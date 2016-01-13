@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Windows;
 using Autofac;
+using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer;
@@ -27,7 +28,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 			_baseConfiguration = baseConfiguration;
 			InitializeComponent();
 			_isEtlToolLoading = true;
-			_generalFunctions = new GeneralFunctions(startConnectionString);
+			_generalFunctions = new GeneralFunctions(startConnectionString, new BaseConfigurationRepository());
 			loadDataSources();
 			manualEtl.InitialJobNowAvailable += manualEtl_InitialJobNowAvailable;
 			manualEtl.JobStartedRunning += manualEtl_JobStartedRunning;
@@ -86,7 +87,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 
 		private bool initializeDataSourceDialog(string connectionString)
 		{
-			_generalFunctions = new GeneralFunctions(connectionString);
+			_generalFunctions = new GeneralFunctions(connectionString, new BaseConfigurationRepository());
 			loadDataSources();
 			_dataSourceConfigurationDialog = new DataSourceConfigurationView(new DataSourceConfigurationModel(_generalFunctions, _baseConfiguration), connectionString);
 			_dataSourceConfigurationDialog.TimeToStartInitialLoad += _timeZoneConfigurationForm_TimeToStartInitialLoad;

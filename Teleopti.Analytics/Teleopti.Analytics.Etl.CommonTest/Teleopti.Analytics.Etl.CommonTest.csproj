@@ -109,6 +109,7 @@
     <Compile Include="JobSchedule\EtlJobScheduleTest.cs" />
     <Compile Include="FakeData\RepositoryFactory.cs" />
     <Compile Include="JobRunnerTest.cs" />
+    <Compile Include="RecurringEvents\HourlyEventPublishingTest.cs" />
     <Compile Include="RunControllerTest.cs" />
     <Compile Include="Service\ResolveTest.cs" />
     <Compile Include="Transformer\AbsenceTransformerTest.cs" />

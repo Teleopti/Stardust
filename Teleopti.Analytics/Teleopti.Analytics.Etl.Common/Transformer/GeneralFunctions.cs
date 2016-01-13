@@ -12,9 +12,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 	{
 		private readonly IGeneralInfrastructure _generalInfrastructure;
 
-		public GeneralFunctions(string dataMartConnectionString)
+		public GeneralFunctions(string dataMartConnectionString, IBaseConfigurationRepository baseConfigurationRepository)
 		{
-			_generalInfrastructure = new GeneralInfrastructure(dataMartConnectionString);
+			_generalInfrastructure = new GeneralInfrastructure(dataMartConnectionString, baseConfigurationRepository);
 		}
 
 		// Used for test only

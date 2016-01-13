@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
@@ -19,18 +20,26 @@ namespace Teleopti.Analytics.Etl.Common
 		public IDataSource DataSource { get; set; }
 		public IBaseConfiguration EtlConfiguration { get; set; }
 	}
-	
+
 	public class Tenants
 	{
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly ILoadAllTenants _loadAllTenants;
+		private readonly IDataSourcesFactory _dataSourcesFactory;
+		private readonly IBaseConfigurationRepository _baseConfigurationRepository;
 		private IEnumerable<TenantInfo> _tenants = Enumerable.Empty<TenantInfo>();
 		private bool _tenantsLoaded = false;
 
-		public Tenants(ITenantUnitOfWork tenantUnitOfWork, ILoadAllTenants loadAllTenants)
+		public Tenants(
+			ITenantUnitOfWork tenantUnitOfWork, 
+			ILoadAllTenants loadAllTenants, 
+			IDataSourcesFactory dataSourcesFactory,
+			IBaseConfigurationRepository baseConfigurationRepository)
 		{
 			_tenantUnitOfWork = tenantUnitOfWork;
 			_loadAllTenants = loadAllTenants;
+			_dataSourcesFactory = dataSourcesFactory;
+			_baseConfigurationRepository = baseConfigurationRepository;
 		}
 
 		public IEnumerable<TenantInfo> LoadedTenants()
@@ -72,13 +81,13 @@ namespace Teleopti.Analytics.Etl.Common
 
 		private void refresh()
 		{
-			var dataSourcesFactory = new DataSourcesFactory(
-				new EnversConfiguration(),
-				new NoPersistCallbacks(),
-				DataSourceConfigurationSetter.ForEtl(),
-				new CurrentHttpContext(),
-				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
-				);
+			//var dataSourcesFactory = new DataSourcesFactory(
+			//	new EnversConfiguration(),
+			//	new NoPersistCallbacks(),
+			//	DataSourceConfigurationSetter.ForEtl(),
+			//	new CurrentHttpContext(),
+			//	() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
+			//	);
 
 			var refreshed = _tenants.ToList();
 
@@ -87,15 +96,15 @@ namespace Teleopti.Analytics.Etl.Common
 				var loaded = _loadAllTenants.Tenants().ToList();
 				foreach (var tenant in loaded)
 				{
-					var existing = LoadedTenants().FirstOrDefault(x => x.Name.Equals(tenant.Name));
+					var existing = _tenants.FirstOrDefault(x => x.Name.Equals(tenant.Name));
 					if (existing != null) continue;
 
-					var configurationHandler = new ConfigurationHandler(new GeneralFunctions(tenant.DataSourceConfiguration.AnalyticsConnectionString));
+					var configurationHandler = new ConfigurationHandler(new GeneralFunctions(tenant.DataSourceConfiguration.AnalyticsConnectionString, _baseConfigurationRepository));
 					IBaseConfiguration baseConfiguration = null;
 					if (configurationHandler.IsConfigurationValid)
 						baseConfiguration = configurationHandler.BaseConfiguration;
 
-					var dataSource = dataSourcesFactory.Create(
+					var dataSource = _dataSourcesFactory.Create(
 						tenant.Name,
 						tenant.DataSourceConfiguration.ApplicationConnectionString,
 						tenant.DataSourceConfiguration.AnalyticsConnectionString);
@@ -108,7 +117,7 @@ namespace Teleopti.Analytics.Etl.Common
 					});
 				}
 
-				var toRemove = (from t in LoadedTenants()
+				var toRemove = (from t in _tenants
 								where loaded.FirstOrDefault(x => x.Name.Equals(t.Name)) == null
 								select t).ToList();
 				foreach (var t in toRemove)

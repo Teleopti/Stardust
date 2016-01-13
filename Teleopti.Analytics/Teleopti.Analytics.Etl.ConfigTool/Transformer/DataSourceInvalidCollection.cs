@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Interfaces.Domain;
 
@@ -8,7 +9,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 	{
 		public DataSourceInvalidCollection(string datamartConnectionString)
 		{
-			var generalFunc = new GeneralFunctions(datamartConnectionString);
+			var generalFunc = new GeneralFunctions(datamartConnectionString, new BaseConfigurationRepository());
 
 			AddRange(generalFunc.DataSourceInvalidList);
 		}

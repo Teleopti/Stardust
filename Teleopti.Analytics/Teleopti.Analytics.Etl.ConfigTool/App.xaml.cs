@@ -7,6 +7,7 @@ using System.Windows.Markup;
 using Autofac;
 using log4net.Config;
 using Teleopti.Analytics.Etl.Common;
+using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.ConfigTool.Gui.StartupConfiguration;
@@ -26,7 +27,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 			builder.RegisterModule(new EtlAppModule());
 			Container = builder.Build();
 
-			var configurationHandler = new ConfigurationHandler(new GeneralFunctions(ConfigurationManager.AppSettings["datamartConnectionString"]));
+			var configurationHandler = new ConfigurationHandler(new GeneralFunctions(ConfigurationManager.AppSettings["datamartConnectionString"], new BaseConfigurationRepository()));
 
 			if (!configurationHandler.IsConfigurationValid)
 			{

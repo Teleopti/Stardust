@@ -6,5 +6,10 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 			throw new System.NotImplementedException();
 		}
+
+		public void AddOrUpdateRecurring(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)
+		{
+			throw new System.NotImplementedException();
+		}
 	}
 }

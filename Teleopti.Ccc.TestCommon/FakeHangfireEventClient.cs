@@ -28,6 +28,14 @@ namespace Teleopti.Ccc.TestCommon
 			Events.Add(serializedEvent);
 			HandlerTypes.Add(handlerType);
 		}
-		
+
+		public string RecurringTenant { get; set; }
+		public bool AddedRecurring { get; set; }
+
+		public void AddOrUpdateRecurring(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)
+		{
+			AddedRecurring = true;
+			RecurringTenant = tenant;
+		}
 	}
 }

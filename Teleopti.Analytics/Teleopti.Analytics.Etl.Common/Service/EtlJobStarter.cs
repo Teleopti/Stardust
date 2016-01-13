@@ -27,17 +27,20 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private readonly JobHelper _jobHelper;
 		private readonly JobExtractor _jobExtractor;
 		private readonly Tenants _tenants;
+		private readonly IBaseConfigurationRepository _baseConfigurationRepository;
 		private DateTime _serviceStartTime;
 		private Action _stopService;
 
 		public EtlJobStarter(
 			JobHelper jobHelper, 
 			JobExtractor jobExtractor,
-			Tenants tenants)
+			Tenants tenants,
+			IBaseConfigurationRepository baseConfigurationRepository)
 		{
 			_jobHelper = jobHelper;
 			_jobExtractor = jobExtractor;
 			_tenants = tenants;
+			_baseConfigurationRepository = baseConfigurationRepository;
 			_connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
 			_cube = ConfigurationManager.AppSettings["cube"];
 			_pmInstallation = ConfigurationManager.AppSettings["pmInstallation"];
@@ -57,7 +60,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private bool checkForEtlJob()
 		{
 			log.Debug("Checking configuration");
-			var configHandler = new ConfigurationHandler(new GeneralFunctions(_connectionString));
+			var configHandler = new ConfigurationHandler(new GeneralFunctions(_connectionString, _baseConfigurationRepository));
 			if (!configHandler.IsConfigurationValid)
 			{
 				log.Debug("Configuration not valid");

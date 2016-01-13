@@ -1,5 +1,6 @@
 using Autofac;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 
@@ -9,7 +10,10 @@ namespace Teleopti.Analytics.Etl.Common
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			var iocArgs = new IocArgs(new ConfigReader());
+			var iocArgs = new IocArgs(new ConfigReader())
+			{
+				DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForEtl()
+			};
 			var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterModule(new TenantServerModule(configuration));

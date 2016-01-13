@@ -354,7 +354,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Assert.That(jobListResult[0].HasError, Is.False);
 
 			//save the current datasource
-			var gen = new GeneralFunctions(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
+			var gen = new GeneralFunctions(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, new BaseConfigurationRepository());
 			gen.SaveDataSource(jobParameters.DataSource, SqlCommands.TimezoneIdGet(timeZoneId));
 			SqlCommands.EtlJobIntradaySettingsReset(testDate.AddDays(-3));
 

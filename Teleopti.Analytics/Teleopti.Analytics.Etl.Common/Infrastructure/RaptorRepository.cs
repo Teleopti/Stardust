@@ -1072,7 +1072,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			get
 			{
-				var generalInfrastructure = new GeneralInfrastructure(_dataMartConnectionString);
+				var generalInfrastructure = new GeneralInfrastructure(_dataMartConnectionString, new BaseConfigurationRepository());
 
 				return generalInfrastructure.DefaultTimeZone;
 			}

@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Threading;
 using System.Windows.Forms;
+using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer;
@@ -41,7 +42,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.DataSourceConfiguration
             _closeApplication = false;
 
 
-			var configurationHandler = new ConfigurationHandler(new GeneralFunctions(_connectionString));
+			var configurationHandler = new ConfigurationHandler(new GeneralFunctions(_connectionString, new BaseConfigurationRepository()));
 
 			if (!configurationHandler.IsConfigurationValid)
 			{
