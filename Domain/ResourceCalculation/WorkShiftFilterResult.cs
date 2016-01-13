@@ -9,13 +9,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly string _message;
         private readonly int _workShiftsBefore;
         private readonly int _workShiftsAfter;
-    	private readonly string _key;
+    	private readonly Guid _key;
 
     	public WorkShiftFilterResult(string message, int workShiftsBefore, int workShiftsAfter)
-			:this(message,workShiftsBefore,workShiftsAfter,Guid.NewGuid().ToString())
+			:this(message,workShiftsBefore,workShiftsAfter,Guid.NewGuid())
 		{}
         
-		public WorkShiftFilterResult(string message, int workShiftsBefore, int workShiftsAfter, string key)
+		public WorkShiftFilterResult(string message, int workShiftsBefore, int workShiftsAfter, Guid key)
 		{
 			_message = message;
 			_workShiftsBefore = workShiftsBefore;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public int WorkShiftsAfter
         { get { return _workShiftsAfter; } }
 
-		public string Key
+		public Guid Key
 		{
 			get { return _key; }
 		}

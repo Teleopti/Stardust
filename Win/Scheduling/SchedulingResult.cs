@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Grid.Grouping;
@@ -65,15 +66,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 		private void setUpGrid(IList<IWorkShiftFinderResult> finderResults)
 		{
-			IDictionary<string, IWorkShiftFinderResult> bugfixDic = new Dictionary<string, IWorkShiftFinderResult>();
-			foreach (IWorkShiftFinderResult finderResult in finderResults)
-			{
-				if (!bugfixDic.ContainsKey(finderResult.PersonDateKey))
-					bugfixDic.Add(finderResult.PersonDateKey, finderResult);
-			}
-
-			finderResults = new List<IWorkShiftFinderResult>(bugfixDic.Values);
-
+			finderResults = finderResults.ToLookup(bugfix => bugfix.PersonDateKey).Select(y => y.First()).ToList();
+			 
 			var dSet = new DataSet {Locale = CultureInfo.CurrentCulture};
 			detailGrid.TableOptions.ListBoxSelectionColorOptions = GridListBoxSelectionColorOptions.ApplySelectionColor;
 			masterGrid.TableOptions.ListBoxSelectionColorOptions = GridListBoxSelectionColorOptions.ApplySelectionColor;

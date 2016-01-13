@@ -31,7 +31,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: zoet
         /// Created date: 2009-01-15
         /// </remarks>
-        string PersonDateKey { get; }
+        Tuple<Guid,DateOnly> PersonDateKey { get; }
 
         /// <summary>
         /// Gets the name of the person.

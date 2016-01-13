@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             Guid guid = Guid.NewGuid();
             _target.Person.SetId(guid);
-            string expectedKey = string.Concat(guid, _target.ScheduleDate.Date.ToString());
+            var expectedKey = new Tuple<Guid,DateOnly>(guid, _target.ScheduleDate);
             Assert.AreEqual(expectedKey, _target.PersonDateKey);
         }
 
@@ -233,14 +233,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void ShouldNotHaveFilterResultsWithSameKey()
 		{
-			var filter1 = new WorkShiftFilterResult("Message 1", 0, 0, "THEKEY");
-			var filter2 = new WorkShiftFilterResult("Message 1", 0, 0, "THEKEY");
+			var theKey = Guid.NewGuid();
+			var filter1 = new WorkShiftFilterResult("Message 1", 0, 0, theKey);
+			var filter2 = new WorkShiftFilterResult("Message 1", 0, 0, theKey);
 
 			var result = new WorkShiftFinderResult(_person, _theDate);
 			result.AddFilterResults(filter1);
 			result.AddFilterResults(filter2);
 			Assert.That(result.FilterResults.Count, Is.EqualTo(1));
-			Assert.That(result.FilterResults[0].Key, Is.EqualTo("THEKEY"));
+			Assert.That(result.FilterResults[0].Key, Is.EqualTo(theKey));
 		}
 
 		[Test]
@@ -255,6 +256,4 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Assert.IsTrue(_filter.Equals(_filter));
 		}
     }
-
-
 }

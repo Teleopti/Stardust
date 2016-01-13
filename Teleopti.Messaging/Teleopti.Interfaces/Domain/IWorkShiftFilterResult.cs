@@ -1,3 +1,5 @@
+using System;
+
 namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
@@ -48,6 +50,6 @@ namespace Teleopti.Interfaces.Domain
 		/// Gets the key used if we want to make shure we only get one item in the list.
 		/// </summary>
 		/// <value>The key.</value>
-    	string Key { get; }
+    	Guid Key { get; }
     }
 }

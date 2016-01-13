@@ -646,7 +646,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			get { throw new NotImplementedException(); }
 		}
 
-		public string PersonDateKey
+		public Tuple<Guid,DateOnly> PersonDateKey
 		{
 			get { throw new NotImplementedException(); }
 		}

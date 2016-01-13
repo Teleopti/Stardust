@@ -45,9 +45,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         {
             get { return _person; }
         }
-        public string PersonDateKey
+        public Tuple<Guid,DateOnly> PersonDateKey
         {
-            get { return string.Concat(Person.Id.ToString(), ScheduleDate.Date.ToString()); }
+            get { return new Tuple<Guid, DateOnly>(Person.Id.GetValueOrDefault(), ScheduleDate); }
         }
 
         public string PersonName
