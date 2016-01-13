@@ -212,7 +212,7 @@
 								<!--/ko-->
 								<!--ko if:$parent.mySchedule().isDayOff-->
 								<div class="shift-trade-layer-container floatleft shift-trade-dayoff">
-									<div class="dayoff" data-bind="style:$parent.mySchedule().isFullDayAbsence&&{'background-color':backgroundColor},tooltip: $parent.mySchedule().isFullDayAbsence&&{ title: tooltipText, html: true}, text:$parent.mySchedule().dayOffName"></div>
+									<div class="dayoff" data-bind="style:$parent.mySchedule().isFullDayAbsence&&{'background-color':backgroundColor},tooltip: $parent.mySchedule().isFullDayAbsence&&{ title: tooltipText, html: true}, text:$parent.mySchedule().dayOffName || titleHeader"></div>
 								</div>
 								<!--/ko-->
 							</div>
@@ -236,7 +236,7 @@
 								<!--/ko-->
 								<!--ko if:$parent.isDayOff-->
 								<div class="shift-trade-layer-container floatleft shift-trade-dayoff">
-									<div class="dayoff" data-bind="style:$parent.isFullDayAbsence&&{'background-color':backgroundColor},tooltip: $parent.isFullDayAbsence&&{ title: tooltipText, html: true}, text:$parent.dayOffName"></div>
+									<div class="dayoff" data-bind="style:$parent.isFullDayAbsence&&{'background-color':backgroundColor},tooltip: $parent.isFullDayAbsence&&{ title: tooltipText, html: true}, text:$parent.dayOffName || titleHeader"></div>
 								</div>
 								<!--/ko-->
 							</div>

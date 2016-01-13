@@ -13,8 +13,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			{
 				return 20000;
 			}
-			var significantPart = schedule.SignificantPart();
-			if ((!isSchedulePublished && !hasPermissionForUnpublishedSchedule) || (schedule.PersonAssignment() == null && significantPart != SchedulePartView.FullDayAbsence))
+			var significantPart = schedule.SignificantPartForDisplay();
+			var isFullDayAbsence = significantPart == SchedulePartView.FullDayAbsence ||
+								   ((significantPart == SchedulePartView.ContractDayOff || significantPart == SchedulePartView.DayOff) &&
+									schedule.ProjectionService().CreateProjection().HasLayers);
+
+			if ((!isSchedulePublished && !hasPermissionForUnpublishedSchedule) || (schedule.PersonAssignment() == null && !isFullDayAbsence))
 			{
 				return 20000;
 			}
@@ -24,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				return dayOffBase;
 			}
 
-			if (!schedule.HasDayOff() && significantPart == SchedulePartView.FullDayAbsence)
+			if (!schedule.HasDayOff() && isFullDayAbsence)
 			{
 				var mininumAbsenceStartTime = schedule.PersonAssignment() != null
 					? schedule.PersonAssignment().Period.StartDateTime

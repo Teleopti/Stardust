@@ -118,9 +118,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 			switch (significantPart)
 			{
+				case SchedulePartView.ContractDayOff:
 				case SchedulePartView.DayOff:
 					ret.IsDayOff = true;
-					ret.DayOffName = scheduleDay.PersonAssignment().DayOff().Description.Name;
+					var dayOff = scheduleDay.PersonAssignment() != null ? scheduleDay.PersonAssignment().DayOff() : null;
+					ret.DayOffName = dayOff != null ? dayOff.Description.Name : "";
 					if (projection.HasLayers)
 						ret.IsFullDayAbsence = true;
 					break;

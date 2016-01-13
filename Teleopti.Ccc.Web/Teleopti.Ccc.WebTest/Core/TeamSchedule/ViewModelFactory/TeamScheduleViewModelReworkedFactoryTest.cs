@@ -422,6 +422,51 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			agentSchedule.IsDayOff.Should().Be.EqualTo(true);
 			agentSchedule.DayOffName.Should().Be.EqualTo("dayoff");
 		}
+	
+		[Test]
+		public void ShouldReturnDayoffWhenHasFullAbsenceOnContractDayOffWithDateNoReadModel()
+		{
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			var p5 = PersonFactory.CreatePersonWithGuid("p5", "p5");
+
+			businessUnit = BusinessUnitFactory.CreateWithId("Teleopti");
+			BusinessUnitRepository.Add(businessUnit);
+
+			team = TeamFactory.CreateTeamWithId("team1");
+			TeamRepository.Add(team);
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2011, 1, 1), team);
+			personPeriod.PersonContract.ContractSchedule.AddContractScheduleWeek(new ContractScheduleWeek());
+			p5.AddPersonPeriod(personPeriod);
+			var schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(2015, 5, 22));
+			p5.AddSchedulePeriod(schedulePeriod);
+			p5.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			
+			PersonRepository.Add(p5);
+
+			var p5ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), p5, scenario);
+			var p5AssOn23 = PersonAssignmentFactory.CreatePersonAssignment(p5, scenario, new DateOnly(2015, 5, 23));
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(p5, scenario,
+				new DateTimePeriod(new DateTime(2015, 5, 23, 0, 0, 0, 0, DateTimeKind.Utc),
+					new DateTime(2015, 5, 23, 23, 59, 0, 0, DateTimeKind.Utc)), AbsenceFactory.CreateAbsence("absence"));
+			p5ScheduleOn23.Add(p5AssOn23);
+			p5ScheduleOn23.Add(personAbsence);
+			ScheduleProvider.AddScheduleDay(p5ScheduleOn23);
+
+			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			{
+				ScheduleDate = new DateOnly(new DateTime(2015, 5, 23, 0, 0, 0, 0, DateTimeKind.Utc)),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				Paging = new Paging { Take = 20, Skip = 0 },
+				SearchNameText = ""
+			});
+
+			var agentSchedule = result.AgentSchedules.Single(s => s.PersonId == p5.Id.Value);
+			agentSchedule.IsFullDayAbsence.Should().Be.EqualTo(true);
+			agentSchedule.ScheduleLayers.Count().Should().Be.EqualTo(1);
+			agentSchedule.ScheduleLayers[0].TitleHeader.Should().Be.EqualTo("absence");
+			agentSchedule.IsDayOff.Should().Be.EqualTo(true);
+			agentSchedule.DayOffName.Should().Be.EqualTo("");
+		}
 		
 		[Test]
 		public void ShouldIndicateOvertimeWithDateNoReadModel()
