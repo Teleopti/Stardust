@@ -12,7 +12,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 {
 	public abstract class JobStepBase : IJobStep, INotifyPropertyChanged, IDisposable
 	{
-		private static ILog _log = LogManager.GetLogger(typeof(JobStepBase));
+		private static readonly ILog _log = LogManager.GetLogger(typeof(JobStepBase));
 		private string _name = String.Empty;
 		private DateTime _startDateTime;
 		private IJobStepResult _jobStepResult;
@@ -89,7 +89,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			catch (Exception ex)
 			{
 				double duration = StopTimer();
-				_log.Warn(ex.ToString());
+				_log.Warn(ex);
 				Result = new JobStepResult(Name, duration, ex, currentBusinessUnit, jobResultCollection);
 				Result.Status = "Error";
 			}
