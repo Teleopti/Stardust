@@ -46,6 +46,31 @@ FROM
 	mart.v_log_object lo
 WHERE NOT EXISTS (SELECT * FROM mart.sys_datasource v where v.log_object_id = lo.log_object_id AND datasource_database_id= 2)
 
+--internal qm logs
+INSERT INTO mart.sys_datasource
+	( 
+	datasource_name, 
+	log_object_id,
+	log_object_name,	
+	datasource_database_id,
+	datasource_database_name,
+	datasource_type_name,
+	source_id,
+	internal
+	)
+SELECT 
+	datasource_name			= 'Internal Agg: '+ lo.log_object_desc Collate Database_Default,
+	log_object_id			= lo.log_object_id,
+	log_object_name			= lo.log_object_desc Collate Database_Default,
+	datasource_database_id	= 2,
+	datasource_database_name= 'TeleoptiAnalytics Default',
+	datasource_type_name	= 'Internal Agg' ,
+	source_id				= CAST(lo.log_object_id AS NVARCHAR(50)),
+	internal				= 1
+FROM 
+	dbo.log_object lo
+WHERE NOT EXISTS (SELECT * FROM mart.sys_datasource v where v.log_object_id = lo.log_object_id AND datasource_database_id= 2)
+
 -- Insert queue_original_id = -1 as the default agent queue for each agg datasource_id
 -- This id should be excluded from standard queues
 INSERT INTO mart.dim_queue_excluded
