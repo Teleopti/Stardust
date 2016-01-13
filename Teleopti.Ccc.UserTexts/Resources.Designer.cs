@@ -7043,6 +7043,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Day Off Rules.
+        /// </summary>
+        public static string DayOffRules {
+            get {
+                return ResourceManager.GetString("DayOffRules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to DO.
         /// </summary>
         public static string DayOffShortName {
@@ -16250,6 +16259,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NewDayOff {
             get {
                 return ResourceManager.GetString("NewDayOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Day Off Rule.
+        /// </summary>
+        public static string NewDayOffRule {
+            get {
+                return ResourceManager.GetString("NewDayOffRule", resourceCulture);
             }
         }
         

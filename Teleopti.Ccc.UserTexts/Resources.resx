@@ -14024,4 +14024,12 @@ Help us improve your experience by sending an error report</value>
     <value>Selected {0} of {1} requests</value>
     <comment>A info shows selected x requests out of n requests</comment>
   </data>
+  <data name="DayOffRules" xml:space="preserve">
+    <value>Day Off Rules</value>
+    <comment>Page header for day off rules/filter web</comment>
+  </data>
+  <data name="NewDayOffRule" xml:space="preserve">
+    <value>New Day Off Rule</value>
+    <comment>Button text, create new day off rule/filter web</comment>
+  </data>
 </root>
