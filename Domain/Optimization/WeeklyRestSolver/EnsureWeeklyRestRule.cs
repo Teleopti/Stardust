@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces.Domain;
@@ -23,34 +23,41 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
             _dayOffMaxFlexCalculator = dayOffMaxFlexCalculator;
         }
 
+	    private class WeeklyRestDetailForValidation
+	    {
+			public IPersonAssignment PersonAssignment { get; set; }
+			public IScheduleDay ScheduleDay { get; set; }
+	    }
+
         public  bool HasMinWeeklyRest(PersonWeek personWeek, IScheduleRange currentSchedules, TimeSpan weeklyRest)
         {
             //TODO rewrite this class in a better way
-            var extendedWeek = new DateOnlyPeriod(personWeek.Week.StartDate.AddDays(-1),
-                personWeek.Week.EndDate.AddDays(1));
-            var pAss = new List<IPersonAssignment>();
-            foreach (var schedule in currentSchedules.ScheduledDayCollection(extendedWeek))
-            {
-                var ass = schedule.PersonAssignment();
-                if (ass != null)
-                {
-                    pAss.Add(ass);
-                }
-            }
+            var extendedWeek = new DateOnlyPeriod(personWeek.Week.StartDate.AddDays(-1), personWeek.Week.EndDate.AddDays(1));
+            var schedules =
+		        currentSchedules.ScheduledDayCollection(new DateOnlyPeriod(extendedWeek.StartDate.AddDays(-1),extendedWeek.EndDate.AddDays(1)))
+			        .ToDictionary(k => k.DateOnlyAsPeriod.DateOnly,
+				        s =>
+					        new WeeklyRestDetailForValidation
+					        {
+						        PersonAssignment = s.PersonAssignment(),
+						        ScheduleDay = s
+					        });
+
+	        var pAss = schedules.Where(s => s.Value.PersonAssignment != null && extendedWeek.Contains(s.Key)).ToList();
             if (pAss.Count == 0)
                 return true;
 
             DateTime endOfPeriodBefore = TimeZoneHelper.ConvertToUtc(extendedWeek.StartDate.Date, personWeek.Person.PermissionInformation.DefaultTimeZone());
 
-            var scheduleDayBefore1 = currentSchedules.ScheduledDay(personWeek.Week.StartDate.AddDays(-1));
-            var scheduleDayBefore2 = currentSchedules.ScheduledDay(personWeek.Week.StartDate.AddDays(-2));
+            var scheduleDayBefore1 = schedules[personWeek.Week.StartDate.AddDays(-1)].ScheduleDay;
+            var scheduleDayBefore2 = schedules[personWeek.Week.StartDate.AddDays(-2)].ScheduleDay;
             var result = _dayOffMaxFlexCalculator.MaxFlex(scheduleDayBefore1, scheduleDayBefore2);
             if (result != null)
                 endOfPeriodBefore = result.Value.EndDateTime;
 
-            foreach (IPersonAssignment ass in pAss)
+            foreach (var ass in pAss)
             {
-                var proj = ass.ProjectionService().CreateProjection();
+                var proj = ass.Value.PersonAssignment.ProjectionService().CreateProjection();
                 var nextStartDateTime =
                     _workTimeStartEndExtractor.WorkTimeStart(proj);
                 if (nextStartDateTime != null)
@@ -69,8 +76,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
             DateTime endOfPeriodAfter = TimeZoneHelper.ConvertToUtc(extendedWeek.EndDate.AddDays(1).Date, personWeek.Person.PermissionInformation.DefaultTimeZone());
 
 
-            var scheduleDayAfter1 = currentSchedules.ScheduledDay(personWeek.Week.EndDate.AddDays(1));
-            var scheduleDayAfter2 = currentSchedules.ScheduledDay(personWeek.Week.EndDate.AddDays(2));
+			var scheduleDayAfter1 = schedules[personWeek.Week.StartDate.AddDays(1)].ScheduleDay;
+			var scheduleDayAfter2 = schedules[personWeek.Week.StartDate.AddDays(2)].ScheduleDay;
             result = _dayOffMaxFlexCalculator.MaxFlex(scheduleDayAfter1, scheduleDayAfter2);
             if (result != null)
                 endOfPeriodAfter = result.Value.StartDateTime;
