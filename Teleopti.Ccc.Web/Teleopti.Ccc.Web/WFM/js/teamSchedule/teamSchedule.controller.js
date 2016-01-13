@@ -100,6 +100,31 @@
 			});
 		};
 
+		vm.updateSchedules = function (message) {
+			var params = { personIds: [message.DomainReferenceId], date: vm.scheduleDate };
+			vm.isLoading = true;
+			teamScheduleSvc.getSchedules.query(params).$promise.then(function(result) {
+				updateGroupScheduleVm(result);
+				vm.isLoading = false;
+			});
+		};
+
+		function updateGroupScheduleVm(result) {
+			var newSchedules = groupScheduleFactory.Create(result.Schedules, vm.scheduleDateMoment());
+
+			newSchedules.Schedules.forEach(function(newSchedule) {
+				var oldScheduleIndex = objectArrayIndexOf(vm.groupScheduleVm.Schedules, 'PersonId', newSchedule.PersonId);
+				vm.groupScheduleVm.Schedules[oldScheduleIndex] = newSchedule;
+			});
+		}
+
+		function objectArrayIndexOf(array, property, searchTerm) {
+			for (var i = 0, len = array.length; i < len; i++) {
+				if (array[i][property] === searchTerm) return i;
+			}
+			return -1;
+		}
+
 		function setupPersonIdSelectionDic(schedules) {
 			schedules.forEach(function (personSchedule) {
 				if (vm.personIdSelectionDic[personSchedule.PersonId] === undefined) {
@@ -358,8 +383,8 @@
 			var startDate = moment(message.StartDate.substring(1, message.StartDate.length));
 			var endDate = moment(message.EndDate.substring(1, message.EndDate.length));
 			var scheduleDate = vm.scheduleDateMoment();
-			var scheduleDateInMessageRange = scheduleDate.isSame(startDate) || scheduleDate.isSame(endDate)
-				|| (scheduleDate.isAfter(startDate) && scheduleDate.isBefore(endDate));
+			var scheduleDateInMessageRange = scheduleDate.isSame(startDate, 'day') || scheduleDate.isSame(endDate, 'day')
+				|| (scheduleDate.isAfter(startDate, 'day') && scheduleDate.isBefore(endDate, 'day'));
 
 			return isMessageInsidePeopleList && scheduleDateInMessageRange;
 		}
@@ -370,9 +395,9 @@
 					DomainType: 'IScheduleChangedInDefaultScenario'
 				}, function (message) {
 					if (isMessageNeedToBeHandled(message)) {
-						vm.loadSchedules();
+						vm.updateSchedules(message);
 					}
-				}, function (message) { });
+				}, function (message) {});
 			}
 		}
 

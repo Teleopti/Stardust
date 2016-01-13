@@ -18,6 +18,14 @@ angular.module("wfm.teamSchedule").service("TeamSchedule", [
 			}
 		});
 
+		service.getSchedules = $resource("../api/TeamSchedule/GetSchedules", {}, {
+			query: {
+				method: "POST",
+				params: {},
+				isArray: false
+			}
+		});
+
 		service.getPermissions = $resource("../api/TeamSchedule/GetPermissions", {
 		}, {
 			query: {
