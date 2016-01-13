@@ -6,13 +6,6 @@ angular.module('toggleService', ['ngResource']).service('Toggle', [
 	function($resource, $q) {
 		var that = this;
 
-		that.isFeatureEnabled = $resource('../ToggleHandler/IsEnabled', {}, {
-			query: {
-				method: 'GET',
-				isArray: false
-			}
-		});
-
 		that.loadAllToggles = $resource('../ToggleHandler/AllToggles', {}, {
 			query: {
 				method: 'GET',
