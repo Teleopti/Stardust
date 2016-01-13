@@ -5,15 +5,7 @@ describe('ForecastingStartCtrl', function() {
 		$httpBackend;
 
 	var mockToggleService = {
-		isFeatureEnabled: {
-			query: function() {
-				var queryDeferred = $q.defer();
-				queryDeferred.resolve({
-					IsEnabled: true
-				});
-				return { $promise: queryDeferred.promise };
-			}
-		},
+		WfmForecast_CreateSkill_34591:true
 	}
 
 	var mockForecastingService = function() {

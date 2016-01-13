@@ -23,10 +23,7 @@
 					$state.go("forecasting.start");
 				};
 
-				$scope.isQueueStatisticsEnabled = false;
-				toggleService.isFeatureEnabled.query({ toggle: 'WfmForecast_QueueStatistics_32572' }).$promise.then(function (result) {
-					$scope.isQueueStatisticsEnabled = result.IsEnabled;
-				});
+				$scope.isQueueStatisticsEnabled = toggleService.WfmForecast_QueueStatistics_32572;
 
 				var getQueueStatistics = function(workloadId, methodId) {
 					$scope.queueStatisticsLoading = true;

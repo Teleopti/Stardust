@@ -26,12 +26,8 @@
 					}
 				}
 
-				$scope.createSkillToggle = false;
+				$scope.createSkillToggle = toggleService.WfmForecast_CreateSkill_34591;
 				$scope.isCreateSkillEnabled = false;
-
-				toggleService.isFeatureEnabled.query({ toggle: 'WfmForecast_CreateSkill_34591' }).$promise.then(function (result) {
-					$scope.createSkillToggle = result.IsEnabled;
-				});
 
 				var startDate = moment().utc().add(1, 'months').startOf('month').toDate();
 				var endDate = moment().utc().add(2, 'months').startOf('month').toDate();

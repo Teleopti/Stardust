@@ -4,18 +4,6 @@ describe('ForecastingSkillCreateCtrl', function () {
 		$rootScope,
 		$httpBackend;
 
-	var mockToggleService = {
-		isFeatureEnabled: {
-			query: function () {
-				var queryDeferred = $q.defer();
-				queryDeferred.resolve({
-					IsEnabled: true
-				});
-				return { $promise: queryDeferred.promise };
-			}
-		},
-	}
-
 	var mockSkillService = {
 		activities: {
 			get: function() {

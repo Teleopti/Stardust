@@ -5,15 +5,7 @@ describe('ForecastingAdvancedCtrl', function () {
 		$httpBackend;
 
 	var mockToggleService = {
-		isFeatureEnabled: {
-			query: function () {
-				var queryDeferred = $q.defer();
-				queryDeferred.resolve({
-					IsEnabled: true
-				});
-				return { $promise: queryDeferred.promise };
-			}
-		},
+		WfmForecast_QueueStatistics_32572 : true
 	}
 
 	var mockForecastingService = function () {
