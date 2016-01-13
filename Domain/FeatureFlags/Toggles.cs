@@ -80,7 +80,6 @@
 		Wfm_Outbound_Campaign_GanttChart_Navigation_34924,
 		WfmForecast_QueueStatistics_32572,
 		WfmForecast_ResultView_33605,
-		WfmForecast_MethodsComparisonView_33610,
 		WfmForecast_CreateSkill_34591,
 		WfmPermission_ReplaceOldPermission_34671,
 		Wfm_RTA_34621,

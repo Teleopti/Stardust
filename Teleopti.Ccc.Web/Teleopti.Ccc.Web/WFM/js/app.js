@@ -74,13 +74,6 @@ wfm.config([
 			url: '/skill/create',
 			templateUrl: 'js/forecasting/html/skill-create.html',
 			controller: 'ForecastingSkillCreateCtrl'
-		}).state('forecasting-method', {
-			params: {
-				workloadId: {},
-				period: {}
-			},
-			templateUrl: 'js/forecasting/html/forecasting-method.html',
-			controller: 'ForecastingMethodCtrl'
 		}).state('resourceplanner', {
 			url: '/resourceplanner',
 			templateUrl: 'js/resourceplanner/resourceplanner.html',
