@@ -82,7 +82,6 @@ Scheduler_OptimizeFlexibleDayOffs_22409 = true
 WfmForecast_QueueStatistics_32572 = true
 WfmForecast_ResultView_33605 = true
 WfmForecast_MethodsComparisonView_33610 = true
-WfmForecast_IntradayPatternView_33069 = true
 WfmForecast_CreateSkill_34591 = true
 MyTimeWeb_AutoShiftTradeWithMeetingAndPersonalActivity_33281 = true
 MessageBroker_SchedulingScreenMailbox_32733 = true

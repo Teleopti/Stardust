@@ -81,13 +81,6 @@ wfm.config([
 			},
 			templateUrl: 'js/forecasting/html/forecasting-method.html',
 			controller: 'ForecastingMethodCtrl'
-		}).state('forecasting-intraday', {
-			params: {
-				workloadId: {},
-				period: {}
-			},
-			templateUrl: 'js/forecasting/html/forecasting-intraday.html',
-			controller: 'ForecastingIntradayCtrl'
 		}).state('resourceplanner', {
 			url: '/resourceplanner',
 			templateUrl: 'js/resourceplanner/resourceplanner.html',
