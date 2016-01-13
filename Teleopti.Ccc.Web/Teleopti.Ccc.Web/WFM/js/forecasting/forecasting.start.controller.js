@@ -35,16 +35,6 @@
 
 				$scope.workloads = [];
 
-				var getName = function(skillName, workloadName) {
-					var name;
-					if (!workloadName || workloadName == skillName)
-						name = skillName;
-					else {
-						name = skillName + " - " + workloadName;
-					}
-					return name;
-				};
-
 				var getSkills = function () {
 					var skillsPromise = forecastingService.skills.query().$promise;
 					skillsPromise.then(function (result) {
@@ -56,7 +46,7 @@
 							angular.forEach(skill.Workloads, function (workload) {
 								var w = {
 									Id: workload.Id,
-									Name: getName(skill.Name, workload.Name),
+									Name: workload.Name,
 									ChartId: "chart" + workload.Id,
 									Scenario: $scope.modalForecastingInfo.selectedScenario
 								};
@@ -489,7 +479,7 @@
 				};
 
 				$scope.nextStepAdvanced = function (workload) {
-					$state.go('forecasting.advanced', { workloadId: workload.Id, workloadName: workload.Name });
+					$state.go('forecasting.advanced', { workloadId: workload.Id });
 				};
 
 				$scope.moreThanOneYear = function () {

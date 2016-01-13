@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 			return new SkillAccuracy
 			{
 				Id = skill.Id.Value,
-				Name = skill.Name,
 				Workloads = skill.WorkloadCollection.Select(workload => _forecastWorkloadEvaluator.Evaluate(workload)).ToArray()
 			};
 		}

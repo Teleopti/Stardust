@@ -34,13 +34,11 @@ describe('ForecastingStartCtrl', function() {
 					[
 						{
 							Id: "3d5dd51a-8713-42e9-9f33-9b5e015ab71b",
-							Name: "Channel sales",
-							Workloads: [{ Id: "d80b16de-bc21-471f-98ed-9b5e015abf6c", Name: "Joint marketing", Accuracies: null }]
+							Workloads: [{ Id: "d80b16de-bc21-471f-98ed-9b5e015abf6c", Name: "Channel sales - Joint marketing", Accuracies: null }]
 						},
 						{
 							Id: "3d5dd51a-8713-42e9-9f33-9b5e015ab71c",
-							Name: "Channel sales2",
-							Workloads: [{ Id: "d80b16de-bc21-471f-98ed-9b5e015abf6d", Name: "Joint marketing2", Accuracies: null }]
+							Workloads: [{ Id: "d80b16de-bc21-471f-98ed-9b5e015abf6d", Name: "Channel sales2 - Joint marketing2", Accuracies: null }]
 						}
 					],
 					IsPermittedToModifySkill: true

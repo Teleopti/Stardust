@@ -32,19 +32,21 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly ICampaignPersister _campaignPersister;
 		private readonly IOverridePersister _overridePersister;
 		private readonly IPrincipalAuthorization _principalAuthorization;
+		private readonly IForecastMisc _forecastMisc;
 
 		public ForecastController(
-			IForecastCreator forecastCreator, 
-			ISkillRepository skillRepository, 
-			IForecastViewModelFactory forecastViewModelFactory, 
-			IForecastResultViewModelFactory forecastResultViewModelFactory, 
+			IForecastCreator forecastCreator,
+			ISkillRepository skillRepository,
+			IForecastViewModelFactory forecastViewModelFactory,
+			IForecastResultViewModelFactory forecastResultViewModelFactory,
 			IIntradayPatternViewModelFactory intradayPatternViewModelFactory, 
-			IActionThrottler actionThrottler, 
+			IActionThrottler actionThrottler,
 			IScenarioRepository scenarioRepository, 
-			IWorkloadRepository workloadRepository, 
-			ICampaignPersister campaignPersister, 
-			IOverridePersister overridePersister, 
-			IPrincipalAuthorization principalAuthorization)
+			IWorkloadRepository workloadRepository,
+			ICampaignPersister campaignPersister,
+			IOverridePersister overridePersister,
+			IPrincipalAuthorization principalAuthorization,
+			IForecastMisc forecastMisc)
 		{
 			_forecastCreator = forecastCreator;
 			_skillRepository = skillRepository;
@@ -57,6 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_campaignPersister = campaignPersister;
 			_overridePersister = overridePersister;
 			_principalAuthorization = principalAuthorization;
+			_forecastMisc = forecastMisc;
 		}
 
 		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]
@@ -67,12 +70,13 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			{
 				IsPermittedToModifySkill = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkill),
 				Skills = skillList.Select(
-				skill => new SkillAccuracy
-				{
-					Id = skill.Id.Value,
-					Name = skill.Name,
-					Workloads = skill.WorkloadCollection.Select(x => new WorkloadAccuracy { Id = x.Id.Value, Name = x.Name }).ToArray()
-				})
+					skill => new SkillAccuracy
+					{
+						Id = skill.Id.Value,
+						Workloads =
+							skill.WorkloadCollection.Select(
+								x => new WorkloadAccuracy {Id = x.Id.Value, Name = _forecastMisc.WorkloadName(skill.Name, x.Name)}).ToArray()
+					})
 			};
 		}
 

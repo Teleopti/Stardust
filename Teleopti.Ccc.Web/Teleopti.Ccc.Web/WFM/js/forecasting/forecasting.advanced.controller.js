@@ -4,9 +4,6 @@
 	angular.module('wfm.forecasting')
 		.controller('ForecastingAdvancedCtrl', ['$scope', '$state', '$stateParams', '$http', 'Toggle', '$translate', 'forecastingService',
 			function ($scope, $state, $stateParams, $http, toggleService, $translate, forecastingService) {
-				$scope.workloadId = $stateParams.workloadId;
-				$scope.workloadName = $stateParams.workloadName;
-
 				$scope.chartInfo = {
 					evaluationChartDataColumns: [
 						{ id: "vh", type: "line", name: $translate.instant('ResReportQueueStatistics') },
@@ -48,10 +45,11 @@
 					$scope.evaluationChartData = [];
 					$scope.queueStatisticsChartData = [];
 
-					forecastingService.evaluate(JSON.stringify({ WorkloadId: $scope.workloadId }),
+					forecastingService.evaluate(JSON.stringify({ WorkloadId: $stateParams.workloadId }),
 						function(data, status, headers, config) {
 							$scope.evaluationLoading = false;
-							angular.forEach(data.Days, function(day) {
+							$scope.workloadName = data.Name;
+							angular.forEach(data.Days, function (day) {
 								day.date = new Date(Date.parse(day.date));
 							});
 							$scope.evaluationChartData = data.Days;
@@ -72,7 +70,7 @@
 							$scope.ForecastMethodRecommended = data.ForecastMethodRecommended;
 
 							if ($scope.isQueueStatisticsEnabled) {
-								getQueueStatistics($scope.workloadId, selectedMethod);
+								getQueueStatistics($stateParams.workloadId, selectedMethod);
 							}
 						}, function(data, status, headers, config) {
 							$scope.error = { message: "Failed to do the evaluate." };

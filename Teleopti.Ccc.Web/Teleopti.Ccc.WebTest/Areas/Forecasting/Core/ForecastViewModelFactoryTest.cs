@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 				MethodId = ForecastMethodType.TeleoptiClassicLongTerm
 			};
 			workloadRepository.Stub(x => x.Get(queueStatisticsInput.WorkloadId)).Return(workload);
-			var target = new ForecastViewModelFactory(null, workloadRepository, historicalPeriodProvider, historicalData, new OutlierRemover(), new ForecastMethodProvider(new LinearRegressionTrendCalculator()));
+			var target = new ForecastViewModelFactory(null, workloadRepository, historicalPeriodProvider, historicalData, new OutlierRemover(), new ForecastMethodProvider(new LinearRegressionTrendCalculator()), null);
 			
 			var result = target.QueueStatistics(queueStatisticsInput);
 
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
 			var forecastWorkloadEvaluator = MockRepository.GenerateMock<IForecastWorkloadEvaluator>();
 			forecastWorkloadEvaluator.Stub(x => x.Evaluate(workload)).Return(new WorkloadAccuracy() { Accuracies = new MethodAccuracy[] { } });
-			var target = new ForecastViewModelFactory(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData, null, null);
+			var target = new ForecastViewModelFactory(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData, null, null, MockRepository.GenerateMock<IForecastMisc>());
 			var availablePeriod = new DateOnlyPeriod(2012, 3, 16, 2015, 3, 15);
 			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload)).Return(availablePeriod);
 			historicalData.Stub(x => x.Fetch(Arg<IWorkload>.Is.Equal(workload), Arg<DateOnlyPeriod>.Is.Anything)).Return(new TaskOwnerPeriod(DateOnly.Today, new ITaskOwner[] { }, TaskOwnerPeriodType.Other));
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 							}
 						}
 				});
-			var target = new ForecastViewModelFactory(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData, null, null);
+			var target = new ForecastViewModelFactory(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData, null, null, MockRepository.GenerateMock<IForecastMisc>());
 
 			var result = target.Evaluate(evaluateInput);
 
@@ -199,12 +199,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
 			var taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.MinValue, new List<WorkloadDay>(), TaskOwnerPeriodType.Other);
 			historicalData.Stub(x => x.Fetch(workload, HistoricalPeriodProvider.DivideIntoTwoPeriods(availablePeriod).Item2)).Return(taskOwnerPeriod);
-			var target = new ForecastViewModelFactory(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData, null, null);
+			var forecastMisc = MockRepository.GenerateMock<IForecastMisc>();
+			var workloadName = workload.Skill.Name + " - " + workload.Name;
+			forecastMisc.Stub(x => x.WorkloadName(workload.Skill.Name, workload.Name)).Return(workloadName);
+			var target = new ForecastViewModelFactory(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData, null, null, forecastMisc);
 
 			var result = target.Evaluate(evaluateInput);
 
 			result.WorkloadId.Should().Be.EqualTo(workload.Id.Value);
-			result.Name.Should().Be.EqualTo(workload.Name);
+			result.Name.Should().Be.EqualTo(workloadName);
 			((ForecastMethodType)result.ForecastMethodRecommended.Id).Should().Be.EqualTo(ForecastMethodType.TeleoptiClassicLongTermWithTrend);
 			result.ForecastMethods.Any(x => (int)x.AccuracyNumber == 89 && x.ForecastMethodType == ForecastMethodType.TeleoptiClassicLongTerm).Should().Be.True();
 			result.ForecastMethods.Any(x => (int)x.AccuracyNumber == 92 && x.ForecastMethodType == ForecastMethodType.TeleoptiClassicLongTermWithTrend).Should().Be.True();
