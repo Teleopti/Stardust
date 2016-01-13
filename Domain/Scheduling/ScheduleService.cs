@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
@@ -10,14 +11,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
     public class ScheduleService : IScheduleService
     {
         private readonly IWorkShiftFinderService _finderService;
-        private readonly IScheduleMatrixListCreator _scheduleMatrixListCreator;
+		private readonly IMatrixListFactory _scheduleMatrixListCreator;
         private readonly IShiftCategoryLimitationChecker _shiftCategoryLimitationChecker;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private readonly Hashtable _finderResults = new Hashtable();
 
         public ScheduleService(
             IWorkShiftFinderService finderService, 
-            IScheduleMatrixListCreator scheduleMatrixListCreator,
+            IMatrixListFactory scheduleMatrixListCreator,
             IShiftCategoryLimitationChecker shiftCategoryLimitationChecker, 
             IEffectiveRestrictionCreator effectiveRestrictionCreator)
         {
@@ -104,7 +105,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                     _shiftCategoryLimitationChecker.SetBlockedShiftCategories(schedulingOptions, person, scheduleDateOnly);
 
                     IList<IScheduleMatrixPro> matrixList = _scheduleMatrixListCreator.
-                        CreateMatrixListFromScheduleParts(
+                        CreateMatrixListForSelection(
                             new List<IScheduleDay> { schedulePart });
                     if (matrixList.Count == 0)
                         return false;

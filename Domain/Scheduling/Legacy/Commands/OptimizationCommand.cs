@@ -32,8 +32,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamBlockOptimizationCommand _teamBlockOptimizationCommand;
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
-		private readonly Func<IOptimizerHelperHelper> _optimizerHelper;
+		private readonly PeriodExctractorFromScheduleParts _periodExctractor;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
+		private readonly IPersonListExtractorFromScheduleParts _personExtractor;
 
 		public OptimizationCommand(Func<IPersonSkillProvider> personSkillProvider, IGroupPageCreator groupPageCreator,
 			IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
@@ -42,8 +43,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ITeamBlockOptimizationCommand teamBlockOptimizationCommand,
 			IMatrixListFactory matrixListFactory,
 			IWeeklyRestSolverCommand weeklyRestSolverCommand,
-			Func<IOptimizerHelperHelper> optimizerHelper,
-			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended)
+			PeriodExctractorFromScheduleParts periodExctractor,
+			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
+			IPersonListExtractorFromScheduleParts personExtractor)
 		{
 			_personSkillProvider = personSkillProvider;
 			_groupPageCreator = groupPageCreator;
@@ -53,8 +55,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamBlockOptimizationCommand = teamBlockOptimizationCommand;
 			_matrixListFactory = matrixListFactory;
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
-			_optimizerHelper = optimizerHelper;
+			_periodExctractor = periodExctractor;
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
+			_personExtractor = personExtractor;
 		}
 
 		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, IBackgroundWorkerWrapper backgroundWorker,
@@ -72,8 +75,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker);
 			}
 			var selectedSchedules = selectedScheduleDays;
-			var selectedPeriod = _optimizerHelper().GetSelectedPeriod(selectedSchedules);
-			var scheduleMatrixOriginalStateContainers = scheduleOptimizerHelper.CreateScheduleMatrixOriginalStateContainers(selectedSchedules, selectedPeriod);
+			var selectedPeriod = _periodExctractor.ExtractPeriod(selectedSchedules);
+			
 			DateOnlyPeriod groupPagePeriod = schedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
 
 			GroupPageLight selectedGroupPage;
@@ -97,6 +100,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			{
 
 				case true:
+					var scheduleMatrixOriginalStateContainers = scheduleOptimizerHelper.CreateScheduleMatrixOriginalStateContainers(selectedSchedules, selectedPeriod);
 					IList<IDayOffTemplate> displayList = schedulerStateHolder.CommonStateHolder.ActiveDayOffs.ToList();
 					scheduleOptimizerHelper.DaysOffBackToLegalState(scheduleMatrixOriginalStateContainers,
 						backgroundWorker, displayList[0], false,
@@ -105,7 +109,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 					_resourceOptimizationHelperExtended().ResourceCalculateMarkedDays(null,
 						optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks);
-					IList<IScheduleMatrixPro> matrixList = _matrixListFactory.CreateMatrixList(selectedSchedules, selectedPeriod);
+					IList<IScheduleMatrixPro> matrixList = _matrixListFactory.CreateMatrixListForSelection(selectedSchedules);
 
 
 					if (optimizationPreferences.Extra.UseTeams)
@@ -118,8 +122,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						allMatrixes);
 					break;
 				case false:
-					var personExtractor = new PersonListExtractorFromScheduleParts(selectedSchedules);
-					var selectedPersons = personExtractor.ExtractPersons().ToList();
+					var selectedPersons = _personExtractor.ExtractPersons(selectedSchedules);
 					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
 					var tagSetter = new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling);
 					var rollbackService = new SchedulePartModifyAndRollbackService(stateHolder,

@@ -16,23 +16,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_restrictionExtractor = restrictionExtractor;
 		}
 
-		public DateOnlyPeriod GetSelectedPeriod(IEnumerable<IScheduleDay> scheduleDays)
-		{
-			if (scheduleDays == null) throw new ArgumentNullException("scheduleDays");
-			DateOnly minDate = DateOnly.MaxValue;
-			DateOnly maxDate = DateOnly.MinValue;
-			foreach (var scheduleDay in scheduleDays)
-			{
-				if (scheduleDay.DateOnlyAsPeriod.DateOnly < minDate)
-					minDate = scheduleDay.DateOnlyAsPeriod.DateOnly;
-
-				if (scheduleDay.DateOnlyAsPeriod.DateOnly > maxDate)
-					maxDate = scheduleDay.DateOnlyAsPeriod.DateOnly;
-			}
-
-			return new DateOnlyPeriod(minDate, maxDate);
-		}
-
 		public void LockDaysForDayOffOptimization(IList<IScheduleMatrixPro> matrixList, IOptimizationPreferences optimizationPreferences, DateOnlyPeriod selectedPeriod)
 		{
 			var schedulingOptionsCreator = new SchedulingOptionsCreator();

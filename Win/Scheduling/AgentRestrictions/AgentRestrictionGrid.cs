@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using Autofac;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -192,8 +191,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 			_agentRestrictionsNoWorkShiftfFinder = container.Resolve<IAgentRestrictionsNoWorkShiftfFinder>();
 			var locker = container.Resolve<IMatrixUserLockLocker>();
-			var scheduleMatrixListCreator = new ScheduleMatrixListCreator(()=>stateHolder.SchedulingResultState,new UniqueSchedulePartExtractor());
-			var agentRestrictionsDisplayRowCreator = new AgentRestrictionsDisplayRowCreator(stateHolder, scheduleMatrixListCreator, locker);
+			var matrixListFactory = container.Resolve<IMatrixListFactory>();
+			var agentRestrictionsDisplayRowCreator = new AgentRestrictionsDisplayRowCreator(stateHolder, matrixListFactory, locker);
 
 			Load(agentRestrictionsDisplayRowCreator);
 		}

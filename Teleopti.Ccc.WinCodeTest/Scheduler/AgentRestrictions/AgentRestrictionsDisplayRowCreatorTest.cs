@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private AgentRestrictionsDisplayRowCreator _agentRestrictionsDisplayRowCreator;
 		private ISchedulerStateHolder _stateHolder;
 		private IList<IPerson> _persons;
-		private IScheduleMatrixListCreator _scheduleMatrixListCreator;
+		private IMatrixListFactory _matrixListFactory;
 		private MockRepository _mocks;
 		private IPerson _person;
 		private IDateOnlyPeriodAsDateTimePeriod _dateOnlyPeriodAsDateTimePeriod;
@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_person = _mocks.StrictMock<IPerson>();
 			_matrixUserLockLocker = _mocks.StrictMock<IMatrixUserLockLocker>();
 			_persons = new List<IPerson> { _person };
-			_scheduleMatrixListCreator = _mocks.StrictMock<IScheduleMatrixListCreator>();
-			_agentRestrictionsDisplayRowCreator = new AgentRestrictionsDisplayRowCreator(_stateHolder, _scheduleMatrixListCreator, _matrixUserLockLocker);
+			_matrixListFactory = _mocks.StrictMock<IMatrixListFactory>();
+			_agentRestrictionsDisplayRowCreator = new AgentRestrictionsDisplayRowCreator(_stateHolder, _matrixListFactory, _matrixUserLockLocker);
 			_dateOnlyPeriodAsDateTimePeriod = _mocks.StrictMock<IDateOnlyPeriodAsDateTimePeriod>();
 			_virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
 				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
 				Expect.Call(_scheduleRange.ScheduledDay(startDate)).Return(_scheduleDay);
-				Expect.Call(_scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(_scheduleDays)).Return(_scheduleMatrixPros);
+				Expect.Call(_matrixListFactory.CreateMatrixListForSelection(_scheduleDays)).Return(_scheduleMatrixPros);
 				Expect.Call(() => _matrixUserLockLocker.Execute(null, dateOnlyPeriod)).IgnoreArguments();
 				Expect.Call(_stateHolder.CommonAgentName(_person)).Return("Name");
 				Expect.Call(_scheduleMatrixPro.Person).Return(_person);

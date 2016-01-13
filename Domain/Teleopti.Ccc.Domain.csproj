@@ -691,6 +691,7 @@
     <Compile Include="Scheduling\Legacy\Commands\ScheduleRangeForPerson.cs" />
     <Compile Include="Scheduling\Legacy\Commands\TargetScheduleSummaryCalculator.cs" />
     <Compile Include="Scheduling\Legacy\Commands\WorkShiftBackToLegalStateServiceFactory.cs" />
+    <Compile Include="Scheduling\PeriodExctractorFromScheduleParts.cs" />
     <Compile Include="Scheduling\PersistConflict.cs" />
     <Compile Include="Scheduling\SaveSchedulePart\SaveSchedulePartService.cs" />
     <Compile Include="Scheduling\SchedulingResultModel.cs" />
@@ -948,7 +949,7 @@
     <Compile Include="Optimization\ExtendReduceTimeOptimizerService.cs" />
     <Compile Include="Optimization\DayOffOptimizerConflictHandler.cs" />
     <Compile Include="Optimization\DayOffOptimizerValidator.cs" />
-    <Compile Include="Optimization\IPersonExtractor.cs" />
+    <Compile Include="Optimization\IPersonListExtractorFromScheduleParts.cs" />
     <Compile Include="Optimization\IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak.cs" />
     <Compile Include="Optimization\IRuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoader.cs" />
     <Compile Include="Optimization\IWorkRuleSetExtractorForGroupOfPeople.cs" />
@@ -1073,7 +1074,7 @@
     <Compile Include="Scheduling\Legacy\Commands\IOptimizerHelperHelper.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IResourceOptimizationHelperExtended.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IScheduleCommandToggle.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\IScheduleOptimizerHelper.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\RequiredScheduleHelper.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IScheduleOvertimeCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ISchedulerStateHolder.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ISelectedPeriod.cs" />
@@ -1145,7 +1146,6 @@
     <Compile Include="Optimization\MainShiftOptimizeActivitiesSpecification.cs" />
     <Compile Include="Optimization\RelativeBoostedDailyDifferencesByPersonalSkillsExtractor.cs" />
     <Compile Include="Collection\AbstractDictionary.cs" />
-    <Compile Include="Optimization\ScheduleMatrixListCreator.cs" />
     <Compile Include="Optimization\ScheduleMatrixOriginalStateContainer.cs" />
     <Compile Include="Optimization\TimePeriodCanHaveShortBreak.cs" />
     <Compile Include="Optimization\WorkShiftBackToLegalStateServicePro.cs" />
@@ -1433,9 +1433,6 @@
     <Compile Include="Optimization\SchedulePeriodShiftCategoryBackToLegalStateServiceBuilder.cs" />
     <Compile Include="Optimization\SchedulePeriodShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Optimization\ShiftCategoryLimitationChecker.cs" />
-    <Compile Include="Optimization\UniqueSchedulePartExtractor.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Payroll\PayrollExport.cs" />
     <Compile Include="Payroll\PayrollResult.cs" />
     <Compile Include="RealTimeAdherence\IRtaStateHolder.cs" />

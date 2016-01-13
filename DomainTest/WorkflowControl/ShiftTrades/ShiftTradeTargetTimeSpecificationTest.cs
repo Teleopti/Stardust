@@ -5,14 +5,16 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 {
-    [TestFixture]
+	[TestFixture]
     public class ShiftTradeTargetTimeSpecificationTest
     {
         private ShiftTradeTargetTimeSpecification _target;
@@ -25,6 +27,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
         private IScheduleRange _range;
         private IProjectionService _projectionService;
         private IVisualLayerCollection _visualLayerCollection;
+		private IMatrixListFactory _matrixListFactory;
 
         [SetUp]
         public void Setup()
@@ -32,13 +35,15 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
             _mocks = new MockRepository();
             _stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _targetTimeTimeCalculator = _mocks.StrictMock<ISchedulePeriodTargetTimeCalculator>();
-            _target = new ShiftTradeTargetTimeSpecification(new ScheduleMatrixListCreator(()=> _stateHolder, new UniqueSchedulePartExtractor()), _targetTimeTimeCalculator);
+			_matrixListFactory = _mocks.StrictMock<IMatrixListFactory>();
+			_target = new ShiftTradeTargetTimeSpecification(_matrixListFactory, _targetTimeTimeCalculator);
             _part1 = _mocks.StrictMock<IScheduleDay>();
             _part2 = _mocks.StrictMock<IScheduleDay>();
             _dic = _mocks.StrictMock<IScheduleDictionary>();
             _range = _mocks.StrictMock<IScheduleRange>();
             _projectionService = _mocks.StrictMock<IProjectionService>();
             _visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
+			
         }
 
         [Test]
@@ -56,6 +61,14 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
             person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(day));
             person2.WorkflowControlSet = new WorkflowControlSet("Hej igen");
 
+	        var matrix1 = new ScheduleMatrixPro(_range,
+		        new FullWeekOuterWeekPeriodCreator(new DateOnlyPeriod(new DateOnly(2010, 1, 1), new DateOnly(2010, 1, 1)),
+			        person1), person1.VirtualSchedulePeriod(new DateOnly(2010, 1, 1)));
+
+			var matrix2 = new ScheduleMatrixPro(_range,
+				new FullWeekOuterWeekPeriodCreator(new DateOnlyPeriod(new DateOnly(2010, 1, 1), new DateOnly(2010, 1, 1)),
+					person2), person2.VirtualSchedulePeriod(new DateOnly(2010, 1, 1)));
+
             using(_mocks.Record())
             {
                 Expect.Call(_part1.Person).Return(person1).Repeat.Any();
@@ -71,7 +84,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
                 _part1.Clear<IPersonAssignment>(); //These should not be here, but something is wrong in the merge
                 _part2.Clear<IPersonAssignment>(); //These should not be here, but something is wrong in the merge
                 Expect.Call(_stateHolder.Schedules).Return(_dic).Repeat.Any();
-                Expect.Call(_dic[person1]).Return(_range).Repeat.Once();
                 Expect.Call(_range.ScheduledDay(day)).Return(_part1).Repeat.Once();
                 Expect.Call(_part1.ProjectionService()).Return(_projectionService).Repeat.Once();
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.Once();
@@ -79,13 +91,14 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
                 Expect.Call(_targetTimeTimeCalculator.TargetWithTolerance(null)).IgnoreArguments().Return(new TimePeriod(TimeSpan.FromHours(8),
                                                                               TimeSpan.FromHours(8))).Repeat.Once();
 
-                Expect.Call(_dic[person2]).Return(_range).Repeat.Once();
                 Expect.Call(_range.ScheduledDay(day)).Return(_part2).Repeat.Once();
                 Expect.Call(_part2.ProjectionService()).Return(_projectionService).Repeat.Once();
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.Once();
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.FromHours(8)).Repeat.Once();
                 Expect.Call(_targetTimeTimeCalculator.TargetWithTolerance(null)).IgnoreArguments().Return(new TimePeriod(TimeSpan.FromHours(8),
                                                                               TimeSpan.FromHours(8))).Repeat.Once();
+	            Expect.Call(_matrixListFactory.CreateMatrixListForSelection(new List<IScheduleDay> {_part1, _part2}))
+		            .Return(new List<IScheduleMatrixPro>{matrix1, matrix2});
             }
             using(_mocks.Playback())
             {
@@ -107,7 +120,15 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
             person2.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(day, SchedulePeriodType.Day, 1));
             person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(day));
             person2.WorkflowControlSet = new WorkflowControlSet("Hej igen");
-            
+
+			var matrix1 = new ScheduleMatrixPro(_range,
+				new FullWeekOuterWeekPeriodCreator(new DateOnlyPeriod(new DateOnly(2010, 1, 1), new DateOnly(2010, 1, 1)),
+					person1), person1.VirtualSchedulePeriod(new DateOnly(2010, 1, 1)));
+
+			var matrix2 = new ScheduleMatrixPro(_range,
+				new FullWeekOuterWeekPeriodCreator(new DateOnlyPeriod(new DateOnly(2010, 1, 1), new DateOnly(2010, 1, 1)),
+					person2), person2.VirtualSchedulePeriod(new DateOnly(2010, 1, 1)));
+
 			using (_mocks.Record())
             {
                 Expect.Call(_part1.Person).Return(person1).Repeat.Any();
@@ -123,7 +144,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
                 _part1.Merge(_part2, false);
                 _part2.Merge(_part1, false);
                 Expect.Call(_stateHolder.Schedules).Return(_dic).Repeat.Any();
-                Expect.Call(_dic[person1]).Return(_range).Repeat.Once();
                 Expect.Call(_range.ScheduledDay(day)).Return(_part1).Repeat.Once();
                 Expect.Call(_part1.ProjectionService()).Return(_projectionService).Repeat.Once();
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.Once();
@@ -131,13 +151,14 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
                 Expect.Call(_targetTimeTimeCalculator.TargetWithTolerance(null)).IgnoreArguments().Return(new TimePeriod(TimeSpan.FromHours(8),
                                                                               TimeSpan.FromHours(8))).Repeat.Once();
 
-                Expect.Call(_dic[person2]).Return(_range).Repeat.Once();
                 Expect.Call(_range.ScheduledDay(day)).Return(_part2).Repeat.Once();
                 Expect.Call(_part2.ProjectionService()).Return(_projectionService).Repeat.Once();
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.Once();
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.FromHours(8)).Repeat.Once();
                 Expect.Call(_targetTimeTimeCalculator.TargetWithTolerance(null)).IgnoreArguments().Return(new TimePeriod(TimeSpan.FromHours(7),
                                                                               TimeSpan.FromHours(7))).Repeat.Once();
+				Expect.Call(_matrixListFactory.CreateMatrixListForSelection(new List<IScheduleDay> { _part1, _part2 }))
+					.Return(new List<IScheduleMatrixPro> { matrix1, matrix2 });
             }
             using (_mocks.Playback())
             {

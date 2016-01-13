@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.WinCode.Common;
@@ -13,8 +15,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	public class AgentInfoHelper
 	{
 		private readonly IWorkShiftWorkTime _workShiftWorkTime;
-		private IPerson _selectedPerson;
-		private ISchedulingResultStateHolder _stateHolder;
+		private readonly IPerson _selectedPerson;
+		private readonly ISchedulingResultStateHolder _stateHolder;
 
 		private bool _periodInLegalState;
 		private bool _weekInLegalState;
@@ -27,13 +29,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private TimeSpan _currentPaidTime;
 		private int _currentOccupiedSlots;
 		private DateOnlyPeriod? _period;
-		private IVirtualSchedulePeriod _schedulePeriod;
-		private DateOnly _selectedDate;
-		private ISchedulingOptions _schedulingOptions;
-		private int _numberOfWarnings;
-		private IDictionary<string, TimeSpan> _timePerDefinitionSet = new Dictionary<string, TimeSpan>();
-		private IScheduleMatrixPro _matrix;
-		private IPeriodScheduledAndRestrictionDaysOff _periodScheduledAndRestrictionDaysOff = new PeriodScheduledAndRestrictionDaysOff();
+		private readonly IVirtualSchedulePeriod _schedulePeriod;
+		private readonly DateOnly _selectedDate;
+		private readonly ISchedulingOptions _schedulingOptions;
+		private readonly IDictionary<string, TimeSpan> _timePerDefinitionSet = new Dictionary<string, TimeSpan>();
+		private readonly IScheduleMatrixPro _matrix;
+		private readonly IPeriodScheduledAndRestrictionDaysOff _periodScheduledAndRestrictionDaysOff = new PeriodScheduledAndRestrictionDaysOff();
 		private string _daysOffTolerance;
 		private Percent _preferenceFulfillment;
 		private Percent _mustHavesFulfillment;
@@ -41,7 +42,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private Percent _availabilityFulfillment;
 		private Percent _studentAvailabilityFulfillment;
 
-		public AgentInfoHelper(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder stateHolder, ISchedulingOptions schedulingOptions, IWorkShiftWorkTime workShiftWorkTime)
+		public AgentInfoHelper(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder stateHolder,
+			ISchedulingOptions schedulingOptions, IWorkShiftWorkTime workShiftWorkTime, IMatrixListFactory matrixListFactory)
 		{
 			_workShiftWorkTime = workShiftWorkTime;
 			if (person != null)
@@ -57,8 +59,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					_period = SchedulePeriod.DateOnlyPeriod;
 					DateOnly periodFirstDate = Period.Value.StartDate;
 					IScheduleDay onePart = _stateHolder.Schedules[_selectedPerson].ScheduledDay(periodFirstDate);
-					IScheduleMatrixListCreator scheduleMatrixListCreator = new ScheduleMatrixListCreator(() => _stateHolder, new UniqueSchedulePartExtractor());
-					_matrix = scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(new List<IScheduleDay> { onePart })[0];
+					_matrix = matrixListFactory.CreateMatrixListForSelection(new List<IScheduleDay> {onePart}).FirstOrDefault();
+
 				}
 
 			}
@@ -167,11 +169,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			get { return _schedulingOptions; }
 		}
 
-		public int NumberOfWarnings
-		{
-			get { return _numberOfWarnings; }
-			set { _numberOfWarnings = value; }
-		}
+		public int NumberOfWarnings { get; set; }
 
 		public IDictionary<string, TimeSpan> TimePerDefinitionSet
 		{

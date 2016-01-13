@@ -164,7 +164,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly ContextMenuStrip _contextMenuSkillGrid = new ContextMenuStrip();
 		private readonly IOptimizerOriginalPreferences _optimizerOriginalPreferences;
 		private readonly IOptimizationPreferences _optimizationPreferences;
-		private readonly IOptimizerHelperHelper _innerOptimizerHelper;
 		private readonly IGroupPagePerDateHolder _groupPagePerDateHolder;
 		private readonly IBudgetPermissionService _budgetPermissionService;
 		private readonly IRestrictionExtractor _restrictionExtractor;
@@ -407,7 +406,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_schedulerState = _container.Resolve<ISchedulerStateHolder>();
 			_groupPagesProvider = _container.Resolve<ISchedulerGroupPagesProvider>();
 			_requiredScheduleHelper = _container.Resolve<IRequiredScheduleHelper>();
-			_innerOptimizerHelper = _container.Resolve<IOptimizerHelperHelper>();
 			_restrictionExtractor = _container.Resolve<IRestrictionExtractor>();
 			_optimizationHelperExtended = _container.Resolve<IResourceOptimizationHelperExtended>();
 			_skillDayLoadHelper = _container.Resolve<ISkillDayLoadHelper>();
@@ -3136,7 +3134,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_undoRedo.CreateBatch(Resources.UndoRedoScheduling);
 			var argument = (SchedulingAndOptimizeArgument) e.Argument;
 			var scheduleDays = argument.SelectedScheduleDays;
-			var selectedPeriod = _innerOptimizerHelper.GetSelectedPeriod(scheduleDays);
+			var selectedPeriod = new PeriodExctractorFromScheduleParts().ExtractPeriod(scheduleDays);
 			turnOffCalculateMinMaxCacheIfNeeded(_optimizerOriginalPreferences.SchedulingOptions);
 			_optimizerOriginalPreferences.SchedulingOptions.NotAllowedShiftCategories.Clear();
 			AdvanceLoggingService.LogSchedulingInfo(_optimizerOriginalPreferences.SchedulingOptions,
@@ -3374,10 +3372,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			var scheduleDays = argument.SelectedScheduleDays;
 
-			var selectedPeriod = _innerOptimizerHelper.GetSelectedPeriod(scheduleDays);
-
 			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays =
-				_container.Resolve<IMatrixListFactory>().CreateMatrixList(scheduleDays, selectedPeriod);
+				_container.Resolve<IMatrixListFactory>().CreateMatrixListForSelection(scheduleDays);
 			if (matrixesOfSelectedScheduleDays.Count == 0)
 				return;
 
@@ -3447,7 +3443,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_undoRedo.CreateBatch(Resources.UndoRedoReOptimize);
 			var argument = (SchedulingAndOptimizeArgument) e.Argument;
 			var scheduleDays = argument.SelectedScheduleDays;
-			var selectedPeriod = _innerOptimizerHelper.GetSelectedPeriod(scheduleDays);
+			var selectedPeriod = new PeriodExctractorFromScheduleParts().ExtractPeriod(scheduleDays);
 			var dateOnlyList = selectedPeriod.DayCollection();
 			_schedulerState.SchedulingResultState.SkillDaysOnDateOnly(dateOnlyList);
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();

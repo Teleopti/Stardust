@@ -256,7 +256,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                                                            UseStudentAvailability = false,
                                                            UseRotations = true
                                                        };
-            var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _workShiftWorkTime);
+            var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _workShiftWorkTime, _container.Resolve<IMatrixListFactory>());
 			if(helper.HasMatrix)
 				helper.SetRestrictionFullfillment();
 			var period = person.Period(helper.SelectedDate);
@@ -375,7 +375,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                 UseStudentAvailability = true,
                 UseRotations = true
             };
-            var helper = new AgentInfoHelper(person, date, _stateHolder.SchedulingResultState, schedulingOptions, _workShiftWorkTime);
+			var helper = new AgentInfoHelper(person, date, _stateHolder.SchedulingResultState, schedulingOptions, _workShiftWorkTime, _container.Resolve<IMatrixListFactory>());
 
             helper.SchedulePeriodData(false);
 
@@ -602,7 +602,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				UseRotations = true
 			};
 
-			var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _workShiftWorkTime);
+			var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _workShiftWorkTime, _container.Resolve<IMatrixListFactory>());
 			helper.SchedulePeriodData(calculateLegalState);
 			if (nullOrZeroPeriod(helper.Period))
 			{

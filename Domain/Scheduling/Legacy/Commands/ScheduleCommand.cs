@@ -29,10 +29,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamBlockScheduleCommand _teamBlockScheduleCommand;
 		private readonly IClassicScheduleCommand _classicScheduleCommand;
 		private readonly IMatrixListFactory _matrixListFactory;
-		private readonly IOptimizerHelperHelper _optimizerHelper;
 		private readonly Func<IWorkShiftFinderResultHolder> _workShiftFinderResultHolder;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
+		private readonly PeriodExctractorFromScheduleParts _periodExctractor;
 
 		public ScheduleCommand(Func<IPersonSkillProvider> personSkillProvider,
 			IResourceOptimizationHelper resourceOptimizationHelper,
@@ -40,10 +40,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ITeamBlockScheduleCommand teamBlockScheduleCommand,
 			IClassicScheduleCommand classicScheduleCommand,
 			IMatrixListFactory matrixListFactory,
-			IOptimizerHelperHelper optimizerHelper,
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
-			IWeeklyRestSolverCommand weeklyRestSolverCommand
+			IWeeklyRestSolverCommand weeklyRestSolverCommand,
+			PeriodExctractorFromScheduleParts periodExctractor
 			)
 		{
 			_personSkillProvider = personSkillProvider;
@@ -52,10 +52,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamBlockScheduleCommand = teamBlockScheduleCommand;
 			_classicScheduleCommand = classicScheduleCommand;
 			_matrixListFactory = matrixListFactory;
-			_optimizerHelper = optimizerHelper;
 			_workShiftFinderResultHolder = workShiftFinderResultHolder;
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
+			_periodExctractor = periodExctractor;
 		}
 
 		[LogTime]
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				if (schedulingOptions.UseShiftCategoryLimitations)
 				{
 					IList<IScheduleMatrixPro> allMatrixes = new List<IScheduleMatrixPro>();
-					var selectedPeriod = _optimizerHelper.GetSelectedPeriod(selectedScheduleDays);
+					var selectedPeriod = _periodExctractor.ExtractPeriod(selectedScheduleDays);
 
 					if (schedulingOptions.UseTeam)
 					{
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					}
 
 					IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays =
-						_matrixListFactory.CreateMatrixList(selectedScheduleDays, selectedPeriod);
+						_matrixListFactory.CreateMatrixListForSelection(selectedScheduleDays);
 					if (matrixesOfSelectedScheduleDays.Count == 0)
 						return;
 

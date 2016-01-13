@@ -73,6 +73,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OptimizationCommand>().As<IOptimizationCommand>().InstancePerLifetimeScope();
 			builder.RegisterType<ClassicDaysOffOptimizationCommand>().As<IClassicDaysOffOptimizationCommand>().InstancePerLifetimeScope();
 			builder.RegisterType<WorkShiftBackToLegalStateServiceFactory>().As<IWorkShiftBackToLegalStateServiceFactory>().InstancePerLifetimeScope();
+			builder.RegisterType<PersonListExtractorFromScheduleParts>().As<IPersonListExtractorFromScheduleParts>().InstancePerLifetimeScope();
 
 			builder.RegisterType<DayOffOptimizationDecisionMakerFactory>().As<DayOffOptimizationDecisionMakerFactory>();
 			builder.RegisterType<FlexibelDayOffOptimizationDecisionMakerFactory>().As<FlexibelDayOffOptimizationDecisionMakerFactory>();
@@ -98,6 +99,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RequiredScheduleHelper>().As<IRequiredScheduleHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleCommandToggle>().As<IScheduleCommandToggle>().SingleInstance();
 			builder.RegisterType<CommonStateHolder>().As<ICommonStateHolder>().InstancePerLifetimeScope();
+			builder.RegisterType<PeriodExctractorFromScheduleParts>().As<PeriodExctractorFromScheduleParts>().InstancePerLifetimeScope();
 
 			builder.RegisterModule<WeeklyRestSolverModule>();
 			builder.RegisterModule<EqualNumberOfCategoryFairnessModule>();
@@ -167,7 +169,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<NonBlendSkillCalculator>().As<INonBlendSkillCalculator>().InstancePerLifetimeScope();
 			builder.RegisterType<SchedulePeriodTargetTimeCalculator>().As<ISchedulePeriodTargetTimeCalculator>().InstancePerLifetimeScope();
-			builder.RegisterType<ScheduleMatrixListCreator>().As<IScheduleMatrixListCreator>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftCategoryLimitationChecker>().As<IShiftCategoryLimitationChecker>().InstancePerLifetimeScope();
 			builder.RegisterType<SchedulePartModifyAndRollbackService>().As<ISchedulePartModifyAndRollbackService>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleService>().As<IScheduleService>().InstancePerLifetimeScope();
@@ -264,7 +265,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<HasContractDayOffDefinition>().As<IHasContractDayOffDefinition>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleDayDataMapper>().As<IScheduleDayDataMapper>().InstancePerLifetimeScope();
 			builder.RegisterType<MatrixDataListCreator>().As<IMatrixDataListCreator>().InstancePerDependency();
-			builder.RegisterType<UniqueSchedulePartExtractor>().As<IUniqueSchedulePartExtractor>().InstancePerLifetimeScope();
 			builder.RegisterType<MatrixDataWithToFewDaysOff>().As<IMatrixDataWithToFewDaysOff>().InstancePerDependency();
 			builder.RegisterType<MissingDaysOffScheduler>().As<IMissingDaysOffScheduler>().InstancePerDependency();
 			builder.RegisterType<TeamDayOffScheduler>().As<ITeamDayOffScheduler>().InstancePerDependency();

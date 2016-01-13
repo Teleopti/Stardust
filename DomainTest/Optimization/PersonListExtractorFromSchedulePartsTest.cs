@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
@@ -31,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _person1 = PersonFactory.CreatePerson("A");
             _person2 = PersonFactory.CreatePerson("B");
             _scheduleDays = new List<IScheduleDay>{ _scheduleDay1, _scheduleDay2, _scheduleDay3 };
-            _target = new PersonListExtractorFromScheduleParts(_scheduleDays);
+            _target = new PersonListExtractorFromScheduleParts();
         }
 
         [Test]
@@ -51,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
             using(_mock.Playback())
             {
-                IList<IPerson> result = _target.ExtractPersons().ToList();
+				IList<IPerson> result = _target.ExtractPersons(_scheduleDays);
                 Assert.AreEqual(uniquePersons, result.Count);
                 Assert.AreEqual(_person1, result[0]);
                 Assert.AreEqual(_person2, result[1]);

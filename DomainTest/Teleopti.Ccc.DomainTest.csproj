@@ -206,6 +206,7 @@
     <Compile Include="Optimization\DayOffOptimizationPreferenceProviderTest.cs" />
     <Compile Include="Optimization\Filter\FindFilterTest.cs" />
     <Compile Include="ResourceCalculation\DoubleMatrixExtensions.cs" />
+    <Compile Include="Scheduling\PeriodExctractorFromSchedulePartsTest.cs" />
     <Compile Include="Scheduling\TeamBlock\DayOff\MissingDayOffBestSpotDeciderTest.cs" />
     <Compile Include="SeatPlanning\CommonSeatAllocatorTests.cs" />
     <Compile Include="SeatPlanning\SeatMapPersisterTests.cs" />
@@ -681,7 +682,6 @@
     <Compile Include="Optimization\MainShiftOptimizeActivitiesSpecificationTest.cs" />
     <Compile Include="Optimization\RelativeBoostedDailyDifferencesByPersonalSkillsExtractorTest.cs" />
     <Compile Include="Optimization\DayOffOptimizationServiceTest.cs" />
-    <Compile Include="Optimization\ScheduleMatrixListCreatorTest.cs" />
     <Compile Include="Optimization\ScheduleMatrixOriginalStateContainerTest.cs" />
     <Compile Include="Optimization\TimePeriodCanHaveShortBreakTest.cs" />
     <Compile Include="Optimization\WorkShiftBackToLegalStateServiceProTest.cs" />
@@ -958,9 +958,6 @@
     <Compile Include="Optimization\RemoveShiftCategoryBackToLegalServiceBuilderTest.cs" />
     <Compile Include="Optimization\SchedulePeriodBackToLegalStateServiceProTest.cs" />
     <Compile Include="Optimization\ShiftCategoryLimitationCheckerTest.cs" />
-    <Compile Include="Optimization\UniqueSchedulePartExtractorTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Payroll\PayrollExportTest.cs" />
     <Compile Include="Payroll\PayrollResultTest.cs" />
     <Compile Include="RealTimeAdherence\RtaRuleTest.cs" />

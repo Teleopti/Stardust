@@ -5,7 +5,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     {
         private MockRepository _mocks;
         private IWorkShiftFinderService _workShiftFinder;
-        private IScheduleMatrixListCreator _scheduleMatrixListCreator;
+		private IMatrixListFactory _matrixListFactory;
         private IShiftCategoryLimitationChecker _shiftCatLimitChecker;
         private ScheduleService _target;
         private IScheduleDay _part;
@@ -33,11 +33,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             _mocks = new MockRepository();
             _workShiftFinder = _mocks.StrictMock<IWorkShiftFinderService>();
-            _scheduleMatrixListCreator = _mocks.StrictMock<IScheduleMatrixListCreator>();
+			_matrixListFactory = _mocks.StrictMock<IMatrixListFactory>();
             _shiftCatLimitChecker = _mocks.StrictMock<IShiftCategoryLimitationChecker>();
             _restrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
             _options = new SchedulingOptions();
-            _target = new ScheduleService(_workShiftFinder, _scheduleMatrixListCreator, _shiftCatLimitChecker, _restrictionCreator);
+			_target = new ScheduleService(_workShiftFinder, _matrixListFactory, _shiftCatLimitChecker, _restrictionCreator);
 
             _part = _mocks.StrictMock<IScheduleDay>();
             
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(_effectiveRestriction.NotAvailable).Return(false);
             Expect.Call(
                 () => _shiftCatLimitChecker.SetBlockedShiftCategories(_options, _person, (new DateOnly(2011, 4, 18))));
-            Expect.Call(_scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(new List<IScheduleDay> {_part})).Return(new List<IScheduleMatrixPro>());
+			Expect.Call(_matrixListFactory.CreateMatrixListForSelection(new List<IScheduleDay> { _part })).Return(new List<IScheduleMatrixPro>());
             _mocks.ReplayAll();
 			Assert.That(_target.SchedulePersonOnDay(_part, _options, _effectiveRestriction, _resourceCalculateDelayer, _rollbackService), Is.False);
             _mocks.VerifyAll();
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(_effectiveRestriction.NotAvailable).Return(false);
             Expect.Call(
                 () => _shiftCatLimitChecker.SetBlockedShiftCategories(_options, _person, (new DateOnly(2011, 4, 18))));
-            Expect.Call(_scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(new List<IScheduleDay> { _part })).Return(new List<IScheduleMatrixPro>{_scheduleMatrixPro});
+			Expect.Call(_matrixListFactory.CreateMatrixListForSelection(new List<IScheduleDay> { _part })).Return(new List<IScheduleMatrixPro> { _scheduleMatrixPro });
 			Expect.Call(_workShiftFinder.FindBestShift(_part, _options, _scheduleMatrixPro, _effectiveRestriction)).Return(new WorkShiftFinderServiceResult(null, new WorkShiftFinderResult(_person,
 																						new DateOnly(2011, 4, 18)))).IgnoreArguments();
             _mocks.ReplayAll();
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(_effectiveRestriction.NotAvailable).Return(false);
             Expect.Call(
                 () => _shiftCatLimitChecker.SetBlockedShiftCategories(_options, _person, (new DateOnly(2011, 4, 18))));
-            Expect.Call(_scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(new List<IScheduleDay> { _part })).Return(new List<IScheduleMatrixPro> { _scheduleMatrixPro });
+			Expect.Call(_matrixListFactory.CreateMatrixListForSelection(new List<IScheduleDay> { _part })).Return(new List<IScheduleMatrixPro> { _scheduleMatrixPro });
 
 			Expect.Call(_workShiftFinder.FindBestShift(_part, _options, _scheduleMatrixPro, _effectiveRestriction)).Return(new WorkShiftFinderServiceResult(resultHolder, new WorkShiftFinderResult(_person,
 																													  new DateOnly(2011, 4, 18)))).IgnoreArguments();
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(_effectiveRestriction.NotAvailable).Return(false);
             Expect.Call(
                 () => _shiftCatLimitChecker.SetBlockedShiftCategories(_options, _person, (new DateOnly(2011, 4, 18))));
-            Expect.Call(_scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(new List<IScheduleDay> { _part })).Return(new List<IScheduleMatrixPro> { _scheduleMatrixPro });
+			Expect.Call(_matrixListFactory.CreateMatrixListForSelection(new List<IScheduleDay> { _part })).Return(new List<IScheduleMatrixPro> { _scheduleMatrixPro });
 
 			Expect.Call(_workShiftFinder.FindBestShift(_part, _options, _scheduleMatrixPro, _effectiveRestriction)).Return(new WorkShiftFinderServiceResult(resultHolder, new WorkShiftFinderResult(_person, new DateOnly(2011, 4, 18)))).IgnoreArguments();
             Expect.Call(resultHolder.ShiftProjection).Return(projCashe).Repeat.Twice();

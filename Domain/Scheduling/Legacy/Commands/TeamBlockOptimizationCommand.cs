@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			if (optimizationPreferences.General.OptimizationStepTimeBetweenDays && !(optimizationPreferences.Extra.UseBlockSameShift && optimizationPreferences.Extra.UseTeamBlockOption))
 			{
-				var matrixesOnSelectedperiod = _matrixListFactory.CreateMatrixList(selectedSchedules, selectedPeriod);
+				var matrixesOnSelectedperiod = _matrixListFactory.CreateMatrixListForSelection(selectedSchedules);
 				optimizeMoveTimeBetweenDays(backgroundWorker, selectedPeriod, selectedPersons, optimizationPreferences,
 					rollbackServiceWithResourceCalculation, schedulingOptions, resourceCalculateDelayer, matrixesOnSelectedperiod,
 					allMatrixes);

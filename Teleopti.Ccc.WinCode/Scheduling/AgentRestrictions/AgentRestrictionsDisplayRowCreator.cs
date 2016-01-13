@@ -13,13 +13,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 	public class AgentRestrictionsDisplayRowCreator : IAgentRestrictionsDisplayRowCreator
 	{
 		private readonly ISchedulerStateHolder _stateHolder;
-		private readonly IScheduleMatrixListCreator _scheduleMatrixListCreator;
+		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly IMatrixUserLockLocker _locker;
 
-		public AgentRestrictionsDisplayRowCreator(ISchedulerStateHolder stateHolder, IScheduleMatrixListCreator scheduleMatrixListCreator, IMatrixUserLockLocker locker)
+		public AgentRestrictionsDisplayRowCreator(ISchedulerStateHolder stateHolder, IMatrixListFactory matrixListFactory, IMatrixUserLockLocker locker)
 		{
 			_stateHolder = stateHolder;
-			_scheduleMatrixListCreator = scheduleMatrixListCreator;
+			_matrixListFactory = matrixListFactory;
 			_locker = locker;
 		}
 
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 				}
 
 				if (scheduleDays.Count <= 0) continue;
-				var matrixLists = _scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(scheduleDays);
+				var matrixLists = _matrixListFactory.CreateMatrixListForSelection(scheduleDays);
 				_locker.Execute(matrixLists, period);
 
 				foreach (var scheduleMatrixPro in matrixLists)

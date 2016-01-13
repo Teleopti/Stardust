@@ -32,8 +32,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 		private readonly ITeamMatrixChecker _teamMatrixChecker;
-		private readonly IOptimizerHelperHelper _optimizerHelper;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
+		private readonly PeriodExctractorFromScheduleParts _periodExctractor;
 
 		public TeamBlockScheduleCommand(IFixedStaffSchedulingService fixedStaffSchedulingService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -49,8 +49,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ITeamBlockSchedulingOptions teamBlockSchedulingOptions,
 			ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
 			ITeamBlockScheduler teamBlockScheduler, IWeeklyRestSolverCommand weeklyRestSolverCommand,
-			ITeamMatrixChecker teamMatrixChecker, IOptimizerHelperHelper optimizerHelper,
-			IGroupPersonBuilderWrapper groupPersonBuilderWrapper)
+			ITeamMatrixChecker teamMatrixChecker,
+			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
+			PeriodExctractorFromScheduleParts periodExctractor)
 		{
 			_fixedStaffSchedulingService = fixedStaffSchedulingService;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -68,8 +69,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamBlockScheduler = teamBlockScheduler;
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
 			_teamMatrixChecker = teamMatrixChecker;
-			_optimizerHelper = optimizerHelper;
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
+			_periodExctractor = periodExctractor;
 		}
 
 		public IWorkShiftFinderResultHolder Execute(ISchedulingOptions schedulingOptions, IBackgroundWorkerWrapper backgroundWorker,
@@ -93,10 +94,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			else
 				_groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
 
-			var selectedPeriod = _optimizerHelper.GetSelectedPeriod(selectedSchedules);
+			var selectedPeriod = _periodExctractor.ExtractPeriod(selectedSchedules);
 
-			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixList(selectedSchedules,
-				selectedPeriod);
+			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixListForSelection(selectedSchedules);
 			if (matrixesOfSelectedScheduleDays.Count == 0)
 				return new WorkShiftFinderResultHolder();
 

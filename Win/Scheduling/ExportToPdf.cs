@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Win.Scheduling.ScheduleReporting;
@@ -63,8 +64,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (!personDic.ContainsKey(part.Person))
 					personDic.Add(part.Person, _schedulerStateHolder.CommonAgentNameScheduleExport(part.Person));
 			}
-
-			var period = new InnerOptimizerHelperHelper(new RestrictionExtractor(new RestrictionCombiner(), new RestrictionRetrievalOperation())).GetSelectedPeriod(selection);
+			var period = new PeriodExctractorFromScheduleParts().ExtractPeriod(selection);
 
 			string path;
 

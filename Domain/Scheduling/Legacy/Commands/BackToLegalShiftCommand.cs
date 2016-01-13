@@ -22,8 +22,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IBackToLegalShiftService _backToLegalShiftService;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-		private readonly IOptimizerHelperHelper _optimizerHelper;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
+		private readonly IPersonListExtractorFromScheduleParts _extractor;
+		private readonly PeriodExctractorFromScheduleParts _periodExctractor;
 		private IBackgroundWorkerWrapper _backgroundWorker;
 
 		public BackToLegalShiftCommand(ITeamBlockInfoFactory teamBlockInfoFactory,
@@ -34,8 +35,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IBackToLegalShiftService backToLegalShiftService,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
 			IResourceOptimizationHelper resourceOptimizationHelper,
-			IOptimizerHelperHelper optimizerHelper,
-			IGroupPersonBuilderWrapper groupPersonBuilderWrapper)
+			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
+			IPersonListExtractorFromScheduleParts extractor,
+			PeriodExctractorFromScheduleParts periodExctractor)
 		{
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
@@ -45,8 +47,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_backToLegalShiftService = backToLegalShiftService;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
-			_optimizerHelper = optimizerHelper;
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
+			_extractor = extractor;
+			_periodExctractor = periodExctractor;
 		}
 
 		public void Execute(IBackgroundWorkerWrapper backgroundWorker,
@@ -71,10 +74,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,
 				_teamBlockSchedulingOptions);
-			var selectedPeriod = _optimizerHelper.GetSelectedPeriod(selectedSchedules);
+			var selectedPeriod = _periodExctractor.ExtractPeriod(selectedSchedules);
 			IList<IScheduleMatrixPro> allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
-			var extractor = new PersonListExtractorFromScheduleParts(selectedSchedules);
-			var selectedPersons = extractor.ExtractPersons().ToList();
+			var selectedPersons = _extractor.ExtractPersons(selectedSchedules);
 			var selectedTeamBlocks = teamBlockGenerator.Generate(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions);
 			var tagSetter = new ScheduleTagSetter(KeepOriginalScheduleTag.Instance);
 			var rollbackService = new SchedulePartModifyAndRollbackService(schedulingResultStateHolder,

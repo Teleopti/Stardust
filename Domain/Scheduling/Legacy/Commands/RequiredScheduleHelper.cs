@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 
 				IList<IScheduleMatrixOriginalStateContainer> originalStateContainers = new List<IScheduleMatrixOriginalStateContainer>();
-				foreach (IScheduleMatrixPro scheduleMatrixPro in _matrixListFactory.CreateMatrixList(allSelectedSchedules, new DateOnlyPeriod(selectedPeriod.First(), selectedPeriod.Last())))
+				foreach (IScheduleMatrixPro scheduleMatrixPro in _matrixListFactory.CreateMatrixListForSelection(allSelectedSchedules))
 					originalStateContainers.Add(new ScheduleMatrixOriginalStateContainer(scheduleMatrixPro, _scheduleDayEquator));
 
 				foreach (var scheduleMatrixOriginalStateContainer in originalStateContainers)
@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				return;
 			}
 
-			var selectedPersons = new PersonListExtractorFromScheduleParts(unlockedSchedules).ExtractPersons();
+			var selectedPersons = new PersonListExtractorFromScheduleParts().ExtractPersons(unlockedSchedules);
 			var selectedPeriod = unlockedSchedules.Select(s => s.DateOnlyAsPeriod.DateOnly).OrderBy(d => d.Date);
 			var period = new DateOnlyPeriod(selectedPeriod.FirstOrDefault(), selectedPeriod.LastOrDefault());
 			var scheduledCount = 0;

@@ -1231,8 +1231,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 	    public virtual IEnumerable<IPerson> AllSelectedPersons(IEnumerable<IScheduleDay> selectedSchedules)
         {
-            var extractor = new PersonListExtractorFromScheduleParts(selectedSchedules);
-            return extractor.ExtractPersons();
+            var extractor = new PersonListExtractorFromScheduleParts();
+			return extractor.ExtractPersons(selectedSchedules);
         }
 
         public virtual IEnumerable<IPerson> AllSelectedPersons()

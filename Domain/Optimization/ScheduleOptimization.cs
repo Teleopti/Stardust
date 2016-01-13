@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var optimizationPreferences = _optimizationPreferencesFactory.Create();
 			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 
-			IList<IScheduleMatrixPro> matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixList(allSchedules, period);
+			IList<IScheduleMatrixPro> matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(allSchedules);
 			IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization =
 				matrixListForDayOffOptimization.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator))
 					.Cast<IScheduleMatrixOriginalStateContainer>().ToList();

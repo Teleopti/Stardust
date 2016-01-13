@@ -22,30 +22,30 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly Func<IResourceOptimizationHelper> _resourceOptimizationHelper;
-		private readonly IOptimizerHelperHelper _optimizerHelper;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
+		private readonly PeriodExctractorFromScheduleParts _periodExctractor;
 
 		public ClassicScheduleCommand(IMatrixListFactory matrixListFactory, IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
-			Func<IResourceOptimizationHelper> resourceOptimizationHelper, IOptimizerHelperHelper optimizerHelper,
-			Func<ISchedulerStateHolder> schedulerStateHolder)
+			Func<IResourceOptimizationHelper> resourceOptimizationHelper,
+			Func<ISchedulerStateHolder> schedulerStateHolder,
+			PeriodExctractorFromScheduleParts periodExctractor)
 		{
 			_matrixListFactory = matrixListFactory;
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
-			_optimizerHelper = optimizerHelper;
 			_schedulerStateHolder = schedulerStateHolder;
+			_periodExctractor = periodExctractor;
 		}
 
 		public void Execute(ISchedulingOptions schedulingOptions, IBackgroundWorkerWrapper backgroundWorker,
 			IRequiredScheduleHelper requiredScheduleOptimizerHelper, IList<IScheduleDay> selectedSchedules, bool runWeeklyRestSolver, 
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-			var selectedPeriod = _optimizerHelper.GetSelectedPeriod(selectedSchedules);
+			var selectedPeriod = _periodExctractor.ExtractPeriod(selectedSchedules);
 
-			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixList(selectedSchedules,
-				selectedPeriod);
+			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixListForSelection(selectedSchedules);
 			if (matrixesOfSelectedScheduleDays.Count == 0)
 				return;
 
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 
 			var daysOnlyHelper = new DaysOnlyHelper(schedulingOptions);
-			var allMatrixesOfSelectedPersons = _matrixListFactory.CreateMatrixList(allScheduleDays, selectedPeriod);
+			var allMatrixesOfSelectedPersons = _matrixListFactory.CreateMatrixListForSelection(allScheduleDays);
 
 			if (daysOnlyHelper.DaysOnly)
 			{

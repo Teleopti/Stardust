@@ -5,8 +5,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public interface IOptimizerHelperHelper
 	{
-		DateOnlyPeriod GetSelectedPeriod(IEnumerable<IScheduleDay> scheduleDays);
-		
 		void LockDaysForDayOffOptimization(IList<IScheduleMatrixPro> matrixList, IOptimizationPreferences optimizationPreferences, DateOnlyPeriod selectedPeriod);
 		void LockDaysForIntradayOptimization(IList<IScheduleMatrixPro> matrixList, DateOnlyPeriod selectedPeriod);
 

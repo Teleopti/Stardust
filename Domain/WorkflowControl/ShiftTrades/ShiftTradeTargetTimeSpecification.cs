@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 {
     public class ShiftTradeTargetTimeSpecification : ShiftTradeSpecification
     {
-	    private readonly IScheduleMatrixListCreator _scheduleMatrixListCreator;
+		private readonly IMatrixListFactory _scheduleMatrixListCreator;
 	    private readonly ISchedulePeriodTargetTimeCalculator _targetTimeTimeCalculator;
         
         public override string DenyReason
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
             get { return "ShiftTradeTargetTimeDenyReason"; }
         }
 
-		public ShiftTradeTargetTimeSpecification(IScheduleMatrixListCreator scheduleMatrixListCreator, ISchedulePeriodTargetTimeCalculator targetTimeTimeCalculator)
+		public ShiftTradeTargetTimeSpecification(IMatrixListFactory scheduleMatrixListCreator, ISchedulePeriodTargetTimeCalculator targetTimeTimeCalculator)
         {
 			_scheduleMatrixListCreator = scheduleMatrixListCreator;
 			_targetTimeTimeCalculator = targetTimeTimeCalculator;
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 			  // Create and add the other trade for all change requests
             obj = createSwapDetails(obj);
 
-            IList<IScheduleMatrixPro> matrixes = _scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(scheduleDays);
+            IList<IScheduleMatrixPro> matrixes = _scheduleMatrixListCreator.CreateMatrixListForSelection(scheduleDays);
             // Nu har jag alla inblandade schamaperioder. Om du och jag ska byta en vecka och din vecka är i en och samma period 
             /// och min vecka är i två olika perioder så får vi tre matriser
             /// Now I have all relevant scheduled periods. If you and me are supposed to trade one week and your week is the same schedulePeriod and my week is in two different shedulePeriods, then we get three matrixes.
