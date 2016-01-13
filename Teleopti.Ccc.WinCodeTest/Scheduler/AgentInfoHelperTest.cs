@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var notPermittedLocker = new MatrixNotPermittedLocker(new PrincipalAuthorizationWithFullPermission());
 			var personListExtraxtor = new PersonListExtractorFromScheduleParts();
 			var periodExtractor = new PeriodExctractorFromScheduleParts();
-			_matrixListFactory = new MatrixListFactory(() => _schedulerStateHolder, matrixUserLocker, notPermittedLocker, personListExtraxtor, periodExtractor);
+			_matrixListFactory = new MatrixListFactory(() => _schedulerStateHolder, matrixUserLocker, notPermittedLocker, personListExtraxtor, periodExtractor, new UtcTimeZone());
 
 			_timeZoneInfo = (TimeZoneInfo.Utc);
 

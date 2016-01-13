@@ -12,7 +12,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.Web.Areas.Global;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;

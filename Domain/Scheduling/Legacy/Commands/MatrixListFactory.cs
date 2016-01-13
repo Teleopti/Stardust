@@ -14,17 +14,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IMatrixNotPermittedLocker _matrixNotPermittedLocker;
 		private readonly IPersonListExtractorFromScheduleParts _personExtractor;
 		private readonly PeriodExctractorFromScheduleParts _periodExctractor;
+		private readonly IUserTimeZone _userTimeZone;
 
 		public MatrixListFactory(Func<ISchedulerStateHolder> schedulerStateHolder,
 			IMatrixUserLockLocker matrixUserLockLocker,
 			IMatrixNotPermittedLocker matrixNotPermittedLocker, IPersonListExtractorFromScheduleParts personExtractor,
-			PeriodExctractorFromScheduleParts periodExctractor)
+			PeriodExctractorFromScheduleParts periodExctractor, IUserTimeZone userTimeZone)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_matrixUserLockLocker = matrixUserLockLocker;
 			_matrixNotPermittedLocker = matrixNotPermittedLocker;
 			_personExtractor = personExtractor;
 			_periodExctractor = periodExctractor;
+			_userTimeZone = userTimeZone;
 		}
 
 
@@ -61,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public IList<IScheduleMatrixPro> CreateMatrixListForSelection(IList<IScheduleDay> scheduleDays)
 		{
 			var stateHolder = _schedulerStateHolder();
-			var period = stateHolder.SchedulingResultState.Schedules.Period.VisiblePeriod.ToDateOnlyPeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+			var period = stateHolder.SchedulingResultState.Schedules.Period.VisiblePeriod.ToDateOnlyPeriod(_userTimeZone.TimeZone());
 			period = new DateOnlyPeriod(period.StartDate.AddDays(-10), period.EndDate.AddDays(10));
 			var startDate = period.StartDate;
 			var selectedPersons = _personExtractor.ExtractPersons(scheduleDays);
