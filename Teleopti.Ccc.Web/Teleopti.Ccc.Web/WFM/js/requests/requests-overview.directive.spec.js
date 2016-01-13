@@ -177,7 +177,7 @@
 			expect(targets.length).toEqual(2);
 		});
 
-		xit("startTime, endTime, createdTime and updatedTime columns should shown in the same timezone as backend says", function() {
+		it("startTime, endTime, createdTime and updatedTime columns should shown in the same timezone as backend says", function() {
 			var test = setUpTarget();
 			
 			test.scope.requests = [{ Id: 1, PeriodStartTime: '2016-01-05T00:00:00', PeriodEndTime: '2016-01-07T23:59:00', CreatedTime: '2016-01-05T03:29:37', TimeZone: 'Europe/Berlin', UpdatedTime: '2016-01-05T03:29:37' }];
@@ -194,7 +194,7 @@
 			expect(updatededTime).toEqual(toDateString('2016-01-05T03:29:37', 'Europe/Berlin'));
 		});
 
-		xit("should be able to switch between user timezone and request submitter timezone", function () {
+		it("should be able to switch between user timezone and request submitter timezone", function () {
 			var test = setUpTarget();
 
 			test.scope.requests = [{ Id: 1, PeriodStartTime: '2016-01-06T14:00:00', PeriodEndTime: '2016-01-09T20:00:00', CreatedTime: '2016-01-06T10:17:31', TimeZone: 'Pacific/Port_Moresby', UpdatedTime: '2016-01-06T10:17:31', IsFullDay: false }];
