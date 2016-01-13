@@ -4,6 +4,7 @@
 }
 
 .permissions-tree {
+	max-height: 617px!important;
 	li {
 		border: none;
 	}
@@ -53,12 +54,13 @@
 	border: none!important;
 }
 
-.tree-line{
-	overflow-y: hidden;
-}
 
 .inline-role-name{
 	width:100%;
+}
+
+.role-list-height{
+	max-height:635px;
 }
 
 .permissions-radio {
@@ -118,6 +120,14 @@ p {
 	padding-top:5px;
 }
 
+.data-list-height{
+	overflow-y: auto;
+	max-height: 576px;
+}
+
+.clear-scroll{
+	overflow-x:hidden;
+}
 .permission-radio-buttons .wfm-radio {
 	width: auto;
 }

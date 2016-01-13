@@ -49,7 +49,7 @@
 </div>
 
   <div ui-tree data-drag-enabled="false">
-    <ol ui-tree-nodes="" ng-model="organization.BusinessUnit" id="tree-root" class="tree-line">
+    <ol ui-tree-nodes="" ng-model="organization.BusinessUnit" id="tree-root" class="data-list-height">
       <li ng-repeat="node in organization.BusinessUnit | nameFilter: searchData  | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle" ui-tree-node ng-include="'nodes_bu_renderer.html'"></li>
     </ol>
   </div>
