@@ -33,12 +33,14 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
             //Creates a root Group object & add into GroupPage
             var allPersonPeriods = (from p in groupPageOptions.Persons
                                    from pp in p.PersonPeriods(groupPageOptions.SelectedPeriod)
+								   let team = pp.Team
                                    select
                                        new
                                        {
                                            Person = p,
-                                           PersonPeriod = pp
-                                       }).ToList();
+                                           PersonPeriod = pp,
+										   Team = team,
+                                       }).ToLookup(period => period.Team);
             foreach (var site in businessUnit.SiteCollection.OrderBy(s => s.Description.Name))
             {
                 if (((IDeleteTag) site).IsDeleted) continue;
@@ -55,8 +57,7 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
                     teamGroup.Entity = team;
                     rootGroup.AddChildGroup(teamGroup);
 
-                    var personPeriodsWithTeam =
-                        allPersonPeriods.Where(p => team.Equals(p.PersonPeriod.Team));
+                    var personPeriodsWithTeam = allPersonPeriods[team];
                     var teamPersons = personPeriodsWithTeam.Select(pp => pp.Person).Distinct();
                     foreach (var teamPerson in teamPersons)
                     {

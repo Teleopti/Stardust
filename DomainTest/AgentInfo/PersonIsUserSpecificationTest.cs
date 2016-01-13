@@ -1,6 +1,4 @@
-using System;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -8,9 +6,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.AgentInfo
 {
-    /// <summary>
-    /// Tests for PersonBelongsToAnyBusinessUnitSpecificationTest
-    /// </summary>
     [TestFixture]
     public class PersonIsUserSpecificationTest
     {
@@ -20,16 +15,11 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
         private Person _personWithoutPersonPeriodWithTerminalDate;
         private Person _personWithoutPersonPeriodWithoutTerminalDate;
         private DateOnly _terminalDate;
-        private IPersonAccountUpdater _personAccountUpdater;
-        private MockRepository _mock;
-
 
         [SetUp]
         public void Setup()
         {
             _personWithPersonPeriod = new Person();
-            _mock = new MockRepository();
-            _personAccountUpdater = _mock.StrictMock<IPersonAccountUpdater>();
             _team= new Team();
             IPersonPeriod personPeriod =
                 PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 01, 01), _team);
@@ -37,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
             
             _personWithoutPersonPeriodWithTerminalDate = new Person();
             _terminalDate = new DateOnly(2003, 01, 01);
-            _personWithoutPersonPeriodWithTerminalDate.TerminatePerson(_terminalDate, _personAccountUpdater) ;
+            _personWithoutPersonPeriodWithTerminalDate.TerminatePerson(_terminalDate, new PersonAccountUpdaterDummy());
 
             _personWithoutPersonPeriodWithoutTerminalDate = new Person();
         }
@@ -74,6 +64,5 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
             Assert.IsFalse(_target.IsSatisfiedBy(_personWithoutPersonPeriodWithTerminalDate));
             Assert.IsTrue(_target.IsSatisfiedBy(_personWithoutPersonPeriodWithoutTerminalDate));
         }
-
     }
 }

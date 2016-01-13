@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Common
     public abstract class PersonGroupBase : AggregateEntity
     {
         private Description _description;
-        private readonly IList<IPerson> _personCollection = new List<IPerson>();
+        private readonly ISet<IPerson> _personCollection = new HashSet<IPerson>();
         private readonly IList<IChildPersonGroup> _childGroupCollection = new List<IChildPersonGroup>();
 
         /// <summary>
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Common
         /// </remarks>
         public virtual ReadOnlyCollection<IPerson> PersonCollection
         {
-            get { return new ReadOnlyCollection<IPerson>(_personCollection); }
+            get { return new ReadOnlyCollection<IPerson>(_personCollection.ToArray()); }
         }
 
         /// <summary>
@@ -95,10 +96,7 @@ namespace Teleopti.Ccc.Domain.Common
         public virtual void AddPerson(IPerson person)
         {
             InParameter.NotNull("person", person);
-            if (!_personCollection.Contains(person))
-            {
-                _personCollection.Add(person);
-            }
+            _personCollection.Add(person);
         }
 
         /// <summary>

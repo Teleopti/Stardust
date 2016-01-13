@@ -17,10 +17,10 @@
     <!--Map parent in child, root nhib files.-->
     <!--<many-to-one class="Teleopti.Ccc.Domain.Common.PersonGroupBase" name="Parent" not-null="false" access="property" />-->
 
-    <bag name="PersonCollection" table="PersonGroup" cascade="none">
+    <set name="PersonCollection" table="PersonGroup" cascade="none">
       <key column="PersonGroup" foreign-key="FK_PersonGroup_PersonGroupBase"/>
       <many-to-many class="Teleopti.Ccc.Domain.Common.Person" column="Person" foreign-key="FK_PersonGroup_Person"/>
-    </bag>
+    </set>
 
     <bag name="ChildGroupCollection" cascade="all-delete-orphan" inverse="true">
       <key column ="Parent" />
