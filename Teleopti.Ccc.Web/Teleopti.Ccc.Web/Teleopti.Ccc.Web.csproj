@@ -400,7 +400,12 @@
     <Compile Include="Areas\Anywhere\Core\IGetSiteAdherence.cs" />
     <Compile Include="Areas\Anywhere\Controllers\ReportsController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AgentsController.cs" />
-    <Compile Include="Areas\Forecasting\Controllers\IForecastMisc.cs" />
+    <Compile Include="Areas\Forecasting\Core\CampaignPersister.cs" />
+    <Compile Include="Areas\Forecasting\Core\ForecastMisc.cs" />
+    <Compile Include="Areas\Forecasting\Core\ICampaignPersister.cs" />
+    <Compile Include="Areas\Forecasting\Core\IForecastMisc.cs" />
+    <Compile Include="Areas\Forecasting\Core\IOverridePersister.cs" />
+    <Compile Include="Areas\Forecasting\Core\OverridePersister.cs" />
     <Compile Include="Areas\Global\BusinessUnitController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\GroupPageController.cs" />
     <Compile Include="Areas\Anywhere\Core\IGetBusinessUnitId.cs" />
@@ -430,11 +435,7 @@
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelMapper.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamViewModel.cs" />
-    <Compile Include="Areas\Forecasting\Controllers\CampaignPersister.cs" />
     <Compile Include="Areas\Forecasting\Controllers\EvaluateInput.cs" />
-    <Compile Include="Areas\Forecasting\Controllers\ICampaignPersister.cs" />
-    <Compile Include="Areas\Forecasting\Controllers\IOverridePersister.cs" />
-    <Compile Include="Areas\Forecasting\Controllers\OverridePersister.cs" />
     <Compile Include="Areas\Forecasting\Controllers\SkillController.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastResultViewModelFactory.cs" />
     <Compile Include="Areas\Forecasting\Core\IForecastViewModelFactory.cs" />

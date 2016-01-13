@@ -1,10 +1,5 @@
-namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
+namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 {
-	public interface IForecastMisc
-	{
-		string WorkloadName(string skillName, string workloadName);
-	}
-
 	public class ForecastMisc : IForecastMisc
 	{
 		public string WorkloadName(string skillName, string workloadName)

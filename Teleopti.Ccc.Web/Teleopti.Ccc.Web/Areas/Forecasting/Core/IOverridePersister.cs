@@ -1,7 +1,7 @@
-using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
+namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 {
 	public interface IOverridePersister
 	{

@@ -1,10 +1,10 @@
-using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
+namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 {
 	public class CampaignPersister : ICampaignPersister
 	{
