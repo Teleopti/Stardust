@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	        {
 		        Expect.Call(_personSkillProvider.SkillsOnPersonDate(p1, new DateOnly()))
 		              .IgnoreArguments()
-		              .Return(new SkillCombination("key", new ISkill[] {}, new DateOnlyPeriod(),
+		              .Return(new SkillCombination(new ISkill[] {}, new DateOnlyPeriod(),
 		                                           new SkillEffiencyResource[]{}));
 	        }
 	        using (_mocks.Playback())

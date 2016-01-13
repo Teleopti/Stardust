@@ -14,19 +14,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public SkillCombination SkillsOnPersonDate(IPerson person, DateOnly date)
 		{
 			ConcurrentBag<SkillCombination> foundCombinations = _personCombination.GetOrAdd(person, _ => new ConcurrentBag<SkillCombination>());
-			if (!foundCombinations.IsEmpty)
+			foreach (var foundCombination in foundCombinations)
 			{
-				foreach (var foundCombination in foundCombinations.ToArray())
+				if (foundCombination.IsValidForDate(date))
 				{
-					if (foundCombination.IsValidForDate(date))
-					{
-						return foundCombination;
-					}
+					return foundCombination;
 				}
 			}
 
 			IPersonPeriod personPeriod = person.Period(date);
-			if (personPeriod == null) return new SkillCombination(string.Empty, new ISkill[0], new DateOnlyPeriod(), new SkillEffiencyResource[]{});
+			if (personPeriod == null) return new SkillCombination(new ISkill[0], new DateOnlyPeriod(), new SkillEffiencyResource[]{});
 
 			var personSkillCollection =
 				personPeriod.PersonSkillCollection.Where(personSkill => !((IDeleteTag) personSkill.Skill).IsDeleted).ToArray();
@@ -43,9 +40,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					s => s.Active && s.SkillPercentage.Value > 0)
 					.Select(k => new SkillEffiencyResource(k.Skill.Id.GetValueOrDefault(), k.SkillPercentage.Value)).ToArray();
 
-			var key = SkillCombination.ToKey(skills.Select(s => s.Id.GetValueOrDefault()));
-
-			var combination = new SkillCombination(key, skills, personPeriod.Period, skillEfficiencies);
+			var combination = new SkillCombination(skills, personPeriod.Period, skillEfficiencies);
 			foundCombinations.Add(combination);
 			
 			return combination;
@@ -57,13 +52,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly DateOnlyPeriod _period;
 		private readonly IList<Guid> _skillKeys;
 
-		public SkillCombination(string key, ISkill[] skills, DateOnlyPeriod period, SkillEffiencyResource[] skillEfficiencies)
+		public SkillCombination(ISkill[] skills, DateOnlyPeriod period, SkillEffiencyResource[] skillEfficiencies)
 		{
 			_period = period;
 			SkillEfficiencies = skillEfficiencies;
-			Key = key;
 			Skills = skills;
 			_skillKeys = Skills.Select(s => s.Id.GetValueOrDefault()).ToList();
+			Key = toKey(_skillKeys);
 		}
 
 		public bool IsValidForDate(DateOnly date)
@@ -71,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return _period.Contains(date);
 		}
 
-		public static string ToKey(IEnumerable<Guid> idCollection)
+		private static string toKey(IEnumerable<Guid> idCollection)
 		{
 			return string.Join("_", idCollection.OrderBy(s => s));
 		}
