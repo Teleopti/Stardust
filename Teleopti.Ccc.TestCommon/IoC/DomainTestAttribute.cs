@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			// Outbound stuff
 			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
 			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			system.UseTestDouble<FakeRecurringEventPublisher>().For<IRecurringEventPublisher>();
 			//
 
 			// Database aspects

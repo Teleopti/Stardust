@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Autofac;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Service;
-using Teleopti.Analytics.Etl.Common.Transformer;
+using Teleopti.Analytics.Etl.Common.TickEvent;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
@@ -32,7 +30,7 @@ namespace Teleopti.Analytics.Etl.Common
 			builder.RegisterType<JobExtractor>().SingleInstance();
 			builder.RegisterType<JobHelper>().SingleInstance();
 			builder.RegisterType<Tenants>().SingleInstance();
-			builder.RegisterType<RecurringEventPublisher>().SingleInstance();
+			builder.RegisterType<HourlyTickEventPublisher>().SingleInstance();
 			builder.RegisterType<BaseConfigurationRepository>().As<IBaseConfigurationRepository>().SingleInstance();
 
 			builder.RegisterType<FindTenantLogonInfoUnsecured>().As<IFindLogonInfo>().SingleInstance();
@@ -62,23 +60,6 @@ namespace Teleopti.Analytics.Etl.Common
 					return ret;
 				}
 			}
-		}
-	}
-
-	public class RecurringEventPublisher
-	{
-		private readonly IHangfireEventClient _hangfire;
-		private readonly Tenants _tenants;
-
-		public RecurringEventPublisher(IHangfireEventClient hangfire, Tenants tenants)
-		{
-			_hangfire = hangfire;
-			_tenants = tenants;
-		}
-
-		public void Tick()
-		{
-			_hangfire.AddOrUpdateRecurring(null, null, _tenants.CurrentTenants().First().Name, null, null, null);
 		}
 	}
 }

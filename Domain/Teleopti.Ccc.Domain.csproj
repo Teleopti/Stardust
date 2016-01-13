@@ -237,6 +237,7 @@
     <Compile Include="ApplicationLayer\Commands\RemovePersonAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Commands\MoveActivityCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\IRecurringEventPublisher.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateFindPersonConsumer.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateGroupingReadModelConsumer.cs" />
     <Compile Include="ApplicationLayer\Rta\Aspects\TenantDataSourceScope.cs" />

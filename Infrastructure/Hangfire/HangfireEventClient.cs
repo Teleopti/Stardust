@@ -17,18 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		public void Enqueue(string displayName, string tenant, string eventType, string serializedEvent, string handlerType)
 		{
 			_jobClient.Value.Enqueue<HangfireEventServer>(x => x.Process(displayName, tenant, eventType, serializedEvent, handlerType));
-
-			//RecurringJob.AddOrUpdate<HangfireEventServer>("id", x => x.Process(displayName, tenant, eventType, serializedEvent, handlerType), Cron.Hourly);
-
-			//var a = new RecurringJobManager();
-			//Expression<Action<HangfireEventServer>> f = x => x.Process(displayName, tenant, eventType, serializedEvent, handlerType);
-			//a.AddOrUpdate("id", Job.FromExpression(f), Cron.Hourly());
-
-		}
-
-		public void AddOrUpdateRecurring(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)
-		{
-			throw new NotImplementedException();
 		}
 	}
+
 }

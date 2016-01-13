@@ -128,6 +128,8 @@
     </Compile>
     <Compile Include="Entity\BusinessUnitItem.cs" />
     <Compile Include="EtlAppModule.cs" />
+    <Compile Include="TickEvent\HourlyTickEvent.cs" />
+    <Compile Include="TickEvent\HourlyTickEventPublisher.cs" />
     <Compile Include="Infrastructure\BaseConfigurationRepository.cs" />
     <Compile Include="Tenants.cs" />
     <Compile Include="Service\EtlJobStarter.cs" />
