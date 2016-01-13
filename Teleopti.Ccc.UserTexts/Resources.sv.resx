@@ -8205,9 +8205,6 @@ schema</value>
   <data name="Optimisation" xml:space="preserve">
     <value>Optimering</value>
   </data>
-  <data name="OverStaff" xml:space="preserve">
-    <value>Överbemanning</value>
-  </data>
   <data name="PriorityColon" xml:space="preserve">
     <value>Prioritet:</value>
   </data>
@@ -8925,7 +8922,7 @@ Error message: {0}</comment>
     <comment>Contractors</comment>
   </data>
   <data name="DaysOffPerWeek" xml:space="preserve">
-    <value>Lediga dagar per v.</value>
+    <value>Lediga dagar per vecka</value>
     <comment>Days off per week</comment>
   </data>
   <data name="Difference" xml:space="preserve">

@@ -8051,9 +8051,6 @@ Teleopti R&amp;D</value>
   <data name="Optimisation" xml:space="preserve">
     <value>Оптимизация</value>
   </data>
-  <data name="OverStaff" xml:space="preserve">
-    <value>Избыток персонала</value>
-  </data>
   <data name="PriorityColon" xml:space="preserve">
     <value>Приоритет:</value>
   </data>

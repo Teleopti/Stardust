@@ -7741,9 +7741,6 @@ Teleopti R&amp;D</value>
   <data name="Optimisation" xml:space="preserve">
     <value>优化</value>
   </data>
-  <data name="OverStaff" xml:space="preserve">
-    <value>超员</value>
-  </data>
   <data name="PriorityColon" xml:space="preserve">
     <value>优先级：</value>
   </data>

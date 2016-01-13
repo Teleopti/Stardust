@@ -6307,9 +6307,6 @@ de Preferencias</value>
   <data name="Optimisation" xml:space="preserve">
     <value>Optimización</value>
   </data>
-  <data name="OverStaff" xml:space="preserve">
-    <value>Sobredimension.</value>
-  </data>
   <data name="PriorityColon" xml:space="preserve">
     <value>Prioridad:</value>
   </data>

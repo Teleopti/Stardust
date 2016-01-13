@@ -8231,9 +8231,6 @@ päivämäärä</value>
   <data name="Optimisation" xml:space="preserve">
     <value>Optimointi</value>
   </data>
-  <data name="OverStaff" xml:space="preserve">
-    <value>Ylimiehitys</value>
-  </data>
   <data name="PriorityColon" xml:space="preserve">
     <value>Prioriteetti:</value>
   </data>
