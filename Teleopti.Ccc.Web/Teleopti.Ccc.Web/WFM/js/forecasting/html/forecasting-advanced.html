@@ -9,12 +9,12 @@
 		<md-content class="md-padding">
 			<md-tabs md-dynamic-height md-border-bottom >
 				<md-tab label="{{ 'ForecastMethod' | translate }}">
-					<md-content class="md-padding">
+					<md-content class="md-padding chart-no-scroll">
 						<div ng-include="'first-forecast-tab.html'" ng-init="init()"></div>
 					</md-content>
 				</md-tab>
 				<md-tab label="{{'Outliers'|translate}}">
-					<md-content class="md-padding">
+					<md-content class="md-padding chart-no-scroll">
 						<div ng-include="'second-forecast-tab.html'"></div>
 					</md-content>
 				</md-tab>
