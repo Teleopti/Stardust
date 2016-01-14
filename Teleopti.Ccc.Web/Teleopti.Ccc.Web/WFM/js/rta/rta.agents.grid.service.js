@@ -44,7 +44,9 @@
 					rowTemplate: rowTemplate,
 					columnDefs: [{
 						displayName: 'Name',
-						field: 'Name',
+						field: 'Name',sort: {
+							direction: 'asc'
+						},
 						enableColumnMenu: false,
 						headerCellTemplate: headerCellTemplate,
 						cellTemplate: coloredCellTemplate,
