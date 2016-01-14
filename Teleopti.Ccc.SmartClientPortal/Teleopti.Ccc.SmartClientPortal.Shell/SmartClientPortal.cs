@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using EO.WebBrowser;
@@ -802,19 +803,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void smartClientShellFormShown(object sender, EventArgs e)
 		{
-			if (_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415))
-			{
-				DateTime start = DateTime.Now;
-				while (!_webViewLoaded)
-				{
-					Application.DoEvents();
-					Thread.Sleep(0);
-					////temp ? fix for bug 31541 (an issue in eo.webbrowser after a windows update)
-					if ((DateTime.Now - start).TotalSeconds >= 10)
-						break;
-				}
-			}
-
 			Enabled = true;
 			Cursor = Cursors.Default;
 
@@ -879,26 +867,27 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				try
 				{
-					var token = SingleSignOnHelper.SingleSignOn();
-					webView1.Url = string.Format("http://www.teleopti.com/elogin.aspx?{0}", token);
+					Task.Run(() =>
+					{
+						var token = SingleSignOnHelper.SingleSignOn();
+						webView1.Url = string.Format("http://www.teleopti.com/elogin.aspx?{0}", token);
+						canAccessInternet = true;
+					});
 				}
 				catch (ArgumentException exception)
 				{
 					_logger.Error("Can't access teleopti.com on startpage " + exception.Message);
-					var html = "<!doctype html><html ><head></head><body>{0}</body></html>";
+					const string html = "<!doctype html><html ><head></head><body>{0}</body></html>";
 					webView1.LoadHtml(string.Format(html, exception.Message));
+					canAccessInternet = true;
 				}
 				catch (Exception exception)
 				{
 					_logger.Error("Can't access teleopti.com on startpage " + exception.Message);
 					canAccessInternet = false;
 					goToLocalPage();
-					return;
 				}
-				canAccessInternet = true;
-				
 			}
-			
 		}
 		
 		private void openOptionsDialog()
