@@ -80,6 +80,8 @@ describe('OutboundService Test', function () {
 	it('Create campaign should work', function() {
 		var campaign = {
 			Name: 'NEW',
+			StartDate: new Date(),
+			EndDate: new Date(),
 			WorkingHours: []
 		};
 
@@ -101,9 +103,11 @@ describe('OutboundService Test', function () {
 
 		var startTime = new Date().setHours(8, 0, 0, 0);
 		var endTime = new Date().setHours(14, 0, 0, 0);
-
+		
 		var campaign = {
 			Name: 'NEW',
+			StartDate: new Date(),
+			EndDate: new Date(),
 			WorkingHours: [
 				{
 					StartTime: startTime,
@@ -134,7 +138,7 @@ describe('OutboundService Test', function () {
 		).respond(200, true);
 
 		outboundService.addCampaign(campaign);
-
+	
 		$httpBackend.flush();
 	});
 

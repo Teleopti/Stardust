@@ -282,15 +282,20 @@
 			var deferred = $q.defer();			
 			outboundService.getCampaigns(ganttPeriod, function success(data) {
 				var ganttArr = [];
-				if (data) data.forEach(function (ele, ind) {					
+				if (data) data.forEach(function (ele, ind) {
+					
+					var startDate = miscService.getDateFromServer(ele.StartDate);
+					var endDate = miscService.getDateFromServer(ele.EndDate);
+					var extendedEndDate = moment(endDate).add(1, 'days').toDate();
+
 					ganttArr[ind] = {};
 					ganttArr[ind].name = ele.Name;
 					ganttArr[ind].id = ele.Id;
 					ganttArr[ind].tasks = [];
 					ganttArr[ind].tasks[0] = {};
-					ganttArr[ind].tasks[0].from =  miscService.getDateFromServer(ele.StartDate);
-					ganttArr[ind].tasks[0].to = miscService.getDateFromServer(moment(ele.EndDate).add(1, 'days').toDate());
 					ganttArr[ind].tasks[0].id = ele.Id;
+					ganttArr[ind].tasks[0].from = startDate;
+					ganttArr[ind].tasks[0].to = extendedEndDate;
 					ganttArr[ind].tasks[0].color = 'rgba(0,0,0,0.6)';
 					ganttArr[ind].tasks[0].tooltips = {
 						'enabled': true

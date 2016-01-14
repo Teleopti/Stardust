@@ -110,7 +110,7 @@
 				});
 		};
 
-		this.addCampaign = function(campaign, successCb, errorCb) {
+		this.addCampaign = function (campaign, successCb, errorCb) {	
 			$http.post(createCampaignCommandUrl, normalizeCampaign(campaign)).
 				success(function(data) {
 					if (successCb != null) successCb(data);
@@ -171,6 +171,9 @@
 
 		function normalizeCampaign(campaign) {
 		    var campaign = angular.copy(campaign);
+			
+		    campaign.StartDate = miscService.sendDateToServer(campaign.StartDate);
+			campaign.EndDate = miscService.sendDateToServer(campaign.EndDate);
 
 			var formattedWorkingHours = [];
 
@@ -236,8 +239,8 @@
 		function denormalizeCampaign(campaign) {
 			var campaignCopy = angular.copy(campaign);
 
-			campaignCopy.StartDate = new Date(campaign.StartDate);
-			campaignCopy.EndDate = new Date(campaign.EndDate);
+			campaignCopy.StartDate = miscService.getDateFromServer(campaign.StartDate);
+			campaignCopy.EndDate = miscService.getDateFromServer(campaign.EndDate);
 		    var reformattedWorkingHours = [];
 
 		    campaignCopy.WorkingHours.forEach(function (a) {
