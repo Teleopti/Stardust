@@ -48,6 +48,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			DataMaker.Person(userName).Apply(user);
 		}
 
+		[When(@"'(.*)' is updated with")]
+		public void WhenIsUpdatedWith(string userName, Table table)
+		{
+			var user = table.CreateInstance<UserConfigurable>();
+			DataMaker.Person(userName).Apply(user);
+		}
+
 		[Given(@"I have user credential with")]
 		public void GivenIHaveUserCredentialWith(Table table)
 		{

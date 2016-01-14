@@ -41,6 +41,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertAnyContains(string.Format(".site [data-max='{0}']", total), site);
 		}
 
+		[Then(@"I should see site '(.*)' with (.*) employees out of adherence")]
+		public void ThenIShouldSeeSiteWithOfEmployeesOutOfAdherence2(string site, int numberOfOutAdherence)
+		{
+			Browser.Interactions.AssertAnyContains(string.Format(".site [data-value='{0}']", numberOfOutAdherence), site);
+		}
+
 		[Then(@"I should see team '(.*)' with (.*) of (.*) employees out of adherence")]
 		public void ThenIShouldSeeTeamWithOfEmployeesOutOfAdherence(string team, int numberOfOutAdherence, int total)
 		{

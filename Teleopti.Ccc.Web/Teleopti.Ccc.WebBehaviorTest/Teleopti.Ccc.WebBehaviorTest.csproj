@@ -844,6 +844,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Wfm\RealTimeAdherence\TerminatedAgents_36042.feature.cs">
+      <DependentUpon>TerminatedAgents_36042.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Wfm\RealTimeAdherence\AgentsInAlarm_34975.feature.cs">
       <DependentUpon>AgentsInAlarm_34975.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1283,6 +1288,10 @@
     <None Include="Wfm\PlanningPeriod.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PlanningPeriod.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\RealTimeAdherence\TerminatedAgents_36042.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>TerminatedAgents_36042.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\RealTimeAdherence\AgentsInAlarm_34975.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
