@@ -14053,6 +14053,6 @@ Help us improve your experience by sending an error report</value>
     <comment>Weekend with colon</comment>
   </data>
   <data name="OverstaffingColon" xml:space="preserve">
-    <value>Overstaffing</value>
+    <value>Overstaffing:</value>
   </data>
 </root>
