@@ -44,9 +44,7 @@
         this.removeManualPlan = function(input, successCb, errorCb) {
 		    var postData = {
 			    CampaignId: input.campaignId,
-			    Dates: input.selectedDates.map(function(d) {
-				    return { Date: d }
-			    })
+			    Dates: input.selectedDates
 		    };
 
 		    $http.post(removeCampaignProductionPlanUrl, postData).
@@ -61,9 +59,7 @@
 	    this.removeActualBacklog = function (input, successCb, errorCb) {
 	        var postData = {
 	        	CampaignId: input.campaignId,
-				Dates: input.selectedDates.map(function(d) {
-					return { Date: d}
-				})
+				Dates: input.selectedDates
 	        };
 
         	$http.post(removeCampaignBacklogUrl, postData).
