@@ -1,4 +1,11 @@
-﻿<div class="wfm-requests material-depth-1" ng-if="requests.isRequestsEnabled">
+﻿<div class="view-header">
+	<div class="view-title">
+		<i class="mdi mdi mdi-numeric-9-plus-box-multiple-outline"></i>
+		<h1 translate style="display: inline-block">Requests</h1>
+	</div>
+</div>
+
+<div class="wfm-requests material-depth-1" ng-if="requests.isRequestsEnabled">
 	<div class="operation-container">
 		<people-search-input class="request-filter inline-block" search-options="requests.agentSearchOptions" search-callback="requests.onAgentSearchTermChanged"></people-search-input>
 		<date-range-picker start-date="requests.period.startDate" end-date="requests.period.endDate" template-type="dropdown"></date-range-picker>		
