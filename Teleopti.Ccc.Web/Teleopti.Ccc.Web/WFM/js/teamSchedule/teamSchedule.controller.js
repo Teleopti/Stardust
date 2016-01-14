@@ -100,8 +100,8 @@
 			});
 		};
 
-		vm.updateSchedules = function (message) {
-			var params = { personIds: [message.DomainReferenceId], date: vm.scheduleDateMoment().format('YYYY-MM-DD') };
+		vm.updateSchedules = function (personIdList) {
+			var params = { personIds: personIdList, date: vm.scheduleDateMoment().format('YYYY-MM-DD') };
 			vm.isLoading = true;
 			teamScheduleSvc.getSchedules.query(params).$promise.then(function(result) {
 				updateGroupScheduleVm(result);
@@ -390,16 +390,24 @@
 		}
 
 		function monitorScheduleChanged() {
-			if (toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303) {
-				signalRSvc.subscribe({
-					DomainType: 'IScheduleChangedInDefaultScenario'
-				}, function (message) {
-					if (isMessageNeedToBeHandled(message)) {
-						vm.updateSchedules(message);
-					}
-				}, function (message) {});
-			}
+			signalRSvc.subscribe({ DomainType: 'IScheduleChangedInDefaultScenario' }, function(message) {
+				isMessageNeedToBeHandled(message) && startMessageHandleing(message);
+			});
 		}
+
+		var personIdsForMessageHandleing = [];
+		var messageHandlerTimeout = null;
+		function startMessageHandleing(message) {
+			personIdsForMessageHandleing.push(message.DomainReferenceId);
+			messageHandlerTimeout !== null && clearTimeout(messageHandlerTimeout);
+			messageHandlerTimeout = setTimeout(function () {
+				vm.updateSchedules(personIdsForMessageHandleing);
+				messageHandlerTimeout = null;
+				personIdsForMessageHandleing = [];
+			}, 5000);
+		}
+
+
 
 		vm.init = function () {
 			createDocumentListeners();
@@ -407,8 +415,7 @@
 			vm.isAbsenceReportingEnabled = toggleSvc.WfmTeamSchedule_AbsenceReporting_35995;
 			vm.searchOptions.isAdvancedSearchEnabled = toggleSvc.WfmPeople_AdvancedSearch_32973;
 			vm.isSwapShiftEnabled = toggleSvc.WfmTeamSchedule_SwapShifts_36231;
-
-			monitorScheduleChanged();
+			toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303 && monitorScheduleChanged();
 
 			vm.schedulePageReset();
 			vm.initialized = true;
