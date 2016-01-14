@@ -7,7 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
@@ -20,8 +19,6 @@ using Teleopti.Ccc.Win.Backlog;
 using Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces;
 using log4net;
 using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Ccc.Domain.Common;
-using Syncfusion.Windows.Forms.Tools.Win32API;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -29,7 +26,6 @@ using Teleopti.Ccc.Domain.SystemCheck;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.SystemCheck;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Properties;
 using Teleopti.Ccc.Win;
@@ -72,7 +68,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private readonly IToggleManager _toggleManager;
 		readonly int homeCommand = CommandIds.RegisterUserCommand("StartPage");
 		private bool canAccessInternet = true;
-		private bool _webViewLoaded = true;
 		private const string _permissionModule = "/permissions";
 		private WebUrlHolder _webUrlHolder;
 
@@ -141,11 +136,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				ahAhAhAhStayingAlive.Invoke(window, new object[] { });
 			}
-		}
-
-		private void WebView1_LoadCompleted(object sender, LoadCompletedEventArgs e)
-		{
-			_webViewLoaded = true;
 		}
 
 		void Form_KeyDown(object sender, KeyEventArgs e)
@@ -221,7 +211,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 			setBusinessUnitInWebView();
 
-			webView1.LoadCompleted += WebView1_LoadCompleted;
 			wfmWebView.BeforeContextMenu += wfmWebView_BeforeContextMenu;
 
 		}
@@ -319,7 +308,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 			if (_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415))
 			{
-				_webViewLoaded = false;
 				if (!canAccessInternet)
 				{
 					goToLocalPage();
