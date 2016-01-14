@@ -1,23 +1,26 @@
 ﻿.hoverBorder {
 	outline: solid 1px rgba(0, 0, 0, 0.15);
 }
+
 .request {
 	min-width: 480px;
 }
-.request-body-inner ol
-{
+
+.request-body-inner ol {
 	list-style: none;
 	margin-left: 0em;
 	margin-right: 0em;
 }
+
 .request-selected {
 	background: rgb(240, 240, 240);
 }
+
 .request-not-selected {
 	background: #f8f8f8;
 }
-.request-body-inner .request-item
-{
+
+.request-body-inner .request-item {
 	padding-top: 0.5em;
 	padding-bottom: 0.8em;
 	padding-left: 1.8em;
@@ -26,40 +29,40 @@
 	margin-top: 0.1em;
 	margin-bottom: 0.1em;
 }
+
 .request-body-inner .friendly-message {
 	width: 433px;
 }
-.request-body-inner .loading
-{
-	height: 5em;
-}
-.request-body-inner .arrow-down
-{
+
+.request-body-inner .loading {
 	height: 5em;
 }
 
-.request-arrow-right
-{
+.request-body-inner .arrow-down {
+	height: 5em;
+}
+
+.request-arrow-right {
 	position: relative;
-	top:23px;
-	left:20px;
+	top: 23px;
+	left: 20px;
 	float: right;
 }
 
 .no-rgba .request-body-inner li {
-	 border: 1px solid #dfdfdf;
+	border: 1px solid #dfdfdf;
 }
-.request-body-inner .request-subject 
-{
+
+.request-body-inner .request-subject {
 	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
-.request-body-inner .request-details 
-{
+
+.request-body-inner .request-details {
 	font-size: smaller;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
-.request-body-inner .request-caption 
-{
+
+.request-body-inner .request-caption {
 	color: #B0B0B0;
 	font-style: italic;
 	font-size: xx-small;
@@ -80,45 +83,51 @@
 	padding-right: 20px;
 	padding-left: 0px;
 }
+
 .rtl .request-body-inner .request-data-type {
 	padding-right: 0px;
 	padding-left: 20px;
 }
+
 .request-body-inner .request-data-date {
 	padding-right: 20px;
 	padding-left: 0px;
 }
+
 .rtl .request-body-inner .request-data-date {
 	padding-right: 0px;
 	padding-left: 20px;
 }
-.request-body-inner .request-text 
-{
+
+.request-body-inner .request-text {
 	padding-top: 0.3em;
 	max-width: 440px;
-    word-break: break-all;
+	word-break: break-all;
 }
+
 .request-body-inner .edit-module-element {
 	position: relative;
 	padding-left: 0px;
 	padding-right: 10px;
 	padding-bottom: 10px;
 }
-.request-edit-section .date-input
-{
+
+.request-edit-section .date-input {
 	width: 8em;
 }
+
 .request-data-subject {
 	word-wrap: break-word;
 	margin: 0 0 5px 0;
 }
+
 .request-data-text {
-	word-wrap: break-word;	
+	word-wrap: break-word;
 }
 
 .shift-exchange-out-of-open-period {
-	margin-top: 5px !important;	
-	margin-bottom: 10px !important;	
+	margin-top: 5px !important;
+	margin-bottom: 10px !important;
 }
 
 .shift-exchange-offer-footer {
@@ -126,41 +135,42 @@
 	margin-top: 5px;
 }
 
-.absence-type-input-label 
-{
+.absence-type-input-label {
 	width: 8em;
 	padding-top: 4px;
 	padding-right: 2px;
 	height: 16px;
 }
-.rtl .absence-type-input-label 
-{
+
+.rtl .absence-type-input-label {
 	text-align: right;
 }
-.request-shift-trade-add-section
-{
+
+.request-shift-trade-add-section {
 	background-color: #f8f8f8;
 	border: 1px solid rgb(216, 216, 216);
 	height: 100%;
 	padding: 10px;
 }
+
 .shift-trade-layer-container {
 	position: relative;
 	padding-left: 0;
 	padding-right: 0;
 	height: 22px;
 }
+
 .shift-trade-layer-container:first-child {
 	height: 30px;
 }
-.shift-trade-layer.add
-{
+
+.shift-trade-layer.add {
 	height: 20px;
 	top: 5px;
 	position: absolute;
 }
-.shift-trade-layer.edit
-{
+
+.shift-trade-layer.edit {
 	position: absolute;
 	zoom: 1;
 	filter: alpha(opacity=80);
@@ -168,49 +178,48 @@
 	height: 18px;
 	z-index: 10;
 }
+
 .shift-trade-layer.edit.my {
-	top: 3px;	
+	top: 3px;
 }
-.shift-trade-add-schedule
-{
+
+.shift-trade-add-schedule {
 	position: relative;
 	white-space: nowrap;
 	/*margin-top: 18px;*/
 }
+
 .shift-trade-schedule-loading {
-    position: absolute; 
-    width: 100%; 
-    height: 100%; 
-    top:0; 
-    left:0;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
 }
-.shift-trade-timeline 
-{
+
+.shift-trade-timeline {
 	height: 100%;
 	position: absolute;
-	left: 220px; /* This change(220) is accounding to width of .shift-trade-agent-name. Original data was 150 +8 +8 =166 */ 
+	left: 220px; /* This change(220) is accounding to width of .shift-trade-agent-name. Original data was 150 +8 +8 =166 */
 }
-.rtl .shift-trade-timeline
-{
+
+.rtl .shift-trade-timeline {
 	left: 0;
 	right: 220px;
 }
 
-.shift-trade-timeline-line 
-{
+.shift-trade-timeline-line {
 	height: 100%;
 	float: left;
 	border-right: 1px solid rgb(216, 216, 216);
 }
 
-.shift-trade-timeline-number
-{
+.shift-trade-timeline-number {
 	width: 27px;
 	float: left;
 	line-height: 10px;
 	text-align: center;
 	/*margin-top: 5px;*/
-
 	padding-left: 2px;
 	padding-right: 3px;
 	position: relative;
@@ -221,47 +230,62 @@
 	border: 1px solid rgba(0, 0, 0, 0.15);
 	background: white;
 }
+
 .rtl .shift-trade-timeline-number {
 	float: right;
 	padding-left: 3px;
 	padding-right: 2px;
 }
-.shift-trade-add-datepicker
-{
-	position:absolute;
+
+.shift-trade-add-datepicker {
+	position: absolute;
 	width: 100px;
 	text-align: center;
 	left: 30px;
 }
-.shift-trade-add-previous-date 
-{
+
+.shift-trade-add-previous-date {
 	background-position: 0 -30px;
 	height: 20px;
 	width: 22px !important;
 	vertical-align: middle;
 	float: left;
 }
-.shift-trade-add-next-date 
-{
-	background-position: right -90px; margin: 0 -4px;
+
+.shift-trade-add-next-date {
+	background-position: right -90px;
+	margin: 0 -4px;
 	height: 20px;
 	width: 22px !important;
 	vertical-align: middle;
 	left: 102px;
 }
-.shift-trade-dayoff-name 
-{
+
+.shift-trade-dayoff-name {
 	position: absolute;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    display: inline-block;
-    overflow: hidden;
+	left: 0;
+	width: 100%;
+	text-align: center;
+	display: inline-block;
+	overflow: hidden;
 }
-.shift-trade-no-possible-trades 
-{
+
+.add-shift-trade-detail-section {
+	margin: 0;
+}
+
+.add-shift-trade-detail-section .col-md-6 {
+	margin-bottom: 0;	
+}
+
+.add-shift-trade-detail-section textarea {
+	max-width: 100%;
+}
+
+.shift-trade-no-possible-trades {
 	margin-top: 10px;
 }
+
 .shift-trade-agent-name {
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -274,8 +298,7 @@
 	text-align: right;
 }
 
-.shift-trade-agent-name-hover
-{
+.shift-trade-agent-name-hover {
 	padding-right: 10px;
 	box-shadow: 7px 0px 10px -1px rgba(0, 0, 0, 0.35);
 	border-right: 1px solid rgba(0, 0, 0, 0.20);
@@ -283,19 +306,17 @@
 	z-index: 11;
 }
 
-.shift-trade-swap-detail-schedule
-{
+.shift-trade-swap-detail-schedule {
 	position: absolute;
 	left: 0px;
 	display: inline;
 }
 
-.shift-trade-swap-detail-schedule-to
-{
+.shift-trade-swap-detail-schedule-to {
 	position: absolute;
 	left: 0px;
 	display: inline;
-	margin-top: 24px
+	margin-top: 24px;
 }
 
 
@@ -304,8 +325,7 @@
 	position: absolute;
 }
 
-.shift-trade-swap-detail-timeline 
-{
+.shift-trade-swap-detail-timeline {
 	height: 46px;
 	position: absolute;
 	/*hack to make LTR work - remove when were using "true" LTR in requests"". See bug 22898*/
@@ -317,27 +337,28 @@
 	height: 30px;
 	/*hack to make LTR work - remove when were using "true" LTR in requests"". See bug 22898*/
 	padding-left: 0;
-
 }
 
 .request-subject-input {
 	width: 100%;
 }
+
 .request-message-input {
 	width: 100%;
 	height: 5em;
 }
-.shift-trade-swap-detail-timeline-line 
-{
+
+.shift-trade-swap-detail-timeline-line {
 	height: 100%;
 	float: left;
 	border-left: 1px solid rgb(216, 216, 216);
 }
-.shift-trade-swap-detail-timeline-line-no-border 
-{
+
+.shift-trade-swap-detail-timeline-line-no-border {
 	height: 100%;
 	float: left;
 }
+
 .rtl .shift-trade-swap-detail-timeline-line {
 	float: right;
 	border-left: none;
@@ -348,34 +369,40 @@
 .shift-trade-add-schedule .shift-trade-timeline div {
 	height: 100%;
 }
+
 .shift-trade-ruler {
 	height: 100%;
 	width: 1px;
 	background-color: rgba(0,0,0,0.2);
 	z-index: 100;
 }
-.shift-trade-label
-{
+
+.shift-trade-add-schedule .responsive {
+	width: 100%;
+}
+
+.shift-trade-label {
 	font-size: xx-small;
 	height: 12px !important;
 	z-index: 111;
 	text-align: center;
 }
+
 .shift-trade-swap-detail-send-again {
 	position: absolute;
-	bottom:25px;
+	bottom: 25px;
 	right: 22px;
 }
 
 .request-label {
-    max-width: 420px;
-    display: inline-block;
-    white-space: normal;
-    text-align: left;
+	max-width: 420px;
+	display: inline-block;
+	white-space: normal;
+	text-align: left;
 }
 
 .trade-day-detail {
-	 height: 86px;
+	height: 86px;
 }
 
 .trade-date {
@@ -385,23 +412,31 @@
 }
 
 .request-absence {
-    max-width: 250px;
+	max-width: 250px;
 }
+
 .request-date {
-    width: 140px;
-    padding-left: 15px;
+	width: 140px;
+	padding-left: 15px;
 }
 
 .request-time {
-    width:130px;
-    padding-left: 15px;
+	width: 130px;
+	padding-left: 15px;
 }
 
-.shift-trade-dayoff {
+.shift-trade-dayoff{
 	padding-top: 4px;
 	text-align: center;
-	width:100%; 
-	height: 100%
+	width: 100%;
+	height: 100%;
+}
+
+.choose-history-divider {
+	border: 0;
+	height: 0;
+	border-top: 1px solid rgba(0, 0, 0, 0.1);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 #choose-history-list .trade-date {
@@ -411,24 +446,22 @@
 	margin-top: 10px;
 }
 
-.choose-history-divider {
-
-border: 0;
-height: 0;
-border-top: 1px solid rgba(0, 0, 0, 0.1);
-border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+#choose-history-list .shift-trade-timeline{
+	height: 80px;
 }
 
 .page-selected {
-	background-color:#b0b0b0;
+	background-color: #b0b0b0;
 }
+
 .pagination {
 	cursor: pointer;
 }
+
 .filter-time-dropdown-form {
-    padding: 5px 10px 0;
-    max-height: 300px;
-    overflow-y: scroll;
+	padding: 5px 10px 0;
+	max-height: 300px;
+	overflow-y: scroll;
 }
 
 .filter-time-dropdown-button {
@@ -444,7 +477,7 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 	padding-left: 5px;
 }
 
-.request-body .alert-warning{
+.request-body .alert-warning {
 	margin-top: 10px;
 }
 
@@ -458,42 +491,54 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .input-right-inner-addon {
-    position: relative;
+	position: relative;
 }
 
 .input-right-inner-addon input {
-    padding-right: 30px;    
+	padding-right: 30px;
 }
 
 .input-right-inner-addon span {
-    position: absolute;
-    right: 0px;
-    padding: 13px 12px;
-    pointer-events: none;
+	position: absolute;
+	right: 0px;
+	padding: 13px 12px;
+	pointer-events: none;
 }
+
 .glyphicon-refresh-animate {
-    -animation: spin 2s infinite linear;
-    -webkit-animation: spin2 2s infinite linear;
+	-animation: spin 2s infinite linear;
+	-webkit-animation: spin2 2s infinite linear;
 }
 
 @-webkit-keyframes spin2 {
-    from { -webkit-transform: rotate(0deg);}
-    to { -webkit-transform: rotate(360deg);}
+	from {
+		-webkit-transform: rotate(0deg);
+	}
+
+	to {
+		-webkit-transform: rotate(360deg);
+	}
 }
 
 @keyframes spin {
-    from { transform: scale(1) rotate(0deg);}
-    to { transform: scale(1) rotate(360deg);}
+	from {
+		transform: scale(1) rotate(0deg);
+	}
+
+	to {
+		transform: scale(1) rotate(360deg);
+	}
 }
 
- .filteractived {
-	Border:1px solid #007fff;
- }
+.filteractived {
+	Border: 1px solid #007fff;
+}
 
 .btn-group .glyphicon-arrow-up, .glyphicon-arrow-down {
 	color: silver;
 	padding-left: 25px;
 }
+
 .btn-group .sortingbuttonselected {
 	color: #007fff;
 }
@@ -502,19 +547,24 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 	margin: 8px 0;
 	/*z-index: 150; */
 }
+
 .btn.dropdown-toggle {
 	width: 100%;
 	align-content: center;
 }
+
 .btn.dropdown-toggle > b {
 	margin-left: 15%;
 }
+
 .select2-container#s2id_Team-Picker {
-	width: 100% !important ;
+	width: 100% !important;
 }
+
 input[type=search]::-ms-clear {
-    display: none;
+	display: none;
 }
+
 .shift-trade-agent-name + .tooltip {
 	white-space: pre-wrap;
 }
