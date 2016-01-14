@@ -63,17 +63,6 @@
 
 /////////End of Sites & teams///////////////
 ///////////rta-agents///////////////////////
-.rta-agents-input {
-				display: inline-flex;
-				width: 100%;
-}
-.rta-search {
-				padding: 10px 0;
-				input {
-								width: 15%!important;
-								height: 23px;
-				}
-}
 .agent-row {
 				cursor: pointer;
 }
@@ -93,16 +82,8 @@
 
 ///////////End of rta-agents////////////////
 ///////////rta-agent-details///////////////
-.rta-agent-details {
-				height: 100%;
-}
-.rta-agent-details-header {
-				border-bottom: 1px solid;
-				display: inline-flex;
-				width: 100%;
-}
 .rta-agent-details-total {
-				margin-left: 78%;
+				text-align: right;
 }
 
 ///////////End of rta-agent-details///////////

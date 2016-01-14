@@ -1,6 +1,10 @@
+<div class="view-header">
+	<div class="view-title">
+		<h1><i class="mdi mdi-alarm"></i> {{'Agents'|translate}}</h1>
+	</div>
+</div>
 <div class="panel material-depth-1">
 				<div class="sub-header">
-								<h4>{{'Agents'|translate}}</h4>
 								<div ng-if="siteName && teamName">
 												<a class="rta-nav-link" href="{{goBackToRootWithUrl()}}">{{'RealTimeAdherence'|translate}}</a>
 												/
@@ -18,13 +22,17 @@
 												/
 												<span>{{multipleTeamsName}}</span>
 								</div>
-								<div class="rta-agents-input">
-												<div class="input-prepend rta-search">
-																<i class="mdi mdi-magnify"></i>
-																<input ng-change="filterData()" ng-model="filterText" placeholder="{{'Search'|translate}}..." type="text">
-												</div>
-								</div>
+
 				</div>
+				<div class="con-row">
+					<div class="con-flex">
+							<label for="filter-agents" class="input-prepend">
+								<i class="mdi mdi-filter-outline"></i>
+								<input ng-change="filterData()" id="filter-agents" ng-model="filterText" placeholder="{{'Search'|translate}}..." type="text">
+								</label>
+					</div>
+				</div>
+
 				<div class="con-row demo-outline">
 								<div class="con-flex">
 												<div class="grid" ng-if="allGrid" ui-grid-auto-resize ui-grid="allGrid"></div>
