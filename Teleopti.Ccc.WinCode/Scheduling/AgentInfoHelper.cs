@@ -60,7 +60,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					DateOnly periodFirstDate = Period.Value.StartDate;
 					IScheduleDay onePart = _stateHolder.Schedules[_selectedPerson].ScheduledDay(periodFirstDate);
 					_matrix = matrixListFactory.CreateMatrixListForSelection(new List<IScheduleDay> {onePart}).FirstOrDefault();
-
 				}
 
 			}
