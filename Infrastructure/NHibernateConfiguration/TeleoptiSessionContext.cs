@@ -7,6 +7,14 @@ using NHibernate.Engine;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
+	/// <summary>
+	/// Puts current session on httpcontext if exists, if not on thread.
+	/// A hashtable is needed so current sessions from different session factories are not "colliding".
+	/// </summary>
+	/// <remarks>
+	/// If we later need a third way of storing "current session" (eg desktop scope?),
+	/// break this type into multiple ones instead of adding yet another if...
+	/// </remarks>
 	public class TeleoptiSessionContext : CurrentSessionContext
 	{
 		private readonly ISessionFactoryImplementor _factory;
