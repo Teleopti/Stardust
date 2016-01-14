@@ -57,13 +57,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public IList<IScheduleMatrixPro> CreateMatrixListForSelection(IList<IScheduleDay> scheduleDays)
 		{
-<<<<<<< local
-=======
-			var stateHolder = _schedulerStateHolder();
-			var period = stateHolder.RequestedPeriod.DateOnlyPeriod;
-			var startDate = period.StartDate;
-			var selectedPersons = _personExtractor.ExtractPersons(scheduleDays);
->>>>>>> other
 			var matrixes = new List<IScheduleMatrixPro>();
 			var selectedPeriod = _periodExctractor.ExtractPeriod(scheduleDays);
 			if (!selectedPeriod.HasValue)
