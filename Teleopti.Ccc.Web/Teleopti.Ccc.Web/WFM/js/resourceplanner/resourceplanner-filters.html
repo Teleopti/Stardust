@@ -1,31 +1,77 @@
-﻿		<div class="row">
-			<div class="col-md-12">
-				<h4 translate>DayOffRules</h4>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-4">
-				<form class="wfm-form">
-					<div class="form-input-wrap">
-						<label for="ruleName" translate>NameColon</label>
-						<input type="text" name="ruleName" id="ruleName" ng-disabled="default" ng-model="name"/>
-						<p class="text-danger" ng-show="!isValidName()" translate>
-							NameRequired
-						</p>
+<div class="view-header">
+	<div class="view-title">
+		<h1><i class="mdi mdi-calendar"></i> <span translate>DayOffRules</span></h1>
+	</div>
+</div>
+<div class="panel material-depth-1">
+	<form name="form" class="wfm-form" novalidate>
+	 <div class="con-row demo-outline">
+	    <div class="con-flex">
+	      <dl>
+	        <dd>
+				<div class="form-input-wrap">
+					<label for="ruleName" translate>NameColon</label>
+					<input type="text" name="ruleName" id="ruleName" ng-disabled="default" ng-model="name"/>
+					<p class="text-danger" ng-show="!isValidName()" translate>
+						NameRequired
+					</p>
+				</div>
+				<div class="wfm-options">
+					<div class="wfm-option-label" >
+						<p translate>DaysOffPerWeek</p>
 					</div>
-					<div class="form-input-wrap">
+					<div class="wfm-option form-input-wrap">
+						<label  for="daysOffMin" translate>MinColon	</label>
+						<input type="number" ng-model="dayOffsPerWeek.MinDayOffsPerWeek"  placeholder="0" min="0" id="daysOffMin"/>
+						<p class="text-danger" ng-show="!isValidDayOffsPerWeek()" translate>InvalidInput</p>
+					</div>
+					<div class="wfm-option form-input-wrap">
+						<label for="daysOffMax" translate>MaxColon</label>
+						<input type="number" ng-model="dayOffsPerWeek.MaxDayOffsPerWeek" name="MaxDayOffsPerWeek" placeholder="0" min="0" required="" id="daysOffMax"/>
+						<p class="text-danger" ng-show="!isValidDayOffsPerWeek()" translate>InvalidInput</p>
+					</div>
+					<div class="wfm-option-label"translate>
+						<p>ConsecutiveDaysOff</p>
+					</div>
+					<div class="wfm-option form-input-wrap">
+						<label  for="workOffMin" translate>MinColon</label>
+						<input type="number" ng-model="consecDaysOff.MinConsecDaysOff" name="MinConsecutiveDayOffs" placeholder="0" min="0" required="" id="workOffMin"/>
+						<p class="text-danger" ng-show="!isValidConsecDaysOff()" translate>InvalidInput</p>
+					</div>
+					<div class="wfm-option form-input-wrap">
+						<label for="workOffMax" translate>MaxColon</label>
+						<input type="number" ng-model="consecDaysOff.MaxConsecDaysOff" name="MaxConsecutiveDayOffs"placeholder="0" min="0" required="" id="workOffMax"/>
+						<p class="text-danger" ng-show="!isValidConsecDaysOff()" translate>InvalidInput</p>
+
+					</div>
+					<div class="wfm-option-label">
+						<p translate>ConsecutiveWorkDays</p>
+					</div>
+					<div class="wfm-option form-input-wrap" >
+						<label  for="workMin" translate>MinColon</label>
+						<input type="number" ng-model="consecWorkDays.MinConsecWorkDays" name="MinConsecutiveWorkdays"  placeholder="0" min="0" required="" id="workMin"/>
+						<p class="text-danger" ng-show="!isValidConsecWorkDays()" translate>InvalidInput</p>
+					</div>
+					<div class="wfm-option form-input-wrap">
+						<label for="workMax" translate>MaxColon</label>
+						<input type="number" ng-model="consecWorkDays.MaxConsecWorkDays" name="MaxConsecutiveWorkdays" placeholder="0" min="0" required="" id="workMax"/>
+						<p class="text-danger" ng-show="!isValidConsecWorkDays()" translate>InvalidInput</p>
+					</div>
+				 </div>
+		        </dd>
+		      </dl>
+		    </div>
+		    <div class="con-flex split-3-1">
+		      <dl>
+		        <dd>
+					<div class="wfm-option form-input-wrap">
 						<label for="searchInput" translate>FilterColon</label>
-
-						<div class="input-prepend">
-							<input type="text" name="searchInput" id="searchInput" ng-disabled="default" ng-model="searchString" ng-model-options="{ debounce: 300 }"/>
-						</div>
-
-						<div class="row" ng-class="{'wfm-filter-dropdown':searchString.length > 0}">
-							<p ng-show="noResultsExists()" translate>
-								noSearchResults
-							</p>
-								<md-progress-circular class=" mini-spinner" md-mode="indeterminate" ng-show="isSearching">
-								</md-progress-circular>
+						<br/>
+						<input type="text" id="searchInput" class="filter-entry" placeholder="Filter something" ng-disabled="default" ng-model="searchString" ng-model-options="{ debounce: 300 }"/>
+						<div ng-class="{'wfm-filter-dropdown':searchString.length > 0}">
+							<p ng-show="noResultsExists()" translate>noSearchResults</p>
+							<md-progress-circular class=" mini-spinner" md-mode="indeterminate" ng-show="isSearching">
+							</md-progress-circular>
 
 							<div class="wfm-filter-results" ng-show="!isSearching" ng-repeat="result in results">
 								<div ng-click="selectResultItem(result)">
@@ -33,75 +79,39 @@
 								</div>
 							</div>
 							<div ng-show="moreResultsExists()" translate>
-                                ThreeDots
+								ThreeDots
 							</div>
 						</div>
 					</div>
-				</form>
-			</div>
-		</div>
-		<p class="text-danger" ng-show="!isValidFilters() ">
-			<span translate>ValidationforFilter</span>
-		</p>
-		<div class="row" ng-show="selectedResults.length > 0">
-			<div class="col-md-12">
-				<p translate>SelectedFiltersColon</p>
-				<div class="wfm-filter-selected">
-					<div class="unrelated-filters" ng-repeat="selected in selectedResults" ng-if="selected.FilterType != 'contract'">
-						<span class="filter-handle">{{selected.FilterType}}</span><span class="filter-chip">{{selected.Name}}<i class="mdi mdi-close" ng-click="removeNode(selected)"></i></span>
+					<p class="text-danger" ng-show="!isValidFilters() ">
+						<span translate>ValidationforFilter</span>
+					</p>
+				</dd>
+				<dd>
+					<div ng-show="selectedResults.length > 0">
+						<p translate>SelectedFiltersColon</p>
+						<div class="wfm-filter-selected">
+							<div class="unrelated-filters" ng-repeat="selected in selectedResults" ng-if="selected.FilterType != 'contract'">
+								<span class="filter-handle">{{selected.FilterType}}</span>
+								<span class="filter-chip">{{selected.Name}}
+									<i class="mdi mdi-close" ng-click="removeNode(selected)">
+									</i>
+								</span>
+							</div>
+							<br/>
+							<div class="unrelated-filters" ng-repeat="contractSelected in selectedResults" ng-if="contractSelected.FilterType === 'contract'">
+								<span class="filter-handle">{{contractSelected.FilterType}}
+								</span>
+								<span class="filter-chip">{{contractSelected.Name}}<i class="mdi mdi-close" ng-click="removeNode(contractSelected)"></i></span>
+							</div>
+						</div>
 					</div>
-					<br/>
-					<div class="unrelated-filters" ng-repeat="contractSelected in selectedResults" ng-if="contractSelected.FilterType === 'contract'">
-						<span class="filter-handle">{{contractSelected.FilterType}}</span><span class="filter-chip">{{contractSelected.Name}}<i class="mdi mdi-close" ng-click="removeNode(contractSelected)"></i></span>
-					</div>
-				</div>
-			</div>
+		        </dd>
+			</dl>
 		</div>
-		<form name="form" class="wfm-form" novalidate>
-
-		<div class="wfm-options">
-			<div class="wfm-option-label" >
-				<p translate>DaysOffPerWeek</p>
-			</div>
-			<div class="wfm-option form-input-wrap">
-				<label  for="daysOffMin" translate>MinColon	</label>
-					<input type="number" ng-model="dayOffsPerWeek.MinDayOffsPerWeek"  placeholder="0" min="0" id="daysOffMin"/>
-					<p class="text-danger" ng-show="!isValidDayOffsPerWeek()" translate>InvalidInput</p>
-			</div>
-			<div class="wfm-option form-input-wrap">
-				<label for="daysOffMax" translate>MaxColon</label>
-					<input type="number" ng-model="dayOffsPerWeek.MaxDayOffsPerWeek" name="MaxDayOffsPerWeek" placeholder="0" min="0" required="" id="daysOffMax"/>
-					<p class="text-danger" ng-show="!isValidDayOffsPerWeek()" translate>InvalidInput</p>
-			</div>
-			<div class="wfm-option-label"translate>
-			<p>ConsecutiveDaysOff</p>
-			</div>
-			<div class="wfm-option form-input-wrap">
-				<label  for="workOffMin" translate>MinColon</label>
-					<input type="number" ng-model="consecDaysOff.MinConsecDaysOff" name="MinConsecutiveDayOffs" placeholder="0" min="0" required="" id="workOffMin"/>
-					<p class="text-danger" ng-show="!isValidConsecDaysOff()" translate>InvalidInput</p>
-			</div>
-			<div class="wfm-option form-input-wrap">
-				<label for="workOffMax" translate>MaxColon</label>
-					<input type="number" ng-model="consecDaysOff.MaxConsecDaysOff" name="MaxConsecutiveDayOffs"placeholder="0" min="0" required="" id="workOffMax"/>
-					<p class="text-danger" ng-show="!isValidConsecDaysOff()" translate>InvalidInput</p>
-			</div>
-			<div class="wfm-option-label">
-				<p translate>ConsecutiveWorkDays</p>
-			</div>
-			<div class="wfm-option form-input-wrap" >
-				<label  for="workMin" translate>MinColon</label>
-					<input type="number" ng-model="consecWorkDays.MinConsecWorkDays" name="MinConsecutiveWorkdays"  placeholder="0" min="0" required="" id="workMin"/>
-					<p class="text-danger" ng-show="!isValidConsecWorkDays()" translate>InvalidInput</p>
-			</div>
-			<div class="wfm-option form-input-wrap">
-				<label for="workMax" translate>MaxColon</label>
-					<input type="number" ng-model="consecWorkDays.MaxConsecWorkDays" name="MaxConsecutiveWorkdays" placeholder="0" min="0" required="" id="workMax"/>
-					<p class="text-danger" ng-show="!isValidConsecWorkDays()" translate>InvalidInput</p>
-			</div>
-	 </div>
-	 </form>
-
-
-
-<button class="wfm-btn" ng-disabled="!isValid" ng-class="{'wfm-btn-primary':isValid(),'wfm-btn-primary-disabled':!isValid()}"ng-click="persist()" translate>Save</button>
+	</div>
+	<div class="con-footer">
+		<button class="wfm-btn" ng-disabled="!isValid" ng-class="{'wfm-btn-invis-primary':isValid(),'wfm-btn-primary-disabled':!isValid()}"ng-click="persist()" translate>Save</button>
+	</div>
+	</form>
+</div>
