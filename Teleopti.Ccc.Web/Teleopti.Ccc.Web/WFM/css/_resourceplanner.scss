@@ -30,6 +30,26 @@
 
 }
 
+.filter-boxes{
+	display:block;
+	width:auto;
+	float:left;
+	margin: 5px;
+}
+
+.card-dot{
+	background: $green-100;
+}
+
+.card-dot-undone{
+	background:$gray012;
+}
+
+.filter-entry{
+    max-width: 30%!important;
+    margin-right: initial!important;
+}
+
 	.wfm-search-li {
 		 margin-left: -10px
 	}
