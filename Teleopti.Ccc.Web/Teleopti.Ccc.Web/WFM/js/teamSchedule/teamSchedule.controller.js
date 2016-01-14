@@ -398,20 +398,11 @@
 			vm.permissions = result;
 		};
 
-		function messageFilter(message) {
-			var isMessageInsidePeopleList = this.personIds.indexOf(message.DomainReferenceId) > -1;
-			var startDate = moment(message.StartDate.substring(1, message.StartDate.length));
-			var endDate = moment(message.EndDate.substring(1, message.EndDate.length));
-			var isScheduleDateInMessageRange = this.scheduleDate.isSame(startDate, 'day') || this.scheduleDate.isSame(endDate, 'day')
-										|| (this.scheduleDate.isAfter(startDate, 'day') && this.scheduleDate.isBefore(endDate, 'day'));
-
-			return isMessageInsidePeopleList && isScheduleDateInMessageRange;
-		}
-
-		function isMessageNeedToBeHandled() {
-			var personIdsInScheduleTable = vm.groupScheduleVm.Schedules.map(function (schedule) { return schedule.PersonId; });
-			var scheduleDateMoment = vm.scheduleDateMoment();
-			return messageFilter.bind({ personIds: personIdsInScheduleTable, scheduleDate: scheduleDateMoment });
+		function monitorScheduleChanged() {
+			signalRSvc.subscribeBatchMessage(
+				{ DomainType: 'IScheduleChangedInDefaultScenario' }
+				, scheduleChangedEventHandler
+				, 300);
 		}
 
 		function scheduleChangedEventHandler(messages) {
@@ -420,11 +411,19 @@
 			personIds.length !== 0 && vm.updateSchedules(personIds);
 		}
 
-		function monitorScheduleChanged() {
-			signalRSvc.subscribeBatchMessage(
-				{ DomainType: 'IScheduleChangedInDefaultScenario' }
-				, scheduleChangedEventHandler
-				, 300);
+		function isMessageNeedToBeHandled() {
+			var personIds = vm.groupScheduleVm.Schedules.map(function(schedule) { return schedule.PersonId; });
+			var scheduleDate = vm.scheduleDateMoment();
+
+			return function(message) {
+				var isMessageInsidePeopleList = personIds.indexOf(message.DomainReferenceId) > -1;
+				var startDate = moment(message.StartDate.substring(1, message.StartDate.length));
+				var endDate = moment(message.EndDate.substring(1, message.EndDate.length));
+				var isScheduleDateInMessageRange = scheduleDate.isSame(startDate, 'day') || scheduleDate.isSame(endDate, 'day')
+					|| (scheduleDate.isAfter(startDate, 'day') && scheduleDate.isBefore(endDate, 'day'));
+
+				return isMessageInsidePeopleList && isScheduleDateInMessageRange;
+			}
 		}
 
 		function createDocumentListeners() {
