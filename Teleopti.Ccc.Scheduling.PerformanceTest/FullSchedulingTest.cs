@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using NUnit.Framework;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
@@ -62,6 +63,9 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 		{
 			browserInteractions.GoTo(string.Concat(TestSiteConfigurationSetup.URL, "wfm/#/resourceplanner/planningperiod/", planningPeriodId));
 			//put here to dump better info
+			//temp to see if this hack makes it more stable
+			dumpInfo(browserInteractions, "JustAfterGoingToView.txt");
+			Thread.Sleep(5000);
 			browserInteractions.AssertExists(".schedule-button:enabled");
 			dumpInfo(browserInteractions, "BeforeButtonClick.txt");
 			browserInteractions.Click(".schedule-button:enabled");
