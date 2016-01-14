@@ -7,10 +7,14 @@
 					return makeGridOptions({
 						headerCellTemplate: 'js/rta/rta-agents-headercelltemplate-ProperAlarm_34975.html',
 						alarmDurationCellTemplate: '<div ng-if="row.entity.TimeInAlarm !== null" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>',
-						timeInAlarmField : 'TimeInAlarm'
+						timeInAlarmField: 'TimeInAlarm'
 					});
 				else
-					return makeGridOptions();
+					return makeGridOptions({
+						sortOnName: {
+							direction: 'asc'
+						}
+					});
 			};
 
 			this.makeInAlarmGrid = function() {
@@ -18,7 +22,7 @@
 					return makeGridOptions({
 						headerCellTemplate: '<div></div>',
 						alarmDurationCellTemplate: '<div ng-if="row.entity.TimeInAlarm !== null" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>',
-						timeInAlarmField : 'TimeInAlarm'
+						timeInAlarmField: 'TimeInAlarm'
 					});
 				else
 					return makeGridOptions();
@@ -40,65 +44,62 @@
 
 				if (toggleService.RTA_AdherenceDetails_34267)
 					rowTemplate = 'js/rta/rta-agents-rowtemplate-AdherenceDetails_34267.html';
-
-					return {
+				var columnDefs = [{
+					displayName: 'Name',
+					field: 'Name',
+					enableColumnMenu: false,
+					headerCellTemplate: headerCellTemplate,
+					cellTemplate: coloredCellTemplate,
+					headerCellFilter: 'translate'
+				}, {
+					displayName: 'Team',
+					field: 'TeamName',
+					enableColumnMenu: false,
+					headerCellTemplate: headerCellTemplate,
+					cellTemplate: coloredCellTemplate,
+					headerCellFilter: 'translate'
+				}, {
+					displayName: 'State',
+					field: 'State',
+					enableColumnMenu: false,
+					headerCellTemplate: headerCellTemplate,
+					cellTemplate: coloredCellTemplate,
+					headerCellFilter: 'translate'
+				}, {
+					displayName: 'Activity',
+					field: 'Activity',
+					enableColumnMenu: false,
+					headerCellTemplate: headerCellTemplate,
+					cellTemplate: coloredCellTemplate,
+					headerCellFilter: 'translate'
+				}, {
+					displayName: 'NextActivity',
+					field: 'NextActivity',
+					enableColumnMenu: false,
+					headerCellTemplate: headerCellTemplate,
+					cellTemplate: nextActivityCellTemplate,
+					headerCellFilter: 'translate'
+				}, {
+					displayName: 'Alarm',
+					field: 'Alarm',
+					enableColumnMenu: false,
+					headerCellTemplate: headerCellTemplate,
+					cellTemplate: alarmCellTemplate,
+					headerCellFilter: 'translate'
+				}, {
+					displayName: 'TimeInAlarm',
+					field: timeInAlarmField,
+					enableColumnMenu: false,
+					headerCellTemplate: headerCellTemplate,
+					cellTemplate: alarmDurationCellTemplate,
+					headerCellFilter: 'translate'
+				}];
+				columnDefs[0].sort = args.sortOnName || null;
+				return {
 					rowTemplate: rowTemplate,
-					columnDefs: [{
-						displayName: 'Name',
-						field: 'Name',sort: {
-							direction: 'asc'
-						},
-						enableColumnMenu: false,
-						headerCellTemplate: headerCellTemplate,
-						cellTemplate: coloredCellTemplate,
-						headerCellFilter: 'translate'
-					}, {
-						displayName: 'Team',
-						field: 'TeamName',
-						enableColumnMenu: false,
-						headerCellTemplate: headerCellTemplate,
-						cellTemplate: coloredCellTemplate,
-						headerCellFilter: 'translate'
-					}, {
-						displayName: 'State',
-						field: 'State',
-						enableColumnMenu: false,
-						headerCellTemplate: headerCellTemplate,
-						cellTemplate: coloredCellTemplate,
-						headerCellFilter: 'translate'
-					}, {
-						displayName: 'Activity',
-						field: 'Activity',
-						enableColumnMenu: false,
-						headerCellTemplate: headerCellTemplate,
-						cellTemplate: coloredCellTemplate,
-						headerCellFilter: 'translate'
-					}, {
-						displayName: 'NextActivity',
-						field: 'NextActivity',
-						enableColumnMenu: false,
-						headerCellTemplate: headerCellTemplate,
-						cellTemplate: nextActivityCellTemplate,
-						headerCellFilter: 'translate'
-					}, {
-						displayName: 'Alarm',
-						field: 'Alarm',
-						enableColumnMenu: false,
-						headerCellTemplate: headerCellTemplate,
-						cellTemplate: alarmCellTemplate,
-						headerCellFilter: 'translate'
-					}, {
-						displayName: 'TimeInAlarm',
-						field: timeInAlarmField,
-						enableColumnMenu: false,
-						headerCellTemplate: headerCellTemplate,
-						cellTemplate: alarmDurationCellTemplate,
-						headerCellFilter: 'translate'
-					}]
+					columnDefs: columnDefs
 				};
 			};
-
-
 		}
 	]);
 })();
