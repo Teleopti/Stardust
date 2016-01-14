@@ -1,36 +1,36 @@
 <div ui-view>
 	<div class="view-header">
-	<div class="view-title">
-		<h1><i class="mdi mdi-calendar"></i> {{'PlanningPeriods' | translate}}</h1>
-		<p translate>CreateAndManagePlanningPeriods</p>
+		<div class="view-title">
+			<h1><i class="mdi mdi-calendar"></i> {{'PlanningPeriods' | translate}}</h1>
+			<p translate>CreateAndManagePlanningPeriods</p>
+		</div>
+		<div class="fab-wrapper">
+			<button ng-click="startNextPlanningPeriod()" class="wfm-fab  material-depth-1 grow-out" ng-class="{'shrink-in': !isEnabled}" ng-disabled="!isEnabled">
+				<i class="mdi mdi-arrow-right"></i>
+				<md-tooltip>
+					{{'StartNext'|translate}}</md-tooltip>
+			</button>
+		</div>
 	</div>
-	<div class="fab-wrapper">
-		<button ng-click="startNextPlanningPeriod()" class="wfm-fab  material-depth-1 grow-out" ng-class="{'shrink-in': !isEnabled}" ng-disabled="!isEnabled">
-			<i class="mdi mdi-arrow-right"></i>
-			<md-tooltip>
-				{{'StartNext'|translate}}</md-tooltip>
-		</button>
-	</div>
-</div>
 
 
 	<div class="panel material-depth-1">
 		<div class="con-row">
-		   <div class="con-flex">
-			   <div class="card-group">
-		   		<div class="wfm-card planingperiod-container"  ng-repeat="p in planningPeriods" ng-click="selectedPlanningPeriod(p)">
-					<div>
-						<i title="Scheduled" ng-if="p.State == 'Scheduled'" class="card-context card-dot mdi mdi-calendar-check"></i>
+			<div class="con-flex">
+				<div class="card-group">
+					<div class="wfm-card planingperiod-container" ng-repeat="p in planningPeriods" ng-click="selectedPlanningPeriod(p)">
+						<div>
+							<i title="Scheduled" ng-if="p.State == 'Scheduled'" class="card-context card-dot mdi mdi-calendar-check"></i>
 
-						<i title="Scheduled" ng-if="p.State !== 'Scheduled'" class="card-context card-dot-undone mdi mdi-calendar-remove">
+							<i title="Scheduled" ng-if="p.State !== 'Scheduled'" class="card-context card-dot-undone mdi mdi-calendar-remove">
 						</i>
+						</div>
+						<p>
+							{{p.StartDate | amDateFormat:"L"}}-{{p.EndDate | amDateFormat:"L"}}
+						</p>
 					</div>
-					<p>
-						{{p.StartDate |  amDateFormat:"L"}}-{{p.EndDate | amDateFormat:"L"}}
-					</p>
-		   		</div>
-		   	</div>
-		   </div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

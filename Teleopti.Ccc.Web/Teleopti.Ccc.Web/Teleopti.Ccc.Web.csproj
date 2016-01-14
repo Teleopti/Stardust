@@ -1570,6 +1570,7 @@
     <Content Include="WFM\js\outbound\outbound.filter.js" />
     <Content Include="WFM\js\resourceplanner\planningperiods.controller.js" />
     <Content Include="WFM\js\resourceplanner\planningperiods.html" />
+	<Content Include="WFM\js\resourceplanner\planningperiods-modal.html" />
     <Content Include="WFM\js\resourceplanner\planningperiods.service.js" />
     <Content Include="WFM\vendor\ng-mfb\mfb.directive.js" />
     <Content Include="WFM\js\seatManagement\seatmap.controller.js" />

@@ -1,4 +1,5 @@
-﻿<div ui-view>
+
+<div ui-view>
 	<div ng-show="scheduleClicked && !schedulingPerformed" class="test-schedule-is-running">
 		<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 		<p>{{status}}</p>
@@ -6,14 +7,16 @@
 	</div>
 
 	<!--dont remove test-errorMessage - used to assert in test -->
-	<div ng-if ="errorMessage" class="test-errorMessage">
+	<div ng-if="errorMessage" class="test-errorMessage">
 		<p>{{errorMessage}}</p>
 	</div>
 	<div class="view-header">
 		<div class="view-title">
 			<!--TRANSLATE ME-->
 			<h1><i class="mdi mdi-calendar"></i>{{'Filters' | translate}}</h1>
-			<div class="alert-warning notice-spacer server-busy" ng-if="isScheduleRunning"><i class='mdi mdi-alert'></i> <span translate>ScheduleIsRunning</span></div>
+			<div class="alert-warning notice-spacer server-busy" ng-if="isScheduleRunning"><i class='mdi mdi-alert'></i>
+				<span translate>ScheduleIsRunning</span>
+			</div>
 			<div ng-if="planningPeriod.State != 'New'" class="text-success" translate>
 				PlanningPeriodIsScheduled
 			</div>
@@ -27,119 +30,115 @@
 		</div>
 	</div>
 
-<div class="next-planning-peroid" >
-	{{'NextPlanningPeriodMessage' | translate}} {{planningPeriod.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{planningPeriod.EndDate | amDateFormat:"L"}}
-	<!--dont remove update-planning-peroid - used to assert in test -->
-	<i ng-show="initialized" ng-click="changeDateToggle = !changeDateToggle;suggestions(planningPeriod.Id)" class="mdi mdi-pencil searchbaricon update-planning-peroid"><md-tooltip>{{'ChangePlanningPeriod' | translate }}</md-tooltip></i>
+	<div class="next-planning-peroid">
+		{{'NextPlanningPeriodMessage' | translate}} {{planningPeriod.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{planningPeriod.EndDate | amDateFormat:"L"}}
+		<!--dont remove update-planning-peroid - used to assert in test -->
+		<i ng-show="initialized" ng-click="changeDateToggle = !changeDateToggle;suggestions(planningPeriod.Id)" class="mdi mdi-pencil searchbaricon update-planning-peroid"><md-tooltip>{{'ChangePlanningPeriod' | translate }}</md-tooltip></i>
 
-	<div ng-show="!initialized">
-		<md-progress-linear md-mode="indeterminate"></md-progress-linear>
-		<p>{{'CheckingForecastingRequirements' | translate}}</p>
-	</div>
+		<div ng-show="!initialized">
+			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+			<p>{{'CheckingForecastingRequirements' | translate}}</p>
+		</div>
 
-	<div ng-show="initialized">
-		<div class="wfm-test-inputContainer" ng-show="changeDateToggle && isEnabled && !planningPeriod.HasNextPlanningPeriod" ng-disabled="rangeDisabled">
-			{{'ChangePlanningPeriodTo' | translate}}
-			<div ng-repeat="op in suggestedPlanningPeriods">
-				<!--dont remove new-planning-period - used to assert in test -->
-				<div class="wfm-radio new-planning-period">
-					<input type="radio" name="changeRangeGroup" id="{{op.PeriodType}}-{{op.Number}}-{{$index}}" ng-click="rangeUpdated(planningPeriod.Id, op)" />
-					<label for="{{op.PeriodType}}-{{op.Number}}-{{$index}}">
-						<span class="wfm-radio-toggle"></span>
-						<span class="wfm-radio-label new-planning-period"> {{op.StartDate |  amDateFormat:"L"}} {{'ToText' | translate}} {{op.EndDate | amDateFormat:"L"}} {{'HavingRangeOf' | translate}} {{op.Number}} {{op.PeriodType}}</span>
-					</label>
+		<div ng-show="initialized">
+			<div class="wfm-test-inputContainer" ng-show="changeDateToggle && isEnabled && !planningPeriod.HasNextPlanningPeriod" ng-disabled="rangeDisabled">
+				{{'ChangePlanningPeriodTo' | translate}}
+				<div ng-repeat="op in suggestedPlanningPeriods">
+					<!--dont remove new-planning-period - used to assert in test -->
+					<div class="wfm-radio new-planning-period">
+						<input type="radio" name="changeRangeGroup" id="{{op.PeriodType}}-{{op.Number}}-{{$index}}" ng-click="rangeUpdated(planningPeriod.Id, op)" />
+						<label for="{{op.PeriodType}}-{{op.Number}}-{{$index}}">
+							<span class="wfm-radio-toggle"></span>
+							<span class="wfm-radio-label new-planning-period"> {{op.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{op.EndDate | amDateFormat:"L"}} {{'HavingRangeOf' | translate}} {{op.Number}} {{op.PeriodType}}</span>
+						</label>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
-<div ng-show="planningPeriod.Skills.length>0 && planningPeriod.State == 'New'">
-	{{'PlanningPeriodMissingMessage' | translate}}
-	<p>
-		{{'MissingSkills' | translate }}
-		<i class="mdi mdi-alert searchbaricon" ng-click="showErrors=!showErrors"><md-tooltip>Show all errors</md-tooltip></i>
-	</p>
-</div>
-
-<div class="con-row">
-	<div class="con-flex">
-		<button type="button" name="button" ng-click="createRuleset()" class="wfm-btn wfm-btn-default" translate>NewDayOffRule</button>
+	<div ng-show="planningPeriod.Skills.length>0 && planningPeriod.State == 'New'">
+		{{'PlanningPeriodMissingMessage' | translate}}
+		<p>
+			{{'MissingSkills' | translate }}
+			<i class="mdi mdi-alert searchbaricon" ng-click="showErrors=!showErrors"><md-tooltip>Show all errors</md-tooltip></i>
+		</p>
 	</div>
-</div>
-<div class="con-row">
-	<div class="con-flex">
-<div style="card-group">
-	<div class="panel material-depth-1 filter-boxes" ng-repeat="node in dayoffRules">
-	 <div class="sub-header">
-	   <h2>{{node.Name}}</h2>
-	   <div class="head-actions panel-menu">
-		 <div ng-show="!node.Default" tabindex=0 class="context-menu card-context" ng-click="destoryRuleset(node)">
-			<i  class=" filter-header mdi mdi-delete searchbaricon" ><md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip></i>
-		 </div>
-		 <div tabindex=0 class="context-menu card-context" ng-click="editRuleset(node)">
-			<i class=" filter-header mdi mdi-pencil searchbaricon" ><md-tooltip>{{'EditFilter' | translate }}</md-tooltip></i>
-		 </div>
-	   </div>
-	 </div>
 
 	<div class="con-row">
-	   <div class="con-flex">
-		   <table class="wfm-table wfm-filter-options">
-			   <thead><tr><th>Settings</th><th>Min</th><th>Max</th></tr></thead>
-			   <tbody><tr><td translate>DaysOffPerWeek</td><td>{{node.MinDayOffsPerWeek}}</td><td>{{node.MaxDayOffsPerWeek}}</td></tr>
-				   <tr><td translate>ConsecutiveWorkDays</td><td>{{node.MinConsecutiveWorkdays}}</td><td>{{node.MaxConsecutiveWorkdays}}</td></tr>
-				   <tr><td translate>ConsecutiveDaysOff</td><td>{{node.MinConsecutiveDayOffs}}</td><td>{{node.MaxConsecutiveDayOffs}}</td></tr>
-			   </tbody>
-		   </table>
-	   </div>
+		<div class="con-flex">
+			<button type="button" name="button" ng-click="createRuleset()" class="wfm-btn wfm-btn-default" translate>NewDayOffRule</button>
+		</div>
 	</div>
-	 <div class="con-footer">
-		<div ng-cloak class="modal-box">
-		<span ng-show="!node.Default">{{'AmountOfFilters'|translate}}: {{node.Filters.length}}</span>
-		<button ng-click="showFilterRules = !showFilterRules" class="wfm-btn wfm-btn-invis-default" ng-hide="node.Filters.length === 0"><span translate>Show</span>
-		</button>
-		<div ng-cloak ng-show="showFilterRules">
-			<div class="modalbg">
-				<div class="dialog">
-					<h1 class="modal-title">
-						{{node.Name}}
-					</h1>
-					<div class="modal-inner-content">
-						<div ng-repeat="subfilter in node.Filters">
-								{{subfilter.FilterType}} {{subfilter.Name}}
+	<div class="con-row">
+		<div class="con-flex">
+			<div class="card-group">
+				<div class="panel material-depth-1 filter-boxes" ng-repeat="node in dayoffRules">
+					<div class="sub-header">
+						<h2>{{node.Name}}</h2>
+						<div class="head-actions panel-menu">
+							<div ng-show="!node.Default" tabindex=0 class="context-menu card-context" ng-click="destoryRuleset(node)">
+								<i class=" filter-header mdi mdi-delete searchbaricon"><md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip></i>
+							</div>
+							<div tabindex=0 class="context-menu card-context" ng-click="editRuleset(node)">
+								<i class=" filter-header mdi mdi-pencil searchbaricon"><md-tooltip>{{'EditFilter' | translate }}</md-tooltip></i>
+							</div>
 						</div>
 					</div>
-					<div class="modal-actions">
-						<aside>
-							<button ng-click="showFilterRules = !showFilterRules" class="wfm-btn wfm-btn-invis-default">{{'Close'|translate}}</button>
-						</aside>
+
+					<div class="con-row">
+						<div class="con-flex">
+							<table class="wfm-table wfm-filter-options">
+								<thead>
+									<tr>
+										<th>{{'Settings'|translate}}</th>
+										<th>{{'Min'|translate}}</th>
+										<th>{{'Max'|translate}}</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td translate>DaysOffPerWeek</td>
+										<td>{{node.MinDayOffsPerWeek}}</td>
+										<td>{{node.MaxDayOffsPerWeek}}</td>
+									</tr>
+									<tr>
+										<td translate>ConsecutiveWorkDays</td>
+										<td>{{node.MinConsecutiveWorkdays}}</td>
+										<td>{{node.MaxConsecutiveWorkdays}}</td>
+									</tr>
+									<tr>
+										<td translate>ConsecutiveDaysOff</td>
+										<td>{{node.MinConsecutiveDayOffs}}</td>
+										<td>{{node.MaxConsecutiveDayOffs}}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="con-footer">
+						<div class="modal-container" ng-include="'js/resourceplanner/planningperiods-modal.html'"></div>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
+	<div ng-show="showErrors">
+		<div class="con-row panel">
+			<div class="con-flex">
+				<ul class="wfm-accordion material-depth-1">
+					<li ng-repeat="skill in planningPeriod.Skills">
+						<div class="wfm-accordion-head" ng-click="skill.toggle = !skill.toggle">
+							{{skill.SkillName}}
+							<i ng-class="{'toggle-icon-open':skill.toggle}" class="mdi mdi-chevron-right"></i>
+							<span class="pull-right" class="text-muted">{{skill.MissingRanges.length}} {{'IssuesText' | translate }}</span>
+						</div>
+						<div class="wfm-accordion-content" ng-cloak ng-show="skill.toggle">
+							<div ng-repeat="range in skill.MissingRanges">{{'MissingForecastFrom' | translate }} {{range.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{range.EndDate | amDateFormat:"L"}}</div>
+						</div>
+					</li>
+				</ul>
+			</div>
 		</div>
-	 </div>
-</div>
-</div>
-</div>
-</div>
-<div ng-show="showErrors">
-	<div class="con-row panel">
-		<div class="con-flex">
-	<ul class="wfm-accordion material-depth-1">
-		<li ng-repeat="skill in planningPeriod.Skills">
-			<div class="wfm-accordion-head" ng-click="skill.toggle = !skill.toggle">
-				{{skill.SkillName}}
-				<i ng-class="{'toggle-icon-open':skill.toggle}" class="mdi mdi-chevron-right"></i>
-				<span class="pull-right" class="text-muted">{{skill.MissingRanges.length}} {{'IssuesText' | translate }}</span>
-			</div>
-			<div class="wfm-accordion-content" ng-cloak ng-show="skill.toggle">
-				<div ng-repeat="range in skill.MissingRanges">{{'MissingForecastFrom' | translate }} {{range.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{range.EndDate | amDateFormat:"L"}}</div>
-			</div>
-		</li>
-	</ul>
-</div>
-</div>
-</div>
+	</div>
 </div>
