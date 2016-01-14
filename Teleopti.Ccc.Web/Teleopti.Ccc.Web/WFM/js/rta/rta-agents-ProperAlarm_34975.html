@@ -1,6 +1,10 @@
-<div class="row">
-				<div class="col-lg-12">
-								<h4>Agents</h4>
+<div class="view-header">
+				<div class="view-title">
+								<h1>	<i class="mdi mdi-alarm"></i>	{{'Agents'|translate}}</h1>
+				</div>
+</div>
+<div class="panel material-depth-1">
+				<div class="sub-header">
 								<div ng-if="siteName && teamName">
 												<a class="rta-nav-link" href="{{goBackToRootWithUrl()}}">{{'RealTimeAdherence'|translate}}</a>
 												/
@@ -18,12 +22,16 @@
 												/
 												<span>{{multipleTeamsName}}</span>
 								</div>
-								<div class="rta-agents-input">
-												<div class="input-prepend rta-search">
-																<i class="mdi mdi-magnify"></i>
-																<input ng-change="filterData()" ng-model="filterText" placeholder="{{'Search'|translate}}..." type="text">
-												</div>
-												<div class="wfm-switch">
+				</div>
+				<div class="con-row">
+								<div class="con-flex">
+												<label class="input-prepend" for="filter-agents">
+																<i class="mdi mdi-filter-outline"></i>
+																<input id="filter-agents" ng-change="filterData()" ng-model="filterText" placeholder="{{'Search'|translate}}..." type="text">
+												</label>
+								</div>
+								<div class="con-flex">
+												<div class="wfm-switch" style="text-align:right;">
 																<input id="switch1" ng-model="agentsInAlarm" type="checkbox"/>
 																<label for="switch1">
 																				<span class="wfm-switch-label">In Alarm</span>
@@ -31,7 +39,11 @@
 																</label>
 												</div>
 								</div>
-								<div class="grid" ng-if="allGrid && !agentsInAlarm" ui-grid-auto-resize ui-grid="allGrid"></div>
-								<div class="grid" ng-if="inAlarmGrid && agentsInAlarm" ui-grid-auto-resize ui-grid="inAlarmGrid"></div>
+				</div>
+				<div class="con-row demo-outline">
+								<div class="con-flex">
+												<div class="grid" ng-if="allGrid && !agentsInAlarm" ui-grid-auto-resize ui-grid="allGrid"></div>
+												<div class="grid" ng-if="inAlarmGrid && agentsInAlarm" ui-grid-auto-resize ui-grid="inAlarmGrid"></div>
+								</div>
 				</div>
 </div>
