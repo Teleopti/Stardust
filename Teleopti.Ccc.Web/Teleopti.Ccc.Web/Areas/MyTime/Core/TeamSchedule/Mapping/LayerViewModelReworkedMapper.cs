@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonSc
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Interfaces.Domain;
 
@@ -21,12 +22,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 			_permissionProvider = permissionProvider;
 		}
 
-		public LayerViewModelReworked[] Map(IEnumerable<SimpleLayer> sourceLayers)
+		public TeamScheduleLayerViewModel[] Map(IEnumerable<SimpleLayer> sourceLayers)
 		{
 			return sourceLayers.Select(Map).ToArray();
 		}
 
-		public LayerViewModelReworked Map(SimpleLayer sourceLayer)
+		public TeamScheduleLayerViewModel Map(SimpleLayer sourceLayer)
 		{
 			var timeZone = _userTimeZone.TimeZone();
 			var start = TimeZoneHelper.ConvertFromUtc(sourceLayer.Start, timeZone);
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 				color = ConfidentialPayloadValues.DisplayColorHex;
 				titleHeader = ConfidentialPayloadValues.Description.Name;
 			}
-			return new LayerViewModelReworked
+			return new TeamScheduleLayerViewModel
 			{
 				Start = start,
 				End = end,

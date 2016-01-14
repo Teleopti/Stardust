@@ -475,6 +475,7 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceNightRestChecker.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\DateTimeMappingUtils.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\RequestsShiftTradeScheduleViewModelFactory.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\PerformanceToolApiController.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\LocalHostAccessAttribute.cs" />
     <Compile Include="Areas\Requests\Core\FormData\AllRequestsFormData.cs" />
@@ -935,7 +936,7 @@
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradePeriodViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradePeriodViewModelMapper.cs" />
-    <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeAddScheduleLayerViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\TeamSchedule\TeamScheduleLayerViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeRequestsPeriodViewModel.cs" />
     <Compile Include="Areas\Anywhere\AnywhereAreaRegistration.cs" />
     <Compile Include="Areas\Anywhere\Controllers\ApplicationController.cs" />

@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			var myScheduleViewModel = _projectionProvider.MakeScheduleReadModel(_logonUser.CurrentUser(), myScheduleDay, true);
 
 			int pageCount;
-			List<AgentScheduleViewModelReworked> agentSchedules;
+			List<AgentInTeamScheduleViewModel> agentSchedules;
 			if (data.TimeFilter == null && data.TimeSortOrder.IsNullOrEmpty())
 			{
 				agentSchedules = constructAgentSchedulesWithoutReadModel(data, out pageCount);
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			};
 		}
 
-		private List<AgentScheduleViewModelReworked> constructAgentSchedulesFromReadModel(TeamScheduleViewModelData data, bool isMyScheduleIncluded, out int pageCount)
+		private List<AgentInTeamScheduleViewModel> constructAgentSchedulesFromReadModel(TeamScheduleViewModelData data, bool isMyScheduleIncluded, out int pageCount)
 		{
 			var personIds = _teamSchedulePersonsProvider.RetrievePersonIds(data).ToList();
 			if (!isMyScheduleIncluded && personIds.Contains(_logonUser.CurrentUser().Id.GetValueOrDefault()))
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 				personIds.Remove(_logonUser.CurrentUser().Id.GetValueOrDefault());
 			}
 
-			var agentSchedules = new List<AgentScheduleViewModelReworked>();
+			var agentSchedules = new List<AgentInTeamScheduleViewModel>();
 
 			var personScheduleDays = _scheduleDayReadModelFinder.ForPersons(data.ScheduleDate, personIds, data.Paging,
 				data.TimeFilter, data.TimeSortOrder);
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			return agentSchedules;
 		}
 
-		private List<AgentScheduleViewModelReworked> constructAgentSchedulesWithoutReadModel(TeamScheduleViewModelData data, out int pageCount)
+		private List<AgentInTeamScheduleViewModel> constructAgentSchedulesWithoutReadModel(TeamScheduleViewModelData data, out int pageCount)
 		{
 			var people = _teamSchedulePersonsProvider.RetrievePeople(data).ToList();
 			if (people.Contains(_logonUser.CurrentUser()))
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			}
 			var isPermittedToViewConfidential =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential);
-			var agentSchedules = new List<AgentScheduleViewModelReworked>();
+			var agentSchedules = new List<AgentInTeamScheduleViewModel>();
 			pageCount = 1;
 			var canSeeUnpublishedSchedules =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);

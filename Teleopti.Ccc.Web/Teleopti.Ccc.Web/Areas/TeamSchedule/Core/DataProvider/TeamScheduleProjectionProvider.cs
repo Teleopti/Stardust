@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Interfaces.Domain;
 
@@ -100,11 +101,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			return scheduleVm;
 		}
 
-		public AgentScheduleViewModelReworked MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay,
+		public AgentInTeamScheduleViewModel MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay,
 			bool isPermittedToViewConfidential)
 		{
-			var ret = new AgentScheduleViewModelReworked();
-			var layers = new List<LayerViewModelReworked>();
+			var ret = new AgentInTeamScheduleViewModel();
+			var layers = new List<TeamScheduleLayerViewModel>();
 			ret.PersonId = person.Id.GetValueOrDefault();
 			ret.Name = _commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person);
 			if (scheduleDay == null)
@@ -157,7 +158,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 												startDateTimeInUserTimeZone.ToShortTimeString(),
 												endDateTimeInUserTimeZone.ToShortTimeString());
 
-					layers.Add(new LayerViewModelReworked
+					layers.Add(new TeamScheduleLayerViewModel
 					{
 						TitleHeader = description.Name,
 						Color =
@@ -184,6 +185,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 	public interface ITeamScheduleProjectionProvider
 	{
 		GroupScheduleShiftViewModel Projection(IScheduleDay scheduleDay, bool canViewConfidential);
-		AgentScheduleViewModelReworked MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay, bool isPermittedToViewConfidential);
+		AgentInTeamScheduleViewModel MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay, bool isPermittedToViewConfidential);
 	}
 }

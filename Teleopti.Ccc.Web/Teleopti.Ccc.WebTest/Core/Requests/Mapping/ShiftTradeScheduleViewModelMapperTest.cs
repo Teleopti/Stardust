@@ -11,6 +11,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
@@ -149,8 +150,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var shiftTradeAddPersonScheduleViewModel = new ShiftTradeAddPersonScheduleViewModel
 			{
 				StartTimeUtc = myScheduleStart,
-				ScheduleLayers = new List<ShiftTradeAddScheduleLayerViewModel>
-				{new ShiftTradeAddScheduleLayerViewModel {End = myScheduleEnd}}
+				ScheduleLayers = new List<TeamScheduleLayerViewModel>
+				{new TeamScheduleLayerViewModel {End = myScheduleEnd}}.ToArray()
 			};
 
 			_shiftTradeRequestProvider.Stub(x => x.RetrieveMySchedule(data.ShiftTradeDate)).Return(myScheduleDayReadModel);

@@ -11,8 +11,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 {
 	public interface IAgentScheduleViewModelReworkedMapper
 	{
-		AgentScheduleViewModelReworked Map(PersonSchedule personSchedule);
-		IEnumerable<AgentScheduleViewModelReworked> Map(IEnumerable<PersonSchedule> personSchedules);
+		AgentInTeamScheduleViewModel Map(PersonSchedule personSchedule);
+		IEnumerable<AgentInTeamScheduleViewModel> Map(IEnumerable<PersonSchedule> personSchedules);
 
 	}
 }

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 			_permissionProvider = permissionProvider;
 		}
 
-		public AgentScheduleViewModelReworked Map(PersonSchedule personSchedule)
+		public AgentInTeamScheduleViewModel Map(PersonSchedule personSchedule)
 		{
 			if (personSchedule == null )
 				return null;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 			var isSchedulePublished = _permissionProvider.IsPersonSchedulePublished(personSchedule.Date,
 				personSchedule.Person, ScheduleVisibleReasons.Any);
 						
-			var ret = new AgentScheduleViewModelReworked
+			var ret = new AgentInTeamScheduleViewModel
 			{
 				PersonId = personSchedule.Schedule.PersonId,
 				Total = personSchedule.Schedule.Total,
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 			}
 			return ret;
 		}
-		public IEnumerable<AgentScheduleViewModelReworked> Map(IEnumerable<PersonSchedule> personSchedules)
+		public IEnumerable<AgentInTeamScheduleViewModel> Map(IEnumerable<PersonSchedule> personSchedules)
 		{
 			return personSchedules.Select(Map).Where(s => s != null);
 		}

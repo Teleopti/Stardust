@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
@@ -56,27 +57,27 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var mySchedule = new ShiftTradeAddPersonScheduleViewModel
 				{
 					ScheduleLayers =
-						new List<ShiftTradeAddScheduleLayerViewModel>
+						new List<TeamScheduleLayerViewModel>
 							{
-								new ShiftTradeAddScheduleLayerViewModel
+								new TeamScheduleLayerViewModel
 									{
 										Start = date.Date.AddHours(11),
 										End = date.Date.AddHours(16)
 									}
-							}
+							}.ToArray()
 				};
 
 			var possibleTradeSchedule = new ShiftTradeAddPersonScheduleViewModel
 				{
 					ScheduleLayers =
-						new List<ShiftTradeAddScheduleLayerViewModel>
+						new List<TeamScheduleLayerViewModel>
 							{
-								new ShiftTradeAddScheduleLayerViewModel
+								new TeamScheduleLayerViewModel
 									{
 										Start = date.Date.AddHours(6),
 										End = date.Date.AddHours(13)
 									}
-							}
+							}.ToArray()
 							,
 					MinStart = date.Date.AddHours(6)
 				};

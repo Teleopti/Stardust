@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
@@ -17,12 +18,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			_userTimeZone = userTimeZone;
 		}
 
-		public ShiftTradeAddScheduleLayerViewModel[] Map(IEnumerable<SimpleLayer> sourceLayers, bool isMySchedule = false)
+		public TeamScheduleLayerViewModel[] Map(IEnumerable<SimpleLayer> sourceLayers, bool isMySchedule = false)
 		{
 			return sourceLayers.Select(layer => mapLayer(layer, isMySchedule)).ToArray();
 		}
 
-		private ShiftTradeAddScheduleLayerViewModel mapLayer(SimpleLayer sourceLayer, bool isMySchedule = false)
+		private TeamScheduleLayerViewModel mapLayer(SimpleLayer sourceLayer, bool isMySchedule = false)
 		{
 			var timeZone = _userTimeZone.TimeZone();
 			var start = TimeZoneHelper.ConvertFromUtc(sourceLayer.Start, timeZone);
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				color = ConfidentialPayloadValues.DisplayColorHex;
 				titleHeader = ConfidentialPayloadValues.Description.Name;
 			}
-			return new ShiftTradeAddScheduleLayerViewModel
+			return new TeamScheduleLayerViewModel
 				{
 					Start = start,
 					End = end,

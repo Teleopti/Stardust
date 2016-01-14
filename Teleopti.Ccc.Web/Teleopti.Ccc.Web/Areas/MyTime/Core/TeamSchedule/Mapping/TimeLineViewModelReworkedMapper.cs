@@ -18,13 +18,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 			_userTimeZone = userTimeZone;
 		}
 
-		public TimeLineViewModelReworked[] Map(IEnumerable<AgentScheduleViewModelReworked>
+		public TimeLineViewModelReworked[] Map(IEnumerable<AgentInTeamScheduleViewModel>
 			                                                         agentSchedules, DateOnly date)
 		{
 			return _timeLineViewModelReworkedFactory.CreateTimeLineHours(getTimeLinePeriod(agentSchedules, date));
 		}
 
-		private DateTimePeriod getTimeLinePeriod(IEnumerable<AgentScheduleViewModelReworked>
+		private DateTimePeriod getTimeLinePeriod(IEnumerable<AgentInTeamScheduleViewModel>
 			agentSchedules, DateOnly date)
 		{
 			DateTimePeriod? scheduleMinMaxPeriod = getScheduleMinMax(agentSchedules);
@@ -42,9 +42,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 			return returnPeriod;
 		}
 
-		private DateTimePeriod? getScheduleMinMax(IEnumerable<AgentScheduleViewModelReworked> agentSchedules)
+		private DateTimePeriod? getScheduleMinMax(IEnumerable<AgentInTeamScheduleViewModel> agentSchedules)
 		{
-			var schedules = (agentSchedules as IList<AgentScheduleViewModelReworked>) ?? agentSchedules.ToList();
+			var schedules = (agentSchedules as IList<AgentInTeamScheduleViewModel>) ?? agentSchedules.ToList();
 
 			var schedulesWithoutDayoffAndEmptyDays = schedules.Where(s => s.IsDayOff == false && (!s.ScheduleLayers.IsNullOrEmpty())).ToList();
 

@@ -1,5 +1,6 @@
 using System;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
@@ -24,12 +25,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 	public class TeamScheduleViewModelReworked
 	{
 		
-		public AgentScheduleViewModelReworked[] AgentSchedules { get; set; }		
+		public AgentInTeamScheduleViewModel[] AgentSchedules { get; set; }		
 		public TimeLineViewModelReworked[] TimeLine { get; set; }
 
 		public int TimeLineLengthInMinutes { get; set; }
 		public int PageCount { get; set; }
-		public AgentScheduleViewModelReworked MySchedule { get; set; }
+		public AgentInTeamScheduleViewModel MySchedule { get; set; }
 	}
 
 
@@ -58,9 +59,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 		public string DayOffText { get; set; }
 	}
 
-	public class AgentScheduleViewModelReworked
-	{		
-		public LayerViewModelReworked[] ScheduleLayers { get; set; }
+	public class AgentInTeamScheduleViewModel
+	{
+		public TeamScheduleLayerViewModel[] ScheduleLayers { get; set; }
 		public string Name { get; set; }
 		public DateTime StartTimeUtc { get; set; }
 		public Guid PersonId { get; set; }
@@ -80,17 +81,4 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 		public string EndTime { get; set; }
 		public string ActivityName { get; set; }
 	}
-
-	public class LayerViewModelReworked
-	{
-		public DateTime Start { get; set; }
-		public DateTime End { get; set; }
-		public int LengthInMinutes { get; set; }
-		public string Color { get; set; }
-		public string TitleHeader { get; set; }
-		public bool IsAbsenceConfidential { get; set; }
-		public bool IsOvertime { get; set; }
-		public string TitleTime { get; set; }
-	}
-
 }
