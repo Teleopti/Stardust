@@ -373,42 +373,6 @@
 			return debounceFn;
 		};
 
-		function isMessageNeedToBeHandled(message) {
-			var personIdList = vm.groupScheduleVm.Schedules.map(function(item) {
-				return item.PersonId;
-			});
-
-			var isMessageInsidePeopleList = personIdList.indexOf(message.DomainReferenceId) > -1;
-
-			var startDate = moment(message.StartDate.substring(1, message.StartDate.length));
-			var endDate = moment(message.EndDate.substring(1, message.EndDate.length));
-			var scheduleDate = vm.scheduleDateMoment();
-			var scheduleDateInMessageRange = scheduleDate.isSame(startDate, 'day') || scheduleDate.isSame(endDate, 'day')
-				|| (scheduleDate.isAfter(startDate, 'day') && scheduleDate.isBefore(endDate, 'day'));
-
-			return isMessageInsidePeopleList && scheduleDateInMessageRange;
-		}
-
-		function monitorScheduleChanged() {
-			signalRSvc.subscribe({ DomainType: 'IScheduleChangedInDefaultScenario' }, function(message) {
-				isMessageNeedToBeHandled(message) && startMessageHandleing(message);
-			});
-		}
-
-		var personIdsForMessageHandleing = [];
-		var messageHandlerTimeout = null;
-		function startMessageHandleing(message) {
-			personIdsForMessageHandleing.push(message.DomainReferenceId);
-			messageHandlerTimeout !== null && clearTimeout(messageHandlerTimeout);
-			messageHandlerTimeout = setTimeout(function () {
-				vm.updateSchedules(personIdsForMessageHandleing);
-				messageHandlerTimeout = null;
-				personIdsForMessageHandleing = [];
-			}, 5000);
-		}
-
-
-
 		vm.init = function () {
 			createDocumentListeners();
 			vm.isSelectAgentsPerPageEnabled = toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230;
@@ -435,6 +399,35 @@
 		function updatePermissions(result) {
 			vm.permissions = result;
 		};
+
+		function messageFilter(message) {
+			var isMessageInsidePeopleList = this.personIds.indexOf(message.DomainReferenceId) > -1;
+			var startDate = moment(message.StartDate.substring(1, message.StartDate.length));
+			var endDate = moment(message.EndDate.substring(1, message.EndDate.length));
+			var isScheduleDateInMessageRange = this.scheduleDate.isSame(startDate, 'day') || this.scheduleDate.isSame(endDate, 'day')
+										|| (this.scheduleDate.isAfter(startDate, 'day') && this.scheduleDate.isBefore(endDate, 'day'));
+
+			return isMessageInsidePeopleList && isScheduleDateInMessageRange;
+		}
+
+		function isMessageNeedToBeHandled() {
+			var personIdsInScheduleTable = vm.groupScheduleVm.Schedules.map(function (schedule) { return schedule.PersonId; });
+			var scheduleDateMoment = vm.scheduleDateMoment();
+			return messageFilter.bind({ personIds: personIdsInScheduleTable, scheduleDate: scheduleDateMoment });
+		}
+
+		function scheduleChangedEventHandler(messages) {
+			var personIds = messages.filter(isMessageNeedToBeHandled())
+									.map(function (message) { return message.DomainReferenceId; });
+			personIds.length !== 0 && vm.updateSchedules(personIds);
+		}
+
+		function monitorScheduleChanged() {
+			signalRSvc.subscribeBatchMessage(
+				{ DomainType: 'IScheduleChangedInDefaultScenario' }
+				, scheduleChangedEventHandler
+				, 300);
+		}
 
 		function createDocumentListeners() {
 			vm.originalKeydownEvent = document.onkeydown;
