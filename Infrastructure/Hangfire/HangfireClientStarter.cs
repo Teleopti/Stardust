@@ -3,28 +3,28 @@ using Teleopti.Ccc.Domain.Config;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
-	public interface IHangFireClient
+	public interface IHangfireClientStarter
 	{
-		void Configure();
+		void Start();
 	}
 
-	public class NoHangFireClient : IHangFireClient
+	public class NoHangfireClient : IHangfireClientStarter
 	{
-		public void Configure()
+		public void Start()
 		{
 		}
 	}
 
-	public class HangFireClient : IHangFireClient
+	public class HangfireClientStarter : IHangfireClientStarter
 	{
 		private readonly IConfigReader _config;
 
-		public HangFireClient(IConfigReader config)
+		public HangfireClientStarter(IConfigReader config)
 		{
 			_config = config;
 		}
 
-		public void Configure()
+		public void Start()
 		{
 			GlobalConfiguration.Configuration.UseSqlServerStorage(_config.AppConfig("Hangfire"));
 		}

@@ -27,9 +27,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<BackgroundJobClient>().As<IBackgroundJobClient>().SingleInstance();
 
 			if (_configuration.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
-				builder.RegisterType<HangFireClient>().As<IHangFireClient>().SingleInstance();
+				builder.RegisterType<HangfireClientStarter>().As<IHangfireClientStarter>().SingleInstance();
 			else
-				builder.RegisterType<NoHangFireClient>().As<IHangFireClient>().SingleInstance();
+				builder.RegisterType<NoHangfireClient>().As<IHangfireClientStarter>().SingleInstance();
 		}
 	}
 }

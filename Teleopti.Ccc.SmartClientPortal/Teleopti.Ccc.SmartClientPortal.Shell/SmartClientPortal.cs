@@ -350,7 +350,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			if (_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415)) 
 				backStage1.Controls.Remove(backStageButtonSignCustomerWeb);
 
-			_container.Resolve<IHangFireClient>().Configure();
+			_container.Resolve<IHangfireClientStarter>().Start();
 		}
 
 		public void setWfmWebUrl(string module)

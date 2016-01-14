@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 			DataSourceForTenantServiceLocator.Set(container.Resolve<IDataSourceForTenant>());
 
-			container.Resolve<IHangFireClient>().Configure();
+			container.Resolve<IHangfireClientStarter>().Start();
 
 			Logger.Info("Initialized application");
 		}

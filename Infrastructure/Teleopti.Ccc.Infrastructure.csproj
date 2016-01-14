@@ -258,7 +258,7 @@
     <Compile Include="Foundation\TeleoptiPrincipalCacheableFactory.cs" />
     <Compile Include="Foundation\ThreadPrincipalContext.cs" />
     <Compile Include="Hangfire\ActivityChangesChecker.cs" />
-    <Compile Include="Hangfire\HangFireClient.cs" />
+    <Compile Include="Hangfire\HangfireClientStarter.cs" />
     <Compile Include="Hangfire\HangfireEventClient.cs" />
     <Compile Include="Hangfire\HangfireEventServer.cs" />
     <Compile Include="Hangfire\HangfireServerStarter.cs" />
