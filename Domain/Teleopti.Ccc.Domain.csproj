@@ -211,7 +211,6 @@
     <Compile Include="ApplicationLayer\Events\PersonPeriodDetail.cs" />
     <Compile Include="ApplicationLayer\Events\PersonPeriodRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonPeriodStartDateChangedEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\PersonReactivatedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonShiftEndEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonShiftStartEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonSkillActivatedEvent.cs" />
@@ -223,7 +222,7 @@
     <Compile Include="ApplicationLayer\Events\PersonSkillResetEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonStateChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonTeamChangedEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\PersonTerminatedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonTerminalDateChangedEvent.cs" />
     <Compile Include="ApplicationLayer\AdherencePercentageReadModelUpdatedMessage.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduledResourcesChangedEvent.cs" />
     <Compile Include="ApplicationLayer\ICurrentEventPublisher.cs" />

@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var terminationDate = new DateTime(2000, 10, 31);
 			var personId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
-			target.Handle(new PersonTerminatedEvent
+			target.Handle(new PersonTerminalDateChangedEvent
 			{
 				PersonId = personId,
 				BusinessUnitId = businessUnitId,

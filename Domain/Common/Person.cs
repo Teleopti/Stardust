@@ -80,29 +80,16 @@ namespace Teleopti.Ccc.Domain.Common
 		            _terminalDate = valueToSet;
 					var valueAfter = _terminalDate.HasValue ? _terminalDate.Value.Date : (DateTime?)null;
 
-					if (valueBefore.HasValue && !valueAfter.HasValue)
+					AddEvent(new PersonTerminalDateChangedEvent
 					{
-						AddEvent(new PersonReactivatedEvent
-							{
-								PersonId = Id.GetValueOrDefault(),
-								PersonPeriodsBefore = personPeriodsBefore,
-								PersonPeriodsAfter = gatherPersonPeriodDetails(),
-								PreviousTerminationDate = valueBefore.Value
-							});
-					}
-					else
-					{
-						AddEvent(new PersonTerminatedEvent
-							{
-								PersonId = Id.GetValueOrDefault(),
-								PersonPeriodsBefore = personPeriodsBefore,
-								PersonPeriodsAfter = gatherPersonPeriodDetails(),
-								PreviousTerminationDate = valueBefore,
-								TerminationDate = valueAfter.Value
-							});
-					}
-	            }
-            }
+						PersonId = Id.GetValueOrDefault(),
+						PersonPeriodsBefore = personPeriodsBefore,
+						PersonPeriodsAfter = gatherPersonPeriodDetails(),
+						PreviousTerminationDate = valueBefore,
+						TerminationDate = valueAfter
+					});
+				}
+			}
         }
 
 		public virtual void ChangeTeam(ITeam team, IPersonPeriod personPeriod)
