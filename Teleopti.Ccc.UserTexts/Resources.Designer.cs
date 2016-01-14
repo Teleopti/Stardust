@@ -1781,6 +1781,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to agents were successfully scheduled.
+        /// </summary>
+        public static string AgentsSuccessfullyScheduled {
+            get {
+                return ResourceManager.GetString("AgentsSuccessfullyScheduled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Agent state.
         /// </summary>
         public static string AgentState {
@@ -6478,6 +6487,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CreateYesNoMessage {
             get {
                 return ResourceManager.GetString("CreateYesNoMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Critical Understaffing:.
+        /// </summary>
+        public static string CriticalUnderstaffingColon {
+            get {
+                return ResourceManager.GetString("CriticalUnderstaffingColon", resourceCulture);
             }
         }
         
@@ -29295,6 +29313,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Understaffing:.
+        /// </summary>
+        public static string UnderstaffingColon {
+            get {
+                return ResourceManager.GetString("UnderstaffingColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Undo.
         /// </summary>
         public static string Undo {
@@ -30749,6 +30776,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string WeekdayExclusion {
             get {
                 return ResourceManager.GetString("WeekdayExclusion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weekend:.
+        /// </summary>
+        public static string WeekendColon {
+            get {
+                return ResourceManager.GetString("WeekendColon", resourceCulture);
             }
         }
         

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Then(@"I should see '(.*)'")]
 		public void ThenIShouldSee(int days)
 		{
-			Browser.Interactions.AssertAnyContains("p", days +" agents were successfully scheduled");
+			Browser.Interactions.AssertAnyContains("p", days +" " + UserTexts.Resources.AgentsSuccessfullyScheduled);
 		}
 
 		[When(@"I click schedule")]

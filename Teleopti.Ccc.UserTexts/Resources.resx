@@ -14032,4 +14032,20 @@ Help us improve your experience by sending an error report</value>
     <value>New Day Off Rule</value>
     <comment>Button text, create new day off rule/filter web</comment>
   </data>
+  <data name="AgentsSuccessfullyScheduled" xml:space="preserve">
+    <value>agents were successfully scheduled</value>
+    <comment>text in webscheduler, how many agents that were successfully scheduled</comment>
+  </data>
+  <data name="CriticalUnderstaffingColon" xml:space="preserve">
+    <value>Critical Understaffing:</value>
+    <comment>Understaffing is critical</comment>
+  </data>
+  <data name="UnderstaffingColon" xml:space="preserve">
+    <value>Understaffing:</value>
+    <comment>Understaffing with colon</comment>
+  </data>
+  <data name="WeekendColon" xml:space="preserve">
+    <value>Weekend:</value>
+    <comment>Weekend with colon</comment>
+  </data>
 </root>

@@ -1,22 +1,22 @@
 ﻿	<!-- this class is used for asserts in tests -->
 	<div class="scheduling-result">
-		<button class="wfm-btn wfm-btn-primary pull-right" ng-class="{'wfm-btn wfm-btn-primary-disabled': publishedClicked}" ng-click="publishSchedule()">Publish</button>
-		<h4>Scheduling result</h4>
+		<button class="wfm-btn wfm-btn-primary pull-right" ng-class="{'wfm-btn wfm-btn-primary-disabled': publishedClicked}" ng-click="publishSchedule()" translate>PublishSchedule</button>
+		<h4 translate>SchedulingResult</h4>
 		{{planningPeriod.StartDate |  amDateFormat:"L"}} - {{planningPeriod.EndDate |  amDateFormat:"L"}}
-		<p>{{scheduledAgents}} agents were successfully scheduled</p>
+	    <p>{{scheduledAgents}} {{'AgentsSuccessfullyScheduled' | translate}}</p>
 		<p ng-if="hasIssues"></p>
 	</div>
-    <div class="wfm-accordion-head" ng-click="accordionToggle1 = !accordionToggle1;">Schedule<i ng-class="{'toggle-icon-open':!accordionToggle1}" class="mdi mdi-chevron-right"></i></div>
+    <div class="wfm-accordion-head" ng-click="accordionToggle1 = !accordionToggle1;" translate>Schedule<i ng-class="{'toggle-icon-open':!accordionToggle1}" class="mdi mdi-chevron-right"></i></div>
     <div class="wfm-accordion-content" ng-cloak ng-show="!accordionToggle1">
         <div class="wfm-grid">
             <div layout-wrap>
                 <div class="legends" layout ="column">
 
 									<ul>
-                    <li>Critical Understaffing:<div class="legend critUnderstaffed"></div></li>
-                     <li>Understaffing:<div class="legend understaffed"></div></li>
-                     <li>Overstaffing:<div class="legend overstaffed"></div></li>
-                     <li>Weekend:<div class="legend weekend"></div></li>
+                    <li translate>CriticalUnderstaffingColon<div class="legend critUnderstaffed"></div></li>
+                     <li translate>UnderstaffingColon<div class="legend understaffed"></div></li>
+                     <li translate>OverstaffingColon<div class="legend overstaffed"></div></li>
+                     <li translate>WeekendColon<div class="legend weekend"></div></li>
 									 </ul>
 
 
@@ -37,7 +37,7 @@
 							ng-class="{understaffed:node.ColorId==1,critUnderstaffed:node.ColorId==2,overstaffed:node.ColorId==3, closed: node.ColorId==4}">
                             <div class="floater-box">
 	                            <p>{{node.Date |  amDateFormat:"L"}} &nbsp;</p> 
-	                            <p>Rel diff: {{node.parseDif}}%</p>
+                                <p>{{'RelativeDifference' | translate}} {{node.parseDif}}%</p>
                             </div>
 						</div>
                         </td>
@@ -48,7 +48,7 @@
         </div>
     </div>
 
-    <div class="wfm-accordion-head" ng-click="accordionToggle2 = !accordionToggle2;">{{issues.length}} issues were found during scheduling<i ng-class="{'toggle-icon-open':accordionToggle2}" class="mdi mdi-chevron-right"></i></div>
+<div class="wfm-accordion-head" ng-click="accordionToggle2 = !accordionToggle2;">{{issues.length}} {{'IssuesText' | translate}}<i ng-class="{'toggle-icon-open':accordionToggle2}" class="mdi mdi-chevron-right"></i></div>
     <div class="wfm-accordion-content" ng-cloak ng-show="accordionToggle2">
 	    <div ng-if="hasIssues" class="resourceplanner-report material-depth-2"></div>
     <div ui-grid="gridOptions" ui-grid-auto-resize class="grid"></div>
