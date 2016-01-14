@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime;
 using System.Windows.Forms;
 using Autofac;
 using Microsoft.Practices.CompositeUI;
@@ -18,6 +19,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Common.Library
 
         protected SmartClientApplication(IComponentContext container)
         {
+			ProfileOptimization.StartProfile("SmartClientApplication.Profile");
             _container = container;
         }
 

@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Runtime;
+using Autofac;
 using Teleopti.Ccc.WinCode.Main;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell
@@ -11,6 +12,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		public ApplicationStartup(IComponentContext componentContext, ILogonPresenter logonPresenter, WebUrlHolder webUrlHolder)
 		{
+			ProfileOptimization.StartProfile("ApplicationStartup.Profile");
 			_componentContext = componentContext;
 			_logonPresenter = logonPresenter;
 			_webUrlHolder = webUrlHolder;
