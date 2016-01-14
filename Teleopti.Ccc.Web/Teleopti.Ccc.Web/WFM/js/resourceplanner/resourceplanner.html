@@ -5,7 +5,7 @@
 		<p translate>CreateAndManagePlanningPeriods</p>
 	</div>
 	<div class="fab-wrapper">
-		<button ng-click="startNextPlanningPeriod()" class="wfm-fab  material-depth-1 grow-out" ng-class="{'shrink-in': !isEnabled" ng-disabled="!isEnabled">
+		<button ng-click="startNextPlanningPeriod()" class="wfm-fab  material-depth-1 grow-out" ng-class="{'shrink-in': !isEnabled}" ng-disabled="!isEnabled">
 			<i class="mdi mdi-arrow-right"></i>
 			<md-tooltip>
 				{{'StartNext'|translate}}</md-tooltip>
@@ -18,8 +18,8 @@
 		<div class="con-row">
 		   <div class="con-flex">
 			   <div class="card-group">
-		   		<div class="wfm-card planingperiod-test-container"  ng-repeat="p in planningPeriods" ng-click="selectedPlanningPeriod(p)">
-					<div style="text-align:center;">
+		   		<div class="wfm-card planingperiod-container"  ng-repeat="p in planningPeriods" ng-click="selectedPlanningPeriod(p)">
+					<div>
 						<i title="Scheduled" ng-if="p.State == 'Scheduled'" class="card-context card-dot mdi mdi-calendar-check"></i>
 
 						<i title="Scheduled" ng-if="p.State !== 'Scheduled'" class="card-context card-dot-undone mdi mdi-calendar-remove">

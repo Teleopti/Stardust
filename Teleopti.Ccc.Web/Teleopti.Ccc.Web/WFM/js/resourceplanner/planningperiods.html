@@ -20,7 +20,7 @@
 			<!-- don't remove non css class test-schedule-is-running - used to assert in test -->
 		</div>
 		<div class="fab-wrapper">
-			<button class="wfm-fab schedule-button" ng-class="{'shrink-in': disableSchedule()}" ng-disabled="disableSchedule()" ng-click="launchSchedule(planningPeriod)">
+			<button class="wfm-fab material-depth-1 schedule-button" ng-class="{'shrink-in': disableSchedule()}" ng-disabled="disableSchedule()" ng-click="launchSchedule(planningPeriod)">
 				<i class="mdi mdi-arrow-right"></i>
 				<md-tooltip>{{'ScheduleVerb' | translate }}</md-tooltip>
 			</button>
@@ -74,8 +74,8 @@
 	 <div class="sub-header">
 	   <h2>{{node.Name}}</h2>
 	   <div class="head-actions panel-menu">
-		 <div tabindex=0 class="context-menu card-context" ng-click="destoryRuleset(node)">
-			<i ng-show="!node.Default" class=" filter-header mdi mdi-delete searchbaricon" ><md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip></i>
+		 <div ng-show="!node.Default" tabindex=0 class="context-menu card-context" ng-click="destoryRuleset(node)">
+			<i  class=" filter-header mdi mdi-delete searchbaricon" ><md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip></i>
 		 </div>
 		 <div tabindex=0 class="context-menu card-context" ng-click="editRuleset(node)">
 			<i class=" filter-header mdi mdi-pencil searchbaricon" ><md-tooltip>{{'EditFilter' | translate }}</md-tooltip></i>
@@ -125,7 +125,9 @@
 </div>
 </div>
 <div ng-show="showErrors">
-	<ul class="wfm-accordion material-depth-2">
+	<div class="con-row panel">
+		<div class="con-flex">
+	<ul class="wfm-accordion material-depth-1">
 		<li ng-repeat="skill in planningPeriod.Skills">
 			<div class="wfm-accordion-head" ng-click="skill.toggle = !skill.toggle">
 				{{skill.SkillName}}
@@ -137,5 +139,7 @@
 			</div>
 		</li>
 	</ul>
+</div>
+</div>
 </div>
 </div>
