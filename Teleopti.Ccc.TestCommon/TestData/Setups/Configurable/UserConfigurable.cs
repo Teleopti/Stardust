@@ -8,6 +8,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -30,13 +31,23 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public string Tenant { get; set; }
 
+		public bool Delete { get; set; }
+
 		public UserConfigurable()
 		{
 			WindowsAuthentication = false;
+			Delete = false;
 		}
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
+			if (Delete)
+			{
+				var repository = new PersonRepository(new ThisUnitOfWork(uow));
+				repository.Remove(user);
+				return;
+			}
+
 			if (!string.IsNullOrEmpty(Name))
 			{
 				if (Name.Contains(" "))

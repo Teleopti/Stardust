@@ -55,6 +55,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			DataMaker.Person(userName).Apply(user);
 		}
 
+		[When(@"'(.*)' is deleted")]
+		public void WhenIsDeleted(string userName)
+		{
+			var user = new UserConfigurable {Delete = true};
+			DataMaker.Person(userName).Apply(user);
+		}
+
 		[Given(@"I have user credential with")]
 		public void GivenIHaveUserCredentialWith(Table table)
 		{
