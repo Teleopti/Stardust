@@ -63,7 +63,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			var stateHolder = _schedulerStateHolder();
 			var period = stateHolder.SchedulingResultState.Schedules.Period.VisiblePeriod.ToDateOnlyPeriod(_userTimeZone.TimeZone());
-			period = new DateOnlyPeriod(period.StartDate.AddDays(-10), period.EndDate.AddDays(10));
 			var startDate = period.StartDate;
 			var selectedPersons = _personExtractor.ExtractPersons(scheduleDays);
 			var matrixes = new List<IScheduleMatrixPro>();
