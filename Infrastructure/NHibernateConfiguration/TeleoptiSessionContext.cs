@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
+using System.Threading;
 using System.Web;
 using NHibernate;
 using NHibernate.Context;
@@ -17,8 +17,9 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 	/// </remarks>
 	public class TeleoptiSessionContext : CurrentSessionContext
 	{
-		private readonly ISessionFactoryImplementor _factory;
 		private const string itemsKey = "TeleoptiSessionContext";
+		private static readonly ThreadLocal<Hashtable> threadSessions = new ThreadLocal<Hashtable>(() => new Hashtable());
+		private readonly ISessionFactoryImplementor _factory;
 
 		public TeleoptiSessionContext(ISessionFactoryImplementor factory)
 		{
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		private static Hashtable sessions()
 		{
 			var httpContext = HttpContext.Current;
-			return httpContext == null ? getThreadSessions() : getWebSessions(httpContext);
+			return httpContext == null ? threadSessions.Value : getWebSessions(httpContext);
 		}
 
 		private static Hashtable getWebSessions(HttpContext httpContext)
@@ -46,14 +47,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			sessions = new Hashtable();
 			items[itemsKey] = sessions;
 			return sessions;
-		}
-
-		[ThreadStatic]
-		private static Hashtable _threadSessions;
-
-		private static Hashtable getThreadSessions()
-		{
-			return _threadSessions ?? (_threadSessions = new Hashtable());
 		}
 	}
 }
