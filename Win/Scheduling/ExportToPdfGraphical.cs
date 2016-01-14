@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				}
 			}
 
-			var period = new PeriodExctractorFromScheduleParts().ExtractPeriod(selection);
+			var period = new PeriodExctractorFromScheduleParts().ExtractPeriod(selection).Value;
 
 			if (model.Team)
 				ScheduleToPdfManager.ExportShiftPerDayTeamViewGraphical(_culture, personDic, period,

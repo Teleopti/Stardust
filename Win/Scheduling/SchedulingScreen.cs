@@ -3134,7 +3134,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_undoRedo.CreateBatch(Resources.UndoRedoScheduling);
 			var argument = (SchedulingAndOptimizeArgument) e.Argument;
 			var scheduleDays = argument.SelectedScheduleDays;
-			var selectedPeriod = new PeriodExctractorFromScheduleParts().ExtractPeriod(scheduleDays);
+			var selectedPeriod = new PeriodExctractorFromScheduleParts().ExtractPeriod(scheduleDays).Value;
 			turnOffCalculateMinMaxCacheIfNeeded(_optimizerOriginalPreferences.SchedulingOptions);
 			_optimizerOriginalPreferences.SchedulingOptions.NotAllowedShiftCategories.Clear();
 			AdvanceLoggingService.LogSchedulingInfo(_optimizerOriginalPreferences.SchedulingOptions,
@@ -3443,7 +3443,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_undoRedo.CreateBatch(Resources.UndoRedoReOptimize);
 			var argument = (SchedulingAndOptimizeArgument) e.Argument;
 			var scheduleDays = argument.SelectedScheduleDays;
-			var selectedPeriod = new PeriodExctractorFromScheduleParts().ExtractPeriod(scheduleDays);
+			var selectedPeriod = new PeriodExctractorFromScheduleParts().ExtractPeriod(scheduleDays).Value;
 			var dateOnlyList = selectedPeriod.DayCollection();
 			_schedulerState.SchedulingResultState.SkillDaysOnDateOnly(dateOnlyList);
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();

@@ -334,7 +334,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
 			var onlyShiftsWhenUnderstaffed = optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed;
 
-			var selectedPeriod = _container.Resolve<PeriodExctractorFromScheduleParts>().ExtractPeriod(selectedDays);
+			var selectedPeriod = _container.Resolve<PeriodExctractorFromScheduleParts>().ExtractPeriod(selectedDays).Value;
 
 			optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = false;
 			var tagSetter = _container.Resolve<IScheduleTagSetter>();
