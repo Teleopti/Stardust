@@ -26,6 +26,7 @@
 		RTA_NeutralAdherence_30930,
 		RTA_MultiTenancy_32539,
 		RTA_DeletedPersons_36041,
+		RTA_TerminatedPersons_36042,
 
 		MessageBroker_SchedulingScreenMailbox_32733,
 
