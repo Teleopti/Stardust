@@ -48,8 +48,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I create new planning period")]
 		public void WhenICreateNewPlanningPeriod()
 		{
-			Browser.Interactions.AssertExists(".wfm-btn:enabled");
-			Browser.Interactions.Click(".wfm-btn");
+			Browser.Interactions.AssertExists(".wfm-fab:enabled");
+			Browser.Interactions.Click(".wfm-fab");
 			Browser.Interactions.AssertUrlContains("resourceplanner/planningperiod");
 		}
 
