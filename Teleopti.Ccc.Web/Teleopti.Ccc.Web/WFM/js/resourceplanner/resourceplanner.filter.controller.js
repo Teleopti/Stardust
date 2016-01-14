@@ -12,16 +12,16 @@
 				$scope.selectedResults = [];
 				$scope.filterId = "";
 				$scope.dayOffsPerWeek = {
-					MinDayOffsPerWeek: 2,
+					MinDayOffsPerWeek: 1,
 					MaxDayOffsPerWeek: 3
 				};
 				$scope.consecDaysOff = {
-					MinConsecDaysOff: 2,
+					MinConsecDaysOff: 1,
 					MaxConsecDaysOff: 3
 				};
 				$scope.consecWorkDays = {
 					MinConsecWorkDays: 2,
-					MaxConsecWorkDays:3
+					MaxConsecWorkDays:6
 				};
 				$scope.isSearching=false;
 				if (Object.keys($stateParams.filterId).length > 0) {

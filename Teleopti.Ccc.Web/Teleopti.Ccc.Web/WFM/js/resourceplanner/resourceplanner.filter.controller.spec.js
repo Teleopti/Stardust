@@ -246,7 +246,7 @@ describe('ResourcePlannerCtrl', function () {
 		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 		expect(scope.isValidDayOffsPerWeek()).toBe(true);
-		expect(scope.dayOffsPerWeek.MinDayOffsPerWeek).toBe(2); //?
+		expect(scope.dayOffsPerWeek.MinDayOffsPerWeek).toBe(1); //?
 		expect(scope.dayOffsPerWeek.MaxDayOffsPerWeek).toBe(3); //?
 	}));
 
@@ -285,7 +285,7 @@ describe('ResourcePlannerCtrl', function () {
 		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 		expect(scope.isValidConsecDaysOff()).toBe(true);
-		expect(scope.consecDaysOff.MinConsecDaysOff).toBe(2); //?
+		expect(scope.consecDaysOff.MinConsecDaysOff).toBe(1); //?
 		expect(scope.consecDaysOff.MaxConsecDaysOff).toBe(3); //?
 	}));
 
@@ -324,7 +324,7 @@ describe('ResourcePlannerCtrl', function () {
 
 		expect(scope.isValidConsecWorkDays()).toBe(true);
 		expect(scope.consecWorkDays.MinConsecWorkDays).toBe(2); //?
-		expect(scope.consecWorkDays.MaxConsecWorkDays).toBe(3); //?
+		expect(scope.consecWorkDays.MaxConsecWorkDays).toBe(6); //?
 	}));
 
 	it('should set invalid if MaxConsecWorkDays is smaller than MinConsecWorkDays', inject(function ($controller,$stateParams) {
