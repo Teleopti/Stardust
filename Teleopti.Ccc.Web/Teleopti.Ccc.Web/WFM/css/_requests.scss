@@ -1,13 +1,14 @@
 ﻿.wfm-requests {
 	background-color: white;
-	height: 732px;
+	position:relative;
 
 	.advanced-search-container tr td:nth-child(2) div {
 		margin-right: 0 !important;
 	}
 
 	.time-zone-switch {
-		top: 25px;
+		position: absolute;
+		bottom: -3em;
 		display: inline-block;
 		z-index: 100;
 	}
@@ -29,7 +30,7 @@
 	requests-commands-pane {
 		position: absolute;
 		right: 1em;
-		top: 3.5em;
+		top: 0em;
 	}
 
 	.m-r-5{
@@ -55,6 +56,7 @@
 	}
 
 	.wfm-date-range-picker-wrap {
+		
 		.relative {
 			position: relative;
 		}
@@ -76,7 +78,7 @@
 	}
 
 	.ui-grid {
-		height: 70vh;
+		height: 77vh;
 
 		.ui-grid-cell-contents {
 			width: 85%;
@@ -95,9 +97,10 @@
 
 	.paging {
 		position:relative;
+		bottom: -1em;
 		.total-requests-count {
 			margin-right: 20px;
-			margin-top: 5px;
+			margin-top: 10px;
 		}
 
 		.page-size-selector{
