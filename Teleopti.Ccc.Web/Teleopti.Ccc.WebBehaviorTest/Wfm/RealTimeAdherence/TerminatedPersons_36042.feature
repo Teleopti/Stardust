@@ -39,7 +39,7 @@ Scenario: Exclude terminated agents
 	Then I should see site 'Paris' with 0 employees out of adherence
 
 @OnlyRunIfEnabled('RTA_TerminatedPersons_36042')
-Scenario: Exclude agents terminated yesterday
+Scenario: Exclude agents terminated retroactively
 	Given the time is '2016-01-14 08:00:00'
 	When I view Real time adherence for teams on site 'Paris'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
