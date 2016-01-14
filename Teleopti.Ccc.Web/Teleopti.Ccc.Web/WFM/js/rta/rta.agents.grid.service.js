@@ -6,7 +6,8 @@
 				if (toggleService.Wfm_RTA_ProperAlarm_34975)
 					return makeGridOptions({
 						headerCellTemplate: 'js/rta/rta-agents-headercelltemplate-ProperAlarm_34975.html',
-						alarmDurationCellTemplate: '<div ng-if="row.entity.TimeInAlarm !== null" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>'
+						alarmDurationCellTemplate: '<div ng-if="row.entity.TimeInAlarm !== null" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>',
+						timeInAlarmField : 'TimeInAlarm'
 					});
 				else
 					return makeGridOptions();
