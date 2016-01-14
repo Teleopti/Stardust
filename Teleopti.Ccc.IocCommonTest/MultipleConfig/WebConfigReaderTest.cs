@@ -29,5 +29,11 @@ namespace Teleopti.Ccc.IocCommonTest.MultipleConfig
 			});
 			target.AppConfig(key).Should().Be(value);
 		}
+
+		[Test]
+		public void ShouldReturnNullIfConnectionStringDoesNotExist()
+		{
+			new WebConfigReader(() => new WebSettings()).ConnectionString("hej micke").Should().Be.Null();
+		}
 	}
 }
