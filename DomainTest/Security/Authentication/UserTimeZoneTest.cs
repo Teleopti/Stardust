@@ -1,10 +1,10 @@
 using System;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.DomainTest.Security.Authentication
 {
@@ -14,11 +14,11 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
 		[Test]
 		public void ShouldGetTimeZoneFromLoggedOnUser()
 		{
+			var currentPrincipal = new FakeCurrentTeleoptiPrincipal();
 			var user = new Person();
 			user.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.Utc));
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(user);
-			var target = new UserTimeZone(loggedOnUser);
+			currentPrincipal.Fake(new TeleoptiPrincipal(new TeleoptiIdentity("user",null,null,null), user));
+			var target = new UserTimeZone(currentPrincipal);
 
 			var result = target.TimeZone();
 
@@ -28,9 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
 		[Test]
 		public void ShouldReturnNullIfNotLoggedOn()
 		{
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(null);
-			var target = new UserTimeZone(loggedOnUser);
+			var target = new UserTimeZone(new FakeCurrentTeleoptiPrincipal());
 			target.TimeZone().Should().Be.Null();
 		}
 	}

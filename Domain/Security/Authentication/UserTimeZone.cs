@@ -6,24 +6,24 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 {
 	public class UserTimeZone : IUserTimeZone
 	{
-		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly ICurrentTeleoptiPrincipal _loggedOnUser;
 
-		public UserTimeZone(ILoggedOnUser loggedOnUser) 
+		public UserTimeZone(ICurrentTeleoptiPrincipal loggedOnUser) 
 		{
 			_loggedOnUser = loggedOnUser;
 		}
 
 		public static IUserTimeZone Make()
 		{
-			return new UserTimeZone(new LoggedOnUser(null, new CurrentTeleoptiPrincipal()));
+			return new UserTimeZone(new CurrentTeleoptiPrincipal());
 		}
 
 		public TimeZoneInfo TimeZone()     
 		{
-			var currentUser = _loggedOnUser.CurrentUser();
-			return currentUser==null ? 
-				null : 
-				currentUser.PermissionInformation.DefaultTimeZone();
+			var currentUser = _loggedOnUser.Current();
+			if (currentUser == null) return null;
+
+			return currentUser.Regional.TimeZone;
 		}
 	}
 }
