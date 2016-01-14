@@ -6,9 +6,7 @@ using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
-using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Common
@@ -81,14 +79,6 @@ namespace Teleopti.Analytics.Etl.Common
 
 		private void refresh()
 		{
-			//var dataSourcesFactory = new DataSourcesFactory(
-			//	new EnversConfiguration(),
-			//	new NoPersistCallbacks(),
-			//	DataSourceConfigurationSetter.ForEtl(),
-			//	new CurrentHttpContext(),
-			//	() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
-			//	);
-
 			var refreshed = _tenants.ToList();
 
 			using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
