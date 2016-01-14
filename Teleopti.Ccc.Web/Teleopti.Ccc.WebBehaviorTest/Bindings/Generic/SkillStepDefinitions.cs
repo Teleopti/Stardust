@@ -24,5 +24,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				});
 		}
 
+
+		[Given(@"there is a skill in timezone '(.*)' named '(.*)' with activity '(.*)'")]
+		public void GivenThereIsASkillNamedWithActivity( string timezone, string name, string activity)
+		{
+			DataMaker.Data().Apply(new SkillConfigurable
+			{
+				Name = name,
+				Activity = activity,
+				TimeZone = timezone
+			});
+		}
+		
+
 	}
 }

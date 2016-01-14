@@ -175,6 +175,30 @@ And after the update is done I goto the campaign list page
 And I set the starting month for viewing period to '2016-10-01'
 Then I should see 'NewCampaign' in campaign list 
 
+Scenario: Should see correct compaign start date and end date
+Given there is an activity named 'NewCampaign'
+And there is a skill in timezone 'Central America Standard Time' named 'NewCampaign' with activity 'NewCampaign' 
+And there is a workload named 'TheWorkload1' with skill 'NewCampaign'
+And I have created a campaign with
+| Field                             | Value       |
+| Name                              | NewCampaign |
+| Start Date                        | 2015-12-01  |
+| End Date                          | 2015-12-14  |
+| Skill                             | NewCampaign |
+| Call List Len                     | 5555        |
+| Target Rate                       | 55          |
+| Connect Rate                      | 55          |
+| Right Party Connect Rate          | 55          |
+| Connect Average Handling Time     | 55          |
+| Right Party Average Handling Time | 555         |
+| Unproductive Time                 | 55          |
+| Opening Hour Start                | 08:00       |
+| Opening Hour End                  | 16:00       |
+When I view campaign 'NewCampaign'
+And I see the edit campaign form
+Then I should see the campaign start date to be '01'
+And I should see the campaign end date to be '14'
+
 @ignore
 Scenario: Manually update workplan
 When I view the backlog chart of the campaign created with 

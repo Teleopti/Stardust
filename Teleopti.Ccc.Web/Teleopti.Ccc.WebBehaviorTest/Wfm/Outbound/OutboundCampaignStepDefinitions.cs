@@ -279,6 +279,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		}
 
 
+		[Then(@"I should see the campaign start date to be '(.*)'")]
+		public void ThenIShouldSeeTheCampaignStartDateToBe(int date)
+		{
+			Browser.Interactions.AssertAnyContains(".datepicker-start-date .btn-info.active", date.ToString());
+		}
+
+		[Then(@"I should see the campaign end date to be '(.*)'")]
+		public void ThenIShouldSeeTheCampaignEndDateToBe(int date)
+		{
+			Browser.Interactions.AssertAnyContains(".datepicker-end-date .btn-info.active", date.ToString());
+		}
+
+
 
 		private int getZeroValidationTolerance()
 		{

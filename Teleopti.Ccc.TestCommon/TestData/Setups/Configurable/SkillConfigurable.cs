@@ -1,7 +1,9 @@
+using System;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
@@ -10,6 +12,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 	{
 		public string Name { get; set; }
 		public string Activity { get; set; }
+		public string TimeZone { get; set; }
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
@@ -17,7 +20,18 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var skillTypeRepository = new SkillTypeRepository(currentUnitOfWork);
 			skillTypeRepository.Add(skillType);
 
-			var skill = SkillFactory.CreateSkill(Name);
+			ISkill skill;
+
+			if (string.IsNullOrEmpty(TimeZone))
+			{
+				skill = SkillFactory.CreateSkill(Name);
+			}
+			else
+			{
+				skill = SkillFactory.CreateSkill(Name, TimeZoneInfo.FindSystemTimeZoneById(TimeZone));
+			}
+
+		
 			skill.SkillType = skillType;
 
 			var activityRepository = new ActivityRepository(currentUnitOfWork);
