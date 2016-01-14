@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class PeriodExctractorFromScheduleParts
 	{
-		public DateOnlyPeriod ExtractPeriod(IEnumerable<IScheduleDay> scheduleDays)
+		public DateOnlyPeriod? ExtractPeriod(IEnumerable<IScheduleDay> scheduleDays)
 		{
 			DateOnly minDate = DateOnly.MaxValue;
 			DateOnly maxDate = DateOnly.MinValue;
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					maxDate = scheduleDay.DateOnlyAsPeriod.DateOnly;
 			}
 
-			return new DateOnlyPeriod(minDate, maxDate);
+			return minDate == DateOnly.MaxValue ? (DateOnlyPeriod?)null : new DateOnlyPeriod(minDate, maxDate);
 		}
 	}
 }

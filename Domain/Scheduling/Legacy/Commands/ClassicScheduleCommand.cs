@@ -91,8 +91,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					allMatrixesOfSelectedPersons, backgroundWorker,
 					schedulingOptions);
 
-			if(runWeeklyRestSolver)
-				solveWeeklyRest(schedulingOptions, selectedSchedules, stateHolder, selectedPeriod, backgroundWorker, dayOffOptimizationPreferenceProvider);
+			if(runWeeklyRestSolver && selectedPeriod.HasValue)
+				solveWeeklyRest(schedulingOptions, selectedSchedules, stateHolder, selectedPeriod.Value, backgroundWorker, dayOffOptimizationPreferenceProvider);
 		}
 
 

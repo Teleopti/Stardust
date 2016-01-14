@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
@@ -75,9 +74,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,
 				_teamBlockSchedulingOptions);
 			var selectedPeriod = _periodExctractor.ExtractPeriod(selectedSchedules);
-			IList<IScheduleMatrixPro> allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
+			var allMatrixes = selectedPeriod.HasValue ? _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod.Value) : new List<IScheduleMatrixPro>();
 			var selectedPersons = _extractor.ExtractPersons(selectedSchedules);
-			var selectedTeamBlocks = teamBlockGenerator.Generate(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions);
+			var selectedTeamBlocks = teamBlockGenerator.Generate(allMatrixes, selectedPeriod.GetValueOrDefault(), selectedPersons, schedulingOptions);
 			var tagSetter = new ScheduleTagSetter(KeepOriginalScheduleTag.Instance);
 			var rollbackService = new SchedulePartModifyAndRollbackService(schedulingResultStateHolder,
 				_scheduleDayChangeCallback,

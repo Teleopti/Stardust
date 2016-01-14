@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			if (matrixesOfSelectedScheduleDays.Count == 0)
 				return new WorkShiftFinderResultHolder();
 
-			var allVisibleMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
+			var allVisibleMatrixes = selectedPeriod.HasValue ? _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod.Value) : new List<IScheduleMatrixPro>();
 
 			_advanceDaysOffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
 			_advanceDaysOffSchedulingService.Execute(allVisibleMatrixes, selectedPersons,
@@ -111,14 +111,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var advanceSchedulingService = createSchedulingService(schedulingOptions, _groupPersonBuilderWrapper);
 
 			advanceSchedulingService.DayScheduled += schedulingServiceDayScheduled;
-			var workShiftFinderResultHolder = advanceSchedulingService.ScheduleSelected(allVisibleMatrixes, selectedPeriod,
+			var workShiftFinderResultHolder = advanceSchedulingService.ScheduleSelected(allVisibleMatrixes, selectedPeriod.GetValueOrDefault(),
 				matrixesOfSelectedScheduleDays.Select(x => x.Person).Distinct().ToList(),
 				rollbackService, resourceCalculateDelayer,
 				_schedulerStateHolder().SchedulingResultState);
 			advanceSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
 
-			_weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedPersons, rollbackService, resourceCalculateDelayer,
-				selectedPeriod, allVisibleMatrixes, _backgroundWorker, dayOffOptimizationPreferenceProvider);
+			if (selectedPeriod.HasValue)
+			{
+				_weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedPersons, rollbackService, resourceCalculateDelayer,
+					selectedPeriod.Value, allVisibleMatrixes, _backgroundWorker, dayOffOptimizationPreferenceProvider);
+			}
 
 			return workShiftFinderResultHolder;
 		}

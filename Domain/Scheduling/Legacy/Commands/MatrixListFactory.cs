@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
@@ -83,7 +82,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					date = matrix.SchedulePeriod.DateOnlyPeriod.EndDate.AddDays(1);
 				}
 			}
-			_matrixUserLockLocker.Execute(matrixes, _periodExctractor.ExtractPeriod(scheduleDays));
+			var selectedPeriod = _periodExctractor.ExtractPeriod(scheduleDays);
+			if (selectedPeriod.HasValue)
+			{
+				_matrixUserLockLocker.Execute(matrixes, selectedPeriod.Value);
+			}
 			_matrixNotPermittedLocker.Execute(matrixes);
 
 

@@ -130,10 +130,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					IList<IScheduleMatrixPro> allMatrixes = new List<IScheduleMatrixPro>();
 					var selectedPeriod = _periodExctractor.ExtractPeriod(selectedScheduleDays);
+					if (!selectedPeriod.HasValue) return;
 
 					if (schedulingOptions.UseTeam)
 					{
-						allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
+						allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod.Value);
 					}
 
 					IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays =
@@ -146,11 +147,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						backgroundWorker,
 						optimizationPreferences,
 						schedulingOptions,
-						selectedPeriod, allMatrixes);
+						selectedPeriod.Value, allMatrixes);
 
 
 					ExecuteWeeklyRestSolverCommand(schedulerStateHolder, schedulingOptions, optimizationPreferences, selectedPersons,
-						selectedPeriod, matrixesOfSelectedScheduleDays, backgroundWorker, dayOffOptimizationPreferenceProvider);
+						selectedPeriod.Value, matrixesOfSelectedScheduleDays, backgroundWorker, dayOffOptimizationPreferenceProvider);
 				}
 			}
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = lastCalculationState;

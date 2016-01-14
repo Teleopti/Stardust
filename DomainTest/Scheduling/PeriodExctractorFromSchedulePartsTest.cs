@@ -23,11 +23,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		{		
 			var p1 = ScheduleDayFactory.Create(new DateOnly(2016, 1, 12));
 			var p2 = ScheduleDayFactory.Create(new DateOnly(2016, 1, 22));
-			var p3 = ScheduleDayFactory.Create(new DateOnly(2016, 1, 20));
 			var parts = new List<IScheduleDay>{p1, p2};
-			var result = _target.ExtractPeriod(parts);
+			var result = _target.ExtractPeriod(parts).Value;
 			result.StartDate.Should().Be.EqualTo(new DateOnly(2016, 1, 12));
 			result.EndDate.Should().Be.EqualTo(new DateOnly(2016, 1, 22));
+		}
+
+		[Test]
+		public void ShouldReturnNullableWithNoValueWhenYouHaveNoScheduleParts()
+		{
+			var result = _target.ExtractPeriod(new List<IScheduleDay>());
+			result.HasValue.Should().Be.False();
 		}
 	}
 }
