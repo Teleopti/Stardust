@@ -29,8 +29,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             var period =
                 shiftTradeRequest.Period.ToDateOnlyPeriod(
                     shiftTradeRequest.PersonFrom.PermissionInformation.DefaultTimeZone());
-            var longPeriod = new DateOnlyPeriod(period.StartDate.AddDays(-1),
-                                                period.EndDate.AddDays(1));
+	        var longPeriod = period.Inflate(1);
             _scheduleDictionary =
                 _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(
                     shiftTradeRequestPersonExtractor.Persons,

@@ -131,6 +131,8 @@
     <Compile Include="Domain\ClipboardAction.cs" />
     <Compile Include="Domain\ClipboardItems.cs" />
     <Compile Include="Domain\ComplexRuleSetEventArgs.cs" />
+    <Compile Include="Domain\DateOnlyExtensions.cs" />
+    <Compile Include="Domain\DateOnlyPeriodExtensions.cs" />
     <Compile Include="Domain\GamificationSettingRuleSet.cs" />
     <Compile Include="Domain\FairnessType.cs" />
     <Compile Include="Domain\ForecastActualDifferNotification.cs" />

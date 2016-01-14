@@ -32,9 +32,9 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
         public  bool HasMinWeeklyRest(PersonWeek personWeek, IScheduleRange currentSchedules, TimeSpan weeklyRest)
         {
             //TODO rewrite this class in a better way
-            var extendedWeek = new DateOnlyPeriod(personWeek.Week.StartDate.AddDays(-1), personWeek.Week.EndDate.AddDays(1));
+            var extendedWeek = personWeek.Week.Inflate(1);
             var schedules =
-		        currentSchedules.ScheduledDayCollection(new DateOnlyPeriod(extendedWeek.StartDate.AddDays(-1),extendedWeek.EndDate.AddDays(1)))
+		        currentSchedules.ScheduledDayCollection(extendedWeek.Inflate(1))
 			        .ToDictionary(k => k.DateOnlyAsPeriod.DateOnly,
 				        s =>
 					        new WeeklyRestDetailForValidation

@@ -96,12 +96,4 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			Assert.IsTrue(result);
 		}
     }
-
-	public static class DateOnlyPeriodForTestExtensions
-	{
-		public static DateOnlyPeriod Inflate(this DateOnlyPeriod period, int days)
-		{
-			return new DateOnlyPeriod(period.StartDate.AddDays(-days),period.EndDate.AddDays(days));
-		}
-	}
 }

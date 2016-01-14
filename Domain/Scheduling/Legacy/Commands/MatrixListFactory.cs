@@ -26,12 +26,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_periodExctractor = periodExctractor;
 		}
 
-
 		public IList<IScheduleMatrixPro> CreateMatrixListAllForLoadedPeriod(DateOnlyPeriod selectedPeriod)
 		{
 			var stateHolder = _schedulerStateHolder();
-			var period = stateHolder.RequestedPeriod.DateOnlyPeriod;
-			period = new DateOnlyPeriod(period.StartDate.AddDays(-10), period.EndDate.AddDays(10));
+			var period = stateHolder.RequestedPeriod.DateOnlyPeriod.Inflate(10);
 			var persons = stateHolder.FilteredPersonDictionary;
 			var startDate = period.StartDate;
 			var matrixes = new List<IScheduleMatrixPro>();
@@ -59,6 +57,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public IList<IScheduleMatrixPro> CreateMatrixListForSelection(IList<IScheduleDay> scheduleDays)
 		{
+<<<<<<< local
+=======
+			var stateHolder = _schedulerStateHolder();
+			var period = stateHolder.RequestedPeriod.DateOnlyPeriod;
+			var startDate = period.StartDate;
+			var selectedPersons = _personExtractor.ExtractPersons(scheduleDays);
+>>>>>>> other
 			var matrixes = new List<IScheduleMatrixPro>();
 			var selectedPeriod = _periodExctractor.ExtractPeriod(scheduleDays);
 			if (!selectedPeriod.HasValue)

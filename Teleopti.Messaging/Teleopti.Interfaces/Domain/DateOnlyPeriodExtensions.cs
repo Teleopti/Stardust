@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
+using System.Collections.Generic;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
+namespace Teleopti.Interfaces.Domain
 {
 	public static class DateOnlyPeriodExtensions
 	{
@@ -17,6 +16,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 
 				startDate = endDate.AddDays(1);
 			}
+		}
+
+		public static DateOnlyPeriod Inflate(this DateOnlyPeriod period, int days)
+		{
+			return new DateOnlyPeriod(period.StartDate.AddDays(-days), period.EndDate.AddDays(days));
 		}
 	}
 }

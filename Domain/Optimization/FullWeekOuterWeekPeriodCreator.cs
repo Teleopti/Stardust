@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             var lastPeriodsLastDateLocal = DateHelper.GetLastDateInWeek(_selectedPeriod.EndDate, person.FirstDayOfWeek);
 
             _fullWeekPeriod = new DateOnlyPeriod(firstPeriodsFirstDateLocal, lastPeriodsLastDateLocal);
-            _outerPeriod = new DateOnlyPeriod(_fullWeekPeriod.StartDate.AddDays(-7), _fullWeekPeriod.EndDate.AddDays(7));
+            _outerPeriod = _fullWeekPeriod.Inflate(7);
 
         }
     }

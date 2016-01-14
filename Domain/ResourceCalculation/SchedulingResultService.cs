@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				return _relevantSkillStaffPeriods;
 
 			var period = periodToRecalculate.ToDateOnlyPeriod(TimeZoneGuard.Instance.TimeZone);
-			var datePeriod = new DateOnlyPeriod(period.StartDate.AddDays(-1), period.EndDate.AddDays(1));
+			var datePeriod = period.Inflate(1);
 			IAffectedPersonSkillService personSkillService = new AffectedPersonSkillService(datePeriod, _allSkills);
 
 			var rc = new ScheduleResourceOptimizer(_relevantProjections, _relevantSkillStaffPeriods, personSkillService,

@@ -223,7 +223,6 @@
     <Compile Include="Denormalizer\UpdateFindPersonDataConsumer.cs" />
     <Compile Include="ExportForecastContainerInstaller.cs" />
     <Compile Include="ForecastContainerInstaller.cs" />
-    <Compile Include="Forecast\DateOnlyPeriodExtensions.cs" />
     <Compile Include="Forecast\ForecastFileDictionary.cs" />
     <Compile Include="Forecast\ForecastsAnalyzeQuery.cs" />
     <Compile Include="Forecast\ForecastsAnalyzeQueryResult.cs" />
