@@ -120,7 +120,6 @@ describe("TeamScheduleControllerTest", function() {
 		};
 		teamScheduleService.searchSchedules = {
 			query: function () {
-				searchScheduleCalledTimes = searchScheduleCalledTimes + 1;
 				var today = "2015-10-26";
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve({
@@ -163,6 +162,15 @@ describe("TeamScheduleControllerTest", function() {
 				return {
 					$promise: queryDeferred.promise
 				};
+			}
+		};
+
+		teamScheduleService.getSchedules = {
+			query: function (params) {
+				searchScheduleCalledTimes = searchScheduleCalledTimes + 1;
+				var queryDeferred = $q.defer();
+				queryDeferred.resolve();
+				return { $promise: queryDeferred.promise };
 			}
 		};
 
