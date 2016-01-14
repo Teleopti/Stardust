@@ -26,7 +26,10 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 
 		public void Start()
 		{
-			GlobalConfiguration.Configuration.UseSqlServerStorage(_config.AppConfig("Hangfire"));
+			var connectionString = _config.ConnectionString("Hangfire");
+			if (string.IsNullOrEmpty(connectionString))
+				connectionString = _config.AppConfig("Hangfire"); //WHA..t?
+			GlobalConfiguration.Configuration.UseSqlServerStorage(connectionString);
 		}
 	}
 }

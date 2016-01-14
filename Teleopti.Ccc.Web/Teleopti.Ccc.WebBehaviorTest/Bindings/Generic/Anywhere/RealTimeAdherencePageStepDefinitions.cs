@@ -54,6 +54,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertAnyContains(string.Format(".team [data-max='{0}']", total), team);
 		}
 
+		[Then(@"I should see team '(.*)' with (.*) employees out of adherence")]
+		public void ThenIShouldSeeTeamWithOfEmployeesOutOfAdherence2(string team, int numberOfOutAdherence)
+		{
+			Browser.Interactions.AssertAnyContains(string.Format(".team [data-value='{0}']", numberOfOutAdherence), team);
+		}
+
 		[Then(@"I should see real time agent details for '(.*)'")]
 		public void ThenIShouldSeeRealTimeAgentDetailsFor(string name, Table table)
 		{
