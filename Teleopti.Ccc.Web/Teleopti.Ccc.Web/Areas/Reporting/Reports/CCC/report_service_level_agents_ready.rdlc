@@ -9,7 +9,7 @@
               <Width>5cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>7.94949cm</Width>
+              <Width>13.49907cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -460,7 +460,7 @@
         <KeepTogether>true</KeepTogether>
         <DataSetName>DataSet1</DataSetName>
         <Height>3.6cm</Height>
-        <Width>12.94949cm</Width>
+        <Width>18.49907cm</Width>
         <Style />
       </Tablix>
       <Chart Name="chart1">
@@ -1257,31 +1257,34 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>2.05656cm</Width>
+              <Width>1.79469cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.05659cm</Width>
+              <Width>1.90789cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.04739cm</Width>
+              <Width>1.69808cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.75001cm</Width>
+              <Width>1.79751cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.75001cm</Width>
-            </TablixColumn>
-            <TablixColumn>
-              <Width>2cm</Width>
-            </TablixColumn>
-            <TablixColumn>
-              <Width>1.75001cm</Width>
+              <Width>1.70251cm</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>2cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.5cm</Width>
+              <Width>2cm</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>2.15876cm</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>1.92063cm</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>1.78181cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1458,6 +1461,39 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
+                    <Textbox Name="Textbox57">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Parameters!ResOfferedCalls.Value</Value>
+                              <Style>
+                                <FontFamily>Segoe UI</FontFamily>
+                                <FontWeight>Bold</FontWeight>
+                                <Color>DimGray</Color>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox57</rd:DefaultName>
+                      <Style>
+                        <BackgroundColor>White</BackgroundColor>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
                     <Textbox Name="textbox32">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
@@ -1595,7 +1631,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.75001cm</Height>
+              <Height>0.69709cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1802,6 +1838,46 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
+                    <Textbox Name="Textbox58">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Sum(Fields!calls_offered.Value)</Value>
+                              <Style>
+                                <FontFamily>Segoe UI</FontFamily>
+                                <FontWeight>Bold</FontWeight>
+                                <Color>DimGray</Color>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox58</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>DimGray</Color>
+                        </Border>
+                        <BottomBorder>
+                          <Style>Solid</Style>
+                        </BottomBorder>
+                        <BackgroundColor>White</BackgroundColor>
+                        <VerticalAlign>Bottom</VerticalAlign>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
                     <Textbox Name="textbox51">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
@@ -1889,13 +1965,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=
-iif(
-(
- sum(Fields!calls_offered.Value))&gt;0,
- sum(Fields!calls_answered.Value)/(sum(Fields!calls_offered.Value))
- ,0
-)</Value>
+                              <Value>=code.CalcRatio(sum(Fields!calls_answered.Value),sum(Fields!calls_offered.Value),0)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
@@ -2154,6 +2224,38 @@ iif(
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
+                    <Textbox Name="Textbox59">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!calls_offered.Value</Value>
+                              <Style>
+                                <FontFamily>Segoe UI</FontFamily>
+                                <Color>DimGray</Color>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox59</rd:DefaultName>
+                      <Style>
+                        <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
                     <Textbox Name="textbox33">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
@@ -2227,7 +2329,7 @@ iif(
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!answ_rate.Value</Value>
+                              <Value>=code.CalcRatio(Fields!calls_answered.Value,Fields!calls_offered.Value,0)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <Format>0.0%</Format>
@@ -2294,7 +2396,7 @@ iif(
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.82893cm</Height>
+              <Height>0.7231cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -2504,6 +2606,46 @@ iif(
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
+                    <Textbox Name="calls_offered">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Sum(Fields!calls_offered.Value)</Value>
+                              <Style>
+                                <FontFamily>Segoe UI</FontFamily>
+                                <FontWeight>Bold</FontWeight>
+                                <Color>DimGray</Color>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>calls_offered</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>DimGray</Color>
+                          <Width>1.5pt</Width>
+                        </Border>
+                        <TopBorder>
+                          <Style>Solid</Style>
+                        </TopBorder>
+                        <VerticalAlign>Bottom</VerticalAlign>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
                     <Textbox Name="textbox34">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
@@ -2593,7 +2735,7 @@ iif(
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=iif(( sum(Fields!calls_offered.Value))&gt;0, sum(Fields!calls_answered.Value)/(sum(Fields!calls_offered.Value)) ,0)</Value>
+                              <Value>=code.CalcRatio(sum(Fields!calls_answered.Value),sum(Fields!calls_offered.Value),0)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
@@ -2666,7 +2808,6 @@ iif(
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
@@ -2675,6 +2816,7 @@ iif(
         </TablixBody>
         <TablixColumnHierarchy>
           <TablixMembers>
+            <TablixMember />
             <TablixMember />
             <TablixMember />
             <TablixMember />
@@ -2718,12 +2860,13 @@ iif(
           </TablixMembers>
         </TablixRowHierarchy>
         <KeepTogether>true</KeepTogether>
+        <DataSetName>DataSet1</DataSetName>
         <PageBreak>
           <BreakLocation>Start</BreakLocation>
         </PageBreak>
         <Top>24.115cm</Top>
-        <Height>3.42895cm</Height>
-        <Width>18.91057cm</Width>
+        <Height>3.2702cm</Height>
+        <Width>18.76188cm</Width>
         <ZIndex>3</ZIndex>
         <Style />
       </Tablix>
@@ -3106,7 +3249,7 @@ iif(
     <Height>27.78208cm</Height>
     <Style />
   </Body>
-  <Width>19cm</Width>
+  <Width>18.76188cm</Width>
   <Page>
     <PageHeader>
       <Height>2.14312cm</Height>
@@ -3264,7 +3407,7 @@ iif(
           </Paragraphs>
           <Top>0.12367cm</Top>
           <Height>0.50265cm</Height>
-          <Width>18.75cm</Width>
+          <Width>18.5cm</Width>
           <Style>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
@@ -3673,9 +3816,13 @@ iif(
 End Function
 
 Public Function CalcRatio(ByVal Numerator As Object, ByVal Denominator As object, ByVal DivZeroDefault As Object) As Object
-
    If Denominator &lt;&gt; 0 Then
-        Return Numerator/Denominator
+	select case Numerator/Denominator
+	case &gt;1
+		return 1
+	case else
+		Return Numerator/Denominator
+	end select
    Else
         Return DivZeroDefault 
    End If
