@@ -39,13 +39,9 @@ var wfm = angular.module('wfm', [
 	'wfm.requests'
 ]);
 
-var toggles = {
-	Wfm_RTA_ProperAlarm_34975: false
-};
-
 wfm.config([
-	'$stateProvider', '$urlRouterProvider', '$translateProvider', '$httpProvider',
-	function($stateProvider, $urlRouterProvider, $translateProvider, $httpProvider) {
+	'$stateProvider', '$urlRouterProvider', '$translateProvider', '$httpProvider', 'RtaStateProvider',
+	function($stateProvider, $urlRouterProvider, $translateProvider, $httpProvider, RtaStateProvider) {
 
 		$urlRouterProvider.otherwise("/#");
 
@@ -75,10 +71,10 @@ wfm.config([
 			templateUrl: 'js/resourceplanner/resourceplanner.html',
 			controller: 'ResourcePlannerCtrl'
 		}).state('resourceplanner.filter', {
-			params:{
-				filterId:{},
-				periodId:{},
-				isDefault:{}
+			params: {
+				filterId: {},
+				periodId: {},
+				isDefault: {}
 			},
 			url: '/dayoffrules',
 			templateUrl: 'js/resourceplanner/resourceplanner-filters.html',
@@ -164,46 +160,7 @@ wfm.config([
 			controller: 'RequestsCtrl as requests'
 		});
 
-		var rtaAgentsTemplate = function(elem, attr) {
-			if (toggles.Wfm_RTA_ProperAlarm_34975)
-				return 'js/rta/rta-agents-ProperAlarm_34975.html';
-			return 'js/rta/rta-agents.html';
-		};
-		$stateProvider.state('rta', {
-			url: '/rta',
-			templateUrl: 'js/rta/rta-sites.html',
-			controller: 'RtaCtrl',
-		}).state('rta-teams', {
-			url: '/rta/teams/:siteId',
-			templateUrl: 'js/rta/rta-teams.html',
-			controller: 'RtaTeamsCtrl'
-		}).state('rta-agents', {
-			url: '/rta/agents/:siteId/:teamId?showAllAgents',
-			templateUrl: rtaAgentsTemplate,
-			controller: 'RtaAgentsCtrl'
-		}).state('rta-agents-teams', {
-			url: '/rta/agents-teams/?teamIds',
-			templateUrl: rtaAgentsTemplate,
-			controller: 'RtaAgentsCtrl',
-			params: {
-				teamIds: {
-					array: true
-				}
-			}
-		}).state('rta-agents-sites', {
-			url: '/rta/agents-sites/?siteIds',
-			templateUrl: rtaAgentsTemplate,
-			controller: 'RtaAgentsCtrl',
-			params: {
-				siteIds: {
-					array: true
-				}
-			}
-		}).state('rta-agent-details', {
-			url: '/rta/agent-details/:personId',
-			templateUrl: 'js/rta/rta-agent-details.html',
-			controller: 'RtaAgentDetailsCtrl'
-		});
+		RtaStateProvider.config($stateProvider);
 
 		$translateProvider.useSanitizeValueStrategy('sanitizeParameters');
 		$translateProvider.useUrlLoader('../api/Global/Language');
@@ -211,8 +168,8 @@ wfm.config([
 		$httpProvider.interceptors.push('httpInterceptor');
 	}
 ]).run([
-	'$rootScope', '$state', '$translate', 'HelpService', '$timeout', 'CurrentUserInfo', 'Toggle', '$q',
-	function($rootScope, $state, $translate, HelpService, $timeout, currentUserInfo, toggleService, $q) {
+	'$rootScope', '$state', '$translate', 'HelpService', '$timeout', 'CurrentUserInfo', 'Toggle', '$q', 'RtaState',
+	function($rootScope, $state, $translate, HelpService, $timeout, currentUserInfo, toggleService, $q, RtaState) {
 		$rootScope.isAuthenticated = false;
 
 		(function broadcastEventOnToggle() {
@@ -235,10 +192,6 @@ wfm.config([
 			});
 		};
 
-		toggleService.togglesLoaded.then(function() {
-			toggles.Wfm_RTA_ProperAlarm_34975 = toggleService.Wfm_RTA_ProperAlarm_34975
-		});
-
 		$rootScope.$on('$stateChangeStart', function(event, next, toParams) {
 			if (!currentUserInfo.isConnected()) {
 				event.preventDefault();
@@ -253,6 +206,8 @@ wfm.config([
 				return;
 			}
 		});
+
+		RtaState(toggleService);
 	}
 
 ]);
