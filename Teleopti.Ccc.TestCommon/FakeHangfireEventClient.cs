@@ -28,6 +28,24 @@ namespace Teleopti.Ccc.TestCommon
 			Events.Add(serializedEvent);
 			HandlerTypes.Add(handlerType);
 		}
-		
+
+		public IList<string> RecurringIds = new List<string>();
+		public IList<string> RecurringDisplayNames = new List<string>();
+		public IList<string> RecurringTenants = new List<string>();
+		public IList<string> RecurringEventTypes = new List<string>();
+		public IList<string> RecurringEvents = new List<string>();
+		public IList<string> RecurringHandlerTypes = new List<string>();
+
+		public bool WasAdded { get { return RecurringEvents.Any(); } }
+
+		public void AddOrUpdate(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)
+		{
+			RecurringDisplayNames.Add(displayName);
+			RecurringIds.Add(id);
+			RecurringTenants.Add(tenant);
+			RecurringEventTypes.Add(eventType);
+			RecurringEvents.Add(serializedEvent);
+			RecurringHandlerTypes.Add(handlerType);
+		}
 	}
 }

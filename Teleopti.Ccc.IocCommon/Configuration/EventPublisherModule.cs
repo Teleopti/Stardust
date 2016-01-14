@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -29,6 +31,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<HangfireEventPublisher>().As<IHangfireEventPublisher>().SingleInstance();
 			builder.RegisterType<ServiceBusEventPublisher>().As<IServiceBusEventPublisher>().SingleInstance();
 			builder.RegisterType<LocalServiceBusEventPublisher>().As<ILocalServiceBusEventPublisher>().SingleInstance();
+
+			builder.RegisterType<HangfireEventPublisher>().As<IRecurringEventPublisher>().SingleInstance();
 
 			builder.RegisterType<ResolveEventHandlers>().As<IResolveEventHandlers>().SingleInstance();
 
@@ -63,5 +67,5 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IgnoreDelayedMessages>().As<ISendDelayedMessages>().SingleInstance();
 		}
 	}
-
+	
 }
