@@ -61,10 +61,18 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public void AddPersonAbsence(IPersonAbsence personAbsence)
 		{
-			var scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, personAbsence.Person, Period.VisiblePeriod));
-			scheduleRange.Add(personAbsence);
-			BaseDictionary.Add(personAbsence.Person, scheduleRange);
-			TakeSnapshot();
+			var person = personAbsence.Person;
+			if (BaseDictionary.ContainsKey(person))
+			{
+				((ScheduleRange)BaseDictionary[person]).Add(personAbsence);		
+			}
+			else
+			{
+				var scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, personAbsence.Person, Period.VisiblePeriod));
+				scheduleRange.Add(personAbsence);
+				BaseDictionary.Add(personAbsence.Person, scheduleRange);
+				TakeSnapshot();	
+			}	
 		}
 
 		public static IScheduleDictionary WithScheduleData(IPerson person, IScenario scenario, DateTimePeriod period, params IScheduleData[] data)

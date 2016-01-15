@@ -99,9 +99,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
                 if (!_allLayersAreInWorkTimeSpecification.IsSatisfiedBy(layers))
                     return false;
 
-                if (layers.Any(x => !((VisualLayer)x).HighestPriorityActivity.AllowOverwrite && x.Period.Intersect(meetingTime )))
-                    return false;
+				foreach (var x in layers.Where(x => x.Period.Intersect(meetingTime)))
+				{
+					if (!((VisualLayer)x).HighestPriorityActivity.AllowOverwrite) return false;
+					if (((VisualLayer)x).HighestPriorityAbsence != null) return false;
+				}
+
 			}
+
 			return true;
 		}
 	}

@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -19,8 +22,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 		private IScheduleDictionary _dictionary;
 		private ISkillStaffPeriodHolder _skillStaffPeriodHolder;
 	    private IAllLayersAreInWorkTimeSpecification _allLayersInWorkTimeSpec;
-
-	    [SetUp]
+		private IPerson _person;
+		private IList<IPerson> _persons;
+		private IScenario _scenario;
+		private IActivity _activity;
+		private IAbsence _absence;
+		private IShiftCategory _shiftCategory;
+		private DateTimePeriod _dateTimePeriod;
+		private IPersonAssignment _personAssignment;
+		private ScheduleDictionaryForTest _scheduleDictionaryWithPersonAssignment;
+		private IAllLayersAreInWorkTimeSpecification _allLayersAreInWorkTimeSpecification;
+		private FakeSchedulingResultStateHolder _schedulingResultState;
+		private MeetingSlotImpactCalculator _calculator;
+			
+		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
@@ -29,111 +44,21 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 			_skillStaffPeriodHolder = _mocks.StrictMock<ISkillStaffPeriodHolder>();
 		    _allLayersInWorkTimeSpec = _mocks.StrictMock<IAllLayersAreInWorkTimeSpecification>();
             _target = new MeetingSlotImpactCalculator(_schedulingResultStateHolder, _allLayersInWorkTimeSpec);
+			_person = PersonFactory.CreatePerson();
+			_persons = new List<IPerson>{_person};
+			_scenario = new Scenario("scenario");
+			_activity = new Activity("activty") { InContractTime = true, InWorkTime = true, AllowOverwrite = true };
+			_absence = new Absence { InWorkTime = true, InContractTime = true };
+			_shiftCategory = new ShiftCategory("shiftCategory");
+			_dateTimePeriod = new DateTimePeriod(new DateTime(2016, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2016, 1, 1, 17, 0, 0, DateTimeKind.Utc));
+			_personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_activity, _person, _dateTimePeriod, _shiftCategory, _scenario);
+			_scheduleDictionaryWithPersonAssignment = new ScheduleDictionaryForTest(_scenario, new DateTimePeriod(2016, 1, 1, 2016, 1, 10));
+			_scheduleDictionaryWithPersonAssignment.AddPersonAssignment(_personAssignment);
+			_allLayersAreInWorkTimeSpecification = new AllLayersAreInWorkTimeSpecification();
+			_schedulingResultState = new FakeSchedulingResultStateHolder();
+			_schedulingResultState.Schedules = _scheduleDictionaryWithPersonAssignment;
+			_calculator = new MeetingSlotImpactCalculator(_schedulingResultState, _allLayersAreInWorkTimeSpecification);
 		}
-
-		[Test]
-		public void ShouldReturnNullIfPersonNotHaveMainShift()
-		{
-			var person = GetPerson();
-			var persons = new List<IPerson> {person};
-			var meetingStart = new DateTime(2010, 11, 1, 11, 0, 0, DateTimeKind.Utc);
-			var meetingTime = new DateTimePeriod(meetingStart, meetingStart.AddHours(1));
-			var range = _mocks.StrictMock<IScheduleRange>();
-			Expect.Call(_schedulingResultStateHolder.Schedules).Return(_dictionary);
-			Expect.Call(_dictionary[person]).Return(range);
-			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-			Expect.Call(range.ScheduledDay(new DateOnly(2010, 11, 1))).Return(scheduleDay);
-			Expect.Call(scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
-			_mocks.ReplayAll();
-			var result = _target.GetImpact(persons, meetingTime);
-			Assert.That(result,Is.Null);
-			_mocks.VerifyAll();
-		}
-
-		[Test]
-		public void ShouldReturnNullIfPersonNotScheduledAtAllInPeriod()
-		{
-			var person = GetPerson();
-			var persons = new List<IPerson> { person };
-			var meetingStart = new DateTime(2010, 11, 1, 11, 0, 0, DateTimeKind.Utc);
-			var meetingTime = new DateTimePeriod(meetingStart, meetingStart.AddHours(1));
-			var range = _mocks.StrictMock<IScheduleRange>();
-			var projService = _mocks.StrictMock<IProjectionService>();
-			var visualLayers = _mocks.StrictMock<IVisualLayerCollection>();
-			var filteredVisualLayers = _mocks.StrictMock<IFilteredVisualLayerCollection>();
-			Expect.Call(_schedulingResultStateHolder.Schedules).Return(_dictionary);
-			Expect.Call(_dictionary[person]).Return(range);
-			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-			Expect.Call(range.ScheduledDay(new DateOnly(2010, 11, 1))).Return(scheduleDay);
-			Expect.Call(scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
-			Expect.Call(scheduleDay.ProjectionService()).Return(projService);
-			Expect.Call(projService.CreateProjection()).Return(visualLayers);
-			//empty
-			Expect.Call(visualLayers.FilterLayers(meetingTime)).Return(filteredVisualLayers);
-			Expect.Call(filteredVisualLayers.HasLayers).Return(false);
-
-			_mocks.ReplayAll();
-			var result = _target.GetImpact(persons, meetingTime);
-			Assert.That(result, Is.Null);
-			_mocks.VerifyAll();
-		}
-
-		[Test]
-		public void ShouldReturnNullIfNotWholeMeetingIsInContractTime()
-		{
-			var person = GetPerson();
-			var persons = new List<IPerson> { person };
-			var meetingStart = new DateTime(2010, 11, 1, 11, 0, 0, DateTimeKind.Utc);
-			var meetingTime = new DateTimePeriod(meetingStart, meetingStart.AddHours(1));
-			var range = _mocks.StrictMock<IScheduleRange>();
-			var projService = _mocks.StrictMock<IProjectionService>();
-			var visualLayers = _mocks.StrictMock<IVisualLayerCollection>();
-			var filteredVisualLayers = _mocks.StrictMock<IFilteredVisualLayerCollection>();
-
-			Expect.Call(_schedulingResultStateHolder.Schedules).Return(_dictionary);
-			Expect.Call(_dictionary[person]).Return(range);
-			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-			Expect.Call(range.ScheduledDay(new DateOnly(2010, 11, 1))).Return(scheduleDay);
-			Expect.Call(scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
-			Expect.Call(scheduleDay.ProjectionService()).Return(projService);
-			Expect.Call(projService.CreateProjection()).Return(visualLayers);
-			Expect.Call(visualLayers.FilterLayers(meetingTime)).Return(filteredVisualLayers);
-			Expect.Call(filteredVisualLayers.HasLayers).Return(true);
-			Expect.Call(filteredVisualLayers.ContractTime()).Return(TimeSpan.FromMinutes(50));
-			_mocks.ReplayAll();
-			var result = _target.GetImpact(persons, meetingTime);
-			Assert.That(result, Is.Null);
-			_mocks.VerifyAll();
-		}
-
-        [Test]
-        public void ShouldReturnNullIfNotWholeMeetingIsInWorkTime()
-        {
-            var person = GetPerson();
-            var persons = new List<IPerson> { person };
-            var meetingStart = new DateTime(2010, 11, 1, 11, 0, 0, DateTimeKind.Utc);
-            var meetingTime = new DateTimePeriod(meetingStart, meetingStart.AddHours(1));
-            var range = _mocks.StrictMock<IScheduleRange>();
-            var projService = _mocks.StrictMock<IProjectionService>();
-            var visualLayers = _mocks.StrictMock<IVisualLayerCollection>();
-            var filteredVisualLayers = _mocks.StrictMock<IFilteredVisualLayerCollection>();
-
-            Expect.Call(_schedulingResultStateHolder.Schedules).Return(_dictionary);
-            Expect.Call(_dictionary[person]).Return(range);
-            var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-            Expect.Call(range.ScheduledDay(new DateOnly(2010, 11, 1))).Return(scheduleDay);
-            Expect.Call(scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
-            Expect.Call(scheduleDay.ProjectionService()).Return(projService);
-            Expect.Call(projService.CreateProjection()).Return(visualLayers);
-            Expect.Call(visualLayers.FilterLayers(meetingTime)).Return(filteredVisualLayers);
-            Expect.Call(filteredVisualLayers.HasLayers).Return(true);
-            Expect.Call(filteredVisualLayers.ContractTime()).Return(TimeSpan.FromMinutes(60));
-            Expect.Call(_allLayersInWorkTimeSpec.IsSatisfiedBy(filteredVisualLayers)).Return(false);
-            _mocks.ReplayAll();
-            var result = _target.GetImpact(persons, meetingTime);
-            Assert.That(result, Is.Null);
-            _mocks.VerifyAll();
-        }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldReturnSomething()
@@ -222,13 +147,45 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 			_mocks.VerifyAll();
 		}
 
-		private static IPerson GetPerson()
+		[Test]
+		public void ShouldNotCalulateOnIntradayAbsences()
 		{
-			var person = PersonFactory.CreatePerson("", "");
-			person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("Utc")));
-			return person;
-		}
-	}
+			var dateTimePeriodAbsence = new DateTimePeriod(_dateTimePeriod.StartDateTime, _dateTimePeriod.StartDateTime.AddHours(1)); 
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario, dateTimePeriodAbsence, _absence);
+			_scheduleDictionaryWithPersonAssignment.AddPersonAbsence(personAbsence);
 
-	
+			_calculator.GetImpact(_persons, _dateTimePeriod).HasValue.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldNotCalculateOnDayOff()
+		{
+			_scheduleDictionaryWithPersonAssignment.Remove(_person);
+			var personAssignmentWithDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, new DateOnly(_dateTimePeriod.StartDateTime), TimeSpan.FromHours(24), TimeSpan.FromHours(0), TimeSpan.FromHours(12));
+			_scheduleDictionaryWithPersonAssignment.AddPersonAssignment(personAssignmentWithDayOff);
+
+			_calculator.GetImpact(_persons, _dateTimePeriod).HasValue.Should().Be.False();
+		}
+
+		[Test]
+		public void SholdNotCalculateWhenNoAssignment()
+		{
+			_scheduleDictionaryWithPersonAssignment.Remove(_person);
+			_calculator.GetImpact(_persons, _dateTimePeriod).HasValue.Should().Be.False();	
+		}
+
+		[Test]
+		public void ShouldNotCalculateWhenNoContractTime()
+		{
+			_activity.InContractTime = false;
+			_calculator.GetImpact(_persons, _dateTimePeriod).HasValue.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldNotCalculateWhenNoWorkTime()
+		{
+			_activity.InWorkTime = false;
+			_calculator.GetImpact(_persons, _dateTimePeriod).HasValue.Should().Be.False();
+		}
+	}	
 }
