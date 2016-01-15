@@ -25,20 +25,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 
 		public IList<IAuthorizeOrganisationDetail> GetPersonFor(DateOnly shiftTradeDate, IList<Guid> teamIdList, string name)
 		{
-			var businessUnit = _businessUnitRepository.LoadAll().First();
-
-
+			var businessUnit = _businessUnitRepository.LoadAll().FirstOrDefault();
+			name = name ?? string.Empty;
 			var personsOrganisationDetail = _personRepository.LoadAll().Where(x =>
 			{
 				var period = new DateOnlyPeriod(shiftTradeDate, shiftTradeDate);
-				return x.PersonPeriods(period).Any(p => teamIdList.Contains(p.Team.Id.Value))
-				       && _personNameProvider.BuildNameFromSetting(x.Name).Contains(name);
+
+				return x.PersonPeriods(period).Any(p => teamIdList.Contains(p.Team.Id.GetValueOrDefault()))
+					 && _personNameProvider.BuildNameFromSetting(x.Name).Contains(name);
+
+
 			}).Select<IPerson,IAuthorizeOrganisationDetail>(x => new PersonSelectorShiftTrade
 			{
-				PersonId = x.Id.Value,
+				PersonId = x.Id.GetValueOrDefault(),
 				TeamId = x.MyTeam(shiftTradeDate).Id,
 				SiteId = null,
-				BusinessUnitId = businessUnit.Id.Value
+				BusinessUnitId = businessUnit != null? businessUnit.Id.GetValueOrDefault() : Guid.Empty
 
 			}).ToList();
 

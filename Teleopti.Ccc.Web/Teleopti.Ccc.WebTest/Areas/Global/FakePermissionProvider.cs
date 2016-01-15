@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -7,12 +8,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 {
 	public class FakePermissionProvider : IPermissionProvider
 	{
-		private readonly Dictionary<string, DateOnly?> applicationFunctions = new Dictionary<string, DateOnly?>();
-		private bool enabled = false;
+		private readonly Dictionary<string, DateOnly?> _applicationFunctions = new Dictionary<string, DateOnly?>();
+		private readonly IList<PersonPermissionData> _personPermissionDatas = new List<PersonPermissionData>();
+		private DateOnly? _schedulePublishedToDate;
+		private bool enabled;
 
 		public bool HasApplicationFunctionPermission(string applicationFunctionPath)
 		{
-			return applicationFunctions.ContainsKey(applicationFunctionPath);
+			return _applicationFunctions.ContainsKey(applicationFunctionPath);
 		}
 
 		public bool HasPersonPermission(string applicationFunctionPath, DateOnly date, IPerson person)
@@ -34,14 +37,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			IAuthorizeOrganisationDetail authorizeOrganisationDetail)
 		{
 			if (!enabled) return true;
-			return applicationFunctions.ContainsKey(applicationFunctionPath)
-				&& (!applicationFunctions[applicationFunctionPath].HasValue || applicationFunctions[applicationFunctionPath] <= date);
+			return _applicationFunctions.ContainsKey(applicationFunctionPath)
+				&& (!_applicationFunctions[applicationFunctionPath].HasValue || _applicationFunctions[applicationFunctionPath] <= date);
 		}
 
 		public bool IsPersonSchedulePublished(DateOnly date, IPerson person,
 			ScheduleVisibleReasons reason = ScheduleVisibleReasons.Published)
 		{
-			throw new NotImplementedException();
+			return !_schedulePublishedToDate.HasValue || _schedulePublishedToDate.Value >= date;
 		}
 
 		public void Enable()
@@ -56,20 +59,44 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 		public void Permit(string applicationFunction)
 		{
-			if (!applicationFunctions.ContainsKey(applicationFunction))
-				applicationFunctions.Add(applicationFunction, null);
+			if (!_applicationFunctions.ContainsKey(applicationFunction))
+				_applicationFunctions.Add(applicationFunction, null);
 		}
 
 		public void Permit(string applicationFunction, DateOnly date)
 		{
-			if (!applicationFunctions.ContainsKey(applicationFunction))
-				applicationFunctions.Add(applicationFunction, date);
+			if (!_applicationFunctions.ContainsKey(applicationFunction))
+				_applicationFunctions.Add(applicationFunction, date);
 		}
 
 		public void Reject(string applicationFunction)
 		{
-			if (applicationFunctions.ContainsKey(applicationFunction))
-				applicationFunctions.Remove(applicationFunction);
+			if (_applicationFunctions.ContainsKey(applicationFunction))
+				_applicationFunctions.Remove(applicationFunction);
+		}
+
+		public void PermitPerson(string applicationFunction,  IPerson person, DateOnly date)
+		{
+			_personPermissionDatas.Add(new PersonPermissionData(applicationFunction, date, person));
+		}
+
+		public void PublishToDate(DateOnly date)
+		{
+			_schedulePublishedToDate = date;
+		}
+	}
+
+	class PersonPermissionData
+	{
+		public string ApplicationFunctionPath;
+		public DateOnly Date;
+		public IPerson Person;
+
+		public PersonPermissionData(string applicationFunctionPath, DateOnly date, IPerson person)
+		{
+			ApplicationFunctionPath = applicationFunctionPath;
+			Date = date;
+			Person = person;
 		}
 	}
 }
