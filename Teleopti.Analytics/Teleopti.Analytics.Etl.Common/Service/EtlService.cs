@@ -1,6 +1,7 @@
 using System;
 using System.Timers;
 using log4net;
+using Teleopti.Analytics.Etl.Common.TickEvent;
 
 namespace Teleopti.Analytics.Etl.Common.Service
 {
@@ -10,10 +11,12 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 		private Timer _timer;
 		private readonly EtlJobStarter _etlJobStarter;
+		private readonly HourlyTickEventPublisher _hourlyTickEventPublisher;
 
-		public EtlService(EtlJobStarter etlJobStarter)
+		public EtlService(EtlJobStarter etlJobStarter, HourlyTickEventPublisher hourlyTickEventPublisher)
 		{
 			_etlJobStarter = etlJobStarter;
+			_hourlyTickEventPublisher = hourlyTickEventPublisher;
 		}
 
 		public void Start(DateTime serviceStartTime, Action stopService)
@@ -26,39 +29,38 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 		void tick(object sender, ElapsedEventArgs e)
 		{
-			var isStopping = false;
+			var stop = false;
+
+			log.Debug("Tick");
+			_timer.Stop();
+			log.Debug("Timer stopped");
+
 			try
 			{
-				log.Debug("Tick");
-				_timer.Stop();
-				log.Debug("Timer stopped");
-
-				var success = _etlJobStarter.Tick();
-
-				isStopping = !success;
+				_hourlyTickEventPublisher.Tick();
 			}
 			catch (Exception ex)
 			{
-				log.Error("Exception occurred in tick", ex);
+				log.Error("Exception occurred invoking HourlyTickEventPublisher", ex);
 			}
-			finally
+
+			try
 			{
-				try
-				{
-					log.DebugFormat("Stopping: {0}", isStopping);
-					if (!isStopping)
-					{
-						log.Debug("Starting timer");
-						_timer.Start();
-						log.Debug("Timer started");
-					}
-				}
-				catch (Exception ex)
-				{
-					log.Error(ex);
-					throw;
-				}
+				stop = !_etlJobStarter.Tick();
 			}
+			catch (Exception ex)
+			{
+				log.Error("Exception occurred invoking EtlJobStarter", ex);
+			}
+
+			log.DebugFormat("stop: {0}", stop);
+			if (!stop)
+			{
+				log.Debug("Starting timer");
+				_timer.Start();
+				log.Debug("Timer started");
+			}
+
 		}
 
 		public void Dispose()

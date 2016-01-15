@@ -33,6 +33,8 @@ namespace Teleopti.Analytics.Etl.Common
 			builder.RegisterType<HourlyTickEventPublisher>().SingleInstance();
 			builder.RegisterType<BaseConfigurationRepository>().As<IBaseConfigurationRepository>().SingleInstance();
 
+			builder.RegisterType<HourlyTickEventPublisher>().SingleInstance();
+
 			builder.RegisterType<FindTenantLogonInfoUnsecured>().As<IFindLogonInfo>().SingleInstance();
 			builder.RegisterType<TenantLogonInfoLoader>().As<ITenantLogonInfoLoader>().SingleInstance();
 		}
