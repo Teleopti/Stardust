@@ -15,6 +15,7 @@
 				scope.dynamicColumnLoaded = true;
 				scope.gridOptions.exporterMenuCsv = false;
 				scope.gridOptions.enableFullRowSelection = true;
+				scope.gridOptions.enableRowHeaderSelection = true;
 				scope.clearSelectedPeople = scope.clearCart;
 
 				scope.gridOptions.columnDefs = [
