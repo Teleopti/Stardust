@@ -1,6 +1,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Analytics.Etl.Common.TickEvent
 {
@@ -8,22 +9,25 @@ namespace Teleopti.Analytics.Etl.Common.TickEvent
 	{
 		private readonly IRecurringEventPublisher _hangfire;
 		private readonly Tenants _tenants;
+		private readonly IDataSourceScope _dataSourceScope;
 
-		public HourlyTickEventPublisher(IRecurringEventPublisher hangfire, Tenants tenants)
+		public HourlyTickEventPublisher(
+			IRecurringEventPublisher hangfire, 
+			Tenants tenants,
+			IDataSourceScope dataSourceScope)
 		{
 			_hangfire = hangfire;
 			_tenants = tenants;
+			_dataSourceScope = dataSourceScope;
 		}
 
 		public void Tick()
 		{
-			var tenants = _tenants
-				.CurrentTenants()
-				.Select(x => x.Name);
-
+			var tenants = _tenants.CurrentTenants();
+			
 			var jobsToRemove =
 				_hangfire.RecurringPublishingIds()
-					.Except(tenants);
+					.Except(tenants.Select(x => x.Name));
 
 			jobsToRemove.ForEach(j =>
 			{
@@ -32,7 +36,8 @@ namespace Teleopti.Analytics.Etl.Common.TickEvent
 
 			tenants.ForEach(t =>
 			{
-				_hangfire.PublishHourly(t, t, new HourlyTickEvent());
+				using (_dataSourceScope.OnThisThreadUse(t.DataSource))
+					_hangfire.PublishHourly(t.Name, new HourlyTickEvent());
 			});
 
 		}

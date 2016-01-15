@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Analytics.Etl.Common.TickEvent;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -42,7 +43,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.TickEvent
 
 			Target.Tick();
 
-			Publisher.Tenant.Should().Be("tenant");
+			Publisher.Tenants.Single().Should().Be("tenant");
 		}
 		
 		[Test]
@@ -69,7 +70,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.TickEvent
 
 			Publisher.Tenants.Should().Be.Empty();
 		}
-
 
 		[Test]
 		public void ShouldStartPublishingForAddedTenants()

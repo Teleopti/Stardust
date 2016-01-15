@@ -35,27 +35,27 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public void Publish(params IEvent[] events)
 		{
-			var tenant = _dataSource.CurrentName();
 			events.ForEach(e =>
 			{
 				jobsFor(e).ForEach(j =>
 				{
-					_client.Enqueue(j.DisplayName, tenant, j.EventTypeName, j.Event, j.HandlerTypeName);
+					_client.Enqueue(j.DisplayName, j.Tenant, j.EventTypeName, j.Event, j.HandlerTypeName);
 				});
 			});
 		}
 
-		public void PublishHourly(string id, string tenant, IEvent @event)
+		public void PublishHourly(string id, IEvent @event)
 		{
 			jobsFor(@event).ForEach(j =>
 			{
-				_client.AddOrUpdateHourly(j.DisplayName, id + ":::" + Guid.NewGuid(), tenant, j.EventTypeName, j.Event, j.HandlerTypeName);
+				_client.AddOrUpdateHourly(j.DisplayName, id + ":::" + Guid.NewGuid(), j.Tenant, j.EventTypeName, j.Event, j.HandlerTypeName);
 			});
 		}
 
 		private class jobInfo
 		{
 			public string DisplayName;
+			public string Tenant;
 			public string EventTypeName;
 			public string Event;
 			public string HandlerTypeName;
@@ -63,6 +63,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		private IEnumerable<jobInfo> jobsFor(IEvent @event)
 		{
+			var tenant = _dataSource.CurrentName();
 			var eventType = @event.GetType();
 			var serialized = _serializer.SerializeEvent(@event);
 			var eventTypeName = eventType.FullName + ", " + eventType.Assembly.GetName().Name;
@@ -78,6 +79,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				yield return new jobInfo
 				{
 					DisplayName = displayName,
+					Tenant = tenant,
 					EventTypeName = eventTypeName,
 					Event = serialized,
 					HandlerTypeName = handlerTypeName
