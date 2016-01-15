@@ -28,10 +28,13 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 			return toggleCache[toggleName];
 		}
 
-		var toggleUrl = (_settings.baseUrl == undefined ? "" : "../") + "ToggleHandler/IsEnabled?toggle=" + toggleName;
+		if (_settings.baseUrl == undefined) {
+			throw "you cannot ask toggle before you initialize it!";
+		}
+
 		var ajax = new Teleopti.MyTimeWeb.Ajax();
 		ajax.Ajax({
-			url: toggleUrl,
+			url: "../ToggleHandler/IsEnabled?toggle=" + toggleName,
 			async: false,
 			success: function (data) {
 				result = data.IsEnabled;
@@ -300,7 +303,6 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		IsRtl: function () {
 			return $("html").attr("dir") == "rtl";
 		},
-
 		SubscribeToMessageBroker: _subscribeToMessageBroker,
 		GetUserData: _getUserData,
 		IsToggleEnabled: isToggleEnabled

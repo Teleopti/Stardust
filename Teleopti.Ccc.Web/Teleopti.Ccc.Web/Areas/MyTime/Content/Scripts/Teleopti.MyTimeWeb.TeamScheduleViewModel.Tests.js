@@ -26,8 +26,6 @@ $(document).ready(function () {
 		loadSchedule: "TeamSchedule/TeamSchedule"
 	};
 
-	Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) { return true; };
-
 	test("should send request to server when I type colleauge`s name in name seach box", function () {
 
 		var nameInAjax;

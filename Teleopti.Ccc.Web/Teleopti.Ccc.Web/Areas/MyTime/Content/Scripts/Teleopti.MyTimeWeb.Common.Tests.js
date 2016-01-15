@@ -16,6 +16,14 @@ $(document).ready(function () {
 		});
 	};
 
+	test("should throw error when there is no initialization before get toggle info", function () {
+		try {
+			Teleopti.MyTimeWeb.Common.IsToggleEnabled("my_toggle");
+		} catch(error) {
+			equal(error, "you cannot ask toggle before you initialize it!");
+		}
+	});
+
 	test("should format moment", function () {
 		
 		common.IsToggleEnabled = function (x) { return true; };
