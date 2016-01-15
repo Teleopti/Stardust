@@ -77,7 +77,12 @@
 
 @media print {
 	.seatplan-header{
+		height:0;
 		display:none;	
+	}
+	
+	#seatplan{
+		height:100%;
 	}
 }
 
@@ -209,12 +214,12 @@
 		padding-left:10px;
 		padding-right:10px;
 		overflow:auto;
-		height:100%;
 		width:100%;
 		position:absolute;
 		top:40px;
 		right:0;
 		left:0;
+		bottom:0;
 
 		h2{
 			margin-bottom:0px !important;
@@ -231,10 +236,15 @@
 		table{
 			width:100%;
 		}
+		
+		table tr th{
+			word-break:break-word;
+		}
 
 		table tr td{
 			vertical-align:top;
 			padding:0px 2px 0px 2px;
+			word-break:break-word
 		}
 
 		table .tr-head{
@@ -287,6 +297,7 @@
 
 		table tr .td-time{
 			width:15%;
+			white-space:nowrap;
 		}
 	}
 
@@ -295,7 +306,7 @@
 	}
 
 	.seatplan-paging-container{
-		height:120px;
+		height:40px;
 		margin-right:-10px;
 
 		.wfm-pagination li{
@@ -329,8 +340,10 @@
 	}
 
 	#seatplan-report-to-print{
+		top:0;
 		width:100%;
 		height:auto;
 		display:block;
+		overflow:visible;
 	}
 }

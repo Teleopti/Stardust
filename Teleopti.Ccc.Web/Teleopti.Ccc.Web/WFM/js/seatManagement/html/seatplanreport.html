@@ -63,34 +63,8 @@
 		<h5 ng-if="vm.seatBookings.length == 0 ">{{'NoDataAvailable' | translate}}</h5>
 		<seat-plan-report-table seat-bookings="vm.seatBookings" ng-if="!vm.isLoadingReport"></seat-plan-report-table>
 
-		<div class="seatplan-paging-container pull-right" ng-if="!vm.isLoadingReport && vm.seatBookings.length !== 0 && vm.totalPages !== 1">
-			<ul class="wfm-pagination">
-				<li ng-class="{disabled: currentPage === 1 || vm.pageCount === 0}">
-					<a ng-click="vm.firstPage()">
-						<i class="mdi mdi-skip-previous"></i>
-					</a>
-				</li>
-				<li ng-class="{disabled: currentPage === 1 || vm.pageCount === 0}">
-					<a ng-click="vm.previousPage()">
-						<i class="mdi mdi-chevron-left"></i>
-					</a>
-				</li>
-				<li ng-repeat="page in vm.getVisiblePages(1,vm.totalPages)"
-					ng-class="{active: page === vm.currentPage}"
-					ng-click="vm.seekPage(page)">
-					<a ng-bind="page"></a>
-				</li>
-				<li ng-class="{disabled: vm.currentPage === vm.pageCount || vm.pageCount === 0}">
-					<a ng-click="vm.nextPage()">
-						<i class="mdi mdi-chevron-right"></i>
-					</a>
-				</li>
-				<li ng-class="{disabled: vm.currentPage === vm.pageCount || vm.pageCount === 0}">
-					<a ng-click="vm.lastPage()">
-						<i class="mdi mdi-skip-next"></i>
-					</a>
-				</li>
-			</ul>
+		<div class="seatplan-paging-container pull-right" ng-if="!vm.isLoadingReport && vm.seatBookings.length !== 0">
+			<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.getPageData"></wfm-pagination>
 		</div>
 	</div>
 

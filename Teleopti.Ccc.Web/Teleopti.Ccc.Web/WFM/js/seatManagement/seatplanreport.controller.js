@@ -10,7 +10,7 @@
 
 		vm.temp = {};
 		vm.isDatePickerOpened = true;
-		vm.reportTake = 34;
+		vm.paginationOptions = { pageNumber: 1, pageSize: 34, totalPages: 1 };
 
 		vm.getSeatBookings = function (options) {
 			vm.isLoadingReport = options.isLoadingReportToDisplay;
@@ -55,7 +55,6 @@
 			reloadCachedFilterValuesAfterCancel();
 		};
 
-
 		vm.applyFilter = function () {
 
 			if (!vm.dateFilterIsValid()) {
@@ -65,99 +64,26 @@
 			vm.isFilterOpened = false;
 
 			vm.getSeatBookings({
-				skip: vm.page,
-				take: vm.reportTake,
+				skip: vm.paginationOptions.pageNumber,
+				take: vm.paginationOptions.pageSize,
 				callback: getSeatBookingsCallback,
 				isLoadingReportToDisplay: true
 			});
-			vm.currentPage = 1;
 		};
 
-		vm.firstPage = function () {
-			vm.paging(1);
-		};
-
-		vm.previousPage = function () {
-			vm.paging(vm.currentPage - 1);
-		};
-
-		vm.getVisiblePages = function (start, end) {
-			var displayPageCount = 5;
-			var ret = [];
-			if (!end) {
-				end = start;
-				start = 1;
-			}
-
-			var leftBoundary = start;
-			var rightBoundary = end;
-			if (end - start >= displayPageCount) {
-				var currentPage = vm.currentPage;
-
-				if (currentPage < displayPageCount - 1) {
-					leftBoundary = 1;
-					rightBoundary = displayPageCount;
-				} else if (end - currentPage < 3) {
-					leftBoundary = end - displayPageCount + 1;
-					rightBoundary = end;
-				} else {
-					leftBoundary = currentPage - Math.floor(displayPageCount / 2) > 1 ? currentPage - Math.floor(displayPageCount / 2) : 1;
-					rightBoundary = currentPage + Math.floor(displayPageCount / 2) > end ? end : currentPage + Math.floor(displayPageCount / 2);
-				}
-			}
-
-			for (var i = leftBoundary; i <= rightBoundary ; i++) {
-				ret.push(i);
-			}
-
-			return ret;
-		};
-		
-		vm.seekPage = function (page) {
-			vm.paging(page);
-		};
-
-		vm.nextPage = function () {
-			vm.paging(vm.currentPage + 1);
-		};
-
-		vm.lastPage = function () {
-			vm.paging(vm.totalPages);
-		};
-
-
-		vm.paging = function (goToPage) {
-
-			if (goToPage > vm.totalPages) {
-				goToPage = vm.totalPages;
-			} else if (goToPage < 1) {
-				goToPage = 1;
-			}
-
-			if (vm.currentPage != goToPage) {
-				vm.getSeatBookings({
-					skip: (goToPage - 1) * vm.reportTake,
-					take: vm.reportTake,
-					callback: getSeatBookingsCallback,
-					isLoadingReportToDisplay: true
-				});
-				vm.currentPage = goToPage;
-			}
+		vm.getPageData = function () {
+			vm.getSeatBookings({
+				skip: (vm.paginationOptions.pageNumber - 1) * vm.paginationOptions.pageSize,
+				take: vm.paginationOptions.pageSize,
+				callback: getSeatBookingsCallback,
+				isLoadingReportToDisplay: true
+			});		
 		};
 
 		vm.init = function () {
-
 			initialiseWatchForDatePickerChanges();
-
-			vm.getSeatBookings({
-				skip: vm.page,
-				take: vm.reportTake,
-				callback: getSeatBookingsCallback,
-				isLoadingReportToDisplay: true
-			});
-			vm.currentPage = 1;
+			vm.getPageData();
 		};
-
 
 		function cacheFilterValuesInCaseOfCancel() {
 			vm.temp.selectedTeams = angular.copy(vm.selectedTeams);
@@ -174,7 +100,7 @@
 		function getSeatBookingsCallback(data) {
 			vm.seatBookings = data.SeatBookingsByDate;
 			vm.isLoadingReport = false;
-			vm.totalPages = Math.ceil(data.TotalRecordCount / vm.reportTake);
+			vm.paginationOptions.totalPages = Math.ceil(data.TotalRecordCount / vm.paginationOptions.pageSize);
 		};
 
 		function keepDatePickersInSync(value) {
