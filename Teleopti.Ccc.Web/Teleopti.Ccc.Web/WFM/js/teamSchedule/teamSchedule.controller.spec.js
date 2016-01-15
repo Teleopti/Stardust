@@ -53,11 +53,11 @@ describe("TeamScheduleControllerTest", function() {
 		searchScheduleCalledTimes = 0;
 
 		controller.scheduleDate = new Date("2015-10-26");
-		mockSignalRBackendServer.notifyClients({
+		mockSignalRBackendServer.notifyClients([{
 			"DomainReferenceId": "221B-Baker-SomeoneElse",
 			"StartDate": "D2015-10-25T00:00:00",
 			"EndDate": "D2015-10-27T00:00:00"
-		});
+		}]);
 
 		expect(searchScheduleCalledTimes).toEqual(1);
 	}));
@@ -67,11 +67,11 @@ describe("TeamScheduleControllerTest", function() {
 		searchScheduleCalledTimes = 0;
 
 		controller.scheduleDate = new Date("2015-10-26");
-		mockSignalRBackendServer.notifyClients({
+		mockSignalRBackendServer.notifyClients([{
 			"DomainReferenceId": "221B-Baker-otherPeople",
 			"StartDate": "D2015-10-25T00:00:00",
 			"EndDate": "D2015-10-27T00:00:00"
-		});
+		}]);
 
 		expect(searchScheduleCalledTimes).toEqual(0);
 	}));
@@ -81,11 +81,11 @@ describe("TeamScheduleControllerTest", function() {
 		searchScheduleCalledTimes = 0;
 
 		controller.scheduleDate = new Date("2015-10-26");
-		mockSignalRBackendServer.notifyClients({
+		mockSignalRBackendServer.notifyClients([{
 			"DomainReferenceId": "221B-Baker-SomeoneElse",
 			"StartDate": "D2015-10-27T00:00:00",
 			"EndDate": "D2015-10-28T00:00:00"
-		});
+		}]);
 
 		expect(searchScheduleCalledTimes).toEqual(0);
 	}));
@@ -212,9 +212,12 @@ describe("TeamScheduleControllerTest", function() {
 		mockSignalRBackendServer.subscriptions = [];
 
 		return {
-			subscribe: function (options, eventHandler, errorHandler) {
+			subscribe: function(options, eventHandler, errorHandler) {
 				mockSignalRBackendServer.subscriptions.push(options);
 				mockSignalRBackendServer.notifyClients = eventHandler;
+			},
+			subscribeBatchMessage: function (options, messageHandler, timeout) {
+				mockSignalRBackendServer.notifyClients = messageHandler;
 			}
 		};
 	}
