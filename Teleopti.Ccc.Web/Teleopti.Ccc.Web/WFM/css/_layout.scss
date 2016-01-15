@@ -14,6 +14,10 @@ html, body{
   right: 0;
 }
 
+.line-right{
+	text-align:right;
+}
+
 /*override bootstrap*/
 .col-md-4, .col-md-8, .col-md-12 { /* please bootstrap, don't make any assumption about padding' */
 	padding: 0;

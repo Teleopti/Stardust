@@ -8,7 +8,7 @@
 </div>
 
 <div class="con-row">
-	<div class="con-flex split-3-1">
+	<div class="con-flex">
 		<form class="permission-radio-buttons">
 			<div class="wfm-radio">
 				<label>
@@ -39,7 +39,7 @@
 		</form>
 	</div>
 	<div class="con-flex">
-		<div class="wfm-switch">
+		<div class="wfm-switch line-right">
 			<input type="checkbox" ng-model="allToggleElement.is" ng-disabled="selectedRole.BuiltIn" ng-class="{'disabled-checkbox': selectedRole.BuiltIn}" ng-click="toggleAllNode(allToggleElement)" id="switchAll" />
 			<label for="switchAll">
 				<span class="wfm-switch-label" translate>AccessAllFunctions</span>
