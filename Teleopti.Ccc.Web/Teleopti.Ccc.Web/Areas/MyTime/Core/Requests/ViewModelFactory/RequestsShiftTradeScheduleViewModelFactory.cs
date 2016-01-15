@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Microsoft.FSharp.Core;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -44,10 +45,29 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			var possibleTradedPersonList = _possibleShiftTradePersonsProvider.RetrievePersons(inputData).Persons.ToList();
 
 			var possibleTradeSchedules = getScheduleForPersons(inputData.ShiftTradeDate, possibleTradedPersonList);
+			
+			var possiblePersonSchedules = possibleTradedPersonList.Select(
+				p => new Tuple<IPerson, IScheduleDay>(p, possibleTradeSchedules.SingleOrDefault(s => s.Person.Id == p.Id)));
 
+			
+			ret.PossibleTradeSchedules = possiblePersonSchedules.Select( pair =>
+			{
+				var person = pair.Item1;
+				var schedule = pair.Item2;
+				if (schedule == null)
+				{
+					return new ShiftTradeAddPersonScheduleViewModel
+					{
+						PersonId = person.Id.GetValueOrDefault(),
+						Name = person.Name.ToString()
+					};
+				}
+				return
+					new ShiftTradeAddPersonScheduleViewModel(_projectionProvider.MakeScheduleReadModel(schedule.Person, schedule,
+						_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential)));
+			}).Where(vm => !vm.IsFullDayAbsence);
+		
 
-			ret.PossibleTradeSchedules = possibleTradeSchedules.Select(schedule =>
-				new ShiftTradeAddPersonScheduleViewModel(_projectionProvider.MakeScheduleReadModel(schedule.Person, schedule, _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential))));
 			return ret;
 		}
 

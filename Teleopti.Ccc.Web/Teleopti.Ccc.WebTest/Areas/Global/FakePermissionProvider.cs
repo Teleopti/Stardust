@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 		public bool HasApplicationFunctionPermission(string applicationFunctionPath)
 		{
+			if (!enabled) return true;
 			return _applicationFunctions.ContainsKey(applicationFunctionPath);
 		}
 

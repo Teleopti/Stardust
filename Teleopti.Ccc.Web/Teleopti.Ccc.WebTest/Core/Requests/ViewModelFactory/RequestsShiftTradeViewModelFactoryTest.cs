@@ -259,6 +259,129 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			possibleTradeSchedule.ScheduleLayers.Second().TitleHeader.Should().Be(ConfidentialPayloadValues.Description.Name);
 		}
 
+		[Test]
+		public void ShouldFilterOutFullAbsence()
+		{
+
+			var scenario = CurrentScenario.Current();
+			var personPublished = PersonFactory.CreatePersonWithGuid("person", "published");
+			var personWithAbsenceOnDayOff = PersonFactory.CreatePersonWithGuid("p2", "p2");
+			var personWithAbsenceOnly = PersonFactory.CreatePersonWithGuid("_", "_");
+
+			var team = TeamFactory.CreateTeamWithId("team");
+			TeamRepository.Add(team);
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 1, 13), team);
+			personPublished.AddPersonPeriod(personPeriod);
+			personWithAbsenceOnDayOff.AddPersonPeriod(personPeriod);
+			personWithAbsenceOnly.AddPersonPeriod(personPeriod);
+
+			PersonRepository.Add(personPublished);
+			PersonRepository.Add(personWithAbsenceOnDayOff);
+			PersonRepository.Add(personWithAbsenceOnly);
+
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, personPublished,
+				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 8, 0, 0), DateTimeKind.Utc), DateTime.SpecifyKind(new DateTime(2016, 1, 13, 17, 0, 0), DateTimeKind.Utc)),
+				ShiftCategoryFactory.CreateShiftCategory("mainShift"));
+			var abs = AbsenceFactory.CreateAbsence("abs");
+			var personAbs = PersonAbsenceFactory.CreatePersonAbsence(personPublished, scenario,
+				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 0, 0, 0), DateTimeKind.Utc),
+					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 23, 0, 0), DateTimeKind.Utc)), abs);
+			ScheduleRepository.Add(personAss);
+			ScheduleRepository.Add(personAbs);
+
+			var p2AssWithDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, personWithAbsenceOnDayOff,
+				new DateOnly(2016, 1, 13), new DayOffTemplate());
+			var p2Abs = PersonAbsenceFactory.CreatePersonAbsence(personWithAbsenceOnDayOff, scenario,
+				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 0, 0, 0), DateTimeKind.Utc),
+					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 23, 0, 0), DateTimeKind.Utc)), abs);
+			ScheduleRepository.Add(p2AssWithDayOff);
+			ScheduleRepository.Add(p2Abs);
+
+			var p3Abs = PersonAbsenceFactory.CreatePersonAbsence(personWithAbsenceOnly,scenario,
+				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 0, 0, 0), DateTimeKind.Utc),
+					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 23, 0, 0), DateTimeKind.Utc)), abs);
+			ScheduleRepository.Add(p3Abs);
+
+
+			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			{
+				Paging = new Paging { Skip = 0, Take = 20 },
+				ShiftTradeDate = new DateOnly(2016, 1, 13),
+				TeamIdList = new[] { team.Id.GetValueOrDefault() }
+			});
+
+			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldFilterOutFullAbsenceOnContractDayOff()
+		{
+			var scenario = CurrentScenario.Current();
+			var personPublished = PersonFactory.CreatePersonWithGuid("person", "published");
+			var personWithAbsenceOnContractDayOff = PersonFactory.CreatePersonWithGuid("_", "_");
+
+			var team = TeamFactory.CreateTeamWithId("team");
+			TeamRepository.Add(team);
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 1, 16), team);
+			personWithAbsenceOnContractDayOff.AddPersonPeriod(personPeriod);
+			personPublished.AddPersonPeriod(personPeriod);
+
+			PersonRepository.Add(personWithAbsenceOnContractDayOff);
+			PersonRepository.Add(personPublished);
+
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, personPublished,
+				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc), DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)),
+				ShiftCategoryFactory.CreateShiftCategory("mainShift"));
+			ScheduleRepository.Add(personAss);
+
+			var abs = AbsenceFactory.CreateAbsence("abs");
+			var p3Abs = PersonAbsenceFactory.CreatePersonAbsence(personWithAbsenceOnContractDayOff, scenario,
+				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 0, 0, 0), DateTimeKind.Utc),
+					DateTime.SpecifyKind(new DateTime(2016, 1, 16, 23, 0, 0), DateTimeKind.Utc)), abs);
+			ScheduleRepository.Add(p3Abs);
+
+
+			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			{
+				Paging = new Paging { Skip = 0, Take = 20 },
+				ShiftTradeDate = new DateOnly(2016, 1, 16),
+				TeamIdList = new[] { team.Id.GetValueOrDefault() }
+			});
+
+			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldRetrieveEmptyDays()
+		{
+			var scenario = CurrentScenario.Current();
+			var personPublished = PersonFactory.CreatePersonWithGuid("person", "published");
+			var personWithEmptySchedule = PersonFactory.CreatePersonWithGuid("_", "_");
+
+			var team = TeamFactory.CreateTeamWithId("team");
+			TeamRepository.Add(team);
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 1, 16), team);
+			personWithEmptySchedule.AddPersonPeriod(personPeriod);
+			personPublished.AddPersonPeriod(personPeriod);
+
+			PersonRepository.Add(personWithEmptySchedule);
+			PersonRepository.Add(personPublished);
+
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, personPublished,
+				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc), DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)),
+				ShiftCategoryFactory.CreateShiftCategory("mainShift"));
+			ScheduleRepository.Add(personAss);
+
+			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			{
+				Paging = new Paging { Skip = 0, Take = 20 },
+				ShiftTradeDate = new DateOnly(2016, 1, 16),
+				TeamIdList = new[] { team.Id.GetValueOrDefault() }
+			});
+
+			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(2);
+		}
+
 	}
 
 
