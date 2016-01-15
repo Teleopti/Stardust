@@ -11,5 +11,5 @@ SET SPASS=%~5
 
 set WORKING_DIRECTORY=%~dp0
 SET Kommandompigg=%WORKING_DIRECTORY%UpgradeTenants.ps1
-powershell.exe -ExecutionPolicy Bypass -File "%Kommandompigg%" "%INTEGRATED%" "%SERVER%" "%DB%" "%SUSER%" "%SPASS%"
+powershell.exe -ExecutionPolicy Bypass -File "%Kommandompigg%" "%INTEGRATED%" "%SERVER%" "%DB%" "%SUSER%" "%SPASS%" >> "%WORKING_DIRECTORY%\..\UpgradeTenants.log"
 ::PAUSE
