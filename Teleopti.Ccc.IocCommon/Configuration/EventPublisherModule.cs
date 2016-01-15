@@ -28,11 +28,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<EventPopulatingPublisher>().As<IEventPopulatingPublisher>().SingleInstance();
 
 			builder.RegisterType<SyncEventPublisher>().As<ISyncEventPublisher>().SingleInstance();
-			builder.RegisterType<HangfireEventPublisher>().As<IHangfireEventPublisher>().SingleInstance();
+			builder.RegisterType<HangfireEventPublisher>()
+				.As<IHangfireEventPublisher>()
+				.As<IRecurringEventPublisher>()
+				.SingleInstance();
 			builder.RegisterType<ServiceBusEventPublisher>().As<IServiceBusEventPublisher>().SingleInstance();
 			builder.RegisterType<LocalServiceBusEventPublisher>().As<ILocalServiceBusEventPublisher>().SingleInstance();
-
-			builder.RegisterType<HangfireEventPublisher>().As<IRecurringEventPublisher>().SingleInstance();
 
 			builder.RegisterType<ResolveEventHandlers>().As<IResolveEventHandlers>().SingleInstance();
 

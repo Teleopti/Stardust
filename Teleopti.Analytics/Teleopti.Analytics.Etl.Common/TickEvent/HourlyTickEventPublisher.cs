@@ -22,7 +22,7 @@ namespace Teleopti.Analytics.Etl.Common.TickEvent
 				.Select(x => x.Name);
 
 			var jobsToRemove =
-				_hangfire.AllPublishings()
+				_hangfire.RecurringPublishingIds()
 					.Except(tenants);
 
 			jobsToRemove.ForEach(j =>

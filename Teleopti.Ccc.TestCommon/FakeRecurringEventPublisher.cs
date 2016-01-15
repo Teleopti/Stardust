@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.TestCommon
 				_jobs.Remove(job);
 		}
 
-		public IEnumerable<string> AllPublishings()
+		public IEnumerable<string> RecurringPublishingIds()
 		{
 			return _jobs.Select(x => x.Id).ToArray();
 		}

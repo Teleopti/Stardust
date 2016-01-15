@@ -7,6 +7,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 	{
 		void PublishHourly(string id, string tenant, IEvent @event);
 		void StopPublishing(string id);
-		IEnumerable<string> AllPublishings();
+		IEnumerable<string> RecurringPublishingIds();
 	}
 }

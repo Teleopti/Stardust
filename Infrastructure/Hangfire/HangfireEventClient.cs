@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Hangfire;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 
@@ -20,6 +21,16 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		}
 
 		public void AddOrUpdate(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<string> GetRecurringJobIds()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void RemoveIfExists(string id)
 		{
 			throw new NotImplementedException();
 		}
@@ -58,7 +69,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 	//		_recurringJob.RemoveIfExists(id);
 	//	}
 
-	//	public IEnumerable<string> AllPublishings()
+	//	public IEnumerable<string> RecurringPublishingIds()
 	//	{
 	//		return _jobStorage.GetConnection().GetRecurringJobs().Select(j => j.Id).ToArray();
 	//	}

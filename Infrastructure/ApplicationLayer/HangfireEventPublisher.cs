@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Castle.DynamicProxy;
+using NHibernate.Util;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
@@ -35,27 +36,32 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		public void Publish(params IEvent[] events)
 		{
 			var tenant = _dataSource.CurrentName();
-
-			foreach (var @event in events)
+			events.ForEach(e =>
 			{
-				var eventType = @event.GetType();
-				var serialized = _serializer.SerializeEvent(@event);
-				var eventTypeName = eventType.FullName + ", " + eventType.Assembly.GetName().Name;
-				var handlers = _resolveEventHandlers.ResolveHandlersForEvent(@event).OfType<IRunOnHangfire>();
-
-				foreach (var handler in handlers)
+				jobsFor(e).ForEach(j =>
 				{
-					var handlerType = ProxyUtil.GetUnproxiedType(handler);
-					var handlerTypeName = handlerType.FullName + ", " + handlerType.Assembly.GetName().Name;
-					string displayName = null;
-					if (_displayNames)
-						displayName = eventType.Name + " to " + handlerType.Name;
-					_client.Enqueue(displayName, tenant, eventTypeName, serialized, handlerTypeName);
-				}
-			}
+					_client.Enqueue(j.DisplayName, tenant, j.EventTypeName, j.Event, j.HandlerTypeName);
+				});
+			});
 		}
 
 		public void PublishHourly(string id, string tenant, IEvent @event)
+		{
+			jobsFor(@event).ForEach(j =>
+			{
+				_client.AddOrUpdate(j.DisplayName, id + ":::" + Guid.NewGuid(), tenant, j.EventTypeName, j.Event, j.HandlerTypeName);
+			});
+		}
+
+		private class jobInfo
+		{
+			public string DisplayName;
+			public string EventTypeName;
+			public string Event;
+			public string HandlerTypeName;
+		}
+
+		private IEnumerable<jobInfo> jobsFor(IEvent @event)
 		{
 			var eventType = @event.GetType();
 			var serialized = _serializer.SerializeEvent(@event);
@@ -69,18 +75,29 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				string displayName = null;
 				if (_displayNames)
 					displayName = eventType.Name + " to " + handlerType.Name;
-				_client.AddOrUpdate(displayName, id + ":::" + Guid.NewGuid(), tenant, eventTypeName, serialized, handlerTypeName);
+				yield return new jobInfo
+				{
+					DisplayName = displayName,
+					EventTypeName = eventTypeName,
+					Event = serialized,
+					HandlerTypeName = handlerTypeName
+				};
 			}
 		}
 
 		public void StopPublishing(string id)
 		{
-			throw new System.NotImplementedException();
+			var jobsToRemove = 
+				_client.GetRecurringJobIds()
+				.Where(x => x.StartsWith(id + ":::"));
+			jobsToRemove.ForEach(x => _client.RemoveIfExists(x));
 		}
 
-		public IEnumerable<string> AllPublishings()
+		public IEnumerable<string> RecurringPublishingIds()
 		{
-			throw new System.NotImplementedException();
+			return _client.GetRecurringJobIds()
+				.Select(x => x.Substring(0, x.IndexOf(":::")))
+				.Distinct();
 		}
 	}
 

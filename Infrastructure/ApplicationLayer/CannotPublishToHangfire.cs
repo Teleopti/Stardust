@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
 	public class CannotPublishToHangfire : IHangfireEventClient
@@ -11,5 +14,16 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 			throw new System.NotImplementedException();
 		}
+
+		public void RemoveIfExists(string id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<string> GetRecurringJobIds()
+		{
+			throw new System.NotImplementedException();
+		}
+
 	}
 }
