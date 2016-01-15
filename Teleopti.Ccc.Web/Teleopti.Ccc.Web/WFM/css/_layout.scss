@@ -211,6 +211,23 @@ position: fixed;
 	}
 }
 
+.sidenav-tooltip{
+	margin-left: 64px;
+	margin-top: -27px;
+}
+
+.nav-item-active{
+	.sidenav-header{
+		background:$green-100;
+	}
+
+	/*i{
+		background: $white;
+		padding:5px;
+		border-radius: 50%;
+	}*/
+}
+
 .sidenav{
     flex-basis: 240px!important;
 	i{
