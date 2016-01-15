@@ -46,10 +46,10 @@ describe('seatmap booking view tests', function () {
 	it('should get class of previous day correctly', function () {
 		controller.occupancyDetails = fakeBooking();
 
-		controller.scheduleDate = new Date("2015-01-01");
+		controller.scheduleDate = new Date("2015-01-01 00:00:00");
 		expect(controller.getSeatBookingDetailClass(fakeBooking())).toEqual("seatmap-seatbooking-previousday");
 
-		controller.scheduleDate = new Date("2015-01-02");
+		controller.scheduleDate = new Date("2015-01-02 00:00:00");
 		expect(controller.getSeatBookingDetailClass(fakeBooking())).toEqual("");
 	});
 
