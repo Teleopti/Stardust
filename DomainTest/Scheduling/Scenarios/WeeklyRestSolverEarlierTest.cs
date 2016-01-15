@@ -408,17 +408,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		private IPerson setupAgent(IWorkShiftRuleSet ruleSet, IActivity skillActivity)
 		{
 			var agent = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue).WithId();
+			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			var weeklyRest = TimeSpan.FromHours(40);
-			agent.Period(weekPeriod.StartDate).PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(54), TimeSpan.Zero, weeklyRest);
-			agent.Period(weekPeriod.StartDate).PersonContract.Contract.WorkTime = new WorkTime(TimeSpan.FromHours(17 - 8));
+			var personPeriod = agent.Period(weekPeriod.StartDate);
+			personPeriod.PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(54), TimeSpan.Zero, weeklyRest);
+			personPeriod.PersonContract.Contract.WorkTime = new WorkTime(TimeSpan.FromHours(17 - 8));
 			
-			agent.Period(weekPeriod.StartDate).RuleSetBag = new RuleSetBag(ruleSet);
+			personPeriod.RuleSetBag = new RuleSetBag(ruleSet);
 
 			var skill = SkillFactory.CreateSkill("skill");
 			skill.Activity = skillActivity;
 			var personSkill = PersonSkillFactory.CreatePersonSkill(skill, 1);
-			var personPeriod = (IPersonPeriodModifySkills)agent.Period(weekPeriod.StartDate);
-			personPeriod.AddPersonSkill(personSkill);
+			agent.AddSkill(personSkill,personPeriod);
 
 			var schedulePeriod = new SchedulePeriod(weekPeriod.StartDate, SchedulePeriodType.Week, 1);
 			schedulePeriod.SetDaysOff(1);

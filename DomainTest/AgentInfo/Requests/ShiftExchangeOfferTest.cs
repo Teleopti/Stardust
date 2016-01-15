@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
 			target.MyShiftPeriod.HasValue.Should().Be.False();
 			target.Date.Should().Be.EqualTo (currentShift.DateOnlyAsPeriod.DateOnly);
-			target.Checksum.Should().Be.EqualTo (650221517L);
+			target.Checksum.Should().Be.EqualTo (56912177L);
 		}
 
 		[Test]

@@ -359,12 +359,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			initialize();
         }
 
-        private static bool isFirstDayOfDaylightSavingTime(DateOnly dateTime)
+        private bool isFirstDayOfDaylightSavingTime(DateOnly dateTime)
         {
             var date = dateTime.Date.AddHours(12);
-            if (date.IsDaylightSavingTime())
+            if (_skill.TimeZone.IsDaylightSavingTime(date))
             {
-                if (!date.AddDays(-1).IsDaylightSavingTime())
+                if (!_skill.TimeZone.IsDaylightSavingTime(date.AddDays(-1)))
                 {
                     return true;
                 }
@@ -372,11 +372,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
             return false;
         }
 
-        private static bool isLastDayOfDaylightSavingTime(DateOnly dateTime)
+        private bool isLastDayOfDaylightSavingTime(DateOnly dateTime)
         {
-            if (dateTime.Date.IsDaylightSavingTime())
+            if (_skill.TimeZone.IsDaylightSavingTime(dateTime.Date))
             {
-                if (!dateTime.AddDays(1).Date.IsDaylightSavingTime())
+                if (!_skill.TimeZone.IsDaylightSavingTime(dateTime.AddDays(1).Date))
                 {
                     return true;
                 }

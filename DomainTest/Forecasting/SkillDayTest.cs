@@ -6,7 +6,6 @@ using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.TestCommon;
@@ -243,19 +242,16 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyIsClosedWorks()
         {
-            //Assert.IsFalse(_skillDay.IsClosed);
             Assert.IsTrue(_skillDay.OpenForWork.IsOpen);
-            foreach (WorkloadDay workloadDay in _skillDay.WorkloadDayCollection)
+            foreach (var workloadDay in _skillDay.WorkloadDayCollection)
             {
                 workloadDay.Close();
             }
-            //Assert.IsTrue(_skillDay.IsClosed);
             Assert.IsFalse(_skillDay.OpenForWork.IsOpen);
-            foreach (WorkloadDay workloadDay in _skillDay.WorkloadDayCollection)
+            foreach (var workloadDay in _skillDay.WorkloadDayCollection)
             {
                 workloadDay.MakeOpen24Hours();
             }
-            //Assert.IsFalse(_skillDay.IsClosed);
             Assert.IsTrue(_skillDay.OpenForWork.IsOpen);
         }
 
@@ -413,7 +409,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             IList<ITemplateSkillDataPeriod> skillDataPeriods = new List<ITemplateSkillDataPeriod>();
 
             DateTimePeriod timePeriod = new DateTimePeriod(
-             TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate.Date, _skill.TimeZone).Add(new TimeSpan(4, 0, 0)),
+             TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate.Date.Add(new TimeSpan(4, 0, 0)), _skill.TimeZone),
              TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate.Date.Add(new TimeSpan(19, 0, 0)), _skill.TimeZone));
 
             skillDataPeriods.Add(
@@ -445,7 +441,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             SkillPersonData skillPersonData = new SkillPersonData(12, 23);
             
             DateTimePeriod timePeriod = new DateTimePeriod(
-             TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate.Date, _skill.TimeZone).Add(new TimeSpan(4, 0, 0)),
+             TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate.Date.Add(new TimeSpan(4, 0, 0)), _skill.TimeZone),
              TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate.Date.Add(new TimeSpan(19, 0, 0)), _skill.TimeZone));
 
             skillDataPeriods.Add(
@@ -546,7 +542,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             SkillPersonData skillPersonData = new SkillPersonData(11, 27);
 
             DateTimePeriod timePeriod = new DateTimePeriod(
-             TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate.Date, _skill.TimeZone).Add(new TimeSpan(4, 0, 0)),
+             TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate.Date.Add(new TimeSpan(4, 0, 0)), _skill.TimeZone),
              TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate.Date.Add(new TimeSpan(19, 0, 0)), _skill.TimeZone));
 
             TemplateSkillDataPeriod templateSkilldataPeriod = new TemplateSkillDataPeriod(
@@ -859,12 +855,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyCampaignTasksAndTimesAreCorrectSet()
         {
-            foreach (WorkloadDay wld in _skillDay.WorkloadDayCollection)
+            foreach (var wld in _skillDay.WorkloadDayCollection)
             {
                 wld.Tasks = 0d;
             }
 
-            foreach (WorkloadDay wld in _skillDay.WorkloadDayCollection)
+            foreach (var wld in _skillDay.WorkloadDayCollection)
             {
                 wld.Tasks = 100d;
                 wld.AverageTaskTime = TimeSpan.FromSeconds(40);
@@ -1356,7 +1352,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void VerifyNoneEntityClone()
         {
             _skillDay = new SkillDay(_dt, _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(_dt.Date, _skill), _skillDataPeriods);
-            typeof(Entity).GetField("_id", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(_skillDay, Guid.NewGuid());
+			_skillDay.SetId(Guid.NewGuid());
 
             _calculator = new SkillDayCalculator(_skill, new List<ISkillDay> { _skillDay }, new DateOnlyPeriod());
 
@@ -1383,8 +1379,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             Assert.AreNotSame(_skillDay.WorkloadDayCollection, clonedSkillDay.WorkloadDayCollection);
             Assert.AreNotSame(_skillDay.WorkloadDayCollection[0], clonedSkillDay.WorkloadDayCollection[0]);
-
-            //Assert.AreNotSame(_skillDay.SkillStaffPeriodCollection[0], clonedSkillDay.SkillStaffPeriodCollection[0]);
+			
             Assert.AreEqual(_skillDay.WorkloadDayCollection.Count, clonedSkillDay.WorkloadDayCollection.Count);
         }
 
@@ -1399,19 +1394,21 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void ShouldHaveMinStaffingFirstAndLastDuringDaylightSavingsTransition()
         {
-            _skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _skill.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
             var createDate = new DateOnly(2009, 10, 25);
             IList<ISkillDataPeriod> skillDataPeriods = new List<ISkillDataPeriod>();
 
-            skillDataPeriods.Add(
-                new SkillDataPeriod(
-                    new ServiceAgreement(
-                        new ServiceLevel(
-                            new Percent(0.8), 20),
-                                new Percent(0.5),
-                                new Percent(0.7)),
-                                new SkillPersonData(),
-                                new DateTimePeriod(DateTime.SpecifyKind(createDate.Date,DateTimeKind.Utc), DateTime.SpecifyKind(createDate.Date.Add(TimeSpan.FromHours(24)),DateTimeKind.Utc))));
+	        var localStartDateTime = createDate.Date.Add(_skill.MidnightBreakOffset);
+	        skillDataPeriods.Add(
+		        new SkillDataPeriod(
+			        new ServiceAgreement(
+				        new ServiceLevel(
+					        new Percent(0.8), 20),
+					        new Percent(0.5),
+					        new Percent(0.7)),
+				        new SkillPersonData(),
+				        TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localStartDateTime,
+					        localStartDateTime.Add(TimeSpan.FromHours(24)),_skill.TimeZone)));
 
             ISkillDay skillDay = new SkillDay(createDate, _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(createDate.Date, _skill), skillDataPeriods);
             skillDay.SetupSkillDay();
@@ -1419,21 +1416,23 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             ISkillDayTemplate skillDayTemplate = CreateTestTemplateSevenToEight();
             skillDay.CreateFromTemplate(createDate, _skill, _scenario, skillDayTemplate);
+			
+			var lookup =
+				skillDay.SkillDataPeriodCollection.ToLookup(s => s.Period.StartDateTimeLocal(_skill.TimeZone).TimeOfDay);
 
-            ISkillDataPeriod skillDataPeriodSeven = skillDay.SkillDataPeriodCollection.First(a => a.Period.StartDateTimeLocal(_skill.TimeZone).TimeOfDay == TimeSpan.FromHours(7));
-            ISkillDataPeriod skillDataPeriodEight = skillDay.SkillDataPeriodCollection.First(a => a.Period.StartDateTimeLocal(_skill.TimeZone).TimeOfDay == TimeSpan.FromHours(19.75));
-            Assert.AreEqual(2, skillDataPeriodSeven.MinimumPersons); //The actual 2 is currently one hour earlier
-            Assert.AreEqual(2, skillDataPeriodEight.MinimumPersons); //The actual 2 is currently one hour earlier
-        }
+			Assert.AreEqual(2, lookup[TimeSpan.FromHours(7)].First().MinimumPersons); //The actual 2 is currently one hour later
+			Assert.AreEqual(2, lookup[TimeSpan.FromHours(19.75)].First().MinimumPersons); //The actual 2 is currently one hour later
+		}
 
         [Test]
         public void ShouldHaveMinStaffingFirstAndLastDuringDaylightSavingsTransitionToSummertime()
         {
-            _skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _skill.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
             var createDate = new DateOnly(2010, 03, 28);
             IList<ISkillDataPeriod> skillDataPeriods = new List<ISkillDataPeriod>();
 
-            skillDataPeriods.Add(
+	        var localStartDateTime = createDate.Date.Add(_skill.MidnightBreakOffset);
+	        skillDataPeriods.Add(
                 new SkillDataPeriod(
                     new ServiceAgreement(
                         new ServiceLevel(
@@ -1441,29 +1440,31 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                                 new Percent(0.5),
                                 new Percent(0.7)),
                                 new SkillPersonData(),
-                                new DateTimePeriod(DateTime.SpecifyKind(createDate.Date, DateTimeKind.Utc), DateTime.SpecifyKind(createDate.Date.Add(TimeSpan.FromHours(24)), DateTimeKind.Utc))));
+								TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localStartDateTime, localStartDateTime.Add(TimeSpan.FromHours(24)), _skill.TimeZone)));
 
-            ISkillDay skillDay = new SkillDay(createDate, _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(createDate.Date, _skill), skillDataPeriods);
+            var skillDay = new SkillDay(createDate, _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(createDate.Date, _skill), skillDataPeriods);
             skillDay.SetupSkillDay();
             skillDay.SkillDayCalculator = new SkillDayCalculator(_skill, new List<ISkillDay> { skillDay }, new DateOnlyPeriod(createDate,createDate));
 
-            ISkillDayTemplate skillDayTemplate = CreateTestTemplateSevenToEight();
+            var skillDayTemplate = CreateTestTemplateSevenToEight();
             skillDay.CreateFromTemplate(createDate, _skill, _scenario, skillDayTemplate);
 
-            ISkillDataPeriod skillDataPeriodSeven = skillDay.SkillDataPeriodCollection.First(a => a.Period.StartDateTimeLocal(_skill.TimeZone).TimeOfDay == TimeSpan.FromHours(7));
-            ISkillDataPeriod skillDataPeriodEight = skillDay.SkillDataPeriodCollection.First(a => a.Period.StartDateTimeLocal(_skill.TimeZone).TimeOfDay == TimeSpan.FromHours(19.75));
-            Assert.AreEqual(2, skillDataPeriodSeven.MinimumPersons); //The actual 2 is currently one hour later
-            Assert.AreEqual(2, skillDataPeriodEight.MinimumPersons); //The actual 2 is currently one hour later
+	        var lookup =
+		        skillDay.SkillDataPeriodCollection.ToLookup(s => s.Period.StartDateTimeLocal(_skill.TimeZone).TimeOfDay);
+			
+            Assert.AreEqual(2, lookup[TimeSpan.FromHours(7)].First().MinimumPersons); //The actual 2 is currently one hour later
+            Assert.AreEqual(2, lookup[TimeSpan.FromHours(19.75)].First().MinimumPersons); //The actual 2 is currently one hour later
         }
 
         [Test]
         public void ShouldHaveMinStaffingFirstWhenNoDaylightSavingChange()
         {
-            _skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _skill.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
             var createDate = new DateOnly(2010, 03, 30);
             IList<ISkillDataPeriod> skillDataPeriods = new List<ISkillDataPeriod>();
 
-            skillDataPeriods.Add(
+			var localStartDateTime = createDate.Date.Add(_skill.MidnightBreakOffset);
+			skillDataPeriods.Add(
                 new SkillDataPeriod(
                     new ServiceAgreement(
                         new ServiceLevel(
@@ -1471,11 +1472,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                         new Percent(0.5),
                         new Percent(0.7)),
                     new SkillPersonData(),
-                    new DateTimePeriod(
-                        DateTime.SpecifyKind(createDate.Date.Add(_skill.MidnightBreakOffset), DateTimeKind.Utc),
-                        DateTime.SpecifyKind(
-                            createDate.Date.Add(_skill.MidnightBreakOffset).Add(TimeSpan.FromHours(24)),
-                            DateTimeKind.Utc))));
+					TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localStartDateTime, localStartDateTime.Add(TimeSpan.FromHours(24)), _skill.TimeZone)));
 
             ISkillDay skillDay = new SkillDay(createDate, _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(createDate.Date, _skill), skillDataPeriods);
             skillDay.SetupSkillDay();
@@ -1484,11 +1481,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             ISkillDayTemplate skillDayTemplate = CreateTestTemplateSevenToEight();
             skillDay.CreateFromTemplate(createDate, _skill, _scenario, skillDayTemplate);
 
-            ISkillDataPeriod skillDataPeriodSeven = skillDay.SkillDataPeriodCollection.First(a => a.Period.StartDateTimeLocal(_skill.TimeZone).TimeOfDay == TimeSpan.FromHours(7));
-            ISkillDataPeriod skillDataPeriodEight = skillDay.SkillDataPeriodCollection.First(a => a.Period.StartDateTimeLocal(_skill.TimeZone).TimeOfDay == TimeSpan.FromHours(19.75));
-            Assert.AreEqual(2, skillDataPeriodSeven.MinimumPersons); //The actual 2 is currently one hour later
-            Assert.AreEqual(2, skillDataPeriodEight.MinimumPersons); //The actual 2 is currently one hour later
-        }
+			var lookup =
+				skillDay.SkillDataPeriodCollection.ToLookup(s => s.Period.StartDateTimeLocal(_skill.TimeZone).TimeOfDay);
+
+			Assert.AreEqual(2, lookup[TimeSpan.FromHours(7)].First().MinimumPersons); //The actual 2 is currently one hour later
+			Assert.AreEqual(2, lookup[TimeSpan.FromHours(19.75)].First().MinimumPersons); //The actual 2 is currently one hour later
+		}
         private ISkillDayTemplate CreateTestTemplateSevenToEight()
         {
             const string name = "<SOME>";
@@ -1501,6 +1499,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                                                                                           timePeriod);
             ISkillDayTemplate skillDayTemplate = new SkillDayTemplate(name,
                                                                      new List<ITemplateSkillDataPeriod> { templateSkillDataPeriod });
+			skillDayTemplate.SetParent(_skill);
 
             skillDayTemplate.SplitTemplateSkillDataPeriods(skillDayTemplate.TemplateSkillDataPeriodCollection.ToList());
 

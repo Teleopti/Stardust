@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 	        Assert.AreEqual(notificationString, _target.TextForNotification);
         }
 
-		[Test]
+		[Test, SetCulture("sv-SE")]
 		public void ShouldDenyMessageForNotTranslatedCultureBeInEnglish()
 		{
 
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             Assert.IsTrue(_personRequest.IsDenied);
         }
 
-        [Test]
+        [Test, SetCulture("sv-SE")]
         public void VerifyApproveCallWorks()
         {
             MockRepository mocks = new MockRepository();
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             mocks.VerifyAll();
         }
 
-        [Test]
+        [Test, SetCulture("sv-SE")]
         public void VerifyApproveCallWorksWithoutNotificationIfValidationError()
         {
             MockRepository mocks = new MockRepository();
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             mocks.VerifyAll();
         }
 
-        [Test]
+        [Test, SetCulture("sv-SE")]
         public void VerifyAccept()
         {
             MockRepository mocks = new MockRepository();
@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			mocks.VerifyAll();
 		}
 
-	    [Test]
+	    [Test, SetCulture("sv-SE")]
 		public void ShouldAcceptMessageForNotTranslatedCultureBeInEnglish()
 		{
 
@@ -298,7 +298,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             _target.Accept(null,new EmptyShiftTradeRequestSetChecksum(),_authorization);
         }
 
-        [Test]
+        [Test, SetCulture("sv-SE")]
         public void CanRefer()
         {
             Assert.AreEqual(ShiftTradeStatus.OkByMe, _target.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));

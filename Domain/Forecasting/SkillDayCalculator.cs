@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
@@ -14,7 +15,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private readonly ISkill _skill;
         private bool _isCalculatedWithinDay;
         private DateOnlyPeriod _visiblePeriod;
-        private readonly Dictionary<IWorkload, SortedList<DateOnly, IWorkloadDay>> _workloadDaysCache;
+
+	    private readonly ConcurrentDictionary<IWorkload, SortedList<DateOnly, IWorkloadDay>> _workloadDaysCache =
+		    new ConcurrentDictionary<IWorkload, SortedList<DateOnly, IWorkloadDay>>();
         private readonly IDictionary<DateTime, ISkillStaffPeriod> _skillStaffPeriods = new Dictionary<DateTime, ISkillStaffPeriod>();
 
         public SkillDayCalculator(ISkill skill, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod visiblePeriod)
@@ -23,15 +26,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
             _skill = skill;
             _visiblePeriod = visiblePeriod;
             _skillDays.ForEach(s => s.SkillDayCalculator = this);
-            _workloadDaysCache = new Dictionary<IWorkload,SortedList<DateOnly, IWorkloadDay>>();
+
             foreach (var workloadDay in skillDays.SelectMany(skillDay => skillDay.WorkloadDayCollection))
             {
-                SortedList<DateOnly, IWorkloadDay> workloadDayList;
-                if (!_workloadDaysCache.TryGetValue(workloadDay.Workload,out workloadDayList))
-                {
-                    workloadDayList = new SortedList<DateOnly, IWorkloadDay>();
-                    _workloadDaysCache.Add(workloadDay.Workload,workloadDayList);
-                }
+	            var workloadDayList = _workloadDaysCache.GetOrAdd(workloadDay.Workload, _ => new SortedList<DateOnly, IWorkloadDay>());
                 workloadDayList.Add(workloadDay.CurrentDate, workloadDay);
             }
         }
@@ -150,8 +148,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
 
             return (from workloadDay in foundList 
-                    where workloadDay.Key > dateTime 
-                    where workloadDay.Value.OpenForWork.IsOpen 
+                    where workloadDay.Key > dateTime && workloadDay.Value.OpenForWork.IsOpen 
                     select (ISkillDay) workloadDay.Value.Parent).FirstOrDefault();
         }
 
