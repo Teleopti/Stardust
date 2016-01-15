@@ -58,8 +58,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
         {
 	        var dayOff = assignment.DayOff();
 					return Crc32.Compute(SerializationHelper.SerializeAsBinary(dayOff.Anchor.Ticks)) ^
-						Crc32.Compute(SerializationHelper.SerializeAsBinary(dayOff.Flexibility)) ^
-						Crc32.Compute(SerializationHelper.SerializeAsBinary(dayOff.TargetLength)) ^
+						Crc32.Compute(SerializationHelper.SerializeAsBinary(dayOff.Flexibility.Ticks)) ^
+						Crc32.Compute(SerializationHelper.SerializeAsBinary(dayOff.TargetLength.Ticks)) ^
 						Crc32.Compute(SerializationHelper.SerializeAsBinary(assignment.Date.Date.Ticks));
         }
     }
