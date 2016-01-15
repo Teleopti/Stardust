@@ -5,8 +5,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	public interface IRecurringEventPublisher
 	{
-		void PublishHourly(string id, IEvent @event);
-		void StopPublishing(string id);
-		IEnumerable<string> RecurringPublishingIds();
+		void PublishHourly(IEvent @event);
+		void StopPublishingForCurrentTenant();
+		IEnumerable<string> TenantsWithRecurringJobs();
 	}
 }

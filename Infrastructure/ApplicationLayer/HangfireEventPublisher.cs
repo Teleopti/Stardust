@@ -44,11 +44,11 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			});
 		}
 
-		public void PublishHourly(string id, IEvent @event)
+		public void PublishHourly(IEvent @event)
 		{
 			jobsFor(@event).ForEach(j =>
 			{
-				_client.AddOrUpdateHourly(j.DisplayName, id + ":::" + Guid.NewGuid(), j.Tenant, j.EventTypeName, j.Event, j.HandlerTypeName);
+				_client.AddOrUpdateHourly(j.DisplayName, j.Tenant +":::"+ Guid.NewGuid(), j.Tenant, j.EventTypeName, j.Event, j.HandlerTypeName);
 			});
 		}
 
@@ -87,15 +87,16 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			}
 		}
 
-		public void StopPublishing(string id)
+		public void StopPublishingForCurrentTenant()
 		{
-			var jobsToRemove = 
+			var tenant = _dataSource.CurrentName();
+			var jobsToRemove =
 				_client.GetRecurringJobIds()
-				.Where(x => x.StartsWith(id + ":::"));
+				.Where(x => x.StartsWith(tenant + ":::"));
 			jobsToRemove.ForEach(x => _client.RemoveIfExists(x));
 		}
 
-		public IEnumerable<string> RecurringPublishingIds()
+		public IEnumerable<string> TenantsWithRecurringJobs()
 		{
 			return _client.GetRecurringJobIds()
 				.Select(x => x.Substring(0, x.IndexOf(":::")))

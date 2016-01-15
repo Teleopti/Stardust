@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Test]
 		public void ShouldAddOrUpdate()
 		{
-			Target.PublishHourly("id", new HangfireTestEvent());
+			Target.PublishHourly(new HangfireTestEvent());
 
 			JobClient.HasRecurringJobs.Should().Be.True();
 		}
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Test]
 		public void ShouldSerializeTheEvent()
 		{
-			Target.PublishHourly("id", new HangfireTestEvent());
+			Target.PublishHourly(new HangfireTestEvent());
 
 			JobClient.RecurringEvents.Single().Should().Be.EqualTo(Serializer.SerializeObject(new HangfireTestEvent()));
 		}
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Test]
 		public void ShouldPassEventTypeShortName()
 		{
-			Target.PublishHourly("id", new HangfireTestEvent());
+			Target.PublishHourly(new HangfireTestEvent());
 
 			JobClient.RecurringEventTypes.Single().Should().Be.EqualTo(typeof(HangfireTestEvent).FullName + ", " + typeof(HangfireTestEvent).Assembly.GetName().Name);
 		}
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Setting("HangfireDashboardDisplayNames", true)]
 		public void ShouldPassEventTypeInDisplayName()
 		{
-			Target.PublishHourly("id", new HangfireTestEvent());
+			Target.PublishHourly(new HangfireTestEvent());
 
 			JobClient.RecurringDisplayNames.Single().Should().Contain(typeof(HangfireTestEvent).Name);
 		}
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Setting("HangfireDashboardDisplayNames", true)]
 		public void ShouldPassHandlerTypeInDisplayName()
 		{
-			Target.PublishHourly("id", new HangfireTestEvent());
+			Target.PublishHourly(new HangfireTestEvent());
 
 			JobClient.RecurringDisplayNames.Single().Should().Contain(typeof(TestHandler).Name);
 		}
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Test]
 		public void ShouldNotPassDisplayNameByDefault()
 		{
-			Target.PublishHourly("id", new HangfireTestEvent());
+			Target.PublishHourly(new HangfireTestEvent());
 
 			JobClient.RecurringDisplayNames.Single().Should().Be.Null();
 		}
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Test]
 		public void ShouldPassHandlerTypeShortName()
 		{
-			Target.PublishHourly("id", new HangfireTestEvent());
+			Target.PublishHourly(new HangfireTestEvent());
 
 			JobClient.RecurringHandlerTypes.Single().Should().Be(typeof(TestHandler).FullName + ", " + typeof(TestHandler).Assembly.GetName().Name);
 		}
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Test]
 		public void ShouldNotAddIfNoHandler()
 		{
-			Target.PublishHourly("id", new UnknownTestEvent());
+			Target.PublishHourly(new UnknownTestEvent());
 
 			JobClient.HasRecurringJobs.Should().Be.False();
 		}
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Test]
 		public void ShouldAddForEachHandler()
 		{
-			Target.PublishHourly("id", new MultiHandlerTestEvent());
+			Target.PublishHourly(new MultiHandlerTestEvent());
 
 			JobClient.RecurringHandlerTypes.Should().Have.Count.EqualTo(2);
 			JobClient.RecurringHandlerTypes.ElementAt(0).Should().Contain(typeof(TestMultiHandler2).FullName);
@@ -122,28 +122,39 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			DataSources.Has(dataSource);
 
 			using (DataSource.OnThisThreadUse(dataSource))
-				Target.PublishHourly("id", new HangfireTestEvent());
+				Target.PublishHourly(new HangfireTestEvent());
 
 			JobClient.RecurringTenants.Single().Should().Be(dataSource.DataSourceName);
 		}
 
 		[Test]
-		public void ShouldReturnAllPublishingsById()
+		public void ShouldReturnTenantsWithRecurringJobs()
 		{
-			Target.PublishHourly("id", new MultiHandlerTestEvent());
+			var dataSource = new FakeDataSource { DataSourceName = RandomName.Make() };
+			DataSources.Has(dataSource);
 
-			Target.RecurringPublishingIds().Single().Should().Be("id");
+			using (DataSource.OnThisThreadUse(dataSource))
+				Target.PublishHourly(new MultiHandlerTestEvent());
+
+			Target.TenantsWithRecurringJobs().Single().Should().Be(dataSource.DataSourceName);
 		}
 
 		[Test]
-		public void ShouldStopPublishing()
+		public void ShouldStopPublishingCurrentTenant()
 		{
-			Target.PublishHourly("1", new HangfireTestEvent());
-			Target.PublishHourly("2", new HangfireTestEvent());
+			var dataSource1 = new FakeDataSource { DataSourceName = RandomName.Make() };
+			var dataSource2 = new FakeDataSource { DataSourceName = RandomName.Make() };
+			DataSources.Has(dataSource1);
+			DataSources.Has(dataSource2);
+			using (DataSource.OnThisThreadUse(dataSource1))
+				Target.PublishHourly(new HangfireTestEvent());
+			using (DataSource.OnThisThreadUse(dataSource2))
+				Target.PublishHourly(new HangfireTestEvent());
 
-			Target.StopPublishing("1");
+			using (DataSource.OnThisThreadUse(dataSource1))
+				Target.StopPublishingForCurrentTenant();
 
-			Target.RecurringPublishingIds().Single().Should().Be("2");
+			Target.TenantsWithRecurringJobs().Single().Should().Be(dataSource2.DataSourceName);
 		}
 
 		public class UnknownTestEvent : IEvent

@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.TestCommon
 
 		private class jobInfo
 		{
-			public string Id;
 			public string Tenant;
 			public IEvent Event;
 		}
@@ -28,34 +27,30 @@ namespace Teleopti.Ccc.TestCommon
 			_dataSource = dataSource;
 		}
 
-		public void PublishHourly(string id, IEvent @event)
+		public void PublishHourly(IEvent @event)
 		{
-			var job = _jobs.SingleOrDefault(x => x.Id == id);
+			var tenant = _dataSource.Current().DataSourceName;
+			var job = _jobs.SingleOrDefault(x => x.Tenant == tenant);
 			if (job == null)
 			{
 				job = new jobInfo();
 				_jobs.Add(job);
 			}
-			job.Id = id;
-			job.Tenant = tenant();
+			job.Tenant = tenant;
 			job.Event = @event;
 		}
 
-		private string tenant()
+		public void StopPublishingForCurrentTenant()
 		{
-			return _dataSource.Current() != null ? _dataSource.Current().DataSourceName : null;
-		}
-
-		public void StopPublishing(string id)
-		{
-			var job = _jobs.SingleOrDefault(x => x.Id == id);
+			var tenant = _dataSource.Current().DataSourceName;
+			var job = _jobs.SingleOrDefault(x => x.Tenant == tenant);
 			if (job != null)
 				_jobs.Remove(job);
 		}
 
-		public IEnumerable<string> RecurringPublishingIds()
+		public IEnumerable<string> TenantsWithRecurringJobs()
 		{
-			return _jobs.Select(x => x.Id).ToArray();
+			return _jobs.Select(x => x.Tenant).ToArray();
 		}
 	}
 }
