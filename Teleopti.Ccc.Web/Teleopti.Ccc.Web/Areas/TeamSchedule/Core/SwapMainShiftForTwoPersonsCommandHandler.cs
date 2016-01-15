@@ -10,9 +10,9 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 {
@@ -28,24 +28,24 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly ISwapAndModifyServiceNew _swapAndModifyServiceNew;
-		private readonly IScheduleDictionaryPersister _scheduleDictionaryPersister;
 		private readonly IMessagePopulatingServiceBusSender _busSender;
+		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
 		public SwapMainShiftForTwoPersonsCommandHandler(ICommonNameDescriptionSetting commonNameDescriptionSetting,
 			IPersonRepository personRepository,
 			IScheduleRepository scheduleRepository,
 			IScenarioRepository scenarioRepository,
 			ISwapAndModifyServiceNew swapAndModifyServiceNew,
-			IScheduleDictionaryPersister scheduleDictionaryPersister,
-			IMessagePopulatingServiceBusSender busSender)
+			IMessagePopulatingServiceBusSender busSender,
+			ICurrentUnitOfWork currentUnitOfWork)
 		{
 			_commonNameDescriptionSetting = commonNameDescriptionSetting;
 			_personRepository = personRepository;
 			_scheduleRepository = scheduleRepository;
 			_scenarioRepository = scenarioRepository;
 			_swapAndModifyServiceNew = swapAndModifyServiceNew;
-			_scheduleDictionaryPersister = scheduleDictionaryPersister;
 			_busSender = busSender;
+			_currentUnitOfWork = currentUnitOfWork;
 		}
 
 		public IEnumerable<FailActionResult> SwapShifts(SwapMainShiftForTwoPersonsCommand command)
@@ -78,16 +78,15 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				return parseErrorResponses(errorResponses);
 			}
 
-			var conflicts = _scheduleDictionaryPersister.Persist(scheduleDictionary).ToArray();
-
-			if (conflicts.Any())
+			var uow = _currentUnitOfWork.Current();
+			foreach (var scheduleRange in scheduleDictionary.Values)
 			{
-				return parseConflicts(conflicts, peoples);
+				var personAssignment = scheduleRange.ScheduledDay(scheduleDateOnly).PersonAssignment(true);
+				uow.Merge(personAssignment);
 			}
+			uow.PersistAll();
 
-			notifyScheduleChanged(scheduleDate, scheduleDate.AddDays(1), defaultScenario.Id.Value, command.PersonIdFrom,
-				command.TrackedCommandInfo);
-			notifyScheduleChanged(scheduleDate, scheduleDate.AddDays(1), defaultScenario.Id.Value, command.PersonIdTo,
+			notifyScheduleChanged(scheduleDate, scheduleDate.AddDays(1), defaultScenario.Id.Value, personIds,
 				command.TrackedCommandInfo);
 
 			return new List<FailActionResult>();
@@ -102,50 +101,24 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			});
 		}
 
-		private IEnumerable<FailActionResult> parseConflicts(IEnumerable<PersistConflict> conflicts,
-			IEnumerable<IPerson> peoples)
-		{
-			var conflictList = conflicts.ToList();
-			var peopleList = peoples.ToList();
-
-			var failResults = new List<FailActionResult>();
-			if (!conflictList.Any())
-			{
-				return failResults;
-			}
-
-			foreach (var c in conflictList)
-			{
-				var peopleId = c.InvolvedId();
-				var people = peopleList.SingleOrDefault(p => p.Id == peopleId);
-				if (people != null)
-				{
-					failResults.Add(new FailActionResult
-					{
-						PersonName = _commonNameDescriptionSetting.BuildCommonNameDescription(people),
-						Message = new List<string> {Resources.ScheduleHasBeenChanged}
-					});
-				}
-			}
-
-			return failResults;
-		}
-
-		private void notifyScheduleChanged(DateTime startTime, DateTime endTime, Guid scenarioId, Guid personId,
+		private void notifyScheduleChanged(DateTime startTime, DateTime endTime, Guid scenarioId, IEnumerable<Guid> personIds,
 			TrackedCommandInfo trackedCommandInfo)
 		{
-			var message = new ScheduleChangedEvent
+			foreach (var personId in personIds)
 			{
-				StartDateTime = DateTime.SpecifyKind(startTime, DateTimeKind.Utc),
-				EndDateTime = DateTime.SpecifyKind(endTime, DateTimeKind.Utc),
-				ScenarioId = scenarioId,
-				PersonId = personId,
-				InitiatorId = trackedCommandInfo != null ? trackedCommandInfo.OperatedPersonId : Guid.Empty,
-				TrackId = trackedCommandInfo != null ? trackedCommandInfo.TrackId : Guid.Empty,
-				Timestamp = DateTime.UtcNow
-			};
+				var message = new ScheduleChangedEvent
+				{
+					StartDateTime = DateTime.SpecifyKind(startTime, DateTimeKind.Utc),
+					EndDateTime = DateTime.SpecifyKind(endTime, DateTimeKind.Utc),
+					ScenarioId = scenarioId,
+					PersonId = personId,
+					InitiatorId = trackedCommandInfo != null ? trackedCommandInfo.OperatedPersonId : Guid.Empty,
+					TrackId = trackedCommandInfo != null ? trackedCommandInfo.TrackId : Guid.Empty,
+					Timestamp = DateTime.UtcNow
+				};
 
-			_busSender.Send(message, true);
+				_busSender.Send(message, true);
+			}
 		}
 	}
 }
