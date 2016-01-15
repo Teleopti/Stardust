@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<InitializeApplication>().As<IInitializeApplication>().SingleInstance();
 			builder.RegisterType<DataSourcesFactory>().As<IDataSourcesFactory>().SingleInstance();
 			builder.RegisterType<SetLicenseActivator>().As<ISetLicenseActivator>().SingleInstance();
+			builder.RegisterType<LicenseVerifierFactory>().As<ILicenseVerifierFactory>().SingleInstance();
 			builder.RegisterType<OneWayEncryption>().As<IOneWayEncryption>().SingleInstance();
 			builder.RegisterType<EnversConfiguration>().As<IEnversConfiguration>().SingleInstance();
 			builder.RegisterType<ConfigReader>().As<IConfigReader>().SingleInstance();

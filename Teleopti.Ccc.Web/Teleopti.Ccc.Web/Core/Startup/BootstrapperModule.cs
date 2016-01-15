@@ -3,7 +3,6 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
-using Teleopti.Ccc.Web.Core.Startup.VerifyLicense;
 
 namespace Teleopti.Ccc.Web.Core.Startup
 {
@@ -24,7 +23,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				.As<IBootstrapperTask>();
 
 			builder.RegisterModule<InitializeApplicationModule>();
-			builder.RegisterModule<VerifyLicenseModule>();
 			builder.RegisterType<RegisterArea>().SingleInstance().As<IRegisterArea>();
 			builder.RegisterType<RegisterAreas>().SingleInstance().As<IRegisterAreas>();
 			builder.RegisterType<GlobalConfigurationWrapper>().SingleInstance().As<IGlobalConfiguration>();

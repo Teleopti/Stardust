@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			builder.RegisterType<LogonModel>().SingleInstance();
 
 			builder.RegisterType<LogonLicenseChecker>().As<ILogonLicenseChecker>();
-			builder.RegisterType<LicenseVerifierFactory>().As<ILicenseVerifierFactory>();
 			builder.RegisterType<LicenseStatusLoader>().As<ILicenseStatusLoader>();
 			builder.RegisterType<RoleToPrincipalCommand>().As<IRoleToPrincipalCommand>();
 			builder.RegisterType<LoginInitializer>().As<ILoginInitializer>();
