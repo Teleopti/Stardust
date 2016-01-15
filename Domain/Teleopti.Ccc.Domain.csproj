@@ -622,7 +622,6 @@
     <Compile Include="Forecasting\SkillMap_DEV.cs" />
     <Compile Include="Forecasting\StaffingCalculatorServiceFacade.cs" />
     <Compile Include="Aop\Core\IAspect.cs" />
-    <Compile Include="Aop\Core\IAttributeForAspect.cs" />
     <Compile Include="Aop\IReadModelUnitOfWorkAspect.cs" />
     <Compile Include="GenericDisposable.cs" />
     <Compile Include="Helper\DateExtensions.cs" />

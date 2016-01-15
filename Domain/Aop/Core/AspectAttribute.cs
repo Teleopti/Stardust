@@ -2,7 +2,7 @@ using System;
 
 namespace Teleopti.Ccc.Domain.Aop.Core
 {
-	public abstract class AspectAttribute : Attribute, IAttributeForAspect
+	public abstract class AspectAttribute : Attribute
 	{
 		protected AspectAttribute(Type aspectType)
 		{
