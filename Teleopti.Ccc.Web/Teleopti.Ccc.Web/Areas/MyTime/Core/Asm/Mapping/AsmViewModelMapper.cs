@@ -13,13 +13,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 	{
 		private readonly IProjectionProvider _projectionProvider;
 		private readonly IUserTimeZone _userTimeZoneInfo;
-		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly IUserCulture _userCulture;
 
-		public AsmViewModelMapper(IProjectionProvider projectionProvider, IUserTimeZone userTimeZoneInfo, ILoggedOnUser loggedOnUser)
+		public AsmViewModelMapper(IProjectionProvider projectionProvider, IUserTimeZone userTimeZoneInfo, IUserCulture userCulture)
 		{
 			_projectionProvider = projectionProvider;
 			_userTimeZoneInfo = userTimeZoneInfo;
-			_loggedOnUser = loggedOnUser;
+			_userCulture = userCulture;
 		}
 
 		public AsmViewModel Map(DateTime asmZeroLocal, IEnumerable<IScheduleDay> scheduleDays, int unreadMessageCount)
@@ -30,12 +30,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 				layers.AddRange(proj);
 			}
 			var timeZone = _userTimeZoneInfo.TimeZone();
-			var culture = _loggedOnUser.CurrentUser().PermissionInformation.Culture();
 			var dstJudgement = new DSTJudgement();
 			return new AsmViewModel
 									{
-										Hours = createHours(asmZeroLocal, timeZone, culture, dstJudgement),
-										Layers = createAsmLayers(asmZeroLocal, timeZone, culture, layers, dstJudgement),
+										Hours = createHours(asmZeroLocal, timeZone, _userCulture.GetCulture(), dstJudgement),
+										Layers = createAsmLayers(asmZeroLocal, timeZone, _userCulture.GetCulture(), layers, dstJudgement),
 										UnreadMessageCount = unreadMessageCount,
 										UserTimeZoneMinuteOffset = (asmZeroLocal - TimeZoneHelper.ConvertToUtc(asmZeroLocal, timeZone)).TotalMinutes
 									};
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			for (var hour = 0; hour < numberOfHoursToShow; hour++)
 			{
  				var localTime = TimeZoneInfo.ConvertTimeFromUtc(asmZeroAsUtc.AddHours(hour), timeZone);
-				var hourString = string.Format(culture, localTime.ToShortTimeString());
+				var hourString = localTime.ToString(culture.DateTimeFormat.ShortTimePattern, culture);
 
 				if (dstJudgement.IsContainsDSTStart && DateTime.Compare(dstJudgement.DSTMarginPoint, new DateTime()) == 0)
 				{
@@ -93,16 +92,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 											StartMinutesSinceAsmZero = getStartMinutesSinceAsmZero(dstJudgement, startDate,asmZero),
 			                        		LengthInMinutes = length,
 			                        		Color = ColorTranslator.ToHtml(visualLayer.DisplayColor()),
-											StartTimeText = string.Format(culture, startDate.ToShortTimeString()),
-											EndTimeText = string.Format(culture, endDate.ToShortTimeString())
- 			                        	}).ToList();
+											StartTimeText = startDate.ToString(culture.DateTimeFormat.ShortTimePattern, culture),
+											EndTimeText = endDate.ToString(culture.DateTimeFormat.ShortTimePattern, culture)
+							 }).ToList();
 			return asmLayers;
 		}
 
 		private double getStartMinutesSinceAsmZero(DSTJudgement dstJudgement, DateTime layerStartTime, DateTime asmZero)
 		{
-			if ((DateTime.Compare(dstJudgement.DSTMarginPoint, layerStartTime) == -1 ||
-			     DateTime.Compare(dstJudgement.DSTMarginPoint, layerStartTime) == 0))
+			var compare = DateTime.Compare(dstJudgement.DSTMarginPoint, layerStartTime);
+			if ((compare == -1 ||
+			     compare == 0))
 			{
 				if (dstJudgement.IsContainsDSTStart)
 					return layerStartTime.Subtract(asmZero).TotalMinutes - 60;

@@ -130,13 +130,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 				                                       	{
 				                                       		if (!s.Layer.Period.HasValue)
 				                                       			return null;
-															return s.Layer.Period.Value.StartDateTimeLocal(_userTimeZone.Invoke().TimeZone()).ToShortTimeString();
+															return _createHourText.CreateText(s.Layer.Period.Value.StartDateTime);
 				                                       	}))
 				.ForMember(d => d.EndTime, o => o.ResolveUsing(s =>
 														{
 															if (!s.Layer.Period.HasValue)
 																return null;
-															return s.Layer.Period.Value.EndDateTimeLocal(_userTimeZone.Invoke().TimeZone()).ToShortTimeString();
+															return _createHourText.CreateText(s.Layer.Period.Value.EndDateTime);
 														}))
 				.ForMember(d => d.ActivityName, o => o.MapFrom(s => s.Layer.ActivityName))
 				;

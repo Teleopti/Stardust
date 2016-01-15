@@ -209,17 +209,17 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 		[Test]
 		public void ShouldAddPageOnDaylightTimesavingSwitch()
 		{
-			Assert.IsFalse(ShiftsPerDayGraphicalToPdfManager.AddPageForDaylightSavingTime(_dateOnly1, _dateOnly2));
+			Assert.IsFalse(ShiftsPerDayGraphicalToPdfManager.AddPageForDaylightSavingTime(_dateOnly1, _dateOnly2, TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
 
 			_dateOnly1 = new DateOnly(2011, 3, 26);
 			_dateOnly2 = new DateOnly(2011, 3, 27);
 
-			Assert.IsTrue(ShiftsPerDayGraphicalToPdfManager.AddPageForDaylightSavingTime(_dateOnly1, _dateOnly2));
+			Assert.IsTrue(ShiftsPerDayGraphicalToPdfManager.AddPageForDaylightSavingTime(_dateOnly1, _dateOnly2, TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
 
 			_dateOnly1 = new DateOnly(2011, 10, 29);
 			_dateOnly2 = new DateOnly(2011, 3, 30);
 
-			Assert.IsTrue(ShiftsPerDayGraphicalToPdfManager.AddPageForDaylightSavingTime(_dateOnly1, _dateOnly2));
+			Assert.IsTrue(ShiftsPerDayGraphicalToPdfManager.AddPageForDaylightSavingTime(_dateOnly1, _dateOnly2, TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
 		}
 
 		[Test]

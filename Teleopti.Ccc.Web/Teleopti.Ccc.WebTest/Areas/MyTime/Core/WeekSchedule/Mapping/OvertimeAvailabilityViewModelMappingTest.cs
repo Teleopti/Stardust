@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using AutoMapper;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.WeekSchedule.Mapping
 		public void Setup()
 		{
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new OvertimeAvailabilityViewModelMappingProfile()));
+			Mapper.Initialize(c => c.AddProfile(new OvertimeAvailabilityViewModelMappingProfile(new ThisCulture(CultureInfo.GetCultureInfo(1053)))));
 		}
 
 		[Test]

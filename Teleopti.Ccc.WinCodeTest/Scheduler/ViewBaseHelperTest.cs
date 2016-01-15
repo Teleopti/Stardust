@@ -23,7 +23,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), TestFixture, SetCulture("sv-SE"), SetUICulture("en-US")]
+    [TestFixture, SetCulture("sv-SE"), SetUICulture("en-US")]
     public class ViewBaseHelperTest
     {
         private IPerson _agent;
@@ -66,12 +66,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private DateOnly _baseDateTime;
         private IDictionary<IPerson, IScheduleRange> _underlyingDictionary;
 			
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
+		[SetUp]
         public void Setup()
         {
             _layerFactory = new VisualLayerFactory();
             _scenario = ScenarioFactory.CreateScenarioAggregate();
             IPerson person = PersonFactory.CreatePerson();
+			
 						_agent = PersonFactory.CreatePersonWithPersonPeriod(person, new DateOnly(1999, 1, 1), new List<ISkill>(), new Contract("ctr"), new PartTimePercentage("ptc"));
             _mockRep = new MockRepository();
             _schedulePart1 = _mockRep.StrictMock<IScheduleDay>();
@@ -248,7 +249,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        [Test]
         public void VerifyConfidentialAbsence()
         {
             IAbsence confidentialAbsence = AbsenceFactory.CreateAbsence("Confidential", "CF", Color.DimGray);

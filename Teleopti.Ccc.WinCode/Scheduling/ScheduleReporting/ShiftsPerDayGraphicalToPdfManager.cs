@@ -6,6 +6,7 @@ using System.Linq;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -154,7 +155,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 				{
 					if (top > page.GetClientSize().Height - 30)
 						top = NewPageAgentView(doc, _rightToLeft, _culture, out page, person, dateOnly);
-					else if(AddPageForDaylightSavingTime(previousDateOnly, dateOnly))
+					else if(AddPageForDaylightSavingTime(previousDateOnly, dateOnly, TimeZoneGuard.Instance.TimeZone))
 						top = NewPageAgentView(doc, _rightToLeft, _culture, out page, person, dateOnly);
 
 					var dic = _stateHolder.Schedules;
@@ -177,12 +178,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 			return doc;
 		}
 
-		public static bool AddPageForDaylightSavingTime(DateOnly previousDateOnly, DateOnly dateOnly)
+		public static bool AddPageForDaylightSavingTime(DateOnly previousDateOnly, DateOnly dateOnly, TimeZoneInfo timeZone)
 		{
-			if (previousDateOnly.Date.AddDays(1).IsDaylightSavingTime() != dateOnly.Date.AddDays(1).IsDaylightSavingTime())
+			if (timeZone.IsDaylightSavingTime(previousDateOnly.Date.AddDays(1)) != timeZone.IsDaylightSavingTime(dateOnly.Date.AddDays(1)))
 				return true;
 
-			return previousDateOnly.Date.AddDays(2).IsDaylightSavingTime() != dateOnly.Date.AddDays(2).IsDaylightSavingTime();
+			return timeZone.IsDaylightSavingTime(previousDateOnly.Date.AddDays(2)) != timeZone.IsDaylightSavingTime(dateOnly.Date.AddDays(2));
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting.ScheduleReportDrawHeader.#ctor(Syncfusion.Pdf.PdfPage,System.String,System.Globalization.CultureInfo)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting.ScheduleReportDrawHeader.#ctor(Syncfusion.Pdf.PdfPage,System.String,System.Boolean,System.Globalization.CultureInfo)")]

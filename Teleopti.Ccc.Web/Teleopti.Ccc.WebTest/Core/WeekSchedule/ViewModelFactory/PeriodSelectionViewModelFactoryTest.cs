@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 {
-	 [TestFixture]
+	 [TestFixture, SetCulture("sv-SE")]
 	 public class PeriodSelectionViewModelFactoryTest
 	 {
 		  [Test]

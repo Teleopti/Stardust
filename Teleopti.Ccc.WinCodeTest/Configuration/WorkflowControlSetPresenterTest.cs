@@ -7,7 +7,6 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -519,7 +518,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         [Test]
         public void VerifySetCalendarCultureInfo()
         {
-            CultureInfo cultureInfo = CultureInfo.CurrentCulture;
+            CultureInfo cultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
             IList<IWorkflowControlSet> repositoryCollection = new List<IWorkflowControlSet> { _workflowControlSet };
             using (_mocks.Record())
             {

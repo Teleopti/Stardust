@@ -7,11 +7,9 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
@@ -22,21 +20,15 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 		private StubFactory scheduleFactory;
 		private IProjectionProvider projectionProvider;
 		private IAsmViewModelMapper target;
-		private IUserTimeZone userTimeZone;
 		private TimeZoneInfo timeZone;
-		private ILoggedOnUser loggedOnUser;
 
 		[SetUp]
 		public void Setup()
 		{
 			projectionProvider = MockRepository.GenerateStub<IProjectionProvider>();
-			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
-			loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			scheduleFactory = new StubFactory();
 			timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
-			userTimeZone.Expect(c => c.TimeZone()).Return(timeZone);
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(new Person()); 
-			target = new AsmViewModelMapper(projectionProvider, userTimeZone, loggedOnUser);
+			target = new AsmViewModelMapper(projectionProvider, new FakeUserTimeZone(timeZone), new ThisCulture(CultureInfo.GetCultureInfo("sv-SE")));
 		}
 
 		[Test]
@@ -63,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 		{
 			var asmZero = new DateTime(1988, 1, 1);
 			var layerPeriod = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
-			var expected = TimeZoneHelper.ConvertFromUtc(layerPeriod.StartDateTime, userTimeZone.TimeZone());
+			var expected = TimeZoneHelper.ConvertFromUtc(layerPeriod.StartDateTime, timeZone);
 
 			var scheduleDay =scheduleFactory.ScheduleDayStub(layerPeriod.StartDateTime);
 
@@ -131,7 +123,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 				                                       	}));
 			var res = target.Map(DateTime.Now, new[] { scheduleDay },0);
 
-			res.Layers.First().EndTimeText.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(endDate, timeZone).ToString("HH:mm"));
+			res.Layers.First().EndTimeText.Should().Be.EqualTo("12:55");
 		}
 
 		[Test]
@@ -143,7 +135,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 			hoursAsInts.AddRange(Enumerable.Range(0, 24));
 			hoursAsInts.AddRange(Enumerable.Range(0, 24));
 
-			var expected = hoursAsInts.ConvertAll(x => x.ToString(loggedOnUser.CurrentUser().PermissionInformation.Culture()));
+			var expected = hoursAsInts.ConvertAll(x => x.ToString(CultureInfo.GetCultureInfo("sv-SE")));
 			var date = new DateTime(2000, 1, 1);
 			var scheduleDay = scheduleFactory.ScheduleDayStub(date);
 			var res = target.Map(new DateTime(2000,1,1), new[] {scheduleDay},0);
@@ -192,13 +184,12 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 			));
 
 			var asmZore = new DateTime(2015, 3, 28, 0, 0, 0);
-			userTimeZone.Expect(u => u.TimeZone()).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
-			var stockholmTarget = new AsmViewModelMapper(projectionProvider, userTimeZone, loggedOnUser);
+			var stockholmTarget = new AsmViewModelMapper(projectionProvider, new FakeUserTimeZone(timeZone), new ThisCulture(CultureInfo.GetCultureInfo("sv-SE")));
 
 			var res = stockholmTarget.Map(asmZore, new[] { scheduleDay }, 0);
 
-			res.Layers.First().StartMinutesSinceAsmZero.Should().Be.EqualTo(TimeZoneInfo.ConvertTimeFromUtc(layerOneStartTime, userTimeZone.TimeZone()).Subtract(asmZore).TotalMinutes);
-			res.Layers.Second().StartMinutesSinceAsmZero.Should().Be.EqualTo(TimeZoneInfo.ConvertTimeFromUtc(layerTwoStartTime, userTimeZone.TimeZone()).Subtract(asmZore).TotalMinutes-60);
+			res.Layers.First().StartMinutesSinceAsmZero.Should().Be.EqualTo(TimeZoneInfo.ConvertTimeFromUtc(layerOneStartTime, timeZone).Subtract(asmZore).TotalMinutes);
+			res.Layers.Second().StartMinutesSinceAsmZero.Should().Be.EqualTo(TimeZoneInfo.ConvertTimeFromUtc(layerTwoStartTime, timeZone).Subtract(asmZore).TotalMinutes-60);
 
 		}
 
@@ -214,14 +205,13 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 												scheduleFactory.VisualLayerStub(new DateTimePeriod(layerTwoStartTime, layerTwoStartTime.AddHours(5)))
 											}
 			));
-			userTimeZone.Expect(u => u.TimeZone()).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
-
+			
 			var asmZore = new DateTime(2015, 10, 24, 0, 0, 0);
-			var stockholmTarget = new AsmViewModelMapper(projectionProvider, userTimeZone, loggedOnUser);
+			var stockholmTarget = new AsmViewModelMapper(projectionProvider, new FakeUserTimeZone(timeZone), new ThisCulture(CultureInfo.GetCultureInfo("sv-SE")));
 			var res = stockholmTarget.Map(asmZore, new[] { scheduleDay }, 0);
 
-			res.Layers.First().StartMinutesSinceAsmZero.Should().Be.EqualTo(TimeZoneInfo.ConvertTimeFromUtc(layerOneStartTime, userTimeZone.TimeZone()).Subtract(asmZore).TotalMinutes);
-			res.Layers.Second().StartMinutesSinceAsmZero.Should().Be.EqualTo(TimeZoneInfo.ConvertTimeFromUtc(layerTwoStartTime, userTimeZone.TimeZone()).Subtract(asmZore).TotalMinutes+60);
+			res.Layers.First().StartMinutesSinceAsmZero.Should().Be.EqualTo(TimeZoneInfo.ConvertTimeFromUtc(layerOneStartTime, timeZone).Subtract(asmZore).TotalMinutes);
+			res.Layers.Second().StartMinutesSinceAsmZero.Should().Be.EqualTo(TimeZoneInfo.ConvertTimeFromUtc(layerTwoStartTime, timeZone).Subtract(asmZore).TotalMinutes+60);
 		}
 	}
 }

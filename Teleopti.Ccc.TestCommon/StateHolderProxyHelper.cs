@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Rhino.Mocks;
@@ -146,6 +147,8 @@ namespace Teleopti.Ccc.TestCommon
             person.PermissionInformation.AddApplicationRole(role);
             person.PermissionInformation.SetDefaultTimeZone(
                 TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo(1053));
+			person.PermissionInformation.SetUICulture(CultureInfo.GetCultureInfo(1033));
             return person;
         }
     }

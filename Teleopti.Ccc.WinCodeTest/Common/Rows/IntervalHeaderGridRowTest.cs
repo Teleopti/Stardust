@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Rows
             cellInfo.ColIndex = 3;
             _target.QueryCellInfo(cellInfo);
             Assert.AreEqual("Header", cellInfo.Style.BaseStyle);
-            Assert.AreEqual(DateTime.MinValue.Add(_timeSpans[1].TimeSpan).ToShortTimeString(),cellInfo.Style.CellValue);
+            Assert.AreEqual("02:00",cellInfo.Style.CellValue);
 
             cellInfo.Style = new GridStyleInfo();
             _target = new IntervalHeaderGridRow(new List<IntervalDefinition>());

@@ -8,6 +8,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
@@ -23,8 +24,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 	public class TeamScheduleViewModelMappingTest
 	{
 		private TeamScheduleDomainData data;
-		private IUserTimeZone userTimeZone;
-		private TimeZoneInfo timeZone;
+		private FakeUserTimeZone userTimeZone;
 
 		[SetUp]
 		public void SetUp()
@@ -35,15 +35,13 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 						DisplayTimePeriod = new DateTimePeriod(DateTime.UtcNow.Date, DateTime.UtcNow.Date.AddHours(24)),
 						Days = new TeamScheduleDayDomainData[] { }
 					};
-
-			timeZone = (TimeZoneInfo.Utc);
-			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
-			userTimeZone.Stub(x => x.TimeZone()).Do((Func<TimeZoneInfo>)(() => timeZone));
-
+			
+			userTimeZone = new FakeUserTimeZone(TimeZoneInfo.Utc);
+			
 			Mapper.Reset();
 			Mapper.Initialize(
 				c => c.AddProfile(new TeamScheduleViewModelMappingProfile(() => userTimeZone,
-					new CreateHourText(userTimeZone), null)));
+					new CreateHourText(userTimeZone, new SwedishCulture()), null)));
 		}
 		
 		[Test]
@@ -137,7 +135,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			personNameProvider.Stub(x => x.BuildNameFromSetting(person.Name)).Return(name);
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(new TeamScheduleViewModelMappingProfile(() => userTimeZone,
-									new CreateHourText(userTimeZone), personNameProvider)));
+									new CreateHourText(userTimeZone, new ThreadCulture()), personNameProvider)));
 
 			var result = Mapper.Map<TeamScheduleDayDomainData, AgentScheduleViewModel>(new TeamScheduleDayDomainData
 			                                                                           	{
@@ -209,7 +207,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		[Test]
 		public void ShouldMapLayerStartTime()
 		{
-			timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			userTimeZone.IsSweden();
 			var period = new DateTimePeriod(new DateTime(2011, 12, 19, 8, 0, 0, DateTimeKind.Utc), new DateTime(2011, 12, 19, 13, 0, 0, DateTimeKind.Utc));
 			data.Days = new []
 			            	{
@@ -227,13 +225,13 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 
 			var result = Mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(data);
 
-			result.AgentSchedules.First().Layers.Single().StartTime.Should().Be(period.StartDateTimeLocal(timeZone).ToShortTimeString());
+			result.AgentSchedules.First().Layers.Single().StartTime.Should().Be("09:00");
 		}
 
 		[Test]
 		public void ShouldMapLayerEndTime()
 		{
-			timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			userTimeZone.IsSweden();
 			var period = new DateTimePeriod(new DateTime(2011, 12, 19, 8, 0, 0, DateTimeKind.Utc), new DateTime(2011, 12, 19, 13, 0, 0, DateTimeKind.Utc));
 			data.Days = new[]
 			            	{
@@ -251,13 +249,13 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 
 			var result = Mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(data);
 
-			result.AgentSchedules.First().Layers.Single().EndTime.Should().Be(period.EndDateTimeLocal(timeZone).ToShortTimeString());
+			result.AgentSchedules.First().Layers.Single().EndTime.Should().Be("14:00");
 		}
 
 		[Test]
 		public void ShouldMapLayerActivityName()
 		{
-			timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			userTimeZone.IsSweden();
 			const string activityName = "Phone";
 			data.Days = new[]
 			            	{
@@ -336,13 +334,17 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			result.TimeLine.Select(t => t.ShortTime).Should().Have.SameSequenceAs(expected);
 		}
 
-		[Test, SetCulture("en-US")]
+		[Test]
 		public void ShouldMapTimeLineShortTimeForUsaCulture()
 		{
 			var start = new DateTime(2012, 1, 3, 8, 45, 0, DateTimeKind.Utc);
 			var end = new DateTime(2012, 1, 3, 12, 15, 0, DateTimeKind.Utc);
 			data.DisplayTimePeriod = new DateTimePeriod(start, end);
 
+			Mapper.Reset();
+			Mapper.Initialize(
+				c => c.AddProfile(new TeamScheduleViewModelMappingProfile(() => userTimeZone,
+					new CreateHourText(userTimeZone, new FakeUserCulture(CultureInfo.GetCultureInfo("en-US"))), null)));
 			var result = Mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(data);
 
 			var expected = new[] { "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM" };
@@ -357,7 +359,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			var start = new DateTime(2012, 1, 3, 8, 45, 0, DateTimeKind.Utc);
 			var end = new DateTime(2012, 1, 3, 11, 15, 0, DateTimeKind.Utc);
 			data.DisplayTimePeriod = new DateTimePeriod(start, end);
-			timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			userTimeZone.IsSweden();
 
 			var result = Mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(data);
 
