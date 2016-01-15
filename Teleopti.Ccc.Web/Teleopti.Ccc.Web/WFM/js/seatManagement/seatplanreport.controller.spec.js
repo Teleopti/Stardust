@@ -39,41 +39,23 @@ describe('seatplan report controller tests', function () {
 	}));
 
 	it('should filter seat bookings by selected locations', inject(function () {
-
 		controller.selectedLocations = ['1', '2'];
 		controller.applyFilter();
 
 		expect(seatBookingsReportRequestParams.locations).toEqual(['1', '2']);
 	}));
 
-	it('currentPage should be 1 when controller is initialized', inject(function () {
+	it('pageNumber should be 1 when controller is initialized', inject(function () {
 		controller.init();
-		expect(controller.currentPage).toEqual(1);
+
+		expect(controller.paginationOptions.pageNumber).toEqual(1);
 	}));
-
-	it('should filter by paging ', inject(function () {
-		var goToPage = 10;
-
-		controller.totalPages = 20;
-		controller.paging(goToPage);
-
-		expect(controller.currentPage).toEqual(10);
-		expect(seatBookingsReportRequestParams.skip).toEqual((goToPage - 1) * controller.reportTake);
-	}));
-
-	it('should page number within page range', inject(function () {
-		controller.currentPage = 20;
-		controller.totalPages = 20;
-		controller.paging(controller.currentPage + 1);
-
-		expect(controller.currentPage).toEqual(20);
-	}));
-
-	it('should currentPage equals to 1 after apply filter', inject(function () {
-		controller.currentPage = 10;
+	
+	it('should pageNumber equals to 1 after apply filter', inject(function () {
+		controller.paginationOptions.pageNumber = 10;
 		controller.applyFilter();
 
-		expect(controller.currentPage).toEqual(1);
+		expect(controller.paginationOptions.pageNumber).toEqual(1);
 	}));
 	
 

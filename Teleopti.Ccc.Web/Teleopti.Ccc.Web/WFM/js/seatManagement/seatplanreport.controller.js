@@ -62,9 +62,10 @@
 			}
 
 			vm.isFilterOpened = false;
+			vm.paginationOptions.pageNumber = 1;
 
 			vm.getSeatBookings({
-				skip: vm.paginationOptions.pageNumber,
+				skip:  (vm.paginationOptions.pageNumber - 1) * vm.paginationOptions.pageSize,
 				take: vm.paginationOptions.pageSize,
 				callback: getSeatBookingsCallback,
 				isLoadingReportToDisplay: true

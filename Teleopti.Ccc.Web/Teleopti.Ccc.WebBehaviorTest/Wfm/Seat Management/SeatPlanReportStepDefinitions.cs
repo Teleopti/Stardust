@@ -19,11 +19,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 			Browser.Interactions.AssertExists("seat-plan-report-table table");
 		}
 
-		[Then(@"paging bar should be hide")]
-		public void ThenPagingBarShouldBeHide()
+		[Then(@"paging bar should be shown")]
+		public void ThenPagingBarShouldBeShown()
 		{
-			Browser.Interactions.AssertNotExists("seat-plan-report-table table", ".seatplan-paging-container");
+			Browser.Interactions.AssertExists(".seatplan-paging-container");
 		}
+
 
 		[When(@"I click SeatPlanReport button from planning period")]
 		public void WhenIClickSeatPlanReportButtonFromPlanningPeriod()

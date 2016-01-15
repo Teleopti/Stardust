@@ -12,7 +12,6 @@ input[type=text],input[type=password],input[type=number]{
 	height: 95%;
 	position: relative;
 }
-
 .seatmap{
 	padding: 0;
 	z-index: 0;
@@ -310,6 +309,35 @@ seatmap-editor{
 	top: 50%;
 	margin-left: -32px;
 	margin-top: -62px;
+}
+
+.wfm-block-edit-mode{
+	md-content.layout-padding{
+		position:absolute;
+		top:0;
+		right:0;
+		bottom:0;
+		left:0;
+		overflow:visible;	
+	}
+
+	.layout-padding .input-prepend{
+		position:absolute;
+		top:40px;
+		right:0;
+		bottom:0;
+		left:0;
+		height:20px;
+	}
+	
+	.seat-roles{
+		position:absolute;
+		top:60px;
+		right:0;
+		bottom:0;
+		left:0;
+		overflow:auto;
+	}
 }
 
 .seatmap-canvas .right-panel-edit-mode .resizable{

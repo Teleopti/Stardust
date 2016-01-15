@@ -10,12 +10,11 @@
 			},
 			templateUrl: 'js/people/html/people-list.html',
 			link: function (scope, element, attrs) {
-				scope.isSelectionMode = true;
 				scope.gridOptions.enableGridMenu = false;
 				scope.gridOptions.enableColumnMenus = false;
 				scope.dynamicColumnLoaded = true;
 				scope.gridOptions.exporterMenuCsv = false;
-
+				scope.gridOptions.enableFullRowSelection = true;
 				scope.clearSelectedPeople = scope.clearCart;
 
 				scope.gridOptions.columnDefs = [
