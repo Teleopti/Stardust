@@ -3,17 +3,34 @@
 	angular.module('wfm.rta').service('RtaGridService', ['Toggle',
 		function(toggleService) {
 			this.makeAllGrid = function() {
+				var sort = {
+					direction: 'asc'
+				};
+				var sortingAlgorithm = function(a, b) {
+					if ((a === null||a === undefined) && (b === null||b === undefined))
+							return 0;
+					if (a === null||a === undefined)
+							return -1;
+					if (b === null||b === undefined)
+							return 1;
+					if (a > b)
+						return 1;
+					if (a < b)
+							return -1;
+					return 0;
+				};
 				if (toggleService.Wfm_RTA_ProperAlarm_34975)
 					return makeGridOptions({
 						headerCellTemplate: 'js/rta/rta-agents-headercelltemplate-ProperAlarm_34975.html',
-						alarmDurationCellTemplate: '<div ng-if="row.entity.TimeInAlarm !== null" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>',
-						timeInAlarmField: 'TimeInAlarm'
+						alarmDurationCellTemplate: '<div ng-if="row.entity.TimeInAlarm" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>',
+						timeInAlarmField: 'TimeInAlarm',
+						sort: sort,
+						sortingAlgorithm: sortingAlgorithm
 					});
 				else
 					return makeGridOptions({
-						sortOnName: {
-							direction: 'asc'
-						}
+						sort: sort,
+						sortingAlgorithm: sortingAlgorithm
 					});
 			};
 
@@ -21,7 +38,7 @@
 				if (toggleService.Wfm_RTA_ProperAlarm_34975)
 					return makeGridOptions({
 						headerCellTemplate: '<div></div>',
-						alarmDurationCellTemplate: '<div ng-if="row.entity.TimeInAlarm !== null" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>',
+						alarmDurationCellTemplate: '<div ng-if="row.entity.TimeInAlarm" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>',
 						timeInAlarmField: 'TimeInAlarm'
 					});
 				else
@@ -94,7 +111,8 @@
 					cellTemplate: alarmDurationCellTemplate,
 					headerCellFilter: 'translate'
 				}];
-				columnDefs[0].sort = args.sortOnName || null;
+				columnDefs[0].sort = args.sort || null;
+				columnDefs[6].sortingAlgorithm = args.sortingAlgorithm || null;
 				return {
 					rowTemplate: rowTemplate,
 					columnDefs: columnDefs
