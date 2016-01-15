@@ -35,16 +35,14 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		[Test]
 		public void ShouldCreateShiftExchangeOfferBasedOnMyCurrentDayOff()
 		{
-			var currentShift = ScheduleDayFactory.Create (new DateOnly (2007, 1, 1));
-			var activity = ActivityFactory.CreateActivity ("Phone");
-			activity.SetId (new Guid ("CB3396E0-5B4D-47CD-9D93-ED4A10725A53"));
+			var currentShift = ScheduleDayFactory.Create (new DateOnly (2007, 1, 1), PersonFactory.CreatePerson());
 			currentShift.CreateAndAddDayOff (new DayOffTemplate());
 
 			var target = new ShiftExchangeOffer (currentShift, new ShiftExchangeCriteria(), ShiftExchangeOfferStatus.Pending);
 
 			target.MyShiftPeriod.HasValue.Should().Be.False();
 			target.Date.Should().Be.EqualTo (currentShift.DateOnlyAsPeriod.DateOnly);
-			target.Checksum.Should().Be.EqualTo (2669285386L);
+			target.Checksum.Should().Be.EqualTo (317L);
 		}
 
 		[Test]
