@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Hangfire;
+using Hangfire.Common;
+using Hangfire.Storage;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
@@ -9,10 +13,17 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 	public class HangfireEventClient : IHangfireEventClient
 	{
 		private readonly Lazy<IBackgroundJobClient> _jobClient;
+		private readonly Lazy<RecurringJobManager> _recurringJob;
+		private readonly Lazy<JobStorage> _storage;
 
-		public HangfireEventClient(Lazy<IBackgroundJobClient> jobClient)
+		public HangfireEventClient(
+			Lazy<IBackgroundJobClient> jobClient,
+			Lazy<RecurringJobManager> recurringJob,
+			Lazy<JobStorage> storage)
 		{
 			_jobClient = jobClient;
+			_recurringJob = recurringJob;
+			_storage = storage;
 		}
 
 		public void Enqueue(string displayName, string tenant, string eventType, string serializedEvent, string handlerType)
@@ -20,60 +31,24 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			_jobClient.Value.Enqueue<HangfireEventServer>(x => x.Process(displayName, tenant, eventType, serializedEvent, handlerType));
 		}
 
-		public void AddOrUpdate(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)
+		public void AddOrUpdateHourly(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)
 		{
-			throw new NotImplementedException();
-		}
-
-		public IEnumerable<string> GetRecurringJobIds()
-		{
-			throw new NotImplementedException();
+			Expression<Action<HangfireEventServer>> f = x => x.Process(displayName, tenant, eventType, serializedEvent, handlerType);
+			_recurringJob.Value.AddOrUpdate(id, Job.FromExpression(f), Cron.Hourly());
 		}
 
 		public void RemoveIfExists(string id)
 		{
-			throw new NotImplementedException();
+			_recurringJob.Value.RemoveIfExists(id);
+		}
+
+		public IEnumerable<string> GetRecurringJobIds()
+		{
+			return _storage.Value.GetConnection()
+				.GetRecurringJobs()
+				.Select(x => x.Id)
+				.ToArray();
 		}
 	}
-
-	//[CLSCompliant(false)]
-	//public class HangfireRecurringEventPublisher : IRecurringEventPublisher
-	//{
-	//	private readonly RecurringJobManager _recurringJob;
-	//	private readonly IJsonEventSerializer _serializer;
-	//	private readonly JobStorage _jobStorage;
-
-	//	public HangfireRecurringEventPublisher(
-	//		RecurringJobManager recurringJob, 
-	//		IJsonEventSerializer serializer,
-	//		JobStorage jobStorage)
-	//	{
-	//		_recurringJob = recurringJob;
-	//		_serializer = serializer;
-	//		_jobStorage = jobStorage;
-	//	}
-
-	//	public void PublishHourly(string id, string tenant, IEvent @event)
-	//	{
-	//		var eventType = @event.GetType();
-	//		var serialized = _serializer.SerializeEvent(@event);
-	//		var eventTypeName = eventType.FullName + ", " + eventType.Assembly.GetName().Name;
-
-	//		//Expression<Action<HangfireEventServer>> f = x => x.Process("displayName", tenant, eventTypeName, serialized, handlerType);
-
-	//		//_recurringJob.AddOrUpdate(id, Job.FromExpression(f), Cron.Hourly());
-	//	}
-
-	//	public void StopPublishing(string id)
-	//	{
-	//		_recurringJob.RemoveIfExists(id);
-	//	}
-
-	//	public IEnumerable<string> RecurringPublishingIds()
-	//	{
-	//		return _jobStorage.GetConnection().GetRecurringJobs().Select(j => j.Id).ToArray();
-	//	}
-
-	//}
-
+	
 }

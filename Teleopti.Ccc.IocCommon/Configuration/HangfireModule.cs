@@ -24,7 +24,19 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<HangfireEventProcessor>().As<IHangfireEventProcessor>().SingleInstance();
 
 			builder.RegisterType<HangfireEventClient>().As<IHangfireEventClient>().SingleInstance();
-			builder.RegisterType<BackgroundJobClient>().As<IBackgroundJobClient>().SingleInstance();
+
+			builder.Register(c => JobStorage.Current).SingleInstance();
+			builder.Register(c =>
+				new BackgroundJobClient(c.Resolve<JobStorage>()))
+				.As<IBackgroundJobClient>()
+				.SingleInstance();
+			builder.Register(c =>
+				new RecurringJobManager(
+					c.Resolve<JobStorage>(),
+					c.Resolve<IBackgroundJobClient>()
+					))
+				.As<RecurringJobManager>()
+				.SingleInstance();
 
 			if (_configuration.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
 				builder.RegisterType<HangfireClientStarter>().As<IHangfireClientStarter>().SingleInstance();

@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public bool HasRecurringJobs { get { return _recurringJobs.Any(); } }
 
-		public void AddOrUpdate(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)
+		public void AddOrUpdateHourly(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)
 		{
 			var job = _recurringJobs.SingleOrDefault(x => x.Id == id);
 			if (job == null)
