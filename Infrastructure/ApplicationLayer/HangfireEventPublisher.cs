@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_serializer = serializer;
 			_resolveEventHandlers = resolveEventHandlers;
 			_dataSource = dataSource;
-			_displayNames = config.ReadValue("HangfireDashboardDisplayNames", false);
+			_displayNames = config.ReadValue("HangfireDashboardDisplayNames", true);
 		}
 
 		public void Publish(params IEvent[] events)
