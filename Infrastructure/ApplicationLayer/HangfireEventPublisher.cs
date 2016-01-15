@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 			jobsFor(@event).ForEach(j =>
 			{
-				_client.AddOrUpdateHourly(j.DisplayName, j.Tenant + ":::" + Guid.NewGuid(), j.Tenant, j.EventTypeName, j.Event, j.HandlerTypeName);
+				_client.AddOrUpdateHourly(j.DisplayName, j.Tenant + ":::" + j.HandlerTypeName, j.Tenant, j.EventTypeName, j.Event, j.HandlerTypeName);
 			});
 		}
 

@@ -140,6 +140,16 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		}
 
 		[Test]
+		public void ShouldUpdateExistingJob()
+		{
+			Target.PublishHourly(new HangfireTestEvent());
+
+			Target.PublishHourly(new HangfireTestEvent());
+
+			JobClient.RecurringIds.Should().Have.Count.EqualTo(1);
+		}
+
+		[Test]
 		public void ShouldStopPublishingCurrentTenant()
 		{
 			var dataSource1 = new FakeDataSource { DataSourceName = RandomName.Make() };
