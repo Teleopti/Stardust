@@ -1570,7 +1570,7 @@
     <Content Include="WFM\js\outbound\outbound.filter.js" />
     <Content Include="WFM\js\resourceplanner\planningperiods.controller.js" />
     <Content Include="WFM\js\resourceplanner\planningperiods.html" />
-	<Content Include="WFM\js\resourceplanner\planningperiods-modal.html" />
+    <Content Include="WFM\js\resourceplanner\planningperiods-modal.html" />
     <Content Include="WFM\js\resourceplanner\planningperiods.service.js" />
     <Content Include="WFM\vendor\ng-mfb\mfb.directive.js" />
     <Content Include="WFM\js\seatManagement\seatmap.controller.js" />
@@ -1919,7 +1919,6 @@
     <Content Include="WFM\html\nav.html" />
     <Content Include="WFM\js\permissions\permissions.html" />
     <Content Include="WFM\index.html" />
-    <Content Include="WFM\js\ABmetrics.min.js" />
     <Content Include="WFM\js\app.js" />
     <Content Include="WFM\vendor\angular-growl.js" />
     <Content Include="WFM\vendor\fabricjs\fabric.js" />
