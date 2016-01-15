@@ -10,6 +10,7 @@ using System.Drawing;
 namespace Teleopti.Ccc.Win.Common.Controls.Cells
 {
     [Serializable]
+	[System.ComponentModel.DesignerCategory("Code")]
 	public class DateTimeCellModel : GridStaticCellModel
 	{
 		public DateTimeCellModel (GridModel grid)

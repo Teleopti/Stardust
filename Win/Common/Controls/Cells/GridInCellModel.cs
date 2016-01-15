@@ -8,7 +8,8 @@ using Syncfusion.Windows.Forms.Grid;
 namespace Teleopti.Ccc.Win.Common.Controls.Cells
 {
     [Serializable]
-    public class GridInCellModel : GridGenericControlCellModel
+	[System.ComponentModel.DesignerCategory("Code")]
+	public class GridInCellModel : GridGenericControlCellModel
     {
         protected GridInCellModel(SerializationInfo info, StreamingContext context)
             : base(info, context)
