@@ -64,6 +64,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 				var notLoadedSkills = 0;
 				var loadedSkills = 0;
 				var personsInIsland = 0;
+				foreach (var groupKey in island.GroupKeys)
+				{
+					personsInIsland += _skillGroupsCreatorResult.GetPersonsForKey(groupKey).Count();
+				}
 				foreach (var guidString in island.SkillGuidStrings)
 				{
 					Guid guid;
@@ -75,8 +79,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 						notLoadedSkills++;
 					else
 					{
-						loadedSkills++;
-						personsInIsland += _skillGroupsCreatorResult.GetPersonsForSkillKey(guidString).Count();
+						loadedSkills++;					
 					}
 				}
 				islandNumber++;
@@ -430,7 +433,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
 		private void toolStripButtonSuggestAction_Click(object sender, EventArgs e)
 		{
-			var results = new SkillGroupReducer().SuggestAction(_skillGroupsCreatorResult);
+			var results = new SkillGroupReducer().SuggestAction(_skillGroupsCreatorResult, _islandList);
 			var resultForm = new SkillGroupReducerSuggestions();
 			resultForm.LoadData(results,_skillGroupsCreatorResult,_loadedSkillList);
 			resultForm.Show(this);
@@ -438,7 +441,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
 		private void toolStripButton1_Click(object sender, EventArgs e)
 		{
-			var results = new SkillGroupReducer().SuggestAction(_skillGroupsCreatorResult);
+			var results = new SkillGroupReducer().SuggestAction(_skillGroupsCreatorResult, _islandList);
 			foreach (var skillGroupReducerResult in results)
 			{
 				foreach (var person in _skillGroupsCreatorResult.GetPersonsForKey(skillGroupReducerResult.RemoveFromGroupKey))

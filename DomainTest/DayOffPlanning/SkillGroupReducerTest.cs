@@ -42,8 +42,10 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 			var personList = new List<IPerson> { p1, p2, p3, p4 };
 			var vitualSkillGroupsCreator = new VirtualSkillGroupsCreator();
 			var skillGroups = vitualSkillGroupsCreator.GroupOnDate(DateOnly.MinValue, personList);
+			var skillGroupIslandsAnalyzer = new SkillGroupIslandsAnalyzer();
+			var islandList = skillGroupIslandsAnalyzer.FindIslands(skillGroups);
 
-			var result = _target.SuggestAction(skillGroups);
+			var result = _target.SuggestAction(skillGroups, islandList);
 
 			result[0].RemoveFromGroupKey.Should().Be.EqualTo(_s2.Id + "|" + _s3.Id);
 			result[0].SkillGuidStringToRemove.Should().Be.EqualTo(_s2.Id.ToString());
@@ -61,7 +63,10 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 			var vitualSkillGroupsCreator = new VirtualSkillGroupsCreator();
 			var skillGroups = vitualSkillGroupsCreator.GroupOnDate(DateOnly.MinValue, personList);
 
-			var result = _target.SuggestAction(skillGroups);
+			var skillGroupIslandsAnalyzer = new SkillGroupIslandsAnalyzer();
+			var islandList = skillGroupIslandsAnalyzer.FindIslands(skillGroups);
+
+			var result = _target.SuggestAction(skillGroups, islandList);
 
 			result.Count.Should().Be.EqualTo(0);
 		}
@@ -78,7 +83,10 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 			var vitualSkillGroupsCreator = new VirtualSkillGroupsCreator();
 			var skillGroups = vitualSkillGroupsCreator.GroupOnDate(DateOnly.MinValue, personList);
 
-			var result = _target.SuggestAction(skillGroups);
+			var skillGroupIslandsAnalyzer = new SkillGroupIslandsAnalyzer();
+			var islandList = skillGroupIslandsAnalyzer.FindIslands(skillGroups);
+
+			var result = _target.SuggestAction(skillGroups, islandList);
 
 			result.Count.Should().Be.EqualTo(0);
 		}
@@ -95,7 +103,10 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 			var vitualSkillGroupsCreator = new VirtualSkillGroupsCreator();
 			var skillGroups = vitualSkillGroupsCreator.GroupOnDate(DateOnly.MinValue, personList);
 
-			var result = _target.SuggestAction(skillGroups);
+			var skillGroupIslandsAnalyzer = new SkillGroupIslandsAnalyzer();
+			var islandList = skillGroupIslandsAnalyzer.FindIslands(skillGroups);
+
+			var result = _target.SuggestAction(skillGroups, islandList);
 
 			result.Count.Should().Be.EqualTo(2);
 			result[0].SkillGuidStringToRemove.Should().Be.EqualTo(_s2.Id.ToString());
