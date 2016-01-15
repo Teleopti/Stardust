@@ -206,11 +206,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Syncfusion.Tools.Base, Version=12.1451.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Syncfusion.Tools.Win.12.1.0.55\lib\4.0\Syncfusion.Tools.Base.dll</HintPath>
+      <HintPath>..\..\packages\Syncfusion.Tools.Win.12.1.0.56\lib\4.0\Syncfusion.Tools.Base.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Syncfusion.Tools.Win.12.1.0.55\lib\4.0\Syncfusion.Tools.Windows.dll</HintPath>
+      <HintPath>..\..\packages\Syncfusion.Tools.Win.12.1.0.56\lib\4.0\Syncfusion.Tools.Windows.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
