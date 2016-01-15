@@ -11,6 +11,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	{
 		private IList<IContract> _contracts = new List<IContract>();
 
+		public void Has(IContract root)
+		{
+			_contracts.Add(root);
+		}
+
 		public void Add(IContract root)
 		{
 			_contracts.Add(root);

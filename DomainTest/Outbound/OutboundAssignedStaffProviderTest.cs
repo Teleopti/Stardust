@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 		[SetUp]
 		public void Setup()
 		{
-			_personRepository = new FakePersonRepository();
+			_personRepository = new FakePersonRepositoryLegacy();
 			_target = new OutboundAssignedStaffProvider(_personRepository);
 			_campaignSkill = SkillFactory.CreateSkill("skill1");
 			_skill = SkillFactory.CreateSkill("skill2");

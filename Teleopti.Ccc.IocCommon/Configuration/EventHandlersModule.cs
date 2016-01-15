@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 							isSynchronizable
 						select i;
 				})
+				.AsSelf() // for testing
 				.SingleInstance()
 				.ApplyAspects()
 				;
@@ -92,6 +93,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<ISiteOutOfAdherenceReadModelPersister>()
 				.As<ISiteOutOfAdherenceReadModelReader>()
 				.SingleInstance();
+
 			builder.RegisterType<IntervalLengthFetcher>().As<IIntervalLengthFetcher>().SingleInstance();
 			builder.RegisterType<AnalyticsFactScheduleTimeHandler>().As<IAnalyticsFactScheduleTimeHandler>().SingleInstance();
 			builder.RegisterType<AnalyticsFactScheduleDateHandler>().As<IAnalyticsFactScheduleDateHandler>().SingleInstance();

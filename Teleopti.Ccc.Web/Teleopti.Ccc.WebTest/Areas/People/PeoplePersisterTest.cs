@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			};
 			person2.SetId(Guid.NewGuid());
 
-			var fakePersonRepository = new FakePersonRepository(person1, person2);
+			var fakePersonRepository = new FakePersonRepositoryLegacy(person1, person2);
 
 			target = new PeoplePersister(personInfoPersister, personInfoMapper, fakeApplicationRoleRepository,
 				fakePersonRepository, new FakeLoggedOnUser(), new UserValidator());

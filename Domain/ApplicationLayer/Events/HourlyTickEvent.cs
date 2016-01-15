@@ -1,6 +1,6 @@
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Analytics.Etl.Common.TickEvent
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
 	public class HourlyTickEvent : IEvent
 	{

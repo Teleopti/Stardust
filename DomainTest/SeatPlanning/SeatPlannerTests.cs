@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			var seatFrequencyCalculator = new SeatFrequencyCalculator (_seatBookingRepository);
 
-			var seatPlanner = new SeatPlanner(new FakePersonRepository(people.ToArray()), seatBookingRequestAssembler,
+			var seatPlanner = new SeatPlanner(new FakePersonRepositoryLegacy(people.ToArray()), seatBookingRequestAssembler,
 				new SeatPlanPersister(_seatBookingRepository, _seatPlanRepository), new FakeTeamRepository(teams), new FakeSeatMapRepository(seatMapLocations.ToArray()), seatFrequencyCalculator);
 
 			return seatPlanner;

@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			personTo.SetId(personIdTo);
 
 			_commonNameDescriptionSetting = new CommonNameDescriptionSetting();
-			_personRepository = new FakePersonRepository(personFrom, personTo);
+			_personRepository = new FakePersonRepositoryLegacy(personFrom, personTo);
 
 			var defaultScenario = new Scenario("Test Scenario")
 			{

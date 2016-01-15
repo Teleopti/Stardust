@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Analytics.Etl.Common.TickEvent;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;

@@ -18,7 +18,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 {
 	[IoCTest]
-	[TestFixture, System.Runtime.InteropServices.GuidAttribute("18265ED8-B35F-4F9B-8340-163B28D0CD28")]
+	[TestFixture]
 	public class GetAgentsTest : ISetup
 	{
 		public IGetAgents Target;

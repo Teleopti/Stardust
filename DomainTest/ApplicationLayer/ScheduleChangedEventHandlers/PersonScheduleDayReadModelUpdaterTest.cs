@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		public void ShouldUpdateDayOffData()
 		{
 			var repository = new FakePersonScheduleDayReadModelPersister();
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var target = new PersonScheduleDayReadModelUpdater(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
 
 			target.Handle(new ProjectionChangedEvent
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		public void ShouldNotUpdateDayOffIfNoDayOff()
 		{
 			var repository = new FakePersonScheduleDayReadModelPersister();
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var target = new PersonScheduleDayReadModelUpdater(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
 
 			target.Handle(new ProjectionChangedEvent
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		public void ShouldUpdateStartAndEndFromDayOff()
 		{
 			var repository = new FakePersonScheduleDayReadModelPersister();
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var target = new PersonScheduleDayReadModelUpdater(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
 
 			target.Handle(new ProjectionChangedEvent
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		public void ShouldUpdateFullDayAbsence()
 		{
 			var repository = new FakePersonScheduleDayReadModelPersister();
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var target = new PersonScheduleDayReadModelUpdater(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
 
 			target.Handle(new ProjectionChangedEvent
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		public void ShouldUpdateIsDayOff()
 		{
 			var repository = new FakePersonScheduleDayReadModelPersister();
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var target = new PersonScheduleDayReadModelUpdater(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
 
 			target.Handle(new ProjectionChangedEvent
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		public void ShouldUpdateIsDayOffToFalseIfNoDayOff()
 		{
 			var repository = new FakePersonScheduleDayReadModelPersister();
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var target = new PersonScheduleDayReadModelUpdater(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
 
 			target.Handle(new ProjectionChangedEvent

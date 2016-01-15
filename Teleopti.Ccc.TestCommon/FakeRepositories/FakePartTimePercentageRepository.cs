@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -8,6 +9,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakePartTimePercentageRepository : IPartTimePercentageRepository
 	{
+		public void Has(PartTimePercentage partTimePercentage)
+		{
+		}
+
 		public void Add(IPartTimePercentage root)
 		{
 			throw new NotImplementedException();
@@ -43,5 +48,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			throw new NotImplementedException();
 		}
+
 	}
 }

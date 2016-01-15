@@ -187,6 +187,7 @@
     <Compile Include="ApplicationLayer\AddIntradayAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddSeatMapCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Commands\AbsenceCommandConverterTest.cs" />
+    <Compile Include="ApplicationLayer\PersonAssociationChangedEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StartTime\AlarmStartTimeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StartTime\IsAlarmTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StartTime\ProperAlarmStartTimeTest.cs" />

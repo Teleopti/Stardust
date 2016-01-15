@@ -215,6 +215,7 @@
     <Compile Include="FakeRepositories\FakePersonAbsenceAccountRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonAbsenceRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonAvailabilityRepository.cs" />
+    <Compile Include="FakeRepositories\FakePersonRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonRotationRepository.cs" />
     <Compile Include="FakeRepositories\FakePlanningPeriodRepository.cs" />
     <Compile Include="FakeRepositories\FakePreferenceDayRepository.cs" />
@@ -314,7 +315,7 @@
     <Compile Include="FakeRepositories\FakeScheduleDataReadScheduleRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonAbsenceReadScheduleRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonAssignmentRepository.cs" />
-    <Compile Include="FakeRepositories\FakePersonRepository.cs" />
+    <Compile Include="FakeRepositories\FakePersonRepositoryLegacy.cs" />
     <Compile Include="FakeData\PersonAccountCollectionFactory.cs" />
     <Compile Include="FakeData\ScheduleDayFactory.cs" />
     <Compile Include="FakeLoggedOnUser.cs" />

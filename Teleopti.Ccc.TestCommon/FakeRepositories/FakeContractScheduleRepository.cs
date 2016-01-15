@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -9,6 +10,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakeContractScheduleRepository : IContractScheduleRepository
 	{
 		private IList<IContractSchedule> _contractSchedules = new List<IContractSchedule>();
+
+		public void Has(ContractSchedule contractSchedule)
+		{
+			_contractSchedules.Add(contractSchedule);
+		}
 
 		public void Add(IContractSchedule root)
 		{
@@ -55,5 +61,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return _contractSchedules;
 		}
+
 	}
 }

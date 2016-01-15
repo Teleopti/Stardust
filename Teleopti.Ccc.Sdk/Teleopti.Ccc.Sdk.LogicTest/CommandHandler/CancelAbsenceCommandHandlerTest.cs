@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             
 			var currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
 			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
-			var personRepository = new FakePersonRepository(_person);
+			var personRepository = new FakePersonRepositoryLegacy(_person);
 			var fakePersonAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 		    var businessRulesForPersonalAccountUpdate = new BusinessRulesForPersonalAccountUpdate(fakePersonAbsenceAccountRepository, new SchedulingResultStateHolder());
 			var scheduleTagAssembler = new ScheduleTagAssembler(new FakeScheduleTagRepository());
