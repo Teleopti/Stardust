@@ -46,8 +46,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 		[Then(@"I delete the first record under the seat booking details")]
 		public void ThenIDeleteTheFirstRecordUnderTheSeatBookingDetails()
 		{
-			Browser.Interactions.HoverOver("seatmap-occupancy-detail .wfm-list li");
-			Browser.Interactions.Click("seatmap-occupancy-detail .wfm-leave-behind span");
+			Browser.Interactions.HoverOver(".seatmap-occupancy-detail .seat-booking-list .wfm-list li");
+			Browser.Interactions.Click(".seatmap-occupancy-detail .wfm-leave-behind span");
 		}
 
 		[When(@"I click add agents to seat button")]

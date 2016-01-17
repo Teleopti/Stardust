@@ -77,7 +77,6 @@ Scenario: be able to view booking detail of selected seat
 	And I press seat map booking view button
 	Then I am able to view booking detail of selected seat
 
-@ignore
 Scenario: be able to delete seat booking for the first seat
 	Given there is a seat booking for me
 		| Field         | Value            |
