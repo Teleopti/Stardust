@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			system.AddService<TestHandler>();
 			system.AddService<TestMultiHandler1>();
 			system.AddService<TestMultiHandler2>();
+			system.AddService<TestLongNameHandlerVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLong>();
 		}
 
 		[Test]
@@ -154,11 +155,11 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			var maxLength = 100 - "recurring-job:".Length;
 
-			Target.PublishHourly(new HangfireTestEvent());
+			Target.PublishHourly(new LongNameHandlerTestEvent());
 
 			JobClient.RecurringIds.Single().Length.Should().Be.LessThanOrEqualTo(maxLength);
 		}
-
+		
 		[Test]
 		public void ShouldStopPublishingCurrentTenant()
 		{
@@ -212,6 +213,19 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			IHandleEvent<MultiHandlerTestEvent>
 		{
 			public void Handle(MultiHandlerTestEvent @event)
+			{
+			}
+		}
+
+		public class LongNameHandlerTestEvent : IEvent
+		{
+		}
+
+		public class TestLongNameHandlerVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLong :
+			IRunOnHangfire,
+			IHandleEvent<LongNameHandlerTestEvent>
+		{
+			public void Handle(LongNameHandlerTestEvent @event)
 			{
 			}
 		}

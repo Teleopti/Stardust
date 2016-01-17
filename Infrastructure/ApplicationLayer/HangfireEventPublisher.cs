@@ -48,9 +48,21 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 			jobsFor(@event).ForEach(j =>
 			{
-				var id = j.Tenant + ":::" + j.HandlerName;
+				var id = idForJob(j);
 				_client.AddOrUpdateHourly(j.DisplayName, id, j.Tenant, j.EventTypeName, j.Event, j.HandlerTypeName);
 			});
+		}
+
+		private static string idForJob(jobInfo j)
+		{
+			var maxLength = 100 - "recurring-job:".Length;
+			var hash = j.HandlerName.GetHashCode().ToString();
+			var id = j.Tenant + ":::" + j.HandlerName + "." + hash;
+			if (id.Length <= maxLength) return id;
+
+			id = j.Tenant + ":::" + j.HandlerName;
+			id = id.Substring(0, maxLength - hash.Length - 1) + "." + hash;
+			return id;
 		}
 
 		private class jobInfo
