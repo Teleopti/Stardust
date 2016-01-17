@@ -2,6 +2,7 @@ using System;
 using Autofac;
 using log4net;
 using log4net.Config;
+using Teleopti.Ccc.Infrastructure.Hangfire;
 
 namespace Teleopti.Analytics.Etl.Common.Service
 {
@@ -23,6 +24,8 @@ namespace Teleopti.Analytics.Etl.Common.Service
 				var builder = new ContainerBuilder();
 				builder.RegisterModule(new EtlAppModule());
 				_container = builder.Build();
+
+				_container.Resolve<IHangfireClientStarter>().Start();
 
 				var service = _container.Resolve<EtlService>();
 				service.Start(serviceStartTime, stopService);

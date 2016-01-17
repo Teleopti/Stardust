@@ -41,6 +41,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			}
 			catch (Exception ex)
 			{
+				Console.WriteLine(ex);
 				log.Error("Exception occurred invoking HourlyTickEventPublisher", ex);
 			}
 
@@ -50,6 +51,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			}
 			catch (Exception ex)
 			{
+				Console.WriteLine(ex);
 				log.Error("Exception occurred invoking EtlJobStarter", ex);
 			}
 

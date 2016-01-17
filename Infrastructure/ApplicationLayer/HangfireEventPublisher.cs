@@ -48,7 +48,8 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 			jobsFor(@event).ForEach(j =>
 			{
-				_client.AddOrUpdateHourly(j.DisplayName, j.Tenant + ":::" + j.HandlerTypeName, j.Tenant, j.EventTypeName, j.Event, j.HandlerTypeName);
+				var id = j.Tenant + ":::" + j.HandlerName;
+				_client.AddOrUpdateHourly(j.DisplayName, id, j.Tenant, j.EventTypeName, j.Event, j.HandlerTypeName);
 			});
 		}
 
@@ -59,6 +60,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			public string EventTypeName;
 			public string Event;
 			public string HandlerTypeName;
+			public string HandlerName { get; set; }
 		}
 
 		private IEnumerable<jobInfo> jobsFor(IEvent @event)
@@ -73,6 +75,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			{
 				var handlerType = ProxyUtil.GetUnproxiedType(handler);
 				var handlerTypeName = handlerType.FullName + ", " + handlerType.Assembly.GetName().Name;
+				var handlerName = handlerType.Name;
 				string displayName = null;
 				if (_displayNames)
 					displayName = eventType.Name + " to " + handlerType.Name;
@@ -82,7 +85,8 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 					Tenant = tenant,
 					EventTypeName = eventTypeName,
 					Event = serialized,
-					HandlerTypeName = handlerTypeName
+					HandlerTypeName = handlerTypeName,
+					HandlerName = handlerName
 				};
 			}
 		}

@@ -150,6 +150,16 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		}
 
 		[Test]
+		public void ShouldPassIdNoLongerThanMaxLength()
+		{
+			var maxLength = 100 - "recurring-job:".Length;
+
+			Target.PublishHourly(new HangfireTestEvent());
+
+			JobClient.RecurringIds.Single().Length.Should().Be.LessThanOrEqualTo(maxLength);
+		}
+
+		[Test]
 		public void ShouldStopPublishingCurrentTenant()
 		{
 			var dataSource1 = new FakeDataSource { DataSourceName = RandomName.Make() };

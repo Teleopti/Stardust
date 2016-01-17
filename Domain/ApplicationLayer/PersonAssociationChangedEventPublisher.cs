@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -9,7 +10,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	[UseOnToggle(Toggles.RTA_TerminatedPersons_36042)]
-	public class PersonAssociationChangedEventPublisher : IHandleEvent<HourlyTickEvent>
+	public class PersonAssociationChangedEventPublisher : 
+		IHandleEvent<HourlyTickEvent>,
+		IRunOnHangfire
 	{
 		private readonly IPersonRepository _persons;
 		private readonly IEventPublisher _eventPublisher;
@@ -25,7 +28,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_now = now;
 		}
 
-		public void Handle(HourlyTickEvent @event)
+		[UnitOfWork]
+		public virtual void Handle(HourlyTickEvent @event)
 		{
 			_persons.LoadAll()
 				.Where(p => p.TerminalDate.HasValue)
