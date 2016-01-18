@@ -48,25 +48,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			var possibleTradedPersonList = _possibleShiftTradePersonsProvider.RetrievePersons(inputData).Persons.ToList();
 
 			var possibleTradeSchedules = getScheduleForPersons(inputData.ShiftTradeDate, possibleTradedPersonList);
-			
+
 			var possiblePersonSchedules = possibleTradedPersonList.Select(
-				p => new Tuple<IPerson, IScheduleDay>(p, possibleTradeSchedules.SingleOrDefault(s => s.Person.Id == p.Id)));
+				p => new Tuple<IPerson, IScheduleDay>(p, possibleTradeSchedules.SingleOrDefault(s => s.Person.Id == p.Id)))
+				.Where(ps => !_projectionProvider.IsFullDayAbsence(ps.Item2));
 
-			
-			ret.PossibleTradeSchedules = possiblePersonSchedules
+			var allSortedPossibleSchedules = possiblePersonSchedules
 				.OrderBy(pair => TeamScheduleSortingUtil.GetSortedValue(pair.Item2, false, true))
-				.Select( pair =>
-			{
-				var person = pair.Item1;
-				var schedule = pair.Item2;				
-				return
-					new ShiftTradeAddPersonScheduleViewModel(_projectionProvider.MakeScheduleReadModel(person, schedule,
-						_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential)));
-			}).Where(vm => !vm.IsFullDayAbsence);
+				.Select(pair =>
+				{
+					var person = pair.Item1;
+					var schedule = pair.Item2;
+					return
+						new ShiftTradeAddPersonScheduleViewModel(_projectionProvider.MakeScheduleReadModel(person, schedule,
+							_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential)));
+				});
+			ret.PageCount = (int)Math.Ceiling((double)allSortedPossibleSchedules.Count()/inputData.Paging.Take);
+			ret.PossibleTradeSchedules = allSortedPossibleSchedules.Skip(inputData.Paging.Skip).Take(inputData.Paging.Take);
 		
-
-
-
 			return ret;
 		}
 

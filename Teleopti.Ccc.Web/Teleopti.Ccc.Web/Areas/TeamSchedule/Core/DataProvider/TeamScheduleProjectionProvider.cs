@@ -40,12 +40,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var overtimeActivities = personAssignment != null
 				? personAssignment.OvertimeActivities().ToArray()
 				: null;
-
+			scheduleVm.IsFullDayAbsence = IsFullDayAbsence(scheduleDay);
 			switch (significantPart)
 			{
-				case SchedulePartView.FullDayAbsence:
-					scheduleVm.IsFullDayAbsence = true;
-					break;
 				case SchedulePartView.DayOff:
 				case SchedulePartView.ContractDayOff:
 					var dayOff = personAssignment != null ? personAssignment.DayOff() : null;
@@ -58,8 +55,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 						Start = TimeZoneInfo.ConvertTimeFromUtc(dayOffStart, userTimeZone).ToFixedDateTimeFormat(),
 						Minutes = (int) dayOffEnd.Subtract(dayOffStart).TotalMinutes
 					};
-					if (projection.HasLayers)
-						scheduleVm.IsFullDayAbsence = true;
 					break;
 			}
 
@@ -116,6 +111,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var userTimeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var projection = _projectionProvider.Projection(scheduleDay);
 			var significantPart = scheduleDay.SignificantPart();
+			ret.IsFullDayAbsence = IsFullDayAbsence(scheduleDay);
 
 			switch (significantPart)
 			{
@@ -124,11 +120,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					ret.IsDayOff = true;
 					var dayOff = scheduleDay.PersonAssignment() != null ? scheduleDay.PersonAssignment().DayOff() : null;
 					ret.DayOffName = dayOff != null ? dayOff.Description.Name : "";
-					if (projection.HasLayers)
-						ret.IsFullDayAbsence = true;
-					break;
-				case SchedulePartView.FullDayAbsence:
-					ret.IsFullDayAbsence = true;
 					break;
 			}
 
@@ -180,11 +171,31 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			ret.Total = layers.Count;
 			return ret;
 		}
+
+		public bool IsFullDayAbsence(IScheduleDay scheduleDay)
+		{
+			if (scheduleDay == null)
+			{
+				return false;
+			}
+			var projection = _projectionProvider.Projection(scheduleDay);
+			var significantPart = scheduleDay.SignificantPart();
+			switch (significantPart)
+			{
+				case SchedulePartView.ContractDayOff:
+				case SchedulePartView.DayOff:
+					return projection.HasLayers;
+				case SchedulePartView.FullDayAbsence:
+					return true;
+			}
+			return false;
+		}
 	}
 
 	public interface ITeamScheduleProjectionProvider
 	{
 		GroupScheduleShiftViewModel Projection(IScheduleDay scheduleDay, bool canViewConfidential);
 		AgentInTeamScheduleViewModel MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay, bool isPermittedToViewConfidential);
+		bool IsFullDayAbsence(IScheduleDay scheduleDay);
 	}
 }
