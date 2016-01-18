@@ -45,7 +45,7 @@
 										<span ng-if="role.editing===false;" class="list-item-container" ng-class="{'text-truncation': role.editing===false}">{{role.DescriptionText}}</span>
 										<span ng-if="role.editing===true;" ng-blur="cancelEdit(role)">
 											<form ng-submit="submitRole(role, tempName)" name="editRoleForm" required>
-												<input type="text" class="inline-role-name" ng-blur="cancelEdit(role)" ng-model="tempName" placeholder="{{'Name' | translate}}"  />
+												<input type="text" ng-blur="cancelEdit(role)" ng-model="tempName" placeholder="{{'Name' | translate}}"  />
 											</form>
 										</span>
 										<span ng-cloak ng-show="role.Id === selectedRole" ng-if="!role.editing" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>

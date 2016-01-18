@@ -1,15 +1,7 @@
-﻿.tab-group .label{
-	line-height: initial;
-	text-transform: capitalize;
-}
-
-.permissions-tree {
+﻿.permissions-tree {
 	max-height: 617px!important;
 	li {
 		border: none;
-	}
-	.angular-ui-tree-handle{
-		border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 	}
 	.toggle-handle{
 		width: auto;
@@ -20,43 +12,17 @@
 	}
 }
 
-.apply-list > li > span{
-  float:left!important;
-}
-
-.apply-list li:hover{
-  border-left:transparent!important;
-  background-color: $gray-100!important;
-}
-
-.apply-list-text{
-  padding-left: 30px;
-}
-
 #tree-root > li > div > div > div > div > ul > li > div{
 	padding-left:50px;
 }
 
-.permissions-tree-switch{
-	text-align: right;
-}
-
-.wfm-switch label{
+.all-functions label{
 	padding-right: 58px;
-}
-
-.padding-reset{
-	padding:0!important;
 }
 
 .dataHeader{
 	margin-top:15px;
 	border: none!important;
-}
-
-
-.inline-role-name{
-	width:100%;
 }
 
 .role-list-height{
@@ -65,14 +31,6 @@
 
 .permissions-radio {
 	display: inline;
-}
-
-.permissions-list {
-	table-layout:auto;
-}
-
-p {
-	margin-bottom: 5px;
 }
 
 .text-truncation {
@@ -100,9 +58,6 @@ p {
 	pointer-events:none;
 }
 
-.wfm-radio input[type=radio]:checked ~ .wfm-radio-toggle {
-	background-color: $blue-300;
-}
 .permission-filter-label{
 	margin:0!important;
 }
@@ -128,9 +83,6 @@ p {
 .clear-scroll{
 	overflow-x:hidden;
 }
-.permission-radio-buttons .wfm-radio {
-	width: auto;
-}
 
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
 	.permission-radio-buttons > .wfm-radio label .wfm-radio-label {
@@ -138,14 +90,14 @@ p {
 	    overflow: hidden;
 	    text-overflow: ellipsis;
 	}
-
-	.md-select-label {
-		width: 25%;
-	}
 }
 
-@media only screen and (max-width: 841px) {
+@media only screen and (max-width: 1100px) {
 	.permission-radio-buttons {
 		display: inline;
+	}
+
+	.all-functions{
+		text-align: left!important;
 	}
 }

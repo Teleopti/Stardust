@@ -18,6 +18,10 @@ html, body{
 	text-align:right;
 }
 
+.padding-reset{
+	padding:0!important;
+}
+
 /*override bootstrap*/
 .col-md-4, .col-md-8, .col-md-12 { /* please bootstrap, don't make any assumption about padding' */
 	padding: 0;
