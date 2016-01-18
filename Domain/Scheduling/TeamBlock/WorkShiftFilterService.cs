@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var ruleSetBag = new RuleSetBag();
 			foreach (var workShiftRuleSet in filteredRuleSetList)
 			{
-				ruleSetBag.AddRuleSet(workShiftRuleSet);
+				ruleSetBag.AddRuleSet(workShiftRuleSet.NoneEntityClone());
 			}
 
 			var shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly,
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var ruleSetBag = new RuleSetBag();
 			foreach (var workShiftRuleSet in filteredRuleSetList)
 			{
-				ruleSetBag.AddRuleSet(workShiftRuleSet);
+				ruleSetBag.AddRuleSet(workShiftRuleSet.NoneEntityClone());
 			}
 
 			var shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly,
