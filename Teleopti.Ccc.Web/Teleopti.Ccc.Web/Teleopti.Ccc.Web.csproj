@@ -1254,6 +1254,7 @@
     <Content Include="WFM\js\global\wfm.i18n.service.spec.js" />
     <Content Include="WFM\js\global\wfmrightpanel\wfmrightpanel.directive.js" />
     <Content Include="WFM\js\global\wfmrightpanel\wfmrightpanel.html" />
+    <Content Include="WFM\js\people\people.searchInputDirective.controller.spec.js" />
     <Content Include="WFM\js\requests\html\requests-commands-pane.tpl.html" />
     <Content Include="WFM\js\requests\requests-commands-pane.directive.js" />
     <Content Include="WFM\js\requests\request-command-params-holder.service.js" />
