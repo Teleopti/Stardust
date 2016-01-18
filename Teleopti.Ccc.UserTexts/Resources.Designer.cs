@@ -5381,6 +5381,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear campaign.
+        /// </summary>
+        public static string ClearCampaign {
+            get {
+                return ResourceManager.GetString("ClearCampaign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear chart selection.
         /// </summary>
         public static string ClearForecastChart {
@@ -18891,6 +18900,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Overstaffing {
             get {
                 return ResourceManager.GetString("Overstaffing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Overstaffing:.
+        /// </summary>
+        public static string OverstaffingColon {
+            get {
+                return ResourceManager.GetString("OverstaffingColon", resourceCulture);
             }
         }
         

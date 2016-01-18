@@ -236,6 +236,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			Browser.Interactions.Click(".forecast-clear-override-button");
 		}
 
+		[When(@"I clear campaign values")]
+		public void WhenIClearCampaignValues()
+		{
+			Browser.Interactions.Click(".forecast-clear-campaign-button");
+		}
+
+
 		[When(@"I enter '(.*)' calls per day")]
 		public void WhenIEnterCallsPerDay(string calls)
 		{
@@ -263,7 +270,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I increase the calls by (.*) percent")]
 		public void WhenIIncreaseTheCallsByPercent(string percent)
 		{
-			Browser.Interactions.FillWith(".forecast-campaign-input", percent);
+			Browser.Interactions.FillWith("#campaignPercentageInputId", percent);
 			var callCount = Browser.Interactions.GetText(".forecast-campaign-calls-count");
 			Browser.Interactions.AssertNoContains(".forecast-campaign-calls-count", ".forecast-campaign-totalcalls-count", callCount);
 		}
@@ -287,9 +294,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			WhenForecastHasSucceeded();
 			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtc')[0]);" +
-				"var v2= (parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vc')[0])*2);" +
-				"return (v1==v2) + '  ' + v1+'  '+ v2;"
+				"var vtc= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtc')[0]);" +
+				"var vc= (parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vc')[0])*2);" +
+				"return (vtc==vc) + '  ' + vtc+'  '+ vc;"
 				, "true");
 		}
 
@@ -300,8 +307,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			WhenForecastHasSucceeded();
 			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtc')[0]);" +
-				"return Math.round(v1);"
+				"var vtc= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtc')[0]);" +
+				"return Math.round(vtc);"
 				, calls);
 		}
 
@@ -312,8 +319,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			WhenForecastHasSucceeded();
 			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vttt')[0]);" +
-				"return Math.round(v1);"
+				"var vttt= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vttt')[0]);" +
+				"return Math.round(vttt);"
 				, talkTime);
 		}
 
@@ -324,8 +331,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			WhenForecastHasSucceeded();
 			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtacw')[0]);" +
-				"return Math.round(v1);"
+				"var vtacw= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtacw')[0]);" +
+				"return Math.round(vtacw);"
 				, afterCallWork);
 		}
 
@@ -335,9 +342,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			WhenForecastHasSucceeded();
 			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
 			Browser.Interactions.AssertJavascriptResultContains(
-				 "var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vttt')[0]);" +
-				 "var v2= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtt')[0]);" +
-				"return (v1==v2) + '  ' + v1+'  '+ v2+'  ';"
+				"var vttt= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vttt')[0]);" +
+				"var vtt= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtt')[0]);" +
+				"return (vttt==vtt) + '  ' + vttt+'  '+ vtt+'  ';"
 				, "true");
 		}
 
@@ -347,9 +354,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			WhenForecastHasSucceeded();
 			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
 			Browser.Interactions.AssertJavascriptResultContains(
-				 "var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtacw')[0]);" +
-				 "var v2= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vacw')[0]);" +
-				"return (v1==v2) + '  ' + v1+'  '+ v2+'  ';"
+				"var vtacw= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtacw')[0]);" +
+				"var vacw= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vacw')[0]);" +
+				"return (vtacw==vacw) + '  ' + vtacw+'  '+ vacw+'  ';"
 				, "true");
 		}
 
@@ -359,29 +366,31 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			WhenForecastHasSucceeded();
 			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtc')[0]);" +
-				"var v2= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vc')[0]);" +
-				"var v3= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vttt')[0]);" +
-				"var v4= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtt')[0]);" +
-				"var v5= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtacw')[0]);" +
-				"var v6= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vacw')[0]);" +
-				"return (v1!=v2 && v3!=v4 && v5!=v6) + '  ' + v1+'  '+ v2+'  '+ v3+'  '+ v4+'  '+ v5+'  '+ v6;"
+				"var vtc= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtc')[0]);" +
+				"var vc= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vc')[0]);" +
+				"var vttt= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vttt')[0]);" +
+				"var vtt= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtt')[0]);" +
+				"var vtacw= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtacw')[0]);" +
+				"var vacw= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vacw')[0]);" +
+				"var voverride= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('voverride')[0]);" +
+				"return (vtc!=vc && vttt!=vtt && vtacw!=vacw && voverride==1) + '  ' + vtc+'  '+ vc+'  '+ vttt+'  '+ vtt+'  '+ vtacw+'  '+ vacw+'  '+ voverride;"
 				, "true");
 		}
 
+		[Then(@"I should see that there are no campaign values for the first day")]
 		[Then(@"I should see that there are no override values for the first day")]
 		public void ThenIShouldSeeThatThereAreNoOverrideValuesForTheFirstDay()
 		{
 			WhenForecastHasSucceeded();
 			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtc')[0]);" +
-				"var v2= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vc')[0]);" +
-				"var v3= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vttt')[0]);" +
-				"var v4= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtt')[0]);" +
-				"var v5= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtacw')[0]);" +
-				"var v6= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vacw')[0]);" +
-				"return (v1==v2 && v3==v4 && v5==v6) + '  ' + v1+'  '+ v2+'  '+ v3+'  '+ v4+'  '+ v5+'  '+ v6;"
+				"var vtc= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtc')[0]);" +
+				"var vc= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vc')[0]);" +
+				"var vttt= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vttt')[0]);" +
+				"var vtt= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtt')[0]);" +
+				"var vtacw= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtacw')[0]);" +
+				"var vacw= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vacw')[0]);" +
+				"return (vtc==vc && vttt==vtt && vtacw==vacw) + '  ' + vtc+'  '+ vc+'  '+ vttt+'  '+ vtt+'  '+ vtacw+'  '+ vacw;"
 				, "true");
 		}
 

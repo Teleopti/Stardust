@@ -14055,4 +14055,8 @@ Help us improve your experience by sending an error report</value>
   <data name="OverstaffingColon" xml:space="preserve">
     <value>Overstaffing:</value>
   </data>
+  <data name="ClearCampaign" xml:space="preserve">
+    <value>Clear campaign</value>
+    <comment>Clear campaign</comment>
+  </data>
 </root>

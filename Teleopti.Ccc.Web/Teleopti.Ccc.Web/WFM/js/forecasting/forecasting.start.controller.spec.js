@@ -57,7 +57,7 @@ describe('ForecastingStartCtrl', function() {
 				WorkloadId: data.WorkloadId
 			});
 		};
-	}
+	};
 
 	beforeEach(function() {
 		module('wfm.forecasting');

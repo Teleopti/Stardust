@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			result.WorkloadId.Should().Be.EqualTo(_workload.Id.Value);
 
 			dynamic firstDay = result.Days.First();
-			(Math.Round((double) firstDay.vcampaign, 2)).Should().Be.EqualTo(50d);
+			(Math.Round((double) firstDay.vcampaign, 2)).Should().Be.EqualTo(1d);
 		}
 
 		[Test]
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			result.WorkloadId.Should().Be.EqualTo(_workload.Id.Value);
 
 			dynamic firstDay = result.Days.First();
-			(Math.Round((double)firstDay.vcampaign, 2)).Should().Be.EqualTo(-50d);
+			(Math.Round((double)firstDay.vcampaign, 2)).Should().Be.EqualTo(1);
 		}
 
 		[Test]

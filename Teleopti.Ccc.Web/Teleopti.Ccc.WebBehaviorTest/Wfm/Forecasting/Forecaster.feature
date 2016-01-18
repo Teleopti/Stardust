@@ -77,7 +77,7 @@ Scenario: Save forecast to scenario
 	| Scenario | Scenario 1   |
 
 Scenario: Create new skill
-	Given I am viewing forecast page
+	Given I am viewing forecast page                                               
 	When I choose to add a new skill
 	And I input the new skill with
 	| Field               | Value                                                        |
@@ -171,3 +171,19 @@ Scenario: Remove override values for one day when campaign exists
 	Then I should see that the total calls for the first day has the double forecasted value 
 	And I should see that the talk time for the first day no longer is overridden
 	And I should see that the after call work for the first day no longer is overridden
+	
+Scenario: Remove campaign value for one day
+	Given I am viewing forecast page
+	And I select workload 'TheWorkload1'
+	And I use default forecast period and forecast for one workload
+	And Forecast has succeeded
+	When I select the first day in the forecast chart
+	And I select to modify the forecast
+	And I choose to add a campaign
+	And I increase the calls by 100 percent
+	And I apply the campaign
+	And I should see that the total calls for the first day has the double forecasted value 
+	And I select the first day in the forecast chart
+	And I select to modify the forecast
+	And I clear campaign values
+	Then I should see that there are no campaign values for the first day 

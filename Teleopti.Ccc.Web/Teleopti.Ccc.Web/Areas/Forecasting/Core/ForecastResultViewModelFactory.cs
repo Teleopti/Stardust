@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 				}
 				else if (Math.Abs(workloadDay.CampaignTasks.Value) > 0)
 				{
-					day.vcampaign = workloadDay.CampaignTasks.Value;
+					day.vcampaign = 1;
 				}
 
 				days.Add(day);
