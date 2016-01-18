@@ -1,4 +1,3 @@
-
 .forecast-period{
 	text-align:center;
 }
@@ -14,8 +13,8 @@
 
 .forecast-campaign-input{
 	height: 25px!important;
-    width: 54px;
-    margin-right: 20px;
+  width: 54px;
+  margin-right: 20px;
 }
 
 .campaign-position{
@@ -42,69 +41,12 @@
 }
 
 .workload-indicator{
-    position: absolute;
-    right: 10.2%;
-}
-
-.forecasting-chart-bar {
-	position:absolute;
-	right: 40px;
-}
-.forecasting-chart-bar:hover {
-	color: $white;
-}
-
-.forecasting-puzzle {
-	position:absolute;
-	right: 80px;
-}
-.forecasting-puzzle:hover {
-	color: $white;
-}
-
-.forecasting-view-day {
-	position:absolute;
-	right: 120px;
-}
-.forecasting-view-day:hover {
-	color: $white;
-}
-
-.forecasting-chart-bar-alert{
-	color:$red-600;
-}
-
-.forecasting-chart{
-	cursor: default;
-}
-
-.forecast-method{
-	height: 30px;
-}
-
-.queue-list {
-	padding-left: 0;
-	padding-right: 0;
-}
-
-.input-invalid-text{
-	color: red;
-	font-size: smaller;
-	opacity:0;
-	transition:0.2s opacity ease-in-out;
-}
-
-.skill-input-label{
-	margin-bottom: 0px!important;
-	color: #C1BEBE!important;
-}
-
-.skill-queues{
-	padding-top: 9px;
+  position: absolute;
+  right: 10.2%;
 }
 
 .wfm-form .skill-service-level-seconds label {
-    display: inline-block!important;
+  display: inline-block!important;
 }
 
 .wfm-dense .wfm-checkbox {
@@ -146,13 +88,18 @@
 	visibility:hidden;
 }
 
+.c3-lines-vcampaign,
+.c3-lines-vcombo,
+.c3-lines-voverride{
+ opacity: 0;
+}
+
 .c3-tooltip-name-vcombo > td.value,
 .c3-tooltip-name-voverride > td.value,
 .c3-tooltip-name-vcampaign > td.value{
 	color:transparent!important;
-		background:$gray-300;
-		border-left:0 solid transparent;
-
+	background:$gray-300;
+	border-left:0 solid transparent;
 }
 
 .c3-tooltip-name-vcombo > td.name,
@@ -162,27 +109,18 @@
 }
 
 .c3-circles-vcampaign > .c3-circle{
- stroke:tomato!important;
- fill:tomato!important;
-}
-
-.c3-lines-vcampaign{
- opacity: 0;
+ stroke:$red-700!important;
+ fill:$red-700!important;
 }
 
 .c3-circles-voverride > .c3-circle{
- stroke:purple!important;
- fill:purple!important;
-}
-
-.c3-lines-voverride{
- opacity: 0;
+ stroke:$purple-500!important;
+ fill:$purple-500!important;
 }
 
 .c3-circles-vcombo > .c3-circle{
- stroke:gray!important;
- fill:gray!important;
-
+ stroke:$gray-300!important;
+ fill:$gray-300!important;
 }
 
 .c3-circles-vcombo > .c3-circle,
@@ -192,12 +130,4 @@
 	transition: .1s all ease-in-out;
 	transform: translate(0px,15px);
   stroke-width: 3!important;
-}
-
-.c3-lines-vcombo{
- opacity: 0;
-}
-
-.mini-spinner {
-     transform: scale(0.2)!important;
 }
