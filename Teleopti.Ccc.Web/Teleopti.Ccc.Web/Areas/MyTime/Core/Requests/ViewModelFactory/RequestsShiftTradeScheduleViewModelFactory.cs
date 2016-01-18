@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -22,8 +23,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		private ITeamScheduleProjectionProvider _projectionProvider;
 		private readonly IPermissionProvider _permissionProvider;
 		private IPossibleShiftTradePersonsProvider _possibleShiftTradePersonsProvider;
+		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 
-		public RequestsShiftTradeScheduleViewModelFactory(ILoggedOnUser loggedOnUser, IScheduleRepository scheduleRepository, ICurrentScenario currentScenario, ITeamScheduleProjectionProvider projectionProvider, IPermissionProvider permissionProvider, IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider)
+		public RequestsShiftTradeScheduleViewModelFactory(ILoggedOnUser loggedOnUser, IScheduleRepository scheduleRepository, ICurrentScenario currentScenario, ITeamScheduleProjectionProvider projectionProvider, IPermissionProvider permissionProvider, IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider, ICommonAgentNameProvider commonAgentNameProvider)
 		{
 			_loggedOnUser = loggedOnUser;
 			_scheduleRepository = scheduleRepository;
@@ -31,6 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			_projectionProvider = projectionProvider;
 			_permissionProvider = permissionProvider;
 			_possibleShiftTradePersonsProvider = possibleShiftTradePersonsProvider;
+			_commonAgentNameProvider = commonAgentNameProvider;
 		}
 
 		public ShiftTradeScheduleViewModel CreateViewModel(ShiftTradeScheduleViewModelData inputData)
@@ -50,23 +53,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 				p => new Tuple<IPerson, IScheduleDay>(p, possibleTradeSchedules.SingleOrDefault(s => s.Person.Id == p.Id)));
 
 			
-			ret.PossibleTradeSchedules = possiblePersonSchedules.Select( pair =>
+			ret.PossibleTradeSchedules = possiblePersonSchedules
+				.OrderBy(pair => TeamScheduleSortingUtil.GetSortedValue(pair.Item2, false, true))
+				.Select( pair =>
 			{
 				var person = pair.Item1;
-				var schedule = pair.Item2;
-				if (schedule == null)
-				{
-					return new ShiftTradeAddPersonScheduleViewModel
-					{
-						PersonId = person.Id.GetValueOrDefault(),
-						Name = person.Name.ToString()
-					};
-				}
+				var schedule = pair.Item2;				
 				return
-					new ShiftTradeAddPersonScheduleViewModel(_projectionProvider.MakeScheduleReadModel(schedule.Person, schedule,
+					new ShiftTradeAddPersonScheduleViewModel(_projectionProvider.MakeScheduleReadModel(person, schedule,
 						_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential)));
 			}).Where(vm => !vm.IsFullDayAbsence);
 		
+
+
 
 			return ret;
 		}
