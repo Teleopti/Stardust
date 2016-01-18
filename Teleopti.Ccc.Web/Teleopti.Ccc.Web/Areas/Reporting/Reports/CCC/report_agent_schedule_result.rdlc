@@ -2594,7 +2594,6 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0)</Value>
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
@@ -2663,7 +2662,6 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0)</Value>
             </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
-        <KeepTogether>true</KeepTogether>
         <DataSetName>DataSet1</DataSetName>
         <Top>5.54391cm</Top>
         <Left>0.25001cm</Left>
