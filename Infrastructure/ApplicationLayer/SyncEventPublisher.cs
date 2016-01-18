@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
 	public class SyncEventPublisher : ISyncEventPublisher, ICurrentEventPublisher
 	{
-		private readonly IResolveEventHandlers _resolver;
+		private readonly ResolveEventHandlers _resolver;
 
-		public SyncEventPublisher(IResolveEventHandlers resolver)
+		public SyncEventPublisher(ResolveEventHandlers resolver)
 		{
 			_resolver = resolver;
 		}
@@ -24,10 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 				foreach (var handler in handlers)
 				{
-					var method = handler
-						.GetType()
-						.GetMethods()
-						.Single(m => m.Name == "Handle" && m.GetParameters().Single().ParameterType == @event.GetType());
+					var method = _resolver.HandleMethodFor(handler.GetType(), @event);
 					try
 					{
 						method.Invoke(handler, new[] {@event});

@@ -1,20 +1,22 @@
-﻿using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	public class SyncPublishTo : IEventPublisher
 	{
+		private readonly ResolveEventHandlers _resolver;
 		private readonly object[] _handlers;
 
-		public SyncPublishTo(object handler)
+		public SyncPublishTo(ResolveEventHandlers resolver, object handler)
 		{
+			_resolver = resolver;
 			_handlers = new[] { handler };
 		}
 
-		public SyncPublishTo(object[] handlers)
+		public SyncPublishTo(ResolveEventHandlers resolver, object[] handlers)
 		{
+			_resolver = resolver;
 			_handlers = handlers;
 		}
 
@@ -24,10 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			{
 				foreach (var handler in _handlers)
 				{
-					var method = handler
-						.GetType()
-						.GetMethods()
-						.FirstOrDefault(m => m.Name == "Handle" && m.GetParameters().Single().ParameterType == @event.GetType());
+					var method = _resolver.HandleMethodFor(handler.GetType(), @event);
 					if (method == null)
 						continue;
 					try

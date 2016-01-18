@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			system.AddService<TestHandler>();
 			system.AddService<TestMultiHandler1>();
 			system.AddService<TestMultiHandler2>();
-			system.AddService<TestLongNameHandlerVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLong>();
+			system.AddService<TestLongNameHandlerVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongWithLongId>();
 		}
 
 		[Test]
@@ -159,6 +160,22 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 			JobClient.RecurringIds.Single().Length.Should().Be.LessThanOrEqualTo(maxLength);
 		}
+
+		[Test]
+		public void ShouldPassIdWithoutHandlerTypeName()
+		{
+			Target.PublishHourly(new HangfireTestEvent());
+
+			JobClient.RecurringIds.Single().Should().Not.Contain(typeof (TestHandler).Name);
+		}
+
+		[Test]
+		public void ShouldPassIdWithHandlerRecurringId()
+		{
+			Target.PublishHourly(new HangfireTestEvent());
+
+			JobClient.RecurringIds.Single().Should().Contain("numberone");
+		}
 		
 		[Test]
 		public void ShouldStopPublishingCurrentTenant()
@@ -190,6 +207,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			IRunOnHangfire,
 			IHandleEvent<HangfireTestEvent>
 		{
+			[RecurringId("numberone")]
 			public void Handle(HangfireTestEvent @event)
 			{
 			}
@@ -203,6 +221,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			IRunOnHangfire,
 			IHandleEvent<MultiHandlerTestEvent>
 		{
+			[RecurringId("2")]
 			public void Handle(MultiHandlerTestEvent @event)
 			{
 			}
@@ -212,6 +231,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			IRunOnHangfire,
 			IHandleEvent<MultiHandlerTestEvent>
 		{
+			[RecurringId("3")]
 			public void Handle(MultiHandlerTestEvent @event)
 			{
 			}
@@ -221,10 +241,11 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 		}
 
-		public class TestLongNameHandlerVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLong :
+		public class TestLongNameHandlerVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongWithLongId :
 			IRunOnHangfire,
 			IHandleEvent<LongNameHandlerTestEvent>
 		{
+			[RecurringId("TestLongNameHandlerVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongWithLongId.LongNameHandlerTestEvent")]
 			public void Handle(LongNameHandlerTestEvent @event)
 			{
 			}

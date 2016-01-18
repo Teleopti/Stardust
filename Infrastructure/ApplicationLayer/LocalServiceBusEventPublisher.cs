@@ -2,6 +2,7 @@ using System.Linq;
 using System.Reflection;
 using Autofac;
 using Teleopti.Ccc.Domain;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
 
@@ -9,9 +10,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
 	public class LocalServiceBusEventPublisher : ILocalServiceBusEventPublisher
 	{
-		private readonly IResolveEventHandlers _resolver;
+		private readonly ResolveEventHandlers _resolver;
 
-		public LocalServiceBusEventPublisher(IResolveEventHandlers resolver)
+		public LocalServiceBusEventPublisher(ResolveEventHandlers resolver)
 		{
 			_resolver = resolver;
 		}
@@ -25,10 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 				foreach (var handler in handlers)
 				{
-					var method = handler
-						.GetType()
-						.GetMethods()
-						.Single(m => m.Name == "Handle" && m.GetParameters().Single().ParameterType == @event.GetType());
+					var method = _resolver.HandleMethodFor(handler.GetType(), @event);
 					try
 					{
 						method.Invoke(handler, new[] { @event });

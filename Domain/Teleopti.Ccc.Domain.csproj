@@ -238,9 +238,12 @@
     <Compile Include="ApplicationLayer\Events\PersonAbsenceRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Commands\MoveActivityCommandHandler.cs" />
     <Compile Include="ApplicationLayer\IRecurringEventPublisher.cs" />
+    <Compile Include="ApplicationLayer\IResolve.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateFindPersonConsumer.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateGroupingReadModelConsumer.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChangedEventPublisher.cs" />
+    <Compile Include="ApplicationLayer\RecurringIdAttribute.cs" />
+    <Compile Include="ApplicationLayer\ResolveEventHandlers.cs" />
     <Compile Include="ApplicationLayer\Rta\Aspects\TenantDataSourceScope.cs" />
     <Compile Include="ApplicationLayer\Rta\Aspects\RtaDataSourceScopeAttribute.cs" />
     <Compile Include="ApplicationLayer\Rta\Aspects\IRtaDataSourceScope.cs" />

@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 			var percentagePersister = new FakeAdherencePercentageReadModelPersister();
 			var detailsUpdater = new AdherenceDetailsReadModelUpdater(detailsPersister, null, null);
 			var percentageUpdater = new AdherencePercentageReadModelUpdater(percentagePersister);
-			var publisher = new SyncPublishTo(new object[] {detailsUpdater, percentageUpdater});
+			var publisher = new SyncPublishTo(new ResolveEventHandlers(null),  new object[] {detailsUpdater, percentageUpdater});
 
 			system.UseTestDouble(detailsPersister).For<IAdherenceDetailsReadModelPersister, IAdherenceDetailsReadModelReader>();
 			system.UseTestDouble(percentagePersister).For<IAdherencePercentageReadModelPersister, IAdherencePercentageReadModelReader>();

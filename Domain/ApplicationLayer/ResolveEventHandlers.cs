@@ -1,12 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer;
+using System.Reflection;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
+namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
-	public class ResolveEventHandlers : IResolveEventHandlers
+	public class ResolveEventHandlers
 	{
 		private readonly IResolve _resolver;
 
@@ -21,5 +22,16 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var enumerableHandlerType = typeof(IEnumerable<>).MakeGenericType(handlerType);
 			return (_resolver.Resolve(enumerableHandlerType) as IEnumerable).Cast<object>();
 		}
+
+		public MethodInfo HandleMethodFor(Type handler, IEvent @event)
+		{
+			return handler
+				.GetMethods()
+				.FirstOrDefault(m =>
+					m.Name == "Handle" &&
+					m.GetParameters().Single().ParameterType == @event.GetType()
+				);
+		}
+
 	}
 }

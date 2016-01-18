@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		}
 
 		[UnitOfWork]
+		[RecurringId("PersonAssociationChangedEventPublisher:::HourlyTickEvent")]
 		public virtual void Handle(HourlyTickEvent @event)
 		{
 			_persons.LoadAll()

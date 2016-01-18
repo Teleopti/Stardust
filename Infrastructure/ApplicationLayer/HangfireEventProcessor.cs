@@ -12,13 +12,13 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	public class HangfireEventProcessor : IHangfireEventProcessor
 	{
 		private readonly IJsonEventDeserializer _deserializer;
-		private readonly IResolveEventHandlers _resolver;
+		private readonly ResolveEventHandlers _resolver;
 		private readonly IDistributedLockAcquirer _distributedLockAcquirer;
 		private readonly IDataSourceScope _dataSourceScope;
 
 		public HangfireEventProcessor(
 			IJsonEventDeserializer deserializer,
-			IResolveEventHandlers resolver,
+			ResolveEventHandlers resolver,
 			IDistributedLockAcquirer distributedLockAcquirer,
 			IDataSourceScope dataSourceScope)
 		{
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 			using (_dataSourceScope.OnThisThreadUse(tenant))
 			using (_distributedLockAcquirer.LockForTypeOf(publishTo))
-				new SyncPublishTo(publishTo).Publish(@event);
+				new SyncPublishTo(_resolver, publishTo).Publish(@event);
 		}
 	}
 }

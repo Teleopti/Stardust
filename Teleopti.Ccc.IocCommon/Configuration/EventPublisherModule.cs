@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ServiceBusEventPublisher>().As<IServiceBusEventPublisher>().SingleInstance();
 			builder.RegisterType<LocalServiceBusEventPublisher>().As<ILocalServiceBusEventPublisher>().SingleInstance();
 
-			builder.RegisterType<ResolveEventHandlers>().As<IResolveEventHandlers>().SingleInstance();
+			builder.RegisterType<ResolveEventHandlers>().SingleInstance();
 
 			if (_configuration.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
 			{

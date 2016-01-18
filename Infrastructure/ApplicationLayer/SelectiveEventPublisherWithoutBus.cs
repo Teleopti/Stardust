@@ -10,23 +10,23 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	{
 		private readonly IHangfireEventPublisher _hangfirePublisher;
 		private readonly ISyncEventPublisher _syncEventPublisher;
-		private readonly IResolveEventHandlers _resolveEventHandlers;
+		private readonly ResolveEventHandlers _resolver;
 
 		public SelectiveEventPublisherWithoutBus(
 			IHangfireEventPublisher hangfirePublisher, 
 			ISyncEventPublisher syncEventPublisher, 
-			IResolveEventHandlers resolveEventHandlers)
+			ResolveEventHandlers resolver)
 		{
 			_hangfirePublisher = hangfirePublisher;
 			_syncEventPublisher = syncEventPublisher;
-			_resolveEventHandlers = resolveEventHandlers;
+			_resolver = resolver;
 		}
 
 		public void Publish(params IEvent[] events)
 		{
 			foreach (var @event in events)
 			{
-				var allHandlers = _resolveEventHandlers.ResolveHandlersForEvent(@event).ToList();
+				var allHandlers = _resolver.ResolveHandlersForEvent(@event).ToList();
 
 				var hasHangfireHandlers = allHandlers.Any(x => x.GetType().IsAssignableTo<IRunOnHangfire>());
 				var hasBusHandlers = allHandlers.Any(x => !x.GetType().IsAssignableTo<IRunOnHangfire>());

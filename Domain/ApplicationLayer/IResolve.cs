@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
+namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	public interface IResolve
 	{

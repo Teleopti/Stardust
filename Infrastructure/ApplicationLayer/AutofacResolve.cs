@@ -1,5 +1,6 @@
 ﻿using System;
 using Autofac;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {

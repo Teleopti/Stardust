@@ -15,20 +15,20 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	{
 		private readonly IHangfireEventClient _client;
 		private readonly IJsonEventSerializer _serializer;
-		private readonly IResolveEventHandlers _resolveEventHandlers;
+		private readonly ResolveEventHandlers _resolver;
 		private readonly ICurrentDataSource _dataSource;
 		private readonly bool _displayNames;
 
 		public HangfireEventPublisher(
 			IHangfireEventClient client, 
 			IJsonEventSerializer serializer, 
-			IResolveEventHandlers resolveEventHandlers,
+			ResolveEventHandlers resolver,
 			IConfigReader config,
 			ICurrentDataSource dataSource)
 		{
 			_client = client;
 			_serializer = serializer;
-			_resolveEventHandlers = resolveEventHandlers;
+			_resolver = resolver;
 			_dataSource = dataSource;
 			_displayNames = config.ReadValue("HangfireDashboardDisplayNames", false);
 		}
@@ -48,20 +48,29 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 			jobsFor(@event).ForEach(j =>
 			{
-				var id = idForJob(j);
-				_client.AddOrUpdateHourly(j.DisplayName, id, j.Tenant, j.EventTypeName, j.Event, j.HandlerTypeName);
+				_client.AddOrUpdateHourly(j.DisplayName, idForJob(j, @event), j.Tenant, j.EventTypeName, j.Event, j.HandlerTypeName);
 			});
 		}
 
-		private static string idForJob(jobInfo j)
+		private string idForJob(jobInfo j, IEvent @event)
 		{
 			var maxLength = 100 - "recurring-job:".Length;
-			var hash = j.HandlerName.GetHashCode().ToString();
-			var id = j.Tenant + ":::" + j.HandlerName + "." + hash;
-			if (id.Length <= maxLength) return id;
 
-			id = j.Tenant + ":::" + j.HandlerName;
+			var handlerId = _resolver.HandleMethodFor(j.HandlerType, @event)
+				.GetCustomAttributes(typeof (RecurringIdAttribute), false)
+				.OfType<RecurringIdAttribute>()
+				.Single()
+				.Id;
+
+			var hash = j.HandlerTypeName.GetHashCode().ToString();
+
+			var id = j.Tenant + ":::" + handlerId + "." + hash;
+			if (id.Length <= maxLength)
+				return id;
+
+			id = j.Tenant + ":::" + handlerId;
 			id = id.Substring(0, maxLength - hash.Length - 1) + "." + hash;
+
 			return id;
 		}
 
@@ -71,8 +80,8 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			public string Tenant;
 			public string EventTypeName;
 			public string Event;
+			public Type HandlerType;
 			public string HandlerTypeName;
-			public string HandlerName { get; set; }
 		}
 
 		private IEnumerable<jobInfo> jobsFor(IEvent @event)
@@ -81,13 +90,12 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var eventType = @event.GetType();
 			var serialized = _serializer.SerializeEvent(@event);
 			var eventTypeName = eventType.FullName + ", " + eventType.Assembly.GetName().Name;
-			var handlers = _resolveEventHandlers.ResolveHandlersForEvent(@event).OfType<IRunOnHangfire>();
+			var handlers = _resolver.ResolveHandlersForEvent(@event).OfType<IRunOnHangfire>();
 
 			foreach (var handler in handlers)
 			{
 				var handlerType = ProxyUtil.GetUnproxiedType(handler);
 				var handlerTypeName = handlerType.FullName + ", " + handlerType.Assembly.GetName().Name;
-				var handlerName = handlerType.Name;
 				string displayName = null;
 				if (_displayNames)
 					displayName = eventType.Name + " to " + handlerType.Name;
@@ -97,8 +105,8 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 					Tenant = tenant,
 					EventTypeName = eventTypeName,
 					Event = serialized,
+					HandlerType = handlerType,
 					HandlerTypeName = handlerTypeName,
-					HandlerName = handlerName
 				};
 			}
 		}

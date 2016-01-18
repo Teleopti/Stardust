@@ -23,29 +23,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly INow _now;
 		private readonly RtaProcessor _processor;
-		private readonly IDatabaseLoader _databaseLoader;
 		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
 		private readonly IEventPublisherScope _eventPublisherScope;
 		private readonly IEnumerable<IInitializeble> _initializebles;
 		private readonly IDistributedLockAcquirer _distributedLockAcquirer;
+		private readonly ResolveEventHandlers _resolver;
 
 		public StateStreamSynchronizer(
 			INow now,
 			RtaProcessor processor,
-			IDatabaseLoader databaseLoader,
 			IAgentStateReadModelReader agentStateReadModelReader,
 			IEventPublisherScope eventPublisherScope,
 			IEnumerable<IInitializeble> initializebles,
-			IDistributedLockAcquirer distributedLockAcquirer
+			IDistributedLockAcquirer distributedLockAcquirer,
+			ResolveEventHandlers resolver
 			)
 		{
 			_now = now;
 			_processor = processor;
-			_databaseLoader = databaseLoader;
 			_agentStateReadModelReader = agentStateReadModelReader;
 			_eventPublisherScope = eventPublisherScope;
 			_initializebles = initializebles;
 			_distributedLockAcquirer = distributedLockAcquirer;
+			_resolver = resolver;
 		}
 		
 		public virtual void Initialize()
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private void processStatesTo(object handler, IEnumerable<AgentStateReadModel> states)
 		{	
 			using (_distributedLockAcquirer.LockForTypeOf(handler))
-			using (_eventPublisherScope.OnThisThreadPublishTo(new SyncPublishTo(handler)))
+			using (_eventPublisherScope.OnThisThreadPublishTo(new SyncPublishTo(_resolver, handler)))
 			{
 				states.ForEach(s =>
 				{

@@ -221,17 +221,14 @@
     <Compile Include="ApplicationLayer\IHangfireEventClient.cs" />
     <Compile Include="ApplicationLayer\IHangfireEventProcessor.cs" />
     <Compile Include="ApplicationLayer\IHangfireEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\IResolveEventHandlers.cs" />
     <Compile Include="ApplicationLayer\IServiceBusEventPublisher.cs" />
     <Compile Include="ApplicationLayer\ISyncEventPublisher.cs" />
     <Compile Include="ApplicationLayer\MessagePopulatingServiceBusSender.cs" />
     <Compile Include="ApplicationLayer\EventPopulatingPublisher.cs" />
     <Compile Include="ApplicationLayer\NoServiceBusSender.cs" />
-    <Compile Include="ApplicationLayer\ResolveEventHandlers.cs" />
     <Compile Include="ApplicationLayer\SelectiveEventPublisherWithoutBus.cs" />
     <Compile Include="ApplicationLayer\SyncEventPublisher.cs" />
     <Compile Include="ApplicationLayer\IMessagePopulatingServiceBusSender.cs" />
-    <Compile Include="ApplicationLayer\IResolve.cs" />
     <Compile Include="ApplicationLayer\IServiceBusSender.cs" />
     <Compile Include="ApplicationLayer\ServiceBusEventPublisher.cs" />
     <Compile Include="ApplicationLayer\SyncCommandDispatcher.cs" />
