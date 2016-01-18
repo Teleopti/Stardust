@@ -13,7 +13,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 {
-	[TestFixture]
+	[TestFixture, SetCulture("sv-SE")]
 	public class StudentAvailabilityDayFeedbackViewModelMappingTest
 	{
 		private IStudentAvailabilityFeedbackProvider studentAvailabilityFeedbackProvider;

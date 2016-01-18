@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
-	[TestFixture]
+	[TestFixture, SetCulture("sv-SE")]
 	public class DayOffsInPeriodCalculatorTest
 	{
 		private MockRepository _mocks;

@@ -11,12 +11,11 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
-using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 {
-	[TestFixture]
+	[TestFixture,SetCulture("sv-SE")]
 	public class PreferenceDayViewModelMappingTest
 	{
 		private IExtendedPreferencePredicate extendedPreferencePredicate;

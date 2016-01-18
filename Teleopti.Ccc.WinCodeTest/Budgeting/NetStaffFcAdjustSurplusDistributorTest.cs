@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Budgeting
 {
-	[TestFixture]
+	[TestFixture, SetCulture("sv-SE")]
 	public class NetStaffFcAdjustSurplusDistributorTest
 	{
 		private IBudgetGroupDayDetailModel _day0, _day1, _day2, _day3, _day4, _day5, _day6;

@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Budgeting
 {
-    [TestFixture]
+    [TestFixture,SetCulture("sv-SE")]
     public class BudgetCalculatorTest
     {
         private BudgetCalculator _target;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
             _scenario = ScenarioFactory.CreateScenarioAggregate();
             _budgetGroup = new BudgetGroup { Name = "Group" };
             _budgetGroup.TrySetDaysPerYear(365);
-            _budgetGroup.TimeZone = (TimeZoneInfo.GetSystemTimeZones()[3]); 
+            _budgetGroup.TimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo(); 
             _date = new DateOnly(2010, 02, 01);
 			_budgetDay1 = new BudgetDay(_budgetGroup, _scenario, _date) { AttritionRate = new Percent(0.1), StaffEmployed = 777, Recruitment = 0, Contractors = 22.8, DaysOffPerWeek = 2, ForecastedHours = 171, FulltimeEquivalentHours = 7.6, OvertimeHours = 2, StudentHours = 3};
 			_budgetDay2 = new BudgetDay(_budgetGroup, _scenario, _date.AddDays(1)) { AttritionRate = new Percent(0.1), Recruitment = 0, Contractors = 22.8, DaysOffPerWeek = 2, ForecastedHours = 168, FulltimeEquivalentHours = 7.6, OvertimeHours = 2, StudentHours = 3 };

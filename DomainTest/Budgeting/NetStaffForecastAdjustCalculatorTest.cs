@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Budgeting;
@@ -10,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Budgeting
 {
-    [TestFixture]
+    [TestFixture,SetCulture("sv-SE")]
     public class NetStaffForecastAdjustCalculatorTest
     {
         private NetStaffForecastAdjustCalculator _target;

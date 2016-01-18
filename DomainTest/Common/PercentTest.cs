@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Common
 {
-    [TestFixture]
+    [TestFixture,SetCulture("sv-SE")]
     public class PercentTest
     {
         private Percent target;

@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 	
 	
 	
-	[TestFixture]
+	[TestFixture,SetCulture("sv-SE")]
 	public class PreferenceDayFeedbackViewModelMappingTest
 	{
 		private IPreferenceFeedbackProvider preferenceFeedbackProvider;

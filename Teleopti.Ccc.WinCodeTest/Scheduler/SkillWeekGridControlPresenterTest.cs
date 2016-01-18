@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
-	[TestFixture]
+	[TestFixture, SetCulture("sv-SE")]
 	public class SkillWeekGridControlPresenterTest
 	{
 		private SkillWeekGridControlPresenter _presenter;
