@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 		{
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			var winAccount = new TokenIdentity { UserIdentifier = @"domain\user", OriginalToken = @"http://fake/domain#user" };
+			var winAccount = new TokenIdentity { UserIdentifier = @"domain\user", OriginalToken = @"http://fake/domain#user", IsPersistent = true};
 			var personInfo = new PersonInfo(tenant, Guid.NewGuid());
 			var person = new Person();
 
@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			result.Successful.Should().Be.True();
 			result.DataSource.Should().Be.SameInstanceAs(dataSource);
 			result.TenantPassword.Should().Be.EqualTo(personInfo.TenantPassword);
+			result.IsPersistent.Should().Be.True();
 		}
 
 		[Test]

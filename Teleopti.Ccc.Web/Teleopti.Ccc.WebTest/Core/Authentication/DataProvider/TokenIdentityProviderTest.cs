@@ -64,6 +64,22 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		}
 
 		[Test]
+		public void ShouldExtractIsPersistentFromClaimIdentity()
+		{
+			httpContext.User =
+				new ClaimsPrincipal(
+					new ClaimsIdentityCollection(new Collection<IClaimsIdentity>
+						{
+							new ClaimsIdentity(new[]
+							{
+								new Claim(ClaimTypes.NameIdentifier, "http://fakeschema.com/kunningm" + TokenIdentityProvider.ApplicationIdentifier),
+								new Claim(ClaimTypes.IsPersistent, "true")
+							})
+						}));
+			target.RetrieveToken().IsPersistent.Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldReturnNullIfNoNameIdentifier()
 		{
 			httpContext.User =

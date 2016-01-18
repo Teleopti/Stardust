@@ -2,9 +2,11 @@
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
+using System.Security.Claims;
 using System.Web.Mvc;
 using DotNetOpenAuth.Messaging;
 using DotNetOpenAuth.OpenId;
+using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
 using DotNetOpenAuth.OpenId.Provider;
 using log4net;
 using Teleopti.Ccc.Web.WindowsIdentityProvider.Core;
@@ -111,7 +113,9 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 				var identifier = new Uri(currentHttp.Request.Url, userIdentifier);
 				idrequest.LocalIdentifier = identifier;
 				idrequest.IsAuthenticated = true;
-				
+				var fetchResponse = new FetchResponse();
+				fetchResponse.Attributes.Add(new AttributeValues(ClaimTypes.IsPersistent, "true"));
+				idrequest.AddResponseExtension(fetchResponse);
 				_openIdProvider.SendResponse(idrequest);
 			}
 			else

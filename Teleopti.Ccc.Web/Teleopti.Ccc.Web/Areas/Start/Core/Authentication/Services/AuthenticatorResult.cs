@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 		public IPerson Person { get; set; }
 		public IDataSource DataSource { get; set; }
 		public string TenantPassword { get; set; }
+		public bool IsPersistent { get; set; }
 
 		public Guid? PersonId()
 		{

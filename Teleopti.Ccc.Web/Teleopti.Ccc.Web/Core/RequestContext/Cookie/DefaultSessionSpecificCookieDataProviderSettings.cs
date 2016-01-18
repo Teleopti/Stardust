@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			// Move these to appSettings or create own configsection
 			AuthenticationCookieDomain = FormsAuthentication.CookieDomain;
 			AuthenticationCookieExpirationTimeSpan = new TimeSpan(0, 30, 0);
+			AuthenticationCookieExpirationTimeSpanLong = new TimeSpan(30, 0, 0, 0);
 			AuthenticationCookieName = "WfmAuth";
 			AuthenticationCookiePath = FormsAuthentication.FormsCookiePath;
 			AuthenticationCookieSlidingExpiration = FormsAuthentication.SlidingExpiration;
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 		public string AuthenticationCookieDomain { get; private set; }
 
 		public TimeSpan AuthenticationCookieExpirationTimeSpan { get; private set; }
+		public TimeSpan AuthenticationCookieExpirationTimeSpanLong { get; private set; }
 
 		public bool AuthenticationCookieSlidingExpiration { get; private set; }
 

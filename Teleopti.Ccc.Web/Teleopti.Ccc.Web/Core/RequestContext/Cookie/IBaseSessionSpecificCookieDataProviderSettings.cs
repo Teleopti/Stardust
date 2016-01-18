@@ -5,6 +5,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 	public interface IBaseSessionSpecificCookieDataProviderSettings
 	{
 		TimeSpan AuthenticationCookieExpirationTimeSpan { get; }
+		TimeSpan AuthenticationCookieExpirationTimeSpanLong { get; }
 		string AuthenticationCookieDomain { get; }
 		bool AuthenticationCookieSlidingExpiration { get; }
 		string AuthenticationCookiePath { get; }

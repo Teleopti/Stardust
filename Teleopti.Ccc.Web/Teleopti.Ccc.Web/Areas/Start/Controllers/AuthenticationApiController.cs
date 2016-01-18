@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				return errorMessage(Resources.LogOnFailedInvalidUserNameOrPassword);
 			try
 			{
-				_webLogon.LogOn(result.DataSource.DataSourceName, model.BusinessUnitId, result.Person.Id.Value, result.TenantPassword);
+				_webLogon.LogOn(result.DataSource.DataSourceName, model.BusinessUnitId, result.Person.Id.Value, result.TenantPassword, result.IsPersistent);
 			}
 			catch (PermissionException)
 			{

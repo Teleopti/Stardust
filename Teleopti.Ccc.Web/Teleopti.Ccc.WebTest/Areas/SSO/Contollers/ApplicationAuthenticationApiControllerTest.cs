@@ -35,14 +35,15 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			var authenticationModel = new ApplicationAuthenticationModel
 			{
 				UserName = "user",
-				Password = "pwd"
+				Password = "pwd",
+				RememberMe = false
 			};
 			authenticator.Stub(
 				x => x.AuthenticateApplicationUser(authenticationModel.UserName, authenticationModel.Password)).Return(result);
 
 			target.CheckPassword(authenticationModel);
 
-			formsAuthentication.AssertWasCalled(x => x.SetAuthCookie(authenticationModel.UserName + TokenIdentityProvider.ApplicationIdentifier));
+			formsAuthentication.AssertWasCalled(x => x.SetAuthCookie(authenticationModel.UserName + TokenIdentityProvider.ApplicationIdentifier, false));
 		}
 
 		[Test]
@@ -119,17 +120,24 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		}
 
 		[Test]
-		public void ShouldRememberMe()
+		public void ShouldRememberMeForTeleoptiIdentityProvider()
 		{
-			var target = new ApplicationAuthenticationApiController(null, null, null, null, null);
-
-			var result = target.CheckPassword(new ApplicationAuthenticationModel()
+			var formsAuthentication = MockRepository.GenerateMock<IFormsAuthentication>();
+			var authenticator = MockRepository.GenerateMock<ISsoAuthenticator>();
+			var result = new ApplicationUserAuthenticateResult { Successful = true, DataSource = new FakeDataSource { DataSourceName = RandomName.Make() } };
+			var target = new ApplicationAuthenticationApiController(formsAuthentication, null, null, authenticator, shouldBeLogged("user", result));
+			var authenticationModel = new ApplicationAuthenticationModel
 			{
 				UserName = "user",
 				Password = "pwd",
 				RememberMe = true
-			});
+			};
+			authenticator.Stub(
+				x => x.AuthenticateApplicationUser(authenticationModel.UserName, authenticationModel.Password)).Return(result);
 
+			target.CheckPassword(authenticationModel);
+
+			formsAuthentication.AssertWasCalled(x => x.SetAuthCookie(authenticationModel.UserName + TokenIdentityProvider.ApplicationIdentifier, authenticationModel.RememberMe));
 		}
 
 		[Test]

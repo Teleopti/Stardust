@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Models
 
 			ValueProviderResult username = bindingContext.ValueProvider.GetValue("username");
 			ValueProviderResult password = bindingContext.ValueProvider.GetValue("password");
+			ValueProviderResult rememberMe = bindingContext.ValueProvider.GetValue("rememberMe");
 			if (username == null || password == null)
 			{
 				return false;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Models
 				return false;
 			}
 
-			bindingContext.Model = new ApplicationAuthenticationModel{UserName = username.RawValue.ToString(),Password = password.RawValue.ToString()};
+			bindingContext.Model = new ApplicationAuthenticationModel{UserName = username.RawValue.ToString(),Password = password.RawValue.ToString(), RememberMe = bool.Parse(rememberMe.RawValue.ToString())};
 			return true;
 		}
 	}

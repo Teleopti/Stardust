@@ -108,14 +108,39 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 					Successful = true,
 					DataSource = new FakeDataSource {DataSourceName = "datasource"},
 					Person = person,
-					TenantPassword = tenantPassword
+					TenantPassword = tenantPassword,
+					IsPersistent = false
 				});
 			var webLogon = MockRepository.GenerateMock<IWebLogOn>();
 			var target = new AuthenticationApiController(null, identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), webLogon, null, new FakeToggleManager());
 
 			target.Logon(new ApiLogonInputModel { BusinessUnitId = businessUnitId });
 
-			webLogon.AssertWasCalled(x => x.LogOn("datasource", businessUnitId, person.Id.Value, tenantPassword));
+			webLogon.AssertWasCalled(x => x.LogOn("datasource", businessUnitId, person.Id.Value, tenantPassword, false));
+		}
+
+		[Test]
+		public void ShouldRememberMeForWfm()
+		{
+			var tenantPassword = RandomName.Make();
+			var person = new Person();
+			person.SetId(Guid.NewGuid());
+			var businessUnitId = Guid.NewGuid();
+			var identityLogon = MockRepository.GenerateMock<IIdentityLogon>();
+			identityLogon.Expect(x => x.LogonIdentityUser()).Return(new AuthenticatorResult
+			{
+				Successful = true,
+				DataSource = new FakeDataSource { DataSourceName = "datasource" },
+				Person = person,
+				TenantPassword = tenantPassword,
+				IsPersistent = true
+			});
+			var webLogon = MockRepository.GenerateMock<IWebLogOn>();
+			var target = new AuthenticationApiController(null, identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), webLogon, null, new FakeToggleManager());
+
+			target.Logon(new ApiLogonInputModel { BusinessUnitId = businessUnitId });
+
+			webLogon.AssertWasCalled(x => x.LogOn("datasource", businessUnitId, person.Id.Value, tenantPassword, true));
 		}
 
 		[Test]
@@ -136,7 +161,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			var identityLogon = MockRepository.GenerateMock<IIdentityLogon>();
 			identityLogon.Expect(x => x.LogonIdentityUser()).Return(new AuthenticatorResult {Successful = true, DataSource = new FakeDataSource(), Person = PersonFactory.CreatePersonWithGuid(RandomName.Make(), RandomName.Make())});
 			var webLogon = MockRepository.GenerateMock<IWebLogOn>();
-			webLogon.Expect(x => x.LogOn(null, Guid.Empty, Guid.Empty, null)).IgnoreArguments().Throw(new LicenseMissingException());
+			webLogon.Expect(x => x.LogOn(null, Guid.Empty, Guid.Empty, null, false)).IgnoreArguments().Throw(new LicenseMissingException());
 			var target = new AuthenticationApiController(null, identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), webLogon, MockRepository.GenerateStub<IDataSourceForTenant>(), new FakeToggleManager());
 
 			var result = (InvalidModelStateResult)target.Logon(new ApiLogonInputModel { BusinessUnitId = Guid.NewGuid() });
@@ -152,7 +177,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			identityLogon.Expect(x => x.LogonIdentityUser()).Return(new AuthenticatorResult { Successful = true, DataSource = new FakeDataSource(tenantName), Person = PersonFactory.CreatePersonWithGuid(RandomName.Make(), RandomName.Make()) });
 			var dataSourceForTenant = MockRepository.GenerateMock<IDataSourceForTenant>();
 			var webLogon = MockRepository.GenerateMock<IWebLogOn>();
-			webLogon.Expect(x => x.LogOn(null, Guid.Empty, Guid.Empty, null)).IgnoreArguments().Throw(new LicenseMissingException());
+			webLogon.Expect(x => x.LogOn(null, Guid.Empty, Guid.Empty, null, false)).IgnoreArguments().Throw(new LicenseMissingException());
 			var target = new AuthenticationApiController(null, identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), webLogon, dataSourceForTenant, new FakeToggleManager());
 
 			target.Logon(new ApiLogonInputModel { BusinessUnitId = Guid.NewGuid() });
@@ -176,7 +201,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 				TenantPassword = tenantPassword
 			});
 			var webLogon = MockRepository.GenerateMock<IWebLogOn>();
-			webLogon.Stub(x => x.LogOn("datasource", businessUnitId, person.Id.Value, tenantPassword)).Throw(new PermissionException());
+			webLogon.Stub(x => x.LogOn("datasource", businessUnitId, person.Id.Value, tenantPassword, false)).Throw(new PermissionException());
 			var target = new AuthenticationApiController(null, identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), webLogon, null, new FakeToggleManager());
 
 			var result = (InvalidModelStateResult)target.Logon(new ApiLogonInputModel { BusinessUnitId = businessUnitId });

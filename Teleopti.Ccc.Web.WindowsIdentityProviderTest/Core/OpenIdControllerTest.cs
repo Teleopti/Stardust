@@ -1,8 +1,14 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using DotNetOpenAuth.Messaging;
+using DotNetOpenAuth.OpenId;
+using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
+using DotNetOpenAuth.OpenId.Messages;
 using DotNetOpenAuth.OpenId.Provider;
 using MvcContrib.TestHelper.Fakes;
 using NUnit.Framework;
@@ -205,7 +211,83 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 			request.IsAuthenticated.Should().Be.EqualTo(false);
 			
 		}
+
+		[Test]
+		public void ShouldSetIsPersistentToTrue()
+		{
+			var openIdProviderWapper = MockRepository.GenerateMock<IOpenIdProviderWrapper>();
+			var request = new FakeAuthenticationRequest();
+			var httpResponse = MockRepository.GenerateStub<HttpResponseBase>();
+			var httpRequest = MockRepository.GenerateStub<HttpRequestBase>();
+			var currentHttpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
+			var httpContext = MockRepository.GenerateStub<HttpContextBase>();
+
+			openIdProviderWapper.Stub(x => x.GetRequest()).Return(request);
+
+			var windowsAccountProvider = MockRepository.GenerateMock<IWindowsAccountProvider>();
+			windowsAccountProvider.Stub(x => x.RetrieveWindowsAccount()).Return(new WindowsAccount("domainName", "user.Name"));
+
+			httpResponse.Stub(x => x.ApplyAppPathModifier("~/OpenId/AskUser/domainName%23user%24%24%24Name")).Return("/OpenId/AskUser/domainName#user$$$Name");
+			httpRequest.Stub(x => x.Url).Return(new Uri("http://mock"));
+			httpContext.Stub(x => x.Response).Return(httpResponse);
+			httpContext.Stub(x => x.Request).Return(httpRequest);
+			currentHttpContext.Stub(x => x.Current()).Return(httpContext);
+
+			var providerEndpointWrapper = MockRepository.GenerateMock<IProviderEndpointWrapper>();
+			providerEndpointWrapper.Stub(x => x.PendingRequest).Return(request);
+
+			var target = new OpenIdController(openIdProviderWapper, windowsAccountProvider, currentHttpContext, providerEndpointWrapper);
+			target.TriggerWindowsAuthorization();
+
+			var fetchResponse = request.GetExtension<FetchResponse>();
+			fetchResponse.GetAttributeValue(ClaimTypes.IsPersistent).Should().Be.EqualTo("true");
+		}
 	}
 
-	
+	public class FakeAuthenticationRequest : IAuthenticationRequest
+	{
+		private readonly IList<IOpenIdMessageExtension> extensionList = new List<IOpenIdMessageExtension>();
+
+		public void AddResponseExtension(IOpenIdMessageExtension extension)
+		{
+			extensionList.Add(extension);
+		}
+
+		public void ClearResponseExtensions()
+		{
+			throw new NotImplementedException();
+		}
+
+		public T GetExtension<T>() where T : IOpenIdMessageExtension, new()
+		{
+			return (T) extensionList.First();
+		}
+
+		public IOpenIdMessageExtension GetExtension(Type extensionType)
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool IsResponseReady { get; private set; }
+		public ProviderSecuritySettings SecuritySettings { get; set; }
+		public RelyingPartyDiscoveryResult IsReturnUrlDiscoverable(IDirectWebRequestHandler webRequestHandler)
+		{
+			return RelyingPartyDiscoveryResult.Success;
+		}
+
+		public ProtocolVersion RelyingPartyVersion { get; private set; }
+		public Realm Realm { get; private set; }
+		public bool Immediate { get; private set; }
+		public Uri ProviderEndpoint { get; set; }
+		public void SetClaimedIdentifierFragment(string fragment)
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool IsDirectedIdentity { get; private set; }
+		public bool IsDelegatedIdentifier { get; private set; }
+		public Identifier LocalIdentifier { get; set; }
+		public Identifier ClaimedIdentifier { get; set; }
+		public bool? IsAuthenticated { get; set; }
+	}
 }

@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				return BadRequest(ModelState);
 			}
 
-			_formsAuthentication.SetAuthCookie(model.UserName + TokenIdentityProvider.ApplicationIdentifier);
+			_formsAuthentication.SetAuthCookie(model.UserName + TokenIdentityProvider.ApplicationIdentifier, model.RememberMe);
 			_logLogonAttempt.SaveAuthenticateResult(model.UserName, result.PersonId(), true);
 			return Ok(new PasswordWarningViewModel { WillExpireSoon = result.HasMessage});
 		}
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				ModelState.AddModelError("Error", errString);
 				return BadRequest(ModelState);
 			}
-			_formsAuthentication.SetAuthCookie(model.UserName + TokenIdentityProvider.ApplicationIdentifier);
+			_formsAuthentication.SetAuthCookie(model.UserName + TokenIdentityProvider.ApplicationIdentifier, false);
 			return Ok(true);
 		}
 	}

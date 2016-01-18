@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			var foundAppUser = _loadUserUnauthorized.LoadFullPersonInSeperateTransaction(dataSource.Application, personInfo.Id);
 			return foundAppUser.IsTerminated() ?
 				new AuthenticatorResult { Successful = false } :
-				new AuthenticatorResult { Successful = true, Person = foundAppUser, DataSource = dataSource, TenantPassword = personInfo.TenantPassword};
+				new AuthenticatorResult { Successful = true, Person = foundAppUser, DataSource = dataSource, TenantPassword = personInfo.TenantPassword, IsPersistent = token.IsPersistent};
 		}
 	}
 }

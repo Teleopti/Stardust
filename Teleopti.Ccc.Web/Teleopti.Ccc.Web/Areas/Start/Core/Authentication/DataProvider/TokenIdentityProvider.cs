@@ -34,10 +34,17 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 			}
 
 			var nameClaim = currentIdentity.Claims.FirstOrDefault(x => x.ClaimType == ClaimTypes.NameIdentifier);
+			var isPersistentClaim = currentIdentity.Claims.FirstOrDefault(x => x.ClaimType == ClaimTypes.IsPersistent);
 			if (nameClaim != null)
 			{
 				var nameClaimValue = Uri.UnescapeDataString(nameClaim.Value);
-				return getTokenIdentity(nameClaimValue);
+				var token = getTokenIdentity(nameClaimValue);
+				if (isPersistentClaim != null && isPersistentClaim.Value.ToLowerInvariant() == "true")
+					token.IsPersistent = true;
+				else
+					token.IsPersistent = false;
+
+				return token;
 			}
 			return null;
 		}
@@ -77,5 +84,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 		public string UserIdentifier { get; set; }
 		public string OriginalToken { get; set; }
 		public bool IsTeleoptiApplicationLogon { get; set; }
+		public bool IsPersistent { get; set; }
 	}
 }

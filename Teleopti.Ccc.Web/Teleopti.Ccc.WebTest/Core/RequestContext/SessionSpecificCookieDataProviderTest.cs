@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web;
+using System.Web.Security;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -53,11 +54,37 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		public void StoreShouldStoreSessionSpecificDataInFormsCookie()
 		{
 			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
-			
-			target.StoreInCookie(sessionSpecificData);
 
-			_cookieCollection[_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName].Should().Not.Be.Null();
-			
+			target.StoreInCookie(sessionSpecificData, false);
+
+			var httpCookie = _cookieCollection[_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName];
+			httpCookie.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void StoreTicketForShortTime()
+		{
+			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
+
+			target.StoreInCookie(sessionSpecificData, false);
+			FormsAuthentication.Decrypt(
+				_cookieCollection[_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName].Value).Expiration.Subtract(
+					now.LocalDateTime())
+				.Should()
+				.Be.EqualTo(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieExpirationTimeSpan);
+		}
+
+		[Test]
+		public void StoreTicketForLongTime()
+		{
+			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
+
+			target.StoreInCookie(sessionSpecificData, true);
+			FormsAuthentication.Decrypt(
+				_cookieCollection[_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName].Value).Expiration.Subtract(
+					now.LocalDateTime())
+				.Should()
+				.Be.EqualTo(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieExpirationTimeSpanLong);
 		}
 
 		[Test]
@@ -73,7 +100,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		{
 			// Good enought?
 			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
-			target.StoreInCookie(sessionSpecificData);
+			target.StoreInCookie(sessionSpecificData, false);
 	
 			var result = target.GrabFromCookie();
 
@@ -88,7 +115,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		public void ShouldExpireCookie()
 		{
 			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
-			target.StoreInCookie(sessionSpecificData);
+			target.StoreInCookie(sessionSpecificData, false);
 
 			target.GrabFromCookie().Should().Not.Be.Null();
 

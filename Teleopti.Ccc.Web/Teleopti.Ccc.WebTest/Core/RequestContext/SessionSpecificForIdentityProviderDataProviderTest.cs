@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		{
 			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
 
-			target.StoreInCookie(sessionSpecificData);
+			target.StoreInCookie(sessionSpecificData, false);
 
 			_cookieCollection[_sessionSpecificCookieForIdentityProviderDataProviderSettings.AuthenticationCookieName].Should().Not.Be.Null();
 		}
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		{
 			// Good enought?
 			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
-			target.StoreInCookie(sessionSpecificData);
+			target.StoreInCookie(sessionSpecificData, false);
 
 			var result = target.GrabFromCookie();
 
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		public void ShouldExpireCookie()
 		{
 			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
-			target.StoreInCookie(sessionSpecificData);
+			target.StoreInCookie(sessionSpecificData, false);
 
 			target.GrabFromCookie().Should().Not.Be.Null();
 
