@@ -26,11 +26,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			system.AddModule(new WebAppModule(configuration));
 			system.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble<FakeToggleManager>().For<IToggleManager>();
+			
 		}
 
 		[Test]
 		public void ShouldHaveRtaAreaWhenFeatureEnabledAndPermitted()
 		{
+			PermissionProvider.Enable();
 			ToggleManager.Enable(Toggles.Wfm_RTA_34621);
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview);
 
@@ -44,6 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		[Test]
 		public void ShouldNotHaveRtaAreaWhenFeatureIsDisabled()
 		{
+			PermissionProvider.Enable();
 			ToggleManager.Disable(Toggles.Wfm_RTA_34621);
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview);
 
@@ -55,6 +58,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		[Test]
 		public void ShouldNotHaveRtaAreaWhenItIsNotPermitted()
 		{
+			PermissionProvider.Enable();
 			ToggleManager.Enable(Toggles.Wfm_RTA_34621);
 			
 			var areas = Target.GetWfmAreasWithPermissions();
