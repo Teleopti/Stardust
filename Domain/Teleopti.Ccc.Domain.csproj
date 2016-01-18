@@ -510,7 +510,6 @@
     <Compile Include="ApplicationLayer\ICommandDispatcher.cs" />
     <Compile Include="ApplicationLayer\IHandleCommand.cs" />
     <Compile Include="Config\ConfigReaderExtensions.cs" />
-    <Compile Include="Config\SdkConfigReader.cs" />
     <Compile Include="Config\WebConfigReader.cs" />
     <Compile Include="CurrentApplicationData.cs" />
     <Compile Include="DayOffPlanning\CMSBCaseSolver.cs" />

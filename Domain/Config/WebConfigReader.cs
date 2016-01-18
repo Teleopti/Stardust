@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Config
 {
 	public class WebConfigReader : IConfigReader
 	{
-		private readonly IDictionary<string, string> _appSettings;
+		protected readonly IDictionary<string, string> _appSettings;
 
 		public WebConfigReader(Func<WebSettings> settings)
 		{
@@ -31,6 +31,18 @@ namespace Teleopti.Ccc.Domain.Config
 		{
 			get { return ConfigurationManager.AppSettings; }
 		}
+	}
+
+	public class SdkConfigReader : WebConfigReader
+	{
+		public SdkConfigReader(Func<WebSettings> settings) : base(settings)
+		{
+		}
+		public IDictionary<string, string> ApplicationConfigs()
+		{
+			return _appSettings;
+		}
+
 	}
 
 	public class WebSettings
