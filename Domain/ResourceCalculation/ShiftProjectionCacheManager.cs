@@ -39,17 +39,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    return ret;
 	    }
 
-	    public IList<IShiftProjectionCache> ShiftProjectionCachesFromRuleSetBag(DateOnly scheduleDateOnly,
-		    TimeZoneInfo timeZone, IRuleSetBag bag, bool forRestrictionsOnly, bool checkExcluded)
+	    public IList<IShiftProjectionCache> ShiftProjectionCachesFromRuleSets(DateOnly scheduleDateOnly, TimeZoneInfo timeZone, IEnumerable<IWorkShiftRuleSet> ruleSets,
+		    bool forRestrictionsOnly, bool checkExcluded)
 	    {
-		    var shiftProjectionCaches = new List<IShiftProjectionCache>();
-		    if (bag == null)
-			    return shiftProjectionCaches;
-		    var ruleSets =
-			    bag.RuleSetCollection.Where(workShiftRuleSet => workShiftRuleSet.OnlyForRestrictions == forRestrictionsOnly)
-				    .ToList();
-
-			foreach (IWorkShiftRuleSet ruleSet in ruleSets)
+			var shiftProjectionCaches = new List<IShiftProjectionCache>();
+			foreach (var ruleSet in ruleSets)
 			{
 				if (checkExcluded && !ruleSet.IsValidDate(scheduleDateOnly))
 					continue;
@@ -60,7 +54,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				if (_rulesSetDeletedShiftCategoryChecker.ContainsDeletedShiftCategory(ruleSet))
 					continue;
 
-				IEnumerable<IShiftProjectionCache> ruleSetList = getShiftsForRuleSet(ruleSet);
+				var ruleSetList = getShiftsForRuleSet(ruleSet);
 				if (ruleSetList == null)
 					continue;
 
@@ -71,7 +65,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				}
 			}
 
-		    return shiftProjectionCaches;
+			return shiftProjectionCaches;
+		}
+
+	    public IList<IShiftProjectionCache> ShiftProjectionCachesFromRuleSetBag(DateOnly scheduleDateOnly,
+		    TimeZoneInfo timeZone, IRuleSetBag bag, bool forRestrictionsOnly, bool checkExcluded)
+	    {
+		    if (bag == null)
+			    return new List<IShiftProjectionCache>();
+		    var ruleSets =
+			    bag.RuleSetCollection.Where(workShiftRuleSet => workShiftRuleSet.OnlyForRestrictions == forRestrictionsOnly)
+				    .ToList();
+		    return ShiftProjectionCachesFromRuleSets(scheduleDateOnly, timeZone, ruleSets, forRestrictionsOnly, checkExcluded);
 	    }
 
 	    private IEnumerable<IShiftProjectionCache> getShiftsForRuleSet(IWorkShiftRuleSet ruleSet)

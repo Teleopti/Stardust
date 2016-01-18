@@ -43,6 +43,25 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         }
 
 	    [Test]
+	    public void CanGetWorkShiftsFromRuleSets()
+	    {
+			var workShiftRuleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(_activity, new TimePeriodWithSegment(), new TimePeriodWithSegment(), _category));
+
+			var callback = MockRepository.GenerateMock<IWorkShiftAddCallback>();
+
+			_activityChecker.Stub(x => x.ContainsDeletedActivity(workShiftRuleSet)).Return(false);
+			_shiftCategoryChecker.Stub(x => x.ContainsDeletedShiftCategory(workShiftRuleSet)).Return(false);
+			_ruleSetProjectionEntityService.Stub(x => x.ProjectionCollection(workShiftRuleSet, callback)).Return(getWorkShiftsInfo()).IgnoreArguments();
+			_shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(getWorkShifts()[0])).IgnoreArguments().Return(new List<IWorkShift>()).Repeat.Once();
+			_shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(getWorkShifts()[0])).IgnoreArguments().Return(getWorkShifts()).Repeat.Once();
+			_shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(getWorkShifts()[0])).IgnoreArguments().Return(new List<IWorkShift>()).Repeat.Once();
+
+			var ret = _target.ShiftProjectionCachesFromRuleSets(dateOnly, timeZoneInfo, new [] {workShiftRuleSet}, false, true);
+			Assert.IsNotNull(ret);
+			Assert.AreEqual(3, ret.Count);
+		}
+
+	    [Test]
 	    public void CanGetWorkShiftsFromRuleSetBag()
 	    {
 		    var workShiftRuleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(_activity, new TimePeriodWithSegment(), new TimePeriodWithSegment(), _category));
