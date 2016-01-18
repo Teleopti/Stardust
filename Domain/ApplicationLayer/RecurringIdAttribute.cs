@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			Id = id;
 		}
 
-		public string Id { get; }
+		public string Id { get; set; }
 
 	}
 }
