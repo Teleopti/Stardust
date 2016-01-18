@@ -203,6 +203,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			return hasPerson(null, name, terminalDate, null, timeZone);
 		}
 
+		public FakeDatabase HasPerson(Guid personId, string name, TimeZoneInfo timeZone)
+		{
+			return hasPerson(personId, name, null, null, timeZone);
+		}
+
 		private FakeDatabase hasPerson(Guid? id, string name, string terminalDate, Guid? teamId, TimeZoneInfo timeZone)
 		{
 			var person = new Person { Name = new Name(name, "") };

@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 	[UseOnToggle(Toggles.RTA_TerminatedPersons_36042)]
 	public class PersonAssociationChangedEventPublisher : 
 		IHandleEvent<HourlyTickEvent>,
+		IHandleEvent<PersonTerminalDateChangedEvent>,
 		IRunOnHangfire
 	{
 		private readonly IPersonRepository _persons;
@@ -33,13 +34,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		public virtual void Handle(HourlyTickEvent @event)
 		{
 			_persons.LoadAll()
-				.Where(p => p.TerminalDate.HasValue)
 				.ForEach(person =>
 				{
-					var terminatedAt = TimeZoneInfo.ConvertTimeToUtc(
-						person.TerminalDate.Value.Date.AddDays(1),
-						person.PermissionInformation.DefaultTimeZone()
-						);
+					var terminatedAt = terminationTime(person.TerminalDate, person.PermissionInformation.DefaultTimeZone());
 					var now = _now.UtcDateTime();
 
 					if (terminatedAt > now)
@@ -53,6 +50,40 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 						Timestamp = now
 					});
 				});
+		}
+
+		public void Handle(PersonTerminalDateChangedEvent @event)
+		{
+			var terminalDate = @event.TerminationDate.HasValue ? new DateOnly(@event.TerminationDate.Value) : null as DateOnly?;
+			var timeZoneId = @event.TimeZoneInfoId ?? TimeZoneInfo.Utc.Id;
+			var terminatedAt = terminationTime(terminalDate, TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
+
+			var now = _now.UtcDateTime();
+
+			if (@event.PreviousTerminationDate < now && terminatedAt < now)
+				return;
+			if (@event.PreviousTerminationDate > now && terminatedAt > now)
+				return;
+
+			var teamId = @event.PersonPeriodsAfter
+				.EmptyIfNull()
+				.Where(x => x.StartDate <= now && x.EndDate > now)
+				.Select(x => x.TeamId as Guid?)
+				.SingleOrDefault();
+			
+			_eventPublisher.Publish(new PersonAssociationChangedEvent
+			{
+				PersonId = @event.PersonId,
+				Timestamp = now,
+				TeamId = teamId
+			});
+		}
+
+		private static DateTime terminationTime(DateOnly? terminationDate, TimeZoneInfo timeZone)
+		{
+			return terminationDate.HasValue
+				? TimeZoneInfo.ConvertTimeToUtc(terminationDate.Value.Date.AddDays(1), timeZone)
+				: DateTime.MaxValue;
 		}
 	}
 }

@@ -120,7 +120,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Publisher.PublishedEvents.Should().Be.Empty();
 		}
 
-
 		[Test]
 		public void ShouldPublishWhenTerminadedInIstanbul()
 		{
@@ -131,6 +130,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Should().Not.Be.Empty();
 		}
+		
 	}
 
 }

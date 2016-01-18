@@ -9,10 +9,5 @@ namespace Teleopti.Ccc.Web.Core
 		{
 			return collection == null ? default(TSource) : collection.SingleOrDefault();
 		}
-
-		public static IEnumerable<T> MakeSureNotNull<T>(this IEnumerable<T> instance)
-		{
-			return instance ?? new T[] {};
-		}
 	}
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Teleopti.Ccc.Domain.Collection
 {
@@ -101,7 +102,7 @@ namespace Teleopti.Ccc.Domain.Collection
 		public static IEnumerable<T> GetRandom<T>(this IEnumerable<T> list, int numberOfElements, bool onlyUnique)
 		{
 			InParameter.NotNull("list", list);
-			return RandomIterator<T>(list, numberOfElements, onlyUnique);
+			return RandomIterator(list, numberOfElements, onlyUnique);
 		}
 
 		private static IEnumerable<T> RandomIterator<T>(IEnumerable<T> list, int numberOfElements, bool onlyUnique)
@@ -146,7 +147,7 @@ namespace Teleopti.Ccc.Domain.Collection
 			return source == null || !source.Any();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter"
+		[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter"
 			)]
 		public static IEnumerable<T> CopyEnumerable<T>(this IEnumerable source)
 		{
@@ -254,6 +255,11 @@ namespace Teleopti.Ccc.Domain.Collection
 						.Where(pair => pair.value.Equals(targetValue))
 						.Select(pair => pair.index + 1)
 						.FirstOrDefault() - 1;
+		}
+
+		public static IEnumerable<T> EmptyIfNull<T>(this IEnumerable<T> instance)
+		{
+			return instance ?? Enumerable.Empty<T>();
 		}
 	}
 }

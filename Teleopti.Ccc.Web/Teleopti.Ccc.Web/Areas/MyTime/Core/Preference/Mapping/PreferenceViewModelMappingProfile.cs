@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -167,7 +168,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		private PreferenceOptionGroup ActivityOptions()
 		{
 			return new PreferenceOptionGroup(Resources.Activity, 
-											(from a in _preferenceOptionsProvider().RetrieveActivityOptions().MakeSureNotNull()
+											(from a in _preferenceOptionsProvider().RetrieveActivityOptions().EmptyIfNull()
 											select new PreferenceOption
 											{
 												Value = a.Id.ToString(),
@@ -181,7 +182,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			var shiftCategoriesFromWorkflowControlSet =
 				_preferenceOptionsProvider()
 					.RetrieveShiftCategoryOptions()
-					.MakeSureNotNull();
+					.EmptyIfNull();
 
 			// Get person period include current date
 			var period = _virtualSchedulePeriodProvider.GetCurrentOrNextVirtualPeriodForDate(date);
@@ -214,7 +215,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 
 			var dayOffs = _preferenceOptionsProvider()
 				.RetrieveDayOffOptions()
-				.MakeSureNotNull()
+				.EmptyIfNull()
 				.Select(s => new PreferenceOption
 				{
 					Value = s.Id.ToString(),
@@ -227,7 +228,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 
 			var absences = _preferenceOptionsProvider()
 				.RetrieveAbsenceOptions()
-				.MakeSureNotNull()
+				.EmptyIfNull()
 				.Select(s => new PreferenceOption
 				{
 					Value = s.Id.ToString(),
