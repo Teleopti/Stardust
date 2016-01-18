@@ -126,7 +126,7 @@ namespace Teleopti.Support.LicTool
 		private void EnterDemoSettings()
 		{
 			txtbxCustomerName.Text = "Demo product activation key! For internal use only!";
-			numExpirationGracePeriodDays.Value = 30;
+			numExpirationGracePeriodDays.Value = 5;
 			numMaxActiveAgents.Value = 100;
 			numMaxActiveAgentsGrace.Value = 10;
 
