@@ -31,6 +31,11 @@ namespace Teleopti.Ccc.Domain.Config
 		{
 			get { return ConfigurationManager.AppSettings; }
 		}
+
+		public IDictionary<string, string> WebSettings_DontUse
+		{
+			get { return _appSettings; }
+		}
 	}
 	
 	public class WebSettings
