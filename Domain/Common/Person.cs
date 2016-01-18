@@ -55,44 +55,46 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual void ActivatePerson(IPersonAccountUpdater personAccountUpdater)
 	    {
-		    TerminalDate = null;
-            personAccountUpdater.Update(this);
+			terminate(null);
+			personAccountUpdater.Update(this);
 	    }
 
 		public virtual void TerminatePerson(DateOnly terminalDate, IPersonAccountUpdater personAccountUpdater)
 	    {
-		    TerminalDate = terminalDate;
+			terminate(terminalDate);
 			personAccountUpdater.Update(this);
 	    }
 
 	    public virtual DateOnly? TerminalDate
         {
             get { return _terminalDate; }
-            protected set
-            {
-	            DateOnly? valueToSet = null;
-	            if (value != null)
-		            valueToSet = value.Value > DefaultTerminalDate ? DefaultTerminalDate : value;
-	            if (_terminalDate != valueToSet)
-	            {
-		            var valueBefore = _terminalDate.HasValue ? _terminalDate.Value.Date : (DateTime?) null;
-		            var personPeriodsBefore = gatherPersonPeriodDetails();
-		            _terminalDate = valueToSet;
-					var valueAfter = _terminalDate.HasValue ? _terminalDate.Value.Date : (DateTime?)null;
-
-					AddEvent(new PersonTerminalDateChangedEvent
-					{
-						PersonId = Id.GetValueOrDefault(),
-						PersonPeriodsBefore = personPeriodsBefore,
-						PersonPeriodsAfter = gatherPersonPeriodDetails(),
-						PreviousTerminationDate = valueBefore,
-						TerminationDate = valueAfter
-					});
-				}
-			}
         }
 
-		public virtual void ChangeTeam(ITeam team, IPersonPeriod personPeriod)
+	    private void terminate(DateOnly? value)
+	    {
+		    DateOnly? valueToSet = null;
+		    if (value != null)
+			    valueToSet = value.Value > DefaultTerminalDate ? DefaultTerminalDate : value;
+		    if (_terminalDate != valueToSet)
+		    {
+			    var valueBefore = _terminalDate.HasValue ? _terminalDate.Value.Date : (DateTime?) null;
+			    var personPeriodsBefore = gatherPersonPeriodDetails();
+			    _terminalDate = valueToSet;
+			    var valueAfter = _terminalDate.HasValue ? _terminalDate.Value.Date : (DateTime?) null;
+
+			    AddEvent(new PersonTerminalDateChangedEvent
+			    {
+				    PersonId = Id.GetValueOrDefault(),
+					TimeZoneInfoId = PermissionInformation.DefaultTimeZone().Id,
+				    PersonPeriodsBefore = personPeriodsBefore,
+				    PersonPeriodsAfter = gatherPersonPeriodDetails(),
+				    PreviousTerminationDate = valueBefore,
+				    TerminationDate = valueAfter
+			    });
+		    }
+	    }
+
+	    public virtual void ChangeTeam(ITeam team, IPersonPeriod personPeriod)
 		{
 			Guid? teamBefore = null;
 			Guid? teamAfter = null;
