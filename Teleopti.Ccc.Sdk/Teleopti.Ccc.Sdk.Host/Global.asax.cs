@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 			var builder = BuildIoc();
 
-			builder.Register(c => new SdkConfigReader(() =>
+			builder.Register(c => new WebConfigReader(() =>
 			{
 				var webSettings = new WebSettings
 				{
@@ -87,12 +87,12 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			AutofacHostFactory.Container = container;
 			var messageBroker = container.Resolve<IMessageBrokerComposite>();
 			
-			var settings = container.Resolve<SdkConfigReader>();
+			var settings = container.Resolve<WebConfigReader>();
 			var passwordPolicyDocument = XDocument.Parse(settings.AppConfig("PasswordPolicy"));
 			var passwordPolicyService = new LoadPasswordPolicyService(passwordPolicyDocument);
 			var initializeApplication = new InitializeApplication(messageBroker);
-			initializeApplication.Start(new SdkState(), passwordPolicyService, settings.ApplicationConfigs());
-			new InitializeMessageBroker(messageBroker).Start(settings.ApplicationConfigs());
+			initializeApplication.Start(new SdkState(), passwordPolicyService, settings.AppSettings_DontUse.ToDictionary());
+			new InitializeMessageBroker(messageBroker).Start(settings.AppSettings_DontUse.ToDictionary());
 
 			//////TODO: Remove this when payroll stuff are fixed! Only here because of payrolls...//////
 			// webconfig key "Tenancy" can also be removed. And registration of LoadAllTenants in SDK... Should only go to tenant server/web when logging in
