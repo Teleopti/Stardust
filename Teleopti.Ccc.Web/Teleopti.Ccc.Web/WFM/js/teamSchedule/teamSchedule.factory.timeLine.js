@@ -37,41 +37,11 @@
 			return timeLineViewModel;
 		}
 
-		function startMinutes(groupSchedule, baseDate) {
-
-			var start = getMinStartTimeOrMaxEndTimeInMinuteFromSchedules(groupSchedule, baseDate, true);
-
-			// If exists any schedule started from yesterday, set timeline start from 00:00;
-			start = start > 0 ? start : 0;
-
-			if (start === undefined)
-				return shiftHelper.MinutesForHourOfDay(8);
-			if (start > 60 && (start % 60 == 0)) {
-				start = shiftHelper.MinutesAddHours(start, -1);
-			}
-				
-			return shiftHelper.MinutesStartOfHour(start);
-		};
-
-		function endMinutes(groupSchedule, baseDate) {
-
-			var end = getMinStartTimeOrMaxEndTimeInMinuteFromSchedules(groupSchedule, baseDate, false);
-
-			if (end === undefined)
-				return shiftHelper.MinutesForHourOfDay(16);
-			if (end % 60 == 0) {
-				end = shiftHelper.MinutesAddHours(end, 1);
-			}
-
-			return shiftHelper.MinutesEndOfHour(end);
-		};
-
-		function getMinStartTimeOrMaxEndTimeInMinuteFromSchedules(schedules, baseDate, isStartTime) {
-
+		function getMinStartTimeInMinute(schedules, baseDate) {
 			if (schedules.length === 0)
 				return undefined;
 
-			var availibleProjections= [];
+			var availibleProjections = [];
 			schedules.forEach(function (personSchedule) {
 				if (hasAvailibleProjections(personSchedule, baseDate)) {
 					availibleProjections = availibleProjections.concat(personSchedule.Projection);
@@ -82,14 +52,10 @@
 				return undefined;
 			}
 
-			var sortedProjections = isStartTime
-				? availibleProjections.sort(compareProjectionByStartTime)
-				: availibleProjections.sort(compareProjectionByEndTime);
+			var sortedProjections = availibleProjections.sort(compareProjectionByStartTime)
 
 			var minStartOrMaxEndProjection = sortedProjections[0];
-			return isStartTime
-				? moment(minStartOrMaxEndProjection.Start).diff(baseDate, 'minutes')
-				: moment(minStartOrMaxEndProjection.Start).add(minStartOrMaxEndProjection.Minutes, 'minutes').diff(baseDate, 'minutes');
+			return moment(minStartOrMaxEndProjection.Start).diff(baseDate, 'minutes');
 		};
 
 		function hasAvailibleProjections(personSchedule, baseDate) {
@@ -99,8 +65,58 @@
 			return hasProjections && isScheduleBelongsToTheDateBefore;
 		};
 
-		function compareProjectionByStartTime(currentProjection, nextProjection) {
+		function getMaxEndTimeInMinute(schedules, baseDate) {
+			if (schedules.length === 0)
+				return undefined;
 
+			var availibleProjections = [];
+			schedules.forEach(function (personSchedule) {
+				if (hasAvailibleProjections(personSchedule, baseDate)) {
+					availibleProjections = availibleProjections.concat(personSchedule.Projection);
+				}
+			});
+
+			if (availibleProjections.length === 0) {
+				return undefined;
+			}
+
+			var sortedProjections = availibleProjections.sort(compareProjectionByEndTime);
+
+			var minStartOrMaxEndProjection = sortedProjections[0];
+			return moment(minStartOrMaxEndProjection.Start)
+				.add(minStartOrMaxEndProjection.Minutes, 'minutes')
+				.diff(baseDate, 'minutes');
+		};
+
+		function startMinutes(groupSchedule, baseDate) {
+			var start = getMinStartTimeInMinute(groupSchedule, baseDate);
+
+			// If exists any schedule started from yesterday, set timeline start from 00:00;
+			start = start > 0 ? start : 0;
+
+			if (start === undefined)
+				return shiftHelper.MinutesForHourOfDay(8);
+			if (start > 60 && (start % 60 === 0)) {
+				start = shiftHelper.MinutesAddHours(start, -1);
+			}
+				
+			return shiftHelper.MinutesStartOfHour(start);
+		};
+
+		function endMinutes(groupSchedule, baseDate) {
+
+			var end = getMaxEndTimeInMinute(groupSchedule, baseDate);
+
+			if (end === undefined)
+				return shiftHelper.MinutesForHourOfDay(16);
+			if (end % 60 === 0) {
+				end = shiftHelper.MinutesAddHours(end, 1);
+			}
+
+			return shiftHelper.MinutesEndOfHour(end);
+		};
+
+		function compareProjectionByStartTime(currentProjection, nextProjection) {
 			var currentProjectionStartTime = moment(currentProjection.Start);
 			var nextProjectionStartTime = moment(nextProjection.Start);
 
@@ -113,7 +129,6 @@
 		};
 
 		function compareProjectionByEndTime(currentProjection, nextProjection) {
-
 			var currentProjectionEndTime = moment(currentProjection.Start).add(currentProjection.Minutes, 'minutes');
 			var nextProjectionEndTime = moment(nextProjection.Start).add(nextProjection.Minutes, 'minutes');
 
@@ -149,8 +164,6 @@
 			
 			return hourPointVm;
 		};
-
-
 
 		return timeLineFactory;
 	}

@@ -17,12 +17,10 @@ angular.module('wfm.teamSchedule').factory('GroupScheduleFactory', ['CurrentUser
 		}
 
 		function createSchedulesFromGroupSchedules(groupSchedules, timeLine, queryDate) {
-
 			var existedSchedulesDictionary = {};
 			var schedules = [];
 
 			groupSchedules.forEach(function (schedule) {
-
 				var scheduleDateInUserTimeZone = moment.tz(schedule.Date, currentUserInfo.DefaultTimeZone);
 				var isOverNightShift = scheduleDateInUserTimeZone < queryDate;
 
@@ -34,12 +32,10 @@ angular.module('wfm.teamSchedule').factory('GroupScheduleFactory', ['CurrentUser
 				} else {
 					existedPersonSchedule.Merge(schedule, timeLine, isOverNightShift);
 				}
-
 			});
 
 			return schedules;
 		}
-
 
 		return groupScheduleFactory;
 	}

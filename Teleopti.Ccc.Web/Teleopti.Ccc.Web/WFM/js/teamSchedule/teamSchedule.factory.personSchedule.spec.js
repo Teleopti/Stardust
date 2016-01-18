@@ -221,9 +221,7 @@ describe("PersonSchedule", function () {
 
 
 	function verifyShift(timeLine, shift, rawSchedule) {
-
 		shift.Projections.forEach(function (projection, index) {
-
 			var rawProjection = rawSchedule.Projection[index];
 			expect(projection.Color).toEqual(rawProjection.Color);
 			expect(projection.Description).toEqual(rawProjection.Description);
@@ -241,8 +239,8 @@ describe("PersonSchedule", function () {
 				expectedLength = (rawProjection.Minutes + startInMinute) * timeLine.LengthPercentPerMinute;
 			}
 
-			expect(projection.StartPosition()).toEqual(expectedStart);
-			expect(projection.Length()).toEqual(expectedLength);
+			expect(projection.StartPosition).toEqual(expectedStart);
+			expect(projection.Length).toEqual(expectedLength);
 
 		});
 	};
@@ -253,12 +251,12 @@ describe("PersonSchedule", function () {
 
 		var startMinutes = moment(rawDayOff.Start).diff(timeLine.Offset, 'minutes');
 		var expectedStartMinutes = startMinutes < timeLine.StartMinute ? 0 : (startMinutes - timeLine.StartMinute);
-		expect(dayOff.StartPosition()).toEqual(expectedStartMinutes * timeLine.LengthPercentPerMinute);
+		expect(dayOff.StartPosition).toEqual(expectedStartMinutes * timeLine.LengthPercentPerMinute);
 
 		var endMinutes = moment(rawDayOff.Start).add(rawDayOff.Minutes, "minute").diff(timeLine.Offset, 'minutes');
 		var actualEndMinutes = endMinutes > timeLine.EndMinute ? timeLine.EndMinute : endMinutes;
 		var expectedLengthInMinutes = (actualEndMinutes - timeLine.StartMinute) - expectedStartMinutes;
-		expect(dayOff.Length()).toEqual(expectedLengthInMinutes * timeLine.LengthPercentPerMinute);
+		expect(dayOff.Length).toEqual(expectedLengthInMinutes * timeLine.LengthPercentPerMinute);
 	};
 
 });

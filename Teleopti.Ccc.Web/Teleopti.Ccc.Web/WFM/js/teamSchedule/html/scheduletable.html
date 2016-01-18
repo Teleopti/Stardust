@@ -32,12 +32,12 @@
 			<td class="schedule schedule-column">
 				<div class="relative time-line-for">
 					<span class="dayoff absolute" ng-repeat="dayOff in personSchedule.DayOffs" ng-if="personSchedule.DayOffs.length > 0"
-						  ng-style="{left: dayOff.StartPosition() + '%', width: dayOff.Length() + '%'}">
+						  ng-style="{left: dayOff.StartPosition + '%', width: dayOff.Length + '%'}">
 						<md-tooltip ng-if="dayOff.DayOffName !=''"> {{dayOff.DayOffName}} </md-tooltip>
 					</span>
 					<div class="shift" ng-repeat="shift in personSchedule.Shifts">
 						<div class="layer absolute floatleft" ng-repeat="projection in shift.Projections"
-							 ng-style="{left: projection.StartPosition() + '%', width: projection.Length() + '%', backgroundColor: projection.Color}"
+							 ng-style="{left: projection.StartPosition + '%', width: projection.Length + '%', backgroundColor: projection.Color}"
 							 ng-class="{overtime:projection.IsOvertime}">
 							<md-tooltip>{{projection.Description}}</md-tooltip>
 						</div>

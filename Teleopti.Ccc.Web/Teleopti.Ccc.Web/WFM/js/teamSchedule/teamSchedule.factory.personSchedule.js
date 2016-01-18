@@ -27,9 +27,7 @@
 			}
 
 			return personSchedule;
-				
 		};
-
 
 		function createProjections(projections, timeLine, isOverNightShift) {
 			if (projections == undefined || projections == null || projections.length === 0) {
@@ -47,7 +45,6 @@
 			return projectionVms;
 		}
 
-
 		function createDayOffViewModel(dayOff, timeLine) {
 			if (dayOff == undefined || dayOff == null) {
 				return undefined;
@@ -61,24 +58,21 @@
 			}
 
 			var displayStart = startTimeMinutes < timeLine.StartMinute ? timeLine.StartMinute : startTimeMinutes;
+			var start = displayStart - timeLine.StartMinute;
+			var startPosition = start * timeLine.LengthPercentPerMinute;
+
+			var displayEnd = startTimeMinutes + dayOff.Minutes;
+			displayEnd = displayEnd <= timeLine.EndMinute ? displayEnd : timeLine.EndMinute;
+			var length = (displayEnd - displayStart) * timeLine.LengthPercentPerMinute;
+
 			var dayOffVm = {
 				DayOffName: dayOff.DayOffName,
-				StartPosition: function () {
-					var start = displayStart - timeLine.StartMinute;
-					var position = start * timeLine.LengthPercentPerMinute;
-					return position;
-				},
-				Length: function () {
-					var displayEnd = startTimeMinutes + dayOff.Minutes;
-					displayEnd = displayEnd <= timeLine.EndMinute ? displayEnd : timeLine.EndMinute;
-					var position = (displayEnd - displayStart) * timeLine.LengthPercentPerMinute;
-					return position;
-				}
+				StartPosition: startPosition,
+				Length: length
 			};
 
 			return dayOffVm;
 		};
-
 
 		function createShiftProjectionViewModel(projection, timeLine, isOverNightShift) {
 			if (!projection) projection = {};
@@ -90,18 +84,16 @@
 				return undefined;
 			}
 
+			var displayStartTimeMinutes = startTimeMinutes >= 0 ? startTimeMinutes : 0;
+			var start = displayStartTimeMinutes - timeLine.StartMinute;
+			var startPosition = start * timeLine.LengthPercentPerMinute;
+
+			var lengthMinutes = startTimeMinutes < 0 ? projection.Minutes - (startTimeMinutes * -1) : projection.Minutes;
+			var length = lengthMinutes * timeLine.LengthPercentPerMinute;
+
 			var shiftProjectionVm = {
-				StartPosition: function () {
-					var displayStartTimeMinutes = startTimeMinutes >= 0 ? startTimeMinutes : 0;
-					var start = displayStartTimeMinutes - timeLine.StartMinute;
-					var position = start * timeLine.LengthPercentPerMinute;
-					return position;
-				},
-				Length: function () {
-					var lengthMinutes = startTimeMinutes < 0 ? projection.Minutes - (startTimeMinutes * -1) : projection.Minutes;
-					var position = lengthMinutes * timeLine.LengthPercentPerMinute;
-					return position;
-				},
+				StartPosition: startPosition,
+				Length: length,
 				IsOvertime: projection.IsOvertime,
 				Color: projection.Color,
 				Description: projection.Description,
@@ -111,7 +103,6 @@
 
 			return shiftProjectionVm;
 		}
-
 
 		function merge(otherSchedule, timeLine, isOverNightShift) {
 			var otherProjections = createProjections(otherSchedule.Projection, timeLine, isOverNightShift);
@@ -125,7 +116,6 @@
 				this.DayOffs.push(otherDayOffVm);
 			}
 		}
-
 
 		return personScheduleFactory;
 	}
