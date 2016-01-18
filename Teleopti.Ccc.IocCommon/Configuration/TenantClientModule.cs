@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
@@ -54,6 +55,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ChangePassword>().As<IChangePassword>().SingleInstance();
 			builder.RegisterType<ResponseException>().As<IResponseException>();
 			builder.RegisterType<TenantDataManager>().As<ITenantDataManager>().SingleInstance();
+
+			builder.RegisterType<CannotIterateAllTenants>().As<IAllTenantNames>().SingleInstance();
 		}
 
 		private static bool isRunFromTest(string server)

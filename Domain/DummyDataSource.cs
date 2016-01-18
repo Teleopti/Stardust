@@ -1,7 +1,7 @@
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Infrastructure.UnitOfWork
+namespace Teleopti.Ccc.Domain
 {
 	public class DummyDataSource : IDataSource
 	{

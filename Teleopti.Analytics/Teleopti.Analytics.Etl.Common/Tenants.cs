@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
+using Teleopti.Analytics.Etl.Common.TickEvent;
 using Teleopti.Analytics.Etl.Common.Transformer;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
@@ -17,6 +19,24 @@ namespace Teleopti.Analytics.Etl.Common
 		public Tenant Tenant { get; set; }
 		public IDataSource DataSource { get; set; }
 		public IBaseConfiguration EtlConfiguration { get; set; }
+	}
+
+	public class TenantsLoadedInEtl : IAllTenantNames
+	{
+		private readonly Tenants _tenants;
+
+		public TenantsLoadedInEtl(Tenants tenants)
+		{
+			_tenants = tenants;
+		}
+
+		public IEnumerable<string> Tenants()
+		{
+			return _tenants
+				.CurrentTenants()
+				.Select(x => x.Name)
+				.ToArray();
+		}
 	}
 
 	public class Tenants

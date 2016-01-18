@@ -7,6 +7,7 @@ using Teleopti.Analytics.Etl.Common.Service;
 using Teleopti.Analytics.Etl.Common.TickEvent;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
@@ -30,10 +31,9 @@ namespace Teleopti.Analytics.Etl.Common
 			builder.RegisterType<JobExtractor>().SingleInstance();
 			builder.RegisterType<JobHelper>().SingleInstance();
 			builder.RegisterType<Tenants>().SingleInstance();
+			builder.RegisterType<TenantsLoadedInEtl>().As<IAllTenantNames>().SingleInstance();
 			builder.RegisterType<HourlyTickEventPublisher>().SingleInstance();
 			builder.RegisterType<BaseConfigurationRepository>().As<IBaseConfigurationRepository>().SingleInstance();
-
-			builder.RegisterType<HourlyTickEventPublisher>().SingleInstance();
 
 			builder.RegisterType<FindTenantLogonInfoUnsecured>().As<IFindLogonInfo>().SingleInstance();
 			builder.RegisterType<TenantLogonInfoLoader>().As<ITenantLogonInfoLoader>().SingleInstance();

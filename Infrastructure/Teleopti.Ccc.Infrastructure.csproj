@@ -542,7 +542,6 @@
     <Compile Include="Rta\NumberOfAgentsInTeamReader.cs" />
     <Compile Include="Rta\SiteAdherenceAggregator.cs" />
     <Compile Include="Rta\TeamAdherenceAggregator.cs" />
-    <Compile Include="UnitOfWork\DummyDataSource.cs" />
     <Compile Include="UnitOfWork\KeepScheduleEvents.cs" />
     <Compile Include="UnitOfWork\ScheduleChangedMessageSender.cs" />
     <Compile Include="UnitOfWork\ClearScheduleEvents.cs" />

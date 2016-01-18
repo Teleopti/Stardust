@@ -164,6 +164,7 @@
     <Compile Include="Aop\ReadOnlyUnitOfWorkAttribute.cs" />
     <Compile Include="Aop\UnitOfWorkAttribute.cs" />
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
+    <Compile Include="ApplicationLayer\AllTenantRecurringEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Commands\AbsenceCommandConverter.cs" />
     <Compile Include="ApplicationLayer\Commands\AbsenceCreatorInfo.cs" />
     <Compile Include="ApplicationLayer\Commands\AddActivityCommand.cs" />
@@ -239,6 +240,7 @@
     <Compile Include="ApplicationLayer\Commands\MoveActivityCommandHandler.cs" />
     <Compile Include="ApplicationLayer\IRecurringEventPublisher.cs" />
     <Compile Include="ApplicationLayer\IResolve.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonAssociationChangedEvent.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateFindPersonConsumer.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateGroupingReadModelConsumer.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChangedEventPublisher.cs" />
@@ -557,6 +559,7 @@
     <Compile Include="DayOffPlanning\TuiCaseSolver.cs" />
     <Compile Include="DayOffPlanning\VirtualSkillGroupsCreator.cs" />
     <Compile Include="DistributedLock\IDistributedLockAcquirer.cs" />
+    <Compile Include="DummyDataSource.cs" />
     <Compile Include="ETL\RunningEtlJob.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\MethodAccuracy.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\SkillAccuracy.cs" />
@@ -643,6 +646,8 @@
     <Compile Include="Config\ConfigReader.cs" />
     <Compile Include="Config\IConfigReader.cs" />
     <Compile Include="MessageBroker\MessageBrokerTracer.cs" />
+    <Compile Include="MultiTenancy\CannotIterateAllTenants.cs" />
+    <Compile Include="MultiTenancy\IAllTenantNames.cs" />
     <Compile Include="MultiTenancy\ICountTenants.cs" />
     <Compile Include="MultiTenancy\IFindTenantNameByRtaKey.cs" />
     <Compile Include="MultiTenancy\ITenantUnitOfWorkAspect.cs" />

@@ -51,6 +51,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IEventPublisherScope>()
 				.SingleInstance();
 
+			builder.RegisterType<AllTenantRecurringEventPublisher>().SingleInstance();
+
 			builder.RegisterType<CannotPublishToHangfire>().As<IHangfireEventClient>().SingleInstance();
 			builder.RegisterType<CannotPublishEventsFromEventHandlers>().As<IPublishEventsFromEventHandlers>().SingleInstance();
 			builder.RegisterType<CannotSendDelayedMessages>().As<ISendDelayedMessages>().SingleInstance();

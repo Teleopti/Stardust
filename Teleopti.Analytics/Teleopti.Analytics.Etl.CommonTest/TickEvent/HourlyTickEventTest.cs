@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Analytics.Etl.Common.TickEvent;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
@@ -16,6 +17,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.TickEvent
 		public HourlyTickEventPublisher Target;
 		public FakeRecurringEventPublisher Publisher;
 		public FakeTenants Tenants;
+		public MutableNow Now;
 		
 		[Test]
 		public void ShouldPublish()
@@ -24,7 +26,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.TickEvent
 
 			Target.Tick();
 
-			Publisher.PublishingHourly.Should().Be.True();
+			Publisher.AddedJob.Should().Be.True();
 		}
 
 		[Test]
@@ -63,9 +65,11 @@ namespace Teleopti.Analytics.Etl.CommonTest.TickEvent
 		[Test]
 		public void ShouldStopPublishingForRemovedTenants()
 		{
+			Now.Is("2016-01-18 13:00");
 			Tenants.Has("tenant");
 			Target.Tick();
 
+			Now.Is("2016-01-18 13:15");
 			Tenants.WasRemoved("tenant");
 			Target.Tick();
 
@@ -75,14 +79,43 @@ namespace Teleopti.Analytics.Etl.CommonTest.TickEvent
 		[Test]
 		public void ShouldStartPublishingForAddedTenants()
 		{
+			Now.Is("2016-01-18 13:00");
 			Tenants.Has("tenant1");
 			Target.Tick();
 
+			Now.Is("2016-01-18 13:15");
 			Tenants.Has("tenant2");
 			Target.Tick();
 
 			Publisher.Tenants.Should().Contain("tenant2");
 		}
 
+		[Test]
+		public void ShouldNotRepublishBefore10Minutes()
+		{
+			Now.Is("2016-01-18 13:00");
+			Tenants.Has("tenant");
+			Target.Tick();
+
+			Now.Is("2016-01-18 13:09");
+			Publisher.Clear();
+			Target.Tick();
+
+			Publisher.AddedJob.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldRepublishAfter10Minutes()
+		{
+			Now.Is("2016-01-18 13:00");
+			Tenants.Has("tenant");
+			Target.Tick();
+
+			Now.Is("2016-01-18 13:10");
+			Publisher.Clear();
+			Target.Tick();
+
+			Publisher.AddedJob.Should().Be.True();
+		}
 	}
 }

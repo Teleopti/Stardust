@@ -55,11 +55,4 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				});
 		}
 	}
-
-	public class PersonAssociationChangedEvent : IEvent
-	{
-		public Guid PersonId { get; set; }
-		public DateTime Timestamp { get; set; }
-		public Guid? TeamId { get; set; }
-	}
 }

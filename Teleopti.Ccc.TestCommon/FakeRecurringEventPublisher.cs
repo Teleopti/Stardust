@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IEnumerable<string> Tenants { get { return _jobs.Select(x => x.Tenant).ToArray(); } }
 		public IEvent Event { get { return _jobs.First().Event; } }
-		public bool PublishingHourly { get { return _jobs.Any(); } }
+		public bool AddedJob { get { return _jobs.Any(); } }
 
 		public FakeRecurringEventPublisher(ICurrentDataSource dataSource)
 		{
@@ -51,6 +51,11 @@ namespace Teleopti.Ccc.TestCommon
 		public IEnumerable<string> TenantsWithRecurringJobs()
 		{
 			return _jobs.Select(x => x.Tenant).ToArray();
+		}
+
+		public void Clear()
+		{
+			_jobs.Clear();
 		}
 	}
 }

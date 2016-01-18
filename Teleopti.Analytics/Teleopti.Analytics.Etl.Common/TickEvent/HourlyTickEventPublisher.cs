@@ -1,48 +1,36 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Common.TickEvent
 {
 	public class HourlyTickEventPublisher
 	{
-		private readonly IRecurringEventPublisher _hangfire;
-		private readonly Tenants _tenants;
-		private readonly IDataSourceScope _dataSourceScope;
+		private readonly AllTenantRecurringEventPublisher _publisher;
+		private readonly INow _now;
+		private DateTime? _nextPublish;
 
 		public HourlyTickEventPublisher(
-			IRecurringEventPublisher hangfire, 
-			Tenants tenants,
-			IDataSourceScope dataSourceScope)
+			AllTenantRecurringEventPublisher publisher,
+			INow now)
 		{
-			_hangfire = hangfire;
-			_tenants = tenants;
-			_dataSourceScope = dataSourceScope;
+			_publisher = publisher;
+			_now = now;
 		}
 
 		public void Tick()
 		{
-			var tenants = _tenants.CurrentTenants();
-			
-			var removedTenants =
-				_hangfire.TenantsWithRecurringJobs()
-					.Except(tenants.Select(x => x.Name));
+			var nextPublish = _nextPublish ?? _now.UtcDateTime();
+			if (_now.UtcDateTime() < nextPublish)
+				return;
+			_nextPublish = _now.UtcDateTime().AddMinutes(10);
 
-			removedTenants.ForEach(j =>
-			{
-				using (_dataSourceScope.OnThisThreadUse(new DummyDataSource(j)))
-					_hangfire.StopPublishingForCurrentTenant();
-			});
-
-			tenants.ForEach(t =>
-			{
-				using (_dataSourceScope.OnThisThreadUse(t.DataSource))
-					_hangfire.PublishHourly(new HourlyTickEvent());
-			});
-
+			_publisher.Publish(new HourlyTickEvent());
 		}
 	}
+
 }
