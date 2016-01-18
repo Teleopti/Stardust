@@ -4,6 +4,7 @@ Teleopti.SSO.Authentication.SignInViewModel = function (data) {
 
 	this.UserName = ko.observable('');
 	this.Password = ko.observable('');
+	this.RememberMe = ko.observable(false);
 	this.ErrorMessage = ko.observable();
 	this.HasErrorMessage = ko.computed(function () {
 		var errorMessage = self.ErrorMessage();
@@ -22,7 +23,8 @@ Teleopti.SSO.Authentication.SignInViewModel = function (data) {
 			data: {
 				type: "application",
 				username: self.UserName(),
-				password: self.Password()
+				password: self.Password(),
+				rememberMe: self.RememberMe()
 			},
 			errormessage: function (message) {
 				self.ErrorMessage(message);

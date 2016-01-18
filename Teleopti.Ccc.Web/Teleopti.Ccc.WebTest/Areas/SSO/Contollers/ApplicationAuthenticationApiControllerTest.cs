@@ -119,6 +119,20 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		}
 
 		[Test]
+		public void ShouldRememberMe()
+		{
+			var target = new ApplicationAuthenticationApiController(null, null, null, null, null);
+
+			var result = target.CheckPassword(new ApplicationAuthenticationModel()
+			{
+				UserName = "user",
+				Password = "pwd",
+				RememberMe = true
+			});
+
+		}
+
+		[Test]
 		public void ShouldChangePassword()
 		{
 			var input = new ChangePasswordInput

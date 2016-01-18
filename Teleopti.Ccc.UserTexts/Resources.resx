@@ -14059,6 +14059,10 @@ Help us improve your experience by sending an error report</value>
     <value>Clear campaign</value>
     <comment>Clear campaign</comment>
   </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Remember me?</value>
+    <comment>Remember me?</comment>
+  </data>
   <data name="CurrentPlanningPeriodMessage" xml:space="preserve">
     <value>This planning period will be from</value>
   </data>

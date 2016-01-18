@@ -46,14 +46,21 @@
         <div id="view" class="login-form"></div>
         <div id="signin">
             <form data-bind="submit: SignIn">
-                <div>
-                    <div class="form-group">
-                        <input type="text" id="Username-input" class="form-control" placeholder="@Resources.UserName" data-bind="value: UserName, valueUpdate: 'afterkeydown',enable: Ajax.Inactive" autocapitalize="off" autocorrect="off" />
-                    </div>
-                    <div class="form-group">
-                        <input type="password" id="Password-input" class="form-control" placeholder="@Resources.Password" data-bind="value: Password, valueUpdate: 'afterkeydown',enable: Ajax.Inactive" autocomplete="off" />
-                    </div>
-                </div>
+				<div>
+					<div class="form-group">
+						<input type="text" id="Username-input" class="form-control" placeholder="@Resources.UserName" data-bind="value: UserName, valueUpdate: 'afterkeydown',enable: Ajax.Inactive" autocapitalize="off" autocorrect="off" />
+					</div>
+					<div class="form-group">
+						<input type="password" id="Password-input" class="form-control" placeholder="@Resources.Password" data-bind="value: Password, valueUpdate: 'afterkeydown',enable: Ajax.Inactive" autocomplete="off" />
+					</div>
+					<div class="form-group">
+						<div class="checkbox" style="padding-left: 0">
+							<label>
+								<input type="checkbox" data-bind="checked: RememberMe, enable: Ajax.Inactive"> @Resources.RememberMe
+							</label>
+						</div>
+					</div>
+				</div>
                 <div id="Signin-error" 
 					 class="alert alert-warning" 
 					 data-bind="visible: HasErrorMessage, text: ErrorMessage"
@@ -61,7 +68,7 @@
 					 data-nodatasourcetext="@Resources.NoDatasource">
                 </div>
 
-                <button class="btn btn-primary" id="Signin-button" type="submit" data-bind="enable: Ajax.Inactive">@Resources.SignIn</button>
+                <button class="btn btn-primary" id="Signin-button" type="submit" data-bind="enable: Ajax.Inactive" style="margin-top: 10px">@Resources.SignIn</button>
                 <img data-bind="visible: Ajax.Active" src="@Url.Content("~/Areas/SSO/Content/Images/ajax-loader-small.gif")" alt="..." />
             </form>
         </div>
