@@ -29,7 +29,7 @@
 						error(errorCb);
 				};
 
-				this.applyCampaign = function(data, successCb, errorCb, finalCb) {
+				this.campaign = function(data, successCb, errorCb, finalCb) {
 					$http.post("../api/Forecasting/Campaign", data)
 						.success(successCb)
 						.error(errorCb)

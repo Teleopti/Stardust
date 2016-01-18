@@ -249,7 +249,15 @@
 					return count == 0;
 				};
 
-				$scope.applyCampaign = function () {
+				$scope.applyCampaign = function() {
+					$scope.campaign($scope.modalModifyInfo.campaignPercentage);
+				};
+
+				$scope.clearCampaign = function () {
+					$scope.campaign(0);
+				};
+
+				$scope.campaign = function (value) {
 					if ($scope.disableApplyCampaign()) {
 						return;
 					}
@@ -259,13 +267,13 @@
 					workload.ShowProgress = true;
 					workload.IsSuccess = false;
 					workload.IsFailed = false;
-					forecastingService.applyCampaign(
+					forecastingService.campaign(
 						JSON.stringify(
 						{
 							Days: $scope.modifyDays,
 							WorkloadId: workload.Id,
 							ScenarioId: workload.Scenario.Id,
-							CampaignTasksPercent: $scope.modalModifyInfo.campaignPercentage
+							CampaignTasksPercent: value
 						}), function(data, status, headers, config) {
 							if (data.Success) {
 								workload.IsSuccess = true;
@@ -287,7 +295,6 @@
 							}
 						}
 					);
-					
 				};
 
 				$scope.applyOverride = function (isFormValid) {
@@ -333,8 +340,6 @@
 							}
 						}
 					);
-
-					
 				};
 
 				$scope.clearOverride = function() {
@@ -378,7 +383,7 @@
 						}
 					);
 				};
-
+				
 				$scope.$on('$destroy', function () {
 					if (c3.restoreFixForForecast)
 						c3.restoreFixForForecast();
