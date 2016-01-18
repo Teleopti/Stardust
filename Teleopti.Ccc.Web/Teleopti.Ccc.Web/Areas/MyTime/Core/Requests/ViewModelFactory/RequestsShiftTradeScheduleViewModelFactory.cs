@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
@@ -24,8 +25,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		private readonly IPermissionProvider _permissionProvider;
 		private IPossibleShiftTradePersonsProvider _possibleShiftTradePersonsProvider;
 		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
+		private readonly IShiftTradeTimeLineHoursViewModelMapper _shiftTradeTimeLineHoursViewModelMapper;
 
-		public RequestsShiftTradeScheduleViewModelFactory(ILoggedOnUser loggedOnUser, IScheduleRepository scheduleRepository, ICurrentScenario currentScenario, ITeamScheduleProjectionProvider projectionProvider, IPermissionProvider permissionProvider, IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider, ICommonAgentNameProvider commonAgentNameProvider)
+		public RequestsShiftTradeScheduleViewModelFactory(ILoggedOnUser loggedOnUser, IScheduleRepository scheduleRepository, ICurrentScenario currentScenario, ITeamScheduleProjectionProvider projectionProvider, IPermissionProvider permissionProvider, IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider, ICommonAgentNameProvider commonAgentNameProvider, IShiftTradeTimeLineHoursViewModelMapper shiftTradeTimeLineHoursViewModelMapper)
 		{
 			_loggedOnUser = loggedOnUser;
 			_scheduleRepository = scheduleRepository;
@@ -34,6 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			_permissionProvider = permissionProvider;
 			_possibleShiftTradePersonsProvider = possibleShiftTradePersonsProvider;
 			_commonAgentNameProvider = commonAgentNameProvider;
+			_shiftTradeTimeLineHoursViewModelMapper = shiftTradeTimeLineHoursViewModelMapper;
 		}
 
 		public ShiftTradeScheduleViewModel CreateViewModel(ShiftTradeScheduleViewModelData inputData)
@@ -62,9 +65,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 					return
 						new ShiftTradeAddPersonScheduleViewModel(_projectionProvider.MakeScheduleReadModel(person, schedule,
 							_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential)));
-				});
+				}).ToList();
 			ret.PageCount = (int)Math.Ceiling((double)allSortedPossibleSchedules.Count()/inputData.Paging.Take);
 			ret.PossibleTradeSchedules = allSortedPossibleSchedules.Skip(inputData.Paging.Skip).Take(inputData.Paging.Take);
+			ret.TimeLineHours = _shiftTradeTimeLineHoursViewModelMapper.Map(ret.MySchedule, ret.PossibleTradeSchedules,
+				inputData.ShiftTradeDate);
 		
 			return ret;
 		}

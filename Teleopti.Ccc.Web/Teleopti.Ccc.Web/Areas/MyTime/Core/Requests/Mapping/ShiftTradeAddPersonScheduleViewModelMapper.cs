@@ -53,15 +53,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				if ((shiftReadModel.Shift != null) && (shiftReadModel.Shift.Projection.Count > 0) &&
 				    (isMySchedule || !shiftReadModel.Shift.IsFullDayAbsence))
 				{
+					ret.IsFullDayAbsence = shiftReadModel.Shift.IsFullDayAbsence;
 					if (scheduleReadModel.Start != null)
 						ret.StartTimeUtc = scheduleReadModel.Start.Value;
 					ret.MinStart = scheduleReadModel.MinStart;
 					ret.ScheduleLayers = _layerMapper.Map(shiftReadModel.Shift.Projection, isMySchedule);
 				}
-				
 
-				//for DayOff schedule, logic is same except using different mapping method.
-				if (((shiftReadModel.DayOff != null) && shiftReadModel.Shift != null && !shiftReadModel.Shift.IsFullDayAbsence))
+				if (shiftReadModel.DayOff != null && isMySchedule)
+				{
+					ret.IsDayOff = true;
+					ret.DayOffName = shiftReadModel.DayOff.Title;
+				}
+				else if (((shiftReadModel.DayOff != null) && shiftReadModel.Shift != null && !shiftReadModel.Shift.IsFullDayAbsence))
 				{
 					var dayOffProjection = new List<SimpleLayer>();
 					var sl = new SimpleLayer

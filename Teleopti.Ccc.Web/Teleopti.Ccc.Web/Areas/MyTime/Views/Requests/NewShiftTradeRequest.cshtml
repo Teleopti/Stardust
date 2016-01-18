@@ -152,15 +152,22 @@
 				<tbody>
 					<tr class="shift-trade-my-schedule-row">
 						<td class="shift-trade-agent-name">@Resources.MySchedule</td>
-						<td class="shift-trade-my-schedule" data-bind="foreach: mySchedule().layers">
-							<!--ko if:!$parent.mySchedule().isDayOff-->
-							<div class="shift-trade-layer-container floatleft">
-								<div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
+						<td class="shift-trade-my-schedule">
+							<div data-bind="foreach: mySchedule().layers">
+								<!--ko if:!$parent.mySchedule().isDayOff-->
+								<div class="shift-trade-layer-container floatleft">
+									<div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
+								</div>
+								<!--/ko-->
+								<!--ko if:$parent.mySchedule().isDayOff-->
+								<div class="shift-trade-layer-container floatleft shift-trade-dayoff">
+									<div class="dayoff" data-bind="style:$parent.mySchedule().isFullDayAbsence&&{'background-color':backgroundColor},tooltip: $parent.mySchedule().isFullDayAbsence&&{ title: tooltipText, html: true}, text:$parent.mySchedule().dayOffName || titleHeader"></div>
+								</div>
+								<!--/ko-->
 							</div>
-							<!--/ko-->
-							<!--ko if:$parent.mySchedule().isDayOff-->
+							<!--ko if:mySchedule().isDayOff && mySchedule().layers.length == 0 -->
 							<div class="shift-trade-layer-container floatleft shift-trade-dayoff">
-								<div class="dayoff" data-bind="text: titleHeader"></div>
+								<div class="dayoff" data-bind="text: mySchedule().dayOffName"></div>
 							</div>
 							<!--/ko-->
 						</td>
@@ -186,6 +193,11 @@
 								</div>
 								<!--/ko-->
 							</div>
+							<!--ko if:isDayOff && $data.layers.length == 0 -->
+							<div class="shift-trade-layer-container floatleft shift-trade-dayoff">
+								<div class="dayoff" data-bind="text: dayOffName"></div>
+							</div>
+							<!--/ko-->
 						</td>
 						<!-- ko if: $root.isTradeForMultiDaysEnabled-->
 						<td class="shift-trade-button-cell">

@@ -2,8 +2,10 @@
 using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -28,6 +30,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IRespondToShiftTrade _respondToShiftTrade;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ITimeFilterHelper _timeFilterHelper;
+		private readonly IToggleManager _toggleManager;
+		private IRequestsShiftTradeScheduleViewModelFactory _shiftTradeScheduleViewModelFactory;
 
 		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory, 
 								ITextRequestPersister textRequestPersister, 
@@ -35,7 +39,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 								IShiftTradeRequestPersister shiftTradeRequestPersister,
 								IRespondToShiftTrade respondToShiftTrade, 
 								IPermissionProvider permissionProvider,
-								ITimeFilterHelper timeFilterHelper)
+								ITimeFilterHelper timeFilterHelper,
+								IToggleManager toggleManager, 
+								IRequestsShiftTradeScheduleViewModelFactory shiftTradeScheduleViewModelFactory)
 		{
 			_requestsViewModelFactory = requestsViewModelFactory;
 			_textRequestPersister = textRequestPersister;
@@ -44,6 +50,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_respondToShiftTrade = respondToShiftTrade;
 			_permissionProvider = permissionProvider;
 			_timeFilterHelper = timeFilterHelper;
+			_toggleManager = toggleManager;
+			_shiftTradeScheduleViewModelFactory = shiftTradeScheduleViewModelFactory;
 		}
 
 		[EnsureInPortal]
@@ -171,6 +179,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				SearchNameText = filter.SearchNameText,
 				TimeSortOrder = filter.TimeSortOrder
 			};
+			if (data.TimeFilter == null && data.TimeSortOrder == null &&
+				_toggleManager.IsEnabled(Toggles.MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211))
+			{
+				return Json(_shiftTradeScheduleViewModelFactory.CreateViewModel(data));
+			}
 			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(data));
 		}
 

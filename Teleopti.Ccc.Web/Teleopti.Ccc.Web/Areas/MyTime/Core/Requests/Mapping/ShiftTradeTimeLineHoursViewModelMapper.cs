@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
 
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		{
 			var schedules = (possibleTradeSchedules as IList<ShiftTradeAddPersonScheduleViewModel>) ?? possibleTradeSchedules.ToList();
 
-			var schedulesWithoutDayoffAndEmptyDays = schedules.Where(s => s.IsDayOff == false && s.ScheduleLayers != null);
+			var schedulesWithoutDayoffAndEmptyDays = schedules.Where(s => s.IsDayOff == false && !s.ScheduleLayers.IsNullOrEmpty());
 			var schedulesWithoutDOAndEmpty = schedulesWithoutDayoffAndEmptyDays as IList<ShiftTradeAddPersonScheduleViewModel> ??
 			                         schedulesWithoutDayoffAndEmptyDays.ToList();
 
