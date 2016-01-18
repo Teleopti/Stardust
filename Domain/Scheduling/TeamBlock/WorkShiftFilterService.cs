@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				ruleSetBag.AddRuleSet(workShiftRuleSet);
 			}
 
-			var shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly,
+			var shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnly,
 				person.PermissionInformation.DefaultTimeZone(), ruleSetBag, false, false);
 
 			shiftList = runFilters(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, person, matrixList,
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			if (allowanceToUseBlackList(shiftList, schedulingOptions, effectiveRestriction))
 			{
-				shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly,
+				shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnly,
 					person.PermissionInformation.DefaultTimeZone(), ruleSetBag, true, false);
 				shiftList = runFilters(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, person,
 					matrixList, true);

@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 			var editableShift = new EditableShift(new ShiftCategory("hej"));
 			using (_mocks.Record())
 			{
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(new DateOnly(), TimeZoneInfo.Utc,
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(new DateOnly(), TimeZoneInfo.Utc,
 					_ruleSetBag, false, true)).Return(new List<IShiftProjectionCache> {_shiftProjectionCache});
 				Expect.Call(_shiftProjectionCache.TheWorkShift).Return(_workShift);
 				Expect.Call(_workShift.ToEditorShift(null, TimeZoneInfo.Utc))
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 			var editableShift = new EditableShift(new ShiftCategory("hej"));
 			using (_mocks.Record())
 			{
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(new DateOnly(), TimeZoneInfo.Utc,
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(new DateOnly(), TimeZoneInfo.Utc,
 					_ruleSetBag, false, true)).Return(new List<IShiftProjectionCache> { _shiftProjectionCache });
 				Expect.Call(_shiftProjectionCache.TheWorkShift).Return(_workShift);
 				Expect.Call(_workShift.ToEditorShift(null, TimeZoneInfo.Utc))

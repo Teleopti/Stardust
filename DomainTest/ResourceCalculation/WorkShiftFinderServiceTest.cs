@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_person.VirtualSchedulePeriod(_scheduleDateOnly)).Return(_schedulePeriod).IgnoreArguments().Repeat.AtLeastOnce();
 			    Expect.Call(_person.Period(dateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
 				Expect.Call(dictionary[_person]).Return(range).Repeat.AtLeastOnce();
-                Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, false, true)).Return(caches);
+                Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnly, _timeZoneInfo, bag, false, true)).Return(caches);
 				Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(caches, new Domain.Specification.All<IEditableShift>())).
 					IgnoreArguments().Return(caches).Repeat.AtLeastOnce();
 				Expect.Call(_shiftProjectionCacheFilter.FilterOnRestrictionAndNotAllowedShiftCategories(new DateOnly(), null, null, null, null, null)).
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_preSchedulingStatusChecker.CheckStatus(null, null, _schedulingOptions)).Return(true).IgnoreArguments();
                 Expect.Call(_person.VirtualSchedulePeriod(_scheduleDateOnly)).Return(_schedulePeriod).IgnoreArguments().Repeat.AtLeastOnce();
                 Expect.Call(_person.Period(dateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
-                Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, false, true)).Return(caches);
+                Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnly, _timeZoneInfo, bag, false, true)).Return(caches);
 				Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(caches, new Domain.Specification.All<IEditableShift>())).
 					IgnoreArguments().Return(caches).Repeat.AtLeastOnce();
                 effectiveRestriction.ShiftCategory = _category;
@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_preSchedulingStatusChecker.CheckStatus(null, null, _schedulingOptions)).Return(true).IgnoreArguments();
                 Expect.Call(_person.VirtualSchedulePeriod(_scheduleDateOnly)).Return(_schedulePeriod).IgnoreArguments().Repeat.AtLeastOnce();
                 Expect.Call(_person.Period(dateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, false, true)).Return(caches);
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnly, _timeZoneInfo, bag, false, true)).Return(caches);
 				Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(new List<IShiftProjectionCache>(), new Domain.Specification.All<IEditableShift>())).
 					IgnoreArguments().Return(caches).Repeat.AtLeastOnce();
                 effectiveRestriction.ShiftCategory = _category;
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_schedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
 				Expect.Call(_person.PermissionInformation).Return(_info).Repeat.AtLeastOnce();
 
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, true, true)).Return(caches);
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnly, _timeZoneInfo, bag, true, true)).Return(caches);
 				effectiveRestriction.ShiftCategory = _category;
 				Expect.Call(_shiftProjectionCacheFilter.FilterOnRestrictionAndNotAllowedShiftCategories(new DateOnly(), null, null, null, null, null)).
 					IgnoreArguments().Return(caches);
@@ -244,8 +244,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_shiftProjectionCacheFilter.CheckRestrictions(null, null, null)).IgnoreArguments().Return(true);
                 Expect.Call(_person.PermissionInformation).Return(_info).Repeat.AtLeastOnce();
                 Expect.Call(_person.Period(dateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, false, true)).Return(new List<IShiftProjectionCache>());
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, true, true)).Return(new List<IShiftProjectionCache>()); 
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnly, _timeZoneInfo, bag, false, true)).Return(new List<IShiftProjectionCache>());
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnly, _timeZoneInfo, bag, true, true)).Return(new List<IShiftProjectionCache>()); 
 			}
             
             using (_mocks.Playback())
@@ -266,7 +266,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(_shiftProjectionCacheFilter.CheckRestrictions(null, null, null)).IgnoreArguments().Return(true);
 			Expect.Call(_person.PermissionInformation).Return(_info).Repeat.AtLeastOnce();
 			Expect.Call(_person.Period(dateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
-			Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, false, true)).Return(new List<IShiftProjectionCache>());
+			Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnly, _timeZoneInfo, bag, false, true)).Return(new List<IShiftProjectionCache>());
 		}
 
 		[Test]
@@ -310,7 +310,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			using (_mocks.Record())
 			{
 				commonMocksForBlackListTests(bag, dateOnly);
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, true, true)).Return(new List<IShiftProjectionCache>());
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnly, _timeZoneInfo, bag, true, true)).Return(new List<IShiftProjectionCache>());
 			}
 
 			using (_mocks.Playback())
@@ -336,7 +336,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			using (_mocks.Record())
 			{
 				commonMocksForBlackListTests(bag, dateOnly);
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, true, true)).Return(new List<IShiftProjectionCache>());
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnly, _timeZoneInfo, bag, true, true)).Return(new List<IShiftProjectionCache>());
 			}
 
 			using (_mocks.Playback())
@@ -362,7 +362,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			using (_mocks.Record())
 			{
 				commonMocksForBlackListTests(bag, dateOnly);
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, true, true)).Return(new List<IShiftProjectionCache>());
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnly, _timeZoneInfo, bag, true, true)).Return(new List<IShiftProjectionCache>());
 			}
 
 			using (_mocks.Playback())
@@ -388,7 +388,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			using (_mocks.Record())
 			{
 				commonMocksForBlackListTests(bag, dateOnly);
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, true, true)).Return(new List<IShiftProjectionCache>());
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnly, _timeZoneInfo, bag, true, true)).Return(new List<IShiftProjectionCache>());
 			}
 
 			using (_mocks.Playback())
@@ -413,8 +413,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(_part.DateOnlyAsPeriod).Return(_scheduleDateOnlyPeriod).Repeat.AtLeastOnce();
 			Expect.Call(_person.PermissionInformation).Return(_info);
             Expect.Call(_person.Period(dateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
-			Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, null, false, true)).Return(new List<IShiftProjectionCache>()).IgnoreArguments();
-			Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, null, false, true)).Return(new List<IShiftProjectionCache>()).IgnoreArguments();
+			Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnly, _timeZoneInfo, (IRuleSetBag) null, false, true)).Return(new List<IShiftProjectionCache>()).IgnoreArguments();
+			Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnly, _timeZoneInfo, (IRuleSetBag) null, false, true)).Return(new List<IShiftProjectionCache>()).IgnoreArguments();
                     
 			_mocks.ReplayAll();
             _schedulingOptions.ShiftCategory = _category;
@@ -535,8 +535,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_person.VirtualSchedulePeriod(_scheduleDateOnly)).Return(_schedulePeriod).IgnoreArguments().Repeat.AtLeastOnce();
 				Expect.Call(_person.Period(dateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
 				Expect.Call(dictionary[_person]).Return(range).Repeat.AtLeastOnce();
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, false, true)).Return(caches);
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, true, true)).Return(new IShiftProjectionCache[]{});
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnly, _timeZoneInfo, bag, false, true)).Return(caches);
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnly, _timeZoneInfo, bag, true, true)).Return(new IShiftProjectionCache[]{});
 				Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(caches, new Domain.Specification.All<IEditableShift>())).
 					IgnoreArguments().Return(caches).Repeat.AtLeastOnce();
 				Expect.Call(_shiftProjectionCacheFilter.FilterOnRestrictionAndNotAllowedShiftCategories(new DateOnly(), null, null, null, null, null)).
@@ -599,8 +599,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_person.VirtualSchedulePeriod(_scheduleDateOnly)).Return(_schedulePeriod).IgnoreArguments().Repeat.AtLeastOnce();
 				Expect.Call(_person.Period(dateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
 				Expect.Call(dictionary[_person]).Return(range).Repeat.AtLeastOnce();
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, false, true)).Return(caches);
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, true, true)).Return(caches);
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnly, _timeZoneInfo, bag, false, true)).Return(caches);
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnly, _timeZoneInfo, bag, true, true)).Return(caches);
 				Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(caches, new Domain.Specification.All<IEditableShift>())).
 					IgnoreArguments().Return(caches).Repeat.AtLeastOnce();
 				Expect.Call(_shiftProjectionCacheFilter.FilterOnRestrictionAndNotAllowedShiftCategories(new DateOnly(), null, null, null, null, null)).

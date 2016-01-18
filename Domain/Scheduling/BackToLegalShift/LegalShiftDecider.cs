@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 
 		public bool IsLegalShift(DateOnly date, TimeZoneInfo timeZoneInfo, IRuleSetBag rulesetBag, IShiftProjectionCache currentShiftProjectionCache)
 		{
-			var shifts = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(date, timeZoneInfo, rulesetBag, false,
+			var shifts = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(date, timeZoneInfo, rulesetBag, false,
 				true);
 
 			var period = new DateOnlyAsDateTimePeriod(date, timeZoneInfo);

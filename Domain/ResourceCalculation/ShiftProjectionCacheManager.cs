@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return shiftProjectionCaches;
 		}
 
-	    public IList<IShiftProjectionCache> ShiftProjectionCachesFromRuleSetBag(DateOnly scheduleDateOnly,
+	    public IList<IShiftProjectionCache> ShiftProjectionCachesFromRuleSets(DateOnly scheduleDateOnly,
 		    TimeZoneInfo timeZone, IRuleSetBag bag, bool forRestrictionsOnly, bool checkExcluded)
 	    {
 		    if (bag == null)
