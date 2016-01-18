@@ -7,6 +7,7 @@
 		.filter('showPhase', [showPhase])
 		.filter('showTimespan', showTimespan)
 		.filter('decreaseOneDay', decreaseOneDay)
+		.filter('sameDay', sameDay)
 		.filter('monthview', ['$locale', '$filter', monthview]);
 
 
@@ -52,11 +53,16 @@
 		}
 	}
 
-	function decreaseOneDay() {
-		
+	function sameDay() {
+		return function(date) {
+			return moment(date).toDate();
+		}
+	}
+
+	function decreaseOneDay() {		
 		return function (date) {
 			var dateToBeHandle = moment(date);
-			return dateToBeHandle.subtract(1, 'day');
+			return dateToBeHandle.subtract(1, 'day').toDate();
 		}
 	}
 

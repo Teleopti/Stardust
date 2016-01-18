@@ -104,7 +104,7 @@
 						x: {
 							type: 'timeseries',
 							tick: {
-								format: '%Y-%m-%d'
+								format: function (x) { return $filter('date')(x, 'shortDate'); }
 							}
 						},
 						y2: {

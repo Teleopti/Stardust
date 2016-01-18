@@ -31,7 +31,7 @@
 				<div class="gantt-current-date-line" ng-show="currentDate === 'line' && gantt.currentDateManager.position >= 0 && gantt.currentDateManager.position <= gantt.width" ng-style="{'left': gantt.currentDateManager.position + 'px' }"></div>
 			</gantt-body-foreground>
 			<gantt-body-columns>
-				<gantt-column ng-repeat="column in gantt.columnsManager.visibleColumns" data-toggle="tooltip" title="{{column.date | amDateFormat : 'LL'}}" data-delay='0'>
+				<gantt-column ng-repeat="column in gantt.columnsManager.visibleColumns" data-toggle="tooltip" title="{{column.date | sameDay| date : 'shortDate'}}" data-delay='0'>
 					<gantt-time-frame ng-repeat="timeFrame in column.visibleTimeFrames"></gantt-time-frame>
 				</gantt-column>
 			</gantt-body-columns>
@@ -212,7 +212,7 @@
 			 ng-style="{top: taskRect.top + 'px', marginTop: -elementHeight - 8 + 'px'}">
 			<div><strong>{{ task.model.campaignName }}</strong></div>
 			<div class="gantt-task-info-content">				
-				{{ task.model.from | amDateFormat: 'LL'}} - {{ task.model.to | decreaseOneDay |  amDateFormat: 'LL' }}											
+				{{ task.model.from | sameDay | date:'shortDate' }} - {{ task.model.to | decreaseOneDay| date:'shortDate'  }}		
 			</div>
 		</div>
 	</script>
