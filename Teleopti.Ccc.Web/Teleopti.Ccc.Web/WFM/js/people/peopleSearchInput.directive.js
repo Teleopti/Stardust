@@ -80,18 +80,23 @@
 		function parseSearchKeywordInputted() {
 			vm.advancedSearchForm = {};
 			if (vm.searchOptions.keyword.indexOf(':') !== -1) {
-				var regex = /(\S*?):\s{0,1}\"(.*?)\",{0,1}/ig;
-				var match;
-				while (match = regex.exec(vm.searchOptions.keyword)) {
-					var searchType = match[1].trim();
-					var searchValue = match[2].trim();
+				var searchTerms = vm.searchOptions.keyword.split(',');
+				angular.forEach(searchTerms, function (searchTerm) {
+					var termSplitter = searchTerm.indexOf(':');
+					if (termSplitter < 0) {
+						return;
+					}
+
+					var searchType = searchTerm.substring(0, termSplitter).trim();
+					var searchValue = searchTerm.substring(termSplitter + 1, searchTerm.length).trim();
+
 					setSearchFormProperty(searchType, searchValue);
-				}
+				});
 			}
 		}
 
 		function getSearchCriteria(title, value) {
-			return value !== undefined && value !== '' ? title + ': "' + value + '", ' : '';
+			return value !== undefined && value !== "" ? title + ": " + value + ", " : "";
 		}
 	}
 	var directive = function () {
