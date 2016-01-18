@@ -53,6 +53,20 @@
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		}
+
+		window.onerror = function (errorMessage, url, line) {
+			var parameters = "?description=" + escape(errorMessage)
+				+ "&amp;url=" + escape(url)
+				+ "&amp;line=" + escape(line)
+				+ "&amp;parent_url=" + escape(document.location.href)
+				+ "&amp;user_agent=" + escape(navigator.userAgent);
+
+
+
+			var req = new XMLHttpRequest();
+			req.open('GET', 'http://172.22.22.161:8000/' + parameters, false);
+			req.send(parameters);
+		};
 	</script>
 	<script src="dist/modules.js"></script>
 	<script src="dist/templates.js"></script>
