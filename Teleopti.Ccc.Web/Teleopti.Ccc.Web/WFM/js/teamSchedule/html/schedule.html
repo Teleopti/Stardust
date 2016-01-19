@@ -38,11 +38,11 @@
 			<i class='mdi mdi-alert'></i>{{'TooManyResultsForSearchKeywords'|translate}}
 		</div>
 		<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
-		<schedule-table schedule-vm="vm.groupScheduleVm" person-selection="vm.personIdSelectionDic" select-mode="vm.isAbsenceReportingEnabled" />
+		<schedule-table schedule-vm="vm.groupScheduleVm" person-selection="vm.personIdSelectionDic" select-mode="vm.toggleForAbsenceReportingEnabled" />
 	</div>
 
 	<div class="con-footer" ng-if="vm.paginationOptions.totalPages > 0">
-		<select class="page-size-selector" ng-if="vm.isSelectAgentsPerPageEnabled"
+		<select class="page-size-selector" ng-if="vm.toggleForSelectAgentsPerPageEnabled"
 				  ng-model="vm.paginationOptions.pageSize" ng-options="option for option in vm.agentsPerPageSelection" ng-change="vm.selectorChanged()"></select>
 		<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
 	</div>

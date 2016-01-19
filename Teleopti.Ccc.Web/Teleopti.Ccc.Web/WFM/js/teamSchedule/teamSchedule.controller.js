@@ -15,7 +15,7 @@
 		vm.personIdSelectionDic = {};
 		vm.scheduleDate = new Date();
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
-		vm.isSelectAgentsPerPageEnabled = false;
+		vm.toggleForSelectAgentsPerPageEnabled = false;
 
 		vm.searchOptions = {
 			keyword: '',
@@ -43,11 +43,11 @@
 		};
 
 		vm.canActiveAddAbsence = function() {
-			return vm.isAbsenceReportingEnabled && (vm.permissions.IsAddFullDayAbsenceAvailable || vm.permissions.IsAddIntradayAbsenceAvailable);
+			return vm.toggleForAbsenceReportingEnabled && (vm.permissions.IsAddFullDayAbsenceAvailable || vm.permissions.IsAddIntradayAbsenceAvailable);
 		}
 
 		vm.canActiveSwapShifts = function() {
-			return vm.isSwapShiftEnabled && vm.permissions.IsSwapShiftsAvailable;
+			return vm.toggleForSwapShiftEnabled && vm.permissions.IsSwapShiftsAvailable;
 		}
 
 		vm.isMenuVisible = function () {
@@ -204,9 +204,10 @@
 		}
 
 		function swapShifts() {
-			var selectedPersonIds = vm.getSelectedPersonIdList();
+			if (!allowSwapShifts()) return;
 
-			if (selectedPersonIds.length !== 2 || !vm.canActiveSwapShifts()) return;
+			var selectedPersonIds = vm.getSelectedPersonIdList();
+			if (selectedPersonIds.length !== 2) return;
 
 			teamScheduleSvc.swapShifts.post({
 				PersonIdFrom: selectedPersonIds[0],
@@ -375,10 +376,10 @@
 
 		vm.init = function () {
 			createDocumentListeners();
-			vm.isSelectAgentsPerPageEnabled = toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230;
-			vm.isAbsenceReportingEnabled = toggleSvc.WfmTeamSchedule_AbsenceReporting_35995;
+			vm.toggleForSelectAgentsPerPageEnabled = toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230;
+			vm.toggleForAbsenceReportingEnabled = toggleSvc.WfmTeamSchedule_AbsenceReporting_35995;
 			vm.searchOptions.isAdvancedSearchEnabled = toggleSvc.WfmPeople_AdvancedSearch_32973;
-			vm.isSwapShiftEnabled = toggleSvc.WfmTeamSchedule_SwapShifts_36231;
+			vm.toggleForSwapShiftEnabled = toggleSvc.WfmTeamSchedule_SwapShifts_36231;
 			toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303 && monitorScheduleChanged();
 			vm.schedulePageReset();
 		};
