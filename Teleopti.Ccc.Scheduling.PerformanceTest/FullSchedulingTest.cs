@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 			//put here to dump better info
 			//temp to see if this hack makes it more stable
 			dumpInfo(browserInteractions, "JustAfterGoingToView.txt");
-			browserInteractions.Click(".schedule-button:enabled");
+			browserInteractions.Click(".test-schedule-button:enabled");
 			dumpInfo(browserInteractions, "AfterButtonClick.txt");
 			browserInteractions.AssertExists(".test-schedule-is-running");
 			browserInteractions.AssertExists(".nav-item-active"); //make sure "menu" has loaded, when "random failing" it hasn't
