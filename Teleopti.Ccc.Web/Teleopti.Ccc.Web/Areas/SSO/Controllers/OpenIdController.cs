@@ -5,9 +5,11 @@ using System.Net.Http;
 using System.Reflection;
 using System.Web.Mvc;
 using DotNetOpenAuth.OpenId;
+using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
 using DotNetOpenAuth.OpenId.Provider;
 using DotNetOpenAuth.Messaging;
 using DotNetOpenAuth.OpenId.Provider.Behaviors;
+using Microsoft.IdentityModel.Claims;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Helper;
@@ -72,7 +74,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 					return SignIn();
 				}
 
-				return ProcessAuthRequest(pendingRequest);
+				return ProcessAuthRequest(pendingRequest, false);
 			}
 			return new EmptyResult();
 
@@ -95,7 +97,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult ProcessAuthRequest(string pendingRequest)
+		public ActionResult ProcessAuthRequest(string pendingRequest, bool isPersistent)
 		{
 			var request = getPendingRequest(pendingRequest);
 			if (request == null)
@@ -105,7 +107,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 
 			// Try responding immediately if possible.
 			ActionResult response;
-			if (AutoRespondIfPossible(request, out response))
+			if (AutoRespondIfPossible(request, isPersistent, out response))
 			{
 				return response;
 			}
@@ -127,7 +129,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			return pendingRequest;
 		}
 
-		private ActionResult sendAssertion(IHostProcessedRequest pendingRequest)
+		private ActionResult sendAssertion(IHostProcessedRequest pendingRequest, bool isPersistent = false)
 		{
 			var authReq = pendingRequest as IAuthenticationRequest;
 			var anonReq = pendingRequest as IAnonymousRequest;
@@ -160,13 +162,16 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				{
 					authReq.ClaimedIdentifier = authReq.LocalIdentifier;
 				}
+				var fetchResponse = new FetchResponse();
+				fetchResponse.Attributes.Add(new AttributeValues(ClaimTypes.IsPersistent, isPersistent.ToString().ToLowerInvariant()));
+				authReq.AddResponseExtension(fetchResponse);
 			}
 
 			return _openIdProvider.PrepareResponse(pendingRequest).AsActionResultMvc5();
 		}
 
 
-		private bool AutoRespondIfPossible(IHostProcessedRequest pendingRequest, out ActionResult response)
+		private bool AutoRespondIfPossible(IHostProcessedRequest pendingRequest, bool isPersistent, out ActionResult response)
 		{
 			string userName;
 			if (_formsAuthentication.TryGetCurrentUser(out userName))
@@ -209,7 +214,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 						returnToProperty.SetValue(requestMessage, temporaryReturnToUri, null);
 					}
 
-					var relyingPartyDiscoveryResult = pendingRequest.IsReturnUrlDiscoverable(_openIdProvider.Channel().WebRequestHandler);
+					var relyingPartyDiscoveryResult = pendingRequest.IsReturnUrlDiscoverable(_openIdProvider.WebRequestHandler());
 					if (relyingPartyDiscoveryResult != RelyingPartyDiscoveryResult.Success)
 					{
 						pending.IsAuthenticated = false;
@@ -226,7 +231,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 						|| UserControlsIdentifier(pending))
 					{
 						pending.IsAuthenticated = true;
-						response = sendAssertion(pendingRequest);
+						response = sendAssertion(pendingRequest, isPersistent);
 						return true;
 					}
 				}

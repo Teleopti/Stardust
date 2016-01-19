@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core
 			_openIdProvider.SendResponse(request);
 		}
 
-		public Channel Channel()
+		public IDirectWebRequestHandler WebRequestHandler()
 		{
-			return _openIdProvider.Channel;
+			return _openIdProvider.Channel.WebRequestHandler;
 		}
 	}
 }

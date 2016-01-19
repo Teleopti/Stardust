@@ -6,19 +6,23 @@ Teleopti.SSO.Authentication.NavigationConstructor = function () {
 	this.GotoMustChangePassword = function () {
 		window.location.hash = 'mustchangepassword';
 	};
-	this.GotoReturnUrl = function(returnUrl, pendingRequest) {
+	this.GotoReturnUrl = function(returnUrl, pendingRequest, rememberMe) {
 		var form = $('<form></form>');
 
 		form.attr("method", "post");
 		form.attr("action", returnUrl);
 
-		var field = $('<input></input>');
+		var requestField = $('<input></input>');
+		requestField.attr("type", "hidden");
+		requestField.attr("name", "pendingRequest");
+		requestField.attr("value", pendingRequest);
+		form.append(requestField);
 
-		field.attr("type", "hidden");
-		field.attr("name", "pendingRequest");
-		field.attr("value", pendingRequest);
-
-		form.append(field);
+		var isPersistentField = $('<input></input>');
+		isPersistentField.attr("type", "hidden");
+		isPersistentField.attr("name", "isPersistent");
+		isPersistentField.attr("value", rememberMe);
+		form.append(isPersistentField);
 
 		$(document.body).append(form);
 		form.submit();

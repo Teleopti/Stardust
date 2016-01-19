@@ -36,15 +36,15 @@ Teleopti.SSO.Authentication.AuthenticationState = function (data) {
 					gotoMustChangePassword();
 					return;
 				}
-				self.GotoReturnUrl();
+				self.GotoReturnUrl(authenticationModel.rememberMe);
 			}
 		});
 
 		$.ajax(options);
 	};
 
-	this.GotoReturnUrl = function() {
-		gotoReturnUrl(Teleopti.SSO.Authentication.Settings.returnUrl, Teleopti.SSO.Authentication.Settings.pendingRequest);
+	this.GotoReturnUrl = function(rememberMe) {
+		gotoReturnUrl(Teleopti.SSO.Authentication.Settings.returnUrl, Teleopti.SSO.Authentication.Settings.pendingRequest, rememberMe);
 	};
 
 	this.CheckState = function () {
@@ -70,7 +70,7 @@ Teleopti.SSO.Authentication.AuthenticationState = function (data) {
 			},
 			success: function (responseData, textStatus, jqXHR) {
 				authenticationModel.password = options.data.newPassword;
-				self.GotoReturnUrl();
+				self.GotoReturnUrl(authenticationModel.rememberMe);
 			}
 		});
 
