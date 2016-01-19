@@ -50,7 +50,7 @@
 }
 
 .wfm-dense .wfm-checkbox {
-	padding: 0px !important;
+	padding: 0 !important;
 }
 .wfm-table.wfm-dense td{
 	height: 22px;
@@ -128,6 +128,6 @@
 .c3-circles-vcampaign > .c3-circle{
 	cy:-10!important;
 	transition: .1s all ease-in-out;
-	transform: translate(0px,15px);
+	transform: translate(0,15px);
   stroke-width: 3!important;
 }
