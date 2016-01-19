@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I click schedule")]
 		public void WhenIClickSchedule()
 		{
-			Browser.Interactions.Click(".schedule-button:enabled");
+			Browser.Interactions.Click(".test-schedule-button:enabled");
 		}
 		[Then(@"I should see updated period label from '(.*)'to '(.*)'")]
 		public void ThenIShouldSeeUpdatedPeriodLabelFromTo(DateTime fromDate, DateTime toDate)
