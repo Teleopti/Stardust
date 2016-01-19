@@ -135,7 +135,7 @@ WHEN  'xx'    THEN ar.Name
 FROM Person p WITH (NOLOCK)
 INNER JOIN PersonInApplicationRole pa ON pa.Person = p.Id
 INNER JOIN ApplicationRole ar ON ar.Id = pa.ApplicationRole
-WHERE ar.IsDeleted = 0
+WHERE p.IsDeleted = 0 AND ar.IsDeleted = 0
 
 DECLARE @date DATETIME
 SELECT @date = CONVERT(DATETIME, CONVERT(varchar(10), GETDATE(), 101))
