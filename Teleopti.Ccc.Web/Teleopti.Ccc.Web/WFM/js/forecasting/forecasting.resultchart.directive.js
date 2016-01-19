@@ -42,7 +42,7 @@
 						$scope.selectedDayCount = $filter('filter')($scope.chart.selected(), { id: 'vtc' }).length;
 					});
 				});
-
+				$scope.selectedDayCount = 0;
 				$scope.chart = c3.generate({
 					bindto: "#" + $scope.chartId,
 					data: {
