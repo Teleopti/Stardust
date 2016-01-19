@@ -91,10 +91,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			var matrixes = new List<IScheduleMatrixPro>();
 			var selectedPersons = _personExtractor.ExtractPersons(scheduleDays);
+			var scheduleDaysLookup = scheduleDays.ToLookup(s => s.Person);
 
 			foreach (var person in selectedPersons)
 			{
-				var daysForPerson = scheduleDays.Where(x => x.Person.Equals(person)).ToList();
+				var daysForPerson = scheduleDaysLookup[person].ToList();
 				var selectedPeriod = _periodExctractor.ExtractPeriod(daysForPerson);
 				if (!selectedPeriod.HasValue) continue;
 				var startDate = selectedPeriod.Value.StartDate;
