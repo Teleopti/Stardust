@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Domain.Helper
         /// </remarks>
         public static IList<ISkillStaffPeriod> CombineSkillStaffPeriodsAndMultisitePeriods(
             IList<ISkillStaffPeriod> skillStaffPeriods,
-            IList<IMultisitePeriod> multisitePeriods)
+            IEnumerable<IMultisitePeriod> multisitePeriods)
         {
             InParameter.NotNull("skillStaffPeriods", skillStaffPeriods);
             InParameter.NotNull("multisitePeriods", multisitePeriods);

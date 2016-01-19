@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 	public class MultisiteDay : VersionedAggregateRootWithBusinessUnit, IMultisiteDay
     {
-        private IList<IMultisitePeriod> _multisitePeriodCollection = new List<IMultisitePeriod>();
+        private ISet<IMultisitePeriod> _multisitePeriodCollection = new HashSet<IMultisitePeriod>();
         private TemplateReference _templateReference = new MultisiteDayTemplateReference();
         private DateOnly _multisiteDayDate;
         private IMultisiteSkill _skill;
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public virtual ReadOnlyCollection<IMultisitePeriod> MultisitePeriodCollection
         {
-            get { return new ReadOnlyCollection<IMultisitePeriod>(_multisitePeriodCollection); }
+            get { return new ReadOnlyCollection<IMultisitePeriod>(_multisitePeriodCollection.ToArray()); }
         }
 
         private void VerifyAndAttachMultisitePeriods(IEnumerable<IMultisitePeriod> multisitePeriodCollection)
@@ -493,7 +493,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             MultisiteDay retobj = (MultisiteDay)MemberwiseClone();
             retobj.SetId(null);
-            retobj._multisitePeriodCollection = new List<IMultisitePeriod>();
+            retobj._multisitePeriodCollection = new HashSet<IMultisitePeriod>();
             foreach (IMultisitePeriod multisitePeriod in _multisitePeriodCollection)
             {
                 IMultisitePeriod clonedPeriod = multisitePeriod.NoneEntityClone();
@@ -511,7 +511,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public virtual IMultisiteDay EntityClone()
         {
             MultisiteDay retobj = (MultisiteDay)MemberwiseClone();
-            retobj._multisitePeriodCollection = new List<IMultisitePeriod>();
+            retobj._multisitePeriodCollection = new HashSet<IMultisitePeriod>();
             foreach (IMultisitePeriod multisitePeriod in _multisitePeriodCollection)
             {
                 IMultisitePeriod clonedPeriod = multisitePeriod.EntityClone();

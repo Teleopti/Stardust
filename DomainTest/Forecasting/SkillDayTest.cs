@@ -370,12 +370,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             skillDay.SkillDayCalculator = new SkillDayCalculator(_skill, new List<ISkillDay> { skillDay }, new DateOnlyPeriod());
             skillDay.CreateFromTemplate(createDate, _skill, _scenario, skillDayTemplate);
 
-            Assert.AreEqual(skillDay.SkillDataPeriodCollection[40].ServiceAgreement.ServiceLevel, skillDayTemplate.TemplateSkillDataPeriodCollection[0].ServiceAgreement.ServiceLevel);
-            Assert.AreEqual(skillDay.SkillDataPeriodCollection[40].ServiceAgreement.MinOccupancy, skillDayTemplate.TemplateSkillDataPeriodCollection[0].ServiceAgreement.MinOccupancy);
-            Assert.AreEqual(skillDay.SkillDataPeriodCollection[40].ServiceAgreement.MaxOccupancy, skillDayTemplate.TemplateSkillDataPeriodCollection[0].ServiceAgreement.MaxOccupancy);
-            Assert.AreEqual(skillDay.SkillDataPeriodCollection[40].SkillPersonData, skillDayTemplate.TemplateSkillDataPeriodCollection[0].SkillPersonData);
-            Assert.AreEqual(skillDay.SkillDataPeriodCollection[40].Period.StartDateTime.TimeOfDay, skillDayTemplate.TemplateSkillDataPeriodCollection[0].Period.StartDateTime.TimeOfDay);
-            Assert.AreEqual(skillDay.SkillDataPeriodCollection[40].Shrinkage, skillDayTemplate.TemplateSkillDataPeriodCollection[0].Shrinkage);
+	        var skillDataPeriod = skillDay.SkillDataPeriodCollection[32];
+	        Assert.AreEqual(skillDataPeriod.ServiceAgreement.ServiceLevel, skillDayTemplate.TemplateSkillDataPeriodCollection[0].ServiceAgreement.ServiceLevel);
+            Assert.AreEqual(skillDataPeriod.ServiceAgreement.MinOccupancy, skillDayTemplate.TemplateSkillDataPeriodCollection[0].ServiceAgreement.MinOccupancy);
+            Assert.AreEqual(skillDataPeriod.ServiceAgreement.MaxOccupancy, skillDayTemplate.TemplateSkillDataPeriodCollection[0].ServiceAgreement.MaxOccupancy);
+            Assert.AreEqual(skillDataPeriod.SkillPersonData, skillDayTemplate.TemplateSkillDataPeriodCollection[0].SkillPersonData);
+            Assert.AreEqual(skillDataPeriod.Period.StartDateTime.TimeOfDay, skillDayTemplate.TemplateSkillDataPeriodCollection[0].Period.StartDateTime.TimeOfDay);
+            Assert.AreEqual(skillDataPeriod.Shrinkage, skillDayTemplate.TemplateSkillDataPeriodCollection[0].Shrinkage);
             Assert.AreEqual(skillDayTemplate.Id ?? Guid.Empty, skillDay.TemplateReference.TemplateId);
             Assert.AreEqual(skillDayTemplate.VersionNumber, skillDay.TemplateReference.VersionNumber);
         }

@@ -20,10 +20,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
     /// </remarks>
     public class SkillDayTemplate : AggregateEntity, ISkillDayTemplate
     {
-
-        #region Fields
-
-        private IList<ITemplateSkillDataPeriod> _templateSkillDataPeriodCollection = new List<ITemplateSkillDataPeriod>();
+	    private ISet<ITemplateSkillDataPeriod> _templateSkillDataPeriodCollection = new HashSet<ITemplateSkillDataPeriod>();
         private string _name;
         private int _versionNumber;
     	private DateTime _updatedDate;
@@ -85,9 +82,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         protected SkillDayTemplate(){ }
 
-        #endregion
-
-        /// <summary>
+	    /// <summary>
         /// Initializes a new instance of the <see cref="SkillDayTemplate"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
@@ -115,7 +110,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public virtual ReadOnlyCollection<ITemplateSkillDataPeriod> TemplateSkillDataPeriodCollection
         {
-            get { return new ReadOnlyCollection<ITemplateSkillDataPeriod>(_templateSkillDataPeriodCollection); }
+            get { return new ReadOnlyCollection<ITemplateSkillDataPeriod>(_templateSkillDataPeriodCollection.ToArray()); }
         }
 
         private void VerifyAndAttachSkillDataPeriods(IEnumerable<ITemplateSkillDataPeriod> templateSkillDataPeriodCollection)
@@ -331,25 +326,19 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				_updatedDate = DateTime.UtcNow;
 		}
 
-        #region Implementation of ICloneable
-
-        public virtual object Clone()
+	    public virtual object Clone()
         {
             return NoneEntityClone();
         }
 
-        #endregion
-
-        #region Implementation of ICloneableEntity<ISkillDayTemplate>
-
-        public virtual ISkillDayTemplate NoneEntityClone()
+	    public virtual ISkillDayTemplate NoneEntityClone()
         {
             SkillDayTemplate retobj = (SkillDayTemplate)MemberwiseClone();
             retobj.SetId(null);
-            retobj._templateSkillDataPeriodCollection = new List<ITemplateSkillDataPeriod>();
+            retobj._templateSkillDataPeriodCollection = new HashSet<ITemplateSkillDataPeriod>();
             foreach (ITemplateSkillDataPeriod templateSkillDataPeriod in _templateSkillDataPeriodCollection)
             {
-                ITemplateSkillDataPeriod clonedPeriod = (ITemplateSkillDataPeriod) templateSkillDataPeriod.NoneEntityClone();
+                ITemplateSkillDataPeriod clonedPeriod = templateSkillDataPeriod.NoneEntityClone();
                 clonedPeriod.SetParent(retobj);
                 retobj._templateSkillDataPeriodCollection.Add(clonedPeriod);
             }
@@ -359,16 +348,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public virtual ISkillDayTemplate EntityClone()
         {
             SkillDayTemplate retobj = (SkillDayTemplate)MemberwiseClone();
-            retobj._templateSkillDataPeriodCollection = new List<ITemplateSkillDataPeriod>();
+            retobj._templateSkillDataPeriodCollection = new HashSet<ITemplateSkillDataPeriod>();
             foreach (ITemplateSkillDataPeriod templateSkillDataPeriod in _templateSkillDataPeriodCollection)
             {
-                ITemplateSkillDataPeriod clonedPeriod = (ITemplateSkillDataPeriod) templateSkillDataPeriod.EntityClone();
+                ITemplateSkillDataPeriod clonedPeriod = templateSkillDataPeriod.EntityClone();
                 clonedPeriod.SetParent(retobj);
                 retobj._templateSkillDataPeriodCollection.Add(clonedPeriod);
             }
             return retobj;
         }
-
-        #endregion
     }
 }

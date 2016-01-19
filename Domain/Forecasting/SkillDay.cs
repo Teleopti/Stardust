@@ -39,15 +39,15 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private double _totalStatisticAnsweredTasks;
         private double _totalStatisticAbandonedTasks;
         private IScenario _scenario;
-        private IList<ISkillStaffPeriod> _skillStaffPeriodCollection = new List<ISkillStaffPeriod>();
+        private ISet<ISkillStaffPeriod> _skillStaffPeriodCollection = new HashSet<ISkillStaffPeriod>();
         private ITemplateReference _templateReference = new SkillDayTemplateReference();
         private ISkillDayCalculator _skillDayCalculator;
 
-        private IList<IWorkloadDay> _workloadDayCollection = new List<IWorkloadDay>();
+        private ISet<IWorkloadDay> _workloadDayCollection = new HashSet<IWorkloadDay>();
         private readonly IList<ITaskOwner> _parents = new List<ITaskOwner>();
-        private IList<ISkillDataPeriod> _skillDataPeriodCollection = new List<ISkillDataPeriod>();
+        private ISet<ISkillDataPeriod> _skillDataPeriodCollection = new HashSet<ISkillDataPeriod>();
         private bool _enableSpillover = true;
-        private IList<ISkillStaffPeriod> _availableSkillStaffPeriods = new List<ISkillStaffPeriod>();
+        private ISet<ISkillStaffPeriod> _availableSkillStaffPeriods = new HashSet<ISkillStaffPeriod>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SkillDay"/> class.
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public virtual ReadOnlyCollection<ISkillDataPeriod> SkillDataPeriodCollection
         {
-            get { return new ReadOnlyCollection<ISkillDataPeriod>(_skillDataPeriodCollection); }
+            get { return new ReadOnlyCollection<ISkillDataPeriod>(_skillDataPeriodCollection.ToArray()); }
         }
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public virtual ReadOnlyCollection<IWorkloadDay> WorkloadDayCollection
         {
-            get { return new ReadOnlyCollection<IWorkloadDay>(_workloadDayCollection); }
+            get { return new ReadOnlyCollection<IWorkloadDay>(_workloadDayCollection.ToArray()); }
         }
 
         /// <summary>
@@ -327,13 +327,13 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     }
                 }
                 var skillDataPeriods =
-                    _skillDataPeriodCollection.Where(t => targetPeriod.Contains(t.Period.StartDateTime)).ToList();
-                int taskPeriodCount = skillDataPeriods.Count;
+                    _skillDataPeriodCollection.Where(t => targetPeriod.Contains(t.Period.StartDateTime)).ToArray();
+                int taskPeriodCount = skillDataPeriods.Length;
                 if (taskPeriodCount > 1)
                 {
                     MergeSkillDataPeriods(skillDataPeriods);
-                    skillDataPeriods = _skillDataPeriodCollection.Where(t => targetPeriod.Contains(t.Period.StartDateTime)).ToList();
-                    taskPeriodCount = skillDataPeriods.Count;
+                    skillDataPeriods = _skillDataPeriodCollection.Where(t => targetPeriod.Contains(t.Period.StartDateTime)).ToArray();
+                    taskPeriodCount = skillDataPeriods.Length;
                 }
                 if (taskPeriodCount == 0) continue;
 
@@ -806,11 +806,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
             get
             {
                 if (!_initialized) initialize();
-                return new ReadOnlyCollection<ISkillStaffPeriod>(createAvailableSkillStaffPeriodCollection());
+                return new ReadOnlyCollection<ISkillStaffPeriod>(createAvailableSkillStaffPeriodCollection().ToArray());
             }
         }
 
-        private IList<ISkillStaffPeriod> createAvailableSkillStaffPeriodCollection()
+        private ISet<ISkillStaffPeriod> createAvailableSkillStaffPeriodCollection()
         {
             if (_availableSkillStaffPeriods.Count==0)
                 _skillStaffPeriodCollection.ForEach(p => { if (p.IsAvailable) _availableSkillStaffPeriods.Add(p); });
@@ -1404,7 +1404,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             get
             {
-                return new ReadOnlyCollection<ISkillStaffPeriod>(_skillStaffPeriodCollection);
+                return new ReadOnlyCollection<ISkillStaffPeriod>(_skillStaffPeriodCollection.ToArray());
             }
         }
 
@@ -1482,20 +1482,20 @@ namespace Teleopti.Ccc.Domain.Forecasting
             SkillDay newSkillDay = (SkillDay)Clone();
             newSkillDay.SetId(null);
             newSkillDay.Scenario = scenario;
-            newSkillDay._workloadDayCollection = new List<IWorkloadDay>();
+            newSkillDay._workloadDayCollection = new HashSet<IWorkloadDay>();
             foreach (WorkloadDay workloadDay in _workloadDayCollection)
             {
                 newSkillDay.AddWorkloadDay(workloadDay.NoneEntityClone());
             }
 
-            newSkillDay._skillStaffPeriodCollection = new List<ISkillStaffPeriod>();
+            newSkillDay._skillStaffPeriodCollection = new HashSet<ISkillStaffPeriod>();
             foreach (ISkillStaffPeriod skillStaffPeriod in _skillStaffPeriodCollection)
             {
                 newSkillDay._skillStaffPeriodCollection.Add(skillStaffPeriod);//ToDo: need a cloned version.
             }
-            newSkillDay._availableSkillStaffPeriods = new List<ISkillStaffPeriod>(); //Will be recreated
+            newSkillDay._availableSkillStaffPeriods = new HashSet<ISkillStaffPeriod>(); //Will be recreated
 
-            newSkillDay._skillDataPeriodCollection = new List<ISkillDataPeriod>();
+            newSkillDay._skillDataPeriodCollection = new HashSet<ISkillDataPeriod>();
             foreach (ISkillDataPeriod skillDataPeriod in _skillDataPeriodCollection)
             {
                 ISkillDataPeriod newSkillDataPeriod = skillDataPeriod.NoneEntityClone();
@@ -1573,7 +1573,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
     		foreach (var skillStaffPeriod in _skillStaffPeriodCollection)
     		{
     			skillStaffPeriod.IsAvailable = true;
-				skillStaffPeriod.Payload.MaxSeats = _skillDataPeriodCollection[0].MaxSeats;
+				skillStaffPeriod.Payload.MaxSeats = _skillDataPeriodCollection.First().MaxSeats;
     		}
     	}
 
@@ -1587,13 +1587,5 @@ namespace Teleopti.Ccc.Domain.Forecasting
                         _currentDate.AddDays(1).Date.Add(_skill.MidnightBreakOffset), _skill.TimeZone);
             }
         }
-
-		// these two is just because we suddenly are ILayerCollectionOwner
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-		public virtual ILayerCollection<ISkillStaff> LayerCollection { get; set; }
-	    public virtual void OnAdd(ILayer<ISkillStaff> layer)
-	    {
-		    throw new NotImplementedException();
-	    }
     }
 }

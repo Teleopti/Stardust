@@ -11,7 +11,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created by: robink
     /// Created date: 2008-09-18
     /// </remarks>
-    public interface ISkillDay : IForecastData, ITaskOwner, IRestrictionChecker<ISkillDay>, ITemplateDay, ICloneableEntity<ISkillDay>, ILayerCollectionOwner<ISkillStaff>, IBelongsToBusinessUnit
+    public interface ISkillDay : IForecastData, ITaskOwner, IRestrictionChecker<ISkillDay>, ITemplateDay, ICloneableEntity<ISkillDay>, IBelongsToBusinessUnit
     {
         /// <summary>
         /// Gets the Scenario

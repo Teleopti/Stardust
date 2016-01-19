@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-        public void SetValues(IList<ISkillStaffPeriod> skillStaffPeriods)
+        public void SetValues(IEnumerable<ISkillStaffPeriod> skillStaffPeriods)
         {
             skillStaffPeriods.ForEach(s =>
                                           {

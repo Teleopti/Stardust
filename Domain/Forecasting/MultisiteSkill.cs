@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 {
     public class MultisiteSkill : Skill, IMultisiteSkill
     {
-        private IList<IChildSkill> _childSkills = new List<IChildSkill>();
+        private ISet<IChildSkill> _childSkills = new HashSet<IChildSkill>();
         private IDictionary<int, IMultisiteDayTemplate> _templateMultisiteWeekCollection;
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public virtual void SetChildSkills(IList<IChildSkill> childSkills)
         {
-            _childSkills = new List<IChildSkill>(childSkills);
+            _childSkills = new HashSet<IChildSkill>(childSkills);
             _childSkills.ForEach(s => s.SetParentSkill(this));
         }
 
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public virtual ReadOnlyCollection<IChildSkill> ChildSkills
         {
-            get { return new ReadOnlyCollection<IChildSkill>(_childSkills); }
+            get { return new ReadOnlyCollection<IChildSkill>(_childSkills.ToArray()); }
         }
 
         /// <summary>
@@ -315,7 +315,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 template.SetParent(retobj);
                 retobj._templateMultisiteWeekCollection.Add(keyValuePair.Key, template);
             }
-            retobj._childSkills = new List<IChildSkill>();
+            retobj._childSkills = new HashSet<IChildSkill>();
             foreach (IChildSkill childSkill in _childSkills)
             {
                 retobj.AddChildSkill(childSkill);
@@ -334,7 +334,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 template.SetParent(retobj);
                 retobj._templateMultisiteWeekCollection.Add(keyValuePair.Key, template);
             }
-            retobj._childSkills = new List<IChildSkill>();
+            retobj._childSkills = new HashSet<IChildSkill>();
             foreach (IChildSkill childSkill in _childSkills)
             {
                 retobj.AddChildSkill(childSkill);

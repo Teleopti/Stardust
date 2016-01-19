@@ -60,18 +60,18 @@
                  not-null="true"
                  unique-key="Unique_SkillDay" foreign-key="FK_SkillDay_Scenario"/>
 
-    <bag name="WorkloadDayCollection"
+    <set name="WorkloadDayCollection"
 				 cascade="all-delete-orphan"
 		 inverse="true">
       <key column="Parent" />
       <one-to-many class="WorkloadDay"/>
-    </bag>
-    <bag name="SkillDataPeriodCollection"
+    </set>
+    <set name="SkillDataPeriodCollection"
 				 cascade="all-delete-orphan"
 				 inverse="true">
       <key column="Parent" />
       <one-to-many class="SkillDataPeriod"/>
-    </bag>
+    </set>
     <many-to-one name="BusinessUnit"
       class="Teleopti.Ccc.Domain.Common.BusinessUnit"
       access="nosetter.camelcase-underscore"

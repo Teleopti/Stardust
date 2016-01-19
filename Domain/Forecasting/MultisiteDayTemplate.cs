@@ -11,17 +11,13 @@ namespace Teleopti.Ccc.Domain.Forecasting
 {
     public class MultisiteDayTemplate : AggregateEntity, IMultisiteDayTemplate
     {
-        #region Fields
-
-        private IList<ITemplateMultisitePeriod> _templateMultisitePeriodCollection = new List<ITemplateMultisitePeriod>();
+	    private ISet<ITemplateMultisitePeriod> _templateMultisitePeriodCollection = new HashSet<ITemplateMultisitePeriod>();
         private string _name;
         private int _versionNumber;
     	private DateTime _updatedDate;
     	private bool _templateVersionNumberIncreased;
 
-    	#endregion
-
-        /// <summary>
+	    /// <summary>
         /// Gets the name.
         /// </summary>
         /// <value>The name.</value>
@@ -88,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public virtual ReadOnlyCollection<ITemplateMultisitePeriod> TemplateMultisitePeriodCollection
         {
-            get { return new ReadOnlyCollection<ITemplateMultisitePeriod>(_templateMultisitePeriodCollection); }
+            get { return new ReadOnlyCollection<ITemplateMultisitePeriod>(_templateMultisitePeriodCollection.ToArray()); }
         }
 
         private void VerifyAndAttachMultisitePeriods(IList<ITemplateMultisitePeriod> templateMultisitePeriodCollection)
@@ -268,22 +264,16 @@ namespace Teleopti.Ccc.Domain.Forecasting
             IncreaseVersionNumber();
         }
 
-        #region Implementation of ICloneable
-
-        public virtual object Clone()
+	    public virtual object Clone()
         {
             return NoneEntityClone();
         }
 
-        #endregion
-
-        #region Implementation of ICloneableEntity<IMultisiteDayTemplate>
-
-        public virtual IMultisiteDayTemplate NoneEntityClone()
+	    public virtual IMultisiteDayTemplate NoneEntityClone()
         {
             MultisiteDayTemplate retobj = (MultisiteDayTemplate)MemberwiseClone();
             retobj.SetId(null);
-            retobj._templateMultisitePeriodCollection = new List<ITemplateMultisitePeriod>();
+            retobj._templateMultisitePeriodCollection = new HashSet<ITemplateMultisitePeriod>();
             foreach (ITemplateMultisitePeriod templateSkillDataPeriod in _templateMultisitePeriodCollection)
             {
                 ITemplateMultisitePeriod clonedPeriod = (ITemplateMultisitePeriod)templateSkillDataPeriod.NoneEntityClone();
@@ -296,7 +286,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public virtual IMultisiteDayTemplate EntityClone()
         {
             MultisiteDayTemplate retobj = (MultisiteDayTemplate)MemberwiseClone();
-            retobj._templateMultisitePeriodCollection = new List<ITemplateMultisitePeriod>();
+            retobj._templateMultisitePeriodCollection = new HashSet<ITemplateMultisitePeriod>();
             foreach (ITemplateMultisitePeriod templateSkillDataPeriod in _templateMultisitePeriodCollection)
             {
                 ITemplateMultisitePeriod clonedPeriod = (ITemplateMultisitePeriod)templateSkillDataPeriod.EntityClone();
@@ -305,7 +295,5 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
             return retobj;
         }
-
-        #endregion
     }
 }

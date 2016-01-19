@@ -27,12 +27,12 @@
               length="50"
               not-null="true"/>
 
-    <bag name="TemplateSkillDataPeriodCollection"
+    <set name="TemplateSkillDataPeriodCollection"
 				 cascade="all-delete-orphan"
 				 inverse="true">
 			<key column="Parent" />
 			<one-to-many class="Teleopti.Ccc.Domain.Forecasting.Template.TemplateSkillDataPeriod"/>
-		</bag>
+		</set>
 
     <property name="VersionNumber"
       type="int"

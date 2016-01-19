@@ -18,7 +18,7 @@ namespace Teleopti.Interfaces.Domain
         /// Sets the target skill staff periods.
         /// </summary>
         /// <param name="skillStaffPeriods">The skill staff periods that should be updated with values from the contained skill staff periods.</param>
-        void SetValues(IList<ISkillStaffPeriod> skillStaffPeriods);
+        void SetValues(IEnumerable<ISkillStaffPeriod> skillStaffPeriods);
 
         /// <summary>
         /// Indicates that the batch was completed.

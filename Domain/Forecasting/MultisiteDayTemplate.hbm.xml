@@ -21,12 +21,12 @@
               length="50"
               not-null="true"/>
 
-    <bag name="TemplateMultisitePeriodCollection"
+    <set name="TemplateMultisitePeriodCollection"
 				 cascade="all-delete-orphan"
 				 inverse="true">
       <key column="Parent" />
       <one-to-many class="Teleopti.Ccc.Domain.Forecasting.Template.TemplateMultisitePeriod"/>
-    </bag>
+    </set>
 
     <property name="WeekdayIndex"
           type="int"

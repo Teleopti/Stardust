@@ -6,11 +6,11 @@
   <joined-subclass name="MultisiteSkill"
 					extends="Skill">
     <key column="Skill" foreign-key="FK_MultisiteSkill_Skill"/>
-    <bag name="ChildSkills"
+    <set name="ChildSkills"
 				 cascade="none">
       <key column="ParentSkill" />
       <one-to-many class="ChildSkill"/>
-    </bag>
+    </set>
     <map name="TemplateMultisiteWeekCollection"
 	            cascade="all-delete-orphan"
               inverse="true">
