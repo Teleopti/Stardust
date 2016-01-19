@@ -190,11 +190,11 @@
 				requestsTableContainerCtrl.reselectRequests();
 			},true);
 
-			scope.$on('reload.requests.without.seletion', function () {
+			scope.$on('reload.requests.without.selection', function () {
 				requestsTableContainerCtrl.clearSelection();
 			});
 
-			scope.$on('reload.requests.with.seletion', function () {
+			scope.$on('reload.requests.with.selection', function () {
 				requestsTableContainerCtrl.reselectRequests();
 			});
 		}

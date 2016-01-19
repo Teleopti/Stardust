@@ -97,7 +97,7 @@
 
 		function onCommandSuccess(commandType, changedRequestsCount, requestsCount) {
 			vm.disableInteraction = false;
-			forceRequestsReloadWithSelection();
+			forceRequestsReloadWithoutSelection();
 
 			if (commandType === requestsDefinitions.REQUEST_COMMANDS.Approve) {
 				requestsNotificationService.notifyApproveRequestsSuccess(changedRequestsCount, requestsCount);
@@ -108,7 +108,7 @@
 
 		function onCommandError(error) {
 			vm.disableInteraction = false;
-			forceRequestsReloadWithSelection();
+			forceRequestsReloadWithoutSelection();
 			requestsNotificationService.notifyCommandError(error);
 		}
 
