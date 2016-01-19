@@ -4,7 +4,7 @@ using Autofac;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Service;
-using Teleopti.Analytics.Etl.Common.TickEvent;
+using Teleopti.Analytics.Etl.Common.TenantHeartbeat;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.MultiTenancy;
@@ -32,7 +32,7 @@ namespace Teleopti.Analytics.Etl.Common
 			builder.RegisterType<JobHelper>().SingleInstance();
 			builder.RegisterType<Tenants>().SingleInstance();
 			builder.RegisterType<TenantsLoadedInEtl>().As<IAllTenantNames>().SingleInstance();
-			builder.RegisterType<HourlyTickEventPublisher>().SingleInstance();
+			builder.RegisterType<TenantHearbeatEventPublisher>().SingleInstance();
 			builder.RegisterType<BaseConfigurationRepository>().As<IBaseConfigurationRepository>().SingleInstance();
 
 			builder.RegisterType<FindTenantLogonInfoUnsecured>().As<IFindLogonInfo>().SingleInstance();

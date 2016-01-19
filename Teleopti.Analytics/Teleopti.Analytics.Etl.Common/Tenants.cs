@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
-using Teleopti.Analytics.Etl.Common.TickEvent;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;

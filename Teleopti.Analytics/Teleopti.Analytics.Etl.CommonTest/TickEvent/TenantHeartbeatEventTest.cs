@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Analytics.Etl.Common.TickEvent;
+using Teleopti.Analytics.Etl.Common.TenantHeartbeat;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -12,9 +12,9 @@ using Teleopti.Ccc.TestCommon.TestData;
 namespace Teleopti.Analytics.Etl.CommonTest.TickEvent
 {
 	[EtlTest]
-	public class HourlyTickEventTest
+	public class TenantHeartbeatEventTest
 	{
-		public HourlyTickEventPublisher Target;
+		public TenantHearbeatEventPublisher Target;
 		public FakeRecurringEventPublisher Publisher;
 		public FakeTenants Tenants;
 		public MutableNow Now;
@@ -26,17 +26,17 @@ namespace Teleopti.Analytics.Etl.CommonTest.TickEvent
 
 			Target.Tick();
 
-			Publisher.AddedJob.Should().Be.True();
+			Publisher.PublishingAdded.Should().Be.True();
 		}
 
 		[Test]
-		public void ShouldPublishHourlyTickEvent()
+		public void ShouldPublishEvent()
 		{
 			Tenants.Has(new Tenant("t"));
 
 			Target.Tick();
 
-			Publisher.Event.Should().Be.OfType<HourlyTickEvent>();
+			Publisher.Event.Should().Be.OfType<TenantHearbeatEvent>();
 		}
 
 		[Test]
@@ -101,7 +101,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.TickEvent
 			Publisher.Clear();
 			Target.Tick();
 
-			Publisher.AddedJob.Should().Be.False();
+			Publisher.PublishingAdded.Should().Be.False();
 		}
 
 		[Test]
@@ -115,7 +115,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.TickEvent
 			Publisher.Clear();
 			Target.Tick();
 
-			Publisher.AddedJob.Should().Be.True();
+			Publisher.PublishingAdded.Should().Be.True();
 		}
 	}
 }

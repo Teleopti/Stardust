@@ -1,20 +1,17 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Analytics.Etl.Common.TickEvent
+namespace Teleopti.Analytics.Etl.Common.TenantHeartbeat
 {
-	public class HourlyTickEventPublisher
+	public class TenantHearbeatEventPublisher
 	{
 		private readonly AllTenantRecurringEventPublisher _publisher;
 		private readonly INow _now;
 		private DateTime? _nextPublish;
 
-		public HourlyTickEventPublisher(
+		public TenantHearbeatEventPublisher(
 			AllTenantRecurringEventPublisher publisher,
 			INow now)
 		{
@@ -29,7 +26,7 @@ namespace Teleopti.Analytics.Etl.Common.TickEvent
 				return;
 			_nextPublish = _now.UtcDateTime().AddMinutes(10);
 
-			_publisher.Publish(new HourlyTickEvent());
+			_publisher.Publish(new TenantHearbeatEvent());
 		}
 	}
 

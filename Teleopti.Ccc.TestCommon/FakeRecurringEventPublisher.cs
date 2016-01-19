@@ -15,12 +15,12 @@ namespace Teleopti.Ccc.TestCommon
 			public IEvent Event;
 		}
 
-		private readonly IList<jobInfo> _jobs = new List<jobInfo>();
+		private readonly IList<jobInfo> _publishing = new List<jobInfo>();
 		private readonly ICurrentDataSource _dataSource;
 
-		public IEnumerable<string> Tenants { get { return _jobs.Select(x => x.Tenant).ToArray(); } }
-		public IEvent Event { get { return _jobs.First().Event; } }
-		public bool AddedJob { get { return _jobs.Any(); } }
+		public IEnumerable<string> Tenants { get { return _publishing.Select(x => x.Tenant).ToArray(); } }
+		public IEvent Event { get { return _publishing.First().Event; } }
+		public bool PublishingAdded { get { return _publishing.Any(); } }
 
 		public FakeRecurringEventPublisher(ICurrentDataSource dataSource)
 		{
@@ -30,11 +30,11 @@ namespace Teleopti.Ccc.TestCommon
 		public void PublishHourly(IEvent @event)
 		{
 			var tenant = _dataSource.Current().DataSourceName;
-			var job = _jobs.SingleOrDefault(x => x.Tenant == tenant);
+			var job = _publishing.SingleOrDefault(x => x.Tenant == tenant);
 			if (job == null)
 			{
 				job = new jobInfo();
-				_jobs.Add(job);
+				_publishing.Add(job);
 			}
 			job.Tenant = tenant;
 			job.Event = @event;
@@ -43,19 +43,19 @@ namespace Teleopti.Ccc.TestCommon
 		public void StopPublishingForCurrentTenant()
 		{
 			var tenant = _dataSource.Current().DataSourceName;
-			var job = _jobs.SingleOrDefault(x => x.Tenant == tenant);
+			var job = _publishing.SingleOrDefault(x => x.Tenant == tenant);
 			if (job != null)
-				_jobs.Remove(job);
+				_publishing.Remove(job);
 		}
 
 		public IEnumerable<string> TenantsWithRecurringJobs()
 		{
-			return _jobs.Select(x => x.Tenant).ToArray();
+			return _publishing.Select(x => x.Tenant).ToArray();
 		}
 
 		public void Clear()
 		{
-			_jobs.Clear();
+			_publishing.Clear();
 		}
 	}
 }

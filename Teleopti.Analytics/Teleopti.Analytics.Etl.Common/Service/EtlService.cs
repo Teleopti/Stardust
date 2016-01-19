@@ -1,7 +1,7 @@
 using System;
 using System.Timers;
 using log4net;
-using Teleopti.Analytics.Etl.Common.TickEvent;
+using Teleopti.Analytics.Etl.Common.TenantHeartbeat;
 
 namespace Teleopti.Analytics.Etl.Common.Service
 {
@@ -11,12 +11,12 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 		private Timer _timer;
 		private readonly EtlJobStarter _etlJobStarter;
-		private readonly HourlyTickEventPublisher _hourlyTickEventPublisher;
+		private readonly TenantHearbeatEventPublisher _tenantHearbeatEventPublisher;
 
-		public EtlService(EtlJobStarter etlJobStarter, HourlyTickEventPublisher hourlyTickEventPublisher)
+		public EtlService(EtlJobStarter etlJobStarter, TenantHearbeatEventPublisher tenantHearbeatEventPublisher)
 		{
 			_etlJobStarter = etlJobStarter;
-			_hourlyTickEventPublisher = hourlyTickEventPublisher;
+			_tenantHearbeatEventPublisher = tenantHearbeatEventPublisher;
 		}
 
 		public void Start(DateTime serviceStartTime, Action stopService)
@@ -37,12 +37,12 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 			try
 			{
-				_hourlyTickEventPublisher.Tick();
+				_tenantHearbeatEventPublisher.Tick();
 			}
 			catch (Exception ex)
 			{
 				Console.WriteLine(ex);
-				log.Error("Exception occurred invoking HourlyTickEventPublisher", ex);
+				log.Error("Exception occurred invoking TenantHearbeatEventPublisher", ex);
 			}
 
 			try

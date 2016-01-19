@@ -197,7 +197,7 @@
     <Compile Include="ApplicationLayer\Events\DayOffAddedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\DayUnscheduledEvent.cs" />
     <Compile Include="ApplicationLayer\Events\EventAdherence.cs" />
-    <Compile Include="ApplicationLayer\Events\HourlyTickEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\TenantHearbeatEvent.cs" />
     <Compile Include="ApplicationLayer\Events\IRunOnHangfire.cs" />
     <Compile Include="ApplicationLayer\Events\ITrackInfo.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceModifiedEvent.cs" />

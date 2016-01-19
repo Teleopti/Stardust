@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Now.Is("2016-01-15 00:00");
 			Data.HasPerson("pierre", "2016-01-14");
 
-			Target.Handle(new HourlyTickEvent());
+			Target.Handle(new TenantHearbeatEvent());
 
 			Publisher.PublishedEvents.Single().Should().Be.OfType<PersonAssociationChangedEvent>();
 		}
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personId = Guid.NewGuid();
 			Data.HasPerson(personId, "pierre", "2016-01-14");
 
-			Target.Handle(new HourlyTickEvent());
+			Target.Handle(new TenantHearbeatEvent());
 
 			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single().PersonId
 				.Should().Be(personId);
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Now.Is("2016-01-15 00:00");
 			Data.HasPerson("pierre", "2016-01-14");
 
-			Target.Handle(new HourlyTickEvent());
+			Target.Handle(new TenantHearbeatEvent());
 
 			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single().Timestamp
 				.Should().Be("2016-01-15 00:00".Utc());
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Now.Is("2016-01-15 00:00");
 			Data.HasPerson("pierre");
 
-			Target.Handle(new HourlyTickEvent());
+			Target.Handle(new TenantHearbeatEvent());
 
 			Publisher.PublishedEvents.Should().Be.Empty();
 		}
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Now.Is("2016-01-15 00:00");
 			Data.HasPerson("pierre", "2016-01-15");
 
-			Target.Handle(new HourlyTickEvent());
+			Target.Handle(new TenantHearbeatEvent());
 
 			Publisher.PublishedEvents.Should().Be.Empty();
 		}
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Data.HasPerson(pierreId, "pierre", "2016-01-14", Guid.NewGuid());
 			Data.HasPerson(ashleeyId, "ashleey", "2016-01-14", Guid.NewGuid());
 
-			Target.Handle(new HourlyTickEvent());
+			Target.Handle(new TenantHearbeatEvent());
 
 			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(new[] {ashleeyId, pierreId});
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var teamId = Guid.NewGuid();
 			Data.HasPerson("pierre", "2016-01-14", teamId);
 
-			Target.Handle(new HourlyTickEvent());
+			Target.Handle(new TenantHearbeatEvent());
 
 			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single().TeamId
 				.Should().Be(null);
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Now.Is("2016-01-15 00:00");
 			Data.HasPerson("pierre", "2016-01-12");
 
-			Target.Handle(new HourlyTickEvent());
+			Target.Handle(new TenantHearbeatEvent());
 
 			Publisher.PublishedEvents.Should().Be.Empty();
 		}
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Now.Is("2016-01-14 22:00");
 			Data.HasPerson("pierre", "2016-01-14", TimeZoneInfoFactory.IstanbulTimeZoneInfo());
 
-			Target.Handle(new HourlyTickEvent());
+			Target.Handle(new TenantHearbeatEvent());
 
 			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Should().Not.Be.Empty();
 		}
