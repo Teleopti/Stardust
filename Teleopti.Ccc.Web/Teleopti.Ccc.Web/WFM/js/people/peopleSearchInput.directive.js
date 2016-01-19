@@ -23,7 +23,7 @@
 
 		vm.validateSearchKeywordChanged = function () {
 			vm.searchOptions.searchKeywordChanged = true;
-			parseSearchKeywordInputted();
+			parseSearchExpressionInputted();
 		};
 		vm.turnOffAdvancedSearch = function () {
 			vm.showAdvancedSearchOption = false;
@@ -32,27 +32,25 @@
 		vm.toggleAdvancedSearchOption = function ($event) {
 			vm.showAdvancedSearchOption = !vm.showAdvancedSearchOption;
 			$event.stopPropagation();
-			parseSearchKeywordInputted();
+			parseSearchExpressionInputted();
 		};
 		vm.advancedSearch = function () {
 			vm.showAdvancedSearchOption = false;
 
-			var keyword = "";
+			var expression = "";
 			angular.forEach(allSearchTypes, function (searchType) {
 				// Change first letter to lowercase
 				var title = searchType.charAt(0).toLowerCase() + searchType.slice(1);
-				keyword += getSearchCriteria(title, vm.advancedSearchForm[searchType]);
+				expression += getSearchCriteria(title, vm.advancedSearchForm[searchType]);
 			});
 
-			if (keyword !== "") {
-				keyword = keyword.substring(0, keyword.length - 2);
-			}
-			if (keyword !== "" && keyword !== vm.searchOptions.keyword) {
+			expression = expression.trim();
+			if (expression !== "" && expression !== vm.searchOptions.keyword) {
 				vm.searchOptions.searchKeywordChanged = true;
 			}
-			vm.searchOptions.keyword = keyword;
+			vm.searchOptions.keyword = expression;
 			if (vm.searchCallback)
-				vm.searchCallback(keyword);
+				vm.searchCallback(expression);
 		};
 
 		var allSearchTypes = [
@@ -77,26 +75,58 @@
 			});
 		}
 
-		function parseSearchKeywordInputted() {
+		function parseSearchExpressionInputted() {
 			vm.advancedSearchForm = {};
 			if (vm.searchOptions.keyword.indexOf(':') !== -1) {
-				var searchTerms = vm.searchOptions.keyword.split(',');
-				angular.forEach(searchTerms, function (searchTerm) {
-					var termSplitter = searchTerm.indexOf(':');
-					if (termSplitter < 0) {
-						return;
-					}
-
-					var searchType = searchTerm.substring(0, termSplitter).trim();
-					var searchValue = searchTerm.substring(termSplitter + 1, searchTerm.length).trim();
-
+				var expression = vm.searchOptions.keyword.trim();
+				if (expression.charAt(expression.length - 1) !== ',') {
+					expression = expression + ',';
+				}
+				var regex = /(\S*?):\s{0,}(\".*?\"),/ig;
+				var match;
+				while (match = regex.exec(expression)) {
+					var searchType = match[1].trim();
+					var searchValue = match[2].trim();
 					setSearchFormProperty(searchType, searchValue);
-				});
+				}
 			}
 		}
 
 		function getSearchCriteria(title, value) {
-			return value !== undefined && value !== "" ? title + ": " + value + ", " : "";
+			if (value === undefined || value === null || value.trim().length === 0) {
+				return '';
+			}
+			var displayValue = value.trim();
+
+			var quotedKeywords = "";
+			var pattern = /"(.*?)"/ig;
+			var match;
+			while (match = pattern.exec(displayValue)) {
+				var keyword = match[1].trim();
+				if (keyword.length > 0) {
+					quotedKeywords = quotedKeywords + ' "' + keyword + '"';
+				}
+			}
+			quotedKeywords = quotedKeywords.trim();
+
+			var unquotedKeywords = displayValue
+				.replace(pattern, '').trim()
+				.replace('"', '').trim()
+				.replace(' ', '" "').trim();
+			unquotedKeywords = '"' + unquotedKeywords + '"';
+
+			var keyWords;
+			if (quotedKeywords.length === 0 && unquotedKeywords === '""') {
+				return '';
+			} else if (quotedKeywords.length === 0) {
+				keyWords = unquotedKeywords;
+			} else if (unquotedKeywords === '""') {
+				keyWords = quotedKeywords;
+			} else {
+				keyWords = quotedKeywords + ' ' + unquotedKeywords;
+			}
+
+			return title + ': ' + keyWords + ', ';
 		}
 	}
 	var directive = function () {
