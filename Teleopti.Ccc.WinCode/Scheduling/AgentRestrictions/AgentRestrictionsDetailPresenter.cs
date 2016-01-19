@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary;
 using Teleopti.Interfaces.Domain;
@@ -90,19 +89,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 				e.Style.CellTipText = sb.ToString();
 			}
 		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "rowIndex-1")]
+		
 		public IWeekHeaderCellData OnQueryWeekHeader(int rowIndex)
 		{
 			int stop = ((rowIndex - 1) * 7) + 7;
-			var minTime = new TimeSpan();
-			var maxTime = new TimeSpan();
-			IPreferenceCellData preferenceCellData;
+			var minTime = TimeSpan.Zero;
+			var maxTime = TimeSpan.Zero;
 
 			var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
-			var myCal = culture.Calendar;
-			var myCwr = culture.DateTimeFormat.CalendarWeekRule;
-			var myFirstDow = culture.DateTimeFormat.FirstDayOfWeek;
 			var weekNumber = 0;
 
 			//var weekMax = new TimeSpan(0);
@@ -114,6 +108,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			for (int index = startIndex; index < stop; index++)
 			{
 				if (index >= _model.DetailData().Count)break;
+				IPreferenceCellData preferenceCellData;
 				_model.DetailData().TryGetValue(index, out preferenceCellData);
 			   
 				var projection = preferenceCellData.SchedulePart.ProjectionService().CreateProjection();
@@ -141,7 +136,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			    if (preferenceCellData.WeeklyMin < weekMin) weekMin = preferenceCellData.WeeklyMin;
                 if (preferenceCellData.EmploymentType.Equals(EmploymentType.HourlyStaff)) haveFullTimePersonPeriod = false;
                 
-				weekNumber = myCal.GetWeekOfYear(preferenceCellData.TheDate.Date, myCwr, myFirstDow);
+				weekNumber = DateHelper.WeekNumber(preferenceCellData.TheDate.Date, culture);
 			}
 			var weekIsLegal = minTime <= weekMax;
             if (weekIsLegal && haveFullTimePersonPeriod &&  SchedulerState.SchedulingResultState.UseMinWeekWorkTime) weekIsLegal = maxTime >= weekMin;

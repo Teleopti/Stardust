@@ -14,6 +14,7 @@ using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary;
 using Teleopti.Interfaces.Domain;
 
@@ -78,7 +79,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			Assert.AreEqual(7, _presenter.ColCount);	
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "period"), Test]
+		[Test]
 		public void ShouldReturnRowCount()
 		{
 			_detailData.Add(0, null);
@@ -109,7 +110,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			Assert.AreEqual(string.Empty, e.Style.CellValue.ToString());
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "period"), Test]
+		[Test]
 		public void ShouldQueryCellInfoScheduleDay()
 		{
 			var part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(_dateTime));
@@ -133,7 +134,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "period"), Test]
+		[Test]
 		public void ShouldQueryCellInfoWeekday()
 		{
 			using (_mocks.Record())
@@ -154,7 +155,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			}	
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "period"), Test]
+		[Test]
 		public void VerifyQueryCellInfoWeekHeaderWhenDayNotScheduled()
 		{
 			var preferenceCellData = new PreferenceCellData();
@@ -203,7 +204,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			}	
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "period"), Test]
+		[Test]
 		public void VerifyQueryCellInfoWeekHeaderWhenDayScheduled()
 		{
 			var preferenceCellData = new PreferenceCellData();
@@ -250,10 +251,50 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				weekHeaderCellData = _presenter.OnQueryWeekHeader(1);
 				Assert.IsNotNull(weekHeaderCellData);
 			}
-
 		}
 
-        [Test]
+		[Test]
+		public void ShouldDisplayCorrectWeekNumberInBeginningOf2016()
+		{
+			var preferenceCellData = new PreferenceCellData();
+			var startTimeLimitation = new StartTimeLimitation(new TimeSpan(7, 0, 0), null);
+			var endTimeLimitation = new EndTimeLimitation(new TimeSpan(0, 20, 0), null);
+			var workTimeLimitation = new WorkTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(12, 0, 0));
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Natt");
+			var effectiveRestriction = new EffectiveRestriction(startTimeLimitation, endTimeLimitation, workTimeLimitation, shiftCategory, null, null, new List<IActivityRestriction>());
+			preferenceCellData.EffectiveRestriction = effectiveRestriction;
+
+			var schedulePart = _mocks.StrictMock<IScheduleDay>();
+			var projectionService = _mocks.StrictMock<IProjectionService>();
+			var visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
+
+			preferenceCellData.SchedulePart = schedulePart;
+
+			preferenceCellData.SchedulingOption = new RestrictionSchedulingOptions();
+			preferenceCellData.SchedulingOption.UseScheduling = true;
+			preferenceCellData.TheDate = new DateOnly(2016,1,1);
+			_detailData.Clear();
+			_detailData.Add(0, preferenceCellData);
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_model.DetailData()).Return(_detailData).Repeat.AtLeastOnce();
+                Expect.Call(schedulePart.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
+                Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
+                Expect.Call(visualLayerCollection.HasLayers).Return(false).Repeat.AtLeastOnce(); // this line indicates that the day is not scheduled
+			}
+
+			using (_mocks.Playback())
+			{
+				//because of constructor in SchedulePresenterBase
+				var period = _schedulerStateHolder.RequestedPeriod;
+				
+				var weekHeaderCellData = _presenter.OnQueryWeekHeader(1);
+				weekHeaderCellData.WeekNumber.Should().Be.EqualTo(53);
+			}
+		}
+
+		[Test]
         public void ShouldAlertWhenBelowMin()
         {
             var preferenceCellData = new PreferenceCellData();
