@@ -42,9 +42,11 @@
 				<a href="javascript: void(0);"> {{'SelectAllMatchedPeople'|translate}}</a>
 			</span>
 	</div>
-
+	
 	<div ui-i18n="{{lang}}" ng-if="dataInitialized" class="big-table-wrapper" style="position: relative">
 		<div ui-grid="gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-selection ui-grid-pagination ui-grid-resize-columns class="grid people-list"></div>
+	</div>
+	<div ng-if="dataInitialized" class="con-footer" style="height: 50px">
 		<wfm-pagination pagination-options="paginationOptions" get-data-for-page-callback="getPageData"></wfm-pagination>
 	</div>
 

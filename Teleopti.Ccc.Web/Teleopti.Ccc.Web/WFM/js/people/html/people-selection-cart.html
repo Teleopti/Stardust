@@ -88,8 +88,8 @@
 			<i class='mdi mdi-alert-octagon'></i>
 			{{'ProcessFailedErrorColon'|translate}}{{vm.updateResult.ErrorMsg}}
 		</div>
-		<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.gridApi.pagination.seek"></wfm-pagination>
-
 	</div>
-
+	<div ng-if="vm.dataInitialized" class="con-footer" style="height: 50px">
+		<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.gridApi.pagination.seek"></wfm-pagination>
+	</div>
 </div>

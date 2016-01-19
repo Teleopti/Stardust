@@ -4,7 +4,7 @@
 	</div>
 </div>
 
-<div class="team-schedule material-depth-1">
+<div class="team-schedule panel material-depth-1">
 	<div>
 		<span class="people-search-container">
 			<people-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged" />
@@ -41,7 +41,7 @@
 		<schedule-table schedule-vm="vm.groupScheduleVm" person-selection="vm.personIdSelectionDic" select-mode="vm.isAbsenceReportingEnabled" />
 	</div>
 
-	<div class="pull-right" ng-if="vm.paginationOptions.totalPages > 0">
+	<div class="con-footer" ng-if="vm.paginationOptions.totalPages > 0">
 		<select class="page-size-selector" ng-if="vm.isSelectAgentsPerPageEnabled"
 				  ng-model="vm.paginationOptions.pageSize" ng-options="option for option in vm.agentsPerPageSelection" ng-change="vm.selectorChanged()"></select>
 		<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
@@ -75,5 +75,5 @@
 			</div>
 		</div>
 	</div>
-	
+
 </div>
