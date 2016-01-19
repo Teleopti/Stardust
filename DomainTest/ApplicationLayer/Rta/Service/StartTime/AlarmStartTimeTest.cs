@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 			Database.PersistedReadModel.AlarmStartTime.Should().Be("2015-12-10 8:05".Utc());
 		}
 
-
 		[Test]
 		public void ShouldNotHaveAlarmStartTimeWhenNotInRule()
 		{
@@ -57,7 +56,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 
 			Database.PersistedReadModel.AlarmStartTime.Should().Be(null);
 		}
-
 
 		[Test]
 		public void ShouldNotUpdateAlarmStartTimeWhenStillInSameAlarm()
