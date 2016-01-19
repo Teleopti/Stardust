@@ -16,6 +16,8 @@
 		vm.scheduleDate = new Date();
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 		vm.toggleForSelectAgentsPerPageEnabled = false;
+		// The original schedule got from server side
+		vm.rawSchedules = [];
 
 		vm.searchOptions = {
 			keyword: '',
@@ -95,6 +97,7 @@
 			vm.isLoading = true;
 			var params = getParamsForLoadingSchedules();
 			teamScheduleSvc.searchSchedules.query(params).$promise.then(function(result) {
+				vm.rawSchedules = result.Schedules;
 				afterSchedulesLoadedForSearchCondition(result);
 				vm.isLoading = false;
 			});
@@ -103,27 +106,19 @@
 		vm.updateSchedules = function (personIdList) {
 			var params = { personIds: personIdList, date: vm.scheduleDateMoment().format('YYYY-MM-DD') };
 			vm.isLoading = true;
+
+			angular.forEach(vm.rawSchedules, function(schedule) {
+				if (personIdList.indexOf(schedule.PersonId) >= 0) {
+					vm.rawSchedules.slice(schedule);
+				}
+			});
+
 			teamScheduleSvc.getSchedules.query(params).$promise.then(function(result) {
-				updateGroupScheduleVm(result);
+				vm.rawSchedules = vm.rawSchedules.concat(result.Schedules);
+				vm.groupScheduleVm = groupScheduleFactory.Create(vm.rawSchedules, vm.scheduleDateMoment());
 				vm.isLoading = false;
 			});
 		};
-
-		function updateGroupScheduleVm(result) {
-			var newSchedules = groupScheduleFactory.Create(result.Schedules, vm.scheduleDateMoment());
-
-			newSchedules.Schedules.forEach(function(newSchedule) {
-				var oldScheduleIndex = objectArrayIndexOf(vm.groupScheduleVm.Schedules, 'PersonId', newSchedule.PersonId);
-				vm.groupScheduleVm.Schedules[oldScheduleIndex] = newSchedule;
-			});
-		}
-
-		function objectArrayIndexOf(array, property, searchTerm) {
-			for (var i = 0, len = array.length; i < len; i++) {
-				if (array[i][property] === searchTerm) return i;
-			}
-			return -1;
-		}
 
 		function setupPersonIdSelectionDic(schedules) {
 			schedules.forEach(function (personSchedule) {
