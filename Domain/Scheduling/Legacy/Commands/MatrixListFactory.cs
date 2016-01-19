@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
 using Teleopti.Interfaces.Domain;
@@ -81,6 +82,37 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 
 			_matrixUserLockLocker.Execute(matrixes, selectedPeriod.Value);
+			_matrixNotPermittedLocker.Execute(matrixes);
+
+			return matrixes;
+		}
+
+		public IList<IScheduleMatrixPro> CreateMatrixListForSelectionPerPerson(IList<IScheduleDay> scheduleDays)
+		{
+			var matrixes = new List<IScheduleMatrixPro>();
+			var selectedPersons = _personExtractor.ExtractPersons(scheduleDays);
+
+			foreach (var person in selectedPersons)
+			{
+				var daysForPerson = scheduleDays.Where(x => x.Person.Equals(person)).ToList();
+				var selectedPeriod = _periodExctractor.ExtractPeriod(daysForPerson);
+				if (!selectedPeriod.HasValue) continue;
+				var startDate = selectedPeriod.Value.StartDate;
+				var date = startDate;
+				while (date <= selectedPeriod.Value.EndDate)
+				{
+					var matrix = createMatrixForPersonAndDate(person, date);
+					if (matrix == null)
+					{
+						date = date.AddDays(1);
+						continue;
+					}
+					matrixes.Add(matrix);
+					date = matrix.SchedulePeriod.DateOnlyPeriod.EndDate.AddDays(1);
+					_matrixUserLockLocker.Execute(new List<IScheduleMatrixPro> { matrix }, selectedPeriod.Value);
+				}
+			}
+
 			_matrixNotPermittedLocker.Execute(matrixes);
 
 			return matrixes;

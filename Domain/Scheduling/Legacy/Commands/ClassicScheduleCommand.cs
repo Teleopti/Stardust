@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 
 			var daysOnlyHelper = new DaysOnlyHelper(schedulingOptions);
-			var allMatrixesOfSelectedPersons = _matrixListFactory.CreateMatrixListForSelection(allScheduleDays);
+			var allMatrixesOfSelectedPersons = _matrixListFactory.CreateMatrixListForSelectionPerPerson(allScheduleDays);
 
 			if (daysOnlyHelper.DaysOnly)
 			{
