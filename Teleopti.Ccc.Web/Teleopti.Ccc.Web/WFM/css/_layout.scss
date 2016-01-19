@@ -2,18 +2,6 @@ html, body{
 	background:#f3f3f3!important;
 }
 
-.current-nav{
-	background-color:#003466;
-	color:$white;
-}
-
-.navbar{
-  position:fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-}
-
 .line-right{
 	text-align:right;
 }
@@ -150,147 +138,19 @@ input::-ms-clear {
 		margin-top: 3rem;
 	}
 
-	.bubble-wrap {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 80px;
-			background: $white;
-			overflow: hidden;
-
-			@media screen and (min-width:0\0) {
-				background: $blue-300;
-			}
-		}
-
-	.bubble {
-		height: 60px;
-		width: 60px;
-		background-color: #66C2FF;
-		top: 15vh;
-		right: 50%;
-		position: absolute;
-		border-radius: 50%;
-		-moz-transform: scale(80);
-		-webkit-transform: scale(80);
-		-moz-transform: bg-in 5s cubic-bezier(0.2, 0.3, 0, 1);
-		-webkit-animation: bg-in 5s cubic-bezier(0.2, 0.3, 0, 1);
-		animation: bg-in 5s cubic-bezier(0.2, 0.3, 0, 1);
-	}
-
-	@-webkit-keyframes bg-in {
-		from {
-			-moz-transform: scale(0);
-			-webkit-transform: scale(0);
-			transform: scale(0);
-		}
-	}
-
 /*nav-context-menu*/
-#lefttoogle > div{
-position: fixed;
-    top: -69px;
-    z-index: 9999;
-    left: 10px;
-    background: transparent;
-    box-shadow: none;
-    color:white;
-    font-size:250%;
-}
-
 .searchbaricon{
 	cursor:pointer;
 }
 
 /*left sidenav */
-.sidenav-header{
-	background:$white;
-	overflow: hidden;
-	position: relative;
-	display: flex;
-
-	&:hover{
-		background: $gray012;
-	}
-}
-
-.sidenav-tooltip{
-	margin-left: 64px;
-	margin-top: -27px;
-}
-
 .nav-item-active{
 	.sidenav-header{
 		background:$green-100;
 	}
-
-	/*i{
-		background: $white;
-		padding:5px;
-		border-radius: 50%;
-	}*/
 }
-
-.sidenav{
-    flex-basis: 240px!important;
-	i{
-		/*border-radius: 50%;
-		text-align: center;
-		background: white;
-		box-shadow: 0 0 0 3px white;*/
-		margin-right: 10px;
-		margin-left: 10px;
-	}
-
-	span{
-		display:inline;
-		opacity: 1;
-		white-space:nowrap;
-		padding-left: 20px;
-		text-overflow: ellipsis;
-	}
-}
-
-.sidenav.is-hidden{
-	flex-basis: 50px!important;
-
-	span{
-		width:0;
-	}
-}
-
-
 
 /*Growl*/
-.growl-wrapper {
-	position: absolute;
-	bottom: 0px;
-	z-index: 99999;
-	right: 10px;
-	left: 10px;
-}
-
-.growl-container > .growl-item {
-	padding: 10px;
-	padding-right: 35px;
-	margin-bottom: 0px;
-	cursor: pointer;
-	vertical-align: middle;
-	box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
-}
-
-.growl-item .close {
-	text-shadow: none;
-	opacity: 1;
-	margin: 0 5px;
-	font-size: 16px!important;
-}
-
-.growl-container > button {
-	border: none;
-	outline:none;
-}
 .growl-container > .growl-item.ng-enter,
 .growl-container > .growl-item.ng-leave {
 	-webkit-transition:0.5s all ease-in-out;
@@ -299,38 +159,35 @@ position: fixed;
 	transition:0.5s all ease-in-out;
 }
 
-.growl-container > .growl-item.ng-enter,
-.growl-container > .growl-item.ng-leave.ng-leave-active {
-	opacity:0;
-}
-.growl-container > .growl-item.ng-leave,
-.growl-container > .growl-item.ng-enter.ng-enter-active {
-	opacity:1;
-}
-
-.growl-container > div.growl-item {
-	background-repeat: no-repeat;
-}
-
-
-/*Merge fixes*/
+/*Project specific*/
 .fab-wrapper .wfm-fab{
 	float:right;
 }
-#materialcontainer{
-	box-shadow: none!important;
+
+.navbar{
+  position:fixed;
+  top: 0;
+  left: 0;
+  right: 0;
 }
 
-.wfm-card-unselected, .wfm-card-unselected:hover{
-	background-color: $white!important;
+#lefttoogle > div{
+	position: fixed;
+	top: -69px;
+  z-index: 9999;
+  left: 10px;
+  background: transparent;
+  box-shadow: none;
+  color:white;
+  font-size:250%;
 }
 
-md-progress-circular .md-inner .md-half-circle {
-	border-top-color: #E91E63!important;
-}
-
-.md-select-menu-container{
-	background:$white!important;
+.growl-wrapper {
+	position: absolute;
+	bottom: 0px;
+	z-index: 99999;
+	right: 10px;
+	left: 10px;
 }
 
 .list-mark{
@@ -339,4 +196,13 @@ md-progress-circular .md-inner .md-half-circle {
 	border-radius:50%;
 	text-align:center;
 	font-size:15px!important;
+}
+
+md-progress-circular .md-inner .md-half-circle {
+	border-top-color: $pink-500!important;
+}
+
+/*temp fixes*/
+.wfm-card-unselected{
+	background: $white;
 }
