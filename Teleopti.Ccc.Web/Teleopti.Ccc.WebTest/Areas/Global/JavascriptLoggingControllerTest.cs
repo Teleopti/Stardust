@@ -14,12 +14,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		{
 			var logSpy = new LogSpy();
 			var target = new JavascriptLoggingController(logSpy);
-			var content = RandomName.Make();
+			var content = new JavascriptLog {Message = RandomName.Make()};
 
 			target.LogError(content);
 
 			logSpy.ErrorMessages.Single()
-				.Should().Be.EqualTo(content);
+				.Should().Be.EqualTo(content.Message);
 		}
 	}
 }

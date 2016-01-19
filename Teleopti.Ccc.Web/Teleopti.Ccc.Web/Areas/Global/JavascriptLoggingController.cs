@@ -13,9 +13,9 @@ namespace Teleopti.Ccc.Web.Areas.Global
 		}
 
 		[HttpPost, Route("api/Logging/LogError")]
-		public virtual void LogError(string content)
+		public void LogError(JavascriptLog content)
 		{
-			_logger.Error(content);
+			_logger.Error(content.Message);
 		}
 	}
 }

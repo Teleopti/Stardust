@@ -446,6 +446,7 @@
     <Compile Include="Areas\Global\ApplicationController.cs" />
     <Compile Include="Areas\Global\AreaWithPermissionPath.cs" />
     <Compile Include="Areas\Global\GlobalAreaController.cs" />
+    <Compile Include="Areas\Global\JavascriptLog.cs" />
     <Compile Include="Areas\Global\LanguageController.cs" />
     <Compile Include="Areas\Global\JavascriptLoggingController.cs" />
     <Compile Include="Areas\Global\NotificationsController.cs" />

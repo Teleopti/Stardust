@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				typeof (StateController),
 				typeof (LanguageController),
 				typeof(ConfigController),
+				typeof(JavascriptLoggingController)
 			})));
 			_globalConfiguration.Configure(c => c.Filters.Add(new Log4NetWebApiLogger(_log4NetLogger)));
 			_globalConfiguration.Configure(c =>
