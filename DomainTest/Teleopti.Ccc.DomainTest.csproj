@@ -181,8 +181,6 @@
     <Compile Include="AgentInfo\Requests\ShiftExchangeOfferTest.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecificationTest.cs" />
     <Compile Include="Aop\InfoLogAspectTest.cs" />
-    <Compile Include="Aop\TestDoubles\FakeLogManagerWrapper.cs" />
-    <Compile Include="Aop\TestDoubles\LogSpy.cs" />
     <Compile Include="ApplicationLayer\AddActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddIntradayAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddSeatMapCommandHandlerTest.cs" />
@@ -1538,6 +1536,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Aop\TestDoubles\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

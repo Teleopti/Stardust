@@ -171,6 +171,7 @@
     <Compile Include="FakeData\FakeFixedStaffSchedulingService.cs" />
     <Compile Include="FakeData\FakeGroupPageCreator.cs" />
     <Compile Include="FakeData\FakeGroupScheduleGroupPageDataProvider.cs" />
+    <Compile Include="FakeData\FakeLogManagerWrapper.cs" />
     <Compile Include="FakeData\FakePeopleAndSkillLoaderDecider.cs" />
     <Compile Include="FakeData\FakePersonContractProvider.cs" />
     <Compile Include="FakeData\FakeRequiredScheduleHelper.cs" />
@@ -187,6 +188,7 @@
     <Compile Include="FakeData\FakeUnitOfWork.cs" />
     <Compile Include="FakeData\FakeUnitOfWorkFactory.cs" />
     <Compile Include="FakeData\FakeWorkloadRepository.cs" />
+    <Compile Include="FakeData\LogSpy.cs" />
     <Compile Include="FakeData\PrincipalAuthorizationWithNoPermission.cs" />
     <Compile Include="FakeData\NoCurrentIdentity.cs" />
     <Compile Include="FakeData\PersonScheduleDayReadModelFactory.cs" />

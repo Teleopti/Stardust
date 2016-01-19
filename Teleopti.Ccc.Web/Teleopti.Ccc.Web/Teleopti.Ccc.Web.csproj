@@ -447,6 +447,7 @@
     <Compile Include="Areas\Global\AreaWithPermissionPath.cs" />
     <Compile Include="Areas\Global\GlobalAreaController.cs" />
     <Compile Include="Areas\Global\LanguageController.cs" />
+    <Compile Include="Areas\Global\JavascriptLoggingController.cs" />
     <Compile Include="Areas\Global\NotificationsController.cs" />
     <Compile Include="Areas\Global\StatusController.cs" />
     <Compile Include="Areas\Global\WfmAreaRegistration.cs" />

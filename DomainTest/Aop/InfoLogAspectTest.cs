@@ -5,8 +5,8 @@ using log4net;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.DomainTest.Aop.TestDoubles;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.Aop

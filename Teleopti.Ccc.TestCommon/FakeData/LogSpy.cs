@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using log4net;
 using log4net.Core;
 
-namespace Teleopti.Ccc.DomainTest.Aop.TestDoubles
+namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class LogSpy : ILog
 	{
 		public LogSpy()
 		{
 			DebugMessages = new List<string>();
+			ErrorMessages = new List<string>();
 		}
 
 		public ILogger Logger { get; private set; }
 		public string InfoMessage { get; private set; }
 		public IList<string> DebugMessages { get; private set; }
+		public IList<string> ErrorMessages { get; private set; }
 		public string LastLoggerName { get; set; }
 
 		public void Debug(object message)
@@ -117,30 +119,37 @@ namespace Teleopti.Ccc.DomainTest.Aop.TestDoubles
 
 		public void Error(object message)
 		{
+			ErrorMessages.Add(message.ToString());
 		}
 
 		public void Error(object message, Exception exception)
 		{
+			ErrorMessages.Add(message.ToString());
 		}
 
 		public void ErrorFormat(string format, params object[] args)
 		{
+			ErrorMessages.Add(string.Format(format, args));
 		}
 
 		public void ErrorFormat(string format, object arg0)
 		{
+			ErrorMessages.Add(string.Format(format, arg0));
 		}
 
 		public void ErrorFormat(string format, object arg0, object arg1)
 		{
+			ErrorMessages.Add(string.Format(format, arg0, arg1));
 		}
 
 		public void ErrorFormat(string format, object arg0, object arg1, object arg2)
 		{
+			ErrorMessages.Add(string.Format(format, arg0, arg1, arg2));
 		}
 
 		public void ErrorFormat(IFormatProvider provider, string format, params object[] args)
 		{
+			ErrorMessages.Add(string.Format(provider, format, args));
 		}
 
 		public void Fatal(object message)
