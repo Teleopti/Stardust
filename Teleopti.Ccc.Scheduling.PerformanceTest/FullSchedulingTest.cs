@@ -62,6 +62,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 		private static void scheduleAndOptimize(IBrowserInteractions browserInteractions, string planningPeriodId)
 		{
 			browserInteractions.GoTo(string.Concat(TestSiteConfigurationSetup.URL, "wfm/#/resourceplanner/planningperiod/", planningPeriodId));
+			browserInteractions.Javascript("window.wfmLogger=true;"); //temp thing to log http requests from client
 			browserInteractions.AssertExists(".nav-item-active"); //make sure "menu" has loaded, when "random failing" it hasn't
 			dumpInfo(browserInteractions, "JustAfterGoingToView.txt");
 			browserInteractions.Click(".test-schedule-button:enabled");
