@@ -6,6 +6,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class AgentStateReadModelUpdater :
 		IRunOnHangfire,
 		IHandleEvent<PersonDeletedEvent>,
+		IHandleEvent<PersonAssociationChangedEvent>,
 		IAgentStateReadModelUpdater
 	{
 		private readonly IAgentStateReadModelPersister _agentStateReadModelPersister;
@@ -18,6 +19,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[UseOnToggle(Toggles.RTA_DeletedPersons_36041)]
 		public virtual void Handle(PersonDeletedEvent @event)
 		{
+			_agentStateReadModelPersister.Delete(@event.PersonId);
+		}
+
+		[UseOnToggle(Toggles.RTA_TerminatedPersons_36042)]
+		public virtual void Handle(PersonAssociationChangedEvent @event)
+		{
+			if (@event.TeamId.HasValue)
+				return;
 			_agentStateReadModelPersister.Delete(@event.PersonId);
 		}
 

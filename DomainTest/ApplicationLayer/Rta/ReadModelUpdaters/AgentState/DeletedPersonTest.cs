@@ -8,12 +8,12 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentState
 {
 	[TestFixture]
 	[ReadModelUpdaterTest]
 	[Toggle(Toggles.RTA_DeletedPersons_36041)]
-	public class AgentStateReadModelUpdaterTest
+	public class DeletedPersonTest
 	{
 		public AgentStateReadModelUpdater Target;
 		public FakeAgentStateReadModelPersister Persister;

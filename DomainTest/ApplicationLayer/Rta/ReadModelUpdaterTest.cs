@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			system.AddService<AdherencePercentageReadModelUpdater>();
 			system.AddService<AdherenceDetailsReadModelUpdater>();
 			system.AddService<AgentStateReadModelUpdater>();
-			
+
 		}
 	}
 
