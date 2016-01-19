@@ -19,34 +19,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 		public TeamOutOfAdherenceReadModelUpdater Target;
 
 		[Test]
-		public void ShouldRecalculateForPersonsTeam()
+		public void ShouldExludeDeletedPerson()
 		{
 			var teamId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
 			Target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId, PersonId = personId });
 
-			Target.Handle(new PersonDeletedEvent { PersonId = personId, PersonPeriodsBefore = new [] {new PersonPeriodDetail {TeamId = teamId} }});
+			Target.Handle(new PersonDeletedEvent
+			{
+				PersonId = personId,
+				PersonPeriodsBefore = new[] {new PersonPeriodDetail {TeamId = teamId}}
+			});
 
 			Persister.Get(teamId).Count.Should().Be(0);
 		}
-
+		
 		[Test]
-		public void ShouldNotRecalculateOtherTeam()
-		{
-			var teamId1 = Guid.NewGuid();
-			var teamId2 = Guid.NewGuid();
-			var personId = Guid.NewGuid();
-
-			Target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId1, PersonId = Guid.NewGuid() });
-			Target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId2, PersonId = personId });
-
-			Target.Handle(new PersonDeletedEvent { PersonId = personId, PersonPeriodsBefore = new[] { new PersonPeriodDetail { TeamId = teamId1 } } });
-
-			Persister.Get(teamId1).Count.Should().Be(1);
-		}
-
-		[Test]
-		public void ShouldRecalculateForAllPersonsTeams()
+		public void ShouldExludeFromAllPastTeams()
 		{
 			var teamId1 = Guid.NewGuid();
 			var teamId2 = Guid.NewGuid();
@@ -65,20 +54,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 		}
 
 		[Test]
-		public void ShouldNotIncludeDeletedPersonInNextRecalculation()
+		public void ShouldExludeDeletedPersonNextUpdate()
 		{
 			var teamId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
 			Target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId, PersonId = personId });
 
-			Target.Handle(new PersonDeletedEvent { PersonId = personId, PersonPeriodsBefore = new[] { new PersonPeriodDetail { TeamId = teamId } } });
-			Target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId, PersonId = new Guid() });
+			Target.Handle(new PersonDeletedEvent
+			{
+				PersonId = personId,
+				PersonPeriodsBefore = new[] { new PersonPeriodDetail { TeamId = teamId } }
+			});
+			Target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId, PersonId = Guid.NewGuid() });
 
 			Persister.Get(teamId).Count.Should().Be(1);
 		}
 
 		[Test]
-		public void ShouldRememberPersonWasDeletedForACoupleOfMinutes()
+		public void ShouldIgnoreAdherenceChangesForDeletedPersonsForAWhile()
 		{
 			var teamId = Guid.NewGuid();
 			var personId = Guid.NewGuid();

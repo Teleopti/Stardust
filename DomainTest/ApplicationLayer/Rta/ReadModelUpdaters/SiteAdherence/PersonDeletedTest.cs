@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 		public SiteOutOfAdherenceReadModelUpdater Target;
 
 		[Test]
-		public void ShouldRecalculateForPersonsSite()
+		public void ShouldExludeDeletedPerson()
 		{
 			var siteId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
@@ -33,28 +33,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 
 			Persister.Get(siteId).Count.Should().Be(0);
 		}
-
+		
 		[Test]
-		public void ShouldNotRecalculateOtherSite()
-		{
-			var siteId1 = Guid.NewGuid();
-			var siteId2 = Guid.NewGuid();
-			var personId = Guid.NewGuid();
-
-			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId1, PersonId = Guid.NewGuid() });
-			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId2, PersonId = personId });
-
-			Target.Handle(new PersonDeletedEvent
-			{
-				PersonId = personId,
-				PersonPeriodsBefore = new[] { new PersonPeriodDetail { SiteId = siteId2 } }
-			});
-
-			Persister.Get(siteId1).Count.Should().Be(1);
-		}
-
-		[Test]
-		public void ShouldRecalculateForAllPersonsSites()
+		public void ShouldExludeFromAllPastSites()
 		{
 			var siteId1 = Guid.NewGuid();
 			var siteId2 = Guid.NewGuid();
@@ -73,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 		}
 
 		[Test]
-		public void ShouldNotIncludeDeletedPersonInNextRecalculation()
+		public void ShouldExludeDeletedPersonNextUpdate()
 		{
 			var siteId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
@@ -84,13 +65,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 				PersonId = personId,
 				PersonPeriodsBefore = new[] { new PersonPeriodDetail { SiteId = siteId } }
 			});
-			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = new Guid() });
+			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = Guid.NewGuid() });
 
 			Persister.Get(siteId).Count.Should().Be(1);
 		}
 
 		[Test]
-		public void ShouldRememberPersonWasDeletedForACoupleOfMinutes()
+		public void ShouldIgnoreAdherenceChangesForDeletedPersonsForAWhile()
 		{
 			var siteId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
