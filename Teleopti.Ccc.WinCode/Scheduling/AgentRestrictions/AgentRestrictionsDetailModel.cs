@@ -28,8 +28,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			lock (_lock)
 			{
 				_detailData = new Dictionary<int, IPreferenceCellData>();
-				//var dates = DetailDates(scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.StartDate.Date,
-				//                        scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.EndDate.Date);
 
 				var counter = 0;
 

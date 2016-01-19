@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -15,6 +14,8 @@ using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary;
 using Teleopti.Interfaces.Domain;
 
@@ -26,7 +27,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private AgentRestrictionsDetailPresenter _presenter;
 		private IAgentRestrictionsDetailView _view;
 		private IAgentRestrictionsDetailModel _model;
-		private MockRepository _mocks;
 		private ISchedulerStateHolder _schedulerStateHolder;
 	    private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private IGridlockManager _gridlockManager;
@@ -34,43 +34,39 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private IOverriddenBusinessRulesHolder _overriddenBusinessRulesHolder;
 		private IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private GridStyleInfo _info;
-		private Dictionary<int, IPreferenceCellData> _detailData;
 		private IPreferenceCellData _preferenceCellData;
 
 		private DateTime _dateTime;
-		private IScheduleDictionary _scheduleDictionary;
 		private IScenario _scenario;
-		private IScheduleDateTimePeriod _scheduleDateTimePeriod;
 		private DateTimePeriod _dateTimePeriod;
-		private IDictionary<IPerson, IScheduleRange> _dictionary;
 		private IPerson _person;
-		private IScheduleRange _range;
 
 		[SetUp]
 		public void Setup()
 		{
-			_mocks = new MockRepository();
-			_view = _mocks.StrictMock<IAgentRestrictionsDetailView>();
-			_model = _mocks.StrictMock<IAgentRestrictionsDetailModel>();
-			_schedulerStateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
-		    _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-			_gridlockManager = _mocks.StrictMock<IGridlockManager>();
-			_clipHandler = new ClipHandler<IScheduleDay>();
-			_overriddenBusinessRulesHolder = _mocks.StrictMock<IOverriddenBusinessRulesHolder>();
-			_scheduleDayChangeCallback = _mocks.DynamicMock<IScheduleDayChangeCallback>();
-			_presenter = new AgentRestrictionsDetailPresenter(_view, _model, _schedulerStateHolder, _gridlockManager, _clipHandler, SchedulePartFilter.None, _overriddenBusinessRulesHolder, _scheduleDayChangeCallback, NullScheduleTag.Instance);
-			_info = new GridStyleInfo();
-			_detailData = new Dictionary<int, IPreferenceCellData>();
-			_preferenceCellData = _mocks.StrictMock<IPreferenceCellData>();
+			_view = MockRepository.GenerateMock<IAgentRestrictionsDetailView>();
+			_person = PersonFactory.CreatePerson("Jens").WithId();
+			_scenario = ScenarioFactory.CreateScenarioAggregate();
 
-			_range = _mocks.StrictMock<IScheduleRange>();
-			_person = PersonFactory.CreatePerson("Jens");
-			_dictionary = new Dictionary<IPerson, IScheduleRange> { { _person, _range } };
 			_dateTime = new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 			_dateTimePeriod = new DateTimePeriod(_dateTime, _dateTime.AddDays(30));
-			_scenario = ScenarioFactory.CreateScenarioAggregate();
-			_scheduleDateTimePeriod = new ScheduleDateTimePeriod(_dateTimePeriod);
-			_scheduleDictionary = new ScheduleDictionaryForTest(_scenario, _scheduleDateTimePeriod, _dictionary);
+			_model = new AgentRestrictionsDetailModel(_dateTimePeriod);
+			_schedulingResultStateHolder = new FakeSchedulingResultStateHolder {PersonsInOrganization = new[] { _person } };
+			_schedulerStateHolder = new SchedulerStateHolder(_scenario,
+				new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2012, 1, 1, 2012, 1, 1), TimeZoneInfo.Utc), new[] {_person},
+				MockRepository.GenerateMock<IDisableDeletedFilter>(), _schedulingResultStateHolder,
+				new FakeTimeZoneGuard(TimeZoneInfo.Utc));
+
+		    _gridlockManager = new GridlockManager();
+			_clipHandler = new ClipHandler<IScheduleDay>();
+			_overriddenBusinessRulesHolder = new OverriddenBusinessRulesHolder();
+			_scheduleDayChangeCallback = new DoNothingScheduleDayChangeCallBack();
+			_presenter = new AgentRestrictionsDetailPresenter(_view, _model, _schedulerStateHolder, _gridlockManager, _clipHandler, SchedulePartFilter.None, _overriddenBusinessRulesHolder, _scheduleDayChangeCallback, NullScheduleTag.Instance);
+			_info = new GridStyleInfo();
+			_preferenceCellData = new PreferenceCellData();
+			
+			_preferenceCellData.SchedulePart = ScheduleDayFactory.Create(new DateOnly(2012, 1, 1),_person,_scenario);
+			_schedulingResultStateHolder.Schedules = _preferenceCellData.SchedulePart.Owner;
 		}
 
 		[Test]
@@ -82,20 +78,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		[Test]
 		public void ShouldReturnRowCount()
 		{
-			_detailData.Add(0, null);
-			_detailData.Add(1, null);
+			var detailData = _model.DetailData();
+			detailData.Add(0, null);
+			detailData.Add(1, null);
 
-			using(_mocks.Record())
-			{
-				Expect.Call(_model.DetailData()).Return(_detailData);
-			}
-
-			using(_mocks.Playback())
-			{
-				//because of constructor in SchedulePresenterBase
-				var period = _schedulerStateHolder.RequestedPeriod;
-				Assert.AreEqual(1, _presenter.RowCount);	
-			}	
+			//because of constructor in SchedulePresenterBase
+			var period = _schedulerStateHolder.RequestedPeriod;
+			Assert.AreEqual(1, _presenter.RowCount);
 		}
 
 		[Test]
@@ -111,97 +100,49 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		}
 
 		[Test]
-		public void ShouldQueryCellInfoScheduleDay()
-		{
-			var part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(_dateTime));
-
-			using(_mocks.Record())
-			{
-				Expect.Call(_model.DetailData()).Return(_detailData);
-				Expect.Call(_preferenceCellData.TheDate).Return(new DateOnly(2012, 1, 1)).Repeat.AtLeastOnce();
-				Expect.Call(_preferenceCellData.SchedulePart).Return(part).Repeat.AtLeastOnce();
-				Expect.Call(_preferenceCellData.ViolatesNightlyRest).Return(true);
-				Expect.Call(_preferenceCellData.NoShiftsCanBeFound).Return(true);
-			}
-
-			using(_mocks.Playback())
-			{
-				//because of constructor in SchedulePresenterBase
-				var period = _schedulerStateHolder.RequestedPeriod;
-				_detailData.Add(0, _preferenceCellData);
-				var e = new GridQueryCellInfoEventArgs(1, 1, _info);
-				_presenter.QueryCellInfo(null, e);	
-			}
-		}
-
-		[Test]
 		public void ShouldQueryCellInfoWeekday()
 		{
-			using (_mocks.Record())
-			{
-				Expect.Call(_model.DetailData()).Return(_detailData);
-				Expect.Call(_preferenceCellData.TheDate).Return(new DateOnly(2012, 1, 1));
-			}
-
-			using (_mocks.Playback())
-			{
-				_detailData.Add(0, _preferenceCellData);
-				var e = new GridQueryCellInfoEventArgs(0, 1, _info);
-				_presenter.QueryCellInfo(null, e);
-				var expectedDay = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture.DateTimeFormat.GetDayName(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture.Calendar.GetDayOfWeek(new DateTime(2012, 1, 1)));
-				//because of constructor in SchedulePresenterBase
-				var period = _schedulerStateHolder.RequestedPeriod;
-				Assert.AreEqual(expectedDay, e.Style.CellValue.ToString());
-			}	
+			_preferenceCellData.TheDate = new DateOnly(2012,1,1);
+			_model.DetailData().Add(0, _preferenceCellData);
+			var e = new GridQueryCellInfoEventArgs(0, 1, _info);
+			_presenter.QueryCellInfo(null, e);
+			var expectedDay =
+				TeleoptiPrincipal.CurrentPrincipal.Regional.Culture.DateTimeFormat.GetDayName(
+					TeleoptiPrincipal.CurrentPrincipal.Regional.Culture.Calendar.GetDayOfWeek(new DateTime(2012, 1, 1)));
+			//because of constructor in SchedulePresenterBase
+			var period = _schedulerStateHolder.RequestedPeriod;
+			Assert.AreEqual(expectedDay, e.Style.CellValue.ToString());
 		}
 
 		[Test]
 		public void VerifyQueryCellInfoWeekHeaderWhenDayNotScheduled()
 		{
-			var preferenceCellData = new PreferenceCellData();
 			var startTimeLimitation = new StartTimeLimitation(new TimeSpan(7, 0, 0), null);
 			var endTimeLimitation = new EndTimeLimitation(new TimeSpan(0, 20, 0), null);
 			var workTimeLimitation = new WorkTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(12, 0, 0));
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Natt");
-			var effectiveRestriction = new EffectiveRestriction(startTimeLimitation, endTimeLimitation,workTimeLimitation, shiftCategory,null, null, new List<IActivityRestriction>());
-			preferenceCellData.EffectiveRestriction = effectiveRestriction;
-			
-			var schedulePart = _mocks.StrictMock<IScheduleDay>();
-			var projectionService = _mocks.StrictMock<IProjectionService>();
-			var visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
+			var effectiveRestriction = new EffectiveRestriction(startTimeLimitation, endTimeLimitation, workTimeLimitation,
+				shiftCategory, null, null, new List<IActivityRestriction>());
+			_preferenceCellData.EffectiveRestriction = effectiveRestriction;
 
-			preferenceCellData.SchedulePart = schedulePart;
-			
-			preferenceCellData.SchedulingOption = new RestrictionSchedulingOptions();
-			preferenceCellData.SchedulingOption.UseScheduling = true;
-			_detailData.Add(0, preferenceCellData);
+			_preferenceCellData.SchedulingOption = new RestrictionSchedulingOptions();
+			_preferenceCellData.SchedulingOption.UseScheduling = true;
+			_model.DetailData().Add(0, _preferenceCellData);
 
-			using(_mocks.Record())
-			{
-				Expect.Call(_model.DetailData()).Return(_detailData).Repeat.AtLeastOnce();
+			_schedulingResultStateHolder.UseMinWeekWorkTime = true;
 
-				Expect.Call(schedulePart.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
-				Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
-				Expect.Call(visualLayerCollection.HasLayers).Return(false).Repeat.AtLeastOnce(); // this line indicates that the day is not scheduled
-			    Expect.Call(_schedulerStateHolder.SchedulingResultState).Return(_schedulingResultStateHolder);
-			    Expect.Call(_schedulingResultStateHolder.UseMinWeekWorkTime).Return(true);
-			}
+			//because of constructor in SchedulePresenterBase
+			var period = _schedulerStateHolder.RequestedPeriod;
 
-			using(_mocks.Playback())
-			{
-				//because of constructor in SchedulePresenterBase
-				var period = _schedulerStateHolder.RequestedPeriod;
+			var e = new GridQueryCellInfoEventArgs(1, 0, _info);
+			_presenter.QueryCellInfo(null, e);
 
-				var e = new GridQueryCellInfoEventArgs(1, 0, _info);
-				_presenter.QueryCellInfo(null, e);
+			var weekHeaderCellData = _presenter.OnQueryWeekHeader(1);
+			Assert.IsNotNull(weekHeaderCellData);
 
-				var weekHeaderCellData = _presenter.OnQueryWeekHeader(1);
-				Assert.IsNotNull(weekHeaderCellData);
-
-				preferenceCellData.EffectiveRestriction = null;
-				weekHeaderCellData = _presenter.OnQueryWeekHeader(1);
-				Assert.IsNotNull(weekHeaderCellData);		
-			}	
+			_preferenceCellData.EffectiveRestriction = null;
+			weekHeaderCellData = _presenter.OnQueryWeekHeader(1);
+			Assert.IsNotNull(weekHeaderCellData);
 		}
 
 		[Test]
@@ -212,171 +153,109 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			var endTimeLimitation = new EndTimeLimitation(new TimeSpan(0, 20, 0), null);
 			var workTimeLimitation = new WorkTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(12, 0, 0));
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Natt");
-			var effectiveRestriction = new EffectiveRestriction(startTimeLimitation, endTimeLimitation, workTimeLimitation, shiftCategory, null, null, new List<IActivityRestriction>());
-			preferenceCellData.EffectiveRestriction = effectiveRestriction;
+			var effectiveRestriction = new EffectiveRestriction(startTimeLimitation, endTimeLimitation, workTimeLimitation,
+				shiftCategory, null, null, new List<IActivityRestriction>());
 
-			var schedulePart = _mocks.StrictMock<IScheduleDay>();
-			var projectionService = _mocks.StrictMock<IProjectionService>();
-			var visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
+			_preferenceCellData.EffectiveRestriction = effectiveRestriction;
+			_preferenceCellData.SchedulingOption = new RestrictionSchedulingOptions();
+			_preferenceCellData.SchedulingOption.UseScheduling = true;
+			var detailData = _model.DetailData();
+			detailData.Clear();
+			detailData.Add(0, _preferenceCellData);
 
-			preferenceCellData.SchedulePart = schedulePart;
+			_preferenceCellData.SchedulePart.AddMainShift(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario,
+				_person, new DateTimePeriod(2012, 1, 1, 8, 2012, 1, 1, 16)));
 
-			preferenceCellData.SchedulingOption = new RestrictionSchedulingOptions();
-			preferenceCellData.SchedulingOption.UseScheduling = true;
-			_detailData.Clear();
-			_detailData.Add(0, preferenceCellData);
+			//because of constructor in SchedulePresenterBase
+			var period = _schedulerStateHolder.RequestedPeriod;
 
-			using (_mocks.Record())
-			{
-				Expect.Call(_model.DetailData()).Return(_detailData).Repeat.AtLeastOnce();
+			var e = new GridQueryCellInfoEventArgs(1, 0, _info);
+			_presenter.QueryCellInfo(null, e);
 
-				Expect.Call(schedulePart.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
-				Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
-				Expect.Call(visualLayerCollection.HasLayers).Return(true).Repeat.AtLeastOnce(); // this line indicates that the day is scheduled
-				Expect.Call(visualLayerCollection.WorkTime()).Return(new TimeSpan(0, 8, 0, 0)).Repeat.AtLeastOnce();
-			}
+			var weekHeaderCellData = _presenter.OnQueryWeekHeader(1);
+			Assert.IsNotNull(weekHeaderCellData);
 
-			using (_mocks.Playback())
-			{
-				//because of constructor in SchedulePresenterBase
-				var period = _schedulerStateHolder.RequestedPeriod;
-
-				var e = new GridQueryCellInfoEventArgs(1, 0, _info);
-				_presenter.QueryCellInfo(null, e);
-
-				var weekHeaderCellData = _presenter.OnQueryWeekHeader(1);
-				Assert.IsNotNull(weekHeaderCellData);
-
-				preferenceCellData.EffectiveRestriction = null;
-				weekHeaderCellData = _presenter.OnQueryWeekHeader(1);
-				Assert.IsNotNull(weekHeaderCellData);
-			}
+			preferenceCellData.EffectiveRestriction = null;
+			weekHeaderCellData = _presenter.OnQueryWeekHeader(1);
+			Assert.IsNotNull(weekHeaderCellData);
 		}
 
 		[Test]
 		public void ShouldDisplayCorrectWeekNumberInBeginningOf2016()
 		{
-			var preferenceCellData = new PreferenceCellData();
 			var startTimeLimitation = new StartTimeLimitation(new TimeSpan(7, 0, 0), null);
 			var endTimeLimitation = new EndTimeLimitation(new TimeSpan(0, 20, 0), null);
 			var workTimeLimitation = new WorkTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(12, 0, 0));
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Natt");
-			var effectiveRestriction = new EffectiveRestriction(startTimeLimitation, endTimeLimitation, workTimeLimitation, shiftCategory, null, null, new List<IActivityRestriction>());
-			preferenceCellData.EffectiveRestriction = effectiveRestriction;
+			var effectiveRestriction = new EffectiveRestriction(startTimeLimitation, endTimeLimitation, workTimeLimitation,
+				shiftCategory, null, null, new List<IActivityRestriction>());
+			_preferenceCellData.SchedulingOption = new RestrictionSchedulingOptions { UseScheduling = true };
+			_preferenceCellData.EffectiveRestriction = effectiveRestriction;
 
-			var schedulePart = _mocks.StrictMock<IScheduleDay>();
-			var projectionService = _mocks.StrictMock<IProjectionService>();
-			var visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
+			var detailData = _model.DetailData();
+			detailData.Clear();
+			detailData.Add(0, _preferenceCellData);
 
-			preferenceCellData.SchedulePart = schedulePart;
+			_preferenceCellData.TheDate = new DateOnly(2016, 1, 1);
 
-			preferenceCellData.SchedulingOption = new RestrictionSchedulingOptions();
-			preferenceCellData.SchedulingOption.UseScheduling = true;
-			preferenceCellData.TheDate = new DateOnly(2016,1,1);
-			_detailData.Clear();
-			_detailData.Add(0, preferenceCellData);
+			//because of constructor in SchedulePresenterBase
+			var period = _schedulerStateHolder.RequestedPeriod;
 
-			using (_mocks.Record())
-			{
-				Expect.Call(_model.DetailData()).Return(_detailData).Repeat.AtLeastOnce();
-                Expect.Call(schedulePart.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
-                Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
-                Expect.Call(visualLayerCollection.HasLayers).Return(false).Repeat.AtLeastOnce(); // this line indicates that the day is not scheduled
-			}
-
-			using (_mocks.Playback())
-			{
-				//because of constructor in SchedulePresenterBase
-				var period = _schedulerStateHolder.RequestedPeriod;
-				
-				var weekHeaderCellData = _presenter.OnQueryWeekHeader(1);
-				weekHeaderCellData.WeekNumber.Should().Be.EqualTo(53);
-			}
+			var weekHeaderCellData = _presenter.OnQueryWeekHeader(1);
+			weekHeaderCellData.WeekNumber.Should().Be.EqualTo(53);
 		}
 
 		[Test]
-        public void ShouldAlertWhenBelowMin()
-        {
-            var preferenceCellData = new PreferenceCellData();
-            var startTimeLimitation = new StartTimeLimitation(new TimeSpan(7, 0, 0), null);
-            var endTimeLimitation = new EndTimeLimitation(new TimeSpan(0, 20, 0), null);
-            var workTimeLimitation = new WorkTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(8, 0, 0));
-            var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Natt");
-            var effectiveRestriction = new EffectiveRestriction(startTimeLimitation, endTimeLimitation, workTimeLimitation, shiftCategory, null, null, new List<IActivityRestriction>());
-            preferenceCellData.EffectiveRestriction = effectiveRestriction;
+		public void ShouldAlertWhenBelowMin()
+		{
+			var startTimeLimitation = new StartTimeLimitation(new TimeSpan(7, 0, 0), null);
+			var endTimeLimitation = new EndTimeLimitation(new TimeSpan(0, 20, 0), null);
+			var workTimeLimitation = new WorkTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(8, 0, 0));
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Natt");
+			var effectiveRestriction = new EffectiveRestriction(startTimeLimitation, endTimeLimitation, workTimeLimitation,
+				shiftCategory, null, null, new List<IActivityRestriction>());
+			_preferenceCellData.EffectiveRestriction = effectiveRestriction;
 
-            var schedulePart = _mocks.StrictMock<IScheduleDay>();
-            var projectionService = _mocks.StrictMock<IProjectionService>();
-            var visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
+			_preferenceCellData.SchedulingOption = new RestrictionSchedulingOptions {UseScheduling = true};
+			_model.DetailData().Add(0, _preferenceCellData);
+			_preferenceCellData.WeeklyMax = TimeSpan.FromHours(10);
+			_preferenceCellData.WeeklyMin = TimeSpan.FromHours(9);
 
-            preferenceCellData.SchedulePart = schedulePart;
+			_schedulingResultStateHolder.UseMinWeekWorkTime = true;
 
-            preferenceCellData.SchedulingOption = new RestrictionSchedulingOptions {UseScheduling = true};
-            _detailData.Add(0, preferenceCellData);
-            preferenceCellData.WeeklyMax = TimeSpan.FromHours(10);
-            preferenceCellData.WeeklyMin = TimeSpan.FromHours(9);
+			_preferenceCellData.SchedulePart.AddMainShift(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario,
+				_person, new DateTimePeriod(2012, 1, 1, 8, 2012, 1, 1, 16)));
 
-            using (_mocks.Record())
-            {
-                Expect.Call(_model.DetailData()).Return(_detailData).Repeat.AtLeastOnce();
+			//because of constructor in SchedulePresenterBase
+			var period = _schedulerStateHolder.RequestedPeriod;
+			var weekHeaderCellData = _presenter.OnQueryWeekHeader(1);
+			Assert.IsNotNull(weekHeaderCellData);
+			Assert.IsNotNull(weekHeaderCellData);
+			Assert.IsTrue(weekHeaderCellData.Alert);
+		}
 
-                Expect.Call(schedulePart.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
-                Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
-                Expect.Call(visualLayerCollection.HasLayers).Return(false).Repeat.AtLeastOnce(); // this line indicates that the day is not scheduled
-                Expect.Call(_schedulerStateHolder.SchedulingResultState).Return(_schedulingResultStateHolder).Repeat.AtLeastOnce();
-                Expect.Call(_schedulingResultStateHolder.UseMinWeekWorkTime).Return(true).Repeat.AtLeastOnce();
-            }
+		[Test]
+		public void ShouldAlertWhenAboveMax()
+		{
+			var startTimeLimitation = new StartTimeLimitation(new TimeSpan(7, 0, 0), null);
+			var endTimeLimitation = new EndTimeLimitation(new TimeSpan(0, 20, 0), null);
+			var workTimeLimitation = new WorkTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(8, 0, 0));
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Natt");
+			var effectiveRestriction = new EffectiveRestriction(startTimeLimitation, endTimeLimitation, workTimeLimitation,
+				shiftCategory, null, null, new List<IActivityRestriction>());
+			_preferenceCellData.EffectiveRestriction = effectiveRestriction;
 
-            using (_mocks.Playback())
-            {
-                //because of constructor in SchedulePresenterBase
-                var period = _schedulerStateHolder.RequestedPeriod;
-                var weekHeaderCellData = _presenter.OnQueryWeekHeader(1);
-                Assert.IsNotNull(weekHeaderCellData);
-                Assert.IsNotNull(weekHeaderCellData);
-                Assert.IsTrue(weekHeaderCellData.Alert);
-            }
-        }
-
-        [Test]
-        public void ShouldAlertWhenAboveMax()
-        {
-            var preferenceCellData = new PreferenceCellData();
-            var startTimeLimitation = new StartTimeLimitation(new TimeSpan(7, 0, 0), null);
-            var endTimeLimitation = new EndTimeLimitation(new TimeSpan(0, 20, 0), null);
-            var workTimeLimitation = new WorkTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(8, 0, 0));
-            var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Natt");
-            var effectiveRestriction = new EffectiveRestriction(startTimeLimitation, endTimeLimitation, workTimeLimitation, shiftCategory, null, null, new List<IActivityRestriction>());
-            preferenceCellData.EffectiveRestriction = effectiveRestriction;
-
-            var schedulePart = _mocks.StrictMock<IScheduleDay>();
-            var projectionService = _mocks.StrictMock<IProjectionService>();
-            var visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
-
-            preferenceCellData.SchedulePart = schedulePart;
-
-            preferenceCellData.SchedulingOption = new RestrictionSchedulingOptions { UseScheduling = true };
-            _detailData.Add(0, preferenceCellData);
-            preferenceCellData.WeeklyMax = TimeSpan.FromHours(7);
-            preferenceCellData.WeeklyMin = TimeSpan.FromHours(6);
-
-            using (_mocks.Record())
-            {
-                Expect.Call(_model.DetailData()).Return(_detailData).Repeat.AtLeastOnce();
-                Expect.Call(schedulePart.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
-                Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
-                Expect.Call(visualLayerCollection.HasLayers).Return(false).Repeat.AtLeastOnce(); // this line indicates that the day is not scheduled
-            }
-
-            using (_mocks.Playback())
-            {
-                //because of constructor in SchedulePresenterBase
-                var period = _schedulerStateHolder.RequestedPeriod;
-                var weekHeaderCellData = _presenter.OnQueryWeekHeader(1);
-                Assert.IsNotNull(weekHeaderCellData);
-                Assert.IsTrue(weekHeaderCellData.Alert);
-            }
-        }
+			_preferenceCellData.SchedulingOption = new RestrictionSchedulingOptions {UseScheduling = true};
+			_model.DetailData().Add(0, _preferenceCellData);
+			_preferenceCellData.WeeklyMax = TimeSpan.FromHours(7);
+			_preferenceCellData.WeeklyMin = TimeSpan.FromHours(6);
+			
+			//because of constructor in SchedulePresenterBase
+			var period = _schedulerStateHolder.RequestedPeriod;
+			var weekHeaderCellData = _presenter.OnQueryWeekHeader(1);
+			Assert.IsNotNull(weekHeaderCellData);
+			Assert.IsTrue(weekHeaderCellData.Alert);
+		}
 
 		public void Dispose()
 		{
