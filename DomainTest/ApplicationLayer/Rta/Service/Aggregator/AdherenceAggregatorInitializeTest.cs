@@ -31,12 +31,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 				.WithSchedule(person1, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithSchedule(person2, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithRule("loggedoff", phone, -1)
+				.WithExistingState(person1, "loggedoff", -1)
 				;
-			Database.PersistActualAgentReadModel(new AgentStateReadModel
-			{
-				PersonId = person1,
-				StaffingEffect = -1
-			});
 			Now.Is("2014-10-20 9:00");
 
 			Target.SaveState(

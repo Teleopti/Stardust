@@ -43,6 +43,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 						let isHandlerEnabled = t.TypeEnabledByToggle(_config)
 						where isHandler && isHandlerEnabled
 						select i;
+					if (t is AdherenceDetailsReadModelUpdater)
+					{
+						var x = 0;
+					}
 					return matches.Any();
 				})
 				.As(t =>

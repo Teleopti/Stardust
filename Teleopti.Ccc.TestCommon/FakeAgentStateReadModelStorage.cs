@@ -8,30 +8,26 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
 {
-	public class FakeAgentStateReadModelReader : IAgentStateReadModelReader
+	public class FakeAgentStateReadModelStorage : IAgentStateReadModelReader, IAgentStateReadModelPersister
 	{
 		private readonly ConcurrentDictionary<Guid, AgentStateReadModel> _data = new ConcurrentDictionary<Guid, AgentStateReadModel>(); 
 
-		public FakeAgentStateReadModelReader()
+		public FakeAgentStateReadModelStorage()
 		{
 		}
 
-		public FakeAgentStateReadModelReader(IEnumerable<AgentStateReadModel> data)
+		public FakeAgentStateReadModelStorage(IEnumerable<AgentStateReadModel> data)
 		{
 			data.ForEach(model =>_data.AddOrUpdate(model.PersonId, model, (g, m) => model));
 		}
 
-		public FakeAgentStateReadModelReader Has(AgentStateReadModel model)
+		public FakeAgentStateReadModelStorage Has(AgentStateReadModel model)
 		{
 			_data.AddOrUpdate(model.PersonId, model, (g, m) => model);
 			return this;
 		}
 
-		public void Remove(Guid personId)
-		{
-			AgentStateReadModel model;
-			_data.TryRemove(personId, out model);
-		}
+		public IEnumerable<AgentStateReadModel> Models { get { return _data.Values.ToArray(); } } 
 
 		public IList<AgentStateReadModel> Load(IEnumerable<IPerson> persons)
 		{
@@ -85,5 +81,23 @@ namespace Teleopti.Ccc.TestCommon
 			return _data.Values.ToArray();
 		}
 
+
+
+
+
+
+		public void PersistActualAgentReadModel(AgentStateReadModel model)
+		{
+			AgentStateReadModel removed;
+			_data.TryRemove(model.PersonId, out removed);
+			_data.AddOrUpdate(model.PersonId, model, (g, m) => model);
+
+		}
+
+		public void Delete(Guid personId)
+		{
+			AgentStateReadModel model;
+			_data.TryRemove(personId, out model);
+		}
 	}
 }

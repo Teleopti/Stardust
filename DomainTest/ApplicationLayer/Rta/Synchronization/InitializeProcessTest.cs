@@ -77,21 +77,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 		{
 			var personId = Guid.NewGuid();
 			var platformId = Guid.NewGuid();
-			var buId = Guid.NewGuid();
+			var businessUnit = Guid.NewGuid();
 			Now.Is("2015-10-01 08:00");
 			Database
-				.WithBusinessUnit(buId)
+				.WithBusinessUnit(businessUnit)
 				.WithUser("user", personId)
 				.WithDefaultStateGroup()
 				.WithStateCode("statecode", platformId.ToString())
+				.WithExistingState(personId, "statecode")
 				;
-			Database.PersistActualAgentReadModel(new AgentStateReadModel
-			{
-				PersonId = personId,
-				StateCode = "statecode",
-				PlatformTypeId = platformId,
-				BusinessUnitId = buId
-			});
 
 			Context.SimulateRestart();
 			Rta.SaveState(new ExternalUserStateForTest());

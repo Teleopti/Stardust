@@ -46,14 +46,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		IFakeDataBuilder WithDefaultStateGroup();
 		IFakeDataBuilder WithStateCode(string statecode);
 		IFakeDataBuilder WithStateCode(string statecode, string platformTypeId);
-		IFakeDataBuilder WithExistingState(Guid personId, string stateCode);
+		IFakeDataBuilder WithExistingState(Guid personId, string stateCode, int staffingEffect);
 	}
 
-	public class FakeRtaDatabase : IDatabaseReader, IAgentStateReadModelPersister, IFakeDataBuilder
+	public class FakeRtaDatabase : IDatabaseReader, IFakeDataBuilder
 	{
 		private readonly IConfigReader _config;
 		private readonly INow _now;
-		public readonly FakeAgentStateReadModelReader AgentStateReadModelReader;
+		public readonly FakeAgentStateReadModelStorage AgentStateReadModels;
 		public readonly FakeRtaStateGroupRepository RtaStateGroupRepository;
 		public readonly FakeRtaMapRepository RtaMapRepository;
 		public readonly FakeTenants Tenants;
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public FakeRtaDatabase(
 			IConfigReader config,
 			INow now,
-			FakeAgentStateReadModelReader agentStateReadModelReader,
+			FakeAgentStateReadModelStorage agentStateReadModels,
 			FakeRtaStateGroupRepository rtaStateGroupRepository,
 			FakeRtaMapRepository rtaMapRepository,
 			FakeTenants tenants,
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_config = config;
 			_now = now;
 			_properAlarm = properAlarm;
-			AgentStateReadModelReader = agentStateReadModelReader;
+			AgentStateReadModels = agentStateReadModels;
 			RtaStateGroupRepository = rtaStateGroupRepository;
 			RtaMapRepository = rtaMapRepository;
 			Tenants = tenants;
@@ -118,13 +118,24 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			WithTenant("default", ConfiguredKeyAuthenticator.LegacyAuthenticationKey);
 		}
 
-		public StoredStateInfo StoredState;
-		public AgentStateReadModel PersistedReadModel;
-		private IProperAlarm _properAlarm;
+		public StoredStateInfo StoredState
+		{
+			get
+			{
+				return AgentStateReadModels
+					.Models
+					.Select(x => new StoredStateInfo(x.PersonId, x))
+					.SingleOrDefault();
+			}
+		}
+
+		public AgentStateReadModel PersistedReadModel { get { return AgentStateReadModels.Models.SingleOrDefault(); } }
+
+		private readonly IProperAlarm _properAlarm;
 
 		public StoredStateInfo StoredStateFor(Guid personId)
 		{
-			return new StoredStateInfo(personId, AgentStateReadModelReader.GetCurrentActualAgentState(personId));
+			return new StoredStateInfo(personId, AgentStateReadModels.GetCurrentActualAgentState(personId));
 		}
 
 		public IRtaState AddedStateCode
@@ -140,8 +151,23 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public IFakeDataBuilder WithDefaultsFromState(ExternalUserStateForTest state)
 		{
 			WithSource(state.SourceId);
-			_platformTypeId = state.PlatformTypeId;
+			withPlatform(state.PlatformTypeId);
 			return this;
+		}
+
+		private Guid withPlatform(string platformTypeId)
+		{
+			return withPlatform(new Guid(platformTypeId));
+		}
+
+		private Guid withPlatform(Guid? platformTypeId)
+		{
+			if (platformTypeId.HasValue)
+			{
+				_platformTypeId = platformTypeId.Value.ToString();
+				return platformTypeId.Value;
+			}
+			return new Guid(_platformTypeId);
 		}
 
 		public IFakeDataBuilder WithDataFromState(ExternalUserStateForTest state)
@@ -261,8 +287,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public IFakeDataBuilder WithRule(string stateCode, Guid? activityId, Guid? alarmId, int staffingEffect, string name, bool isLoggedOutState, TimeSpan? threshold, Adherence? adherence, Guid? platformTypeId)
 		{
-			var platformTypeIdGuid = platformTypeId ?? new Guid(_platformTypeId);
-
 			IRtaRule _rtaRule = null;
 			if (alarmId != null)
 			{
@@ -282,7 +306,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					from g in RtaStateGroupRepository.LoadAll()
 					from s in g.StateCollection
 					where s.StateCode == stateCode &&
-						  s.PlatformTypeId == platformTypeIdGuid
+						  s.PlatformTypeId == withPlatform(platformTypeId)
 					select g
 					).FirstOrDefault();
 				if (stateGroup == null)
@@ -291,7 +315,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					stateGroup.SetId(Guid.NewGuid());
 					stateGroup.SetBusinessUnit(_businessUnit);
 					stateGroup.IsLogOutState = isLoggedOutState;
-					stateGroup.AddState(null, stateCode, platformTypeIdGuid);
+					stateGroup.AddState(null, stateCode, withPlatform(platformTypeId));
 					RtaStateGroupRepository.Add(stateGroup);
 				}
 			}
@@ -337,20 +361,35 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			var defaultStateGroup = RtaStateGroupRepository.LoadAll().SingleOrDefault(x => x.DefaultStateGroup);
 			if (defaultStateGroup == null)
 				return this;
-			defaultStateGroup.AddState(statecode, statecode, Guid.Parse(platformTypeId));
+			defaultStateGroup.AddState(statecode, statecode, withPlatform(platformTypeId));
 			return this;
 		}
 
 		public IFakeDataBuilder WithExistingState(Guid personId, string stateCode)
 		{
-			AgentStateReadModelReader.Has(new AgentStateReadModel
+			AgentStateReadModels.Has(new AgentStateReadModel
 			{
 				PersonId = personId,
-				StateCode = stateCode
+				BusinessUnitId = _businessUnitId,
+				PlatformTypeId = new Guid(_platformTypeId),
+				StateCode = stateCode,
 			});
 			return this;
 		}
-		
+
+		public IFakeDataBuilder WithExistingState(Guid personId, string stateCode, int staffingEffect)
+		{
+			AgentStateReadModels.Has(new AgentStateReadModel
+			{
+				PersonId = personId,
+				BusinessUnitId = _businessUnitId,
+				PlatformTypeId = new Guid(_platformTypeId),
+				StateCode = stateCode,
+				StaffingEffect = staffingEffect
+			});
+			return this;
+		}
+
 
 
 
@@ -377,21 +416,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			return new ConcurrentDictionary<string, int>(_datasources);
 		}
-
-		public void PersistActualAgentReadModel(AgentStateReadModel model)
-		{
-			AgentStateReadModelReader.Has(model);
-			PersistedReadModel = model;
-			StoredState = new StoredStateInfo(model.PersonId, model);
-		}
-
-		public void Delete(Guid personId)
-		{
-			AgentStateReadModelReader.Remove(personId);
-			PersistedReadModel = null;
-			StoredState = null;
-		}
-
+		
 		public ConcurrentDictionary<string, IEnumerable<ResolvedPerson>> ExternalLogOns()
 		{
 			return new ConcurrentDictionary<string, IEnumerable<ResolvedPerson>>(_externalLogOns);
@@ -517,6 +542,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public static IFakeDataBuilder WithRule(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid activityId, Guid alarmId, int staffingEffect, Adherence adherence, TimeSpan thresholdTime)
 		{
 			return fakeDataBuilder.WithRule(stateCode, activityId, alarmId, staffingEffect, null, false, thresholdTime, adherence, null);
+		}
+
+		public static IFakeDataBuilder WithExistingState(this IFakeDataBuilder fakeDataBuilder, Guid personId, string stateCode)
+		{
+			return fakeDataBuilder.WithExistingState(personId, stateCode, 0);
 		}
 	}
 
