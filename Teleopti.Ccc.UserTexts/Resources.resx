@@ -14059,4 +14059,7 @@ Help us improve your experience by sending an error report</value>
     <value>Clear campaign</value>
     <comment>Clear campaign</comment>
   </data>
+  <data name="CurrentPlanningPeriodMessage" xml:space="preserve">
+    <value>This planning period will be from</value>
+  </data>
 </root>

@@ -23,15 +23,14 @@
 			<!-- don't remove non css class test-schedule-is-running - used to assert in test -->
 		</div>
 		<div class="fab-wrapper">
-			<button class="wfm-fab material-depth-1 schedule-button" ng-class="{'shrink-in': disableSchedule()}" ng-disabled="disableSchedule()" ng-click="launchSchedule(planningPeriod)">
-				<i class="mdi mdi-arrow-right"></i>
-				<md-tooltip>{{'ScheduleVerb' | translate }}</md-tooltip>
+			<button class="wfm-btn material-depth-1 wfm-btn-primary" ng-class="{'shrink-in': disableSchedule()}" ng-disabled="disableSchedule()" ng-click="launchSchedule(planningPeriod)">
+				{{'ScheduleVerb' | translate }}
 			</button>
 		</div>
 	</div>
 
 	<div class="next-planning-peroid">
-		{{'NextPlanningPeriodMessage' | translate}} {{planningPeriod.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{planningPeriod.EndDate | amDateFormat:"L"}}
+		{{'CurrentPlanningPeriodMessage' | translate}} {{planningPeriod.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{planningPeriod.EndDate | amDateFormat:"L"}}
 		<!--dont remove update-planning-peroid - used to assert in test -->
 		<i ng-show="initialized" ng-click="changeDateToggle = !changeDateToggle;suggestions(planningPeriod.Id)" class="mdi mdi-pencil searchbaricon update-planning-peroid"><md-tooltip>{{'ChangePlanningPeriod' | translate }}</md-tooltip></i>
 
