@@ -197,20 +197,16 @@ Teleopti.MyTimeWeb.PagingMixin = function () {
 	};
 
 	self.goPreviousPages = function () {
-
 		var start = self.selectablePages()[0].index() - self.maxPagesVisible;
 		self.selectablePages.removeAll();
 
-		if (start > 0) {
-			for (var i = 0; i < self.maxPagesVisible; i++) {
-				self.selectablePages.push(new Teleopti.MyTimeWeb.Request.PageView(start + i));
-			}
-			self.isPreviousMore(self.selectablePages()[0].index() !== 1);
-			self.isMore(self.selectablePages()[self.maxPagesVisible - 1].index() < self.pageCount());
-			self.selectedPageIndex(self.selectablePages()[0].index());
-		} else {
-			self.goToFirstPage();
+		for (var i = 0; i < self.maxPagesVisible; i++) {
+			self.selectablePages.push(new Teleopti.MyTimeWeb.Request.PageView(start + i));
 		}
+
+		self.isPreviousMore(self.selectablePages()[0].index() !== 1);
+		self.isMore(self.selectablePages()[self.maxPagesVisible - 1].index() < self.pageCount());
+		self.selectedPageIndex(self.selectablePages()[self.maxPagesVisible -1 ].index());
 	};
 
 
