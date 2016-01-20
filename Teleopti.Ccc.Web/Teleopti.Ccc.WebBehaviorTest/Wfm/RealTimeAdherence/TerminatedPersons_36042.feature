@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: Terminated agents
+﻿Feature: Terminated agents
 	In order to easier find the team leader to blame
 	As a real time analyst
 	I do not want to see terminated agents
