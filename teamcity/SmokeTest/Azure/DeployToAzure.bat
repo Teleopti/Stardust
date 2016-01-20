@@ -5,7 +5,7 @@ SET ThisScriptsDirectory=%~dp0
 SET rootdir=%ThisScriptsDirectory:~0,-1%
 SET CloudServiceName=%1
 SET PowerShellScriptPath=%ThisScriptsDirectory%DeployToAzure.ps1
-SET AzurePackagePath=%ThisScriptsDirectory%AzurePackages
+SET AzurePackagePath=%ThisScriptsDirectory%AzureRelease
 IF "%AzurePackagePath%"=="" GOTO :NoAzurePackage
 
 @ECHO ***************************************************************
