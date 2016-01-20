@@ -56,16 +56,13 @@
 		}
 
 		window.onerror = function (errorMessage, url, line) {
-			var parameters = ("Message=" + JSON.stringify(errorMessage)
-				+ " url " + JSON.stringify(url)
-				+ " line " + JSON.stringify(line)
-				+ " parent_url " + JSON.stringify(document.location.href)
-				+ " user_agent " + JSON.stringify(navigator.userAgent));
-
-
+			var parameters = ("Message=window_on_error " + JSON.stringify(errorMessage)
+				+ " on url " + JSON.stringify(url)
+				+ " at line " + JSON.stringify(line)
+				+ ". The parent_url is " + JSON.stringify(document.location.href)
+				+ " and the user_agent is " + JSON.stringify(navigator.userAgent));
 
 			var req = new XMLHttpRequest();
-			
 			req.open('POST', window.location.origin + '/api/Logging/LogError', true);
 			req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			req.send(parameters );
