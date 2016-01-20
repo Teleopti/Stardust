@@ -457,7 +457,8 @@ namespace Teleopti.Ccc.Domain.Common
 						var site = p.Team.Site;
 						if (site != null)
 						{
-							businessUnitId = site.BusinessUnit.Id.GetValueOrDefault();
+							if (site.BusinessUnit != null)
+								businessUnitId = site.BusinessUnit.Id.GetValueOrDefault();
 							siteId = site.Id.GetValueOrDefault();
 						}
 						return new PersonPeriodDetail
