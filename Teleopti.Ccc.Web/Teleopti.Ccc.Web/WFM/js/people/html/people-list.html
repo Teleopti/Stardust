@@ -14,7 +14,7 @@
 		</div>
 
 		<div ng-if="dataInitialized && (isImportUsersEnabled || isAdjustSkillEnabled) && !isSelectionMode">
-			<div class="context-menu card-context pull-right">
+			<button class="context-menu wfm-fab mini pull-right">
 				<i class="mdi mdi-dots-vertical" style="color: #000000"></i>
 				<div class="context-menu-left" style="z-index: 1000; text-transform: none;">
 					<ul class="wfm-list">
@@ -31,9 +31,9 @@
 					</ul>
 				</div>
 				<span ng-show="rowSelectionEnabled && selectedCount() > 0" class="wfm-panel selection-cart-indicator">
-					{{selectedCount()}}
-				</span>
-			</div>
+						{{selectedCount()}}
+					</span>
+			</button>
 		</div>
 	</div>
 
