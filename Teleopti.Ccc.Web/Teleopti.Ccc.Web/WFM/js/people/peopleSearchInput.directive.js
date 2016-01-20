@@ -21,6 +21,9 @@
 		vm.advancedSearchForm = {};
 		vm.searchCriteriaDic = {};
 
+		var searchExpressionSeprator = ";";
+		var keyValueSeprator = ":";
+
 		vm.validateSearchKeywordChanged = function () {
 			vm.searchOptions.searchKeywordChanged = true;
 			parseSearchExpressionInputted();
@@ -75,31 +78,14 @@
 			});
 		}
 
-		function parseSearchExpressionInputted() {
-			vm.advancedSearchForm = {};
-			if (vm.searchOptions.keyword.indexOf(':') !== -1) {
-				var expression = vm.searchOptions.keyword.trim();
-				if (expression.charAt(expression.length - 1) !== ',') {
-					expression = expression + ',';
-				}
-				var regex = /(\S*?):\s{0,}(\".*?\"),/ig;
-				var match;
-				while (match = regex.exec(expression)) {
-					var searchType = match[1].trim();
-					var searchValue = match[2].trim();
-					setSearchFormProperty(searchType, searchValue);
-				}
-			}
-		}
-
-		function getSearchCriteria(title, value) {
+		function parseSearchValue(value) {
 			if (value === undefined || value === null || value.trim().length === 0) {
 				return '';
 			}
 			var displayValue = value.trim();
 
 			var quotedKeywords = "";
-			var pattern = /"(.*?)"/ig;
+			var pattern = /['"](.*?)['"]/ig;
 			var match;
 			while (match = pattern.exec(displayValue)) {
 				var keyword = match[1].trim();
@@ -111,24 +97,36 @@
 
 			var unquotedKeywords = displayValue
 				.replace(pattern, '').trim()
-				.replace('"', '').trim()
-				.replace(' ', '" "').trim();
-			unquotedKeywords = '"' + unquotedKeywords + '"';
+				.replace('"', '').trim();
 
-			var keyWords;
-			if (quotedKeywords.length === 0 && unquotedKeywords === '""') {
-				return '';
-			} else if (quotedKeywords.length === 0) {
-				keyWords = unquotedKeywords;
-			} else if (unquotedKeywords === '""') {
-				keyWords = quotedKeywords;
-			} else {
-				keyWords = quotedKeywords + ' ' + unquotedKeywords;
+			return (quotedKeywords + ' ' + unquotedKeywords).trim();
+		}
+
+		function parseSearchExpressionInputted() {
+			vm.advancedSearchForm = {};
+			if (vm.searchOptions.keyword.indexOf(keyValueSeprator) !== -1) {
+				var expression = vm.searchOptions.keyword.trim();
+				if (expression.charAt(expression.length - 1) !== searchExpressionSeprator) {
+					expression = expression + searchExpressionSeprator;
+				}
+				var regex = /(\S*?):\s{0,}(.*?);/ig;
+				var match;
+				while (match = regex.exec(expression)) {
+					var searchType = match[1].trim();
+					var searchValue = parseSearchValue(match[2].trim());
+					setSearchFormProperty(searchType, searchValue);
+				}
 			}
+		}
 
-			return title + ': ' + keyWords + ', ';
+		function getSearchCriteria(title, value) {
+			var keyWords = parseSearchValue(value);
+			return keyWords.length > 0
+				? title + keyValueSeprator + ' ' + keyWords + searchExpressionSeprator + ' '
+				: '';
 		}
 	}
+
 	var directive = function () {
 		return {
 			controller: 'PeopleSearchInputCtrl',
