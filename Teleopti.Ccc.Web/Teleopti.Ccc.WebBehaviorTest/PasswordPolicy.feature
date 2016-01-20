@@ -58,7 +58,6 @@ Scenario: See change password when password will expire soon
 	| Password | P@ssword1 |
 	Then I should see change password page with warning 'Your password will expire soon'
 
-@ignore
 Scenario: Skip change password when password will expire soon
 	Given I have user logon details with
 	| Field                           | Value |
