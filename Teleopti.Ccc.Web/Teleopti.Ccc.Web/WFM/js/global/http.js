@@ -10,12 +10,10 @@
 				function request(config) {
 					if (window.wfmLogger) {
 						// to be removed
-						var parameters = "Message="+('method ' + config.method + ' url ' + config.url + ' params ' + JSON.stringify(config.params));
 						var req = new XMLHttpRequest();
 						req.open('POST', window.location.origin + '/api/Logging/LogError', true);
-						req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-						req.send(parameters);
+						req.setRequestHeader("Content-type", "application/json");
+						req.send(JSON.stringify({Message:config.url}));
 					}
 					if (!connected) {
 						var q = $q.defer();
