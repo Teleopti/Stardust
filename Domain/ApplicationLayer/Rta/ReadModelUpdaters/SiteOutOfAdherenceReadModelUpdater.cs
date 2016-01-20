@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -27,81 +28,126 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonOutOfAdherenceEvent @event)
 		{
-			handleEvent(@event.BusinessUnitId, @event.SiteId, model =>
-				updatePerson(model, @event.PersonId, @event.Timestamp, person =>
-				{
-					person.OutOfAdherence = true;
-				}));
+			updateModel(
+				@event.PersonId,
+				@event.Timestamp,
+				@event.BusinessUnitId,
+				@event.SiteId, 
+				outPerson);
 		}
 
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonInAdherenceEvent @event)
 		{
-			handleEvent(@event.BusinessUnitId, @event.SiteId, model =>
-				updatePerson(model, @event.PersonId, @event.Timestamp, person =>
-				{
-					person.OutOfAdherence = false;
-				}));
+			updateModel(
+				@event.PersonId,
+				@event.Timestamp,
+				@event.BusinessUnitId,
+				@event.SiteId, 
+				notOutPerson);
 		}
-		
+
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonNeutralAdherenceEvent @event)
 		{
-			handleEvent(@event.BusinessUnitId, @event.SiteId, model =>
-				updatePerson(model, @event.PersonId, @event.Timestamp, person =>
-				{
-					person.OutOfAdherence = false;
-				}));
+			updateModel(
+				@event.PersonId,
+				@event.Timestamp,
+				@event.BusinessUnitId,
+				@event.SiteId, 
+				notOutPerson);
 		}
 
 		[UseOnToggle(Toggles.RTA_DeletedPersons_36041)]
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonDeletedEvent @event)
 		{
-			if (@event.PersonPeriodsBefore == null || @event.PersonPeriodsBefore.IsEmpty())
-				return;
-
-			foreach (var personPeriod in @event.PersonPeriodsBefore)
-			{
-				handleEvent(@event.BusinessUnitId, personPeriod.SiteId, model =>
-					deletePerson(model, @event.PersonId, @event.Timestamp, person =>
-					{
-						person.Deleted = true;
-						person.OutOfAdherence = false;
-					}));
-			}
+			var sites = @event.PersonPeriodsBefore.EmptyIfNull()
+				.Select(p => new site { SiteId = p.SiteId, BusinessUnitId = p.BusinessUnitId});
+			updateAllModels(
+				@event.PersonId,
+				@event.Timestamp,
+				sites,
+				deletePerson);
 		}
-		
-		private void handleEvent(Guid businessUnitId, Guid siteId, Action<SiteOutOfAdherenceReadModel> mutate)
+
+		private void updateModel(Guid personId, DateTime time, Guid businessUnitId, Guid siteId, UpdateAction update)
 		{
-			var model = _persister.Get(siteId) ?? new SiteOutOfAdherenceReadModel
+			var model = modelFor(businessUnitId, siteId);
+			updateModel(model, personId, time, update);
+		}
+
+		private void updateAllModels(Guid personId, DateTime time, IEnumerable<site> sites, UpdateAction update)
+		{
+			var existingModels = _persister.GetAll();
+
+			var newModels =
+				from t in sites
+				let unknown = !existingModels.Select(m => m.SiteId).Contains(t.SiteId)
+				where unknown
+				select modelFor(t.BusinessUnitId, t.SiteId);
+
+			var models = existingModels.Concat(newModels);
+
+			models.ForEach(m =>
+			{
+				updateModel(m, personId, time, update);
+			});
+		}
+
+		private void updateModel(SiteOutOfAdherenceReadModel model, Guid personId, DateTime time, UpdateAction update)
+		{
+			if (!update(model, personId, time))
+				return;
+			removeRedundantOldStates(model);
+			calculate(model);
+			_persister.Persist(model);
+		}
+
+		private class site
+		{
+			public Guid BusinessUnitId;
+			public Guid SiteId;
+		}
+
+		private SiteOutOfAdherenceReadModel modelFor(Guid businessUnitId, Guid siteId)
+		{
+			return _persister.Get(siteId) ?? new SiteOutOfAdherenceReadModel
 			{
 				SiteId = siteId,
 				BusinessUnitId = businessUnitId,
 				State = new SiteOutOfAdherenceReadModelState[] { }
 			};
-			mutate(model);
-			calculate(model);
-			_persister.Persist(model);
 		}
 
-		private static void deletePerson(SiteOutOfAdherenceReadModel model, Guid personId, DateTime time, Action<SiteOutOfAdherenceReadModelState> mutate)
+		private delegate bool UpdateAction(SiteOutOfAdherenceReadModel model, Guid personId, DateTime time);
+
+		private static bool deletePerson(SiteOutOfAdherenceReadModel model, Guid personId, DateTime time)
 		{
 			var state = stateForPerson(model, personId);
 			state.Time = time;
-			mutate(state);
-			removeRedundantOldStates(model);
+			state.Deleted = true;
+			return true;
 		}
 
-		private static void updatePerson(SiteOutOfAdherenceReadModel model, Guid personId, DateTime time, Action<SiteOutOfAdherenceReadModelState> mutate)
+		private static bool notOutPerson(SiteOutOfAdherenceReadModel model, Guid personId, DateTime time)
 		{
 			var state = stateForPerson(model, personId);
-			if (state.Time <= time && !state.Deleted)
-			{
-				state.Time = time;
-				mutate(state);
-			}
-			removeRedundantOldStates(model);
+			if (state.Time > time)
+				return false;
+			state.Time = time;
+			state.OutOfAdherence = false;
+			return true;
+		}
+
+		private static bool outPerson(SiteOutOfAdherenceReadModel model, Guid personId, DateTime time)
+		{
+			var state = stateForPerson(model, personId);
+			if (state.Time > time)
+				return false;
+			state.Time = time;
+			state.OutOfAdherence = true;
+			return true;
 		}
 
 		private static void removeRedundantOldStates(SiteOutOfAdherenceReadModel model)
@@ -126,9 +172,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 
 		private static void calculate(SiteOutOfAdherenceReadModel model)
 		{
-			model.Count = model.State.Count(x => x.OutOfAdherence);
+			model.Count = model.State
+				.Count(x =>
+					x.OutOfAdherence &&
+					!x.Deleted);
 		}
-		
+
 		[ReadModelUnitOfWork]
 		public virtual bool Initialized()
 		{

@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 	{
 		void Persist(TeamOutOfAdherenceReadModel model);
 		TeamOutOfAdherenceReadModel Get(Guid teamId);
+		IEnumerable<TeamOutOfAdherenceReadModel> GetAll();
 		bool HasData();
 		void Clear();
 	}

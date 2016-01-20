@@ -20,6 +20,11 @@ namespace Teleopti.Ccc.TestCommon
 			return _models.FirstOrDefault(m => m.TeamId == teamId);
 		}
 
+		public IEnumerable<TeamOutOfAdherenceReadModel> GetAll()
+		{
+			return _models.ToArray();
+		}
+
 		public IEnumerable<TeamOutOfAdherenceReadModel> Read(Guid siteId)
 		{
 			return _models.Where(x => x.SiteId == siteId);

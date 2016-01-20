@@ -58,29 +58,55 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 
 		public TeamOutOfAdherenceReadModel Get(Guid teamId)
 		{
-			var result = _unitOfWork.Current()
+			return _unitOfWork.Current()
 				.CreateSqlQuery(
 					"SELECT " +
-					"		TeamId, " +
-					"		SiteId, " +
-					"		Count, " +
-					"		State as StateJson " +
-					"FROM " +
-					"		ReadModel.TeamOutOfAdherence " +
-					"WHERE " +
-					"		TeamId =:TeamId")
+					"	TeamId, " +
+					"	SiteId, " +
+					"	Count, " +
+					"	State as StateJson " +
+					"FROM ReadModel.TeamOutOfAdherence " +
+					"WHERE TeamId =:TeamId")
 				.AddScalar("TeamId", NHibernateUtil.Guid)
 				.AddScalar("SiteId", NHibernateUtil.Guid)
 				.AddScalar("Count", NHibernateUtil.Int32)
 				.AddScalar("StateJson", NHibernateUtil.StringClob)
 				.SetParameter("TeamId", teamId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof (internalModel)))
 				.List()
-				.Cast<internalModel>().SingleOrDefault();
+				.Cast<internalModel>()
+				.Select(m =>
+				{
+					m.State = _deserializer.DeserializeObject<TeamOutOfAdherenceReadModelState[]>(m.StateJson);
+					m.StateJson = null;
+					return m;
+				})
+				.SingleOrDefault();
+		}
 
-			if (result == null) return null;
-			result.State = _deserializer.DeserializeObject<TeamOutOfAdherenceReadModelState[]>(result.StateJson);
-			return result;
+		public IEnumerable<TeamOutOfAdherenceReadModel> GetAll()
+		{
+			return _unitOfWork.Current()
+				.CreateSqlQuery(
+					"SELECT " +
+					"	TeamId, " +
+					"	SiteId, " +
+					"	Count, " +
+					"	State as StateJson " +
+					"FROM ReadModel.TeamOutOfAdherence")
+				.AddScalar("TeamId", NHibernateUtil.Guid)
+				.AddScalar("SiteId", NHibernateUtil.Guid)
+				.AddScalar("Count", NHibernateUtil.Int32)
+				.AddScalar("StateJson", NHibernateUtil.StringClob)
+				.SetResultTransformer(Transformers.AliasToBean(typeof (internalModel)))
+				.List()
+				.Cast<internalModel>()
+				.Select(m =>
+				{
+					m.State = _deserializer.DeserializeObject<TeamOutOfAdherenceReadModelState[]>(m.StateJson);
+					return m;
+				})
+				.ToArray();
 		}
 
 		public bool HasData()

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -138,6 +139,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				State = states
 			});
 			Target.HasData().Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldGetAll()
+		{
+			var team1 = Guid.NewGuid();
+			var team2 = Guid.NewGuid();
+			Target.Persist(new TeamOutOfAdherenceReadModel {TeamId = team1});
+			Target.Persist(new TeamOutOfAdherenceReadModel {TeamId = team2});
+
+			var models = Target.GetAll();
+
+			models.Single(x => x.TeamId == team1).TeamId.Should().Be(team1);
+			models.Single(x => x.TeamId == team2).TeamId.Should().Be(team2);
 		}
 	}
 

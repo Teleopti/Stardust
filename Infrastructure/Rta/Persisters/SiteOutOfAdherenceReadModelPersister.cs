@@ -57,13 +57,13 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 
 		public SiteOutOfAdherenceReadModel Get(Guid siteId)
 		{
-			var result = _unitOfWork.Current()
+			return _unitOfWork.Current()
 				.CreateSqlQuery(
 					"SELECT " +
-					"SiteId," +
-					"BusinessUnitId," +
-					"Count," +
-					"[State] AS StateJson " +
+					"	SiteId," +
+					"	BusinessUnitId," +
+					"	Count," +
+					"	[State] AS StateJson " +
 					"FROM ReadModel.SiteOutOfAdherence " +
 					"WHERE SiteId =:SiteId")
 				.AddScalar("SiteId", NHibernateUtil.Guid)
@@ -74,13 +74,39 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.SetResultTransformer(Transformers.AliasToBean(typeof (internalModel)))
 				.List()
 				.Cast<internalModel>()
+				.Select(m =>
+				{
+					m.State = _deserializer.DeserializeObject<SiteOutOfAdherenceReadModelState[]>(m.StateJson);
+					m.StateJson = null;
+					return m;
+				})
 				.SingleOrDefault();
-			if (result == null) return null;
-			if (result.StateJson == null) return result;
+		}
 
-			result.State = _deserializer.DeserializeObject<SiteOutOfAdherenceReadModelState[]>(result.StateJson);
-			result.StateJson = null;
-			return result;
+		public IEnumerable<SiteOutOfAdherenceReadModel> GetAll()
+		{
+			return _unitOfWork.Current()
+				.CreateSqlQuery(
+					"SELECT " +
+					"	SiteId," +
+					"	BusinessUnitId," +
+					"	Count," +
+					"	[State] AS StateJson " +
+					"FROM ReadModel.SiteOutOfAdherence ")
+				.AddScalar("SiteId", NHibernateUtil.Guid)
+				.AddScalar("BusinessUnitId", NHibernateUtil.Guid)
+				.AddScalar("Count", NHibernateUtil.Int32)
+				.AddScalar("StateJson", NHibernateUtil.StringClob)
+				.SetResultTransformer(Transformers.AliasToBean(typeof (internalModel)))
+				.List()
+				.Cast<internalModel>()
+				.Select(m =>
+				{
+					m.State = _deserializer.DeserializeObject<SiteOutOfAdherenceReadModelState[]>(m.StateJson);
+					m.StateJson = null;
+					return m;
+				})
+				.ToArray();
 		}
 
 		public IEnumerable<SiteOutOfAdherenceReadModel> Read()

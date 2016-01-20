@@ -133,5 +133,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			});
 			Target.HasData().Should().Be.True();
 		}
+
+		[Test]
+		public void ShouldGetAll()
+		{
+			var site1 = Guid.NewGuid();
+			var site2 = Guid.NewGuid();
+			Target.Persist(new SiteOutOfAdherenceReadModel { SiteId = site1 });
+			Target.Persist(new SiteOutOfAdherenceReadModel { SiteId = site2 });
+
+			var models = Target.GetAll();
+
+			models.Single(x => x.SiteId == site1).SiteId.Should().Be(site1);
+			models.Single(x => x.SiteId == site2).SiteId.Should().Be(site2);
+		}
 	}
 }
