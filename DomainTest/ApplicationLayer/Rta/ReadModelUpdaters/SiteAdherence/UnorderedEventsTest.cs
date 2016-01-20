@@ -38,6 +38,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 			Persister.Get(siteId).Count.Should().Be(0);
 		}
 
+		[Test]
+		[TestCaseSource(typeof(UnorderedEventsTest), "OutTerminatedInOut")]
+		public void ShouldHandleTerminations(IEnumerable<IEvent> events)
+		{
+			events.ForEach(e => Target.Handle((dynamic)e));
+			var siteId = events.OfType<PersonOutOfAdherenceEvent>().First().SiteId;
+			Persister.Get(siteId).Count.Should().Be(0);
+		}
+
 		public static IEnumerable OutInOut_OutIn
 		{
 			get
@@ -45,8 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 				var personId1 = Guid.NewGuid();
 				var personId2 = Guid.NewGuid();
 				var siteId = Guid.NewGuid();
-
-				return permutationsOf(new List<IEvent>
+				var events = new List<IEvent>
 				{
 					new PersonOutOfAdherenceEvent
 					{
@@ -79,7 +87,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 						SiteId = siteId,
 						Timestamp = "2015-02-18 12:08".Utc()
 					}
-				});
+				};
+				return events
+					.Permutations()
+					.TestCases();
 			}
 		}
 
@@ -89,8 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 			{
 				var personId = Guid.NewGuid();
 				var siteId = Guid.NewGuid();
-
-				return permutationsOf(new List<IEvent>
+				var events = new IEvent[]
 				{
 					new PersonOutOfAdherenceEvent
 					{
@@ -116,18 +126,54 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 						SiteId = siteId,
 						Timestamp = "2015-02-18 12:08".Utc()
 					},
-				});
+				};
+
+				return events
+					.Permutations()
+					.TestCases();
 			}
 		}
 
-		private static IEnumerable permutationsOf(List<IEvent> events)
+		public static IEnumerable OutTerminatedInOut
 		{
-			var permutations = events.Permutations();
+			get
+			{
+				var personId = Guid.NewGuid();
+				var siteId = Guid.NewGuid();
+				var events = new IEvent[]
+				{
+					new PersonOutOfAdherenceEvent
+					{
+						PersonId = personId,
+						SiteId = siteId,
+						Timestamp = "2015-02-18 12:02".Utc()
+					},
+					new PersonAssociationChangedEvent
+					{
+						PersonId = personId,
+						Timestamp = "2015-02-18 12:04".Utc(),
+						TeamId = null
+					},
+					new PersonInAdherenceEvent
+					{
+						PersonId = personId,
+						SiteId = siteId,
+						Timestamp = "2015-02-18 12:06".Utc()
+					},
+					new PersonOutOfAdherenceEvent
+					{
+						PersonId = personId,
+						SiteId = siteId,
+						Timestamp = "2015-02-18 12:08".Utc()
+					},
+				};
 
-			return from p in permutations
-				   let name = (from pe in p select pe.GetType().Name).Aggregate((current, next) => current + ", " + next)
-				   select new TestCaseData(p).SetName(name);
+				return events
+					.Permutations()
+					.Where(p => !(p.First() is PersonAssociationChangedEvent))
+					.TestCases();
+			}
 		}
-	
+		
 	}
 }

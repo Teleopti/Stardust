@@ -188,6 +188,8 @@
     <Compile Include="ApplicationLayer\PersonAssociationChangedEventPublisherTerminalDateTest.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChangedEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\TerminatedPersonTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteAdherence\PersonTerminatedTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamAdherence\PersonTerminatedTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StartTime\AlarmStartTimeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StartTime\IsAlarmTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StartTime\ProperAlarmStartTimeTest.cs" />

@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		IHandleEvent<PersonOutOfAdherenceEvent>,
 		IHandleEvent<PersonNeutralAdherenceEvent>,
 		IHandleEvent<PersonDeletedEvent>,
+		IHandleEvent<PersonAssociationChangedEvent>,
 		IInitializeble,
 		IRecreatable
 	{
@@ -75,7 +76,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				teams,
 				deletePerson);
 		}
-		
+
+		[UseOnToggle(Toggles.RTA_TerminatedPersons_36042)]
+		[ReadModelUnitOfWork]
+		public void Handle(PersonAssociationChangedEvent @event)
+		{
+			updateAllModels(
+				@event.PersonId,
+				@event.Timestamp,
+				null,
+				deletePerson);
+		}
+
 		private void updateModel(Guid personId, DateTime time, Guid siteId, Guid teamId, UpdateAction update)
 		{
 			var model = modelFor(siteId, teamId);
@@ -87,7 +99,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			var existingModels = _persister.GetAll();
 
 			var newModels =
-				from t in teams
+				from t in teams.EmptyIfNull()
 				let unknown = !existingModels.Select(m => m.TeamId).Contains(t.TeamId)
 				where unknown
 				select modelFor(t.SiteId, t.TeamId);
@@ -194,5 +206,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		{
 			_persister.Clear();
 		}
+
 	}
 }
