@@ -444,27 +444,35 @@ namespace Teleopti.Ccc.Domain.Common
 				});
 		}
 
-		private ICollection<PersonPeriodDetail> gatherPersonPeriodDetails()
-		{
-			var personPeriods = InternalPersonPeriodCollection;
-			if (personPeriods == null) return new List<PersonPeriodDetail>();
-			return 
-				personPeriods.Select(
-					p =>
-					{
-						var siteId = p.Team.Site != null ? p.Team.Site.Id.GetValueOrDefault() : Guid.Empty;
+	    private ICollection<PersonPeriodDetail> gatherPersonPeriodDetails()
+	    {
+		    var personPeriods = InternalPersonPeriodCollection;
+		    if (personPeriods == null) return new List<PersonPeriodDetail>();
+		    return
+			    personPeriods.Select(
+				    p =>
+				    {
+						var businessUnitId = Guid.Empty;
+						var siteId = Guid.Empty;
+						var site = p.Team.Site;
+						if (site != null)
+						{
+							businessUnitId = site.BusinessUnit.Id.GetValueOrDefault();
+							siteId = site.Id.GetValueOrDefault();
+						}
 						return new PersonPeriodDetail
 						{
 							StartDate = p.StartDate.Date,
 							EndDate = p.EndDate().Date,
+							BusinessUnitId = businessUnitId,
 							SiteId = siteId,
 							TeamId = p.Team.Id.GetValueOrDefault(),
 							PersonSkillDetails = gatherSkillDetails(p),
 						};
-					}).ToList();
-		}
+				    }).ToList();
+	    }
 
-		private ICollection<PersonSkillDetail> gatherSkillDetails(IPersonPeriod personPeriod)
+	    private ICollection<PersonSkillDetail> gatherSkillDetails(IPersonPeriod personPeriod)
 		{
 			return personPeriod.PersonSkillCollection.Select(p => new PersonSkillDetail
 				{
