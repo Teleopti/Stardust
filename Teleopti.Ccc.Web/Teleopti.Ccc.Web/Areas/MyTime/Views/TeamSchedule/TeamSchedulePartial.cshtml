@@ -236,8 +236,10 @@
 								<!--/ko-->
 								<!--ko if:$parent.isDayOff-->
 								<div class="shift-trade-layer-container floatleft shift-trade-dayoff">
-									<div class="dayoff" data-bind="style:$parent.isFullDayAbsence&&{'background-color':backgroundColor},tooltip: $parent.isFullDayAbsence&&{ title: tooltipText, html: true}, text:$parent.dayOffName || titleHeader"></div>
+									<div class="dayoff" data-bind="style:$parent.isFullDayAbsence&&{'background-color':backgroundColor},tooltip: $parent.isFullDayAbsence && { title: tooltipText, html: true}, text:$parent.dayOffName || titleHeader"></div>
+									<div class="shift-trade-layer add" data-bind="visible: !$parent.isFullDayAbsence, style: styleJson, tooltip: { title: tooltipText, html: true}"></div>
 								</div>
+								
 								<!--/ko-->
 							</div>
 							<!--ko if:isDayOff && layers.length == 0-->
