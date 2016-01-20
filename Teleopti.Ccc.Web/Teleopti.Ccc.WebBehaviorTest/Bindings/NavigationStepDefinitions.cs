@@ -62,6 +62,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoAnApplicationPage();
 		}
 
+		[Given(@"I was logged on with remember me")]
+		public void GivenIWasLoggedOnWithRememberMe()
+		{
+			if (!DataMaker.Data().HasSetup<IUserRoleSetup>())
+				DataMaker.Data().Apply(new Agent());
+			TestControllerMethods.LogonWithRememberMe();
+			Navigation.GotoAnApplicationPage();
+		}
+
+
 		[When(@"I am viewing an application page as '(.*)' with password '(.*)'")]
 		public void WhenIAmViewingAnApplicationPage(string userName, string password)
 		{

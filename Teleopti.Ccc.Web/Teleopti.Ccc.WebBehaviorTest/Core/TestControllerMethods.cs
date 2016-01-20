@@ -70,7 +70,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			var userName = DataMaker.Data().ApplyDelayed();
 			var password = DefaultPassword.ThePassword;
-			InnerLogon(userName, password);
+			innerLogon(userName, password);
+		}
+
+		public static void LogonWithRememberMe()
+		{
+			var userName = DataMaker.Data().ApplyDelayed();
+			var password = DefaultPassword.ThePassword;
+			innerLogon(userName, password, true);
 		}
 
 		public static void LogonForSpecificUser(string userName, string password)
@@ -82,18 +89,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 						Password = password
 					});
 			DataMaker.Data().ApplyDelayed();
-			InnerLogon(userName, password);
+			innerLogon(userName, password);
 		}
 
-		/// <summary>
-		/// Imitates a logon process on UI with the given username and password.
-		/// </summary>
-		/// <param name="userName">Name of the user.</param>
-		/// <param name="password">The password.</param>
-		private static void InnerLogon(string userName, string password)
+		private static void innerLogon(string userName, string password, bool isPersistent=false)
 		{
 			var businessUnitName = DataMaker.Data().MePerson.PermissionInformation.ApplicationRoleCollection.First().BusinessUnit.Name;
-			var queryString = string.Format("?businessUnitName={0}&userName={1}&password={2}", businessUnitName, userName, password);
+			var queryString = string.Format("?businessUnitName={0}&userName={1}&password={2}&isPersistent={3}", businessUnitName, userName, password, isPersistent);
 			Navigation.Navigation.GoToPage("Test/Logon" + queryString);
 		}
 

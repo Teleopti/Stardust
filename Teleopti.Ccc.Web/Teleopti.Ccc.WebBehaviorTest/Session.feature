@@ -31,6 +31,22 @@ Scenario: Signed out when time passes
 	When the time is '2013-09-30 17:00'
 	And I navigate to an application page
 	Then I should see the sign in page
+
+Scenario: Stay signed in when time passes (remember me)
+	Given the time is '2013-09-30 16:00'
+	And I was logged on with remember me
+	Then I should be signed in
+	When the time is '2013-10-30 15:00'
+	And I navigate to an application page
+	Then I should stay signed in
+
+Scenario: Signed out when time passes (remember me)
+	Given the time is '2013-09-30 16:00'
+	And I was logged on with remember me
+	Then I should be signed in
+	When the time is '2013-10-30 17:00'
+	And I navigate to an application page
+	Then I should see the sign in page
 	
 Scenario: Stay signed in when time passes with ASM open
 	Given I have the role 'Full access to mytime'
