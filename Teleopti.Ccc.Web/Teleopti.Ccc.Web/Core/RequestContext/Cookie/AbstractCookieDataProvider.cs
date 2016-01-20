@@ -122,10 +122,10 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			return makeTicket(
 				userName,
 				userData,
-				_now.LocalDateTime()
+				_now.UtcDateTime()
 					.Add(isPersistent
 						? _sessionSpecificCookieDataProviderSettings.AuthenticationCookieExpirationTimeSpanLong
-						: _sessionSpecificCookieDataProviderSettings.AuthenticationCookieExpirationTimeSpan)
+						: _sessionSpecificCookieDataProviderSettings.AuthenticationCookieExpirationTimeSpan).ToLocalTime()
 				);
 		}
 

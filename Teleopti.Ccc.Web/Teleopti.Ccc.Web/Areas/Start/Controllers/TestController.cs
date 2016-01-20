@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 		[TenantUnitOfWork]
 		[NoTenantAuthentication]
-		public virtual ViewResult Logon(string businessUnitName, string userName, string password)
+		public virtual ViewResult Logon(string businessUnitName, string userName, string password, bool isPersistent = false)
 		{
 			var result = _authenticator.AuthenticateApplicationUser(userName, password);
 			var businessUnits = _businessUnitProvider.RetrieveBusinessUnitsForPerson(result.DataSource, result.Person);
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 			if (result.Successful)
 			{
-				_formsAuthentication.SetAuthCookie(userName + TokenIdentityProvider.ApplicationIdentifier, false);
+				_formsAuthentication.SetAuthCookie(userName + TokenIdentityProvider.ApplicationIdentifier, isPersistent);
 				tenantPassword = _findPersonInfo.GetById(result.Person.Id.Value).TenantPassword;
 			}
 
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			};
 			var claimsIdentity = new ClaimsIdentity(claims, "IssuerForTest");
 			_httpContext.Current().User = new ClaimsPrincipal(new IClaimsIdentity[] { claimsIdentity });
-			_logon.LogOn(result.DataSource.DataSourceName, businessUnit.Id.Value, result.Person.Id.Value, tenantPassword, false);
+			_logon.LogOn(result.DataSource.DataSourceName, businessUnit.Id.Value, result.Person.Id.Value, tenantPassword, isPersistent);
 
 			return View("Message", new TestMessageViewModel
 			{
