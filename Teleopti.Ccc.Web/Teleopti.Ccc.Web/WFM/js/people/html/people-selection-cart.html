@@ -20,9 +20,9 @@
 			<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.toggleCalendar()"><i class="mdi mdi-calendar"></i></button>
 		</div>
 		<div class="pull-right">
-			<button class="context-menu wfm-fab mini">
+			<div tabindex=0 class="context-menu card-context">
 				<i class="mdi mdi-dots-vertical" style="color: #000000"></i>
-				<div class="context-menu-left" style="z-index: 1000; text-transform: none;">
+				<span class="context-menu-left" style="z-index: 1000; text-transform: none;">
 					<ul class="wfm-list">
 						<li class="item" ng-click="vm.clearCart()">
 							<div>
@@ -35,11 +35,11 @@
 							</div>
 						</li>
 					</ul>
-				</div>
+				</span>
 				<span ng-show="vm.selectedPeopleIds.length > 0" class="wfm-panel selection-cart-indicator">
 					{{vm.selectedPeopleIds.length}}
 				</span>
-			</button>
+			</div>
 		</div>
 	</div>
 	<div ui-i18n="{{lang}}" ng-if="vm.dataInitialized" class="big-table-wrapper" style="position: relative">
