@@ -395,6 +395,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personWithAbsenceOnContractDayOff = PersonFactory.CreatePersonWithGuid("_", "_");
 			var personWithDayoff = PersonFactory.CreatePersonWithGuid("person3", "dayoff");
 			var personWithEmptySchedule = PersonFactory.CreatePersonWithGuid("person4", "empty");
+			var person2WithEmptySchedule = PersonFactory.CreatePersonWithGuid("person5", "anotherEmpty");
 
 			var team = TeamFactory.CreateTeamWithId("team");
 			TeamRepository.Add(team);
@@ -404,12 +405,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			personWithMainShift2.AddPersonPeriod(personPeriod);
 			personWithDayoff.AddPersonPeriod(personPeriod);
 			personWithEmptySchedule.AddPersonPeriod(personPeriod);
+			person2WithEmptySchedule.AddPersonPeriod(personPeriod);
 
 			PersonRepository.Add(personWithAbsenceOnContractDayOff);
 			PersonRepository.Add(personWithMainShift1);
 			PersonRepository.Add(personWithMainShift2);
 			PersonRepository.Add(personWithDayoff);
 			PersonRepository.Add(personWithEmptySchedule);
+			PersonRepository.Add(person2WithEmptySchedule);
 
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, personWithMainShift1,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc), DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)),
@@ -439,12 +442,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				TeamIdList = new[] { team.Id.GetValueOrDefault() }
 			});
 		
-			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(4);
+			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(5);
 			var possibleSchedules = result.PossibleTradeSchedules.ToList();
 			possibleSchedules[0].Name.Should().Be.EqualTo("person2@published");
 			possibleSchedules[1].Name.Should().Be.EqualTo("person1@published");
 			possibleSchedules[2].Name.Should().Be.EqualTo("person3@dayoff");
-			possibleSchedules[3].Name.Should().Be.EqualTo("person4@empty");
+			possibleSchedules[3].Name.Should().Be.EqualTo("person5@anotherEmpty");
+			possibleSchedules[4].Name.Should().Be.EqualTo("person4@empty");
 		}
 
 		[Test]

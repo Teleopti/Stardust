@@ -21,13 +21,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly ICurrentScenario _currentScenario;
-		private ITeamScheduleProjectionProvider _projectionProvider;
+		private readonly ITeamScheduleProjectionProvider _projectionProvider;
 		private readonly IPermissionProvider _permissionProvider;
-		private IPossibleShiftTradePersonsProvider _possibleShiftTradePersonsProvider;
-		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
+		private readonly IPossibleShiftTradePersonsProvider _possibleShiftTradePersonsProvider;
 		private readonly IShiftTradeTimeLineHoursViewModelMapper _shiftTradeTimeLineHoursViewModelMapper;
 
-		public RequestsShiftTradeScheduleViewModelFactory(ILoggedOnUser loggedOnUser, IScheduleRepository scheduleRepository, ICurrentScenario currentScenario, ITeamScheduleProjectionProvider projectionProvider, IPermissionProvider permissionProvider, IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider, ICommonAgentNameProvider commonAgentNameProvider, IShiftTradeTimeLineHoursViewModelMapper shiftTradeTimeLineHoursViewModelMapper)
+		public RequestsShiftTradeScheduleViewModelFactory(ILoggedOnUser loggedOnUser, IScheduleRepository scheduleRepository, ICurrentScenario currentScenario, ITeamScheduleProjectionProvider projectionProvider, IPermissionProvider permissionProvider, IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider, IShiftTradeTimeLineHoursViewModelMapper shiftTradeTimeLineHoursViewModelMapper)
 		{
 			_loggedOnUser = loggedOnUser;
 			_scheduleRepository = scheduleRepository;
@@ -35,7 +34,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			_projectionProvider = projectionProvider;
 			_permissionProvider = permissionProvider;
 			_possibleShiftTradePersonsProvider = possibleShiftTradePersonsProvider;
-			_commonAgentNameProvider = commonAgentNameProvider;
 			_shiftTradeTimeLineHoursViewModelMapper = shiftTradeTimeLineHoursViewModelMapper;
 		}
 
@@ -58,6 +56,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 
 			var allSortedPossibleSchedules = possiblePersonSchedules
 				.OrderBy(pair => TeamScheduleSortingUtil.GetSortedValue(pair.Item2, false, true))
+				.ThenBy(pair => pair.Item1.Name.LastName)
 				.Select(pair =>
 				{
 					var person = pair.Item1;
