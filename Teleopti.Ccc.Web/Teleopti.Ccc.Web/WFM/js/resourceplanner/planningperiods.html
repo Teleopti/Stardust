@@ -13,27 +13,20 @@
 	<div class="view-header">
 		<div class="view-title">
 			<!--TRANSLATE ME-->
-			<h1><i class="mdi mdi-calendar"></i>{{'Filters' | translate}}</h1>
+			<h1><i class="mdi mdi-calendar"></i> {{planningPeriod.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{planningPeriod.EndDate | amDateFormat:"L"}} 				<i ng-show="initialized" ng-click="changeDateToggle = !changeDateToggle;suggestions(planningPeriod.Id)" class="mdi mdi-pencil searchbaricon update-planning-peroid"><md-tooltip>{{'ChangePlanningPeriod' | translate }}</md-tooltip></i></h1>
+
 			<div class="alert-warning notice-spacer server-busy" ng-if="isScheduleRunning"><i class='mdi mdi-alert'></i>
 				<span translate>ScheduleIsRunning</span>
 			</div>
-			<div ng-if="planningPeriod.State != 'New'" class="text-success" translate>
-				PlanningPeriodIsScheduled
+			<div ng-if="planningPeriod.State != 'New'" class="text-info schedule-warning" >
+				{{'PlanningPeriodIsScheduled' | translate }}
 			</div>
 			<!-- don't remove non css class test-schedule-is-running - used to assert in test -->
-		</div>
-		<div class="fab-wrapper">
-			<button class="wfm-btn material-depth-1 wfm-btn-primary test-schedule-button" ng-class="{'shrink-in': disableSchedule()}" ng-disabled="disableSchedule()" ng-click="launchSchedule(planningPeriod)">
-				{{'ScheduleVerb' | translate }}
-			</button>
 		</div>
 	</div>
 
 	<div class="next-planning-peroid">
-		{{'CurrentPlanningPeriodMessage' | translate}} {{planningPeriod.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{planningPeriod.EndDate | amDateFormat:"L"}}
 		<!--dont remove update-planning-peroid - used to assert in test -->
-		<i ng-show="initialized" ng-click="changeDateToggle = !changeDateToggle;suggestions(planningPeriod.Id)" class="mdi mdi-pencil searchbaricon update-planning-peroid"><md-tooltip>{{'ChangePlanningPeriod' | translate }}</md-tooltip></i>
-
 		<div ng-show="!initialized">
 			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 			<p>{{'CheckingForecastingRequirements' | translate}}</p>
@@ -58,15 +51,18 @@
 
 	<div ng-show="planningPeriod.Skills.length>0 && planningPeriod.State == 'New'">
 		{{'PlanningPeriodMissingMessage' | translate}}
-		<p>
-			{{'MissingSkills' | translate }}
-			<i class="mdi mdi-alert searchbaricon" ng-click="showErrors=!showErrors"><md-tooltip>Show all errors</md-tooltip></i>
+		<p class="text-warning">
+			{{'MissingSkills' | translate }}:
+			<button class="wfm-btn wfm-btn-default" ng-click="showErrors=!showErrors">show<md-tooltip>Show all errors</md-tooltip></button>
 		</p>
 	</div>
 
 	<div class="con-row">
 		<div class="con-flex">
 			<button type="button" name="button" ng-click="createRuleset()" class="wfm-btn wfm-btn-default" translate>NewDayOffRule</button>
+			<button class="wfm-btn material-depth-1 wfm-btn-primary" ng-class="{'shrink-in': disableSchedule()}" ng-disabled="disableSchedule()" ng-click="launchSchedule(planningPeriod)">
+				{{'ScheduleVerb' | translate }}
+			</button>
 		</div>
 	</div>
 	<div class="con-row">
@@ -76,12 +72,13 @@
 					<div class="sub-header">
 						<h2>{{node.Name}}</h2>
 						<div class="head-actions panel-menu">
-							<div ng-show="!node.Default" tabindex=0 class="context-menu card-context" ng-click="destoryRuleset(node)">
-								<i class=" filter-header mdi mdi-delete searchbaricon"><md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip></i>
-							</div>
 							<div tabindex=0 class="context-menu card-context" ng-click="editRuleset(node)">
 								<i class=" filter-header mdi mdi-pencil searchbaricon"><md-tooltip>{{'EditFilter' | translate }}</md-tooltip></i>
 							</div>
+							<div ng-show="!node.Default" tabindex=0 class="context-menu card-context" ng-click="destoryRuleset(node)">
+								<i class=" filter-header mdi mdi-delete searchbaricon"><md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip></i>
+							</div>
+
 						</div>
 					</div>
 
@@ -113,6 +110,15 @@
 									</tr>
 								</tbody>
 							</table>
+						</div>
+					</div>
+					<div class="con-row">
+						<div class="con-flex" ng-show="!node.Default">{{'AppliedFilters'|translate}}
+							<span class="appliedFilters con-row" ng-repeat="filter in node.Filters">
+								<span class="filter-handle">{{filter.FilterType}}</span>
+								<span class="filter-chip" >{{filter.Name}}</span>
+							</span>
+							<span class="moreExists" ng-show="node.Filters.length>5">{{'ThreeDots' | translate}}</span>
 						</div>
 					</div>
 					<div class="con-footer">

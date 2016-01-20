@@ -14,7 +14,6 @@
 	            $scope.isEnabled = false;
 	            $scope.dayoffRules = [];
 	            $scope.planningPeriod = {};
-
 	            $scope.disableSchedule = function() {
 	                return !$scope.initialized || $scope.isScheduleRunning || $scope.scheduleClicked || !$scope.planningPeriod.StartDate;
 	            };
@@ -86,7 +85,9 @@
 	            PlanningPeriodSvrc.getPlanningPeriod.query({ id: $stateParams.id }).$promise.then(function(result) {
 	                $scope.planningPeriod = result;
 	                $scope.initialized = true;
+
 	            });
+
 
 	            $scope.suggestions = function(id) {
 	                $scope.suggestedPlanningPeriods = [];
