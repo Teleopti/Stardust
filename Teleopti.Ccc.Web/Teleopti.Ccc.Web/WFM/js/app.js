@@ -19,6 +19,7 @@ var wfm = angular.module('wfm', [
 	'currentUserInfoService',
 	'toggleService',
 	'wfm.http',
+	'wfm.exceptionHandler',
 	'wfm.permissions',
 	'wfm.people',
 	'wfm.outbound',
@@ -202,7 +203,7 @@ wfm.config([
 				event.preventDefault();
 				toggleService.togglesLoaded.then(function() {
 					$state.go(next, toParams);
-				})
+				});
 				return;
 			}
 		});

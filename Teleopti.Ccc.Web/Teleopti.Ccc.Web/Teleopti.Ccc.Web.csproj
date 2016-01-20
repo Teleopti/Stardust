@@ -1251,6 +1251,7 @@
     <Content Include="WFM\js\global\businessunits\businessunits.service.js" />
     <Content Include="WFM\js\global\businessunits\_modules.js" />
     <Content Include="WFM\js\global\currentuserinfo.service.spec.js" />
+    <Content Include="WFM\js\global\exceptionhandler.js" />
     <Content Include="WFM\js\global\http.spec.js" />
     <Content Include="WFM\js\global\notification.controller.spec.js" />
     <Content Include="WFM\js\global\numeric-value\numeric-value.directive.js" />
