@@ -12791,9 +12791,6 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="ScheduleIsRunning" xml:space="preserve">
     <value>Varning: Servern är upptagen med schemaläggning. Var god försök igen senare.</value>
   </data>
-  <data name="AmountOfFilters" xml:space="preserve">
-    <value>Antal filter</value>
-  </data>
   <data name="ChangePlanningPeriod" xml:space="preserve">
     <value>Ändra planeringsperiod</value>
   </data>

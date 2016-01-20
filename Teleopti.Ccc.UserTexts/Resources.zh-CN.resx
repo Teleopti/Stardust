@@ -11949,9 +11949,6 @@ Teleopti R&amp;D</value>
   <data name="ForecastPeriodLength" xml:space="preserve">
     <value>预测周期不能超过1年</value>
   </data>
-  <data name="AmountOfFilters" xml:space="preserve">
-    <value>筛选器总数</value>
-  </data>
   <data name="SpaceHorizontally" xml:space="preserve">
     <value>水平分割所选项目</value>
   </data>

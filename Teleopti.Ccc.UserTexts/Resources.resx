@@ -13819,10 +13819,6 @@ Reduce the complexity to use these shifts.</value>
     <value>Total Talk time &gt;</value>
     <comment>label for the forecasting chart</comment>
   </data>
-  <data name="AmountOfFilters" xml:space="preserve">
-    <value>Amount of Filters</value>
-    <comment>Display the amount of filters</comment>
-  </data>
   <data name="ChangePlanningPeriod" xml:space="preserve">
     <value>Change planning period</value>
     <comment>Change selected planning period</comment>
@@ -14069,5 +14065,9 @@ Help us improve your experience by sending an error report</value>
   </data>
   <data name="CurrentPlanningPeriodMessage" xml:space="preserve">
     <value>This planning period will be from</value>
+  </data>
+  <data name="AppliedFilters" xml:space="preserve">
+    <value>Settings are applied to the following:</value>
+    <comment>Describing what units are covered by custom rulesets</comment>
   </data>
 </root>

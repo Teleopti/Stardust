@@ -12308,9 +12308,6 @@ Maksimi viikkotuntimäärä on pienempi kuin</value>
   <data name="ValidationforFilter" xml:space="preserve">
     <value>Lisää lajittelu</value>
   </data>
-  <data name="AmountOfFilters" xml:space="preserve">
-    <value>Lajittelujen määrä</value>
-  </data>
   <data name="ChangePlanningPeriod" xml:space="preserve">
     <value>Muokkaa suunnittelujaksoa</value>
   </data>

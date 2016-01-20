@@ -10663,9 +10663,6 @@ Ces options sont actives:
   <data name="TotalTalkTimeCaret" xml:space="preserve">
     <value>Temps de communication total &gt;</value>
   </data>
-  <data name="AmountOfFilters" xml:space="preserve">
-    <value>Quantité de filtres</value>
-  </data>
   <data name="ChangePlanningPeriod" xml:space="preserve">
     <value>Changer période planning</value>
   </data>

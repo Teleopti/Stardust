@@ -12315,9 +12315,6 @@ Teleopti R&amp;D</value>
   <data name="TotalTalkTimeCaret" xml:space="preserve">
     <value>Итоговое время диалога &gt;</value>
   </data>
-  <data name="AmountOfFilters" xml:space="preserve">
-    <value>Количество фильтров</value>
-  </data>
   <data name="ChangePlanningPeriod" xml:space="preserve">
     <value>Изменить планируемый период</value>
   </data>
