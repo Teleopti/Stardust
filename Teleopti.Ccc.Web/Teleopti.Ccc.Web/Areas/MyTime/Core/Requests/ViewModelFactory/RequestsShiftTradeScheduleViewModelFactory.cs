@@ -26,7 +26,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		private readonly IPossibleShiftTradePersonsProvider _possibleShiftTradePersonsProvider;
 		private readonly IShiftTradeTimeLineHoursViewModelMapper _shiftTradeTimeLineHoursViewModelMapper;
 
-		public RequestsShiftTradeScheduleViewModelFactory(ILoggedOnUser loggedOnUser, IScheduleRepository scheduleRepository, ICurrentScenario currentScenario, ITeamScheduleProjectionProvider projectionProvider, IPermissionProvider permissionProvider, IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider, IShiftTradeTimeLineHoursViewModelMapper shiftTradeTimeLineHoursViewModelMapper)
+		public RequestsShiftTradeScheduleViewModelFactory(
+														ILoggedOnUser loggedOnUser, 
+														IScheduleRepository scheduleRepository, 
+														ICurrentScenario currentScenario, 
+														ITeamScheduleProjectionProvider projectionProvider, 
+														IPermissionProvider permissionProvider, 
+														IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider, 
+														IShiftTradeTimeLineHoursViewModelMapper shiftTradeTimeLineHoursViewModelMapper
+														)
 		{
 			_loggedOnUser = loggedOnUser;
 			_scheduleRepository = scheduleRepository;
@@ -87,11 +95,4 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			return dictionary.SchedulesForDay(date);
 		}
 	}
-
-
-	public interface IRequestsShiftTradeScheduleViewModelFactory
-	{
-		ShiftTradeScheduleViewModel CreateViewModel(ShiftTradeScheduleViewModelData inputData);
-	}
-
 }
