@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -29,7 +30,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly ISwapAndModifyServiceNew _swapAndModifyServiceNew;
 		private readonly IMessagePopulatingServiceBusSender _busSender;
-		private readonly ICurrentUnitOfWork _currentUnitOfWork;
+		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
+		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
+		
 
 		public SwapMainShiftForTwoPersonsCommandHandler(ICommonNameDescriptionSetting commonNameDescriptionSetting,
 			IPersonRepository personRepository,
@@ -37,7 +40,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			IScenarioRepository scenarioRepository,
 			ISwapAndModifyServiceNew swapAndModifyServiceNew,
 			IMessagePopulatingServiceBusSender busSender,
-			ICurrentUnitOfWork currentUnitOfWork)
+			IDifferenceCollectionService<IPersistableScheduleData> differenceService, 
+			IScheduleDifferenceSaver scheduleDifferenceSaver)
 		{
 			_commonNameDescriptionSetting = commonNameDescriptionSetting;
 			_personRepository = personRepository;
@@ -45,54 +49,65 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			_scenarioRepository = scenarioRepository;
 			_swapAndModifyServiceNew = swapAndModifyServiceNew;
 			_busSender = busSender;
-			_currentUnitOfWork = currentUnitOfWork;
+			_differenceService = differenceService;
+			_scheduleDifferenceSaver = scheduleDifferenceSaver;
 		}
 
 		public IEnumerable<FailActionResult> SwapShifts(SwapMainShiftForTwoPersonsCommand command)
 		{
+			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
 			var personIds = new[] {command.PersonIdFrom, command.PersonIdTo};
-			var peoples = _personRepository.FindPeople(personIds).ToArray();
-
+			var people = _personRepository.FindPeople(personIds).ToArray();
 			var scheduleDate = command.ScheduleDate;
 			var scheduleDateOnly = new DateOnly(scheduleDate);
-			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
-			var period = new DateTimePeriod(scheduleDate.ToUniversalTime(), scheduleDate.AddDays(1).ToUniversalTime());
-
-			var schedulePeriod = new ScheduleDateTimePeriod(period);
-			var personProvider = new PersonProvider(peoples);
-			var options = new ScheduleDictionaryLoadOptions(true, true);
-
-			var scheduleDictionary =
-				_scheduleRepository.FindSchedulesForPersons(schedulePeriod, defaultScenario, personProvider, options, peoples);
-
-			var dates = new List<DateOnly> {scheduleDateOnly};
-			var lockDates = new List<DateOnly>();
-			var businessRules = NewBusinessRuleCollection.Minimum();
-			var scheduleTagSetter = new ScheduleTagSetter(NullScheduleTag.Instance);
-			var errorResponses =
-				_swapAndModifyServiceNew.Swap(peoples[0], peoples[1], dates, lockDates, scheduleDictionary,
-					businessRules, scheduleTagSetter).Where(r => r.Error).ToArray();
+			var scheduleDictionary = getScheduleDictionary(defaultScenario, scheduleDate, people);
+			var errorResponses = swapShifts(scheduleDateOnly, people, scheduleDictionary);
 
 			if (errorResponses.Length > 0)
 			{
 				return parseErrorResponses(errorResponses);
 			}
 
-			var uow = _currentUnitOfWork.Current();
-			foreach (var scheduleRange in scheduleDictionary.Values)
-			{
-				var personAssignment = scheduleRange.ScheduledDay(scheduleDateOnly).PersonAssignment(true);
-				uow.Merge(personAssignment);
-			}
-			uow.PersistAll();
-
-			notifyScheduleChanged(scheduleDate, scheduleDate.AddDays(1), defaultScenario.Id.Value, personIds,
-				command.TrackedCommandInfo);
+			people.ForEach( person =>
+				   saveAndNotifyChanges(defaultScenario, scheduleDictionary, person, scheduleDateOnly, command.TrackedCommandInfo));
 
 			return new List<FailActionResult>();
 		}
 
-		private IEnumerable<FailActionResult> parseErrorResponses(IEnumerable<IBusinessRuleResponse> errorResponses)
+		private IScheduleDictionary getScheduleDictionary(IScenario scenario, DateTime date, IPerson[] people)
+		{
+			var period = new DateTimePeriod(date.ToUniversalTime(), date.AddDays(1).ToUniversalTime());
+			var options = new ScheduleDictionaryLoadOptions(true, true);
+			var schedulePeriod = new ScheduleDateTimePeriod(period);
+			var personProvider = new PersonProvider(people);
+			
+			return _scheduleRepository.FindSchedulesForPersons(schedulePeriod, scenario, personProvider, options, people);
+		}
+
+		private IBusinessRuleResponse[] swapShifts(DateOnly date, IPerson[] people, IScheduleDictionary scheduleDictionary)
+		{
+			var dates = new List<DateOnly> { date};
+			var lockDates = new List<DateOnly>();
+			var businessRules = NewBusinessRuleCollection.Minimum();
+			var scheduleTagSetter = new ScheduleTagSetter(NullScheduleTag.Instance);
+
+			return _swapAndModifyServiceNew.Swap(people[0], people[1], dates, lockDates, scheduleDictionary, businessRules, scheduleTagSetter)
+										   .Where(r => r.Error)
+										   .ToArray();
+		}
+
+		private void saveAndNotifyChanges(IScenario scenario, IScheduleDictionary scheduleDictionary, IPerson person, DateOnly date, TrackedCommandInfo trackedCommandInfo)
+		{
+			var range = scheduleDictionary[person];
+			var diff = range.DifferenceSinceSnapshot(_differenceService);
+			var personAssignment = range.ScheduledDay(date).PersonAssignment();
+
+			personAssignment.PopAllEvents();
+			_scheduleDifferenceSaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate)range);
+			notifyScheduleChanged(personAssignment.Period, scenario.Id.Value, person.Id.Value, trackedCommandInfo);
+		}
+
+		private IEnumerable<FailActionResult> parseErrorResponses(IBusinessRuleResponse[] errorResponses)
 		{
 			return errorResponses.Select(r => new FailActionResult
 			{
@@ -101,24 +116,19 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			});
 		}
 
-		private void notifyScheduleChanged(DateTime startTime, DateTime endTime, Guid scenarioId, IEnumerable<Guid> personIds,
-			TrackedCommandInfo trackedCommandInfo)
+		private void notifyScheduleChanged(DateTimePeriod period, Guid scenarioId, Guid personId, TrackedCommandInfo trackedCommandInfo)
 		{
-			foreach (var personId in personIds)
+			var message = new ScheduleChangedEvent
 			{
-				var message = new ScheduleChangedEvent
-				{
-					StartDateTime = DateTime.SpecifyKind(startTime, DateTimeKind.Utc),
-					EndDateTime = DateTime.SpecifyKind(endTime, DateTimeKind.Utc),
-					ScenarioId = scenarioId,
-					PersonId = personId,
-					InitiatorId = trackedCommandInfo != null ? trackedCommandInfo.OperatedPersonId : Guid.Empty,
-					TrackId = trackedCommandInfo != null ? trackedCommandInfo.TrackId : Guid.Empty,
-					Timestamp = DateTime.UtcNow
-				};
-
-				_busSender.Send(message, true);
-			}
+				StartDateTime = period.StartDateTime,
+				EndDateTime = period.EndDateTime,
+				Timestamp = DateTime.UtcNow,
+				ScenarioId = scenarioId,
+				PersonId = personId,
+				TrackId = trackedCommandInfo != null ? trackedCommandInfo.TrackId : Guid.Empty,
+				InitiatorId = trackedCommandInfo != null ? trackedCommandInfo.OperatedPersonId : Guid.Empty
+			};
+			_busSender.Send(message, true);
 		}
 	}
 }
