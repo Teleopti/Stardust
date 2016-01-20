@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
+		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 
 		public ScheduleOptimization(SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,
 	IFixedStaffLoader fixedStaffLoader, IScheduleControllerPrerequisites prerequisites, Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -38,7 +39,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 	Func<IPersonSkillProvider> personSkillProvider, IScheduleDictionaryPersister persister, IPlanningPeriodRepository planningPeriodRepository,
 	WeeklyRestSolverExecuter weeklyRestSolverExecuter, OptimizationPreferencesFactory optimizationPreferencesFactory,
 			IMatrixListFactory matrixListFactory, IScheduleDayEquator scheduleDayEquator,
-	DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory)
+	DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
+			IOptimizerHelperHelper optimizerHelperHelper)
 		{
 			_setupStateHolderForWebScheduling = setupStateHolderForWebScheduling;
 			_fixedStaffLoader = fixedStaffLoader;
@@ -53,6 +55,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_matrixListFactory = matrixListFactory;
 			_scheduleDayEquator = scheduleDayEquator;
 			_dayOffOptimizationPreferenceProviderUsingFiltersFactory = dayOffOptimizationPreferenceProviderUsingFiltersFactory;
+			_optimizerHelperHelper = optimizerHelperHelper;
 		}
 
 		[LogTime]
@@ -102,6 +105,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization =
 				matrixListForDayOffOptimization.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator))
 					.Cast<IScheduleMatrixOriginalStateContainer>().ToList();
+
+			_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixListForDayOffOptimization, optimizationPreferences, period);
 
 			_classicDaysOffOptimizationCommand.Execute(matrixOriginalStateContainerListForDayOffOptimization, period, optimizationPreferences, _schedulerStateHolder(),
 				new NoBackgroundWorker(), dayOffOptimizationPreferenceProvider);

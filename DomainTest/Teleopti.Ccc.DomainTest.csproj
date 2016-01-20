@@ -206,6 +206,7 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamAdherence\PersonDeletedTest.cs" />
     <Compile Include="Optimization\DayOffOptimizationPreferenceProviderTest.cs" />
     <Compile Include="Optimization\Filter\FindFilterTest.cs" />
+    <Compile Include="Optimization\ScheduleOptimizationTests\DayOffOptimizationLockDaysTest.cs" />
     <Compile Include="ResourceCalculation\DoubleMatrixExtensions.cs" />
     <Compile Include="Scheduling\PeriodExctractorFromSchedulePartsTest.cs" />
     <Compile Include="Scheduling\TeamBlock\DayOff\MissingDayOffBestSpotDeciderTest.cs" />
