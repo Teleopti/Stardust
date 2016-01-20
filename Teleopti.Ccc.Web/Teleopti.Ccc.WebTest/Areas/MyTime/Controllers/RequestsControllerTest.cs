@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnErrorMessageOnInvalidModelFromTextRequest()
 		{
-			var target = new StubbingControllerBuilder().CreateController<RequestsController>(null, null, null,null, null, null, null);
+			var target = new StubbingControllerBuilder().CreateController<RequestsController>(null, null, null,null, null, null, null, null, null);
 			const string message = "Test model validation error";
 			target.ModelState.AddModelError("Test", message);
 
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnErrorMessageOnInvalidModelFromShiftTradeRequest()
 		{
-			var target = new StubbingControllerBuilder().CreateController<RequestsController>(null, null, null, null, null, null, null);
+			var target = new StubbingControllerBuilder().CreateController<RequestsController>(null, null, null, null, null, null, null,null, null);
 			const string message = "Test model validation error";
 			target.ModelState.AddModelError("Test", message);
 
@@ -272,26 +272,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			data.Should().Be.EqualTo(myTeamId);
 		}
 
-		[Test]
-		public void ShouldGetScheduleModelWithFilter()
-		{
-			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
-			var model = new ShiftTradeScheduleViewModel();
-
-			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModel(Arg<ShiftTradeScheduleViewModelData>.Is.Anything))
-			            .Return(model);
-
-			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), _timeFilterHelper, null, null);
-
-			var result = target.ShiftTradeRequestSchedule(DateOnly.Today, new ScheduleFilter
-			{
-				TeamIds = Guid.NewGuid().ToString(),
-				FilteredStartTimes = "8:00-10:00",
-				FilteredEndTimes = "16:00-18:00",
-				IsDayOff = true
-			}, new Paging());
-			result.Data.Should().Be.SameInstanceAs(model);
-		}
 
 		[Test]
 		public void ShouldApproveShiftTradeRequest()
