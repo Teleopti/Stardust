@@ -65,5 +65,42 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 			areas.Count().Should().Be(0);
 		}
+
+		[Test]
+		public void ShouldHaveMyTeamWhenPermittedAndFeatureEnabled()
+		{
+			PermissionProvider.Enable();
+			ToggleManager.Enable(Toggles.WfmTeamSchedule_AbsenceReporting_35995);
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+
+			var areas = Target.GetWfmAreasWithPermissions();
+
+			areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+			areas.Single().Name.Invoke().Should().Be(Resources.MyTeam);
+			areas.Single().InternalName.Should().Be("myTeam");
+		}
+
+		[Test]
+		public void ShouldNotHaveMyTeamWhenItNotPermitted()
+		{
+			PermissionProvider.Enable();
+			ToggleManager.Enable(Toggles.WfmTeamSchedule_AbsenceReporting_35995);
+
+			var areas = Target.GetWfmAreasWithPermissions();
+
+			areas.Count().Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldNotHaveMyTeamWhenFeatureIsDisabled()
+		{
+			PermissionProvider.Enable();
+			ToggleManager.Disable(Toggles.WfmTeamSchedule_AbsenceReporting_35995);
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+
+			var areas = Target.GetWfmAreasWithPermissions();
+
+			areas.Count().Should().Be(0);
+		}
 	}
 }

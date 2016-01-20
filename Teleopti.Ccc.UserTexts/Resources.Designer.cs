@@ -15948,6 +15948,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to My Team.
+        /// </summary>
+        public static string MyTeam {
+            get {
+                return ResourceManager.GetString("MyTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to MyTeam Schedules.
         /// </summary>
         public static string MyTeamSchedules {

@@ -27,7 +27,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner,() => Resources.SeatPlan,"seatPlan"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner,() => Resources.SeatMap,"seatMap"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview,() => Resources.RealTimeAdherence,"rta"),
-            new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.IntradayEarlyWarning,() => Resources.Intraday,"intraday")
+            new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.IntradayEarlyWarning,() => Resources.Intraday,"intraday"),
+            new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules,() => Resources.MyTeam,"myTeam")
         };
 
 
@@ -98,6 +99,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.WebRequests))
 			{
 				return _toggleManager.IsEnabled(Toggles.Wfm_Requests_Basic_35986);
+			}
+			if (path.Equals(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules))
+			{
+				return _toggleManager.IsEnabled(Toggles.WfmTeamSchedule_AbsenceReporting_35995);
 			}
 			return true;
 		}

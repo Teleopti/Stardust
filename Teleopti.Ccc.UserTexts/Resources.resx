@@ -14063,6 +14063,10 @@ Help us improve your experience by sending an error report</value>
     <value>Remember me?</value>
     <comment>Remember me?</comment>
   </data>
+  <data name="MyTeam" xml:space="preserve">
+    <value>My Team</value>
+    <comment>use in WFM web the name of my team schedule in left sidebar</comment>
+  </data>
   <data name="CurrentPlanningPeriodMessage" xml:space="preserve">
     <value>This planning period will be from</value>
   </data>
