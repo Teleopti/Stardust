@@ -39,32 +39,41 @@
 				</p>
 			</div>
 		</div>
-		<c3chart bindto-id="evaluationChart" chart-data="evaluationChartData" chart-columns="chartInfo.evaluationChartDataColumns" chart-x="chartInfo.dataX" show-subchart="true" style="margin-left:-13px;">
-			<chart-axis>
-				<chart-axis-x axis-id="date" axis-type="timeseries">
-					<chart-axis-x-tick tick-format="%Y-%m-%d" />
-				</chart-axis-x>
-			</chart-axis>
-			<chart-axis>
-				<chart-axis-y axis-id="y" axis-position="outer-middle"/>
-			</chart-axis>
-		</c3chart>
+		<div class="con-row">
+			<div class="con-flex">
+				<c3chart bindto-id="evaluationChart" chart-data="evaluationChartData" chart-columns="chartInfo.evaluationChartDataColumns" chart-x="chartInfo.dataX" show-subchart="true" style="margin-left:-13px;">
+					<chart-axis>
+						<chart-axis-x axis-id="date" axis-type="timeseries">
+							<chart-axis-x-tick tick-format="%Y-%m-%d" />
+						</chart-axis-x>
+					</chart-axis>
+					<chart-axis>
+						<chart-axis-y axis-id="y" axis-position="outer-middle"/>
+					</chart-axis>
+				</c3chart>
+			</div>
+		</div>
 	</div>
 </script>
 
 <script type="text/ng-template" id="second-forecast-tab.html">
-	<div ng-if="queueStatisticsLoading">
+	<div ng-if="queueStatisticsLoading" class="wfm-block">
 		<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 	</div>
 	<div class="alert-warning notice-spacer" ng-show="noHistoricalDataForForecasting"><i class='mdi mdi-alert'></i> {{'WarningNoHistorícalData'|translate}}</div>
 	<div ng-if="!queueStatisticsLoading && !noHistoricalDataForForecasting">
-		<c3chart bindto-id="queueStatisticsChart" chart-data="queueStatisticsChartData" chart-columns="chartInfo.queueStatisticsChartDataColumns" chart-x="chartInfo.dataX" show-subchart="true" style="margin-left:-13px;">
-			<chart-axis>
-				<chart-axis-x axis-id="date" axis-type="timeseries">
-					<chart-axis-x-tick tick-format="%Y-%m-%d" /></chart-axis-x>
-				</chart-axis>
-			<chart-axis>
-			<chart-axis-y axis-id="y" axis-position="outer-middle" /></chart-axis>
-		</c3chart>
+		<div class="con-row">
+			<div class="con-flex">
+			<c3chart bindto-id="queueStatisticsChart" chart-data="queueStatisticsChartData" chart-columns="chartInfo.queueStatisticsChartDataColumns" chart-x="chartInfo.dataX" show-subchart="true" style="margin-left:-13px;">
+				<chart-axis>
+					<chart-axis-x axis-id="date" axis-type="timeseries">
+						<chart-axis-x-tick tick-format="%Y-%m-%d" /></chart-axis-x>
+					</chart-axis>
+				<chart-axis>
+				<chart-axis-y axis-id="y" axis-position="outer-middle" /></chart-axis>
+			</c3chart>
+			</div>
+		</div>
+
 	</div>
 </script>

@@ -184,7 +184,8 @@ input::-ms-clear {
 
 .growl-wrapper {
 	position: absolute;
-	bottom: 20px!important;
+	bottom: 0;
+	margin-bottom: 20px;
 	z-index: 99999;
 	right: 10px;
 	left: 10px;
@@ -205,4 +206,12 @@ md-progress-circular .md-inner .md-half-circle {
 /*temp fixes*/
 .wfm-card-unselected{
 	background: $white;
+}
+
+input, label, .form-input-message{
+	font-size: 14px!important;
+}
+
+.wfm-form input, .wfm-form select{
+	width:400px;
 }
