@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -317,6 +318,37 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(0);
 		}
 
+		[Test]
+		public void ShouldMapCorrectViewModelWhenOvertimeOnDayOff()
+		{
+			var scenario = CurrentScenario.Current();
+			var personPublished = PersonFactory.CreatePersonWithGuid("person", "published");
+			var team = TeamFactory.CreateTeamWithId("team");
+			TeamRepository.Add(team);
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 1, 16), team);
+			personPublished.AddPersonPeriod(personPeriod);
+
+			PersonRepository.Add(personPublished);
+
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario,personPublished,new DateOnly(2016,1,16),new DayOffTemplate(new Description("dayoff")) );
+			personAss.AddOvertimeActivity(ActivityFactory.CreateActivity("overtime"),new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc),
+					DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)), new MultiplicatorDefinitionSet("a",MultiplicatorType.Overtime));
+
+			ScheduleRepository.Add(personAss);
+
+			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			{
+				Paging = new Paging { Skip = 0, Take = 20 },
+				ShiftTradeDate = new DateOnly(2016, 1, 16),
+				TeamIdList = new[] { team.Id.GetValueOrDefault() }
+			});
+
+			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(1);
+			result.PossibleTradeSchedules.First().IsDayOff.Should().Be.EqualTo(true);
+			result.PossibleTradeSchedules.First().IsFullDayAbsence.Should().Be.EqualTo(false);
+			result.PossibleTradeSchedules.First().ScheduleLayers.Count().Should().Be.EqualTo(1);
+			result.PossibleTradeSchedules.First().ScheduleLayers.First().IsOvertime.Should().Be.True();
+		}
 		[Test]
 		public void ShouldFilterOutFullAbsenceOnContractDayOff()
 		{

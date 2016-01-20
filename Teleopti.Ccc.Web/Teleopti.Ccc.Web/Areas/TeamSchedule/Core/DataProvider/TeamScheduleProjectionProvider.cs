@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			{
 				case SchedulePartView.ContractDayOff:
 				case SchedulePartView.DayOff:
-					return projection.All(layer => (layer.Payload is IAbsence));
+					return projection.HasLayers&& projection.All(layer => (layer.Payload is IAbsence));
 				case SchedulePartView.FullDayAbsence:
 					return true;
 			}
