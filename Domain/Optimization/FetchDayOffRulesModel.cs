@@ -15,13 +15,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_dayOffRulesMapper = dayOffRulesMapper;
 		}
 
-		//Will probably go away
-		public DayOffRulesModel FetchDefaultRules()
-		{
-			var defaultRules = _dayOffRulesRepository.Default();
-			return _dayOffRulesMapper.ToModel(defaultRules);
-		}
-
 		public IEnumerable<DayOffRulesModel> FetchAll()
 		{
 			var all = _dayOffRulesRepository.LoadAll();

@@ -16,14 +16,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_dayOffRulesModelPersister = dayOffRulesModelPersister;
 		}
 
-
-		//TODO: remove this (under objects it uses when old "schedule view" is gone and instead filters are used.
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/dayoffrules/default")]
-		public virtual IHttpActionResult GetDefaultSettings()
-		{
-			return Ok(_fetchDayOffRulesModel.FetchDefaultRules());
-		}
-
 		[UnitOfWork, HttpPost, Route("api/resourceplanner/dayoffrules")]
 		public virtual IHttpActionResult Persist(DayOffRulesModel dayOffRulesModel)
 		{
