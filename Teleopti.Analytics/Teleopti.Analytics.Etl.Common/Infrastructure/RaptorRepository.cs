@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using NHibernate;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -762,14 +763,35 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		}
 
+		private TResult repositoryActionWithRetry<TResult>(Func<IUnitOfWork, TResult> innerAction, int attempt = 0)
+		{
+			try
+			{
+				using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenUnitOfWork())
+				{
+					var ret = innerAction(uow);
+					uow.PersistAll();
+					return ret;
+				}
+			}
+			catch (DataSourceException ex)
+			{
+				if (ex.InnerException is TransactionException && attempt < 6)
+				{
+					return repositoryActionWithRetry(innerAction, ++attempt);
+				}
+				throw;
+			}
+		}
+
 		public void UpdateLastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTime thisTime)
 		{
-			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenUnitOfWork())
+			repositoryActionWithRetry(uow =>
 			{
 				IEtlReadModelRepository rep = new EtlReadModelRepository(uow);
 				rep.UpdateLastChangedDate(currentBusinessUnit, stepName, thisTime);
-				uow.PersistAll();
-			}
+				return 0;
+			});
 		}
 
 		public IEnumerable<IPreferenceDay> ChangedPreferencesOnStep(DateTime lastTime, IBusinessUnit currentBusinessUnit)
@@ -898,26 +920,12 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public int SynchronizeQueues(IList<IQueueSource> matrixQueues)
 		{
-			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				int retVal = MatrixSync.SynchronizeQueueSources(uow, matrixQueues);
-
-				uow.PersistAll();
-
-				return retVal;
-			}
+			return repositoryActionWithRetry(uow => MatrixSync.SynchronizeQueueSources(uow, matrixQueues));
 		}
 
 		public int SynchronizeAgentLogOns(IList<IExternalLogOn> matrixAgentLogins)
 		{
-			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				int retVal = MatrixSync.SynchronizeExternalLogOns(uow, matrixAgentLogins);
-
-				uow.PersistAll();
-
-				return retVal;
-			}
+			return repositoryActionWithRetry(uow => MatrixSync.SynchronizeExternalLogOns(uow, matrixAgentLogins));
 		}
 
 		public ReadOnlyCollection<IQueueSource> LoadQueues()
