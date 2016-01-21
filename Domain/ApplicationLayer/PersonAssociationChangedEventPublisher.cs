@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				{
 					var terminatedAt = terminationTime(person.TerminalDate, person.PermissionInformation.DefaultTimeZone());
 					var now = _now.UtcDateTime();
-
+					
 					if (terminatedAt > now)
 						return;
 					if (terminatedAt < now.AddDays(-1))
@@ -54,15 +55,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		public void Handle(PersonTerminalDateChangedEvent @event)
 		{
-			var terminalDate = @event.TerminationDate.HasValue ? new DateOnly(@event.TerminationDate.Value) : null as DateOnly?;
-			var timeZoneId = @event.TimeZoneInfoId ?? TimeZoneInfo.Utc.Id;
-			var terminatedAt = terminationTime(terminalDate, TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
+			var timeZone = @event.TimeZoneInfoId != null ? TimeZoneInfo.FindSystemTimeZoneById(@event.TimeZoneInfoId) : TimeZoneInfo.Utc;
+			var previousTerminatedAt = terminationTime(@event.PreviousTerminationDate, timeZone);
+			var terminatedAt = terminationTime(@event.TerminationDate, timeZone);
 
 			var now = _now.UtcDateTime();
-
-			if (@event.PreviousTerminationDate < now && terminatedAt < now)
+			
+			if (previousTerminatedAt < now && terminatedAt < now)
 				return;
-			if (@event.PreviousTerminationDate > now && terminatedAt > now)
+			if (previousTerminatedAt > now && terminatedAt > now)
 				return;
 
 			var teamId = @event.PersonPeriodsAfter
@@ -77,6 +78,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				Timestamp = now,
 				TeamId = teamId
 			});
+		}
+
+		private static DateTime terminationTime(DateTime? terminationDate, TimeZoneInfo timeZone)
+		{
+			var date = terminationDate.HasValue ? new DateOnly(terminationDate.Value) : null as DateOnly?;
+			return terminationTime(date, timeZone);
 		}
 
 		private static DateTime terminationTime(DateOnly? terminationDate, TimeZoneInfo timeZone)

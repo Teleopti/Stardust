@@ -42,6 +42,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
+		public void ShouldPublishWhenChangedFromTodayToThePast()
+		{
+			Now.Is("2016-01-14 09:00");
+			var personId = Guid.NewGuid();
+			Data.HasPerson(personId, "pierre", "2016-01-14");
+
+			Target.Handle(new PersonTerminalDateChangedEvent
+			{
+				PersonId = personId,
+				PreviousTerminationDate = "2016-01-14".Utc(),
+				TerminationDate = "2016-01-05".Utc()
+			});
+
+			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Should().Not.Be.Empty();
+		}
+
+		[Test]
 		public void ShouldPublishPropertiesWhenChangedFromTheFutureToThePast()
 		{
 			Now.Is("2016-01-18 08:15");
