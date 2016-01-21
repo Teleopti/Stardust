@@ -2,6 +2,10 @@ var request = require("request");
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
 
+var baseRequest = request.defaults({
+  headers: {'pragma': 'no-cache','cache-control':'no-cache'}
+})
+
 var startTime = new Date();
 var ping = function(){
 	var currentTime = new Date();
@@ -12,7 +16,7 @@ var ping = function(){
 	var sdkUrl = process.env.UrlToTest + '/SDK/TeleoptiCCCSdkService.svc';
 	
 	var expectUrlToWorkWithinGivenTime = function (url, intervalIdCallback) {
-		request(url, function (error, response, body) {
+		baseRequest(url, function (error, response, body) {
 			if (!error && response.statusCode == 200) {
 				console.log(url + " is up and running.");
 				clearInterval(intervalIdCallback());
