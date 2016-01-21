@@ -7,6 +7,7 @@
 		function($scope, $state, $stateParams, $interval, $filter, RtaOrganizationService, RtaService, $location, $sessionStorage, RtaRouteService, RtaFormatService) {
 
 			$scope.getAdherencePercent = RtaFormatService.numberToPercent;
+			$scope.checkboxesChecked = 0;
 			var siteId = $stateParams.siteId;
 			var selectedTeamIds = [];
 
@@ -47,8 +48,10 @@
 				var index = selectedTeamIds.indexOf(teamId);
 				if (index > -1) {
 					selectedTeamIds.splice(index, 1);
+					$scope.checkboxesChecked--;
 				} else {
 					selectedTeamIds.push(teamId);
+					$scope.checkboxesChecked++;
 				}
 			};
 

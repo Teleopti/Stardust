@@ -1,12 +1,17 @@
 <div class="view-header">
-	<div class="view-title">
-		<h1><i class="mdi mdi-alarm"></i> {{'Teams'|translate}}</h1>
-	</div>
+				<div class="view-title">
+								<h1>
+												<i class="mdi mdi-alarm"></i>
+												{{'Teams'|translate}}</h1>
+				</div>
 </div>
 
 <div class="panel material-depth-1">
 				<div class="sub-header">
-								<button class="wfm-btn wfm-btn-invis-primary open" ng-click="openSelectedTeams(selectedTeams)">{{'Open'|translate}}</button>
+								<button class="wfm-btn open" ng-class="{'wfm-btn-invis-primary': checkboxesChecked > 0,'wfm-btn-invis-disabled': checkboxesChecked < 1}" ng-click="openSelectedTeams(selectedTeams)">
+												<md-tooltip ng-if="checkboxesChecked < 1">Select teams</md-tooltip>
+												{{'Open'|translate}}
+								</button>
 								<a class="rta-nav-link" href="{{goBackWithUrl()}}">{{'RealTimeAdherence'|translate}}</a>
 								/
 								<span>{{siteName}}</span>

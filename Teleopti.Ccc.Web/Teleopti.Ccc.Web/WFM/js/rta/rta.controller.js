@@ -6,6 +6,7 @@
 			function($scope, $filter, $state, $stateParams, $interval, RtaService, RtaOrganizationService, RtaFormatService) {
 
 				$scope.getAdherencePercent = RtaFormatService.numberToPercent;
+				$scope.checkboxesChecked = 0;
 				var selectedSiteIds = [];
 
 				var polling = $interval(function() {
@@ -33,8 +34,10 @@
 					var index = selectedSiteIds.indexOf(siteId);
 					if (index > -1) {
 						selectedSiteIds.splice(index, 1);
+						$scope.checkboxesChecked--;
 					} else {
 						selectedSiteIds.push(siteId);
+						$scope.checkboxesChecked++;
 					}
 				};
 
