@@ -533,9 +533,16 @@ describe('ResourcePlannerCtrl', function () {
 		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 		scope.searchString = 'test';
 		scope.results = [];
-		
+
 
 		expect(scope.noResultsExists()).toEqual(true);
 	}));
+	it('should not perform rule lookup if default guid', inject(function ($controller,$stateParams) {
+		var scope = $rootScope.$new();
+		var mockStateParams = {filterId:'00000000-0000-0000-0000-000000000000',period:1,isDefault:true}
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
+		expect(scope.name).toBe('Default')
+	}));
+
 
 });
