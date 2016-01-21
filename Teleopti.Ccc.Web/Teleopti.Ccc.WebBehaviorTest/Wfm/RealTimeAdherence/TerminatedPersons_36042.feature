@@ -32,7 +32,6 @@ Background:
 Scenario: Exclude terminated agents
 	Given the time is '2016-01-14 09:00:00'
 	When I view Real time adherence for teams on site 'Paris'
-	And 'Pierre Baldi' sets his phone state to 'Ready'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	Then I should see team 'Red' with 1 employees out of adherence
 	When the time is '2016-01-15 12:00:00'
