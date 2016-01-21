@@ -40,10 +40,11 @@ var ping = function(){
 	var refreshIntervalIdBridgeUrl = setInterval(function () {
 		expectUrlToWorkWithinGivenTime(bridgeUrl,function (){return refreshIntervalIdBridgeUrl;});
 	}, 10000);
-	
+	/*
 	var refreshIntervalIdSdkUrl = setInterval(function () {
 		expectUrlToWorkWithinGivenTime(sdkUrl,function (){return refreshIntervalIdSdkUrl;});
 	}, 10000);
+	*/
 };
 
 
