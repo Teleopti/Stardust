@@ -140,7 +140,14 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			var sourceFile = Path.Combine(Paths.FindProjectPath(@"BuildArtifacts\"), o.SourceFileName);
 			var targetFile = Path.Combine(o.TargetFolder, "web.config");
 
-			var tags = new AllTags {{"PublishEventsToServiceBus", "false"}};
+			var tags = new AllTags
+			{
+				{"BehaviorTest", "true"},
+				{"HangfireDashboard", "true"},
+				{"HangfireDashboardStatistics", "true"},
+				{"HangfireDashboardCounters", "true"},
+				{"HangfireDashboardDisplayNames", "true"}
+			};
 
 			FileConfigurator.ConfigureByTags(
 				sourceFile,

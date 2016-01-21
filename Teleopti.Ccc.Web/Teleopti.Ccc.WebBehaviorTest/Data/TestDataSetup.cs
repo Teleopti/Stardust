@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			var builder = new ContainerBuilder();
 			var args = new IocArgs(new ConfigReader())
 			{
-				PublishEventsToServiceBus = false,
+				BehaviorTest = true,
 				FeatureToggle = "http://notinuse"
 			};
 			// should really use same toggles as the website!

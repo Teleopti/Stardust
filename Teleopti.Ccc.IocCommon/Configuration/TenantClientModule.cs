@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Security;
@@ -23,7 +24,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			var tenantServer = _configuration.Args().TenantServer;
 			builder.Register(c => new TenantServerConfiguration(tenantServer)).As<ITenantServerConfiguration>().SingleInstance();
-			builder.RegisterType<AuthenticationQuerierResultConverter>().As<IAuthenticationQuerierResultConverter>().SingleInstance();
+			builder.RegisterType<AuthenticationQuerierResultConverter>()
+				.As<IAuthenticationQuerierResultConverter>()
+				.SingleInstance();
 			if (isRunFromTest(tenantServer) || tenantServer.IsAnUrl())
 			{
 				builder.RegisterType<AuthenticationQuerier>().As<IAuthenticationQuerier>().SingleInstance();
@@ -40,7 +43,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DataSourceConfigDecryption>().As<IDataSourceConfigDecryption>().SingleInstance();
 
 			var configServer = _configuration.Args().ConfigServer;
-			if(isRunFromTest(configServer) || configServer.IsAnUrl())
+			if (isRunFromTest(configServer) || configServer.IsAnUrl())
 			{
 				builder.Register(c => new SharedSettingsQuerier(configServer))
 					.As<ISharedSettingsQuerier>()
@@ -56,7 +59,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ResponseException>().As<IResponseException>();
 			builder.RegisterType<TenantDataManager>().As<ITenantDataManager>().SingleInstance();
 
-			builder.RegisterType<CannotIterateAllTenants>().As<IAllTenantNames>().SingleInstance();
+			if (_configuration.Args().BehaviorTest)
+				builder.Register(c => c.Resolve<TenantsInitializedInRta>()).As<IAllTenantNames>().SingleInstance();
+			else
+				builder.RegisterType<CannotIterateAllTenants>().As<IAllTenantNames>().SingleInstance();
 		}
 
 		private static bool isRunFromTest(string server)
