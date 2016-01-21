@@ -319,7 +319,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldMapCorrectViewModelWhenOvertimeOnDayOff()
+		public void ShouldFilterOutOvertimeOnDayOffForPossibleTradedSchedules()
 		{
 			var scenario = CurrentScenario.Current();
 			var personPublished = PersonFactory.CreatePersonWithGuid("person", "published");
@@ -343,11 +343,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				TeamIdList = new[] { team.Id.GetValueOrDefault() }
 			});
 
-			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(1);
-			result.PossibleTradeSchedules.First().IsDayOff.Should().Be.EqualTo(true);
-			result.PossibleTradeSchedules.First().IsFullDayAbsence.Should().Be.EqualTo(false);
-			result.PossibleTradeSchedules.First().ScheduleLayers.Count().Should().Be.EqualTo(1);
-			result.PossibleTradeSchedules.First().ScheduleLayers.First().IsOvertime.Should().Be.True();
+			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(0);
 		}
 		[Test]
 		public void ShouldFilterOutFullAbsenceOnContractDayOff()
@@ -484,22 +480,30 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldViewOvertimeIndicator()
+		public void ShouldViewOvertimeIndicatorOnlyForMySchedule()
 		{
 			var scenario = CurrentScenario.Current();
 			var personPublished = PersonFactory.CreatePersonWithGuid("person", "published");
-
+			var me = PersonFactory.CreatePersonWithGuid("me","publised");
+			
 			var team = TeamFactory.CreateTeamWithId("team");
 			TeamRepository.Add(team);
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 1, 16), team);
 			personPublished.AddPersonPeriod(personPeriod);
+			me.AddPersonPeriod(personPeriod);
 
 			PersonRepository.Add(personPublished);
+			PersonRepository.Add(me);
+			LoggedOnUser.SetFakeLoggedOnUser(me);
 
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndOvertimeShift(scenario, personPublished,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc), 
 					DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)));
 			ScheduleRepository.Add(personAss);
+			var meAss = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndOvertimeShift(scenario, me,
+							new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc), 
+								DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)));
+			ScheduleRepository.Add(meAss);
 
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
 			{
@@ -508,7 +512,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				TeamIdList = new[] { team.Id.GetValueOrDefault()}
 			});
 
-			result.PossibleTradeSchedules.Single().ScheduleLayers.Single().IsOvertime.Should().Be.True();
+			result.PossibleTradeSchedules.Single().ScheduleLayers.Single().IsOvertime.Should().Be.False();
+			result.MySchedule.ScheduleLayers.Single().IsOvertime.Should().Be.True();
 		}
 
 		[Test]

@@ -113,7 +113,12 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			person1Schedule2.Add(person1Assignment2);
 			ScheduleProvider.AddScheduleDay(person1Schedule2);
 
-			
+			var person2Schedule = ScheduleDayFactory.Create(new DateOnly(2015, 5, 22), person2, scenario);
+			var person2Assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person2, new DateTimePeriod(2015, 5, 22, 10, 2015, 5, 22, 16));
+			person2Assignment2.AddOvertimeActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 22, 6, 2015, 5, 22, 8), new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime));
+			person2Schedule.Add(person2Assignment2);
+			ScheduleProvider.AddScheduleDay(person2Schedule);
+
 		}
 
 
@@ -469,11 +474,12 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		}
 		
 		[Test]
-		public void ShouldIndicateOvertimeWithDateNoReadModel()
+		public void ShouldIndicateOvertimeWithDateNoReadModelOnlyForMySchedule()
 		{
 			SetUp();
-
-			var person1 = PersonRepository.LoadAll().First(p => p.Name.LastName == "1");
+			var me = PersonRepository.LoadAll().First(p => p.Name.LastName == "1");
+			var teamate = PersonRepository.LoadAll().First(p => p.Name.LastName == "a");
+			LoggedOnUser.SetFakeLoggedOnUser(me);
 	
 			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
 			{
@@ -483,9 +489,11 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				SearchNameText = ""
 			});
 
-			var agentSchedule = result.AgentSchedules.Single(s => s.PersonId == person1.Id.Value);
-			agentSchedule.ScheduleLayers.First().IsOvertime.Should().Be.EqualTo(true);
-			agentSchedule.ScheduleLayers.Second().IsOvertime.Should().Be.EqualTo(false);
+			var agentSchedule = result.AgentSchedules.Single(s => s.PersonId == teamate.Id.Value);
+			agentSchedule.ScheduleLayers.First().IsOvertime.Should().Be.EqualTo(false);
+
+			result.MySchedule.ScheduleLayers[0].IsOvertime.Should().Be.True();
+			result.MySchedule.ScheduleLayers[1].IsOvertime.Should().Be.False();
 		}	
 	
 		[Test]

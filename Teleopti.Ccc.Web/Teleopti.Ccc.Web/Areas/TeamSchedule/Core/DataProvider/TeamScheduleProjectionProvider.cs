@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				foreach (var layer in projection)
 				{
 					var isPayloadAbsence = layer.Payload is IAbsence;
-					var isOvertime = layer.DefinitionSet != null && layer.DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime;
+					var isOvertime = person.Id == _loggedOnUser.CurrentUser().Id && (layer.DefinitionSet != null && layer.DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime);
 					var isAbsenceConfidential = isPayloadAbsence && (layer.Payload as IAbsence).Confidential;
 					var startDateTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, userTimeZone);
 					var endDateTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, userTimeZone);
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			{
 				case SchedulePartView.ContractDayOff:
 				case SchedulePartView.DayOff:
-					return projection.HasLayers&& projection.All(layer => (layer.Payload is IAbsence));
+					return projection.HasLayers;
 				case SchedulePartView.FullDayAbsence:
 					return true;
 			}

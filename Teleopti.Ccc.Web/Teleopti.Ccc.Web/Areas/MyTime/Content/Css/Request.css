@@ -426,10 +426,14 @@
 }
 
 .shift-trade-dayoff{
-	padding-top: 4px;
+	padding-top: 5px;
 	text-align: center;
 	width: 100%;
 	height: 100%;
+}
+
+.shift-trade-dayoff .dayoff{
+	height: 20px;
 }
 
 .choose-history-divider {
