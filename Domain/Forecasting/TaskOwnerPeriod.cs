@@ -1232,15 +1232,15 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				var taskOwnerDays = TaskOwnerDayOpenCollection();
 				if (_averageTaskTime != TimeSpan.Zero)
 				{
-					double totalCampaignTaskTime = taskOwnerDays.Sum(t => t.AverageTaskTime.Ticks * (1 + t.CampaignTaskTime.Value));
-					double sumOfTaskTime = taskOwnerDays.Count * _averageTaskTime.Ticks;
-					_campaignTaskTime = new Percent((totalCampaignTaskTime / sumOfTaskTime) - 1d);
+					double totalCampaignTaskTime = taskOwnerDays.Sum(t => t.AverageTaskTime.Ticks * (1 + t.CampaignTaskTime.Value) * t.Tasks);
+					double sumOfTaskTime = _tasks * _averageTaskTime.Ticks;
+					_campaignTaskTime = Math.Abs(sumOfTaskTime) < 0.000001 ? new Percent(0) : new Percent((totalCampaignTaskTime / sumOfTaskTime) - 1d);
 				}
 				if (_averageAfterTaskTime != TimeSpan.Zero)
 				{
-					double totalCampaignAfterTaskTime = taskOwnerDays.Sum(t => t.AverageAfterTaskTime.Ticks * (1 + t.CampaignAfterTaskTime.Value));
-					double sumOfAfterTaskTime = taskOwnerDays.Count * _averageAfterTaskTime.Ticks;
-					_campaignAfterTaskTime = new Percent((totalCampaignAfterTaskTime / sumOfAfterTaskTime) - 1d);
+					double totalCampaignAfterTaskTime = taskOwnerDays.Sum(t => t.AverageAfterTaskTime.Ticks * (1 + t.CampaignAfterTaskTime.Value) * t.Tasks);
+					double sumOfAfterTaskTime = _tasks * _averageAfterTaskTime.Ticks;
+					_campaignAfterTaskTime = Math.Abs(sumOfAfterTaskTime) < 0.000001 ? new Percent(0) : new Percent((totalCampaignAfterTaskTime / sumOfAfterTaskTime) - 1d);
 				}
 				_turnOffInternalRecalc = false;
 
