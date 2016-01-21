@@ -7,10 +7,14 @@ using System.Threading;
 using System.Web.Mvc;
 using Hangfire;
 using Hangfire.States;
+using Hangfire.Storage;
 using Microsoft.IdentityModel.Claims;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
@@ -22,7 +26,6 @@ using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Models.Test;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Ccc.Web.Core.Hangfire;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
 using Teleopti.Interfaces.Domain;
@@ -31,6 +34,7 @@ using ClaimTypes = System.IdentityModel.Claims.ClaimTypes;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
+	[CLSCompliant(false)]
 	public class TestController : Controller
 	{
 		private readonly IMutateNow _mutateNow;
@@ -49,6 +53,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly IPhysicalApplicationPath _physicalApplicationPath;
 		private readonly IFindPersonInfo _findPersonInfo;
 		private readonly ActivityChangesChecker _activityChangesChecker;
+		private readonly AllTenantRecurringEventPublisher _allTenantRecurringEventPublisher;
+		private readonly JobStorage _hangfireStorage;
+		private readonly RecurringJobManager _hangfireRecurringJobs;
 
 		public TestController(
 			IMutateNow mutateNow, 
@@ -66,7 +73,10 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			ISettings settings, 
 			IPhysicalApplicationPath physicalApplicationPath, 
 			IFindPersonInfo findPersonInfo,
-			ActivityChangesChecker activityChangesChecker)
+			ActivityChangesChecker activityChangesChecker,
+			AllTenantRecurringEventPublisher allTenantRecurringEventPublisher,
+			JobStorage hangfireStorage,
+			RecurringJobManager hangfireRecurringJobs)
 		{
 			_mutateNow = mutateNow;
 			_now = now;
@@ -84,6 +94,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_physicalApplicationPath = physicalApplicationPath;
 			_findPersonInfo = findPersonInfo;
 			_activityChangesChecker = activityChangesChecker;
+			_allTenantRecurringEventPublisher = allTenantRecurringEventPublisher;
+			_hangfireStorage = hangfireStorage;
+			_hangfireRecurringJobs = hangfireRecurringJobs;
 		}
 
 		public ViewResult BeforeScenario(bool enableMyTimeMessageBroker, string defaultProvider = null, bool usePasswordPolicy = false)
@@ -200,13 +213,18 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			});
 		}
 
-		public ViewResult SetCurrentTime(long ticks)
+		public ViewResult SetCurrentTime(long ticks, string time)
 		{
 			invalidateRtaCache();
 
-			_mutateNow.Is(new DateTime(ticks));
+			if (time != null)
+				_mutateNow.Is(time.Utc());
+			else
+				_mutateNow.Is(new DateTime(ticks));
 
 			_activityChangesChecker.ExecuteForTest();
+			_allTenantRecurringEventPublisher.PublishHourly(new TenantHearbeatEvent());
+			triggerAllRecurringHangfireJobs();
 
 			return View("Message", new TestMessageViewModel
 			{
@@ -237,16 +255,16 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			SqlConnection.ClearAllPools();
 		}
 
-		private static void cancelHangfireQueue()
+		private void cancelHangfireQueue()
 		{
-			var monitoring = JobStorage.Current.GetMonitoringApi();
+			var monitoring = _hangfireStorage.GetMonitoringApi();
 			var jobs = monitoring.EnqueuedJobs(EnqueuedState.DefaultQueue, 0, 500);
 			jobs.ForEach(j => BackgroundJob.Delete(j.Key));
 		}
 
-		private static void waitForHangfireQueue()
+		private void waitForHangfireQueue()
 		{
-			var monitoring = JobStorage.Current.GetMonitoringApi();
+			var monitoring = _hangfireStorage.GetMonitoringApi();
 			while (true)
 			{
 				if (monitoring.EnqueuedCount(EnqueuedState.DefaultQueue) == 0 &&
@@ -257,7 +275,16 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				Thread.Sleep(20);
 			}
 		}
-		
+
+		private void triggerAllRecurringHangfireJobs()
+		{
+			var jobs = _hangfireStorage.GetConnection().GetRecurringJobs();
+			jobs.ForEach(j =>
+			{
+				_hangfireRecurringJobs.Trigger(j.Id);
+			});
+		}
+
 		private void invalidateRtaCache()
 		{
 			if (_cacheInvalidator != null)

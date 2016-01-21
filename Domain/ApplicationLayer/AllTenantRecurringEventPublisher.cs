@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_dataSourceScope = dataSourceScope;
 		}
 
-		public void Publish(IEvent @event)
+		public void PublishHourly(IEvent @event)
 		{
 			var tenants = _tenants.Tenants();
 

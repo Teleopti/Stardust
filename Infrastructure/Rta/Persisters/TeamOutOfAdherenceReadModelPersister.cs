@@ -104,6 +104,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.Select(m =>
 				{
 					m.State = _deserializer.DeserializeObject<TeamOutOfAdherenceReadModelState[]>(m.StateJson);
+					m.StateJson = null;
 					return m;
 				})
 				.ToArray();

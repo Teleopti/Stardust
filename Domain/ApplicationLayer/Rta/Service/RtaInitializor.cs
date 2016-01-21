@@ -8,14 +8,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IAdherenceAggregator _adherenceAggregator;
 		private readonly IStateStreamSynchronizer _synchronizer;
 		private readonly ICurrentDataSource _dataSource;
-		private readonly RtaTenants _tenants;
+		private readonly TenantsInitializedInRta _tenants;
 		private readonly object _initializeLock = new object();
 
 		public RtaInitializor(
 			IAdherenceAggregator adherenceAggregator,
 			IStateStreamSynchronizer synchronizer,
 			ICurrentDataSource dataSource,
-			RtaTenants tenants)
+			TenantsInitializedInRta tenants)
 		{
 			_adherenceAggregator = adherenceAggregator;
 			_synchronizer = synchronizer;

@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.MultiTenancy;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public class RtaTenants
+	public class TenantsInitializedInRta : IAllTenantNames
 	{
 		private readonly IList<string> _initialized = new List<string>();
 
@@ -27,5 +29,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			_initialized.Clear();
         }
+
+		public IEnumerable<string> Tenants()
+		{
+			return _initialized.ToArray();
+		}
 	}
 }

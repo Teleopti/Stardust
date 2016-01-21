@@ -26,7 +26,7 @@ namespace Teleopti.Analytics.Etl.Common.TenantHeartbeat
 				return;
 			_nextPublish = _now.UtcDateTime().AddMinutes(10);
 
-			_publisher.Publish(new TenantHearbeatEvent());
+			_publisher.PublishHourly(new TenantHearbeatEvent());
 		}
 	}
 

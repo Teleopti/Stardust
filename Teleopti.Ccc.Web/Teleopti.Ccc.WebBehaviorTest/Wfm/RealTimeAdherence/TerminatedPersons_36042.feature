@@ -37,6 +37,7 @@ Scenario: Exclude terminated agents
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	Then I should see team 'Red' with 1 employees out of adherence
 	When the time is '2016-01-15 12:00:00'
+	And I view Real time adherence for teams on site 'Paris'
 	Then I should see team 'Red' with 0 employees out of adherence
 
 @OnlyRunIfEnabled('RTA_TerminatedPersons_36042')

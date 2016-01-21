@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<Rta>().SingleInstance().ApplyAspects();
 			builder.RegisterType<ActivityChangeProcessor>().SingleInstance();
 			builder.RegisterType<RtaInitializor>().SingleInstance();
-			builder.RegisterType<RtaTenants>().SingleInstance();
+			builder.RegisterType<TenantsInitializedInRta>().SingleInstance();
 			builder.RegisterType<CacheInvalidator>().As<ICacheInvalidator>().SingleInstance();
 			builder.RegisterType<RtaProcessor>().SingleInstance();
 			builder.RegisterType<AgentStateReadModelUpdater>().As<IAgentStateReadModelUpdater>().SingleInstance();

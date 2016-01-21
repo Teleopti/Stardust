@@ -32,12 +32,12 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 	public class ActivityChangesChecker : IServerComponent
 	{
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
-		private readonly RtaTenants _tenants;
+		private readonly TenantsInitializedInRta _tenants;
 		private TimeSpan _timeout = TimeSpan.FromMinutes(1);
 
 		public ActivityChangesChecker(
 			Domain.ApplicationLayer.Rta.Service.Rta rta, 
-			RtaTenants tenants
+			TenantsInitializedInRta tenants
 			)
 		{
 			_rta = rta;
