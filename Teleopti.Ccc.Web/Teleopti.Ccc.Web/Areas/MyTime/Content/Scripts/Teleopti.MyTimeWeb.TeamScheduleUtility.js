@@ -355,7 +355,7 @@ Teleopti.MyTimeWeb.TeamScheduleDrawerMixin = function () {
 
 		if (!self.IsLoading) {
 			canvasWidth = $("td.shift-trade-possible-trade-schedule:visible").width();
-			if (canvasWidth == null) canvasWidth = self.getCanvasWidth();
+			if (canvasWidth == null) canvasWidth = $("td.shift-trade-my-schedule").width();
 		} else {
 			canvasWidth = self.getCanvasWidth();
 		}
