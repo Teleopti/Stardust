@@ -79,11 +79,11 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 				   + runnerByQuerySelector(selector)				
 				   + string.Format("var evaluator = function(){{ {0} }}; ", next)
 				   + string.Format("var setv = function(v) {{ scope.$result{0} = v; }}; ", readerName)
-				   + string.Format("runner(function() {{ scope.$result{0} = null; scope.$watch(evaluator, function(v) {{ setv(v); }}); }}); ", readerName);			
+				   + string.Format("runner(function() {{ scope.$result{0} = null; scope.$watch(evaluator, function(v) {{ setv(v); }}); }}, 200); ", readerName);			
 		}
 
 		private static string getTmpName(string input)
-		{			
+		{
 			var output = Convert.ToBase64String(Encoding.UTF8.GetBytes(input));
 			Regex rgx = new Regex("[^a-zA-Z0-9 -]");
 			return rgx.Replace(output, "");

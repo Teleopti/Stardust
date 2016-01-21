@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		
 		[HttpPost, Route("api/Outbound/Campaigns/Status"), UnitOfWork]
 		public virtual IEnumerable<CampaignStatusViewModel> GetCamapignsStatus([FromBody]GanttPeriod peroid)
-		{
+		{			
 			return _campaignListProvider.GetCampaignsStatus(peroid);
 		}		
 		

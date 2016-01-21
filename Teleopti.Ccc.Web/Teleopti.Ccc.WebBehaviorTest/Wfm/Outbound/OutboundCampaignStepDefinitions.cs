@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -158,7 +159,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 
 		[Given(@"I have created a campaign with")]
 		public void GivenIHaveCreatedACampaignWith(Table table)
-		{
+		{			
 			DataMaker.ApplyFromTable<OutboundCampaignConfigurable>(table);
 		}
 
@@ -275,7 +276,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		[Then(@"the campaign is overstaffed")]
 		public void ThenTheCampaignIsOverstaffed()
 		{
-			Browser.Interactions.AssertScopeValue("div[id^=Chart]", "campaign.WarningInfo[0].TypeOfRule","campaignoverstaff");
+			Browser.Interactions.AssertScopeValue("div[id^=Chart]", "campaign.WarningInfo[0].TypeOfRule","CampaignOverstaff");
 		}
 
 
