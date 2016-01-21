@@ -9,40 +9,36 @@ var ping = function(){
 	console.log('time '+diff);
 	var webUrl = process.env.UrlToTest + '/Web';
 	var bridgeUrl = process.env.UrlToTest + '/AuthenticationBridge';
-	var refreshIntervalIdWebUrl = setInterval(function () {
-		request(webUrl, function (error, response, body) {
+	var sdkUrl = process.env.UrlToTest + '/SDK/TeleoptiCCCSdkService.svc';
+	
+	var expectUrlToWorkWithinGivenTime = function (url, intervalIdCallback) {
+		request(url, function (error, response, body) {
 			if (!error && response.statusCode == 200) {
-				console.log(webUrl + " is up and running.");
-				clearInterval(refreshIntervalIdWebUrl);
+				console.log(url + " is up and running.");
+				clearInterval(intervalIdCallback());
 			} else {
 				var currentTime = new Date();
 				var diff = (currentTime - startTime) / 1000;
-				console.log(webUrl + " isn't available for " + diff + " seconds.");
+				console.log(url + " isn't available for " + diff + " seconds.");
 				
 				if (diff > 1200) {
-					clearInterval(refreshIntervalIdWebUrl);
-					throw new Error(webUrl + " isn't available for 20 minutes.");
+					clearInterval(intervalIdCallback());
+					throw new Error(url + " isn't available for 20 minutes.");
 				}
 			}
 		});
+	}
+	
+	var refreshIntervalIdWebUrl = setInterval(function(){
+		expectUrlToWorkWithinGivenTime(webUrl,function (){return refreshIntervalIdWebUrl;});
 	}, 10000);
 	
 	var refreshIntervalIdBridgeUrl = setInterval(function () {
-		request(bridgeUrl, function (error, response, body) {
-			if (!error && response.statusCode == 200) {
-				console.log(bridgeUrl + " is up and running.");
-				clearInterval(refreshIntervalIdBridgeUrl);
-			} else {
-				var currentTime = new Date();
-				var diff = (currentTime - startTime) / 1000;
-				console.log(bridgeUrl + " isn't available for " + diff + " seconds.");
-				
-				if (diff > 1200) {
-					clearInterval(refreshIntervalIdBridgeUrl);
-					throw new Error(bridgeUrl + " isn't available for 20 minutes.");
-				}
-			}
-		});
+		expectUrlToWorkWithinGivenTime(bridgeUrl,function (){return refreshIntervalIdBridgeUrl;});
+	}, 10000);
+	
+	var refreshIntervalIdSdkUrl = setInterval(function () {
+		expectUrlToWorkWithinGivenTime(sdkUrl,function (){return refreshIntervalIdSdkUrl;});
 	}, 10000);
 };
 
