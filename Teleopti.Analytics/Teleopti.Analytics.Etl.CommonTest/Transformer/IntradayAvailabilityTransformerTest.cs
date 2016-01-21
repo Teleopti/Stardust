@@ -51,9 +51,8 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 
 			_stateHolder.Stub(x => x.GetSchedules(Arg<HashSet<IStudentAvailabilityDay>>.Is.Anything, Arg<IScenario>.Is.Same(scenario))).Return(dic);
 			_stateHolder.Stub(x => x.PersonsWithIds(new List<Guid>())).IgnoreArguments().Return(new List<IPerson> { person });
-			schedDic.Stub(x => x.ContainsKey(person)).Return(true);
-			schedDic.Stub(x => x[person]).Return(range);
-
+			schedDic.Stub(x => x.TryGetValue(person, out range)).OutRef(range).Return(true);
+			
 			range.Stub(x => x.ScheduledDay(date)).Return(schedDay);
 			schedDay.Stub(x => x.Scenario).Return(scenario);
 			schedDay.Stub(x => x.Person).Return(person);
