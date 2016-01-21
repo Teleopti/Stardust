@@ -1,4 +1,5 @@
-﻿using NHibernate;
+﻿using System.ComponentModel;
+using NHibernate;
 using NHibernate.Transform;
 using System;
 using System.Collections;
@@ -336,58 +337,49 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IList LoadAdherenceData(DateTime dateTime, string timeZoneId, Guid personCode, Guid agentPersonCode, int languageId, int adherenceId)
 		{
-			using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
-			{
-				return session(uow).CreateSQLQuery(
-					 "exec mart.raptor_adherence_report_load @date_from=:date_from, @time_zone_id=:time_zone_id, @person_code=:person_code, @agent_person_code=:agent_person_code, @language_id=:language_id, @adherence_id=:adherence_id")
+			return repositoryActionWithRetry(uow => session(uow).CreateSQLQuery(
+				"exec mart.raptor_adherence_report_load @date_from=:date_from, @time_zone_id=:time_zone_id, @person_code=:person_code, @agent_person_code=:agent_person_code, @language_id=:language_id, @adherence_id=:adherence_id")
 
-					 .SetReadOnly(true)
-					 .SetDateTime("date_from", dateTime)
-					 .SetString("time_zone_id", timeZoneId)
-					 .SetGuid("person_code", personCode)
-					 .SetGuid("agent_person_code", agentPersonCode)
-					 .SetInt32("language_id", languageId)
-					 .SetInt32("adherence_id", adherenceId)
-					 .List();
-			}
+				.SetReadOnly(true)
+				.SetDateTime("date_from", dateTime)
+				.SetString("time_zone_id", timeZoneId)
+				.SetGuid("person_code", personCode)
+				.SetGuid("agent_person_code", agentPersonCode)
+				.SetInt32("language_id", languageId)
+				.SetInt32("adherence_id", adherenceId)
+				.List());
 		}
 
 		public IList LoadAgentStat(Guid scenarioCode, DateTime startDate, DateTime endDate, string timeZoneId, Guid personCode)
 		{
-			using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
-			{
-				return session(uow).CreateSQLQuery(
-					 "exec mart.raptor_stat_agent @scenario_code=:scenario_code, @date_from=:date_from, @date_to=:date_to, @time_zone_code=:time_zone_code, @person_code=:person_code")
+			return repositoryActionWithRetry(uow => session(uow).CreateSQLQuery(
+				"exec mart.raptor_stat_agent @scenario_code=:scenario_code, @date_from=:date_from, @date_to=:date_to, @time_zone_code=:time_zone_code, @person_code=:person_code")
 
-					 .SetReadOnly(true)
-					 .SetGuid("scenario_code", scenarioCode)
-					 .SetDateTime("date_from", startDate)
-					 .SetDateTime("date_to", endDate)
-					 .SetString("time_zone_code", timeZoneId)
-					 .SetGuid("person_code", personCode)
-					 .List();
-			}
+				.SetReadOnly(true)
+				.SetGuid("scenario_code", scenarioCode)
+				.SetDateTime("date_from", startDate)
+				.SetDateTime("date_to", endDate)
+				.SetString("time_zone_code", timeZoneId)
+				.SetGuid("person_code", personCode)
+				.List());
 		}
 
 		public IList LoadAgentQueueStat(DateTime startDate, DateTime endDate, string timeZoneId, Guid personCode)
 		{
-			using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
-			{
-				return session(uow).CreateSQLQuery(
-					 "exec mart.raptor_stat_agent_queue @date_from=:date_from, @date_to=:date_to, @time_zone_code=:time_zone_code, @person_code=:person_code")
+			return repositoryActionWithRetry(uow => session(uow).CreateSQLQuery(
+				"exec mart.raptor_stat_agent_queue @date_from=:date_from, @date_to=:date_to, @time_zone_code=:time_zone_code, @person_code=:person_code")
 
-					 .SetReadOnly(true)
-					 .SetDateTime("date_from", startDate)
-					 .SetDateTime("date_to", endDate)
-					 .SetString("time_zone_code", timeZoneId)
-					 .SetGuid("person_code", personCode)
-					 .List();
-			}
+				.SetReadOnly(true)
+				.SetDateTime("date_from", startDate)
+				.SetDateTime("date_to", endDate)
+				.SetString("time_zone_code", timeZoneId)
+				.SetGuid("person_code", personCode)
+				.List());
 		}
 
 		public IList LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date, int answeredCallsThreshold, Guid businessUnitId)
 		{
-			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			return repositoryActionWithRetry(uow =>
 			{
 				const string sql =
 				"exec [mart].[raptor_number_of_calls_per_agent_by_date] @threshold=:threshold, @time_zone_code=:timezoneCode, @local_date=:date, @business_unit_code=:businessUnitId";
@@ -399,8 +391,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetDateTime("date", date)
 					.SetGuid("businessUnitId", businessUnitId)
 					.List();
-			}
-
+			});
 		}
 
 		public IList LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod, string timezoneCode, DateTime date, Percent adherenceThreshold, Guid businessUnitId)
@@ -410,7 +401,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				CalculationMethod = adherenceCalculationMethod
 			};
 
-			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			return repositoryActionWithRetry(uow =>
 			{
 				const string sql =
 				"exec [mart].[raptor_adherence_per_agent_by_date] @threshold=:threshold, @time_zone_code=:timezoneCode, @local_date=:date, @adherence_id=:adherenceId, @business_unit_code=:businessUnitId";
@@ -423,12 +414,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetInt32("adherenceId", reportSetting.AdherenceIdForReport())
 					.SetGuid("businessUnitId", businessUnitId)
 					.List();
-			}
+			});
 		}
 
 		public IList LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date, TimeSpan aHTThreshold, Guid businessUnitId)
 		{
-			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			return repositoryActionWithRetry(uow =>
 			{
 				const string sql =
 				"exec [mart].[raptor_AHT_per_agent_by_date] @threshold=:threshold, @time_zone_code=:timezoneCode, @local_date=:date, @business_unit_code=:businessUnitId";
@@ -440,28 +431,29 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetDateTime("date", date)
 					.SetGuid("businessUnitId", businessUnitId)
 					.List();
-			}
+			});
 		}
 
 		public IEnumerable<ForecastActualDifferNotification> ForecastActualDifferNotifications()
 		{
-			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			return repositoryActionWithRetry(uow =>
 			{
 				const string sql =
-				"exec [mart].[raptor_forecast_actual_differ_notifications]";
+					"exec [mart].[raptor_forecast_actual_differ_notifications]";
 
-				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
+				return ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(sql)
 					.AddScalar("Receiver", NHibernateUtil.String)
 					.AddScalar("Subject", NHibernateUtil.String)
 					.AddScalar("Body", NHibernateUtil.String)
 					.SetReadOnly(true)
-					.SetResultTransformer(Transformers.AliasToBean(typeof(ForecastActualDifferNotification))).List<ForecastActualDifferNotification>();
-			}
+					.SetResultTransformer(Transformers.AliasToBean(typeof (ForecastActualDifferNotification)))
+					.List<ForecastActualDifferNotification>();
+			});
 		}
 
 		public IEnumerable<RunningEtlJob> GetRunningEtlJobs()
 		{
-			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			return repositoryActionWithRetry(uow =>
 			{
 				const string sql = "exec [mart].[sys_etl_job_running_info_get]";
 
@@ -482,6 +474,26 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						  IsStartedByService = (bool)x[3],
 						  LockUntil = (DateTime)x[4]
 					  });
+			});
+		}
+
+		private TResult repositoryActionWithRetry<TResult>(Func<IStatelessUnitOfWork, TResult> innerAction, int attempt = 0)
+		{
+			try
+			{
+				using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+				{
+					var ret = innerAction(uow);
+					return ret;
+				}
+			}
+			catch (SqlException ex)
+			{
+				if (ex.InnerException is Win32Exception && attempt < 6)
+				{
+					return repositoryActionWithRetry(innerAction, ++attempt);
+				}
+				throw;
 			}
 		}
 
