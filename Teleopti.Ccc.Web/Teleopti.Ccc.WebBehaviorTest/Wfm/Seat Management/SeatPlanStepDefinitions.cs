@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 			DataMaker.Data().Apply(table.CreateInstance<SeatBookingConfigurable>());
 		}
 		
-		[Then(@"I should see planning period available for seat planning from '(.*)'to '(.*)'")]
+		[Then(@"I should see planning period available for seat planning from '(.*)'to '(.*)'"), SetCulture("sv-SE")]
 		public void ThenIShouldSeeAPlanningPeriodAvailableForSeatPlanning(DateTime fromDate, DateTime toDate)
 		{
 			Browser.Interactions.AssertExists(".wfm-card-title");
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 			Browser.Interactions.AssertAnyContains(".planning-period-header", toDate.ToString("yyyy-MM-dd"));
 		}
 
-		[When(@"I choose the planning period beginning on '(.*)' for seat planning")]
+		[When(@"I choose the planning period beginning on '(.*)' for seat planning"), SetCulture("sv-SE")]
 		public void WhenIChooseThePlanningPeriodBeginningOnForSeatPlanning(DateTime date)
 		{
 			var headerSelector = string.Format(".planning-period-header[data-start-date=\"{0}\"]", date.ToString("yyyy-MM-dd"));
