@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var requestForPeriod = DetachedCriteria.For<Request>()
 				.SetProjection(Projections.Property("Parent"))
 				.Add(Restrictions.Ge("Period.period.Maximum", period.StartDateTime))
-				.Add(Restrictions.Le("Period.period.Minimum", period.EndDateTime));
+				.Add(Restrictions.Lt("Period.period.Minimum", period.EndDateTime));
 
 			criteria.Add(Subqueries.PropertyIn("Id", requestForPeriod));
 		}
