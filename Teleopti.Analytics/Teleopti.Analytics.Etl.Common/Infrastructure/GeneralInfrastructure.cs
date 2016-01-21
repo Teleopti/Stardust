@@ -68,12 +68,12 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			{
 				foreach (DataRow dataRow in dataSet.Tables[0].Rows)
 				{
-					ITimeZoneDim timeZoneDim = new TimeZoneDim((Int16)dataRow["time_zone_id"],
+					ITimeZoneDim timeZoneDim = new TimeZoneDim((short)dataRow["time_zone_id"],
 														(string)dataRow["time_zone_code"],
 														(string)dataRow["time_zone_name"],
-														handleDbNullValueBool(dataRow["default_zone"]),
-														handleDbNullValueInt(dataRow["utc_conversion"]),
-														handleDbNullValueInt(dataRow["utc_conversion_dst"])
+														handleDbNullValue<bool>(dataRow["default_zone"]),
+														handleDbNullValue<int>(dataRow["utc_conversion"]),
+														handleDbNullValue<int>(dataRow["utc_conversion_dst"])
 														);
 					timeZoneList.Add(timeZoneDim);
 				}
@@ -135,22 +135,14 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			return (int)HelperFunctions.ExecuteScalar(CommandType.StoredProcedure, "mart.etl_dim_interval_check", _dataMartConnectionString);
 		}
 
-		private static bool handleDbNullValueBool(object value)
+		private static T handleDbNullValue<T>(object value)
 		{
 			if (value == DBNull.Value)
-				return false;
+				return default(T);
 
-			return (bool)value;
+			return (T)value;
 		}
-
-		private static int handleDbNullValueInt(object value)
-		{
-			if (value == DBNull.Value)
-				return 0;
-
-			return (int)value;
-		}
-
+		
 		private DataSet getDatasources(bool getValidDatasources, bool includeOptionAll)
 		{
 			var parameterList = new[]

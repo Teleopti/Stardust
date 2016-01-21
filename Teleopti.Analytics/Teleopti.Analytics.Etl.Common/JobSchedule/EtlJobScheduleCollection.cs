@@ -22,8 +22,7 @@ namespace Teleopti.Analytics.Etl.Common.JobSchedule
             foreach (DataRow row in dataTable.Rows)
             {
                 var scheduleType = (int)row["schedule_type"];
-
-
+				
                 switch (scheduleType)
                 {
                     case 0:
@@ -31,10 +30,10 @@ namespace Teleopti.Analytics.Etl.Common.JobSchedule
                             IEtlJobSchedule etlJobSchedule = new EtlJobSchedule((int)row["schedule_id"], (string)row["schedule_name"],
                                                                        (bool)row["enabled"], (int)row["occurs_daily_at"],
                                                                        (string)row["etl_job_name"],
-                                                                       row["etl_relative_period_start"] == DBNull.Value ? 0 : (int)row["etl_relative_period_start"],
-                                                                       row["etl_relative_period_end"] == DBNull.Value ? 0 : (int)row["etl_relative_period_end"],
-                                                                       row["etl_datasource_id"] == DBNull.Value ? -1 : (int)row["etl_datasource_id"],
-                                                                       row["description"] == DBNull.Value ? "" : (string)row["description"],
+                                                                       handleDBNull(row["etl_relative_period_start"], 0),
+																	   handleDBNull(row["etl_relative_period_end"],0),
+																	   handleDBNull(row["etl_datasource_id"],-1),
+																	   handleDBNull(row["description"],string.Empty),
                                                                        etlJobLogCollection, GetSchedulePeriods((int)row["schedule_id"], rep));
                             Add(etlJobSchedule);
                         }
@@ -46,10 +45,10 @@ namespace Teleopti.Analytics.Etl.Common.JobSchedule
                                                                        (int)row["recurring_starttime"],
                                                                        (int)row["recurring_endtime"],
                                                                        (string)row["etl_job_name"],
-                                                                       row["etl_relative_period_start"] == DBNull.Value ? 0 : (int)row["etl_relative_period_start"],
-                                                                       row["etl_relative_period_end"] == DBNull.Value ? 0 : (int)row["etl_relative_period_end"],
-                                                                       row["etl_datasource_id"] == DBNull.Value ? -1 : (int)row["etl_datasource_id"],
-                                                                       row["description"] == DBNull.Value ? "" : (string)row["description"],
+                                                                       handleDBNull(row["etl_relative_period_start"], 0),
+																	   handleDBNull(row["etl_relative_period_end"], 0),
+																	   handleDBNull(row["etl_datasource_id"], -1),
+																	   handleDBNull(row["description"], string.Empty),
                                                                        etlJobLogCollection, serverStartTime, GetSchedulePeriods((int)row["schedule_id"], rep));
                             Add(etlJobSchedule);
                         }
@@ -57,6 +56,14 @@ namespace Teleopti.Analytics.Etl.Common.JobSchedule
                 }
             }
         }
+
+	    private static T handleDBNull<T>(object value, T defaultValue)
+	    {
+		    if (value == DBNull.Value)
+			    return defaultValue;
+
+		    return (T)value;
+	    }
 
         private static IList<IEtlJobRelativePeriod> GetSchedulePeriods(int scheduleId, Interfaces.Common.IJobScheduleRepository rep)
         {

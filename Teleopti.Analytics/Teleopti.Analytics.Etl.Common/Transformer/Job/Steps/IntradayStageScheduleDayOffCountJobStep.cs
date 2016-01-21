@@ -26,7 +26,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 			foreach (var scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded.Where(scenario => scenario.DefaultScenario))
 			{
 				//Get data from Cashe
-				var scheduleDictionary = _jobParameters.StateHolder.GetScheduleCashe();
+				var scheduleDictionary = _jobParameters.StateHolder.GetScheduleCache();
 
 				// Extract one schedulepart per each person and date
 				var rootList = _jobParameters.StateHolder.GetSchedulePartPerPersonAndDate(scheduleDictionary);

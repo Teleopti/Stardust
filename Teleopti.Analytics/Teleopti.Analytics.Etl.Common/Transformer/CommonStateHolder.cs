@@ -22,7 +22,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		private IList<TimeZoneInfo> _timeZones;
 		private IList<TimeZonePeriod> _bridgeTimeZonePeriodList;
 		private IList<IPerson> _userCollection;
-		private IList<IScheduleDay> _schedulePartCollection;
 		private IList<IActivity> _activityCollection;
 		private IList<IAbsence> _absenceCollection;
 		private readonly ScheduleCacheCollection _scheduleCache = new ScheduleCacheCollection();
@@ -37,7 +36,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		private IList<IRuleSetBag> _ruleSetBagCollection;
 		private IList<IGroupPage> _userDefinedGroupings;
 		private IList<IMultiplicatorDefinitionSet> _multiplicatorDefinitionSetCollection;
-		private Dictionary<DateTimePeriod, IScheduleDictionary> _dictionaryCashe;
+		private Dictionary<DateTimePeriod, IScheduleDictionary> _dictionaryCache;
 		private CommonStateHolder()
 		{
 		}
@@ -50,27 +49,13 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 
 		public IList<IScenario> ScenarioCollection
 		{
-			get
-			{
-				if (_scenarioCollection == null)
-				{
-					// Load scenarios
-					_scenarioCollection = _jobParameters.Helper.Repository.LoadScenario();
-				}
-				return _scenarioCollection;
-			}
+			get { return _scenarioCollection ?? (_scenarioCollection = _jobParameters.Helper.Repository.LoadScenario()); }
 		}
 
 		public IList<ISkill> SkillCollection
 		{
-			get
-			{
-				if (_skillCollection == null)
-				{
-					// Load skills
-					_skillCollection = _jobParameters.Helper.Repository.LoadSkill(ActivityCollection);
-				}
-				return _skillCollection;
+			get {
+				return _skillCollection ?? (_skillCollection = _jobParameters.Helper.Repository.LoadSkill(ActivityCollection));
 			}
 		}
 
@@ -82,79 +67,40 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 
 		public IList<IActivity> ActivityCollection
 		{
-			get
-			{
-				if (_activityCollection == null)
-				{
-					// Load activities
-					_activityCollection = _jobParameters.Helper.Repository.LoadActivity();
-				}
-				return _activityCollection;
-			}
+			get { return _activityCollection ?? (_activityCollection = _jobParameters.Helper.Repository.LoadActivity()); }
 		}
 
 		public IList<IAbsence> AbsenceCollection
 		{
-			get
-			{
-				if (_absenceCollection == null)
-				{
-					// Load absences
-					_absenceCollection = _jobParameters.Helper.Repository.LoadAbsence();
-				}
-				return _absenceCollection;
-			}
+			get { return _absenceCollection ?? (_absenceCollection = _jobParameters.Helper.Repository.LoadAbsence()); }
 		}
 
 		public IList<IShiftCategory> ShiftCategoryCollection
 		{
-			get
-			{
-				if (_shiftCategoryCollection == null)
-				{
-					// Load shift categories
-					_shiftCategoryCollection = _jobParameters.Helper.Repository.LoadShiftCategory();
-				}
-				return _shiftCategoryCollection;
+			get {
+				return _shiftCategoryCollection ?? (_shiftCategoryCollection = _jobParameters.Helper.Repository.LoadShiftCategory());
 			}
 		}
 
 		public IList<IDayOffTemplate> DayOffTemplateCollection
 		{
-			get
-			{
-				if (_dayOffTemplateCollection == null)
-				{
-					// Load day off templates
-					_dayOffTemplateCollection = _jobParameters.Helper.Repository.LoadDayOff();
-				}
-				return _dayOffTemplateCollection;
+			get {
+				return _dayOffTemplateCollection ?? (_dayOffTemplateCollection = _jobParameters.Helper.Repository.LoadDayOff());
 			}
 		}
 
 		public IList<IApplicationFunction> ApplicationFunctionCollection
 		{
-			get
-			{
-				if (_applicationFunctionCollection == null)
-				{
-					// Load application functions
-					_applicationFunctionCollection = _jobParameters.Helper.Repository.LoadApplicationFunction();
-				}
-				return _applicationFunctionCollection;
+			get {
+				return _applicationFunctionCollection ??
+					   (_applicationFunctionCollection = _jobParameters.Helper.Repository.LoadApplicationFunction());
 			}
 		}
 
 		public IList<IAvailableData> AvailableDataCollection
 		{
-			get
-			{
-				if (_availableDataCollection == null)
-				{
-					// Load available data
-					_availableDataCollection = _jobParameters.Helper.Repository.LoadAvailableData();
-				}
-				return _availableDataCollection;
+			get {
+				return _availableDataCollection ?? (_availableDataCollection = _jobParameters.Helper.Repository.LoadAvailableData());
 			}
 		}
 
@@ -177,29 +123,16 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 
 		public IList<IApplicationRole> ApplicationRoleCollection
 		{
-			get
-			{
-				if (_applicationRoleCollection == null)
-				{
-					// Load application roles
-					_applicationRoleCollection = _jobParameters.Helper.Repository.LoadApplicationRole(this);
-				}
-				return _applicationRoleCollection;
+			get {
+				return _applicationRoleCollection ??
+					   (_applicationRoleCollection = _jobParameters.Helper.Repository.LoadApplicationRole(this));
 			}
 		}
 
 		public IScenario DefaultScenario
 		{
-			get
-			{
-				if (_defaultScenario == null)
-				{
-					_defaultScenario = (from s in ScenarioCollectionDeletedExcluded
-											  where s.DefaultScenario
-											  select s).First();
-				}
-
-				return _defaultScenario;
+			get {
+				return _defaultScenario ?? (_defaultScenario = ScenarioCollectionDeletedExcluded.First(s => s.DefaultScenario));
 			}
 		}
 
@@ -210,8 +143,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				if (_timeZones == null)
 				{
 					_timeZones = (IList<TimeZoneInfo>)_jobParameters.Helper.Repository.LoadTimeZonesInUse();
-					//_timeZones = _jobParameters.Helper.Repository.LoadTimeZonesInUse();
-
+					
 					// Ensure that the default time zone always exist
 					if (!_timeZones.Contains(_jobParameters.DefaultTimeZone))
 					{
@@ -219,7 +151,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 					}
 
 					// Ensure that UTC time zone always exist
-					TimeZoneInfo utc = TimeZoneInfo.FindSystemTimeZoneById("UTC");
+					TimeZoneInfo utc = TimeZoneInfo.Utc;
 					if (!_timeZones.Contains(utc))
 					{
 						_timeZones.Add(utc);
@@ -248,17 +180,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 
 		public IEnumerable<IPerson> PersonCollection
 		{
-			get
-			{
-				if (_personCollection == null)
-				{
-					// Load persons
-					_personCollection =
-						 _jobParameters.Helper.Repository.LoadPerson(this);
-				}
-
-				return _personCollection;
-			}
+			get { return _personCollection ?? (_personCollection = _jobParameters.Helper.Repository.LoadPerson(this)); }
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
@@ -269,62 +191,35 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 
 		public IEnumerable<IContract> ContractCollection
 		{
-			get
-			{
-				if (_contractCollection == null)
-				{
-					// Loads contracts
-					_contractCollection = _jobParameters.Helper.Repository.LoadContract();
-				}
-				return _contractCollection;
-			}
+			get { return _contractCollection ?? (_contractCollection = _jobParameters.Helper.Repository.LoadContract()); }
 		}
 
 		public IEnumerable<IContractSchedule> ContractScheduleCollection
 		{
-			get
-			{
-				if (_contractScheduleCollection == null)
-				{
-					_contractScheduleCollection = _jobParameters.Helper.Repository.LoadContractSchedule();
-				}
-				return _contractScheduleCollection;
+			get {
+				return _contractScheduleCollection ??
+					   (_contractScheduleCollection = _jobParameters.Helper.Repository.LoadContractSchedule());
 			}
 		}
 
 		public IEnumerable<IPartTimePercentage> PartTimePercentageCollection
 		{
-			get
-			{
-				if (_partTimePercentageCollection == null)
-				{
-					_partTimePercentageCollection = _jobParameters.Helper.Repository.LoadPartTimePercentage();
-				}
-				return _partTimePercentageCollection;
+			get {
+				return _partTimePercentageCollection ??
+					   (_partTimePercentageCollection = _jobParameters.Helper.Repository.LoadPartTimePercentage());
 			}
 		}
 
 		public IEnumerable<IRuleSetBag> RuleSetBagCollection
 		{
-			get
-			{
-				if (_ruleSetBagCollection == null)
-				{
-					_ruleSetBagCollection = _jobParameters.Helper.Repository.LoadRuleSetBag();
-				}
-				return _ruleSetBagCollection;
-			}
+			get { return _ruleSetBagCollection ?? (_ruleSetBagCollection = _jobParameters.Helper.Repository.LoadRuleSetBag()); }
 		}
 
 		public IEnumerable<IGroupPage> UserDefinedGroupings
 		{
-			get
-			{
-				if (_userDefinedGroupings == null)
-				{
-					_userDefinedGroupings = _jobParameters.Helper.Repository.LoadUserDefinedGroupings();
-				}
-				return _userDefinedGroupings;
+			get {
+				return _userDefinedGroupings ??
+					   (_userDefinedGroupings = _jobParameters.Helper.Repository.LoadUserDefinedGroupings());
 			}
 		}
 
@@ -351,7 +246,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 
 		public IDictionary<DateTimePeriod, IScheduleDictionary> GetSchedules(IList<IScheduleChangedReadModel> changed, IScenario scenario)
 		{
-			_dictionaryCashe = new Dictionary<DateTimePeriod, IScheduleDictionary>();
+			_dictionaryCache = new Dictionary<DateTimePeriod, IScheduleDictionary>();
 
 			var groupedChanged = changed.GroupBy(c => c.Date);
 			foreach (var changedReadModels in groupedChanged)
@@ -363,10 +258,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				var personsIds = changedReadModels.Select(scheduleChangedReadModel => scheduleChangedReadModel.Person).ToList();
 				var persons = PersonsWithIds(personsIds);
 				var scheduleDictionary = _jobParameters.Helper.Repository.LoadSchedule(period, scenario, persons);
-				_dictionaryCashe.Add(period, scheduleDictionary);
+				_dictionaryCache.Add(period, scheduleDictionary);
 			}
 
-			return _dictionaryCashe;
+			return _dictionaryCache;
 		}
 
 		public IDictionary<DateOnly, IScheduleDictionary> GetSchedules(HashSet<IStudentAvailabilityDay> days, IScenario scenario)
@@ -378,7 +273,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			{
 				var theDate = availabilityDay.Key;
 				// detta måste fixas med tidszon, eller???
-				var utcDate = new DateTime(theDate.Date.Ticks, DateTimeKind.Utc);
+				var utcDate = DateTime.SpecifyKind(theDate.Date, DateTimeKind.Utc);
 				var period = new DateTimePeriod(utcDate, utcDate.AddDays(1).AddMilliseconds(-1));
 				var personsIds = availabilityDay.Select(d => d.Person.Id.GetValueOrDefault()).ToList();
 				var persons = PersonsWithIds(personsIds);
@@ -389,11 +284,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			return dictionary;
 		}
 
-		public IDictionary<DateTimePeriod, IScheduleDictionary> GetScheduleCashe()
+		public IDictionary<DateTimePeriod, IScheduleDictionary> GetScheduleCache()
 		{
-			if (_dictionaryCashe == null)
-				_dictionaryCashe = new Dictionary<DateTimePeriod, IScheduleDictionary>();
-			return _dictionaryCashe;
+			return _dictionaryCache ?? (_dictionaryCache = new Dictionary<DateTimePeriod, IScheduleDictionary>());
 		}
 
 		public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScenario scenario)
@@ -425,62 +318,52 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 
 		public IList<IPerson> UserCollection
 		{
-			get
-			{
-				if (_userCollection == null)
-				{
-					// Load users
-					_userCollection =
-						 _jobParameters.Helper.Repository.LoadUser();
-				}
-
-				return _userCollection;
-			}
+			get { return _userCollection ?? (_userCollection = _jobParameters.Helper.Repository.LoadUser()); }
 		}
 
 		public IList<IScheduleDay> GetSchedulePartPerPersonAndDate(IScheduleDictionary scheduleDictionary)
 		{
-			_schedulePartCollection = new List<IScheduleDay>();
+			var schedulePartCollection = new List<IScheduleDay>();
 			DateOnlyPeriod period = scheduleDictionary.Period.VisiblePeriod.ToDateOnlyPeriod(TimeZoneInfo.Local);
 
 			foreach (IPerson person in scheduleDictionary.Keys)
 			{
-				var range = scheduleDictionary[person];
-				foreach (var dateOnly in period.DayCollection())
+				var personEndDate = person.TerminalDate.GetValueOrDefault(DateOnly.MaxValue);
+				var periodToExtract = period;
+				if (period.StartDate > personEndDate) continue;
+				if (personEndDate < period.EndDate)
 				{
-					if (dateOnly > person.TerminalDate.GetValueOrDefault(DateOnly.MaxValue))
-						break;
-
-					IScheduleDay schedulePart = range.ScheduledDay(dateOnly);
-					if (schedulePart != null)
-					{
-						_schedulePartCollection.Add(schedulePart);
-					}
+					periodToExtract = new DateOnlyPeriod(periodToExtract.StartDate, personEndDate);
 				}
+
+				var range = scheduleDictionary[person];
+				schedulePartCollection.AddRange(range.ScheduledDayCollection(periodToExtract));
 			}
 
-			return _schedulePartCollection;
+			return schedulePartCollection;
 		}
 
 		public IList<IScheduleDay> GetSchedulePartPerPersonAndDate(
 			IDictionary<DateTimePeriod, IScheduleDictionary> dictionary)
 		{
 			var ret = new List<IScheduleDay>();
-			foreach (var key in dictionary.Keys)
+			foreach (var key in dictionary)
 			{
-				ret.AddRange(GetSchedulePartPerPersonAndDate(dictionary[key]));
+				ret.AddRange(GetSchedulePartPerPersonAndDate(key.Value));
 			}
 			return ret;
 		}
 
 		public IScheduleDay GetSchedulePartOnPersonAndDate(IPerson person, DateOnly restrictionDate, IScenario scenario)
 		{
-			var period = new DateTimePeriod(new DateTime(restrictionDate.Date.Ticks, DateTimeKind.Utc), new DateTime(restrictionDate.Date.Ticks, DateTimeKind.Utc).AddDays(1).AddMilliseconds(-1));
-			if (GetScheduleCashe().ContainsKey(period))
+			var period = new DateTimePeriod(DateTime.SpecifyKind(restrictionDate.Date, DateTimeKind.Utc), DateTime.SpecifyKind(restrictionDate.Date, DateTimeKind.Utc).AddDays(1).AddMilliseconds(-1));
+			var scheduleCache = GetScheduleCache();
+			IScheduleDictionary dic;
+			if (scheduleCache.TryGetValue(period, out dic))
 			{
-				var dic = GetScheduleCashe()[period];
-				if (dic.ContainsKey(person))
-					return dic[person].ScheduledDay(restrictionDate);
+				IScheduleRange range;
+				if (dic.TryGetValue(person, out range))
+					return range.ScheduledDay(restrictionDate);
 			}
 
 			var theDic = _jobParameters.Helper.Repository.LoadSchedule(period, scenario, new List<IPerson> { person });
@@ -584,11 +467,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 
 			internal IScheduleDictionary GetFromCacheIfAvailable(DateTimePeriod period)
 			{
-				foreach (DateTimePeriod currentPeriod in _periodData.Keys)
+				foreach (var currentPeriod in _periodData)
 				{
-					if (currentPeriod.Contains(period))
+					if (currentPeriod.Key.Contains(period))
 					{
-						return _periodData[currentPeriod];
+						return currentPeriod.Value;
 					}
 				}
 

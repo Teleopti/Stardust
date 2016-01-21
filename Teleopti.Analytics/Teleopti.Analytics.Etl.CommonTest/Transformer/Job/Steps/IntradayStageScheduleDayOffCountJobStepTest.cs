@@ -54,7 +54,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Steps
 
 			Expect.Call(jobParameters.StateHolder).Return(stateHolder);
 			Expect.Call(stateHolder.ScenarioCollectionDeletedExcluded).Return(new List<IScenario> { new Scenario("scenario"){DefaultScenario = true} });
-			Expect.Call(stateHolder.GetScheduleCashe()).Return(dic);
+			Expect.Call(stateHolder.GetScheduleCache()).Return(dic);
 			Expect.Call(stateHolder.GetSchedulePartPerPersonAndDate(dic)).Return(new List<IScheduleDay>());
 			Expect.Call(() => transformer.Transform(new List<IScheduleDay>(), null,1)).IgnoreArguments();
 			Expect.Call(jobParameters.Helper).Return(jobHelper);

@@ -34,7 +34,7 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 
 	    IDictionary<DateOnly, IScheduleDictionary> GetSchedules(HashSet<IStudentAvailabilityDay> days,
 		    IScenario scenario);
-	    IDictionary<DateTimePeriod, IScheduleDictionary> GetScheduleCashe();
+	    IDictionary<DateTimePeriod, IScheduleDictionary> GetScheduleCache();
 
 	    IList<IScheduleDay> GetSchedulePartPerPersonAndDate(
 		    IDictionary<DateTimePeriod, IScheduleDictionary> dictionary);

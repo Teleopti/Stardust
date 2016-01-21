@@ -38,8 +38,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading
 
 		public void Transform(IList<IScheduleDay> scheduleList, DateTime insertDateTime, IJobParameters jobParameters, IThreadPool threadPool)
 		{
-			//jobParameters.Helper.Repository.TruncateSchedule();
-
 			IList<ScheduleProjection> scheduleProjectionServiceList = ProjectionsForAllAgentSchedulesFactory.CreateProjectionsForAllAgentSchedules(scheduleList);
 
 			if (scheduleProjectionServiceList.Count > 0)

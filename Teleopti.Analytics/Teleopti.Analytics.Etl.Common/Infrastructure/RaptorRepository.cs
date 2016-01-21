@@ -793,19 +793,11 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScheduleDictionary dictionary)
 		{
-			List<IScheduleDay> scheduleParts = new List<IScheduleDay>();
+			var scheduleParts = new List<IScheduleDay>();
 			foreach (IPerson person in dictionary.Keys)
 			{
-				DateOnlyPeriod dateOnlyPeriod = period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
-				foreach (DateOnly dateOnly in dateOnlyPeriod.DayCollection())
-				{
-					IScheduleRange scheduleRange = dictionary[person];
-					IScheduleDay schedulePart = scheduleRange.ScheduledDay(dateOnly);
-					if (schedulePart != null)
-					{
-						scheduleParts.Add(schedulePart);
-					}
-				}
+				var dateOnlyPeriod = period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
+				scheduleParts.AddRange(dictionary[person].ScheduledDayCollection(dateOnlyPeriod));
 			}
 
 			return scheduleParts;

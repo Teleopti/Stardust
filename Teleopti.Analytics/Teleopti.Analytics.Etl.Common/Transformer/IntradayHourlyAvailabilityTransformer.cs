@@ -35,11 +35,12 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		private IScheduleDay getScheduleDay(IDictionary<DateOnly, IScheduleDictionary> dictionary, DateOnly dateOnly,
 			IPerson person)
 		{
-			if (dictionary.ContainsKey(dateOnly))
+			IScheduleDictionary days;
+			if (dictionary.TryGetValue(dateOnly,out days))
 			{
-				var days = dictionary[dateOnly];
-				if (days.ContainsKey(person))
-					return days[person].ScheduledDay(dateOnly);
+				IScheduleRange range;
+				if (days.TryGetValue(person, out range))
+					return range.ScheduledDay(dateOnly);
 			}
 
 			return null;
