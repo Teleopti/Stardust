@@ -8,14 +8,14 @@ SET PowerShellScriptPath=%ThisScriptsDirectory%DeployToAzure.ps1
 SET AzurePackagePath=%ThisScriptsDirectory%AzureRelease
 IF "%AzurePackagePath%"=="" GOTO :NoAzurePackage
 
+FOR /F %%G IN ('DIR "%AzurePackagePath%\*.cspkg" /B') DO SET VersionedName=%%G
+
 @ECHO ***************************************************************
 @ECHO CloudServiceName			=	%CloudServiceName%
 @ECHO AzurePackagePath			=	%AzurePackagePath%
 @ECHO ThisScriptsDirectory		=	%ThisScriptsDirectory%
 @ECHO VersionedName				=	%VersionedName%
 @ECHO ***************************************************************
-
-FOR /F %%G IN ('DIR "%AzurePackagePath%\*.cspkg" /B') DO SET VersionedName=%%G
 
 PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%PowerShellScriptPath%' '%ThisScriptsDirectory%' 'Teleopti CCC Azure' '%CloudServiceName%' '%AzurePackagePath%\%VersionedName%' '%AzurePackagePath%\%CloudServiceName%.cscfg' 'production' '%ThisScriptsDirectory%AzureDemo.publishsettings'";
 EXIT %ERRORLEVEL%
