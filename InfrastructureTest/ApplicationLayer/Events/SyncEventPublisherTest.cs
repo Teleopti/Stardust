@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[TestFixture]
 	[InfrastructureTest]
-	[Setting("PublishEventsToServiceBus", false)]
+	[Setting("BehaviorTest", true)]
 	public class SyncEventPublisherTest : ISetup
 	{
 		public FakeHandler Handler;

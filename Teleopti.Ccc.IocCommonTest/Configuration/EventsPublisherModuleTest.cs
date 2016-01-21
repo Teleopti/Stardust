@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void ShouldResolveSyncEventPublisher()
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { PublishEventsToServiceBus = false }, new FalseToggleManager())));
+			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { BehaviorTest = true}, new FalseToggleManager())));
 			var container = builder.Build();
 
 			container.Resolve<ISyncEventPublisher>().Should().Not.Be.Null();
