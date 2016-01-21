@@ -24,9 +24,9 @@
 		vm.sortingOrders = [];
 
 	
-		function reload(requestsFilter, sortingOrders, paging) {
+		function reload(requestsFilter, sortingOrders, paging, done) {
 			vm.loaded = false;
-
+			
 			if (vm.togglePaginationEnabled) {
 				requestsDataService.getAllRequestsPromise(requestsFilter, sortingOrders, paging).then(function (requests) {
 					vm.requests = requests.data.Requests;
@@ -36,6 +36,7 @@
 							vm.onTotalRequestsCountChanges({ totalRequestsCount: vm.totalRequestsCount });
 					}					
 					vm.loaded = true;
+					if (done != null) done();
 				});
 
 			} else {
@@ -43,6 +44,7 @@
 					vm.requests = requests.data;
 					vm.loaded = true;
 				});
+				if (done != null ) done();
 			}			
 		}
 	}
@@ -65,7 +67,7 @@
 		};
 
 		function postlink(scope, elem, attrs, ctrl) {
-
+			
 			scope.$watch(function () {				
 				var target = {
 					startDate: scope.requestsOverview.period.startDate,
@@ -75,23 +77,24 @@
 				return target;
 			}, function (newValue) {
 				if (newValue.endDate === null || newValue.startDate === null) return;
-				if (moment(newValue.endDate).isBefore(newValue.startDate, 'day')) return;				
-				reload();
+				if (moment(newValue.endDate).isBefore(newValue.startDate, 'day')) return;
 				scope.$broadcast('reload.requests.without.selection');
 			}, true);
 
 			scope.$watch(function() {
 				return scope.requestsOverview.sortingOrders;
-			}, reload);
+			}, reload());
 
-			scope.$on('reload.requests.with.selection', reload);
-			scope.$on('reload.requests.without.selection', reload);
+			scope.$on('reload.requests.with.selection', reload());
+			scope.$on('reload.requests.without.selection', reload());
 
-			function reload() {							
-				ctrl.reload({
-					period: scope.requestsOverview.period,
-					agentSearchTerm: scope.requestsOverview.agentSearchTerm,
-				}, scope.requestsOverview.sortingOrders, scope.requestsOverview.paging);								
+			function reload(done) {
+				return function() {
+					ctrl.reload({
+						period:scope.requestsOverview.period,
+						agentSearchTerm:scope.requestsOverview.agentSearchTerm,
+					}, scope.requestsOverview.sortingOrders, scope.requestsOverview.paging, done);
+				};
 			}
 		}
 	}
