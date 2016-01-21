@@ -1341,7 +1341,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 _turnOffInternalRecalc = true;
                 if (_tasks > 0)
                 {
-                    _campaignTasks = new Percent((_totalTasks / _tasks) - 1d);
+	                double totalCamapaignTasks = _taskPeriodList.Sum(t => t.Task.Tasks * t.CampaignTasks.Value);
+	                _campaignTasks = new Percent(totalCamapaignTasks/_tasks);
                 }
                 _turnOffInternalRecalc = false;
 
@@ -1371,13 +1372,17 @@ namespace Teleopti.Ccc.Domain.Forecasting
             if (!_turnOffInternalRecalc)
             {
                 _turnOffInternalRecalc = true;
-                if (_averageTaskTime != TimeSpan.Zero)
+	            if (_averageTaskTime != TimeSpan.Zero)
+	            {
+		            double totalCampaignTaskTime = _taskPeriodList.Sum(t => t.AverageTaskTime.Ticks*(1 + t.CampaignTaskTime.Value));
+		            double sumOfTaskTime = _taskPeriodList.Count*_averageTaskTime.Ticks;
+		            _campaignTaskTime = new Percent((totalCampaignTaskTime/sumOfTaskTime) - 1d);
+	            }
+	            if (_averageAfterTaskTime != TimeSpan.Zero)
 				{
-					_campaignTaskTime = new Percent((_totalAverageTaskTime.Ticks / (double)_averageTaskTime.Ticks) - 1d);
-                }
-                if (_averageAfterTaskTime != TimeSpan.Zero)
-				{
-					_campaignAfterTaskTime = new Percent((_totalAverageAfterTaskTime.Ticks / (double)_averageAfterTaskTime.Ticks) - 1d);
+					 double totalCampaignAfterTaskTime = _taskPeriodList.Sum(t => t.AverageAfterTaskTime.Ticks * (1 + t.CampaignAfterTaskTime.Value));
+					 double sumOfAfterTaskTime = _taskPeriodList.Count * _averageAfterTaskTime.Ticks;
+					 _campaignAfterTaskTime = new Percent((totalCampaignAfterTaskTime / sumOfAfterTaskTime) - 1d);
                 }
                 _turnOffInternalRecalc = false;
 
