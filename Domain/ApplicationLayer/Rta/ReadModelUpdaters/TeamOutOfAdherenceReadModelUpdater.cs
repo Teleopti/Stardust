@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 
 		[UseOnToggle(Toggles.RTA_TerminatedPersons_36042)]
 		[ReadModelUnitOfWork]
-		public void Handle(PersonAssociationChangedEvent @event)
+		public virtual void Handle(PersonAssociationChangedEvent @event)
 		{
 			updateAllModels(
 				@event.PersonId,
