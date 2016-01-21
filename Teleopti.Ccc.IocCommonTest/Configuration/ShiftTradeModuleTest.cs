@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			builder = new ContainerBuilder();
 			builder.RegisterModule(CommonModule.ForTest());
 			builder.RegisterModule<ShiftTradeModule>();
-			builder.RegisterModule(new SchedulingCommonModule(new IocConfiguration(new IocArgs(new ConfigReader()), null)));
 			
 		}
 
