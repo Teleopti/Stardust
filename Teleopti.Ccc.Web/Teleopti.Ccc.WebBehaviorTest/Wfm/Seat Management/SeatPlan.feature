@@ -25,7 +25,7 @@ Background:
 	And there is a location with 
 		| Field		| Value			|
 		| Name		| Location1	|
-	And I am swedish
+	And I am american
 	
 
 Scenario: display seat plan planning period list
