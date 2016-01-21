@@ -11,7 +11,7 @@
 					if (window.wfmLogger) {
 						// to be removed
 						var req = new XMLHttpRequest();
-						req.open('POST', window.location.origin + '/api/Logging/LogError', true);
+						req.open('POST', '../api/Logging/LogError', true);
 						req.setRequestHeader("Content-type", "application/json");
 						req.send(JSON.stringify({Message:config.url}));
 					}
