@@ -324,7 +324,7 @@ Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel = function (layer, minute
     		return {
     			'right': self.leftPx(),
     			'background-size': self.isOvertime ? '11px 11px' : 'initial',
-    			'background-image': self.isOvertime ? 'linear-gradient(45deg,transparent,transparent 4px,rgba(0,0,0,.2) 6px,transparent 10px,transparent)' : (self.IsFullDayAbsence),
+    			'background-image': self.isOvertime ? 'linear-gradient(45deg,transparent,transparent 4px,rgba(0,0,0,.2) 6px,transparent 10px,transparent)' : '',
     			'background-color': self.backgroundColor,
     			'paddingRight': self.widthPx()
     		};
@@ -347,6 +347,8 @@ Teleopti.MyTimeWeb.Request.CloneLayerAddShiftTradeViewModel = function (layer, m
 	self.minutesSinceTimeLineStart = ko.observable(minutesSinceTimeLineStart);
 	self.lengthInMinutes = ko.observable(layer.lengthInMinutes());
 	self.titleHeader = layer.titleHeader;
+	self.isOvertime = layer.isOvertime;
+	
 	self.leftPx = ko.computed(function () {
 		return (self.minutesSinceTimeLineStart() * self.pixelPerMinute()) + 'px';
 	});
@@ -359,8 +361,20 @@ Teleopti.MyTimeWeb.Request.CloneLayerAddShiftTradeViewModel = function (layer, m
 	var isRtl = Teleopti.MyTimeWeb.Common.IsRtl();
 	self.styleJson = ko.computed(function () {
 		if (isRtl)
-			return { 'right': self.leftPx(), 'backgroundColor': self.backgroundColor, 'paddingRight': self.widthPx() };
-		return { 'left': self.leftPx(), 'backgroundColor': self.backgroundColor, 'paddingLeft': self.widthPx() };
+			return {
+				'right': self.leftPx(),
+				'background-size': self.isOvertime ? '11px 11px' : 'initial',
+				'background-image': self.isOvertime ? 'linear-gradient(45deg,transparent,transparent 4px,rgba(0,0,0,.2) 6px,transparent 10px,transparent)' : '',
+				'background-color': self.backgroundColor,
+				'paddingRight': self.widthPx()
+			};
+		return {
+			'left': self.leftPx(),
+			'background-size': self.isOvertime ? '11px 11px' : 'initial',
+			'background-image': self.isOvertime ? 'linear-gradient(45deg,transparent,transparent 4px,rgba(0,0,0,.2) 6px,transparent 10px,transparent)' : 'initial',
+			'background-color': self.backgroundColor,
+			'paddingLeft': self.widthPx()
+		};
 	});
 };
 
