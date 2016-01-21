@@ -44,14 +44,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		[Then(@"I should see a request from '(.*)' in the list")]
 		public void ThenIShouldSeeARequestFromInTheList(string userName)
 		{
-			Browser.Interactions.AssertScopeValue("requests-table-container", "requestsOverview.loaded", Is.EqualTo("true"));
+			Browser.Interactions.AssertScopeValue("requests-table-container", "requestsOverview.loaded", true);
 			Browser.Interactions.AssertAnyContains(".request-agent-name .ui-grid-cell-contents", userName);
 		}
 
 		[When(@"I sort the request list by descending agent name")]
 		public void WhenISortTheRequestListByDescendingAgentName()
 		{
-			Browser.Interactions.AssertScopeValue("requests-table-container", "requestsOverview.loaded", Is.EqualTo("true"));
+			Browser.Interactions.AssertScopeValue("requests-table-container", "requestsOverview.loaded", true);
 			Browser.Interactions.ClickUsingJQuery(".request-agent-name-header .ui-grid-column-menu-button");
 			Browser.Interactions.ClickUsingJQuery(".ui-grid-menu-items li:nth(1) button");
 		}
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		[When(@"I approve all requests that I see")]
 		public void WhenIApproveAllRequestsThatISee()
 		{
-			Browser.Interactions.AssertScopeValue("requests-table-container", "requestsOverview.loaded", Is.EqualTo("true"));
+			Browser.Interactions.AssertScopeValue("requests-table-container", "requestsOverview.loaded", true);
 			Browser.Interactions.ClickUsingJQuery(".ui-grid-row .ui-grid-selection-row-header-buttons");
 			Browser.Interactions.ClickUsingJQuery("requests-commands-pane .approve-requests");
 		}

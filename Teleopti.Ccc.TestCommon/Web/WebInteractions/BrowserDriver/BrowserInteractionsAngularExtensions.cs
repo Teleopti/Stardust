@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using NUnit.Framework.Constraints;
-using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl;
 
 namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 {
@@ -20,36 +18,44 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 			interactions.Javascript(script);		
 		}
 
-		public static void WaitScopeCondition(this IBrowserInteractions interactions, string selector, string name,
-			Constraint constraint, Action actionThen, bool useIsolateScope = false)
+		public static void WaitScopeCondition<T>(this IBrowserInteractions interactions, string selector, string name,
+			T constraint, Action actionThen, bool useIsolateScope = false)
 		{
 			AssertScopeValue(interactions, selector, name, constraint, useIsolateScope);			
 			actionThen();						
 		}
 
-		public static void AssertScopeValue(this IBrowserInteractions interactions, string selector, string name, Constraint constraint, bool useIsolateScope = false)
+		public static void AssertScopeValueNullOrEmpty(this IBrowserInteractions interactions, string selector, string name, bool useIsolateScope = false)
 		{
-			// using eventual assert here is not required.
-			// use interactions.AssertJavascriptResultContains to be more robust!
-			// hardcoding timeout and polling here for now... anyone who understands, please clean this up
 			var script = string.Format(scopeByQuerySelector(selector, useIsolateScope) + " return scope.{0}; ", name);
 			var readerName = getTmpName(name);
 			interactions.Javascript(waitForAngular(selector, script, readerName, useIsolateScope));
-			EventualAssert.That(() =>
-			{
-				var query = scopeByQuerySelector(selector, useIsolateScope) + string.Format(" return scope.$result{0}; ", readerName);
-				var result = interactions.Javascript(query);
-				if (result != null)	result = result.ToLower();	
-				Console.Out.WriteLine(">>> " + result + " - " + name);					
-				return result;
+			var query = scopeByQuerySelector(selector, useIsolateScope) +
+						string.Format("return scope.$result{0} == null ?'True': 'False' ; ", readerName);
 
-			}, 
-			constraint, 
-			() => "Failed to assert scope value " + name, 
-			new SeleniumExceptionCatcher(), 
-			TimeSpan.FromMilliseconds(25), TimeSpan.FromSeconds(10));
+			interactions.AssertJavascriptResultContains(query, "True");
 		}
 
+		public static void AssertScopeValue<T>(this IBrowserInteractions interactions, string selector, string name, T constraint, bool useIsolateScope = false)
+		{		
+			var script = string.Format(scopeByQuerySelector(selector, useIsolateScope) + " return scope.{0}; ", name);
+			var readerName = getTmpName(name);
+			interactions.Javascript(waitForAngular(selector, script, readerName, useIsolateScope));
+			
+			if (typeof (T) == typeof (bool))
+			{
+				var query = scopeByQuerySelector(selector, useIsolateScope) +
+							string.Format(" return scope.$result{0} ?'True': 'False' ; ", readerName);
+				interactions.AssertJavascriptResultContains(query, constraint.ToString());				
+			}		
+			else 
+			{
+				var query = scopeByQuerySelector(selector, useIsolateScope) +
+							string.Format(" return scope.$result{0}; ", readerName);
+				interactions.AssertJavascriptResultContains(query, constraint.ToString());
+			}		
+		}
+		
 
 		private static string elementByQuerySelector(string selector)
 		{
@@ -65,11 +71,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 		{
 			return string.Format("var runner = {0}.injector().get('$timeout'); ", elementByQuerySelector(selector));
 		}
-
-		private static string repeaterByQuerySelector(string selector)
-		{
-			return string.Format("var repeat = {0}.injector().get('$interval'); ", elementByQuerySelector(selector));
-		}
+	
 
 		private static string waitForAngular(string selector, string next, string readerName, bool useIsolateScope)
 		{

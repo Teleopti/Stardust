@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		[When(@"I click at campaign name tag '(.*)'")]
 		public void WhenIClickAtCampaignNameTag(string campaignName)
 		{
-			Browser.Interactions.WaitScopeCondition(".outbound-summary", "isRefreshingGantt", Is.EqualTo("false"),
+			Browser.Interactions.WaitScopeCondition(".outbound-summary", "isRefreshingGantt", false,
 				() =>
 				{			
 					Browser.Interactions.ClickVisibleOnly(".campaign-visualization-toggle");
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 				{ "preventAutomaticRedirect", "true"}
 			});
 
-			Browser.Interactions.WaitScopeCondition(".campaign-create", "isInputValid()", Is.EqualTo("true"), () =>
+			Browser.Interactions.WaitScopeCondition(".campaign-create", "isInputValid()", true, () =>
 
 					Browser.Interactions.ClickVisibleOnly(".form-submit.wfm-btn-primary"));							
 		}
@@ -107,15 +107,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		[When(@"after the creation I goto the campaign list page")]
 		public void WhenAfterTheCreationIGotoTheCampaignListPage()
 		{
-			Browser.Interactions.AssertScopeValue(".campaign-create", "campaign.Name", Is.Null.Or.Empty);
-			Browser.Interactions.AssertScopeValue(".campaign-create", "isCreating", Is.EqualTo("false"));
+			Browser.Interactions.AssertScopeValueNullOrEmpty(".campaign-create", "campaign.Name");
+			Browser.Interactions.AssertScopeValue(".campaign-create", "isCreating", false);
 			Navigation.GoToOutbound();
 		}
 
 		[When(@"I confirm to delete the campaign")]
 		public void WhenIConfirmToDeleteTheCampaign()
 		{
-			Browser.Interactions.WaitScopeCondition(".campaign-edit", "isCampaignLoaded()", Is.EqualTo("true"), () =>
+			Browser.Interactions.WaitScopeCondition(".campaign-edit", "isCampaignLoaded()", true, () =>
 			{
 				Browser.Interactions.ClickVisibleOnly(".trigger-campaign-delete");
 				Browser.Interactions.ClickVisibleOnly(".modal-box .confirm-delete");
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 				{"manualPlanInput" , planValue.ToString() } 
 			}, true);
 
-			Browser.Interactions.WaitScopeCondition("campaign-commands-pane", "validManualProductionPlan()", Is.EqualTo("true"),
+			Browser.Interactions.WaitScopeCondition("campaign-commands-pane", "validManualProductionPlan()", true,
 				() => {
 					Browser.Interactions.ClickVisibleOnly(".btn-save-plan");
 				}, true);
@@ -233,14 +233,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		{
 			var check = string.Format("function(x) {{ return !angular.isNumber(x) ||  x == {0}; }}", planValue);
 			var target = string.Format("campaign.graphData.unscheduledPlans.every({0})", check);
-			Browser.Interactions.AssertScopeValue("div[id^=Chart]", target, Is.EqualTo("true"));
+			Browser.Interactions.AssertScopeValue("div[id^=Chart]", target, true);
 		}
 
 		[When(@"I see that the campaign is not done after the end date")]
 		public void WhenISeeThatTheCampaignIsNotDoneAfterTheEndDate()
 		{
 			var target = string.Format("campaign.graphData.rawBacklogs.slice(-1)[0] > {0}", getZeroValidationTolerance());
-			Browser.Interactions.AssertScopeValue("div[id^=Chart]", target, Is.EqualTo("true"));			
+			Browser.Interactions.AssertScopeValue("div[id^=Chart]", target, true);			
 		}
 
 		[When(@"I replan the campaign")]
@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		public void ThenIShouldSeeTheCampaignIsDoneAfterTheEndDate()
 		{
 			var target = string.Format("campaign.graphData.rawBacklogs.slice(-1)[0] < {0}", getZeroValidationTolerance());
-			Browser.Interactions.AssertScopeValue("div[id^=Chart]", target, Is.EqualTo("true"));
+			Browser.Interactions.AssertScopeValue("div[id^=Chart]", target, true);
 		}
 
 		[When(@"I set the manual backlog to '(.*)'")]
@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 				{"manualBacklogInput" , backlogValue.ToString() } 
 			}, true);
 
-			Browser.Interactions.WaitScopeCondition("campaign-commands-pane", "validManualBacklog()", Is.EqualTo("true"),
+			Browser.Interactions.WaitScopeCondition("campaign-commands-pane", "validManualBacklog()", true,
 				() =>
 				{
 					Browser.Interactions.ClickVisibleOnly(".btn-save-backlog");
@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		[Then(@"the campaign is overstaffed")]
 		public void ThenTheCampaignIsOverstaffed()
 		{
-			Browser.Interactions.AssertScopeValue("div[id^=Chart]", "campaign.WarningInfo[0].TypeOfRule", Is.EqualTo("campaignoverstaff"));
+			Browser.Interactions.AssertScopeValue("div[id^=Chart]", "campaign.WarningInfo[0].TypeOfRule","campaignoverstaff");
 		}
 
 
