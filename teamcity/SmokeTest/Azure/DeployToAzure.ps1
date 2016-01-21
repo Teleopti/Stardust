@@ -10,9 +10,8 @@ Param(
 
 $storageAccount = "teleopticcc7"	#Our standard Storage account
 $timeStampFormat = "g"
-$deploymentLabel = $package
-$deploymentLabel = $deploymentLabel.Replace("Azure-", "")    
-$deploymentLabel = $deploymentLabel.Replace(".cspkg", "")  
+$deploymentLabel = [io.path]::GetFileNameWithoutExtension($package)
+$deploymentLabel = $deploymentLabel.Replace("Azure-", "")   
 
 Write-Output ""
 Write-Output "Starting to upload new Azure Deployment"

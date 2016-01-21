@@ -1,6 +1,9 @@
 @ECHO OFF
 
-::Deploy latest Azure package to Azure (teleoptirnd)
+::Deploy latest Azure package to Azure
+::
+:: Inparameter CloudServiceName, example: teleoptirnd
+
 SET ThisScriptsDirectory=%~dp0
 SET rootdir=%ThisScriptsDirectory:~0,-1%
 SET CloudServiceName=%1
