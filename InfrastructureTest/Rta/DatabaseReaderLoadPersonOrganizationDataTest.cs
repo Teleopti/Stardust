@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
 	[RtaDatabaseTest]
-	public class DatabaseReaderLoadPersonDataTest
+	public class DatabaseReaderLoadPersonOrganizationDataTest
 	{
 		public IDatabaseReader Reader;
 		public WithUnitOfWork WithUnitOfWork;
@@ -28,27 +29,44 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public IExternalLogOnRepository ExternalLogOns;
 		public MutableNow Now;
 
-		private IPerson addPerson(int dataSourceId, string externalLogon)
+		private IPerson addPerson(string externalLogon, int dataSourceId)
 		{
 			return addPerson(externalLogon, dataSourceId, new DateOnly(Now.UtcDateTime().Date));
 		}
 
 		private IPerson addPerson(string externalLogon, int dataSourceId, DateOnly fromDate)
 		{
-			var team = TeamFactory.CreateTeam(".", ".");
+			return addPerson(externalLogon, dataSourceId, fromDate, null);
+		}
+
+		private IPerson addPerson(string externalLogon, int dataSourceId, DateOnly fromDate, DateOnly? terminalDate)
+		{
+			return addPerson(externalLogon, dataSourceId, fromDate, terminalDate, null);
+		}
+
+		private IPerson addPerson(string externalLogon, int dataSourceId, DateOnly fromDate, DateOnly? terminalDate, TimeZoneInfo timeZone)
+		{
 			var person = PersonFactory.CreatePersonWithPersonPeriod(fromDate);
+			person.PermissionInformation.SetDefaultTimeZone(timeZone ?? TimeZoneInfoFactory.UtcTimeZoneInfo());
+
 			var personPeriod = person.Period(fromDate);
+			var team = TeamFactory.CreateTeam("team", "site");
+			personPeriod.Team = team;
+
 			var externalLogOn = new ExternalLogOn
 			{
 				AcdLogOnOriginalId = externalLogon,
 				DataSourceId = dataSourceId
 			};
+
 			person.AddExternalLogOn(
 				externalLogOn,
 				personPeriod
 				);
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
-			personPeriod.Team = team;
+
+			if (terminalDate.HasValue)
+				person.TerminatePerson(terminalDate.Value, new PersonAccountUpdaterDummy());
+
 			WithUnitOfWork.Do(() =>
 			{
 				ContractSchedules.Add(personPeriod.PersonContract.ContractSchedule);
@@ -59,21 +77,32 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				Teams.Add(team);
 				Persons.Add(person);
 			});
+
 			return person;
 		}
 
-		private void addPersonPeriod(IPerson person, DateOnly endDate)
+		private void addPersonPeriod(IPerson person, DateOnly startDate)
 		{
-			var personPeriod = person.Period(endDate);
-			person.AddPersonPeriod(new PersonPeriod(endDate, personPeriod.PersonContract, personPeriod.Team));
-			WithUnitOfWork.Do(() => Persons.Add(person));
-		}
+			var oldPeriod = person.Period(startDate);
 
+			var newPeriod = new PersonPeriod(startDate, oldPeriod.PersonContract, oldPeriod.Team);
+			newPeriod.Team = oldPeriod.Team;
+			person.AddPersonPeriod(newPeriod);
+
+			//if (externalLogOn != null)
+			//	person.AddExternalLogOn(externalLogOn, newPeriod);
+
+			WithUnitOfWork.Do(() =>
+			{
+				Persons.Add(person);
+			});
+		}
+		
 		[Test]
 		public void ShouldFindByExternalLogon()
 		{
-			var person1 = addPerson(1, "user1");
-			var person2 = addPerson(1, "user2");
+			var person1 = addPerson("user1", 1);
+			var person2 = addPerson("user2", 1);
 
 			var result = Reader.LoadPersonOrganizationData(1, "user2");
 
@@ -83,7 +112,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldFindNothing()
 		{
-			addPerson(1, "user");
+			addPerson("user", 1);
 
 			var result = Reader.LoadPersonOrganizationData(1, "unknownUser");
 
@@ -93,8 +122,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldFindAllWithSameExternalLogon()
 		{
-			addPerson(1, "user");
-			addPerson(1, "user");
+			addPerson("user", 1);
+			addPerson("user", 1);
 
 			var result = Reader.LoadPersonOrganizationData(1, "user");
 
@@ -118,8 +147,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldFindByDataSource()
 		{
-			var person1 = addPerson(2, "user");
-			var person2 = addPerson(3, "user");
+			var person1 = addPerson("user", 2);
+			var person2 = addPerson("user", 3);
 
 			var result = Reader.LoadPersonOrganizationData(2, "user");
 
@@ -129,7 +158,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldLoadProperties()
 		{
-			var person = addPerson(1, "user");
+			var person = addPerson("user", 1);
 
 			var result = Reader.LoadPersonOrganizationData(1, "user");
 
@@ -139,43 +168,48 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		}
 
 		[Test]
-		public void ShouldLoadAllData()
+		public void ShouldNotFindTerminatedPersons()
 		{
-			var person1 = addPerson(2, "user");
-			var person2 = addPerson(3, "user");
+			Now.Is("2016-01-20 00:00");
+			var person = addPerson("user", 1, "2016-01-01".Date(), "2016-01-19".Date());
 
-			var result = Reader.LoadAllPersonOrganizationData();
+			var result = Reader.LoadPersonOrganizationData(1, "user");
 
-			result.Select(r => r.PersonId).Should().Have.SameValuesAs(person1.Id.Value, person2.Id.Value);
+			result.Should().Be.Empty();
 		}
 
 		[Test]
-		public void ShouldFindAllByActivePersonPeriod()
+		public void ShouldFindTerminatedPersonsTheirLastDay()
 		{
-			Now.Is("2015-12-02");
-			var pastUser = addPerson("user", 1, "2015-10-01".Date());
-			addPersonPeriod(pastUser, "2015-10-31".Date());
-			var currentUser = addPerson("user", 1, "2015-11-01".Date());
-			var futureUser = addPerson("user", 1, "2015-12-31".Date());
+			Now.Is("2016-01-20 08:00");
+			var person = addPerson("user", 1, "2016-01-01".Date(), "2016-01-20".Date());
 
-			var result = Reader.LoadAllPersonOrganizationData();
+			var result = Reader.LoadPersonOrganizationData(1, "user");
 
-			result.Single().PersonId.Should().Be(currentUser.Id);
+			result.Single().PersonId.Should().Be(person.Id.Value);
 		}
 
 		[Test]
-		public void ShouldLoadAllWithProperties()
+		public void ShouldNotFindTerminatedPersonsInInstanbul()
 		{
-			var person = addPerson(1, "user");
+			Now.Is("2016-01-20 23:00");
+			var person = addPerson("user", 1, "2016-01-01".Date(), "2016-01-20".Date(), TimeZoneInfoFactory.IstanbulTimeZoneInfo());
 
-			var results = Reader.LoadAllPersonOrganizationData();
-			Console.WriteLine(results.GetType());
+			var result = Reader.LoadPersonOrganizationData(1, "user");
 
-			var result = results.Single(r => r.PersonId == person.Id);
-			result.TeamId.Should().Be(person.PersonPeriodCollection.Single().Team.Id);
-			result.SiteId.Should().Be(person.PersonPeriodCollection.Single().Team.Site.Id);
-			result.BusinessUnitId.Should().Be(person.PersonPeriodCollection.Single().Team.Site.BusinessUnit.Id);
+			result.Should().Be.Empty();
 		}
 
+		[Test]
+		public void ShouldFindTerminatedPersonsInHawaiiTheirLastHour()
+		{
+			Now.Is("2016-01-21 09:00");
+			var person = addPerson("user", 1, "2016-01-01".Date(), "2016-01-20".Date(), TimeZoneInfoFactory.HawaiiTimeZoneInfo());
+
+			var result = Reader.LoadPersonOrganizationData(1, "user");
+
+			result.Single().PersonId.Should().Be(person.Id.Value);
+		}
+		
 	}
 }

@@ -9,15 +9,19 @@ Background:
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
 	And I have a role with full access
+
+
+
+
 	And Pierre Baldi has a person period with
 	 | Field      | Value      |
 	 | Team       | Red        |
 	 | Start Date | 2016-01-01 |
 	And Pierre Baldi has a shift with
-	| Field                    | Value            |
-	| Activity                 | Phone            |
-	| Start time               | 2016-01-14 08:00 |
-	| End time                 | 2016-01-14 17:00 |
+	| Field      | Value            |
+	| Activity   | Phone            |
+	| Start time | 2016-01-14 08:00 |
+	| End time   | 2016-01-14 17:00 |
 	And there is a rule with 
 	| Field           | Value        |
 	| Activity        | Phone        |

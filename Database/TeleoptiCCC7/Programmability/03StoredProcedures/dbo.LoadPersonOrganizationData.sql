@@ -15,12 +15,14 @@ SELECT
 	v.PersonId,
 	v.TeamId,
 	v.SiteId,
-	v.BusinessUnitId
+	v.BusinessUnitId,
+	v.TimeZone,
+	v.EndDate
 FROM
 	dbo.v_PersonOrganizationData v WITH(NOEXPAND)
 WHERE
 	v.AcdLogOnOriginalId = @externallogon AND
 	v.DataSourceId = @dataSourceId AND 
-	@now BETWEEN v.StartDate AND v.EndDate
-
+	@now >= v.StartDate AND
+	@now <= DATEADD(DAY,2,v.EndDate)
 GO

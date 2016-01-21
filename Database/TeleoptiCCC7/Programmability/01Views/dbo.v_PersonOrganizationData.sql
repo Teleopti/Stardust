@@ -19,6 +19,7 @@ SELECT
 	pp.StartDate as 'StartDate',
 	pp.EndDate as 'EndDate',
 	p.Id as 'PersonId',
+	p.DefaultTimeZone as 'TimeZone',
 	pp.Team as 'TeamId',
 	t.Site AS 'SiteId',
 	s.BusinessUnit as 'BusinessUnitId'

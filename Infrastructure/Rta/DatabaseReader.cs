@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using log4net;
@@ -175,11 +176,12 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 					cmd.Parameters.AddWithValue("@now", _now.UtcDateTime());
 					cmd.Parameters.AddWithValue("@dataSourceId", dataSourceId);
 					cmd.Parameters.AddWithValue("@externalLogOn", externalLogOn);
+
 					return readPersonOrganizationDatas(cmd).ToArray();
 				}
 			}
 		}
-
+		
 		public IEnumerable<PersonOrganizationData> LoadAllPersonOrganizationData()
 		{
 			using (var conn = new SqlConnection(_connectionStrings.Application()))
@@ -194,19 +196,31 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		}
 
-		private static IEnumerable<PersonOrganizationData> readPersonOrganizationDatas(SqlCommand cmd)
+		private IEnumerable<PersonOrganizationData> readPersonOrganizationDatas(SqlCommand cmd)
 		{
 			using (var reader = cmd.ExecuteReader())
 			{
 				while (reader.Read())
 				{
-					yield return new PersonOrganizationData
+					var timeZoneValue = reader.GetString(reader.GetOrdinal("TimeZone"));
+					var endDateValue = reader.GetDateTime(reader.GetOrdinal("EndDate"));
+
+					var timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneValue);
+					var terminatedAt = endDateValue.AddDays(1);
+					terminatedAt = TimeZoneInfo.ConvertTimeToUtc(terminatedAt, timeZone);
+
+					if (terminatedAt > _now.UtcDateTime())
 					{
-						PersonId = reader.GetGuid(reader.GetOrdinal("PersonId")),
-						TeamId = reader.GetGuid(reader.GetOrdinal("TeamId")),
-						SiteId = reader.GetGuid(reader.GetOrdinal("SiteId")),
-						BusinessUnitId = reader.GetGuid(reader.GetOrdinal("BusinessUnitId"))
-					};
+						yield return new PersonOrganizationData
+						{
+							PersonId = reader.GetGuid(reader.GetOrdinal("PersonId")),
+							TeamId = reader.GetGuid(reader.GetOrdinal("TeamId")),
+							SiteId = reader.GetGuid(reader.GetOrdinal("SiteId")),
+							BusinessUnitId = reader.GetGuid(reader.GetOrdinal("BusinessUnitId")),
+							TimeZone = timeZoneValue,
+							EndDate = endDateValue
+						};
+					}
 				}
 			}
 		}

@@ -18,33 +18,34 @@ Background:
 	 | Team       | Red        |
 	 | Start Date | 2016-01-01 |
 	And Pierre Baldi has a shift with
-	| Field                    | Value            |
-	| Activity                 | Phone            |
-	| Start time               | 2016-01-14 08:00 |
-	| End time                 | 2016-01-14 17:00 |
+	| Field      | Value            |
+	| Activity   | Phone            |
+	| Start time | 2016-01-14 08:00 |
+	| End time   | 2016-01-14 17:00 |
 	And there is a rule with 
 	| Field           | Value        |
 	| Activity        | Phone        |
 	| Phone state     | Pause        |
-	| Display Color   | Orange       |
 	| Name            | Not adhering |
+	| Staffing effect | -1           |
 
 @OnlyRunIfEnabled('RTA_TerminatedPersons_36042')
 Scenario: Exclude terminated agents
-	Given the time is '2016-01-14 08:00:00'
+	Given the time is '2016-01-14 09:00:00'
 	When I view Real time adherence for teams on site 'Paris'
+	And 'Pierre Baldi' sets his phone state to 'Ready'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
-	Then I should see site 'Paris' with 1 employees out of adherence
+	Then I should see team 'Red' with 1 employees out of adherence
 	When the time is '2016-01-15 12:00:00'
-	Then I should see site 'Paris' with 0 employees out of adherence
+	Then I should see team 'Red' with 0 employees out of adherence
 
 @OnlyRunIfEnabled('RTA_TerminatedPersons_36042')
 Scenario: Exclude agents terminated retroactively
-	Given the time is '2016-01-14 08:00:00'
+	Given the time is '2016-01-14 09:00:00'
 	When I view Real time adherence for teams on site 'Paris'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
-	Then I should see site 'Paris' with 1 employees out of adherence
+	Then I should see team 'Red' with 1 employees out of adherence
 	When 'Pierre Baldi' is updated with
 	| Field         | Value      |
 	| Terminal Date | 2016-01-05 |
-	Then I should see site 'Paris' with 0 employees out of adherence
+	Then I should see team 'Red' with 0 employees out of adherence

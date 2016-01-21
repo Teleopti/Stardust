@@ -236,7 +236,8 @@
     <Compile Include="Persisters\Schedules\ScheduleRangeReassociateTest.cs" />
     <Compile Include="Repositories\DayOffRulesRepositoryTest.cs" />
     <Compile Include="Repositories\PersonInRoleQuerierTest.cs" />
-    <Compile Include="Rta\DatabaseReaderLoadPersonDataTest.cs" />
+    <Compile Include="Rta\DatabaseReaderLoadAllPersonOrganizationDataTest.cs" />
+    <Compile Include="Rta\DatabaseReaderLoadPersonOrganizationDataTest.cs" />
     <Compile Include="Rta\Persisters\AgentStateReadModelPersisterTest.cs" />
     <Compile Include="Rta\PublishRtaEventsToHangfireTest.cs" />
     <Compile Include="Rta\RtaDatabaseTestAttribute.cs" />
