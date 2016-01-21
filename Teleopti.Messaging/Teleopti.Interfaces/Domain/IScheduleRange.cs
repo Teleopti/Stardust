@@ -173,7 +173,7 @@ namespace Teleopti.Interfaces.Domain
     	/// <returns></returns>
     	IScheduleDay ScheduledDay(DateOnly day, bool includeUnpublished);
 
-	    void ForceRecalculationOfContractTimeAndDaysOff();
+	    void ForceRecalculationOfTargetTimeContractTimeAndDaysOff();
 
 	    bool IsEmpty();
 

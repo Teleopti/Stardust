@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.Win.Reporting
 					//TODO: refactor report to use the same data as in the agentinfo in scheduler. DaysOff, TargetTime, ScheduledDayOff, ScheduledTime 
 					// should be the virtual schedule period's responsibility where is is tested code!!! This is NOT!
 
-					stateHolder.Schedules[person].ForceRecalculationOfContractTimeAndDaysOff();
+					stateHolder.Schedules[person].ForceRecalculationOfTargetTimeContractTimeAndDaysOff();
 
 					IScheduledTimeVersusTargetTimeReportData detailData = new ScheduledTimeVersusTargetTimeReportData();
 

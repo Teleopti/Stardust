@@ -452,10 +452,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return _shiftCategoryFairnessHolder;
         }
 
-		public void ForceRecalculationOfContractTimeAndDaysOff()
+		public void ForceRecalculationOfTargetTimeContractTimeAndDaysOff()
 		{
 			_calculatedContractTimeHolder = null;
 			_calculatedScheduleDaysOff = null;
+		    _calculatedTargetTimeHolder = null;
 		}
 
 						public bool IsEmpty()

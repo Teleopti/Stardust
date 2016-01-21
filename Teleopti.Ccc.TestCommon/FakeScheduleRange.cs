@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.TestCommon
 			throw new NotImplementedException();
 		}
 
-		public void ForceRecalculationOfContractTimeAndDaysOff()
+		public void ForceRecalculationOfTargetTimeContractTimeAndDaysOff()
 		{
 			throw new NotImplementedException();
 		}

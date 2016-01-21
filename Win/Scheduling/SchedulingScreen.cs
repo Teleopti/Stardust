@@ -582,7 +582,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				period.DayCollection().ForEach(_schedulerState.MarkDateToBeRecalculated);
 			});
 			_schedulerState.Schedules.Where(s => changes.Any(c => s.Key.Equals(c.MainRoot)))
-				.ForEach(p => p.Value.ForceRecalculationOfContractTimeAndDaysOff());
+				.ForEach(p => p.Value.ForceRecalculationOfTargetTimeContractTimeAndDaysOff());
 		}
 
 		private void contextMenuViews_Opened(object sender, EventArgs e)
@@ -6025,7 +6025,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			try
 			{
 				refreshEntitiesUsingMessageBroker();
-				_schedulerState.Schedules.ForEach(p => p.Value.ForceRecalculationOfContractTimeAndDaysOff());
+				_schedulerState.Schedules.ForEach(p => p.Value.ForceRecalculationOfTargetTimeContractTimeAndDaysOff());
 				RecalculateResources();
 				updateShiftEditor();
 				var selectedSchedules = _scheduleView.SelectedSchedules();
