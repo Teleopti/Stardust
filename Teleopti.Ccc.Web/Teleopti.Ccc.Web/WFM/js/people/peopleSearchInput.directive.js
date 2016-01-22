@@ -4,13 +4,14 @@
 	angular.module('wfm.people').run([
 		'$templateCache', function ($templateCache) {
 			$templateCache.put('wfm-people-search-input-default.tpl.html',
-				'<div class="input-prepend people-search">'+
-					'<i class="mdi mdi-magnify"></i>' +
+				'<label for="inputId" class="input-prepend people-search">' +
+					'<i class="mdi mdi-magnify">' +
+					'<md-tooltip>Filter people</md-tooltip></i>' +
 					'<input id="simple-search" style="width: 90%; height: 30px;" type="text" placeholder="{{\'Search\'|translate}}..." '+
 						'ng-model="vm.searchOptions.keyword" ng-keydown="$event.which === 13 && vm.searchCallback(vm.searchOptions.keyword) || vm.turnOffAdvancedSearch()" ng-change="vm.validateSearchKeywordChanged()" ' +
 						'ng-click="vm.toggleAdvancedSearchOption($event)" />'+
 					'<advance-search class="dropdown" ng-cloak ng-if="vm.searchOptions.isAdvancedSearchEnabled && vm.showAdvancedSearchOption" outside-click="vm.turnOffAdvancedSearch()"></advance-search>' +
-				'</div>'
+				'</label>'
 			);
 		}]);
 })();
