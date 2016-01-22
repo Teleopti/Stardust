@@ -47,9 +47,9 @@
 		<md-sidenav class="md-sidenav-right md-sidenav-skill-panel md-whiteframe-z2" md-component-id="right-skill">
 			<div class="sidenav-header">{{'Skill'|translate}}</div>
 			<md-content layout-padding style="height: 68vh">
-				<label for="inputId" class="input-prepend">
+				<label for="skill-filter" class="input-prepend">
 					<i class="mdi mdi-filter-outline"><md-tooltip>Filter skills</md-tooltip></i>
-					<input class="text-filter" type="text" name="filterSkill" ng-model="searchSkills.SkillName" placeholder="Filter skills" />
+					<input id="skill-filter" class="text-filter" type="text" name="filterSkill" ng-model="searchSkills.SkillName" placeholder="Filter skills" />
 				</label>
 				<div class="wfm-checkbox" ng-repeat="skill in vm.availableSkills|filter:searchSkills|orderBy:'SkillName'">
 					<input type="checkbox" id="{{skill.SkillId}}" ng-model="skill.Selected" ng-change="vm.skillSelectedStatusChanged(skill)" people-indeterminate="skill.Status =='partial'" />
