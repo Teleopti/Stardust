@@ -9,7 +9,7 @@
 		var vm = this;
 
 		vm.temp = {};
-		vm.isDatePickerOpened = true;
+		
 		vm.paginationOptions = { pageNumber: 1, pageSize: 34, totalPages: 1 };
 
 		vm.getSeatBookings = function (options) {
@@ -41,13 +41,6 @@
 			}
 
 			vm.isFilterOpened = !vm.isFilterOpened;
-		}
-
-		vm.toggleFilter = function (tabName) {
-			vm.isDatePickerOpened = tabName == 'date';
-			vm.isTeamPickerOpened = tabName == 'team';
-			vm.isLocationPickerOpened = tabName == 'location';
-
 		};
 
 		vm.cancelFilter = function () {
