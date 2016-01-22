@@ -100,16 +100,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 				{ "preventAutomaticRedirect", "true"}
 			});
 
-			Browser.Interactions.WaitScopeCondition(".campaign-create", "isInputValid()", true, () =>
-
-					Browser.Interactions.ClickVisibleOnly(".form-submit.wfm-btn-primary"));							
+			Browser.Interactions.AssertScopeValue(".campaign-create", "isInputValid()", true);
+			Browser.Interactions.ClickVisibleOnly(".form-submit.wfm-btn-primary");						
 		}
 
 		[When(@"after the creation I goto the campaign list page")]
 		public void WhenAfterTheCreationIGotoTheCampaignListPage()
-		{
-			Browser.Interactions.AssertScopeValueNullOrEmpty(".campaign-create", "campaign.Name");
-			Browser.Interactions.AssertScopeValue(".campaign-create", "isCreating", false);
+		{			
+			Browser.Interactions.AssertScopeValueEmpty(".campaign-create", "campaign.Name");		
+			Browser.Interactions.AssertScopeValue(".campaign-create", "isCreating", false);			
 			Navigation.GoToOutbound();
 		}
 

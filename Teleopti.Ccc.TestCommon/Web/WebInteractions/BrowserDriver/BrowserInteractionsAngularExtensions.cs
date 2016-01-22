@@ -25,15 +25,15 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 			actionThen();						
 		}
 
-		public static void AssertScopeValueNullOrEmpty(this IBrowserInteractions interactions, string selector, string name, bool useIsolateScope = false)
+		public static void AssertScopeValueEmpty(this IBrowserInteractions interactions, string selector, string name, bool useIsolateScope = false)
 		{
 			var script = string.Format(scopeByQuerySelector(selector, useIsolateScope) + " return scope.{0}; ", name);
 			var readerName = getTmpName(name);
 			interactions.Javascript(waitForAngular(selector, script, readerName, useIsolateScope));
 			var query = scopeByQuerySelector(selector, useIsolateScope) +
 						string.Format("return scope.$result{0} == null ?'True': 'False' ; ", readerName);
-
-			interactions.AssertJavascriptResultContains(query, "True");
+			
+			interactions.AssertJavascriptResultContains(query, "True");		
 		}
 
 		public static void AssertScopeValue<T>(this IBrowserInteractions interactions, string selector, string name, T constraint, bool useIsolateScope = false)
@@ -46,13 +46,15 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 			{
 				var query = scopeByQuerySelector(selector, useIsolateScope) +
 							string.Format(" return scope.$result{0} ?'True': 'False' ; ", readerName);
+				
 				interactions.AssertJavascriptResultContains(query, constraint.ToString());				
 			}		
 			else 
 			{
 				var query = scopeByQuerySelector(selector, useIsolateScope) +
 							string.Format(" return scope.$result{0}; ", readerName);
-				interactions.AssertJavascriptResultContains(query, constraint.ToString());
+			
+				interactions.AssertJavascriptResultContains(query, constraint.ToString());				
 			}		
 		}
 		
@@ -78,6 +80,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 			return scopeByQuerySelector(selector, useIsolateScope)
 				   + runnerByQuerySelector(selector)				
 				   + string.Format("var evaluator = function(){{ {0} }}; ", next)
+				   + string.Format("scope.$result{0} = 'i_am_a_dummy_value'; ", readerName)
 				   + string.Format("var setv = function(v) {{ scope.$result{0} = v; }}; ", readerName)
 				   + string.Format("runner(function() {{ scope.$result{0} = null; scope.$watch(evaluator, function(v) {{ setv(v); }}); }}, 200); ", readerName);			
 		}
