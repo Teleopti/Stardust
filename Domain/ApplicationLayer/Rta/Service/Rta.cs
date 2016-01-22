@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			int result;
 			if (input.IsSnapshot && string.IsNullOrEmpty(input.UserCode))
-				result = closeSnapshot(input);
+				result = CloseSnapshot(input);
 			else
 				result = processStateChange(input, dataSourceId);
 			Log.InfoFormat("Message handling complete for UserCode: {0}, StateCode: {1}. (MessageId: {2})", input.UserCode, input.StateCode, messageId);
@@ -197,7 +197,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return 1;
 		}
 
-		private int closeSnapshot(ExternalUserStateInputModel input)
+		[InfoLog]
+		protected virtual int CloseSnapshot(ExternalUserStateInputModel input)
 		{
 			input.StateCode = "CCC Logged out";
 			input.PlatformTypeId = Guid.Empty.ToString();
