@@ -123,7 +123,11 @@
 		function setupPersonIdSelectionDic(schedules) {
 			schedules.forEach(function (personSchedule) {
 				if (vm.personIdSelectionDic[personSchedule.PersonId] === undefined) {
-					vm.personIdSelectionDic[personSchedule.PersonId] = { isSelected: false };
+					var canSwapShift = allowSwap(personSchedule);
+					vm.personIdSelectionDic[personSchedule.PersonId] = {
+						isSelected: false,
+						canSwapShift: canSwapShift
+					};
 				}
 			});
 		};
@@ -176,26 +180,8 @@
 		function allowSwapShifts() {
 			var selectedPersonIds = vm.getSelectedPersonIdList();
 			if (selectedPersonIds.length !== 2) return false;
-
-			var firstSchedule = undefined;
-			var secondSchedule = undefined;
-			angular.forEach(vm.groupScheduleVm.Schedules, function (schedule) {
-				var firstPersonId = selectedPersonIds[0];
-				if (schedule.PersonId === firstPersonId) {
-					firstSchedule = schedule;
-				}
-
-				var secondPersonId = selectedPersonIds[1];
-				if (schedule.PersonId === secondPersonId) {
-					secondSchedule = schedule;
-				}
-			});
-
-			if (firstSchedule == undefined || secondSchedule == undefined) {
-				return false;
-			}
-
-			return allowSwap(firstSchedule) && allowSwap(secondSchedule);
+			
+			return selectedPersonIds[0].canSwapShift && selectedPersonIds[1].canSwapShift;
 		}
 
 		function swapShifts() {
@@ -205,8 +191,8 @@
 			if (selectedPersonIds.length !== 2) return;
 
 			teamScheduleSvc.swapShifts.post({
-				PersonIdFrom: selectedPersonIds[0],
-				PersonIdTo: selectedPersonIds[1],
+				PersonIdFrom: selectedPersonIds[0].personId,
+				PersonIdTo: selectedPersonIds[1].personId,
 				ScheduleDate: vm.scheduleDateMoment().format("YYYY-MM-DD"),
 				TrackedCommandInfo: { TrackId: "" } // TODO: Generate unique track id
 			}).$promise.then(function (result) {
@@ -314,8 +300,12 @@
 		vm.getSelectedPersonIdList = function() {
 			var result = [];
 			for (var key in vm.personIdSelectionDic) {
-				if (vm.personIdSelectionDic[key].isSelected) {
-					result.push(key);
+				var schedule = vm.personIdSelectionDic[key];
+				if (schedule.isSelected) {
+					result.push({
+						personId: key,
+						canSwapShift: schedule.canSwapShift
+					});
 				}
 			}
 			return result;
