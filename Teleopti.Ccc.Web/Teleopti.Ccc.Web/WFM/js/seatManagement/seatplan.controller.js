@@ -4,9 +4,9 @@
 
 	angular.module('wfm.seatPlan').controller('SeatPlanCtrl', seatPlanDirectiveController);
 
-	seatPlanDirectiveController.$inject = ['ResourcePlannerSvrc', 'seatPlanService', '$stateParams', 'Toggle'];
+	seatPlanDirectiveController.$inject = ['ResourcePlannerSvrc', 'seatPlanService', '$stateParams', 'Toggle', '$timeout'];
 
-	function seatPlanDirectiveController(resourcePlannerService, seatPlanService, params, toggleService) {
+	function seatPlanDirectiveController(resourcePlannerService, seatPlanService, params, toggleService, $timeout) {
 
 		var vm = this;
 
@@ -169,6 +169,31 @@
 				});
 			}
 			return dayClass;
+		};
+
+		vm.printReport = function (event) {
+			var seatBookingReportParams = {
+				startDate: moment(vm.reportPeriod.StartDate).format('YYYY-MM-DD'),
+				endDate: moment(vm.reportPeriod.EndData).format('YYYY-MM-DD'),
+				teams: vm.reportSelectedTeams,
+				locations: vm.reportSelectedLocations
+			};
+			
+			seatPlanService.seatBookingReport.get(seatBookingReportParams).$promise.then(function (data) {
+				vm.seatBookingsAll = data.SeatBookingsByDate;
+				angular.element(document).ready(function () {
+					
+					if (event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.classList[0] == undefined) {
+						event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.classList.add('container-to-print-report');
+						window.print();
+						event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.classList.remove('container-to-print-report');
+					} else {
+						event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.classList.add('container-to-print-report');
+						window.print();
+						event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.classList.remove('container-to-print-report');
+					}
+				});
+			});
 		};
 
 		vm.init = function () {

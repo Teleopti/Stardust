@@ -4,7 +4,7 @@
 	}
 
 	.container.content {
-		overflow: hidden;
+		overflow: visible;
 	}
 </style>
 
@@ -18,10 +18,6 @@
 		<button class="wfm-btn wfm-btn-invis-primary pull-left" ng-class="{'button-active':vm.isFilterOpened}" ng-click="vm.toggleFilterVisibility()">
 			<i class="mdi mdi-filter"></i>
 			{{'Filter' | translate}}
-		</button>
-		<button class="wfm-fab info seatplan-report-print-button" ng-show="!vm.isFilterOpened" seat-plan-report-print>
-			<i class="mdi mdi-printer"></i>
-			<md-tooltip>{{'Print' | translate}}</md-tooltip>
 		</button>
 
 		<span class="turn-off-filter-blank" ng-click="vm.isFilterOpened = false"></span>

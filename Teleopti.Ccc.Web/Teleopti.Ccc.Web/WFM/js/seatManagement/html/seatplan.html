@@ -13,11 +13,28 @@
 			{{"SeatPlan" | translate}}
 		</h1>
 	</div>
-</div>
-<div id="seatplan" class="material-depth-1" ui-view>
 
+	<div class="fab-wrapper" ng-if="!seatplan.isReportOpened && !seatplan.isSeatMapBookingViewOpened">
+		<button class="wfm-fab  material-depth-1" ng-click="seatplan.showReport({StartDate:seatplan.selectedDate,EndDate:seatplan.selectedDate},[],[])">
+			<i class="mdi mdi-file-document"></i>
+			<md-tooltip>{{'GenerateReport' | translate}}</md-tooltip>
+		</button>
+	</div>
+
+	<div class="fab-wrapper" ng-if="seatplan.isReportOpened">
+		<button class="wfm-fab  material-depth-1" ng-click="seatplan.printReport($event)">
+			<i class="mdi mdi-printer"></i>
+			<md-tooltip>{{'Print' | translate}}</md-tooltip>
+		</button>
+	</div>
+	
+</div>
+
+
+<div id="seatplan" class="material-depth-1" ui-view>
 	<seat-plan-report ng-if="seatplan.isReportOpened" toggle="seatplan.isReportOpened = !seatplan.isReportOpened"
-					  selected-period="seatplan.reportPeriod" selected-teams="seatplan.reportSelectedTeams" selected-locations="seatplan.reportSelectedLocations"></seat-plan-report>
+					  selected-period="seatplan.reportPeriod" selected-teams="seatplan.reportSelectedTeams" 
+					  selected-locations="seatplan.reportSelectedLocations" seat-bookings-all="seatplan.seatBookingsAll"></seat-plan-report>
 
 	<seatmap-canvas occupancy date="seatplan.selectedDate" toggle="seatplan.showSeatmap()" ng-if="seatplan.isSeatMapBookingViewOpened"></seatmap-canvas>
 
@@ -33,12 +50,7 @@
 		</div>
 
 		<div class="planning-day-detail" ng-if="seatplan.selectedDate!=null">
-			<button class="wfm-fab info  material-depth-1 pull-right"
-					ng-click="seatplan.showReport({StartDate:seatplan.selectedDate,EndDate:seatplan.selectedDate},[],[])">
-				<i class="mdi mdi-file-document"></i>
-				<md-tooltip>{{'GenerateReport' | translate}}</md-tooltip>
-			</button>
-
+			
 			<h3>{{seatplan.selectedDate | date : "fullDate"}}</h3>
 			<md-divider md-insert></md-divider>
 			<p>{{ seatplan.getToDayInfo() | translate}}</p>

@@ -1500,7 +1500,6 @@
     <Content Include="WFM\js\seatManagement\html\seatplanreport.html" />
     <Content Include="WFM\js\seatManagement\html\teampicker.html" />
     <Content Include="WFM\js\seatManagement\seatmapoccupancydetail.directive.js" />
-    <Content Include="WFM\js\seatManagement\seatplanreportprint.directive.js" />
     <Content Include="WFM\js\seatManagement\locationpicker.directive.js" />
     <Content Include="WFM\js\seatManagement\seatplantranslator.factory.js" />
     <Content Include="WFM\js\seatManagement\seatplanreport.controller.js" />

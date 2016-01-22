@@ -13,7 +13,8 @@
 				toggle: '&toggle',
 				selectedPeriod: '=selectedPeriod',
 				selectedTeams: '=selectedTeams',
-				selectedLocations: '=selectedLocations'
+				selectedLocations: '=selectedLocations',
+				seatBookingsAll: '=seatBookingsAll'
 			},
 			link: linkFunction,
 			restrict: "E",
