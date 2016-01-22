@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			if (myScheduleViewModel.IsFullDayAbsence)
 			{
 				ret.PossibleTradeSchedules = new List<ShiftTradeAddPersonScheduleViewModel>();
-				ret.PageCount = 1;
+				ret.PageCount = 0;
 			}
 			else
 			{
