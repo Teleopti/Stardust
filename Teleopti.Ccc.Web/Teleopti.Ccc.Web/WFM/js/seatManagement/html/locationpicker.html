@@ -1,34 +1,27 @@
-﻿<div>
-	<label for="locationFilter" class="input-prepend">
+﻿<div class="wfm-block">
+	<label for="locationFilterId" class="input-prepend">
 		<i class="mdi mdi-filter-outline">
 			<md-tooltip>{{ 'FilterLocations' | translate }}</md-tooltip>
 		</i>
-		<input type="text" id="locationFilter" name="filterLocations" placeholder="{{ 'FilterLocations' | translate }}" ng-model="searchLocations" />
+		<input type="text" ng-model="searchLocations" id="locationFilterId" placeholder="{{ 'FilterLocations' | translate }}" />
 	</label>
-
-	<div class="tree">
-		<div ui-tree data-drag-enabled="false">
-			<ol ui-tree-nodes="" ng-model="vm.locations" id="tree-root-locations" class="tree-line" toggle-focus>
-				<li ng-repeat="node in vm.locations | filter:searchLocations" ui-tree-node ng-include=" 'locations_renderer.html' "></li>
-			</ol>
+</div>
+<div class="tree">
+	<div ui-tree data-drag-enabled="false">
+		<ol ui-tree-nodes="" ng-model="vm.locations" class="tree-line" toggle-focus>
+			<li ng-repeat="item in vm.locations | filter:searchLocations" ui-tree-node ng-include=" 'location_renderer.html' "></li>
+		</ol>
+	</div>
+</div>
+<script type="text/ng-template" id="location_renderer.html">
+	<div class="tree-toggle-group">
+		<div class="toggle-handle" ng-class="{open: item.show}" ng-click="item.show = !item.show"><i ng-show="item.Children.length > 0" class="mdi mdi-chevron-right"></i></div>
+		<div ui-tree-handle ng-class="{selected: item.selected}" ng-click="vm.toggleLocationSelection(item)">
+			<span ng-bind="vm.getLocationDisplayText(item)"></span>
+			<span class="tree-line-right"><i class="mdi mdi-check"></i></span>
 		</div>
 	</div>
-
-
-	<div class="clearfix"></div>
-
-	<script type="text/ng-template" id="locations_renderer.html">
-		<div class="tree-toggle-group">
-			<div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-show="node.Children.length > 0" class="mdi mdi-chevron-right"></i></div>
-			<div ui-tree-handle ng-class="{selected: node.selected}" ng-click="vm.toggleLocationSelection(node)" ng-hide="checked">
-				{{vm.getLocationDisplayText(node)}}
-				<span><i class="mdi mdi-check"></i></span>
-			</div>
-		</div>
-
-		<ol ui-tree-nodes="" ng-model="node.Children" ng-show="node.show">
-			<li ng-repeat="node in node.Children | filter:searchLocations" ui-tree-node ng-include="'locations_renderer.html'">
-			</li>
-		</ol>
-	</script>
-</div>
+	<ol ui-tree-nodes="" ng-model="item.Children" ng-show="item.show">
+		<li ng-repeat="item in item.Children | filter:searchLocations" ui-tree-node ng-include=" 'location_renderer.html' "></li>
+	</ol>
+</script>

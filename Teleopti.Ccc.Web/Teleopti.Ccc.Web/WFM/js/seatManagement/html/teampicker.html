@@ -1,30 +1,27 @@
-﻿
-<label for="teamFilter" class="input-prepend">
-	<i class="mdi mdi-filter-outline">
-		<md-tooltip>{{ 'FilterTeams' | translate }}</md-tooltip>
-	</i>
-	<input type="text" id="teamFilter" name="filterTeams" placeholder="{{ 'FilterTeams' | translate }}" ng-model="searchTeams" />
-</label>
-
+﻿<div class="wfm-block">
+	<label for="teamFilterId" class="input-prepend">
+		<i class="mdi mdi-filter-outline">
+			<md-tooltip>{{ 'FilterTeams' | translate }}</md-tooltip>
+		</i>
+		<input type="text" ng-model="searchTeams" id="teamFilterId" placeholder="{{ 'FilterTeams' | translate }}" />
+	</label>
+</div>
 <div class="tree">
-	<div ui-tree data-drag-enabled=" false">
-		<ol ui-tree-nodes="" ng-model="vm.teams" id="tree-root-teams" class="tree-line" toggle-focus>
-			<li ng-repeat="node in vm.teams | filter:searchTeams" ui-tree-node ng-include="'teams_renderer.html'"></li>
+	<div ui-tree data-drag-enabled="false">
+		<ol ui-tree-nodes="" ng-model="vm.teams" class="tree-line" toggle-focus>
+			<li ng-repeat="item in vm.teams | filter:searchTeams" ui-tree-node ng-include=" 'team_renderer.html' "></li>
 		</ol>
 	</div>
 </div>
-
-<script type="text/ng-template" id="teams_renderer.html">
+<script type="text/ng-template" id="team_renderer.html">
 	<div class="tree-toggle-group">
-		<div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-show="node.Children.length > 0" class="mdi mdi-chevron-right"></i></div>
-		<div ui-tree-handle ng-class="{selected: node.selected}" ng-click="vm.toggleNodeSelection(node);" ng-hide="checked">
-			{{vm.getTeamDisplayText(node)}}
-			<span><i class="mdi mdi-check"></i></span>
+		<div class="toggle-handle" ng-class="{open: item.show}" ng-click="item.show = !item.show"><i ng-show="item.Children.length > 0" class="mdi mdi-chevron-right"></i></div>
+		<div ui-tree-handle ng-class="{selected: item.selected}" ng-click="vm.toggleNodeSelection(item);">
+			<span ng-bind="vm.getTeamDisplayText(item)"></span>
+			<span class="tree-line-right"><i class="mdi mdi-check"></i></span>
 		</div>
 	</div>
-
-	<ol ui-tree-nodes="" ng-model="node.Children" ng-show="node.show">
-		<li ng-repeat="node in node.Children | filter:searchTeams" ui-tree-node ng-include="'teams_renderer.html'">
-		</li>
+	<ol ui-tree-nodes="" ng-model="item.Children" ng-show="item.show">
+		<li ng-repeat="item in item.Children | filter:searchTeams" ui-tree-node ng-include=" 'team_renderer.html' "></li>
 	</ol>
 </script>

@@ -174,11 +174,10 @@
 		vm.printReport = function (event) {
 			var seatBookingReportParams = {
 				startDate: moment(vm.reportPeriod.StartDate).format('YYYY-MM-DD'),
-				endDate: moment(vm.reportPeriod.EndData).format('YYYY-MM-DD'),
+				endDate: moment(vm.reportPeriod.EndDate).format('YYYY-MM-DD'),
 				teams: vm.reportSelectedTeams,
 				locations: vm.reportSelectedLocations
 			};
-			
 			seatPlanService.seatBookingReport.get(seatBookingReportParams).$promise.then(function (data) {
 				vm.seatBookingsAll = data.SeatBookingsByDate;
 				angular.element(document).ready(function () {
