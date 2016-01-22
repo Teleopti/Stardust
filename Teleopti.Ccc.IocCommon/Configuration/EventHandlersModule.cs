@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
@@ -38,16 +40,30 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterAssemblyTypes(typeof (IHandleEvent<>).Assembly)
 				.Where(t =>
 				{
-					var matches = from i in t.GetInterfaces()
+					var handleInterfaces = (
+						from i in t.GetInterfaces()
 						let isHandler = i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IHandleEvent<>)
 						let isHandlerEnabled = t.TypeEnabledByToggle(_config)
 						where isHandler && isHandlerEnabled
-						select i;
-					return matches.Any();
+						select i
+						).ToArray();
+
+					var hasHandleInterfaces = handleInterfaces.Any();
+
+					if (hasHandleInterfaces)
+					{
+						var runOnHangfire = typeof (IRunOnHangfire).IsAssignableFrom(t);
+						var runOnServiceBus = typeof (IRunOnServiceBus).IsAssignableFrom(t);
+						if (!(runOnHangfire ^ runOnServiceBus))
+							throw new Exception(string.Format("All events handlers need to implement IRunOnHangfire or IRunOnServiceBus. {0} does not.", t.Name));
+					}
+
+					return hasHandleInterfaces;
 				})
 				.As(t =>
 				{
-					return from i in t.GetInterfaces()
+					return
+						from i in t.GetInterfaces()
 
 						let isHandler = i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IHandleEvent<>)
 						let eventType = isHandler ? i.GetMethods().Single().GetParameters().Single().ParameterType : null

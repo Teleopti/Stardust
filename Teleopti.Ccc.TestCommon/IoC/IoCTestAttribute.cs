@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.Licensing;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -37,6 +38,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		protected virtual FakeToggleManager Toggles()
 		{
 			var toggles = new FakeToggleManager();
+			if (QueryAllAttributes<AllTogglesOnAttribute>().Any())
+				toggles.EnableAll();
+			if (QueryAllAttributes<AllTogglesOffAttribute>().Any())
+				toggles.DisableAll();
 			QueryAllAttributes<ToggleAttribute>().ForEach(a => toggles.Enable(a.Toggle));
 			QueryAllAttributes<ToggleOffAttribute>().ForEach(a => toggles.Disable(a.Toggle));
 			return toggles;
@@ -153,7 +158,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		private void disposeContainer()
 		{
-			_container.Dispose();
+			if (_container != null)
+				_container.Dispose();
 			_container = null;
 		}
 

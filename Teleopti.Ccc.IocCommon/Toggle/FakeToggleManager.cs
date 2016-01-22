@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autofac;
-using Autofac.Core;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -34,6 +34,16 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 		public bool IsEnabled(Toggles toggle)
 		{
 			return _enabled.Any(e => e == toggle);
+		}
+
+		public void DisableAll()
+		{
+			_enabled.Clear();
+		}
+
+		public void EnableAll()
+		{
+			Enum.GetValues(typeof (Toggles)).Cast<Toggles>().ForEach(Enable);
 		}
 	}
 

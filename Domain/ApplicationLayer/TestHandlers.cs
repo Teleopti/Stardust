@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
@@ -7,6 +8,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 	[UseOnToggle(Toggles.TestToggle)]
 	public class HandlerUsedOnTestToggle : 
 		IHandleEvent<TestToggleEvent>,
+		IRunOnHangfire,
 		IRecreatable,
 		IInitializeble
 	{
@@ -32,6 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 	public class HandlerUsedOnTestToggle_WithMethodUsedOnTestToggle2 : 
 		IHandleEvent<TestToggleEvent>,
 		IHandleEvent<TestToggle2Event>,
+		IRunOnHangfire,
 		IRecreatable,
 		IInitializeble
 	{

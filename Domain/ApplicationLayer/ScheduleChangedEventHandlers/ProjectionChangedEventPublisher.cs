@@ -13,7 +13,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		IHandleEvent<ScheduleChangedEvent>, 
 		IHandleEvent<ScheduleInitializeTriggeredEventForScheduleProjection>,
 		IHandleEvent<ScheduleInitializeTriggeredEventForScheduleDay>,
-		IHandleEvent<ScheduleInitializeTriggeredEventForPersonScheduleDay>
+		IHandleEvent<ScheduleInitializeTriggeredEventForPersonScheduleDay>,
+		IRunOnServiceBus
 	{
 		private readonly IPublishEventsFromEventHandlers _publisher;
 	    private static readonly ILog Logger = LogManager.GetLogger(typeof (ProjectionChangedEventPublisher));

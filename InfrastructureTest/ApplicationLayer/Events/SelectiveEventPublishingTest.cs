@@ -114,6 +114,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		}
 
 		public class BusEventHandler :
+			IRunOnServiceBus,
 			IHandleEvent<EventWithBusHandler>,
 			IHandleEvent<EventWithBothHandlers>
 		{

@@ -12,7 +12,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		IHandleEvent<ActivityMovedEvent>,
 		IHandleEvent<PersonAbsenceModifiedEvent>,
 		IHandleEvent<DayOffAddedEvent>,
-		IHandleEvent<DayUnscheduledEvent>
+		IHandleEvent<DayUnscheduledEvent>,
+		IRunOnServiceBus
 	{
 		private readonly IPublishEventsFromEventHandlers _publisher;
 

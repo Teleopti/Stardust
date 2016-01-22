@@ -11,7 +11,9 @@ using Teleopti.Interfaces.Infrastructure.Analytics;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
 	[UseOnToggle(Toggles.ETL_SpeedUpETL_30791)]
-	public class AnalyticsScheduleChangeUpdater : IHandleEvent<ProjectionChangedEvent>
+	public class AnalyticsScheduleChangeUpdater : 
+		IHandleEvent<ProjectionChangedEvent>,
+		IRunOnServiceBus
 	{
 		private readonly static ILog Logger = LogManager.GetLogger(typeof(AnalyticsScheduleChangeUpdater));
 		private readonly IAnalyticsFactScheduleHandler _factScheduleHandler;

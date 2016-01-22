@@ -6,8 +6,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection
 {
-	public class ScheduleProjectionReadOnlyUpdater : IHandleEvent<ProjectionChangedEvent>, 
-		IHandleEvent<ProjectionChangedEventForScheduleProjection>
+	public class ScheduleProjectionReadOnlyUpdater : 
+		IHandleEvent<ProjectionChangedEvent>, 
+		IHandleEvent<ProjectionChangedEventForScheduleProjection>,
+		IRunOnServiceBus
 	{
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 	    private readonly IPublishEventsFromEventHandlers _serviceBus;

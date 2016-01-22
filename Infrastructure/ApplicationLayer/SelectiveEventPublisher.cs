@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				var allHandlers = _resolver.ResolveHandlersForEvent(@event).ToArray();
 
 				var hasHangfireHandlers = allHandlers.Any(x => x.GetType().IsAssignableTo<IRunOnHangfire>());
-				var hasBusHandlers = allHandlers.Any(x => !x.GetType().IsAssignableTo<IRunOnHangfire>());
+				var hasBusHandlers = allHandlers.Any(x => x.GetType().IsAssignableTo<IRunOnServiceBus>());
 
 				if (hasHangfireHandlers)
 					_hangfirePublisher.Publish(@event);

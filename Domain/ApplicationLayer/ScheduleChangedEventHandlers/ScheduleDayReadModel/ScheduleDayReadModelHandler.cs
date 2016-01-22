@@ -5,7 +5,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel
 {
-	public class ScheduleDayReadModelHandler : IHandleEvent<ProjectionChangedEvent>, IHandleEvent<ProjectionChangedEventForScheduleDay>
+	public class ScheduleDayReadModelHandler : 
+		IHandleEvent<ProjectionChangedEvent>, 
+		IHandleEvent<ProjectionChangedEventForScheduleDay>,
+		IRunOnServiceBus
 	{
 		private readonly IPersonRepository _personRepository;
 		private readonly INotificationValidationCheck _notificationValidationCheck;

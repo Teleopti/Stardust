@@ -1,12 +1,14 @@
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel
 {
-	public class ShiftExchangeOfferHandler : IHandleEvent<ProjectionChangedEvent>
+	public class ShiftExchangeOfferHandler : 
+		IHandleEvent<ProjectionChangedEvent>,
+		IRunOnServiceBus
 	{
 		private readonly IPersonRepository _personRepository;
 		private readonly IPersonRequestRepository _personRequestRepository;
@@ -34,8 +36,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 						{
 							offer.Status = ShiftExchangeOfferStatus.Invalid;
 
-							SendPushMessageService.CreateConversation(UserTexts.Resources.AnnouncementInvalid,
-							string.Format(UserTexts.Resources.AnnouncementInvalidMessage, offer.Date.ToShortDateString()), false)
+							SendPushMessageService.CreateConversation(Resources.AnnouncementInvalid,
+							string.Format(Resources.AnnouncementInvalidMessage, offer.Date.ToShortDateString()), false)
 							.To(new[] { person }).TranslateMessage().AddReplyOption("OK").SendConversation(_msgPersister);
 						}
 					}

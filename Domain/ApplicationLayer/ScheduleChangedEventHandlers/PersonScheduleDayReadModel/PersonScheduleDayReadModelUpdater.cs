@@ -10,7 +10,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 	public class PersonScheduleDayReadModelUpdater :
 		IHandleEvent<ProjectionChangedEvent>, 
 		IHandleEvent<ProjectionChangedEventForPersonScheduleDay>,
-		IHandleEvent<PersonTerminalDateChangedEvent>
+		IHandleEvent<PersonTerminalDateChangedEvent>,
+		IRunOnServiceBus
 	{
 		private readonly IPersonScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
 		private readonly IPersonScheduleDayReadModelPersister _scheduleDayReadModelRepository;

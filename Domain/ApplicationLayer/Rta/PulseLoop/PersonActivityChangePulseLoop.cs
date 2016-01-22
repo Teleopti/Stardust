@@ -9,7 +9,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop
 {
 	public class PersonActivityChangePulseLoop : 
 		IHandleEvent<PersonActivityChangePulseEvent>,
-		IHandleEvent<ScheduleProjectionReadOnlyChanged>
+		IHandleEvent<ScheduleProjectionReadOnlyChanged>,
+		IRunOnServiceBus
 	{
 		private readonly ISendDelayedMessages _serviceBus;
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;

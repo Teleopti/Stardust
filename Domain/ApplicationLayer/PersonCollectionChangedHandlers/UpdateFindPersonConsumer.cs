@@ -4,7 +4,9 @@ using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
-    public class UpdateFindPersonConsumer : IHandleEvent<PersonCollectionChangedEvent>
+    public class UpdateFindPersonConsumer : 
+		IHandleEvent<PersonCollectionChangedEvent>,
+		IRunOnServiceBus
 	{
 		private readonly IPersonFinderReadOnlyRepository _personFinderReadOnlyRepository;
 
@@ -19,7 +21,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		}
 	}
 
-	public class LegacyUpdateFindPersonConsumer : IHandleEvent<PersonChangedMessage>
+	public class LegacyUpdateFindPersonConsumer : 
+		IHandleEvent<PersonChangedMessage>,
+		IRunOnServiceBus
 	{
 		private readonly IEventPublisher _publisher;
 
