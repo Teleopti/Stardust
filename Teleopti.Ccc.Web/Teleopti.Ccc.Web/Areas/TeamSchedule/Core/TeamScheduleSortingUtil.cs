@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		{
 			var fullAbsenceBase = isFullAbsenceBeforeDayOff ? 5000 : 10000;
 			var dayOffBase = isFullAbsenceBeforeDayOff ? 10000 : 5000;
-			if (schedule == null || !schedule.IsScheduled())
+			if (schedule == null)
 			{
 				return 20000;
 			}

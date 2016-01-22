@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 																		DateTimePeriod period,
 																		IScenario scenario)
 		{
-			IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.LocalStartDateTime));
+			IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.StartDateTime));
 			IMultiplicatorDefinitionSet multiplicatorDefinitionSet =
 				MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("a", MultiplicatorType.Overtime);
 			ass.AddOvertimeActivity(activity, period, multiplicatorDefinitionSet);
