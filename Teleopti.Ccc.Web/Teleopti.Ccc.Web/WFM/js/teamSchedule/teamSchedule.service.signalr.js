@@ -32,6 +32,7 @@
 				}, timeout);
 			};
 
+			negotiatesFromCurrentLocation();
 			$.connection.hub.start()
 				.done(function () { hub.server.addSubscription(options); })
 				.fail(function () { });
@@ -40,6 +41,10 @@
 		function resetPendingMessages() {
 			pendingMessages = [];
 			messagesHandlingTimeout = null;
+		}
+
+		function negotiatesFromCurrentLocation() {
+			$.connection.hub.url = 'signalr';
 		}
 	};
 
