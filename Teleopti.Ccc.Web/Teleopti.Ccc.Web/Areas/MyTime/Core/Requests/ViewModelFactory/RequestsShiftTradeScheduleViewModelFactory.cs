@@ -54,27 +54,36 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			var myScheduleViewModel = _projectionProvider.MakeScheduleReadModel(_loggedOnUser.CurrentUser(), myScheduleDay, true);
 			var ret = new ShiftTradeScheduleViewModel();
 			ret.MySchedule = new ShiftTradeAddPersonScheduleViewModel(myScheduleViewModel);
-			var possibleTradedPersonList = _possibleShiftTradePersonsProvider.RetrievePersons(inputData).Persons.ToList();
+			if (myScheduleViewModel.IsFullDayAbsence)
+			{
+				ret.PossibleTradeSchedules = new List<ShiftTradeAddPersonScheduleViewModel>();
+				ret.PageCount = 1;
+			}
+			else
+			{
+				var possibleTradedPersonList = _possibleShiftTradePersonsProvider.RetrievePersons(inputData).Persons.ToList();
 
-			var possibleTradeSchedules = getScheduleForPersons(inputData.ShiftTradeDate, possibleTradedPersonList);
+				var possibleTradeSchedules = getScheduleForPersons(inputData.ShiftTradeDate, possibleTradedPersonList);
 
-			var possiblePersonSchedules = possibleTradedPersonList.Select(
-				p => new Tuple<IPerson, IScheduleDay>(p, possibleTradeSchedules.SingleOrDefault(s => s.Person.Id == p.Id)))
-				.Where(ps => !_projectionProvider.IsFullDayAbsence(ps.Item2));
+				var possiblePersonSchedules = possibleTradedPersonList.Select(
+					p => new Tuple<IPerson, IScheduleDay>(p, possibleTradeSchedules.SingleOrDefault(s => s.Person.Id == p.Id)))
+					.Where(ps => !_projectionProvider.IsFullDayAbsence(ps.Item2));
 
-			var allSortedPossibleSchedules = possiblePersonSchedules
-				.OrderBy(pair => TeamScheduleSortingUtil.GetSortedValue(pair.Item2, false, true))
-				.ThenBy(pair => pair.Item1.Name.LastName)
-				.Select(pair =>
-				{
-					var person = pair.Item1;
-					var schedule = pair.Item2;
-					return
-						new ShiftTradeAddPersonScheduleViewModel(_projectionProvider.MakeScheduleReadModel(person, schedule,
-							_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential)));
-				}).ToList();
-			ret.PageCount = (int)Math.Ceiling((double)allSortedPossibleSchedules.Count()/inputData.Paging.Take);
-			ret.PossibleTradeSchedules = allSortedPossibleSchedules.Skip(inputData.Paging.Skip).Take(inputData.Paging.Take);
+				var allSortedPossibleSchedules = possiblePersonSchedules
+					.OrderBy(pair => TeamScheduleSortingUtil.GetSortedValue(pair.Item2, false, true))
+					.ThenBy(pair => pair.Item1.Name.LastName)
+					.Select(pair =>
+					{
+						var person = pair.Item1;
+						var schedule = pair.Item2;
+						return
+							new ShiftTradeAddPersonScheduleViewModel(_projectionProvider.MakeScheduleReadModel(person, schedule,
+								_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential)));
+					}).ToList();
+				ret.PageCount = (int)Math.Ceiling((double)allSortedPossibleSchedules.Count() / inputData.Paging.Take);
+				ret.PossibleTradeSchedules = allSortedPossibleSchedules.Skip(inputData.Paging.Skip).Take(inputData.Paging.Take);
+			}
+			
 			ret.TimeLineHours = _shiftTradeTimeLineHoursViewModelMapper.Map(ret.MySchedule, ret.PossibleTradeSchedules,
 				inputData.ShiftTradeDate);
 		
