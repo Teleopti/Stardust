@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Rhino.Mocks.Constraints;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
@@ -273,6 +275,32 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var result = _target.Map(data);
 
 			result.PossibleTradeSchedules.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldMapNoPossibleSchedulesWhenMyScheduleIsFullDayAbsence()
+		{
+			var teamId = Guid.NewGuid();
+			var data = new ShiftTradeScheduleViewModelData
+			{
+				ShiftTradeDate = DateOnly.Today,
+				TeamIdList = new List<Guid>() { teamId },
+				Paging = new Paging { Take = 1 }
+			};
+			var readModel = new PersonScheduleDayReadModel();
+			var mySchedule = new ShiftTradeAddPersonScheduleViewModel{IsFullDayAbsence = true};
+			var scheduleReadModels = new List<IPersonScheduleDayReadModel>();
+			var teamMateSchedule = new ShiftTradeAddPersonScheduleViewModel();
+			var persons = new DatePersons { Date = data.ShiftTradeDate, Persons = new List<IPerson>{PersonFactory.CreatePerson("aa")} };
+
+			_shiftTradeRequestProvider.Stub(x => x.RetrieveMySchedule(DateOnly.Today)).Return(readModel);
+			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradeSchedules(DateOnly.Today, persons.Persons,data.Paging)).IgnoreArguments().Return(new List<IPersonScheduleDayReadModel>());
+			_possibleShiftTradePersonsProvider.Stub(x => x.RetrievePersons(data)).Return(persons);
+			_shiftTradePersonScheduleViewModelMapper.Stub(x => x.Map(readModel, true)).Return(mySchedule);
+			_shiftTradePersonScheduleViewModelMapper.Stub(x => x.Map(scheduleReadModels)).Return(new List<ShiftTradeAddPersonScheduleViewModel>(){teamMateSchedule});
+
+			var result = _target.Map(data);
+			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(0);
 		}
 		
 	}

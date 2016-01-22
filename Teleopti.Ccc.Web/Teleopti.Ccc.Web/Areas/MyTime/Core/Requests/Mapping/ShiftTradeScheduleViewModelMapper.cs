@@ -152,12 +152,33 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private ShiftTradeScheduleViewModel getShiftTradeScheduleViewModel(Paging paging, DateOnly shiftTradeDate,
 			TimeFilterInfo timeFilter,string timeSortOrder, DatePersons possibleTradePersons)
 		{
+			var ret = new ShiftTradeScheduleViewModel();
 			var myScheduleDayReadModel = _shiftTradeRequestProvider.RetrieveMySchedule(shiftTradeDate);
-			var possibleTradeSchedule = timeFilter == null
+			var mySchedule = _shiftTradePersonScheduleViewModelMapper.Map(myScheduleDayReadModel, true);
+			ret.MySchedule = mySchedule;
+			var possibleTradeSchedule = new List<ShiftTradeAddPersonScheduleViewModel>();
+			if (mySchedule == null ||!mySchedule.IsFullDayAbsence)
+			{
+				possibleTradeSchedule = timeFilter == null
 				? getPossibleTradeSchedules(possibleTradePersons, paging, timeSortOrder).ToList()
 				: getFilteredTimesPossibleTradeSchedules(possibleTradePersons, paging, timeFilter, timeSortOrder).ToList();
+			}
+			
+			var possibleTradeScheduleNum = possibleTradeSchedule.Any()
+				? possibleTradeSchedule.First().Total
+				: 0;
+			var pageCount = possibleTradeScheduleNum % paging.Take != 0
+				? possibleTradeScheduleNum / paging.Take + 1
+				: possibleTradeScheduleNum / paging.Take;
 
-			return getShiftTradeScheduleViewModel(paging, myScheduleDayReadModel, possibleTradeSchedule, shiftTradeDate);
+			var timeLineHours = _shiftTradeTimeLineHoursViewModelMapper.Map(mySchedule, possibleTradeSchedule,
+				shiftTradeDate);
+
+			ret.PageCount = pageCount;
+			ret.PossibleTradeSchedules = possibleTradeSchedule;
+			ret.TimeLineHours = timeLineHours;
+
+			return ret;
 		}
 
 		private IEnumerable<ShiftTradeAddPersonScheduleViewModel> getBulletinSchedules(IEnumerable<IShiftExchangeOffer> offers , Paging paging)
