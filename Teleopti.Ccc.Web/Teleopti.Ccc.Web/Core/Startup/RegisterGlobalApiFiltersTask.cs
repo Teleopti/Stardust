@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				c.Formatters.JsonFormatter.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Unspecified;
 				c.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new DateOnlyConverter());
 			});
+			_globalConfiguration.Configure(c => c.MessageHandlers.Add(new CancelledTaskBugWorkaroundMessageHandler()));
 			return Task.FromResult(false);
 		}
 	}

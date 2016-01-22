@@ -3,24 +3,24 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
-using System.Web.Hosting;
 using System.Web.Http;
 using System.Web.Mvc;
 using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.Wcf;
 using Autofac.Integration.WebApi;
-using Contrib.SignalR.SignalRMessageBus;
 using log4net;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.IdentityModel.Protocols.WSFederation;
 using Microsoft.IdentityModel.Web;
-using Microsoft.Owin;
 using Owin;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
@@ -120,6 +120,22 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				HttpContext.Current.Response.Redirect(returnUrl, false);
 				HttpContext.Current.ApplicationInstance.CompleteRequest();
 			}
+		}
+	}
+
+	public class CancelledTaskBugWorkaroundMessageHandler : DelegatingHandler
+	{
+		protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+		{
+			HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
+
+			// Try to suppress response content when the cancellation token has fired; ASP.NET will log to the Application event log if there's content in this case.
+			if (cancellationToken.IsCancellationRequested)
+			{
+				return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+			}
+
+			return response;
 		}
 	}
 }
