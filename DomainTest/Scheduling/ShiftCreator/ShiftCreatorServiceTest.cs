@@ -29,19 +29,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         }
 
         [Test]
-        public void VerifyConstructorForTest()
-        {
-            Assert.AreSame(buildFromOneTemplate, target.WorkShiftGenerator);
-        }
-
-        [Test]
-        public void VerifyDefaultConstructor()
-        {
-			  target = new ShiftCreatorService(new CreateWorkShiftsFromTemplate());
-            Assert.IsInstanceOf<CreateWorkShiftsFromTemplate>(target.WorkShiftGenerator);
-        }
-
-        [Test]
         public void VerifyGenerate()
         {
             IWorkShiftRuleSet ruleSet = mocks.StrictMock<IWorkShiftRuleSet>();
