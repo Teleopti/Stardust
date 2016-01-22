@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I update planning period to two week")]
 		public void WhenIUpdatePlanningPeriodToWeek()
 		{
-			Browser.Interactions.ClickContaining(".wfm-radio-label", "2 Week");
+			Browser.Interactions.ClickContaining(".wfm-radio-label", "2 ");
 		}
 
 		[Given(@"GroupingReadModel is updated")]

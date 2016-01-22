@@ -1,4 +1,3 @@
-
 <div ui-view>
 	<div ng-show="scheduleClicked && !schedulingPerformed" class="test-schedule-is-running">
 		<md-progress-linear md-mode="indeterminate"></md-progress-linear>
@@ -18,7 +17,7 @@
 			<div class="alert-warning notice-spacer server-busy" ng-if="isScheduleRunning"><i class='mdi mdi-alert'></i>
 				<span translate>ScheduleIsRunning</span>
 			</div>
-			<div ng-if="planningPeriod.State != 'New'" class="text-info schedule-warning" >
+			<div ng-if="planningPeriod.State != 'New'" class="text-info schedule-warning">
 				{{'PlanningPeriodIsScheduled' | translate }}
 			</div>
 			<!-- don't remove non css class test-schedule-is-running - used to assert in test -->
@@ -41,7 +40,10 @@
 						<input type="radio" name="changeRangeGroup" id="{{op.PeriodType}}-{{op.Number}}-{{$index}}" ng-click="rangeUpdated(planningPeriod.Id, op)" />
 						<label for="{{op.PeriodType}}-{{op.Number}}-{{$index}}">
 							<span class="wfm-radio-toggle"></span>
-							<span class="wfm-radio-label new-planning-period"> {{op.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{op.EndDate | amDateFormat:"L"}} {{'HavingRangeOf' | translate}} {{op.Number}} {{op.PeriodType}}</span>
+							<span class="wfm-radio-label new-planning-period"> {{op.StartDate | amDateFormat:"L"}}
+								 {{'ToText' | translate}}
+								 {{op.EndDate | amDateFormat:"L"}} {{'HavingRangeOf' | translate}}
+								  {{op.Number}} {{op.PeriodType}}</span>
 						</label>
 					</div>
 				</div>
@@ -52,8 +54,9 @@
 	<div ng-show="planningPeriod.Skills.length>0 && planningPeriod.State == 'New'">
 		{{'PlanningPeriodMissingMessage' | translate}}
 		<p class="text-warning">
-			{{'MissingSkills' | translate }}:
-			<button class="wfm-btn wfm-btn-default" ng-click="showErrors=!showErrors">show<md-tooltip>Show all errors</md-tooltip></button>
+			<button class="wfm-btn wfm-btn-default" ng-click="showErrors=!showErrors">show
+				<md-tooltip>Show all errors</md-tooltip>
+			</button>
 		</p>
 	</div>
 
@@ -116,7 +119,7 @@
 						<div class="con-flex" ng-show="!node.Default">{{'AppliedFilters'|translate}}
 							<span class="appliedFilters con-row" ng-repeat="filter in node.Filters">
 								<span class="filter-handle">{{filter.FilterType}}</span>
-								<span class="filter-chip" >{{filter.Name}}</span>
+							<span class="filter-chip">{{filter.Name}}</span>
 							</span>
 							<span class="moreExists" ng-show="node.Filters.length>5">{{'ThreeDots' | translate}}</span>
 						</div>
