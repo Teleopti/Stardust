@@ -10,6 +10,24 @@
 			margin-top:5px;
 		}
 	}
+	.row{
+		width:100%;
+	}
+	.row:before{
+		display: table;
+		content: " ";
+	}
+
+	.row:after{
+		display: table;
+		content: " ";
+	}
+
+	.row-6{
+		width:50%;
+		float:left;
+		padding-right:15px;
+	}
 
 	.outbound-summary{
 		background:$white;

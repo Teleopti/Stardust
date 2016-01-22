@@ -17,20 +17,18 @@
         $scope.backToList = backToList;
 
         function addCampaign() {
-            if (!$scope.isInputValid()) {
-                $scope.flashErrorIcons();
-                return;
-            }
+	        console.log('$scope.isInputValid()', $scope.isInputValid());
+	        if (!$scope.isInputValid()) return;
 
             $scope.isCreating = true;
-
-            outboundService.addCampaign($scope.campaign, function (campaign) {
-                outboundNotificationService.notifyCampaignCreationSuccess(angular.copy(campaign));
-                init();
-                if (!$scope.preventAutomaticRedirect) show(campaign);
-            }, function (error) {
-                outboundNotificationService.notifyCampaignCreationFailure(error);
-            });
+	        console.log('addCampaign success');
+	        //outboundService.addCampaign($scope.campaign, function (campaign) {
+	        //    outboundNotificationService.notifyCampaignCreationSuccess(angular.copy(campaign));
+	        //    init();
+	        //    if (!$scope.preventAutomaticRedirect) show(campaign);
+	        //}, function (error) {
+	        //    outboundNotificationService.notifyCampaignCreationFailure(error);
+	        //});
         }
 
         function init() {
@@ -40,13 +38,9 @@
                 EndDate: new Date(),
                 WorkingHours: []
             };
-
-            $scope.isCreating = false;	        
-
-            viewUtilityService.expandAllSections($scope);
-            viewUtilityService.registerCampaignForms($scope);
-            viewUtilityService.registerPersonHourFeedback($scope, outboundService);
-            viewUtilityService.setupValidators($scope);
+	        $scope.isCreating = false;
+	        viewUtilityService.setupValidators($scope);
+	        viewUtilityService.registerPersonHourFeedback($scope, outboundService);
         }
 
         function show(campaign) {

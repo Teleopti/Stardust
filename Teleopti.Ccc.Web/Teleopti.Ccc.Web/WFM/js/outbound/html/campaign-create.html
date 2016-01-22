@@ -13,188 +13,124 @@
 	</div>
 </div>
 
-<div class="campaign-create material-depth-1">
-	<div class="wfm-block">
-
-		<div class="panel">
-			<div class="sub-header" ng-click="acToggle0 = !acToggle0">
-				<h2 translate>Campaign</h2>
-				<span><strong>{{campaign.Name}}</strong></span>
+<div class="panel material-depth-1">
+	<form name="form" class="wfm-form">
+		<div class="con-row">
+			<div class="con-flex">
+				<dl>
+					<dd>
+						<h2 translate>Campaign</h2>
+						<div class="form-input-wrap">
+							<label for="name">
+								<span translate>Name</span>:
+								<input type="text" ng-model="campaign.Name" name="Name" required="" id="name" ng-minlength="1" ng-maxlength="50" ng-disabled="isCreating"/>
+							</label>
+							<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Name.$touched">
+								<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">{{ 'YouCannotHaveABlankName' | translate }}</div>
+								<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.maxlength}">{{'NameCantBeMoreThan'|translate}}</div>
+							</div>
+						</div>
+						<div class="form-input-wrap">
+							<label>
+								<span translate>Activity</span>:
+								<activity-picker ng-model="campaign.Activity" name="Activity" sync-name="{{campaign.Name}}" class="custom-input"></activity-picker>
+							</label>
+						</div>
+						<h2 translate>Workload</h2>
+						<div class="row">
+							<div class="row-6">
+								<div class="form-input-wrap">
+									<label for="callList">
+										<span translate>CallListLength</span>:
+										<input type="number" ng-model="campaign.CallListLen" placeholder="{{ 'LargeValueRange' | translate }}" name="CallListLen" required="" id="callList" min="0" max="1000000" ng-disabled="isCreating"/>
+									</label>
+									<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.CallListLen.$touched">
+										<div class="form-input-message" ng-class="{formInvalidInput:form.CallListLen.$error.required}">{{ 'Required' | translate }}</div>
+									</div>
+								</div>
+								<div class="form-input-wrap">
+									<label for="targetRate">
+										<span translate>TargetRate</span>:
+										<input type="number" ng-model="campaign.TargetRate" placeholder="{{ 'RateRange' | translate }}" name="TargetRate" required="" id="targetRate" min="1" max="100" ng-disabled="isCreating"/>
+									</label>
+									<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.TargetRate.$touched">
+										<div class="form-input-message" ng-class="{formInvalidInput:form.TargetRate.$error.required}">{{ 'Required' | translate }}</div>
+									</div>
+								</div>
+								<div class="form-input-wrap">
+									<label for="connectRate">
+										<span translate>ConnectRate</span>:
+										<input type="number" ng-model="campaign.ConnectRate" placeholder="{{ 'RateRange' | translate }}" name="ConnectRate" required="" id="connectRate" min="1" max="100" ng-disabled="isCreating"/>
+									</label>
+									<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.ConnectRate.$touched">
+										<div class="form-input-message" ng-class="{formInvalidInput:form.ConnectRate.$error.required}">{{ 'Required' | translate }}</div>
+									</div>
+								</div>
+								<div class="form-input-wrap">
+									<label for="RPCR">
+										<span translate>RPCR</span>:
+										<input type="number" ng-model="campaign.RightPartyConnectRate" placeholder="{{ 'RateRange' | translate }}" name="RightPartyConnectRate" required="" id="RPCR" min="1" max="100" ng-disabled="isCreating"/>
+									</label>
+									<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.RightPartyConnectRate.$touched">
+										<div class="form-input-message" ng-class="{formInvalidInput:form.RightPartyConnectRate.$error.required}">{{ 'Required' | translate }}</div>
+									</div>
+								</div>
+							</div>
+							<div class="row-6">
+								<div class="form-input-wrap">
+									<label for="cAHT">
+										<span translate>ConnectAHT</span>:
+										<input type="number" ng-model="campaign.ConnectAverageHandlingTime" placeholder="{{ 'ValueRange' | translate }}" name="ConnectAverageHandlingTime" required="" id="cAHT" min="0" max="9999" ng-disabled="isCreating"/>
+									</label>
+									<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.ConnectAverageHandlingTime.$touched">
+										<div class="form-input-message" ng-class="{formInvalidInput:form.ConnectAverageHandlingTime.$error.required}">{{ 'Required' | translate }}</div>
+									</div>
+								</div>
+								<div class="form-input-wrap">
+									<label for="rpcAHT">
+										<span translate>RPCAHT</span>:
+										<input type="number" ng-model="campaign.RightPartyAverageHandlingTime" placeholder="{{ 'ValueRange' | translate }}" name="RightPartyAverageHandlingTime" required="" id="rpcAHT" min="0" max="9999" ng-disabled="isCreating"/>
+									</label>
+									<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.RightPartyAverageHandlingTime.$touched">
+										<div class="form-input-message" ng-class="{formInvalidInput:form.RightPartyAverageHandlingTime.$error.required}">{{ 'Required' | translate }}</div>
+									</div>
+								</div>
+								<div class="form-input-wrap">
+									<label for="unproductive">
+										<span translate>UnproductiveTime</span>:
+										<input type="number" ng-model="campaign.UnproductiveTime" placeholder="{{ 'ValueRange' | translate }}" name="UnproductiveTime" required="" id="unproductive" min="0" max="9999" ng-disabled="isCreating"/>
+									</label>
+									<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.UnproductiveTime.$touched">
+										<div class="form-input-message" ng-class="{formInvalidInput:form.UnproductiveTime.$error.required}">{{ 'Required' | translate }}</div>
+									</div>
+								</div>
+								<div class="form-input-wrap">
+									<label><strong translate>NeededPersonHours</strong></label>:
+									<strong style="display: block;">{{estimatedWorkload | showTimespan }}</strong>
+								</div>
+							</div>
+						</div>
+					</dd>
+				</dl>
 			</div>
-			<div class="con-row">
-				<div class="con-flex">
-					<form name="campaignGeneralForm" class="form-horizontal wfm-block input-group" form-locator ng-show="acToggle0">
-						<div layout="row">
-							<div class="row-title"><span translate>Name</span></div>
-							<div flex class="icon-set-fix">
-								<input id="name" type="text" ng-model="campaign.Name" placeholder="{{ 'NewCampaignName' | translate }}" ng-minlength="1" ng-maxlength="50" required ng-disabled="isCreating" />
-								<div class="icon-set  input-validation-sign" expandable>
-									<i class="mdi mdi-check right-sign"></i>
-									<i class="mdi mdi-close wrong-sign"></i>
-								</div>
-							</div>
+			<div class="con-flex split-3-1">
+				<dl>
+					<dd>
+						<h2 translate>OpenHours</h2>
+						<div class="form-input-wrap">
+							<working-hours-picker class="working-hours-picker" working-hours="campaign.WorkingHours" ng-disabled="isCreating"></working-hours-picker>
 						</div>
-						<div layout="row" class="activity-picker">
-							<div class="row-title"><span translate>Activity</span></div>
-							<div flex class="icon-set-fix">
-								<activity-picker ng-model="campaign.Activity" sync-name="{{campaign.Name}}" class="custom-input"></activity-picker>
-								<div class="icon-set  input-validation-sign" expandable>
-									<span></span>
-									<i class="mdi mdi-check right-sign"></i>
-									<i class="mdi mdi-close wrong-sign"></i>
-								</div>
-							</div>
+						<h2 translate>Duration</h2>
+						<div class="form-input-wrap">
+							<date-range-picker start-date="campaign.StartDate" end-date="campaign.EndDate" errors="campaign.spanningPeriodErrors"></date-range-picker>
 						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-
-		<div class="panel">
-			<div class="sub-header" ng-click="acToggle1 = !acToggle1">
-				<h2 translate>Workload</h2>
-			</div>
-			<div class="con-row">
-				<div class="con-flex">
-					<form name="campaignWorkloadForm" class="form-horizontal wfm-block input-group" form-locator ng-show="acToggle1">
-						<div layout="row">
-							<div class="row-title">
-								<span translate>CallListLength</span>
-							</div>
-							<div flex class="icon-set-fix ">
-								<input id="callList" type="text" ng-model="campaign.CallListLen" placeholder="{{ 'LargeValueRange' | translate }}" numeric-value min="0" max="1000000" required ng-disabled="isCreating" />
-								<div class="icon-set  input-validation-sign" expandable>
-									<i class="mdi mdi-check right-sign"></i>
-									<i class="mdi mdi-close wrong-sign"></i>
-								</div>
-							</div>
-						</div>
-						<div layout="row">
-							<div class="row-title">
-								<span translate>TargetRate</span>
-							</div>
-							<div flex class="icon-set-fix">
-								<input id="callList" type="text" ng-model="campaign.TargetRate" placeholder="{{ 'RateRange' | translate }}" numeric-value max="100" min="1" required ng-disabled="isCreating" />
-								<div class="icon-set  input-validation-sign" expandable>
-									<i class="mdi mdi-check right-sign"></i>
-									<i class="mdi mdi-close wrong-sign"></i>
-								</div>
-							</div>
-						</div>
-						<div layout="row">
-							<div class="row-title">
-								<span translate>ConnectRate</span>
-							</div>
-							<div flex class="icon-set-fix">
-								<input id="cr" type="text" ng-model="campaign.ConnectRate" placeholder="{{ 'RateRange' | translate }}" numeric-value max="100" min="1" required ng-disabled="isCreating" />
-								<div class="icon-set  input-validation-sign" expandable>
-									<i class="mdi mdi-check right-sign"></i>
-									<i class="mdi mdi-close wrong-sign"></i>
-								</div>
-							</div>
-						</div>
-						<div layout="row">
-							<div class="row-title">
-								<span translate>RPCR</span>
-							</div>
-							<div flex class="icon-set-fix">
-								<input id="target" type="text" ng-model="campaign.RightPartyConnectRate" placeholder="{{ 'RateRange' | translate }}" numeric-value max="100" min="1" required ng-disabled="isCreating" />
-								<div class="icon-set  input-validation-sign" expandable>
-									<i class="mdi mdi-check right-sign"></i>
-									<i class="mdi mdi-close wrong-sign"></i>
-								</div>
-							</div>
-						</div>
-						<div layout="row">
-							<div class="row-title">
-								<span translate>ConnectAHT</span>
-							</div>
-							<div flex class="icon-set-fix">
-								<input id="cAHT" type="text" ng-model="campaign.ConnectAverageHandlingTime" placeholder="{{ 'ValueRange' | translate }}" numeric-value min="0" max="9999" required ng-disabled="isCreating" />
-								<div class="icon-set  input-validation-sign" expandable>
-									<i class="mdi mdi-check right-sign"></i>
-									<i class="mdi mdi-close wrong-sign"></i>
-								</div>
-							</div>
-						</div>
-						<div layout="row">
-							<div class="row-title">
-								<span translate>RPCAHT</span>
-							</div>
-							<div flex class="icon-set-fix">
-								<input id="rpcAHT" type="text" ng-model="campaign.RightPartyAverageHandlingTime" placeholder="{{ 'ValueRange' | translate }}" numeric-value min="0" max="9999" required ng-disabled="isCreating" />
-								<div class="icon-set  input-validation-sign" expandable>
-									<i class="mdi mdi-check right-sign"></i>
-									<i class="mdi mdi-close wrong-sign"></i>
-								</div>
-							</div>
-						</div>
-						<div layout="row">
-							<div class="row-title">
-								<span translate>UnproductiveTime</span>
-							</div>
-							<div flex class="icon-set-fix">
-								<input id="unproductive" type="text" ng-model="campaign.UnproductiveTime" placeholder="{{ 'ValueRange' | translate }}" numeric-value min="0" max="9999" required ng-disabled="isCreating" />
-								<div class="icon-set  input-validation-sign" expandable>
-									<i class="mdi mdi-check right-sign"></i>
-									<i class="mdi mdi-close wrong-sign"></i>
-								</div>
-							</div>
-						</div>
-						<br />
-						<div layout="row">
-							<div class="row-title">
-								<strong translate>NeededPersonHours</strong>
-							</div>
-							<div flex class="icon-set-fix">
-								<strong>{{estimatedWorkload | showTimespan }}</strong>
-							</div>
-
-						</div>
-
-					</form>
-				</div>
+					</dd>
+				</dl>
 			</div>
 		</div>
-
-		<div class="panel">
-			<div class="sub-header" ng-click="acToggle2 = !acToggle2">
-				<h2 translate>Duration </h2>
-				<span ng-show="!acToggle2"> <span translate>DateFrom </span><strong>{{campaign.StartDate | amDateFormat: 'LL' }}</strong> <span translate>DateTo</span> <strong>{{campaign.EndDate | amDateFormat: 'LL' }}</strong></span>
-			</div>
-			<div class="con-row">
-				<div class="con-flex">
-					<form name="campaignSpanningPeriodForm" class="form-horizontal wfm-block input-group" form-locator ng-show="acToggle2">
-						<date-range-picker start-date="campaign.StartDate" end-date="campaign.EndDate" errors="campaign.spanningPeriodErrors"></date-range-picker>
-					</form>
-				</div>
-			</div>
+		<div class="con-footer">
+			<button type="submit" class="wfm-btn wfm-btn-invis-primary" ng-click="addCampaign()" ng-class1="{'wfm-btn-primary-disabled': !isInputValid(), 'wfm-btn-primary':isInputValid()}" ng-disabled1="isCreating"><span translate>Save</span></button>
 		</div>
 
-		<div class="panel">
-			<div class="sub-header" ng-click="acToggle3 = !acToggle3">
-				<h2 translate>OpenHours</h2>
-			</div>
-			<div class="con-row">
-				<div class="con-flex">
-					<div ng-show="acToggle3">
-						<div class="in-place-container">
-							<div class="in-place-element">
-								<input type="text" ng-class="validWorkingHours()?'custom-valid':'custom-invalid'" ng-show="false"/>
-								<div class="icon-set  input-validation-sign" expandable>
-									<i class="mdi mdi-check right-sign"></i>
-									<i class="mdi mdi-close wrong-sign"></i>
-								</div>
-							</div>
-						</div>
-						<working-hours-picker class="working-hours-picker" working-hours="campaign.WorkingHours" ng-disabled="isCreating"></working-hours-picker>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div layout="row" layout-align="center">
-		<button class="wfm-btn material-depth-1 form-submit" ng-click="addCampaign()" ng-class="{'wfm-btn-primary-disabled': !isInputValid(), 'wfm-btn-primary':isInputValid()}" ng-disabled="isCreating"><span translate>Save</span></button>
-	</div>
+	</form>
 </div>
