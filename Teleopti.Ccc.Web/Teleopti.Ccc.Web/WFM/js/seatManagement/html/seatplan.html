@@ -15,7 +15,7 @@
 	</div>
 
 	<div class="fab-wrapper" ng-if="!seatplan.isReportOpened && !seatplan.isSeatMapBookingViewOpened">
-		<button class="wfm-fab  material-depth-1" ng-click="seatplan.showReport({StartDate:seatplan.selectedDate,EndDate:seatplan.selectedDate},[],[])">
+		<button class="wfm-fab  material-depth-1 seatplan-report-btn" ng-click="seatplan.showReport({StartDate:seatplan.selectedDate,EndDate:seatplan.selectedDate},[],[])">
 			<i class="mdi mdi-file-document"></i>
 			<md-tooltip>{{'GenerateReport' | translate}}</md-tooltip>
 		</button>

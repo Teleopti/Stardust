@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 		[When(@"I click SeatPlanReport button")]
 		public void WhenIClickSeatPlanReportButton()
 		{
-			Browser.Interactions.Click(".planning-day-detail button");
+			Browser.Interactions.Click(".view-header .seatplan-report-btn");
 		}
 
 		[Then(@"I should be able to view the report content")]
