@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 		public AspectedType Target;
 		private static IList<string> startResult;
 		private static IList<string> endResult;
-			
+		
 		[Test]
 		public void ShouldRunBeforeMethodBasedOnAttributeOrder()
 		{
