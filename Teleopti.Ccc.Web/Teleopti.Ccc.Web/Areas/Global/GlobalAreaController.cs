@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 			_toggleManager = toggleManager;
 		}
 
-		[UnitOfWork, HttpGet, Route("Global/Application/Areas")]
+		[HttpGet, Route("Global/Application/Areas")]
 		public IEnumerable<object> GetApplicationAreas()
 		{
 			return _toggleManager.IsEnabled(Toggles.MyTimeWeb_KeepUrlAfterLogon_34762)
