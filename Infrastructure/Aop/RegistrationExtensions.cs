@@ -1,11 +1,6 @@
-using System;
-using System.Linq;
-using System.Reflection;
 using Autofac.Builder;
 using Autofac.Extras.DynamicProxy2;
 using Autofac.Features.Scanning;
-using Castle.DynamicProxy;
-using Teleopti.Ccc.Domain.Aop.Core;
 
 namespace Teleopti.Ccc.Infrastructure.Aop
 {
@@ -16,10 +11,9 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 			this IRegistrationBuilder<TLimit, ScanningActivatorData, TRegistrationStyle> registration)
 		{
 			return registration
-				.OnActivating(e => validateAspectedType(ProxyUtil.GetUnproxiedType(e.Instance)))
 				.EnableClassInterceptors()
 				.ApplyFix()
-				.InterceptedBy(typeof (AspectInterceptor))
+				.InterceptedBy(typeof(AspectInterceptor))
 				;
 		}
 
@@ -28,36 +22,11 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 			this IRegistrationBuilder<TLimit, TConcreteReflectionActivatorData, TRegistrationStyle> registration)
 			where TConcreteReflectionActivatorData : ConcreteReflectionActivatorData
 		{
-			validateAspectedType(registration.ActivatorData.ImplementationType);
 			return registration
 				.EnableClassInterceptors()
 				.ApplyFix()
 				.InterceptedBy(typeof(AspectInterceptor))
 				;
-		}
-
-		private static void validateAspectedType(Type type)
-		{
-			var methods = type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-
-			var invalidMethods =
-				from m in methods
-				let hasAspect = m.GetCustomAttributes<AspectAttribute>().Any()
-				let isVirtual = m.IsVirtual
-				where hasAspect && !isVirtual
-				select m;
-
-			var invalidSample = invalidMethods.FirstOrDefault();
-			if (invalidSample != null)
-				throw new AspectApplicationException(string.Format("Aspected methods needs to be virtual. {0} is not.", invalidSample.Name));
-		}
-
-	}
-
-	public class AspectApplicationException : Exception
-	{
-		public AspectApplicationException(string message) : base(message)
-		{
 		}
 	}
 }
