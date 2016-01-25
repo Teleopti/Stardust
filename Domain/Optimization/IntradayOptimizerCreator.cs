@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -9,7 +7,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling
+namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class IntradayOptimizer2Creator : IIntradayOptimizer2Creator
 	{
