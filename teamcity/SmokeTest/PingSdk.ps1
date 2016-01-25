@@ -28,7 +28,7 @@ while ($count -lt 30) {
     $output = $webClient.DownloadString($sdkUrl)
     $endTime = get-date
 
-    if ($output -like "*TeleoptiWFM/SDK/TeleoptiCccSdkService.svc?singleWsdl*") {
+    if ($output -like "*/SDK/TeleoptiCccSdkService.svc?singleWsdl*") {
         "Success to ping SDK`t`t" + $startTime.DateTime + "`t`t" + ($endTime - $startTime).TotalSeconds + " seconds"	
         $isSuccess = $true;	  
 	    break;
