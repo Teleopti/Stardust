@@ -807,6 +807,40 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             }
         }
 
+		[Test]
+        public void ShouldKeepOverrideValueAfterAppliedTemplate()
+        {
+			var createDate = new DateOnly(2008, 01, 14);
+			var templateName = "<JULDAGEN>";
+			var workloadDayTemplate = new WorkloadDayTemplate();
+
+			IList<TimePeriod> openHours = new List<TimePeriod>();
+			openHours.Add(new TimePeriod(new TimeSpan(7, 0, 0), new TimeSpan(11, 0, 0)));
+			workloadDayTemplate.Create(templateName, DateTime.SpecifyKind(createDate.Date, DateTimeKind.Utc), _workload, openHours);
+			foreach (ITemplateTaskPeriod taskPeriod in workloadDayTemplate.SortedTaskPeriodList)
+			{
+				taskPeriod.AverageTaskTime = new TimeSpan(0, 1, 0);
+				taskPeriod.Tasks = 1;
+			}
+
+			var workloadDay = new WorkloadDay();
+			workloadDay.Create(createDate, _workload, openHours);
+
+			workloadDay.Tasks = 1;
+			workloadDay.AverageTaskTime = new TimeSpan(0, 0, 2, 0);
+			workloadDay.AverageAfterTaskTime = new TimeSpan(0, 0, 3, 0);
+			
+	        workloadDay.OverrideAverageTaskTime = new TimeSpan(0,0,5,0);
+	        workloadDay.OverrideAverageAfterTaskTime = new TimeSpan(0,0,9,0);
+	        workloadDay.SetOverrideTasks(4, null);
+			//Apply the template
+			workloadDay.ApplyTemplate(workloadDayTemplate, day => day.Lock(), day => day.Release());
+
+			Assert.AreEqual(4, workloadDay.TotalTasks);
+			Assert.AreEqual(new TimeSpan(0, 0, 5, 0), workloadDay.TotalAverageTaskTime);
+			Assert.AreEqual(new TimeSpan(0, 0, 9, 0), workloadDay.TotalAverageAfterTaskTime);
+        }
+
         [Test]
         public void VerifyCanApplyTemplateAndDayAverageHandlingTimeNotTouched()
         {

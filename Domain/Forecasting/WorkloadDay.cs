@@ -166,6 +166,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
             Percent campaignTasks = CampaignTasks;
             Percent campaignAfterTasksTime = CampaignAfterTaskTime;
             Percent campaignTasksTime = CampaignTaskTime;
+			var overrideTasks = OverrideTasks;
+			var overrideAverageTaskTime = OverrideAverageTaskTime;
+			var overrideAverageAfterTaskTime = OverrideAverageAfterTaskTime;
             TimeSpan originalAverageTaskTime = AverageTaskTime;
             TimeSpan originalAfterTaskTime = AverageAfterTaskTime;
             double tasksSum = 0.0;
@@ -230,7 +233,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
             {
                 CampaignTasks = campaignTasks;
                 CampaignTaskTime = campaignTasksTime;
-                CampaignAfterTaskTime = campaignAfterTasksTime;
+				CampaignAfterTaskTime = campaignAfterTasksTime;
+				SetOverrideTasks(overrideTasks, null);
+				OverrideAverageTaskTime = overrideAverageTaskTime;
+				OverrideAverageAfterTaskTime = overrideAverageAfterTaskTime;
 
                 if (tasks == 0 && originalAfterTaskTime.TotalSeconds == 0 && originalAverageTaskTime.TotalSeconds == 0)
                 {
@@ -264,7 +270,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 lockAction(this);
                 CampaignTasks = campaignTasks;
                 CampaignTaskTime = campaignTasksTime;
-                CampaignAfterTaskTime = campaignAfterTasksTime;
+				CampaignAfterTaskTime = campaignAfterTasksTime;
+				SetOverrideTasks(overrideTasks, null);
+				OverrideAverageTaskTime = overrideAverageTaskTime;
+				OverrideAverageAfterTaskTime = overrideAverageAfterTaskTime;
 
                 if (tasks == 0 && originalAfterTaskTime.TotalSeconds == 0 && originalAverageTaskTime.TotalSeconds == 0)
                 {
@@ -285,7 +294,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     Tasks = tasks;
                     AverageTaskTime = originalAverageTaskTime;
                     AverageAfterTaskTime = originalAfterTaskTime;
-                    
                 }
                 
                 releaseAction(this);
