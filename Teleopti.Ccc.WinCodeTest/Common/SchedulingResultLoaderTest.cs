@@ -173,6 +173,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
             _repositoryFactory.Stub(x=>x.CreateMultiplicatorDefinitionSetRepository(_uow)).Return(multiplicatorDefinitionSetRepository);
             multiplicatorDefinitionSetRepository.Stub(x => x.FindAllOvertimeDefinitions()).Return(new List<IMultiplicatorDefinitionSet>());
+            multiplicatorDefinitionSetRepository.Stub(x => x.LoadAll()).Return(new List<IMultiplicatorDefinitionSet>());
         }
 
         private void createSkillInitializeExpectation(ISkill skill)

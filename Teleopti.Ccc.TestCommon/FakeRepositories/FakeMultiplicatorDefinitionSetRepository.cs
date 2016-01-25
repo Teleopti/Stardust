@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IMultiplicatorDefinitionSet> LoadAll()
 		{
-			throw new NotImplementedException();
+			return new List<IMultiplicatorDefinitionSet>();
 		}
 
 		public IMultiplicatorDefinitionSet Load(Guid id)
@@ -38,10 +38,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }
-		public IList<IMultiplicatorDefinitionSet> LoadAllSortByName()
-		{
-			return new List<IMultiplicatorDefinitionSet>();
-		}
 
 		public IList<IMultiplicatorDefinitionSet> FindAllOvertimeDefinitions()
 		{

@@ -254,6 +254,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(businessUnitRepository.LoadAllBusinessUnitSortedByName()).Return(new List<IBusinessUnit>());
             Expect.Call(scheduleTagRepository.LoadAll()).Return(new List<IScheduleTag>());
 	        Expect.Call(workflowControlSetRepository.LoadAll()).Return(new List<IWorkflowControlSet>());
+	        Expect.Call(multi.LoadAll()).Return(new List<IMultiplicatorDefinitionSet>());
 
             _view.EnableAfterLoadingStateHolder();
 
