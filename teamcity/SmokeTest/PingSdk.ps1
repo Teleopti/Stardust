@@ -19,7 +19,7 @@ $webclient.Credentials = new-object System.Net.NetworkCredential($username, $pas
 $webClient.Headers.Add("user-agent", "PowerShell Script")
 
 $pingStartTime = get-date
-$sdkUrl = "https://neptune/TeleoptiWFM/SDK/TeleoptiCCCSdkService.svc"
+$sdkUrl = $Env:UrlToTest + "/SDK/TeleoptiCCCSdkService.svc"
 $count = 0
 $isSuccess = $false
 while ($count -lt 30) {
@@ -30,14 +30,12 @@ while ($count -lt 30) {
 
     if ($output -like "*TeleoptiWFM/SDK/TeleoptiCccSdkService.svc?singleWsdl*") {
         "Success to ping SDK`t`t" + $startTime.DateTime + "`t`t" + ($endTime - $startTime).TotalSeconds + " seconds"	
-        $isSuccess=$true;	  
+        $isSuccess = $true;	  
 	    break;
     } else {
         "Fail (" + $count + ") to ping SDK`t`t" + $startTime.DateTime + "`t`t" + ($endTime - $startTime).TotalSeconds + " seconds"
     }
-
     sleep(10)
-   
     $count++
 }
 
