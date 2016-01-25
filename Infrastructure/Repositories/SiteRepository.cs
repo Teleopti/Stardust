@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Criterion;
-using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -30,7 +29,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             ICollection<ISite> retList = Session.CreateCriteria<Site>()
                       .Add(Restrictions.Eq("Description.Name", name))
-                     .SetResultTransformer(Transformers.DistinctRootEntity)
                      .List<ISite>();
             return retList;
         }
