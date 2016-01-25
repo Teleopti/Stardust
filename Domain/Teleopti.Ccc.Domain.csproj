@@ -254,6 +254,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\IAppliedIsAlarm.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\InvalidPlatformException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\InvalidSourceException.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\InvalidUserCodeException.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModelBuilders\AgentStateViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModelBuilders\AgentViewModel.cs" />
     <Compile Include="ApplicationLayer\TestHandlers.cs" />

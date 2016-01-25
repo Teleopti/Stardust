@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			});
 
 			Context.SimulateRestart();
-			Rta.SaveState(new ExternalUserStateForTest());
+			Rta.Touch(Database.TenantName());
 
 			TeamOutOfAdherenceReadModel.Get(teamId).Count.Should().Be(3);
 			SiteOutOfAdherenceReadModel.Get(siteId).Count.Should().Be(1);

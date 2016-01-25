@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithSource(state.SourceId);
 			Now.Is("2014-10-20 9:00");
 			
-			Target.SaveState(state);
+			Assert.Catch(() => Target.SaveState(state));
 
 			Sender.AllNotifications.Should().Be.Empty();
 		}

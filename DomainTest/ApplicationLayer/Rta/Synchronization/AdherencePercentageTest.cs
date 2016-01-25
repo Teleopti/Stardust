@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			Now.Is("2015-01-08 12:00");
 
 			Context.SimulateRestart();
-			Rta.SaveState(new ExternalUserStateForTest());
+			Rta.Touch(Database.TenantName());
 
 			Persister.Get(new DateOnly("2015-01-08".Utc()), personId).Should().Not.Be.Null();
 		}

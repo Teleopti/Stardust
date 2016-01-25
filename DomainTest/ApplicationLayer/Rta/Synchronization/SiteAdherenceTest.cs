@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			});
 
 			Context.SimulateRestart();
-			Rta.SaveState(new ExternalUserStateForTest());
+			Rta.Touch(Database.TenantName());
 
 			Model.Get(siteId).Count.Should().Be(1);
 		}
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			});
 
 			Context.SimulateRestart();
-			Rta.SaveState(new ExternalUserStateForTest());
+			Rta.Touch(Database.TenantName());
 
 			Model.Get(existingSite).Count.Should().Be(3);
 			Model.Get(stateSite).Should().Be.Null();

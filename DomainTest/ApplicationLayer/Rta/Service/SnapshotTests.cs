@@ -66,10 +66,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			Database
 				.WithSource("source1")
-				.WithSource("source2")
 				.WithUser("usercode1", Guid.NewGuid())
+				.WithSource("source2")
 				.WithUser("usercode2", personId)
-				.WithRule("statecode1", Guid.Empty)
+				.WithRule("statecode", Guid.Empty)
 				;
 			Now.Is("2014-10-20 10:00");
 			Target.SaveStateSnapshot(new[]
@@ -77,7 +77,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
 				{
 					UserCode = "usercode1",
-					StateCode = "statecode1"
+					StateCode = "statecode",
+					SourceId = "source1",
 				}
 			});
 			Target.SaveStateSnapshot(new[]
@@ -85,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
 				{
 					UserCode = "usercode2",
-					StateCode = "statecode1",
+					StateCode = "statecode",
 					SourceId = "source2",
 				}
 			});
@@ -95,14 +96,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
 				{
 					UserCode = "usercode1",
-					StateCode = "statecode1"
+					StateCode = "statecode",
+					SourceId = "source1",
 				}
 			});
 
 			Sender.NotificationsOfType<AgentStateReadModel>()
 				.Select(x => x.DeseralizeActualAgentState())
 				.Single(x => x.PersonId == personId)
-				.StateCode.Should().Be("statecode1");
+				.StateCode.Should().Be("statecode");
 		}
 
 		[Test]

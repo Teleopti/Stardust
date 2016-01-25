@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			MessageSender.AllNotifications.Clear();
 
 			Context.SimulateRestart();
-			Rta.SaveState(new ExternalUserStateForTest());
+			Rta.Touch(Database.TenantName());
 
 			MessageSender.AllNotifications.Should().Have.Count.EqualTo(0);
 		}
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			EventPublisher.Clear();
 
 			Context.SimulateRestart();
-			Rta.SaveState(new ExternalUserStateForTest());
+			Rta.Touch(Database.TenantName());
 			Rta.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "user",
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				;
 
 			Context.SimulateRestart();
-			Rta.SaveState(new ExternalUserStateForTest());
+			Rta.Touch(Database.TenantName());
 
 			Database.AddedStateCodes.Should().Have.Count.EqualTo(1);
 		}

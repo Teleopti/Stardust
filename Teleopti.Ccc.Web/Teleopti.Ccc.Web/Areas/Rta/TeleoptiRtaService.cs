@@ -104,6 +104,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				Log.Error("The platform type id cannot be empty or null.", e);
 				return -200;
 			}
+			catch (InvalidUserCodeException e)
+			{
+				Log.Error("No person found.", e);
+				return 0;
+			}
 		}
 
 	}
