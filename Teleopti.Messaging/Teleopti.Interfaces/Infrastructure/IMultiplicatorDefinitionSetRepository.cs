@@ -13,11 +13,6 @@ namespace Teleopti.Interfaces.Infrastructure
     public interface IMultiplicatorDefinitionSetRepository : IRepository<IMultiplicatorDefinitionSet>
     {
         /// <summary>
-        /// Loads all definitions sets sorted by name
-        /// </summary>
-        IList<IMultiplicatorDefinitionSet> LoadAllSortByName();
-
-        /// <summary>
         /// Finds all overtime definitions.
         /// </summary>
         /// <returns></returns>

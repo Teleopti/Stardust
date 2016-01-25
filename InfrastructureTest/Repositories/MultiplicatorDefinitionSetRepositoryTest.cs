@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(multiplicatorSet);
 
             IMultiplicatorDefinitionSetRepository rep = new MultiplicatorDefinitionSetRepository(UnitOfWork);
-            IList<IMultiplicatorDefinitionSet> lst = rep.LoadAllSortByName();
+            IList<IMultiplicatorDefinitionSet> lst = rep.LoadAll();
 
             Assert.AreEqual(1, lst.Count);
             Assert.AreEqual(2, lst[0].DefinitionCollection.Count);

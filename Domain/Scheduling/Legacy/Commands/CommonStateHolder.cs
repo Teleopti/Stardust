@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         private readonly List<IScheduleTag> _scheduleTags = new List<IScheduleTag>();
 		private readonly List<IWorkflowControlSet> _workflowControlSets = new List<IWorkflowControlSet>();
 		private readonly List<IWorkflowControlSet> _modifiedWorkflowControlSets = new List<IWorkflowControlSet>();
-		private IList<IMultiplicatorDefinitionSet> _multiplicatorDefinitionSets = new List<IMultiplicatorDefinitionSet>();
+		private readonly List<IMultiplicatorDefinitionSet> _multiplicatorDefinitionSets = new List<IMultiplicatorDefinitionSet>();
 
 	    public CommonStateHolder(IDisableDeletedFilter disableDeleteFilter)
 	    {
@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		    _scheduleTags.Clear();
 		    _shiftCategories.Clear();
 		    _workflowControlSets.Clear();
+		    _multiplicatorDefinitionSets.Clear();
 
 		    using (_disableDeleteFilter.Disable())
 		    {
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 	    private void loadMultiplicatorDefinitionSet(IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository)
 	    {
-		    _multiplicatorDefinitionSets = multiplicatorDefinitionSetRepository.LoadAllSortByName();
+		    _multiplicatorDefinitionSets.AddRange(multiplicatorDefinitionSetRepository.LoadAll());
 	    }
 
 	    public IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSets

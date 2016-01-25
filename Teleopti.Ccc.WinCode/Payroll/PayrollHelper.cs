@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.WinCode.Payroll
         /// <returns></returns>
         IList<IMultiplicatorDefinitionSet> IPayrollHelper.LoadDefinitionSets()
         {
-            return GetMultiplicatorDefinitionSetRepository().LoadAllSortByName();
+            return GetMultiplicatorDefinitionSetRepository().LoadAll();
         }
 
         /// <summary>

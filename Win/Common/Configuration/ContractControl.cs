@@ -621,7 +621,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			checkedListBoxMultiplicatorDefenitionSets.DisplayMember = "Name";
 			_multiplicatorDefinitionSets.Clear();
-			_multiplicatorDefinitionSets.AddRange(_multiplicatorDefinitionSetRepository.LoadAllSortByName());
+			_multiplicatorDefinitionSets.AddRange(_multiplicatorDefinitionSetRepository.LoadAll());
 
 			loadMultiplicatorCheckbox();
 		}

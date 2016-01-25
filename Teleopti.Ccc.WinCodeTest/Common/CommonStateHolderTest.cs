@@ -74,6 +74,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             Expect.Call(contractScheduleRepMock.LoadAllAggregate()).Return(_contractScheduleColl);
             Expect.Call(scheduleTagRep.LoadAll()).Return(new List<IScheduleTag>()).Repeat.Once();
 	        Expect.Call(workflowControlSetRepository.LoadAll()).Return(_workflowControlSets);
+	        Expect.Call(multi.LoadAll()).Return(new List<IMultiplicatorDefinitionSet> {null});
 
             _mockRep.ReplayAll();
 
@@ -91,6 +92,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             Assert.AreEqual(1, _commonStateHolder.ShiftCategories.Count());
             Assert.AreEqual(1, _commonStateHolder.ActiveShiftCategories.Count());
 			Assert.AreEqual(1, _commonStateHolder.WorkflowControlSets.Count);
+			Assert.AreEqual(1, _commonStateHolder.MultiplicatorDefinitionSets.Count);
             _mockRep.VerifyAll();
         }
 

@@ -24,12 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    {
 		    
 	    }
-
-        public IList<IMultiplicatorDefinitionSet> LoadAllSortByName()
-        {
-            return LoadAll();
-        }
-
+		
     	public IList<IMultiplicatorDefinitionSet> FindAllShiftAllowanceDefinitions()
     	{
 			IList<IMultiplicatorDefinitionSet> retList = Session.CreateCriteria(typeof(MultiplicatorDefinitionSet))

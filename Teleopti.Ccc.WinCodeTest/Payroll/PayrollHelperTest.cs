@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WinCodeTest.Payroll
                 _mockRepository.StrictMock<IMultiplicatorDefinitionSetRepository>();
             Expect.Call(_repositoryFactory.CreateMultiplicatorDefinitionSetRepository(_unitOfWork)).Return(
                 multiplicatorDefinitionSetRepository);
-            Expect.Call(multiplicatorDefinitionSetRepository.LoadAllSortByName()).Return(multiplicatorDefinitionSets);
+            Expect.Call(multiplicatorDefinitionSetRepository.LoadAll()).Return(multiplicatorDefinitionSets);
             _mockRepository.ReplayAll();
             Assert.AreEqual(0,_target.LoadDefinitionSets().Count);
             _mockRepository.VerifyAll();
