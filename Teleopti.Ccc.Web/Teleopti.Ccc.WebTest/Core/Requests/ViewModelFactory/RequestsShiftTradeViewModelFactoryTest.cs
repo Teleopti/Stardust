@@ -345,6 +345,35 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(0);
 		}
+
+		[Test]
+		public void ShouldReturnZeroPageCountWhenNoPossibleTradedSchedule()
+		{
+			var scenario = CurrentScenario.Current();
+			var personPublished = PersonFactory.CreatePersonWithGuid("person", "published");
+			var team = TeamFactory.CreateTeamWithId("team");
+			TeamRepository.Add(team);
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 1, 16), team);
+			personPublished.AddPersonPeriod(personPeriod);
+
+			PersonRepository.Add(personPublished);
+
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, personPublished, new DateOnly(2016, 1, 16), new DayOffTemplate(new Description("dayoff")));
+			personAss.AddOvertimeActivity(ActivityFactory.CreateActivity("overtime"), new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc),
+					DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)), new MultiplicatorDefinitionSet("a", MultiplicatorType.Overtime));
+
+			ScheduleRepository.Add(personAss);
+
+			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			{
+				Paging = new Paging { Skip = 0, Take = 20 },
+				ShiftTradeDate = new DateOnly(2016, 1, 16),
+				TeamIdList = new[] { team.Id.GetValueOrDefault() }
+			});
+
+			result.PageCount.Should().Be.EqualTo(0);
+		}
+
 		[Test]
 		public void ShouldFilterOutFullAbsenceOnContractDayOff()
 		{
