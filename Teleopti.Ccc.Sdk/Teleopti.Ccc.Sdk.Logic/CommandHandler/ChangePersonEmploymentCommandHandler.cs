@@ -190,9 +190,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             var contractSchedule = _contractScheduleRepository.Load(personContractDto.ContractScheduleId.GetValueOrDefault());
             var contract = _contractRepository.Load(personContractDto.ContractId.GetValueOrDefault());
 
-            checkBusinessUnitConsistency((IBelongsToBusinessUnit) partTimePercentage);
-            checkBusinessUnitConsistency((IBelongsToBusinessUnit) contractSchedule);
-            checkBusinessUnitConsistency((IBelongsToBusinessUnit) contract);
+            checkBusinessUnitConsistency(partTimePercentage);
+            checkBusinessUnitConsistency(contractSchedule);
+            checkBusinessUnitConsistency(contract);
 
             return new PersonContract(contract, partTimePercentage, contractSchedule);
         }
