@@ -434,10 +434,11 @@
 			}
 
 			function showSeatBooking(canvas, seatInfo) {
-
+				if (seatInfo == undefined)
+					return;
 				var occupiedSeatObjects = [];
 				var seatDict = getObjectsByTypeDict(canvas, 'seat');
-
+				
 				seatInfo.forEach(function (seat) {
 					if (seat.IsOccupied) {
 						var occupiedSeat = seatDict[seat.Id];
