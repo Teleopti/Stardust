@@ -44,7 +44,7 @@
 				<c3chart bindto-id="evaluationChart" chart-data="evaluationChartData" chart-columns="chartInfo.evaluationChartDataColumns" chart-x="chartInfo.dataX" show-subchart="true" style="margin-left:-13px;">
 					<chart-axis>
 						<chart-axis-x axis-id="date" axis-type="timeseries">
-							<chart-axis-x-tick tick-format="%Y-%m-%d" />
+							<chart-axis-x-tick tick-format-function="tickFormat" />
 						</chart-axis-x>
 					</chart-axis>
 					<chart-axis>
@@ -67,7 +67,7 @@
 			<c3chart bindto-id="queueStatisticsChart" chart-data="queueStatisticsChartData" chart-columns="chartInfo.queueStatisticsChartDataColumns" chart-x="chartInfo.dataX" show-subchart="true" style="margin-left:-13px;">
 				<chart-axis>
 					<chart-axis-x axis-id="date" axis-type="timeseries">
-						<chart-axis-x-tick tick-format="%Y-%m-%d" /></chart-axis-x>
+						<chart-axis-x-tick tick-format-function="tickFormat" /></chart-axis-x>
 					</chart-axis>
 				<chart-axis>
 				<chart-axis-y axis-id="y" axis-position="outer-middle" /></chart-axis>

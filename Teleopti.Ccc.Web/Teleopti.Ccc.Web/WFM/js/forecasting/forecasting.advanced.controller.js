@@ -2,8 +2,8 @@
 	'use strict';
 
 	angular.module('wfm.forecasting')
-		.controller('ForecastingAdvancedCtrl', ['$scope', '$state', '$stateParams', '$http', '$translate', 'forecastingService',
-			function ($scope, $state, $stateParams, $http, $translate, forecastingService) {
+		.controller('ForecastingAdvancedCtrl', ['$scope', '$state', '$stateParams', '$http', '$translate', 'forecastingService', '$filter',
+			function ($scope, $state, $stateParams, $http, $translate, forecastingService, $filter) {
 				$scope.chartInfo = {
 					evaluationChartDataColumns: [
 						{ id: "vh", type: "line", name: $translate.instant('ResReportQueueStatistics') },
@@ -18,6 +18,10 @@
 
 				$scope.back = function () {
 					$state.go("forecasting.start");
+				};
+
+				$scope.tickFormat = function (x) {
+					return $filter('date')(x, 'shortDate');
 				};
 
 				var getQueueStatistics = function(workloadId, methodId) {
