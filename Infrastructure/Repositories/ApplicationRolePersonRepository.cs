@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	    public IList<IPersonInRole> GetPersonsInRole(Guid roleId)
         {
-            var onDate = DateTime.Today.Date;
+            var onDate = DateTime.Today;
             const string query = @"SELECT p.Id, FirstName, LastName , ISNULL(t.Name, '') Team
                         FROM Person p INNER JOIN PersonInApplicationRole a ON p.Id = a.Person 
                         AND a.ApplicationRole = :role
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public IList<IPersonInRole> GetPersonsNotInRole(Guid roleId, ICollection<Guid> personsIds)
         {
-            var onDate = DateTime.Today.Date;
+            var onDate = DateTime.Today;
             var ids = new List<Guid>();
             ids.AddRange(personsIds);
             const string query = @"SELECT p.Id, FirstName, LastName , ISNULL(t.Name, '') Team
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public IList<IPersonInRole> Persons()
         {
-            var onDate = DateTime.Today.Date;
+            var onDate = DateTime.Today;
             const string query = @"SELECT p.Id, FirstName, LastName , ISNULL(t.Name, '') Team
                         FROM Person p LEFT JOIN PersonPeriod ON Parent = p.Id
                         AND StartDate <= :onDate AND EndDate >= :onDate
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public IList<IPersonInRole> PersonsWithFunction(Guid selectedFunction)
         {
-            var onDate = DateTime.Today.Date;
+            var onDate = DateTime.Today;
             const string query = @"SELECT DISTINCT p.Id, FirstName, LastName , ISNULL(t.Name, '') Team
                                 FROM Person p INNER JOIN PersonInApplicationRole a ON p.Id = a.Person AND IsDeleted = 0
                                 AND ApplicationRole IN(SELECT ApplicationRole FROM ApplicationFunctionInRole WHERE ApplicationFunction = :function)

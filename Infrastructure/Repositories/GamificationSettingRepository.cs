@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			ICollection<IGamificationSetting> retList = Session.CreateCriteria(typeof(GamificationSetting))
 				.AddOrder(Order.Asc("Description"))
-				.SetResultTransformer(Transformers.DistinctRootEntity)
 				.List<IGamificationSetting>();
 
 			return retList;
@@ -34,7 +33,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			ICollection<IGamificationSetting> retList = Session.CreateCriteria<GamificationSetting>()
 					   .Add(Restrictions.Eq("Description.Name", name))
-					  .SetResultTransformer(Transformers.DistinctRootEntity)
 					  .List<IGamificationSetting>();
 			return retList;
 		}

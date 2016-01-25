@@ -5,7 +5,6 @@ using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -59,13 +58,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return retList;
         }
 
-        public ICollection<IMeeting> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario, bool includeForOrganizer)
+        public ICollection<IMeeting> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario, bool includeForOrganizer = true)
         {
-        	return findMeetings(persons, period, scenario, includeForOrganizer);
-        }
-
-    	private ICollection<IMeeting> findMeetings(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario, bool includeForOrganizer)
-    	{
     		InParameter.NotNull("persons", persons);
     		InParameter.NotNull("period", period);
     		InParameter.NotNull("scenario", scenario);
@@ -105,12 +99,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
     		return retList;
     	}
-
-    	public ICollection<IMeeting> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
-		{
-        	return findMeetings(persons, period, scenario, true);
-        }
-
+		
         public IMeeting LoadAggregate(Guid id)
         {
             IMeeting meeting = Get(id);
@@ -158,9 +147,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 
             }
             return result;
-
         }
-
-    	
     }
 }
