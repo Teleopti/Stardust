@@ -13,42 +13,37 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 	[Category("LongRunning")]
 	public class MatrixRaptorQueueSynchronizationTest
 	{
-		private IQueueSourceRepository _repMock;
-		private MatrixRaptorQueueSynchronization _target;
-
-		[SetUp]
-		public void Setup()
-		{
-			_repMock = MockRepository.GenerateMock<IQueueSourceRepository>();
-			_target = new MatrixRaptorQueueSynchronization(_repMock);
-		}
-
 		[Test]
 		public void ShouldClearInvalidMartDataFromRaptorQueue()
 		{
+			var queueSourceRepository = MockRepository.GenerateMock<IQueueSourceRepository>();
+			var target = new MatrixRaptorQueueSynchronization(queueSourceRepository);
 			IQueueSource raptorQueueInvalidMartData = new QueueSource("q1", "q1", 1, 2, 3, 4);
 			
-			_repMock.Stub(x => x.LoadAllQueues()).Return(new List<IQueueSource> { raptorQueueInvalidMartData });
-			_repMock.Stub(x => x.AddRange(new List<IQueueSource>()));
+			queueSourceRepository.Stub(x => x.LoadAll()).Return(new List<IQueueSource> { raptorQueueInvalidMartData });
 			
-			var affectedQueues = _target.SynchronizeQueues(new List<IQueueSource>());
+			var affectedQueues = target.SynchronizeQueues(new List<IQueueSource>());
 
 			affectedQueues.Should().Be.EqualTo(0);
 			raptorQueueInvalidMartData.QueueMartId.Should().Be.EqualTo(0);
 			raptorQueueInvalidMartData.QueueOriginalId.Should().Be.EqualTo(0);
 			raptorQueueInvalidMartData.DataSourceId.Should().Be.EqualTo(0);
+
+			queueSourceRepository.AssertWasNotCalled(x => x.AddRange(new List<IQueueSource>()), o => o.IgnoreArguments());
 		}
 
 		[Test]
 		public void ShouldSynchronizeClearedRaptorQueueWhenAggIdMatches()
 		{
+			var queueSourceRepository = MockRepository.GenerateMock<IQueueSourceRepository>();
+			var target = new MatrixRaptorQueueSynchronization(queueSourceRepository);
+
 			IQueueSource raptorQueueCleared = new QueueSource("q1", "q1", 0, 2, 0, 0);
 			IQueueSource matrixQueue = new QueueSource("mart q1", "mart q1 desc", 1, 2, 3, 4);
 
-			_repMock.Stub(x => x.LoadAllQueues()).Return(new List<IQueueSource> { raptorQueueCleared });
-			_repMock.Stub(x => x.AddRange(new List<IQueueSource>()));
-
-			var affectedQueues = _target.SynchronizeQueues(new List<IQueueSource> { matrixQueue });
+			queueSourceRepository.Stub(x => x.LoadAll()).Return(new List<IQueueSource> { raptorQueueCleared });
+			
+			var affectedQueues = target.SynchronizeQueues(new List<IQueueSource> { matrixQueue });
 
 			affectedQueues.Should().Be.EqualTo(1);
 			raptorQueueCleared.QueueMartId.Should().Be.EqualTo(matrixQueue.QueueMartId);
@@ -56,35 +51,41 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			raptorQueueCleared.DataSourceId.Should().Be.EqualTo(matrixQueue.DataSourceId);
 			raptorQueueCleared.Name.Should().Be.EqualTo(matrixQueue.Name);
 			raptorQueueCleared.Description.Should().Be.EqualTo(matrixQueue.Description);
+
+			queueSourceRepository.AssertWasNotCalled(x => x.AddRange(new List<IQueueSource>()), o => o.IgnoreArguments());
 		}
 
 		[Test]
 		public void ShouldNotSynchronizeRaptorQueueWhenNoAggOrMartIdMatches()
 		{
+			var queueSourceRepository = MockRepository.GenerateMock<IQueueSourceRepository>();
+			var target = new MatrixRaptorQueueSynchronization(queueSourceRepository);
 			IQueueSource raptorQueueCleared = new QueueSource("q1", "q1", 0, 2, 0, 0);
 			IQueueSource matrixQueue = new QueueSource("mart q1", "mart q1 desc", 1, 99, 3, 4);
 
-			_repMock.Stub(x => x.LoadAllQueues()).Return(new List<IQueueSource> { raptorQueueCleared });
-			_repMock.Stub(x => x.AddRange(new List<IQueueSource> { matrixQueue }));
-
-			var affectedQueues = _target.SynchronizeQueues(new List<IQueueSource> { matrixQueue });
+			queueSourceRepository.Stub(x => x.LoadAll()).Return(new List<IQueueSource> { raptorQueueCleared });
+			
+			var affectedQueues = target.SynchronizeQueues(new List<IQueueSource> { matrixQueue });
 
 			affectedQueues.Should().Be.EqualTo(1);
 			raptorQueueCleared.QueueMartId.Should().Be.EqualTo(0);
 			raptorQueueCleared.QueueOriginalId.Should().Be.EqualTo(0);
 			raptorQueueCleared.DataSourceId.Should().Be.EqualTo(0);
+
+			queueSourceRepository.AssertWasCalled(x => x.AddRange(new List<IQueueSource> {matrixQueue}));
 		}
 
 		[Test]
 		public void ShouldSynchronizeRaptorQueueWhenMartIdMatches()
 		{
+			var queueSourceRepository = MockRepository.GenerateMock<IQueueSourceRepository>();
+			var target = new MatrixRaptorQueueSynchronization(queueSourceRepository);
 			IQueueSource raptorQueue = new QueueSource("q1", "q1", 1, 2, 3, 4);
 			IQueueSource matrixQueue = new QueueSource("mart q1", "mart q1 desc", 11, 22, 3, 44);
 
-			_repMock.Stub(x => x.LoadAllQueues()).Return(new List<IQueueSource> { raptorQueue });
-			_repMock.Stub(x => x.AddRange(new List<IQueueSource>()));
-
-			var affectedQueues = _target.SynchronizeQueues(new List<IQueueSource> { matrixQueue });
+			queueSourceRepository.Stub(x => x.LoadAll()).Return(new List<IQueueSource> { raptorQueue });
+			
+			var affectedQueues = target.SynchronizeQueues(new List<IQueueSource> { matrixQueue });
 
 			affectedQueues.Should().Be.EqualTo(1);
 			raptorQueue.QueueMartId.Should().Be.EqualTo(matrixQueue.QueueMartId);
@@ -92,6 +93,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			raptorQueue.DataSourceId.Should().Be.EqualTo(matrixQueue.DataSourceId);
 			raptorQueue.Name.Should().Be.EqualTo(matrixQueue.Name);
 			raptorQueue.Description.Should().Be.EqualTo(matrixQueue.Description);
+
+			queueSourceRepository.AssertWasNotCalled(x => x.AddRange(new List<IQueueSource>()), o => o.IgnoreArguments());
+		}
+
+		[Test]
+		public void ShouldNotCreateAnotherQueueSourceWhenMartIdMatchesAndItIsZero()
+		{
+			var queueSourceRepository = MockRepository.GenerateMock<IQueueSourceRepository>();
+			var target = new MatrixRaptorQueueSynchronization(queueSourceRepository);
+			IQueueSource raptorQueue = new QueueSource("q1", "q1", 1, 2, 0, 4);
+			IQueueSource newRaptorQueue = new QueueSource("q2", "q2", 2, 3, 0, 4);
+			IQueueSource matrixQueue = new QueueSource("mart q1", "mart q1 desc", 11, 22, 0, 4);
+
+			queueSourceRepository.Stub(x => x.LoadAll()).Return(new List<IQueueSource> { raptorQueue, newRaptorQueue });
+			
+			var affectedQueues = target.SynchronizeQueues(new List<IQueueSource> { matrixQueue });
+
+			affectedQueues.Should().Be.EqualTo(2);
+			queueSourceRepository.AssertWasNotCalled(x => x.AddRange(new List<IQueueSource>()), o => o.IgnoreArguments());
 		}
 	}
 }

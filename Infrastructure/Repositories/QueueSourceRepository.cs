@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -20,20 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public QueueSourceRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 		{
 		}
-
-        /// <summary>
-        /// Loads all queues.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2008-05-07
-        /// </remarks>
-        public IList<IQueueSource> LoadAllQueues()
-        {
-            return Session.CreateCriteria(typeof(QueueSource)).List<IQueueSource>();
-        }
-
+		
         public IDictionary<int, string> GetDistinctLogItemName()
         {
             var dbResult = Session.GetNamedQuery("distinctLogItemName").List();

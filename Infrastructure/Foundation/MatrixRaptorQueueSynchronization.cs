@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		/// </remarks>
 		public int SynchronizeQueues(IList<IQueueSource> matrixQueues)
 		{
-			IList<IQueueSource> raptorQueues = _queueSourceRepository.LoadAllQueues();
+			IList<IQueueSource> raptorQueues = _queueSourceRepository.LoadAll();
 			IList<IQueueSource> queuesToAdd = new List<IQueueSource>(matrixQueues);
 			int updatedCount = 0;
 
@@ -76,7 +76,10 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 				}
 			}
 
-			_queueSourceRepository.AddRange(queuesToAdd);
+			if (queuesToAdd.Count > 0)
+			{
+				_queueSourceRepository.AddRange(queuesToAdd);
+			}
 
 			return queuesToAdd.Count + updatedCount;
 		}

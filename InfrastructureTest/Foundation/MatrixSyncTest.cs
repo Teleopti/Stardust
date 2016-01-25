@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Interfaces.Domain;
 
@@ -41,13 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 
             Assert.AreEqual(1, retVal);
         }
-
-        //[Test]
-        //public void VerifySynchronizeReports()
-        //{
-        //        MatrixSync.SynchronizeReports(UnitOfWork, repositoryFactory);
-        //}
-
+		
         protected override void SetupForRepositoryTest(){}
     }
 }

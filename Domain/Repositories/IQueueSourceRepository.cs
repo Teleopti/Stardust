@@ -13,16 +13,6 @@ namespace Teleopti.Ccc.Domain.Repositories
     public interface IQueueSourceRepository : IRepository<IQueueSource>
     {
         /// <summary>
-        /// Loads all queues.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2008-05-07
-        /// </remarks>
-        IList<IQueueSource> LoadAllQueues();
-
-        /// <summary>
         /// This is to get the distinct log item names
         /// </summary>
         /// <returns></returns>

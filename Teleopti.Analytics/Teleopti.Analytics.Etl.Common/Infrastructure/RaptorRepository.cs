@@ -937,15 +937,15 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			{
 				foreach (DataRow row in dataSet.Tables[0].Rows)
 				{
-					string description = row["Description"] == DBNull.Value ? "" : (string)row["Description"];
+					string description = row["Description"] == DBNull.Value ? string.Empty : (string)row["Description"];
 					int queueOriginalId = row["QueueOriginalId"] == DBNull.Value
 											  ? -1
 											  : int.Parse((string)row["QueueOriginalId"], CultureInfo.InvariantCulture);
 					int queueAgglId = row["QueueAggId"] == DBNull.Value ? -1 : (int)row["QueueAggId"];
-					int dsId = row["DataSourceId"] == DBNull.Value ? -1 : (int)(Int16)row["DataSourceId"];
+					int dsId = row["DataSourceId"] == DBNull.Value ? -1 : (short)row["DataSourceId"];
 
 					IQueueSource queue = new QueueSource((string)row["Name"], description, queueOriginalId, queueAgglId, (int)row["QueueMartId"], dsId);
-					queue.LogObjectName = row["LogObjectName"] == DBNull.Value ? "" : (string)row["LogObjectName"];
+					queue.LogObjectName = row["LogObjectName"] == DBNull.Value ? string.Empty : (string)row["LogObjectName"];
 					queueSources.Add(queue);
 				}
 			}

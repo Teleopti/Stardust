@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 
             _target = new QueueSourceRepository(UnitOfWork);
-            IList<IQueueSource> queueSources = _target.LoadAllQueues();
+            IList<IQueueSource> queueSources = _target.LoadAll();
             Assert.IsNotNull(queueSources);
             Assert.AreEqual(queueSources.Count, 3);
 
