@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				.Return(new ArrayList {new object[] {_lastPersonId, now, 120}});
 
 			_badgeTransactionRepository = MockRepository.GenerateMock<IAgentBadgeTransactionRepository>();
-			_badgeTransactionRepository.Stub(x => x.Find(person, BadgeType.Adherence)).IgnoreArguments().Return(null);
+			_badgeTransactionRepository.Stub(x => x.Find(person, BadgeType.Adherence, DateOnly.Today)).IgnoreArguments().Return(null);
 
 			_now = MockRepository.GenerateMock<INow>();
 

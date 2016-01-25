@@ -9,19 +9,20 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-    ///<summary>
-    /// Tests AvailabilityRepository
-    ///</summary>
     [TestFixture]
     [Category("LongRunning")]
 	public class AgentBadgeTransactionRepositoryTest : RepositoryTest<IAgentBadgeTransaction>
     {
 	    private IPerson person;
 
-	    protected override IAgentBadgeTransaction CreateAggregateWithCorrectBusinessUnit()
+	    protected override void ConcreteSetup()
 	    {
 			person = PersonFactory.CreatePerson();
 			PersistAndRemoveFromUnitOfWork(person);
+		}
+
+	    protected override IAgentBadgeTransaction CreateAggregateWithCorrectBusinessUnit()
+	    {
 		    return new AgentBadgeTransaction
 		    {
 			    Amount = 1,
@@ -53,14 +54,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	    [Test]
 	    public void ShouldResetBadges()
 	    {
-		    UnitOfWork.PersistAll();
-		    CleanUpAfterTest();
+		    var badge = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(badge);
 
 		    var target = new AgentBadgeTransactionRepository(UnitOfWork);
 		    target.ResetAgentBadges();
-
-		    var result = target.Find(person);
-		    result.Should().Be.Empty();
+			
+		    var result = target.Find(badge.Person,badge.BadgeType,badge.CalculatedDate);
+		    result.Should().Be.Null();
 	    }
     }
 }
