@@ -99,22 +99,22 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			}
 			catch (InvalidSourceException e)
 			{
-				Log.Error("The source id was not valid.", e);
+				Log.Error("Source id was not valid.", e);
 				return -300;
 			}
 			catch (InvalidPlatformException e)
 			{
-				Log.Error("The platform type id cannot be empty or null.", e);
+				Log.Error("Platform id was not valid.", e);
 				return -200;
 			}
 			catch (InvalidUserCodeException e)
 			{
-				Log.Error("No person found.", e);
+				Log.Error("User code was not valid.", e);
 				return -100;
 			}
 			catch (AggregateException e)
 			{
-				Log.Error("Several exceptions.", e);
+				Log.Error("Exceptions while processing batch.", e);
 				return -500;
 			}
 		}
