@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -30,19 +31,20 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		public Task Execute(IAppBuilder application)
 		{
-			_globalConfiguration.Configure(c => c.Filters.Add(new AuthorizeTeleoptiAttribute(new []
+			_globalConfiguration.Configure(c => c.Filters.Add(new AuthorizeTeleoptiAttribute(new[]
 			{
 				typeof (DangerousController),
 				typeof (MessageBrokerController),
 				typeof (ToggleHandlerController),
 				typeof (AuthenticateController),
-				typeof(PersonInfoController),
+				typeof (PersonInfoController),
 				typeof (ApplicationAuthenticationApiController),
 				typeof (AuthenticationApiController),
 				typeof (StateController),
 				typeof (LanguageController),
-				typeof(ConfigController),
-				typeof(JavascriptLoggingController)
+				typeof (ConfigController),
+				typeof (JavascriptLoggingController),
+				typeof (ChangePasswordController)
 			})));
 			_globalConfiguration.Configure(c => c.Filters.Add(new Log4NetWebApiLogger(_log4NetLogger)));
 			_globalConfiguration.Configure(c =>
