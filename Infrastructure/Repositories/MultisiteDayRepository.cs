@@ -10,13 +10,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-    /// <summary>
-    /// Ropository for MultisiteDay
-    /// </summary>
-    /// <remarks>
-    /// Created by: robink
-    /// Created date: 2008-01-08
-    /// </remarks>
     public class MultisiteDayRepository : Repository<IMultisiteDay>, IMultisiteDayRepository
     {
 #pragma warning disable 618
@@ -28,20 +21,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				public MultisiteDayRepository(ICurrentUnitOfWork currentUnitOfWork)
 					: base(currentUnitOfWork)
 	    {
-		    
 	    }
-
-        /// <summary>
-        /// Finds the range.
-        /// </summary>
-        /// <param name="period">The period.</param>
-        /// <param name="skill">The skill.</param>
-        /// <param name="scenario">The scenario.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-01-25
-        /// </remarks>
+		
         public ICollection<IMultisiteDay> FindRange(DateOnlyPeriod period, ISkill skill, IScenario scenario)
         {
             InParameter.NotNull("skill", skill);
@@ -71,40 +52,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             return multisiteDays;
         }
-
-        /// <summary>
-        /// Gets all multisite days.
-        /// </summary>
-        /// <param name="period">The period.</param>
-        /// <param name="multisiteDays">The multisite days.</param>
-        /// <param name="skill">The skill.</param>
-        /// <param name="scenario">The scenario.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-23
-        /// </remarks>
-        public ICollection<IMultisiteDay> GetAllMultisiteDays(DateOnlyPeriod period, ICollection<IMultisiteDay> multisiteDays, IMultisiteSkill skill, IScenario scenario)
+		
+        public ICollection<IMultisiteDay> GetAllMultisiteDays(DateOnlyPeriod period, ICollection<IMultisiteDay> multisiteDays, IMultisiteSkill skill, IScenario scenario, bool addToRepository = true)
         {
-            return GetAllMultisiteDays(period, multisiteDays, skill, scenario, true);
-        }
-
-        /// <summary>
-        /// Gets all multisite days.
-        /// </summary>
-        /// <param name="period">The period.</param>
-        /// <param name="multisiteDays">The multisite days.</param>
-        /// <param name="skill">The skill.</param>
-        /// <param name="scenario">The scenario.</param>
-        /// <param name="addToRepository">if set to <c>true</c> [add to repository].</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-23
-        /// </remarks>
-        public ICollection<IMultisiteDay> GetAllMultisiteDays(DateOnlyPeriod period, ICollection<IMultisiteDay> multisiteDays, IMultisiteSkill skill, IScenario scenario, bool addToRepository)
-        {
-            //CreateProjection Date Collection for the local dates in the current time zone (from skill)
             var uniqueDays = period.DayCollection();
 
             if (uniqueDays.Count != multisiteDays.Count)
@@ -127,17 +77,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             multisiteDays = multisiteDays.OrderBy(wd => wd.MultisiteDayDate).ToList();
             return multisiteDays;
         }
-
-        /// <summary>
-        /// Deletes the specified date time period.
-        /// </summary>
-        /// <param name="dateTimePeriod">The date time period.</param>
-        /// <param name="multisiteSkill">The multisite skill.</param>
-        /// <param name="scenario">The scenario.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-12-22
-        /// </remarks>
+		
         public void Delete(DateOnlyPeriod dateTimePeriod, IMultisiteSkill multisiteSkill, IScenario scenario)
         {
             ICollection<IMultisiteDay> multisiteDays = FindRange(dateTimePeriod, multisiteSkill, scenario);
