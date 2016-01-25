@@ -4,8 +4,8 @@
 		<option value="" disabled selected="">{{'PickAnAbsence'|translate}}</option>
 		<option value={{absence.Id}} ng-repeat="absence in vm.AvailableAbsenceTypes|orderBy: 'Name'">{{absence.Name}}</option>
 	</select>
-	<div>{{'From'|translate}}: </div>
-	<div class="row">
+	<h3>{{'From'|translate}}: </h3>
+	<div class="con-row">
 		<span class="col-sm-7" style="padding-right: 0; height: 48px;">
 			<team-schedule-datepicker selected-date="vm.selectedAbsenceStartDate" mini />
 		</span>
@@ -14,8 +14,8 @@
 		</span>
 	</div>
 
-	<div>{{'To'|translate}}: </div>
-	<div class="row">
+	<h3>{{'To'|translate}}: </h3>
+	<div class="con-row">
 		<span class="col-sm-7" style="padding-right: 0; height: 48px;">
 			<team-schedule-datepicker selected-date="vm.selectedAbsenceEndDate" mini />
 		</span>

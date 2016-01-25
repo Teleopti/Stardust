@@ -8,36 +8,38 @@
 </div>
 
 <div class="panel material-depth-1">
-	<div class="row" style="position: relative">
-		<div class="col-md-4">
+	<div class="con-row" style="position: relative">
+		<div class="con-flex">
 			<people-search-input search-options="searchOptions" search-callback="searchKeyword"></people-search-input>
 		</div>
 
-		<div ng-if="dataInitialized && (isImportUsersEnabled || isAdjustSkillEnabled) && !isSelectionMode">
-			<div tabindex=0 class="context-menu card-context pull-right">
-				<i class="mdi mdi-dots-vertical" style="color: #000000"></i>
-				<span class="context-menu-left" style="z-index: 1000; text-transform: none;">
-					<ul class="wfm-list">
-						<li class="item" ng-if="rowSelectionEnabled && selectedCount() > 0" ng-click="clearCart()">
-							<div>
-								<span class="pull-left">{{"ResetSelection" | translate}}</span>
-							</div>
-						</li>
-						<li class="item" ng-if="cmd.active()" ng-repeat="cmd in commands" ng-click="cmd.action()">
-							<div>
-								<span class="pull-left">{{cmd.label|translate}}</span>
-							</div>
-						</li>
-					</ul>
-				</span>
-				<span ng-show="rowSelectionEnabled && selectedCount() > 0" class="wfm-panel selection-cart-indicator">
-					{{selectedCount()}}
-				</span>
+		<div class="con-flex split-3-1">
+			<div ng-if="dataInitialized && (isImportUsersEnabled || isAdjustSkillEnabled) && !isSelectionMode">
+				<div tabindex=0 class="context-menu card-context pull-right">
+					<i class="mdi mdi-dots-vertical" style="color: #000000"></i>
+					<span class="context-menu-left" style="z-index: 1000; text-transform: none;">
+						<ul class="wfm-list">
+							<li class="item" ng-if="rowSelectionEnabled && selectedCount() > 0" ng-click="clearCart()">
+								<div>
+									<span class="pull-left">{{"ResetSelection" | translate}}</span>
+								</div>
+							</li>
+							<li class="item" ng-if="cmd.active()" ng-repeat="cmd in commands" ng-click="cmd.action()">
+								<div>
+									<span class="pull-left">{{cmd.label|translate}}</span>
+								</div>
+							</li>
+						</ul>
+					</span>
+					<span ng-show="rowSelectionEnabled && selectedCount() > 0" class="wfm-panel selection-cart-indicator">
+						{{selectedCount()}}
+					</span>
+				</div>
 			</div>
 		</div>
 	</div>
 
-	<div class="row select-all-dialog" ng-show="selectAllVisible">
+	<div class="con-row select-all-dialog" ng-show="selectAllVisible">
 		<span class="notice-spacer" ng-click="selectAllMatch()">
 				<a href="javascript: void(0);"> {{'SelectAllMatchedPeople'|translate}}</a>
 			</span>
