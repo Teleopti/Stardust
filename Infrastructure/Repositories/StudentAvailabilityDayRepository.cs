@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             ICriteria crit = Session.CreateCriteria(typeof(StudentAvailabilityDay))
                 .Add(Restrictions.Eq("RestrictionDate", dateOnly))
-                .Add(Restrictions.Eq("Person", person))
+                .Add(personCriterion(person))
 				.AddOrder(Order.Desc("UpdatedOn"))
                 .SetResultTransformer(Transformers.DistinctRootEntity)
                 .SetFetchMode("Restriction", FetchMode.Join);
@@ -94,10 +94,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-        private static ICriterion personCriterion(IList<IPerson> personCollection)
+        private static ICriterion personCriterion(params IPerson[] personCollection)
         {
             ICriterion ret;
-            if (personCollection.Count > 1)
+            if (personCollection.Length > 1)
                 ret = Restrictions.InG("Person", personCollection);
             else
                 ret = Restrictions.Eq("Person", personCollection[0]);

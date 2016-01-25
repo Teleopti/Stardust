@@ -15,12 +15,12 @@ namespace Teleopti.Ccc.Domain.Outbound
 
 		public ISkillType Outbound()
 		{
-			return _skillTypeRepository.FindAll().First(s => s.Description.Name == "SkillTypeOutbound");
+			return _skillTypeRepository.LoadAll().First(s => s.Description.Name == "SkillTypeOutbound");
 		}
 
 		public ISkillType InboundTelephony()
 		{
-			return _skillTypeRepository.FindAll().First(s => s.ForecastSource == ForecastSource.InboundTelephony);
+			return _skillTypeRepository.LoadAll().First(s => s.ForecastSource == ForecastSource.InboundTelephony);
 		}
 	}
 }

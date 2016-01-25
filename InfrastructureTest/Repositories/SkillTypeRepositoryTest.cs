@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             //have left the database in some un-cleaned mode. Developers seem to 
             //over use the SkipRollback();
             SkillTypeRepository rep = new SkillTypeRepository(UnitOfWork);
-            IList<ISkillType> skillsTypes = new List<ISkillType>(rep.FindAll());
+            IList<ISkillType> skillsTypes = new List<ISkillType>(rep.LoadAll());
 
             foreach (ISkillType type in skillsTypes)
             {
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             SkillTypeRepository rep = new SkillTypeRepository(UnitOfWork);
           
-            IList<ISkillType> skillsTypes = new List<ISkillType>(rep.FindAll());
+            IList<ISkillType> skillsTypes = new List<ISkillType>(rep.LoadAll());
 
             ISkillType skillTypeToTest = skillsTypes[0];
             Assert.AreEqual(1, skillsTypes.Count);

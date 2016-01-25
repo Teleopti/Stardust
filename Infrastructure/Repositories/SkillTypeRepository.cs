@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -20,19 +18,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			: base(currentUnitOfWork)
 		{
 		}
-
-        /// <summary>
-        /// Finds all and include workload and queues.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: peterwe
-        /// Created date: 2007-12-10
-        /// </remarks>
-        public ICollection<ISkillType> FindAll()
-        {
-            return Session.CreateCriteria(typeof (SkillType))
-                                .List<ISkillType>();
-        }
     }
 }

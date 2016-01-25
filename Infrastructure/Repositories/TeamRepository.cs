@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             ICollection<ITeam> retList = Session.CreateCriteria<Team>()
                        .Add(Restrictions.Eq("Description.Name", name))
-                      .SetResultTransformer(Transformers.DistinctRootEntity)
                       .List<ITeam>();
             return retList;
         }

@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             ICriteria crit = Session.CreateCriteria(typeof(OvertimeAvailability))
                                     .Add(Restrictions.Eq("DateOfOvertime", dateOnly))
-                                    .Add(Restrictions.Eq("Person", person))
+                                    .Add(personCriterion(person))
                                     .SetResultTransformer(Transformers.DistinctRootEntity)
                                     .SetFetchMode("Restriction", FetchMode.Join);
             IList<IOvertimeAvailability> retList = crit.List<IOvertimeAvailability>();
@@ -78,20 +78,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-        private static ICriterion personCriterion(IList<IPerson> personCollection)
+        private static ICriterion personCriterion(params IPerson[] people)
         {
             ICriterion ret;
-            if (personCollection.Count > 1)
-                ret = Restrictions.InG("Person", personCollection);
+            if (people.Length > 1)
+                ret = Restrictions.InG("Person", people);
             else
-                ret = Restrictions.Eq("Person", personCollection[0]);
+                ret = Restrictions.Eq("Person", people[0]);
             return ret;
         }
 
         public IOvertimeAvailability LoadAggregate(Guid id)
         {
             IOvertimeAvailability ret = Session.CreateCriteria(typeof(OvertimeAvailability))
-                                                 .SetResultTransformer(Transformers.DistinctRootEntity)
                                                  .Add(Restrictions.Eq("Id", id))
                                                  .UniqueResult<IOvertimeAvailability>();
 
