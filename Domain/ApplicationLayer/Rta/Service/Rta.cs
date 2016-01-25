@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Resolvers;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -66,49 +67,54 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[RtaDataSourceScope]
-		public virtual int SaveStateSnapshot(IEnumerable<ExternalUserStateInputModel> states)
+		public virtual void SaveStateSnapshot(IEnumerable<ExternalUserStateInputModel> states)
 		{
 			_initializor.EnsureTenantInitialized();
 
 			var state = states.First();
-			SaveStateBatch(states);
-			return SaveState(new ExternalUserStateInputModel
-			{
-				AuthenticationKey = state.AuthenticationKey,
-				PlatformTypeId = state.PlatformTypeId,
-				SourceId = state.SourceId,
-				UserCode = "",
-				IsSnapshot = true,
-				BatchId = state.BatchId
-			});
+			SaveStateBatch(
+				states
+					.Concat(new[]
+					{
+						new ExternalUserStateInputModel
+						{
+							AuthenticationKey = state.AuthenticationKey,
+							PlatformTypeId = state.PlatformTypeId,
+							SourceId = state.SourceId,
+							UserCode = "",
+							IsSnapshot = true,
+							BatchId = state.BatchId
+						}
+					})
+				);
 		}
 
 		[RtaDataSourceScope]
-		public virtual int SaveStateBatch(IEnumerable<ExternalUserStateInputModel> states)
+		public virtual void SaveStateBatch(IEnumerable<ExternalUserStateInputModel> states)
 		{
 			_initializor.EnsureTenantInitialized();
 
 			if (states.Count() > 50)
-			{
-				Log.ErrorFormat("The incoming batch contains more than 50 external user states. Reduce the number if states per batch to a number below 50.");
 				throw new BatchTooBigException("Incoming batch too large. Please lower the number of user states in a batch to below 50.");
-			}
 
-			var result = 0;
-
-			foreach (var state in states)
+			var exceptions = new List<Exception>();
+			states.ForEach(s =>
 			{
-				var processResult = SaveState(state);
-
-				if (processResult < result || result == 0)
-					result = processResult;
-			}
-
-			return result;
+				try
+				{
+					SaveState(s);
+				}
+				catch (Exception e)
+				{
+					exceptions.Add(e);
+				}
+			});
+			if (exceptions.Any())
+				throw new AggregateException(exceptions);
 		}
 
 		[RtaDataSourceScope]
-		public virtual int SaveState(ExternalUserStateInputModel input)
+		public virtual void SaveState(ExternalUserStateInputModel input)
 		{
 			var messageId = Guid.NewGuid();
 
@@ -135,14 +141,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			fixInput(input, messageId);
 
-			int result;
 			if (input.IsSnapshot && string.IsNullOrEmpty(input.UserCode))
-				result = CloseSnapshot(input);
+				CloseSnapshot(input);
 			else
-				result = processStateChange(input, dataSourceId);
+				processStateChange(input, dataSourceId);
 
 			Log.InfoFormat("Message handling complete for UserCode: {0}, StateCode: {1}. (MessageId: {2})", input.UserCode, input.StateCode, messageId);
-			return result;
 		}
 
 		private static void fixInput(ExternalUserStateInputModel input, Guid messageId)
@@ -163,7 +167,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			}
 		}
 
-		private int processStateChange(ExternalUserStateInputModel input, int dataSourceId)
+		private void processStateChange(ExternalUserStateInputModel input, int dataSourceId)
 		{
 			var persons = _personLoader.LoadPersonData(dataSourceId, input.UserCode);
 
@@ -176,12 +180,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				Log.DebugFormat("UserCode: {0} is connected to PersonId: {1}", input.UserCode, person.PersonId);
 				process(input, person);
 			}
-
-			return 1;
 		}
 
 		[InfoLog]
-		protected virtual int CloseSnapshot(ExternalUserStateInputModel input)
+		protected virtual void CloseSnapshot(ExternalUserStateInputModel input)
 		{
 			input.StateCode = "CCC Logged out";
 			input.PlatformTypeId = Guid.Empty.ToString();
@@ -201,9 +203,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						SiteId = agent.SiteId.GetValueOrDefault(),
 						TeamId = agent.TeamId.GetValueOrDefault()
 					});
-
-
-			return 1;
 		}
 
 		[InfoLog]

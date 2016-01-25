@@ -35,8 +35,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			DateTime batchId,
 			bool isSnapshot)
 		{
-			return handleRtaExceptions(() => _rta.SaveState(
-				new ExternalUserStateInputModel
+			return handleRtaExceptions(() =>
+			{
+				_rta.SaveState(new ExternalUserStateInputModel
 				{
 					AuthenticationKey = authenticationKey,
 					UserCode = userCode,
@@ -47,7 +48,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 					SourceId = sourceId,
 					BatchId = batchId,
 					IsSnapshot = isSnapshot
-				}));
+				});
+			});
 		}
 
 		public int SaveBatchExternalUserState(string authenticationKey, string platformTypeId, string sourceId, ICollection<ExternalUserState> externalUserStateBatch)
@@ -67,7 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 						BatchId = s.BatchId,
 						IsSnapshot = s.IsSnapshot
 					};
-				return _rta.SaveStateBatch(states.ToArray());
+				_rta.SaveStateBatch(states.ToArray());
 			});
 		}
 
@@ -76,11 +78,12 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			_rta.ReloadSchedulesOnNextCheckForActivityChanges(tenant, personId);
 		}
 
-		private int handleRtaExceptions(Func<int> rtaCall)
+		private int handleRtaExceptions(Action rtaCall)
 		{
 			try
 			{
-				return rtaCall.Invoke();
+				rtaCall.Invoke();
+				return 1;
 			}
 			catch (InvalidAuthenticationKeyException e)
 			{
@@ -108,6 +111,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			{
 				Log.Error("No person found.", e);
 				return -100;
+			}
+			catch (AggregateException e)
+			{
+				Log.Error("Several exceptions.", e);
+				return -500;
 			}
 		}
 

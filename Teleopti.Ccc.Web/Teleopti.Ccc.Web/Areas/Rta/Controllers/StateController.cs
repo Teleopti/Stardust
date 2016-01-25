@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			DateTime batchId;
 			DateTime.TryParse(input.BatchId, out batchId);
 
-			var result = _rta.SaveState(
+			_rta.SaveState(
 				new ExternalUserStateInputModel
 				{
 					AuthenticationKey = input.AuthenticationKey,
@@ -33,11 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 					IsSnapshot = input.IsSnapshot,
 				});
 
-			// apparently 1 = input accepted, 0 = something was missing, anything else == error
-			if (result == 1)
-				return Ok();
-
-			return BadRequest("Result from TeleoptiRtaService was " + result);
+			return Ok();
 		}
 	}
 }
