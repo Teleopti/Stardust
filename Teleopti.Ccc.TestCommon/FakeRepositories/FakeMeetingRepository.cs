@@ -53,13 +53,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			throw new NotImplementedException();
 		}
-
-		public ICollection<IMeeting> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
-		{
-			//impl correct when needed
-			return new List<IMeeting>();
-		}
-
+		
 		public ICollection<IMeeting> Find(DateTimePeriod period, IScenario scenario)
 		{
 			//change when/if needed
@@ -71,9 +65,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public ICollection<IMeeting> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario, bool includeForOrganizer)
+		public ICollection<IMeeting> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario, bool includeForOrganizer = true)
 		{
-			throw new NotImplementedException();
+			//impl correct when needed
+			return new List<IMeeting>();
 		}
 	}
 }
