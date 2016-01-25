@@ -123,18 +123,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			_initializor.EnsureTenantInitialized();
 
-			if (string.IsNullOrEmpty(input.SourceId))
-				throw new InvalidSourceException(string.Format("The source id was not valid. Supplied value was {0}", input.SourceId));
-
 			if (string.IsNullOrEmpty(input.PlatformTypeId))
-				throw new InvalidPlatformException("The platform type id cannot be empty or null");
+				throw new InvalidPlatformException("Platform id is required");
 
+			if (string.IsNullOrEmpty(input.SourceId))
+				throw new InvalidSourceException("Source id is required");
 			int dataSourceId;
 			if (!_dataSourceResolver.TryResolveId(input.SourceId, out dataSourceId))
-			{
-				Log.WarnFormat("No data source available for source id: {0}. Event will not be handled before data source is set up.", input.SourceId);
-				return 0;
-			}
+				throw new InvalidSourceException(string.Format("Source id not found {0}", input.SourceId));
 
 			Log.InfoFormat("Message verified and validated for UserCode: {0}, StateCode: {1}. (MessageId: {2})", input.UserCode, input.StateCode, messageId);
 
@@ -145,6 +141,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				result = CloseSnapshot(input);
 			else
 				result = processStateChange(input, dataSourceId);
+
 			Log.InfoFormat("Message handling complete for UserCode: {0}, StateCode: {1}. (MessageId: {2})", input.UserCode, input.StateCode, messageId);
 			return result;
 		}
@@ -154,9 +151,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			input.UserCode = input.UserCode.Trim();
 			if (!input.IsLoggedOn)
 			{
-				Log.InfoFormat(
-					"This is a log out state. The original state code {0} is substituted with hardcoded state code {1}. (MessageId: {2})",
-					input.StateCode, LogOutStateCode, messageId);
+				Log.InfoFormat("This is a log out state. The original state code {0} is substituted with hardcoded state code {1}. (MessageId: {2})", input.StateCode, LogOutStateCode, messageId);
 				input.StateCode = LogOutStateCode;
 			}
 			const int stateCodeMaxLength = 25;
@@ -164,8 +159,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			if (input.StateCode.Length > stateCodeMaxLength)
 			{
 				var newStateCode = input.StateCode.Substring(0, stateCodeMaxLength);
-				Log.WarnFormat("The original state code {0} is too long and substituted with state code {1}. (MessageId: {2})",
-					input.StateCode, newStateCode, messageId);
+				Log.WarnFormat("The original state code {0} is too long and substituted with state code {1}. (MessageId: {2})", input.StateCode, newStateCode, messageId);
 				input.StateCode = newStateCode;
 			}
 		}
