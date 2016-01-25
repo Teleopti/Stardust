@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -25,6 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
+		public IntradayOptimization Target;
 
 		[Test, Ignore("To be fixed... #36617")]
 		public void ShouldMoveLunchToLowerDemandInterval()
@@ -58,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			assignment.AddActivity(lunchActivity, new DateTimePeriod(dateTime.AddHours(11), dateTime.AddHours(12)));
 			PersonAssignmentRepository.Add(assignment);
 
-			//Target.Doit(planning);
+			Target.Optimize(planningPeriod);
 
 			PersonAssignmentRepository.GetSingle(dateOnly).MainActivities().Single(x => x.Payload.Equals(lunchActivity)).Period
 				.Should().Be.EqualTo(new DateTimePeriod(dateTime.AddHours(10), dateTime.AddHours(11)));

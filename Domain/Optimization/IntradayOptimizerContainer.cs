@@ -14,20 +14,18 @@ namespace Teleopti.Ccc.Domain.Optimization
     /// </summary>
     public class IntradayOptimizerContainer
     {
-        private readonly IList<IIntradayOptimizer2> _optimizers;
 	    private readonly IDailyValueByAllSkillsExtractor _dailyValueByAllSkillsExtractor;
 
-        public IntradayOptimizerContainer(IList<IIntradayOptimizer2> optimizers, IDailyValueByAllSkillsExtractor dailyValueByAllSkillsExtractor)
+        public IntradayOptimizerContainer(IDailyValueByAllSkillsExtractor dailyValueByAllSkillsExtractor)
         {
-	        _optimizers = optimizers;
 	        _dailyValueByAllSkillsExtractor = dailyValueByAllSkillsExtractor;
         }
 
 	    public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
-		public void Execute(DateOnlyPeriod period, TargetValueOptions targetValueOptions)
+		public void Execute(IList<IIntradayOptimizer2> optimizers, DateOnlyPeriod period, TargetValueOptions targetValueOptions)
         {
-			IEnumerable<IIntradayOptimizer2> shuffledOptimizers = _optimizers.GetRandom(_optimizers.Count, true);
+			IEnumerable<IIntradayOptimizer2> shuffledOptimizers = optimizers.GetRandom(optimizers.Count, true);
 #if DEBUG
 	        var log = new List<string>();
 #endif

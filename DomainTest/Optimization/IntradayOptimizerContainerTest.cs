@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _optimizer2 = _mocks.StrictMock<IIntradayOptimizer2>();
             _optimizerList = new List<IIntradayOptimizer2> { _optimizer1, _optimizer2 };
 		    _dailyValueByAllSkillsExtractor = _mocks.StrictMultiMock<IDailyValueByAllSkillsExtractor>();
-            _target = new IntradayOptimizerContainer(_optimizerList, _dailyValueByAllSkillsExtractor);
+            _target = new IntradayOptimizerContainer(_dailyValueByAllSkillsExtractor);
 	        _timesExecuted = 0;
 		    _period = new DateOnlyPeriod();
 		    _targetValueOptions = TargetValueOptions.StandardDeviation;
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
 			{
 				_target.ReportProgress += _target_ReportProgress;
-				_target.Execute(_period, _targetValueOptions);
+				_target.Execute(_optimizerList, _period, _targetValueOptions);
                 _target.ReportProgress -= _target_ReportProgress;
                 Assert.IsTrue(_eventExecuted);
             }
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			}
 			using (_mocks.Playback())
 			{
-				_target.Execute(_period, _targetValueOptions);
+				_target.Execute(_optimizerList, _period, _targetValueOptions);
 				Assert.AreEqual(1, _timesExecuted);
 				_target.ReportProgress -= targetReportProgress2;
 			}
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
             using (_mocks.Playback())
             {
-				_target.Execute(_period, _targetValueOptions);
+				_target.Execute(_optimizerList, _period, _targetValueOptions);
             }
         }
     }

@@ -87,10 +87,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				dayOffOptimizationPreferenceProvider);
 
 			IList<IIntradayOptimizer2> optimizers = creator.Create();
-			var service = new IntradayOptimizerContainer(optimizers, _container.Resolve<IDailyValueByAllSkillsExtractor>());
+			var service = new IntradayOptimizerContainer(_container.Resolve<IDailyValueByAllSkillsExtractor>());
 
 			service.ReportProgress += resourceOptimizerPersonOptimized;
-			service.Execute(selectedPeriod, optimizerPreferences.Advanced.TargetValueCalculation);
+			service.Execute(optimizers, selectedPeriod, optimizerPreferences.Advanced.TargetValueCalculation);
 			service.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
 
