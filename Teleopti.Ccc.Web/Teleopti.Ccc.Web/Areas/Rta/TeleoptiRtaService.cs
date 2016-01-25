@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			catch (InvalidUserCodeException e)
 			{
 				Log.Error("No person found.", e);
-				return 0;
+				return -100;
 			}
 		}
 
