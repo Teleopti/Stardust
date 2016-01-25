@@ -91,11 +91,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 
 			_businessUnitId = new Guid();
 
-			_lastPersonId = (Guid) person.Id;
+			_lastPersonId = person.Id.GetValueOrDefault();
 			_statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
 
 			_badgeTransactionRepository = MockRepository.GenerateMock<IAgentBadgeWithRankTransactionRepository>();
-			_badgeTransactionRepository.Stub(x => x.Find(person, BadgeType.Adherence)).IgnoreArguments().Return(null);
+			_badgeTransactionRepository.Stub(x => x.Find(person, BadgeType.Adherence, DateOnly.Today)).IgnoreArguments().Return(null);
 
 			_now = MockRepository.GenerateMock<INow>();
 

@@ -15,10 +15,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	{
 		private IPerson person;
 
-		protected override IAgentBadgeWithRankTransaction CreateAggregateWithCorrectBusinessUnit()
+		protected override void ConcreteSetup()
 		{
 			person = PersonFactory.CreatePerson();
 			PersistAndRemoveFromUnitOfWork(person);
+		}
+
+		protected override IAgentBadgeWithRankTransaction CreateAggregateWithCorrectBusinessUnit()
+		{
 			return new AgentBadgeWithRankTransaction
 			{
 				BronzeBadgeAmount = 3,
@@ -54,14 +58,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldResetBadges()
 		{
-			UnitOfWork.PersistAll();
-			CleanUpAfterTest();
+			var badgeTransaction = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(badgeTransaction);
 
 			var target = new AgentBadgeWithRankTransactionRepository(UnitOfWork);
 			target.ResetAgentBadges();
 
-			var result = target.Find(person);
-			result.Should().Be.Empty();
+			var result = target.Find(person,badgeTransaction.BadgeType,badgeTransaction.CalculatedDate);
+			result.Should().Be.Null();
 		}
 	}
 }

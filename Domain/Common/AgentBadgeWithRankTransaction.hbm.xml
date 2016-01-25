@@ -21,7 +21,6 @@
 				 foreign-key="FK_AgentBadgeWithRankTransaction_Person_Person"/>
 
 	<property name="BadgeType"
-			  type="int"
 			  not-null="true" />
 
 	<property name="BronzeBadgeAmount"
