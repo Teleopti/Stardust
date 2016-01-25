@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 		[When(@"I search people with keyword '(.*)'")]
 		public void WhenISearchPeopleWithKeyword(string value)
 		{
-			var selector = ".people-search #simple-search";
+			var selector = ".people-search #simple-people-search";
 			Browser.Interactions.Clear(selector);
 			Browser.Interactions.FillWith(selector, value);
 			Browser.Interactions.PressEnter(selector);
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 		[When(@"I search with")]
 		public void WhenISearchWith(Table table)
 		{
-			Browser.Interactions.Click("#simple-search");
+			Browser.Interactions.Click("#simple-people-search");
 
 			var criterias = table.CreateSet<SearchCriteria>();
 
