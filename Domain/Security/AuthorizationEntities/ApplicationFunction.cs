@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
@@ -72,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             {
                 if ((!string.IsNullOrEmpty(applicationFunction.ForeignSource) && applicationFunction.ForeignSource == source)
                     &&
-                   ((!string.IsNullOrEmpty(applicationFunction.ForeignId) && applicationFunction.ForeignId.ToUpper() == id.ToUpper())))
+                   (!string.IsNullOrEmpty(applicationFunction.ForeignId) && applicationFunction.ForeignId.ToUpperInvariant() == id.ToUpperInvariant()))
                     return applicationFunction;
             }
             return null;
@@ -95,32 +94,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             }
             return null;
         }
-
-        /// <summary>
-        /// Finds the application function by its path.
-        /// </summary>
-        /// <param name="functions">The functions collection.</param>
-        /// <returns></returns>
-        public static IList<IApplicationFunction> OrderBySortOrder(IEnumerable<IApplicationFunction> functions)
-        {
-            var orderedFunction = functions.OrderBy(c => c.SortOrder);
-
-            IList<IApplicationFunction> result = new List<IApplicationFunction>();
-
-            foreach (IApplicationFunction applicationFunction in orderedFunction)
-            {
-                if (applicationFunction.SortOrder.HasValue)
-                    result.Add(applicationFunction);
-            }
-            foreach (IApplicationFunction applicationFunction in orderedFunction)
-            {
-                if (!applicationFunction.SortOrder.HasValue)
-                    result.Add(applicationFunction);
-            }
-
-            return result;
-        }
-
+		
         /// <summary>
         /// Finds the code from path.
         /// </summary>

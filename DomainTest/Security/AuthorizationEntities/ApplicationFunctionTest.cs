@@ -168,26 +168,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
             result = ApplicationFunction.GetCode(path);
             Assert.AreEqual("METHOD", result);
         }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-        public void VerifyOrderBySortOrder()
-        {
-            IList<IApplicationFunction> list = ApplicationFunctionFactory.CreateApplicationFunctionList("Root", "Child", 4);
-
-            IApplicationFunction first = list[2];
-            first.SortOrder = 1;
-            IApplicationFunction second = list[4];
-            second.SortOrder = 3;
-            IApplicationFunction third = list[0];
-            third.SortOrder = 4;
-
-            list = ApplicationFunction.OrderBySortOrder(list);
-            
-            Assert.IsTrue(first.Equals(list[0]));
-            Assert.IsTrue(second.Equals(list[1]));
-            Assert.IsTrue(third.Equals(list[2]));
-        }
-
+		
         [Test]
         public void VerifyBelongsToBusinessUnit()
         {

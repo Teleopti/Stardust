@@ -11,6 +11,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class ApplicationFunctionRepository : Repository<IApplicationFunction>, IApplicationFunctionRepository
 	{
+		private static readonly DefinedRaptorApplicationFunctionFactory _definedRaptorApplicationFunctionFactory = new DefinedRaptorApplicationFunctionFactory();
+
 		public ApplicationFunctionRepository(IUnitOfWork unitOfWork)
 #pragma warning disable 618
 			: base(unitOfWork)
@@ -28,7 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 														   .AddOrder(Order.Asc("FunctionCode"))
 														   .List<IApplicationFunction>();
 
-			SynchronizeApplicationFunctions(functions);
+			synchronizeApplicationFunctions(functions);
 			return functions;
 		}
 
@@ -49,12 +51,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-		protected static void SynchronizeRaptorApplicationFunctions(IApplicationFunction applicationFunction)
+		private void synchronizeRaptorApplicationFunctions(IApplicationFunction applicationFunction)
 		{
 			if (applicationFunction.ForeignSource == DefinedForeignSourceNames.SourceRaptor)
 			{
 				IApplicationFunction raptorCounterpart =
-					ApplicationFunction.FindByForeignId(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
+					ApplicationFunction.FindByForeignId(_definedRaptorApplicationFunctionFactory.ApplicationFunctionList,
 														DefinedForeignSourceNames.SourceRaptor,
 														applicationFunction.ForeignId);
 
@@ -70,11 +72,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-		protected static void SynchronizeApplicationFunctions(IEnumerable<IApplicationFunction> applicationFunctions)
+		private void synchronizeApplicationFunctions(IEnumerable<IApplicationFunction> applicationFunctions)
 		{
 			foreach (IApplicationFunction applicationFunction in applicationFunctions)
 			{
-				SynchronizeRaptorApplicationFunctions(applicationFunction);
+				synchronizeRaptorApplicationFunctions(applicationFunction);
 			}
 		}
 
