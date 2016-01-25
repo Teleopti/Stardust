@@ -14,6 +14,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public bool IsLoggedOn { get; set; }
 		public DateTime BatchId { get; set; }
 		public bool IsSnapshot { get; set; }
+
+		// for logging
+		public override string ToString()
+		{
+			return string.Format(
+				"UserCode: {0}, StateCode: {1}, StateDescription: {2}, IsLoggedOn: {3}, PlatformTypeId: {4}, SourceId: {5}, BatchId: {6}, IsSnapshot: {7}.",
+				UserCode, StateCode, StateDescription, IsLoggedOn, PlatformTypeId, SourceId, BatchId, IsSnapshot);
+		}
 	}
 
 	public static class ExternalUserStateInputModelExtensions

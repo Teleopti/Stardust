@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Resolvers;
@@ -17,7 +15,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
 		private readonly IPreviousStateInfoLoader _previousStateInfoLoader;
 		public static string LogOutStateCode = "LOGGED-OFF";
-		private static readonly ILog Log = LogManager.GetLogger(typeof(Rta));
 
 		private readonly DataSourceResolver _dataSourceResolver;
 		private readonly ICacheInvalidator _cacheInvalidator;
@@ -62,10 +59,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_agentStateReadModelUpdater = agentStateReadModelUpdater;
 			_messageSender = messageSender;
 			_adherenceAggregator = adherenceAggregator;
-
-			Log.Info("The real time adherence service is now started");
 		}
 
+		[InfoLog]
 		[RtaDataSourceScope]
 		public virtual void SaveStateSnapshot(IEnumerable<ExternalUserStateInputModel> states)
 		{
@@ -89,6 +85,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				);
 		}
 
+		[InfoLog]
 		[RtaDataSourceScope]
 		public virtual void SaveStateBatch(IEnumerable<ExternalUserStateInputModel> states)
 		{
@@ -113,75 +110,85 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				throw new AggregateException(exceptions);
 		}
 
+		[InfoLog]
 		[RtaDataSourceScope]
 		public virtual void SaveState(ExternalUserStateInputModel input)
 		{
-			var messageId = Guid.NewGuid();
+			validateAuthenticationKey(input);
+			_initializor.EnsureTenantInitialized();
+			validatePlatformId(input);
+			var dataSourceId = validateSourceId(input);
+			ProcessInput(input, dataSourceId);
+		}
 
-			Log.InfoFormat(CultureInfo.InvariantCulture,
-						   "Incoming message: MessageId: {8}, UserCode: {0}, StateCode: {1}, StateDescription: {2}, IsLoggedOn: {3}, PlatformTypeId: {4}, SourceId: {5}, BatchId: {6}, IsSnapshot: {7}.",
-						   input.UserCode, input.StateCode, input.StateDescription, input.IsLoggedOn, input.PlatformTypeId, input.SourceId, input.BatchId, input.IsSnapshot, messageId);
-
+		private void validateAuthenticationKey(ExternalUserStateInputModel input)
+		{
 			input.MakeLegacyKeyEncodingSafe();
 			if (!_authenticator.Authenticate(input.AuthenticationKey))
-				throw new InvalidAuthenticationKeyException("You supplied an invalid authentication key. Please verify the key and try again.");
+				throw new InvalidAuthenticationKeyException(
+					"You supplied an invalid authentication key. Please verify the key and try again.");
+		}
 
-			_initializor.EnsureTenantInitialized();
-
+		private static void validatePlatformId(ExternalUserStateInputModel input)
+		{
 			if (string.IsNullOrEmpty(input.PlatformTypeId))
 				throw new InvalidPlatformException("Platform id is required");
+		}
 
+		private int validateSourceId(ExternalUserStateInputModel input)
+		{
 			if (string.IsNullOrEmpty(input.SourceId))
 				throw new InvalidSourceException("Source id is required");
 			int dataSourceId;
 			if (!_dataSourceResolver.TryResolveId(input.SourceId, out dataSourceId))
 				throw new InvalidSourceException(string.Format("Source id not found {0}", input.SourceId));
-
-			Log.InfoFormat("Message verified and validated for UserCode: {0}, StateCode: {1}. (MessageId: {2})", input.UserCode, input.StateCode, messageId);
-
-			fixInput(input, messageId);
-
-			if (input.IsSnapshot && string.IsNullOrEmpty(input.UserCode))
-				CloseSnapshot(input);
-			else
-				processStateChange(input, dataSourceId);
-
-			Log.InfoFormat("Message handling complete for UserCode: {0}, StateCode: {1}. (MessageId: {2})", input.UserCode, input.StateCode, messageId);
+			return dataSourceId;
 		}
 
-		private static void fixInput(ExternalUserStateInputModel input, Guid messageId)
-		{
-			input.UserCode = input.UserCode.Trim();
-			if (!input.IsLoggedOn)
-			{
-				Log.InfoFormat("This is a log out state. The original state code {0} is substituted with hardcoded state code {1}. (MessageId: {2})", input.StateCode, LogOutStateCode, messageId);
-				input.StateCode = LogOutStateCode;
-			}
-			const int stateCodeMaxLength = 25;
-			input.StateCode = input.StateCode.Trim();
-			if (input.StateCode.Length > stateCodeMaxLength)
-			{
-				var newStateCode = input.StateCode.Substring(0, stateCodeMaxLength);
-				Log.WarnFormat("The original state code {0} is too long and substituted with state code {1}. (MessageId: {2})", input.StateCode, newStateCode, messageId);
-				input.StateCode = newStateCode;
-			}
-		}
-
-		private void processStateChange(ExternalUserStateInputModel input, int dataSourceId)
+		private IEnumerable<PersonOrganizationData> validateUserCode(ExternalUserStateInputModel input, int dataSourceId)
 		{
 			var persons = _personLoader.LoadPersonData(dataSourceId, input.UserCode);
 
 			if (!persons.Any())
 				throw new InvalidUserCodeException(string.Format("No person found for DataSourceId {0} and UserCode {1}", dataSourceId, input.UserCode));
+			return persons;
+		}
 
-			//GLHF
-			foreach (var person in persons)
+		[InfoLog]
+		protected virtual void ProcessInput(ExternalUserStateInputModel input, int dataSourceId)
+		{
+			input.UserCode = FixUserCode(input);
+			input.StateCode = FixStateCode(input);
+
+			if (input.IsSnapshot && string.IsNullOrEmpty(input.UserCode))
+				CloseSnapshot(input);
+			else
 			{
-				Log.DebugFormat("UserCode: {0} is connected to PersonId: {1}", input.UserCode, person.PersonId);
-				process(input, person);
+				var persons = validateUserCode(input, dataSourceId);
+				//GLHF
+				foreach (var person in persons)
+					Process(input, person);
 			}
 		}
 
+		[InfoLog]
+		protected virtual string FixUserCode(ExternalUserStateInputModel input)
+		{
+			return input.UserCode.Trim();
+		}
+
+		[InfoLog]
+		protected virtual string FixStateCode(ExternalUserStateInputModel input)
+		{
+			if (!input.IsLoggedOn)
+				return LogOutStateCode;
+			var stateCode = input.StateCode.Trim();
+			const int stateCodeMaxLength = 25;
+			if (stateCode.Length > stateCodeMaxLength)
+				return stateCode.Substring(0, stateCodeMaxLength);
+			return stateCode;
+		}
+		
 		[InfoLog]
 		protected virtual void CloseSnapshot(ExternalUserStateInputModel input)
 		{
@@ -194,7 +201,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 											select a;
 
 			foreach (var agent in agentsNotAlreadyLoggedOut)
-				process(
+				Process(
 					input,
 					new PersonOrganizationData
 					{
@@ -203,6 +210,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						SiteId = agent.SiteId.GetValueOrDefault(),
 						TeamId = agent.TeamId.GetValueOrDefault()
 					});
+		}
+
+		[InfoLog]
+		protected virtual void Process(ExternalUserStateInputModel input, PersonOrganizationData person)
+		{
+			_processor.Process(
+				new RtaProcessContext(
+					input,
+					person,
+					_now,
+					_agentStateReadModelUpdater,
+					_messageSender,
+					_adherenceAggregator,
+					_previousStateInfoLoader
+					));
 		}
 
 		[InfoLog]
@@ -223,20 +245,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public virtual void Touch(string tenant)
 		{
 			_initializor.EnsureTenantInitialized();
-		}
-
-		private void process(ExternalUserStateInputModel input, PersonOrganizationData person)
-		{
-			_processor.Process(
-				new RtaProcessContext(
-					input,
-					person,
-					_now,
-					_agentStateReadModelUpdater,
-					_messageSender,
-					_adherenceAggregator,
-					_previousStateInfoLoader
-					));
 		}
 
 	}
