@@ -1,10 +1,9 @@
 using System;
-using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-	public class AgentBadge : SimpleAggregateRoot, IAgentBadge
+	public class AgentBadge
 	{
 		private bool _initialized;
 		private int _lastAmount;
@@ -12,24 +11,13 @@ namespace Teleopti.Ccc.Domain.Common
 		private bool _silverBadgeAdded;
 		private bool _goldBadgeAdded;
 
-		private Guid _person;
-		private BadgeType _badgeType;
 		private int _totalAmount;
-		private DateTime _lastCalculatedDate;
 
-		public virtual Guid Person
-		{
-			get { return _person; }
-			set { _person = value; }
-		}
+		public Guid Person { get; set; }
 
-		public virtual BadgeType BadgeType
-		{
-			get { return _badgeType; }
-			set { _badgeType = value; }
-		}
+		public BadgeType BadgeType { get; set; }
 
-		public virtual int TotalAmount
+		public int TotalAmount
 		{
 			get { return _totalAmount; }
 			set
@@ -48,11 +36,7 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 		}
 
-		public virtual DateTime LastCalculatedDate
-		{
-			get { return _lastCalculatedDate; }
-			set { _lastCalculatedDate = value; }
-		}
+		public virtual DateTime LastCalculatedDate { get; set; }
 
 		public virtual int GetBronzeBadge(int silverToBronzeRate, int goldToSilverRate)
 		{

@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 				return new List<BadgeViewModel>();
 			}
 
-			var badges = new List<IAgentBadge>
+			var badges = new List<AgentBadge>
 			{
 				_badgeRepository.Find(person, BadgeType.Adherence) ??
 				new AgentBadge {BadgeType = BadgeType.Adherence, Person = person.Id.Value, TotalAmount = 0},

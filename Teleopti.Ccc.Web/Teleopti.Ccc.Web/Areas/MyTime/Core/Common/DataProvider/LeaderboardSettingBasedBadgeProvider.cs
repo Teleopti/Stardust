@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Repositories;
@@ -167,7 +168,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			return agentWithBadgesConvertedFromRatio;
 		}
 
-		private static IEnumerable<agentWithBadge> getAgentWithBadges(IEnumerable<IAgentBadge> agentBadges,
+		private static IEnumerable<agentWithBadge> getAgentWithBadges(IEnumerable<AgentBadge> agentBadges,
 			int silverToBronzeRate, int goldToSilverRate)
 		{
 

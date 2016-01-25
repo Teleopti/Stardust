@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			GamificationSettingRuleSet = GamificationSettingRuleSet.RuleWithDifferentThreshold,
 		};
 
-		private IList<IAgentBadge> agentBadges;
+		private IList<AgentBadge> agentBadges;
 		private IList<IAgentBadgeWithRank> agentsWithRankedBadge;
 		private const string personName1 = "first1 last1";
 		private const string personName2 = "first2 last2";
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			_toggleManager = MockRepository.GenerateMock<IToggleManager>();
 			_toggleManager.Stub(x => x.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185)).Return(true);
-			agentBadges = new IAgentBadge[]
+			agentBadges = new[]
 			{
 				new AgentBadge
 				{
@@ -323,7 +323,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				Type = LeadboardQueryType.Everyone
 			};
 
-			agentBadges = new IAgentBadge[]
+			agentBadges = new[]
 			{
 				new AgentBadge
 				{

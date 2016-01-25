@@ -687,6 +687,7 @@
     <Compile Include="Outbound\OutboundScheduledResourcesProvider.cs" />
     <Compile Include="Outbound\OutboundAssignedStaffProvider.cs" />
     <Compile Include="Outbound\SkillTypeProvider.cs" />
+    <Compile Include="Repositories\IAgentBadgeRepository.cs" />
     <Compile Include="Repositories\IIntradayStatistics.cs" />
     <Compile Include="Repositories\ISeatPlanRepository.cs" />
     <Compile Include="Scheduling\DayOffBusinessRuleValidation.cs" />
