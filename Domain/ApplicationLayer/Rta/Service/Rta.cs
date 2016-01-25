@@ -127,10 +127,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				throw new InvalidSourceException(string.Format("The source id was not valid. Supplied value was {0}", input.SourceId));
 
 			if (string.IsNullOrEmpty(input.PlatformTypeId))
-			{
-				Log.ErrorFormat("The platform type id cannot be empty or null. (MessageId: {0})", messageId);
-				return -200;
-			}
+				throw new InvalidPlatformException("The platform type id cannot be empty or null");
 
 			int dataSourceId;
 			if (!_dataSourceResolver.TryResolveId(input.SourceId, out dataSourceId))

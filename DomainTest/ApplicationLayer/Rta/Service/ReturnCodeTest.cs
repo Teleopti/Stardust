@@ -36,15 +36,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		public void ShouldNotProcessStateIfNoPlatformId()
+		public void ShouldThrowIfNoPlatformId()
 		{
 			var state = new ExternalUserStateForTest();
 			Database
 				.WithDataFromState(state);
 			state.PlatformTypeId = string.Empty;
 
-			Target.SaveState(state)
-				.Should().Not.Be.EqualTo(1);
+			Assert.Throws<InvalidPlatformException>(() => Target.SaveState(state));
 		}
 
 		[Test]

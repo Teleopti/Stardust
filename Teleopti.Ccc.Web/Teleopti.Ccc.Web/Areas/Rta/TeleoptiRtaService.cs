@@ -99,6 +99,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				Log.Error("The source id was not valid.", e);
 				return -300;
 			}
+			catch (InvalidPlatformException e)
+			{
+				Log.Error("The platform type id cannot be empty or null.", e);
+				return -200;
+			}
 		}
 
 	}
