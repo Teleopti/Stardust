@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -56,11 +57,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 		private void drawIslandList()
 		{
 			listViewIslands.Items.Clear();
+			listViewIslands.Groups.Clear();
 			listViewIslands.ListViewItemSorter = new listViewItemComparer(0, SortOrder.Ascending);
 			listViewIslands.SuspendLayout();
 			var islandNumber = 0;		
 			foreach (var island in _islandList)
-			{
+			{			
 				var notLoadedSkills = 0;
 				var loadedSkills = 0;
 				var personsInIsland = 0;
@@ -112,36 +114,53 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
 		private void drawSkillList()
 		{
-			listViewSkillViewSkills.Items.Clear();
-			listViewSkillViewSkills.ListViewItemSorter = new listViewItemComparer(0, SortOrder.Ascending);
 			listViewSkillViewSkills.SuspendLayout();
-			foreach (var skill in _loadedSkillList)
+			listViewSkillViewSkills.Items.Clear();
+			listViewSkillViewSkills.Groups.Clear();
+			listViewSkillViewSkills.ListViewItemSorter = new listViewItemComparer(0, SortOrder.Ascending);
+			
+			var islandNumber = 0;
+			foreach (var island in _islandList)
 			{
-				var guidString = skill.Id.ToString();
-				var item = new ListViewItem(skill.Name);
-				item.Tag = guidString;
-				var agentCount = _skillGroupsCreatorResult.GetPersonsForSkillKey(guidString).Count();
-				item.SubItems.Add(agentCount.ToString(CultureInfo.InvariantCulture).PadLeft(8));
-				var agentPercent = new Percent(agentCount / (double)_personList.Count());
-				item.SubItems.Add(Math.Round(agentPercent.ValueAsPercent(), 2).ToString("F").PadLeft(5));
-				var forecastForSkill = _skillDayForecastForSkills[skill];
-				item.SubItems.Add(_timeFormatter.GetLongHourMinuteTimeString(forecastForSkill).PadLeft(7));
-				var forecastPercent = _totalForecastedForDate == TimeSpan.Zero
-					? new Percent()
-					: new Percent(forecastForSkill.TotalMinutes / _totalForecastedForDate.TotalMinutes);
-				item.SubItems.Add(Math.Round(forecastPercent.ValueAsPercent(), 2).ToString("F").PadLeft(5));
-				item.SubItems.Add(skill.SkillType.Description.Name);
-				item.SubItems.Add(skill.Activity.Name);
-				listViewSkillViewSkills.Items.Add(item);
+				islandNumber ++;
+				var group = new ListViewGroup("Island " + islandNumber, "Island " + islandNumber);
+				listViewSkillViewSkills.Groups.Add(group);
+				foreach (var skillGuidString in island.SkillGuidStrings)
+				{
+					var item = createSkillItem(skillGuidString);
+					listViewSkillViewSkills.Items.Add(item);
+					group.Items.Add(item);
+				}
 			}
+
+			autoResizeColumns(listViewSkillViewSkills);
 			listViewSkillViewSkills.ResumeLayout();
+			listViewSkillViewSkills.Groups[0].Items[0].Selected = true;
 		}
 
-		private void drawVirtualGroupList(string filterGuid)
+		private void autoResizeColumns(ListView listView)
 		{
-			listView1.Items.Clear();
-			listView1.ListViewItemSorter = new listViewItemComparer(0, SortOrder.Ascending);
-			listView1.SuspendLayout();
+			//listView.SuspendLayout();
+			listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+			var columnWidths = new Dictionary<int, int>();
+			for (int i = 0; i < listView.Columns.Count; i++)
+			{
+				columnWidths.Add(i, listView.Columns[i].Width);
+			}
+			listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+			for (int i = 0; i < listView.Columns.Count; i++)
+			{
+				if(columnWidths[i] > listView.Columns[i].Width)
+					listView.Columns[i].AutoResize(ColumnHeaderAutoResizeStyle.HeaderSize);
+			}
+			//listView.ResumeLayout();
+		}
+
+		private void drawVirtualGroupList(string filterGuid, ListView listView)
+		{
+			listView.Items.Clear();
+			listView.ListViewItemSorter = new listViewItemComparer(0, SortOrder.Ascending);
+			listView.SuspendLayout();
 			foreach (var key in _skillGroupsCreatorResult.GetKeys())
 			{		
 				var splitted = key.Split("|".ToCharArray());
@@ -167,35 +186,36 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 				item.Tag = key;
 				item.SubItems.Add(loadedSkills.ToString(CultureInfo.InvariantCulture).PadLeft(3) + " (" + notLoadedSkills.ToString(CultureInfo.InvariantCulture).PadLeft(3) + ")");
 				item.SubItems.Add(_skillGroupsCreatorResult.GetPersonsForKey(key).Count().ToString(CultureInfo.InvariantCulture).PadLeft(6));
-				listView1.Items.Add(item);
+				listView.Items.Add(item);
 			}
-			listView1.ResumeLayout(true);
-			listView1.Items[0].Selected = true;
+			autoResizeColumns(listView);
+			listView.ResumeLayout(true);
+			listView.Items[0].Selected = true;
 		}
 
-		private void listView1SelectedIndexChanged(object sender, EventArgs e)
+		private void listViewAllVirtualGroupsSelectedIndexChanged(object sender, EventArgs e)
 		{			
-			listView2.Items.Clear();			
+			listViewSkillInSkillGroup.Items.Clear();			
 			listView3.Items.Clear();
-			if (listView1.SelectedItems.Count == 0)
+			if (listViewAllVirtualGroups.SelectedItems.Count == 0)
 				return;
 
-			var selectedItem = listView1.SelectedItems[0];
+			var selectedItem = listViewAllVirtualGroups.SelectedItems[0];
 			var key = selectedItem.Tag as string;
 			if (key == null)
 				return;
 
-			listView2.SuspendLayout();
+			listViewSkillInSkillGroup.SuspendLayout();
 			listView3.SuspendLayout();
 
-			fillSkillListView(key, listView2);
+			fillSkillListView(key, listViewSkillInSkillGroup);
 
 			foreach (var person in _skillGroupsCreatorResult.GetPersonsForKey(key))
 			{
 				listView3.Items.Add(person.Name.ToString());
 			}
 
-			listView2.ResumeLayout();
+			listViewSkillInSkillGroup.ResumeLayout();
 			listView3.ResumeLayout();
 
 			Refresh();
@@ -206,44 +226,61 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			var splitted = key.Split("|".ToCharArray());
 			foreach (var guidString in splitted)
 			{
-				Guid guid;
-				if (!Guid.TryParse(guidString, out guid))
-					continue;
-
-				var color = Color.Black;
-				var skill = _loadedSkillList.FirstOrDefault(s => s.Id == guid);
-
-				if (skill == null)
-				{
-					skill = _allSkills.FirstOrDefault(s => s.Id == guid);
-					if (skill == null)
-						continue;
-					color = Color.Red;
-				}
-
-				var item = new ListViewItem(skill.Name);
-				item.Tag = guidString;
-				if (color == Color.Black)
-				{
-					var agentCount = _skillGroupsCreatorResult.GetPersonsForSkillKey(guidString).Count();
-					item.SubItems.Add(agentCount.ToString(CultureInfo.InvariantCulture).PadLeft(8));
-					var agentPercent = new Percent(agentCount/(double) _personList.Count());
-					item.SubItems.Add(Math.Round(agentPercent.ValueAsPercent(), 2).ToString("F").PadLeft(5));
-					var forecastForSkill = _skillDayForecastForSkills[skill];
-					item.SubItems.Add(_timeFormatter.GetLongHourMinuteTimeString(forecastForSkill).PadLeft(7));
-					var forecastPercent = _totalForecastedForDate == TimeSpan.Zero
-						? new Percent()
-						: new Percent(forecastForSkill.TotalMinutes/_totalForecastedForDate.TotalMinutes);
-					item.SubItems.Add(Math.Round(forecastPercent.ValueAsPercent(), 2).ToString("F").PadLeft(5));
-					item.SubItems.Add(skill.SkillType.Description.Name);
-					item.SubItems.Add(skill.Activity.Name);
-				}
-				item.ForeColor = color;
-				view.Items.Add(item);
+				var item = createSkillItem(guidString);
+				if(item != null)
+					view.Items.Add(item);
 			}
 		}
 
-		private void listView1_ColumnClick(object sender, ColumnClickEventArgs e)
+		private ListViewItem createSkillItem(string guidString)
+		{
+			Guid guid;
+			if (!Guid.TryParse(guidString, out guid))
+				return null;
+
+			var color = Color.Black;
+			var skill = _loadedSkillList.FirstOrDefault(s => s.Id == guid);
+
+			if (skill == null)
+			{
+				skill = _allSkills.FirstOrDefault(s => s.Id == guid);
+				if (skill == null)
+					return null;
+				color = Color.Red;
+			}
+
+			var item = new ListViewItem(skill.Name);
+			item.Tag = guidString;
+			if (color == Color.Black)
+			{
+				var agentCount = _skillGroupsCreatorResult.GetPersonsForSkillKey(guidString).Count();
+				item.SubItems.Add(agentCount.ToString(CultureInfo.InvariantCulture).PadLeft(8));
+				var agentPercent = new Percent(agentCount/(double) _personList.Count());
+				item.SubItems.Add(Math.Round(agentPercent.ValueAsPercent(), 2).ToString("F").PadLeft(5));
+				var forecastForSkill = _skillDayForecastForSkills[skill];
+				item.SubItems.Add(_timeFormatter.GetLongHourMinuteTimeString(forecastForSkill).PadLeft(7));
+				var forecastPercent = _totalForecastedForDate == TimeSpan.Zero
+					? new Percent()
+					: new Percent(forecastForSkill.TotalMinutes/_totalForecastedForDate.TotalMinutes);
+				item.SubItems.Add(Math.Round(forecastPercent.ValueAsPercent(), 2).ToString("F").PadLeft(5));
+				item.SubItems.Add(skill.SkillType.Description.Name);
+				item.SubItems.Add(skill.Activity.Name);
+			}
+			else
+			{
+				item.SubItems.Add(" ".PadLeft(8));
+				item.SubItems.Add(" ".PadLeft(5));
+				item.SubItems.Add(" ".PadLeft(7));
+				item.SubItems.Add(" ".PadLeft(5));
+				item.SubItems.Add(skill.SkillType.Description.Name);
+				item.SubItems.Add(skill.Activity.Name);
+			}
+			item.ForeColor = color;
+
+			return item;
+		}
+
+		private void listViewAllVirtualGroupsColumnClick(object sender, ColumnClickEventArgs e)
 		{
 			sortListView(sender, e);
 		}
@@ -264,44 +301,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			listView.ListViewItemSorter = new listViewItemComparer(e.Column, listView.Sorting);
 		}
 
-		private void toolStripButtonFilterOnSelectedSkillCheckedChanged(object sender, EventArgs e)
-		{
-			if (toolStripButtonFilterOnSelectedSkill.Checked)
-			{
-				if (listView2.SelectedItems.Count == 0)
-					return;
-
-				var guidString = listView2.SelectedItems[0].Tag as string;
-				if (guidString == null)
-					return;
-
-				toolStripButtonFilterOnSelectedSkill.Text = "Filter groups on skill: " + listView2.SelectedItems[0].Text;
-				drawVirtualGroupList(guidString);				
-			}
-			else
-			{
-				toolStripButtonFilterOnSelectedSkill.Text = "Filter groups on selected skill";
-				drawVirtualGroupList(null);				
-			}
-		}
-
-		private void listView2_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			toolStripButtonFilterOnSelectedSkill.Enabled = listView2.SelectedItems.Count > 0;
-
-			if (toolStripButtonFilterOnSelectedSkill.Checked)
-			{
-				if (listView2.SelectedItems.Count == 0)
-					return;
-
-				var guidString = listView2.SelectedItems[0].Tag as string;
-				if (guidString == null)
-					return;
-
-				drawVirtualGroupList(guidString);
-			}
-		}
-
 		class listViewItemComparer : IComparer
 		{
 			private readonly SortOrder _orderBy;
@@ -314,7 +313,15 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
 			public int Compare(object x, object y)
 			{
-				int returnVal = String.CompareOrdinal(((ListViewItem)x).SubItems[Column].Text, ((ListViewItem)y).SubItems[Column].Text);
+				var ix = x as ListViewItem;
+				var iy = y as ListViewItem;
+				if (iy == null || ix == null)
+					return 0;
+
+				if(ix.SubItems.Count <= Column || iy.SubItems.Count <= Column)
+					return 0;
+
+				int returnVal = String.CompareOrdinal(ix.SubItems[Column].Text, iy.SubItems[Column].Text);
 
 				if (_orderBy == SortOrder.Descending)
 					returnVal *= -1;
@@ -334,6 +341,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			var key = selectedItem.Tag as string;
 			if (key == null)
 				return;
+
+			drawVirtualGroupList(key, listViewSkillGroupsForSkill);
 
 			listViewSkillViewAgents.SuspendLayout();
 			listViewSkillViewAgents.Items.Clear();
@@ -417,6 +426,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				_allSkills = new SkillRepository(uow).LoadAll();
+				foreach (var skill in _allSkills)
+				{
+					LazyLoadingManager.Initialize(skill.Activity);
+					LazyLoadingManager.Initialize(skill.SkillType);
+				}
 			}
 			_skillDayForecastForSkills = new Dictionary<ISkill, TimeSpan>();
 			_totalForecastedForDate = TimeSpan.Zero;
@@ -424,16 +438,16 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			var creator = new VirtualSkillGroupsCreator();
 			_skillGroupsCreatorResult = creator.GroupOnDate(_date, _personList);
 			createSkillDayForSkillsDic();
-			drawVirtualGroupList(null);
-			drawSkillList();
+			drawVirtualGroupList(null, listViewAllVirtualGroups);
 			var skillGroupIslandsAnalyzer = new SkillGroupIslandsAnalyzer();
 			_islandList = skillGroupIslandsAnalyzer.FindIslands(_skillGroupsCreatorResult);
+			drawSkillList();		
 			drawIslandList();
 		}
 
 		private void toolStripButtonSuggestAction_Click(object sender, EventArgs e)
 		{
-			var results = new SkillGroupReducer().SuggestAction(_skillGroupsCreatorResult, _islandList);
+			var results = new SkillGroupReducer().SuggestAction(_skillGroupsCreatorResult, _islandList, _allSkills);
 			var resultForm = new SkillGroupReducerSuggestions();
 			resultForm.LoadData(results,_skillGroupsCreatorResult,_loadedSkillList);
 			resultForm.Show(this);
@@ -441,7 +455,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
 		private void toolStripButton1_Click(object sender, EventArgs e)
 		{
-			var results = new SkillGroupReducer().SuggestAction(_skillGroupsCreatorResult, _islandList);
+			var results = new SkillGroupReducer().SuggestAction(_skillGroupsCreatorResult, _islandList, _allSkills);
 			foreach (var skillGroupReducerResult in results)
 			{
 				foreach (var person in _skillGroupsCreatorResult.GetPersonsForKey(skillGroupReducerResult.RemoveFromGroupKey))

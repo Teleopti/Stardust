@@ -29,11 +29,11 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AgentSkillAnalyzer));
-			this.listView1 = new System.Windows.Forms.ListView();
+			this.listViewAllVirtualGroups = new System.Windows.Forms.ListView();
 			this.columnHeaderVirtualGroup = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeaderNumberOfSkills = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeaderNumberOfAgents = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.listView2 = new System.Windows.Forms.ListView();
+			this.listViewSkillInSkillGroup = new System.Windows.Forms.ListView();
 			this.columnHeaderSkills = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -44,16 +44,13 @@
 			this.listView3 = new System.Windows.Forms.ListView();
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-			this.toolStripButtonFilterOnSelectedSkill = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonSuggestAction = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonRemoveNotLoadedSkills = new System.Windows.Forms.ToolStripButton();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
-			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-			this.listViewSkillViewAgents = new System.Windows.Forms.ListView();
-			this.columnHeader15 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.tableLayoutPanelSkillView = new System.Windows.Forms.TableLayoutPanel();
+			this.listViewSkillGroupsForSkill = new System.Windows.Forms.ListView();
+			this.columnHeader30 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader31 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader32 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.listViewSkillViewSkills = new System.Windows.Forms.ListView();
 			this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -62,6 +59,8 @@
 			this.columnHeader12 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader13 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader14 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.listViewSkillViewAgents = new System.Windows.Forms.ListView();
+			this.columnHeader15 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
@@ -83,13 +82,15 @@
 			this.columnHeader17 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader18 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
-			this.toolStripMain = new System.Windows.Forms.ToolStrip();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+			this.toolStripMain = new System.Windows.Forms.ToolStrip();
+			this.toolStripButtonRemoveNotLoadedSkills = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButtonSuggestAction = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 			this.tableLayoutPanel1.SuspendLayout();
-			this.toolStrip1.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.tabPage2.SuspendLayout();
-			this.tableLayoutPanel2.SuspendLayout();
+			this.tableLayoutPanelSkillView.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.tabPage3.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
@@ -97,27 +98,28 @@
 			this.toolStripContainer1.ContentPanel.SuspendLayout();
 			this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
 			this.toolStripContainer1.SuspendLayout();
+			this.toolStripMain.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// listView1
+			// listViewAllVirtualGroups
 			// 
-			this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+			this.listViewAllVirtualGroups.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeaderVirtualGroup,
             this.columnHeaderNumberOfSkills,
             this.columnHeaderNumberOfAgents});
-			this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.listView1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.listView1.FullRowSelect = true;
-			this.listView1.HideSelection = false;
-			this.listView1.Location = new System.Drawing.Point(3, 3);
-			this.listView1.MultiSelect = false;
-			this.listView1.Name = "listView1";
-			this.listView1.Size = new System.Drawing.Size(331, 514);
-			this.listView1.TabIndex = 0;
-			this.listView1.UseCompatibleStateImageBehavior = false;
-			this.listView1.View = System.Windows.Forms.View.Details;
-			this.listView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView1_ColumnClick);
-			this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1SelectedIndexChanged);
+			this.listViewAllVirtualGroups.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.listViewAllVirtualGroups.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.listViewAllVirtualGroups.FullRowSelect = true;
+			this.listViewAllVirtualGroups.HideSelection = false;
+			this.listViewAllVirtualGroups.Location = new System.Drawing.Point(3, 3);
+			this.listViewAllVirtualGroups.MultiSelect = false;
+			this.listViewAllVirtualGroups.Name = "listViewAllVirtualGroups";
+			this.listViewAllVirtualGroups.Size = new System.Drawing.Size(329, 503);
+			this.listViewAllVirtualGroups.TabIndex = 0;
+			this.listViewAllVirtualGroups.UseCompatibleStateImageBehavior = false;
+			this.listViewAllVirtualGroups.View = System.Windows.Forms.View.Details;
+			this.listViewAllVirtualGroups.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewAllVirtualGroupsColumnClick);
+			this.listViewAllVirtualGroups.SelectedIndexChanged += new System.EventHandler(this.listViewAllVirtualGroupsSelectedIndexChanged);
 			// 
 			// columnHeaderVirtualGroup
 			// 
@@ -136,9 +138,9 @@
 			this.columnHeaderNumberOfAgents.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.columnHeaderNumberOfAgents.Width = 81;
 			// 
-			// listView2
+			// listViewSkillInSkillGroup
 			// 
-			this.listView2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+			this.listViewSkillInSkillGroup.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeaderSkills,
             this.columnHeader2,
             this.columnHeader5,
@@ -146,18 +148,17 @@
             this.columnHeader7,
             this.columnHeader3,
             this.columnHeader4});
-			this.listView2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.listView2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-			this.listView2.FullRowSelect = true;
-			this.listView2.HideSelection = false;
-			this.listView2.Location = new System.Drawing.Point(340, 3);
-			this.listView2.MultiSelect = false;
-			this.listView2.Name = "listView2";
-			this.listView2.Size = new System.Drawing.Size(500, 514);
-			this.listView2.TabIndex = 1;
-			this.listView2.UseCompatibleStateImageBehavior = false;
-			this.listView2.View = System.Windows.Forms.View.Details;
-			this.listView2.SelectedIndexChanged += new System.EventHandler(this.listView2_SelectedIndexChanged);
+			this.listViewSkillInSkillGroup.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.listViewSkillInSkillGroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+			this.listViewSkillInSkillGroup.FullRowSelect = true;
+			this.listViewSkillInSkillGroup.HideSelection = false;
+			this.listViewSkillInSkillGroup.Location = new System.Drawing.Point(338, 3);
+			this.listViewSkillInSkillGroup.MultiSelect = false;
+			this.listViewSkillInSkillGroup.Name = "listViewSkillInSkillGroup";
+			this.listViewSkillInSkillGroup.Size = new System.Drawing.Size(497, 503);
+			this.listViewSkillInSkillGroup.TabIndex = 1;
+			this.listViewSkillInSkillGroup.UseCompatibleStateImageBehavior = false;
+			this.listViewSkillInSkillGroup.View = System.Windows.Forms.View.Details;
 			// 
 			// columnHeaderSkills
 			// 
@@ -202,10 +203,10 @@
 			this.listView3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
 			this.listView3.FullRowSelect = true;
 			this.listView3.HideSelection = false;
-			this.listView3.Location = new System.Drawing.Point(846, 3);
+			this.listView3.Location = new System.Drawing.Point(841, 3);
 			this.listView3.MultiSelect = false;
 			this.listView3.Name = "listView3";
-			this.listView3.Size = new System.Drawing.Size(276, 514);
+			this.listView3.Size = new System.Drawing.Size(274, 503);
 			this.listView3.TabIndex = 2;
 			this.listView3.UseCompatibleStateImageBehavior = false;
 			this.listView3.View = System.Windows.Forms.View.Details;
@@ -217,75 +218,20 @@
 			// 
 			// tableLayoutPanel1
 			// 
-			this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.tableLayoutPanel1.ColumnCount = 3;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-			this.tableLayoutPanel1.Controls.Add(this.listView1, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.listViewAllVirtualGroups, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.listView3, 2, 0);
-			this.tableLayoutPanel1.Controls.Add(this.listView2, 1, 0);
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(8, 31);
+			this.tableLayoutPanel1.Controls.Add(this.listViewSkillInSkillGroup, 1, 0);
+			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 1;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(1125, 520);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(1118, 509);
 			this.tableLayoutPanel1.TabIndex = 3;
-			// 
-			// toolStrip1
-			// 
-			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonFilterOnSelectedSkill,
-            this.toolStripButtonRemoveNotLoadedSkills,
-            this.toolStripButtonSuggestAction,
-            this.toolStripButton1});
-			this.toolStrip1.Location = new System.Drawing.Point(3, 3);
-			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(1135, 25);
-			this.toolStrip1.TabIndex = 4;
-			this.toolStrip1.Text = "toolStrip1";
-			// 
-			// toolStripButtonFilterOnSelectedSkill
-			// 
-			this.toolStripButtonFilterOnSelectedSkill.CheckOnClick = true;
-			this.toolStripButtonFilterOnSelectedSkill.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Filter;
-			this.toolStripButtonFilterOnSelectedSkill.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonFilterOnSelectedSkill.Name = "toolStripButtonFilterOnSelectedSkill";
-			this.toolStripButtonFilterOnSelectedSkill.Size = new System.Drawing.Size(179, 22);
-			this.toolStripButtonFilterOnSelectedSkill.Text = "Filter groups on selected skill";
-			this.toolStripButtonFilterOnSelectedSkill.CheckedChanged += new System.EventHandler(this.toolStripButtonFilterOnSelectedSkillCheckedChanged);
-			// 
-			// toolStripButtonSuggestAction
-			// 
-			this.toolStripButtonSuggestAction.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripButtonSuggestAction.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSuggestAction.Image")));
-			this.toolStripButtonSuggestAction.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonSuggestAction.Name = "toolStripButtonSuggestAction";
-			this.toolStripButtonSuggestAction.Size = new System.Drawing.Size(118, 22);
-			this.toolStripButtonSuggestAction.Text = "Preview suggestions";
-			this.toolStripButtonSuggestAction.Click += new System.EventHandler(this.toolStripButtonSuggestAction_Click);
-			// 
-			// toolStripButton1
-			// 
-			this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-			this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButton1.Name = "toolStripButton1";
-			this.toolStripButton1.Size = new System.Drawing.Size(108, 22);
-			this.toolStripButton1.Text = "Apply suggestions";
-			this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
-			// 
-			// toolStripButtonRemoveNotLoadedSkills
-			// 
-			this.toolStripButtonRemoveNotLoadedSkills.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripButtonRemoveNotLoadedSkills.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonRemoveNotLoadedSkills.Image")));
-			this.toolStripButtonRemoveNotLoadedSkills.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonRemoveNotLoadedSkills.Name = "toolStripButtonRemoveNotLoadedSkills";
-			this.toolStripButtonRemoveNotLoadedSkills.Size = new System.Drawing.Size(142, 22);
-			this.toolStripButtonRemoveNotLoadedSkills.Text = "Remove not loaded skills";
-			this.toolStripButtonRemoveNotLoadedSkills.Click += new System.EventHandler(this.toolStripButtonRemoveNotLoadedSkillsClick);
 			// 
 			// tabControl1
 			// 
@@ -296,55 +242,71 @@
 			this.tabControl1.Location = new System.Drawing.Point(0, 0);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(1149, 585);
+			this.tabControl1.Size = new System.Drawing.Size(1132, 541);
 			this.tabControl1.TabIndex = 5;
 			// 
 			// tabPage2
 			// 
-			this.tabPage2.Controls.Add(this.tableLayoutPanel2);
+			this.tabPage2.Controls.Add(this.tableLayoutPanelSkillView);
 			this.tabPage2.Location = new System.Drawing.Point(4, 22);
 			this.tabPage2.Name = "tabPage2";
 			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(1141, 606);
+			this.tabPage2.Size = new System.Drawing.Size(1124, 515);
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "Skill view";
 			this.tabPage2.UseVisualStyleBackColor = true;
 			// 
-			// tableLayoutPanel2
+			// tableLayoutPanelSkillView
 			// 
-			this.tableLayoutPanel2.ColumnCount = 2;
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 62.80138F));
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 37.19862F));
-			this.tableLayoutPanel2.Controls.Add(this.listViewSkillViewAgents, 0, 0);
-			this.tableLayoutPanel2.Controls.Add(this.listViewSkillViewSkills, 0, 0);
-			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
-			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 1;
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(1135, 600);
-			this.tableLayoutPanel2.TabIndex = 0;
+			this.tableLayoutPanelSkillView.ColumnCount = 3;
+			this.tableLayoutPanelSkillView.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanelSkillView.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
+			this.tableLayoutPanelSkillView.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+			this.tableLayoutPanelSkillView.Controls.Add(this.listViewSkillGroupsForSkill, 0, 0);
+			this.tableLayoutPanelSkillView.Controls.Add(this.listViewSkillViewSkills, 0, 0);
+			this.tableLayoutPanelSkillView.Controls.Add(this.listViewSkillViewAgents, 2, 0);
+			this.tableLayoutPanelSkillView.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanelSkillView.Location = new System.Drawing.Point(3, 3);
+			this.tableLayoutPanelSkillView.Name = "tableLayoutPanelSkillView";
+			this.tableLayoutPanelSkillView.RowCount = 1;
+			this.tableLayoutPanelSkillView.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanelSkillView.Size = new System.Drawing.Size(1118, 509);
+			this.tableLayoutPanelSkillView.TabIndex = 0;
 			// 
-			// listViewSkillViewAgents
+			// listViewSkillGroupsForSkill
 			// 
-			this.listViewSkillViewAgents.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader15});
-			this.listViewSkillViewAgents.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.listViewSkillViewAgents.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-			this.listViewSkillViewAgents.FullRowSelect = true;
-			this.listViewSkillViewAgents.HideSelection = false;
-			this.listViewSkillViewAgents.Location = new System.Drawing.Point(715, 3);
-			this.listViewSkillViewAgents.MultiSelect = false;
-			this.listViewSkillViewAgents.Name = "listViewSkillViewAgents";
-			this.listViewSkillViewAgents.Size = new System.Drawing.Size(417, 594);
-			this.listViewSkillViewAgents.TabIndex = 3;
-			this.listViewSkillViewAgents.UseCompatibleStateImageBehavior = false;
-			this.listViewSkillViewAgents.View = System.Windows.Forms.View.Details;
+			this.listViewSkillGroupsForSkill.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader30,
+            this.columnHeader31,
+            this.columnHeader32});
+			this.listViewSkillGroupsForSkill.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.listViewSkillGroupsForSkill.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.listViewSkillGroupsForSkill.FullRowSelect = true;
+			this.listViewSkillGroupsForSkill.HideSelection = false;
+			this.listViewSkillGroupsForSkill.Location = new System.Drawing.Point(562, 3);
+			this.listViewSkillGroupsForSkill.MultiSelect = false;
+			this.listViewSkillGroupsForSkill.Name = "listViewSkillGroupsForSkill";
+			this.listViewSkillGroupsForSkill.Size = new System.Drawing.Size(329, 503);
+			this.listViewSkillGroupsForSkill.TabIndex = 5;
+			this.listViewSkillGroupsForSkill.UseCompatibleStateImageBehavior = false;
+			this.listViewSkillGroupsForSkill.View = System.Windows.Forms.View.Details;
 			// 
-			// columnHeader15
+			// columnHeader30
 			// 
-			this.columnHeader15.Text = "Agents";
-			this.columnHeader15.Width = 263;
+			this.columnHeader30.Text = "Virtual groups";
+			this.columnHeader30.Width = 119;
+			// 
+			// columnHeader31
+			// 
+			this.columnHeader31.Text = "# Skills (not loaded)";
+			this.columnHeader31.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.columnHeader31.Width = 132;
+			// 
+			// columnHeader32
+			// 
+			this.columnHeader32.Text = "# Agents in group";
+			this.columnHeader32.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.columnHeader32.Width = 104;
 			// 
 			// listViewSkillViewSkills
 			// 
@@ -363,7 +325,7 @@
 			this.listViewSkillViewSkills.Location = new System.Drawing.Point(3, 3);
 			this.listViewSkillViewSkills.MultiSelect = false;
 			this.listViewSkillViewSkills.Name = "listViewSkillViewSkills";
-			this.listViewSkillViewSkills.Size = new System.Drawing.Size(706, 594);
+			this.listViewSkillViewSkills.Size = new System.Drawing.Size(553, 503);
 			this.listViewSkillViewSkills.TabIndex = 2;
 			this.listViewSkillViewSkills.UseCompatibleStateImageBehavior = false;
 			this.listViewSkillViewSkills.View = System.Windows.Forms.View.Details;
@@ -373,7 +335,7 @@
 			// columnHeader8
 			// 
 			this.columnHeader8.Text = "Loaded skills";
-			this.columnHeader8.Width = 133;
+			this.columnHeader8.Width = 119;
 			// 
 			// columnHeader9
 			// 
@@ -408,14 +370,34 @@
 			// 
 			this.columnHeader14.Text = "Activity";
 			// 
+			// listViewSkillViewAgents
+			// 
+			this.listViewSkillViewAgents.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader15});
+			this.listViewSkillViewAgents.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.listViewSkillViewAgents.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+			this.listViewSkillViewAgents.FullRowSelect = true;
+			this.listViewSkillViewAgents.HideSelection = false;
+			this.listViewSkillViewAgents.Location = new System.Drawing.Point(897, 3);
+			this.listViewSkillViewAgents.MultiSelect = false;
+			this.listViewSkillViewAgents.Name = "listViewSkillViewAgents";
+			this.listViewSkillViewAgents.Size = new System.Drawing.Size(218, 503);
+			this.listViewSkillViewAgents.TabIndex = 4;
+			this.listViewSkillViewAgents.UseCompatibleStateImageBehavior = false;
+			this.listViewSkillViewAgents.View = System.Windows.Forms.View.Details;
+			// 
+			// columnHeader15
+			// 
+			this.columnHeader15.Text = "Agents";
+			this.columnHeader15.Width = 263;
+			// 
 			// tabPage1
 			// 
-			this.tabPage1.Controls.Add(this.toolStrip1);
 			this.tabPage1.Controls.Add(this.tableLayoutPanel1);
 			this.tabPage1.Location = new System.Drawing.Point(4, 22);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(1141, 559);
+			this.tabPage1.Size = new System.Drawing.Size(1124, 515);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "Skill group view";
 			this.tabPage1.UseVisualStyleBackColor = true;
@@ -426,7 +408,7 @@
 			this.tabPage3.Location = new System.Drawing.Point(4, 22);
 			this.tabPage3.Name = "tabPage3";
 			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage3.Size = new System.Drawing.Size(1141, 606);
+			this.tabPage3.Size = new System.Drawing.Size(1124, 515);
 			this.tabPage3.TabIndex = 2;
 			this.tabPage3.Text = "Skill islands view";
 			this.tabPage3.UseVisualStyleBackColor = true;
@@ -445,7 +427,7 @@
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
 			this.tableLayoutPanel3.RowCount = 1;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(1135, 600);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(1118, 509);
 			this.tableLayoutPanel3.TabIndex = 0;
 			// 
 			// listViewIslandsSkillsOnGroup
@@ -462,10 +444,10 @@
 			this.listViewIslandsSkillsOnGroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
 			this.listViewIslandsSkillsOnGroup.FullRowSelect = true;
 			this.listViewIslandsSkillsOnGroup.HideSelection = false;
-			this.listViewIslandsSkillsOnGroup.Location = new System.Drawing.Point(683, 3);
+			this.listViewIslandsSkillsOnGroup.Location = new System.Drawing.Point(673, 3);
 			this.listViewIslandsSkillsOnGroup.MultiSelect = false;
 			this.listViewIslandsSkillsOnGroup.Name = "listViewIslandsSkillsOnGroup";
-			this.listViewIslandsSkillsOnGroup.Size = new System.Drawing.Size(449, 594);
+			this.listViewIslandsSkillsOnGroup.Size = new System.Drawing.Size(442, 503);
 			this.listViewIslandsSkillsOnGroup.TabIndex = 3;
 			this.listViewIslandsSkillsOnGroup.UseCompatibleStateImageBehavior = false;
 			this.listViewIslandsSkillsOnGroup.View = System.Windows.Forms.View.Details;
@@ -519,7 +501,7 @@
 			this.listViewIslands.Location = new System.Drawing.Point(3, 3);
 			this.listViewIslands.MultiSelect = false;
 			this.listViewIslands.Name = "listViewIslands";
-			this.listViewIslands.Size = new System.Drawing.Size(334, 594);
+			this.listViewIslands.Size = new System.Drawing.Size(329, 503);
 			this.listViewIslands.TabIndex = 2;
 			this.listViewIslands.UseCompatibleStateImageBehavior = false;
 			this.listViewIslands.View = System.Windows.Forms.View.Details;
@@ -558,10 +540,10 @@
 			this.listViewGroupsInIsland.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.listViewGroupsInIsland.FullRowSelect = true;
 			this.listViewGroupsInIsland.HideSelection = false;
-			this.listViewGroupsInIsland.Location = new System.Drawing.Point(343, 3);
+			this.listViewGroupsInIsland.Location = new System.Drawing.Point(338, 3);
 			this.listViewGroupsInIsland.MultiSelect = false;
 			this.listViewGroupsInIsland.Name = "listViewGroupsInIsland";
-			this.listViewGroupsInIsland.Size = new System.Drawing.Size(334, 594);
+			this.listViewGroupsInIsland.Size = new System.Drawing.Size(329, 503);
 			this.listViewGroupsInIsland.TabIndex = 1;
 			this.listViewGroupsInIsland.UseCompatibleStateImageBehavior = false;
 			this.listViewGroupsInIsland.View = System.Windows.Forms.View.Details;
@@ -594,11 +576,11 @@
 			// toolStripContainer1.ContentPanel
 			// 
 			this.toolStripContainer1.ContentPanel.Controls.Add(this.tabControl1);
-			this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1149, 585);
+			this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1132, 541);
 			this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
 			this.toolStripContainer1.Name = "toolStripContainer1";
-			this.toolStripContainer1.Size = new System.Drawing.Size(1149, 632);
+			this.toolStripContainer1.Size = new System.Drawing.Size(1132, 588);
 			this.toolStripContainer1.TabIndex = 6;
 			this.toolStripContainer1.Text = "toolStripContainer1";
 			// 
@@ -606,38 +588,66 @@
 			// 
 			this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStripMain);
 			// 
-			// toolStripMain
-			// 
-			this.toolStripMain.Dock = System.Windows.Forms.DockStyle.None;
-			this.toolStripMain.Location = new System.Drawing.Point(3, 0);
-			this.toolStripMain.Name = "toolStripMain";
-			this.toolStripMain.Size = new System.Drawing.Size(43, 25);
-			this.toolStripMain.TabIndex = 0;
-			// 
 			// statusStrip1
 			// 
 			this.statusStrip1.Dock = System.Windows.Forms.DockStyle.None;
 			this.statusStrip1.Location = new System.Drawing.Point(0, 0);
 			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(1149, 22);
+			this.statusStrip1.Size = new System.Drawing.Size(1132, 22);
 			this.statusStrip1.TabIndex = 0;
+			// 
+			// toolStripMain
+			// 
+			this.toolStripMain.Dock = System.Windows.Forms.DockStyle.None;
+			this.toolStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonRemoveNotLoadedSkills,
+            this.toolStripButton1,
+            this.toolStripButtonSuggestAction});
+			this.toolStripMain.Location = new System.Drawing.Point(3, 0);
+			this.toolStripMain.Name = "toolStripMain";
+			this.toolStripMain.Size = new System.Drawing.Size(380, 25);
+			this.toolStripMain.TabIndex = 0;
+			// 
+			// toolStripButtonRemoveNotLoadedSkills
+			// 
+			this.toolStripButtonRemoveNotLoadedSkills.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButtonRemoveNotLoadedSkills.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonRemoveNotLoadedSkills.Image")));
+			this.toolStripButtonRemoveNotLoadedSkills.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonRemoveNotLoadedSkills.Name = "toolStripButtonRemoveNotLoadedSkills";
+			this.toolStripButtonRemoveNotLoadedSkills.Size = new System.Drawing.Size(142, 22);
+			this.toolStripButtonRemoveNotLoadedSkills.Text = "Remove not loaded skills";
+			// 
+			// toolStripButtonSuggestAction
+			// 
+			this.toolStripButtonSuggestAction.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButtonSuggestAction.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSuggestAction.Image")));
+			this.toolStripButtonSuggestAction.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonSuggestAction.Name = "toolStripButtonSuggestAction";
+			this.toolStripButtonSuggestAction.Size = new System.Drawing.Size(118, 22);
+			this.toolStripButtonSuggestAction.Text = "Preview suggestions";
+			// 
+			// toolStripButton1
+			// 
+			this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+			this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton1.Name = "toolStripButton1";
+			this.toolStripButton1.Size = new System.Drawing.Size(108, 22);
+			this.toolStripButton1.Text = "Apply suggestions";
 			// 
 			// AgentSkillAnalyzer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1149, 632);
+			this.ClientSize = new System.Drawing.Size(1132, 588);
 			this.Controls.Add(this.toolStripContainer1);
 			this.Name = "AgentSkillAnalyzer";
 			this.Text = "Agent Skill Analyzer";
 			this.tableLayoutPanel1.ResumeLayout(false);
-			this.toolStrip1.ResumeLayout(false);
-			this.toolStrip1.PerformLayout();
 			this.tabControl1.ResumeLayout(false);
 			this.tabPage2.ResumeLayout(false);
-			this.tableLayoutPanel2.ResumeLayout(false);
+			this.tableLayoutPanelSkillView.ResumeLayout(false);
 			this.tabPage1.ResumeLayout(false);
-			this.tabPage1.PerformLayout();
 			this.tabPage3.ResumeLayout(false);
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.toolStripContainer1.BottomToolStripPanel.ResumeLayout(false);
@@ -647,17 +657,19 @@
 			this.toolStripContainer1.TopToolStripPanel.PerformLayout();
 			this.toolStripContainer1.ResumeLayout(false);
 			this.toolStripContainer1.PerformLayout();
+			this.toolStripMain.ResumeLayout(false);
+			this.toolStripMain.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
 
-		private System.Windows.Forms.ListView listView1;
+		private System.Windows.Forms.ListView listViewAllVirtualGroups;
 		private System.Windows.Forms.ColumnHeader columnHeaderVirtualGroup;
 		private System.Windows.Forms.ColumnHeader columnHeaderNumberOfSkills;
 		private System.Windows.Forms.ColumnHeader columnHeaderNumberOfAgents;
-		private System.Windows.Forms.ListView listView2;
+		private System.Windows.Forms.ListView listViewSkillInSkillGroup;
 		private System.Windows.Forms.ColumnHeader columnHeaderSkills;
 		private System.Windows.Forms.ListView listView3;
 		private System.Windows.Forms.ColumnHeader columnHeader1;
@@ -665,17 +677,13 @@
 		private System.Windows.Forms.ColumnHeader columnHeader2;
 		private System.Windows.Forms.ColumnHeader columnHeader3;
 		private System.Windows.Forms.ColumnHeader columnHeader4;
-		private System.Windows.Forms.ToolStrip toolStrip1;
-		private System.Windows.Forms.ToolStripButton toolStripButtonFilterOnSelectedSkill;
 		private System.Windows.Forms.ColumnHeader columnHeader5;
 		private System.Windows.Forms.ColumnHeader columnHeader6;
 		private System.Windows.Forms.ColumnHeader columnHeader7;
 		private System.Windows.Forms.TabControl tabControl1;
 		private System.Windows.Forms.TabPage tabPage1;
 		private System.Windows.Forms.TabPage tabPage2;
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-		private System.Windows.Forms.ListView listViewSkillViewAgents;
-		private System.Windows.Forms.ColumnHeader columnHeader15;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelSkillView;
 		private System.Windows.Forms.ListView listViewSkillViewSkills;
 		private System.Windows.Forms.ColumnHeader columnHeader8;
 		private System.Windows.Forms.ColumnHeader columnHeader9;
@@ -703,11 +711,17 @@
 		private System.Windows.Forms.ColumnHeader columnHeader17;
 		private System.Windows.Forms.ColumnHeader columnHeader18;
 		private System.Windows.Forms.ColumnHeader columnHeader29;
-		private System.Windows.Forms.ToolStripButton toolStripButtonSuggestAction;
-		private System.Windows.Forms.ToolStripButton toolStripButton1;
-		private System.Windows.Forms.ToolStripButton toolStripButtonRemoveNotLoadedSkills;
 		private System.Windows.Forms.ToolStripContainer toolStripContainer1;
 		private System.Windows.Forms.StatusStrip statusStrip1;
 		private System.Windows.Forms.ToolStrip toolStripMain;
+		private System.Windows.Forms.ListView listViewSkillViewAgents;
+		private System.Windows.Forms.ColumnHeader columnHeader15;
+		private System.Windows.Forms.ListView listViewSkillGroupsForSkill;
+		private System.Windows.Forms.ColumnHeader columnHeader30;
+		private System.Windows.Forms.ColumnHeader columnHeader31;
+		private System.Windows.Forms.ColumnHeader columnHeader32;
+		private System.Windows.Forms.ToolStripButton toolStripButtonRemoveNotLoadedSkills;
+		private System.Windows.Forms.ToolStripButton toolStripButton1;
+		private System.Windows.Forms.ToolStripButton toolStripButtonSuggestAction;
 	}
 }
