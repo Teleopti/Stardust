@@ -3,7 +3,7 @@
 	grunt.initConfig({
 		watch: {
 			dev: {
-				files: ['css/*.scss','js/**/*.html','html/**/*.html','js/**/*.js', 'tests/**/*.js'],
+				files: ['css/*.scss','js/**/*.html','html/**/*.html','js/**/*.js'],
 				tasks: ['devBuild'],
 				options: {
 					spawn: false,
@@ -224,12 +224,12 @@
 	grunt.registerTask('default', ['devBuild','test','watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('test', ['ngtemplates', 'karma:unit']);
 	grunt.registerTask('devTest', ['ngtemplates','karma:dev']);
-	grunt.registerTask('devBuild',['ngtemplates','concat:distJs','concat:distCss','uglify:dev', 'sass', 'cssmin','generateIndex'])
+	grunt.registerTask('devBuild', ['ngtemplates', 'concat:distJs', 'concat:distCss', 'uglify:dev', 'sass', 'cssmin', 'generateIndex']);
 	grunt.registerTask('test:continuous', ['ngtemplates', 'karma:continuous']);
 	grunt.registerTask('dist', ['ngtemplates','concat:distJs','concat:distCss','uglify:dist', 'sass', 'cssmin','generateIndex']); // this task should only be used by the build. It's kind of packaging for production.
 	grunt.registerTask('nova', ['devBuild','iisexpress:authBridge','iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('build', ['msbuild:build']); // build the solution
-	grunt.registerTask('generateIndex',['processhtml','cacheBust'])
+	grunt.registerTask('generateIndex', ['processhtml', 'cacheBust']);
 
 
 };

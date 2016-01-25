@@ -283,8 +283,8 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 			currentPageIndex: $scope.paginationOptions.pageNumber,
 			sortColumns: sortColumnList
 		}).$promise.then(function (result) {
-			$scope.searchResult = result.People;
-			$scope.gridOptions.data = result.People;
+			$scope.searchResult = result.People ? result.People : [];
+			$scope.gridOptions.data = result.People ? result.People : [];
 			$scope.gridOptions.paginationCurrentPage = $scope.paginationOptions.pageNumber;
 			angular.forEach($scope.searchResult, function (person) {
 				angular.forEach(person.OptionalColumnValues, function (val) {
