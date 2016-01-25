@@ -25,15 +25,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		public void ShouldNotProcessIfNoSourceId()
+		public void ShouldThrowIfNoSourceId()
 		{
 			var state = new ExternalUserStateForTest();
 			Database
 				.WithDataFromState(state);
 			state.SourceId = string.Empty;
 
-			Target.SaveState(state)
-				.Should().Not.Be.EqualTo(1);
+			Assert.Throws<InvalidSourceException>(() => Target.SaveState(state));
 		}
 
 		[Test]

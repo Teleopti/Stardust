@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
+using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Rta.WebService;
@@ -14,6 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 	public class TeleoptiRtaService : ITeleoptiRtaService
 	{
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
+		private static readonly ILog Log = LogManager.GetLogger(typeof(TeleoptiRtaService));
 
 		public TeleoptiRtaService(Domain.ApplicationLayer.Rta.Service.Rta rta)
 		{
@@ -91,6 +93,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			catch (BatchTooBigException e)
 			{
 				throw new FaultException<BatchTooBigException>(e);
+			}
+			catch (InvalidSourceException e)
+			{
+				Log.Error("The source id was not valid.", e);
+				return -300;
 			}
 		}
 

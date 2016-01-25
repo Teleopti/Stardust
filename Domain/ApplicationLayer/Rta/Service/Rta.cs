@@ -123,12 +123,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			_initializor.EnsureTenantInitialized();
 
-
 			if (string.IsNullOrEmpty(input.SourceId))
-			{
-				Log.ErrorFormat("The source id was not valid. Supplied value was {0}. (MessageId: {1})", input.SourceId, messageId);
-				return -300;
-			}
+				throw new InvalidSourceException(string.Format("The source id was not valid. Supplied value was {0}", input.SourceId));
 
 			if (string.IsNullOrEmpty(input.PlatformTypeId))
 			{
