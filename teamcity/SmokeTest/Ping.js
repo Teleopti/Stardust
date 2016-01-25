@@ -13,7 +13,6 @@ var ping = function(){
 	console.log('time '+diff);
 	var webUrl = process.env.UrlToTest + '/Web';
 	var bridgeUrl = process.env.UrlToTest + '/AuthenticationBridge';
-	var sdkUrl = process.env.UrlToTest + '/SDK/TeleoptiCCCSdkService.svc';
 	
 	var expectUrlToWorkWithinGivenTime = function (url, intervalIdCallback) {
 		baseRequest(url, function (error, response, body) {
@@ -40,11 +39,6 @@ var ping = function(){
 	var refreshIntervalIdBridgeUrl = setInterval(function () {
 		expectUrlToWorkWithinGivenTime(bridgeUrl,function (){return refreshIntervalIdBridgeUrl;});
 	}, 10000);
-	/*
-	var refreshIntervalIdSdkUrl = setInterval(function () {
-		expectUrlToWorkWithinGivenTime(sdkUrl,function (){return refreshIntervalIdSdkUrl;});
-	}, 10000);
-	*/
 };
 
 
