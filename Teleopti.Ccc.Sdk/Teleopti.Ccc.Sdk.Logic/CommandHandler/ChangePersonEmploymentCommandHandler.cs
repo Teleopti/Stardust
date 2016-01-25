@@ -233,16 +233,14 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private void resetExternalLogOns(IEnumerable<ExternalLogOnDto> externalLogOnDtos, IPersonPeriod personPeriod, IPerson person)
         {
 			  person.ResetExternalLogOn(personPeriod);
-            var externalLogOns = _externalLogOnRepository.LoadAllExternalLogOns();
+            var externalLogOns = _externalLogOnRepository.LoadAll();
             var filteredExternalLogOns = new List<IExternalLogOn>();
-            externalLogOns.ForEach(e =>
-                                       {
-                                           if (externalLogOnDtos.Any(
-                                               edto =>
-                                               edto.AcdLogOnName.Equals(e.AcdLogOnName) &&
-                                               edto.AcdLogOnOriginalId.Equals(e.AcdLogOnOriginalId)))
-                                               filteredExternalLogOns.Add(e);
-                                       });
+	        filteredExternalLogOns.AddRange(externalLogOns.Where(e =>
+	        {
+				return externalLogOnDtos.Any(edto =>
+					edto.AcdLogOnName.Equals(e.AcdLogOnName) &&
+					edto.AcdLogOnOriginalId.Equals(e.AcdLogOnOriginalId));
+	        }));
 	        foreach (var filteredExternalLogOn in filteredExternalLogOns)
 	        {
 		        person.AddExternalLogOn(filteredExternalLogOn,personPeriod);

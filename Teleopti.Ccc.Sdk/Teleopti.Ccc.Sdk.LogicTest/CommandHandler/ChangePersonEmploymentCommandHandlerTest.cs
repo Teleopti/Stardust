@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 .Return(_contractSchedule);
             _teamRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault()))
                 .Return(_team);
-            _externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
+            _externalLogOnRepository.Stub(x => x.LoadAll()).Return(new List<IExternalLogOn>());
 
             _target.Handle(_changePersonEmploymentCommandDto);
 
@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 .Return(_contractSchedule);
             _teamRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault()))
                 .Return(_team);
-            _externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
+            _externalLogOnRepository.Stub(x => x.LoadAll()).Return(new List<IExternalLogOn>());
             _skillRepository.Stub(x => x.Load(_skill.Id.GetValueOrDefault())).Return(_skill);
 #pragma warning disable 618
             _changePersonEmploymentCommandDto.PersonSkillPeriodCollection[0].PersonSkillCollection.Add(new PersonSkillDto { Active = false, Proficiency = 0.9, SkillId = _skill.Id.GetValueOrDefault() });
@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 .Return(_contractSchedule);
             _teamRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault()))
                 .Return(_team);
-            _externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
+            _externalLogOnRepository.Stub(x => x.LoadAll()).Return(new List<IExternalLogOn>());
             _skillRepository.Stub(x => x.Load(_skill.Id.GetValueOrDefault())).Return(_skill);
 #pragma warning disable 618
             _changePersonEmploymentCommandDto.PersonSkillPeriodCollection[0].SkillCollection.Add(_skill.Id.GetValueOrDefault());
@@ -262,7 +262,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 .Return(_contractSchedule);
             _teamRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault()))
                 .Return(_team);
-            _externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
+            _externalLogOnRepository.Stub(x => x.LoadAll()).Return(new List<IExternalLogOn>());
             _skillRepository.Stub(x => x.Load(_skill.Id.GetValueOrDefault())).Return(_skill);
 #pragma warning disable 618
             _changePersonEmploymentCommandDto.PersonSkillPeriodCollection = null;
@@ -299,7 +299,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 .Return(_contractSchedule);
             _teamRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault()))
                 .Return(_team);
-            _externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
+            _externalLogOnRepository.Stub(x => x.LoadAll()).Return(new List<IExternalLogOn>());
             _skillRepository.Stub(x => x.Load(_skill.Id.GetValueOrDefault())).Return(_skill);
 #pragma warning disable 618
             _changePersonEmploymentCommandDto.PersonSkillPeriodCollection[0].SkillCollection.Add(_skill.Id.GetValueOrDefault());
@@ -337,7 +337,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 .Return(_contractSchedule);
             _teamRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault()))
                 .Return(_team);
-            _externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
+            _externalLogOnRepository.Stub(x => x.LoadAll()).Return(new List<IExternalLogOn>());
 
             _skillRepository.Stub(x => x.Load(_skill.Id.GetValueOrDefault())).Return(_skill);
 #pragma warning disable 618
@@ -377,7 +377,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _personSkillPeriodAssembler.Stub(x => x.DomainEntityToDto(personPeriod))
                 .IgnoreArguments()
                 .Return(new PersonSkillPeriodDto());
-            _externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
+            _externalLogOnRepository.Stub(x => x.LoadAll()).Return(new List<IExternalLogOn>());
 
             _target.Handle(_changePersonEmploymentCommandDto);
             unitOfWork.AssertWasCalled(x => x.PersistAll());
@@ -397,7 +397,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 _partTimePercentageRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.PartTimePercentageId.GetValueOrDefault())).Return(_partTimePercentage);
                 _contractRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractId.GetValueOrDefault())).Return(_contract);
                 _contractScheduleRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractScheduleId.GetValueOrDefault())).Return(_contractSchedule);
-                _externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
+                _externalLogOnRepository.Stub(x => x.LoadAll()).Return(new List<IExternalLogOn>());
                 
                 _target.Handle(_changePersonEmploymentCommandDto);
 
@@ -420,7 +420,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_partTimePercentageRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.PartTimePercentageId.GetValueOrDefault())).Return(_partTimePercentage);
 			_contractRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractId.GetValueOrDefault())).Return(_contract);
 			_contractScheduleRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractScheduleId.GetValueOrDefault())).Return(_contractSchedule);
-			_externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
+			_externalLogOnRepository.Stub(x => x.LoadAll()).Return(new List<IExternalLogOn>());
 			_personSkillPeriodAssembler.Stub(x => x.DomainEntityToDto(personPeriod)).Return(new PersonSkillPeriodDto());
 
 			_target.Handle(_changePersonEmploymentCommandDto);
@@ -445,7 +445,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _partTimePercentageRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.PartTimePercentageId.GetValueOrDefault())).Return(_partTimePercentage);
             _contractRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractId.GetValueOrDefault())).Return(_contract);
             _contractScheduleRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractScheduleId.GetValueOrDefault())).Return(_contractSchedule);
-            _externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
+            _externalLogOnRepository.Stub(x => x.LoadAll()).Return(new List<IExternalLogOn>());
             _skillRepository.Stub(x => x.Load(_skill.Id.GetValueOrDefault())).Return(_skill);
 
 #pragma warning disable 618

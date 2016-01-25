@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(source1);
             PersistAndRemoveFromUnitOfWork(source2);
 
-            IList<IExternalLogOn> logins = new ExternalLogOnRepository(UnitOfWork).LoadAllExternalLogOns();
+            IList<IExternalLogOn> logins = new ExternalLogOnRepository(UnitOfWork).LoadAll();
 
             Assert.AreEqual(2,logins.Count);
             Assert.IsTrue(logins.Contains(source1));

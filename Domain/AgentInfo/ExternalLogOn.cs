@@ -167,7 +167,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo
         public virtual object Clone()
         {
             ExternalLogOn retobj = (ExternalLogOn)MemberwiseClone();
-            //retobj.SetId(null);
             return retobj;
         }
 
@@ -179,7 +178,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo
         public virtual int CompareTo(object obj)
         {
             return string.Compare(AcdLogOnName, ((ExternalLogOn)obj).AcdLogOnName, true, CultureInfo.CurrentCulture);
-                //acdLogOnName.CompareTo(((ExternalLogOn)obj).AcdLogOnName,);
         }
     }
 }

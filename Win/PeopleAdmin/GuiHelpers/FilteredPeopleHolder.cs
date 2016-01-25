@@ -992,7 +992,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			var r = new ExternalLogOnRepository(GetUnitOfWork);
 			var logObjectUniqueRecord = new QueueSourceRepository(GetUnitOfWork);
 			var logObjectInfo = logObjectUniqueRecord.GetDistinctLogItemName();
-			var externalLogOnList = r.LoadAllExternalLogOns();
+			var externalLogOnList = r.LoadAll();
 			foreach (var extLogOnItem in externalLogOnList)
 			{
 				if (logObjectInfo.ContainsKey(extLogOnItem.DataSourceId))

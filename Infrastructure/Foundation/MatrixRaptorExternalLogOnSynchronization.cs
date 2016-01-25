@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
         /// </remarks>
         public int SynchronizeExternalLogOns(IList<IExternalLogOn> matrixExternalLogOns)
         {
-            IList<IExternalLogOn> raptorExternalLogOns = _externalLogOnRepository.LoadAllExternalLogOns();
+            IList<IExternalLogOn> raptorExternalLogOns = _externalLogOnRepository.LoadAll();
             IList<IExternalLogOn> externalLogOnsToAdd = new List<IExternalLogOn>(matrixExternalLogOns);
             int updatedCount = 0;
 
@@ -67,7 +67,11 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			        updatedCount += 1;
 		        }
 	        }
-	        _externalLogOnRepository.AddRange(externalLogOnsToAdd);
+
+	        if (externalLogOnsToAdd.Count > 0)
+	        {
+		        _externalLogOnRepository.AddRange(externalLogOnsToAdd);
+	        }
 
             return externalLogOnsToAdd.Count + updatedCount;
         }

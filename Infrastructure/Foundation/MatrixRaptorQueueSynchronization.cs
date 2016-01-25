@@ -44,35 +44,29 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			IList<IQueueSource> queuesToAdd = new List<IQueueSource>(matrixQueues);
 			int updatedCount = 0;
 
-			clearInvalidMartDataOnRaptorQueues(raptorQueues, matrixQueues);
+			var matrixQueuesByMartId = matrixQueues.ToDictionary(k => k.QueueMartId);
+			var matrixQueuesByAggId = matrixQueues.ToLookup(k => k.QueueAggId);
 
-			foreach (IQueueSource matrixQueue in matrixQueues)
+			clearInvalidMartDataOnRaptorQueues(raptorQueues, matrixQueuesByMartId);
+
+			foreach (IQueueSource raptorQueue in raptorQueues)
 			{
-				foreach (IQueueSource raptorQueue in raptorQueues)
+				IQueueSource matrixQueue;
+				if ((matrixQueuesByMartId.TryGetValue(raptorQueue.QueueMartId, out matrixQueue) && raptorQueue.QueueOriginalId >= 0 &&
+					 raptorQueue.DataSourceId > 0) || findByLookup(matrixQueuesByAggId, raptorQueue, out matrixQueue))
 				{
-					if ((raptorQueue.QueueMartId == 0 &&
-						raptorQueue.QueueOriginalId == 0 &&
-						raptorQueue.DataSourceId == 0 &&
-						raptorQueue.QueueAggId > 0 &&
-						raptorQueue.QueueAggId == matrixQueue.QueueAggId)
-						||
-						(raptorQueue.QueueMartId == matrixQueue.QueueMartId &&
-						raptorQueue.QueueOriginalId >= 0 &&
-						raptorQueue.DataSourceId > 0))
-					{
-						// Newly upgraded/converted database with unmapped queue with matching QueueAggId´s
-						// Or
-						// queues with matching QueueMartId´s. 
-						raptorQueue.DataSourceId = matrixQueue.DataSourceId;
-						raptorQueue.QueueMartId = matrixQueue.QueueMartId;
-						raptorQueue.QueueAggId = matrixQueue.QueueAggId;
-						raptorQueue.QueueOriginalId = matrixQueue.QueueOriginalId;
-						raptorQueue.Name = matrixQueue.Name;
-						raptorQueue.Description = matrixQueue.Description;
-						raptorQueue.LogObjectName = matrixQueue.LogObjectName;
-						queuesToAdd.Remove(matrixQueue);
-						updatedCount += 1;
-					}
+					// Newly upgraded/converted database with unmapped queue with matching QueueAggId´s
+					// Or
+					// queues with matching QueueMartId´s. 
+					raptorQueue.DataSourceId = matrixQueue.DataSourceId;
+					raptorQueue.QueueMartId = matrixQueue.QueueMartId;
+					raptorQueue.QueueAggId = matrixQueue.QueueAggId;
+					raptorQueue.QueueOriginalId = matrixQueue.QueueOriginalId;
+					raptorQueue.Name = matrixQueue.Name;
+					raptorQueue.Description = matrixQueue.Description;
+					raptorQueue.LogObjectName = matrixQueue.LogObjectName;
+					queuesToAdd.Remove(matrixQueue);
+					updatedCount += 1;
 				}
 			}
 
@@ -84,13 +78,23 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			return queuesToAdd.Count + updatedCount;
 		}
 
-		private static void clearInvalidMartDataOnRaptorQueues(IList<IQueueSource> raptorQueues, IList<IQueueSource> matrixQueues)
+		private bool findByLookup(ILookup<int, IQueueSource> matrixQueuesByAggId, IQueueSource raptorQueue, out IQueueSource matrixQueue)
 		{
-			var keyedMatrixQueues = matrixQueues.ToDictionary(k => k.QueueMartId);
+			var validToFind = (raptorQueue.QueueMartId == 0 &&
+					 raptorQueue.QueueOriginalId == 0 &&
+					 raptorQueue.DataSourceId == 0 &&
+					 raptorQueue.QueueAggId > 0);
+
+			matrixQueue = matrixQueuesByAggId[raptorQueue.QueueAggId].FirstOrDefault();
+			return validToFind && matrixQueue != null;
+		}
+
+		private static void clearInvalidMartDataOnRaptorQueues(IList<IQueueSource> raptorQueues, IDictionary<int, IQueueSource> matrixQueues)
+		{
 			foreach (var raptorQueue in raptorQueues)
 			{
 				IQueueSource matrixQueue;
-				if (!keyedMatrixQueues.TryGetValue(raptorQueue.QueueMartId, out matrixQueue))
+				if (!matrixQueues.TryGetValue(raptorQueue.QueueMartId, out matrixQueue))
 				{
 					raptorQueue.QueueMartId = 0;
 					raptorQueue.QueueOriginalId = 0;

@@ -27,9 +27,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		{
 			IExternalLogOn raptorLogOnInvalidMartData = new ExternalLogOn(1, 2, "1", "a1", true);
 
-			_repMock.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn> { raptorLogOnInvalidMartData });
-			_repMock.Stub(x => x.AddRange(new List<IExternalLogOn>()));
-
+			_repMock.Stub(x => x.LoadAll()).Return(new List<IExternalLogOn> { raptorLogOnInvalidMartData });
+			
 			var affectedLogOn = _target.SynchronizeExternalLogOns(new List<IExternalLogOn>());
 
 			affectedLogOn.Should().Be.EqualTo(0);
@@ -47,9 +46,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			raptorLogOnCleared.DataSourceId = -1;
 			IExternalLogOn matrixLogOn = new ExternalLogOn(1, 2, "9", "n9", true);
 
-			_repMock.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn> { raptorLogOnCleared });
-			_repMock.Stub(x => x.AddRange(new List<IExternalLogOn>()));
-
+			_repMock.Stub(x => x.LoadAll()).Return(new List<IExternalLogOn> { raptorLogOnCleared });
+			
 			var affectedLogOns = _target.SynchronizeExternalLogOns(new List<IExternalLogOn> { matrixLogOn });
 
 			affectedLogOns.Should().Be.EqualTo(1);
@@ -65,9 +63,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			IExternalLogOn raptorLogOnCleared = new ExternalLogOn(-1, 2, "2", "2", true);
 			IExternalLogOn matrixLogOn = new ExternalLogOn(1, 99, "origId", "name", true);
 
-			_repMock.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn> { raptorLogOnCleared });
-			_repMock.Stub(x => x.AddRange(new List<IExternalLogOn> { matrixLogOn }));
-
+			_repMock.Stub(x => x.LoadAll()).Return(new List<IExternalLogOn> { raptorLogOnCleared });
+			
 			var affectedLogOns = _target.SynchronizeExternalLogOns(new List<IExternalLogOn> { matrixLogOn });
 
 			affectedLogOns.Should().Be.EqualTo(1);
@@ -75,6 +72,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			raptorLogOnCleared.DataSourceId.Should().Be.EqualTo(-1);
 			raptorLogOnCleared.AcdLogOnOriginalId.Should().Be.EqualTo("2");
 			raptorLogOnCleared.AcdLogOnName.Should().Be.EqualTo("2");
+
+			_repMock.AssertWasCalled(x => x.AddRange(new List<IExternalLogOn> { matrixLogOn }));
 		}
 
 		[Test]
@@ -83,9 +82,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			IExternalLogOn raptorLogOn = new ExternalLogOn(1, 2, "o1", "n1", true);
 			IExternalLogOn matrixLogOn = new ExternalLogOn(1, 22, "origId", "name", true);
 
-			_repMock.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn> { raptorLogOn });
-			_repMock.Stub(x => x.AddRange(new List<IExternalLogOn>()));
-
+			_repMock.Stub(x => x.LoadAll()).Return(new List<IExternalLogOn> { raptorLogOn });
+			
 			var affectedLogOns = _target.SynchronizeExternalLogOns(new List<IExternalLogOn> { matrixLogOn });
 
 			affectedLogOns.Should().Be.EqualTo(1);
