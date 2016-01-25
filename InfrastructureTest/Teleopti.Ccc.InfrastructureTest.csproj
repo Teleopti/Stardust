@@ -348,7 +348,6 @@
     <Compile Include="Persisters\Schedules\UpdateConflictWithUpdateTest.cs" />
     <Compile Include="Persisters\Schedules\UpdateNoConflictTest.cs" />
     <Compile Include="Persisters\WriteProtection\UpdateNoConflictTest.cs" />
-    <Compile Include="Repositories\AbsenceRequestInfoTest.cs" />
     <Compile Include="Repositories\PersonForShiftTradeRepositoryTest.cs" />
     <Compile Include="Repositories\SkillLoaderDeciderTest.cs" />
     <Compile Include="Repositories\Deadlock\StudentAvailabilityPersistTest.cs" />

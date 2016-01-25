@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             IList<IAbsence> retList = Session.CreateCriteria(typeof(Absence))
                         .AddOrder(Order.Asc("Description.Name"))
-                        .SetResultTransformer(Transformers.DistinctRootEntity)
                         .List<IAbsence>();
 
             return retList;
@@ -56,7 +55,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             IList<IAbsence> retList = Session.CreateCriteria(typeof(Absence))
                         .Add(Restrictions.Eq("Requestable", true))
                         .AddOrder(Order.Asc("Description.Name"))
-                        .SetResultTransformer(Transformers.DistinctRootEntity)
                         .List<IAbsence>();
 
             return retList;

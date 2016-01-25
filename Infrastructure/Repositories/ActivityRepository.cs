@@ -42,10 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public IList<IActivity> LoadAllSortByName()
         {
-            IList<IActivity> retList = LoadAll();
-            var lst = from a in retList orderby a.Name select a;
-            return new List<IActivity>(lst);
-            
+            return LoadAll().OrderBy(a => a.Name).ToList();
         }
 
         public IList<IActivity> LoadAllWithUpdatedBy()
