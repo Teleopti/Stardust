@@ -112,29 +112,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetReadOnly(true)
 					.List<ReadOnlyGroupDetail>();
 		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
+		
 		public void UpdateGroupingReadModel(ICollection<Guid> inputIds)
 		{
-			//change the array to comma seperated string
 			string ids = String.Join(",", inputIds.Select(p => p.ToString()).ToArray());
 			_currentUnitOfWork.Session().CreateSQLQuery(
 				"exec [ReadModel].[UpdateGroupingReadModel] :idList").SetString("idList", ids).ExecuteUpdate();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
 		public void UpdateGroupingReadModelGroupPage(ICollection<Guid> inputIds)
 		{
-			//change the array to comma seperated string
 			string ids = String.Join(",", inputIds.Select(p => p.ToString()).ToArray());
 			_currentUnitOfWork.Session().CreateSQLQuery(
 					"exec [ReadModel].[UpdateGroupingReadModelGroupPage] :idList").SetString("idList", ids).ExecuteUpdate();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
 		public void UpdateGroupingReadModelData(ICollection<Guid> inputIds)
 		{
-			//change the array to comma seperated string
 			string ids = String.Join(",", inputIds.Select(p => p.ToString()).ToArray());
 
 			_currentUnitOfWork.Session().CreateSQLQuery(

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
@@ -17,11 +18,13 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 
         public override ContractScheduleDto DomainEntityToDto(IContractSchedule entity)
         {
+	        var daysOfWeek = Enum.GetValues(typeof (DayOfWeek)).OfType<DayOfWeek>();
             return new ContractScheduleDto
                        {
                            Description = entity.Description.Name,
                            Id = entity.Id,
-                           IsDeleted = ((IDeleteTag) entity).IsDeleted
+                           IsDeleted = ((IDeleteTag) entity).IsDeleted,
+						   Weeks = entity.ContractScheduleWeeks.Select(s => new ContractScheduleWeekDto {WeekNumber = s.WeekOrder+1,WorkingDays = daysOfWeek.Where(s.IsWorkday).ToArray()}).ToArray()
                        };
         }
 

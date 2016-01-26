@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -62,7 +63,19 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             Assert.IsFalse(contractScheduleDto.IsDeleted);
         }
 
-        [Test]
+		[Test]
+		public void ShouldExposeWorkWeekDetailsInDto()
+		{
+			ContractScheduleDto contractScheduleDto = _target.DomainEntityToDto(_contractScheduleDomain);
+
+			contractScheduleDto.Weeks.Length.Should().Be.EqualTo(2);
+			contractScheduleDto.Weeks[0].WeekNumber.Should().Be.EqualTo(1);
+			contractScheduleDto.Weeks[0].WorkingDays.Should().Have.SameSequenceAs(new [] {DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Saturday });
+			contractScheduleDto.Weeks[1].WeekNumber.Should().Be.EqualTo(2);
+			contractScheduleDto.Weeks[1].WorkingDays.Should().Have.SameSequenceAs(new[] { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday });
+		}
+
+		[Test]
         public void VerifyDtoToDomainEntity()
         {
             using (_mocks.Record())

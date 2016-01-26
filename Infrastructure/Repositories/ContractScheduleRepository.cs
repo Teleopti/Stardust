@@ -24,17 +24,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				public ContractScheduleRepository(ICurrentUnitOfWork currentUnitOfWork)
 					: base(currentUnitOfWork)
 	    {
-		    
 	    }
-
-        /// <summary>
-        /// Finds all contract schedule by description.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by:SanjayaI
-        /// Created date: 3/31/2008
-        /// </remarks>
+		
          public ICollection<IContractSchedule> FindAllContractScheduleByDescription()
          {
              ICollection<IContractSchedule> retList = Session.CreateCriteria(typeof(ContractSchedule))

@@ -24,12 +24,12 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                 {
                     using (unitOfWork.DisableFilter(QueryFilter.Deleted))
                     {
-                        list = repository.FindAllContractScheduleByDescription();
+                        list = repository.LoadAllAggregate();
                     }
                 }
                 else
                 {
-                    list = repository.FindAllContractScheduleByDescription();
+                    list = repository.LoadAllAggregate();
                 }
                 dtoList = new ContractScheduleAssembler(null).DomainEntitiesToDtos(list).ToList();
             }
