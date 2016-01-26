@@ -11,12 +11,15 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 {
 	public class StageDateJobStep : JobStepBase
 	{
-		public StageDateJobStep(IJobParameters jobParameters)
+        private readonly bool _isInitial;
+
+		public StageDateJobStep(IJobParameters jobParameters,bool isInitial = false)
 			: base(jobParameters)
 		{
 			Name = "stg_date";
 			JobCategory = JobCategoryType.Initial;
 			IsBusinessUnitIndependent = true;
+		    _isInitial = isInitial;
 			DateInfrastructure.AddColumnsToDataTable(BulkInsertDataTable1);
 		}
 
@@ -24,7 +27,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 		{
 			// Get max date in dim_date (to be able to avoid gaps in the date_id sequence)
 			TimeZoneInfo timeZoneInfo = _jobParameters.DefaultTimeZone;
-			DateTime startDate = timeZoneInfo.SafeConvertTimeToUtc(_jobParameters.Helper.Repository.GetMaxDateInDimDate());
+            DateTime startDate = timeZoneInfo.SafeConvertTimeToUtc(_jobParameters.Helper.Repository.GetMaxDateInDimDate(_isInitial));
 			DateTime endDate = startDate;
 
 			IJobMultipleDateItem minMaxDatePeriodFromAllJobCategorys = _jobParameters.JobCategoryDates.MinMaxDatesUtc;

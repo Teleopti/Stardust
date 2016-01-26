@@ -87,7 +87,7 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 		int PersistTimeZoneBridge(DataTable dataTable, bool doTruncateTable);
 		int FillTimeZoneBridgeDataMart();
 		IEnumerable<TimeZoneInfo> LoadTimeZonesInUse();
-		DateTime GetMaxDateInDimDate();
+		DateTime GetMaxDateInDimDate(bool isInitial);
 		IList<TimeZonePeriod> GetBridgeTimeZoneLoadPeriod(TimeZoneInfo timeZone);
 
 		//Forecast data

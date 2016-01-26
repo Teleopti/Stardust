@@ -9,7 +9,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 		public InitialJobCollection(IJobParameters jobParameters)
 		{
 			Add(new DimIntervalJobStep(jobParameters));     // BU independent
-			Add(new StageDateJobStep(jobParameters));       // BU independent
+			Add(new StageDateJobStep(jobParameters, true));       // BU independent, refresh dim_date when initial
 			Add(new DimDateJobStep(jobParameters));         // BU independent
 			Add(new StageTimeZoneJobStep(jobParameters));
 			Add(new DimTimeZoneJobStep(jobParameters));

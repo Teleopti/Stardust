@@ -86,6 +86,25 @@ WHERE NOT EXISTS (SELECT * FROM mart.dim_date where date_id = -2)
 
 SET IDENTITY_INSERT mart.dim_date OFF
 
+--update incorrect date attributes
+UPDATE mart.dim_date
+SET year				= s.year, 
+	year_month			= s.year_month, 
+	month				= s.month, 
+	month_name			= s.month_name, 
+	month_resource_key	= s.month_resource_key,
+	day_in_month		= s.day_in_month, 
+	weekday_number		= s.weekday_number, 
+	weekday_name		= s.weekday_name, 
+	weekday_resource_key= s.weekday_resource_key,
+	week_number			= s.week_number, 
+	year_week			= s.year_week, 
+	quarter				= s.quarter,
+	insert_date			 = getdate()
+FROM
+	Stage.stg_date s
+INNER JOIN mart.dim_date d ON s.date_date = d.date_date
+
 ----------------------------------------------------------------------------
 -- Insert new dates
 INSERT INTO mart.dim_date

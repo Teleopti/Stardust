@@ -10,14 +10,25 @@ GO
 -- Description:	Return tha max date from dim_date
 -- =============================================
 CREATE PROCEDURE [mart].[etl_dim_date_get_max_date]
-	
+@isInitial bit = 0	
 AS
-
+set nocount on
+/*fix incorrect weeknumbers or culture in dim_date*/
+IF @isInitial = 1 
+BEGIN
+	SELECT 
+		isnull(min(date_date), '1999-12-31') as max_date
+	FROM mart.dim_date
+	WHERE 
+		date_id > -1
+END
+ELSE
+BEGIN
 SELECT 
 	isnull(max(date_date), '1999-12-31') as max_date
 FROM mart.dim_date
 WHERE 
 	date_id > -1
-
+END 
 GO
 

@@ -1568,12 +1568,14 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 									  _dataMartConnectionString);
 		}
 
-		public DateTime GetMaxDateInDimDate()
+		public DateTime GetMaxDateInDimDate(bool isInitial)
 		{
+            //Prepare sql parameters
+            var parameterList = new[] { new SqlParameter("isInitial", isInitial)};
 			return
 				DateTime.SpecifyKind(
 					(DateTime)
-					HelperFunctions.ExecuteScalar(CommandType.StoredProcedure, "mart.etl_dim_date_get_max_date",
+					HelperFunctions.ExecuteScalar(CommandType.StoredProcedure, "mart.etl_dim_date_get_max_date",parameterList,
 												  _dataMartConnectionString), DateTimeKind.Unspecified);
 		}
 
