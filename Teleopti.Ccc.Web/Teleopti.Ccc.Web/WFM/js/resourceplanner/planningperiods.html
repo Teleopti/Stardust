@@ -117,7 +117,7 @@
 					</div>
 					<div class="con-row">
 						<div class="con-flex" ng-show="!node.Default">{{'AppliedFilters'|translate}}
-							<span class="appliedFilters con-row" ng-repeat="filter in node.Filters">
+							<span class="appliedFilters con-row" ng-repeat="filter in node.Filters | limitTo:5">
 								<span class="filter-handle">{{filter.FilterType}}</span>
 							<span class="filter-chip">{{filter.Name}}</span>
 							</span>

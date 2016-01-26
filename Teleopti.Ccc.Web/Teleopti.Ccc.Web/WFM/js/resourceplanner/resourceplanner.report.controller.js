@@ -2,13 +2,22 @@
 	'use strict';
 	angular.module('wfm.resourceplanner')
 		.controller('ResourceplannerReportCtrl', [
-			'$scope','$filter','$state', '$stateParams','ResourcePlannerReportSrvc','PlanningPeriodSvrc','growl', function($scope, $filter, $state, $stateParams, ResourcePlannerReportSrvc, PlanningPeriodSvrc, growl) {
+			'$scope','$filter','$state', '$stateParams','ResourcePlannerReportSrvc','PlanningPeriodSvrc','growl','Toggle', function($scope, $filter, $state, $stateParams, ResourcePlannerReportSrvc, PlanningPeriodSvrc, growl, toggleService) {
 	            $scope.issues = $stateParams.result.BusinessRulesValidationResults;
 	            $scope.hasIssues = $scope.issues.length > 0;
 	            $scope.scheduledAgents = $stateParams.result.ScheduledAgentsCount;
+				$scope.isEnabled = false;
 	            var scheduleResult = $stateParams.interResult.SkillResultList;
 	            $scope.planningPeriod = $stateParams.planningperiod;
 	            $scope.dayNodes = scheduleResult;
+				toggleService.togglesLoaded.then(function() {
+					$scope.isEnabled = toggleService.Scheduler_IntradayOptimization_36617;
+				});
+				$scope.intraOptimize = function(){
+					ResourcePlannerReportSrvc.intraOptimize('test');
+
+
+				}
 	            $scope.gridOptions = {
 	                columnDefs: [
 	                    { name: 'Agent', field: 'Name', enableColumnMenu: false },
