@@ -87,12 +87,12 @@
 					var seats = utils.getObjectsOfTypeFromGroup(object, 'seat');
 					if (seats.length > 0) {
 						loadOccupancyForSeats(seats);
-						vm.parentVm.rightPanelOption.panelState = true;
+						vm.parentVm.rightPanelOptions.panelState = true;
 					}
 				} else {
 					if (object.get('type') == 'seat') {
 						loadOccupancyForSeats([object]);
-						vm.parentVm.rightPanelOption.panelState = true;
+						vm.parentVm.rightPanelOptions.panelState = true;
 					}
 				}
 
@@ -128,7 +128,7 @@
 					vm.occupancyDetails = undefined;
 					vm.previousSelectedSeatIds = [];
 				}
-				vm.parentVm.rightPanelOption.panelState = false;
+				vm.parentVm.rightPanelOptions.panelState = false;
 			});
 
 		};
@@ -251,7 +251,7 @@
 		vm.parentVm = controllers[1];
 		vm.rightPanelVm = controllers[2];
 		
-		vm.parentVm.rightPanelOption.panelTitle = "Seat Information";//need to translate
+		vm.parentVm.rightPanelOptions.panelTitle = "SeatBookingsList";
 
 		vm.init();
 	};

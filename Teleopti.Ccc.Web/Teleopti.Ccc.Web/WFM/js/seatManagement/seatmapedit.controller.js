@@ -30,7 +30,7 @@
 			});
 
 			canvas().on('before:selection:cleared', function (e) {
-				vm.parentVm.rightPanelOption.panelState = false;
+				vm.parentVm.rightPanelOptions.panelState = false;
 			});
 
 			createDocumentListeners();
@@ -289,7 +289,7 @@
 			};
 
 			editor.save(data, onSaveSuccess);
-			vm.parentVm.rightPanelOption.panelState = false;
+			vm.parentVm.rightPanelOptions.panelState = false;
 		};
 
 		function onSaveSuccess() {

@@ -24,11 +24,12 @@
 		vm.scrollListen = false;
 		vm.loadedSeatsData = [];
 		vm.zoomData = { min: 0.1, max: 2, step: 0.05, zoomValue: 1 };
-		vm.rightPanelOption = {
+		vm.rightPanelOptions = {
 			panelState: false,
-			panelTitle: "Seat Properties",
+			panelTitle: "SeatProperties",
 			showCloseButton: true,
-			showBackdrop: false
+			showBackdrop: false,
+			showResizer: true
 		};
 
 		var canvas = new fabric.CanvasWithViewport('c');
@@ -92,12 +93,12 @@
 
 			//TODO:currently we only support showing properties for seats
 			if (vm.activeSeats.length > 0)
-				vm.rightPanelOption.panelState = true;
+				vm.rightPanelOptions.panelState = true;
 		};
 
 		vm.handleBreadcrumbClick = function (id) {
 			vm.isLoading = true;
-			vm.rightPanelOption.panelState = false;
+			vm.rightPanelOptions.panelState = false;
 			canvasUtils.loadSeatMap(id, vm.selectedDate, canvas, vm.isInEditMode, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
 

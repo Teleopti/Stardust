@@ -58,5 +58,10 @@
 		scope.vm.panelOptions.panelTitle = scope.vm.panelOptions.panelTitle || "Right Panel";
 		scope.vm.panelOptions.showCloseButton = scope.vm.panelOptions.showCloseButton == true;
 		scope.vm.panelOptions.showBackdrop = scope.vm.panelOptions.showBackdrop == true;
+		scope.vm.panelOptions.showResizer = scope.vm.panelOptions.showResizer == true;
+
+		if (!scope.vm.panelOptions.showResizer) {
+			$("wfm-right-panel .resizable .rg-left").hide();
+		}
 	};
 })();

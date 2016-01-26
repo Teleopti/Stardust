@@ -2213,15 +2213,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Amount of Filters.
-        /// </summary>
-        public static string AmountOfFilters {
-            get {
-                return ResourceManager.GetString("AmountOfFilters", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to &amp;Employment Number.
         /// </summary>
         public static string AmpersandEmployeeNumber {
@@ -2587,6 +2578,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ApplicationUserIdShouldBeAValidEmailAddressErrorMsg {
             get {
                 return ResourceManager.GetString("ApplicationUserIdShouldBeAValidEmailAddressErrorMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings are applied to the following:.
+        /// </summary>
+        public static string AppliedFilters {
+            get {
+                return ResourceManager.GetString("AppliedFilters", resourceCulture);
             }
         }
         
@@ -6577,6 +6577,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CurrentPassword {
             get {
                 return ResourceManager.GetString("CurrentPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This planning period will be from.
+        /// </summary>
+        public static string CurrentPlanningPeriodMessage {
+            get {
+                return ResourceManager.GetString("CurrentPlanningPeriodMessage", resourceCulture);
             }
         }
         
@@ -24226,6 +24235,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Seat Bookings List.
+        /// </summary>
+        public static string SeatBookingsList {
+            get {
+                return ResourceManager.GetString("SeatBookingsList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to seats.
         /// </summary>
         public static string SeatCountTitle {
@@ -24345,6 +24363,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SeatProductActivationKey {
             get {
                 return ResourceManager.GetString("SeatProductActivationKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Seat Properties.
+        /// </summary>
+        public static string SeatProperties {
+            get {
+                return ResourceManager.GetString("SeatProperties", resourceCulture);
             }
         }
         

@@ -50,7 +50,7 @@
 				<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 			</div>
 
-			<wfm-right-panel panel-options="vm.rightPanelOption" on-open="vm.getRoles()" ng-class="{'right-panel-edit-mode':(vm.showEditor)} ">
+			<wfm-right-panel panel-options="vm.rightPanelOptions" on-open="vm.getRoles()" ng-class="{'right-panel-edit-mode':(vm.showEditor)} ">
 
 				<seatmap-occupancy-detail schedule-date="vm.selectedDate" refresh-seat-map="vm.refreshSeatMap()" ng-if="vm.showOccupancy"></seatmap-occupancy-detail>
 

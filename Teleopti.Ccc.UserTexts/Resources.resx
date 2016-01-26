@@ -14070,4 +14070,12 @@ Help us improve your experience by sending an error report</value>
     <value>Settings are applied to the following:</value>
     <comment>Describing what units are covered by custom rulesets</comment>
   </data>
+  <data name="SeatBookingsList" xml:space="preserve">
+    <value>Seat Bookings List</value>
+    <comment>Seat bookings list title name in seat booking view</comment>
+  </data>
+  <data name="SeatProperties" xml:space="preserve">
+    <value>Seat Properties</value>
+    <comment>Seat property information title of seatmap right panel</comment>
+  </data>
 </root>

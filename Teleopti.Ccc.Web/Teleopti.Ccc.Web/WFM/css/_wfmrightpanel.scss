@@ -1,86 +1,94 @@
-﻿@keyframes widthChange {
+﻿@keyframes widthChange5 {
 	0% {
 		width: 0px;
+		background:$white;
 	}
 	
-	50%{
+	80%{
 		width: 0px;
+		background:$gray012;
 	}
 
 	100%{
 		width: 5px;
+		background:$gray-300;
 	}
 }
 
-@-webkit-keyframes fadeIn {
+@keyframes widthChange7 {
 	0% {
-	opacity: 0;
+		width: 0px;
+	}
+	
+	80%{
+		width: 0px;
 	}
 
-	100% {
-	opacity: 1;
+	100%{
+		width: 7px;
 	}
 }
 
-@keyframes fadeIn {
-	0% {
-	opacity: 0;
-	}
-
-	100% {
-	opacity: 1;
-	}
-}
 
 wfm-right-panel{
 	z-index:1;
+
 
 	.resizable{
 		position:absolute;	
 		right:0;
 		width:auto;
-		min-width:307px;
-		max-width:600px;
+		min-width:310px;
+		max-width:80%;
 		top:0;
 		bottom:0;
+		z-index:60;
+		background:$white;
+		overflow:visible!important;
 
 		.rg-left{
 			width:5px;
 			z-index:2;
 			margin-left:0;
 			margin:0;
+			left:-5px;
 			height:100%;
-			background:#e1e2e3;
-			animation: widthChange 0.5s 1;
-			-webkit-animation: widthChange 0.5s 1;
+			background:$gray-300;
+			animation: widthChange5 450ms;
+			-webkit-animation: widthChange5 450ms;
 
 			span{
 				margin-left:6px;
-				animation: fadeIn 0.5s 1;
-				-webkit-animation: fadeIn 0.5s 1;
 				z-index:1;
+				animation: widthChange7 450ms;
+				-webkit-animation: widthChange7 450ms;
 			}
+		}
+		
+		.md-sidenav-backdrop{
+			display:none;
 		}
 	}
 
 	md-sidenav{
-		top:initial;
-		left:inital;
 		max-width:none;
 		overflow:hidden;
+		width:100%;
+		z-index:1;
 	}
 	
-	.md-sidenav-right{
-		width:99.5%;
-		z-index:1;
+	.panel-content{
+		position:absolute;
+		top:41px;
+		right:0;
+		bottom:0;
+		left:0;
+		overflow:auto;
+		padding-left:5px;
 	}
 }
 
 .wfm-right-panel{
-	
-	.sidenav-header{
-		padding:9px 5px!important;
-	}
 	
 	.sidenav-header .chevron{
 		margin:0;

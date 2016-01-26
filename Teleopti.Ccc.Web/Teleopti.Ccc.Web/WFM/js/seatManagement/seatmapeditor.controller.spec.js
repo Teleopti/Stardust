@@ -67,7 +67,7 @@ describe('seatmap editor controller tests', function () {
 		controller.parentVm = {
 			seats: [],
 			getCanvas: function () { return canvas; },
-			rightPanelOption: {}
+			rightPanelOptions: {}
 		};
 	};
 

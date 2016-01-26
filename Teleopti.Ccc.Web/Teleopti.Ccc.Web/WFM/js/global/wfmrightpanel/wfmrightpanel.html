@@ -1,13 +1,16 @@
-﻿<div resizable r-directions="['left']" r-flex="false" ng-show="vm.showResizer">
+﻿<md-backdrop class="md-sidenav-backdrop md-opaque ng-scope" ng-if="vm.panelOptions.showBackdrop && vm.panelOptions.panelState"
+			 ng-click="vm.panelOptions.panelState = false;"></md-backdrop>
 
-	<md-sidenav class="md-sidenav-right wfm-right-panel drsElement" md-component-id="right-panel">
+<div resizable r-directions="['left']" r-flex="false" ng-show="vm.showResizer">
+
+	<md-sidenav class="md-sidenav-right wfm-right-panel drsElement" md-component-id="right-panel" md-is-open="vm.panelOptions.panelState">
 
 		<div class="sidenav-header">
 			<span class="chevron pull-left" ng-click="vm.closePanel()" ng-if="vm.panelOptions.showCloseButton"><i class="mdi mdi-arrow-right"></i></span>
-			<span>{{vm.panelOptions.panelTitle}}</span>
+			<span>{{vm.panelOptions.panelTitle | translate}}</span>
 		</div>
 
-		<div ng-transclude></div>
+		<div class="panel-content"ng-transclude></div>
 
 	</md-sidenav>
 

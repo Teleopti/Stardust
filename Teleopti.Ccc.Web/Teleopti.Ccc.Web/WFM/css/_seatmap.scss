@@ -20,18 +20,18 @@ input[type=text],input[type=password],input[type=number]{
 	background:$white;
 
 	.wfm-block{
-		width: 100%;
 		margin: 0;
-		padding:0;
-		position:absolute;
-		top:0;
-		right:0;
-		bottom:0;
-		left:0;
+		padding: 0;
+		position: absolute;
+		top: 41px;
+		right: 0;
+		bottom: 0;
+		left: 0
 	}
 
 	.wfm-block-edit-mode{
 		position:relative;
+		top:0;
 	}	
 }
 
@@ -90,9 +90,10 @@ input[type=text],input[type=password],input[type=number]{
 }
 
 .location-breadcrumb{
+	background:$white;
 	position: absolute;
 	height:30px;
-	top:0;
+	top:41px;
 	left:0;
 	right:0;
 	padding-top:5px;
@@ -143,14 +144,10 @@ input[type=text],input[type=password],input[type=number]{
 	bottom:0px;
 	overflow:hidden;
 	width:100%;
-
-	md-backdrop.md-sidenav-backdrop{
-		display:none;
-	}	
-}
-
-.seatmap-canvas.booking-view {
-	top:40px;
+	
+	.booking-view {
+		top:40px;
+	}
 }
 
 seatmap-editor{
@@ -314,11 +311,12 @@ seatmap-editor{
 .wfm-block-edit-mode{
 	md-content.layout-padding{
 		position:absolute;
-		top:40px;
+		top:0;
 		right:0;
 		bottom:0;
-		left:4px;
+		left:0;
 		overflow:visible;	
+		padding:0;
 	}
 
 	.layout-padding .input-prepend{
@@ -340,13 +338,18 @@ seatmap-editor{
 	}
 }
 
+.seatmap-canvas .resizable{
+	min-width:370px;
+}
+
 .seatmap-canvas .right-panel-edit-mode .resizable{
 	top:-30px;
-	bottom:2px;
+	bottom:0;
+	min-width:310px;
 }
 
 seatmap-occupancy-detail{
-	top: 40px;
+	top: 0;
 	bottom: 0;
 	position: absolute;
 	right: 0;
@@ -355,7 +358,8 @@ seatmap-occupancy-detail{
 
 .seatbooking-operations-add, .seatbooking-operations-cancel {
 	position:absolute;
-	top:3px;
+	top:0;
+	padding:2px 0;
 	height:40px;
 	width:100%;
 	border-bottom:1px solid #e1e2e3;
@@ -378,6 +382,7 @@ people-selection-list{
 	position: absolute;
 	right: 0;
 	left: 0;
+	overflow:hidden;
 }
 
 people-selection-list>div.view-header{
@@ -402,6 +407,15 @@ people-selection-list .panel{
 	
 	.advaned-container{
 		margin-left:5px;	
+	}
+	
+	.split-3-1{
+		display:none;
+	}
+
+	.notice-spacer{
+		margin:0;
+		padding:0;
 	}
 	
 	.select-all-dialog{
@@ -448,7 +462,7 @@ people-selection-list .panel{
 	bottom: 0;
 	position: absolute;
 	right: 0;
-	left: 3px;
+	left: 0;
 
 	.seat-booking-list{
 		overflow:auto;
@@ -456,7 +470,7 @@ people-selection-list .panel{
 		top:40px;
 		right:0;
 		left:0;
-		bottom:0px;
+		bottom:0;
 
 		.wfm-list{
 			overflow-y:auto;
