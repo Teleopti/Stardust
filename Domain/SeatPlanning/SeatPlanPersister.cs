@@ -47,7 +47,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 					.Select (booking => booking.SeatBooking);
 				
 				seatPlan.Status = bookingsForDay.Any (booking => booking.Seat == null) ? SeatPlanStatus.InError : SeatPlanStatus.Ok;
-				_seatPlanRepository.Update (seatPlan);
 			}
 		}
 
@@ -70,7 +69,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			else
 			{
 				seatPlan.Status = SeatPlanStatus.InProgress;
-				_seatPlanRepository.Update (seatPlan);
 			}
 
 			return seatPlan as SeatPlan;
@@ -89,7 +87,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			{
 				_seatPlanRepository.RemoveSeatPlanForDate (seatBooking.BelongsToDate);
 			}
-
 		}
 	}
 }

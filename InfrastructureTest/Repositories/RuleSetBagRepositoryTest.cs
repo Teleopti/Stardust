@@ -14,23 +14,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     [Category("LongRunning")]
     public class RuleSetBagRepositoryTest : RepositoryTest<IRuleSetBag>
     {
-        protected override void ConcreteSetup()
-        {
-        }
+	    private IWorkShiftRuleSet ruleSet;
+
+	    protected override void ConcreteSetup()
+		{
+			IActivity act = new Activity("for test");
+			IShiftCategory cat = new ShiftCategory("for test");
+			PersistAndRemoveFromUnitOfWork(act);
+			PersistAndRemoveFromUnitOfWork(cat);
+			ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(act, new TimePeriodWithSegment(1, 2, 3, 4, 5), new TimePeriodWithSegment(1, 2, 3, 4, 5), cat));
+			ruleSet.Description = new Description("test");
+			ruleSet.AddAccessibilityDate(new DateOnly(2015, 1, 1));
+			ruleSet.AddAccessibilityDate(new DateOnly(2015, 1, 2));
+			ruleSet.AddAccessibilityDayOfWeek(DayOfWeek.Friday);
+			ruleSet.AddAccessibilityDayOfWeek(DayOfWeek.Saturday);
+			PersistAndRemoveFromUnitOfWork(ruleSet);
+		}
 
         protected override IRuleSetBag CreateAggregateWithCorrectBusinessUnit()
         {
-            IActivity act = new Activity("for test");
-            IShiftCategory cat = new ShiftCategory("for test");
-            PersistAndRemoveFromUnitOfWork(act);
-            PersistAndRemoveFromUnitOfWork(cat);
-            WorkShiftRuleSet ruleSet =new WorkShiftRuleSet(new WorkShiftTemplateGenerator(act, new TimePeriodWithSegment(1, 2, 3, 4, 5), new TimePeriodWithSegment(1, 2, 3, 4, 5), cat));
-            ruleSet.Description = new Description("test");
-			ruleSet.AddAccessibilityDate(new DateOnly(2015,1,1));
-			ruleSet.AddAccessibilityDate(new DateOnly(2015,1,2));
-			ruleSet.AddAccessibilityDayOfWeek(DayOfWeek.Friday);
-			ruleSet.AddAccessibilityDayOfWeek(DayOfWeek.Saturday);
-            PersistAndRemoveFromUnitOfWork(ruleSet);
             RuleSetBag root = new RuleSetBag();
             root.Description = new Description("for test");
             root.AddRuleSet(ruleSet);

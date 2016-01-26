@@ -13,13 +13,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-    /// <summary>
-    /// Repository for RuleSetBag
-    /// </summary>
-    /// <remarks>
-    /// Created by: rogerkr
-    /// Created date: 2008-03-28
-    /// </remarks>
     public class RuleSetBagRepository : Repository<IRuleSetBag>, IRuleSetBagRepository
     {
 #pragma warning disable 618
@@ -30,7 +23,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	    public RuleSetBagRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 	    {
-		    
 	    }
 
         public IEnumerable<IRuleSetBag> LoadAllWithRuleSets()
@@ -75,18 +67,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				CollectionHelper.ToDistinctGenericCollection<IRuleSetBag>(res[0]);
 
 		    return ruleSetBags.FirstOrDefault();
-			
-			
-			
-			/* Session.CreateCriteria(typeof(IRuleSetBag), "bag")
-				.Add(Restrictions.Eq("Id",id))
-				.CreateAlias("RuleSetCollection","r",JoinType.InnerJoin)
-				.CreateAlias("r.LimiterCollection", "l", JoinType.LeftOuterJoin)
-				.CreateAlias("r.ExtenderCollection", "e", JoinType.LeftOuterJoin)
-				.CreateAlias("r.AccessibilityDates", "d", JoinType.LeftOuterJoin)
-				.CreateAlias("r.AccessibilityDaysOfWeek", "w", JoinType.LeftOuterJoin)
-				.SetResultTransformer(Transformers.DistinctRootEntity)
-				.UniqueResult<IRuleSetBag>();*/
 	    }
     }
 }

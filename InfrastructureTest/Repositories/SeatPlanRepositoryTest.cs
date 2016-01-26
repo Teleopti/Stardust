@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -11,21 +10,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	[Category ("LongRunning")]
 	internal class SeatPlanRepositoryTest : RepositoryTest<ISeatPlan>
 	{
-		private int _callCount;
+		private DateOnly date = new DateOnly(2015, 10, 2);
 		
 		protected override ISeatPlan CreateAggregateWithCorrectBusinessUnit()
 		{
-
-			var seatPlan = new SeatPlan()
+			var seatPlan = new SeatPlan
 			{
-				Date = DateOnly.Today.AddDays (_callCount),
+				Date = date,
 				Status = SeatPlanStatus.InError
 			};
 
-			_callCount++;
+			date = date.AddDays(1);
 
 			return seatPlan;
-			
 		}
 
 		protected override void VerifyAggregateGraphProperties (ISeatPlan loadedAggregateFromDatabase)
@@ -44,13 +41,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldChangeSeatPlanStatus()
 		{
-
-			var seatPlan = new SeatPlan()
+			var seatPlan = new SeatPlan
 			{
-				
-				Date = new DateOnly(2015, 10, 2),
+				Date = date,
 				Status = SeatPlanStatus.InProgress
-
 			};
 
 			PersistAndRemoveFromUnitOfWork(seatPlan);
@@ -58,25 +52,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var seatPlanRepo = new SeatPlanRepository (UnitOfWork);
 			var existingSeatPlan = seatPlanRepo.GetSeatPlanForDate (seatPlan.Date);
 			existingSeatPlan.Status = SeatPlanStatus.Ok;
-			seatPlanRepo.Update(existingSeatPlan);
 
-			var loaded = seatPlanRepo.LoadAggregate(seatPlan.Id.Value);
+			var loaded = seatPlanRepo.Get(seatPlan.Id.GetValueOrDefault());
 			Assert.AreEqual(loaded.Status, SeatPlanStatus.Ok);
 			Assert.AreEqual(loaded.Id, seatPlan.Id);
 		}
-
-		#region Utility Methods
-
-		private ISeat createSeatMapLocationAndSeatInDb()
-		{
-			var rep = new SeatMapLocationRepository(UnitOfWork);
-			var seatMapLocation = new SeatMapLocation();
-			seatMapLocation.SetLocation("{DummyData}", "TestLocation");
-			seatMapLocation.AddSeat("Test Seat", 0);
-			rep.Add(seatMapLocation);
-			return seatMapLocation.Seats.First();
-		}
-
-		#endregion
 	}
 }

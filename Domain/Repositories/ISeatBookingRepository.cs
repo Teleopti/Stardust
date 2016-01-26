@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
-	public interface ISeatBookingRepository : IRepository<ISeatBooking>, ILoadAggregateFromBroker<ISeatBooking>
+	public interface ISeatBookingRepository : IRepository<ISeatBooking>
 	{
 		IList<ISeatBooking> LoadSeatBookingsForDateOnlyPeriod(DateOnlyPeriod period);
 		IList<ISeatBooking> LoadSeatBookingsForDateOnlyPeriod (IPerson person, DateOnlyPeriod period);

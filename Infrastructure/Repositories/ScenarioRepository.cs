@@ -30,26 +30,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				public ScenarioRepository(ICurrentUnitOfWork currentUnitOfWork)
 					: base(currentUnitOfWork)
 	    {
-		    
 	    }
-
-        /// <summary>
-        /// Finds all scenarios.
-        /// Default first, then sorted by name
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2007-12-07
-        /// </remarks>
+		
         public IList<IScenario> FindAllSorted()
         {
             IList<IScenario> scenarios = Session.CreateCriteria(typeof (Scenario))
-                //.AddOrder(Order.Desc("DefaultScenario"))
-                //.AddOrder(Order.Asc("Description.Name"))
                 .List<IScenario>();
 
-            return scenarios.OrderBy(sc => sc.Description.Name).OrderByDescending(sc => sc.DefaultScenario).ToList();
+            return scenarios.OrderByDescending(sc => sc.DefaultScenario).ThenBy(sc => sc.Description.Name).ToList();
         }
 
         public IList<IScenario> FindEnabledForReportingSorted()
@@ -58,17 +46,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .Add(Property.ForName("EnableReporting").Eq(true))
                 .List<IScenario>();
 
-            return scenarios.OrderBy(sc => sc.Description.Name).OrderByDescending(sc => sc.DefaultScenario).ToList();
-        }
-
-        /// <summary>
-        /// Loads the defaut scenario.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Sumeda Herath
-        /// Created date: 2008-03-05
-        /// </remarks>
+			return scenarios.OrderByDescending(sc => sc.DefaultScenario).ThenBy(sc => sc.Description.Name).ToList();
+		}
+		
         public IScenario LoadDefaultScenario()
         {
             var defaultScenario =  Session.CreateCriteria(typeof(Scenario))

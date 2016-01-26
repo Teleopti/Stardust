@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.SeatManagement;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -19,28 +18,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class SeatBookingRepository : Repository<ISeatBooking>, ISeatBookingRepository
 	{
-		private readonly ICurrentUnitOfWork _unitOfWork;
-
 		public SeatBookingRepository(IUnitOfWork unitOfWork)
 #pragma warning disable 618
 			: base(unitOfWork)
 #pragma warning restore 618
 		{
-			_unitOfWork = new ThisUnitOfWork(unitOfWork);
 		}
 
 		public SeatBookingRepository(ICurrentUnitOfWork currentUnitOfWork)
 			: base(currentUnitOfWork)
 		{
-			_unitOfWork = currentUnitOfWork;
 		}
-
-		public ISeatBooking LoadAggregate(Guid id)
-		{
-			return Session.Query<ISeatBooking>()
-				.FirstOrDefault(booking => booking.Id == id);
-		}
-
+		
 		public ISeatBooking LoadSeatBookingForPerson(DateOnly date, IPerson person)
 		{
 			return
@@ -103,12 +92,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public void RemoveSeatBookingsForSeat(ISeat seat)
 		{
 			GetSeatBookingsForSeat(seat)
-				.ForEach(booking => Session.Delete(booking));
+				.ForEach(Remove);
 		}
 
 		public ISeatBookingReportModel LoadSeatBookingsReport(ISeatBookingReportCriteria criteria, Paging paging = null)
 		{
-
 			var scheduleAndBookingQuery = getScheduleAndBookingQuery(criteria);
 			return getBookingReportResults(scheduleAndBookingQuery, paging);
 		}
@@ -197,11 +185,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private Guid getBusinessUnitId()
 		{
-			var filter = (FilterImpl)_unitOfWork.Session().GetEnabledFilter("businessUnitFilter");
+			var filter = (FilterImpl)Session.GetEnabledFilter("businessUnitFilter");
 			object businessUnitId;
 			if (!filter.Parameters.TryGetValue("businessUnitParameter", out businessUnitId))
 			{
-				businessUnitId = ((ITeleoptiIdentity)ClaimsPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault();
+				return ((ITeleoptiIdentity)ClaimsPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault();
 			}
 			return Guid.Parse(businessUnitId.ToString());
 		}
@@ -215,7 +203,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return reportCriteria.Teams.IsNullOrEmpty() ? null : string.Join(",", reportCriteria.Teams.Select(team => team.Id));
 		}
-
-		
 	}
 }

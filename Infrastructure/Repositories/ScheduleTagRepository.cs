@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System.Linq;
+using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
@@ -18,15 +18,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				public ScheduleTagRepository(ICurrentUnitOfWork currentUnitOfWork)
 					: base(currentUnitOfWork)
 	    {
-		    
 	    }
 
         public IList<IScheduleTag> FindAllScheduleTags()
         {
-            IList<IScheduleTag> scheduleTags = Session.CreateCriteria(typeof(ScheduleTag))
+            return Session.CreateCriteria(typeof(ScheduleTag))
+				.AddOrder(Order.Asc("Description"))
                 .List<IScheduleTag>();
-
-            return scheduleTags.OrderBy(sc => sc.Description).ToList();
         }
     }
 }

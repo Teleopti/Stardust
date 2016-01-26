@@ -1,50 +1,24 @@
-using System.Collections.Generic;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
+using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-    ///<summary>
-    /// Tests ScenarioRepository
-    ///</summary>
     [TestFixture]
     [Category("LongRunning")]
     public class ScenarioRepositoryTest : RepositoryTest<IScenario>
     {
-        private IScenarioRepository _rep;
-
-        /// <summary>
-        /// Runs before every test.
-        /// </summary>
-        protected override void ConcreteSetup()
-        {
-            _rep = new ScenarioRepository(UnitOfWork);
-        }
-
-
-        /// <summary>
-        /// Creates an aggreagte using the Bu of logged in user.
-        /// Should be a "full detailed" aggregate
-        /// </summary>
-        /// <returns></returns>
         protected override IScenario CreateAggregateWithCorrectBusinessUnit()
         {
             IScenario scenario = ScenarioFactory.CreateScenarioAggregate("Dummy", false);
             return scenario;
         }
 
-
-        /// <summary>
-        /// Verifies the aggregate graph properties.
-        /// </summary>
-        protected override void VerifyAggregateGraphProperties(IScenario loadedAggregateFromDatabase)
+		protected override void VerifyAggregateGraphProperties(IScenario loadedAggregateFromDatabase)
         {
             Assert.AreEqual(loadedAggregateFromDatabase.Description.Name, "Dummy");
         }
@@ -52,17 +26,36 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldThrowIfDefaultScenarioDoesNotExist()
 		{
-			foreach (var scenario in _rep.LoadAll())
+			var repository = new ScenarioRepository(UnitOfWork);
+			foreach (var scenario in repository.LoadAll())
 			{
 				((IDeleteTag)scenario).SetDeleted();
 				PersistAndRemoveFromUnitOfWork(scenario);
 			}
 
-			Assert.Throws<DataSourceException>(() => _rep.LoadDefaultScenario());
+			Assert.Throws<DataSourceException>(() => repository.LoadDefaultScenario());
 		}
 
+		[Test]
+		public void ShouldReturnSortedListWithDefaultScenarioFirst()
+		{
+			var repository = new ScenarioRepository(UnitOfWork);
 
-        protected override Repository<IScenario> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
+			var scenarioA = CreateAggregateWithCorrectBusinessUnit();
+			scenarioA.Description = new Description("A");
+			var scenarioX = CreateAggregateWithCorrectBusinessUnit();
+			scenarioX.Description = new Description("X");
+			scenarioX.DefaultScenario = true;
+
+			PersistAndRemoveFromUnitOfWork(scenarioX);
+			PersistAndRemoveFromUnitOfWork(scenarioA);
+
+			var result = repository.LoadAll();
+			result[0].Should().Be.EqualTo(scenarioX);
+			result[1].Should().Be.EqualTo(scenarioA);
+		}
+
+		protected override Repository<IScenario> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
             return new ScenarioRepository(currentUnitOfWork);
         }

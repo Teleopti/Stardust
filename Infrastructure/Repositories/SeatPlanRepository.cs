@@ -18,13 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public SeatPlanRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 		{
 		}
-
-		public ISeatPlan LoadAggregate (Guid id)
-		{
-			return Session.Query<ISeatPlan>()
-				.FirstOrDefault(plan => plan.Id == id);
-		}
-
+		
 		public ISeatPlan GetSeatPlanForDate (DateOnly date)
 		{
 			return 	Session.Query<ISeatPlan>().SingleOrDefault(seatPlan => seatPlan.Date == date );
@@ -37,12 +31,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				Remove(seatPlan);
 			}
-		}
-
-
-		public void Update (ISeatPlan existingSeatPlan)
-		{
-			Session.Update (existingSeatPlan);
 		}
 	}
 }
