@@ -33,6 +33,7 @@ BEGIN
 		SELECT @day_off_id = day_off_id
 		FROM mart.dim_day_off
 		WHERE day_off_name = @day_off_name
+		AND business_unit_id =@business_unit_id
 
 		IF @day_off_id IS NULL
 		BEGIN
