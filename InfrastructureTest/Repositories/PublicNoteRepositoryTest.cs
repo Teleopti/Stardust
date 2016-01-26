@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -15,16 +14,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     [Category("LongRunning")]
     public class PublicNoteRepositoryTest: RepositoryTest<IPublicNote>
     {
-        private IPublicNoteRepository _repository;
+	    private IPerson personToCreate;
+	    private IScenario scenario;
 
-        protected override IPublicNote CreateAggregateWithCorrectBusinessUnit()
+	    protected override void ConcreteSetup()
+		{
+			personToCreate = PersonFactory.CreatePerson("Kalle");
+			scenario = new Scenario("Active");
+			PersistAndRemoveFromUnitOfWork(personToCreate);
+			PersistAndRemoveFromUnitOfWork(scenario);
+		}
+
+	    protected override IPublicNote CreateAggregateWithCorrectBusinessUnit()
         {
-            var personToCreate = PersonFactory.CreatePerson("Kalle");
-            var scenario = new Scenario("Active");
-            var dateOnly = new DateOnly(2010,4,1);
-            const string text = "Agent was hit by shrinkage";
-            PersistAndRemoveFromUnitOfWork(personToCreate);
-            PersistAndRemoveFromUnitOfWork(scenario);
+			var dateOnly = new DateOnly(2010,4,1);
+			const string text = "Agent was hit by shrinkage";
 
             IPublicNote note = new PublicNote(personToCreate, dateOnly, scenario, text);
 
@@ -50,8 +54,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             IPublicNote note = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(note);
-            _repository = new PublicNoteRepository(UnitOfWork);
-            Assert.AreEqual(1, _repository.Find(new DateTimePeriod(2010, 4, 1, 2010, 4, 2), note.Scenario).Count);
+            var repository = new PublicNoteRepository(UnitOfWork);
+            Assert.AreEqual(1, repository.Find(new DateTimePeriod(2010, 4, 1, 2010, 4, 2), note.Scenario).Count);
         }
 
         [Test]
@@ -59,8 +63,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             IPublicNote note = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(note);
-            _repository = new PublicNoteRepository(UnitOfWork);
-            Assert.AreEqual(0, _repository.Find(new DateTimePeriod(2010, 4, 14, 2010, 4, 21), note.Scenario).Count);
+            var repository = new PublicNoteRepository(UnitOfWork);
+            Assert.AreEqual(0, repository.Find(new DateTimePeriod(2010, 4, 14, 2010, 4, 21), note.Scenario).Count);
         }
 
         [Test]
@@ -68,9 +72,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             IPublicNote note = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(note);
-            _repository = new PublicNoteRepository(UnitOfWork);
+            var repository = new PublicNoteRepository(UnitOfWork);
             ICollection<IPerson> persons = new List<IPerson> {note.Person};
-            Assert.AreEqual(1, _repository.Find(new DateOnlyPeriod(2010, 4, 1, 2010, 4, 2), persons, note.Scenario).Count);
+            Assert.AreEqual(1, repository.Find(new DateOnlyPeriod(2010, 4, 1, 2010, 4, 2), persons, note.Scenario).Count);
         }
 
         [Test]
@@ -80,9 +84,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IPublicNote note = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(note);
             PersistAndRemoveFromUnitOfWork(personWithoutNotes);
-            _repository = new PublicNoteRepository(UnitOfWork);
+            var repository = new PublicNoteRepository(UnitOfWork);
             ICollection<IPerson> persons = new List<IPerson> { personWithoutNotes };
-            Assert.AreEqual(0, _repository.Find(new DateOnlyPeriod(2010, 4, 1, 2010, 4, 2), persons, note.Scenario).Count);
+            Assert.AreEqual(0, repository.Find(new DateOnlyPeriod(2010, 4, 1, 2010, 4, 2), persons, note.Scenario).Count);
         }
 
         [Test]
@@ -90,8 +94,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             IPublicNote note = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(note);
-            _repository = new PublicNoteRepository(UnitOfWork);
-            Assert.IsNotNull(_repository.Find(note.NoteDate, note.Person, note.Scenario));
+            var repository = new PublicNoteRepository(UnitOfWork);
+            Assert.IsNotNull(repository.Find(note.NoteDate, note.Person, note.Scenario));
         }
 
         [Test]
@@ -99,8 +103,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             IPublicNote note = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(note);
-            _repository = new PublicNoteRepository(UnitOfWork);
-            Assert.IsNull(_repository.Find(new DateOnly(2011, 1, 1), note.Person, note.Scenario));
+            var repository = new PublicNoteRepository(UnitOfWork);
+            Assert.IsNull(repository.Find(new DateOnly(2011, 1, 1), note.Person, note.Scenario));
         }
 
         [Test]
@@ -108,9 +112,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             IPublicNote note = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(note);
-            _repository = new PublicNoteRepository(UnitOfWork);
+            var repository = new PublicNoteRepository(UnitOfWork);
             Assert.IsNotNull(note.Id);
-            Assert.AreEqual(note, _repository.LoadAggregate(note.Id.Value));
+            Assert.AreEqual(note, repository.LoadAggregate(note.Id.Value));
         }
     }
 }
