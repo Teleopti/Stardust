@@ -11,7 +11,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			if (dataTable == null)
 				return 0;
 
-			BulkWriter.BulkWrite(dataTable, connectionString, tableName);
+			new BulkWriter().WriteWithRetries(dataTable, connectionString, tableName);
 			Trace.WriteLine("Rows bulk-inserted into '" + tableName + "' : " + dataTable.Rows.Count);
 			return dataTable.Rows.Count;
 		}

@@ -4,12 +4,51 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
+using log4net;
+using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 
 namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
-    public static class BulkWriter
+    public class BulkWriter
     {
-        public static void BulkWrite(DataTable dataTable, String connectionString, String tableName)
+		private static readonly ILog logger = LogManager.GetLogger(typeof(BulkWriter));
+		const int maxRetry = 5;
+		const int delayMs = 100;
+
+
+		private RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy> makeRetryPolicy()
+		{
+			var fromMilliseconds = TimeSpan.FromMilliseconds(delayMs);
+			var policy = new RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy>(maxRetry, fromMilliseconds);
+			policy.Retrying += (sender, args) =>
+			{
+				// Log details of the retry.
+				var msg = String.Format("Retry - Count:{0}, Delay:{1}, Exception:{2}", args.CurrentRetryCount, args.Delay, args.LastException);
+				Trace.WriteLine(msg);
+			};
+			return policy;
+		}
+
+		public void WriteWithRetries(DataTable dataTable, String connectionString, String tableName)
+		{
+			tryWrite(dataTable, connectionString, tableName);
+		}
+
+		private void tryWrite(DataTable dataTable, string connectionString, string tableName)
+		{
+			var policy = makeRetryPolicy();
+			try
+			{
+				policy.ExecuteAction(() => write(dataTable, connectionString, tableName));
+			}
+			catch (Exception ex)
+			{
+				logger.Error("Get exception when executing SqlBulkCopy", ex);
+				throw;
+			}
+		}
+
+		private void write(DataTable dataTable, String connectionString, String tableName)
         {
             using (var destinationConnection = new SqlConnection(connectionString))
             {
