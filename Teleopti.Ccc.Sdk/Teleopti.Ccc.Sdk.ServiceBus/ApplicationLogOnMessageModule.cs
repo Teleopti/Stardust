@@ -31,11 +31,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private readonly ClaimCache _claimCache;
 		private readonly DataSourceForTenantWrapper _dataSourceForTenant;
 
-		public ApplicationLogOnMessageModule(ILogOnOff logOnOff, 
-																	IRoleToClaimSetTransformer roleToClaimSetTransformer, 
-																	IRepositoryFactory repositoryFactory, 
-																	ClaimCache claimCache,
-																	DataSourceForTenantWrapper dataSourceForTenant)
+		public ApplicationLogOnMessageModule(ILogOnOff logOnOff,
+			IRoleToClaimSetTransformer roleToClaimSetTransformer,
+			IRepositoryFactory repositoryFactory,
+			ClaimCache claimCache,
+			DataSourceForTenantWrapper dataSourceForTenant)
 		{
 			_logOnOff = logOnOff;
 			_roleToClaimSetTransformer = roleToClaimSetTransformer;
