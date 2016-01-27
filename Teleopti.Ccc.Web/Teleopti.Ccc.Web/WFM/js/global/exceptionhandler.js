@@ -3,16 +3,13 @@
 
 	angular
 		.module('wfm.exceptionHandler', [])
-		.factory('$exceptionHandler',function () {
-				var service = {
-					'errorCatcherHandler': errorCatcherHandler
+		.config(function($provide) {
+			$provide.decorator("$exceptionHandler", ['$delegate', function($delegate) {
+				return function(error, cause) {
+					if (window.onerror) window.onerror(error.message + ' - ' +error.stack);
+					$delegate(error, cause);
 				};
-				return service;
-
-				function errorCatcherHandler(exception, cause) {
-					console.error(exception);
-					if (window.OnClientError) window.OnClientError(exception);
-				};
-			}
-		);
+			}]);
+		});
+		
 })();
