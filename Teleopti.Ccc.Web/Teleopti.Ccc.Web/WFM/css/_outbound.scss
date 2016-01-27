@@ -37,22 +37,15 @@
 			right:0;
 			z-index:100;
 		}
-		
-		.pull-left{
-			position:relative;
-		}
 	}
 	
-	campaign-commands-pane input.ng-invalid.ng-dirty {
-        border-bottom:2px solid #F44336;
+	campaign-commands-pane input.ng-invalid.ng-dirty { // fix styleguide and refactor
+        border-bottom:2px solid $red-800 ;
 	}
 
-	.wfm-card-list-container {
-		max-height: none;
-	}
 	.enhanced-gantt-header{
-	    cursor:pointer;
-		transition: all .2s ease-in-out;
+		@extend .cursor;
+		transition: $transition-timing;
 	}
 	.enhanced-gantt-header:hover{
 	    background-color:#ececec;
@@ -63,7 +56,7 @@
 	.anti-enhanced-gantt-header:hover{
 	    background-color:#fff !important;
 	}
-	.outbound-back-btn{
+	.outbound-back-btn{ //unused ?
 	    margin:0;
 		padding:0;
 		line-height: 25px;
@@ -72,7 +65,7 @@
 		border-radius:0;
 		background-color:#F0F0F0;
 	}
-	.outbound-back-btn:hover{
+	.outbound-back-btn:hover{ //unused ?
 	    background-color:$blue-500;
 		.mdi-reply{
 			color:#fff !important;
@@ -121,18 +114,16 @@
 		z-index:1000;
 		margin-left:-130px;
 	}
-	.gantt-datepicker-container{
+	.gantt-datepicker-container{ //one line
 		.wfm-datepicker-wrap{
 		    min-height:auto;
 			padding:5px;
 		}
 	}
-	.wfm-btn-sm{
-	    padding:5px;
+	.wfm-btn-sm{ 
+	    padding:5px; // extract in styleguide or remove ?
 	}
-	.pointer{
-	    cursor:pointer;
-	}
+	
 	.outbound-gantt-chart {
 		position:relative;
 		border:1px solid $gray012;
@@ -193,7 +184,7 @@
 		.gantt-foreground-col {
 			border-right: solid 1px lightgray;
 		}
-		.gantt-body {
+		.gantt-body { // compact
 			.gantt-row-background.gantt-row-expanded {
 				border: solid 1px;
 				border-left: none;
@@ -212,7 +203,7 @@
 				border-right: none;
 			}
 
-			.gantt-row-background {
+			.gantt-row-background { //compact
 				&.gantt-row-expansion {
 					border-right: none;
 				}
@@ -346,7 +337,7 @@
 	    margin-top:10px;
 	}
     .date-label-close-fix:before{
-	    font-size:12px !important;
+	    font-size:12px !important; // could be extracted as a variable in styleguide helpers
 	}
 	.date-label-close-fix{
 	    position:relative;
@@ -474,7 +465,7 @@
 		background-color: $white;
 	}
 
-	.middle{
+	.middle{ // could be extracted as styleguide helper
 	    vertical-align:middle;
 	}
 	
@@ -675,7 +666,7 @@
 	.wrong-sign {
 		color: $red-600 ;
 	}
-
+	// compact
 	.ng-invalid, .custom-invalid {
 		& + .input-validation-sign {
 			.right-sign {
@@ -740,6 +731,7 @@
 		}
 	}
 
+	// mix campaign-edit and campaign-create ?
 	.campaign-edit {
 		background:$white;
 		padding:10px 5px;
@@ -776,6 +768,7 @@
 			}
 		}
 
+		//compact
 		input:not(.ng-dirty), .custom-input:not(.ng-dirty) {
 			& + .input-validation-sign {
 				.right-sign, .wrong-sign, .error-msg-container {
