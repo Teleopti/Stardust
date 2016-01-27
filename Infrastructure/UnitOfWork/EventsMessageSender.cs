@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class EventsMessageSender : IPersistCallback
 	{
-		private readonly IEventsPublisher _publisher;
+		private readonly IEventPublisher _publisher;
 
-		public EventsMessageSender(IEventsPublisher publisher) {
+		public EventsMessageSender(IEventPublisher publisher) {
 			_publisher = publisher;
 		}
 

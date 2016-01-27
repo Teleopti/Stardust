@@ -20,8 +20,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<AutofacResolve>().As<IResolve>().SingleInstance();
 
-			builder.RegisterType<SyncEventsPublisher>().As<IEventsPublisher>().SingleInstance();
-
 			builder.RegisterType<EventContextPopulator>().As<IEventContextPopulator>().SingleInstance();
 			builder.RegisterType<EventPopulatingPublisher>().As<IEventPopulatingPublisher>().SingleInstance();
 			builder.RegisterType<ResolveEventHandlers>().SingleInstance();

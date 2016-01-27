@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 			containerBuilder.RegisterModule(CommonModule.ForTest());
 			containerBuilder.RegisterModule<LocalServiceBusEventsPublisherModule>();
 			var container = containerBuilder.Build();
-			container.Resolve<IEventsPublisher>().Should().Not.Be.Null();
+			container.Resolve<IEventPublisher>().Should().Not.Be.Null();
 			container.Resolve<IEventPopulatingPublisher>().Should().Be.OfType<EventPopulatingPublisher>();
 		}
 

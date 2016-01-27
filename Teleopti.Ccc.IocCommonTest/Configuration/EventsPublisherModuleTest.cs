@@ -17,17 +17,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 	public class EventsPublisherModuleTest
 	{
 		[Test]
-		public void ShouldResolveEventsPublisher()
-		{
-			var builder = new ContainerBuilder();
-			builder.RegisterModule(CommonModule.ForTest());
-			builder.RegisterInstance(MockRepository.GenerateMock<IServiceBusSender>()).As<IServiceBusSender>();
-			var container = builder.Build();
-
-			container.Resolve<IEventsPublisher>().Should().Not.Be.Null();
-		}
-
-		[Test]
 		public void ShouldResolveSyncEventPublisher()
 		{
 			var builder = new ContainerBuilder();

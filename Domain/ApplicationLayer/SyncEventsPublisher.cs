@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
-	public class SyncEventsPublisher : IEventsPublisher
+	public class SyncEventsPublisher
 	{
 		private readonly IEventPopulatingPublisher _eventPopulatingPublisher;
 

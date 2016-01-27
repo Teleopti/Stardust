@@ -231,7 +231,6 @@
     <Compile Include="ApplicationLayer\IEventPopulatingPublisher.cs" />
     <Compile Include="ApplicationLayer\IEventPublisher.cs" />
     <Compile Include="ApplicationLayer\IEventPublisherScope.cs" />
-    <Compile Include="ApplicationLayer\IEventsPublisher.cs" />
     <Compile Include="ApplicationLayer\IgnoreDelayedMessages.cs" />
     <Compile Include="ApplicationLayer\IHandleEvent.cs" />
     <Compile Include="ApplicationLayer\Commands\RemovePersonAbsenceCommand.cs" />
