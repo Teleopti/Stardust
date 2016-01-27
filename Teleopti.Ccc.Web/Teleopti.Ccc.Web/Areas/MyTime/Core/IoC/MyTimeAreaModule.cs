@@ -142,6 +142,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<ShiftExchangeOffer>().As<IShiftExchangeOffer>().SingleInstance();
 			builder.RegisterType<ShiftExchangeOfferMapper>().As<IShiftExchangeOfferMapper>().SingleInstance();
 			builder.RegisterType<ShiftTradePersonScheduleProvider>().As<IShiftTradePersonScheduleProvider>().SingleInstance();
+			builder.RegisterType<ShiftTradePersonScheduleViewModelMapper>()
+				.As<IShiftTradePersonScheduleViewModelMapper>()
+				.SingleInstance();
 		}
 
 		private void registerAutoMapperTypes(ContainerBuilder builder)

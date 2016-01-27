@@ -14,32 +14,32 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 {
 	public class RequestsShiftTradeScheduleViewModelFactory : IRequestsShiftTradeScheduleViewModelFactory
 	{
-		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly ITeamScheduleProjectionProvider _projectionProvider;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IPossibleShiftTradePersonsProvider _possibleShiftTradePersonsProvider;
 		private readonly IShiftTradeTimeLineHoursViewModelMapper _shiftTradeTimeLineHoursViewModelMapper;
 		private readonly IShiftTradePersonScheduleProvider _personScheduleProvider;
+		private readonly IShiftTradePersonScheduleViewModelMapper _personScheduleViewModelMapper;
 
-		public RequestsShiftTradeScheduleViewModelFactory(
-														ILoggedOnUser loggedOnUser, 
-														ITeamScheduleProjectionProvider projectionProvider, 
+		public RequestsShiftTradeScheduleViewModelFactory(ITeamScheduleProjectionProvider projectionProvider, 
 														IPermissionProvider permissionProvider, 
-														IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider, 
-														IShiftTradeTimeLineHoursViewModelMapper shiftTradeTimeLineHoursViewModelMapper, IShiftTradePersonScheduleProvider personScheduleProvider)
+														IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider,
+														IShiftTradeTimeLineHoursViewModelMapper shiftTradeTimeLineHoursViewModelMapper, 
+														IShiftTradePersonScheduleProvider personScheduleProvider, 
+														IShiftTradePersonScheduleViewModelMapper personScheduleViewModelMapper)
 		{
-			_loggedOnUser = loggedOnUser;
 			_projectionProvider = projectionProvider;
 			_permissionProvider = permissionProvider;
 			_possibleShiftTradePersonsProvider = possibleShiftTradePersonsProvider;
 			_shiftTradeTimeLineHoursViewModelMapper = shiftTradeTimeLineHoursViewModelMapper;
 			_personScheduleProvider = personScheduleProvider;
+			_personScheduleViewModelMapper = personScheduleViewModelMapper;
 		}
 
 		public ShiftTradeScheduleViewModel CreateViewModel(ShiftTradeScheduleViewModelData inputData)
 		{
 			var ret = new ShiftTradeScheduleViewModel();
-			ret.MySchedule = makeMyScheduleViewModel(inputData);
+			ret.MySchedule = _personScheduleViewModelMapper.MakeMyScheduleViewModel(inputData);
 			if (ret.MySchedule.IsFullDayAbsence)
 			{
 				ret.PossibleTradeSchedules = new List<ShiftTradeAddPersonScheduleViewModel>();
@@ -75,16 +75,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		
 			return ret;
 		}
-
-		private ShiftTradeAddPersonScheduleViewModel makeMyScheduleViewModel(ShiftTradeScheduleViewModelData inputData)
-		{
-			var myScheduleDay = _permissionProvider.IsPersonSchedulePublished(inputData.ShiftTradeDate,
-				_loggedOnUser.CurrentUser())
-				? _personScheduleProvider.GetScheduleForPersons(inputData.ShiftTradeDate, new[] {_loggedOnUser.CurrentUser()}).SingleOrDefault()
-				: null;
-			var myScheduleViewModel = _projectionProvider.MakeScheduleReadModel(_loggedOnUser.CurrentUser(), myScheduleDay, true);
-			return new ShiftTradeAddPersonScheduleViewModel(myScheduleViewModel);
-		}
-
 	}
 }

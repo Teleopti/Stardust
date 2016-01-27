@@ -668,6 +668,13 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		}
 
 		[Test]
+		public void ShouldResolveRequestsShiftTradeBulletinBoardController()
+		{
+			requestContainer.Resolve<RequestsShiftTradeBulletinBoardController>()
+				 .Should().Not.Be.Null();
+		}
+
+		[Test]
 		public void ShouldResolveHangfireServerStartupTaskIfToggleEnabled()
 		{
 			using (var container = buildContainer(Toggles.RTA_NewEventHangfireRTA_34333, true))
