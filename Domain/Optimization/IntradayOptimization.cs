@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -45,6 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IScheduleDictionaryPersister _persister;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
+		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
 
 		public IntradayOptimization(IDailyValueByAllSkillsExtractor dailyValueByAllSkillsExtractor, 
 									IIntradayDecisionMaker intradayDecisionMaker, IScheduleService scheduleService,
@@ -67,7 +69,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 									IScheduleControllerPrerequisites prerequisites,
 									Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 									IScheduleDictionaryPersister persister,
-									IOptimizerHelperHelper optimizerHelperHelper
+									IOptimizerHelperHelper optimizerHelperHelper,
+									WeeklyRestSolverExecuter weeklyRestSolverExecuter
 									)
 		{
 			_dailyValueByAllSkillsExtractor = dailyValueByAllSkillsExtractor;
@@ -93,6 +96,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 			_persister = persister;
 			_optimizerHelperHelper = optimizerHelperHelper;
+			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
 		}
 
 		public virtual OptimizationResultModel Optimize(Guid planningPeriodId)
@@ -159,6 +163,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoBackgroundWorker());
 				service.Execute(optimizers, period, optimizationPreferences.Advanced.TargetValueCalculation);
 			}
+
+			_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, allSchedules, people.AllPeople, dayOffOptimizationPreference);
 
 			_persister.Persist(_schedulerStateHolder().Schedules);
 
