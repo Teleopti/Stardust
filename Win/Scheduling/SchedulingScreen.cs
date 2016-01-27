@@ -4230,10 +4230,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			skillGridMenuItem = new ToolStripMenuItem(Resources.DeleteSkillSummery) {Name = "Delete", Enabled = false};
 			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
 
-			if (
-				DefinedLicenseDataFactory.GetLicenseActivator(
-					((ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity).DataSource.DataSourceName).CustomerName ==
-				"Teleopti_RD")
+			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_AgentSkillAnalyzer_12345))
 			{
 				skillGridMenuItem = new ToolStripMenuItem("Agent Skill Analyzer...");
 				skillGridMenuItem.Click += skillGridMenuItemAgentSkillAnalyser_Click;

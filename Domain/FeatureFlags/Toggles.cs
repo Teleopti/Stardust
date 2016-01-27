@@ -99,7 +99,8 @@
 		Wfm_Requests_ApproveDeny_36297,
 
 		Report_UseOpenXmlFormat_35797,
-		Scheduler_IntradayOptimization_36617
+		Scheduler_IntradayOptimization_36617,
+		Scheduler_AgentSkillAnalyzer_12345
 		// ReSharper restore InconsistentNaming
 	}
 }
