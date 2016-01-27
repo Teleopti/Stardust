@@ -2,8 +2,8 @@
 	'use strict';
 	angular.module('wfm.resourceplanner')
 		.controller('ResourceplannerFilterCtrl', [
-			'$scope', 'ResourcePlannerFilterSrvc', 'ResourcePlannerSvrc', '$state', '$stateParams',
-			function($scope, ResourcePlannerFilterSrvc, ResourcePlannerSvrc, $state, $stateParams) {
+			'$scope', 'ResourcePlannerFilterSrvc', 'ResourcePlannerSvrc', '$state', '$stateParams', 'growl',
+			function($scope, ResourcePlannerFilterSrvc, ResourcePlannerSvrc, $state, $stateParams, growl) {
 				var maxHits = 5;
 				$scope.name = "";
 				$scope.searchString = '';
@@ -126,11 +126,26 @@
 					return $scope.name.length > 0;
 				};
 
+				var isVaildUnit = function(item){
+					var check = true;
+					$scope.selectedResults.forEach(function(node){
+						if (node.Id === item.Id){
+							check = false
+						};
+					});
+					return check;
+				};
 				$scope.selectResultItem = function(item) {
-					if ($scope.selectedResults.indexOf(item) < 0) {
+					if (isVaildUnit(item)) {
 						$scope.selectedResults.push(item);
+						$scope.clearInput();
+					}else {
+						$scope.clearInput();
+						growl.warning("<i class='mdi mdi-alert'></i> Unit already exists", {
+							ttl: 5000,
+							disableCountDown: true
+						});
 					}
-					$scope.clearInput();
 				};
 
 				$scope.moreResultsExists = function() {

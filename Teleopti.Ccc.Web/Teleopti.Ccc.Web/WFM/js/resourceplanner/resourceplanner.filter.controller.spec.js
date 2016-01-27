@@ -422,7 +422,7 @@ describe('ResourcePlannerCtrl', function () {
 		$httpBackend.verifyNoOutstandingRequest();
 	}));
 
-	it('should not be possible to select item twice', inject(function ($controller,$stateParams) {
+	fit('should not be possible to select item twice', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
@@ -448,8 +448,8 @@ describe('ResourcePlannerCtrl', function () {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
-		scope.results = [{}];
-		scope.selectResultItem({});
+		scope.results = [{Id:1}];
+		scope.selectResultItem({Id:1});
 
 		expect(scope.results.length).toEqual(0);
 	}));
@@ -543,6 +543,5 @@ describe('ResourcePlannerCtrl', function () {
 		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 		expect(scope.name).toBe('Default')
 	}));
-
 
 });
