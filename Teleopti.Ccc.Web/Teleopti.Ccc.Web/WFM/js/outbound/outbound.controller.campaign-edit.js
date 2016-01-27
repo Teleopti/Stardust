@@ -25,10 +25,10 @@
 		$scope.cancelRemoveCampaign = cancelRemoveCampaign;
 
         function editCampaign() {
-            if (!$scope.isInputValid()) {
-                $scope.flashErrorIcons();
-                return;
-            }
+            //if (!$scope.isInputValid()) {
+            //    $scope.flashErrorIcons();
+            //    return;
+            //}
             outboundService.editCampaign($scope.campaign, function (campaign) {
                 outboundNotificationService.notifyCampaignUpdateSuccess(angular.copy(campaign));
                 init();
@@ -61,21 +61,23 @@
 		}
 
         function init() {
-            $scope.isCampaignLoaded = function () { return angular.isDefined($scope.campaign); };
+           // $scope.isCampaignLoaded = function () { return angular.isDefined($scope.campaign); };
 
             var currentCampaignId = (angular.isDefined($stateParams.Id) && $stateParams.Id != "") ? $stateParams.Id : null;
             if (currentCampaignId == null) return;
 
             outboundService.getCampaign(currentCampaignId, function (campaign) {
+	            console.log('get campaign', campaign);
                 originalCampaign = campaign;
                 $scope.campaign = angular.copy(campaign);
 
                 $scope.$emit('outbound.campaign.selected', { Id: campaign.Id });
 
-                viewUtilityService.expandAllSections($scope);
-                viewUtilityService.registerCampaignForms($scope);
-                viewUtilityService.registerPersonHourFeedback($scope, outboundService);
+                //viewUtilityService.expandAllSections($scope);
+               // viewUtilityService.registerCampaignForms($scope);
+                
                 viewUtilityService.setupValidators($scope);
+                viewUtilityService.registerPersonHourFeedback($scope, outboundService);
 
                 setPristineForms();
 
@@ -93,9 +95,11 @@
         }
 
         function setPristineForms() {
-            if ($scope.campaignGeneralForm) $scope.campaignGeneralForm.$setPristine();
-            if ($scope.campaignWorkloadForm) $scope.campaignWorkloadForm.$setPristine();
-            if ($scope.campaignSpanningPeriodForm) $scope.campaignSpanningPeriodForm.$setPristine();
+            //if ($scope.campaignGeneralForm) $scope.campaignGeneralForm.$setPristine();
+            //if ($scope.campaignWorkloadForm) $scope.campaignWorkloadForm.$setPristine();
+        	//if ($scope.campaignSpanningPeriodForm) $scope.campaignSpanningPeriodForm.$setPristine();
+
+	        if ($scope.form) $scope.form.$setPristine();
 
             muteDirtyWorkingHoursWatcher = true;
             $scope.dirtyWorkingHours = false;
