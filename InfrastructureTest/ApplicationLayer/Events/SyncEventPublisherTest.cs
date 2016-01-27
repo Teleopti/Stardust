@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -65,11 +66,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		public class TestDomainEvent : EventWithLogOnAndInitiator
 		{
 		}
-
-		public interface ITestHandler : IHandleEvent<TestEvent>, IHandleEvent<TestEventTwo>
-		{
-		}
-
+		
 		public class FakeHandler1 : FakeHandler
 		{
 			
@@ -83,7 +80,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		public class FakeHandler : 
 			IHandleEvent<TestEvent>, 
 			IHandleEvent<TestEventTwo>, 
-			IHandleEvent<TestDomainEvent>
+			IHandleEvent<TestDomainEvent>,
+			IRunOnServiceBus
 		{
 			public Event CalledWithEvent;
 			public Event CalledWithEventTwo;

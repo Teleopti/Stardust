@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer;
 using Teleopti.Ccc.Sdk.ServiceBus.Container;

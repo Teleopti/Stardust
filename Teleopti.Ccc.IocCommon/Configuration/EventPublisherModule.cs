@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					builder.RegisterType<SelectiveEventPublisherWithoutBus>().As<IEventPublisher>().SingleInstance();
 				else
 					builder.Register(c => c.Resolve<SyncEventPublisher>()).As<IEventPublisher>().SingleInstance();
-				builder.Register(c => c.Resolve<IEventPopulatingPublisher>() as EventPopulatingPublisher).As<IEventPublisher>().SingleInstance();
 				builder.RegisterType<IgnoreDelayedMessages>().As<IDelayedMessageSender>().SingleInstance();
 			}
 
