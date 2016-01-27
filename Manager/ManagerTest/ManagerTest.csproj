@@ -91,6 +91,7 @@
     <Compile Include="Fakes\FakeHttpSender.cs" />
     <Compile Include="Fakes\FakeJobRepository.cs" />
     <Compile Include="Fakes\FakeWorkerNodeRepository.cs" />
+    <Compile Include="Helpers\UriHelperTests.cs" />
     <Compile Include="JobManagerTests.cs" />
     <Compile Include="JobTestsAttribute.cs" />
     <Compile Include="ManagerModuleTest.cs" />
