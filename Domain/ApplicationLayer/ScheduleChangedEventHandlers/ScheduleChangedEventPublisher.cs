@@ -15,9 +15,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		IHandleEvent<DayUnscheduledEvent>,
 		IRunOnServiceBus
 	{
-		private readonly IPublishEventsFromEventHandlers _publisher;
+		private readonly IEventPublisher _publisher;
 
-		public ScheduleChangedEventPublisher(IPublishEventsFromEventHandlers publisher)
+		public ScheduleChangedEventPublisher(IEventPublisher publisher)
 		{
 			_publisher = publisher;
 		}

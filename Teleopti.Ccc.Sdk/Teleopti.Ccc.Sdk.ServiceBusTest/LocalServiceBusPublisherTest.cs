@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			var bus = new FakeServiceBus();
 			var @event = new AnEventThatCanHaveInitiatorId();
 			var initiatorId = Guid.NewGuid();
-			var target = new LocalServiceBusPublisher(
+			var target = new LocalServiceBusEventPublisher(
 				bus,
 				new EventContextPopulator(null, null,
 					new FakeCurrentInitiatorIdentifier(

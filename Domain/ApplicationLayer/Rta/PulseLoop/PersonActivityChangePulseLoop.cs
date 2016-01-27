@@ -12,14 +12,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop
 		IHandleEvent<ScheduleProjectionReadOnlyChanged>,
 		IRunOnServiceBus
 	{
-		private readonly ISendDelayedMessages _serviceBus;
+		private readonly IDelayedMessageSender _serviceBus;
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 		private readonly IPersonRepository _personRepository;
         private readonly INotifyRtaToCheckForActivityChange _teleoptiRtaService;
         private readonly static ILog Logger = LogManager.GetLogger(typeof(PersonActivityChangePulseLoop));
 
 		public PersonActivityChangePulseLoop(
-			ISendDelayedMessages serviceBus, 
+			IDelayedMessageSender serviceBus, 
 			IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, 
 			INotifyRtaToCheckForActivityChange teleoptiRtaService, 
 			IPersonRepository personRepository)

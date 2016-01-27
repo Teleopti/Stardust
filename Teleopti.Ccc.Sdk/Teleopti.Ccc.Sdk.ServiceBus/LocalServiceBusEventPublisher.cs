@@ -6,14 +6,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
-	public class LocalServiceBusPublisher : 
-		IPublishEventsFromEventHandlers,
-		ISendDelayedMessages
+	public class LocalServiceBusEventPublisher : 
+		IEventPublisher,
+		IDelayedMessageSender
 	{
 		private readonly IServiceBus _bus;
 		private readonly IEventContextPopulator _eventContextPopulator;
 
-		public LocalServiceBusPublisher(IServiceBus bus, IEventContextPopulator eventContextPopulator)
+		public LocalServiceBusEventPublisher(IServiceBus bus, IEventContextPopulator eventContextPopulator)
 		{
 			_bus = bus;
 			_eventContextPopulator = eventContextPopulator;

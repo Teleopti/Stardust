@@ -241,7 +241,7 @@
     <Compile Include="ApplicationLayer\IRecurringEventPublisher.cs" />
     <Compile Include="ApplicationLayer\IResolve.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAssociationChangedEvent.cs" />
-    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateFindPersonConsumer.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\PersonFinderReadOnlyUpdater.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateGroupingReadModelConsumer.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChangedEventPublisher.cs" />
     <Compile Include="ApplicationLayer\RecurringIdAttribute.cs" />
@@ -384,8 +384,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\IAnalyticsFactSchedulePersonHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\IAnalyticsFactScheduleHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\IAnalyticsFactScheduleTimeHandler.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\CanNotPublishEventsFromEventHandlers.cs" />
-    <Compile Include="ApplicationLayer\ISendDelayedMessages.cs" />
+    <Compile Include="ApplicationLayer\IDelayedMessageSender.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\IPersonScheduleDayReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\IPersonScheduleDayReadModelsCreator.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\PersonScheduleDayReadModel.cs" />
@@ -417,7 +416,6 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventScheduleDay.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventBuilder.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\IProjectionChangedEventBuilder.cs" />
-    <Compile Include="ApplicationLayer\IPublishEventsFromEventHandlers.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduleInitializeTriggeredEventForPersonScheduleDay.cs" />
     <Compile Include="ApplicationLayer\EventWithLogOnAndInitiator.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduleChangedEvent.cs" />

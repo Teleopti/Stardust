@@ -4,13 +4,13 @@ using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
-    public class UpdateFindPersonConsumer : 
+    public class PersonFinderReadOnlyUpdater : 
 		IHandleEvent<PersonCollectionChangedEvent>,
 		IRunOnServiceBus
 	{
 		private readonly IPersonFinderReadOnlyRepository _personFinderReadOnlyRepository;
 
-        public UpdateFindPersonConsumer(IPersonFinderReadOnlyRepository personFinderReadOnlyRepository)
+        public PersonFinderReadOnlyUpdater(IPersonFinderReadOnlyRepository personFinderReadOnlyRepository)
         {
             _personFinderReadOnlyRepository = personFinderReadOnlyRepository;
         }
@@ -21,13 +21,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		}
 	}
 
-	public class LegacyUpdateFindPersonConsumer : 
+	public class PersonCollectionChangedEventPublisherOfLegacyPersonChangedMessage : 
 		IHandleEvent<PersonChangedMessage>,
 		IRunOnServiceBus
 	{
 		private readonly IEventPublisher _publisher;
 
-		public LegacyUpdateFindPersonConsumer(IEventPublisher publisher)
+		public PersonCollectionChangedEventPublisherOfLegacyPersonChangedMessage(IEventPublisher publisher)
 		{
 			_publisher = publisher;
 		}

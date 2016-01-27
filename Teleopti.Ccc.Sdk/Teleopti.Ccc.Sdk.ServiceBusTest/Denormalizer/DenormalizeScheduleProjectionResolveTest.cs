@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			builder.RegisterModule<SchedulingContainerInstaller>();
 			builder.RegisterType<NoJsonSerializer>().As<IJsonSerializer>();
 			builder.RegisterType<DoNotNotify>().As<INotificationValidationCheck>();
-			builder.RegisterType<LocalServiceBusPublisher>().As<IPublishEventsFromEventHandlers>().SingleInstance();
+			builder.RegisterType<LocalServiceBusEventPublisher>().As<IEventPublisher>().SingleInstance();
 
 			using (var container = builder.Build())
 			{
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			builder.RegisterModule<SchedulingContainerInstaller>();
 			builder.RegisterType<NoJsonSerializer>().As<IJsonSerializer>();
 			builder.RegisterType<DoNotNotify>().As<INotificationValidationCheck>();
-			builder.RegisterType<LocalServiceBusPublisher>().As<IPublishEventsFromEventHandlers>().SingleInstance();
+			builder.RegisterType<LocalServiceBusEventPublisher>().As<IEventPublisher>().SingleInstance();
 
 			using (var container = builder.Build())
 			{

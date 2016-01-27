@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		private IAnalyticsFactSchedulePersonHandler _personHandler;
 		private IAnalyticsFactScheduleDayCountHandler _scheduleDayCountHandler;
 		private IAnalyticsFactScheduleHandler _factScheduleHandler;
-		private ISendDelayedMessages _sendDelayedMessages;
+		private IDelayedMessageSender _sendDelayedMessages;
 
 		[SetUp]
 		public void Setup()
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_personHandler = MockRepository.GenerateMock<IAnalyticsFactSchedulePersonHandler>();
 			_scheduleDayCountHandler = MockRepository.GenerateMock<IAnalyticsFactScheduleDayCountHandler>();
 			_analyticsScheduleRepository = MockRepository.GenerateMock<IAnalyticsScheduleRepository>();
-			_sendDelayedMessages = MockRepository.GenerateMock<ISendDelayedMessages>();
+			_sendDelayedMessages = MockRepository.GenerateMock<IDelayedMessageSender>();
 			_target = new AnalyticsScheduleChangeUpdater(
 				_factScheduleHandler,
 				_dateHandler,

@@ -16,14 +16,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		IHandleEvent<ScheduleInitializeTriggeredEventForPersonScheduleDay>,
 		IRunOnServiceBus
 	{
-		private readonly IPublishEventsFromEventHandlers _publisher;
+		private readonly IEventPublisher _publisher;
 	    private static readonly ILog Logger = LogManager.GetLogger(typeof (ProjectionChangedEventPublisher));
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly IProjectionChangedEventBuilder _projectionChangedEventBuilder;
 
-		public ProjectionChangedEventPublisher(IPublishEventsFromEventHandlers publisher, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, IProjectionChangedEventBuilder projectionChangedEventBuilder)
+		public ProjectionChangedEventPublisher(IEventPublisher publisher, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, IProjectionChangedEventBuilder projectionChangedEventBuilder)
 		{
 			_publisher = publisher;
 			_scenarioRepository = scenarioRepository;

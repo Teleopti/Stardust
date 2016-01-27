@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 	public class UpdatedScheduleInfoHandlerTest
 	{
 		private MockRepository mocks;
-		private ISendDelayedMessages serviceBus;
+		private IDelayedMessageSender serviceBus;
 		private IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository;
 		private IPersonRepository personRepository;
 		private PersonActivityChangePulseLoop target;
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 		public void Setup()
 		{
 			mocks = new MockRepository();
-			serviceBus = mocks.StrictMock<ISendDelayedMessages>();
+			serviceBus = mocks.StrictMock<IDelayedMessageSender>();
 			scheduleProjectionReadOnlyRepository = mocks.DynamicMock<IScheduleProjectionReadOnlyRepository>();
 			teleoptiRtaService = mocks.DynamicMock<INotifyRtaToCheckForActivityChange>();
 			personRepository = MockRepository.GenerateStub<IPersonRepository>();

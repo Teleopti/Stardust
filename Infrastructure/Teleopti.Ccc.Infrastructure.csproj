@@ -228,7 +228,6 @@
     <Compile Include="ApplicationLayer\IServiceBusSender.cs" />
     <Compile Include="ApplicationLayer\ServiceBusEventPublisher.cs" />
     <Compile Include="ApplicationLayer\SyncCommandDispatcher.cs" />
-    <Compile Include="ApplicationLayer\LocalServiceBusEventPublisher.cs" />
     <Compile Include="ApplicationLayer\UnitOfWorkTransactionEventSyncronization.cs" />
     <Compile Include="Authentication\ILoadUserUnauthorized.cs" />
     <Compile Include="Authentication\LoadUserUnauthorized.cs" />

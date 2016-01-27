@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldHandleLegacyMessage()
 		{
 			var publisher = MockRepository.GenerateMock<IEventPublisher>();
-			var handler = new LegacyUpdateFindPersonConsumer(publisher);
+			var handler = new PersonCollectionChangedEventPublisherOfLegacyPersonChangedMessage(publisher);
 			var legacyMessage = new PersonChangedMessage();
 
 			handler.Handle(legacyMessage);

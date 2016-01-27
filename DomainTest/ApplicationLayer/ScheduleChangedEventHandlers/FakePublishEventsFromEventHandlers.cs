@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 {
-	public class FakePublishEventsFromEventHandlers : IPublishEventsFromEventHandlers
+	public class FakePublishEventsFromEventHandlers : IEventPublisher
 	{
 		private IEvent _published;
 

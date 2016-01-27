@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		private readonly IAnalyticsFactScheduleDateHandler _factScheduleDateHandler;
 		private readonly IAnalyticsFactScheduleDayCountHandler _factScheduleDayCountHandler;
 		private readonly IAnalyticsScheduleRepository _analyticsScheduleRepository;
-		private readonly ISendDelayedMessages _serviceBus;
+		private readonly IDelayedMessageSender _serviceBus;
 
 		public AnalyticsScheduleChangeUpdater(
 			IAnalyticsFactScheduleHandler factScheduleHandler,
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			IAnalyticsFactSchedulePersonHandler factSchedulePersonHandler,
 			IAnalyticsFactScheduleDayCountHandler factScheduleDayCountHandler,
 			IAnalyticsScheduleRepository analyticsScheduleRepository,
-			ISendDelayedMessages serviceBus)
+			IDelayedMessageSender serviceBus)
 
 		{
 			_factScheduleHandler = factScheduleHandler;

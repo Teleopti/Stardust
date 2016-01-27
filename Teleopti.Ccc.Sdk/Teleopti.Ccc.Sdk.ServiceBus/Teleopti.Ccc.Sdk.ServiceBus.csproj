@@ -203,7 +203,7 @@
     <Compile Include="Diagnostics\DiagnosticsConsumer.cs" />
     <Compile Include="GeneralBusBootStrapper.cs" />
     <Compile Include="NotifyTeleoptiRtaServiceToCheckForActivityChange.cs" />
-    <Compile Include="LocalServiceBusPublisher.cs" />
+    <Compile Include="LocalServiceBusEventPublisher.cs" />
     <Compile Include="LocalServiceBusEventsPublisherModule.cs" />
     <Compile Include="RtaBusBootStrapper.cs" />
     <Compile Include="Rta\BusinessUnitInfoConsumer.cs" />

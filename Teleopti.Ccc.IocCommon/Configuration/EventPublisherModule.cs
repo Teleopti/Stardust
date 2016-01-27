@@ -24,16 +24,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<EventContextPopulator>().As<IEventContextPopulator>().SingleInstance();
 			builder.RegisterType<EventPopulatingPublisher>().As<IEventPopulatingPublisher>().SingleInstance();
+			builder.RegisterType<ResolveEventHandlers>().SingleInstance();
 
 			builder.RegisterType<SyncEventPublisher>().SingleInstance();
-			builder.RegisterType<HangfireEventPublisher>()
-				.AsSelf()
-				.As<IRecurringEventPublisher>()
-				.SingleInstance();
+			builder.RegisterType<HangfireEventPublisher>().SingleInstance();
 			builder.RegisterType<ServiceBusEventPublisher>().SingleInstance();
-			builder.RegisterType<LocalServiceBusEventPublisher>().SingleInstance();
-
-			builder.RegisterType<ResolveEventHandlers>().SingleInstance();
 
 			if (_configuration.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
 				builder.RegisterType<SelectiveEventPublisher>().As<IEventPublisher>().SingleInstance();
@@ -45,12 +40,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IEventPublisherScope>()
 				.SingleInstance();
 
+			builder.Register(c => c.Resolve<HangfireEventPublisher>()).As<IRecurringEventPublisher>().SingleInstance();
 			builder.RegisterType<AllTenantRecurringEventPublisher>().SingleInstance();
 
 			builder.RegisterType<CannotPublishToHangfire>().As<IHangfireEventClient>().SingleInstance();
-			builder.RegisterType<CannotPublishEventsFromEventHandlers>().As<IPublishEventsFromEventHandlers>().SingleInstance();
-			builder.RegisterType<CannotSendDelayedMessages>().As<ISendDelayedMessages>().SingleInstance();
-
+			builder.RegisterType<CannotSendDelayedMessages>().As<IDelayedMessageSender>().SingleInstance();
 
 
 
@@ -61,8 +55,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					builder.RegisterType<SelectiveEventPublisherWithoutBus>().As<IEventPublisher>().SingleInstance();
 				else
 					builder.Register(c => c.Resolve<SyncEventPublisher>()).As<IEventPublisher>().SingleInstance();
-				builder.Register(c => c.Resolve<IEventPopulatingPublisher>() as EventPopulatingPublisher).As<IPublishEventsFromEventHandlers>().SingleInstance();
-				builder.RegisterType<IgnoreDelayedMessages>().As<ISendDelayedMessages>().SingleInstance();
+				builder.Register(c => c.Resolve<IEventPopulatingPublisher>() as EventPopulatingPublisher).As<IEventPublisher>().SingleInstance();
+				builder.RegisterType<IgnoreDelayedMessages>().As<IDelayedMessageSender>().SingleInstance();
 			}
 
 

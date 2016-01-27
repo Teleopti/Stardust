@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 	{
 		private ScheduleProjectionReadOnlyUpdater target;
 		private IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository;
-		private IPublishEventsFromEventHandlers serviceBus;
+		private IEventPublisher serviceBus;
 		private Guid personId, businessUnitId;
 	    private readonly DateTime utcNow = DateTime.UtcNow;
 	    private readonly DateOnly today = DateOnly.Today;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		public void Setup()
 		{
 			scheduleProjectionReadOnlyRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
-			serviceBus = MockRepository.GenerateMock<IPublishEventsFromEventHandlers>();
+			serviceBus = MockRepository.GenerateMock<IEventPublisher>();
 
 			personId = Guid.NewGuid();
 			businessUnitId = Guid.NewGuid();

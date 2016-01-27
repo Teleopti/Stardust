@@ -12,11 +12,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		IRunOnServiceBus
 	{
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
-	    private readonly IPublishEventsFromEventHandlers _serviceBus;
+	    private readonly IEventPublisher _serviceBus;
 		private readonly INow _now;
 
 		public ScheduleProjectionReadOnlyUpdater(IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, 
-																							IPublishEventsFromEventHandlers serviceBus,
+																							IEventPublisher serviceBus,
 																							INow now)
 		{
 			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
