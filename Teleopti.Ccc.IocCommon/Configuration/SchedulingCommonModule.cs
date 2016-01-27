@@ -319,7 +319,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<ScheduleOptimization>().InstancePerLifetimeScope().ApplyAspects(); //should be singleinstance but not yet possible
 			builder.RegisterType<FullScheduling>().InstancePerLifetimeScope().ApplyAspects(); //should be singleinstance but not yet possible
-			builder.RegisterType<IntradayOptimization>().InstancePerLifetimeScope().ApplyAspects(); //should be singleinstance but not yet possible
+			builder.RegisterType<IntradayOptimization>().As<IIntradayOptimization>().InstancePerLifetimeScope().ApplyAspects(); //should be singleinstance but not yet possible
+			builder.RegisterType<IntradayDecisionMaker>().As<IIntradayDecisionMaker>().SingleInstance();
 			builder.RegisterType<SetupStateHolderForWebScheduling>();
 			builder.RegisterType<FixedStaffLoader>().As<IFixedStaffLoader>().SingleInstance();
 			builder.RegisterType<ScheduleControllerPrerequisites>().As<IScheduleControllerPrerequisites>().SingleInstance();

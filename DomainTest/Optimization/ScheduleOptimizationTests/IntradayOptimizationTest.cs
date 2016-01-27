@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -26,45 +25,83 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public IntradayOptimization Target;
+		public IIntradayOptimization Target;
 
-		[Test, Ignore("To be fixed... #36617")]
-		public void ShouldMoveLunchToLowerDemandInterval()
+		[Test]
+		public void ShouldUseShiftThatCoverHigherDemand()
 		{
-			//skifts med phone 8 - 17, lunch varje timme
-			//utgångsläge lunch 11 - 12
-			//efter lunch 10 -11
+			//before:	shift with phone 8 - 17
+			//demand:	higher 17 - 18
+			//after:	shift 8:15 - 17:15
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
-			var lunchActivity = ActivityFactory.CreateActivity("lunch");	
+			phoneActivity.RequiresSkill = true;
+			
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var dateOnly = new DateOnly(2015, 10, 12);
-			var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, skill.TimeZone);
 			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
 			var scenario = ScenarioRepository.Has("some name");
 			var schedulePeriod = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
-			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, skill);
+			var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
+			var contract = new Contract("contract"){WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9)};
+			var agent = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, skill);	
 			var shiftCategory = new ShiftCategory("_").WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(17, 0, 17, 0, 15), shiftCategory));
-			ruleSet.AddExtender(new ActivityAbsoluteStartExtender(lunchActivity, new TimePeriodWithSegment(1, 0, 1, 0, 60), new TimePeriodWithSegment(8, 0, 16, 0, 60)));
-			
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(8, 15, 8, 15, 15), new TimePeriodWithSegment(17, 15, 17, 15, 15), shiftCategory));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
-	
+
 			SkillDayRepository.Has(new List<ISkillDay>
 				{
-					skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(10), new Tuple<int, TimeSpan>(10, TimeSpan.FromHours(5)))
+					skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)))
 				});
 
-	
+			var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, agent.PermissionInformation.DefaultTimeZone());
 			var assignment = new PersonAssignment(agent, scenario, dateOnly);
+			assignment.SetShiftCategory(shiftCategory);
 			assignment.AddActivity(phoneActivity, new DateTimePeriod(dateTime.AddHours(8), dateTime.AddHours(17)));
-			assignment.AddActivity(lunchActivity, new DateTimePeriod(dateTime.AddHours(11), dateTime.AddHours(12)));
 			PersonAssignmentRepository.Add(assignment);
 
-			Target.Optimize(planningPeriod);
+			Target.Optimize(planningPeriod.Id.Value);
 
-			PersonAssignmentRepository.GetSingle(dateOnly).MainActivities().Single(x => x.Payload.Equals(lunchActivity)).Period
-				.Should().Be.EqualTo(new DateTimePeriod(dateTime.AddHours(10), dateTime.AddHours(11)));
+			PersonAssignmentRepository.GetSingle(dateOnly).Period
+				.Should().Be.EqualTo(new DateTimePeriod(dateTime.AddHours(8).AddMinutes(15), dateTime.AddHours(17).AddMinutes(15)));
+		}
 
+		[Test]
+		public void ShouldNotOptimizeDaysWithOvertime()
+		{
+			//before:	shift with phone 8 - 17, overtime 8 - 9
+			//demand:	higher 17 - 18
+			//after:	shift 8 - 17
+			var phoneActivity = ActivityFactory.CreateActivity("phone");
+			phoneActivity.RequiresSkill = true;
+			var skill = SkillRepository.Has("skill", phoneActivity);
+			var dateOnly = new DateOnly(2015, 10, 12);
+			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
+			var scenario = ScenarioRepository.Has("some name");
+			var schedulePeriod = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
+			var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
+			var contract = new Contract("contract") { WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
+			var agent = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, skill);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(8, 15, 8, 15, 15), new TimePeriodWithSegment(17, 15, 17, 15, 15), shiftCategory));
+			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
+
+			SkillDayRepository.Has(new List<ISkillDay>
+				{
+					skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)))
+				});
+
+			var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, agent.PermissionInformation.DefaultTimeZone());
+			var assignment = new PersonAssignment(agent, scenario, dateOnly);
+			assignment.SetShiftCategory(shiftCategory);
+			assignment.AddActivity(phoneActivity, new DateTimePeriod(dateTime.AddHours(9), dateTime.AddHours(17)));
+			assignment.AddOvertimeActivity(phoneActivity, new DateTimePeriod(dateTime.AddHours(8), dateTime.AddHours(9)),
+											MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("multiplicator", MultiplicatorType.Overtime));
+			PersonAssignmentRepository.Add(assignment);
+			
+			Target.Optimize(planningPeriod.Id.Value);
+
+			PersonAssignmentRepository.GetSingle(dateOnly).Period
+				.Should().Be.EqualTo(new DateTimePeriod(dateTime.AddHours(8), dateTime.AddHours(17)));
 		}
 	}
 }
