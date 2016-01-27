@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public class ServiceBusEventPublisher : IServiceBusEventPublisher, ICurrentEventPublisher
+	public class ServiceBusEventPublisher : IEventPublisher, ICurrentEventPublisher
 	{
 		private readonly IServiceBusSender _sender;
 

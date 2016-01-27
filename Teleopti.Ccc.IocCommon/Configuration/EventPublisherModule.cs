@@ -1,11 +1,9 @@
-using System.Collections.Generic;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -27,24 +25,20 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<EventContextPopulator>().As<IEventContextPopulator>().SingleInstance();
 			builder.RegisterType<EventPopulatingPublisher>().As<IEventPopulatingPublisher>().SingleInstance();
 
-			builder.RegisterType<SyncEventPublisher>().As<ISyncEventPublisher>().SingleInstance();
+			builder.RegisterType<SyncEventPublisher>().SingleInstance();
 			builder.RegisterType<HangfireEventPublisher>()
-				.As<IHangfireEventPublisher>()
+				.AsSelf()
 				.As<IRecurringEventPublisher>()
 				.SingleInstance();
-			builder.RegisterType<ServiceBusEventPublisher>().As<IServiceBusEventPublisher>().SingleInstance();
-			builder.RegisterType<LocalServiceBusEventPublisher>().As<ILocalServiceBusEventPublisher>().SingleInstance();
+			builder.RegisterType<ServiceBusEventPublisher>().SingleInstance();
+			builder.RegisterType<LocalServiceBusEventPublisher>().SingleInstance();
 
 			builder.RegisterType<ResolveEventHandlers>().SingleInstance();
 
 			if (_configuration.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
-			{
 				builder.RegisterType<SelectiveEventPublisher>().As<IEventPublisher>().SingleInstance();
-			}
 			else
-			{
-				builder.Register(c => c.Resolve<IServiceBusEventPublisher>()).As<IEventPublisher>().SingleInstance();
-			}
+				builder.Register(c => c.Resolve<ServiceBusEventPublisher>()).As<IEventPublisher>().SingleInstance();
 
 			builder.RegisterType<CurrentEventPublisher>()
 				.As<ICurrentEventPublisher>()
@@ -66,7 +60,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				if (_configuration.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
 					builder.RegisterType<SelectiveEventPublisherWithoutBus>().As<IEventPublisher>().SingleInstance();
 				else
-					builder.Register(c => c.Resolve<ISyncEventPublisher>()).As<IEventPublisher>().SingleInstance();
+					builder.Register(c => c.Resolve<SyncEventPublisher>()).As<IEventPublisher>().SingleInstance();
 				builder.Register(c => c.Resolve<IEventPopulatingPublisher>() as EventPopulatingPublisher).As<IPublishEventsFromEventHandlers>().SingleInstance();
 				builder.RegisterType<IgnoreDelayedMessages>().As<ISendDelayedMessages>().SingleInstance();
 			}

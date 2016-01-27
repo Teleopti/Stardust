@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public class HangfireEventPublisher : IHangfireEventPublisher, IRecurringEventPublisher
+	public class HangfireEventPublisher : IEventPublisher, IRecurringEventPublisher
 	{
 		private readonly IHangfireEventClient _client;
 		private readonly IJsonEventSerializer _serializer;

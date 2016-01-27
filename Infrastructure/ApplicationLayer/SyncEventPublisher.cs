@@ -1,12 +1,11 @@
-﻿using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public class SyncEventPublisher : ISyncEventPublisher, ICurrentEventPublisher
+	public class SyncEventPublisher : IEventPublisher, ICurrentEventPublisher
 	{
 		private readonly ResolveEventHandlers _resolver;
 

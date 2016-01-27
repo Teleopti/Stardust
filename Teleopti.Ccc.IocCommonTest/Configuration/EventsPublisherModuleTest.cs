@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { BehaviorTest = true}, new FalseToggleManager())));
 			var container = builder.Build();
 
-			container.Resolve<ISyncEventPublisher>().Should().Not.Be.Null();
+			container.Resolve<SyncEventPublisher>().Should().Not.Be.Null();
 			container.Resolve<IEventPublisher>().Should().Be.OfType<SyncEventPublisher>();
 		}
 
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			builder.RegisterInstance(MockRepository.GenerateMock<IServiceBusSender>()).As<IServiceBusSender>();
 			var container = builder.Build();
 
-			container.Resolve<IServiceBusEventPublisher>().Should().Not.Be.Null();
+			container.Resolve<ServiceBusEventPublisher>().Should().Not.Be.Null();
 			container.Resolve<IEventPublisher>().Should().Be.OfType<ServiceBusEventPublisher>();
 		}
 

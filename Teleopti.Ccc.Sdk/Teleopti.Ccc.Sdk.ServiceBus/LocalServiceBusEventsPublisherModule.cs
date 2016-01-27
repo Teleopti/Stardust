@@ -8,8 +8,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
+			// this has become a tad too complex...
+			// LocalServiceBusPublisher puts events on the bus queue
+			// LocalServiceBusEventPublisher publishes sync!
 			builder.RegisterType<LocalServiceBusPublisher>().As<IPublishEventsFromEventHandlers>().As<ISendDelayedMessages>().SingleInstance();
-			builder.Register(c => c.Resolve<ILocalServiceBusEventPublisher>()).As<IEventPublisher>().SingleInstance();
+			builder.Register(c => c.Resolve<LocalServiceBusEventPublisher>()).As<IEventPublisher>().SingleInstance();
 		}
 	}
 }

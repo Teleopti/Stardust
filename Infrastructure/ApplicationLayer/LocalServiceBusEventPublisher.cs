@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public class LocalServiceBusEventPublisher : ILocalServiceBusEventPublisher
+	public class LocalServiceBusEventPublisher
 	{
 		private readonly ResolveEventHandlers _resolver;
 

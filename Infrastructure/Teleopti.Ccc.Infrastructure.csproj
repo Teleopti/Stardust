@@ -216,13 +216,9 @@
     <Compile Include="ApplicationLayer\CurrentEventPublisher.cs" />
     <Compile Include="ApplicationLayer\HangfireEventProcessor.cs" />
     <Compile Include="ApplicationLayer\HangfireEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\ILocalServiceBusEventPublisher.cs" />
     <Compile Include="ApplicationLayer\SelectiveEventPublisher.cs" />
     <Compile Include="ApplicationLayer\IHangfireEventClient.cs" />
     <Compile Include="ApplicationLayer\IHangfireEventProcessor.cs" />
-    <Compile Include="ApplicationLayer\IHangfireEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\IServiceBusEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\ISyncEventPublisher.cs" />
     <Compile Include="ApplicationLayer\MessagePopulatingServiceBusSender.cs" />
     <Compile Include="ApplicationLayer\EventPopulatingPublisher.cs" />
     <Compile Include="ApplicationLayer\NoServiceBusSender.cs" />

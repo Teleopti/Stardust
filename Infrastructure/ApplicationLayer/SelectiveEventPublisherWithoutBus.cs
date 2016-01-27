@@ -8,13 +8,13 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
 	public class SelectiveEventPublisherWithoutBus : IEventPublisher
 	{
-		private readonly IHangfireEventPublisher _hangfirePublisher;
-		private readonly ISyncEventPublisher _syncEventPublisher;
+		private readonly HangfireEventPublisher _hangfirePublisher;
+		private readonly SyncEventPublisher _syncEventPublisher;
 		private readonly ResolveEventHandlers _resolver;
 
 		public SelectiveEventPublisherWithoutBus(
-			IHangfireEventPublisher hangfirePublisher, 
-			ISyncEventPublisher syncEventPublisher, 
+			HangfireEventPublisher hangfirePublisher, 
+			SyncEventPublisher syncEventPublisher, 
 			ResolveEventHandlers resolver)
 		{
 			_hangfirePublisher = hangfirePublisher;
