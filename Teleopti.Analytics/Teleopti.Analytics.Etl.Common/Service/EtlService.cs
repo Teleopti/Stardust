@@ -1,5 +1,5 @@
 using System;
-using System.Timers;
+using System.Threading;
 using log4net;
 using Teleopti.Analytics.Etl.Common.TenantHeartbeat;
 
@@ -17,24 +17,21 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		{
 			_etlJobStarter = etlJobStarter;
 			_tenantHearbeatEventPublisher = tenantHearbeatEventPublisher;
+			_timer = new Timer(tick, null, TimeSpan.FromMilliseconds(-1), TimeSpan.FromMilliseconds(-1));
 		}
 
 		public void Start(DateTime serviceStartTime, Action stopService)
 		{
 			_etlJobStarter.Initialize(serviceStartTime, stopService);
-			_timer = new Timer(10000);
-			_timer.Elapsed += tick;
-			_timer.Start();
+			_timer.Change(TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(-1));
 		}
 
-		void tick(object sender, ElapsedEventArgs e)
+		void tick(object state)
 		{
 			var stop = false;
 
 			log.Debug("Tick");
-			_timer.Stop();
-			log.Debug("Timer stopped");
-
+			
 			try
 			{
 				_tenantHearbeatEventPublisher.Tick();
@@ -59,7 +56,10 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			if (!stop)
 			{
 				log.Debug("Starting timer");
-				_timer.Start();
+				if (_timer != null)
+				{
+					_timer.Change(TimeSpan.FromSeconds(10),TimeSpan.FromMilliseconds(-1));
+				}
 				log.Debug("Timer started");
 			}
 
@@ -70,8 +70,8 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			log.Info("The service is stopping.");
 			if (_timer != null)
 			{
-				_timer.Stop();
 				_timer.Dispose();
+				_timer = null;
 			}
 		}
 	}
