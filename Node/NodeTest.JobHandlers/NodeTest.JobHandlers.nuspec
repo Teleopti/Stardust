@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>NodeTest.JobHandlers</id>
+    <version>1.0.0</version>
+    <title>NodeTest.JobHandlers</title>
+    <authors>Teleopti</authors>
+    <owners>Teleopti</owners>
+    <description>Description of NodeTest.JobHandlers</description>
+    <copyright>Teleopti</copyright>
+  </metadata>
+   <files>
+	<file src="..\Node.Interfaces\bin\Release\Node.Interfaces.dll" target="lib\net40\"/>
+  </files>
+</package>
