@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		public AHandler Handler;
 		public AnotherHandler Another;
 		public AspectedHandler Aspected;
-		public IHangfireEventProcessor Target;
+		public HangfireEventProcessor Target;
 		public FakeDataSourceForTenant DataSources;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)

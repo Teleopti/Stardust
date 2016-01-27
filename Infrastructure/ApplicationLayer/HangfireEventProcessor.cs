@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public class HangfireEventProcessor : IHangfireEventProcessor
+	public class HangfireEventProcessor
 	{
 		private readonly IJsonEventDeserializer _deserializer;
 		private readonly ResolveEventHandlers _resolver;

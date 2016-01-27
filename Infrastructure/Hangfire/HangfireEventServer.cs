@@ -5,9 +5,9 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
 	public class HangfireEventServer
 	{
-		private readonly IHangfireEventProcessor _processor;
+		private readonly HangfireEventProcessor _processor;
 
-		public HangfireEventServer(IHangfireEventProcessor processor)
+		public HangfireEventServer(HangfireEventProcessor processor)
 		{
 			_processor = processor;
 		}

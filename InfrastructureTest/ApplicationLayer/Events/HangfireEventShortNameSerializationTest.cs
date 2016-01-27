@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 	{
 		public FakeHangfireEventClient JobClient;
 		public IEventPublisher Client;
-		public IHangfireEventProcessor Server;
+		public HangfireEventProcessor Server;
 		public IJsonSerializer Serializer;
 		public IJsonDeserializer Deserializer;
 		public FakeHandler Handler;
