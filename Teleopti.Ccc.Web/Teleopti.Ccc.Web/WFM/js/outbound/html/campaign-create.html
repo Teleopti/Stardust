@@ -119,6 +119,9 @@
 						<h2 translate>OpenHours</h2>
 						<div class="form-input-wrap">
 							<working-hours-picker class="working-hours-picker" working-hours="campaign.WorkingHours" ng-disabled="isCreating"></working-hours-picker>
+							<div class="animate-input-message" ng-show="!validWorkingHours()">
+								<div class="form-input-message invalidWorkingHours" ng-class="{formInvalidInput:!validWorkingHours()}">{{ 'Required' | translate }}</div>
+							</div>
 						</div>
 						<h2 translate>Duration</h2>
 						<div class="form-input-wrap">

@@ -28,6 +28,16 @@
 		float:left;
 		padding-right:15px;
 	}
+	.ng-valid-required{
+		.invalidWorkingHours{
+			display:block;
+		}
+	}
+	.ng-invalid-required{
+		.invalidWorkingHours{
+			display:none;
+		}
+	}
 
 	.outbound-summary{
 		background:$white;
