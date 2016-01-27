@@ -25,7 +25,7 @@ namespace Manager.IntegrationTest.Console.Host.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("../../../../ManagerConsoleHost/bin/debug/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("../../../../Manager/ManagerConsoleHost/bin/debug/")]
         public string ManagerAssemblyLocationFullPath {
             get {
                 return ((string)(this["ManagerAssemblyLocationFullPath"]));
@@ -38,15 +38,6 @@ namespace Manager.IntegrationTest.Console.Host.Properties {
         public string ManagerAssemblyName {
             get {
                 return ((string)(this["ManagerAssemblyName"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("../../../../../stardust-node/NodeConsoleHost/bin/debug/")]
-        public string NodeAssemblyLocationFullPath {
-            get {
-                return ((string)(this["NodeAssemblyLocationFullPath"]));
             }
         }
         
@@ -65,15 +56,6 @@ namespace Manager.IntegrationTest.Console.Host.Properties {
         public string ManagerConfigurationFileName {
             get {
                 return ((string)(this["ManagerConfigurationFileName"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("../../../../../stardust-node/NodeConsoleHost/bin/debug/")]
-        public string NodeConfigurationFileFullPath {
-            get {
-                return ((string)(this["NodeConfigurationFileFullPath"]));
             }
         }
         
@@ -138,6 +120,24 @@ namespace Manager.IntegrationTest.Console.Host.Properties {
         public string ManagerConfigurationFileFullPath {
             get {
                 return ((string)(this["ManagerConfigurationFileFullPath"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("../../../../Node/NodeConsoleHost/bin/debug/")]
+        public string NodeAssemblyLocationFullPath {
+            get {
+                return ((string)(this["NodeAssemblyLocationFullPath"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("../../../../Node/NodeConsoleHost/bin/debug/")]
+        public string NodeConfigurationFileFullPath {
+            get {
+                return ((string)(this["NodeConfigurationFileFullPath"]));
             }
         }
     }
