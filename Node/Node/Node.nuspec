@@ -8,29 +8,23 @@
     <description>Node to handle long running jobs</description>
     <copyright>Teleopti</copyright>
 <dependencies>
-	<dependency id="Microsoft.AspNet.WebApi.WebHost" version="5.2.3" />
+	<dependency id="Autofac" version="3.5.2" />
+	<dependency id="Autofac.Owin" version="3.1.0" />
+	<dependency id="Autofac.WebApi2" version="3.4.0" />
+	<dependency id="Autofac.WebApi2.Owin" version="3.3.0" />
+	<dependency id="log4net" version="2.0.5" />
+	<dependency id="Microsoft.AspNet.WebApi.Client" version="5.2.3" />
+	<dependency id="Microsoft.AspNet.WebApi.Core" version="5.2.3" />
 	<dependency id="Microsoft.AspNet.WebApi.Owin" version="5.2.3" />
+	<dependency id="Microsoft.AspNet.WebApi.WebHost" version="5.2.3" />
 	<dependency id="Microsoft.Owin" version="3.0.1" />
-	  <dependency id="Microsoft.Owin.Hosting" version="3.0.1" />
-	  <dependency id="Microsoft.Owin.Host.HttpListener" version="3.0.1" />
-	  <dependency id="log4net" version="2.0.5" />
+	<dependency id="Microsoft.Owin.Hosting" version="3.0.1" />
 	<dependency id="Newtonsoft.Json" version="8.0.1" />
-	
+	<dependency id="Owin" version="1.0" />
+	<dependency id="Microsoft.Owin.Host.HttpListener" version="3.0.1" />
 </dependencies>
   </metadata>
   <files>
 	<file src="\bin\Release\Stardust.Node.dll" target="lib\net451"/>
-	<file src="bin\Release\Autofac.dll" target="lib\net451"/>
-	<file src="bin\Release\Autofac.Integration.WebApi.dll" target="lib\net451"/>
-	<file src="bin\Release\Autofac.Integration.Owin.dll" target="lib\net451"/>
-	<file src="bin\Release\log4net.dll" target="lib\net451"/>
-	<file src="bin\Release\Microsoft.Owin.dll" target="lib\net451"/>
-	<file src="bin\Release\Microsoft.Owin.Hosting.dll" target="lib\net451"/>
-	<file src="bin\Release\Newtonsoft.Json.dll" target="lib\net451"/>
-	<file src="bin\Release\Owin.dll" target="lib\net451"/>
-	<file src="bin\Release\System.Net.Http.Formatting.dll" target="lib\net451"/>
-	<file src="bin\Release\System.Web.Http.dll" target="lib\net451"/>
-	<file src="bin\Release\System.Web.Http.Owin.dll" target="lib\net451"/>
-	<file src="bin\Release\System.Web.Http.WebHost.dll" target="lib\net451"/>
   </files>
 </package>
