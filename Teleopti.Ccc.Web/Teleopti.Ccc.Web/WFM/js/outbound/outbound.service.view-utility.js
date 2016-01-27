@@ -7,28 +7,7 @@
     function viewUtilityService() {
         this.registerPersonHourFeedback = registerPersonHourFeedback;
         this.setupValidators = setupValidators;
-       // this.expandAllSections = expandAllSections;
         this.deepPropertyAccess = deepPropertyAccess;
-
-        //function registerCampaignForms(scope) {
-        //    scope.$on('formLocator.campaignGeneralForm', function (event) {
-        //        scope.campaignGeneralForm = event.targetScope.campaignGeneralForm;
-        //        scope.formScope = event.targetScope;
-        //        scope.campaignGeneralForm.$setPristine();
-        //    });
-
-        //    scope.$on('formLocator.campaignWorkloadForm', function (event) {
-        //        scope.campaignWorkloadForm = event.targetScope.campaignWorkloadForm;
-        //        scope.formScope = event.targetScope;
-        //        scope.campaignWorkloadForm.$setPristine();
-        //    });
-
-        //    scope.$on('formLocator.campaignSpanningPeriodForm', function (event) {
-        //        scope.campaignSpanningPeriodForm = event.targetScope.campaignSpanningPeriodForm;
-        //        scope.formScope = event.targetScope;
-        //        scope.campaignSpanningPeriodForm.$setPristine();
-        //    });
-        //}
 
         function registerPersonHourFeedback(scope, outboundService) {
             scope.$watch(function () {
@@ -51,24 +30,18 @@
 				if (oldValue && oldValue.length > 0) {
 					angular.forEach(oldValue, function (v) {
 						campaignDurationError = [];
-						//scope.campaignSpanningPeriodForm.$setValidity(v, true);
 					});
 				}
 	        	if (newValue && newValue.length > 0) {
 	        		angular.forEach(newValue, function (v) {
 				        campaignDurationError.push(v);
-				        //scope.campaignSpanningPeriodForm.$setValidity(v, false);
 			        });
 				}
 	        }, true);
 
 	        function isInputValid() {
-	        	console.log('scope.form', scope.form);
-	        	if (scope.form.$error.required && scope.form.$error.required.length > 0) return false; //|| campaignDurationError.length>0
+	        	if (scope.form.$error.required && scope.form.$error.required.length > 0) return false;
 		        if (campaignDurationError.length > 0) return false;
-		        // if (!scope.campaignWorkloadForm) return false;
-		        // if (!scope.campaignSpanningPeriodForm) return false;
-
 		        return  validWorkingHours();
 	        }          
 
@@ -86,13 +59,6 @@
                 scope.$broadcast('expandable.expand');
             }
         }
-
-        //function expandAllSections(scope) {
-        //    scope.acToggle0 = true;
-        //    scope.acToggle1 = true;
-        //    scope.acToggle2 = true;
-        //    scope.acToggle3 = true;
-        //}
 
         function deepPropertyAccess(obj, propertiesChain) {
             var curObj = obj;

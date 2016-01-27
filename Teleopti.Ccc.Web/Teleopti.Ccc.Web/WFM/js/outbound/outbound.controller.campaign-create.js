@@ -17,18 +17,16 @@
         $scope.backToList = backToList;
 
         function addCampaign() {
-	        console.log('$scope.isInputValid()', $scope.isInputValid());
 	        if (!$scope.isInputValid()) return;
 
             $scope.isCreating = true;
-	        console.log('addCampaign success');
-	        //outboundService.addCampaign($scope.campaign, function (campaign) {
-	        //    outboundNotificationService.notifyCampaignCreationSuccess(angular.copy(campaign));
-	        //    init();
-	        //    if (!$scope.preventAutomaticRedirect) show(campaign);
-	        //}, function (error) {
-	        //    outboundNotificationService.notifyCampaignCreationFailure(error);
-	        //});
+	        outboundService.addCampaign($scope.campaign, function (campaign) {
+	            outboundNotificationService.notifyCampaignCreationSuccess(angular.copy(campaign));
+	            init();
+	            if (!$scope.preventAutomaticRedirect) show(campaign);
+	        }, function (error) {
+	            outboundNotificationService.notifyCampaignCreationFailure(error);
+	        });
         }
 
         function init() {
