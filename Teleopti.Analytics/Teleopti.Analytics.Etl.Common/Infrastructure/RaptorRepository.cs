@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using log4net;
 using NHibernate;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
@@ -33,6 +34,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 	{
 		private readonly string _dataMartConnectionString;
 		private ILicenseStatusUpdater _licenseStatusUpdater;
+		private readonly ILog _logger = LogManager.GetLogger(typeof(RaptorRepository));
 
 		public RaptorRepository(string dataMartConnectionString, string isolationLevel)
 		{
@@ -778,6 +780,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			{
 				if (ex.InnerException is TransactionException && attempt < 6)
 				{
+					_logger.Warn(String.Format("Retry - Count:{0}, Exception:{1}, StackTrace:{2}", attempt, ex, ex.StackTrace));
 					return repositoryActionWithRetry(innerAction, ++attempt);
 				}
 				throw;

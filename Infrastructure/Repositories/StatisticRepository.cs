@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using log4net;
 using NHibernate;
 using NHibernate.Transform;
 using System;
@@ -31,6 +32,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	/// </remarks>
 	public class StatisticRepository : IStatisticRepository
 	{
+		private readonly ILog _logger = LogManager.GetLogger(typeof(StatisticRepository));
+
 		internal StatisticRepository() { }
 
 		/// <summary>
@@ -491,6 +494,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				if (ex.InnerException is Win32Exception && attempt < 6)
 				{
+					_logger.Warn(String.Format("Retry - Count:{0}, Exception:{1}, StackTrace:{2}", attempt, ex, ex.StackTrace));
 					return repositoryActionWithRetry(innerAction, ++attempt);
 				}
 				throw;
