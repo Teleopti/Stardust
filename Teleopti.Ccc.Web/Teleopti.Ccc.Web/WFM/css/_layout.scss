@@ -147,13 +147,6 @@ input::-ms-clear {
 	cursor:pointer;
 }
 
-/*left sidenav */
-.nav-item-active{
-	.sidenav-header{
-		background:$green-100;
-	}
-}
-
 /*Growl*/
 .growl-container > .growl-item.ng-enter,
 .growl-container > .growl-item.ng-leave {
@@ -208,10 +201,6 @@ md-progress-circular .md-inner .md-half-circle {
 }
 
 /*temp fixes*/
-.wfm-card-unselected{
-	background: $white;
-}
-
 input, label, .form-input-message{
 	font-size: 14px!important;
 }
@@ -220,15 +209,6 @@ input, label, .form-input-message{
 	width:400px;
 }
 
-label{font-weight: normal;}
-
-/*panel switch*/
-.panel-switch label{
-	padding-right: 58px;
-}
-
-@media only screen and (max-width: 1100px) {
-	.panel-switch{
-		text-align: left!important;
-	}
+.wfm-card-unselected{
+	background: $white;
 }
