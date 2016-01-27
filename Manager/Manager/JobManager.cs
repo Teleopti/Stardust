@@ -26,6 +26,7 @@ namespace Stardust.Manager
 			foreach (var availableNode in availableNodes)
 			{
 				var response = await _httpSender.PostAsync(availableNode.Url + NodeRouteConstants.IsAlive, "");
+
 				if (response != null && response.IsSuccessStatusCode)
 					upNodes.Add(availableNode);
 			}
