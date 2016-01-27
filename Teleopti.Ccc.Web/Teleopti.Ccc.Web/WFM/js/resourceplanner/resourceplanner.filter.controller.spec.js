@@ -422,7 +422,7 @@ describe('ResourcePlannerCtrl', function () {
 		$httpBackend.verifyNoOutstandingRequest();
 	}));
 
-	fit('should not be possible to select item twice', inject(function ($controller,$stateParams) {
+	it('should not be possible to select item twice', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
