@@ -7,10 +7,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 	{
 
 		private readonly IShiftTradeScheduleViewModelMapper _shiftTradeScheduleViewModelMapper;
+		private readonly IShiftTradePersonScheduleViewModelMapper _personScheduleViewModelMapper;
 
-		public RequestsShiftTradeBulletinViewModelFactory(IShiftTradeScheduleViewModelMapper shiftTradeScheduleViewModelMapper)
+		public RequestsShiftTradeBulletinViewModelFactory(IShiftTradeScheduleViewModelMapper shiftTradeScheduleViewModelMapper, IShiftTradePersonScheduleViewModelMapper personScheduleViewModelMapper)
 		{
 			_shiftTradeScheduleViewModelMapper = shiftTradeScheduleViewModelMapper;
+			_personScheduleViewModelMapper = personScheduleViewModelMapper;
 		}
 
 
@@ -19,5 +21,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			return _shiftTradeScheduleViewModelMapper.MapForBulletin(data);
 		}
 
+		public ShiftTradeScheduleViewModel CreateShiftTradeBulletinViewModelFromRawData(ShiftTradeScheduleViewModelData data)
+		{
+			var ret = new ShiftTradeScheduleViewModel();
+			ret.MySchedule = _personScheduleViewModelMapper.MakeMyScheduleViewModel(data);
+			ret.PossibleTradeSchedules = _personScheduleViewModelMapper.MakePossibleShiftTradeAddPersonScheduleViewModels(data);
+			return ret;
+		}
 	}
 }
