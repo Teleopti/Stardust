@@ -147,6 +147,44 @@ input::-ms-clear {
 	cursor:pointer;
 }
 
+.navbar{
+  position:fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+	transition:$transition-timing;
+
+	.card-context{
+		margin:5px 0;
+	}
+
+	.white-text{
+		color:$white;
+	}
+
+	.nav-tools{
+		position: fixed;
+		right: 0;
+		top: 0;
+	}
+
+	.navbar-search{
+		background: $white;
+		padding:10px;
+	}
+
+	.search-results{
+		position: relative;
+		width:auto;
+	}
+}
+
+.navbar-right{
+	.card-context{
+		margin:0;
+	}
+}
+
 /*Growl*/
 .growl-container > .growl-item.ng-enter,
 .growl-container > .growl-item.ng-leave {
