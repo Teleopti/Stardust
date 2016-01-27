@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 		{
 			Browser.Interactions.AssertExists("wfm-card-list");
 			Browser.Interactions.Click("wfm-card-list card-header");
-			Browser.Interactions.Click("wfm-card-list card-body .period-report-btn");
+			Browser.Interactions.ClickVisibleOnly("wfm-card-list card-body .period-report-btn");
 		}
 
 		[Then(@"I should be able to view the report from ""(.*)"" to ""(.*)""")]
