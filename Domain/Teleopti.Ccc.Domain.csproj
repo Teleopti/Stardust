@@ -423,7 +423,6 @@
     <Compile Include="ApplicationLayer\Events\ScheduleInitializeTriggeredEventForScheduleDay.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduleInitializeTriggeredEventForScheduleProjection.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjection\UpdateScheduleProjectionReadModel.cs" />
-    <Compile Include="ApplicationLayer\SyncEventsPublisher.cs" />
     <Compile Include="ApplicationLayer\SyncPublishTo.cs" />
     <Compile Include="ApplicationLayer\TrackingMessageSender.cs" />
     <Compile Include="Auditing\AuditSetting.cs" />
