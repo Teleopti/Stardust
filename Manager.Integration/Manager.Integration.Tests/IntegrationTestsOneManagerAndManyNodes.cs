@@ -153,7 +153,7 @@ namespace Manager.Integration.Test
             //task.Wait();
         }
 
-        [Test]
+        [Test][Ignore]
         public void ShouldBeAbleToCreate10SuccessfullJobRequest()
         {
             string status = string.Empty;
