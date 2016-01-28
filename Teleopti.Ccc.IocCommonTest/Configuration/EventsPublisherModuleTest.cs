@@ -17,14 +17,14 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 	public class EventsPublisherModuleTest
 	{
 		[Test]
-		public void ShouldResolveSyncEventPublisher()
+		public void ShouldResolveSyncEventPublisherForBehaviorTest()
 		{
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { BehaviorTest = true}, new FalseToggleManager())));
 			var container = builder.Build();
 
-			container.Resolve<ServiceBusAsSyncEventPublisher>().Should().Not.Be.Null();
-			container.Resolve<IEventPublisher>().Should().Be.OfType<ServiceBusAsSyncEventPublisher>();
+			container.Resolve<SyncAllEventPublisher>().Should().Not.Be.Null();
+			container.Resolve<IEventPublisher>().Should().Be.OfType<SyncAllEventPublisher>();
 		}
 
 		[Test]
