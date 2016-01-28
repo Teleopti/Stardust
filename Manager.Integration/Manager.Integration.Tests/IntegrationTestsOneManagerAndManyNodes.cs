@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using log4net;
 using Manager.Integration.Test.Constants;
@@ -10,7 +13,7 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
-    [TestFixture] 
+    [TestFixture]
     public class IntegrationTestsOneManagerAndManyNodes
     {
         private const int NumberOfNodesToStart = 2;
@@ -36,25 +39,25 @@ namespace Manager.Integration.Test
         }
 
         private ManagerApiHelper ManagerApiHelper { get; set; }
-        
-        [Test][Ignore]
-        public void Test()
+
+        [Test]
+        public async  void Test()
         {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeConstants.ApplicationJson));
 
-            //using (var client = new HttpClient())
-            //{
-            //    client.DefaultRequestHeaders.Accept.Clear();
-            //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeConstants.ApplicationJson));
+                ManagerUriBuilder uriBuilder = new ManagerUriBuilder();
 
-            //    ManagerUriBuilder uriBuilder = new ManagerUriBuilder();
+                var uri = uriBuilder.GetCancelJobUri(Guid.NewGuid());
 
-            //    var uri =uriBuilder.GetCancelJobUri(Guid.NewGuid());
-
-            //    var response = await client.DeleteAsync(uri);
-            //}
+                var response = await client.DeleteAsync(uri);
+            }
         }
 
-        [Test][Ignore]
+        [Test]
+        [Ignore]
         public void Create10RequestShouldReturnBothCancelAndDeleteStatuses()
         {
             JobHelper.GiveNodesTimeToInitialize();

@@ -38,7 +38,7 @@ namespace Stardust.Node.Extensions
         {
             nodeConfiguration.ThrowArgumentNullException();
 
-            NodeConfigurationUriBuilder nodeConfigurationUriBuilder = new NodeConfigurationUriBuilder(nodeConfiguration);
+            NodeConfigurationUriBuilderHelper nodeConfigurationUriBuilder = new NodeConfigurationUriBuilderHelper(nodeConfiguration);
 
             return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobDoneUri(guid);
         }
@@ -47,27 +47,27 @@ namespace Stardust.Node.Extensions
         {
             nodeConfiguration.ThrowArgumentNullException();
 
-            NodeConfigurationUriBuilder nodeConfigurationUriBuilder = new NodeConfigurationUriBuilder(nodeConfiguration);
+            NodeConfigurationUriBuilderHelper nodeConfigurationUriBuilder = new NodeConfigurationUriBuilderHelper(nodeConfiguration);
 
-            return nodeConfigurationUriBuilder.ManagerUriBuilder.GetNodeHasBeenInitializedUri();
+            return nodeConfigurationUriBuilder.ManagerUriBuilder.GetNodeHasBeenInitializedTemplateUri();
         }
 
         public static Uri GetManagerNodeHeartbeatUri(this INodeConfiguration nodeConfiguration)
         {
             nodeConfiguration.ThrowArgumentNullException();
 
-            NodeConfigurationUriBuilder nodeConfigurationUriBuilder = new NodeConfigurationUriBuilder(nodeConfiguration);
+            NodeConfigurationUriBuilderHelper nodeConfigurationUriBuilder = new NodeConfigurationUriBuilderHelper(nodeConfiguration);
 
-            return nodeConfigurationUriBuilder.ManagerUriBuilder.GetHeartbeatUri();
+            return nodeConfigurationUriBuilder.ManagerUriBuilder.GetHeartbeatTemplateUri();
         }
 
         public static Uri GetManagerJobHasBeenCanceledUri(this INodeConfiguration nodeConfiguration)
         {
             nodeConfiguration.ThrowArgumentNullException();
 
-            NodeConfigurationUriBuilder nodeConfigurationUriBuilder = new NodeConfigurationUriBuilder(nodeConfiguration);
+            NodeConfigurationUriBuilderHelper nodeConfigurationUriBuilder = new NodeConfigurationUriBuilderHelper(nodeConfiguration);
 
-            return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobHasBeenCanceledUri();
+            return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobHasBeenCanceledTemplateUri();
         }
 
         public static Uri GetManagerJobHasBeenCanceledUri(this INodeConfiguration nodeConfiguration,
@@ -75,7 +75,7 @@ namespace Stardust.Node.Extensions
         {
             nodeConfiguration.ThrowArgumentNullException();
 
-            NodeConfigurationUriBuilder nodeConfigurationUriBuilder = new NodeConfigurationUriBuilder(nodeConfiguration);
+            NodeConfigurationUriBuilderHelper nodeConfigurationUriBuilder = new NodeConfigurationUriBuilderHelper(nodeConfiguration);
 
             return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobHasBeenCanceledUri(guid);
         }
@@ -84,25 +84,25 @@ namespace Stardust.Node.Extensions
         {
             nodeConfiguration.ThrowArgumentNullException();
 
-            NodeConfigurationUriBuilder nodeConfigurationUriBuilder = new NodeConfigurationUriBuilder(nodeConfiguration);
+            NodeConfigurationUriBuilderHelper nodeConfigurationUriBuilder = new NodeConfigurationUriBuilderHelper(nodeConfiguration);
 
-            return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobHasFailedUri();
+            return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobHasFailedTemplateUri();
         }
 
         public static Uri GetManagerJobDoneUri(this INodeConfiguration nodeConfiguration)
         {
             nodeConfiguration.ThrowArgumentNullException();
 
-            NodeConfigurationUriBuilder nodeConfigurationUriBuilder = new NodeConfigurationUriBuilder(nodeConfiguration);
+            NodeConfigurationUriBuilderHelper nodeConfigurationUriBuilder = new NodeConfigurationUriBuilderHelper(nodeConfiguration);
 
-            return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobDoneUri();
+            return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobDoneTemplateUri();
         }
 
         public static Uri GetManagerLocationUri(this INodeConfiguration nodeConfiguration)
         {
             nodeConfiguration.ThrowArgumentNullException();
 
-            NodeConfigurationUriBuilder nodeConfigurationUriBuilder = new NodeConfigurationUriBuilder(nodeConfiguration);
+            NodeConfigurationUriBuilderHelper nodeConfigurationUriBuilder = new NodeConfigurationUriBuilderHelper(nodeConfiguration);
 
             return nodeConfigurationUriBuilder.ManagerUriBuilder.GetLocationUri();
         }

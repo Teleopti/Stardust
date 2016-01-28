@@ -1,10 +1,11 @@
 ﻿using System;
+using Stardust.Node.Constants;
 
 namespace Stardust.Node.Helpers
 {
-    public class NodeUriBuilder
+    public class NodeUriBuilderHelper
     {
-        public NodeUriBuilder(string locationUri)
+        public NodeUriBuilderHelper(string locationUri)
         {
             LocationUri = new Uri(locationUri);
 
@@ -23,11 +24,21 @@ namespace Stardust.Node.Helpers
             return UriBuilder.Uri;
         }
 
+        public Uri CreateUri(string template,
+                             Guid guid)
+        {
+            UriBuilder.Path = template.Replace(NodeRouteConstants.JobIdOptionalParameter,
+                                               guid.ToString());
+
+            return UriBuilder.Uri;
+        }
+
+
         private UriBuilder UriBuilder { get; set; }
 
         private Uri LocationUri { get; set; }
 
-        public NodeUriBuilder(Uri locationUri) : this(locationUri.ToString())
+        public NodeUriBuilderHelper(Uri locationUri) : this(locationUri.ToString())
         {
         }
     }

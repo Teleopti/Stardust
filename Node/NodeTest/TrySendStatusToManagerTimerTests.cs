@@ -44,6 +44,25 @@ namespace NodeTest
         }
 
         [Test]
+        public void ShouldTriggerSuccessEvent()
+        {
+            TimerOnTrySendStatusSuccededTriggered = false;
+
+            var timer = new TrySendStatusToManagerTimer(null,
+                                                        null,
+                                                        null,
+                                                        OverrideElapsedEventHandler,
+                                                        1000);
+
+            timer.TrySendStatusSucceded += TimerOnTrySendStatusSucceded;
+
+            timer.Start();
+            Thread.Sleep(TimeSpan.FromSeconds(2)); //Wait for timer (takes 1 second)
+
+            Assert.IsTrue(TimerOnTrySendStatusSuccededTriggered);
+        }
+
+        [Test][Ignore]  //will always pass - cannot unit test timers that post to manager !
         public void SendJobDoneTest()
         {
             var jobToDo = new JobToDo
@@ -72,25 +91,9 @@ namespace NodeTest
 
 
             Thread.Sleep(TimeSpan.FromSeconds(60));
+            
         }
 
-        [Test]
-        public void ShouldTriggerSuccessEvent()
-        {
-            TimerOnTrySendStatusSuccededTriggered = false;
 
-            var timer = new TrySendStatusToManagerTimer(null,
-                                                        null,
-                                                        null,
-                                                        OverrideElapsedEventHandler,
-                                                        1000);
-
-            timer.TrySendStatusSucceded += TimerOnTrySendStatusSucceded;
-
-            timer.Start();
-            Thread.Sleep(TimeSpan.FromSeconds(2)); //Wait for timer (takes 1 second)
-
-            Assert.IsTrue(TimerOnTrySendStatusSuccededTriggered);
-        }
     }
 }
