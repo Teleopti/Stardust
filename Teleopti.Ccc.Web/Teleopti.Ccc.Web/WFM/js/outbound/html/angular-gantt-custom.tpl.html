@@ -42,11 +42,11 @@
 					<gantt-task ng-if="!row.model.expansion" ng-repeat="task in row.visibleTasks track by task.model.id">
 					</gantt-task>
 					<div class="gantt-row-expansion" ng-if="row.model.expansion">
-						<div class="loading-whole-section loading-card-bodyfix" ng-show="row.model.isLoadingData || row.model.isRefreshingData">
+						<div class="loading-whole-section loading loading-card-bodyfix" ng-show="row.model.isLoadingData || row.model.isRefreshingData">
 							<md-progress-circular md-mode="indeterminate" style="z-index: 100;"></md-progress-circular>
 						</div>
 						<div class="clearfix text-center" style="height: 40px;">
-							<p class="campaign-message orangefix" ng-if="row.model.campaign.WarningInfo[0].TypeOfRule=='CampaignOverstaff'"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>CampaignOverstaff</span></p>
+							<p class="campaign-message overstaffed-color" ng-if="row.model.campaign.WarningInfo[0].TypeOfRule=='CampaignOverstaff'"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>CampaignOverstaff</span></p>
 							<p class="campaign-message" ng-if="row.model.campaign.WarningInfo[0].TypeOfRule=='CampaignUnderSLA'"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>CampaignUnderSLA</span></p>
 						</div>
 						<div class="campaign-chart-wrapper relative" ng-if="!row.model.isLoadingData">

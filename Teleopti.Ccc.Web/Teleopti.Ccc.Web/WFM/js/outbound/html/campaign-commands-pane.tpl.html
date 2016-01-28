@@ -52,16 +52,14 @@
 		</div>
 	</div>
 	<button class="wfm-btn wfm-btn-invis-primary inline-block btn-toggle-manual-plan"
-			ng-click="toggleManualPlan()"
-			ng-class="{'selected-ope-btn': manualPlanSwitch }"
-			translate>
-		ManualPlan
+			ng-click="toggleManualPlan()">
+		<span translate ng-show="!manualPlanSwitch">ManualPlan</span>
+		<span translate ng-show="manualPlanSwitch">Cancel</span>
 	</button>
 	<button class="wfm-btn wfm-btn-invis-primary inline-block"
-			ng-click="toggleManualBacklog()"
-			ng-class="{'selected-ope-btn': manualBacklogSwitch}"
-			translate>
-		AddBacklog
+			ng-click="toggleManualBacklog()">
+		<span translate ng-show="!manualBacklogSwitch">AddBacklog</span>
+		<span translate ng-show="manualBacklogSwitch">Cancel</span>
 	</button>
 	<button class="wfm-btn wfm-btn-invis-primary inline-block btn-replan"
 			ng-click="replan()"

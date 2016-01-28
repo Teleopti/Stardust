@@ -24,7 +24,8 @@
 	    $scope.removeCampaign = removeCampaign;
 		$scope.cancelRemoveCampaign = cancelRemoveCampaign;
 
-        function editCampaign() {
+		function editCampaign() {
+			if (!$scope.isInputValid()) return;
             outboundService.editCampaign($scope.campaign, function (campaign) {
                 outboundNotificationService.notifyCampaignUpdateSuccess(angular.copy(campaign));
                 init();

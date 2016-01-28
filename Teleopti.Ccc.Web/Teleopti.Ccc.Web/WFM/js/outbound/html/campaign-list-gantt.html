@@ -13,8 +13,8 @@
 	</div>
 </div>
 
-<div class="outbound-summary material-depth-1" ng-if="isInitFinished">
-	<div class="loading-gantt-section" ng-show="!isLoadFinished">
+<div class="panel material-depth-1 p-10" ng-if="isInitFinished">
+	<div class="loading loading-gantt-section" ng-show="!isLoadFinished">
 		<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 	</div>
 	<div class="operation-container clearfix">
@@ -26,11 +26,11 @@
 					   ng-model="settings.threshold"
 					   ng-disabled="isRefreshingGantt"></md-slider>
 		</div>
-		<div class="relative" ng-show="isNavigationEnabled">
+		<div class="relative pull-left" ng-show="isNavigationEnabled">
 			<button class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="viewOneMonthBefore()"><i class="mdi mdi-chevron-double-left middle"></i></button>
 			<div class="gantt-datepicker-container inline-block" ng-init="showDatePicker=false">
+				<input class="pointer text-center" type="text" ng-click="showDatePicker=!showDatePicker" value="{{settings.periodStart | monthview }}" readonly />
 				<i class="mdi mdi-calendar pointer" ng-click="showDatePicker=!showDatePicker"></i>
-				<input class="pointer" type="text" ng-click="showDatePicker=!showDatePicker" value="{{settings.periodStart | monthview }}" readonly />
 				<div class="wfm-datepicker-wrap gantt-datepicker" ng-show="showDatePicker">
 					<datepicker show-weeks="true" ng-model="settings.periodStart" class="wfm-datepicker" min-mode="month" ng-change="showDatePicker=false"></datepicker>
 				</div>
