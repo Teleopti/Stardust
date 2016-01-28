@@ -2,13 +2,21 @@
 	<div class="con-flex">
 		<span class="brand" ui-sref="main">Teleopti WFM</span>
 	</div>
-	<div class="con-flex" ng-if="show">
-		<!-- <span ng-if="show">  -->
-		<span ng-controller="BusinessUnitsCtrl" >
-			<select name="business-unit-select" class="white-text" id="business-unit-select" ng-change="changeBusinessUnit(data.selectedBu)" ng-options="bu.Name for bu in data.businessUnits" ng-model="data.selectedBu" ></select>
-			<md-tooltip>{{'BusinessUnit' |translate}}</md-tooltip>
+	<div class="con-flex">
+		<div class="navbar-left">
+			<span ng-controller="BusinessUnitsCtrl">
+			<span >
+				<span class="ui-select">
+					<i class="bu-caret mdi mdi-menu-down"></i>
+					<select name="business-unit-select" id="business-unit-select" class="bu-change" ng-change="changeBusinessUnit(data.selectedBu)" ng-options="bu.Name for bu in data.businessUnits" ng-model="data.selectedBu" ></select>
+					<md-tooltip>{{'BusinessUnit' |translate}}</md-tooltip>
+				</span>
+			</span>
 		</span>
 	</div>
+	</div>
+
+
 
 	<div class="con-flex split-3-1 animate-show" ng-controller="SearchCtrl" ng-show="searchmode">
 		<input type="text" id="searchbar" class="navbar-search" placeholder="{{'SearchThreeDots' | translate}}" ng-model="keyword" ng-change="searchKeyword()"/>
