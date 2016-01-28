@@ -26,7 +26,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<HangfireEventPublisher>().SingleInstance();
 			builder.RegisterType<ServiceBusEventPublisher>().SingleInstance();
-			builder.RegisterType<SyncServiceBusEventPublisher>().SingleInstance();
+			builder.RegisterType<SyncAllEventPublisher>().SingleInstance();
+			builder.RegisterType<ServiceBusAsSyncEventPublisher>().SingleInstance();
 
 			if (_configuration.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
 				builder.RegisterType<SelectiveEventPublisher>().As<IEventPublisher>().SingleInstance();
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				if (_configuration.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
 					builder.RegisterType<SelectiveEventPublisherWithoutBus>().As<IEventPublisher>().SingleInstance();
 				else
-					builder.Register(c => c.Resolve<SyncServiceBusEventPublisher>()).As<IEventPublisher>().SingleInstance();
+					builder.Register(c => c.Resolve<SyncAllEventPublisher>()).As<IEventPublisher>().SingleInstance();
 				builder.RegisterType<IgnoreDelayedMessages>().As<IDelayedMessageSender>().SingleInstance();
 			}
 

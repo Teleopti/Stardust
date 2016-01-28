@@ -1,18 +1,15 @@
-﻿using System.Linq;
-using System.Reflection;
-using Autofac;
+﻿using System.Reflection;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public class SyncServiceBusEventPublisher : IEventPublisher, ICurrentEventPublisher
+	public class SyncAllEventPublisher : IEventPublisher
 	{
 		private readonly ResolveEventHandlers _resolver;
 
-		public SyncServiceBusEventPublisher(ResolveEventHandlers resolver)
+		public SyncAllEventPublisher(ResolveEventHandlers resolver)
 		{
 			_resolver = resolver;
 		}
@@ -21,15 +18,14 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 			foreach (var @event in events)
 			{
-				var handlers = _resolver.ResolveHandlersForEvent(@event)
-					.Where(x => x.GetType().IsAssignableTo<IRunOnServiceBus>());
+				var handlers = _resolver.ResolveHandlersForEvent(@event);
 
 				foreach (var handler in handlers)
 				{
 					var method = _resolver.HandleMethodFor(handler.GetType(), @event);
 					try
 					{
-						method.Invoke(handler, new[] {@event});
+						method.Invoke(handler, new[] { @event });
 					}
 					catch (TargetInvocationException e)
 					{
@@ -38,11 +34,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 					}
 				}
 			}
-		}
-
-		public IEventPublisher Current()
-		{
-			return this;
 		}
 	}
 }

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 		ConsumerOf<IEvent>,
 		ConsumerOf<EventsPackageMessage>
 	{
-		private readonly SyncServiceBusEventPublisher _publisher;
+		private readonly SyncAllEventPublisher _publisher;
 		private readonly IEventContextPopulator _eventContextPopulator;
 		private readonly IServiceBus _bus;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 		private readonly static ILog Logger = LogManager.GetLogger(typeof(EventsConsumer));
 
 		public EventsConsumer(
-			SyncServiceBusEventPublisher publisher,
+			SyncAllEventPublisher publisher,
 			IEventContextPopulator eventContextPopulator,
 			IServiceBus bus, 
 			ICurrentUnitOfWorkFactory unitOfWorkFactory, 
