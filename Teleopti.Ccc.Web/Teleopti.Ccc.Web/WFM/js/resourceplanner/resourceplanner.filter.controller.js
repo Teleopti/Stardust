@@ -7,7 +7,8 @@
 
 				var keys = {
 					up: 38,
-					down: 40
+					down: 40,
+					enter: 13
 				};
 				var position = -1;
 
@@ -31,7 +32,7 @@
 				};
 
 				var enterKey = function () {
-
+					$scope.selectResultItem($scope.results[position]);
 				};
 
 				$scope.onKeydown = function($event) {
@@ -40,6 +41,9 @@
 					}
 					if ($event.keyCode === keys.down) {
 						downArrow();
+					}
+					if ($event.keyCode === keys.enter) {
+						enterKey();
 					}
 				};
 

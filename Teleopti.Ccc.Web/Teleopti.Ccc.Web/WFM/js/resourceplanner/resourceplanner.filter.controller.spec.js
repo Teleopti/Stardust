@@ -587,5 +587,21 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.results[0].selected).toBe(true);
 		expect(scope.results[1].selected).toBe(false);
 	}));
+	it('should select current element in results when pressing enter key', inject(function ($controller, $stateParams){
+		var scope = $rootScope.$new();
+		var eventEnter = {
+			keyCode: 13
+		};
+		var eventDown = {
+			down: 40
+		};
+		$controller('ResourceplannerFilterCtrl', { $scope: scope, $stateParams:mockStateParams });
+		scope.selectedResults = [];
+
+		scope.onKeydown(eventDown);
+		scope.onKeydown(eventEnter);
+
+		expect(scope.selectedResults.length).toEqual(1);
+}));
 
 });
