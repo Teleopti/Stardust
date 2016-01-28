@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			modelFactory.Stub(x => x.CreateShiftTradeBulletinViewModel(Arg<ShiftTradeScheduleViewModelData>.Is.Anything))
 							.Return(model);
 
-			var target = new RequestsShiftTradeBulletinBoardController(modelFactory, _timeFilterHelper);
+			var target = new RequestsShiftTradeBulletinBoardController(modelFactory, _timeFilterHelper, null);
 
 			var result = target.BulletinSchedules(DateOnly.Today, Guid.NewGuid().ToString(), new Paging());
 			result.Data.Should().Be.SameInstanceAs(model);
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				x => x.CreateShiftTradeBulletinViewModel(Arg<ShiftTradeScheduleViewModelData>.Is.Anything))
 				.Return(model);
 
-			var target = new RequestsShiftTradeBulletinBoardController(modelFactory, _timeFilterHelper);
+			var target = new RequestsShiftTradeBulletinBoardController(modelFactory, _timeFilterHelper, null);
 
 			var result = target.BulletinSchedulesWithTimeFilter(DateOnly.Today, new ScheduleFilter { TeamIds = Guid.NewGuid().ToString() }, new Paging());
 			result.Data.Should().Be.SameInstanceAs(model);

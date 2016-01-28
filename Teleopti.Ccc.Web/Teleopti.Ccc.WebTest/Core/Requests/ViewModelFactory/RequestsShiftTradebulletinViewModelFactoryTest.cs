@@ -111,6 +111,32 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		}
 
 		[Test]
+		public void ShouldIndicateOvertimeInMySchedule()
+		{
+			setUpMe();
+
+			var myAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, me,
+				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 8, 0, 0), DateTimeKind.Utc),
+					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 10, 0, 0), DateTimeKind.Utc)),
+				ShiftCategoryFactory.CreateShiftCategory("mainShift"));
+			myAss.AddOvertimeActivity(ActivityFactory.CreateActivity("overtime"), new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 6, 0, 0), DateTimeKind.Utc),
+						DateTime.SpecifyKind(new DateTime(2016, 1, 13, 8, 0, 0), DateTimeKind.Utc)), new MultiplicatorDefinitionSet("a", MultiplicatorType.Overtime));
+			ScheduleRepository.Add(myAss);
+
+			var result = Target.CreateShiftTradeBulletinViewModelFromRawData(new ShiftTradeScheduleViewModelData
+			{
+				Paging = new Paging {Skip = 0, Take = 20},
+				ShiftTradeDate = new DateOnly(2016, 1, 13),
+				TeamIdList = new[] {team.Id.GetValueOrDefault()}
+			});
+
+			result.MySchedule.ScheduleLayers.Count().Should().Be(2);
+			result.MySchedule.Name.Should().Be.EqualTo("me@me");
+			result.MySchedule.ScheduleLayers[0].IsOvertime.Should().Be.EqualTo(true);
+			result.MySchedule.StartTimeUtc.Should().Be.EqualTo(new DateTime(2016, 1, 13, 6, 0, 0));
+		}
+
+		[Test]
 		public void ShouldRetrieveShiftTradeExchangedSchedules()
 		{
 			setUpMe();
