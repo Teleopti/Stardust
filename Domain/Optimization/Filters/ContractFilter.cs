@@ -26,5 +26,19 @@ namespace Teleopti.Ccc.Domain.Optimization.Filters
 		{
 			get { return "contract"; }
 		}
+
+		public override bool Equals(IEntity other)
+		{
+			var otherContractFilter = other as ContractFilter;
+			if (otherContractFilter == null)
+				return false;
+
+			return Contract.Equals(otherContractFilter.Contract);
+		}
+
+		public override int GetHashCode()
+		{
+			return Contract.GetHashCode();
+		}
 	}
 }

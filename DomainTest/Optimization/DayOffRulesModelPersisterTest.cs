@@ -188,6 +188,54 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		}
 
 		[Test]
+		public void ShouldNotAddExistingTeamFilter()
+		{
+			var team = new Team().WithId();
+			TeamRepository.Add(team);
+
+			var model = new DayOffRulesModel();
+			model.Filters.Add(new FilterModel{Id = team.Id.Value,FilterType = "team"});
+			model.Filters.Add(new FilterModel{Id = team.Id.Value,FilterType = "team"});
+
+			Target.Persist(model);
+
+			var inDb = DayOffRulesRepository.LoadAll().Single();
+			inDb.Filters.Count().Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldNotAddExistingContractFilter()
+		{
+			var contract = new Contract("_").WithId();
+			ContractRepository.Add(contract);
+			
+			var model = new DayOffRulesModel();
+			model.Filters.Add(new FilterModel { Id = contract.Id.Value, FilterType = "contract" });
+			model.Filters.Add(new FilterModel { Id = contract.Id.Value, FilterType = "contract" });
+
+			Target.Persist(model);
+
+			var inDb = DayOffRulesRepository.LoadAll().Single();
+			inDb.Filters.Count().Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldNotAddExistingSiteFilter()
+		{
+			var site = new Site("_").WithId();
+			SiteRepository.Add(site);
+
+			var model = new DayOffRulesModel();
+			model.Filters.Add(new FilterModel { Id = site.Id.Value, FilterType = "site" });
+			model.Filters.Add(new FilterModel { Id = site.Id.Value, FilterType = "site" });
+
+			Target.Persist(model);
+
+			var inDb = DayOffRulesRepository.LoadAll().Single();
+			inDb.Filters.Count().Should().Be.EqualTo(1);
+		}
+
+		[Test]
 		public void ShouldThrowIfUnknownFilter()
 		{
 			var model = new DayOffRulesModel();

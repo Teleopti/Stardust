@@ -26,5 +26,19 @@ namespace Teleopti.Ccc.Domain.Optimization.Filters
 		{
 			get { return "organization"; }
 		}
+
+		public override bool Equals(IEntity other)
+		{
+			var otherSiteFilter = other as SiteFilter;
+			if (otherSiteFilter == null)
+				return false;
+
+			return Site.Equals(otherSiteFilter.Site);
+		}
+
+		public override int GetHashCode()
+		{
+			return Site.GetHashCode();
+		}
 	}
 }
