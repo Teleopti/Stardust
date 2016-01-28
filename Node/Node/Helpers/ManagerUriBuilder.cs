@@ -53,9 +53,8 @@ namespace Stardust.Node.Helpers
 
         public Uri GetJobHasFailedUri(Guid guid)
         {
-            string path = string.Format(ManagerRouteConstants.JobFailed.Replace("{jobId}",
-                                                                                "{0}"),
-                                        guid);
+            string path = ManagerRouteConstants.JobFailed.Replace(ManagerRouteConstants.JobIdOptionalParameter,
+                                                                  guid.ToString());
 
             return CreateUri(path);
         }
@@ -67,9 +66,8 @@ namespace Stardust.Node.Helpers
 
         public Uri GetJobHasBeenCanceledUri(Guid guid)
         {
-            string path = string.Format(ManagerRouteConstants.JobHasBeenCanceled.Replace("{jobId}",
-                                                                                         "{0}"),
-                                        guid);
+            string path = ManagerRouteConstants.JobHasBeenCanceled.Replace(ManagerRouteConstants.JobIdOptionalParameter,
+                                                                           guid.ToString());
 
             return CreateUri(path);
         }
@@ -81,9 +79,8 @@ namespace Stardust.Node.Helpers
 
         public Uri GetJobDoneUri(Guid guid)
         {
-            string path = string.Format(ManagerRouteConstants.JobDone.Replace("{jobId}",
-                                                                              "{0}"),
-                                        guid);
+            string path = ManagerRouteConstants.JobDone.Replace(ManagerRouteConstants.JobIdOptionalParameter,
+                                                                guid.ToString());
 
             return CreateUri(path);
         }

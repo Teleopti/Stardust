@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Stardust.Node.Constants;
 using Stardust.Node.Interfaces;
 
 namespace Stardust.Node.Extensions
@@ -32,8 +33,8 @@ namespace Stardust.Node.Extensions
             jobToDo.ThrowExceptionWhenNull();
             endPoint.ThrowArgumentExceptionIfNullOrEmpty();
 
-            Uri transformUri = new Uri(endPoint.Replace("{jobId}",
-                                                jobToDo.Id.ToString()));
+            Uri transformUri = new Uri(endPoint.Replace(NodeRouteConstants.JobIdOptionalParameter,
+                                                        jobToDo.Id.ToString()));
 
             return transformUri;
         }
@@ -54,7 +55,8 @@ namespace Stardust.Node.Extensions
 
                 Uri uri = jobToDo.CreateUri(apiEndpoint.ToString());
 
-                response = await client.PostAsync(uri,null);
+                response = await client.PostAsync(uri,
+                                                  null);
             }
 
             return response;

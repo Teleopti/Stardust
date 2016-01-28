@@ -15,7 +15,7 @@ namespace Manager.Integration.Test
     [TestFixture]
     public class IntegrationTestsOneManagerAndManyNodes
     {
-        private const int NumberOfNodesToStart = 2;
+        private const int NumberOfNodesToStart = 10;
 
         private static readonly ILog Logger = 
             LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndManyNodes));
@@ -44,7 +44,7 @@ namespace Manager.Integration.Test
         {
             JobHelper.GiveNodesTimeToInitialize();
 
-            List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(1);
+            List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(10);
 
             List<Task> tasks = new List<Task>();
 
@@ -143,7 +143,7 @@ namespace Manager.Integration.Test
 
             JobHelper.GiveNodesTimeToInitialize();
 
-            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(1);
+            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(100);
 
             List<Task> tasks = new List<Task>();
 

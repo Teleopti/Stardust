@@ -34,9 +34,8 @@ namespace Manager.Integration.Test.Helpers
 
         public Uri GetJobHistoryUri(Guid guid)
         {
-            string path = string.Format(ManagerRouteConstants.GetJobHistory.Replace("{jobId}",
-                                                                                    "{0}"),
-                                        guid);
+            string path = ManagerRouteConstants.GetJobHistory.Replace(ManagerRouteConstants.JobIdOptionalParameter,
+                                                                      guid.ToString());
 
             return CreateUri(path);
         }
@@ -44,9 +43,8 @@ namespace Manager.Integration.Test.Helpers
 
         public Uri GetCancelJobUri(Guid guid)
         {
-            string path = string.Format(ManagerRouteConstants.CancelJob.Replace("{jobId}",
-                                                                                "{0}"),
-                                        guid);
+            string path = ManagerRouteConstants.CancelJob.Replace(ManagerRouteConstants.JobIdOptionalParameter,
+                                                                  guid.ToString());
 
             return CreateUri(path);
         }
