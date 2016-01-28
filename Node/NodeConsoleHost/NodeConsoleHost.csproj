@@ -64,9 +64,9 @@
       <Project>{3d7d71b6-4676-498c-b148-447a5fc5f3a0}</Project>
       <Name>NodeTest.JobHandlers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Node\Node.csproj">
+    <ProjectReference Include="..\Node\Stardust.Node.csproj">
       <Project>{7b0ddb7c-6d8e-453d-9785-f5651756b169}</Project>
-      <Name>Node</Name>
+      <Name>Stardust.Node</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
