@@ -76,9 +76,12 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 		public void RemoveAuthBridgeCookie()
 		{
 			var fedAuthCookieName = _sessionAuthenticationModule.CookieName;
-			var fedAuthCookie = new HttpCookie(fedAuthCookieName) {Expires = _now.LocalDateTime().AddHours(-1)};
-			_httpContext.Current().Response.Cookies.Remove(fedAuthCookieName);
-			_httpContext.Current().Response.Cookies.Add(fedAuthCookie);
+			if (_httpContext.Current().Request.Cookies[fedAuthCookieName] != null)
+			{
+				var fedAuthCookie = new HttpCookie(fedAuthCookieName) { Expires = _now.LocalDateTime().AddHours(-1) };
+				_httpContext.Current().Response.Cookies.Remove(fedAuthCookieName);
+				_httpContext.Current().Response.Cookies.Add(fedAuthCookie);
+			}
 		}
 
 		public void RemoveCookie()
