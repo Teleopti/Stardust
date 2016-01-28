@@ -58,13 +58,12 @@
     <Compile Include="TestJobWorker.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Node\Node.csproj">
+    <ProjectReference Include="..\Node\Stardust.Node.csproj">
       <Project>{7b0ddb7c-6d8e-453d-9785-f5651756b169}</Project>
-      <Name>Node</Name>
+      <Name>Stardust.Node</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
