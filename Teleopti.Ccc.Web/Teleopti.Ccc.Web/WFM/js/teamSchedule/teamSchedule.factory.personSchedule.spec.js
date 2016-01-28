@@ -99,7 +99,6 @@ describe("PersonSchedule", function () {
 		};
 
 		var personSchedule = target.Create(schedule, timeLine);
-		console.log("personSchedule.IsOvernightShift:", personSchedule.IsOvernightShift);
 		expect(personSchedule.IsOvernightShift).toEqual(true);
 	}));
 

@@ -14,7 +14,6 @@
 			var isOvernightShift = false;
 			if (schedule.Projection != undefined && schedule.Projection != null && schedule.Projection.length > 0) {
 				var shiftStartTime = moment(schedule.Projection[0].Start);
-				//console.log("shiftStartTime:", shiftStartTime);
 				var lastProjection = schedule.Projection[schedule.Projection.length - 1];
 				var shiftEndTime = moment(lastProjection.Start);
 				shiftEndTime = shiftEndTime.add(lastProjection.Minutes, 'minutes');
