@@ -1240,7 +1240,6 @@
     <Content Include="Areas\MyTime\Content\Images\logo.png" />
     <Content Include="Areas\MyTime\Content\Images\seat.svg" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewNew.js" />
-    <Content Include="WFM\index.tpl.html" />
     <Content Include="WFM\js\forecasting\forecasting.advanced.controller.spec.js" />
     <Content Include="WFM\js\forecasting\forecasting.start.controller.spec.js" />
     <Content Include="WFM\js\forecasting\html\forecasting-result-chart.html" />
@@ -1924,6 +1923,7 @@
     <Content Include="WFM\html\main.html" />
     <Content Include="WFM\html\nav.html" />
     <Content Include="WFM\js\permissions\permissions.html" />
+    <Content Include="WFM\index.html" />
     <Content Include="WFM\js\app.js" />
     <Content Include="WFM\vendor\angular-growl.js" />
     <Content Include="WFM\vendor\fabricjs\fabric.js" />
