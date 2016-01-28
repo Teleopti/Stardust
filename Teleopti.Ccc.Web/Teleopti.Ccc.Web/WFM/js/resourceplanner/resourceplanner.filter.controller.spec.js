@@ -543,5 +543,49 @@ describe('ResourcePlannerCtrl', function () {
 		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 		expect(scope.name).toBe('Default')
 	}));
+	it('should be on first element in results when pressing down key', inject(function ($controller, $stateParams){
+		var scope = $rootScope.$new();
+		var event = {
+			keyCode: 40
+		};
+		$controller('ResourceplannerFilterCtrl', { $scope: scope, $stateParams:mockStateParams });
+		scope.results = [{Id: '1'},{Id: '2'}];
+
+		scope.onKeydown(event);
+
+		expect(scope.results[0].selected).toBe(true);
+	}));
+	it('should be on second element in results when pressing down key two times', inject(function ($controller, $stateParams){
+		var scope = $rootScope.$new();
+		var event = {
+			keyCode: 40
+		};
+		$controller('ResourceplannerFilterCtrl', { $scope: scope, $stateParams:mockStateParams });
+		scope.results = [{Id: '1'},{Id: '2'}];
+
+		scope.onKeydown(event);
+		scope.onKeydown(event);
+
+		expect(scope.results[0].selected).toBe(false);
+		expect(scope.results[1].selected).toBe(true);
+	}));
+	it('should be on first element when pressing down key two times and up key ones', inject(function ($controller, $stateParams){
+		var scope = $rootScope.$new();
+		var eventUp = {
+			keyCode: 38
+		};
+		var eventDown = {
+			keyCode: 40
+		};
+		$controller('ResourceplannerFilterCtrl', { $scope: scope, $stateParams:mockStateParams });
+		scope.results = [{Id: '1'},{Id: '2'}];
+
+		scope.onKeydown(eventDown);
+		scope.onKeydown(eventDown);
+		scope.onKeydown(eventUp);
+
+		expect(scope.results[0].selected).toBe(true);
+		expect(scope.results[1].selected).toBe(false);
+	}));
 
 });

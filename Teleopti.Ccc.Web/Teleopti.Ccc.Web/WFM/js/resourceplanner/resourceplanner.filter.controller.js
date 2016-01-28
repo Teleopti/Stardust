@@ -4,6 +4,45 @@
 		.controller('ResourceplannerFilterCtrl', [
 			'$scope', 'ResourcePlannerFilterSrvc', 'ResourcePlannerSvrc', '$state', '$stateParams', 'growl',
 			function($scope, ResourcePlannerFilterSrvc, ResourcePlannerSvrc, $state, $stateParams, growl) {
+
+				var keys = {
+					up: 38,
+					down: 40
+				};
+				var position = -1;
+
+				var upArrow = function () {
+					if (position > 0) {
+						position--;
+						$scope.results[position].selected = true;
+						$scope.results[position + 1].selected = false;
+					}
+				};
+
+				var downArrow = function () {
+					if (position === $scope.results.length - 1) {
+						return;
+					}
+					position++;
+					$scope.results[position].selected = true;
+					if (position > 0){
+						$scope.results[position - 1].selected = false;
+					}
+				};
+
+				var enterKey = function () {
+
+				};
+
+				$scope.onKeydown = function($event) {
+					if ($event.keyCode === keys.up) {
+						upArrow();
+					}
+					if ($event.keyCode === keys.down) {
+						downArrow();
+					}
+				};
+
 				var maxHits = 5;
 				$scope.name = "";
 				$scope.searchString = '';
@@ -126,10 +165,10 @@
 					return $scope.name.length > 0;
 				};
 
-				var isVaildUnit = function(item){
+				var isVaildUnit = function(item) {
 					var check = true;
-					$scope.selectedResults.forEach(function(node){
-						if (node.Id === item.Id){
+					$scope.selectedResults.forEach(function(node) {
+						if (node.Id === item.Id) {
 							check = false
 						};
 					});
@@ -139,7 +178,7 @@
 					if (isVaildUnit(item)) {
 						$scope.selectedResults.push(item);
 						$scope.clearInput();
-					}else {
+					} else {
 						$scope.clearInput();
 						growl.warning("<i class='mdi mdi-alert'></i> Unit already exists", {
 							ttl: 5000,
