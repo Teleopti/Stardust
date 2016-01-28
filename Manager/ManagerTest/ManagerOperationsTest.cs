@@ -298,15 +298,11 @@ namespace ManagerTest
             var okNegotiatedDoJobResult = doJobResult as OkNegotiatedContentResult<Guid>;
             Guid jobId = okNegotiatedDoJobResult.Content;
 
-            // Bad test - TODO  do in another way
-            // Must wait for DoJob is done before reading job history
-            Thread.Sleep(TimeSpan.FromSeconds(10));
-
             IHttpActionResult getResult = Target.JobHistory(jobId);
 
-            Assert.IsInstanceOf<OkNegotiatedContentResult<JobHistory>>(getResult);
             var okNegotiatedGetResult = getResult as OkNegotiatedContentResult<JobHistory>;
-            Assert.IsNotNull(okNegotiatedGetResult);
+            JobHistory jobHistory = okNegotiatedGetResult.Content;
+            Assert.IsNotNull(jobHistory);
         }
 
 		private void thisNodeIsBusy(string url)

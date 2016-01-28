@@ -39,7 +39,7 @@ namespace Manager.Integration.Test
 
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
-        [Test]
+        [Test][Ignore]
         public async  void Test()
         {
             using (var client = new HttpClient())
