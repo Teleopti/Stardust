@@ -14082,4 +14082,8 @@ Help us improve your experience by sending an error report</value>
     <value>Intra optimize</value>
     <comment>describing action for starting intraday optimization on selected schedule</comment>
   </data>
+  <data name="ShowErrors" xml:space="preserve">
+    <value>Show errors</value>
+    <comment>describing a button to display all availible errors</comment>
+  </data>
 </root>
