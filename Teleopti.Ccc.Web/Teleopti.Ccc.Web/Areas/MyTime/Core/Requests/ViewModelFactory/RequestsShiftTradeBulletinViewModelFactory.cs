@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		{
 			var ret = new ShiftTradeScheduleViewModel();
 			ret.MySchedule = _personScheduleViewModelMapper.MakeMyScheduleViewModel(data);
-			var pageCount = 0;
+			int pageCount;
 			ret.PossibleTradeSchedules = _personScheduleViewModelMapper.MakePossibleShiftTradeAddPersonScheduleViewModels(data, out pageCount);
 			ret.PageCount = pageCount;
 			return ret;

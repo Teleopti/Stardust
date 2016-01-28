@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
@@ -17,13 +19,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	{
 		private readonly IRequestsShiftTradeBulletinViewModelFactory _requestsShiftTradeBulletinViewModelFactory;
 		private readonly ITimeFilterHelper _timeFilterHelper;
+		private readonly IToggleManager _toggleManager;
 
 		public RequestsShiftTradeBulletinBoardController(
 			IRequestsShiftTradeBulletinViewModelFactory requestsShiftTradeBulletinViewModelFactory,
-			ITimeFilterHelper timeFilterHelper)
+			ITimeFilterHelper timeFilterHelper, IToggleManager toggleManager)
 		{
 			_requestsShiftTradeBulletinViewModelFactory = requestsShiftTradeBulletinViewModelFactory;
 			_timeFilterHelper = timeFilterHelper;
+			_toggleManager = toggleManager;
 		}
 
 		[UnitOfWork]
@@ -37,7 +41,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				TeamIdList = allTeamIds,
 				Paging = paging
 			};
-			return Json(_requestsShiftTradeBulletinViewModelFactory.CreateShiftTradeBulletinViewModel(data));
+			return
+				Json(_toggleManager.IsEnabled(Toggles.MyTimeWeb_ShiftTradeBoardNoReadModel_36662)
+					? _requestsShiftTradeBulletinViewModelFactory.CreateShiftTradeBulletinViewModelFromRawData(data)
+					: _requestsShiftTradeBulletinViewModelFactory.CreateShiftTradeBulletinViewModel(data));
 		}
 
 		[UnitOfWork]
