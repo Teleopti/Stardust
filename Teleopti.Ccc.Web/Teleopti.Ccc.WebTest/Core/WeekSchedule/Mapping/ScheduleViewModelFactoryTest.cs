@@ -443,7 +443,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		public IEnumerable<IShiftExchangeOffer> FindShiftExchangeOffersForBulletin(IEnumerable<IPerson> personList, DateOnly shiftTradeDate)
 		{
 			var result = _requestRepository.Where(request => request.Request.RequestType == RequestType.ShiftExchangeOffer
-															 && request.RequestedDate == shiftTradeDate.Date
+															 && request.RequestedDate.Date == shiftTradeDate.Date
 															 && personList.Contains(request.Person) && request.IsPending).Select(pr => (IShiftExchangeOffer)pr.Request).ToList();
 			return result;
 		}
