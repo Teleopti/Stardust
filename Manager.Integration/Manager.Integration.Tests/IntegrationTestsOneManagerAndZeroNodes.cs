@@ -34,7 +34,7 @@ namespace Manager.Integration.Test
 
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
-        [Test]
+        [Test][Ignore]
         public void TryStartOneJob()
         {
             List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(5);

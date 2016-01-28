@@ -39,7 +39,7 @@ namespace Manager.Integration.Test
 
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
-        [Test]
+        [Test][Ignore]
         public void Create10RequestShouldReturnBothCancelAndDeleteStatuses()
         {
             JobHelper.GiveNodesTimeToInitialize();
@@ -88,7 +88,7 @@ namespace Manager.Integration.Test
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.Keys.Count == numberOfStatuses);
         }
 
-        [Test]
+        [Test][Ignore]
         public void FailJobTest()
         {
             string status = string.Empty;
@@ -124,7 +124,7 @@ namespace Manager.Integration.Test
             ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
         }
 
-        [Test]
+        [Test] [Ignore]
         public void CancelWrongJob()
         {
             //JobHelper.GiveNodesTimeToInitialize(5);
@@ -136,7 +136,7 @@ namespace Manager.Integration.Test
             //task.Wait();
         }
 
-        [Test]
+        [Test][Ignore]
         public void ShouldBeAbleToCreate10SuccessfullJobRequest()
         {
             string status = string.Empty;
