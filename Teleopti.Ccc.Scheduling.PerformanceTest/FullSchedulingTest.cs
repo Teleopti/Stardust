@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading;
 using NUnit.Framework;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
@@ -23,49 +20,27 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 
 				scheduleAndOptimize(browserInteractions, AppConfigs.PlanningPeriodId);
 
-				using (new TimeoutScope(browserActivator, TimeSpan.FromDays(2)))
+				using (new TimeoutScope(browserActivator, TimeSpan.FromDays(1)))
 				{
-					try
-					{
-						dumpInfo(browserInteractions, "Waiting.txt");
-						browserInteractions.AssertExists(".scheduling-result, .test-errorMessage, .server-busy, #Login-container, .test-alert");
-					}
-					finally
-					{
-						dumpInfo(browserInteractions, "finally.txt");
-					}
+					browserInteractions.AssertExists(".scheduling-result, .test-errorMessage, .server-busy, #Login-container, .test-alert");
+
+					//no server error
+					browserInteractions.AssertNotExists("body", ".test-errorMessage");
+					//no failing request
+					browserInteractions.AssertNotExists("body", ".test-alert");
+					//not showing "server busy"
+					browserInteractions.AssertNotExists("body", ".server-busy");
+					//not redirected to logon page
+					browserInteractions.AssertNotExists("body", "#Login-container");
+					browserInteractions.AssertExists(".scheduling-result");
 				}
-				//no server error
-				browserInteractions.AssertNotExists("body", ".test-errorMessage");
-				//no failing request
-				browserInteractions.AssertNotExists("body", ".test-alert");
-				//not showing "server busy"
-				browserInteractions.AssertNotExists("body", ".server-busy");
-				//not redirected to logon page
-				browserInteractions.AssertNotExists("body", "#Login-container");
-				browserInteractions.AssertExists(".scheduling-result");
 			}
 		}
-
-		private static void dumpInfo(IBrowserInteractions browserInteractions, string fileName)
-		{
-			var path = Path.Combine(Environment.CurrentDirectory, @"..\..\..\Logs\");
-			var output = new List<string>();
-			browserInteractions.DumpInfo(info =>
-			{
-				output.Add(info);
-			});
-			File.WriteAllLines(path + fileName, output);
-		}
-
 
 		private static void scheduleAndOptimize(IBrowserInteractions browserInteractions, string planningPeriodId)
 		{
 			browserInteractions.GoTo(string.Concat(TestSiteConfigurationSetup.URL, "wfm/#/resourceplanner/planningperiod/", planningPeriodId));
-			browserInteractions.AssertExists(".nav-item-active"); //make sure "menu" has loaded, when "random failing" it hasn't
-			dumpInfo(browserInteractions, "JustAfterGoingToView.txt");
 			browserInteractions.Click(".test-schedule-button:enabled");
-			dumpInfo(browserInteractions, "AfterButtonClick.txt");
 			browserInteractions.AssertExists(".test-schedule-is-running");
 		}
 
