@@ -40,28 +40,24 @@ namespace Manager.Integration.Test
 
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
-<<<<<<< HEAD
         [Test]
-        public   void Test()
+        public async  void Test()
         {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeConstants.ApplicationJson));
 
-            //using (var client = new HttpClient())
-            //{
-            //    client.DefaultRequestHeaders.Accept.Clear();
-            //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeConstants.ApplicationJson));
+                ManagerUriBuilder uriBuilder = new ManagerUriBuilder();
 
-            //    ManagerUriBuilder uriBuilder = new ManagerUriBuilder();
+                var uri = uriBuilder.GetCancelJobUri(Guid.NewGuid());
 
-            //    var uri =uriBuilder.GetCancelJobUri(Guid.NewGuid());
-
-            //    var response = await client.DeleteAsync(uri);
-            //}
+                var response = await client.DeleteAsync(uri);
+            }
         }
 
         [Test]
-=======
-        [Test][Ignore]
->>>>>>> e28edc6fdb3f49f670a99681e265ccbf0117177b
+        [Ignore]
         public void Create10RequestShouldReturnBothCancelAndDeleteStatuses()
         {
             JobHelper.GiveNodesTimeToInitialize();

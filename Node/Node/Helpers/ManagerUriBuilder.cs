@@ -26,27 +26,42 @@ namespace Stardust.Node.Helpers
             };
         }
 
+        public string GetHostName()
+        {
+            return UriBuilder.Host;
+        }
+
+        public int GetPort()
+        {
+            return UriBuilder.Port;
+        }
+
+        public string GetScheme()
+        {
+            return UriBuilder.Scheme;
+        }
+
         public Uri GetLocationUri()
         {
             return UriBuilder.Uri;
         }
 
-        public Uri GetJobProgressUri()
+        public Uri GetJobProgressTemplateUri()
         {
             return CreateUri(ManagerRouteConstants.JobProgress);
         }
 
-        public Uri GetHeartbeatUri()
+        public Uri GetHeartbeatTemplateUri()
         {
             return CreateUri(ManagerRouteConstants.Heartbeat);
         }
 
-        public Uri GetNodeHasBeenInitializedUri()
+        public Uri GetNodeHasBeenInitializedTemplateUri()
         {
             return CreateUri(ManagerRouteConstants.NodeHasBeenInitialized);
         }
 
-        public Uri GetJobHasFailedUri()
+        public Uri GetJobHasFailedTemplateUri()
         {
             return CreateUri(ManagerRouteConstants.JobFailed);
         }
@@ -59,7 +74,7 @@ namespace Stardust.Node.Helpers
             return CreateUri(path);
         }
 
-        public Uri GetJobHasBeenCanceledUri()
+        public Uri GetJobHasBeenCanceledTemplateUri()
         {
             return CreateUri(ManagerRouteConstants.JobHasBeenCanceled);
         }
@@ -72,7 +87,7 @@ namespace Stardust.Node.Helpers
             return CreateUri(path);
         }
 
-        public Uri GetJobDoneUri()
+        public Uri GetJobDoneTemplateUri()
         {
             return CreateUri(ManagerRouteConstants.JobDone);
         }
