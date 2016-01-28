@@ -411,6 +411,7 @@
     <Compile Include="Core\Startup\RegisterAreasTest.cs" />
     <Compile Include="Core\Startup\RegisterGlobalApiFiltersTaskTest.cs" />
     <Compile Include="Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelReworkedFactoryTest.cs" />
+    <Compile Include="Core\TranslatedTextsTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProviderTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeAddPersonScheduleViewModelMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeAddScheduleLayerViewModelMapperTest.cs" />

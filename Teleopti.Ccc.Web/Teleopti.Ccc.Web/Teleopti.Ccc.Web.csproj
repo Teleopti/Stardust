@@ -1011,6 +1011,7 @@
     <Compile Include="Core\Startup\RegisterAreas.cs" />
     <Compile Include="Core\Startup\RegisterGlobalApiFiltersTask.cs" />
     <Compile Include="Core\Startup\Startup.cs" />
+    <Compile Include="Core\TranslatedTexts.cs" />
     <Compile Include="Filters\AddChallengeOnUnauthorizedResult.cs" />
     <Compile Include="Filters\ApplicationFunctionAnywhereAttribute.cs" />
     <Compile Include="Filters\ApplicationFunctionApiAttribute.cs" />

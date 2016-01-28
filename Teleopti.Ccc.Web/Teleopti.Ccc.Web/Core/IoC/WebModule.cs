@@ -122,6 +122,9 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<IntradayAreaModule>();
 			builder.RegisterModule<RequestsAreaModule>();
 
+			//remove me when #36904 is done!
+			builder.RegisterType<TranslatedTexts>().SingleInstance();
+
 			tenantWebSpecificTypes(builder);
 		}
 
