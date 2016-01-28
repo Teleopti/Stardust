@@ -1,9 +1,0 @@
-﻿<ul class="campaign-phase clearfix">
-    <li ng-repeat="phase in phases">
-        <md-button ng-class="{'phase-active': phase.isActive}" ng-click="$parent.togglePhase(phase)" ng-disabled="disableAction">
-            <span translate>{{phase.phaseName}}</span>            
-            <span class="campaign-warning-icon campaign-warning-icon-phasefix" ng-if="phase.warningNum!=0" ng-bind="phase.warningNum"></span>
-            <span ng-bind="phase.totalNum"></span>
-        </md-button>
-    </li>
-</ul>

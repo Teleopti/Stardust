@@ -18,15 +18,15 @@
 		<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 	</div>
 	<div class="operation-container clearfix">
-		<div class="threshold-slider inline-block pull-right">
-			<div style="position: absolute; top: 0; left: 3px;">
+		<div class="threshold-slider relative pull-right">
+			<div>
 				{{settings.threshold}}%
 			</div>
 			<md-slider flex md-discrete min="0" max="100" aria-label="slider"
-						  ng-model="settings.threshold"
-						  ng-disabled="isRefreshingGantt"></md-slider>
+					   ng-model="settings.threshold"
+					   ng-disabled="isRefreshingGantt"></md-slider>
 		</div>
-		<div class="pull-left" ng-show="isNavigationEnabled">
+		<div class="relative" ng-show="isNavigationEnabled">
 			<button class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="viewOneMonthBefore()"><i class="mdi mdi-chevron-double-left middle"></i></button>
 			<div class="gantt-datepicker-container inline-block" ng-init="showDatePicker=false">
 				<i class="mdi mdi-calendar pointer" ng-click="showDatePicker=!showDatePicker"></i>

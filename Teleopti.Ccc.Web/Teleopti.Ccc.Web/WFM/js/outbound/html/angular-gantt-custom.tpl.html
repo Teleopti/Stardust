@@ -49,7 +49,7 @@
 							<p class="campaign-message orangefix" ng-if="row.model.campaign.WarningInfo[0].TypeOfRule=='CampaignOverstaff'"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>CampaignOverstaff</span></p>
 							<p class="campaign-message" ng-if="row.model.campaign.WarningInfo[0].TypeOfRule=='CampaignUnderSLA'"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>CampaignUnderSLA</span></p>
 						</div>
-						<div class="campaign-chart-wrapper" ng-if="!row.model.isLoadingData">
+						<div class="campaign-chart-wrapper relative" ng-if="!row.model.isLoadingData">
 							<campaign-chart campaign="row.model.campaign" dictionary="row.model.campaign.translations" exclude-closed="row.model.campaign.manualPlanswitch"></campaign-chart>
 							<campaign-commands-pane campaign="row.model.campaign" selected-dates="row.model.campaign.selectedDates" selected-dates-closed="row.model.campaign.selectedDatesClosed" is-loading="row.model.isRefreshingData" callbacks="row.model.callbacks"></campaign-commands-pane>
 						</div>						

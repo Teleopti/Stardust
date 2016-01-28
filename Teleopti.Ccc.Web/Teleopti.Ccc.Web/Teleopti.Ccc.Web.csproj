@@ -1358,7 +1358,6 @@
     <Content Include="WFM\js\outbound\html\campaign-sheet.tpl.html" />
     <Content Include="WFM\js\outbound\html\outbound-overview.html" />
     <Content Include="WFM\js\outbound\html\outbound.html" />
-    <Content Include="WFM\js\outbound\html\phase-picker.tpl.html" />
     <Content Include="WFM\js\global\workinghourspicker\working-hours-picker.tpl.html" />
     <Content Include="WFM\js\outbound\outbound.controller.campaign-create.js" />
     <Content Include="WFM\js\outbound\outbound.directive.campaign-commands-pane.js" />
@@ -1484,7 +1483,6 @@
     <Content Include="WFM\js\outbound\outbound.service.activity.js" />
     <Content Include="WFM\js\outbound\outbound.service.campaign-chart.js" />
     <Content Include="WFM\js\outbound\outbound.directive.campaign-chart.js" />
-    <Content Include="WFM\js\outbound\outbound.directive.campaign-phase .js" />
     <Content Include="WFM\js\outbound\outbound.directive.activity-picker.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewModel.Tests.js" />
     <Content Include="Areas\Reporting\Views\Shared\Error.cshtml" />
