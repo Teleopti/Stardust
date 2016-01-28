@@ -20,6 +20,8 @@ namespace Manager.Integration.Test
         [SetUp]
         public void Setup()
         {
+            DatabaseHelper.TryClearDatabase();
+
             ManagerApiHelper = new ManagerApiHelper();
 
             ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
@@ -27,7 +29,7 @@ namespace Manager.Integration.Test
             StartManagerIntegrationConsoleHostProcess =
                 ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
 
-            DatabaseHelper.ClearDatabase();
+            DatabaseHelper.TryClearDatabase();
         }
 
         private ManagerApiHelper ManagerApiHelper { get; set; }

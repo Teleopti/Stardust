@@ -25,7 +25,8 @@ namespace NodeTest
         [Test]
         public void OnCancelCanceledShouldBeCalled()
         {
-            var jobParams = new TestJobParams("tjo", "flöjt");
+            var jobParams = new TestJobParams("tjo",
+                                              "flöjt");
             var ser = JsonConvert.SerializeObject(jobParams);
             var job = new JobToDo
             {
@@ -41,8 +42,10 @@ namespace NodeTest
 
             NodeController.TryCancelJob(job.Id);
             CanceledTimer.Wait.Wait();
-            DoneTimer.NumberOfTimeCalled.Should().Be.EqualTo(0);
-            CanceledTimer.NumberOfTimeCalled.Should().Be.GreaterThan(0);
+            DoneTimer.NumberOfTimeCalled.Should()
+                .Be.EqualTo(0);
+            CanceledTimer.NumberOfTimeCalled.Should()
+                .Be.GreaterThan(0);
         }
 
         [Test]
@@ -63,7 +66,8 @@ namespace NodeTest
             NodeController.StartJob(job);
 
             FaultedTimer.Wait.Wait();
-            FaultedTimer.NumberOfTimeCalled.Should().Be.GreaterThan(0);
+            FaultedTimer.NumberOfTimeCalled.Should()
+                .Be.GreaterThan(0);
         }
 
         [Test]
@@ -80,26 +84,30 @@ namespace NodeTest
             CanceledTimer.Interval = 100;
             NodeController.Request = new HttpRequestMessage();
             var result = NodeController.StartJob(job);
-            result.Should().Be.OfType<BadRequestResult>();
+            result.Should()
+                .Be.OfType<BadRequestResult>();
         }
 
         [Test]
         public void OnWrongTypeBadRequestShouldBeReturned()
         {
-            var jobParams = new TestJobParams("tjo", "flöjt");
+            var jobParams = new TestJobParams("tjo",
+                                              "flöjt");
             var ser = JsonConvert.SerializeObject(jobParams);
             var job = new JobToDo {Id = Guid.NewGuid(), Name = "Janne", Serialized = ser, Type = "rappakalja"};
             CanceledTimer.JobToDo = job;
             CanceledTimer.Interval = 100;
             NodeController.Request = new HttpRequestMessage();
             var result = NodeController.StartJob(job);
-            result.Should().Be.OfType<BadRequestResult>();
+            result.Should()
+                .Be.OfType<BadRequestResult>();
         }
 
         [Test]
         public void ProgressShouldBeSentToManager()
         {
-            var jobParams = new TestJobParams("tjo", "flöjt");
+            var jobParams = new TestJobParams("tjo",
+                                              "flöjt");
             var ser = JsonConvert.SerializeObject(jobParams);
             var job = new JobToDo
             {
@@ -111,13 +119,15 @@ namespace NodeTest
             NodeController.Request = new HttpRequestMessage();
             NodeController.StartJob(job);
 
-            PostHttpRequest.CalledUrl.Should().Not.Be.Empty();
+            PostHttpRequest.CalledUrl.Should()
+                .Not.Be.Empty();
         }
 
         [Test]
         public void ShouldContainController()
         {
-            NodeController.Should().Not.Be.Null();
+            NodeController.Should()
+                .Not.Be.Null();
         }
     }
 }

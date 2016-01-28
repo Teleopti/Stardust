@@ -4,7 +4,6 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Manager.Integration.Test.Constants;
-using Manager.Integration.Test.Properties;
 using Manager.Integration.Test.Timers;
 using Newtonsoft.Json;
 
@@ -14,7 +13,10 @@ namespace Manager.Integration.Test.Helpers
     {
         public ManagerApiHelper()
         {
+            ManagerUriBuilder =new ManagerUriBuilder();
         }
+
+        public ManagerUriBuilder ManagerUriBuilder { get; private set; }
 
         public ManagerApiHelper(CheckJobHistoryStatusTimer checkJobHistoryStatusTimer)
         {
@@ -39,10 +41,7 @@ namespace Manager.Integration.Test.Helpers
 
                     var sez = JsonConvert.SerializeObject(jobRequestModel);
 
-                    Uri uri =
-                        new Uri(Settings.Default.ManagerLocationUri + ManagerRouteConstants.Job);
-
-                    HttpResponseMessage response = await client.PostAsync(uri.ToString(),
+                    HttpResponseMessage response = await client.PostAsync(ManagerUriBuilder.GetStartJobUri(),
                                                                           new StringContent(sez,
                                                                                             Encoding.UTF8,
                                                                                             MediaTypeConstants.ApplicationJson));
@@ -73,11 +72,7 @@ namespace Manager.Integration.Test.Helpers
                     {
                         DefineDefaultRequestHeaders(client);
 
-                        Uri uri = 
-                            new Uri(Settings.Default.ManagerLocationUri + 
-                                    string.Format(ManagerRouteConstants.CancelJob.Replace("{jobId}","{0}"),guid));
-
-                        response = client.DeleteAsync(uri.ToString());
+                        response = client.DeleteAsync(ManagerUriBuilder.GetCancelJobUri(guid));
                     }
 
                     return response.Result;

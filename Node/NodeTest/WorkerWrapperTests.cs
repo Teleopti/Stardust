@@ -25,23 +25,23 @@ namespace NodeTest
         public void Setup()
         {
             NodeConfigurationFake = new NodeConfigurationFake(new Uri(ConfigurationManager.AppSettings["BaseAddress"]),
-                new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
-                Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
-                ConfigurationManager.AppSettings["NodeName"]);
+                                                              new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
+                                                              Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
+                                                              ConfigurationManager.AppSettings["NodeName"]);
 
             WorkerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
-                NodeConfigurationFake,
-                new NodeStartupNotificationToManagerFake(),
-                new PingToManagerFake(),
-                new SendJobDoneTimerFake(),
-                new SendJobCanceledTimerFake(),
-                new SendJobFaultedTimerFake(),
-                new PostHttpRequestFake());
+                                              NodeConfigurationFake,
+                                              new NodeStartupNotificationToManagerFake(),
+                                              new PingToManagerFake(),
+                                              new SendJobDoneTimerFake(),
+                                              new SendJobCanceledTimerFake(),
+                                              new SendJobFaultedTimerFake(),
+                                              new PostHttpRequestFake());
 
             NodeController = new NodeController(WorkerWrapper);
 
             var parameters = new TestJobParams("hejhopp",
-                "i lingonskogen");
+                                               "i lingonskogen");
 
             var ser = JsonConvert.SerializeObject(parameters);
             JobDefinition = new JobToDo
@@ -57,8 +57,8 @@ namespace NodeTest
         {
             return arg.GetInterfaces()
                 .Any(x =>
-                    x.IsGenericType &&
-                    x.GetGenericTypeDefinition() == typeof (IHandle<>));
+                         x.IsGenericType &&
+                         x.GetGenericTypeDefinition() == typeof (IHandle<>));
         }
 
         public NodeConfigurationFake NodeConfigurationFake;
@@ -73,10 +73,10 @@ namespace NodeTest
 
             // Start job.
             var actionResult = WorkerWrapper.StartJob(JobDefinition,
-                httpRequestMessage);
+                                                      httpRequestMessage);
 
             Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
-                .Result.StatusCode == HttpStatusCode.OK);
+                              .Result.StatusCode == HttpStatusCode.OK);
         }
 
         [Test]
@@ -85,33 +85,33 @@ namespace NodeTest
             var elapsedEventHandlersFake = new ElapsedEventHandlersFake();
 
             IWorkerWrapper workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
-                NodeConfigurationFake,
-                new NodeStartupNotificationToManagerFake(NodeConfigurationFake,
-                    null,
-                    elapsedEventHandlersFake.NodeStartupElapsedEventHandler),
-                new PingToManagerFake(),
-                new SendJobDoneTimerFake(null,
-                    NodeConfigurationFake,
-                    null,
-                    elapsedEventHandlersFake.SendJodDoneElapsedEventHandler),
-                new SendJobCanceledTimerFake(null,
-                    NodeConfigurationFake,
-                    null,
-                    elapsedEventHandlersFake.SendJodCanceledElapsedEventHandler),
-                new SendJobFaultedTimerFake(null,
-                    NodeConfigurationFake,
-                    null,
-                    elapsedEventHandlersFake.SendJodFaultedElapsedEventHandler),
-                new PostHttpRequestFake());
+                                                             NodeConfigurationFake,
+                                                             new NodeStartupNotificationToManagerFake(NodeConfigurationFake,
+                                                                                                      null,
+                                                                                                      elapsedEventHandlersFake.NodeStartupElapsedEventHandler),
+                                                             new PingToManagerFake(),
+                                                             new SendJobDoneTimerFake(null,
+                                                                                      NodeConfigurationFake,
+                                                                                      null,
+                                                                                      elapsedEventHandlersFake.SendJodDoneElapsedEventHandler),
+                                                             new SendJobCanceledTimerFake(null,
+                                                                                          NodeConfigurationFake,
+                                                                                          null,
+                                                                                          elapsedEventHandlersFake.SendJodCanceledElapsedEventHandler),
+                                                             new SendJobFaultedTimerFake(null,
+                                                                                         NodeConfigurationFake,
+                                                                                         null,
+                                                                                         elapsedEventHandlersFake.SendJodFaultedElapsedEventHandler),
+                                                             new PostHttpRequestFake());
 
 
             var httpRequestMessage = new HttpRequestMessage();
 
             var actionResult = workerWrapper.StartJob(JobDefinition,
-                httpRequestMessage);
+                                                      httpRequestMessage);
 
             Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
-                .Result.StatusCode == HttpStatusCode.OK);
+                              .Result.StatusCode == HttpStatusCode.OK);
         }
 
         [Test]
@@ -123,14 +123,14 @@ namespace NodeTest
             // Start a job.
             //-------------------------------------------
             var actionResult = WorkerWrapper.StartJob(JobDefinition,
-                httpRequestMessage);
+                                                      httpRequestMessage);
             //-------------------------------------------
             // Try cancel job.
             //-------------------------------------------
             WorkerWrapper.CancelJob(JobDefinition.Id);
 
             Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
-                .Result.StatusCode == HttpStatusCode.OK);
+                              .Result.StatusCode == HttpStatusCode.OK);
             Assert.IsTrue(WorkerWrapper.IsCancellationRequested);
         }
 
@@ -143,7 +143,7 @@ namespace NodeTest
             // Start a job.
             //-------------------------------------------
             var actionResult = WorkerWrapper.StartJob(JobDefinition,
-                httpRequestMessage);
+                                                      httpRequestMessage);
             //-------------------------------------------
             // Try cancel job.
             //-------------------------------------------
@@ -164,13 +164,13 @@ namespace NodeTest
         public void ShouldThrowArgumentNullExceptionWhenInvokeHandlerIsNull()
         {
             IWorkerWrapper workerWrapper = new WorkerWrapper(null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null);
+                                                             null,
+                                                             null,
+                                                             null,
+                                                             null,
+                                                             null,
+                                                             null,
+                                                             null);
         }
 
         [Test]
@@ -178,13 +178,13 @@ namespace NodeTest
         public void ShouldThrowArgumentNullExceptionWhenJobCanceledTimerIsNull()
         {
             IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
-                NodeConfigurationFake,
-                new NodeStartupNotificationToManagerFake(),
-                new PingToManagerFake(),
-                new SendJobDoneTimerFake(),
-                null,
-                null,
-                new PostHttpRequestFake());
+                                                             NodeConfigurationFake,
+                                                             new NodeStartupNotificationToManagerFake(),
+                                                             new PingToManagerFake(),
+                                                             new SendJobDoneTimerFake(),
+                                                             null,
+                                                             null,
+                                                             new PostHttpRequestFake());
         }
 
         [Test]
@@ -192,13 +192,13 @@ namespace NodeTest
         public void ShouldThrowArgumentNullExceptionWhenJobFaultedTimerIsNull()
         {
             IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
-                NodeConfigurationFake,
-                new NodeStartupNotificationToManagerFake(),
-                new PingToManagerFake(),
-                new SendJobDoneTimerFake(),
-                new SendJobCanceledTimerFake(),
-                null,
-                new PostHttpRequestFake());
+                                                             NodeConfigurationFake,
+                                                             new NodeStartupNotificationToManagerFake(),
+                                                             new PingToManagerFake(),
+                                                             new SendJobDoneTimerFake(),
+                                                             new SendJobCanceledTimerFake(),
+                                                             null,
+                                                             new PostHttpRequestFake());
         }
 
         [Test]
@@ -206,13 +206,13 @@ namespace NodeTest
         public void ShouldThrowArgumentNullExceptionWhenJodDoneTimerIsNull()
         {
             IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
-                NodeConfigurationFake,
-                new NodeStartupNotificationToManagerFake(),
-                new PingToManagerFake(),
-                null,
-                null,
-                null,
-                new PostHttpRequestFake());
+                                                             NodeConfigurationFake,
+                                                             new NodeStartupNotificationToManagerFake(),
+                                                             new PingToManagerFake(),
+                                                             null,
+                                                             null,
+                                                             null,
+                                                             new PostHttpRequestFake());
         }
 
         [Test]
@@ -220,13 +220,13 @@ namespace NodeTest
         public void ShouldThrowArgumentNullExceptionWhenNodeConfigurationIsNull()
         {
             IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                new PostHttpRequestFake());
+                                                             null,
+                                                             null,
+                                                             null,
+                                                             null,
+                                                             null,
+                                                             null,
+                                                             new PostHttpRequestFake());
         }
 
 
@@ -235,13 +235,13 @@ namespace NodeTest
         public void ShouldThrowArgumentNullExceptionWhenNodeStartupNotificationToManaagerTimerIsNull()
         {
             IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
-                NodeConfigurationFake,
-                null,
-                null,
-                null,
-                null,
-                null,
-                new PostHttpRequestFake());
+                                                             NodeConfigurationFake,
+                                                             null,
+                                                             null,
+                                                             null,
+                                                             null,
+                                                             null,
+                                                             new PostHttpRequestFake());
         }
 
         [Test]
@@ -249,23 +249,23 @@ namespace NodeTest
         public void ShouldThrowArgumentNullExceptionWhenPingToManagerTimerIsNull()
         {
             IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
-                NodeConfigurationFake,
-                new NodeStartupNotificationToManagerFake(),
-                null,
-                null,
-                null,
-                null,
-                new PostHttpRequestFake());
+                                                             NodeConfigurationFake,
+                                                             new NodeStartupNotificationToManagerFake(),
+                                                             null,
+                                                             null,
+                                                             null,
+                                                             null,
+                                                             new PostHttpRequestFake());
         }
 
         [Test]
         public void StartJobShouldReturnBadRequestWhenMessageIdIsEmptyGuid()
         {
             var actionResult = WorkerWrapper.StartJob(new JobToDo(),
-                new HttpRequestMessage());
+                                                      new HttpRequestMessage());
 
             Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
-                .Result.StatusCode ==
+                              .Result.StatusCode ==
                           HttpStatusCode.BadRequest);
         }
 
@@ -273,10 +273,10 @@ namespace NodeTest
         public void StartJobShouldReturnBadRequestWhenMessageIsEmpty()
         {
             var actionResult = WorkerWrapper.StartJob(new JobToDo(),
-                new HttpRequestMessage());
+                                                      new HttpRequestMessage());
 
             Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
-                .Result.StatusCode ==
+                              .Result.StatusCode ==
                           HttpStatusCode.BadRequest);
         }
 
@@ -284,10 +284,10 @@ namespace NodeTest
         public void StartJobShouldReturnBadRequestWhenMessageIsNull()
         {
             var actionResult = WorkerWrapper.StartJob(null,
-                new HttpRequestMessage());
+                                                      new HttpRequestMessage());
 
             Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
-                .Result.StatusCode == HttpStatusCode.BadRequest);
+                              .Result.StatusCode == HttpStatusCode.BadRequest);
         }
     }
 }

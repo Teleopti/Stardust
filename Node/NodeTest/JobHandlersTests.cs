@@ -18,7 +18,8 @@ namespace NodeTest
 
             builder.RegisterInstance<IHandle<TestJobParams>>(new TestJobWorker());
 
-            builder.RegisterType<InvokeHandler>().SingleInstance();
+            builder.RegisterType<InvokeHandler>()
+                .SingleInstance();
 
             Container = builder.Build();
         }
@@ -37,8 +38,9 @@ namespace NodeTest
             var invokehandler = Container.Resolve<InvokeHandler>();
 
             invokehandler.Invoke(new TestJobParams("Dummy data",
-                "Name data"),
-                new CancellationTokenSource(), ProgressCallback);
+                                                   "Name data"),
+                                 new CancellationTokenSource(),
+                                 ProgressCallback);
         }
 
         [Test]

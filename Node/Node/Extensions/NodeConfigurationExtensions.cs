@@ -1,4 +1,5 @@
 ﻿using System;
+using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 
 namespace Stardust.Node.Extensions
@@ -13,7 +14,8 @@ namespace Stardust.Node.Extensions
             }
         }
 
-        public static string CreateWhoIAm(this INodeConfiguration nodeConfiguration, string machineName)
+        public static string CreateWhoIAm(this INodeConfiguration nodeConfiguration,
+                                          string machineName)
         {
             var nodeName = "Missing Node Name";
             var machine = "Missing Machine Name";
@@ -31,19 +33,78 @@ namespace Stardust.Node.Extensions
             return "[" + nodeName.ToUpper() + ", " + machine.ToUpper() + "]";
         }
 
-
-        public static Uri GenerateUri(this INodeConfiguration nodeConfiguration,
-            string extraResourceInformation = null)
+        public static Uri GetManagerJobDoneUri(this INodeConfiguration nodeConfiguration,
+                                               Guid guid)
         {
             nodeConfiguration.ThrowArgumentNullException();
-            nodeConfiguration.ManagerLocation.ThrowArgumentExceptionWhenNull();
 
-            if (extraResourceInformation != null)
-            {
-                return new Uri(nodeConfiguration.ManagerLocation + extraResourceInformation);
-            }
+            NodeConfigurationUriBuilder nodeConfigurationUriBuilder = new NodeConfigurationUriBuilder(nodeConfiguration);
 
-            return null;
+            return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobDoneUri(guid);
+        }
+
+        public static Uri GetManagerNodeHasBeenInitializedUri(this INodeConfiguration nodeConfiguration)
+        {
+            nodeConfiguration.ThrowArgumentNullException();
+
+            NodeConfigurationUriBuilder nodeConfigurationUriBuilder = new NodeConfigurationUriBuilder(nodeConfiguration);
+
+            return nodeConfigurationUriBuilder.ManagerUriBuilder.GetNodeHasBeenInitializedUri();
+        }
+
+        public static Uri GetManagerNodeHeartbeatUri(this INodeConfiguration nodeConfiguration)
+        {
+            nodeConfiguration.ThrowArgumentNullException();
+
+            NodeConfigurationUriBuilder nodeConfigurationUriBuilder = new NodeConfigurationUriBuilder(nodeConfiguration);
+
+            return nodeConfigurationUriBuilder.ManagerUriBuilder.GetHeartbeatUri();
+        }
+
+        public static Uri GetManagerJobHasBeenCanceledUri(this INodeConfiguration nodeConfiguration)
+        {
+            nodeConfiguration.ThrowArgumentNullException();
+
+            NodeConfigurationUriBuilder nodeConfigurationUriBuilder = new NodeConfigurationUriBuilder(nodeConfiguration);
+
+            return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobHasBeenCanceledUri();
+        }
+
+        public static Uri GetManagerJobHasBeenCanceledUri(this INodeConfiguration nodeConfiguration,
+                                                          Guid guid)
+        {
+            nodeConfiguration.ThrowArgumentNullException();
+
+            NodeConfigurationUriBuilder nodeConfigurationUriBuilder = new NodeConfigurationUriBuilder(nodeConfiguration);
+
+            return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobHasBeenCanceledUri(guid);
+        }
+
+        public static Uri GetManagerJobHasFailedUri(this INodeConfiguration nodeConfiguration)
+        {
+            nodeConfiguration.ThrowArgumentNullException();
+
+            NodeConfigurationUriBuilder nodeConfigurationUriBuilder = new NodeConfigurationUriBuilder(nodeConfiguration);
+
+            return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobHasFailedUri();
+        }
+
+        public static Uri GetManagerJobDoneUri(this INodeConfiguration nodeConfiguration)
+        {
+            nodeConfiguration.ThrowArgumentNullException();
+
+            NodeConfigurationUriBuilder nodeConfigurationUriBuilder = new NodeConfigurationUriBuilder(nodeConfiguration);
+
+            return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobDoneUri();
+        }
+
+        public static Uri GetManagerLocationUri(this INodeConfiguration nodeConfiguration)
+        {
+            nodeConfiguration.ThrowArgumentNullException();
+
+            NodeConfigurationUriBuilder nodeConfigurationUriBuilder = new NodeConfigurationUriBuilder(nodeConfiguration);
+
+            return nodeConfigurationUriBuilder.ManagerUriBuilder.GetLocationUri();
         }
     }
 }

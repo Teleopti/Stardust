@@ -7,12 +7,12 @@ namespace Stardust.Node.Timers
     public class TrySendJobCanceledToManagerTimer : TrySendStatusToManagerTimer
     {
         public TrySendJobCanceledToManagerTimer(JobToDo jobToDo,
-            INodeConfiguration nodeConfiguration,
-            double interval = 10000) : base(jobToDo,
-                nodeConfiguration,
-                nodeConfiguration.GenerateUri(ManagerRouteConstants.JobHasBeenCanceled),
-                null,
-                interval)
+                                                INodeConfiguration nodeConfiguration,
+                                                double interval = 10000) : base(jobToDo,
+                                                                                nodeConfiguration,
+                                                                                nodeConfiguration.GetManagerJobHasBeenCanceledUri(),
+                                                                                null,
+                                                                                interval)
         {
         }
     }

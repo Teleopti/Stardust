@@ -7,9 +7,8 @@ using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
-using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.EventArgs;
-using Manager.Integration.Test.Properties;
+using Manager.Integration.Test.Helpers;
 using Newtonsoft.Json;
 using Timer = System.Timers.Timer;
 
@@ -26,6 +25,8 @@ namespace Manager.Integration.Test.Timers
         public ManualResetEventSlim ManualResetEventSlim { get; private set; }
 
         public ConcurrentDictionary<Guid, string> Guids { get; private set; }
+
+        public ManagerUriBuilder ManagerUriBuilder { get; private set; }
 
         public void AddOrUpdateGuidStatus(Guid key,
                                           string value)
@@ -89,10 +90,7 @@ namespace Manager.Integration.Test.Timers
             {
                 DefineDefaultRequestHeaders(client);
 
-                Uri uri =
-                    new Uri(Settings.Default.ManagerLocationUri + string.Format(ManagerRouteConstants.GetJobHistory.Replace("{jobId}","{0}"),guid));
-
-                var response = await client.GetAsync(uri.ToString());
+                var response = await client.GetAsync(ManagerUriBuilder.GetJobHistoryUri(guid));
 
                 return response;
             }
@@ -106,6 +104,8 @@ namespace Manager.Integration.Test.Timers
             {
                 throw new ArgumentException();
             }
+
+            ManagerUriBuilder = new ManagerUriBuilder();
 
             NumberOfGuidsToWatch = numberOfGuidsToWatch;
             StatusToLookFor = statusToLookFor;
