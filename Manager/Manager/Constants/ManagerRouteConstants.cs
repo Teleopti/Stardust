@@ -4,7 +4,6 @@
     {
         public const string JobIdOptionalParameter = "{jobId}";
 
-
         public const string StartJob = "manager/job";
 
         public const string CancelJob = "manager/job/" + JobIdOptionalParameter;
