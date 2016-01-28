@@ -266,8 +266,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		protected override void AfterShellCreated()
 		{
 			base.AfterShellCreated();
-
 			RootWorkItem.UIExtensionSites.RegisterSite(UIExtensionSiteNames.MainStatus, Shell.MainStatusStrip);
+			Shell.Activate();
 		}
 
 		/// <summary>
