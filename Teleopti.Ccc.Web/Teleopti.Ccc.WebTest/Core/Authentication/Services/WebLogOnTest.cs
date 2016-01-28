@@ -138,5 +138,32 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			logOnOff.AssertWasCalled(x => x.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit));
 			sessionSpecificDataProvider.AssertWasNotCalled(x => x.StoreInCookie(null, false), o => o.IgnoreArguments());
 		}
+
+		[Test]
+		public void ShouldRemoveAuthBridgeCookieAfterSaveWfmCookie()
+		{
+			var buId = Guid.NewGuid();
+			const string dataSourceName = "sdfsjdlfkjsd ";
+			var personId = Guid.NewGuid();
+
+			var choosenBusinessUnit = new BusinessUnit("sdfsdf");
+			var choosenDatasource = MockRepository.GenerateMock<IDataSource>();
+			var uow = MockRepository.GenerateMock<IUnitOfWork>();
+			var logonPerson = new Person();
+
+			dataSourceForTenant.Stub(x => x.Tenant(dataSourceName)).Return(choosenDatasource);
+			choosenDatasource.Stub(x => x.Application).Return(unitOfWorkFactory);
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+			repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRepository);
+			repositoryFactory.Stub(x => x.CreateBusinessUnitRepository(uow)).Return(businessUnitRepository);
+			repositoryFactory.Stub(x => x.CreateApplicationFunctionRepository(uow)).Return(MockRepository.GenerateMock<IApplicationFunctionRepository>());
+			personRepository.Stub(x => x.Get(personId)).Return(logonPerson);
+			businessUnitRepository.Stub(x => x.Get(buId)).Return(choosenBusinessUnit);
+			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
+
+			target.LogOn(dataSourceName, buId, personId, null, true);
+
+			sessionSpecificDataProvider.AssertWasCalled(x=>x.RemoveAuthBridgeCookie());
+		}
 	}
 }

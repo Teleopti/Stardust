@@ -70,8 +70,13 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			cookie.Value = encryptTicket(ticket);
 			setCookie(cookie);
 
+			RemoveAuthBridgeCookie();
+		}
+
+		public void RemoveAuthBridgeCookie()
+		{
 			var fedAuthCookieName = _sessionAuthenticationModule.CookieName;
-			var fedAuthCookie = new HttpCookie(fedAuthCookieName) { Expires = _now.LocalDateTime().AddHours(-1) };
+			var fedAuthCookie = new HttpCookie(fedAuthCookieName) {Expires = _now.LocalDateTime().AddHours(-1)};
 			_httpContext.Current().Response.Cookies.Remove(fedAuthCookieName);
 			_httpContext.Current().Response.Cookies.Add(fedAuthCookie);
 		}
@@ -80,11 +85,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 		{
 			var cookie = new HttpCookie(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName) { Expires = _now.LocalDateTime().AddYears(-2) };
 			setCookie(cookie);
-
-			var fedAuthCookieName = _sessionAuthenticationModule.CookieName;
-			var fedAuthCookie = new HttpCookie(fedAuthCookieName) { Expires = _now.LocalDateTime().AddYears(-2) };
-			_httpContext.Current().Response.Cookies.Remove(fedAuthCookieName);
-			_httpContext.Current().Response.Cookies.Add(fedAuthCookie);
+			RemoveAuthBridgeCookie();
 		}
 
 		private HttpCookie getCookie()

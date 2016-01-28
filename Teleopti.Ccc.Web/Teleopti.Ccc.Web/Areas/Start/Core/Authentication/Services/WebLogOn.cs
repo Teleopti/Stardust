@@ -60,6 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 
 			var sessionSpecificData = new SessionSpecificData(businessUnitId, dataSourceName, personId, tenantPassword);
 			_sessionSpecificDataProvider.StoreInCookie(sessionSpecificData, isPersistent);
+			_sessionSpecificDataProvider.RemoveAuthBridgeCookie();
 		}
 	}
 }

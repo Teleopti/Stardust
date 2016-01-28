@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 		void ExpireTicket();
 		void MakeCookie(string userName, string userData, bool isPersistent);
 		void RemoveCookie();
+		void RemoveAuthBridgeCookie();
 	}
 
 	public interface ISessionSpecificDataProvider : IBaseSessionSpecificDataProvider
