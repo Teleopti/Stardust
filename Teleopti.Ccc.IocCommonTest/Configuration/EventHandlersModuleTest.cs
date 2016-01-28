@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			allEvents().ForEach(x =>
 			{
-				var instances = Resolver.ResolveHandlersForEvent(x);
-				instances.Should().Not.Be.Null();
+				Resolver.ResolveServiceBusHandlersForEvent(x);
+				Resolver.ResolveHangfireHandlersForEvent(x);
 			});
 		}
 
@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			allEvents().ForEach(x =>
 			{
-				var instances = Resolver.ResolveHandlersForEvent(x);
-				instances.Should().Not.Be.Null();
+				Resolver.ResolveServiceBusHandlersForEvent(x);
+				Resolver.ResolveHangfireHandlersForEvent(x);
 			});
 		}
 
@@ -43,8 +43,12 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			allEvents().ForEach(x =>
 			{
-				var instance1 = Resolver.ResolveHandlersForEvent(x).FirstOrDefault();
-				var instance2 = Resolver.ResolveHandlersForEvent(x).FirstOrDefault();
+				var instance1 = Resolver.ResolveServiceBusHandlersForEvent(x)
+					.Concat(Resolver.ResolveHangfireHandlersForEvent(x))
+					.FirstOrDefault();
+				var instance2 = Resolver.ResolveServiceBusHandlersForEvent(x)
+					.Concat(Resolver.ResolveHangfireHandlersForEvent(x))
+					.FirstOrDefault();
 				instance1.Should().Be.SameInstanceAs(instance2);
 			});
 		}

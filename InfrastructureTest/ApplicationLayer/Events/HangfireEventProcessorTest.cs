@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
@@ -119,7 +120,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			public string Data { get; set; }
 		}
 
-		public class AHandler : IHandleEvent<AnEvent>
+		public class AHandler : IHandleEvent<AnEvent>, IRunOnHangfire
 		{
 			private readonly ICurrentDataSource _dataSource;
 			public List<IEvent> HandledEvents = new List<IEvent>();
@@ -137,7 +138,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			}
 		}
 
-		public class AnotherHandler : IHandleEvent<AnEvent>
+		public class AnotherHandler : IHandleEvent<AnEvent>, IRunOnHangfire
 		{
 			public List<IEvent> HandledEvents = new List<IEvent>();
 
@@ -147,7 +148,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			}
 		}
 
-		public class AspectedHandler : IHandleEvent<AnEvent>
+		public class AspectedHandler : IHandleEvent<AnEvent>, IRunOnHangfire
 		{
 			public List<IEvent> HandledEvents = new List<IEvent>();
 
@@ -157,7 +158,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			}
 		}
 
-		public class NonConcurrenctSafeHandler : IHandleEvent<AnEvent>
+		public class NonConcurrenctSafeHandler : IHandleEvent<AnEvent>, IRunOnHangfire
 		{
 			private bool _isHandling = false;
 

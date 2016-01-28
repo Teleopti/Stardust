@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var handlerT = Type.GetType(handlerType, true);
 			var eventT = Type.GetType(eventType, true);
 			var @event = _deserializer.DeserializeEvent(serializedEvent, eventT) as IEvent;
-			var handlers = _resolver.ResolveHandlersForEvent(@event);
+			var handlers = _resolver.ResolveHangfireHandlersForEvent(@event);
 			var publishTo = handlers.Single(o => ProxyUtil.GetUnproxiedType(o) == handlerT);
 
 			using (_dataSourceScope.OnThisThreadUse(tenant))

@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			system.UseTestDouble<FakeServiceBusSender>().For<IServiceBusSender>();
 
-			//system.AddService<EventHandler>();
+			system.AddService<EventHandler>();
 		}
 
 		[Test]
@@ -33,11 +34,11 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			Bus.SentMessages.Single().Should().Be(@event);
 		}
 
-		//public class EventHandler : IHandleEvent<Event>
-		//{
-		//	public void Handle(Event @event)
-		//	{
-		//	}
-		//}
+		public class EventHandler : IHandleEvent<Event>, IRunOnServiceBus
+		{
+			public void Handle(Event @event)
+			{
+			}
+		}
 	}
 }

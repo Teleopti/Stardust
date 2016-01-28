@@ -7,16 +7,22 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
 	public class ServiceBusEventPublisher : IEventPublisher, ICurrentEventPublisher
 	{
+		private readonly ResolveEventHandlers _resolver;
 		private readonly IServiceBusSender _sender;
 
-		public ServiceBusEventPublisher(IServiceBusSender sender)
+		public ServiceBusEventPublisher(ResolveEventHandlers resolver, IServiceBusSender sender)
 		{
+			_resolver = resolver;
 			_sender = sender;
 		}
 
 		public void Publish(params IEvent[] events)
 		{
-			events.Batch(100).ForEach(b => _sender.Send(true, b.ToArray()));
+			events.Where(e => _resolver.ResolveServiceBusHandlersForEvent(e).Any())
+				.Batch(100)
+				.ForEach(b =>
+					_sender.Send(true, b.ToArray())
+				);
 		}
 
 		public IEventPublisher Current()

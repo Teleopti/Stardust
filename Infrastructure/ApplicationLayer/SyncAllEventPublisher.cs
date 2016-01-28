@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Linq;
+using System.Reflection;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
@@ -18,7 +19,8 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 			foreach (var @event in events)
 			{
-				var handlers = _resolver.ResolveHandlersForEvent(@event);
+				var handlers = _resolver.ResolveServiceBusHandlersForEvent(@event)
+					.Concat(_resolver.ResolveHangfireHandlersForEvent(@event));
 
 				foreach (var handler in handlers)
 				{

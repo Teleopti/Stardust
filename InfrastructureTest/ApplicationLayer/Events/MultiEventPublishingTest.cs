@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 	[TestFixture]
 	[InfrastructureTest]
 	[Toggle(Toggles.RTA_NewEventHangfireRTA_34333)]
-	public class SelectiveEventPublishingTest : ISetup
+	public class MultiEventPublishingTest : ISetup
 	{
 		public FakeHangfireEventClient Hangfire;
 		public FakeServiceBusSender Bus;

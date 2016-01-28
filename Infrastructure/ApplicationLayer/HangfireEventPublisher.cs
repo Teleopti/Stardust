@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var eventType = @event.GetType();
 			var serialized = _serializer.SerializeEvent(@event);
 			var eventTypeName = eventType.FullName + ", " + eventType.Assembly.GetName().Name;
-			var handlers = _resolver.ResolveHandlersForEvent(@event).OfType<IRunOnHangfire>();
+			var handlers = _resolver.ResolveHangfireHandlersForEvent(@event);
 
 			foreach (var handler in handlers)
 			{

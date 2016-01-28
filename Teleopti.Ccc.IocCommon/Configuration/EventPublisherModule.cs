@@ -1,6 +1,5 @@
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -30,7 +29,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ServiceBusAsSyncEventPublisher>().SingleInstance();
 
 			if (_configuration.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
-				builder.RegisterType<SelectiveEventPublisher>().As<IEventPublisher>().SingleInstance();
+				builder.RegisterType<MultiEventPublisher>().As<IEventPublisher>().SingleInstance();
 			else
 				builder.Register(c => c.Resolve<ServiceBusEventPublisher>()).As<IEventPublisher>().SingleInstance();
 
@@ -45,13 +44,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CannotPublishToHangfire>().As<IHangfireEventClient>().SingleInstance();
 			builder.RegisterType<CannotSendDelayedMessages>().As<IDelayedMessageSender>().SingleInstance();
 
+			builder.RegisterType<ServiceBusEventProcessor>().SingleInstance();
+
 
 
 
 			if (_configuration.Args().BehaviorTest)
 			{
 				if (_configuration.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
-					builder.RegisterType<SelectiveEventPublisherWithoutBus>().As<IEventPublisher>().SingleInstance();
+					builder.RegisterType<MultiEventPublisherWithoutBus>().As<IEventPublisher>().SingleInstance();
 				else
 					builder.Register(c => c.Resolve<SyncAllEventPublisher>()).As<IEventPublisher>().SingleInstance();
 				builder.RegisterType<IgnoreDelayedMessages>().As<IDelayedMessageSender>().SingleInstance();

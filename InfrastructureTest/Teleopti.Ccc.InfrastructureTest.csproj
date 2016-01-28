@@ -183,7 +183,7 @@
     <Compile Include="ApplicationLayer\Events\HangfireEventShortNameSerializationTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireEventPublishingTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireRecurringEventPublisherTest.cs" />
-    <Compile Include="ApplicationLayer\Events\SelectiveEventPublishingTest.cs" />
+    <Compile Include="ApplicationLayer\Events\MultiEventPublishingTest.cs" />
     <Compile Include="Authentication\LoadUserUnauthorizedTest.cs" />
     <Compile Include="Bugs\BugShiftExchangeInvalidUpdate.cs" />
     <Compile Include="DatabaseTestAttribute.cs" />

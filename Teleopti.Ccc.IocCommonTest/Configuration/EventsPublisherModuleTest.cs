@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			using (var container = buildContainer(Toggles.RTA_NewEventHangfireRTA_34333, true))
 			{
-				container.Resolve<IEventPublisher>().Should().Be.OfType<SelectiveEventPublisher>();
+				container.Resolve<IEventPublisher>().Should().Be.OfType<MultiEventPublisher>();
 			}
 		}
 
