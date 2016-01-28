@@ -7,10 +7,11 @@ namespace Stardust.Manager.Helpers
         public static Uri CreateCorrectUri(string host,
                                            string path)
         {
-            UriBuilder uriBuilder = new UriBuilder();
-
-            uriBuilder.Host = host;
-            uriBuilder.Path = path;
+            UriBuilder uriBuilder = new UriBuilder
+            {
+                Host = host,
+                Path = path
+            };
 
             return uriBuilder.Uri;
         }

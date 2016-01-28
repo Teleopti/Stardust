@@ -72,6 +72,7 @@
     <Compile Include="Helpers\ManagerApiHelper.cs" />
     <Compile Include="Helpers\ProcessHelper.cs" />
     <Compile Include="Helpers\SecurityHelper.cs" />
+    <Compile Include="Helpers\ManagerUriBuilder.cs" />
     <Compile Include="IntegrationTestsOneManagerAndZeroNodes.cs" />
     <Compile Include="LongRunningJobParams.cs" />
     <Compile Include="EventArgs\GuidStatusChangedEventArgs.cs" />

@@ -19,7 +19,7 @@ namespace Stardust.Node.Extensions
         }
 
         private static void ValidateJobDefinitionAndApiEndpoint(JobToDo jobToDo,
-            Uri apiEndpoint)
+                                                                Uri apiEndpoint)
         {
             jobToDo.ThrowExceptionWhenNull();
             apiEndpoint.ThrowArgumentExceptionWhenNull();
@@ -27,25 +27,23 @@ namespace Stardust.Node.Extensions
 
 
         public static Uri CreateUri(this JobToDo jobToDo,
-            string endPoint)
+                                    string endPoint)
         {
             jobToDo.ThrowExceptionWhenNull();
             endPoint.ThrowArgumentExceptionIfNullOrEmpty();
 
-            if (!endPoint.EndsWith("/"))
-            {
-                endPoint = endPoint + "/";
-            }
+            Uri transformUri = new Uri(endPoint.Replace("{jobId}",
+                                                jobToDo.Id.ToString()));
 
-            return new Uri(endPoint + jobToDo.Id);
+            return transformUri;
         }
 
         public static async Task<HttpResponseMessage> PostAsync(this JobToDo jobToDo,
-            Uri apiEndpoint)
+                                                                Uri apiEndpoint)
         {
             // Validate arguments.
             ValidateJobDefinitionAndApiEndpoint(jobToDo,
-                apiEndpoint);
+                                                apiEndpoint);
 
             // Call API.
             HttpResponseMessage response;
@@ -54,9 +52,9 @@ namespace Stardust.Node.Extensions
             {
                 DefineDefaultRequestHeaders(client);
 
-                var sez = jobToDo.SerializeToJson();
+                Uri uri = jobToDo.CreateUri(apiEndpoint.ToString());
 
-                response = await client.PostAsync(jobToDo.CreateUri(apiEndpoint.ToString()), null);
+                response = await client.PostAsync(uri,null);
             }
 
             return response;

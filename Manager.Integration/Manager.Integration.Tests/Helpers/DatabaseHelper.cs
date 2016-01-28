@@ -7,17 +7,21 @@ namespace Manager.Integration.Test.Helpers
 {
     public static class DatabaseHelper
     {
-        public static void ClearDatabase(string connectionStringName = "ManagerConnectionString")
+        public static void TryClearDatabase(string connectionStringName = "ManagerConnectionString")
         {
             DirectoryInfo directoryManagerIntegrationConsoleHost =
                 new DirectoryInfo(Settings.Default.ManagerIntegrationConsoleHostLocation);
-
 
             ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap
             {
                 ExeConfigFilename = Path.Combine(directoryManagerIntegrationConsoleHost.FullName,
                                                  Settings.Default.ManagerConfigurationFileName)
             };
+
+            if (!File.Exists(configFileMap.ExeConfigFilename))
+            {
+                return;
+            }
 
             Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap,
                                                                                    ConfigurationUserLevel.None);

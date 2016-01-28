@@ -13,9 +13,9 @@ namespace NodeTest
         public void ShouldThrowExceptionWhenConstructorArgumentIsNull()
         {
             _nodeConfiguration = new NodeConfiguration(null,
-                null,
-                null,
-                null);
+                                                       null,
+                                                       null,
+                                                       null);
         }
     }
 }

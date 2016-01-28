@@ -13,10 +13,10 @@ namespace Stardust.Node.Timers
         private static readonly ILog Logger = LogManager.GetLogger(typeof (TrySendStatusToManagerTimer));
 
         public TrySendStatusToManagerTimer(JobToDo jobToDo,
-            INodeConfiguration nodeConfiguration,
-            Uri callbackUri,
-            ElapsedEventHandler overrideElapsedEventHandler = null,
-            double interval = 10000) : base(interval)
+                                           INodeConfiguration nodeConfiguration,
+                                           Uri callbackUri,
+                                           ElapsedEventHandler overrideElapsedEventHandler = null,
+                                           double interval = 10000) : base(interval)
         {
             JobToDo = jobToDo;
 
@@ -54,21 +54,33 @@ namespace Stardust.Node.Timers
             if (TrySendStatusSucceded != null)
             {
                 TrySendStatusSucceded(this,
-                    EventArgs.Empty);
+                                      EventArgs.Empty);
             }
         }
 
         public virtual async Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo)
         {
-            var httpResponseMessage =
-                await jobToDo.PostAsync(CallbackUri);
+            try
+            {
+                var httpResponseMessage =
+                    await jobToDo.PostAsync(CallbackUri);
 
-            return httpResponseMessage;
+                return httpResponseMessage;
+
+            }
+
+            catch (Exception exp)
+            {
+                Logger.Error("Error in TrySendStatus.",exp);
+                throw;
+            }
         }
 
         private async void OnTimedEvent(object sender,
-            ElapsedEventArgs e)
+                                        ElapsedEventArgs e)
         {
+            Enabled = false;
+
             try
             {
                 if (JobToDo != null)
@@ -104,6 +116,11 @@ namespace Stardust.Node.Timers
                 {
                     Logger.Error(WhoAmI + ": Try send status to manager failed.");
                 }
+            }
+
+            finally
+            {
+                Enabled = true;
             }
         }
     }

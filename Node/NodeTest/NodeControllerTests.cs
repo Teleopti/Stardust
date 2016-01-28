@@ -22,22 +22,22 @@ namespace NodeTest
         public void Setup()
         {
             _nodeConfigurationFake = new NodeConfigurationFake(new Uri(ConfigurationManager.AppSettings["BaseAddress"]),
-                new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
-                Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
-                ConfigurationManager.AppSettings["NodeName"]);
+                                                               new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
+                                                               Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
+                                                               ConfigurationManager.AppSettings["NodeName"]);
 
             _workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
-                _nodeConfigurationFake,
-                new NodeStartupNotificationToManagerFake(),
-                new PingToManagerFake(),
-                new SendJobDoneTimerFake(),
-                new SendJobCanceledTimerFake(),
-                new SendJobFaultedTimerFake(),
-                new PostHttpRequestFake());
+                                               _nodeConfigurationFake,
+                                               new NodeStartupNotificationToManagerFake(),
+                                               new PingToManagerFake(),
+                                               new SendJobDoneTimerFake(),
+                                               new SendJobCanceledTimerFake(),
+                                               new SendJobFaultedTimerFake(),
+                                               new PostHttpRequestFake());
 
             _nodeController = new NodeController(_workerWrapper) {Request = new HttpRequestMessage()};
             var parameters = new TestJobParams("hejhopp",
-                "i lingonskogen");
+                                               "i lingonskogen");
             var ser = JsonConvert.SerializeObject(parameters);
             _JobToDo = new JobToDo
             {
@@ -59,7 +59,7 @@ namespace NodeTest
         {
             var actionResultCancel = _nodeController.TryCancelJob(_JobToDo.Id);
             Assert.IsInstanceOf(typeof (NotFoundResult),
-                actionResultCancel);
+                                actionResultCancel);
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace NodeTest
 
             var actionResult = _nodeController.TryCancelJob(wrongJobToDo.Id);
             Assert.IsInstanceOf(typeof (NotFoundResult),
-                actionResult);
+                                actionResult);
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace NodeTest
 
             var actionResult = _nodeController.TryCancelJob(_JobToDo.Id);
             Assert.IsInstanceOf(typeof (OkResult),
-                actionResult);
+                                actionResult);
         }
 
         [Test]
@@ -107,7 +107,7 @@ namespace NodeTest
         public void StartJobShouldReturnConflictWhenAlreadyProcessingJob()
         {
             var parameters = new TestJobParams("hejhopp",
-                "i lingonskogen");
+                                               "i lingonskogen");
             var ser = JsonConvert.SerializeObject(parameters);
 
             var JobToDo2 = new JobToDo {Id = Guid.NewGuid(), Name = "Another name", Serialized = ser};
@@ -116,7 +116,7 @@ namespace NodeTest
 
             var actionResult = _nodeController.StartJob(JobToDo2);
             Assert.IsInstanceOf(typeof (ConflictResult),
-                actionResult);
+                                actionResult);
         }
 
         [Test]
@@ -124,7 +124,7 @@ namespace NodeTest
         {
             var actionResult = _nodeController.StartJob(_JobToDo);
             Assert.IsInstanceOf(typeof (OkNegotiatedContentResult<string>),
-                actionResult);
+                                actionResult);
         }
     }
 }
