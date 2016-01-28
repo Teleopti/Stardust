@@ -1,3 +1,4 @@
+using System;
 using System.Configuration;
 using Autofac;
 using ManagerTest.Fakes;
@@ -21,6 +22,8 @@ namespace ManagerTest
 				.As<IWorkerNodeRepository>();
 			builder.RegisterType<ManagerController>();
 			builder.RegisterType<JobManager>();
+		    builder.Register(
+		        c => new Uri("localhost:9050/")).As<Uri>();
 		}
 	}
 }
