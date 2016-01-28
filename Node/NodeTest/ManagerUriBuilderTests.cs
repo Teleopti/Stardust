@@ -86,7 +86,7 @@ namespace NodeTest
         }
 
         [Test]
-        public void ShouldInstantiateWhenCorrectUriStringIsCorrect()
+        public void ShouldInstantiateWhenConstructorArgumentStringIsIvalidUri()
         {
             ManagerUriBuilderToTest = new ManagerUriBuilder(UriToTest);
 

@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Stardust.Node.Constants;
+using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 
 namespace Stardust.Node.Extensions

@@ -1,4 +1,5 @@
 ﻿using System;
+using Stardust.Node.Constants;
 
 namespace Stardust.Node.Helpers
 {
@@ -22,6 +23,16 @@ namespace Stardust.Node.Helpers
 
             return UriBuilder.Uri;
         }
+
+        public Uri CreateUri(string template,
+                             Guid guid)
+        {
+            UriBuilder.Path = template.Replace(NodeRouteConstants.JobIdOptionalParameter,
+                                               guid.ToString());
+
+            return UriBuilder.Uri;
+        }
+
 
         private UriBuilder UriBuilder { get; set; }
 
