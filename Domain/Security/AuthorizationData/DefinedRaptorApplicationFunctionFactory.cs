@@ -161,6 +161,8 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.WebPeople, "xxPeople", DefinedRaptorApplicationFunctionForeignIds.WebPeople, null);
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.WebRequests, "xxRequests", DefinedRaptorApplicationFunctionForeignIds.WebRequests, null);
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.WebModifySkill, "xxModifySkill", DefinedRaptorApplicationFunctionForeignIds.WebModifySkill, null);
+			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.WebIntraday, "xxIntraday", DefinedRaptorApplicationFunctionForeignIds.WebIntraday, null);
+			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.WebModifySkillArea, "xxModifySkillArea", DefinedRaptorApplicationFunctionForeignIds.WebModifySkillArea, null);
 
 			return new ReadOnlyCollection<IApplicationFunction>(applicationFunctionList);
 		}

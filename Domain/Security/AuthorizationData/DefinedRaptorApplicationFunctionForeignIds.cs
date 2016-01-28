@@ -6,7 +6,7 @@
 	/// <remarks>
 	/// Structure of a key: Unique Id
 	/// Must be unique. Do NOT USE the Unique Id even of a deleted function to avoid conflict. 
-	/// Use a higher number than the current maximum Unique Id which is 0126 currently.  
+	/// Use a higher number than the current maximum Unique Id which is 0128 currently.  
 	/// </remarks>
 	public static class DefinedRaptorApplicationFunctionForeignIds
 	{
@@ -126,12 +126,13 @@
 		public const string WebPeople = "0124";
 		public const string WebRequests = "0126";
 		public const string WebModifySkill = "0125";
+		public const string WebIntraday = "0127";
+		public const string WebModifySkillArea = "0128";
 
 		//Seat Planner
 		public const string SeatPlanner = "0107";
 
 		//Outbound
 		public const string Outbound = "0120";
-
 	}
 }

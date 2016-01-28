@@ -120,10 +120,12 @@
 
 		// Angel
 		public const string WebForecasts = "Raptor/Anywhere/WebForecasts";
+		public const string WebIntraday = "Raptor/Anywhere/WebIntraday";
 		public const string WebPermissions = "Raptor/Anywhere/WebPermissions";
 		public const string WebSchedules = "Raptor/Anywhere/WebSchedules";
 		public const string WebPeople = "Raptor/Anywhere/WebPeople";
 		public const string WebRequests = "Raptor/Anywhere/WebRequests";
 		public const string WebModifySkill = "Raptor/Anywhere/WebForecasts/WebModifySkill";
+		public const string WebModifySkillArea = "Raptor/Anywhere/WebIntraday/WebModifySkillArea";
 	}
 }
