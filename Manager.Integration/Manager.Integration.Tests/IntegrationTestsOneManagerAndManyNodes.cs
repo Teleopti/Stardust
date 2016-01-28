@@ -41,14 +41,13 @@ namespace Manager.Integration.Test
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
         [Test]
-        public async  void Test()
+        public   void Test()
         {
 
             //using (var client = new HttpClient())
             //{
             //    client.DefaultRequestHeaders.Accept.Clear();
             //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeConstants.ApplicationJson));
-
 
             //    ManagerUriBuilder uriBuilder = new ManagerUriBuilder();
 
