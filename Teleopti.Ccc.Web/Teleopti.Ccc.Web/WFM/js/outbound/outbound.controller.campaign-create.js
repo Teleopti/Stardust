@@ -10,14 +10,16 @@
     function createCtrl($scope, $state, outboundService, outboundNotificationService, viewUtilityService) {
 	   
 		outboundService.checkPermission($scope).then(init);
-	  
 		$scope.preventAutomaticRedirect = false;
-        $scope.addCampaign = addCampaign;
+		$scope.addCampaign = addCampaign;
         $scope.init = init;
         $scope.backToList = backToList;
 
         function addCampaign() {
-	        if (!$scope.isInputValid()) return;
+        	$scope.isFormValidForPage = $scope.isFormValid();
+	        checkIsWorkingHoursValid();
+	        $scope.isCampaignDurationValidForPage = $scope.isCampaignDurationValid();
+	        if (!$scope.isFormValidForPage || !$scope.isWorkingHoursValidForPage || !$scope.isCampaignDurationValidForPage) return;
 
             $scope.isCreating = true;
 	        outboundService.addCampaign($scope.campaign, function (campaign) {
@@ -27,6 +29,10 @@
 	        }, function (error) {
 	            outboundNotificationService.notifyCampaignCreationFailure(error);
 	        });
+        }
+
+        function checkIsWorkingHoursValid() {
+        	$scope.isWorkingHoursValidForPage = $scope.isWorkingHoursValid();
         }
 
         function init() {
@@ -39,6 +45,7 @@
 	        $scope.isCreating = false;
 	        viewUtilityService.setupValidators($scope);
 	        viewUtilityService.registerPersonHourFeedback($scope, outboundService);
+	        $scope.checkIsWorkingHoursValid = checkIsWorkingHoursValid;
         }
 
         function show(campaign) {

@@ -25,14 +25,22 @@
 		$scope.cancelRemoveCampaign = cancelRemoveCampaign;
 
 		function editCampaign() {
-			if (!$scope.isInputValid()) return;
+			$scope.isFormValidForPage = $scope.isFormValid();
+			checkIsWorkingHoursValid();
+			$scope.isCampaignDurationValidForPage = $scope.isCampaignDurationValid();
+			if (!$scope.isFormValidForPage || !$scope.isWorkingHoursValidForPage || !$scope.isCampaignDurationValidForPage) return;
+			$scope.isEditing = true;
             outboundService.editCampaign($scope.campaign, function (campaign) {
                 outboundNotificationService.notifyCampaignUpdateSuccess(angular.copy(campaign));
                 init();
             }, function (error) {
                 outboundNotificationService.notifyCampaignUpdateFailure(error);
             });
-        }
+		}
+
+		function checkIsWorkingHoursValid() {
+			$scope.isWorkingHoursValidForPage = $scope.isWorkingHoursValid();
+		}
 
         function reset() {
         	$scope.campaign = angular.copy(originalCampaign);
@@ -60,14 +68,14 @@
         function init() {
             var currentCampaignId = (angular.isDefined($stateParams.Id) && $stateParams.Id != "") ? $stateParams.Id : null;
             if (currentCampaignId == null) return;
-
+            $scope.isEditing = false;
             outboundService.getCampaign(currentCampaignId, function (campaign) {
                 originalCampaign = campaign;
                 $scope.campaign = angular.copy(campaign);
 
                 viewUtilityService.setupValidators($scope);
                 viewUtilityService.registerPersonHourFeedback($scope, outboundService);
-
+                $scope.checkIsWorkingHoursValid = checkIsWorkingHoursValid;
                 setPristineForms();
 
                 $scope.$watch(function () {

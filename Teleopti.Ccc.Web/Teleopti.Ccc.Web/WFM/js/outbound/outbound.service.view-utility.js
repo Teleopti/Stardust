@@ -11,7 +11,7 @@
 
         function registerPersonHourFeedback(scope, outboundService) {
             scope.$watch(function () {
-            	return (scope.form.$error.required && scope.form.$error.required.length == 1 && scope.form.$error.required[0].$name == 'Name') || scope.form.$error.required ==undefined ? //scope.campaignWorkloadForm && scope.campaignWorkloadForm.$valid ?
+            	return (scope.form.$error.required && scope.form.$error.required.length == 1 && scope.form.$error.required[0].$name == 'Name') || scope.form.$error.required ==undefined ? 
             	    outboundService.calculateCampaignPersonHour(scope.campaign) : null;
             }, function (newValue) {
                 scope.estimatedWorkload = newValue;
@@ -19,8 +19,9 @@
         }
 
         function setupValidators(scope) {
-            scope.isInputValid = isInputValid;
-            scope.validWorkingHours = validWorkingHours;
+        	scope.isFormValid = isFormValid;
+        	scope.isWorkingHoursValid = isWorkingHoursValid;
+        	scope.isCampaignDurationValid = isCampaignDurationValid;
             scope.flashErrorIcons = flashErrorIcons;
 	        var campaignDurationError = [];
 
@@ -39,13 +40,15 @@
 				}
 	        }, true);
 
-	        function isInputValid() {
-	        	if (scope.form.$error.required && scope.form.$error.required.length > 0) return false;
-		        if (campaignDurationError.length > 0) return false;
-		        return  validWorkingHours();
-	        }          
+	        function isCampaignDurationValid() {
+		        return campaignDurationError.length > 0 ? false : true;
+	        }
 
-            function validWorkingHours() {
+			function isFormValid() {
+				return scope.form.$valid;
+			}
+
+            function isWorkingHoursValid() {
                 var i, j;
                 for (i = 0; i < scope.campaign.WorkingHours.length; i++) {
                     for (j = 0; j < scope.campaign.WorkingHours[i].WeekDaySelections.length; j++) {
