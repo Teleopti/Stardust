@@ -16,7 +16,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
 	[DomainTest]
-	public class DayOffRuleModelPersisterTest
+	public class DayOffRulesModelPersisterTest
 	{
 		public FakeDayOffRulesRepository DayOffRulesRepository;
 		public FakeContractRepository ContractRepository;
