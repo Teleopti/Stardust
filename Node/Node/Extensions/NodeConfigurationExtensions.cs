@@ -38,7 +38,7 @@ namespace Stardust.Node.Extensions
         {
             nodeConfiguration.ThrowArgumentNullException();
 
-            NodeConfigurationUriBuilder nodeConfigurationUriBuilder = new NodeConfigurationUriBuilder(nodeConfiguration);
+            NodeConfigurationUriBuilderHelper nodeConfigurationUriBuilder = new NodeConfigurationUriBuilderHelper(nodeConfiguration);
 
             return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobDoneUri(guid);
         }
@@ -47,7 +47,7 @@ namespace Stardust.Node.Extensions
         {
             nodeConfiguration.ThrowArgumentNullException();
 
-            NodeConfigurationUriBuilder nodeConfigurationUriBuilder = new NodeConfigurationUriBuilder(nodeConfiguration);
+            NodeConfigurationUriBuilderHelper nodeConfigurationUriBuilder = new NodeConfigurationUriBuilderHelper(nodeConfiguration);
 
             return nodeConfigurationUriBuilder.ManagerUriBuilder.GetNodeHasBeenInitializedTemplateUri();
         }
@@ -56,7 +56,7 @@ namespace Stardust.Node.Extensions
         {
             nodeConfiguration.ThrowArgumentNullException();
 
-            NodeConfigurationUriBuilder nodeConfigurationUriBuilder = new NodeConfigurationUriBuilder(nodeConfiguration);
+            NodeConfigurationUriBuilderHelper nodeConfigurationUriBuilder = new NodeConfigurationUriBuilderHelper(nodeConfiguration);
 
             return nodeConfigurationUriBuilder.ManagerUriBuilder.GetHeartbeatTemplateUri();
         }
@@ -65,7 +65,7 @@ namespace Stardust.Node.Extensions
         {
             nodeConfiguration.ThrowArgumentNullException();
 
-            NodeConfigurationUriBuilder nodeConfigurationUriBuilder = new NodeConfigurationUriBuilder(nodeConfiguration);
+            NodeConfigurationUriBuilderHelper nodeConfigurationUriBuilder = new NodeConfigurationUriBuilderHelper(nodeConfiguration);
 
             return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobHasBeenCanceledTemplateUri();
         }
@@ -75,7 +75,7 @@ namespace Stardust.Node.Extensions
         {
             nodeConfiguration.ThrowArgumentNullException();
 
-            NodeConfigurationUriBuilder nodeConfigurationUriBuilder = new NodeConfigurationUriBuilder(nodeConfiguration);
+            NodeConfigurationUriBuilderHelper nodeConfigurationUriBuilder = new NodeConfigurationUriBuilderHelper(nodeConfiguration);
 
             return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobHasBeenCanceledUri(guid);
         }
@@ -84,7 +84,7 @@ namespace Stardust.Node.Extensions
         {
             nodeConfiguration.ThrowArgumentNullException();
 
-            NodeConfigurationUriBuilder nodeConfigurationUriBuilder = new NodeConfigurationUriBuilder(nodeConfiguration);
+            NodeConfigurationUriBuilderHelper nodeConfigurationUriBuilder = new NodeConfigurationUriBuilderHelper(nodeConfiguration);
 
             return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobHasFailedTemplateUri();
         }
@@ -93,7 +93,7 @@ namespace Stardust.Node.Extensions
         {
             nodeConfiguration.ThrowArgumentNullException();
 
-            NodeConfigurationUriBuilder nodeConfigurationUriBuilder = new NodeConfigurationUriBuilder(nodeConfiguration);
+            NodeConfigurationUriBuilderHelper nodeConfigurationUriBuilder = new NodeConfigurationUriBuilderHelper(nodeConfiguration);
 
             return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobDoneTemplateUri();
         }
@@ -102,7 +102,7 @@ namespace Stardust.Node.Extensions
         {
             nodeConfiguration.ThrowArgumentNullException();
 
-            NodeConfigurationUriBuilder nodeConfigurationUriBuilder = new NodeConfigurationUriBuilder(nodeConfiguration);
+            NodeConfigurationUriBuilderHelper nodeConfigurationUriBuilder = new NodeConfigurationUriBuilderHelper(nodeConfiguration);
 
             return nodeConfigurationUriBuilder.ManagerUriBuilder.GetLocationUri();
         }

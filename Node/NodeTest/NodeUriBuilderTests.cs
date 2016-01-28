@@ -10,7 +10,7 @@ namespace NodeTest
     {
         private string UriToTest { get; set; }
 
-        private NodeUriBuilder NodeUriBuilderToTest { get; set; }
+        private NodeUriBuilderHelper NodeUriBuilderToTest { get; set; }
 
         [SetUp]
         public void Setup()
@@ -22,20 +22,20 @@ namespace NodeTest
         [ExpectedException(typeof (System.UriFormatException))]
         public void ShouldThrowExceptionWhenConstructorArgumentIsStringEmpty()
         {
-            NodeUriBuilderToTest = new NodeUriBuilder(string.Empty);
+            NodeUriBuilderToTest = new NodeUriBuilderHelper(string.Empty);
         }
 
         [Test]
         [ExpectedException(typeof (System.UriFormatException))]
         public void ShouldThrowExceptionWhenConstructorArgumentStringIsIvalidUri()
         {
-            NodeUriBuilderToTest = new NodeUriBuilder("invalid uri");
+            NodeUriBuilderToTest = new NodeUriBuilderHelper("invalid uri");
         }
 
         [Test]
         public void ShouldInstantiateWhenConstructorArgumentStringIsIvalidUri()
         {
-            NodeUriBuilderToTest = new NodeUriBuilder(UriToTest);
+            NodeUriBuilderToTest = new NodeUriBuilderHelper(UriToTest);
 
             Assert.IsNotNull(NodeUriBuilderToTest);
         }
@@ -50,7 +50,7 @@ namespace NodeTest
                 Path = path
             };
 
-            NodeUriBuilderToTest = new NodeUriBuilder(UriToTest);
+            NodeUriBuilderToTest = new NodeUriBuilderHelper(UriToTest);
 
             var uriToTest = NodeUriBuilderToTest.CreateUri(path);
 
@@ -71,7 +71,7 @@ namespace NodeTest
                 Path = path
             };
 
-            NodeUriBuilderToTest = new NodeUriBuilder(UriToTest);
+            NodeUriBuilderToTest = new NodeUriBuilderHelper(UriToTest);
 
             var uriToTest = NodeUriBuilderToTest.CreateUri(NodeRouteConstants.CancelJob,
                                                            guid);

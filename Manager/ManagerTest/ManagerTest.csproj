@@ -91,13 +91,13 @@
     <Compile Include="Fakes\FakeHttpSender.cs" />
     <Compile Include="Fakes\FakeJobRepository.cs" />
     <Compile Include="Fakes\FakeWorkerNodeRepository.cs" />
-    <Compile Include="Helpers\UriHelperTests.cs" />
     <Compile Include="JobManagerTests.cs" />
     <Compile Include="JobTestsAttribute.cs" />
     <Compile Include="ManagerModuleTest.cs" />
     <Compile Include="ManagerOperationsTest.cs" />
     <Compile Include="ManagerOperationTestsAttribute.cs" />
     <Compile Include="ManagerTestsAttribute.cs" />
+    <Compile Include="NodeUriBuilderHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -110,7 +110,9 @@
       <Name>Stardust.Manager</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Helpers\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

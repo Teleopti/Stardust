@@ -3,18 +3,18 @@ using Stardust.Node.Constants;
 
 namespace Stardust.Node.Helpers
 {
-    public class ManagerUriBuilder
+    public class ManagerUriBuilderHelper
     {
         private UriBuilder UriBuilder { get; set; }
 
         private Uri LocationUri { get; set; }
 
 
-        public ManagerUriBuilder(Uri locationUri) : this(locationUri.ToString())
+        public ManagerUriBuilderHelper(Uri locationUri) : this(locationUri.ToString())
         {
         }
 
-        public ManagerUriBuilder(string locationUri)
+        public ManagerUriBuilderHelper(string locationUri)
         {
             LocationUri = new Uri(locationUri);
 

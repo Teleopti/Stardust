@@ -107,7 +107,7 @@
     <Compile Include="Constants\ManagerRouteConstants.cs" />
     <Compile Include="Constants\NodeRouteConstants.cs" />
     <Compile Include="GlobalExceptionLogger.cs" />
-    <Compile Include="Helpers\UriHelper.cs" />
+    <Compile Include="Helpers\NodeUriBuilderHelper.cs" />
     <Compile Include="HttpSender.cs" />
     <Compile Include="Interfaces\IHttpSender.cs" />
     <Compile Include="Interfaces\IJobRepository.cs" />

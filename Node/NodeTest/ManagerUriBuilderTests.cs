@@ -8,7 +8,7 @@ namespace NodeTest
     [TestFixture]
     public class ManagerUriBuilderTests
     {
-        private ManagerUriBuilder ManagerUriBuilderToTest { get; set; }
+        private ManagerUriBuilderHelper ManagerUriBuilderToTest { get; set; }
 
         private string UriToTest { get; set; }
 
@@ -75,20 +75,20 @@ namespace NodeTest
         [ExpectedException(typeof (System.UriFormatException))]
         public void ShouldThrowExceptionWhenConstructorArgumentIsStringEmpty()
         {
-            ManagerUriBuilderToTest = new ManagerUriBuilder(string.Empty);
+            ManagerUriBuilderToTest = new ManagerUriBuilderHelper(string.Empty);
         }
 
         [Test]
         [ExpectedException(typeof (System.UriFormatException))]
         public void ShouldThrowExceptionWhenConstructorArgumentStringIsIvalidUri()
         {
-            ManagerUriBuilderToTest = new ManagerUriBuilder("invalid uri");
+            ManagerUriBuilderToTest = new ManagerUriBuilderHelper("invalid uri");
         }
 
         [Test]
         public void ShouldInstantiateWhenConstructorArgumentStringIsIvalidUri()
         {
-            ManagerUriBuilderToTest = new ManagerUriBuilder(UriToTest);
+            ManagerUriBuilderToTest = new ManagerUriBuilderHelper(UriToTest);
 
             Assert.IsNotNull(ManagerUriBuilderToTest);
         }
@@ -98,7 +98,7 @@ namespace NodeTest
         {
             var uri = new Uri(UriToTest);
 
-            ManagerUriBuilderToTest = new ManagerUriBuilder(UriToTest);
+            ManagerUriBuilderToTest = new ManagerUriBuilderHelper(UriToTest);
 
             Assert.IsTrue(ManagerUriBuilderToTest.GetHostName() == uri.Host);
             Assert.IsTrue(ManagerUriBuilderToTest.GetScheme() == uri.Scheme);
@@ -109,7 +109,7 @@ namespace NodeTest
         [Test]
         public void ShouldReturnCorrectHeartBeatTemplateUri()
         {
-            ManagerUriBuilderToTest = new ManagerUriBuilder(UriToTest);
+            ManagerUriBuilderToTest = new ManagerUriBuilderHelper(UriToTest);
 
             Assert.IsTrue(ManagerUriBuilderToTest.GetHeartbeatTemplateUri() == HeartBeatTemplateUri);
         }
@@ -117,7 +117,7 @@ namespace NodeTest
         [Test]
         public void ShouldReturnCorrectNodeHasBeenInitializedTemplateUri()
         {
-            ManagerUriBuilderToTest = new ManagerUriBuilder(UriToTest);
+            ManagerUriBuilderToTest = new ManagerUriBuilderHelper(UriToTest);
 
             Assert.IsTrue(ManagerUriBuilderToTest.GetNodeHasBeenInitializedTemplateUri() == NodeHasBeenInitializedTemplateUri);
         }
@@ -125,7 +125,7 @@ namespace NodeTest
         [Test]
         public void ShouldReturnCorrectGetJobHasFailedTemplateUri()
         {
-            ManagerUriBuilderToTest = new ManagerUriBuilder(UriToTest);
+            ManagerUriBuilderToTest = new ManagerUriBuilderHelper(UriToTest);
 
             Assert.IsTrue(ManagerUriBuilderToTest.GetJobHasFailedTemplateUri() == JobHasFailedTemplateUri);
         }
@@ -133,7 +133,7 @@ namespace NodeTest
         [Test]
         public void ShouldReturnCorrectGetJobHasBeenCanceledTemplateUri()
         {
-            ManagerUriBuilderToTest = new ManagerUriBuilder(UriToTest);
+            ManagerUriBuilderToTest = new ManagerUriBuilderHelper(UriToTest);
 
             Assert.IsTrue(ManagerUriBuilderToTest.GetJobHasBeenCanceledTemplateUri() == JobHasBeenCanceledTemplateUri);
         }
@@ -141,7 +141,7 @@ namespace NodeTest
         [Test]
         public void ShouldReturnCorrectGetJobDoneTemplateUri()
         {
-            ManagerUriBuilderToTest = new ManagerUriBuilder(UriToTest);
+            ManagerUriBuilderToTest = new ManagerUriBuilderHelper(UriToTest);
 
             Assert.IsTrue(ManagerUriBuilderToTest.GetJobDoneTemplateUri() == JobNodeTemplateUri);
         }
@@ -149,7 +149,7 @@ namespace NodeTest
         [Test]
         public void ShouldReturnCorrectGetJobHasBeenCanceledUri()
         {
-            ManagerUriBuilderToTest = new ManagerUriBuilder(UriToTest);
+            ManagerUriBuilderToTest = new ManagerUriBuilderHelper(UriToTest);
 
             Assert.IsTrue(ManagerUriBuilderToTest.GetJobHasBeenCanceledUri(Guid) == JobHasBeenCanceledUri);
         }
@@ -157,7 +157,7 @@ namespace NodeTest
         [Test]
         public void ShouldReturnCorrectGetJobDoneUri()
         {
-            ManagerUriBuilderToTest = new ManagerUriBuilder(UriToTest);
+            ManagerUriBuilderToTest = new ManagerUriBuilderHelper(UriToTest);
 
             Assert.IsTrue(ManagerUriBuilderToTest.GetJobDoneUri(Guid) == JobDoneUri);
         }
@@ -165,7 +165,7 @@ namespace NodeTest
         [Test]
         public void ShouldReturnCorrectGetJobHasFailedUri()
         {
-            ManagerUriBuilderToTest = new ManagerUriBuilder(UriToTest);
+            ManagerUriBuilderToTest = new ManagerUriBuilderHelper(UriToTest);
 
             Assert.IsTrue(ManagerUriBuilderToTest.GetJobHasFailedUri(Guid) == JobHasFailedUri);
         }
