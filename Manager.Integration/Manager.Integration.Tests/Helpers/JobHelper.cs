@@ -33,7 +33,7 @@ namespace Manager.Integration.Test.Helpers
                         Name = "Job Name " + i,
                         Serialized = longRunningJobParamsJson,
                         Type = "NodeTest.JobHandlers.LongRunningJobParams",
-                        UserName = SecurityHelper.GetLoggedInUser()
+                        UserName = SecurityHelper.GetLoggedInUser()                        
                     };
 
                     requestModels.Add(job);

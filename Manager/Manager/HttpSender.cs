@@ -36,8 +36,7 @@ namespace Stardust.Manager
             }
         }
 
-        public async Task<HttpResponseMessage> DeleteAsync(string url,
-                                                           Guid jobId)
+        public async Task<HttpResponseMessage> DeleteAsync(string url)
         {
             using (var client = new HttpClient())
             {
@@ -47,7 +46,7 @@ namespace Stardust.Manager
                 try
                 {
                     var response =
-                        await client.DeleteAsync(url + "/" + jobId);
+                        await client.DeleteAsync(url);
 
                     return response;
                 }

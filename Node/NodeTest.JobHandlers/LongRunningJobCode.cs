@@ -23,10 +23,25 @@ namespace NodeTest.JobHandlers
         {
             Logger.Info("'Long Running Job Code' Do The Thing method called.");
 
+            TestJobProgress jobProgress;
+
+            if (cancellationTokenSource.IsCancellationRequested)
+            {
+                jobProgress = new TestJobProgress
+                {
+                    Text = WhoAmI + ": Long running job. Cancellation is requested " + message.Name,
+                    ConsoleColor = ConsoleColor.Yellow
+                };
+
+                progress(jobProgress.Text);
+
+                cancellationTokenSource.Token.ThrowIfCancellationRequested();
+            }
+
             // -----------------------------------------------------------
             // Start execution.
             // -----------------------------------------------------------
-            var jobProgress = new TestJobProgress
+            jobProgress = new TestJobProgress
             {
                 Text = WhoAmI + ": Start a long running job. Will take 10 seconds to complete. " + message.Name,
                 ConsoleColor = ConsoleColor.Green

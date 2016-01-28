@@ -16,7 +16,7 @@ namespace Manager.Integration.Test
     [TestFixture]
     public class IntegrationTestsOneManagerAndManyNodes
     {
-        private const int NumberOfNodesToStart = 2;
+        private const int NumberOfNodesToStart = 1;
 
         private static readonly ILog Logger = 
             LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndManyNodes));
@@ -35,7 +35,6 @@ namespace Manager.Integration.Test
             StartManagerIntegrationConsoleHostProcess =
                 ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
 
-            DatabaseHelper.TryClearDatabase();
         }
 
         private ManagerApiHelper ManagerApiHelper { get; set; }
@@ -62,7 +61,7 @@ namespace Manager.Integration.Test
         {
             JobHelper.GiveNodesTimeToInitialize();
 
-            List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(10);
+            List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(5);
 
             List<Task> tasks = new List<Task>();
 
@@ -84,7 +83,7 @@ namespace Manager.Integration.Test
             {
                 var cancelJobTask = ManagerApiHelper.CreateManagerCancelTask(args.Guid);
 
-                Logger.Debug("Created task for cancel job :" + args.Guid);
+                Logger.Debug("IntegrationTestsOneManagerAndManyNodes : Created task for cancel job :" + args.Guid);
 
                 cancelJobTask.Start();
             };
@@ -154,7 +153,7 @@ namespace Manager.Integration.Test
             //task.Wait();
         }
 
-        [Test][Ignore]
+        [Test]
         public void ShouldBeAbleToCreate10SuccessfullJobRequest()
         {
             string status = string.Empty;

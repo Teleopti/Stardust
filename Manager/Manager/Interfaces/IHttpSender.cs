@@ -8,6 +8,6 @@ namespace Stardust.Manager.Interfaces
 	{
 		Task<HttpResponseMessage> PostAsync(string url, object data);
 
-        Task<HttpResponseMessage> DeleteAsync(string url, Guid jobId);
+        Task<HttpResponseMessage> DeleteAsync(string url);
     }
 }

@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using log4net;
 using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Timers;
 using Newtonsoft.Json;
@@ -11,9 +12,11 @@ namespace Manager.Integration.Test.Helpers
 {
     public class ManagerApiHelper
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (ManagerApiHelper));
+
         public ManagerApiHelper()
         {
-            ManagerUriBuilder =new ManagerUriBuilder();
+            ManagerUriBuilder = new ManagerUriBuilder();
         }
 
         public ManagerUriBuilder ManagerUriBuilder { get; private set; }
@@ -37,27 +40,29 @@ namespace Manager.Integration.Test.Helpers
             {
                 using (var client = new HttpClient())
                 {
-                    DefineDefaultRequestHeaders(client);
-
-                    var sez = JsonConvert.SerializeObject(jobRequestModel);
-
-                    var uri = ManagerUriBuilder.GetStartJobUri();
-
-                    HttpResponseMessage response = await client.PostAsync(uri,
-                                                                          new StringContent(sez,
-                                                                                            Encoding.UTF8,
-                                                                                            MediaTypeConstants.ApplicationJson));
-                    var str = await response.Content.ReadAsStringAsync();
-
                     try
                     {
+                        DefineDefaultRequestHeaders(client);
+
+                        var sez = JsonConvert.SerializeObject(jobRequestModel);
+
+                        var uri = ManagerUriBuilder.GetStartJobUri();
+
+                        HttpResponseMessage response = await client.PostAsync(uri,
+                                                                              new StringContent(sez,
+                                                                                                Encoding.UTF8,
+                                                                                                MediaTypeConstants.ApplicationJson));
+                        var str = await response.Content.ReadAsStringAsync();
+
                         Guid jobId = JsonConvert.DeserializeObject<Guid>(str);
 
                         CheckJobHistoryStatusTimer.AddOrUpdateGuidStatus(jobId,
                                                                          null);
                     }
-                    catch (Exception)
+                    catch (Exception exp)
                     {
+                        Logger.Error("Post async error : ",
+                                     exp);
                     }
                 }
             });
@@ -68,18 +73,28 @@ namespace Manager.Integration.Test.Helpers
             Task<HttpResponseMessage> taskToReturn =
                 new Task<HttpResponseMessage>(() =>
                 {
-                    Task<HttpResponseMessage> response;
-
-                    using (var client = new HttpClient())
+                    try
                     {
-                        DefineDefaultRequestHeaders(client);
+                        Task<HttpResponseMessage> response;
 
-                        var uri = ManagerUriBuilder.GetCancelJobUri(guid);
+                        using (var client = new HttpClient())
+                        {
+                            DefineDefaultRequestHeaders(client);
 
-                        response = client.DeleteAsync(uri);
+                            var uri = ManagerUriBuilder.GetCancelJobUri(guid);
+
+                            response = client.DeleteAsync(uri);
+                        }
+
+                        return response.Result;
+                    }
+                    catch (Exception exp)
+                    {
+                        Logger.Error("Delete async error : ",
+                                     exp);
                     }
 
-                    return response.Result;
+                    return null;
                 });
 
             return taskToReturn;

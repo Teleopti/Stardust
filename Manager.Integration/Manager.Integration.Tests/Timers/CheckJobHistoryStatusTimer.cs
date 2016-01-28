@@ -7,6 +7,7 @@ using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
+using log4net;
 using Manager.Integration.Test.EventArgs;
 using Manager.Integration.Test.Helpers;
 using Newtonsoft.Json;
@@ -16,6 +17,8 @@ namespace Manager.Integration.Test.Timers
 {
     public class CheckJobHistoryStatusTimer : Timer
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(CheckJobHistoryStatusTimer));
+
         public EventHandler<GuidStatusChangedEventArgs> GuidStatusChangedEvent;
 
         public EventHandler<GuidAddedEventArgs> GuidAddedEventHandler;
@@ -119,7 +122,7 @@ namespace Manager.Integration.Test.Timers
             AutoReset = true;
         }
 
-        private void CheckRequestStatusTimer_Elapsed(object sender,
+        private async void CheckRequestStatusTimer_Elapsed(object sender,
                                                      ElapsedEventArgs e)
         {
             Enabled = false;
@@ -160,29 +163,28 @@ namespace Manager.Integration.Test.Timers
 
                     IEnumerable<Guid> inCorrectStatusConcurrentDictionary = Guids.Keys.Except(correctStatusConcurrentDictionary.Keys);
 
-                    Parallel.ForEach(inCorrectStatusConcurrentDictionary,
-                                     new ParallelOptions {MaxDegreeOfParallelism = 2},
-                                     async guid =>
-                                     {
-                                         var response = await GetJobHistory(guid);
+                    foreach (var guid in inCorrectStatusConcurrentDictionary)
+                    {
+                        var response = await GetJobHistory(guid);
 
-                                         if (response.IsSuccessStatusCode)
-                                         {
-                                             string jobSerialized = await response.Content.ReadAsStringAsync();
+                        if (response.IsSuccessStatusCode)
+                        {
+                            string jobSerialized = await response.Content.ReadAsStringAsync();
 
-                                             try
-                                             {
-                                                 var jobHistory =
-                                                     JsonConvert.DeserializeObject<JobHistory>(jobSerialized);
+                            try
+                            {
+                                var jobHistory =
+                                    JsonConvert.DeserializeObject<JobHistory>(jobSerialized);
 
-                                                 AddOrUpdateGuidStatus(guid,
-                                                                       jobHistory.Result);
-                                             }
-                                             catch (Exception)
-                                             {
-                                             }
-                                         }
-                                     });
+                                AddOrUpdateGuidStatus(guid,
+                                                      jobHistory.Result);
+                            }
+                            catch (Exception exp)
+                            {
+                                Logger.Error(exp.Message,exp);
+                            }
+                        }
+                    }
                 }
             }
 

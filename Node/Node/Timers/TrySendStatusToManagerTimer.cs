@@ -79,8 +79,6 @@ namespace Stardust.Node.Timers
         private async void OnTimedEvent(object sender,
                                         ElapsedEventArgs e)
         {
-            Enabled = false;
-
             try
             {
                 if (JobToDo != null)
@@ -118,10 +116,6 @@ namespace Stardust.Node.Timers
                 }
             }
 
-            finally
-            {
-                Enabled = true;
-            }
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using log4net;
 using Stardust.Manager.Constants;
+using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
 
@@ -330,8 +331,14 @@ namespace Stardust.Manager
 					}
 					else
 					{
-						var response = 
-                            await httpSender.PostAsync(node + "/" + NodeRouteConstants.Job, jobId);
+                        NodeUriBuilderHelper builderHelper = new NodeUriBuilderHelper(node);
+
+					    var uriCancel=builderHelper.GetCancelJobUri(jobId);
+
+                        Logger.Info("Send delete async : " + uriCancel);
+
+                        var response = 
+                            await httpSender.DeleteAsync(uriCancel.ToString());
 
 						if (response != null && response.IsSuccessStatusCode)
 						{
