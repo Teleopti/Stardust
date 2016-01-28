@@ -1,8 +1,8 @@
 ﻿using System;
 using log4net;
 using Rhino.ServiceBus;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -15,16 +15,23 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 		ConsumerOf<IEvent>,
 		ConsumerOf<EventsPackageMessage>
 	{
-		private readonly IEventPopulatingPublisher _populatingPublisher;
+		private readonly SyncServiceBusEventPublisher _publisher;
+		private readonly IEventContextPopulator _eventContextPopulator;
 		private readonly IServiceBus _bus;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly ITrackingMessageSender _trackingMessageSender;
 
 		private readonly static ILog Logger = LogManager.GetLogger(typeof(EventsConsumer));
 
-		public EventsConsumer(IEventPopulatingPublisher populatingPublisher, IServiceBus bus, ICurrentUnitOfWorkFactory unitOfWorkFactory, ITrackingMessageSender trackingMessageSender)
+		public EventsConsumer(
+			SyncServiceBusEventPublisher publisher,
+			IEventContextPopulator eventContextPopulator,
+			IServiceBus bus, 
+			ICurrentUnitOfWorkFactory unitOfWorkFactory, 
+			ITrackingMessageSender trackingMessageSender)
 		{
-			_populatingPublisher = populatingPublisher;
+			_publisher = publisher;
+			_eventContextPopulator = eventContextPopulator;
 			_bus = bus;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_trackingMessageSender = trackingMessageSender;
@@ -43,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 			{
 				if (logOnInfo == null)
 				{
-					_populatingPublisher.Publish(@event);
+					_publisher.Publish(@event);
 				}
 				else
 				{
@@ -51,7 +58,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 					{
 						using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 						{
-							_populatingPublisher.Publish(@event);
+							_eventContextPopulator.PopulateEventContext(@event);
+							_publisher.Publish(@event);
 							unitOfWork.PersistAll();
 						}
 					}
@@ -59,7 +67,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 					{
 						using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork(new InitiatorIdentifierFromMessage(initiatorInfo)))
 						{
-							_populatingPublisher.Publish(@event);
+							_eventContextPopulator.PopulateEventContext(@event);
+							_publisher.Publish(@event);
 							unitOfWork.PersistAll();
 						}
 					}

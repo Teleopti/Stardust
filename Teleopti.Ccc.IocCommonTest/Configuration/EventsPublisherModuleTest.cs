@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { BehaviorTest = true}, new FalseToggleManager())));
 			var container = builder.Build();
 
-			container.Resolve<SyncEventPublisher>().Should().Not.Be.Null();
-			container.Resolve<IEventPublisher>().Should().Be.OfType<SyncEventPublisher>();
+			container.Resolve<SyncServiceBusEventPublisher>().Should().Not.Be.Null();
+			container.Resolve<IEventPublisher>().Should().Be.OfType<SyncServiceBusEventPublisher>();
 		}
 
 		[Test]

@@ -9,16 +9,16 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	public class SelectiveEventPublisherWithoutBus : IEventPublisher
 	{
 		private readonly HangfireEventPublisher _hangfirePublisher;
-		private readonly SyncEventPublisher _syncEventPublisher;
+		private readonly SyncServiceBusEventPublisher _syncServiceBusEventPublisher;
 		private readonly ResolveEventHandlers _resolver;
 
 		public SelectiveEventPublisherWithoutBus(
 			HangfireEventPublisher hangfirePublisher, 
-			SyncEventPublisher syncEventPublisher, 
+			SyncServiceBusEventPublisher syncServiceBusEventPublisher, 
 			ResolveEventHandlers resolver)
 		{
 			_hangfirePublisher = hangfirePublisher;
-			_syncEventPublisher = syncEventPublisher;
+			_syncServiceBusEventPublisher = syncServiceBusEventPublisher;
 			_resolver = resolver;
 		}
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 					_hangfirePublisher.Publish(@event);
 
 				if (hasBusHandlers)
-					_syncEventPublisher.Publish(@event);
+					_syncServiceBusEventPublisher.Publish(@event);
 			}
 		}
 	}

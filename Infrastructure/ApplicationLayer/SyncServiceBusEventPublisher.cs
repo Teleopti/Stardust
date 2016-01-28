@@ -1,15 +1,18 @@
-﻿using System.Reflection;
+﻿using System.Linq;
+using System.Reflection;
+using Autofac;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public class SyncEventPublisher : IEventPublisher, ICurrentEventPublisher
+	public class SyncServiceBusEventPublisher : IEventPublisher, ICurrentEventPublisher
 	{
 		private readonly ResolveEventHandlers _resolver;
 
-		public SyncEventPublisher(ResolveEventHandlers resolver)
+		public SyncServiceBusEventPublisher(ResolveEventHandlers resolver)
 		{
 			_resolver = resolver;
 		}
@@ -18,8 +21,8 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 			foreach (var @event in events)
 			{
-				var handlers = _resolver.ResolveHandlersForEvent(@event);
-				if (handlers == null) return;
+				var handlers = _resolver.ResolveHandlersForEvent(@event)
+					.Where(x => x.GetType().IsAssignableTo<IRunOnServiceBus>());
 
 				foreach (var handler in handlers)
 				{

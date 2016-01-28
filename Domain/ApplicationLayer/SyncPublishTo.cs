@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 						continue;
 					try
 					{
-
 						method.Invoke(handler, new[] { @event });
 					}
 					catch (TargetInvocationException e)
