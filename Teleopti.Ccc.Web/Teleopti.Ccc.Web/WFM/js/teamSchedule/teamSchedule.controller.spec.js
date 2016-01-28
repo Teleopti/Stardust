@@ -35,7 +35,7 @@ describe("TeamScheduleControllerTest", function() {
 		var selectedPersonList = controller.getSelectedPersonIdList();
 
 		expect(selectedPersonList.length).toEqual(1);
-		expect(selectedPersonList[0].personId).toEqual("221B-Baker-SomeoneElse");
+		expect(selectedPersonList[0]).toEqual("221B-Baker-SomeoneElse");
 	}));
 
 	it("can deselect one person", inject(function () {

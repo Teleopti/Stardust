@@ -177,10 +177,10 @@
 		}
 
 		function allowSwapShifts() {
-			var selectedPersonIds = vm.getSelectedPersonIdList();
-			if (selectedPersonIds.length !== 2) return false;
+			var selectedPersonInfos = vm.getSelectedPersonInfoList();
+			if (selectedPersonInfos.length !== 2) return false;
 			
-			return selectedPersonIds[0].canSwapShift && selectedPersonIds[1].canSwapShift;
+			return selectedPersonInfos[0].canSwapShift && selectedPersonInfos[1].canSwapShift;
 		}
 
 		function swapShifts() {
@@ -190,8 +190,8 @@
 			if (selectedPersonIds.length !== 2) return;
 
 			teamScheduleSvc.swapShifts.post({
-				PersonIdFrom: selectedPersonIds[0].personId,
-				PersonIdTo: selectedPersonIds[1].personId,
+				PersonIdFrom: selectedPersonIds[0],
+				PersonIdTo: selectedPersonIds[1],
 				ScheduleDate: vm.scheduleDateMoment().format("YYYY-MM-DD"),
 				TrackedCommandInfo: { TrackId: "" } // TODO: Generate unique track id
 			}).$promise.then(function (result) {
@@ -296,7 +296,7 @@
 			}
 		};
 
-		vm.getSelectedPersonIdList = function() {
+		vm.getSelectedPersonInfoList = function() {
 			var result = [];
 			for (var key in vm.personIdSelectionDic) {
 				var schedule = vm.personIdSelectionDic[key];
@@ -308,6 +308,15 @@
 				}
 			}
 			return result;
+		}
+
+		vm.getSelectedPersonIdList = function () {
+			var personIds = [];
+			var list = vm.getSelectedPersonInfoList();
+			angular.forEach(list, function (element) {
+				personIds.push(element.personId);
+			});
+			return personIds;
 		}
 
 		function replaceParameters(text, params) {
