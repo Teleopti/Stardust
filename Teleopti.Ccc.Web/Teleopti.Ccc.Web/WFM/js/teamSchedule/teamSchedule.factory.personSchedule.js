@@ -11,9 +11,20 @@
 		function create(schedule, timeLine, isOverNightShift) {
 			if (!schedule) schedule = {};
 
+			var isOvernightShift = false;
+			if (schedule.Projection != undefined && schedule.Projection != null && schedule.Projection.length > 0) {
+				var shiftStartTime = moment(schedule.Projection[0].Start);
+				//console.log("shiftStartTime:", shiftStartTime);
+				var lastProjection = schedule.Projection[schedule.Projection.length - 1];
+				var shiftEndTime = moment(lastProjection.Start);
+				shiftEndTime = shiftEndTime.add(lastProjection.Minutes, 'minutes');
+				isOvernightShift = shiftStartTime.startOf('day').format("YYYY-MM-DD HH:mm:ss")
+					!== shiftEndTime.startOf('day').format("YYYY-MM-DD HH:mm:ss");
+			}
+
 			var projectionVms = createProjections(schedule.Projection, timeLine, isOverNightShift);
 			var dayOffVm = createDayOffViewModel(schedule.DayOff, timeLine);
-
+			
 			var personSchedule = {
 				PersonId: schedule.PersonId,
 			
@@ -23,7 +34,11 @@
 				IsFullDayAbsence: schedule.IsFullDayAbsence,
 				DayOffs: dayOffVm == undefined ? [] : [dayOffVm],
 				Merge: merge,
-				IsSelected: false
+				IsSelected: false,
+				IsOvernightShift: isOvernightShift,
+				AllowSwapShifts: function () {
+					return !this.IsFullDayAbsence && (this.Shifts.length === 0 || (this.Shifts.length === 1 && !this.IsOvernightShift));
+				}
 			}
 
 			return personSchedule;
@@ -115,6 +130,8 @@
 			if (otherDayOffVm != undefined) {
 				this.DayOffs.push(otherDayOffVm);
 			}
+
+			this.IsOvernightShift = true;
 		}
 
 		return personScheduleFactory;

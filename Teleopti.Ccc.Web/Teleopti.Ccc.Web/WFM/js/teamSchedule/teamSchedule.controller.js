@@ -122,7 +122,7 @@
 		function setupPersonIdSelectionDic(schedules) {
 			schedules.forEach(function (personSchedule) {
 				if (vm.personIdSelectionDic[personSchedule.PersonId] === undefined) {
-					var canSwapShift = allowSwap(personSchedule);
+					var canSwapShift = personSchedule.AllowSwapShifts();
 					vm.personIdSelectionDic[personSchedule.PersonId] = {
 						isSelected: false,
 						canSwapShift: canSwapShift
@@ -171,10 +171,6 @@
 				vm.setCurrentCommand("addAbsence")();
 			}
 		};
-
-		function allowSwap(schedule) {
-			return !schedule.IsFullDayAbsence && schedule.Shifts.length <= 1;
-		}
 
 		function allowSwapShifts() {
 			var selectedPersonInfos = vm.getSelectedPersonInfoList();
