@@ -18,7 +18,7 @@ namespace Stardust.Node.API
         {
             _workerWrapper = workerWrapper;
         }
-
+        
         [HttpPost, Route(NodeRouteConstants.Job)]
         public IHttpActionResult StartJob(JobToDo jobToDo)
         {
@@ -43,7 +43,7 @@ namespace Stardust.Node.API
 
             return CreateOkStatusCode(jobToDo);
         }
-
+        
         [HttpDelete, Route(NodeRouteConstants.CancelJob)]
         public IHttpActionResult TryCancelJob(Guid jobId)
         {
@@ -78,9 +78,9 @@ namespace Stardust.Node.API
                         jobId);
             return NotFound();
         }
-
-	    [HttpPost, Route(NodeRouteConstants.IsAlive)]
-	    public IHttpActionResult IsAlive()
+        
+        [HttpPost, Route(NodeRouteConstants.IsAlive)]
+        public IHttpActionResult IsAlive()
 	    {
 			return  new OkResult(Request);
 	    }
