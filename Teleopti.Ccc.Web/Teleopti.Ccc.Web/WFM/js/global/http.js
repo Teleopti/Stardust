@@ -8,13 +8,6 @@
 				var connected = true;
 
 				function request(config) {
-					if (window.wfmLogger) {
-						// to be removed
-						var req = new XMLHttpRequest();
-						req.open('POST', '../api/Logging/LogError', true);
-						req.setRequestHeader("Content-type", "application/json");
-						req.send(JSON.stringify({Message:config.url}));
-					}
 					if (!connected) {
 						var q = $q.defer();
 						$timeout(function () {
