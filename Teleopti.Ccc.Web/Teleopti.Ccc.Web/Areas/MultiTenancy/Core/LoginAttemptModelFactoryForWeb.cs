@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Auditing;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 

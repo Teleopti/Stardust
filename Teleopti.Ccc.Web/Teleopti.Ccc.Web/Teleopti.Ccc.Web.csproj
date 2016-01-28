@@ -992,7 +992,6 @@
     <Compile Include="Core\ServiceBus\ServiceBusSender.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceTypesProvider.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceTypesProvider.cs" />
-    <Compile Include="Core\RequestContext\Initialize\WebRequestPrincipalContext.cs" />
     <Compile Include="Areas\MyTime\Core\TimeSpanModelBinder.cs" />
     <Compile Include="Areas\SSO\Models\ApplicationAuthenticationModel.cs" />
     <Compile Include="Core\Startup\CancelledTaskBugWorkaroundMessageHandler.cs" />
@@ -1086,8 +1085,6 @@
     <Compile Include="Areas\Start\StartAreaRegistration.cs" />
     <Compile Include="Areas\Start\Core\Authentication\DataProvider\BusinessUnitProvider.cs" />
     <Compile Include="Areas\Start\Core\Authentication\DataProvider\IBusinessUnitProvider.cs" />
-    <Compile Include="Areas\Start\Core\Authentication\DataProvider\ITokenIdentityProvider.cs" />
-    <Compile Include="Areas\Start\Core\Authentication\DataProvider\TokenIdentityProvider.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\ApplicationUserAuthenticateResult.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\Authenticator.cs" />
     <Compile Include="Core\FormsAuthenticationWrapper.cs" />

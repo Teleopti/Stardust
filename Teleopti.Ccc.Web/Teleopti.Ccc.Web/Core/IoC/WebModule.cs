@@ -92,8 +92,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterModule<ResourceHandlerModule>();
 
-			builder.RegisterType<WebRequestPrincipalContext>().As<ICurrentPrincipalContext>().SingleInstance();
-
 			builder.RegisterModule(new RuleSetModule(_configuration, false));
 			builder.RegisterModule(new AuthenticationCachedModule(_configuration));
 

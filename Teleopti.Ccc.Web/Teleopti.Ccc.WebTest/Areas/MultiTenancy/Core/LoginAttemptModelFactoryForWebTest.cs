@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;

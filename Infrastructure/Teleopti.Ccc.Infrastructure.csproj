@@ -142,6 +142,10 @@
       <HintPath>..\packages\MbCache.2.10\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
       <Private>True</Private>
@@ -240,14 +244,18 @@
     <Compile Include="Foundation\CouldNotCreateTransactionException.cs" />
     <Compile Include="ApplicationLayer\IJsonEventDeserializer.cs" />
     <Compile Include="ApplicationLayer\IJsonEventSerializer.cs" />
+    <Compile Include="Foundation\SelectivePrincipalContext.cs" />
     <Compile Include="Foundation\HttpRequestTrue.cs" />
     <Compile Include="Foundation\InitializeMessageBroker.cs" />
     <Compile Include="Foundation\ITogglesActive.cs" />
+    <Compile Include="Foundation\ITokenIdentityProvider.cs" />
     <Compile Include="Foundation\JsonExtensions.cs" />
     <Compile Include="Foundation\NewtonsoftJsonSerializer.cs" />
     <Compile Include="Foundation\ReportUrlConstructor.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalCacheableFactory.cs" />
     <Compile Include="Foundation\ThreadPrincipalContext.cs" />
+    <Compile Include="Foundation\TokenIdentityProvider.cs" />
+    <Compile Include="Foundation\WebRequestPrincipalContext.cs" />
     <Compile Include="Hangfire\ActivityChangesChecker.cs" />
     <Compile Include="Hangfire\HangfireClientStarter.cs" />
     <Compile Include="Hangfire\HangfireEventClient.cs" />

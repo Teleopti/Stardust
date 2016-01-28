@@ -9,8 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 	{
 		private readonly IPrincipalFactory _factory;
 
-		public ThreadPrincipalContext(
-			IPrincipalFactory factory)
+		public ThreadPrincipalContext(IPrincipalFactory factory)
 		{
 			_factory = factory;
 		}

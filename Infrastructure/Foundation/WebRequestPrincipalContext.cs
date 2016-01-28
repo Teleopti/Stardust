@@ -1,13 +1,10 @@
 using System.Security.Principal;
 using System.Threading;
-using Microsoft.IdentityModel.Claims;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Web;
-using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
+namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public class WebRequestPrincipalContext : ICurrentPrincipalContext
 	{
@@ -17,7 +14,8 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 
 		public WebRequestPrincipalContext(
 			ICurrentHttpContext httpContext,
-			IPrincipalFactory factory, ITokenIdentityProvider tokenIdentityProvider)
+			IPrincipalFactory factory, 
+			ITokenIdentityProvider tokenIdentityProvider)
 		{
 			_httpContext = httpContext;
 			_factory = factory;

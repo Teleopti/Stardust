@@ -4,7 +4,7 @@ using Microsoft.IdentityModel.Claims;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Web;
 
-namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
+namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public class TokenIdentityProvider : ITokenIdentityProvider
 	{

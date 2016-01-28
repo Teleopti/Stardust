@@ -23,21 +23,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<WindowsAppDomainPrincipalContext>()
-				.As<ICurrentPrincipalContext>()
-				.SingleInstance();
-			builder.RegisterType<TeleoptiPrincipalFactory>()
-				.As<IPrincipalFactory>()
-				.SingleInstance();
-			builder.RegisterType<LogOnOff>()
-				.As<ILogOnOff>()
-				.SingleInstance();
-			builder.RegisterType<RepositoryFactory>()
-				.As<IRepositoryFactory>()
-				.SingleInstance();
-			builder.RegisterType<AvailableBusinessUnitsProvider>()
-				.As<IAvailableBusinessUnitsProvider>()
-				.SingleInstance();
+			builder.RegisterType<WindowsAppDomainPrincipalContext>().SingleInstance();
+			builder.RegisterType<WebRequestPrincipalContext>().SingleInstance();
+			builder.RegisterType<ThreadPrincipalContext>().SingleInstance();
+			builder.RegisterType<SelectivePrincipalContext>().As<ICurrentPrincipalContext>().SingleInstance();
+
+			builder.RegisterType<TokenIdentityProvider>().As<ITokenIdentityProvider>().SingleInstance();
+			builder.RegisterType<TeleoptiPrincipalFactory>().As<IPrincipalFactory>().SingleInstance();
+			builder.RegisterType<LogOnOff>().As<ILogOnOff>().SingleInstance();
+			builder.RegisterType<RepositoryFactory>().As<IRepositoryFactory>().SingleInstance();
+			builder.RegisterType<AvailableBusinessUnitsProvider>().As<IAvailableBusinessUnitsProvider>().SingleInstance();
 
 			builder.Register<IPasswordPolicy>(c =>
 			{

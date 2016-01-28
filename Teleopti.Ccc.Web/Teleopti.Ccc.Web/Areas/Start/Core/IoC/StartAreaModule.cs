@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.SSO.Core;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
