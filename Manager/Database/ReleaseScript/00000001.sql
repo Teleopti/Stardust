@@ -24,12 +24,17 @@ GO
 
 CREATE TABLE [dbo].[WorkerNodes](
 	[Id] [uniqueidentifier] NOT NULL,
-	[Url] [nvarchar](max) NULL,
+	[Url] [nvarchar](450) NOT NULL,
  CONSTRAINT [PK_WorkerNodes] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 ))
 
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [UQ_WorkerNodes_Url] ON [dbo].[WorkerNodes]
+(
+	[Url] ASC
+)
 GO
 
 CREATE TABLE JobHistory(
