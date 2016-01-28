@@ -13,7 +13,7 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
-    [TestFixture]
+    [TestFixture] //this is a comment
     public class IntegrationTestsOneManagerAndManyNodes
     {
         private const int NumberOfNodesToStart = 2;
