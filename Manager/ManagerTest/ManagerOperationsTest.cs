@@ -301,7 +301,7 @@ namespace ManagerTest
             IHttpActionResult getResult = Target.JobHistory(jobId);
 
             var okNegotiatedGetResult = getResult as OkNegotiatedContentResult<JobHistory>;
-            var jobHistory = okNegotiatedGetResult.Content;
+            JobHistory jobHistory = okNegotiatedGetResult.Content;
             Assert.IsNotNull(jobHistory);
         }
 
