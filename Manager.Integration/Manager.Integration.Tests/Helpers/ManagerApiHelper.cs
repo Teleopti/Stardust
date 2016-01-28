@@ -41,7 +41,9 @@ namespace Manager.Integration.Test.Helpers
 
                     var sez = JsonConvert.SerializeObject(jobRequestModel);
 
-                    HttpResponseMessage response = await client.PostAsync(ManagerUriBuilder.GetStartJobUri(),
+                    var uri = ManagerUriBuilder.GetStartJobUri();
+
+                    HttpResponseMessage response = await client.PostAsync(uri,
                                                                           new StringContent(sez,
                                                                                             Encoding.UTF8,
                                                                                             MediaTypeConstants.ApplicationJson));
@@ -72,7 +74,9 @@ namespace Manager.Integration.Test.Helpers
                     {
                         DefineDefaultRequestHeaders(client);
 
-                        response = client.DeleteAsync(ManagerUriBuilder.GetCancelJobUri(guid));
+                        var uri = ManagerUriBuilder.GetCancelJobUri(guid);
+
+                        response = client.DeleteAsync(uri);
                     }
 
                     return response.Result;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using log4net;
 using Manager.Integration.Test.Constants;
@@ -15,7 +16,7 @@ namespace Manager.Integration.Test
     [TestFixture]
     public class IntegrationTestsOneManagerAndManyNodes
     {
-        private const int NumberOfNodesToStart = 10;
+        private const int NumberOfNodesToStart = 2;
 
         private static readonly ILog Logger = 
             LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndManyNodes));
@@ -38,6 +39,24 @@ namespace Manager.Integration.Test
         }
 
         private ManagerApiHelper ManagerApiHelper { get; set; }
+
+        [Test]
+        public async  void Test()
+        {
+
+            //using (var client = new HttpClient())
+            //{
+            //    client.DefaultRequestHeaders.Accept.Clear();
+            //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeConstants.ApplicationJson));
+
+
+            //    ManagerUriBuilder uriBuilder = new ManagerUriBuilder();
+
+            //    var uri =uriBuilder.GetCancelJobUri(Guid.NewGuid());
+
+            //    var response = await client.DeleteAsync(uri);
+            //}
+        }
 
         [Test]
         public void Create10RequestShouldReturnBothCancelAndDeleteStatuses()
@@ -143,7 +162,7 @@ namespace Manager.Integration.Test
 
             JobHelper.GiveNodesTimeToInitialize();
 
-            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(100);
+            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(10);
 
             List<Task> tasks = new List<Task>();
 

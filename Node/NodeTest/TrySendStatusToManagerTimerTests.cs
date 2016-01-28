@@ -44,7 +44,7 @@ namespace NodeTest
         }
 
         [Test]
-        public void Test()
+        public void SendJobDoneTest()
         {
             var jobToDo = new JobToDo
             {
