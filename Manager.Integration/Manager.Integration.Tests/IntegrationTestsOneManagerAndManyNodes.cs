@@ -39,10 +39,9 @@ namespace Manager.Integration.Test
         }
 
         private ManagerApiHelper ManagerApiHelper { get; set; }
-
-<<<<<<< HEAD
-        [Test]
-        public   void Test()
+        
+        [Test][Ignore]
+        public void Test()
         {
 
             //using (var client = new HttpClient())
@@ -58,10 +57,7 @@ namespace Manager.Integration.Test
             //}
         }
 
-        [Test]
-=======
         [Test][Ignore]
->>>>>>> e28edc6fdb3f49f670a99681e265ccbf0117177b
         public void Create10RequestShouldReturnBothCancelAndDeleteStatuses()
         {
             JobHelper.GiveNodesTimeToInitialize();
