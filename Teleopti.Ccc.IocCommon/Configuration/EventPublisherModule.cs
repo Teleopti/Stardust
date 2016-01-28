@@ -19,10 +19,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<AutofacResolve>().As<IResolve>().SingleInstance();
+			builder.RegisterType<ResolveEventHandlers>().SingleInstance();
 
 			builder.RegisterType<EventContextPopulator>().As<IEventContextPopulator>().SingleInstance();
 			builder.RegisterType<EventPopulatingPublisher>().As<IEventPopulatingPublisher>().SingleInstance();
-			builder.RegisterType<ResolveEventHandlers>().SingleInstance();
 
 			builder.RegisterType<HangfireEventPublisher>().SingleInstance();
 			builder.RegisterType<ServiceBusEventPublisher>().SingleInstance();
