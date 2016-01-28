@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
+using Stardust.Node.Constants;
 using Stardust.Node.Helpers;
 
 namespace NodeTest
@@ -38,6 +40,43 @@ namespace NodeTest
             Assert.IsNotNull(NodeUriBuilderToTest);
         }
 
+        [Test]
+        public void ShouldReturnCorrectUriWhenPathArgumentIsAssigned()
+        {
+            string path = NodeRouteConstants.IsAlive;
 
+            var uriBuilder = new UriBuilder(UriToTest)
+            {
+                Path = path
+            };
+
+            NodeUriBuilderToTest = new NodeUriBuilder(UriToTest);
+
+            var uriToTest = NodeUriBuilderToTest.CreateUri(path);
+
+            Assert.IsTrue(uriBuilder.Uri == uriToTest);
+        }
+
+        [Test]
+        public void ShouldReturnCorrectUriWhenTemplateAndGuidArgumentsAreAssigned()
+        {
+            var guid = Guid.NewGuid();
+
+            string path =
+                NodeRouteConstants.CancelJob.Replace(NodeRouteConstants.JobIdOptionalParameter,
+                                                     guid.ToString());
+
+            var uriBuilder = new UriBuilder(UriToTest)
+            {
+                Path = path
+            };
+
+            NodeUriBuilderToTest = new NodeUriBuilder(UriToTest);
+
+            var uriToTest = NodeUriBuilderToTest.CreateUri(NodeRouteConstants.CancelJob,
+                                                           guid);
+
+            Assert.IsTrue(uriBuilder.Uri == uriToTest);
+        }
     }
 }
