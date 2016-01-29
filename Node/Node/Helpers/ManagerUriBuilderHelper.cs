@@ -1,5 +1,6 @@
 ﻿using System;
 using Stardust.Node.Constants;
+using Stardust.Node.Extensions;
 
 namespace Stardust.Node.Helpers
 {
@@ -7,23 +8,15 @@ namespace Stardust.Node.Helpers
     {
         private UriBuilder UriBuilder { get; set; }
 
-        private Uri LocationUri { get; set; }
-
-
         public ManagerUriBuilderHelper(Uri locationUri) : this(locationUri.ToString())
         {
         }
 
-        public ManagerUriBuilderHelper(string locationUri)
+        public ManagerUriBuilderHelper(string location)
         {
-            LocationUri = new Uri(locationUri);
+            location.ThrowArgumentNullExceptionIfNullOrEmpty();
 
-            UriBuilder = new UriBuilder
-            {
-                Host = LocationUri.Host,
-                Port = LocationUri.Port,
-                Scheme = LocationUri.Scheme
-            };
+            UriBuilder = new UriBuilder(location);
         }
 
         public string GetHostName()

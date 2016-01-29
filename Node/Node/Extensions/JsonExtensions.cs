@@ -15,7 +15,8 @@ namespace Stardust.Node.Extensions
             return responseToJson<T>(request);
         }
 
-        public static T PostRequest<T>(this HttpWebRequest request, string json)
+        public static T PostRequest<T>(this HttpWebRequest request,
+                                       string json)
         {
             request.Method = "POST";
             request.ContentType = "application/json";

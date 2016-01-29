@@ -17,17 +17,20 @@ namespace NodeTest
     public class ProgressCallbackTests
     {
         public NodeController NodeController;
-        public PostHttpRequestFake PostHttpRequest;
-        public SendJobFaultedTimerFake FaultedTimer;
-        public SendJobCanceledTimerFake CanceledTimer;
-        public SendJobDoneTimerFake DoneTimer;
+
+        public PostHttpRequestFake PostHttpRequestFake;
+        public SendJobFaultedTimerFake SendJobFaultedTimerFake;
+        public SendJobCanceledTimerFake SendJobCanceledTimerFake;
+        public SendJobDoneTimerFake SendJobDoneTimerFake;
 
         [Test]
         public void OnCancelCanceledShouldBeCalled()
         {
             var jobParams = new TestJobParams("tjo",
                                               "flöjt");
+
             var ser = JsonConvert.SerializeObject(jobParams);
+
             var job = new JobToDo
             {
                 Id = Guid.NewGuid(),
@@ -35,17 +38,18 @@ namespace NodeTest
                 Serialized = ser,
                 Type = "NodeTest.JobHandlers.TestJobParams"
             };
-            CanceledTimer.JobToDo = job;
-            CanceledTimer.Interval = 100;
+
+            SendJobCanceledTimerFake.JobToDo = job;
+            SendJobCanceledTimerFake.Interval = 100;
+
             NodeController.Request = new HttpRequestMessage();
             NodeController.StartJob(job);
-
             NodeController.TryCancelJob(job.Id);
-            CanceledTimer.Wait.Wait();
-            DoneTimer.NumberOfTimeCalled.Should()
-                .Be.EqualTo(0);
-            CanceledTimer.NumberOfTimeCalled.Should()
-                .Be.GreaterThan(0);
+
+            SendJobCanceledTimerFake.Wait.Wait();
+
+            SendJobDoneTimerFake.NumberOfTimeCalled.Should().Be.EqualTo(0);
+            SendJobCanceledTimerFake.NumberOfTimeCalled.Should().Be.GreaterThan(0);
         }
 
         [Test]
@@ -60,13 +64,13 @@ namespace NodeTest
                 Serialized = ser,
                 Type = "NodeTest.JobHandlers.FailingJobParams"
             };
-            FaultedTimer.JobToDo = job;
-            FaultedTimer.Interval = 100;
+            SendJobFaultedTimerFake.JobToDo = job;
+            SendJobFaultedTimerFake.Interval = 100;
             NodeController.Request = new HttpRequestMessage();
             NodeController.StartJob(job);
 
-            FaultedTimer.Wait.Wait();
-            FaultedTimer.NumberOfTimeCalled.Should()
+            SendJobFaultedTimerFake.Wait.Wait();
+            SendJobFaultedTimerFake.NumberOfTimeCalled.Should()
                 .Be.GreaterThan(0);
         }
 
@@ -80,8 +84,8 @@ namespace NodeTest
                 Serialized = "rappakalja",
                 Type = "NodeTest.JobHandlers.TestJobParams"
             };
-            CanceledTimer.JobToDo = job;
-            CanceledTimer.Interval = 100;
+            SendJobCanceledTimerFake.JobToDo = job;
+            SendJobCanceledTimerFake.Interval = 100;
             NodeController.Request = new HttpRequestMessage();
             var result = NodeController.StartJob(job);
             result.Should()
@@ -95,8 +99,8 @@ namespace NodeTest
                                               "flöjt");
             var ser = JsonConvert.SerializeObject(jobParams);
             var job = new JobToDo {Id = Guid.NewGuid(), Name = "Janne", Serialized = ser, Type = "rappakalja"};
-            CanceledTimer.JobToDo = job;
-            CanceledTimer.Interval = 100;
+            SendJobCanceledTimerFake.JobToDo = job;
+            SendJobCanceledTimerFake.Interval = 100;
             NodeController.Request = new HttpRequestMessage();
             var result = NodeController.StartJob(job);
             result.Should()
@@ -119,7 +123,7 @@ namespace NodeTest
             NodeController.Request = new HttpRequestMessage();
             NodeController.StartJob(job);
 
-            PostHttpRequest.CalledUrl.Should()
+            PostHttpRequestFake.CalledUrl.Should()
                 .Not.Be.Empty();
         }
 

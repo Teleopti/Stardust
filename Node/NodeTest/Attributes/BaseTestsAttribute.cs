@@ -17,8 +17,8 @@ namespace NodeTest.Attributes
             _fixture = test.Fixture;
             _fixtureType = _fixture.GetType();
 
-            buildContainer();
-            injectMembers();
+            BuildContainer();
+            InjectMembers();
         }
 
         public void AfterTest(TestDetails test)
@@ -31,28 +31,38 @@ namespace NodeTest.Attributes
             get { return ActionTargets.Test; }
         }
 
-        private void injectMembers()
+        private void InjectMembers()
         {
-            injectMembers(GetType(), this);
-            injectMembers(_fixtureType, _fixture);
+            InjectMembers(GetType(),
+                          this);
+
+            InjectMembers(_fixtureType,
+                          _fixture);
         }
 
-        private void injectMembers(IReflect type, object instance)
+        private void InjectMembers(IReflect type,
+                                   object instance)
         {
             var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(x => x.CanWrite);
+
             foreach (var propertyInfo in properties)
             {
-                propertyInfo.SetValue(instance, _container.Resolve(propertyInfo.PropertyType), null);
+                propertyInfo.SetValue(instance,
+                                      _container.Resolve(propertyInfo.PropertyType),
+                                      null);
             }
+
             var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
+
             foreach (var fieldsInfo in fields)
             {
-                fieldsInfo.SetValue(instance, _container.Resolve(fieldsInfo.FieldType));
+                fieldsInfo.SetValue(instance,
+                                    _container.Resolve(fieldsInfo.FieldType));
             }
         }
 
-        private void buildContainer()
+        private void BuildContainer()
         {
             var builder = new ContainerBuilder();
             SetUp(builder);

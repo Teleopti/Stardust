@@ -12,29 +12,17 @@ namespace Stardust.Node.Timers
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (TrySendStatusToManagerTimer));
 
-        public TrySendStatusToManagerTimer(JobToDo jobToDo,
-                                           INodeConfiguration nodeConfiguration,
-                                           Uri callbackUri,
-                                           ElapsedEventHandler overrideElapsedEventHandler = null,
+        public TrySendStatusToManagerTimer(INodeConfiguration nodeConfiguration,
+                                           Uri callbackTemplateUri,
                                            double interval = 10000) : base(interval)
         {
-            JobToDo = jobToDo;
-
             NodeConfiguration = nodeConfiguration;
 
             WhoAmI = NodeConfiguration.CreateWhoIAm(Environment.MachineName);
 
-            CallbackUri = callbackUri;
-            OverrideElapsedEventHandler = overrideElapsedEventHandler;
+            CallbackTemplateUri = callbackTemplateUri;
 
-            if (overrideElapsedEventHandler != null)
-            {
-                Elapsed += overrideElapsedEventHandler;
-            }
-            else
-            {
-                Elapsed += OnTimedEvent;
-            }
+            Elapsed += OnTimedEvent;
 
             AutoReset = true;
         }
@@ -42,14 +30,14 @@ namespace Stardust.Node.Timers
         public string WhoAmI { get; private set; }
 
         public JobToDo JobToDo { get; set; }
-        public INodeConfiguration NodeConfiguration { get; private set; }
-        public Uri CallbackUri { get; set; }
 
-        private ElapsedEventHandler OverrideElapsedEventHandler { get; set; }
+        public INodeConfiguration NodeConfiguration { get; private set; }
+
+        public Uri CallbackTemplateUri { get; set; }
 
         public event EventHandler TrySendStatusSucceded;
 
-        public void TriggerTrySendStatusSucceded()
+        public void InvokeTriggerTrySendStatusSucceded()
         {
             if (TrySendStatusSucceded != null)
             {
@@ -63,15 +51,15 @@ namespace Stardust.Node.Timers
             try
             {
                 var httpResponseMessage =
-                    await jobToDo.PostAsync(CallbackUri);
+                    await jobToDo.PostAsync(CallbackTemplateUri);
 
                 return httpResponseMessage;
-
             }
 
             catch (Exception exp)
             {
-                Logger.Error("Error in TrySendStatus.",exp);
+                Logger.Error("Error in TrySendStatus.",
+                             exp);
                 throw;
             }
         }
@@ -79,6 +67,8 @@ namespace Stardust.Node.Timers
         private async void OnTimedEvent(object sender,
                                         ElapsedEventArgs e)
         {
+            Stop();
+
             try
             {
                 if (JobToDo != null)
@@ -93,10 +83,10 @@ namespace Stardust.Node.Timers
                     {
                         if (Logger.IsDebugEnabled)
                         {
-                            Logger.Debug(WhoAmI + ": Try send status to manager succeded. Manager Uri =  " + CallbackUri);
+                            Logger.Debug(WhoAmI + ": Try send status to manager succeded. Manager Uri =  " + CallbackTemplateUri);
                         }
 
-                        TriggerTrySendStatusSucceded();
+                        InvokeTriggerTrySendStatusSucceded();
                     }
                     else
                     {
@@ -116,6 +106,10 @@ namespace Stardust.Node.Timers
                 }
             }
 
+            finally
+            {
+                Stop();
+            }
         }
     }
 }

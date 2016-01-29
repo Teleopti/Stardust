@@ -7,9 +7,9 @@ namespace NodeTest.Fakes.InvokeHandlers
     public class NodeConfigurationFake : INodeConfiguration
     {
         public NodeConfigurationFake(Uri baseAddress,
-            Uri managerLocation,
-            Assembly handlerAssembly,
-            string nodeName)
+                                     Uri managerLocation,
+                                     Assembly handlerAssembly,
+                                     string nodeName)
         {
             if (baseAddress == null)
             {

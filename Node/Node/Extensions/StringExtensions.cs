@@ -12,6 +12,14 @@ namespace Stardust.Node.Extensions
             }
         }
 
+        public static void ThrowArgumentNullExceptionIfNullOrEmpty(this string stringValue)
+        {
+            if (stringValue.IsNullOrEmpty())
+            {
+                throw new ArgumentNullException();
+            }
+        }
+
         public static bool IsNullOrEmpty(this string stringValue)
         {
             return string.IsNullOrEmpty(stringValue);

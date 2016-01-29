@@ -39,7 +39,7 @@ namespace NodeTest
             var parameters = new TestJobParams("hejhopp",
                                                "i lingonskogen");
             var ser = JsonConvert.SerializeObject(parameters);
-            _JobToDo = new JobToDo
+            _jobToDo = new JobToDo
             {
                 Id = Guid.NewGuid(),
                 Name = "JobToDo Name",
@@ -51,13 +51,13 @@ namespace NodeTest
         private NodeConfigurationFake _nodeConfigurationFake;
         private IWorkerWrapper _workerWrapper;
         private NodeController _nodeController;
-        private JobToDo _JobToDo;
+        private JobToDo _jobToDo;
 
 
         [Test]
         public void CancelJobShouldReturnNotFoundWhenCancellingJobWhenIdle()
         {
-            var actionResultCancel = _nodeController.TryCancelJob(_JobToDo.Id);
+            var actionResultCancel = _nodeController.TryCancelJob(_jobToDo.Id);
             Assert.IsInstanceOf(typeof (NotFoundResult),
                                 actionResultCancel);
         }
@@ -72,7 +72,7 @@ namespace NodeTest
                 Type = "NodeTest.JobHandlers.TestJobParams"
             };
 
-            _nodeController.StartJob(_JobToDo);
+            _nodeController.StartJob(_jobToDo);
 
             var actionResult = _nodeController.TryCancelJob(wrongJobToDo.Id);
             Assert.IsInstanceOf(typeof (NotFoundResult),
@@ -82,9 +82,9 @@ namespace NodeTest
         [Test]
         public void CancelJobShouldReturnOkWhenSuccessful()
         {
-            _nodeController.StartJob(_JobToDo);
+            _nodeController.StartJob(_jobToDo);
 
-            var actionResult = _nodeController.TryCancelJob(_JobToDo.Id);
+            var actionResult = _nodeController.TryCancelJob(_jobToDo.Id);
             Assert.IsInstanceOf(typeof (OkResult),
                                 actionResult);
         }
@@ -112,7 +112,7 @@ namespace NodeTest
 
             var JobToDo2 = new JobToDo {Id = Guid.NewGuid(), Name = "Another name", Serialized = ser};
 
-            _nodeController.StartJob(_JobToDo);
+            _nodeController.StartJob(_jobToDo);
 
             var actionResult = _nodeController.StartJob(JobToDo2);
             Assert.IsInstanceOf(typeof (ConflictResult),
@@ -122,7 +122,7 @@ namespace NodeTest
         [Test]
         public void StartJobShouldReturnOkIfNotRunningJobAlready()
         {
-            var actionResult = _nodeController.StartJob(_JobToDo);
+            var actionResult = _nodeController.StartJob(_jobToDo);
             Assert.IsInstanceOf(typeof (OkNegotiatedContentResult<string>),
                                 actionResult);
         }

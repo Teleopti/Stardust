@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using log4net;
 using Manager.Integration.Test.Constants;
@@ -18,7 +15,9 @@ namespace Manager.Integration.Test
     {
         private const int NumberOfNodesToStart = 1;
 
-        private static readonly ILog Logger = 
+        private readonly bool _startUpManagerAndNodeManually = false;
+
+        private static readonly ILog Logger =
             LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndManyNodes));
 
         private Process StartManagerIntegrationConsoleHostProcess { get; set; }
@@ -26,34 +25,20 @@ namespace Manager.Integration.Test
         [SetUp]
         public void SetUp()
         {
-            DatabaseHelper.TryClearDatabase();
-
             ManagerApiHelper = new ManagerApiHelper();
 
-            ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
+            if (!_startUpManagerAndNodeManually)
+            {
+                DatabaseHelper.TryClearDatabase();
 
-            StartManagerIntegrationConsoleHostProcess =
-                ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
+                ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
 
+                StartManagerIntegrationConsoleHostProcess =
+                    ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
+            }
         }
 
         private ManagerApiHelper ManagerApiHelper { get; set; }
-
-        [Test][Ignore]
-        public async  void Test()
-        {
-            using (var client = new HttpClient())
-            {
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeConstants.ApplicationJson));
-
-                ManagerUriBuilder uriBuilder = new ManagerUriBuilder();
-
-                var uri = uriBuilder.GetCancelJobUri(Guid.NewGuid());
-
-                var response = await client.DeleteAsync(uri);
-            }
-        }
 
         [Test]
         [Ignore]
@@ -105,7 +90,8 @@ namespace Manager.Integration.Test
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.Keys.Count == numberOfStatuses);
         }
 
-        [Test][Ignore]
+        [Test]
+        [Ignore]
         public void FailJobTest()
         {
             string status = string.Empty;
@@ -141,7 +127,8 @@ namespace Manager.Integration.Test
             ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
         }
 
-        [Test] [Ignore]
+        [Test]
+        [Ignore]
         public void CancelWrongJob()
         {
             //JobHelper.GiveNodesTimeToInitialize(5);
@@ -153,7 +140,8 @@ namespace Manager.Integration.Test
             //task.Wait();
         }
 
-        [Test][Ignore]
+        [Test]
+        [Ignore]
         public void ShouldBeAbleToCreate10SuccessfullJobRequest()
         {
             string status = string.Empty;

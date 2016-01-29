@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
+using log4net;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
 
@@ -9,25 +10,29 @@ namespace NodeTest.Fakes.Timers
 {
     public class SendJobDoneTimerFake : TrySendStatusToManagerTimer
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(SendJobDoneTimerFake));
+
+        public ManualResetEventSlim Wait = new ManualResetEventSlim();
+
         public int NumberOfTimeCalled;
 
-        public SendJobDoneTimerFake(JobToDo jobToDo = null,
-            INodeConfiguration nodeConfiguration = null,
-            Uri callbackUri = null,
-            ElapsedEventHandler overrideElapsedEventHandler = null,
-            double interval = 10000) : base(jobToDo,
-                nodeConfiguration,
-                callbackUri,
-                overrideElapsedEventHandler,
-                interval)
+        public SendJobDoneTimerFake(INodeConfiguration nodeConfiguration = null,
+                                    Uri callbackTemplateUri = null,
+                                    double interval = 10000) : base(nodeConfiguration,
+                                                                    callbackTemplateUri,
+                                                                    interval)
         {
         }
 
-        public override async Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo)
+        public override Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo)
         {
+            Logger.Info("Send job done timer fake.");
+
             NumberOfTimeCalled++;
 
-            return await base.TrySendStatus(jobToDo);
+            Wait.Set();
+
+            return null;
         }
     }
 }

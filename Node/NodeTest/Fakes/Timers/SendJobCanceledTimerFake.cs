@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
+using log4net;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
 
@@ -10,30 +10,29 @@ namespace NodeTest.Fakes.Timers
 {
     public class SendJobCanceledTimerFake : TrySendStatusToManagerTimer
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(SendJobCanceledTimerFake));
+
         public int NumberOfTimeCalled;
+
         public ManualResetEventSlim Wait = new ManualResetEventSlim();
 
-        public SendJobCanceledTimerFake(JobToDo jobToDo = null,
-            INodeConfiguration nodeConfiguration = null,
-            Uri callbackUri = null,
-            ElapsedEventHandler overrideElapsedEventHandler = null,
-            double interval = 10000) : base(jobToDo,
-                nodeConfiguration,
-                callbackUri,
-                overrideElapsedEventHandler,
-                interval)
+        public SendJobCanceledTimerFake(INodeConfiguration nodeConfiguration = null,
+                                        Uri callbackTemplateUri = null,
+                                        double interval = 10000) : base(nodeConfiguration,
+                                                                        callbackTemplateUri,
+                                                                        interval)
         {
         }
 
-        public override async Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo)
+        public override Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo)
         {
-            if (!Wait.IsSet)
-            {
-                Wait.Set();
-            }
+            Logger.Info("Send job canceled timer fake.");
+
+            Wait.Set();
+
             NumberOfTimeCalled++;
 
-            return await base.TrySendStatus(jobToDo);
+            return null;
         }
     }
 }

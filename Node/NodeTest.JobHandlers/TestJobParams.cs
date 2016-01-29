@@ -2,7 +2,8 @@
 {
     public class TestJobParams
     {
-        public TestJobParams(string dummy, string name)
+        public TestJobParams(string dummy,
+                             string name)
         {
             Name = name;
             Dummy = dummy;

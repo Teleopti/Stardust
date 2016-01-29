@@ -13,8 +13,8 @@ namespace Stardust.Node.Timers
         private static readonly ILog Logger = LogManager.GetLogger(typeof (PingToManagerTimer));
 
         public PingToManagerTimer(INodeConfiguration nodeConfiguration,
-            Uri callbackUri,
-            double interval = 10000) : base(interval)
+                                  Uri callbackUri,
+                                  double interval = 10000) : base(interval)
         {
             nodeConfiguration.ThrowArgumentNullException();
             callbackUri.ThrowArgumentExceptionWhenNull();
@@ -44,7 +44,7 @@ namespace Stardust.Node.Timers
         }
 
         private async void OnTimedEvent(object sender,
-            ElapsedEventArgs e)
+                                        ElapsedEventArgs e)
         {
             try
             {
@@ -70,7 +70,8 @@ namespace Stardust.Node.Timers
             {
                 if (Logger.IsErrorEnabled)
                 {
-                    Logger.Error(WhoAmI + ": Heartbeat failed. Is the manager up and running?", exp);
+                    Logger.Error(WhoAmI + ": Heartbeat failed. Is the manager up and running?",
+                                 exp);
                 }
             }
         }

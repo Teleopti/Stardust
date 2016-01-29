@@ -25,7 +25,7 @@ namespace NodeTest.JobHandlers
 
             var jobProgress = new TestJobProgress
             {
-                Text = WhoAmI + ": This job will soon throw exeception." ,
+                Text = WhoAmI + ": This job will soon throw exeception.",
                 ConsoleColor = ConsoleColor.DarkRed
             };
 

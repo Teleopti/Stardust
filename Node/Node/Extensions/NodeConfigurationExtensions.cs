@@ -61,7 +61,7 @@ namespace Stardust.Node.Extensions
             return nodeConfigurationUriBuilder.ManagerUriBuilder.GetHeartbeatTemplateUri();
         }
 
-        public static Uri GetManagerJobHasBeenCanceledUri(this INodeConfiguration nodeConfiguration)
+        public static Uri GetManagerJobHasBeenCanceledTemplateUri(this INodeConfiguration nodeConfiguration)
         {
             nodeConfiguration.ThrowArgumentNullException();
 
@@ -80,7 +80,7 @@ namespace Stardust.Node.Extensions
             return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobHasBeenCanceledUri(guid);
         }
 
-        public static Uri GetManagerJobHasFailedUri(this INodeConfiguration nodeConfiguration)
+        public static Uri GetManagerJobHasFaileTemplatedUri(this INodeConfiguration nodeConfiguration)
         {
             nodeConfiguration.ThrowArgumentNullException();
 
@@ -89,7 +89,7 @@ namespace Stardust.Node.Extensions
             return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobHasFailedTemplateUri();
         }
 
-        public static Uri GetManagerJobDoneUri(this INodeConfiguration nodeConfiguration)
+        public static Uri GetManagerJobDoneTemplateUri(this INodeConfiguration nodeConfiguration)
         {
             nodeConfiguration.ThrowArgumentNullException();
 

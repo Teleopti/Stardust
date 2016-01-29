@@ -8,7 +8,7 @@ namespace NodeTest.JobHandlers
     public class TestJobWorker : IHandle<TestJobParams>
 
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(TestJobWorker));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (TestJobWorker));
 
         public TestJobWorker()
         {

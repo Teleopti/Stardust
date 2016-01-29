@@ -16,23 +16,28 @@ namespace NodeTest.Attributes
         protected override void SetUp(ContainerBuilder builder)
         {
             var nodeConfiguration = new NodeConfiguration(new Uri(ConfigurationManager.AppSettings["BaseAddress"]),
-                new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
-                Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
-                ConfigurationManager.AppSettings["NodeName"]);
+                                                          new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
+                                                          Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
+                                                          ConfigurationManager.AppSettings["NodeName"]);
 
             builder.RegisterAssemblyTypes(nodeConfiguration.HandlerAssembly)
                 .Where(IsHandler)
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
             builder.RegisterType<InvokeHandler>();
+
             builder.RegisterType<SendJobFaultedTimerFake>()
                 .SingleInstance();
+
             builder.RegisterType<SendJobCanceledTimerFake>()
                 .SingleInstance();
+
             builder.RegisterType<SendJobDoneTimerFake>()
                 .SingleInstance();
 
             builder.RegisterType<NodeController>();
+
             builder.RegisterType<PostHttpRequestFake>()
                 .SingleInstance();
 
@@ -40,13 +45,13 @@ namespace NodeTest.Attributes
 
             // Register IWorkerWrapper.
             builder.Register<IWorkerWrapper>(c => new WorkerWrapper(c.Resolve<InvokeHandler>(),
-                nodeConfiguration,
-                new NodeStartupNotificationToManagerFake(),
-                new PingToManagerFake(),
-                c.Resolve<SendJobDoneTimerFake>(),
-                c.Resolve<SendJobCanceledTimerFake>(),
-                c.Resolve<SendJobFaultedTimerFake>(),
-                c.Resolve<PostHttpRequestFake>()))
+                                                                    nodeConfiguration,
+                                                                    new NodeStartupNotificationToManagerFake(),
+                                                                    new PingToManagerFake(),
+                                                                    c.Resolve<SendJobDoneTimerFake>(),
+                                                                    c.Resolve<SendJobCanceledTimerFake>(),
+                                                                    c.Resolve<SendJobFaultedTimerFake>(),
+                                                                    c.Resolve<PostHttpRequestFake>()))
                 .SingleInstance();
         }
 
@@ -54,8 +59,8 @@ namespace NodeTest.Attributes
         {
             return arg.GetInterfaces()
                 .Any(x =>
-                    x.IsGenericType &&
-                    x.GetGenericTypeDefinition() == typeof (IHandle<>));
+                         x.IsGenericType &&
+                         x.GetGenericTypeDefinition() == typeof (IHandle<>));
         }
     }
 }
