@@ -5,7 +5,7 @@
 	<div class="con-flex">
 		<div class="navbar-left">
 			<span ng-controller="BusinessUnitsCtrl">
-			<span >
+			<span ng-if="show">
 				<span class="ui-select">
 					<i class="bu-caret mdi mdi-menu-down"></i>
 					<select name="business-unit-select" id="business-unit-select" class="bu-change" ng-change="changeBusinessUnit(data.selectedBu)" ng-options="bu.Name for bu in data.businessUnits" ng-model="data.selectedBu" ></select>
