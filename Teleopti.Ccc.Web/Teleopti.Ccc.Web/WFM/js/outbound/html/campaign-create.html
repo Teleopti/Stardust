@@ -5,12 +5,6 @@
 			<span translate>CreateCampaign</span>
 		</h1>
 	</div>
-	<div class="fab-wrapper">
-		<button class="wfm-fab  material-depth-1" ng-class="{'shrink-in':animateIn === 'trigger1'}" ng-click="backToList()">
-			<i class="mdi mdi-close"></i>
-			<md-tooltip>{{"Cancel" | translate}}</md-tooltip>
-		</button>
-	</div>
 </div>
 
 <div class="panel material-depth-1">
@@ -132,7 +126,8 @@
 			</div>
 		</div>
 		<div class="con-footer">
-			<button type="submit" class="wfm-btn wfm-btn-invis-primary" ng-click="addCampaign()" ng-class1="{'wfm-btn-primary-disabled': !isInputValid(), 'wfm-btn-primary':isInputValid()}" ng-disabled1="isCreating"><span translate>Save</span></button>
+			<button class="wfm-btn wfm-btn-invis-primary" ng-click="backToList()" ng-disabled="isCreating"><span translate>Cancel</span></button>
+			<button type="submit" class="wfm-btn wfm-btn-invis-primary" ng-click="addCampaign()" ng-class="{'wfm-btn-invis-disabled': !isInputValid(), 'wfm-btn-invis-primary':isInputValid()}" ng-disabled="isCreating"><span translate>Save</span></button>
 		</div>
 
 	</form>

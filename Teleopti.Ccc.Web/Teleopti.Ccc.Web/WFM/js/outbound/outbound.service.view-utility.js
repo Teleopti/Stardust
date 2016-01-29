@@ -22,6 +22,7 @@
         	scope.isFormValid = isFormValid;
         	scope.isWorkingHoursValid = isWorkingHoursValid;
         	scope.isCampaignDurationValid = isCampaignDurationValid;
+	        scope.isInputValid = isInputValid;
             scope.flashErrorIcons = flashErrorIcons;
 	        var campaignDurationError = [];
 
@@ -56,6 +57,10 @@
                     }
                 }
                 return false;
+            }
+
+            function isInputValid() {
+            	return scope.isFormValid() && scope.isWorkingHoursValid() && scope.isCampaignDurationValid();
             }
 
             function flashErrorIcons() {
