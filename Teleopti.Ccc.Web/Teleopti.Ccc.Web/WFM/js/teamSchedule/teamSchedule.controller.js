@@ -189,7 +189,7 @@
 				PersonIdFrom: selectedPersonIds[0],
 				PersonIdTo: selectedPersonIds[1],
 				ScheduleDate: vm.scheduleDateMoment().format("YYYY-MM-DD"),
-				TrackedCommandInfo: { TrackId: guidgenerator.newGuid() } // TODO: Generate unique track id 
+				TrackedCommandInfo: { TrackId: guidgenerator.newGuid() }
 			}).$promise.then(function (result) {
 				vm.afterActionCallback(result, "FinishedSwapShifts", "FailedToSwapShifts");
 			});
@@ -397,6 +397,7 @@
 		function scheduleChangedEventHandler(messages) {
 			var personIds = messages.filter(isMessageNeedToBeHandled())
 									.map(function (message) { return message.DomainReferenceId; });
+			personIds = removeDuplicatePersonId(personIds);
 			personIds.length !== 0 && vm.updateSchedules(personIds);
 		}
 
@@ -413,6 +414,14 @@
 
 				return isMessageInsidePeopleList && isScheduleDateInMessageRange;
 			}
+		}
+
+		function removeDuplicatePersonId(personIds) {
+			var result = [];
+			personIds.forEach(function(personId) {
+				if (result.indexOf(personId) === -1) result.push(personId);
+			});
+			return result;
 		}
 
 		function createDocumentListeners() {

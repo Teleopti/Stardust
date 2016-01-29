@@ -78,6 +78,7 @@ namespace Teleopti.Interfaces.MessageBroker
 		public string StartDate { get; set; }
 		public int DomainUpdateType { get; set; }
 		public string BinaryData { get; set; }
+		public string TrackId { get; set; }
 
 
 		public Guid DomainIdAsGuid()

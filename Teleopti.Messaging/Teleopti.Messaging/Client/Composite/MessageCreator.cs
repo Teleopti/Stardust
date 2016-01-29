@@ -31,7 +31,8 @@ namespace Teleopti.Messaging.Client.Composite
 			Guid domainObjectId, 
 			Type domainObjectType,
 			DomainUpdateType updateType, 
-			byte[] domainObject)
+			byte[] domainObject,
+			Guid trackId)
 		{
 			if (_messageFilterManager.HasType(domainObjectType))
 			{
@@ -42,6 +43,7 @@ namespace Teleopti.Messaging.Client.Composite
 				var domainQualifiedTypeString = _messageFilterManager.LookupTypeToSend(domainObjectType);
 				var domainReferenceIdString = Subscription.IdToString(referenceObjectId);
 				var domainObjectString = (domainObject != null) ? Convert.ToBase64String(domainObject) : null;
+				var trackIdString = Subscription.IdToString(trackId);
 				yield return new Message
 				{
 					StartDate = eventStartDateString,
@@ -54,12 +56,13 @@ namespace Teleopti.Messaging.Client.Composite
 					DomainUpdateType = (int)updateType,
 					DataSource = dataSource,
 					BusinessUnitId = businessUnitId,
-					BinaryData = domainObjectString
+					BinaryData = domainObjectString,
+					TrackId = trackIdString
 				};
 			}
 		}
 
-		public void Send(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
+		public void Send(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject, Guid? trackId = null)
 		{
 			var notificationList = createNotifications(
 				dataSource,
@@ -71,7 +74,8 @@ namespace Teleopti.Messaging.Client.Composite
 				domainObjectId,
 				domainObjectType,
 				updateType,
-				domainObject);
+				domainObject, 
+				trackId.GetValueOrDefault(Guid.Empty));
 			_messageSender.SendMultiple(notificationList);
 		}
 
@@ -96,7 +100,7 @@ namespace Teleopti.Messaging.Client.Composite
 					eventMessage.DomainObjectId,
 					eventMessage.DomainObjectTypeCache,
 					eventMessage.DomainUpdateType,
-					eventMessage.DomainObject));
+					eventMessage.DomainObject, Guid.Empty));
 
 				if (notificationList.Count > MessagesPerBatch)
 				{

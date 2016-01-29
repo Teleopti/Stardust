@@ -16,7 +16,8 @@ namespace Teleopti.Interfaces.MessageBroker.Client.Composite
 			Guid domainObjectId,
 			Type domainObjectType,
 			DomainUpdateType updateType,
-			byte[] domainObject);
+			byte[] domainObject,
+			Guid? trackId = null);
 
 		void Send(
 			string dataSource,

@@ -23,6 +23,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var _settings;
 	var userTimeZoneMinuteOffset = 0;
+	var _notificationTrackIdList = [];
 
 	function resize() {
 		var innerWidth = document.documentElement.clientWidth || document.body.clientWidth || window.innerWidth;
@@ -211,6 +212,15 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		}
 		return false;
 	}
+
+	function _validateNotificationSource(notification) {
+		if (notification.TrackId != null && _notificationTrackIdList.indexOf(notification.TrackId) > -1) {
+			return false;
+		}
+
+		_notificationTrackIdList.push(notification.TrackId);
+		return true;
+	}
     
 	function _makeSureWeAreLoggedOn() {
 		
@@ -242,7 +252,8 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			_listenForEvents(eventListeners);
 		},
 		NotifyWhenScheduleChangedListener: function (notification) {
-			if (_validSchedulePeriod(notification)) {
+
+			if (_validSchedulePeriod(notification) && _validateNotificationSource(notification)) {
 				var changedDateRange;
 				if (notification.StartDate == notification.EndDate)
 				{
