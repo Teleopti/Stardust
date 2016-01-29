@@ -11,7 +11,11 @@ namespace Manager.IntegrationTest.Console.Host
     public static class Program
     {
         private const string CopiedManagerConfigName = "Manager.config";
-        private static string _buildMode;
+#if (DEBUG)
+        private static string _buildMode = "Debug";
+#else
+        private static string _buildMode = "Release";
+#endif
 
         public static FileInfo ManagerConfigurationFile { get; set; }
 
@@ -33,12 +37,6 @@ namespace Manager.IntegrationTest.Console.Host
 
         private static void Main(string[] args)
         {
-        #if (DEBUG)
-           _buildMode = "Debug";
-        #else
-            _buildMode = "Release";
-        #endif
-
             var directoryManagerConfigurationFileFullPath =
                 new DirectoryInfo(AddEndingSlash(Settings.Default.ManagerConfigurationFileFullPath + _buildMode));
 

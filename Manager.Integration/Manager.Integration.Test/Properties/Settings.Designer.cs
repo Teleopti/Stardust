@@ -26,9 +26,9 @@ namespace Manager.Integration.Test.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:9000/")]
-        public string LocationUri {
+        public string ManagerLocationUri {
             get {
-                return ((string)(this["LocationUri"]));
+                return ((string)(this["ManagerLocationUri"]));
             }
         }
         
