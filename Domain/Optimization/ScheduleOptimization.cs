@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
@@ -55,7 +54,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_optimizerHelperHelper = optimizerHelperHelper;
 		}
 
-		[LogTime]
 		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
 		{
 			var planningPeriod = SetupAndOptimize(planningPeriodId);

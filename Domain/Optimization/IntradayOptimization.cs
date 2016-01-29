@@ -74,7 +74,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_intradayOptimizer2Creator = intradayOptimizer2Creator;
 		}
 
-		[LogTime]
 		public virtual OptimizationResultModel Optimize(Guid planningPeriodId)
 		{
 			var planningPeriod = SetupAndOptimize(planningPeriodId);

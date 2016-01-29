@@ -56,7 +56,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_currentUnitOfWork = currentUnitOfWork;
 		}
 
-		[LogTime]
 		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period)
 		{
 			int daysScheduled;
