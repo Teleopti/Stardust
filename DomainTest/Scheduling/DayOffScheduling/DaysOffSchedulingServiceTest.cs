@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_matrixList = new List<IScheduleMatrixPro>();
 			_schedulingOptions = new SchedulingOptions();
-			_schedulingOptions.TagToUseOnScheduling = new NullScheduleTag();
 			_scheduleTagSetter = new FakeScheduleTagSetter();
 		}
 
