@@ -4,9 +4,9 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IIntradayDecisionMaker _decisionMaker;
 		private IScheduleService _scheduleService;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
-		private ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private ISchedulerStateHolder _schedulingResultStateHolder;
 
 		private IScheduleMatrixOriginalStateContainer _matrixContainer1;
 		private IScheduleMatrixOriginalStateContainer _matrixContainer2;
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_workShiftContainerList = new List<IScheduleMatrixOriginalStateContainer> { _workShiftContainer1, _workShiftContainer2 };
 			_decisionMaker = _mocks.StrictMock<IIntradayDecisionMaker>();
 			_scheduleService = _mocks.StrictMock<IScheduleService>();
-			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
+			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
 
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_skillStaffPeriodToSkillIntervalDataMapper = _mocks.StrictMock<ISkillStaffPeriodToSkillIntervalDataMapper>();
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			_target = new IntradayOptimizer2Creator(_decisionMaker,
 			                                        _scheduleService,
-			                                        _schedulingResultStateHolder,
+			                                        () => _schedulingResultStateHolder,
 													_skillStaffPeriodToSkillIntervalDataMapper,
 												   _skillIntervalDataDivider,
 												   _skillIntervalDataAggregator,

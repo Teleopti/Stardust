@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IIntradayOptimizer2Creator creator = new IntradayOptimizer2Creator(
 				decisionMaker,
 				scheduleService,
-				_stateHolder(),
+				_schedulerStateHolder,
 				_container.Resolve<ISkillStaffPeriodToSkillIntervalDataMapper>(),
 				_container.Resolve<ISkillIntervalDataDivider>(),
 				_container.Resolve<ISkillIntervalDataAggregator>(),

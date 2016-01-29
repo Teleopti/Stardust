@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -13,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly IIntradayDecisionMaker _decisionMaker;
 		private readonly IScheduleService _scheduleService;
-		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
 		private readonly ISkillIntervalDataDivider _skillIntervalDataDivider;
 		private readonly ISkillIntervalDataAggregator _skillIntervalDataAggregator;
@@ -24,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public IntradayOptimizer2Creator(
 			IIntradayDecisionMaker decisionMaker,
 			IScheduleService scheduleService,
-			ISchedulingResultStateHolder schedulingResultStateHolder,
+			Func<ISchedulerStateHolder> schedulerStateHolder,
 			ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
 			ISkillIntervalDataDivider skillIntervalDataDivider,
 			ISkillIntervalDataAggregator skillIntervalDataAggregator,
@@ -34,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			_decisionMaker = decisionMaker;
 			_scheduleService = scheduleService;
-			_schedulingResultStateHolder = schedulingResultStateHolder;
+			_schedulerStateHolder = schedulerStateHolder;
 			_skillStaffPeriodToSkillIntervalDataMapper = skillStaffPeriodToSkillIntervalDataMapper;
 			_skillIntervalDataDivider = skillIntervalDataDivider;
 			_skillIntervalDataAggregator = skillIntervalDataAggregator;
@@ -72,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				                                                                                                           _skillIntervalDataAggregator);
 
 				IDeleteSchedulePartService deleteSchedulePartService =
-					new DeleteSchedulePartService(()=>_schedulingResultStateHolder);
+					new DeleteSchedulePartService(()=> _schedulerStateHolder().SchedulingResultState);
 				
 				IScheduleMatrixOriginalStateContainer workShiftStateContainer = workShiftContainerList[index];
 

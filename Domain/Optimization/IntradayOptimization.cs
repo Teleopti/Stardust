@@ -8,9 +8,7 @@ using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -21,17 +19,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class IntradayOptimization
 	{
 		private readonly IDailyValueByAllSkillsExtractor _dailyValueByAllSkillsExtractor;
-		private readonly IIntradayDecisionMaker _intradayDecisionMaker;
-		private readonly IScheduleService _scheduleService;
 		private readonly OptimizationPreferencesFactory _optimizationPreferencesFactory;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
-		private readonly ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
-		private readonly ISkillIntervalDataDivider _skillIntervalDataDivider;
-		private readonly ISkillIntervalDataAggregator _skillIntervalDataAggregator;
-		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private readonly IMinWeekWorkTimeRule _minWeekWorkTimeRule;
-		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 		private readonly IFixedStaffLoader _fixedStaffLoader;
 		private readonly SetupStateHolderForWebScheduling _setupStateHolderForWebScheduling;
@@ -44,18 +34,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IScheduleDictionaryPersister _persister;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
+		private readonly IIntradayOptimizer2Creator _intradayOptimizer2Creator;
 
 		public IntradayOptimization(IDailyValueByAllSkillsExtractor dailyValueByAllSkillsExtractor, 
-									IIntradayDecisionMaker intradayDecisionMaker, IScheduleService scheduleService,
 									OptimizationPreferencesFactory optimizationPreferencesFactory,
 									Func<ISchedulerStateHolder> schedulerStateHolder,
 									Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
-									ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
-									ISkillIntervalDataDivider skillIntervalDataDivider,
-									ISkillIntervalDataAggregator skillIntervalDataAggregator,
-									IEffectiveRestrictionCreator effectiveRestrictionCreator,
-									IMinWeekWorkTimeRule minWeekWorkTimeRule,
-									IResourceOptimizationHelper resourceOptimizationHelper,
 									DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
 									IFixedStaffLoader fixedStaffLoader,
 									SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,
@@ -67,21 +51,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 									Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 									IScheduleDictionaryPersister persister,
 									IOptimizerHelperHelper optimizerHelperHelper,
-									WeeklyRestSolverExecuter weeklyRestSolverExecuter
+									WeeklyRestSolverExecuter weeklyRestSolverExecuter,
+									IIntradayOptimizer2Creator intradayOptimizer2Creator
 									)
 		{
 			_dailyValueByAllSkillsExtractor = dailyValueByAllSkillsExtractor;
-			_intradayDecisionMaker = intradayDecisionMaker;
-			_scheduleService = scheduleService;
 			_optimizationPreferencesFactory = optimizationPreferencesFactory;
 			_schedulerStateHolder = schedulerStateHolder;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
-			_skillStaffPeriodToSkillIntervalDataMapper = skillStaffPeriodToSkillIntervalDataMapper;
-			_skillIntervalDataDivider = skillIntervalDataDivider;
-			_skillIntervalDataAggregator = skillIntervalDataAggregator;
-			_effectiveRestrictionCreator = effectiveRestrictionCreator;
-			_minWeekWorkTimeRule = minWeekWorkTimeRule;
-			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_dayOffOptimizationPreferenceProviderUsingFiltersFactory = dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 			_fixedStaffLoader = fixedStaffLoader;
 			_setupStateHolderForWebScheduling = setupStateHolderForWebScheduling;
@@ -94,6 +71,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_persister = persister;
 			_optimizerHelperHelper = optimizerHelperHelper;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
+			_intradayOptimizer2Creator = intradayOptimizer2Creator;
 		}
 
 		[LogTime]
@@ -138,18 +116,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					_scheduleDayChangeCallback(),
 					new ScheduleTagSetter(optimizationPreferences.General.ScheduleTag));
 
-			var creator = new IntradayOptimizer2Creator(
-				_intradayDecisionMaker,
-				_scheduleService,
-				_schedulerStateHolder().SchedulingResultState,
-				_skillStaffPeriodToSkillIntervalDataMapper,
-				_skillIntervalDataDivider,
-				_skillIntervalDataAggregator,
-				_effectiveRestrictionCreator,
-				_minWeekWorkTimeRule,
-				_resourceOptimizationHelper);
-
-			var optimizers = creator.Create(matrixOriginalStateContainerListForIntradayOptimizationOriginal,
+			var optimizers = _intradayOptimizer2Creator.Create(matrixOriginalStateContainerListForIntradayOptimizationOriginal,
 				matrixOriginalStateContainerListForIntradayOptimizationWork, optimizationPreferences,
 				rollbackService,
 				dayOffOptimizationPreference);
@@ -194,12 +161,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private static IList<IScheduleDay> extractAllSchedules(ISchedulingResultStateHolder stateHolder, PeopleSelection people, DateOnlyPeriod period)
 		{
 			var allSchedules = new List<IScheduleDay>();
-			foreach (var schedule in stateHolder.Schedules)
+			foreach (var schedule in stateHolder.Schedules.Where(schedule => people.FixedStaffPeople.Contains(schedule.Key)))
 			{
-				if (people.FixedStaffPeople.Contains(schedule.Key))
-				{
-					allSchedules.AddRange(schedule.Value.ScheduledDayCollection(period));
-				}
+				allSchedules.AddRange(schedule.Value.ScheduledDayCollection(period));
 			}
 			return allSchedules;
 		}
