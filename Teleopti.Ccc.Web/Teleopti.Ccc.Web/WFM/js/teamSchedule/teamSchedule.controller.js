@@ -4,10 +4,10 @@
 	angular.module('wfm.teamSchedule')
 		.controller('TeamScheduleCtrl', ['$scope', '$q', '$locale', '$translate', 'TeamSchedule',
 			'GroupScheduleFactory', 'teamScheduleNotificationService', 'Toggle', 'SignalR', '$mdComponentRegistry', '$mdSidenav',
-			'$mdUtil', TeamScheduleController]);
+			'$mdUtil', 'guidgenerator', TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $locale, $translate, teamScheduleSvc, groupScheduleFactory,
-		notificationService, toggleSvc, signalRSvc, $mdComponentRegistry, $mdSidenav, $mdUtil) {
+		notificationService, toggleSvc, signalRSvc, $mdComponentRegistry, $mdSidenav, $mdUtil, guidgenerator) {
 		var vm = this;
 
 		vm.isLoading = false;
@@ -189,7 +189,7 @@
 				PersonIdFrom: selectedPersonIds[0],
 				PersonIdTo: selectedPersonIds[1],
 				ScheduleDate: vm.scheduleDateMoment().format("YYYY-MM-DD"),
-				TrackedCommandInfo: { TrackId: "" } // TODO: Generate unique track id
+				TrackedCommandInfo: { TrackId: guidgenerator.newGuid() } // TODO: Generate unique track id 
 			}).$promise.then(function (result) {
 				vm.afterActionCallback(result, "FinishedSwapShifts", "FailedToSwapShifts");
 			});
