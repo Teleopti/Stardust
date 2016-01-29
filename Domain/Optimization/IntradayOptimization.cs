@@ -77,9 +77,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public virtual OptimizationResultModel Optimize(Guid planningPeriodId)
 		{
 			var planningPeriod = SetupAndOptimize(planningPeriodId);
-
 			Persist();
-
 			return CreateResult(planningPeriod);
 		}
 
@@ -99,26 +97,18 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			var matrixListForIntraDayOptimizationOriginal = _matrixListFactory.CreateMatrixListForSelection(allSchedules);
 			var matrixOriginalStateContainerListForIntradayOptimizationOriginal =
-				matrixListForIntraDayOptimizationOriginal.Select(
-					matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator))
-					.Cast<IScheduleMatrixOriginalStateContainer>().ToList();
+				matrixListForIntraDayOptimizationOriginal.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator));
 
-			var matrixListForIntraDayOptimizationWork = _matrixListFactory.CreateMatrixListForSelection(allSchedules);
 			var matrixOriginalStateContainerListForIntradayOptimizationWork =
-				matrixListForIntraDayOptimizationWork.Select(
-					matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator))
-					.Cast<IScheduleMatrixOriginalStateContainer>().ToList();
+				_matrixListFactory.CreateMatrixListForSelection(allSchedules).Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator));
 
-			ISchedulePartModifyAndRollbackService rollbackService =
-				new SchedulePartModifyAndRollbackService(
+			var rollbackService = new SchedulePartModifyAndRollbackService(
 					_schedulerStateHolder().SchedulingResultState,
 					_scheduleDayChangeCallback(),
 					new ScheduleTagSetter(optimizationPreferences.General.ScheduleTag));
 
 			var optimizers = _intradayOptimizer2Creator.Create(matrixOriginalStateContainerListForIntradayOptimizationOriginal,
-				matrixOriginalStateContainerListForIntradayOptimizationWork, optimizationPreferences,
-				rollbackService,
-				dayOffOptimizationPreference);
+				matrixOriginalStateContainerListForIntradayOptimizationWork, optimizationPreferences, rollbackService, dayOffOptimizationPreference);
 			var service = new IntradayOptimizerContainer(_dailyValueByAllSkillsExtractor);
 			var minutesPerInterval = 15;
 
@@ -138,8 +128,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				service.Execute(optimizers, period, optimizationPreferences.Advanced.TargetValueCalculation);
 			}
 
-			_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, allSchedules, people.AllPeople,
-				dayOffOptimizationPreference);
+			_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, allSchedules, people.AllPeople, dayOffOptimizationPreference);
 			return planningPeriod;
 		}
 
