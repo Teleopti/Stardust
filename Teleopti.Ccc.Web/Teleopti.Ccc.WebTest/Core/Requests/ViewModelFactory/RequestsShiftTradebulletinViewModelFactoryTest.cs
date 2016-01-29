@@ -472,5 +472,31 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			result.PossibleTradeSchedules.First().Name.Should().Be.EqualTo("person2@mainshift");
 			result.PageCount.Should().Be.EqualTo(3);
 		}
+
+		[Test]
+		public void ShouldMapTimeLine()
+		{
+			setUpMe();
+			setUpMySchedule();
+			var someone = PersonFactory.CreatePersonWithGuid("someone", "someone");
+			someone.AddPersonPeriod(personPeriod);
+			PersonRepository.Add(someone);
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, someone,
+				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 8, 0, 0), DateTimeKind.Utc),
+					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 10, 0, 0), DateTimeKind.Utc)),
+				ShiftCategoryFactory.CreateShiftCategory("mainshift"));
+			ScheduleRepository.Add(personAss);
+
+			var offerId = setUpOffer(someone);
+
+			var result = Target.CreateShiftTradeBulletinViewModelFromRawData(new ShiftTradeScheduleViewModelData
+			{
+				Paging = new Paging { Skip = 0, Take = 20 },
+				ShiftTradeDate = new DateOnly(2016, 1, 13),
+				TeamIdList = new[] { team.Id.GetValueOrDefault() }
+			});
+
+			result.TimeLineHours.Count().Should().Be.EqualTo(4);
+		}
 	}
 }
