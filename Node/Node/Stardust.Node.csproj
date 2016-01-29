@@ -94,6 +94,7 @@
     <Compile Include="API\NodeConfiguration.cs" />
     <Compile Include="API\NodeController.cs" />
     <Compile Include="Constants\ManagerRouteConstants.cs" />
+    <Compile Include="Constants\MediaTypeConstants.cs" />
     <Compile Include="Constants\NodeRouteConstants.cs" />
     <Compile Include="Diagnostics\TaskToExecuteStopWatch.cs" />
     <Compile Include="Extensions\HttpClientExtensions.cs" />

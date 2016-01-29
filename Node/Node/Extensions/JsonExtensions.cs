@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using Newtonsoft.Json;
+using Stardust.Node.Constants;
 
 namespace Stardust.Node.Extensions
 {
@@ -12,33 +13,33 @@ namespace Stardust.Node.Extensions
             var request = (HttpWebRequest) WebRequest.Create(uriBuilder.Uri);
             request.AllowAutoRedirect = true;
 
-            return responseToJson<T>(request);
+            return ResponseToJson<T>(request);
         }
 
         public static T PostRequest<T>(this HttpWebRequest request,
                                        string json)
         {
             request.Method = "POST";
-            request.ContentType = "application/json";
+            request.ContentType = MediaTypeConstants.ApplicationJson;
 
             using (var requestWriter = new StreamWriter(request.GetRequestStream()))
             {
                 requestWriter.Write(json);
             }
-            return responseToJson<T>(request);
+            return ResponseToJson<T>(request);
         }
 
         public static T GetRequest<T>(this HttpWebRequest request)
         {
             request.Method = "GET";
-            request.ContentType = "application/json";
-            request.Accept = "application/json";
+            request.ContentType = MediaTypeConstants.ApplicationJson;
+            request.Accept = MediaTypeConstants.ApplicationJson;
             request.AllowAutoRedirect = true;
 
-            return responseToJson<T>(request);
+            return ResponseToJson<T>(request);
         }
 
-        private static T responseToJson<T>(WebRequest request)
+        private static T ResponseToJson<T>(WebRequest request)
         {
             using (var response = request.GetResponse())
             {

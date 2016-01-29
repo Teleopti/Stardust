@@ -10,8 +10,6 @@ namespace Stardust.Node.Extensions
 {
     public static class JobToDoExtensions
     {
-        private const string ApplicationJsonMediaType = "application/json";
-
         public static string SerializeToJson(this JobToDo jobToDo)
         {
             jobToDo.ThrowExceptionWhenNull();
@@ -69,7 +67,7 @@ namespace Stardust.Node.Extensions
 
             // Create request headers.
             client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(ApplicationJsonMediaType));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeConstants.ApplicationJson));
         }
 
 
