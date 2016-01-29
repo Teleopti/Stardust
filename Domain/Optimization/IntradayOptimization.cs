@@ -139,22 +139,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 					new ScheduleTagSetter(optimizationPreferences.General.ScheduleTag));
 
 			var creator = new IntradayOptimizer2Creator(
-				matrixOriginalStateContainerListForIntradayOptimizationOriginal,
-				matrixOriginalStateContainerListForIntradayOptimizationWork,
 				_intradayDecisionMaker,
 				_scheduleService,
-				optimizationPreferences,
-				rollbackService,
 				_schedulerStateHolder().SchedulingResultState,
 				_skillStaffPeriodToSkillIntervalDataMapper,
 				_skillIntervalDataDivider,
 				_skillIntervalDataAggregator,
 				_effectiveRestrictionCreator,
 				_minWeekWorkTimeRule,
-				_resourceOptimizationHelper,
-				dayOffOptimizationPreference);
+				_resourceOptimizationHelper);
 
-			var optimizers = creator.Create();
+			var optimizers = creator.Create(matrixOriginalStateContainerListForIntradayOptimizationOriginal,
+				matrixOriginalStateContainerListForIntradayOptimizationWork, optimizationPreferences,
+				rollbackService,
+				dayOffOptimizationPreference);
 			var service = new IntradayOptimizerContainer(_dailyValueByAllSkillsExtractor);
 			var minutesPerInterval = 15;
 

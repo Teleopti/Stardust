@@ -71,22 +71,20 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var scheduleService = _container.Resolve<IScheduleService>();
 
 			IIntradayOptimizer2Creator creator = new IntradayOptimizer2Creator(
-				matrixContainerList,
-				workShiftContainerList,
 				decisionMaker,
 				scheduleService,
-				optimizerPreferences,
-				rollbackService,
 				_stateHolder(),
 				_container.Resolve<ISkillStaffPeriodToSkillIntervalDataMapper>(),
 				_container.Resolve<ISkillIntervalDataDivider>(),
 				_container.Resolve<ISkillIntervalDataAggregator>(),
 				_container.Resolve<IEffectiveRestrictionCreator>(),
 				_container.Resolve<IMinWeekWorkTimeRule>(),
-				_container.Resolve<IResourceOptimizationHelper>(),
-				dayOffOptimizationPreferenceProvider);
+				_container.Resolve<IResourceOptimizationHelper>());
 
-			IList<IIntradayOptimizer2> optimizers = creator.Create();
+			IList<IIntradayOptimizer2> optimizers = creator.Create(matrixContainerList,
+				workShiftContainerList, optimizerPreferences,
+				rollbackService,
+				dayOffOptimizationPreferenceProvider);
 			var service = new IntradayOptimizerContainer(_container.Resolve<IDailyValueByAllSkillsExtractor>());
 
 			service.ReportProgress += resourceOptimizerPersonOptimized;

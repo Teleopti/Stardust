@@ -11,12 +11,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class IntradayOptimizer2Creator : IIntradayOptimizer2Creator
 	{
-		private readonly IList<IScheduleMatrixOriginalStateContainer> _scheduleMatrixContainerList;
-		private readonly IList<IScheduleMatrixOriginalStateContainer> _workShiftStateContainerList;
 		private readonly IIntradayDecisionMaker _decisionMaker;
 		private readonly IScheduleService _scheduleService;
-		private readonly IOptimizationPreferences _optimizerPreferences;
-		private readonly ISchedulePartModifyAndRollbackService _rollbackService;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
 		private readonly ISkillIntervalDataDivider _skillIntervalDataDivider;
@@ -24,30 +20,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private readonly IMinWeekWorkTimeRule _minWeekWorkTimeRule;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-		private readonly IDayOffOptimizationPreferenceProvider _dayOffOptimizationPreferenceProvider;
 
 		public IntradayOptimizer2Creator(
-			IList<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainerList,
-			IList<IScheduleMatrixOriginalStateContainer> workShiftContainerList,
 			IIntradayDecisionMaker decisionMaker,
 			IScheduleService scheduleService,
-			IOptimizationPreferences optimizerPreferences,
-			ISchedulePartModifyAndRollbackService rollbackService,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
 			ISkillIntervalDataDivider skillIntervalDataDivider,
 			ISkillIntervalDataAggregator skillIntervalDataAggregator,
 			IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			IMinWeekWorkTimeRule minWeekWorkTimeRule,
-			IResourceOptimizationHelper resourceOptimizationHelper,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+			IResourceOptimizationHelper resourceOptimizationHelper)
 		{
-			_scheduleMatrixContainerList = scheduleMatrixContainerList;
-			_workShiftStateContainerList = workShiftContainerList;
 			_decisionMaker = decisionMaker;
 			_scheduleService = scheduleService;
-			_optimizerPreferences = optimizerPreferences;
-			_rollbackService = rollbackService;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_skillStaffPeriodToSkillIntervalDataMapper = skillStaffPeriodToSkillIntervalDataMapper;
 			_skillIntervalDataDivider = skillIntervalDataDivider;
@@ -55,30 +41,32 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 			_minWeekWorkTimeRule = minWeekWorkTimeRule;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
-			_dayOffOptimizationPreferenceProvider = dayOffOptimizationPreferenceProvider;
 		}
 
 		/// <summary>
 		/// Creates the list of optimizers.
 		/// </summary>
 		/// <returns></returns>
-		public IList<IIntradayOptimizer2> Create()
+		public IList<IIntradayOptimizer2> Create(IList<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainerList,
+			IList<IScheduleMatrixOriginalStateContainer> workShiftContainerList, IOptimizationPreferences optimizerPreferences,
+			ISchedulePartModifyAndRollbackService rollbackService,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			IList<IIntradayOptimizer2> result = new List<IIntradayOptimizer2>();
 
-			for (int index = 0; index < _scheduleMatrixContainerList.Count; index++)
+			for (int index = 0; index < scheduleMatrixContainerList.Count; index++)
 			{
-				IScheduleMatrixOriginalStateContainer originalStateContainer = _scheduleMatrixContainerList[index];
+				IScheduleMatrixOriginalStateContainer originalStateContainer = scheduleMatrixContainerList[index];
 
 				IScheduleMatrixPro scheduleMatrix = originalStateContainer.ScheduleMatrix;
 
 				IScheduleResultDailyValueCalculator dailyValueCalculator = new RelativeDailyValueByPersonalSkillsExtractor(scheduleMatrix,
-				                                                                                                           _optimizerPreferences.Advanced,
+				                                                                                                           optimizerPreferences.Advanced,
 				                                                                                                           _skillStaffPeriodToSkillIntervalDataMapper,
 				                                                                                                           _skillIntervalDataDivider,
 				                                                                                                           _skillIntervalDataAggregator);
 				IScheduleResultDataExtractor personalSkillsDataExtractor = new RelativeDailyValueByPersonalSkillsExtractor(scheduleMatrix,
-				                                                                                                           _optimizerPreferences.Advanced,
+				                                                                                                           optimizerPreferences.Advanced,
 				                                                                                                           _skillStaffPeriodToSkillIntervalDataMapper,
 				                                                                                                           _skillIntervalDataDivider,
 				                                                                                                           _skillIntervalDataAggregator);
@@ -86,20 +74,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 				IDeleteSchedulePartService deleteSchedulePartService =
 					new DeleteSchedulePartService(()=>_schedulingResultStateHolder);
 				
-				IScheduleMatrixOriginalStateContainer workShiftStateContainer = _workShiftStateContainerList[index];
+				IScheduleMatrixOriginalStateContainer workShiftStateContainer = workShiftContainerList[index];
 
 				var restrictionChecker = new RestrictionChecker();
 
-				var dayOffOptimizationPreference = _dayOffOptimizationPreferenceProvider.ForAgent(scheduleMatrix.Person, scheduleMatrix.EffectivePeriodDays.First().Day);
+				var dayOffOptimizationPreference = dayOffOptimizationPreferenceProvider.ForAgent(scheduleMatrix.Person, scheduleMatrix.EffectivePeriodDays.First().Day);
 
-				var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(restrictionChecker, _optimizerPreferences, originalStateContainer, dayOffOptimizationPreference);
+				var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(restrictionChecker, optimizerPreferences, originalStateContainer, dayOffOptimizationPreference);
 
 				var optimizationLimits = new OptimizationLimits(optimizerOverLimitDecider, _minWeekWorkTimeRule);
 
 				ISchedulingOptionsCreator schedulingOptionsCreator = new SchedulingOptionsCreator();
 				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
 
-				var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
+				var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
 				var deleteAndResourceCalculateService = new DeleteAndResourceCalculateService(deleteSchedulePartService, _resourceOptimizationHelper);
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
 
@@ -109,8 +97,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 						personalSkillsDataExtractor,
 						_decisionMaker,
 						_scheduleService,
-						_optimizerPreferences,
-						_rollbackService,
+						optimizerPreferences,
+						rollbackService,
 						_resourceOptimizationHelper,
 						_effectiveRestrictionCreator,
 						optimizationLimits,
