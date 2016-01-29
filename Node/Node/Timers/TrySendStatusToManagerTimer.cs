@@ -16,6 +16,11 @@ namespace Stardust.Node.Timers
                                            Uri callbackTemplateUri,
                                            double interval = 10000) : base(interval)
         {
+            // Validate arguments.
+            nodeConfiguration.ThrowArgumentNullException();
+            callbackTemplateUri.ThrowArgumentExceptionWhenNull();
+
+            // Assign values.
             NodeConfiguration = nodeConfiguration;
 
             WhoAmI = NodeConfiguration.CreateWhoIAm(Environment.MachineName);

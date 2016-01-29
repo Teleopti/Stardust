@@ -1,6 +1,8 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using NodeTest.Fakes.Timers;
 using NUnit.Framework;
+using Stardust.Node.Timers;
 
 namespace NodeTest
 {
@@ -9,13 +11,18 @@ namespace NodeTest
     {
         readonly ManualResetEventSlim _manualResetEventSlim = new ManualResetEventSlim();
 
+        readonly Uri _fakeUrl = new Uri("http://localhost:9000");
 
         [Test]
-        public void ShouldBeAbleToInstantiateSendJobDoneTimer()
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ShouldThrowExceptionWhenNodeConfigurationArgumentIsNull()
         {
-            var timer = new SendJobDoneTimerFake();
+            var trySendJobDoneStatusToManagerTimer = new TrySendStatusToManagerTimer(null, _fakeUrl);
 
-            Assert.IsNotNull(timer);
+            Assert.IsNotNull(trySendJobDoneStatusToManagerTimer);
         }
+
+
+
     }
 }
