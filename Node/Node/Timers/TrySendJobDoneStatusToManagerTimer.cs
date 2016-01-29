@@ -5,12 +5,9 @@ namespace Stardust.Node.Timers
 {
     public class TrySendJobDoneStatusToManagerTimer : TrySendStatusToManagerTimer
     {
-        public TrySendJobDoneStatusToManagerTimer(JobToDo jobToDo,
-                                                  INodeConfiguration nodeConfiguration,
-                                                  double interval = 10000) : base(jobToDo,
-                                                                                  nodeConfiguration,
-                                                                                  nodeConfiguration.GetManagerJobDoneUri(),
-                                                                                  null,
+        public TrySendJobDoneStatusToManagerTimer(INodeConfiguration nodeConfiguration,
+                                                  double interval = 10000) : base(nodeConfiguration,
+                                                                                  nodeConfiguration.GetManagerJobDoneTemplateUri(),
                                                                                   interval)
         {
         }

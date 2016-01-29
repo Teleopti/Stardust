@@ -1,99 +1,21 @@
-﻿using System;
-using System.Configuration;
-using System.Reflection;
-using System.Threading;
-using System.Timers;
+﻿using System.Threading;
+using NodeTest.Fakes.Timers;
 using NUnit.Framework;
-using Stardust.Node.API;
-using Stardust.Node.Interfaces;
-using Stardust.Node.Timers;
 
 namespace NodeTest
 {
     [TestFixture]
     public class TrySendStatusToManagerTimerTests
     {
-        public bool TimerOnTrySendStatusSuccededTriggered { get; set; }
+        readonly ManualResetEventSlim _manualResetEventSlim = new ManualResetEventSlim();
 
-        private void TimerOnTrySendStatusSucceded(object sender,
-                                                  EventArgs eventArgs)
-        {
-            TimerOnTrySendStatusSuccededTriggered = true;
-        }
-
-        private void OverrideElapsedEventHandler(object sender,
-                                                 ElapsedEventArgs elapsedEventArgs)
-        {
-            var trySendStatusToManagerTimer = sender as TrySendStatusToManagerTimer;
-
-            if (trySendStatusToManagerTimer != null)
-            {
-                trySendStatusToManagerTimer.TriggerTrySendStatusSucceded();
-            }
-        }
 
         [Test]
-        public void ShouldNotBeStartedImplicitly()
+        public void ShouldBeAbleToInstantiateSendJobDoneTimer()
         {
-            var timer = new TrySendStatusToManagerTimer(null,
-                                                        null,
-                                                        null,
-                                                        OverrideElapsedEventHandler);
+            var timer = new SendJobDoneTimerFake();
 
-            Assert.IsTrue(timer.Enabled == false);
+            Assert.IsNotNull(timer);
         }
-
-        [Test]
-        public void ShouldTriggerSuccessEvent()
-        {
-            TimerOnTrySendStatusSuccededTriggered = false;
-
-            var timer = new TrySendStatusToManagerTimer(null,
-                                                        null,
-                                                        null,
-                                                        OverrideElapsedEventHandler,
-                                                        1000);
-
-            timer.TrySendStatusSucceded += TimerOnTrySendStatusSucceded;
-
-            timer.Start();
-            Thread.Sleep(TimeSpan.FromSeconds(2)); //Wait for timer (takes 1 second)
-
-            Assert.IsTrue(TimerOnTrySendStatusSuccededTriggered);
-        }
-
-        [Test][Ignore]  //will always pass - cannot unit test timers that post to manager !
-        public void SendJobDoneTest()
-        {
-            var jobToDo = new JobToDo
-            {
-                Id = Guid.NewGuid(),
-                Name = "Test name",
-                Serialized = "Serialized",
-                Type = "NodeTest.JobHandlers.TestParams"
-            };
-
-
-            var asssembly = Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]);
-
-            INodeConfiguration nodeConfiguration = new NodeConfiguration(new Uri(ConfigurationManager.AppSettings["BaseAddress"]),
-                                                                         new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
-                                                                         asssembly,
-                                                                         ConfigurationManager.AppSettings["NodeName"]);
-
-            TrySendJobDoneStatusToManagerTimer trySendJobDoneStatusToManagerTimer =
-                new TrySendJobDoneStatusToManagerTimer(jobToDo,
-                                                       nodeConfiguration,
-                                                       5000);
-
-
-            trySendJobDoneStatusToManagerTimer.Start();
-
-
-            Thread.Sleep(TimeSpan.FromSeconds(60));
-            
-        }
-
-
     }
 }

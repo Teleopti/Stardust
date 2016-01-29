@@ -19,6 +19,6 @@ namespace Stardust.Node.Interfaces
         void CancelJob(Guid id);
 
         IHttpActionResult StartJob(JobToDo jobToDo,
-            HttpRequestMessage requestMessage);
+                                   HttpRequestMessage requestMessage);
     }
 }

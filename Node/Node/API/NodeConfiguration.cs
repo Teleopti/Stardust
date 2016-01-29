@@ -10,9 +10,9 @@ namespace Stardust.Node.API
         private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeConfiguration));
 
         public NodeConfiguration(Uri baseAddress,
-            Uri managerLocation,
-            Assembly handlerAssembly,
-            string nodeName)
+                                 Uri managerLocation,
+                                 Assembly handlerAssembly,
+                                 string nodeName)
         {
             if (baseAddress == null)
             {

@@ -9,6 +9,5 @@
         public const string CancelJob = "node/job/" + JobIdOptionalParameter;
 
         public const string IsAlive = "node/ping";
-
     }
 }

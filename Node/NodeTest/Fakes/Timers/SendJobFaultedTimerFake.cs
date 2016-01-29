@@ -2,7 +2,6 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
 
@@ -11,29 +10,24 @@ namespace NodeTest.Fakes.Timers
     public class SendJobFaultedTimerFake : TrySendStatusToManagerTimer
     {
         public int NumberOfTimeCalled;
+
         public ManualResetEventSlim Wait = new ManualResetEventSlim();
 
-        public SendJobFaultedTimerFake(JobToDo jobToDo = null,
-            INodeConfiguration nodeConfiguration = null,
-            Uri callbackUri = null,
-            ElapsedEventHandler overrideElapsedEventHandler = null,
-            double interval = 10000) : base(jobToDo,
-                nodeConfiguration,
-                callbackUri,
-                overrideElapsedEventHandler,
-                interval)
+        public SendJobFaultedTimerFake(INodeConfiguration nodeConfiguration = null,
+                                       Uri callbackTemplateUri = null,
+                                       double interval = 10000) : base(nodeConfiguration,
+                                                                       callbackTemplateUri,
+                                                                       interval)
         {
         }
 
-        public override async Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo)
+        public override Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo)
         {
-            if (!Wait.IsSet)
-            {
-                Wait.Set();
-            }
+            Wait.Set();
+
             NumberOfTimeCalled ++;
 
-            return await base.TrySendStatus(jobToDo);
+            return null;
         }
     }
 }

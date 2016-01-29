@@ -36,7 +36,8 @@ namespace Stardust.Node.Extensions
             return uri != null;
         }
 
-        public static async Task<HttpResponseMessage> PostAsync(this Uri uri, Uri apiEndpoint)
+        public static async Task<HttpResponseMessage> PostAsync(this Uri uri,
+                                                                Uri apiEndpoint)
         {
             // Call API.
             HttpResponseMessage response;
@@ -47,9 +48,12 @@ namespace Stardust.Node.Extensions
 
                 var sez = JsonConvert.SerializeObject(uri);
 
-                var str = new StringContent(sez, Encoding.Unicode, "application/json");
+                var str = new StringContent(sez,
+                                            Encoding.Unicode,
+                                            "application/json");
 
-                response = await client.PostAsync(apiEndpoint, str);
+                response = await client.PostAsync(apiEndpoint,
+                                                  str);
             }
 
             return response;

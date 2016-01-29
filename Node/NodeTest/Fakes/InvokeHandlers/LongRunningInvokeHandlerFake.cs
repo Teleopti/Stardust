@@ -7,7 +7,8 @@ namespace NodeTest.Fakes.InvokeHandlers
     internal class LongRunningInvokeHandlerFake : IInvokeHandler
     {
         public void Invoke(object query,
-            CancellationTokenSource cancellationTokenSource, Action<string> progressCallback)
+                           CancellationTokenSource cancellationTokenSource,
+                           Action<string> progressCallback)
         {
             var someString = string.Empty;
 

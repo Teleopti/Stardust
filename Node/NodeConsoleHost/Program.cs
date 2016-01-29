@@ -19,15 +19,15 @@ namespace NodeConsoleHost
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
             var nodeConfig = new NodeConfiguration(new Uri(ConfigurationManager.AppSettings["BaseAddress"]),
-                new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
-                Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
-                ConfigurationManager.AppSettings["NodeName"]);
+                                                   new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
+                                                   Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
+                                                   ConfigurationManager.AppSettings["NodeName"]);
 
             new NodeStarter().Start(nodeConfig);
         }
 
         private static void CurrentDomain_UnhandledException(object sender,
-            UnhandledExceptionEventArgs e)
+                                                             UnhandledExceptionEventArgs e)
         {
             Logger.Error("Unhandeled Exception in NodeConsoleHost");
         }

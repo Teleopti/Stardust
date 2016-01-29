@@ -6,7 +6,9 @@ namespace Stardust.Node.Workers
 {
     public class PostHttpRequest : IPostHttpRequest
     {
-        public T Send<T>(string url, string json, string userAgent = null)
+        public T Send<T>(string url,
+                         string json,
+                         string userAgent = null)
         {
             var request = (HttpWebRequest) WebRequest.Create(url);
             request.UserAgent = userAgent;

@@ -1,6 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Timers;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using log4net;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
 
@@ -8,20 +10,26 @@ namespace NodeTest.Fakes.Timers
 {
     public class NodeStartupNotificationToManagerFake : TrySendNodeStartUpNotificationToManagerTimer
     {
+        public ManualResetEventSlim Wait = new ManualResetEventSlim();
+
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeStartupNotificationToManagerFake));
+
         public NodeStartupNotificationToManagerFake(INodeConfiguration nodeConfiguration = null,
-            Uri callbackUri = null,
-            ElapsedEventHandler overrideElapsedEventHandler = null,
-            double interval = 3000) : base(nodeConfiguration,
-                callbackUri,
-                overrideElapsedEventHandler,
-                interval)
+                                                    Uri callbackTemplateUri = null,
+                                                    double interval = 3000) : base(nodeConfiguration,
+                                                                                   callbackTemplateUri,
+                                                                                   interval)
         {
         }
 
-        private void OnTimedEvent(object sender,
-            ElapsedEventArgs e)
+
+        public override Task<HttpResponseMessage> TrySendNodeStartUpToManager(Uri nodeAddress)
         {
-            Debug.WriteLine("Try send node start up notification to manager.");
+            Logger.Info("Try send node start up notification to manager.");
+
+            Wait.Set();
+
+            return null;
         }
     }
 }

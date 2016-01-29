@@ -49,12 +49,9 @@ namespace Stardust.Node
                                                                                                                                              nodeConfiguration.GetManagerNodeHasBeenInitializedUri()),
                                                                                             new PingToManagerTimer(nodeConfiguration,
                                                                                                                    nodeConfiguration.GetManagerNodeHeartbeatUri()),
-                                                                                            new TrySendJobDoneStatusToManagerTimer(null,
-                                                                                                                                   nodeConfiguration),
-                                                                                            new TrySendJobCanceledToManagerTimer(null,
-                                                                                                                                 nodeConfiguration),
-                                                                                            new TrySendJobFaultedToManagerTimer(null,
-                                                                                                                                nodeConfiguration),
+                                                                                            new TrySendJobDoneStatusToManagerTimer(nodeConfiguration),
+                                                                                            new TrySendJobCanceledToManagerTimer(nodeConfiguration),
+                                                                                            new TrySendJobFaultedToManagerTimer(nodeConfiguration),
                                                                                             new PostHttpRequest()))
                                         .SingleInstance();
 

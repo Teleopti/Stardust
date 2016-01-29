@@ -6,6 +6,7 @@ namespace Stardust.Node.Interfaces
     public interface IInvokeHandler
     {
         void Invoke(object query,
-            CancellationTokenSource cancellationTokenSource, Action<string> progressCallback);
+                    CancellationTokenSource cancellationTokenSource,
+                    Action<string> progressCallback);
     }
 }

@@ -18,7 +18,7 @@ namespace Stardust.Node.API
         {
             _workerWrapper = workerWrapper;
         }
-        
+
         [HttpPost, Route(NodeRouteConstants.Job)]
         public IHttpActionResult StartJob(JobToDo jobToDo)
         {
@@ -34,7 +34,8 @@ namespace Stardust.Node.API
                 return CreateConflictStatusCode();
             }
 
-            var response = _workerWrapper.StartJob(jobToDo, Request);
+            var response = _workerWrapper.StartJob(jobToDo,
+                                                   Request);
             if (response.GetType() != typeof (OkResult))
             {
                 return response;
@@ -43,7 +44,7 @@ namespace Stardust.Node.API
 
             return CreateOkStatusCode(jobToDo);
         }
-        
+
         [HttpDelete, Route(NodeRouteConstants.CancelJob)]
         public IHttpActionResult TryCancelJob(Guid jobId)
         {
@@ -78,14 +79,14 @@ namespace Stardust.Node.API
                         jobId);
             return NotFound();
         }
-        
+
         [HttpPost, Route(NodeRouteConstants.IsAlive)]
         public IHttpActionResult IsAlive()
-	    {
-			return  new OkResult(Request);
-	    }
+        {
+            return new OkResult(Request);
+        }
 
-	    private IHttpActionResult CreateOkStatusCode(JobToDo jobToDo)
+        private IHttpActionResult CreateOkStatusCode(JobToDo jobToDo)
         {
             ValidateJobDefintionValues(jobToDo);
 

@@ -7,7 +7,6 @@ using System.Reflection;
 using System.Threading;
 using Newtonsoft.Json;
 using NodeTest.Fakes;
-using NodeTest.Fakes.ElapsedEventHandlers;
 using NodeTest.Fakes.InvokeHandlers;
 using NodeTest.Fakes.Timers;
 using NodeTest.JobHandlers;
@@ -44,6 +43,7 @@ namespace NodeTest
                                                "i lingonskogen");
 
             var ser = JsonConvert.SerializeObject(parameters);
+
             JobDefinition = new JobToDo
             {
                 Id = Guid.NewGuid(),
@@ -82,26 +82,13 @@ namespace NodeTest
         [Test]
         public void ShouldBeAbleToStartJob()
         {
-            var elapsedEventHandlersFake = new ElapsedEventHandlersFake();
-
             IWorkerWrapper workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
                                                              NodeConfigurationFake,
-                                                             new NodeStartupNotificationToManagerFake(NodeConfigurationFake,
-                                                                                                      null,
-                                                                                                      elapsedEventHandlersFake.NodeStartupElapsedEventHandler),
+                                                             new NodeStartupNotificationToManagerFake(NodeConfigurationFake),
                                                              new PingToManagerFake(),
-                                                             new SendJobDoneTimerFake(null,
-                                                                                      NodeConfigurationFake,
-                                                                                      null,
-                                                                                      elapsedEventHandlersFake.SendJodDoneElapsedEventHandler),
-                                                             new SendJobCanceledTimerFake(null,
-                                                                                          NodeConfigurationFake,
-                                                                                          null,
-                                                                                          elapsedEventHandlersFake.SendJodCanceledElapsedEventHandler),
-                                                             new SendJobFaultedTimerFake(null,
-                                                                                         NodeConfigurationFake,
-                                                                                         null,
-                                                                                         elapsedEventHandlersFake.SendJodFaultedElapsedEventHandler),
+                                                             new SendJobDoneTimerFake(NodeConfigurationFake),
+                                                             new SendJobCanceledTimerFake(NodeConfigurationFake),
+                                                             new SendJobFaultedTimerFake(NodeConfigurationFake),
                                                              new PostHttpRequestFake());
 
 

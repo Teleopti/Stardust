@@ -10,8 +10,6 @@ namespace NodeTest
     {
         private string UriToTest { get; set; }
 
-        private NodeUriBuilderHelper NodeUriBuilderToTest { get; set; }
-
         [SetUp]
         public void Setup()
         {
@@ -19,25 +17,32 @@ namespace NodeTest
         }
 
         [Test]
-        [ExpectedException(typeof (System.UriFormatException))]
+        [ExpectedException(typeof (ArgumentNullException))]
+        public void ShouldThrowExceptionWhenConstructorArgumentIsStringNull()
+        {
+            var nodeUriBuilderToTest = new NodeUriBuilderHelper(location: null);
+        }
+
+        [Test]
+        [ExpectedException(typeof (System.ArgumentNullException))]
         public void ShouldThrowExceptionWhenConstructorArgumentIsStringEmpty()
         {
-            NodeUriBuilderToTest = new NodeUriBuilderHelper(string.Empty);
+            var nodeUriBuilderToTest = new NodeUriBuilderHelper(string.Empty);
         }
 
         [Test]
         [ExpectedException(typeof (System.UriFormatException))]
         public void ShouldThrowExceptionWhenConstructorArgumentStringIsIvalidUri()
         {
-            NodeUriBuilderToTest = new NodeUriBuilderHelper("invalid uri");
+            var nodeUriBuilderToTest = new NodeUriBuilderHelper("invalid uri");
         }
 
         [Test]
         public void ShouldInstantiateWhenConstructorArgumentStringIsIvalidUri()
         {
-            NodeUriBuilderToTest = new NodeUriBuilderHelper(UriToTest);
+            var nodeUriBuilderToTest = new NodeUriBuilderHelper(UriToTest);
 
-            Assert.IsNotNull(NodeUriBuilderToTest);
+            Assert.IsNotNull(nodeUriBuilderToTest);
         }
 
         [Test]
@@ -50,9 +55,9 @@ namespace NodeTest
                 Path = path
             };
 
-            NodeUriBuilderToTest = new NodeUriBuilderHelper(UriToTest);
+            var nodeUriBuilderToTest = new NodeUriBuilderHelper(UriToTest);
 
-            var uriToTest = NodeUriBuilderToTest.CreateUri(path);
+            var uriToTest = nodeUriBuilderToTest.CreateUri(path);
 
             Assert.IsTrue(uriBuilder.Uri == uriToTest);
         }
@@ -71,9 +76,9 @@ namespace NodeTest
                 Path = path
             };
 
-            NodeUriBuilderToTest = new NodeUriBuilderHelper(UriToTest);
+            var nodeUriBuilderToTest = new NodeUriBuilderHelper(UriToTest);
 
-            var uriToTest = NodeUriBuilderToTest.CreateUri(NodeRouteConstants.CancelJob,
+            var uriToTest = nodeUriBuilderToTest.CreateUri(NodeRouteConstants.CancelJob,
                                                            guid);
 
             Assert.IsTrue(uriBuilder.Uri == uriToTest);

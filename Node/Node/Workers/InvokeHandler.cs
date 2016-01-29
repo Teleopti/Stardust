@@ -23,16 +23,19 @@ namespace Stardust.Node.Workers
         private IComponentContext ComponentContext { get; set; }
 
         public void Invoke(object query,
-            CancellationTokenSource cancellationTokenSource, Action<string> progressCallback)
+                           CancellationTokenSource cancellationTokenSource,
+                           Action<string> progressCallback)
         {
             var handler =
                 ComponentContext.Resolve(typeof (IHandle<>).MakeGenericType(query.GetType()));
 
-            var method = handler.GetType().GetMethod("Handle");
+            var method = handler.GetType()
+                .GetMethod("Handle");
 
             try //this is to throw right exception and not cause faulted on cancellation
             {
-                method.Invoke(handler, new[] {query, cancellationTokenSource, progressCallback});
+                method.Invoke(handler,
+                              new[] {query, cancellationTokenSource, progressCallback});
             }
             catch (Exception ex)
             {

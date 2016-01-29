@@ -1,25 +1,17 @@
 ﻿using System;
 using Stardust.Node.Constants;
+using Stardust.Node.Extensions;
 
 namespace Stardust.Node.Helpers
 {
     public class NodeUriBuilderHelper
     {
-        public NodeUriBuilderHelper(string locationUri)
+
+        public NodeUriBuilderHelper(string location)
         {
-            LocationUri = new Uri(locationUri);
+            location.ThrowArgumentNullExceptionIfNullOrEmpty();
 
-            if (string.IsNullOrEmpty(LocationUri.Scheme))
-            {
-                throw new ArgumentNullException();
-            }
-
-            UriBuilder = new UriBuilder
-            {
-                Host = LocationUri.Host,
-                Port = LocationUri.Port,
-                Scheme = LocationUri.Scheme
-            };
+            UriBuilder = new UriBuilder(location);
         }
 
         public Uri CreateUri(string path)
@@ -40,8 +32,6 @@ namespace Stardust.Node.Helpers
 
 
         private UriBuilder UriBuilder { get; set; }
-
-        private Uri LocationUri { get; set; }
 
         public NodeUriBuilderHelper(Uri locationUri) : this(locationUri.ToString())
         {
