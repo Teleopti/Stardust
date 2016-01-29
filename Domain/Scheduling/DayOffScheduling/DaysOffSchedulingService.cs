@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 	public interface IDaysOffSchedulingService
 	{
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-		void Execute(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> allMatrixList, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions);
+		void Execute(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> allMatrixList, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions, IScheduleTagSetter scheduleTagSetter);
 	}
 
 	public class DaysOffSchedulingService : IDaysOffSchedulingService
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			_missingDaysOffScheduler = missingDaysOffScheduler;
 		}
 
-		public void Execute(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> allMatrixList, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions)
+		public void Execute(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> allMatrixList, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions, IScheduleTagSetter scheduleTagSetter)
 		{
 			var cancelMe = false;
 			EventHandler<SchedulingServiceBaseEventArgs> dayScheduled = (sender, e) =>
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 
 			var dayOffScheduler = _dayOffScheduler();
 			dayOffScheduler.DayScheduled += dayScheduled;
-			dayOffScheduler.DayOffScheduling(matrixList, allMatrixList, rollbackService, schedulingOptions);
+			dayOffScheduler.DayOffScheduling(matrixList, allMatrixList, rollbackService, schedulingOptions, scheduleTagSetter);
 			dayOffScheduler.DayScheduled -= dayScheduled;
 			
 			if (cancelMe) return;

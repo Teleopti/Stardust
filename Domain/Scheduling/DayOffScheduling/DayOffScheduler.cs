@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 	public interface IDayOffScheduler
 	{
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-        void DayOffScheduling(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions);
+        void DayOffScheduling(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions, IScheduleTagSetter scheduleTagSetter);
 	}
 
 	public class DayOffScheduler : IDayOffScheduler
@@ -38,16 +38,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			_hasContractDayOffDefinition = hasContractDayOffDefinition;
 		}
 
-		public void DayOffScheduling(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions)
+		public void DayOffScheduling(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions, IScheduleTagSetter scheduleTagSetter)
         {
             using (PerformanceOutput.ForOperation("Inital assignment of days off"))
             {
-                addDaysOff(matrixList, schedulingOptions);
+                addDaysOff(matrixList, schedulingOptions, scheduleTagSetter);
                 addContractDaysOff(matrixListAll, rollbackService, schedulingOptions);
             }
         }
 
-		private void addDaysOff(IEnumerable<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions)
+		private void addDaysOff(IEnumerable<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, IScheduleTagSetter scheduleTagSetter)
 		{
 			var cancel = false;
             foreach (var scheduleMatrixPro in matrixList)
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 	                try
                     {
                         part.CreateAndAddDayOff(effectiveRestriction.DayOffTemplate);
-                        schedulePartModifyAndRollbackService.Modify(part);
+                        schedulePartModifyAndRollbackService.Modify(part, scheduleTagSetter);
                     }
                     catch (DayOffOutsideScheduleException)
                     {

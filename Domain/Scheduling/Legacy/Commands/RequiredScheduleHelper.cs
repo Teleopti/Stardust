@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						tagSetter);
 				_daysOffSchedulingService.DayScheduled += onDayScheduled;
 				_daysOffSchedulingService.Execute(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff,
-					schedulingOptions);
+					schedulingOptions, tagSetter);
 				_daysOffSchedulingService.DayScheduled -= onDayScheduled;
 
 				//lock none selected days
