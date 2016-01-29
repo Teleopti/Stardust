@@ -24,7 +24,7 @@ namespace NodeTest
         }
 
         [Test]
-        [ExpectedException(typeof (System.UriFormatException))]
+        [ExpectedException(typeof (System.ArgumentNullException))]
         public void ShouldThrowExceptionWhenConstructorArgumentIsStringEmpty()
         {
             var nodeUriBuilderToTest = new NodeUriBuilderHelper(string.Empty);
