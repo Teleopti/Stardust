@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -90,7 +89,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(multisiteSkill);
 
             var q = new QueueSource("vågar inte skriva sånt", "peter", 1);
-            var q2 = new QueueSource("ft", "peter", 1);
+            var q2 = new QueueSource("ft", "peter", 2);
             PersistAndRemoveFromUnitOfWork(q);
             PersistAndRemoveFromUnitOfWork(q2);
 
@@ -133,7 +132,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(skill1);
             
             QueueSource q = new QueueSource("vågar inte skriva sånt", "peter", 1);
-            QueueSource q2 = new QueueSource("ft", "peter", 1);
+            QueueSource q2 = new QueueSource("ft", "peter", 2);
             PersistAndRemoveFromUnitOfWork(q);
             PersistAndRemoveFromUnitOfWork(q2);
 
@@ -588,11 +587,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		    };
 		    PersistAndRemoveFromUnitOfWork(skill);
 		    var wl = WorkloadFactory.CreateWorkload(skill);
-		    wl.AddQueueSource(new QueueSource());
-		    wl.AddQueueSource(new QueueSource());
+		    wl.AddQueueSource(new QueueSource{QueueAggId = 1});
+            wl.AddQueueSource(new QueueSource { QueueAggId = 2 });
 		    var wl2 = WorkloadFactory.CreateWorkload(skill);
-		    wl2.AddQueueSource(new QueueSource());
-		    wl2.AddQueueSource(new QueueSource());
+		    wl2.AddQueueSource(new QueueSource{QueueAggId = 3});
+            wl2.AddQueueSource(new QueueSource { QueueAggId = 4 });
 		    PersistAndRemoveFromUnitOfWork(wl.QueueSourceCollection.First());
 		    PersistAndRemoveFromUnitOfWork(wl.QueueSourceCollection.Last());
 		    PersistAndRemoveFromUnitOfWork(wl2.QueueSourceCollection.First());

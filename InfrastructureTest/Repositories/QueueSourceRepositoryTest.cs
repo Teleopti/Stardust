@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -49,6 +50,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(queueSource.Description, loadedAggregateFromDatabase.Description);
         }
 
+        [Test]
+        public void MustBeUniqueMartAggOrgData()
+        {
+            var qs1 = new QueueSource {QueueMartId = 1, QueueAggId = 2, QueueOriginalId = 3, DataSourceId = 4};
+            var qs2 = new QueueSource {QueueMartId = 1, QueueAggId = 2, QueueOriginalId = 3, DataSourceId = 4};
+            PersistAndRemoveFromUnitOfWork(qs1);
+            Assert.Throws<ConstraintViolationException>(() => PersistAndRemoveFromUnitOfWork(qs2));
+        }
+        
+        
+        
         /// <summary>
         /// Determines whether this instance can be created.
         /// </summary>
@@ -70,8 +82,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void CanLoadAllQueues()
         {
             PersistAndRemoveFromUnitOfWork(new QueueSource("Q1", "Queue1", 1));
-            PersistAndRemoveFromUnitOfWork(new QueueSource("Q2", "Queue2", 1));
-            PersistAndRemoveFromUnitOfWork(new QueueSource("Q3", "Queue3", 1));
+            PersistAndRemoveFromUnitOfWork(new QueueSource("Q2", "Queue2", 2));
+            PersistAndRemoveFromUnitOfWork(new QueueSource("Q3", "Queue3", 3));
 
 
             _target = new QueueSourceRepository(UnitOfWork);
@@ -99,8 +111,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void ShouldNotCrashIfDifferentNameForSameId()
         {
-            var qs1 = new QueueSource { LogObjectName = "4", DataSourceId = 4 };
-            var qs2 = new QueueSource { LogObjectName = "8", DataSourceId = 4 };
+            var qs1 = new QueueSource { LogObjectName = "4", DataSourceId = 4, QueueAggId = 1};
+            var qs2 = new QueueSource { LogObjectName = "8", DataSourceId = 4, QueueAggId = 2 };
             PersistAndRemoveFromUnitOfWork(qs1);
             PersistAndRemoveFromUnitOfWork(qs2);
 

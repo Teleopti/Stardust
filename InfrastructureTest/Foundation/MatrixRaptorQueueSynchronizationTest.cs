@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			var affectedQueues = target.SynchronizeQueues(new List<IQueueSource>());
 
 			affectedQueues.Should().Be.EqualTo(0);
-			raptorQueueInvalidMartData.QueueMartId.Should().Be.EqualTo(0);
+			raptorQueueInvalidMartData.QueueMartId.Should().Be.EqualTo(-1);
 			raptorQueueInvalidMartData.QueueOriginalId.Should().Be.EqualTo(0);
 			raptorQueueInvalidMartData.DataSourceId.Should().Be.EqualTo(0);
 
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			var affectedQueues = target.SynchronizeQueues(new List<IQueueSource> { matrixQueue });
 
 			affectedQueues.Should().Be.EqualTo(1);
-			raptorQueueCleared.QueueMartId.Should().Be.EqualTo(0);
+			raptorQueueCleared.QueueMartId.Should().Be.EqualTo(-1);
 			raptorQueueCleared.QueueOriginalId.Should().Be.EqualTo(0);
 			raptorQueueCleared.DataSourceId.Should().Be.EqualTo(0);
 
