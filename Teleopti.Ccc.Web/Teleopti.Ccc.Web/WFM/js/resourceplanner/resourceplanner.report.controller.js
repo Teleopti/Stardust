@@ -7,6 +7,7 @@
 	            $scope.hasIssues = $scope.issues.length > 0;
 	            $scope.scheduledAgents = $stateParams.result.ScheduledAgentsCount;
 				$scope.isEnabled = false;
+				$scope.optimizeRunning = false;
 	            var scheduleResult = $stateParams.interResult.SkillResultList;
 	            $scope.planningPeriod = $stateParams.planningperiod;
 	            $scope.dayNodes = scheduleResult;
@@ -14,9 +15,13 @@
 					$scope.isEnabled = toggleService.Scheduler_IntradayOptimization_36617;
 				});
 				$scope.intraOptimize = function(){
-					ResourcePlannerReportSrvc.intraOptimize('test');
-
-
+					$scope.optimizeRunning = true;
+					console.log($scope.planningPeriod);
+					ResourcePlannerReportSrvc.intraOptimize.save({id:$scope.planningPeriod.Id}).$promise.then(function(result){
+						console.log('done',result);
+						$scope.optimizeRunning = false;
+						$scope.dayNodes = result.SkillResultList
+					});
 				}
 	            $scope.gridOptions = {
 	                columnDefs: [

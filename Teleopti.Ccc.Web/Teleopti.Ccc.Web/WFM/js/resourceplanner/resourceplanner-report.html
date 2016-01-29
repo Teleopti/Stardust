@@ -29,7 +29,7 @@
 	</div>
 	<div class="con-row demo-outline">
 		<div class="con-flex">
-			<div class="legends" layout="column">
+			<div class="legends" ng-show="!optimizeRunning" layout="column">
 				<ul>
 					<li>{{'CriticalUnderstaffingColon' | translate}}
 						<div class="legend critUnderstaffed"></div>
@@ -46,7 +46,9 @@
 				</ul>
 			</div>
 			<div class="grid-scroll-wrap">
-				<table ng-hide="dates.lenght > 0" class="overview">
+				<md-progress-linear ng-show="optimizeRunning" md-mode="indeterminate"></md-progress-linear>
+					<div ng-show="optimizeRunning" class="wfm-block material-depth-1">{{'OptimizingIntraday'|translate}}</div>
+				<table ng-hide="dates.lenght > 0" class="overview" ng-show="!optimizeRunning">
 					<tr ng-repeat="(index, subnode) in dayNodes | limitTo:1 ">
 						<th></th>
 						<th class="datehead" ng-repeat="datenode in subnode.SkillDetails">

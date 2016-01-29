@@ -23,9 +23,9 @@
 						})
 					})
 				};
-				this.intraOptimize = function(a){
-					console.log(a);
-				}
+				this.intraOptimize = $resource('../api/ResourcePlanner/optimize/intraday/:id', {id:'@id'}, {
+					query: { method: 'save', params: {}, isArray: false }
+				});
 
 				this.parseRelDif = function(period) {
 					period.forEach(function(node) {
