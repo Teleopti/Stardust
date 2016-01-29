@@ -89,7 +89,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 				dataSourceCollection = new List<IDataSourceEtl> {temp};
 			}
 			comboBoxDataSource.DataSource = dataSourceCollection;
-			comboBoxDataSource.DisplayMember = "Name";
+			comboBoxDataSource.DisplayMember = "DataSourceName";
 			comboBoxDataSource.ValueMember = "DataSourceId";
 			//if (dataSourceCollection.Count > 0)
 			//{
