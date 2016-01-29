@@ -1,4 +1,5 @@
-﻿using Stardust.Node.Interfaces;
+﻿using Stardust.Node.Extensions;
+using Stardust.Node.Interfaces;
 
 namespace Stardust.Node.Helpers
 {
@@ -10,6 +11,8 @@ namespace Stardust.Node.Helpers
 
         public NodeConfigurationUriBuilderHelper(INodeConfiguration configuration)
         {
+            configuration.ThrowArgumentNullException();
+
             ManagerUriBuilder = new ManagerUriBuilderHelper(configuration.ManagerLocation);
 
             NodeUriBuilder = new NodeUriBuilderHelper(configuration.BaseAddress);

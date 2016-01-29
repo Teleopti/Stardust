@@ -18,6 +18,11 @@ namespace NodeTest
 
         private INodeConfiguration _nodeConfiguration;
 
+        private Uri FakeUrl
+        {
+            get { return _fakeUrl; }
+        }
+
         [SetUp]
         public void Setup()
         {
@@ -40,7 +45,7 @@ namespace NodeTest
         public void ShouldThrowExceptionWhenNodeConfigurationArgumentIsNull()
         {
             var trySendJobDoneStatusToManagerTimer = new TrySendStatusToManagerTimer(null,
-                                                                                     _fakeUrl);
+                                                                                     FakeUrl);
         }
 
         [Test]

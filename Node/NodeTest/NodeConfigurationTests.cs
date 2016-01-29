@@ -4,7 +4,7 @@ using Stardust.Node.API;
 
 namespace NodeTest
 {
-    internal class NodeConfigurationTest
+    internal class NodeConfigurationTests
     {
         private NodeConfiguration _nodeConfiguration;
 
