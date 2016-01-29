@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly Func<IRequiredScheduleHelper> _requiredScheduleHelper;
 		private readonly Func<IGroupPagePerDateHolder> _groupPagePerDateHolder;
 		private readonly Func<IScheduleTagSetter> _scheduleTagSetter;
-		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 		private readonly IScheduleDictionaryPersister _persister;
 		private readonly ViolatedSchedulePeriodBusinessRule _violatedSchedulePeriodBusinessRule;
 		private readonly DayOffBusinessRuleValidation _dayOffBusinessRuleValidation;
@@ -38,8 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			IFixedStaffLoader fixedStaffLoader, IScheduleControllerPrerequisites prerequisites, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService,
 			Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder,
 			Func<IRequiredScheduleHelper> requiredScheduleHelper, Func<IGroupPagePerDateHolder> groupPagePerDateHolder,
-			Func<IScheduleTagSetter> scheduleTagSetter,
-			Func<IPersonSkillProvider> personSkillProvider, IScheduleDictionaryPersister persister,
+			Func<IScheduleTagSetter> scheduleTagSetter, IScheduleDictionaryPersister persister,
 			ViolatedSchedulePeriodBusinessRule violatedSchedulePeriodBusinessRule,
 			DayOffBusinessRuleValidation dayOffBusinessRuleValidation, ICurrentUnitOfWork currentUnitOfWork)
 		{
@@ -52,7 +50,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_requiredScheduleHelper = requiredScheduleHelper;
 			_groupPagePerDateHolder = groupPagePerDateHolder;
 			_scheduleTagSetter = scheduleTagSetter;
-			_personSkillProvider = personSkillProvider;
 			_persister = persister;
 			_violatedSchedulePeriodBusinessRule = violatedSchedulePeriodBusinessRule;
 			_dayOffBusinessRuleValidation = dayOffBusinessRuleValidation;

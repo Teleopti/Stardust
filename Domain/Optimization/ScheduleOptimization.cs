@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -23,7 +22,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IScheduleControllerPrerequisites _prerequisites;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IClassicDaysOffOptimizationCommand _classicDaysOffOptimizationCommand;
-		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 		private readonly IScheduleDictionaryPersister _persister;
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
@@ -36,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public ScheduleOptimization(SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,
 			IFixedStaffLoader fixedStaffLoader, IScheduleControllerPrerequisites prerequisites, Func<ISchedulerStateHolder> schedulerStateHolder,
 			IClassicDaysOffOptimizationCommand classicDaysOffOptimizationCommand,
-			Func<IPersonSkillProvider> personSkillProvider, IScheduleDictionaryPersister persister, IPlanningPeriodRepository planningPeriodRepository,
+			IScheduleDictionaryPersister persister, IPlanningPeriodRepository planningPeriodRepository,
 			WeeklyRestSolverExecuter weeklyRestSolverExecuter, OptimizationPreferencesFactory optimizationPreferencesFactory,
 			IMatrixListFactory matrixListFactory, IScheduleDayEquator scheduleDayEquator,
 			DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
@@ -47,7 +45,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_prerequisites = prerequisites;
 			_schedulerStateHolder = schedulerStateHolder;
 			_classicDaysOffOptimizationCommand = classicDaysOffOptimizationCommand;
-			_personSkillProvider = personSkillProvider;
 			_persister = persister;
 			_planningPeriodRepository = planningPeriodRepository;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
