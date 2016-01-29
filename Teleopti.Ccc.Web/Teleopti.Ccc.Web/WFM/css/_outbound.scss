@@ -39,12 +39,10 @@
 			display:none;
 		}
 	}
-	.operation-container{
-		.threshold-slider>div{
-			position: absolute; 
-			top: 0; 
-			left: 3px;
-		}
+	.threshold-slider>div{
+		position: absolute; 
+		top: 0; 
+		left: 3px;
 	}
 	campaign-commands-pane input.ng-invalid.ng-dirty { // fix styleguide and refactor
         border-bottom:2px solid $red-700;
@@ -173,7 +171,6 @@
 				border: solid 1px;
 				border-right: none;
 			}
-
 			.gantt-row-background { //compact
 				&.gantt-row-expansion {
 					border-right: none;
@@ -209,17 +206,6 @@
 		}
 		.gantt-body-columns {
 			pointer-events: auto;
-		}
-		.gantt-column { //not sure what this does
-			.custom-tooltip {
-				position: relative;
-				display: none;
-			}
-		}
-		.gantt-column:hover { 
-			.custom-tooltip {
-				display: block !important;
-			}
 		}
 	}
 	.week-days-header {
@@ -375,12 +361,6 @@
 			display: inline-block;
 		}
 	}
-	.loading-c3{
-		position:relative;
-		height:100%;
-		width:100%;
-		background-color:rgba(0,0,0,0.2);
-	}
 	.loading{
 		position:absolute !important;
 		top:0;
@@ -388,14 +368,12 @@
 		height:100%;
 		width:100%;
 		z-index: 3000;
+		background-color:rgba(0,0,0,0.5);
 	}
 	md-progress-circular {
 		position:absolute;
 		top:40%;
 		left:48%;
-	}
-	.loading-gantt{
-		background-color:rgba(0,0,0,0.5);
 	}
 	.gantt-schedule-loader{
 		position:absolute;
