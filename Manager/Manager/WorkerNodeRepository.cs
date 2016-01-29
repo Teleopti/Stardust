@@ -52,7 +52,7 @@ namespace Stardust.Manager
 						var jobDefinition = new WorkerNode()
 						{
 							Id = (Guid)reader.GetValue(reader.GetOrdinal("Id")),
-							Url = (Uri)reader.GetValue(reader.GetOrdinal("Url"))
+							Url = (string)reader.GetValue(reader.GetOrdinal("Url"))
 						};
 						listToReturn.Add(jobDefinition);
 					}
@@ -87,7 +87,7 @@ namespace Stardust.Manager
 							var jobDefinition = new WorkerNode()
 							{
 								Id = (Guid) reader.GetValue(reader.GetOrdinal("Id")),
-								Url = (Uri) reader.GetValue(reader.GetOrdinal("Url"))
+								Url = (string) reader.GetValue(reader.GetOrdinal("Url"))
 							};
 							listToReturn.Add(jobDefinition);
 						}

@@ -24,7 +24,7 @@ namespace ManagerTest
         public IWorkerNodeRepository NodeRepository;
         public INodeManager NodeManager;
         public FakeHttpSender HttpSender;
-        public Uri NodeUri;
+        private readonly Uri _nodeUri = new Uri("http://localhost:9050/");
 
         [Test]
         public void ShouldBeAbleToAcknowledgeWhenJobIsReceived()
@@ -100,32 +100,32 @@ namespace ManagerTest
         [Test]
         public void ShouldAddANodeOnInit()
         {
-            Target.NodeInitialized(NodeUri);
+            Target.NodeInitialized(_nodeUri);
             NodeRepository.LoadAll()
                 .First()
                 .Url.Should()
-                .Be.EqualTo(NodeUri.ToString());
+                .Be.EqualTo(_nodeUri.ToString());
         }
 
         [Test]
         public void ShouldBeAbleToSendNewJobToAvailableNode()
         {
             var job = new JobRequestModel() {Name = "ShouldBeAbleToSendNewJobToAvailableNode", Serialized = "ngt", Type = "bra", UserName = "ManagerTests"};
-            Target.NodeInitialized(NodeUri);
+            Target.NodeInitialized(_nodeUri);
             Target.DoThisJob(job);
-            Target.Heartbeat(NodeUri);
+            Target.Heartbeat(_nodeUri);
             HttpSender.CalledNodes.Keys.First()
                 .Should()
-                .Contain(NodeUri.ToString());
+                .Contain(_nodeUri.ToString());
         }
 
         [Test]
         public void ShouldReturnConflictIfNodeIsBusy()
         {
             var job = new JobRequestModel() {Name = "ShouldBeAbleToSendNewJobToAvailableNode", Serialized = "ngt", Type = "bra", UserName = "ManagerTests"};
-            thisNodeIsBusy(NodeUri.ToString());
+            thisNodeIsBusy(_nodeUri.ToString());
 
-            Target.Heartbeat(NodeUri);
+            Target.Heartbeat(_nodeUri);
 
             Target.DoThisJob(job);
 
@@ -137,14 +137,14 @@ namespace ManagerTest
         public void ShouldBeAbleToSendNewJobToFirstAvailableNode()
         {
             var job = new JobRequestModel() {Name = "ShouldBeAbleToSendNewJobToFirstAvailableNode", Serialized = "ngt", Type = "bra", UserName = "ManagerTests"};
-            thisNodeIsBusy(NodeUri.ToString());
+            thisNodeIsBusy(_nodeUri.ToString());
 
-            Target.NodeInitialized(NodeUri);
+            Target.NodeInitialized(_nodeUri);
             Target.NodeInitialized(new Uri("http://localhost:9051/"));
 
             Target.DoThisJob(job);
 
-            Target.Heartbeat(NodeUri);
+            Target.Heartbeat(_nodeUri);
 
             HttpSender.CalledNodes.Count.Should()
                 .Be.EqualTo(2);
@@ -158,13 +158,13 @@ namespace ManagerTest
         {
             var job = new JobRequestModel() {Name = "ShouldAddNodeReferenceToJObDefinition", Serialized = "ngt", Type = "bra", UserName = "ManagerTests"};
 
-            Target.NodeInitialized(NodeUri);
+            Target.NodeInitialized(_nodeUri);
             Target.DoThisJob(job);
-            Target.Heartbeat(NodeUri);
+            Target.Heartbeat(_nodeUri);
             JobRepository.LoadAll()
                 .First()
                 .AssignedNode.Should()
-                .Contain(NodeUri.ToString());
+                .Contain(_nodeUri.ToString());
         }
 
         [Test]
@@ -178,8 +178,8 @@ namespace ManagerTest
             JobRepository.Add(job1);
             JobRepository.Add(job2);
 
-            Target.NodeInitialized(NodeUri);
-            Target.Heartbeat(NodeUri);
+            Target.NodeInitialized(_nodeUri);
+            Target.Heartbeat(_nodeUri);
             HttpSender.CalledNodes.Count.Should()
                 .Be.EqualTo(2);
         }
@@ -202,9 +202,9 @@ namespace ManagerTest
             Guid jobId = Guid.NewGuid();
             var job = new JobDefinition() {Name = " ", Serialized = " ", Type = " ", UserName = "ManagerTests", Id = jobId};
             JobRepository.Add(job);
-            JobRepository.CheckAndAssignNextJob(new List<WorkerNode>() {new WorkerNode() {Url = NodeUri } },
+            JobRepository.CheckAndAssignNextJob(new List<WorkerNode>() {new WorkerNode() {Url = _nodeUri.ToString() } },
                                                 HttpSender);
-            thisNodeIsBusy(NodeUri.ToString());
+            thisNodeIsBusy(_nodeUri.ToString());
             Target.CancelThisJob(jobId);
             JobRepository.LoadAll()
                 .Count.Should()
@@ -214,12 +214,12 @@ namespace ManagerTest
         [Test]
         public void ShouldBeAbleToCancelJobOnNode()
         {
-            Target.Heartbeat(NodeUri);
+            Target.Heartbeat(_nodeUri);
             Target.Heartbeat(new Uri("http://localhost:9051/"));
 
             Guid jobId = Guid.NewGuid();
             JobRepository.Add(new JobDefinition() {Id = jobId, Serialized = "", Name = "", Type = "", UserName = "ManagerTests"});
-            JobRepository.CheckAndAssignNextJob(new List<WorkerNode>() {new WorkerNode() {Url = NodeUri }, new WorkerNode() {Url = new Uri("http://localhost:9051/") } },
+            JobRepository.CheckAndAssignNextJob(new List<WorkerNode>() {new WorkerNode() {Url = _nodeUri.ToString() }, new WorkerNode() {Url = "http://localhost:9051/" } },
                                                 HttpSender);
             HttpSender.CalledNodes.Clear();
             Target.CancelThisJob(jobId);
@@ -232,7 +232,7 @@ namespace ManagerTest
         public void ShouldRemoveTheJobWhenItsFinished()
         {
             Guid jobId = Guid.NewGuid();
-            var job = new JobDefinition() {Id = jobId, AssignedNode = NodeUri.ToString(), Name = "job", Serialized = "", Type = "", UserName = "ShouldRemoveTheJobWhenItsFinished"};
+            var job = new JobDefinition() {Id = jobId, AssignedNode = _nodeUri.ToString(), Name = "job", Serialized = "", Type = "", UserName = "ShouldRemoveTheJobWhenItsFinished"};
             JobRepository.Add(job);
             Target.JobDone(job.Id);
             JobRepository.LoadAll()
@@ -244,7 +244,7 @@ namespace ManagerTest
         public void ShouldSendOkWhenJobDoneSignalReceived()
         {
             Guid jobId = Guid.NewGuid();
-            var job = new JobDefinition() {Id = jobId, AssignedNode = NodeUri.ToString(), Name = "job", Serialized = "", Type = "", UserName = "ShouldSendOkWhenJobDoneSignalReceived"};
+            var job = new JobDefinition() {Id = jobId, AssignedNode = _nodeUri.ToString(), Name = "job", Serialized = "", Type = "", UserName = "ShouldSendOkWhenJobDoneSignalReceived"};
             JobRepository.Add(job);
             var result = Target.JobDone(job.Id);
             result.Should()
@@ -259,19 +259,19 @@ namespace ManagerTest
             string userName = "ManagerTests";
             var job = new JobDefinition() {Id = jobId, Name = "job", UserName = userName, Serialized = "Fake Serialized", Type = "Fake Type"};
             JobRepository.Add(job);
-            JobRepository.CheckAndAssignNextJob(new List<WorkerNode>() {new WorkerNode() {Url = NodeUri } },
+            JobRepository.CheckAndAssignNextJob(new List<WorkerNode>() {new WorkerNode() {Url = _nodeUri.ToString() } },
                                                 HttpSender);
-            Target.Heartbeat(NodeUri);
+            Target.Heartbeat(_nodeUri);
             HttpSender.CalledNodes.First()
                 .Key.Should()
-                .Contain(NodeUri.ToString());
+                .Contain(_nodeUri.ToString());
         }
 
         [Test]
         public void ShouldNotAddSameNodeTwiceInInit()
         {
-            Target.NodeInitialized(NodeUri);
-            Target.NodeInitialized(NodeUri);
+            Target.NodeInitialized(_nodeUri);
+            Target.NodeInitialized(_nodeUri);
             NodeRepository.LoadAll()
                 .Count.Should()
                 .Be.EqualTo(1);
