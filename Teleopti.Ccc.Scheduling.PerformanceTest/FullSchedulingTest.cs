@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 
 				using (new TimeoutScope(browserActivator, TimeSpan.FromDays(1)))
 				{
-					browserInteractions.AssertExists(".scheduling-result, .test-errorMessage, .server-busy, #Login-container, .test-alert");
+					browserInteractions.AssertExists(".test-scheduling-result, .test-errorMessage, .server-busy, #Login-container, .test-alert");
 
 					//no server error
 					browserInteractions.AssertNotExists("body", ".test-errorMessage");
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 					browserInteractions.AssertNotExists("body", ".server-busy");
 					//not redirected to logon page
 					browserInteractions.AssertNotExists("body", "#Login-container");
-					browserInteractions.AssertExists(".scheduling-result");
+					browserInteractions.AssertExists(".test-scheduling-result");
 				}
 			}
 		}
