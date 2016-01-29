@@ -5,6 +5,6 @@ namespace Stardust.Manager.Interfaces
 	public interface INodeManager
 	{
 		void AddIfNeeded(Uri nodeUrl);
-		void FreeJobIfAssingedToNode(string url);
+		void FreeJobIfAssingedToNode(Uri url);
 	}
 }
