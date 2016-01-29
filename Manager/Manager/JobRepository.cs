@@ -223,7 +223,7 @@ namespace Stardust.Manager
                                     NodeUriBuilderHelper builderHelper = new NodeUriBuilderHelper(node.Url);
                                     var urijob = builderHelper.GetJobTemplateUri();
 
-                                    var response = await httpSender.PostAsync(urijob.ToString(), job);
+                                    var response = await httpSender.PostAsync(urijob, job);
 
 									if (response != null && response.IsSuccessStatusCode)
 									{
@@ -341,7 +341,7 @@ namespace Stardust.Manager
                         Logger.Info("Send delete async : " + uriCancel);
 
                         var response = 
-                            await httpSender.DeleteAsync(uriCancel.ToString());
+                            await httpSender.DeleteAsync(uriCancel);
 
 						if (response != null && response.IsSuccessStatusCode)
 						{

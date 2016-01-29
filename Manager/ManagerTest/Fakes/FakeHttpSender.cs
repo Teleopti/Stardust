@@ -27,16 +27,16 @@ namespace ManagerTest.Fakes
 
 
 #pragma warning disable 1998
-        public async Task<HttpResponseMessage> PostAsync(string url,
+        public async Task<HttpResponseMessage> PostAsync(Uri url,
 #pragma warning restore 1998
                                                          object data)
         {
-            if (BusyNodesUrl.Any(url.Contains))
+            if (BusyNodesUrl.Any(url.ToString().Contains))
             {
                 return new HttpResponseMessage(HttpStatusCode.Conflict);
             }
 
-            CalledNodes.Add(url,
+            CalledNodes.Add(url.ToString(),
                             data);
 
             if (Responses.Count == CalledNodes.Count())
@@ -47,10 +47,10 @@ namespace ManagerTest.Fakes
             return Responses[0];
         }
 #pragma warning disable 1998
-        public async Task<HttpResponseMessage> DeleteAsync(string url)
+        public async Task<HttpResponseMessage> DeleteAsync(Uri url)
 #pragma warning restore 1998
         {
-            CalledNodes.Add(url, null);
+            CalledNodes.Add(url.ToString(), null);
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
     }

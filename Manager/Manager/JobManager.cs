@@ -31,7 +31,7 @@ namespace Stardust.Manager
 
 			    Uri postUri=nodeUriBuilder.GetIsAliveTemplateUri();
 
-                var response = await _httpSender.PostAsync(postUri.ToString(), null);
+                var response = await _httpSender.PostAsync(postUri, null);
 
 				if (response != null && response.IsSuccessStatusCode)
 					upNodes.Add(availableNode);

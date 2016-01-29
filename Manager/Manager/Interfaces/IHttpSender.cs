@@ -6,8 +6,8 @@ namespace Stardust.Manager.Interfaces
 {
 	public interface IHttpSender
 	{
-		Task<HttpResponseMessage> PostAsync(string url, object data);
+		Task<HttpResponseMessage> PostAsync(Uri url, object data);
 
-        Task<HttpResponseMessage> DeleteAsync(string url);
+        Task<HttpResponseMessage> DeleteAsync(Uri url);
     }
 }

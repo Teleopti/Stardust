@@ -10,7 +10,7 @@ namespace Stardust.Manager
 {
     public class HttpSender : IHttpSender
     {
-        public async Task<HttpResponseMessage> PostAsync(string url,
+        public async Task<HttpResponseMessage> PostAsync(Uri url,
                                                          object data)
         {
             using (var client = new HttpClient())
@@ -36,7 +36,7 @@ namespace Stardust.Manager
             }
         }
 
-        public async Task<HttpResponseMessage> DeleteAsync(string url)
+        public async Task<HttpResponseMessage> DeleteAsync(Uri url)
         {
             using (var client = new HttpClient())
             {

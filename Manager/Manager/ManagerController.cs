@@ -77,9 +77,8 @@ namespace Stardust.Manager
 		{
 			Logger.Error(WhoAmI + ": Received job failed from a Node. JobId = " + jobId);
 			_jobManager.SetEndResultOnJobAndRemoveIt(jobId, "Failed");
-
-			Logger.Info("Received cancel from client. JobId = " + jobId);
-			_jobManager.CancelThisJob(jobId);
+            
+	//		_jobManager.CancelThisJob(jobId);   ???? What is this doing here?
 			return Ok();
 		}
 
