@@ -24,8 +24,7 @@ namespace ManagerTest
         public IWorkerNodeRepository NodeRepository;
         public INodeManager NodeManager;
         public FakeHttpSender HttpSender;
-        public Uri NodeUri; 
-
+        public Uri NodeUri;
 
         [Test]
         public void ShouldBeAbleToAcknowledgeWhenJobIsReceived()
@@ -203,7 +202,7 @@ namespace ManagerTest
             Guid jobId = Guid.NewGuid();
             var job = new JobDefinition() {Name = " ", Serialized = " ", Type = " ", UserName = "ManagerTests", Id = jobId};
             JobRepository.Add(job);
-            JobRepository.CheckAndAssignNextJob(new List<WorkerNode>() {new WorkerNode() {Url = NodeUri.ToString() } },
+            JobRepository.CheckAndAssignNextJob(new List<WorkerNode>() {new WorkerNode() {Url = NodeUri } },
                                                 HttpSender);
             thisNodeIsBusy(NodeUri.ToString());
             Target.CancelThisJob(jobId);
@@ -220,7 +219,7 @@ namespace ManagerTest
 
             Guid jobId = Guid.NewGuid();
             JobRepository.Add(new JobDefinition() {Id = jobId, Serialized = "", Name = "", Type = "", UserName = "ManagerTests"});
-            JobRepository.CheckAndAssignNextJob(new List<WorkerNode>() {new WorkerNode() {Url = NodeUri.ToString() }, new WorkerNode() {Url = "localhost:9051/" } },
+            JobRepository.CheckAndAssignNextJob(new List<WorkerNode>() {new WorkerNode() {Url = NodeUri }, new WorkerNode() {Url = new Uri("http://localhost:9051/") } },
                                                 HttpSender);
             HttpSender.CalledNodes.Clear();
             Target.CancelThisJob(jobId);
@@ -260,7 +259,7 @@ namespace ManagerTest
             string userName = "ManagerTests";
             var job = new JobDefinition() {Id = jobId, Name = "job", UserName = userName, Serialized = "Fake Serialized", Type = "Fake Type"};
             JobRepository.Add(job);
-            JobRepository.CheckAndAssignNextJob(new List<WorkerNode>() {new WorkerNode() {Url = NodeUri.ToString() } },
+            JobRepository.CheckAndAssignNextJob(new List<WorkerNode>() {new WorkerNode() {Url = NodeUri } },
                                                 HttpSender);
             Target.Heartbeat(NodeUri);
             HttpSender.CalledNodes.First()
