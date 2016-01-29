@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -12,6 +13,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -95,8 +97,19 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
 		}
 
-		[UnitOfWork]
+		[LogTime]
 		public virtual OptimizationResultModel Optimize(Guid planningPeriodId)
+		{
+			var planningPeriod = SetupAndOptimize(planningPeriodId);
+
+			Persist();
+
+			return CreateResult(planningPeriod);
+		}
+
+		[UnitOfWork]
+		[LogTime]
+		protected virtual IPlanningPeriod SetupAndOptimize(Guid planningPeriodId)
 		{
 			var optimizationPreferences = _optimizationPreferencesFactory.Create();
 			var dayOffOptimizationPreference = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
@@ -111,12 +124,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			var matrixListForIntraDayOptimizationOriginal = _matrixListFactory.CreateMatrixListForSelection(allSchedules);
 			var matrixOriginalStateContainerListForIntradayOptimizationOriginal =
-				matrixListForIntraDayOptimizationOriginal.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator))
+				matrixListForIntraDayOptimizationOriginal.Select(
+					matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator))
 					.Cast<IScheduleMatrixOriginalStateContainer>().ToList();
 
 			var matrixListForIntraDayOptimizationWork = _matrixListFactory.CreateMatrixListForSelection(allSchedules);
 			var matrixOriginalStateContainerListForIntradayOptimizationWork =
-				matrixListForIntraDayOptimizationWork.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator))
+				matrixListForIntraDayOptimizationWork.Select(
+					matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator))
 					.Cast<IScheduleMatrixOriginalStateContainer>().ToList();
 
 			ISchedulePartModifyAndRollbackService rollbackService =
@@ -124,7 +139,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					_schedulerStateHolder().SchedulingResultState,
 					_scheduleDayChangeCallback(),
 					new ScheduleTagSetter(optimizationPreferences.General.ScheduleTag));
-			
+
 			var creator = new IntradayOptimizer2Creator(
 				matrixOriginalStateContainerListForIntradayOptimizationOriginal,
 				matrixOriginalStateContainerListForIntradayOptimizationWork,
@@ -141,7 +156,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_resourceOptimizationHelper,
 				dayOffOptimizationPreference);
 
-			var optimizers = creator.Create();	
+			var optimizers = creator.Create();
 			var service = new IntradayOptimizerContainer(_dailyValueByAllSkillsExtractor);
 			var minutesPerInterval = 15;
 
@@ -161,10 +176,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 				service.Execute(optimizers, period, optimizationPreferences.Advanced.TargetValueCalculation);
 			}
 
-			_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, allSchedules, people.AllPeople, dayOffOptimizationPreference);
+			_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, allSchedules, people.AllPeople,
+				dayOffOptimizationPreference);
+			return planningPeriod;
+		}
 
+		[LogTime]
+		protected virtual void Persist()
+		{
 			_persister.Persist(_schedulerStateHolder().Schedules);
+		}
 
+		[LogTime]
+		protected virtual OptimizationResultModel CreateResult(IPlanningPeriod planningPeriod)
+		{
 			var result = new OptimizationResultModel();
 			result.Map(_schedulerStateHolder().SchedulingResultState.SkillDays, planningPeriod.Range);
 			return result;
