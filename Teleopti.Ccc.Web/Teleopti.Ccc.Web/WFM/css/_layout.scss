@@ -147,6 +147,14 @@ input::-ms-clear {
 	cursor:pointer;
 }
 
+.nav-row{
+	padding-top:5px;
+
+	.nav-inline{
+		display:inline-flex;
+	}
+}
+
 .navbar{
   position:fixed;
   top: 0;
@@ -177,11 +185,17 @@ input::-ms-clear {
 		position: relative;
 		width:auto;
 	}
-}
 
-.navbar-right{
-	.card-context{
-		margin:0;
+	.navbar-left{
+			float: none!important;
+			margin-left: $full-padding;
+			line-height: 25px;
+	}
+
+	.navbar-right{
+		.card-context{
+			margin:0;
+		}
 	}
 }
 
@@ -197,13 +211,6 @@ input::-ms-clear {
 /*Project specific*/
 .fab-wrapper .wfm-fab{
 	float:right;
-}
-
-.navbar{
-  position:fixed;
-  top: 0;
-  left: 0;
-  right: 0;
 }
 
 #lefttoogle > div{
@@ -239,12 +246,26 @@ md-progress-circular .md-inner .md-half-circle {
 }
 
 /*temp fixes*/
-
 .wfm-card-unselected{
 	background: $white;
 }
 
-
 .wfm-form input, .wfm-form select {
 	margin-right: 0;
+}
+
+@media screen and (max-width: 960px) {
+	.sidenav{
+	    text-overflow: hidden;
+	    flex-basis: 50px!important;
+	}
+	#lefttoogle{
+		display: none;
+	}
+	.brand{
+		margin-left: 0!important;
+	}
+	.navbar-right {
+    margin-right: 10px;
+	}
 }

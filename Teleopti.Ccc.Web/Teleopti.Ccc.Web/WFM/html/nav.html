@@ -1,24 +1,21 @@
-<div class="con-row" style="padding-top:5px;">
-	<div class="con-flex">
+<div class="con-row nav-row">
+	<div class="con-flex nav-inline">
 		<span class="brand" ui-sref="main">Teleopti WFM</span>
-	</div>
-	<div class="con-flex">
+
 		<div class="navbar-left">
 			<span ng-controller="BusinessUnitsCtrl">
-			<span ng-if="show">
-				<span class="ui-select">
-					<i class="bu-caret mdi mdi-menu-down"></i>
-					<select name="business-unit-select" id="business-unit-select" class="bu-change" ng-change="changeBusinessUnit(data.selectedBu)" ng-options="bu.Name for bu in data.businessUnits" ng-model="data.selectedBu" ></select>
-					<md-tooltip>{{'BusinessUnit' |translate}}</md-tooltip>
+				<span ng-if="show">
+					<span class="ui-select">
+						<i class="bu-caret mdi mdi-menu-down"></i>
+						<select name="business-unit-select" id="business-unit-select" class="bu-change" ng-change="changeBusinessUnit(data.selectedBu)" ng-options="bu.Name for bu in data.businessUnits" ng-model="data.selectedBu" ></select>
+						<md-tooltip>{{'BusinessUnit' |translate}}</md-tooltip>
+					</span>
 				</span>
 			</span>
-		</span>
+		</div>
 	</div>
-	</div>
 
-
-
-	<div class="con-flex split-3-1 animate-show" ng-controller="SearchCtrl" ng-show="searchmode">
+	<div class="con-flex split-1-2 animate-show" ng-controller="SearchCtrl" ng-show="searchmode">
 		<input type="text" id="searchbar" class="navbar-search" placeholder="{{'SearchThreeDots' | translate}}" ng-model="keyword" ng-change="searchKeyword()"/>
 		<div class="search-results material-depth-2">
 			<ul class="wfm-list">
