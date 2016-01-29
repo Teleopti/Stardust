@@ -85,8 +85,8 @@
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripMain = new System.Windows.Forms.ToolStrip();
 			this.toolStripButtonRemoveNotLoadedSkills = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonSuggestAction = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButtonSuggestAction = new System.Windows.Forms.ToolStripButton();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.tabPage2.SuspendLayout();
@@ -605,7 +605,7 @@
             this.toolStripButtonSuggestAction});
 			this.toolStripMain.Location = new System.Drawing.Point(3, 0);
 			this.toolStripMain.Name = "toolStripMain";
-			this.toolStripMain.Size = new System.Drawing.Size(380, 25);
+			this.toolStripMain.Size = new System.Drawing.Size(411, 25);
 			this.toolStripMain.TabIndex = 0;
 			// 
 			// toolStripButtonRemoveNotLoadedSkills
@@ -616,15 +616,7 @@
 			this.toolStripButtonRemoveNotLoadedSkills.Name = "toolStripButtonRemoveNotLoadedSkills";
 			this.toolStripButtonRemoveNotLoadedSkills.Size = new System.Drawing.Size(142, 22);
 			this.toolStripButtonRemoveNotLoadedSkills.Text = "Remove not loaded skills";
-			// 
-			// toolStripButtonSuggestAction
-			// 
-			this.toolStripButtonSuggestAction.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripButtonSuggestAction.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSuggestAction.Image")));
-			this.toolStripButtonSuggestAction.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonSuggestAction.Name = "toolStripButtonSuggestAction";
-			this.toolStripButtonSuggestAction.Size = new System.Drawing.Size(118, 22);
-			this.toolStripButtonSuggestAction.Text = "Preview suggestions";
+			this.toolStripButtonRemoveNotLoadedSkills.Click += new System.EventHandler(this.toolStripButtonRemoveNotLoadedSkillsClick);
 			// 
 			// toolStripButton1
 			// 
@@ -634,6 +626,17 @@
 			this.toolStripButton1.Name = "toolStripButton1";
 			this.toolStripButton1.Size = new System.Drawing.Size(108, 22);
 			this.toolStripButton1.Text = "Apply suggestions";
+			this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+			// 
+			// toolStripButtonSuggestAction
+			// 
+			this.toolStripButtonSuggestAction.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButtonSuggestAction.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSuggestAction.Image")));
+			this.toolStripButtonSuggestAction.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonSuggestAction.Name = "toolStripButtonSuggestAction";
+			this.toolStripButtonSuggestAction.Size = new System.Drawing.Size(118, 22);
+			this.toolStripButtonSuggestAction.Text = "Preview suggestions";
+			this.toolStripButtonSuggestAction.Click += new System.EventHandler(this.toolStripButtonSuggestAction_Click);
 			// 
 			// AgentSkillAnalyzer
 			// 

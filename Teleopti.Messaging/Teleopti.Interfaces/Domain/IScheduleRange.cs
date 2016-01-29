@@ -61,19 +61,6 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         IFairnessValueResult FairnessValue();
 
-        /// <summary>
-        /// Gets or sets the calculated contract time holder. Used by the result columns in Scheduler.
-        /// This field vill be set to null when Modify method is called.
-        /// </summary>
-        /// <value>The calculated contract time holder.</value>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-11-21
-        /// </remarks>
-        TimeSpan CalculatedContractTimeHolder { get;}
-
-
-
 		TimeSpan CalculatedContractTimeHolderOnPeriod(DateOnlyPeriod periodToCheck);
 
 	    /// <summary>
@@ -98,11 +85,7 @@ namespace Teleopti.Interfaces.Domain
 	    /// </remarks>
 	    int? CalculatedTargetScheduleDaysOff(DateOnlyPeriod periodToCheck);
 
-		/// <summary>
-		/// Gets or sets the calculated schedule days off.
-		/// </summary>
-		/// <value>The calculated schedule days off.</value>
-		int CalculatedScheduleDaysOff { get;}
+	    int CalculatedScheduleDaysOffOnPeriod(DateOnlyPeriod periodToCheck);
 
         /// <summary>
         /// Scheduleds the day colletion.

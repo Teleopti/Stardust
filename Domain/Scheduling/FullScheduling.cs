@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					x =>
 					{
 						var calculatedTargetTime = x.Value.CalculatedTargetTimeHolder(periodToCheck);
-						return calculatedTargetTime.HasValue && x.Value.CalculatedContractTimeHolder == calculatedTargetTime;
+						return calculatedTargetTime.HasValue && x.Value.CalculatedContractTimeHolderOnPeriod(periodToCheck) == calculatedTargetTime;
 					});
 		}
 
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var targetTime = scheduleRange.CalculatedTargetTimeHolder(periodToCheck);
 			return targetTime.HasValue &&
-					 (targetTime.Value == scheduleRange.CalculatedContractTimeHolder);
+				(targetTime.Value == scheduleRange.CalculatedContractTimeHolderOnPeriod(periodToCheck));
 		}
 
 		private IEnumerable<BusinessRulesValidationResult> getDayOffBusinessRulesValidationResults(

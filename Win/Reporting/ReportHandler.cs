@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.Win.Reporting
 					detailData.TargetDayOffs = stateHolder.Schedules[person].CalculatedTargetScheduleDaysOff(schedulePeriod.DateOnlyPeriod).GetValueOrDefault(0);
 
 					detailData.ScheduledTime = stateHolder.Schedules[person].CalculatedContractTimeHolderOnPeriod(schedulePeriod.DateOnlyPeriod).TotalMinutes;
-					detailData.ScheduledDayOffs = stateHolder.Schedules[person].CalculatedScheduleDaysOff;
+					detailData.ScheduledDayOffs = stateHolder.Schedules[person].CalculatedScheduleDaysOffOnPeriod(schedulePeriod.DateOnlyPeriod);
 					detailDataList.Add(detailData);
 				});
 			});

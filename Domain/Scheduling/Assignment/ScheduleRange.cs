@@ -235,21 +235,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return fairnessValue(period);
         }
 
-		public TimeSpan CalculatedContractTimeHolder
-		{
-			get
-			{
-				if (!_calculatedContractTimeHolder.HasValue)
-				{
-					var timeAndDaysOffTuple =	new CurrentScheduleSummaryCalculator().GetCurrent(this);
-					_calculatedContractTimeHolder = timeAndDaysOffTuple.Item1;
-					_calculatedScheduleDaysOff = timeAndDaysOffTuple.Item2;
-				}
-
-				return _calculatedContractTimeHolder.Value;
-			}
-		}
-
 	    public TimeSpan CalculatedContractTimeHolderOnPeriod(DateOnlyPeriod periodToCheck)
 	    {
 
@@ -275,20 +260,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		    return _calculatedTargetTimeHolder;
 	    }
 
-	    public int CalculatedScheduleDaysOff
-        {
-	        get
-	        {
-				if (!_calculatedScheduleDaysOff.HasValue)
-				{
-					var timeAndDaysOffTuple = new CurrentScheduleSummaryCalculator().GetCurrent(this);
-					_calculatedContractTimeHolder = timeAndDaysOffTuple.Item1;
-					_calculatedScheduleDaysOff = timeAndDaysOffTuple.Item2;
-				}
+	    public int CalculatedScheduleDaysOffOnPeriod(DateOnlyPeriod periodToCheck)
+	    {
 
-		        return _calculatedScheduleDaysOff.Value;
-	        }
-        }
+		    if (!_calculatedScheduleDaysOff.HasValue)
+		    {
+			    var timeAndDaysOffTuple = new CurrentScheduleSummaryCalculator().GetCurrent(this, periodToCheck);
+			    _calculatedContractTimeHolder = timeAndDaysOffTuple.Item1;
+			    _calculatedScheduleDaysOff = timeAndDaysOffTuple.Item2;
+		    }
+
+		    return _calculatedScheduleDaysOff.Value;
+	    }
 
 	    public int? CalculatedTargetScheduleDaysOff(DateOnlyPeriod periodToCheck)
 	    {

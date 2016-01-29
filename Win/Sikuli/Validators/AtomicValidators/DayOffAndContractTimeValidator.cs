@@ -29,17 +29,18 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators
 			bool daysOffResult = true;
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
 			IList<IPerson> persons = _schedulerState.FilteredPersonDictionary.Values.ToList();
+			var requestedPeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
 
 			foreach (var person in persons)
 			{
 				var range = _schedulerState.Schedules[person];
-				var currentContractTime = range.CalculatedContractTimeHolder;
-				var targetContractTime = range.CalculatedTargetTimeHolder(_schedulerState.RequestedPeriod.DateOnlyPeriod);
+				var currentContractTime = range.CalculatedContractTimeHolderOnPeriod(requestedPeriod);
+				var targetContractTime = range.CalculatedTargetTimeHolder(requestedPeriod);
 
 				if (currentContractTime != targetContractTime)
 					contractTimeResult = false;
 
-				var currentDaysOff = range.CalculatedScheduleDaysOff;
+				var currentDaysOff = range.CalculatedScheduleDaysOffOnPeriod(_schedulerState.RequestedPeriod.DateOnlyPeriod);
 				var targetDayOffs = range.CalculatedTargetScheduleDaysOff(_schedulerState.RequestedPeriod.DateOnlyPeriod);
 
 				if (currentDaysOff != targetDayOffs)

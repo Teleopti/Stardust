@@ -8,7 +8,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			if (!(scheduleRange.CalculatedTargetScheduleDaysOff(periodToCheck).HasValue))
 				return false;
-			return (scheduleRange.CalculatedTargetScheduleDaysOff(periodToCheck) == scheduleRange.CalculatedScheduleDaysOff);
+
+			var calculatedTargetScheduleDaysOff = scheduleRange.CalculatedTargetScheduleDaysOff(periodToCheck);
+			return calculatedTargetScheduleDaysOff != null && (calculatedTargetScheduleDaysOff.Value == scheduleRange.CalculatedScheduleDaysOffOnPeriod(periodToCheck));
 		}
 	}
 }

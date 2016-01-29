@@ -388,7 +388,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		public static void StyleCurrentContractTimeCell(GridStyleInfo style, IScheduleRange wholeRange, DateOnlyPeriod period)
 		{
 			style.CellType = "TotalTimeCell";
-			style.CellValue = wholeRange.CalculatedContractTimeHolder;
+			style.CellValue = wholeRange.CalculatedContractTimeHolderOnPeriod(period);
 		}
 
 		public static Boolean CheckOpenPeriodMatchSchedulePeriod(IPerson person, DateOnlyPeriod openPeriod)
@@ -409,7 +409,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		public static void StyleCurrentTotalDayOffCell(GridStyleInfo style, IScheduleRange wholeRange, DateOnlyPeriod period)
 		{
 			style.CellType = "TotalDayOffCell";
-			style.CellValue = wholeRange.CalculatedScheduleDaysOff;
+			style.CellValue = wholeRange.CalculatedScheduleDaysOffOnPeriod(period);
 		}
 
 		#endregion

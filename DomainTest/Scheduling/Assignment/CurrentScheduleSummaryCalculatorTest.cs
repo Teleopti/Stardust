@@ -1,8 +1,11 @@
 ﻿using System;
 using NUnit.Framework;
-using Rhino.Mocks;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -12,94 +15,87 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	[TestFixture]
 	public class CurrentScheduleSummaryCalculatorTest
 	{
-		private MockRepository _mocks;
-		private CurrentScheduleSummaryCalculator _target;
-		private IScheduleRange _scheduleRange;
-		private IScheduleDictionary _dic;
-		private IPerson _person;
-		private IScheduleDateTimePeriod _scheduleDateTimePeriod;
-		private IScheduleDay _scheduleDay1;
-		private IProjectionService _projectionService;
-		private IVisualLayerCollection _visualLayerCollection;
-
-		[SetUp]
-		public void Setup()
+		[Test]
+		public void ShouldCalculateCorrectWhenLoggedOnInSwedenAndAgentInFinland()
 		{
-			_mocks = new MockRepository();
-			_target = new CurrentScheduleSummaryCalculator();
-			_scheduleRange = _mocks.StrictMock<IScheduleRange>();
-			_dic = _mocks.StrictMock<IScheduleDictionary>();
-			_person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
-			_person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			_scheduleDateTimePeriod = new ScheduleDateTimePeriod(new DateTimePeriod(2015,5,20,2015,5,20));
-			_scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
-			_projectionService = _mocks.StrictMock<IProjectionService>();
-			_visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
+			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("E. Europe Standard Time"));
+
+			var phoneActivity = ActivityFactory.CreateActivity("phone");
+			phoneActivity.InContractTime = true;
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var loggedOnTimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+			var date = new DateOnly(2016, 01, 28);
+			var loggedOnDateTime = TimeZoneHelper.ConvertToUtc(date.Date, loggedOnTimeZone);
+			var visibleDateTimePeriod = new DateTimePeriod(loggedOnDateTime, loggedOnDateTime.AddDays(1));
+			var visibleDateOnlyPeriod = visibleDateTimePeriod.ToDateOnlyPeriod(loggedOnTimeZone);
+			var scenario = new Scenario("scenario");
+			var dic = new ScheduleDictionaryForTest(scenario, visibleDateTimePeriod);
+			var scheduleParameters = new ScheduleParameters(scenario, person, new DateTimePeriod(2016, 01, 26, 2016, 01, 30));
+			var range = new ScheduleRange(dic, scheduleParameters);
+
+			var personDateTime = TimeZoneHelper.ConvertToUtc(date.AddDays(-1).Date, person.PermissionInformation.DefaultTimeZone());
+			var assignment = new PersonAssignment(person, scenario, date.AddDays(-1));
+			assignment.SetShiftCategory(shiftCategory);
+			assignment.AddActivity(phoneActivity, new DateTimePeriod(personDateTime.AddHours(9), personDateTime.AddHours(11)));
+			range.Add(assignment);
+
+			personDateTime = TimeZoneHelper.ConvertToUtc(date.Date, person.PermissionInformation.DefaultTimeZone());
+			assignment = new PersonAssignment(person, scenario, date);
+			assignment.SetShiftCategory(shiftCategory);
+			assignment.AddActivity(phoneActivity, new DateTimePeriod(personDateTime.AddHours(9), personDateTime.AddHours(17)));
+			range.Add(assignment);
+
+			personDateTime = TimeZoneHelper.ConvertToUtc(date.AddDays(1).Date, person.PermissionInformation.DefaultTimeZone());
+			assignment = new PersonAssignment(person, scenario, date.AddDays(1));
+			assignment.SetShiftCategory(shiftCategory);
+			assignment.AddActivity(phoneActivity, new DateTimePeriod(personDateTime.AddHours(9), personDateTime.AddHours(12)));
+			range.Add(assignment);
+
+			var currentContractTimeOnVisiblePeriod = range.CalculatedContractTimeHolderOnPeriod(visibleDateOnlyPeriod);
+			currentContractTimeOnVisiblePeriod.Should().Be.EqualTo(TimeSpan.FromHours(8));
 		}
 
 		[Test]
-		public void ShouldCountContractTime()
+		public void ShouldCalculateCorrectWhenLoggedOnInSwedenAndAgentInLondon()
 		{
-			using (_mocks.Record())
-			{
-				Expect.Call(_scheduleRange.Person).Return(_person);
-				Expect.Call(_scheduleRange.Owner).Return(_dic);
-				Expect.Call(_dic.Period).Return(_scheduleDateTimePeriod);
-				Expect.Call(_scheduleRange.ScheduledDay(new DateOnly(2015, 5, 20))).Return(_scheduleDay1);
-				Expect.Call(_scheduleDay1.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
-				Expect.Call(_scheduleDay1.ProjectionService()).Return(_projectionService);
-				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
-				Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.FromHours(8));
-			}
+			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
 
-			using (_mocks.Playback())
-			{
-				var result = _target.GetCurrent(_scheduleRange);
-				Assert.AreEqual(TimeSpan.FromHours(8), result.Item1);
-				Assert.AreEqual(0, result.Item2);
-			}
-		}
+			var phoneActivity = ActivityFactory.CreateActivity("phone");
+			phoneActivity.InContractTime = true;
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var loggedOnTimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+			var date = new DateOnly(2016, 01, 28);
+			var loggedOnDateTime = TimeZoneHelper.ConvertToUtc(date.Date, loggedOnTimeZone);
+			var visibleDateTimePeriod = new DateTimePeriod(loggedOnDateTime, loggedOnDateTime.AddDays(1));
+			var visibleDateOnlyPeriod = visibleDateTimePeriod.ToDateOnlyPeriod(loggedOnTimeZone);
+			var scenario = new Scenario("scenario");
+			
+			var dic = new ScheduleDictionaryForTest(scenario, visibleDateTimePeriod);
+			var scheduleParameters = new ScheduleParameters(scenario, person, new DateTimePeriod(2016, 01, 26, 2016, 01, 30));
+			var range = new ScheduleRange(dic, scheduleParameters);
 
-		[Test]
-		public void ShouldCountContractTimeOnPeriod()
-		{
-			using (_mocks.Record())
-			{
-				Expect.Call(_scheduleRange.Person).Return(_person);
-				Expect.Call(_scheduleRange.ScheduledDay(new DateOnly(2015, 5, 20))).Return(_scheduleDay1);
-				Expect.Call(_scheduleDay1.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
-				Expect.Call(_scheduleDay1.ProjectionService()).Return(_projectionService);
-				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
-				Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.FromHours(8));
-			}
+			var personDateTime = TimeZoneHelper.ConvertToUtc(date.AddDays(-1).Date, person.PermissionInformation.DefaultTimeZone());
+			var assignment = new PersonAssignment(person, scenario, date.AddDays(-1));
+			assignment.SetShiftCategory(shiftCategory);
+			assignment.AddActivity(phoneActivity, new DateTimePeriod(personDateTime.AddHours(9), personDateTime.AddHours(11)));
+			range.Add(assignment);
 
-			using (_mocks.Playback())
-			{
-				var dateOnlyPeriod = _scheduleDateTimePeriod.LoadedPeriod().ToDateOnlyPeriod(_person.PermissionInformation.DefaultTimeZone());
-				var result = _target.GetCurrent(_scheduleRange, dateOnlyPeriod);
-				Assert.AreEqual(TimeSpan.FromHours(8), result.Item1);
-				Assert.AreEqual(0, result.Item2);
-			}	
-		}
+			personDateTime = TimeZoneHelper.ConvertToUtc(date.Date, person.PermissionInformation.DefaultTimeZone());
+			assignment = new PersonAssignment(person, scenario, date);
+			assignment.SetShiftCategory(shiftCategory);
+			assignment.AddActivity(phoneActivity, new DateTimePeriod(personDateTime.AddHours(9), personDateTime.AddHours(17)));
+			range.Add(assignment);
 
-		[Test]
-		public void ShouldCountDaysOff()
-		{
-			using (_mocks.Record())
-			{
-				Expect.Call(_scheduleRange.Person).Return(_person);
-				Expect.Call(_scheduleRange.Owner).Return(_dic);
-				Expect.Call(_dic.Period).Return(_scheduleDateTimePeriod);
-				Expect.Call(_scheduleRange.ScheduledDay(new DateOnly(2015, 5, 20))).Return(_scheduleDay1);
-				Expect.Call(_scheduleDay1.SignificantPartForDisplay()).Return(SchedulePartView.DayOff);
-			}
+			personDateTime = TimeZoneHelper.ConvertToUtc(date.AddDays(1).Date, person.PermissionInformation.DefaultTimeZone());
+			assignment = new PersonAssignment(person, scenario, date.AddDays(1));
+			assignment.SetShiftCategory(shiftCategory);
+			assignment.AddActivity(phoneActivity, new DateTimePeriod(personDateTime.AddHours(9), personDateTime.AddHours(12)));
+			range.Add(assignment);
 
-			using (_mocks.Playback())
-			{
-				var result = _target.GetCurrent(_scheduleRange);
-				Assert.AreEqual(TimeSpan.Zero, result.Item1);
-				Assert.AreEqual(1, result.Item2);
-			}
+			var currentContractTimeOnVisiblePeriod = range.CalculatedContractTimeHolderOnPeriod(visibleDateOnlyPeriod);
+			currentContractTimeOnVisiblePeriod.Should().Be.EqualTo(TimeSpan.FromHours(8));
 		}
 	}
 }

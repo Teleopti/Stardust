@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using NHibernate.Mapping;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -73,9 +71,10 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 		public TimeSpan CalculatedContractTimeHolder { get; set; }
+
 		public TimeSpan CalculatedContractTimeHolderOnPeriod(DateOnlyPeriod periodToCheck)
 		{
-			throw new NotImplementedException();
+			return CalculatedContractTimeHolder;
 		}
 
 		public TimeSpan? CalculatedTargetTimeHolder(DateOnlyPeriod periodToCheck)
@@ -87,7 +86,12 @@ namespace Teleopti.Ccc.TestCommon
 			return 8;
 		}
 
-		public int CalculatedScheduleDaysOff { get; private set; }
+		public int CalculatedScheduleDaysOffOnPeriod(DateOnlyPeriod periodToCheck)
+		{
+			return CalculatedScheduleDaysOff;
+		}
+
+		public int CalculatedScheduleDaysOff { get; set; }
 
 
 

@@ -5,13 +5,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class CurrentScheduleSummaryCalculator
 	{
-		public Tuple<TimeSpan, int> GetCurrent(IScheduleRange scheduleRange)
-		{
-			var person = scheduleRange.Person;
-			var period = scheduleRange.Owner.Period.VisiblePeriod.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
-			return calculate(scheduleRange, period, person);
-		}
-
 		public Tuple<TimeSpan, int> GetCurrent(IScheduleRange scheduleRange, DateOnlyPeriod period)
 		{
 			var person = scheduleRange.Person;
