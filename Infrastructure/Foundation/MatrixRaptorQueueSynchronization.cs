@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		private bool findByLookup(ILookup<int, IQueueSource> matrixQueuesByAggId, IQueueSource raptorQueue, out IQueueSource matrixQueue)
 		{
-			var validToFind = (raptorQueue.QueueMartId == 0 &&
+			var validToFind = (raptorQueue.QueueMartId == -1 &&
 					 raptorQueue.QueueOriginalId == 0 &&
 					 raptorQueue.DataSourceId == 0 &&
 					 raptorQueue.QueueAggId > 0);
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 				IQueueSource matrixQueue;
 				if (!matrixQueues.TryGetValue(raptorQueue.QueueMartId, out matrixQueue))
 				{
-					raptorQueue.QueueMartId = 0;
+					raptorQueue.QueueMartId = -1;
 					raptorQueue.QueueOriginalId = 0;
 					raptorQueue.DataSourceId = 0;
 				}

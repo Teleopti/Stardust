@@ -81,7 +81,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				dataRow2["queue_code"] = queueSource.QueueOriginalId;
 				dataRow2["workload_code"] = workload.Id;
 				dataRow2["log_object_data_source_id"] = queueSource.DataSourceId;
-				dataRow2["log_object_name"] = "dummy_data";
+                dataRow2["log_object_name"] = queueSource.LogObjectName;
 
 				dataRow2["business_unit_code"] = workload.BusinessUnit.Id;
 				dataRow2["business_unit_name"] = workload.BusinessUnit.Name;
