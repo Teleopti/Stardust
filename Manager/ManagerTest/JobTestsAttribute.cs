@@ -1,3 +1,4 @@
+using System;
 using System.Configuration;
 using Autofac;
 using ManagerTest.Fakes;
@@ -20,7 +21,7 @@ namespace ManagerTest
 				c => new WorkerNodeRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString))
 				.As<IWorkerNodeRepository>();
 			builder.RegisterType<FakeHttpSender>().As<IHttpSender>().SingleInstance();
-		}
+        }
 
 		
 	}

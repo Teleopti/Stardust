@@ -17,7 +17,7 @@ namespace Stardust.Manager
 			_jobRepository = jobRepository;
 		}
 
-		public void AddIfNeeded(string nodeUrl)
+		public void AddIfNeeded(Uri nodeUrl)
 		{
 			try
 			{

@@ -107,7 +107,7 @@ namespace Stardust.Manager
 		{
 			Logger.Info(WhoAmI + ": Received init from node " + nodeUrl);
 			_nodeManager.FreeJobIfAssingedToNode(nodeUrl.ToString());
-			_nodeManager.AddIfNeeded(nodeUrl.ToString());
+			_nodeManager.AddIfNeeded(nodeUrl);
 
 			return Ok();
 		}
