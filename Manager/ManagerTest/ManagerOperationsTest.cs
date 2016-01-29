@@ -141,7 +141,7 @@ namespace ManagerTest
             thisNodeIsBusy(NodeUri.ToString());
 
             Target.NodeInitialized(NodeUri);
-            Target.NodeInitialized(new Uri("localhost:9051/"));
+            Target.NodeInitialized(new Uri("http://localhost:9051/"));
 
             Target.DoThisJob(job);
 
@@ -212,11 +212,11 @@ namespace ManagerTest
                 .Be.EqualTo(1);
         }
 
-        [Test][Ignore]
+        [Test]
         public void ShouldBeAbleToCancelJobOnNode()
         {
             Target.Heartbeat(NodeUri);
-            Target.Heartbeat(new Uri("localhost:9051/"));
+            Target.Heartbeat(new Uri("http://localhost:9051/"));
 
             Guid jobId = Guid.NewGuid();
             JobRepository.Add(new JobDefinition() {Id = jobId, Serialized = "", Name = "", Type = "", UserName = "ManagerTests"});

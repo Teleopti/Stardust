@@ -23,7 +23,7 @@ namespace ManagerTest
 			builder.RegisterType<ManagerController>();
 			builder.RegisterType<JobManager>();
 		    builder.Register(
-		        c => new Uri("localhost:9050/")).As<Uri>();
+		        c => new Uri("http://localhost:9050/")).As<Uri>();
 		}
 	}
 }

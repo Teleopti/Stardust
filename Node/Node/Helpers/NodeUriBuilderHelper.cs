@@ -11,7 +11,12 @@ namespace Stardust.Node.Helpers
         {
             location.ThrowArgumentNullExceptionIfNullOrEmpty();
 
-            UriBuilder = new UriBuilder(new Uri(location));
+            UriBuilder = new UriBuilder
+            {
+                Host = LocationUri.Host,
+                Port = LocationUri.Port,
+                Scheme = LocationUri.Scheme
+            };
         }
 
         public Uri CreateUri(string path)

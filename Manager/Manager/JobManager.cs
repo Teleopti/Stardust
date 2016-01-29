@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Stardust.Manager.Constants;
+using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
 
@@ -23,9 +24,14 @@ namespace Stardust.Manager
 		{
 			var availableNodes = _nodeRepository.LoadAllFreeNodes();
 			var upNodes = new List<WorkerNode>();
+            
 			foreach (var availableNode in availableNodes)
 			{
-				var response = await _httpSender.PostAsync(availableNode.Url + NodeRouteConstants.IsAlive, "");
+                var nodeUriBuilder = new NodeUriBuilderHelper(availableNode.Url);
+
+			    Uri postUri=nodeUriBuilder.GetIsAliveTemplateUri();
+
+                var response = await _httpSender.PostAsync(postUri.ToString(), null);
 
 				if (response != null && response.IsSuccessStatusCode)
 					upNodes.Add(availableNode);
