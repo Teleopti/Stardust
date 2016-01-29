@@ -9,6 +9,11 @@ namespace Stardust.Node.Helpers
         {
             LocationUri = new Uri(locationUri);
 
+            if (string.IsNullOrEmpty(LocationUri.Scheme))
+            {
+                throw new ArgumentNullException();
+            }
+
             UriBuilder = new UriBuilder
             {
                 Host = LocationUri.Host,

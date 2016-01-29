@@ -65,12 +65,12 @@ namespace ManagerTest
 				Status = "Added",
 				Type = ""
 			});
-			WorkerNodeRepository.Add(new WorkerNode {Id = nodeId , Url = "urltonodeone"});
+			WorkerNodeRepository.Add(new WorkerNode {Id = nodeId , Url = "http://urltonodeone" });
          JobManager.CheckAndAssignNextJob();
 			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(2);
 
 			var job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
-			job.AssignedNode.Should().Be.EqualTo("urltonodeone");
+			job.AssignedNode.Should().Be.EqualTo("http://urltonodeone");
 		}
 
 		[Test]
@@ -109,7 +109,7 @@ namespace ManagerTest
 				Serialized = "",
 				Type = ""
 			});
-			WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = "localhost:9050/" });
+			WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = "http://localhost:9050/" });
 
 			JobManager.CheckAndAssignNextJob();
 			var job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
@@ -134,7 +134,7 @@ namespace ManagerTest
 				Serialized = "",
 				Type = ""
 			});
-			WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = "urltonodeone" });
+			WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = "http://urltonodeone" });
 
 			JobManager.CheckAndAssignNextJob();
 			var job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
@@ -155,7 +155,7 @@ namespace ManagerTest
 				Serialized = "",
 				Type = ""
 			});
-			WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = "urltonodeone" });
+			WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = "http://urltonode1" });
 			FakeHttpSender.Responses = new List<HttpResponseMessage> { new HttpResponseMessage(HttpStatusCode.OK) , new HttpResponseMessage(HttpStatusCode.BadRequest) };
 				
          JobManager.CheckAndAssignNextJob();
@@ -177,12 +177,12 @@ namespace ManagerTest
 				Serialized = "",
 				Type = ""
 			});
-			WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = "urltonodeone" });
+			WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = "http://urltonode1" });
 			JobManager.CheckAndAssignNextJob();
 			var job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
-			job.AssignedNode.Should().Be.EqualTo("urltonodeone");
+			job.AssignedNode.Should().Be.EqualTo("http://urltonode1");
 
-			NodeManager.FreeJobIfAssingedToNode("urltonodeone");
+			NodeManager.FreeJobIfAssingedToNode("http://urltonode1");
 			job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
 			// how will we handle status?
 			job.AssignedNode.Should().Be.Null();
@@ -200,17 +200,17 @@ namespace ManagerTest
 				Serialized = "",
 				Type = ""
 			});
-			WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = "Url1/" });
-			WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = "Url2/" });
-			WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = "Url3/" });
+			WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = "http://Url1/" });
+			WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = "http://Url2/" });
+			WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = "http://Url3/" });
 
 			FakeHttpSender.BusyNodesUrl.Add("Url1");
 			FakeHttpSender.BusyNodesUrl.Add("Url3");
 			JobManager.CheckAndAssignNextJob();
 
-            FakeHttpSender.CalledNodes["Url2/" + NodeRouteConstants.Job].Should().Not.Be.Null();
-			FakeHttpSender.CalledNodes.Keys.Should().Not.Contain("Url1/" + NodeRouteConstants.Job);
-			FakeHttpSender.CalledNodes.Keys.Should().Not.Contain("Url3/" + NodeRouteConstants.Job);
+            FakeHttpSender.CalledNodes["http://Url2/" + NodeRouteConstants.Job].Should().Not.Be.Null();
+			FakeHttpSender.CalledNodes.Keys.Should().Not.Contain("http://Url1/" + NodeRouteConstants.Job);
+			FakeHttpSender.CalledNodes.Keys.Should().Not.Contain("http://Url3/" + NodeRouteConstants.Job);
 		}
 	}
 }
