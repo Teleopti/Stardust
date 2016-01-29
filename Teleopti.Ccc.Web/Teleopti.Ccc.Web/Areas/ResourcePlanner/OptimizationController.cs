@@ -39,15 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[HttpPost, Route("api/ResourcePlanner/optimize/intraday/{id}")]
 		public virtual IHttpActionResult OptimizeIntraday(Guid id, BlockToken tokenFromScheduling)
 		{
-			_actionThrottler.Resume(tokenFromScheduling);
-			try
-			{
-				return Ok(_intradayOptimization.Optimize(id));
-			}
-			finally
-			{
-				_actionThrottler.Finish(tokenFromScheduling);
-			}
+			return Ok(_intradayOptimization.Optimize(id));
 		}
 	}
 }
