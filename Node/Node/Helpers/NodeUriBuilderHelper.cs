@@ -6,7 +6,6 @@ namespace Stardust.Node.Helpers
 {
     public class NodeUriBuilderHelper
     {
-
         public NodeUriBuilderHelper(string location)
         {
             location.ThrowArgumentNullExceptionIfNullOrEmpty();
