@@ -220,7 +220,10 @@ namespace Stardust.Manager
 							{
 								try
 								{
-									var response = await httpSender.PostAsync(node.Url.ToString() + NodeRouteConstants.Job, job);
+                                    NodeUriBuilderHelper builderHelper = new NodeUriBuilderHelper(node.Url);
+                                    var urijob = builderHelper.GetJobTemplateUri();
+
+                                    var response = await httpSender.PostAsync(urijob.ToString(), job);
 
 									if (response != null && response.IsSuccessStatusCode)
 									{
