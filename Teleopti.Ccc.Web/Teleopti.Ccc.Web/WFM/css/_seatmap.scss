@@ -179,6 +179,11 @@ seatmap-editor{
 			margin:2px 0 0 0;
 			box-shadow:0 2px 5px 0 rgba(0,0,0,.26);
 		}
+	
+		ul li{
+			white-space:nowrap;		
+		}	
+	
 		ul li .md-alt-text{
 			box-shadow:none;
 			float:right;

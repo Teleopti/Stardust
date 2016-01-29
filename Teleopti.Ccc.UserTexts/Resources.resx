@@ -13731,9 +13731,9 @@ Reduce the complexity to use these shifts.</value>
     <value>Space Selected Items Vertically</value>
     <comment>Used in the seat map editor toolbar (tooltip)</comment>
   </data>
-  <data name="UndoChangesAndRevertToLastSave" xml:space="preserve">
-    <value>Undo changes and revert to last save</value>
-    <comment>Used in the seat map editor</comment>
+  <data name="RevertToLastSave" xml:space="preserve">
+    <value>Revert to last save</value>
+    <comment>Undo text in the seat map editor</comment>
   </data>
   <data name="UngroupItems" xml:space="preserve">
     <value>Ungroup Items</value>

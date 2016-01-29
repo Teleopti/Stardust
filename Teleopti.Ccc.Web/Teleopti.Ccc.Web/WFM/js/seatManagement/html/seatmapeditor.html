@@ -31,9 +31,9 @@
 		{{'Edit' | translate}}
 		<span class="context-menu-right">
 			<ul class="wfm-list">
-				<li ng-click="vm.refreshSeatMap()" ng-disabled="!vm.hasChanges()" style="white-space: nowrap">
+				<li ng-click="vm.refreshSeatMap()" ng-disabled="!vm.hasChanges()">
 					<i class="mdi mdi-undo menu-icon"></i>
-					{{'UndoChangesAndRevertToLastSave' | translate}}
+					{{'RevertToLastSave' | translate}}
 				</li>
 				<li ng-click="vm.delete()" ng-disabled="!vm.hasObjectSelected()">
 					<i class="mdi mdi-delete menu-icon"></i>

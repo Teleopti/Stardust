@@ -12554,6 +12554,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Intra optimize.
+        /// </summary>
+        public static string IntraOptimize {
+            get {
+                return ResourceManager.GetString("IntraOptimize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ( In UTC).
         /// </summary>
         public static string InUTC {
@@ -22902,6 +22911,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Revert to last save.
+        /// </summary>
+        public static string RevertToLastSave {
+            get {
+                return ResourceManager.GetString("RevertToLastSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Revoke.
         /// </summary>
         public static string Revoke {
@@ -26049,6 +26067,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShowEditor {
             get {
                 return ResourceManager.GetString("ShowEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show errors.
+        /// </summary>
+        public static string ShowErrors {
+            get {
+                return ResourceManager.GetString("ShowErrors", resourceCulture);
             }
         }
         
@@ -29408,15 +29435,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string UndoAll {
             get {
                 return ResourceManager.GetString("UndoAll", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Undo changes and revert to last save.
-        /// </summary>
-        public static string UndoChangesAndRevertToLastSave {
-            get {
-                return ResourceManager.GetString("UndoChangesAndRevertToLastSave", resourceCulture);
             }
         }
         
