@@ -23,6 +23,8 @@ namespace NodeTest.JobHandlers
         {
             Logger.Info("'Long Running Job Code' Do The Thing method called.");
 
+            Thread.Sleep(TimeSpan.FromSeconds(10));
+
             TestJobProgress jobProgress;
 
             if (cancellationTokenSource.IsCancellationRequested)
