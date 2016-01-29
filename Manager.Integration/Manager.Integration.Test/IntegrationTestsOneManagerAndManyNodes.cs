@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using Manager.Integration.Test.Constants;
@@ -60,7 +61,9 @@ namespace Manager.Integration.Test
             ManagerApiHelper.CheckJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(requests.Count,
                                                                                          5000,
                                                                                          StatusConstants.CanceledStatus,
-                                                                                         StatusConstants.DeletedStatus);
+                                                                                         StatusConstants.DeletedStatus,
+                                                                                         StatusConstants.SuccessStatus,
+                                                                                         StatusConstants.FailedStatus);
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.GuidAddedEventHandler += (sender,
                                                                                   args) =>
@@ -68,7 +71,7 @@ namespace Manager.Integration.Test
                 var cancelJobTask = ManagerApiHelper.CreateManagerCancelTask(args.Guid);
 
                 Logger.Debug("IntegrationTestsOneManagerAndManyNodes : Created task for cancel job :" + args.Guid);
-
+                Thread.Sleep(TimeSpan.FromMilliseconds(250));
                 cancelJobTask.Start();
             };
 
