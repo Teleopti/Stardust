@@ -671,6 +671,8 @@
     <Compile Include="Optimization\IDayOffOptimizationPreferenceProvider.cs" />
     <Compile Include="Optimization\IDayOffRulesModelPersister.cs" />
     <Compile Include="Optimization\IFetchDayOffRulesModel.cs" />
+    <Compile Include="Optimization\IIntradayOptimizer2.cs" />
+    <Compile Include="Optimization\IIntraDayOptimizer2Creator.cs" />
     <Compile Include="Optimization\IntradayOptimization.cs" />
     <Compile Include="Optimization\IntradayOptimizerCreator.cs" />
     <Compile Include="Optimization\OptimizationPreferencesFactory.cs" />

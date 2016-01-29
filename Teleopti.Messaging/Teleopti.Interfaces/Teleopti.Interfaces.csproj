@@ -286,8 +286,6 @@
     <Compile Include="Domain\IEffectiveRestrictionCreator.cs" />
     <Compile Include="Domain\IGroupShiftCategoryFairnessCreator.cs" />
     <Compile Include="Domain\IIncreasePeriodByOne.cs" />
-    <Compile Include="Domain\IIntraDayOptimizer2Creator.cs" />
-    <Compile Include="Domain\IIntradayOptimizer2.cs" />
     <Compile Include="Domain\IIntradayDecisionMaker.cs" />
     <Compile Include="Domain\ICommonNameDescriptionSetting.cs" />
     <Compile Include="Domain\IBudgetGroup.cs" />

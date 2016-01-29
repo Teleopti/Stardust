@@ -1,6 +1,6 @@
-using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.Optimization
 {
     /// <summary>
     /// Intraday optimization container, which contatins a logic to try to reschedule one day on one matrix

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.Optimization
 {
     /// <summary>
     /// Creates the IIntradayOptimizer2 optimizers list.
