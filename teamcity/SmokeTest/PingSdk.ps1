@@ -29,11 +29,11 @@ while ($count -lt 30) {
     $endTime = get-date
 
     if ($output -like "*/SDK/TeleoptiCccSdkService.svc?singleWsdl*") {
-        "Success to ping SDK`t`t" + $startTime.DateTime + "`t`t" + ($endTime - $startTime).TotalSeconds + " seconds"	
+        "Success to ping " + $sdkUrl + "`t`t" + $startTime.DateTime + "`t`t" + ($endTime - $startTime).TotalSeconds + " seconds"	
         $isSuccess = $true;	  
 	    break;
     } else {
-        "Fail (" + $count + ") to ping SDK`t`t" + $startTime.DateTime + "`t`t" + ($endTime - $startTime).TotalSeconds + " seconds"
+        "Fail (" + $count + ") to ping " + $sdkUrl + "`t`t" + $startTime.DateTime + "`t`t" + ($endTime - $startTime).TotalSeconds + " seconds"
     }
     sleep(10)
     $count++
