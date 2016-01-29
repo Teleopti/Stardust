@@ -17,6 +17,8 @@ namespace Stardust.Node.Helpers
             location.ThrowArgumentNullExceptionIfNullOrEmpty();
 
             UriBuilder = new UriBuilder(location);
+
+            UriBuilder.Scheme.ThrowArgumentNullExceptionIfNullOrEmpty();
         }
 
         public string GetHostName()
