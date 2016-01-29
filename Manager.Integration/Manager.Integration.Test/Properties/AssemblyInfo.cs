@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Manager.IntegrationTest.WindowsService")]
+[assembly: AssemblyTitle("Manager.Integration.Test")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Manager.IntegrationTest.WindowsService")]
+[assembly: AssemblyProduct("Manager.Integration.Test")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("56ac1ab6-03e6-4388-9894-bd4a1610aecc")]
+[assembly: Guid("b826fd46-436a-4ea9-bfb9-7baae271bc55")]
 
 // Version information for an assembly consists of the following four values:
 //
