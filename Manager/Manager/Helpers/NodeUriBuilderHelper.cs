@@ -17,11 +17,16 @@ namespace Stardust.Manager.Helpers
         {
             LocationUri = new Uri(locationUri);
 
+            if (string.IsNullOrEmpty(LocationUri.Scheme))
+            {
+                throw new ArgumentNullException();
+            }
+
             UriBuilder = new UriBuilder
             {
                 Host = LocationUri.Host,
                 Port = LocationUri.Port,
-                Scheme = LocationUri.Scheme
+                Scheme = LocationUri.Scheme 
             };
         }
 

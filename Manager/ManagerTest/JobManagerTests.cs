@@ -74,7 +74,7 @@ namespace ManagerTest
 		}
 
 		[Test]
-		public void ShouldJustDeleteJobIfNotStarted()
+        public void ShouldJustDeleteJobIfNotStarted()
 		{
 			var jobId = Guid.NewGuid();
 			JobRepository.Add(new JobDefinition
@@ -97,7 +97,7 @@ namespace ManagerTest
 			job.Should().Be.Null();
 		}
 
-		[Test][Ignore]
+		[Test]
 		public void ShouldCallNodeToCancelIfStarted()
 		{
 			var jobId = Guid.NewGuid();

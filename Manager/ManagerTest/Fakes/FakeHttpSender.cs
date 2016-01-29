@@ -46,10 +46,12 @@ namespace ManagerTest.Fakes
 
             return Responses[0];
         }
-
-        public Task<HttpResponseMessage> DeleteAsync(string url)
+#pragma warning disable 1998
+        public async Task<HttpResponseMessage> DeleteAsync(string url)
+#pragma warning restore 1998
         {
-            throw new NotImplementedException();
+            CalledNodes.Add(url, null);
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
     }
 }
