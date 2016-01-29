@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ActivityChangesChecker>().SingleInstance();
 
 			builder.RegisterType<HangfireEventServer>().SingleInstance();
-			builder.RegisterType<HangfireEventProcessor>().SingleInstance();
 
 			builder.RegisterType<HangfireEventClient>().As<IHangfireEventClient>().SingleInstance();
 
