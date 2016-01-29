@@ -60,70 +60,60 @@ describe('OutboundCreateCtrl', function() {
 
 	it('Default to invalid', function() {
 		var test = setUpTarget();
-		expect(test.scope.isInputValid()).not.toBeTruthy();
+		expect(test.scope.isFormValidForPage).not.toBeDefined();
 	});
 
 	it('Should watch for campaign person hour', function() {
 		var test = setUpTarget();
 
-		test.scope.campaignWorkloadForm = { $valid: true };
+		test.scope.form = { $error: {} };
 		test.scope.campaign.calculatedPersonHour = 1;
 
 		test.scope.$digest();
 		expect(test.scope.estimatedWorkload).toEqual(1);
 	});
 
-	it('Valid campaign should be valid', function() {
-
-		var test = setUpTarget();
-
-		test.scope.campaignWorkloadForm = { $valid: true };
-		test.scope.campaignGeneralForm = { $valid: true };
-		test.scope.campaignSpanningPeriodForm = { $valid: true };
-
-		completeValidCampaign(test.scope.campaign);
-		expect(test.scope.isInputValid()).toBeTruthy();
-	});
-
 	it('Should reset after valid submission', function() {
 		var test = setUpTarget();
-		test.scope.campaignWorkloadForm = { $valid: true, $setPristine: function () { } };
-		test.scope.campaignGeneralForm = { $valid: true, $setPristine: function () { } };
-		test.scope.campaignSpanningPeriodForm = { $valid: true, $setPristine: function () { } };
+		test.scope.form = { $valid: true };
 		completeValidCampaign(test.scope.campaign);
 		test.scope.addCampaign();
 		expect(test.scope.campaign.WorkingHours.length).toEqual(0);
 	});
 
-	it('Invalid date range should fail', function() {
+	it('Invalid date range should fail', function () {
 
 		var test = setUpTarget();
-		test.scope.campaignWorkloadForm = { $valid: true, $setPristine: function() {} };
-		test.scope.campaignGeneralForm = { $valid: true, $setPristine: function() {} };
+		test.scope.form = { $valid: true, $error: { required: [] } };
 		completeValidCampaign(test.scope.campaign);
-		test.scope.campaign.StartDate = new Date();
-		test.scope.campaign.EndDate = (new Date()).setDate((new Date()).getDate() - 1);
-		expect(test.scope.isInputValid()).not.toBeTruthy();
+		test.scope.campaign.spanningPeriodErrors = [];
+		test.scope.$digest();
+		expect(test.scope.isCampaignDurationValid()).toBeTruthy();
+		test.scope.campaign.spanningPeriodErrors = ['something wrong'];
+		test.scope.$digest();
+		expect(test.scope.isCampaignDurationValid()).not.toBeTruthy();
 	});
 
-	it('At least one working hour has been selected for any weekday for the campaign to be valid', function() {
+	it('At least one working hour has been selected for any weekday for the campaign to be valid', function() {		
 		var test = setUpTarget();
-		test.scope.campaignWorkloadForm = { $valid: true, $setPristine: function () { } };
-		test.scope.campaignGeneralForm = { $valid: true, $setPristine: function () { } };
-		test.scope.campaignSpanningPeriodForm = { $valid: true, $setPristine: function () { } };
+		test.scope.form = { $valid: true, $error: { required: [] } };
 		completeValidCampaign(test.scope.campaign);
+		angular.forEach(test.scope.campaign.WorkingHours[0].WeekDaySelections, function (e) {
+			e.Checked = true;
+		});
+		test.scope.$digest();
+		expect(test.scope.isWorkingHoursValid()).toBeTruthy();
 
-		angular.forEach(test.scope.campaign.WorkingHours[0].WeekDaySelections, function(e) {
+		angular.forEach(test.scope.campaign.WorkingHours[0].WeekDaySelections, function (e) {
 			e.Checked = false;
 		});
-		expect(test.scope.isInputValid()).not.toBeTruthy();
+		test.scope.$digest();
+		expect(test.scope.isWorkingHoursValid()).not.toBeTruthy();
 	});
 
 	it('Should move to campaign edit upon successful submission', function() {
 		var test = setUpTarget();
-		test.scope.campaignWorkloadForm = { $valid: true, $setPristine: function () { } };
-		test.scope.campaignGeneralForm = { $valid: true, $setPristine: function () { } };
-		test.scope.campaignSpanningPeriodForm = { $valid: true, $setPristine: function () { } };
+		test.scope.form = { $valid: true, $error: { required: [] } };
 		completeValidCampaign(test.scope.campaign);
 		test.scope.addCampaign();
 		expect(stateService.getWhere()).toEqual('outbound.edit');
@@ -160,6 +150,7 @@ describe('OutboundCreateCtrl', function() {
 		var campaigns = [];
 
 		this.getCampaign = function (campaignId, successCb, errorCb) {
+			return campaigns;
 		};
 
 		this.checkPermission = function () {
