@@ -58,7 +58,6 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			system.UseTestDouble(new FakeTimeZoneGuard(TimeZoneInfo.Utc)).For<ITimeZoneGuard>();
 			system.UseTestDouble<FakePlanningPeriodRepository>().For<IPlanningPeriodRepository>();
 			system.UseTestDouble<FakeFixedStaffLoader>().For<IFixedStaffLoader>();
-			system.UseTestDouble<FakeIntraDayOptimization>().For<IIntradayOptimization>();
 			system.UseTestDouble<FakeMissingForecastProvider>().For<IMissingForecastProvider>();
 			system.UseTestDouble<FakeClassicDaysOffOptimizationCommand>().For<IClassicDaysOffOptimizationCommand>();
 			system.UseTestDouble<FakeDayOffRulesRepository>().For<IDayOffRulesRepository>();

@@ -12,10 +12,10 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	public class OptimizationController : ApiController
 	{
 		private readonly ScheduleOptimization _scheduleOptimization;
-		private readonly IIntradayOptimization _intradayOptimization;
+		private readonly IntradayOptimization _intradayOptimization;
 		private readonly IActionThrottler _actionThrottler;
 
-		public OptimizationController(ScheduleOptimization scheduleOptimization, IIntradayOptimization intradayOptimization, IActionThrottler actionThrottler)
+		public OptimizationController(ScheduleOptimization scheduleOptimization, IntradayOptimization intradayOptimization, IActionThrottler actionThrottler)
 		{
 			_scheduleOptimization = scheduleOptimization;
 			_intradayOptimization = intradayOptimization;

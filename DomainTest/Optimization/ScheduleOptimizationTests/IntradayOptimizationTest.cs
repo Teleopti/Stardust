@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public IIntradayOptimization Target;
+		public IntradayOptimization Target;
 		public IPersonWeekViolatingWeeklyRestSpecification CheckWeeklyRestRule;
 		public IScheduleRepository ScheduleRepository;
 

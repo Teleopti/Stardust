@@ -17,12 +17,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public interface IIntradayOptimization
-	{
-		OptimizationResultModel Optimize(Guid planningPeriodId);
-	}
-
-	public class IntradayOptimization : IIntradayOptimization
+	public class IntradayOptimization
 	{
 		private readonly IDailyValueByAllSkillsExtractor _dailyValueByAllSkillsExtractor;
 		private readonly IIntradayDecisionMaker _intradayDecisionMaker;
