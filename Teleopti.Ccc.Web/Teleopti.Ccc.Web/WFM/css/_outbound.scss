@@ -378,10 +378,11 @@
 			display: inline-block;
 		}
 	}
-	.loading-whole-section{
+	.loading-c3{
 		position:relative;
 		height:100%;
 		width:100%;
+		background-color:rgba(0,0,0,0.2);
 	}
 	.loading{
 		position:absolute !important;
@@ -396,11 +397,8 @@
 		top:40%;
 		left:48%;
 	}
-	.loading-gantt-section{
+	.loading-gantt{
 		background-color:rgba(0,0,0,0.5);
-	}
-	.loading-card-bodyfix{
-		background-color:rgba(0,0,0,0.2);
 	}
 	.gantt-schedule-loader{
 		position:absolute;
