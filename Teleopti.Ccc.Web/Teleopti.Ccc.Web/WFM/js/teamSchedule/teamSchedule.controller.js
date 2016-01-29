@@ -234,7 +234,6 @@
 		};
 
 		vm.menuState = 'open';
-
 		vm.toggleMenuState = function () {
 			if (vm.menuState === 'closed') {
 				vm.menuState = 'open';
