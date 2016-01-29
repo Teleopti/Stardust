@@ -67,7 +67,7 @@ namespace ManagerTest
 				Status = "Added",
 				Type = ""
 			});
-			WorkerNodeRepository.Add(new WorkerNode {Id = nodeId , Url = _nodeUri1 });
+			WorkerNodeRepository.Add(new WorkerNode {Id = nodeId , Url = _nodeUri1.ToString() });
          JobManager.CheckAndAssignNextJob();
 			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(2);
 
@@ -111,7 +111,7 @@ namespace ManagerTest
 				Serialized = "",
 				Type = ""
 			});
-			WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = _nodeUri1 });
+			WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = _nodeUri1.ToString() });
 
 			JobManager.CheckAndAssignNextJob();
 			var job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
@@ -136,7 +136,7 @@ namespace ManagerTest
 				Serialized = "",
 				Type = ""
 			});
-			WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = _nodeUri1 });
+			WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = _nodeUri1.ToString() });
 
 			JobManager.CheckAndAssignNextJob();
 			var job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
@@ -157,7 +157,7 @@ namespace ManagerTest
 				Serialized = "",
 				Type = ""
 			});
-			WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = _nodeUri1 });
+			WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = _nodeUri1.ToString() });
 			FakeHttpSender.Responses = new List<HttpResponseMessage> { new HttpResponseMessage(HttpStatusCode.OK) , new HttpResponseMessage(HttpStatusCode.BadRequest) };
 				
          JobManager.CheckAndAssignNextJob();
@@ -179,7 +179,7 @@ namespace ManagerTest
 				Serialized = "",
 				Type = ""
 			});
-			WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = _nodeUri1 });
+			WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = _nodeUri1.ToString() });
 			JobManager.CheckAndAssignNextJob();
 			var job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
 			job.AssignedNode.Should().Be.EqualTo(_nodeUri1.ToString());
@@ -202,9 +202,9 @@ namespace ManagerTest
 				Serialized = "",
 				Type = ""
 			});
-			WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = new Uri("http://Url1/") });
-            WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = new Uri("http://Url2/") });
-            WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = new Uri("http://Url3/") });
+			WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = "http://Url1/" });
+            WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = "http://Url2/" });
+            WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = "http://Url3/" });
 
             FakeHttpSender.BusyNodesUrl.Add("Url1");
 			FakeHttpSender.BusyNodesUrl.Add("Url3");
