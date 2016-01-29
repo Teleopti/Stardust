@@ -26,15 +26,15 @@ namespace Manager.Integration.Test.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:9000/")]
-        public string ManagerLocationUri {
+        public string LocationUri {
             get {
-                return ((string)(this["ManagerLocationUri"]));
+                return ((string)(this["LocationUri"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("../../../Manager.Integration.Tests.Console.Host/bin/debug/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("../../../Manager.Integration.Tests.Console.Host/bin/")]
         public string ManagerIntegrationConsoleHostLocation {
             get {
                 return ((string)(this["ManagerIntegrationConsoleHostLocation"]));

@@ -42,12 +42,12 @@ namespace Manager.Integration.Test
 
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
-        [Test]
-        public void Create10RequestShouldReturnBothCancelAndDeleteStatuses()
+        [Test][Ignore]
+        public void Create5RequestShouldReturnBothCancelAndDeleteStatuses()
         {
             JobHelper.GiveNodesTimeToInitialize();
 
-            List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(1);
+            List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(5);
 
             List<Task> tasks = new List<Task>();
 
