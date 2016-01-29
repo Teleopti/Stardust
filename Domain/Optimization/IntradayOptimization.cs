@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -99,6 +100,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
 		}
 
+		[UnitOfWork]
 		public virtual OptimizationResultModel Optimize(Guid planningPeriodId)
 		{
 			var optimizationPreferences = _optimizationPreferencesFactory.Create();
