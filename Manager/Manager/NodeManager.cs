@@ -21,7 +21,7 @@ namespace Stardust.Manager
 		{
 			try
 			{
-				var node = new WorkerNode() { Url = nodeUrl.ToString(), Id = Guid.NewGuid() };
+				var node = new WorkerNode() { Url = nodeUrl, Id = Guid.NewGuid() };
 				_nodeRepository.Add(node);
 			}
 			catch (SqlException exception)
@@ -32,9 +32,9 @@ namespace Stardust.Manager
 			}
 		}
 
-		public void FreeJobIfAssingedToNode(string url)
+		public void FreeJobIfAssingedToNode(Uri url)
 		{
-			_jobRepository.FreeJobIfNodeIsAssigned(url);
+			_jobRepository.FreeJobIfNodeIsAssigned(url.ToString());
 		}
 	}
 }

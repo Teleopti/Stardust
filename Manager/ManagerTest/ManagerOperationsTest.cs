@@ -155,9 +155,9 @@ namespace ManagerTest
         }
 
         [Test]
-        public void ShouldAddNodeReferenceToJObDefinition()
+        public void ShouldAddNodeReferenceToJobDefinition()
         {
-            var job = new JobRequestModel() {Name = "ShouldAddNodeReferenceToJObDefinition", Serialized = "ngt", Type = "bra", UserName = "ManagerTests"};
+            var job = new JobRequestModel() {Name = "ShouldAddNodeReferenceToJobDefinition", Serialized = "ngt", Type = "bra", UserName = "ManagerTests"};
 
             Target.NodeInitialized(_nodeUri1);
             Target.DoThisJob(job);
@@ -203,7 +203,7 @@ namespace ManagerTest
             Guid jobId = Guid.NewGuid();
             var job = new JobDefinition() {Name = " ", Serialized = " ", Type = " ", UserName = "ManagerTests", Id = jobId};
             JobRepository.Add(job);
-            JobRepository.CheckAndAssignNextJob(new List<WorkerNode>() {new WorkerNode() {Url = _nodeUri1.ToString() } },
+            JobRepository.CheckAndAssignNextJob(new List<WorkerNode>() {new WorkerNode() {Url = _nodeUri1 } },
                                                 HttpSender);
             thisNodeIsBusy(_nodeUri1.ToString());
             Target.CancelThisJob(jobId);
@@ -220,7 +220,7 @@ namespace ManagerTest
 
             Guid jobId = Guid.NewGuid();
             JobRepository.Add(new JobDefinition() {Id = jobId, Serialized = "", Name = "", Type = "", UserName = "ManagerTests"});
-            JobRepository.CheckAndAssignNextJob(new List<WorkerNode>() {new WorkerNode() {Url = _nodeUri1.ToString() }, new WorkerNode() {Url = _nodeUri2.ToString() } },
+            JobRepository.CheckAndAssignNextJob(new List<WorkerNode>() {new WorkerNode() {Url = _nodeUri1 }, new WorkerNode() {Url = _nodeUri2 } },
                                                 HttpSender);
             HttpSender.CalledNodes.Clear();
             Target.CancelThisJob(jobId);
@@ -260,7 +260,7 @@ namespace ManagerTest
             string userName = "ManagerTests";
             var job = new JobDefinition() {Id = jobId, Name = "job", UserName = userName, Serialized = "Fake Serialized", Type = "Fake Type"};
             JobRepository.Add(job);
-            JobRepository.CheckAndAssignNextJob(new List<WorkerNode>() {new WorkerNode() {Url = _nodeUri1.ToString() } },
+            JobRepository.CheckAndAssignNextJob(new List<WorkerNode>() {new WorkerNode() {Url = _nodeUri1 } },
                                                 HttpSender);
             Target.Heartbeat(_nodeUri1);
             HttpSender.CalledNodes.First()

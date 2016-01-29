@@ -106,7 +106,7 @@ namespace Stardust.Manager
 		public IHttpActionResult NodeInitialized([FromBody] Uri nodeUrl)
 		{
 			Logger.Info(WhoAmI + ": Received init from node " + nodeUrl);
-			_nodeManager.FreeJobIfAssingedToNode(nodeUrl.ToString());
+			_nodeManager.FreeJobIfAssingedToNode(nodeUrl);
 			_nodeManager.AddIfNeeded(nodeUrl);
 
 			return Ok();

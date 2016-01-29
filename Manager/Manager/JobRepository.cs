@@ -220,12 +220,12 @@ namespace Stardust.Manager
 							{
 								try
 								{
-									var response = await httpSender.PostAsync(node.Url + NodeRouteConstants.Job, job);
+									var response = await httpSender.PostAsync(node.Url.ToString() + NodeRouteConstants.Job, job);
 
 									if (response != null && response.IsSuccessStatusCode)
 									{
 										//save
-										nodeParam.Value = node.Url;
+										nodeParam.Value = node.Url.ToString();
 										da.UpdateCommand.ExecuteNonQuery();
 
 										//update history
@@ -235,7 +235,7 @@ namespace Stardust.Manager
 										da.UpdateCommand.Parameters.Add("@Started", SqlDbType.DateTime, 16, "Started");
 										da.UpdateCommand.Parameters[1].Value = DateTime.UtcNow;
 										da.UpdateCommand.Parameters.Add("@Node", SqlDbType.NVarChar, 2000, "SentTo");
-										da.UpdateCommand.Parameters[2].Value = node.Url;
+										da.UpdateCommand.Parameters[2].Value = node.Url.ToString();
 
 										da.UpdateCommand.Transaction = tran;
 										da.UpdateCommand.ExecuteNonQuery();
@@ -260,7 +260,7 @@ namespace Stardust.Manager
 										da.UpdateCommand.Parameters.Add("@Result", SqlDbType.NVarChar, 200, "Result");
 										da.UpdateCommand.Parameters[1].Value = "Removed because of bad request";
 										da.UpdateCommand.Parameters.Add("@Node", SqlDbType.NVarChar, 2000, "SentTo");
-										da.UpdateCommand.Parameters[2].Value = node.Url;
+										da.UpdateCommand.Parameters[2].Value = node.Url.ToString();
 
 										da.UpdateCommand.Transaction = tran;
 										da.UpdateCommand.ExecuteNonQuery();
