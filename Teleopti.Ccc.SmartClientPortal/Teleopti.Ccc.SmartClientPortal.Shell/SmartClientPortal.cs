@@ -811,6 +811,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				wfmWebView.LoadCompleted += WfmWebViewOnLoadCompleted;
 				setWfmWebUrl(_permissionModule);
 			}
+			TopMost = true;
+			Focus();
+			BringToFront();
+			TopMost = false;
 		}
 
 		private void webView1_Command(object sender, CommandEventArgs e)

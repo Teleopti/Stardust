@@ -267,7 +267,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			base.AfterShellCreated();
 			RootWorkItem.UIExtensionSites.RegisterSite(UIExtensionSiteNames.MainStatus, Shell.MainStatusStrip);
-			Shell.Activate();
 		}
 
 		/// <summary>
