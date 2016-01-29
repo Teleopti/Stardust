@@ -86,14 +86,12 @@ namespace Manager.Integration.Test
         }
 
         [Test]
-        [Ignore]
-        public void FailJobTest()
+        public void JobShouldHaveStatusFailedIfFailed()
         {
-            string status = string.Empty;
-
-            JobHelper.GiveNodesTimeToInitialize(5);
+            JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateFailingJobParamsRequests(1);
+            
             List<Task> tasks = new List<Task>();
 
             foreach (var jobRequestModel in requests)
@@ -103,21 +101,19 @@ namespace Manager.Integration.Test
 
             ManagerApiHelper.CheckJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(requests.Count,
                                                                                          5000,
-                                                                                         StatusConstants.FailedStatus);
-
-            ManagerApiHelper.CheckJobHistoryStatusTimer.GuidStatusChangedEvent += (sender,
-                                                                                   args) =>
-            { status = args.NewStatus; };
+                                                                                         StatusConstants.SuccessStatus,
+                                                                                         StatusConstants.DeletedStatus,
+                                                                                         StatusConstants.FailedStatus,
+                                                                                         StatusConstants.CanceledStatus);
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.Start();
 
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
 
-            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait();
+            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(TimeSpan.FromSeconds(60)); // If not succeded in 1 min, something is wrong
 
-            Assert.AreEqual(StatusConstants.FailedStatus,
-                            status);
+            Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.FailedStatus));
 
             ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
         }
@@ -136,7 +132,7 @@ namespace Manager.Integration.Test
         }
 
         [Test]
-        public void ShouldBeAbleToExecute5SuccessfullJobRequest()
+        public void JobShouldHaveStatusSuccededIfSucceded()
         {
             JobHelper.GiveNodesTimeToInitialize();
 
