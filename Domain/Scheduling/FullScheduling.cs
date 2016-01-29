@@ -113,7 +113,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			var allSchedules = extractAllSchedules(_schedulerStateHolder().SchedulingResultState, people, period);
 
-			initializePersonSkillProviderBeforeAccessingItFromOtherThreads(period, people.AllPeople);
 			_scheduleTagSetter().ChangeTagToSet(NullScheduleTag.Instance);
 
 			var daysScheduledInternal = 0;
@@ -222,13 +221,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				}
 			}
 			return allSchedules;
-		}
-
-		private void initializePersonSkillProviderBeforeAccessingItFromOtherThreads(DateOnlyPeriod period, IEnumerable<IPerson> allPeople)
-		{
-			var provider = _personSkillProvider();
-			var dayCollection = period.DayCollection();
-			allPeople.ForEach(p => dayCollection.ForEach(d => provider.SkillsOnPersonDate(p, d)));
 		}
 	}
 }

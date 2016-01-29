@@ -97,7 +97,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_setupStateHolderForWebScheduling.Setup(period, people);
 
 			var allSchedules = extractAllSchedules(_schedulerStateHolder().SchedulingResultState, people, period);
-			initializePersonSkillProviderBeforeAccessingItFromOtherThreads(period, people.AllPeople);
 			var optimizationPreferences = _optimizationPreferencesFactory.Create();
 			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 
@@ -134,13 +133,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 				}
 			}
 			return allSchedules;
-		}
-
-		private void initializePersonSkillProviderBeforeAccessingItFromOtherThreads(DateOnlyPeriod period, IEnumerable<IPerson> allPeople)
-		{
-			var provider = _personSkillProvider();
-			var dayCollection = period.DayCollection();
-			allPeople.ForEach(p => dayCollection.ForEach(d => provider.SkillsOnPersonDate(p, d)));
 		}
 	}
 }
