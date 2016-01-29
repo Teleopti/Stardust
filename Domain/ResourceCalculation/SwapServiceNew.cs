@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return true;
 		}
 
-			public IList<IScheduleDay> Swap(IScheduleDictionary schedules)
+		public IList<IScheduleDay> Swap(IScheduleDictionary schedules, TrackedCommandInfo trackedCommandInfo = null)
 		{
 			if(schedules == null)
 				throw new ArgumentNullException("schedules");
@@ -38,22 +38,22 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var assignment1 = schedulePart1.PersonAssignment(true);
 			var workingAssignment = assignment0.NoneEntityClone();
 
-			movePersonAssignment(assignment0, workingAssignment);
-			movePersonAssignment(assignment1, assignment0);
-			movePersonAssignment(workingAssignment, assignment1);
+			movePersonAssignment(assignment0, workingAssignment, trackedCommandInfo);
+			movePersonAssignment(assignment1, assignment0, trackedCommandInfo);
+			movePersonAssignment(workingAssignment, assignment1, trackedCommandInfo);
 
 			retList.AddRange(new List<IScheduleDay> {schedulePart0, schedulePart1});
 			return retList;
 		}
 
-		private static void movePersonAssignment(IPersonAssignment sourceAssignment, IPersonAssignment targetAssignment)
+		private static void movePersonAssignment(IPersonAssignment sourceAssignment, IPersonAssignment targetAssignment, TrackedCommandInfo trackedCommandInfo)
 		{
 			targetAssignment.ClearMainActivities();
 			targetAssignment.ClearOvertimeActivities();
 
 			foreach (var layer in sourceAssignment.MainActivities())
 			{
-				targetAssignment.AddActivity(layer.Payload, layer.Period);
+				targetAssignment.AddActivity(layer.Payload, layer.Period, trackedCommandInfo);
 			}
 
 			var dateOnlyPerson = sourceAssignment.Date;

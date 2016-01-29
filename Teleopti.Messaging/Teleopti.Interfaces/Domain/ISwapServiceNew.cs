@@ -27,7 +27,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Swaps two assignments if permitted.
 		/// </summary>
 		/// <returns></returns>
-		IList<IScheduleDay> Swap(IScheduleDictionary schedules);
+		IList<IScheduleDay> Swap(IScheduleDictionary schedules, TrackedCommandInfo trackedCommandInfo = null);
 
 		/// <summary>
 		/// 

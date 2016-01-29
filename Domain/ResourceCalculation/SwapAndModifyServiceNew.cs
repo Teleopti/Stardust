@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        public IEnumerable<IBusinessRuleResponse> Swap(IPerson person1, IPerson person2, IList<DateOnly> dates, IList<DateOnly> lockedDates, IScheduleDictionary scheduleDictionary, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTagSetter scheduleTagSetter)
+        public IEnumerable<IBusinessRuleResponse> Swap(IPerson person1, IPerson person2, IList<DateOnly> dates, IList<DateOnly> lockedDates, IScheduleDictionary scheduleDictionary, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTagSetter scheduleTagSetter, TrackedCommandInfo trackedCommandInfo = null)
 		{
 			InParameter.NotNull("person1", person1);
 			InParameter.NotNull("person2", person2);
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				IList<IScheduleDay> selectedSchedules = new List<IScheduleDay> { part1, part2 };
 
-				modifiedParts.AddRange(SwapParts(scheduleDictionary, selectedSchedules));
+				modifiedParts.AddRange(SwapParts(scheduleDictionary, selectedSchedules, trackedCommandInfo));
 
 				var ass1 = part1.PersonAssignment();
 				if (ass1 != null)
@@ -76,10 +76,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return responses.Where(r => !r.Overridden).ToList();
 		}
 
-		private IEnumerable<IScheduleDay> SwapParts(IScheduleDictionary scheduleDictionary, IList<IScheduleDay> selectedSchedules)
+		private IEnumerable<IScheduleDay> SwapParts(IScheduleDictionary scheduleDictionary, IList<IScheduleDay> selectedSchedules, TrackedCommandInfo trackedCommandInfo)
 		{
 			_swapService.Init(selectedSchedules);
-			return _swapService.Swap(scheduleDictionary);
+			return _swapService.Swap(scheduleDictionary, trackedCommandInfo);
 		}
 	}
 }

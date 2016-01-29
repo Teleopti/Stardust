@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			var scheduleDate = command.ScheduleDate;
 			var scheduleDateOnly = new DateOnly(scheduleDate);
 			var scheduleDictionary = getScheduleDictionary(defaultScenario, scheduleDate, people);
-			var errorResponses = swapShifts(scheduleDateOnly, people, scheduleDictionary);
+			var errorResponses = swapShifts(scheduleDateOnly, people, scheduleDictionary, command.TrackedCommandInfo);
 
 			if (errorResponses.Length > 0)
 			{
@@ -84,14 +84,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			return _scheduleRepository.FindSchedulesForPersons(schedulePeriod, scenario, personProvider, options, people);
 		}
 
-		private IBusinessRuleResponse[] swapShifts(DateOnly date, IPerson[] people, IScheduleDictionary scheduleDictionary)
+		private IBusinessRuleResponse[] swapShifts(DateOnly date, IPerson[] people, IScheduleDictionary scheduleDictionary, TrackedCommandInfo trackedCommandInfo)
 		{
 			var dates = new List<DateOnly> { date};
 			var lockDates = new List<DateOnly>();
 			var businessRules = NewBusinessRuleCollection.Minimum();
 			var scheduleTagSetter = new ScheduleTagSetter(NullScheduleTag.Instance);
 
-			return _swapAndModifyServiceNew.Swap(people[0], people[1], dates, lockDates, scheduleDictionary, businessRules, scheduleTagSetter)
+			return _swapAndModifyServiceNew.Swap(people[0], people[1], dates, lockDates, scheduleDictionary, businessRules, scheduleTagSetter, trackedCommandInfo)
 										   .Where(r => r.Error)
 										   .ToArray();
 		}
@@ -102,9 +102,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			var diff = range.DifferenceSinceSnapshot(_differenceService);
 			var personAssignment = range.ScheduledDay(date).PersonAssignment();
 
-			personAssignment.PopAllEvents();
+			//personAssignment.PopAllEvents();
 			_scheduleDifferenceSaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate)range);
-			notifyScheduleChanged(personAssignment.Period, scenario.Id.Value, person.Id.Value, trackedCommandInfo);
+			//notifyScheduleChanged(personAssignment.Period, scenario.Id.Value, person.Id.Value, trackedCommandInfo);
 		}
 
 		private IEnumerable<FailActionResult> parseErrorResponses(IBusinessRuleResponse[] errorResponses)
