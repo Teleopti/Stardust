@@ -16,8 +16,8 @@ namespace NodeTest.Fakes.Timers
 
         public ManualResetEventSlim Wait = new ManualResetEventSlim();
 
-        public SendJobCanceledTimerFake(INodeConfiguration nodeConfiguration = null,
-                                        Uri callbackTemplateUri = null,
+        public SendJobCanceledTimerFake(INodeConfiguration nodeConfiguration ,
+                                        Uri callbackTemplateUri ,
                                         double interval = 10000) : base(nodeConfiguration,
                                                                         callbackTemplateUri,
                                                                         interval)

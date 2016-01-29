@@ -16,8 +16,8 @@ namespace NodeTest.Fakes.Timers
 
         public int NumberOfTimeCalled;
 
-        public SendJobDoneTimerFake(INodeConfiguration nodeConfiguration = null,
-                                    Uri callbackTemplateUri = null,
+        public SendJobDoneTimerFake(INodeConfiguration nodeConfiguration,
+                                    Uri callbackTemplateUri ,
                                     double interval = 10000) : base(nodeConfiguration,
                                                                     callbackTemplateUri,
                                                                     interval)

@@ -15,10 +15,20 @@ namespace NodeTest.Attributes
     {
         protected override void SetUp(ContainerBuilder builder)
         {
-            var nodeConfiguration = new NodeConfiguration(new Uri(ConfigurationManager.AppSettings["BaseAddress"]),
-                                                          new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
-                                                          Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
-                                                          ConfigurationManager.AppSettings["NodeName"]);
+            var baseAddress = new Uri(ConfigurationManager.AppSettings["BaseAddress"]);
+
+            var managerLocation = new Uri(ConfigurationManager.AppSettings["ManagerLocation"]);
+
+            var handlerAssembly = Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]);
+
+            var nodeName = ConfigurationManager.AppSettings["NodeName"];
+
+            CallBackUriTemplateFake = managerLocation;
+
+            var nodeConfiguration = new NodeConfiguration(baseAddress,
+                                                          managerLocation,
+                                                          handlerAssembly,
+                                                          nodeName);
 
             builder.RegisterAssemblyTypes(nodeConfiguration.HandlerAssembly)
                 .Where(IsHandler)
@@ -43,10 +53,22 @@ namespace NodeTest.Attributes
 
             builder.RegisterInstance(nodeConfiguration);
 
+            builder.RegisterInstance(new SendJobDoneTimerFake(nodeConfiguration,
+                                                              CallBackUriTemplateFake));
+
+            builder.RegisterInstance(new SendJobCanceledTimerFake(nodeConfiguration,
+                                                                  CallBackUriTemplateFake));
+
+            builder.RegisterInstance(new SendJobFaultedTimerFake(nodeConfiguration,
+                                                                 CallBackUriTemplateFake));
+
+            builder.RegisterInstance(new NodeStartupNotificationToManagerFake(nodeConfiguration,
+                                                                              CallBackUriTemplateFake));
+
             // Register IWorkerWrapper.
             builder.Register<IWorkerWrapper>(c => new WorkerWrapper(c.Resolve<InvokeHandler>(),
                                                                     nodeConfiguration,
-                                                                    new NodeStartupNotificationToManagerFake(),
+                                                                    c.Resolve<NodeStartupNotificationToManagerFake>(),
                                                                     new PingToManagerFake(),
                                                                     c.Resolve<SendJobDoneTimerFake>(),
                                                                     c.Resolve<SendJobCanceledTimerFake>(),
@@ -54,6 +76,8 @@ namespace NodeTest.Attributes
                                                                     c.Resolve<PostHttpRequestFake>()))
                 .SingleInstance();
         }
+
+        private Uri CallBackUriTemplateFake { get; set; }
 
         private bool IsHandler(Type arg)
         {

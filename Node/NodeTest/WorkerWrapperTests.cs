@@ -23,18 +23,29 @@ namespace NodeTest
         [SetUp]
         public void Setup()
         {
-            NodeConfigurationFake = new NodeConfigurationFake(new Uri(ConfigurationManager.AppSettings["BaseAddress"]),
-                                                              new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
-                                                              Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
-                                                              ConfigurationManager.AppSettings["NodeName"]);
+            var managerLocation = new Uri(ConfigurationManager.AppSettings["ManagerLocation"]);
+            var baseAddress = new Uri(ConfigurationManager.AppSettings["BaseAddress"]);
+            var handlerAssembly = Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]);
+            var nodeName = ConfigurationManager.AppSettings["NodeName"];
+
+            CallBackUriTemplateFake = managerLocation;
+
+            NodeConfigurationFake = new NodeConfigurationFake(baseAddress,
+                                                              managerLocation,
+                                                              handlerAssembly,
+                                                              nodeName);
 
             WorkerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
                                               NodeConfigurationFake,
-                                              new NodeStartupNotificationToManagerFake(),
+                                              new NodeStartupNotificationToManagerFake(NodeConfigurationFake,
+                                                                                       CallBackUriTemplateFake),
                                               new PingToManagerFake(),
-                                              new SendJobDoneTimerFake(),
-                                              new SendJobCanceledTimerFake(),
-                                              new SendJobFaultedTimerFake(),
+                                              new SendJobDoneTimerFake(NodeConfigurationFake,
+                                                                       CallBackUriTemplateFake),
+                                              new SendJobCanceledTimerFake(NodeConfigurationFake,
+                                                                           CallBackUriTemplateFake),
+                                              new SendJobFaultedTimerFake(NodeConfigurationFake,
+                                                                          CallBackUriTemplateFake),
                                               new PostHttpRequestFake());
 
             NodeController = new NodeController(WorkerWrapper);
@@ -52,6 +63,8 @@ namespace NodeTest
                 Type = "NodeTest.JobHandlers.TestJobParams"
             };
         }
+
+        private Uri CallBackUriTemplateFake { get; set; }
 
         private bool IsHandler(Type arg)
         {
@@ -84,11 +97,15 @@ namespace NodeTest
         {
             IWorkerWrapper workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
                                                              NodeConfigurationFake,
-                                                             new NodeStartupNotificationToManagerFake(NodeConfigurationFake),
+                                                             new NodeStartupNotificationToManagerFake(NodeConfigurationFake,
+                                                                                                      CallBackUriTemplateFake),
                                                              new PingToManagerFake(),
-                                                             new SendJobDoneTimerFake(NodeConfigurationFake),
-                                                             new SendJobCanceledTimerFake(NodeConfigurationFake),
-                                                             new SendJobFaultedTimerFake(NodeConfigurationFake),
+                                                             new SendJobDoneTimerFake(NodeConfigurationFake,
+                                                                                      CallBackUriTemplateFake),
+                                                             new SendJobCanceledTimerFake(NodeConfigurationFake,
+                                                                                          CallBackUriTemplateFake),
+                                                             new SendJobFaultedTimerFake(NodeConfigurationFake,
+                                                                                         CallBackUriTemplateFake),
                                                              new PostHttpRequestFake());
 
 
@@ -166,9 +183,11 @@ namespace NodeTest
         {
             IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
                                                              NodeConfigurationFake,
-                                                             new NodeStartupNotificationToManagerFake(),
+                                                             new NodeStartupNotificationToManagerFake(NodeConfigurationFake,
+                                                                                                      CallBackUriTemplateFake),
                                                              new PingToManagerFake(),
-                                                             new SendJobDoneTimerFake(),
+                                                             new SendJobDoneTimerFake(NodeConfigurationFake,
+                                                                                      CallBackUriTemplateFake),
                                                              null,
                                                              null,
                                                              new PostHttpRequestFake());
@@ -180,10 +199,13 @@ namespace NodeTest
         {
             IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
                                                              NodeConfigurationFake,
-                                                             new NodeStartupNotificationToManagerFake(),
+                                                             new NodeStartupNotificationToManagerFake(NodeConfigurationFake,
+                                                                                                      CallBackUriTemplateFake),
                                                              new PingToManagerFake(),
-                                                             new SendJobDoneTimerFake(),
-                                                             new SendJobCanceledTimerFake(),
+                                                             new SendJobDoneTimerFake(NodeConfigurationFake,
+                                                                                      CallBackUriTemplateFake),
+                                                             new SendJobCanceledTimerFake(NodeConfigurationFake,
+                                                                                          CallBackUriTemplateFake),
                                                              null,
                                                              new PostHttpRequestFake());
         }
@@ -194,7 +216,8 @@ namespace NodeTest
         {
             IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
                                                              NodeConfigurationFake,
-                                                             new NodeStartupNotificationToManagerFake(),
+                                                             new NodeStartupNotificationToManagerFake(NodeConfigurationFake,
+                                                                                                      CallBackUriTemplateFake),
                                                              new PingToManagerFake(),
                                                              null,
                                                              null,
@@ -237,7 +260,8 @@ namespace NodeTest
         {
             IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
                                                              NodeConfigurationFake,
-                                                             new NodeStartupNotificationToManagerFake(),
+                                                             new NodeStartupNotificationToManagerFake(NodeConfigurationFake,
+                                                                                                      CallBackUriTemplateFake),
                                                              null,
                                                              null,
                                                              null,

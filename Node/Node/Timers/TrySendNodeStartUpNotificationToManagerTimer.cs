@@ -12,10 +12,13 @@ namespace Stardust.Node.Timers
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (TrySendNodeStartUpNotificationToManagerTimer));
 
-        public TrySendNodeStartUpNotificationToManagerTimer(INodeConfiguration nodeConfiguration = null,
-                                                            Uri callbackTemplateUri = null,
+        public TrySendNodeStartUpNotificationToManagerTimer(INodeConfiguration nodeConfiguration,
+                                                            Uri callbackTemplateUri,
                                                             double interval = 3000) : base(interval)
         {
+            nodeConfiguration.ThrowArgumentNullException();
+            callbackTemplateUri.ThrowArgumentNullExceptionWhenNull();
+
             NodeConfiguration = nodeConfiguration;
             CallbackTemplateUri = callbackTemplateUri;
 

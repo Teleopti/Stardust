@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
@@ -13,8 +14,9 @@ namespace NodeTest.Fakes.Timers
 
         private static readonly ILog Logger = LogManager.GetLogger(typeof (SendJobDoneWithEventTriggerTimerFake));
 
-        public SendJobDoneWithEventTriggerTimerFake() : base(null,
-                                                             null)
+        public SendJobDoneWithEventTriggerTimerFake(INodeConfiguration nodeConfiguration,
+                                                    Uri callbackTemplateUri) : base(nodeConfiguration,
+                                                                                    callbackTemplateUri)
         {
         }
 

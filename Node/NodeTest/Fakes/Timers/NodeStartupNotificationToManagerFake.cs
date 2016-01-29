@@ -14,8 +14,8 @@ namespace NodeTest.Fakes.Timers
 
         private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeStartupNotificationToManagerFake));
 
-        public NodeStartupNotificationToManagerFake(INodeConfiguration nodeConfiguration = null,
-                                                    Uri callbackTemplateUri = null,
+        public NodeStartupNotificationToManagerFake(INodeConfiguration nodeConfiguration ,
+                                                    Uri callbackTemplateUri ,
                                                     double interval = 3000) : base(nodeConfiguration,
                                                                                    callbackTemplateUri,
                                                                                    interval)

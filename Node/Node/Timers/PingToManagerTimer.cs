@@ -17,7 +17,7 @@ namespace Stardust.Node.Timers
                                   double interval = 10000) : base(interval)
         {
             nodeConfiguration.ThrowArgumentNullException();
-            callbackUri.ThrowArgumentExceptionWhenNull();
+            callbackUri.ThrowArgumentNullExceptionWhenNull();
 
             NodeConfiguration = nodeConfiguration;
             CallbackUri = callbackUri;

@@ -21,18 +21,33 @@ namespace NodeTest
         [SetUp]
         public void Setup()
         {
-            _nodeConfigurationFake = new NodeConfigurationFake(new Uri(ConfigurationManager.AppSettings["BaseAddress"]),
-                                                               new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
-                                                               Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
-                                                               ConfigurationManager.AppSettings["NodeName"]);
+            var baseAddress = new Uri(ConfigurationManager.AppSettings["BaseAddress"]);
+
+            var managerLocation = new Uri(ConfigurationManager.AppSettings["ManagerLocation"]);
+
+            var handlerAssembly = Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]);
+
+            var nodeName = ConfigurationManager.AppSettings["NodeName"];
+
+            _nodeConfigurationFake = new NodeConfigurationFake(baseAddress,
+                                                               managerLocation,
+                                                               handlerAssembly,
+                                                               nodeName);
+
+
+            _callBackTemplateUriFake = managerLocation;
 
             _workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
                                                _nodeConfigurationFake,
-                                               new NodeStartupNotificationToManagerFake(),
+                                               new NodeStartupNotificationToManagerFake(_nodeConfigurationFake,
+                                                                                        _callBackTemplateUriFake),
                                                new PingToManagerFake(),
-                                               new SendJobDoneTimerFake(),
-                                               new SendJobCanceledTimerFake(),
-                                               new SendJobFaultedTimerFake(),
+                                               new SendJobDoneTimerFake(_nodeConfigurationFake,
+                                                                        _callBackTemplateUriFake),
+                                               new SendJobCanceledTimerFake(_nodeConfigurationFake,
+                                                                            _callBackTemplateUriFake),
+                                               new SendJobFaultedTimerFake(_nodeConfigurationFake,
+                                                                           _callBackTemplateUriFake),
                                                new PostHttpRequestFake());
 
             _nodeController = new NodeController(_workerWrapper) {Request = new HttpRequestMessage()};
@@ -52,6 +67,7 @@ namespace NodeTest
         private IWorkerWrapper _workerWrapper;
         private NodeController _nodeController;
         private JobToDo _jobToDo;
+        private Uri _callBackTemplateUriFake;
 
 
         [Test]

@@ -18,7 +18,7 @@ namespace Stardust.Node.Timers
         {
             // Validate arguments.
             nodeConfiguration.ThrowArgumentNullException();
-            callbackTemplateUri.ThrowArgumentExceptionWhenNull();
+            callbackTemplateUri.ThrowArgumentNullExceptionWhenNull();
 
             // Assign values.
             NodeConfiguration = nodeConfiguration;
