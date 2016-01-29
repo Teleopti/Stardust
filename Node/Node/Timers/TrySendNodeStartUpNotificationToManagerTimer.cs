@@ -82,12 +82,11 @@ namespace Stardust.Node.Timers
                 }
             }
 
-            catch (Exception exp)
+            catch 
             {
                 if (Logger.IsErrorEnabled)
                 {
-                    Logger.Error(WhoAmI + ": Node start up notification to manager failed.",
-                                 exp);
+                    Logger.Error(WhoAmI + ": Node start up notification to manager failed.");
                 }
             }
         }
