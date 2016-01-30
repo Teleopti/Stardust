@@ -447,7 +447,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
 		private void toolStripButtonSuggestAction_Click(object sender, EventArgs e)
 		{
-			var results = new SkillGroupReducer().SuggestAction(_skillGroupsCreatorResult, _islandList, _allSkills);
+			var results = new SkillGroupReducer().SuggestAction(_skillGroupsCreatorResult, _allSkills);
 			var resultForm = new SkillGroupReducerSuggestions();
 			resultForm.LoadData(results,_skillGroupsCreatorResult,_loadedSkillList);
 			resultForm.Show(this);
@@ -455,7 +455,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
 		private void toolStripButton1_Click(object sender, EventArgs e)
 		{
-			var results = new SkillGroupReducer().SuggestAction(_skillGroupsCreatorResult, _islandList, _allSkills);
+			var results = new SkillGroupReducer().SuggestAction(_skillGroupsCreatorResult, _allSkills);
 			foreach (var skillGroupReducerResult in results)
 			{
 				foreach (var person in _skillGroupsCreatorResult.GetPersonsForKey(skillGroupReducerResult.RemoveFromGroupKey))

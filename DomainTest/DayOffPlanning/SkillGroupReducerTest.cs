@@ -50,10 +50,8 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 			var personList = new List<IPerson> { p1, p2, p3, p4 };
 			var vitualSkillGroupsCreator = new VirtualSkillGroupsCreator();
 			var skillGroups = vitualSkillGroupsCreator.GroupOnDate(DateOnly.MinValue, personList);
-			var skillGroupIslandsAnalyzer = new SkillGroupIslandsAnalyzer();
-			var islandList = skillGroupIslandsAnalyzer.FindIslands(skillGroups);
 
-			var result = _target.SuggestAction(skillGroups, islandList, _allskills);
+			var result = _target.SuggestAction(skillGroups, _allskills);
 
 			result[0].RemoveFromGroupKey.Should().Be.EqualTo(_s2.Id + "|" + _s3.Id);
 			result[0].SkillGuidStringToRemove.Should().Be.EqualTo(_s2.Id.ToString());
@@ -71,10 +69,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 			var vitualSkillGroupsCreator = new VirtualSkillGroupsCreator();
 			var skillGroups = vitualSkillGroupsCreator.GroupOnDate(DateOnly.MinValue, personList);
 
-			var skillGroupIslandsAnalyzer = new SkillGroupIslandsAnalyzer();
-			var islandList = skillGroupIslandsAnalyzer.FindIslands(skillGroups);
-
-			var result = _target.SuggestAction(skillGroups, islandList, _allskills);
+			var result = _target.SuggestAction(skillGroups, _allskills);
 
 			result.Count.Should().Be.EqualTo(0);
 		}
@@ -91,10 +86,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 			var vitualSkillGroupsCreator = new VirtualSkillGroupsCreator();
 			var skillGroups = vitualSkillGroupsCreator.GroupOnDate(DateOnly.MinValue, personList);
 
-			var skillGroupIslandsAnalyzer = new SkillGroupIslandsAnalyzer();
-			var islandList = skillGroupIslandsAnalyzer.FindIslands(skillGroups);
-
-			var result = _target.SuggestAction(skillGroups, islandList, _allskills);
+			var result = _target.SuggestAction(skillGroups, _allskills);
 
 			result.Count.Should().Be.EqualTo(0);
 		}
@@ -111,10 +103,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 			var vitualSkillGroupsCreator = new VirtualSkillGroupsCreator();
 			var skillGroups = vitualSkillGroupsCreator.GroupOnDate(DateOnly.MinValue, personList);
 
-			var skillGroupIslandsAnalyzer = new SkillGroupIslandsAnalyzer();
-			var islandList = skillGroupIslandsAnalyzer.FindIslands(skillGroups);
-
-			var result = _target.SuggestAction(skillGroups, islandList, _allskills);
+			var result = _target.SuggestAction(skillGroups, _allskills);
 
 			result.Count.Should().Be.EqualTo(2);
 			result[0].SkillGuidStringToRemove.Should().Be.EqualTo(_s2.Id.ToString());
@@ -122,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 		}
 
 		[Test]
-		public void ShouldNotReduceSoActivityIsRemovedFromGroup()
+		public void ShouldNotReduceSoActivityIsRemovedFromGroupSimple()
 		{
 			var activity = new Activity("other");
 			_s3.Activity = activity;
@@ -134,10 +123,28 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 			var personList = new List<IPerson> { p1, p2, p3, p4 };
 			var vitualSkillGroupsCreator = new VirtualSkillGroupsCreator();
 			var skillGroups = vitualSkillGroupsCreator.GroupOnDate(DateOnly.MinValue, personList);
-			var skillGroupIslandsAnalyzer = new SkillGroupIslandsAnalyzer();
-			var islandList = skillGroupIslandsAnalyzer.FindIslands(skillGroups);
 
-			var result = _target.SuggestAction(skillGroups, islandList, _allskills);
+			var result = _target.SuggestAction(skillGroups, _allskills);
+
+			result.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldNotReduceSoActivityIsRemovedFromGroup()
+		{
+			var activity = new Activity("other");
+			_s3.Activity = activity;
+			_s4.Activity = activity;
+			var p1 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> { _s1, _s2 }); //G1
+			var p2 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> { _s2, _s1 }); //G1
+			var p3 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> { _s2, _s3, _s4 }); //G2
+			var p4 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> { _s3 }); //G3
+
+			var personList = new List<IPerson> { p1, p2, p3, p4 };
+			var vitualSkillGroupsCreator = new VirtualSkillGroupsCreator();
+			var skillGroups = vitualSkillGroupsCreator.GroupOnDate(DateOnly.MinValue, personList);
+
+			var result = _target.SuggestAction(skillGroups, _allskills);
 
 			result.Count.Should().Be.EqualTo(0);
 		}
