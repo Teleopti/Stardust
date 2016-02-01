@@ -44,7 +44,7 @@
 
 	function showTimespan() {
 		return function (input) {
-			if (input === null) return ' -- : -- ';
+			if (!input) return ' -- : -- ';
 
 			var hours = Math.floor(input);
 			var minutes = Math.ceil((input - hours) * 60);

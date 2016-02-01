@@ -36,37 +36,41 @@
 								<div class="form-input-wrap">
 									<label for="callList">
 										<span translate>CallListLength</span>:
-										<input type="number" ng-model="campaign.CallListLen" placeholder="{{ 'LargeValueRange' | translate }}" name="CallListLen" required="" id="callList" min="0" max="1000000" ng-disabled="isCreating"/>
+										<input type="text" ng-model="campaign.CallListLen" placeholder="{{ 'LargeValueRange' | translate }}" name="CallListLen" required="" id="callList" numeric-value min="0" max="1000000" ng-disabled="isCreating" />
 									</label>
 									<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.CallListLen.$touched">
 										<div class="form-input-message" ng-class="{formInvalidInput:form.CallListLen.$error.required}">{{ 'Required' | translate }}</div>
+										<div class="form-input-message" ng-class="{formInvalidInput:form.CallListLen.$error.range}">{{'LargeValueRange'|translate}}</div>
 									</div>
 								</div>
 								<div class="form-input-wrap">
 									<label for="targetRate">
 										<span translate>TargetRate</span>:
-										<input type="number" ng-model="campaign.TargetRate" placeholder="{{ 'RateRange' | translate }}" name="TargetRate" required="" id="targetRate" min="1" max="100" ng-disabled="isCreating"/>
+										<input type="text" ng-model="campaign.TargetRate" placeholder="{{ 'RateRange' | translate }}" name="TargetRate" required="" id="targetRate" numeric-value min="1" max="100" ng-disabled="isCreating" />
 									</label>
 									<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.TargetRate.$touched">
 										<div class="form-input-message" ng-class="{formInvalidInput:form.TargetRate.$error.required}">{{ 'Required' | translate }}</div>
+										<div class="form-input-message" ng-class="{formInvalidInput:form.TargetRate.$error.range}">{{'RateRange'|translate}}</div>
 									</div>
 								</div>
 								<div class="form-input-wrap">
 									<label for="connectRate">
 										<span translate>ConnectRate</span>:
-										<input type="number" ng-model="campaign.ConnectRate" placeholder="{{ 'RateRange' | translate }}" name="ConnectRate" required="" id="connectRate" min="1" max="100" ng-disabled="isCreating"/>
+										<input type="text" ng-model="campaign.ConnectRate" placeholder="{{ 'RateRange' | translate }}" name="ConnectRate" required="" id="connectRate" numeric-value min="1" max="100" ng-disabled="isCreating" />
 									</label>
 									<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.ConnectRate.$touched">
 										<div class="form-input-message" ng-class="{formInvalidInput:form.ConnectRate.$error.required}">{{ 'Required' | translate }}</div>
+										<div class="form-input-message" ng-class="{formInvalidInput:form.ConnectRate.$error.range}">{{'RateRange'|translate}}</div>
 									</div>
 								</div>
 								<div class="form-input-wrap">
 									<label for="RPCR">
 										<span translate>RPCR</span>:
-										<input type="number" ng-model="campaign.RightPartyConnectRate" placeholder="{{ 'RateRange' | translate }}" name="RightPartyConnectRate" required="" id="RPCR" min="1" max="100" ng-disabled="isCreating"/>
+										<input type="text" ng-model="campaign.RightPartyConnectRate" placeholder="{{ 'RateRange' | translate }}" name="RightPartyConnectRate" required="" id="RPCR" numeric-value min="1" max="100" ng-disabled="isCreating" />
 									</label>
 									<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.RightPartyConnectRate.$touched">
 										<div class="form-input-message" ng-class="{formInvalidInput:form.RightPartyConnectRate.$error.required}">{{ 'Required' | translate }}</div>
+										<div class="form-input-message" ng-class="{formInvalidInput:form.RightPartyConnectRate.$error.range}">{{'RateRange'|translate}}</div>
 									</div>
 								</div>
 							</div>
@@ -74,28 +78,31 @@
 								<div class="form-input-wrap">
 									<label for="cAHT">
 										<span translate>ConnectAHT</span>:
-										<input type="number" ng-model="campaign.ConnectAverageHandlingTime" placeholder="{{ 'ValueRange' | translate }}" name="ConnectAverageHandlingTime" required="" id="cAHT" min="0" max="9999" ng-disabled="isCreating"/>
+										<input type="text" ng-model="campaign.ConnectAverageHandlingTime" placeholder="{{ 'ValueRange' | translate }}" name="ConnectAverageHandlingTime" required="" id="cAHT" numeric-value min="0" max="9999" ng-disabled="isCreating" />
 									</label>
 									<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.ConnectAverageHandlingTime.$touched">
 										<div class="form-input-message" ng-class="{formInvalidInput:form.ConnectAverageHandlingTime.$error.required}">{{ 'Required' | translate }}</div>
+										<div class="form-input-message" ng-class="{formInvalidInput:form.ConnectAverageHandlingTime.$error.range}">{{'ValueRange'|translate}}</div>
 									</div>
 								</div>
 								<div class="form-input-wrap">
 									<label for="rpcAHT">
 										<span translate>RPCAHT</span>:
-										<input type="number" ng-model="campaign.RightPartyAverageHandlingTime" placeholder="{{ 'ValueRange' | translate }}" name="RightPartyAverageHandlingTime" required="" id="rpcAHT" min="0" max="9999" ng-disabled="isCreating"/>
+										<input type="text" ng-model="campaign.RightPartyAverageHandlingTime" placeholder="{{ 'ValueRange' | translate }}" name="RightPartyAverageHandlingTime" required="" id="rpcAHT" numeric-value min="0" max="9999" ng-disabled="isCreating" />
 									</label>
 									<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.RightPartyAverageHandlingTime.$touched">
 										<div class="form-input-message" ng-class="{formInvalidInput:form.RightPartyAverageHandlingTime.$error.required}">{{ 'Required' | translate }}</div>
+										<div class="form-input-message" ng-class="{formInvalidInput:form.RightPartyAverageHandlingTime.$error.range}">{{'ValueRange'|translate}}</div>
 									</div>
 								</div>
 								<div class="form-input-wrap">
 									<label for="unproductive">
 										<span translate>UnproductiveTime</span>:
-										<input type="number" ng-model="campaign.UnproductiveTime" placeholder="{{ 'ValueRange' | translate }}" name="UnproductiveTime" required="" id="unproductive" min="0" max="9999" ng-disabled="isCreating"/>
+										<input type="text" ng-model="campaign.UnproductiveTime" placeholder="{{ 'ValueRange' | translate }}" name="UnproductiveTime" required="" id="unproductive" numeric-value min="0" max="9999" ng-disabled="isCreating" />
 									</label>
 									<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.UnproductiveTime.$touched">
 										<div class="form-input-message" ng-class="{formInvalidInput:form.UnproductiveTime.$error.required}">{{ 'Required' | translate }}</div>
+										<div class="form-input-message" ng-class="{formInvalidInput:form.UnproductiveTime.$error.range}">{{'ValueRange'|translate}}</div>
 									</div>
 								</div>
 								<div class="form-input-wrap">
