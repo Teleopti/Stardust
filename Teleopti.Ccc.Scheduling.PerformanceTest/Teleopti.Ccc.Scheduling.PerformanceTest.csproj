@@ -48,7 +48,9 @@
     </Compile>
     <Compile Include="AppConfigs.cs" />
     <Compile Include="FullSchedulingTest.cs" />
+    <Compile Include="IntradayOptTest.cs" />
     <Compile Include="NUnitSetup.cs" />
+    <Compile Include="WebAction.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

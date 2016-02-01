@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 				browserActivator.Start(TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(500));
 				var browserInteractions = browserActivator.GetInteractions();
 
-				logon(browserInteractions, AppConfigs.BusinessUnitName, AppConfigs.UserName, AppConfigs.Password);
+				WebAction.Logon(browserInteractions, AppConfigs.BusinessUnitName, AppConfigs.UserName, AppConfigs.Password);
 
 				scheduleAndOptimize(browserInteractions, AppConfigs.PlanningPeriodId);
 
@@ -43,14 +43,6 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 			browserInteractions.GoTo(string.Concat(TestSiteConfigurationSetup.URL, "wfm/#/resourceplanner/planningperiod/", planningPeriodId));
 			browserInteractions.Click(".test-schedule-button:enabled");
 			browserInteractions.AssertExists(".test-schedule-is-running");
-		}
-
-		private static void logon(IBrowserInteractions browserInteractions, string businessUnitName, string userName, string password)
-		{
-			browserInteractions.GoTo(string.Concat(
-				TestSiteConfigurationSetup.URL,
-				"Test/Logon",
-				string.Format("?businessUnitName={0}&userName={1}&password={2}", businessUnitName, userName, password)));
 		}
 	}
 }
