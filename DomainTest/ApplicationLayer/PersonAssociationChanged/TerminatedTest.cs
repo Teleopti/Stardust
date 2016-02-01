@@ -12,12 +12,12 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 {
 	[TestFixture]
 	[DomainTest]
 	[Toggle(Toggles.RTA_TerminatedPersons_36042)]
-	public class PersonAssociationChangedEventPublisherTest
+	public class TerminatedTest
 	{
 		public PersonAssociationChangedEventPublisher Target;
 		public FakeEventPublisher Publisher;
