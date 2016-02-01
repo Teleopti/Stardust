@@ -177,6 +177,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Bindings\Generic\QueueSourceDefinitions.cs" />
     <Compile Include="Bindings\Generic\RuleStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\DescriptionToggle.cs" />
     <Compile Include="Bindings\Generic\Diagnosis\DiagnosisViewPageStepDefinition.cs" />
@@ -189,6 +190,7 @@
     <Compile Include="Bindings\Generic\ShiftExchangeOfferFields.cs" />
     <Compile Include="Bindings\Generic\StateGroupStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Wfm\GlobalStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\Wfm\IntradayStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Wfm\PermissionsStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Wfm\ResourcePlannerStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkloadStepDefinitions.cs" />

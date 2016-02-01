@@ -70,6 +70,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool MoveActivity { get; set; }
 
 		public bool QuickForecaster { get; set; }
+		public bool AccessToIntraday { get; set; }
 
 		public RoleConfigurable()
 		{
@@ -327,8 +328,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 			if (!AccessToWfmRequests)
 				applicationFunctions = from f in applicationFunctions
-									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebRequests
-									   select f;
+											where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebRequests
+											select f;
+
+			if (!AccessToIntraday)
+				applicationFunctions = from f in applicationFunctions
+										   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebIntraday
+										   & f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebModifySkillArea
+										   select f;
 
 			return applicationFunctions;
 		}

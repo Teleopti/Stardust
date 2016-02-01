@@ -644,5 +644,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			Navigation.GoToForecasting();
 		}
+
+		[Given(@"I am viewing intraday page")]
+		public void GivenIAmViewingIntradayPage()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToIntraday();
+		}
+
 	}
 }

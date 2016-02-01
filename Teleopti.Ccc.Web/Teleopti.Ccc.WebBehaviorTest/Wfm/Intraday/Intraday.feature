@@ -6,9 +6,9 @@ Feature: Intraday
 
 Background:
     Given I have a role with
-    | Field           | Value |
-    | ModifySkillArea | True  |
-    And There is a skill called 'Skill A'
+    | Field              | Value |
+    | Access to Intraday | True  |
+    And There is a skill to monitor called 'Skill A'
 
 Scenario: Create Skill Area
     Given I am viewing intraday page
@@ -21,7 +21,8 @@ Scenario: Create Skill Area
 
 Scenario: Remove Skill Area
     Given I am viewing intraday page
-	And there is a Skill Area called 'my Area'
+	And There is a skill to monitor called 'Skill B'
+	And there is a Skill Area called 'my Area' that monitors skill 'Skill B'
 	And I select to monitor 'my Area'
     When I select to remove 'my Area'
 	Then I should no longer be able to monitor 'my Area'
