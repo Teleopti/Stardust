@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
+using log4net.Config;
 using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Timers;
@@ -35,8 +36,9 @@ namespace Manager.Integration.Test
             _clearDatabase= true;
             _startUpManagerAndNodeManually = false;
 #endif
+            XmlConfigurator.Configure();
 
-            Logger.Info("_clearDatabase = " + _clearDatabase + "    " + "_startUpManagerAndNodeManually" + _startUpManagerAndNodeManually);
+            Logger.Info("_clearDatabase = " + _clearDatabase + "    " + "_startUpManagerAndNodeManually = " + _startUpManagerAndNodeManually);
             if (_clearDatabase)
             {
                 DatabaseHelper.TryClearDatabase();
@@ -48,7 +50,6 @@ namespace Manager.Integration.Test
             {
                 ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
                 Logger.Info("Shut down all processes");
-                Thread.Sleep(TimeSpan.FromSeconds(10));
                 StartManagerIntegrationConsoleHostProcess =
                     ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
             }
