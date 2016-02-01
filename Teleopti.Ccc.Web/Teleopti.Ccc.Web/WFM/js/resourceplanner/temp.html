@@ -2,9 +2,9 @@
 
 <button class="wfm-btn wfm-btn-primary test-btn" ng-show="checkStatus() === 'waiting'" ng-click="intraOptimize()">Start</button>
 
-<div ng-show="checkStatus() === 'running'" class=”test-is-running”>Nu körs intraday
+<div ng-show="checkStatus() === 'running'" class="test-is-running">Nu körs intraday
 	<md-progress-linear md-mode="indeterminate"></md-progress-linear>
-<div class="wfm-block material-depth-1">{{'OptimizingIntraday'|translate}}</div>
+	<div class="wfm-block material-depth-1">{{'OptimizingIntraday'|translate}}</div>
 </div>
-<div ng-show="checkStatus() === 'done'" class=”test-is-done”>done<i class="mdi mdi-check"></i></div>
-<div ng-show="checkStatus() === 'error'" class=”test-was-failing”>PANG!<i class="mdi mdi-close"></i></div>
+<div ng-show="checkStatus() === 'done'" class="test-is-done">done<i class="mdi mdi-check"></i></div>
+<div ng-show="checkStatus() === 'error'" class="test-was-failing">PANG!<i class="mdi mdi-close"></i></div>
