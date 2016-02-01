@@ -28,6 +28,7 @@ namespace Manager.Integration.Test
         [SetUp]
         public void SetUp()
         {
+
 #if (DEBUG)
             // Do nothing.
 #else
@@ -84,6 +85,7 @@ namespace Manager.Integration.Test
                 var cancelJobTask = ManagerApiHelper.CreateManagerCancelTask(args.Guid);
 
                 Logger.Debug("IntegrationTestsOneManagerAndManyNodes : Created task for cancel job :" + args.Guid);
+
                 cancelJobTask.Start();
             };
 
