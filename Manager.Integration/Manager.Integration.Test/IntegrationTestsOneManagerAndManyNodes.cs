@@ -187,11 +187,11 @@ namespace Manager.Integration.Test
         }
 
         [Test]
-        public void ShouldBeAbleToCreate10SuccessJobRequest()
+        public void ShouldBeAbleToCreate5SuccessJobRequest()
         {
             JobHelper.GiveNodesTimeToInitialize();
 
-            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(10);
+            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(5);
 
             TimeSpan timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count);
 
