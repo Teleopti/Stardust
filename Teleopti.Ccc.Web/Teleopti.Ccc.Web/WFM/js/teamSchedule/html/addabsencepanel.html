@@ -32,10 +32,9 @@
 		</label>
 	</div>
 	<p class="text-danger" ng-if="!vm.isAbsenceTimeValid() && !vm.isAbsenceDateValid()">{{'EndTimeMustBeGreaterOrEqualToStartTime'|translate}}</p>
-</md-content>
-<div style="position: relative;float: right;">
-	<button class="wfm-btn" ng-class="{'wfm-btn-primary': vm.isDataChangeValid(), 'wfm-btn-primary-disabled': !vm.isDataChangeValid()}"
+	
+	<button class="wfm-btn pull-right" ng-class="{'wfm-btn-primary': vm.isDataChangeValid(), 'wfm-btn-primary-disabled': !vm.isDataChangeValid()}"
 			  ng-disabled="!vm.isDataChangeValid()" ng-click="vm.applyAbsence()">
 		{{'Apply' | translate}}
 	</button>
-</div>
+</md-content>
