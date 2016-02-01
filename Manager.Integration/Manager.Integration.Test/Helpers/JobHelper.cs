@@ -14,6 +14,30 @@ namespace Manager.Integration.Test.Helpers
             Thread.Sleep(time);
         }
 
+        public static TimeSpan GenerateTimeoutTimeInMinutes(int numberOfRequest,
+                                                            int latencyPerRequestInMinutes = 1)
+        {
+            if (numberOfRequest <= 0)
+            {
+                throw new ArgumentException("numberOfRequest");
+            }
+
+            return new TimeSpan(0, numberOfRequest * latencyPerRequestInMinutes, 0);
+        }
+
+        public static TimeSpan GenerateTimeoutTimeInSeconds(int numberOfRequest,
+                                                            int latencyPerRequestInSeconds = 60)
+        {
+            if (numberOfRequest <= 0)
+            {
+                throw new ArgumentException("numberOfRequest");
+            }
+
+            return new TimeSpan(0,
+                                0,
+                                numberOfRequest*latencyPerRequestInSeconds);
+        }
+
         public static List<JobRequestModel> GenerateLongRunningParamsRequests(int numberOfJobRequests)
         {
             List<JobRequestModel> requestModels = null;
@@ -33,7 +57,7 @@ namespace Manager.Integration.Test.Helpers
                         Name = "Job Name " + i,
                         Serialized = longRunningJobParamsJson,
                         Type = "NodeTest.JobHandlers.LongRunningJobParams",
-                        UserName = SecurityHelper.GetLoggedInUser()                        
+                        UserName = SecurityHelper.GetLoggedInUser()
                     };
 
                     requestModels.Add(job);

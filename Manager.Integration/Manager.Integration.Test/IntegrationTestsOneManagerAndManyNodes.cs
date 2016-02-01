@@ -15,7 +15,7 @@ namespace Manager.Integration.Test
     [TestFixture]
     public class IntegrationTestsOneManagerAndManyNodes
     {
-        private const int NumberOfNodesToStart = 3;
+        private const int NumberOfNodesToStart = 1;
 
         private bool _startUpManagerAndNodeManually = false;
         private bool _clearDatabase = true;
@@ -28,7 +28,6 @@ namespace Manager.Integration.Test
         [SetUp]
         public void SetUp()
         {
-
 #if (DEBUG)
             // Do nothing.
 #else
@@ -61,6 +60,8 @@ namespace Manager.Integration.Test
 
             List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(10);
 
+            var timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count);
+
             List<Task> tasks = new List<Task>();
 
             foreach (var jobRequestModel in requests)
@@ -83,7 +84,6 @@ namespace Manager.Integration.Test
                 var cancelJobTask = ManagerApiHelper.CreateManagerCancelTask(args.Guid);
 
                 Logger.Debug("IntegrationTestsOneManagerAndManyNodes : Created task for cancel job :" + args.Guid);
-                Thread.Sleep(TimeSpan.FromMilliseconds(250));
                 cancelJobTask.Start();
             };
 
@@ -92,13 +92,12 @@ namespace Manager.Integration.Test
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
 
-            // Time out after 60 seconds.
-            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(TimeSpan.FromSeconds(60));
-
-            ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
-
+            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+            
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.CanceledStatus ||
                                                                                         pair.Value == StatusConstants.DeletedStatus));
+
+            ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
         }
 
         [Test]
@@ -108,6 +107,8 @@ namespace Manager.Integration.Test
 
             List<JobRequestModel> requests = JobHelper.GenerateFailingJobParamsRequests(1);
 
+            var timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count);
+
             List<Task> tasks = new List<Task>();
 
             foreach (var jobRequestModel in requests)
@@ -127,7 +128,7 @@ namespace Manager.Integration.Test
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
 
-            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(TimeSpan.FromSeconds(60)); // If not succeded in 1 min, something is wrong
+            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.FailedStatus));
 
@@ -135,16 +136,52 @@ namespace Manager.Integration.Test
         }
 
         [Test]
-        [Ignore]
-        public void CancelWrongJob()
+        public void CancelWrongJobs()
         {
-            //JobHelper.GiveNodesTimeToInitialize(5);
+            JobHelper.GiveNodesTimeToInitialize();
 
-            //Task<HttpResponseMessage> task = ManagerApiHelper.CreateManagerCancelTask(Guid.NewGuid());
+            List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(1);
 
-            //task.Start();
+            var timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count,
+                                                                 5);
+            List<Task> tasks = new List<Task>();
 
-            //task.Wait();
+            foreach (var jobRequestModel in requests)
+            {
+                tasks.Add(ManagerApiHelper.CreateManagerDoThisTask(jobRequestModel));
+
+                Logger.Debug("Created task for add job :" + jobRequestModel.Name);
+            }
+
+            ManagerApiHelper.CheckJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(requests.Count,
+                                                                                         5000,
+                                                                                         StatusConstants.SuccessStatus,
+                                                                                         StatusConstants.DeletedStatus,
+                                                                                         StatusConstants.FailedStatus,
+                                                                                         StatusConstants.CanceledStatus);
+
+            ManagerApiHelper.CheckJobHistoryStatusTimer.GuidAddedEventHandler += (sender,
+                                                                                  args) =>
+            {
+                // Create new guid.
+                var newGuid = Guid.NewGuid();
+
+                var cancelJobTask = ManagerApiHelper.CreateManagerCancelTask(newGuid);
+
+                Logger.Debug("CancelWrongJobs : Created task for cancel job :" + newGuid);
+                cancelJobTask.Start();
+            };
+
+            ManagerApiHelper.CheckJobHistoryStatusTimer.Start();
+
+            Parallel.ForEach(tasks,
+                             task => { task.Start(); });
+
+            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+            
+            Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
+
+            ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
         }
 
         [Test]
@@ -154,6 +191,8 @@ namespace Manager.Integration.Test
 
             List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(10);
 
+            TimeSpan timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count);
+
             List<Task> tasks = new List<Task>();
 
             foreach (var jobRequestModel in requests)
@@ -173,7 +212,7 @@ namespace Manager.Integration.Test
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
 
-            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(TimeSpan.FromSeconds(60)); // If not succeded in 1 min, something is wrong
+            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);            
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
 

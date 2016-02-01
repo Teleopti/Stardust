@@ -207,6 +207,13 @@ namespace Stardust.Node.Workers
                     Logger.Info(WhoamI + " : Cancel job method called. CancellationTokenSource.IsCancellationRequested is now true.");
                 }
             }
+            else
+            {
+                if (id != Guid.Empty)
+                {
+                    Logger.Warn(WhoamI + " : Can not cancel job with id : " + id);
+                }                
+            }
         }
 
         public bool IsCancellationRequested

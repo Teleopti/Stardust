@@ -310,57 +310,73 @@ namespace Stardust.Manager
 				DataTable jobs = new DataTable();
 				da.Fill(jobs);
 
-				if (jobs.Rows.Count > 0)
-				{
-					DataRow jobRow = jobs.Rows[0];
-					var node = getValue<string>(jobRow["AssignedNode"]);
-					if (string.IsNullOrEmpty(node))
-					{
-						da.DeleteCommand = new SqlCommand("DELETE FROM JobDefinitions WHERE Id = @Id", connection);
-						var parameter = da.DeleteCommand.Parameters.Add("@Id", SqlDbType.UniqueIdentifier);
-						parameter.SourceColumn = "Id";
-						parameter.Value = jobId;
-						da.DeleteCommand.Transaction = tran;
-						da.DeleteCommand.ExecuteNonQuery();
+			    if (jobs.Rows.Count > 0)
+			    {
+			        DataRow jobRow = jobs.Rows[0];
+			        var node = getValue<string>(jobRow["AssignedNode"]);
+			        if (string.IsNullOrEmpty(node))
+			        {
+			            da.DeleteCommand = new SqlCommand("DELETE FROM JobDefinitions WHERE Id = @Id",
+			                                              connection);
+			            var parameter = da.DeleteCommand.Parameters.Add("@Id",
+			                                                            SqlDbType.UniqueIdentifier);
+			            parameter.SourceColumn = "Id";
+			            parameter.Value = jobId;
+			            da.DeleteCommand.Transaction = tran;
+			            da.DeleteCommand.ExecuteNonQuery();
 
-						//update history
-						da.UpdateCommand = new SqlCommand("UPDATE JobHistory SET Result = @Result WHERE JobId = @Id", connection);
-						da.UpdateCommand.Parameters.Add("@Id", SqlDbType.UniqueIdentifier, 16, "JobId");
-						da.UpdateCommand.Parameters[0].Value = jobId;
-						da.UpdateCommand.Parameters.Add("@Result", SqlDbType.NVarChar, 2000, "Result");
-						da.UpdateCommand.Parameters[1].Value = "Deleted";
-						da.UpdateCommand.Transaction = tran;
-						da.UpdateCommand.ExecuteNonQuery();
-					}
-					else
-					{
-                        NodeUriBuilderHelper builderHelper = new NodeUriBuilderHelper(node);
+			            //update history
+			            da.UpdateCommand = new SqlCommand("UPDATE JobHistory SET Result = @Result WHERE JobId = @Id",
+			                                              connection);
+			            da.UpdateCommand.Parameters.Add("@Id",
+			                                            SqlDbType.UniqueIdentifier,
+			                                            16,
+			                                            "JobId");
+			            da.UpdateCommand.Parameters[0].Value = jobId;
+			            da.UpdateCommand.Parameters.Add("@Result",
+			                                            SqlDbType.NVarChar,
+			                                            2000,
+			                                            "Result");
+			            da.UpdateCommand.Parameters[1].Value = "Deleted";
+			            da.UpdateCommand.Transaction = tran;
+			            da.UpdateCommand.ExecuteNonQuery();
+			        }
+			        else
+			        {
+			            NodeUriBuilderHelper builderHelper = new NodeUriBuilderHelper(node);
 
-					    var uriCancel=builderHelper.GetCancelJobUri(jobId);
+			            var uriCancel = builderHelper.GetCancelJobUri(jobId);
 
-                        Logger.Info("Send delete async : " + uriCancel);
+			            Logger.Info("Send delete async : " + uriCancel);
 
-                        var response = 
-                            await httpSender.DeleteAsync(uriCancel);
+			            var response =
+			                await httpSender.DeleteAsync(uriCancel);
 
-						if (response != null && response.IsSuccessStatusCode)
-						{
-							da.UpdateCommand = new SqlCommand("UPDATE JobDefinitions SET Status = 'Canceling' WHERE Id = @Id", connection);
+			            if (response != null && response.IsSuccessStatusCode)
+			            {
+			                da.UpdateCommand = new SqlCommand("UPDATE JobDefinitions SET Status = 'Canceling' WHERE Id = @Id",
+			                                                  connection);
 
-							var parameter = da.UpdateCommand.Parameters.Add("@Id", SqlDbType.UniqueIdentifier);
-							parameter.SourceColumn = "Id";
-							parameter.Value = jobId;
+			                var parameter = da.UpdateCommand.Parameters.Add("@Id",
+			                                                                SqlDbType.UniqueIdentifier);
+			                parameter.SourceColumn = "Id";
+			                parameter.Value = jobId;
 
-							da.UpdateCommand.Transaction = tran;
-							da.UpdateCommand.ExecuteNonQuery();
-							ReportProgress(jobId, "Canceling");
-						}
-						else
-						{
-							//??? did the node we thought not work on this job, what to do
-						}
-					}
-				}
+			                da.UpdateCommand.Transaction = tran;
+			                da.UpdateCommand.ExecuteNonQuery();
+			                ReportProgress(jobId,
+			                               "Canceling");
+			            }
+			            else
+			            {
+			                //??? did the node we thought not work on this job, what to do
+			            }
+			        }
+			    }
+			    else
+			    {
+                    Logger.Warn("[MANAGER, "  + Environment.MachineName + "] : Could not find job defintion for id : " + jobId);
+                }
 
 				tran.Commit();
 				connection.Close();
