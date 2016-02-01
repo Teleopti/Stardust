@@ -88,7 +88,7 @@ namespace Stardust.Node.Timers
                     {
                         if (Logger.IsDebugEnabled)
                         {
-                            Logger.Debug(WhoAmI + ": Try send status to manager succeded. Manager Uri =  " + CallbackTemplateUri);
+                            Logger.Debug(WhoAmI + ": Try send status to manager succeded. Send Uri =  " + httpResponseMessage.RequestMessage.RequestUri);
                         }
 
                         InvokeTriggerTrySendStatusSucceded();

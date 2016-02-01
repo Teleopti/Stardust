@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using Manager.Integration.Test.Constants;
@@ -16,6 +18,7 @@ namespace Manager.Integration.Test
         private const int NumberOfNodesToStart = 1;
 
         private readonly bool _startUpManagerAndNodeManually = false;
+        private readonly bool _clearDatabase= true;
 
         private static readonly ILog Logger =
             LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndManyNodes));
@@ -25,12 +28,15 @@ namespace Manager.Integration.Test
         [SetUp]
         public void SetUp()
         {
+            if (_clearDatabase)
+            {
+                DatabaseHelper.TryClearDatabase();
+            }
+
             ManagerApiHelper = new ManagerApiHelper();
 
             if (!_startUpManagerAndNodeManually)
-            {
-                DatabaseHelper.TryClearDatabase();
-
+            {                
                 ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
 
                 StartManagerIntegrationConsoleHostProcess =
@@ -41,7 +47,7 @@ namespace Manager.Integration.Test
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
         [Test]
-        public void Create10RequestShouldReturnBothCancelAndDeleteStatuses()
+        public void Create2RequestShouldReturnBothCancelAndDeleteStatuses()
         {
             JobHelper.GiveNodesTimeToInitialize();
 
@@ -135,11 +141,11 @@ namespace Manager.Integration.Test
         }
 
         [Test]
-        public void ShouldBeAbleToCreate10SuccessJobRequest()
+        public void ShouldBeAbleToCreate1SuccessJobRequest()
         {
             JobHelper.GiveNodesTimeToInitialize();
 
-            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(10);
+            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(1);
 
             List<Task> tasks = new List<Task>();
 

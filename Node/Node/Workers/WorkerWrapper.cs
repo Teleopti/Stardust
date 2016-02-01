@@ -194,7 +194,19 @@ namespace Stardust.Node.Workers
 
         public void CancelJob(Guid id)
         {
-            CancellationTokenSource.Cancel();
+            if (CurrentMessageToProcess != null &&
+                id != Guid.Empty &&
+                CurrentMessageToProcess.Id == id)
+            {
+                Logger.Info(WhoamI + " : Cancel job method called. Will call cancel on canellation token source.");
+
+                CancellationTokenSource.Cancel();
+
+                if (CancellationTokenSource.IsCancellationRequested)
+                {
+                    Logger.Info(WhoamI + " : Cancel job method called. CancellationTokenSource.IsCancellationRequested is now true.");
+                }
+            }
         }
 
         public bool IsCancellationRequested

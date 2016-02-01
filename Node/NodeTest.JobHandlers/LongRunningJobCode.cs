@@ -21,9 +21,12 @@ namespace NodeTest.JobHandlers
                                CancellationTokenSource cancellationTokenSource,
                                Action<string> progress)
         {
+            
+
             Logger.Info("'Long Running Job Code' Do The Thing method called.");
 
-            Thread.Sleep(TimeSpan.FromSeconds(10));
+            Logger.Info("'Long Running Job Code' Do The Thing method called. Will sleep for 20 seconds.");
+            Thread.Sleep(TimeSpan.FromSeconds(20));
 
             TestJobProgress jobProgress;
 
@@ -51,6 +54,7 @@ namespace NodeTest.JobHandlers
 
             progress(jobProgress.Text);
 
+            Logger.Info("'Long Running Job Code' : Will sleep for 10 seconds.");
             Thread.Sleep(TimeSpan.FromSeconds(10));
 
             if (cancellationTokenSource.IsCancellationRequested)

@@ -19,8 +19,11 @@ namespace Manager.Integration.Test.Helpers
 
         public static void CloseProcess(Process process)
         {
-            process.CloseMainWindow();
-            process.WaitForExit();
+            if (process != null)
+            {
+                process.CloseMainWindow();
+                process.WaitForExit();
+            }
         }
 
         public static Process StartManagerIntegrationConsoleHostProcess(int numberOfNodesToStart)
