@@ -1,19 +1,17 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 {
-	public class Agent : IUserSetup, IUserRoleSetup
+	public class Agent_ThingThatReallyAppliesSetupsInConstructor : IUserSetup, IUserRoleSetup
 	{
-		public Agent()
+		public Agent_ThingThatReallyAppliesSetupsInConstructor()
 		{
-			var role = new AgentRole();
-			if (!DataMaker.Data().HasSetup<AgentRole>())
+			var role = new agentRole();
+			if (!DataMaker.Data().HasSetup<agentRole>())
 				DataMaker.Data().Apply(role);
 			if (!DataMaker.Data().HasSetup<RoleForUser>())
 				DataMaker.Me().Apply(new RoleForUser { Name = role.Name });
@@ -22,14 +20,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 		}
-	}
-	
-	public class AgentRole : RoleConfigurable
-	{
-		public AgentRole()
+
+		private  class agentRole : RoleConfigurable
 		{
-			Name = "Agent";
-			AccessToStudentAvailability = true;
+			public agentRole()
+			{
+				Name = "Agent";
+				AccessToStudentAvailability = true;
+			}
 		}
 	}
+	
 }

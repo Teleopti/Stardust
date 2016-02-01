@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void WhenIViewMyRegionalSettings()
 		{
 			if (!DataMaker.Data().HasSetup<IUserRoleSetup>())
-				DataMaker.Data().Apply(new Agent());
+				DataMaker.Data().Apply(new Agent_ThingThatReallyAppliesSetupsInConstructor());
 			TestControllerMethods.Logon();
 			Navigation.GotoRegionalSettings();
 		}
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void WhenIViewMyPassword()
 		{
 			if (!DataMaker.Data().HasSetup<IUserRoleSetup>())
-				DataMaker.Data().Apply(new Agent());
+				DataMaker.Data().Apply(new Agent_ThingThatReallyAppliesSetupsInConstructor());
 			TestControllerMethods.Logon();
 			Navigation.GotoPasswordPage();
 		}

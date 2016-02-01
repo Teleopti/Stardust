@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Given(@"I have a colleague '(.*)'")]
 		public void GivenIHaveAColleague(string colleagueName)
 		{
-			DataMaker.Person(colleagueName).Apply(new Agent());
+			DataMaker.Person(colleagueName).Apply(new Agent_ThingThatReallyAppliesSetupsInConstructor());
 			DataMaker.Person(colleagueName).Apply(new SchedulePeriod());
 			DataMaker.Person(colleagueName).Apply(new PersonPeriod(DefaultTeam.Get()));
 
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Given(@"I have a colleague")]
 		public void GivenIHaveAColleague()
 		{
-			DataMaker.Person(TeamColleagueName).Apply(new Agent());
+			DataMaker.Person(TeamColleagueName).Apply(new Agent_ThingThatReallyAppliesSetupsInConstructor());
 			DataMaker.Person(TeamColleagueName).Apply(new SchedulePeriod());
 			DataMaker.Person(TeamColleagueName).Apply(new PersonPeriod(DefaultTeam.Get()));
 			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published2", SchedulePublishedToDate = "2030-12-01" });
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Given(@"I have a colleague in another team")]
 		public void GivenIHaveAColleagueInAnotherTeam()
 		{
-			DataMaker.Person(OtherTeamColleagueName).Apply(new Agent());
+			DataMaker.Person(OtherTeamColleagueName).Apply(new Agent_ThingThatReallyAppliesSetupsInConstructor());
 			DataMaker.Person(OtherTeamColleagueName).Apply(new SchedulePeriod());
 			DataMaker.Person(OtherTeamColleagueName).Apply(new PersonPeriod(GetTheOtherTeam()));
 			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published3", SchedulePublishedToDate = "2030-12-01" });

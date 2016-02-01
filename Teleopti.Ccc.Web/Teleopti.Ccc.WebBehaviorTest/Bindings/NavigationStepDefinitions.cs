@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenIAmViewingAnApplicationPage()
 		{
 			if (!DataMaker.Data().HasSetup<IUserRoleSetup>())
-				DataMaker.Data().Apply(new Agent());
+				DataMaker.Data().Apply(new Agent_ThingThatReallyAppliesSetupsInConstructor());
 			TestControllerMethods.Logon();
 			Navigation.GotoAnApplicationPage();
 		}
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void GivenIWasLoggedOnWithRememberMe()
 		{
 			if (!DataMaker.Data().HasSetup<IUserRoleSetup>())
-				DataMaker.Data().Apply(new Agent());
+				DataMaker.Data().Apply(new Agent_ThingThatReallyAppliesSetupsInConstructor());
 			TestControllerMethods.LogonWithRememberMe();
 			Navigation.GotoAnApplicationPage();
 		}
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenIAmViewingAnApplicationPage(string userName, string password)
 		{
 			if (!DataMaker.Data().HasSetup<IUserRoleSetup>())
-				DataMaker.Data().Apply(new Agent());
+				DataMaker.Data().Apply(new Agent_ThingThatReallyAppliesSetupsInConstructor());
 			TestControllerMethods.LogonForSpecificUser(userName, password);
 			Navigation.GotoAnApplicationPage();
 		}

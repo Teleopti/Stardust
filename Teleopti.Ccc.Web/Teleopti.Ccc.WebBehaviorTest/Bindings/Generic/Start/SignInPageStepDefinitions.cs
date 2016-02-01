@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		public void IAmSignedIn()
 		{
 			if (!DataMaker.Data().HasSetup<IUserRoleSetup>())
-				DataMaker.Data().Apply(new Agent());
+				DataMaker.Data().Apply(new Agent_ThingThatReallyAppliesSetupsInConstructor());
 			TestControllerMethods.Logon();
 		}
 

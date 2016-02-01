@@ -216,7 +216,7 @@
     <Compile Include="Data\Setups\Default\DefaultPersonThatCreatesDbData.cs" />
     <Compile Include="Data\Setups\Default\DefaultRaptorApplicationFunctions.cs" />
     <Compile Include="Data\Setups\Default\DefaultMatrixApplicationFunctions.cs" />
-    <Compile Include="Data\Setups\DoNotUse\Agent.cs" />
+    <Compile Include="Data\Setups\DoNotUse\Agent_ThingThatReallyAppliesSetupsInConstructor.cs" />
     <Compile Include="Data\Setups\Default\IHashableDataSetup.cs" />
     <Compile Include="Data\TenantUnitOfWorkState.cs" />
     <Compile Include="MultiTenancy\MultiTenancyStepDefinition.cs" />

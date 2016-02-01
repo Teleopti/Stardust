@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse
 		[Given(@"I am an agent")]
 		public void GivenIAmAnAgent()
 		{
-			DataMaker.Data().Apply(new Agent());
+			DataMaker.Data().Apply(new Agent_ThingThatReallyAppliesSetupsInConstructor());
 			DataMaker.Data().Apply(new SchedulePeriod());
 			DataMaker.Data().Apply(new PersonPeriod(DefaultTeam.Get()));
 			DataMaker.Data().Apply(new WorkflowControlSetConfigurable{Name = "Published", SchedulePublishedToDate = "2030-12-01"});
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse
 		[Given(@"I am an agent named first name '(.*)' last name '(.*)'")]
 		public void GivenIAmAnAgentNamedFirstNameLastName(string firstName, string lastName)
 		{
-			DataMaker.Data().ApplyPerson(new Agent(), new Name(firstName, lastName));
+			DataMaker.Data().ApplyPerson(new Agent_ThingThatReallyAppliesSetupsInConstructor(), new Name(firstName, lastName));
 			DataMaker.Data().Apply(new SchedulePeriod());
 			DataMaker.Data().Apply(new PersonPeriod(DefaultTeam.Get()));
 			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse
 		[Given(@"I am an agent that has a dayoff today according to my contract")]
 		public void GivenIAmAnAgentThatHasAContractDayOffToday()
 		{
-			DataMaker.Data().Apply(new Agent());
+			DataMaker.Data().Apply(new Agent_ThingThatReallyAppliesSetupsInConstructor());
 			DataMaker.Data().Apply(new SchedulePeriod());
 			var contractSchedule = new ContractScheduleFromTable
 			                       	{
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse
 		[Given(@"I am an agent in no team with access to my team")]
 		public void GivenIAmAnAgentInNoTeamWithAccessToMyTeam()
 		{
-			DataMaker.Data().Apply(new Agent());
+			DataMaker.Data().Apply(new Agent_ThingThatReallyAppliesSetupsInConstructor());
 			DataMaker.Data().Apply(new SchedulePeriod());
 			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
 			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published" });
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse
 		[Given(@"I am an agent in a team with access to my team")]
 		public void GivenIAmAnAgentInATeam()
 		{
-			DataMaker.Data().Apply(new Agent());
+			DataMaker.Data().Apply(new Agent_ThingThatReallyAppliesSetupsInConstructor());
 			DataMaker.Data().Apply(new SchedulePeriod());
 			DataMaker.Data().Apply(new PersonPeriod(DefaultTeam.Get()));
 			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse
 		[Given(@"I am a student agent")]
 		public void GivenIAmAStudentAgent()
 		{
-			DataMaker.Data().Apply(new Agent());
+			DataMaker.Data().Apply(new Agent_ThingThatReallyAppliesSetupsInConstructor());
 			DataMaker.Data().Apply(new SchedulePeriod());
 			DataMaker.Data().Apply(new PersonPeriod(DefaultTeam.Get()));
 			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published Student", SchedulePublishedToDate = "2030-12-01" });
