@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 	public class FullSchedulingTest
 	{
 		[Test]
+		[Category("ScheduleOptimization")]
 		public void MeasurePerformance()
 		{
 			using (var browserActivator = new CoypuChromeActivator())
