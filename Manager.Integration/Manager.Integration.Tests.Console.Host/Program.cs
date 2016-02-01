@@ -161,10 +161,10 @@ namespace Manager.IntegrationTest.Console.Host
             foreach (var task in tasks)
             {
                 task.Start();
-                Thread.Sleep(TimeSpan.FromSeconds(2)); //see if this helps TC
+                Thread.Sleep(TimeSpan.FromSeconds(1)); //see if this helps TC
             }
 
-            System.Console.ReadKey();
+            System.Console.Read();
         }
 
         public static FileInfo CreateNodeConfigFile(FileInfo nodeConfigurationFile,
