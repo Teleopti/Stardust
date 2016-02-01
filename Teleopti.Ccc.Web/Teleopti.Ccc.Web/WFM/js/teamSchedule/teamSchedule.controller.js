@@ -103,16 +103,20 @@
 		};
 
 		vm.updateSchedules = function (personIdList) {
-			var params = { personIds: personIdList, date: vm.scheduleDateMoment().format('YYYY-MM-DD') };
 			vm.isLoading = true;
 
-			angular.forEach(vm.rawSchedules, function(schedule) {
-				if (personIdList.indexOf(schedule.PersonId) >= 0) {
-					vm.rawSchedules.slice(schedule);
+			var peopleInCurrentPage = [];
+			angular.forEach(vm.rawSchedules, function (schedule) {
+				if (personIdList.indexOf(schedule.PersonId) > -1) {
+					peopleInCurrentPage.push(schedule.PersonId);
+					schedule.ContractTimeMinutes = 0;
+					schedule.Projection = null;
+					schedule.WorkTimeMinutes = 0;
 				}
 			});
 
-			teamScheduleSvc.getSchedules.query(params).$promise.then(function(result) {
+			var params = { personIds: peopleInCurrentPage, date: vm.scheduleDateMoment().format('YYYY-MM-DD') };
+			teamScheduleSvc.getSchedules.query(params).$promise.then(function (result) {
 				vm.rawSchedules = vm.rawSchedules.concat(result.Schedules);
 				vm.groupScheduleVm = groupScheduleFactory.Create(vm.rawSchedules, vm.scheduleDateMoment());
 				vm.isLoading = false;
@@ -350,8 +354,11 @@
 
 		vm.afterActionCallback = function (result, successMessageTemplate, failMessageTemplate) {
 			handleActionResult(result, successMessageTemplate, failMessageTemplate);
+			vm.updateSchedules(vm.getSelectedPersonIdList());
+
 			vm.personIdSelectionDic = {};
-			vm.loadSchedules();
+			setupPersonIdSelectionDic(vm.groupScheduleVm.Schedules);
+
 			vm.setCurrentCommand("");
 		}
 
