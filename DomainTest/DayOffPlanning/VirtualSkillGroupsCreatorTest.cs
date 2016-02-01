@@ -41,8 +41,8 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
 			result.GetKeys().Should().Contain(s1.Id + "|" + s2.Id);
 			result.GetKeys().Should().Contain(s2.Id + "|" + s3.Id);
-			result.GetPersonsForKey(s1.Id + "|" + s2.Id).Should().Contain(p1).And.Contain(p2);
-			result.GetPersonsForKey(s2.Id + "|" + s3.Id).Should().Contain(p3).And.Not.Contain(p4);
+			result.GetPersonsForSkillGroupKey(s1.Id + "|" + s2.Id).Should().Contain(p1).And.Contain(p2);
+			result.GetPersonsForSkillGroupKey(s2.Id + "|" + s3.Id).Should().Contain(p3).And.Not.Contain(p4);
 		}
 
 		[Test]

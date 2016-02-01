@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 				var personsInIsland = 0;
 				foreach (var groupKey in island.GroupKeys)
 				{
-					personsInIsland += _skillGroupsCreatorResult.GetPersonsForKey(groupKey).Count();
+					personsInIsland += _skillGroupsCreatorResult.GetPersonsForSkillGroupKey(groupKey).Count();
 				}
 				foreach (var guidString in island.SkillGuidStrings)
 				{
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 				var item = new ListViewItem(_skillGroupsCreatorResult.GetNameForKey(key));
 				item.Tag = key;
 				item.SubItems.Add(loadedSkills.ToString(CultureInfo.InvariantCulture).PadLeft(3) + " (" + notLoadedSkills.ToString(CultureInfo.InvariantCulture).PadLeft(3) + ")");
-				item.SubItems.Add(_skillGroupsCreatorResult.GetPersonsForKey(key).Count().ToString(CultureInfo.InvariantCulture).PadLeft(6));
+				item.SubItems.Add(_skillGroupsCreatorResult.GetPersonsForSkillGroupKey(key).Count().ToString(CultureInfo.InvariantCulture).PadLeft(6));
 				listView.Items.Add(item);
 			}
 			autoResizeColumns(listView);
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
 			fillSkillListView(key, listViewSkillInSkillGroup);
 
-			foreach (var person in _skillGroupsCreatorResult.GetPersonsForKey(key))
+			foreach (var person in _skillGroupsCreatorResult.GetPersonsForSkillGroupKey(key))
 			{
 				listView3.Items.Add(person.Name.ToString());
 			}
@@ -393,7 +393,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 				var item = new ListViewItem(_skillGroupsCreatorResult.GetNameForKey(key));
 				item.Tag = key;
 				item.SubItems.Add(loadedSkills.ToString().PadLeft(3) + " (" + notLoadedSkills.ToString().PadLeft(3) + ")");
-				item.SubItems.Add(_skillGroupsCreatorResult.GetPersonsForKey(key).Count().ToString().PadLeft(6));
+				item.SubItems.Add(_skillGroupsCreatorResult.GetPersonsForSkillGroupKey(key).Count().ToString().PadLeft(6));
 				listViewGroupsInIsland.Items.Add(item);
 			}
 
@@ -458,7 +458,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			var results = new SkillGroupReducer().SuggestAction(_skillGroupsCreatorResult, _allSkills);
 			foreach (var skillGroupReducerResult in results)
 			{
-				foreach (var person in _skillGroupsCreatorResult.GetPersonsForKey(skillGroupReducerResult.RemoveFromGroupKey))
+				foreach (var person in _skillGroupsCreatorResult.GetPersonsForSkillGroupKey(skillGroupReducerResult.RemoveFromGroupKey))
 				{
 					Guid guid;
 					if (!Guid.TryParse(skillGroupReducerResult.SkillGuidStringToRemove, out guid))
@@ -495,7 +495,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 						if (skill == null)
 							continue;
 
-						foreach (var person in _skillGroupsCreatorResult.GetPersonsForKey(key))
+						foreach (var person in _skillGroupsCreatorResult.GetPersonsForSkillGroupKey(key))
 						{
 							var period = person.Period(_date);
 							var personSkill = period.PersonSkillCollection.Where(ps => ps.Skill.Equals(skill)).ToList();

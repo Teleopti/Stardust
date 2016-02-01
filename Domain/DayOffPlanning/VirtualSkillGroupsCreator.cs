@@ -10,50 +10,40 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 	{
 		public VirtualSkillGroupsCreatorResult GroupOnDate(DateOnly dateOnly, IEnumerable<IPerson> personList)
 		{
-			var result = new VirtualSkillGroupsCreatorResult(dateOnly);
+			var skillGroupKeyPersonListDic = new Dictionary<string, IList<IPerson>>();
+			var skillKeyPersonListDic = new Dictionary<string, IList<IPerson>>();
+			var skillGroupKeyUniqueNameDic = new Dictionary<string, string>();
 			foreach (var person in personList)
 			{
-				result.AddPerson(person);
+				addPerson(person, dateOnly, skillGroupKeyPersonListDic, skillKeyPersonListDic, skillGroupKeyUniqueNameDic);
 			}
 
-			return result;
-		}
-	}
-
-	public class VirtualSkillGroupsCreatorResult
-	{
-		private readonly DateOnly _dateOnly;
-		private readonly IDictionary<string, IList<IPerson>> _innerDic = new Dictionary<string, IList<IPerson>>();
-		private readonly IDictionary<string, IList<IPerson>> _innerSkillDic = new Dictionary<string, IList<IPerson>>();
-		private readonly IDictionary<string, string> _groupUniqueNameDic = new Dictionary<string, string>();
-
-		public VirtualSkillGroupsCreatorResult(DateOnly dateOnly)
-		{
-			_dateOnly = dateOnly;
+			return new VirtualSkillGroupsCreatorResult(skillGroupKeyPersonListDic, skillKeyPersonListDic, skillGroupKeyUniqueNameDic);
 		}
 
-		public void AddPerson(IPerson person)
+		private static void addPerson(IPerson person, DateOnly date, IDictionary<string, IList<IPerson>> skillGroupKeyPersonListDic,
+			IDictionary<string, IList<IPerson>> skillKeyPersonListDic, IDictionary<string, string> skillGroupKeyUniqueNameDic)
 		{
-			var personPeriod = person.Period(_dateOnly);
+			var personPeriod = person.Period(date);
 			if (personPeriod == null)
 				return;
 
 			var key = string.Empty;
 			foreach (var personSkill in personPeriod.PersonSkillCollection.OrderBy(s => s.Skill.Id))
 			{
-				if (personSkill.Active && !((IDeleteTag)personSkill.Skill).IsDeleted)
+				if (personSkill.Active && !((IDeleteTag) personSkill.Skill).IsDeleted)
 				{
 					string thisId = personSkill.Skill.Id.ToString();
 					key = key.IsEmpty() ? thisId : key + "|" + thisId;
 
 					IList<IPerson> skillPersonList;
-					if (_innerSkillDic.TryGetValue(thisId, out skillPersonList))
+					if (skillKeyPersonListDic.TryGetValue(thisId, out skillPersonList))
 					{
 						skillPersonList.Add(person);
 					}
 					else
 					{
-						_innerSkillDic.Add(thisId, new List<IPerson> { person });
+						skillKeyPersonListDic.Add(thisId, new List<IPerson> {person});
 					}
 				}
 			}
@@ -62,36 +52,51 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 				return;
 
 			IList<IPerson> personList;
-			if (_innerDic.TryGetValue(key, out personList))
+			if (skillGroupKeyPersonListDic.TryGetValue(key, out personList))
 			{
 				personList.Add(person);
 			}
 			else
 			{
-				_innerDic.Add(key, new List<IPerson>{person});
-				_groupUniqueNameDic.Add(key, "Group " + _innerDic.Count);
+				skillGroupKeyPersonListDic.Add(key, new List<IPerson> {person});
+				skillGroupKeyUniqueNameDic.Add(key, "Group " + skillGroupKeyPersonListDic.Count);
 			}
+		}
+	}
+
+	public class VirtualSkillGroupsCreatorResult
+	{
+		private readonly IDictionary<string, IList<IPerson>> _skillGroupKeyPersonListDic = new Dictionary<string, IList<IPerson>>();
+		private readonly IDictionary<string, IList<IPerson>> _skillKeyPersonListDic = new Dictionary<string, IList<IPerson>>();
+		private readonly IDictionary<string, string> _skillGroupKeyUniqueNameDic = new Dictionary<string, string>();
+
+		public VirtualSkillGroupsCreatorResult(IDictionary<string, IList<IPerson>> skillGroupKeyPersonListDic,
+			IDictionary<string, IList<IPerson>> skillKeyPersonListDic, IDictionary<string, string> skillGroupKeyUniqueNameDic)
+		{
+			_skillGroupKeyPersonListDic = skillGroupKeyPersonListDic;
+			_skillKeyPersonListDic = skillKeyPersonListDic;
+			_skillGroupKeyUniqueNameDic = skillGroupKeyUniqueNameDic;
 		}
 
 		public IEnumerable<string> GetKeys()
 		{
-			return _innerDic.Keys;
+			return _skillGroupKeyPersonListDic.Keys;
 		}
 
 		public string GetNameForKey(string key)
 		{
-			return _groupUniqueNameDic[key];
+			return _skillGroupKeyUniqueNameDic[key];
 		}
 
-		public IEnumerable<IPerson> GetPersonsForKey(string key)
+		public IEnumerable<IPerson> GetPersonsForSkillGroupKey(string key)
 		{
-			return _innerDic[key];
+			return _skillGroupKeyPersonListDic[key];
 		}
 
 		public IEnumerable<IPerson> GetPersonsForSkillKey(string key)
 		{
 			IList<IPerson> personList;
-			if (!_innerSkillDic.TryGetValue(key, out personList))
+			if (!_skillKeyPersonListDic.TryGetValue(key, out personList))
 				return new List<IPerson>();
 
 			return personList;

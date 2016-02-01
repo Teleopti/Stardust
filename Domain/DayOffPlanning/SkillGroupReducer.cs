@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 			var totalAgents = 0;
 			foreach (var key in keyList)
 			{
-				var numAgents = skillGroups.GetPersonsForKey(key).Count();
+				var numAgents = skillGroups.GetPersonsForSkillGroupKey(key).Count();
 				totalAgents += numAgents;				
 			}
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 				var maxAgents = int.MinValue;
 				foreach (var key in keyList)
 				{
-					var numAgents = skillGroups.GetPersonsForKey(key).Count();
+					var numAgents = skillGroups.GetPersonsForSkillGroupKey(key).Count();
 					if (numAgents > maxAgents)
 					{
 						maxAgentGroup = key;
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 			var minAgentList = new List<string>();
 			foreach (var key in keyList)
 			{
-				var numAgents = skillGroups.GetPersonsForKey(key).Count();
+				var numAgents = skillGroups.GetPersonsForSkillGroupKey(key).Count();
 
 				if (numAgents <= numAgentLimit)
 					minAgentList.Add(key);
