@@ -36,6 +36,7 @@ namespace Manager.Integration.Test
             _startUpManagerAndNodeManually = false;
 #endif
 
+            Logger.Info("_clearDatabase = " + _clearDatabase + "    " + "_startUpManagerAndNodeManually" + _startUpManagerAndNodeManually);
             if (_clearDatabase)
             {
                 DatabaseHelper.TryClearDatabase();
@@ -46,7 +47,8 @@ namespace Manager.Integration.Test
             if (!_startUpManagerAndNodeManually)
             {
                 ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
-
+                Logger.Info("Shut down all processes");
+                Thread.Sleep(TimeSpan.FromSeconds(10));
                 StartManagerIntegrationConsoleHostProcess =
                     ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
             }
@@ -58,6 +60,7 @@ namespace Manager.Integration.Test
         public void Create5RequestShouldReturnBothCancelAndDeleteStatuses()
         {
             Logger.Info("Starting test Create5RequestShouldReturnBothCancelAndDeleteStatuses()");
+
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(5);
