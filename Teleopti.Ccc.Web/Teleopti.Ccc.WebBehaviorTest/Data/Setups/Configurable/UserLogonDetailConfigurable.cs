@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 {
-	public class UserLogonDetailConfigurable : ITenantUserSetup
+	public class UserLogonDetailConfigurable : IUserSetup, ITenantUserSetup
 	{
 		public bool? IsLocked { get; set; }
 		public int? LastPasswordChangeXDaysAgo { get; set; }

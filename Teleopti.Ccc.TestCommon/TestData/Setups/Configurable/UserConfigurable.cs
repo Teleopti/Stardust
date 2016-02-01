@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {
-	public class UserConfigurable : ITenantUserSetup
+	public class UserConfigurable : IUserSetup, ITenantUserSetup
 	{
 		public const string DefaultTenantName = "TestData";
 

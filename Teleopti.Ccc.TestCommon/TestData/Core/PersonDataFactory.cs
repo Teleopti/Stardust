@@ -41,9 +41,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 			_unitOfWorkAction(uow => setup.Apply(uow.Current(), Person, Person.PermissionInformation.Culture()));
 			var setupTenant = setup as ITenantUserSetup;
 			if (setupTenant != null)
-			{
-				_tenantUnitOfWorkAction(tenantSesssion => setupTenant.Apply(tenantSesssion, Person, this));
-			}
+				_tenantUnitOfWorkAction(ses => setupTenant.Apply(ses, Person, this));
 			_userSetups.Add(setup);
 		}
 
@@ -52,7 +50,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 			_unitOfWorkAction(uow => setup.Apply(uow, Person, Person.PermissionInformation.Culture()));
 			_userDataSetups.Add(setup);
 		}
-
 
 		public IEnumerable<object> Applied { get { return _userSetups.Cast<object>().Union(_userDataSetups); } }
 		public string LogOnName { get; private set; }
