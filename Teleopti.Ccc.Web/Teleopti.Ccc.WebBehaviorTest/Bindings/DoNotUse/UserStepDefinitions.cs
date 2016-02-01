@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse
 		[Given(@"I am a student agent")]
 		public void GivenIAmAStudentAgent()
 		{
-			DataMaker.Data().Apply(new StudentAgent());
+			DataMaker.Data().Apply(new Agent());
 			DataMaker.Data().Apply(new SchedulePeriod());
 			DataMaker.Data().Apply(new PersonPeriod(DefaultTeam.Get()));
 			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published Student", SchedulePublishedToDate = "2030-12-01" });

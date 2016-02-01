@@ -23,10 +23,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 		{
 		}
 	}
-
-	public class StudentAgent : Agent
-	{
-	}
 	
 	public class AgentRole : RoleConfigurable
 	{
