@@ -51,7 +51,7 @@ namespace Manager.Integration.Test
         {
             JobHelper.GiveNodesTimeToInitialize();
 
-            List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(5);
+            List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(2);
 
             List<Task> tasks = new List<Task>();
 
@@ -79,10 +79,12 @@ namespace Manager.Integration.Test
                 cancelJobTask.Start();
             };
 
-            ManagerApiHelper.CheckJobHistoryStatusTimer.Start();
+            //ManagerApiHelper.CheckJobHistoryStatusTimer.Start();
 
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
+
+            Thread.Sleep(TimeSpan.FromSeconds(60));
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait();
 

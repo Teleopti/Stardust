@@ -11,6 +11,7 @@ namespace Manager.IntegrationTest.Console.Host
     public static class Program
     {
         private const string CopiedManagerConfigName = "Manager.config";
+
 #if (DEBUG)
         private static string _buildMode = "Debug";
 #else
