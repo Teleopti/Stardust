@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Given(@"my last working date as an agent in the organisation is '(.*)'")]
 		public void GivenMyLastWorkingDateAsAnAgentInTheOrganisationIs(DateTime leavingDate)
 		{
-			var leavingDateForUser = new LeavingDateForUser { LeavingDate = leavingDate };
+			var leavingDateForUser = new UserConfigurable {TerminalDate = leavingDate};
 			DataMaker.Data().Apply(leavingDateForUser);
 		}
 

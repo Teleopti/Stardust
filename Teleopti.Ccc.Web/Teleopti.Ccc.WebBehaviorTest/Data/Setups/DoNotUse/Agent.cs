@@ -27,16 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 	public class StudentAgent : Agent
 	{
 	}
-
-	public class AgentThatLeaves : Agent
-	{
-		public AgentThatLeaves(DateTime date)
-		{
-			DataMaker.Me().Apply(new LeavingDateForUser {LeavingDate = date});
-		}
-
-	}
-
+	
 	public class AgentRole : RoleConfigurable
 	{
 		public AgentRole()
