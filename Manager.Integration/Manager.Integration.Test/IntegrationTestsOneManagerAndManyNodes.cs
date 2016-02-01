@@ -55,11 +55,11 @@ namespace Manager.Integration.Test
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
         [Test]
-        public void Create10RequestShouldReturnBothCancelAndDeleteStatuses()
+        public void Create5RequestShouldReturnBothCancelAndDeleteStatuses()
         {
             JobHelper.GiveNodesTimeToInitialize();
 
-            List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(10);
+            List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(5);
 
             var timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count);
 
