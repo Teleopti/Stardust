@@ -48,8 +48,9 @@ namespace Manager.Integration.Test
 
             if (!_startUpManagerAndNodeManually)
             {
+                Logger.Info("Start to shut down all processes");
                 ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
-                Logger.Info("Shut down all processes");
+                
                 Thread.Sleep(TimeSpan.FromSeconds(20));
                 StartManagerIntegrationConsoleHostProcess =
                     ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);

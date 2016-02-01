@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using log4net.Repository.Hierarchy;
 using Manager.Integration.Test.Properties;
 
 namespace Manager.Integration.Test.Helpers
