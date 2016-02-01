@@ -236,7 +236,7 @@ describe('ForecastingStartCtrl', function() {
 		expect(scope.workloads[0].Scenario.Name).toBe("Default");
 	}));
 
-	it('should limit forecast period to be less one year', inject(function ($controller) {
+	xit('should limit forecast period to be less one year', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService() });
 		var startDate = moment().utc().add(1, 'months').startOf('month').toDate();
