@@ -160,7 +160,7 @@ namespace Manager.IntegrationTest.Console.Host
 
                 tasks.Add(nodeTask);
             }
-
+            
             foreach (var task in tasks)
             {
                 task.Start();

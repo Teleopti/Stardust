@@ -51,9 +51,10 @@ namespace Manager.Integration.Test
 
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
-        [Test]
+        [Test][Ignore]
         public void JobShouldJustBeQueuedIfNoNodes()
         {
+            Logger.Info("Starting test JobShouldJustBeQueuedIfNoNodes()");
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(1);
