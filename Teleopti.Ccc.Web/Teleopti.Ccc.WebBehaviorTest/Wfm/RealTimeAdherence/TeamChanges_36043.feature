@@ -1,4 +1,5 @@
-﻿Feature: Team changes
+﻿@ignore
+Feature: Team changes
 	In order to easier find the team leader to blame
 	As a real time analyst
 	I want agents changing teams calculated correctly
