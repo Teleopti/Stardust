@@ -1,3 +1,4 @@
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.Throws<DataSourceException>(() => repository.LoadDefaultScenario());
 		}
 
-		[Test, Ignore("only failed on build server")]
+		[Test]
 		public void ShouldReturnSortedListWithDefaultScenarioFirst()
 		{
 			var repository = new ScenarioRepository(UnitOfWork);
@@ -50,9 +51,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(scenarioX);
 			PersistAndRemoveFromUnitOfWork(scenarioA);
 
-			var result = repository.LoadAll();
+			var result = repository.FindAllSorted();
 			result[0].Should().Be.EqualTo(scenarioX);
 			result[1].Should().Be.EqualTo(scenarioA);
+		}
+
+		[Test]
+		public void ShouldIgnoreScenariosNotEnabledForReporting()
+		{
+			var repository = new ScenarioRepository(UnitOfWork);
+
+			var scenarioA = CreateAggregateWithCorrectBusinessUnit();
+			scenarioA.Description = new Description("A");
+			scenarioA.EnableReporting = false;
+			var scenarioX = CreateAggregateWithCorrectBusinessUnit();
+			scenarioX.Description = new Description("X");
+			scenarioX.DefaultScenario = true;
+			scenarioX.EnableReporting = true;
+
+			PersistAndRemoveFromUnitOfWork(scenarioX);
+			PersistAndRemoveFromUnitOfWork(scenarioA);
+
+			var result = repository.FindEnabledForReportingSorted();
+			result.Single().Should().Be.EqualTo(scenarioX);
 		}
 
 		protected override Repository<IScenario> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
