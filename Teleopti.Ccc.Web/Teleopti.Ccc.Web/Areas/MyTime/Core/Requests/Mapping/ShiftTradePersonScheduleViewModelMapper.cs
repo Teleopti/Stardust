@@ -46,11 +46,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				_personScheduleProvider.GetScheduleForPersons(inputData.ShiftTradeDate, new List<IPerson> { _loggedOnUser.CurrentUser() })
 					.FirstOrDefault();
 
-			if (myScheduleDay == null)
-			{
-				pageCount = 0;
-				return new List<ShiftTradeAddPersonScheduleViewModel>();
-			}
 			var persons = _possibleShiftTradePersonsProvider.RetrievePersons(inputData);
 			var shiftTradeRequests = _personRequestRepository.FindShiftExchangeOffersForBulletin(persons.Persons, inputData.ShiftTradeDate)
 				.Where(x => x.IsWantedSchedule(myScheduleDay));
@@ -62,9 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					var scheduleDay =
 						_personScheduleProvider.GetScheduleForPersons(inputData.ShiftTradeDate, new[] {person}).SingleOrDefault();
 					var shiftExchangeOfferId = req.ShiftExchangeOfferId;
-					return scheduleDay == null
-						? null
-						: new ShiftTradeAddPersonScheduleViewModel(_projectionProvider.MakeScheduleReadModel(person, scheduleDay, true))
+					return new ShiftTradeAddPersonScheduleViewModel(_projectionProvider.MakeScheduleReadModel(person, scheduleDay, true))
 						{
 							ShiftExchangeOfferId = new Guid(shiftExchangeOfferId)
 						};

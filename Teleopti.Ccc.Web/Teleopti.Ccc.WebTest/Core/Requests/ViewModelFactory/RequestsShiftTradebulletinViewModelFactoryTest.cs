@@ -76,12 +76,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			ScheduleRepository.Add(personAss);
 		}
 
-		private string setUpOffer(IPerson person)
+		private string setUpOffer(IPerson person, ShiftExchangeLookingForDay exchangeType=ShiftExchangeLookingForDay.WorkingShift)
 		{
 			var criteria = new ShiftExchangeCriteria(DateOnly.Today,
-				new ScheduleDayFilterCriteria(ShiftExchangeLookingForDay.WorkingShift,
-					new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 0, 0, 0), DateTimeKind.Utc),
-						DateTime.SpecifyKind(new DateTime(2016, 1, 13, 23, 0, 0), DateTimeKind.Utc))));
+				new ScheduleDayFilterCriteria(exchangeType,
+					exchangeType != ShiftExchangeLookingForDay.EmptyDay? new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 0, 0, 0), DateTimeKind.Utc),
+						DateTime.SpecifyKind(new DateTime(2016, 1, 13, 23, 0, 0), DateTimeKind.Utc)):(DateTimePeriod?) null));
 			var offer = new ShiftExchangeOffer(ScheduleDayFactory.Create(new DateOnly(2016, 1, 13), person, scenario), criteria,
 				ShiftExchangeOfferStatus.Pending);
 			offer.ShiftExchangeOfferId = Guid.NewGuid().ToString();
@@ -339,12 +339,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldFilterOutEmptyShift()
+		public void ShouldRetriveEmptyShift()
 		{
 			setUpMe();
-			setUpMySchedule();
+			
 			var personWithMainShift = PersonFactory.CreatePersonWithGuid("person", "mainShift");
-			var personWithoutSchedule = PersonFactory.CreatePersonWithGuid("person", "overtime");
+			var personWithoutSchedule = PersonFactory.CreatePersonWithGuid("person", "empty");
 			personWithMainShift.AddPersonPeriod(personPeriod);
 			personWithoutSchedule.AddPersonPeriod(personPeriod);
 			PersonRepository.Add(personWithMainShift);
@@ -358,7 +358,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			ScheduleRepository.Add(personAssWithMainShift);
 
 			setUpOffer(personWithMainShift);
-			setUpOffer(personWithoutSchedule);
+			setUpOffer(personWithoutSchedule, ShiftExchangeLookingForDay.EmptyDay);
 
 			var result = Target.CreateShiftTradeBulletinViewModelFromRawData(new ShiftTradeScheduleViewModelData
 			{
@@ -368,6 +368,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			});
 
 			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(1);
+			result.PossibleTradeSchedules.First().Name.Should().Be.EqualTo("person@empty");
 		}
 
 		[Test]
