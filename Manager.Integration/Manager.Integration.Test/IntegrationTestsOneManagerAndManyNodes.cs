@@ -49,6 +49,7 @@ namespace Manager.Integration.Test
             {
                 ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
                 Logger.Info("Shut down all processes");
+                Thread.Sleep(TimeSpan.FromSeconds(20));
                 StartManagerIntegrationConsoleHostProcess =
                     ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
             }
@@ -106,7 +107,7 @@ namespace Manager.Integration.Test
             ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
         }
 
-        [Test]
+        [Test][Ignore]
         public void JobShouldHaveStatusFailedIfFailed()
         {
             Logger.Info("Starting test JobShouldHaveStatusFailedIfFailed()");
@@ -192,7 +193,7 @@ namespace Manager.Integration.Test
             ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
         }
 
-        [Test]
+        [Test][Ignore]
         public void ShouldBeAbleToCreate5SuccessJobRequest()
         {
             Logger.Info("Starting test ShouldBeAbleToCreate5SuccessJobRequest()");
