@@ -27,6 +27,7 @@
 		RTA_MultiTenancy_32539,
 		RTA_DeletedPersons_36041,
 		RTA_TerminatedPersons_36042,
+		RTA_PersonPeriodChanges_36043,
 
 		MessageBroker_SchedulingScreenMailbox_32733,
 
