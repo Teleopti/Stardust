@@ -207,6 +207,7 @@
     <Compile Include="Core\Navigation\WaitUntilReadyForInteraction.cs" />
     <Compile Include="Core\Navigation\WaitUntilSubscriptionIsCompleted.cs" />
     <Compile Include="Data\Setups\Configurable\BadgeBasedOnSettingConfigurable.cs" />
+    <Compile Include="Data\Setups\ChangeTeam.cs" />
     <Compile Include="Data\Setups\Configurable\GamificationSettingConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\PersonEmptyDayConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\TeamGamificationSettingConfigurable.cs" />

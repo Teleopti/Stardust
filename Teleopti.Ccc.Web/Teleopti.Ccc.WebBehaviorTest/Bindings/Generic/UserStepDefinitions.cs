@@ -4,6 +4,7 @@ using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 using AbsenceRequestConfigurable = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable.AbsenceRequestConfigurable;
 using PersonPeriodConfigurable = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable.PersonPeriodConfigurable;
@@ -65,8 +66,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"'(.*)' changes team to '(.*)'")]
 		public void WhenChangesTeamTo(string userName, string team)
 		{
-			//var user = new UserConfigurable() {Team = team};
-			//DataMaker.Person(userName).Apply(user);
+			var user = new ChangeTeam { Team = team};
+			DataMaker.Person(userName).Apply(user);
 		}
 
 		[Given(@"I have user credential with")]
