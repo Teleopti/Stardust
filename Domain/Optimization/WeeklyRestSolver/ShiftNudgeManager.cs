@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.IdentityModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -128,6 +130,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			resourceCalculateDelayer.Pause();
 			var firstLeftNudge = true;
 			var firstRightNudge = true;
+			var rollbackServiceKeep = new SchedulePartModifyAndRollbackService(schedulingResultStateHolder, new DoNothingScheduleDayChangeCallBack(), new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+
 			while (!restTimeEnsured)
 			{
 				var leftScheduleDay = personRange.ScheduledDay(leftDate);
@@ -166,7 +170,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			bool success = _ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personRange, weeklyRestTime);
 			if (!success)
 			{
-				rollBackAndResourceCalculate(rollbackService, resourceCalculateDelayer, _clonedSchedules);
+				rollBackAndResourceCalculate(rollbackServiceKeep, resourceCalculateDelayer, _clonedSchedules);
 				return false;
 			}
 
@@ -179,7 +183,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			}
 			if (!(leftOk && rightOk))
 			{
-				rollBackAndResourceCalculate(rollbackService, resourceCalculateDelayer, _clonedSchedules);
+				rollBackAndResourceCalculate(rollbackServiceKeep, resourceCalculateDelayer, _clonedSchedules);
 				return false;
 			}
 
@@ -188,7 +192,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 			if (!(leftOk && rightOk))
 			{
-				rollBackAndResourceCalculate(rollbackService, resourceCalculateDelayer, _clonedSchedules);
+				rollBackAndResourceCalculate(rollbackServiceKeep, resourceCalculateDelayer, _clonedSchedules);
 				return false;
 			}
 
