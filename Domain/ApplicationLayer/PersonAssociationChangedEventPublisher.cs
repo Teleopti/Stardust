@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using log4net;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -37,18 +38,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_persons.LoadAll()
 				.ForEach(person =>
 				{
-					var terminatedAt = terminationTime(person.TerminalDate, person.PermissionInformation.DefaultTimeZone());
 					var now = _now.UtcDateTime();
+					var timeZone = person.PermissionInformation.DefaultTimeZone();
+					var agentDate = new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(now, timeZone));
+					var currentPeriod = person.Period(agentDate);
 					
-					if (terminatedAt > now)
+					var time = timeOfChange(person.TerminalDate, currentPeriod, timeZone);
+
+					if (time > now)
 						return;
-					if (terminatedAt < now.AddDays(-1))
+					if (time < now.AddDays(-1))
 						return;
 
 					_eventPublisher.Publish(new PersonAssociationChangedEvent
 					{
 						PersonId = person.Id.Value,
-						Timestamp = now
+						Timestamp = now,
+						TeamId = currentPeriod != null ? currentPeriod.Team.Id.Value : null as Guid?,
+						SiteId = currentPeriod != null ? currentPeriod.Team.Site.Id.Value : null as Guid?,
+						BusinessUnitId = currentPeriod != null ? currentPeriod.Team.Site.BusinessUnit.Id.Value : null as Guid?
 					});
 				});
 		}
@@ -78,6 +86,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				Timestamp = now,
 				TeamId = teamId
 			});
+		}
+
+		private DateTime timeOfChange(DateOnly? terminalDate, IPersonPeriod currentPeriod, TimeZoneInfo timeZone)
+		{
+			var terminatedAt = terminationTime(terminalDate, timeZone);
+			if (terminatedAt <= _now.UtcDateTime())
+				return terminatedAt;
+			return TimeZoneInfo.ConvertTimeToUtc(currentPeriod.StartDate.Date, timeZone);
 		}
 
 		private static DateTime terminationTime(DateTime? terminationDate, TimeZoneInfo timeZone)

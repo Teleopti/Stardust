@@ -7,6 +7,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	{
 		public Guid PersonId { get; set; }
 		public DateTime Timestamp { get; set; }
+		public Guid? BusinessUnitId { get; set; }
+		public Guid? SiteId { get; set; }
 		public Guid? TeamId { get; set; }
 	}
 }

@@ -91,6 +91,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			// Repositories
 			system.AddService<FakeDatabase>();
+			system.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
 			system.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
 			system.UseTestDouble<FakeSkillDayRepository>().For<ISkillDayRepository>();
 			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();

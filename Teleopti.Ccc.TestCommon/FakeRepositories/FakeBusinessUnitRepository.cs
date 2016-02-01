@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -11,6 +12,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	{
 
 		private IList<IBusinessUnit> _businessUnits = new List<IBusinessUnit>();
+
+		public void Has(BusinessUnit businessUnit)
+		{
+			Add(businessUnit);
+		}
 
 		public void Add(IBusinessUnit entity)
 		{
@@ -67,5 +73,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			throw new NotImplementedException();
 		}
+
 	}
 }
