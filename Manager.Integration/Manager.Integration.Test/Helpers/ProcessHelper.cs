@@ -16,15 +16,16 @@ namespace Manager.Integration.Test.Helpers
 #else
         private static string _buildMode = "Release";
 #endif
+
         private static readonly ILog Logger =
-           LogManager.GetLogger(typeof(ProcessHelper));
+            LogManager.GetLogger(typeof (ProcessHelper));
 
         public static void ShutDownAllManagerIntegrationConsoleHostProcesses()
         {
             var consoleHostname = new FileInfo(Settings.Default.ManagerIntegrationConsoleHostAssemblyName);
 
             var fileNameWithNoExtension = consoleHostname.Name.Replace(consoleHostname.Extension,
-                                                                       string.Empty);
+                string.Empty);
 
             ShutDownAllProcesses(fileNameWithNoExtension);
         }
@@ -36,10 +37,12 @@ namespace Manager.Integration.Test.Helpers
                 try
                 {
                     process.CloseMainWindow();
-                    process.WaitForExit();
+                  //  process.WaitForExit();
+                  process.Kill();
                 }
                 catch (Exception)
                 {
+                    Logger.Error("Error in CloseProcess ");
                 }
             }
         }
@@ -49,9 +52,9 @@ namespace Manager.Integration.Test.Helpers
             var consoleHostname = new FileInfo(Settings.Default.ManagerIntegrationConsoleHostAssemblyName);
 
             var fileNameWithNoExtension = consoleHostname.Name.Replace(consoleHostname.Extension,
-                                                                       string.Empty);
+                string.Empty);
             Process[] processes = Process.GetProcessesByName(fileNameWithNoExtension);
-          
+
             if (processes.Any())
             {
                 Logger.Error("Processes not closed before new started!");
@@ -65,17 +68,17 @@ namespace Manager.Integration.Test.Helpers
 
 
             return StartProcess(managerIntegrationConsoleHostLocation,
-                                managerIntegrationConsoleHostAssemblyName,
-                                numberOfNodesToStart);
+                managerIntegrationConsoleHostAssemblyName,
+                numberOfNodesToStart);
         }
 
         public static Process StartProcess(DirectoryInfo processDirectory,
-                                           string processFileName,
-                                           int numberOfNodesToStart)
+            string processFileName,
+            int numberOfNodesToStart)
         {
             var process = CreateProcess(processDirectory,
-                                        processFileName,
-                                        numberOfNodesToStart);
+                processFileName,
+                numberOfNodesToStart);
 
             process.Start();
 
@@ -83,8 +86,8 @@ namespace Manager.Integration.Test.Helpers
         }
 
         public static Process CreateProcess(DirectoryInfo processDirectory,
-                                            string processFileName,
-                                            int numberOfNodesToStart)
+            string processFileName,
+            int numberOfNodesToStart)
         {
             ProcessStartInfo processStartInfo = new ProcessStartInfo
             {
@@ -95,7 +98,7 @@ namespace Manager.Integration.Test.Helpers
                 WorkingDirectory = processDirectory.FullName,
                 RedirectStandardOutput = false,
                 FileName = Path.Combine(processDirectory.FullName,
-                                        processFileName)
+                    processFileName)
             };
 
             var processToReturn = new Process
@@ -118,5 +121,21 @@ namespace Manager.Integration.Test.Helpers
                 }
             }
         }
+
+        public static void ShutDownAllProcesses()
+        {
+            ShutDownAllManagerAndNodeProcesses();
+            ShutDownAllProcesses("Manager.IntegrationTest.Console.Host");
+            ShutDownAllProcesses("Manager.IntegrationTest.Console.Host.vshost");
+
+            Process[] processes = Process.GetProcesses();
+        }
+
+        public static void ShutDownAllManagerAndNodeProcesses()
+        {
+            ShutDownAllProcesses("NodeConsoleHost.vshost");
+            ShutDownAllProcesses("ManagerConsoleHost.vshost");
+        }
+
     }
 }

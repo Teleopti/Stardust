@@ -16,15 +16,7 @@ namespace Manager.Integration.Test
     [TestFixture]
     public class IntegrationTestsOneManagerAndManyNodes
     { 
-        private const int NumberOfNodesToStart = 1;
 
-        private bool _startUpManagerAndNodeManually = false;
-        private bool _clearDatabase = true;
-
-        private static readonly ILog Logger =
-            LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndManyNodes));
-
-        private Process StartManagerIntegrationConsoleHostProcess { get; set; }
 
         [SetUp]
         public void SetUp()
@@ -46,6 +38,9 @@ namespace Manager.Integration.Test
 
             ManagerApiHelper = new ManagerApiHelper();
 
+            ProcessHelper.ShutDownAllManagerAndNodeProcesses();
+            ProcessHelper.ShutDownAllProcesses("Manager.IntegrationTest.Console.Host");
+
             if (_startUpManagerAndNodeManually)
             {
                 ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
@@ -55,11 +50,28 @@ namespace Manager.Integration.Test
                 StartManagerIntegrationConsoleHostProcess =
                     ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
             }
+            
         }
+
+        [TearDown]
+        public void Teardown()
+        {
+            ProcessHelper.ShutDownAllProcesses();
+        }
+
+        private const int NumberOfNodesToStart = 1;
+
+        private bool _startUpManagerAndNodeManually = false;
+        private bool _clearDatabase = true;
+
+        private static readonly ILog Logger =
+            LogManager.GetLogger(typeof(IntegrationTestsOneManagerAndManyNodes));
+
+        private Process StartManagerIntegrationConsoleHostProcess { get; set; }
 
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
-        [Test]
+        [Test][Ignore]
         public void Create5RequestShouldReturnBothCancelAndDeleteStatuses()
         {
            
@@ -98,17 +110,13 @@ namespace Manager.Integration.Test
 
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
-
-            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(TimeSpan.FromMinutes(2));
-
-            //Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.CanceledStatus ||
-            //                                                                            pair.Value == StatusConstants.DeletedStatus));
-            Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
-
-            ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
+            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(TimeSpan.FromMinutes(1));
+            Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.CanceledStatus ||
+                                                                                        pair.Value == StatusConstants.DeletedStatus));
+             
         }
 
-        [Test][Ignore]
+        [Test]
         public void JobShouldHaveStatusFailedIfFailed()
         {
             Logger.Info("Starting test JobShouldHaveStatusFailedIfFailed()");
@@ -140,8 +148,7 @@ namespace Manager.Integration.Test
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.FailedStatus));
-
-            ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
+            
         }
 
         [Test][Ignore]
@@ -191,8 +198,7 @@ namespace Manager.Integration.Test
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
             
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
-
-            ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
+            
         }
 
         [Test][Ignore]
@@ -227,8 +233,7 @@ namespace Manager.Integration.Test
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait();            
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
-
-            ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
+            
         }
     }
 }
