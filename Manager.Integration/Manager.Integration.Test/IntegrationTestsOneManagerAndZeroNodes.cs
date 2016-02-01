@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using log4net;
+using log4net.Config;
 using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Timers;
@@ -13,25 +14,19 @@ namespace Manager.Integration.Test
     [TestFixture]
     public class IntegrationTestsOneManagerAndZeroNodes
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndZeroNodes));
-
-        private Process StartManagerIntegrationConsoleHostProcess { get; set; }
-
-        private const int NumberOfNodesToStart = 0;
-
-        private bool _startUpManagerAndNodeManually = false;
-        private bool _clearDatabase = true;
 
         [SetUp]
-        public void Setup()
+        public void SetUp()
         {
+            XmlConfigurator.Configure();
 
 #if (DEBUG)
             // Do nothing.
 #else
-            _clearDatabase= true;
+            _clearDatabase = true;
             _startUpManagerAndNodeManually = false;
 #endif
+            XmlConfigurator.Configure();
 
             if (_clearDatabase)
             {
@@ -40,21 +35,41 @@ namespace Manager.Integration.Test
 
             ManagerApiHelper = new ManagerApiHelper();
 
-            if (!_startUpManagerAndNodeManually)
+            ProcessHelper.ShutDownAllManagerAndNodeProcesses(); 
+
+            if (_startUpManagerAndNodeManually)
             {
                 ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
-
+            }
+            else
+            {
                 StartManagerIntegrationConsoleHostProcess =
                     ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
             }
+
         }
+
+        [TearDown]
+        public void Teardown()
+        {
+            ProcessHelper.ShutDownAllProcesses();
+        }
+
+
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(IntegrationTestsOneManagerAndZeroNodes));
+
+        private Process StartManagerIntegrationConsoleHostProcess { get; set; }
+
+        private const int NumberOfNodesToStart = 0;
+
+        private bool _startUpManagerAndNodeManually = false;
+        private bool _clearDatabase = true;
 
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
-        [Test][Ignore]
+        [Test]
         public void JobShouldJustBeQueuedIfNoNodes()
         {
-            Logger.Info("Starting test JobShouldJustBeQueuedIfNoNodes()");
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(1);
@@ -81,8 +96,7 @@ namespace Manager.Integration.Test
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.NullStatus));
-
-            ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
+            
         }
     }
 }

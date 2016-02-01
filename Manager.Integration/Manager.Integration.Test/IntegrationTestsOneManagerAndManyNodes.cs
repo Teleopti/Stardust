@@ -39,7 +39,6 @@ namespace Manager.Integration.Test
             ManagerApiHelper = new ManagerApiHelper();
 
             ProcessHelper.ShutDownAllManagerAndNodeProcesses();
-            ProcessHelper.ShutDownAllProcesses("Manager.IntegrationTest.Console.Host");
 
             if (_startUpManagerAndNodeManually)
             {
@@ -71,12 +70,11 @@ namespace Manager.Integration.Test
 
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
-        [Test][Ignore]
+        [Test]
         public void Create5RequestShouldReturnBothCancelAndDeleteStatuses()
         {
            
             JobHelper.GiveNodesTimeToInitialize();
-            Logger.Info("Starting test Create5RequestShouldReturnBothCancelAndDeleteStatuses()");
 
             List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(5);
 
@@ -100,9 +98,6 @@ namespace Manager.Integration.Test
                                                                                   args) =>
             {
                 var cancelJobTask = ManagerApiHelper.CreateManagerCancelTask(args.Guid);
-
-                Logger.Debug("IntegrationTestsOneManagerAndManyNodes : Created task for cancel job :" + args.Guid);
-
                 cancelJobTask.Start();
             };
 
@@ -119,7 +114,6 @@ namespace Manager.Integration.Test
         [Test]
         public void JobShouldHaveStatusFailedIfFailed()
         {
-            Logger.Info("Starting test JobShouldHaveStatusFailedIfFailed()");
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateFailingJobParamsRequests(1);
@@ -151,10 +145,9 @@ namespace Manager.Integration.Test
             
         }
 
-        [Test][Ignore]
+        [Test]
         public void CancelWrongJobs()
         {
-            Logger.Info("Starting test CancelWrongJobs()");
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(1);
@@ -201,10 +194,9 @@ namespace Manager.Integration.Test
             
         }
 
-        [Test][Ignore]
+        [Test]
         public void ShouldBeAbleToCreate5SuccessJobRequest()
         {
-            Logger.Info("Starting test ShouldBeAbleToCreate5SuccessJobRequest()");
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(5);

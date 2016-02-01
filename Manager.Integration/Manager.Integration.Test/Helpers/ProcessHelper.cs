@@ -125,10 +125,8 @@ namespace Manager.Integration.Test.Helpers
         public static void ShutDownAllProcesses()
         {
             ShutDownAllManagerAndNodeProcesses();
-            ShutDownAllProcesses("Manager.IntegrationTest.Console.Host");
             ShutDownAllProcesses("Manager.IntegrationTest.Console.Host.vshost");
-
-            Process[] processes = Process.GetProcesses();
+            ShutDownAllProcesses("Manager.IntegrationTest.Console.Host");
         }
 
         public static void ShutDownAllManagerAndNodeProcesses()
