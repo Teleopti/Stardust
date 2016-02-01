@@ -12973,4 +12973,73 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
   <data name="PresentTenseSchedule" xml:space="preserve">
     <value>Schemalägger</value>
   </data>
+  <data name="SuccessTip" xml:space="preserve">
+    <value>Klar</value>
+  </data>
+  <data name="RevertToLastSave" xml:space="preserve">
+    <value>Återgå till senast sparade</value>
+  </data>
+  <data name="ManageMappings" xml:space="preserve">
+    <value>Hantera tillämpning av regler</value>
+  </data>
+  <data name="Mappings" xml:space="preserve">
+    <value>Tillämpning av regler</value>
+  </data>
+  <data name="IsAlarm" xml:space="preserve">
+    <value>Larm</value>
+  </data>
+  <data name="CannotBeDeletedBecauseItIsBeingUsedInMappings" xml:space="preserve">
+    <value>Kan inte tas bort eftersom den är vald i tillämpningen av reglerna. </value>
+  </data>
+  <data name="SelectedRequestsInfo" xml:space="preserve">
+    <value>Markerade {0} av {1} förfrågningar</value>
+  </data>
+  <data name="DayOffRules" xml:space="preserve">
+    <value>Fridagsregler</value>
+  </data>
+  <data name="NewDayOffRule" xml:space="preserve">
+    <value>Ny fridagsregel</value>
+  </data>
+  <data name="AgentsSuccessfullyScheduled" xml:space="preserve">
+    <value>agenter schemalades </value>
+  </data>
+  <data name="CriticalUnderstaffingColon" xml:space="preserve">
+    <value>Kritisk underbemanning:</value>
+  </data>
+  <data name="InvalidInput" xml:space="preserve">
+    <value>Ogiltig input</value>
+  </data>
+  <data name="UnderstaffingColon" xml:space="preserve">
+    <value>Underbemanning:</value>
+  </data>
+  <data name="WeekendColon" xml:space="preserve">
+    <value>Helg:</value>
+  </data>
+  <data name="OverstaffingColon" xml:space="preserve">
+    <value>Överbemanning:</value>
+  </data>
+  <data name="ClearCampaign" xml:space="preserve">
+    <value>Rensa kampanj</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Kom ihåg mig?</value>
+  </data>
+  <data name="MyTeam" xml:space="preserve">
+    <value>MyTeam</value>
+  </data>
+  <data name="CurrentPlanningPeriodMessage" xml:space="preserve">
+    <value>Denna planeringsperiod börjar</value>
+  </data>
+  <data name="AppliedFilters" xml:space="preserve">
+    <value>Inställningarna används för:</value>
+  </data>
+  <data name="SeatBookingsList" xml:space="preserve">
+    <value>Bokningslista för sittplatser</value>
+  </data>
+  <data name="SeatProperties" xml:space="preserve">
+    <value>Sittplatsegenskaper</value>
+  </data>
+  <data name="ShowErrors" xml:space="preserve">
+    <value>Visa fel</value>
+  </data>
 </root>

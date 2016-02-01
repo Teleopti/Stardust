@@ -13843,11 +13843,11 @@ Reduce the complexity to use these shifts.</value>
     <comment>Add location dialog title</comment>
   </data>
   <data name="ManageMappings" xml:space="preserve">
-    <value>Manage Mappings</value>
+    <value>Manage Rule Mappings</value>
     <comment>Managing the mapping</comment>
   </data>
   <data name="Mappings" xml:space="preserve">
-    <value>Mappings</value>
+    <value>Rule Mappings</value>
     <comment>Mapping state group, activety to rules</comment>
   </data>
   <data name="Threshold" xml:space="preserve">
@@ -13855,7 +13855,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Time threshold</comment>
   </data>
   <data name="IsAlarm" xml:space="preserve">
-    <value>Is Alarm</value>
+    <value>Alarm</value>
     <comment>A rta rule flag</comment>
   </data>
   <data name="createNewRuleset" xml:space="preserve">
