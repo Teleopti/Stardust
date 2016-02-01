@@ -57,6 +57,7 @@ namespace Manager.Integration.Test
         [Test]
         public void Create5RequestShouldReturnBothCancelAndDeleteStatuses()
         {
+            Logger.Info("Starting test Create5RequestShouldReturnBothCancelAndDeleteStatuses()");
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(5);
@@ -105,6 +106,7 @@ namespace Manager.Integration.Test
         [Test]
         public void JobShouldHaveStatusFailedIfFailed()
         {
+            Logger.Info("Starting test JobShouldHaveStatusFailedIfFailed()");
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateFailingJobParamsRequests(1);
@@ -140,6 +142,7 @@ namespace Manager.Integration.Test
         [Test]
         public void CancelWrongJobs()
         {
+            Logger.Info("Starting test CancelWrongJobs()");
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(1);
@@ -189,6 +192,7 @@ namespace Manager.Integration.Test
         [Test]
         public void ShouldBeAbleToCreate5SuccessJobRequest()
         {
+            Logger.Info("Starting test ShouldBeAbleToCreate5SuccessJobRequest()");
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(5);

@@ -54,6 +54,7 @@ namespace Manager.Integration.Test
         [Test]
         public void JobShouldJustBeQueuedIfNoNodes()
         {
+            Logger.Info("Starting test JobShouldJustBeQueuedIfNoNodes()");
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(1);
