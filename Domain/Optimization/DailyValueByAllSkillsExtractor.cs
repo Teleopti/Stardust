@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
-using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -12,32 +9,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public interface IDailyValueByAllSkillsExtractor
 	{
 		double ValueForPeriod(DateOnlyPeriod period, TargetValueOptions targetValueOptions);
-		IList<double?> Values(DateOnlyPeriod period, TargetValueOptions targetValueOptions);
-		double? DayValue(DateOnly scheduleDay, TargetValueOptions targetValueOptions);
 	}
 
 	public class DailyValueByAllSkillsExtractor : IDailyValueByAllSkillsExtractor
 	{
-	    private readonly ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
-	    private readonly ISkillIntervalDataDivider _skillIntervalDataDivider;
-	    private readonly ISkillIntervalDataAggregator _skillIntervalDataAggregator;
 		private readonly Func<ISchedulingResultStateHolder> _stateholder;
 
-		public DailyValueByAllSkillsExtractor(ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
-	                                                       ISkillIntervalDataDivider skillIntervalDataDivider,
-															ISkillIntervalDataAggregator skillIntervalDataAggregator,
-			Func<ISchedulingResultStateHolder> stateholder)
+		public DailyValueByAllSkillsExtractor(Func<ISchedulingResultStateHolder> stateholder)
 	    {
-		    _skillStaffPeriodToSkillIntervalDataMapper = skillStaffPeriodToSkillIntervalDataMapper;
-		    _skillIntervalDataDivider = skillIntervalDataDivider;
-		    _skillIntervalDataAggregator = skillIntervalDataAggregator;
 			_stateholder = stateholder;
 	    }
 
 		public double ValueForPeriod(DateOnlyPeriod period, TargetValueOptions targetValueOptions)
 		{
 			double total = 0;
-			foreach (var value in Values(period, targetValueOptions))
+			foreach (var value in values(period, targetValueOptions))
 			{
 				if(value.HasValue)
 				total += value.Value;
@@ -46,89 +32,58 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return total;
 		}
 
-		public IList<double?> Values(DateOnlyPeriod period, TargetValueOptions targetValueOptions)
+		private IList<double?> values(DateOnlyPeriod period, TargetValueOptions targetValueOptions)
         {
             IList<double?> ret = new List<double?>();
 
             foreach (var dateOnly in period.DayCollection())
             {
-                double? value = DayValue(dateOnly, targetValueOptions);
+                double? value = dayValue(dateOnly, targetValueOptions);
                 ret.Add(value);
             }
 
             return ret;
         }
 
-        public double? DayValue(DateOnly scheduleDay, TargetValueOptions targetValueOptions)
+        private double dayValue(DateOnly scheduleDay, TargetValueOptions targetValueOptions)
         {
-            IList<double> intradayRelativePersonnelDeficits =
-                getIntradayRelativePersonnelDeficits(scheduleDay);
+	        var result = 0d;
+			var loadedSkillList = _stateholder().VisibleSkills.Where(s => s.SkillType.ForecastSource != ForecastSource.MaxSeatSkill).ToList();
+			foreach (var skill in loadedSkillList)
+			{
+				var skillDay = _stateholder().SkillDayOnSkillAndDateOnly(skill, scheduleDay);
+				if(skillDay == null)
+					continue;
 
-            double? result = null;
-
-            if (intradayRelativePersonnelDeficits.Any())
-            {
+		        var personsSkillStaffPeriods = skillDay.SkillStaffPeriodCollection;
+				var statistics = new SkillStaffPeriodStatisticsForSkillIntraday(personsSkillStaffPeriods);
+			
 				switch (targetValueOptions)
 				{
 					case TargetValueOptions.StandardDeviation:
-						result = Calculation.Variances.StandardDeviation(intradayRelativePersonnelDeficits);
+						result += statistics.StatisticsCalculator.RelativeStandardDeviation.Equals(double.NaN)
+							? 0d
+							: statistics.StatisticsCalculator.RelativeStandardDeviation;
 						break;
 
 					case TargetValueOptions.RootMeanSquare:
-						result = Calculation.Variances.RMS(intradayRelativePersonnelDeficits);
+						result += statistics.StatisticsCalculator.AbsoluteRootMeanSquare.Equals(double.NaN)
+							? 0d
+							: statistics.StatisticsCalculator.RelativeStandardDeviation;
 						break;
 
 					case TargetValueOptions.Teleopti:
-						result = Calculation.Variances.Teleopti(intradayRelativePersonnelDeficits);
+						result += statistics.StatisticsCalculator.AbsoluteDeviationSumma.Equals(double.NaN)
+							? 0d
+							: statistics.StatisticsCalculator.RelativeStandardDeviation;
+						result += statistics.StatisticsCalculator.RelativeStandardDeviation.Equals(double.NaN)
+							? 0d
+							: statistics.StatisticsCalculator.RelativeStandardDeviation;
 						break;
-
 				}
+	        }
 
-            }
             return result;
         }
-
-        // todo: move to extractor methods
-        private IList<double> getIntradayRelativePersonnelDeficits(DateOnly scheduleDay)
-        {
-	        var stateHolder = _stateholder();
-	        IEnumerable<ISkill> activeSkills = stateHolder.VisibleSkills;
-			var minResolution = 15;
-			if (activeSkills.Any())
-				minResolution = activeSkills.Min(skill => skill.DefaultResolution);
-
-            DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-               scheduleDay.Date, scheduleDay.Date.AddDays(1),
-               TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
-
-			IList<IList<ISkillIntervalData>> nestedList = new List<IList<ISkillIntervalData>>();
-
-			foreach (var skill in activeSkills)
-			{
-				IList<ISkillStaffPeriod> personsSkillStaffPeriods =
-				stateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(new[] { skill }, dateTimePeriod);
-
-				if (!personsSkillStaffPeriods.Any())
-					continue;
-
-				var skillIntervalDataList =
-				_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(personsSkillStaffPeriods, scheduleDay, TimeZoneGuard.Instance.TimeZone);
-				var splittedSkillIntervalDataList = _skillIntervalDataDivider.SplitSkillIntervalData(skillIntervalDataList,
-																									  minResolution);
-				nestedList.Add(splittedSkillIntervalDataList);
-			}
-
-			var aggregatedByPeriodSkillIntervalDataList =
-				_skillIntervalDataAggregator.AggregateSkillIntervalData(nestedList);
-
-			var resultingList = skillStaffPeriodsRelativeDifference(aggregatedByPeriodSkillIntervalDataList);
-	        return resultingList;
-        }
-
-		private static IList<double> skillStaffPeriodsRelativeDifference(IEnumerable<ISkillIntervalData> skillIntervalDataList)
-        {
-			return skillIntervalDataList.Select(s => s.RelativeDifferenceBoosted()).ToList();
-        }
-
 	}
 }
