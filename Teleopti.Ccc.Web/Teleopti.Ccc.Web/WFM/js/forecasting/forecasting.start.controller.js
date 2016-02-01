@@ -488,9 +488,7 @@
 
 				$scope.moreThanOneYear = function () {
 					if ($scope.period && $scope.period.endDate && $scope.period.startDate) {
-						var dateDiff = new Date($scope.period.endDate - $scope.period.startDate);
-						dateDiff.setDate(dateDiff.getDate() - 1);
-						return dateDiff.getFullYear() - 1970 >= 1;
+						return moment($scope.period.endDate).diff(moment($scope.period.startDate), 'years') >= 1;
 					} else
 						return false;
 				};
