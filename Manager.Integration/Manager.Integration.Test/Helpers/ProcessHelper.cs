@@ -37,8 +37,11 @@ namespace Manager.Integration.Test.Helpers
                 try
                 {
                     process.CloseMainWindow();
-                  //  process.WaitForExit();
-                  process.Kill();
+                    if (!process.WaitForExit(100))
+                    {
+                        process.Kill();
+                    }
+                    
                 }
                 catch (Exception)
                 {
