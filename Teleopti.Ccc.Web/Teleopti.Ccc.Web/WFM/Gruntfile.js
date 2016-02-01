@@ -86,7 +86,11 @@
 			},
 			target: {
 				files: {
-					'dist/style.min.css': ['css/style.css']
+					'dist/style.min.css': ['css/style.css'],
+					'dist/angular-gant.min.css': ['node_modules/angular-gantt/assets/angular-gantt.css',
+						'node_modules/angular-gantt/assets/angular-gantt-plugins.css',
+						'node_modules/angular-gantt/assets/angular-gantt-table-plugin.css',
+						'node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.css']
 				}
 			}
 		},
@@ -146,13 +150,10 @@
 					'node_modules/angular-material/angular-material.min.css',
 					'vendor/c3/c3.min.css',
 					'vendor/ng-mfb/mfb.css',
-					'node_modules/angular-gantt/assets/angular-gantt.css',
-					'node_modules/angular-gantt/assets/angular-gantt-plugins.css',
-					'node_modules/angular-gantt/assets/angular-gantt-table-plugin.css',
-					'node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.css',
+					'dist/angular-gant.min.css',
 					'node_modules/teleopti-styleguide/css/main.min.css'
 				],
-				dest: 'dist/modules.css',
+				dest: 'dist/modules.css'
 			},
 		},
 
