@@ -27,25 +27,21 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 		private IEnumerable<SkillGroupReducerResult> run(IList<string> keyList, VirtualSkillGroupsCreatorResult skillGroups, IList<ISkill> allSkillList)
 		{
 			var results = new List<SkillGroupReducerResult>();
-			string maxAgentGroup = string.Empty;
-			int maxAgents = int.MinValue;
-			var totalAgentsInIsland = 0;
+			var totalAgents = 0;
 			foreach (var key in keyList)
 			{
 				var numAgents = skillGroups.GetPersonsForKey(key).Count();
-				totalAgentsInIsland += numAgents;
-				if (numAgents > maxAgents)
-				{
-					maxAgentGroup = key;
-					maxAgents = numAgents;
-				}
+				totalAgents += numAgents;				
 			}
-			results.AddRange(tryFind(keyList, skillGroups, maxAgentGroup, (int)Math.Round(totalAgentsInIsland * 0.02, 0), allSkillList));
+
+			var maxAgentLimit = Math.Round(totalAgents * 0.02, 0);
+			if (maxAgentLimit < 2)
+				maxAgentLimit = 2;
+
 			while (true)
-			{
-				keyList.Remove(maxAgentGroup);
-				maxAgentGroup = string.Empty;
-				maxAgents = int.MinValue;
+			{				
+				var maxAgentGroup = string.Empty;
+				var maxAgents = int.MinValue;
 				foreach (var key in keyList)
 				{
 					var numAgents = skillGroups.GetPersonsForKey(key).Count();
@@ -56,20 +52,17 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 					}
 				}
 
-				var maxAgentLimit = Math.Round(totalAgentsInIsland*0.01, 0);
-				if (maxAgentLimit < 10)
-					maxAgentLimit = 10;
-
 				if (maxAgents < maxAgentLimit)
 					break;
 
-				var thisResults = tryFind(keyList, skillGroups, maxAgentGroup, (int) Math.Round(totalAgentsInIsland*0.02, 0),
+				var thisResults = tryFind(keyList, skillGroups, maxAgentGroup, (int) Math.Round(totalAgents*0.01, 0),
 					allSkillList).ToList();
 				results.AddRange(thisResults);
 				foreach (var skillGroupReducerResult in thisResults)
 				{
 					keyList.Remove(skillGroupReducerResult.RemoveFromGroupKey);
 				}
+				keyList.Remove(maxAgentGroup);
 			}
 
 			return results;
