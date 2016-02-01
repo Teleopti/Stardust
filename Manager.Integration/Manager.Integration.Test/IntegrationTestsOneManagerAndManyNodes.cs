@@ -17,8 +17,8 @@ namespace Manager.Integration.Test
     {
         private const int NumberOfNodesToStart = 3;
 
-        private readonly bool _startUpManagerAndNodeManually = false;
-        private readonly bool _clearDatabase= true;
+        private readonly bool _startUpManagerAndNodeManually = true;
+        private readonly bool _clearDatabase= false;
 
         private static readonly ILog Logger =
             LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndManyNodes));
@@ -51,7 +51,7 @@ namespace Manager.Integration.Test
         {
             JobHelper.GiveNodesTimeToInitialize();
 
-            List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(2);
+            List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(1);
 
             List<Task> tasks = new List<Task>();
 
@@ -79,7 +79,7 @@ namespace Manager.Integration.Test
                 cancelJobTask.Start();
             };
 
-            //ManagerApiHelper.CheckJobHistoryStatusTimer.Start();
+            ManagerApiHelper.CheckJobHistoryStatusTimer.Start();
 
             Parallel.ForEach(tasks,
                              task => { task.Start(); });

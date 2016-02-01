@@ -52,6 +52,8 @@ namespace Manager.Integration.Test.Helpers
                                                                               new StringContent(sez,
                                                                                                 Encoding.UTF8,
                                                                                                 MediaTypeConstants.ApplicationJson));
+                        response.EnsureSuccessStatusCode();
+
                         var str = await response.Content.ReadAsStringAsync();
 
                         Guid jobId = JsonConvert.DeserializeObject<Guid>(str);
@@ -68,36 +70,33 @@ namespace Manager.Integration.Test.Helpers
             });
         }
 
-        public Task<HttpResponseMessage> CreateManagerCancelTask(Guid guid)
+        public Task CreateManagerCancelTask(Guid guid)
         {
-            Task<HttpResponseMessage> taskToReturn =
-                new Task<HttpResponseMessage>(() =>
+               return new Task(async () =>
                 {
                     try
                     {
-                        Task<HttpResponseMessage> response;
-
                         using (var client = new HttpClient())
                         {
                             DefineDefaultRequestHeaders(client);
 
                             var uri = ManagerUriBuilder.GetCancelJobUri(guid);
 
-                            response = client.DeleteAsync(uri);
+                            var response = await client.DeleteAsync(uri);
+
+                            response.EnsureSuccessStatusCode();
+
+                            var str = await response.Content.ReadAsStringAsync();
                         }
 
-                        return response.Result;
                     }
                     catch (Exception exp)
                     {
                         Logger.Error("Delete async error : ",
                                      exp);
                     }
-
-                    return null;
                 });
 
-            return taskToReturn;
         }
     }
 }
