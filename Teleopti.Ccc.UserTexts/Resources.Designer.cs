@@ -12572,15 +12572,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Intra optimize.
-        /// </summary>
-        public static string IntraOptimize {
-            get {
-                return ResourceManager.GetString("IntraOptimize", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to ( In UTC).
         /// </summary>
         public static string InUTC {
@@ -26085,15 +26076,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShowEditor {
             get {
                 return ResourceManager.GetString("ShowEditor", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Show errors.
-        /// </summary>
-        public static string ShowErrors {
-            get {
-                return ResourceManager.GetString("ShowErrors", resourceCulture);
             }
         }
         

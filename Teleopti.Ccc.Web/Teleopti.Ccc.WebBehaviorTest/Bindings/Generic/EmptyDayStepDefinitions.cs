@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	public class EmptyDayStepDefinitions
 	{
 		[Given(@"(I) have an empty day with")]
-		[Given(@"'(.*)' has an empty day with")]
+		[Given(@"'?(.*)'? has an empty day with")]
 		public void GivenHaveADayOffWith(string person, Table table)
 		{
 			var personEmptyDay = table.CreateInstance<PersonEmptyDayConfigurable>();

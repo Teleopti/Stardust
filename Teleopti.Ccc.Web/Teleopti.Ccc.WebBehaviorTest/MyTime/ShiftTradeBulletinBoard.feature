@@ -144,7 +144,7 @@ Scenario: Should possible make shift trade in Bulletin board with day off
 
 @OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
 @OnlyRunIfEnabled('MyTimeWeb_TradeWithDayOffAndEmptyDay_31317')
-Scenario: Should possible make shift trade in Bulletin board with empty day
+Scenario: Should possibly make my empty day trade with main shift day in Bulletin board
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -170,6 +170,56 @@ Scenario: Should possible make shift trade in Bulletin board with empty day
 	And I click send button in bulletin board
 	Then Shift trade bulletin board view should not be visible
 	And I should see a shift trade request in the list with subject 'A nice subject'
+
+@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
+@OnlyRunIfEnabled('MyTimeWeb_TradeWithDayOffAndEmptyDay_31317')
+Scenario: Should possible make shift trade with empty day in Bulletin board
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have an empty day with
+	| Field | Value      |
+	| Date  | 2030-01-01 |
+	And OtherAgent has an empty day with
+	| Field | Value      |
+	| Date  | 2030-01-01 |
+	And OtherAgent has a shift exchange for bulletin
+	| Field         | Value            |
+	| Valid To      | 2029-12-31       |
+	| StartTime     | 2030-01-01 09:00 |
+	| EndTime       | 2030-01-01 17:00 |
+	| WishShiftType | EmptyDay         |
+	And the time is '2029-12-27'
+	When I view Shift Trade Bulletin Board for date '2030-01-01'
+	And I click agent 'OtherAgent'
+	And I enter subject 'A nice subject'
+	And I enter message 'A cute little message'
+	And I click send button in bulletin board
+	Then Shift trade bulletin board view should not be visible
+	And I should see a shift trade request in the list with subject 'A nice subject'
+	
+@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
+@OnlyRunIfEnabled('MyTimeWeb_TradeWithDayOffAndEmptyDay_31317')
+Scenario: Should see the anonymous name when viewing empty day in Bulletin board
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Anonymous trade 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have an empty day with
+	| Field | Value      |
+	| Date  | 2030-01-01 |
+	And OtherAgent has an empty day with
+	| Field | Value      |
+	| Date  | 2030-01-01 |
+	And OtherAgent has a shift exchange for bulletin
+	| Field         | Value            |
+	| Valid To      | 2029-12-31       |
+	| StartTime     | 2030-01-01 09:00 |
+	| EndTime       | 2030-01-01 17:00 |
+	| WishShiftType | EmptyDay         |
+	And the time is '2029-12-27'
+	When I view Shift Trade Bulletin Board for date '2030-01-01'
+	Then I should see agent name as Anonymous
+	
 	
 @OnlyRunIfEnabled('MyTimeWeb_SeeAnnouncedShifts_31639')
 Scenario: Should list announced shift
