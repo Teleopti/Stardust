@@ -13001,7 +13001,7 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
     <value>Ny fridagsregel</value>
   </data>
   <data name="AgentsSuccessfullyScheduled" xml:space="preserve">
-    <value>agenter schemalades </value>
+    <value>agenter schemalades</value>
   </data>
   <data name="CriticalUnderstaffingColon" xml:space="preserve">
     <value>Kritisk underbemanning:</value>
