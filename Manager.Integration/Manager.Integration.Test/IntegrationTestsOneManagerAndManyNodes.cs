@@ -17,8 +17,8 @@ namespace Manager.Integration.Test
     {
         private const int NumberOfNodesToStart = 3;
 
-        private readonly bool _startUpManagerAndNodeManually = true;
-        private readonly bool _clearDatabase= false;
+        private bool _startUpManagerAndNodeManually = false;
+        private bool _clearDatabase = true;
 
         private static readonly ILog Logger =
             LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndManyNodes));
@@ -28,6 +28,14 @@ namespace Manager.Integration.Test
         [SetUp]
         public void SetUp()
         {
+
+#if (DEBUG)
+            // Do nothing.
+#else
+            _clearDatabase= true;
+            _startUpManagerAndNodeManually = false;
+#endif
+
             if (_clearDatabase)
             {
                 DatabaseHelper.TryClearDatabase();
@@ -51,7 +59,7 @@ namespace Manager.Integration.Test
         {
             JobHelper.GiveNodesTimeToInitialize();
 
-            List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(1);
+            List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(10);
 
             List<Task> tasks = new List<Task>();
 
@@ -84,14 +92,13 @@ namespace Manager.Integration.Test
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
 
-            Thread.Sleep(TimeSpan.FromSeconds(60));
-
-            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait();
+            // Time out after 60 seconds.
+            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(TimeSpan.FromSeconds(60));
 
             ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.CanceledStatus ||
-                                                                                            pair.Value == StatusConstants.DeletedStatus));
+                                                                                        pair.Value == StatusConstants.DeletedStatus));
         }
 
         [Test]
@@ -100,7 +107,7 @@ namespace Manager.Integration.Test
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateFailingJobParamsRequests(1);
-            
+
             List<Task> tasks = new List<Task>();
 
             foreach (var jobRequestModel in requests)
