@@ -21,7 +21,7 @@ namespace Stardust.Node
 
         private string WhoAmI { get; set; }
 
-        public void Start(INodeConfiguration nodeConfiguration)
+        public void Start(INodeConfiguration nodeConfiguration, IContainer container)
         {
             // Start OWIN host 
             using (WebApp.Start(nodeConfiguration.BaseAddress.ToString(),
@@ -56,7 +56,7 @@ namespace Stardust.Node
                                         .SingleInstance();
 
 
-                                    var container = builder.Build();
+                                    builder.Update(container);
 
                                     //to start it
                                     container.Resolve<IWorkerWrapper>();
