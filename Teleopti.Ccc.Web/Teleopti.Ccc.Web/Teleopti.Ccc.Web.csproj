@@ -1289,6 +1289,7 @@
     <Content Include="WFM\js\requests\_module.js" />
     <Content Include="WFM\js\resourceplanner\planningperiods.controller.spec.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner-filters.html" />
+	<Content Include="WFM\js\resourceplanner\temp.html" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.controller.spec.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.filter.controller.spec.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.report.controller.spec.js" />
@@ -1296,6 +1297,7 @@
     <Content Include="WFM\js\rta\rta-agents-rowtemplate-AdherenceDetails_34267.html" />
     <Content Include="WFM\js\rta\rta-agents-rowtemplate.html" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.filter.controller.js" />
+	<Content Include="WFM\js\resourceplanner\resourceplanner.temp.controller.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.filter.service.js" />
     <Content Include="WFM\js\rta\rta-agent-details.html" />
     <Content Include="WFM\js\rta\rta-agents-ProperAlarm_34975.html" />
