@@ -29,7 +29,7 @@
 		<NpmInstallKarmaCmd>"$(NpmCmd)" update -g karma@0.13.3</NpmInstallKarmaCmd>
 
 		<!-- Karma cli install command -->
-		<NpmInstallKarmaCliCmd>"$(NpmCmd)" install -g karma-cli@0.1.0</NpmInstallKarmaCliCmd>
+		<NpmInstallKarmaCliCmd>"$(NpmCmd)" install -g karma-cli@0.1.2</NpmInstallKarmaCliCmd>
 
 		<!-- grunt-cli install command -->
 		<NpmInstallGruntCliCmd>"$(NpmCmd)" install -g grunt-cli@0.1.13</NpmInstallGruntCliCmd>
