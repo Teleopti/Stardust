@@ -52,9 +52,15 @@ client.setValue('#Username-input', 'demo')
 
 log('navigate to health check');
 client.url(webUrl + '/HealthCheck')
-	.waitForExist(".services li span", 600000, false, function(err, res, response) {
+	.waitForExist(".services li span", 300000, false, function(err, res, response) {
 		if (err || !res) {
-			closeAndThrow('service bus isnot up and running after trying 10 minutes. Please visit ' + webUrl + '/HealthCheck , and have a look. ' + err);
+			log('service bus isnot up and running after trying 5 minutes. Try to refresh, and have another try.');
+			client.refresh()
+				.waitForExist(".services li span", 300000, false, function(err, res, response) {
+					if (err || !res) {
+						closeAndThrow('service bus isnot up and running after trying 10 minutes. Please visit ' + webUrl + '/HealthCheck , and have a look. ' + err);
+					}
+				});
 		}
 	});
 log('check service bus and broker');
