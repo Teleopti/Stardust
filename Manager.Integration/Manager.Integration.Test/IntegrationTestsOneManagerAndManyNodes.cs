@@ -142,7 +142,7 @@ namespace Manager.Integration.Test
             ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
         }
 
-        [Test]
+        [Test][Ignore]
         public void CancelWrongJobs()
         {
             Logger.Info("Starting test CancelWrongJobs()");
