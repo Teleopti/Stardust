@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using Manager.Integration.Test.Constants;
@@ -34,10 +36,10 @@ namespace Manager.Integration.Test
 
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
-        [Test][Ignore]
-        public void TryStartOneJob()
+        [Test]
+        public void JobShouldJustBeQueuedIfNoNodes()
         {
-            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(5);
+            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(1);
 
             List<Task> tasks = new List<Task>();
 
@@ -50,21 +52,18 @@ namespace Manager.Integration.Test
                                                                                          5000,
                                                                                          StatusConstants.NullStatus, 
                                                                                          StatusConstants.EmptyStatus);
-            ManagerApiHelper.CheckJobHistoryStatusTimer.Start();
 
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
-
-            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait();
+            
+            Thread.Sleep(TimeSpan.FromSeconds(5));  //short sleep, shouldnt crash
 
             ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
 
-            var numberOfStatuses =
-                ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.Values.Where(s => s == StatusConstants.NullStatus || s == StatusConstants.EmptyStatus)
-                    .ToList()
-                    .Count;
+            Assert.IsTrue(
+                ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(
+                    pair => pair.Value == StatusConstants.NullStatus));
 
-            Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.Keys.Count == numberOfStatuses);
         }
 
         private Process StartManagerIntegrationConsoleHostProcess { get; set; }

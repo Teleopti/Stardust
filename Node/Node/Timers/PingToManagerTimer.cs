@@ -48,30 +48,13 @@ namespace Stardust.Node.Timers
         {
             try
             {
-                var httpResponseMessage =
-                    await SendPing(NodeConfiguration.BaseAddress);
-
-                if (httpResponseMessage.IsSuccessStatusCode)
-                {
-                    if (Logger.IsDebugEnabled)
-                    {
-                        Logger.Debug(WhoAmI + ": Heartbeat sent to " + CallbackUri);
-                    }
-                }
-                else
-                {
-                    if (Logger.IsWarnEnabled)
-                    {
-                        Logger.Warn(WhoAmI + ": Heartbeat failed. " + httpResponseMessage.Content);
-                    }
-                }
+                await SendPing(NodeConfiguration.BaseAddress); 
             }
-            catch (Exception exp)
+            catch 
             {
                 if (Logger.IsErrorEnabled)
                 {
-                    Logger.Error(WhoAmI + ": Heartbeat failed. Is the manager up and running?",
-                                 exp);
+                    Logger.Error(WhoAmI + ": Heartbeat failed. Is the manager up and running?");
                 }
             }
         }

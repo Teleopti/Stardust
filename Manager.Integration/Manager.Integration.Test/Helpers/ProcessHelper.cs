@@ -7,6 +7,11 @@ namespace Manager.Integration.Test.Helpers
 {
     public static class ProcessHelper
     {
+#if DEBUG
+        private static string _buildMode = "Debug";
+#else
+        private static string _buildMode = "Release";
+#endif
         public static void ShutDownAllManagerIntegrationConsoleHostProcesses()
         {
             var consoleHostname = new FileInfo(Settings.Default.ManagerIntegrationConsoleHostAssemblyName);
@@ -29,7 +34,7 @@ namespace Manager.Integration.Test.Helpers
         public static Process StartManagerIntegrationConsoleHostProcess(int numberOfNodesToStart)
         {
             var managerIntegrationConsoleHostLocation =
-                new DirectoryInfo(Settings.Default.ManagerIntegrationConsoleHostLocation);
+                new DirectoryInfo(Settings.Default.ManagerIntegrationConsoleHostLocation + _buildMode);
 
             var managerIntegrationConsoleHostAssemblyName = 
                 Settings.Default.ManagerIntegrationConsoleHostAssemblyName;

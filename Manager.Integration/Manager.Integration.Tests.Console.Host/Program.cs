@@ -10,6 +10,18 @@ namespace Manager.IntegrationTest.Console.Host
 {
     public static class Program
     {
+        private const string CopiedManagerConfigName = "Manager.config";
+#if (DEBUG)
+        private static string _buildMode = "Debug";
+#else
+        private static string _buildMode = "Release";
+#endif
+
+        public static FileInfo ManagerConfigurationFile { get; set; }
+
+        public static FileInfo CopiedManagerConfigurationFile { get; set; }
+
+
         private static string AddEndingSlash(string path)
         {
             if (!string.IsNullOrEmpty(path))
@@ -23,36 +35,32 @@ namespace Manager.IntegrationTest.Console.Host
             return path;
         }
 
-        private const string CopiedManagerConfigName = "Manager.config";
-
-        public static FileInfo ManagerConfigurationFile { get; set; }
-
-        public static FileInfo CopiedManagerConfigurationFile { get; set; }
-
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            DirectoryInfo directoryManagerConfigurationFileFullPath =
-                new DirectoryInfo(AddEndingSlash(Settings.Default.ManagerConfigurationFileFullPath));
+            var directoryManagerConfigurationFileFullPath =
+                new DirectoryInfo(AddEndingSlash(Settings.Default.ManagerConfigurationFileFullPath + _buildMode));
 
             ManagerConfigurationFile =
-                new FileInfo(directoryManagerConfigurationFileFullPath.FullName + Settings.Default.ManagerConfigurationFileName);
+                new FileInfo(directoryManagerConfigurationFileFullPath.FullName +
+                             Settings.Default.ManagerConfigurationFileName);
 
             CopiedManagerConfigurationFile =
                 CopyManagerConfigurationFile(ManagerConfigurationFile,
-                                             CopiedManagerConfigName);
+                    CopiedManagerConfigName);
 
-            DirectoryInfo directoryNodeConfigurationFileFullPath =
-                new DirectoryInfo(AddEndingSlash(Settings.Default.NodeConfigurationFileFullPath));
+            var directoryNodeConfigurationFileFullPath =
+                new DirectoryInfo(AddEndingSlash(Settings.Default.NodeConfigurationFileFullPath + _buildMode));
 
-            FileInfo nodeConfigurationFile =
-                new FileInfo(directoryNodeConfigurationFileFullPath.FullName + Settings.Default.NodeConfigurationFileName);
+            var nodeConfigurationFile =
+                new FileInfo(directoryNodeConfigurationFileFullPath.FullName +
+                             Settings.Default.NodeConfigurationFileName);
 
-            Dictionary<string, FileInfo> nodeconfigurationFiles = new Dictionary<string, FileInfo>();
+            var nodeconfigurationFiles = new Dictionary<string, FileInfo>();
 
-            int portStartNumber =
+            var portStartNumber =
                 Settings.Default.NodeEndpointPortNumberStart;
 
-            int numberOfNodesToStart = Settings.Default.NumberOfNodesToStart;
+            var numberOfNodesToStart = Settings.Default.NumberOfNodesToStart;
 
             if (args.Any())
             {
@@ -61,38 +69,40 @@ namespace Manager.IntegrationTest.Console.Host
 
             if (numberOfNodesToStart > 0)
             {
-                for (int i = 1; i <= numberOfNodesToStart; i++)
+                for (var i = 1; i <= numberOfNodesToStart; i++)
                 {
-                    string nodeName = "Node" + i;
+                    var nodeName = "Node" + i;
 
-                    string configName = nodeName + ".config";
+                    var configName = nodeName + ".config";
 
-                    int portNumber = portStartNumber + (i - 1);
+                    var portNumber = portStartNumber + (i - 1);
 
-                    Uri endPointUri =
+                    var endPointUri =
                         new Uri(Settings.Default.NodeEndpointUriTemplate.Replace("PORTNUMBER",
-                                                                                 portNumber.ToString()));
+                            portNumber.ToString()));
 
-                    FileInfo copiedConfigurationFile =
+                    var copiedConfigurationFile =
                         CreateNodeConfigFile(nodeConfigurationFile,
-                                             configName,
-                                             nodeName,
-                                             new Uri(Settings.Default.ManagerLocationUri),
-                                             endPointUri,
-                                             Settings.Default.HandlerAssembly);
+                            configName,
+                            nodeName,
+                            new Uri(Settings.Default.ManagerLocationUri),
+                            endPointUri,
+                            Settings.Default.HandlerAssembly);
 
                     nodeconfigurationFiles.Add(nodeName,
-                                               copiedConfigurationFile);
+                        copiedConfigurationFile);
                 }
             }
 
 
-            List<Task> tasks = new List<Task>();
+            var tasks = new List<Task>();
 
             var managerTask = new Task(() =>
             {
-                DirectoryInfo directoryManagerAssemblyLocationFullPath =
-                    new DirectoryInfo(AddEndingSlash(Settings.Default.ManagerAssemblyLocationFullPath));
+                var managerAssemblyLocationFullPath = Settings.Default.ManagerAssemblyLocationFullPath;
+
+                var directoryManagerAssemblyLocationFullPath =
+                    new DirectoryInfo(AddEndingSlash(managerAssemblyLocationFullPath + _buildMode));
 
                 // Start manager.
                 var managerAppDomainSetup = new AppDomainSetup
@@ -103,16 +113,18 @@ namespace Manager.IntegrationTest.Console.Host
                     ConfigurationFile = CopiedManagerConfigurationFile.FullName
                 };
 
-                AppDomain managerAppDomain = AppDomain.CreateDomain(managerAppDomainSetup.ApplicationName,
-                                                                    null,
-                                                                    managerAppDomainSetup);
+                var managerAppDomain = AppDomain.CreateDomain(managerAppDomainSetup.ApplicationName,
+                    null,
+                    managerAppDomainSetup);
 
-                managerAppDomain.ExecuteAssembly(managerAppDomainSetup.ApplicationBase + managerAppDomainSetup.ApplicationName);
+                managerAppDomain.ExecuteAssembly(managerAppDomainSetup.ApplicationBase +
+                                                 managerAppDomainSetup.ApplicationName);
             });
 
             tasks.Add(managerTask);
 
-            DirectoryInfo directoryNodeAssemblyLocationFullPath = new DirectoryInfo(AddEndingSlash(Settings.Default.NodeAssemblyLocationFullPath));
+            var directoryNodeAssemblyLocationFullPath =
+                new DirectoryInfo(AddEndingSlash(Settings.Default.NodeAssemblyLocationFullPath + _buildMode));
 
             foreach (var nodeconfigurationFile in nodeconfigurationFiles)
             {
@@ -126,11 +138,11 @@ namespace Manager.IntegrationTest.Console.Host
                         ConfigurationFile = nodeconfigurationFile.Value.FullName
                     };
 
-                    AppDomain nodeAppDomain = AppDomain.CreateDomain(nodeconfigurationFile.Key,
-                                                                     null,
-                                                                     nodeAppDomainSetup);
+                    var nodeAppDomain = AppDomain.CreateDomain(nodeconfigurationFile.Key,
+                        null,
+                        nodeAppDomainSetup);
 
-                    string assemblyToExecute =
+                    var assemblyToExecute =
                         nodeAppDomainSetup.ApplicationBase + nodeAppDomainSetup.ApplicationName;
 
                     nodeAppDomain.ExecuteAssembly(assemblyToExecute);
@@ -148,23 +160,23 @@ namespace Manager.IntegrationTest.Console.Host
         }
 
         public static FileInfo CreateNodeConfigFile(FileInfo nodeConfigurationFile,
-                                                    string newConfigurationFileName,
-                                                    string nodeName,
-                                                    Uri managerEndpoint,
-                                                    Uri nodeEndPoint,
-                                                    string handlerAssembly)
+            string newConfigurationFileName,
+            string nodeName,
+            Uri managerEndpoint,
+            Uri nodeEndPoint,
+            string handlerAssembly)
         {
             var copiedNodeConfigFile = nodeConfigurationFile.CopyTo(newConfigurationFileName,
-                                                                    true);
+                true);
 
             // Change app settings.
-            ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap
+            var configFileMap = new ExeConfigurationFileMap
             {
                 ExeConfigFilename = copiedNodeConfigFile.FullName
             };
 
-            Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap,
-                                                                                   ConfigurationUserLevel.None);
+            var config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap,
+                ConfigurationUserLevel.None);
 
             config.AppSettings.Settings["NodeName"].Value = nodeName;
             config.AppSettings.Settings["BaseAddress"].Value = nodeEndPoint.ToString();
@@ -177,10 +189,10 @@ namespace Manager.IntegrationTest.Console.Host
         }
 
         public static FileInfo CopyManagerConfigurationFile(FileInfo managerConfigFile,
-                                                            string newConfigFileName)
+            string newConfigFileName)
         {
             return managerConfigFile.CopyTo(newConfigFileName,
-                                            true);
+                true);
         }
     }
 }

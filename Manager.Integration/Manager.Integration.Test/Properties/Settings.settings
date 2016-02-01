@@ -2,11 +2,11 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Manager.Integration.Test.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="LocationUri" Type="System.String" Scope="Application">
+    <Setting Name="ManagerLocationUri" Type="System.String" Scope="Application">
       <Value Profile="(Default)">http://localhost:9000/</Value>
     </Setting>
     <Setting Name="ManagerIntegrationConsoleHostLocation" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">../../../Manager.Integration.Tests.Console.Host/bin/debug/</Value>
+      <Value Profile="(Default)">../../../Manager.Integration.Tests.Console.Host/bin/</Value>
     </Setting>
     <Setting Name="ManagerIntegrationConsoleHostAssemblyName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Manager.IntegrationTest.Console.Host.exe</Value>

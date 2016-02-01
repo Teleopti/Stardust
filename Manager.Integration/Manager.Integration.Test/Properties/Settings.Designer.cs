@@ -34,7 +34,7 @@ namespace Manager.Integration.Test.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("../../../Manager.Integration.Tests.Console.Host/bin/debug/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("../../../Manager.Integration.Tests.Console.Host/bin/")]
         public string ManagerIntegrationConsoleHostLocation {
             get {
                 return ((string)(this["ManagerIntegrationConsoleHostLocation"]));
