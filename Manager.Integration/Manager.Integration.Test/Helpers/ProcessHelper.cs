@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using log4net;
 using log4net.Repository.Hierarchy;
 using Manager.Integration.Test.Properties;
 
@@ -14,6 +16,8 @@ namespace Manager.Integration.Test.Helpers
 #else
         private static string _buildMode = "Release";
 #endif
+        private static readonly ILog Logger =
+           LogManager.GetLogger(typeof(ProcessHelper));
 
         public static void ShutDownAllManagerIntegrationConsoleHostProcesses()
         {
@@ -36,12 +40,24 @@ namespace Manager.Integration.Test.Helpers
                 }
                 catch (Exception)
                 {
+                    Logger.Error("Error in CloseProcess ");
                 }
             }
         }
 
         public static Process StartManagerIntegrationConsoleHostProcess(int numberOfNodesToStart)
         {
+            var consoleHostname = new FileInfo(Settings.Default.ManagerIntegrationConsoleHostAssemblyName);
+
+            var fileNameWithNoExtension = consoleHostname.Name.Replace(consoleHostname.Extension,
+                                                                       string.Empty);
+            Process[] processes = Process.GetProcessesByName(fileNameWithNoExtension);
+          
+            if (processes.Any())
+            {
+                Logger.Error("Processes not closed before new started!");
+            }
+
             var managerIntegrationConsoleHostLocation =
                 new DirectoryInfo(Settings.Default.ManagerIntegrationConsoleHostLocation + _buildMode);
 
@@ -99,8 +115,7 @@ namespace Manager.Integration.Test.Helpers
             {
                 foreach (var process in processes)
                 {
-                    process.CloseMainWindow();
-                    process.WaitForExit();
+                    CloseProcess(process);
                 }
             }
         }

@@ -48,10 +48,10 @@ namespace Manager.Integration.Test
 
             if (!_startUpManagerAndNodeManually)
             {
-                Logger.Info("Start to shut down all processes");
-                ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
+         //       Logger.Info("Start to shut down all processes");
+        //        ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
                 
-                Thread.Sleep(TimeSpan.FromSeconds(20));
+        //        Thread.Sleep(TimeSpan.FromSeconds(20));
                 StartManagerIntegrationConsoleHostProcess =
                     ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
             }
@@ -101,7 +101,7 @@ namespace Manager.Integration.Test
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
 
-            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait();
+            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
             
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.CanceledStatus ||
                                                                                         pair.Value == StatusConstants.DeletedStatus));
