@@ -65,21 +65,15 @@ namespace Stardust.Node.Timers
 
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {
-                    if (Logger.IsDebugEnabled)
-                    {
                         Logger.Debug(WhoAmI + ": Node start up notification to manager succeded. Manager Uri =  " +
                                      CallbackTemplateUri);
-                    }
 
                     TrySendNodeStartUpNotificationSuccededInvoke();
                 }
                 else
                 {
-                    if (Logger.IsWarnEnabled)
-                    {
                         Logger.Warn(WhoAmI + ": Node start up notification to manager failed. Error message =  " +
                                     httpResponseMessage.Content);
-                    }
                 }
             }
 

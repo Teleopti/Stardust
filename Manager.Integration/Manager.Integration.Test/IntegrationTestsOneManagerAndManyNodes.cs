@@ -39,6 +39,7 @@ namespace Manager.Integration.Test
             ManagerApiHelper = new ManagerApiHelper();
 
             ProcessHelper.ShutDownAllManagerAndNodeProcesses();
+            ProcessHelper.ShutDownAllProcesses("Manager.IntegrationTest.Console.Host");
 
             if (_startUpManagerAndNodeManually)
             {
