@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
+using log4net.Config;
 using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Timers;
@@ -28,6 +29,7 @@ namespace Manager.Integration.Test
         [SetUp]
         public void SetUp()
         {
+            XmlConfigurator.Configure();
 
 #if (DEBUG)
             // Do nothing.
@@ -94,7 +96,7 @@ namespace Manager.Integration.Test
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
 
-            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait();
             
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.CanceledStatus ||
                                                                                         pair.Value == StatusConstants.DeletedStatus));
@@ -171,6 +173,7 @@ namespace Manager.Integration.Test
                 var cancelJobTask = ManagerApiHelper.CreateManagerCancelTask(newGuid);
 
                 Logger.Debug("CancelWrongJobs : Created task for cancel job :" + newGuid);
+
                 cancelJobTask.Start();
             };
 
@@ -189,7 +192,7 @@ namespace Manager.Integration.Test
         [Test]
         public void ShouldBeAbleToCreate10SuccessJobRequest()
         {
-            JobHelper.GiveNodesTimeToInitialize();
+            JobHelper.GiveNodesTimeToInitialize(20);
 
             List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(10);
 
@@ -214,7 +217,7 @@ namespace Manager.Integration.Test
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
 
-            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);            
+            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait();            
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
 

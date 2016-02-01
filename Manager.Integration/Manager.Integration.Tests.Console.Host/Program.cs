@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using log4net.Config;
 using Manager.IntegrationTest.Console.Host.Properties;
 
 namespace Manager.IntegrationTest.Console.Host
@@ -39,6 +40,8 @@ namespace Manager.IntegrationTest.Console.Host
 
         private static void Main(string[] args)
         {
+            XmlConfigurator.Configure();
+
             var directoryManagerConfigurationFileFullPath =
                 new DirectoryInfo(AddEndingSlash(Settings.Default.ManagerConfigurationFileFullPath + _buildMode));
 

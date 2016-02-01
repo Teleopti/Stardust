@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Manager.Integration.Test.Properties;
@@ -12,6 +13,7 @@ namespace Manager.Integration.Test.Helpers
 #else
         private static string _buildMode = "Release";
 #endif
+
         public static void ShutDownAllManagerIntegrationConsoleHostProcesses()
         {
             var consoleHostname = new FileInfo(Settings.Default.ManagerIntegrationConsoleHostAssemblyName);
@@ -26,8 +28,14 @@ namespace Manager.Integration.Test.Helpers
         {
             if (process != null)
             {
-                process.CloseMainWindow();
-                process.WaitForExit();
+                try
+                {
+                    process.CloseMainWindow();
+                    process.WaitForExit();
+                }
+                catch (Exception)
+                {
+                }
             }
         }
 
@@ -36,14 +44,13 @@ namespace Manager.Integration.Test.Helpers
             var managerIntegrationConsoleHostLocation =
                 new DirectoryInfo(Settings.Default.ManagerIntegrationConsoleHostLocation + _buildMode);
 
-            var managerIntegrationConsoleHostAssemblyName = 
+            var managerIntegrationConsoleHostAssemblyName =
                 Settings.Default.ManagerIntegrationConsoleHostAssemblyName;
 
 
             return StartProcess(managerIntegrationConsoleHostLocation,
                                 managerIntegrationConsoleHostAssemblyName,
                                 numberOfNodesToStart);
-
         }
 
         public static Process StartProcess(DirectoryInfo processDirectory,
