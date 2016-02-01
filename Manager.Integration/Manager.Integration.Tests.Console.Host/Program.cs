@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Manager.IntegrationTest.Console.Host.Properties;
 
@@ -48,6 +49,37 @@ namespace Manager.IntegrationTest.Console.Host
             CopiedManagerConfigurationFile =
                 CopyManagerConfigurationFile(ManagerConfigurationFile,
                     CopiedManagerConfigName);
+
+
+
+            var tasks = new List<Task>();
+
+            var managerTask = new Task(() =>
+            {
+                var managerAssemblyLocationFullPath = Settings.Default.ManagerAssemblyLocationFullPath;
+
+                var directoryManagerAssemblyLocationFullPath =
+                    new DirectoryInfo(AddEndingSlash(managerAssemblyLocationFullPath + _buildMode));
+
+                // Start manager.
+                var managerAppDomainSetup = new AppDomainSetup
+                {
+                    ApplicationBase = directoryManagerAssemblyLocationFullPath.FullName,
+                    ApplicationName = Settings.Default.ManagerAssemblyName,
+                    ShadowCopyFiles = "true",
+                    ConfigurationFile = CopiedManagerConfigurationFile.FullName
+                };
+
+                var managerAppDomain = AppDomain.CreateDomain(managerAppDomainSetup.ApplicationName,
+                    null,
+                    managerAppDomainSetup);
+
+                managerAppDomain.ExecuteAssembly(managerAppDomainSetup.ApplicationBase +
+                                                 managerAppDomainSetup.ApplicationName);
+            });
+
+            tasks.Add(managerTask);
+            
 
             var directoryNodeConfigurationFileFullPath =
                 new DirectoryInfo(AddEndingSlash(Settings.Default.NodeConfigurationFileFullPath + _buildMode));
@@ -96,33 +128,7 @@ namespace Manager.IntegrationTest.Console.Host
             }
 
 
-            var tasks = new List<Task>();
 
-            var managerTask = new Task(() =>
-            {
-                var managerAssemblyLocationFullPath = Settings.Default.ManagerAssemblyLocationFullPath;
-
-                var directoryManagerAssemblyLocationFullPath =
-                    new DirectoryInfo(AddEndingSlash(managerAssemblyLocationFullPath + _buildMode));
-
-                // Start manager.
-                var managerAppDomainSetup = new AppDomainSetup
-                {
-                    ApplicationBase = directoryManagerAssemblyLocationFullPath.FullName,
-                    ApplicationName = Settings.Default.ManagerAssemblyName,
-                    ShadowCopyFiles = "true",
-                    ConfigurationFile = CopiedManagerConfigurationFile.FullName
-                };
-
-                var managerAppDomain = AppDomain.CreateDomain(managerAppDomainSetup.ApplicationName,
-                    null,
-                    managerAppDomainSetup);
-
-                managerAppDomain.ExecuteAssembly(managerAppDomainSetup.ApplicationBase +
-                                                 managerAppDomainSetup.ApplicationName);
-            });
-
-            tasks.Add(managerTask);
 
             var directoryNodeAssemblyLocationFullPath =
                 new DirectoryInfo(AddEndingSlash(Settings.Default.NodeAssemblyLocationFullPath + _buildMode));
@@ -155,6 +161,7 @@ namespace Manager.IntegrationTest.Console.Host
             foreach (var task in tasks)
             {
                 task.Start();
+                Thread.Sleep(TimeSpan.FromSeconds(2)); //see if this helps TC
             }
 
             System.Console.ReadKey();
