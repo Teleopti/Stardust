@@ -62,6 +62,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			DataMaker.Person(userName).Apply(user);
 		}
 
+		[When(@"'(.*)' changes team to '(.*)'")]
+		public void WhenChangesTeamTo(string userName, string team)
+		{
+			//var user = new UserConfigurable() {Team = team};
+			//DataMaker.Person(userName).Apply(user);
+		}
+
 		[Given(@"I have user credential with")]
 		public void GivenIHaveUserCredentialWith(Table table)
 		{

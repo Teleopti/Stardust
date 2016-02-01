@@ -80,22 +80,22 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			if (!WindowsAuthentication && !changedApplicationLogonCredentials() && Tenant==null) return;
 
 			var personInfo = tenantSession.CurrentSession().Get<PersonInfo>(user.Id.Value);
+
 			if (personInfo == null)
 			{
 				personInfo = new PersonInfo(defaultTenant(tenantSession), user.Id.Value);
 				tenantSession.CurrentSession().Save(personInfo);
 			}
 
-
 			if (Tenant != null)
 			{
 				personInfo.ChangeTenant_OnlyUseInTest(new FindTenantByName(tenantSession).Find(Tenant));
 			}
-			
 			if (WindowsAuthentication)
 			{
 				personInfo.SetIdentity(IdentityHelper.Merge(Environment.UserDomainName, Environment.UserName));
 			}
+
 			if (changedApplicationLogonCredentials())
 			{
 				var wasLocked = personInfo.ApplicationLogonInfo.IsLocked;
