@@ -16,7 +16,7 @@ namespace NodeTest
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterInstance<IHandle<TestJobParams>>(new TestJobWorker());
+            builder.RegisterInstance<IHandle<TestJobParams>>(new TestJobWorker(new TestJobCode()));
 
             builder.RegisterType<InvokeHandler>()
                 .SingleInstance();

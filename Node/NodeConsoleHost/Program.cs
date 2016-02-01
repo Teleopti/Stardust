@@ -4,6 +4,7 @@ using System.Reflection;
 using Autofac;
 using log4net;
 using log4net.Config;
+using NodeTest.JobHandlers;
 using Stardust.Node;
 using Stardust.Node.API;
 
@@ -23,7 +24,10 @@ namespace NodeConsoleHost
 																new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
 																Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
 																ConfigurationManager.AppSettings["NodeName"]);
-			var container = new ContainerBuilder().Build();
+			var builder = new ContainerBuilder();
+			builder.RegisterModule(new WorkerModule());
+			var container = builder.Build();
+
 			new NodeStarter().Start(nodeConfig, container);
 		}
 
