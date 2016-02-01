@@ -78,11 +78,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			//person.TerminatePerson(new DateOnly(testDate.AddDays(0)), new PersonAccountUpdaterDummy());
 
 			var personFactory = Data.Person(personName);
-			var leavingDateForUser = new LeavingDateForUser
-				{
-					LeavingDate = testDate.Date
-				};
-			personFactory.Apply(leavingDateForUser);
+			personFactory.Apply(new UserConfigurable
+			{
+				TerminalDate = testDate.Date
+			});
 
 			//run nightly
 			jobParameters = new JobParameters(
@@ -148,11 +147,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			//person.TerminatePerson(new DateOnly(testDate.AddDays(0)), new PersonAccountUpdaterDummy());
 
 			var personFactory = Data.Person(personName);
-			var leavingDateForUser = new LeavingDateForUser
+			personFactory.Apply(new UserConfigurable
 			{
-				LeavingDate = testDate.Date
-			};
-			personFactory.Apply(leavingDateForUser);
+				TerminalDate = testDate.Date
+			});
 
 			//run nightly
 			jobParameters = new JobParameters(
