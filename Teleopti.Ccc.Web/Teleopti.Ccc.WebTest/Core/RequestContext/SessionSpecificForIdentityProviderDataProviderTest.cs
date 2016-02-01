@@ -5,11 +5,9 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
-using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.RequestContext
@@ -47,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			now = new ThisIsNow(new DateTime(2013, 9, 23, 12, 0, 0));
 
 			_sessionSpecificCookieForIdentityProviderDataProviderSettings = new DefaultSessionSpecificCookieForIdentityProviderDataProviderSettings();
-			target = new SessionSpecificForIdentityProviderDataProvider(new FakeCurrentHttpContext(httpContext), _sessionSpecificCookieForIdentityProviderDataProviderSettings, now, new SessionSpecificDataStringSerializer(MockRepository.GenerateStub<ILog>()), MockRepository.GenerateMock<ISessionAuthenticationModule>());
+			target = new SessionSpecificForIdentityProviderDataProvider(new FakeCurrentHttpContext(httpContext), _sessionSpecificCookieForIdentityProviderDataProviderSettings, now, new SessionSpecificDataStringSerializer(MockRepository.GenerateStub<ILog>()));
 		}
 
 		[Test]

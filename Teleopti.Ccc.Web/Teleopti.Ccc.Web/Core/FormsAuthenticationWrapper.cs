@@ -34,9 +34,7 @@ namespace Teleopti.Ccc.Web.Core
 
 		public void SignOut()
 		{
-			FederatedAuthentication.SessionAuthenticationModule.SignOut();
 			FormsAuthentication.SignOut();
-
 			var fedAuthCookie = new HttpCookie(_sessionSpecificCookieForIdentityProviderDataProviderSettings.AuthenticationCookieName) { Expires = _now.LocalDateTime().AddYears(-2) };
 			_httpContext.Current().Response.Cookies.Remove(_sessionSpecificCookieForIdentityProviderDataProviderSettings.AuthenticationCookieName);
 			_httpContext.Current().Response.Cookies.Add(fedAuthCookie);

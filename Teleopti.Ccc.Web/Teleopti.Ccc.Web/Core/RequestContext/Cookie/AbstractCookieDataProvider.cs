@@ -2,9 +2,9 @@ using System;
 using System.Security.Cryptography;
 using System.Web;
 using System.Web.Security;
+using Microsoft.IdentityModel.Web;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Infrastructure.Web;
-using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
@@ -15,15 +15,14 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 		private readonly IBaseSessionSpecificCookieDataProviderSettings _sessionSpecificCookieDataProviderSettings;
 		private readonly INow _now;
 		private readonly ISessionSpecificDataStringSerializer _dataStringSerializer;
-		private readonly ISessionAuthenticationModule _sessionAuthenticationModule;
 
-		protected AbstractCookieDataProvider(ICurrentHttpContext httpContext, IBaseSessionSpecificCookieDataProviderSettings sessionSpecificCookieDataProviderSettings, INow now, ISessionSpecificDataStringSerializer dataStringSerializer, ISessionAuthenticationModule sessionAuthenticationModule)
+
+		protected AbstractCookieDataProvider(ICurrentHttpContext httpContext, IBaseSessionSpecificCookieDataProviderSettings sessionSpecificCookieDataProviderSettings, INow now, ISessionSpecificDataStringSerializer dataStringSerializer)
 		{
 			_httpContext = httpContext;
 			_sessionSpecificCookieDataProviderSettings = sessionSpecificCookieDataProviderSettings;
 			_now = now;
 			_dataStringSerializer = dataStringSerializer;
-			_sessionAuthenticationModule = sessionAuthenticationModule;
 		}
 
 		public void StoreInCookie(SessionSpecificData data, bool isPersistent)
@@ -69,19 +68,11 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			ticket = makeTicket(ticket.Name, ticket.UserData, _now.LocalDateTime().AddHours(-1));
 			cookie.Value = encryptTicket(ticket);
 			setCookie(cookie);
-
-			RemoveAuthBridgeCookie();
 		}
 
 		public void RemoveAuthBridgeCookie()
 		{
-			var fedAuthCookieName = _sessionAuthenticationModule.CookieName;
-			if (_httpContext.Current().Request.Cookies[fedAuthCookieName] != null)
-			{
-				var fedAuthCookie = new HttpCookie(fedAuthCookieName) { Expires = _now.LocalDateTime().AddHours(-1) };
-				_httpContext.Current().Response.Cookies.Remove(fedAuthCookieName);
-				_httpContext.Current().Response.Cookies.Add(fedAuthCookie);
-			}
+			FederatedAuthentication.SessionAuthenticationModule.SignOut();
 		}
 
 		public void RemoveCookie()
