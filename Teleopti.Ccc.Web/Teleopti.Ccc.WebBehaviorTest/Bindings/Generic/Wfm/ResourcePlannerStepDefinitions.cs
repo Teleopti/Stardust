@@ -25,14 +25,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.AssertAnyContains(".wfm-card", toDate.ToString("yyyy-MM-dd"));
 		}
 
-
-
-		[Then(@"I should see '(.*)'")]
-		public void ThenIShouldSee(int days)
+		[Then(@"Planning period should have been scheduled")]
+		public void ThenPlanningPeriodShouldHaveBeenScheduled()
 		{
-			Browser.Interactions.AssertAnyContains("p", days +" " + UserTexts.Resources.AgentsSuccessfullyScheduled);
+			Browser.Interactions.AssertAnyContains("p", UserTexts.Resources.AgentsSuccessfullyScheduled);
 		}
-
+		
 		[When(@"I click schedule")]
 		public void WhenIClickSchedule()
 		{

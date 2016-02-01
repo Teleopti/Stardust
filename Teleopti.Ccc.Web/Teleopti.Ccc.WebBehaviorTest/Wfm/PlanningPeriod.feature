@@ -21,7 +21,7 @@ Scenario: schedule the next planning period
 	When I view Resource planner
 	And I open planning period
 	And  I click schedule
-	Then I should see '0'
+	Then Planning period should have been scheduled
 
 @Ignore
 Scenario: Publish the schedules for next planning period
