@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl;
 
@@ -22,13 +23,19 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 
 				using (new TimeoutScope(browserActivator, TimeSpan.FromDays(1)))
 				{
+					browserInteractions.AssertExists(".test-is-done .test-was-failing");
+
+					browserInteractions.AssertNotExists("body", ".test-was-failing");
+					browserInteractions.AssertExists(".test-is-done");
 				}
 			}
 		}
 
 		private static void doIntraday(IBrowserInteractions browserInteractions, string planningPeriodId)
 		{
-			
+			browserInteractions.GoTo(string.Concat(TestSiteConfigurationSetup.URL, "wfm/#/resourceplanner/optimize/", planningPeriodId));
+			browserInteractions.Click(".test-btn:enabled");
+			browserInteractions.AssertExists(".test-is-running");
 		}
 	}
 }
