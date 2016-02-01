@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly ISwapAndModifyServiceNew _swapAndModifyServiceNew;
-		private readonly IMessagePopulatingServiceBusSender _busSender;
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
 		
@@ -39,7 +38,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			IScheduleRepository scheduleRepository,
 			IScenarioRepository scenarioRepository,
 			ISwapAndModifyServiceNew swapAndModifyServiceNew,
-			IMessagePopulatingServiceBusSender busSender,
 			IDifferenceCollectionService<IPersistableScheduleData> differenceService, 
 			IScheduleDifferenceSaver scheduleDifferenceSaver)
 		{
@@ -48,7 +46,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			_scheduleRepository = scheduleRepository;
 			_scenarioRepository = scenarioRepository;
 			_swapAndModifyServiceNew = swapAndModifyServiceNew;
-			_busSender = busSender;
 			_differenceService = differenceService;
 			_scheduleDifferenceSaver = scheduleDifferenceSaver;
 		}
@@ -69,7 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			}
 
 			people.ForEach( person =>
-				   saveAndNotifyChanges(defaultScenario, scheduleDictionary, person, scheduleDateOnly, command.TrackedCommandInfo));
+				   saveScheduleDictionaryChanges(scheduleDictionary, person));
 
 			return new List<FailActionResult>();
 		}
@@ -96,15 +93,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 										   .ToArray();
 		}
 
-		private void saveAndNotifyChanges(IScenario scenario, IScheduleDictionary scheduleDictionary, IPerson person, DateOnly date, TrackedCommandInfo trackedCommandInfo)
+		private void saveScheduleDictionaryChanges(IScheduleDictionary scheduleDictionary, IPerson person)
 		{
 			var range = scheduleDictionary[person];
 			var diff = range.DifferenceSinceSnapshot(_differenceService);
-			var personAssignment = range.ScheduledDay(date).PersonAssignment();
-
-			//personAssignment.PopAllEvents();
 			_scheduleDifferenceSaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate)range);
-			//notifyScheduleChanged(personAssignment.Period, scenario.Id.Value, person.Id.Value, trackedCommandInfo);
 		}
 
 		private IEnumerable<FailActionResult> parseErrorResponses(IBusinessRuleResponse[] errorResponses)
@@ -114,21 +107,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				PersonName = _commonNameDescriptionSetting.BuildCommonNameDescription(r.Person),
 				Message = new List<string> {r.Message}
 			});
-		}
-
-		private void notifyScheduleChanged(DateTimePeriod period, Guid scenarioId, Guid personId, TrackedCommandInfo trackedCommandInfo)
-		{
-			var message = new ScheduleChangedEvent
-			{
-				StartDateTime = period.StartDateTime,
-				EndDateTime = period.EndDateTime,
-				Timestamp = DateTime.UtcNow,
-				ScenarioId = scenarioId,
-				PersonId = personId,
-				TrackId = trackedCommandInfo != null ? trackedCommandInfo.TrackId : Guid.Empty,
-				InitiatorId = trackedCommandInfo != null ? trackedCommandInfo.OperatedPersonId : Guid.Empty
-			};
-			_busSender.Send(message, true);
 		}
 	}
 }

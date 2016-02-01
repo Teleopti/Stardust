@@ -5,14 +5,12 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -30,8 +28,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		private IScheduleRepository _scheduleRepository;
 		private IScenarioRepository _scenarioRepository;
 		private ISwapAndModifyServiceNew _swapAndModifyServiceNew;
-		private IMessagePopulatingServiceBusSender _busSender;
-		private ICurrentUnitOfWork _currentUnitOfWork;
 		private IScheduleDifferenceSaver _scheduleDifferenceSaver;
 		private IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
 
@@ -67,12 +63,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			_scheduleRepository = new FakeScheduleRepository();
 			_swapAndModifyServiceNew = MockRepository.GenerateMock<ISwapAndModifyServiceNew>();
 
-			_currentUnitOfWork = new DummyCurrentUnitOfWork();
 			_scheduleDifferenceSaver = new FakeScheduleDifferenceSaver(_scheduleRepository);
 			_differenceService = new DifferenceEntityCollectionService<IPersistableScheduleData>();
-
-			_busSender = MockRepository.GenerateMock<IMessagePopulatingServiceBusSender>();
-			_busSender.Stub(x => x.Send(null, false)).IgnoreArguments();
 		}
 
 		[Test, Ignore]
@@ -83,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 				.IgnoreArguments();
 
 			_target = new SwapMainShiftForTwoPersonsCommandHandler(_commonNameDescriptionSetting, _personRepository,
-				_scheduleRepository, _scenarioRepository, _swapAndModifyServiceNew, _busSender, _differenceService, _scheduleDifferenceSaver);
+				_scheduleRepository, _scenarioRepository, _swapAndModifyServiceNew, _differenceService, _scheduleDifferenceSaver);
 
 			var result = _target.SwapShifts(new SwapMainShiftForTwoPersonsCommand
 			{
@@ -101,11 +93,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 				Arg<INewBusinessRuleCollection>.Matches(a => (a != null)),
 				Arg<IScheduleTagSetter>.Matches(a => (a != null))));
 			
-			_busSender.AssertWasCalled(
-				x => x.Send(Arg<ScheduleChangedEvent>.Matches(a => a.PersonId == personIdFrom), Arg<bool>.Matches(a => a == true)));
-			_busSender.AssertWasCalled(
-				x => x.Send(Arg<ScheduleChangedEvent>.Matches(a => a.PersonId == personIdTo), Arg<bool>.Matches(a => a == true)));
-
 			result.Count().Should().Be.EqualTo(0);
 		}
 
@@ -121,7 +108,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 				}).IgnoreArguments();
 
 			_target = new SwapMainShiftForTwoPersonsCommandHandler(_commonNameDescriptionSetting, _personRepository,
-				_scheduleRepository, _scenarioRepository, _swapAndModifyServiceNew, _busSender, _differenceService, _scheduleDifferenceSaver);
+				_scheduleRepository, _scenarioRepository, _swapAndModifyServiceNew, _differenceService, _scheduleDifferenceSaver);
 
 			var result = _target.SwapShifts(new SwapMainShiftForTwoPersonsCommand
 			{
