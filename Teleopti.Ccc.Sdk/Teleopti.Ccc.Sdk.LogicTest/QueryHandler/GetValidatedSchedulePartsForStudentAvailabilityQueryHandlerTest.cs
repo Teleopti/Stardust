@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			target = new GetValidatedSchedulePartsForStudentAvailabilityQueryHandler(unitOfWorkFactory, shiftCategoryRepository, activityRepository, personRepository, scheduleRepository, scenarioRepository, preferenceDayAssembler, studentAvailabilityDayAssembler, workShiftWorkTime);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test, SetCulture("sv-SE")]
 		public void ShouldGetValidatedSchedulePartsForStudentAvailability()
 		{
 			var date = new DateOnly(2012, 4, 30);
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"),Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test, SetCulture("sv-SE")]
 		public void ShouldGetValidatedSchedulePartsForStudentAvailabilityWithValidShiftBag()
 		{
 			var date = new DateOnly(2012, 4, 30);
