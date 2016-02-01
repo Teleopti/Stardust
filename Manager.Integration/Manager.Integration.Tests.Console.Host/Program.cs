@@ -158,6 +158,7 @@ namespace Manager.IntegrationTest.Console.Host
                 tasks.Add(nodeTask);
             }
 
+            Thread.Sleep(TimeSpan.FromSeconds(10)); //see if this helps TC
             foreach (var task in tasks)
             {
                 task.Start();
