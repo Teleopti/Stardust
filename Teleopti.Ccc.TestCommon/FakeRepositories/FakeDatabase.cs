@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
@@ -67,9 +68,26 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			var person = new Person { Name = new Name(name, "") };
 			person.SetId(id ?? Guid.NewGuid());
+			_persons.Has(person);
+
 			if (timeZone != null)
 				person.PermissionInformation.SetDefaultTimeZone(timeZone);
 
+			WithPeriod("2016-01-01", teamId);
+
+			if (terminalDate != null)
+				person.TerminatePerson(terminalDate.Date(), new PersonAccountUpdaterDummy());
+
+			return this;
+		}
+
+		public FakeDatabase WithPeriod(string startDate)
+		{
+			return WithPeriod(startDate, null);
+		}
+
+		public FakeDatabase WithPeriod(string startDate, Guid? teamId)
+		{
 			var team = new Team();
 			team.SetId(teamId ?? Guid.NewGuid());
 			_teams.Has(team);
@@ -86,14 +104,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			contractSchedule.SetId(Guid.NewGuid());
 			_contractSchedules.Has(contractSchedule);
 			var personContract = new PersonContract(contract, partTimePercentage, contractSchedule);
-			
-			person.AddPersonPeriod(new PersonPeriod("2016-01-01".Date(), personContract, team));
 
-			if (terminalDate != null)
-				person.TerminatePerson(terminalDate.Date(), new PersonAccountUpdaterDummy());
-			_persons.Has(person);
+			var person = _persons.LoadAll().Last();
+
+			person.AddPersonPeriod(new PersonPeriod(startDate.Date(), personContract, team));
+
 			return this;
 		}
-
 	}
 }
