@@ -560,7 +560,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse
 		[Given(@"I am an agent in a team that leaves on '(.*)'")]
 		public void GivenIAmAnAgentThatLeavesOn(DateTime date)
 		{
-			DataMaker.Me().Apply(new UserConfigurable {TerminalDate = date});
+			var role = new RoleConfigurable
+			{
+				Name = "Agent",
+				AccessToStudentAvailability = true
+			};
+			DataMaker.Data().Apply(role);
+			DataMaker.Me().Apply(new RoleForUser { Name = "Agent" });
+			DataMaker.Data().Apply(new UserConfigurable {TerminalDate = date});
 			DataMaker.Data().Apply(new SchedulePeriod());
 			DataMaker.Data().Apply(new PersonPeriod(DefaultTeam.Get()));
 			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
