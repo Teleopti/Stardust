@@ -15,7 +15,7 @@ namespace Manager.Integration.Test
 {
     [TestFixture]
     public class IntegrationTestsOneManagerAndManyNodes
-    {
+    { 
         private const int NumberOfNodesToStart = 1;
 
         private bool _startUpManagerAndNodeManually = false;
@@ -32,9 +32,9 @@ namespace Manager.Integration.Test
             XmlConfigurator.Configure();
 
 #if (DEBUG)
-            // Do nothing.
+    // Do nothing.
 #else
-            _clearDatabase= true;
+            _clearDatabase = true;
             _startUpManagerAndNodeManually = false;
 #endif
             XmlConfigurator.Configure();
@@ -46,12 +46,12 @@ namespace Manager.Integration.Test
 
             ManagerApiHelper = new ManagerApiHelper();
 
-            if (!_startUpManagerAndNodeManually)
+            if (_startUpManagerAndNodeManually)
             {
-         //       Logger.Info("Start to shut down all processes");
-        //        ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
-                
-        //        Thread.Sleep(TimeSpan.FromSeconds(20));
+                ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
+            }
+            else
+            {
                 StartManagerIntegrationConsoleHostProcess =
                     ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
             }
@@ -101,7 +101,7 @@ namespace Manager.Integration.Test
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
 
-            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(TimeSpan.FromMinutes(2));
             
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.CanceledStatus ||
                                                                                         pair.Value == StatusConstants.DeletedStatus));

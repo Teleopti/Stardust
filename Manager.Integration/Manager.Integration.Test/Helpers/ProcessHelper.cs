@@ -40,7 +40,6 @@ namespace Manager.Integration.Test.Helpers
                 }
                 catch (Exception)
                 {
-                    Logger.Error("Error in CloseProcess ");
                 }
             }
         }
