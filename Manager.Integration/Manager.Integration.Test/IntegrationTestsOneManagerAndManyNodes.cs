@@ -75,8 +75,6 @@ namespace Manager.Integration.Test
             foreach (var jobRequestModel in requests)
             {
                 tasks.Add(ManagerApiHelper.CreateManagerDoThisTask(jobRequestModel));
-
-              //  Logger.Debug("Created task for add job :" + jobRequestModel.Name);
             }
 
             ManagerApiHelper.CheckJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(requests.Count,
@@ -102,9 +100,10 @@ namespace Manager.Integration.Test
                              task => { task.Start(); });
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(TimeSpan.FromMinutes(2));
-            
-            Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.CanceledStatus ||
-                                                                                        pair.Value == StatusConstants.DeletedStatus));
+
+            //Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.CanceledStatus ||
+            //                                                                            pair.Value == StatusConstants.DeletedStatus));
+            Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
 
             ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
         }
