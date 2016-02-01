@@ -169,34 +169,27 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		delete preference.SelectedTemplate;
 		delete preference.NewTemplateName;
 
-		$('#Preference-body-inner .ui-selected')
-			.each(function (index, cell) {
-				var date = $(cell).data('mytime-date');
-				var promise = preferencesAndScheduleViewModel.DayViewModels[date].SetPreference(preference, validationErrorCallback);
-				promises.push(promise);
+		$('#Preference-body-inner .ui-selected').each(function(index, cell) {
+			var date = $(cell).data('mytime-date');
+			var promise = preferencesAndScheduleViewModel.DayViewModels[date].SetPreference(preference, validationErrorCallback);
+			promises.push(promise);
+		});
+		if (promises.length !== 0) {
+			$.when.apply(null, promises).done(function() {
+				periodFeedbackViewModel.LoadFeedback();
+				if (toggleShowNightViolation()) {
+					loadNeighborFeedback();
+					periodFeedbackViewModel.PossibleNightRestViolations();
+				}
 			});
-		if (promises.length != 0) {
-			$.when.apply(null, promises)
-				.done(function () {
-					periodFeedbackViewModel.LoadFeedback();
-					if (toggleShowNightViolation()) {
-						loadNeighborFeedback();
-						periodFeedbackViewModel.PossibleNightRestViolations();
-					}
-				});
 		}
-
 	}
 
-
-
 	function loadNeighborFeedback() {
-
 		var dates = [];
 		$("#Preference-body-inner").find('li[data-mytime-date]').each(function (i, e) {
 			dates.push($(e).data('mytime-date'));
 		});
-
 
 		$('#Preference-body-inner .ui-selected').each(function (index, ele) {
 			var date = $(ele).data('mytime-date');

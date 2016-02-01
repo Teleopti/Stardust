@@ -74,15 +74,22 @@
 					</ul>
 				</li>
 			}
-			<li class="col-xs-12 col-sm-4"><a href="#" data-bind="click: deletePreference"><i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove</a></li>
+			<li class="col-xs-12 col-sm-4">
+				<a href="#" data-bind="click: deletePreference">
+					<i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove
+				</a>
+			</li>
 
 			<!-- ko if: mustHaveEnabled -->
-
 			<li class="col-xs-12 col-sm-4">
 				<div class="input-group">
 					<div class="btn-group" role="group">
 						<div class="btn-group" role="group">
-							<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class=" glyphicon glyphicon-heart"></i>&nbsp;<span>@Resources.MustHave</span>&nbsp;<span data-bind="text: currentMustHaves" class="musthave-current"></span>&nbsp;(<span data-bind="	text: maxMustHave" class="musthave-max"></span>)
+							<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+								<i class=" glyphicon glyphicon-heart"></i>&nbsp;
+								<span>@Resources.MustHave</span>&nbsp;
+								<span data-bind="text: currentMustHaves" class="musthave-current"></span>&nbsp;
+								(<span data-bind="	text: maxMustHave" class="musthave-max"></span>)
 								<span class="caret"></span>
 							</button> 
 							<ul class="dropdown-menu" role="menu">
@@ -94,7 +101,6 @@
 
 				</div>
 			</li>
-
 			<!-- /ko -->
 		</ul>
 	</div>
@@ -210,31 +216,35 @@
 						<li class="relative @(day.InPeriod ? "inperiod" : "non-editable")" data-mytime-date="@date" data-mytime-editable="@day.Editable" data-bind="css: StyleClassName, css: { editable: Editable, 'non-editable': !Editable(), feedback: Feedback }">
 							<div class="relative">
 								<div class="day-header">
-									<span class="day-header-left badge day-header-text @(day.Header.DayDescription == "" ? "hide" : "floatleft")">@day.Header.DayDescription</span><span class="floatright day-header-right badge day-header-text">@day.Header.DayNumber</span>
+									<span class="day-header-left badge day-header-text @(day.Header.DayDescription == "" ? "hide" : "floatleft")">@day.Header.DayDescription</span>
+									<span class="floatright day-header-right badge day-header-text">@day.Header.DayNumber</span>
 								</div>
 								<div class="day-content">
 									<figure class="cover-me" data-bind="visible: IsLoading"><img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." /></figure>
+									
 									<!-- ko if: HasAjaxError -->
-									<h2 class="error" data-bind="text: AjaxError"></h2>
+									<div class="error" data-bind="text: AjaxError" style="font-weight: bold;"></div>
 									<!-- /ko -->
 
 									<div class="preference">
-										<span class="displayinline-block">
-											<div class="preference-indicator" />
+										<div class="displayinline-block">
+											<!--ko if: MustHave -->
 											<div class="preference-indicator">
 												<span class="preference-must-have" data-bind="css: {'glyphicon glyphicon-heart': MustHave}"></span>
 											</div>
-										    <div class="label preference-text" data-bind="text: Preference, attr: { title: Preference }, style: {color: TextColor(), backgroundColor: Color(), opacity: Editable() ? 1 : 0.2 }, css: { hide: !HasPreferenceCategory() }" />
-										    <!--ko if:NightRestViolationSwitch -->
-										    <div class="night-rest-violation" ></div>
 											<!--/ko-->
+											<div class="label preference-text" data-bind="text: Preference, attr: { title: Preference }, style: {color: TextColor(), backgroundColor: Color(), opacity: Editable() ? 1 : 0.2 }, css: { hide: !HasPreferenceCategory() }"></div>
+											<!--ko if: NightRestViolationSwitch -->
+											<div class="night-rest-violation"></div>
+											<!--/ko-->
+											<!-- ko if: tooltipText -->
 											<div class="preference-indicator">
-												<!-- ko if: tooltipText -->
 												<div class="extended-indication" data-bind="tooltip: { title: tooltipText, html: true }">&raquo;</div>
-												<!-- /ko -->
 											</div>
+											<!-- /ko -->
+
+											<!-- ko if: HasPersonalShiftsOrMeetings -->
 											<div class="preference-indicator">
-												<!-- ko if: HasPersonalShiftsOrMeetings -->
 												<i class="meeting-icon glyphicon glyphicon-user">
 													<!--<i class="glyphicon glyphicon-user ml10"></i>-->
 												</i>
@@ -244,19 +254,19 @@
 													<table>
 														<thead>@Resources.Meetings</thead>
 														<tbody data-bind="foreach: Meetings">
-															<tr>
-																<td data-bind="text: TimeSpan"></td>
-															</tr>
-															<tr>
-																<td>
-																	<div class="preference-tooltip-subject">
-																		<label class="preference-tooltip-font" data-bind="text : Subject"></label>
-																	</div>
-																</td>
-																<!-- ko if: IsOptional -->
-																<td>(@Resources.Optional)</td>
-																<!-- /ko -->
-															</tr>
+														<tr>
+															<td data-bind="text: TimeSpan"></td>
+														</tr>
+														<tr>
+															<td>
+																<div class="preference-tooltip-subject">
+																	<label class="preference-tooltip-font" data-bind="text : Subject"></label>
+																</div>
+															</td>
+															<!-- ko if: IsOptional -->
+															<td>(@Resources.Optional)</td>
+															<!-- /ko -->
+														</tr>
 														</tbody>
 													</table>
 													<!-- /ko -->
@@ -264,18 +274,18 @@
 													<table>
 														<thead>@Resources.PersonalShift</thead>
 														<tbody data-bind="foreach: PersonalShifts">
-															<tr>
-																<td data-bind="text: Subject"></td>
-																<td>:</td>
-																<td data-bind="text: TimeSpan"></td>
-															</tr>
+														<tr>
+															<td data-bind="text: Subject"></td>
+															<td>:</td>
+															<td data-bind="text: TimeSpan"></td>
+														</tr>
 														</tbody>
 													</table>
 													<!-- /ko -->
 												</div>
-												<!-- /ko -->
 											</div>
-										</span>
+											<!-- /ko -->
+										</div>
 									</div>
 
 									<!-- ko if: HasDayOff -->

@@ -262,13 +262,9 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 				nightRestViolationObj.hoursBetweenTwoDays = self.RestTimeToNextDay();
 				nightRestViolationObjs.push(nightRestViolationObj);
 			}
-			
 		}
 
 		return nightRestViolationObjs;
-		
-		
-
 	};
 
 	this.SetPreference = function (value, validationErrorCallback) {
@@ -293,7 +289,9 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 			success: self.ReadPreference,
 			complete: function () {
 				deferred.resolve();
-				self.LoadFeedback();
+				if (!self.HasAjaxError()) {
+					self.LoadFeedback();
+				}
 			}
 		});
 		return deferred.promise();
