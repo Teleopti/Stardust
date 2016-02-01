@@ -2402,6 +2402,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Anonymous.
+        /// </summary>
+        public static string Anonymous {
+            get {
+                return ResourceManager.GetString("Anonymous", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Anonymous Bulletin Board.
         /// </summary>
         public static string AnonymousBulletinBoardTrading {
@@ -12550,6 +12559,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string IntraIntervalOptimization {
             get {
                 return ResourceManager.GetString("IntraIntervalOptimization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Intra optimize.
+        /// </summary>
+        public static string IntraOptimize {
+            get {
+                return ResourceManager.GetString("IntraOptimize", resourceCulture);
             }
         }
         
@@ -26067,6 +26085,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShowEditor {
             get {
                 return ResourceManager.GetString("ShowEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show errors.
+        /// </summary>
+        public static string ShowErrors {
+            get {
+                return ResourceManager.GetString("ShowErrors", resourceCulture);
             }
         }
         

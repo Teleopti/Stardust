@@ -14086,4 +14086,8 @@ Help us improve your experience by sending an error report</value>
     <value>Show errors</value>
     <comment>describing a button to display all availible errors</comment>
   </data>
+  <data name="Anonymous" xml:space="preserve">
+    <value>Anonymous</value>
+    <comment>The display name for anonymous agent</comment>
+  </data>
 </root>

@@ -421,7 +421,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function (ajax) {
 		self.possibleTradeSchedules.removeAll();
 		var mappedPersonsSchedule = ko.utils.arrayMap(possibleTradeSchedules, function (personSchedule) {
 			var mappedLayers = [];
-			if (personSchedule != null && personSchedule.ScheduleLayers != null) {
+			if (personSchedule != null && personSchedule.ScheduleLayers != null && personSchedule.ScheduleLayers.length >0) {
 				var layers = personSchedule.ScheduleLayers;
 				var scheduleStartTime = moment(layers[0].Start);
 				var scheduleEndTime = moment(layers[layers.length - 1].End);

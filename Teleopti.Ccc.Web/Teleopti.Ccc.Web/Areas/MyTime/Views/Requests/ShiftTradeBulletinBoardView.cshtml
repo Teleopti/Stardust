@@ -107,7 +107,7 @@
 				</tbody>
 				<tbody data-bind="foreach: possibleTradeSchedules">
 					<tr id="agent-in-bulletin-board" class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible, click: $parent.chooseAgent, hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
-						<td class="shift-trade-agent-name floatleft" data-bind="text: $data.agentName"></td>
+						<td class="shift-trade-agent-name floatleft" data-bind="text: $data.agentName || '(@Resources.Anonymous)'"></td>
 						<td class="shift-trade-possible-trade-schedule">
 							<div data-bind="foreach: $data.layers">
 								<!--ko if:!$parent.isDayOff-->
@@ -127,6 +127,14 @@
 								<div class="dayoff" data-bind="text: dayOffName"></div>
 							</div>
 							<!--/ko-->
+
+							<!--ko if:!isDayOff && $data.layers.length == 0 -->
+							<div class="shift-trade-layer-container floatleft">
+								<div class="empty" data-bind="tooltip: { title: '@Resources.OptionEmptyDay', html: true, container: '.tooltipContainer'}"></div>
+							</div>
+							<!--/ko-->
+
+
 						</td>
 					</tr>
 				</tbody>
