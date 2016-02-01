@@ -1558,12 +1558,9 @@
     <Content Include="WFM\vendor\d3\d3.min.js" />
     <Content Include="WFM\vendor\d3\nv.d3.css" />
     <Content Include="WFM\vendor\d3\nv.d3.js" />
-    <Content Include="WFM\vendor\ng-mfb\mfb.css.map" />
-    <Content Include="WFM\css\_mfb.scss" />
     <Content Include="WFM\css\_intraday.scss" />
     <None Include="WFM\css\_layout.scss" />
     <None Include="WFM\css\_outbound.scss" />
-    <Content Include="WFM\vendor\ng-mfb\mfb.css" />
     <Content Include="WFM\Gruntfile.js" />
     <Content Include="WFM\js\forecasting\forecasting.start.controller.js" />
     <Content Include="WFM\js\forecasting\forecasting.service.js" />
@@ -1577,7 +1574,6 @@
     <Content Include="WFM\js\resourceplanner\planningperiods.html" />
     <Content Include="WFM\js\resourceplanner\planningperiods-modal.html" />
     <Content Include="WFM\js\resourceplanner\planningperiods.service.js" />
-    <Content Include="WFM\vendor\ng-mfb\mfb.directive.js" />
     <Content Include="WFM\js\seatManagement\seatmap.controller.js" />
     <Content Include="WFM\js\rta\rta.controller.js" />
     <Content Include="WFM\js\people\people.start.controller.js" />
@@ -2193,7 +2189,6 @@
     </Content>
     <None Include="Properties\PublishProfiles\Local iis.pubxml" />
     <Content Include="WFM\css\style.scss" />
-    <Content Include="WFM\vendor\ng-mfb\mfb.scss" />
     <Content Include="WFM\vendor\MaterialDesignIcons\fonts\materialdesignicons-webfont.eot" />
     <Content Include="WFM\vendor\MaterialDesignIcons\fonts\materialdesignicons-webfont.ttf" />
     <Content Include="WFM\vendor\MaterialDesignIcons\fonts\materialdesignicons-webfont.woff" />

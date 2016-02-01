@@ -128,7 +128,6 @@
 				'vendor/angular-growl.js',
 				'vendor/fabricjs/fabric.min.js',
 				'vendor/fabricjs/fabricjs_viewport.js',
-				'vendor/ng-mfb/mfb.directive.js',
 				'vendor/ng-image-input-with-preview/ng-image-input-with-preview.js',
 				'vendor/d3/d3.min.js',
 				'vendor/c3/c3.min.js',
@@ -139,7 +138,7 @@
 				'../Content/signalr/jquery.signalR-2.1.2.js',
 				'../Content/signalr/broker-hubs.js'
 				],
-				dest: 'dist/modules.js',
+				dest: 'dist/modules.js'
 		    },
 			distCss: {
 				src: [
@@ -149,7 +148,6 @@
 					'node_modules/angular-ui-grid/ui-grid.min.css',
 					'node_modules/angular-material/angular-material.min.css',
 					'vendor/c3/c3.min.css',
-					'vendor/ng-mfb/mfb.css',
 					'dist/angular-gant.min.css',
 					'node_modules/teleopti-styleguide/css/main.min.css'
 				],
