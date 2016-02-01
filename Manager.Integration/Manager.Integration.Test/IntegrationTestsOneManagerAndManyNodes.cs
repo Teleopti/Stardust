@@ -38,7 +38,6 @@ namespace Manager.Integration.Test
 #endif
             XmlConfigurator.Configure();
 
-            Logger.Info("_clearDatabase = " + _clearDatabase + "    " + "_startUpManagerAndNodeManually = " + _startUpManagerAndNodeManually);
             if (_clearDatabase)
             {
                 DatabaseHelper.TryClearDatabase();
@@ -60,9 +59,9 @@ namespace Manager.Integration.Test
         [Test]
         public void Create5RequestShouldReturnBothCancelAndDeleteStatuses()
         {
-            Logger.Info("Starting test Create5RequestShouldReturnBothCancelAndDeleteStatuses()");
-
+           
             JobHelper.GiveNodesTimeToInitialize();
+            Logger.Info("Starting test Create5RequestShouldReturnBothCancelAndDeleteStatuses()");
 
             List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(5);
 
@@ -74,7 +73,7 @@ namespace Manager.Integration.Test
             {
                 tasks.Add(ManagerApiHelper.CreateManagerDoThisTask(jobRequestModel));
 
-                Logger.Debug("Created task for add job :" + jobRequestModel.Name);
+              //  Logger.Debug("Created task for add job :" + jobRequestModel.Name);
             }
 
             ManagerApiHelper.CheckJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(requests.Count,

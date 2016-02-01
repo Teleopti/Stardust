@@ -59,6 +59,7 @@ namespace Stardust.Node.Timers
         {
             try
             {
+                Logger.Info("Trying to send init to manager");
                 var httpResponseMessage =
                     await TrySendNodeStartUpToManager(NodeConfiguration.BaseAddress);
 
@@ -84,10 +85,7 @@ namespace Stardust.Node.Timers
 
             catch 
             {
-                if (Logger.IsErrorEnabled)
-                {
                     Logger.Error(WhoAmI + ": Node start up notification to manager failed.");
-                }
             }
         }
     }
