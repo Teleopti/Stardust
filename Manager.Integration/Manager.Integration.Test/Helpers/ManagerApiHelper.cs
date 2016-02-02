@@ -61,9 +61,9 @@ namespace Manager.Integration.Test.Helpers
                         CheckJobHistoryStatusTimer.AddOrUpdateGuidStatus(jobId,
                                                                          null);
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        Logger.Error("ERROR: ManagerApiHelper CreateManagerDoThisTask problem with Post Async");
+                        Logger.Error("ERROR: ManagerApiHelper CreateManagerDoThisTask problem with Post Async" + ex);
                     }
                 }
             });

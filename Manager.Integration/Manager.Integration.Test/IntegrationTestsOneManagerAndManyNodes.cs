@@ -115,7 +115,7 @@ namespace Manager.Integration.Test
         [Test]
         public void JobShouldHaveStatusFailedIfFailed()
         {
-            JobHelper.GiveNodesTimeToInitialize(20);
+            JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateFailingJobParamsRequests(1);
 
@@ -223,7 +223,7 @@ namespace Manager.Integration.Test
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
 
-            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait();            
+            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(1);            
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
             
