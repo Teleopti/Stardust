@@ -73,6 +73,17 @@ namespace Stardust.Node.Workers
 
         private bool SendNodeStartUpNotificationSucceded { get; set; }
 
+        public bool TryCloseDown()
+        {
+            NodeStartUpNotificationToManagerTimer.Stop();
+            PingToManagerTimer.Stop();            
+            TrySendJobDoneStatusToManagerTimer.Stop();
+            TrySendJobCanceledStatusToManagerTimer.Stop();
+            TrySendJobFaultedStatusToManagerTimer.Stop();
+
+            return true;
+        }
+
         public string WhoamI { get; private set; }
 
         public CancellationTokenSource CancellationTokenSource { get; set; }

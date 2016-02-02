@@ -1,19 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using log4net;
 using log4net.Config;
 using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
-using Manager.Integration.Test.Properties;
 using Manager.Integration.Test.Timers;
 using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
     [TestFixture]
+    [Ignore]
     public class IntegrationTestsOneManagerAndZeroNodes
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndZeroNodes));
@@ -28,14 +27,12 @@ namespace Manager.Integration.Test
         [TestFixtureSetUp]
         public void TextFixtureSetup()
         {
-
 #if (DEBUG)
             // Do nothing.
 #else
             _clearDatabase= true;
             _startUpManagerAndNodeManually = false;
 #endif
-
             XmlConfigurator.Configure();
 
             if (!_startUpManagerAndNodeManually)
@@ -61,17 +58,6 @@ namespace Manager.Integration.Test
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
         [Test]
-        [Ignore]
-        public void ShouldBeAbleToPingManager()
-        {
-            Ping pingSender = new Ping();
-            PingReply reply = pingSender.Send(Settings.Default.ManagerLocationUri);
-
-            Assert.IsTrue(reply.Status == IPStatus.Success);
-        }
-
-        [Test]
-        [Ignore]
         public void JobShouldJustBeQueuedIfNoNodes()
         {
             Logger.Info("Starting test JobShouldJustBeQueuedIfNoNodes()");

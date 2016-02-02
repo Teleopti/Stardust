@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Security.Policy;
+using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using log4net.Config;
@@ -28,6 +30,40 @@ namespace Manager.IntegrationTest.Console.Host
 
         public static FileInfo CopiedManagerConfigurationFile { get; set; }
 
+        [DllImport("Kernel32")]
+        public static extern bool SetConsoleCtrlHandler(HandlerRoutine handler,
+                                                        bool add);
+
+        // A delegate type to be used as the handler routine 
+        // for SetConsoleCtrlHandler.
+        public delegate bool HandlerRoutine(CtrlTypes ctrlType);
+
+        // An enumerated type for the control messages
+        // sent to the handler routine.
+        public enum CtrlTypes
+        {
+            CtrlCEvent = 0,
+            CtrlBreakEvent,
+            CtrlCloseEvent,
+            CtrlLogoffEvent = 5,
+            CtrlShutdownEvent
+        }
+
+        private static bool ConsoleCtrlCheck(CtrlTypes ctrlType)
+        {
+            if (ctrlType == CtrlTypes.CtrlCloseEvent ||
+                ctrlType == CtrlTypes.CtrlShutdownEvent)
+            {
+                foreach (var appDomain in AppDomains.Values)
+                {
+                    AppDomain.Unload(appDomain);
+                }
+
+                return true;
+            }
+
+            return false;
+        }
 
         private static string AddEndingSlash(string path)
         {
@@ -47,15 +83,26 @@ namespace Manager.IntegrationTest.Console.Host
         public static void AddOrUpdateAppDomains(string key,
                                                  AppDomain value)
         {
-            AppDomain appdomain = AppDomains.AddOrUpdate(key, value,
-                                                         (name, val) => value);
+            AppDomain appdomain = AppDomains.AddOrUpdate(key,
+                                                         value,
+                                                         (name,
+                                                          val) => value);
         }
 
         private static void Main(string[] args)
-        {            
+        {
+            SetConsoleCtrlHandler(ConsoleCtrlCheck,
+                                  true);
+
+            System.Console.CancelKeyPress += Console_CancelKeyPress;
+
+            AppDomain.CurrentDomain.DomainUnload += CurrentDomainOnDomainUnload;
+
             XmlConfigurator.Configure();
 
             AppDomains = new ConcurrentDictionary<string, AppDomain>();
+
+            Evidence adevidence = AppDomain.CurrentDomain.Evidence;
 
             Logger.Info("Manager.IntegrationTest.Console.Host.Main started.");
 
@@ -89,13 +136,14 @@ namespace Manager.IntegrationTest.Console.Host
                 };
 
                 AppDomain managerAppDomain = AppDomain.CreateDomain(managerAppDomainSetup.ApplicationName,
-                                                                    null,
+                                                                    adevidence,
                                                                     managerAppDomainSetup);
-                managerAppDomain.ExecuteAssembly(managerAppDomainSetup.ApplicationBase +
-                                                 managerAppDomainSetup.ApplicationName);
 
                 AddOrUpdateAppDomains("Manager",
                                       managerAppDomain);
+
+                managerAppDomain.ExecuteAssembly(managerAppDomainSetup.ApplicationBase +
+                                                 managerAppDomainSetup.ApplicationName);
             });
 
             tasks.Add(managerTask);
@@ -159,20 +207,20 @@ namespace Manager.IntegrationTest.Console.Host
                         ApplicationBase = directoryNodeAssemblyLocationFullPath.FullName,
                         ApplicationName = Settings.Default.NodeAssemblyName,
                         ShadowCopyFiles = "true",
-                        ConfigurationFile = nodeconfigurationFile.Value.FullName
+                        ConfigurationFile = nodeconfigurationFile.Value.FullName,
                     };
 
                     var nodeAppDomain = AppDomain.CreateDomain(nodeconfigurationFile.Key,
-                                                               null,
+                                                               adevidence,
                                                                nodeAppDomainSetup);
+
+                    AddOrUpdateAppDomains(nodeconfigurationFile.Value.Name,
+                                          nodeAppDomain);
 
                     var assemblyToExecute =
                         nodeAppDomainSetup.ApplicationBase + nodeAppDomainSetup.ApplicationName;
 
                     nodeAppDomain.ExecuteAssembly(assemblyToExecute);
-
-                    AddOrUpdateAppDomains(nodeconfigurationFile.Value.Name, nodeAppDomain);
-
                 });
 
                 tasks.Add(nodeTask);
@@ -183,14 +231,32 @@ namespace Manager.IntegrationTest.Console.Host
                 task.Start();
             }
 
-            System.Console.Read();
+            QuitEvent.WaitOne();
 
-            //foreach (var appDomain in AppDomains.Values)
-            //{
-            //    AppDomain.Unload(appDomain);
-            //}
+            Logger.Info("Manager.IntegrationTest.Console.Host.Main unload app domains.");
 
-            Logger.Info("Manager.IntegrationTest.Console.Host.Main stopped.");
+            foreach (var appDomain in AppDomains.Values)
+            {
+                AppDomain.Unload(appDomain);
+            }
+        }
+
+        private static void CurrentDomainOnDomainUnload(object sender,
+                                                        EventArgs eventArgs)
+        {
+            Logger.Info("Manager.IntegrationTest.Console.Host.CurrentDomainOnDomainUnload.");
+
+            QuitEvent.Set();
+        }
+
+        private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
+
+        private static void Console_CancelKeyPress(object sender,
+                                                   ConsoleCancelEventArgs e)
+        {
+            QuitEvent.Set();
+
+            e.Cancel = true;
         }
 
         public static FileInfo CreateNodeConfigFile(FileInfo nodeConfigurationFile,

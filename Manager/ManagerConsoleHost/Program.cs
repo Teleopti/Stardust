@@ -15,6 +15,7 @@ namespace ManagerConsoleHost
 
         private static void Main(string[] args)
         {
+            AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
             WhoAmI = "[MANAGER, " + Environment.MachineName.ToUpper() + "]";
 
             XmlConfigurator.Configure();
@@ -26,9 +27,23 @@ namespace ManagerConsoleHost
             var config = new ManagerConfiguration
             {
                 BaseAdress = ConfigurationManager.AppSettings["baseAddress"],
-                ConnectionString = ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString
+                ConnectionString = 
+                    ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString
             };
-            new ManagerStarter().Start(config);
+
+            _managerStarter = new ManagerStarter();
+
+            _managerStarter.Start(config);
+        }
+
+
+        private static ManagerStarter _managerStarter;
+
+        private static void CurrentDomain_DomainUnload(object sender, EventArgs e)
+        {
+            Console.WriteLine("Manager console host CurrentDomain_DomainUnload");
+
+            _managerStarter.Stop();
         }
 
         private static void CurrentDomain_UnhandledException(object sender,

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
 using Autofac;
@@ -14,7 +15,15 @@ namespace Stardust.Manager
 	public class ManagerStarter
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ManagerStarter));
-		private string WhoAmI;
+
+        private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
+
+	    public void Stop()
+	    {
+	        QuitEvent.Set();
+	    }
+
+        private string WhoAmI;
 		public void Start(ManagerConfiguration managerConfiguration)
 		{
 			WhoAmI = "[MANAGER, " + Environment.MachineName.ToUpper() + "]";
@@ -56,7 +65,7 @@ namespace Stardust.Manager
             {
 				Logger.Info(WhoAmI + ": Started listening on port : " + managerConfiguration.BaseAdress);
 
-				Console.ReadLine();
+                QuitEvent.WaitOne();
 			}
 		}
 	}

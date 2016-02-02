@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using log4net.Config;
@@ -69,7 +67,7 @@ namespace Manager.Integration.Test
 
         [Test]
         public void Create5RequestShouldReturnBothCancelAndDeleteStatuses()
-        {           
+        {
             JobHelper.GiveNodesTimeToInitialize();
 
             Logger.Info("Starting test : Create5RequestShouldReturnBothCancelAndDeleteStatuses");
@@ -108,9 +106,9 @@ namespace Manager.Integration.Test
                              task => { task.Start(); });
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait();
-            
+
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.CanceledStatus ||
-                                                                                        pair.Value == StatusConstants.DeletedStatus));            
+                                                                                        pair.Value == StatusConstants.DeletedStatus));
         }
 
         [Test]
@@ -137,7 +135,6 @@ namespace Manager.Integration.Test
                                                                                          StatusConstants.DeletedStatus,
                                                                                          StatusConstants.FailedStatus,
                                                                                          StatusConstants.CanceledStatus);
-
             ManagerApiHelper.CheckJobHistoryStatusTimer.Start();
 
             Parallel.ForEach(tasks,
@@ -193,14 +190,14 @@ namespace Manager.Integration.Test
                              task => { task.Start(); });
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
-            
+
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
         }
 
-        [Test]        
+        [Test]
         public void ShouldBeAbleToCreate5SuccessJobRequest()
         {
-            Logger.Info("Starting test ShouldBeAbleToCreate5SuccessJobRequest()");
+            Logger.Info("Starting test : ShouldBeAbleToCreate5SuccessJobRequest");
 
             JobHelper.GiveNodesTimeToInitialize();
 
@@ -227,7 +224,7 @@ namespace Manager.Integration.Test
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
 
-            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait();            
+            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait();
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
         }

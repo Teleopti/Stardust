@@ -8,8 +8,9 @@ namespace Stardust.Node.Interfaces
 {
     public interface IWorkerWrapper
     {
-        string WhoamI { get; }
+        bool TryCloseDown();
 
+        string WhoamI { get; }
         CancellationTokenSource CancellationTokenSource { get; set; }
         bool IsCancellationRequested { get; }
         bool IsTaskExecuting { get; }

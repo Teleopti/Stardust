@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
 using Autofac;
@@ -20,6 +21,13 @@ namespace Stardust.Node
         private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeStarter));
 
         private string WhoAmI { get; set; }
+
+        private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
+
+        public void Stop()
+        {
+            QuitEvent.Set();
+        }
 
         public void Start(INodeConfiguration nodeConfiguration, IContainer container)
         {
@@ -80,7 +88,7 @@ namespace Stardust.Node
                 Logger.Info(WhoAmI + ": Node started on machine.");
                 Logger.Info(WhoAmI + ": Listening on port " + nodeConfiguration.BaseAddress);
 
-                Console.ReadLine();
+                QuitEvent.WaitOne();
             }
         }
 
