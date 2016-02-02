@@ -68,7 +68,7 @@ namespace Manager.Integration.Test
 
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
-        [Test]
+        [Test][Ignore]
         public void JobShouldJustBeQueuedIfNoNodes()
         {
             JobHelper.GiveNodesTimeToInitialize();

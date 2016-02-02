@@ -41,7 +41,6 @@ namespace Manager.Integration.Test.Helpers
                     {
                         process.Kill();
                     }
-                    
                 }
                 catch (Exception)
                 {
@@ -52,17 +51,6 @@ namespace Manager.Integration.Test.Helpers
 
         public static Process StartManagerIntegrationConsoleHostProcess(int numberOfNodesToStart)
         {
-            var consoleHostname = new FileInfo(Settings.Default.ManagerIntegrationConsoleHostAssemblyName);
-
-            var fileNameWithNoExtension = consoleHostname.Name.Replace(consoleHostname.Extension,
-                string.Empty);
-            Process[] processes = Process.GetProcessesByName(fileNameWithNoExtension);
-
-            if (processes.Any())
-            {
-                Logger.Error("Processes not closed before new started!");
-            }
-
             var managerIntegrationConsoleHostLocation =
                 new DirectoryInfo(Settings.Default.ManagerIntegrationConsoleHostLocation + _buildMode);
 
