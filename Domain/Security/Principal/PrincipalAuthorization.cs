@@ -37,12 +37,13 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		private bool CheckPermitted(string functionPath, Func<IAuthorizeAvailableData, bool> availableDataCheck)
 		{
-			if (_teleoptiPrincipal.Current() == null) return false;
+			var teleoptiPrincipal = _teleoptiPrincipal.Current();
+			if (teleoptiPrincipal == null) return false;
 			var claimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/",
 				functionPath);
 			var dataClaimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
 				"/AvailableData");
-			foreach (var claimSet in _teleoptiPrincipal.Current().ClaimSets)
+			foreach (var claimSet in teleoptiPrincipal.ClaimSets)
 			{
 				if (claimSet.FindClaims(claimType, Rights.PossessProperty).Any())
 				{
@@ -89,8 +90,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
         {
             return CheckPermitted(functionPath, a => true); //Ignoring available data!
         }
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
+		
 		public IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person)
         {
             var owningPersonPeriods = _teleoptiPrincipal.Current().Organisation.Periods();
@@ -162,8 +162,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
         {
 			return specification.IsSatisfiedBy(_teleoptiPrincipal.Current().ClaimSets);
         }
-
-        //new ExternalApplicationFunctionSpecification(DefinedForeignSourceNames.SourceMatrix)
+		
 		public IEnumerable<IApplicationFunction> GrantedFunctionsBySpecification(ISpecification<IApplicationFunction> specification)
         {
 			return GrantedFunctions().FilterBySpecification(specification);

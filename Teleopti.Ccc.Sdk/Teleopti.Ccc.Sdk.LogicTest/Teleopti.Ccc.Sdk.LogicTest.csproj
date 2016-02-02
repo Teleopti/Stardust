@@ -241,8 +241,11 @@
     <Compile Include="OldTests\TeamDtoTest.cs" />
     <Compile Include="Payroll\PayrollFormatHandlerTest.cs" />
     <Compile Include="Payroll\PayrollResultServiceTest.cs" />
+    <Compile Include="QueryHandler\FakeTenantLogonDataManager.cs" />
     <Compile Include="QueryHandler\GetAllRolesQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetAllScheduleTagsQueryHandlerTest.cs" />
+    <Compile Include="QueryHandler\GetGroupsForGroupPageForDateRangeQueryHandlerTest.cs" />
+    <Compile Include="QueryHandler\GetPeopleByGroupPageGroudForDateRangeQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetPeopleOptionalValuesByPersonIdQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetMultiplicatorDefinitionSetOvertimeQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetMultiplicatorDefinitionSetShiftAllowanceQueryHandlerTest.cs" />

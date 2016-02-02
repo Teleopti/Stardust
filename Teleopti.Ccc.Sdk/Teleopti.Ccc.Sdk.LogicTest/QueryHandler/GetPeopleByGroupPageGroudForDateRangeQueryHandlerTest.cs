@@ -15,16 +15,16 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 {
 	[TestFixture]
-	public class GetPeopleByGroupPageGroupQueryHandlerTest
+	public class GetPeopleByGroupPageGroudForDateRangeQueryHandlerTest
 	{
 		[Test]
-		public void ShouldGetPeopleByGroupInGroupPage()
+		public void ShouldGetPeopleByGroupForDateRangeInGroupPage()
 		{
 			var groupPageGroupId = Guid.NewGuid();
 			var personWithId = PersonFactory.CreatePersonWithId();
 			var personRepository = new FakePersonRepository();
 			personRepository.Add(personWithId);
-			var groupingReadOnlyRepository = new FakeGroupingReadOnlyRepository(new ReadOnlyGroupDetail {PersonId = personWithId.Id.GetValueOrDefault()});
+			var groupingReadOnlyRepository = new FakeGroupingReadOnlyRepository(new ReadOnlyGroupDetail { PersonId = personWithId.Id.GetValueOrDefault() });
 			var assembler = new PersonAssembler(personRepository,
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
@@ -32,15 +32,15 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
 
 			var unitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
-			var target = new GetPeopleByGroupPageGroupQueryHandler(groupingReadOnlyRepository, personRepository, assembler,
+			var target = new GetPeopleByGroupPageGroupForDateRangeQueryHandler(groupingReadOnlyRepository, personRepository, assembler,
 				unitOfWorkFactory);
 			var dateOnly = new DateOnly(2012, 4, 30);
-			
+
 			var result =
-				target.Handle(new GetPeopleByGroupPageGroupQueryDto
+				target.Handle(new GetPeopleByGroupPageGroupForDateRangeQueryDto
 				{
 					GroupPageGroupId = groupPageGroupId,
-					QueryDate = new DateOnlyDto {DateTime = dateOnly.Date}
+					QueryRange = new DateOnlyPeriodDto {StartDate = new DateOnlyDto { DateTime = dateOnly.Date },EndDate = new DateOnlyDto {DateTime = dateOnly.Date } }
 				});
 			result.Count.Should().Be.EqualTo(1);
 		}

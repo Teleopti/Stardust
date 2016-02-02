@@ -215,10 +215,12 @@
     <Compile Include="QueryHandler\DateOnlyDtoExtensions.cs" />
     <Compile Include="QueryHandler\GetAllRolesQueryHandler.cs" />
     <Compile Include="QueryHandler\GetAllScheduleTagsQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetGroupsForGroupPageForDateRangeQueryHandler.cs" />
     <Compile Include="QueryHandler\GetMultiplicatorDefinitionSetOvertimeQueryHandler.cs" />
     <Compile Include="QueryHandler\GetMultiplicatorDefinitionSetShiftAllowanceQueryHandler.cs" />
     <Compile Include="QueryHandler\GetMultiplicatorOvertimeQueryHandler.cs" />
     <Compile Include="QueryHandler\GetMultiplicatorShiftAllowanceQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetPeopleByGroupPageGroupForDateRangeQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPeopleOptionalValuesByPersonIdQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPersonByEmailQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPersonByIdentityQueryHandler.cs" />

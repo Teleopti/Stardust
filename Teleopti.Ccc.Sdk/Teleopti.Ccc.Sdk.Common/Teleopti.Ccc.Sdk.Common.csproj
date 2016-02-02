@@ -211,10 +211,12 @@
     <Compile Include="DataTransferObject\PublicNoteDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetAllRolesQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetAllScheduleTagsDto.cs" />
+    <Compile Include="DataTransferObject\QueryDtos\GetGroupsForGroupPageForDateRangeQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorDefinitionSetOvertimeDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorDefinitionSetShiftAllowanceDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorOvertimeQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorShiftAllowanceQueryDto.cs" />
+    <Compile Include="DataTransferObject\QueryDtos\GetPeopleByGroupPageGroupForDateRangeQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetPeopleOptionalValuesByPersonIdQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetPersonByEmailQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetPersonByIdentityQueryDto.cs" />

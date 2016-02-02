@@ -12,14 +12,14 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
-	public class GetPeopleByGroupPageGroupQueryHandler : IHandleQuery<GetPeopleByGroupPageGroupQueryDto, ICollection<PersonDto>>
+	public class GetPeopleByGroupPageGroupForDateRangeQueryHandler : IHandleQuery<GetPeopleByGroupPageGroupForDateRangeQueryDto, ICollection<PersonDto>>
 	{
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IAssembler<IPerson, PersonDto> _personAssembler;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-		public GetPeopleByGroupPageGroupQueryHandler(IGroupingReadOnlyRepository groupingReadOnlyRepository,IPersonRepository personRepository,IAssembler<IPerson,PersonDto> personAssembler, ICurrentUnitOfWorkFactory unitOfWorkFactory)
+		public GetPeopleByGroupPageGroupForDateRangeQueryHandler(IGroupingReadOnlyRepository groupingReadOnlyRepository,IPersonRepository personRepository,IAssembler<IPerson,PersonDto> personAssembler, ICurrentUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_groupingReadOnlyRepository = groupingReadOnlyRepository;
 			_personRepository = personRepository;
@@ -27,16 +27,18 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			_unitOfWorkFactory = unitOfWorkFactory;
 		}
 
-		public ICollection<PersonDto> Handle(GetPeopleByGroupPageGroupQueryDto query)
+		public ICollection<PersonDto> Handle(GetPeopleByGroupPageGroupForDateRangeQueryDto query)
 		{
-			var queryDate = query.QueryDate.ToDateOnly();
+			var queryRange = query.QueryRange.ToDateOnlyPeriod();
+			var days = queryRange.DayCollection();
 			using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				var details = _groupingReadOnlyRepository.DetailsForGroup(query.GroupPageGroupId, queryDate);
+				var details = _groupingReadOnlyRepository.DetailsForGroup(query.GroupPageGroupId, queryRange);
 
+				var principalAuthorization = PrincipalAuthorization.Instance();
 				var availableDetails = details.Where(
-					p => PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules,
-				                                                                  queryDate, p));
+					p => days.Any(date => principalAuthorization.IsPermitted((string) DefinedRaptorApplicationFunctionPaths.ViewSchedules,
+						(DateOnly) date, (IAuthorizeOrganisationDetail) p)));
 
 				var people = _personRepository.FindPeople(availableDetails.Select(d => d.PersonId));
 				return _personAssembler.DomainEntitiesToDtos(people).ToList();

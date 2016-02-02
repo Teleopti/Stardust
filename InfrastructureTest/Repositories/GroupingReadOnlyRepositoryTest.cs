@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -47,6 +46,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldLoadDetailsForGroupFromReadModel()
 		{
 			var items = _target.DetailsForGroup(Guid.Empty, DateOnly.Today);
+			items.Count().Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldLoadDetailsForGroupFromReadModelForRange()
+		{
+			var items = _target.DetailsForGroup(Guid.Empty, new DateOnlyPeriod(2001,1,1,2001,1,2));
 			items.Count().Should().Be.EqualTo(0);
 		}
 

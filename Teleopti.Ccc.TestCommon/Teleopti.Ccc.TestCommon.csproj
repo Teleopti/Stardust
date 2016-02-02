@@ -207,6 +207,7 @@
     <Compile Include="FakeRepositories\FakeExistingForecastRepository.cs" />
     <Compile Include="FakeRepositories\FakeFixedStaffLoader.cs" />
     <Compile Include="FakeRepositories\FakeGlobalSettingDataRepository.cs" />
+    <Compile Include="FakeRepositories\FakeGroupingReadOnlyRepository.cs" />
     <Compile Include="FakeRepositories\FakeMailboxRepository.cs" />
     <Compile Include="FakeRepositories\FakeDayOffTemplateRepository.cs" />
     <Compile Include="FakeRepositories\FakeMeetingRepository.cs" />

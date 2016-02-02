@@ -14,6 +14,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    void UpdateGroupingReadModel(ICollection<Guid> inputIds);
         void UpdateGroupingReadModelGroupPage(ICollection<Guid> inputIds);
         void UpdateGroupingReadModelData(ICollection<Guid> inputIds);
+		IEnumerable<ReadOnlyGroupDetail> AvailableGroups(ReadOnlyGroupPage groupPage, DateOnlyPeriod queryDateRange);
+		IEnumerable<ReadOnlyGroupDetail> DetailsForGroup(Guid groupId, DateOnlyPeriod queryRange);
 	}
 
 	public class ReadOnlyGroupDetail : IAuthorizeOrganisationDetail
