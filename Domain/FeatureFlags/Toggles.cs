@@ -89,7 +89,7 @@
 		WfmTeamSchedule_SetAgentsPerPage_36230,
 		WfmTeamSchedule_SwapShifts_36231,
 		WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
-		WfmTeamSchedule_RemovePlannedAbsence_36705,
+		WfmTeamSchedule_RemoveAbsence_36705,
 
 		Scheduler_OptimizeFlexibleDayOffs_22409,
 		ResourcePlanner_WeeklyRestSolver_35043,
