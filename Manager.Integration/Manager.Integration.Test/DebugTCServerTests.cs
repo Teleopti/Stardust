@@ -37,6 +37,13 @@ namespace Manager.Integration.Test
             Assert.IsTrue(numberOfIntegrationProcesses == 0);
         }
 
+        [Test]
+        public void ShouldNotBeAnyOldProcessesLeft()
+        {
+            Process[] processes = Process.GetProcessesByName("Manager.IntegrationTest.Console.Host");
+            Assert.IsTrue(processes.Length == 1);
+        }
+
         //    Assert.IsTrue(numberOfManagerProcesses == 0);
         //    int numberOfManagerProcesses = ProcessHelper.NumberOfProcesses("ManagerConsoleHost");
         //{
