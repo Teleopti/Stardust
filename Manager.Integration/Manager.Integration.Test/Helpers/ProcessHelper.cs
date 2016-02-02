@@ -2,12 +2,17 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using log4net;
 using Manager.Integration.Test.Properties;
 
 namespace Manager.Integration.Test.Helpers
 {
     public static class ProcessHelper
     {
+        private static readonly ILog Logger =
+            LogManager.GetLogger(typeof (ProcessHelper));
+
 #if DEBUG
         private static string _buildMode = "Debug";
 #else
@@ -16,13 +21,28 @@ namespace Manager.Integration.Test.Helpers
 
         public static void ShutDownAllManagerIntegrationConsoleHostProcesses()
         {
+            Logger.Info("ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses :  Started.");
+
+            var consoleHostname = new FileInfo(Settings.Default.ManagerIntegrationConsoleHostAssemblyName);
+
+            var fileNameWithNoExtension = consoleHostname.Name.Replace(consoleHostname.Extension,
+                                                                       string.Empty);
+            ShutDownAllProcesses(fileNameWithNoExtension);
+
+            Logger.Info("ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses :  Finished.");
+        }
+
+        public static void ShowAllManagerIntegrationConsoleHostProcesses()
+        {
             var consoleHostname = new FileInfo(Settings.Default.ManagerIntegrationConsoleHostAssemblyName);
 
             var fileNameWithNoExtension = consoleHostname.Name.Replace(consoleHostname.Extension,
                                                                        string.Empty);
 
-            ShutDownAllProcesses(fileNameWithNoExtension);
+            ShowAllProcesses(fileNameWithNoExtension);
         }
+
+        private static ManualResetEventSlim CloseProcessManualResetEventSlim;
 
         public static void CloseProcess(Process process)
         {
@@ -30,13 +50,26 @@ namespace Manager.Integration.Test.Helpers
             {
                 try
                 {
+                    CloseProcessManualResetEventSlim = new ManualResetEventSlim();
+
+                    process.Exited += ProcessOnExited;
+
                     process.CloseMainWindow();
-                    process.WaitForExit();
+
+                    CloseProcessManualResetEventSlim.Wait();
+
+                    process.Exited -= ProcessOnExited;
                 }
                 catch (Exception)
                 {
                 }
             }
+        }
+
+        private static void ProcessOnExited(object sender,
+                                            System.EventArgs eventArgs)
+        {
+            CloseProcessManualResetEventSlim.Set();
         }
 
         public static Process StartManagerIntegrationConsoleHostProcess(int numberOfNodesToStart)
@@ -90,7 +123,7 @@ namespace Manager.Integration.Test.Helpers
             return processToReturn;
         }
 
-        public static void ShutDownAllProcesses(string processName)
+        public static void ShowAllProcesses(string processName)
         {
             Process[] processes = Process.GetProcessesByName(processName);
 
@@ -98,10 +131,43 @@ namespace Manager.Integration.Test.Helpers
             {
                 foreach (var process in processes)
                 {
-                    process.CloseMainWindow();
-                    process.WaitForExit();
+                    Logger.Info(string.Format("Process name : {0}, Process path : {1}, Process started by : {2}",
+                                              process.ProcessName,
+                                              process.StartInfo.FileName,
+                                              process.StartInfo.UserName));
                 }
             }
+        }
+
+        public static void ShutDownAllProcesses(string processName)
+        {
+            Logger.Info("ProcessHelper.ShutDownAllProcesses method started.");
+
+            Process[] processes = Process.GetProcessesByName(processName);
+
+            if (processes.Any())
+            {
+                foreach (var process in processes)
+                {
+                    var name = process.ProcessName;
+                    var fileName = process.StartInfo.FileName;
+                    var userName = process.StartInfo.UserName;
+
+                    Logger.Info(string.Format("ShutDownAllProcesses... Started : Process name : {0}, Process path : {1}, Process started by : {2}",
+                                              name,
+                                              fileName,
+                                              userName));
+
+                    CloseProcess(process);
+
+                    Logger.Info(string.Format("ShutDownAllProcesses... Finished : Process name : {0}, Process path : {1}, Process started by : {2}",
+                                              name,
+                                              fileName,
+                                              userName));
+                }
+            }
+
+            Logger.Info("ProcessHelper.ShutDownAllProcesses method finished.");
         }
     }
 }

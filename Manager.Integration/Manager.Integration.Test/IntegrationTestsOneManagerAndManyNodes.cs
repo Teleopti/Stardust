@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,7 +28,16 @@ namespace Manager.Integration.Test
         private Process StartManagerIntegrationConsoleHostProcess { get; set; }
 
         [SetUp]
-        public void SetUp()
+        public void Setup()
+        {
+            if (_clearDatabase)
+            {
+                DatabaseHelper.TryClearDatabase();
+            }
+        }
+
+        [TestFixtureSetUp]
+        public void TestFixtureSetUp()
         {
             XmlConfigurator.Configure();
 
@@ -37,32 +47,31 @@ namespace Manager.Integration.Test
             _clearDatabase= true;
             _startUpManagerAndNodeManually = false;
 #endif
-            XmlConfigurator.Configure();
-
-            if (_clearDatabase)
-            {
-                DatabaseHelper.TryClearDatabase();
-            }
 
             ManagerApiHelper = new ManagerApiHelper();
 
             if (!_startUpManagerAndNodeManually)
             {
                 ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
-                Logger.Info("Shut down all processes");
-                Thread.Sleep(TimeSpan.FromSeconds(20));
+
                 StartManagerIntegrationConsoleHostProcess =
                     ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
             }
+        }
+
+        [TestFixtureTearDown]
+        public void Cleanup()
+        {
+            ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
         }
 
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
         [Test]
         public void Create5RequestShouldReturnBothCancelAndDeleteStatuses()
-        {
-           
+        {           
             JobHelper.GiveNodesTimeToInitialize();
+
             Logger.Info("Starting test Create5RequestShouldReturnBothCancelAndDeleteStatuses()");
 
             List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(5);
@@ -103,12 +112,10 @@ namespace Manager.Integration.Test
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait();
             
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.CanceledStatus ||
-                                                                                        pair.Value == StatusConstants.DeletedStatus));
-
-            ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
+                                                                                        pair.Value == StatusConstants.DeletedStatus));            
         }
 
-        [Test][Ignore]
+        [Test]
         public void JobShouldHaveStatusFailedIfFailed()
         {
             Logger.Info("Starting test JobShouldHaveStatusFailedIfFailed()");
@@ -140,14 +147,13 @@ namespace Manager.Integration.Test
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.FailedStatus));
-
-            ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
         }
 
-        [Test][Ignore]
+        [Test]
         public void CancelWrongJobs()
         {
             Logger.Info("Starting test CancelWrongJobs()");
+
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(1);
@@ -191,14 +197,13 @@ namespace Manager.Integration.Test
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
             
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
-
-            ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
         }
 
-        [Test][Ignore]
+        [Test]        
         public void ShouldBeAbleToCreate5SuccessJobRequest()
         {
             Logger.Info("Starting test ShouldBeAbleToCreate5SuccessJobRequest()");
+
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(5);
@@ -227,8 +232,6 @@ namespace Manager.Integration.Test
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait();            
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
-
-            ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
         }
     }
 }

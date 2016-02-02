@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using log4net;
+using log4net.Config;
 using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
+using Manager.Integration.Test.Properties;
 using Manager.Integration.Test.Timers;
 using NUnit.Framework;
 
@@ -22,8 +25,8 @@ namespace Manager.Integration.Test
         private bool _startUpManagerAndNodeManually = false;
         private bool _clearDatabase = true;
 
-        [SetUp]
-        public void Setup()
+        [TestFixtureSetUp]
+        public void TextFixtureSetup()
         {
 
 #if (DEBUG)
@@ -33,12 +36,7 @@ namespace Manager.Integration.Test
             _startUpManagerAndNodeManually = false;
 #endif
 
-            if (_clearDatabase)
-            {
-                DatabaseHelper.TryClearDatabase();
-            }
-
-            ManagerApiHelper = new ManagerApiHelper();
+            XmlConfigurator.Configure();
 
             if (!_startUpManagerAndNodeManually)
             {
@@ -49,9 +47,31 @@ namespace Manager.Integration.Test
             }
         }
 
+        [SetUp]
+        public void Setup()
+        {
+            if (_clearDatabase)
+            {
+                DatabaseHelper.TryClearDatabase();
+            }
+
+            ManagerApiHelper = new ManagerApiHelper();
+        }
+
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
-        [Test][Ignore]
+        [Test]
+        [Ignore]
+        public void ShouldBeAbleToPingManager()
+        {
+            Ping pingSender = new Ping();
+            PingReply reply = pingSender.Send(Settings.Default.ManagerLocationUri);
+
+            Assert.IsTrue(reply.Status == IPStatus.Success);
+        }
+
+        [Test]
+        [Ignore]
         public void JobShouldJustBeQueuedIfNoNodes()
         {
             Logger.Info("Starting test JobShouldJustBeQueuedIfNoNodes()");
@@ -59,7 +79,8 @@ namespace Manager.Integration.Test
 
             List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(1);
 
-            var timeout = JobHelper.GenerateTimeoutTimeInSeconds(requests.Count,30);
+            var timeout = JobHelper.GenerateTimeoutTimeInSeconds(requests.Count,
+                                                                 30);
 
             List<Task> tasks = new List<Task>();
 

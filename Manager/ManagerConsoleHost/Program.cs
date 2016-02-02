@@ -19,6 +19,8 @@ namespace ManagerConsoleHost
 
             XmlConfigurator.Configure();
 
+            Logger.Info(WhoAmI +  " : started.");
+
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
             var config = new ManagerConfiguration

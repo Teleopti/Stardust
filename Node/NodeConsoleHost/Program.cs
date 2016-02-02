@@ -17,13 +17,16 @@ namespace NodeConsoleHost
 		{
 			XmlConfigurator.Configure();
 
-			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            Logger.Info("NodeConsoleHost: started.");
+
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
 			var nodeConfig = new NodeConfiguration(new Uri(ConfigurationManager.AppSettings["BaseAddress"]),
 																new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
 																Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
 																ConfigurationManager.AppSettings["NodeName"]);
 			var container = new ContainerBuilder().Build();
+
 			new NodeStarter().Start(nodeConfig, container);
 		}
 

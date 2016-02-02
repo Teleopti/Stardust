@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Threading;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using log4net;
 using log4net.Config;
 using Manager.IntegrationTest.Console.Host.Properties;
 
@@ -12,6 +14,8 @@ namespace Manager.IntegrationTest.Console.Host
 {
     public static class Program
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (Program));
+
         private const string CopiedManagerConfigName = "Manager.config";
 
 #if (DEBUG)
@@ -38,9 +42,22 @@ namespace Manager.IntegrationTest.Console.Host
             return path;
         }
 
-        private static void Main(string[] args)
+        public static ConcurrentDictionary<string, AppDomain> AppDomains { get; set; }
+
+        public static void AddOrUpdateAppDomains(string key,
+                                                 AppDomain value)
         {
+            AppDomain appdomain = AppDomains.AddOrUpdate(key, value,
+                                                         (name, val) => value);
+        }
+
+        private static void Main(string[] args)
+        {            
             XmlConfigurator.Configure();
+
+            AppDomains = new ConcurrentDictionary<string, AppDomain>();
+
+            Logger.Info("Manager.IntegrationTest.Console.Host.Main started.");
 
             var directoryManagerConfigurationFileFullPath =
                 new DirectoryInfo(AddEndingSlash(Settings.Default.ManagerConfigurationFileFullPath + _buildMode));
@@ -51,9 +68,7 @@ namespace Manager.IntegrationTest.Console.Host
 
             CopiedManagerConfigurationFile =
                 CopyManagerConfigurationFile(ManagerConfigurationFile,
-                    CopiedManagerConfigName);
-
-
+                                             CopiedManagerConfigName);
 
             var tasks = new List<Task>();
 
@@ -73,16 +88,17 @@ namespace Manager.IntegrationTest.Console.Host
                     ConfigurationFile = CopiedManagerConfigurationFile.FullName
                 };
 
-                var managerAppDomain = AppDomain.CreateDomain(managerAppDomainSetup.ApplicationName,
-                    null,
-                    managerAppDomainSetup);
-
+                AppDomain managerAppDomain = AppDomain.CreateDomain(managerAppDomainSetup.ApplicationName,
+                                                                    null,
+                                                                    managerAppDomainSetup);
                 managerAppDomain.ExecuteAssembly(managerAppDomainSetup.ApplicationBase +
                                                  managerAppDomainSetup.ApplicationName);
+
+                AddOrUpdateAppDomains("Manager",
+                                      managerAppDomain);
             });
 
             tasks.Add(managerTask);
-            
 
             var directoryNodeConfigurationFileFullPath =
                 new DirectoryInfo(AddEndingSlash(Settings.Default.NodeConfigurationFileFullPath + _buildMode));
@@ -115,22 +131,20 @@ namespace Manager.IntegrationTest.Console.Host
 
                     var endPointUri =
                         new Uri(Settings.Default.NodeEndpointUriTemplate.Replace("PORTNUMBER",
-                            portNumber.ToString()));
+                                                                                 portNumber.ToString()));
 
                     var copiedConfigurationFile =
                         CreateNodeConfigFile(nodeConfigurationFile,
-                            configName,
-                            nodeName,
-                            new Uri(Settings.Default.ManagerLocationUri),
-                            endPointUri,
-                            Settings.Default.HandlerAssembly);
+                                             configName,
+                                             nodeName,
+                                             new Uri(Settings.Default.ManagerLocationUri),
+                                             endPointUri,
+                                             Settings.Default.HandlerAssembly);
 
                     nodeconfigurationFiles.Add(nodeName,
-                        copiedConfigurationFile);
+                                               copiedConfigurationFile);
                 }
             }
-
-
 
 
             var directoryNodeAssemblyLocationFullPath =
@@ -149,36 +163,45 @@ namespace Manager.IntegrationTest.Console.Host
                     };
 
                     var nodeAppDomain = AppDomain.CreateDomain(nodeconfigurationFile.Key,
-                        null,
-                        nodeAppDomainSetup);
+                                                               null,
+                                                               nodeAppDomainSetup);
 
                     var assemblyToExecute =
                         nodeAppDomainSetup.ApplicationBase + nodeAppDomainSetup.ApplicationName;
 
                     nodeAppDomain.ExecuteAssembly(assemblyToExecute);
+
+                    AddOrUpdateAppDomains(nodeconfigurationFile.Value.Name, nodeAppDomain);
+
                 });
 
                 tasks.Add(nodeTask);
             }
-            
+
             foreach (var task in tasks)
             {
                 task.Start();
-                Thread.Sleep(TimeSpan.FromSeconds(1)); //see if this helps TC
             }
 
             System.Console.Read();
+
+            //foreach (var appDomain in AppDomains.Values)
+            //{
+            //    AppDomain.Unload(appDomain);
+            //}
+
+            Logger.Info("Manager.IntegrationTest.Console.Host.Main stopped.");
         }
 
         public static FileInfo CreateNodeConfigFile(FileInfo nodeConfigurationFile,
-            string newConfigurationFileName,
-            string nodeName,
-            Uri managerEndpoint,
-            Uri nodeEndPoint,
-            string handlerAssembly)
+                                                    string newConfigurationFileName,
+                                                    string nodeName,
+                                                    Uri managerEndpoint,
+                                                    Uri nodeEndPoint,
+                                                    string handlerAssembly)
         {
             var copiedNodeConfigFile = nodeConfigurationFile.CopyTo(newConfigurationFileName,
-                true);
+                                                                    true);
 
             // Change app settings.
             var configFileMap = new ExeConfigurationFileMap
@@ -187,7 +210,7 @@ namespace Manager.IntegrationTest.Console.Host
             };
 
             var config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap,
-                ConfigurationUserLevel.None);
+                                                                         ConfigurationUserLevel.None);
 
             config.AppSettings.Settings["NodeName"].Value = nodeName;
             config.AppSettings.Settings["BaseAddress"].Value = nodeEndPoint.ToString();
@@ -200,10 +223,10 @@ namespace Manager.IntegrationTest.Console.Host
         }
 
         public static FileInfo CopyManagerConfigurationFile(FileInfo managerConfigFile,
-            string newConfigFileName)
+                                                            string newConfigFileName)
         {
             return managerConfigFile.CopyTo(newConfigFileName,
-                true);
+                                            true);
         }
     }
 }
