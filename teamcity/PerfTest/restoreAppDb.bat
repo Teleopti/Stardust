@@ -21,6 +21,8 @@ COPY "%sourceFolder%\ccc7.bak" "%destinationBakFile%" /Y
 
 ::restore db
 SQLCMD -S%dbServer% -E -dmaster -i"%RepoRoot%\.debug-Setup\database\tsql\DemoDatabase\RestoreDatabase.sql" -v BAKFILE="%destinationBakFile%" DATAFOLDER="%RepoRoot%" -v DATABASENAME="%appDb%"
+IF %ERRORLEVEL% NEQ 0 GOTO :restoreError
+
 
 ::Skapa agg + analytics
 SQLCMD -S%dbServer% -E -Q "alter database [%analDb%] set single_user with rollback immediate"
@@ -47,10 +49,15 @@ echo Two arguments are needed. Pass in server name and a path to a folder contai
 echo restoreAppDb.bat . \\devbuild01\perftests\demosales
 echo.
 pause
-exit
+exit -1
+
+:restoreError
+echo Something went wrong with restore database
+echo.
+exit -1
 
 :missingAssemblies
 echo To run this script, please first compile DBManager and Security in release mode!
 echo.
 pause
-exit
+exit -1
