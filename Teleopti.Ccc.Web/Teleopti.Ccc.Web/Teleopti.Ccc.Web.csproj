@@ -1256,6 +1256,8 @@
     <Content Include="WFM\js\global\http.spec.js" />
     <Content Include="WFM\js\global\notification.controller.spec.js" />
     <Content Include="WFM\js\global\numeric-value\numeric-value.directive.js" />
+    <Content Include="WFM\js\global\shortcuts.service.js" />
+    <Content Include="WFM\js\global\shortcuts.service.spec.js" />
     <Content Include="WFM\js\global\wfm.i18n.service.spec.js" />
     <Content Include="WFM\js\global\wfmrightpanel\wfmrightpanel.directive.js" />
     <Content Include="WFM\js\global\wfmrightpanel\wfmrightpanel.html" />
