@@ -21,18 +21,16 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var existingSkillInIntraday = new SkillInIntraday();
 			LoadAllSkillIntradays.Has(existingSkillInIntraday);
 
-			Target.GetAll()
-				.Should().Have.SameValuesAs(existingSkillInIntraday);
+			Target.GetAll().Should().Have.SameValuesAs(existingSkillInIntraday);
 		}
 
 		[Test]
 		public void ShouldReturnSkillName()
 		{
 			var name = RandomName.Make();
-			FakeLoadAllSkillInIntradays.HasWithName(name);
+			LoadAllSkillIntradays.HasWithName(name);
 
-			Target.GetAll().Single().Name
-				.Should().Be.EqualTo(name);
+			Target.GetAll().Single().Name.Should().Be.EqualTo(name);
 		}
 	}
 }

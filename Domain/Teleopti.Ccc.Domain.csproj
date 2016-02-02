@@ -645,7 +645,6 @@
     <Compile Include="Logon\ApplicationFunctionsForRole.cs" />
     <Compile Include="Logon\AsSystem.cs" />
     <Compile Include="Intraday\FetchSkillInIntraday.cs" />
-    <Compile Include="Intraday\FetchSkillInIntradayTest.cs" />
     <Compile Include="Intraday\IIntradaySkillStatusService.cs" />
     <Compile Include="Intraday\IntradaySkillStatusService.cs" />
     <Compile Include="Intraday\SkillActualTasksProvider.cs" />

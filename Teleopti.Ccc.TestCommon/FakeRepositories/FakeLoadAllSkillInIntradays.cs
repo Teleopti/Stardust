@@ -18,10 +18,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _skillInIntradays;
 		}
 
-		public static void HasWithName(string name)
+		public void HasWithName(string name)
 		{
-			var skillInIntraday = new SkillInIntraday();
-			//typeof(SkillInIntraday).Get
+			var skillInIntraday = new SkillInIntraday {Name = name};
+			_skillInIntradays.Add(skillInIntraday);
 		}
 	}
 }
