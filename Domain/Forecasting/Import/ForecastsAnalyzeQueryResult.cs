@@ -1,7 +1,8 @@
 using System;
+using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
+namespace Teleopti.Ccc.Domain.Forecasting.Import
 {
     public interface IForecastsAnalyzeQueryResult
     {

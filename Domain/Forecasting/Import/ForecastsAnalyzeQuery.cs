@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
+namespace Teleopti.Ccc.Domain.Forecasting.Import
 {
     public interface IForecastsAnalyzeQuery
     {

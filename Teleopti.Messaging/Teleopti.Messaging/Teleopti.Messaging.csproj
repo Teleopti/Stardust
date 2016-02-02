@@ -147,9 +147,6 @@
     <Compile Include="Client\MutableUrl.cs" />
     <Compile Include="Client\NoMessageSender.cs" />
     <Compile Include="Client\SignalR\DisabledSignalRClient.cs" />
-    <Compile Include="Coders\JobResultProgressDecoder.cs" />
-    <Compile Include="Coders\JobResultProgressEncoder.cs" />
-    <Compile Include="Core\FramerUtility.cs" />
     <Compile Include="Events\EventMessage.cs" />
     <Compile Include="Exceptions\BrokerNotInstantiatedException.cs">
       <SubType>Code</SubType>
@@ -214,6 +211,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Core\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

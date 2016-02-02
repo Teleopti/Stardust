@@ -4,9 +4,8 @@ using System.IO;
 using System.Text;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Core;
-using Teleopti.Messaging.Core;
 
-namespace Teleopti.Messaging.Coders
+namespace Teleopti.Ccc.Domain.Coders
 {
     /// <summary>
     /// The job result progress decoder.

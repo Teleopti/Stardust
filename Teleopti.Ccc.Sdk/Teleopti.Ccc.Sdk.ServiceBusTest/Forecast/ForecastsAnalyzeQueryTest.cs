@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
-using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
+using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;

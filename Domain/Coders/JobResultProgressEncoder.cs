@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Core;
 
-namespace Teleopti.Messaging.Coders
+namespace Teleopti.Ccc.Domain.Coders
 {
     /// <summary>
     /// The job result progress encoder.

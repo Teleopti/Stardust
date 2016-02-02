@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
+using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;

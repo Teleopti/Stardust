@@ -1,12 +1,11 @@
 ﻿using System;
-using Teleopti.Interfaces.Infrastructure;
 using log4net;
+using Teleopti.Ccc.Domain.Coders;
 using Teleopti.Ccc.Domain.Payroll;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Messaging.Coders;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 {

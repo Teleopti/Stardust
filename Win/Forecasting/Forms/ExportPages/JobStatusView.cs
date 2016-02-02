@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using Teleopti.Ccc.Domain.Coders;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Messaging.Coders;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 {
@@ -18,11 +19,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 			if (!DesignMode)
 			{
 				SetTexts();
-				labelDetail.Text = UserTexts.Resources.WaitingThreeDots;
+				labelDetail.Text = Resources.WaitingThreeDots;
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		[SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public JobStatusView(JobStatusModel model)  : this()
 		{
 			Presenter = new JobStatusPresenter(this,model, StateHolder.Instance.StateReader.ApplicationScopeData.Messaging);
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 			if (progressBar1.Value == progressBar1.Maximum)
 			{
 				progressBar1.Visible = false;
-				labelTitle.Text = UserTexts.Resources.Ready;
+				labelTitle.Text = Resources.Ready;
 			}
 		}
 
@@ -148,7 +149,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 		public void SetJobStatusId(Guid id)
 		{
 			if(id == Guid.Empty)
-				_view.SetMessage(UserTexts.Resources.CommunicationErrorEndPoint);
+				_view.SetMessage(Resources.CommunicationErrorEndPoint);
 			else
 				_model.JobStatusId = id;
 		}

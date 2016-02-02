@@ -452,6 +452,9 @@
     <Compile Include="Budgeting\NetStaffForecastAdjustedCalculator.cs" />
     <Compile Include="Budgeting\PayloadWorkTime.cs" />
     <Compile Include="Budgeting\TotalAllowanceCalculator.cs" />
+    <Compile Include="Coders\FramerUtility.cs" />
+    <Compile Include="Coders\JobResultProgressDecoder.cs" />
+    <Compile Include="Coders\JobResultProgressEncoder.cs" />
     <Compile Include="Collection\CachedNumberOfEachCategoryPerDate.cs" />
     <Compile Include="Collection\CachedNumberOfEachCategoryPerPerson.cs" />
     <Compile Include="Collection\CachedShiftCategoryDistribution.cs" />
@@ -623,6 +626,11 @@
     <Compile Include="Forecasting\Angel\ForecastCreator.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastWorkloadEvaluator.cs" />
     <Compile Include="Forecasting\ForecastingTarget.cs" />
+    <Compile Include="Forecasting\Import\ForecastFileDictionary.cs" />
+    <Compile Include="Forecasting\Import\ForecastsAnalyzeQuery.cs" />
+    <Compile Include="Forecasting\Import\ForecastsAnalyzeQueryResult.cs" />
+    <Compile Include="Forecasting\Import\JobResultFeedback.cs" />
+    <Compile Include="Forecasting\Import\WorkloadDayOpenHoursDictionary.cs" />
     <Compile Include="Forecasting\ITaskOwnerPeriod.cs" />
     <Compile Include="Forecasting\OverrideTask.cs" />
     <Compile Include="Forecasting\SkillMap_DEV.cs" />

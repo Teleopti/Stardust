@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			builder.RegisterModule<RequestContainerInstaller>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
 			builder.RegisterModule<IntraIntervalSolverServiceModule>();
-		
+			builder.RegisterModule<PersonAccountModule>();
 			using (var container = builder.Build())
 			{
 				container.Resolve<ConsumerOf<NewAbsenceRequestCreated>>().Should().Not.Be.Null();
