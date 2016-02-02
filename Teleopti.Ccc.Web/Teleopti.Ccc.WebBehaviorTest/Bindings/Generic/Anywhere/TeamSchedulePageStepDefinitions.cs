@@ -17,13 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 	[Binding]
 	public class TeamSchedulePageStepDefinitions
 	{
-		[StepArgumentTransformation]
-		public CssClass ToClassName(string textToBeClassName)
-		{
-			var className = textToBeClassName.ToLower().Replace(" ", "-");
-			return new CssClass { Name = className };
-		}
-
+		
 		[When(@"I search for group '(.*)'")]
 		public void WhenISearchForGroup(string searchText)
 		{

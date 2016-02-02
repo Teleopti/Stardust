@@ -7,34 +7,10 @@ using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
 
-	public class CssClass
-	{
-		public string Name { get; set; }
-	}
-
-	public class LocalizedText
-	{
-		public string Text { get; set; }
-	}
-
 	[Binding]
 	public class UIStepDefinitions
 	{
-		[StepArgumentTransformation]
-		public CssClass ToClassName(string textToBeClassName)
-		{
-			var className = textToBeClassName.ToLower().Replace(" ", "-");
-			return new CssClass {Name = className};
-		}
-
-		[StepArgumentTransformation]
-		public LocalizedText To(string textToBeResourceKey)
-		{
-			var resourceKey = new CultureInfo("en-US").TextInfo.ToTitleCase(textToBeResourceKey).Replace(" ", "");
-			var localizedText = Resources.ResourceManager.GetString(resourceKey, DataMaker.Data().MyCulture) ?? textToBeResourceKey;
-			return new LocalizedText { Text = localizedText };
-		}
-
+		
 		// I click 'add full day absence'
 		// *NOT* I click 'remove' on absence named 'Vacation'
 		[When(@"I click '([a-z|\s]*)'")]
