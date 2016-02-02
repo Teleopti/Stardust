@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
@@ -30,7 +32,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return database.WithAgent(null, name, terminalDate, teamId, null);
 		}
 
-		public static FakeDatabase WithAgent(this FakeDatabase database, Guid id, string name, string terminalDate, Guid teamId)
+		public static FakeDatabase WithAgent(this FakeDatabase database, Guid id, string name, string terminalDate,
+			Guid teamId)
 		{
 			return database.WithAgent(id, name, terminalDate, teamId, null);
 		}
@@ -45,7 +48,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return database.WithAgent(null, name, null, null, timeZone);
 		}
 
-		public static FakeDatabase WithAgent(this FakeDatabase database, string name, string terminalDate, TimeZoneInfo timeZone)
+		public static FakeDatabase WithAgent(this FakeDatabase database, string name, string terminalDate,
+			TimeZoneInfo timeZone)
 		{
 			return database.WithAgent(null, name, terminalDate, null, timeZone);
 		}
@@ -55,7 +59,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return database.WithAgent(id, name, null, null, timeZone);
 		}
 
-		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, string name, string terminalDate, Guid? teamId, TimeZoneInfo timeZone)
+		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, string name, string terminalDate,
+			Guid? teamId, TimeZoneInfo timeZone)
 		{
 			database.WithPerson(id, name, terminalDate, timeZone);
 			database.WithPeriod("2016-01-01", teamId);
@@ -99,8 +104,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly FakePartTimePercentageRepository _partTimePercentages;
 		private readonly FakeContractScheduleRepository _contractSchedules;
 
+		private BusinessUnit _businessUnit;
+		private Site _site;
+		private Person _person;
+		private Team _team;
+		private Contract _contract;
+		private PartTimePercentage _partTimePercentage;
+		private ContractSchedule _contractSchedule;
+
 		public FakeDatabase(
-			FakePersonRepository persons, 
+			FakePersonRepository persons,
 			FakeBusinessUnitRepository businessUnits,
 			FakeSiteRepository sites,
 			FakeTeamRepository teams,
@@ -118,56 +131,134 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_contractSchedules = contractSchedules;
 		}
 
+		public FakeDatabase WithBusinessUnit(Guid? id)
+		{
+			_businessUnit = new BusinessUnit("b");
+			_businessUnit.SetId(id ?? Guid.NewGuid());
+			_businessUnits.Has(_businessUnit);
+			return this;
+		}
+
+		public FakeDatabase WithSite(Guid? id)
+		{
+			_site = new Site("s");
+			_site.SetBusinessUnit(_businessUnit);
+			_site.SetId(id ?? Guid.NewGuid());
+			_sites.Has(_site);
+			return this;
+		}
+
+		public FakeDatabase WithTeam(Guid? id)
+		{
+			_team = new Team {Site = _site};
+			_team.SetId(id ?? Guid.NewGuid());
+			_teams.Has(_team);
+			return this;
+		}
+
+		public FakeDatabase WithContract(Guid? id)
+		{
+			_contract = new Contract("c");
+			_contract.SetBusinessUnit(_businessUnit);
+			_contract.SetId(id ?? Guid.NewGuid());
+			_contracts.Has(_contract);
+			return this;
+		}
+
+		public FakeDatabase WithPartTimePercentage(Guid? id)
+		{
+			_partTimePercentage = new PartTimePercentage("p");
+			_partTimePercentage.SetBusinessUnit(_businessUnit);
+			_partTimePercentage.SetId(Guid.NewGuid());
+			_partTimePercentages.Has(_partTimePercentage);
+			return this;
+		}
+
+		public FakeDatabase WithContractSchedule(Guid? id)
+		{
+			_contractSchedule = new ContractSchedule("cs");
+			_contractSchedule.SetBusinessUnit(_businessUnit);
+			_contractSchedule.SetId(Guid.NewGuid());
+			_contractSchedules.Has(_contractSchedule);
+			return this;
+		}
+
+
 
 		public FakeDatabase WithPerson(Guid? id, string name, string terminalDate, TimeZoneInfo timeZone)
 		{
-			var person = new Person { Name = new Name(name, "") };
-			person.SetId(id ?? Guid.NewGuid());
-			_persons.Has(person);
+			_person = new Person {Name = new Name(name, "")};
+			_person.SetId(id ?? Guid.NewGuid());
+			_persons.Has(_person);
 
 			if (timeZone != null)
-				person.PermissionInformation.SetDefaultTimeZone(timeZone);
+				_person.PermissionInformation.SetDefaultTimeZone(timeZone);
 
 			if (terminalDate != null)
-				person.TerminatePerson(terminalDate.Date(), new PersonAccountUpdaterDummy());
+				_person.TerminatePerson(terminalDate.Date(), new PersonAccountUpdaterDummy());
 
 			return this;
 		}
 
 		public FakeDatabase WithPeriod(string startDate, Guid? teamId, Guid? siteId, Guid? businessUnitId)
 		{
-			var businessUnit = new BusinessUnit("b");
-			businessUnit.SetId(businessUnitId ?? Guid.NewGuid());
-			_businessUnits.Has(businessUnit);
+			ensureBusinssUnit(businessUnitId);
+			ensureSite(siteId);
+			ensureTeam(teamId);
 
-			var site = new Site("s");
-			site.SetBusinessUnit(businessUnit);
-			site.SetId(siteId ?? Guid.NewGuid());
-			_sites.Has(site);
+			ensureContract(null);
+			ensurePartTimePercentage(null);
+			ensureContractSchedule(null);
 
-			var team = new Team();
-			team.Site = site;
-			team.SetId(teamId ?? Guid.NewGuid());
-			_teams.Has(team);
-
-			var contract = new Contract("c");
-			contract.SetId(Guid.NewGuid());
-			_contracts.Has(contract);
-
-			var partTimePercentage = new PartTimePercentage("p");
-			partTimePercentage.SetId(Guid.NewGuid());
-			_partTimePercentages.Has(partTimePercentage);
-
-			var contractSchedule = new ContractSchedule("cs");
-			contractSchedule.SetId(Guid.NewGuid());
-			_contractSchedules.Has(contractSchedule);
-			var personContract = new PersonContract(contract, partTimePercentage, contractSchedule);
-
-			var person = _persons.LoadAll().Last();
-
-			person.AddPersonPeriod(new PersonPeriod(startDate.Date(), personContract, team));
+			var personContract = new PersonContract(_contract, _partTimePercentage, _contractSchedule);
+			_person.AddPersonPeriod(new PersonPeriod(startDate.Date(), personContract, _team));
 
 			return this;
+		}
+
+
+		private void ensureBusinssUnit(Guid? id)
+		{
+			ensureAggregate(id, () => _businessUnits.LoadAll(), i => WithBusinessUnit(i));
+		}
+
+		private void ensureSite(Guid? id)
+		{
+			ensureAggregate(id, () => _sites.LoadAll(), i => WithSite(i));
+		}
+
+		private void ensureTeam(Guid? id)
+		{
+			ensureAggregate(id, () => _teams.LoadAll(), i => WithTeam(i));
+		}
+
+		private void ensureContract(Guid? id)
+		{
+			ensureAggregate(id, () => _contracts.LoadAll(), i => WithContract(i));
+		}
+
+		private void ensurePartTimePercentage(Guid? id)
+		{
+			ensureAggregate(id, () => _partTimePercentages.LoadAll(), i => WithPartTimePercentage(i));
+		}
+
+		private void ensureContractSchedule(Guid? id)
+		{
+			ensureAggregate(id, () => _contractSchedules.LoadAll(), i => WithContractSchedule(i));
+		}
+
+		private static void ensureAggregate<T>(Guid? id, Func<IEnumerable<T>> loadAggregates, Action<Guid?> withAggregate)
+			where T : IAggregateRoot
+		{
+			if (id.HasValue)
+			{
+				var existing = loadAggregates().SingleOrDefault(x => x.Id.Equals(id));
+				if (existing != null)
+					return;
+				withAggregate(id);
+			}
+			if (loadAggregates().IsEmpty())
+				withAggregate(id);
 		}
 	}
 }

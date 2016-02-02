@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -9,13 +10,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakePartTimePercentageRepository : IPartTimePercentageRepository
 	{
+		private readonly IList<IPartTimePercentage> _partTimePercentages = new List<IPartTimePercentage>(); 
+
 		public void Has(PartTimePercentage partTimePercentage)
 		{
+			Add(partTimePercentage);
 		}
 
 		public void Add(IPartTimePercentage root)
 		{
-			throw new NotImplementedException();
+			_partTimePercentages.Add(root);
 		}
 
 		public void Remove(IPartTimePercentage root)
@@ -30,7 +34,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IPartTimePercentage> LoadAll()
 		{
-			return new List<IPartTimePercentage>();
+			return _partTimePercentages.ToArray();
 		}
 
 		public IPartTimePercentage Load(Guid id)

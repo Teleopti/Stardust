@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IContractSchedule> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _contractSchedules.ToArray();
 		}
 
 		public IContractSchedule Load(Guid id)

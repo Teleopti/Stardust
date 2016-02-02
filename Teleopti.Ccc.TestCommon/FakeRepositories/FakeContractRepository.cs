@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IContract> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _contracts.ToArray();
 		}
 
 		public IContract Load(Guid id)
