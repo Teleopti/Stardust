@@ -81,6 +81,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonAssociationChangedEvent @event)
 		{
+			if (@event.TeamId != null)
+				return;
 			updateAllModels(
 				@event.PersonId,
 				@event.Timestamp,
@@ -103,7 +105,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				let unknown = !existingModels.Select(m => m.TeamId).Contains(t.TeamId)
 				where unknown
 				select modelFor(t.SiteId, t.TeamId);
-
+			
 			var models = existingModels.Concat(newModels);
 
 			models.ForEach(m =>

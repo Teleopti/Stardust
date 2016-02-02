@@ -76,6 +76,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonAssociationChangedEvent @event)
 		{
+			if (@event.SiteId != null)
+				return;
 			updateAllModels(
 				@event.PersonId,
 				@event.Timestamp,

@@ -52,5 +52,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 			Persister.Get(siteId2).Count.Should().Be(0);
 		}
 
+		[Test]
+		public void ShouldOnlyExcludeTerminatedPerson()
+		{
+			var siteId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
+			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = personId });
+
+			Target.Handle(new PersonAssociationChangedEvent
+			{
+				PersonId = personId,
+				SiteId = siteId
+			});
+
+			Persister.Get(siteId).Count.Should().Be(1);
+		}
 	}
 }
