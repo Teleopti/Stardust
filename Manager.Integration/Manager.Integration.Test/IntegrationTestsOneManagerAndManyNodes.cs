@@ -109,7 +109,7 @@ namespace Manager.Integration.Test
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(TimeSpan.FromMinutes(1));
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.CanceledStatus ||
                                                                                         pair.Value == StatusConstants.DeletedStatus));
-             
+
         }
 
         [Test]
@@ -143,7 +143,13 @@ namespace Manager.Integration.Test
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.FailedStatus));
-            
+
+            ICollection<string> statuses = ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.Values;
+            foreach (var status in statuses)
+            {
+                Logger.Info("StatusConstant: " + status);
+            }
+
         }
 
         [Test]
@@ -192,7 +198,12 @@ namespace Manager.Integration.Test
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
             
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
-            
+
+            ICollection<string> statuses = ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.Values;
+            foreach (var status in statuses)
+            {
+                Logger.Info("StatusConstant: " + status);
+            }
         }
 
         [Test]
@@ -226,7 +237,12 @@ namespace Manager.Integration.Test
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(1);            
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
-            
+
+            ICollection<string> statuses = ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.Values;
+            foreach (var status in statuses)
+            {
+                Logger.Info("StatusConstant: " + status);
+            }
         }
     }
 }
