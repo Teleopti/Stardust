@@ -63,7 +63,7 @@ namespace Manager.Integration.Test.Helpers
                     }
                     catch
                     {
-                        Logger.Error("ERROR: CreateManagerDoThisTask problem with Post Async");
+                        Logger.Error("ERROR: ManagerApiHelper CreateManagerDoThisTask problem with Post Async");
                     }
                 }
             });

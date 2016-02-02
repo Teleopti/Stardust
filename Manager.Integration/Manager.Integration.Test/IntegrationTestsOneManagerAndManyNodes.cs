@@ -38,7 +38,7 @@ namespace Manager.Integration.Test
 
             ManagerApiHelper = new ManagerApiHelper();
 
-      //      ProcessHelper.ShutDownAllManagerAndNodeProcesses();
+            ProcessHelper.ShutDownAllManagerAndNodeProcesses();
        //     ProcessHelper.ShutDownAllProcesses("Manager.IntegrationTest.Console.Host");
 
             if (_startUpManagerAndNodeManually)
@@ -115,7 +115,7 @@ namespace Manager.Integration.Test
         [Test]
         public void JobShouldHaveStatusFailedIfFailed()
         {
-            JobHelper.GiveNodesTimeToInitialize();
+            JobHelper.GiveNodesTimeToInitialize(20);
 
             List<JobRequestModel> requests = JobHelper.GenerateFailingJobParamsRequests(1);
 
