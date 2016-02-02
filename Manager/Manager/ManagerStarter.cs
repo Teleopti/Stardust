@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
 using Autofac;
@@ -55,8 +56,12 @@ namespace Stardust.Manager
 
             {
 				Logger.Info(WhoAmI + ": Started listening on port : " + managerConfiguration.BaseAdress);
-
-				Console.ReadLine();
+                while (true)
+                {
+                    Logger.Info("MANAGER IS ALIVE");
+                    Thread.Sleep(TimeSpan.FromSeconds(1));
+                }
+               // Console.ReadLine();
 			}
 		}
 	}

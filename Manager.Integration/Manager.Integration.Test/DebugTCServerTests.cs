@@ -35,16 +35,16 @@ namespace Manager.Integration.Test
             Thread.Sleep(TimeSpan.FromSeconds(2));
             var numberOfIntegrationProcesses = ProcessHelper.NumberOfProcesses("Manager.IntegrationTest.Console.Host");
             Assert.IsTrue(numberOfIntegrationProcesses == 1);
-            Thread.Sleep(TimeSpan.FromSeconds(1));
+            Thread.Sleep(TimeSpan.FromSeconds(2));
             var numberOfIntegrationProcesses1 = ProcessHelper.NumberOfProcesses("Manager.IntegrationTest.Console.Host");
             Assert.IsTrue(numberOfIntegrationProcesses1 == 1);
-            Thread.Sleep(TimeSpan.FromSeconds(1));
+            Thread.Sleep(TimeSpan.FromSeconds(2));
             var numberOfIntegrationProcesses2 = ProcessHelper.NumberOfProcesses("Manager.IntegrationTest.Console.Host");
             Assert.IsTrue(numberOfIntegrationProcesses2 == 1);
-            Thread.Sleep(TimeSpan.FromSeconds(1));
+            Thread.Sleep(TimeSpan.FromSeconds(2));
             var numberOfIntegrationProcesses3 = ProcessHelper.NumberOfProcesses("Manager.IntegrationTest.Console.Host");
             Assert.IsTrue(numberOfIntegrationProcesses3 == 1);
-            Thread.Sleep(TimeSpan.FromSeconds(1));
+            Thread.Sleep(TimeSpan.FromSeconds(2));
             var numberOfIntegrationProcesses4 = ProcessHelper.NumberOfProcesses("Manager.IntegrationTest.Console.Host");
             Assert.IsTrue(numberOfIntegrationProcesses4 == 1);
         }
