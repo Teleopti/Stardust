@@ -93,6 +93,8 @@ namespace Manager.Integration.Test.Helpers
             var managerIntegrationConsoleHostAssemblyName =
                 Settings.Default.ManagerIntegrationConsoleHostAssemblyName;
 
+            Logger.Info("managerIntegrationConsoleHostAssemblyName: " + managerIntegrationConsoleHostAssemblyName);
+            Logger.Info("managerIntegrationConsoleHostLocation: " + managerIntegrationConsoleHostLocation);
 
             return StartProcess(managerIntegrationConsoleHostLocation,
                 managerIntegrationConsoleHostAssemblyName,
@@ -103,6 +105,8 @@ namespace Manager.Integration.Test.Helpers
             string processFileName,
             int numberOfNodesToStart)
         {
+            Logger.Info("StartProcess, processFileName " + processFileName);
+
             var process = CreateProcess(processDirectory,
                 processFileName,
                 numberOfNodesToStart);
