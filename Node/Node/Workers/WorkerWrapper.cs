@@ -33,7 +33,6 @@ namespace Stardust.Node.Workers
         {
             _postHttpRequest = postHttpRequest;
 
-            // Validate arguments.
             invokeHandler.ThrowArgumentNullExceptionWhenNull();
             nodeConfiguration.ThrowArgumentNullException();
 
@@ -43,11 +42,9 @@ namespace Stardust.Node.Workers
             trySendJobCanceledStatusToManagerTimer.ThrowArgumentNullExceptionWhenNull();
             trySendJobFaultedStatusToManagerTimer.ThrowArgumentNullExceptionWhenNull();
 
-            // Assign values.
             Handler = invokeHandler;
             NodeConfiguration = nodeConfiguration;
 
-            // Who am I.
             WhoamI = NodeConfiguration.CreateWhoIAm(Environment.MachineName);
 
             NodeStartUpNotificationToManagerTimer = nodeStartUpNotificationToManagerTimer;
@@ -112,9 +109,8 @@ namespace Stardust.Node.Workers
 
                 if (typ == null)
                 {
-                    Logger.Info(
-                        string.Format(WhoamI + ": The type [{0}] could not be resolved. The job cannot be started.",
-                                      jobToDo.Type));
+                    Logger.Info(string.Format(WhoamI + ": The type [{0}] could not be resolved. The job cannot be started.",
+                                              jobToDo.Type));
 
                     return new BadRequestResult(requestMessage);
                 }
@@ -152,11 +148,18 @@ namespace Stardust.Node.Workers
 
             Task.ContinueWith(t =>
             {
+                string logInfo = null;
+
                 switch (t.Status)
                 {
                     case TaskStatus.RanToCompletion:
+                        logInfo =
+                            string.Format("{0} : The task has completed for (id, name) : ({1}, {2})",
+                                          WhoamI,
+                                          CurrentMessageToProcess.Id,
+                                          CurrentMessageToProcess.Name);
 
-                        Logger.Info(WhoamI + " : The task has completed.");
+                        Logger.Info(logInfo);
 
                         SetNodeStatusTimer(TrySendJobDoneStatusToManagerTimer,
                                            CurrentMessageToProcess);
@@ -164,7 +167,13 @@ namespace Stardust.Node.Workers
 
 
                     case TaskStatus.Canceled:
-                        Logger.Info(WhoamI + ": The task was canceled.");
+                        logInfo =
+                            string.Format("{0} : The task has been canceled for (id, name) : ({1}, {2})",
+                                          WhoamI,
+                                          CurrentMessageToProcess.Id,
+                                          CurrentMessageToProcess.Name);
+
+                        Logger.Info(logInfo);
 
                         SetNodeStatusTimer(TrySendJobCanceledStatusToManagerTimer,
                                            CurrentMessageToProcess);
@@ -172,7 +181,14 @@ namespace Stardust.Node.Workers
                         break;
 
                     case TaskStatus.Faulted:
-                        Logger.Info(WhoamI + ": The task faulted.");
+                        logInfo =
+                            string.Format("{0} : The task faulted for (id, name) : ({1}, {2})",
+                                          WhoamI,
+                                          CurrentMessageToProcess.Id,
+                                          CurrentMessageToProcess.Name);
+
+                        Logger.Info(logInfo);
+
 
                         SetNodeStatusTimer(TrySendJobFaultedStatusToManagerTimer,
                                            CurrentMessageToProcess);
@@ -181,7 +197,6 @@ namespace Stardust.Node.Workers
                 }
             });
 
-            // Start the task.
             Task.Start();
 
             return new OkResult(requestMessage);
@@ -212,7 +227,7 @@ namespace Stardust.Node.Workers
                 if (id != Guid.Empty)
                 {
                     Logger.Warn(WhoamI + " : Can not cancel job with id : " + id);
-                }                
+                }
             }
         }
 
@@ -284,7 +299,13 @@ namespace Stardust.Node.Workers
         private void ProgressCallback(string message)
         {
             Logger.Info(message);
-            var progressModel = new JobProgressModel {JobId = CurrentMessageToProcess.Id, ProgressDetail = message};
+
+            var progressModel = new JobProgressModel
+            {
+                JobId = CurrentMessageToProcess.Id,
+                ProgressDetail = message
+            };
+
             var json = JsonConvert.SerializeObject(progressModel);
 
             try

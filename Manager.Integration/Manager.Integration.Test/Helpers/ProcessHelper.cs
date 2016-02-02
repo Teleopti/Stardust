@@ -42,7 +42,7 @@ namespace Manager.Integration.Test.Helpers
             ShowAllProcesses(fileNameWithNoExtension);
         }
 
-        private static ManualResetEventSlim CloseProcessManualResetEventSlim;
+        private static ManualResetEventSlim _closeProcessManualResetEventSlim;
 
         public static void CloseProcess(Process process)
         {
@@ -50,18 +50,23 @@ namespace Manager.Integration.Test.Helpers
             {
                 try
                 {
-                    CloseProcessManualResetEventSlim = new ManualResetEventSlim();
+                    _closeProcessManualResetEventSlim = new ManualResetEventSlim();
 
+                    process.EnableRaisingEvents = true;
                     process.Exited += ProcessOnExited;
 
                     process.CloseMainWindow();
 
-                    CloseProcessManualResetEventSlim.Wait();
-
-                    process.Exited -= ProcessOnExited;
+                    _closeProcessManualResetEventSlim.Wait();
                 }
+
                 catch (Exception)
                 {
+                }
+
+                finally
+                {
+                    process.Exited -= ProcessOnExited;
                 }
             }
         }
@@ -69,7 +74,7 @@ namespace Manager.Integration.Test.Helpers
         private static void ProcessOnExited(object sender,
                                             System.EventArgs eventArgs)
         {
-            CloseProcessManualResetEventSlim.Set();
+            _closeProcessManualResetEventSlim.Set();
         }
 
         public static Process StartManagerIntegrationConsoleHostProcess(int numberOfNodesToStart)
@@ -79,7 +84,6 @@ namespace Manager.Integration.Test.Helpers
 
             var managerIntegrationConsoleHostAssemblyName =
                 Settings.Default.ManagerIntegrationConsoleHostAssemblyName;
-
 
             return StartProcess(managerIntegrationConsoleHostLocation,
                                 managerIntegrationConsoleHostAssemblyName,

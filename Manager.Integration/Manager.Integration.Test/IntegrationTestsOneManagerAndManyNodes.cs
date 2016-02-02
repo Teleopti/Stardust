@@ -72,7 +72,7 @@ namespace Manager.Integration.Test
         {           
             JobHelper.GiveNodesTimeToInitialize();
 
-            Logger.Info("Starting test Create5RequestShouldReturnBothCancelAndDeleteStatuses()");
+            Logger.Info("Starting test : Create5RequestShouldReturnBothCancelAndDeleteStatuses");
 
             List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(5);
 
@@ -83,8 +83,6 @@ namespace Manager.Integration.Test
             foreach (var jobRequestModel in requests)
             {
                 tasks.Add(ManagerApiHelper.CreateManagerDoThisTask(jobRequestModel));
-
-              //  Logger.Debug("Created task for add job :" + jobRequestModel.Name);
             }
 
             ManagerApiHelper.CheckJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(requests.Count,
@@ -118,7 +116,8 @@ namespace Manager.Integration.Test
         [Test]
         public void JobShouldHaveStatusFailedIfFailed()
         {
-            Logger.Info("Starting test JobShouldHaveStatusFailedIfFailed()");
+            Logger.Info("Starting test : JobShouldHaveStatusFailedIfFailed");
+
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateFailingJobParamsRequests(1);
@@ -152,7 +151,7 @@ namespace Manager.Integration.Test
         [Test]
         public void CancelWrongJobs()
         {
-            Logger.Info("Starting test CancelWrongJobs()");
+            Logger.Info("Starting test : CancelWrongJobs");
 
             JobHelper.GiveNodesTimeToInitialize();
 
@@ -179,7 +178,6 @@ namespace Manager.Integration.Test
             ManagerApiHelper.CheckJobHistoryStatusTimer.GuidAddedEventHandler += (sender,
                                                                                   args) =>
             {
-                // Create new guid.
                 var newGuid = Guid.NewGuid();
 
                 var cancelJobTask = ManagerApiHelper.CreateManagerCancelTask(newGuid);
