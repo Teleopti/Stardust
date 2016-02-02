@@ -2,11 +2,10 @@
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Intraday;
-using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Intraday
 {
-    public class IntradaySkillStatusController : ApiController
+	public class IntradaySkillStatusController : ApiController
     {
 	    private readonly IIntradaySkillStatusService _intradaySkillStatusService;
 

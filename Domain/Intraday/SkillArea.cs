@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -21,8 +22,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 			get { return _name; }
 			set { _name = value; }
 		}
-
-		//public void AddSkill(SkillInIntraday skil)
 
 		public virtual bool IsDeleted
 		{

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Infrastructure;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Add(SkillArea root)
 		{
-			throw new NotImplementedException();
+			_skillAreas.Add(root);
 		}
 
 		public void Remove(SkillArea root)
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public SkillArea Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _skillAreas.Single(x => x.Id == id);
 		}
 
 		public IList<SkillArea> LoadAll()

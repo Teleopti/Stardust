@@ -21,6 +21,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override void ConcreteSetup()
 		{
+			var queueSourceHelpdesk = QueueSourceFactory.CreateQueueSourceHelpdesk();
+			PersistAndRemoveFromUnitOfWork(queueSourceHelpdesk);
+
 			_skillType = SkillTypeFactory.CreateSkillType();
 			PersistAndRemoveFromUnitOfWork(_skillType);
 			_activity = new Activity("The test") { DisplayColor = Color.Honeydew };
@@ -28,6 +31,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			skill = SkillFactory.CreateSkill("Skill - Name", _skillType, 15);
 			skill.Activity = _activity;
 			PersistAndRemoveFromUnitOfWork(skill);
+
+			var workload = WorkloadFactory.CreateWorkload(skill);
+			workload.AddQueueSource(queueSourceHelpdesk);
+			PersistAndRemoveFromUnitOfWork(workload);
 		}
 
 		protected override SkillArea CreateAggregateWithCorrectBusinessUnit()
@@ -37,7 +44,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return new SkillArea
 			{
 				Name = "skill area 1 name",
-				SkillCollection = new[] { skills.First() }
+				SkillCollection = new[]
+				{
+					skills.First()
+				}
 			};
 		}
 
