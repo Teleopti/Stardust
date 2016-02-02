@@ -146,7 +146,8 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 				{"HangfireDashboard", "true"},
 				{"HangfireDashboardStatistics", "true"},
 				{"HangfireDashboardCounters", "true"},
-				{"HangfireDashboardDisplayNames", "true"}
+				{"HangfireDashboardDisplayNames", "true"},
+				{"HangfireJobExpirationSeconds", TimeSpan.FromDays(1).TotalSeconds.ToString()}
 			};
 
 			FileConfigurator.ConfigureByTags(
