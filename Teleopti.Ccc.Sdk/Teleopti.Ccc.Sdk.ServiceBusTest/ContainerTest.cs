@@ -28,10 +28,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         [Test]
         public void ShouldResolveNewAbsenceRequestConsumer()
         {
-
 			var builder = new ContainerBuilder();
 			builder.RegisterType<NewAbsenceRequestConsumer>().As<ConsumerOf<NewAbsenceRequestCreated>>();
 			builder.RegisterModule(CommonModule.ForTest());
+	        builder.RegisterModule<PersonAccountModule>();
 			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<RequestContainerInstaller>();
