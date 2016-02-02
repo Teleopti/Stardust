@@ -26,20 +26,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			var person = _personRepository.Get(@event.PersonId);
 			foreach (var projectionChangedEventScheduleDay in @event.ScheduleDays)
 			{
-				if (!projectionChangedEventScheduleDay.NotScheduled)
+				var date = new DateOnly(projectionChangedEventScheduleDay.Date);
+				var offers = _personRequestRepository.FindOfferByStatus(person, date, ShiftExchangeOfferStatus.Pending);
+				foreach (var offer in offers)
 				{
-					var date = new DateOnly(projectionChangedEventScheduleDay.Date);
-					var offers = _personRequestRepository.FindOfferByStatus(person, date, ShiftExchangeOfferStatus.Pending);
-					foreach (var offer in offers)
+					if (projectionChangedEventScheduleDay.CheckSum != offer.Checksum)
 					{
-						if (projectionChangedEventScheduleDay.CheckSum != offer.Checksum)
-						{
-							offer.Status = ShiftExchangeOfferStatus.Invalid;
+						offer.Status = ShiftExchangeOfferStatus.Invalid;
 
-							SendPushMessageService.CreateConversation(Resources.AnnouncementInvalid,
-							string.Format(Resources.AnnouncementInvalidMessage, offer.Date.ToShortDateString()), false)
-							.To(new[] { person }).TranslateMessage().AddReplyOption("OK").SendConversation(_msgPersister);
-						}
+						SendPushMessageService.CreateConversation(Resources.AnnouncementInvalid,
+						string.Format(Resources.AnnouncementInvalidMessage, offer.Date.ToShortDateString()), false)
+						.To(new[] { person }).TranslateMessage().AddReplyOption("OK").SendConversation(_msgPersister);
 					}
 				}
 			}
