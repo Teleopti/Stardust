@@ -234,8 +234,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		else{
 			self.mySchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedlayers, moment(), moment(), '', '', false));
 		}
-		console.log("here",self.mySchedule().isDayOff);
-		console.log("here",self.mySchedule().layers);
 	}
 
 	self._createPossibleTradeSchedules = function (possibleTradeSchedules) {
