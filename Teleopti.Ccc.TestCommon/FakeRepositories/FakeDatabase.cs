@@ -183,8 +183,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-
-
 		public FakeDatabase WithPerson(Guid? id, string name, string terminalDate, TimeZoneInfo timeZone)
 		{
 			_person = new Person {Name = new Name(name, "")};
@@ -202,13 +200,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeDatabase WithPeriod(string startDate, Guid? teamId, Guid? siteId, Guid? businessUnitId)
 		{
-			ensureBusinssUnit(businessUnitId);
-			ensureSite(siteId);
-			ensureTeam(teamId);
+			ensureExists(_businessUnits, businessUnitId, () => WithBusinessUnit(businessUnitId));
+			ensureExists(_sites, siteId, () => WithSite(siteId));
+			ensureExists(_teams, teamId, () => WithTeam(teamId));
 
-			ensureContract(null);
-			ensurePartTimePercentage(null);
-			ensureContractSchedule(null);
+			ensureExists(_contracts, null, () => WithContract(null));
+			ensureExists(_partTimePercentages, null, () => WithPartTimePercentage(null));
+			ensureExists(_contractSchedules, null, () => WithContractSchedule(null));
 
 			var personContract = new PersonContract(_contract, _partTimePercentage, _contractSchedule);
 			_person.AddPersonPeriod(new PersonPeriod(startDate.Date(), personContract, _team));
@@ -216,49 +214,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-
-		private void ensureBusinssUnit(Guid? id)
-		{
-			ensureAggregate(id, () => _businessUnits.LoadAll(), i => WithBusinessUnit(i));
-		}
-
-		private void ensureSite(Guid? id)
-		{
-			ensureAggregate(id, () => _sites.LoadAll(), i => WithSite(i));
-		}
-
-		private void ensureTeam(Guid? id)
-		{
-			ensureAggregate(id, () => _teams.LoadAll(), i => WithTeam(i));
-		}
-
-		private void ensureContract(Guid? id)
-		{
-			ensureAggregate(id, () => _contracts.LoadAll(), i => WithContract(i));
-		}
-
-		private void ensurePartTimePercentage(Guid? id)
-		{
-			ensureAggregate(id, () => _partTimePercentages.LoadAll(), i => WithPartTimePercentage(i));
-		}
-
-		private void ensureContractSchedule(Guid? id)
-		{
-			ensureAggregate(id, () => _contractSchedules.LoadAll(), i => WithContractSchedule(i));
-		}
-
-		private static void ensureAggregate<T>(Guid? id, Func<IEnumerable<T>> loadAggregates, Action<Guid?> withAggregate)
+		private static void ensureExists<T>(IRepository<T> loadAggregates, Guid? id, Action createAction)
 			where T : IAggregateRoot
 		{
+			var all = loadAggregates.LoadAll();
 			if (id.HasValue)
 			{
-				var existing = loadAggregates().SingleOrDefault(x => x.Id.Equals(id));
+				var existing = all.SingleOrDefault(x => x.Id.Equals(id));
 				if (existing != null)
 					return;
-				withAggregate(id);
+				createAction();
 			}
-			if (loadAggregates().IsEmpty())
-				withAggregate(id);
+			if (all.IsEmpty())
+				createAction();
 		}
 	}
 }
