@@ -45,6 +45,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					
 					var time = timeOfChange(person.TerminalDate, currentPeriod, timeZone);
 
+					if (time == null)
+						return;
 					if (time > now)
 						return;
 					if (time < now.AddDays(-1))
@@ -88,11 +90,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			});
 		}
 
-		private DateTime timeOfChange(DateOnly? terminalDate, IPersonPeriod currentPeriod, TimeZoneInfo timeZone)
+		private DateTime? timeOfChange(DateOnly? terminalDate, IPersonPeriod currentPeriod, TimeZoneInfo timeZone)
 		{
 			var terminatedAt = terminationTime(terminalDate, timeZone);
 			if (terminatedAt <= _now.UtcDateTime())
 				return terminatedAt;
+			if (currentPeriod == null)
+				return null;
 			return TimeZoneInfo.ConvertTimeToUtc(currentPeriod.StartDate.Date, timeZone);
 		}
 

@@ -83,6 +83,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		private FakeDatabase hasPerson(Guid? id, string name, string terminalDate, Guid? teamId, TimeZoneInfo timeZone)
 		{
+			hasPersonWithoutPersonPeriod(id, name, terminalDate, timeZone);
+			WithPeriod("2016-01-01", teamId);
+			return this;
+		}
+
+		public FakeDatabase HasPersonWithoutPersonPeriod(string name)
+		{
+			return hasPersonWithoutPersonPeriod(null, name, null, null);
+		}
+
+		private FakeDatabase hasPersonWithoutPersonPeriod(Guid? id, string name, string terminalDate, TimeZoneInfo timeZone)
+		{
 			var person = new Person { Name = new Name(name, "") };
 			person.SetId(id ?? Guid.NewGuid());
 			_persons.Has(person);
@@ -90,13 +102,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			if (timeZone != null)
 				person.PermissionInformation.SetDefaultTimeZone(timeZone);
 
-			WithPeriod("2016-01-01", teamId);
-
 			if (terminalDate != null)
 				person.TerminatePerson(terminalDate.Date(), new PersonAccountUpdaterDummy());
 
 			return this;
+
 		}
+
 
 		public FakeDatabase WithPeriod(string startDate)
 		{

@@ -117,5 +117,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			
 			Publisher.PublishedEvents.Single().Should().Be.OfType<PersonAssociationChangedEvent>();
 		}
+
+		[Test]
+		public void ShouldWorkWithoutPersonPeriod()
+		{
+			Now.Is("2016-02-01 22:00");
+			Data.HasPersonWithoutPersonPeriod("pierre");
+
+			Target.Handle(new TenantHearbeatEvent());
+
+			Publisher.PublishedEvents.Should().Be.Empty();
+		}
 	}
 }
