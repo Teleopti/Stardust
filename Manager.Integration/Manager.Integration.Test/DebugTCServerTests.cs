@@ -15,11 +15,11 @@ namespace Manager.Integration.Test
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
-            Logger.Info("Running TestFixtureSetUp...");
+            Console.WriteLine("Running TestFixtureSetUp...");
             StartManagerIntegrationConsoleHostProcess =
                 ProcessHelper.StartManagerIntegrationConsoleHostProcess(1);
             Thread.Sleep(TimeSpan.FromSeconds(10));
-            Logger.Info("Finish with TestFixtureSetUp...");
+            Console.WriteLine("Finish with TestFixtureSetUp...");
         }
 
         [TestFixtureTearDown]
