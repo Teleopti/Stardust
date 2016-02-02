@@ -11,7 +11,7 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
-    [TestFixture]
+    [TestFixture][Ignore]
     public class IntegrationTestsOneManagerAndZeroNodes
     {
 
@@ -35,7 +35,7 @@ namespace Manager.Integration.Test
 
             ManagerApiHelper = new ManagerApiHelper();
 
-            ProcessHelper.ShutDownAllManagerAndNodeProcesses();
+        //    ProcessHelper.ShutDownAllManagerAndNodeProcesses();
        //     ProcessHelper.ShutDownAllProcesses("Manager.IntegrationTest.Console.Host");
 
             if (_startUpManagerAndNodeManually)
@@ -94,7 +94,7 @@ namespace Manager.Integration.Test
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.Start();
 
-            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(1);
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.NullStatus));
             

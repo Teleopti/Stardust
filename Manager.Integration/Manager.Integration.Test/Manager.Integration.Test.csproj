@@ -67,6 +67,7 @@
     <Compile Include="Constants\ManagerRouteConstants.cs" />
     <Compile Include="Constants\MediaTypeConstants.cs" />
     <Compile Include="Constants\StatusConstants.cs" />
+    <Compile Include="DebugTCServerTests.cs" />
     <Compile Include="EventArgs\GuidAddedEventArgs.cs" />
     <Compile Include="Helpers\DatabaseHelper.cs" />
     <Compile Include="Helpers\JobHelper.cs" />

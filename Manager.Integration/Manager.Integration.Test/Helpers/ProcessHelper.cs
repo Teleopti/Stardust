@@ -126,5 +126,28 @@ namespace Manager.Integration.Test.Helpers
             ShutDownAllProcesses("ManagerConsoleHost.vshost");
         }
 
+
+        public static void ShowAllProcesses(string processName)
+        {
+            Process[] processes = Process.GetProcessesByName(processName);
+
+            if (processes.Any())
+            {
+                foreach (var process in processes)
+                {
+                    Logger.Info(string.Format("Process name : {0}, Process path : {1}, Process started by : {2}",
+                                              process.ProcessName,
+                                              process.StartInfo.FileName,
+                                              process.StartInfo.UserName));
+                }
+            }
+        }
+
+        public static int NumberOfProcesses(string processName)
+        {
+            Process[] processes = Process.GetProcessesByName(processName);
+
+            return processes.Length;
+        }
     }
 }
