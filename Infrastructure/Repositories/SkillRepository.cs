@@ -14,7 +14,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-    /// <summary>
+	/// <summary>
     /// SkillRepository class
     /// </summary>
     public class SkillRepository : Repository<ISkill>, ISkillRepository

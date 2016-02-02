@@ -644,9 +644,12 @@
     <Compile Include="ICurrentApplicationData.cs" />
     <Compile Include="Logon\ApplicationFunctionsForRole.cs" />
     <Compile Include="Logon\AsSystem.cs" />
+    <Compile Include="Intraday\FetchSkillInIntraday.cs" />
+    <Compile Include="Intraday\FetchSkillInIntradayTest.cs" />
     <Compile Include="Intraday\IIntradaySkillStatusService.cs" />
     <Compile Include="Intraday\IntradaySkillStatusService.cs" />
     <Compile Include="Intraday\SkillActualTasksProvider.cs" />
+    <Compile Include="Intraday\SkillArea.cs" />
     <Compile Include="Intraday\SkillForecastedTasksProvider.cs" />
     <Compile Include="Intraday\SkillStatusMeasure.cs" />
     <Compile Include="Intraday\SkillStatusModel.cs" />
@@ -709,6 +712,7 @@
     <Compile Include="Repositories\IAgentBadgeRepository.cs" />
     <Compile Include="Repositories\IIntradayStatistics.cs" />
     <Compile Include="Repositories\ISeatPlanRepository.cs" />
+    <Compile Include="Repositories\ILoadAllSkillInIntradays.cs" />
     <Compile Include="Scheduling\DayOffBusinessRuleValidation.cs" />
     <Compile Include="Scheduling\FullScheduling.cs" />
     <Compile Include="Scheduling\IScheduleDictionaryPersister.cs" />
@@ -2592,6 +2596,8 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Intraday\SkillInIntraday.hbm.xml" />
+    <EmbeddedResource Include="Intraday\SkillArea.hbm.xml" />
     <EmbeddedResource Include="Optimization\Filters\TeamFilter.hbm.xml" />
     <EmbeddedResource Include="Optimization\Filters\SiteFilter.hbm.xml" />
     <EmbeddedResource Include="Optimization\Filters\ContractFilter.hbm.xml" />

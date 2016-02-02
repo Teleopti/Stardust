@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Intraday"
+                   default-access="field.camelcase-underscore">
+
+  <class name="SkillArea">
+    <id name="Id" type="guid" unsaved-value="null" access="nosetter.camelcase-underscore">
+      <generator class="guid.comb" />
+    </id>
+		<property name="Name" not-null="true" type="string" length="50"/>
+
+		<bag name="SkillCollection" cascade="none">
+			<key foreign-key="FK_SkillAreaSkillCollection_SkillArea">
+				<column name="SkillArea"
+						not-null="true"
+						unique-key="UQ_SkillAreaSkillCollection"/>
+			</key>
+			<many-to-many class="Teleopti.Ccc.Domain.Intraday.SkillInIntraday" foreign-key="FK_SkillAreaSkillCollection_Skill">
+				<column name="Skill"
+						unique-key="UQ_SkillAreaSkillCollection"
+						not-null="true"/>
+			</many-to-many>
+		</bag>
+  </class>
+
+</hibernate-mapping>

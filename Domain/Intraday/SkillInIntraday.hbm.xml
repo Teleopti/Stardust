@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+				   assembly="Teleopti.Ccc.Domain"
+				   namespace="Teleopti.Ccc.Domain.Intraday"
+				   default-access="field.camelcase-underscore">
+	<class name="SkillInIntraday" table="Skill">
+		<!--IEntity-->
+		<id name="Id"
+				type="guid"
+			 access="nosetter.camelcase-underscore"
+				unsaved-value="null">
+			<generator class="guid.comb" />
+		</id>
+		<!--IEntity-->
+
+		<property name="Name"/>
+  </class>
+
+	<query name="loadAllSkills">
+		<![CDATA[
+select Id as "Id", Name as "Name" from Skill
+]]>
+	</query>
+
+</hibernate-mapping>
