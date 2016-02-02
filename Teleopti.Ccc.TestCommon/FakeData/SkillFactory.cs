@@ -168,14 +168,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             //4. Load historical data in Stat structure
             SkillType skillType = SkillTypeFactory.CreateSkillType();
             ISkill skill = CreateSkill("TestSkill", skillType,15);
-            IWorkload fs = WorkloadFactory.CreateWorkload(skill);
-			fs.SetId(Guid.NewGuid());
+            IWorkload workload = WorkloadFactory.CreateWorkload(skill);
+			workload.SetId(Guid.NewGuid());
 
             QueueSource qsInrikes = QueueSourceFactory.CreateQueueSourceInrikes();
             QueueSource qsHelpDesk = QueueSourceFactory.CreateQueueSourceHelpdesk();
 
-            fs.AddQueueSource(qsInrikes);
-            fs.AddQueueSource(qsHelpDesk);
+            workload.AddQueueSource(qsInrikes);
+            workload.AddQueueSource(qsHelpDesk);
 
             return skill;
         }

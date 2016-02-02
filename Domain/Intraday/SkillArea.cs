@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Intraday
@@ -36,23 +34,4 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_isDeleted = true;
 		}
 	}
-
-	public class SkillInIntraday
-	{
-		private string _name;
-		private Guid _id;
-
-		public virtual string Name
-		{
-			get { return _name; }
-			set { _name = value; }
-		}
-
-		public virtual Guid Id
-		{
-			get { return _id; }
-			set { _id = value; }
-		}
-	}
-
 }

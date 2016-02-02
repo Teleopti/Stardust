@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<FetchSkillInIntraday>().SingleInstance();
+			builder.RegisterType<FetchSkillArea>().SingleInstance();
 			builder.RegisterType<LoadAllSkillInIntradays>().As<ILoadAllSkillInIntradays>().SingleInstance();
 		}
 	}

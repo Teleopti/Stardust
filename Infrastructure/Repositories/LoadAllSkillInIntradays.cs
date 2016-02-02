@@ -18,8 +18,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<SkillInIntraday> Skills()
 		{
 			return _currentUnitOfWork.Current().Session()
-				.GetNamedQuery("loadAllSkills")
+				.GetNamedQuery("loadIntradaySkillsWithAtLeastOneQueue")
 				.SetResultTransformer(Transformers.AliasToBean<SkillInIntraday>())
+				//.SetResultTransformer(Transformers.DistinctRootEntity)
 				.SetReadOnly(true)
 				.List<SkillInIntraday>();
 		}

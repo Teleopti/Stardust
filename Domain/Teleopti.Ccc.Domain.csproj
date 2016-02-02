@@ -643,6 +643,7 @@
     <Compile Include="Helper\IBackgroundWorkerWrapper.cs" />
     <Compile Include="ICurrentApplicationData.cs" />
     <Compile Include="Logon\ApplicationFunctionsForRole.cs" />
+    <Compile Include="Intraday\FetchSkillArea.cs" />
     <Compile Include="Logon\AsSystem.cs" />
     <Compile Include="Intraday\FetchSkillInIntraday.cs" />
     <Compile Include="Intraday\IIntradaySkillStatusService.cs" />
@@ -650,6 +651,7 @@
     <Compile Include="Intraday\SkillActualTasksProvider.cs" />
     <Compile Include="Intraday\SkillArea.cs" />
     <Compile Include="Intraday\SkillForecastedTasksProvider.cs" />
+    <Compile Include="Intraday\SkillInIntraday.cs" />
     <Compile Include="Intraday\SkillStatusMeasure.cs" />
     <Compile Include="Intraday\SkillStatusModel.cs" />
     <Compile Include="Intraday\SkillTaskDetails.cs" />
@@ -712,6 +714,7 @@
     <Compile Include="Repositories\IIntradayStatistics.cs" />
     <Compile Include="Repositories\ISeatPlanRepository.cs" />
     <Compile Include="Repositories\ILoadAllSkillInIntradays.cs" />
+    <Compile Include="Repositories\ISkillAreaRepository.cs" />
     <Compile Include="Scheduling\DayOffBusinessRuleValidation.cs" />
     <Compile Include="Scheduling\FullScheduling.cs" />
     <Compile Include="Scheduling\IScheduleDictionaryPersister.cs" />

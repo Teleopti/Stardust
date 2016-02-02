@@ -399,6 +399,7 @@
     <Compile Include="Repositories\DayOffRulesRepository.cs" />
     <Compile Include="Repositories\PersonInRoleQuerier.cs" />
     <Compile Include="Repositories\LoadAllSkillInIntradays.cs" />
+    <Compile Include="Repositories\SkillAreaRepository.cs" />
     <Compile Include="SeatManagement\PersonScheduleWithSeatBooking.cs" />
     <Compile Include="Repositories\PlanningPeriodRepository.cs" />
     <Compile Include="Repositories\PlanningPeriodSuggestions.cs" />

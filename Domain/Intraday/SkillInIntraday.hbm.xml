@@ -14,11 +14,14 @@
 		<!--IEntity-->
 
 		<property name="Name"/>
+		<property name="IsDeleted"/>
   </class>
 
-	<query name="loadAllSkills">
+	<query name="loadIntradaySkillsWithAtLeastOneQueue">
 		<![CDATA[
-select Id as "Id", Name as "Name" from Skill
+select s.Id as "Id", s.Name as "Name", s.IsDeleted as "IsDeleted" from Skill s
+	inner join s.WorkloadCollection wl
+	inner join wl.QueueSourceCollection
 ]]>
 	</query>
 

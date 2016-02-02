@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.Intraday
@@ -16,5 +17,10 @@ namespace Teleopti.Ccc.Domain.Intraday
 		{
 			return _loadAllSkillInIntradays.Skills();
 		}
+
+		//public IEnumerable<SkillInIntraday> GetAllInOneSkillArea(Guid skillAreaId)
+		//{
+			
+		//}
 	}
 }

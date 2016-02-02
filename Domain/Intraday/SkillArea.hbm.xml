@@ -4,24 +4,52 @@
                    namespace="Teleopti.Ccc.Domain.Intraday"
                    default-access="field.camelcase-underscore">
 
-  <class name="SkillArea">
-    <id name="Id" type="guid" unsaved-value="null" access="nosetter.camelcase-underscore">
-      <generator class="guid.comb" />
-    </id>
+	<class name="SkillArea">
+		<id name="Id" type="guid" unsaved-value="null" access="nosetter.camelcase-underscore">
+			<generator class="guid.comb" />
+		</id>
+		<version name="Version"
+				 unsaved-value ="null"/>
+		
 		<property name="Name" not-null="true" type="string" length="50"/>
 
-		<bag name="SkillCollection" cascade="none">
+		<bag name="SkillCollection" table="SkillAreaSkillCollection" cascade="none">
 			<key foreign-key="FK_SkillAreaSkillCollection_SkillArea">
 				<column name="SkillArea"
 						not-null="true"
 						unique-key="UQ_SkillAreaSkillCollection"/>
 			</key>
-			<many-to-many class="Teleopti.Ccc.Domain.Intraday.SkillInIntraday" foreign-key="FK_SkillAreaSkillCollection_Skill">
+			<many-to-many class="Teleopti.Ccc.Domain.Intraday.SkillInIntraday"
+						  foreign-key="FK_SkillAreaSkillCollection_Skill">
 				<column name="Skill"
 						unique-key="UQ_SkillAreaSkillCollection"
 						not-null="true"/>
 			</many-to-many>
 		</bag>
-  </class>
+
+		<many-to-one name="BusinessUnit"
+					 class="Teleopti.Ccc.Domain.Common.BusinessUnit"
+					 access="nosetter.camelcase-underscore"
+					 not-null="true"
+					 foreign-key="FK_Skill_BusinessUnit"/>
+		
+		<property name="IsDeleted"
+			  type="boolean"
+			  not-null="true"/>
+
+		<many-to-one name="UpdatedBy"
+					   class="Teleopti.Ccc.Domain.Common.Person"
+					   not-null="true"
+					   foreign-key="FK_Skill_Person_UpdatedBy"/>
+
+		<property name="UpdatedOn"
+				  type="UtcDateTime"
+				  not-null="true"/>
+
+		<filter name="businessUnitFilter"
+				condition=":businessUnitParameter = BusinessUnit" />
+		<filter name="deletedFlagFilter"
+				condition="IsDeleted = 0" />
+	</class>
 
 </hibernate-mapping>

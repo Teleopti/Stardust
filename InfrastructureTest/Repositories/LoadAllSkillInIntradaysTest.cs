@@ -1,4 +1,3 @@
-using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -14,19 +13,31 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	public class LoadAllSkillInIntradaysTest : DatabaseTest
 	{
 		[Test]
-		public void ShouldFindExistingSkillInIntraday()
+		public void ShouldLoadExistingIntradaySkillWithAtLeastOneQueue()
 		{
 			var skillType = SkillTypeFactory.CreateSkillType();
+			var skillWithQueue = SkillFactory.CreateSkill("dummy", skillType, 15);
+			var skillWithoutQueue = SkillFactory.CreateSkill("dummy", skillType, 15);
+			var activity = new Activity("dummyActivity");
+			skillWithQueue.Activity = activity;
+			skillWithoutQueue.Activity = activity;
+			var queueSourceHelpdesk = QueueSourceFactory.CreateQueueSourceHelpdesk();
+
+			PersistAndRemoveFromUnitOfWork(queueSourceHelpdesk);
+
 			PersistAndRemoveFromUnitOfWork(skillType);
-			var activity = new Activity("The test") { DisplayColor = Color.Honeydew };
+
 			PersistAndRemoveFromUnitOfWork(activity);
-			var skill = SkillFactory.CreateSkill("Skill - Name", skillType, 15);
-			skill.Activity = activity;
-			PersistAndRemoveFromUnitOfWork(skill);
+			PersistAndRemoveFromUnitOfWork(skillWithQueue);
+			PersistAndRemoveFromUnitOfWork(skillWithoutQueue);
+
+			var workload = WorkloadFactory.CreateWorkload(skillWithQueue);
+			workload.AddQueueSource(queueSourceHelpdesk);
+			PersistAndRemoveFromUnitOfWork(workload);
 
 			var target = new LoadAllSkillInIntradays(CurrUnitOfWork);
 			target.Skills().Count().Should().Be.EqualTo(1);
-			target.Skills().First().Name.Should().Be.EqualTo(skill.Name);
+			target.Skills().First().Name.Should().Be.EqualTo(skillWithQueue.Name);
 		}
 
 	}
