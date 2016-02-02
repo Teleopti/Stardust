@@ -12680,6 +12680,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid number.
+        /// </summary>
+        public static string InvalidNumber {
+            get {
+                return ResourceManager.GetString("InvalidNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid percentage value.
         /// </summary>
         public static string InvalidPercentageValue {
@@ -12725,7 +12734,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is Alarm.
+        ///   Looks up a localized string similar to Alarm.
         /// </summary>
         public static string IsAlarm {
             get {
@@ -14048,7 +14057,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage Mappings.
+        ///   Looks up a localized string similar to Manage Rule Mappings.
         /// </summary>
         public static string ManageMappings {
             get {
@@ -14301,7 +14310,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mappings.
+        ///   Looks up a localized string similar to Rule Mappings.
         /// </summary>
         public static string Mappings {
             get {

@@ -27,8 +27,8 @@
 						<div class="form-input-wrap">
 							<label>
 								<span translate>Activity</span>:
-								<activity-picker ng-model="campaign.Activity" name="Activity" sync-name="{{campaign.Name}}" class="custom-input"></activity-picker>
 							</label>
+							<activity-picker ng-model="campaign.Activity" name="Activity" sync-name="{{campaign.Name}}" class="custom-input"></activity-picker>
 						</div>
 						<h2 translate>Workload</h2>
 						<div class="row">
@@ -41,6 +41,7 @@
 									<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.CallListLen.$touched">
 										<div class="form-input-message" ng-class="{formInvalidInput:form.CallListLen.$error.required}">{{ 'Required' | translate }}</div>
 										<div class="form-input-message" ng-class="{formInvalidInput:form.CallListLen.$error.range}">{{'LargeValueRange'|translate}}</div>
+										<div class="form-input-message" ng-class="{formInvalidInput:!form.CallListLen.$error.required&&form.CallListLen.$error.number}">{{'InvalidNumber'|translate}}</div>
 									</div>
 								</div>
 								<div class="form-input-wrap">
@@ -51,6 +52,7 @@
 									<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.TargetRate.$touched">
 										<div class="form-input-message" ng-class="{formInvalidInput:form.TargetRate.$error.required}">{{ 'Required' | translate }}</div>
 										<div class="form-input-message" ng-class="{formInvalidInput:form.TargetRate.$error.range}">{{'RateRange'|translate}}</div>
+										<div class="form-input-message" ng-class="{formInvalidInput:!form.TargetRate.$error.required&&form.TargetRate.$error.number}">{{'InvalidNumber'|translate}}</div>
 									</div>
 								</div>
 								<div class="form-input-wrap">
@@ -61,6 +63,7 @@
 									<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.ConnectRate.$touched">
 										<div class="form-input-message" ng-class="{formInvalidInput:form.ConnectRate.$error.required}">{{ 'Required' | translate }}</div>
 										<div class="form-input-message" ng-class="{formInvalidInput:form.ConnectRate.$error.range}">{{'RateRange'|translate}}</div>
+										<div class="form-input-message" ng-class="{formInvalidInput:!form.ConnectRate.$error.required&&form.ConnectRate.$error.number}">{{'InvalidNumber'|translate}}</div>
 									</div>
 								</div>
 								<div class="form-input-wrap">
@@ -71,6 +74,7 @@
 									<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.RightPartyConnectRate.$touched">
 										<div class="form-input-message" ng-class="{formInvalidInput:form.RightPartyConnectRate.$error.required}">{{ 'Required' | translate }}</div>
 										<div class="form-input-message" ng-class="{formInvalidInput:form.RightPartyConnectRate.$error.range}">{{'RateRange'|translate}}</div>
+										<div class="form-input-message" ng-class="{formInvalidInput:!form.RightPartyConnectRate.$error.required&&form.RightPartyConnectRate.$error.number}">{{'InvalidNumber'|translate}}</div>
 									</div>
 								</div>
 							</div>
@@ -83,6 +87,7 @@
 									<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.ConnectAverageHandlingTime.$touched">
 										<div class="form-input-message" ng-class="{formInvalidInput:form.ConnectAverageHandlingTime.$error.required}">{{ 'Required' | translate }}</div>
 										<div class="form-input-message" ng-class="{formInvalidInput:form.ConnectAverageHandlingTime.$error.range}">{{'ValueRange'|translate}}</div>
+										<div class="form-input-message" ng-class="{formInvalidInput:!form.ConnectAverageHandlingTime.$error.required&&form.ConnectAverageHandlingTime.$error.number}">{{'InvalidNumber'|translate}}</div>
 									</div>
 								</div>
 								<div class="form-input-wrap">
@@ -93,6 +98,7 @@
 									<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.RightPartyAverageHandlingTime.$touched">
 										<div class="form-input-message" ng-class="{formInvalidInput:form.RightPartyAverageHandlingTime.$error.required}">{{ 'Required' | translate }}</div>
 										<div class="form-input-message" ng-class="{formInvalidInput:form.RightPartyAverageHandlingTime.$error.range}">{{'ValueRange'|translate}}</div>
+										<div class="form-input-message" ng-class="{formInvalidInput:!form.RightPartyAverageHandlingTime.$error.required&&form.RightPartyAverageHandlingTime.$error.number}">{{'InvalidNumber'|translate}}</div>
 									</div>
 								</div>
 								<div class="form-input-wrap">
@@ -103,6 +109,7 @@
 									<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.UnproductiveTime.$touched">
 										<div class="form-input-message" ng-class="{formInvalidInput:form.UnproductiveTime.$error.required}">{{ 'Required' | translate }}</div>
 										<div class="form-input-message" ng-class="{formInvalidInput:form.UnproductiveTime.$error.range}">{{'ValueRange'|translate}}</div>
+										<div class="form-input-message" ng-class="{formInvalidInput:!form.UnproductiveTime.$error.required&&form.UnproductiveTime.$error.number}">{{'InvalidNumber'|translate}}</div>
 									</div>
 								</div>
 								<div class="form-input-wrap">
