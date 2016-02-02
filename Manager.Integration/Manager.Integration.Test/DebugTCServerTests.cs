@@ -12,18 +12,24 @@ namespace Manager.Integration.Test
     public class DebugTCServerTests
     {
         [Test]
-        public void ManagerConsoleHostShouldNotBeInstantiated()
+        public void ManagerIntegrationConsoleHostShouldNotBeInstantiated()
         {
             int numberOfIntegrationProcesses = ProcessHelper.NumberOfProcesses("Manager.IntegrationTest.Console.Host");
             Assert.IsTrue(numberOfIntegrationProcesses == 0);
         }
 
-        [Test][Ignore]
-        public void ManagerConsoleHostShouldBeInstantiated()
+        [Test]
+        public void ManagerConsoleHostShouldNotBeInstantiated()
         {
+            int numberOfManagerProcesses = ProcessHelper.NumberOfProcesses("ManagerConsoleHost");
+            Assert.IsTrue(numberOfManagerProcesses == 0);
+        }
 
-            int numberOfIntegrationProcesses = ProcessHelper.NumberOfProcesses("Manager.IntegrationTest.Console.Host");
-            Assert.IsTrue(numberOfIntegrationProcesses == 1);
+        [Test]
+        public void NodeConsoleHostShouldNotBeInstantiated()
+        {
+            int numberOfNodeProcesses = ProcessHelper.NumberOfProcesses("NodeConsoleHost");
+            Assert.IsTrue(numberOfNodeProcesses == 0);
         }
 
     }
