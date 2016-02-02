@@ -7,7 +7,7 @@
 	</div>
 </div>
 
-<div class="panel material-depth-1">
+<div class="panel material-depth-1 test-campaign-create">
 	<form name="form" class="wfm-form">
 		<div class="con-row">
 			<div class="con-flex">
@@ -134,7 +134,7 @@
 		</div>
 		<div class="con-footer">
 			<button class="wfm-btn wfm-btn-invis-primary" ng-click="backToList()" ng-disabled="isCreating"><span translate>Cancel</span></button>
-			<button type="submit" class="wfm-btn wfm-btn-invis-primary" ng-click="addCampaign()" ng-class="{'wfm-btn-invis-disabled': !isInputValid(), 'wfm-btn-invis-primary':isInputValid()}" ng-disabled="isCreating"><span translate>Save</span></button>
+			<button type="submit" class="wfm-btn wfm-btn-invis-primary test-campaign-create-submit" ng-click="addCampaign()" ng-class="{'wfm-btn-invis-disabled': !isInputValid(), 'wfm-btn-invis-primary':isInputValid()}" ng-disabled="isCreating"><span translate>Save</span></button>
 		</div>
 
 	</form>

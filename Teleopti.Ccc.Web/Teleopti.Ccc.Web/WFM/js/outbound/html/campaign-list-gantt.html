@@ -13,7 +13,7 @@
 	</div>
 </div>
 
-<div class="panel material-depth-1 p-10" ng-if="isInitFinished">
+<div class="panel material-depth-1 p-10  test-outbound-summary" ng-if="isInitFinished">
 	<div class="loading" ng-show="!isLoadFinished">
 		<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 	</div>
@@ -39,16 +39,16 @@
 		</div>
 	</div>
 	<div class="spacer outbound-gantt-chart"
-		  gantt
-		  data="ganttData"
-		  options="ganttOptions"
-		  from-date="ganttOptions.fromDate"
-		  to-date="ganttOptions.toDate"
-		  timespans="timespans"
-		  headers-formats="headerFormats"
-		  template-url="js/outbound/html/angular-gantt-custom.tpl.html"
-		  scrollfix="+10">
-		
+		 gantt
+		 data="ganttData"
+		 options="ganttOptions"
+		 from-date="ganttOptions.fromDate"
+		 to-date="ganttOptions.toDate"
+		 timespans="timespans"
+		 headers-formats="headerFormats"
+		 template-url="js/outbound/html/angular-gantt-custom.tpl.html"
+		 scrollfix="+10">
+
 		<gantt-tooltips></gantt-tooltips>
 		<gantt-table headers="tableHeaders" class="gantt-schedule-loader"></gantt-table>
 		<div ng-show="isRefreshingGantt" class="gantt-schedule-loader"><md-progress-linear md-mode="indeterminate"></md-progress-linear></div>

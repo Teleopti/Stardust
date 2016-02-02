@@ -23,6 +23,9 @@
 	    $scope.showRemoveCampaignConfirmDialog = false;
 	    $scope.removeCampaign = removeCampaign;
 		$scope.cancelRemoveCampaign = cancelRemoveCampaign;
+		$scope.isCampaignLoaded = function () { return angular.isDefined($scope.campaign); };
+
+
 
 		function editCampaign() {
 			$scope.isFormValidForPage = $scope.isFormValid();
@@ -66,6 +69,7 @@
 		}
 
         function init() {
+        	
             var currentCampaignId = (angular.isDefined($stateParams.Id) && $stateParams.Id != "") ? $stateParams.Id : null;
             if (currentCampaignId == null) return;
             $scope.isEditing = false;

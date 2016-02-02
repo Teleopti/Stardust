@@ -7,10 +7,11 @@ Feature: OutboundCampaignBasicOperations
 
 
 Background: 
-	Given I have a role with
+	Given I am englishspeaking swede
+	And I have a role with
 	| Field              | Value            |
 	| Name               | Resource Planner |
-	| Access to outbound | true             |	
+	| Access to outbound | true             |
 	And there is an activity with
 	| Field | Value     |
 	| Name  | Campaign1 |
@@ -92,7 +93,6 @@ Scenario: Display Gantt chart for showing the campaigns
 When I view outbound
 Then I should see the gantt chart
 
-@ignore
 Scenario: List campaigns in three months
 When I view outbound
 And I set the starting month for viewing period to '2015-08-01'
@@ -102,7 +102,6 @@ And I should see 'Campaign4' in campaign list
 And I should not see 'Campaign1' in campaign list
 And I should not see 'Campaign5' in campaign list
 
-@ignore
 Scenario: Navigate in gantt chart by month
 When I view outbound
 And I set the starting month for viewing period to '2015-09-01'
@@ -111,7 +110,6 @@ And I set the starting month for viewing period to '2015-07-01'
 Then I should see 'Campaign1' in campaign list
 And I should not see 'Campaign4' in campaign list
 
-@ignore
 Scenario: Visualize campaign backlog
 When I view outbound
 And I set the starting month for viewing period to '2015-09-01'
@@ -119,7 +117,6 @@ And I can see 'Campaign4' in campaign list
 And I click at campaign name tag 'Campaign4'
 Then I should see the backlog visualization of 'Campaign4'
  
-@ignore
 Scenario: Create a campaign
 When I view the outbound campaign creation page 
 And I see the new campaign form
@@ -141,7 +138,6 @@ And after the creation I goto the campaign list page
 And I set the starting month for viewing period to '2016-01-01'
 Then I should see 'NewCampaign' in campaign list
 
-@ignore
 Scenario: Delete a campaign
 When I view campaign 'Campaign4'
 And I confirm to delete the campaign
@@ -149,7 +145,6 @@ And after that I am redirected to the campaign list page
 And I set the starting month for viewing period to '2015-09-01'
 Then I should not see 'Campaign4' in campaign list 
 
-@ignore
 Scenario: Edit a campaign
 Given there is an activity named 'NewCampaign'
 And there is a skill named 'NewCampaign' with activity 'NewCampaign'
@@ -245,7 +240,6 @@ And I see that the campaign is not done after the end date
 And I replan the campaign
 Then I should see the campaign is done after the end date
 
-@ignore
 Scenario: Manually update backlog
 Given there is an activity with
 	| Field | Value     |

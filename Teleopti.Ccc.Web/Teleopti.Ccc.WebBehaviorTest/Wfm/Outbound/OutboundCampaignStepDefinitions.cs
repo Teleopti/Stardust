@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		[Given(@"I set the starting month for viewing period to '(.*)'")]
 		public void WhenISetTheStartingMonthForViewingPeriodTo(DateTime startingMonth)
 		{
-			Browser.Interactions.SetScopeValues(".outbound-summary", new Dictionary<string, string>
+			Browser.Interactions.SetScopeValues(".test-outbound-summary", new Dictionary<string, string>
 			{
 				{"settings.periodStart" , string.Format("new Date('{0}')", startingMonth.ToShortDateString())} 
 			});
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		[When(@"I click at campaign name tag '(.*)'")]
 		public void WhenIClickAtCampaignNameTag(string campaignName)
 		{
-			Browser.Interactions.WaitScopeCondition(".outbound-summary", "isRefreshingGantt", false,
+			Browser.Interactions.WaitScopeCondition(".test-outbound-summary", "isRefreshingGantt", false,
 				() =>
 				{			
 					Browser.Interactions.ClickVisibleOnly(".campaign-visualization-toggle");
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		[When(@"I see the new campaign form")]
 		public void ThenIShouldSeeTheNewCampaignForm()
 		{
-			Browser.Interactions.AssertExists(".campaign-create");
+			Browser.Interactions.AssertExists(".test-campaign-create");
 		}
 
 		[When(@"I submit the campaign form with the campaign detail")]
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 			var instance = new OutboundCampaignConfigurable();
 			table.FillInstance(instance);
 
-			Browser.Interactions.SetScopeValues(".campaign-create", new Dictionary<string, string>
+			Browser.Interactions.SetScopeValues(".test-campaign-create", new Dictionary<string, string>
 			{
 				{ "campaign.Name" , string.Format("\"{0}\"", instance.Name)},
  				{ "campaign.Activity", string.Format("\"{0}\"", instance.Name) },
@@ -100,26 +100,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 				{ "preventAutomaticRedirect", "true"}
 			});
 
-			Browser.Interactions.AssertScopeValue(".campaign-create", "isInputValid()", true);
-			Browser.Interactions.ClickVisibleOnly(".form-submit.wfm-btn-primary");						
+			Browser.Interactions.AssertScopeValue(".test-campaign-create", "isInputValid()", true);
+			Browser.Interactions.ClickVisibleOnly(".test-campaign-create-submit");						
 		}
 
 		[When(@"after the creation I goto the campaign list page")]
 		public void WhenAfterTheCreationIGotoTheCampaignListPage()
 		{			
-			Browser.Interactions.AssertScopeValueEmpty(".campaign-create", "campaign.Name");		
-			Browser.Interactions.AssertScopeValue(".campaign-create", "isCreating", false);			
+			Browser.Interactions.AssertScopeValueEmpty(".test-campaign-create", "campaign.Name");		
+			Browser.Interactions.AssertScopeValue(".test-campaign-create", "isCreating", false);			
 			Navigation.GoToOutbound();
 		}
 
 		[When(@"I confirm to delete the campaign")]
 		public void WhenIConfirmToDeleteTheCampaign()
 		{
-			Browser.Interactions.WaitScopeCondition(".campaign-edit", "isCampaignLoaded()", true, () =>
+			Browser.Interactions.WaitScopeCondition(".test-campaign-edit", "isCampaignLoaded()", true, () =>
 			{
-				Browser.Interactions.ClickVisibleOnly(".trigger-campaign-delete");
-				Browser.Interactions.ClickVisibleOnly(".modal-box .confirm-delete");
-			});							
+				Browser.Interactions.ClickVisibleOnly(".test-delete-campaign");
+				Browser.Interactions.ClickVisibleOnly(".modal-box .test-confirm-delete");
+			});			
 		}
 
 		[When(@"after that I am redirected to the campaign list page")]
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		[When(@"I see the edit campaign form")]
 		public void WhenISeeTheEditCampaignForm()
 		{
-			Browser.Interactions.AssertExists(".campaign-edit");
+			Browser.Interactions.AssertExists(".test-campaign-edit");
 		}
 
 		[When(@"I change the campaign period to")]
@@ -140,14 +140,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 			var instance = new OutboundCampaignConfigurable();
 			table.FillInstance(instance);
 
-			Browser.Interactions.SetScopeValues(".campaign-edit", new Dictionary<string, string>
+			Browser.Interactions.SetScopeValues(".test-campaign-edit", new Dictionary<string, string>
 			{				
 				{ "campaign.StartDate", string.Format("new Date('{0}')", instance.StartDate)},
 				{ "campaign.EndDate", string.Format("new Date('{0}')", instance.EndDate) },
 				{ "campaignSpanningPeriodForm.$pristine", "false" }
 			});
 
-			Browser.Interactions.Click(".form-submit.wfm-btn-primary");
+			Browser.Interactions.Click(".test-campaign-edit-submit");
 		}
 
 		[When(@"after the update is done I goto the campaign list page")]

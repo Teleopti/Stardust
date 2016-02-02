@@ -7,7 +7,7 @@
 	</div>
 </div>
 
-<div class="campaign-edit">
+<div class="test-campaign-edit" ng-show="isCampaignLoaded()">
 
 	<div class="panel material-depth-1">
 		<form name="form" class="wfm-form">
@@ -136,9 +136,9 @@
 			</div>
 			<div class="con-footer">
 				<button class="wfm-btn wfm-btn-invis-primary" ng-click="backToList()" ng-disabled="isCreating"><span translate>Cancel</span></button>
-				<button class="wfm-btn" ng-click="editCampaign()" ng-class="{'wfm-btn-invis-disabled': !isInputValid(), 'wfm-btn-invis-primary': isInputValid()}"><span translate>Save</span></button>
+				<button class="wfm-btn test-campaign-edit-submit" ng-click="editCampaign()" ng-class="{'wfm-btn-invis-disabled': !isInputValid(), 'wfm-btn-invis-primary': isInputValid()}"><span translate>Save</span></button>
 				<button class="wfm-btn wfm-btn-invis-primary" ng-click="reset()"><span translate>Reset</span></button>
-				<button class="wfm-btn wfm-btn-invis-primary" ng-click="removeCampaign()"><span translate>Remove</span></button>
+				<button class="wfm-btn wfm-btn-invis-primary test-delete-campaign" ng-click="removeCampaign()"><span translate>Remove</span></button>
 			</div>
 
 		</form>
@@ -157,7 +157,7 @@
 					<div class="modal-actions">
 						<aside>
 							<button ng-click="cancelRemoveCampaign()" class="wfm-btn wfm-btn-invis-default" translate>Cancel</button>
-							<button ng-click="remove()" class="wfm-btn wfm-btn-invis-primary confirm-delete" translate>Delete</button>
+							<button ng-click="remove()" class="wfm-btn wfm-btn-invis-primary test-confirm-delete" translate>Delete</button>
 						</aside>
 					</div>
 				</div>
