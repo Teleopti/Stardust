@@ -77,6 +77,5 @@
             }
             return curObj;
         }
-
     }   
 })();
