@@ -13,14 +13,18 @@ namespace Manager.Integration.Test
     [TestFixture]
     public class DebugTCServerTests
     {
-        [SetUp]
-        public void SetUp()
+        [TestFixtureSetUp]
+        public void TestFixtureSetUp()
         {
             StartManagerIntegrationConsoleHostProcess =
                     ProcessHelper.StartManagerIntegrationConsoleHostProcess(1);
             Thread.Sleep(TimeSpan.FromSeconds(10)); 
-        //    ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
-        ProcessHelper.ShutDownAllProcesses();
+        
+        }
+        [TestFixtureTearDown]
+        public void TestFixtureTearDown()
+        {
+            ProcessHelper.ShutDownAllProcesses();
         }
 
         private Process StartManagerIntegrationConsoleHostProcess { get; set; }
