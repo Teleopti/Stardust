@@ -52,9 +52,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var target = new RemovePersonAbsenceCommandHandler(personAbsenceRepository, _scheduleRepository, _businessRulesForAccountUpdate, _saveSchedulePartService);
 
 			var command = new RemovePersonAbsenceCommand
-			{
-				PersonAbsenceIds = new[] {personAbsence.Id.Value}
-			};
+				{
+					PersonAbsenceId = personAbsence.Id.Value
+				};
 
 			target.Handle(command);
 
@@ -76,14 +76,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var operatedPersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();
 			var command = new RemovePersonAbsenceCommand
-			{
-				PersonAbsenceIds = new[] {personAbsence.Id.Value},
-				TrackedCommandInfo = new TrackedCommandInfo
 				{
-					OperatedPersonId = operatedPersonId,
-					TrackId = trackId
-				}
-			};
+					PersonAbsenceId = personAbsence.Id.Value,
+					TrackedCommandInfo = new TrackedCommandInfo
+					{
+						OperatedPersonId = operatedPersonId,
+						TrackId = trackId
+					}
+				};
 
 			target.Handle(command);
 			var @event = personAbsence.PopAllEvents().Single() as PersonAbsenceRemovedEvent;

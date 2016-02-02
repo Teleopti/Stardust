@@ -26,12 +26,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		public void Handle(RemovePersonAbsenceCommand command)
 		{
-			foreach (var personAbsenceId in command.PersonAbsenceIds)
-			{
-				var personAbsence = (PersonAbsence)_personAbsenceRepository.LoadAggregate(personAbsenceId);
-				personAbsence.RemovePersonAbsence(command.TrackedCommandInfo);
-				removePersonAbsenceFromScheduleDay(personAbsence);
-			}
+			var personAbsence = (PersonAbsence)_personAbsenceRepository.LoadAggregate(command.PersonAbsenceId);
+			personAbsence.RemovePersonAbsence(command.TrackedCommandInfo);
+			removePersonAbsenceFromScheduleDay(personAbsence);
 		}
 
 		private void removePersonAbsenceFromScheduleDay(IPersonAbsence personAbsence)
