@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using log4net;
 using log4net.Repository.Hierarchy;
 using Manager.Integration.Test.Properties;
@@ -20,6 +21,8 @@ namespace Manager.Integration.Test.Helpers
         private static readonly ILog Logger =
             LogManager.GetLogger(typeof (ProcessHelper));
 
+        private static ManualResetEventSlim _closeProcessManualResetEventSlim;
+
         public static void ShutDownAllManagerIntegrationConsoleHostProcesses()
         {
             var consoleHostname = new FileInfo(Settings.Default.ManagerIntegrationConsoleHostAssemblyName);
@@ -30,23 +33,56 @@ namespace Manager.Integration.Test.Helpers
             ShutDownAllProcesses(fileNameWithNoExtension);
         }
 
+        //public static void CloseProcess(Process process)
+        //{
+        //    if (process != null)
+        //    {
+        //        try
+        //        {
+        //            process.CloseMainWindow();
+        //            if (!process.WaitForExit(100))
+        //            {
+        //                process.Kill();
+        //            }
+        //        }
+        //        catch (Exception)
+        //        {
+        //            Logger.Error("Error in CloseProcess ");
+        //        }
+        //    }
+        //}
+       
+
         public static void CloseProcess(Process process)
         {
             if (process != null)
             {
                 try
                 {
+                    _closeProcessManualResetEventSlim = new ManualResetEventSlim();
+
+                    process.EnableRaisingEvents = true;
+                    process.Exited += ProcessOnExited;
+
                     process.CloseMainWindow();
-                    if (!process.WaitForExit(100))
-                    {
-                        process.Kill();
-                    }
+
+                    _closeProcessManualResetEventSlim.Wait();
                 }
+
                 catch (Exception)
                 {
-                    Logger.Error("Error in CloseProcess ");
+                }
+
+                finally
+                {
+                    process.Exited -= ProcessOnExited;
                 }
             }
+        }
+        private static void ProcessOnExited(object sender,
+                                            System.EventArgs eventArgs)
+        {
+            _closeProcessManualResetEventSlim.Set();
         }
 
         public static Process StartManagerIntegrationConsoleHostProcess(int numberOfNodesToStart)
@@ -115,15 +151,17 @@ namespace Manager.Integration.Test.Helpers
 
         public static void ShutDownAllProcesses()
         {
-            ShutDownAllManagerAndNodeProcesses();
-            ShutDownAllProcesses("Manager.IntegrationTest.Console.Host.vshost");
+       //     ShutDownAllManagerAndNodeProcesses();
+    //        ShutDownAllProcesses("Manager.IntegrationTest.Console.Host.vshost");
             ShutDownAllProcesses("Manager.IntegrationTest.Console.Host");
         }
 
         public static void ShutDownAllManagerAndNodeProcesses()
         {
-            ShutDownAllProcesses("NodeConsoleHost.vshost");
-            ShutDownAllProcesses("ManagerConsoleHost.vshost");
+    //        ShutDownAllProcesses("NodeConsoleHost.vshost");
+      //      ShutDownAllProcesses("ManagerConsoleHost.vshost");
+            ShutDownAllProcesses("NodeConsoleHost");
+            ShutDownAllProcesses("ManagerConsoleHost");
         }
 
 
