@@ -41,4 +41,7 @@ while ($count -lt 30) {
 
 if(!$isSuccess){
     $sdkUrl + " isn't available for 5 minutes."
+	Write-Error $_
+    ##teamcity[buildStatus status='FAILURE']
+    [System.Environment]::Exit(1)
 }
