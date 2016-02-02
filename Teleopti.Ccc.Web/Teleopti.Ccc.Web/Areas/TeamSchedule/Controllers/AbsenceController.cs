@@ -4,6 +4,7 @@ using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 {
@@ -29,11 +30,4 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		    }));
 	    }
     }
-
-	public class AbsenceViewModel
-	{
-		public string Id { get; set; }
-		public string Name { get; set; }
-		public string ShortName { get; set; }
-	}
 }
