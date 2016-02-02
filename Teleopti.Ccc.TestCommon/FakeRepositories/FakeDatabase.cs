@@ -7,6 +7,88 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
+	public static class FakeDatabaseAgentExtensions
+	{
+
+		public static FakeDatabase WithAgent(this FakeDatabase database, string name)
+		{
+			return database.WithAgent(null, name, null, null, null);
+		}
+
+		public static FakeDatabase WithAgent(this FakeDatabase database, Guid id, string name)
+		{
+			return database.WithAgent(id, name, null, null, null);
+		}
+
+		public static FakeDatabase WithAgent(this FakeDatabase database, string name, string terminalDate)
+		{
+			return database.WithAgent(null, name, terminalDate, null, null);
+		}
+
+		public static FakeDatabase WithAgent(this FakeDatabase database, string name, string terminalDate, Guid teamId)
+		{
+			return database.WithAgent(null, name, terminalDate, teamId, null);
+		}
+
+		public static FakeDatabase WithAgent(this FakeDatabase database, Guid id, string name, string terminalDate, Guid teamId)
+		{
+			return database.WithAgent(id, name, terminalDate, teamId, null);
+		}
+
+		public static FakeDatabase WithAgent(this FakeDatabase database, Guid id, string name, string terminalDate)
+		{
+			return database.WithAgent(id, name, terminalDate, null, null);
+		}
+
+		public static FakeDatabase WithAgent(this FakeDatabase database, string name, TimeZoneInfo timeZone)
+		{
+			return database.WithAgent(null, name, null, null, timeZone);
+		}
+
+		public static FakeDatabase WithAgent(this FakeDatabase database, string name, string terminalDate, TimeZoneInfo timeZone)
+		{
+			return database.WithAgent(null, name, terminalDate, null, timeZone);
+		}
+
+		public static FakeDatabase WithAgent(this FakeDatabase database, Guid id, string name, TimeZoneInfo timeZone)
+		{
+			return database.WithAgent(id, name, null, null, timeZone);
+		}
+
+		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, string name, string terminalDate, Guid? teamId, TimeZoneInfo timeZone)
+		{
+			database.WithPerson(id, name, terminalDate, timeZone);
+			database.WithPeriod("2016-01-01", teamId);
+			return database;
+		}
+	}
+
+	public static class FakeDatabasePeriodExtensions
+	{
+		public static FakeDatabase WithPeriod(this FakeDatabase database, string startDate)
+		{
+			return database.WithPeriod(startDate, null, null, null);
+		}
+
+		public static FakeDatabase WithPeriod(this FakeDatabase database, string startDate, Guid? teamId)
+		{
+			return database.WithPeriod(startDate, teamId, null, null);
+		}
+
+		public static FakeDatabase WithPeriod(this FakeDatabase database, string startDate, Guid? teamId, Guid? siteId)
+		{
+			return database.WithPeriod(startDate, teamId, siteId, null);
+		}
+	}
+
+	public static class FakeDatabasePersonExtensions
+	{
+		public static FakeDatabase WithPerson(this FakeDatabase database, string name)
+		{
+			return database.WithPerson(null, name, null, null);
+		}
+	}
+
 	public class FakeDatabase
 	{
 		private readonly FakePersonRepository _persons;
@@ -36,64 +118,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_contractSchedules = contractSchedules;
 		}
 
-		public FakeDatabase HasPerson(string name)
-		{
-			return hasPerson(null, name, null, null, null);
-		}
 
-		public FakeDatabase HasPerson(Guid id, string name)
-		{
-			return hasPerson(id, name, null, null, null);
-		}
-
-		public FakeDatabase HasPerson(string name, string terminalDate)
-		{
-			return hasPerson(null, name, terminalDate, null, null);
-		}
-
-		public FakeDatabase HasPerson(string name, string terminalDate, Guid teamId)
-		{
-			return hasPerson(null, name, terminalDate, teamId, null);
-		}
-
-		public FakeDatabase HasPerson(Guid id, string name, string terminalDate, Guid teamId)
-		{
-			return hasPerson(id, name, terminalDate, teamId, null);
-		}
-
-		public FakeDatabase HasPerson(Guid id, string name, string terminalDate)
-		{
-			return hasPerson(id, name, terminalDate, null, null);
-		}
-
-		public FakeDatabase HasPerson(string name, TimeZoneInfo timeZone)
-		{
-			return hasPerson(null, name, null, null, timeZone);
-		}
-
-		public FakeDatabase HasPerson(string name, string terminalDate, TimeZoneInfo timeZone)
-		{
-			return hasPerson(null, name, terminalDate, null, timeZone);
-		}
-
-		public FakeDatabase HasPerson(Guid id, string name, TimeZoneInfo timeZone)
-		{
-			return hasPerson(id, name, null, null, timeZone);
-		}
-
-		private FakeDatabase hasPerson(Guid? id, string name, string terminalDate, Guid? teamId, TimeZoneInfo timeZone)
-		{
-			hasPersonWithoutPersonPeriod(id, name, terminalDate, timeZone);
-			WithPeriod("2016-01-01", teamId);
-			return this;
-		}
-
-		public FakeDatabase HasPersonWithoutPersonPeriod(string name)
-		{
-			return hasPersonWithoutPersonPeriod(null, name, null, null);
-		}
-
-		private FakeDatabase hasPersonWithoutPersonPeriod(Guid? id, string name, string terminalDate, TimeZoneInfo timeZone)
+		public FakeDatabase WithPerson(Guid? id, string name, string terminalDate, TimeZoneInfo timeZone)
 		{
 			var person = new Person { Name = new Name(name, "") };
 			person.SetId(id ?? Guid.NewGuid());
@@ -106,23 +132,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				person.TerminatePerson(terminalDate.Date(), new PersonAccountUpdaterDummy());
 
 			return this;
-
-		}
-
-
-		public FakeDatabase WithPeriod(string startDate)
-		{
-			return WithPeriod(startDate, null, null, null);
-		}
-
-		public FakeDatabase WithPeriod(string startDate, Guid? teamId)
-		{
-			return WithPeriod(startDate, teamId, null, null);
-		}
-
-		public FakeDatabase WithPeriod(string startDate, Guid? teamId, Guid? siteId)
-		{
-			return WithPeriod(startDate, teamId, siteId, null);
 		}
 
 		public FakeDatabase WithPeriod(string startDate, Guid? teamId, Guid? siteId, Guid? businessUnitId)

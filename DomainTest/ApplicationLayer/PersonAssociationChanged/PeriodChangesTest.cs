@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		public void ShouldPublishWhenPeriodChanges()
 		{
 			Now.Is("2016-02-01 00:00");
-			Data.HasPerson("pierre")
+			Data.WithAgent("pierre")
 				.WithPeriod("2016-02-01");
 
 			Target.Handle(new TenantHearbeatEvent());
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		{
 			Now.Is("2016-02-01 00:00");
 			var personId = Guid.NewGuid();
-			Data.HasPerson(personId, "pierre")
+			Data.WithAgent(personId, "pierre")
 				.WithPeriod("2016-02-01");
 
 			Target.Handle(new TenantHearbeatEvent());
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		public void ShouldPublishWithTimestamp()
 		{
 			Now.Is("2016-02-01 00:00");
-			Data.HasPerson("pierre")
+			Data.WithAgent("pierre")
 				.WithPeriod("2016-02-01");
 
 			Target.Handle(new TenantHearbeatEvent());
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		{
 			Now.Is("2016-02-01 00:00");
 			var teamId = Guid.NewGuid();
-			Data.HasPerson("pierre")
+			Data.WithAgent("pierre")
 				.WithPeriod("2016-02-01", teamId);
 
 			Target.Handle(new TenantHearbeatEvent());
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		{
 			Now.Is("2016-02-01 00:00");
 			var siteId = Guid.NewGuid();
-			Data.HasPerson("pierre")
+			Data.WithAgent("pierre")
 				.WithPeriod("2016-02-01", Guid.NewGuid(), siteId);
 
 			Target.Handle(new TenantHearbeatEvent());
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		{
 			Now.Is("2016-02-01 00:00");
 			var businessUnitId = Guid.NewGuid();
-			Data.HasPerson("pierre")
+			Data.WithAgent("pierre")
 				.WithPeriod("2016-02-01", Guid.NewGuid(), Guid.NewGuid(), businessUnitId);
 
 			Target.Handle(new TenantHearbeatEvent());
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		public void ShouldPublishWhenPeriodChangesInIstanbul()
 		{
 			Now.Is("2016-02-01 22:00");
-			Data.HasPerson("pierre", TimeZoneInfoFactory.IstanbulTimeZoneInfo())
+			Data.WithAgent("pierre", TimeZoneInfoFactory.IstanbulTimeZoneInfo())
 				.WithPeriod("2016-02-02");
 
 			Target.Handle(new TenantHearbeatEvent());
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		public void ShouldWorkWithoutPersonPeriod()
 		{
 			Now.Is("2016-02-01 22:00");
-			Data.HasPersonWithoutPersonPeriod("pierre");
+			Data.WithPerson("pierre");
 
 			Target.Handle(new TenantHearbeatEvent());
 

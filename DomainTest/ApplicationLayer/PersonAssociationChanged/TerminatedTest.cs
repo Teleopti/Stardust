@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		public void ShouldPublishWhenTerminated()
 		{
 			Now.Is("2016-01-15 00:00");
-			Data.HasPerson("pierre", "2016-01-14");
+			Data.WithAgent("pierre", "2016-01-14");
 
 			Target.Handle(new TenantHearbeatEvent());
 
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		{
 			Now.Is("2016-01-15 00:00");
 			var personId = Guid.NewGuid();
-			Data.HasPerson(personId, "pierre", "2016-01-14");
+			Data.WithAgent(personId, "pierre", "2016-01-14");
 
 			Target.Handle(new TenantHearbeatEvent());
 
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		public void ShouldPublishWithTimestamp()
 		{
 			Now.Is("2016-01-15 00:00");
-			Data.HasPerson("pierre", "2016-01-14");
+			Data.WithAgent("pierre", "2016-01-14");
 
 			Target.Handle(new TenantHearbeatEvent());
 
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		public void ShouldNotPublishWhenNotTerminated()
 		{
 			Now.Is("2016-01-15 00:00");
-			Data.HasPerson("pierre");
+			Data.WithAgent("pierre");
 
 			Target.Handle(new TenantHearbeatEvent());
 
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		public void ShouldNotPublishWhenLastDayToday()
 		{
 			Now.Is("2016-01-15 00:00");
-			Data.HasPerson("pierre", "2016-01-15");
+			Data.WithAgent("pierre", "2016-01-15");
 
 			Target.Handle(new TenantHearbeatEvent());
 
@@ -88,8 +88,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			Now.Is("2016-01-15 00:00");
 			var ashleeyId = Guid.NewGuid();
 			var pierreId = Guid.NewGuid();
-			Data.HasPerson(pierreId, "pierre", "2016-01-14", Guid.NewGuid());
-			Data.HasPerson(ashleeyId, "ashleey", "2016-01-14", Guid.NewGuid());
+			Data.WithAgent(pierreId, "pierre", "2016-01-14", Guid.NewGuid());
+			Data.WithAgent(ashleeyId, "ashleey", "2016-01-14", Guid.NewGuid());
 
 			Target.Handle(new TenantHearbeatEvent());
 
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		{
 			Now.Is("2016-01-15 00:00");
 			var teamId = Guid.NewGuid();
-			Data.HasPerson("pierre", "2016-01-14", teamId);
+			Data.WithAgent("pierre", "2016-01-14", teamId);
 
 			Target.Handle(new TenantHearbeatEvent());
 
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		public void ShouldNotPublishWhenTerminated2DaysAgo()
 		{
 			Now.Is("2016-01-15 00:00");
-			Data.HasPerson("pierre", "2016-01-12");
+			Data.WithAgent("pierre", "2016-01-12");
 
 			Target.Handle(new TenantHearbeatEvent());
 
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		public void ShouldPublishWhenTerminadedInIstanbul()
 		{
 			Now.Is("2016-01-14 22:00");
-			Data.HasPerson("pierre", "2016-01-14", TimeZoneInfoFactory.IstanbulTimeZoneInfo());
+			Data.WithAgent("pierre", "2016-01-14", TimeZoneInfoFactory.IstanbulTimeZoneInfo());
 
 			Target.Handle(new TenantHearbeatEvent());
 

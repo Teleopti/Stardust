@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		{
 			Now.Is("2016-01-18 00:00");
 			var personId = Guid.NewGuid();
-			Data.HasPerson(personId, "pierre", "2016-12-31");
+			Data.WithAgent(personId, "pierre", "2016-12-31");
 
 			Target.Handle(new PersonTerminalDateChangedEvent
 			{
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		{
 			Now.Is("2016-01-14 09:00");
 			var personId = Guid.NewGuid();
-			Data.HasPerson(personId, "pierre", "2016-01-14");
+			Data.WithAgent(personId, "pierre", "2016-01-14");
 
 			Target.Handle(new PersonTerminalDateChangedEvent
 			{
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		{
 			Now.Is("2016-01-18 08:15");
 			var personId = Guid.NewGuid();
-			Data.HasPerson(personId, "pierre", "2016-12-31");
+			Data.WithAgent(personId, "pierre", "2016-12-31");
 
 			Target.Handle(new PersonTerminalDateChangedEvent
 			{
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		{
 			Now.Is("2016-01-18 00:00");
 			var personId = Guid.NewGuid();
-			Data.HasPerson(personId, "Pierre", "2016-06-30");
+			Data.WithAgent(personId, "Pierre", "2016-06-30");
 
 			Target.Handle(new PersonTerminalDateChangedEvent
 			{
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		{
 			Now.Is("2016-01-18 00:00");
 			var personId = Guid.NewGuid();
-			Data.HasPerson(personId, "Pierre", "2016-06-30");
+			Data.WithAgent(personId, "Pierre", "2016-06-30");
 
 			Target.Handle(new PersonTerminalDateChangedEvent
 			{
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			Now.Is("2016-01-18 00:00");
 			var personId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
-			Data.HasPerson(personId, "Pierre", "2016-01-01", teamId);
+			Data.WithAgent(personId, "Pierre", "2016-01-01", teamId);
 
 			Target.Handle(new PersonTerminalDateChangedEvent
 			{
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			Now.Is("2016-01-18 00:00");
 			var personId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
-			Data.HasPerson(personId, "Pierre", "2016-01-01", teamId);
+			Data.WithAgent(personId, "Pierre", "2016-01-01", teamId);
 
 			Target.Handle(new PersonTerminalDateChangedEvent
 			{
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			Now.Is("2016-01-18 00:00");
 			var personId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
-			Data.HasPerson(personId, "Pierre", "2016-01-01", teamId);
+			Data.WithAgent(personId, "Pierre", "2016-01-01", teamId);
 
 			Target.Handle(new PersonTerminalDateChangedEvent
 			{
@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		{
 			Now.Is("2016-01-18 00:00");
 			var personId = Guid.NewGuid();
-			Data.HasPerson(personId, "Pierre", "2016-01-02");
+			Data.WithAgent(personId, "Pierre", "2016-01-02");
 
 			Target.Handle(new PersonTerminalDateChangedEvent
 			{
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		{
 			Now.Is("2016-01-18 22:00");
 			var personId = Guid.NewGuid();
-			Data.HasPerson(personId, "pierre", TimeZoneInfoFactory.IstanbulTimeZoneInfo());
+			Data.WithAgent(personId, "pierre", TimeZoneInfoFactory.IstanbulTimeZoneInfo());
 
 			Target.Handle(new PersonTerminalDateChangedEvent
 			{
@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		{
 			Now.Is("2016-01-18 21:00");
 			var personId = Guid.NewGuid();
-			Data.HasPerson(personId, "pierre", TimeZoneInfoFactory.IstanbulTimeZoneInfo());
+			Data.WithAgent(personId, "pierre", TimeZoneInfoFactory.IstanbulTimeZoneInfo());
 
 			Target.Handle(new PersonTerminalDateChangedEvent
 			{
