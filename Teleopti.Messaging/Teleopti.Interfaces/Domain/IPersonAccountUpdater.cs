@@ -12,5 +12,8 @@ namespace Teleopti.Interfaces.Domain
 		/// Updates the person absence accounts on activation / on termination
 		/// </summary>
         void Update(IPerson person);
+
+		bool UpdateForAbsence (IPerson person, IAbsence absence, DateOnly personAbsenceStartDate);
+
 	}
 }

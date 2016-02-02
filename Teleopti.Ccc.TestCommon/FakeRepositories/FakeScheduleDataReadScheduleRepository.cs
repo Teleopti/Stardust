@@ -103,7 +103,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence)
 		{
-			throw new NotImplementedException();
+			var dict =  ScheduleDictionaryForTest.WithScheduleData(person, scenario, period, _data.ToArray());
+			return new FakeScheduleRange(dict, new ScheduleParameters(scenario, person, period));
 		}
 
 		public IScheduleDictionary FindSchedulesForPersons(IScheduleDateTimePeriod period, IScenario scenario,

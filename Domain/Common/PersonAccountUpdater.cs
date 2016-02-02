@@ -1,3 +1,6 @@
+using System.Linq;
+using System.Runtime.Remoting.Messaging;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Interfaces.Domain;
@@ -32,6 +35,24 @@ namespace Teleopti.Ccc.Domain.Common
 					_traceableRefreshService.Refresh(account);
 				}
 			}
+		}
+
+		public bool UpdateForAbsence(IPerson person, IAbsence absence, DateOnly personAbsenceStartDate)
+		{
+			var personAccounts = _provider.Find(person);
+			var accountsForAbsence = personAccounts.Find (absence);
+			
+			if (accountsForAbsence == null) return false;
+
+			var accountCollection =
+				accountsForAbsence.AccountCollection()
+					.Where (personAbsenceAccount => personAbsenceAccount.Period().Contains (personAbsenceStartDate)).ToList();
+
+			if (!accountCollection.Any()) return false;
+
+			accountCollection.ForEach(_traceableRefreshService.Refresh);
+			
+			return true;
 		}
 	}
 }

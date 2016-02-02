@@ -53,7 +53,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<TimeZoneGuardWrapper>().As<ITimeZoneGuard>().SingleInstance();
 			builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>();
 			builder.RegisterType<ResourceCalculationPrerequisitesLoader>().As<IResourceCalculationPrerequisitesLoader>();
-			builder.RegisterType<IntraIntervalFinderService>().As<IIntraIntervalFinderService>();	
+			builder.RegisterType<IntraIntervalFinderService>().As<IIntraIntervalFinderService>();
+
 		}
 
 		private static ISchedulingResultStateHolder getSchedulingResultStateHolder(IComponentContext componentContext)

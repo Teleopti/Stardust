@@ -32,6 +32,7 @@ Request_ShiftTradeRequestForMoreDays_20918 = true
 Request_GiveCommentWhenDenyOrApproveShiftTradeRequest_28341 = true
 Request_SeePossibleShiftTradesFromAllTeams_28770 = true
 Request_FilterPossibleShiftTradeByTime_24560 = true
+Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850 = RC
 Portal_NewLandingpage_29415 = true
 Show_StaticPageOnNoInternet_29415 = false
 Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635 = true

@@ -9,6 +9,12 @@ namespace Teleopti.Ccc.Domain.Common
 	        CallCount++;
         }
 
+		public bool UpdateForAbsence (IPerson person, IAbsence absence, DateOnly personAbsenceStartDate)
+		{
+			CallCount++;
+			return true;
+		}
+
 		public int CallCount { get; private set; }
 	}
 }	
