@@ -18,7 +18,6 @@ namespace Manager.Integration.Test
             Console.WriteLine("Running TestFixtureSetUp...");
             StartManagerIntegrationConsoleHostProcess =
                 ProcessHelper.StartManagerIntegrationConsoleHostProcess(1);
-            Thread.Sleep(TimeSpan.FromSeconds(10));
             Console.WriteLine("Finish with TestFixtureSetUp...");
         }
 
@@ -31,10 +30,23 @@ namespace Manager.Integration.Test
         private Process StartManagerIntegrationConsoleHostProcess { get; set; }
 
         [Test]
-        public void ManagerIntegrationConsoleHostShouldNotBeInstantiated()
+        public void ManagerIntegrationConsoleHostShouldBeInstantiated()
         {
+            Thread.Sleep(TimeSpan.FromSeconds(2));
             var numberOfIntegrationProcesses = ProcessHelper.NumberOfProcesses("Manager.IntegrationTest.Console.Host");
-            Assert.IsTrue(numberOfIntegrationProcesses == 0);
+            Assert.IsTrue(numberOfIntegrationProcesses == 1);
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+            var numberOfIntegrationProcesses1 = ProcessHelper.NumberOfProcesses("Manager.IntegrationTest.Console.Host");
+            Assert.IsTrue(numberOfIntegrationProcesses1 == 1);
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+            var numberOfIntegrationProcesses2 = ProcessHelper.NumberOfProcesses("Manager.IntegrationTest.Console.Host");
+            Assert.IsTrue(numberOfIntegrationProcesses2 == 1);
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+            var numberOfIntegrationProcesses3 = ProcessHelper.NumberOfProcesses("Manager.IntegrationTest.Console.Host");
+            Assert.IsTrue(numberOfIntegrationProcesses3 == 1);
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+            var numberOfIntegrationProcesses4 = ProcessHelper.NumberOfProcesses("Manager.IntegrationTest.Console.Host");
+            Assert.IsTrue(numberOfIntegrationProcesses4 == 1);
         }
 
         [Test][Ignore]

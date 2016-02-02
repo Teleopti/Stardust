@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using log4net;
 using log4net.Config;
 using Manager.IntegrationTest.Console.Host.Properties;
 
@@ -13,6 +14,7 @@ namespace Manager.IntegrationTest.Console.Host
     public static class Program
     {
         private const string CopiedManagerConfigName = "Manager.config";
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(Program));
 
 #if (DEBUG)
         private static string _buildMode = "Debug";
@@ -41,7 +43,7 @@ namespace Manager.IntegrationTest.Console.Host
         private static void Main(string[] args)
         {
             XmlConfigurator.Configure();
-
+            System.Console.WriteLine("Manager.IntergrationTest.Console.Host Main Started");
             var directoryManagerConfigurationFileFullPath =
                 new DirectoryInfo(AddEndingSlash(Settings.Default.ManagerConfigurationFileFullPath + _buildMode));
 
@@ -105,8 +107,10 @@ namespace Manager.IntegrationTest.Console.Host
 
             if (numberOfNodesToStart > 0)
             {
+               
                 for (var i = 1; i <= numberOfNodesToStart; i++)
                 {
+                   
                     var nodeName = "Node" + i;
 
                     var configName = nodeName + ".config";

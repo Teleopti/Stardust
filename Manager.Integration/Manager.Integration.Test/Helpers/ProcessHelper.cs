@@ -93,8 +93,8 @@ namespace Manager.Integration.Test.Helpers
             var managerIntegrationConsoleHostAssemblyName =
                 Settings.Default.ManagerIntegrationConsoleHostAssemblyName;
 
-            Logger.Info("managerIntegrationConsoleHostAssemblyName: " + managerIntegrationConsoleHostAssemblyName);
-            Logger.Info("managerIntegrationConsoleHostLocation: " + managerIntegrationConsoleHostLocation);
+            Console.WriteLine("managerIntegrationConsoleHostAssemblyName: " + managerIntegrationConsoleHostAssemblyName);
+            Console.WriteLine("managerIntegrationConsoleHostLocation: " + managerIntegrationConsoleHostLocation);
 
             return StartProcess(managerIntegrationConsoleHostLocation,
                 managerIntegrationConsoleHostAssemblyName,
@@ -105,7 +105,7 @@ namespace Manager.Integration.Test.Helpers
             string processFileName,
             int numberOfNodesToStart)
         {
-            Logger.Info("StartProcess, processFileName " + processFileName);
+            Console.WriteLine("StartProcess, processFileName " + processFileName);
 
             var process = CreateProcess(processDirectory,
                 processFileName,
@@ -177,7 +177,7 @@ namespace Manager.Integration.Test.Helpers
             {
                 foreach (var process in processes)
                 {
-                    Logger.Info(string.Format("Process name : {0}, Process path : {1}, Process started by : {2}",
+                    Console.WriteLine(string.Format("Process name : {0}, Process path : {1}, Process started by : {2}",
                                               process.ProcessName,
                                               process.StartInfo.FileName,
                                               process.StartInfo.UserName));
