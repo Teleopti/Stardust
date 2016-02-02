@@ -32,17 +32,17 @@ log('try to sign in');
 client.setValue('#Username-input', 'demo')
 	.setValue('#Password-input', 'demo')
 	.click('#Signin-button')
-	.waitForExist('.user-name', 120000, false, function(err, res, response) {
+	.waitForExist('.user-name', 300000, false, function(err, res, response) {
 		if (err || !res) {
-			log('failed to sign in first time. res: ' + res);
+			log('failed to sign in first time.');
 			//second try
 			client.url(webUrl)
 				.waitForExist('.user-name', 120000, false, function(err, res, response) {
 					if (err || !res) {
-						log('failed to sign in second time. res: ' + res);
-						closeAndThrow('failed to sign in. ' + err);
+						log('failed to sign in second time.');
+						closeAndThrow('failed to sign in second time.' + err);
 					}else{
-						log('sign in succeeded second time:' + res);
+						log('succeeded to sign in second time.');
 					}
 				});
 		}else{
@@ -58,7 +58,7 @@ client.url(webUrl + '/HealthCheck')
 			client.refresh()
 				.waitForExist(".services li span", 300000, false, function(err, res, response) {
 					if (err || !res) {
-						closeAndThrow('service bus isnot up and running after trying 10 minutes. Please visit ' + webUrl + '/HealthCheck , and have a look. ' + err);
+						closeAndThrow('service bus isnot up and running after trying 5 minutes. Please visit ' + webUrl + '/HealthCheck , and have a look. ' + err);
 					}
 				});
 		}
@@ -74,7 +74,7 @@ client.refresh()
 			client.refresh()
 				.waitForExist(".services li span", 300000, false, function(err, res, response) {
 					if (err || !res) {
-						closeAndThrow('service bus isnot up and running after trying 10 minutes. Please visit ' + webUrl + '/HealthCheck , and have a look. ' + err);
+						closeAndThrow('service bus isnot up and running after trying 5 minutes. Please visit ' + webUrl + '/HealthCheck , and have a look. ' + err);
 					}
 				});
 		}
