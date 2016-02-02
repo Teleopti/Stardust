@@ -146,7 +146,7 @@ namespace Manager.Integration.Test
             
         }
 
-        [Test][Ignore]
+        [Test]
         public void CancelWrongJobs()
         {
             JobHelper.GiveNodesTimeToInitialize();
@@ -195,7 +195,7 @@ namespace Manager.Integration.Test
             
         }
 
-        [Test][Ignore]
+        [Test]
         public void ShouldBeAbleToCreate5SuccessJobRequest()
         {
             JobHelper.GiveNodesTimeToInitialize();

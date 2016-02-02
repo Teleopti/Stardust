@@ -36,7 +36,7 @@ namespace Manager.Integration.Test
             ManagerApiHelper = new ManagerApiHelper();
 
             ProcessHelper.ShutDownAllManagerAndNodeProcesses();
-            ProcessHelper.ShutDownAllProcesses("Manager.IntegrationTest.Console.Host");
+       //     ProcessHelper.ShutDownAllProcesses("Manager.IntegrationTest.Console.Host");
 
             if (_startUpManagerAndNodeManually)
             {
@@ -68,7 +68,7 @@ namespace Manager.Integration.Test
 
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
-        [Test][Ignore]
+        [Test]
         public void JobShouldJustBeQueuedIfNoNodes()
         {
             JobHelper.GiveNodesTimeToInitialize();
