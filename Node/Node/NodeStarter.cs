@@ -10,6 +10,7 @@ using Microsoft.Owin.Hosting;
 using Owin;
 using Stardust.Node.API;
 using Stardust.Node.Extensions;
+using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
 using Stardust.Node.Workers;
@@ -18,8 +19,7 @@ namespace Stardust.Node
 {
     public class NodeStarter : INodeStarter
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeStarter));
-
+       
         private string WhoAmI { get; set; }
 
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
@@ -36,7 +36,6 @@ namespace Stardust.Node
                                 appBuilder =>
                                 {
                                     var builder = new ContainerBuilder();
-
                                     builder.RegisterType<InvokeHandler>()
                                         .SingleInstance();
 
@@ -79,8 +78,8 @@ namespace Stardust.Node
             {
                 WhoAmI = nodeConfiguration.CreateWhoIAm(Environment.MachineName);
 
-                Logger.Info(WhoAmI + ": Node started on machine.");
-                Logger.Info(WhoAmI + ": Listening on port " + nodeConfiguration.BaseAddress);
+                LogHelper.LogInfoWithLineNumber(WhoAmI + ": Node started on machine.");
+                LogHelper.LogInfoWithLineNumber(WhoAmI + ": Listening on port " + nodeConfiguration.BaseAddress);
 
                 QuitEvent.WaitOne();
             }

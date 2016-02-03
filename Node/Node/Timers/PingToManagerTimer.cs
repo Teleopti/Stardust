@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 using System.Timers;
 using log4net;
 using Stardust.Node.Extensions;
+using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 
 namespace Stardust.Node.Timers
 {
     public class PingToManagerTimer : Timer
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (PingToManagerTimer));
 
         public PingToManagerTimer(INodeConfiguration nodeConfiguration,
                                   Uri callbackUri,
@@ -52,10 +52,8 @@ namespace Stardust.Node.Timers
             }
             catch 
             {
-                if (Logger.IsErrorEnabled)
-                {
-                    Logger.Error(WhoAmI + ": Heartbeat failed. Is the manager up and running?");
-                }
+                    LogHelper.LogErrorWithLineNumber(WhoAmI + ": Heartbeat failed. Is the manager up and running?");
+                
             }
         }
     }

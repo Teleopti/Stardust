@@ -3,6 +3,7 @@ using System.Web.Http;
 using System.Web.Http.Results;
 using log4net;
 using Stardust.Manager.Constants;
+using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
 
@@ -12,7 +13,6 @@ namespace Stardust.Manager
 	{
 		private readonly INodeManager _nodeManager;
 		private readonly JobManager _jobManager;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(ManagerController));
 
 		public string WhoAmI { get; private set; }
 
@@ -41,14 +41,14 @@ namespace Stardust.Manager
 				Id = Guid.NewGuid()
 			};
 			_jobManager.Add(jobReceived);
-			Logger.Info(WhoAmI + ": New job received from client. JobId: " + jobReceived.Id);
+            LogHelper.LogInfoWithLineNumber(WhoAmI + ": New job received from client. JobId: " + jobReceived.Id);
 			return Ok(jobReceived.Id);
 		}
 
 		[HttpPost, Route(ManagerRouteConstants.Heartbeat)]
 		public void Heartbeat([FromBody] Uri nodeUri)
 		{
-			Logger.Info(WhoAmI + ": Received heartbeat from Node : " + nodeUri);
+            LogHelper.LogInfoWithLineNumber(WhoAmI + ": Received heartbeat from Node : " + nodeUri);
 			_jobManager.CheckAndAssignNextJob();
 		}
 
@@ -56,7 +56,7 @@ namespace Stardust.Manager
 		[HttpDelete, Route(ManagerRouteConstants.CancelJob)]
 		public void CancelThisJob(Guid jobId)
 		{
-			Logger.Info(WhoAmI + ": Received cancel from client. JobId = " + jobId);
+            LogHelper.LogInfoWithLineNumber(WhoAmI + ": Received cancel from client. JobId = " + jobId);
 
 			_jobManager.CancelThisJob(jobId);
 		}
@@ -64,7 +64,7 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.JobDone)]
 		public IHttpActionResult JobDone(Guid jobId)
 		{
-			Logger.Info(WhoAmI + ": Received job done from a Node. JobId = " + jobId);
+            LogHelper.LogInfoWithLineNumber(WhoAmI + ": Received job done from a Node. JobId = " + jobId);
 			_jobManager.SetEndResultOnJobAndRemoveIt(jobId, "Success");
 			//should we do this here also or only on heartbeats
 			_jobManager.CheckAndAssignNextJob();
@@ -75,7 +75,7 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.JobFailed)]
 		public IHttpActionResult JobFailed(Guid jobId)
 		{
-			Logger.Error(WhoAmI + ": Received job failed from a Node. JobId = " + jobId);
+            LogHelper.LogErrorWithLineNumber(WhoAmI + ": Received job failed from a Node. JobId = " + jobId);
 			_jobManager.SetEndResultOnJobAndRemoveIt(jobId, "Failed");
 			return Ok();
 		}
@@ -83,7 +83,7 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.JobHasBeenCanceled)]
 		public IHttpActionResult JobCanceled(Guid jobId)
 		{
-			Logger.Info(WhoAmI + ": Received cancel from a Node. JobId = " + jobId);
+            LogHelper.LogInfoWithLineNumber(WhoAmI + ": Received cancel from a Node. JobId = " + jobId);
 			_jobManager.SetEndResultOnJobAndRemoveIt(jobId, "Canceled");
 
 			return Ok();
@@ -102,7 +102,7 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.NodeHasBeenInitialized)]
 		public IHttpActionResult NodeInitialized([FromBody] Uri nodeUrl)
 		{
-			Logger.Info(WhoAmI + ": Received init from node " + nodeUrl);
+            LogHelper.LogInfoWithLineNumber(WhoAmI + ": Received init from node " + nodeUrl);
 			_nodeManager.FreeJobIfAssingedToNode(nodeUrl);
 			_nodeManager.AddIfNeeded(nodeUrl);
 

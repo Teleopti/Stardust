@@ -7,7 +7,6 @@ namespace Stardust.Node.API
 {
     public class NodeConfiguration : INodeConfiguration
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeConfiguration));
 
         public NodeConfiguration(Uri baseAddress,
                                  Uri managerLocation,

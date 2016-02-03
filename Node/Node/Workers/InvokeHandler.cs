@@ -8,7 +8,6 @@ namespace Stardust.Node.Workers
 {
     public class InvokeHandler : IInvokeHandler
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (InvokeHandler));
 
         public InvokeHandler(IComponentContext componentContext)
         {

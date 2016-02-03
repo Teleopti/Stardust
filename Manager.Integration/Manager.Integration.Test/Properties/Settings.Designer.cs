@@ -58,5 +58,23 @@ namespace Manager.Integration.Test.Properties {
                 return ((string)(this["ManagerConfigurationFileName"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Manager.IntegrationTest.Console.Host.exe.config")]
+        public string ManagerIntegrationConsoleHostConfigurationFile {
+            get {
+                return ((string)(this["ManagerIntegrationConsoleHostConfigurationFile"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("scripts/CreateLoggingTable.sql")]
+        public string CreateLoggingTableSqlScriptLocationAndFileName {
+            get {
+                return ((string)(this["CreateLoggingTableSqlScriptLocationAndFileName"]));
+            }
+        }
     }
 }

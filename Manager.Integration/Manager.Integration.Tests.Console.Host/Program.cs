@@ -4,15 +4,11 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Policy;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
 using log4net.Config;
-using log4net.Repository.Hierarchy;
-using Manager.Integration.Test.Helpers;
 using Manager.IntegrationTest.Console.Host.Properties;
 
 namespace Manager.IntegrationTest.Console.Host
@@ -173,10 +169,8 @@ namespace Manager.IntegrationTest.Console.Host
 
             if (numberOfNodesToStart > 0)
             {
-               
                 for (var i = 1; i <= numberOfNodesToStart; i++)
                 {
-                   
                     var nodeName = "Node" + i;
 
                     var configName = nodeName + ".config";

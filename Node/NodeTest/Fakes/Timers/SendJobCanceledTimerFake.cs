@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
+using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
 
@@ -10,7 +11,6 @@ namespace NodeTest.Fakes.Timers
 {
     public class SendJobCanceledTimerFake : TrySendStatusToManagerTimer
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(SendJobCanceledTimerFake));
 
         public int NumberOfTimeCalled;
 
@@ -26,7 +26,7 @@ namespace NodeTest.Fakes.Timers
 
         public override Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo)
         {
-            Logger.Info("Send job canceled timer fake.");
+            LogHelper.LogInfoWithLineNumber("Send job canceled timer fake.");
 
             Wait.Set();
 

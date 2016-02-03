@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -8,17 +9,16 @@ using log4net;
 using log4net.Config;
 using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
+using Manager.Integration.Test.Properties;
+using Manager.Integration.Test.Scripts;
 using Manager.Integration.Test.Timers;
 using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
     [TestFixture]
-    [Ignore]
     public class IntegrationTestsOneManagerAndManyNodes
-    { 
-
-
+    {
         [SetUp]
         public void Setup()
         {
@@ -34,45 +34,97 @@ namespace Manager.Integration.Test
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
+            CreateSqlLoggingTable();
 
 #if (DEBUG)
-    // Do nothing.
+            // Do nothing.
 #else
             _clearDatabase = true;
             _startUpManagerAndNodeManually = false;
+            _debugMode = false;
+            _buildMode = "Release";
 #endif
 
             ManagerApiHelper = new ManagerApiHelper();
 
-            ProcessHelper.ShutDownAllManagerAndNodeProcesses();
-       //     ProcessHelper.ShutDownAllProcesses("Manager.IntegrationTest.Console.Host");
-
-            if (_startUpManagerAndNodeManually)
+            if (!_startUpManagerAndNodeManually)
             {
-                ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
-                StartManagerIntegrationConsoleHostProcess =
-                    ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
+                if (_debugMode)
+                {
+                    ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
+
+                    StartManagerIntegrationConsoleHostProcess =
+                        ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
+                }
+                else
+                {
+                    var task = AppDomainHelper.CreateAppDomainForManagerIntegrationConsoleHost(_buildMode);
+
+                    task.Start();
+                }
             }
-            
         }
-        
-        [TestFixtureTearDown]
-        public void Cleanup()
+
+        private static void CreateSqlLoggingTable()
         {
+            FileInfo scriptFile =
+                new FileInfo(Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
+                                          Settings.Default.CreateLoggingTableSqlScriptLocationAndFileName));
+
+            ScriptExecuteHelper.ExecuteScriptFile(scriptFile,
+                                                  ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            if (ManagerApiHelper != null &&
+                ManagerApiHelper.CheckJobHistoryStatusTimer != null)
+            {
+                ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
+            }            
+        }
+
+        [TestFixtureTearDown]
+        public void TestFixtureTearDown()
+        {
+            if (ManagerApiHelper != null &&
+                ManagerApiHelper.CheckJobHistoryStatusTimer != null)
+            {
+                ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
+            }
+
+            if (AppDomainHelper.AppDomains != null &&
+                AppDomainHelper.AppDomains.Any())
+            {
+                foreach (var appDomain in AppDomainHelper.AppDomains.Values)
+                {
+                    AppDomain.Unload(appDomain);
+                }
+            }
+
             ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
         }
 
         private const int NumberOfNodesToStart = 1;
 
         private bool _startUpManagerAndNodeManually = false;
+
         private bool _clearDatabase = true;
-        
+
+        private bool _debugMode = true;
+
+        private string _buildMode = "Debug";
+
+        private static readonly ILog Logger =
+            LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndManyNodes));
 
         private Process StartManagerIntegrationConsoleHostProcess { get; set; }
-        
+
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
-        [Test][Ignore]
+        [Test]
+        [Ignore]
         public void Create5RequestShouldReturnBothCancelAndDeleteStatuses()
         {
             JobHelper.GiveNodesTimeToInitialize();
@@ -99,6 +151,7 @@ namespace Manager.Integration.Test
                                                                                   args) =>
             {
                 var cancelJobTask = ManagerApiHelper.CreateManagerCancelTask(args.Guid);
+
                 cancelJobTask.Start();
             };
 
@@ -108,16 +161,18 @@ namespace Manager.Integration.Test
                              task => { task.Start(); });
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(TimeSpan.FromMinutes(1));
+
+            ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
+
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.CanceledStatus ||
                                                                                         pair.Value == StatusConstants.DeletedStatus));
-
         }
 
         [Test]
         public void JobShouldHaveStatusFailedIfFailed()
         {
             LogHelper.LogInfoWithLineNumber("Starting test : JobShouldHaveStatusFailedIfFailed");
-            
+
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateFailingJobParamsRequests(1);
@@ -144,15 +199,17 @@ namespace Manager.Integration.Test
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
-            Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.FailedStatus));
+            ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
 
+            Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.FailedStatus));
         }
 
         [Test]
+        [Ignore]
         public void CancelWrongJobs()
         {
             LogHelper.LogInfoWithLineNumber("Starting test : CancelWrongJobs");
-            
+
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(1);
@@ -193,16 +250,17 @@ namespace Manager.Integration.Test
                              task => { task.Start(); });
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
-            
-            Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
 
+            ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
+
+            Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
         }
 
         [Test]
         public void ShouldBeAbleToCreate5SuccessJobRequest()
         {
             LogHelper.LogInfoWithLineNumber("starting test...");
-            
+
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(5);
@@ -227,13 +285,14 @@ namespace Manager.Integration.Test
 
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
-            
+
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait();
+
+            ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
 
             LogHelper.LogInfoWithLineNumber("finished test.");
-
         }
     }
 }
