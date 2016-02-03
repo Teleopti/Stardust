@@ -108,7 +108,7 @@ wfm.config([
 		}).state('intraday.config', {
 			url: '/config',
 			templateUrl: 'js/intraday/intraday-config.html',
-			controller: 'IntradayConfigfCtrl'
+			controller: 'IntradayConfigCtrl'
 		}).state('outbound', {
 			url: '/outbound',
 			templateUrl: 'js/outbound/html/outbound.html',
