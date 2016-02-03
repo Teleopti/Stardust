@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using log4net.Config;
@@ -128,7 +129,6 @@ namespace Manager.Integration.Test
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
         [Test]
-        [Ignore]
         public void Create5RequestShouldReturnBothCancelAndDeleteStatuses()
         {
             JobHelper.GiveNodesTimeToInitialize();
@@ -154,6 +154,8 @@ namespace Manager.Integration.Test
             ManagerApiHelper.CheckJobHistoryStatusTimer.GuidAddedEventHandler += (sender,
                                                                                   args) =>
             {
+                Thread.Sleep(TimeSpan.FromSeconds(1));
+
                 var cancelJobTask = ManagerApiHelper.CreateManagerCancelTask(args.Guid);
 
                 cancelJobTask.Start();
