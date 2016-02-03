@@ -101,14 +101,13 @@ namespace Manager.Integration.Test
             }
 
             if (AppDomainHelper.AppDomains != null &&
-                AppDomainHelper.AppDomains.Any())
+                AppDomainHelper.AppDomains.Values.Any())
             {
-                LogHelper.LogInfoWithLineNumber("Will soon unload " + AppDomainHelper.AppDomains.Count + "Appdomains");
+                LogHelper.LogInfoWithLineNumber("Will soon unload " + AppDomainHelper.AppDomains.Values.Count + " Appdomain(s)");
                 foreach (var appDomain in AppDomainHelper.AppDomains.Values)
                 {
                     LogHelper.LogInfoWithLineNumber("appDomain unload: " + appDomain);
                         AppDomain.Unload(appDomain);
-                    
                 }
             }
 
