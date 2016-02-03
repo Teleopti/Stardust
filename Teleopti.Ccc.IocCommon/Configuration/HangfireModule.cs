@@ -41,6 +41,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<HangfireClientStarter>().As<IHangfireClientStarter>().SingleInstance();
 			else
 				builder.RegisterType<NoHangfireClient>().As<IHangfireClientStarter>().SingleInstance();
+
+			builder.RegisterType<HangfireUtilties>().SingleInstance();
 		}
 	}
 }
