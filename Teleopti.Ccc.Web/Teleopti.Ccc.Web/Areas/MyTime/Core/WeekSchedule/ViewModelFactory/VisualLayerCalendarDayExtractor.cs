@@ -56,7 +56,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
                 var layerForDisplay = new VisualLayerForWebDisplay(visualLayer.Payload, visualLayer.Period, layer.HighestPriorityActivity, visualLayer.Person)
                                           {
-                                              VisualPeriod = visualPeriod
+                                              VisualPeriod = visualPeriod,
+											  DefinitionSet = visualLayer.DefinitionSet
                                           };
                 returnList.Add(layerForDisplay);
             }

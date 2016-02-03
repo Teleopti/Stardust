@@ -59,6 +59,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
             activity = ActivityFactory.CreateActivity("Phone");
             activity.SetId(Guid.NewGuid());
 
+		    var scheduleDay = ScheduleDayFactory.Create(new DateOnly(localDate));
+			scheduleDay.CreateAndAddActivity(activity, period,new ShiftCategory("Shift Category") );
+
             minMaxTime = new TimePeriod(8, 0, 19, 0);
 
             visualActivityLayer = factory.CreateShiftSetupLayer(activity, period, person);
@@ -186,6 +189,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
                 layerDetails.Color.Should().Be.EqualTo("0,128,0");
                 layerDetails.StartPositionPercentage.Should().Be.EqualTo(0);
                 layerDetails.EndPositionPercentage.Should().Be.EqualTo((17.0 - 8.0) / (19.0 - 8.0));
+	            layerDetails.IsOvertime.Should().Be(true);
             }
         }
 

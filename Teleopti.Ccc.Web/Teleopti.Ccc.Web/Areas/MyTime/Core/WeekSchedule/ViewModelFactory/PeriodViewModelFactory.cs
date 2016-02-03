@@ -44,7 +44,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
                                         };
                 }
 
-                //yield return
+				var isOvertimeLayer = visualLayer.DefinitionSet != null && visualLayer.DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime;
+
                 newList.Add(new PeriodViewModel
                                 {
                                     Summary =
@@ -66,7 +67,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
                                         (decimal)
 										(visualLayer.VisualPeriod.TimePeriod(_timeZone.TimeZone()).
                                              EndTime - minMaxTime.StartTime).Ticks/
-                                        (minMaxTime.EndTime - minMaxTime.StartTime).Ticks
+                                        (minMaxTime.EndTime - minMaxTime.StartTime).Ticks,
+									IsOvertime = isOvertimeLayer
                                 });
 
             }

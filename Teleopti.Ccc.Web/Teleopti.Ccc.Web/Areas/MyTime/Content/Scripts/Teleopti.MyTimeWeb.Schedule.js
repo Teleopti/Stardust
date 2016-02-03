@@ -565,20 +565,14 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			}
 			return null;
 		});
+
 		self.timeSpan = ko.computed(function () {
 			var originalTimespan = layer.TimeSpan;
 			// Remove extra space for extreme long timespan (For example: "10:00 PM - 12:00 AM +1")
 			var realTimespan = originalTimespan.length >= 22 ? originalTimespan.replace(" - ", "-").replace(" +1", "+1") : originalTimespan;
 			return realTimespan;
 		});
-		self.color = ko.observable('rgb(' + layer.Color + ')');
-		self.textColor = ko.computed(function () {
-			if (layer.Color != null && layer.Color != 'undefined') {
-				var backgroundColor = 'rgb(' + layer.Color + ')';
-				return Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(backgroundColor);
-			}
-			return 'black';
-		});
+
 		self.tooltipText = ko.computed(function () {
 			//not nice! rewrite tooltips in the future!
 			var text = '';
@@ -601,10 +595,21 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 			return '<div>{0}</div>{1}'.format(self.title(), text);
 		});
+
+		self.backgroundColor = ko.observable('rgb(' + layer.Color + ')');
+		self.textColor = ko.computed(function () {
+			if (layer.Color != null && layer.Color != 'undefined') {
+				var backgroundColor = 'rgb(' + layer.Color + ')';
+				return Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(backgroundColor);
+			}
+			return 'black';
+		});
+		
 		self.startPositionPercentage = ko.observable(layer.StartPositionPercentage);
 		self.endPositionPercentage = ko.observable(layer.EndPositionPercentage);
 		self.overtimeAvailabilityYesterday = layer.OvertimeAvailabilityYesterday;
 		self.isOvertimeAvailability = ko.observable(layer.IsOvertimeAvailability);
+		self.isOvertime = layer.IsOvertime;
 		self.top = ko.computed(function () {
 			return Math.round(scheduleHeight * self.startPositionPercentage());
 		});
@@ -623,6 +628,19 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.heightPx = ko.computed(function () {
 			return self.height() + 'px';
 		});
+
+		self.styleJson = ko.computed(function () {
+			return {
+				'top': self.topPx,
+				'width':self.widthPx,
+				'height': self.heightPx,
+				'color': self.textColor,
+				'background-size': self.isOvertime ? '11px 11px' : 'initial',
+				'background-image': self.isOvertime ? 'linear-gradient(45deg,transparent,transparent 4px,rgba(0,0,0,.2) 6px,transparent 10px,transparent)' : '',
+				'background-color': self.backgroundColor
+			};
+		});
+
 		self.heightDouble = ko.computed(function () {
 			return scheduleHeight * (self.endPositionPercentage() - self.startPositionPercentage());
 		});

@@ -167,12 +167,12 @@
 					</div>
 					<!-- ko foreach: layers -->
 					<!-- ko if: isOvertimeAvailability() -->
-					<div class="weekview-day-schedule-layer absolute overtime-availability-bar" data-bind="tooltip: { title: tooltipText, html: true }, style: { backgroundColor: color, color: textColor, 'height': heightPx, top: topPx, 'width': widthPx }, click: $parent.showOvertimeAvailability">
+					<div class="weekview-day-schedule-layer absolute overtime-availability-bar" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson, click: $parent.showOvertimeAvailability">
 						<i class="glyphicon glyphicon-time"></i>
 					</div>
 					<!-- /ko -->
 					<!-- ko ifnot: isOvertimeAvailability() -->
-					<div class="weekview-day-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: { backgroundColor: color, color: textColor, 'height': heightPx, top: topPx, 'width': widthPx }">
+					<div class="weekview-day-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson">
 						<div data-bind="visible: showTitle">
 							<strong class="weekview-day-schedule-layer-activity truncate" data-bind="text: title"></strong>
 							<!-- ko if: hasMeeting -->
