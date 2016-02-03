@@ -1,9 +1,13 @@
-﻿<div class="intraday">
-	<div class="row">
-		<div class="col-md-12">
-			<h4 translate>{{'Intraday'|translate}}</h4>
-		</div>
+<div class="view-header">
+	<div class="view-title">
+		<h1><i class="mdi mdi-compass-outline"></i> {{'Intraday'|translate}}</h1>
 	</div>
+	<div class="fab-wrapper">
+		<button class="wfm-fab  material-depth-1" ng-click="configMode();"><i class="mdi mdi-plus"></i></button>
+	</div>
+</div>
+
+<div class="intraday">
 	<div class="row">
 		<div class="col-md-4">
 			<form class="wfm-form">
@@ -14,7 +18,7 @@
 				</div>
 			</form>
 		</div>
-		<div class="col-md-8 text-align-right">
+		<div class="col-md-8">
 			<p>{{'LatestAcquiredTime'|translate}}: {{format(selectedSkill.Measures[0].LatestDate)}}</p>
 		</div>
 	</div>

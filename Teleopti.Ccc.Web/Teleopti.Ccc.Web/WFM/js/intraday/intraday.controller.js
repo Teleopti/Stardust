@@ -16,6 +16,11 @@
 				$scope.selectedSkill = skill;
 			}
 
+			$scope.configMode = function () {
+				$state.go('intraday-config', {});
+			};
+
+
 			$scope.reload = setInterval(function () {
 				IntradayService.skillList.query().$promise.then(function (result) {
 					result.forEach(function (resultItem) {
