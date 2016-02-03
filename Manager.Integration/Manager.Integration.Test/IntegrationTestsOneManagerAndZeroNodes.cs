@@ -11,11 +11,52 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
-    [TestFixture]
-    [Ignore]
+    [TestFixture][Ignore]
     public class IntegrationTestsOneManagerAndZeroNodes
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndZeroNodes));
+        
+        [TestFixtureSetUp]
+        public void TextFixtureSetup()
+        {
+            XmlConfigurator.Configure();
+            
+#if (DEBUG)
+            // Do nothing.
+#else
+            _clearDatabase = true;
+            _startUpManagerAndNodeManually = false;
+#endif
+            XmlConfigurator.Configure();
+
+            if (_clearDatabase)
+            {
+                DatabaseHelper.TryClearDatabase();
+            }
+
+            ManagerApiHelper = new ManagerApiHelper();
+
+        //    ProcessHelper.ShutDownAllManagerAndNodeProcesses();
+       //     ProcessHelper.ShutDownAllProcesses("Manager.IntegrationTest.Console.Host");
+
+            if (_startUpManagerAndNodeManually)
+            {
+                ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
+            }
+            else
+            {
+                StartManagerIntegrationConsoleHostProcess =
+                    ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
+            }
+
+        }
+
+        [TestFixtureTearDown]
+        public void Cleanup()
+        {
+            ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
+        }
+
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(IntegrationTestsOneManagerAndZeroNodes));
 
         private Process StartManagerIntegrationConsoleHostProcess { get; set; }
 
@@ -23,44 +64,12 @@ namespace Manager.Integration.Test
 
         private bool _startUpManagerAndNodeManually = false;
         private bool _clearDatabase = true;
-
-        [TestFixtureSetUp]
-        public void TextFixtureSetup()
-        {
-#if (DEBUG)
-            // Do nothing.
-#else
-            _clearDatabase= true;
-            _startUpManagerAndNodeManually = false;
-#endif
-            XmlConfigurator.Configure();
-
-            if (!_startUpManagerAndNodeManually)
-            {
-                ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
-
-                StartManagerIntegrationConsoleHostProcess =
-                    ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
-            }
-        }
-
-        [SetUp]
-        public void Setup()
-        {
-            if (_clearDatabase)
-            {
-                DatabaseHelper.TryClearDatabase();
-            }
-
-            ManagerApiHelper = new ManagerApiHelper();
-        }
-
+        
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
         [Test]
         public void JobShouldJustBeQueuedIfNoNodes()
         {
-            Logger.Info("Starting test JobShouldJustBeQueuedIfNoNodes()");
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(1);
@@ -85,11 +94,10 @@ namespace Manager.Integration.Test
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.Start();
 
-            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(1);
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.NullStatus));
-
-            ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
+            
         }
     }
 }

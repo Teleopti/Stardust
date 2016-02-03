@@ -188,8 +188,10 @@ namespace Manager.IntegrationTest.Console.Host
 
             if (numberOfNodesToStart > 0)
             {
+               
                 for (var i = 1; i <= numberOfNodesToStart; i++)
                 {
+                   
                     var nodeName = "Node" + i;
 
                     var configName = nodeName + ".config";

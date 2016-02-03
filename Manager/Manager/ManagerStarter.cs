@@ -66,6 +66,7 @@ namespace Stardust.Manager
 				Logger.Info(WhoAmI + ": Started listening on port : " + managerConfiguration.BaseAdress);
 
                 QuitEvent.WaitOne();
+
 			}
 		}
 	}

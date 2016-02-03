@@ -60,6 +60,7 @@
     <Compile Include="TestJobCode.cs" />
     <Compile Include="FailingJobWorker.cs" />
     <Compile Include="TestJobWorker.cs" />
+    <Compile Include="WorkerModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

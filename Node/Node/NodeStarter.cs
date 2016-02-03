@@ -37,12 +37,6 @@ namespace Stardust.Node
                                 {
                                     var builder = new ContainerBuilder();
 
-                                    // Register handlers.
-                                    builder.RegisterAssemblyTypes(nodeConfiguration.HandlerAssembly)
-                                        .Where(IsHandler)
-                                        .AsImplementedInterfaces()
-                                        .SingleInstance();
-
                                     builder.RegisterType<InvokeHandler>()
                                         .SingleInstance();
 
@@ -68,7 +62,7 @@ namespace Stardust.Node
 
                                     //to start it
                                     container.Resolve<IWorkerWrapper>();
-
+											  
                                     // Configure Web API for self-host. 
                                     var config = new HttpConfiguration
                                     {
@@ -90,14 +84,6 @@ namespace Stardust.Node
 
                 QuitEvent.WaitOne();
             }
-        }
-
-        private bool IsHandler(Type arg)
-        {
-            return arg.GetInterfaces()
-                .Any(x =>
-                         x.IsGenericType &&
-                         x.GetGenericTypeDefinition() == typeof (IHandle<>));
         }
     }
 }
