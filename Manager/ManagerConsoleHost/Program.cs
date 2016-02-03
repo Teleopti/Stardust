@@ -99,7 +99,6 @@ namespace ManagerConsoleHost
             e.Cancel = true;
         }
 
-
         private static ManagerStarter _managerStarter;
 
         private static void CurrentDomain_DomainUnload(object sender,

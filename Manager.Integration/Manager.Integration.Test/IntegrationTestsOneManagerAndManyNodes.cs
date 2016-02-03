@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using log4net;
 using log4net.Config;
 using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
+using Manager.Integration.Test.Properties;
+using Manager.Integration.Test.Scripts;
 using Manager.Integration.Test.Timers;
 using NUnit.Framework;
 
@@ -16,7 +18,7 @@ namespace Manager.Integration.Test
 {
     [TestFixture]
     public class IntegrationTestsOneManagerAndManyNodes
-    { 
+    {
         [SetUp]
         public void Setup()
         {
@@ -29,13 +31,13 @@ namespace Manager.Integration.Test
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
-
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
+            CreateSqlLoggingTable();
 
 #if (DEBUG)
-    // Do nothing.
+            // Do nothing.
 #else
             _clearDatabase = false;
             _startUpManagerAndNodeManually = false;
@@ -49,20 +51,30 @@ namespace Manager.Integration.Test
             {
                 if (_debugMode)
                 {
-                ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
+                    ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
 
-                StartManagerIntegrationConsoleHostProcess =
-                    ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
-            }
+                    StartManagerIntegrationConsoleHostProcess =
+                        ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
+                }
                 else
                 {
                     var task = AppDomainHelper.CreateAppDomainForManagerIntegrationConsoleHost(_buildMode);
-            
+
                     task.Start();
-        }
+                }
             }
         }
-        
+
+        private static void CreateSqlLoggingTable()
+        {
+            FileInfo scriptFile =
+                new FileInfo(Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
+                                          Settings.Default.CreateLoggingTableSqlScriptLocationAndFileName));
+
+            ScriptExecuteHelper.ExecuteScriptFile(scriptFile,
+                                                  ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString);
+        }
+
         [TearDown]
         public void TearDown()
         {
@@ -77,7 +89,7 @@ namespace Manager.Integration.Test
             if (AppDomainHelper.AppDomains.Any())
             {
                 foreach (var appDomain in AppDomainHelper.AppDomains.Values)
-        {
+                {
                     AppDomain.Unload(appDomain);
                 }
             }
@@ -87,19 +99,19 @@ namespace Manager.Integration.Test
 
         private const int NumberOfNodesToStart = 1;
 
-        private bool _startUpManagerAndNodeManually;
+        private bool _startUpManagerAndNodeManually = false;
 
-        private bool _clearDatabase;
+        private bool _clearDatabase = false;
 
         private bool _debugMode = true;
 
         private string _buildMode = "Debug";
 
         private static readonly ILog Logger =
-            LogManager.GetLogger(typeof(IntegrationTestsOneManagerAndManyNodes));
+            LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndManyNodes));
 
         private Process StartManagerIntegrationConsoleHostProcess { get; set; }
-        
+
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
         [Test]
@@ -150,7 +162,7 @@ namespace Manager.Integration.Test
         public void JobShouldHaveStatusFailedIfFailed()
         {
             LogHelper.LogInfoWithLineNumber("Starting test : JobShouldHaveStatusFailedIfFailed");
-            
+
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateFailingJobParamsRequests(1);
@@ -186,7 +198,7 @@ namespace Manager.Integration.Test
         public void CancelWrongJobs()
         {
             LogHelper.LogInfoWithLineNumber("Starting test : CancelWrongJobs");
-            
+
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(1);
@@ -227,7 +239,7 @@ namespace Manager.Integration.Test
                              task => { task.Start(); });
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
-            
+
             ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
@@ -237,7 +249,7 @@ namespace Manager.Integration.Test
         public void ShouldBeAbleToCreate5SuccessJobRequest()
         {
             LogHelper.LogInfoWithLineNumber("starting test...");
-            
+
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(5);
@@ -262,7 +274,7 @@ namespace Manager.Integration.Test
 
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
-            
+
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait();
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();

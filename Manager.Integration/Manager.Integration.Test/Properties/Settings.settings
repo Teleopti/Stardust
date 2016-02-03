@@ -17,5 +17,8 @@
     <Setting Name="ManagerIntegrationConsoleHostConfigurationFile" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Manager.IntegrationTest.Console.Host.exe.config</Value>
     </Setting>
+    <Setting Name="CreateLoggingTableSqlScriptLocationAndFileName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">scripts/CreateLoggingTable.sql</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

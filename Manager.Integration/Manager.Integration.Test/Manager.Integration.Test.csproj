@@ -67,7 +67,6 @@
     <Compile Include="Constants\ManagerRouteConstants.cs" />
     <Compile Include="Constants\MediaTypeConstants.cs" />
     <Compile Include="Constants\StatusConstants.cs" />
-    <Compile Include="DebugTCServerTests.cs" />
     <Compile Include="EventArgs\GuidAddedEventArgs.cs" />
     <Compile Include="Helpers\AppDomainHelper.cs" />
     <Compile Include="Helpers\DatabaseHelper.cs" />
@@ -83,6 +82,7 @@
     <Compile Include="FailingJobParams.cs" />
     <Compile Include="JobHistory.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Scripts\ScriptExecuteHelper.cs" />
     <Compile Include="TestJobParams.cs" />
     <Compile Include="JobRequestModel.cs" />
     <Compile Include="IntegrationTestsOneManagerAndManyNodes.cs" />
@@ -108,6 +108,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="EventHandlers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\CreateLoggingTable.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
