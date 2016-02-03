@@ -48,7 +48,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		public void Handle(PersonTerminalDateChangedEvent @event)
 		{
 			if (@event.TerminationDate.HasValue)
-				_scheduleDayReadModelRepository.UpdateReadModels(new DateOnlyPeriod(new DateOnly(@event.TerminationDate.Value).AddDays(1), DateOnly.MaxValue), @event.PersonId, @event.BusinessUnitId, null, true);
+<<<<<<< local
+				_scheduleDayReadModelRepository.UpdateReadModels(new DateOnlyPeriod(new DateOnly(@event.TerminationDate.Value).AddDays(1), DateOnly.MaxValue), @event.PersonId, @event.LogOnBusinessUnitId, null, false);
+>>>>>>> other
 		}
 
 		private void createReadModel(ProjectionChangedEventBase message)

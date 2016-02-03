@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			target.Handle(new PersonTerminalDateChangedEvent
 			{
 				PersonId = personId,
-				BusinessUnitId = businessUnitId,
+				LogOnBusinessUnitId = businessUnitId,
 				TerminationDate = terminationDate
 			});
 
