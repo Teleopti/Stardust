@@ -45,9 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			globalData.ForEach(dataSetup => GlobalDataMaker.Data().Apply(dataSetup));
 			DataSourceHelper.BackupCcc7Database(globalData.HashValue);
 
-			SystemSetup.MessageBrokerUrl.Configure(TestSiteConfigurationSetup.URL.ToString());
-			SystemSetup.SignalRClient.StartBrokerService();
-			SystemSetup.HangfireClient.Start();
+			SystemSetup.Start();
 		}
 
 		public static void ClearAnalyticsData()
@@ -66,9 +64,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private static IContainer _container;
 
 		public static ICurrentPersistCallbacks PersistCallbacks;
-		public static IMessageBrokerUrl MessageBrokerUrl;
-		public static ISignalRClient SignalRClient;
-		public static IHangfireClientStarter HangfireClient;
 		public static HangfireUtilties Hangfire;
 
 		public static void Setup()
@@ -91,9 +86,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			_container = builder.Build();
 
 			PersistCallbacks = _container.Resolve<ICurrentPersistCallbacks>();
-			MessageBrokerUrl = _container.Resolve<IMessageBrokerUrl>();
-			SignalRClient = _container.Resolve<ISignalRClient>();
-			HangfireClient = _container.Resolve<IHangfireClientStarter>();
+		}
+
+		public static void Start()
+		{
+			_container.Resolve<IMessageBrokerUrl>().Configure(TestSiteConfigurationSetup.URL.ToString());
+			_container.Resolve<ISignalRClient>().StartBrokerService();
+			_container.Resolve<IHangfireClientStarter>().Start();
 			Hangfire = _container.Resolve<HangfireUtilties>();
 		}
 	}
