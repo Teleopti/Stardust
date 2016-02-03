@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 
 			var tags = new AllTags
 			{
-				{"BehaviorTest", "true"},
+				{"BehaviorTestServer", "true"},
 				{"HangfireDashboard", "true"},
 				{"HangfireDashboardStatistics", "true"},
 				{"HangfireDashboardCounters", "true"},

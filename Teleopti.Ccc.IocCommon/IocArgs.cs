@@ -23,7 +23,8 @@ namespace Teleopti.Ccc.IocCommon
 		public IDataSourceConfigurationSetter DataSourceConfigurationSetter { get; set; }
 		public Type ImplementationTypeForCurrentUnitOfWork { get; set; }
 
-		public bool BehaviorTest { get; set; }
+		public bool BehaviorTestServer { get; set; }
+		public bool BehaviorTestClient { get; set; }
 
 		public IocArgs(IConfigReader configReader)
 		{
@@ -35,7 +36,8 @@ namespace Teleopti.Ccc.IocCommon
 			MatrixWebSiteUrl = configReader.AppConfig("MatrixWebSiteUrl");
 			ThrottleMessages = configReader.ReadValue("ThrottleMessages", true);
 			MessagesPerSecond = configReader.ReadValue("MessagesPerSecond", 80);
-			BehaviorTest = configReader.ReadValue("BehaviorTest", false);
+			BehaviorTestServer = configReader.ReadValue("BehaviorTestServer", false);
+			BehaviorTestClient = configReader.ReadValue("BehaviorTestClient", false);
 			DataSourceConfigurationSetter = Infrastructure.NHibernateConfiguration.DataSourceConfigurationSetter.ForDesktop();
 			ImplementationTypeForCurrentUnitOfWork = typeof(CurrentUnitOfWork);
 		}

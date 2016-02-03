@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void Setup()
 		{
-
 			SystemSetup.Setup();
 
 			datasource = DataSourceHelper.CreateDataSource(SystemSetup.PersistCallbacks, UserConfigurable.DefaultTenantName);
@@ -71,7 +70,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			var builder = new ContainerBuilder();
 			var args = new IocArgs(new ConfigReader())
 			{
-				BehaviorTest = true,
+				BehaviorTestClient = true,
 				FeatureToggle = "http://notinuse"
 			};
 			// should really use same toggles as the website!

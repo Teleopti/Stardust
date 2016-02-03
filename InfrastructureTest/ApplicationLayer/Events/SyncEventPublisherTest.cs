@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[TestFixture]
 	[InfrastructureTest]
-	[Setting("BehaviorTest", true)]
+	[Setting("BehaviorTestServer", true)]
 	public class SyncEventPublisherTest : ISetup
 	{
 		public FakeHandler Handler;
