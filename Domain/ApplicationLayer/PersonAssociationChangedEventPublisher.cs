@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 	public class PersonAssociationChangedEventPublisher : 
 		IHandleEvent<TenantHearbeatEvent>,
 		IHandleEvent<PersonTerminalDateChangedEvent>,
+		IHandleEvent<PersonTeamChangedEvent>,
 		IRunOnHangfire
 	{
 		private readonly IPersonRepository _persons;
@@ -89,6 +90,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				TeamId = teamId
 			});
 		}
+		
 
 		private DateTime? timeOfChange(DateOnly? terminalDate, IPersonPeriod currentPeriod, TimeZoneInfo timeZone)
 		{
@@ -111,6 +113,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			return terminationDate.HasValue
 				? TimeZoneInfo.ConvertTimeToUtc(terminationDate.Value.Date.AddDays(1), timeZone)
 				: DateTime.MaxValue;
+		}
+
+		[UseOnToggle(Toggles.RTA_TeamChanges_36043)]
+		public virtual void Handle(PersonTeamChangedEvent @event)
+		{
+			_eventPublisher.Publish(new PersonAssociationChangedEvent());
 		}
 	}
 }

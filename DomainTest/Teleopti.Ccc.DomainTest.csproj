@@ -186,6 +186,7 @@
     <Compile Include="ApplicationLayer\AddSeatMapCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Commands\AbsenceCommandConverterTest.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChanged\PeriodChangesTest.cs" />
+    <Compile Include="ApplicationLayer\PersonAssociationChanged\PersonTeamChangedTest.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChanged\TerminalDateChangedTest.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChanged\TerminatedTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\TerminatedPersonTest.cs" />
