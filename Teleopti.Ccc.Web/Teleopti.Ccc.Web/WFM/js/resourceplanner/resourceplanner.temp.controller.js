@@ -1,6 +1,6 @@
 (function() {
 	'use strict';
-	angular.module('wfm')
+	angular.module('wfm.resourceplanner')
 		.controller('ResourceplannerTempCtrl', [
 			'$scope', '$state', '$stateParams','ResourcePlannerReportSrvc',
 			function($scope, $state, $stateParams, ResourcePlannerReportSrvc) {

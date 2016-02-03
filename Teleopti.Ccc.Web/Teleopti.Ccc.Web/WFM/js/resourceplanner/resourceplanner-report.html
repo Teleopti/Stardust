@@ -21,7 +21,7 @@
 				<i class="mdi mdi-dots-vertical"></i>
 				<span class="context-menu-left">
 		 <ul class="wfm-list">
-		   <li ng-show="isEnabled" ng-click="intraOptimize()">{{'IntraOptimize'|translate}}</li>
+		   <li ng-show="optimizeDayOffIsEnabled()" ng-dissabled="" ng-click="intraOptimize()">{{'IntraOptimize'|translate}}</li>
 		 </ul>
 	   </span>
 			</div>
@@ -48,7 +48,7 @@
 			<div class="grid-scroll-wrap">
 				<md-progress-linear ng-show="optimizeRunning" md-mode="indeterminate"></md-progress-linear>
 					<div ng-show="optimizeRunning" class="wfm-block material-depth-1">{{'OptimizingIntraday'|translate}}</div>
-				<table ng-hide="dates.lenght > 0" class="overview" ng-show="!optimizeRunning">
+				<table ng-hide="dates.length > 0" class="overview" ng-show="!optimizeRunning">
 					<tr ng-repeat="(index, subnode) in dayNodes | limitTo:1 ">
 						<th></th>
 						<th class="datehead" ng-repeat="datenode in subnode.SkillDetails">

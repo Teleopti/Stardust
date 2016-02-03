@@ -4,7 +4,7 @@ describe('ResourceplannerReportCtrl', function () {
 	$rootScope,
 	$httpBackend;
 
-	beforeEach(module('wfm'));
+	beforeEach(module('wfm.resourceplanner'));
 	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
@@ -13,6 +13,7 @@ describe('ResourceplannerReportCtrl', function () {
 		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
 	}));
 	var result = {};
+
 	result.withNoIssues = function(){
 		return {result:{BusinessRulesValidationResults:[]},interResult:{SkillResultList:[{SkillName:'test',SkillDetails:[{Date:'2015-11-14'}]}]}};
 	};
@@ -66,6 +67,35 @@ describe('ResourceplannerReportCtrl', function () {
 
 		scope.publishSchedule()
 		expect(scope.publishedClicked).toBe(true);
+	}));
+	it('should default values if none are loaded', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		var mockstateParams = {result:{},interResult:[],planningperiod:{}}
+		$controller('ResourceplannerReportCtrl', { $scope: scope, $stateParams:mockstateParams  });
+
+		expect(scope.dayNodes.length).toEqual(0);
+	}));
+	it('should return false if no params are provided', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		var mockstateParams = {id:"",result:{},interResult:[],planningperiod:{}}
+		$controller('ResourceplannerReportCtrl', { $scope: scope, $stateParams: mockstateParams});
+
+		expect(scope.optimizeDayOffIsEnabled()).toBe(false);
+	}));
+	it('should return true if params are provided', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		var deferred = $q.defer();
+		deferred.resolve();
+		var mockToggleService = {
+			togglesLoaded: deferred.promise,
+			Scheduler_IntradayOptimization_36617:function(){
+				return true;
+			}
+		};
+		var mockstateParams = {id:"111-111",result:{},interResult:[],planningperiod:{}}
+		$controller('ResourceplannerReportCtrl', { $scope: scope, $stateParams: mockstateParams, Toggle:mockToggleService});
+		scope.$digest();
+		expect(scope.optimizeDayOffIsEnabled()).toBe(true);
 	}));
 
 

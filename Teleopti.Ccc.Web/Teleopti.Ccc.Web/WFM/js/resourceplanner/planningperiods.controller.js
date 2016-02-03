@@ -81,6 +81,7 @@
 							}, JSON.stringify(scheduleResult.ThrottleToken)).$promise.then(function(result) {
 								$scope.schedulingPerformed = true;
 								$state.go('resourceplanner.report', {
+									id:p.Id,
 									result: scheduleResult,
 									interResult: result,
 									planningperiod: p

@@ -90,6 +90,7 @@ wfm.config([
 				interResult: [],
 				planningperiod: {}
 			},
+			url: '/report/:id',
 			templateUrl: 'js/resourceplanner/resourceplanner-report.html',
 			controller: 'ResourceplannerReportCtrl'
 		}).state('resourceplanner.temp', {
