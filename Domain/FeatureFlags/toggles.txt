@@ -106,4 +106,5 @@ Wfm_Requests_ApproveDeny_36297 = RC
 MyTimeWeb_TeamScheduleNoReadModel_36210 = RC
 WfmIntraday_MonitorActualvsForecasted_35176 = RC
 MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211 = RC
+MyTimeWeb_ShiftTradeBoardNoReadModel_36662 = RC
 Scheduler_AgentSkillAnalyzer_12345 = DEV
