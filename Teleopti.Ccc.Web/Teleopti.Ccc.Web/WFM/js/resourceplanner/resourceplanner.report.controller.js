@@ -8,10 +8,10 @@
 				var toggledOptimization = false;
 				var optimizationState = true;
 				var scheduleResult = $stateParams.interResult.SkillResultList ? $stateParams.interResult.SkillResultList : [];
-				var issues = $stateParams.result.BusinessRulesValidationResults ? $stateParams.result.BusinessRulesValidationResults : [];
+				$scope.issues = $stateParams.result.BusinessRulesValidationResults ? $stateParams.result.BusinessRulesValidationResults : [];
 				$scope.scheduledAgents = $stateParams.result.ScheduledAgentsCount ? $stateParams.result.ScheduledAgentsCount : 0;
 				$scope.planningPeriod = $stateParams.planningperiod;
-				$scope.hasIssues = issues.length > 0;
+				$scope.hasIssues = $scope.issues.length > 0;
 				$scope.dayNodes = scheduleResult;
 				$scope.optimizeRunning = false;
 				toggleService.togglesLoaded.then(function() {
@@ -63,7 +63,7 @@
 						field: 'BusinessRuleCategoryText',
 						enableColumnMenu: false
 					}],
-					data: issues
+					data: $scope.issues
 				};
 				var parseRelDif = function(period) {
 					ResourcePlannerReportSrvc.parseRelDif(period);
