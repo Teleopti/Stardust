@@ -69,6 +69,7 @@
     <Compile Include="Constants\StatusConstants.cs" />
     <Compile Include="DebugTCServerTests.cs" />
     <Compile Include="EventArgs\GuidAddedEventArgs.cs" />
+    <Compile Include="Helpers\AppDomainHelper.cs" />
     <Compile Include="Helpers\DatabaseHelper.cs" />
     <Compile Include="Helpers\JobHelper.cs" />
     <Compile Include="Helpers\LogHelper.cs" />

@@ -14,5 +14,8 @@
     <Setting Name="ManagerConfigurationFileName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Manager.config</Value>
     </Setting>
+    <Setting Name="ManagerIntegrationConsoleHostConfigurationFile" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Manager.IntegrationTest.Console.Host.exe.config</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
