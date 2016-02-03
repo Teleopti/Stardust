@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Policy;
 using System.Threading;
@@ -89,8 +90,26 @@ namespace Manager.IntegrationTest.Console.Host
                                                           val) => value);
         }
 
+        private static void LogInfoWithLineNumber(string info,
+                                                  [CallerFilePath] string file = "",
+                                                  [CallerMemberName] string member = "",
+                                                  [CallerLineNumber] int line = 0)
+        {
+            if (Logger.IsInfoEnabled)
+            {
+                Logger.Info(string.Format("{0}_{1}({2}): {3}",
+                                          Path.GetFileName(file),
+                                          member,
+                                          line,
+                                          info));
+            }
+        }
+
         private static void Main(string[] args)
         {
+            var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+            XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
+
             SetConsoleCtrlHandler(ConsoleCtrlCheck,
                                   true);
 
@@ -98,13 +117,13 @@ namespace Manager.IntegrationTest.Console.Host
 
             AppDomain.CurrentDomain.DomainUnload += CurrentDomainOnDomainUnload;
 
-            XmlConfigurator.Configure();
+            AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
 
             AppDomains = new ConcurrentDictionary<string, AppDomain>();
 
             Evidence adevidence = AppDomain.CurrentDomain.Evidence;
 
-            Logger.Info("Manager.IntegrationTest.Console.Host.Main started.");
+            LogInfoWithLineNumber("started.");
 
             var directoryManagerConfigurationFileFullPath =
                 new DirectoryInfo(AddEndingSlash(Settings.Default.ManagerConfigurationFileFullPath + _buildMode));
@@ -233,18 +252,27 @@ namespace Manager.IntegrationTest.Console.Host
 
             QuitEvent.WaitOne();
 
-            Logger.Info("Manager.IntegrationTest.Console.Host.Main unload app domains.");
-
             foreach (var appDomain in AppDomains.Values)
             {
                 AppDomain.Unload(appDomain);
             }
         }
 
+        private static void CurrentDomain_ProcessExit(object sender,
+                                                      EventArgs e)
+        {
+            LogInfoWithLineNumber(string.Empty);
+        }
+
         private static void CurrentDomainOnDomainUnload(object sender,
                                                         EventArgs eventArgs)
         {
-            Logger.Info("Manager.IntegrationTest.Console.Host.CurrentDomainOnDomainUnload.");
+            Logger.Info("CurrentDomainOnDomainUnload");
+
+            foreach (var appDomain in AppDomains.Values)
+            {
+                AppDomain.Unload(appDomain);
+            }
 
             QuitEvent.Set();
         }
@@ -254,6 +282,11 @@ namespace Manager.IntegrationTest.Console.Host
         private static void Console_CancelKeyPress(object sender,
                                                    ConsoleCancelEventArgs e)
         {
+            foreach (var appDomain in AppDomains.Values)
+            {
+                AppDomain.Unload(appDomain);
+            }
+
             QuitEvent.Set();
 
             e.Cancel = true;

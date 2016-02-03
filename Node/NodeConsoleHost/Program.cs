@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Configuration;
+using System.IO;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Autofac;
-using Autofac.Core;
 using log4net;
 using log4net.Config;
 using Stardust.Node;
@@ -14,11 +13,12 @@ using Stardust.Node.Interfaces;
 
 namespace NodeConsoleHost
 {
-	internal class Program
-	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(Program));
+    internal class Program
+    {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (Program));
 
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
+
 
         [DllImport("Kernel32")]
         public static extern bool SetConsoleCtrlHandler(HandlerRoutine handler,
@@ -56,55 +56,71 @@ namespace NodeConsoleHost
 
 
         private static void Main(string[] args)
-		{
+        {
+            var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+
+            XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
+
             SetConsoleCtrlHandler(ConsoleCtrlCheck,
                                   true);
 
             System.Console.CancelKeyPress += ConsoleOnCancelKeyPress;
 
-            XmlConfigurator.Configure();
+            WhoAmI = "[NODE CONSOLE HOST, " + Environment.MachineName.ToUpper() + "]";
 
-            Logger.Info("NodeConsoleHost: started.");
+            
+
+            Logger.Info(WhoAmI + " : started.");
 
             AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-			var nodeConfig = new NodeConfiguration(new Uri(ConfigurationManager.AppSettings["BaseAddress"]),
-																new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
-																Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
-																ConfigurationManager.AppSettings["NodeName"]);
-			Container = new ContainerBuilder().Build();
+            var nodeConfig = new NodeConfiguration(new Uri(ConfigurationManager.AppSettings["BaseAddress"]),
+                                                   new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
+                                                   Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
+                                                   ConfigurationManager.AppSettings["NodeName"]);
+            Container = new ContainerBuilder().Build();
 
             _nodeStarter = new NodeStarter();
 
-            _nodeStarter.Start(nodeConfig, Container);
+            _nodeStarter.Start(nodeConfig,
+                               Container);
 
             QuitEvent.WaitOne();
         }
 
-	    private static void ConsoleOnCancelKeyPress(object sender,
-	                                                ConsoleCancelEventArgs e)
-	    {
+        private static string WhoAmI { get; set; }
+
+        private static void ConsoleOnCancelKeyPress(object sender,
+                                                    ConsoleCancelEventArgs e)
+        {
+            Logger.Info(WhoAmI + " : ConsoleOnCancelKeyPress called.");
+
             _nodeStarter.Stop();
 
             QuitEvent.Set();
 
             e.Cancel = true;
-	    }
+        }
 
-	    private static INodeStarter _nodeStarter;
+        private static INodeStarter _nodeStarter;
 
-	    public static IContainer Container { get; set; }
+        public static IContainer Container { get; set; }
 
-	    private static void CurrentDomain_DomainUnload(object sender, EventArgs e)
+        private static void CurrentDomain_DomainUnload(object sender,
+                                                       EventArgs e)
         {
+            Logger.Info(WhoAmI + " : CurrentDomain_DomainUnload called.");
+
             _nodeStarter.Stop();
+
+            QuitEvent.Set();
         }
 
         private static void CurrentDomain_UnhandledException(object sender,
-																			  UnhandledExceptionEventArgs e)
-		{
-			Logger.Error("Unhandeled Exception in NodeConsoleHost");
-		}
-	}
+                                                             UnhandledExceptionEventArgs e)
+        {
+            Logger.Error(WhoAmI + " : CurrentDomain_UnhandledException called.");
+        }
+    }
 }

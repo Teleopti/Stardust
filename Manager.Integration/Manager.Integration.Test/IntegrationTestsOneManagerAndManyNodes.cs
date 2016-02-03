@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using log4net;
@@ -37,7 +38,9 @@ namespace Manager.Integration.Test
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
-            XmlConfigurator.Configure();
+            var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+            XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
+
 
 #if (DEBUG)
             // Do nothing.
@@ -197,7 +200,7 @@ namespace Manager.Integration.Test
         [Test]
         public void ShouldBeAbleToCreate5SuccessJobRequest()
         {
-            Logger.Info("Starting test : ShouldBeAbleToCreate5SuccessJobRequest");
+            LogHelper.LogInfoWithLineNumber("starting test...");
 
             JobHelper.GiveNodesTimeToInitialize();
 
@@ -227,6 +230,8 @@ namespace Manager.Integration.Test
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait();
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
+
+            LogHelper.LogInfoWithLineNumber("finished test.");
         }
     }
 }

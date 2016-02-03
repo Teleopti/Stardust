@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using log4net;
@@ -17,6 +18,9 @@ namespace ManagerConsoleHost
 
         private static void Main(string[] args)
         {
+            var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+            XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
+
             SetConsoleCtrlHandler(ConsoleCtrlCheck,
                                   true);
 
@@ -24,9 +28,7 @@ namespace ManagerConsoleHost
 
             AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
 
-            WhoAmI = "[MANAGER, " + Environment.MachineName.ToUpper() + "]";
-
-            XmlConfigurator.Configure();
+            WhoAmI = "[MANAGER CONSOLE HOST, " + Environment.MachineName.ToUpper() + "]";
 
             Logger.Info(WhoAmI + " : started.");
 
@@ -67,6 +69,8 @@ namespace ManagerConsoleHost
 
         private static bool ConsoleCtrlCheck(CtrlTypes ctrlType)
         {
+            Console.WriteLine(WhoAmI + " : ConsoleCtrlCheck called.");
+
             if (ctrlType == CtrlTypes.CtrlCloseEvent ||
                 ctrlType == CtrlTypes.CtrlShutdownEvent)
             {
@@ -86,6 +90,8 @@ namespace ManagerConsoleHost
         private static void ConsoleOnCancelKeyPress(object sender,
                                                     ConsoleCancelEventArgs e)
         {
+            Console.WriteLine(WhoAmI + " : ConsoleOnCancelKeyPress called.");
+
             _managerStarter.Stop();
 
             QuitEvent.Set();
@@ -99,9 +105,11 @@ namespace ManagerConsoleHost
         private static void CurrentDomain_DomainUnload(object sender,
                                                        EventArgs e)
         {
-            Console.WriteLine("Manager console host CurrentDomain_DomainUnload");
+            Console.WriteLine(WhoAmI + " : CurrentDomain_DomainUnload called.");
 
             _managerStarter.Stop();
+
+            QuitEvent.Set();
         }
 
         private static void CurrentDomain_UnhandledException(object sender,

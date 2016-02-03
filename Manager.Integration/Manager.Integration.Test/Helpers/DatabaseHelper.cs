@@ -40,6 +40,12 @@ namespace Manager.Integration.Test.Helpers
             {
                 connection.Open();
 
+                using (SqlCommand command = new SqlCommand("truncate table Logging",
+                                                           connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+
                 using (SqlCommand command = new SqlCommand("truncate table JobDefinitions",
                                                            connection))
                 {

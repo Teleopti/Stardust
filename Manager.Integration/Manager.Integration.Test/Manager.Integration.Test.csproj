@@ -70,6 +70,7 @@
     <Compile Include="EventArgs\GuidAddedEventArgs.cs" />
     <Compile Include="Helpers\DatabaseHelper.cs" />
     <Compile Include="Helpers\JobHelper.cs" />
+    <Compile Include="Helpers\LogHelper.cs" />
     <Compile Include="Helpers\ManagerApiHelper.cs" />
     <Compile Include="Helpers\ProcessHelper.cs" />
     <Compile Include="Helpers\SecurityHelper.cs" />
