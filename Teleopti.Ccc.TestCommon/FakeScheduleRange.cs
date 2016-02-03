@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.TestCommon
 		public new IList<IBusinessRuleResponse> BusinessRuleResponseInternalCollection { get; private set; }
 		public void ExtractAllScheduleData(IScheduleExtractor extractor, DateTimePeriod period)
 		{
-			throw new NotImplementedException();
+			
 		}
 
 		public IScheduleDay ScheduledDay(DateOnly day)

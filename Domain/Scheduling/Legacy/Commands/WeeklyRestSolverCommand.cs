@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -17,12 +19,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
+		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 
 		public WeeklyRestSolverCommand(ITeamBlockInfoFactory teamBlockInfoFactory,
 			ITeamBlockSchedulingOptions teamBlockSchedulingOptions, Func<IWeeklyRestSolverService> weeklyRestSolverService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
-			IGroupPersonBuilderWrapper groupPersonBuilderWrapper)
+			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
+			Func<IPersonSkillProvider> personSkillProvider)
 		{
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
@@ -30,6 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_schedulerStateHolder = schedulerStateHolder;
 			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
+			_personSkillProvider = personSkillProvider;
 		}
 
 		public void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, 
@@ -48,17 +53,28 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,
 				_teamBlockSchedulingOptions);
 
-			EventHandler<ResourceOptimizerProgressEventArgs> onResolvingWeek = (sender, e) =>
+			var schedulerStateHolder = _schedulerStateHolder();
+			var minutesPerInterval = 15;
+			if (schedulerStateHolder.SchedulingResultState.Skills.Any())
 			{
-				e.Cancel = backgroundWorker.CancellationPending;
-				backgroundWorker.ReportProgress(1, e);
-			};
-			var weeklyRestSolverService = _weeklyRestSolverService();
-			weeklyRestSolverService.ResolvingWeek += onResolvingWeek;
-			weeklyRestSolverService.Execute(selectedPersons, selectedPeriod, teamBlockGenerator,
-				rollbackService, resourceCalculateDelayer, _schedulerStateHolder().SchedulingResultState, allVisibleMatrixes,
-				optimizationPreferences, schedulingOptions, dayOffOptimizationPreferenceProvider);
-			weeklyRestSolverService.ResolvingWeek -= onResolvingWeek;
+				minutesPerInterval = schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution);
+			}
+			var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
+			var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
+			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
+			{
+				EventHandler<ResourceOptimizerProgressEventArgs> onResolvingWeek = (sender, e) =>
+				{
+					e.Cancel = backgroundWorker.CancellationPending;
+					backgroundWorker.ReportProgress(1, e);
+				};
+				var weeklyRestSolverService = _weeklyRestSolverService();
+				weeklyRestSolverService.ResolvingWeek += onResolvingWeek;
+				weeklyRestSolverService.Execute(selectedPersons, selectedPeriod, teamBlockGenerator,
+					rollbackService, resourceCalculateDelayer, schedulerStateHolder.SchedulingResultState, allVisibleMatrixes,
+					optimizationPreferences, schedulingOptions, dayOffOptimizationPreferenceProvider);
+				weeklyRestSolverService.ResolvingWeek -= onResolvingWeek;
+			}
 		}
 	}
 }
