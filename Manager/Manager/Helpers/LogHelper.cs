@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using log4net;
 
-namespace Manager.Integration.Test.Helpers
+namespace Stardust.Manager.Helpers
 {
     public static class LogHelper
     {
@@ -87,16 +87,5 @@ namespace Manager.Integration.Test.Helpers
                                           info));
             }
         }
-    }
-}using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Stardust.Manager.Helpers
-{
-    class LogHelper
-    {
     }
 }
