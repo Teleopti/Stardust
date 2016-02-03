@@ -15,7 +15,6 @@ namespace Stardust.Manager
 	public class JobRepository : IJobRepository
 	{
 		private readonly string _connectionString;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(JobRepository));
 
 		public JobRepository(string connectionString)
 		{
@@ -78,11 +77,11 @@ namespace Stardust.Manager
 			}
 			catch (TimeoutException exception)
 			{
-				Logger.Error("Can not add Job because of timeout", exception);
+                LogHelper.LogErrorWithLineNumber("Can not add Job because of timeout", exception);
 			}
 			catch (Exception exception)
 			{
-				Logger.Error("Can not add Job because of Error", exception);
+                LogHelper.LogErrorWithLineNumber("Can not add Job because of Error", exception);
 			}
 		}
 
@@ -285,14 +284,14 @@ namespace Stardust.Manager
 			}
 			catch (SqlException sqlException)
 			{
-				//probably timeout
-				Logger.Info("Timeout in Check and assign", sqlException.InnerException);
+                //probably timeout
+                LogHelper.LogErrorWithLineNumber("Timeout in Check and assign", sqlException.InnerException);
 				//System.Threading.Thread.Sleep(5000);
 			}
 			catch (Exception exception)
 			{
-				//log it
-				Logger.Error("Error in Check and Assign job", exception);
+                //log it
+                LogHelper.LogErrorWithLineNumber("Error in Check and Assign job", exception);
 			}
 
 		}
@@ -347,7 +346,7 @@ namespace Stardust.Manager
 
 			            var uriCancel = builderHelper.GetCancelJobUri(jobId);
 
-			            Logger.Info("Send delete async : " + uriCancel);
+                        LogHelper.LogInfoWithLineNumber("Send delete async : " + uriCancel);
 
 			            var response =
 			                await httpSender.DeleteAsync(uriCancel);
@@ -375,7 +374,7 @@ namespace Stardust.Manager
 			    }
 			    else
 			    {
-                    Logger.Warn("[MANAGER, "  + Environment.MachineName + "] : Could not find job defintion for id : " + jobId);
+                    LogHelper.LogWarningWithLineNumber("[MANAGER, "  + Environment.MachineName + "] : Could not find job defintion for id : " + jobId);
                 }
 
 				tran.Commit();

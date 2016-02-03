@@ -2,15 +2,16 @@
 using System.Web.Http;
 using System.Web.Http.Results;
 using log4net;
+using log4net.Repository.Hierarchy;
 using Stardust.Node.Constants;
 using Stardust.Node.Extensions;
+using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 
 namespace Stardust.Node.API
 {
     public class NodeController : ApiController
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeController));
 
         private readonly IWorkerWrapper _workerWrapper;
 
@@ -28,7 +29,7 @@ namespace Stardust.Node.API
             }
             if (_workerWrapper.IsTaskExecuting)
             {
-                Logger.Info(_workerWrapper.WhoamI +
+                LogHelper.LogInfoWithLineNumber(_workerWrapper.WhoamI +
                             ": New job request from manager rejected, node is working on an earlier request. JobId: " +
                             jobToDo.Id);
                 return CreateConflictStatusCode();
@@ -40,7 +41,7 @@ namespace Stardust.Node.API
             {
                 return response;
             }
-            Logger.Info(_workerWrapper.WhoamI + ": Starting Job. JobId " + jobToDo.Id);
+            LogHelper.LogInfoWithLineNumber(_workerWrapper.WhoamI + ": Starting Job. JobId " + jobToDo.Id);
 
             return CreateOkStatusCode(jobToDo);
         }
@@ -56,7 +57,7 @@ namespace Stardust.Node.API
             {
                 throw new ArgumentNullException();
             }
-            Logger.Info(_workerWrapper.WhoamI + ": Try cancel job. JobId " + jobId);
+            LogHelper.LogInfoWithLineNumber(_workerWrapper.WhoamI + ": Try cancel job. JobId " + jobId);
 
             var currentJob = _workerWrapper.GetCurrentMessageToProcess();
 
@@ -75,7 +76,7 @@ namespace Stardust.Node.API
             {
                 return Ok();
             }
-            Logger.Info(_workerWrapper.WhoamI + ": Could not cancel job since job not found on this node. JobId " +
+            LogHelper.LogInfoWithLineNumber(_workerWrapper.WhoamI + ": Could not cancel job since job not found on this node. JobId " +
                         jobId);
             return NotFound();
         }

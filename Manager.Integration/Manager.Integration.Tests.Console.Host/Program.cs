@@ -9,6 +9,7 @@ using System.Security.Policy;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net.Config;
+using Manager.Integration.Test.Helpers;
 using Manager.IntegrationTest.Console.Host.Properties;
 
 namespace Manager.IntegrationTest.Console.Host
@@ -242,7 +243,7 @@ namespace Manager.IntegrationTest.Console.Host
         private static void CurrentDomain_ProcessExit(object sender,
                                                       EventArgs e)
         {
-            LogHelper.LogInfoWithLineNumber(string.Empty);
+           LogHelper.LogInfoWithLineNumber(string.Empty);
         }
 
         private static void CurrentDomainOnDomainUnload(object sender,

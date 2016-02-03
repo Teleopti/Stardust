@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Threading;
 using log4net;
+using Stardust.Node.Helpers;
 
 namespace NodeTest.JobHandlers
 {
     public class LongRunningJobCode
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (LongRunningJobCode));
 
         public LongRunningJobCode()
         {
-            Logger.Info("'Long Running Job Code' class constructor called.");
+            LogHelper.LogInfoWithLineNumber("'Long Running Job Code' class constructor called.");
 
             WhoAmI = "[NODETEST.JOBHANDLERS.LongRunningJobCode, " + Environment.MachineName.ToUpper() + "]";
         }
@@ -21,11 +21,11 @@ namespace NodeTest.JobHandlers
                                CancellationTokenSource cancellationTokenSource,
                                Action<string> progress)
         {
-            
 
-            Logger.Info("'Long Running Job Code' Do The Thing method called.");
 
-            Logger.Info("'Long Running Job Code' Do The Thing method called. Will sleep for 20 seconds.");
+            LogHelper.LogInfoWithLineNumber("'Long Running Job Code' Do The Thing method called.");
+
+            LogHelper.LogInfoWithLineNumber("'Long Running Job Code' Do The Thing method called. Will sleep for 20 seconds.");
             Thread.Sleep(TimeSpan.FromSeconds(20));
 
             TestJobProgress jobProgress;
@@ -54,7 +54,7 @@ namespace NodeTest.JobHandlers
 
             progress(jobProgress.Text);
 
-            Logger.Info("'Long Running Job Code' : Will sleep for 10 seconds.");
+            LogHelper.LogInfoWithLineNumber("'Long Running Job Code' : Will sleep for 10 seconds.");
             Thread.Sleep(TimeSpan.FromSeconds(10));
 
             if (cancellationTokenSource.IsCancellationRequested)

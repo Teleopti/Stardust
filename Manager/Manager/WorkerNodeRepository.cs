@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using log4net;
+using log4net.Repository.Hierarchy;
+using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
 
@@ -13,7 +15,6 @@ namespace Stardust.Manager
 		private readonly string _connectionString;
 		private DataSet _jdDataSet;
 		private DataTable _jdDataTable;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(WorkerNodeRepository));
 
 		public WorkerNodeRepository(string connectionString)
 		{
@@ -98,11 +99,11 @@ namespace Stardust.Manager
 			}
 			catch (TimeoutException exception)
 			{
-				Logger.Debug("Can not get WorkerNodes, maybe there is a lock in JobDefinitions table", exception);
+                LogHelper.LogErrorWithLineNumber("Can not get WorkerNodes, maybe there is a lock in JobDefinitions table", exception);
 			}
 			catch (Exception exception)
 			{
-				Logger.Debug("Can not get WorkerNodes", exception);
+                LogHelper.LogErrorWithLineNumber("Can not get WorkerNodes", exception);
 			}
 
 			return listToReturn;

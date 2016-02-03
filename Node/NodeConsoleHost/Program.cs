@@ -10,13 +10,13 @@ using log4net.Config;
 using NodeTest.JobHandlers;
 using Stardust.Node;
 using Stardust.Node.API;
+using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 
 namespace NodeConsoleHost
 {
     internal class Program
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (Program));
 
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
 
@@ -71,7 +71,7 @@ namespace NodeConsoleHost
 
             
 
-            Logger.Info(WhoAmI + " : started.");
+            LogHelper.LogInfoWithLineNumber(WhoAmI + " : started.");
 
             AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -98,7 +98,7 @@ namespace NodeConsoleHost
         private static void ConsoleOnCancelKeyPress(object sender,
                                                     ConsoleCancelEventArgs e)
         {
-            Logger.Info(WhoAmI + " : ConsoleOnCancelKeyPress called.");
+            LogHelper.LogInfoWithLineNumber(WhoAmI + " : ConsoleOnCancelKeyPress called.");
 
             _nodeStarter.Stop();
 
@@ -114,7 +114,7 @@ namespace NodeConsoleHost
         private static void CurrentDomain_DomainUnload(object sender,
                                                        EventArgs e)
         {
-            Logger.Info(WhoAmI + " : CurrentDomain_DomainUnload called.");
+            LogHelper.LogInfoWithLineNumber(WhoAmI + " : CurrentDomain_DomainUnload called.");
 
             _nodeStarter.Stop();
 
@@ -124,7 +124,7 @@ namespace NodeConsoleHost
         private static void CurrentDomain_UnhandledException(object sender,
                                                              UnhandledExceptionEventArgs e)
         {
-            Logger.Error(WhoAmI + " : CurrentDomain_UnhandledException called.");
+            LogHelper.LogErrorWithLineNumber(WhoAmI + " : CurrentDomain_UnhandledException called.");
         }
     }
 
