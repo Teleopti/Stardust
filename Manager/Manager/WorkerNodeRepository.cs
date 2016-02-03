@@ -24,7 +24,7 @@ namespace Stardust.Manager
 		private void initDS()
 		{
 			_jdDataSet = new DataSet();
-			_jdDataTable = new DataTable("WorkerNodes");
+			_jdDataTable = new DataTable("[Stardust].WorkerNodes");
 			_jdDataTable.Columns.Add(new DataColumn("Id", typeof(Guid)));
 			_jdDataTable.Columns.Add(new DataColumn("Url", typeof(string)));
 			_jdDataSet.Tables.Add(_jdDataTable);
@@ -32,7 +32,7 @@ namespace Stardust.Manager
 
 		public List<WorkerNode> LoadAll()
 		{
-			const string selectCommand = @"SELECT  Id ,Url FROM WorkerNodes";
+			const string selectCommand = @"SELECT  Id ,Url FROM [Stardust].WorkerNodes";
 
 			var listToReturn = new List<WorkerNode>();;
 			using (var connection = new SqlConnection(_connectionString))
@@ -65,7 +65,7 @@ namespace Stardust.Manager
 
 		public List<WorkerNode> LoadAllFreeNodes()
 		{
-			const string selectCommand = @"SELECT * FROM WorkerNodes WHERE Url NOT IN (SELECT ISNULL(AssignedNode,'') FROM JobDefinitions)";
+			const string selectCommand = @"SELECT * FROM [Stardust].WorkerNodes WHERE Url NOT IN (SELECT ISNULL(AssignedNode,'') FROM [Stardust].JobDefinitions)";
 
 			var listToReturn = new List<WorkerNode>();
 			try
@@ -98,7 +98,7 @@ namespace Stardust.Manager
 			}
 			catch (TimeoutException exception)
 			{
-				Logger.Debug("Can not get WorkerNodes, maybe there is a lock in JobDefinitions table", exception);
+				Logger.Debug("Can not get WorkerNodes, maybe there is a lock in Stardust.JobDefinitions table", exception);
 			}
 			catch (Exception exception)
 			{
@@ -118,10 +118,10 @@ namespace Stardust.Manager
 			using (var connection = new SqlConnection(_connectionString))
 			{
 				connection.Open();
-				var da = new SqlDataAdapter("Select * From WorkerNodes", connection);
+				var da = new SqlDataAdapter("Select * From [Stardust].WorkerNodes", connection);
 				var builder = new SqlCommandBuilder(da);
 				builder.GetInsertCommand();
-				da.Update(_jdDataSet, "WorkerNodes");
+				da.Update(_jdDataSet, "[Stardust].WorkerNodes");
 				connection.Close();
 			}
 		}
@@ -131,9 +131,9 @@ namespace Stardust.Manager
 			using (var connection = new SqlConnection(_connectionString))
 			{
 				connection.Open();
-				var da = new SqlDataAdapter("Select * From WorkerNodes", connection);
+				var da = new SqlDataAdapter("Select * From [Stardust].WorkerNodes", connection);
 				var command = new SqlCommand(
-					"DELETE FROM WorkerNodes WHERE Id = @ID", connection);
+					"DELETE FROM [Stardust].WorkerNodes WHERE Id = @ID", connection);
 				var parameter = command.Parameters.Add(
 					"@ID", SqlDbType.UniqueIdentifier, 16, "Id");
 				parameter.Value = nodeId;

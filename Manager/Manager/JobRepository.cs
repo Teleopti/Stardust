@@ -25,7 +25,7 @@ namespace Stardust.Manager
 		public void Add(JobDefinition job)
 		{
 			var jdDataSet = new DataSet();
-			var jdDataTable = new DataTable("JobDefinitions");
+			var jdDataTable = new DataTable("[Stardust].[JobDefinitions]");
 			jdDataTable.Columns.Add(new DataColumn("Id", typeof(Guid)));
 			jdDataTable.Columns.Add(new DataColumn("Name", typeof(string)));
 			jdDataTable.Columns.Add(new DataColumn("Serialized", typeof(string)));
@@ -51,13 +51,13 @@ namespace Stardust.Manager
 				using (var connection = new SqlConnection(_connectionString))
 				{
 					connection.Open();
-					var da = new SqlDataAdapter("Select * From JobDefinitions", connection);
+					var da = new SqlDataAdapter("Select * From [Stardust].JobDefinitions", connection);
 					var builder = new SqlCommandBuilder(da);
 					builder.GetInsertCommand();
-					da.Update(jdDataSet, "JobDefinitions");
+					da.Update(jdDataSet, "[Stardust].[JobDefinitions]");
 
 					//add a row in history
-					da.InsertCommand = new SqlCommand("INSERT INTO JobHistory (JobId, Name, CreatedBy, Serialized, Type) VALUES(@Id, @Name, @By, @Serialized, @Type)", connection);
+					da.InsertCommand = new SqlCommand("INSERT INTO [Stardust].JobHistory (JobId, Name, CreatedBy, Serialized, Type) VALUES(@Id, @Name, @By, @Serialized, @Type)", connection);
 					da.InsertCommand.Parameters.Add("@Id", SqlDbType.UniqueIdentifier, 16, "JobId");
 					da.InsertCommand.Parameters[0].Value = job.Id;
 					da.InsertCommand.Parameters.Add("@Name", SqlDbType.NVarChar, 2000, "Name");
@@ -103,7 +103,7 @@ namespace Stardust.Manager
                                             ,AssignedNode
                                             ,JobProgress,
 															Status
-                                        FROM JobDefinitions";
+                                        FROM [Stardust].JobDefinitions";
 
 			var listToReturn = new List<JobDefinition>();
 
@@ -149,9 +149,9 @@ namespace Stardust.Manager
 			using (var connection = new SqlConnection(_connectionString))
 			{
 				connection.Open();
-				var da = new SqlDataAdapter("Select * From JobDefinitions", connection);
+				var da = new SqlDataAdapter("Select * From [Stardust].JobDefinitions", connection);
 				var command = new SqlCommand(
-					"DELETE FROM JobDefinitions WHERE Id = @ID", connection);
+					"DELETE FROM [Stardust].JobDefinitions WHERE Id = @ID", connection);
 				var parameter = command.Parameters.Add(
 					"@ID", SqlDbType.UniqueIdentifier, 16, "Id");
 				parameter.Value = jobId;
@@ -167,8 +167,8 @@ namespace Stardust.Manager
 			using (var connection = new SqlConnection(_connectionString))
 			{
 				connection.Open();
-				var da = new SqlDataAdapter("Select * From JobDefinitions", connection);
-				var command = new SqlCommand("Update JobDefinitions Set AssignedNode = null where AssignedNode = @assingedNode", connection);
+				var da = new SqlDataAdapter("Select * From [Stardust].JobDefinitions", connection);
+				var command = new SqlCommand("Update [Stardust].JobDefinitions Set AssignedNode = null where AssignedNode = @assingedNode", connection);
 				var parameter = command.Parameters.Add("@assingedNode", SqlDbType.NVarChar, 2000, "AssignedNode");
 				parameter.Value = url;
 				da.UpdateCommand = command;
@@ -188,7 +188,7 @@ namespace Stardust.Manager
 					connection.Open();
 					using (var tran = connection.BeginTransaction(IsolationLevel.Serializable))
 					{
-						var da = new SqlDataAdapter("SELECT * From JobDefinitions  WITH (TABLOCKX) WHERE AssignedNode IS NULL OR AssignedNode = ''",
+						var da = new SqlDataAdapter("SELECT * From [Stardust].JobDefinitions  WITH (TABLOCKX) WHERE AssignedNode IS NULL OR AssignedNode = ''",
 						connection)
 						{ SelectCommand = { Transaction = tran, CommandTimeout = 2 } };
 						DataTable jobs = new DataTable();
@@ -205,7 +205,7 @@ namespace Stardust.Manager
 								Type = getValue<string>(jobRow["Type"]),
 								CreatedBy = getValue<string>(jobRow["UserName"])
 							};
-							da.UpdateCommand = new SqlCommand("UPDATE JobDefinitions SET AssignedNode = @AssignedNode, Status = 'Started' WHERE Id = @Id", connection);
+							da.UpdateCommand = new SqlCommand("UPDATE [Stardust].JobDefinitions SET AssignedNode = @AssignedNode, Status = 'Started' WHERE Id = @Id", connection);
 
 							var nodeParam = da.UpdateCommand.Parameters.Add("@AssignedNode", SqlDbType.NVarChar);
 							nodeParam.SourceColumn = "AssignedNode";
@@ -232,7 +232,7 @@ namespace Stardust.Manager
 										da.UpdateCommand.ExecuteNonQuery();
 
 										//update history
-										da.UpdateCommand = new SqlCommand("UPDATE JobHistory SET Started = @Started, SentTo = @Node WHERE JobId = @Id", connection);
+										da.UpdateCommand = new SqlCommand("UPDATE [Stardust].JobHistory SET Started = @Started, SentTo = @Node WHERE JobId = @Id", connection);
 										da.UpdateCommand.Parameters.Add("@Id", SqlDbType.UniqueIdentifier, 16, "JobId");
 										da.UpdateCommand.Parameters[0].Value = job.Id;
 										da.UpdateCommand.Parameters.Add("@Started", SqlDbType.DateTime, 16, "Started");
@@ -248,7 +248,7 @@ namespace Stardust.Manager
 									if (response != null && response.StatusCode.Equals(HttpStatusCode.BadRequest))
 									{
 										//remove the job if badrequest
-										da.DeleteCommand = new SqlCommand("DELETE FROM JobDefinitions WHERE Id = @Id", connection);
+										da.DeleteCommand = new SqlCommand("DELETE FROM [Stardust].JobDefinitions WHERE Id = @Id", connection);
 
 										var deleteParameter = da.DeleteCommand.Parameters.Add("@Id", SqlDbType.UniqueIdentifier);
 										deleteParameter.SourceColumn = "Id";
@@ -257,7 +257,7 @@ namespace Stardust.Manager
 										da.DeleteCommand.Transaction = tran;
 										da.DeleteCommand.ExecuteNonQuery();
 										//update history
-										da.UpdateCommand = new SqlCommand("UPDATE JobHistory SET Result = @Result, SentTo = @Node WHERE JobId = @Id", connection);
+										da.UpdateCommand = new SqlCommand("UPDATE [Stardust].JobHistory SET Result = @Result, SentTo = @Node WHERE JobId = @Id", connection);
 										da.UpdateCommand.Parameters.Add("@Id", SqlDbType.UniqueIdentifier, 16, "JobId");
 										da.UpdateCommand.Parameters[0].Value = job.Id;
 										da.UpdateCommand.Parameters.Add("@Result", SqlDbType.NVarChar, 200, "Result");
@@ -304,7 +304,7 @@ namespace Stardust.Manager
 				connection.Open();
 				var tran = connection.BeginTransaction(IsolationLevel.Serializable);
 				var da =
-					new SqlDataAdapter(string.Format("SELECT * From JobDefinitions  WITH (TABLOCKX) WHERE Id = '{0}'", jobId),
+					new SqlDataAdapter(string.Format("SELECT * From [Stardust].JobDefinitions  WITH (TABLOCKX) WHERE Id = '{0}'", jobId),
 						connection)
 					{ SelectCommand = { Transaction = tran } };
 				DataTable jobs = new DataTable();
@@ -316,7 +316,7 @@ namespace Stardust.Manager
 			        var node = getValue<string>(jobRow["AssignedNode"]);
 			        if (string.IsNullOrEmpty(node))
 			        {
-			            da.DeleteCommand = new SqlCommand("DELETE FROM JobDefinitions WHERE Id = @Id",
+			            da.DeleteCommand = new SqlCommand("DELETE FROM [Stardust].JobDefinitions WHERE Id = @Id",
 			                                              connection);
 			            var parameter = da.DeleteCommand.Parameters.Add("@Id",
 			                                                            SqlDbType.UniqueIdentifier);
@@ -326,7 +326,7 @@ namespace Stardust.Manager
 			            da.DeleteCommand.ExecuteNonQuery();
 
 			            //update history
-			            da.UpdateCommand = new SqlCommand("UPDATE JobHistory SET Result = @Result WHERE JobId = @Id",
+			            da.UpdateCommand = new SqlCommand("UPDATE [Stardust].JobHistory SET Result = @Result WHERE JobId = @Id",
 			                                              connection);
 			            da.UpdateCommand.Parameters.Add("@Id",
 			                                            SqlDbType.UniqueIdentifier,
@@ -354,7 +354,7 @@ namespace Stardust.Manager
 
 			            if (response != null && response.IsSuccessStatusCode)
 			            {
-			                da.UpdateCommand = new SqlCommand("UPDATE JobDefinitions SET Status = 'Canceling' WHERE Id = @Id",
+			                da.UpdateCommand = new SqlCommand("UPDATE [Stardust].JobDefinitions SET Status = 'Canceling' WHERE Id = @Id",
 			                                                  connection);
 
 			                var parameter = da.UpdateCommand.Parameters.Add("@Id",
@@ -388,8 +388,8 @@ namespace Stardust.Manager
 			using (var connection = new SqlConnection(_connectionString))
 			{
 				connection.Open();
-				var da = new SqlDataAdapter("SELECT * From JobHistory", connection);
-				da.UpdateCommand = new SqlCommand("UPDATE JobHistory SET Result = @Result, Ended = @Ended WHERE JobId = @Id", connection);
+				var da = new SqlDataAdapter("SELECT * From [Stardust].JobHistory", connection);
+				da.UpdateCommand = new SqlCommand("UPDATE [Stardust].JobHistory SET Result = @Result, Ended = @Ended WHERE JobId = @Id", connection);
 
 				da.UpdateCommand.Parameters.Add("@Id", SqlDbType.UniqueIdentifier, 16, "JobId");
 				da.UpdateCommand.Parameters[0].Value = jobId;
@@ -409,10 +409,10 @@ namespace Stardust.Manager
 			using (var connection = new SqlConnection(_connectionString))
 			{
 				connection.Open();
-				var da = new SqlDataAdapter("SELECT * From JobHistoryDetail", connection)
+				var da = new SqlDataAdapter("SELECT * From [Stardust].JobHistoryDetail", connection)
 				{
 					InsertCommand =
-						new SqlCommand("INSERT INTO JobHistoryDetail (JobId, Detail) VALUES (@Id, @Detail)", connection)
+						new SqlCommand("INSERT INTO [Stardust].JobHistoryDetail (JobId, Detail) VALUES (@Id, @Detail)", connection)
 				};
 
 				da.InsertCommand.Parameters.Add("@Id", SqlDbType.UniqueIdentifier, 16, "JobId");
@@ -435,7 +435,7 @@ namespace Stardust.Manager
                                             ,Ended
                                             ,SentTo,
 															Result
-                                        FROM JobHistory WHERE JobId = @JobId";
+                                        FROM [Stardust].JobHistory WHERE JobId = @JobId";
 
 			using (var connection = new SqlConnection(_connectionString))
 			{

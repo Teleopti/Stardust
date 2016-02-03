@@ -7,7 +7,10 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [JobDefinitions](
+CREATE SCHEMA [Stardust]
+GO;
+
+CREATE TABLE [Stardust].[JobDefinitions](
 	[Id] [uniqueidentifier] NOT NULL,
 	[Name] [nvarchar](max) NULL,
 	[Serialized] [nvarchar](max) NULL,
@@ -22,7 +25,7 @@ CREATE TABLE [JobDefinitions](
 ))
 GO
 
-CREATE TABLE [dbo].[WorkerNodes](
+CREATE TABLE [Stardust].[WorkerNodes](
 	[Id] [uniqueidentifier] NOT NULL,
 	[Url] [nvarchar](450) NOT NULL,
  CONSTRAINT [PK_WorkerNodes] PRIMARY KEY CLUSTERED 
@@ -31,13 +34,13 @@ CREATE TABLE [dbo].[WorkerNodes](
 ))
 
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [UQ_WorkerNodes_Url] ON [dbo].[WorkerNodes]
+CREATE UNIQUE NONCLUSTERED INDEX [UQ_WorkerNodes_Url] ON [Stardust].[WorkerNodes]
 (
 	[Url] ASC
 )
 GO
 
-CREATE TABLE JobHistory(
+CREATE TABLE [Stardust].[JobHistory](
 	[JobId] [uniqueidentifier] NOT NULL,
 	[Name] [nvarchar](max) NULL,
 	[CreatedBy] nvarchar(500) NOT NULL,
@@ -54,11 +57,11 @@ CONSTRAINT [PK_JobHistory] PRIMARY KEY CLUSTERED
 ))
 
 GO
-ALTER TABLE dbo.JobHistory ADD CONSTRAINT
+ALTER TABLE [Stardust].[JobHistory] ADD CONSTRAINT
 	DF_JobHistory_Created DEFAULT getutcdate() FOR Created
 GO
 
-CREATE TABLE JobHistoryDetail(
+CREATE TABLE [Stardust].[JobHistoryDetail](
 	[Id] int NOT NULL IDENTITY (1, 1),
 	[JobId] [uniqueidentifier] NOT NULL,
 	[Created] DateTime NOT NULL,
@@ -66,6 +69,6 @@ CREATE TABLE JobHistoryDetail(
 )
 
 GO
-ALTER TABLE dbo.JobHistoryDetail ADD CONSTRAINT
+ALTER TABLE [Stardust].[JobHistoryDetail] ADD CONSTRAINT
 	DF_JobHistoryDetail_Created DEFAULT getutcdate() FOR Created
 GO
