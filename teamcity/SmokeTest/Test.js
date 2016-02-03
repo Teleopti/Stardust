@@ -39,14 +39,35 @@ client.setValue('#Username-input', 'demo')
 			client.url(webUrl)
 				.waitForExist('.user-name', 120000, false, function(err, res, response) {
 					if (err || !res) {
-						log('failed to sign in second time.');
-						closeAndThrow('failed to sign in second time.' + err);
+						log('failed to sign in first time after refresh.');
+						
+						log('try to sign in second time:');
+						log('navigate to url ' + webUrl);
+						client.url(webUrl)
+							.waitForExist('#Username-input', 60000, false, function(err, res, response) {
+								if (err || !res) {
+									closeAndThrow('failed to navigate to sign in page. ' + err);
+								}
+							});
+							
+						log('try to sign in');
+						client.setValue('#Username-input', 'demo')
+							.setValue('#Password-input', 'demo')
+							.click('#Signin-button')
+							.waitForExist('.user-name', 300000, false, function(err, res, response) {
+								if (err || !res) {
+									closeAndThrow('failed to sign in second time.' + err);
+								}else{
+									log('succeeded to sign in second time.');
+								}
+							});
+
 					}else{
-						log('succeeded to sign in second time.');
+						log('succeeded to sign in first time after refresh.');
 					}
 				});
 		}else{
-			log('sign in succeeded first time:' + res);
+			log('succeeded to sign in first time.');
 		}
 	});
 
