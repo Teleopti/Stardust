@@ -152,7 +152,7 @@ namespace Manager.Integration.Test
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.Start();
 
-            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(1);
+            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(TimeSpan.FromMinutes(1));
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.NullStatus));
             
