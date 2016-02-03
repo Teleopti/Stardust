@@ -7,7 +7,7 @@ namespace Manager.Integration.Test.Helpers
     public static class LogHelper
     {
         private static readonly ILog Logger =
-            LogManager.GetLogger(typeof (LogHelper));
+            LogManager.GetLogger(typeof(LogHelper));
 
         public static void LogErrorWithLineNumber(string info,
                                                   System.Exception exception = null,
@@ -87,5 +87,16 @@ namespace Manager.Integration.Test.Helpers
                                           info));
             }
         }
+    }
+}using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Stardust.Manager.Helpers
+{
+    class LogHelper
+    {
     }
 }
