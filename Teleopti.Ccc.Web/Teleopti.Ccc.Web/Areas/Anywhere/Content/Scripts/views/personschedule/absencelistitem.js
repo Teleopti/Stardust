@@ -193,7 +193,7 @@ define([
 						type: 'POST',
 						headers: { 'X-Business-Unit-Filter': data.BusinessUnitId },
 						data: JSON.stringify({
-							PersonAbsenceId: data.Id,
+							PersonAbsenceIds: [data.Id],
 							TrackedCommandInfo: { TrackId: trackId }
 						}),
 						success: function (responseData, textStatus, jqXHR) {
