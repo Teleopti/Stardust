@@ -26,24 +26,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void Setup()
 		{
-			var builder = new ContainerBuilder();
-			var args = new IocArgs(new ConfigReader())
-			{
-				BehaviorTest = true,
-				FeatureToggle = "http://notinuse"
-			};
-			// should really use same toggles as the website!
-			var toggleManager = new FakeToggleManager();
-			toggleManager.Enable(Toggles.RTA_NewEventHangfireRTA_34333);
-			toggleManager.Enable(Toggles.RTA_AdherenceDetails_34267);
-			toggleManager.Enable(Toggles.RTA_DeletedPersons_36041);
-			toggleManager.Enable(Toggles.RTA_TerminatedPersons_36042);
-			builder.RegisterModule(new CommonModule(new IocConfiguration(args, toggleManager)));
-			builder.RegisterInstance(toggleManager).As<IToggleManager>();
 
-			var container = builder.Build();
+			SystemSetup.Setup();
 
-			datasource = DataSourceHelper.CreateDataSource(container.Resolve<ICurrentPersistCallbacks>(), UserConfigurable.DefaultTenantName);
+			datasource = DataSourceHelper.CreateDataSource(SystemSetup.PersistCallbacks, UserConfigurable.DefaultTenantName);
 
 			TestSiteConfigurationSetup.StartApplicationAsync();
 
@@ -59,9 +45,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			globalData.ForEach(dataSetup => GlobalDataMaker.Data().Apply(dataSetup));
 			DataSourceHelper.BackupCcc7Database(globalData.HashValue);
 
-			container.Resolve<IMessageBrokerUrl>().Configure(TestSiteConfigurationSetup.URL.ToString());
-			container.Resolve<ISignalRClient>().StartBrokerService();
-			container.Resolve<IHangfireClientStarter>().Start();
+			SystemSetup.MessageBrokerUrl.Configure(TestSiteConfigurationSetup.URL.ToString());
+			SystemSetup.SignalRClient.StartBrokerService();
+			SystemSetup.HangfireClient.Start();
 		}
 
 		public static void ClearAnalyticsData()
@@ -72,6 +58,43 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static void RestoreCcc7Data()
 		{
 			DataSourceHelper.RestoreCcc7Database(globalData.HashValue);
+		}
+	}
+
+	public static class SystemSetup
+	{
+		private static IContainer _container;
+
+		public static ICurrentPersistCallbacks PersistCallbacks;
+		public static IMessageBrokerUrl MessageBrokerUrl;
+		public static ISignalRClient SignalRClient;
+		public static IHangfireClientStarter HangfireClient;
+		public static HangfireUtilties Hangfire;
+
+		public static void Setup()
+		{
+			var builder = new ContainerBuilder();
+			var args = new IocArgs(new ConfigReader())
+			{
+				BehaviorTest = true,
+				FeatureToggle = "http://notinuse"
+			};
+			// should really use same toggles as the website!
+			var toggleManager = new FakeToggleManager();
+			toggleManager.Enable(Toggles.RTA_NewEventHangfireRTA_34333);
+			toggleManager.Enable(Toggles.RTA_AdherenceDetails_34267);
+			toggleManager.Enable(Toggles.RTA_DeletedPersons_36041);
+			toggleManager.Enable(Toggles.RTA_TerminatedPersons_36042);
+			builder.RegisterModule(new CommonModule(new IocConfiguration(args, toggleManager)));
+			builder.RegisterInstance(toggleManager).As<IToggleManager>();
+
+			_container = builder.Build();
+
+			PersistCallbacks = _container.Resolve<ICurrentPersistCallbacks>();
+			MessageBrokerUrl = _container.Resolve<IMessageBrokerUrl>();
+			SignalRClient = _container.Resolve<ISignalRClient>();
+			HangfireClient = _container.Resolve<IHangfireClientStarter>();
+			Hangfire = _container.Resolve<HangfireUtilties>();
 		}
 	}
 }

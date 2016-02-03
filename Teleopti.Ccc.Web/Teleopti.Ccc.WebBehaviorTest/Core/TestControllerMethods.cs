@@ -31,12 +31,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			navigateOrRequest("Test/ClearConnections");
 		}
-
-		public static void WaitForHangfireQueue()
-		{
-			navigateOrRequest("Test/WaitForHangfireQueue");
-		}
-
+		
 		private static void navigateOrRequest(string url)
 		{
 			if (Browser.Interactions.TryCheckIfUrlContains("/Test/"))
