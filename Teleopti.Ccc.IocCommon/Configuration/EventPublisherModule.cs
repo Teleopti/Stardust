@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 
 
-			if (_configuration.Args().BehaviorTestServer)
+			if (_configuration.Args().BehaviorTestServer || _configuration.Args().BehaviorTestClient)
 			{
 				if (_configuration.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
 					builder.Register(c => c.Resolve<MultiEventPublisherServiceBusAsSync>()).As<IEventPublisher>().SingleInstance();
@@ -60,11 +60,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<IgnoreDelayedMessages>().As<IDelayedMessageSender>().SingleInstance();
 			}
 
-			if (_configuration.Args().BehaviorTestClient)
-			{
-				builder.Register(c => c.Resolve<SyncAllEventPublisher>()).As<IEventPublisher>().SingleInstance();
-				builder.RegisterType<IgnoreDelayedMessages>().As<IDelayedMessageSender>().SingleInstance();
-			}
+			//if (_configuration.Args().BehaviorTestClient)
+			//{
+			//	builder.Register(c => c.Resolve<SyncAllEventPublisher>()).As<IEventPublisher>().SingleInstance();
+			//	builder.RegisterType<IgnoreDelayedMessages>().As<IDelayedMessageSender>().SingleInstance();
+			//}
 
 
 		}
