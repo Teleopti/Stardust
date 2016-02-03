@@ -14,7 +14,6 @@ using Stardust.Node.Interfaces;
 
 namespace NodeConsoleHost
 {
-<<<<<<< HEAD
     internal class Program
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (Program));
@@ -125,33 +124,5 @@ namespace NodeConsoleHost
             Logger.Error(WhoAmI + " : CurrentDomain_UnhandledException called.");
         }
     }
-=======
-	internal class Program
-	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(Program));
 
-		private static void Main(string[] args)
-		{
-			XmlConfigurator.Configure();
-
-			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-
-			var nodeConfig = new NodeConfiguration(new Uri(ConfigurationManager.AppSettings["BaseAddress"]),
-																new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
-																Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
-																ConfigurationManager.AppSettings["NodeName"]);
-			var builder = new ContainerBuilder();
-			builder.RegisterModule(new WorkerModule());
-			var container = builder.Build();
-
-			new NodeStarter().Start(nodeConfig, container);
-		}
-
-		private static void CurrentDomain_UnhandledException(object sender,
-																			  UnhandledExceptionEventArgs e)
-		{
-			Logger.Error("Unhandeled Exception in NodeConsoleHost");
-		}
-	}
->>>>>>> 1ab870e7a67bd026018c120f0bfdf84d0e447e49
 }
