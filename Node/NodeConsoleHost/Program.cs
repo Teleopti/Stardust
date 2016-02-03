@@ -69,8 +69,6 @@ namespace NodeConsoleHost
 
             WhoAmI = "[NODE CONSOLE HOST, " + Environment.MachineName.ToUpper() + "]";
 
-            
-
             LogHelper.LogInfoWithLineNumber(WhoAmI + " : started.");
 
             AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;

@@ -39,7 +39,7 @@ namespace Manager.Integration.Test
 #if (DEBUG)
             // Do nothing.
 #else
-            _clearDatabase = false;
+            _clearDatabase = true;
             _startUpManagerAndNodeManually = false;
             _debugMode = false;
             _buildMode = "Release";
@@ -78,15 +78,24 @@ namespace Manager.Integration.Test
         [TearDown]
         public void TearDown()
         {
-            ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
+            if (ManagerApiHelper != null &&
+                ManagerApiHelper.CheckJobHistoryStatusTimer != null)
+            {
+                ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
+            }            
         }
 
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
         {
-            ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
+            if (ManagerApiHelper != null &&
+                ManagerApiHelper.CheckJobHistoryStatusTimer != null)
+            {
+                ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
+            }
 
-            if (AppDomainHelper.AppDomains.Any())
+            if (AppDomainHelper.AppDomains != null &&
+                AppDomainHelper.AppDomains.Any())
             {
                 foreach (var appDomain in AppDomainHelper.AppDomains.Values)
                 {
@@ -101,7 +110,7 @@ namespace Manager.Integration.Test
 
         private bool _startUpManagerAndNodeManually = false;
 
-        private bool _clearDatabase = false;
+        private bool _clearDatabase = true;
 
         private bool _debugMode = true;
 
@@ -115,6 +124,7 @@ namespace Manager.Integration.Test
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
         [Test]
+        [Ignore]
         public void Create5RequestShouldReturnBothCancelAndDeleteStatuses()
         {
             JobHelper.GiveNodesTimeToInitialize();
@@ -195,6 +205,7 @@ namespace Manager.Integration.Test
         }
 
         [Test]
+        [Ignore]
         public void CancelWrongJobs()
         {
             LogHelper.LogInfoWithLineNumber("Starting test : CancelWrongJobs");
