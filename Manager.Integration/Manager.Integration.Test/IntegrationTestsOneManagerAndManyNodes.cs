@@ -209,7 +209,6 @@ namespace Manager.Integration.Test
         }
 
         [Test]
-        [Ignore]
         public void CancelWrongJobs()
         {
             LogHelper.LogInfoWithLineNumber("Starting test : CancelWrongJobs");
