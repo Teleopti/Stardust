@@ -99,11 +99,7 @@ namespace Stardust.Manager
 			}
 			catch (TimeoutException exception)
 			{
-<<<<<<< HEAD
-				Logger.Debug("Can not get WorkerNodes, maybe there is a lock in Stardust.JobDefinitions table", exception);
-=======
-                LogHelper.LogErrorWithLineNumber("Can not get WorkerNodes, maybe there is a lock in JobDefinitions table", exception);
->>>>>>> ad7ed1c63c136569d4d21c302709be670e2034ed
+                LogHelper.LogErrorWithLineNumber("Can not get WorkerNodes, maybe there is a lock in Stardust.JobDefinitions table", exception);
 			}
 			catch (Exception exception)
 			{
