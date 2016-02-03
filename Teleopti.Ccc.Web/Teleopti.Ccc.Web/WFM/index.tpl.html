@@ -1,17 +1,6 @@
 ﻿<!DOCTYPE html>
 <html ng-app="wfm">
 <head lang="en">
-	<script type="text/javascript">
-		function iAmCalledFromFatClient() {
-			document.getElementById('nav').style.display = 'none';
-			document.getElementById('leftsidenav').style.display = 'none';
-			document.getElementById('notice').style.display = 'none';
-			document.getElementById('lefttoogle').style.display = 'none';
-			document.getElementById('materialcontainer').style["margin-top"] = '0';
-			document.getElementById('materialcontainer').style.height = '100vh';
-
-		}
-	</script>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>WFM</title>
@@ -45,6 +34,24 @@
 
 </div>
 	<script type="text/javascript">
+		function iAmCalledFromFatClient() {
+			var elementsToRemove = [
+				document.getElementById('nav'),
+				document.getElementById('leftsidenav'),
+				document.getElementById('notice')
+			];
+
+			elementsToRemove.forEach(function(elmt) {
+				if (elmt) elmt.style.display = 'none';
+			});
+
+			var materialcontainer = document.getElementById('materialcontainer');
+			if (materialcontainer) {
+				materialcontainer.style["margin-top"] = '0';
+				materialcontainer.style.height = '100vh';
+			}
+		};
+
 		function ahAhAhAhStayingAlive() {
 			$.get('../Start/Url/Index')
 				.success(function () {
