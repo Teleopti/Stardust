@@ -354,8 +354,8 @@
 
 		vm.afterActionCallback = function (result, successMessageTemplate, failMessageTemplate) {
 			handleActionResult(result, successMessageTemplate, failMessageTemplate);
-			vm.updateSchedules(vm.getSelectedPersonIdList());
 
+			vm.updateSchedules(vm.getSelectedPersonIdList());
 			vm.personIdSelectionDic = {};
 			setupPersonIdSelectionDic(vm.groupScheduleVm.Schedules);
 
@@ -375,6 +375,7 @@
 			vm.toggleForAbsenceReportingEnabled = toggleSvc.WfmTeamSchedule_AbsenceReporting_35995;
 			vm.searchOptions.isAdvancedSearchEnabled = toggleSvc.WfmPeople_AdvancedSearch_32973;
 			vm.toggleForSwapShiftEnabled = toggleSvc.WfmTeamSchedule_SwapShifts_36231;
+			vm.toggleForRemoveAbsenceEnabled = toggleSvc.WfmTeamSchedule_RemoveAbsence_36705;
 			toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303 && monitorScheduleChanged();
 			vm.schedulePageReset();
 		};
