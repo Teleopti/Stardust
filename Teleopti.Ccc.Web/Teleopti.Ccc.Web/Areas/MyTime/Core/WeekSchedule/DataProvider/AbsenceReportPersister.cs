@@ -31,8 +31,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 		{
 			var message = new NewAbsenceReportCreated
 			{
-				BusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
-				Datasource = _currentDataSource.Current().DataSourceName,
+				LogOnBusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
+				LogOnDatasource = _currentDataSource.Current().DataSourceName,
 				AbsenceId = input.AbsenceId,
 				PersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault(),
 				RequestedDate = input.Date.Date,

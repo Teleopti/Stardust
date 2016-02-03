@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 	{
 		public DateTime Timestamp { get; set; }
 		public Guid InitiatorId { get; set; }
-		public string Datasource { get; set; }
-		public Guid BusinessUnitId { get; set; }
+		public string LogOnDatasource { get; set; }
+		public Guid LogOnBusinessUnitId { get; set; }
 	}
 }

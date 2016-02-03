@@ -53,26 +53,26 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private void setLogOnInfo(ILogOnInfo @event)
 		{
-			if (!string.IsNullOrEmpty(@event.Datasource))
+			if (!string.IsNullOrEmpty(@event.LogOnDatasource))
 				return;
 
-			if (@event.BusinessUnitId.Equals(Guid.Empty))
+			if (@event.LogOnBusinessUnitId.Equals(Guid.Empty))
 			{
 				if (_businessUnit != null)
 				{
 					var businessUnit = _businessUnit.Current();
 					if (businessUnit != null)
 					{
-						@event.BusinessUnitId = businessUnit.Id.Value;
+						@event.LogOnBusinessUnitId = businessUnit.Id.Value;
 					}
 				}
 			}
 
-			if (string.IsNullOrEmpty(@event.Datasource))
+			if (string.IsNullOrEmpty(@event.LogOnDatasource))
 			{
 				if (_dataSource != null)
 				{
-					@event.Datasource = _dataSource.CurrentName();
+					@event.LogOnDatasource = _dataSource.CurrentName();
 				}
 			}
 		}

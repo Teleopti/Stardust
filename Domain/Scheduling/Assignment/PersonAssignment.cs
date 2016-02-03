@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				Date = Date,
 				PersonId = Person.Id.Value,
 				ScenarioId = Scenario.Id.Value,
-				BusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
 			});
 		}
 
@@ -298,7 +298,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					StartDateTime = period.StartDateTime,
 					EndDateTime = period.EndDateTime,
 					ScenarioId = Scenario.Id.Value,
-					BusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+					LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
 				};
 				if (trackedCommandInfo != null)
 				{
@@ -398,7 +398,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					StartDateTime = affectedPeriod.StartDateTime,
 					EndDateTime =affectedPeriod.EndDateTime,
 					ScenarioId = Scenario.Id.Value,
-					BusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+					LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
 				};
 				if (trackedCommandInfo != null)
 				{
@@ -429,7 +429,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				Date = Date,
 				PersonId = Person.Id.Value,
 				ScenarioId = Scenario.Id.Value,
-				BusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
 			});
 		}
 

@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Common
 
         public virtual ITeam MyTeam(DateOnly theDate)
         {
-            IPersonPeriod per = Period(theDate);
+            var per = Period(theDate);
             return per == null ? null : per.Team;
         }
 
@@ -454,12 +454,18 @@ namespace Teleopti.Ccc.Domain.Common
 				    {
 						var businessUnitId = Guid.Empty;
 						var siteId = Guid.Empty;
-						var site = p.Team.Site;
-						if (site != null)
+						var teamId = Guid.Empty;
+						if (p.Team != null)
 						{
-							if (site.BusinessUnit != null)
-								businessUnitId = site.BusinessUnit.Id.GetValueOrDefault();
-							siteId = site.Id.GetValueOrDefault();
+							teamId = p.Team.Id.GetValueOrDefault();
+							if (p.Team.Site != null)
+							{
+								siteId = p.Team.Site.Id.GetValueOrDefault();
+								if (p.Team.Site.BusinessUnit != null)
+								{
+									businessUnitId = p.Team.Site.BusinessUnit.Id.GetValueOrDefault();
+								}
+							}
 						}
 						return new PersonPeriodDetail
 						{
@@ -467,7 +473,7 @@ namespace Teleopti.Ccc.Domain.Common
 							EndDate = p.EndDate().Date,
 							BusinessUnitId = businessUnitId,
 							SiteId = siteId,
-							TeamId = p.Team.Id.GetValueOrDefault(),
+							TeamId = teamId,
 							PersonSkillDetails = gatherSkillDetails(p),
 						};
 				    }).ToList();

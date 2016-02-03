@@ -42,8 +42,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				{
 					bus.Send(new BadgeCalculationInitMessage
 					{
-						Datasource = tenant.DataSourceName,
-						BusinessUnitId = businessUnitId,
+						LogOnDatasource = tenant.DataSourceName,
+						LogOnBusinessUnitId = businessUnitId,
 						Timestamp = DateTime.UtcNow
 					});
 

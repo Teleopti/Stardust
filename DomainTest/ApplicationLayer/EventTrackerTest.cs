@@ -21,8 +21,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var @event = new ActivityAddedEvent
 			{
-				Datasource = "datasource",
-				BusinessUnitId = Guid.NewGuid(), 
+				LogOnDatasource = "datasource",
+				LogOnBusinessUnitId = Guid.NewGuid(), 
 				InitiatorId = Guid.NewGuid()
 			};
 			target.SendTrackingMessage(@event, new TrackingMessage
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			messageBrokerSender.AssertWasCalled(x => x.Send(
 				Arg<Interfaces.MessageBroker.Message>.Matches(e =>
 					e.DataSource == "datasource" &&
-					e.BusinessUnitId == @event.BusinessUnitId.ToString() &&
+					e.BusinessUnitId == @event.LogOnBusinessUnitId.ToString() &&
 					e.ModuleId == @event.InitiatorId.ToString() &&
 					e.DomainType == typeof (TrackingMessage).Name &&
 					e.DomainReferenceId == @event.InitiatorId.ToString()

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var message = new CalculateTimeZoneMessage
 			{
 				Timestamp = DateTime.Now,
-				BusinessUnitId = bussinessUnit.Id.GetValueOrDefault(),
+				LogOnBusinessUnitId = bussinessUnit.Id.GetValueOrDefault(),
 				TimeZoneCode = TimeZoneInfo.Utc.Id
 			};
 			var timezone = TimeZoneInfo.FindSystemTimeZoneById(message.TimeZoneCode);

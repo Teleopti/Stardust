@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			if (Logger.IsDebugEnabled)
 			{
 				Logger.DebugFormat("Consume CalculateTimeZoneMessage with BusinessUnit {0}, DataSource {1} and timezone {2}",
-					message.BusinessUnitId, message.Datasource, message.TimeZoneCode);
+					message.LogOnBusinessUnitId, message.LogOnDatasource, message.TimeZoneCode);
 			}
 			var today = _now.LocalDateTime();
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(message.TimeZoneCode);
@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 			_serviceBus.Send(new CalculateBadgeMessage
 			{
-				Datasource = message.Datasource,
-				BusinessUnitId = message.BusinessUnitId,
+				LogOnDatasource = message.LogOnDatasource,
+				LogOnBusinessUnitId = message.LogOnBusinessUnitId,
 				Timestamp = DateTime.UtcNow,
 				CalculationDate = yesterdayForGivenTimeZone,
 				TimeZoneCode = message.TimeZoneCode 

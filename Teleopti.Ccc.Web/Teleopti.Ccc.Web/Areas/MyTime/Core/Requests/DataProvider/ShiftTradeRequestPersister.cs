@@ -98,8 +98,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			{
 				message = new NewShiftTradeRequestCreated
 				{
-					BusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
-					Datasource = _dataSourceProvider.Current().DataSourceName,
+					LogOnBusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
+					LogOnDatasource = _dataSourceProvider.Current().DataSourceName,
 					PersonRequestId = personRequest.Id.GetValueOrDefault(Guid.Empty),
 					Timestamp = _now.UtcDateTime()
 				};

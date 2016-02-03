@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 						PersonId = schedule.PersonId,
 						TeamId = scheduleDay.TeamId,
 						SiteId = scheduleDay.SiteId,
-						BusinessUnitId = schedule.BusinessUnitId,
+						BusinessUnitId = schedule.LogOnBusinessUnitId,
 						Date = scheduleDay.Date
 					};
 

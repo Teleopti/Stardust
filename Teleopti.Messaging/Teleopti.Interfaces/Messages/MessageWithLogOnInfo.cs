@@ -7,8 +7,8 @@ namespace Teleopti.Interfaces.Messages
     {
         public abstract Guid Identity { get; }
 		public Guid InitiatorId { get; set; }
-        public string Datasource { get; set; }
+        public string LogOnDatasource { get; set; }
 		public DateTime Timestamp { get; set; }
-		public Guid BusinessUnitId { get; set; }
+		public Guid LogOnBusinessUnitId { get; set; }
     }
 }

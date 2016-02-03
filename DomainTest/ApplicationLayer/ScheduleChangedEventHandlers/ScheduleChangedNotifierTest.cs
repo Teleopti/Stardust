@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var message = new ScheduleChangedEvent
 				{
 					InitiatorId = Guid.NewGuid(),
-					BusinessUnitId = Guid.NewGuid(),
-					Datasource = "My Data",
+					LogOnBusinessUnitId = Guid.NewGuid(),
+					LogOnDatasource = "My Data",
 					StartDateTime = new DateTime(2010,1,1),
 					EndDateTime = new DateTime(2010,1,31),
 					PersonId = Guid.NewGuid(),
@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			handler.Handle(message);
 
 			broker.AssertWasCalled(x => x.Send(
-				message.Datasource,
-				message.BusinessUnitId,
+				message.LogOnDatasource,
+				message.LogOnBusinessUnitId,
 				message.StartDateTime,
 				message.EndDateTime,
 				message.InitiatorId,
@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var message = new ScheduleChangedEvent
 			{
 				InitiatorId = Guid.NewGuid(),
-				BusinessUnitId = Guid.NewGuid(),
-				Datasource = "My Data",
+				LogOnBusinessUnitId = Guid.NewGuid(),
+				LogOnDatasource = "My Data",
 				StartDateTime = new DateTime(2010, 1, 1),
 				EndDateTime = new DateTime(2010, 1, 31),
 				PersonId = Guid.NewGuid(),
@@ -66,8 +66,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			handler.Handle(message);
 
 			broker.AssertWasNotCalled(x => x.Send(
-				message.Datasource,
-				message.BusinessUnitId,
+				message.LogOnDatasource,
+				message.LogOnBusinessUnitId,
 				message.StartDateTime,
 				message.EndDateTime,
 				message.InitiatorId,

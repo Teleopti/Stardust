@@ -18,8 +18,8 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow);
 			target = new ProcessDenormalizeQueue
 			         	{
-			         		BusinessUnitId = Guid.NewGuid(),
-			         		Datasource = "test",
+			         		LogOnBusinessUnitId = Guid.NewGuid(),
+			         		LogOnDatasource = "test",
 			         		Timestamp = period.StartDateTime
 			         	};
 		}
@@ -29,8 +29,8 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		{
 			target.Identity.Should().Not.Be.EqualTo(Guid.Empty);
 			target.Timestamp.Should().Be.EqualTo(period.StartDateTime);
-			target.BusinessUnitId.Should().Be.EqualTo(target.BusinessUnitId);
-			target.Datasource.Should().Be.EqualTo(target.Datasource);
+			target.LogOnBusinessUnitId.Should().Be.EqualTo(target.LogOnBusinessUnitId);
+			target.LogOnDatasource.Should().Be.EqualTo(target.LogOnDatasource);
 		}
 	}
 }

@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				StartDateTime = _layer.Period.StartDateTime,
 				EndDateTime = _layer.Period.EndDateTime,
 				ScenarioId = _scenario.Id.GetValueOrDefault(),
-				BusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
 			};
 			if (trackedCommandInfo != null)
 			{
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				StartDateTime = _layer.Period.StartDateTime,
 				EndDateTime = _layer.Period.EndDateTime,
 				ScenarioId = _scenario.Id.GetValueOrDefault(),
-				BusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
 			};
 			if (trackedCommandInfo != null)
 			{
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				ScenarioId = Scenario.Id.GetValueOrDefault(),
 				StartDateTime = Period.StartDateTime,
 				EndDateTime = Period.EndDateTime,
-				BusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
 			};
 			if (trackedCommandInfo != null)
 			{
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				ScenarioId = Scenario.Id.GetValueOrDefault(),
 				StartDateTime = newAbsencePeriod.StartDateTime,
 				EndDateTime = existingEndDateTime, // use existingEndDateTime so the entire existing period schedule is updated.
-				BusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
 			};
 			if (trackedCommandInfo != null)
 			{

@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.DebugFormat("Consume message with BusinessUnit {0} and DataSource {1}", message.BusinessUnitId,
-					message.Datasource);
+				logger.DebugFormat("Consume message with BusinessUnit {0} and DataSource {1}", message.LogOnBusinessUnitId,
+					message.LogOnDatasource);
 			}
 
 			if (_serviceBus == null)
@@ -68,8 +68,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						{
 							logger.DebugFormat(
 								"Badge disabled for all teams. Delay Sending BadgeCalculationInitMessage to Service Bus for "
-								+ "BusinessUnitId={0} in DataSource={1} tommorrow", message.BusinessUnitId,
-								message.Datasource);
+								+ "BusinessUnitId={0} in DataSource={1} tommorrow", message.LogOnBusinessUnitId,
+								message.LogOnDatasource);
 						}
 						return;
 					}
@@ -87,8 +87,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			{
 				_serviceBus.Send(new CalculateTimeZoneMessage
 				{
-					BusinessUnitId = message.BusinessUnitId,
-					Datasource = message.Datasource,
+					LogOnBusinessUnitId = message.LogOnBusinessUnitId,
+					LogOnDatasource = message.LogOnDatasource,
 					Timestamp = DateTime.UtcNow,
 					TimeZoneCode = timeZoneInfo.Id
 				});
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				{
 					logger.DebugFormat(
 						"Sending CalculateTimeZoneMessage to Service Bus for Timezone={0} in BusinessUnitId={1}",
-						timeZoneInfo.Id, message.BusinessUnitId);
+						timeZoneInfo.Id, message.LogOnBusinessUnitId);
 				}
 			}
 		}

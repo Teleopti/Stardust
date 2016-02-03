@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					if (scheduleDay.Date < DateTime.Now.AddDays(1))
 					{
 						_analyticsScheduleRepository.InsertStageScheduleChangedServicebus(new DateOnly(scheduleDay.Date), @event.PersonId,
-						@event.ScenarioId, @event.BusinessUnitId, DateTime.Now);
+						@event.ScenarioId, @event.LogOnBusinessUnitId, DateTime.Now);
 					}
 				}
 				catch (SqlException ex)
@@ -117,9 +117,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					{
 						ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> { scheduleDay },
 						ScenarioId = @event.ScenarioId,
-						BusinessUnitId = @event.BusinessUnitId,
+						LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
 						InitiatorId = @event.InitiatorId,
-						Datasource = @event.Datasource,
+						LogOnDatasource = @event.LogOnDatasource,
 						IsDefaultScenario = @event.IsDefaultScenario,
 						IsInitialLoad = @event.IsInitialLoad,
 						PersonId = @event.PersonId,

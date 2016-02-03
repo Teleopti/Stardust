@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			if (@event.SkipDelete) return;
 
 			_broker.Send(
-				@event.Datasource,
-				@event.BusinessUnitId,
+				@event.LogOnDatasource,
+				@event.LogOnBusinessUnitId,
 				@event.StartDateTime,
 				@event.EndDateTime,
 				@event.InitiatorId,

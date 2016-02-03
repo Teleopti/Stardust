@@ -95,8 +95,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 				p =>
 				new T
 					{
-						BusinessUnitId = message.BusinessUnitId,
-						Datasource = message.Datasource,
+						LogOnBusinessUnitId = message.LogOnBusinessUnitId,
+						LogOnDatasource = message.LogOnDatasource,
 						PersonId = p.Id.GetValueOrDefault(),
 						ScenarioId = _defaultScenario.Id.GetValueOrDefault(),
 						Timestamp = DateTime.UtcNow,

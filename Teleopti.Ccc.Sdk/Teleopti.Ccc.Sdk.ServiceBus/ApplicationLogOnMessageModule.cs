@@ -68,16 +68,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				Logger.InfoFormat(
 					 "Message requires the domain. (Message Id = {0}, DataSource = {1}, BusinessUnit = {2}, Timestamp = {3})",
-					 arg.MessageId, logOnInfo.Datasource, logOnInfo.BusinessUnitId, DateTime.UtcNow);
+					 arg.MessageId, logOnInfo.LogOnDatasource, logOnInfo.LogOnBusinessUnitId, DateTime.UtcNow);
 			}
 
-			var dataSourceContainer = DataSourceFactory.GetDataSource(_dataSourceForTenant.DataSource()(), logOnInfo.Datasource, _repositoryFactory);
+			var dataSourceContainer = DataSourceFactory.GetDataSource(_dataSourceForTenant.DataSource()(), logOnInfo.LogOnDatasource, _repositoryFactory);
 
 			if (Logger.IsInfoEnabled)
 			{
 				Logger.Info("UnitOfWorkFactory configured");
 			}
-			LogOnRaptorDomain(dataSourceContainer, logOnInfo.BusinessUnitId);
+			LogOnRaptorDomain(dataSourceContainer, logOnInfo.LogOnBusinessUnitId);
 			if (Logger.IsInfoEnabled)
 			{
 				Logger.Info("Logged on the domain");

@@ -148,8 +148,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 				var openHours = queryResult.WorkloadDayOpenHours.GetOpenHour(date);
 				listOfMessages.Add(new OpenAndSplitTargetSkill
 				{
-					BusinessUnitId = message.BusinessUnitId,
-					Datasource = message.Datasource,
+					LogOnBusinessUnitId = message.LogOnBusinessUnitId,
+					LogOnDatasource = message.LogOnDatasource,
 					JobId = message.JobId,
 					OwnerPersonId = message.OwnerPersonId,
 					Date = date.Date,

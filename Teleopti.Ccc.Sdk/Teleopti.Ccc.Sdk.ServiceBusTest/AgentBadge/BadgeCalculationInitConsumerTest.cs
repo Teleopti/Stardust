@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var message = new BadgeCalculationInitMessage
 			{
 				Timestamp = DateTime.Now,
-				BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
 			};
 			var timezoneList = new List<TimeZoneInfo> {TimeZoneInfo.Local};
 
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var message = new BadgeCalculationInitMessage
 			{
 				Timestamp = now,
-				BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
 			};
 			var timezoneList = new List<TimeZoneInfo> { TimeZoneInfo.Local };
 

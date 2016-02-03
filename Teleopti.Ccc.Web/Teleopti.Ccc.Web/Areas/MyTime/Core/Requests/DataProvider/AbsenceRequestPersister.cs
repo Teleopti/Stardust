@@ -70,8 +70,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			{
 				var message = new NewAbsenceRequestCreated
 				{
-					BusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
-					Datasource = _currentDataSource.Current().DataSourceName,
+					LogOnBusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
+					LogOnDatasource = _currentDataSource.Current().DataSourceName,
 					PersonRequestId = personRequest.Id.GetValueOrDefault(Guid.Empty),
 					Timestamp = _now.UtcDateTime()
 				};

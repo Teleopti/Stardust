@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				}
 				foreach (var businessUnitId in businessUnitCollection)
 				{
-					bus.Send(new InitialLoadScheduleProjection { Datasource = tenant.DataSourceName, BusinessUnitId = businessUnitId, Timestamp = DateTime.UtcNow, StartDays = start, EndDays = end });
+					bus.Send(new InitialLoadScheduleProjection { LogOnDatasource = tenant.DataSourceName, LogOnBusinessUnitId = businessUnitId, Timestamp = DateTime.UtcNow, StartDays = start, EndDays = end });
 				}
 			});
 		}

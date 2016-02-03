@@ -82,8 +82,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			var message = new NewAbsenceRequestCreated
 			              	{
-			              		BusinessUnitId = buId,
-			              		Datasource = datasource.DataSourceName,
+			              		LogOnBusinessUnitId = buId,
+			              		LogOnDatasource = datasource.DataSourceName,
 			              		PersonRequestId = personRequestId,
 			              		Timestamp = time
 			              	};

@@ -80,8 +80,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			{
 				_serviceBus.Publish(new ScheduleProjectionReadOnlyChanged
 					{
-						Datasource = @event.Datasource,
-						BusinessUnitId = @event.BusinessUnitId,
+						LogOnDatasource = @event.LogOnDatasource,
+						LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
 						PersonId = @event.PersonId,
 						ActivityStartDateTime = layerPeriod.StartDateTime,
 						ActivityEndDateTime = layerPeriod.EndDateTime,

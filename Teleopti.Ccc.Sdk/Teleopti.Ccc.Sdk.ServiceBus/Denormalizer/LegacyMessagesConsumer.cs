@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
         {
             _bus.SendToSelf(new ScheduleChangedEvent
                 {
-                    BusinessUnitId = message.BusinessUnitId,
-                    Datasource = message.Datasource,
+                    LogOnBusinessUnitId = message.LogOnBusinessUnitId,
+                    LogOnDatasource = message.LogOnDatasource,
                     PersonId = message.PersonId,
                     ScenarioId = message.ScenarioId,
                     SkipDelete = message.SkipDelete,
@@ -40,8 +40,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
         {
             _bus.SendToSelf(new ScheduleChangedEvent
                 {
-                    BusinessUnitId = message.BusinessUnitId,
-                    Datasource = message.Datasource,
+                    LogOnBusinessUnitId = message.LogOnBusinessUnitId,
+                    LogOnDatasource = message.LogOnDatasource,
                     PersonId = message.PersonId,
                     ScenarioId = message.ScenarioId,
                     SkipDelete = message.SkipDelete,

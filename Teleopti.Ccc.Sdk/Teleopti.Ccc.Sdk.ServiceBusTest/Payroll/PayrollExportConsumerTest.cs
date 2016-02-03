@@ -162,8 +162,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 		{
 			return new RunPayrollExport
 			{
-				BusinessUnitId = buGuid,
-				Datasource = "DS",
+				LogOnBusinessUnitId = buGuid,
+				LogOnDatasource = "DS",
 				OwnerPersonId = ownerGuid,
 				PayrollExportId = payrollGuid,
 				PayrollResultId = resultId,

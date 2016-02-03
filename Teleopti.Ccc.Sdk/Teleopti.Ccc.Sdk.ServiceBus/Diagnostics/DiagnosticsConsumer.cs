@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Diagnostics
 			};
 
 			var binaryData = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(diagnostics));
-			_broker.Send(message.Datasource, message.BusinessUnitId, DateTime.Today, DateTime.Today, Guid.Empty,
+			_broker.Send(message.LogOnDatasource, message.LogOnBusinessUnitId, DateTime.Today, DateTime.Today, Guid.Empty,
 				message.InitiatorId, typeof (ITeleoptiDiagnosticsInformation), DomainUpdateType.NotApplicable,
 				binaryData);
 		}

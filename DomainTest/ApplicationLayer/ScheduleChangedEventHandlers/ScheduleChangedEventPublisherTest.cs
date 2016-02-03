@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var @event = new ActivityAddedEvent
 				{
 					Timestamp = new DateTime(2013, 11, 15, 10, 0, 0),
-					Datasource = "datasource",
-					BusinessUnitId = Guid.NewGuid(),
+					LogOnDatasource = "datasource",
+					LogOnBusinessUnitId = Guid.NewGuid(),
 					PersonId = Guid.NewGuid(),
 					Date = new DateOnly(2013,11,15),
 					ActivityId = Guid.NewGuid(),
@@ -32,8 +32,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 
 			var published = publisher.Published<ScheduleChangedEvent>();
 			published.Timestamp.Should().Be(@event.Timestamp);
-			published.Datasource.Should().Be(@event.Datasource);
-			published.BusinessUnitId.Should().Be(@event.BusinessUnitId);
+			published.LogOnDatasource.Should().Be(@event.LogOnDatasource);
+			published.LogOnBusinessUnitId.Should().Be(@event.LogOnBusinessUnitId);
 			published.PersonId.Should().Be(@event.PersonId);
 			published.ScenarioId.Should().Be(@event.ScenarioId);
 			published.StartDateTime.Should().Be(@event.StartDateTime);
@@ -49,8 +49,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var theEvent = new ActivityMovedEvent
 			{
 				Timestamp = DateTime.Now,
-				Datasource = "datasource",
-				BusinessUnitId = Guid.NewGuid(),
+				LogOnDatasource = "datasource",
+				LogOnBusinessUnitId = Guid.NewGuid(),
 				PersonId = Guid.NewGuid(),
 				ScenarioId = Guid.NewGuid(),
 				StartDateTime = DateTime.Now,
@@ -61,8 +61,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 
 			var published = publisher.Published<ScheduleChangedEvent>();
 			published.Timestamp.Should().Be(theEvent.Timestamp);
-			published.Datasource.Should().Be(theEvent.Datasource);
-			published.BusinessUnitId.Should().Be(theEvent.BusinessUnitId);
+			published.LogOnDatasource.Should().Be(theEvent.LogOnDatasource);
+			published.LogOnBusinessUnitId.Should().Be(theEvent.LogOnBusinessUnitId);
 			published.PersonId.Should().Be(theEvent.PersonId);
 			published.ScenarioId.Should().Be(theEvent.ScenarioId);
 			published.StartDateTime.Should().Be(theEvent.StartDateTime);

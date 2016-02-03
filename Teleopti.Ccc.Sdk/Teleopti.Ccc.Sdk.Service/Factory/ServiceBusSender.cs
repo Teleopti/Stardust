@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 				var raptorDomainMessage = message.First() as ILogOnInfo;
 				if (raptorDomainMessage != null)
 				{
-					datasource = raptorDomainMessage.Datasource;
+					datasource = raptorDomainMessage.LogOnDatasource;
 				}
 				Logger.Debug(string.Format(CultureInfo.InvariantCulture,
 										   "Sending message with identity: {0} (Data source = {1})",

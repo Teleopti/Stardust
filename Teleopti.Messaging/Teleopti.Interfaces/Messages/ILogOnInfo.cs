@@ -4,7 +4,7 @@ namespace Teleopti.Interfaces.Messages
 {
 	public interface ILogOnInfo
 	{
-		string Datasource { get; set; }
-		Guid BusinessUnitId { get; set; }
+		string LogOnDatasource { get; set; }
+		Guid LogOnBusinessUnitId { get; set; }
 	}
 }

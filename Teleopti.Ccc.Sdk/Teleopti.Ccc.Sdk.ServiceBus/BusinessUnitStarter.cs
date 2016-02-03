@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 						foreach (var businessUnitId in businessUnitCollection)
 						{
-							bus.Send(new StartUpBusinessUnit { Datasource = tenant.DataSourceName, BusinessUnitId = businessUnitId, Timestamp = DateTime.UtcNow });
+							bus.Send(new StartUpBusinessUnit { LogOnDatasource = tenant.DataSourceName, LogOnBusinessUnitId = businessUnitId, Timestamp = DateTime.UtcNow });
 						}
 					});
 		}

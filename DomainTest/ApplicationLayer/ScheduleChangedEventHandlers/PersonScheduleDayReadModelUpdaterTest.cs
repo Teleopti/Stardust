@@ -155,13 +155,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var @event = new ProjectionChangedEvent
 			{
 				InitiatorId = initiatorId,
-				BusinessUnitId = businessUnitId,
+				LogOnBusinessUnitId = businessUnitId,
 				TrackId = trackId
 			};
 			target.Handle(@event);
 
 			eventTracker.AssertWasCalled(x => x.SendTrackingMessage(
-				Arg<ProjectionChangedEvent>.Matches(e => e.InitiatorId == initiatorId && e.BusinessUnitId == businessUnitId), 
+				Arg<ProjectionChangedEvent>.Matches(e => e.InitiatorId == initiatorId && e.LogOnBusinessUnitId == businessUnitId), 
 				Arg<TrackingMessage>.Matches(m => m.TrackId == trackId)));
 
 		}

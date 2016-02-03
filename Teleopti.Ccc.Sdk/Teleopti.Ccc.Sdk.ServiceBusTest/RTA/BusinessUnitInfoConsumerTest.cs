@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 
 			var message = new StartUpBusinessUnit();
 			message.Timestamp = period.StartDateTime;
-			message.BusinessUnitId = bussinessUnit.Id.GetValueOrDefault();
+			message.LogOnBusinessUnitId = bussinessUnit.Id.GetValueOrDefault();
 
 			var personList = new List<Guid> { person.Id.GetValueOrDefault() };
 			var uow = mocks.DynamicMock<IUnitOfWork>();

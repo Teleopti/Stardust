@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Diagnostics
 			var datasourceName = "datasource";
 			var timestamp = DateTime.UtcNow;
 			var initiatorId = Guid.NewGuid();
-			target.Consume(new DiagnosticsMessage{BusinessUnitId = businessUnitId,Datasource = datasourceName,Timestamp = timestamp,InitiatorId = initiatorId});
+			target.Consume(new DiagnosticsMessage{LogOnBusinessUnitId = businessUnitId,LogOnDatasource = datasourceName,Timestamp = timestamp,InitiatorId = initiatorId});
 
 			broker.AssertWasCalled(
 				x =>

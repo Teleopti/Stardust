@@ -18,8 +18,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
     		period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow);
     		target = new ScheduleChangedEvent
     		         	{
-    		         		BusinessUnitId = Guid.NewGuid(),
-    		         		Datasource = "test",
+    		         		LogOnBusinessUnitId = Guid.NewGuid(),
+    		         		LogOnDatasource = "test",
     		         		EndDateTime = period.EndDateTime,
     		         		StartDateTime = period.StartDateTime,
     		         		PersonId = Guid.NewGuid(),
@@ -36,8 +36,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
         	target.EndDateTime.Should().Be.EqualTo(period.EndDateTime);
         	target.Timestamp.Should().Be.EqualTo(period.StartDateTime);
         	target.ScenarioId.Should().Be.EqualTo(target.ScenarioId);
-        	target.BusinessUnitId.Should().Be.EqualTo(target.BusinessUnitId);
-        	target.Datasource.Should().Be.EqualTo(target.Datasource);
+        	target.LogOnBusinessUnitId.Should().Be.EqualTo(target.LogOnBusinessUnitId);
+        	target.LogOnDatasource.Should().Be.EqualTo(target.LogOnDatasource);
         }
     }
 }

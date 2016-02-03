@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 			IList<Guid> persons;
 			using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				persons = _businessRepository.LoadAllPersonsWithExternalLogOn(message.BusinessUnitId, DateOnly.Today);	
+				persons = _businessRepository.LoadAllPersonsWithExternalLogOn(message.LogOnBusinessUnitId, DateOnly.Today);	
 			}
 
 			foreach (var person in persons)
@@ -40,8 +40,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 				{
 					_serviceBus.Send(new PersonActivityChangePulseEvent
 						{
-							Datasource = message.Datasource,
-							BusinessUnitId = message.BusinessUnitId,
+							LogOnDatasource = message.LogOnDatasource,
+							LogOnBusinessUnitId = message.LogOnBusinessUnitId,
 							PersonId = person,
 							Timestamp = DateTime.UtcNow,
 							PersonHaveExternalLogOn = true
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 
 					Logger.DebugFormat(
 						"Sending PersonActivityChangePulseEvent Message to Service Bus for Person={0} and Bussiness Unit Id={1}", person,
-						message.BusinessUnitId);
+						message.LogOnBusinessUnitId);
 				}
 				catch (Exception exception)
 				{

@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 			                                        new DateOnly(message.ScheduleDays.Max(s => s.Date.Date)));
 
 			var readModels = _scheduleDayReadModelsCreator.MakeReadModels(message);
-			_scheduleDayReadModelRepository.UpdateReadModels(dateOnlyPeriod, message.PersonId, message.BusinessUnitId, readModels, initialLoad: message.IsInitialLoad);
+			_scheduleDayReadModelRepository.UpdateReadModels(dateOnlyPeriod, message.PersonId, message.LogOnBusinessUnitId, readModels, initialLoad: message.IsInitialLoad);
 		}
 	}
 }

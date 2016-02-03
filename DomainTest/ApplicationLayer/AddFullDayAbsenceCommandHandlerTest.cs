@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			@event.EndDateTime.Should().Be(command.EndDate.AddHours(24).AddMinutes(-1));
 			@event.InitiatorId.Should().Be(operatedPersonId);
 			@event.TrackId.Should().Be(trackId);
-			@event.BusinessUnitId.Should().Be(_currentScenario.Current().BusinessUnit.Id.GetValueOrDefault());
+			@event.LogOnBusinessUnitId.Should().Be(_currentScenario.Current().BusinessUnit.Id.GetValueOrDefault());
 		}
 
 		[Test]

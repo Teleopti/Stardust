@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 		{
 			var messages = message.WorkloadIds.Select(workloadId => new QuickForecastWorkloadMessage
 				{
-					BusinessUnitId = message.BusinessUnitId, Datasource = message.Datasource, JobId = message.JobId, 
+					LogOnBusinessUnitId = message.LogOnBusinessUnitId, LogOnDatasource = message.LogOnDatasource, JobId = message.JobId, 
 					ScenarioId = message.ScenarioId, StatisticPeriod = message.StatisticPeriod, TargetPeriod = message.TargetPeriod, 
 					WorkloadId = workloadId, TemplatePeriod = message.TemplatePeriod,
 					SmoothingStyle = message.SmoothingStyle, IncreaseWith = message.IncreaseWith,

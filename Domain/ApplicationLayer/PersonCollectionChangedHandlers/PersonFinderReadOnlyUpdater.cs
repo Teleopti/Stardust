@@ -36,8 +36,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		{
 			_publisher.Publish(new PersonCollectionChangedEvent
 			{
-				BusinessUnitId = @event.BusinessUnitId,
-				Datasource = @event.Datasource,
+				LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
+				LogOnDatasource = @event.LogOnDatasource,
 				InitiatorId = @event.InitiatorId,
 				SerializedPeople = @event.SerializedPeople,
 				Timestamp = @event.Timestamp

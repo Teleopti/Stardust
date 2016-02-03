@@ -48,8 +48,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 				{
 					PersonId = person.Id.GetValueOrDefault(),
 					Timestamp = period.StartDateTime,
-					BusinessUnitId = bussinessUnit.Id.GetValueOrDefault(),
-					Datasource = "DS"
+					LogOnBusinessUnitId = bussinessUnit.Id.GetValueOrDefault(),
+					LogOnDatasource = "DS"
 				};
 
 			Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 				ActivityStartDateTime = DateTime.UtcNow.AddHours(1),
 				ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
 				PersonId = person.Id.GetValueOrDefault(),
-				BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
 			};
 
 			Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 				ActivityStartDateTime = DateTime.UtcNow.AddHours(1),
 				ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
 				PersonId = person.Id.GetValueOrDefault(),
-				BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
 			};
 			Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
 																					person.Id.GetValueOrDefault())).IgnoreArguments()
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 					ActivityStartDateTime = DateTime.UtcNow.AddHours(1),
 					ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
 					PersonId = person.Id.GetValueOrDefault(),
-					BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
+					LogOnBusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
 				};
 			Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
 																					 person.Id.GetValueOrDefault())).IgnoreArguments()
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 				ActivityStartDateTime = DateTime.UtcNow.AddDays(3),
 				ActivityEndDateTime = DateTime.UtcNow.AddDays(4),
 				PersonId = person.Id.GetValueOrDefault(),
-				BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
 			};
 			Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
 																					  person.Id.GetValueOrDefault()))
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 				ActivityStartDateTime = DateTime.UtcNow.AddHours(1),
 				ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
 				PersonId = person.Id.GetValueOrDefault(),
-				BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
 			};
 			Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
 																					 person.Id.GetValueOrDefault())).IgnoreArguments()
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 					ActivityStartDateTime = DateTime.UtcNow.AddHours(1),
 					ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
 					PersonId = person.Id.GetValueOrDefault(),
-					BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
+					LogOnBusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
 				};
 			Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
 																					  person.Id.GetValueOrDefault()))
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 				ActivityStartDateTime = DateTime.UtcNow.AddHours(4),
 				ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
 				PersonId = person.Id.GetValueOrDefault(),
-				BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
 			};
 			Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
 																					  person.Id.GetValueOrDefault()))
@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 				ActivityStartDateTime = DateTime.UtcNow.AddHours(1),
 				ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
 				PersonId = person.Id.GetValueOrDefault(),
-				BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
 			};
 			Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
 																					  person.Id.GetValueOrDefault()))
@@ -296,7 +296,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 					ActivityStartDateTime = DateTime.UtcNow.AddHours(1),
 					ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
 					PersonId = personId,
-					BusinessUnitId = businessUnitId
+					LogOnBusinessUnitId = businessUnitId
 				};
 			personRepository.Stub(x => x.DoesPersonHaveExternalLogOn(DateOnly.Today, Guid.Empty)).IgnoreArguments().Return(false);
 
@@ -315,7 +315,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 				ActivityStartDateTime = DateTime.UtcNow.AddHours(1),
 				ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
 				PersonId = Guid.Empty,
-				BusinessUnitId = Guid.Empty
+				LogOnBusinessUnitId = Guid.Empty
 			};
 			personRepository.Stub(x => x.DoesPersonHaveExternalLogOn(DateOnly.Today, Guid.Empty)).IgnoreArguments().Return(true);
 
@@ -333,7 +333,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 			var personActivityStarting = new PersonActivityChangePulseEvent
 				{
 					PersonId = Guid.NewGuid(),
-					BusinessUnitId = Guid.Empty,
+					LogOnBusinessUnitId = Guid.Empty,
 					Timestamp = DateTime.UtcNow
 				};
 

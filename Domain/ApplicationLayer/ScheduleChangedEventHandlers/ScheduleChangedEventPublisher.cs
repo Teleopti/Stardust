@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			_publisher.Publish(new ScheduleChangedEvent
 				{
 					Timestamp = @event.Timestamp,
-					BusinessUnitId = @event.BusinessUnitId,
-					Datasource = @event.Datasource,
+					LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
+					LogOnDatasource = @event.LogOnDatasource,
 					PersonId = @event.PersonId,
 					ScenarioId = @event.ScenarioId,
 					StartDateTime = @event.StartDateTime,
@@ -43,8 +43,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			_publisher.Publish(new ScheduleChangedEvent
 				{
 					Timestamp = @event.Timestamp,
-					BusinessUnitId = @event.BusinessUnitId,
-					Datasource = @event.Datasource,
+					LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
+					LogOnDatasource = @event.LogOnDatasource,
 					PersonId = @event.PersonId,
 					ScenarioId = @event.ScenarioId,
 					StartDateTime = @event.StartDateTime,
@@ -59,8 +59,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			_publisher.Publish(new ScheduleChangedEvent
 				{
 					Timestamp = @event.Timestamp,
-					BusinessUnitId = @event.BusinessUnitId,
-					Datasource = @event.Datasource,
+					LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
+					LogOnDatasource = @event.LogOnDatasource,
 					PersonId = @event.PersonId,
 					ScenarioId = @event.ScenarioId,
 					StartDateTime = @event.StartDateTime,
@@ -75,8 +75,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			_publisher.Publish(new ScheduleChangedEvent
 				{
 					Timestamp = @event.Timestamp,
-					Datasource = @event.Datasource,
-					BusinessUnitId = @event.BusinessUnitId,
+					LogOnDatasource = @event.LogOnDatasource,
+					LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
 					PersonId = @event.PersonId,
 					ScenarioId = @event.ScenarioId,
 					StartDateTime = @event.StartDateTime,
@@ -91,8 +91,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			_publisher.Publish(new ScheduleChangedEvent
 			{
 				Timestamp = @event.Timestamp,
-				Datasource = @event.Datasource,
-				BusinessUnitId = @event.BusinessUnitId,
+				LogOnDatasource = @event.LogOnDatasource,
+				LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
 				PersonId = @event.PersonId,
 				ScenarioId = @event.ScenarioId,
 				StartDateTime = @event.StartDateTime,
@@ -107,8 +107,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			_publisher.Publish(new ScheduleChangedEvent
 			{
 				Timestamp = @event.Timestamp,
-				Datasource = @event.Datasource,
-				BusinessUnitId = @event.BusinessUnitId,
+				LogOnDatasource = @event.LogOnDatasource,
+				LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
 				PersonId = @event.PersonId,
 				ScenarioId = @event.ScenarioId,
 				StartDateTime = @event.StartDateTime,
@@ -124,8 +124,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			_publisher.Publish(new ScheduleChangedEvent
 			{
 				Timestamp = @event.Timestamp,
-				Datasource = @event.Datasource,
-				BusinessUnitId = @event.BusinessUnitId,
+				LogOnDatasource = @event.LogOnDatasource,
+				LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
 				PersonId = @event.PersonId,
 				ScenarioId = @event.ScenarioId,
 				StartDateTime = dateTimeperiod.StartDateTime,
@@ -140,8 +140,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			_publisher.Publish(new ScheduleChangedEvent
 			{
 				Timestamp = @event.Timestamp,
-				Datasource = @event.Datasource,
-				BusinessUnitId = @event.BusinessUnitId,
+				LogOnDatasource = @event.LogOnDatasource,
+				LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
 				PersonId = @event.PersonId,
 				ScenarioId = @event.ScenarioId,
 				StartDateTime = dateTimeperiod.StartDateTime,

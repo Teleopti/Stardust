@@ -59,8 +59,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 {
                     listOfMessages.Add(new ExportMultisiteSkillToSkill
                                            {
-                                               BusinessUnitId = message.BusinessUnitId,
-                                               Datasource = message.Datasource,
+                                               LogOnBusinessUnitId = message.LogOnBusinessUnitId,
+                                               LogOnDatasource = message.LogOnDatasource,
                                                JobId = message.JobId,
                                                MultisiteSkillSelections = multisiteSkillSelection,
                                                OwnerPersonId = message.OwnerPersonId,

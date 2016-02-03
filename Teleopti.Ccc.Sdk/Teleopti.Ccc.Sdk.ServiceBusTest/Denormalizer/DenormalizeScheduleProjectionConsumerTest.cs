@@ -115,8 +115,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var message = new ProjectionChangedEvent
 				{
 					IsDefaultScenario = true,
-					Datasource = "DataSource",
-					BusinessUnitId = businessUnitId,
+					LogOnDatasource = "DataSource",
+					LogOnBusinessUnitId = businessUnitId,
 					PersonId = personId,
 					ScheduleDays = new[]
 						{
@@ -151,8 +151,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			serviceBus.AssertWasCalled(s => s.Publish(new ScheduleProjectionReadOnlyChanged
 				{
-					Datasource = message.Datasource,
-					BusinessUnitId = message.BusinessUnitId,
+					LogOnDatasource = message.LogOnDatasource,
+					LogOnBusinessUnitId = message.LogOnBusinessUnitId,
 					PersonId = message.PersonId,
 					ActivityStartDateTime = closestPeriod.StartDateTime,
 					ActivityEndDateTime = closestPeriod.EndDateTime,
@@ -168,8 +168,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var message = new ProjectionChangedEvent
 				{
 					IsDefaultScenario = true,
-					Datasource = "DataSource",
-					BusinessUnitId = businessUnitId,
+					LogOnDatasource = "DataSource",
+					LogOnBusinessUnitId = businessUnitId,
 					PersonId = personId,
 					ScheduleDays = new[]
 						{
@@ -197,8 +197,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			serviceBus.AssertWasCalled(s => s.Publish(new ScheduleProjectionReadOnlyChanged
 				{
-					Datasource = message.Datasource,
-					BusinessUnitId = message.BusinessUnitId,
+					LogOnDatasource = message.LogOnDatasource,
+					LogOnBusinessUnitId = message.LogOnBusinessUnitId,
 					PersonId = message.PersonId,
 					ActivityStartDateTime = closestPeriod.StartDateTime,
 					ActivityEndDateTime = closestPeriod.EndDateTime,
@@ -214,8 +214,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var message = new ProjectionChangedEvent
 				{
 					IsDefaultScenario = true,
-					Datasource = "DataSource",
-					BusinessUnitId = businessUnitId,
+					LogOnDatasource = "DataSource",
+					LogOnBusinessUnitId = businessUnitId,
 					PersonId = personId,
 					ScheduleDays = new[]
 						{
@@ -248,8 +248,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			serviceBus.AssertWasNotCalled(s => s.Publish(new ScheduleProjectionReadOnlyChanged
 			{
-				Datasource = message.Datasource,
-				BusinessUnitId = message.BusinessUnitId,
+				LogOnDatasource = message.LogOnDatasource,
+				LogOnBusinessUnitId = message.LogOnBusinessUnitId,
 				PersonId = message.PersonId,
 				ActivityStartDateTime = closestPeriod.StartDateTime,
 				ActivityEndDateTime = closestPeriod.EndDateTime,
@@ -263,8 +263,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var message2 = new ProjectionChangedEvent
 				{
 					IsDefaultScenario = true,
-					Datasource = "DataSource",
-					BusinessUnitId = businessUnitId,
+					LogOnDatasource = "DataSource",
+					LogOnBusinessUnitId = businessUnitId,
 					PersonId = personId,
 					ScheduleDays = new[]
 						{
@@ -296,8 +296,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			target.Handle(message);
 			serviceBus.AssertWasCalled(s => s.Publish(new ScheduleProjectionReadOnlyChanged
 				{
-					Datasource = message.Datasource,
-					BusinessUnitId = message.BusinessUnitId,
+					LogOnDatasource = message.LogOnDatasource,
+					LogOnBusinessUnitId = message.LogOnBusinessUnitId,
 					PersonId = message.PersonId,
 					ActivityStartDateTime = utcNow,
 					ActivityEndDateTime = utcNow,

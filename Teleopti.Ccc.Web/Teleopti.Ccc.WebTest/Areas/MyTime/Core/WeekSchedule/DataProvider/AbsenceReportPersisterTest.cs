@@ -52,8 +52,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.WeekSchedule.DataProvider
 			loggedOnUser.Expect(u => u.CurrentUser().Id).Return(Guid.NewGuid());
 			message = new NewAbsenceReportCreated
 			{
-				BusinessUnitId = buId,
-				Datasource = datasource.DataSourceName,
+				LogOnBusinessUnitId = buId,
+				LogOnDatasource = datasource.DataSourceName,
 				AbsenceId = absenceId,
 				PersonId = (Guid) loggedOnUser.CurrentUser().Id,
 				Timestamp = time

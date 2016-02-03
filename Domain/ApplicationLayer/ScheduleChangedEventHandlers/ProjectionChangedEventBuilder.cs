@@ -150,8 +150,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					{
 						IsInitialLoad = message.SkipDelete,
 						IsDefaultScenario = range.Scenario.DefaultScenario,
-						Datasource = message.Datasource,
-						BusinessUnitId = message.BusinessUnitId,
+						LogOnDatasource = message.LogOnDatasource,
+						LogOnBusinessUnitId = message.LogOnBusinessUnitId,
 						Timestamp = message.Timestamp,
 						ScenarioId = message.ScenarioId,
 						PersonId = message.PersonId,

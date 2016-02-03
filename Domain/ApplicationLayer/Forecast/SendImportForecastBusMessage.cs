@@ -39,8 +39,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
                     new OpenAndSplitTargetSkill
                         {
                             ImportMode = ImportForecastsMode.ImportWorkloadAndStaffing,
-                            BusinessUnitId = targetSkill.BusinessUnit.Id.GetValueOrDefault(),
-                            Datasource = identity.DataSource.DataSourceName,
+                            LogOnBusinessUnitId = targetSkill.BusinessUnit.Id.GetValueOrDefault(),
+                            LogOnDatasource = identity.DataSource.DataSourceName,
                             Timestamp = DateTime.UtcNow,
                             TargetSkillId = targetSkill.Id.GetValueOrDefault(),
                             JobId = _feedback.JobId()
@@ -73,8 +73,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
                 var openHours = queryResult.WorkloadDayOpenHours.GetOpenHour(date);
                 listOfMessages.Add(new OpenAndSplitTargetSkill
                                        {
-                                           BusinessUnitId = messageTemplate.BusinessUnitId,
-                                           Datasource = messageTemplate.Datasource,
+                                           LogOnBusinessUnitId = messageTemplate.LogOnBusinessUnitId,
+                                           LogOnDatasource = messageTemplate.LogOnDatasource,
                                            JobId = messageTemplate.JobId,
                                            OwnerPersonId = messageTemplate.OwnerPersonId,
                                            Date = date.Date,

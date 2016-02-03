@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			var logOnInfo = originatingEvent as ILogOnInfo;
 			if (logOnInfo != null)
 			{
-				dataSource = logOnInfo.Datasource;
-				businessUnitId = logOnInfo.BusinessUnitId;
+				dataSource = logOnInfo.LogOnDatasource;
+				businessUnitId = logOnInfo.LogOnBusinessUnitId;
 			}
 			var initiatorInfo = originatingEvent as IInitiatorInfo;
 			if (initiatorInfo != null)

@@ -77,8 +77,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 				{
 					currentSendingMsg = new ImportForecastsToSkill
 					{
-						BusinessUnitId = message.BusinessUnitId,
-						Datasource = message.Datasource,
+						LogOnBusinessUnitId = message.LogOnBusinessUnitId,
+						LogOnDatasource = message.LogOnDatasource,
 						JobId = message.JobId,
 						OwnerPersonId = message.OwnerPersonId,
 						Date = message.Date,

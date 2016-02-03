@@ -276,8 +276,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
         private static NewShiftTradeRequestCreated getNewShiftTradeRequestCreated()
         {
             var nstrc = new NewShiftTradeRequestCreated();
-            nstrc.Datasource = "V7Config";
-            nstrc.BusinessUnitId = new Guid("928DD0BC-BF40-412E-B970-9B5E015AADEA");
+            nstrc.LogOnDatasource = "V7Config";
+            nstrc.LogOnBusinessUnitId = new Guid("928DD0BC-BF40-412E-B970-9B5E015AADEA");
             nstrc.Timestamp = DateTime.UtcNow;
             nstrc.PersonRequestId = new Guid("9AC8476B-9B8F-4330-9561-9D7A00BAA585");
             return nstrc;
@@ -287,8 +287,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
         private static AcceptShiftTrade getAcceptShiftTrade()
         {
             var ast = new AcceptShiftTrade();
-            ast.Datasource = "V7Config";
-            ast.BusinessUnitId = new Guid("928DD0BC-BF40-412E-B970-9B5E015AADEA");
+            ast.LogOnDatasource = "V7Config";
+            ast.LogOnBusinessUnitId = new Guid("928DD0BC-BF40-412E-B970-9B5E015AADEA");
             ast.Timestamp = DateTime.UtcNow;
             ast.PersonRequestId = new Guid("9AC8476B-9B8F-4330-9561-9D7A00BAA585");
             ast.Message = "I want to trade!";

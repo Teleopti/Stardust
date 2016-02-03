@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop
 			
 			try
 			{
-                _teleoptiRtaService.CheckForActivityChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow);
-				Logger.InfoFormat("Message successfully send to TeleoptiRtaService BU: {0}, Person: {1}, TimeStamp: {2}.", message.BusinessUnitId, message.PersonId, DateTime.UtcNow);
+                _teleoptiRtaService.CheckForActivityChange(message.PersonId, message.LogOnBusinessUnitId, DateTime.UtcNow);
+				Logger.InfoFormat("Message successfully send to TeleoptiRtaService BU: {0}, Person: {1}, TimeStamp: {2}.", message.LogOnBusinessUnitId, message.PersonId, DateTime.UtcNow);
 			}
 			catch (Exception exception)
 			{
@@ -58,12 +58,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop
 				TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(startTime.Value, DateTimeKind.Unspecified), TimeZoneInfo.Local),
 				new PersonActivityChangePulseEvent
 					{
-						Datasource = message.Datasource,
-						BusinessUnitId = message.BusinessUnitId,
+						LogOnDatasource = message.LogOnDatasource,
+						LogOnBusinessUnitId = message.LogOnBusinessUnitId,
 						PersonId = message.PersonId,
 						Timestamp = DateTime.UtcNow
 					});
-			Logger.InfoFormat("Delay Message successfully sent to ServiceBus BU: {0}, Person: {1}, SendTime: {2}.", message.BusinessUnitId, message.PersonId, startTime);
+			Logger.InfoFormat("Delay Message successfully sent to ServiceBus BU: {0}, Person: {1}, SendTime: {2}.", message.LogOnBusinessUnitId, message.PersonId, startTime);
 		}
 
 		public void Handle(ScheduleProjectionReadOnlyChanged message)
@@ -74,8 +74,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop
 			
 			try
 			{
-                _teleoptiRtaService.CheckForActivityChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow);
-				Logger.InfoFormat("Message successfully send to TeleoptiRtaService BU: {0}, Person: {1}, TimeStamp: {2}.", message.BusinessUnitId, message.PersonId, DateTime.UtcNow);
+                _teleoptiRtaService.CheckForActivityChange(message.PersonId, message.LogOnBusinessUnitId, DateTime.UtcNow);
+				Logger.InfoFormat("Message successfully send to TeleoptiRtaService BU: {0}, Person: {1}, TimeStamp: {2}.", message.LogOnBusinessUnitId, message.PersonId, DateTime.UtcNow);
 			}
 			catch (Exception exception)
 			{
@@ -97,12 +97,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop
 				TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(startTime.Value, DateTimeKind.Unspecified), TimeZoneInfo.Local),
 				new PersonActivityChangePulseEvent
 					{
-						Datasource = message.Datasource,
-						BusinessUnitId = message.BusinessUnitId,
+						LogOnDatasource = message.LogOnDatasource,
+						LogOnBusinessUnitId = message.LogOnBusinessUnitId,
 						PersonId = message.PersonId,
 						Timestamp = DateTime.UtcNow
 					});
-			Logger.InfoFormat("Delay Message successfully sent to ServiceBus BU: {0}, Person: {1}, SendTime: {2}.", message.BusinessUnitId, message.PersonId, startTime);
+			Logger.InfoFormat("Delay Message successfully sent to ServiceBus BU: {0}, Person: {1}, SendTime: {2}.", message.LogOnBusinessUnitId, message.PersonId, startTime);
 		}
 
 		private bool doesPersonHaveExternalLogOn(Guid personId)

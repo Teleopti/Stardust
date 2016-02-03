@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			@event.ScenarioId.Should().Be(personAssignmentRepository.Single().Scenario.Id.Value);
 			@event.InitiatorId.Should().Be(operatedPersonId);
 			@event.TrackId.Should().Be(trackId);
-			@event.BusinessUnitId.Should().Be(scenario.Current().BusinessUnit.Id.GetValueOrDefault());
+			@event.LogOnBusinessUnitId.Should().Be(scenario.Current().BusinessUnit.Id.GetValueOrDefault());
 		}
 
 		[Test]
