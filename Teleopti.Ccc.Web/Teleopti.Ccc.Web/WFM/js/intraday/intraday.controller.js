@@ -17,7 +17,7 @@
 			}
 
 			$scope.configMode = function () {
-				$state.go('intraday-config', {});
+				$state.go('intraday.config', {});
 			};
 
 

@@ -1,46 +1,48 @@
-<div class="view-header">
-	<div class="view-title">
-		<h1><i class="mdi mdi-compass-outline"></i> {{'Intraday'|translate}}</h1>
+<div ui-view>
+	<div class="view-header">
+		<div class="view-title">
+			<h1><i class="mdi mdi-compass-outline"></i> {{'Intraday'|translate}}</h1>
+		</div>
+		<div class="fab-wrapper">
+			<button class="wfm-fab  material-depth-1" ng-click="configMode();"><i class="mdi mdi-plus"></i></button>
+		</div>
 	</div>
-	<div class="fab-wrapper">
-		<button class="wfm-fab  material-depth-1" ng-click="configMode();"><i class="mdi mdi-plus"></i></button>
-	</div>
-</div>
 
-<div class="intraday">
-	<div class="row">
-		<div class="col-md-4">
-			<form class="wfm-form">
-				<div class="form-input-wrap">
-					<label for="skill-select">Select skill:</label>
-					<select id="skill-select" ng-model="selectedSkill" ng-change="skillChange(selectedSkill)" ng-options="skill.SkillName for skill in skillList" name="skill-select" required></select>
-					<noscript><input type="submit" value="Submit"></noscript>
-				</div>
-			</form>
+	<div class="intraday">
+		<div class="row">
+			<div class="col-md-4">
+				<form class="wfm-form">
+					<div class="form-input-wrap">
+						<label for="skill-select">Select skill:</label>
+						<select id="skill-select" ng-model="selectedSkill" ng-change="skillChange(selectedSkill)" ng-options="skill.SkillName for skill in skillList" name="skill-select" required></select>
+						<noscript><input type="submit" value="Submit"></noscript>
+					</div>
+				</form>
+			</div>
+			<div class="col-md-8">
+				<p>{{'LatestAcquiredTime'|translate}}: {{format(selectedSkill.Measures[0].LatestDate)}}</p>
+			</div>
 		</div>
-		<div class="col-md-8">
-			<p>{{'LatestAcquiredTime'|translate}}: {{format(selectedSkill.Measures[0].LatestDate)}}</p>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-4">
-			<div class="material-depth-1">
-				<div class="sub-header" translate>{{selectedSkill.SkillName}}</div>
-				<div class="wfm-block">
-					<div class="info-row">
-						<div class="measure">Offered calls: </div>
-						<div class="value">{{selectedSkill.Measures[0].ActualCalls}}</div>
-					</div>
-					<div class="info-row">
-						<div class="measure">Forecasted calls: </div>
-						<div class="value">{{selectedSkill.Measures[0].ForecastedCalls}}</div>
-					</div>
-					<div class="info-row">
-						<div class="measure">Relative difference: </div>
-						<div class="value">{{selectedSkill.Measures[0].Value}}</div>
-					</div>
-					<div class="info-row">
-						<div class="text-danger">{{selectedSkill.Measures[0].StringValue}}</div>
+		<div class="row">
+			<div class="col-md-4">
+				<div class="material-depth-1">
+					<div class="sub-header" translate>{{selectedSkill.SkillName}}</div>
+					<div class="wfm-block">
+						<div class="info-row">
+							<div class="measure">Offered calls: </div>
+							<div class="value">{{selectedSkill.Measures[0].ActualCalls}}</div>
+						</div>
+						<div class="info-row">
+							<div class="measure">Forecasted calls: </div>
+							<div class="value">{{selectedSkill.Measures[0].ForecastedCalls}}</div>
+						</div>
+						<div class="info-row">
+							<div class="measure">Relative difference: </div>
+							<div class="value">{{selectedSkill.Measures[0].Value}}</div>
+						</div>
+						<div class="info-row">
+							<div class="text-danger">{{selectedSkill.Measures[0].StringValue}}</div>
+						</div>
 					</div>
 				</div>
 			</div>
