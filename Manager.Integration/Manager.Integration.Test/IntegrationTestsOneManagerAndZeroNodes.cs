@@ -93,18 +93,23 @@ namespace Manager.Integration.Test
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
         {
+            
             if (ManagerApiHelper != null &&
                 ManagerApiHelper.CheckJobHistoryStatusTimer != null)
             {
+                LogHelper.LogInfoWithLineNumber("1");
                 ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
             }
 
             if (AppDomainHelper.AppDomains != null &&
                 AppDomainHelper.AppDomains.Any())
             {
+                LogHelper.LogInfoWithLineNumber("2");
                 foreach (var appDomain in AppDomainHelper.AppDomains.Values)
                 {
-                    AppDomain.Unload(appDomain);
+                    LogHelper.LogInfoWithLineNumber("appDomain unload: " + appDomain);
+                        AppDomain.Unload(appDomain);
+                    
                 }
             }
 
@@ -152,7 +157,7 @@ namespace Manager.Integration.Test
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.Start();
 
-            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(TimeSpan.FromMinutes(1));
+            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.NullStatus));
             
