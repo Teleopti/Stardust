@@ -56,8 +56,6 @@ namespace Manager.Integration.Test
             ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
         }
 
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(IntegrationTestsOneManagerAndZeroNodes));
-
         private Process StartManagerIntegrationConsoleHostProcess { get; set; }
 
         private const int NumberOfNodesToStart = 0;

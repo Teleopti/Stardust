@@ -66,9 +66,7 @@ namespace Manager.Integration.Test
 
         private bool _startUpManagerAndNodeManually = false;
         private bool _clearDatabase = true;
-
-        private static readonly ILog Logger =
-            LogManager.GetLogger(typeof(IntegrationTestsOneManagerAndManyNodes));
+        
 
         private Process StartManagerIntegrationConsoleHostProcess { get; set; }
         
@@ -118,7 +116,7 @@ namespace Manager.Integration.Test
         [Test]
         public void JobShouldHaveStatusFailedIfFailed()
         {
-            Logger.Info("Starting test : JobShouldHaveStatusFailedIfFailed");
+            LogHelper.LogInfoWithLineNumber("Starting test : JobShouldHaveStatusFailedIfFailed");
             
             JobHelper.GiveNodesTimeToInitialize();
 
@@ -153,7 +151,7 @@ namespace Manager.Integration.Test
         [Test]
         public void CancelWrongJobs()
         {
-            Logger.Info("Starting test : CancelWrongJobs");
+            LogHelper.LogInfoWithLineNumber("Starting test : CancelWrongJobs");
             
             JobHelper.GiveNodesTimeToInitialize();
 
@@ -167,7 +165,7 @@ namespace Manager.Integration.Test
             {
                 tasks.Add(ManagerApiHelper.CreateManagerDoThisTask(jobRequestModel));
 
-                Logger.Debug("Created task for add job :" + jobRequestModel.Name);
+                LogHelper.LogDebugWithLineNumber("Created task for add job :" + jobRequestModel.Name);
             }
 
             ManagerApiHelper.CheckJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(requests.Count,
@@ -184,7 +182,7 @@ namespace Manager.Integration.Test
 
                 var cancelJobTask = ManagerApiHelper.CreateManagerCancelTask(newGuid);
 
-                Logger.Debug("CancelWrongJobs : Created task for cancel job :" + newGuid);
+                LogHelper.LogDebugWithLineNumber("CancelWrongJobs : Created task for cancel job :" + newGuid);
 
                 cancelJobTask.Start();
             };
