@@ -8,6 +8,7 @@ using log4net;
 using Newtonsoft.Json;
 using Stardust.Node.Constants;
 using Stardust.Node.Extensions;
+using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
 using Timer = System.Timers.Timer;
@@ -16,7 +17,6 @@ namespace Stardust.Node.Workers
 {
     public class WorkerWrapper : IWorkerWrapper
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (WorkerWrapper));
 
         private readonly IPostHttpRequest _postHttpRequest;
 
@@ -120,7 +120,7 @@ namespace Stardust.Node.Workers
 
                 if (typ == null)
                 {
-                    Logger.Info(string.Format(WhoamI + ": The type [{0}] could not be resolved. The job cannot be started.",
+                    LogHelper.LogInfoWithLineNumber(string.Format(WhoamI + ": The type [{0}] could not be resolved. The job cannot be started.",
                                               jobToDo.Type));
 
                     return new BadRequestResult(requestMessage);
@@ -170,7 +170,7 @@ namespace Stardust.Node.Workers
                                           CurrentMessageToProcess.Id,
                                           CurrentMessageToProcess.Name);
 
-                        Logger.Info(logInfo);
+                        LogHelper.LogInfoWithLineNumber(logInfo);
 
                         SetNodeStatusTimer(TrySendJobDoneStatusToManagerTimer,
                                            CurrentMessageToProcess);
@@ -184,7 +184,7 @@ namespace Stardust.Node.Workers
                                           CurrentMessageToProcess.Id,
                                           CurrentMessageToProcess.Name);
 
-                        Logger.Info(logInfo);
+                        LogHelper.LogInfoWithLineNumber(logInfo);
 
                         SetNodeStatusTimer(TrySendJobCanceledStatusToManagerTimer,
                                            CurrentMessageToProcess);
@@ -198,7 +198,7 @@ namespace Stardust.Node.Workers
                                           CurrentMessageToProcess.Id,
                                           CurrentMessageToProcess.Name);
 
-                        Logger.Info(logInfo);
+                        LogHelper.LogInfoWithLineNumber(logInfo);
 
 
                         SetNodeStatusTimer(TrySendJobFaultedStatusToManagerTimer,
@@ -224,20 +224,20 @@ namespace Stardust.Node.Workers
                 id != Guid.Empty &&
                 CurrentMessageToProcess.Id == id)
             {
-                Logger.Info(WhoamI + " : Cancel job method called. Will call cancel on canellation token source.");
+                LogHelper.LogInfoWithLineNumber(WhoamI + " : Cancel job method called. Will call cancel on canellation token source.");
 
                 CancellationTokenSource.Cancel();
 
                 if (CancellationTokenSource.IsCancellationRequested)
                 {
-                    Logger.Info(WhoamI + " : Cancel job method called. CancellationTokenSource.IsCancellationRequested is now true.");
+                    LogHelper.LogInfoWithLineNumber(WhoamI + " : Cancel job method called. CancellationTokenSource.IsCancellationRequested is now true.");
                 }
             }
             else
             {
                 if (id != Guid.Empty)
                 {
-                    Logger.Warn(WhoamI + " : Can not cancel job with id : " + id);
+                    LogHelper.LogWarningWithLineNumber(WhoamI + " : Can not cancel job with id : " + id);
                 }
             }
         }
@@ -309,7 +309,7 @@ namespace Stardust.Node.Workers
 
         private void ProgressCallback(string message)
         {
-            Logger.Info(message);
+            LogHelper.LogInfoWithLineNumber(message);
 
             var progressModel = new JobProgressModel
             {
@@ -326,7 +326,7 @@ namespace Stardust.Node.Workers
             }
             catch (Exception exception)
             {
-                Logger.Error(WhoamI + ": Exception occured.",
+                LogHelper.LogErrorWithLineNumber(WhoamI + ": Exception occured.",
                              exception);
             }
         }

@@ -9,13 +9,12 @@ using Microsoft.Owin.Hosting;
 using Owin;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
+using Stardust.Manager.Helpers;
 
 namespace Stardust.Manager
 {
 	public class ManagerStarter
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(ManagerStarter));
-
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
 
 	    public void Stop()
@@ -63,7 +62,7 @@ namespace Stardust.Manager
 					 }))
 
             {
-				Logger.Info(WhoAmI + ": Started listening on port : " + managerConfiguration.BaseAdress);
+                LogHelper.LogInfoWithLineNumber(WhoAmI + ": Started listening on port : " + managerConfiguration.BaseAdress);
 
                 QuitEvent.WaitOne();
 

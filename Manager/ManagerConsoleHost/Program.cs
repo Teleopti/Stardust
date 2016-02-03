@@ -6,13 +6,13 @@ using System.Threading;
 using log4net;
 using log4net.Config;
 using Stardust.Manager;
+using Stardust.Manager.Helpers;
 using Stardust.Manager.Models;
 
 namespace ManagerConsoleHost
 {
     internal class Program
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (ManagerController));
 
         private static string WhoAmI { get; set; }
 
@@ -30,7 +30,7 @@ namespace ManagerConsoleHost
 
             WhoAmI = "[MANAGER CONSOLE HOST, " + Environment.MachineName.ToUpper() + "]";
 
-            Logger.Info(WhoAmI + " : started.");
+            LogHelper.LogInfoWithLineNumber(WhoAmI + " : started.");
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
@@ -115,7 +115,7 @@ namespace ManagerConsoleHost
         private static void CurrentDomain_UnhandledException(object sender,
                                                              UnhandledExceptionEventArgs e)
         {
-            Logger.Error(WhoAmI + ": Unhandeled Exception in ManagerConsoleHost");
+            LogHelper.LogErrorWithLineNumber(WhoAmI + ": Unhandeled Exception in ManagerConsoleHost");
         }
     }
 }

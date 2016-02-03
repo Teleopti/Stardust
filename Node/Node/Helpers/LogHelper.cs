@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using log4net;
 
-namespace Manager.Integration.Test.Helpers
+namespace Stardust.Node.Helpers
 {
     public static class LogHelper
     {
