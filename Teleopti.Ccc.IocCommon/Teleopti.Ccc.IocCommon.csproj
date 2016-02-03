@@ -191,7 +191,7 @@
     <Compile Include="Configuration\ForecasterModule.cs" />
     <Compile Include="Configuration\HangfireModule.cs" />
     <Compile Include="Configuration\ForecastEventModule.cs" />
-    <Compile Include="Configuration\IntradayModule.cs" />
+    <Compile Include="Configuration\IntradayWebModule.cs" />
     <Compile Include="Configuration\IntraIntervalOptimizationServiceModule.cs" />
     <Compile Include="Configuration\IntraIntervalSolverServiceModule.cs" />
     <Compile Include="Configuration\MbCacheLog4NetListener.cs" />

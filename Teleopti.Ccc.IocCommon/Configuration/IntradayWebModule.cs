@@ -5,7 +5,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public class IntradayModule : Module
+	public class IntradayWebModule : Module
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
