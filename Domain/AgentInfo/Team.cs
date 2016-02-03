@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
             get
             {
                 if (_site == null)
-                    return CurrentBusinessUnit.InstanceForEntities.Current();
+                    return ServiceLocatorForEntity.CurrentBusinessUnit.Current();
                 return _site.BusinessUnit;
             }
         }

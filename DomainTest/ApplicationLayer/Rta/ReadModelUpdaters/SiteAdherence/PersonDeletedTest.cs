@@ -27,8 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 
 			Target.Handle(new PersonDeletedEvent
 			{
-				PersonId = personId,
-				PersonPeriodsBefore = new[] {new PersonPeriodDetail {SiteId = siteId}}
+				PersonId = personId
 			});
 
 			Persister.Get(siteId).Count.Should().Be(0);
@@ -53,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 		}
 
 		[Test]
-		public void ShouldExludeFromAllPastSites()
+		public void ShouldExludeFromAllSites()
 		{
 			var siteId1 = Guid.NewGuid();
 			var siteId2 = Guid.NewGuid();
@@ -63,8 +62,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 
 			Target.Handle(new PersonDeletedEvent
 			{
-				PersonId = personId,
-				PersonPeriodsBefore = new[] {new PersonPeriodDetail {SiteId = siteId1}, new PersonPeriodDetail {SiteId = siteId2}}
+				PersonId = personId
 			});
 
 			Persister.Get(siteId1).Count.Should().Be(0);
@@ -80,8 +78,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 
 			Target.Handle(new PersonDeletedEvent
 			{
-				PersonId = personId,
-				PersonPeriodsBefore = new[] { new PersonPeriodDetail { SiteId = siteId } }
+				PersonId = personId
 			});
 			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = Guid.NewGuid() });
 
@@ -98,7 +95,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 			Target.Handle(new PersonDeletedEvent
 			{
 				PersonId = personId,
-				PersonPeriodsBefore = new[] { new PersonPeriodDetail { SiteId = siteId } },
 				Timestamp = "2015-12-04 10:00".Utc()
 			});
 			Target.Handle(new PersonOutOfAdherenceEvent {SiteId = siteId, PersonId = personId, Timestamp = "2015-12-04 10:05".Utc()});

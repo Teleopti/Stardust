@@ -68,8 +68,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			#endregion
 
 			builder.RegisterType<CurrentBusinessUnit>().As<ICurrentBusinessUnit>().SingleInstance()
-				.OnActivated(e => CurrentBusinessUnit.SetInstanceFromContainer(e.Instance))
-				.OnRelease(e => CurrentBusinessUnit.SetInstanceFromContainer(null));
+				.OnActivated(e => ServiceLocatorForEntity.SetInstanceFromContainer(e.Instance))
+				.OnRelease(e => ServiceLocatorForEntity.SetInstanceFromContainer(null as ICurrentBusinessUnit));
 			builder.RegisterType<HttpRequestFalse>().As<IIsHttpRequest>().SingleInstance();
 
 			// placed here because at the moment uow is the "owner" of the *current* initiator identifier

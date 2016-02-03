@@ -78,23 +78,50 @@ namespace Teleopti.Ccc.Domain.Common
 		    if (_terminalDate != valueToSet)
 		    {
 			    var valueBefore = _terminalDate.HasValue ? _terminalDate.Value.Date : (DateTime?) null;
-			    var personPeriodsBefore = gatherPersonPeriodDetails();
 			    _terminalDate = valueToSet;
 			    var valueAfter = _terminalDate.HasValue ? _terminalDate.Value.Date : (DateTime?) null;
 
+			    var info = currentAssociationInfo();
 			    AddEvent(new PersonTerminalDateChangedEvent
 			    {
 				    PersonId = Id.GetValueOrDefault(),
+				    BusinessUnitId = info.BusinessUnitId,
+				    SiteId = info.SiteId,
+				    TeamId = info.TeamId,
 					TimeZoneInfoId = PermissionInformation.DefaultTimeZone().Id,
-				    PersonPeriodsBefore = personPeriodsBefore,
-				    PersonPeriodsAfter = gatherPersonPeriodDetails(),
-				    PreviousTerminationDate = valueBefore,
+					PreviousTerminationDate = valueBefore,
 				    TerminationDate = valueAfter
 			    });
 		    }
 	    }
 
-	    public virtual void ChangeTeam(ITeam team, IPersonPeriod personPeriod)
+		private personAssociationInfo currentAssociationInfo()
+		{
+			var period = Period(new DateOnly(ServiceLocatorForEntity.Now.UtcDateTime()));
+			var info = new personAssociationInfo();
+			if (period != null && period.Team != null)
+			{
+				info.TeamId = period.Team.Id.GetValueOrDefault();
+				if (period.Team.Site != null)
+				{
+					info.SiteId = period.Team.Site.Id.GetValueOrDefault();
+					if (period.Team.Site.BusinessUnit != null)
+					{
+						info.BusinessUnitId = period.Team.Site.BusinessUnit.Id.GetValueOrDefault();
+					}
+				}
+			}
+			return info;
+		}
+
+		private class personAssociationInfo
+		{
+			public Guid? BusinessUnitId { get; set; }
+			public Guid? SiteId { get; set; }
+			public Guid? TeamId { get; set; }
+		}
+
+		public virtual void ChangeTeam(ITeam team, IPersonPeriod personPeriod)
 		{
 			Guid? teamBefore = null;
 			Guid? teamAfter = null;
@@ -444,38 +471,17 @@ namespace Teleopti.Ccc.Domain.Common
 				});
 		}
 
-	    private ICollection<PersonPeriodDetail> gatherPersonPeriodDetails()
+		private ICollection<PersonPeriodDetail> gatherPersonPeriodDetails()
 	    {
 		    var personPeriods = InternalPersonPeriodCollection;
 		    if (personPeriods == null) return new List<PersonPeriodDetail>();
 		    return
 			    personPeriods.Select(
-				    p =>
+				    p => new PersonPeriodDetail
 				    {
-						var businessUnitId = Guid.Empty;
-						var siteId = Guid.Empty;
-						var teamId = Guid.Empty;
-						if (p.Team != null)
-						{
-							teamId = p.Team.Id.GetValueOrDefault();
-							if (p.Team.Site != null)
-							{
-								siteId = p.Team.Site.Id.GetValueOrDefault();
-								if (p.Team.Site.BusinessUnit != null)
-								{
-									businessUnitId = p.Team.Site.BusinessUnit.Id.GetValueOrDefault();
-								}
-							}
-						}
-						return new PersonPeriodDetail
-						{
-							StartDate = p.StartDate.Date,
-							EndDate = p.EndDate().Date,
-							BusinessUnitId = businessUnitId,
-							SiteId = siteId,
-							TeamId = teamId,
-							PersonSkillDetails = gatherSkillDetails(p),
-						};
+					    StartDate = p.StartDate.Date,
+					    EndDate = p.EndDate().Date,
+					    PersonSkillDetails = gatherSkillDetails(p),
 				    }).ToList();
 	    }
 
@@ -804,13 +810,10 @@ namespace Teleopti.Ccc.Domain.Common
 
 	    public virtual void SetDeleted()
 	    {
-		    var personPeriodsBefore = gatherPersonPeriodDetails();
 		    _isDeleted = true;
-
 		    AddEvent(new PersonDeletedEvent
 			    {
-				    PersonId = Id.GetValueOrDefault(),
-				    PersonPeriodsBefore = personPeriodsBefore
+				    PersonId = Id.GetValueOrDefault()
 			    });
 	    }
 
@@ -822,7 +825,6 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 		}
 
-	    [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public virtual void AddOptionalColumnValue(IOptionalColumnValue value, IOptionalColumn column)
 		{
 			InParameter.NotNull("value", value);

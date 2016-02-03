@@ -68,12 +68,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonDeletedEvent @event)
 		{
-			var teams = @event.PersonPeriodsBefore.EmptyIfNull()
-				.Select(p => new team {SiteId = p.SiteId, TeamId = p.TeamId});
 			updateAllModels(
 				@event.PersonId,
 				@event.Timestamp,
-				teams,
 				deletePerson);
 		}
 
@@ -86,7 +83,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			updateAllModels(
 				@event.PersonId,
 				@event.Timestamp,
-				null,
 				deletePerson);
 		}
 
@@ -96,22 +92,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			updateModel(model, personId, time, update);
 		}
 		
-		private void updateAllModels(Guid personId, DateTime time, IEnumerable<team> teams, UpdateAction update)
+		private void updateAllModels(Guid personId, DateTime time, UpdateAction update)
 		{
-			var existingModels = _persister.GetAll();
-
-			var newModels =
-				from t in teams.EmptyIfNull()
-				let unknown = !existingModels.Select(m => m.TeamId).Contains(t.TeamId)
-				where unknown
-				select modelFor(t.SiteId, t.TeamId);
-			
-			var models = existingModels.Concat(newModels);
-
-			models.ForEach(m =>
-			{
-				updateModel(m, personId, time, update);
-			});
+			_persister.GetAll()
+				.ForEach(m => updateModel(m, personId, time, update));
 		}
 
 		private void updateModel(TeamOutOfAdherenceReadModel model, Guid personId, DateTime time, UpdateAction update)

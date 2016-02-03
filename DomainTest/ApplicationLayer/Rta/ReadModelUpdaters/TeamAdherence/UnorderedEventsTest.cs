@@ -112,8 +112,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 					new PersonDeletedEvent
 					{
 						PersonId = personId,
-						Timestamp = "2015-02-18 12:04".Utc(),
-						PersonPeriodsBefore = new[] {new PersonPeriodDetail {TeamId = teamId}}
+						Timestamp = "2015-02-18 12:04".Utc()
 					},
 					new PersonInAdherenceEvent
 					{
@@ -131,6 +130,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 
 				return events
 					.Permutations()
+					.Where(p => !(p.First() is PersonDeletedEvent))
 					.TestCases();
 			}
 		}

@@ -77,21 +77,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			if (previousTerminatedAt > now && terminatedAt > now)
 				return;
 
-			var teamId = @event.PersonPeriodsAfter
-				.EmptyIfNull()
-				.Where(x => x.StartDate <= now && x.EndDate > now)
-				.Select(x => x.TeamId as Guid?)
-				.SingleOrDefault();
-			
 			_eventPublisher.Publish(new PersonAssociationChangedEvent
 			{
 				PersonId = @event.PersonId,
 				Timestamp = now,
-				TeamId = teamId
+				TeamId = @event.TeamId
 			});
 		}
 		
-
 		private DateTime? timeOfChange(DateOnly? terminalDate, IPersonPeriod currentPeriod, TimeZoneInfo timeZone)
 		{
 			var terminatedAt = terminationTime(terminalDate, timeZone);

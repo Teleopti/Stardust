@@ -159,26 +159,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			Target.Handle(new PersonTerminalDateChangedEvent
 			{
 				PersonId = personId,
-				PersonPeriodsAfter = new[]
-				{
-					new PersonPeriodDetail
-					{
-						StartDate = "2016-01-01".Utc(),
-						EndDate = "2016-01-14".Utc(),
-						TeamId = Guid.NewGuid()
-					},
-					new PersonPeriodDetail
-					{
-						StartDate = "2016-01-15".Utc(),
-						EndDate = "2016-12-31".Utc(),
-						TeamId = teamId
-					},new PersonPeriodDetail
-					{
-						StartDate = "2017-01-01".Utc(),
-						EndDate = "2017-01-31".Utc(),
-						TeamId = Guid.NewGuid()
-					}
-				},
+				TeamId = teamId,
 				PreviousTerminationDate = "2016-01-01".Utc(),
 				TerminationDate = null
 			});

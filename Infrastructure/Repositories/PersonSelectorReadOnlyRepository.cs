@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .SetString("type", "Organization")
 					.SetDateOnly("ondate", dateOnlyPeriod.StartDate)
 					.SetDateOnly("enddate", dateOnlyPeriod.EndDate)
-                    .SetGuid("bu", CurrentBusinessUnit.InstanceForEntities.Current().Id.GetValueOrDefault())
+                    .SetGuid("bu", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
                     .SetBoolean("users", loadUsers)
                     .SetInt32("culture", cultureId)
                     .SetResultTransformer(Transformers.AliasToBean(typeof(PersonSelectorOrganization)))
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .SetString("type", loadType.ToString())
 					.SetDateOnly("ondate", dateOnlyPeriod.StartDate)
 					.SetDateOnly("enddate", dateOnlyPeriod.EndDate)
-                    .SetGuid("bu", CurrentBusinessUnit.InstanceForEntities.Current().Id.GetValueOrDefault())
+                    .SetGuid("bu", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
                     .SetBoolean("users", false)
                     .SetInt32("culture", cultureId)
                     .SetResultTransformer(Transformers.AliasToBean(typeof(PersonSelectorBuiltIn)))
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return _unitOfWorkFactory.Session().CreateSQLQuery(
                     "exec ReadModel.LoadUserDefinedTab @tabid=:tabid, @bu=:bu,  @ondate=:ondate, @culture=:culture")
                     .SetGuid("tabid", value)
-					.SetGuid("bu", CurrentBusinessUnit.InstanceForEntities.Current().Id.GetValueOrDefault())
+					.SetGuid("bu", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
 					.SetDateOnly("ondate", onDate)
                     .SetInt32("culture", cultureId)
                     .SetResultTransformer(Transformers.AliasToBean(typeof(PersonSelectorUserDefined)))
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             return _unitOfWorkFactory.Session().CreateSQLQuery(
                     "SELECT Id, Name FROM GroupPage WHERE IsDeleted = 0 AND BusinessUnit = :bu")
-					.SetGuid("bu", CurrentBusinessUnit.InstanceForEntities.Current().Id.GetValueOrDefault())
+					.SetGuid("bu", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
                     .SetResultTransformer(Transformers.AliasToBean(typeof(UserDefinedTabLight)))
                     .SetReadOnly(true)
                     .List<IUserDefinedTabLight>();   

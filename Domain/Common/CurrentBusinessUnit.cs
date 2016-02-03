@@ -3,35 +3,52 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-	public class CurrentBusinessUnit : ICurrentBusinessUnit
+	public static class ServiceLocatorForEntity
 	{
-		private readonly ICurrentIdentity _identity;
-		private readonly IIsHttpRequest _isHttpRequest;
+		private static ICurrentBusinessUnit _currentBusinessUnit;
+		private static INow _now;
 
-		private static ICurrentBusinessUnit _instanceForEntities;
-
-		public static ICurrentBusinessUnit Make()
-		{
-			var identity = new CurrentIdentity(new CurrentTeleoptiPrincipal());
-			return new CurrentBusinessUnit(identity, new HttpRequestFalse());
-		}
-
-		public static ICurrentBusinessUnit InstanceForEntities
+		public static ICurrentBusinessUnit CurrentBusinessUnit
 		{
 			get
 			{
-				if (_instanceForEntities != null)
-					return _instanceForEntities;
+				if (_currentBusinessUnit != null)
+					return _currentBusinessUnit;
+				return _currentBusinessUnit = Common.CurrentBusinessUnit.Make();
+			}
+		}
 
-				var instance = Make();
-				_instanceForEntities = instance;
-				return _instanceForEntities;
+		public static INow Now
+		{
+			get
+			{
+				if (_now != null)
+					return _now;
+				return _now = new Now();
 			}
 		}
 
 		public static void SetInstanceFromContainer(ICurrentBusinessUnit instance)
 		{
-			_instanceForEntities = instance;
+			_currentBusinessUnit = instance;
+		}
+		
+		public static void SetInstanceFromContainer(INow instance)
+		{
+			_now = instance;
+		}
+
+	}
+
+	public class CurrentBusinessUnit : ICurrentBusinessUnit
+	{
+		private readonly ICurrentIdentity _identity;
+		private readonly IIsHttpRequest _isHttpRequest;
+
+		public static ICurrentBusinessUnit Make()
+		{
+			var identity = new CurrentIdentity(new CurrentTeleoptiPrincipal());
+			return new CurrentBusinessUnit(identity, new HttpRequestFalse());
 		}
 
 		public CurrentBusinessUnit(ICurrentIdentity identity, IIsHttpRequest isHttpRequest)

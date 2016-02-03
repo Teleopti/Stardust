@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private Guid getBusinessUnitId()
 		{
-			return CurrentBusinessUnit.InstanceForEntities.Current().Id.GetValueOrDefault();
+			return ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault();
 		}
 
 		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(ReadOnlyGroupPage groupPage,DateOnly queryDate)

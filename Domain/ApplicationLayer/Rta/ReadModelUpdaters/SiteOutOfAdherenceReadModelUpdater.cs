@@ -63,12 +63,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonDeletedEvent @event)
 		{
-			var sites = @event.PersonPeriodsBefore.EmptyIfNull()
-				.Select(p => new site { SiteId = p.SiteId, BusinessUnitId = p.BusinessUnitId});
 			updateAllModels(
 				@event.PersonId,
 				@event.Timestamp,
-				sites,
 				deletePerson);
 		}
 
@@ -81,7 +78,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			updateAllModels(
 				@event.PersonId,
 				@event.Timestamp,
-				null,
 				deletePerson);
 		}
 
@@ -91,22 +87,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			updateModel(model, personId, time, update);
 		}
 
-		private void updateAllModels(Guid personId, DateTime time, IEnumerable<site> sites, UpdateAction update)
+		private void updateAllModels(Guid personId, DateTime time, UpdateAction update)
 		{
-			var existingModels = _persister.GetAll();
-
-			var newModels =
-				from t in sites.EmptyIfNull()
-				let unknown = !existingModels.Select(m => m.SiteId).Contains(t.SiteId)
-				where unknown
-				select modelFor(t.BusinessUnitId, t.SiteId);
-
-			var models = existingModels.Concat(newModels);
-
-			models.ForEach(m =>
-			{
-				updateModel(m, personId, time, update);
-			});
+			_persister.GetAll()
+				.ForEach(m => updateModel(m, personId, time, update));
 		}
 
 		private void updateModel(SiteOutOfAdherenceReadModel model, Guid personId, DateTime time, UpdateAction update)

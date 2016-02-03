@@ -27,8 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 
 			Target.Handle(new PersonDeletedEvent
 			{
-				PersonId = personId,
-				PersonPeriodsBefore = new[] {new PersonPeriodDetail {TeamId = teamId}}
+				PersonId = personId
 			});
 
 			Persister.Get(teamId).Count.Should().Be(0);
@@ -53,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 		}
 
 		[Test]
-		public void ShouldExludeFromAllPastTeams()
+		public void ShouldExludeFromAllTeams()
 		{
 			var teamId1 = Guid.NewGuid();
 			var teamId2 = Guid.NewGuid();
@@ -63,8 +62,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 
 			Target.Handle(new PersonDeletedEvent
 			{
-				PersonId = personId,
-				PersonPeriodsBefore = new[] {new PersonPeriodDetail {TeamId = teamId1}, new PersonPeriodDetail {TeamId = teamId2}}
+				PersonId = personId
 			});
 
 			Persister.Get(teamId1).Count.Should().Be(0);
@@ -80,8 +78,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 
 			Target.Handle(new PersonDeletedEvent
 			{
-				PersonId = personId,
-				PersonPeriodsBefore = new[] { new PersonPeriodDetail { TeamId = teamId } }
+				PersonId = personId
 			});
 			Target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId, PersonId = Guid.NewGuid() });
 
@@ -98,7 +95,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 			Target.Handle(new PersonDeletedEvent
 			{
 				PersonId = personId,
-				PersonPeriodsBefore = new[] {new PersonPeriodDetail {TeamId = teamId}},
 				Timestamp = "2015-12-04 10:00".Utc()
 			});
 			Target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId, PersonId = personId, Timestamp = "2015-12-04 10:05".Utc() });

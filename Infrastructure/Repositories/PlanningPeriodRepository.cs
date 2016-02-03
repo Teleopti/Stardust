@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var uniqueSchedulePeriods = Session.GetNamedQuery("UniqueSchedulePeriods")
 				.SetDateTime("date", now.UtcDateTime())
-				.SetGuid("businessUnit", CurrentBusinessUnit.InstanceForEntities.Current().Id.GetValueOrDefault())
+				.SetGuid("businessUnit", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
 				.SetResultTransformer(new AliasToBeanResultTransformer(typeof(AggregatedSchedulePeriod)))
 				.List<AggregatedSchedulePeriod>();
 
