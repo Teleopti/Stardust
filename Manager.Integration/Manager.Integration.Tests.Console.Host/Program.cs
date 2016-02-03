@@ -4,12 +4,10 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Policy;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
 using log4net.Config;
 using Manager.IntegrationTest.Console.Host.Properties;
 
@@ -17,8 +15,6 @@ namespace Manager.IntegrationTest.Console.Host
 {
     public static class Program
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (Program));
-
         private const string CopiedManagerConfigName = "Manager.config";
 
 #if (DEBUG)
@@ -90,21 +86,6 @@ namespace Manager.IntegrationTest.Console.Host
                                                           val) => value);
         }
 
-        private static void LogInfoWithLineNumber(string info,
-                                                  [CallerFilePath] string file = "",
-                                                  [CallerMemberName] string member = "",
-                                                  [CallerLineNumber] int line = 0)
-        {
-            if (Logger.IsInfoEnabled)
-            {
-                Logger.Info(string.Format("{0}_{1}({2}): {3}",
-                                          Path.GetFileName(file),
-                                          member,
-                                          line,
-                                          info));
-            }
-        }
-
         private static void Main(string[] args)
         {
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
@@ -123,7 +104,7 @@ namespace Manager.IntegrationTest.Console.Host
 
             Evidence adevidence = AppDomain.CurrentDomain.Evidence;
 
-            LogInfoWithLineNumber("started.");
+            LogHelper.LogInfoWithLineNumber("started.");
 
             var directoryManagerConfigurationFileFullPath =
                 new DirectoryInfo(AddEndingSlash(Settings.Default.ManagerConfigurationFileFullPath + _buildMode));
@@ -188,10 +169,8 @@ namespace Manager.IntegrationTest.Console.Host
 
             if (numberOfNodesToStart > 0)
             {
-               
                 for (var i = 1; i <= numberOfNodesToStart; i++)
                 {
-                   
                     var nodeName = "Node" + i;
 
                     var configName = nodeName + ".config";
@@ -263,13 +242,13 @@ namespace Manager.IntegrationTest.Console.Host
         private static void CurrentDomain_ProcessExit(object sender,
                                                       EventArgs e)
         {
-            LogInfoWithLineNumber(string.Empty);
+            LogHelper.LogInfoWithLineNumber(string.Empty);
         }
 
         private static void CurrentDomainOnDomainUnload(object sender,
                                                         EventArgs eventArgs)
         {
-            Logger.Info("CurrentDomainOnDomainUnload");
+            LogHelper.LogInfoWithLineNumber("CurrentDomainOnDomainUnload");
 
             foreach (var appDomain in AppDomains.Values)
             {

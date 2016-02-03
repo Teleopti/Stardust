@@ -7,7 +7,7 @@ namespace Manager.Integration.Test.Helpers
     public static class LogHelper
     {
         private static readonly ILog Logger =
-            LogManager.GetLogger(typeof (LogHelper));
+            LogManager.GetLogger(typeof(LogHelper));
 
         public static void LogErrorWithLineNumber(string info,
                                                   System.Exception exception = null,

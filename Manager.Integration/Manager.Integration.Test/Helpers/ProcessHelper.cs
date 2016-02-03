@@ -18,15 +18,13 @@ namespace Manager.Integration.Test.Helpers
 #else
         private static string _buildMode = "Release";
 #endif
-
-        private static readonly ILog Logger =
-            LogManager.GetLogger(typeof (ProcessHelper));
+        
 
         private static ManualResetEventSlim _closeProcessManualResetEventSlim;
 
         public static void ShutDownAllManagerIntegrationConsoleHostProcesses()
         {
-            Logger.Info("ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses :  Started.");
+            LogHelper.LogInfoWithLineNumber("ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses :  Started.");
 
             var consoleHostname = new FileInfo(Settings.Default.ManagerIntegrationConsoleHostAssemblyName);
 
@@ -35,7 +33,7 @@ namespace Manager.Integration.Test.Helpers
 
             ShutDownAllProcesses(fileNameWithNoExtension);
 
-            Logger.Info("ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses :  Finished.");
+            LogHelper.LogInfoWithLineNumber("ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses :  Finished.");
         }
         public static void ShowAllManagerIntegrationConsoleHostProcesses()
         {
@@ -134,7 +132,7 @@ namespace Manager.Integration.Test.Helpers
 
         public static void ShutDownAllProcesses(string processName)
         {
-            Logger.Info("ProcessHelper.ShutDownAllProcesses method started.");
+            LogHelper.LogInfoWithLineNumber("ProcessHelper.ShutDownAllProcesses method started.");
 
             Process[] processes = Process.GetProcessesByName(processName);
 
@@ -146,14 +144,14 @@ namespace Manager.Integration.Test.Helpers
                     var fileName = process.StartInfo.FileName;
                     var userName = process.StartInfo.UserName;
 
-                    Logger.Info(string.Format("ShutDownAllProcesses... Started : Process name : {0}, Process path : {1}, Process started by : {2}",
+                    LogHelper.LogInfoWithLineNumber(string.Format("ShutDownAllProcesses... Started : Process name : {0}, Process path : {1}, Process started by : {2}",
                                               name,
                                               fileName,
                                               userName));
 
                     CloseProcess(process);
 
-                    Logger.Info(string.Format("ShutDownAllProcesses... Finished : Process name : {0}, Process path : {1}, Process started by : {2}",
+                    LogHelper.LogInfoWithLineNumber(string.Format("ShutDownAllProcesses... Finished : Process name : {0}, Process path : {1}, Process started by : {2}",
                                               name,
                                               fileName,
                                               userName));
@@ -161,7 +159,7 @@ namespace Manager.Integration.Test.Helpers
                 }
             }
 
-            Logger.Info("ProcessHelper.ShutDownAllProcesses method finished.");
+            LogHelper.LogInfoWithLineNumber("ProcessHelper.ShutDownAllProcesses method finished.");
         }
 
         public static void ShutDownAllProcesses()

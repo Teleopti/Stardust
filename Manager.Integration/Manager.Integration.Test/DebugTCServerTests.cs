@@ -10,7 +10,6 @@ namespace Manager.Integration.Test
     [TestFixture]
     public class DebugTCServerTests
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (DebugTCServerTests));
 
         [TestFixtureSetUp]
         public void TestFixtureSetUp()

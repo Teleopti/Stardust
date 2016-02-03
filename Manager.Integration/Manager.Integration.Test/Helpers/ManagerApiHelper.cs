@@ -12,7 +12,6 @@ namespace Manager.Integration.Test.Helpers
 {
     public class ManagerApiHelper
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (ManagerApiHelper));
 
         public ManagerApiHelper()
         {
@@ -63,7 +62,7 @@ namespace Manager.Integration.Test.Helpers
                     }
                     catch (Exception ex)
                     {
-                        Logger.Error("ERROR: ManagerApiHelper CreateManagerDoThisTask problem with Post Async" + ex);
+                        LogHelper.LogErrorWithLineNumber("ERROR: ManagerApiHelper CreateManagerDoThisTask problem with Post Async" + ex);
                     }
                 }
             });
@@ -91,7 +90,7 @@ namespace Manager.Integration.Test.Helpers
                     }
                     catch (Exception exp)
                     {
-                        Logger.Error("Delete async error : ",
+                        LogHelper.LogErrorWithLineNumber("Delete async error : ",
                                      exp);
                     }
                 });

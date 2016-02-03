@@ -16,7 +16,7 @@ namespace Manager.Integration.Test
 {
     [TestFixture]
     public class IntegrationTestsOneManagerAndManyNodes
-    {
+    { 
         [SetUp]
         public void Setup()
         {
@@ -35,7 +35,7 @@ namespace Manager.Integration.Test
 
 
 #if (DEBUG)
-            // Do nothing.
+    // Do nothing.
 #else
             _clearDatabase = false;
             _startUpManagerAndNodeManually = false;
@@ -49,20 +49,20 @@ namespace Manager.Integration.Test
             {
                 if (_debugMode)
                 {
-                    ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
+                ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
 
-                    StartManagerIntegrationConsoleHostProcess =
-                        ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
-                }
+                StartManagerIntegrationConsoleHostProcess =
+                    ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
+            }
                 else
                 {
                     var task = AppDomainHelper.CreateAppDomainForManagerIntegrationConsoleHost(_buildMode);
-
+            
                     task.Start();
-                }
+        }
             }
         }
-
+        
         [TearDown]
         public void TearDown()
         {
@@ -77,7 +77,7 @@ namespace Manager.Integration.Test
             if (AppDomainHelper.AppDomains.Any())
             {
                 foreach (var appDomain in AppDomainHelper.AppDomains.Values)
-                {
+        {
                     AppDomain.Unload(appDomain);
                 }
             }
@@ -96,10 +96,10 @@ namespace Manager.Integration.Test
         private string _buildMode = "Debug";
 
         private static readonly ILog Logger =
-            LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndManyNodes));
+            LogManager.GetLogger(typeof(IntegrationTestsOneManagerAndManyNodes));
 
         private Process StartManagerIntegrationConsoleHostProcess { get; set; }
-
+        
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
         [Test]
@@ -149,8 +149,8 @@ namespace Manager.Integration.Test
         [Test]
         public void JobShouldHaveStatusFailedIfFailed()
         {
-            Logger.Info("Starting test : JobShouldHaveStatusFailedIfFailed");
-
+            LogHelper.LogInfoWithLineNumber("Starting test : JobShouldHaveStatusFailedIfFailed");
+            
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateFailingJobParamsRequests(1);
@@ -185,8 +185,8 @@ namespace Manager.Integration.Test
         [Test]
         public void CancelWrongJobs()
         {
-            Logger.Info("Starting test : CancelWrongJobs");
-
+            LogHelper.LogInfoWithLineNumber("Starting test : CancelWrongJobs");
+            
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(1);
@@ -199,7 +199,7 @@ namespace Manager.Integration.Test
             {
                 tasks.Add(ManagerApiHelper.CreateManagerDoThisTask(jobRequestModel));
 
-                Logger.Debug("Created task for add job :" + jobRequestModel.Name);
+                LogHelper.LogDebugWithLineNumber("Created task for add job :" + jobRequestModel.Name);
             }
 
             ManagerApiHelper.CheckJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(requests.Count,
@@ -216,7 +216,7 @@ namespace Manager.Integration.Test
 
                 var cancelJobTask = ManagerApiHelper.CreateManagerCancelTask(newGuid);
 
-                Logger.Debug("CancelWrongJobs : Created task for cancel job :" + newGuid);
+                LogHelper.LogDebugWithLineNumber("CancelWrongJobs : Created task for cancel job :" + newGuid);
 
                 cancelJobTask.Start();
             };
@@ -227,7 +227,7 @@ namespace Manager.Integration.Test
                              task => { task.Start(); });
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
-
+            
             ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
@@ -237,7 +237,7 @@ namespace Manager.Integration.Test
         public void ShouldBeAbleToCreate5SuccessJobRequest()
         {
             LogHelper.LogInfoWithLineNumber("starting test...");
-
+            
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(5);
@@ -262,7 +262,7 @@ namespace Manager.Integration.Test
 
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
-
+            
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait();
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();

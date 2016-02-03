@@ -2,12 +2,12 @@
 using System.Runtime.CompilerServices;
 using log4net;
 
-namespace Manager.Integration.Test.Helpers
+namespace Manager.IntegrationTest.Console.Host
 {
     public static class LogHelper
     {
         private static readonly ILog Logger =
-            LogManager.GetLogger(typeof (LogHelper));
+            LogManager.GetLogger(typeof(LogHelper));
 
         public static void LogErrorWithLineNumber(string info,
                                                   System.Exception exception = null,
