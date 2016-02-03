@@ -4,6 +4,8 @@ using Rhino.Mocks;
 using Rhino.ServiceBus;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -70,29 +72,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 			}
 		}
 
-		[Test]
-		public void ShouldResolveImportForecastsFileToSkillConsumer()
-		{
-			var builder = new ContainerBuilder();
-			fakeInternalBusRegistrations(builder);
-			using (var container = builder.Build())
-			{
-				new ContainerConfiguration(container, MockRepository.GenerateMock<IToggleManager>()).Configure();
-				container.Resolve<ConsumerOf<ImportForecastsFileToSkill>>().Should().Not.Be.Null();
-			}
-		}
 
-		[Test]
-		public void ShouldResolveImportForecastsToSkillConsumer()
-		{
-			var builder = new ContainerBuilder();
-			fakeInternalBusRegistrations(builder);
-			using (var container = builder.Build())
-			{
-				new ContainerConfiguration(container, MockRepository.GenerateMock<IToggleManager>()).Configure();
-				container.Resolve<ConsumerOf<ImportForecastsToSkill>>().Should().Not.Be.Null();
-			}
-		}
+
 
 		[Test]
 		public void ShouldResolvePayrollExportConsumer()
@@ -134,9 +115,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 			builder.RegisterType<EventsConsumer>().As<ConsumerOf<IEvent>>();
 			builder.RegisterType<ExportMultisiteSkillsToSkillConsumer>().As<ConsumerOf<ExportMultisiteSkillsToSkill>>();
 			builder.RegisterType<ExportMultisiteSkillToSkillConsumer>().As<ConsumerOf<ExportMultisiteSkillToSkill>>();
-			builder.RegisterType<ImportForecastsFileToSkillConsumer>().As<ConsumerOf<ImportForecastsFileToSkill>>();
-			builder.RegisterType<ImportForecastsToSkillConsumer>().As<ConsumerOf<ImportForecastsToSkill>>();
 			builder.RegisterType<PayrollExportConsumer>().As<ConsumerOf<RunPayrollExport>>();
+
 		}
 	}
 }

@@ -872,15 +872,12 @@
     <Compile Include="Messages\General\ExportMultisiteSkillsToSkill.cs" />
     <Compile Include="Messages\General\ExportMultisiteSkillToSkill.cs" />
     <Compile Include="Messages\General\IForecastsRow.cs" />
-    <Compile Include="Messages\General\ImportForecastsToSkill.cs" />
     <Compile Include="Messages\General\MultisiteSkillSelection.cs" />
-    <Compile Include="Messages\General\OpenAndSplitTargetSkill.cs" />
     <Compile Include="Messages\General\BadgeCalculationInitMessage.cs" />
     <Compile Include="Messages\IInitiatorInfo.cs" />
     <Compile Include="Messages\ILogOnInfo.cs" />
     <Compile Include="Messages\Rta\FactQueueUpdatedMessage.cs" />
     <Compile Include="Messages\Payroll\RunPayrollExport.cs" />
-    <Compile Include="Messages\General\ImportForecastsFileToSkill.cs" />
     <Compile Include="Messages\Requests\AcceptShiftTrade.cs" />
     <Compile Include="Messages\Requests\NewAbsenceReportCreated.cs" />
     <Compile Include="Messages\Requests\NewShiftTradeRequestCreated.cs" />

@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Forecasting.Import;
@@ -9,22 +10,22 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
     public class SendImportForecastBusMessage : ISendBusMessage
     {
         private readonly IForecastsAnalyzeQuery _analyzeQuery;
         private readonly IJobResultFeedback _feedback;
-        private readonly IServiceBus _serviceBus;
+        private readonly IEventPublisher _eventPublisher;
 
-        public SendImportForecastBusMessage(IForecastsAnalyzeQuery analyzeQuery, IJobResultFeedback feedback, IServiceBus serviceBus)
+        public SendImportForecastBusMessage(IForecastsAnalyzeQuery analyzeQuery, IJobResultFeedback feedback, IEventPublisher eventPublisher)
         {
             _analyzeQuery = analyzeQuery;
             _feedback = feedback;
-            _serviceBus = serviceBus;
+            _eventPublisher = eventPublisher;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Info(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Info(System.String)"), SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public void Process(IEnumerable<IForecastsRow> importForecast, ISkill targetSkill, DateOnlyPeriod period)
         {
             var result = _analyzeQuery.Run(importForecast, targetSkill);
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 listOfMessages.ForEach(m =>
                                            {
                                                currentSendingMsg = m;
-                                               _serviceBus.Send(m);
+                                               _eventPublisher.Publish(m);
                                            });
             }
             catch (Exception e)

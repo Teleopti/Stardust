@@ -1,4 +1,6 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -78,17 +80,19 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
 				_jobResultRepository.Add(jobResult);
 				jobResultId = jobResult.Id.GetValueOrDefault();
 				unitOfWork.PersistAll();
+
+				var message = new ImportForecastsFileToSkill
+				{
+					JobId = jobResultId,
+					UploadedFileId = _model.FileId,
+					TargetSkillId = _model.SelectedSkill.Id.GetValueOrDefault(),
+					OwnerPersonId = person.Id.GetValueOrDefault(Guid.Empty),
+					ImportMode = _model.ImportMode
+				};
+				_messageSender.Send(message, true);
 			}
 
-			var message = new ImportForecastsFileToSkill
-			{
-				JobId = jobResultId,
-				UploadedFileId = _model.FileId,
-				TargetSkillId = _model.SelectedSkill.Id.GetValueOrDefault(),
-				OwnerPersonId = person.Id.GetValueOrDefault(Guid.Empty),
-				ImportMode = _model.ImportMode
-			};
-			_messageSender.Send(message, true);
+			
 
 			_view.ShowStatusDialog(jobResultId);
 		}

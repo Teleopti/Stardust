@@ -223,13 +223,9 @@
     <Compile Include="Denormalizer\UpdateFindPersonDataConsumer.cs" />
     <Compile Include="ExportForecastContainerInstaller.cs" />
     <Compile Include="ForecastContainerInstaller.cs" />
-    <Compile Include="Forecast\ImportForecastsFileToSkillConsumer.cs" />
-    <Compile Include="Forecast\ImportForecastsToSkillConsumer.cs" />
     <Compile Include="Forecast\ExportMultisiteSkillsToSkillConsumer.cs" />
     <Compile Include="Forecast\ExportMultisiteSkillToSkillConsumer.cs" />
     <Compile Include="Forecast\LargeForecastsRowCollectionSerializer.cs" />
-    <Compile Include="Forecast\OpenAndSplitTargetSkillConsumer.cs" />
-    <Compile Include="Forecast\SendImportForecastBusMessage.cs" />
     <Compile Include="ImportForecastContainerInstaller.cs" />
     <Compile Include="InitialLoadOfScheduleProjectionReadModel.cs" />
     <Compile Include="IPersonAbsenceAccountProvider.cs" />

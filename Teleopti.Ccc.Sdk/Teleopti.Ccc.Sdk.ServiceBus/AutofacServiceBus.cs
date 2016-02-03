@@ -14,6 +14,9 @@ using Rhino.ServiceBus.Impl;
 using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.LoadBalancer;
 using Rhino.ServiceBus.MessageModules;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
+using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -114,6 +117,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 							IsTypeAcceptableForThisBootStrapper(type))
 				.OnRegistered(e => ConfigureConsumer(e.ComponentRegistration))
 				.InstancePerDependency();
+			//builder.RegisterType<ImportForecastsFileToSkillConsumer>().As<IHandleEvent<ImportForecastsFileToSkill>>();
+			//builder.RegisterType<OpenAndSplitTargetSkillConsumer>().As<IHandleEvent<OpenAndSplitTargetSkill>>();
 
 			builder.Update(container);
 		}

@@ -547,6 +547,7 @@
     <Compile Include="Rta\NumberOfAgentsInTeamReader.cs" />
     <Compile Include="Rta\SiteAdherenceAggregator.cs" />
     <Compile Include="Rta\TeamAdherenceAggregator.cs" />
+    <Compile Include="UnitOfWork\DisableBusinessUnitFilter.cs" />
     <Compile Include="UnitOfWork\KeepScheduleEvents.cs" />
     <Compile Include="UnitOfWork\ScheduleChangedMessageSender.cs" />
     <Compile Include="UnitOfWork\ClearScheduleEvents.cs" />
@@ -576,7 +577,6 @@
     <Compile Include="Repositories\EtlReadModelRepository.cs" />
     <Compile Include="Repositories\PersonScheduleDayReadModelFinder.cs" />
     <Compile Include="Repositories\LicenseStatusRepository.cs" />
-    <Compile Include="Repositories\IImportForecastsRepository.cs" />
     <Compile Include="Repositories\ImportForecastsRepository.cs" />
     <Compile Include="Repositories\PersonFinderReadOnlyRepository.cs" />
     <Compile Include="Repositories\AgentDayScheduleTagRepository.cs" />

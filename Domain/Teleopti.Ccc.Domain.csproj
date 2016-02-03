@@ -227,6 +227,14 @@
     <Compile Include="ApplicationLayer\Events\PersonTerminalDateChangedEvent.cs" />
     <Compile Include="ApplicationLayer\AdherencePercentageReadModelUpdatedMessage.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduledResourcesChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\Forecast\IImportForecastsRepository.cs" />
+    <Compile Include="ApplicationLayer\Events\ImportForecastsFileToSkill.cs" />
+    <Compile Include="ApplicationLayer\Forecast\ImportForecastsFileToSkillHandler.cs" />
+    <Compile Include="ApplicationLayer\Events\ImportForecastsToSkill.cs" />
+    <Compile Include="ApplicationLayer\Events\OpenAndSplitTargetSkill.cs" />
+    <Compile Include="ApplicationLayer\Forecast\ImportForecastsToSkillHandler.cs" />
+    <Compile Include="ApplicationLayer\Forecast\OpenAndSplitTargetSkillHandler.cs" />
+    <Compile Include="ApplicationLayer\Forecast\SendImportForecastBusMessage.cs" />
     <Compile Include="ApplicationLayer\ICurrentEventPublisher.cs" />
     <Compile Include="ApplicationLayer\IEventPopulatingPublisher.cs" />
     <Compile Include="ApplicationLayer\IEventPublisher.cs" />
@@ -706,6 +714,7 @@
     <Compile Include="Scheduling\Legacy\Commands\CurrentScheduleSummaryCalculator.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ClassicDaysOffOptimizationCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\FlexibelDayOffOptimizationDecisionMakerFactory.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\IDisableBusinessUnitFilter.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IScheduleDayForPerson.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IScheduleRangeForPerson.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ScheduleDayForPerson.cs" />
