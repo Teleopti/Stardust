@@ -34,7 +34,7 @@ namespace Manager.Integration.Test
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
-            CreateSqlLoggingTable();
+            TryCreateSqlLoggingTable();
 
 #if (DEBUG)
             // Do nothing.
@@ -65,14 +65,18 @@ namespace Manager.Integration.Test
             }
         }
 
-        private static void CreateSqlLoggingTable()
+        private static void TryCreateSqlLoggingTable()
         {
+            LogHelper.LogInfoWithLineNumber("Run sql script to create logging file started.");
+
             FileInfo scriptFile =
                 new FileInfo(Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
                                           Settings.Default.CreateLoggingTableSqlScriptLocationAndFileName));
 
             ScriptExecuteHelper.ExecuteScriptFile(scriptFile,
                                                   ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString);
+
+            LogHelper.LogInfoWithLineNumber("Run sql script to create logging file finished.");
         }
 
         [TearDown]
