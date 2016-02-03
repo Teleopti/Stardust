@@ -18,8 +18,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 {
 	public class ServiceBusCommonModule : Module
 	{
-		[ThreadStatic] private static IJobResultFeedback jobResultFeedback;
-
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<BusStartup>().As<IServiceBusAware>().SingleInstance();
@@ -27,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.Register(c => UnitOfWorkFactoryContainer.Current).As<ICurrentUnitOfWorkFactory>().ExternallyOwned();
 			builder.RegisterType<CurrentUnitOfWork>().As<ICurrentUnitOfWork>().SingleInstance();
 			builder.RegisterType<CurrentDataSource>().As<ICurrentDataSource>().SingleInstance();
-			builder.Register(getThreadJobResultFeedback).As<IJobResultFeedback>().ExternallyOwned();
+			
 			builder.RegisterType<SendPushMessageWhenRootAlteredService>().As<ISendPushMessageWhenRootAlteredService>().InstancePerDependency();
 			builder.RegisterType<RepositoryFactory>().As<IRepositoryFactory>().SingleInstance();
 			builder.RegisterType<InternalServiceBusSender>().As<IServiceBusSender>().SingleInstance();
@@ -44,9 +42,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				.SingleInstance();
 		}
 
-		private static IJobResultFeedback getThreadJobResultFeedback(IComponentContext componentContext)
-		{
-			return jobResultFeedback ?? (jobResultFeedback = new JobResultFeedback(componentContext.Resolve<ICurrentUnitOfWorkFactory>()));
-		}
+		
 	}
 }

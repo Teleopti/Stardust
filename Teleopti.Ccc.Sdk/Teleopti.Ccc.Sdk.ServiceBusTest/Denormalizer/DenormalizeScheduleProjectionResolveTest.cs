@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			builder.RegisterModule(CommonModule.ForTest());
 			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<ForecastContainerInstaller>();
-			builder.RegisterModule<ExportForecastContainerInstaller>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
 			builder.RegisterType<NoJsonSerializer>().As<IJsonSerializer>();
 			builder.RegisterModule<LocalServiceBusEventsPublisherModule>();
@@ -58,7 +57,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			builder.RegisterModule(CommonModule.ForTest());
 			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<ForecastContainerInstaller>();
-			builder.RegisterModule<ExportForecastContainerInstaller>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
 			builder.RegisterType<NoJsonSerializer>().As<IJsonSerializer>();
 			builder.RegisterType<DoNotNotify>().As<INotificationValidationCheck>();
@@ -80,7 +78,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			builder.RegisterModule(CommonModule.ForTest());
 			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<ForecastContainerInstaller>();
-			builder.RegisterModule<ExportForecastContainerInstaller>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
 			builder.RegisterType<NoJsonSerializer>().As<IJsonSerializer>();
 			builder.RegisterType<DoNotNotify>().As<INotificationValidationCheck>();

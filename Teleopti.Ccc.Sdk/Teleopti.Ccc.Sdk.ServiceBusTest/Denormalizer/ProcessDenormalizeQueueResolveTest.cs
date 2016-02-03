@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			builder.RegisterModule(CommonModule.ForTest());
 			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<ForecastContainerInstaller>();
-			builder.RegisterModule<ExportForecastContainerInstaller>();
+			
 
 			using (var container = builder.Build())
 			{

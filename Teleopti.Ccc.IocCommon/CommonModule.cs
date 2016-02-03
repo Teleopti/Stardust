@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule(new MessageBrokerServerModule(_configuration));
 			builder.RegisterModule<SchedulePersistModule>();
 			builder.RegisterModule(new HangfireModule(_configuration));
+			builder.RegisterModule<ForecastEventModule>();
 		}
 
 		public static IToggleManager ToggleManagerForIoc(IocArgs iocArgs)
