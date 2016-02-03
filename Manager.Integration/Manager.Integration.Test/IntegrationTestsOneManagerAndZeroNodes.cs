@@ -1,67 +1,127 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using log4net;
 using log4net.Config;
 using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
+using Manager.Integration.Test.Properties;
+using Manager.Integration.Test.Scripts;
 using Manager.Integration.Test.Timers;
 using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
-    [TestFixture][Ignore]
+    [TestFixture]
     public class IntegrationTestsOneManagerAndZeroNodes
     {
-        
-        [TestFixtureSetUp]
-        public void TextFixtureSetup()
+
+        [SetUp]
+        public void Setup()
         {
-            XmlConfigurator.Configure();
-            
+            if (_clearDatabase)
+            {
+                DatabaseHelper.TryClearDatabase();
+            }
+        }
+
+        [TestFixtureSetUp]
+        public void TestFixtureSetUp()
+        {
+            var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+            XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
+
+            TryCreateSqlLoggingTable();
+
 #if (DEBUG)
             // Do nothing.
 #else
             _clearDatabase = true;
             _startUpManagerAndNodeManually = false;
+            _debugMode = false;
+            _buildMode = "Release";
 #endif
-            XmlConfigurator.Configure();
-
-            if (_clearDatabase)
-            {
-                DatabaseHelper.TryClearDatabase();
-            }
 
             ManagerApiHelper = new ManagerApiHelper();
 
-        //    ProcessHelper.ShutDownAllManagerAndNodeProcesses();
-       //     ProcessHelper.ShutDownAllProcesses("Manager.IntegrationTest.Console.Host");
-
-            if (_startUpManagerAndNodeManually)
+            if (!_startUpManagerAndNodeManually)
             {
-                ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
-            }
-            else
-            {
-                StartManagerIntegrationConsoleHostProcess =
-                    ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
-            }
+                if (_debugMode)
+                {
+                    ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
 
+                    StartManagerIntegrationConsoleHostProcess =
+                        ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
+                }
+                else
+                {
+                    var task = AppDomainHelper.CreateAppDomainForManagerIntegrationConsoleHost(_buildMode);
+
+                    task.Start();
+                }
+            }
+        }
+
+        private static void TryCreateSqlLoggingTable()
+        {
+            LogHelper.LogInfoWithLineNumber("Run sql script to create logging file started.");
+
+            FileInfo scriptFile =
+                new FileInfo(Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
+                                          Settings.Default.CreateLoggingTableSqlScriptLocationAndFileName));
+
+            ScriptExecuteHelper.ExecuteScriptFile(scriptFile,
+                                                  ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString);
+
+            LogHelper.LogInfoWithLineNumber("Run sql script to create logging file finished.");
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            if (ManagerApiHelper != null &&
+                ManagerApiHelper.CheckJobHistoryStatusTimer != null)
+            {
+                ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
+            }
         }
 
         [TestFixtureTearDown]
-        public void Cleanup()
+        public void TestFixtureTearDown()
         {
+            if (ManagerApiHelper != null &&
+                ManagerApiHelper.CheckJobHistoryStatusTimer != null)
+            {
+                ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
+            }
+
+            if (AppDomainHelper.AppDomains != null &&
+                AppDomainHelper.AppDomains.Any())
+            {
+                foreach (var appDomain in AppDomainHelper.AppDomains.Values)
+                {
+                    AppDomain.Unload(appDomain);
+                }
+            }
+
             ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
         }
-
-        private Process StartManagerIntegrationConsoleHostProcess { get; set; }
 
         private const int NumberOfNodesToStart = 0;
 
         private bool _startUpManagerAndNodeManually = false;
+
         private bool _clearDatabase = true;
+
+        private bool _debugMode = true;
+
+        private string _buildMode = "Debug";
+
+        private Process StartManagerIntegrationConsoleHostProcess { get; set; }
         
         private ManagerApiHelper ManagerApiHelper { get; set; }
 

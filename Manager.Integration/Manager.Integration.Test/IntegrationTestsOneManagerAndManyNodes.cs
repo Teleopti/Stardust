@@ -121,9 +121,6 @@ namespace Manager.Integration.Test
 
         private string _buildMode = "Debug";
 
-        private static readonly ILog Logger =
-            LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndManyNodes));
-
         private Process StartManagerIntegrationConsoleHostProcess { get; set; }
 
         private ManagerApiHelper ManagerApiHelper { get; set; }
