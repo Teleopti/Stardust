@@ -23,8 +23,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			config.Filters.Select(item => item.Instance.GetType())
 				.Should().Have.SameValuesAs(new[]
 				{
-					typeof(AuthorizeTeleoptiAttribute),
-					typeof(Log4NetWebApiLogger)
+					typeof(AuthorizeTeleoptiAttribute)
 				});
 		}
 
@@ -42,6 +41,20 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 					typeof(CancelledTaskBugWorkaroundMessageHandler)
 				});
 		}
+
+	    [Test]
+	    public void LoggerShouldBeAddedAsAService()
+	    {
+	        var config = new HttpConfiguration();
+            var target = new RegisterGlobalApiFiltersTask(new FakeApiConfig(config), null);
+
+            target.Execute(null);
+
+	        config.Services.GetExceptionLoggers().Select(item => item.GetType()).Should().Have.SameValuesAs(new[]
+	        {
+	            typeof (Log4NetWebApiLogger)
+	        });
+	    }
 	}
 
 	public class FakeApiConfig : IGlobalConfiguration

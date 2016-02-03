@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using System.Web.Http.ExceptionHandling;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Owin;
@@ -46,8 +47,9 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				typeof (JavascriptLoggingController),
 				typeof (ChangePasswordController)
 			})));
-			_globalConfiguration.Configure(c => c.Filters.Add(new Log4NetWebApiLogger(_log4NetLogger)));
-			_globalConfiguration.Configure(c =>
+
+            _globalConfiguration.Configure(c => c.Services.Add(typeof(IExceptionLogger), new Log4NetWebApiLogger(_log4NetLogger)));
+            _globalConfiguration.Configure(c =>
 			{
 				c.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new DefaultContractResolver();
 				c.Formatters.JsonFormatter.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Unspecified;
