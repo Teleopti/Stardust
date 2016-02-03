@@ -8,9 +8,9 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
 using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
-using Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
@@ -35,20 +35,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldNotHandleApproveCommandWithInvalidRequestId()
 		{
-			var affectedIds = Target.ApproveRequests(new List<Guid> {new Guid()});
+			var affectedIds = Target.ApproveRequests(new List<Guid> { new Guid() });
 			affectedIds.ToList().Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]
 		public void ShouldInvokeApproveAbsenceFromRequestApprovalServiceWithValidAbsenceRequest()
 		{
+			var person = PersonFactory.CreatePerson("tester");
 			var scheduleDictionary = new FakeScheduleDictionary();
 
 			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(scheduleDictionary,
-				Scenario.Current());
+				Scenario.Current(), person);
 
 			var absence = AbsenceFactory.CreateAbsence("absence");
-			var person = PersonFactory.CreatePerson("tester");
+
 			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
 			var personRequest = new PersonRequest(person, absenceRequest);
 			personRequest.SetId(Guid.NewGuid());
@@ -57,21 +58,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			personRequestRepostitory.Add(personRequest);
 
 			requestApprovalService.Stub(x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person)).Return(new List<IBusinessRuleResponse>());
-			Target.ApproveRequests(new List<Guid> {personRequest.Id.Value});
-			requestApprovalService.AssertWasCalled(x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person), options => options.Repeat.AtLeastOnce());			
+			Target.ApproveRequests(new List<Guid> { personRequest.Id.Value });
+			requestApprovalService.AssertWasCalled(x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person), options => options.Repeat.AtLeastOnce());
 		}
 
 
 		[Test]
 		public void ShouldApproveAbsenceRequestWithPendingStatus()
 		{
+			var person = PersonFactory.CreatePerson("tester");
 			var scheduleDictionary = new FakeScheduleDictionary();
 
 			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(scheduleDictionary,
-				Scenario.Current());
+				Scenario.Current(), person);
 
 			var absence = AbsenceFactory.CreateAbsence("absence");
-			var person = PersonFactory.CreatePerson("tester");
+
 			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
 			var personRequest = new PersonRequest(person, absenceRequest);
 			personRequest.SetId(Guid.NewGuid());
@@ -91,13 +93,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldApproveAllAbsenceRequestsWithPendingStatus()
 		{
+			var person = PersonFactory.CreatePerson("tester");
 			var scheduleDictionary = new FakeScheduleDictionary();
 
 			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(scheduleDictionary,
-				Scenario.Current());
+				Scenario.Current(), person);
 
 			var absence = AbsenceFactory.CreateAbsence("absence");
-			var person = PersonFactory.CreatePerson("tester");
+
 			var absenceRequest1 = new AbsenceRequest(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
 			var personRequest1 = new PersonRequest(person, absenceRequest1);
 			personRequest1.SetId(Guid.NewGuid());
@@ -131,7 +134,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldDenyAbsenceRequestWithPendingStatus()
 		{
-			
+
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var person = PersonFactory.CreatePerson("tester");
 			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
@@ -142,7 +145,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 
 			var personRequestRepostitory = PersonRequestRepository as FakePersonRequestRepository;
 			personRequestRepostitory.Add(personRequest);
-			
+
 			var affectedIds = Target.DenyRequests(new List<Guid> { personRequest.Id.Value });
 
 			affectedIds.ToList().Count.Should().Be.EqualTo(1);
@@ -151,7 +154,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldDenyAllAbsenceRequestsWithPendingStatus()
 		{
-			
+
 
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var person = PersonFactory.CreatePerson("tester");

@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private bool approveRequest(IPersonRequest personRequest)
 		{		
 			var scheduleDictionary = getSchedules(personRequest);
-			var approvalService = _requestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(scheduleDictionary, _currentScenario.Current());
+			var approvalService = _requestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(scheduleDictionary, _currentScenario.Current(), personRequest.Person);
 
 			try
 			{
@@ -59,6 +59,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			foreach (var range in scheduleDictionary.Values)
 			{
+				
 				var diff = range.DifferenceSinceSnapshot(_differenceService);
 				_scheduleDictionarySaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate)range);
 			}

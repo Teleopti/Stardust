@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
@@ -17,17 +18,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Add(IPersonAbsenceAccount entity)
 		{
-			_absenceAccounts.Add (entity);
+			_absenceAccounts.Add(entity);
 		}
 
 		public void Remove(IPersonAbsenceAccount entity)
 		{
-			_absenceAccounts.Remove (entity);
+			_absenceAccounts.Remove(entity);
 		}
 
 		public IPersonAbsenceAccount Get(Guid id)
 		{
-			return _absenceAccounts.SingleOrDefault (account => account.Id == id);
+			return _absenceAccounts.SingleOrDefault(account => account.Id == id);
 		}
 
 		public IList<IPersonAbsenceAccount> LoadAll()
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void AddRange(IEnumerable<IPersonAbsenceAccount> entityCollection)
 		{
-			entityCollection.ForEach (Add);
+			entityCollection.ForEach(Add);
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }
@@ -63,10 +64,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IDictionary<IPerson, IPersonAccountCollection> FindByUsers(IEnumerable<IPerson> persons)
 		{
-			var result = new Dictionary<IPerson, IPersonAccountCollection>();
-			var person = PersonFactory.CreatePerson("a");
-			result.Add(person, new PersonAccountCollection(person));
-			return result;
+
+			var personAccountCollectionDictionary = new Dictionary<IPerson, IPersonAccountCollection>();
+
+			foreach (var person in persons)
+			{
+				var personAccountCollection = new PersonAccountCollection (person);
+				var absenceAccountsForPerson = _absenceAccounts.Where (account => account.Person == person);
+				absenceAccountsForPerson.ForEach(personAccountCollection.Add);
+				personAccountCollectionDictionary.Add(person, personAccountCollection);
+			}
+
+			return personAccountCollectionDictionary;
+			
 		}
 	}
 }

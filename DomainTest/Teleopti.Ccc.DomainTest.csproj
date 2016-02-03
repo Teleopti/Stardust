@@ -184,6 +184,7 @@
     <Compile Include="ApplicationLayer\AddActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddIntradayAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddSeatMapCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\ApproveRequestCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Commands\AbsenceCommandConverterTest.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChanged\PeriodChangesTest.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChanged\PersonTeamChangedTest.cs" />

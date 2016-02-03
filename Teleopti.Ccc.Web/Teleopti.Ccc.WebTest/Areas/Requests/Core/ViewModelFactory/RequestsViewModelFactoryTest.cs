@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;

@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Interfaces.Domain;
@@ -11,8 +12,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			var from1 = new DateOnly(2008, 1, 3);
             var from2 = new DateOnly(2009, 1, 3);
-            var from3 = new DateOnly(2010, 1, 3);
-
+            
             account1 = new AccountDay(from1);
             account1.BalanceIn = TimeSpan.FromDays(5);
             account1.Accrued = TimeSpan.FromDays(20);
