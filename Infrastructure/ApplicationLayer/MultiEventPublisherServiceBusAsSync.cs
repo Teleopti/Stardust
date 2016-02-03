@@ -3,20 +3,17 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public class MultiEventPublisherWithoutBus : IEventPublisher
+	public class MultiEventPublisherServiceBusAsSync : IEventPublisher
 	{
 		private readonly HangfireEventPublisher _hangfirePublisher;
 		private readonly ServiceBusAsSyncEventPublisher _serviceBusPublisher;
-		private readonly ResolveEventHandlers _resolver;
 
-		public MultiEventPublisherWithoutBus(
+		public MultiEventPublisherServiceBusAsSync(
 			HangfireEventPublisher hangfirePublisher, 
-			ServiceBusAsSyncEventPublisher serviceBusPublisher, 
-			ResolveEventHandlers resolver)
+			ServiceBusAsSyncEventPublisher serviceBusPublisher)
 		{
 			_hangfirePublisher = hangfirePublisher;
 			_serviceBusPublisher = serviceBusPublisher;
-			_resolver = resolver;
 		}
 
 		public void Publish(params IEvent[] events)

@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_configuration.Args().BehaviorTest)
 			{
 				if (_configuration.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
-					builder.RegisterType<MultiEventPublisherWithoutBus>().As<IEventPublisher>().SingleInstance();
+					builder.RegisterType<MultiEventPublisherServiceBusAsSync>().As<IEventPublisher>().SingleInstance();
 				else
 					builder.Register(c => c.Resolve<SyncAllEventPublisher>()).As<IEventPublisher>().SingleInstance();
 				builder.RegisterType<IgnoreDelayedMessages>().As<IDelayedMessageSender>().SingleInstance();
