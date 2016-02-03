@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 using log4net;
 using log4net.Config;
 using log4net.Repository.Hierarchy;
-using Manager.Integration.Test.Helpers;
 using Manager.IntegrationTest.Console.Host.Properties;
 
 namespace Manager.IntegrationTest.Console.Host

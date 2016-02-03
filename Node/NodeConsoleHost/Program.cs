@@ -80,6 +80,10 @@ namespace NodeConsoleHost
                                                    new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
                                                    Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
                                                    ConfigurationManager.AppSettings["NodeName"]);
+
+            var builder = new ContainerBuilder();
+            builder.RegisterModule(new WorkerModule());
+            Container = builder.Build();
             Container = new ContainerBuilder().Build();
 
             _nodeStarter = new NodeStarter();

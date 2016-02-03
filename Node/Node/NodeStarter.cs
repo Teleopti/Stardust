@@ -36,7 +36,6 @@ namespace Stardust.Node
                                 appBuilder =>
                                 {
                                     var builder = new ContainerBuilder();
-
                                     builder.RegisterType<InvokeHandler>()
                                         .SingleInstance();
 
