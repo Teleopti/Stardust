@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Interfaces.Domain;
@@ -224,60 +225,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			(result.GroupPages[0].Name as string).Should()
 				.Be.EqualTo(Resources.ResourceManager.GetString(pageName2.Substring(2)));
 			(result.GroupPages[1].Name as string).Should().Be.EqualTo(groupPage1.PageName);
-		}
-
-	}
-
-	public class FakeGroupingReadOnlyRepository : IGroupingReadOnlyRepository
-	{
-		private readonly IList<ReadOnlyGroupPage> _readOnlyGroupPages;
-		private readonly IList<ReadOnlyGroupDetail> _readOnlyGroupDetails;
-
-		public FakeGroupingReadOnlyRepository(IList<ReadOnlyGroupPage> readOnlyGroupPages,
-			IList<ReadOnlyGroupDetail> readOnlyGroupDetails)
-		{
-			_readOnlyGroupPages = readOnlyGroupPages;
-			_readOnlyGroupDetails = readOnlyGroupDetails;
-		}
-
-		public IEnumerable<ReadOnlyGroupPage> AvailableGroupPages()
-		{
-			return _readOnlyGroupPages;
-		}
-
-		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(IEnumerable<ReadOnlyGroupPage> groupPages, DateOnly queryDate)
-		{
-			return _readOnlyGroupDetails;
-		}
-
-		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(ReadOnlyGroupPage groupPage, DateOnly queryDate)
-		{
-			return _readOnlyGroupDetails;
-		}
-
-		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(DateOnly queryDate)
-		{
-			return _readOnlyGroupDetails;
-		}
-
-		public IEnumerable<ReadOnlyGroupDetail> DetailsForGroup(Guid groupId, DateOnly queryDate)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void UpdateGroupingReadModel(ICollection<Guid> inputIds)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void UpdateGroupingReadModelGroupPage(ICollection<Guid> inputIds)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void UpdateGroupingReadModelData(ICollection<Guid> inputIds)
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

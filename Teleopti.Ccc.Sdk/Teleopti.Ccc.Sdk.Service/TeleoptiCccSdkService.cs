@@ -99,31 +99,8 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		public ICollection<string> GetHibernateConfiguration()
 		{
 			ICollection<string> hibConfigs = new List<string>();
-			//var availableDataSources = _authenticationFactory.DataSourceContainers();
-			//var groupedByFileName = availableDataSources.GroupBy(t => t.DataSource.OriginalFileName);
-			//foreach (var dataSourceContainers in groupedByFileName)
-			//{
-			//	if (!File.Exists(dataSourceContainers.Key)) continue; //To handle the case where someone deleted the data source while running the application
-
-			//	var xmlData = new XmlDocument();
-			//	xmlData.Load(dataSourceContainers.Key);
-
-			//	var navigator = xmlData.CreateNavigator();
-			//	var datasourceElement = navigator.SelectSingleNode("datasource");
-			//	foreach (var dataSourceContainer in dataSourceContainers)
-			//	{
-			//		datasourceElement.AppendChildElement(string.Empty, "authenticationType", string.Empty, dataSourceContainer.AuthenticationTypeOption.ToString());
-			//	}
-
-			//	string encryptedString = Encryption.EncryptStringToBase64(navigator.OuterXml,
-			//															  EncryptionConstants.Image1,
-			//															  EncryptionConstants.Image2);
-			//	hibConfigs.Add(encryptedString);
-			//}
-
 			return hibConfigs;
 		}
-
 
 		public void SetWriteProtectionDateOnPerson(PersonWriteProtectionDto personWriteProtectionDto)
 		{
@@ -139,7 +116,6 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 				throw new FaultException(exception.Message);
 			}
-
 		}
 
 		public PersonWriteProtectionDto GetWriteProtectionDateOnPerson(PersonDto personDto)
@@ -241,8 +217,6 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		[OperationBehavior(Impersonation = ImpersonationOption.Allowed)]
 		public void TransferSession(SessionDataDto sessionDataDto)
 		{
-			GetDataSources(); //This is to initialize cache with authentication service!
-			_authenticationFactory.TransferSession(sessionDataDto);
 		}
 
 		/// <summary>
@@ -251,8 +225,6 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// <param name="businessUnit">The business unit.</param>
 		public void SetBusinessUnit(BusinessUnitDto businessUnit)
 		{
-			//SdkSessionCache cache = ((ISdkState)StateHolder.Instance.StateReader).SdkSessionCache;
-			_authenticationFactory.SetBusinessUnit(businessUnit);
 		}
 
 		/// <summary>
@@ -1852,6 +1824,12 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			}
 		}
 
+		public ICollection<PersonPeriodDetailDto> GetPersonPeriodsByQuery(QueryDto queryDto)
+		{
+			var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<PersonPeriodDetailDto>>>();
+			return invoker.Invoke(queryDto);
+		}
+
 		/// <summary>
 		/// Saves the person.
 		/// </summary>
@@ -2051,35 +2029,13 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			if (endDate == null)
 				throw new ArgumentNullException("endDate");
 
-			IList<PersonPeriodDetailDto> personPeriodDto2List;
-
-			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var startDateDateOnly = new DateOnly(startDate.DateTime);
-				var endDateDateOnly = new DateOnly(endDate.DateTime);
-
-				using (unitOfWork.DisableFilter(QueryFilter.Deleted))
+			return
+#pragma warning disable 618
+				GetPersonPeriodsByQuery(new GetAllPersonPeriodsQueryDto
+#pragma warning restore 618
 				{
-					IRepositoryFactory repositoryFactory = new RepositoryFactory();
-					var personRepository = repositoryFactory.CreatePersonRepository(unitOfWork);
-					var persons = personRepository.FindAllSortByName();
-
-
-					var dateOnlyPeriod = new DateOnlyPeriod(startDateDateOnly, endDateDateOnly);
-					var personPeriods = new List<IPersonPeriod>();
-
-					if (loadOptionDto.LoadAll)
-					{
-						personPeriods.AddRange(persons.SelectMany(person => person.PersonPeriods(dateOnlyPeriod)));
-					}
-
-
-					IAssembler<IExternalLogOn, ExternalLogOnDto> externalLogonAssembler = new ExternalLogOnAssembler();
-					personPeriodDto2List = new PersonPeriodAssembler(externalLogonAssembler).DomainEntitiesToDtos(personPeriods).ToList();
-				}
-			}
-
-			return personPeriodDto2List;
+					Range = new DateOnlyPeriodDto {StartDate = startDate, EndDate = endDate}
+				});
 		}
 
 		#endregion

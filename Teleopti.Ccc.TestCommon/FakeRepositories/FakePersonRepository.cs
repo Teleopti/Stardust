@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPerson> FindAllSortByName()
 		{
-			throw new NotImplementedException();
+			return _persons.OrderBy(p => p.Name.ToString()).ToArray();
 		}
 
 		public ICollection<IPerson> FindPeopleInOrganization(DateOnlyPeriod period, bool includeRuleSetData)

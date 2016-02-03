@@ -213,6 +213,7 @@
     <Compile Include="Payroll\PayrollFormatHandler.cs" />
     <Compile Include="Payroll\PayrollResultService.cs" />
     <Compile Include="QueryHandler\DateOnlyDtoExtensions.cs" />
+    <Compile Include="QueryHandler\GetAllPersonPeriodsQueryHandler.cs" />
     <Compile Include="QueryHandler\GetAllRolesQueryHandler.cs" />
     <Compile Include="QueryHandler\GetAllScheduleTagsQueryHandler.cs" />
     <Compile Include="QueryHandler\GetGroupsForGroupPageForDateRangeQueryHandler.cs" />
@@ -225,6 +226,7 @@
     <Compile Include="QueryHandler\GetPersonByEmailQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPersonByIdentityQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPersonByUserNameQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetPersonPeriodsByPersonIdQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPersonRolesQueryHandler.cs" />
     <Compile Include="QueryHandler\GetSchedulesByGroupPageGroupQueryHandler.cs" />
     <Compile Include="QueryHandler\GetSchedulesBySiteQueryHandler.cs" />

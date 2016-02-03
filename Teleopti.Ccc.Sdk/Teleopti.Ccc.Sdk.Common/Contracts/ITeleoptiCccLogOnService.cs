@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.ServiceModel;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
-using Teleopti.Ccc.Sdk.Common.WcfExtensions;
 
 namespace Teleopti.Ccc.Sdk.Common.Contracts
 {
@@ -28,8 +27,7 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 	/// if (result.Succesful)
 	/// {
 	///     BusinessUnitDto businessUnit = result.BusinessUnitCollection.FirstOrDefault();
-	///     //Set the business unit
-	///     sdkService.SetBusinessUnit(businessUnit);
+	///     //Set the business unit in the soap header
 	/// }
 	/// </code>
 	/// </example>
@@ -50,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		/// Gets the data sources.
 		/// </summary>
 		/// <returns></returns>
-		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate"), OperationContract, Obsolete("This will only return a list of fake datasources and should not be used")]
+		[OperationContract, Obsolete("This will only return a list of fake datasources and should not be used")]
 		ICollection<DataSourceDto> GetDataSources();
 
 		/// <summary>
@@ -71,7 +69,7 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		/// <summary>
 		/// Logs on using windows credentials, the correct database will be detected automaticly
 		/// </summary>
-		[OperationContract, Obsolete("Use method LogOnAsWindowsUser instead")]
+		[OperationContract, Obsolete("Use method LogOnWindowsUser instead")]
 		AuthenticationResultDto LogOnAsWindowsUser();
 
 		/// <summary>
@@ -116,7 +114,6 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		/// </summary>
 		/// <returns></returns>
 		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate"), OperationContract]
-
 		PersonDto GetLoggedOnPerson();
 
 		/// <summary>
@@ -125,22 +122,19 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		/// <param name="person">The person.</param>
 		/// <returns></returns>
 		[OperationContract]
-
 		ICollection<ApplicationFunctionDto> GetApplicationFunctionsForPerson(PersonDto person);
 
 		/// <summary>
 		/// Gets the defined application function paths.
 		/// </summary>
 		/// <returns></returns>
-		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate"), OperationContract]
-
+		[OperationContract]
 		DefinedRaptorApplicationFunctionPathsDto GetDefinedApplicationFunctionPaths();
 
 		/// <summary>
 		/// Logs off the current user. Clearing the cached user data.
 		/// </summary>
-		[OperationContract]
-
+		[OperationContract, Obsolete("Starting with version 7.1.322, the SDK is stateless and no session information is stored.")]
 		void LogOffUser();
 
 		/// <summary>
@@ -160,21 +154,20 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		/// <param name="newPassword">The new password.</param>
 		/// <returns></returns>
 		[OperationContract]
-
 		bool ChangePassword(PersonDto personDto, string oldPassword, string newPassword);
 
 		/// <summary>
 		/// Gets the app settings.
 		/// </summary>
 		/// <returns></returns>
-		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate"), OperationContract]
+		[Obsolete("Doesn't return settings any longer"), OperationContract]
 		IDictionary<string, string> GetAppSettings();
 
 		/// <summary>
 		/// Gets the hibernate configuration.
 		/// </summary>
 		/// <returns></returns>
-		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate"), OperationContract, Obsolete("Will not return anything anymore")]
+		[OperationContract, Obsolete("Will not return anything anymore")]
 		ICollection<string> GetHibernateConfiguration();
 
 		/// <summary>
@@ -188,16 +181,14 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		/// Gets the message broker configuration.
 		/// </summary>
 		/// <returns></returns>
-		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate"), OperationContract]
-
+		[OperationContract]
 		MessageBrokerDto GetMessageBrokerConfiguration();
 
 		/// <summary>
 		/// Gets the matrix report info.
 		/// </summary>
 		/// <returns></returns>
-		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate"), OperationContract]
-
+		[OperationContract]
 		ICollection<MatrixReportInfoDto> GetMatrixReportInfo();
 	}
 }

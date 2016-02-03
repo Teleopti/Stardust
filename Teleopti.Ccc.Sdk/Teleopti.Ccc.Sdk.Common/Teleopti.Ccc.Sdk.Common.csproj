@@ -209,6 +209,7 @@
     <Compile Include="DataTransferObject\PersonPeriodLoadOptionDto.cs" />
     <Compile Include="DataTransferObject\PersonSkillPeriodDto.cs" />
     <Compile Include="DataTransferObject\PublicNoteDto.cs" />
+    <Compile Include="DataTransferObject\QueryDtos\GetAllPersonPeriodsQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetAllRolesQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetAllScheduleTagsDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetGroupsForGroupPageForDateRangeQueryDto.cs" />
@@ -221,6 +222,7 @@
     <Compile Include="DataTransferObject\QueryDtos\GetPersonByEmailQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetPersonByIdentityQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetPersonByUserNameQueryDto.cs" />
+    <Compile Include="DataTransferObject\QueryDtos\GetPersonPeriodsByPersonIdQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetPersonRolesQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetSchedulesByGroupPageGroupQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetSchedulesBySiteQueryDto.cs" />

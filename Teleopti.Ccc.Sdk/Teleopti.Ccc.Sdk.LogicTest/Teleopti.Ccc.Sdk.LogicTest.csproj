@@ -242,6 +242,7 @@
     <Compile Include="Payroll\PayrollFormatHandlerTest.cs" />
     <Compile Include="Payroll\PayrollResultServiceTest.cs" />
     <Compile Include="QueryHandler\FakeTenantLogonDataManager.cs" />
+    <Compile Include="QueryHandler\GetAllPersonPeriodsQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetAllRolesQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetAllScheduleTagsQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetGroupsForGroupPageForDateRangeQueryHandlerTest.cs" />
@@ -254,6 +255,7 @@
     <Compile Include="QueryHandler\GetPersonByEmailQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetPersonByIdentityQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetPersonByUserNameQueryHandlerTest.cs" />
+    <Compile Include="QueryHandler\GetPersonPeriodsByPersonIdQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetPersonRolesQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetSchedulesByGroupPageGroupQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetSchedulesBySiteQueryHandlerTest.cs" />

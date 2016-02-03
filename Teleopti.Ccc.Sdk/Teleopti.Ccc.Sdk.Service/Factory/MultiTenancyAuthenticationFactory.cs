@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.IdentityModel.Configuration;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -13,11 +11,8 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 {
 	public interface IAuthenticationFactory
 	{
-		void SetBusinessUnit(BusinessUnitDto businessUnit);
 		AuthenticationResultDto LogOnWindows(DataSourceDto dataSource);
 		ICollection<DataSourceDto> GetDataSources();
-		IEnumerable<DataSourceContainer> DataSourceContainers();
-		void TransferSession(SessionDataDto sessionDataDto);
 		AuthenticationResultDto LogOnApplication(string userName, string password, DataSourceDto dataSource);
 	}
 
@@ -36,12 +31,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			_authenticationQuerier = authenticationQuerier;
 			_windowsUserProvider = windowsUserProvider;
 		}
-
-		public void SetBusinessUnit(BusinessUnitDto businessUnit)
-		{
-			//not supported anymore
-		}
-
+		
 		public AuthenticationResultDto LogOnWindows(DataSourceDto dataSource)
 		{
 			var identity = _windowsUserProvider.Identity();
@@ -65,18 +55,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 				new DataSourceDto {Name = "Teleopti WFM", AuthenticationTypeOptionDto = AuthenticationTypeOptionDto.Windows}
 			};
 		}
-
-		public IEnumerable<DataSourceContainer> DataSourceContainers()
-		{
-			//just return an empty list
-			return new List<DataSourceContainer>();
-		}
-
-		public void TransferSession(SessionDataDto sessionDataDto)
-		{
-			//not supported anymore
-		}
-
+		
 		public AuthenticationResultDto LogOnApplication(string userName, string password, DataSourceDto dataSource)
 		{
 			var result = _authenticationQuerier.TryLogon(new ApplicationLogonClientModel {UserName = userName, Password = password}, UserAgent);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -8,15 +9,23 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakeGroupingReadOnlyRepository : IGroupingReadOnlyRepository
 	{
 		private readonly ReadOnlyGroupDetail[] _details;
+		private readonly IList<ReadOnlyGroupPage> _readOnlyGroupPages;
 
 		public FakeGroupingReadOnlyRepository(params ReadOnlyGroupDetail[] details)
 		{
 			_details = details;
 		}
 
+		public FakeGroupingReadOnlyRepository(IList<ReadOnlyGroupPage> readOnlyGroupPages,
+			IList<ReadOnlyGroupDetail> readOnlyGroupDetails)
+		{
+			_readOnlyGroupPages = readOnlyGroupPages;
+			_details = readOnlyGroupDetails.ToArray();
+		}
+
 		public IEnumerable<ReadOnlyGroupPage> AvailableGroupPages()
 		{
-			throw new NotImplementedException();
+			return _readOnlyGroupPages;
 		}
 
 		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(DateOnly queryDate)
@@ -31,7 +40,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(IEnumerable<ReadOnlyGroupPage> groupPages, DateOnly queryDate)
 		{
-			throw new NotImplementedException();
+			return _details;
 		}
 
 		public IEnumerable<ReadOnlyGroupDetail> DetailsForGroup(Guid groupId, DateOnly queryDate)

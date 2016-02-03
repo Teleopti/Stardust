@@ -102,14 +102,22 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
         /// <param name="startDate">The start date.</param>
         /// <param name="endDate">The end date.</param>
         /// <returns></returns>
-    	[OperationContract]
+    	[OperationContract, Obsolete("This is not the recommended method to get person periods. Use GetPersonPeriodsByQuery instead.")]
     	ICollection<PersonPeriodDetailDto> GetPersonPeriods(PersonPeriodLoadOptionDto loadOptionDto, DateOnlyDto startDate, DateOnlyDto endDate);
 
-        /// <summary>
-        /// Saves a new person.
-        /// </summary>
-        /// <param name="personDto">The person details.</param>
-        [OperationContract]
+		/// <summary>
+		/// Gets the person periods for the given query.
+		/// </summary>
+		/// <param name="queryDto">A predefined query type used to filter out persons.</param>
+		/// <returns>A list of found person periods according to the query.</returns>
+		[OperationContract]
+		ICollection<PersonPeriodDetailDto> GetPersonPeriodsByQuery(QueryDto queryDto);
+
+		/// <summary>
+		/// Saves a new person.
+		/// </summary>
+		/// <param name="personDto">The person details.</param>
+		[OperationContract]
         void SavePerson(PersonDto personDto);
 
         /// <summary>

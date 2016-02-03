@@ -4,8 +4,8 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
-using Teleopti.Ccc.WebTest.Areas.Anywhere;
 
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 {
