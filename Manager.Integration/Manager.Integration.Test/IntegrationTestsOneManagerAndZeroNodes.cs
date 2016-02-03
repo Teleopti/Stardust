@@ -97,14 +97,13 @@ namespace Manager.Integration.Test
             if (ManagerApiHelper != null &&
                 ManagerApiHelper.CheckJobHistoryStatusTimer != null)
             {
-                LogHelper.LogInfoWithLineNumber("1");
                 ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
             }
 
             if (AppDomainHelper.AppDomains != null &&
                 AppDomainHelper.AppDomains.Any())
             {
-                LogHelper.LogInfoWithLineNumber("2");
+                LogHelper.LogInfoWithLineNumber("Will soon unload " + AppDomainHelper.AppDomains.Count + "Appdomains");
                 foreach (var appDomain in AppDomainHelper.AppDomains.Values)
                 {
                     LogHelper.LogInfoWithLineNumber("appDomain unload: " + appDomain);
