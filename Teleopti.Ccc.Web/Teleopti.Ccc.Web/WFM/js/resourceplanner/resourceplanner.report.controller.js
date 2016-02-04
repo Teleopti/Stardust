@@ -3,10 +3,9 @@
 	'use strict';
 	angular.module('wfm.resourceplanner')
 		.controller('ResourceplannerReportCtrl', [
-			'$scope', '$state', '$stateParams', 'ResourcePlannerReportSrvc', 'PlanningPeriodSvrc', 'growl', 'Toggle',
-			function($scope, $state, $stateParams, ResourcePlannerReportSrvc, PlanningPeriodSvrc, growl, toggleService) {
+			'$scope', '$state','$translate', '$stateParams', 'ResourcePlannerReportSrvc', 'PlanningPeriodSvrc', 'growl', 'Toggle',
+			function($scope, $state,$translate, $stateParams, ResourcePlannerReportSrvc, PlanningPeriodSvrc, growl, toggleService) {
 				var toggledOptimization = false;
-				var optimizationState = true;
 				var scheduleResult = $stateParams.interResult.SkillResultList ? $stateParams.interResult.SkillResultList : [];
 				$scope.issues = $stateParams.result.BusinessRulesValidationResults ? $stateParams.result.BusinessRulesValidationResults : [];
 				$scope.scheduledAgents = $stateParams.result.ScheduledAgentsCount ? $stateParams.result.ScheduledAgentsCount : 0;
@@ -18,19 +17,18 @@
 					toggledOptimization = toggleService.Scheduler_IntradayOptimization_36617;
 				});
 				$scope.optimizeDayOffIsEnabled = function() {
-					return (toggledOptimization && optimizationState && $stateParams.id !== "");
+					return (toggledOptimization && !$scope.optimizeRunning && $stateParams.id !== "");
 				}
 				$scope.intraOptimize = function() {
 					$scope.optimizeRunning = true;
-					optimizationState = false
 					ResourcePlannerReportSrvc.intraOptimize.save({
 						id: $stateParams.id
 					}).$promise.then(function(result) {
-						optimizationState = true;
 						$scope.optimizeRunning = false;
 						$scope.dayNodes = result.SkillResultList;
 						notifyOptimization('successfull');
 					}, function(reason) {
+						$scope.optimizeRunning = false;
 						notifyOptimization('error');
 					});
 				};

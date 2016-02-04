@@ -94,11 +94,11 @@
 .floater-box{
   visibility: hidden;
   background:rgba(0,0,0,0.6);
+  display: inline-block;
   color:$white;
 	top: -1px;
 	width: 195px;
 	right: 0px;
-	display: flex;
   position: absolute;
 	padding: 5px;
   margin-top: 17px;

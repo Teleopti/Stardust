@@ -8,7 +8,7 @@
 	<div class="fab-wrapper">
 		<button class="wfm-fab material-depth-1 grow-out" ng-class="{'shrink-in': publishedClicked}" ng-click="publishSchedule()">
 			<i class="mdi mdi-arrow-right"></i>
-			<md-tooltip>{{'Schedule'|translate}}</md-tooltip>
+			<md-tooltip>{{'PublishSchedule'|translate}}</md-tooltip>
 		</button>
 	</div>
 </div>
@@ -61,8 +61,8 @@
 						<td ng-repeat="node in subnode.SkillDetails" ng-class="{weekend: node.weekend}">
 							<div class="resourceplanner-box" ng-class="{understaffed:node.ColorId==1,critUnderstaffed:node.ColorId==2,overstaffed:node.ColorId==3, closed: node.ColorId==4}">
 								<div class="floater-box">
-									<p>{{node.Date | amDateFormat:"L"}} &nbsp;</p>
-									<p>{{'RelativeDifference' | translate}} {{node.parseDif}}%</p>
+									<p>{{node.Date | amDateFormat:"L"}}</p>
+									<p>{{'RelativeDifference' | translate}}: {{node.parseDif}}%</p>
 								</div>
 							</div>
 						</td>
