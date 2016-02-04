@@ -112,7 +112,7 @@ namespace Stardust.Node.Workers
                 if (typ == null)
                 {
                     LogHelper.LogInfoWithLineNumber(Logger,
-                                                    string.Format(WhoamI + ": The type [{0}] could not be resolved. The job cannot be started.",
+                                                    string.Format(WhoamI + ": The job type [{0}] could not be resolved. The job cannot be started.",
                                                                   jobToDo.Type));
 
                     return new BadRequestResult(requestMessage);
@@ -157,7 +157,7 @@ namespace Stardust.Node.Workers
                 {
                     case TaskStatus.RanToCompletion:
                         logInfo =
-                            string.Format("{0} : The task has completed for (id, name) : ({1}, {2})",
+                            string.Format("{0} : The task has completed for job ( jobId, jobName ) : ( {1}, {2} )",
                                           WhoamI,
                                           CurrentMessageToProcess.Id,
                                           CurrentMessageToProcess.Name);
@@ -172,7 +172,7 @@ namespace Stardust.Node.Workers
 
                     case TaskStatus.Canceled:
                         logInfo =
-                            string.Format("{0} : The task has been canceled for (id, name) : ({1}, {2})",
+                            string.Format("{0} : The task has been canceled for job ( jobId, jobName ) : ( {1}, {2} )",
                                           WhoamI,
                                           CurrentMessageToProcess.Id,
                                           CurrentMessageToProcess.Name);
@@ -187,7 +187,7 @@ namespace Stardust.Node.Workers
 
                     case TaskStatus.Faulted:
                         logInfo =
-                            string.Format("{0} : The task faulted for (id, name) : ({1}, {2})",
+                            string.Format("{0} : The task faulted for job ( jobId, jobName ) : ( {1}, {2} )",
                                           WhoamI,
                                           CurrentMessageToProcess.Id,
                                           CurrentMessageToProcess.Name);

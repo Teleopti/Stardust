@@ -75,38 +75,57 @@ namespace Stardust.Node.Timers
         private async void OnTimedEvent(object sender,
                                         ElapsedEventArgs e)
         {
+            if (JobToDo == null)
+            {
+                return;
+            }
+
             Stop();
 
             try
             {
-                if (JobToDo != null)
+                var httpResponseMessage = await TrySendStatus(new JobToDo
+                                                                {
+                                                                    Id = JobToDo.Id
+                                                                });
+
+                if (httpResponseMessage.IsSuccessStatusCode)
                 {
-                    var httpResponseMessage =
-                        await TrySendStatus(new JobToDo
-                        {
-                            Id = JobToDo.Id
-                        });
+                    string msg = string.Format("{0} : Send ({3}) job status to manager succeeded for job (id, name) : ({1}, {2})",
+                                               WhoAmI,
+                                               JobToDo.Id,
+                                               JobToDo.Name,
+                                               httpResponseMessage.RequestMessage.RequestUri);
 
-                    if (httpResponseMessage.IsSuccessStatusCode)
-                    {
-                        LogHelper.LogDebugWithLineNumber(Logger,
-                                                         WhoAmI + ": Try send status to manager succeded. Send Uri =  " + httpResponseMessage.RequestMessage.RequestUri);
+                    LogHelper.LogDebugWithLineNumber(Logger,
+                                                     msg);
 
 
-                        InvokeTriggerTrySendStatusSucceded();
-                    }
-                    else
-                    {
-                        LogHelper.LogWarningWithLineNumber(Logger,
-                                                           WhoAmI + ": " + httpResponseMessage.ReasonPhrase);
-                    }
+                    InvokeTriggerTrySendStatusSucceded();
+                }
+                else
+                {
+                    string msg = string.Format("{0} : Send status to manager failed for job (id, name) : ({1}, {2}). Reason : {3}",
+                                               WhoAmI,
+                                               JobToDo.Id,
+                                               JobToDo.Name,
+                                               httpResponseMessage.ReasonPhrase);
+
+                    LogHelper.LogWarningWithLineNumber(Logger,
+                                                       msg);
                 }
             }
 
-            catch (Exception)
+            catch (Exception exp)
             {
+                string msg = string.Format("{0} : Send status to manager failed for job (id, name) : ({1}, {2}). Reason : {3}",
+                                           WhoAmI,
+                                           JobToDo.Id,
+                                           JobToDo.Name,
+                                           exp.Message);
+
                 LogHelper.LogErrorWithLineNumber(Logger,
-                                                 WhoAmI + ": Try send status to manager failed.");
+                                                 msg);
             }
 
             finally

@@ -48,8 +48,15 @@ namespace Stardust.Manager
                 Id = Guid.NewGuid()
             };
             _jobManager.Add(jobReceived);
+
+            string msg = string.Format("{0} : New job received from client ( jobId, jobName ) : ( {1}, {2} )",
+                                       WhoAmI,
+                                       jobReceived.Id,
+                                       jobReceived.Name);
+
             LogHelper.LogInfoWithLineNumber(Logger,
-                                            WhoAmI + ": New job received from client. JobId: " + jobReceived.Id);
+                                            msg);
+
             return Ok(jobReceived.Id);
         }
 
@@ -57,7 +64,8 @@ namespace Stardust.Manager
         public void Heartbeat([FromBody] Uri nodeUri)
         {
             LogHelper.LogInfoWithLineNumber(Logger,
-                                            WhoAmI + ": Received heartbeat from Node : " + nodeUri);
+                                            WhoAmI + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
+
             _jobManager.CheckAndAssignNextJob();
         }
 
@@ -66,7 +74,7 @@ namespace Stardust.Manager
         public void CancelThisJob(Guid jobId)
         {
             LogHelper.LogInfoWithLineNumber(Logger,
-                                            WhoAmI + ": Received cancel from client. JobId = " + jobId);
+                                            WhoAmI + ": Received job cancel from client ( jobId ) : ( " + jobId + " )");
 
             _jobManager.CancelThisJob(jobId);
         }
@@ -75,9 +83,11 @@ namespace Stardust.Manager
         public IHttpActionResult JobDone(Guid jobId)
         {
             LogHelper.LogInfoWithLineNumber(Logger,
-                                            WhoAmI + ": Received job done from a Node. JobId = " + jobId);
+                                            WhoAmI + ": Received job done from a Node ( jobId ) : ( " + jobId + " )");
+
             _jobManager.SetEndResultOnJobAndRemoveIt(jobId,
                                                      "Success");
+            
             //should we do this here also or only on heartbeats
             _jobManager.CheckAndAssignNextJob();
 
@@ -88,7 +98,8 @@ namespace Stardust.Manager
         public IHttpActionResult JobFailed(Guid jobId)
         {
             LogHelper.LogErrorWithLineNumber(Logger,
-                                             WhoAmI + ": Received job failed from a Node. JobId = " + jobId);
+                                             WhoAmI + ": Received job failed from a Node ( jobId ) : ( " + jobId + " )");
+
             _jobManager.SetEndResultOnJobAndRemoveIt(jobId,
                                                      "Failed");
             return Ok();
@@ -98,7 +109,8 @@ namespace Stardust.Manager
         public IHttpActionResult JobCanceled(Guid jobId)
         {
             LogHelper.LogInfoWithLineNumber(Logger,
-                                            WhoAmI + ": Received cancel from a Node. JobId = " + jobId);
+                                            WhoAmI + ": Received cancel from a Node ( jobId ) : ( " + jobId + " )");
+
             _jobManager.SetEndResultOnJobAndRemoveIt(jobId,
                                                      "Canceled");
 
@@ -119,7 +131,8 @@ namespace Stardust.Manager
         public IHttpActionResult NodeInitialized([FromBody] Uri nodeUrl)
         {
             LogHelper.LogInfoWithLineNumber(Logger,
-                                            WhoAmI + ": Received init from node " + nodeUrl);
+                                            WhoAmI + ": Received init from Node. Node Uri : ( " + nodeUrl + " )");
+
             _nodeManager.FreeJobIfAssingedToNode(nodeUrl);
             _nodeManager.AddIfNeeded(nodeUrl);
 
@@ -130,6 +143,7 @@ namespace Stardust.Manager
         public IHttpActionResult JobHistory(Guid jobId)
         {
             JobHistory jobHistory = _jobManager.GetJobHistory(jobId);
+
             return Ok(jobHistory);
         }
     }

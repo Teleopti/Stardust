@@ -170,7 +170,7 @@ namespace Manager.IntegrationTest.Console.Host
                 numberOfNodesToStart = Convert.ToInt32(args[0]);
             }
 
-            LogHelper.LogInfoWithLineNumber(numberOfNodesToStart + " number of nodes will be started.");            
+            LogHelper.LogInfoWithLineNumber(numberOfNodesToStart + " number of nodes will be started.");
 
             if (numberOfNodesToStart > 0)
             {
@@ -223,9 +223,10 @@ namespace Manager.IntegrationTest.Console.Host
                                           nodeAppDomain);
 
                     var assemblyToExecute =
-                        nodeAppDomainSetup.ApplicationBase + nodeAppDomainSetup.ApplicationName;
+                        new FileInfo(Path.Combine(nodeAppDomainSetup.ApplicationBase,
+                                                  nodeAppDomainSetup.ApplicationName));
 
-                    nodeAppDomain.ExecuteAssembly(assemblyToExecute);
+                    nodeAppDomain.ExecuteAssembly(assemblyToExecute.FullName);
                 });
 
                 tasks.Add(nodeTask);
@@ -247,13 +248,13 @@ namespace Manager.IntegrationTest.Console.Host
         private static void CurrentDomain_ProcessExit(object sender,
                                                       EventArgs e)
         {
-           LogHelper.LogInfoWithLineNumber(string.Empty);
+            LogHelper.LogInfoWithLineNumber(string.Empty);
         }
 
         private static void CurrentDomainOnDomainUnload(object sender,
                                                         EventArgs eventArgs)
         {
-            LogHelper.LogInfoWithLineNumber("CurrentDomainOnDomainUnload");
+            LogHelper.LogInfoWithLineNumber(string.Empty);
 
             foreach (var appDomain in AppDomains.Values)
             {

@@ -42,8 +42,15 @@ namespace Stardust.Node.API
             {
                 return response;
             }
+
+            string startJobMessage = string.Format("{0} : Starting job (id, name) : ({1}, {2})",
+                                                   _workerWrapper.WhoamI,
+                                                   jobToDo.Id,
+                                                   jobToDo.Name);
+
             LogHelper.LogInfoWithLineNumber(Logger,
-                                            _workerWrapper.WhoamI + ": Starting Job. JobId " + jobToDo.Id);
+                                            startJobMessage);
+
 
             return CreateOkStatusCode(jobToDo);
         }
