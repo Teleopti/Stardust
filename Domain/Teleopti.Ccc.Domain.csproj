@@ -721,8 +721,6 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ActivityRequiresSkillProjectionFilter.cs" />
     <Compile Include="Scheduling\SaveSchedulePart\BusinessRulesForPersonalAccountUpdate.cs" />
     <Compile Include="Scheduling\ViolatedSchedulePeriodBusinessRule.cs" />
-    <Compile Include="Scheduling\WebLegacy\IScheduleControllerPrerequisites.cs" />
-    <Compile Include="Scheduling\WebLegacy\ScheduleControllerPrerequisites.cs" />
     <Compile Include="Scheduling\WebLegacy\SetupStateHolderForWebScheduling.cs" />
     <Compile Include="SeatPlanning\GroupSeatBookingRanker.cs" />
     <Compile Include="SeatPlanning\LocationSeatBookingScore.cs" />

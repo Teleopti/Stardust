@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
-		private readonly IScheduleControllerPrerequisites _prerequisites;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IScheduleDictionaryPersister _persister;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
@@ -47,7 +46,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 									IMatrixListFactory matrixListFactory,
 									IScheduleDayEquator scheduleDayEquator,
 									IPlanningPeriodRepository planningPeriodRepository,
-									IScheduleControllerPrerequisites prerequisites,
 									Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 									IScheduleDictionaryPersister persister,
 									IOptimizerHelperHelper optimizerHelperHelper,
@@ -66,7 +64,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_matrixListFactory = matrixListFactory;
 			_scheduleDayEquator = scheduleDayEquator;
 			_planningPeriodRepository = planningPeriodRepository;
-			_prerequisites = prerequisites;
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 			_persister = persister;
 			_optimizerHelperHelper = optimizerHelperHelper;
@@ -89,7 +86,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var dayOffOptimizationPreference = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
-			_prerequisites.MakeSureLoaded();
 			var people = _fixedStaffLoader.Load(period);
 			_setupStateHolderForWebScheduling.Setup(period, people);
 			var allSchedules = extractAllSchedules(_schedulerStateHolder().SchedulingResultState, people, period);

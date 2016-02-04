@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly SetupStateHolderForWebScheduling _setupStateHolderForWebScheduling;
 		private readonly IFixedStaffLoader _fixedStaffLoader;
-		private readonly IScheduleControllerPrerequisites _prerequisites;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IClassicDaysOffOptimizationCommand _classicDaysOffOptimizationCommand;
 		private readonly IScheduleDictionaryPersister _persister;
@@ -31,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 
 		public ScheduleOptimization(SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,
-			IFixedStaffLoader fixedStaffLoader, IScheduleControllerPrerequisites prerequisites, Func<ISchedulerStateHolder> schedulerStateHolder,
+			IFixedStaffLoader fixedStaffLoader, Func<ISchedulerStateHolder> schedulerStateHolder,
 			IClassicDaysOffOptimizationCommand classicDaysOffOptimizationCommand,
 			IScheduleDictionaryPersister persister, IPlanningPeriodRepository planningPeriodRepository,
 			WeeklyRestSolverExecuter weeklyRestSolverExecuter, OptimizationPreferencesFactory optimizationPreferencesFactory,
@@ -41,7 +40,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			_setupStateHolderForWebScheduling = setupStateHolderForWebScheduling;
 			_fixedStaffLoader = fixedStaffLoader;
-			_prerequisites = prerequisites;
 			_schedulerStateHolder = schedulerStateHolder;
 			_classicDaysOffOptimizationCommand = classicDaysOffOptimizationCommand;
 			_persister = persister;
@@ -77,7 +75,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
-			_prerequisites.MakeSureLoaded();
 			var people = _fixedStaffLoader.Load(period);
 			_setupStateHolderForWebScheduling.Setup(period, people);
 			var allSchedules = extractAllSchedules(_schedulerStateHolder().SchedulingResultState, people, period);

@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 		private readonly SetupStateHolderForWebScheduling _setupStateHolderForWebScheduling;
 		private readonly IFixedStaffLoader _fixedStaffLoader;
-		private readonly IScheduleControllerPrerequisites _prerequisites;
 		private readonly Func<IScheduleCommand> _scheduleCommand;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly Func<IRequiredScheduleHelper> _requiredScheduleHelper;
@@ -33,8 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
 		public FullScheduling(SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,
-			IFixedStaffLoader fixedStaffLoader, IScheduleControllerPrerequisites prerequisites,
-			Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder,
+			IFixedStaffLoader fixedStaffLoader, Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder,
 			Func<IRequiredScheduleHelper> requiredScheduleHelper, Func<IGroupPagePerDateHolder> groupPagePerDateHolder,
 			Func<IScheduleTagSetter> scheduleTagSetter, IScheduleDictionaryPersister persister,
 			ViolatedSchedulePeriodBusinessRule violatedSchedulePeriodBusinessRule,
@@ -42,7 +40,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			_setupStateHolderForWebScheduling = setupStateHolderForWebScheduling;
 			_fixedStaffLoader = fixedStaffLoader;
-			_prerequisites = prerequisites;
 			_scheduleCommand = scheduleCommand;
 			_schedulerStateHolder = schedulerStateHolder;
 			_requiredScheduleHelper = requiredScheduleHelper;
@@ -88,7 +85,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		[UnitOfWork]
 		protected virtual PeopleSelection SetupAndSchedule(DateOnlyPeriod period)
 		{
-			_prerequisites.MakeSureLoaded();
 			var people = _fixedStaffLoader.Load(period);
 			_setupStateHolderForWebScheduling.Setup(period, people);
 			var allSchedules = extractAllSchedules(_schedulerStateHolder().SchedulingResultState, people, period);
