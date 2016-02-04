@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly SetupStateHolderForWebScheduling _setupStateHolderForWebScheduling;
 		private readonly IFixedStaffLoader _fixedStaffLoader;
 		private readonly IScheduleControllerPrerequisites _prerequisites;
-		private readonly Func<IFixedStaffSchedulingService> _fixedStaffSchedulingService;
 		private readonly Func<IScheduleCommand> _scheduleCommand;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly Func<IRequiredScheduleHelper> _requiredScheduleHelper;
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
 		public FullScheduling(SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,
-			IFixedStaffLoader fixedStaffLoader, IScheduleControllerPrerequisites prerequisites, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService,
+			IFixedStaffLoader fixedStaffLoader, IScheduleControllerPrerequisites prerequisites,
 			Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder,
 			Func<IRequiredScheduleHelper> requiredScheduleHelper, Func<IGroupPagePerDateHolder> groupPagePerDateHolder,
 			Func<IScheduleTagSetter> scheduleTagSetter, IScheduleDictionaryPersister persister,
@@ -44,7 +43,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_setupStateHolderForWebScheduling = setupStateHolderForWebScheduling;
 			_fixedStaffLoader = fixedStaffLoader;
 			_prerequisites = prerequisites;
-			_fixedStaffSchedulingService = fixedStaffSchedulingService;
 			_scheduleCommand = scheduleCommand;
 			_schedulerStateHolder = schedulerStateHolder;
 			_requiredScheduleHelper = requiredScheduleHelper;
@@ -58,17 +56,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period)
 		{
-			int daysScheduled;
-			var people = SetupAndSchedule(period, out daysScheduled);
-
-			var conflicts = _persister.Persist(_schedulerStateHolder().Schedules);
-
-			return CreateResult(period, people, daysScheduled, conflicts);
+			var people = SetupAndSchedule(period);
+			_persister.Persist(_schedulerStateHolder().Schedules);
+			return CreateResult(period, people);
 		}
 
 		[LogTime]
 		[UnitOfWork]
-		protected virtual SchedulingResultModel CreateResult(DateOnlyPeriod period, PeopleSelection people, int daysScheduled, IEnumerable<PersistConflict> conflicts)
+		protected virtual SchedulingResultModel CreateResult(DateOnlyPeriod period, PeopleSelection people)
 		{
 			//some hack to get rid of lazy load ex
 			var uow = _currentUnitOfWork.Current();
@@ -84,8 +79,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			voilatedBusinessRules.AddRange(daysOffValidationResult);
 			return new SchedulingResultModel
 			{
-				DaysScheduled = daysScheduled,
-				ConflictCount = conflicts.Count(),
 				ScheduledAgentsCount = successfulScheduledAgents(scheduleOfSelectedPeople, period),
 				BusinessRulesValidationResults = voilatedBusinessRules
 			};
@@ -93,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		[LogTime]
 		[UnitOfWork]
-		protected virtual PeopleSelection SetupAndSchedule(DateOnlyPeriod period, out int daysScheduled)
+		protected virtual PeopleSelection SetupAndSchedule(DateOnlyPeriod period)
 		{
 			_prerequisites.MakeSureLoaded();
 
@@ -105,13 +98,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			_scheduleTagSetter().ChangeTagToSet(NullScheduleTag.Instance);
 
-			var daysScheduledInternal = 0;
 			if (allSchedules.Any())
 			{
-				EventHandler<SchedulingServiceBaseEventArgs> schedulingServiceOnDayScheduled = (sender, args) => daysScheduledInternal++;
-				var fixedStaffSchedulingService = _fixedStaffSchedulingService();
-				fixedStaffSchedulingService.DayScheduled += schedulingServiceOnDayScheduled;
-
 				_scheduleCommand().Execute(new OptimizerOriginalPreferences(new SchedulingOptions
 				{
 					UseAvailability = true,
@@ -125,9 +113,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				}), new NoBackgroundWorker(), _schedulerStateHolder(), allSchedules, _groupPagePerDateHolder(),
 					_requiredScheduleHelper(),
 					new OptimizationPreferences(), false, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
-				fixedStaffSchedulingService.DayScheduled -= schedulingServiceOnDayScheduled;
 			}
-			daysScheduled = daysScheduledInternal;
 			return people;
 		}
 

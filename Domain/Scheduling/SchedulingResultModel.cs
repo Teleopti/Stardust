@@ -5,8 +5,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class SchedulingResultModel
 	{
-		public int DaysScheduled { get; set; }
-		public int ConflictCount { get; set; }
 		public int ScheduledAgentsCount { get; set; }
 		public IEnumerable<BusinessRulesValidationResult> BusinessRulesValidationResults { get; set; }
 	}
