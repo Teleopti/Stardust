@@ -250,6 +250,10 @@ md-progress-circular .md-inner .md-half-circle {
 	background: $white;
 }
 
+.click-modal .dialog {
+  position: relative!important; //remove important and move to styleguide
+}
+
 .wfm-form input, .wfm-form select {
 	margin-right: 0;
 }

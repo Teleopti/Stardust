@@ -1394,6 +1394,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.signalr.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.shiftHelpers.js" />
     <Content Include="WFM\js\global\wfmpagination\wfmpagination.directive.js" />
+	<Content Include="WFM\js\global\wfmmodal\wfmmodal.directive.js" />
     <Content Include="WFM\js\teamSchedule\html\timeline.html" />
     <Content Include="WFM\js\teamSchedule\_modules.js" />
     <Content Include="WFM\vendor\uigrid.directive.ext.js" />
