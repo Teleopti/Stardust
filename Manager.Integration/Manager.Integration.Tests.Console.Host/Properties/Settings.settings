@@ -18,7 +18,7 @@
       <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="ManagerLocationUri" Type="(Web Service URL)" Scope="Application">
-      <Value Profile="(Default)">http://localhost:9000/</Value>
+      <Value Profile="(Default)">http://localhost:9000/jobmanager/</Value>
     </Setting>
     <Setting Name="HandlerAssembly" Type="System.String" Scope="Application">
       <Value Profile="(Default)">NodeTest.JobHandlers, Version=1.0.0.0</Value>

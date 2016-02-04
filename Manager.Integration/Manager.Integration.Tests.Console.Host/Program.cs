@@ -148,11 +148,13 @@ namespace Manager.IntegrationTest.Console.Host
                                                                     adevidence,
                                                                     managerAppDomainSetup);
 
-                AddOrUpdateAppDomains("Manager",
+                AddOrUpdateAppDomains(managerAppDomainSetup.ApplicationName,
                                       managerAppDomain);
 
-                managerAppDomain.ExecuteAssembly(managerAppDomainSetup.ApplicationBase +
-                                                 managerAppDomainSetup.ApplicationName);
+                var assemblyFile = new FileInfo(Path.Combine(managerAppDomainSetup.ApplicationBase,
+                                                managerAppDomainSetup.ApplicationName));
+
+                managerAppDomain.ExecuteAssembly(assemblyFile.FullName);
             });
 
             tasks.Add(managerTask);

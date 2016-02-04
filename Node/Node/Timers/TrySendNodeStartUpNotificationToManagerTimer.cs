@@ -61,30 +61,29 @@ namespace Stardust.Node.Timers
             try
             {
                 LogHelper.LogInfoWithLineNumber(Logger,
-                                                "Trying to send init to manager " + CallbackTemplateUri);
+                                                "Trying to send init to manager. Manager Uri : ( " + CallbackTemplateUri + " )");
                 var httpResponseMessage =
                     await TrySendNodeStartUpToManager(NodeConfiguration.BaseAddress);
 
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {
                     LogHelper.LogDebugWithLineNumber(Logger,
-                                                     WhoAmI + ": Node start up notification to manager succeded. Manager Uri =  " +
-                                                     CallbackTemplateUri);
+                                                     WhoAmI + ": Node start up notification to manager succeded. Manager Uri : ( " +
+                                                     CallbackTemplateUri + " )");
 
                     TrySendNodeStartUpNotificationSuccededInvoke();
                 }
                 else
                 {
                     LogHelper.LogWarningWithLineNumber(Logger,
-                                                       WhoAmI + ": Node start up notification to manager failed. Error message =  " +
-                                                       httpResponseMessage.Content);
+                                                       WhoAmI + ": Node start up notification to manager failed. Manager Uri : ( " + CallbackTemplateUri + "  )");
                 }
             }
 
             catch
             {
                 LogHelper.LogErrorWithLineNumber(Logger,
-                                                 WhoAmI + ": Node start up notification to manager failed.");
+                                                 WhoAmI + ": Node start up notification to manager failed. Manager Uri : ( " + CallbackTemplateUri + "  )");
             }
         }
     }

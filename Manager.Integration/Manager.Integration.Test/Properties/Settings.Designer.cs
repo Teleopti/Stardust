@@ -25,7 +25,7 @@ namespace Manager.Integration.Test.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:9000/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:9000/jobmanager/")]
         public string ManagerLocationUri {
             get {
                 return ((string)(this["ManagerLocationUri"]));

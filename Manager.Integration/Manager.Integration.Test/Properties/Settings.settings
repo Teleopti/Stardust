@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="ManagerLocationUri" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">http://localhost:9000/</Value>
+      <Value Profile="(Default)">http://localhost:9000/jobmanager/</Value>
     </Setting>
     <Setting Name="ManagerIntegrationConsoleHostLocation" Type="System.String" Scope="Application">
       <Value Profile="(Default)">../../../Manager.Integration.Tests.Console.Host/bin/</Value>
