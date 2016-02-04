@@ -13,15 +13,6 @@ namespace Manager.Integration.Test.Helpers
         public ManagerUriBuilder()
         {
             _managerLocationUri = new Uri(Settings.Default.ManagerLocationUri);
-
-            /*      _uriBuilder = new UriBuilder
-                  {
-                      Host = _managerLocationUri.Host,
-                      Port = _managerLocationUri.Port,
-                      Scheme = _managerLocationUri.Scheme
-                  };
-                  */
-
             _uriBuilder = new UriBuilder(_managerLocationUri);
             
         }
