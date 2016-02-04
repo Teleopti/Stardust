@@ -62,7 +62,8 @@ namespace Manager.Integration.Test
                 }
                 else
                 {
-                    var task = AppDomainHelper.CreateAppDomainForManagerIntegrationConsoleHost(_buildMode);
+                    var task = AppDomainHelper.CreateAppDomainForManagerIntegrationConsoleHost(_buildMode,
+                                                                                               NumberOfNodesToStart);
 
                     task.Start();
                 }
@@ -91,7 +92,7 @@ namespace Manager.Integration.Test
             if (ManagerApiHelper != null &&
                 ManagerApiHelper.CheckJobHistoryStatusTimer != null)
             {
-                ManagerApiHelper.CheckJobHistoryStatusTimer.StopAll();
+                ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
             }
         }
 
@@ -101,7 +102,7 @@ namespace Manager.Integration.Test
             if (ManagerApiHelper != null &&
                 ManagerApiHelper.CheckJobHistoryStatusTimer != null)
             {
-                ManagerApiHelper.CheckJobHistoryStatusTimer.StopAll();
+                ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
             }
 
             if (AppDomainHelper.AppDomains != null &&
@@ -133,6 +134,9 @@ namespace Manager.Integration.Test
         [Test]
         public void Create5RequestShouldReturnBothCancelAndDeleteStatuses()
         {
+            LogHelper.LogInfoWithLineNumber("Start test.",
+                                            Logger);
+
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
             JobHelper.GiveNodesTimeToInitialize();
@@ -174,18 +178,22 @@ namespace Manager.Integration.Test
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(TimeSpan.FromMinutes(1));
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
+            ManagerApiHelper.CheckJobHistoryStatusTimer.CancelAllRequest();
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.CanceledStatus ||
                                                                                         pair.Value == StatusConstants.DeletedStatus));
+
+            LogHelper.LogInfoWithLineNumber("Finished test.",
+                                            Logger);
         }
 
         [Test]
         public void JobShouldHaveStatusFailedIfFailed()
         {
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-
             LogHelper.LogInfoWithLineNumber("Starting test.",
                                             Logger);
+
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
             JobHelper.GiveNodesTimeToInitialize();
 
@@ -215,17 +223,21 @@ namespace Manager.Integration.Test
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
+            ManagerApiHelper.CheckJobHistoryStatusTimer.CancelAllRequest();
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.FailedStatus));
+
+            LogHelper.LogInfoWithLineNumber("Finished test.",
+                                            Logger);
         }
 
         [Test]
         public void CancelWrongJobs()
         {
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-
             LogHelper.LogInfoWithLineNumber("Starting test.",
                                             Logger);
+
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
             JobHelper.GiveNodesTimeToInitialize();
 
@@ -272,21 +284,25 @@ namespace Manager.Integration.Test
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
+            ManagerApiHelper.CheckJobHistoryStatusTimer.CancelAllRequest();
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
+
+            LogHelper.LogInfoWithLineNumber("Finished test.",
+                                            Logger);
         }
 
         [Test]
-        public void ShouldBeAbleToCreate5SuccessJobRequest()
+        public void ShouldBeAbleToCreateManySuccessJobRequest()
         {
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-
-            LogHelper.LogInfoWithLineNumber("Starting test.",
+            LogHelper.LogInfoWithLineNumber("Start test.",
                                             Logger);
+
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
             JobHelper.GiveNodesTimeToInitialize();
 
-            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(5);
+            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(NumberOfNodesToStart * 2);
 
             TimeSpan timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count);
 
@@ -312,9 +328,13 @@ namespace Manager.Integration.Test
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait();
 
-            ManagerApiHelper.CheckJobHistoryStatusTimer.StopAll();
+            ManagerApiHelper.CheckJobHistoryStatusTimer.CancelAllRequest();
+            ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
 
-            Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
+            bool condition =
+                ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus);
+
+            Assert.IsTrue(condition);
 
             LogHelper.LogInfoWithLineNumber("Finished test.",
                                             Logger);

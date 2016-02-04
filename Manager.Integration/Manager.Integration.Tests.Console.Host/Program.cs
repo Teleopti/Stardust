@@ -165,8 +165,12 @@ namespace Manager.IntegrationTest.Console.Host
 
             if (args.Any())
             {
+                LogHelper.LogInfoWithLineNumber("Has command arguments.");
+
                 numberOfNodesToStart = Convert.ToInt32(args[0]);
             }
+
+            LogHelper.LogInfoWithLineNumber(numberOfNodesToStart + " number of nodes will be started.");            
 
             if (numberOfNodesToStart > 0)
             {

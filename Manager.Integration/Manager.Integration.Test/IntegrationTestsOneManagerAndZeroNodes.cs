@@ -48,6 +48,9 @@ namespace Manager.Integration.Test
             _buildMode = "Release";
 #endif
 
+            LogHelper.LogInfoWithLineNumber("Start.",
+                                            Logger);
+
             ManagerApiHelper = new ManagerApiHelper();
 
             if (!_startUpManagerAndNodeManually)
@@ -61,11 +64,15 @@ namespace Manager.Integration.Test
                 }
                 else
                 {
-                    var task = AppDomainHelper.CreateAppDomainForManagerIntegrationConsoleHost(_buildMode);
+                    var task = AppDomainHelper.CreateAppDomainForManagerIntegrationConsoleHost(_buildMode,
+                                                                                               NumberOfNodesToStart);
 
                     task.Start();
                 }
             }
+
+            LogHelper.LogInfoWithLineNumber("Finished.",
+                                            Logger);
         }
 
         private static void TryCreateSqlLoggingTable()
@@ -87,20 +94,31 @@ namespace Manager.Integration.Test
         [TearDown]
         public void TearDown()
         {
+            LogHelper.LogInfoWithLineNumber("Start.",
+                                            Logger);
+
             if (ManagerApiHelper != null &&
                 ManagerApiHelper.CheckJobHistoryStatusTimer != null)
             {
-                ManagerApiHelper.CheckJobHistoryStatusTimer.StopAll();
+                ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
+                ManagerApiHelper.CheckJobHistoryStatusTimer.CancelAllRequest();
             }
+
+            LogHelper.LogInfoWithLineNumber("Finished.",
+                                            Logger);
         }
 
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
         {
+            LogHelper.LogInfoWithLineNumber("Start.",
+                                            Logger);
+
             if (ManagerApiHelper != null &&
                 ManagerApiHelper.CheckJobHistoryStatusTimer != null)
             {
-                ManagerApiHelper.CheckJobHistoryStatusTimer.StopAll();
+                ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
+                ManagerApiHelper.CheckJobHistoryStatusTimer.CancelAllRequest();
             }
 
             if (AppDomainHelper.AppDomains != null &&
@@ -119,6 +137,9 @@ namespace Manager.Integration.Test
             }
 
             ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
+
+            LogHelper.LogInfoWithLineNumber("Finished.",
+                                            Logger);
         }
 
         private const int NumberOfNodesToStart = 0;
@@ -127,7 +148,7 @@ namespace Manager.Integration.Test
 
         private bool _clearDatabase = true;
 
-        private bool _debugMode = true;
+        private bool _debugMode = false;
 
         private string _buildMode = "Debug";
 
@@ -138,6 +159,9 @@ namespace Manager.Integration.Test
         [Test]
         public void JobShouldJustBeQueuedIfNoNodes()
         {
+            LogHelper.LogInfoWithLineNumber("Start test.",
+                                            Logger);
+
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
             JobHelper.GiveNodesTimeToInitialize();
@@ -167,7 +191,13 @@ namespace Manager.Integration.Test
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
+            ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
+            ManagerApiHelper.CheckJobHistoryStatusTimer.CancelAllRequest();
+
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.NullStatus));
+
+            LogHelper.LogInfoWithLineNumber("Finshed test.",
+                                            Logger);
         }
     }
 }

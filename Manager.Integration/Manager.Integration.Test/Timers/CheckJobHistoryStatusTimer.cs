@@ -91,6 +91,11 @@ namespace Manager.Integration.Test.Timers
 
         private async Task<HttpResponseMessage> GetJobHistory(Guid guid)
         {
+            if (CancellationTokenSource.IsCancellationRequested)
+            {
+                return null;
+            }
+
             using (var client = new HttpClient())
             {
                 DefineDefaultRequestHeaders(client);
@@ -104,8 +109,9 @@ namespace Manager.Integration.Test.Timers
 
         public void StopAll()
         {
-            Stop();
             CancelAllRequest();
+
+            Stop();
         }
 
         public void CancelAllRequest()
@@ -149,6 +155,11 @@ namespace Manager.Integration.Test.Timers
         private async void CheckRequestStatusTimer_Elapsed(object sender,
                                                            ElapsedEventArgs e)
         {
+            if (CancellationTokenSource.IsCancellationRequested)
+            {
+                return;
+            }
+
             Enabled = false;
 
             try

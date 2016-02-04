@@ -15,12 +15,14 @@ namespace Manager.Integration.Test.Helpers
             AppDomains = new ConcurrentDictionary<string, AppDomain>();
         }
 
-        public static Task CreateAppDomainForManagerIntegrationConsoleHost(string buildmode)
+        public static Task CreateAppDomainForManagerIntegrationConsoleHost(string buildmode,
+                                                                           int numberOfNodes)
         {
             return new Task(() =>
             {
                 var assemblyLocationFullPath =
-                    Path.Combine(Settings.Default.ManagerIntegrationConsoleHostLocation, buildmode);
+                    Path.Combine(Settings.Default.ManagerIntegrationConsoleHostLocation,
+                                 buildmode);
 
                 var directoryManagerAssemblyLocationFullPath =
                     new DirectoryInfo(assemblyLocationFullPath);
@@ -34,22 +36,25 @@ namespace Manager.Integration.Test.Helpers
                     ApplicationBase = directoryManagerAssemblyLocationFullPath.FullName,
                     ApplicationName = Settings.Default.ManagerIntegrationConsoleHostAssemblyName,
                     ShadowCopyFiles = "true",
-                    ConfigurationFile = configFileName.FullName
+                    AppDomainInitializerArguments = new[] {numberOfNodes.ToString()},
+                    ConfigurationFile = configFileName.FullName,
                 };
 
                 AppDomain appDomain = AppDomain.CreateDomain(managerAppDomainSetup.ApplicationName,
-                                                                    AppDomain.CurrentDomain.Evidence,
-                                                                    managerAppDomainSetup);
+                                                             AppDomain.CurrentDomain.Evidence,
+                                                             managerAppDomainSetup);
 
-                AddOrUpdateAppDomains(managerAppDomainSetup.ApplicationName, appDomain);
+                AddOrUpdateAppDomains(managerAppDomainSetup.ApplicationName,
+                                      appDomain);
 
                 FileInfo assemblyToExecute =
-                    new FileInfo(Path.Combine(managerAppDomainSetup.ApplicationBase, managerAppDomainSetup.ApplicationName));
+                    new FileInfo(Path.Combine(managerAppDomainSetup.ApplicationBase,
+                                              managerAppDomainSetup.ApplicationName));
 
-                var ret=appDomain.ExecuteAssembly(assemblyToExecute.FullName);
+                var ret = appDomain.ExecuteAssembly(assemblyToExecute.FullName,
+                                                    managerAppDomainSetup.AppDomainInitializerArguments);
 
                 Environment.ExitCode = ret;
-
             });
         }
 
