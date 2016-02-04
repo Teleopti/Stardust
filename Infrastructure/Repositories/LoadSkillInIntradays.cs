@@ -6,11 +6,11 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class LoadAllSkillInIntradays : ILoadAllSkillInIntradays
+	public class LoadSkillInIntradays : ILoadAllSkillInIntradays
 	{
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
-		public LoadAllSkillInIntradays(ICurrentUnitOfWork currentUnitOfWork)
+		public LoadSkillInIntradays(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			_currentUnitOfWork = currentUnitOfWork;
 		}

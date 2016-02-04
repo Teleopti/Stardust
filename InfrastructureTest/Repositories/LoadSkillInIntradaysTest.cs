@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture]
 	[Category("LongRunning")]
-	public class LoadAllSkillInIntradaysTest : DatabaseTest
+	public class LoadSkillInIntradaysTest : DatabaseTest
 	{
 		[Test]
 		public void ShouldLoadExistingIntradaySkillWithAtLeastOneQueue()
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			workload.AddQueueSource(queueSourceHelpdesk);
 			PersistAndRemoveFromUnitOfWork(workload);
 
-			var target = new LoadAllSkillInIntradays(CurrUnitOfWork);
+			var target = new LoadSkillInIntradays(CurrUnitOfWork);
 			target.Skills().Count().Should().Be.EqualTo(1);
 			target.Skills().First().Name.Should().Be.EqualTo(skillWithQueue.Name);
 		}
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			workload.AddQueueSource(queue2);
 			PersistAndRemoveFromUnitOfWork(workload);
 
-			var target = new LoadAllSkillInIntradays(CurrUnitOfWork);
+			var target = new LoadSkillInIntradays(CurrUnitOfWork);
 			target.Skills().Count().Should().Be.EqualTo(1);
 		}
 

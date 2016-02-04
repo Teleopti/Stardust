@@ -240,7 +240,7 @@
     <Compile Include="Persisters\Schedules\NoUnitOfWorkModifyNoConflictTest.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangeReassociateTest.cs" />
     <Compile Include="Repositories\DayOffRulesRepositoryTest.cs" />
-    <Compile Include="Repositories\LoadAllSkillInIntradaysTest.cs" />
+    <Compile Include="Repositories\LoadSkillInIntradaysTest.cs" />
     <Compile Include="Repositories\PersonInRoleQuerierTest.cs" />
     <Compile Include="Repositories\SkillAreaRepositoryTest.cs" />
     <Compile Include="Rta\DatabaseReaderLoadAllPersonOrganizationDataTest.cs" />

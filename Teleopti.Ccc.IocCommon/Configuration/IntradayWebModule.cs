@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<FetchSkillInIntraday>().SingleInstance();
 			builder.RegisterType<FetchSkillArea>().SingleInstance();
 			builder.RegisterType<CreateSkillArea>().SingleInstance();
-			builder.RegisterType<LoadAllSkillInIntradays>().As<ILoadAllSkillInIntradays>().SingleInstance();
+			builder.RegisterType<LoadSkillInIntradays>().As<ILoadAllSkillInIntradays>().SingleInstance();
 		}
 	}
 }
