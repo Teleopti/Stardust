@@ -28,15 +28,10 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			system.AddModule(new SchedulingCommonModule(configuration));
 			system.AddModule(new ResourcePlannerModule());
 
-			system.UseTestDouble<FakePeopleAndSkillLoaderDecider>().For<IPeopleAndSkillLoaderDecider>();
-			system.UseTestDouble<FakeRequiredScheduleHelper>().For<IRequiredScheduleHelper>();
-			system.UseTestDouble<FakeScheduleCommand>().For<IScheduleCommand>();
 			system.UseTestDouble<FakeDayOffTemplateRepository>().For<IDayOffTemplateRepository>();
 			system.UseTestDouble<FakeScheduleDataReadScheduleRepository>().For<IScheduleRepository>();
 			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
-			system.UseTestDouble<FakeDayOffsInPeriodCalculator>().For<IDayOffsInPeriodCalculator>();
 			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
-			system.UseTestDouble<FakeCommonStateHolder>().For<ICommonStateHolder>();
 			system.UseTestDouble<FakeSchedulingResultStateHolder>().For<ISchedulingResultStateHolder>();
 			system.UseTestDouble<FakeScheduleRangePersister>().For<IScheduleRangePersister>();
 			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
