@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
+using System.Threading.Tasks;
 using Teleopti.Ccc.Secrets.Furness;
 using Teleopti.Interfaces.Domain;
 
@@ -38,23 +38,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public void Optimize(DateTimePeriod datePeriodToRecalculate)
         {
-            var affectedSkills = _personSkillService.AffectedSkills;
-	        _distinctActivities.ForEach(
-		        currentActivity =>
+            var affectedSkills = _personSkillService.AffectedSkills.Where(s => s.Activity != null).ToLookup(s => s.Activity);
+	        Parallel.ForEach(_distinctActivities, currentActivity =>
 			        optimizeActivity(affectedSkills, currentActivity, datePeriodToRecalculate));
         }
 
-        private void optimizeActivity(IEnumerable<ISkill> affectedSkills, IActivity currentActivity, DateTimePeriod datePeriodToRecalculate)
+        private void optimizeActivity(ILookup<IActivity, ISkill> affectedSkills, IActivity currentActivity, DateTimePeriod datePeriodToRecalculate)
         {
-            IList<ISkill> skills = new List<ISkill>();
-            foreach (var affectedSkill in affectedSkills)
-            {
-                if (affectedSkill != null && affectedSkill.Activity.Equals(currentActivity))
-                    skills.Add(affectedSkill);
-            }
+	        var skills = affectedSkills[currentActivity].ToArray();
 
             //All skills with same activity must have the same resolution
-            TimeSpan defaultResolution = TimeSpan.FromMinutes(skills[0].DefaultResolution);
+            TimeSpan defaultResolution = TimeSpan.FromMinutes(skills.First().DefaultResolution);
             DateTime currentStart =
                 datePeriodToRecalculate.StartDateTime.Date.Add(
                     TimeHelper.FitToDefaultResolution(datePeriodToRecalculate.StartDateTime.TimeOfDay,
@@ -81,14 +75,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                         }
                     }
                 }
-                optimizeActivityPeriod(currentActivity, completeIntervalPeriod);
+                optimizeActivityPeriod(currentActivity, completeIntervalPeriod, affectedSkills);
                 currentStart = currentStart.Add(defaultResolution);
             }
         }
 
-        private void optimizeActivityPeriod(IActivity currentActivity, DateTimePeriod completeIntervalPeriod)
+        private void optimizeActivityPeriod(IActivity currentActivity, DateTimePeriod completeIntervalPeriod, ILookup<IActivity,ISkill> personSkillLookup)
         {
-            IDividedActivityData dividedActivityData = _activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService,
+            IDividedActivityData dividedActivityData = _activityDivider.DivideActivity(_skillStaffPeriods, personSkillLookup,
                                                                   currentActivity, _relevantProjections,
                                                                   completeIntervalPeriod);
 

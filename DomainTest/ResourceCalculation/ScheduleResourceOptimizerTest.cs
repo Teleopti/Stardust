@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             var activityDivider = new ActivityDivider();
             IDividedActivityData dividedActivityData =
-                activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService, _personAssignmentListContainer.ContainedActivities["Phone"], _resources, _inPeriod);
+                activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService.AffectedSkills.ToLookup(s => s.Activity), _personAssignmentListContainer.ContainedActivities["Phone"], _resources, _inPeriod);
             var furnessDataConverter = new FurnessDataConverter(dividedActivityData);
             IFurnessData furnessData = furnessDataConverter.ConvertDividedActivityToFurnessData();
             _furnessEvaluator = new FurnessEvaluator(furnessData);
@@ -86,9 +86,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             var activityDivider = new ActivityDivider();
             IDividedActivityData dividedActivityData =
-                activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService, _personAssignmentListContainer.ContainedActivities["Phone"], _resources, _inPeriod);
+                activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService.AffectedSkills.ToLookup(s => s.Activity), _personAssignmentListContainer.ContainedActivities["Phone"], _resources, _inPeriod);
 
-            Expect.Call(_activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService,
+            Expect.Call(_activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService.AffectedSkills.ToLookup(s => s.Activity),
                                                         _personAssignmentListContainer.ContainedActivities["Phone"],
                                                         _resources,
                                                         _inPeriod)).Return(dividedActivityData).IgnoreArguments().Repeat.AtLeastOnce();
@@ -110,9 +110,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             var activityDivider = new ActivityDivider();
             IDividedActivityData dividedActivityData =
-                activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService, _personAssignmentListContainer.ContainedActivities["Phone"], _resources, _inPeriod);
+                activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService.AffectedSkills.ToLookup(s => s.Activity), _personAssignmentListContainer.ContainedActivities["Phone"], _resources, _inPeriod);
 
-            Expect.Call(_activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService,
+            Expect.Call(_activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService.AffectedSkills.ToLookup(s => s.Activity),
                                                         _personAssignmentListContainer.ContainedActivities["Phone"],
                                                         _resources,
                                                         _inPeriod)).Return(dividedActivityData).IgnoreArguments().Repeat.AtLeastOnce();

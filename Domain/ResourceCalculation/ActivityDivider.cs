@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Created date: 2008-02-07
         /// </remarks>
         IDividedActivityData DivideActivity(ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods,
-                                                             IAffectedPersonSkillService affectedPersonSkillService,
+															 ILookup<IActivity, ISkill> affectedPersonSkillService,
                                                            IActivity activity,
 														   IResourceCalculationDataContainer filteredProjections,
                                                            DateTimePeriod periodToCalculate);
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     public class ActivityDivider : IActivityDivider
     {
         public IDividedActivityData DivideActivity(ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods,
-            IAffectedPersonSkillService affectedPersonSkillService,
+            ILookup<IActivity,ISkill> affectedPersonSkillService,
             IActivity activity,
 			IResourceCalculationDataContainer filteredProjections,
             DateTimePeriod periodToCalculate)
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             var dividedActivity = new DividedActivityData();
             var elapsedToCalculate = periodToCalculate.ElapsedTime();
 
-            IEnumerable<ISkill> skillsForActivity = skillsInActivity(affectedPersonSkillService,activity);
+            IEnumerable<ISkill> skillsForActivity = affectedPersonSkillService[activity];
             foreach (ISkill skill in skillsForActivity)
             {
                 double? targetDemandValue = skillDayDemand(skill,relevantSkillStaffPeriods,periodToCalculate);
@@ -137,19 +137,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 return null;
 
 			return totalTime / periodToCalculate.ElapsedTime().TotalSeconds;
-        }
-
-        private static IEnumerable<ISkill> skillsInActivity(IAffectedPersonSkillService affectedPersonSkillService, IActivity activity)
-        {
-            var distinctList = new HashSet<ISkill>();
-            foreach (var affectedSkill in affectedPersonSkillService.AffectedSkills)
-            {
-                if (affectedSkill.Activity.Equals(activity))
-                {
-                    distinctList.Add(affectedSkill);
-                }
-            }
-            return distinctList;
         }
     }
 }
