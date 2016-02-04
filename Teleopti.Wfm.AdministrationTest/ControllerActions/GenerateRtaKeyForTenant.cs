@@ -35,7 +35,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldGenerateRtaKeyWhenCreatingDatabases()
 		{
-			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoPersistCallbacks(), "TestData");
 			TestPollutionCleaner.Clean("tenant", "appuser");
 
 			var result = Database.CreateDatabases(new CreateTenantModelForTest
@@ -50,7 +50,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldGenerateRtaKeyWith10RandomCharacters()
 		{
-			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoPersistCallbacks(), "TestData");
 			TestPollutionCleaner.Clean("tenant1", "appuser1");
 			TestPollutionCleaner.Clean("tenant2", "appuser2");
 

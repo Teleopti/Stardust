@@ -1,12 +1,10 @@
 using Autofac;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
@@ -17,6 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 	{
 		private static IContainer _container;
 
+		public static IToggleManager Toggles;
 		public static ICurrentPersistCallbacks PersistCallbacks;
 		public static HangfireUtilties Hangfire;
 		public static MutableNow Now;
@@ -27,19 +26,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			var args = new IocArgs(new ConfigReader())
 			{
 				BehaviorTestClient = true,
-				FeatureToggle = "http://notinuse"
+				FeatureToggle = TestSiteConfigurationSetup.URL.ToString()
 			};
-			// should really use same toggles as the website!
-			var toggleManager = new FakeToggleManager();
-			toggleManager.Enable(Toggles.RTA_NewEventHangfireRTA_34333);
-			toggleManager.Enable(Toggles.RTA_AdherenceDetails_34267);
-			toggleManager.Enable(Toggles.RTA_DeletedPersons_36041);
-			toggleManager.Enable(Toggles.RTA_TerminatedPersons_36042);
-			builder.RegisterModule(new CommonModule(new IocConfiguration(args, toggleManager)));
-			builder.RegisterInstance(toggleManager).As<IToggleManager>();
+			builder.RegisterModule(new CommonModule(new IocConfiguration(args, CommonModule.ToggleManagerForIoc(args))));
 
 			_container = builder.Build();
 
+			Toggles = _container.Resolve<IToggleManager>();
 			Now = _container.Resolve<INow>() as MutableNow;
 			PersistCallbacks = _container.Resolve<ICurrentPersistCallbacks>();
 		}

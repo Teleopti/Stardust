@@ -75,7 +75,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldImportExistingDatabases()
 		{
-			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoPersistCallbacks(), "TestData");
 			TestPollutionCleaner.Clean("tenant", "appuser");
 			var builder = TestPollutionCleaner.TestTenantConnection();
 			builder.IntegratedSecurity = false;

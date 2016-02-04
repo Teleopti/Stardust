@@ -22,7 +22,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[SetUp]
 		public void Setup()
 		{
-			DataSource = DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), UserConfigurable.DefaultTenantName);
+			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(new NoPersistCallbacks(), UserConfigurable.DefaultTenantName);
 
 			var personThatCreatesTestData = PersonFactory.CreatePerson("UserThatCreatesTestData", "password");
 

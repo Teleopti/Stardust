@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.ApplicationConfigTest
         [SetUp]
         public void RunBeforeAnyTest()
         {
-            var applicationDb = DataSourceHelper.CreateDataSource(null, null).Application;
+            var applicationDb = DataSourceHelper.CreateDatabasesAndDataSource(null, null).Application;
             SessionFactory = ((NHibernateUnitOfWorkFactory)applicationDb).SessionFactory;
             createTestPerson();
         }

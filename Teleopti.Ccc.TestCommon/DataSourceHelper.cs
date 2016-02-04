@@ -5,7 +5,6 @@ using System.IO;
 using Newtonsoft.Json;
 using NHibernate.Dialect;
 using Teleopti.Ccc.DBManager.Library;
-using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Domain;
@@ -15,10 +14,21 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public static class DataSourceHelper
 	{
-		public static IDataSource CreateDataSource(ICurrentPersistCallbacks persistCallbacks, string name)
+		public static IDataSource CreateDatabasesAndDataSource(ICurrentPersistCallbacks persistCallbacks, string name)
 		{
 			setupCcc7(name);
 			setupAnalytics();
+			return makeDataSource(persistCallbacks, name);
+		}
+
+		public static void CreateDatabases(string name)
+		{
+			setupCcc7(name);
+			setupAnalytics();
+		}
+
+		public static IDataSource CreateDataSource(ICurrentPersistCallbacks persistCallbacks, string name)
+		{
 			return makeDataSource(persistCallbacks, name);
 		}
 

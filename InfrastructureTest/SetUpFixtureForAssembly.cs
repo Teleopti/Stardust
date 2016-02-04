@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(
 				 name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
 
-			DataSource = DataSourceHelper.CreateDataSource(container.Resolve<ICurrentPersistCallbacks>(), null);
+			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(container.Resolve<ICurrentPersistCallbacks>(), null);
 
 			loggedOnPerson = PersonFactory.CreatePerson("logged on person");
 

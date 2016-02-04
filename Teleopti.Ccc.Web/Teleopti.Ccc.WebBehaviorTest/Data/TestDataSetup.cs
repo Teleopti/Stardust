@@ -18,11 +18,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void Setup()
 		{
+			DataSourceHelper.CreateDatabases(UserConfigurable.DefaultTenantName);
+
+			TestSiteConfigurationSetup.StartApplicationAsync();
+
 			SystemSetup.Setup();
 
 			datasource = DataSourceHelper.CreateDataSource(SystemSetup.PersistCallbacks, UserConfigurable.DefaultTenantName);
-
-			TestSiteConfigurationSetup.StartApplicationAsync();
 
 			StateHolderProxyHelper.SetupFakeState(
 				datasource,

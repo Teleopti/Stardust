@@ -23,7 +23,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnFalseWhenNoTenantInDb()
 		{
-			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoPersistCallbacks(), "TestData");
 			var result = Target.AddSuperUserToTenant(new AddSuperUserToTenantModel {Tenant = "tenantThatNotExists", UserName = "userName", Password = "PassaDej0"});
 			result.Content.Success.Should().Be.False();
 			//if this happen we do it wrong in the javascript
@@ -41,7 +41,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnTrueWhenUsernameAndPasswordProvided()
 		{
-			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoPersistCallbacks(), "TestData");
 			var result =
 				Target.AddSuperUserToTenant(new AddSuperUserToTenantModel
 				{
