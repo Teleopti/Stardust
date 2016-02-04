@@ -19,8 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	//This class is just a mess. Copied from ScheduleController. Needs a lot of refactoring...
 	public class FullScheduling
 	{
-		private readonly SetupStateHolderForWebScheduling _setupStateHolderForWebScheduling;
-		private readonly IFixedStaffLoader _fixedStaffLoader;
+		private readonly WebSchedulingSetup _webSchedulingSetup;
 		private readonly Func<IScheduleCommand> _scheduleCommand;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly Func<IRequiredScheduleHelper> _requiredScheduleHelper;
@@ -31,15 +30,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly DayOffBusinessRuleValidation _dayOffBusinessRuleValidation;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
-		public FullScheduling(SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,
-			IFixedStaffLoader fixedStaffLoader, Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder,
+		public FullScheduling(WebSchedulingSetup webSchedulingSetup,
+			Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder,
 			Func<IRequiredScheduleHelper> requiredScheduleHelper, Func<IGroupPagePerDateHolder> groupPagePerDateHolder,
 			Func<IScheduleTagSetter> scheduleTagSetter, IScheduleDictionaryPersister persister,
 			ViolatedSchedulePeriodBusinessRule violatedSchedulePeriodBusinessRule,
 			DayOffBusinessRuleValidation dayOffBusinessRuleValidation, ICurrentUnitOfWork currentUnitOfWork)
 		{
-			_setupStateHolderForWebScheduling = setupStateHolderForWebScheduling;
-			_fixedStaffLoader = fixedStaffLoader;
+			_webSchedulingSetup = webSchedulingSetup;
 			_scheduleCommand = scheduleCommand;
 			_schedulerStateHolder = schedulerStateHolder;
 			_requiredScheduleHelper = requiredScheduleHelper;
@@ -85,13 +83,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		[UnitOfWork]
 		protected virtual PeopleSelection SetupAndSchedule(DateOnlyPeriod period)
 		{
-			var people = _fixedStaffLoader.Load(period);
-			_setupStateHolderForWebScheduling.Setup(period, people);
-			var allSchedules = extractAllSchedules(_schedulerStateHolder().SchedulingResultState, people, period);
+			var webScheduleState = _webSchedulingSetup.Setup(period);
 
 			_scheduleTagSetter().ChangeTagToSet(NullScheduleTag.Instance);
 
-			if (allSchedules.Any())
+			if (webScheduleState.AllSchedules.Any())
 			{
 				_scheduleCommand().Execute(new OptimizerOriginalPreferences(new SchedulingOptions
 				{
@@ -103,11 +99,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
 					GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
 					TagToUseOnScheduling = NullScheduleTag.Instance
-				}), new NoBackgroundWorker(), _schedulerStateHolder(), allSchedules, _groupPagePerDateHolder(),
+				}), new NoBackgroundWorker(), _schedulerStateHolder(), webScheduleState.AllSchedules, _groupPagePerDateHolder(),
 					_requiredScheduleHelper(),
 					new OptimizationPreferences(), false, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 			}
-			return people;
+			return webScheduleState.PeopleSelection;
 		}
 
 		private static int successfulScheduledAgents(IEnumerable<KeyValuePair<IPerson, IScheduleRange>> schedules, DateOnlyPeriod periodToCheck)
@@ -175,16 +171,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				BusinessRuleCategoryText = "Schedule period",
 				Name = person.Name.ToString(NameOrderOption.FirstNameLastName)
 			});
-		}
-
-		private static IList<IScheduleDay> extractAllSchedules(ISchedulingResultStateHolder stateHolder, PeopleSelection people, DateOnlyPeriod period)
-		{
-			var allSchedules = new List<IScheduleDay>();
-			foreach (var schedule in stateHolder.Schedules.Where(schedule => people.FixedStaffPeople.Contains(schedule.Key)))
-			{
-				allSchedules.AddRange(schedule.Value.ScheduledDayCollection(period));
-			}
-			return allSchedules;
 		}
 	}
 }

@@ -23,8 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
-		private readonly IFixedStaffLoader _fixedStaffLoader;
-		private readonly SetupStateHolderForWebScheduling _setupStateHolderForWebScheduling;
+		private readonly WebSchedulingSetup _webSchedulingSetup;
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
@@ -40,8 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 									Func<ISchedulerStateHolder> schedulerStateHolder,
 									Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 									DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
-									IFixedStaffLoader fixedStaffLoader,
-									SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,
+									WebSchedulingSetup webSchedulingSetup,
 									Func<IPersonSkillProvider> personSkillProvider,
 									IMatrixListFactory matrixListFactory,
 									IScheduleDayEquator scheduleDayEquator,
@@ -58,8 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_schedulerStateHolder = schedulerStateHolder;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_dayOffOptimizationPreferenceProviderUsingFiltersFactory = dayOffOptimizationPreferenceProviderUsingFiltersFactory;
-			_fixedStaffLoader = fixedStaffLoader;
-			_setupStateHolderForWebScheduling = setupStateHolderForWebScheduling;
+			_webSchedulingSetup = webSchedulingSetup;
 			_personSkillProvider = personSkillProvider;
 			_matrixListFactory = matrixListFactory;
 			_scheduleDayEquator = scheduleDayEquator;
@@ -86,16 +83,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var dayOffOptimizationPreference = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
-			var people = _fixedStaffLoader.Load(period);
-			_setupStateHolderForWebScheduling.Setup(period, people);
-			var allSchedules = extractAllSchedules(_schedulerStateHolder().SchedulingResultState, people, period);
+			var webScheduleState = _webSchedulingSetup.Setup(period);
 
-			var matrixListForIntraDayOptimizationOriginal = _matrixListFactory.CreateMatrixListForSelection(allSchedules);
+			var matrixListForIntraDayOptimizationOriginal = _matrixListFactory.CreateMatrixListForSelection(webScheduleState.AllSchedules);
 			var matrixOriginalStateContainerListForIntradayOptimizationOriginal =
 				matrixListForIntraDayOptimizationOriginal.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator));
 
 			var matrixOriginalStateContainerListForIntradayOptimizationWork =
-				_matrixListFactory.CreateMatrixListForSelection(allSchedules).Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator));
+				_matrixListFactory.CreateMatrixListForSelection(webScheduleState.AllSchedules).Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator));
 
 			var rollbackService = new SchedulePartModifyAndRollbackService(
 					_schedulerStateHolder().SchedulingResultState,
@@ -123,7 +118,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				service.Execute(optimizers, period, optimizationPreferences.Advanced.TargetValueCalculation);
 			}
 
-			_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, allSchedules, people.AllPeople, dayOffOptimizationPreference);
+			_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, webScheduleState.AllSchedules, webScheduleState.PeopleSelection.AllPeople, dayOffOptimizationPreference);
 			return planningPeriod;
 		}
 
@@ -133,16 +128,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var result = new OptimizationResultModel();
 			result.Map(_schedulerStateHolder().SchedulingResultState.SkillDays, planningPeriod.Range);
 			return result;
-		}
-
-		private static IList<IScheduleDay> extractAllSchedules(ISchedulingResultStateHolder stateHolder, PeopleSelection people, DateOnlyPeriod period)
-		{
-			var allSchedules = new List<IScheduleDay>();
-			foreach (var schedule in stateHolder.Schedules.Where(schedule => people.FixedStaffPeople.Contains(schedule.Key)))
-			{
-				allSchedules.AddRange(schedule.Value.ScheduledDayCollection(period));
-			}
-			return allSchedules;
 		}
 	}
 }

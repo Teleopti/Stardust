@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
@@ -13,7 +14,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
-	public class SetupStateHolderForWebScheduling
+	public class WebSchedulingSetup
 	{
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
@@ -25,8 +26,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IRepositoryFactory _repositoryFactory;
+		private readonly IFixedStaffLoader _fixedStaffLoader;
 
-		public SetupStateHolderForWebScheduling(IScenarioRepository scenarioRepository, 
+		public WebSchedulingSetup(IScenarioRepository scenarioRepository, 
 					ISkillDayLoadHelper skillDayLoadHelper, 
 					ISkillRepository skillRepository, 
 					IScheduleRepository scheduleRepository, 
@@ -35,7 +37,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 					ICurrentTeleoptiPrincipal principal, 
 					ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
 					Func<ISchedulerStateHolder> schedulerStateHolder,
-					IRepositoryFactory repositoryFactory)
+					IRepositoryFactory repositoryFactory,
+					IFixedStaffLoader fixedStaffLoader)
 		{
 			_scenarioRepository = scenarioRepository;
 			_skillDayLoadHelper = skillDayLoadHelper;
@@ -47,10 +50,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_schedulerStateHolder = schedulerStateHolder;
 			_repositoryFactory = repositoryFactory;
+			_fixedStaffLoader = fixedStaffLoader;
 		}
 
-		public void Setup(DateOnlyPeriod period, PeopleSelection people)
+		public WebSchedulingSetupResult Setup(DateOnlyPeriod period)
 		{
+			var people = _fixedStaffLoader.Load(period);
 			var scenario = _scenarioRepository.LoadDefaultScenario();
 			var timeZone = _principal.Current().Regional.TimeZone;
 			
@@ -78,6 +83,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			schedulerStateHolder.LoadSchedules(_scheduleRepository, new PersonsInOrganizationProvider(people.AllPeople),
 				new ScheduleDictionaryLoadOptions(true, false, false),
 				new ScheduleDateTimePeriod(dateTimePeriod, people.AllPeople, new SchedulerRangeToLoadCalculator(dateTimePeriod)));
+			return new WebSchedulingSetupResult(people, extractAllSchedules(schedulerStateHolder.SchedulingResultState, people, period));
+		}
+
+		private static IList<IScheduleDay> extractAllSchedules(ISchedulingResultStateHolder stateHolder, PeopleSelection people, DateOnlyPeriod period)
+		{
+			var allSchedules = new List<IScheduleDay>();
+			foreach (var schedule in stateHolder.Schedules.Where(schedule => people.FixedStaffPeople.Contains(schedule.Key)))
+			{
+				allSchedules.AddRange(schedule.Value.ScheduledDayCollection(period));
+			}
+			return allSchedules;
 		}
 	}
 }

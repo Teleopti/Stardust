@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
@@ -16,8 +15,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class ScheduleOptimization
 	{
-		private readonly SetupStateHolderForWebScheduling _setupStateHolderForWebScheduling;
-		private readonly IFixedStaffLoader _fixedStaffLoader;
+		private readonly WebSchedulingSetup _webSchedulingSetup;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IClassicDaysOffOptimizationCommand _classicDaysOffOptimizationCommand;
 		private readonly IScheduleDictionaryPersister _persister;
@@ -29,8 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 
-		public ScheduleOptimization(SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,
-			IFixedStaffLoader fixedStaffLoader, Func<ISchedulerStateHolder> schedulerStateHolder,
+		public ScheduleOptimization(WebSchedulingSetup webSchedulingSetup, Func<ISchedulerStateHolder> schedulerStateHolder,
 			IClassicDaysOffOptimizationCommand classicDaysOffOptimizationCommand,
 			IScheduleDictionaryPersister persister, IPlanningPeriodRepository planningPeriodRepository,
 			WeeklyRestSolverExecuter weeklyRestSolverExecuter, OptimizationPreferencesFactory optimizationPreferencesFactory,
@@ -38,8 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
 			IOptimizerHelperHelper optimizerHelperHelper)
 		{
-			_setupStateHolderForWebScheduling = setupStateHolderForWebScheduling;
-			_fixedStaffLoader = fixedStaffLoader;
+			_webSchedulingSetup = webSchedulingSetup;
 			_schedulerStateHolder = schedulerStateHolder;
 			_classicDaysOffOptimizationCommand = classicDaysOffOptimizationCommand;
 			_persister = persister;
@@ -75,11 +71,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
-			var people = _fixedStaffLoader.Load(period);
-			_setupStateHolderForWebScheduling.Setup(period, people);
-			var allSchedules = extractAllSchedules(_schedulerStateHolder().SchedulingResultState, people, period);
+			var webScheduleState = _webSchedulingSetup.Setup(period);
 
-			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(allSchedules);
+			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(webScheduleState.AllSchedules);
 			var matrixOriginalStateContainerListForDayOffOptimization =
 				matrixListForDayOffOptimization.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator))
 					.Cast<IScheduleMatrixOriginalStateContainer>().ToList();
@@ -89,22 +83,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_classicDaysOffOptimizationCommand.Execute(matrixOriginalStateContainerListForDayOffOptimization, period, optimizationPreferences, _schedulerStateHolder(),
 				new NoBackgroundWorker(), dayOffOptimizationPreferenceProvider);
 
-			_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, allSchedules, people.AllPeople, dayOffOptimizationPreferenceProvider);
+			_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, webScheduleState.AllSchedules, webScheduleState.PeopleSelection.AllPeople, dayOffOptimizationPreferenceProvider);
 
 			//should maybe happen _after_ all schedules are persisted?
 			planningPeriod.Scheduled();
 
 			return planningPeriod;
-		}
-		
-		private static IList<IScheduleDay> extractAllSchedules(ISchedulingResultStateHolder stateHolder, PeopleSelection people, DateOnlyPeriod period)
-		{
-			var allSchedules = new List<IScheduleDay>();
-			foreach (var schedule in stateHolder.Schedules.Where(schedule => people.FixedStaffPeople.Contains(schedule.Key)))
-			{
-				allSchedules.AddRange(schedule.Value.ScheduledDayCollection(period));
-			}
-			return allSchedules;
 		}
 	}
 }
