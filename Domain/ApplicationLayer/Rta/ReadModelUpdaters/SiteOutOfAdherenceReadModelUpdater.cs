@@ -102,12 +102,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			_persister.Persist(model);
 		}
 
-		private class site
-		{
-			public Guid BusinessUnitId;
-			public Guid SiteId;
-		}
-
 		private SiteOutOfAdherenceReadModel modelFor(Guid businessUnitId, Guid siteId)
 		{
 			return _persister.Get(siteId) ?? new SiteOutOfAdherenceReadModel

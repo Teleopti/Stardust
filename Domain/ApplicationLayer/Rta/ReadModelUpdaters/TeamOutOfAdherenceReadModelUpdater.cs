@@ -107,12 +107,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			_persister.Persist(model);
 		}
 
-		private class team
-		{
-			public Guid TeamId;
-			public Guid SiteId;
-		}
-
 		private TeamOutOfAdherenceReadModel modelFor(Guid siteId, Guid teamId)
 		{
 			return _persister.Get(teamId) ?? new TeamOutOfAdherenceReadModel
