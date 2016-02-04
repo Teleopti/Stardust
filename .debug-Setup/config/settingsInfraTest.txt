@@ -2,7 +2,7 @@
 $(AS_SERVER_NAME)|.
 $(SQL_SERVER_NAME)|.
 $(IIS_AUTH)|Windows
-$(LOCAL_WIKI)^|c:\temp
+$(LOCAL_WIKI)|c:\temp
 $(PM_ASMX)|http://localhost/analyzer/services/Analyzer2005.asmx
 $(PM_AUTH_MODE)|Windows
 $(PM_ANONYMOUS_DOMAINUSER)|YourDomain\theUser
@@ -12,7 +12,7 @@ $(PM_SERVICE)|http://localhost:53396/PMService.svc
 $(SDK_SSL_SECURITY_MODE)|TransportCredentialOnly
 $(SDK_CRED_PROT)|Ntlm
 $(AGENT_SERVICE)|http://localhost:1335/TeleoptiCccSdkService.svc
-$(RTA_SERVICE)|http://localhost:52130/TeleoptiRtaService.svc
+$(RTA_SERVICE)|http://localhost:52858/TeleoptiRtaService.svc
 $(RTA_QUEUE_ID)|2001,2002,0063,2000,0019,0068,0085,0202,0238,2003
 $(RTA_STATE_CODE)|Ready,InCall,ACW,AUX1,AUX2,AUX3,AUX4,AUX5
 $(HTTPGETENABLED)|true
@@ -23,8 +23,15 @@ $(LocalWiki)|http://localhost/TeleoptiWFM/LocalWiki/
 $(WEB_BROKER_FOR_WEB)|http://localhost:52858
 $(WEB_BROKER)|http://localhost:52858/
 $(WEB_BROKER_BACKPLANE)|
-$(WEB_DEPLOY)|false
+$(DEFAULT_IDENTITY_PROVIDER)|Teleopti
+$(WindowsClaimProvider)|<add identifier="urn:Windows" displayName="Windows" url="http://localhost:52859/" protocolHandler="OpenIdHandler" />
+$(TeleoptiClaimProvider)|<add identifier="urn:Teleopti" displayName="Teleopti" url="http://localhost:52858/sso/" protocolHandler="OpenIdHandler" />
+$(UrlAuthenticationBridge)|http://localhost:52857/
+$(URL)|http://localhost:52858/
+$(CONFIGURATION_FILES_PATH)|c:\nhib
 <compilation debug="false"|<compilation debug="true"
 <compilation targetFramework="4.0"|<compilation debug="true" targetFramework="4.0"
 <compilation targetFramework="4.5"|<compilation debug="true" targetFramework="4.5"
-
+$(ETLPM_BINDING_NAME)|Etl_Pm_Http_Binding
+$(WEB_DEPLOY)|false
+_replace_|c:\InfraTest.ini

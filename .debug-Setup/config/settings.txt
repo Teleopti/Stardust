@@ -1,5 +1,6 @@
 ﻿$(SQL_AUTH_STRING)|Data Source=.;Integrated Security=SSPI
 $(AS_SERVER_NAME)|.
+$(SQL_SERVER_NAME)|.
 $(DB_CCC7)|TeleoptiApp_Demo
 $(DB_ANALYTICS)|TeleoptiAnalytics_Demo
 $(AS_DATABASE)|TeleoptiAnalytics_Demo
