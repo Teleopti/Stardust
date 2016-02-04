@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using log4net.Config;
@@ -89,7 +90,7 @@ namespace Manager.Integration.Test
             if (ManagerApiHelper != null &&
                 ManagerApiHelper.CheckJobHistoryStatusTimer != null)
             {
-                ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
+                ManagerApiHelper.CheckJobHistoryStatusTimer.StopAll();
             }
         }
 
@@ -99,7 +100,7 @@ namespace Manager.Integration.Test
             if (ManagerApiHelper != null &&
                 ManagerApiHelper.CheckJobHistoryStatusTimer != null)
             {
-                ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
+                ManagerApiHelper.CheckJobHistoryStatusTimer.StopAll();
             }
 
             if (AppDomainHelper.AppDomains != null &&
@@ -137,6 +138,8 @@ namespace Manager.Integration.Test
         [Test]
         public void JobShouldJustBeQueuedIfNoNodes()
         {
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(1);
@@ -153,6 +156,7 @@ namespace Manager.Integration.Test
 
             ManagerApiHelper.CheckJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(requests.Count,
                                                                                          5000,
+                                                                                         cancellationTokenSource,
                                                                                          StatusConstants.NullStatus,
                                                                                          StatusConstants.EmptyStatus);
 

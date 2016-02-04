@@ -40,25 +40,25 @@ namespace Manager.Integration.Test.Helpers
             {
                 connection.Open();
 
-                using (SqlCommand command = new SqlCommand("truncate table JobDefinitions",
+                using (SqlCommand command = new SqlCommand("truncate table Stardust.JobDefinitions",
                                                            connection))
                 {
                     command.ExecuteNonQuery();
                 }
 
-                using (SqlCommand command = new SqlCommand("truncate table JobHistory",
+                using (SqlCommand command = new SqlCommand("truncate table Stardust.JobHistory",
                                                            connection))
                 {
                     command.ExecuteNonQuery();
                 }
 
-                using (SqlCommand command = new SqlCommand("truncate table JobHistoryDetail",
+                using (SqlCommand command = new SqlCommand("truncate table Stardust.JobHistoryDetail",
                                                            connection))
                 {
                     command.ExecuteNonQuery();
                 }
 
-                using (SqlCommand command = new SqlCommand("truncate table WorkerNodes",
+                using (SqlCommand command = new SqlCommand("truncate table Stardust.WorkerNodes",
                                                            connection))
                 {
                     command.ExecuteNonQuery();

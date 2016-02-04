@@ -91,7 +91,7 @@ namespace Manager.Integration.Test
             if (ManagerApiHelper != null &&
                 ManagerApiHelper.CheckJobHistoryStatusTimer != null)
             {
-                ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
+                ManagerApiHelper.CheckJobHistoryStatusTimer.StopAll();
             }
         }
 
@@ -101,7 +101,7 @@ namespace Manager.Integration.Test
             if (ManagerApiHelper != null &&
                 ManagerApiHelper.CheckJobHistoryStatusTimer != null)
             {
-                ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
+                ManagerApiHelper.CheckJobHistoryStatusTimer.StopAll();
             }
 
             if (AppDomainHelper.AppDomains != null &&
@@ -133,6 +133,8 @@ namespace Manager.Integration.Test
         [Test]
         public void Create5RequestShouldReturnBothCancelAndDeleteStatuses()
         {
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
             JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(5);
@@ -148,6 +150,7 @@ namespace Manager.Integration.Test
 
             ManagerApiHelper.CheckJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(requests.Count,
                                                                                          5000,
+                                                                                         cancellationTokenSource,
                                                                                          StatusConstants.CanceledStatus,
                                                                                          StatusConstants.DeletedStatus,
                                                                                          StatusConstants.SuccessStatus,
@@ -179,6 +182,8 @@ namespace Manager.Integration.Test
         [Test]
         public void JobShouldHaveStatusFailedIfFailed()
         {
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
             LogHelper.LogInfoWithLineNumber("Starting test.",
                                             Logger);
 
@@ -197,6 +202,7 @@ namespace Manager.Integration.Test
 
             ManagerApiHelper.CheckJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(requests.Count,
                                                                                          5000,
+                                                                                         cancellationTokenSource,
                                                                                          StatusConstants.SuccessStatus,
                                                                                          StatusConstants.DeletedStatus,
                                                                                          StatusConstants.FailedStatus,
@@ -216,6 +222,8 @@ namespace Manager.Integration.Test
         [Test]
         public void CancelWrongJobs()
         {
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
             LogHelper.LogInfoWithLineNumber("Starting test.",
                                             Logger);
 
@@ -237,6 +245,7 @@ namespace Manager.Integration.Test
 
             ManagerApiHelper.CheckJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(requests.Count,
                                                                                          5000,
+                                                                                         cancellationTokenSource,
                                                                                          StatusConstants.SuccessStatus,
                                                                                          StatusConstants.DeletedStatus,
                                                                                          StatusConstants.FailedStatus,
@@ -270,6 +279,8 @@ namespace Manager.Integration.Test
         [Test]
         public void ShouldBeAbleToCreate5SuccessJobRequest()
         {
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
             LogHelper.LogInfoWithLineNumber("Starting test.",
                                             Logger);
 
@@ -288,6 +299,7 @@ namespace Manager.Integration.Test
 
             ManagerApiHelper.CheckJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(requests.Count,
                                                                                          5000,
+                                                                                         cancellationTokenSource,
                                                                                          StatusConstants.SuccessStatus,
                                                                                          StatusConstants.DeletedStatus,
                                                                                          StatusConstants.FailedStatus,
@@ -300,7 +312,7 @@ namespace Manager.Integration.Test
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait();
 
-            ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
+            ManagerApiHelper.CheckJobHistoryStatusTimer.StopAll();
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
 

@@ -17,8 +17,9 @@ namespace Manager.Integration.Test.Timers
 {
     public class CheckJobHistoryStatusTimer : Timer
     {
-        private static readonly ILog Logger =
-            LogManager.GetLogger(typeof(CheckJobHistoryStatusTimer));
+        private CancellationTokenSource CancellationTokenSource { get; set; }
+
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (CheckJobHistoryStatusTimer));
 
         public EventHandler<GuidStatusChangedEventArgs> GuidStatusChangedEvent;
 
@@ -94,14 +95,30 @@ namespace Manager.Integration.Test.Timers
             {
                 DefineDefaultRequestHeaders(client);
 
-                var response = await client.GetAsync(ManagerUriBuilder.GetJobHistoryUri(guid));
+                var response = await client.GetAsync(ManagerUriBuilder.GetJobHistoryUri(guid),
+                                                     CancellationTokenSource.Token);
 
                 return response;
             }
         }
 
+        public void StopAll()
+        {
+            Stop();
+            CancelAllRequest();
+        }
+
+        public void CancelAllRequest()
+        {
+            if (CancellationTokenSource != null)
+            {
+                CancellationTokenSource.Cancel();
+            }
+        }
+
         public CheckJobHistoryStatusTimer(int numberOfGuidsToWatch,
                                           double delay,
+                                          CancellationTokenSource cancellationTokenSource,
                                           params string[] statusToLookFor) : base(delay)
         {
             if (numberOfGuidsToWatch <= 0)
@@ -109,9 +126,15 @@ namespace Manager.Integration.Test.Timers
                 throw new ArgumentException();
             }
 
+            if (cancellationTokenSource == null)
+            {
+                throw new ArgumentNullException("cancellationTokenSource");
+            }
+
             ManagerUriBuilder = new ManagerUriBuilder();
 
             NumberOfGuidsToWatch = numberOfGuidsToWatch;
+            CancellationTokenSource = cancellationTokenSource;
             StatusToLookFor = statusToLookFor;
 
             ManualResetEventSlim = new ManualResetEventSlim();
@@ -124,7 +147,7 @@ namespace Manager.Integration.Test.Timers
         }
 
         private async void CheckRequestStatusTimer_Elapsed(object sender,
-                                                     ElapsedEventArgs e)
+                                                           ElapsedEventArgs e)
         {
             Enabled = false;
 
@@ -182,7 +205,9 @@ namespace Manager.Integration.Test.Timers
                             }
                             catch (Exception exp)
                             {
-                                LogHelper.LogErrorWithLineNumber(exp.Message, Logger,exp);
+                                LogHelper.LogErrorWithLineNumber(exp.Message,
+                                                                 Logger,
+                                                                 exp);
                             }
                         }
                     }
