@@ -4,10 +4,10 @@
     {
         public const string JobIdOptionalParameter = "{jobId}";
 
-        public const string Job = "manager/job";
+        public const string Job = "job";
 
-        public const string CancelJob = "manager/job/" + JobIdOptionalParameter;
+        public const string CancelJob = "job/" + JobIdOptionalParameter;
 
-        public const string GetJobHistory = "manager/job/" + JobIdOptionalParameter;
+        public const string GetJobHistory = "job/" + JobIdOptionalParameter;
     }
 }
