@@ -1,7 +1,6 @@
 using System;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Web.Areas.Global;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner

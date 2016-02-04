@@ -309,12 +309,10 @@
     <Compile Include="Areas\ResourcePlanner\FakePlanningPeriod.cs" />
     <Compile Include="Areas\ResourcePlanner\GroupPagesControllerTest.cs" />
     <Compile Include="Areas\ResourcePlanner\MissingForecastProviderTest.cs" />
-    <Compile Include="Areas\ResourcePlanner\OptimizationControllerTest.cs" />
     <Compile Include="Areas\ResourcePlanner\OptimizationResultModelTest.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningPeriodControllerTest.cs" />
     <Compile Include="Areas\ResourcePlanner\ResourcePlannerModuleTest.cs" />
     <Compile Include="Areas\ResourcePlanner\ResourcePlannerTestAttribute.cs" />
-    <Compile Include="Areas\ResourcePlanner\ScheduleControllerTest.cs" />
     <Compile Include="Areas\ResourcePlanner\ThrottleActionTest.cs" />
     <Compile Include="Areas\ResourcePlanner\ViolatedBusinessRulesTest.cs" />
     <Compile Include="Areas\Search\FakeApplicationRoleRepository.cs" />
