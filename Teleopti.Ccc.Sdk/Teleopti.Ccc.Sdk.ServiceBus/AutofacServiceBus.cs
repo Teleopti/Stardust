@@ -117,9 +117,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 							IsTypeAcceptableForThisBootStrapper(type))
 				.OnRegistered(e => ConfigureConsumer(e.ComponentRegistration))
 				.InstancePerDependency();
-			//builder.RegisterType<ImportForecastsFileToSkillConsumer>().As<IHandleEvent<ImportForecastsFileToSkill>>();
-			//builder.RegisterType<OpenAndSplitTargetSkillConsumer>().As<IHandleEvent<OpenAndSplitTargetSkill>>();
-
+			
 			builder.Update(container);
 		}
 

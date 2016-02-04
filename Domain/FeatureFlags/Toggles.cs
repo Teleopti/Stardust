@@ -102,7 +102,8 @@
 
 		Report_UseOpenXmlFormat_35797,
 		Scheduler_IntradayOptimization_36617,
-		Scheduler_AgentSkillAnalyzer_12345
+		Scheduler_AgentSkillAnalyzer_12345,
+		Wfm_UseManagersAndNodes
 		// ReSharper restore InconsistentNaming
 	}
 }

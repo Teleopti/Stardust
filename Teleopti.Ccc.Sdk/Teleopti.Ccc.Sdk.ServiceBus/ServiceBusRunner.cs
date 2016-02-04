@@ -1,9 +1,16 @@
 using System;
+using System.Configuration;
 using System.IO;
+using System.Linq;
 using System.Net;
+using System.Reflection;
+using System.Threading;
 using Autofac;
 using log4net.Config;
+using Stardust.Node;
+using Stardust.Node.API;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Sdk.ServiceBus.Container;
@@ -35,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		public void Start()
 		{
 			hostServiceStart();
-}
+		}
 
 		private void hostServiceStart()
 		{
@@ -49,6 +56,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()));
 			var sharedContainer = new ContainerBuilder().Build();
 			new ContainerConfiguration(sharedContainer, toggleManager).Configure(null);
+			if (toggleManager.IsEnabled(Toggles.Wfm_UseManagersAndNodes))
+			{
+				var nodeThread = new Thread(StartNode);
+				nodeThread.Start();
+			}
 
 			_requestBus = new ConfigFileDefaultHost("RequestQueue.config", new BusBootStrapper(makeContainer(toggleManager, sharedContainer)));
 			_requestBus.Start();
@@ -140,6 +152,28 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				{
 				}
 			}
+		}
+
+		private static void StartNode()
+		{
+			var assemblyName =
+				Assembly.GetExecutingAssembly()
+					.GetReferencedAssemblies()
+					.FirstOrDefault(x => x.Name.Equals(ConfigurationManager.AppSettings["HandlerAssembly"]));
+			if(assemblyName == null)
+				throw new Exception("Can not find the Asembly specified in AppSettings['HandlerAssembly']");
+
+			var assembly = Assembly.Load(assemblyName);
+			var nodeConfig = new NodeConfiguration(new Uri(ConfigurationManager.AppSettings["NodeBaseAddress"]),
+					 new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
+					 assembly, 
+					 ConfigurationManager.AppSettings["NodeName"]);
+
+			var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()));
+			var sharedContainer = new ContainerBuilder().Build();
+			new ContainerConfiguration(sharedContainer, toggleManager).Configure(null);
+
+			new NodeStarter().Start(nodeConfig, sharedContainer);
 		}
 	}
 }
