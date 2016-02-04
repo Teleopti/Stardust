@@ -113,7 +113,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		[UseOnToggle(Toggles.RTA_TeamChanges_36043)]
 		public virtual void Handle(PersonTeamChangedEvent @event)
 		{
-			_eventPublisher.Publish(new PersonAssociationChangedEvent());
+			_eventPublisher.Publish(new PersonAssociationChangedEvent
+			{
+				PersonId = @event.PersonId,
+				Timestamp = _now.UtcDateTime(),
+				BusinessUnitId = @event.CurrentBusinessUnitId,
+				SiteId = @event.CurrentSiteId,
+				TeamId = @event.CurrentTeamId
+			});
 		}
 	}
 }

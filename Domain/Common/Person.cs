@@ -123,25 +123,15 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual void ChangeTeam(ITeam team, IPersonPeriod personPeriod)
 		{
-			Guid? teamBefore = null;
-			Guid? teamAfter = null;
-
-			if (personPeriod.Team != null)
-			{
-				teamBefore = personPeriod.Team.Id;
-			}
-			if (team != null)
-			{
-				teamAfter = team.Id;
-			}
 			personPeriod.Team = team;
+			var info = currentAssociationInfo();
 			AddEvent(new PersonTeamChangedEvent
-				{
-					PersonId = Id.GetValueOrDefault(),
-					StartDate = personPeriod.StartDate.Date,
-					OldTeam = teamBefore,
-					NewTeam = teamAfter
-				});
+			{
+				PersonId = Id.GetValueOrDefault(),
+				CurrentBusinessUnitId = info.BusinessUnitId,
+				CurrentSiteId = info.SiteId,
+				CurrentTeamId = info.TeamId,
+			});
 		}
 
 		public virtual void AddSkill(IPersonSkill personSkill, IPersonPeriod personPeriod)
