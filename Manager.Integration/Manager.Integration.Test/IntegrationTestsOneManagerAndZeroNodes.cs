@@ -124,14 +124,8 @@ namespace Manager.Integration.Test
             if (AppDomainHelper.AppDomains != null &&
                 AppDomainHelper.AppDomains.Values.Any())
             {
-                LogHelper.LogInfoWithLineNumber("Will soon unload " + AppDomainHelper.AppDomains.Values.Count + " Appdomain(s)",
-                                                Logger);
-
                 foreach (var appDomain in AppDomainHelper.AppDomains.Values)
                 {
-                    LogHelper.LogInfoWithLineNumber("appDomain unload: " + appDomain,
-                                                    Logger);
-
                     AppDomain.Unload(appDomain);
                 }
             }
