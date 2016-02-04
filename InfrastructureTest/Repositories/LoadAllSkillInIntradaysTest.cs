@@ -40,5 +40,32 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			target.Skills().First().Name.Should().Be.EqualTo(skillWithQueue.Name);
 		}
 
+		[Test]
+		public void ShouldNotLoadDuplicateSkills()
+		{
+			var skillType = SkillTypeFactory.CreateSkillType();
+			var skillWithQueues = SkillFactory.CreateSkill("dummy", skillType, 15);
+			var activity = new Activity("dummyActivity");
+			skillWithQueues.Activity = activity;
+			var queue1 = QueueSourceFactory.CreateQueueSourceHelpdesk();
+			var queue2 = QueueSourceFactory.CreateQueueSourceInrikes();
+
+			PersistAndRemoveFromUnitOfWork(queue1);
+			PersistAndRemoveFromUnitOfWork(queue2);
+
+			PersistAndRemoveFromUnitOfWork(skillType);
+
+			PersistAndRemoveFromUnitOfWork(activity);
+			PersistAndRemoveFromUnitOfWork(skillWithQueues);
+
+			var workload = WorkloadFactory.CreateWorkload(skillWithQueues);
+			workload.AddQueueSource(queue1);
+			workload.AddQueueSource(queue2);
+			PersistAndRemoveFromUnitOfWork(workload);
+
+			var target = new LoadAllSkillInIntradays(CurrUnitOfWork);
+			target.Skills().Count().Should().Be.EqualTo(1);
+		}
+
 	}
 }

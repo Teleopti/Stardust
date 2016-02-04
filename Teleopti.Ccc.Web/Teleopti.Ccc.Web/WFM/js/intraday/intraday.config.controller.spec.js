@@ -1,5 +1,5 @@
 'use strict';
-describe('IntradayConigfCtrl', function () {
+describe('IntradayConfigCtrl', function () {
 	var $httpBackend,
 		$controller,
 		scope;
@@ -26,7 +26,7 @@ describe('IntradayConigfCtrl', function () {
 	}));
 
 	var createController = function () {
-		$controller('IntradayConigfCtrl', {
+		$controller('IntradayConfigCtrl', {
 			$scope: scope
 		});
 		scope.$digest();

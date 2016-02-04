@@ -19,9 +19,10 @@
 
 	<query name="loadIntradaySkillsWithAtLeastOneQueue">
 		<![CDATA[
-select s.Id as "Id", s.Name as "Name", s.IsDeleted as "IsDeleted" from Skill s
+select distinct s.Id as "Id", s.Name as "Name", s.IsDeleted as "IsDeleted" from Skill s
 	inner join s.WorkloadCollection wl
 	inner join wl.QueueSourceCollection
+order by s.Name
 ]]>
 	</query>
 

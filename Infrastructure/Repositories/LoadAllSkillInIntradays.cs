@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return _currentUnitOfWork.Current().Session()
 				.GetNamedQuery("loadIntradaySkillsWithAtLeastOneQueue")
 				.SetResultTransformer(Transformers.AliasToBean<SkillInIntraday>())
-				//.SetResultTransformer(Transformers.DistinctRootEntity)
 				.SetReadOnly(true)
 				.List<SkillInIntraday>();
 		}
