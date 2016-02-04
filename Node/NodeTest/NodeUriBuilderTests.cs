@@ -13,7 +13,7 @@ namespace NodeTest
         [SetUp]
         public void Setup()
         {
-            UriToTest = "http://localhost:9000";
+            UriToTest = "http://localhost:9000/jobmanager/";
         }
 
         [Test]
