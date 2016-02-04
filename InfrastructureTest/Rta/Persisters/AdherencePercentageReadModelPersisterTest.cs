@@ -72,30 +72,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public void ShouldUpdateExistingReadModel()
 		{
 			var personId = Guid.NewGuid();
-			Target.Persist(new AdherencePercentageReadModel
+			var model = new AdherencePercentageReadModel
 			{
 				Date = new DateTime(2012, 08, 29),
 				PersonId = personId,
 				LastTimestamp = "2012-08-29 8:00".Utc(),
 				TimeInAdherence = "0".Minutes(),
 				TimeOutOfAdherence = "10".Minutes()
-			});
-			Target.Persist(new AdherencePercentageReadModel
-			{
-				Date = new DateTime(2012, 08, 29),
-				PersonId = personId,
-				LastTimestamp = "2012-08-29 8:15".Utc(),
-				TimeInAdherence = "17".Minutes(),
-				TimeOutOfAdherence = "28".Minutes(),
-				State = new[] { new AdherencePercentageReadModelState { Timestamp = "2012-08-29 8:15".Utc() } }
-			});
+			};
+			Target.Persist(model);
+			model.Date = new DateTime(2012, 08, 29);
+			model.PersonId = personId;
+			model.LastTimestamp = "2012-08-29 8:15".Utc();
+			model.TimeInAdherence = "17".Minutes();
+			model.TimeOutOfAdherence = "28".Minutes();
+			model.State = new[] {new AdherencePercentageReadModelState {Timestamp = "2012-08-29 8:15".Utc()}};
+			Target.Persist(model);
 
-			var model = Target.Get("2012-08-29".Date(), personId);
-			model.LastTimestamp.Should().Be("2012-08-29 8:15".Utc());
-			model.BelongsToDate.Should().Be.EqualTo("2012-08-29".Date());
-			model.TimeOutOfAdherence.Should().Be.EqualTo("28".Minutes());
-			model.TimeInAdherence.Should().Be.EqualTo("17".Minutes());
-			model.State.Single().Timestamp.Should().Be("2012-08-29 8:15".Utc());
+			var actual = Target.Get("2012-08-29".Date(), personId);
+			actual.LastTimestamp.Should().Be("2012-08-29 8:15".Utc());
+			actual.BelongsToDate.Should().Be.EqualTo("2012-08-29".Date());
+			actual.TimeOutOfAdherence.Should().Be.EqualTo("28".Minutes());
+			actual.TimeInAdherence.Should().Be.EqualTo("17".Minutes());
+			actual.State.Single().Timestamp.Should().Be("2012-08-29 8:15".Utc());
 		}
 
 		[Test]
@@ -132,22 +131,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public void ShouldUpdateToNullables()
 		{
 			var personId = Guid.NewGuid();
-			Target.Persist(new AdherencePercentageReadModel
+			var model = new AdherencePercentageReadModel
 			{
 				Date = new DateTime(2012, 08, 29),
 				PersonId = personId,
 				IsLastTimeInAdherence = false,
 				LastTimestamp = "2012-08-29 8:00".Utc()
-			});
-			Target.Persist(new AdherencePercentageReadModel
-			{
-				Date = new DateTime(2012, 08, 29),
-				PersonId = personId
-			});
-
-			var model = Target.Get("2012-08-29".Date(), personId);
-			model.IsLastTimeInAdherence.Should().Be(null);
-			model.LastTimestamp.Should().Be(null);
+			};
+			Target.Persist(model);
+			model.IsLastTimeInAdherence = null;
+			model.LastTimestamp = null;
+			Target.Persist(model);
+			
+			var actual = Target.Get("2012-08-29".Date(), personId);
+			actual.IsLastTimeInAdherence.Should().Be(null);
+			actual.LastTimestamp.Should().Be(null);
 		}
 
 		[Test]
@@ -212,6 +210,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				ShiftHasEnded = true,
 				State = states
 			}));
+		}
+
+		[Test]
+		public void ShouldThrowIfUpdatedByAnother()
+		{
+			var personId = Guid.NewGuid();
+			Target.Persist(new AdherencePercentageReadModel
+			{
+				PersonId = personId,
+				Date = "2016-02-04".Utc()
+			});
+
+			var model1 = Target.Get("2016-02-04".Date(), personId);
+			var model2 = Target.Get("2016-02-04".Date(), personId);
+			Target.Persist(model2);
+			var exception = Assert.Catch<Exception>(() => Target.Persist(model1));
+
+			exception.Should().Not.Be.Null();
 		}
 	}
 }

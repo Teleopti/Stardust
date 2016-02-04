@@ -25,10 +25,12 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 
 		public void Persist(AdherencePercentageReadModel model)
 		{
+			var fromVersion = model.Version;
+			var toVersion = model.Version + 1;
 			_unitOfWork.Current().CreateSqlQuery(
 				"MERGE INTO ReadModel.AdherencePercentage AS T " +
-				"USING (VALUES (:PersonId, :Date )) AS S (PersonId, Date) " +
-				"ON T.PersonId = S.PersonId AND T.BelongsToDate = S.Date " +
+				"USING (VALUES (:PersonId, :Date, :FromVersion)) AS S (PersonId, Date, [Version]) " +
+				"ON T.PersonId = S.PersonId AND T.BelongsToDate = S.Date AND T.[Version] = S.[Version] " +
 				"WHEN NOT MATCHED THEN " +
 				"	INSERT " +
 				"	(" +
@@ -39,7 +41,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				"		TimeInAdherence," +
 				"		TimeOutOfAdherence," +
 				"		ShiftHasEnded," +
-				"		[State]" +
+				"		[State]," +
+				"		[Version]" +
 				"	) VALUES (" +
 				"		:PersonId," +
 				"		:Date," +
@@ -48,7 +51,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				"		:TimeInAdherence," +
 				"		:TimeOutOfAdherence," +
 				"		:ShiftHasEnded," +
-				"		:State" +
+				"		:State," +
+				"		:ToVersion" +
 				"	) " +
 				"WHEN MATCHED THEN " +
 				"	UPDATE SET" +
@@ -57,10 +61,13 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				"		TimeInAdherence = :TimeInAdherence," +
 				"		TimeOutOfAdherence = :TimeOutOfAdherence," +
 				"		ShiftHasEnded = :ShiftHasEnded, " +
-				"		[State] = :State " +
+				"		[State] = :State, " +
+				"		[Version] = :ToVersion" +
 				";")
 				.SetGuid("PersonId", model.PersonId)
 				.SetDateTime("Date", model.Date)
+				.SetParameter("FromVersion", fromVersion)
+				.SetParameter("ToVersion", toVersion)
 				.SetParameter("LastTimestamp", model.LastTimestamp)
 				.SetParameter("IsLastTimeInAdherence", model.IsLastTimeInAdherence)
 				.SetParameter("TimeInAdherence", model.TimeInAdherence)
@@ -68,6 +75,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.SetParameter("ShiftHasEnded", model.ShiftHasEnded)
 				.SetParameter("State", _serializer.SerializeObject(model.State), NHibernateUtil.StringClob)
 				.ExecuteUpdate();
+			model.Version = toVersion;
 		}
 
 		public AdherencePercentageReadModel Get(DateOnly date, Guid personId)
@@ -81,10 +89,11 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				"	TimeInAdherence," +
 				"	TimeOutOfAdherence," +
 				"	ShiftHasEnded, " +
-				"	[State] AS StateJson " +
+				"	[State] AS StateJson, " +
+				"	[Version]" +
 				"FROM ReadModel.AdherencePercentage WHERE" +
 				"	PersonId =:PersonId AND " +
-					"	BelongsToDate =:Date ")
+				"	BelongsToDate =:Date ")
 				.AddScalar("PersonId", NHibernateUtil.Guid)
 				.AddScalar("Date", NHibernateUtil.DateTime)
 				.AddScalar("LastTimestamp", NHibernateUtil.DateTime)
@@ -93,6 +102,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.AddScalar("TimeOutOfAdherence", NHibernateUtil.TimeSpan)
 				.AddScalar("ShiftHasEnded", NHibernateUtil.Boolean)
 				.AddScalar("StateJson", NHibernateUtil.StringClob)
+				.AddScalar("Version", NHibernateUtil.Int32)
 				.SetGuid("PersonId", personId)
 				.SetDateOnly("Date", date)
 				.SetResultTransformer(Transformers.AliasToBean(typeof (getModel)))
