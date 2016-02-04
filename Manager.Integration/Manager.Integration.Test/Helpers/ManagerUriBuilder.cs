@@ -15,6 +15,7 @@ namespace Manager.Integration.Test.Helpers
         public ManagerUriBuilder()
         {
             _managerLocationUri = new Uri(Settings.Default.ManagerLocationUri);
+            _uriBuilder = new UriBuilder(_managerLocationUri);
 
             _uriTemplateBuilder = new UriBuilder(_managerLocationUri);
 

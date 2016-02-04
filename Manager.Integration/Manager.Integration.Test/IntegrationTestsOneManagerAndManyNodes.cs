@@ -139,7 +139,7 @@ namespace Manager.Integration.Test
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
         [Test]
-        public void Create5RequestShouldReturnBothCancelAndDeleteStatuses()
+        public void CreateSeveralRequestShouldReturnBothCancelAndDeleteStatuses()
         {
             LogHelper.LogInfoWithLineNumber("Start test.",
                                             Logger);
@@ -148,7 +148,7 @@ namespace Manager.Integration.Test
 
             JobHelper.GiveNodesTimeToInitialize();
 
-            List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(5);
+            List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(2*NumberOfNodesToStart);
 
             var timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count);
 

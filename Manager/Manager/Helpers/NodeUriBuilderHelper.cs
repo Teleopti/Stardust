@@ -17,7 +17,7 @@ namespace Stardust.Manager.Helpers
         {
             if (string.IsNullOrEmpty(locationUri))
             {
-                throw new ArgumentNullException();
+                  throw new UriFormatException();
             }
 
             LocationUri = new Uri(locationUri);
