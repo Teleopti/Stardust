@@ -27,9 +27,12 @@ namespace Stardust.Manager.Helpers
                 throw new ArgumentNullException();
             }
 
-            UriBuilder = new UriBuilder(LocationUri);
+            UriTemplateBuilder = new UriBuilder(LocationUri);
 
+            UriBuilder = new UriBuilder(LocationUri);
         }
+
+        private UriBuilder UriTemplateBuilder { get; set; }
 
         public Uri GetIsAliveTemplateUri()
         {
@@ -56,6 +59,8 @@ namespace Stardust.Manager.Helpers
 
         public Uri CreateUri(string path)
         {
+            UriBuilder.Path = UriTemplateBuilder.Path;
+
             UriBuilder.Path += path;
 
             return UriBuilder.Uri;

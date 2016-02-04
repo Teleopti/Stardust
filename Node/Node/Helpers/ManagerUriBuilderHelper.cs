@@ -8,6 +8,8 @@ namespace Stardust.Node.Helpers
     {
         private UriBuilder UriBuilder { get; set; }
 
+        private UriBuilder UriTemplateBuilder { get; set; }
+
         public ManagerUriBuilderHelper(Uri locationUri) : this(locationUri.ToString())
         {
         }
@@ -17,6 +19,8 @@ namespace Stardust.Node.Helpers
             location.ThrowArgumentNullExceptionIfNullOrEmpty();
 
             UriBuilder = new UriBuilder(location);
+
+            UriTemplateBuilder = new UriBuilder(location);
 
             UriBuilder.Scheme.ThrowArgumentNullExceptionIfNullOrEmpty();
         }
@@ -97,6 +101,8 @@ namespace Stardust.Node.Helpers
 
         public Uri CreateUri(string path)
         {
+            UriBuilder.Path = UriTemplateBuilder.Path;
+
             UriBuilder.Path += path;
 
             return UriBuilder.Uri;
