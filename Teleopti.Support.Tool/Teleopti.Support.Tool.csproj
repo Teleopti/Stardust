@@ -420,7 +420,7 @@
 XCOPY "$(ProjectDir)SQLServerPerformance" "$(ProjectDir)bin\$(Configuration)\SQLServerPerformance" /S /Y /I
 XCOPY "$(ProjectDir)StartStopSystem" "$(ProjectDir)bin\$(Configuration)\StartStopSystem" /S /Y /I
 XCOPY "$(ProjectDir)WiseIISConfig" "$(ProjectDir)bin\$(Configuration)\WiseIISConfig" /S /Y /I
-if not exist "$(ProjectDir)settings.txt" copy "$(ProjectDir)..\.debug-Setup\config\settings.txt" "$(ProjectDir)settings.txt"
+COPY "$(ProjectDir)..\.debug-Setup\config\settings.txt" "$(ProjectDir)settings.txt"
 </PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
