@@ -68,22 +68,21 @@ namespace Stardust.Node.Timers
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {
                     LogHelper.LogDebugWithLineNumber(Logger,
-                                                     WhoAmI + ": Node start up notification to manager succeded. Manager Uri : ( " +
-                                                     CallbackTemplateUri + " )");
+                                                     WhoAmI + ": Node start up notification to manager succeded.");
 
                     TrySendNodeStartUpNotificationSuccededInvoke();
                 }
                 else
                 {
                     LogHelper.LogWarningWithLineNumber(Logger,
-                                                       WhoAmI + ": Node start up notification to manager failed. Manager Uri : ( " + CallbackTemplateUri + "  )");
+                                                       WhoAmI + ": Node start up notification to manager failed.");
                 }
             }
 
             catch
             {
                 LogHelper.LogErrorWithLineNumber(Logger,
-                                                 WhoAmI + ": Node start up notification to manager failed. Manager Uri : ( " + CallbackTemplateUri + "  )");
+                                                 WhoAmI + ": Node start up notification to manager failed.");
             }
         }
     }

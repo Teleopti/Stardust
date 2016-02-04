@@ -91,7 +91,7 @@ namespace Stardust.Node.Timers
 
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {
-                    string msg = string.Format("{0} : Send ({3}) job status to manager succeeded for job ( jobId, jobName ) : ( {1}, {2} )",
+                    string msg = string.Format("{0} : Sent job status to manager ({3}) for job ( jobId, jobName ) : ( {1}, {2} )",
                                                WhoAmI,
                                                JobToDo.Id,
                                                JobToDo.Name,
