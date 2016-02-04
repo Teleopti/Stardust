@@ -54,7 +54,13 @@ namespace Manager.IntegrationTest.Console.Host
             {
                 foreach (var appDomain in AppDomains.Values)
                 {
-                    AppDomain.Unload(appDomain);
+                    try
+                    {
+                        AppDomain.Unload(appDomain);
+                    }
+                    catch (Exception)
+                    {                        
+                    }
                 }
 
                 return true;
@@ -100,6 +106,8 @@ namespace Manager.IntegrationTest.Console.Host
             AppDomain.CurrentDomain.DomainUnload += CurrentDomainOnDomainUnload;
 
             AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
+
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
             AppDomains = new ConcurrentDictionary<string, AppDomain>();
 
@@ -241,8 +249,19 @@ namespace Manager.IntegrationTest.Console.Host
 
             foreach (var appDomain in AppDomains.Values)
             {
-                AppDomain.Unload(appDomain);
+                try
+                {
+                    AppDomain.Unload(appDomain);
+                }
+                catch (Exception)
+                {
+                }
             }
+        }
+
+        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            LogHelper.LogErrorWithLineNumber(string.Empty);
         }
 
         private static void CurrentDomain_ProcessExit(object sender,
@@ -258,7 +277,14 @@ namespace Manager.IntegrationTest.Console.Host
 
             foreach (var appDomain in AppDomains.Values)
             {
-                AppDomain.Unload(appDomain);
+                try
+                {
+                    AppDomain.Unload(appDomain);
+                }
+                catch (Exception)
+                {
+
+                }
             }
 
             QuitEvent.Set();
@@ -271,7 +297,13 @@ namespace Manager.IntegrationTest.Console.Host
         {
             foreach (var appDomain in AppDomains.Values)
             {
-                AppDomain.Unload(appDomain);
+                try
+                {
+                    AppDomain.Unload(appDomain);
+                }
+                catch (Exception)
+                {
+                }
             }
 
             QuitEvent.Set();

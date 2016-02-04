@@ -333,7 +333,7 @@ namespace Manager.Integration.Test
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
 
-            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait();
+            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.CancelAllRequest();
             ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
