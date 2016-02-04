@@ -20,7 +20,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 {
-	public class ResourcePlannerTestAttribute : IoCTestAttribute
+	public class ResourcePlannerTest_DontUseAttribute : IoCTestAttribute
 	{
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{

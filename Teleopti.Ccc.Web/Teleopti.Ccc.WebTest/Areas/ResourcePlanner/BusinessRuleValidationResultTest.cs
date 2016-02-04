@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 {
 	[TestFixture]
-	[ResourcePlannerTest]
+	[ResourcePlannerTest_DontUse]
 	public class DayOffBusinessRuleValidationTest
 	{
 		public DayOffBusinessRuleValidation Target;

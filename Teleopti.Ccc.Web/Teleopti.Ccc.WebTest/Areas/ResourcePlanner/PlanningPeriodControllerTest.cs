@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 {
-	[ResourcePlannerTest]
+	[ResourcePlannerTest_DontUse]
 	public class PlanningPeriodControllerTest
 	{
 		//break this test in to multiple
