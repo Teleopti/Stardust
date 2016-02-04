@@ -13,31 +13,21 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	{
 		private readonly ScheduleOptimization _scheduleOptimization;
 		private readonly IntradayOptimization _intradayOptimization;
-		private readonly IActionThrottler _actionThrottler;
 
-		public OptimizationController(ScheduleOptimization scheduleOptimization, IntradayOptimization intradayOptimization, IActionThrottler actionThrottler)
+		public OptimizationController(ScheduleOptimization scheduleOptimization, IntradayOptimization intradayOptimization)
 		{
 			_scheduleOptimization = scheduleOptimization;
 			_intradayOptimization = intradayOptimization;
-			_actionThrottler = actionThrottler;
 		}
 
 		[HttpPost, Route("api/ResourcePlanner/optimize/FixedStaff/{id}")]
-		public virtual IHttpActionResult FixedStaff(Guid id, BlockToken tokenFromScheduling)
+		public virtual IHttpActionResult FixedStaff(Guid id)
 		{
-			_actionThrottler.Resume(tokenFromScheduling);
-			try
-			{
-				return Ok(_scheduleOptimization.Execute(id));
-			}
-			finally
-			{
-				_actionThrottler.Finish(tokenFromScheduling);
-			}
+			return Ok(_scheduleOptimization.Execute(id));
 		}
 
 		[HttpPost, Route("api/ResourcePlanner/optimize/intraday/{id}")]
-		public virtual IHttpActionResult OptimizeIntraday(Guid id, BlockToken tokenFromScheduling)
+		public virtual IHttpActionResult OptimizeIntraday(Guid id)
 		{
 			return Ok(_intradayOptimization.Optimize(id));
 		}

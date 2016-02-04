@@ -76,9 +76,7 @@
 						//to make sure long optimization request doesn't create a new cookie based on current time
 						//we call keepAlive here again
 						PlanningPeriodSvrc.keepAlive().then(function() {
-							PlanningPeriodSvrc.launchOptimization.query({
-								id: p.Id
-							}, JSON.stringify(scheduleResult.ThrottleToken)).$promise.then(function(result) {
+							PlanningPeriodSvrc.launchOptimization.query({id: p.Id}).$promise.then(function(result) {
 								$scope.schedulingPerformed = true;
 								$state.go('resourceplanner.report', {
 									id:p.Id,

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
@@ -10,7 +9,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public int ConflictCount { get; set; }
 		public int ScheduledAgentsCount { get; set; }
 		public IEnumerable<BusinessRulesValidationResult> BusinessRulesValidationResults { get; set; }
-		public BlockToken ThrottleToken { get; set; }
 	}
 
 	public struct BusinessRulesValidationResult : IEquatable<BusinessRulesValidationResult>
