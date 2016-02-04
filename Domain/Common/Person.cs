@@ -314,16 +314,20 @@ namespace Teleopti.Ccc.Domain.Common
             set { _employmentNumber = value; }
         }
 
-        public virtual void AddPersonPeriod(IPersonPeriod period)
-        {
-            InParameter.NotNull("period", period);
+		public virtual void AddSchedulePeriod(ISchedulePeriod period)
+		{
+			InParameter.NotNull("period", period);
 
-            if (!_personPeriodCollection.ContainsKey(period.StartDate))
-            {
-                period.SetParent(this);
-                _personPeriodCollection.Add(period.StartDate, period);
-            }
-        }
+			if (_personSchedulePeriodCollection.ContainsKey(period.DateFrom)) return;
+			period.SetParent(this);
+			_personSchedulePeriodCollection.Add(period.DateFrom, period);
+		}
+
+		public virtual void RemoveSchedulePeriod(ISchedulePeriod period)
+		{
+			InParameter.NotNull("period", period);
+			_personSchedulePeriodCollection.Remove(period.DateFrom);
+		}
 
 		public virtual void ChangeSchedulePeriodStartDate(DateOnly startDate, ISchedulePeriod schedulePeriod)
 		{
@@ -339,17 +343,29 @@ namespace Teleopti.Ccc.Domain.Common
 			_personSchedulePeriodCollection.Add(startDate, schedulePeriod);
 		}
 
-        public virtual void RemoveSchedulePeriod(ISchedulePeriod period)
-        {
-            InParameter.NotNull("period", period);
-            _personSchedulePeriodCollection.Remove(period.DateFrom);
-        }
+		public virtual void RemoveAllSchedulePeriods()
+		{
+			_personSchedulePeriodCollection.Clear();
+		}
 
-        public virtual void DeletePersonPeriod(IPersonPeriod period)
-        {
-            InParameter.NotNull("period", period);
-            _personPeriodCollection.Remove(period.StartDate);
-        }
+		public virtual void AddPersonPeriod(IPersonPeriod period)
+		{
+			InParameter.NotNull("period", period);
+
+			if (!_personPeriodCollection.ContainsKey(period.StartDate))
+			{
+				period.SetParent(this);
+				_personPeriodCollection.Add(period.StartDate, period);
+				addPersonPeriodChangedEvent();
+			}
+		}
+
+	    public virtual void DeletePersonPeriod(IPersonPeriod period)
+		{
+			InParameter.NotNull("period", period);
+			_personPeriodCollection.Remove(period.StartDate);
+			addPersonPeriodChangedEvent();
+		}
 
 		public virtual void ChangePersonPeriodStartDate(DateOnly startDate, IPersonPeriod personPeriod)
 		{
@@ -363,18 +379,31 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 			personPeriod.StartDate = startDate;
 			_personPeriodCollection.Add(startDate, personPeriod);
+			addPersonPeriodChangedEvent();
 		}
-		
-		public virtual void AddSchedulePeriod(ISchedulePeriod period)
-        {
-            InParameter.NotNull("period", period);
 
-            if (_personSchedulePeriodCollection.ContainsKey(period.DateFrom)) return;
-            period.SetParent(this);
-            _personSchedulePeriodCollection.Add(period.DateFrom, period);
-        }
+		public virtual void RemoveAllPersonPeriods()
+		{
+			_personPeriodCollection.Clear();
+			addPersonPeriodChangedEvent();
+		}
 
-        public virtual IPersonPeriod Period(DateOnly dateOnly)
+		private void addPersonPeriodChangedEvent()
+		{
+			AddEvent(now =>
+			{
+				var info = currentAssociationInfo(now);
+				return new PersonPeriodChangedEvent
+				{
+					PersonId = Id.GetValueOrDefault(),
+					CurrentBusinessUnitId = info.BusinessUnitId,
+					CurrentSiteId = info.SiteId,
+					CurrentTeamId = info.TeamId,
+				};
+			});
+		}
+
+		public virtual IPersonPeriod Period(DateOnly dateOnly)
         {
             IPersonPeriod period = null;
 
@@ -427,16 +456,6 @@ namespace Teleopti.Ccc.Domain.Common
             }
 
             return retList;
-        }
-
-        public virtual void RemoveAllPersonPeriods()
-        {
-            _personPeriodCollection.Clear();
-        }
-
-        public virtual void RemoveAllSchedulePeriods()
-        {
-            _personSchedulePeriodCollection.Clear();
         }
 
         public virtual ISchedulePeriod SchedulePeriod(DateOnly dateOnly)

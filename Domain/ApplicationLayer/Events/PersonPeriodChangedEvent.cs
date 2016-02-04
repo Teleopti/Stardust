@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	public class PersonTeamChangedEvent : IEvent, ITimestamped
+	public class PersonPeriodChangedEvent : IEvent, ITimestamped
 	{
 		public DateTime Timestamp { get; set; }
 		public Guid PersonId { get; set; }
