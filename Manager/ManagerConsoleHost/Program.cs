@@ -13,6 +13,7 @@ namespace ManagerConsoleHost
 {
     internal class Program
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (Program));
 
         private static string WhoAmI { get; set; }
 
@@ -24,13 +25,14 @@ namespace ManagerConsoleHost
             SetConsoleCtrlHandler(ConsoleCtrlCheck,
                                   true);
 
-            System.Console.CancelKeyPress += ConsoleOnCancelKeyPress; 
+            System.Console.CancelKeyPress += ConsoleOnCancelKeyPress;
 
             AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
 
             WhoAmI = "[MANAGER CONSOLE HOST, " + Environment.MachineName.ToUpper() + "]";
 
-            LogHelper.LogInfoWithLineNumber(WhoAmI + " : started.");
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            WhoAmI + " : started.");
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
@@ -45,7 +47,7 @@ namespace ManagerConsoleHost
 
             _managerStarter.Start(config);
 
-            QuitEvent.WaitOne();            
+            QuitEvent.WaitOne();
         }
 
         [DllImport("Kernel32")]
@@ -114,7 +116,8 @@ namespace ManagerConsoleHost
         private static void CurrentDomain_UnhandledException(object sender,
                                                              UnhandledExceptionEventArgs e)
         {
-            LogHelper.LogErrorWithLineNumber(WhoAmI + ": Unhandeled Exception in ManagerConsoleHost");
+            LogHelper.LogErrorWithLineNumber(Logger,
+                                             WhoAmI + ": Unhandeled Exception in ManagerConsoleHost");
         }
     }
 }
