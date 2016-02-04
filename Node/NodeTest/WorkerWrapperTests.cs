@@ -35,25 +35,25 @@ namespace NodeTest
                                                               handlerAssembly,
                                                               nodeName);
 
-            WorkerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
-                                              NodeConfigurationFake,
-                                              new NodeStartupNotificationToManagerFake(NodeConfigurationFake,
-                                                                                       CallBackUriTemplateFake),
-                                              new PingToManagerFake(),
-                                              new SendJobDoneTimerFake(NodeConfigurationFake,
-                                                                       CallBackUriTemplateFake),
-                                              new SendJobCanceledTimerFake(NodeConfigurationFake,
-                                                                           CallBackUriTemplateFake),
-                                              new SendJobFaultedTimerFake(NodeConfigurationFake,
-                                                                          CallBackUriTemplateFake),
-                                              new PostHttpRequestFake());
-
 
         }
 
         [SetUp]
         public void Setup()
         {
+            WorkerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
+                                  NodeConfigurationFake,
+                                  new NodeStartupNotificationToManagerFake(NodeConfigurationFake,
+                                                                           CallBackUriTemplateFake),
+                                  new PingToManagerFake(),
+                                  new SendJobDoneTimerFake(NodeConfigurationFake,
+                                                           CallBackUriTemplateFake),
+                                  new SendJobCanceledTimerFake(NodeConfigurationFake,
+                                                               CallBackUriTemplateFake),
+                                  new SendJobFaultedTimerFake(NodeConfigurationFake,
+                                                              CallBackUriTemplateFake),
+                                  new PostHttpRequestFake());
+
             NodeController = new NodeController(WorkerWrapper);
 
             var parameters = new TestJobParams("hejhopp",
