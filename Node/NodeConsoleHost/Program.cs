@@ -126,8 +126,11 @@ namespace NodeConsoleHost
         private static void CurrentDomain_UnhandledException(object sender,
                                                              UnhandledExceptionEventArgs e)
         {
+            Exception exp = (Exception) e.ExceptionObject;
+
             LogHelper.LogErrorWithLineNumber(Logger,
-                                             WhoAmI + " : CurrentDomain_UnhandledException called.");
+                                             WhoAmI + " : CurrentDomain_UnhandledException called.",
+                                             exp);
         }
     }
 }

@@ -27,12 +27,17 @@ namespace Stardust.Node.API
             {
                 throw new ArgumentNullException();
             }
+
             if (_workerWrapper.IsTaskExecuting)
             {
+                string msg = string.Format("{0} : New job request from manager rejected, node is working on another job ( jobId, jobName ) : ( {1}, {2} )",
+                                           _workerWrapper.WhoamI,
+                                           jobToDo.Id,
+                                           jobToDo.Name);
+
                 LogHelper.LogInfoWithLineNumber(Logger,
-                                                _workerWrapper.WhoamI +
-                                                ": New job request from manager rejected, node is working on an earlier request. JobId: " +
-                                                jobToDo.Id);
+                                                msg);
+
                 return CreateConflictStatusCode();
             }
 
@@ -43,7 +48,7 @@ namespace Stardust.Node.API
                 return response;
             }
 
-            string startJobMessage = string.Format("{0} : Starting job (id, name) : ({1}, {2})",
+            string startJobMessage = string.Format("{0} : Starting job ( jobId, jobName ) : ( {1}, {2} )",
                                                    _workerWrapper.WhoamI,
                                                    jobToDo.Id,
                                                    jobToDo.Name);
@@ -67,7 +72,7 @@ namespace Stardust.Node.API
                 throw new ArgumentNullException();
             }
             LogHelper.LogInfoWithLineNumber(Logger,
-                                            _workerWrapper.WhoamI + ": Try cancel job. JobId " + jobId);
+                                            _workerWrapper.WhoamI + ": Try cancel job ( jobId ) : ( " + jobId + " )");
 
             var currentJob = _workerWrapper.GetCurrentMessageToProcess();
 
@@ -87,8 +92,8 @@ namespace Stardust.Node.API
                 return Ok();
             }
             LogHelper.LogInfoWithLineNumber(Logger,
-                                            _workerWrapper.WhoamI + ": Could not cancel job since job not found on this node. JobId " +
-                                            jobId);
+                                            _workerWrapper.WhoamI + ": Could not cancel job since job not found on this node. Manager sent job ( jobId ) : ( " +
+                                            jobId + " )");
             return NotFound();
         }
 
@@ -102,7 +107,7 @@ namespace Stardust.Node.API
         {
             ValidateJobDefintionValues(jobToDo);
 
-            return Ok(_workerWrapper.WhoamI + ": Work started for jobId " + jobToDo.Name);
+            return Ok(_workerWrapper.WhoamI + ": Work started for job ( jobId, jobName )  : ( " + jobToDo.Id + ", " + jobToDo.Name + " )");
         }
 
         private IHttpActionResult CreateConflictStatusCode()

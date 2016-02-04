@@ -116,8 +116,11 @@ namespace ManagerConsoleHost
         private static void CurrentDomain_UnhandledException(object sender,
                                                              UnhandledExceptionEventArgs e)
         {
+            Exception exp = (Exception) e.ExceptionObject;
+
             LogHelper.LogErrorWithLineNumber(Logger,
-                                             WhoAmI + ": Unhandeled Exception in ManagerConsoleHost");
+                                             WhoAmI + ": Unhandeled Exception",
+                                             exp);
         }
     }
 }

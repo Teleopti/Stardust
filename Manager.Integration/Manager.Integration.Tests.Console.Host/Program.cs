@@ -59,7 +59,7 @@ namespace Manager.IntegrationTest.Console.Host
                         AppDomain.Unload(appDomain);
                     }
                     catch (Exception)
-                    {                        
+                    {
                     }
                 }
 
@@ -152,7 +152,7 @@ namespace Manager.IntegrationTest.Console.Host
                                       managerAppDomain);
 
                 var assemblyFile = new FileInfo(Path.Combine(managerAppDomainSetup.ApplicationBase,
-                                                managerAppDomainSetup.ApplicationName));
+                                                             managerAppDomainSetup.ApplicationName));
 
                 managerAppDomain.ExecuteAssembly(assemblyFile.FullName);
             });
@@ -261,9 +261,13 @@ namespace Manager.IntegrationTest.Console.Host
             }
         }
 
-        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        private static void CurrentDomain_UnhandledException(object sender,
+                                                             UnhandledExceptionEventArgs e)
         {
-            LogHelper.LogErrorWithLineNumber(string.Empty);
+            Exception exp = (Exception) e.ExceptionObject;
+
+            LogHelper.LogErrorWithLineNumber(string.Empty,
+                                             exp.InnerException);
         }
 
         private static void CurrentDomain_ProcessExit(object sender,
@@ -285,7 +289,6 @@ namespace Manager.IntegrationTest.Console.Host
                 }
                 catch (Exception)
                 {
-
                 }
             }
 

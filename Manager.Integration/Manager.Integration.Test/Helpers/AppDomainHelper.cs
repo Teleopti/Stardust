@@ -36,8 +36,11 @@ namespace Manager.Integration.Test.Helpers
                     ApplicationBase = directoryManagerAssemblyLocationFullPath.FullName,
                     ApplicationName = Settings.Default.ManagerIntegrationConsoleHostAssemblyName,
                     ShadowCopyFiles = "true",
-                    AppDomainInitializerArguments = new[] {numberOfNodes.ToString()},
-                    ConfigurationFile = configFileName.FullName,
+                    AppDomainInitializerArguments = new[]
+                    {
+                        numberOfNodes.ToString()
+                    },
+                    ConfigurationFile = configFileName.FullName
                 };
 
                 AppDomain appDomain = AppDomain.CreateDomain(managerAppDomainSetup.ApplicationName,
@@ -54,7 +57,6 @@ namespace Manager.Integration.Test.Helpers
                 var ret = appDomain.ExecuteAssembly(assemblyToExecute.FullName,
                                                     managerAppDomainSetup.AppDomainInitializerArguments);
 
-                Environment.ExitCode = ret;
             });
         }
 

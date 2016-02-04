@@ -19,12 +19,7 @@ namespace Manager.Integration.Test.Scripts
                 throw new ArgumentNullException("connectionstring");
             }
 
-            string line;
-
-            using (StreamReader sr = new StreamReader(scriptFile.FullName))
-            {
-                line = sr.ReadToEnd();
-            }
+            string line = File.ReadAllText(scriptFile.FullName);
 
             if (string.IsNullOrEmpty(line))
             {
@@ -49,6 +44,7 @@ namespace Manager.Integration.Test.Scripts
                                                          Logger,
                                                          exp);
                     }
+
                 }
 
                 con.Close();

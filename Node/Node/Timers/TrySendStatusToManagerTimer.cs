@@ -91,7 +91,7 @@ namespace Stardust.Node.Timers
 
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {
-                    string msg = string.Format("{0} : Send ({3}) job status to manager succeeded for job (id, name) : ({1}, {2})",
+                    string msg = string.Format("{0} : Send ({3}) job status to manager succeeded for job ( jobId, jobName ) : ( {1}, {2} )",
                                                WhoAmI,
                                                JobToDo.Id,
                                                JobToDo.Name,
@@ -105,7 +105,7 @@ namespace Stardust.Node.Timers
                 }
                 else
                 {
-                    string msg = string.Format("{0} : Send status to manager failed for job (id, name) : ({1}, {2}). Reason : {3}",
+                    string msg = string.Format("{0} : Send status to manager failed for job ( jobId, jobName ) : ( {1}, {2} ). Reason : {3}",
                                                WhoAmI,
                                                JobToDo.Id,
                                                JobToDo.Name,
@@ -118,7 +118,7 @@ namespace Stardust.Node.Timers
 
             catch (Exception exp)
             {
-                string msg = string.Format("{0} : Send status to manager failed for job (id, name) : ({1}, {2}). Reason : {3}",
+                string msg = string.Format("{0} : Send status to manager failed for job ( jobId, jobName ) : ( {1}, {2} ). Reason : {3}",
                                            WhoAmI,
                                            JobToDo.Id,
                                            JobToDo.Name,

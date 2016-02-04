@@ -35,6 +35,8 @@ namespace Manager.Integration.Test
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
@@ -68,6 +70,13 @@ namespace Manager.Integration.Test
                     task.Start();
                 }
             }
+        }
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception exp = (Exception) e.ExceptionObject;
+
+
         }
 
         private static void TryCreateSqlLoggingTable()
@@ -112,7 +121,10 @@ namespace Manager.Integration.Test
                 {
                     try
                     {
-                        AppDomain.Unload(appDomain);
+                        if (!appDomain.IsFinalizingForUnload())
+                        {
+                            AppDomain.Unload(appDomain);
+                        }                        
                     }
 
                     catch (Exception)
@@ -130,7 +142,7 @@ namespace Manager.Integration.Test
 
         private bool _clearDatabase = true;
 
-        private bool _debugMode = true;
+        private bool _debugMode = false;
 
         private string _buildMode = "Debug";
 
