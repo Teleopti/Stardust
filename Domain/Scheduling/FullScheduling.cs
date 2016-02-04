@@ -198,17 +198,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			});
 		}
 
-		private static IList<IScheduleDay> extractAllSchedules(ISchedulingResultStateHolder stateHolder,
-			PeopleSelection people,
-			DateOnlyPeriod period)
+		private static IList<IScheduleDay> extractAllSchedules(ISchedulingResultStateHolder stateHolder, PeopleSelection people, DateOnlyPeriod period)
 		{
 			var allSchedules = new List<IScheduleDay>();
-			foreach (var schedule in stateHolder.Schedules)
+			foreach (var schedule in stateHolder.Schedules.Where(schedule => people.FixedStaffPeople.Contains(schedule.Key)))
 			{
-				if (people.FixedStaffPeople.Contains(schedule.Key))
-				{
-					allSchedules.AddRange(schedule.Value.ScheduledDayCollection(period));
-				}
+				allSchedules.AddRange(schedule.Value.ScheduledDayCollection(period));
 			}
 			return allSchedules;
 		}

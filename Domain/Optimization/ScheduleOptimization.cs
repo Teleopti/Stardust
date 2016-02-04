@@ -74,13 +74,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 		protected virtual IPlanningPeriod SetupAndOptimize(Guid planningPeriodId)
 		{
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
-
 			var period = planningPeriod.Range;
 
 			_prerequisites.MakeSureLoaded();
-
 			var people = _fixedStaffLoader.Load(period);
-
 			_setupStateHolderForWebScheduling.Setup(period, people);
 
 			var allSchedules = extractAllSchedules(_schedulerStateHolder().SchedulingResultState, people, period);
@@ -97,27 +94,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_classicDaysOffOptimizationCommand.Execute(matrixOriginalStateContainerListForDayOffOptimization, period, optimizationPreferences, _schedulerStateHolder(),
 				new NoBackgroundWorker(), dayOffOptimizationPreferenceProvider);
 
-			_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, allSchedules, people.AllPeople,
-				dayOffOptimizationPreferenceProvider);
+			_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, allSchedules, people.AllPeople, dayOffOptimizationPreferenceProvider);
 
 			//should maybe happen _after_ all schedules are persisted?
 			planningPeriod.Scheduled();
 
 			return planningPeriod;
 		}
-
-
-		private static IList<IScheduleDay> extractAllSchedules(ISchedulingResultStateHolder stateHolder,
-			PeopleSelection people,
-			DateOnlyPeriod period)
+		
+		private static IList<IScheduleDay> extractAllSchedules(ISchedulingResultStateHolder stateHolder, PeopleSelection people, DateOnlyPeriod period)
 		{
 			var allSchedules = new List<IScheduleDay>();
-			foreach (var schedule in stateHolder.Schedules)
+			foreach (var schedule in stateHolder.Schedules.Where(schedule => people.FixedStaffPeople.Contains(schedule.Key)))
 			{
-				if (people.FixedStaffPeople.Contains(schedule.Key))
-				{
-					allSchedules.AddRange(schedule.Value.ScheduledDayCollection(period));
-				}
+				allSchedules.AddRange(schedule.Value.ScheduledDayCollection(period));
 			}
 			return allSchedules;
 		}
