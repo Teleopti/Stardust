@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				};
 			target.Handle(command);
 			var personAbsence = _scheduleRepository.LoadAll().Single() as PersonAbsence;
-			var @event = personAbsence.PopAllEvents().Single() as FullDayAbsenceAddedEvent;
+			var @event = personAbsence.PopAllEvents(new Now()).Single() as FullDayAbsenceAddedEvent;
 			@event.AbsenceId.Should().Be(personAbsence.Layer.Payload.Id.Value);
 			@event.PersonId.Should().Be(_personRepository.Single().Id.Value);
 			@event.ScenarioId.Should().Be(_currentScenario.Current().Id.Value);
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var absenceLayer = personAbsence.Layer as AbsenceLayer;
 			absenceLayer.Period.StartDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.StartDate, agentsTimeZone));
 			absenceLayer.Period.EndDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.EndDate.AddHours(24).AddMinutes(-1), agentsTimeZone));
-			var @event = personAbsence.PopAllEvents().Single() as FullDayAbsenceAddedEvent;
+			var @event = personAbsence.PopAllEvents(new Now()).Single() as FullDayAbsenceAddedEvent;
 			@event.StartDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.StartDate, agentsTimeZone));
 			@event.EndDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.EndDate.AddHours(24).AddMinutes(-1), agentsTimeZone));
 		}
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var absenceLayer = personAbsence.Layer as AbsenceLayer;
 			absenceLayer.Period.StartDateTime.Should().Be(personAssignmentPeriod.StartDateTime);
 			absenceLayer.Period.EndDateTime.Should().Be(personAssignmentPeriod.EndDateTime);
-			var @event = personAbsence.PopAllEvents().Single() as FullDayAbsenceAddedEvent;
+			var @event = personAbsence.PopAllEvents(new Now()).Single() as FullDayAbsenceAddedEvent;
 			@event.StartDateTime.Should().Be(personAssignmentPeriod.StartDateTime);
 			@event.EndDateTime.Should().Be(personAssignmentPeriod.EndDateTime);
 		}
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personAbsence = _scheduleRepository.LoadAll().Single(scheduleItem => scheduleItem is PersonAbsence) as PersonAbsence;
 			var absenceLayer = personAbsence.Layer as AbsenceLayer;
 			absenceLayer.Period.StartDateTime.Should().Be(personAssignmentPeriod.EndDateTime);
-			var @event = personAbsence.PopAllEvents().Single() as FullDayAbsenceAddedEvent;
+			var @event = personAbsence.PopAllEvents(new Now()).Single() as FullDayAbsenceAddedEvent;
 			@event.StartDateTime.Should().Be(personAssignmentPeriod.EndDateTime);
 		}
 
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personAbsence = _scheduleRepository.LoadAll().Single(scheduleItem => scheduleItem is PersonAbsence) as PersonAbsence;
 			var absenceLayer = personAbsence.Layer as AbsenceLayer;
 			absenceLayer.Period.EndDateTime.Should().Be(personAssignmentPeriod.EndDateTime);
-			var @event = personAbsence.PopAllEvents().Single() as FullDayAbsenceAddedEvent;
+			var @event = personAbsence.PopAllEvents(new Now()).Single() as FullDayAbsenceAddedEvent;
 			@event.EndDateTime.Should().Be(personAssignmentPeriod.EndDateTime);
 		}
 	}

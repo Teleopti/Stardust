@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.Implementa
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Update);
 			var publisher = new eventPopulatingPublisherProbe();
-			var target = new ScheduleChangedEventPublisher(publisher);
+			var target = new ScheduleChangedEventPublisher(publisher, new Now());
 			target.AfterFlush(new[] { rootChangeInfo });
 
 			Assert.That(publisher.PublishedEvent.StartDateTime, Is.EqualTo(personAssignment.Period.StartDateTime));
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.Implementa
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Update);
 			var publisher = new eventPopulatingPublisherTrowingSqlExeption();
-			var target = new ScheduleChangedEventPublisher(publisher);
+			var target = new ScheduleChangedEventPublisher(publisher, new Now());
 			try
 			{
 				target.AfterFlush(new[] { rootChangeInfo });

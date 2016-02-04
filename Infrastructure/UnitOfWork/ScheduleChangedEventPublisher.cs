@@ -12,10 +12,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	public class ScheduleChangedEventPublisher : IPersistCallback
 	{
 		private readonly IEventPopulatingPublisher _eventPublisher;
+		private readonly INow _now;
 
-		public ScheduleChangedEventPublisher(IEventPopulatingPublisher eventPublisher)
+		public ScheduleChangedEventPublisher(IEventPopulatingPublisher eventPublisher, INow now)
 		{
 			_eventPublisher = eventPublisher;
+			_now = now;
 		}
 
 		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
@@ -28,7 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				.Select(x =>
 				{
 					if (x is IAggregateRootWithEvents)
-						(x as IAggregateRootWithEvents).PopAllEvents();
+						(x as IAggregateRootWithEvents).PopAllEvents(_now);
 					return x;
 				})
 				.ToArray();

@@ -79,23 +79,28 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 		private IPerson _updatedBy;
 		private DateTime? _updatedOn;
 		private readonly LocalizedUpdateInfo _localizedUpdateInfo = new LocalizedUpdateInfo();
-		private readonly IList<Func<IEvent>> _events = new List<Func<IEvent>>();
+		private readonly IList<Func<INow, IEvent>> _events = new List<Func<INow, IEvent>>();
 
-		public virtual IEnumerable<IEvent> PopAllEvents()
+		public virtual IEnumerable<IEvent> PopAllEvents(INow now)
 		{
-			var allEvents = _events.Select(e => e.Invoke()).ToArray();
+			var allEvents = _events.Select(e => e.Invoke(now)).ToArray();
 			_events.Clear();
 			return allEvents;
 		}
 
+		protected void AddEvent(Func<INow, IEvent> @event)
+		{
+			_events.Add(@event.Invoke);
+		}
+
 		protected void AddEvent(Func<IEvent> @event)
 		{
-			_events.Add(@event);
+			_events.Add(n => @event.Invoke());
 		}
 
 		protected void AddEvent(IEvent @event)
 		{
-			_events.Add(() => @event);
+			_events.Add(n => @event);
 		}
 
 		public virtual IPerson UpdatedBy

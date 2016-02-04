@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			target.Handle(command);
 
 			var personAbsence = _scheduleRepository.LoadAll().Single() as PersonAbsence;
-			var @event = personAbsence.PopAllEvents().Single() as PersonAbsenceAddedEvent;
+			var @event = personAbsence.PopAllEvents(new Now()).Single() as PersonAbsenceAddedEvent;
 			@event.AbsenceId.Should().Be(_absenceRepository.Single().Id.Value);
 			@event.PersonId.Should().Be(_personRepository.Single().Id.Value);
 			@event.ScenarioId.Should().Be(_currentScenario.Current().Id.Value);
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var absenceLayer = personAbsence.Layer as AbsenceLayer;
 			absenceLayer.Period.StartDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.StartTime, userTimeZone));
 			absenceLayer.Period.EndDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.EndTime, userTimeZone));
-			var @event = personAbsence.PopAllEvents().Single() as PersonAbsenceAddedEvent;
+			var @event = personAbsence.PopAllEvents(new Now()).Single() as PersonAbsenceAddedEvent;
 			@event.StartDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.StartTime, userTimeZone));
 			@event.EndDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.EndTime, userTimeZone));
 		}

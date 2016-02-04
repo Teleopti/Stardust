@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.Impl;
 using Rhino.ServiceBus.Internal;
@@ -11,6 +10,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest
 {
@@ -25,9 +25,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			var initiatorId = Guid.NewGuid();
 			var target = new LocalServiceBusEventPublisher(
 				bus,
-				new EventInfrastructureInfoPopulator(null, null,
-					new FakeCurrentInitiatorIdentifier(
-						new FakeInitiatorIdentifier { InitiatorId = initiatorId })));
+				new EventInfrastructureInfoPopulator(
+					null,
+					null,
+					new FakeCurrentInitiatorIdentifier(new FakeInitiatorIdentifier { InitiatorId = initiatorId }),
+					new Now()
+					));
 
 			target.Publish(@event);
 

@@ -6,7 +6,6 @@ namespace Teleopti.Ccc.Domain.Common
 	public static class ServiceLocatorForEntity
 	{
 		private static ICurrentBusinessUnit _currentBusinessUnit;
-		private static INow _now;
 
 		public static ICurrentBusinessUnit CurrentBusinessUnit
 		{
@@ -17,25 +16,10 @@ namespace Teleopti.Ccc.Domain.Common
 				return _currentBusinessUnit = Common.CurrentBusinessUnit.Make();
 			}
 		}
-
-		public static INow Now
-		{
-			get
-			{
-				if (_now != null)
-					return _now;
-				return _now = new Now();
-			}
-		}
-
+		
 		public static void SetInstanceFromContainer(ICurrentBusinessUnit instance)
 		{
 			_currentBusinessUnit = instance;
-		}
-		
-		public static void SetInstanceFromContainer(INow instance)
-		{
-			_now = instance;
 		}
 
 	}

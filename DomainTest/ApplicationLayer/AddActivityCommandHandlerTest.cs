@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 			target.Handle(command);
 
-			var @event = personAssignmentRepository.Single().PopAllEvents().OfType<ActivityAddedEvent>().Single(e => e.ActivityId == addedActivity.Id.Value);
+			var @event = personAssignmentRepository.Single().PopAllEvents(new Now()).OfType<ActivityAddedEvent>().Single(e => e.ActivityId == addedActivity.Id.Value);
 			@event.PersonId.Should().Be(personRepository.Single().Id.Value);
 			@event.Date.Should().Be(new DateOnly(2013, 11, 14));
 			@event.StartDateTime.Should().Be(command.StartTime);

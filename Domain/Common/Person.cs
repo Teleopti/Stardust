@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -81,38 +80,63 @@ namespace Teleopti.Ccc.Domain.Common
 			    _terminalDate = valueToSet;
 			    var valueAfter = _terminalDate.HasValue ? _terminalDate.Value.Date : (DateTime?) null;
 
-			    var info = currentAssociationInfo();
-			    AddEvent(new PersonTerminalDateChangedEvent
+			    AddEvent(now =>
 			    {
-				    PersonId = Id.GetValueOrDefault(),
-				    BusinessUnitId = info.BusinessUnitId,
-				    SiteId = info.SiteId,
-				    TeamId = info.TeamId,
-					TimeZoneInfoId = PermissionInformation.DefaultTimeZone().Id,
-					PreviousTerminationDate = valueBefore,
-				    TerminationDate = valueAfter
+					var info = currentAssociationInfo(now);
+					return new PersonTerminalDateChangedEvent
+					{
+						PersonId = Id.GetValueOrDefault(),
+						BusinessUnitId = info.BusinessUnitId,
+						SiteId = info.SiteId,
+						TeamId = info.TeamId,
+						TimeZoneInfoId = PermissionInformation.DefaultTimeZone().Id,
+						PreviousTerminationDate = valueBefore,
+						TerminationDate = valueAfter
+					};
 			    });
 		    }
 	    }
+
+		public virtual void ChangeTeam(ITeam team, IPersonPeriod personPeriod)
+		{
+			personPeriod.Team = team;
+			AddEvent(now =>
+			{
+				var info = currentAssociationInfo(now);
+				return new PersonTeamChangedEvent
+				{
+					PersonId = Id.GetValueOrDefault(),
+					CurrentBusinessUnitId = info.BusinessUnitId,
+					CurrentSiteId = info.SiteId,
+					CurrentTeamId = info.TeamId,
+				};
+			});
+		}
+
+		private personAssociationInfo currentAssociationInfo(INow now)
+		{
+			var period = Period(new DateOnly(now.UtcDateTime()));
+			var info = new personAssociationInfo();
+			if (period != null && period.Team != null)
+			{
+				info.TeamId = period.Team.Id.GetValueOrDefault();
+				if (period.Team.Site != null)
+				{
+					info.SiteId = period.Team.Site.Id.GetValueOrDefault();
+					if (period.Team.Site.BusinessUnit != null)
+					{
+						info.BusinessUnitId = period.Team.Site.BusinessUnit.Id.GetValueOrDefault();
+					}
+				}
+			}
+			return info;
+		}
 
 		private class personAssociationInfo
 		{
 			public Guid? BusinessUnitId { get; set; }
 			public Guid? SiteId { get; set; }
 			public Guid? TeamId { get; set; }
-		}
-
-		public virtual void ChangeTeam(ITeam team, IPersonPeriod personPeriod)
-		{
-			personPeriod.Team = team;
-			var info = currentAssociationInfo();
-			AddEvent(new PersonTeamChangedEvent
-			{
-				PersonId = Id.GetValueOrDefault(),
-				CurrentBusinessUnitId = info.BusinessUnitId,
-				CurrentSiteId = info.SiteId,
-				CurrentTeamId = info.TeamId,
-			});
 		}
 
 		public virtual void AddSkill(IPersonSkill personSkill, IPersonPeriod personPeriod)
@@ -341,25 +365,6 @@ namespace Teleopti.Ccc.Domain.Common
 			_personPeriodCollection.Add(startDate, personPeriod);
 		}
 		
-		private personAssociationInfo currentAssociationInfo()
-		{
-			var period = Period(new DateOnly(ServiceLocatorForEntity.Now.UtcDateTime()));
-			var info = new personAssociationInfo();
-			if (period != null && period.Team != null)
-			{
-				info.TeamId = period.Team.Id.GetValueOrDefault();
-				if (period.Team.Site != null)
-				{
-					info.SiteId = period.Team.Site.Id.GetValueOrDefault();
-					if (period.Team.Site.BusinessUnit != null)
-					{
-						info.BusinessUnitId = period.Team.Site.BusinessUnit.Id.GetValueOrDefault();
-					}
-				}
-			}
-			return info;
-		}
-
 		public virtual void AddSchedulePeriod(ISchedulePeriod period)
         {
             InParameter.NotNull("period", period);
