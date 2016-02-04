@@ -251,8 +251,15 @@ md-progress-circular .md-inner .md-half-circle {
 }
 
 .click-modal .dialog {
-  position: relative!important; //remove important and move to styleguide
+left:25%;
 }
+@media only screen and (max-width:769px){
+	.dialog {
+		left:5px!important;
+		right:1%;
+	}
+}
+
 
 .wfm-form input, .wfm-form select {
 	margin-right: 0;
