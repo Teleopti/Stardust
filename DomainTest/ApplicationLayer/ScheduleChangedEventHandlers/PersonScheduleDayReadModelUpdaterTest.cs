@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			repository.AssertWasCalled(
 				x =>
 					x.UpdateReadModels(new DateOnlyPeriod(new DateOnly(terminationDate).AddDays(1), DateOnly.MaxValue), personId, businessUnitId,
-						null, false));
+						null, true));
 		}
 
 		[Test]
