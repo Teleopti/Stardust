@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
@@ -19,7 +18,8 @@ namespace Stardust.Node
 {
     public class NodeStarter : INodeStarter
     {
-       
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeStarter));
+
         private string WhoAmI { get; set; }
 
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
@@ -29,7 +29,8 @@ namespace Stardust.Node
             QuitEvent.Set();
         }
 
-        public void Start(INodeConfiguration nodeConfiguration, IContainer container)
+        public void Start(INodeConfiguration nodeConfiguration,
+                          IContainer container)
         {
             // Start OWIN host 
             using (WebApp.Start(nodeConfiguration.BaseAddress.ToString(),
@@ -61,7 +62,7 @@ namespace Stardust.Node
 
                                     //to start it
                                     container.Resolve<IWorkerWrapper>();
-											  
+
                                     // Configure Web API for self-host. 
                                     var config = new HttpConfiguration
                                     {
@@ -78,8 +79,11 @@ namespace Stardust.Node
             {
                 WhoAmI = nodeConfiguration.CreateWhoIAm(Environment.MachineName);
 
-                LogHelper.LogInfoWithLineNumber(WhoAmI + ": Node started on machine.");
-                LogHelper.LogInfoWithLineNumber(WhoAmI + ": Listening on port " + nodeConfiguration.BaseAddress);
+                LogHelper.LogInfoWithLineNumber(Logger,
+                                                WhoAmI + ": Node started on machine.");
+
+                LogHelper.LogInfoWithLineNumber(Logger,
+                                                WhoAmI + ": Listening on port " + nodeConfiguration.BaseAddress);
 
                 QuitEvent.WaitOne();
             }

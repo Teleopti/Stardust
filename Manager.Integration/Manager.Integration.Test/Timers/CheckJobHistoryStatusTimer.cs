@@ -17,6 +17,9 @@ namespace Manager.Integration.Test.Timers
 {
     public class CheckJobHistoryStatusTimer : Timer
     {
+        private static readonly ILog Logger =
+            LogManager.GetLogger(typeof(CheckJobHistoryStatusTimer));
+
         public EventHandler<GuidStatusChangedEventArgs> GuidStatusChangedEvent;
 
         public EventHandler<GuidAddedEventArgs> GuidAddedEventHandler;
@@ -179,7 +182,7 @@ namespace Manager.Integration.Test.Timers
                             }
                             catch (Exception exp)
                             {
-                                LogHelper.LogErrorWithLineNumber(exp.Message,exp);
+                                LogHelper.LogErrorWithLineNumber(exp.Message, Logger,exp);
                             }
                         }
                     }

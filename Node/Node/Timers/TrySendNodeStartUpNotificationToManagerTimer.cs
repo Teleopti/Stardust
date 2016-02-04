@@ -11,7 +11,8 @@ namespace Stardust.Node.Timers
 {
     public class TrySendNodeStartUpNotificationToManagerTimer : Timer
     {
-       
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (TrySendNodeStartUpNotificationToManagerTimer));
+
         public TrySendNodeStartUpNotificationToManagerTimer(INodeConfiguration nodeConfiguration,
                                                             Uri callbackTemplateUri,
                                                             double interval = 3000) : base(interval)
@@ -59,27 +60,31 @@ namespace Stardust.Node.Timers
         {
             try
             {
-                LogHelper.LogInfoWithLineNumber("Trying to send init to manager");
+                LogHelper.LogInfoWithLineNumber(Logger,
+                                                "Trying to send init to manager");
                 var httpResponseMessage =
                     await TrySendNodeStartUpToManager(NodeConfiguration.BaseAddress);
 
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {
-                    LogHelper.LogDebugWithLineNumber(WhoAmI + ": Node start up notification to manager succeded. Manager Uri =  " +
-                                     CallbackTemplateUri);
+                    LogHelper.LogDebugWithLineNumber(Logger,
+                                                     WhoAmI + ": Node start up notification to manager succeded. Manager Uri =  " +
+                                                     CallbackTemplateUri);
 
                     TrySendNodeStartUpNotificationSuccededInvoke();
                 }
                 else
                 {
-                    LogHelper.LogWarningWithLineNumber(WhoAmI + ": Node start up notification to manager failed. Error message =  " +
-                                    httpResponseMessage.Content);
+                    LogHelper.LogWarningWithLineNumber(Logger,
+                                                       WhoAmI + ": Node start up notification to manager failed. Error message =  " +
+                                                       httpResponseMessage.Content);
                 }
             }
 
-            catch 
+            catch
             {
-                LogHelper.LogErrorWithLineNumber(WhoAmI + ": Node start up notification to manager failed.");
+                LogHelper.LogErrorWithLineNumber(Logger,
+                                                 WhoAmI + ": Node start up notification to manager failed.");
             }
         }
     }

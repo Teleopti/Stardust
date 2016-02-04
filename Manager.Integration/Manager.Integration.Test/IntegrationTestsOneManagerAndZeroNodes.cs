@@ -19,6 +19,7 @@ namespace Manager.Integration.Test
     [TestFixture]
     public class IntegrationTestsOneManagerAndZeroNodes
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndZeroNodes));
 
         [SetUp]
         public void Setup()
@@ -68,7 +69,8 @@ namespace Manager.Integration.Test
 
         private static void TryCreateSqlLoggingTable()
         {
-            LogHelper.LogInfoWithLineNumber("Run sql script to create logging file started.");
+            LogHelper.LogInfoWithLineNumber("Run sql script to create logging file started.",
+                                            Logger);
 
             FileInfo scriptFile =
                 new FileInfo(Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
@@ -77,7 +79,8 @@ namespace Manager.Integration.Test
             ScriptExecuteHelper.ExecuteScriptFile(scriptFile,
                                                   ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString);
 
-            LogHelper.LogInfoWithLineNumber("Run sql script to create logging file finished.");
+            LogHelper.LogInfoWithLineNumber("Run sql script to create logging file finished.",
+                                            Logger);
         }
 
         [TearDown]
@@ -93,7 +96,6 @@ namespace Manager.Integration.Test
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
         {
-            
             if (ManagerApiHelper != null &&
                 ManagerApiHelper.CheckJobHistoryStatusTimer != null)
             {
@@ -103,11 +105,15 @@ namespace Manager.Integration.Test
             if (AppDomainHelper.AppDomains != null &&
                 AppDomainHelper.AppDomains.Values.Any())
             {
-                LogHelper.LogInfoWithLineNumber("Will soon unload " + AppDomainHelper.AppDomains.Values.Count + " Appdomain(s)");
+                LogHelper.LogInfoWithLineNumber("Will soon unload " + AppDomainHelper.AppDomains.Values.Count + " Appdomain(s)",
+                                                Logger);
+
                 foreach (var appDomain in AppDomainHelper.AppDomains.Values)
                 {
-                    LogHelper.LogInfoWithLineNumber("appDomain unload: " + appDomain);
-                        AppDomain.Unload(appDomain);
+                    LogHelper.LogInfoWithLineNumber("appDomain unload: " + appDomain,
+                                                    Logger);
+
+                    AppDomain.Unload(appDomain);
                 }
             }
 
@@ -125,7 +131,7 @@ namespace Manager.Integration.Test
         private string _buildMode = "Debug";
 
         private Process StartManagerIntegrationConsoleHostProcess { get; set; }
-        
+
         private ManagerApiHelper ManagerApiHelper { get; set; }
 
         [Test]
@@ -158,7 +164,6 @@ namespace Manager.Integration.Test
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.NullStatus));
-            
         }
     }
 }

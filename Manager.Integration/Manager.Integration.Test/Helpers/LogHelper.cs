@@ -1,23 +1,25 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Runtime.CompilerServices;
 using log4net;
+using log4net.Repository.Hierarchy;
 
 namespace Manager.Integration.Test.Helpers
 {
     public static class LogHelper
     {
-        private static readonly ILog Logger =
-            LogManager.GetLogger(typeof (LogHelper));
-
         public static void LogErrorWithLineNumber(string info,
+                                                  ILog logger,
                                                   System.Exception exception = null,
                                                   [CallerFilePath] string file = "",
                                                   [CallerMemberName] string member = "",
                                                   [CallerLineNumber] int line = 0)
         {
-            if (Logger.IsErrorEnabled)
+            ValidateArgument(logger);
+
+            if (logger.IsErrorEnabled)
             {
-                Logger.Error(string.Format("{0}_{1}({2}): {3}",
+                logger.Error(string.Format("{0}_{1}({2}): {3}",
                                            Path.GetFileName(file),
                                            member,
                                            line,
@@ -26,15 +28,26 @@ namespace Manager.Integration.Test.Helpers
             }
         }
 
+        private static void ValidateArgument(ILog logger)
+        {
+            if (logger == null)
+            {
+                throw new ArgumentNullException("logger");
+            }
+        }
+
         public static void LogFatalWithLineNumber(string info,
+                                                  ILog logger,
                                                   System.Exception exception = null,
                                                   [CallerFilePath] string file = "",
                                                   [CallerMemberName] string member = "",
                                                   [CallerLineNumber] int line = 0)
         {
-            if (Logger.IsFatalEnabled)
+            ValidateArgument(logger);
+
+            if (logger.IsFatalEnabled)
             {
-                Logger.Fatal(string.Format("{0}_{1}({2}): {3}",
+                logger.Fatal(string.Format("{0}_{1}({2}): {3}",
                                            Path.GetFileName(file),
                                            member,
                                            line,
@@ -44,13 +57,16 @@ namespace Manager.Integration.Test.Helpers
         }
 
         public static void LogWarningWithLineNumber(string info,
+                                                    ILog logger,
                                                     [CallerFilePath] string file = "",
                                                     [CallerMemberName] string member = "",
                                                     [CallerLineNumber] int line = 0)
         {
-            if (Logger.IsWarnEnabled)
+            ValidateArgument(logger);
+
+            if (logger.IsWarnEnabled)
             {
-                Logger.Warn(string.Format("{0}_{1}({2}): {3}",
+                logger.Warn(string.Format("{0}_{1}({2}): {3}",
                                           Path.GetFileName(file),
                                           member,
                                           line,
@@ -59,13 +75,16 @@ namespace Manager.Integration.Test.Helpers
         }
 
         public static void LogDebugWithLineNumber(string info,
+                                                  ILog logger,
                                                   [CallerFilePath] string file = "",
                                                   [CallerMemberName] string member = "",
                                                   [CallerLineNumber] int line = 0)
         {
-            if (Logger.IsDebugEnabled)
+            ValidateArgument(logger);
+
+            if (logger.IsDebugEnabled)
             {
-                Logger.Debug(string.Format("{0}_{1}({2}): {3}",
+                logger.Debug(string.Format("{0}_{1}({2}): {3}",
                                            Path.GetFileName(file),
                                            member,
                                            line,
@@ -74,13 +93,16 @@ namespace Manager.Integration.Test.Helpers
         }
 
         public static void LogInfoWithLineNumber(string info,
+                                                 ILog logger,
                                                  [CallerFilePath] string file = "",
                                                  [CallerMemberName] string member = "",
                                                  [CallerLineNumber] int line = 0)
         {
-            if (Logger.IsInfoEnabled)
+            ValidateArgument(logger);
+
+            if (logger.IsInfoEnabled)
             {
-                Logger.Info(string.Format("{0}_{1}({2}): {3}",
+                logger.Info(string.Format("{0}_{1}({2}): {3}",
                                           Path.GetFileName(file),
                                           member,
                                           line,

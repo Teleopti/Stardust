@@ -17,6 +17,7 @@ namespace Stardust.Node.Workers
 {
     public class WorkerWrapper : IWorkerWrapper
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (WorkerWrapper));
 
         private readonly IPostHttpRequest _postHttpRequest;
 
@@ -110,8 +111,9 @@ namespace Stardust.Node.Workers
 
                 if (typ == null)
                 {
-                    LogHelper.LogInfoWithLineNumber(string.Format(WhoamI + ": The type [{0}] could not be resolved. The job cannot be started.",
-                                              jobToDo.Type));
+                    LogHelper.LogInfoWithLineNumber(Logger,
+                                                    string.Format(WhoamI + ": The type [{0}] could not be resolved. The job cannot be started.",
+                                                                  jobToDo.Type));
 
                     return new BadRequestResult(requestMessage);
                 }
@@ -160,7 +162,8 @@ namespace Stardust.Node.Workers
                                           CurrentMessageToProcess.Id,
                                           CurrentMessageToProcess.Name);
 
-                        LogHelper.LogInfoWithLineNumber(logInfo);
+                        LogHelper.LogInfoWithLineNumber(Logger,
+                                                        logInfo);
 
                         SetNodeStatusTimer(TrySendJobDoneStatusToManagerTimer,
                                            CurrentMessageToProcess);
@@ -174,7 +177,8 @@ namespace Stardust.Node.Workers
                                           CurrentMessageToProcess.Id,
                                           CurrentMessageToProcess.Name);
 
-                        LogHelper.LogInfoWithLineNumber(logInfo);
+                        LogHelper.LogInfoWithLineNumber(Logger,
+                                                        logInfo);
 
                         SetNodeStatusTimer(TrySendJobCanceledStatusToManagerTimer,
                                            CurrentMessageToProcess);
@@ -188,7 +192,8 @@ namespace Stardust.Node.Workers
                                           CurrentMessageToProcess.Id,
                                           CurrentMessageToProcess.Name);
 
-                        LogHelper.LogInfoWithLineNumber(logInfo);
+                        LogHelper.LogInfoWithLineNumber(Logger,
+                                                        logInfo);
 
 
                         SetNodeStatusTimer(TrySendJobFaultedStatusToManagerTimer,
@@ -214,20 +219,23 @@ namespace Stardust.Node.Workers
                 id != Guid.Empty &&
                 CurrentMessageToProcess.Id == id)
             {
-                LogHelper.LogInfoWithLineNumber(WhoamI + " : Cancel job method called. Will call cancel on canellation token source.");
+                LogHelper.LogInfoWithLineNumber(Logger,
+                                                WhoamI + " : Cancel job method called. Will call cancel on canellation token source.");
 
                 CancellationTokenSource.Cancel();
 
                 if (CancellationTokenSource.IsCancellationRequested)
                 {
-                    LogHelper.LogInfoWithLineNumber(WhoamI + " : Cancel job method called. CancellationTokenSource.IsCancellationRequested is now true.");
+                    LogHelper.LogInfoWithLineNumber(Logger,
+                                                    WhoamI + " : Cancel job method called. CancellationTokenSource.IsCancellationRequested is now true.");
                 }
             }
             else
             {
                 if (id != Guid.Empty)
                 {
-                    LogHelper.LogWarningWithLineNumber(WhoamI + " : Can not cancel job with id : " + id);
+                    LogHelper.LogWarningWithLineNumber(Logger,
+                                                       WhoamI + " : Can not cancel job with id : " + id);
                 }
             }
         }
@@ -299,7 +307,8 @@ namespace Stardust.Node.Workers
 
         private void ProgressCallback(string message)
         {
-            LogHelper.LogInfoWithLineNumber(message);
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            message);
 
             var progressModel = new JobProgressModel
             {
@@ -316,8 +325,9 @@ namespace Stardust.Node.Workers
             }
             catch (Exception exception)
             {
-                LogHelper.LogErrorWithLineNumber(WhoamI + ": Exception occured.",
-                             exception);
+                LogHelper.LogErrorWithLineNumber(Logger,
+                                                 WhoamI + ": Exception occured.",
+                                                 exception);
             }
         }
     }

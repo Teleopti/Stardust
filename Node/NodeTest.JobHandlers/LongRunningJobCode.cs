@@ -7,10 +7,12 @@ namespace NodeTest.JobHandlers
 {
     public class LongRunningJobCode
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (LongRunningJobCode));
 
         public LongRunningJobCode()
         {
-            LogHelper.LogInfoWithLineNumber("'Long Running Job Code' class constructor called.");
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            "'Long Running Job Code' class constructor called.");
 
             WhoAmI = "[NODETEST.JOBHANDLERS.LongRunningJobCode, " + Environment.MachineName.ToUpper() + "]";
         }
@@ -21,11 +23,11 @@ namespace NodeTest.JobHandlers
                                CancellationTokenSource cancellationTokenSource,
                                Action<string> progress)
         {
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            "'Long Running Job Code' Do The Thing method called.");
 
-
-            LogHelper.LogInfoWithLineNumber("'Long Running Job Code' Do The Thing method called.");
-
-            LogHelper.LogInfoWithLineNumber("'Long Running Job Code' Do The Thing method called. Will sleep for 20 seconds.");
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            "'Long Running Job Code' Do The Thing method called. Will sleep for 20 seconds.");
             Thread.Sleep(TimeSpan.FromSeconds(20));
 
             TestJobProgress jobProgress;
@@ -54,7 +56,8 @@ namespace NodeTest.JobHandlers
 
             progress(jobProgress.Text);
 
-            LogHelper.LogInfoWithLineNumber("'Long Running Job Code' : Will sleep for 10 seconds.");
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            "'Long Running Job Code' : Will sleep for 10 seconds.");
             Thread.Sleep(TimeSpan.FromSeconds(10));
 
             if (cancellationTokenSource.IsCancellationRequested)

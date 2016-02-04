@@ -20,6 +20,9 @@ namespace Manager.Integration.Test
     [TestFixture]
     public class IntegrationTestsOneManagerAndManyNodes
     {
+        private static readonly ILog Logger =
+            LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndManyNodes));
+
         [SetUp]
         public void Setup()
         {
@@ -68,7 +71,8 @@ namespace Manager.Integration.Test
 
         private static void TryCreateSqlLoggingTable()
         {
-            LogHelper.LogInfoWithLineNumber("Run sql script to create logging file started.");
+            LogHelper.LogInfoWithLineNumber("Run sql script to create logging file started.",
+                                            Logger);
 
             FileInfo scriptFile =
                 new FileInfo(Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
@@ -77,7 +81,8 @@ namespace Manager.Integration.Test
             ScriptExecuteHelper.ExecuteScriptFile(scriptFile,
                                                   ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString);
 
-            LogHelper.LogInfoWithLineNumber("Run sql script to create logging file finished.");
+            LogHelper.LogInfoWithLineNumber("Run sql script to create logging file finished.",
+                                            Logger);
         }
 
         [TearDown]
@@ -87,7 +92,7 @@ namespace Manager.Integration.Test
                 ManagerApiHelper.CheckJobHistoryStatusTimer != null)
             {
                 ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
-            }            
+            }
         }
 
         [TestFixtureTearDown]
@@ -174,7 +179,8 @@ namespace Manager.Integration.Test
         [Test]
         public void JobShouldHaveStatusFailedIfFailed()
         {
-            LogHelper.LogInfoWithLineNumber("Starting test : JobShouldHaveStatusFailedIfFailed");
+            LogHelper.LogInfoWithLineNumber("Starting test.",
+                                            Logger);
 
             JobHelper.GiveNodesTimeToInitialize();
 
@@ -210,7 +216,8 @@ namespace Manager.Integration.Test
         [Test]
         public void CancelWrongJobs()
         {
-            LogHelper.LogInfoWithLineNumber("Starting test : CancelWrongJobs");
+            LogHelper.LogInfoWithLineNumber("Starting test.",
+                                            Logger);
 
             JobHelper.GiveNodesTimeToInitialize();
 
@@ -224,7 +231,8 @@ namespace Manager.Integration.Test
             {
                 tasks.Add(ManagerApiHelper.CreateManagerDoThisTask(jobRequestModel));
 
-                LogHelper.LogDebugWithLineNumber("Created task for add job :" + jobRequestModel.Name);
+                LogHelper.LogDebugWithLineNumber("Created task for add job :" + jobRequestModel.Name,
+                                                 Logger);
             }
 
             ManagerApiHelper.CheckJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(requests.Count,
@@ -241,7 +249,8 @@ namespace Manager.Integration.Test
 
                 var cancelJobTask = ManagerApiHelper.CreateManagerCancelTask(newGuid);
 
-                LogHelper.LogDebugWithLineNumber("CancelWrongJobs : Created task for cancel job :" + newGuid);
+                LogHelper.LogDebugWithLineNumber("CancelWrongJobs : Created task for cancel job :" + newGuid,
+                                                 Logger);
 
                 cancelJobTask.Start();
             };
@@ -261,7 +270,8 @@ namespace Manager.Integration.Test
         [Test]
         public void ShouldBeAbleToCreate5SuccessJobRequest()
         {
-            LogHelper.LogInfoWithLineNumber("starting test...");
+            LogHelper.LogInfoWithLineNumber("Starting test.",
+                                            Logger);
 
             JobHelper.GiveNodesTimeToInitialize();
 
@@ -294,7 +304,8 @@ namespace Manager.Integration.Test
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
 
-            LogHelper.LogInfoWithLineNumber("finished test.");
+            LogHelper.LogInfoWithLineNumber("Finished test.",
+                                            Logger);
         }
     }
 }

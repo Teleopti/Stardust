@@ -11,13 +11,14 @@ namespace NodeTest.Fakes.Timers
 {
     public class SendJobCanceledTimerFake : TrySendStatusToManagerTimer
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (SendJobCanceledTimerFake));
 
         public int NumberOfTimeCalled;
 
         public ManualResetEventSlim Wait = new ManualResetEventSlim();
 
-        public SendJobCanceledTimerFake(INodeConfiguration nodeConfiguration ,
-                                        Uri callbackTemplateUri ,
+        public SendJobCanceledTimerFake(INodeConfiguration nodeConfiguration,
+                                        Uri callbackTemplateUri,
                                         double interval = 10000) : base(nodeConfiguration,
                                                                         callbackTemplateUri,
                                                                         interval)
@@ -26,7 +27,8 @@ namespace NodeTest.Fakes.Timers
 
         public override Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo)
         {
-            LogHelper.LogInfoWithLineNumber("Send job canceled timer fake.");
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            "Send job canceled timer fake.");
 
             Wait.Set();
 

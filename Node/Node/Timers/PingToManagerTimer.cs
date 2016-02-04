@@ -11,6 +11,7 @@ namespace Stardust.Node.Timers
 {
     public class PingToManagerTimer : Timer
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (PingToManagerTimer));
 
         public PingToManagerTimer(INodeConfiguration nodeConfiguration,
                                   Uri callbackUri,
@@ -48,12 +49,13 @@ namespace Stardust.Node.Timers
         {
             try
             {
-                await SendPing(NodeConfiguration.BaseAddress); 
+                await SendPing(NodeConfiguration.BaseAddress);
             }
-            catch 
+
+            catch
             {
-                    LogHelper.LogErrorWithLineNumber(WhoAmI + ": Heartbeat failed. Is the manager up and running?");
-                
+                LogHelper.LogErrorWithLineNumber(Logger,
+                                                 WhoAmI + ": Heartbeat failed. Is the manager up and running?");
             }
         }
     }

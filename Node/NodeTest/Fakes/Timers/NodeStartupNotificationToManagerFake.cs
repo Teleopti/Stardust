@@ -11,10 +11,12 @@ namespace NodeTest.Fakes.Timers
 {
     public class NodeStartupNotificationToManagerFake : TrySendNodeStartUpNotificationToManagerTimer
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeStartupNotificationToManagerFake));
+
         public ManualResetEventSlim Wait = new ManualResetEventSlim();
-        
-        public NodeStartupNotificationToManagerFake(INodeConfiguration nodeConfiguration ,
-                                                    Uri callbackTemplateUri ,
+
+        public NodeStartupNotificationToManagerFake(INodeConfiguration nodeConfiguration,
+                                                    Uri callbackTemplateUri,
                                                     double interval = 3000) : base(nodeConfiguration,
                                                                                    callbackTemplateUri,
                                                                                    interval)
@@ -24,7 +26,8 @@ namespace NodeTest.Fakes.Timers
 
         public override Task<HttpResponseMessage> TrySendNodeStartUpToManager(Uri nodeAddress)
         {
-            LogHelper.LogInfoWithLineNumber("Try send node start up notification to manager.");
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            "Try send node start up notification to manager.");
 
             Wait.Set();
 

@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Timers;
 using log4net;
-using log4net.Repository.Hierarchy;
 using Stardust.Node.Extensions;
 using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
@@ -12,6 +11,8 @@ namespace Stardust.Node.Timers
 {
     public class TrySendStatusToManagerTimer : Timer
     {
+        private static readonly ILog Logger =
+            LogManager.GetLogger(typeof (TrySendStatusToManagerTimer));
 
         public TrySendStatusToManagerTimer(INodeConfiguration nodeConfiguration,
                                            Uri callbackTemplateUri,
@@ -64,8 +65,9 @@ namespace Stardust.Node.Timers
 
             catch (Exception exp)
             {
-                LogHelper.LogErrorWithLineNumber("Error in TrySendStatus.",
-                             exp);
+                LogHelper.LogErrorWithLineNumber(Logger,
+                                                 "Error in TrySendStatus.",
+                                                 exp);
                 throw;
             }
         }
@@ -87,23 +89,24 @@ namespace Stardust.Node.Timers
 
                     if (httpResponseMessage.IsSuccessStatusCode)
                     {
-                        LogHelper.LogDebugWithLineNumber(WhoAmI + ": Try send status to manager succeded. Send Uri =  " + httpResponseMessage.RequestMessage.RequestUri);
-                        
+                        LogHelper.LogDebugWithLineNumber(Logger,
+                                                         WhoAmI + ": Try send status to manager succeded. Send Uri =  " + httpResponseMessage.RequestMessage.RequestUri);
+
 
                         InvokeTriggerTrySendStatusSucceded();
                     }
                     else
                     {
-                        LogHelper.LogWarningWithLineNumber(WhoAmI + ": " + httpResponseMessage.ReasonPhrase);
-                        
+                        LogHelper.LogWarningWithLineNumber(Logger,
+                                                           WhoAmI + ": " + httpResponseMessage.ReasonPhrase);
                     }
                 }
             }
 
             catch (Exception)
             {
-                LogHelper.LogErrorWithLineNumber(WhoAmI + ": Try send status to manager failed.");
-                
+                LogHelper.LogErrorWithLineNumber(Logger,
+                                                 WhoAmI + ": Try send status to manager failed.");
             }
 
             finally

@@ -15,8 +15,9 @@ using Stardust.Node.Interfaces;
 
 namespace NodeConsoleHost
 {
-    internal class Program
+    public class Program
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (Program));
 
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
 
@@ -69,7 +70,8 @@ namespace NodeConsoleHost
 
             WhoAmI = "[NODE CONSOLE HOST, " + Environment.MachineName.ToUpper() + "]";
 
-            LogHelper.LogInfoWithLineNumber(WhoAmI + " : started.");
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            WhoAmI + " : started.");
 
             AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -96,7 +98,8 @@ namespace NodeConsoleHost
         private static void ConsoleOnCancelKeyPress(object sender,
                                                     ConsoleCancelEventArgs e)
         {
-            LogHelper.LogInfoWithLineNumber(WhoAmI + " : ConsoleOnCancelKeyPress called.");
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            WhoAmI + " : ConsoleOnCancelKeyPress called.");
 
             _nodeStarter.Stop();
 
@@ -112,7 +115,8 @@ namespace NodeConsoleHost
         private static void CurrentDomain_DomainUnload(object sender,
                                                        EventArgs e)
         {
-            LogHelper.LogInfoWithLineNumber(WhoAmI + " : CurrentDomain_DomainUnload called.");
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            WhoAmI + " : CurrentDomain_DomainUnload called.");
 
             _nodeStarter.Stop();
 
@@ -122,8 +126,8 @@ namespace NodeConsoleHost
         private static void CurrentDomain_UnhandledException(object sender,
                                                              UnhandledExceptionEventArgs e)
         {
-            LogHelper.LogErrorWithLineNumber(WhoAmI + " : CurrentDomain_UnhandledException called.");
+            LogHelper.LogErrorWithLineNumber(Logger,
+                                             WhoAmI + " : CurrentDomain_UnhandledException called.");
         }
     }
-
 }

@@ -6,30 +6,34 @@ using Stardust.Node.Interfaces;
 
 namespace NodeTest.JobHandlers
 {
-	public class TestJobWorker : IHandle<TestJobParams>
+    public class TestJobWorker : IHandle<TestJobParams>
 
-	{
-		private readonly TestJobCode _testJobCode;
+    {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (TestJobWorker));
 
-		public TestJobWorker(TestJobCode testJobCode)
-		{
-			_testJobCode = testJobCode;
-            LogHelper.LogInfoWithLineNumber("'Test Job Worker' class constructor called.");
-		}
+        private readonly TestJobCode _testJobCode;
 
-		public CancellationTokenSource CancellationTokenSource { get; set; }
+        public TestJobWorker(TestJobCode testJobCode)
+        {
+            _testJobCode = testJobCode;
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            "'Test Job Worker' class constructor called.");
+        }
 
-		public void Handle(TestJobParams parameters,
-								 CancellationTokenSource cancellationTokenSource,
-								 Action<string> sendProgress)
-		{
-            LogHelper.LogInfoWithLineNumber("'Test Job Worker' handle method called.");
+        public CancellationTokenSource CancellationTokenSource { get; set; }
 
-			CancellationTokenSource = cancellationTokenSource;
+        public void Handle(TestJobParams parameters,
+                           CancellationTokenSource cancellationTokenSource,
+                           Action<string> sendProgress)
+        {
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            "'Test Job Worker' handle method called.");
 
-			_testJobCode.DoTheThing(parameters,
-												  cancellationTokenSource,
-												  sendProgress);
-		}
-	}
+            CancellationTokenSource = cancellationTokenSource;
+
+            _testJobCode.DoTheThing(parameters,
+                                    cancellationTokenSource,
+                                    sendProgress);
+        }
+    }
 }

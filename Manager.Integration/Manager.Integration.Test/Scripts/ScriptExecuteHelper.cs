@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.IO;
+using log4net;
 using Manager.Integration.Test.Helpers;
 
 namespace Manager.Integration.Test.Scripts
 {
     public static class ScriptExecuteHelper
     {
+        private static readonly ILog Logger =
+            LogManager.GetLogger(typeof (ScriptExecuteHelper));
+
         public static void ExecuteScriptFile(FileInfo scriptFile,
                                              string connectionstring)
         {
@@ -31,7 +35,8 @@ namespace Manager.Integration.Test.Scripts
             {
                 con.Open();
 
-                using (SqlCommand command = new SqlCommand(line,con))
+                using (SqlCommand command = new SqlCommand(line,
+                                                           con))
                 {
                     try
                     {
@@ -40,7 +45,9 @@ namespace Manager.Integration.Test.Scripts
 
                     catch (Exception exp)
                     {
-                        LogHelper.LogErrorWithLineNumber(exp.Message,exp);
+                        LogHelper.LogErrorWithLineNumber(exp.Message,
+                                                         Logger,
+                                                         exp);
                     }
                 }
 

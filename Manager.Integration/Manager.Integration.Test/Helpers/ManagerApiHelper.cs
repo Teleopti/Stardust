@@ -12,6 +12,8 @@ namespace Manager.Integration.Test.Helpers
 {
     public class ManagerApiHelper
     {
+        private static readonly ILog Logger =
+            LogManager.GetLogger(typeof (ManagerApiHelper));
 
         public ManagerApiHelper()
         {
@@ -62,7 +64,8 @@ namespace Manager.Integration.Test.Helpers
                     }
                     catch (Exception ex)
                     {
-                        LogHelper.LogErrorWithLineNumber("ERROR: ManagerApiHelper CreateManagerDoThisTask problem with Post Async" + ex);
+                        LogHelper.LogErrorWithLineNumber("ManagerApiHelper CreateManagerDoThisTask problem with Post Async" + ex,
+                                                         Logger);
                     }
                 }
             });
@@ -70,31 +73,30 @@ namespace Manager.Integration.Test.Helpers
 
         public Task CreateManagerCancelTask(Guid guid)
         {
-               return new Task(async () =>
+            return new Task(async () =>
+            {
+                try
                 {
-                    try
+                    using (var client = new HttpClient())
                     {
-                        using (var client = new HttpClient())
-                        {
-                            DefineDefaultRequestHeaders(client);
+                        DefineDefaultRequestHeaders(client);
 
-                            var uri = ManagerUriBuilder.GetCancelJobUri(guid);
+                        var uri = ManagerUriBuilder.GetCancelJobUri(guid);
 
-                            var response = await client.DeleteAsync(uri);
+                        var response = await client.DeleteAsync(uri);
 
-                            response.EnsureSuccessStatusCode();
+                        response.EnsureSuccessStatusCode();
 
-                            var str = await response.Content.ReadAsStringAsync();
-                        }
-
+                        var str = await response.Content.ReadAsStringAsync();
                     }
-                    catch (Exception exp)
-                    {
-                        LogHelper.LogErrorWithLineNumber("Delete async error : ",
-                                     exp);
-                    }
-                });
-
+                }
+                catch (Exception exp)
+                {
+                    LogHelper.LogErrorWithLineNumber("Delete async error : ",
+                                                     Logger,
+                                                     exp);
+                }
+            });
         }
     }
 }

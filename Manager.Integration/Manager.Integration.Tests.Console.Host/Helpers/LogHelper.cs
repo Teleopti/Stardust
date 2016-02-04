@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using log4net;
 
-namespace Manager.IntegrationTest.Console.Host
+namespace Manager.IntegrationTest.Console.Host.Helpers
 {
     public static class LogHelper
     {

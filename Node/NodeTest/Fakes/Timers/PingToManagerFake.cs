@@ -8,6 +8,7 @@ namespace NodeTest.Fakes.Timers
 {
     public class PingToManagerFake : Timer
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (PingToManagerFake));
 
         public ManualResetEventSlim Wait = new ManualResetEventSlim();
 
@@ -22,7 +23,8 @@ namespace NodeTest.Fakes.Timers
         private void OnTimedEvent(object sender,
                                   ElapsedEventArgs e)
         {
-            LogHelper.LogInfoWithLineNumber("Try ping to manager fake.");
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            "Try ping to manager fake.");
 
             Wait.Set();
         }
