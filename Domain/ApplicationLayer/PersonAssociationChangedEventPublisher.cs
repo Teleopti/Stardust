@@ -53,13 +53,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					if (time < now.AddDays(-1))
 						return;
 
+					var teamId = currentPeriod != null ? currentPeriod.Team.Id.Value : null as Guid?;
+					var siteId = currentPeriod != null ? currentPeriod.Team.Site.Id.Value : null as Guid?;
+					var businessUnitId = currentPeriod != null ? currentPeriod.Team.Site.BusinessUnit.Id.Value : null as Guid?;
+
 					_eventPublisher.Publish(new PersonAssociationChangedEvent
 					{
 						PersonId = person.Id.Value,
 						Timestamp = now,
-						TeamId = currentPeriod != null ? currentPeriod.Team.Id.Value : null as Guid?,
-						SiteId = currentPeriod != null ? currentPeriod.Team.Site.Id.Value : null as Guid?,
-						BusinessUnitId = currentPeriod != null ? currentPeriod.Team.Site.BusinessUnit.Id.Value : null as Guid?
+						TeamId = teamId,
+						SiteId = siteId,
+						BusinessUnitId = businessUnitId
 					});
 				});
 		}
