@@ -101,10 +101,15 @@ namespace Teleopti.Ccc.Domain.Optimization
             var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay, schedulingOptions);
             
             //delete schedule
-			IList<IScheduleDay> listToDelete = new List<IScheduleDay> { scheduleDay };    
+			IList<IScheduleDay> listToDelete = new List<IScheduleDay> { scheduleDay };
 
-            _deleteAndResourceCalculateService.DeleteWithResourceCalculation(listToDelete, _rollbackService, schedulingOptions.ConsiderShortBreaks);
-            
+			var dayPeriod = scheduleDay.DateOnlyAsPeriod.Period();
+			var personAssPeriod = scheduleDay.PersonAssignment().Period;
+			if(personAssPeriod.EndDateTime > dayPeriod.EndDateTime)
+				_deleteAndResourceCalculateService.DeleteWithResourceCalculation(listToDelete, _rollbackService, schedulingOptions.ConsiderShortBreaks);
+			else
+				_deleteAndResourceCalculateService.DeleteWithoutResourceCalculationOnNextDay(listToDelete, _rollbackService, schedulingOptions.ConsiderShortBreaks);
+			    
             if (!tryScheduleDay(dateToBeRemoved, schedulingOptions, effectiveRestriction, WorkShiftLengthHintOption.AverageWorkTime)) 
                 return true;
 

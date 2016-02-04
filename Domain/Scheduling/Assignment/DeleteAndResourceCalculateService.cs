@@ -10,6 +10,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		IList<IScheduleDay> DeleteWithoutResourceCalculation(IList<IScheduleDay> list,
 			ISchedulePartModifyAndRollbackService rollbackService);
+
+		IList<IScheduleDay> DeleteWithoutResourceCalculationOnNextDay(IList<IScheduleDay> list,
+			ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks);
 	}
 
 	public class DeleteAndResourceCalculateService : IDeleteAndResourceCalculateService
@@ -28,7 +31,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 
 			IList<IScheduleDay> deleted = _deleteSchedulePartService.Delete(list, rollbackService);
-			resourceCalculate(list, considerShortBreaks);
+			resourceCalculate(list, considerShortBreaks, false);
+
+			return deleted;
+		}
+
+		public IList<IScheduleDay> DeleteWithoutResourceCalculationOnNextDay(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks)
+		{
+
+			IList<IScheduleDay> deleted = _deleteSchedulePartService.Delete(list, rollbackService);
+			resourceCalculate(list, considerShortBreaks, true);
 
 			return deleted;
 		}
@@ -40,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return deleted;
 		}
 
-		private void resourceCalculate(IEnumerable<IScheduleDay> list, bool considerShortBreaks)
+		private void resourceCalculate(IEnumerable<IScheduleDay> list, bool considerShortBreaks, bool skipNextDay)
 		{
 			IDictionary<DateOnly, IList<IScheduleDay>> dic = new Dictionary<DateOnly, IList<IScheduleDay>>();
 			foreach (var scheduleDay in list)
@@ -58,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			foreach (var pair in dic)
 			{
 				_resourceOptimizationHelper.ResourceCalculateDate(pair.Key, considerShortBreaks);
-				if (!dic.ContainsKey(pair.Key.AddDays(1)))
+				if (!dic.ContainsKey(pair.Key.AddDays(1)) && !skipNextDay)
 					_resourceOptimizationHelper.ResourceCalculateDate(pair.Key.AddDays(1), considerShortBreaks);
 			}
 		}
