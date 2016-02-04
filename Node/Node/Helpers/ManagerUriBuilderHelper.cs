@@ -97,7 +97,7 @@ namespace Stardust.Node.Helpers
 
         public Uri CreateUri(string path)
         {
-            UriBuilder.Path = path;
+            UriBuilder.Path += path;
 
             return UriBuilder.Uri;
         }

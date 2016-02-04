@@ -14,7 +14,7 @@ namespace NodeTest
     {
         readonly ManualResetEventSlim _manualResetEventSlim = new ManualResetEventSlim();
 
-        readonly Uri _fakeUrl = new Uri("http://localhost:9000");
+        readonly Uri _fakeUrl = new Uri("http://localhost:9000/jobmanager/");
 
         private INodeConfiguration _nodeConfiguration;
 

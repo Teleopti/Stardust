@@ -35,7 +35,7 @@ namespace NodeTest
         {
             Guid = Guid.NewGuid();
 
-            UriToTest = "http://localhost:9000";
+            UriToTest = "http://localhost:9000/jobmanager/";
 
             HeartBeatTemplateUri = new Uri(new Uri(UriToTest),
                                            ManagerRouteConstants.Heartbeat);

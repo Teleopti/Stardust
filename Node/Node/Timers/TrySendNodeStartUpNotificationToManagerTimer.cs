@@ -61,7 +61,7 @@ namespace Stardust.Node.Timers
             try
             {
                 LogHelper.LogInfoWithLineNumber(Logger,
-                                                "Trying to send init to manager");
+                                                "Trying to send init to manager " + CallbackTemplateUri);
                 var httpResponseMessage =
                     await TrySendNodeStartUpToManager(NodeConfiguration.BaseAddress);
 

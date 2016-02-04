@@ -4,16 +4,16 @@
     {
         public const string JobIdOptionalParameter = "{jobId}";
 
-        public const string NodeHasBeenInitialized = "manager/nodeinit";
+        public const string NodeHasBeenInitialized = "nodeinit";
 
-        public const string Heartbeat = "manager/heartbeat";
+        public const string Heartbeat = "heartbeat";
 
-        public const string JobHasBeenCanceled = "manager/status/cancel/" + JobIdOptionalParameter;
+        public const string JobHasBeenCanceled = "status/cancel/" + JobIdOptionalParameter;
 
-        public const string JobDone = "manager/status/done/" + JobIdOptionalParameter;
+        public const string JobDone = "status/done/" + JobIdOptionalParameter;
 
-        public const string JobFailed = "manager/status/fail/" + JobIdOptionalParameter;
+        public const string JobFailed = "status/fail/" + JobIdOptionalParameter;
 
-        public const string JobProgress = "manager/status/progress";
+        public const string JobProgress = "status/progress";
     }
 }
