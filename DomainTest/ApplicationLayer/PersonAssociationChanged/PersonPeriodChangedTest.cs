@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 	[DomainTest]
 	[Toggle(Toggles.RTA_TerminatedPersons_36042)]
 	[Toggle(Toggles.RTA_TeamChanges_36043)]
-	public class PersonTeamChangedTest
+	public class PersonPeriodChangedTest
 	{
 		public PersonAssociationChangedEventPublisher Target;
 		public FakeEventPublisher Publisher;
@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		public void ShouldPublishWhenTeamChanges()
 		{
 			Now.Is("2016-02-01 00:00");
-			
-			Target.Handle(new PersonTeamChangedEvent());
+
+			Target.Handle(new PersonPeriodChangedEvent());
 
 			Publisher.PublishedEvents.Single().Should().Be.OfType<PersonAssociationChangedEvent>();
 		}
@@ -42,8 +42,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			var businessUnitId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
-			
-			Target.Handle(new PersonTeamChangedEvent
+
+			Target.Handle(new PersonPeriodChangedEvent
 			{
 				Timestamp = "2016-02-01 00:00:01".Utc(),
 				PersonId = personId,

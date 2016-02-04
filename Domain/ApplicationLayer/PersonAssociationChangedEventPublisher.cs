@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		IHandleEvent<TenantHearbeatEvent>,
 		IHandleEvent<PersonTerminalDateChangedEvent>,
 		IHandleEvent<PersonTeamChangedEvent>,
+		IHandleEvent<PersonPeriodChangedEvent>,
 		IRunOnHangfire
 	{
 		private readonly IPersonRepository _persons;
@@ -115,12 +116,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		}
 
 		[UseOnToggle(Toggles.RTA_TeamChanges_36043)]
-		public virtual void Handle(PersonTeamChangedEvent @event)
+		public void Handle(PersonTeamChangedEvent @event)
 		{
 			_eventPublisher.Publish(new PersonAssociationChangedEvent
 			{
 				PersonId = @event.PersonId,
-				Timestamp = _now.UtcDateTime(),
+				Timestamp = @event.Timestamp,
+				BusinessUnitId = @event.CurrentBusinessUnitId,
+				SiteId = @event.CurrentSiteId,
+				TeamId = @event.CurrentTeamId
+			});
+		}
+
+		[UseOnToggle(Toggles.RTA_TeamChanges_36043)]
+		public void Handle(PersonPeriodChangedEvent @event)
+		{
+			_eventPublisher.Publish(new PersonAssociationChangedEvent
+			{
+				PersonId = @event.PersonId,
+				Timestamp = @event.Timestamp,
 				BusinessUnitId = @event.CurrentBusinessUnitId,
 				SiteId = @event.CurrentSiteId,
 				TeamId = @event.CurrentTeamId
