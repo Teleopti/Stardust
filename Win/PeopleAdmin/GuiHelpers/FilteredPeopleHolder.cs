@@ -1608,6 +1608,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			{
 				foreach (var tenantAuthenticationData in changed)
 				{
+					if (string.IsNullOrEmpty(tenantAuthenticationData.ApplicationLogonName) &&
+						 string.IsNullOrEmpty(tenantAuthenticationData.Identity))
+					{
+						toBeRemovedList.Add(tenantAuthenticationData.PersonId);
+						continue;
+					}
 					var result = _tenantDataManager.SaveTenantData(tenantAuthenticationData);
 					if (!result.Success)
 					{
