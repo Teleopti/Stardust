@@ -15,6 +15,11 @@ namespace Stardust.Manager.Helpers
 
         public NodeUriBuilderHelper(string locationUri)
         {
+            if (string.IsNullOrEmpty(locationUri))
+            {
+                throw new ArgumentNullException();
+            }
+
             LocationUri = new Uri(locationUri);
 
             if (string.IsNullOrEmpty(LocationUri.Scheme))
@@ -22,12 +27,8 @@ namespace Stardust.Manager.Helpers
                 throw new ArgumentNullException();
             }
 
-            UriBuilder = new UriBuilder
-            {
-                Host = LocationUri.Host,
-                Port = LocationUri.Port,
-                Scheme = LocationUri.Scheme 
-            };
+            UriBuilder = new UriBuilder(LocationUri);
+
         }
 
         public Uri GetIsAliveTemplateUri()
@@ -55,7 +56,7 @@ namespace Stardust.Manager.Helpers
 
         public Uri CreateUri(string path)
         {
-            UriBuilder.Path = path;
+            UriBuilder.Path += path;
 
             return UriBuilder.Uri;
         }
