@@ -142,7 +142,7 @@ namespace Manager.Integration.Test
 
         private bool _clearDatabase = true;
 
-        private bool _debugMode = false;
+        private bool _debugMode = true;
 
         private string _buildMode = "Debug";
 
