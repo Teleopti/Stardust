@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -22,7 +23,8 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			_persistCallbacks = persistCallbacks;
 		}
 
-		public IEnumerable<PersistConflict> Persist(IScheduleDictionary scheduleDictionary)
+		[LogTime]
+		public virtual IEnumerable<PersistConflict> Persist(IScheduleDictionary scheduleDictionary)
 		{
 			var completeResult = new SchedulePersistResult();
             foreach (var scheduleRange in scheduleDictionary.Values)

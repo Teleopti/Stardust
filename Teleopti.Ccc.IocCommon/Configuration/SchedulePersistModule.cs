@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{		
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<ScheduleDictionaryPersister>().As<IScheduleDictionaryPersister>().SingleInstance();
+			builder.RegisterType<ScheduleDictionaryPersister>().As<IScheduleDictionaryPersister>().SingleInstance().ApplyAspects();
 			builder.RegisterType<ScheduleRangePersister>().As<IScheduleRangePersister>().SingleInstance();
 			builder.RegisterType<KeepScheduleEvents>().As<IClearScheduleEvents>().SingleInstance();
 			builder.RegisterGeneric(typeof (DifferenceEntityCollectionService<>)).As(typeof (IDifferenceCollectionService<>)).SingleInstance();

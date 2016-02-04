@@ -57,16 +57,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
 		{
 			var planningPeriod = SetupAndOptimize(planningPeriodId);
-
-			Persist();
-
-			return CreateResult(planningPeriod);
-		}
-
-		[LogTime]
-		protected virtual void Persist()
-		{
 			_persister.Persist(_schedulerStateHolder().Schedules);
+			return CreateResult(planningPeriod);
 		}
 
 		[LogTime]
