@@ -30,15 +30,12 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 
 			system.UseTestDouble<FakeScheduleDataReadScheduleRepository>().For<IScheduleRepository>();
 			system.UseTestDouble<FakeSchedulingResultStateHolder>().For<ISchedulingResultStateHolder>();
-			system.UseTestDouble<FakeFixedStaffSchedulingService>().For<IFixedStaffSchedulingService>();
 			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 			system.UseTestDouble<FakeUnitOfWorkFactory>().For<IUnitOfWorkFactory>();
 			system.UseTestDouble(new FakeScenarioRepository(ScenarioFactory.CreateScenario("Default", true, true))).For<IScenarioRepository>();
 			system.UseTestDouble(new FakeCurrentTeleoptiPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null), PersonFactory.CreatePerson(new Name("Anna", "Andersson"), TimeZoneInfo.Utc)))).For<ICurrentTeleoptiPrincipal>();
 			system.UseTestDouble<FakeScheduleTagSetter>().For<IScheduleTagSetter>();
 			system.UseTestDouble<FakeGroupPageCreator>().For<IGroupPageCreator>();
-			system.UseTestDouble<FakeGroupScheduleGroupPageDataProvider>().For<IGroupScheduleGroupPageDataProvider>();
-			system.UseTestDouble<FakeResourceOptimizationHelper>().For<IResourceOptimizationHelper>();
 			system.UseTestDouble<FakeScheduleRange>().For<IScheduleRange>();
 			system.UseTestDouble<FakeScheduleDictionary>().For<IScheduleDictionary>();
 			system.UseTestDouble<FakeScheduleParameters>().For<IScheduleParameters>();

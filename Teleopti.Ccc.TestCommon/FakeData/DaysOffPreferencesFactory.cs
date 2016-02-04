@@ -5,14 +5,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
     public static class DaysOffPreferencesFactory
     {
-        public static IDaysOffPreferences Create()
-        {
-            return new DaysOffPreferences();
-        }
-
         public static IDaysOffPreferences CreateWithFalseDefaultValues()
         {
-            IDaysOffPreferences rules = Create();
+            IDaysOffPreferences rules = new DaysOffPreferences();
             rules.UseConsecutiveDaysOff = false;
             rules.UseConsecutiveWorkdays = false;
             rules.UseDaysOffPerWeek = false;
