@@ -75,6 +75,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			var result = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
 			result.PersonId.Should().Be(personId);
 			result.TeamId.Should().Be(null);
+			result.SiteId.Should().Be(null);
 			result.Timestamp.Should().Be("2016-01-18 08:15".Utc());
 		}
 
@@ -128,6 +129,31 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			});
 
 			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Should().Not.Be.Empty();
+		}
+
+		[Test]
+		public void ShouldPublishWithPropertiesWhenReactivated()
+		{
+			Now.Is("2016-01-18 00:00");
+			var personId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+
+			Target.Handle(new PersonTerminalDateChangedEvent
+			{
+				PersonId = personId,
+				PreviousTerminationDate = "2016-01-01".Utc(),
+				TerminationDate = "2016-12-31".Utc(),
+				TeamId = teamId,
+				SiteId = siteId,
+				BusinessUnitId = businessUnitId
+			});
+
+			var result = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
+			result.TeamId.Should().Be(teamId);
+			result.SiteId.Should().Be(siteId);
+			result.BusinessUnitId.Should().Be(businessUnitId);
 		}
 
 		[Test]

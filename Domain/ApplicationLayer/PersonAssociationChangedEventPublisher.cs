@@ -76,12 +76,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				return;
 			if (previousTerminatedAt > now && terminatedAt > now)
 				return;
-
+		
 			_eventPublisher.Publish(new PersonAssociationChangedEvent
 			{
 				PersonId = @event.PersonId,
 				Timestamp = now,
-				TeamId = @event.TeamId
+				TeamId = @event.TeamId,
+				SiteId = @event.SiteId,
+				BusinessUnitId = @event.BusinessUnitId
 			});
 		}
 		
