@@ -1,6 +1,5 @@
 using System;
-using TechTalk.SpecFlow;
-using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
+using Teleopti.Ccc.WebBehaviorTest.Data;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core
 {
@@ -21,11 +20,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void Reset()
 		{
 			_currentTime = null;
+			SystemSetup.Now.Reset();
 		}
 
 		public static void Set(DateTime time)
 		{
 			_currentTime = time;
+			SystemSetup.Now.Is(time);
 			TestControllerMethods.SetCurrentTime(Value());
 			Navigation.Navigation.ReapplyFakeTime();
 		}
