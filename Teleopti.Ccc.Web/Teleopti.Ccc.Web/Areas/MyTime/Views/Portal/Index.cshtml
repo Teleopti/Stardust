@@ -35,12 +35,12 @@
 					Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);
 				}
 			);
+			Teleopti.MyTimeWeb.AsmMessage.Init();
 			</text>
 			}
 
-			Teleopti.MyTimeWeb.AsmMessage.Init();
 			if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_EnhanceTeamSchedule_32580")
-				|| Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_TeamScheduleNoReadModel_36210")) {
+					|| Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_TeamScheduleNoReadModel_36210")) {
 				Teleopti.MyTimeWeb.TeamScheduleNew.Init();
 			} else {
 				Teleopti.MyTimeWeb.TeamScheduleOld.Init();
