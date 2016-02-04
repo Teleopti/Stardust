@@ -73,19 +73,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[LogTime]
 		protected virtual IPlanningPeriod SetupAndOptimize(Guid planningPeriodId)
 		{
+			var optimizationPreferences = _optimizationPreferencesFactory.Create();
+			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
-
 			_prerequisites.MakeSureLoaded();
 			var people = _fixedStaffLoader.Load(period);
 			_setupStateHolderForWebScheduling.Setup(period, people);
-
 			var allSchedules = extractAllSchedules(_schedulerStateHolder().SchedulingResultState, people, period);
-			var optimizationPreferences = _optimizationPreferencesFactory.Create();
-			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 
-			IList<IScheduleMatrixPro> matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(allSchedules);
-			IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization =
+			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(allSchedules);
+			var matrixOriginalStateContainerListForDayOffOptimization =
 				matrixListForDayOffOptimization.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator))
 					.Cast<IScheduleMatrixOriginalStateContainer>().ToList();
 

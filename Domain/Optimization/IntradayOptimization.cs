@@ -92,7 +92,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_prerequisites.MakeSureLoaded();
 			var people = _fixedStaffLoader.Load(period);
 			_setupStateHolderForWebScheduling.Setup(period, people);
-
 			var allSchedules = extractAllSchedules(_schedulerStateHolder().SchedulingResultState, people, period);
 
 			var matrixListForIntraDayOptimizationOriginal = _matrixListFactory.CreateMatrixListForSelection(allSchedules);

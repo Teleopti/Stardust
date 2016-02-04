@@ -89,11 +89,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		protected virtual PeopleSelection SetupAndSchedule(DateOnlyPeriod period)
 		{
 			_prerequisites.MakeSureLoaded();
-
 			var people = _fixedStaffLoader.Load(period);
-
 			_setupStateHolderForWebScheduling.Setup(period, people);
-
 			var allSchedules = extractAllSchedules(_schedulerStateHolder().SchedulingResultState, people, period);
 
 			_scheduleTagSetter().ChangeTagToSet(NullScheduleTag.Instance);
