@@ -110,7 +110,14 @@ namespace Manager.Integration.Test
             {
                 foreach (var appDomain in AppDomainHelper.AppDomains.Values)
                 {
-                    AppDomain.Unload(appDomain);
+                    try
+                    {
+                        AppDomain.Unload(appDomain);
+                    }
+
+                    catch (Exception)
+                    {
+                    }
                 }
             }
 
