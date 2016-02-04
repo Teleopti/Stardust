@@ -11,8 +11,8 @@ namespace NodeTest
     [TestFixture]
     public class JobHandlersTests
     {
-        [SetUp]
-        public void Setup()
+        [TestFixtureSetUp]
+        public void TestFixtureSetUp()
         {
             var builder = new ContainerBuilder();
 

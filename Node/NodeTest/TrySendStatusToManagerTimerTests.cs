@@ -23,8 +23,8 @@ namespace NodeTest
             get { return _fakeUrl; }
         }
 
-        [SetUp]
-        public void Setup()
+        [TestFixtureSetUp]
+        public void TestFixtureSetUp()
         {
             var baseAddress = new Uri(ConfigurationManager.AppSettings["BaseAddress"]);
 

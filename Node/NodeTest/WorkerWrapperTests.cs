@@ -20,8 +20,8 @@ namespace NodeTest
     [TestFixture]
     public class WorkerWrapperTests
     {
-        [SetUp]
-        public void Setup()
+        [TestFixtureSetUp]
+        public void TestFixtureSetup()
         {
             var managerLocation = new Uri(ConfigurationManager.AppSettings["ManagerLocation"]);
             var baseAddress = new Uri(ConfigurationManager.AppSettings["BaseAddress"]);
@@ -48,6 +48,12 @@ namespace NodeTest
                                                                           CallBackUriTemplateFake),
                                               new PostHttpRequestFake());
 
+
+        }
+
+        [SetUp]
+        public void Setup()
+        {
             NodeController = new NodeController(WorkerWrapper);
 
             var parameters = new TestJobParams("hejhopp",
@@ -65,15 +71,6 @@ namespace NodeTest
         }
 
         private Uri CallBackUriTemplateFake { get; set; }
-
-        private bool IsHandler(Type arg)
-        {
-            return arg.GetInterfaces()
-                .Any(x =>
-                         x.IsGenericType &&
-                         x.GetGenericTypeDefinition() == typeof (IHandle<>));
-        }
-
         public NodeConfigurationFake NodeConfigurationFake;
         public IWorkerWrapper WorkerWrapper;
         public NodeController NodeController;

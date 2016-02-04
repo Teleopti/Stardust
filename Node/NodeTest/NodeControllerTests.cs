@@ -18,8 +18,8 @@ namespace NodeTest
     [TestFixture]
     public class NodeControllerTests
     {
-        [SetUp]
-        public void Setup()
+        [TestFixtureSetUp]
+        public void TestFixtureSetUp()
         {
             var baseAddress = new Uri(ConfigurationManager.AppSettings["BaseAddress"]);
 
@@ -36,24 +36,32 @@ namespace NodeTest
 
 
             _callBackTemplateUriFake = managerLocation;
+            
 
+        }
+
+        [SetUp]
+        public void SetUp()
+        {
             _workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
-                                               _nodeConfigurationFake,
-                                               new NodeStartupNotificationToManagerFake(_nodeConfigurationFake,
-                                                                                        _callBackTemplateUriFake),
-                                               new PingToManagerFake(),
-                                               new SendJobDoneTimerFake(_nodeConfigurationFake,
-                                                                        _callBackTemplateUriFake),
-                                               new SendJobCanceledTimerFake(_nodeConfigurationFake,
-                                                                            _callBackTemplateUriFake),
-                                               new SendJobFaultedTimerFake(_nodeConfigurationFake,
+                                              _nodeConfigurationFake,
+                                              new NodeStartupNotificationToManagerFake(_nodeConfigurationFake,
+                                                                                       _callBackTemplateUriFake),
+                                              new PingToManagerFake(),
+                                              new SendJobDoneTimerFake(_nodeConfigurationFake,
+                                                                       _callBackTemplateUriFake),
+                                              new SendJobCanceledTimerFake(_nodeConfigurationFake,
                                                                            _callBackTemplateUriFake),
-                                               new PostHttpRequestFake());
+                                              new SendJobFaultedTimerFake(_nodeConfigurationFake,
+                                                                          _callBackTemplateUriFake),
+                                              new PostHttpRequestFake());
 
-            _nodeController = new NodeController(_workerWrapper) {Request = new HttpRequestMessage()};
+            _nodeController = new NodeController(_workerWrapper) { Request = new HttpRequestMessage() };
+
             var parameters = new TestJobParams("hejhopp",
-                                               "i lingonskogen");
+                                   "i lingonskogen");
             var ser = JsonConvert.SerializeObject(parameters);
+
             _jobToDo = new JobToDo
             {
                 Id = Guid.NewGuid(),
@@ -62,6 +70,7 @@ namespace NodeTest
                 Type = "NodeTest.JobHandlers.TestJobParams"
             };
         }
+
 
         private NodeConfigurationFake _nodeConfigurationFake;
         private IWorkerWrapper _workerWrapper;

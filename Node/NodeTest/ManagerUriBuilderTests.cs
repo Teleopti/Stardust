@@ -30,8 +30,8 @@ namespace NodeTest
 
         private Guid Guid { get; set; }
 
-        [SetUp]
-        public void Setup()
+        [TestFixtureSetUp]
+        public void TestFixtureSetUp()
         {
             Guid = Guid.NewGuid();
 

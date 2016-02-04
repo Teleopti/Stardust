@@ -10,8 +10,8 @@ namespace NodeTest
     {
         private string UriToTest { get; set; }
 
-        [SetUp]
-        public void Setup()
+        [TestFixtureSetUp]
+        public void TestFixtureSetup()
         {
             UriToTest = "http://localhost:9000/jobmanager/";
         }
