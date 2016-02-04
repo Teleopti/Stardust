@@ -160,8 +160,6 @@
     <Compile Include="FakeDataSourcesFactory.cs" />
     <Compile Include="FakeData\FakeActivityRepository.cs" />
     <Compile Include="FakeData\FakeCampaignRepository.cs" />
-    <Compile Include="FakeData\FakeClassicDaysOffOptimizationCommand.cs" />
-    <Compile Include="FakeData\FakeClassicScheduleCommand.cs" />
     <Compile Include="FakeData\FakeCommonAgentNameProvider.cs" />
     <Compile Include="FakeData\FakeCurrentIdentity.cs" />
     <Compile Include="FakeData\FakeCurrentUnitOfWorkFactory.cs" />
@@ -178,7 +176,6 @@
     <Compile Include="FakeData\FakeScheduleTagSetter.cs" />
     <Compile Include="FakeData\FakeSchedulingResultStateHolder.cs" />
     <Compile Include="FakeData\FakeSkillRepository.cs" />
-    <Compile Include="FakeData\FakeTeamBlockScheduleCommand.cs" />
     <Compile Include="FakeData\FakeUnitOfWork.cs" />
     <Compile Include="FakeData\FakeUnitOfWorkFactory.cs" />
     <Compile Include="FakeData\FakeWorkloadRepository.cs" />
@@ -219,7 +216,6 @@
     <Compile Include="FakeRepositories\FakePreferenceDayRepository.cs" />
     <Compile Include="FakeRepositories\FakePublicNoteRepository.cs" />
     <Compile Include="FakeRepositories\FakeRepositoryFactory.cs" />
-    <Compile Include="FakeRepositories\FakeScheduleRangePersister.cs" />
     <Compile Include="FakeRepositories\FakeScheduleRepository.cs" />
     <Compile Include="FakeRepositories\FakeScheduleTagRepository.cs" />
     <Compile Include="FakeRepositories\FakeSeatBookingRepository.cs" />

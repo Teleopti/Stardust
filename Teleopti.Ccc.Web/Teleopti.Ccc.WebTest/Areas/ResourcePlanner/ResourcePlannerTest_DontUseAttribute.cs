@@ -28,14 +28,8 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			system.AddModule(new SchedulingCommonModule(configuration));
 			system.AddModule(new ResourcePlannerModule());
 
-			system.UseTestDouble<FakeDayOffTemplateRepository>().For<IDayOffTemplateRepository>();
 			system.UseTestDouble<FakeScheduleDataReadScheduleRepository>().For<IScheduleRepository>();
-			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
-			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 			system.UseTestDouble<FakeSchedulingResultStateHolder>().For<ISchedulingResultStateHolder>();
-			system.UseTestDouble<FakeScheduleRangePersister>().For<IScheduleRangePersister>();
-			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
-			system.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
 			system.UseTestDouble<FakeFixedStaffSchedulingService>().For<IFixedStaffSchedulingService>();
 			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 			system.UseTestDouble<FakeUnitOfWorkFactory>().For<IUnitOfWorkFactory>();
@@ -44,8 +38,6 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			system.UseTestDouble<FakeScheduleTagSetter>().For<IScheduleTagSetter>();
 			system.UseTestDouble<FakeGroupPageCreator>().For<IGroupPageCreator>();
 			system.UseTestDouble<FakeGroupScheduleGroupPageDataProvider>().For<IGroupScheduleGroupPageDataProvider>();
-			system.UseTestDouble<FakeTeamBlockScheduleCommand>().For<ITeamBlockScheduleCommand>();
-			system.UseTestDouble<FakeClassicScheduleCommand>().For<IClassicScheduleCommand>();
 			system.UseTestDouble<FakeResourceOptimizationHelper>().For<IResourceOptimizationHelper>();
 			system.UseTestDouble<FakeScheduleRange>().For<IScheduleRange>();
 			system.UseTestDouble<FakeScheduleDictionary>().For<IScheduleDictionary>();
@@ -54,7 +46,6 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			system.UseTestDouble<FakePlanningPeriodRepository>().For<IPlanningPeriodRepository>();
 			system.UseTestDouble<FakeFixedStaffLoader>().For<IFixedStaffLoader>();
 			system.UseTestDouble<FakeMissingForecastProvider>().For<IMissingForecastProvider>();
-			system.UseTestDouble<FakeClassicDaysOffOptimizationCommand>().For<IClassicDaysOffOptimizationCommand>();
 			system.UseTestDouble<FakeDayOffRulesRepository>().For<IDayOffRulesRepository>();
 			system.UseTestDouble<FakeSkillDayRepository>().For<ISkillDayRepository>();
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
