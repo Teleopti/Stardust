@@ -7,7 +7,6 @@
 			function($scope, $state, $stateParams, $interval, PlanningPeriodSvrc, toggleService, $translate) {
 				//schedulings
 				$scope.status = '';
-				$scope.scheduledDays = 0;
 				$scope.schedulingPerformed = false;
 
 				$scope.isScheduleRunning = false;
@@ -71,7 +70,6 @@
 					cancelPoll();
 					$scope.status = $translate.instant('PresentTenseSchedule');
 					PlanningPeriodSvrc.launchScheduling.query(JSON.stringify(planningPeriod)).$promise.then(function(scheduleResult) {
-						$scope.scheduledDays = scheduleResult.DaysScheduled;
 						$scope.status = $translate.instant('OptimizingDaysOff');
 						//to make sure long optimization request doesn't create a new cookie based on current time
 						//we call keepAlive here again
