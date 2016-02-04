@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using log4net;
 using Stardust.Manager.Constants;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
@@ -12,8 +13,9 @@ namespace Stardust.Manager
 		private readonly IJobRepository _jobRepository;
 		private readonly IWorkerNodeRepository _nodeRepository;
 		private readonly IHttpSender _httpSender;
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(JobManager));
 
-		public JobManager(IJobRepository jobRepository, IWorkerNodeRepository nodeRepository, IHttpSender httpSender)
+        public JobManager(IJobRepository jobRepository, IWorkerNodeRepository nodeRepository, IHttpSender httpSender)
 		{
 			_jobRepository = jobRepository;
 			_nodeRepository = nodeRepository;
@@ -33,8 +35,15 @@ namespace Stardust.Manager
 
                 var response = await _httpSender.PostAsync(postUri, null);
 
-				if (response != null && response.IsSuccessStatusCode)
-					upNodes.Add(availableNode);
+			    if (response != null && response.IsSuccessStatusCode)
+			    {
+                    upNodes.Add(availableNode);
+                }
+			    else
+			    {
+			        LogHelper.LogInfoWithLineNumber(Logger, "response = " + response + "Sent to " + postUri.ToString());
+			    }
+					
 			}
 			_jobRepository.CheckAndAssignNextJob(upNodes, _httpSender);
 		}
