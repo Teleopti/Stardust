@@ -175,7 +175,7 @@ namespace Manager.Integration.Test
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
 
-            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(TimeSpan.FromMinutes(1));
+            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
             ManagerApiHelper.CheckJobHistoryStatusTimer.CancelAllRequest();
