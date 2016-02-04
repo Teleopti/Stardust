@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Win.Payroll
 			
 			_payrollResultRepository = payrollResultRepository;
 			var serviceBusSender = new ServiceBusSender();
-			var populator = EventContextPopulator.Make();
+			var populator = EventInfrastructureInfoPopulator.Make();
 			_messageSender = new MessagePopulatingServiceBusSender(serviceBusSender, populator);
 			
 		}

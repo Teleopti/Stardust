@@ -12,7 +12,7 @@ namespace Teleopti.Interfaces.Messages.Payroll
     /// Created by: peterwe
     /// Created date: 2010-11-22
     /// </remarks>
-    public class RunPayrollExport : MessageWithLogOnInfo
+    public class RunPayrollExport : MessageWithLogOnContext
     {
 
         /// <summary>

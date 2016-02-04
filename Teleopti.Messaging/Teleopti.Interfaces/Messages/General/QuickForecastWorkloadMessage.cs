@@ -6,7 +6,7 @@ namespace Teleopti.Interfaces.Messages.General
 	/// <summary>
 	/// Message with details to perform an quick forecast on a workload.
 	/// </summary>
-	public class QuickForecastWorkloadMessage : MessageWithLogOnInfo
+	public class QuickForecastWorkloadMessage : MessageWithLogOnContext
 	{
 		/// <summary>
 		/// Same as the JobId

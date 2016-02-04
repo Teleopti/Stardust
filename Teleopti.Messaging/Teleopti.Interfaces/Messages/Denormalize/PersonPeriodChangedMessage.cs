@@ -9,7 +9,7 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 	/// Denormalize the person period message.
 	/// </summary>
 	[Serializable]
-	public class PersonPeriodChangedMessage : MessageWithLogOnInfo
+	public class PersonPeriodChangedMessage : MessageWithLogOnContext
 	{
 		private readonly Guid _messageId = Guid.NewGuid();
 		private string _serializedPersonPeriod;

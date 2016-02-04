@@ -7,7 +7,7 @@ namespace Teleopti.Interfaces.Messages.General
 	///<summary>
 	/// Message with details to perform an export of forecasting data from sub skills of multisite skills to a regular skill.
 	///</summary>
-	public class ExportMultisiteSkillsToSkill : MessageWithLogOnInfo
+	public class ExportMultisiteSkillsToSkill : MessageWithLogOnContext
 	{
 		///<summary>
 		/// Creates a new instance of the <see cref="ExportMultisiteSkillsToSkill"/>.

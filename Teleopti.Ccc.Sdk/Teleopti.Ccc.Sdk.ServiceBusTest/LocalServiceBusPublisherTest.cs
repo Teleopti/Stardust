@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			var initiatorId = Guid.NewGuid();
 			var target = new LocalServiceBusEventPublisher(
 				bus,
-				new EventContextPopulator(null, null,
+				new EventInfrastructureInfoPopulator(null, null,
 					new FakeCurrentInitiatorIdentifier(
 						new FakeInitiatorIdentifier { InitiatorId = initiatorId })));
 
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		}
 	}
 
-	public class AnEventThatCanHaveInitiatorId : EventWithLogOnAndInitiator
+	public class AnEventThatCanHaveInitiatorId : EventWithInfrastructureContext
 	{
 	}
 

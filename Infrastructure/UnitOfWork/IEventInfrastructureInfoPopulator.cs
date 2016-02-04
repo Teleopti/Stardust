@@ -1,6 +1,6 @@
 ﻿namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public interface IEventContextPopulator
+	public interface IEventInfrastructureInfoPopulator
 	{
 		void PopulateEventContext(params object[] events);
 	}

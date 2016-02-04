@@ -6,7 +6,7 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 	/// Denormalize the projection of schedules.
 	/// </summary>
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix")]
-	public class ProcessDenormalizeQueue : MessageWithLogOnInfo
+	public class ProcessDenormalizeQueue : MessageWithLogOnContext
 	{
 		private readonly Guid _messageId = Guid.NewGuid();
 

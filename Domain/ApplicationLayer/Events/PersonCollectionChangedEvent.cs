@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	public class PersonCollectionChangedEvent : EventWithLogOnAndInitiator
+	public class PersonCollectionChangedEvent : EventWithInfrastructureContext
 	{
 		private string _serializedPeople;
 

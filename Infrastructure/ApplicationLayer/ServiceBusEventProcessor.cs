@@ -12,26 +12,26 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	public class ServiceBusEventProcessor
 	{
 		private readonly ResolveEventHandlers _resolver;
-		private readonly IEventContextPopulator _eventContextPopulator;
+		private readonly IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly ITrackingMessageSender _trackingMessageSender;
 
 		public ServiceBusEventProcessor(
 			ResolveEventHandlers resolver,
-			IEventContextPopulator eventContextPopulator,
+			IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator,
 			ICurrentUnitOfWorkFactory unitOfWorkFactory,
 			ITrackingMessageSender trackingMessageSender)
 		{
 			_resolver = resolver;
-			_eventContextPopulator = eventContextPopulator;
+			_eventInfrastructureInfoPopulator = eventInfrastructureInfoPopulator;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_trackingMessageSender = trackingMessageSender;
 		}
 
 		public void Process(IEvent @event)
 		{
-			var logOnInfo = @event as ILogOnInfo;
-			var initiatorInfo = @event as IInitiatorInfo;
+			var logOnInfo = @event as ILogOnContext;
+			var initiatorInfo = @event as IInitiatorContext;
 			var trackInfo = @event as ITrackInfo;
 
 			try
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		private void process(IEvent @event)
 		{
-			_eventContextPopulator.PopulateEventContext(@event);
+			_eventInfrastructureInfoPopulator.PopulateEventContext(@event);
 
 			var handlers = _resolver.ResolveServiceBusHandlersForEvent(@event);
 

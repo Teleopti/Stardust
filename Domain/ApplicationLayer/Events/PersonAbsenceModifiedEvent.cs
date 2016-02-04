@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	public class PersonAbsenceModifiedEvent : EventWithLogOnAndInitiator, ITrackInfo
+	public class PersonAbsenceModifiedEvent : EventWithInfrastructureContext, ITrackInfo
 	{
 		public Guid AbsenceId { get; set; }
 		public Guid PersonId { get; set; }

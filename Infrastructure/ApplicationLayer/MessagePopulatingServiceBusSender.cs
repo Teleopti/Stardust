@@ -5,17 +5,17 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	public class MessagePopulatingServiceBusSender : IMessagePopulatingServiceBusSender
 	{
 		private readonly IServiceBusSender _serviceBus;
-		private readonly IEventContextPopulator _eventContextPopulator;
+		private readonly IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
 
-		public MessagePopulatingServiceBusSender(IServiceBusSender serviceBus, IEventContextPopulator eventContextPopulator)
+		public MessagePopulatingServiceBusSender(IServiceBusSender serviceBus, IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator)
 		{
 			_serviceBus = serviceBus;
-			_eventContextPopulator = eventContextPopulator;
+			_eventInfrastructureInfoPopulator = eventInfrastructureInfoPopulator;
 		}
 
 		public void Send(object message, bool throwOnNoBus)
 		{
-			_eventContextPopulator.PopulateEventContext(message);
+			_eventInfrastructureInfoPopulator.PopulateEventContext(message);
 			_serviceBus.Send(throwOnNoBus, message);
 		}
 	}

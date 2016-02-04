@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Interfaces.Messages.General
 {
-	public class CalculateBadgeMessage : MessageWithLogOnInfo
+	public class CalculateBadgeMessage : MessageWithLogOnContext
 	{
 		private readonly Guid _messageId = Guid.NewGuid();
 

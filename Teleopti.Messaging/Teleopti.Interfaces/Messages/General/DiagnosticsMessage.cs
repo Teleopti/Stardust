@@ -2,7 +2,7 @@
 
 namespace Teleopti.Interfaces.Messages.General
 {
-	public class DiagnosticsMessage : MessageWithLogOnInfo
+	public class DiagnosticsMessage : MessageWithLogOnContext
 	{
 		private readonly Guid _identity = Guid.NewGuid();
 

@@ -11,17 +11,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		IDelayedMessageSender
 	{
 		private readonly IServiceBus _bus;
-		private readonly IEventContextPopulator _eventContextPopulator;
+		private readonly IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
 
-		public LocalServiceBusEventPublisher(IServiceBus bus, IEventContextPopulator eventContextPopulator)
+		public LocalServiceBusEventPublisher(IServiceBus bus, IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator)
 		{
 			_bus = bus;
-			_eventContextPopulator = eventContextPopulator;
+			_eventInfrastructureInfoPopulator = eventInfrastructureInfoPopulator;
 		}
 
 		public void Publish(params IEvent[] events)
 		{
-			_eventContextPopulator.PopulateEventContext(events);
+			_eventInfrastructureInfoPopulator.PopulateEventContext(events);
 			_bus.Send(events);
 		}
 

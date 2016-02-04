@@ -6,7 +6,7 @@ namespace Teleopti.Interfaces.Messages.Denormalize
     /// Legacy message type, here only to be able to read old messages from denormalization queue.
     /// </summary>
     [Serializable, Obsolete("Legacy only")]
-    public class ScheduleChanged : MessageWithLogOnInfo
+    public class ScheduleChanged : MessageWithLogOnContext
     {
         private readonly Guid _messageId = Guid.NewGuid();
 

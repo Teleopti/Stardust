@@ -2,7 +2,7 @@ using System;
 
 namespace Teleopti.Interfaces.Messages.Requests
 {
-	public class NewAbsenceReportCreated : MessageWithLogOnInfo
+	public class NewAbsenceReportCreated : MessageWithLogOnContext
 	{
 		/// <summary>
 		/// Message to inform consumers that a new absence report has been created

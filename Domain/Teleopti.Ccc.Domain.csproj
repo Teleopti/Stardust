@@ -234,9 +234,11 @@
     <Compile Include="ApplicationLayer\Commands\RemovePersonAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Commands\MoveActivityCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\IInitiatorContext.cs" />
     <Compile Include="ApplicationLayer\IRecurringEventPublisher.cs" />
     <Compile Include="ApplicationLayer\IResolve.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAssociationChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\ITimestamped.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\PersonFinderReadOnlyUpdater.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateGroupingReadModelConsumer.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChangedEventPublisher.cs" />
@@ -413,7 +415,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventBuilder.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\IProjectionChangedEventBuilder.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduleInitializeTriggeredEventForPersonScheduleDay.cs" />
-    <Compile Include="ApplicationLayer\EventWithLogOnAndInitiator.cs" />
+    <Compile Include="ApplicationLayer\EventWithInfrastructureContext.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduleChangedEvent.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedEventBase.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventPublisher.cs" />

@@ -5,7 +5,7 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 	/// <summary>
 	/// Initial load of schedule projections
 	/// </summary>
-	public class InitialLoadScheduleProjection : MessageWithLogOnInfo
+	public class InitialLoadScheduleProjection : MessageWithLogOnContext
 	{
 		private readonly Guid _messageId = Guid.NewGuid();
 

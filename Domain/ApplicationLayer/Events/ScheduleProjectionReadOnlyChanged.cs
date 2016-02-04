@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-    public class ScheduleProjectionReadOnlyChanged : EventWithLogOnAndInitiator
+    public class ScheduleProjectionReadOnlyChanged : EventWithInfrastructureContext
     {
 	    public Guid PersonId { get; set; }
 

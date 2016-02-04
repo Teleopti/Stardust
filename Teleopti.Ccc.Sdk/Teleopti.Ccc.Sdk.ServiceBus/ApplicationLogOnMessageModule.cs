@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		bool transport_MessageArrived(Rhino.ServiceBus.Impl.CurrentMessageInformation arg)
 		{
-			var logOnInfo = arg.Message as ILogOnInfo;
+			var logOnInfo = arg.Message as ILogOnContext;
 			if (Logger.IsDebugEnabled)
 			{
 				Logger.DebugFormat("Message recieved. Message Id = {0}", arg.MessageId);

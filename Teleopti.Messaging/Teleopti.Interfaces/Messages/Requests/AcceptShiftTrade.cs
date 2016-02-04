@@ -5,7 +5,7 @@ namespace Teleopti.Interfaces.Messages.Requests
     ///<summary>
     ///Message used for accepting a shift trade
     ///</summary>
-    public class AcceptShiftTrade : MessageWithLogOnInfo
+    public class AcceptShiftTrade : MessageWithLogOnContext
     {
         /// <summary>
         /// Identity for this message

@@ -874,15 +874,14 @@
     <Compile Include="Messages\General\IForecastsRow.cs" />
     <Compile Include="Messages\General\MultisiteSkillSelection.cs" />
     <Compile Include="Messages\General\BadgeCalculationInitMessage.cs" />
-    <Compile Include="Messages\IInitiatorInfo.cs" />
-    <Compile Include="Messages\ILogOnInfo.cs" />
+    <Compile Include="Messages\ILogOnContext.cs" />
     <Compile Include="Messages\Rta\FactQueueUpdatedMessage.cs" />
     <Compile Include="Messages\Payroll\RunPayrollExport.cs" />
     <Compile Include="Messages\Requests\AcceptShiftTrade.cs" />
     <Compile Include="Messages\Requests\NewAbsenceReportCreated.cs" />
     <Compile Include="Messages\Requests\NewShiftTradeRequestCreated.cs" />
     <Compile Include="Messages\Requests\NewAbsenceRequestCreated.cs" />
-    <Compile Include="Messages\MessageWithLogOnInfo.cs" />
+    <Compile Include="Messages\MessageWithLogOnContext.cs" />
     <Compile Include="Messages\Rta\AgentAdherenceStateInfo.cs" />
     <Compile Include="Domain\UnderstaffingDetails.cs" />
     <Compile Include="Messages\Rta\StartUpBusinessUnit.cs" />

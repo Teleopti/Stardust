@@ -5,7 +5,7 @@ namespace Teleopti.Interfaces.Messages.Rta
     /// <summary>
     /// 
     /// </summary>
-    public class StartUpBusinessUnit : MessageWithLogOnInfo
+    public class StartUpBusinessUnit : MessageWithLogOnContext
     {
         private readonly Guid _messageId = Guid.NewGuid();
 

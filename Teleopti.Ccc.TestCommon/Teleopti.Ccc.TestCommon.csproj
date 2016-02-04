@@ -307,7 +307,7 @@
     <Compile Include="TestData\Setups\Specific\IranianCulture.cs" />
     <Compile Include="TestData\Setups\Specific\IstanbulTimeZone.cs" />
     <Compile Include="ThreadCulture.cs" />
-    <Compile Include="DummyContextPopulator.cs" />
+    <Compile Include="DummyInfrastructureInfoPopulator.cs" />
     <Compile Include="EntityExtensions.cs" />
     <Compile Include="FakeConfigReader.cs" />
     <Compile Include="SwedishCulture.cs" />

@@ -24,13 +24,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			var businessUnitId = Guid.Empty;
 			var initiatorId = Guid.Empty;
 
-			var logOnInfo = originatingEvent as ILogOnInfo;
+			var logOnInfo = originatingEvent as ILogOnContext;
 			if (logOnInfo != null)
 			{
 				dataSource = logOnInfo.LogOnDatasource;
 				businessUnitId = logOnInfo.LogOnBusinessUnitId;
 			}
-			var initiatorInfo = originatingEvent as IInitiatorInfo;
+			var initiatorInfo = originatingEvent as IInitiatorContext;
 			if (initiatorInfo != null)
 			{
 				initiatorId = initiatorInfo.InitiatorId;

@@ -558,9 +558,9 @@
     <Compile Include="UnitOfWork\FromFactory.cs" />
     <Compile Include="UnitOfWork\IClearScheduleEvents.cs" />
     <Compile Include="UnitOfWork\ICurrentInitiatorIdentifier.cs" />
-    <Compile Include="UnitOfWork\EventContextPopulator.cs" />
+    <Compile Include="UnitOfWork\EventInfrastructureInfoPopulator.cs" />
     <Compile Include="UnitOfWork\ICurrentPersistCallbacks.cs" />
-    <Compile Include="UnitOfWork\IEventContextPopulator.cs" />
+    <Compile Include="UnitOfWork\IEventInfrastructureInfoPopulator.cs" />
     <Compile Include="UnitOfWork\IMessageSendersScope.cs" />
     <Compile Include="UnitOfWork\InitiatorIdentifierFromMessage.cs" />
     <Compile Include="UnitOfWork\ISessionContextBinder.cs" />

@@ -2,7 +2,7 @@ using System;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	public class PersonTeamChangedEvent : EventWithLogOnAndInitiator
+	public class PersonTeamChangedEvent : EventWithInfrastructureContext
 	{
 		public Guid PersonId { get; set; }
 		public Guid? CurrentBusinessUnitId { get; set; }

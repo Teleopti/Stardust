@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Core.ServiceBus
 			}
 		}
 
-		public class TestMessage : MessageWithLogOnInfo
+		public class TestMessage : MessageWithLogOnContext
 		{
 			public override Guid Identity { get { return Guid.Empty; } }
 		}

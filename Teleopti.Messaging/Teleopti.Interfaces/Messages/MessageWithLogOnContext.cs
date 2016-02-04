@@ -3,7 +3,7 @@ using System;
 namespace Teleopti.Interfaces.Messages
 {
     [Serializable]
-	public abstract class MessageWithLogOnInfo : ILogOnInfo
+	public abstract class MessageWithLogOnContext : ILogOnContext
     {
         public abstract Guid Identity { get; }
 		public Guid InitiatorId { get; set; }

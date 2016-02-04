@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Messages;
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	[Serializable]
-	public class EventsPackageMessage : MessageWithLogOnInfo
+	public class EventsPackageMessage : MessageWithLogOnContext
 	{
 		private readonly Guid _messageId = Guid.NewGuid();
 		public override Guid Identity { get { return _messageId; } }

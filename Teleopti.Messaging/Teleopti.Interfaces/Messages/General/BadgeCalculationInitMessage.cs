@@ -5,7 +5,7 @@ namespace Teleopti.Interfaces.Messages.General
 	/// <summary>
 	/// 
 	/// </summary>
-	public class BadgeCalculationInitMessage : MessageWithLogOnInfo
+	public class BadgeCalculationInitMessage : MessageWithLogOnContext
 	{
 		private readonly Guid _messageId = Guid.NewGuid();
 

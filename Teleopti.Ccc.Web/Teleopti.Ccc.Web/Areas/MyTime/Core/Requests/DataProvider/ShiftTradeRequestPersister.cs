@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		{
 			if (_currentUnitOfWork == null)
 				return;
-			MessageWithLogOnInfo message = null;
+			MessageWithLogOnContext message = null;
 			var workflowControlSet = _shiftTradeRequestprovider.RetrieveUserWorkflowControlSet();
 			if (form.ShiftExchangeOfferId != null && workflowControlSet.LockTrading)
 			{

@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Messages.General;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
 
-    public class OpenAndSplitTargetSkill : EventWithLogOnAndInitiator
+    public class OpenAndSplitTargetSkill : EventWithInfrastructureContext
     {
 
         public Guid JobId { get; set; }

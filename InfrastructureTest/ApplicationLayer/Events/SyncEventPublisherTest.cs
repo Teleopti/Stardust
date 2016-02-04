@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 		}
 
-		public class TestDomainEvent : EventWithLogOnAndInitiator
+		public class TestDomainEvent : EventWithInfrastructureContext
 		{
 		}
 		

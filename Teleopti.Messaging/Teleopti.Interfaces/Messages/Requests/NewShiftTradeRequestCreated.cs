@@ -9,7 +9,7 @@ namespace Teleopti.Interfaces.Messages.Requests
     /// Created by: robink
     /// Created date: 2010-02-24
     /// </remarks>
-    public class NewShiftTradeRequestCreated : MessageWithLogOnInfo
+    public class NewShiftTradeRequestCreated : MessageWithLogOnContext
     {
         /// <summary>
         /// Identity for this message

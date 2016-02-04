@@ -2,7 +2,7 @@ using System;
 
 namespace Teleopti.Interfaces.Messages.General
 {
-	public class CalculateTimeZoneMessage : MessageWithLogOnInfo
+	public class CalculateTimeZoneMessage : MessageWithLogOnContext
 	{
 		private readonly Guid _messageId = Guid.NewGuid();
 

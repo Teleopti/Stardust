@@ -8,7 +8,7 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 	/// Denormalize the grouping message.
 	/// </summary>
 	[Serializable]
-	public class GroupPageChangedMessage : MessageWithLogOnInfo
+	public class GroupPageChangedMessage : MessageWithLogOnContext
 	{
 		private readonly Guid _messageId = Guid.NewGuid();
 		private string _serializedGroupPageId;
