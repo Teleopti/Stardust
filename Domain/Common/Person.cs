@@ -95,25 +95,6 @@ namespace Teleopti.Ccc.Domain.Common
 		    }
 	    }
 
-		private personAssociationInfo currentAssociationInfo()
-		{
-			var period = Period(new DateOnly(ServiceLocatorForEntity.Now.UtcDateTime()));
-			var info = new personAssociationInfo();
-			if (period != null && period.Team != null)
-			{
-				info.TeamId = period.Team.Id.GetValueOrDefault();
-				if (period.Team.Site != null)
-				{
-					info.SiteId = period.Team.Site.Id.GetValueOrDefault();
-					if (period.Team.Site.BusinessUnit != null)
-					{
-						info.BusinessUnitId = period.Team.Site.BusinessUnit.Id.GetValueOrDefault();
-					}
-				}
-			}
-			return info;
-		}
-
 		private class personAssociationInfo
 		{
 			public Guid? BusinessUnitId { get; set; }
@@ -139,8 +120,6 @@ namespace Teleopti.Ccc.Domain.Common
 			InParameter.NotNull("personSkill", personSkill);
 			InParameter.NotNull("personPeriod", personPeriod);
 
-			var skillsBefore = gatherSkillDetails(personPeriod);
-
 			var modify = personPeriod.PersonSkillCollection.FirstOrDefault(s => s.Skill.Equals(personSkill.Skill)) as IPersonSkillModify;
 			if (modify == null)
 			{
@@ -151,16 +130,6 @@ namespace Teleopti.Ccc.Domain.Common
 				modify.Active = personSkill.Active;
 				modify.SkillPercentage = personSkill.SkillPercentage;
 			}
-			AddEvent(new PersonSkillAddedEvent
-				{
-					PersonId = Id.GetValueOrDefault(),
-					SkillId = personSkill.Skill.Id.GetValueOrDefault(),
-					StartDate = personPeriod.StartDate.Date,
-					EndDate = personPeriod.EndDate().Date,
-					Proficiency = personSkill.SkillPercentage.Value,
-					SkillActive = personSkill.Active,
-					SkillsBefore = skillsBefore
-				});
 		}
 
 	    public virtual void AddSkill(ISkill skill, DateOnly personPeriodDate)
@@ -172,19 +141,9 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			InParameter.NotNull("personPeriod", personPeriod);
 
-			var skillsBefore = gatherSkillDetails(personPeriod);
-
 			var modify = personPeriod as IPersonPeriodModifySkills;
 			if (modify != null)
-			{
 				modify.ResetPersonSkill();
-			}
-			AddEvent(new PersonSkillResetEvent
-			{
-				PersonId = Id.GetValueOrDefault(),
-				StartDate = personPeriod.StartDate.Date,
-				SkillsBefore = skillsBefore
-			});
 		}
 
 		public virtual void AddExternalLogOn(IExternalLogOn externalLogOn, IPersonPeriod personPeriod)
@@ -230,22 +189,11 @@ namespace Teleopti.Ccc.Domain.Common
 			InParameter.NotNull("skill", skill);
 			InParameter.NotNull("personPeriod", personPeriod);
 
-			var skillsBefore = gatherSkillDetails(personPeriod);
-
 			var personSkill = personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill)) as IPersonSkillModify;
 			if (personSkill == null) return;
 			if (personSkill.Active) return;
 
 			personSkill.Active = true;
-
-			AddEvent(new PersonSkillActivatedEvent
-				{
-					PersonId = Id.GetValueOrDefault(),
-					SkillId = skill.Id.GetValueOrDefault(),
-					StartDate = personPeriod.StartDate.Date,
-					EndDate = personPeriod.EndDate().Date,
-					SkillsBefore = skillsBefore
-				});
 		}
 
 		public virtual void DeactivateSkill(ISkill skill, IPersonPeriod personPeriod)
@@ -253,21 +201,10 @@ namespace Teleopti.Ccc.Domain.Common
 			InParameter.NotNull("skill", skill);
 			InParameter.NotNull("personPeriod", personPeriod);
 
-			var skillsBefore = gatherSkillDetails(personPeriod);
-
 			var personSkill = personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill)) as IPersonSkillModify;
 			if (personSkill == null) return;
 
 			personSkill.Active = false;
-
-			AddEvent(new PersonSkillDeactivatedEvent
-				{
-					PersonId = Id.GetValueOrDefault(),
-					SkillId = skill.Id.GetValueOrDefault(),
-					StartDate = personPeriod.StartDate.Date,
-					EndDate = personPeriod.EndDate().Date,
-					SkillsBefore = skillsBefore
-				});
 		}
 
 		public virtual void RemoveSkill(ISkill skill, IPersonPeriod personPeriod)
@@ -276,21 +213,7 @@ namespace Teleopti.Ccc.Domain.Common
 			InParameter.NotNull("personPeriod",personPeriod);
 			var personSkill = personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill));
 			if (personSkill != null)
-			{
-				var skillsBefore = gatherSkillDetails(personPeriod);
-
 				((IPersonPeriodModifySkills)personPeriod).DeletePersonSkill(personSkill);
-				AddEvent(new PersonSkillRemovedEvent
-					{
-						PersonId = Id.GetValueOrDefault(),
-						SkillId = skill.Id.GetValueOrDefault(),
-						StartDate = personPeriod.StartDate.Date,
-						EndDate = personPeriod.EndDate().Date,
-						Proficiency = personSkill.SkillPercentage.Value,
-						SkillActive = personSkill.Active,
-						SkillsBefore = skillsBefore
-					});
-			}
 		}
 
 		public virtual void ChangeSkillProficiency(ISkill skill, Percent proficiency, IPersonPeriod personPeriod)
@@ -299,21 +222,7 @@ namespace Teleopti.Ccc.Domain.Common
 			InParameter.NotNull("personPeriod", personPeriod);
 			IPersonSkillModify personSkill = (IPersonSkillModify)personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill));
 			if (personSkill != null)
-			{
-				var skillsBefore = gatherSkillDetails(personPeriod);
-
 				personSkill.SkillPercentage = proficiency;
-
-				AddEvent(new PersonSkillProficiencyChangedEvent
-					{
-						PersonId = Id.GetValueOrDefault(),
-						SkillId = skill.Id.GetValueOrDefault(),
-						StartDate = personPeriod.StartDate.Date,
-						EndDate = personPeriod.EndDate().Date,
-						SkillsBefore = skillsBefore,
-						ProficiencyAfter = proficiency.Value
-					});
-			}
 		}
 
         public virtual Name Name
@@ -387,17 +296,8 @@ namespace Teleopti.Ccc.Domain.Common
 
             if (!_personPeriodCollection.ContainsKey(period.StartDate))
             {
-	            var personPeriodsBefore = gatherPersonPeriodDetails();
                 period.SetParent(this);
                 _personPeriodCollection.Add(period.StartDate, period);
-
-	            AddEvent(new PersonPeriodAddedEvent
-		            {
-			            PersonId = Id.GetValueOrDefault(),
-			            StartDate = period.StartDate.Date,
-			            PersonPeriodsBefore = personPeriodsBefore,
-			            PersonPeriodsAfter = gatherPersonPeriodDetails()
-		            });
             }
         }
 
@@ -424,17 +324,7 @@ namespace Teleopti.Ccc.Domain.Common
         public virtual void DeletePersonPeriod(IPersonPeriod period)
         {
             InParameter.NotNull("period", period);
-
-	        var personPeriodsBefore = gatherPersonPeriodDetails();
             _personPeriodCollection.Remove(period.StartDate);
-
-	        AddEvent(new PersonPeriodRemovedEvent
-		        {
-			        PersonId = Id.GetValueOrDefault(),
-			        StartDate = period.StartDate.Date,
-			        PersonPeriodsBefore = personPeriodsBefore,
-			        PersonPeriodsAfter = gatherPersonPeriodDetails()
-		        });
         }
 
 		public virtual void ChangePersonPeriodStartDate(DateOnly startDate, IPersonPeriod personPeriod)
@@ -442,7 +332,6 @@ namespace Teleopti.Ccc.Domain.Common
 			InParameter.NotNull("personPeriod", personPeriod);
 
 			var startDateBefore = personPeriod.StartDate;
-			var personPeriodsBefore = gatherPersonPeriodDetails();
 			_personPeriodCollection.Remove(startDateBefore);
 			while (_personPeriodCollection.ContainsKey(startDate))
 			{
@@ -450,42 +339,28 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 			personPeriod.StartDate = startDate;
 			_personPeriodCollection.Add(startDate, personPeriod);
-			
-			AddEvent(new PersonPeriodStartDateChangedEvent
-				{
-					PersonId = Id.GetValueOrDefault(),
-					NewStartDate = startDate.Date,
-					OldStartDate = startDateBefore.Date,
-					PersonPeriodsBefore = personPeriodsBefore,
-					PersonPeriodsAfter = gatherPersonPeriodDetails()
-				});
 		}
-
-		private ICollection<PersonPeriodDetail> gatherPersonPeriodDetails()
-	    {
-		    var personPeriods = InternalPersonPeriodCollection;
-		    if (personPeriods == null) return new List<PersonPeriodDetail>();
-		    return
-			    personPeriods.Select(
-				    p => new PersonPeriodDetail
-				    {
-					    StartDate = p.StartDate.Date,
-					    EndDate = p.EndDate().Date,
-					    PersonSkillDetails = gatherSkillDetails(p),
-				    }).ToList();
-	    }
-
-	    private ICollection<PersonSkillDetail> gatherSkillDetails(IPersonPeriod personPeriod)
+		
+		private personAssociationInfo currentAssociationInfo()
 		{
-			return personPeriod.PersonSkillCollection.Select(p => new PersonSkillDetail
+			var period = Period(new DateOnly(ServiceLocatorForEntity.Now.UtcDateTime()));
+			var info = new personAssociationInfo();
+			if (period != null && period.Team != null)
+			{
+				info.TeamId = period.Team.Id.GetValueOrDefault();
+				if (period.Team.Site != null)
 				{
-					Active = p.Active,
-					Proficiency = p.SkillPercentage.Value,
-					SkillId = p.Skill.Id.GetValueOrDefault()
-				}).ToList();
+					info.SiteId = period.Team.Site.Id.GetValueOrDefault();
+					if (period.Team.Site.BusinessUnit != null)
+					{
+						info.BusinessUnitId = period.Team.Site.BusinessUnit.Id.GetValueOrDefault();
+					}
+				}
+			}
+			return info;
 		}
 
-        public virtual void AddSchedulePeriod(ISchedulePeriod period)
+		public virtual void AddSchedulePeriod(ISchedulePeriod period)
         {
             InParameter.NotNull("period", period);
 
