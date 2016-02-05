@@ -2,6 +2,8 @@
 using System.Net.Http;
 using System.Threading;
 using System.Web.Http.Results;
+using Autofac;
+using Autofac.Core;
 using Newtonsoft.Json;
 using NodeTest.Attributes;
 using NodeTest.Fakes;
@@ -11,10 +13,11 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Stardust.Node.API;
 using Stardust.Node.Interfaces;
+using Stardust.Node.Workers;
 
 namespace NodeTest
 {
-    [TestFixture, ProgressTest]
+    [TestFixture, ProgressTest, Ignore]
     public class ProgressCallbackTests
     {
         public NodeController NodeController;
@@ -23,8 +26,8 @@ namespace NodeTest
         public SendJobFaultedTimerFake SendJobFaultedTimerFake;
         public SendJobCanceledTimerFake SendJobCanceledTimerFake;
         public SendJobDoneTimerFake SendJobDoneTimerFake;
-
-        [Test, Ignore]
+                        
+        [Test]
         public void OnCancelCanceledShouldBeCalled()
         {
             var jobParams = new TestJobParams("tjo",
@@ -80,7 +83,7 @@ namespace NodeTest
             SendJobCanceledTimerFake.NumberOfTimeCalled.Should().Be.EqualTo(0);
         }
 
-        [Test, Ignore]
+        [Test]
         public void OnSuccessSuccededShouldBeCalled()
         {
             var jobParams = new TestJobParams("tjo",
