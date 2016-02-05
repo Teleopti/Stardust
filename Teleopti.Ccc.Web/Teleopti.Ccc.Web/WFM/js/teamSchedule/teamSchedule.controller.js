@@ -56,8 +56,21 @@
 			return vm.canActiveAddAbsence() || vm.canActiveSwapShifts();
 		};
 
-		vm.onScheduleDateChanged = function (date) {
+		function updateShiftStatusForSelectedPerson() {
+			var params = {
+				personIds: vm.getSelectedPersonIdList(),
+				date: vm.scheduleDateMoment().format('YYYY-MM-DD')
+			};
+
+			teamScheduleSvc.getSchedules.query(params).$promise.then(function (result) {
+				vm.groupScheduleVm = groupScheduleFactory.Create(result.Schedules, vm.scheduleDateMoment());
+				setupPersonIdSelectionDic(vm.groupScheduleVm.Schedules);
+			});
+		}
+
+		vm.onScheduleDateChanged = function () {
 			vm.schedulePageReset();
+			updateShiftStatusForSelectedPerson();
 		};
 
 		vm.onKeyWordInSearchInputChanged = function () {
@@ -128,13 +141,14 @@
 		function setupPersonIdSelectionDic(schedules) {
 			schedules.forEach(function (personSchedule) {				
 				var allowSwap = personSchedule.AllowSwap();
-				if (vm.personIdSelectionDic[personSchedule.PersonId] === undefined) {
+				var selectedPerson = vm.personIdSelectionDic[personSchedule.PersonId];
+				if (selectedPerson === undefined || selectedPerson === null) {
 					vm.personIdSelectionDic[personSchedule.PersonId] = {
 						isSelected: false,
 						allowSwap: allowSwap
 					};
 				} else {
-					vm.personIdSelectionDic[personSchedule.PersonId].allowSwap = allowSwap;
+					selectedPerson.allowSwap = allowSwap;
 				}
 			});
 		};
