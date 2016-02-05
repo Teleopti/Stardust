@@ -113,5 +113,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			affectedQueues.Should().Be.EqualTo(2);
 			queueSourceRepository.AssertWasNotCalled(x => x.AddRange(new List<IQueueSource>()), o => o.IgnoreArguments());
 		}
+
+		[Test]
+		public void ShouldNotCreateAnotherQueueSourceWhenOriginalIdIsNegative()
+		{
+			var queueSourceRepository = MockRepository.GenerateMock<IQueueSourceRepository>();
+			var target = new MatrixRaptorQueueSynchronization(queueSourceRepository);
+			IQueueSource raptorQueue = new QueueSource("q1", "q1", -11, 2, 0, 4);
+			IQueueSource matrixQueue = new QueueSource("mart q1", "mart q1 desc", -11, 2, 0, 4);
+
+			queueSourceRepository.Stub(x => x.LoadAll()).Return(new List<IQueueSource> { raptorQueue });
+
+			var affectedQueues = target.SynchronizeQueues(new List<IQueueSource> { matrixQueue });
+
+			affectedQueues.Should().Be.EqualTo(1);
+			queueSourceRepository.AssertWasNotCalled(x => x.AddRange(new List<IQueueSource>()), o => o.IgnoreArguments());
+		}
 	}
 }

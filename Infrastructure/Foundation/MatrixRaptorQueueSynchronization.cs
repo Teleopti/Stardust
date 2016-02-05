@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			foreach (IQueueSource raptorQueue in raptorQueues)
 			{
 				IQueueSource matrixQueue;
-				if ((matrixQueuesByMartId.TryGetValue(raptorQueue.QueueMartId, out matrixQueue) && raptorQueue.QueueOriginalId >= 0 &&
+				if ((matrixQueuesByMartId.TryGetValue(raptorQueue.QueueMartId, out matrixQueue) &&
 					 raptorQueue.DataSourceId > 0) || findByLookup(matrixQueuesByAggId, raptorQueue, out matrixQueue))
 				{
 					// Newly upgraded/converted database with unmapped queue with matching QueueAggId´s
