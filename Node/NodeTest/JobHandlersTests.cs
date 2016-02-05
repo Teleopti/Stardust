@@ -27,8 +27,10 @@ namespace NodeTest
 
             Container = builder.Build();
 
+#if DEBUG
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
+#endif
 
         }
 

@@ -35,8 +35,10 @@ namespace NodeTest
                 handlerAssembly,
                 nodeName);
 
+#if DEBUG
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
+#endif
 
         }
 

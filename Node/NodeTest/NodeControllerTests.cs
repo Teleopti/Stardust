@@ -41,9 +41,10 @@ namespace NodeTest
 
 
             _callBackTemplateUriFake = managerLocation;
-
+#if DEBUG
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
+#endif
         }
 
         [SetUp]

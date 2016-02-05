@@ -59,8 +59,10 @@ namespace NodeTest
                     CallBackUriTemplateFake);
             PingToManagerFake = new PingToManagerFake();
 
+#if DEBUG
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
+#endif
         }
 
         [TestFixtureTearDown]
