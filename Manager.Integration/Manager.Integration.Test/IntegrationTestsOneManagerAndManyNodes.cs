@@ -121,14 +121,17 @@ namespace Manager.Integration.Test
                 {
                     try
                     {
-                        if (!appDomain.IsFinalizingForUnload())
-                        {
-                            AppDomain.Unload(appDomain);
-                        }                        
+                        AppDomain.Unload(appDomain);
                     }
 
-                    catch (Exception)
+                    catch (AppDomainUnloadedException)
                     {
+                        
+                    }
+
+                    catch (Exception exp)
+                    {
+                        LogHelper.LogErrorWithLineNumber(exp.Message, Logger,exp);
                     }
                 }
             }
@@ -321,7 +324,7 @@ namespace Manager.Integration.Test
 
             JobHelper.GiveNodesTimeToInitialize();
 
-            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(NumberOfNodesToStart * 2);
+            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(NumberOfNodesToStart * 1);
 
             TimeSpan timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count);
 
