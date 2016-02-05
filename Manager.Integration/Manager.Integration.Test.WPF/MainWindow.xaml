@@ -28,10 +28,10 @@
         <DataGrid x:Name="dataGrid" Grid.Row="1" ItemsSource="{Binding LoggingData}" SelectionUnit="Cell" AutoGenerateColumns="False" HorizontalGridLinesBrush="#FFF5EFEF" VerticalGridLinesBrush="#FFF5EFEF"                  
                    >
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Message}" ClipboardContentBinding="{x:Null}" Header="Message"/>
-                <DataGridTextColumn Binding="{Binding Level}" ClipboardContentBinding="{x:Null}" Header="Level"/>
-                <DataGridTextColumn Binding="{Binding Exception}" ClipboardContentBinding="{x:Null}" Header="Exception"/>
-                <DataGridTextColumn Binding="{Binding Date}" ClipboardContentBinding="{x:Null}" Header="Date"/>
+                <DataGridTextColumn Binding="{Binding Message}" ClipboardContentBinding="{Binding Message}" Header="Message"/>
+                <DataGridTextColumn Binding="{Binding Level}" ClipboardContentBinding="{Binding Level}" Header="Level"/>
+                <DataGridTextColumn Binding="{Binding Exception}" ClipboardContentBinding="{Binding Exception}" Header="Exception"/>
+                <DataGridTextColumn Binding="{Binding Date}" ClipboardContentBinding="{Binding Date}" Header="Date"/>
             </DataGrid.Columns>
         </DataGrid>
         <TextBlock x:Name="textBlock" TextWrapping="Wrap" d:LayoutOverrides="Height" VerticalAlignment="Center" Text="{Binding Status}"/>
