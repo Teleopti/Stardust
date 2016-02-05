@@ -3,11 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:ViewModels="clr-namespace:Manager.Integration.Test.WPF.ViewModels" x:Name="window" x:Class="Manager.Integration.Test.WPF.MainWindow"
+        xmlns:ViewModels="clr-namespace:Manager.Integration.Test.WPF.ViewModels" 
+              x:Name="window" 
+              x:Class="Manager.Integration.Test.WPF.MainWindow"
         mc:Ignorable="d"
         Title="Manager Integration Test Viewer" 
-        Height="379.459" 
-        Width="651.253" 
         WindowStartupLocation="CenterScreen" 
         WindowState="Maximized">
     <Window.Background>
@@ -29,6 +29,15 @@
             <TabControl.Effect>
                 <DropShadowEffect Color="#FFECDDDD"/>
             </TabControl.Effect>
+            
+            <TabItem Header="Worker Node">
+                <Grid Background="#FFE5E5E5">
+                    <DataGrid ItemsSource="{Binding WorkerNodesData}" 
+                		HorizontalGridLinesBrush="#FFF5EFEF" 
+                		VerticalGridLinesBrush="#FFF5EFEF" SelectionUnit="Cell" IsReadOnly="True"/>
+                </Grid>
+            </TabItem>
+
             <TabItem Header="Logging">
                 <Grid Background="#FFE5E5E5">
                     <DataGrid x:Name="dataGrid" ItemsSource="{Binding LoggingData}" SelectionUnit="Cell" AutoGenerateColumns="False" HorizontalGridLinesBrush="#FFF5EFEF" VerticalGridLinesBrush="#FFF5EFEF" IsReadOnly="True" RowDetailsVisibilityMode="Collapsed" CanUserDeleteRows="False"                  
@@ -63,6 +72,13 @@
                             <DataGridTextColumn Binding="{Binding Detail}" ClipboardContentBinding="{x:Null}" Header="Detail"/>
                         </DataGrid.Columns>
                     </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Job Definition">
+                <Grid Background="#FFE5E5E5">
+                    <DataGrid ItemsSource="{Binding JobDefinitionsData}" 
+                              HorizontalGridLinesBrush="#FFF5EFEF" 
+                              VerticalGridLinesBrush="#FFF5EFEF" SelectionUnit="Cell" IsReadOnly="True"/>
                 </Grid>
             </TabItem>
         </TabControl>

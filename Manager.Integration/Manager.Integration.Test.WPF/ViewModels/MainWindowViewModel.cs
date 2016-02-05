@@ -67,6 +67,8 @@ namespace Manager.Integration.Test.WPF.ViewModels
         private List<Logging> _loggingData;
         private List<JobHistory> _jobHistoryData;
         private List<JobHistoryDetail> _jobHistoryDetailData;
+        private List<JobDefinition> _jobDefinitionData;
+        private List<WorkerNode> _workerNodesData;
 
         public List<Logging> LoggingData
         {
@@ -98,9 +100,38 @@ namespace Manager.Integration.Test.WPF.ViewModels
                     managerDbEntities.JobHistoryDetails.OrderByDescending(history => history.Created)
                         .ToList();
 
+                JobDefinitionData =
+                    managerDbEntities.JobDefinitions
+                        .ToList();
+
+                WorkerNodesData  =
+                    managerDbEntities.WorkerNodes
+                        .ToList();
+
             }
 
             Status = "Refresh finished.";
+        }
+
+        public List<WorkerNode> WorkerNodesData
+        {
+            get { return _workerNodesData; }
+            set
+            {
+                _workerNodesData = value;
+
+                OnPropertyChanged();
+            }
+        }
+
+        public List<JobDefinition> JobDefinitionData
+        {
+            get { return _jobDefinitionData; }
+            set
+            {
+                _jobDefinitionData = value;
+                OnPropertyChanged();
+            }
         }
 
         public List<JobHistoryDetail> JobHistoryDetailData
