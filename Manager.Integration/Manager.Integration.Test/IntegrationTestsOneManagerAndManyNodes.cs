@@ -143,7 +143,7 @@ namespace Manager.Integration.Test
             ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
         }
 
-        private const int NumberOfNodesToStart = 1;
+        private const int NumberOfNodesToStart = 10;
 
         private bool _startUpManagerAndNodeManually = false;
 

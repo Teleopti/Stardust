@@ -54,6 +54,18 @@
                               RowDetailsVisibilityMode="Collapsed" 
                               CanUserDeleteRows="False" 
                               Grid.Row="1" >
+                        
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Level}" Value="ERROR">
+                                        <Setter Property="Background" Value="Red"></Setter>
+                                        <Setter Property="Foreground" Value="White"></Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                        
                         <DataGrid.LayoutTransform>
                             <ScaleTransform  
                                         CenterX="0" CenterY="0" 
