@@ -360,7 +360,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			//delete
 
             Expect.Call(_rollbackService.ModificationCollection).Return(new List<IScheduleDay>()).Repeat.Any();
-			Expect.Call(_deleteAndResourceCalculateService.DeleteWithResourceCalculation(null, null, true)).IgnoreArguments()
+			Expect.Call(_deleteAndResourceCalculateService.DeleteWithResourceCalculation(null, null, true, false)).IgnoreArguments()
 				.Return(null);
 		}
 
@@ -438,8 +438,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 		private void resourceCalculation()
 		{
-            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_mostUnderStaffDate, true)).IgnoreArguments();
-            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_mostOverStaffDate, true)).IgnoreArguments();
+            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_mostUnderStaffDate, true, false)).IgnoreArguments();
+            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_mostOverStaffDate, true, false)).IgnoreArguments();
 		}
     }
 }

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_considerShortBreaks = considerShortBreaks;
 		}
 
-		public bool CalculateIfNeeded(DateOnly scheduleDateOnly, DateTimePeriod? workShiftProjectionPeriod)
+		public bool CalculateIfNeeded(DateOnly scheduleDateOnly, DateTimePeriod? workShiftProjectionPeriod, bool doIntraIntervalCalculation = false)
 		{
 			if (_paused)
 				return false;
@@ -31,21 +31,21 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			if (_calculationFrequency == 1)
 			{
-				_resourceOptimizationHelper.ResourceCalculateDate(scheduleDateOnly, _considerShortBreaks);
+				_resourceOptimizationHelper.ResourceCalculateDate(scheduleDateOnly, _considerShortBreaks, doIntraIntervalCalculation);
 				DateTimePeriod? dateTimePeriod = workShiftProjectionPeriod;
 				if (dateTimePeriod.HasValue)
 				{
 					DateTimePeriod period = dateTimePeriod.Value;
 					if (period.StartDateTime.Date != period.EndDateTime.Date)
-						_resourceOptimizationHelper.ResourceCalculateDate(scheduleDateOnly.AddDays(1), _considerShortBreaks);
+						_resourceOptimizationHelper.ResourceCalculateDate(scheduleDateOnly.AddDays(1), _considerShortBreaks, doIntraIntervalCalculation);
 				}
 				return true;
 			}
 
 			if (_counter % _calculationFrequency == 0 || scheduleDateOnly != _lastDate.Value)
 			{
-				_resourceOptimizationHelper.ResourceCalculateDate(_lastDate.Value,  _considerShortBreaks);
-				_resourceOptimizationHelper.ResourceCalculateDate(_lastDate.Value.AddDays(1),  _considerShortBreaks);
+				_resourceOptimizationHelper.ResourceCalculateDate(_lastDate.Value,  _considerShortBreaks, doIntraIntervalCalculation);
+				_resourceOptimizationHelper.ResourceCalculateDate(_lastDate.Value.AddDays(1),  _considerShortBreaks, doIntraIntervalCalculation);
 				_lastDate = scheduleDateOnly;
 				_counter = 1;
 

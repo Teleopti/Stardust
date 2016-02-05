@@ -119,7 +119,8 @@ namespace Teleopti.Ccc.Win.Intraday
 
 		private void backgroundWorkerResourcesDoWork(object sender, DoWorkEventArgs e)
 		{
-			_resourceOptimizationHelperExtended.ResourceCalculateMarkedDays(new BackgroundWorkerWrapper(_backgroundWorkerResources), true);
+			//Claes & Roger: we don't know if intrainterval calc needs to be done. We keep this as before
+			_resourceOptimizationHelperExtended.ResourceCalculateMarkedDays(new BackgroundWorkerWrapper(_backgroundWorkerResources), true, true);
 		}
 
 		private void calculateResources()

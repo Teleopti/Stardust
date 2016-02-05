@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.WinCode.Common
                 SchedulerState.RequestedPeriod.DateOnlyPeriod;
             foreach (var dateOnly in dateOnlyPeriod.DayCollection())
             {
-                _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true);
+                _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
             }
         }
 

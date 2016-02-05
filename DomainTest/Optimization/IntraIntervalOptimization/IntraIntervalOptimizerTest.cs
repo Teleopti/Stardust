@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(_schedulingOptions,
 						_optimizationPreferences, _editableShift, _dateOnly));
 				
-				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_scheduleDayList, _rollbackService, true));
+				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_scheduleDayList, _rollbackService, true, true));
 
 				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { _dateOnly })).Return(_skillDays);
 				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { _dateOnly.AddDays(1) })).Return(_skillDaysAfter);
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(_schedulingOptions,
 						_optimizationPreferences, _editableShift, _dateOnly));
 
-				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_scheduleDayList, _rollbackService, true));
+				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_scheduleDayList, _rollbackService, true, true));
 
 				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { _dateOnly })).Return(_skillDays);
 				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { _dateOnly.AddDays(1) })).Return(_skillDaysAfter);
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 
 				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
 				
-				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_scheduleDayList, _rollbackService, true));
+				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_scheduleDayList, _rollbackService, true, true));
 
 				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { _dateOnly })).Return(_skillDays);
 				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { _dateOnly.AddDays(1) })).Return(_skillDaysAfter);
@@ -256,7 +256,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
 
 				Expect.Call(() => _rollbackService.Rollback());
-				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null)).Return(true);	
+				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null, true)).Return(true);	
 			}
 
 			using (_mock.Playback())
@@ -289,7 +289,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 
 				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
 
-				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_scheduleDayList, _rollbackService, true));
+				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_scheduleDayList, _rollbackService, true, true));
 
 				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { _dateOnly })).Return(_skillDays);
 				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { _dateOnly.AddDays(1) })).Return(_skillDaysAfter);
@@ -307,7 +307,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_teamBlockShiftCategoryLimitationValidator.Validate(_teamBlockInfo, null, _optimizationPreferences)).Return(false);
 
 				Expect.Call(() => _rollbackService.Rollback());
-				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null)).Return(true);
+				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null, true)).Return(true);
 
 				
 			}
@@ -342,7 +342,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 
 				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
 
-				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_scheduleDayList, _rollbackService, true));
+				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_scheduleDayList, _rollbackService, true, true));
 
 				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { _dateOnly })).Return(_skillDays);
 				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { _dateOnly.AddDays(1) })).Return(_skillDaysAfter);
@@ -361,7 +361,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_skillStaffPeriodEvaluator.ResultIsWorse(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter, _limit)).Return(true);
 
 				Expect.Call(() => _rollbackService.Rollback());
-				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null)).Return(true);
+				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null, true)).Return(true);
 				Expect.Call(_teamBlockShiftCategoryLimitationValidator.Validate(_teamBlockInfo, null, _optimizationPreferences)).Return(true);
 			}
 

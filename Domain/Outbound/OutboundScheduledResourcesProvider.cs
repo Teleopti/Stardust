@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 	      
 			foreach (var dateOnly in period.DayCollection())
 			{
-				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true);
+				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, false);
 			}
 		}
 

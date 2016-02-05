@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_personSkillProvider = personSkillProvider;
 		}
 
-		public void ResourceCalculateAllDays(IBackgroundWorkerWrapper backgroundWorker)
+		public void ResourceCalculateAllDays(IBackgroundWorkerWrapper backgroundWorker, bool doIntraIntervalCalculation)
 		{
 			var stateHolder = _stateHolder();
 			if (!stateHolder.SchedulingResultState.Skills.Any()) return;
@@ -35,19 +35,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			backgroundWorker.ReportProgress(1);
 			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 			{
-				resourceCalculateDays(backgroundWorker, stateHolder.ConsiderShortBreaks, stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection());
+				resourceCalculateDays(backgroundWorker, stateHolder.ConsiderShortBreaks, stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection(), doIntraIntervalCalculation);
 			}
 		}
 
-		private void prepareAndCalculateDate(DateOnly date, bool considerShortBreaks)
+		private void prepareAndCalculateDate(DateOnly date, bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
 			using (PerformanceOutput.ForOperation("PrepareAndCalculateDate " + date.ToShortDateString(CultureInfo.CurrentCulture)))
 			{
-				_basicHelper.ResourceCalculateDate(date, considerShortBreaks);
+				_basicHelper.ResourceCalculateDate(date, considerShortBreaks, doIntraIntervalCalculation);
 			}
 		}
 
-		public void ResourceCalculateMarkedDays(IBackgroundWorkerWrapper backgroundWorker, bool considerShortBreaks)
+		public void ResourceCalculateMarkedDays(IBackgroundWorkerWrapper backgroundWorker, bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
 			var stateHolder = _stateHolder();
 			if (!stateHolder.DaysToRecalculate.Any()) return;
@@ -59,12 +59,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 			{
 				resourceCalculateDays(backgroundWorker, considerShortBreaks,
-					stateHolder.DaysToRecalculate.ToList());
+					stateHolder.DaysToRecalculate.ToList(), doIntraIntervalCalculation);
 				stateHolder.ClearDaysToRecalculate();
 			}
 		}
 
-		private void resourceCalculateDays(IBackgroundWorkerWrapper backgroundWorker, bool considerShortBreaks, ICollection<DateOnly> datesList)
+		private void resourceCalculateDays(IBackgroundWorkerWrapper backgroundWorker, bool considerShortBreaks, ICollection<DateOnly> datesList, bool doIntraIntervalCalculation)
 		{
 			if (datesList.Count == 0)
 				return;
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var cancel = false;
 			foreach (var date in datesList)
 			{
-				prepareAndCalculateDate(date, considerShortBreaks);
+				prepareAndCalculateDate(date, considerShortBreaks, doIntraIntervalCalculation);
 
 				if (backgroundWorker != null)
 				{

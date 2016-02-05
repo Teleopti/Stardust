@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			_optimizerHelperHelper.LockDaysForIntradayOptimization(matrixListForIntraDayOptimizationOriginal, period);
 
-			_resourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoBackgroundWorker());
+			_resourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoBackgroundWorker(), false);
 			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 			{
 				service.Execute(optimizers, period, optimizationPreferences.Advanced.TargetValueCalculation);

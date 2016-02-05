@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = false;
 			if (lastCalculationState)
 			{
-				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker);
+				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, false);
 			}
 
 			//set to false for first scheduling and then use it for RemoveShiftCategoryBackToLegalState

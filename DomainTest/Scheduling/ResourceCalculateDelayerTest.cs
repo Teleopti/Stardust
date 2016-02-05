@@ -42,8 +42,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 3, true);
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true));
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly().AddDays(1), true));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true, false));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly().AddDays(1), true, false));
 			}
 
 			using (_mocks.Playback())
@@ -59,8 +59,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 2, true);
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true));
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly().AddDays(1), true));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true, false));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly().AddDays(1), true, false));
 			}
 
 			using (_mocks.Playback())
@@ -78,8 +78,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true);
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true));
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly().AddDays(1), true));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true, false));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly().AddDays(1), true, false));
 			}
 
 			using (_mocks.Playback())
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true);
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true, false));
 			}
 
 			using (_mocks.Playback())

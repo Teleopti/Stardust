@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using (_mocks.Playback())
 			{
-				_target.ResourceCalculateDate(new DateOnly(2009, 2, 2), true);
+				_target.ResourceCalculateDate(new DateOnly(2009, 2, 2), true, true);
 			}
 		}
 
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			}
 			using (_mocks.Playback())
 			{
-				_target.ResourceCalculateDate(new DateOnly(2009, 2, 2), true);
+				_target.ResourceCalculateDate(new DateOnly(2009, 2, 2), true, false);
 			}
 		}
 
@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			}
 			using (_mocks.Playback())
 			{
-				_target.ResourceCalculateDate(new DateOnly(2009, 2, 2), true);
+				_target.ResourceCalculateDate(new DateOnly(2009, 2, 2), true, false);
 			}
 		}
 	}

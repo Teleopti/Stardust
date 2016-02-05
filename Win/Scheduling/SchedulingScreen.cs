@@ -2148,7 +2148,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			setThreadCulture();
 			_optimizationHelperExtended.ResourceCalculateMarkedDays(
-				new BackgroundWorkerWrapper(_backgroundWorkerResourceCalculator), SchedulerState.ConsiderShortBreaks);
+				new BackgroundWorkerWrapper(_backgroundWorkerResourceCalculator), SchedulerState.ConsiderShortBreaks, true);
 		}
 
 		private void validateAllPersons()
@@ -3362,7 +3362,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_schedulerState.SchedulingResultState.SkipResourceCalculation = false;
 			if (lastCalculationState)
 			{
-				_optimizationHelperExtended.ResourceCalculateAllDays(new BackgroundWorkerWrapper(_backgroundWorkerOvertimeScheduling));
+				_optimizationHelperExtended.ResourceCalculateAllDays(new BackgroundWorkerWrapper(_backgroundWorkerOvertimeScheduling), true);
 			}
 
 			_totalScheduled = 0;
@@ -3550,7 +3550,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (!_schedulerState.SchedulingResultState.SkipResourceCalculation && !_teamLeaderMode)
 			{
 				backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXCalculatingResourcesDotDotDot"));
-				_optimizationHelperExtended.ResourceCalculateAllDays(new BackgroundWorkerWrapper(backgroundWorkerLoadData));
+				_optimizationHelperExtended.ResourceCalculateAllDays(new BackgroundWorkerWrapper(backgroundWorkerLoadData), true);
 			}
 
 			if (e.Cancel)

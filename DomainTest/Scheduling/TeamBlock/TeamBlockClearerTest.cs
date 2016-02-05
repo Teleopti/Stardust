@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(_deleteAndResourceCalculateService.DeleteWithResourceCalculation(_toRemoveList,
 				                                                                             _rollbackService,
-				                                                                             _schedulingOptions.ConsiderShortBreaks))
+				                                                                             _schedulingOptions.ConsiderShortBreaks, false))
 					  .Return(_toRemoveList);
 			}
 
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay>(), _rollbackService, _schedulingOptions.ConsiderShortBreaks)).Return(_toRemoveList);
+				Expect.Call(_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay>(), _rollbackService, _schedulingOptions.ConsiderShortBreaks, false)).Return(_toRemoveList);
 			}
 
 			using (_mocks.Playback())
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					  .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>()));
 				Expect.Call(_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay>(),
 																							 _rollbackService,
-																							 _schedulingOptions.ConsiderShortBreaks))
+																							 _schedulingOptions.ConsiderShortBreaks, false))
 					  .Return(new List<IScheduleDay>());
 			}
 
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			{
 				Expect.Call(_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay>(), 
 																							 _rollbackService,
-																							 _schedulingOptions.ConsiderShortBreaks))
+																							 _schedulingOptions.ConsiderShortBreaks, false))
 					  .Return(new List<IScheduleDay>());
 			}
 

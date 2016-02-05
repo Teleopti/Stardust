@@ -107,9 +107,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IList<IScheduleDay> listToDelete = new List<IScheduleDay> { scheduleDay };
 
 			if(_resourceCalculateDaysDecider.IsNightShift(scheduleDay))
-				_deleteAndResourceCalculateService.DeleteWithResourceCalculation(listToDelete, _rollbackService, schedulingOptions.ConsiderShortBreaks);
+				_deleteAndResourceCalculateService.DeleteWithResourceCalculation(listToDelete, _rollbackService, schedulingOptions.ConsiderShortBreaks, false);
 			else
-				_deleteAndResourceCalculateService.DeleteWithoutResourceCalculationOnNextDay(listToDelete, _rollbackService, schedulingOptions.ConsiderShortBreaks);
+				_deleteAndResourceCalculateService.DeleteWithoutResourceCalculationOnNextDay(listToDelete, _rollbackService, schedulingOptions.ConsiderShortBreaks, false);
 			    
             if (!tryScheduleDay(dateToBeRemoved, schedulingOptions, effectiveRestriction, WorkShiftLengthHintOption.AverageWorkTime)) 
                 return true;

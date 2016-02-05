@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			hasResource.Should().Be.True();
 		}
 
-		[Test, Ignore("PBI 36999")]
+		[Test]
 		public void ShouldNotCalculateIntraIntervalIssuses()
 		{
 			var phoneActivity = ActivityFactory.CreateActivity("phone");

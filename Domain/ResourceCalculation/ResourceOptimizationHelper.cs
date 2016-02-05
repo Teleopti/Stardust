@@ -34,12 +34,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_intraIntervalFinderService = intraIntervalFinderService;
 		}
 
-		public void ResourceCalculateDate(DateOnly localDate, bool considerShortBreaks)
-		{
-			resourceCalculateDate(localDate, considerShortBreaks);
-		}
 
-		private void resourceCalculateDate(DateOnly localDate, bool considerShortBreaks)
+		public void ResourceCalculateDate(DateOnly localDate, bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
 			var stateHolder = _stateHolder();
 			if (stateHolder.SchedulingResultState.TeamLeaderMode)
@@ -71,7 +67,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				ResourceCalculateDate(relevantProjections, localDate, considerShortBreaks);
 
-				_intraIntervalFinderService.Execute(stateHolder.SchedulingResultState, localDate, relevantProjections);
+				if (doIntraIntervalCalculation)
+				{
+					_intraIntervalFinderService.Execute(stateHolder.SchedulingResultState, localDate, relevantProjections);
+				}
 
 				if (context != null)
 				{

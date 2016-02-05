@@ -47,23 +47,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				Expect.Call(dateOnlyAsDateTimePeriod2.DateOnly).Return(new DateOnly(2012, 1, 10));
 				Expect.Call(
 					() =>
-					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1), true));
+					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1), true, false));
 				Expect.Call(
 					() =>
-					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1).AddDays(1), true));
+					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1).AddDays(1), true, false));
 				Expect.Call(
 					() =>
-					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 10), true));
+					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 10), true, false));
 				Expect.Call(
 					() =>
-					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 10).AddDays(1), true));
+					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 10).AddDays(1), true, false));
 			}
 
 			IList<IScheduleDay> ret;
 
 			using (_mocks.Playback())
 			{
-				ret = _target.DeleteWithResourceCalculation(_list, _rollbackService, true);
+				ret = _target.DeleteWithResourceCalculation(_list, _rollbackService, true, false);
 			}
 
 			Assert.AreEqual(2, ret.Count);
@@ -84,19 +84,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				Expect.Call(dateOnlyAsDateTimePeriod2.DateOnly).Return(new DateOnly(2012, 1, 2));
 				Expect.Call(
 					() =>
-						_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1), true));
+						_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1), true, false));
 				Expect.Call(
 					() =>
-						_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 2), true));
+						_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 2), true, false));
 				Expect.Call(
 					() =>
-						_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 3), true));
+						_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 3), true, false));
 			}
 			IList<IScheduleDay> ret;
 
 			using (_mocks.Playback())
 			{
-				ret = _target.DeleteWithResourceCalculation(_list, _rollbackService, true);
+				ret = _target.DeleteWithResourceCalculation(_list, _rollbackService, true, false);
 			}
 
 			Assert.AreEqual(2, ret.Count);

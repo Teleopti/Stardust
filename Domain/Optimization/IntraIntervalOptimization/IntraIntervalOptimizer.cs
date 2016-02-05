@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			var originalMainShift = daySchedule.GetEditorShift();
 			_mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(schedulingOptions, optimizationPreferences, originalMainShift, dateOnly);
 
-			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay> { daySchedule }, rollbackService, true);
+			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay> { daySchedule }, rollbackService, true, true);
 
 			var skillDaysOnDay = schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { dateOnly });
 			var skillDaysOnDayAfter = schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { dateOnly.AddDays(1) });
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			if (bestFit == null)
 			{
 				rollbackService.Rollback();
-				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
+				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, true);
 				return intervalIssuesBefore;
 			}
 		
@@ -102,14 +102,14 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			if (!daySchedule.IsScheduled())
 			{
 				rollbackService.Rollback();
-				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
+				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, true);
 				return intervalIssuesBefore;
 			}
 
 			if (!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlock, null, optimizationPreferences))
 			{
 				rollbackService.Rollback();
-				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
+				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, true);
 				return intervalIssuesBefore;
 			}
 
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			if (worse)
 			{
 				rollbackService.Rollback();
-				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
+				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, true);
 			}
 
 			else

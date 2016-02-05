@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
         	_deleteAndResourceCalculateService.DeleteWithResourceCalculation(daysToDelete,
         	                                                                 schedulePartModifyAndRollbackService,
-																			 schedulingOptions.ConsiderShortBreaks);
+																			 schedulingOptions.ConsiderShortBreaks, false);
 
             bool success = false;
             IPerson person = matrix.Person;

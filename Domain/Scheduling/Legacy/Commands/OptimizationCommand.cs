@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = false;
 			if (lastCalculationState)
 			{
-				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker);
+				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, false);
 			}
 			var selectedSchedules = selectedScheduleDays;
 			var selectedPeriod = _periodExctractor.ExtractPeriod(selectedSchedules);
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						dayOffOptimizationPreferenceProvider);
 
 					_resourceOptimizationHelperExtended().ResourceCalculateMarkedDays(null,
-						optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks);
+						optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, false);
 					IList<IScheduleMatrixPro> matrixList = _matrixListFactory.CreateMatrixListForSelection(selectedSchedules);
 
 
