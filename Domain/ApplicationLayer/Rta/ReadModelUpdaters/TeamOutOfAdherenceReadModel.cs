@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 	{
 		public Guid TeamId { get; set; }
 		public Guid SiteId { get; set; }
+		public int Version { get; set; }
 		public int Count { get; set; }
 		public IEnumerable<TeamOutOfAdherenceReadModelState> State { get; set; }
 	}

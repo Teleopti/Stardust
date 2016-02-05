@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -37,25 +39,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var teamId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
 
-			Target.Persist(new TeamOutOfAdherenceReadModel
+			var model = new TeamOutOfAdherenceReadModel
 			{
 				TeamId = teamId,
 				State = new [] {new TeamOutOfAdherenceReadModelState(){ PersonId = Guid.NewGuid()}}
-			});
-			var persisted = new TeamOutOfAdherenceReadModel
-			{
-				Count = 5, 
-				TeamId = teamId,
-				SiteId = siteId,
-				State = new[] { new TeamOutOfAdherenceReadModelState() {PersonId = Guid.NewGuid() } }
 			};
-			Target.Persist(persisted);
+			Target.Persist(model);
 
-			var model = Target.Get(teamId);
-			model.Count.Should().Be(5);
-			model.TeamId.Should().Be(teamId);
-			model.SiteId.Should().Be(siteId);
-			model.State.Should().Have.Count.EqualTo(1);
+			model.Count = 5;
+			model.TeamId = teamId;
+			model.SiteId = siteId;
+			model.State = new[] {new TeamOutOfAdherenceReadModelState() {PersonId = Guid.NewGuid()}};
+			Target.Persist(model);
+
+			var actual = Target.Get(teamId);
+			actual.Count.Should().Be(5);
+			actual.TeamId.Should().Be(teamId);
+			actual.SiteId.Should().Be(siteId);
+			actual.State.Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
