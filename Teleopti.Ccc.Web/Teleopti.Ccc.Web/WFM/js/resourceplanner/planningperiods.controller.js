@@ -8,37 +8,20 @@
 				//schedulings
 				$scope.status = '';
 				$scope.schedulingPerformed = false;
-
-				$scope.isScheduleRunning = false;
 				$scope.scheduleClicked = false;
 				$scope.initialized = false;
 				$scope.isEnabled = false;
 				$scope.dayoffRules = [];
 				$scope.planningPeriod = {};
 				$scope.disableSchedule = function() {
-					return !$scope.initialized || $scope.isScheduleRunning || $scope.scheduleClicked || !$scope.planningPeriod.StartDate;
+					return !$scope.initialized || $scope.scheduleClicked || !$scope.planningPeriod.StartDate;
 				};
-
-				function updateRunningStatus() {
-					PlanningPeriodSvrc.status.get().$promise.then(function(result) {
-						$scope.isScheduleRunning = result.IsRunning;
-					});
-				}
-
-				var stopPolling;
-
-				function startPoll() {
-					updateRunningStatus();
-					stopPolling = $interval(updateRunningStatus, 10 * 1000);
-				}
-				startPoll();
 
 				function handleScheduleOrOptimizeError() {
 					$scope.errorMessage = "An error occurred. Please try again.";
 					$scope.schedulingPerformed = false;
 					$scope.status = '';
 					$scope.scheduleClicked = false;
-					startPoll();
 				}
 
 				PlanningPeriodSvrc.getDayOffRules().then(function(result) {
@@ -50,14 +33,6 @@
 					PlanningPeriodSvrc.keepAlive();
 				}, tenMinutes);
 
-				function cancelPoll() {
-					$scope.isScheduleRunning = false;
-					if (angular.isDefined(stopPolling)) {
-						$interval.cancel(stopPolling);
-						stopPolling = undefined;
-					}
-				}
-
 				$scope.launchSchedule = function(p) {
 					$scope.errorMessage = undefined;
 					$scope.schedulingPerformed = false;
@@ -67,7 +42,6 @@
 						StartDate: p.StartDate,
 						EndDate: p.EndDate
 					};
-					cancelPoll();
 					$scope.status = $translate.instant('PresentTenseSchedule');
 					PlanningPeriodSvrc.launchScheduling.query(JSON.stringify(planningPeriod)).$promise.then(function(scheduleResult) {
 						$scope.status = $translate.instant('OptimizingDaysOff');
@@ -96,9 +70,7 @@
 				}).$promise.then(function(result) {
 					$scope.planningPeriod = result;
 					$scope.initialized = true;
-
 				});
-
 
 				$scope.suggestions = function(id) {
 					$scope.suggestedPlanningPeriods = [];
@@ -115,8 +87,7 @@
 							if (suggestion.PeriodType === "Month") {
 								suggestion.PeriodType = $translate.instant('SchedulePeriodTypeMonth');
 							}
-
-						})
+						});
 						$scope.suggestedPlanningPeriods = result;
 					});
 				};
@@ -157,8 +128,6 @@
 				};
 
 				$scope.$on('$destroy', function() {
-					// Make sure that the interval is destroyed too
-					cancelPoll();
 					$interval.cancel(keepAliveRef);
 				});
 			}

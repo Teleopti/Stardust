@@ -14,13 +14,9 @@
 			<!--TRANSLATE ME-->
 			<h1><i class="mdi mdi-calendar"></i> {{planningPeriod.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{planningPeriod.EndDate | amDateFormat:"L"}} 				<i ng-show="initialized" ng-click="changeDateToggle = !changeDateToggle;suggestions(planningPeriod.Id)" class="mdi mdi-pencil searchbaricon update-planning-peroid"><md-tooltip>{{'ChangePlanningPeriod' | translate }}</md-tooltip></i></h1>
 
-			<div class="alert-warning notice-spacer server-busy" ng-if="isScheduleRunning"><i class='mdi mdi-alert'></i>
-				<span translate>ScheduleIsRunning</span>
-			</div>
 			<div ng-if="planningPeriod.State != 'New'" class="text-info schedule-warning">
 				{{'PlanningPeriodIsScheduled' | translate }}
 			</div>
-			<!-- don't remove non css class test-schedule-is-running - used to assert in test -->
 		</div>
 	</div>
 

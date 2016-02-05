@@ -21,10 +21,6 @@
 			this.publishPeriod = $resource('../api/resourceplanner/planningperiod/:id/publish', {id:"@id"},{
 				query: { method: 'POST', params: {}, isArray: false}
 			});
-			
-			this.status = $resource('../api/Status/Scheduling', {}, {
-			    get: { method: 'GET', params: {}, isArray: false }
-			});
 			this.destroyDayOffRule = $resource('../api/resourceplanner/dayoffrules/:id', {id:'@id'}, {
 				remove: { method: 'DELETE', params: {}, isArray: false }
 			});
