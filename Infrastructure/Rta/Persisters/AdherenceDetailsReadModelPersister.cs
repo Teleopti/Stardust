@@ -22,40 +22,33 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 			_jsonSerializer = jsonSerializer;
 			_jsonDeserializer = jsonDeserializer;
 		}
-
-		public void Add(AdherenceDetailsReadModel model)
+		
+		public void Persist(AdherenceDetailsReadModel model)
 		{
 			_unitOfWork.Current().CreateSqlQuery(
-				"INSERT INTO ReadModel.AdherenceDetails " +
-				"(" +
-				"	PersonId," +
-				"	BelongsToDate," +
-				"	Model, " +
-				"	[State]" +
-				") VALUES (" +
-				"	:PersonId," +
-				"	:BelongsToDate," +
-				"	:Model," +
-				"	:State" +
-				")")
+				"MERGE INTO ReadModel.AdherenceDetails AS T " +
+				"USING (VALUES (:PersonId, :Date)) AS S (PersonId, Date) " +
+				"ON T.PersonId = S.PersonId AND T.BelongsToDate = S.Date " +
+				"WHEN NOT MATCHED THEN " +
+				"	INSERT " +
+				"	(" +
+				"		PersonId," +
+				"		BelongsToDate," +
+				"		Model, " +
+				"		[State]" +
+				"	) VALUES (" +
+				"		:PersonId," +
+				"		:Date," +
+				"		:Model," +
+				"		:State" +
+				"	)" +
+				"WHEN MATCHED THEN " +
+				"	UPDATE SET" +
+				"		Model = :Model, " +
+				"		[State] = :State" +
+				";")
 				.SetGuid("PersonId", model.PersonId)
-				.SetDateOnly("BelongsToDate", model.BelongsToDate)
-				.SetParameter("Model", _jsonSerializer.SerializeObject(model.Model), NHibernateUtil.StringClob)
-				.SetParameter("State", _jsonSerializer.SerializeObject(model.State), NHibernateUtil.StringClob)
-				.ExecuteUpdate();
-		}
-
-		public void Update(AdherenceDetailsReadModel model)
-		{
-			_unitOfWork.Current().CreateSqlQuery(
-				"UPDATE ReadModel.AdherenceDetails SET" +
-				"	Model = :Model, " +
-				"	State = :State " +
-				"WHERE " +
-				"	PersonId = :PersonId AND " +
-				"	BelongsToDate =:Date")
-				.SetGuid("PersonId", model.PersonId)
-				.SetDateOnly("Date", model.BelongsToDate)
+				.SetDateTime("Date", model.Date)
 				.SetParameter("Model", _jsonSerializer.SerializeObject(model.Model), NHibernateUtil.StringClob)
 				.SetParameter("State", _jsonSerializer.SerializeObject(model.State), NHibernateUtil.StringClob)
 				.ExecuteUpdate();

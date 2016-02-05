@@ -34,19 +34,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			get { return _data.Single().Model.Activities; }
 		}
-
-		public void Add(AdherenceDetailsReadModel model)
+		
+		public void Persist(AdherenceDetailsReadModel model)
 		{
-			_data.Add(model);
-		}
-
-		public void Update(AdherenceDetailsReadModel model)
-		{
-			var existing = from m in _data
-				where m.PersonId == model.PersonId &&
-				      m.Date == model.Date
-				select m;
-			_data.Remove(existing.Single());
+			var existing = _data.SingleOrDefault(m => m.PersonId == model.PersonId && m.Date == model.Date);
+			if (existing != null)
+				_data.Remove(existing);
 			_data.Add(model);
 		}
 

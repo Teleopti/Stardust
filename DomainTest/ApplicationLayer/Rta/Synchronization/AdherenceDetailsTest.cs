@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				UserCode = "user", 
 				StateCode = "phone"
 			});
-			Persister.Add(new AdherenceDetailsReadModel
+			Persister.Persist(new AdherenceDetailsReadModel
 			{
 				PersonId = personId,
 				Date = "2015-01-08".Utc(),

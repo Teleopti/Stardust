@@ -36,33 +36,33 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				"	(" +
 				"		PersonId," +
 				"		BelongsToDate," +
+				"		[Version]," +
 				"		LastTimestamp," +
 				"		IsLastTimeInAdherence," +
 				"		TimeInAdherence," +
 				"		TimeOutOfAdherence," +
 				"		ShiftHasEnded," +
-				"		[State]," +
-				"		[Version]" +
+				"		[State]" +
 				"	) VALUES (" +
 				"		:PersonId," +
 				"		:Date," +
+				"		:ToVersion," +
 				"		:LastTimestamp," +
 				"		:IsLastTimeInAdherence," +
 				"		:TimeInAdherence," +
 				"		:TimeOutOfAdherence," +
 				"		:ShiftHasEnded," +
-				"		:State," +
-				"		:ToVersion" +
+				"		:State" +
 				"	) " +
 				"WHEN MATCHED THEN " +
 				"	UPDATE SET" +
+				"		[Version] = :ToVersion," +
 				"		LastTimestamp = :LastTimestamp," +
 				"		IsLastTimeInAdherence = :IsLastTimeInAdherence," +
 				"		TimeInAdherence = :TimeInAdherence," +
 				"		TimeOutOfAdherence = :TimeOutOfAdherence," +
 				"		ShiftHasEnded = :ShiftHasEnded, " +
-				"		[State] = :State, " +
-				"		[Version] = :ToVersion" +
+				"		[State] = :State " +
 				";")
 				.SetGuid("PersonId", model.PersonId)
 				.SetDateTime("Date", model.Date)

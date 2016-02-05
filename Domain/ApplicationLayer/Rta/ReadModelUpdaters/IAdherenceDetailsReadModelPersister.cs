@@ -10,8 +10,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 
 	public interface IAdherenceDetailsReadModelPersister
 	{
-		void Add(AdherenceDetailsReadModel model);
-		void Update(AdherenceDetailsReadModel model);
+		void Persist(AdherenceDetailsReadModel model);
 		void Delete(Guid personId);
 		AdherenceDetailsReadModel Get(Guid personId, DateOnly date);
 		bool HasData();

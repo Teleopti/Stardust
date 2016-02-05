@@ -121,25 +121,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 
 		private void handleEvent(Guid personId, DateOnly date, Action<AdherenceDetailsReadModelState> mutate)
 		{
-			var model = _persister.Get(personId, date);
-			if (model == null)
-			{
-				model = new AdherenceDetailsReadModel
-				{
-					Date = date.Date,
-					PersonId = personId,
-					State = new AdherenceDetailsReadModelState()
-				};
-				mutate(model.State);
-				calculate(model);
-				_persister.Add(model);
-			}
-			else
-			{
-				mutate(model.State);
-				calculate(model);
-				_persister.Update(model);
-			}
+			var model = _persister.Get(personId, date)
+						?? new AdherenceDetailsReadModel
+						{
+							Date = date.Date,
+							PersonId = personId,
+							State = new AdherenceDetailsReadModelState()
+						};
+			mutate(model.State);
+			calculate(model);
+			_persister.Persist(model);
 		}
 
 		private static void incrementLastUpdate(AdherenceDetailsReadModelState model, DateTime time)
