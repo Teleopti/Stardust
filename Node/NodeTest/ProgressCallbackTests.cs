@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Threading;
 using System.Web.Http.Results;
 using Newtonsoft.Json;
 using NodeTest.Attributes;
@@ -27,7 +28,7 @@ namespace NodeTest
         public void OnCancelCanceledShouldBeCalled()
         {
             var jobParams = new TestJobParams("tjo",
-                                              "flöjt");
+                "flöjt");
 
             var ser = JsonConvert.SerializeObject(jobParams);
 
@@ -43,13 +44,15 @@ namespace NodeTest
             SendJobCanceledTimerFake.Interval = 100;
 
             NodeController.Request = new HttpRequestMessage();
-            NodeController.StartJob(job);
+            //   NodeController.StartJob(job);
+            Thread.Sleep(TimeSpan.FromSeconds(1));
             NodeController.TryCancelJob(job.Id);
 
-            SendJobCanceledTimerFake.Wait.Wait();
+            SendJobCanceledTimerFake.Wait.Wait(TimeSpan.FromMinutes(2));
 
             SendJobDoneTimerFake.NumberOfTimeCalled.Should().Be.EqualTo(0);
             SendJobCanceledTimerFake.NumberOfTimeCalled.Should().Be.GreaterThan(0);
+            SendJobFaultedTimerFake.NumberOfTimeCalled.Should().Be.EqualTo(0);
         }
 
         [Test]
@@ -69,9 +72,41 @@ namespace NodeTest
             NodeController.Request = new HttpRequestMessage();
             NodeController.StartJob(job);
 
-            SendJobFaultedTimerFake.Wait.Wait();
+            SendJobFaultedTimerFake.Wait.Wait(TimeSpan.FromMinutes(2));
+
             SendJobFaultedTimerFake.NumberOfTimeCalled.Should()
                 .Be.GreaterThan(0);
+            SendJobDoneTimerFake.NumberOfTimeCalled.Should().Be.EqualTo(0);
+            SendJobCanceledTimerFake.NumberOfTimeCalled.Should().Be.EqualTo(0);
+        }
+
+        [Test]
+        public void OnSuccessSuccededShouldBeCalled()
+        {
+            var jobParams = new TestJobParams("tjo",
+                "flöjt");
+
+            var ser = JsonConvert.SerializeObject(jobParams);
+
+            var job = new JobToDo
+            {
+                Id = Guid.NewGuid(),
+                Name = "Janne",
+                Serialized = ser,
+                Type = "NodeTest.JobHandlers.TestJobParams"
+            };
+
+            SendJobDoneTimerFake.JobToDo = job;
+            SendJobDoneTimerFake.Interval = 100;
+
+            NodeController.Request = new HttpRequestMessage();
+            NodeController.StartJob(job);
+
+            SendJobDoneTimerFake.Wait.Wait(TimeSpan.FromMinutes(2));
+
+            SendJobDoneTimerFake.NumberOfTimeCalled.Should().Be.GreaterThan(0);
+            SendJobCanceledTimerFake.NumberOfTimeCalled.Should().Be.EqualTo(0);
+            SendJobFaultedTimerFake.NumberOfTimeCalled.Should().Be.EqualTo(0);
         }
 
         [Test]
@@ -96,7 +131,7 @@ namespace NodeTest
         public void OnWrongTypeBadRequestShouldBeReturned()
         {
             var jobParams = new TestJobParams("tjo",
-                                              "flöjt");
+                "flöjt");
             var ser = JsonConvert.SerializeObject(jobParams);
             var job = new JobToDo {Id = Guid.NewGuid(), Name = "Janne", Serialized = ser, Type = "rappakalja"};
             SendJobCanceledTimerFake.JobToDo = job;
@@ -111,7 +146,7 @@ namespace NodeTest
         public void ProgressShouldBeSentToManager()
         {
             var jobParams = new TestJobParams("tjo",
-                                              "flöjt");
+                "flöjt");
             var ser = JsonConvert.SerializeObject(jobParams);
             var job = new JobToDo
             {
