@@ -55,6 +55,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		public WebSchedulingSetupResult Setup(DateOnlyPeriod period)
 		{
+			var schedulerStateHolder = _schedulerStateHolder();
+			schedulerStateHolder.LoadCommonState(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(), _repositoryFactory);
 			var people = _fixedStaffLoader.Load(period);
 			var scenario = _scenarioRepository.LoadDefaultScenario();
 			var timeZone = _principal.Current().Regional.TimeZone;
@@ -67,7 +69,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 			var forecast = _skillDayLoadHelper.LoadSchedulerSkillDays(period, allSkills, scenario);
 
-			var schedulerStateHolder = _schedulerStateHolder();
 			var stateHolder = schedulerStateHolder.SchedulingResultState;
 			stateHolder.PersonsInOrganization = people.AllPeople;
 			stateHolder.SkillDays = forecast;
@@ -77,7 +78,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			schedulerStateHolder.SetRequestedScenario(scenario);
 			schedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(period, timeZone);
 			people.AllPeople.ForEach(schedulerStateHolder.AllPermittedPersons.Add);
-			schedulerStateHolder.LoadCommonState(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(), _repositoryFactory);
 			stateHolder.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(people.AllPeople);
 			schedulerStateHolder.ResetFilteredPersons();
 			schedulerStateHolder.LoadSchedules(_scheduleRepository, new PersonsInOrganizationProvider(people.AllPeople),
