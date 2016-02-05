@@ -9,7 +9,8 @@ angular.module("wfm.teamSchedule").service("TeamSchedule", [
 			keyword: "@keyword",
 			date: "@queryDate",
 			pageSize: "@pageSize",
-			currentPageIndex: "@currentPageIndex"
+			currentPageIndex: "@currentPageIndex",
+			isOnlyAbsences: "@isOnlyAbsences"
 		}, {
 			query: {
 				method: "GET",

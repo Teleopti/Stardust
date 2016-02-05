@@ -56,8 +56,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamSchedule/SearchSchedules")]
-		public virtual JsonResult<GroupScheduleViewModel> SearchSchedules(string keyword, DateTime date, int pageSize,
-			int currentPageIndex)
+		public virtual JsonResult<GroupScheduleViewModel> SearchSchedules(string keyword, DateTime date, int pageSize, int currentPageIndex, bool isOnlyAbsences)
 		{
 			var currentDate = new DateOnly(date);
 			var myTeam = _loggonUser.CurrentUser().MyTeam(currentDate);

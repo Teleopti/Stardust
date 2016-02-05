@@ -15,6 +15,7 @@
 		vm.scheduleDate = new Date();
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 		vm.toggleForSelectAgentsPerPageEnabled = false;
+		vm.isSwitchAbsence = false;
 		// The original schedule got from server side
 		vm.rawSchedules = [];
 
@@ -77,7 +78,8 @@
 				keyword: options.keyword != undefined ? options.keyword : vm.searchOptions.keyword,
 				date: options.date != undefined ? options.date : vm.scheduleDateMoment().format("YYYY-MM-DD"),
 				pageSize: options.pageSize != undefined ? options.pageSize : vm.paginationOptions.pageSize,
-				currentPageIndex: options.currentPageIndex != undefined ? options.currentPageIndex : vm.paginationOptions.pageNumber
+				currentPageIndex: options.currentPageIndex != undefined ? options.currentPageIndex : vm.paginationOptions.pageNumber,
+				isOnlyAbsences: vm.isSwitchAbsence
 			};
 			return params;
 		}
@@ -92,7 +94,7 @@
 			setupPersonIdSelectionDic(vm.groupScheduleVm.Schedules);
 		};
 
-		vm.loadSchedules = function () {
+		vm.loadSchedules = function() {
 			vm.isLoading = true;
 			var params = getParamsForLoadingSchedules();
 			teamScheduleSvc.searchSchedules.query(params).$promise.then(function(result) {
