@@ -29,7 +29,7 @@
             <TabControl.Effect>
                 <DropShadowEffect Color="#FFECDDDD"/>
             </TabControl.Effect>
-            
+
             <TabItem Header="Worker Node">
                 <Grid Background="#FFE5E5E5">
                     <DataGrid ItemsSource="{Binding WorkerNodesData}" 
@@ -40,8 +40,28 @@
 
             <TabItem Header="Logging">
                 <Grid Background="#FFE5E5E5">
-                    <DataGrid x:Name="dataGrid" ItemsSource="{Binding LoggingData}" SelectionUnit="Cell" AutoGenerateColumns="False" HorizontalGridLinesBrush="#FFF5EFEF" VerticalGridLinesBrush="#FFF5EFEF" IsReadOnly="True" RowDetailsVisibilityMode="Collapsed" CanUserDeleteRows="False"                  
-                   >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25.002"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <DataGrid x:Name="dataGrid" 
+                              ItemsSource="{Binding LoggingData}" 
+                              SelectionUnit="Cell" 
+                              AutoGenerateColumns="False" 
+                              HorizontalGridLinesBrush="#FFF5EFEF" 
+                              VerticalGridLinesBrush="#FFF5EFEF" 
+                              IsReadOnly="True" 
+                              RowDetailsVisibilityMode="Collapsed" 
+                              CanUserDeleteRows="False" 
+                              Grid.Row="1" >
+                        <DataGrid.LayoutTransform>
+                            <ScaleTransform  
+                                        CenterX="0" CenterY="0" 
+                                        ScaleX="{Binding ElementName=uiScaleSlider,Path=Value}"
+                                        ScaleY="{Binding ElementName=uiScaleSlider,Path=Value}"
+                                    />
+                        </DataGrid.LayoutTransform>
+                        
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding Message}" ClipboardContentBinding="{Binding Message}" Header="Message"/>
                             <DataGridTextColumn Binding="{Binding Level}" ClipboardContentBinding="{Binding Level}" Header="Level"/>
@@ -49,6 +69,10 @@
                             <DataGridTextColumn Binding="{Binding Date}" ClipboardContentBinding="{Binding Date}" Header="Date"/>
                         </DataGrid.Columns>
                     </DataGrid>
+                    <Slider x:Name="uiScaleSlider" 
+                            Value="1" Minimum="0.1" Maximum="4"
+                            d:LayoutOverrides="Height" 
+                            VerticalAlignment="Center"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Job History">

@@ -57,10 +57,14 @@ namespace Manager.Integration.Test
             {
                 if (_debugMode)
                 {
-                    ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
+                    var task = new Task(() =>
+                    {
+                        StartManagerIntegrationConsoleHostProcess =
+                            ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
 
-                    StartManagerIntegrationConsoleHostProcess =
-                        ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
+                    });
+
+                    task.Start();
                 }
                 else
                 {
@@ -145,7 +149,7 @@ namespace Manager.Integration.Test
 
         private bool _clearDatabase = true;
 
-        private bool _debugMode = true;
+        private bool _debugMode = false;
 
         private string _buildMode = "Debug";
 
@@ -324,7 +328,7 @@ namespace Manager.Integration.Test
 
             JobHelper.GiveNodesTimeToInitialize();
 
-            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(NumberOfNodesToStart * 1);
+            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(NumberOfNodesToStart * 2);
 
             TimeSpan timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count);
 
@@ -350,8 +354,8 @@ namespace Manager.Integration.Test
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
-            //ManagerApiHelper.CheckJobHistoryStatusTimer.CancelAllRequest();
             ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
+            ManagerApiHelper.CheckJobHistoryStatusTimer.CancelAllRequest();            
 
             bool condition =
                 ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus);

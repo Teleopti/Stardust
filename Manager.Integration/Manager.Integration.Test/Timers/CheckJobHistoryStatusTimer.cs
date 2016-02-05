@@ -116,7 +116,7 @@ namespace Manager.Integration.Test.Timers
 
         public void CancelAllRequest()
         {
-            if (CancellationTokenSource != null)
+            if (CancellationTokenSource != null && !CancellationTokenSource.IsCancellationRequested)
             {
                 CancellationTokenSource.Cancel();
             }
