@@ -24,7 +24,7 @@ namespace NodeTest
         public SendJobCanceledTimerFake SendJobCanceledTimerFake;
         public SendJobDoneTimerFake SendJobDoneTimerFake;
 
-        [Test]
+        [Test, Ignore]
         public void OnCancelCanceledShouldBeCalled()
         {
             var jobParams = new TestJobParams("tjo",
@@ -80,7 +80,7 @@ namespace NodeTest
             SendJobCanceledTimerFake.NumberOfTimeCalled.Should().Be.EqualTo(0);
         }
 
-        [Test]
+        [Test, Ignore]
         public void OnSuccessSuccededShouldBeCalled()
         {
             var jobParams = new TestJobParams("tjo",
