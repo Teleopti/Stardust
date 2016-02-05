@@ -43,6 +43,7 @@ namespace NodeTest
 
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
+
         }
 
         [SetUp]

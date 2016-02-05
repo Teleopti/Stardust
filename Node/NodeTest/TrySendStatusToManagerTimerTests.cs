@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Configuration;
+using System.IO;
 using System.Reflection;
-using System.Threading;
+using log4net;
+using log4net.Config;
 using NUnit.Framework;
 using Stardust.Node.API;
+using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
 
@@ -12,16 +15,9 @@ namespace NodeTest
     [TestFixture]
     public class TrySendStatusToManagerTimerTests
     {
-        readonly ManualResetEventSlim _manualResetEventSlim = new ManualResetEventSlim();
-
-        readonly Uri _fakeUrl = new Uri("http://localhost:9000/jobmanager/");
+        private readonly Uri _fakeUrl = new Uri("http://localhost:9000/jobmanager/");
 
         private INodeConfiguration _nodeConfiguration;
-
-        private Uri FakeUrl
-        {
-            get { return _fakeUrl; }
-        }
 
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
@@ -35,9 +31,29 @@ namespace NodeTest
             var nodeName = ConfigurationManager.AppSettings["NodeName"];
 
             _nodeConfiguration = new NodeConfiguration(baseAddress,
-                                                        managerLocation, 
-                                                        handlerAssembly,
-                                                        nodeName);
+                managerLocation,
+                handlerAssembly,
+                nodeName);
+
+            var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+            XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
+
+        }
+
+        [TestFixtureTearDown]
+        public void TestFixtureTearDown()
+        {
+            LogHelper.LogInfoWithLineNumber(Logger, "Closing TrySendStatusToManagerTimerTests...");
+        }
+
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (TrySendStatusToManagerTimerTests));
+
+        [Test]
+        [ExpectedException(typeof (ArgumentNullException))]
+        public void ShouldThrowExceptionWhenCallBackTemplateUriArgumentIsNull()
+        {
+            var trySendJobDoneStatusToManagerTimer = new TrySendStatusToManagerTimer(_nodeConfiguration,
+                null);
         }
 
         [Test]
@@ -45,17 +61,7 @@ namespace NodeTest
         public void ShouldThrowExceptionWhenNodeConfigurationArgumentIsNull()
         {
             var trySendJobDoneStatusToManagerTimer = new TrySendStatusToManagerTimer(null,
-                                                                                     FakeUrl);
+                _fakeUrl);
         }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ShouldThrowExceptionWhenCallBackTemplateUriArgumentIsNull()
-        {
-            var trySendJobDoneStatusToManagerTimer = new TrySendStatusToManagerTimer(_nodeConfiguration,
-                                                                                     null);
-
-        }
-
     }
 }
