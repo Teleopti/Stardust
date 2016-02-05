@@ -14102,4 +14102,8 @@ Help us improve your experience by sending an error report</value>
     <value>Only support seat roles setting</value>
     <comment>Seat roles setting warning text in seatmap</comment>
   </data>
+  <data name="ShowOnlyAbsence" xml:space="preserve">
+    <value>Show only absences</value>
+    <comment>use in WFM TeamSchedule, the switch description</comment>
+  </data>
 </root>

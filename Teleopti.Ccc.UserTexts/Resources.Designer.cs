@@ -26206,6 +26206,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show only absences.
+        /// </summary>
+        public static string ShowOnlyAbsence {
+            get {
+                return ResourceManager.GetString("ShowOnlyAbsence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show only available for shift trade.
         /// </summary>
         public static string ShowOnlyAvailableForShiftTrade {
