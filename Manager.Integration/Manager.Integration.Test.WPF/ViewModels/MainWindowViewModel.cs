@@ -57,11 +57,16 @@ namespace Manager.Integration.Test.WPF.ViewModels
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChanged?.Invoke(this,
-                                    new PropertyChangedEventArgs(propertyName));
+            if (this.PropertyChanged != null)
+            {
+                PropertyChanged(this,
+                                new PropertyChangedEventArgs(propertyName));
+            }
         }
 
         private List<Logging> _loggingData;
+        private List<JobHistory> _jobHistoryData;
+        private List<JobHistoryDetail> _jobHistoryDetailData;
 
         public List<Logging> LoggingData
         {
@@ -84,9 +89,42 @@ namespace Manager.Integration.Test.WPF.ViewModels
                 LoggingData =
                     managerDbEntities.Loggings.OrderByDescending(logging => logging.Id)
                         .ToList();
+
+                JobHistoryData =
+                    managerDbEntities.JobHistories.OrderByDescending(history => history.Created)
+                        .ToList();
+
+                JobHistoryDetailData =
+                    managerDbEntities.JobHistoryDetails.OrderByDescending(history => history.Created)
+                        .ToList();
+
             }
 
             Status = "Refresh finished.";
+        }
+
+        public List<JobHistoryDetail> JobHistoryDetailData
+        {
+            get { return _jobHistoryDetailData; }
+
+            set
+            {
+                _jobHistoryDetailData = value;
+
+                OnPropertyChanged();
+            }
+        }
+
+        public List<JobHistory> JobHistoryData
+        {
+            get { return _jobHistoryData; }
+
+            set
+            {
+                _jobHistoryData = value;
+
+                OnPropertyChanged();
+            }
         }
     }
 }

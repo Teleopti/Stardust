@@ -10,26 +10,28 @@
         Width="651.253" 
         WindowStartupLocation="CenterScreen" 
         WindowState="Maximized">
-
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-            <GradientStop Color="#FFA5CFEE" Offset="0"/>
-            <GradientStop Color="White" Offset="0.727"/>
+            <GradientStop Color="#FFCEDBF7" Offset="0"/>
+            <GradientStop Color="White" Offset="1"/>
         </LinearGradientBrush>
     </Window.Background>
     <Window.DataContext>
         <ViewModels:MainWindowViewModel/>
     </Window.DataContext>
-    <Grid Margin="10,5">
+    <Grid Margin="10,5,10,10">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <TextBlock x:Name="textBlock" TextWrapping="Wrap" d:LayoutOverrides="Height" VerticalAlignment="Center" Text="{Binding Status}"/>
         <TabControl x:Name="tabControl" Grid.Row="1">
+            <TabControl.Effect>
+                <DropShadowEffect Color="#FFECDDDD"/>
+            </TabControl.Effect>
             <TabItem Header="Logging">
                 <Grid Background="#FFE5E5E5">
-                    <DataGrid x:Name="dataGrid" ItemsSource="{Binding LoggingData}" SelectionUnit="Cell" AutoGenerateColumns="False" HorizontalGridLinesBrush="#FFF5EFEF" VerticalGridLinesBrush="#FFF5EFEF"                  
+                    <DataGrid x:Name="dataGrid" ItemsSource="{Binding LoggingData}" SelectionUnit="Cell" AutoGenerateColumns="False" HorizontalGridLinesBrush="#FFF5EFEF" VerticalGridLinesBrush="#FFF5EFEF" IsReadOnly="True" RowDetailsVisibilityMode="Collapsed" CanUserDeleteRows="False"                  
                    >
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding Message}" ClipboardContentBinding="{Binding Message}" Header="Message"/>
@@ -41,7 +43,27 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Job History">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+                    <DataGrid ItemsSource="{Binding JobHistoryData}" AutoGenerateColumns="False" HorizontalGridLinesBrush="#FFF5EFEF" VerticalGridLinesBrush="#FFF5EFEF" SelectionUnit="Cell" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Created}" ClipboardContentBinding="{x:Null}" Header="Created"/>
+                            <DataGridTextColumn Binding="{Binding Started}" ClipboardContentBinding="{x:Null}" Header="Started"/>
+                            <DataGridTextColumn Binding="{Binding Ended}" ClipboardContentBinding="{x:Null}" Header="Ended"/>
+                            <DataGridTextColumn Binding="{Binding CreatedBy}" ClipboardContentBinding="{x:Null}" Header="Created by"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Job History Detail">
+                <Grid Background="#FFE5E5E5">
+                    <DataGrid ItemsSource="{Binding JobHistoryDetailData}" AutoGenerateColumns="False" HorizontalGridLinesBrush="#FFF5EFEF" VerticalGridLinesBrush="#FFF5EFEF" SelectionUnit="Cell" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding JobId}" ClipboardContentBinding="{x:Null}" Header="JobId"/>
+                            <DataGridTextColumn Binding="{Binding Created}" ClipboardContentBinding="{x:Null}" Header="Created"/>
+                            <DataGridTextColumn Binding="{Binding Detail}" ClipboardContentBinding="{x:Null}" Header="Detail"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
             </TabItem>
         </TabControl>
 
