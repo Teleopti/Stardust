@@ -15,7 +15,8 @@ namespace Stardust.Node.Timers
 
         public TrySendNodeStartUpNotificationToManagerTimer(INodeConfiguration nodeConfiguration,
                                                             Uri callbackTemplateUri,
-                                                            double interval = 3000) : base(interval)
+                                                            double interval = 3000,
+                                                            bool autoReset = true) : base(interval)
         {
             nodeConfiguration.ThrowArgumentNullException();
             callbackTemplateUri.ThrowArgumentNullExceptionWhenNull();
@@ -27,7 +28,7 @@ namespace Stardust.Node.Timers
 
             Elapsed += OnTimedEvent;
 
-            AutoReset = true;
+            AutoReset = autoReset;
         }
 
         public string WhoAmI { get; private set; }

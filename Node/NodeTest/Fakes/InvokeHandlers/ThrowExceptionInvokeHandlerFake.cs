@@ -10,7 +10,7 @@ namespace NodeTest.Fakes.InvokeHandlers
                            CancellationTokenSource cancellationTokenSource,
                            Action<string> progressCallback)
         {
-            Thread.Sleep(TimeSpan.FromSeconds(5));
+            Thread.Sleep(TimeSpan.FromSeconds(2));
 
             throw new Exception();
         }

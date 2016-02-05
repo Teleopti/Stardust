@@ -17,9 +17,11 @@ namespace NodeTest.Fakes.Timers
 
         public NodeStartupNotificationToManagerFake(INodeConfiguration nodeConfiguration,
                                                     Uri callbackTemplateUri,
-                                                    double interval = 5000) : base(nodeConfiguration,
+                                                    double interval = 1000,
+                                                    bool autoReset = false) : base(nodeConfiguration,
                                                                                    callbackTemplateUri,
-                                                                                   interval)
+                                                                                   interval,
+                                                                                   autoReset)
         {
         }
 

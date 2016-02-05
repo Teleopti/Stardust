@@ -3,6 +3,7 @@ using System.Configuration;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
+using System.Threading;
 using System.Web.Http.Results;
 using log4net;
 using log4net.Config;
@@ -79,6 +80,7 @@ namespace NodeTest
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
         {
+            Thread.Sleep(TimeSpan.FromMinutes(1));
             LogHelper.LogInfoWithLineNumber(Logger, "Closing NodeControllerTests...");
         }
 
