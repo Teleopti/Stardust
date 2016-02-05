@@ -126,13 +126,15 @@
 		};
 
 		function setupPersonIdSelectionDic(schedules) {
-			schedules.forEach(function (personSchedule) {
+			schedules.forEach(function (personSchedule) {				
+				var allowSwap = personSchedule.AllowSwap();
 				if (vm.personIdSelectionDic[personSchedule.PersonId] === undefined) {
-					var canSwapShift = personSchedule.AllowSwapShifts();
 					vm.personIdSelectionDic[personSchedule.PersonId] = {
 						isSelected: false,
-						canSwapShift: canSwapShift
+						allowSwap: allowSwap
 					};
+				} else {
+					vm.personIdSelectionDic[personSchedule.PersonId].allowSwap = allowSwap;
 				}
 			});
 		};
@@ -165,7 +167,7 @@
 				shortcut: "Alt+S",
 				panelName: "", // No panel needed,
 				action: swapShifts,
-				enabled: allowSwapShifts,
+				enabled: canSwapShifts,
 				active: function () { return vm.canActiveSwapShifts(); }
 			}
 		];
@@ -178,15 +180,15 @@
 			}
 		};
 
-		function allowSwapShifts() {
+		function canSwapShifts() {
 			var selectedPersonInfos = vm.getSelectedPersonInfoList();
 			if (selectedPersonInfos.length !== 2) return false;
-			
-			return selectedPersonInfos[0].canSwapShift && selectedPersonInfos[1].canSwapShift;
+
+			return selectedPersonInfos[0].allowSwap && selectedPersonInfos[1].allowSwap;
 		}
 
 		function swapShifts() {
-			if (!allowSwapShifts()) return;
+			if (!canSwapShifts()) return;
 
 			var selectedPersonIds = vm.getSelectedPersonIdList();
 			if (selectedPersonIds.length !== 2) return;
@@ -304,7 +306,7 @@
 				if (schedule.isSelected) {
 					result.push({
 						personId: key,
-						canSwapShift: schedule.canSwapShift
+						allowSwap: schedule.allowSwap
 					});
 				}
 			}

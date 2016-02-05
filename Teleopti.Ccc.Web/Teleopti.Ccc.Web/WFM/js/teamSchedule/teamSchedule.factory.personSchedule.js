@@ -35,7 +35,7 @@
 				Merge: merge,
 				IsSelected: false,
 				IsOvernightShift: isOvernightShift,
-				AllowSwapShifts: function () {
+				AllowSwap: function () {
 					return !this.IsFullDayAbsence && (this.Shifts.length === 0 || (this.Shifts.length === 1 && !this.IsOvernightShift));
 				}
 			}
