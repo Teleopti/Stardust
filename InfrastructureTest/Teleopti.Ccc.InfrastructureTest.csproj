@@ -241,6 +241,7 @@
     <Compile Include="Rta\DatabaseReaderLoadPersonOrganizationDataTest.cs" />
     <Compile Include="Rta\Persisters\AgentStateReadModelPersisterTest.cs" />
     <Compile Include="Rta\Persisters\RetryingQueueSimulator.cs" />
+    <Compile Include="Rta\Persisters\SiteOutOfAdherenceReadModelPersisterConcurrencyTest.cs" />
     <Compile Include="Rta\Persisters\TeamOutOfAdherenceReadModelPersisterConcurrencyTest.cs" />
     <Compile Include="Rta\PublishRtaEventsToHangfireTest.cs" />
     <Compile Include="Rta\RtaDatabaseTestAttribute.cs" />

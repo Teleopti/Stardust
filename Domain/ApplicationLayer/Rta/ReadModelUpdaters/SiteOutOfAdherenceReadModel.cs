@@ -5,9 +5,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
 	public class SiteOutOfAdherenceReadModel
 	{
-		public int Count { get; set; }
 		public Guid SiteId { get; set; }
 		public Guid BusinessUnitId { get; set; }
+		public int Version { get; set; }
+		public int Count { get; set; }
 		public IEnumerable<SiteOutOfAdherenceReadModelState> State { get; set; }
 	}
 

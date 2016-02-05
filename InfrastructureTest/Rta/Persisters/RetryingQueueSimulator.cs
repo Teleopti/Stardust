@@ -8,13 +8,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 	public class RetryingQueueSimulator
 	{
 		private readonly List<Thread> _jobThreads = new List<Thread>();
+		public int RetryCount { get; set; }
 
 		public void ProcessAsync(Action job)
 		{
 			_jobThreads.Add(Execute.OnAnotherThread(() => tryJob(100, job)));
 		}
 
-		private static void tryJob(int retriesLeft, Action job)
+		private void tryJob(int retriesLeft, Action job)
 		{
 			try
 			{
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			}
 			catch
 			{
+				RetryCount++;
 				if (retriesLeft == 0)
 					return;
 				retriesLeft--;

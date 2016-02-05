@@ -24,7 +24,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 
 		public void Persist(SiteOutOfAdherenceReadModel model)
 		{
-			//var data = _serializer.SerializeObject(model.State)
+			var fromVersion = model.Version;
+			var toVersion = model.Version + 1;
 			_unitOfWork.Current().CreateSqlQuery(
 				"MERGE ReadModel.SiteOutOfAdherence AS T " +
 				"USING (" +
@@ -32,26 +33,33 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				"	(" +
 				"		:SiteId, " +
 				"		:BusinessUnitId, " +
+				"		:FromVersion," +
+				"		:ToVersion," +
 				"		:Count, " +
 				"		:State" +
 				"	)" +
 				") AS S (" +
 				"	SiteId," +
 				"	BusinessUnitId," +
+				"	FromVersion," +
+				"	ToVersion," +
 				"	Count," +
 				"	[State]" +
 				") " +
-				"ON T.SiteId = S.SiteId " +
+				"ON T.SiteId = S.SiteId AND" +
+				"	T.[Version] = S.FromVersion " +
 				"WHEN NOT MATCHED THEN " +
 				"	INSERT " +
 				"	(" +
 				"		SiteId," +
 				"		BusinessUnitId," +
+				"		[Version]," +
 				"		Count," +
 				"		[State]" +
 				"	) VALUES (" +
 				"		S.SiteId," +
 				"		S.BusinessUnitId," +
+				"		S.ToVersion," +
 				"		S.Count," +
 				"		S.State" +
 				"	) " +
@@ -59,13 +67,17 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				"	UPDATE SET" +
 				"		BusinessUnitId = S.BusinessUnitId," +
 				"		Count = S.Count," +
+				"		[Version] = S.ToVersion," +
 				"		[State] = S.State " +
 				";")
 				.SetParameter("SiteId", model.SiteId)
 				.SetParameter("BusinessUnitId", model.BusinessUnitId)
+				.SetParameter("FromVersion", fromVersion)
+				.SetParameter("ToVersion", toVersion)
 				.SetParameter("Count", model.Count)
 				.SetParameter("State", _serializer.SerializeObject(model.State), NHibernateUtil.StringClob)
 				.ExecuteUpdate();
+			model.Version = toVersion;
 		}
 
 		public SiteOutOfAdherenceReadModel Get(Guid siteId)
@@ -75,12 +87,14 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 					"SELECT " +
 					"	SiteId," +
 					"	BusinessUnitId," +
+					"	[Version], " +
 					"	Count," +
 					"	[State] AS StateJson " +
-					"FROM ReadModel.SiteOutOfAdherence " +
+					"FROM ReadModel.SiteOutOfAdherence  WITH (UPDLOCK) " +
 					"WHERE SiteId =:SiteId")
 				.AddScalar("SiteId", NHibernateUtil.Guid)
 				.AddScalar("BusinessUnitId", NHibernateUtil.Guid)
+				.AddScalar("Version", NHibernateUtil.Int32)
 				.AddScalar("Count", NHibernateUtil.Int32)
 				.AddScalar("StateJson", NHibernateUtil.StringClob)
 				.SetParameter("SiteId", siteId)
@@ -103,11 +117,13 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 					"SELECT " +
 					"	SiteId," +
 					"	BusinessUnitId," +
+					"	[Version], " +
 					"	Count," +
 					"	[State] AS StateJson " +
-					"FROM ReadModel.SiteOutOfAdherence ")
+					"FROM ReadModel.SiteOutOfAdherence  WITH (UPDLOCK) ")
 				.AddScalar("SiteId", NHibernateUtil.Guid)
 				.AddScalar("BusinessUnitId", NHibernateUtil.Guid)
+				.AddScalar("Version", NHibernateUtil.Int32)
 				.AddScalar("Count", NHibernateUtil.Int32)
 				.AddScalar("StateJson", NHibernateUtil.StringClob)
 				.SetResultTransformer(Transformers.AliasToBean(typeof (internalModel)))

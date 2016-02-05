@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public TheService Service { get; set; }
 
 		[Test]
-		public void ShouldHandleMultipleWorkersUpdatingTheSameModel()
+		public void ShouldNotRetryWhenMultipleWorkersUpdatesSameModel()
 		{
 			var teamId = Guid.NewGuid();
 			var simulator = new RetryingQueueSimulator();
@@ -34,7 +34,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			10.Times(() => simulator.ProcessAsync(() => Service.GetAndIncrementCount(teamId)));
 			10.Times(() => simulator.ProcessAsync(() => Service.GetAllAndIncrementCount(teamId)));
 			simulator.WaitForAll();
-
+			
+			simulator.RetryCount.Should().Be(0);
 			Service.Get(teamId).Count.Should().Be(21);
 		}
 
@@ -44,11 +45,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var teamId = Guid.NewGuid();
 			var simulator = new RetryingQueueSimulator();
 
-			simulator.ProcessAsync(() => Service.GetAndIncrementCount(teamId));
-			simulator.ProcessAsync(() => Service.GetAllAndIncrementCount(teamId));
+			10.Times(() => simulator.ProcessAsync(() => Service.GetAndIncrementCount(teamId)));
+			10.Times(() => simulator.ProcessAsync(() => Service.GetAllAndIncrementCount(teamId)));
 			simulator.WaitForAll();
 
-			Service.Get(teamId).Count.Should().Be(2);
+			Service.Get(teamId).Count.Should().Be(20);
 		}
 
 		public class TheService

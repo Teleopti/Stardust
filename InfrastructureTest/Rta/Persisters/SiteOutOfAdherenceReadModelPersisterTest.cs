@@ -49,24 +49,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var businessUnitId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
 
-			Target.Persist(new SiteOutOfAdherenceReadModel()
+			var model = new SiteOutOfAdherenceReadModel()
 			{
 				SiteId = siteId,
 				State = new[] { new SiteOutOfAdherenceReadModelState() { PersonId = personId} }
-			});
-			Target.Persist(new SiteOutOfAdherenceReadModel()
-			{
-				Count = 5,
-				SiteId = siteId,
-				BusinessUnitId = businessUnitId,
-				State = new[] { new SiteOutOfAdherenceReadModelState() { PersonId = personId} }
-			});
+			};
+			Target.Persist(model);
 
-			var model = Target.Get(siteId);
-			model.Count.Should().Be(5);
-			model.SiteId.Should().Be(siteId);
-			model.BusinessUnitId.Should().Be(businessUnitId);
-			model.State.Should().Have.Count.EqualTo(1);
+			model.Count = 5;
+			model.BusinessUnitId = businessUnitId;
+			model.SiteId = siteId;
+			model.State = new[] {new SiteOutOfAdherenceReadModelState() {PersonId = personId}};
+			Target.Persist(model);
+
+			var actual = Target.Get(siteId);
+			actual.Count.Should().Be(5);
+			actual.SiteId.Should().Be(siteId);
+			actual.BusinessUnitId.Should().Be(businessUnitId);
+			actual.State.Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
