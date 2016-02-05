@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Configuration;
+using System.IO;
 using System.Net.Http;
 using System.Reflection;
 using System.Web.Http.Results;
+using log4net;
+using log4net.Config;
 using Newtonsoft.Json;
 using NodeTest.Fakes;
 using NodeTest.Fakes.InvokeHandlers;
@@ -10,6 +13,7 @@ using NodeTest.Fakes.Timers;
 using NodeTest.JobHandlers;
 using NUnit.Framework;
 using Stardust.Node.API;
+using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Workers;
 
@@ -36,8 +40,9 @@ namespace NodeTest
 
 
             _callBackTemplateUriFake = managerLocation;
-            
 
+            var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+            XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
         }
 
         [SetUp]
@@ -71,12 +76,18 @@ namespace NodeTest
             };
         }
 
+        [TestFixtureTearDown]
+        public void TestFixtureTearDown()
+        {
+            LogHelper.LogInfoWithLineNumber(Logger, "Closing NodeControllerTests...");
+        }
 
         private NodeConfigurationFake _nodeConfigurationFake;
         private IWorkerWrapper _workerWrapper;
         private NodeController _nodeController;
         private JobToDo _jobToDo;
         private Uri _callBackTemplateUriFake;
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(NodeControllerTests));
 
 
         [Test]
