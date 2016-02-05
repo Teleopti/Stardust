@@ -11,6 +11,7 @@ GO
 -- ---Change Log---
 -- 2009-02-11 New Mart schema KJ
 -- 2010-08-17 change order for dim_scorecard, removed fact_contract
+-- 2016-02-05 fact_schedule_deviation deletion fix
 -- =============================================
 CREATE PROCEDURE [mart].[etl_data_mart_delete]
 @DeleteAll BIT = 0, --Delete initial load too 
@@ -114,6 +115,7 @@ BEGIN
 	DELETE FROM mart.fact_agent_queue				WHERE date_id >= @Date_Id
 	DELETE FROM mart.fact_agent_queue				WHERE date_id >= @Date_Id
 	DELETE FROM mart.fact_schedule_deviation		WHERE shift_startdate_local_id >= @Date_Id
+	DELETE FROM mart.fact_schedule_deviation		WHERE date_id >= @Date_Id
 	DELETE FROM mart.fact_schedule_day_count		WHERE shift_startdate_local_id >= @Date_Id
 	DELETE FROM mart.fact_schedule_preference		WHERE date_id >= @Date_Id
 	DELETE FROM mart.fact_quality					WHERE date_id >= @Date_Id
