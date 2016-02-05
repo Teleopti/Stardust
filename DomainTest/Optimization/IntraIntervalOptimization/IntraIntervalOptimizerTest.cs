@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_teamBlockScheduler.GetShiftProjectionCaches(_teamBlockInfo, _person, _dateOnly, _schedulingOptions, _schedulingResultStateHolder)).Return(_workShiftCalculationResultHolders);
 
 				Expect.Call(_shiftProjectionIntraIntervalBestFitCalculator.GetShiftProjectionCachesSortedByBestIntraIntervalFit(_workShiftCalculationResultHolders, new List<ISkillStaffPeriod>(), _skill, _limit)).Return(_workShiftCalculationResultHolder).IgnoreArguments();
-				Expect.Call(() =>_teamScheduling.ExecutePerDayPerPerson(_person, _dateOnly, _teamBlockInfo, _shiftProjectionCache, _rollbackService,_resourceCalculateDelayer));
+				Expect.Call(() =>_teamScheduling.ExecutePerDayPerPerson(_person, _dateOnly, _teamBlockInfo, _shiftProjectionCache, _rollbackService,_resourceCalculateDelayer, true));
 				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.IsScheduled()).Return(true);
 				Expect.Call(_intraIntervalIssueCalculator.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly)).Return(_issusesAfter);
@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_teamBlockScheduler.GetShiftProjectionCaches(_teamBlockInfo, _person, _dateOnly, _schedulingOptions, _schedulingResultStateHolder)).Return(_workShiftCalculationResultHolders);
 
 				Expect.Call(_shiftProjectionIntraIntervalBestFitCalculator.GetShiftProjectionCachesSortedByBestIntraIntervalFit(_workShiftCalculationResultHolders, new List<ISkillStaffPeriod>(), _skill, _limit)).Return(_workShiftCalculationResultHolder).IgnoreArguments();
-				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person, _dateOnly, _teamBlockInfo, _shiftProjectionCache, _rollbackService, _resourceCalculateDelayer));
+				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person, _dateOnly, _teamBlockInfo, _shiftProjectionCache, _rollbackService, _resourceCalculateDelayer, true));
 				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.IsScheduled()).Return(true);
 				Expect.Call(_intraIntervalIssueCalculator.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly)).Return(_issusesAfter);
@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_teamBlockScheduler.GetShiftProjectionCaches(_teamBlockInfo, _person, _dateOnly, _schedulingOptions, _schedulingResultStateHolder)).Return(_workShiftCalculationResultHolders);
 
 				Expect.Call(_shiftProjectionIntraIntervalBestFitCalculator.GetShiftProjectionCachesSortedByBestIntraIntervalFit(_workShiftCalculationResultHolders, new List<ISkillStaffPeriod>(), _skill, _limit)).Return(_workShiftCalculationResultHolder).IgnoreArguments();
-				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person, _dateOnly, _teamBlockInfo, _shiftProjectionCache, _rollbackService, _resourceCalculateDelayer));
+				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person, _dateOnly, _teamBlockInfo, _shiftProjectionCache, _rollbackService, _resourceCalculateDelayer, true));
 				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
 
@@ -300,7 +300,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_teamBlockScheduler.GetShiftProjectionCaches(_teamBlockInfo, _person, _dateOnly, _schedulingOptions, _schedulingResultStateHolder)).Return(_workShiftCalculationResultHolders);
 
 				Expect.Call(_shiftProjectionIntraIntervalBestFitCalculator.GetShiftProjectionCachesSortedByBestIntraIntervalFit(_workShiftCalculationResultHolders, new List<ISkillStaffPeriod>(), _skill, _limit)).Return(_workShiftCalculationResultHolder).IgnoreArguments();
-				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person, _dateOnly, _teamBlockInfo, _shiftProjectionCache, _rollbackService, _resourceCalculateDelayer));
+				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person, _dateOnly, _teamBlockInfo, _shiftProjectionCache, _rollbackService, _resourceCalculateDelayer, true));
 				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.IsScheduled()).Return(true);
 
@@ -353,7 +353,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_teamBlockScheduler.GetShiftProjectionCaches(_teamBlockInfo, _person, _dateOnly, _schedulingOptions, _schedulingResultStateHolder)).Return(_workShiftCalculationResultHolders);
 
 				Expect.Call(_shiftProjectionIntraIntervalBestFitCalculator.GetShiftProjectionCachesSortedByBestIntraIntervalFit(_workShiftCalculationResultHolders, new List<ISkillStaffPeriod>(), _skill, _limit)).Return(_workShiftCalculationResultHolder).IgnoreArguments();
-				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person, _dateOnly, _teamBlockInfo, _shiftProjectionCache, _rollbackService, _resourceCalculateDelayer));
+				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person, _dateOnly, _teamBlockInfo, _shiftProjectionCache, _rollbackService, _resourceCalculateDelayer, true));
 				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.IsScheduled()).Return(true);
 				Expect.Call(_intraIntervalIssueCalculator.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly)).Return(_issusesAfter);

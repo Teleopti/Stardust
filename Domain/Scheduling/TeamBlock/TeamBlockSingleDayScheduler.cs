@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 				_teamScheduling.DayScheduled += onDayScheduled;
 				_teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, bestShiftProjectionCache,
-					schedulePartModifyAndRollbackService, resourceCalculateDelayer);
+					schedulePartModifyAndRollbackService, resourceCalculateDelayer, false);
 				_teamScheduling.DayScheduled -= onDayScheduled;
 			}
 

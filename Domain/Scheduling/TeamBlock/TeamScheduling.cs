@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
 		    IShiftProjectionCache shiftProjectionCache,
 		    ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-		    IResourceCalculateDelayer resourceCalculateDelayer);
+		    IResourceCalculateDelayer resourceCalculateDelayer, bool doIntraIntervalCalculation);
     }
 
     public  class TeamScheduling : ITeamScheduling
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    public void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
 		    IShiftProjectionCache shiftProjectionCache,
 		    ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-		    IResourceCalculateDelayer resourceCalculateDelayer)
+		    IResourceCalculateDelayer resourceCalculateDelayer, bool doIntraIntervalCalculation)
 	    {
 		    var tempMatrixList =
 			    teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly)
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			    schedulePartModifyAndRollbackService);
 		    onDayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
 		    resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
-			    shiftProjectionCache.WorkShiftProjectionPeriod, false);
+			    shiftProjectionCache.WorkShiftProjectionPeriod, doIntraIntervalCalculation);
 	    }
 
 	    private void onDayScheduled(SchedulingServiceBaseEventArgs args)

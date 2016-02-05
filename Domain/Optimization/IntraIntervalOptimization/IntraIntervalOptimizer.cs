@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		
 			var shiftProjectionCacheBestFit = bestFit.ShiftProjection;
 
-			_teamScheduling.ExecutePerDayPerPerson(person, dateOnly, teamBlock, shiftProjectionCacheBestFit, rollbackService, resourceCalculateDelayer);
+			_teamScheduling.ExecutePerDayPerPerson(person, dateOnly, teamBlock, shiftProjectionCacheBestFit, rollbackService, resourceCalculateDelayer, true);
 
 			daySchedule = totalScheduleRange.ScheduledDay(dateOnly);
 			if (!daySchedule.IsScheduled())
