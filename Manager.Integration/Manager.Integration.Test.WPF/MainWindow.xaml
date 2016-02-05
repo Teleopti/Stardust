@@ -25,16 +25,25 @@
             <RowDefinition Height="30"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <DataGrid x:Name="dataGrid" Grid.Row="1" ItemsSource="{Binding LoggingData}" SelectionUnit="Cell" AutoGenerateColumns="False" HorizontalGridLinesBrush="#FFF5EFEF" VerticalGridLinesBrush="#FFF5EFEF"                  
-                   >
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Message}" ClipboardContentBinding="{Binding Message}" Header="Message"/>
-                <DataGridTextColumn Binding="{Binding Level}" ClipboardContentBinding="{Binding Level}" Header="Level"/>
-                <DataGridTextColumn Binding="{Binding Exception}" ClipboardContentBinding="{Binding Exception}" Header="Exception"/>
-                <DataGridTextColumn Binding="{Binding Date}" ClipboardContentBinding="{Binding Date}" Header="Date"/>
-            </DataGrid.Columns>
-        </DataGrid>
         <TextBlock x:Name="textBlock" TextWrapping="Wrap" d:LayoutOverrides="Height" VerticalAlignment="Center" Text="{Binding Status}"/>
+        <TabControl x:Name="tabControl" Grid.Row="1">
+            <TabItem Header="Logging">
+                <Grid Background="#FFE5E5E5">
+                    <DataGrid x:Name="dataGrid" ItemsSource="{Binding LoggingData}" SelectionUnit="Cell" AutoGenerateColumns="False" HorizontalGridLinesBrush="#FFF5EFEF" VerticalGridLinesBrush="#FFF5EFEF"                  
+                   >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Message}" ClipboardContentBinding="{Binding Message}" Header="Message"/>
+                            <DataGridTextColumn Binding="{Binding Level}" ClipboardContentBinding="{Binding Level}" Header="Level"/>
+                            <DataGridTextColumn Binding="{Binding Exception}" ClipboardContentBinding="{Binding Exception}" Header="Exception"/>
+                            <DataGridTextColumn Binding="{Binding Date}" ClipboardContentBinding="{Binding Date}" Header="Date"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Job History">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+        </TabControl>
 
 
     </Grid>
