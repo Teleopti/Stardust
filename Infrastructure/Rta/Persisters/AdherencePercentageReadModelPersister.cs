@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				"	TimeOutOfAdherence," +
 				"	ShiftHasEnded, " +
 				"	[State] AS StateJson, " +
-				"	[Version]" +
+				"	[Version] " +
 				"FROM ReadModel.AdherencePercentage WHERE" +
 				"	PersonId =:PersonId AND " +
 				"	BelongsToDate =:Date ")

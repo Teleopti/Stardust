@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			});
 
-			var model = Target.Get(personId, "2014-11-19".Date());
+			var model = Target.Get("2014-11-19".Date(), personId);
 			model.Model.LastAdherence.Should().Be(true);
 			model.Model.LastUpdate.Should().Be("2014-11-19 8:06".Utc());
 			model.State.Activities.Should().Have.Count.EqualTo(1);
@@ -62,43 +62,40 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public void ShouldUpdate()
 		{
 			var personId = Guid.NewGuid();
-			Target.Persist(new AdherenceDetailsReadModel
+			var model = new AdherenceDetailsReadModel
 			{
 				Date = new DateTime(2014, 11, 19),
 				PersonId = personId,
-			});
+			};
+			Target.Persist(model);
 
-			Target.Persist(new AdherenceDetailsReadModel
+			model.Model = new AdherenceDetailsModel
 			{
-				Date = new DateTime(2014, 11, 19),
-				PersonId = personId,
-				Model = new AdherenceDetailsModel
+				LastUpdate = "2014-11-19 8:06".Utc(),
+				LastAdherence = true,
+				Activities = new[]
 				{
-					LastUpdate = "2014-11-19 8:06".Utc(),
-					LastAdherence = true,
-					Activities = new[]
+					new ActivityAdherence
 					{
-						new ActivityAdherence
-						{
-							TimeInAdherence = "10".Minutes(),
-							TimeOutOfAdherence = "20".Minutes(),
-							ActualStartTime = "2014-11-19 8:05".Utc(),
-							Name = "Phone",
-							StartTime = "2014-11-19 8:00".Utc(),
-						}
+						TimeInAdherence = "10".Minutes(),
+						TimeOutOfAdherence = "20".Minutes(),
+						ActualStartTime = "2014-11-19 8:05".Utc(),
+						Name = "Phone",
+						StartTime = "2014-11-19 8:00".Utc(),
 					}
-				},
-				State = new AdherenceDetailsReadModelState
-				{
-					Activities = new[] {new AdherenceDetailsReadModelActivityState()}
 				}
-			});
+			};
+			model.State = new AdherenceDetailsReadModelState
+			{
+				Activities = new[] {new AdherenceDetailsReadModelActivityState()}
+			};
+			Target.Persist(model);
 
-			var model = Target.Get(personId, "2014-11-19".Date());
-			model.Model.LastAdherence.Should().Be(true);
-			model.State.Activities.Should().Have.Count.EqualTo(1);
-			model.Model.LastUpdate.Should().Be("2014-11-19 8:06".Utc());
-			var detail = model.Model.Activities.First();
+			var actual = Target.Get("2014-11-19".Date(), personId);
+			actual.Model.LastAdherence.Should().Be(true);
+			actual.State.Activities.Should().Have.Count.EqualTo(1);
+			actual.Model.LastUpdate.Should().Be("2014-11-19 8:06".Utc());
+			var detail = actual.Model.Activities.First();
 			detail.Name.Should().Be("Phone");
 			detail.StartTime.Should().Be("2014-11-19 8:00".Utc());
 			detail.ActualStartTime.Should().Be("2014-11-19 8:05".Utc());
@@ -123,7 +120,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
-		public void ShouldAddWithNulls()
+		public void ShouldPersistWithNulls()
 		{
 			var personId = Guid.NewGuid();
 
@@ -143,13 +140,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			});
 
-			var model = Target.Get(personId, "2014-11-19".Date());
+			var model = Target.Get("2014-11-19".Date(), personId);
 			var detail = model.Model.Activities.First();
 			detail.ActualStartTime.Should().Be(null);
 		}
 
 		[Test]
-		public void ShouldAddForEachDay()
+		public void ShouldPersistForEachDay()
 		{
 			var personId = Guid.NewGuid();
 
@@ -164,46 +161,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				PersonId = personId,
 			});
 
-			var model1 = Target.Get(personId, "2014-11-19".Date());
+			var model1 = Target.Get("2014-11-19".Date(), personId);
 			model1.PersonId.Should().Be(personId);
 			model1.BelongsToDate.Should().Be("2014-11-19".Date());
 
-			var model2 = Target.Get(personId, "2014-11-20".Date());
+			var model2 = Target.Get("2014-11-20".Date(), personId);
 			model2.PersonId.Should().Be(personId);
 			model2.BelongsToDate.Should().Be("2014-11-20".Date());
 		}
 		
-		[Test]
-		public void ShouldUpdateWithNulls()
-		{
-			var personId = Guid.NewGuid();
-			Target.Persist(new AdherenceDetailsReadModel
-			{
-				Date = new DateTime(2014, 11, 19),
-				PersonId = personId,
-			});
-
-			Target.Persist(new AdherenceDetailsReadModel
-			{
-				Date = new DateTime(2014, 11, 19),
-				PersonId = personId,
-				Model = new AdherenceDetailsModel
-				{
-					LastAdherence = true,
-					Activities = new[]
-					{
-						new ActivityAdherence
-						{
-							ActualStartTime = null
-						}
-					}
-				}
-			});
-
-			var model = Target.Get(personId, "2014-11-19".Date());
-			model.Model.Activities.First().ActualStartTime.Should().Be(null);
-		}
-
 		[Test]
 		public void ShouldKnowIfThereIsData()
 		{
@@ -219,7 +185,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
-		public void ShouldAddWithAlotOfData()
+		public void ShouldPersistWithAlotOfData()
 		{
 			const string aVeryLongNameForActivty = "There are 4001 characters having fake ids 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a6388";
 			var personId = Guid.NewGuid();
@@ -240,41 +206,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			});
 
-			var model = Target.Get(personId, "2014-11-19".Date());
+			var model = Target.Get("2014-11-19".Date(), personId);
 			model.Model.Activities.First().Name.Should().Be(aVeryLongNameForActivty);
 		}
-
-		[Test]
-		public void ShouldUpdateWithAlotOfData()
-		{
-			const string aVeryLongNameForActivty = "There are 4001 characters having fake ids 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a6388";
-			var personId = Guid.NewGuid();
-			Target.Persist(new AdherenceDetailsReadModel
-			{
-				Date = new DateTime(2014, 11, 19),
-				PersonId = personId,
-			});
-
-			Target.Persist(new AdherenceDetailsReadModel
-			{
-				Date = new DateTime(2014, 11, 19),
-				PersonId = personId,
-				Model = new AdherenceDetailsModel
-				{
-					Activities = new[]
-					{
-						new ActivityAdherence
-						{
-							Name = aVeryLongNameForActivty
-						}
-					}
-				}
-			});
-
-			var model = Target.Get(personId, "2014-11-19".Date());
-			model.Model.Activities.First().Name.Should().Be(aVeryLongNameForActivty);
-		}
-
+		
 		[Test]
 		public void ShouldRead()
 		{
@@ -298,6 +233,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			var model = Reader.Read(personId, "2014-11-19".Date());
 			model.Model.Activities.Single().TimeInAdherence.Should().Be("10".Minutes());
+		}
+
+		[Test]
+		public void ShouldThrowIfUpdatedByAnother()
+		{
+			var personId = Guid.NewGuid();
+			Target.Persist(new AdherenceDetailsReadModel
+			{
+				Date = "2016-02-04".Utc(),
+				PersonId = personId
+			});
+
+			var model1 = Target.Get("2016-02-04".Date(), personId);
+			var model2 = Target.Get("2016-02-04".Date(), personId);
+			Target.Persist(model2);
+			var exception = Assert.Catch<Exception>(() => Target.Persist(model1));
+
+			exception.Should().Not.Be.Null();
 		}
 	}
 

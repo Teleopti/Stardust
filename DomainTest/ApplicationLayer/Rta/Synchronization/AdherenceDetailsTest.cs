@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			Context.SimulateRestart();
 			Rta.Touch(Database.TenantName());
 
-			Persister.Get(personId, new DateOnly("2015-01-08 12:00".Utc())).Model.Activities.Single().StartTime
+			Persister.Get(new DateOnly("2015-01-08 12:00".Utc()), personId).Model.Activities.Single().StartTime
 				.Should().Be("2015-01-08 11:00".Utc());
 		}
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			Context.SimulateRestart();
 			Rta.Touch(Database.TenantName());
 
-			Persister.Get(personId, new DateOnly("2015-01-08 12:00".Utc())).Model.Should().Be.Null();
+			Persister.Get(new DateOnly("2015-01-08 12:00".Utc()), personId).Model.Should().Be.Null();
 		}
 
 	}

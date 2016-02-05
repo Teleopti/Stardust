@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		}
 
 
-		public AdherenceDetailsReadModel Get(Guid personId, DateOnly date)
+		public AdherenceDetailsReadModel Get(DateOnly date, Guid personId)
 		{
 			return _data.Where(r => r.PersonId == personId && r.Date == date.Date)
 				.Select(m => JsonConvert.DeserializeObject<AdherenceDetailsReadModel>(JsonConvert.SerializeObject(m)))
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public AdherenceDetailsReadModel Read(Guid personId, DateOnly date)
 		{
-			return Get(personId, date);
+			return Get(date, personId);
 		}
 	}
 }

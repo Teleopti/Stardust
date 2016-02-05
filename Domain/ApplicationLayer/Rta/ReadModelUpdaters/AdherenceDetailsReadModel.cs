@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
@@ -10,6 +9,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		public Guid PersonId { get; set; }
 		public DateTime Date { get; set; }
 		public DateOnly BelongsToDate { get { return new DateOnly(Date); } }
+
+		public int Version { get; set; }
 
 		public AdherenceDetailsModel Model { get; set; }
 

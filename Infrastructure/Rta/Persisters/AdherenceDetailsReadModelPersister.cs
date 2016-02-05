@@ -25,33 +25,41 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 		
 		public void Persist(AdherenceDetailsReadModel model)
 		{
+			var fromVersion = model.Version;
+			var toVersion = model.Version + 1;
 			_unitOfWork.Current().CreateSqlQuery(
 				"MERGE INTO ReadModel.AdherenceDetails AS T " +
-				"USING (VALUES (:PersonId, :Date)) AS S (PersonId, Date) " +
-				"ON T.PersonId = S.PersonId AND T.BelongsToDate = S.Date " +
+				"USING (VALUES (:PersonId, :Date, :FromVersion)) AS S (PersonId, Date, [Version]) " +
+				"ON T.PersonId = S.PersonId AND T.BelongsToDate = S.Date AND T.[Version] = S.[Version] " +
 				"WHEN NOT MATCHED THEN " +
 				"	INSERT " +
 				"	(" +
 				"		PersonId," +
 				"		BelongsToDate," +
+				"		[Version]," +
 				"		Model, " +
 				"		[State]" +
 				"	) VALUES (" +
 				"		:PersonId," +
 				"		:Date," +
+				"		:ToVersion," +
 				"		:Model," +
 				"		:State" +
 				"	)" +
 				"WHEN MATCHED THEN " +
 				"	UPDATE SET" +
+				"		[Version] = :ToVersion," +
 				"		Model = :Model, " +
 				"		[State] = :State" +
 				";")
 				.SetGuid("PersonId", model.PersonId)
 				.SetDateTime("Date", model.Date)
+				.SetParameter("FromVersion", fromVersion)
+				.SetParameter("ToVersion", toVersion)
 				.SetParameter("Model", _jsonSerializer.SerializeObject(model.Model), NHibernateUtil.StringClob)
 				.SetParameter("State", _jsonSerializer.SerializeObject(model.State), NHibernateUtil.StringClob)
 				.ExecuteUpdate();
+			model.Version = toVersion;
 		}
 
 		public void Delete(Guid personId)
@@ -64,14 +72,15 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				   .ExecuteUpdate();
 		}
 
-		public AdherenceDetailsReadModel Get(Guid personId, DateOnly date)
+		public AdherenceDetailsReadModel Get(DateOnly date, Guid personId)
 		{
 			var result = _unitOfWork.Current().CreateSqlQuery(
 				"SELECT " +
 				"	PersonId," +
 				"	BelongsToDate AS Date, " +
 				"	Model AS ModelJson, " +
-				"	[State] AS StateJson " +
+				"	[State] AS StateJson, " +
+				"	[Version] " +
 				"FROM ReadModel.AdherenceDetails WHERE" +
 				"	PersonId =:PersonId AND " +
 				"	BelongsToDate =:Date ")
@@ -79,6 +88,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.AddScalar("Date", NHibernateUtil.DateTime)
 				.AddScalar("ModelJson", NHibernateUtil.String)
 				.AddScalar("StateJson", NHibernateUtil.String)
+				.AddScalar("Version", NHibernateUtil.Int32)
 				.SetGuid("PersonId", personId)
 				.SetDateOnly("Date", date)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))

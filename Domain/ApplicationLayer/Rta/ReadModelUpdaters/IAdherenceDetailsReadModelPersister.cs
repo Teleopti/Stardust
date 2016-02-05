@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 	{
 		void Persist(AdherenceDetailsReadModel model);
 		void Delete(Guid personId);
-		AdherenceDetailsReadModel Get(Guid personId, DateOnly date);
+		AdherenceDetailsReadModel Get(DateOnly date, Guid personId);
 		bool HasData();
 	}
 }

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 				BelongsToDate = new DateOnly(2015,02,22)
 			});
 
-			Persister.Get(personId, "2015-02-22".Date()).Should().Not.Be.Null();
+			Persister.Get("2015-02-22".Date(), personId).Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 				BelongsToDate = new DateOnly(2015,02,22)
 			});
 
-			Persister.Get(personId, "2015-02-22".Date()).Should().Not.Be.Null();
+			Persister.Get("2015-02-22".Date(), personId).Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 				BelongsToDate = new DateOnly(2015,02,22)
 			});
 
-			Persister.Get(personId, "2015-02-22".Date()).Should().Not.Be.Null();
+			Persister.Get("2015-02-22".Date(), personId).Should().Not.Be.Null();
 		}
 
 	}
