@@ -28,7 +28,20 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 		{
 			_unitOfWork.Current().CreateSqlQuery(
 				"MERGE ReadModel.TeamOutOfAdherence AS T " +
-				"USING (VALUES(:TeamId)) AS S (TeamId) " +
+				"USING (" + 
+				"	VALUES" +
+				"	(" +
+				"		:TeamId, " +
+				"		:SiteId, " +
+				"		:Count, " +
+				"		:State" +
+				"	)" +
+				") AS S (" +
+				"	TeamId, " +
+				"	SiteId, " +
+				"	Count, " +
+				"	[State]" +
+				") " +
 				"ON T.TeamId = S.TeamId " +
 				"WHEN NOT MATCHED THEN " +
 				"	INSERT " +
@@ -38,16 +51,16 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				"		Count," +
 				"		[State]" +
 				"	) VALUES (" +
-				"		:TeamId," +
-				"		:SiteId," +
-				"		:Count," +
-				"		:State" +
+				"		S.TeamId," +
+				"		S.SiteId," +
+				"		S.Count," +
+				"		S.[State]" +
 				"	) " +
 				"WHEN MATCHED THEN " +
 				"	UPDATE SET" +
-				"		SiteId = :SiteId," +
-				"		Count = :Count," +
-				"		[State] = :State " +
+				"		SiteId = S.SiteId," +
+				"		Count = S.Count," +
+				"		[State] = S.State " +
 				";")
 				.SetParameter("TeamId", model.TeamId)
 				.SetParameter("SiteId", model.SiteId)

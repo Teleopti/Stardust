@@ -27,7 +27,20 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 			//var data = _serializer.SerializeObject(model.State)
 			_unitOfWork.Current().CreateSqlQuery(
 				"MERGE ReadModel.SiteOutOfAdherence AS T " +
-				"USING (VALUES(:SiteId)) AS S (SiteId) " +
+				"USING (" +
+				"	VALUES" +
+				"	(" +
+				"		:SiteId, " +
+				"		:BusinessUnitId, " +
+				"		:Count, " +
+				"		:State" +
+				"	)" +
+				") AS S (" +
+				"	SiteId," +
+				"	BusinessUnitId," +
+				"	Count," +
+				"	[State]" +
+				") " +
 				"ON T.SiteId = S.SiteId " +
 				"WHEN NOT MATCHED THEN " +
 				"	INSERT " +
@@ -37,16 +50,16 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				"		Count," +
 				"		[State]" +
 				"	) VALUES (" +
-				"		:SiteId," +
-				"		:BusinessUnitId," +
-				"		:Count," +
-				"		:State" +
+				"		S.SiteId," +
+				"		S.BusinessUnitId," +
+				"		S.Count," +
+				"		S.State" +
 				"	) " +
 				"WHEN MATCHED THEN " +
 				"	UPDATE SET" +
-				"		BusinessUnitId = :BusinessUnitId," +
-				"		Count = :Count," +
-				"		[State] = :State " +
+				"		BusinessUnitId = S.BusinessUnitId," +
+				"		Count = S.Count," +
+				"		[State] = S.State " +
 				";")
 				.SetParameter("SiteId", model.SiteId)
 				.SetParameter("BusinessUnitId", model.BusinessUnitId)

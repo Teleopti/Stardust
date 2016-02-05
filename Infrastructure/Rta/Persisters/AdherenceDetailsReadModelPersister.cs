@@ -29,8 +29,28 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 			var toVersion = model.Version + 1;
 			_unitOfWork.Current().CreateSqlQuery(
 				"MERGE INTO ReadModel.AdherenceDetails AS T " +
-				"USING (VALUES (:PersonId, :Date, :FromVersion)) AS S (PersonId, Date, [Version]) " +
-				"ON T.PersonId = S.PersonId AND T.BelongsToDate = S.Date AND T.[Version] = S.[Version] " +
+				"USING (" +
+				"	VALUES " +
+				"	(" +
+				"		:PersonId, " +
+				"		:Date, " +
+				"		:FromVersion, " +
+				"		:ToVersion, " +
+				"		:Model, " +
+				"		:State" +
+				"	)" +
+				") AS S (" +
+				"	PersonId, " +
+				"	Date, " +
+				"	FromVersion," +
+				"	ToVersion," +
+				"	Model," +
+				"	[State]" +
+				") " +
+				"ON " +
+				"	T.PersonId = S.PersonId AND " +
+				"	T.BelongsToDate = S.Date AND " +
+				"	T.[Version] = S.[FromVersion] " +
 				"WHEN NOT MATCHED THEN " +
 				"	INSERT " +
 				"	(" +
@@ -40,17 +60,17 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				"		Model, " +
 				"		[State]" +
 				"	) VALUES (" +
-				"		:PersonId," +
-				"		:Date," +
-				"		:ToVersion," +
-				"		:Model," +
-				"		:State" +
+				"		S.PersonId," +
+				"		S.Date," +
+				"		S.ToVersion," +
+				"		S.Model," +
+				"		S.State" +
 				"	)" +
 				"WHEN MATCHED THEN " +
 				"	UPDATE SET" +
-				"		[Version] = :ToVersion," +
-				"		Model = :Model, " +
-				"		[State] = :State" +
+				"		[Version] = S.ToVersion," +
+				"		Model = S.Model, " +
+				"		[State] = S.[State]" +
 				";")
 				.SetGuid("PersonId", model.PersonId)
 				.SetDateTime("Date", model.Date)

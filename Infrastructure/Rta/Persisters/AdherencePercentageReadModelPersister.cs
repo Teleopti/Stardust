@@ -29,8 +29,36 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 			var toVersion = model.Version + 1;
 			_unitOfWork.Current().CreateSqlQuery(
 				"MERGE INTO ReadModel.AdherencePercentage AS T " +
-				"USING (VALUES (:PersonId, :Date, :FromVersion)) AS S (PersonId, Date, [Version]) " +
-				"ON T.PersonId = S.PersonId AND T.BelongsToDate = S.Date AND T.[Version] = S.[Version] " +
+				"USING (" +
+				"	VALUES " +
+				"	(" +
+				"		:PersonId, " +
+				"		:Date, " +
+				"		:FromVersion," +
+				"		:ToVersion," +
+				"		:LastTimestamp," +
+				"		:IsLastTimeInAdherence," +
+				"		:TimeInAdherence," +
+				"		:TimeOutOfAdherence," +
+				"		:ShiftHasEnded," +
+				"		:State" +
+				"		)" +
+				") AS S (" +
+				"	PersonId, " +
+				"	Date, " +
+				"	FromVersion," +
+				"	ToVersion," +
+				"	LastTimestamp," +
+				"	IsLastTimeInAdherence," +
+				"	TimeInAdherence," +
+				"	TimeOutOfAdherence," +
+				"	ShiftHasEnded," +
+				"	[State]" +
+				") " +
+				"ON " +
+				"	T.PersonId = S.PersonId AND " +
+				"	T.BelongsToDate = S.Date AND " +
+				"	T.[Version] = S.FromVersion " +
 				"WHEN NOT MATCHED THEN " +
 				"	INSERT " +
 				"	(" +
@@ -44,25 +72,25 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				"		ShiftHasEnded," +
 				"		[State]" +
 				"	) VALUES (" +
-				"		:PersonId," +
-				"		:Date," +
-				"		:ToVersion," +
-				"		:LastTimestamp," +
-				"		:IsLastTimeInAdherence," +
-				"		:TimeInAdherence," +
-				"		:TimeOutOfAdherence," +
-				"		:ShiftHasEnded," +
-				"		:State" +
+				"		S.PersonId," +
+				"		S.Date," +
+				"		S.ToVersion," +
+				"		S.LastTimestamp," +
+				"		S.IsLastTimeInAdherence," +
+				"		S.TimeInAdherence," +
+				"		S.TimeOutOfAdherence," +
+				"		S.ShiftHasEnded," +
+				"		S.State" +
 				"	) " +
 				"WHEN MATCHED THEN " +
 				"	UPDATE SET" +
-				"		[Version] = :ToVersion," +
-				"		LastTimestamp = :LastTimestamp," +
-				"		IsLastTimeInAdherence = :IsLastTimeInAdherence," +
-				"		TimeInAdherence = :TimeInAdherence," +
-				"		TimeOutOfAdherence = :TimeOutOfAdherence," +
-				"		ShiftHasEnded = :ShiftHasEnded, " +
-				"		[State] = :State " +
+				"		[Version] = S.ToVersion," +
+				"		LastTimestamp = S.LastTimestamp," +
+				"		IsLastTimeInAdherence = S.IsLastTimeInAdherence," +
+				"		TimeInAdherence = S.TimeInAdherence," +
+				"		TimeOutOfAdherence = S.TimeOutOfAdherence," +
+				"		ShiftHasEnded = S.ShiftHasEnded, " +
+				"		[State] = S.State " +
 				";")
 				.SetGuid("PersonId", model.PersonId)
 				.SetDateTime("Date", model.Date)
