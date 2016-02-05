@@ -34,15 +34,19 @@
 
 		<seatmap-editor ng-if="vm.showEditor"></seatmap-editor>
 
-		<div class="location-breadcrumb" ng-class="{'location-breadcrumb-edit-mode':(vm.showEditor)} " ng-click="vm.isDatePickerOpened = false">
-			<span ng-if="!vm.isLoading" class="breadcrumb-inverse" ng-repeat="breadcrumb in vm.breadcrumbs">
-				<span ng-class="{'location-breadcrumb-clickable': !$last}"
-						ng-click="vm.handleBreadcrumbClick(breadcrumb.Id)">{{breadcrumb.Name}}</span>
-				<span class="divider" ng-if="!$last">></span>
-			</span>
-		</div>
-
 		<div class="wfm-block" ng-class="{'wfm-block-edit-mode':(vm.showEditor)} ">
+
+			<div class="location-breadcrumb" ng-click="vm.isDatePickerOpened = false">
+				<span ng-if="!vm.isLoading" class="breadcrumb-inverse" ng-repeat="breadcrumb in vm.breadcrumbs">
+					<span ng-class="{'location-breadcrumb-clickable': !$last}"
+						  ng-click="vm.handleBreadcrumbClick(breadcrumb.Id)">{{breadcrumb.Name}}</span>
+					<span class="divider" ng-if="!$last">></span>
+				</span>
+			</div>
+
+			<div class="seat-property-message" ng-if="!vm.rightPanelOptions.showPopupButton">
+				{{"OnlySupportSeatRolesSetting" | translate}}
+			</div>
 
 			<canvas id="c" ng-mouseenter="vm.scrollListen = true" ng-mouseleave="vm.scrollListen = false"></canvas>
 
@@ -50,7 +54,7 @@
 				<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 			</div>
 
-			<wfm-right-panel panel-options="vm.rightPanelOptions" on-open="vm.getRoles()" ng-class="{'right-panel-edit-mode':(vm.showEditor)} ">
+			<wfm-right-panel panel-options="vm.rightPanelOptions" on-open="vm.getRoles()">
 
 				<seatmap-occupancy-detail schedule-date="vm.selectedDate" refresh-seat-map="vm.refreshSeatMap()" ng-if="vm.showOccupancy"></seatmap-occupancy-detail>
 

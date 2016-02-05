@@ -33,6 +33,14 @@
 wfm-right-panel{
 	z-index:1;
 
+	.call-out-button{
+		position:absolute;
+		right:0;
+		top:0;
+		margin:0;
+		padding:5px;
+		z-index:1;
+	}	
 
 	.resizable{
 		position:absolute;	
@@ -63,6 +71,15 @@ wfm-right-panel{
 				animation: widthChange7 450ms;
 				-webkit-animation: widthChange7 450ms;
 			}
+
+			.sidenav-header .chevron{
+				margin:0;
+				padding:0px 5px 0px 5px;
+			}
+
+			.sidenav-header .chevron:hover{
+				cursor:pointer;
+			}
 		}
 		
 		.md-sidenav-backdrop{
@@ -85,17 +102,5 @@ wfm-right-panel{
 		left:0;
 		overflow:auto;
 		padding-left:5px;
-	}
-}
-
-.wfm-right-panel{
-	
-	.sidenav-header .chevron{
-		margin:0;
-		padding:0px 5px 0px 5px;
-	}
-
-	.sidenav-header .chevron:hover{
-		cursor:pointer;
 	}
 }

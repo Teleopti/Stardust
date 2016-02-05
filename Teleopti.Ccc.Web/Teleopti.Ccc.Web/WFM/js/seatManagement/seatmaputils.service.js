@@ -68,9 +68,10 @@
 			function doResize(canvas) {
 				var viewPortHeight = $('.seatmap').height();
 				var width = $('[ui-view]')[0].clientWidth - 0;
-				var heightReduction = $('#seatmap-toolbar').height() + $('.location-breadcrumb').height() + 5;
+				var heightReduction = $('#seatmap-toolbar').height() + 1;
 
 				canvas.setHeight((viewPortHeight - heightReduction));
+
 				canvas.setWidth(width);
 			}
 
@@ -110,7 +111,9 @@
 
 				canvas.selection = true;
 				for (var idx in canvasObjects) {
-					if (canvasObjects[idx].type == 'location') {
+					if (canvasObjects[idx].type == 'location'
+						|| canvasObjects[idx].type == 'image'
+						|| canvasObjects[idx].type == 'i-text') {
 						canvasObjects[idx].selectable = false;
 					} else {
 						canvasObjects[idx].selectable = true;

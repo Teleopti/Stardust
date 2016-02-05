@@ -94,9 +94,8 @@ input[type=text],input[type=password],input[type=number]{
 	background:$white;
 	position: absolute;
 	height:30px;
-	top:41px;
+	top:0;
 	left:0;
-	right:0;
 	padding-top:5px;
 	z-index:1;
 
@@ -116,6 +115,7 @@ input[type=text],input[type=password],input[type=number]{
 
 	.breadcrumb-inverse{
 		font-size : 95%;
+		float:left;
 	}
 
 	.breadcrumb-inverse a, .breadcrumb-inverse>.active {
@@ -126,17 +126,9 @@ input[type=text],input[type=password],input[type=number]{
 
 	.breadcrumb-inverse span {
 		position:relative;
-		margin-left : 6px;
+		margin-left : 5px;
 	}
 
-}
-
-.location-breadcrumb-edit-mode{
-	position:static;
-
-	.breadcrumb-inverse{
-		font-size : 95%;
-	}
 }
 
 .seatmap-canvas {
@@ -313,8 +305,23 @@ seatmap-editor{
 	min-width:370px;
 }
 
+.seatmap .call-out-button{
+	top:0px;
+	margin:2px;
+	z-index:1;
+}
+
+.seat-property-message{
+	position:absolute;
+	right:0;
+	top:0;
+	height:30px;
+	background:$white;
+	z-index:2;
+	padding:5px;
+}
+
 .seatmap-canvas .right-panel-edit-mode .resizable{
-	top:-30px;
 	bottom:0;
 	min-width:310px;
 }

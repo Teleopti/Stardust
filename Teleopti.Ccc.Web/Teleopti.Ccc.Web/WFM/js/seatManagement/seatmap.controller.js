@@ -18,6 +18,7 @@
 		vm.roles = [];
 		vm.seats = [];
 		vm.activeSeats = [];
+		vm.otherActiveObjects = [];
 		vm.newLocationName = '';
 		vm.showLocationDialog = false;
 		vm.fileCallbackFunction = null;
@@ -29,7 +30,8 @@
 			panelTitle: "SeatProperties",
 			showCloseButton: true,
 			showBackdrop: false,
-			showResizer: true
+			showResizer: true,
+			showPopupButton: true
 		};
 
 		var canvas = new fabric.CanvasWithViewport('c');
@@ -86,14 +88,26 @@
 				vm.roles = rolesData;
 			});
 		};
-	
+
 		vm.getActiveObjects = function () {
 			vm.activeSeats = [];
+			vm.otherActiveObjects = [];
+			vm.rightPanelOptions.showPopupButton = true;
+
 			canvasUtils.getActiveSeatObjects(canvas, vm.seats, vm.activeSeats);
 
+			vm.otherActiveObjects = vm.otherActiveObjects.concat(canvasUtils.getActiveFabricObjectsByType(canvas, 'location'),
+														canvasUtils.getActiveFabricObjectsByType(canvas, 'image'),
+														canvasUtils.getActiveFabricObjectsByType(canvas, 'i-text'));
+
 			//TODO:currently we only support showing properties for seats
-			if (vm.activeSeats.length > 0)
+			if (vm.activeSeats.length > 0 && vm.otherActiveObjects.length == 0)
 				vm.rightPanelOptions.panelState = true;
+
+			if (vm.otherActiveObjects.length > 0) {
+				vm.rightPanelOptions.showPopupButton = false;
+				vm.rightPanelOptions.panelState = false;
+			}
 		};
 
 		vm.handleBreadcrumbClick = function (id) {
@@ -168,7 +182,7 @@
 			vm.isLoading = false;
 			canvas.fire('seatmaplocation:loaded', { data: data });
 
-			$timeout(function() { $scope.$apply(); });
+			$timeout(function () { $scope.$apply(); });
 		};
 
 		function onLoadSeatMapSuccess(data) {

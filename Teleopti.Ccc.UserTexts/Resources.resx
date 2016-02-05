@@ -14094,4 +14094,12 @@ Help us improve your experience by sending an error report</value>
     <value>Invalid number</value>
     <comment>Invalid number</comment>
   </data>
+  <data name="ShowRightPanel" xml:space="preserve">
+    <value>Show right panel</value>
+    <comment>Show right panel tooltip text</comment>
+  </data>
+  <data name="OnlySupportSeatRolesSetting" xml:space="preserve">
+    <value>Only support seat roles setting</value>
+    <comment>Seat roles setting warning text in seatmap</comment>
+  </data>
 </root>

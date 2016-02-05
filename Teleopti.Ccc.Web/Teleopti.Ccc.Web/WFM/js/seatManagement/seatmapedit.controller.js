@@ -31,6 +31,7 @@
 
 			canvas().on('before:selection:cleared', function (e) {
 				vm.parentVm.rightPanelOptions.panelState = false;
+				vm.parentVm.rightPanelOptions.showPopupButton = true;
 			});
 
 			createDocumentListeners();

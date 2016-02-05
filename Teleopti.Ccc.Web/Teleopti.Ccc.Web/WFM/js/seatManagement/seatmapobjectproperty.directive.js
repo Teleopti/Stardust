@@ -16,7 +16,7 @@
 				if (roleIndex > -1) appliedRoleCount++;
 			});
 
-			if (appliedRoleCount === vm.seats.length) {
+			if (appliedRoleCount === vm.seats.length && vm.seats.length > 0) {
 				role.Selected = true;
 				return false;
 

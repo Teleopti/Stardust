@@ -13,7 +13,7 @@
 				$mdSidenav('right-panel').open();
 				vm.onOpen();
 			}
-			vm.showResizer = true;
+			vm.showPanel = true;
 			vm.panelOptions.panelState = true;
 		};
 
@@ -22,7 +22,7 @@
 				$mdSidenav('right-panel').close();
 				vm.onClose();
 			}
-			vm.showResizer = false;
+			vm.showPanel = false;
 			vm.panelOptions.panelState = false;
 		};
 
@@ -59,6 +59,7 @@
 		scope.vm.panelOptions.showCloseButton = scope.vm.panelOptions.showCloseButton == true;
 		scope.vm.panelOptions.showBackdrop = scope.vm.panelOptions.showBackdrop == true;
 		scope.vm.panelOptions.showResizer = scope.vm.panelOptions.showResizer == true;
+		scope.vm.panelOptions.showPopupButton = scope.vm.panelOptions.showPopupButton == true;
 
 		if (!scope.vm.panelOptions.showResizer) {
 			$("wfm-right-panel .resizable .rg-left").hide();

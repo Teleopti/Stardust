@@ -18093,6 +18093,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Only support seat roles setting.
+        /// </summary>
+        public static string OnlySupportSeatRolesSetting {
+            get {
+                return ResourceManager.GetString("OnlySupportSeatRolesSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to On this date you are no longer an employee.
         /// </summary>
         public static string OnThisDateYouAreNoLongerAnEmployee {
@@ -26310,6 +26319,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShowResult {
             get {
                 return ResourceManager.GetString("ShowResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show right panel.
+        /// </summary>
+        public static string ShowRightPanel {
+            get {
+                return ResourceManager.GetString("ShowRightPanel", resourceCulture);
             }
         }
         
