@@ -237,11 +237,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			hasResource.Should().Be.True();
 		}
 
-		[Test, Ignore]
+		[Test, Ignore("PBI 36999")]
 		public void ShouldNotCalculateIntraIntervalIssuses()
 		{
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
-			phoneActivity.RequiresSkill = true;
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var dateOnly = new DateOnly(2015, 10, 12);
 			var planningPeriod = PlanningPeriodRepository.Has(dateOnly.AddDays(-6), 1);
