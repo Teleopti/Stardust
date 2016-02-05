@@ -12,7 +12,7 @@ namespace NodeTest.Fakes.Timers
 
         public ManualResetEventSlim Wait = new ManualResetEventSlim();
 
-        public PingToManagerFake()
+        public PingToManagerFake(double interval = 10000): base(interval)
         {
             Elapsed += OnTimedEvent;
 

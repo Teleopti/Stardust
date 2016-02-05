@@ -1,17 +1,23 @@
 ﻿using System;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
+using log4net;
+using log4net.Config;
 using Newtonsoft.Json;
 using NodeTest.Fakes;
 using NodeTest.Fakes.InvokeHandlers;
 using NodeTest.Fakes.Timers;
 using NodeTest.JobHandlers;
 using NUnit.Framework;
+using Stardust.Node;
 using Stardust.Node.API;
+using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Workers;
 
@@ -35,7 +41,8 @@ namespace NodeTest
                                                               handlerAssembly,
                                                               nodeName);
 
-
+            var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+            XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
         }
 
         [SetUp]
@@ -70,17 +77,24 @@ namespace NodeTest
             };
         }
 
+        [TestFixtureTearDown]
+        public void TestFixtureTearDown()
+        {
+            LogHelper.LogInfoWithLineNumber(Logger, "Closing WorkerWrapperTests...");
+        }
+
         private Uri CallBackUriTemplateFake { get; set; }
         public NodeConfigurationFake NodeConfigurationFake;
         public IWorkerWrapper WorkerWrapper;
         public NodeController NodeController;
         public JobToDo JobDefinition;
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(WorkerWrapperTests));
 
         [Test]
         public void ShouldBeAbleToCatchExceptionsFromJob() //faulting job
         {
-            var httpRequestMessage = new HttpRequestMessage();
 
+            var httpRequestMessage = new HttpRequestMessage();
             // Start job.
             var actionResult = WorkerWrapper.StartJob(JobDefinition,
                                                       httpRequestMessage);
