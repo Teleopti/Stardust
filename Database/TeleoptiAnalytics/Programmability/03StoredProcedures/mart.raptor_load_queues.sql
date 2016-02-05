@@ -15,7 +15,7 @@ BEGIN
         log_object_name		LogObjectName,
         queue_name			Name,
         queue_Description	[Description]                                        
-	FROM mart.dim_queue 
+	FROM mart.dim_queue dq
 	WHERE queue_id > -1
 	AND queue_original_id NOT IN (SELECT queue_original_id FROM mart.dim_queue_excluded excl 
 						WHERE	excl.queue_original_id	= dq.queue_original_id
