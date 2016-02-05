@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
         private readonly IResourceCalculateDelayer _resourceCalculateDelayer;
 	    private readonly IScheduleMatrixPro _matrix;
+	    private readonly IResourceCalculateDaysDecider _resourceCalculateDaysDecider;
 
 	    public IntradayOptimizer2(
             IScheduleResultDailyValueCalculator dailyValueCalculator,
@@ -50,7 +51,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
             IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
             IResourceCalculateDelayer resourceCalculateDelayer,
-			IScheduleMatrixPro matrix)
+			IScheduleMatrixPro matrix,
+			IResourceCalculateDaysDecider resourceCalculateDaysDecider)
         {
             _dailyValueCalculator = dailyValueCalculator;
             _personalSkillsDataExtractor = personalSkillsDataExtractor;
@@ -67,6 +69,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     	    _deleteAndResourceCalculateService = deleteAndResourceCalculateService;
             _resourceCalculateDelayer = resourceCalculateDelayer;
 	        _matrix = matrix;
+		    _resourceCalculateDaysDecider = resourceCalculateDaysDecider;
         }
 
         public bool Execute()
@@ -103,9 +106,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             //delete schedule
 			IList<IScheduleDay> listToDelete = new List<IScheduleDay> { scheduleDay };
 
-			var dayPeriod = scheduleDay.DateOnlyAsPeriod.Period();
-			var personAssPeriod = scheduleDay.PersonAssignment().Period;
-			if(personAssPeriod.EndDateTime > dayPeriod.EndDateTime)
+			if(_resourceCalculateDaysDecider.IsNightShift(scheduleDay))
 				_deleteAndResourceCalculateService.DeleteWithResourceCalculation(listToDelete, _rollbackService, schedulingOptions.ConsiderShortBreaks);
 			else
 				_deleteAndResourceCalculateService.DeleteWithoutResourceCalculationOnNextDay(listToDelete, _rollbackService, schedulingOptions.ConsiderShortBreaks);

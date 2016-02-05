@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     public interface IResourceCalculateDaysDecider
     {
         IList<DateOnly> DecideDates(IScheduleDay currentSchedule, IScheduleDay previousSchedule);
+	    bool IsNightShift(IScheduleDay scheduleDay);
     }
 
     public class ResourceCalculateDaysDecider : IResourceCalculateDaysDecider
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             if(current == SchedulePartView.DayOff && previous == SchedulePartView.MainShift)
             {
-                if(!isNightShift(previousSchedule))
+                if(!IsNightShift(previousSchedule))
                 {
                     return new List<DateOnly> { currentDate };
                 }
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             if (current == SchedulePartView.MainShift && previous == SchedulePartView.DayOff)
             {
-                if (!isNightShift(currentSchedule))
+                if (!IsNightShift(currentSchedule))
                 {
                     return new List<DateOnly> { currentDate };
                 }
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             if(current == SchedulePartView.MainShift && previous == SchedulePartView.MainShift)
             {
-                if (!isNightShift(previousSchedule) && !isNightShift(currentSchedule))
+                if (!IsNightShift(previousSchedule) && !IsNightShift(currentSchedule))
                 {
                     return new List<DateOnly> { currentDate };
                 }
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             if (!currentSchedule.IsScheduled() && previous == SchedulePartView.MainShift)
             {
-                if (!isNightShift(previousSchedule))
+                if (!IsNightShift(previousSchedule))
                 {
                     return new List<DateOnly> { currentDate };
                 }
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return ret;
         }
 
-        private static bool isNightShift(IScheduleDay scheduleDay)
+        public bool IsNightShift(IScheduleDay scheduleDay)
         {
             var tz = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 	        var personAssignment = scheduleDay.PersonAssignment();

@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	    private OverLimitResults _overLimitCounts;
 	    private IDateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
 	    private IPersonAssignment _personAssignment;
+	    private IResourceCalculateDaysDecider _resourceCalculateDaysDecider;
 
 	    [SetUp]
         public void Setup()
@@ -73,6 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	        _overLimitCounts = new OverLimitResults(0, 0, 0, 0, 0);
 			_dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_removedDate, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 		    _personAssignment = _mockRepository.StrictMock<IPersonAssignment>();
+			_resourceCalculateDaysDecider = new ResourceCalculateDaysDecider();
 
 
             _target = new IntradayOptimizer2(
@@ -90,7 +92,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _mainShiftOptimizeActivitySpecificationSetter,
                 _deleteAndResourceCalculateService,
                 _resourceCalculateDelayer,
-				_scheduleMatrix);
+				_scheduleMatrix,
+				_resourceCalculateDaysDecider);
         }
 
         [Test]
@@ -150,9 +153,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _rollbackService.ClearModificationCollection();
 	        Expect.Call(_optimizationLimits.HasOverLimitExceeded(_overLimitCounts, _scheduleMatrix)).Return(false);
 
-			Expect.Call(_removedSchedulePart.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 			Expect.Call(_removedSchedulePart.PersonAssignment()).Return(_personAssignment);
-			Expect.Call(_personAssignment.Period).Return(_dateOnlyAsDateTimePeriod.Period());
+			Expect.Call(_personAssignment.Period).Return(_dateOnlyAsDateTimePeriod.Period()).Repeat.AtLeastOnce();
         }
 
         private void makePeriodBetter()
@@ -230,9 +232,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_removedDate, null)).IgnoreArguments().Return(true);
 				Expect.Call(_deleteAndResourceCalculateService.DeleteWithoutResourceCalculationOnNextDay(new List<IScheduleDay>(), _rollbackService, true)).IgnoreArguments();
                 Expect.Call(() =>_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_removedDate, _removedDate)));
-	            Expect.Call(_removedSchedulePart.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 	            Expect.Call(_removedSchedulePart.PersonAssignment()).Return(_personAssignment);
-				Expect.Call(_personAssignment.Period).Return(_dateOnlyAsDateTimePeriod.Period());
+				Expect.Call(_personAssignment.Period).Return(_dateOnlyAsDateTimePeriod.Period()).Repeat.AtLeastOnce();
             }
 
             using (_mockRepository.Playback())
@@ -348,9 +349,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_removedDate, _removedDate));
 	            Expect.Call(_optimizationLimits.HasOverLimitExceeded(_overLimitCounts, _scheduleMatrix)).Return(false);
 
-				Expect.Call(_removedSchedulePart.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 				Expect.Call(_removedSchedulePart.PersonAssignment()).Return(_personAssignment);
-				Expect.Call(_personAssignment.Period).Return(_dateOnlyAsDateTimePeriod.Period());
+				Expect.Call(_personAssignment.Period).Return(_dateOnlyAsDateTimePeriod.Period()).Repeat.AtLeastOnce();
             }
 
             using (_mockRepository.Playback())
@@ -411,9 +411,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_rollbackService.ModificationCollection).Return(new List<IScheduleDay>()).Repeat.AtLeastOnce();
                 _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_removedDate, _removedDate));
 
-				Expect.Call(_removedSchedulePart.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 				Expect.Call(_removedSchedulePart.PersonAssignment()).Return(_personAssignment);
-				Expect.Call(_personAssignment.Period).Return(_dateOnlyAsDateTimePeriod.Period());
+				Expect.Call(_personAssignment.Period).Return(_dateOnlyAsDateTimePeriod.Period()).Repeat.AtLeastOnce();
             }
 
             using (_mockRepository.Playback())

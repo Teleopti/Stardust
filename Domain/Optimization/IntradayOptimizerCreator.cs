@@ -94,6 +94,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
 				var deleteAndResourceCalculateService = new DeleteAndResourceCalculateService(deleteSchedulePartService, _resourceOptimizationHelper);
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
+				var resourceCalculateDaysDecider = new ResourceCalculateDaysDecider();
 
 				IIntradayOptimizer2 optimizer =
 					new IntradayOptimizer2(
@@ -111,7 +112,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 						mainShiftOptimizeActivitySpecificationSetter,
 						deleteAndResourceCalculateService,
 						resourceCalculateDelayer,
-						scheduleMatrix);
+						scheduleMatrix,
+						resourceCalculateDaysDecider);
 
 				result.Add(optimizer);
 			}
