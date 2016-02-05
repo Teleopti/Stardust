@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
 			PeopleSearchProvider.Add(person);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1).Content.Schedules.ToList();
+			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1).Content.Schedules.ToList();
+			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1).Content.Schedules.ToList();
+			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1).Content.Schedules.ToList();
+			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1).Content.Schedules.ToList();
+			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1).Content.Schedules.ToList();
+			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1).Content.Schedules.ToList();
+			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1).Content.Schedules.ToList();
+			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -314,7 +314,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1).Content.Schedules.ToList();
+			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -358,7 +358,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1).Content.Schedules.ToList();
+			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -392,7 +392,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			scheduleDayPrevious.Add(paPrev);
 			ScheduleProvider.AddScheduleDay(scheduleDayPrevious);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1).Content.Schedules.ToList();
+			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
 
 			result.Count.Should().Be.EqualTo(2);
 			result.First().Date.Should().Be.EqualTo("2020-01-01");
@@ -417,7 +417,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			scheduleDay.Add(pa);
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1).Content.Schedules.ToList();
+			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
 
 			result.Count.Should().Be.EqualTo(1);
 			var schedule = result.First();
@@ -491,7 +491,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			ScheduleProvider.AddScheduleDay(scheduleDay1);
 			ScheduleProvider.AddScheduleDay(scheduleDay2);
 
-			var result = Target.SearchSchedules("firstName:a1 b1 c1 d1 e1 f1", scheduleDate, 20, 1).Content.Schedules.ToList();
+			var result = Target.SearchSchedules("firstName:a1 b1 c1 d1 e1 f1", scheduleDate, 20, 1, false).Content.Schedules.ToList();
 
 			result.Count.Should().Be.EqualTo(6);
 			result[0].Name.Should().Be.EqualTo("b1@b1");
@@ -569,7 +569,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			ScheduleProvider.AddScheduleDay(scheduleDay1);
 			ScheduleProvider.AddScheduleDay(scheduleDay2);
 
-			var result = Target.SearchSchedules("firstName:a1 b1 c1 d1 e1 f1", scheduleDate, 20, 1).Content.Schedules.ToList();
+			var result = Target.SearchSchedules("firstName:a1 b1 c1 d1 e1 f1", scheduleDate, 20, 1, false).Content.Schedules.ToList();
 
 			result.Count.Should().Be.EqualTo(6);
 			result[0].Name.Should().Be.EqualTo("b1@b1");
@@ -652,7 +652,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			ScheduleProvider.AddScheduleDay(scheduleDay1);
 			ScheduleProvider.AddScheduleDay(scheduleDay2);
 
-			var result = Target.SearchSchedules("firstName:a1 b1 c1 d1 e1 f1", scheduleDate, 2, 2).Content.Schedules.ToList();
+			var result = Target.SearchSchedules("firstName:a1 b1 c1 d1 e1 f1", scheduleDate, 2, 2, false).Content.Schedules.ToList();
 
 			result.Count.Should().Be.EqualTo(3);
 
