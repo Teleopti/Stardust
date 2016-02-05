@@ -1,5 +1,4 @@
 ﻿using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.InfrastructureTest.Rta;
 
 namespace Teleopti.Ccc.InfrastructureTest
 {
@@ -7,11 +6,13 @@ namespace Teleopti.Ccc.InfrastructureTest
 	{
 		protected override void BeforeTest()
 		{
+			base.BeforeTest();
 			Resolve<IReadModelUnitOfWorkAspect>().OnBeforeInvocation(null);
 		}
 
 		protected override void AfterTest()
 		{
+			base.AfterTest();
 			Resolve<IReadModelUnitOfWorkAspect>().OnAfterInvocation(null, null);
 			SetupFixtureForAssembly.RestoreCcc7Database();
 		}
