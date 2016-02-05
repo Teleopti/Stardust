@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (isPeriodWorse)
             {
                 _rollbackService.Rollback();
-                _resourceCalculateDelayer.CalculateIfNeeded(dateToBeRemoved, null);
+                _resourceCalculateDelayer.CalculateIfNeeded(dateToBeRemoved, null, false);
                 lockDay(dateToBeRemoved);
                 return true;
             }
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	        if (_optimizationLimits.HasOverLimitExceeded(lastOverLimitCounts, _matrix) || daysOverMax())
 	        {
 				_rollbackService.Rollback();
-				_resourceCalculateDelayer.CalculateIfNeeded(dateToBeRemoved, null);
+				_resourceCalculateDelayer.CalculateIfNeeded(dateToBeRemoved, null, false);
 				lockDay(dateToBeRemoved);
 				return false;   
 	        }
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				foreach (var schedDay in days)
 				{
 					var dateOnly = schedDay.DateOnlyAsPeriod.DateOnly;
-                    resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
+                    resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);
 				}
                 lockDay(day);
                 return false;

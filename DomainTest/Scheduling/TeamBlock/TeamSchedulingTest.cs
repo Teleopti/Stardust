@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	            Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDay));
 	            Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 	            Expect.Call(_shiftProjectionCache.WorkShiftProjectionPeriod).Return(new DateTimePeriod());
-	            Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(DateOnly.MinValue, new DateTimePeriod())).Return(true);
+	            Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(DateOnly.MinValue, new DateTimePeriod(), false)).Return(true);
 
 	            Expect.Call(_scheduleDay.PersonAssignment()).Return(null);
 	            Expect.Call(_scheduleDay.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			    Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 			    Expect.Call(_shiftProjectionCache.WorkShiftProjectionPeriod).Return(new DateTimePeriod());
-			    Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(DateOnly.MinValue, new DateTimePeriod())).Return(true);
+			    Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(DateOnly.MinValue, new DateTimePeriod(), false)).Return(true);
 
 			    Expect.Call(_scheduleDay.PersonAssignment()).Return(personAssignment).Repeat.AtLeastOnce();
 			    Expect.Call(personAssignment.PersonalActivities()).Return(personalActivities).Repeat.Twice();
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 				Expect.Call(_shiftProjectionCache.WorkShiftProjectionPeriod).Return(new DateTimePeriod());
-				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(DateOnly.MinValue, new DateTimePeriod())).Return(true);
+				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(DateOnly.MinValue, new DateTimePeriod(), false)).Return(true);
 
 				Expect.Call(_scheduleDay.PersonAssignment()).Return(null);
 				Expect.Call(_scheduleDay.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(meetings)).Repeat.Twice();

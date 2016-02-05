@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private void safeCalculateDate(DateOnly dayDate, IScheduleDay originalScheduleDay, IResourceCalculateDelayer resourceCalculateDelayer)
         {
-            resourceCalculateDelayer.CalculateIfNeeded(dayDate, originalScheduleDay.ProjectionService().CreateProjection().Period());
+            resourceCalculateDelayer.CalculateIfNeeded(dayDate, originalScheduleDay.ProjectionService().CreateProjection().Period(), false);
         }
 
 		private void lockDays(DateOnly firstDayDate, DateOnly secondDayDate)

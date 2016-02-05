@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			foreach (DateOnly dateOnly1 in toResourceCalculate)
 			{
 				var currentScheduleDay = _matrix.GetScheduleDayByKey(dateOnly1).DaySchedulePart();
-                _resourceCalculateDelayer.CalculateIfNeeded(dateOnly1, currentScheduleDay.ProjectionService().CreateProjection().Period());
+                _resourceCalculateDelayer.CalculateIfNeeded(dateOnly1, currentScheduleDay.ProjectionService().CreateProjection().Period(), false);
 			}
 		}
 
@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					foreach (DateOnly dateOnly1 in toResourceCalculate)
 					{
                         var currentScheduleDay = _matrix.GetScheduleDayByKey(dateOnly1).DaySchedulePart();
-                        _resourceCalculateDelayer.CalculateIfNeeded(dateOnly1, currentScheduleDay.ProjectionService().CreateProjection().Period());
+                        _resourceCalculateDelayer.CalculateIfNeeded(dateOnly1, currentScheduleDay.ProjectionService().CreateProjection().Period(), false);
 					}
 					return false;
 				}
@@ -278,7 +278,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				IList<DateOnly> days = _decider.DecideDates(changed.CurrentSchedule, changed.PreviousSchedule);
 				foreach (var dateOnly in days)
 				{
-				    _resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
+				    _resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);
 				}
 			}
 		}
@@ -291,7 +291,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			foreach (DateOnly dateOnly in removedIllegalDates)
 			{
                 var currentScheduleDay = _matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
-                _resourceCalculateDelayer.CalculateIfNeeded(dateOnly, currentScheduleDay.ProjectionService().CreateProjection().Period());
+                _resourceCalculateDelayer.CalculateIfNeeded(dateOnly, currentScheduleDay.ProjectionService().CreateProjection().Period(), false);
 			}
 
 			return removedIllegalDates;

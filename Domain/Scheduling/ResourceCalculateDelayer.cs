@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_considerShortBreaks = considerShortBreaks;
 		}
 
-		public bool CalculateIfNeeded(DateOnly scheduleDateOnly, DateTimePeriod? workShiftProjectionPeriod, bool doIntraIntervalCalculation = false)
+		public bool CalculateIfNeeded(DateOnly scheduleDateOnly, DateTimePeriod? workShiftProjectionPeriod, bool doIntraIntervalCalculation)
 		{
 			if (_paused)
 				return false;

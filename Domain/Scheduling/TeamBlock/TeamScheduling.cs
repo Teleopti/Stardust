@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			    schedulePartModifyAndRollbackService);
 		    onDayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
 		    resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
-			    shiftProjectionCache.WorkShiftProjectionPeriod);
+			    shiftProjectionCache.WorkShiftProjectionPeriod, false);
 	    }
 
 	    private void onDayScheduled(SchedulingServiceBaseEventArgs args)

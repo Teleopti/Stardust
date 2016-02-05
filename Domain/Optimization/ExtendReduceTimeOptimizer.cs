@@ -122,13 +122,13 @@ namespace Teleopti.Ccc.Domain.Optimization
             IList<DateOnly> daysToRecalculate = _decider.DecideDates(scheduleDayAfter, scheduleDayBefore);
             foreach (var dateToRecalculate in daysToRecalculate)
             {
-                _resourceCalculateDelayer.CalculateIfNeeded(dateToRecalculate, null);
+                _resourceCalculateDelayer.CalculateIfNeeded(dateToRecalculate, null, false);
             }
 
             matrix.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
             if (!tryScheduleDay(dateOnly, schedulingOptions, lenghtHint))
             {
-                _resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
+                _resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);
                 return false;
             }
 
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             foreach (var date in days)
             {
-                _resourceCalculateDelayer.CalculateIfNeeded(date, null);
+                _resourceCalculateDelayer.CalculateIfNeeded(date, null, false);
             }
         }
 

@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					return true;
 
                 _rollbackService.Rollback();
-                _resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
+                _resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);
             }
 
             var scheduleDayAfter = _scheduleMatrixPro.GetScheduleDayByKey(dateOnly.AddDays(1));
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 if (!result)
                 {
 					_rollbackService.Rollback();
-                    _resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
+                    _resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null,false);
                 }    
             }
 
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			scheduleDay.DeleteMainShift(scheduleDay);
 			_rollbackService.Modify(scheduleDay);
 			var dateOnly = scheduleDay.DateOnlyAsPeriod.DateOnly;
-			_resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
+			_resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);
 			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay, schedulingOptions);
 			bool result = _scheduleService.SchedulePersonOnDay(scheduleDay.ReFetch(), schedulingOptions, effectiveRestriction, _resourceCalculateDelayer, _rollbackService);
 

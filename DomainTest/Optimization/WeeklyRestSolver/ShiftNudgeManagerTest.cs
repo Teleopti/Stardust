@@ -157,8 +157,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false).Repeat.Once();
 			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false).Repeat.Once();
 
-			_resourceCalculateDelayer.Stub(x => x.CalculateIfNeeded(new DateOnly(2014, 3, 29), null)).Return(true);
-			_resourceCalculateDelayer.Stub(x => x.CalculateIfNeeded(new DateOnly(2014, 3, 30), null)).Return(true);
+			_resourceCalculateDelayer.Stub(x => x.CalculateIfNeeded(new DateOnly(2014, 3, 29), null, false)).Return(true);
+			_resourceCalculateDelayer.Stub(x => x.CalculateIfNeeded(new DateOnly(2014, 3, 30), null, false)).Return(true);
 
 			_teamBlockSteadyStateValidator.Stub(x => x.IsTeamBlockInSteadyState(_leftTeamBlockInfo, _schedulingOptions))
 				.Return(true);
@@ -241,8 +241,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_teamBlockOptimizationLimits.Stub(
 				x => x.Validate(_rightTeamBlockInfo, _optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(false);
 
-			_resourceCalculateDelayer.Stub(x => x.CalculateIfNeeded(new DateOnly(2014, 3, 29), null)).Return(true);
-			_resourceCalculateDelayer.Stub(x => x.CalculateIfNeeded(new DateOnly(2014, 3, 30), null)).Return(true);
+			_resourceCalculateDelayer.Stub(x => x.CalculateIfNeeded(new DateOnly(2014, 3, 29), null, false)).Return(true);
+			_resourceCalculateDelayer.Stub(x => x.CalculateIfNeeded(new DateOnly(2014, 3, 30), null, false)).Return(true);
 
 			_teamBlockSteadyStateValidator.Stub(x => x.IsTeamBlockInSteadyState(_leftTeamBlockInfo, _schedulingOptions))
 				.Return(true);
@@ -312,8 +312,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_teamBlockOptimizationLimits.Stub(x => x.ValidateMinWorkTimePerWeek(_leftTeamBlockInfo)).Return(false);
 			_teamBlockOptimizationLimits.Stub(x => x.ValidateMinWorkTimePerWeek(_rightTeamBlockInfo)).Return(false);
 
-			_resourceCalculateDelayer.Stub(x => x.CalculateIfNeeded(new DateOnly(2014, 3, 29), null)).Return(true);
-			_resourceCalculateDelayer.Stub(x => x.CalculateIfNeeded(new DateOnly(2014, 3, 30), null)).Return(true);
+			_resourceCalculateDelayer.Stub(x => x.CalculateIfNeeded(new DateOnly(2014, 3, 29), null, false)).Return(true);
+			_resourceCalculateDelayer.Stub(x => x.CalculateIfNeeded(new DateOnly(2014, 3, 30), null, false)).Return(true);
 
 			_teamBlockSteadyStateValidator.Stub(x => x.IsTeamBlockInSteadyState(_leftTeamBlockInfo, _schedulingOptions))
 				.Return(true);

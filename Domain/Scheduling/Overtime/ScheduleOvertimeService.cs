@@ -60,16 +60,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 			_schedulePartModifyAndRollbackService.ClearModificationCollection();
 			_schedulePartModifyAndRollbackService.ModifyStrictly(scheduleDay, scheduleTagSetter, rules);
-			resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
-			resourceCalculateDelayer.CalculateIfNeeded(dateOnly.AddDays(1), null);
+			resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);
+			resourceCalculateDelayer.CalculateIfNeeded(dateOnly.AddDays(1), null, false);
 
 			var newRmsValue = calculatePeriodValue(dateOnly, overtimePreferences.SkillActivity, person, timeZoneInfo);
 			
 			if (!(newRmsValue > oldRmsValue)) return true;
 
 			_schedulePartModifyAndRollbackService.Rollback();
-			resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
-			resourceCalculateDelayer.CalculateIfNeeded(dateOnly.AddDays(1), null);
+			resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);
+			resourceCalculateDelayer.CalculateIfNeeded(dateOnly.AddDays(1), null, false);
 			return false;
 		}
 

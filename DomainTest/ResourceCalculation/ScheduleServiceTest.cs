@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(() => _rollbackService.Modify(_part));
             Expect.Call(projCashe.WorkShiftProjectionPeriod).Return(period);
             Expect.Call(_restrictionCreator.GetEffectiveRestriction(null, _options)).IgnoreArguments().Return(_effectiveRestriction);
-        	Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(2011, 04, 18), period)).IgnoreArguments().Return(false);
+        	Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(2011, 04, 18), period, false)).IgnoreArguments().Return(false);
 			
 
             _mocks.ReplayAll();
@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(() =>_part.AddMainShift(mainShift));
 			Expect.Call(() => _rollbackService.Modify(_part));
             Expect.Call(projCashe.WorkShiftProjectionPeriod).Return(period);
-			Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(2011, 04, 18), period)).IgnoreArguments().Return(false);
+			Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(2011, 04, 18), period, false)).IgnoreArguments().Return(false);
 
             _mocks.ReplayAll();
 			Assert.That(_target.SchedulePersonOnDay(_part, _options, _effectiveRestriction, _resourceCalculateDelayer, _rollbackService), Is.True);

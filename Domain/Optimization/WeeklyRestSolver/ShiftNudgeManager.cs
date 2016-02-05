@@ -198,14 +198,14 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 			foreach (var date in leftTeamBlock.BlockInfo.BlockPeriod.DayCollection())
 			{
-				resourceCalculateDelayer.CalculateIfNeeded(date, null);
+				resourceCalculateDelayer.CalculateIfNeeded(date, null, false);
 			}
 
 			if(!firstRightNudge)
 			{
 				foreach (var date in rightTeamBlock.BlockInfo.BlockPeriod.DayCollection())
 				{
-					resourceCalculateDelayer.CalculateIfNeeded(date, null);
+					resourceCalculateDelayer.CalculateIfNeeded(date, null, false);
 				}
 			}
 
@@ -256,7 +256,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			}
 			foreach (var dateOnly in dateList)
 			{
-				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
+				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);
 			}
 		}
 

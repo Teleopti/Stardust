@@ -293,8 +293,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_decider.DecideDates(null, null)).IgnoreArguments()
                 .Return(new List<DateOnly> { new DateOnly(2011, 1, 1) }).Repeat.Any();
             Expect.Call(_schedulingOptions.WorkShiftLengthHintOption).PropertyBehavior().Return(WorkShiftLengthHintOption.Long).Repeat.Any();
-            Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(2011, 1, 1), null)).Return(true).Repeat.Any();
-            Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(2011, 1, 2), null)).Return(true).Repeat.Any();
+            Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(2011, 1, 1), null, false)).Return(true).Repeat.Any();
+            Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(2011, 1, 2), null, false)).Return(true).Repeat.Any();
             Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod(2011, 1, 1, 2011, 1, 1))).Repeat.AtLeastOnce();
             Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod(2011, 1, 2, 2011, 1, 2))).Repeat.AtLeastOnce();
             Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay1, _schedulingOptions)).IgnoreArguments()

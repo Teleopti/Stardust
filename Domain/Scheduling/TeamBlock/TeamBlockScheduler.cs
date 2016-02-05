@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 					foreach (var selectedBlockDay in selectedBlockDays)
 					{
-						resourceCalculateDelayer.CalculateIfNeeded(selectedBlockDay, null);
+						resourceCalculateDelayer.CalculateIfNeeded(selectedBlockDay, null, false);
 					}		
 				}
 		
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 					foreach (var selectedBlockDay in selectedBlockDays)
 					{
-						resourceCalculateDelayer.CalculateIfNeeded(selectedBlockDay, null);
+						resourceCalculateDelayer.CalculateIfNeeded(selectedBlockDay, null, false);
 					}	
 				}
 			}

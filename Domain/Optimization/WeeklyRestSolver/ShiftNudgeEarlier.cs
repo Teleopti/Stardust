@@ -102,9 +102,9 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 				var blockPeriod = teamBlockInfo.BlockInfo.BlockPeriod;
 				foreach (var dateOnly in blockPeriod.DayCollection())
 				{
-					resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
+					resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);
 				}
-				resourceCalculateDelayer.CalculateIfNeeded(blockPeriod.EndDate.AddDays(1), null);
+				resourceCalculateDelayer.CalculateIfNeeded(blockPeriod.EndDate.AddDays(1), null, false);
 			}
 			rollbackService.ClearModificationCollection();
 

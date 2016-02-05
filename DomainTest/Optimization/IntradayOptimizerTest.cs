@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 
                 Expect.Call(() =>_rollbackService.ClearModificationCollection());
                 Expect.Call(() =>_rollbackService.Rollback());
-                Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_removedDate, null)).IgnoreArguments().Return(true);
+                Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_removedDate, null, false)).IgnoreArguments().Return(true);
 				Expect.Call(_deleteAndResourceCalculateService.DeleteWithoutResourceCalculationOnNextDay(new List<IScheduleDay>(), _rollbackService, true, false)).IgnoreArguments();
                 Expect.Call(() =>_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_removedDate, _removedDate)));
 	            Expect.Call(_removedSchedulePart.PersonAssignment()).Return(_personAssignment);

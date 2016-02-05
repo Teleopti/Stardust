@@ -5,7 +5,7 @@
 	/// </summary>
 	public interface IResourceCalculateDelayer
 	{
-		bool CalculateIfNeeded(DateOnly scheduleDateOnly, DateTimePeriod? workShiftProjectionPeriod, bool doIntraIntervalCalculation = false);
+		bool CalculateIfNeeded(DateOnly scheduleDateOnly, DateTimePeriod? workShiftProjectionPeriod, bool doIntraIntervalCalculation);
 		void Pause();
 		void Resume();
 	}

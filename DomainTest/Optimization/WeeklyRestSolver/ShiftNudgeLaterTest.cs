@@ -119,8 +119,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				Expect.Call(() => _rollbackService.Rollback());
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
 				Expect.Call(_blockInfo.BlockPeriod).Return(new DateOnlyPeriod(_personAssignment.Date, _personAssignment.Date));
-				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_personAssignment.Date, null)).Return(true);
-				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_personAssignment.Date.AddDays(1), null)).Return(true);
+				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_personAssignment.Date, null, false)).Return(true);
+				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_personAssignment.Date.AddDays(1), null, false)).Return(true);
 			}
 
 			using (_mocks.Playback())

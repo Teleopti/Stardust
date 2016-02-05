@@ -31,8 +31,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			using(_mocks.Playback())
 			{
-                Assert.IsFalse(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod()));
-				Assert.IsFalse(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod()));
+                Assert.IsFalse(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod(), false));
+				Assert.IsFalse(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod(), false));
 			}
 		}
 
@@ -48,8 +48,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			using (_mocks.Playback())
 			{
-                Assert.IsFalse(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod()));
-                Assert.IsTrue(_target.CalculateIfNeeded(new DateOnly().AddDays(7), new DateTimePeriod()));
+                Assert.IsFalse(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod(), false));
+                Assert.IsTrue(_target.CalculateIfNeeded(new DateOnly().AddDays(7), new DateTimePeriod(), false));
 			}
 		}
 
@@ -65,8 +65,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			using (_mocks.Playback())
 			{
-                Assert.IsFalse(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod()));
-                Assert.IsTrue(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod()));
+                Assert.IsFalse(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod(), false));
+                Assert.IsTrue(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod(), false));
 			}
 		}
 
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			using (_mocks.Playback())
 			{
-                Assert.IsTrue(_target.CalculateIfNeeded(new DateOnly(), dp));
+                Assert.IsTrue(_target.CalculateIfNeeded(new DateOnly(), dp, false));
 			}
 		}
 
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			using (_mocks.Playback())
 			{
-                Assert.IsTrue(_target.CalculateIfNeeded(new DateOnly(), dp));
+                Assert.IsTrue(_target.CalculateIfNeeded(new DateOnly(), dp, false));
 			}
 		}
 	}

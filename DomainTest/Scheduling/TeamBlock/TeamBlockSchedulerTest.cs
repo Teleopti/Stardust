@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(() => _singleDayScheduler.DayScheduled -= null).IgnoreArguments();
 
 				Expect.Call(()=>_schedulePartModifyAndRollbackService.Rollback());
-				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null)).Return(true);
+				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null, false)).Return(true);
 			}
 			using (_mocks.Playback())
 			{
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(() => _singleDayScheduler.DayScheduled -= null).IgnoreArguments();
 
 				Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
-				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null)).Return(true);
+				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null, false)).Return(true);
 
 			}
 
