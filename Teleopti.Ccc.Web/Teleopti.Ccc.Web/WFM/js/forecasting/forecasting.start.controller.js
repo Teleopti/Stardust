@@ -6,6 +6,7 @@
 			'$scope', '$state', 'forecastingService', '$filter', '$interval', '$stateParams', '$translate',
 			function ($scope, $state, forecastingService, $filter, $interval, $stateParams, $translate) {
 				$scope.isForecastRunning = false;
+				$scope.infos = {};
 				function updateRunningStatus() {
 					forecastingService.status.get().$promise.then(function (result) {
 						$scope.isForecastRunning = result.IsRunning;
@@ -160,6 +161,11 @@
 					$scope.modalModifyInfo.selectedDayCount = $scope.modifyDays.length;
 					$scope.modalModifyInfo.selectedDaySpan = selectedDaySpanString();
  					$scope.sumOfCallsForSelectedDaysWithCampaign = calculateCampaignCalls();
+					$scope.infos.overrideTasks = false;
+					$scope.infos.addCampaign = false;
+					$scope.infos.activeTaskInput = false;
+					$scope.infos.activeTalkInput = false;
+					$scope.infos.activeAcwInput = false;
 				};
 
 				var buildSelectedDaysText = function() {
@@ -383,7 +389,7 @@
 						}
 					);
 				};
-				
+
 				$scope.$on('$destroy', function () {
 					if (c3.restoreFixForForecast)
 						c3.restoreFixForForecast();
