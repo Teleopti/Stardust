@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -7,7 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 {
-	[TestFixture, Category("LongRunning")]
+	[TestFixture]
 	[ReadModelUnitOfWorkTest]
 	public class TeamOutOfAdherenceReadModelPersisterTest
 	{

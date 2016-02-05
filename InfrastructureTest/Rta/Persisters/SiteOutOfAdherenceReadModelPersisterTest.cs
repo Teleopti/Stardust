@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 {
-	[TestFixture, Category("LongRunning")]
+	[TestFixture]
 	[ReadModelUnitOfWorkTest]
 	public class SiteOutOfAdherenceReadModelPersisterTest
 	{

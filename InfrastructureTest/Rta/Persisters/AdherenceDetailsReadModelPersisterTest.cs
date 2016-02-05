@@ -8,7 +8,7 @@ using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 {
-	[TestFixture, Category("LongRunning")]
+	[TestFixture]
 	[ReadModelUnitOfWorkTest]
 	public class AdherenceDetailsReadModelPersisterTest
 	{
