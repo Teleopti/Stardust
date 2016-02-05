@@ -17,6 +17,9 @@ BEGIN
         queue_Description	[Description]                                        
 	FROM mart.dim_queue 
 	WHERE queue_id > -1
+	AND queue_original_id NOT IN (SELECT queue_original_id FROM mart.dim_queue_excluded excl 
+						WHERE	excl.queue_original_id	= dq.queue_original_id
+						AND		excl.datasource_id		= dq.datasource_id)
 END
 GO
 
