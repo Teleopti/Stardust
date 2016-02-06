@@ -57,12 +57,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					var scheduleDay =
 						_personScheduleProvider.GetScheduleForPersons(inputData.ShiftTradeDate, new[] {person}).SingleOrDefault();
 					var shiftExchangeOfferId = req.ShiftExchangeOfferId;
-					return new ShiftTradeAddPersonScheduleViewModel(_projectionProvider.MakeScheduleReadModel(person, scheduleDay, true))
+					return _projectionProvider.IsFullDayAbsence(scheduleDay)||_projectionProvider.IsOvertimeOnDayOff(scheduleDay)? null:new ShiftTradeAddPersonScheduleViewModel(_projectionProvider.MakeScheduleReadModel(person, scheduleDay, true))
 						{
 							ShiftExchangeOfferId = new Guid(shiftExchangeOfferId)
 						};
 
-				}).Where(vm => vm != null && !vm.IsFullDayAbsence);
+				}).Where(vm => vm != null);
 			pageCount = (int)Math.Ceiling((double)possibleExchangedSchedules.Count()/inputData.Paging.Take);
 
 			return possibleExchangedSchedules.OrderBy(vm => vm.StartTimeUtc).Skip(inputData.Paging.Skip).Take(inputData.Paging.Take).ToList();

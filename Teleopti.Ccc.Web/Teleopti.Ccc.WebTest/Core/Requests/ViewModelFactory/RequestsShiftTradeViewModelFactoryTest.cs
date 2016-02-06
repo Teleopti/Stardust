@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Autofac.Core;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
