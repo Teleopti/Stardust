@@ -498,13 +498,13 @@ Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel = function(chooseHistory, canv
 			var scheduleStartTime;
 			var scheduleEndTime;
 
-			if (mySchedule.isDayOff && !selectedSchedule.isDayOff) {
+			if (mySchedule.isDayOff && !selectedSchedule.isDayOff && selectedSchedule.layers != null && selectedSchedule.layers.length > 0) {
 				scheduleStartTime = selectedSchedule.scheduleStartTime();
 				scheduleEndTime = selectedSchedule.scheduleEndTime();
-			} else if (!mySchedule.isDayOff && selectedSchedule.isDayOff) {
+			} else if (!mySchedule.isDayOff && mySchedule.layers != null && mySchedule.layers.length > 0 && selectedSchedule.isDayOff) {
 				scheduleStartTime = mySchedule.scheduleStartTime();
 				scheduleEndTime = mySchedule.scheduleEndTime();
-			} else if (mySchedule.isDayOff && selectedSchedule.isDayOff) {
+			} else if ((mySchedule.isDayOff || mySchedule.layers == null || mySchedule.layers.length == 0) && (selectedSchedule.isDayOff || selectedSchedule.layers == null || selectedSchedule.layers.length == 0)) {
 				return allHours;
 			} else {
 				var myScheduleFormatedStartTime = mySchedule.scheduleStartTime() != undefined ? mySchedule.scheduleStartTime().format('MMMM Do YYYY, h:mm') : null;
