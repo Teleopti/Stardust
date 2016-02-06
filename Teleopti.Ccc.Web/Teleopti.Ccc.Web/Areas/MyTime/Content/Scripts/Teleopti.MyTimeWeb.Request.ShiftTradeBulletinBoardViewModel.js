@@ -48,6 +48,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function (ajax) {
 	self.preloadTimeFilterFinished = true;
 	self.isAnonymousTrading = ko.observable(false);
 	self.Toggle31638Enabled = ko.observable(false);
+	self.Toggle36662Enabled = ko.observable(Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeBoardNoReadModel_36662'));
 
 	self.isDetailVisible = ko.computed(function () {
 		if (self.agentChoosed() === null) {
