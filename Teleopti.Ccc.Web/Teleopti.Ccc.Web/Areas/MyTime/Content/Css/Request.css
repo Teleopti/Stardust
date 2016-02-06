@@ -177,6 +177,7 @@
 	height: 20px;
 	top: 5px;
 	position: absolute;
+	z-index: 2;
 }
 
 .shift-trade-layer.edit {
@@ -443,6 +444,7 @@
 
 .shift-trade-dayoff .dayoff{
 	height: 20px;
+	z-index: 1;
 }
 
 .choose-history-divider {

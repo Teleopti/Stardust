@@ -184,9 +184,26 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			{
 				case SchedulePartView.ContractDayOff:
 				case SchedulePartView.DayOff:
-					return projection.HasLayers;
+					return projection.HasLayers && projection.All(l => l.Payload is IAbsence);
 				case SchedulePartView.FullDayAbsence:
 					return true;
+			}
+			return false;
+		}
+
+		public bool IsOvertimeOnDayOff(IScheduleDay scheduleDay)
+		{
+			if (scheduleDay == null)
+			{
+				return false;
+			}
+
+			var projection = _projectionProvider.Projection(scheduleDay);
+			var significantPart = scheduleDay.SignificantPart();
+			switch (significantPart)
+			{
+				case SchedulePartView.DayOff:
+					return projection.HasLayers && projection.All(layer => layer.DefinitionSet != null && layer.DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime);
 			}
 			return false;
 		}
@@ -197,5 +214,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		GroupScheduleShiftViewModel Projection(IScheduleDay scheduleDay, bool canViewConfidential);
 		AgentInTeamScheduleViewModel MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay, bool isPermittedToViewConfidential);
 		bool IsFullDayAbsence(IScheduleDay scheduleDay);
+		bool IsOvertimeOnDayOff(IScheduleDay scheduleDay);
 	}
 }
