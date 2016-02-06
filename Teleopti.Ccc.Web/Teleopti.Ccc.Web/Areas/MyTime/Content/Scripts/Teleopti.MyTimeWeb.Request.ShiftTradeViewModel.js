@@ -49,6 +49,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	self.isDayoffFiltered = ko.observable(false);
 	self.searchNameText = ko.observable();
 	self.refocusToNameSearch = null;
+	self.isShiftTradeScheduleNoReadModelEnabled = ko.observable(false);
 
 	self.isDetailVisible = ko.computed(function () {
 		if (self.agentChoosed() === null) {
@@ -857,6 +858,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		self.isFilterByTimeEnabled(filterByTimeEnabled);
 
 		self.isTeamScheduleSortingFeatureEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_SortSchedule_32092"));
+		self.isShiftTradeScheduleNoReadModelEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211"));
 	};
 
 	self.setTimeFilters = function (hourTexts) {

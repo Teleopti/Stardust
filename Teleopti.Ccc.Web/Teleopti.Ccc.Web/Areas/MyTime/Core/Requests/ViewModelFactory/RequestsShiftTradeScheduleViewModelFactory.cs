@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NPOI.SS.Formula.Functions;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		{
 			var ret = new ShiftTradeScheduleViewModel();
 			ret.MySchedule = _personScheduleViewModelMapper.MakeMyScheduleViewModel(inputData);
-			if (ret.MySchedule.IsFullDayAbsence)
+			if (ret.MySchedule.IsFullDayAbsence || ret.MySchedule.IsDayOff && ret.MySchedule.ScheduleLayers.Any()&&ret.MySchedule.ScheduleLayers.All(l=>l.IsOvertime))
 			{
 				ret.PossibleTradeSchedules = new List<ShiftTradeAddPersonScheduleViewModel>();
 				ret.PageCount = 0;
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 
 				var possiblePersonSchedules = possibleTradedPersonList.Select(
 					p => new Tuple<IPerson, IScheduleDay>(p, possibleTradeSchedules.SingleOrDefault(s => s.Person.Id == p.Id)))
-					.Where(ps => !_projectionProvider.IsFullDayAbsence(ps.Item2));
+					.Where(ps => !_projectionProvider.IsFullDayAbsence(ps.Item2) && !_projectionProvider.IsOvertimeOnDayOff(ps.Item2));
 
 				var allSortedPossibleSchedules = possiblePersonSchedules
 					.OrderBy(pair => TeamScheduleSortingUtil.GetSortedValue(pair.Item2, false, true))

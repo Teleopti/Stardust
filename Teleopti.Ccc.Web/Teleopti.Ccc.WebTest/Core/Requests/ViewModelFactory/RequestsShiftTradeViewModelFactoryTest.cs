@@ -769,7 +769,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			});
 
 			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(0);
-			result.MySchedule.IsFullDayAbsence.Should().Be.True();
+			result.MySchedule.IsFullDayAbsence.Should().Be.False();
+			result.MySchedule.ScheduleLayers.First().IsOvertime.Should().Be.True();
 			result.MySchedule.IsDayOff.Should().Be.True();
 		}
 	}

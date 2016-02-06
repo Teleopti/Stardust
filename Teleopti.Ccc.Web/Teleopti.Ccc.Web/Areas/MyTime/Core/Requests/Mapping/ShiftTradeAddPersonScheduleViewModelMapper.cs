@@ -64,6 +64,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				{
 					ret.IsDayOff = true;
 					ret.DayOffName = shiftReadModel.DayOff.Title;
+					if (scheduleReadModel.Start != null)
+						ret.StartTimeUtc = scheduleReadModel.Start.Value;
 				}
 				else if (((shiftReadModel.DayOff != null) && shiftReadModel.Shift != null && !shiftReadModel.Shift.IsFullDayAbsence))
 				{
