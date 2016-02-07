@@ -698,6 +698,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 				toolStripMenuItemFindMatching2.Visible = TestMode.Micke;
 				Refresh();
 				drawSkillGrid();
+				if (TestMode.Micke)
+				{
+					var skillGridMenuItem = new ToolStripMenuItem("Agent Skill Analyzer...");
+					skillGridMenuItem.Click += skillGridMenuItemAgentSkillAnalyser_Click;
+					_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
+				}
 			}
 			if (e.KeyCode == Keys.I && e.Shift && e.Alt)
 			{
