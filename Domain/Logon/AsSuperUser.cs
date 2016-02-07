@@ -15,14 +15,14 @@ namespace Teleopti.Ccc.Domain.Logon
 		private readonly ILogOnOff _logOnOff;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly ClaimSetForApplicationRole _claimSetForApplicationRole;
-		private readonly IDataSourceForTenant _dataSourceForTenant;
+		private readonly Lazy<IDataSourceForTenant> _dataSourceForTenant;
 		private readonly claimCache _claimCache;
 
 		public AsSuperUser(
 			ILogOnOff logOnOff,
 			IRepositoryFactory repositoryFactory,
 			ClaimSetForApplicationRole claimSetForApplicationRole,
-			IDataSourceForTenant dataSourceForTenant,
+			Lazy<IDataSourceForTenant> dataSourceForTenant,
 			ITime time
 			)
 		{
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Logon
 
 		public void Logon(string tenant, Guid businessUnitId)
 		{
-			Logon(_dataSourceForTenant.Tenant(tenant), businessUnitId);
+			Logon(_dataSourceForTenant.Value.Tenant(tenant), businessUnitId);
 		}
 		
 		public void Logon(IDataSource dataSource, Guid businessUnitId)
