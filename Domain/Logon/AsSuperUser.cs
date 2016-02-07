@@ -9,24 +9,24 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Domain.Infrastructure
+namespace Teleopti.Ccc.Domain.Logon
 {
 	public class AsSuperUser
 	{
 		private readonly ILogOnOff _logOnOff;
 		private readonly IRepositoryFactory _repositoryFactory;
-		private readonly IRoleToClaimSetTransformer _roleToClaimSetTransformer;
+		private readonly ClaimSetForApplicationRole _claimSetForApplicationRole;
 		private readonly claimCache _claimCache;
 
 		public AsSuperUser(
 			ILogOnOff logOnOff,
 			IRepositoryFactory repositoryFactory,
-			IRoleToClaimSetTransformer roleToClaimSetTransformer
+			ClaimSetForApplicationRole claimSetForApplicationRole
 			)
 		{
 			_logOnOff = logOnOff;
 			_repositoryFactory = repositoryFactory;
-			_roleToClaimSetTransformer = roleToClaimSetTransformer;
+			_claimSetForApplicationRole = claimSetForApplicationRole;
 			_claimCache = new claimCache();
 		}
 
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Infrastructure
 				var cachedClaim = _claimCache.Get(unitOfWorkFactory.Name, applicationRole.Id.GetValueOrDefault());
 				if (cachedClaim == null)
 				{
-					cachedClaim = _roleToClaimSetTransformer.Transform(applicationRole, unitOfWorkFactory);
+					cachedClaim = _claimSetForApplicationRole.Transform(applicationRole, unitOfWorkFactory.Name);
 					_claimCache.Add(cachedClaim, unitOfWorkFactory.Name, applicationRole.Id.GetValueOrDefault());
 				}
 				TeleoptiPrincipal.CurrentPrincipal.AddClaimSet(cachedClaim);

@@ -7,7 +7,8 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public class ApplicationData : IApplicationData
 	{
-		public ApplicationData(IDictionary<string, string> appSettings,
+		public ApplicationData(
+			IDictionary<string, string> appSettings,
 			IMessageBrokerComposite messageBroker,
 			ILoadPasswordPolicyService loadPasswordPolicyService)
 		{

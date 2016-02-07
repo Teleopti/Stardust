@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 {
     public interface ILicensedFunctionsProvider
     {
-        IEnumerable<IApplicationFunction> LicensedFunctions(string dataSourceName);
+        IEnumerable<IApplicationFunction> LicensedFunctions(string tenantName);
     }
 
     public class LicensedFunctionsProvider : ILicensedFunctionsProvider
@@ -22,16 +22,16 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             _definedRaptorApplicationFunctionFactory = definedRaptorApplicationFunctionFactory;
         }
 
-        public IEnumerable<IApplicationFunction> LicensedFunctions(string dataSourceName)
+        public IEnumerable<IApplicationFunction> LicensedFunctions(string tenantName)
         {
-	        return _licensedFunctions.GetOrAdd(dataSourceName, e=>fetchLicensedFunctions(dataSourceName));
+	        return _licensedFunctions.GetOrAdd(tenantName, e => fetchLicensedFunctions(tenantName));
         }
 
-		private IEnumerable<IApplicationFunction> fetchLicensedFunctions(string dataSource)
+		private IEnumerable<IApplicationFunction> fetchLicensedFunctions(string tenantName)
     	{
 			var applicationFunctions = _definedRaptorApplicationFunctionFactory.ApplicationFunctionList.ToList();
 			var licensedFunctions = new HashSet<IApplicationFunction>();
-			foreach (var enabledLicenseOption in LicenseSchema.GetActiveLicenseSchema(dataSource).EnabledLicenseOptions)
+			foreach (var enabledLicenseOption in LicenseSchema.GetActiveLicenseSchema(tenantName).EnabledLicenseOptions)
 			{
 				enabledLicenseOption.EnableApplicationFunctions(applicationFunctions);
 				//Don't change this foreach to linq, please!

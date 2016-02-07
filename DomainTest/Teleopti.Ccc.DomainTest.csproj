@@ -1357,7 +1357,6 @@
     <Compile Include="Security\LicenseOptions\TeleoptiWfmSeatPlannerLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiWfmVNextPilotLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseTest.cs" />
-    <Compile Include="Security\Matrix\ApplicationFunctionResolverTest.cs" />
     <Compile Include="Security\Matrix\MatrixPermissionsResolverTest.cs" />
     <Compile Include="Security\Matrix\MatrixReportsSynchronizerTest.cs" />
     <Compile Include="Security\Matrix\MatrixReportsSynchronizerTestClass.cs" />
@@ -1374,13 +1373,11 @@
     <Compile Include="Security\Principal\AuthorizeMyOwnTest.cs" />
     <Compile Include="Security\Principal\AuthorizeMySiteTest.cs" />
     <Compile Include="Security\Principal\AuthorizeMyTeamTest.cs" />
-    <Compile Include="Security\Principal\FunctionsForRoleProviderTest.cs" />
     <Compile Include="Security\Principal\LicensedFunctionsProviderTest.cs" />
     <Compile Include="Security\Principal\ModuleSpecificationTest.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Security\Principal\PrincipalAuthorizationTest.cs" />
-    <Compile Include="Security\Principal\RoleToClaimSetTransformerTest.cs" />
     <Compile Include="Security\Principal\TeleoptiPrincipalTest.cs" />
     <Compile Include="Security\Principal\UnsafePersonProviderTest.cs" />
     <Compile Include="Security\RaptorApplicationFunctionsSynchronizerTest.cs">

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -15,21 +16,21 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
 
 	public class ApplicationFunctionResolver : IApplicationFunctionResolver
 	{
-		private readonly IFunctionsForRoleProvider _functionsForRoleProvider;
+		private readonly ApplicationFunctionsForRole _applicationFunctionsForRole;
 		private readonly ISpecification<IApplicationFunction> _matrixFunctionSpecification =
 			 new ExternalApplicationFunctionSpecification(DefinedForeignSourceNames.SourceMatrix);
 		private readonly IList<IApplicationFunction> _matrixFunctionsForThisInstance = new List<IApplicationFunction>();
 
-		public ApplicationFunctionResolver(IFunctionsForRoleProvider functionsForRoleProvider)
+		public ApplicationFunctionResolver(ApplicationFunctionsForRole applicationFunctionsForRole)
 		{
-			_functionsForRoleProvider = functionsForRoleProvider;
+			_applicationFunctionsForRole = applicationFunctionsForRole;
 		}
 
 		public HashSet<MatrixPermissionHolder> ResolveApplicationFunction(HashSet<MatrixPermissionHolder> list, IApplicationRole applicationRole, IUnitOfWorkFactory unitOfWorkFactory)
 		{
 			var result = new HashSet<MatrixPermissionHolder>();
 
-			var availableFunctions = _functionsForRoleProvider.AvailableFunctions(applicationRole, unitOfWorkFactory);
+			var availableFunctions = _applicationFunctionsForRole.AvailableFunctions(applicationRole, unitOfWorkFactory.Name);
 			var matrixFunctionsForCurrentRole = availableFunctions.FilterBySpecification(_matrixFunctionSpecification).ToList();
 			foreach (var applicationFunction in matrixFunctionsForCurrentRole)
 			{

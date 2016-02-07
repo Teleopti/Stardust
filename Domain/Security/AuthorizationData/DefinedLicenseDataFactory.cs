@@ -7,10 +7,6 @@ using Teleopti.Ccc.Domain.Security.LicenseOptions;
 
 namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 {
-
-    /// <summary>
-    /// Represents the default license schema of Raptor and makes the licence data available.
-    /// </summary>
     public static class DefinedLicenseDataFactory
     {
         private static readonly ConcurrentDictionary<string, ILicenseActivator> _licenseActivators = new ConcurrentDictionary<string, ILicenseActivator>();
@@ -44,13 +40,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
             get { return _licenseActivators.Values.Any(a => a != null); }
         }
 
-        #region Interface
-
-        /// <summary>
-        /// Creates the active license schema.
-        /// </summary>
-        /// <param name="dataSource"></param>
-        /// <returns></returns>
         public static LicenseSchema CreateActiveLicenseSchema(string dataSource)
         {
             var activeLicenseSchema = new LicenseSchema();
@@ -58,10 +47,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
             return activeLicenseSchema;
         }
 
-        /// <summary>
-        /// Creates the defined license options.
-        /// </summary>
-        /// <returns></returns>
         public static ReadOnlyCollection<LicenseOption> CreateDefinedLicenseOptions()
         {
             IList<LicenseOption> licenseOptions = new List<LicenseOption>();
@@ -105,8 +90,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
             licenseOptions.Add(new AllLicenseOption());
             return new ReadOnlyCollection<LicenseOption>(licenseOptions);
         }
-
-        #endregion
 
     }
 }

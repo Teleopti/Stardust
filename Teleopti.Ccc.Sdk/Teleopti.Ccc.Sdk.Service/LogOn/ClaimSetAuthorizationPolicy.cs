@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IdentityModel.Claims;
 using System.IdentityModel.Policy;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -67,16 +68,18 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
                             var roleRepository = new ApplicationRoleRepository(unitOfWork);
                             var applicationRole = roleRepository.Get(applicationRoleId);
 
-	                        var licensedFunctionsProvider =
-		                        new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory());
+	                        var licensedFunctionsProvider = new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory());
 							if (!hasValidLicense(licensedFunctionsProvider,unitOfWorkFactory.Name)) return true;
 
 	                        var roleToClaimSetTransformer =
-		                        new RoleToClaimSetTransformer(new FunctionsForRoleProvider(licensedFunctionsProvider,
-		                                                                                   new ExternalFunctionsProvider(
-			                                                                                   new RepositoryFactory())));
+		                        new ClaimSetForApplicationRole(
+			                        new ApplicationFunctionsForRole(
+				                        licensedFunctionsProvider,
+					                        new ApplicationFunctionRepository(new ThisUnitOfWork(unitOfWork))
+				                        )
+			                        );
 
-                            claimSet = roleToClaimSetTransformer.Transform(applicationRole, unitOfWorkFactory);
+                            claimSet = roleToClaimSetTransformer.Transform(applicationRole, unitOfWorkFactory.Name);
                             _claimCache.Add(claimSet, applicationRoleId);
                         }
 

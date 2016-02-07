@@ -1,11 +1,7 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Matrix;
-using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -38,27 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Matrix
 			_target = new MatrixPermissionsResolverTestClass(new List<IPersonRoleResolver> { _personRoleResolver1, _personRoleResolver2 });
 
 		}
-
-		[Test]
-		public void VerifyConstructor1()
-		{
-			var personProvider = MockRepository.GenerateMock<IPersonRepository>();
-			var siteRep = MockRepository.GenerateMock<ISiteRepository>();
-
-			personProvider.Stub(x => x.FindAllWithRolesSortByName()).Return(new List<IPerson> { _person1, _person2 });
-			siteRep.Stub(x => x.LoadAll()).Return(new List<ISite>());
-
-			var target = new MatrixPermissionsResolver(personProvider,
-																 new FunctionsForRoleProvider(
-																	 new LicensedFunctionsProvider(
-																			 new DefinedRaptorApplicationFunctionFactory
-																				 ()),
-																	 new ExternalFunctionsProvider(
-																			 new RepositoryFactory())), siteRep);
-			Assert.IsNotNull(target);
-
-		}
-
+		
 		[Test]
 		public void VerifyResolve()
 		{

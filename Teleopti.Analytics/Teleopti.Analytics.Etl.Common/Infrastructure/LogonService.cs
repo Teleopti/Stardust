@@ -1,5 +1,6 @@
 using log4net;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -37,17 +38,18 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 			LicenseProvider.ProvideLicenseActivator(unitOfWorkFactory.Name, licenseService);
 
-			var roleToPrincipalCommand =
-				new RoleToPrincipalCommand(
-					new RoleToClaimSetTransformer(
-						new FunctionsForRoleProvider(
-							new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory()),
-							new ExternalFunctionsProvider(new RepositoryFactory())
-							)
-						)
-					);
 			using (var uow = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
+				var roleToPrincipalCommand =
+					new RoleToPrincipalCommand(
+						new ClaimSetForApplicationRole(
+							new ApplicationFunctionsForRole(
+								new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory()),
+								new ApplicationFunctionRepository(new ThisUnitOfWork(uow))
+								)
+							)
+						);
+					
 				roleToPrincipalCommand.Execute(TeleoptiPrincipal.CurrentPrincipal, unitOfWorkFactory, new PersonRepository(new ThisUnitOfWork(uow)));
 			}
 			return true;

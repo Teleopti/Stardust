@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Infrastructure.Foundation
+namespace Teleopti.Ccc.Domain.Logon
 {
     public interface IRoleToPrincipalCommand
     {

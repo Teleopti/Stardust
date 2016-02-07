@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Web.UI;
 using Autofac;
 using Autofac.Integration.Wcf;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Foundation;

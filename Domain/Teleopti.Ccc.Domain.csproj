@@ -641,7 +641,8 @@
     <Compile Include="Helper\DateExtensions.cs" />
     <Compile Include="Helper\IBackgroundWorkerWrapper.cs" />
     <Compile Include="ICurrentApplicationData.cs" />
-    <Compile Include="Infrastructure\AsSuperUser.cs" />
+    <Compile Include="Logon\ApplicationFunctionsForRole.cs" />
+    <Compile Include="Logon\AsSuperUser.cs" />
     <Compile Include="Intraday\IIntradaySkillStatusService.cs" />
     <Compile Include="Intraday\IntradaySkillStatusService.cs" />
     <Compile Include="Intraday\SkillActualTasksProvider.cs" />
@@ -649,6 +650,10 @@
     <Compile Include="Intraday\SkillStatusMeasure.cs" />
     <Compile Include="Intraday\SkillStatusModel.cs" />
     <Compile Include="Intraday\SkillTaskDetails.cs" />
+    <Compile Include="Logon\ICurrentPrincipalContext.cs" />
+    <Compile Include="Logon\IRoleToPrincipalCommand.cs" />
+    <Compile Include="Logon\LogOnOff.cs" />
+    <Compile Include="Logon\RoleToPrincipalCommand.cs" />
     <Compile Include="MessageBroker\IMailboxRepository.cs" />
     <Compile Include="Config\ConfigOverrider.cs" />
     <Compile Include="Config\ConfigReader.cs" />
@@ -1784,7 +1789,6 @@
     <Compile Include="Security\Principal\CurrentTeleoptiPrincipal.cs" />
     <Compile Include="Security\Principal\IAuthorizeAvailableData.cs" />
     <Compile Include="Security\Principal\ICurrentTeleoptiPrincipal.cs" />
-    <Compile Include="Security\Principal\IExternalFunctionsProvider.cs" />
     <Compile Include="Security\Principal\IOrganisationMembership.cs" />
     <Compile Include="Security\Principal\IPrincipalAuthorization.cs" />
     <Compile Include="Security\Principal\IRegional.cs" />
@@ -1793,7 +1797,7 @@
     <Compile Include="Security\Principal\OrganisationMembership.cs" />
     <Compile Include="Security\Principal\PrincipalAuthorization.cs" />
     <Compile Include="Security\Principal\Regional.cs" />
-    <Compile Include="Security\Principal\RoleToClaimSetTransformer.cs" />
+    <Compile Include="Logon\ClaimSetForApplicationRole.cs" />
     <Compile Include="Security\Principal\ITeleoptiIdentity.cs" />
     <Compile Include="Security\Principal\TeleoptiIdentity.cs" />
     <Compile Include="Security\Principal\TeleoptiPrincipal.cs" />
@@ -1865,7 +1869,7 @@
     <Compile Include="Forecasting\SkillTypeEmail.cs" />
     <Compile Include="Forecasting\TaskTimeEmailDistributionService.cs" />
     <Compile Include="Forecasting\TaskTimePhoneDistributionService.cs" />
-    <Compile Include="Infrastructure\ILogOnOff.cs" />
+    <Compile Include="Logon\ILogOnOff.cs" />
     <Compile Include="Repositories\IOptionalColumnRepository.cs" />
     <Compile Include="Repositories\IMeetingRepository.cs" />
     <Compile Include="ResourceCalculation\SchedulingResultStateHolder.cs" />

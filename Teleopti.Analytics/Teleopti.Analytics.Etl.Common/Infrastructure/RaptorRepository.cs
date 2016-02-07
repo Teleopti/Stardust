@@ -14,6 +14,7 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -1492,17 +1493,17 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public IList<MatrixPermissionHolder> LoadReportPermissions()
 		{
-			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				IPersonRepository personRepository = new PersonRepository(new ThisUnitOfWork(uow));
+				var personRepository = new PersonRepository(new ThisUnitOfWork(uow));
 				new ApplicationRoleRepository(uow).LoadAll();
 				var permissionsResolver = new MatrixPermissionsResolver(personRepository,
-																		new FunctionsForRoleProvider(
-																			new LicensedFunctionsProvider(
-																				new DefinedRaptorApplicationFunctionFactory
-																					()),
-																			new ExternalFunctionsProvider(
-																				new RepositoryFactory())), new SiteRepository(uow));
+					new ApplicationFunctionsForRole(
+						new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory()),
+						new ApplicationFunctionRepository(new ThisUnitOfWork(uow))
+						),
+					new SiteRepository(uow)
+					);
 
 				var permissionHolders = permissionsResolver.ResolvePermission(DateOnly.Today, UnitOfWorkFactory.Current);
 

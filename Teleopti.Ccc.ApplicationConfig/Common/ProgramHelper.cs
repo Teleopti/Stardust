@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using Teleopti.Ccc.ApplicationConfig.Creators;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -87,12 +88,17 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 			
 			logOnOff.LogOn(dataSource, user, businessUnit);
 
-			var roleToPrincipalCommand =
-				new RoleToPrincipalCommand(
-					new RoleToClaimSetTransformer(new FunctionsForRoleProvider(new DummyLicensedFunctionsProvider(),
-						new ExternalFunctionsProvider(repositoryFactory))));
 			using (var uow = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
+				var roleToPrincipalCommand =
+					new RoleToPrincipalCommand(
+						new ClaimSetForApplicationRole(
+							new ApplicationFunctionsForRole(
+								new DummyLicensedFunctionsProvider(),
+								new ApplicationFunctionRepository(new ThisUnitOfWork(uow))
+								)
+							)
+						);
 				roleToPrincipalCommand.Execute(TeleoptiPrincipal.CurrentPrincipal, unitOfWorkFactory, repositoryFactory.CreatePersonRepository(uow));
 			}
 
@@ -149,7 +155,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 
 	internal class DummyLicensedFunctionsProvider : ILicensedFunctionsProvider
 	{
-		public IEnumerable<IApplicationFunction> LicensedFunctions(string dataSourceName)
+		public IEnumerable<IApplicationFunction> LicensedFunctions(string tenantName)
 		{
 			return new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList;
 		}

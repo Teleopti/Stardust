@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.IdentityModel.Web;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -21,13 +22,14 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 		private readonly IPrincipalAuthorization _principalAuthorization;
 
-		public WebLogOn(ILogOnOff logOnOff,
-										IDataSourceForTenant dataSourceForTenant,
-		                IRepositoryFactory repositoryFactory,
-		                ISessionSpecificDataProvider sessionSpecificDataProvider,
-		                IRoleToPrincipalCommand roleToPrincipalCommand,
-		                ICurrentTeleoptiPrincipal currentTeleoptiPrincipal,
-		                IPrincipalAuthorization principalAuthorization)
+		public WebLogOn(
+			ILogOnOff logOnOff,
+			IDataSourceForTenant dataSourceForTenant,
+			IRepositoryFactory repositoryFactory,
+			ISessionSpecificDataProvider sessionSpecificDataProvider,
+			IRoleToPrincipalCommand roleToPrincipalCommand,
+			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal,
+			IPrincipalAuthorization principalAuthorization)
 		{
 			_logOnOff = logOnOff;
 			_dataSourceForTenant = dataSourceForTenant;
@@ -49,6 +51,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 				_logOnOff.LogOn(dataSource, person, businessUnit);
 				var principal = _currentTeleoptiPrincipal.Current();
 				_roleToPrincipalCommand.Execute(principal, dataSource.Application, personRep);
+
+				// why just load all but discard any result from the server?
 				_repositoryFactory.CreateApplicationFunctionRepository(uow).LoadAll();
 
 				var allowed =	_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb) ||

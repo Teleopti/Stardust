@@ -2,24 +2,23 @@
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Infrastructure.Foundation
+namespace Teleopti.Ccc.Domain.Logon
 {
     public class RoleToPrincipalCommand : IRoleToPrincipalCommand
     {
-        private readonly IRoleToClaimSetTransformer _roleToClaimSetTransformer;
+        private readonly ClaimSetForApplicationRole _claimSetForApplicationRole;
 
-        public RoleToPrincipalCommand(IRoleToClaimSetTransformer roleToClaimSetTransformer)
+        public RoleToPrincipalCommand(ClaimSetForApplicationRole claimSetForApplicationRole)
         {
-            _roleToClaimSetTransformer = roleToClaimSetTransformer;
+            _claimSetForApplicationRole = claimSetForApplicationRole;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Execute(ITeleoptiPrincipal principalToFillWithClaimSets, IUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository)
         {
             var person = principalToFillWithClaimSets.GetPerson(personRepository);
             foreach (var applicationRole in person.PermissionInformation.ApplicationRoleCollection)
             {
-                principalToFillWithClaimSets.AddClaimSet(_roleToClaimSetTransformer.Transform(applicationRole,unitOfWorkFactory));
+	            principalToFillWithClaimSets.AddClaimSet(_claimSetForApplicationRole.Transform(applicationRole, unitOfWorkFactory.Name));
             }
         }
     }

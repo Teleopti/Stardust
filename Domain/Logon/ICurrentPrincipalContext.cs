@@ -1,7 +1,7 @@
 ﻿using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Infrastructure.Foundation
+namespace Teleopti.Ccc.Domain.Logon
 {
 	public interface ICurrentPrincipalContext
 	{

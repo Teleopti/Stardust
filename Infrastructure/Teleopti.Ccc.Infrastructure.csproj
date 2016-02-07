@@ -459,10 +459,7 @@
     <Compile Include="Config\LoadPasswordPolicyService.cs" />
     <Compile Include="Foundation\ForeignKeyException.cs" />
     <Compile Include="Foundation\IInitializeApplication.cs" />
-    <Compile Include="Foundation\ICurrentPrincipalContext.cs" />
-    <Compile Include="Foundation\IRoleToPrincipalCommand.cs" />
     <Compile Include="Foundation\WindowsAppDomainPrincipalContext.cs" />
-    <Compile Include="Foundation\RoleToPrincipalCommand.cs" />
     <Compile Include="Licensing\ILicenseFeedback.cs" />
     <Compile Include="Licensing\ILicenseVerifier.cs" />
     <Compile Include="Licensing\ILicenseVerifierFactory.cs" />
@@ -482,7 +479,6 @@
     <Compile Include="NHibernateConfiguration\ColorNumber.cs" />
     <Compile Include="Foundation\ConstraintViolationException.cs" />
     <Compile Include="NHibernateConfiguration\DateOnlyMappingType.cs" />
-    <Compile Include="Foundation\LogOnOff.cs" />
     <Compile Include="Foundation\LazyLoadingManager.cs" />
     <Compile Include="Foundation\DataSourceException.cs" />
     <Compile Include="Foundation\InitializeApplication.cs">

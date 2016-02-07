@@ -5,10 +5,9 @@ using log4net;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.MessageModules;
-using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
@@ -20,18 +19,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 	public class ApplicationLogOnMessageModule : IMessageModule
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ApplicationLogOnMessageModule));
-		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly DataSourceForTenantWrapper _dataSourceForTenant;
 		private readonly AsSuperUser _asSuperUser;
 
-		public ApplicationLogOnMessageModule(ILogOnOff logOnOff,
-			IRoleToClaimSetTransformer roleToClaimSetTransformer,
+		public ApplicationLogOnMessageModule(
+			ILogOnOff logOnOff,
+			ClaimSetForApplicationRole claimSetForApplicationRole,
 			IRepositoryFactory repositoryFactory,
 			DataSourceForTenantWrapper dataSourceForTenant)
 		{
-			_repositoryFactory = repositoryFactory;
 			_dataSourceForTenant = dataSourceForTenant;
-			_asSuperUser = new AsSuperUser(logOnOff, repositoryFactory, roleToClaimSetTransformer);
+			_asSuperUser = new AsSuperUser(logOnOff, repositoryFactory, claimSetForApplicationRole);
 		}
 
 		public void Init(ITransport transport, IServiceBus bus)
@@ -61,12 +59,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					 arg.MessageId, logOnInfo.LogOnDatasource, logOnInfo.LogOnBusinessUnitId, DateTime.UtcNow);
 			}
 
-			var dataSourceInfo = getDataSource(_dataSourceForTenant.DataSource()(), logOnInfo.LogOnDatasource, _repositoryFactory);
+			var dataSourceInfo = getDataSource(_dataSourceForTenant.DataSource()(), logOnInfo.LogOnDatasource);
 
 			if (Logger.IsInfoEnabled)
 				Logger.Info("UnitOfWorkFactory configured");
 
-			logOnRaptorDomain(dataSourceInfo.DataSource, logOnInfo.LogOnBusinessUnitId);
+			if (checkLicense(dataSourceInfo.DataSource))
+			{
+				_asSuperUser.Logon(dataSourceInfo.DataSource, logOnInfo.LogOnBusinessUnitId);
+				setWcfAuthenticationHeader(dataSourceInfo.DataSource, logOnInfo.LogOnBusinessUnitId);
+			}
 
 			if (Logger.IsInfoEnabled)
 				Logger.Info("Logged on the domain");
@@ -74,7 +76,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			return false;
 		}
 
-		private static sdkDataSourceResult getDataSource(IDataSourceForTenant dataSourceForTenant, string tenant, IRepositoryFactory repositoryFactory)
+		private static sdkDataSourceResult getDataSource(IDataSourceForTenant dataSourceForTenant, string tenant)
 		{
 			var ret = new sdkDataSourceResult();
 			var dataSource = dataSourceForTenant.Tenant(tenant);
@@ -92,40 +94,43 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			public IDataSource DataSource { get; set; }
 		}
 
-		private void logOnRaptorDomain(IDataSource dataSource, Guid businessUnitId)
+		private static void setWcfAuthenticationHeader(IDataSource dataSource, Guid businessUnitId)
 		{
-			if (!DefinedLicenseDataFactory.HasLicense(dataSource.DataSourceName))
-			{
-				var unitOfWorkFactory = dataSource.Application;
-				var licenseVerifier = new LicenseVerifier(new LicenseFeedback(), unitOfWorkFactory,
-																		new LicenseRepository(unitOfWorkFactory));
-				var licenseService = licenseVerifier.LoadAndVerifyLicense();
-				if (licenseService == null)
-				{
-					Logger.Error("No license could be found.");
-					return;
-				}
-
-				LicenseProvider.ProvideLicenseActivator(unitOfWorkFactory.Name, licenseService);
-			}
-
-			_asSuperUser.Logon(dataSource, businessUnitId);
-			
 			AuthenticationMessageHeader.BusinessUnit = businessUnitId;
 			AuthenticationMessageHeader.DataSource = dataSource.Application.Name;
 			AuthenticationMessageHeader.UserName = SuperUser.Id_AvoidUsing_This.ToString(); //rk - is this really correct - why the guid as username?
 			AuthenticationMessageHeader.Password = "custom";
 			AuthenticationMessageHeader.UseWindowsIdentity = false;
-
 		}
-		
+
+		private static bool checkLicense(IDataSource dataSource)
+		{
+			if (DefinedLicenseDataFactory.HasLicense(dataSource.DataSourceName))
+				return true;
+
+			var licenseVerifier = new LicenseVerifier(
+				new logLicenseFeedback(),
+				dataSource.Application,
+				new LicenseRepository(dataSource.Application)
+				);
+			var licenseService = licenseVerifier.LoadAndVerifyLicense();
+			if (licenseService == null)
+			{
+				Logger.Error("No license could be found.");
+				return false;
+			}
+
+			LicenseProvider.ProvideLicenseActivator(dataSource.DataSourceName, licenseService);
+			return true;
+		}
+
 		public void Stop(ITransport transport, IServiceBus bus)
 		{
 			transport.MessageArrived -= transport_MessageArrived;
 			transport.MessageProcessingCompleted -= transport_MessageProcessingCompleted;
 		}
 
-		private class LicenseFeedback : ILicenseFeedback
+		private class logLicenseFeedback : ILicenseFeedback
 		{
 			public void Warning(string warning)
 			{

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -16,14 +17,14 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
 			_personRoleResolvers = personRoleResolvers;
 		}
 
-		public MatrixPermissionsResolver(IPersonRepository personRepository, IFunctionsForRoleProvider functionsForRoleProvider, ISiteRepository siteRepository)
+		public MatrixPermissionsResolver(IPersonRepository personRepository, ApplicationFunctionsForRole applicationFunctionsForRole, ISiteRepository siteRepository)
 		{
 			_personRoleResolvers = new List<IPersonRoleResolver>();
 			var sites = siteRepository.LoadAll();
 			foreach (IPerson person in personRepository.FindAllWithRolesSortByName())
 			{
 				ITeamResolver teamResolver = new TeamResolver(person, sites);
-				IApplicationFunctionResolver functionResolver = new ApplicationFunctionResolver(functionsForRoleProvider);
+				IApplicationFunctionResolver functionResolver = new ApplicationFunctionResolver(applicationFunctionsForRole);
 				_personRoleResolvers.Add(new PersonRoleResolver(person, teamResolver, functionResolver));
 			}
 		}

@@ -358,7 +358,6 @@
     <Compile Include="Foundation\PurgeApplicationDataTest.cs" />
     <Compile Include="Foundation\ExplicitlySetGenericPrincipalDataSourceException.cs" />
     <Compile Include="Foundation\ForeignKeyExceptionTest.cs" />
-    <Compile Include="Foundation\RoleToPrincipalCommandTest.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalCacheableFactoryTest.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalInternalsFactoryTest.cs" />
     <Compile Include="Foundation\WindowsAppDomainPrincipalContextTest.cs">
