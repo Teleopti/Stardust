@@ -13,7 +13,7 @@ namespace Teleopti.Messaging.Client.SignalR
 		private ITime _time;
 		private DateTime _nextPingTime;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(RecreateOnNoPingReply));
-		private object _timer;
+		private IDisposable _timer;
 
 		public RecreateOnNoPingReply() : this(TimeSpan.FromMinutes(5))
 		{
@@ -68,7 +68,7 @@ namespace Teleopti.Messaging.Client.SignalR
 
 		public void OnClose(IStateAccessor stateAccessor)
 		{
-			_time.DisposeTimer(_timer);
+			_timer.Dispose();
 		}
 
 		private void initializePing(IStateAccessor stateAccessor)

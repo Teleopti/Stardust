@@ -503,6 +503,7 @@
     <Compile Include="Common\Time\MutableNow.cs" />
     <Compile Include="Common\Time\MutateNowExtensions.cs" />
     <Compile Include="Common\Time\ThisIsNow.cs" />
+    <Compile Include="Common\Time\Time.cs" />
     <Compile Include="Common\TrueFalseRandomizer.cs" />
     <Compile Include="Common\VirtualSchedulePeriodFinder.cs" />
     <Compile Include="Common\EntityBaseTypes\SimpleAggregateRoot.cs" />

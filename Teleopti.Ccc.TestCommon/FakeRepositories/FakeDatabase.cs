@@ -1,9 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 
@@ -88,6 +89,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 	public static class FakeDatabasePersonExtensions
 	{
+		public static FakeDatabase WithPerson(this FakeDatabase database, Guid id, string name)
+		{
+			return database.WithPerson(id, name, null, null);
+		}
+
 		public static FakeDatabase WithPerson(this FakeDatabase database, string name)
 		{
 			return database.WithPerson(null, name, null, null);
@@ -96,6 +102,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 	public class FakeDatabase
 	{
+		private readonly FakeTenants _tenants;
 		private readonly FakePersonRepository _persons;
 		private readonly FakeBusinessUnitRepository _businessUnits;
 		private readonly FakeSiteRepository _sites;
@@ -113,6 +120,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private ContractSchedule _contractSchedule;
 
 		public FakeDatabase(
+			FakeTenants tenants,
 			FakePersonRepository persons,
 			FakeBusinessUnitRepository businessUnits,
 			FakeSiteRepository sites,
@@ -122,6 +130,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FakeContractScheduleRepository contractSchedules
 			)
 		{
+			_tenants = tenants;
 			_persons = persons;
 			_businessUnits = businessUnits;
 			_sites = sites;
@@ -129,6 +138,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_contracts = contracts;
 			_partTimePercentages = partTimePercentages;
 			_contractSchedules = contractSchedules;
+
+			// created by app config app
+			this.WithPerson(SuperUser.Id_AvoidUsing_This, "System");
+		}
+
+		public FakeDatabase WithTenant(string tenant)
+		{
+			_tenants.Has(tenant);
+			return this;
 		}
 
 		public FakeDatabase WithBusinessUnit(Guid? id)

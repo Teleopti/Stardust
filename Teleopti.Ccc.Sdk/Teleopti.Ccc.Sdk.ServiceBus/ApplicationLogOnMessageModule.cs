@@ -23,13 +23,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private readonly AsSuperUser _asSuperUser;
 
 		public ApplicationLogOnMessageModule(
-			ILogOnOff logOnOff,
-			ClaimSetForApplicationRole claimSetForApplicationRole,
-			IRepositoryFactory repositoryFactory,
-			DataSourceForTenantWrapper dataSourceForTenant)
+			DataSourceForTenantWrapper dataSourceForTenant,
+			AsSuperUser asSuperUser)
 		{
 			_dataSourceForTenant = dataSourceForTenant;
-			_asSuperUser = new AsSuperUser(logOnOff, repositoryFactory, claimSetForApplicationRole);
+			_asSuperUser = asSuperUser;
 		}
 
 		public void Init(ITransport transport, IServiceBus bus)
@@ -59,48 +57,26 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					 arg.MessageId, logOnInfo.LogOnDatasource, logOnInfo.LogOnBusinessUnitId, DateTime.UtcNow);
 			}
 
-			var dataSourceInfo = getDataSource(_dataSourceForTenant.DataSource()(), logOnInfo.LogOnDatasource);
+			var dataSource = _dataSourceForTenant.DataSource()().Tenant(logOnInfo.LogOnDatasource);
+			if (dataSource == null)
+			{
+				Logger.ErrorFormat("No datasource matching the name {0} was found.", logOnInfo.LogOnDatasource);
+				throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "No datasource matching the name {0} was found.", logOnInfo.LogOnDatasource));
+			}
 
 			if (Logger.IsInfoEnabled)
 				Logger.Info("UnitOfWorkFactory configured");
 
-			if (checkLicense(dataSourceInfo.DataSource))
+			if (checkLicense(dataSource))
 			{
-				_asSuperUser.Logon(dataSourceInfo.DataSource, logOnInfo.LogOnBusinessUnitId);
-				setWcfAuthenticationHeader(dataSourceInfo.DataSource, logOnInfo.LogOnBusinessUnitId);
+				_asSuperUser.Logon(dataSource, logOnInfo.LogOnBusinessUnitId);
+				setWcfAuthenticationHeader(dataSource, logOnInfo.LogOnBusinessUnitId);
 			}
 
 			if (Logger.IsInfoEnabled)
 				Logger.Info("Logged on the domain");
 
 			return false;
-		}
-
-		private static sdkDataSourceResult getDataSource(IDataSourceForTenant dataSourceForTenant, string tenant)
-		{
-			var ret = new sdkDataSourceResult();
-			var dataSource = dataSourceForTenant.Tenant(tenant);
-			if (dataSource == null)
-			{
-				Logger.ErrorFormat("No datasource matching the name {0} was found.", tenant);
-				throw new ArgumentNullException("tenant", string.Format(CultureInfo.InvariantCulture, "No datasource matching the name {0} was found.", tenant));
-			}
-			ret.DataSource = dataSource;
-			return ret;
-		}
-
-		private class sdkDataSourceResult
-		{
-			public IDataSource DataSource { get; set; }
-		}
-
-		private static void setWcfAuthenticationHeader(IDataSource dataSource, Guid businessUnitId)
-		{
-			AuthenticationMessageHeader.BusinessUnit = businessUnitId;
-			AuthenticationMessageHeader.DataSource = dataSource.Application.Name;
-			AuthenticationMessageHeader.UserName = SuperUser.Id_AvoidUsing_This.ToString(); //rk - is this really correct - why the guid as username?
-			AuthenticationMessageHeader.Password = "custom";
-			AuthenticationMessageHeader.UseWindowsIdentity = false;
 		}
 
 		private static bool checkLicense(IDataSource dataSource)
@@ -122,6 +98,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			LicenseProvider.ProvideLicenseActivator(dataSource.DataSourceName, licenseService);
 			return true;
+		}
+
+		private static void setWcfAuthenticationHeader(IDataSource dataSource, Guid businessUnitId)
+		{
+			AuthenticationMessageHeader.BusinessUnit = businessUnitId;
+			AuthenticationMessageHeader.DataSource = dataSource.Application.Name;
+			AuthenticationMessageHeader.UserName = SuperUser.Id_AvoidUsing_This.ToString(); //rk - is this really correct - why the guid as username?
+			AuthenticationMessageHeader.Password = "custom";
+			AuthenticationMessageHeader.UseWindowsIdentity = false;
 		}
 
 		public void Stop(ITransport transport, IServiceBus bus)

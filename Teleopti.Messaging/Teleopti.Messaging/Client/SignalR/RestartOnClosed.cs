@@ -13,7 +13,7 @@ namespace Teleopti.Messaging.Client.SignalR
 		private Action _closedHandler;
 		private ITime _time;
 		private DateTime? _restartAt;
-		private object _timer;
+		private IDisposable _timer;
 		private IHubConnectionWrapper _connectionToRestart;
 
 		public RestartOnClosed() : this(TimeSpan.FromMinutes(1)) { }
@@ -71,7 +71,7 @@ namespace Teleopti.Messaging.Client.SignalR
 
 		public void OnClose(IStateAccessor stateAccessor)
 		{
-			_time.DisposeTimer(_timer);
+			_timer.Dispose();
 			stateAccessor.WithConnection(c =>
 			{
 				c.Closed -= _closedHandler;

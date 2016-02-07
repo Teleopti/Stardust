@@ -63,7 +63,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public void Remove(IAggregateRoot root)
 		{
-			throw new NotImplementedException();
 		}
 
 		public int? DatabaseVersion(IAggregateRoot root, bool usePessimisticLock = false)

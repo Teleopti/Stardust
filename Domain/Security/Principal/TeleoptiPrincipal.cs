@@ -54,7 +54,11 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		public void AddClaimSet(ClaimSet claimSet) { _claimSets.Add(claimSet); }
 
-		public virtual IPerson GetPerson(IPersonRepository personRepository) { return personRepository.Get(_person.Id.GetValueOrDefault()); }
+		public virtual IPerson GetPerson(IPersonRepository personRepository)
+		{
+			return personRepository.Get(_person.Id.GetValueOrDefault());
+		}
+
 		IPerson IUnsafePerson.Person { get { return _person; } }
 
 	}

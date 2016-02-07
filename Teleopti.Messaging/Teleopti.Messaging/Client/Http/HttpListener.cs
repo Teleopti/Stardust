@@ -19,7 +19,7 @@ namespace Teleopti.Messaging.Client.Http
 		private readonly ITime _time;
 		private readonly HttpClientM _client;
 		private readonly IMessageBrokerUrl _url;
-		private object _timer;
+		private IDisposable _timer;
 		private readonly TimeSpan _interval;
 		private DateTime _nextPollTime;
 		private bool _isPolling;
@@ -113,7 +113,7 @@ namespace Teleopti.Messaging.Client.Http
 		public void Dispose()
 		{
 			if (_timer != null)
-				_time.DisposeTimer(_timer);
+				_timer.Dispose();
 		}
 
 		private bool tryServerRequest(Action action)

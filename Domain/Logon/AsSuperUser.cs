@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Globalization;
 using System.IdentityModel.Claims;
-using System.Threading;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -16,20 +15,29 @@ namespace Teleopti.Ccc.Domain.Logon
 		private readonly ILogOnOff _logOnOff;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly ClaimSetForApplicationRole _claimSetForApplicationRole;
+		private readonly IDataSourceForTenant _dataSourceForTenant;
 		private readonly claimCache _claimCache;
 
 		public AsSuperUser(
 			ILogOnOff logOnOff,
 			IRepositoryFactory repositoryFactory,
-			ClaimSetForApplicationRole claimSetForApplicationRole
+			ClaimSetForApplicationRole claimSetForApplicationRole,
+			IDataSourceForTenant dataSourceForTenant,
+			ITime time
 			)
 		{
 			_logOnOff = logOnOff;
 			_repositoryFactory = repositoryFactory;
 			_claimSetForApplicationRole = claimSetForApplicationRole;
-			_claimCache = new claimCache();
+			_dataSourceForTenant = dataSourceForTenant;
+			_claimCache = new claimCache(time);
 		}
 
+		public void Logon(string tenant, Guid businessUnitId)
+		{
+			Logon(_dataSourceForTenant.Tenant(tenant), businessUnitId);
+		}
+		
 		public void Logon(IDataSource dataSource, Guid businessUnitId)
 		{
 			IPerson superUser;
@@ -67,11 +75,11 @@ namespace Teleopti.Ccc.Domain.Logon
 		private sealed class claimCache : IDisposable
 		{
 			private readonly ConcurrentDictionary<string, ClaimSet> _cache = new ConcurrentDictionary<string, ClaimSet>();
-			private readonly Timer _timer;
+			private readonly IDisposable _timer;
 
-			public claimCache()
+			public claimCache(ITime time)
 			{
-				_timer = new Timer(emptyCache, null, TimeSpan.FromMilliseconds(-1), TimeSpan.FromMinutes(30));
+				_timer = time.StartTimer(emptyCache, null, TimeSpan.FromMilliseconds(-1), TimeSpan.FromMinutes(30));
 			}
 
 			private void emptyCache(object state)
@@ -109,9 +117,7 @@ namespace Teleopti.Ccc.Domain.Logon
 				if (disposing)
 				{
 					if (_timer != null)
-					{
 						_timer.Dispose();
-					}
 					_cache.Clear();
 				}
 			}

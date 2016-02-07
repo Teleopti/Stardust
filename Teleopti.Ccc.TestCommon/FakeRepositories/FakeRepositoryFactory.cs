@@ -8,6 +8,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeRepositoryFactory : IRepositoryFactory
 	{
+		private readonly IPersonRepository _personRepository;
+		private readonly IBusinessUnitRepository _businessUnitRepository;
 		private readonly IActivityRepository _activityRepository;
 		private readonly IAbsenceRepository _absenceRepository;
 		private readonly IDayOffTemplateRepository _dayOffTemplateRepository;
@@ -29,6 +31,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly FakeMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSetRepository;
 
 		public FakeRepositoryFactory(
+			IPersonRepository personRepository,
+			IBusinessUnitRepository businessUnitRepository,
 			IActivityRepository activityRepository,
 			IAbsenceRepository absenceRepository,
 			IDayOffTemplateRepository dayOffTemplateRepository,
@@ -50,6 +54,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FakeMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository
       )
 		{
+			_personRepository = personRepository;
+			_businessUnitRepository = businessUnitRepository;
 			_activityRepository = activityRepository;
 			_absenceRepository = absenceRepository;
 			_dayOffTemplateRepository = dayOffTemplateRepository;
@@ -73,7 +79,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPersonRepository CreatePersonRepository(IUnitOfWork unitOfWork)
 		{
-			throw new System.NotImplementedException();
+			return _personRepository;
 		}
 
 		public IAbsenceRepository CreateAbsenceRepository(IUnitOfWork unitOfWork)
@@ -128,7 +134,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IBusinessUnitRepository CreateBusinessUnitRepository(IUnitOfWork unitOfWork)
 		{
-			throw new System.NotImplementedException();
+			return _businessUnitRepository;
 		}
 
 		public ISkillDayRepository CreateSkillDayRepository(IUnitOfWork unitOfWork)

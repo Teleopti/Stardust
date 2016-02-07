@@ -641,7 +641,6 @@
     <Compile Include="Domain\TeleoptiAuthenticationHeaderNames.cs" />
     <Compile Include="Domain\TeleoptiDiagnosticsInformation.cs" />
     <Compile Include="Domain\ThisCulture.cs" />
-    <Compile Include="Domain\Time.cs" />
     <Compile Include="Domain\TimeFormatsType.cs" />
     <Compile Include="Domain\MultiplicatorType.cs" />
     <Compile Include="Domain\TimeOfDay.cs" />

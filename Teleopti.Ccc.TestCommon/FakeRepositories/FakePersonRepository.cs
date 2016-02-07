@@ -5,6 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakePersonRepository : IPersonRepository, IEnumerable<IPerson>
 	{
 		private readonly IList<IPerson> _persons = new List<IPerson>();
-
+		
 		public void Has(IPerson person)
 		{
 			_persons.Add(person);
@@ -199,7 +200,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPerson LoadPersonAndPermissions(Guid id)
 		{
-			throw new NotImplementedException();
+			return Get(id);
 		}
 	}
 }

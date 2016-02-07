@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Teleopti.Ccc.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.TestCommon
 			public bool NextDueTimeHasPassed;
 		}
 
-		public object StartTimer(TimerCallback callback, object state, TimeSpan dueTime, TimeSpan period)
+		public IDisposable StartTimer(TimerCallback callback, object state, TimeSpan dueTime, TimeSpan period)
 		{
 			var timer = new FakeTimer
 			{
@@ -55,21 +56,17 @@ namespace Teleopti.Ccc.TestCommon
 			_timers.Add(timer);
 			if (dueTime == TimeSpan.Zero)
 				handleCallbackCall();
-			return timer;
+			return new GenericDisposable(() =>
+			{
+				_timers.Remove(timer);
+			});
 		}
 
 		public int ActiveTimers()
 		{
 			return _timers.Count;
 		}
-
-		public void DisposeTimer(object timer)
-		{
-			if (timer == null)
-				throw new ArgumentNullException();
-			_timers.Remove((FakeTimer) timer);
-		}
-
+		
 		public void Passes(TimeSpan time)
 		{
 			var targetTime = _now.UtcDateTime().Add(time);
