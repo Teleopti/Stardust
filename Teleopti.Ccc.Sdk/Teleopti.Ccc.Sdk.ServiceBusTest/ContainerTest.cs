@@ -78,7 +78,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 			builder.RegisterModule(CommonModule.ForTest());
 			builder.RegisterInstance(appData);
-			builder.RegisterModule<AuthenticationContainerInstaller>();
 			builder.RegisterModule<AuthorizationContainerInstaller>();
 
 			using (var container = builder.Build())

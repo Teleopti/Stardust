@@ -3,8 +3,6 @@ using Autofac;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
-using Teleopti.Ccc.Domain.Forecasting.Export;
-using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Licensing;
@@ -42,6 +40,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				.SingleInstance();
 		}
 
-		
 	}
+
+	public static class UnitOfWorkFactoryContainer
+	{
+		[ThreadStatic]
+		private static ICurrentUnitOfWorkFactory _current;
+
+		public static ICurrentUnitOfWorkFactory Current
+		{
+			get { return _current ?? UnitOfWorkFactory.CurrentUnitOfWorkFactory(); }
+			set { _current = value; }
+		}
+	}
+
 }

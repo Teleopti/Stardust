@@ -641,6 +641,7 @@
     <Compile Include="Helper\DateExtensions.cs" />
     <Compile Include="Helper\IBackgroundWorkerWrapper.cs" />
     <Compile Include="ICurrentApplicationData.cs" />
+    <Compile Include="Infrastructure\AsSuperUser.cs" />
     <Compile Include="Intraday\IIntradaySkillStatusService.cs" />
     <Compile Include="Intraday\IntradaySkillStatusService.cs" />
     <Compile Include="Intraday\SkillActualTasksProvider.cs" />

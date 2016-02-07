@@ -39,8 +39,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(BusBootStrapper));
 		private static Lazy<IDataSourceForTenant> _lazy;
 
-		public DataSourceForTenantWrapper(Func<IDataSourceForTenant> dataSourceForTenant, ITenantUnitOfWork tenantUnitOfWork,
-			IInitializeApplication initializeApplication, ILoadAllTenants loadAllTenants)
+		public DataSourceForTenantWrapper(
+			Func<IDataSourceForTenant> dataSourceForTenant, 
+			ITenantUnitOfWork tenantUnitOfWork,
+			IInitializeApplication initializeApplication, 
+			ILoadAllTenants loadAllTenants)
 		{
 			if (_lazy == null)
 			{
@@ -48,7 +51,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				{
 					var state = new State();
 					var appSettings = ConfigurationManager.AppSettings.ToDictionary();
-          initializeApplication.Start(state, null, ConfigurationManager.AppSettings.ToDictionary());
+					initializeApplication.Start(state, null, ConfigurationManager.AppSettings.ToDictionary());
 					new InitializeMessageBroker(state.ApplicationScopeData.Messaging).Start(appSettings);
 
 					//////////TODO: Remove this code when bus no longer has to "loop" tenants/datasources later (DataSourceForTenant.DoOnAllTenants_AvoidUsingThis)/////

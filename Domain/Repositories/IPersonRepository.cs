@@ -86,5 +86,8 @@ namespace Teleopti.Ccc.Domain.Repositories
 	    bool DoesPersonHaveExternalLogOn(DateOnly dateTime, Guid personId);
 		ICollection<IPerson> FindAllWithRolesSortByName();
 		ICollection<IPerson> FindPeopleByEmail(string email);
+
+		IPerson LoadPersonAndPermissions(Guid id);
+
 	}
 }

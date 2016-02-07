@@ -242,7 +242,6 @@
     <Compile Include="NotificationModule.cs" />
     <Compile Include="ServiceBusCommonModule.cs" />
     <Compile Include="ApplicationLayer\EventsConsumer.cs" />
-    <Compile Include="AuthenticationContainerInstaller.cs" />
     <Compile Include="AuthorizationContainerInstaller.cs" />
     <Compile Include="BudgetGroupAllowanceSpecification.cs" />
     <Compile Include="BudgetGroupHeadCountSpecification.cs" />
@@ -305,7 +304,6 @@
     <Compile Include="RequestContainerInstaller.cs" />
     <Compile Include="RequestFactory.cs" />
     <Compile Include="BusBootStrapper.cs" />
-    <Compile Include="DataSourceFactory.cs" />
     <Compile Include="ApplicationLogOnMessageModule.cs" />
     <Compile Include="NewAbsenceRequestConsumer.cs" />
     <Compile Include="BusinessUnitStarter.cs" />
