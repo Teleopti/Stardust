@@ -2,48 +2,65 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using NHibernate;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-    /// <summary>
-    /// Repository for schedules
-    /// </summary>
-    /// <remarks>
-    /// Created by: rogerkr
-    /// Created date: 2008-02-12
-    /// </remarks>
-    public class ScheduleRepository : Repository<IPersistableScheduleData>, IScheduleRepository
+    public class ScheduleRepository : IScheduleRepository
     {
-        private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
+	    private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
+	    private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
-        public ScheduleRepository(IUnitOfWork unitOfWork)
-#pragma warning disable 618
-            : base(unitOfWork)
-#pragma warning restore 618
+	    public ScheduleRepository(IUnitOfWork unitOfWork)
         {
-        }
+			_currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
+		}
 
         public ScheduleRepository(IUnitOfWorkFactory unitOfWorkFactory)
-#pragma warning disable 618
-            : base(unitOfWorkFactory)
-#pragma warning restore 618
         {
-        }
+			_currentUnitOfWork = new FromFactory(() => unitOfWorkFactory);
+		}
 
-				public ScheduleRepository(ICurrentUnitOfWork currentUnitOfWork, IRepositoryFactory repositoryFactory)
-					: base(currentUnitOfWork)
-				{
+	    public ScheduleRepository(ICurrentUnitOfWork currentUnitOfWork, IRepositoryFactory repositoryFactory)
+	    {
+		    _currentUnitOfWork = currentUnitOfWork;
 					_repositoryFactory = repositoryFactory;
 				}
 
-        public IPersistableScheduleData Get(Type concreteType, Guid id)
+		protected ISession Session
+		{
+			get
+			{
+				return UnitOfWork.Session();
+			}
+		}
+		public IUnitOfWork UnitOfWork
+		{
+			get
+			{
+				return _currentUnitOfWork.Current();
+			}
+		}
+
+	    public void Add(IPersistableScheduleData scheduleData)
+	    {
+		    Session.SaveOrUpdate(scheduleData);
+	    }
+
+	    public void Remove(IPersistableScheduleData scheduleData)
+	    {
+		    Session.Delete(scheduleData);
+	    }
+
+	    public IPersistableScheduleData Get(Type concreteType, Guid id)
         {
             return (IPersistableScheduleData) Session.Get(concreteType, id);
         }

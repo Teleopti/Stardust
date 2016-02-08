@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Interfaces.Domain
 {
-    /// <summary>
-    /// Interface for schedule repository
-    /// </summary>
-    /// <remarks>
-    /// Created by: rogerkr
-    /// Created date: 2008-02-19
-    /// </remarks>
-    public interface IScheduleRepository : IRepository<IPersistableScheduleData> 
+    public interface IScheduleRepository
 		{
+		IUnitOfWork UnitOfWork { get; }
+	    void Add(IPersistableScheduleData scheduleData);
+	    void Remove(IPersistableScheduleData scheduleData);
 			  ///<summary>
         /// Gets the entity of the specified type using the specified id
         ///</summary>
