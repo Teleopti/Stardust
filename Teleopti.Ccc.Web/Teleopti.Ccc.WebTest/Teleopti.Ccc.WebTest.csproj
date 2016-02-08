@@ -565,7 +565,6 @@
     <Compile Include="Core\RequestContext\SetThreadCultureTest.cs" />
     <Compile Include="Core\RequestContext\RequestContextInitializerTest.cs" />
     <Compile Include="Core\RequestContext\SessionSpecificCookieDataProviderTest.cs" />
-    <Compile Include="Core\RequestContext\SessionPrincipalFactoryTest.cs" />
     <Compile Include="Core\RequestContext\SessionSpecificDataTest.cs" />
     <Compile Include="Core\DateOnlyModelBinderTest.cs" />
     <Compile Include="Core\ErrorMessageResolverTest.cs" />

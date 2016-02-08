@@ -35,7 +35,11 @@ Background:
 	| Access to mytime web     | false     |
 	| Access to admin web      | false     |
 	| Access to matrix reports | false     |
-
+	And there is a role with
+	| Field                | Value           |
+	| Name                 | Full access     |
+	| Business Unit        | Business Unit 1 |
+	| Access to everything | true            |
 
 Scenario: Sign in with a user with multiple business units by user name
 	Given I have the role 'Role for business unit 1'
@@ -44,7 +48,6 @@ Scenario: Sign in with a user with multiple business units by user name
 	When I sign in by user name
 	And I select business unit 'Business Unit 1'
 	Then I should be signed in
-
 
 Scenario: Sign in with a user with one business unit by user name and I should be directed into that business unit direct without having to select it
 	Given I have the role 'Role for business unit 1'
@@ -74,3 +77,10 @@ Scenario: Sign in without permission
 	And I am viewing the sign in page
 	When I sign in by user name
 	Then I should see a log on error 'InsufficientPermissionForWeb'
+
+Scenario: Sign in with a user with access to everything
+	Given I have the role 'Full access'
+	And I am viewing the sign in page
+	When I sign in by user name
+	Then I should be signed in
+

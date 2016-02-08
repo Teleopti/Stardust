@@ -79,15 +79,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		[Then(@"I should (be|stay) signed in")]
 		public void ThenIShouldBeSignedIn(string beOrStay)
 		{
-			Browser.Interactions.AssertExists("#regional-settings");
+			Browser.Interactions.AssertExists("#regional-settings, .user-name");
 		}
-
-		[Then(@"I should be signed in for Anywhere")]
-		public void ThenIShouldBeSignedInForAnywhere()
-		{
-			Browser.Interactions.AssertExists(".user-name");
-		}
-
+		
 		[Then(@"I should be signed in as another user '(.*)'")]
 		public void ThenIShouldBeSignedInAsAnotherUser(string name)
 		{

@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToEveryone { get; set; }
 		public bool NoDataAccess { get; set; }
 
+		public bool AccessToEverything { get; set; }
 		public bool ViewUnpublishedSchedules { get; set; }
 		public bool ViewConfidential { get; set; }
 		public bool AccessToExtendedPreferences { get; set; }
@@ -77,6 +78,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			Name = RandomName.Make("A role");
 			Description = RandomName.Make("A role");
 			BusinessUnit = DefaultBusinessUnit.BusinessUnitFromFakeState.Description.Name;
+			AccessToEverything = false;
 			ViewUnpublishedSchedules = false;
 			ViewConfidential = false;
 			AccessToMyOwn = false;
@@ -157,7 +159,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 			var applicationFunctionRepository = new ApplicationFunctionRepository(currentUnitOfWork);
 			var allApplicationFunctions = applicationFunctionRepository.LoadAll();
-			var filteredApplicationFunctions = FilterApplicationFunctions(allApplicationFunctions);
+			var filteredApplicationFunctions = filterApplicationFunctions(allApplicationFunctions);
 			filteredApplicationFunctions.ToList().ForEach(role.AddApplicationFunction);
 
 			var applicationRoleRepository = new ApplicationRoleRepository(currentUnitOfWork);
@@ -168,16 +170,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 		}
 
-		/// <summary>
-		/// Filters the application functions by the filter properties.
-		/// </summary>
-		/// <param name="allApplicationFunctions">All application functions.</param>
-		/// <returns>Filtered application functions</returns>
-		private IEnumerable<IApplicationFunction> FilterApplicationFunctions(IList<IApplicationFunction> allApplicationFunctions)
+		private IEnumerable<IApplicationFunction> filterApplicationFunctions(IEnumerable<IApplicationFunction> allApplicationFunctions)
 		{
-			var applicationFunctions = from f in allApplicationFunctions
-												where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.All
-												select f;
+			IEnumerable<IApplicationFunction> applicationFunctions;
+			if (AccessToEverything)
+				applicationFunctions = from f in allApplicationFunctions
+					where f.FunctionPath == DefinedRaptorApplicationFunctionPaths.All
+					select f;
+			else
+				applicationFunctions = from f in allApplicationFunctions
+					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.All
+					select f;
 
 			if (!ViewUnpublishedSchedules)
 				applicationFunctions = from f in applicationFunctions
