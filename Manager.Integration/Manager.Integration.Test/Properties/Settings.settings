@@ -20,5 +20,8 @@
     <Setting Name="CreateLoggingTableSqlScriptLocationAndFileName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">scripts/CreateLoggingTable.sql</Value>
     </Setting>
+    <Setting Name="ManagerIntegrationTestControllerBaseAddress" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://localhost:9100/managerIntegrationTestController/</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

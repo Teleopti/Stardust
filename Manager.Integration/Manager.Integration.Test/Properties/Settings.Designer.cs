@@ -76,5 +76,14 @@ namespace Manager.Integration.Test.Properties {
                 return ((string)(this["CreateLoggingTableSqlScriptLocationAndFileName"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:9100/managerIntegrationTestController/")]
+        public string ManagerIntegrationTestControllerBaseAddress {
+            get {
+                return ((string)(this["ManagerIntegrationTestControllerBaseAddress"]));
+            }
+        }
     }
 }

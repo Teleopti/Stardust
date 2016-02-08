@@ -8,9 +8,15 @@ using System.Runtime.InteropServices;
 using System.Security.Policy;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Http;
+using Autofac;
+using Autofac.Integration.WebApi;
+using log4net;
 using log4net.Config;
 using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.Properties;
+using Microsoft.Owin.Hosting;
+using Owin;
 
 namespace Manager.IntegrationTest.Console.Host
 {
@@ -23,6 +29,8 @@ namespace Manager.IntegrationTest.Console.Host
 #else
         private static string _buildMode = "Release";
 #endif
+
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (Program));
 
         public static FileInfo ManagerConfigurationFile { get; set; }
 
@@ -93,6 +101,38 @@ namespace Manager.IntegrationTest.Console.Host
                                                           val) => value);
         }
 
+
+        private static void StartSelfHosting()
+        {
+            Models.Configuration configuration =
+                new Models.Configuration(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
+
+            using (WebApp.Start(configuration.BaseAddress.ToString(),
+                                appBuilder =>
+                                {
+                                    var builder = new ContainerBuilder();
+
+                                    var container = builder.Build();
+
+                                    var config = new HttpConfiguration
+                                    {
+                                        DependencyResolver = new AutofacWebApiDependencyResolver(container)
+                                    };
+
+                                    config.MapHttpAttributeRoutes();
+
+                                    appBuilder.UseAutofacMiddleware(container);
+                                    appBuilder.UseAutofacWebApi(config);
+                                    appBuilder.UseWebApi(config);
+                                }))
+            {
+                LogHelper.LogInfoWithLineNumber(Logger,
+                                                "Started listening on port : ( " + configuration.BaseAddress + " )");
+
+                QuitEvent.WaitOne();
+            }
+        }
+
         private static void Main(string[] args)
         {
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
@@ -113,7 +153,8 @@ namespace Manager.IntegrationTest.Console.Host
 
             Evidence adevidence = AppDomain.CurrentDomain.Evidence;
 
-            LogHelper.LogInfoWithLineNumber("started.");
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            "started.");
 
             var directoryManagerConfigurationFileFullPath =
                 new DirectoryInfo(AddEndingSlash(Settings.Default.ManagerConfigurationFileFullPath + _buildMode));
@@ -175,12 +216,14 @@ namespace Manager.IntegrationTest.Console.Host
 
             if (args.Any())
             {
-                LogHelper.LogInfoWithLineNumber("Has command arguments.");
+                LogHelper.LogInfoWithLineNumber(Logger,
+                                                "Has command arguments.");
 
                 numberOfNodesToStart = Convert.ToInt32(args[0]);
             }
 
-            LogHelper.LogInfoWithLineNumber(numberOfNodesToStart + " number of nodes will be started.");
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            numberOfNodesToStart + " number of nodes will be started.");
 
             if (numberOfNodesToStart > 0)
             {
@@ -247,6 +290,8 @@ namespace Manager.IntegrationTest.Console.Host
                 task.Start();
             }
 
+            StartSelfHosting();
+
             QuitEvent.WaitOne();
 
             foreach (var appDomain in AppDomains.Values)
@@ -266,20 +311,23 @@ namespace Manager.IntegrationTest.Console.Host
         {
             Exception exp = (Exception) e.ExceptionObject;
 
-            LogHelper.LogErrorWithLineNumber(string.Empty,
+            LogHelper.LogErrorWithLineNumber(Logger,
+                                             string.Empty,
                                              exp.InnerException);
         }
 
         private static void CurrentDomain_ProcessExit(object sender,
                                                       EventArgs e)
         {
-            LogHelper.LogInfoWithLineNumber(string.Empty);
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            string.Empty);
         }
 
         private static void CurrentDomainOnDomainUnload(object sender,
                                                         EventArgs eventArgs)
         {
-            LogHelper.LogInfoWithLineNumber(string.Empty);
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            string.Empty);
 
             foreach (var appDomain in AppDomains.Values)
             {
