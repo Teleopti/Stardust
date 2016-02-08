@@ -81,19 +81,22 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var webScheduleState = _webSchedulingSetup.Setup(period);
 
-			_scheduleCommand().Execute(new OptimizerOriginalPreferences(new SchedulingOptions
+			if (webScheduleState.AllSchedules.Any())
 			{
-				UseAvailability = true,
-				UsePreferences = true,
-				UseRotations = true,
-				UseStudentAvailability = false,
-				DayOffTemplate = _schedulerStateHolder().CommonStateHolder.DefaultDayOffTemplate,
-				ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
-				GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
-				TagToUseOnScheduling = NullScheduleTag.Instance
-			}), new NoBackgroundWorker(), _schedulerStateHolder(), webScheduleState.AllSchedules, _groupPagePerDateHolder(),
-				_requiredScheduleHelper(),
-				new OptimizationPreferences(), false, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
+				_scheduleCommand().Execute(new OptimizerOriginalPreferences(new SchedulingOptions
+				{
+					UseAvailability = true,
+					UsePreferences = true,
+					UseRotations = true,
+					UseStudentAvailability = false,
+					DayOffTemplate = _schedulerStateHolder().CommonStateHolder.DefaultDayOffTemplate,
+					ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
+					GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
+					TagToUseOnScheduling = NullScheduleTag.Instance
+				}), new NoBackgroundWorker(), _schedulerStateHolder(), webScheduleState.AllSchedules, _groupPagePerDateHolder(),
+					_requiredScheduleHelper(),
+					new OptimizationPreferences(), false, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
+			}
 
 			return webScheduleState.PeopleSelection;
 		}
