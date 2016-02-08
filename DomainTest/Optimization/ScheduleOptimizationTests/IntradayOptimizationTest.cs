@@ -153,11 +153,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 
 			SkillDayRepository.Has(new List<ISkillDay>
 				{
-					skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)))
-				});
-
-			SkillDayRepository.Has(new List<ISkillDay>
-				{
+					skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360))),
 					skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly.AddDays(1), TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)))
 				});
 
@@ -200,14 +196,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
 
 			SkillDayRepository.Has(new List<ISkillDay>
-				{
-					skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)))
-				});
-
-			SkillDayRepository.Has(new List<ISkillDay>
-				{
-					skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly.AddDays(1), TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)))
-				});
+			{
+				skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360))),
+				skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly.AddDays(1), TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)))
+			});
 
 			var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, agent.PermissionInformation.DefaultTimeZone());
 			var assignment = new PersonAssignment(agent, scenario, dateOnly);
@@ -224,17 +216,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 
 			var skillDays = SkillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(dateOnly.AddDays(1), dateOnly.AddDays(1)), new List<ISkill> { skill }, scenario);
 			var skillStaffPeriods = skillDays.First().SkillStaffPeriodCollection;
-			var hasResource = false;
-			foreach (var skillStaffPeriod in skillStaffPeriods)
-			{
-				if (skillStaffPeriod.CalculatedResource > 0d)
-				{
-					hasResource = true;
-					break;
-				}
-			}
 
-			hasResource.Should().Be.True();
+			skillStaffPeriods.Any(skillStaffPeriod => skillStaffPeriod.CalculatedResource > 0d)
+				.Should().Be.True();
 		}
 
 		[Test]
