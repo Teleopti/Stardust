@@ -1,29 +1,33 @@
 ﻿using System;
 using NUnit.Framework;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 {
-	[TestFixture]
-	[ResourcePlannerTest_DontUse]
 	public class DayOffBusinessRuleValidationTest
 	{
-		public DayOffBusinessRuleValidation Target;
-		public FakeScheduleRange ScheduleRange;
 		[Test]
 		public void ShouldReturnFalseIfTargetDayOffNotFullfilled()
 		{
-			ScheduleRange.UpdateCalcValues(7,TimeSpan.Zero);
-			Assert.IsFalse(Target.Validate(ScheduleRange, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MaxValue)));
+			var range = new FakeScheduleRange(new FakeScheduleDictionary(), new ScheduleParameters(new Scenario("_"), new Person(), new DateTimePeriod()));
+			range.UpdateCalcValues(7, TimeSpan.Zero);
+			new DayOffBusinessRuleValidation().Validate(range, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MaxValue))
+				.Should().Be.False();
 		}
 
 		[Test]
 		public void ShouldReturnTrueIfTargetDayIsFullfilled()
 		{
-			ScheduleRange.UpdateCalcValues(8, TimeSpan.Zero);
-			Assert.True(Target.Validate(ScheduleRange, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MaxValue)));
+			var range = new FakeScheduleRange(new FakeScheduleDictionary(), new ScheduleParameters(new Scenario("_"), new Person(), new DateTimePeriod()));
+			range.UpdateCalcValues(8, TimeSpan.Zero);
+			new DayOffBusinessRuleValidation().Validate(range, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MaxValue))
+				.Should().Be.True();
 		}
 	}
 }
