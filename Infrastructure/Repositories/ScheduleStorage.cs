@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using NHibernate;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -16,13 +14,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
     public class ScheduleStorage : IScheduleStorage
     {
-	    private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
+	    private readonly IRepositoryFactory _repositoryFactory;
 	    private readonly ICurrentUnitOfWork _currentUnitOfWork;
-
-	    public ScheduleStorage(IUnitOfWork unitOfWork)
-        {
-			_currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
-		}
 
 	    public ScheduleStorage(ICurrentUnitOfWork currentUnitOfWork, IRepositoryFactory repositoryFactory)
 	    {
@@ -30,13 +23,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					_repositoryFactory = repositoryFactory;
 				}
 
-		protected ISession Session
-		{
-			get
-			{
-				return UnitOfWork.Session();
-			}
-		}
 		public IUnitOfWork UnitOfWork
 		{
 			get
@@ -47,17 +33,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	    public void Add(IPersistableScheduleData scheduleData)
 	    {
-		    Session.SaveOrUpdate(scheduleData);
+		    UnitOfWork.Session().SaveOrUpdate(scheduleData);
 	    }
 
 	    public void Remove(IPersistableScheduleData scheduleData)
 	    {
-		    Session.Delete(scheduleData);
+		    UnitOfWork.Session().Delete(scheduleData);
 	    }
 
 	    public IPersistableScheduleData Get(Type concreteType, Guid id)
         {
-            return (IPersistableScheduleData) Session.Get(concreteType, id);
+            return (IPersistableScheduleData)UnitOfWork.Session().Get(concreteType, id);
         }
 
 			//todo: Fixa lazy-problem utanför! inte ladda andra rötter här inne!

@@ -25,6 +25,7 @@ using Teleopti.Ccc.WpfControls.Controls.Messaging;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 {
@@ -147,7 +148,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 																														var foundPeople = _personRepository.FindPeople(selectedGuids).ToList();
 																														var accounts = new PersonAbsenceAccountRepository(uow).FindByUsers(foundPeople);
 																														var logonData = _tenantDataManager.GetLogonInfoModelsForGuids(selectedGuids);
-																														ITraceableRefreshService service = new TraceableRefreshService(_currentScenario, new ScheduleStorage(uow));
+																														ITraceableRefreshService service = new TraceableRefreshService(_currentScenario, new ScheduleStorage(new ThisUnitOfWork(uow), new RepositoryFactory()));
 
 																														var filteredPeopleHolder = new FilteredPeopleHolder(service, accounts, saviour)
 																														{
@@ -226,7 +227,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 			{
 				IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork();
 				var accounts = new PersonAbsenceAccountRepository(uow).LoadAllAccounts();
-				ITraceableRefreshService cacheServiceForPersonAccounts = new TraceableRefreshService(_currentScenario, new ScheduleStorage(uow));
+				ITraceableRefreshService cacheServiceForPersonAccounts = new TraceableRefreshService(_currentScenario, new ScheduleStorage(new ThisUnitOfWork(uow), new RepositoryFactory()));
 				var state = new WorksheetStateHolder();
 				var saviour = _container.Resolve<ITenantDataManager>();
 				var filteredPeopleHolder = new FilteredPeopleHolder(cacheServiceForPersonAccounts, accounts, saviour)

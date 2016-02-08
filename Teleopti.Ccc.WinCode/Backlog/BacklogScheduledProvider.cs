@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 				{
 					LoadDaysAfterLeft = true
 				};
-				stateHolder.LoadSchedules(new ScheduleStorage(uow), personsInOrganizationProvider, scheduleDictionaryLoadOptions, period);
+				stateHolder.LoadSchedules(new ScheduleStorage(new ThisUnitOfWork(uow), new RepositoryFactory()), personsInOrganizationProvider, scheduleDictionaryLoadOptions, period);
 			}
 		}
 	}

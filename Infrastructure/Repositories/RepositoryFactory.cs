@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IScheduleStorage CreateScheduleRepository(IUnitOfWork unitOfWork)
 		{
-			return new ScheduleStorage(unitOfWork);
+			return new ScheduleStorage(new ThisUnitOfWork(unitOfWork), new RepositoryFactory());
 		}
 
 		public IContractScheduleRepository CreateContractScheduleRepository(IUnitOfWork unitOfWork)

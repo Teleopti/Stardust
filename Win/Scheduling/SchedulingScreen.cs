@@ -3749,8 +3749,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					LoadDaysAfterLeft = true
 				};
-				stateHolder.LoadSchedules(new ScheduleStorage(uow), personsInOrganizationProvider, scheduleDictionaryLoadOptions,
-					period);
+				stateHolder.LoadSchedules(new ScheduleStorage(new ThisUnitOfWork(uow), new RepositoryFactory()), personsInOrganizationProvider, scheduleDictionaryLoadOptions, period);
 				_schedulerState.Schedules.SetUndoRedoContainer(_undoRedo);
 			}
 			SchedulerState.Schedules.PartModified += _schedules_PartModified;

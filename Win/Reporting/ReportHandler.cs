@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.Win.Reporting
 			IPersonProvider personsInOrganizationProvider = new PersonsInOrganizationProvider(persons) { DoLoadByPerson = true};
 			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false);
 			unitOfWork.Reassociate(persons);
-			stateHolder.LoadSchedules(new ScheduleStorage(unitOfWork), personsInOrganizationProvider, scheduleDictionaryLoadOptions, period);
+			stateHolder.LoadSchedules(new ScheduleStorage(new ThisUnitOfWork(unitOfWork), new RepositoryFactory()), personsInOrganizationProvider, scheduleDictionaryLoadOptions, period);
 		}
 	
 		public static IList<IReportDataParameter> CreateScheduleAuditingParameters(ReportSettingsScheduleAuditingModel model, IFormatProvider culture)

@@ -13,6 +13,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 {
@@ -376,13 +377,13 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             {
                 IUnitOfWorkFactory unitOfWorkFactory = _mocker.StrictMock<IUnitOfWorkFactory>();
                 ICurrentScenario currentScenario = _mocker.DynamicMock<ICurrentScenario>();
-                
-                IPersonAccountChildModel adapter1 = new PersonAccountChildModel
-                    (new TraceableRefreshService(currentScenario, new ScheduleStorage(unitOfWorkFactory.CreateAndOpenUnitOfWork())), _collection, _account1,
-                     null, null);
+	            var scheduleStorage = new ScheduleStorage(new ThisUnitOfWork(unitOfWorkFactory.CreateAndOpenUnitOfWork()), new RepositoryFactory());
+
+								IPersonAccountChildModel adapter1 = new PersonAccountChildModel
+                    (new TraceableRefreshService(currentScenario, scheduleStorage), _collection, _account1, null, null);
 
                 IPersonAccountChildModel adapter2 = new PersonAccountChildModel
-                    (new TraceableRefreshService(currentScenario, new ScheduleStorage(unitOfWorkFactory.CreateAndOpenUnitOfWork())), _collection, _account3,
+                    (new TraceableRefreshService(currentScenario, scheduleStorage), _collection, _account3,
                      null, null);
 
                 adapter1.CanBold = true;

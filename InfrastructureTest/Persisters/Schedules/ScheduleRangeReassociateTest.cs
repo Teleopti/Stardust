@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			PersistAndRemoveFromUnitOfWork(agent);
 			PersistAndRemoveFromUnitOfWork(pa);
 
-			var scheduleDic = new ScheduleStorage(UnitOfWork).FindSchedulesForPersonOnlyInGivenPeriod(agent, new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(2000,1,1, 2001,1,1), scenario);
+			var scheduleDic = new ScheduleStorage(CurrUnitOfWork, new RepositoryFactory()).FindSchedulesForPersonOnlyInGivenPeriod(agent, new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(2000,1,1, 2001,1,1), scenario);
 
 			UnitOfWork.Clear();
 			scheduleDic[agent].Reassociate(UnitOfWork);

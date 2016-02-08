@@ -13,6 +13,7 @@ using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 {
@@ -374,17 +375,15 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             var account = _acc.Find(new DateOnly(2005, 5, 2)).FirstOrDefault();
             _targetDay =
                 new PersonAccountChildModel(
-                    new TraceableRefreshService(scenario, new ScheduleStorage(unitOfWorkFactory.CreateAndOpenUnitOfWork())), _acc, account, null, null);
+                    new TraceableRefreshService(scenario, new ScheduleStorage(new ThisUnitOfWork(unitOfWorkFactory.CreateAndOpenUnitOfWork()), new RepositoryFactory())), _acc, account, null, null);
         }
 
         private void SetTargetDayWithoutAccount(IUnitOfWork unitOfWork, ICurrentScenario scenario)
         {
-            //IUnitOfWorkFactory unitOfWorkFactory = _mocker.StrictMock<IUnitOfWorkFactory>();
-            //ICurrentScenario scenario = _mocker.DynamicMock<ICurrentScenario>();
 			var account = _acc.Find(new DateOnly(2005, 5, 2)).FirstOrDefault();
 	        _targetDay =
 		        new PersonAccountChildModel(
-			        new TraceableRefreshService(scenario,new ScheduleStorage(unitOfWork)), _acc, account, null, null);
+			        new TraceableRefreshService(scenario,new ScheduleStorage(new ThisUnitOfWork(unitOfWork), new RepositoryFactory())), _acc, account, null, null);
         }
 
         [Test]

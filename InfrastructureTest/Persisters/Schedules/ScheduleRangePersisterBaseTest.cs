@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				new AbsenceRepository(unitOfWork).Add(Absence);
 				new MultiplicatorDefinitionSetRepository(unitOfWork).Add(DefinitionSet);
 				new DayOffTemplateRepository(unitOfWork).Add(DayOffTemplate);
-				Given().ForEach(x => new ScheduleStorage(unitOfWork).Add(x));
+				Given().ForEach(x => new ScheduleStorage(new ThisUnitOfWork(unitOfWork), new RepositoryFactory()).Add(x));
 				unitOfWork.PersistAll();
 			}
 		}
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				ReassociateDataFor(Person);
-				var rep = new ScheduleStorage(unitOfWork);
+				var rep = new ScheduleStorage(new ThisUnitOfWork(unitOfWork), new RepositoryFactory());
 				var dictionary = rep.FindSchedulesForPersons(new ScheduleDateTimePeriod(new DateTimePeriod(1800, 1, 1, 2040, 1, 1)),
 																								 Scenario,
 																								 new PersonProvider(new[] { Person }),

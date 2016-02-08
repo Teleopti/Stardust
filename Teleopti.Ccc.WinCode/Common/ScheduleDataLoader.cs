@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.WinCode.Common
 			IScheduleDateTimePeriod scheduleDateTimePeriod = new ScheduleDateTimePeriod(dateTimePeriod, persons);
 			IPersonProvider personProvider = new PersonsInOrganizationProvider(persons);
 		    IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
-			var scheduleRepository = new ScheduleStorage(unitOfWork);
+			var scheduleRepository = new ScheduleStorage(new ThisUnitOfWork(unitOfWork), new RepositoryFactory());
 			_schedulerStateHolder.LoadSchedules(scheduleRepository, personProvider, scheduleDictionaryLoadOptions, scheduleDateTimePeriod);
 		}
 	}
