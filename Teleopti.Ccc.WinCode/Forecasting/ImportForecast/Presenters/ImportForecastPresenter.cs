@@ -96,7 +96,8 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
 					TargetSkillId = _model.SelectedSkill.Id.GetValueOrDefault(),
 					OwnerPersonId = person.Id.GetValueOrDefault(Guid.Empty),
 					ImportMode = _model.ImportMode,
-					LogOnDatasource = _unitOfWorkFactory.Name
+					LogOnDatasource = _unitOfWorkFactory.Name,
+					LogOnBusinessUnitId = _model.SelectedSkill.BusinessUnit.Id.GetValueOrDefault()
 				};
 				if (_toggleManager.IsEnabled(Toggles.Wfm_UseManagersAndNodes))
 				{
