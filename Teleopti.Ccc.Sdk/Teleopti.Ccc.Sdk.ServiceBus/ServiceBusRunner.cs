@@ -9,11 +9,14 @@ using Autofac;
 using log4net.Config;
 using Stardust.Node;
 using Stardust.Node.API;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus.Container;
+using Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
@@ -33,6 +36,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private ConfigFileDefaultHost _payrollBus;
 		[NonSerialized]
 		private ConfigFileDefaultHost _rtaBus;
+
+		private IContainer _sharedContainer;
 
 		public ServiceBusRunner(Action<int> requestAdditionalTime)
 		{
@@ -54,29 +59,29 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			ServicePointManager.DefaultConnectionLimit = 50;
 
 			var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()));
-			var sharedContainer = new ContainerBuilder().Build();
-			new ContainerConfiguration(sharedContainer, toggleManager).Configure(null);
+			_sharedContainer = new ContainerBuilder().Build();
+			new ContainerConfiguration(_sharedContainer, toggleManager).Configure(null);
 			if (toggleManager.IsEnabled(Toggles.Wfm_UseManagersAndNodes))
 			{
 				var nodeThread = new Thread(StartNode);
 				nodeThread.Start();
 			}
 
-			_requestBus = new ConfigFileDefaultHost("RequestQueue.config", new BusBootStrapper(makeContainer(toggleManager, sharedContainer)));
+			_requestBus = new ConfigFileDefaultHost("RequestQueue.config", new BusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
 			_requestBus.Start();
 
-			_generalBus = new ConfigFileDefaultHost("GeneralQueue.config", new GeneralBusBootStrapper(makeContainer(toggleManager, sharedContainer)));
+			_generalBus = new ConfigFileDefaultHost("GeneralQueue.config", new GeneralBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
 			_generalBus.Start();
 
-			_denormalizeBus = new ConfigFileDefaultHost("DenormalizeQueue.config", new DenormalizeBusBootStrapper(makeContainer(toggleManager, sharedContainer)));
+			_denormalizeBus = new ConfigFileDefaultHost("DenormalizeQueue.config", new DenormalizeBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
 			_denormalizeBus.Start();
 
-			_rtaBus = new ConfigFileDefaultHost("RtaQueue.config", new RtaBusBootStrapper(makeContainer(toggleManager, sharedContainer)));
+			_rtaBus = new ConfigFileDefaultHost("RtaQueue.config", new RtaBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
 			_rtaBus.Start();
 
 			new PayrollDllCopy(new SearchPath()).CopyPayrollDll();
 
-			_payrollBus = new ConfigFileDefaultHost("PayrollQueue.config", new PayrollBusBootStrapper(makeContainer(toggleManager, sharedContainer)));
+			_payrollBus = new ConfigFileDefaultHost("PayrollQueue.config", new PayrollBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
 			_payrollBus.Start();
 
 			AppDomain.MonitoringIsEnabled = true;
@@ -154,7 +159,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			}
 		}
 
-		private static void StartNode()
+		private void StartNode()
 		{
 			var assemblyName =
 				Assembly.GetExecutingAssembly()
@@ -169,11 +174,27 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					 assembly, 
 					 ConfigurationManager.AppSettings["NodeName"]);
 
-			var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()));
-			var sharedContainer = new ContainerBuilder().Build();
-			new ContainerConfiguration(sharedContainer, toggleManager).Configure(null);
+			//var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()));
+			//var sharedContainer = new ContainerBuilder().Build();
+			//new ContainerConfiguration(sharedContainer, toggleManager).Configure(null);
+			var iocArgs = new IocArgs(new ConfigReader());
+			var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));
+			var builder = new ContainerBuilder();
+			builder.RegisterModule(new CommonModule(configuration));
+			builder.RegisterModule(new TenantServerModule(configuration));
+			builder.RegisterModule<NodeHandlersModule>();
+			var container = builder.Build();
+			iocArgs.SharedContainer = container;
 
-			new NodeStarter().Start(nodeConfig, sharedContainer);
+			var b2 = new ContainerBuilder();
+			b2.RegisterModule(new CommonModule(configuration));
+			b2.RegisterModule(new TenantServerModule(configuration));
+			b2.RegisterModule<NodeHandlersModule>();
+			b2.Update(container);
+
+			var state = container.Resolve<IDataSourceScope>();
+
+			new NodeStarter().Start(nodeConfig, container);
 		}
 	}
 }

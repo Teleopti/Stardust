@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -16,7 +17,11 @@ using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.IdentityModel.Protocols.WSFederation;
 using Microsoft.IdentityModel.Web;
 using Owin;
+using Stardust.Manager;
+using Stardust.Manager.Models;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
@@ -86,6 +91,13 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				application.UseAutofacMiddleware(container);
 				application.UseAutofacMvc();
 				application.UseAutofacWebApi(config);
+
+				var toggles = container.Resolve<IToggleManager>();
+				if (toggles.IsEnabled(Toggles.Wfm_UseManagersAndNodes))
+				{
+					var managerThread = new Thread(startManager);
+					managerThread.Start();
+				}
 			}
 			catch (Exception ex)
 			{
@@ -116,6 +128,16 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				HttpContext.Current.Response.Redirect(returnUrl, false);
 				HttpContext.Current.ApplicationInstance.CompleteRequest();
 			}
+		}
+
+		private static void startManager()
+		{
+			var config = new ManagerConfiguration
+			{
+				BaseAdress = ConfigurationManager.AppSettings["ManagerBaseAddress"],
+				ConnectionString = ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString
+			};
+			new ManagerStarter().Start(config);
 		}
 	}
 }

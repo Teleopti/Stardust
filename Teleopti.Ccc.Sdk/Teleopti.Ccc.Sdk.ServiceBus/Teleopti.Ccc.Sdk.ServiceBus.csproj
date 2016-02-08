@@ -166,7 +166,7 @@
       <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.16\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
     </Reference>
     <Reference Include="Stardust.Node, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Stardust.Node.1.0.0.76\lib\net451\Stardust.Node.dll</HintPath>
+      <HintPath>..\..\packages\Stardust.Node.1.0.0.105\lib\net451\Stardust.Node.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -235,6 +235,9 @@
     <Compile Include="AgentBadge\RunningEtlJobChecker.cs" />
     <Compile Include="AutofacServiceBus.cs" />
     <Compile Include="InternalServiceBusSender.cs" />
+    <Compile Include="NodeHandlerSender.cs" />
+    <Compile Include="NodeHandlers\ImportForecastFromFileHandler.cs" />
+    <Compile Include="NodeHandlers\NodeHandlersModule.cs" />
     <Compile Include="PayrollBusBootStrapper.cs" />
     <Compile Include="Payroll\InitializePayrollFormatsToDb.cs" />
     <Compile Include="Rta\FactQueueUpdatedConsumer.cs" />
@@ -317,6 +320,7 @@
     <None Include="..\..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>
     </None>
+    <None Include="app.config" />
     <None Include="log4net.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
