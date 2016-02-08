@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Timers;
 using Manager.Integration.Test.WPF.Annotations;
+using Manager.Integration.Test.WPF.Commands;
 
 namespace Manager.Integration.Test.WPF.ViewModels
 {
@@ -21,6 +23,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
             set
             {
                 _workerNodeHeader = value;
+
                 OnPropertyChanged();
 
             }
@@ -42,7 +45,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
         public MainWindowViewModel()
         {
-            GetData();
+            ClearDatabaseCommand = new ClearDatabaseCommand(this);
 
             RefreshTimer = new Timer(5000);
 
@@ -81,7 +84,6 @@ namespace Manager.Integration.Test.WPF.ViewModels
             }
         }
 
-        private List<Logging> _loggingData;
         private List<JobHistory> _jobHistoryData;
         private List<JobHistoryDetail> _jobHistoryDetailData;
         private List<JobDefinition> _jobDefinitionData;
@@ -91,11 +93,23 @@ namespace Manager.Integration.Test.WPF.ViewModels
         private string _jobHistoryHeader;
         private string _jobHistoryDetailHeader;
         private string _jobDefinitionDataHeader;
+        private ClearDatabaseCommand _clearDatabaseCommand;
+        private List<Logging> _loggingData;
+
+        public ClearDatabaseCommand ClearDatabaseCommand
+        {
+            get { return _clearDatabaseCommand; }
+            set
+            {
+                _clearDatabaseCommand = value;
+
+                OnPropertyChanged();
+            }
+        }
 
         public List<Logging> LoggingData
         {
             get { return _loggingData; }
-
             set
             {
                 _loggingData = value;
@@ -233,5 +247,19 @@ namespace Manager.Integration.Test.WPF.ViewModels
             }
         }
 
+        public bool DatabaseContainsInformation()
+        {
+            return true;
+        }
+
+        public void DatabaseClearAllInformation()
+        {
+            using (ManagerDbEntities managerDbEntities = new ManagerDbEntities())
+            {
+                managerDbEntities.Database.ExecuteSqlCommand("TRUNCATE TABLE Stardust.Logging");
+            }
+
+            GetData();
+        }
     }
 }

@@ -61,7 +61,6 @@ namespace Manager.Integration.Test
                     {
                         StartManagerIntegrationConsoleHostProcess =
                             ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
-
                     });
 
                     task.Start();
@@ -74,12 +73,19 @@ namespace Manager.Integration.Test
                     task.Start();
                 }
             }
+
+            JobHelper.GiveNodesTimeToInitialize();
         }
 
-        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        private void CurrentDomain_UnhandledException(object sender,
+                                                      UnhandledExceptionEventArgs e)
         {
             Exception exp = (Exception) e.ExceptionObject;
-            
+
+
+            LogHelper.LogFatalWithLineNumber(exp.Message,
+                                             Logger,
+                                             exp);
         }
 
         private static void TryCreateSqlLoggingTable()
@@ -134,7 +140,9 @@ namespace Manager.Integration.Test
 
                     catch (Exception exp)
                     {
-                        LogHelper.LogErrorWithLineNumber(exp.Message, Logger,exp);
+                        LogHelper.LogErrorWithLineNumber(exp.Message,
+                                                         Logger,
+                                                         exp);
                     }
                 }
             }
@@ -163,8 +171,6 @@ namespace Manager.Integration.Test
                                             Logger);
 
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-
-            JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(2*NumberOfNodesToStart);
 
@@ -220,8 +226,6 @@ namespace Manager.Integration.Test
 
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-            JobHelper.GiveNodesTimeToInitialize();
-
             List<JobRequestModel> requests = JobHelper.GenerateFailingJobParamsRequests(1);
 
             var timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count);
@@ -263,8 +267,6 @@ namespace Manager.Integration.Test
                                             Logger);
 
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-
-            JobHelper.GiveNodesTimeToInitialize();
 
             List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(1);
 
@@ -325,9 +327,7 @@ namespace Manager.Integration.Test
 
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-            JobHelper.GiveNodesTimeToInitialize();
-
-            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(NumberOfNodesToStart * 2);
+            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(NumberOfNodesToStart*2);
 
             TimeSpan timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count);
 
@@ -354,7 +354,7 @@ namespace Manager.Integration.Test
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
-            ManagerApiHelper.CheckJobHistoryStatusTimer.CancelAllRequest();            
+            ManagerApiHelper.CheckJobHistoryStatusTimer.CancelAllRequest();
 
             bool condition =
                 ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus);

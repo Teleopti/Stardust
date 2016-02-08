@@ -115,7 +115,6 @@ namespace Manager.Integration.Test
                     JsonConvert.DeserializeObject<List<string>>(content);
             }
 
-
             Logger.Info("Finished tests.");
         }
     }

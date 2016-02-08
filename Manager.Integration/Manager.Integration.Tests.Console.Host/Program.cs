@@ -189,7 +189,7 @@ namespace Manager.IntegrationTest.Console.Host
                                                                     adevidence,
                                                                     managerAppDomainSetup);
 
-                AddOrUpdateAppDomains(managerAppDomainSetup.ApplicationName,
+                AddOrUpdateAppDomains(CopiedManagerConfigurationFile.Name,
                                       managerAppDomain);
 
                 var assemblyFile = new FileInfo(Path.Combine(managerAppDomainSetup.ApplicationBase,
@@ -406,6 +406,11 @@ namespace Manager.IntegrationTest.Console.Host
                 Program.AppDomains.FirstOrDefault(pair => pair.Key == id);
 
             AppDomain.Unload(appDomainToUnload.Value);
+
+            AppDomain appdomainToRemove;
+
+            bool ok=Program.AppDomains.TryRemove(id,
+                                                 out appdomainToRemove);
         }
     }
 }

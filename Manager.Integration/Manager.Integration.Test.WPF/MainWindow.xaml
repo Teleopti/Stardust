@@ -29,17 +29,24 @@
         <viewModels:MainWindowViewModel />
     </Window.DataContext>
     <Grid Margin="10,5,10,10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="160" />
+            <ColumnDefinition Width="20" />
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition />
         </Grid.RowDefinitions>
         <TextBlock x:Name="TextBlock"
                    TextWrapping="Wrap"
-                   d:LayoutOverrides="Height"
                    VerticalAlignment="Center"
-                   Text="{Binding Status}" />
+                   Text="{Binding Status}"
+                   Margin="0,7.02" />
         <TabControl x:Name="TabControl"
-                    Grid.Row="1">
+                    Grid.Row="1"
+                    Grid.ColumnSpan="4">
             <TabControl.Effect>
                 <DropShadowEffect Color="#FFECDDDD" />
             </TabControl.Effect>
@@ -75,7 +82,8 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Header="{Binding LoggingHeader, FallbackValue='Logging'}" IsSelected="True">
+            <TabItem Header="{Binding LoggingHeader, FallbackValue='Logging'}"
+                     IsSelected="True">
                 <Grid Background="#FFE5E5E5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="25" />
@@ -288,6 +296,10 @@
                 </Grid>
             </TabItem>
         </TabControl>
+        <Button x:Name="button"
+                Content="Clear Logging Table"
+                Grid.Column="2"
+                Command="{Binding ClearDatabaseCommand}" />
 
 
     </Grid>
