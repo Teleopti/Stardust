@@ -67,6 +67,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\ClearDatabaseCommand.cs" />
     <Compile Include="Converters\RowNumberConverter.cs" />
     <Compile Include="JobDefinition.cs">
       <DependentUpon>Model1.tt</DependentUpon>
