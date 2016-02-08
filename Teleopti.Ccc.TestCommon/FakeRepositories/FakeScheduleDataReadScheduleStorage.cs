@@ -10,7 +10,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakeScheduleDataReadScheduleRepository : IScheduleRepository
+	public class FakeScheduleDataReadScheduleStorage : IScheduleStorage
 	{
 		public void InitRangeValues(int targetScheduledDaysOff, int scheduledDaysOff, TimeSpan targetTimeHolder, TimeSpan contractTimeHolder)
 		{
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public DateTimePeriod ThePeriodThatWasUsedForFindingSchedules { get; private set; }
 
-		public FakeScheduleDataReadScheduleRepository(params IScheduleData[] data)
+		public FakeScheduleDataReadScheduleStorage(params IScheduleData[] data)
 		{
 			_data = data;
 		}

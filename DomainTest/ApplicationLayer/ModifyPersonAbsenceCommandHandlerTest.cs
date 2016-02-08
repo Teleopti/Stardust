@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	{
 
 		private SaveSchedulePartService _saveSchedulePartService;
-		private FakeScheduleRepository _scheduleRepository;
+		private FakeScheduleStorage _scheduleStorage;
 		private BusinessRulesForPersonalAccountUpdate _businessRulesForAccountUpdate;
 		
 		[SetUp]
@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			var personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 			_businessRulesForAccountUpdate = new BusinessRulesForPersonalAccountUpdate(personAbsenceAccountRepository, new SchedulingResultStateHolder());
-			_scheduleRepository = new FakeScheduleRepository();
-			var scheduleDifferenceSaver = new ScheduleDifferenceSaver(_scheduleRepository);
+			_scheduleStorage = new FakeScheduleStorage();
+			var scheduleDifferenceSaver = new ScheduleDifferenceSaver(_scheduleStorage);
 			_saveSchedulePartService = new SaveSchedulePartService(scheduleDifferenceSaver, personAbsenceAccountRepository);
 		}
 
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var currentScenario = new FakeCurrentScenario();
 			var personAbsence = new PersonAbsence(PersonFactory.CreatePersonWithId(), currentScenario.Current(), MockRepository.GenerateMock<IAbsenceLayer>());
 			var personAbsenceRepository = new FakePersonAbsenceWriteSideRepository() { personAbsence } ;
-			var target = new ModifyPersonAbsenceCommandHandler(personAbsenceRepository, new UtcTimeZone(), _scheduleRepository, _businessRulesForAccountUpdate, _saveSchedulePartService);
+			var target = new ModifyPersonAbsenceCommandHandler(personAbsenceRepository, new UtcTimeZone(), _scheduleStorage, _businessRulesForAccountUpdate, _saveSchedulePartService);
 
 			var command = new ModifyPersonAbsenceCommand
 			{
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 						originalDateTimePeriod)
 				};
 
-			var target = new ModifyPersonAbsenceCommandHandler(personAbsenceRepository, new UtcTimeZone(), _scheduleRepository, _businessRulesForAccountUpdate, _saveSchedulePartService);
+			var target = new ModifyPersonAbsenceCommandHandler(personAbsenceRepository, new UtcTimeZone(), _scheduleStorage, _businessRulesForAccountUpdate, _saveSchedulePartService);
 			var command = new ModifyPersonAbsenceCommand
 			{
 				PersonAbsenceId = personAbsenceRepository.Single().Id.Value,
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				{
 					PersonAbsenceFactory.CreatePersonAbsence (PersonFactory.CreatePersonWithId(), currentScenario.Current(),
 						new DateTimePeriod(2013, 11, 27, 11, 2013, 11, 27, 16))
-				};var target = new ModifyPersonAbsenceCommandHandler(personAbsenceRepository, new UtcTimeZone(), _scheduleRepository, _businessRulesForAccountUpdate, _saveSchedulePartService);
+				};var target = new ModifyPersonAbsenceCommandHandler(personAbsenceRepository, new UtcTimeZone(), _scheduleStorage, _businessRulesForAccountUpdate, _saveSchedulePartService);
 
 			var command = new ModifyPersonAbsenceCommand
 			{

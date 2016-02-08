@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakeScheduleRepository : IScheduleRepository
+	public class FakeScheduleStorage : IScheduleStorage
 	{
 		public void InitRangeValues(int targetScheduledDaysOff, int scheduledDaysOff, TimeSpan targetTimeHolder, TimeSpan contractTimeHolder)
 		{

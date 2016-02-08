@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// Created by: robink
 		/// Created date: 2008-09-24
 		/// </remarks>
-		IScheduleRepository CreateScheduleRepository(IUnitOfWork unitOfWork);
+		IScheduleStorage CreateScheduleRepository(IUnitOfWork unitOfWork);
 
 		/// <summary>
 		/// Creates the multisite day repository.

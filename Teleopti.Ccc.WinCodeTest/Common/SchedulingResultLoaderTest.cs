@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         private IScheduleDictionary createScheduleInitializationExpectation()
         {
             var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
-            var scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
+            var scheduleRepository = MockRepository.GenerateMock<IScheduleStorage>();
         	var period = _schedulerState.RequestedPeriod.Period();
 
             _repositoryFactory.Stub(x => x.CreateScheduleRepository(_uow)).Return(scheduleRepository);

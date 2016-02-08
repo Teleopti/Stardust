@@ -11,15 +11,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly ICurrentScenario _scenario;
 		private readonly IProxyForId<IPerson> _personRepository;
 		private readonly IProxyForId<IAbsence> _absenceRepository;
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IUserTimeZone _timeZone;
 
-		public AbsenceCommandConverter(ICurrentScenario scenario, IProxyForId<IPerson> personRepository, IProxyForId<IAbsence> absenceRepository, IScheduleRepository scheduleRepository, IUserTimeZone timeZone)
+		public AbsenceCommandConverter(ICurrentScenario scenario, IProxyForId<IPerson> personRepository, IProxyForId<IAbsence> absenceRepository, IScheduleStorage scheduleStorage, IUserTimeZone timeZone)
 		{
 			_scenario = scenario;
 			_personRepository = personRepository;
 			_absenceRepository = absenceRepository;
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 			_timeZone = timeZone;
 		}
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		private IScheduleRange getScheduleRangeForPeriod(DateOnlyPeriod period, IPerson person)
 		{
-			var dictionary = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(
+			var dictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
 					person,
 					new ScheduleDictionaryLoadOptions(false, false),
 					period,

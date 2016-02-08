@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             {
                 IList<IPerson> personList = _personAssembler.DtosToDomainEntities(personCollection).ToList();
 
-                IScheduleRepository scheduleRep = repositoryFactory.CreateScheduleRepository(unitOfWork);
+                IScheduleStorage scheduleRep = repositoryFactory.CreateScheduleRepository(unitOfWork);
                 IScheduleDictionary scheduleDictionary = scheduleRep.FindSchedulesForPersonsOnlyInGivenPeriod(personList, new ScheduleDictionaryLoadOptions(false, true), period, _scenarioRepository.Current());
                 //rk don't know if I break stuff here...
                 //scheduleDictionary.SetTimeZone(timeZone);

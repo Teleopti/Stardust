@@ -223,14 +223,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			IPersonProvider personsProvider = new PersonsInOrganizationProvider(_schedulerState.SchedulingResultState.PersonsInOrganization);
 			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
-			IScheduleRepository scheduleRepository = _repositoryFactory.CreateScheduleRepository(uow);
+			IScheduleStorage scheduleStorage = _repositoryFactory.CreateScheduleRepository(uow);
 
 			using (PerformanceOutput.ForOperation("Loading schedules"))
 			{
 				uow.Reassociate(_schedulerState.SchedulingResultState.PersonsInOrganization);
 				using (uow.DisableFilter(QueryFilter.Deleted))
 					_repositoryFactory.CreateActivityRepository(uow).LoadAll();
-				_schedulerState.LoadSchedules(scheduleRepository, personsProvider, scheduleDictionaryLoadOptions, scheduleDateTimePeriod);
+				_schedulerState.LoadSchedules(scheduleStorage, personsProvider, scheduleDictionaryLoadOptions, scheduleDateTimePeriod);
 			}
 		}
 

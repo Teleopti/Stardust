@@ -14,16 +14,16 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 	public class GetSchedulesByPersonQueryHandler : IHandleQuery<GetSchedulesByPersonQueryDto,ICollection<SchedulePartDto>>
 	{
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IDateTimePeriodAssembler _dateTimePeriodAssembler;
 		private readonly ISchedulePartAssembler _scheduleDayAssembler;
 
-        public GetSchedulesByPersonQueryHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IDateTimePeriodAssembler dateTimePeriodAssembler, ISchedulePartAssembler scheduleDayAssembler)
+        public GetSchedulesByPersonQueryHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IScheduleStorage scheduleStorage, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IDateTimePeriodAssembler dateTimePeriodAssembler, ISchedulePartAssembler scheduleDayAssembler)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 			_personRepository = personRepository;
 			_scenarioRepository = scenarioRepository;
 			_dateTimePeriodAssembler = dateTimePeriodAssembler;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				var person = _personRepository.Get(query.PersonId);
 
 				IScheduleDictionary scheduleDictionary =
-					_scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
+					_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
 						period, scenario);
 
 				IScheduleRange scheduleRange = scheduleDictionary[person];

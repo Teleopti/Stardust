@@ -3749,7 +3749,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					LoadDaysAfterLeft = true
 				};
-				stateHolder.LoadSchedules(new ScheduleRepository(uow), personsInOrganizationProvider, scheduleDictionaryLoadOptions,
+				stateHolder.LoadSchedules(new ScheduleStorage(uow), personsInOrganizationProvider, scheduleDictionaryLoadOptions,
 					period);
 				_schedulerState.Schedules.SetUndoRedoContainer(_undoRedo);
 			}
@@ -4687,7 +4687,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var allNewRules = _schedulerState.SchedulingResultState.GetRulesToRun();
 			var selectedSchedules = _scheduleView.SelectedSchedules();
 			var uowFactory = UnitOfWorkFactory.Current;
-			var scheduleRepository = new ScheduleRepository(uowFactory);
+			var scheduleRepository = new ScheduleStorage(uowFactory);
 			using (
 				var exportForm = new ExportToScenarioResultView(uowFactory, scheduleRepository,
 					new MoveDataBetweenSchedules(allNewRules,

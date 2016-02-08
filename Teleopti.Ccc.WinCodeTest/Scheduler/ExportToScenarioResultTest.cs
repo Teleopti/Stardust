@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IExportToScenarioResultView view;
 		private MockRepository mocks;
 		private Presenter target;
-		private IScheduleRepository scheduleRepository;
+		private IScheduleStorage scheduleStorage;
 		private IMoveDataBetweenSchedules moveSvc;
 		private IScenario exportScenario;
 		private IScenario orginalScenario;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 			mocks = new MockRepository();
 			view = mocks.StrictMock<IExportToScenarioResultView>();
-			scheduleRepository = mocks.StrictMock<IScheduleRepository>();
+			scheduleStorage = mocks.StrictMock<IScheduleStorage>();
 			moveSvc = mocks.StrictMock<IMoveDataBetweenSchedules>();
 			uowFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
 			scheduleDictionaryBatchPersister = mocks.DynamicMock<IScheduleDictionaryPersister>();
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			persons = new List<IPerson>();
 			exportScenario = new Scenario("export");
 			orginalScenario = new Scenario("original");
-			target = new Presenter(uowFactory, view, scheduleRepository, moveSvc, callback, persons, partsToMove, exportScenario, scheduleDictionaryBatchPersister);
+			target = new Presenter(uowFactory, view, scheduleStorage, moveSvc, callback, persons, partsToMove, exportScenario, scheduleDictionaryBatchPersister);
 		}
 
 		[Test]
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(() => view.EnableInteractions());
 				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(null);
 				callback.ReassociateDataForAllPeople();
-				Expect.Call(scheduleRepository.FindSchedulesForPersons(null, null, null, null, null)).IgnoreArguments()
+				Expect.Call(scheduleStorage.FindSchedulesForPersons(null, null, null, null, null)).IgnoreArguments()
 					.Return(dictionaryToExportTo);
 				LastCall.IgnoreArguments();
 				Expect.Call(moveSvc.CopySchedulePartsToAnotherDictionary(dictionaryToExportTo, partsToMove)).Return(warnings);
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(() => view.EnableInteractions());
 				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(null);
 				callback.ReassociateDataForAllPeople();
-				Expect.Call(scheduleRepository.FindSchedulesForPersons(null, null, null, null, null)).Return(dictionaryToExportTo);
+				Expect.Call(scheduleStorage.FindSchedulesForPersons(null, null, null, null, null)).Return(dictionaryToExportTo);
 				LastCall.IgnoreArguments();
 				Expect.Call(moveSvc.CopySchedulePartsToAnotherDictionary(dictionaryToExportTo, partsToMove)).Return(warnings);
 				verifyScenarioText();
@@ -295,8 +295,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 		private class Presenter : ExportToScenarioResultPresenter
 		{
-			public Presenter(IUnitOfWorkFactory uowFactory, IExportToScenarioResultView view, IScheduleRepository scheduleRepository, IMoveDataBetweenSchedules moveSchedules, IReassociateDataForSchedules callback, IEnumerable<IPerson> persons, IEnumerable<IScheduleDay> schedulePartsToExport, IScenario exportScenario, IScheduleDictionaryPersister scheduleDictionaryBatchPersister)
-				: base(uowFactory, view, scheduleRepository, moveSchedules, callback, persons, schedulePartsToExport, exportScenario, scheduleDictionaryBatchPersister)
+			public Presenter(IUnitOfWorkFactory uowFactory, IExportToScenarioResultView view, IScheduleStorage scheduleStorage, IMoveDataBetweenSchedules moveSchedules, IReassociateDataForSchedules callback, IEnumerable<IPerson> persons, IEnumerable<IScheduleDay> schedulePartsToExport, IScenario exportScenario, IScheduleDictionaryPersister scheduleDictionaryBatchPersister)
+				: base(uowFactory, view, scheduleStorage, moveSchedules, callback, persons, schedulePartsToExport, exportScenario, scheduleDictionaryBatchPersister)
 			{
 			}
 
@@ -310,7 +310,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 			public IUnitOfWorkFactory UowFactory { get; set; }
 			public IExportToScenarioResultView View { get; set; }
-			public IScheduleRepository ScheduleRepository { get; set; }
+			public IScheduleStorage ScheduleStorage { get; set; }
 			public IMoveDataBetweenSchedules MoveSchedules { get; set; }
 			public IReassociateDataForSchedules Callback { get; set; }
 			public IEnumerable<IPerson> FullyLoadedPersonsToMove { get; set; }
@@ -329,9 +329,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				{
 					View = fakeFactory.Stub<IExportToScenarioResultView>();
 				}
-				if (ScheduleRepository == null)
+				if (ScheduleStorage == null)
 				{
-					ScheduleRepository = fakeFactory.Stub<IScheduleRepository>();
+					ScheduleStorage = fakeFactory.Stub<IScheduleStorage>();
 				}
 				if (Callback == null)
 				{
@@ -366,7 +366,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 					ScheduleDictionaryBatchPersister = fakeFactory.Stub<IScheduleDictionaryPersister>();
 				}
 				fakeFactory.ReplayAll();
-				return new ExportToScenarioResultPresenter(UowFactory, View, ScheduleRepository, MoveSchedules, Callback, FullyLoadedPersonsToMove, SchedulePartsToExport, ExportScenario, ScheduleDictionaryBatchPersister);
+				return new ExportToScenarioResultPresenter(UowFactory, View, ScheduleStorage, MoveSchedules, Callback, FullyLoadedPersonsToMove, SchedulePartsToExport, ExportScenario, ScheduleDictionaryBatchPersister);
 			}
 		}
 		#endregion

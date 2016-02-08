@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     public class AddDayOffCommandHandler : IHandleCommand<AddDayOffCommandDto>
     {
         private readonly IDayOffTemplateRepository _dayOffRepository;
-        private readonly IScheduleRepository _scheduleRepository;
+        private readonly IScheduleStorage _scheduleStorage;
         private readonly IPersonRepository _personRepository;
         private readonly IScenarioRepository _scenarioRepository;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
@@ -21,10 +21,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		private readonly IScheduleTagAssembler _scheduleTagAssembler;
 		private readonly IScheduleSaveHandler _scheduleSaveHandler;
 
-		public AddDayOffCommandHandler(IDayOffTemplateRepository dayOffRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleTagAssembler scheduleTagAssembler, IScheduleSaveHandler scheduleSaveHandler)
+		public AddDayOffCommandHandler(IDayOffTemplateRepository dayOffRepository, IScheduleStorage scheduleStorage, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleTagAssembler scheduleTagAssembler, IScheduleSaveHandler scheduleSaveHandler)
         {
             _dayOffRepository = dayOffRepository;
-            _scheduleRepository = scheduleRepository;
+            _scheduleStorage = scheduleStorage;
             _personRepository = personRepository;
             _scenarioRepository = scenarioRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			    var person = _personRepository.Load(command.PersonId);
 			    var scenario = getDesiredScenario(command);
 			    var startDate = command.Date.ToDateOnly();
-			    var scheduleDictionary = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(
+			    var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
 				    person, new ScheduleDictionaryLoadOptions(false, false),
 				    new DateOnlyPeriod(startDate, startDate.AddDays(1)), scenario);
 

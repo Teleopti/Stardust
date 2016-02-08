@@ -617,7 +617,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				//Avoid lazy load error
 				avoidLazyLoadForLoadSchedule(uow, persons);
 
-				var scheduleRepository = new ScheduleRepository(uow);
+				var scheduleRepository = new ScheduleStorage(uow);
 				IPersonProvider personsInOrganizationProvider = new PersonsInOrganizationProvider(persons) { DoLoadByPerson = true };
 				IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, false, true) { LoadDaysAfterLeft = true };
 

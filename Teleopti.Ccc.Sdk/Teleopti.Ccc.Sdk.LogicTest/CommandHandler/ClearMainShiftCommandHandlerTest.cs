@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
     [TestFixture]
     public class ClearMainShiftCommandHandlerTest
     {
-        private IScheduleRepository _scheduleRepository;
+        private IScheduleStorage _scheduleStorage;
         private IPersonRepository _personRepository;
         private IScenarioRepository _scenarioRepository;
         private IUnitOfWorkFactory _unitOfWorkFactory;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 	    [SetUp]
         public void Setup()
         {
-            _scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
+            _scheduleStorage = MockRepository.GenerateMock<IScheduleStorage>();
 			_personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			_scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
 			_unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_scheduleTagAssembler = MockRepository.GenerateMock<IScheduleTagAssembler>();
 			_scheduleSaveHandler = MockRepository.GenerateMock<IScheduleSaveHandler>();
 
-			_target = new ClearMainShiftCommandHandler(_scheduleTagAssembler, _scheduleRepository, _personRepository, _scenarioRepository, _currentUnitOfWorkFactory, _businessRulesForPersonalAccountUpdate, _scheduleSaveHandler);
+			_target = new ClearMainShiftCommandHandler(_scheduleTagAssembler, _scheduleStorage, _personRepository, _scenarioRepository, _currentUnitOfWorkFactory, _businessRulesForPersonalAccountUpdate, _scheduleSaveHandler);
 
             _person = PersonFactory.CreatePerson("test");
             _person.SetId(Guid.NewGuid());
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		    _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 		    _currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
 		    _personRepository.Stub(x => x.Load(_clearMainShiftDto.PersonId)).Return(_person);
-			_scheduleRepository.Stub(x => x.FindSchedulesForPersonOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario))
+			_scheduleStorage.Stub(x => x.FindSchedulesForPersonOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario))
 		                       .IgnoreArguments()
 		                       .Return(dictionary);
 		    dictionary.Stub(x => x[_person]).Return(scheduleRangeMock);
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		    _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 		    _currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
 		    _personRepository.Stub(x => x.Load(_clearMainShiftDto.PersonId)).Return(_person);
-			_scheduleRepository.Stub(x => x.FindSchedulesForPersonOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario)).IgnoreArguments().Return(dictionary);
+			_scheduleStorage.Stub(x => x.FindSchedulesForPersonOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario)).IgnoreArguments().Return(dictionary);
 		    dictionary.Stub(x => x[_person]).Return(scheduleRangeMock);
 		    scheduleRangeMock.Stub(x => x.ScheduledDay(new DateOnly(_startDate))).Return(schedulePart);
 		    _businessRulesForPersonalAccountUpdate.Stub(x => x.FromScheduleRange(scheduleRangeMock)).Return(rules);
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			_currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
 			_personRepository.Stub(x => x.Load(_clearMainShiftDto.PersonId)).Return(_person);
-			_scheduleRepository.Stub(x => x.FindSchedulesForPersonOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario)).IgnoreArguments().Return(dictionary);
+			_scheduleStorage.Stub(x => x.FindSchedulesForPersonOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario)).IgnoreArguments().Return(dictionary);
 			dictionary.Stub(x => x[_person]).Return(scheduleRangeMock);
 			scheduleRangeMock.Stub(x => x.ScheduledDay(new DateOnly(_startDate))).Return(schedulePart);
 			_businessRulesForPersonalAccountUpdate.Stub(x => x.FromScheduleRange(scheduleRangeMock)).Return(rules);

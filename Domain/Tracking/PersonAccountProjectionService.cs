@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Tracking
             return (_schedule != null) ? _accountPeriod.Intersection(_schedule.Period) : null;
         }
 
-        public IList<IScheduleDay> CreateProjection(IScheduleRepository repository, IScenario scenario)
+        public IList<IScheduleDay> CreateProjection(IScheduleStorage storage, IScenario scenario)
         {
             var scheduleDays  = new SortedList<DateOnly, IScheduleDay>();
 	        var timeZone = _person.PermissionInformation.DefaultTimeZone();
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Tracking
 	            if (!intersection.HasValue) continue;
 
 	            var dateOnlyPeriod = intersection.Value.ToDateOnlyPeriod(timeZone);
-	            var range = repository.ScheduleRangeBasedOnAbsence(intersection.Value, scenario, _person, _account.Owner.Absence);
+	            var range = storage.ScheduleRangeBasedOnAbsence(intersection.Value, scenario, _person, _account.Owner.Absence);
 	            range.ScheduledDayCollection(dateOnlyPeriod)
 	                 .ForEach(d => scheduleDays.Add(d.DateOnlyAsPeriod.DateOnly, d));
             }

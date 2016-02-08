@@ -8,17 +8,17 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 	public class ShiftTradeRequestStatusChecker : IBatchShiftTradeRequestStatusChecker
     {
         private readonly ICurrentScenario _scenarioRepository;
-        private readonly IScheduleRepository _scheduleRepository;
+        private readonly IScheduleStorage _scheduleStorage;
         private readonly IPersonRequestCheckAuthorization _authorization;
         private IList<IPerson> _persons;
         private DateTimePeriod? _period;
         private IScheduleDictionary _scheduleDictionary;
         private bool _isInBatchMode;
 
-		  public ShiftTradeRequestStatusChecker(ICurrentScenario scenarioRepository, IScheduleRepository scheduleRepository, IPersonRequestCheckAuthorization authorization)
+		  public ShiftTradeRequestStatusChecker(ICurrentScenario scenarioRepository, IScheduleStorage scheduleStorage, IPersonRequestCheckAuthorization authorization)
         {
             _scenarioRepository = scenarioRepository;
-            _scheduleRepository = scheduleRepository;
+            _scheduleStorage = scheduleStorage;
             _authorization = authorization;
         }
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         {
 	        var longPeriod = new DateOnlyPeriod(new DateOnly(period.StartDateTime.AddDays(-1)),
 	                                            new DateOnly(period.EndDateTime.AddDays(1)));
-	        _scheduleDictionary = _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(
+	        _scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
 		        _persons,
 		        new ScheduleDictionaryLoadOptions(false, false),
 		        longPeriod, _scenarioRepository.Current());

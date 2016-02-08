@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
     public class ApproveRequestCommandHandlerTest
     {
         private MockRepository _mock;
-        private IScheduleRepository _scheduleRepository;
+        private IScheduleStorage _scheduleStorage;
 				private IScheduleDifferenceSaver _scheduleDictionarySaver;
         private ICurrentScenario _scenarioRepository;
         private IPersonRequestCheckAuthorization _authorization;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         public  void Setup()
         {
             _mock = new MockRepository();
-            _scheduleRepository = _mock.StrictMock<IScheduleRepository>();
+            _scheduleStorage = _mock.StrictMock<IScheduleStorage>();
 						_scheduleDictionarySaver = _mock.StrictMock<IScheduleDifferenceSaver>();
 			_scenarioRepository = _mock.StrictMock<ICurrentScenario>();
             _authorization = _mock.StrictMock<IPersonRequestCheckAuthorization>();
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
             _currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
             _globalSettingDataRepository = _mock.StrictMock<IGlobalSettingDataRepository>();
-            _target = new ApproveRequestCommandHandler(_scheduleRepository, _scheduleDictionarySaver, _scenarioRepository,
+            _target = new ApproveRequestCommandHandler(_scheduleStorage, _scheduleDictionarySaver, _scenarioRepository,
                                                        _authorization, _swapAndModifyService, _personRequestRepository,
                                                        _currentUnitOfWorkFactory,
 													   new DifferenceEntityCollectionService<IPersistableScheduleData>(),
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
                 Expect.Call(request.Request).Return(_absenceRequest).Repeat.Times(3);
                 Expect.Call(_scenarioRepository.Current()).Return(_scenario).Repeat.Twice();
-				Expect.Call(_scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { _person }, new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(), null)).
+				Expect.Call(_scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { _person }, new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(), null)).
                     IgnoreArguments().Return(dictionary);
 				Expect.Call(dictionary.Values).Return(new List<IScheduleRange>{_mock.DynamicMultiMock<IScheduleRange>(typeof(IUnvalidatedScheduleRangeUpdate))});
                 Expect.Call(_personRequestRepository.Get(_approveRequestCommandDto.PersonRequestId)).Return(request);
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
                 Expect.Call(request.Request).Return(_shiftTradeRequest).Repeat.Times(3);
                 Expect.Call(_scenarioRepository.Current()).Return(_scenario).Repeat.Twice();
-				Expect.Call(_scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { _person }, new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(), null)).
+				Expect.Call(_scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { _person }, new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(), null)).
                     IgnoreArguments().Return(dictionary);
 				Expect.Call(dictionary.Values).Return(new List<IScheduleRange> { _mock.DynamicMultiMock<IScheduleRange>(typeof(IUnvalidatedScheduleRangeUpdate)) });
                 Expect.Call(_personRequestRepository.Get(_approveRequestCommandDto.PersonRequestId)).Return(request);
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
                 Expect.Call(request.Request).Return(_absenceRequest).Repeat.Times(3);
                 Expect.Call(_scenarioRepository.Current()).Return(_scenario).Repeat.Twice();
-				Expect.Call(_scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(
+				Expect.Call(_scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
 										new[] { _person }, new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(), null)).
                     IgnoreArguments().Return(dictionary);
                 Expect.Call(_personRequestRepository.Get(_approveRequestCommandDto.PersonRequestId)).Return(request);

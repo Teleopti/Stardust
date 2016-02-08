@@ -13,21 +13,21 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 {
 	public class TeleoptiPayrollExportFactory
 	{
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IPersonRepository _personRepository;
 		private readonly IAssembler<DateTimePeriod, DateTimePeriodDto> _dateTimePeriodAssembler;
 		private readonly ICurrentScenario _scenarioRepository;
 		private readonly ISchedulePartAssembler _schedulePartAssembler;
 
-		public TeleoptiPayrollExportFactory(IScheduleRepository scheduleRepository,
+		public TeleoptiPayrollExportFactory(IScheduleStorage scheduleStorage,
 		                                    ICurrentUnitOfWorkFactory unitOfWorkFactory,
 		                                    IPersonRepository personRepository,
 		                                    IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler,
 		                                    ICurrentScenario scenarioRepository,
 		                                    ISchedulePartAssembler schedulePartAssembler)
 		{
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_personRepository = personRepository;
 			_dateTimePeriodAssembler = dateTimePeriodAssembler;
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			{
 				var personList = _personRepository.FindPeople(personCollection.Select(p => p.Id.GetValueOrDefault())).ToList();
 				var scheduleDictionary =
-					_scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(
+					_scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
 						personList,
 						new ScheduleDictionaryLoadOptions(false, false),
 						period,

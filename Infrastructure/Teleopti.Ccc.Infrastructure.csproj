@@ -643,7 +643,7 @@
     <Compile Include="Repositories\RuleSetBagRepository.cs" />
     <Compile Include="Repositories\ScorecardRepository.cs" />
     <Compile Include="Repositories\ValidatedVolumeDayRepository.cs" />
-    <Compile Include="Repositories\ScheduleRepository.cs" />
+    <Compile Include="Repositories\ScheduleStorage.cs" />
     <Compile Include="Repositories\SkillDayRepository.cs" />
     <Compile Include="Repositories\PersonAbsenceRepository.cs" />
     <Compile Include="Repositories\PersonAssignmentRepository.cs" />

@@ -65,10 +65,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
             }
         }
 
-        public virtual void CalculateUsed(IScheduleRepository repository, IScenario scenario)
+        public virtual void CalculateUsed(IScheduleStorage storage, IScenario scenario)
         {
 	        var projectionServiceForPersonAccount = new PersonAccountProjectionService(this, null);
-			IList<IScheduleDay> scheduleDays = projectionServiceForPersonAccount.CreateProjection(repository, scenario);
+			IList<IScheduleDay> scheduleDays = projectionServiceForPersonAccount.CreateProjection(storage, scenario);
 			_usedInScheduler = TimeSpan.Zero;
 			_usedOutsideScheduler = null;
 			TimeSpan result = Owner.Absence.Tracker.TrackForReset(Owner.Absence, scheduleDays);

@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		private SeatPlanner setupSeatPlanner(ITeam[] teams, IEnumerable<IPerson> people, IEnumerable<ISeatMapLocation> seatMapLocations, params IPersonAssignment[] personAssignment)
 		{
 			var seatBookingRequestAssembler = new SeatBookingRequestAssembler(
-				new FakeScheduleDataReadScheduleRepository(personAssignment), _seatBookingRepository, _currentScenario);
+				new FakeScheduleDataReadScheduleStorage(personAssignment), _seatBookingRepository, _currentScenario);
 
 			var seatFrequencyCalculator = new SeatFrequencyCalculator (_seatBookingRepository);
 

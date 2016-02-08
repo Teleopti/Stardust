@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakeDayOffRulesRepository DayOffRulesRepository;
-		public IScheduleRepository ScheduleRepository;
+		public IScheduleStorage ScheduleStorage;
 		public IPersonWeekViolatingWeeklyRestSpecification CheckWeeklyRestRule;
 
 		[Test]
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 
 			Target.Execute(planningPeriod.Id.Value);
 
-			var agentRange = ScheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(agent, new ScheduleDictionaryLoadOptions(false, false, false), weekPeriod, scenario)[agent];
+			var agentRange = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(agent, new ScheduleDictionaryLoadOptions(false, false, false), weekPeriod, scenario)[agent];
 
 			CheckWeeklyRestRule.IsSatisfyBy(agentRange, weekPeriod, weeklyRest)
 				.Should().Be.True();

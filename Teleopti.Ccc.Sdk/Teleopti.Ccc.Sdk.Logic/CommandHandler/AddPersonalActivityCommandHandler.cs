@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 	{
 		private readonly IAssembler<DateTimePeriod, DateTimePeriodDto> _dateTimePeriodAssembler;
 		private readonly IActivityRepository _activityRepository;
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScenarioRepository _scenarioRepository;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
@@ -22,11 +22,11 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		private readonly IScheduleTagAssembler _scheduleTagAssembler;
 		private readonly IScheduleSaveHandler _scheduleSaveHandler;
 
-		public AddPersonalActivityCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IActivityRepository activityRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleTagAssembler scheduleTagAssembler, IScheduleSaveHandler scheduleSaveHandler)
+		public AddPersonalActivityCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IActivityRepository activityRepository, IScheduleStorage scheduleStorage, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleTagAssembler scheduleTagAssembler, IScheduleSaveHandler scheduleSaveHandler)
 		{
 			_dateTimePeriodAssembler = dateTimePeriodAssembler;
 			_activityRepository = activityRepository;
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 			_personRepository = personRepository;
 			_scenarioRepository = scenarioRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var person = _personRepository.Load(command.PersonId);
 				var scenario = getDesiredScenario(command);
 				var startDate = command.Date.ToDateOnly();
-				var scheduleDictionary = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(
+				var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
 					person, new ScheduleDictionaryLoadOptions(false, false),
 					new DateOnlyPeriod(startDate, startDate.AddDays(1)), scenario);
 

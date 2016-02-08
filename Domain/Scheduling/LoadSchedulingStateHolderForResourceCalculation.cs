@@ -19,16 +19,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IWorkloadRepository _workloadRepository;
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly Func<IEnumerable<IPerson>, IPersonProvider> _personProviderMaker;
 
-		public LoadSchedulingStateHolderForResourceCalculation(IPersonRepository personRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, ISkillRepository skillRepository, IWorkloadRepository workloadRepository, IScheduleRepository scheduleRepository, ISchedulingResultStateHolder schedulingResultStateHolder, IPeopleAndSkillLoaderDecider peopleAndSkillLoaderDecider, ISkillDayLoadHelper skillDayLoadHelper) : this(personRepository, personAbsenceAccountRepository, skillRepository, workloadRepository, scheduleRepository,
+		public LoadSchedulingStateHolderForResourceCalculation(IPersonRepository personRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, ISkillRepository skillRepository, IWorkloadRepository workloadRepository, IScheduleStorage scheduleStorage, ISchedulingResultStateHolder schedulingResultStateHolder, IPeopleAndSkillLoaderDecider peopleAndSkillLoaderDecider, ISkillDayLoadHelper skillDayLoadHelper) : this(personRepository, personAbsenceAccountRepository, skillRepository, workloadRepository, scheduleStorage,
 			 schedulingResultStateHolder, peopleAndSkillLoaderDecider, skillDayLoadHelper, p => new PersonsInOrganizationProvider(p))
 		{
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-		public LoadSchedulingStateHolderForResourceCalculation(IPersonRepository personRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, ISkillRepository skillRepository, IWorkloadRepository workloadRepository, IScheduleRepository scheduleRepository, ISchedulingResultStateHolder schedulingResultStateHolder, IPeopleAndSkillLoaderDecider peopleAndSkillLoaderDecider, ISkillDayLoadHelper skillDayLoadHelper, Func<IEnumerable<IPerson>, IPersonProvider> personProviderMaker)
+		public LoadSchedulingStateHolderForResourceCalculation(IPersonRepository personRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, ISkillRepository skillRepository, IWorkloadRepository workloadRepository, IScheduleStorage scheduleStorage, ISchedulingResultStateHolder schedulingResultStateHolder, IPeopleAndSkillLoaderDecider peopleAndSkillLoaderDecider, ISkillDayLoadHelper skillDayLoadHelper, Func<IEnumerable<IPerson>, IPersonProvider> personProviderMaker)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_peopleAndSkillLoaderDecider = peopleAndSkillLoaderDecider;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_personAbsenceAccountRepository = personAbsenceAccountRepository;
 			_skillRepository = skillRepository;
 			_workloadRepository = workloadRepository;
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 			_personProviderMaker = personProviderMaker;
 		}
 
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			 var scheduleDateTimePeriod = new ScheduleDateTimePeriod(new DateTimePeriod(period.StartDateTime.AddDays(-9), period.EndDateTime.AddDays(2)));
 			_schedulingResultStateHolder.Schedules =
-				_scheduleRepository.FindSchedulesForPersons(
+				_scheduleStorage.FindSchedulesForPersons(
 					scheduleDateTimePeriod,
 					scenario, 
 					personsProvider,

@@ -14,17 +14,17 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 	public class GetSchedulesBySiteQueryHandler : IHandleQuery<GetSchedulesBySiteQueryDto, ICollection<SchedulePartDto>>
 	{
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly ISiteRepository _siteRepository;
 		private readonly IDateTimePeriodAssembler _dateTimePeriodAssembler;
 		private readonly ISchedulePartAssembler _scheduleDayAssembler;
 
-		public GetSchedulesBySiteQueryHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ISiteRepository siteRepository, IDateTimePeriodAssembler dateTimePeriodAssembler, ISchedulePartAssembler scheduleDayAssembler)
+		public GetSchedulesBySiteQueryHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IScheduleStorage scheduleStorage, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ISiteRepository siteRepository, IDateTimePeriodAssembler dateTimePeriodAssembler, ISchedulePartAssembler scheduleDayAssembler)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 			_personRepository = personRepository;
 			_scenarioRepository = scenarioRepository;
 			_siteRepository = siteRepository;
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 					personList.AddRange(_personRepository.FindPeopleBelongTeam(team, datePeriod));
 				}
 
-				var scheduleDictionary = _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(personList, new ScheduleDictionaryLoadOptions(false, false), period, scenario);
+				var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(personList, new ScheduleDictionaryLoadOptions(false, false), period, scenario);
 				foreach (IPerson person in personList)
 				{
 					var scheduleRange = scheduleDictionary[person];

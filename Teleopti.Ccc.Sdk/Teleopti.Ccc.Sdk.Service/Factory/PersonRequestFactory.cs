@@ -22,17 +22,17 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		private readonly IMessagePopulatingServiceBusSender _serviceBusSender;
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly ICurrentScenario _currentScenario;
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IPersonRepository _personRepository;
 		private readonly IAssembler<IPersonRequest, PersonRequestDto> _personRequestAssembler;
 
-		public PersonRequestFactory(IPersistPersonRequest persistPersonRequest, IMessagePopulatingServiceBusSender serviceBusSender, IPersonRequestRepository personRequestRepository, ICurrentScenario currentScenario, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IAssembler<IPersonRequest, PersonRequestDto> personRequestAssembler)
+		public PersonRequestFactory(IPersistPersonRequest persistPersonRequest, IMessagePopulatingServiceBusSender serviceBusSender, IPersonRequestRepository personRequestRepository, ICurrentScenario currentScenario, IScheduleStorage scheduleStorage, IPersonRepository personRepository, IAssembler<IPersonRequest, PersonRequestDto> personRequestAssembler)
 		{
 			_persistPersonRequest = persistPersonRequest;
 			_serviceBusSender = serviceBusSender;
 			_personRequestRepository = personRequestRepository;
 			_currentScenario = currentScenario;
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 			_personRepository = personRepository;
 			_personRequestAssembler = personRequestAssembler;
 		}
@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			var personRequest = _personRequestAssembler.DtoToDomainEntity(personRequestDto);
 			var shiftTradeRequestSetChecksum =
 				new ShiftTradeRequestSetChecksum(_currentScenario,
-												 _scheduleRepository);
+												 _scheduleStorage);
 			shiftTradeRequestSetChecksum.SetChecksum(personRequest.Request);
 			return _personRequestAssembler.DomainEntityToDto(personRequest);
 		}
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			PersonRequestedShiftTrade personRequestedShiftTrade = new PersonRequestedShiftTrade(personRequestDto);
 			if (personRequestedShiftTrade.IsSatisfiedBy(person))
 			{
-				var command = new AcceptPreviouslyReferredShiftTradeCommand(_scheduleRepository, _personRequestRepository,
+				var command = new AcceptPreviouslyReferredShiftTradeCommand(_scheduleStorage, _personRequestRepository,
 																			_currentScenario, _serviceBusSender,
 																			personRequestDto);
 				command.Execute();

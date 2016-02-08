@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         private IScheduleDataAssembler<IPersonMeeting, PersonMeetingDto> personMeetingAssembler;
     	private ISdkProjectionServiceFactory sdkProjectionServiceFactory;
         private IPersonRepository personRepository;
-        private IScheduleRepository scheduleRepository;
+        private IScheduleStorage scheduleStorage;
         private IPerson person;
         private DateTimePeriodAssembler dateTimePeriodAssembler;
 		private IScheduleTagAssembler _tagAssembler;
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             absenceAssembler = mocks.DynamicMock<IScheduleDataAssembler<IPersonAbsence, PersonAbsenceDto>>();
             dayOffAssembler = mocks.DynamicMock<IScheduleDataAssembler<IPersonAssignment, PersonDayOffDto>>();
             personMeetingAssembler = mocks.DynamicMock<IScheduleDataAssembler<IPersonMeeting, PersonMeetingDto>>();
-            scheduleRepository = mocks.StrictMock<IScheduleRepository>();
+            scheduleStorage = mocks.StrictMock<IScheduleStorage>();
             personRepository = mocks.StrictMock<IPersonRepository>();
         	sdkProjectionServiceFactory = mocks.DynamicMock<ISdkProjectionServiceFactory>();
             dateTimePeriodAssembler = new DateTimePeriodAssembler();
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
                                                dateTimePeriodAssembler,
 															  sdkProjectionServiceFactory, _tagAssembler);
             target.PersonRepository = personRepository;
-            target.ScheduleRepository = scheduleRepository;
+            target.ScheduleStorage = scheduleStorage;
 			  target.TimeZone = (TimeZoneInfo.Utc);
         }
 
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             using(mocks.Record())
             {
                 Expect.Call(personRepository.Load(dto.PersonId)).Return(person);
-                Expect.Call(scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null)).Return(dic);
+                Expect.Call(scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null)).Return(dic);
                 LastCall.Constraints(new[]
                                          {
                                              Is.Matching<IPerson>(t => t == person),
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             using (mocks.Record())
             {
                 Expect.Call(personRepository.Load(dto.PersonId)).Return(person);
-				Expect.Call(scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null)).Return(dic);
+				Expect.Call(scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null)).Return(dic);
                 LastCall.IgnoreArguments(); //tested in another test
                 Expect.Call(dic[person]).Return(range);
                 Expect.Call(range.ScheduledDay(date)).Return(part);
@@ -379,7 +379,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void CannotExecuteFromDtoConverterWithoutScheduleRepository()
         {
-            target.ScheduleRepository = null;
+            target.ScheduleStorage = null;
             target.DtoToDomainEntity(new SchedulePartDto());
         }
 

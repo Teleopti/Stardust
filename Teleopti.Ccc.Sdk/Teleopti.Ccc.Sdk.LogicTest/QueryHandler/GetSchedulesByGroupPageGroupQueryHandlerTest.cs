@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 	public class GetSchedulesByGroupPageGroupQueryHandlerTest
 	{
 		private MockRepository mocks;
-		private IScheduleRepository scheduleRepository;
+		private IScheduleStorage scheduleStorage;
 		private ICurrentUnitOfWorkFactory unitOfWorkFactory;
 		private GetSchedulesByGroupPageGroupQueryHandler target;
 		private IDateTimePeriodAssembler dateTimePeriodAssembler;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		public void Setup()
 		{
 			mocks = new MockRepository();
-			scheduleRepository = mocks.DynamicMock<IScheduleRepository>();
+			scheduleStorage = mocks.DynamicMock<IScheduleStorage>();
 			personRepository = mocks.DynamicMock<IPersonRepository>();
 			dateTimePeriodAssembler = mocks.DynamicMock<IDateTimePeriodAssembler>();
 			scheduleDayAssembler = mocks.DynamicMock<ISchedulePartAssembler>();
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			groupPageGroupId = Guid.NewGuid();
 			unitOfWork = mocks.DynamicMock<IUnitOfWork>();
 			
-			target = new GetSchedulesByGroupPageGroupQueryHandler(unitOfWorkFactory,scheduleRepository,personRepository,scenarioRepository,groupingReadOnlyRepository,dateTimePeriodAssembler,scheduleDayAssembler);
+			target = new GetSchedulesByGroupPageGroupQueryHandler(unitOfWorkFactory,scheduleStorage,personRepository,scenarioRepository,groupingReadOnlyRepository,dateTimePeriodAssembler,scheduleDayAssembler);
 		}
 
 		[Test]
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 					new List<ReadOnlyGroupDetail> { new ReadOnlyGroupDetail { PersonId = person1Id} });
 				Expect.Call(scenarioRepository.Get(scenarioId)).Return(scenario);
 				Expect.Call(personRepository.FindPeople((IEnumerable<Guid>)null)).Constraints(Rhino.Mocks.Constraints.List.Equal(new[] { person1Id })).Return(new[] { person1 });
-				Expect.Call(scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), scenario)).IgnoreArguments().Return(dictionary);
+				Expect.Call(scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), scenario)).IgnoreArguments().Return(dictionary);
 				Expect.Call(unitOfWorkFactory.Current().CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(dictionary[person1]).Return(scheduleRange);
 				Expect.Call(scheduleDayAssembler.DomainEntitiesToDtos(null))
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(groupingReadOnlyRepository.DetailsForGroup(groupPageGroupId, new DateOnly(2012, 5, 2))).Return(
 					new List<ReadOnlyGroupDetail> { new ReadOnlyGroupDetail { PersonId = person1Id } });
 				Expect.Call(personRepository.FindPeople((IEnumerable<Guid>)null)).Constraints(Rhino.Mocks.Constraints.List.Equal(new[] { person1Id })).Return(new[] { person1 });
-				Expect.Call(scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), scenario)).IgnoreArguments().Return(dictionary);
+				Expect.Call(scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), scenario)).IgnoreArguments().Return(dictionary);
 				Expect.Call(unitOfWorkFactory.Current().CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(dictionary[person1]).Return(scheduleRange);
 				Expect.Call(scheduleDayAssembler.DomainEntitiesToDtos(null))

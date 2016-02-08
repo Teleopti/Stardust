@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
 	public class ApproveRequestCommandHandler : IHandleCommand<ApproveRequestCommandDto>
 	{
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 				private readonly IScheduleDifferenceSaver _scheduleDictionarySaver;
 		private readonly ICurrentScenario _scenarioRepository;
 		private readonly IPersonRequestCheckAuthorization _authorization;
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
 	    
-	    public ApproveRequestCommandHandler(IScheduleRepository scheduleRepository, 
+	    public ApproveRequestCommandHandler(IScheduleStorage scheduleStorage, 
 																								IScheduleDifferenceSaver scheduleDictionarySaver, 
 																								ICurrentScenario scenarioRepository, 
 																								IPersonRequestCheckAuthorization authorization, 
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 																								IDifferenceCollectionService<IPersistableScheduleData> differenceService,
                                                                                                 IGlobalSettingDataRepository globalSettingDataRepository)
 		{
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 			_scheduleDictionarySaver = scheduleDictionarySaver;
 			_scenarioRepository = scenarioRepository;
 			_authorization = authorization;
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			var timePeriod = personRequest.Request.Period;
 			var dateonlyPeriod = new DateOnlyPeriod(new DateOnly(timePeriod.StartDateTime.AddDays(-1)),
 													new DateOnly(timePeriod.EndDateTime.AddDays(1)));
-			var scheduleDictionary = _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
 				personList,
 				new ScheduleDictionaryLoadOptions(true, false), 
 				dateonlyPeriod,

@@ -9,14 +9,14 @@ namespace Teleopti.Ccc.Domain.Tracking
     public class TraceableRefreshService : ITraceableRefreshService
     {
         private readonly ICurrentScenario _currentScenario;
-        private readonly IScheduleRepository _scheduleRepository;
+        private readonly IScheduleStorage _scheduleStorage;
         private readonly HashSet<ITraceable> _refreshedAccounts = new HashSet<ITraceable>();
         
 
-        public TraceableRefreshService(ICurrentScenario currentScenario, IScheduleRepository scheduleRepository)
+        public TraceableRefreshService(ICurrentScenario currentScenario, IScheduleStorage scheduleStorage)
         {
             _currentScenario = currentScenario;
-            _scheduleRepository = scheduleRepository;
+            _scheduleStorage = scheduleStorage;
         }
 
         public bool NeedsRefresh(ITraceable traceable)
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Tracking
 
         private void RefreshAndAddToCache(IAccount account)
         {
-            account.CalculateUsed(_scheduleRepository, _currentScenario.Current());
+            account.CalculateUsed(_scheduleStorage, _currentScenario.Current());
            _refreshedAccounts.Add(account);
         }
     }

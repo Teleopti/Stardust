@@ -14,16 +14,16 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 	public class GetSchedulesForAllPeopleQueryHandler : IHandleQuery<GetSchedulesForAllPeopleQueryDto,ICollection<SchedulePartDto>>
 	{
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IDateTimePeriodAssembler _dateTimePeriodAssembler;
 		private readonly ISchedulePartAssembler _scheduleDayAssembler;
 
-        public GetSchedulesForAllPeopleQueryHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IDateTimePeriodAssembler dateTimePeriodAssembler, ISchedulePartAssembler scheduleDayAssembler)
+        public GetSchedulesForAllPeopleQueryHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IScheduleStorage scheduleStorage, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IDateTimePeriodAssembler dateTimePeriodAssembler, ISchedulePartAssembler scheduleDayAssembler)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 			_personRepository = personRepository;
 			_scenarioRepository = scenarioRepository;
 			_dateTimePeriodAssembler = dateTimePeriodAssembler;
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				IScenario scenario = GetGivenScenarioOrDefault(query);
 				var people = _personRepository.FindPeopleInOrganizationLight(datePeriod);
 
-				IScheduleDictionary scheduleDictionary = _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(people, new ScheduleDictionaryLoadOptions(false, false), period, scenario);
+				IScheduleDictionary scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(people, new ScheduleDictionaryLoadOptions(false, false), period, scenario);
 
 				foreach (var person in people)
 				{

@@ -5,11 +5,11 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeScheduleDifferenceSaver : IScheduleDifferenceSaver
 	{
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 
-		public FakeScheduleDifferenceSaver(IScheduleRepository scheduleRepository)
+		public FakeScheduleDifferenceSaver(IScheduleStorage scheduleStorage)
 		{
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 		}
 
 		public void SaveChanges(IDifferenceCollection<IPersistableScheduleData> scheduleChanges, IUnvalidatedScheduleRangeUpdate stateInMemoryUpdater)
@@ -20,18 +20,18 @@ namespace Teleopti.Ccc.TestCommon
 				{
 					case DifferenceStatus.Added:
 						var currentItem = scheduleChange.CurrentItem;
-						_scheduleRepository.Add(currentItem);
+						_scheduleStorage.Add(currentItem);
 						stateInMemoryUpdater.SolveConflictBecauseOfExternalInsert(currentItem, true);
 						break;
 					case DifferenceStatus.Deleted:
 						var orgItem = scheduleChange.OriginalItem;
-						_scheduleRepository.Remove(orgItem);
+						_scheduleStorage.Remove(orgItem);
 						stateInMemoryUpdater.SolveConflictBecauseOfExternalDeletion(orgItem.Id.Value, true);
 						break;
 					case DifferenceStatus.Modified:
 
-						_scheduleRepository.Remove(scheduleChange.OriginalItem);
-						_scheduleRepository.Add(scheduleChange.CurrentItem);
+						_scheduleStorage.Remove(scheduleChange.OriginalItem);
+						_scheduleStorage.Add(scheduleChange.CurrentItem);
 
 						stateInMemoryUpdater.SolveConflictBecauseOfExternalUpdate(scheduleChange.CurrentItem, true);
 						break;

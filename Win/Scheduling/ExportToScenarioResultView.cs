@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private ExportToScenarioResultPresenter _presenter;
 
 		public ExportToScenarioResultView(IUnitOfWorkFactory uowFactory,
-											IScheduleRepository scheduleRepository,
+											IScheduleStorage scheduleStorage,
 											IMoveDataBetweenSchedules moveDataBetweenSchedules,
 											IReassociateDataForSchedules callback,
 											IEnumerable<IPerson> fullyLoadedPersonsToMove,
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				SetTexts();
 				_presenter = new ExportToScenarioResultPresenter(uowFactory, this,
-										scheduleRepository, moveDataBetweenSchedules, callback,
+										scheduleStorage, moveDataBetweenSchedules, callback,
 										fullyLoadedPersonsToMove, schedulePartsToExport,
 										exportScenario, scheduleDictionaryPersister);
 			}

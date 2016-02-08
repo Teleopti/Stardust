@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
     public class AddDayOffCommandHandlerTest
     {
         private IDayOffTemplateRepository _dayOffRepository;
-        private IScheduleRepository _scheduleRepository;
+        private IScheduleStorage _scheduleStorage;
         private IPersonRepository _personRepository;
         private IScenarioRepository _scenarioRepository;
         private IUnitOfWorkFactory _unitOfWorkFactory;
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         {
             _mock = new MockRepository();
             _dayOffRepository = _mock.StrictMock<IDayOffTemplateRepository>();
-            _scheduleRepository = _mock.StrictMock<IScheduleRepository>();
+            _scheduleStorage = _mock.StrictMock<IScheduleStorage>();
             _personRepository = _mock.StrictMock<IPersonRepository>();
             _scenarioRepository = _mock.StrictMock<IScenarioRepository>();
             _currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _dayOff = DayOffFactory.CreateDayOff();
             _dayOff.SetId(Guid.NewGuid());
 
-				_target = new AddDayOffCommandHandler(_dayOffRepository, _scheduleRepository, _personRepository, _scenarioRepository, _currentUnitOfWorkFactory, _businessRulesForPersonalAccountUpdate, _scheduleTagAssembler, _scheduleSaveHandler);
+				_target = new AddDayOffCommandHandler(_dayOffRepository, _scheduleStorage, _personRepository, _scenarioRepository, _currentUnitOfWorkFactory, _businessRulesForPersonalAccountUpdate, _scheduleTagAssembler, _scheduleSaveHandler);
             _schedulePartFactory = new SchedulePartFactoryForDomain(_person, _scenario, _period, SkillFactory.CreateSkill("Test Skill"));
 
             _addAbsenceCommandDto = new AddDayOffCommandDto
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
                 Expect.Call(_personRepository.Load(_person.Id.GetValueOrDefault())).Return(_person);
                 Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario);
-				Expect.Call(_scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(null, null, _dateOnlyPeriod, _scenario)).IgnoreArguments().Return(dictionary);
+				Expect.Call(_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(null, null, _dateOnlyPeriod, _scenario)).IgnoreArguments().Return(dictionary);
                 Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
                 Expect.Call(_dayOffRepository.Load(_dayOff.Id.GetValueOrDefault())).Return(_dayOff);
                 Expect.Call(scheduleRangeMock.ScheduledDay(_startDate)).Return(scheduleDay);
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
 				Expect.Call(_personRepository.Load(_person.Id.GetValueOrDefault())).Return(_person);
 				Expect.Call(_scenarioRepository.Get(scenarioId)).Return(_scenario);
-				Expect.Call(_scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(null, null, _dateOnlyPeriod, _scenario)).IgnoreArguments().Return(dictionary);
+				Expect.Call(_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(null, null, _dateOnlyPeriod, _scenario)).IgnoreArguments().Return(dictionary);
 				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
 				Expect.Call(_dayOffRepository.Load(_dayOff.Id.GetValueOrDefault())).Return(_dayOff);
 				Expect.Call(scheduleRangeMock.ScheduledDay(_startDate)).Return(scheduleDay);

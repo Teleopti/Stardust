@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         private ShiftTradeRequestStatusChecker _target;
         private MockRepository _mockRepository;
         private ICurrentScenario _scenarioRepository;
-        private IScheduleRepository _scheduleRepository;
+        private IScheduleStorage _scheduleStorage;
         private IScheduleDictionary _scheduleDictionary;
         private IScheduleRange _scheduleRangePerson1;
         private IScheduleRange _scheduleRangePerson2;
@@ -38,10 +38,10 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         {
             _mockRepository = new MockRepository();
             _scenarioRepository = _mockRepository.StrictMock<ICurrentScenario>();
-            _scheduleRepository = _mockRepository.StrictMock<IScheduleRepository>();
+            _scheduleStorage = _mockRepository.StrictMock<IScheduleStorage>();
             _authorization = new PersonRequestAuthorizationCheckerForTest();
             _scenario = ScenarioFactory.CreateScenarioAggregate();
-            _target = new ShiftTradeRequestStatusChecker(_scenarioRepository, _scheduleRepository, _authorization);
+            _target = new ShiftTradeRequestStatusChecker(_scenarioRepository, _scheduleStorage, _authorization);
 
             _scheduleDictionary = _mockRepository.StrictMock<IScheduleDictionary>();
             _scheduleRangePerson1 = _mockRepository.StrictMock<IScheduleRange>();
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         public void VerifyChangedScheduleForOwnerRefersRequest()
         {
             Expect.Call(_scenarioRepository.Current()).Return(_scenario);
-            Expect.Call(_scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { _person2, _person1 }, new ScheduleDictionaryLoadOptions(true, true), new DateOnlyPeriod(new DateOnly(_personRequest2.Request.Period.StartDateTime), new DateOnly(_personRequest2.Request.Period.EndDateTime.AddDays(1))), _scenario)).Return(_scheduleDictionary).IgnoreArguments();
+            Expect.Call(_scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { _person2, _person1 }, new ScheduleDictionaryLoadOptions(true, true), new DateOnlyPeriod(new DateOnly(_personRequest2.Request.Period.StartDateTime), new DateOnly(_personRequest2.Request.Period.EndDateTime.AddDays(1))), _scenario)).Return(_scheduleDictionary).IgnoreArguments();
             SetupSchedule();
 
             _mockRepository.ReplayAll();
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         public void VerifyChangedScheduleForRequestedRefersRequest()
         {
             Expect.Call(_scenarioRepository.Current()).Return(_scenario);
-			Expect.Call(_scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { _person2, _person1 }, new ScheduleDictionaryLoadOptions(true, true), new DateOnlyPeriod(new DateOnly(_personRequest2.Request.Period.StartDateTime), new DateOnly(_personRequest2.Request.Period.EndDateTime.AddDays(1))), _scenario)).Return(_scheduleDictionary).IgnoreArguments();
+			Expect.Call(_scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { _person2, _person1 }, new ScheduleDictionaryLoadOptions(true, true), new DateOnlyPeriod(new DateOnly(_personRequest2.Request.Period.StartDateTime), new DateOnly(_personRequest2.Request.Period.EndDateTime.AddDays(1))), _scenario)).Return(_scheduleDictionary).IgnoreArguments();
             SetupSchedule();
 
             _mockRepository.ReplayAll();
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         public void VerifyNotChangedScheduleMakesNoStatusChange()
         {
             Expect.Call(_scenarioRepository.Current()).Return(_scenario);
-	        Expect.Call(_scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(
+	        Expect.Call(_scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
 		        new[] {_person2, _person1},
 		        new ScheduleDictionaryLoadOptions(true, true),
 		        new DateOnlyPeriod(new DateOnly(_personRequest2.Request.Period.StartDateTime), new DateOnly(_personRequest2.Request.Period.EndDateTime.AddDays(1))),

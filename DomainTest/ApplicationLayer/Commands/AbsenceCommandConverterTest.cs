@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 		private FakeWriteSideRepository<IPerson> _personRepository;
 		private FakeWriteSideRepository<IAbsence> _absenceRepository;
 		private FakeCurrentScenario _currentScenario;
-		private FakeScheduleRepository _scheduleRepository;
+		private FakeScheduleStorage _scheduleStorage;
 
 		[SetUp]
 		public void Setup()
@@ -24,13 +24,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 			_personRepository = new FakeWriteSideRepository<IPerson> { PersonFactory.CreatePersonWithId() };
 			_absenceRepository = new FakeWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
 			_currentScenario = new FakeCurrentScenario();
-			_scheduleRepository = new FakeScheduleRepository();
+			_scheduleStorage = new FakeScheduleStorage();
 		}
 
 		[Test]
 		public void ShouldConvertAbsenceForFullDay()
 		{
-			var target = new AbsenceCommandConverter(_currentScenario,_personRepository, _absenceRepository, _scheduleRepository, null);
+			var target = new AbsenceCommandConverter(_currentScenario,_personRepository, _absenceRepository, _scheduleStorage, null);
 
 			var operatedPersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 		[Test]
 		public void ShouldConvertPersonForFullDay()
 		{
-			var target = new AbsenceCommandConverter(_currentScenario,_personRepository, _absenceRepository, _scheduleRepository, null);
+			var target = new AbsenceCommandConverter(_currentScenario,_personRepository, _absenceRepository, _scheduleStorage, null);
 
 			var operatedPersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 		[Test]
 		public void ShouldConvertTrackedCommandInfoForFullDay()
 		{
-			var target = new AbsenceCommandConverter(_currentScenario,_personRepository, _absenceRepository, _scheduleRepository, null);
+			var target = new AbsenceCommandConverter(_currentScenario,_personRepository, _absenceRepository, _scheduleStorage, null);
 
 			var operatedPersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();

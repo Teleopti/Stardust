@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         private IPersonRepository _personRep;
         private MockRepository _mocks;
         private IScenario _scenario;
-        private IScheduleRepository _target;
+        private IScheduleStorage _target;
         private IPreferenceDayRepository _prefDayRep;
         private IStudentAvailabilityDayRepository _availabilityDayRep;
         private IOvertimeAvailabilityRepository _overtimeAvailabilityRepository;
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             CreateRelatedRepositories();
             SetupExpectationsForRelatedRepositories();
 
-            _target = new ScheduleRepository(new ThisUnitOfWork(_unitOfWork),_repositoryFactory);
+            _target = new ScheduleStorage(new ThisUnitOfWork(_unitOfWork),_repositoryFactory);
 
             CreateBasicStuff();
             CreateEmptyLists();

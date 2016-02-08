@@ -9,17 +9,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	public class RemovePersonAbsenceCommandHandler : IHandleCommand<RemovePersonAbsenceCommand>
 	{
 		private readonly IWriteSideRepository<IPersonAbsence> _personAbsenceRepository;
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 		private readonly ISaveSchedulePartService _saveSchedulePartService;
 
 		public RemovePersonAbsenceCommandHandler(IWriteSideRepository<IPersonAbsence> personAbsenceRepository,
-			IScheduleRepository scheduleRepository,
+			IScheduleStorage scheduleStorage,
 			IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate,
 			ISaveSchedulePartService saveSchedulePartService)
 		{
 			_personAbsenceRepository = personAbsenceRepository;
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 			_saveSchedulePartService = saveSchedulePartService;
 		}
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var endDate = startDate.AddDays(1);
 
 			var scheduleDictionary =
-					_scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(
+					_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
 						person, new ScheduleDictionaryLoadOptions(false, false),
 						new DateOnlyPeriod(startDate, endDate), personAbsence.Scenario);
 

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var person = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(2013, 10, 02));
 			var publisher = new FakePublishEventsFromEventHandlers();
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person, new DateOnly(2013, 10, 02), new DayOffTemplate(new Description("Day off", "DO")));
-			var target = new ProjectionChangedEventPublisher(publisher, new FakeScenarioRepository(scenario), new FakePersonRepositoryLegacy(person), new FakePersonAssignmentReadScheduleRepository(personAssignment), new ProjectionChangedEventBuilder());
+			var target = new ProjectionChangedEventPublisher(publisher, new FakeScenarioRepository(scenario), new FakePersonRepositoryLegacy(person), new FakePersonAssignmentReadScheduleStorage(personAssignment), new ProjectionChangedEventBuilder());
 
 			target.Handle(new ScheduleChangedEvent
 				{
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			var publisher = new FakePublishEventsFromEventHandlers();
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person, new DateOnly(2013, 10, 08), new DayOffTemplate(new Description("Day off")));
-			var target = new ProjectionChangedEventPublisher(publisher, new FakeScenarioRepository(scenario), new FakePersonRepositoryLegacy(person), new FakePersonAssignmentReadScheduleRepository(personAssignment), new ProjectionChangedEventBuilder());
+			var target = new ProjectionChangedEventPublisher(publisher, new FakeScenarioRepository(scenario), new FakePersonRepositoryLegacy(person), new FakePersonAssignmentReadScheduleStorage(personAssignment), new ProjectionChangedEventBuilder());
 
 			target.Handle(new ScheduleChangedEvent
 				{
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var scenario = ScenarioFactory.CreateScenarioWithId("scenario", true);
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2013, 10, 04, 2013, 10, 05));
 			var publisher = new FakePublishEventsFromEventHandlers();
-			var target = new ProjectionChangedEventPublisher(publisher, new FakeScenarioRepository(scenario), new FakePersonRepositoryLegacy(person), new FakePersonAbsenceReadScheduleRepository(personAbsence), new ProjectionChangedEventBuilder());
+			var target = new ProjectionChangedEventPublisher(publisher, new FakeScenarioRepository(scenario), new FakePersonRepositoryLegacy(person), new FakePersonAbsenceReadScheduleStorage(personAbsence), new ProjectionChangedEventBuilder());
 
 			target.Handle(new ScheduleChangedEvent
 				{
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			absence.Confidential = true;
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2013, 10, 04, 2013, 10, 05), absence);
 			var publisher = new FakePublishEventsFromEventHandlers();
-			var target = new ProjectionChangedEventPublisher(publisher, new FakeScenarioRepository(scenario), new FakePersonRepositoryLegacy(person), new FakePersonAbsenceReadScheduleRepository(personAbsence), new ProjectionChangedEventBuilder());
+			var target = new ProjectionChangedEventPublisher(publisher, new FakeScenarioRepository(scenario), new FakePersonRepositoryLegacy(person), new FakePersonAbsenceReadScheduleStorage(personAbsence), new ProjectionChangedEventBuilder());
 
 			target.Handle(new ScheduleChangedEvent
 			{
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person, new DateOnly(2013, 10, 29), new DayOffTemplate(new Description("Day off", "DO")));
 			var publisher = new FakePublishEventsFromEventHandlers();
 			var target = new ProjectionChangedEventPublisher(publisher, new FakeScenarioRepository(scenario),
-			                                                 new FakePersonRepositoryLegacy(person), new FakeScheduleDataReadScheduleRepository(personAbsence, personAssignment), 
+			                                                 new FakePersonRepositoryLegacy(person), new FakeScheduleDataReadScheduleStorage(personAbsence, personAssignment), 
 			                                                 new ProjectionChangedEventBuilder());
 
 			target.Handle(new ScheduleChangedEvent
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var person = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(2013, 10, 29));
 			var scenario = ScenarioFactory.CreateScenarioWithId("scenario", true);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person, new DateOnly(2013, 10, 29), new DayOffTemplate(new Description("Day off", "DO")));
-			var scheduleRepository = new FakeScheduleDataReadScheduleRepository(personAssignment);
+			var scheduleRepository = new FakeScheduleDataReadScheduleStorage(personAssignment);
 			
 			var publisher = new FakePublishEventsFromEventHandlers();
 			var target = new ProjectionChangedEventPublisher(publisher, new FakeScenarioRepository(scenario),

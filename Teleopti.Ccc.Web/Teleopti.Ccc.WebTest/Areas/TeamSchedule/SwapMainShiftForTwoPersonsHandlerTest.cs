@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 	{
 		private ICommonNameDescriptionSetting _commonNameDescriptionSetting;
 		private IPersonRepository _personRepository;
-		private IScheduleRepository _scheduleRepository;
+		private IScheduleStorage _scheduleStorage;
 		private IScenarioRepository _scenarioRepository;
 		private ISwapAndModifyServiceNew _swapAndModifyServiceNew;
 		private IScheduleDifferenceSaver _scheduleDifferenceSaver;
@@ -60,10 +60,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			defaultScenario.SetId(Guid.NewGuid());
 			_scenarioRepository = new FakeScenarioRepository(defaultScenario);
 
-			_scheduleRepository = new FakeScheduleRepository();
+			_scheduleStorage = new FakeScheduleStorage();
 			_swapAndModifyServiceNew = MockRepository.GenerateMock<ISwapAndModifyServiceNew>();
 
-			_scheduleDifferenceSaver = new FakeScheduleDifferenceSaver(_scheduleRepository);
+			_scheduleDifferenceSaver = new FakeScheduleDifferenceSaver(_scheduleStorage);
 			_differenceService = new DifferenceEntityCollectionService<IPersistableScheduleData>();
 		}
 
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 				.IgnoreArguments();
 
 			_target = new SwapMainShiftForTwoPersonsCommandHandler(_commonNameDescriptionSetting, _personRepository,
-				_scheduleRepository, _scenarioRepository, _swapAndModifyServiceNew, _differenceService, _scheduleDifferenceSaver);
+				_scheduleStorage, _scenarioRepository, _swapAndModifyServiceNew, _differenceService, _scheduleDifferenceSaver);
 
 			var result = _target.SwapShifts(new SwapMainShiftForTwoPersonsCommand
 			{
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 				}).IgnoreArguments();
 
 			_target = new SwapMainShiftForTwoPersonsCommandHandler(_commonNameDescriptionSetting, _personRepository,
-				_scheduleRepository, _scenarioRepository, _swapAndModifyServiceNew, _differenceService, _scheduleDifferenceSaver);
+				_scheduleStorage, _scenarioRepository, _swapAndModifyServiceNew, _differenceService, _scheduleDifferenceSaver);
 
 			var result = _target.SwapShifts(new SwapMainShiftForTwoPersonsCommand
 			{

@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 	public class GetSchedulesBySiteQueryHandlerTest
 	{
 		private MockRepository mocks;
-		private IScheduleRepository scheduleRepository;
+		private IScheduleStorage scheduleStorage;
 		private IUnitOfWorkFactory unitOfWorkFactory;
 		private GetSchedulesBySiteQueryHandler target;
 		private IDateTimePeriodAssembler dateTimePeriodAssembler;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		public void Setup()
 		{
 			mocks = new MockRepository();
-			scheduleRepository = mocks.DynamicMock<IScheduleRepository>();
+			scheduleStorage = mocks.DynamicMock<IScheduleStorage>();
 			personRepository = mocks.DynamicMock<IPersonRepository>();
 			dateTimePeriodAssembler = mocks.DynamicMock<IDateTimePeriodAssembler>();
 			scheduleDayAssembler = mocks.DynamicMock<ISchedulePartAssembler>();
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			siteId = Guid.NewGuid();
 			unitOfWork = mocks.DynamicMock<IUnitOfWork>();
 			
-			target = new GetSchedulesBySiteQueryHandler(currentUnitOfWorkFactory,scheduleRepository,personRepository,scenarioRepository,siteRepository,dateTimePeriodAssembler,scheduleDayAssembler);
+			target = new GetSchedulesBySiteQueryHandler(currentUnitOfWorkFactory,scheduleStorage,personRepository,scenarioRepository,siteRepository,dateTimePeriodAssembler,scheduleDayAssembler);
 		}
 
 		[Test]
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(siteRepository.Get(siteId)).Return(site);
 				Expect.Call(personRepository.FindPeopleBelongTeam(team1, new DateOnlyPeriod(2012,5,2,2012,5,2))).Return(new[] {person1});
 				Expect.Call(personRepository.FindPeopleBelongTeam(team2, new DateOnlyPeriod(2012,5,2,2012,5,2))).Return(new[] {person2});
-				Expect.Call(scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), scenario)).IgnoreArguments().Return(dictionary);
+				Expect.Call(scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), scenario)).IgnoreArguments().Return(dictionary);
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(currentUnitOfWorkFactory.Current()).Return(unitOfWorkFactory);
 				Expect.Call(dictionary[person1]).Return(scheduleRange);
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(siteRepository.Get(siteId)).Return(site);
 				Expect.Call(personRepository.FindPeopleBelongTeam(team1, new DateOnlyPeriod(2012, 5, 2, 2012, 5, 2))).Return(new[] { person1 });
 				Expect.Call(personRepository.FindPeopleBelongTeam(team2, new DateOnlyPeriod(2012, 5, 2, 2012, 5, 2))).Return(new[] { person2 });
-				Expect.Call(scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), scenario)).IgnoreArguments().Return(dictionary);
+				Expect.Call(scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), scenario)).IgnoreArguments().Return(dictionary);
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(currentUnitOfWorkFactory.Current()).Return(unitOfWorkFactory);
 				Expect.Call(dictionary[person1]).Return(scheduleRange);

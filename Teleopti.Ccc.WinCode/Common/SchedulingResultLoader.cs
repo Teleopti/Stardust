@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
         private void initializeSchedules(IUnitOfWork uow)
         {
-            IScheduleRepository scheduleRepository = _repositoryFactory.CreateScheduleRepository(uow);
+            IScheduleStorage scheduleStorage = _repositoryFactory.CreateScheduleRepository(uow);
 
 			var requestedPeriod = SchedulerState.RequestedPeriod.Period().ChangeEndTime(TimeSpan.FromHours(24)).ChangeStartTime(TimeSpan.FromHours(-24));
 
@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.WinCode.Common
             var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, true);
 
             var schedulePeriod = new ScheduleDateTimePeriod(requestedPeriod, SchedulerState.AllPermittedPersons);
-            SchedulerState.LoadSchedules(scheduleRepository, personsInOrganizationProvider, scheduleDictionaryLoadOptions, schedulePeriod);
+            SchedulerState.LoadSchedules(scheduleStorage, personsInOrganizationProvider, scheduleDictionaryLoadOptions, schedulePeriod);
         }
 
         public void InitializeScheduleData()

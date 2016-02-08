@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		private FakeCurrentScenario _scenario;
 		private FakePersonRequestRepository _personRequestRepository;
 		private FakePersonAbsenceAccountRepository _personAbsenceAccountRepository;
-		private FakeScheduleRepository _fakeScheduleRepository;
+		private FakeScheduleStorage _fakeScheduleStorage;
 		private FakeScheduleDifferenceSaver _scheduleDifferenceSaver;
 		private RequestApprovalServiceFactory _requestApprovalServiceFactory;
 		private ApproveRequestCommandHandler _approveRequestCommandHandler;
@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_personRequestRepository = new FakePersonRequestRepository();
 			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 
-			_fakeScheduleRepository = new FakeScheduleRepository();
-			_scheduleDifferenceSaver = new FakeScheduleDifferenceSaver(_fakeScheduleRepository);
+			_fakeScheduleStorage = new FakeScheduleStorage();
+			_scheduleDifferenceSaver = new FakeScheduleDifferenceSaver(_fakeScheduleStorage);
 
 			var businessRules = new BusinessRulesForPersonalAccountUpdate (_personAbsenceAccountRepository, new SchedulingResultStateHolder());
 
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			);
 			
 			_approveRequestCommandHandler = new ApproveRequestCommandHandler(
-				_fakeScheduleRepository, _scheduleDifferenceSaver,
+				_fakeScheduleStorage, _scheduleDifferenceSaver,
 				new PersonRequestAuthorizationCheckerForTest(),
 				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
 				_personRequestRepository, _requestApprovalServiceFactory,
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personRequest = createAbsenceRequest(person, absence, absenceDateTimePeriod);
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift (_scenario.Current(), person, absenceDateTimePeriod); 
 			
-			_fakeScheduleRepository.Add(assignment);
+			_fakeScheduleStorage.Add(assignment);
 			
 			_approveRequestCommandHandler.Handle(new ApproveRequestCommand(){ PersonRequestId = personRequest.Id.Value });
 

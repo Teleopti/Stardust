@@ -14,15 +14,15 @@ namespace Teleopti.Ccc.DomainTest.Tracking
         private MockRepository _mocker;
         private ITraceableRefreshService _target;
         private ICurrentScenario _scenario;
-        private IScheduleRepository _repositoryFactory;
+        private IScheduleStorage _storageFactory;
 
         [SetUp]
         public void Setup()
         {
             _mocker = new MockRepository();
             _scenario = _mocker.StrictMock<ICurrentScenario>();
-            _repositoryFactory = _mocker.Stub<IScheduleRepository>();
-            _target = new TraceableRefreshService(_scenario, _repositoryFactory);
+            _storageFactory = _mocker.Stub<IScheduleStorage>();
+            _target = new TraceableRefreshService(_scenario, _storageFactory);
         }
         
         [Test]

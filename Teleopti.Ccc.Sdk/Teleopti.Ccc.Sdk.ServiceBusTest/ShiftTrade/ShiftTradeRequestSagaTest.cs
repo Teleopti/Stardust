@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
         private Person fromPerson;
         private Person toPerson;
         private ICurrentScenario scenarioRepository;
-        private IScheduleRepository scheduleRepository;
+        private IScheduleStorage scheduleStorage;
         private ISchedulingResultStateHolder schedulingResultState;
         private IScenario scenario;
         private IRequestFactory requestFactory;
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 		    loader = MockRepository.GenerateMock<ILoadSchedulesForRequestWithoutResourceCalculation>();
 
 		    target = new ShiftTradeRequestSaga(unitOfWorkFactory, schedulingResultState, validator, requestFactory,
-		                                       scenarioRepository, personRequestRepository, scheduleRepository,
+		                                       scenarioRepository, personRequestRepository, scheduleStorage,
 		                                       personRepository, personRequestCheckAuthorization, scheduleDictionarySaver,
 		                                       loader, differenceCollectionService, null);
 		    prepareUnitOfWork();
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
             personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
             personRepository = MockRepository.GenerateMock<IPersonRepository>();
             scenarioRepository = MockRepository.GenerateMock<ICurrentScenario>();
-            scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
+            scheduleStorage = MockRepository.GenerateMock<IScheduleStorage>();
         }
 
         private void CreateRequest()

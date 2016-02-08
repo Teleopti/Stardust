@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	public class ApproveRequestCommandHandler : IHandleCommand<ApproveRequestCommand>
 	{
 		
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IRequestApprovalServiceFactory _requestApprovalServiceFactory;
 		private readonly IScheduleDifferenceSaver _scheduleDictionarySaver;
 		private readonly IPersonRequestCheckAuthorization _authorization;
@@ -19,9 +19,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly ICurrentScenario _currentScenario;
 
-		public ApproveRequestCommandHandler(IScheduleRepository scheduleRepository, IScheduleDifferenceSaver scheduleDictionarySaver,  IPersonRequestCheckAuthorization authorization,  IDifferenceCollectionService<IPersistableScheduleData> differenceService,  IPersonRequestRepository personRequestRepository, IRequestApprovalServiceFactory requestApprovalServiceFactory, ICurrentScenario currentScenario)
+		public ApproveRequestCommandHandler(IScheduleStorage scheduleStorage, IScheduleDifferenceSaver scheduleDictionarySaver,  IPersonRequestCheckAuthorization authorization,  IDifferenceCollectionService<IPersistableScheduleData> differenceService,  IPersonRequestRepository personRequestRepository, IRequestApprovalServiceFactory requestApprovalServiceFactory, ICurrentScenario currentScenario)
 		{
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 			_scheduleDictionarySaver = scheduleDictionarySaver;
 
 			_authorization = authorization;
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var timePeriod = personRequest.Request.Period;
 			var dateonlyPeriod = new DateOnlyPeriod(new DateOnly(timePeriod.StartDateTime.AddDays(-1)),
 													new DateOnly(timePeriod.EndDateTime.AddDays(1)));
-			var scheduleDictionary = _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
 				personList,
 				new ScheduleDictionaryLoadOptions(true, false),
 				dateonlyPeriod,

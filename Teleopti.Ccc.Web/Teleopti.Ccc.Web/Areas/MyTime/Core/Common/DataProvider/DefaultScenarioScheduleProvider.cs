@@ -8,14 +8,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 	public class DefaultScenarioScheduleProvider : IScheduleProvider
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ICurrentScenario _scenarioRepository;
 
-		public DefaultScenarioScheduleProvider(ILoggedOnUser loggedOnUser, IScheduleRepository scheduleRepository,
+		public DefaultScenarioScheduleProvider(ILoggedOnUser loggedOnUser, IScheduleStorage scheduleStorage,
 			ICurrentScenario scenarioRepository)
 		{
 			_loggedOnUser = loggedOnUser;
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 			_scenarioRepository = scenarioRepository;
 		}
 
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		{
 			var defaultScenario = _scenarioRepository.Current();
 
-			var dictionary = _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(
+			var dictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
 				persons, 
 				new ScheduleDictionaryLoadOptions(false, false),
 				new DateOnlyPeriod(date, date),
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			var person = _loggedOnUser.CurrentUser();
 			var defaultScenario = _scenarioRepository.Current();
 
-			var dictionary = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(
+			var dictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
 				person,
 				options,
 				period,

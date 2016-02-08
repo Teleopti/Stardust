@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			using (var container = builder.Build())
 			{
-				container.Resolve<IScheduleRepository>().Should().Not.Be.Null();
+				container.Resolve<IScheduleStorage>().Should().Not.Be.Null();
 			}
 		}
 	}

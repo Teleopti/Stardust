@@ -14,22 +14,22 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-    public class ScheduleRepository : IScheduleRepository
+    public class ScheduleStorage : IScheduleStorage
     {
 	    private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
 	    private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
-	    public ScheduleRepository(IUnitOfWork unitOfWork)
+	    public ScheduleStorage(IUnitOfWork unitOfWork)
         {
 			_currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
 		}
 
-        public ScheduleRepository(IUnitOfWorkFactory unitOfWorkFactory)
+        public ScheduleStorage(IUnitOfWorkFactory unitOfWorkFactory)
         {
 			_currentUnitOfWork = new FromFactory(() => unitOfWorkFactory);
 		}
 
-	    public ScheduleRepository(ICurrentUnitOfWork currentUnitOfWork, IRepositoryFactory repositoryFactory)
+	    public ScheduleStorage(ICurrentUnitOfWork currentUnitOfWork, IRepositoryFactory repositoryFactory)
 	    {
 		    _currentUnitOfWork = currentUnitOfWork;
 					_repositoryFactory = repositoryFactory;

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IUnitOfWorkFactory _unitOfWorkFactory;
         private IShiftCategoryRepository _shiftCategoryRepository;
         private IActivityLayerAssembler<IMainShiftLayer> _mainActivityLayerAssembler;
-        private IScheduleRepository _scheduleRepository;
+        private IScheduleStorage _scheduleStorage;
         private IScenarioRepository _scenarioRepository;
         private IPersonRepository _personRepository;
         private NewMainShiftCommandHandler _target;
@@ -50,14 +50,14 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
             _shiftCategoryRepository = _mock.StrictMock<IShiftCategoryRepository>();
             _mainActivityLayerAssembler = _mock.StrictMock<IActivityLayerAssembler<IMainShiftLayer>>();
-            _scheduleRepository = _mock.StrictMock<IScheduleRepository>();
+            _scheduleStorage = _mock.StrictMock<IScheduleStorage>();
             _scenarioRepository = _mock.StrictMock<IScenarioRepository>();
             _personRepository = _mock.StrictMock<IPersonRepository>();
     		_businessRulesForPersonalAccountUpdate = _mock.DynamicMock<IBusinessRulesForPersonalAccountUpdate>();
     		_scheduleTagAssembler = _mock.DynamicMock<IScheduleTagAssembler>();
 			_scheduleSaveHandler = _mock.DynamicMock<IScheduleSaveHandler>();
 
-			_target = new NewMainShiftCommandHandler(_currentUnitOfWorkFactory, _shiftCategoryRepository, _mainActivityLayerAssembler, _scheduleTagAssembler, _scheduleRepository, _scenarioRepository, _personRepository, _businessRulesForPersonalAccountUpdate, _scheduleSaveHandler);
+			_target = new NewMainShiftCommandHandler(_currentUnitOfWorkFactory, _shiftCategoryRepository, _mainActivityLayerAssembler, _scheduleTagAssembler, _scheduleStorage, _scenarioRepository, _personRepository, _businessRulesForPersonalAccountUpdate, _scheduleSaveHandler);
 
             _person = PersonFactory.CreatePerson("test");
             _person.SetId(Guid.NewGuid());
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario);
                 Expect.Call(_mainActivityLayerAssembler.DtosToDomainEntities(_activityLayerDtoCollection)).
                     IgnoreArguments().Return(_mainShiftActivityLayerCollection);
-				Expect.Call(_scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario)).
+				Expect.Call(_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario)).
                     IgnoreArguments().Return(dictionary);
                 Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
                 Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(schedulePart);
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(_scenarioRepository.Get(scenarioId)).Return(_scenario);
 				Expect.Call(_mainActivityLayerAssembler.DtosToDomainEntities(_activityLayerDtoCollection)).
 					IgnoreArguments().Return(_mainShiftActivityLayerCollection);
-				Expect.Call(_scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario)).
+				Expect.Call(_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario)).
 					IgnoreArguments().Return(dictionary);
 				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
 				Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(schedulePart);

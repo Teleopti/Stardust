@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCode.Common
 			IScheduleDateTimePeriod scheduleDateTimePeriod = new ScheduleDateTimePeriod(dateTimePeriod, persons);
 			IPersonProvider personProvider = new PersonsInOrganizationProvider(persons);
 		    IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
-			var scheduleRepository = new ScheduleRepository(unitOfWork);
+			var scheduleRepository = new ScheduleStorage(unitOfWork);
 			_schedulerStateHolder.LoadSchedules(scheduleRepository, personProvider, scheduleDictionaryLoadOptions, scheduleDateTimePeriod);
 		}
 	}

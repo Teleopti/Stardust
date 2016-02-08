@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
             IAbsence absence = AbsenceFactory.CreateAbsence("for test"); 
             IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
 
-            IScheduleRepository repository = _mocker.StrictMock<IScheduleRepository>();
+            IScheduleStorage storage = _mocker.StrictMock<IScheduleStorage>();
             IScheduleRange rangeFromRepository = _mocker.StrictMock<IScheduleRange>();
             
             var tempAccountPeriod = _accountPeriod.ToDateTimePeriod(timeZone);
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
                 Expect.Call(_account.Period()).Return(_accountPeriod).Repeat.Any();
                 Expect.Call(_schedule.Period).Return(_schedulePeriod).Repeat.Any();
                 Expect.Call(
-                    repository.ScheduleRangeBasedOnAbsence(
+                    storage.ScheduleRangeBasedOnAbsence(
                         new DateTimePeriod(_schedulePeriod.EndDateTime, tempAccountPeriod.EndDateTime), scenario,
                         _person, absence)).Return(rangeFromRepository);
 				Expect.Call(day.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_accountPeriod.StartDate, _person.PermissionInformation.DefaultTimeZone()));
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
             using (_mocker.Playback())
             {
                 _target = new PersonAccountProjectionService(_account, _schedule);
-                var days = _target.CreateProjection(repository, scenario);
+                var days = _target.CreateProjection(storage, scenario);
 
                 //Verify correct number of days is returned
                 Assert.AreEqual(2, days.Count);

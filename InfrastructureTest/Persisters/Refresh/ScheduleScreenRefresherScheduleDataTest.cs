@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
     {
         private MockRepository _mocks;
         private ScheduleScreenRefresher _target;
-        private IScheduleRepository _scheduleRepository;
+        private IScheduleStorage _scheduleStorage;
         private IReassociateDataForSchedules _messageQueueUpdater;
         private Guid _conflictingScheduleDataEntityId;
 		private IPersistableScheduleData _conflictingScheduleDataEntity;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
         {
             _mocks = new MockRepository();
 
-            _scheduleRepository = _mocks.DynamicMock<IScheduleRepository>();
+            _scheduleStorage = _mocks.DynamicMock<IScheduleStorage>();
             _messageQueueUpdater = _mocks.DynamicMock<IReassociateDataForSchedules>();
             _scheduleDataUpdater = _mocks.DynamicMock<IUpdateScheduleDataFromMessages>();
 
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 			_myChange = new DifferenceCollectionItem<IPersistableScheduleData>(_conflictingScheduleDataEntity, _conflictingScheduleDataEntity);
             _myChanges.Add(_myChange);
 
-            Expect.Call(_scheduleRepository.LoadScheduleDataAggregate(typeof(IPersistableScheduleData), _conflictingScheduleDataEntityId)).Return(_mocks.DynamicMock<IPersistableScheduleData>()).Repeat.Any();
+            Expect.Call(_scheduleStorage.LoadScheduleDataAggregate(typeof(IPersistableScheduleData), _conflictingScheduleDataEntityId)).Return(_mocks.DynamicMock<IPersistableScheduleData>()).Repeat.Any();
             Expect.Call(_scheduleDataUpdater.UpdateInsertScheduleData(_refreshedScheduleDataMessage)).Return(_refreshedScheduleDataEntity).Repeat.Any();
 
             _scheduleDictionary = _mocks.DynamicMock<IScheduleDictionary>();
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
         private void MakeTarget()
         {
 	        var mqremover = this;
-					_target = new ScheduleScreenRefresher(_messageQueueUpdater, new ScheduleRefresher(MockRepository.GenerateMock<IPersonRepository>(), _scheduleDataUpdater, MockRepository.GenerateMock<IPersonAssignmentRepository>(), MockRepository.GenerateMock<IPersonAbsenceRepository>(), mqremover), new ScheduleDataRefresher(_scheduleRepository, _scheduleDataUpdater, mqremover), new MeetingRefresher(null, mqremover), new PersonRequestRefresher(null, mqremover));
+					_target = new ScheduleScreenRefresher(_messageQueueUpdater, new ScheduleRefresher(MockRepository.GenerateMock<IPersonRepository>(), _scheduleDataUpdater, MockRepository.GenerateMock<IPersonAssignmentRepository>(), MockRepository.GenerateMock<IPersonAbsenceRepository>(), mqremover), new ScheduleDataRefresher(_scheduleStorage, _scheduleDataUpdater, mqremover), new MeetingRefresher(null, mqremover), new PersonRequestRefresher(null, mqremover));
         }
 
         [Test]
@@ -164,12 +164,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
         [Test]
         public void ShouldFillReloadedScheduleDataOnConflictingScheduleDataDatabaseEntity()
         {
-            _scheduleRepository = _mocks.StrictMock<IScheduleRepository>();
+            _scheduleStorage = _mocks.StrictMock<IScheduleStorage>();
 
             MakeTarget();
 
             var databaseVersionOfConflictingEntity = _mocks.Stub<IPersistableScheduleData>();
-            Expect.Call(_scheduleRepository.LoadScheduleDataAggregate(typeof(IPersistableScheduleData), _conflictingScheduleDataEntityId)).Return(databaseVersionOfConflictingEntity);
+            Expect.Call(_scheduleStorage.LoadScheduleDataAggregate(typeof(IPersistableScheduleData), _conflictingScheduleDataEntityId)).Return(databaseVersionOfConflictingEntity);
             Expect.Call(() => _scheduleDataUpdater.FillReloadedScheduleData(databaseVersionOfConflictingEntity));
 
             _mocks.ReplayAll();

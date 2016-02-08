@@ -16,18 +16,18 @@ namespace Teleopti.Ccc.Domain.Scheduling
     {
         private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
         private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
-        private readonly IScheduleRepository _scheduleRepository;
+        private readonly IScheduleStorage _scheduleStorage;
         private readonly Func<IEnumerable<IPerson>, IPersonProvider> _personProviderMaker;
 
-        public LoadSchedulesForRequestWithoutResourceCalculation(ISchedulingResultStateHolder schedulingResultStateHolder, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IScheduleRepository scheduleRepository) : this(schedulingResultStateHolder, personAbsenceAccountRepository,scheduleRepository, p => new PersonProvider(p))
+        public LoadSchedulesForRequestWithoutResourceCalculation(ISchedulingResultStateHolder schedulingResultStateHolder, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IScheduleStorage scheduleStorage) : this(schedulingResultStateHolder, personAbsenceAccountRepository,scheduleStorage, p => new PersonProvider(p))
         {
         }
 
-        public LoadSchedulesForRequestWithoutResourceCalculation(ISchedulingResultStateHolder schedulingResultStateHolder, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IScheduleRepository scheduleRepository, Func<IEnumerable<IPerson>, IPersonProvider> personProviderMaker)
+        public LoadSchedulesForRequestWithoutResourceCalculation(ISchedulingResultStateHolder schedulingResultStateHolder, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IScheduleStorage scheduleStorage, Func<IEnumerable<IPerson>, IPersonProvider> personProviderMaker)
         {
             _schedulingResultStateHolder = schedulingResultStateHolder;
             _personAbsenceAccountRepository = personAbsenceAccountRepository;
-            _scheduleRepository = scheduleRepository;
+            _scheduleStorage = scheduleStorage;
             _personProviderMaker = personProviderMaker;
         }
 
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
             var scheduleDateTimePeriod = new ScheduleDateTimePeriod(period, requestedPersons);
             _schedulingResultStateHolder.Schedules =
-                _scheduleRepository.FindSchedulesForPersons(
+                _scheduleStorage.FindSchedulesForPersons(
                     scheduleDateTimePeriod,
                     scenario,
                     personsProvider,

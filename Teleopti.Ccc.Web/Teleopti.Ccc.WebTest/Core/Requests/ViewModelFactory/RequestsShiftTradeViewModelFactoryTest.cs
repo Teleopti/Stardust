@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		{
 			base.Setup(system, configuration);
 			system.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
-			system.UseTestDouble<FakeScheduleRepository>().For<IScheduleRepository>();
+			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
 			system.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
 		}
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		public FakePersonRepository PersonRepository;
 		public FakeCurrentScenario CurrentScenario;
 		public ITeamRepository TeamRepository;
-		public IScheduleRepository ScheduleRepository;
+		public IScheduleStorage ScheduleStorage;
 		public FakeLoggedOnUser LoggedOnUser;
 		public IRequestsShiftTradeScheduleViewModelFactory Target;
 		public Areas.Global.FakePermissionProvider PermissionProvider;
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, me,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13,8,0,0), DateTimeKind.Utc), DateTime.SpecifyKind(new DateTime(2016, 1, 13,10,0,0), DateTimeKind.Utc)),
 				ShiftCategoryFactory.CreateShiftCategory("mainShift"));
-			ScheduleRepository.Add(personAss);
+			ScheduleStorage.Add(personAss);
 
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
 			{
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, me,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13,8,0,0), DateTimeKind.Utc), DateTime.SpecifyKind(new DateTime(2016, 1, 13,10,0,0), DateTimeKind.Utc)),
 				ShiftCategoryFactory.CreateShiftCategory("mainShift"));
-			ScheduleRepository.Add(personAss);
+			ScheduleStorage.Add(personAss);
 
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
 			{
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, personUnpublished,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 8, 0, 0), DateTimeKind.Utc), DateTime.SpecifyKind(new DateTime(2016, 1, 13, 10, 0, 0), DateTimeKind.Utc)),
 				ShiftCategoryFactory.CreateShiftCategory("mainShift"));
-			ScheduleRepository.Add(personAss);
+			ScheduleStorage.Add(personAss);
 
 
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, personPublished,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 8, 0, 0), DateTimeKind.Utc), DateTime.SpecifyKind(new DateTime(2016, 1, 13, 10, 0, 0), DateTimeKind.Utc)),
 				ShiftCategoryFactory.CreateShiftCategory("mainShift"));
-			ScheduleRepository.Add(personAss);
+			ScheduleStorage.Add(personAss);
 
 
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
@@ -198,8 +198,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personAbs = PersonAbsenceFactory.CreatePersonAbsence(personPublished, scenario,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 10, 0, 0), DateTimeKind.Utc),
 					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 11, 0, 0), DateTimeKind.Utc)), confidentialAbs);
-			ScheduleRepository.Add(personAss);
-			ScheduleRepository.Add(personAbs);
+			ScheduleStorage.Add(personAss);
+			ScheduleStorage.Add(personAbs);
 
 
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
@@ -243,8 +243,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personAbs = PersonAbsenceFactory.CreatePersonAbsence(personPublished, scenario,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 10, 0, 0), DateTimeKind.Utc),
 					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 11, 0, 0), DateTimeKind.Utc)), confidentialAbs);
-			ScheduleRepository.Add(personAss);
-			ScheduleRepository.Add(personAbs);
+			ScheduleStorage.Add(personAss);
+			ScheduleStorage.Add(personAbs);
 
 
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
@@ -290,21 +290,21 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personAbs = PersonAbsenceFactory.CreatePersonAbsence(personPublished, scenario,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 0, 0, 0), DateTimeKind.Utc),
 					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 23, 0, 0), DateTimeKind.Utc)), abs);
-			ScheduleRepository.Add(personAss);
-			ScheduleRepository.Add(personAbs);
+			ScheduleStorage.Add(personAss);
+			ScheduleStorage.Add(personAbs);
 
 			var p2AssWithDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, personWithAbsenceOnDayOff,
 				new DateOnly(2016, 1, 13), new DayOffTemplate());
 			var p2Abs = PersonAbsenceFactory.CreatePersonAbsence(personWithAbsenceOnDayOff, scenario,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 0, 0, 0), DateTimeKind.Utc),
 					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 23, 0, 0), DateTimeKind.Utc)), abs);
-			ScheduleRepository.Add(p2AssWithDayOff);
-			ScheduleRepository.Add(p2Abs);
+			ScheduleStorage.Add(p2AssWithDayOff);
+			ScheduleStorage.Add(p2Abs);
 
 			var p3Abs = PersonAbsenceFactory.CreatePersonAbsence(personWithAbsenceOnly,scenario,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 0, 0, 0), DateTimeKind.Utc),
 					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 23, 0, 0), DateTimeKind.Utc)), abs);
-			ScheduleRepository.Add(p3Abs);
+			ScheduleStorage.Add(p3Abs);
 
 
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
@@ -333,7 +333,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			personAss.AddOvertimeActivity(ActivityFactory.CreateActivity("overtime"),new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc),
 					DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)), new MultiplicatorDefinitionSet("a",MultiplicatorType.Overtime));
 
-			ScheduleRepository.Add(personAss);
+			ScheduleStorage.Add(personAss);
 
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
 			{
@@ -361,7 +361,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			personAss.AddOvertimeActivity(ActivityFactory.CreateActivity("overtime"), new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc),
 					DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)), new MultiplicatorDefinitionSet("a", MultiplicatorType.Overtime));
 
-			ScheduleRepository.Add(personAss);
+			ScheduleStorage.Add(personAss);
 
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
 			{
@@ -393,13 +393,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, personPublished,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc), DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)),
 				ShiftCategoryFactory.CreateShiftCategory("mainShift"));
-			ScheduleRepository.Add(personAss);
+			ScheduleStorage.Add(personAss);
 
 			var abs = AbsenceFactory.CreateAbsence("abs");
 			var p3Abs = PersonAbsenceFactory.CreatePersonAbsence(personWithAbsenceOnContractDayOff, scenario,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 0, 0, 0), DateTimeKind.Utc),
 					DateTime.SpecifyKind(new DateTime(2016, 1, 16, 23, 0, 0), DateTimeKind.Utc)), abs);
-			ScheduleRepository.Add(p3Abs);
+			ScheduleStorage.Add(p3Abs);
 
 
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
@@ -431,7 +431,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, personPublished,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc), DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)),
 				ShiftCategoryFactory.CreateShiftCategory("mainShift"));
-			ScheduleRepository.Add(personAss);
+			ScheduleStorage.Add(personAss);
 
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
 			{
@@ -477,29 +477,29 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, personWithMainShift1,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc), DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)),
 				ShiftCategoryFactory.CreateShiftCategory("mainShift"));
-			ScheduleRepository.Add(personAss);
+			ScheduleStorage.Add(personAss);
 
 			var person2Ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, personWithMainShift2,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 7, 0, 0), DateTimeKind.Utc), DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)),
 				ShiftCategoryFactory.CreateShiftCategory("mainShift"));
-			ScheduleRepository.Add(person2Ass);
+			ScheduleStorage.Add(person2Ass);
 
 			var personOvertimeAss =
 				PersonAssignmentFactory.CreateAssignmentWithOvertimeShift(ActivityFactory.CreateActivity("overtime"),
 					personWithOvertimeShift,
 					new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 6, 0, 0), DateTimeKind.Utc),
 						DateTime.SpecifyKind(new DateTime(2016, 1, 16, 7, 0, 0), DateTimeKind.Utc)), scenario);
-			ScheduleRepository.Add(personOvertimeAss);
+			ScheduleStorage.Add(personOvertimeAss);
 
 			var abs = AbsenceFactory.CreateAbsence("abs");
 			var p3Abs = PersonAbsenceFactory.CreatePersonAbsence(personWithAbsenceOnContractDayOff, scenario,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 0, 0, 0), DateTimeKind.Utc),
 					DateTime.SpecifyKind(new DateTime(2016, 1, 16, 23, 0, 0), DateTimeKind.Utc)), abs);
-			ScheduleRepository.Add(p3Abs);
+			ScheduleStorage.Add(p3Abs);
 
 			var personWithDayoffAss = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, personWithDayoff,
 				new DateOnly(2016, 1, 16), new DayOffTemplate());
-			ScheduleRepository.Add(personWithDayoffAss);
+			ScheduleStorage.Add(personWithDayoffAss);
 
 
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
@@ -539,11 +539,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndOvertimeShift(scenario, personPublished,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc), 
 					DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)));
-			ScheduleRepository.Add(personAss);
+			ScheduleStorage.Add(personAss);
 			var meAss = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndOvertimeShift(scenario, me,
 							new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc), 
 								DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)));
-			ScheduleRepository.Add(meAss);
+			ScheduleStorage.Add(meAss);
 
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
 			{
@@ -584,22 +584,22 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, personWithMainShift1,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc), DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)),
 				ShiftCategoryFactory.CreateShiftCategory("mainShift"));
-			ScheduleRepository.Add(personAss);
+			ScheduleStorage.Add(personAss);
 
 			var person2Ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, personWithMainShift2,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 7, 0, 0), DateTimeKind.Utc), DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)),
 				ShiftCategoryFactory.CreateShiftCategory("mainShift"));
-			ScheduleRepository.Add(person2Ass);
+			ScheduleStorage.Add(person2Ass);
 
 			var abs = AbsenceFactory.CreateAbsence("abs");
 			var p3Abs = PersonAbsenceFactory.CreatePersonAbsence(personWithAbsenceOnContractDayOff, scenario,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 0, 0, 0), DateTimeKind.Utc),
 					DateTime.SpecifyKind(new DateTime(2016, 1, 16, 23, 0, 0), DateTimeKind.Utc)), abs);
-			ScheduleRepository.Add(p3Abs);
+			ScheduleStorage.Add(p3Abs);
 
 			var personWithDayoffAss = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, personWithDayoff,
 				new DateOnly(2016, 1, 16), new DayOffTemplate());
-			ScheduleRepository.Add(personWithDayoffAss);
+			ScheduleStorage.Add(personWithDayoffAss);
 
 
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
@@ -636,10 +636,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, personPublished,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc),
 					DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)));
-			ScheduleRepository.Add(personAss);
+			ScheduleStorage.Add(personAss);
 			var meAbs = PersonAbsenceFactory.CreatePersonAbsence(me,scenario,new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc),
 								DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)));
-			ScheduleRepository.Add(meAbs);
+			ScheduleStorage.Add(meAbs);
 
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
 			{
@@ -672,15 +672,15 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, personPublished,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc),
 					DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)));
-			ScheduleRepository.Add(personAss);
+			ScheduleStorage.Add(personAss);
 
 			var meDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, me, new DateOnly(2016, 1, 16),
 				new DayOffTemplate());
 
 			var meAbs = PersonAbsenceFactory.CreatePersonAbsence(me,scenario,new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc),
 								DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)));
-			ScheduleRepository.Add(meDayOff);
-			ScheduleRepository.Add(meAbs);
+			ScheduleStorage.Add(meDayOff);
+			ScheduleStorage.Add(meAbs);
 
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
 			{
@@ -714,11 +714,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, personPublished,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc),
 					DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)));
-			ScheduleRepository.Add(personAss);
+			ScheduleStorage.Add(personAss);
 
 			var meAbs = PersonAbsenceFactory.CreatePersonAbsence(me,scenario,new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc),
 								DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)));
-			ScheduleRepository.Add(meAbs);
+			ScheduleStorage.Add(meAbs);
 
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
 			{
@@ -752,13 +752,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, personPublished,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc),
 					DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)));
-			ScheduleRepository.Add(personAss);
+			ScheduleStorage.Add(personAss);
 
 			var meAss = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, me, new DateOnly(2016, 1, 16),
 				new DayOffTemplate());
 			meAss.AddOvertimeActivity(ActivityFactory.CreateActivity("overtime"), new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc),
 								DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)),new MultiplicatorDefinitionSet("a",MultiplicatorType.Overtime));
-			ScheduleRepository.Add(meAss);
+			ScheduleStorage.Add(meAss);
 
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
 			{

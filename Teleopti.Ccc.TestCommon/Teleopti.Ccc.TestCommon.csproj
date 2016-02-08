@@ -210,7 +210,7 @@
     <Compile Include="FakeRepositories\FakePreferenceDayRepository.cs" />
     <Compile Include="FakeRepositories\FakePublicNoteRepository.cs" />
     <Compile Include="FakeRepositories\FakeRepositoryFactory.cs" />
-    <Compile Include="FakeRepositories\FakeScheduleRepository.cs" />
+    <Compile Include="FakeRepositories\FakeScheduleStorage.cs" />
     <Compile Include="FakeRepositories\FakeScheduleTagRepository.cs" />
     <Compile Include="FakeRepositories\FakeSeatBookingRepository.cs" />
     <Compile Include="FakeRepositories\FakeSeatMapRepository.cs" />
@@ -304,14 +304,14 @@
     <Compile Include="FakeData\EditableShiftFactory.cs" />
     <Compile Include="FakeData\FakeDataSource.cs" />
     <Compile Include="FakeInitiatorIdentifier.cs" />
-    <Compile Include="FakeRepositories\FakeScheduleDataReadScheduleRepository.cs" />
-    <Compile Include="FakeRepositories\FakePersonAbsenceReadScheduleRepository.cs" />
+    <Compile Include="FakeRepositories\FakeScheduleDataReadScheduleStorage.cs" />
+    <Compile Include="FakeRepositories\FakePersonAbsenceReadScheduleStorage.cs" />
     <Compile Include="FakeRepositories\FakePersonAssignmentRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonRepositoryLegacy.cs" />
     <Compile Include="FakeData\PersonAccountCollectionFactory.cs" />
     <Compile Include="FakeData\ScheduleDayFactory.cs" />
     <Compile Include="FakeLoggedOnUser.cs" />
-    <Compile Include="FakeRepositories\FakePersonAssignmentReadScheduleRepository.cs" />
+    <Compile Include="FakeRepositories\FakePersonAssignmentReadScheduleStorage.cs" />
     <Compile Include="FakeRepositories\FakeScenarioRepository.cs" />
     <Compile Include="FakeTime.cs" />
     <Compile Include="IniFileInfo.cs" />

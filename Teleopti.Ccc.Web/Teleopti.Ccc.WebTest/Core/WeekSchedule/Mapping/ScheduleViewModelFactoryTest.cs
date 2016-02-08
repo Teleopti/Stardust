@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		public IScheduleViewModelFactory Target;
 		public ICurrentScenario Scenario;
 		public ILoggedOnUser User;
-		public FakeScheduleDataReadScheduleRepository ScheduleData;
+		public FakeScheduleDataReadScheduleStorage ScheduleData;
 		public MutableNow Now;
 		public FakeUserCulture Culture;
 		public FakeUserTimeZone TimeZone;

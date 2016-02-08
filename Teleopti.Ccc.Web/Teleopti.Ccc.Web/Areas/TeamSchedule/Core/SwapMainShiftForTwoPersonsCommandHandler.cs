@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 	{
 		private readonly ICommonNameDescriptionSetting _commonNameDescriptionSetting;
 		private readonly IPersonRepository _personRepository;
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly ISwapAndModifyServiceNew _swapAndModifyServiceNew;
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 		public SwapMainShiftForTwoPersonsCommandHandler(ICommonNameDescriptionSetting commonNameDescriptionSetting,
 			IPersonRepository personRepository,
-			IScheduleRepository scheduleRepository,
+			IScheduleStorage scheduleStorage,
 			IScenarioRepository scenarioRepository,
 			ISwapAndModifyServiceNew swapAndModifyServiceNew,
 			IDifferenceCollectionService<IPersistableScheduleData> differenceService, 
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		{
 			_commonNameDescriptionSetting = commonNameDescriptionSetting;
 			_personRepository = personRepository;
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 			_scenarioRepository = scenarioRepository;
 			_swapAndModifyServiceNew = swapAndModifyServiceNew;
 			_differenceService = differenceService;
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			var schedulePeriod = new ScheduleDateTimePeriod(period);
 			var personProvider = new PersonProvider(people);
 			
-			return _scheduleRepository.FindSchedulesForPersons(schedulePeriod, scenario, personProvider, options, people);
+			return _scheduleStorage.FindSchedulesForPersons(schedulePeriod, scenario, personProvider, options, people);
 		}
 
 		private IBusinessRuleResponse[] swapShifts(DateOnly date, IPerson[] people, IScheduleDictionary scheduleDictionary, TrackedCommandInfo trackedCommandInfo)

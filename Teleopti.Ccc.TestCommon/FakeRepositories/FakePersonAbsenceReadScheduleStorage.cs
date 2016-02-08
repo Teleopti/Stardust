@@ -6,11 +6,11 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakePersonAbsenceReadScheduleRepository : IScheduleRepository
+	public class FakePersonAbsenceReadScheduleStorage : IScheduleStorage
 	{
 		private readonly IPersonAbsence _personAbsence;
 
-		public FakePersonAbsenceReadScheduleRepository(IPersonAbsence personAbsence)
+		public FakePersonAbsenceReadScheduleStorage(IPersonAbsence personAbsence)
 		{
 			_personAbsence = personAbsence;
 		}

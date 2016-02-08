@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		public IAbsenceRepository AbsenceRepository;
 		public IMultiplicatorDefinitionSetRepository MultiplicatorDefinitionSetRepository;
 		public IDayOffTemplateRepository DayOffTemplateRepository;
-		public IScheduleRepository ScheduleRepository;
+		public IScheduleStorage ScheduleStorage;
 		public IPersonRepository PersonRepository;
 		public ICurrentScenario Scenario;
 		public FakePersistCallback MessageSender2;
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			IScheduleDictionary schedules = null;
 			WithUnitOfWork.Do(() =>
 			{
-				schedules = ScheduleRepository.FindSchedulesForPersons(new ScheduleDateTimePeriod(new DateTimePeriod(1800, 1, 1, 2040, 1, 1)),
+				schedules = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(new DateTimePeriod(1800, 1, 1, 2040, 1, 1)),
 					Scenario.Current(),
 					new PersonProvider(new IPerson[] { }),
 					new ScheduleDictionaryLoadOptions(true, true),

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
         private readonly IRequestFactory _requestFactory;
         private readonly ICurrentScenario _scenarioRepository;
         private readonly IPersonRequestRepository _personRequestRepository;
-        private readonly IScheduleRepository _scheduleRepository;
+        private readonly IScheduleStorage _scheduleStorage;
         private readonly IPersonRepository _personRepository;
 				private readonly IScheduleDifferenceSaver _scheduleDictionarySaver;
     	private readonly ILoadSchedulesForRequestWithoutResourceCalculation _loadSchedulingDataForRequestWithoutResourceCalculation;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
     	private IScenario _defaultScenario;
 		private readonly IToggleManager _toggleManager;
 
-		public ShiftTradeRequestSaga(ICurrentUnitOfWorkFactory unitOfWorkFactory, ISchedulingResultStateHolder schedulingResultStateHolder, IShiftTradeValidator validator, IRequestFactory requestFactory, ICurrentScenario scenarioRepository, IPersonRequestRepository personRequestRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDifferenceSaver scheduleDictionarySaver, ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation, IDifferenceCollectionService<IPersistableScheduleData> differenceService, IToggleManager toggleManager)
+		public ShiftTradeRequestSaga(ICurrentUnitOfWorkFactory unitOfWorkFactory, ISchedulingResultStateHolder schedulingResultStateHolder, IShiftTradeValidator validator, IRequestFactory requestFactory, ICurrentScenario scenarioRepository, IPersonRequestRepository personRequestRepository, IScheduleStorage scheduleStorage, IPersonRepository personRepository, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDifferenceSaver scheduleDictionarySaver, ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation, IDifferenceCollectionService<IPersistableScheduleData> differenceService, IToggleManager toggleManager)
         {
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
             _requestFactory = requestFactory;
             _scenarioRepository = scenarioRepository;
             _personRequestRepository = personRequestRepository;
-            _scheduleRepository = scheduleRepository;
+            _scheduleStorage = scheduleStorage;
             _personRepository = personRepository;
             _scheduleDictionarySaver = scheduleDictionarySaver;
     	    _loadSchedulingDataForRequestWithoutResourceCalculation = loadSchedulingDataForRequestWithoutResourceCalculation;
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
                 {
                     Logger.Debug("Loading Accepting person");
                     var acceptingPerson = loadPersonAcceptingPerson(message);
-						  var checkSum = new ShiftTradeRequestSetChecksum(_scenarioRepository, _scheduleRepository);
+						  var checkSum = new ShiftTradeRequestSetChecksum(_scenarioRepository, _scheduleStorage);
 
                     try
                     {

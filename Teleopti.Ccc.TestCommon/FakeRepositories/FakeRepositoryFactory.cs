@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new System.NotImplementedException();
 		}
 
-		public IScheduleRepository CreateScheduleRepository(IUnitOfWork unitOfWork)
+		public IScheduleStorage CreateScheduleRepository(IUnitOfWork unitOfWork)
 		{
 			throw new System.NotImplementedException();
 		}

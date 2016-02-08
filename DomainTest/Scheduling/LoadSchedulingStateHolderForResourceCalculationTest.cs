@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		private IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private ISkillRepository _skillRepository;
 		private IWorkloadRepository _workloadRepository;
-		private IScheduleRepository _scheduleRepository;
+		private IScheduleStorage _scheduleStorage;
 		private IPersonProvider _personProvider;
 
 		[SetUp]
@@ -36,9 +36,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_personAbsenceAccountRepository = MockRepository.GenerateMock<IPersonAbsenceAccountRepository>();
 			_skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			_workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
-			_scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
+			_scheduleStorage = MockRepository.GenerateMock<IScheduleStorage>();
 			_personProvider = MockRepository.GenerateMock<IPersonProvider>();
-			_target = new LoadSchedulingStateHolderForResourceCalculation(_personRepository, _personAbsenceAccountRepository, _skillRepository, _workloadRepository, _scheduleRepository, _schedulingResultStateHolder, _peopleAndSkillLoadDecider, _skillDayLoadHelper, p => _personProvider);
+			_target = new LoadSchedulingStateHolderForResourceCalculation(_personRepository, _personAbsenceAccountRepository, _skillRepository, _workloadRepository, _scheduleStorage, _schedulingResultStateHolder, _peopleAndSkillLoadDecider, _skillDayLoadHelper, p => _personProvider);
 		}
 
 		[Test]
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			
 			_workloadRepository.Stub(x => x.LoadAll()).Return(new List<IWorkload>());
 			_personRepository.Stub(x => x.FindPeopleInOrganization(dateOnlyPeriod, false)).Return(peopleInOrganization);
-			_scheduleRepository.Stub(
+			_scheduleStorage.Stub(
 				x => x.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, null))
 				.IgnoreArguments()
 				.Return(scheduleDictionary);
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			_workloadRepository.Stub(x => x.LoadAll()).Return(new List<IWorkload>());
 			_personRepository.Stub(x => x.FindPeopleInOrganization(dateOnlyPeriod, false)).Return(peopleInOrganization);
-			_scheduleRepository.Stub(
+			_scheduleStorage.Stub(
 				x => x.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, null, null))
 				.IgnoreArguments()
 				.Return(scheduleDictionary);
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			_target.Execute(scenario, period, requestedPeople);
 
-			_scheduleRepository.AssertWasCalled(
+			_scheduleStorage.AssertWasCalled(
 				x => x.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, null, null),
 				o =>
 					o.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Same(scenario),
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			_workloadRepository.Stub(x => x.LoadAll()).Return(new List<IWorkload>());
 			_personRepository.Stub(x => x.FindPeopleInOrganization(dateOnlyPeriod, false)).Return(peopleInOrganization);
-			_scheduleRepository.Stub(
+			_scheduleStorage.Stub(
 				x =>
 					x.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions,
 						visiblePeople)).IgnoreArguments().Return(scheduleDictionary);

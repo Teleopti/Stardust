@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private IDefinedRaptorApplicationFunctionFactory appFunctionFactory;
 
 		private IPersonRepository personRepository;
-		private IScheduleRepository scheduleRepository;
+		private IScheduleStorage scheduleStorage;
 		private IScenarioRepository scenarioRepository;
 
 		private ApplicationRole _badgeRole;
@@ -122,8 +122,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			scenarioRepository.Stub(x => x.LoadDefaultScenario()).Return(defaultScenario);
 
 			// Stub for schedule
-			scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
-			scheduleRepository.Stub(
+			scheduleStorage = MockRepository.GenerateMock<IScheduleStorage>();
+			scheduleStorage.Stub(
 				x =>
 					x.FindSchedulesForPersonsOnlyInGivenPeriod(_allPersons, new ScheduleDictionaryLoadOptions(true, false),
 						new DateOnlyPeriod(_calculateDateOnly, _calculateDateOnly), defaultScenario))
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				.Return(new ScheduleDictionaryForTest(defaultScenario, now));
 
 			_calculator = new AgentBadgeCalculator(_statisticRepository, _badgeTransactionRepository, appFunctionFactory,
-				personRepository, scheduleRepository, scenarioRepository, _now);
+				personRepository, scheduleStorage, scenarioRepository, _now);
 		}
 
 		[Test]
@@ -226,8 +226,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var personAbsence = new PersonAbsence(lastPerson, defaultScenario, absenceLayer);
 			scheduleDict.AddPersonAbsence(personAbsence);
 
-			scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
-			scheduleRepository.Stub(
+			scheduleStorage = MockRepository.GenerateMock<IScheduleStorage>();
+			scheduleStorage.Stub(
 				x =>
 					x.FindSchedulesForPersonsOnlyInGivenPeriod(_allPersons, new ScheduleDictionaryLoadOptions(true, false),
 						new DateOnlyPeriod(_calculateDateOnly, _calculateDateOnly), defaultScenario))
@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				.Return(scheduleDict);
 
 			_calculator = new AgentBadgeCalculator(_statisticRepository, _badgeTransactionRepository, appFunctionFactory,
-				personRepository, scheduleRepository, scenarioRepository, _now);
+				personRepository, scheduleStorage, scenarioRepository, _now);
 
 			var result = _calculator.CalculateAdherenceBadges(_allPersons, timezoneCode, _calculateDateOnly,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,

@@ -197,13 +197,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_shiftTradeRequestStatusChecker.ClearReferredShiftTradeRequests();
 		}
 
-		public void LoadSchedules(IScheduleRepository scheduleRepository, IPersonProvider personsProvider, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IScheduleDateTimePeriod period)
+		public void LoadSchedules(IScheduleStorage scheduleStorage, IPersonProvider personsProvider, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IScheduleDateTimePeriod period)
 		{
-			if (scheduleRepository == null) throw new ArgumentNullException("scheduleRepository");
+			if (scheduleStorage == null) throw new ArgumentNullException("scheduleStorage");
 			if (period == null) throw new ArgumentNullException("period");
 
 			SchedulingResultState.Schedules =
-				scheduleRepository.FindSchedulesForPersons(period, RequestedScenario, personsProvider, scheduleDictionaryLoadOptions, AllPermittedPersons);
+				scheduleStorage.FindSchedulesForPersons(period, RequestedScenario, personsProvider, scheduleDictionaryLoadOptions, AllPermittedPersons);
 
 			_loadedPeriod = period.LoadedPeriod();
 
@@ -355,7 +355,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_filteredAgents = (from p in selectedPersons orderby CommonAgentName(p) select p).ToDictionary(p => p.Id.Value);
 		}
 
-		public IPersonRequest RequestUpdateFromBroker(IPersonRequestRepository personRequestRepository, Guid personRequestId, IScheduleRepository scheduleRepository)
+		public IPersonRequest RequestUpdateFromBroker(IPersonRequestRepository personRequestRepository, Guid personRequestId, IScheduleStorage scheduleStorage)
 		{
 			
 			IPersonRequest updatedRequest = null;
@@ -367,7 +367,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				if (!SchedulingResultState.PersonsInOrganization.Contains(updatedRequest.Person)) //Do not try to update persons that are not loaded in scheduler
 					return null;
 
-				updatePersonAccountFromBroker(scheduleRepository, updatedRequest);
+				updatePersonAccountFromBroker(scheduleStorage, updatedRequest);
 
 				var shiftTradeRequestReferredSpecification = new ShiftTradeRequestReferredSpecification(_shiftTradeRequestStatusChecker);
 				var shiftTradeRequestOkByMeSpecification = new ShiftTradeRequestOkByMeSpecification(_shiftTradeRequestStatusChecker);
@@ -387,7 +387,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			return updatedRequest;
 		}
 
-		private void updatePersonAccountFromBroker(IScheduleRepository scheduleRepository, IPersonRequest updatedRequest)
+		private void updatePersonAccountFromBroker(IScheduleStorage scheduleStorage, IPersonRequest updatedRequest)
 		{
 			var absenceRequest = updatedRequest.Request as IAbsenceRequest;
 			if (absenceRequest != null && (updatedRequest.IsApproved || updatedRequest.IsAutoAproved))
@@ -412,7 +412,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						if (account.StartDate > person.TerminalDate)
 							continue;
 
-						account.CalculateUsed(scheduleRepository, Schedules.Scenario);
+						account.CalculateUsed(scheduleStorage, Schedules.Scenario);
 						var range = (IValidateScheduleRange) Schedules[person];
 						range.ValidateBusinessRules(NewBusinessRuleCollection.MinimumAndPersonAccount(SchedulingResultState));
 					}

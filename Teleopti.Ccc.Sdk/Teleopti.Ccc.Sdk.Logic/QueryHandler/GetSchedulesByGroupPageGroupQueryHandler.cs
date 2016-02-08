@@ -18,17 +18,17 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 	public class GetSchedulesByGroupPageGroupQueryHandler : IHandleQuery<GetSchedulesByGroupPageGroupQueryDto, ICollection<SchedulePartDto>>
 	{
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 		private readonly IDateTimePeriodAssembler _dateTimePeriodAssembler;
 		private readonly ISchedulePartAssembler _scheduleDayAssembler;
 
-		public GetSchedulesByGroupPageGroupQueryHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IGroupingReadOnlyRepository groupingReadOnlyRepository, IDateTimePeriodAssembler dateTimePeriodAssembler, ISchedulePartAssembler scheduleDayAssembler)
+		public GetSchedulesByGroupPageGroupQueryHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IScheduleStorage scheduleStorage, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IGroupingReadOnlyRepository groupingReadOnlyRepository, IDateTimePeriodAssembler dateTimePeriodAssembler, ISchedulePartAssembler scheduleDayAssembler)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 			_personRepository = personRepository;
 			_scenarioRepository = scenarioRepository;
 			_groupingReadOnlyRepository = groupingReadOnlyRepository;
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 				var personList = _personRepository.FindPeople(availableDetails.Select(d => d.PersonId));
 
-				IScheduleDictionary scheduleDictionary = _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(personList, new ScheduleDictionaryLoadOptions(false, false), period, scenario);
+				IScheduleDictionary scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(personList, new ScheduleDictionaryLoadOptions(false, false), period, scenario);
 				foreach (IPerson person in personList)
 				{
 					IScheduleRange scheduleRange = scheduleDictionary[person];

@@ -60,11 +60,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         /// <summary>
         /// Loads the schedules.
         /// </summary>
-        /// <param name="scheduleRepository">The schedule repository.</param>
+        /// <param name="scheduleStorage">The schedule repository.</param>
         /// <param name="personsProvider">The persons in organisation provider.</param>
         /// <param name="scheduleDictionaryLoadOptions">The persons in organisation provider.</param>
         /// <param name="period">The period.</param>
-        void LoadSchedules(IScheduleRepository scheduleRepository, IPersonProvider personsProvider, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IScheduleDateTimePeriod period);
+        void LoadSchedules(IScheduleStorage scheduleStorage, IPersonProvider personsProvider, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IScheduleDateTimePeriod period);
 
         /// <summary>
         /// Gets the schedules.
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	    void LoadPersonRequests(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory,
                                 IPersonRequestCheckAuthorization authorization, int numberOfDaysToShowNonPendingRequests);
 
-		IPersonRequest RequestUpdateFromBroker(IPersonRequestRepository personRequestRepository, Guid personRequestId, IScheduleRepository scheduleRepository);
+		IPersonRequest RequestUpdateFromBroker(IPersonRequestRepository personRequestRepository, Guid personRequestId, IScheduleStorage scheduleStorage);
 
         IPersonRequest RequestDeleteFromBroker(Guid personRequestId);
 

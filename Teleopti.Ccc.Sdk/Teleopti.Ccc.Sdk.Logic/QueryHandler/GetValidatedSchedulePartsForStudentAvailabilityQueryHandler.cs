@@ -24,19 +24,19 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
     	private readonly IShiftCategoryRepository _shiftCategoryRepository;
     	private readonly IActivityRepository _activityRepository;
     	private readonly IPersonRepository _personRepository;
-    	private readonly IScheduleRepository _scheduleRepository;
+    	private readonly IScheduleStorage _scheduleStorage;
         private readonly ICurrentScenario _scenarioRepository;
     	private readonly IAssembler<IPreferenceDay, PreferenceRestrictionDto> _preferenceDayAssembler;
     	private readonly IAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto> _studentAvailabilityDayAssembler;
     	private readonly IWorkShiftWorkTime _workShiftWorkTime;
 
-        public GetValidatedSchedulePartsForStudentAvailabilityQueryHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IShiftCategoryRepository shiftCategoryRepository, IActivityRepository activityRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, ICurrentScenario scenarioRepository, IAssembler<IPreferenceDay, PreferenceRestrictionDto> preferenceDayAssembler, IAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto> studentAvailabilityDayAssembler, IWorkShiftWorkTime workShiftWorkTime)
+        public GetValidatedSchedulePartsForStudentAvailabilityQueryHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IShiftCategoryRepository shiftCategoryRepository, IActivityRepository activityRepository, IPersonRepository personRepository, IScheduleStorage scheduleStorage, ICurrentScenario scenarioRepository, IAssembler<IPreferenceDay, PreferenceRestrictionDto> preferenceDayAssembler, IAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto> studentAvailabilityDayAssembler, IWorkShiftWorkTime workShiftWorkTime)
         {
         	_unitOfWorkFactory = unitOfWorkFactory;
         	_shiftCategoryRepository = shiftCategoryRepository;
     		_activityRepository = activityRepository;
     		_personRepository = personRepository;
-    		_scheduleRepository = scheduleRepository;
+    		_scheduleStorage = scheduleStorage;
     		_scenarioRepository = scenarioRepository;
     		_preferenceDayAssembler = preferenceDayAssembler;
     		_studentAvailabilityDayAssembler = studentAvailabilityDayAssembler;
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				period = period.ChangeEndTime(TimeSpan.FromTicks(-1));
 				personList.Add(person);
 
-				IScheduleDictionary scheduleDictionary = _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(personList, new ScheduleDictionaryLoadOptions(true, false), period.ToDateOnlyPeriod(timeZoneInfo), _scenarioRepository.Current());
+				IScheduleDictionary scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(personList, new ScheduleDictionaryLoadOptions(true, false), period.ToDateOnlyPeriod(timeZoneInfo), _scenarioRepository.Current());
 
 
 				using (ISchedulingResultStateHolder stateHolder = new SchedulingResultStateHolder())

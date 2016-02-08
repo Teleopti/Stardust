@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public IntradayOptimization Target;
 		public IPersonWeekViolatingWeeklyRestSpecification CheckWeeklyRestRule;
-		public IScheduleRepository ScheduleRepository;
+		public IScheduleStorage ScheduleStorage;
 
 		[Test]
 		public void ShouldUseShiftThatCoverHigherDemand()
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 
 			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, new DateOnlyPeriod(dateOnly, dateOnly.AddDays(7)), new TimePeriod(8, 0, 16, 0));
 			Target.Optimize(planningPeriod.Id.Value);
-			var agentRange = ScheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(agent, new ScheduleDictionaryLoadOptions(false, false, false), weekPeriod, scenario)[agent];
+			var agentRange = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(agent, new ScheduleDictionaryLoadOptions(false, false, false), weekPeriod, scenario)[agent];
 			CheckWeeklyRestRule.IsSatisfyBy(agentRange, weekPeriod, weeklyRest).Should().Be.True();	
 		}
 

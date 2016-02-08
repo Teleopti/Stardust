@@ -6,15 +6,15 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakePersonAssignmentReadScheduleRepository:IScheduleRepository
+	public class FakePersonAssignmentReadScheduleStorage:IScheduleStorage
 	{
 		private readonly IPersonAssignment _personAssignment;
 
-		public FakePersonAssignmentReadScheduleRepository()
+		public FakePersonAssignmentReadScheduleStorage()
 		{
 		}
 
-		public FakePersonAssignmentReadScheduleRepository(IPersonAssignment personAssignment)
+		public FakePersonAssignmentReadScheduleStorage(IPersonAssignment personAssignment)
 		{
 			_personAssignment = personAssignment;
 		}

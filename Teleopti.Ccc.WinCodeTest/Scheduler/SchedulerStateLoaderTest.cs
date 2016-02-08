@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
             var activityRepository = MockRepository.GenerateMock<IActivityRepository>();
             var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
-            var scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
+            var scheduleRepository = MockRepository.GenerateMock<IScheduleStorage>();
             var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
             var skillDayRepository = MockRepository.GenerateMock<ISkillDayRepository>();
             

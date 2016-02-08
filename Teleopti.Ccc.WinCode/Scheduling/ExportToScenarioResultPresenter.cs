@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	{
 		private readonly IExportToScenarioResultView _view;
 		private readonly IScenario _exportScenario;
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IUnitOfWorkFactory _uowFactory;
 		private readonly IMoveDataBetweenSchedules _moveSchedules;
 		private readonly IReassociateDataForSchedules _callback;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		//modifierbart state
 		public ExportToScenarioResultPresenter(IUnitOfWorkFactory uowFactory,
 												IExportToScenarioResultView view,
-												IScheduleRepository scheduleRepository,
+												IScheduleStorage scheduleStorage,
 												IMoveDataBetweenSchedules moveSchedules,
 												IReassociateDataForSchedules callback,
 												IEnumerable<IPerson> fullyLoadedPersonsToMove,
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_moveSchedules = moveSchedules;
 			_callback = callback;
 			_fullyLoadedPersonsToMove = fullyLoadedPersonsToMove;
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 			_view = view;
 			_exportScenario = exportScenario;
 			_schedulePartsToExport = schedulePartsToExport;
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 				_callback.ReassociateDataForAllPeople();
 				ScheduleDictionaryToPersist =
-					_scheduleRepository.FindSchedulesForPersons(new ScheduleDateTimePeriod(schedulePartPeriod(), _fullyLoadedPersonsToMove), _exportScenario, personProvider, scheduleDictionaryLoadOptions, _fullyLoadedPersonsToMove);
+					_scheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(schedulePartPeriod(), _fullyLoadedPersonsToMove), _exportScenario, personProvider, scheduleDictionaryLoadOptions, _fullyLoadedPersonsToMove);
 				return _moveSchedules.CopySchedulePartsToAnotherDictionary(ScheduleDictionaryToPersist, _schedulePartsToExport);
 			}
 		}

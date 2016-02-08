@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Interfaces.Domain
 {
-    public interface IScheduleRepository
+    public interface IScheduleStorage
 		{
 		IUnitOfWork UnitOfWork { get; }
 	    void Add(IPersistableScheduleData scheduleData);

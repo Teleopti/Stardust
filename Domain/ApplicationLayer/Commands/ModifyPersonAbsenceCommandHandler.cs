@@ -12,19 +12,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	{
 		private readonly IWriteSideRepositoryTypedId<IPersonAbsence, Guid> _personAbsenceRepository;
 		private readonly IUserTimeZone _timeZone;
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 		private readonly ISaveSchedulePartService _saveSchedulePartService;
 
 		public ModifyPersonAbsenceCommandHandler(IWriteSideRepositoryTypedId<IPersonAbsence, Guid> personAbsenceRepository,
 			IUserTimeZone timeZone,
-			IScheduleRepository scheduleRepository,
+			IScheduleStorage scheduleStorage,
 			IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate,
 			ISaveSchedulePartService saveSchedulePartService)
 		{
 			_personAbsenceRepository = personAbsenceRepository;
 			_timeZone = timeZone;
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 			_saveSchedulePartService = saveSchedulePartService;
 		}
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var existingPeriodOfAbsence = new DateOnlyPeriod (startDate, endDate);
 
 			var scheduleDictionary =
-					_scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(
+					_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
 						person, new ScheduleDictionaryLoadOptions(false, false),
 						existingPeriodOfAbsence, personAbsence.Scenario);
 

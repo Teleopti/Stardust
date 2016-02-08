@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 		private readonly ISkillRepository _skillRepository;
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private readonly IPeopleAndSkillLoaderDecider _decider;
 		private readonly ICurrentTeleoptiPrincipal _principal;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		public WebSchedulingSetup(IScenarioRepository scenarioRepository, 
 					ISkillDayLoadHelper skillDayLoadHelper, 
 					ISkillRepository skillRepository, 
-					IScheduleRepository scheduleRepository, 
+					IScheduleStorage scheduleStorage, 
 					IPersonAbsenceAccountRepository personAbsenceAccountRepository, 
 					IPeopleAndSkillLoaderDecider decider, 
 					ICurrentTeleoptiPrincipal principal, 
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			_scenarioRepository = scenarioRepository;
 			_skillDayLoadHelper = skillDayLoadHelper;
 			_skillRepository = skillRepository;
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 			_personAbsenceAccountRepository = personAbsenceAccountRepository;
 			_decider = decider;
 			_principal = principal;
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			people.AllPeople.ForEach(schedulerStateHolder.AllPermittedPersons.Add);
 			stateHolder.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(people.AllPeople);
 			schedulerStateHolder.ResetFilteredPersons();
-			schedulerStateHolder.LoadSchedules(_scheduleRepository, new PersonsInOrganizationProvider(people.AllPeople),
+			schedulerStateHolder.LoadSchedules(_scheduleStorage, new PersonsInOrganizationProvider(people.AllPeople),
 				new ScheduleDictionaryLoadOptions(true, false, false),
 				new ScheduleDateTimePeriod(dateTimePeriod, people.AllPeople, new SchedulerRangeToLoadCalculator(dateTimePeriod)));
 			return new WebSchedulingSetupResult(people, extractAllSchedules(schedulerStateHolder.SchedulingResultState, people, period));

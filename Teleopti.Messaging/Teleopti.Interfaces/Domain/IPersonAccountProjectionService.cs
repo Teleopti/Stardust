@@ -23,9 +23,9 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Alls the visual layers from loaded data and repository.
         /// </summary>
-        /// <param name="repository">The repository.</param>
+        /// <param name="storage">The repository.</param>
         /// <param name="scenario">The scenario.</param>
         /// <returns></returns>
-        IList<IScheduleDay> CreateProjection(IScheduleRepository repository, IScenario scenario);
+        IList<IScheduleDay> CreateProjection(IScheduleStorage storage, IScenario scenario);
     }
 }

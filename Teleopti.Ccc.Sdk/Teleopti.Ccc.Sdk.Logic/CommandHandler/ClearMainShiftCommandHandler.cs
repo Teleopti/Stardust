@@ -13,17 +13,17 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     public class ClearMainShiftCommandHandler : IHandleCommand<ClearMainShiftCommandDto>
     {
 	    private readonly IScheduleTagAssembler _scheduleTagAssembler;
-	    private readonly IScheduleRepository _scheduleRepository;
+	    private readonly IScheduleStorage _scheduleStorage;
         private readonly IPersonRepository _personRepository;
         private readonly IScenarioRepository _scenarioRepository;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
     	private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 		private readonly IScheduleSaveHandler _scheduleSaveHandler;
 
-    	public ClearMainShiftCommandHandler(IScheduleTagAssembler scheduleTagAssembler, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleSaveHandler scheduleSaveHandler)
+    	public ClearMainShiftCommandHandler(IScheduleTagAssembler scheduleTagAssembler, IScheduleStorage scheduleStorage, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleSaveHandler scheduleSaveHandler)
         {
     		_scheduleTagAssembler = scheduleTagAssembler;
-    		_scheduleRepository = scheduleRepository;
+    		_scheduleStorage = scheduleStorage;
             _personRepository = personRepository;
             _scenarioRepository = scenarioRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var person = _personRepository.Load(command.PersonId);
                 var scenario = getDesiredScenario(command);
                 var startDate = command.Date.ToDateOnly();
-	            var scheduleDictionary = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(
+	            var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
 		            person, new ScheduleDictionaryLoadOptions(false, false),
 		            new DateOnlyPeriod(startDate, startDate.AddDays(1)), scenario);
 

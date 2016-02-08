@@ -10,16 +10,16 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 	public class SeatBookingRequestAssembler : ISeatBookingRequestAssembler
 	{
 	
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ISeatBookingRepository _seatBookingRepository;
 		private readonly ICurrentScenario _scenario;
 		private IList<ITeamGroupedBooking> _bookingsWithDateAndTeam;
 		private IList<ISeatBooking> _existingSeatBookings;
 		private int _numberOfUnscheduledAgentDays;
 
-		public SeatBookingRequestAssembler(IScheduleRepository scheduleRepository, ISeatBookingRepository seatBookingRepository, ICurrentScenario scenario)
+		public SeatBookingRequestAssembler(IScheduleStorage scheduleStorage, ISeatBookingRepository seatBookingRepository, ICurrentScenario scenario)
 		{
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 			_seatBookingRepository = seatBookingRepository;
 			_scenario = scenario;
 		}
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		private IScheduleDictionary getScheduleDaysForPeriod(DateOnlyPeriod period, IEnumerable<IPerson> people, IScenario currentScenario)
 		{
-			return _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(people, new ScheduleDictionaryLoadOptions(false, false), period, currentScenario);
+			return _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(people, new ScheduleDictionaryLoadOptions(false, false), period, currentScenario);
 		}
 	}
 }

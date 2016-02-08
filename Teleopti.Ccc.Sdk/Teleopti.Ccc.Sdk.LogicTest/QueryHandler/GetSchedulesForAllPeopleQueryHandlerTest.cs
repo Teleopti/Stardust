@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 	public class GetSchedulesForAllPeopleQueryHandlerTest
 	{
 		private MockRepository mocks;
-		private IScheduleRepository scheduleRepository;
+		private IScheduleStorage scheduleStorage;
 		private IUnitOfWorkFactory unitOfWorkFactory;
 		private GetSchedulesForAllPeopleQueryHandler target;
 		private IDateTimePeriodAssembler dateTimePeriodAssembler;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		public void Setup()
 		{
 			mocks = new MockRepository();
-			scheduleRepository = mocks.DynamicMock<IScheduleRepository>();
+			scheduleStorage = mocks.DynamicMock<IScheduleStorage>();
 			personRepository = mocks.DynamicMock<IPersonRepository>();
 			dateTimePeriodAssembler = mocks.DynamicMock<IDateTimePeriodAssembler>();
 			scheduleDayAssembler = mocks.DynamicMock<ISchedulePartAssembler>();
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			scenarioId = Guid.NewGuid();
 			unitOfWork = mocks.DynamicMock<IUnitOfWork>();
 
-			target = new GetSchedulesForAllPeopleQueryHandler(currentUnitOfWorkFactory, scheduleRepository, personRepository, scenarioRepository, dateTimePeriodAssembler, scheduleDayAssembler);
+			target = new GetSchedulesForAllPeopleQueryHandler(currentUnitOfWorkFactory, scheduleStorage, personRepository, scenarioRepository, dateTimePeriodAssembler, scheduleDayAssembler);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			{
 				Expect.Call(scenarioRepository.Get(scenarioId)).Return(scenario);
 				Expect.Call(personRepository.FindPeopleInOrganizationLight(new DateOnlyPeriod(2012,5,2,2012,5,2))).Return(new []{person1});
-				Expect.Call(scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), scenario)).IgnoreArguments().Return(dictionary);
+				Expect.Call(scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), scenario)).IgnoreArguments().Return(dictionary);
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(currentUnitOfWorkFactory.Current()).Return(unitOfWorkFactory);
 				Expect.Call(dictionary[person1]).Return(scheduleRange);
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			{
 				Expect.Call(scenarioRepository.LoadDefaultScenario()).Return(scenario);
 				Expect.Call(personRepository.FindPeopleInOrganizationLight(new DateOnlyPeriod(2012, 5, 2, 2012, 5, 2))).Return(new[] { person1 });
-				Expect.Call(scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), scenario)).IgnoreArguments().Return(dictionary);
+				Expect.Call(scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), scenario)).IgnoreArguments().Return(dictionary);
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(currentUnitOfWorkFactory.Current()).Return(unitOfWorkFactory);
 				Expect.Call(dictionary[person1]).Return(scheduleRange);

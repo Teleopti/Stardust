@@ -17,19 +17,19 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly IShiftCategoryRepository _shiftCategoryRepository;
         private readonly IActivityLayerAssembler<IMainShiftLayer> _mainActivityLayerAssembler;
 	    private readonly IScheduleTagAssembler _scheduleTagAssembler;
-	    private readonly IScheduleRepository _scheduleRepository;
+	    private readonly IScheduleStorage _scheduleStorage;
         private readonly IScenarioRepository _scenarioRepository;
         private readonly IPersonRepository _personRepository;
     	private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 		private readonly IScheduleSaveHandler _scheduleSaveHandler;
 
-    	public NewMainShiftCommandHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory,IShiftCategoryRepository shiftCategoryRepository,IActivityLayerAssembler<IMainShiftLayer> mainActivityLayerAssembler, IScheduleTagAssembler scheduleTagAssembler, IScheduleRepository scheduleRepository, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleSaveHandler scheduleSaveHandler)
+    	public NewMainShiftCommandHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory,IShiftCategoryRepository shiftCategoryRepository,IActivityLayerAssembler<IMainShiftLayer> mainActivityLayerAssembler, IScheduleTagAssembler scheduleTagAssembler, IScheduleStorage scheduleStorage, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleSaveHandler scheduleSaveHandler)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _shiftCategoryRepository = shiftCategoryRepository;
             _mainActivityLayerAssembler = mainActivityLayerAssembler;
     		_scheduleTagAssembler = scheduleTagAssembler;
-    		_scheduleRepository = scheduleRepository;
+    		_scheduleStorage = scheduleStorage;
             _scenarioRepository = scenarioRepository;
             _personRepository = personRepository;
     		_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			    var person = _personRepository.Load(command.PersonId);
 			    var scenario = getDesiredScenario(command);
 			    var startDate = command.Date.ToDateOnly();
-			    var scheduleDictionary = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(
+			    var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
 				    person, new ScheduleDictionaryLoadOptions(false, false),
 				    new DateOnlyPeriod(startDate, startDate.AddDays(1)), scenario);
 

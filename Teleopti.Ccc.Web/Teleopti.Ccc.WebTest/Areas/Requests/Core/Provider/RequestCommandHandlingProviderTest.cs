@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		public IRequestCommandHandlingProvider Target;
 
 		public ICurrentScenario Scenario;
-		public IScheduleRepository ScheduleRepository;
+		public IScheduleStorage ScheduleStorage;
 		public IPersonRequestRepository PersonRequestRepository;
 		public IRequestApprovalServiceFactory RequestApprovalServiceFactory;
 

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IPersonRepository _personRepository;
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IShiftCategoryRepository _shiftCategoryRepository;
 		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance
 		public ScheduleGenerator(ICurrentUnitOfWork unitOfWork,
 			IScenarioRepository scenarioRepository,
 			IPersonRepository personRepository,
-			IScheduleRepository scheduleRepository,
+			IScheduleStorage scheduleStorage,
 			IShiftCategoryRepository shiftCategoryRepository,
 			IPersonAbsenceAccountRepository personAbsenceAccountRepository,
 			IScheduleDifferenceSaver scheduleDifferenceSaver,
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance
 			_unitOfWork = unitOfWork;
 			_scenarioRepository = scenarioRepository;
 			_personRepository = personRepository;
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 			_shiftCategoryRepository = shiftCategoryRepository;
 			_personAbsenceAccountRepository = personAbsenceAccountRepository;
 			_scheduleDifferenceSaver = scheduleDifferenceSaver;
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance
 		{
 			var person = _personRepository.Load(personId);
 			var scenario = _scenarioRepository.LoadDefaultScenario();
-			var scheduleDictionary = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
 				person, new ScheduleDictionaryLoadOptions(false, false),
 				new DateOnlyPeriod(date, date.AddDays(1)), scenario);
 

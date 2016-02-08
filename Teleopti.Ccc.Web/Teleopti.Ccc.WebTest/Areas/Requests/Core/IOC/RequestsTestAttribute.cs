@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 
 			system.UseTestDouble<SyncCommandDispatcher>().For<ICommandDispatcher>();
 			system.UseTestDouble<FakeRequestApprovalServiceFactory>().For<IRequestApprovalServiceFactory>();
-			system.UseTestDouble<FakeScheduleDataReadScheduleRepository>().For<IScheduleRepository>();
+			system.UseTestDouble<FakeScheduleDataReadScheduleStorage>().For<IScheduleStorage>();
 			
 		}
 		

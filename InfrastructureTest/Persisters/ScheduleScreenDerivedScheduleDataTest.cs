@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
     {
         private MockRepository _mocks;
         private ScheduleScreenRefresher _target;
-        private IScheduleRepository _scheduleRepository;
+        private IScheduleStorage _scheduleStorage;
         private IReassociateDataForSchedules _messageQueueUpdater;
         private List<IEventMessage> _messages;
         private IScheduleDictionary _scheduleDictionary;
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
         {
             _mocks = new MockRepository();
 
-            _scheduleRepository = _mocks.DynamicMock<IScheduleRepository>();
+            _scheduleStorage = _mocks.DynamicMock<IScheduleStorage>();
             _messageQueueUpdater = _mocks.DynamicMock<IReassociateDataForSchedules>();
             _scheduleDataUpdater = _mocks.DynamicMock<IUpdateScheduleDataFromMessages>();
 
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
         private void MakeTarget()
         {
 	        var mqRemoval = MockRepository.GenerateMock<IMessageQueueRemoval>();
-					_target = new ScheduleScreenRefresher(_messageQueueUpdater, new ScheduleRefresher(MockRepository.GenerateMock<IPersonRepository>(), _scheduleDataUpdater, MockRepository.GenerateMock<IPersonAssignmentRepository>(), MockRepository.GenerateMock<IPersonAbsenceRepository>(), mqRemoval), new ScheduleDataRefresher(_scheduleRepository, _scheduleDataUpdater, mqRemoval), new MeetingRefresher(null, mqRemoval), new PersonRequestRefresher(null, mqRemoval));
+					_target = new ScheduleScreenRefresher(_messageQueueUpdater, new ScheduleRefresher(MockRepository.GenerateMock<IPersonRepository>(), _scheduleDataUpdater, MockRepository.GenerateMock<IPersonAssignmentRepository>(), MockRepository.GenerateMock<IPersonAbsenceRepository>(), mqRemoval), new ScheduleDataRefresher(_scheduleStorage, _scheduleDataUpdater, mqRemoval), new MeetingRefresher(null, mqRemoval), new PersonRequestRefresher(null, mqRemoval));
         }
 
         [Test]

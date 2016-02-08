@@ -15,16 +15,16 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 	public class GetSchedulesByTeamQueryHandler : IHandleQuery<GetSchedulesByTeamQueryDto, ICollection<SchedulePartDto>>
 	{
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IDateTimePeriodAssembler _dateTimePeriodAssembler;
 		private readonly ISchedulePartAssembler _scheduleDayAssembler;
 
-        public GetSchedulesByTeamQueryHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IDateTimePeriodAssembler dateTimePeriodAssembler, ISchedulePartAssembler scheduleDayAssembler)
+        public GetSchedulesByTeamQueryHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IScheduleStorage scheduleStorage, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IDateTimePeriodAssembler dateTimePeriodAssembler, ISchedulePartAssembler scheduleDayAssembler)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 			_personRepository = personRepository;
 			_scenarioRepository = scenarioRepository;
 			_dateTimePeriodAssembler = dateTimePeriodAssembler;
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 				var personList = _personRepository.FindPeopleBelongTeam(team, datePeriod);
 
-				var scheduleDictionary = _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(personList, new ScheduleDictionaryLoadOptions(false, false), period, scenario);
+				var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(personList, new ScheduleDictionaryLoadOptions(false, false), period, scenario);
 				foreach (IPerson person in personList)
 				{
 					var scheduleRange = scheduleDictionary[person];

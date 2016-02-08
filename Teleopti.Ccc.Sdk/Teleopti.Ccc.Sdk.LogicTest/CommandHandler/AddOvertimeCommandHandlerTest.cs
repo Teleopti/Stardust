@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private MockRepository _mock;
         private IAssembler<DateTimePeriod, DateTimePeriodDto> _dateTimePeriodMock;
         private IActivityRepository _activityRepository;
-        private IScheduleRepository _scheduleRepository;
+        private IScheduleStorage _scheduleStorage;
         private IPersonRepository _personRepository;
         private IScenarioRepository _scenarioRepository;
         private IUnitOfWorkFactory _unitOfWorkFactory;
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _dateTimePeriodMock = _mock.StrictMock<IAssembler<DateTimePeriod, DateTimePeriodDto>>();
             _multiplicatorDefinitionSetRepository = _mock.StrictMock<IMultiplicatorDefinitionSetRepository>();
             _activityRepository = _mock.StrictMock<IActivityRepository>();
-            _scheduleRepository = _mock.StrictMock<IScheduleRepository>();
+            _scheduleStorage = _mock.StrictMock<IScheduleStorage>();
             _personRepository = _mock.StrictMock<IPersonRepository>();
             _scenarioRepository = _mock.StrictMock<IScenarioRepository>();
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _scenario = ScenarioFactory.CreateScenarioAggregate();
             _period = _dateOnlyPeriod.ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone());
             _multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime);
-				_target = new AddOvertimeCommandHandler(_dateTimePeriodMock, _multiplicatorDefinitionSetRepository, _activityRepository, _scheduleRepository, _personRepository, _scenarioRepository, _currentUnitOfWorkFactory, _businessRulesForPersonalAccountUpdate, _scheduleTagAssembler, _scheduleSaveHandler);
+				_target = new AddOvertimeCommandHandler(_dateTimePeriodMock, _multiplicatorDefinitionSetRepository, _activityRepository, _scheduleStorage, _personRepository, _scenarioRepository, _currentUnitOfWorkFactory, _businessRulesForPersonalAccountUpdate, _scheduleTagAssembler, _scheduleSaveHandler);
 
             _addOvertimeCommandDto = new AddOvertimeCommandDto
             {
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
                 Expect.Call(_personRepository.Load(_person.Id.GetValueOrDefault())).Return(_person);
                 Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario);
-				Expect.Call(_scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(null, null, _dateOnlyPeriod, _scenario)).IgnoreArguments().Return(dictionary);
+				Expect.Call(_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(null, null, _dateOnlyPeriod, _scenario)).IgnoreArguments().Return(dictionary);
                 Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
                 Expect.Call(_activityRepository.Load(_activity.Id.GetValueOrDefault())).Return(_activity);
                 Expect.Call(_multiplicatorDefinitionSetRepository.Load(_addOvertimeCommandDto.OvertimeDefinitionSetId)).Return(_multiplicatorDefinitionSet);
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
 				Expect.Call(_personRepository.Load(_person.Id.GetValueOrDefault())).Return(_person);
 				Expect.Call(_scenarioRepository.Get(scenarioId)).Return(_scenario);
-				Expect.Call(_scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(null, null, _dateOnlyPeriod, _scenario)).IgnoreArguments().Return(dictionary);
+				Expect.Call(_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(null, null, _dateOnlyPeriod, _scenario)).IgnoreArguments().Return(dictionary);
 				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
 				Expect.Call(_activityRepository.Load(_activity.Id.GetValueOrDefault())).Return(_activity);
 				Expect.Call(_multiplicatorDefinitionSetRepository.Load(_addOvertimeCommandDto.OvertimeDefinitionSetId)).Return(_multiplicatorDefinitionSet);

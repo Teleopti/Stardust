@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 
 			//make this one an explicit override now -> later make code above generic with repos with multiple ctors with multiple args
-			builder.RegisterType<ScheduleRepository>()
+			builder.RegisterType<ScheduleStorage>()
 				.UsingConstructor(typeof(ICurrentUnitOfWork), typeof(IRepositoryFactory))
 				.AsImplementedInterfaces()
 				.SingleInstance();

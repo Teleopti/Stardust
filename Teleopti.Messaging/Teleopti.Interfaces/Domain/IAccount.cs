@@ -94,10 +94,10 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Calculates the used by reading from the repository and doing a projection
         /// </summary>
-        /// <param name="repository">The repository.</param>
+        /// <param name="storage">The repository.</param>
         /// <param name="scenario">The scenario to look for.</param>
         /// <remarks>Henrik 090226</remarks>
-        void CalculateUsed(IScheduleRepository repository, IScenario scenario);
+        void CalculateUsed(IScheduleStorage storage, IScenario scenario);
 
         /// <summary>
         /// Calculates the period based on the next PersonAccounts StartDateTime

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		{
 			var scenario = new ScenarioRepository(currentUnitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Scenario));
 			var absence = new AbsenceRepository(currentUnitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Name));
-			var scheduleRepository = new ScheduleRepository(currentUnitOfWork, new RepositoryFactory());
+			var scheduleRepository = new ScheduleStorage(currentUnitOfWork, new RepositoryFactory());
 			var personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 			var scheduleDifferenceSaver = new SaveSchedulePartService(new ScheduleDifferenceSaver(scheduleRepository), personAbsenceAccountRepository);
 			var businessRulesForAccountUpdate = new BusinessRulesForPersonalAccountUpdate(personAbsenceAccountRepository, new SchedulingResultStateHolder());

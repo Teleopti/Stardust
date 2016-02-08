@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 	{
 		private DefaultScenarioScheduleProvider _target;
 		private ICurrentScenario _scenarioProvider;
-		private IScheduleRepository _scheduleRepository;
+		private IScheduleStorage _scheduleStorage;
 		private ILoggedOnUser _loggedOnUser;
 
 		[SetUp]
@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		{
 			_scenarioProvider = MockRepository.GenerateMock<ICurrentScenario>();
 			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			_scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
-			_target = new DefaultScenarioScheduleProvider(_loggedOnUser, _scheduleRepository, _scenarioProvider);
+			_scheduleStorage = MockRepository.GenerateMock<IScheduleStorage>();
+			_target = new DefaultScenarioScheduleProvider(_loggedOnUser, _scheduleStorage, _scenarioProvider);
 		}
 
 		[Test]
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			_scenarioProvider.Stub(x => x.Current()).Return(scenario);
-			_scheduleRepository.Stub(x => x.FindSchedulesForPersonOnlyInGivenPeriod(
+			_scheduleStorage.Stub(x => x.FindSchedulesForPersonOnlyInGivenPeriod(
 				person,
 				new ScheduleDictionaryLoadOptions(true, true),
 				period,
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			_scenarioProvider.Stub(x => x.Current()).Return(scenario);
-			_scheduleRepository.Stub(x => x.FindSchedulesForPersonOnlyInGivenPeriod(
+			_scheduleStorage.Stub(x => x.FindSchedulesForPersonOnlyInGivenPeriod(
 				person,
 				new ScheduleDictionaryLoadOptions(true, true),
 				period,
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(user);
 			_scenarioProvider.Stub(x => x.Current()).Return(scenario);
-			_scheduleRepository.Stub(x => x.FindSchedulesForPersonsOnlyInGivenPeriod(
+			_scheduleStorage.Stub(x => x.FindSchedulesForPersonsOnlyInGivenPeriod(
 				Arg<IEnumerable<IPerson>>.Matches(o => o.Single() == user),
 				Arg<IScheduleDictionaryLoadOptions>.Is.Anything,
 				Arg<DateOnlyPeriod>.Is.Equal(period),

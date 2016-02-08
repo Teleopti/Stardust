@@ -378,11 +378,11 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
                 ICurrentScenario currentScenario = _mocker.DynamicMock<ICurrentScenario>();
                 
                 IPersonAccountChildModel adapter1 = new PersonAccountChildModel
-                    (new TraceableRefreshService(currentScenario, new ScheduleRepository(unitOfWorkFactory.CreateAndOpenUnitOfWork())), _collection, _account1,
+                    (new TraceableRefreshService(currentScenario, new ScheduleStorage(unitOfWorkFactory.CreateAndOpenUnitOfWork())), _collection, _account1,
                      null, null);
 
                 IPersonAccountChildModel adapter2 = new PersonAccountChildModel
-                    (new TraceableRefreshService(currentScenario, new ScheduleRepository(unitOfWorkFactory.CreateAndOpenUnitOfWork())), _collection, _account3,
+                    (new TraceableRefreshService(currentScenario, new ScheduleStorage(unitOfWorkFactory.CreateAndOpenUnitOfWork())), _collection, _account3,
                      null, null);
 
                 adapter1.CanBold = true;

@@ -7,13 +7,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
     public class ShiftTradeRequestSetChecksum : IShiftTradeRequestSetChecksum
     {
 	    private readonly ICurrentScenario _scenarioRepository;
-	    private readonly IScheduleRepository _scheduleRepository;
+	    private readonly IScheduleStorage _scheduleStorage;
         private IScheduleDictionary _scheduleDictionary;
 
-        public ShiftTradeRequestSetChecksum(ICurrentScenario scenarioRepository, IScheduleRepository scheduleRepository)
+        public ShiftTradeRequestSetChecksum(ICurrentScenario scenarioRepository, IScheduleStorage scheduleStorage)
         {
 	        _scenarioRepository = scenarioRepository;
-	        _scheduleRepository = scheduleRepository;
+	        _scheduleStorage = scheduleStorage;
         }
 
         public void SetChecksum(IRequest request)
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
                     shiftTradeRequest.PersonFrom.PermissionInformation.DefaultTimeZone());
 	        var longPeriod = period.Inflate(1);
             _scheduleDictionary =
-                _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(
+                _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
                     shiftTradeRequestPersonExtractor.Persons,
                     new ScheduleDictionaryLoadOptions(false, false),
                     longPeriod,

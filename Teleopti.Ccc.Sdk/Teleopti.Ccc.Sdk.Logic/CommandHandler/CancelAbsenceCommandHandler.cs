@@ -13,18 +13,18 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     {
         private readonly IAssembler<DateTimePeriod, DateTimePeriodDto> _dateTimePeriodAssembler;
 	    private readonly IScheduleTagAssembler _scheduleTagAssembler;
-	    private readonly IScheduleRepository _scheduleRepository;
+	    private readonly IScheduleStorage _scheduleStorage;
         private readonly IPersonRepository _personRepository;
         private readonly IScenarioRepository _scenarioRepository;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
     	private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 		private readonly IScheduleSaveHandler _scheduleSaveHandler;
 
-        public CancelAbsenceCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IScheduleTagAssembler scheduleTagAssembler, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleSaveHandler scheduleSaveHandler)
+        public CancelAbsenceCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IScheduleTagAssembler scheduleTagAssembler, IScheduleStorage scheduleStorage, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleSaveHandler scheduleSaveHandler)
         {
             _dateTimePeriodAssembler = dateTimePeriodAssembler;
 	        _scheduleTagAssembler = scheduleTagAssembler;
-	        _scheduleRepository = scheduleRepository;
+	        _scheduleStorage = scheduleStorage;
             _personRepository = personRepository;
             _scenarioRepository = scenarioRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					absence = new Absence();
 					absence.SetId(command.AbsenceId.Value);
 				}
-				var scheduleDictionary = _scheduleRepository.ScheduleRangeBasedOnAbsence(dateTimePeriod, scenario, person, absence).Owner;
+				var scheduleDictionary = _scheduleStorage.ScheduleRangeBasedOnAbsence(dateTimePeriod, scenario, person, absence).Owner;
 
 				var scheduleRange = scheduleDictionary[person];
 				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);

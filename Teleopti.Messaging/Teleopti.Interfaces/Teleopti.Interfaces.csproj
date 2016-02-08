@@ -492,7 +492,7 @@
     <Compile Include="Domain\ISchedulePartModifyAndRollbackService.cs" />
     <Compile Include="Domain\IRtaState.cs" />
     <Compile Include="Domain\IRtaStateGroup.cs" />
-    <Compile Include="Domain\IScheduleRepository.cs" />
+    <Compile Include="Domain\IScheduleStorage.cs" />
     <Compile Include="Domain\ISchedulingOptions.cs" />
     <Compile Include="Domain\ISchedulingResultStateHolder.cs" />
     <Compile Include="Domain\ISettingData.cs" />

@@ -8,13 +8,13 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Refresh
 {
 	public class ScheduleDataRefresher : IScheduleDataRefresher
     {
-        private readonly IScheduleRepository _scheduleRepository;
+        private readonly IScheduleStorage _scheduleStorage;
 	    private readonly IUpdateScheduleDataFromMessages _scheduleDataUpdater;
 		private readonly IMessageQueueRemoval _messageQueueRemoval;
 
-		public ScheduleDataRefresher(IScheduleRepository scheduleRepository, IUpdateScheduleDataFromMessages scheduleDataUpdater, IMessageQueueRemoval messageQueueRemoval)
+		public ScheduleDataRefresher(IScheduleStorage scheduleStorage, IUpdateScheduleDataFromMessages scheduleDataUpdater, IMessageQueueRemoval messageQueueRemoval)
         {
-            _scheduleRepository = scheduleRepository;
+            _scheduleStorage = scheduleStorage;
             _scheduleDataUpdater = scheduleDataUpdater;
 	        _messageQueueRemoval = messageQueueRemoval;
         }
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Refresh
                 if (myVersionOfEntity.HasValue)
                 {
                     var databaseVerionOfEntity =
-                        _scheduleRepository.LoadScheduleDataAggregate(eventMessage.InterfaceType,
+                        _scheduleStorage.LoadScheduleDataAggregate(eventMessage.InterfaceType,
                                                                       eventMessage.DomainObjectId);
                     _scheduleDataUpdater.FillReloadedScheduleData(databaseVerionOfEntity);
 	                var state = new PersistConflict(myVersionOfEntity.Value, databaseVerionOfEntity);

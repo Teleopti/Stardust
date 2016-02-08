@@ -8,18 +8,18 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 {
 	public class ScheduleRangeConflictCollector : IScheduleRangeConflictCollector
 	{
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IPersonAssignmentRepository _personAssignmentRepository;
 		private readonly IReassociateDataForSchedules _reassociateDataForSchedules;
 		private readonly ILazyLoadingManager _lazyLoadingManager;
 
 		public ScheduleRangeConflictCollector(
-			IScheduleRepository scheduleRepository,
+			IScheduleStorage scheduleStorage,
 			IPersonAssignmentRepository personAssignmentRepository,
 			IReassociateDataForSchedules reassociateDataForSchedules,
 			ILazyLoadingManager lazyLoadingManager)
 		{
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 			_personAssignmentRepository = personAssignmentRepository;
 			_reassociateDataForSchedules = reassociateDataForSchedules;
 			_lazyLoadingManager = lazyLoadingManager;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			var dateOnlyPeriod = scheduleParameters.Period.ToDateOnlyPeriod(scheduleParameters.Person.PermissionInformation.DefaultTimeZone());
 			var personAssignmentsInDb = _personAssignmentRepository.FetchDatabaseVersions(dateOnlyPeriod, scheduleParameters.Scenario, scheduleParameters.Person);
 
-			var uow = _scheduleRepository.UnitOfWork;
+			var uow = _scheduleStorage.UnitOfWork;
 
 			var modifiedAndDeletedEntities = from e in differences
 			                                 where e.Status != DifferenceStatus.Added
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 				}
 				if (inMemoryVersion.Version != databaseVersion)
 				{
-					var databaseEntity = _scheduleRepository.LoadScheduleDataAggregate(inMemoryEntity.GetType(), inMemoryEntity.Id.Value);
+					var databaseEntity = _scheduleStorage.LoadScheduleDataAggregate(inMemoryEntity.GetType(), inMemoryEntity.Id.Value);
 					persistConflicts.Add(makePersistConflict(diffItem, databaseEntity));
 				}
 			}
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 					{
 						if (assignmentInDb.EqualWith(currentAss))
 						{
-							persistConflicts.Add(makePersistConflict(diffItem, _scheduleRepository.LoadScheduleDataAggregate(typeof(IPersonAssignment), assignmentInDb.Id)));
+							persistConflicts.Add(makePersistConflict(diffItem, _scheduleStorage.LoadScheduleDataAggregate(typeof(IPersonAssignment), assignmentInDb.Id)));
 						}
 					}
 				}

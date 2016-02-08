@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble(new FakePermissionProvider(false)).For<IPermissionProvider>();
-			system.UseTestDouble(new FakeScheduleDataReadScheduleRepository()).For<IScheduleRepository>();
+			system.UseTestDouble(new FakeScheduleDataReadScheduleStorage()).For<IScheduleStorage>();
 			system.UseTestDouble(scenario).For<ICurrentScenario>();
 			system.UseTestDouble(principalAuthorization).For<IPrincipalAuthorization>();
 			system.UseTestDouble(new FakePersonRequestRepository()).For<IPersonRequestRepository>();

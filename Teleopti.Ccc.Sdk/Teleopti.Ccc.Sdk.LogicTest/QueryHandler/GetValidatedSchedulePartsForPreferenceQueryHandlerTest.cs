@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		private IShiftCategoryRepository shiftCategoryRepository;
 		private IActivityRepository activityRepository;
 		private IPersonRepository personRepository;
-		private IScheduleRepository scheduleRepository;
+		private IScheduleStorage scheduleStorage;
 		private ICurrentScenario scenarioRepository;
 		private IAssembler<IPreferenceDay, PreferenceRestrictionDto> preferenceDayAssembler;
 		private IAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto> studentAvailabilityDayAssembler;
@@ -37,14 +37,14 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			shiftCategoryRepository = mocks.DynamicMock<IShiftCategoryRepository>();
 			activityRepository = mocks.DynamicMock<IActivityRepository>();
 			personRepository = mocks.DynamicMock<IPersonRepository>();
-			scheduleRepository = mocks.DynamicMock<IScheduleRepository>();
+			scheduleStorage = mocks.DynamicMock<IScheduleStorage>();
 			scenarioRepository = mocks.DynamicMock<ICurrentScenario>();
 			unitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			preferenceDayAssembler = mocks.DynamicMock<IAssembler<IPreferenceDay, PreferenceRestrictionDto>>();
 			studentAvailabilityDayAssembler = mocks.DynamicMock<IAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto>>();
 			workShiftWorkTime = mocks.DynamicMock<IWorkShiftWorkTime>();
 
-			target = new GetValidatedSchedulePartsForPreferenceQueryHandler(unitOfWorkFactory,shiftCategoryRepository,activityRepository,personRepository,scheduleRepository,scenarioRepository,preferenceDayAssembler,studentAvailabilityDayAssembler,workShiftWorkTime);
+			target = new GetValidatedSchedulePartsForPreferenceQueryHandler(unitOfWorkFactory,shiftCategoryRepository,activityRepository,personRepository,scheduleStorage,scenarioRepository,preferenceDayAssembler,studentAvailabilityDayAssembler,workShiftWorkTime);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test, SetCulture("sv-SE")]
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			{
 				Expect.Call(personRepository.Load(personDto.Id.GetValueOrDefault())).Return(person);
 				Expect.Call(unitOfWorkFactory.Current().CreateAndOpenUnitOfWork()).Return(unitOfWork);
-				Expect.Call(scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null)).
+				Expect.Call(scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null)).
 					IgnoreArguments().Return(dictionary);
 				Expect.Call(dictionary[person]).Return(range).Repeat.AtLeastOnce();
 				Expect.Call(range.ScheduledDay(date)).IgnoreArguments().Return(scheduleDay).Repeat.AtLeastOnce();
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			{
 				Expect.Call(personRepository.Load(personDto.Id.GetValueOrDefault())).Return(person);
 				Expect.Call(unitOfWorkFactory.Current().CreateAndOpenUnitOfWork()).Return(unitOfWork);
-				Expect.Call(scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null)).
+				Expect.Call(scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null)).
 					   IgnoreArguments().Return(dictionary);
 				Expect.Call(dictionary[person]).Return(range).Repeat.AtLeastOnce();
 				Expect.Call(range.ScheduledDay(date)).IgnoreArguments().Return(scheduleDay).Repeat.AtLeastOnce();

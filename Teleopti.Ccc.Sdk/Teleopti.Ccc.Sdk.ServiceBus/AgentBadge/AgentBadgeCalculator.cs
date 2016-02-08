@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		private readonly IStatisticRepository _statisticRepository;
 		private readonly IAgentBadgeTransactionRepository _transactionRepository;
 		private readonly IDefinedRaptorApplicationFunctionFactory _appFunctionFactory;
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly INow _now;
@@ -25,14 +25,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			IAgentBadgeTransactionRepository transactionRepository,
 			IDefinedRaptorApplicationFunctionFactory appFunctionFactory,
 			IPersonRepository personRepository,
-			IScheduleRepository scheduleRepository,
+			IScheduleStorage scheduleStorage,
 			IScenarioRepository scenarioRepository,
 			INow now)
 		{
 			_statisticRepository = statisticRepository;
 			_transactionRepository = transactionRepository;
 			_appFunctionFactory = appFunctionFactory;
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 			_scenarioRepository = scenarioRepository;
 			_personRepository = personRepository;
 			_now = now;
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			{
 				var personIdList = (from object[] data in agentAdherenceList select (Guid)data[0]).ToList();
 				var personsList = _personRepository.FindPeople(personIdList);
-				var schedules = _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(personsList,
+				var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(personsList,
 					new ScheduleDictionaryLoadOptions(true, false), new DateOnlyPeriod(date, date),
 					_scenarioRepository.LoadDefaultScenario());
 

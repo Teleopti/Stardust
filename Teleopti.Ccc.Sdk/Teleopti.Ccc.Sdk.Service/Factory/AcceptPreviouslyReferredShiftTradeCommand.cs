@@ -14,15 +14,15 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 {
 	public class AcceptPreviouslyReferredShiftTradeCommand : IExecutableCommand
 	{
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IMessagePopulatingServiceBusSender _serviceBusSender;
 		private readonly PersonRequestDto _personRequestDto;
 
-		public AcceptPreviouslyReferredShiftTradeCommand(IScheduleRepository scheduleRepository, IPersonRequestRepository personRequestRepository, ICurrentScenario currentScenario, IMessagePopulatingServiceBusSender serviceBusSender, PersonRequestDto personRequestDto)
+		public AcceptPreviouslyReferredShiftTradeCommand(IScheduleStorage scheduleStorage, IPersonRequestRepository personRequestRepository, ICurrentScenario currentScenario, IMessagePopulatingServiceBusSender serviceBusSender, PersonRequestDto personRequestDto)
 		{
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 			_personRequestRepository = personRequestRepository;
 			_currentScenario = currentScenario;
 			_serviceBusSender = serviceBusSender;
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var shiftTradeRequestSetChecksum = new ShiftTradeRequestSetChecksum(_currentScenario, _scheduleRepository);
+				var shiftTradeRequestSetChecksum = new ShiftTradeRequestSetChecksum(_currentScenario, _scheduleStorage);
 
 				var domainPersonRequest = _personRequestRepository.Load(_personRequestDto.Id.GetValueOrDefault(Guid.Empty));
 				try

@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		protected virtual IScheduleRangePersister CreateTarget()
 		{
 			var currUnitOfWork = new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make());
-			var scheduleRep = new ScheduleRepository(currUnitOfWork, new RepositoryFactory());
+			var scheduleRep = new ScheduleStorage(currUnitOfWork, new RepositoryFactory());
 			return new ScheduleRangePersister(CurrentUnitOfWorkFactory.Make(),
 				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
 				ConflictCollector(),
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				new AbsenceRepository(unitOfWork).Add(Absence);
 				new MultiplicatorDefinitionSetRepository(unitOfWork).Add(DefinitionSet);
 				new DayOffTemplateRepository(unitOfWork).Add(DayOffTemplate);
-				Given().ForEach(x => new ScheduleRepository(unitOfWork).Add(x));
+				Given().ForEach(x => new ScheduleStorage(unitOfWork).Add(x));
 				unitOfWork.PersistAll();
 			}
 		}
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				ReassociateDataFor(Person);
-				var rep = new ScheduleRepository(unitOfWork);
+				var rep = new ScheduleStorage(unitOfWork);
 				var dictionary = rep.FindSchedulesForPersons(new ScheduleDateTimePeriod(new DateTimePeriod(1800, 1, 1, 2040, 1, 1)),
 																								 Scenario,
 																								 new PersonProvider(new[] { Person }),
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		protected virtual IScheduleRangeConflictCollector ConflictCollector()
 		{
 			var currUnitOfWork = new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make());
-			var scheduleRep = new ScheduleRepository(currUnitOfWork, new RepositoryFactory());
+			var scheduleRep = new ScheduleStorage(currUnitOfWork, new RepositoryFactory());
 			return new ScheduleRangeConflictCollector(scheduleRep, new PersonAssignmentRepository(currUnitOfWork), this, new LazyLoadingManagerWrapper());
 		}
 

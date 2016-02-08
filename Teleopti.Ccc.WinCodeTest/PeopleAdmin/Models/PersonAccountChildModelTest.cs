@@ -374,7 +374,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             var account = _acc.Find(new DateOnly(2005, 5, 2)).FirstOrDefault();
             _targetDay =
                 new PersonAccountChildModel(
-                    new TraceableRefreshService(scenario, new ScheduleRepository(unitOfWorkFactory.CreateAndOpenUnitOfWork())), _acc, account, null, null);
+                    new TraceableRefreshService(scenario, new ScheduleStorage(unitOfWorkFactory.CreateAndOpenUnitOfWork())), _acc, account, null, null);
         }
 
         private void SetTargetDayWithoutAccount(IUnitOfWork unitOfWork, ICurrentScenario scenario)
@@ -384,7 +384,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			var account = _acc.Find(new DateOnly(2005, 5, 2)).FirstOrDefault();
 	        _targetDay =
 		        new PersonAccountChildModel(
-			        new TraceableRefreshService(scenario,new ScheduleRepository(unitOfWork)), _acc, account, null, null);
+			        new TraceableRefreshService(scenario,new ScheduleStorage(unitOfWork)), _acc, account, null, null);
         }
 
         [Test]

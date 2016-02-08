@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
     	private readonly ISdkProjectionServiceFactory _sdkProjectionServiceFactory;
 	    private readonly IScheduleTagAssembler _scheduleTagAssembler;
 	    public IPersonRepository PersonRepository { get; set; }
-        public IScheduleRepository ScheduleRepository { get; set; }
+        public IScheduleStorage ScheduleStorage { get; set; }
 
     	public string SpecialProjection { get; set; }
     	public TimeZoneInfo TimeZone { get; set; }
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         {
             if (PersonRepository == null)
                 throw new InvalidOperationException("You'll need to provide a person repository");
-            if (ScheduleRepository == null)
+            if (ScheduleStorage == null)
                 throw new InvalidOperationException("You'll need to provide a schedule repository");
         }
 
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 	        var skaVaraPersonernaIListansFullaSchemaPeriod =
 		        period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
 	        var scheduleDictionary =
-		        ScheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(true, false),
+		        ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(true, false),
 		                                                                    skaVaraPersonernaIListansFullaSchemaPeriod,
 		                                                                    _scenarioRepository.Current());
 

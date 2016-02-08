@@ -5,11 +5,11 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 {
 	public class ScheduleDifferenceSaver : IScheduleDifferenceSaver
 	{
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 
-		public ScheduleDifferenceSaver(IScheduleRepository scheduleRepository)
+		public ScheduleDifferenceSaver(IScheduleStorage scheduleStorage)
 		{
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 		}
 
 		public void SaveChanges(IDifferenceCollection<IPersistableScheduleData> scheduleChanges, IUnvalidatedScheduleRangeUpdate stateInMemoryUpdater)
@@ -20,16 +20,16 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 				{
 					case DifferenceStatus.Added:
 						var currentItem = scheduleChange.CurrentItem;
-						_scheduleRepository.Add(currentItem);
+						_scheduleStorage.Add(currentItem);
 						stateInMemoryUpdater.SolveConflictBecauseOfExternalInsert(currentItem, true);
 						break;
 					case DifferenceStatus.Deleted:
 						var orgItem = scheduleChange.OriginalItem;
-						_scheduleRepository.Remove(orgItem);
+						_scheduleStorage.Remove(orgItem);
 						stateInMemoryUpdater.SolveConflictBecauseOfExternalDeletion(orgItem.Id.Value, true);
 						break;
 					case DifferenceStatus.Modified:
-						var unitOfWork = _scheduleRepository.UnitOfWork;
+						var unitOfWork = _scheduleStorage.UnitOfWork;
 						unitOfWork.Reassociate(scheduleChange.OriginalItem);
 						var merged = unitOfWork.Merge(scheduleChange.CurrentItem);
 						stateInMemoryUpdater.SolveConflictBecauseOfExternalUpdate(merged, true);

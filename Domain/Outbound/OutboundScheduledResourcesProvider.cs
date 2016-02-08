@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 		private readonly ISkillRepository _skillRepository;
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IPeopleAndSkillLoaderDecider _decider;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly IRepositoryFactory _repositoryFactory;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 
 		public OutboundScheduledResourcesProvider(IResourceOptimizationHelper resourceOptimizationHelper,
 			IUserTimeZone userTimeZone, Func<ISchedulerStateHolder> schedulerStateHolder, IScenarioRepository scenarioRepository,
-			ISkillDayLoadHelper skillDayLoadHelper, ISkillRepository skillRepository, IScheduleRepository scheduleRepository,
+			ISkillDayLoadHelper skillDayLoadHelper, ISkillRepository skillRepository, IScheduleStorage scheduleStorage,
 			IPeopleAndSkillLoaderDecider decider,
 			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IRepositoryFactory repositoryFactory,
 			OutboundAssignedStaffProvider outboundAssignedStaffProvider,
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 			_scenarioRepository = scenarioRepository;
 			_skillDayLoadHelper = skillDayLoadHelper;
 			_skillRepository = skillRepository;
-			_scheduleRepository = scheduleRepository;
+			_scheduleStorage = scheduleStorage;
 			_decider = decider;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_repositoryFactory = repositoryFactory;
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 			schedulerStateHolder.LoadCommonState(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(),
 				_repositoryFactory);
 			schedulerStateHolder.ResetFilteredPersons();
-			schedulerStateHolder.LoadSchedules(_scheduleRepository, new PersonsInOrganizationProvider(people.AllPeople),
+			schedulerStateHolder.LoadSchedules(_scheduleStorage, new PersonsInOrganizationProvider(people.AllPeople),
 				new ScheduleDictionaryLoadOptions(true, false, false),
 				new ScheduleDateTimePeriod(dateTimePeriod, people.FixedStaffPeople, new SchedulerRangeToLoadCalculator(dateTimePeriod)));
 	      
