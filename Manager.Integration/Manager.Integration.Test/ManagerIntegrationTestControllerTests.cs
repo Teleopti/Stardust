@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading;
 using log4net;
-using Manager.Integration.Test.Helpers;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
     [TestFixture]
+    [Ignore]
     public class ManagerIntegrationTestControllerTests
     {
         private static readonly ILog Logger =
@@ -38,8 +37,6 @@ namespace Manager.Integration.Test
 
                 List<string> list =
                     JsonConvert.DeserializeObject<List<string>>(content);
-
-
             }
 
 
