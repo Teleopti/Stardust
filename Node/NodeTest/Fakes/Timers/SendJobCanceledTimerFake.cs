@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,14 +28,14 @@ namespace NodeTest.Fakes.Timers
 
         public override Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo)
         {
-            LogHelper.LogInfoWithLineNumber(Logger,
-                                            "Send job canceled timer fake.");
-
             Wait.Set();
 
             NumberOfTimeCalled++;
 
-            return null;
+            var response = new HttpResponseMessage(HttpStatusCode.OK);
+            var request = new HttpRequestMessage(HttpMethod.Post, CallbackTemplateUri);
+            response.RequestMessage = request;
+            return Task.FromResult(response);
         }
     }
 }
