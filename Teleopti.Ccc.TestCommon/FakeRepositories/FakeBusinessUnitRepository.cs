@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -10,10 +9,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeBusinessUnitRepository : IBusinessUnitRepository
 	{
+		private readonly IList<IBusinessUnit> _businessUnits = new List<IBusinessUnit>();
 
-		private IList<IBusinessUnit> _businessUnits = new List<IBusinessUnit>();
-
-		public void Has(BusinessUnit businessUnit)
+		public void Has(IBusinessUnit businessUnit)
 		{
 			Add(businessUnit);
 		}
@@ -61,7 +59,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IBusinessUnit LoadHierarchyInformation(IBusinessUnit businessUnit)
 		{
-			throw new NotImplementedException();
+			return businessUnit;
 		}
 
 		public IList<Guid> LoadAllPersonsWithExternalLogOn(Guid businessUnitId, DateOnly now)

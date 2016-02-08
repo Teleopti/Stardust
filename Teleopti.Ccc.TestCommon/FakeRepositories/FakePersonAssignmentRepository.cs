@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
 		{
-			return new Collection<IPersonAssignment>(_personAssignments);
+			return _personAssignments.Where(ass => persons.Any(x => ass.Person.Equals(x)) && ass.BelongsToPeriod(period) && ass.Scenario.Equals(scenario)).ToList();
 		}
 
 		public ICollection<IPersonAssignment> Find(DateOnlyPeriod period, IScenario scenario)

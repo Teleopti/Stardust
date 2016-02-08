@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly Func<IRequiredScheduleHelper> _requiredScheduleHelper;
 		private readonly Func<IGroupPagePerDateHolder> _groupPagePerDateHolder;
-		private readonly Func<IScheduleTagSetter> _scheduleTagSetter;
 		private readonly IScheduleDictionaryPersister _persister;
 		private readonly ViolatedSchedulePeriodBusinessRule _violatedSchedulePeriodBusinessRule;
 		private readonly DayOffBusinessRuleValidation _dayOffBusinessRuleValidation;
@@ -33,8 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public FullScheduling(WebSchedulingSetup webSchedulingSetup,
 			Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder,
 			Func<IRequiredScheduleHelper> requiredScheduleHelper, Func<IGroupPagePerDateHolder> groupPagePerDateHolder,
-			Func<IScheduleTagSetter> scheduleTagSetter, IScheduleDictionaryPersister persister,
-			ViolatedSchedulePeriodBusinessRule violatedSchedulePeriodBusinessRule,
+			IScheduleDictionaryPersister persister, ViolatedSchedulePeriodBusinessRule violatedSchedulePeriodBusinessRule,
 			DayOffBusinessRuleValidation dayOffBusinessRuleValidation, ICurrentUnitOfWork currentUnitOfWork)
 		{
 			_webSchedulingSetup = webSchedulingSetup;
@@ -42,7 +40,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_schedulerStateHolder = schedulerStateHolder;
 			_requiredScheduleHelper = requiredScheduleHelper;
 			_groupPagePerDateHolder = groupPagePerDateHolder;
-			_scheduleTagSetter = scheduleTagSetter;
 			_persister = persister;
 			_violatedSchedulePeriodBusinessRule = violatedSchedulePeriodBusinessRule;
 			_dayOffBusinessRuleValidation = dayOffBusinessRuleValidation;
@@ -84,8 +81,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		protected virtual PeopleSelection SetupAndSchedule(DateOnlyPeriod period)
 		{
 			var webScheduleState = _webSchedulingSetup.Setup(period);
-
-			_scheduleTagSetter().ChangeTagToSet(NullScheduleTag.Instance);
 
 			if (webScheduleState.AllSchedules.Any())
 			{

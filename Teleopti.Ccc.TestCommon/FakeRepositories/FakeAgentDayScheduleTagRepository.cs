@@ -8,9 +8,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeAgentDayScheduleTagRepository : IAgentDayScheduleTagRepository
 	{
+		private readonly IList<IAgentDayScheduleTag> agentDayScheduleTags = new List<IAgentDayScheduleTag>();
+
 		public void Add(IAgentDayScheduleTag root)
 		{
-			throw new NotImplementedException();
+			agentDayScheduleTags.Add(root);
 		}
 
 		public void Remove(IAgentDayScheduleTag root)
@@ -25,7 +27,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IAgentDayScheduleTag> LoadAll()
 		{
-			throw new NotImplementedException();
+			return agentDayScheduleTags;
 		}
 
 		public IAgentDayScheduleTag Load(Guid id)
