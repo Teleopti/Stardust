@@ -39,10 +39,10 @@ DECLARE @last_logg_date smalldatetime,
 SET NOCOUNT ON
 
 /*
-@start_date anvõnds om man vill agga frÕn specifikt datum
-@end_date anvõnds om man vill agga till ett specifikt datum
-@rel_start_date anvõnds om man t ex vill agg bakÕt en dag hela tiden. Skickar dÕ in -1
-@rel_start_int anvõnds om man t ex vill agg bakÕt fyra intervall hela tiden. Skickar dÕ in -4
+@start_date anvñ®¤³ om man vill agga frÖ® specifikt datum
+@end_date anvñ®¤³ om man vill agga till ett specifikt datum
+@rel_start_date anvñ®¤³ om man t ex vill agg bakÖ´ en dag hela tiden. Skickar dÕ in -1
+@rel_start_int anvñ®¤³ om man t ex vill agg bakÖ´ fyra intervall hela tiden. Skickar dÕ in -4
 */
 /********************************************************/
 /* Fetch latest log date and interval                   */
@@ -69,7 +69,7 @@ WHERE [id]=1
 
 /* 
 
-Hõr blir det lite nytt  
+Hñ² ¢lir det lite nytt  
 
 */
 IF ( @start_date > '1970-01-01' ) 
@@ -92,19 +92,19 @@ BEGIN
 
 		IF  (@rel_start_int + @last_logg_interval < @int_per_day - 1)
 		BEGIN
-			/* Hõr ligger intervallet fortfarande inom dagen sÕ det õr bara att plussa */
+			/* Hñ² ¬igger intervallet fortfarande inom dagen sÕ det ñ² ¢ara att plussa */
 			SELECT @last_logg_interval = @last_logg_interval + @rel_start_int
 		END
 		ELSE IF  (@rel_start_int + @last_logg_interval >= @int_per_day)
 		BEGIN
-			/* Hõr har intervallet gÕtt ÷ver till nõsta dag vi ÷kar pÕ dagen en dag och õndrar intervallet */
+			/* Hñ² ¨ar intervallet gÖ´t ó¶¥² till nñ³´¡ dag vi ó«¡² pÕ dagen en dag och ñ®¤²ar intervallet */
 			SELECT @last_logg_date = dateadd ( day,1,@last_logg_date)
 			SELECT @last_logg_interval = (@last_logg_interval + @rel_start_int) - (@int_per_day - 1)
 		END 
 	END 
 	ELSE
 	BEGIN
-		/* Hõr õr intervallet igÕr */
+		/* Hñ² µr intervallet igÖ² */
 		SELECT @last_logg_date = dateadd ( day,-1,@last_logg_date)
 		SELECT @last_logg_interval = (@int_per_day - 1) - (@last_logg_interval - @rel_start_int)
 	END 
@@ -218,7 +218,7 @@ BEGIN TRANSACTION
 /*   Ta bort det senaste loggintervallet i agent_Logg	*/
 /**********************************************************************/
 /*
-	Hõr blir det nytt
+	Hñ² ¢lir det nytt
 	
 */
 

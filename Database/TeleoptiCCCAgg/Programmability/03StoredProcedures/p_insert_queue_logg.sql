@@ -45,10 +45,10 @@ DECLARE @last_logg_date smalldatetime,
 SET NOCOUNT ON
 
 /*
-@start_date anvınds om man vill agga fr’n specifikt datum
-@end_date anvınds om man vill agga till ett specifikt datum
-@rel_start_date anvınds om man t ex vill agg bak’t en dag hela tiden. Skickar d’ in -1
-@rel_start_int anvınds om man t ex vill agg bak’t fyra intervall hela tiden. Skickar d’ in -4
+@start_date anv√µnds om man vill agga fr√ïn specifikt datum
+@end_date anv√µnds om man vill agga till ett specifikt datum
+@rel_start_date anv√µnds om man t ex vill agg bak√ït en dag hela tiden. Skickar d√ï in -1
+@rel_start_int anv√µnds om man t ex vill agg bak√ït fyra intervall hela tiden. Skickar d√ï in -4
 */
 /********************************************************/
 /* Fetch latest log date and interval                   */
@@ -76,7 +76,7 @@ WHERE [id]=1
 
 /* 
 
-Hır blir det lite nytt  
+H√µr blir det lite nytt  
 
 */
 IF ( @start_date > '1970-01-01' ) 
@@ -99,19 +99,19 @@ BEGIN
 
 		IF  (@rel_start_int + @last_logg_interval < @int_per_day - 1)
 		BEGIN
-			/* Hır ligger intervallet fortfarande inom dagen s’ det ır bara att plussa */
+			/* H√µr ligger intervallet fortfarande inom dagen s√ï det √µr bara att plussa */
 			SELECT @last_logg_interval = @last_logg_interval + @rel_start_int
 		END
 		ELSE IF  (@rel_start_int + @last_logg_interval >= @int_per_day)
 		BEGIN
-			/* Hır har intervallet g’tt ˜ver till nısta dag vi ˜kar p’ dagen en dag och ındrar intervallet */
+			/* H√µr har intervallet g√ïtt √∑ver till n√µsta dag vi √∑kar p√ï dagen en dag och √µndrar intervallet */
 			SELECT @last_logg_date = dateadd ( day,1,@last_logg_date)
 			SELECT @last_logg_interval = (@last_logg_interval + @rel_start_int) - (@int_per_day - 1)
 		END 
 	END 
 	ELSE
 	BEGIN
-		/* Hır ır intervallet ig’r */
+		/* H√µr √µr intervallet ig√ïr */
 		SELECT @last_logg_date = dateadd ( day,-1,@last_logg_date)
 		SELECT @last_logg_interval = (@int_per_day - 1) - (@last_logg_interval - @rel_start_int)
 	END 
@@ -236,7 +236,7 @@ END
 /****************************************************************************/
 BEGIN TRANSACTION
 /*
-	Hır blir det nytt
+	H√µr blir det nytt
 	
 */
 
