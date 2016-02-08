@@ -70,7 +70,6 @@ namespace NodeTest
         {
             PingToManagerFake.Wait.Wait();
             NodeStartupNotification.Wait.Wait();
-            Thread.Sleep(TimeSpan.FromMinutes(1));
             LogHelper.LogInfoWithLineNumber(Logger, "Closing WorkerWrapperTests...");
         }
 

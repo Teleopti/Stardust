@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,12 +29,12 @@ namespace NodeTest.Fakes.Timers
 
         public override Task<HttpResponseMessage> TrySendNodeStartUpToManager(Uri nodeAddress)
         {
-            LogHelper.LogInfoWithLineNumber(Logger,
-                                            "Try send node start up notification to manager.");
-
             Wait.Set();
 
-            return null;
+            var response = new HttpResponseMessage(HttpStatusCode.OK);
+            var request = new HttpRequestMessage(HttpMethod.Post, CallbackTemplateUri);
+            response.RequestMessage = request;
+            return Task.FromResult(response);
         }
     }
 }
