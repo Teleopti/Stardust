@@ -162,13 +162,11 @@
     <Compile Include="FakeData\FakeCampaignRepository.cs" />
     <Compile Include="FakeData\FakeCommonAgentNameProvider.cs" />
     <Compile Include="FakeData\FakeCurrentUnitOfWorkFactory.cs" />
-    <Compile Include="FakeData\FakeGroupPageCreator.cs" />
     <Compile Include="FakeData\FakeLogManagerWrapper.cs" />
     <Compile Include="FakeData\FakePersonContractProvider.cs" />
     <Compile Include="FakeData\FakeScheduleDayForPerson.cs" />
     <Compile Include="FakeData\FakeScheduleDictionary.cs" />
     <Compile Include="FakeData\FakeScheduleDictionaryPersister.cs" />
-    <Compile Include="FakeData\FakeScheduleParameters.cs" />
     <Compile Include="FakeData\FakeScheduleTagSetter.cs" />
     <Compile Include="FakeData\FakeSchedulingResultStateHolder.cs" />
     <Compile Include="FakeData\FakeSkillRepository.cs" />

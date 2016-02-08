@@ -5,18 +5,21 @@ using System.Net.Http;
 using System.Web.Http.Results;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 {
-	[ResourcePlannerTest_DontUse]
-	public class PlanningPeriodControllerTest
+	[DomainTest]
+	public class PlanningPeriodControllerTest : ISetup
 	{
 		//break this test in to multiple
 		public PlanningPeriodController Target;
@@ -240,6 +243,17 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 					Priority = 10
 				}
 			};
+		}
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			//shouldn't be here
+			//intead move logic to domain and don't fake other stuff than "out of process calls" (=repos and similar)
+			//These out of process-fakes, put it in DomainTestAttribute
+			system.AddService<PlanningPeriodController>();
+			system.AddModule(new ResourcePlannerModule());
+			system.UseTestDouble<FakeMissingForecastProvider>().For<IMissingForecastProvider>();
+			system.UseTestDouble<FakeFixedStaffLoader>().For<IFixedStaffLoader>();
 		}
 	}
 }

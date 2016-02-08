@@ -312,7 +312,6 @@
     <Compile Include="Areas\ResourcePlanner\OptimizationResultModelTest.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningPeriodControllerTest.cs" />
     <Compile Include="Areas\ResourcePlanner\ResourcePlannerModuleTest.cs" />
-    <Compile Include="Areas\ResourcePlanner\ResourcePlannerTest_DontUseAttribute.cs" />
     <Compile Include="Areas\ResourcePlanner\ThrottleActionTest.cs" />
     <Compile Include="Areas\ResourcePlanner\ViolatedBusinessRulesTest.cs" />
     <Compile Include="Areas\Search\FakeApplicationRoleRepository.cs" />
