@@ -32,7 +32,7 @@ namespace Manager.Integration.Test.WPF
                 if (args.MiddleButton == MouseButtonState.Pressed)
 
                 {
-                    RestoreScalingFactor(uiScaleSlider,
+                    RestoreScalingFactor(UiScaleSlider,
                                          args);
                 }
             }
@@ -47,7 +47,7 @@ namespace Manager.Integration.Test.WPF
                 Keyboard.IsKeyDown(Key.RightCtrl))
 
             {
-                uiScaleSlider.Value += (args.Delta > 0) ? 0.1 : -0.1;
+                UiScaleSlider.Value += (args.Delta > 0) ? 0.1 : -0.1;
             }
         }
     }
