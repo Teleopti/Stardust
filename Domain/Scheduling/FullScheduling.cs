@@ -16,7 +16,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	//This class is just a mess. Copied from ScheduleController. Needs a lot of refactoring...
 	public class FullScheduling
 	{
 		private readonly WebSchedulingSetup _webSchedulingSetup;
@@ -82,22 +81,20 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var webScheduleState = _webSchedulingSetup.Setup(period);
 
-			if (webScheduleState.AllSchedules.Any())
+			_scheduleCommand().Execute(new OptimizerOriginalPreferences(new SchedulingOptions
 			{
-				_scheduleCommand().Execute(new OptimizerOriginalPreferences(new SchedulingOptions
-				{
-					UseAvailability = true,
-					UsePreferences = true,
-					UseRotations = true,
-					UseStudentAvailability = false,
-					DayOffTemplate = _schedulerStateHolder().CommonStateHolder.DefaultDayOffTemplate,
-					ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
-					GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
-					TagToUseOnScheduling = NullScheduleTag.Instance
-				}), new NoBackgroundWorker(), _schedulerStateHolder(), webScheduleState.AllSchedules, _groupPagePerDateHolder(),
-					_requiredScheduleHelper(),
-					new OptimizationPreferences(), false, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
-			}
+				UseAvailability = true,
+				UsePreferences = true,
+				UseRotations = true,
+				UseStudentAvailability = false,
+				DayOffTemplate = _schedulerStateHolder().CommonStateHolder.DefaultDayOffTemplate,
+				ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
+				GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
+				TagToUseOnScheduling = NullScheduleTag.Instance
+			}), new NoBackgroundWorker(), _schedulerStateHolder(), webScheduleState.AllSchedules, _groupPagePerDateHolder(),
+				_requiredScheduleHelper(),
+				new OptimizationPreferences(), false, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
+
 			return webScheduleState.PeopleSelection;
 		}
 

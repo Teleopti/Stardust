@@ -67,6 +67,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IOptimizationPreferences optimizationPreferences, bool runWeeklyRestSolver,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
+			if (!selectedScheduleDays.Any())
+				return;
 			setThreadCulture();
 			var schedulingOptions = optimizerOriginalPreferences.SchedulingOptions;
 			schedulingOptions.DayOffTemplate = schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate;
