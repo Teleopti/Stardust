@@ -1,48 +1,56 @@
-﻿(function(){
-'use strict';
+(function() {
+	'use strict';
 
-describe('shortcutsService', function () {
+	describe('shortcutsService', function() {
 
- beforeEach(function () {
-  module('shortcutsService');
- });
+		beforeEach(function() {
+			module('shortcutsService');
+		})
 
-it('should catch key event and store in array', inject(function(ShortCuts){
-var event = {
- keyCode: 17
-};
+		it('should check if key event is special key', inject(function(ShortCuts, keyCodes) {
+			var specialKeyEvent = {
+				keyCode: 17
+			};
+			var normalKeyEvent = {
+				keyCode: 49
+			};
 
-expect(ShortCuts.checkSpecialKey(event)).toEqual(true);
-}));
-it('should recive key sequence and store in table', inject(function(ShortCuts){
-var specialKeySequence = {shift: false, control: true, alt: false};
-var stateName = 'Rta';
-var keyCode = 59;
-var key = keyCode + stateName;
+			expect(ShortCuts.checkSpecialKey(specialKeyEvent)).toEqual(true);
+			expect(ShortCuts.checkSpecialKey(normalKeyEvent)).toEqual(false);
+		}));
 
-ShortCuts.registerKeySequence(keyCode, stateName, specialKeySequence, function(){
-});
+		it('should receive registered key sequence and store in table', inject(function(ShortCuts){
+			var specialKeySequence = [17];
+			var stateName = 'rta';
+			var keyCode = 49;
+			var keySequenceName = keyCode + stateName;
+			var callback = function (){};
 
-expect(ShortCuts.keySequenceTable.key).not.toBeNull();
-}));
-it('should execute callback function for given key sequence', inject(function(ShortCuts){
-var event1 = {
-  keyCode: 16
-};
-var event2 = {
- keyCode: 59
-};
-var specialKeySequence = [16];
-var stateName = 'Rta';
-var keyCode = 59;
-var key = keyCode + stateName;
+			ShortCuts.registerKeySequence(keyCode, stateName, specialKeySequence, callback);
 
-ShortCuts.registerKeySequence(keyCode, stateName, specialKeySequence, function(){
-});
-ShortCuts.state = stateName;
-ShortCuts.handleKeyEvent(event1);
+			expect(ShortCuts.keySequenceTable[keySequenceName].length).toEqual(2);
+			expect(ShortCuts.keySequenceTable[keySequenceName][0]).toEqual(specialKeySequence);
+			expect(ShortCuts.keySequenceTable[keySequenceName][1]).toEqual(callback);
+		}));
 
-expect(ShortCuts.handleKeyEvent(event2)).toEqual(true);
-}));
-});
+		it('should execute callback function for given key sequence', inject(function(ShortCuts){
+			var specialKeySequence = [17];
+			var stateName = 'rta';
+			var keyCode = 49;
+			var keySequenceName = keyCode + stateName;
+			var callback = function (){};
+			var specialKeyEvent = {
+				keyCode: 17
+			};
+			var normalKeyEvent = {
+				keyCode: 49
+			};
+			ShortCuts.state = stateName;
+
+			ShortCuts.registerKeySequence(keyCode, stateName, specialKeySequence, callback);
+			ShortCuts.handleKeyEvent(specialKeyEvent)
+
+			expect(ShortCuts.handleKeyEvent(normalKeyEvent)).toEqual(true);
+		}));
+	});
 })();
