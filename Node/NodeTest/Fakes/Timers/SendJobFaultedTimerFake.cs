@@ -16,7 +16,7 @@ namespace NodeTest.Fakes.Timers
 
         public SendJobFaultedTimerFake(INodeConfiguration nodeConfiguration ,
                                        Uri callbackTemplateUri ,
-                                       double interval = 10000) : base(nodeConfiguration,
+                                       double interval = 1000) : base(nodeConfiguration,
                                                                        callbackTemplateUri,
                                                                        interval)
         {
@@ -24,12 +24,12 @@ namespace NodeTest.Fakes.Timers
 
         public override Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo)
         {
+            NumberOfTimeCalled++;
+
             Wait.Set();
 
-            NumberOfTimeCalled ++;
-
             var response = new HttpResponseMessage(HttpStatusCode.OK);
-            var request = new HttpRequestMessage(HttpMethod.Post, CallbackTemplateUri);
+            var request = new HttpRequestMessage(HttpMethod.Post, "Faulted");
             response.RequestMessage = request;
             return Task.FromResult(response);
         }

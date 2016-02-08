@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
-using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
 
@@ -19,21 +18,21 @@ namespace NodeTest.Fakes.Timers
         public ManualResetEventSlim Wait = new ManualResetEventSlim();
 
         public SendJobCanceledTimerFake(INodeConfiguration nodeConfiguration,
-                                        Uri callbackTemplateUri,
-                                        double interval = 10000) : base(nodeConfiguration,
-                                                                        callbackTemplateUri,
-                                                                        interval)
+            Uri callbackTemplateUri,
+            double interval = 1000) : base(nodeConfiguration,
+                callbackTemplateUri,
+                interval)
         {
         }
 
         public override Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo)
         {
-            Wait.Set();
-
             NumberOfTimeCalled++;
 
+            Wait.Set();
+
             var response = new HttpResponseMessage(HttpStatusCode.OK);
-            var request = new HttpRequestMessage(HttpMethod.Post, CallbackTemplateUri);
+            var request = new HttpRequestMessage(HttpMethod.Post, "JobCanceled");
             response.RequestMessage = request;
             return Task.FromResult(response);
         }
