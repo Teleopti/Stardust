@@ -44,7 +44,7 @@
                 <DropShadowEffect Color="#FFECDDDD" />
             </TabControl.Effect>
 
-            <TabItem Header="Worker Node">
+            <TabItem Header="{Binding WorkerNodeHeader, FallbackValue='Worker Node'}">
                 <Grid Background="#FFE5E5E5">
                     <DataGrid ItemsSource="{Binding WorkerNodesData}"
                               AutoGenerateColumns="False"
@@ -75,7 +75,7 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Header="Logging">
+            <TabItem Header="{Binding LoggingHeader, FallbackValue='Logging'}">
                 <Grid Background="#FFE5E5E5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="25" />
@@ -147,11 +147,11 @@
                             <DataGridTextColumn Binding="{Binding Level}"
                                                 ClipboardContentBinding="{Binding Level}"
                                                 Header="Level" />
-                            
+
                             <DataGridTextColumn Binding="{Binding Exception}"
                                                 ClipboardContentBinding="{Binding Exception}"
                                                 Header="Exception" />
-                            
+
                         </DataGrid.Columns>
                     </DataGrid>
                     <Slider Grid.Row="0"
@@ -163,7 +163,7 @@
                             VerticalAlignment="Center" />
                 </Grid>
             </TabItem>
-            <TabItem Header="Job History">
+            <TabItem Header="{Binding JobHistoryHeader, FallbackValue='Job History'}">
                 <Grid Background="#FFE5E5E5">
                     <DataGrid ItemsSource="{Binding JobHistoryData}"
                               AutoGenerateColumns="False"
@@ -192,7 +192,7 @@
                             <DataGridTextColumn Binding="{Binding Ended, StringFormat=yyyy-mm-dd hh:mm:ss}"
                                                 ClipboardContentBinding="{Binding Ended, StringFormat=yyyy-mm-dd hh:mm:ss}"
                                                 Header="Ended" />
-                            
+
                             <DataGridTextColumn Binding="{Binding CreatedBy}"
                                                 ClipboardContentBinding="{Binding CreatedBy}"
                                                 Header="Created By" />
@@ -200,7 +200,7 @@
                     </DataGrid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Job History Detail">
+            <TabItem Header="{Binding JobHistoryDetailHeader, FallbackValue='Job History Detail'}">
                 <Grid Background="#FFE5E5E5">
                     <DataGrid ItemsSource="{Binding JobHistoryDetailData}"
                               AutoGenerateColumns="False"
@@ -233,7 +233,7 @@
                     </DataGrid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Job Definition">
+            <TabItem Header="{Binding JobDefinitionDataHeader, FallbackValue='Job Definition'}">
                 <Grid Background="#FFE5E5E5">
                     <DataGrid ItemsSource="{Binding JobDefinitionsData}"
                               HorizontalGridLinesBrush="#FFF5EFEF"
@@ -283,7 +283,7 @@
                                                 ClipboardContentBinding="{Binding Status}"
                                                 Header="Status" />
 
-                        </DataGrid.Columns>                        
+                        </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
             </TabItem>
