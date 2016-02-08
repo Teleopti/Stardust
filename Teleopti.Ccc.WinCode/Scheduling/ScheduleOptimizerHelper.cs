@@ -691,6 +691,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			bool notFullyScheduledMatrixFound = false;
 			IList<IScheduleMatrixOriginalStateContainer> validMatrixContainerList = new List<IScheduleMatrixOriginalStateContainer>();
+			rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(), _scheduleDayChangeCallback(), new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
 			foreach (IScheduleMatrixOriginalStateContainer matrixContainer in matrixContainerList)
 			{
 				bool isFullyScheduled = matrixContainer.IsFullyScheduled();
@@ -713,8 +714,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			classicDaysOffOptimization(validMatrixContainerList, selectedPeriod, _backgroundWorker);
 
-			// we create a rollback service and do the changes and check for the case that not all white spots can be scheduled
-			rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(), _scheduleDayChangeCallback(), new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
 			foreach (IScheduleMatrixOriginalStateContainer matrixContainer in validMatrixContainerList)
 			{
 				if (!matrixContainer.IsFullyScheduled())
