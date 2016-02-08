@@ -24,11 +24,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
 		}
 
-        public ScheduleStorage(IUnitOfWorkFactory unitOfWorkFactory)
-        {
-			_currentUnitOfWork = new FromFactory(() => unitOfWorkFactory);
-		}
-
 	    public ScheduleStorage(ICurrentUnitOfWork currentUnitOfWork, IRepositoryFactory repositoryFactory)
 	    {
 		    _currentUnitOfWork = currentUnitOfWork;

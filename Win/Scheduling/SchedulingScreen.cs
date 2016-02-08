@@ -4687,7 +4687,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var allNewRules = _schedulerState.SchedulingResultState.GetRulesToRun();
 			var selectedSchedules = _scheduleView.SelectedSchedules();
 			var uowFactory = UnitOfWorkFactory.Current;
-			var scheduleRepository = new ScheduleStorage(uowFactory);
+			var scheduleRepository = new ScheduleStorage(new FromFactory(() => uowFactory), new RepositoryFactory());
 			using (
 				var exportForm = new ExportToScenarioResultView(uowFactory, scheduleRepository,
 					new MoveDataBetweenSchedules(allNewRules,
