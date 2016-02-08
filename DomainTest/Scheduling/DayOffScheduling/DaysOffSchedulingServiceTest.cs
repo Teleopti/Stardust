@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
@@ -36,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_matrixList = new List<IScheduleMatrixPro>();
 			_schedulingOptions = new SchedulingOptions();
-			_scheduleTagSetter = new FakeScheduleTagSetter();
+			_scheduleTagSetter = new NoScheduleTagSetter();
 		}
 
 		[Test]

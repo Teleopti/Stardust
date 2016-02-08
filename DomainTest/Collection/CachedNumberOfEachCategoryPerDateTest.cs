@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -88,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			//fire event for a change on one day
 
 			_dic.Modify(ScheduleModifier.Scheduler, _dic[person1].ScheduledDay(periodToMonitor.StartDate), NewBusinessRuleCollection.Minimum(),
-				new DoNothingScheduleDayChangeCallBack(), new FakeScheduleTagSetter());
+				new DoNothingScheduleDayChangeCallBack(), new NoScheduleTagSetter());
 			
 			Assert.AreEqual(1, _target.ItemCount);
 		}
@@ -112,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			//fire event for a change on one day
 
 			_dic.Modify(ScheduleModifier.Scheduler, _dic[person1].ScheduledDay(periodToMonitor.StartDate), NewBusinessRuleCollection.Minimum(),
-				new DoNothingScheduleDayChangeCallBack(), new FakeScheduleTagSetter());
+				new DoNothingScheduleDayChangeCallBack(), new NoScheduleTagSetter());
 		}
 
 		[Test]
