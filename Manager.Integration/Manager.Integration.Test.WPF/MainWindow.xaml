@@ -75,7 +75,7 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Header="{Binding LoggingHeader, FallbackValue='Logging'}">
+            <TabItem Header="{Binding LoggingHeader, FallbackValue='Logging'}" IsSelected="True">
                 <Grid Background="#FFE5E5E5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="25" />
