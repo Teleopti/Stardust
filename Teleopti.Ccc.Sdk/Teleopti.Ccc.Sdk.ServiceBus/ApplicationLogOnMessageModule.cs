@@ -6,7 +6,6 @@ using Rhino.ServiceBus;
 using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.MessageModules;
 using Teleopti.Ccc.Domain.Logon;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -20,11 +19,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ApplicationLogOnMessageModule));
 		private readonly DataSourceForTenantWrapper _dataSourceForTenant;
-		private readonly AsSuperUser _asSuperUser;
+		private readonly Lazy<AsSuperUser> _asSuperUser;
 
 		public ApplicationLogOnMessageModule(
 			DataSourceForTenantWrapper dataSourceForTenant,
-			AsSuperUser asSuperUser)
+			Lazy<AsSuperUser> asSuperUser)
 		{
 			_dataSourceForTenant = dataSourceForTenant;
 			_asSuperUser = asSuperUser;
@@ -69,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			if (checkLicense(dataSource))
 			{
-				_asSuperUser.Logon(dataSource, logOnInfo.LogOnBusinessUnitId);
+				_asSuperUser.Value.Logon(dataSource, logOnInfo.LogOnBusinessUnitId);
 				setWcfAuthenticationHeader(dataSource, logOnInfo.LogOnBusinessUnitId);
 			}
 
