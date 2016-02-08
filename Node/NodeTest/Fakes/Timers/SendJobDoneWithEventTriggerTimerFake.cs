@@ -29,7 +29,7 @@ namespace NodeTest.Fakes.Timers
             Wait.Set();
 
             var response = new HttpResponseMessage(HttpStatusCode.OK);
-            var request = new HttpRequestMessage(HttpMethod.Post, CallbackTemplateUri);
+            var request = new HttpRequestMessage(HttpMethod.Post, "JobDoneTrigger");
             response.RequestMessage = request;
             return Task.FromResult(response);
         }

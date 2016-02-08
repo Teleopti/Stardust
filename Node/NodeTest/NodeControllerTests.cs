@@ -50,21 +50,6 @@ namespace NodeTest
         [SetUp]
         public void SetUp()
         {
-            _workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
-                                              _nodeConfigurationFake,
-                                              new NodeStartupNotificationToManagerFake(_nodeConfigurationFake,
-                                                                                       _callBackTemplateUriFake),
-                                              new PingToManagerFake(),
-                                              new SendJobDoneTimerFake(_nodeConfigurationFake,
-                                                                       _callBackTemplateUriFake),
-                                              new SendJobCanceledTimerFake(_nodeConfigurationFake,
-                                                                           _callBackTemplateUriFake),
-                                              new SendJobFaultedTimerFake(_nodeConfigurationFake,
-                                                                          _callBackTemplateUriFake),
-                                              new PostHttpRequestFake());
-
-            _nodeController = new NodeController(_workerWrapper) { Request = new HttpRequestMessage() };
-
             var parameters = new TestJobParams("hejhopp",
                                    "i lingonskogen");
             var ser = JsonConvert.SerializeObject(parameters);
@@ -76,12 +61,21 @@ namespace NodeTest
                 Serialized = ser,
                 Type = "NodeTest.JobHandlers.TestJobParams"
             };
+
+            _nodeStartupNotification = new NodeStartupNotificationToManagerFake(_nodeConfigurationFake,
+                    _callBackTemplateUriFake);
+            _pingToManagerFake = new PingToManagerFake();
+            _sendJobDoneTimer = new SendJobDoneTimerFake(_nodeConfigurationFake,
+                _callBackTemplateUriFake);
+            _sendJobCanceledTimer = new SendJobCanceledTimerFake(_nodeConfigurationFake,
+                _callBackTemplateUriFake);
+            _sendJobFaultedTimer = new SendJobFaultedTimerFake(_nodeConfigurationFake,
+                _callBackTemplateUriFake);
         }
 
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
         {
-            Thread.Sleep(TimeSpan.FromMinutes(1));
             LogHelper.LogInfoWithLineNumber(Logger, "Closing NodeControllerTests...");
         }
 
@@ -91,19 +85,47 @@ namespace NodeTest
         private JobToDo _jobToDo;
         private Uri _callBackTemplateUriFake;
         private static readonly ILog Logger = LogManager.GetLogger(typeof(NodeControllerTests));
-
+        private PingToManagerFake _pingToManagerFake;
+        private NodeStartupNotificationToManagerFake _nodeStartupNotification;
+        private SendJobDoneTimerFake _sendJobDoneTimer;
+        private SendJobCanceledTimerFake _sendJobCanceledTimer;
+        private SendJobFaultedTimerFake _sendJobFaultedTimer;
 
         [Test]
         public void CancelJobShouldReturnNotFoundWhenCancellingJobWhenIdle()
         {
+            _workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
+                      _nodeConfigurationFake,
+                      _nodeStartupNotification,
+                      _pingToManagerFake,
+                      _sendJobDoneTimer,
+                      _sendJobCanceledTimer,
+                      _sendJobFaultedTimer,
+                      new PostHttpRequestFake());
+
+            _nodeController = new NodeController(_workerWrapper) { Request = new HttpRequestMessage() };
+
+            LogHelper.LogInfoWithLineNumber(Logger, "Starting test...");
             var actionResultCancel = _nodeController.TryCancelJob(_jobToDo.Id);
             Assert.IsInstanceOf(typeof (NotFoundResult),
                                 actionResultCancel);
         }
-
+    
         [Test]
         public void CancelJobShouldReturnNotFoundWhenCancellingWrongJob()
         {
+            _workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
+                      _nodeConfigurationFake,
+                      _nodeStartupNotification,
+                      _pingToManagerFake,
+                      _sendJobDoneTimer,
+                      _sendJobCanceledTimer,
+                      _sendJobFaultedTimer,
+                      new PostHttpRequestFake());
+
+            _nodeController = new NodeController(_workerWrapper) { Request = new HttpRequestMessage() };
+
+            LogHelper.LogInfoWithLineNumber(Logger, "Starting test...");
             var wrongJobToDo = new JobToDo
             {
                 Id = Guid.NewGuid(),
@@ -112,8 +134,9 @@ namespace NodeTest
             };
 
             _nodeController.StartJob(_jobToDo);
-
             var actionResult = _nodeController.TryCancelJob(wrongJobToDo.Id);
+
+            _sendJobDoneTimer.Wait.Wait(TimeSpan.FromMinutes(1));
             Assert.IsInstanceOf(typeof (NotFoundResult),
                                 actionResult);
         }
@@ -121,9 +144,24 @@ namespace NodeTest
         [Test]
         public void CancelJobShouldReturnOkWhenSuccessful()
         {
+            _workerWrapper = new WorkerWrapper(new LongRunningInvokeHandlerFake(),
+                      _nodeConfigurationFake,
+                      _nodeStartupNotification,
+                      _pingToManagerFake,
+                      _sendJobDoneTimer,
+                      _sendJobCanceledTimer,
+                      _sendJobFaultedTimer,
+                      new PostHttpRequestFake());
+
+            _nodeController = new NodeController(_workerWrapper) { Request = new HttpRequestMessage() };
+
+            LogHelper.LogInfoWithLineNumber(Logger, "Starting test...");
             _nodeController.StartJob(_jobToDo);
 
             var actionResult = _nodeController.TryCancelJob(_jobToDo.Id);
+
+            _sendJobCanceledTimer.Wait.Wait(TimeSpan.FromMinutes(1));
+
             Assert.IsInstanceOf(typeof (OkResult),
                                 actionResult);
         }
@@ -132,6 +170,18 @@ namespace NodeTest
         [ExpectedException(typeof (ArgumentNullException))]
         public void ShouldThrowArgumentNullExceptionWhenJobDefinitionIsNullCancelJob()
         {
+            _workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
+                      _nodeConfigurationFake,
+                      _nodeStartupNotification,
+                      _pingToManagerFake,
+                      _sendJobDoneTimer,
+                      _sendJobCanceledTimer,
+                      _sendJobFaultedTimer,
+                      new PostHttpRequestFake());
+
+            _nodeController = new NodeController(_workerWrapper) { Request = new HttpRequestMessage() };
+
+            LogHelper.LogInfoWithLineNumber(Logger, "Starting test...");
             _nodeController.TryCancelJob(Guid.Empty);
         }
 
@@ -139,12 +189,36 @@ namespace NodeTest
         [ExpectedException(typeof (ArgumentNullException))]
         public void ShouldThrowArgumentNullExceptionWhenJobDefinitionIsNullStartJob()
         {
+            _workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
+                      _nodeConfigurationFake,
+                      _nodeStartupNotification,
+                      _pingToManagerFake,
+                      _sendJobDoneTimer,
+                      _sendJobCanceledTimer,
+                      _sendJobFaultedTimer,
+                      new PostHttpRequestFake());
+
+            _nodeController = new NodeController(_workerWrapper) { Request = new HttpRequestMessage() };
+
+            LogHelper.LogInfoWithLineNumber(Logger, "Starting test...");
             _nodeController.StartJob(null);
         }
 
         [Test]
         public void StartJobShouldReturnConflictWhenAlreadyProcessingJob()
         {
+            _workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
+                      _nodeConfigurationFake,
+                      _nodeStartupNotification,
+                      _pingToManagerFake,
+                      _sendJobDoneTimer,
+                      _sendJobCanceledTimer,
+                      _sendJobFaultedTimer,
+                      new PostHttpRequestFake());
+
+            _nodeController = new NodeController(_workerWrapper) { Request = new HttpRequestMessage() };
+
+            LogHelper.LogInfoWithLineNumber(Logger, "Starting test...");
             var parameters = new TestJobParams("hejhopp",
                                                "i lingonskogen");
             var ser = JsonConvert.SerializeObject(parameters);
@@ -154,6 +228,8 @@ namespace NodeTest
             _nodeController.StartJob(_jobToDo);
 
             var actionResult = _nodeController.StartJob(JobToDo2);
+
+            _sendJobDoneTimer.Wait.Wait(TimeSpan.FromMinutes(1));
             Assert.IsInstanceOf(typeof (ConflictResult),
                                 actionResult);
         }
@@ -161,7 +237,20 @@ namespace NodeTest
         [Test]
         public void StartJobShouldReturnOkIfNotRunningJobAlready()
         {
+            _workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
+                      _nodeConfigurationFake,
+                      _nodeStartupNotification,
+                      _pingToManagerFake,
+                      _sendJobDoneTimer,
+                      _sendJobCanceledTimer,
+                      _sendJobFaultedTimer,
+                      new PostHttpRequestFake());
+
+            _nodeController = new NodeController(_workerWrapper) { Request = new HttpRequestMessage() };
+
+            LogHelper.LogInfoWithLineNumber(Logger, "Starting test...");
             var actionResult = _nodeController.StartJob(_jobToDo);
+            _sendJobDoneTimer.Wait.Wait(TimeSpan.FromMinutes(1));
             Assert.IsInstanceOf(typeof (OkNegotiatedContentResult<string>),
                                 actionResult);
         }
