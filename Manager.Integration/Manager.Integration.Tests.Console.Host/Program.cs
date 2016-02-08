@@ -399,5 +399,13 @@ namespace Manager.IntegrationTest.Console.Host
             return managerConfigFile.CopyTo(newConfigFileName,
                                             true);
         }
+
+        public static void UnloadAppDomainById(string id)
+        {
+            var appDomainToUnload =
+                Program.AppDomains.FirstOrDefault(pair => pair.Key == id);
+
+            AppDomain.Unload(appDomainToUnload.Value);
+        }
     }
 }

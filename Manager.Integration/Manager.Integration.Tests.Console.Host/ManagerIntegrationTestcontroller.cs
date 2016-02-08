@@ -19,7 +19,15 @@ namespace Manager.IntegrationTest.Console.Host
             WhoAmI = "[MANAGER INTEGRATION TEST CONTROLLER, " + Environment.MachineName.ToUpper() + "]";
         }
 
-        [HttpGet, Route("appdomains")]
+        [HttpDelete, Route("appdomain/{id}")]
+        public void DeleteAppDomain(string id)
+        {
+            LogHelper.LogInfoWithLineNumber(Logger, "Called API controller.");
+
+            Program.UnloadAppDomainById(id);
+        }
+
+        [HttpGet, Route("appdomain")]
         public List<string> GetAllAppDomains()
         {
             LogHelper.LogInfoWithLineNumber(Logger, "Called API controller.");
