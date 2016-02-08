@@ -6,7 +6,7 @@ using System.Web.Http;
 
 namespace Stardust.Node.Interfaces
 {
-    public interface IWorkerWrapper
+    public interface IWorkerWrapper : IDisposable
     {
 
         string WhoamI { get; }

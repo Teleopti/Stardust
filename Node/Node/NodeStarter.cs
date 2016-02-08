@@ -27,6 +27,7 @@ namespace Stardust.Node
         public void Stop()
         {
             QuitEvent.Set();
+
         }
 
         public void Start(INodeConfiguration nodeConfiguration,
@@ -86,6 +87,14 @@ namespace Stardust.Node
                                                 WhoAmI + ": Listening on port " + nodeConfiguration.BaseAddress);
 
                 QuitEvent.WaitOne();
+
+                var workerWrapper=
+                    container.Resolve<IWorkerWrapper>();
+
+                if (workerWrapper != null)
+                {
+                    workerWrapper.Dispose();
+                }
             }
         }
     }

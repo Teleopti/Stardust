@@ -79,8 +79,7 @@ namespace Manager.Integration.Test
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Exception exp = (Exception) e.ExceptionObject;
-
-
+            
         }
 
         private static void TryCreateSqlLoggingTable()
@@ -124,13 +123,13 @@ namespace Manager.Integration.Test
                 foreach (var appDomain in AppDomainHelper.AppDomains.Values)
                 {
                     try
-                    {
+                    { 
                         AppDomain.Unload(appDomain);
+                        
                     }
 
                     catch (AppDomainUnloadedException)
                     {
-                        
                     }
 
                     catch (Exception exp)

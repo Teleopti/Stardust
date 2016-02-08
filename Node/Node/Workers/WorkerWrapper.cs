@@ -330,5 +330,24 @@ namespace Stardust.Node.Workers
                                                  exception);
             }
         }
+
+        public void Dispose()
+        {
+            if (PingToManagerTimer != null)
+                PingToManagerTimer.Dispose();
+
+            if (TrySendJobCanceledStatusToManagerTimer != null)
+                TrySendJobCanceledStatusToManagerTimer.Dispose();
+
+            if (TrySendJobDoneStatusToManagerTimer != null)
+                TrySendJobDoneStatusToManagerTimer.Dispose();
+
+            if (TrySendJobFaultedStatusToManagerTimer != null)
+                TrySendJobFaultedStatusToManagerTimer.Dispose();
+
+            if (NodeStartUpNotificationToManagerTimer != null)
+                NodeStartUpNotificationToManagerTimer.Dispose();
+            
+        }
     }
 }
