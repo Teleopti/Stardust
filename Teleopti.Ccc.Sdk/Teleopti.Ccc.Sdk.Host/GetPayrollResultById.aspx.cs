@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 				return;
 			}
 
-			var logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
+			var logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(), new TeleoptiPrincipalFactory(), null);
 			logOnOff.LogOn(result.DataSource, result.Person, null);
 
 			using (result.DataSource.Application.CreateAndOpenUnitOfWork())

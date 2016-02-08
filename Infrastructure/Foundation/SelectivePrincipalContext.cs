@@ -26,10 +26,10 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			_thread = thread;
 		}
 
-		public void SetCurrentPrincipal(IPerson loggedOnUser, IDataSource dataSource, IBusinessUnit businessUnit)
-		{
-			selectContext().SetCurrentPrincipal(loggedOnUser, dataSource, businessUnit);
-		}
+		//public void SetCurrentPrincipal(IPerson loggedOnUser, IDataSource dataSource, IBusinessUnit businessUnit)
+		//{
+		//	selectContext().SetCurrentPrincipal(loggedOnUser, dataSource, businessUnit);
+		//}
 
 		public void SetCurrentPrincipal(ITeleoptiPrincipal principal)
 		{

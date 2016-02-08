@@ -652,7 +652,9 @@
     <Compile Include="Intraday\SkillStatusModel.cs" />
     <Compile Include="Intraday\SkillTaskDetails.cs" />
     <Compile Include="Logon\ICurrentPrincipalContext.cs" />
+    <Compile Include="Logon\IPrincipalFactory.cs" />
     <Compile Include="Logon\IRoleToPrincipalCommand.cs" />
+    <Compile Include="Logon\ITokenIdentityProvider.cs" />
     <Compile Include="Logon\LogOnOff.cs" />
     <Compile Include="Logon\RoleToPrincipalCommand.cs" />
     <Compile Include="MessageBroker\IMailboxRepository.cs" />

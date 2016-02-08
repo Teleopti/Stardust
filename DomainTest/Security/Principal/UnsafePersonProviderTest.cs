@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			target = new UnsafePersonProvider();
 			beforePrincipal = TeleoptiPrincipal.CurrentPrincipal;
 			currentLoggedOnPerson = new Person();
-			var currentPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null), currentLoggedOnPerson);
+			var currentPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null, null), currentLoggedOnPerson);
 			Thread.CurrentPrincipal = currentPrincipal;
 		}
 

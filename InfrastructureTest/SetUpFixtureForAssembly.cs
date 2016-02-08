@@ -237,12 +237,12 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 				DataSource, 
 				person, 
 				BusinessUnitFactory.BusinessUnitUsedInTest,
-				new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
+				new ThreadPrincipalContext());
 		}
 
 		public static void Logout()
 		{
-			StateHolderProxyHelper.Logout(new ThreadPrincipalContext(null));
+			StateHolderProxyHelper.Logout(new ThreadPrincipalContext());
 		}
 
 		private static void saveBusinessUnitAndPerson(IPerson person, IUnitOfWork uow)

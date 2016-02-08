@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				datasource,
 				DefaultPersonThatCreatesDbData.PersonThatCreatesDbData,
 				DefaultBusinessUnit.BusinessUnitFromFakeState,
-				new ThreadPrincipalContext(new TeleoptiPrincipalFactory())
+				new ThreadPrincipalContext()
 				);
 			GlobalPrincipalState.Principal = Thread.CurrentPrincipal as TeleoptiPrincipal;
 			GlobalUnitOfWorkState.CurrentUnitOfWorkFactory = UnitOfWorkFactory.CurrentUnitOfWorkFactory();

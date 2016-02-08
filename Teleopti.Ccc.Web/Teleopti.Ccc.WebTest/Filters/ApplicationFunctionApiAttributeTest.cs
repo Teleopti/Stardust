@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 					new CustomHttpActionDescriptorForTest(new HttpControllerDescriptor {ControllerType = typeof (object)}));
 
 			var before = Thread.CurrentPrincipal;
-			Thread.CurrentPrincipal = TeleoptiPrincipalCacheable.Make(new TeleoptiIdentity("hej",null,null,null), PersonFactory.CreatePerson());
+			Thread.CurrentPrincipal = TeleoptiPrincipalCacheable.Make(new TeleoptiIdentity("hej",null,null,null, null), PersonFactory.CreatePerson());
 			target.OnAuthorization(httpActionContext);
 
 			httpActionContext.Response.IsSuccessStatusCode.Should().Be.False();

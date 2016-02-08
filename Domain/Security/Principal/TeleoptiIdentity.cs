@@ -5,11 +5,12 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 {
 	public class TeleoptiIdentity : GenericIdentity, ITeleoptiIdentity
 	{
-		public TeleoptiIdentity(string name,
-		                        IDataSource dataSource,
-		                        IBusinessUnit businessUnit,
-		                        WindowsIdentity windowsIdentity,
-								string tokenIdentity = null)
+		public TeleoptiIdentity(
+			string name, 
+			IDataSource dataSource, 
+			IBusinessUnit businessUnit, 
+			WindowsIdentity windowsIdentity, 
+			string tokenIdentity)
 			: base(name)
 		{
 			DataSource = dataSource;

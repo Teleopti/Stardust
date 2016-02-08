@@ -29,7 +29,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			ISessionSpecificDataProvider sessionSpecificDataProvider,
 			IRoleToPrincipalCommand roleToPrincipalCommand,
 			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal,
-			IPrincipalAuthorization principalAuthorization)
+			IPrincipalAuthorization principalAuthorization
+			)
 		{
 			_logOnOff = logOnOff;
 			_dataSourceForTenant = dataSourceForTenant;

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
 			var target = new CurrentBusinessUnit(new CurrentIdentity(currentTeleoptiPrincipal), new HttpRequestFalse());
 			var businessUnit = MockRepository.GenerateMock<IBusinessUnit>();
-			var teleoptiPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("hej", null, businessUnit, null), new Person());
+			var teleoptiPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("hej", null, businessUnit, null, null), new Person());
 
 			currentTeleoptiPrincipal.Expect(x => x.Current()).Return(teleoptiPrincipal);
 
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit();
 			businessUnit.SetId(Guid.NewGuid());
 			var anotherBusinessUnit = MockRepository.GenerateMock<IBusinessUnit>();
-			var teleoptiPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("hej", null, anotherBusinessUnit, null), new Person());
+			var teleoptiPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("hej", null, anotherBusinessUnit, null, null), new Person());
 			currentTeleoptiPrincipal.Expect(x => x.Current()).Return(teleoptiPrincipal);
 			var businessUnitRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
 			businessUnitRepository.Stub(x => x.Load(businessUnit.Id.Value)).Return(businessUnit);

@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		{
 			var person = new Person();
 			person.SetId(Guid.NewGuid());
-			var identity = new TeleoptiIdentity(person.Name.ToString(), null, null, null);
+			var identity = new TeleoptiIdentity(person.Name.ToString(), null, null, null, null);
 			var principal = new TeleoptiPrincipal(identity, person);
 
 			Thread.CurrentPrincipal = principal;

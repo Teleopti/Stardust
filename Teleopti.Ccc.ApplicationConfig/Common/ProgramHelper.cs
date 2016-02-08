@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 			var repositoryFactory = new RepositoryFactory();
 
 			var unitOfWorkFactory = dataSource.Application;
-			var logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
+			var logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(), new TeleoptiPrincipalFactory(), new TokenIdentityProvider(new CurrentHttpContext()));
 			var user = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(unitOfWorkFactory, SuperUser.Id_AvoidUsing_This);
 			
 			logOnOff.LogOn(dataSource, user, businessUnit);

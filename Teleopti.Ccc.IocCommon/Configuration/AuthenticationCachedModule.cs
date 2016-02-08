@@ -1,5 +1,6 @@
 using Autofac;
 using MbCache.Core;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.IocCommon.Configuration

@@ -5,7 +5,6 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Core.RequestContext;
@@ -24,7 +23,6 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 	    [SetUp]
 		public void SetUp()
 	    {
-
 		    var person = PersonFactory.CreatePerson ("Test Person");
 			_httpContextBase = MockRepository.GenerateStub<HttpContextBase>();
 		    _setThreadCulture = MockRepository.GenerateMock<ISetThreadCulture>();
@@ -34,8 +32,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 	    		new TestSessionPrincipalFactory(_teleoptiPrincipal),
 	    		_setThreadCulture,
 	    		new WebRequestPrincipalContext(
-					new FakeCurrentHttpContext(_httpContextBase),
-					new TeleoptiPrincipalFactory(), null
+					new FakeCurrentHttpContext(_httpContextBase)
 	    			)
 	    		);
 		}

@@ -358,7 +358,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		{
 			var businessUnit = BusinessUnitFactory.CreateWithId("Bu 2");
 			System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(
-				new TeleoptiIdentity("test", null, businessUnit, null), PersonFactory.CreatePerson());
+				new TeleoptiIdentity("test", null, businessUnit, null, null), PersonFactory.CreatePerson());
 			var roleId = Guid.NewGuid();
 			var site = SiteFactory.CreateSimpleSite();
 
@@ -463,7 +463,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		{
 			var businessUnit = BusinessUnitFactory.CreateWithId("Bu 2");
 			System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(
-				new TeleoptiIdentity("test", null, businessUnit, null), PersonFactory.CreatePerson());
+				new TeleoptiIdentity("test", null, businessUnit, null, null), PersonFactory.CreatePerson());
 			var roleId = Guid.NewGuid();
 			var site = SiteFactory.CreateSimpleSite();
 

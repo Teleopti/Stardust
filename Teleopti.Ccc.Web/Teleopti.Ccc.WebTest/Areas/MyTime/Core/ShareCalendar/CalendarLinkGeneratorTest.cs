@@ -193,43 +193,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 			personScheduleDayReadModelFinder.AssertWasNotCalled(x => x.ForPerson(startDate, DateOnly.Today.AddDays(180), person.Id.GetValueOrDefault()));
 			personScheduleDayReadModelFinder.AssertWasCalled(x => x.ForPerson(startDate, publishedToDate, person.Id.GetValueOrDefault()));
 		}
-
-		[Test, ExpectedException(typeof(PermissionException))]
-		public void ShouldThrowIfNoCalendarLinkPermission()
-		{
-			var person = PersonFactory.CreatePersonWithGuid("first", "last");
-            var roleToPrincipalCommand = MockRepository.GenerateMock<IRoleToPrincipalCommand>();
-            var principalFactory = MockRepository.GenerateMock<IPrincipalFactory>();
-            var principalAuthorizationFactory = MockRepository.GenerateMock<IPrincipalAuthorizationFactory>();
-            var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
-            var principal = MockRepository.GenerateMock<ITeleoptiPrincipal>();
-			_personRepository.Stub(x => x.Get(person.Id.GetValueOrDefault())).Return(person);
-		    principalFactory.Stub(x => x.MakePrincipal(person, _dataSource, null)).Return(principal);
-			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ShareCalendar)).Return(false);
-            principalAuthorizationFactory.Stub(x => x.FromPrincipal(principal)).Return(principalAuthorization);
-
-		    var target = new CheckCalendarPermissionCommand(roleToPrincipalCommand, principalFactory, principalAuthorizationFactory);
-			target.Execute(_dataSource,person,_personRepository);
-		}
-
-        [Test]
-        public void ShouldPassIfCalendarLinkPermission()
-        {
-            var person = PersonFactory.CreatePersonWithGuid("first", "last");
-            var roleToPrincipalCommand = MockRepository.GenerateMock<IRoleToPrincipalCommand>();
-            var principalFactory = MockRepository.GenerateMock<IPrincipalFactory>();
-            var principalAuthorizationFactory = MockRepository.GenerateMock<IPrincipalAuthorizationFactory>();
-            var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
-            var principal = MockRepository.GenerateMock<ITeleoptiPrincipal>();
-            _personRepository.Stub(x => x.Get(person.Id.GetValueOrDefault())).Return(person);
-            principalFactory.Stub(x => x.MakePrincipal(person, _dataSource, null)).Return(principal);
-            principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ShareCalendar)).Return(true);
-            principalAuthorizationFactory.Stub(x => x.FromPrincipal(principal)).Return(principalAuthorization);
-
-            var target = new CheckCalendarPermissionCommand(roleToPrincipalCommand, principalFactory, principalAuthorizationFactory);
-            target.Execute(_dataSource, person, _personRepository);
-        }
-
+		
 		[Test, ExpectedException(typeof(InvalidOperationException))]
 		public void ShouldThrowIfCalendarLinkNonActive()
 		{

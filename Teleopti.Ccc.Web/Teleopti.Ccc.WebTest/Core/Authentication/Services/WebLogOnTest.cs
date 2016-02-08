@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			logOnOff = MockRepository.GenerateMock<ILogOnOff>();
 			var ruleToPrincipalCommand = MockRepository.GenerateMock<IRoleToPrincipalCommand>();
 			principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
-			ITeleoptiPrincipal principal = new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null), new Person());
+			ITeleoptiPrincipal principal = new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null, null), new Person());
 
 			target = new WebLogOn(logOnOff,
 			                      dataSourceForTenant,

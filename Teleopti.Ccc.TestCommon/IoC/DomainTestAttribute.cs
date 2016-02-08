@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.DistributedLock;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Optimization;
@@ -143,7 +144,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 					thePrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null, null), null);
 				principal.Fake(thePrincipal);
 			}
-			system.UseTestDouble(principal).For<ICurrentTeleoptiPrincipal>();
+			system.UseTestDouble(principal).For<ICurrentTeleoptiPrincipal, ICurrentPrincipalContext>();
 		}
 	}
 }

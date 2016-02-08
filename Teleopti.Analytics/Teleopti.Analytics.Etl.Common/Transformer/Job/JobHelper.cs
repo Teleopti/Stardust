@@ -40,7 +40,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 
 			var application = new InitializeApplication(null);
 			application.Start(new State(), null, ConfigurationManager.AppSettings.ToDictionary());
-			var logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
+			var logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(), new TeleoptiPrincipalFactory(), null);
 			_logonService = new LogOnService(logOnOff, new AvailableBusinessUnitsProvider(new RepositoryFactory()));
 		}
 		

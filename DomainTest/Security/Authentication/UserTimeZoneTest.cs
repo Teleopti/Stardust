@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
 			var currentPrincipal = new FakeCurrentTeleoptiPrincipal();
 			var user = new Person();
 			user.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.Utc));
-			currentPrincipal.Fake(new TeleoptiPrincipal(new TeleoptiIdentity("user",null,null,null), user));
+			currentPrincipal.Fake(new TeleoptiPrincipal(new TeleoptiIdentity("user",null,null,null, null), user));
 			var target = new UserTimeZone(currentPrincipal);
 
 			var result = target.TimeZone();

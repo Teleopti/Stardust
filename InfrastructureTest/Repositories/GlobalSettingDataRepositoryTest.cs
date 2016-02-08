@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	    private void changeBusinessUnit(IBusinessUnit businessUnit,IPerson person)
 	    {
 			 var dataSource = MockRepository.GenerateMock<IDataSource>();
-			 var identity = new TeleoptiIdentity("test user", dataSource, businessUnit, WindowsIdentity.GetCurrent());
+			 var identity = new TeleoptiIdentity("test user", dataSource, businessUnit, WindowsIdentity.GetCurrent(), null);
 			 //var threadPreviousPerson = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person;
 			 var principalForTest = new TeleoptiPrincipal(identity, person);
 			 Thread.CurrentPrincipal = new TeleoptiPrincipal(identity, person);

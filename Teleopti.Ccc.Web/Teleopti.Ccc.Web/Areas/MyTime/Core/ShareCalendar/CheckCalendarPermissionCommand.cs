@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 
         public void Execute(IDataSource dataSource, IPerson person, IPersonRepository personRepository)
         {
-            var principal = _principalFactory.MakePrincipal(person, dataSource, null);
+            var principal = _principalFactory.MakePrincipal(person, dataSource, null, null);
             _roleToPrincipalCommand.Execute(principal, dataSource.Application, personRepository);
             var permission = _principalAuthorizationFactory.FromPrincipal(principal);
 

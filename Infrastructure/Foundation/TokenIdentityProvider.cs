@@ -19,15 +19,18 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		public TokenIdentity RetrieveToken()
 		{
-			if (_httpContext.Current().User == null)
+			var httpContext = _httpContext.Current();
+			if (httpContext == null)
 				return null;
-			var teleoptiIdentity = _httpContext.Current().User.Identity as ITeleoptiIdentity;
+			if (httpContext.User == null)
+				return null;
+			var teleoptiIdentity = httpContext.User.Identity as ITeleoptiIdentity;
 			if (teleoptiIdentity != null)
 			{
 				return getTokenIdentity(teleoptiIdentity.TokenIdentity);
 			}
 
-			var currentIdentity = _httpContext.Current().User.Identity as IClaimsIdentity;
+			var currentIdentity = httpContext.User.Identity as IClaimsIdentity;
 			if (currentIdentity == null)
 			{
 				return null;
@@ -79,11 +82,4 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		}
 	}
 
-	public class TokenIdentity
-	{
-		public string UserIdentifier { get; set; }
-		public string OriginalToken { get; set; }
-		public bool IsTeleoptiApplicationLogon { get; set; }
-		public bool IsPersistent { get; set; }
-	}
 }

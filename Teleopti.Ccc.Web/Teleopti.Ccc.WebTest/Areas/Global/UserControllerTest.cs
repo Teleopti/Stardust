@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldGetTheCurrentIdentityName()
 		{
 			var person = PersonFactory.CreatePerson();
-			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("Pelle", null, null, null), person);
+			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("Pelle", null, null, null, null), person);
 			var currentPrinciple = new FakeCurrentTeleoptiPrincipal(principal);
 			var target = new UserController(currentPrinciple,  new FakeIanaTimeZoneProvider());
 			dynamic result = target.CurrentUser();

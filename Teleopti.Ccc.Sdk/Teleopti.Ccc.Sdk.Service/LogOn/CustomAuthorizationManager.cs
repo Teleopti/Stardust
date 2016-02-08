@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
                                 }
                             }
                     }
-                    var identity = new TeleoptiIdentity(userName, datasource, businessUnit, windowsIdentity);
+                    var identity = new TeleoptiIdentity(userName, datasource, businessUnit, windowsIdentity, null);
                     foreach (TeleoptiPrincipalAuthorizationPolicy authorizationPolicy in teleoptiPolicies)
                     {
                         authorizationPolicy.Identity = identity;
