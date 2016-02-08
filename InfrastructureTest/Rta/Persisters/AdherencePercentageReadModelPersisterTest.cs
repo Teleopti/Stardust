@@ -211,24 +211,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				State = states
 			}));
 		}
-
-		[Test]
-		public void ShouldThrowIfUpdatedByAnother()
-		{
-			var personId = Guid.NewGuid();
-			Target.Persist(new AdherencePercentageReadModel
-			{
-				PersonId = personId,
-				Date = "2016-02-04".Utc()
-			});
-
-			var model1 = Target.Get("2016-02-04".Date(), personId);
-			var model2 = Target.Get("2016-02-04".Date(), personId);
-			Target.Persist(model2);
-			var exception = Assert.Catch<Exception>(() => Target.Persist(model1));
-
-			exception.Should().Not.Be.Null();
-		}
+		
 	}
 }
 

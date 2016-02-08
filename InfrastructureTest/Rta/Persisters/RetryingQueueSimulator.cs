@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using Teleopti.Ccc.TestCommon;
 
@@ -35,11 +36,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				if (ex != null)
 					throw ex;
 			}
-			catch
+			catch(Exception ex)
 			{
 				RetryCount++;
 				if (retriesLeft == 0)
+				{
+					Debug.WriteLine(ex.ToString());
 					return;
+				}
 				retriesLeft--;
 				tryJob(retriesLeft, job);
 			}
