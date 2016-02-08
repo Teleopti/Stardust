@@ -89,15 +89,6 @@ namespace Manager.IntegrationTest.Console.Host.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:PORTNUMBER")]
-        public string NodeEndpointUriTemplate {
-            get {
-                return ((string)(this["NodeEndpointUriTemplate"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("9050")]
         public int NodeEndpointPortNumberStart {
             get {
@@ -138,6 +129,24 @@ namespace Manager.IntegrationTest.Console.Host.Properties {
         public string NodeConfigurationFileFullPath {
             get {
                 return ((string)(this["NodeConfigurationFileFullPath"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:PORTNUMBER/jobnode/")]
+        public string NodeEndpointUriTemplate {
+            get {
+                return ((string)(this["NodeEndpointUriTemplate"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:9100/managerIntegrationTestController/")]
+        public string ManagerIntegrationTestControllerBaseAddress {
+            get {
+                return ((string)(this["ManagerIntegrationTestControllerBaseAddress"]));
             }
         }
     }
