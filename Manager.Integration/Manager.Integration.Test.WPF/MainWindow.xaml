@@ -9,7 +9,8 @@
         mc:Ignorable="d"
         Title="Manager Integration Test Viewer"
         WindowStartupLocation="CenterScreen"
-        WindowState="Maximized">
+        WindowState="Maximized"
+        Icon="Icons/Viewer.png">
     <Window.Resources>
         <local:RowNumberConverter x:Key="RowNumberConverter" />
 
@@ -77,7 +78,7 @@
             <TabItem Header="Logging">
                 <Grid Background="#FFE5E5E5">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="25.002" />
+                        <RowDefinition Height="25" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <DataGrid x:Name="DataGrid"
@@ -101,6 +102,15 @@
                                         <Setter Property="Foreground"
                                                 Value="White"></Setter>
                                     </DataTrigger>
+
+                                    <DataTrigger Binding="{Binding Level}"
+                                                 Value="FATAL">
+                                        <Setter Property="Background"
+                                                Value="DarkRed"></Setter>
+                                        <Setter Property="Foreground"
+                                                Value="White"></Setter>
+                                    </DataTrigger>
+
                                 </Style.Triggers>
                             </Style>
                         </DataGrid.RowStyle>
@@ -129,7 +139,11 @@
                             <DataGridTextColumn Binding="{Binding Message}"
                                                 ClipboardContentBinding="{Binding Message}"
                                                 Header="Message" />
-                            
+
+                            <DataGridTextColumn Binding="{Binding Logger}"
+                                                ClipboardContentBinding="{Binding Logger}"
+                                                Header="Logger" />
+
                             <DataGridTextColumn Binding="{Binding Level}"
                                                 ClipboardContentBinding="{Binding Level}"
                                                 Header="Level" />
