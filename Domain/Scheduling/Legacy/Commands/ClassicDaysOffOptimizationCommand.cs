@@ -15,14 +15,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-	public interface IClassicDaysOffOptimizationCommand
-	{
-		void Execute(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences,
-					ISchedulerStateHolder schedulerStateHolder, IBackgroundWorkerWrapper backgroundWorker, 
-					IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
-	}
-
-	public class ClassicDaysOffOptimizationCommand : IClassicDaysOffOptimizationCommand
+	public class ClassicDaysOffOptimizationCommand
 	{
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;

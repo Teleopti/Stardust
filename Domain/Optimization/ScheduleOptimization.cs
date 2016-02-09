@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly WebSchedulingSetup _webSchedulingSetup;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly IClassicDaysOffOptimizationCommand _classicDaysOffOptimizationCommand;
+		private readonly ClassicDaysOffOptimizationCommand _classicDaysOffOptimizationCommand;
 		private readonly IScheduleDictionaryPersister _persister;
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 
 		public ScheduleOptimization(WebSchedulingSetup webSchedulingSetup, Func<ISchedulerStateHolder> schedulerStateHolder,
-			IClassicDaysOffOptimizationCommand classicDaysOffOptimizationCommand,
+			ClassicDaysOffOptimizationCommand classicDaysOffOptimizationCommand,
 			IScheduleDictionaryPersister persister, IPlanningPeriodRepository planningPeriodRepository,
 			WeeklyRestSolverExecuter weeklyRestSolverExecuter, OptimizationPreferencesFactory optimizationPreferencesFactory,
 			IMatrixListFactory matrixListFactory, IScheduleDayEquator scheduleDayEquator,

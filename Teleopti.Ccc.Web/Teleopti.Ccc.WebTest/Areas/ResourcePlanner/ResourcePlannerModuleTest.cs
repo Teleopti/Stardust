@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 
 			using (var container = _containerBuilder.Build())
 			{
-				container.Resolve<IClassicDaysOffOptimizationCommand>()
+				container.Resolve<ClassicDaysOffOptimizationCommand>()
 								 .Should().Not.Be.Null();
 			}
 		}
