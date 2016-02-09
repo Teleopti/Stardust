@@ -14,6 +14,10 @@ html, body{
 	    cursor:pointer; // extract in styleguide helpers ?
 }
 
+.full-padding {
+	padding: $full-padding; 
+}
+
 /*override bootstrap*/
 .col-md-4, .col-md-8, .col-md-12 { /* please bootstrap, don't make any assumption about padding' */
 	padding: 0;

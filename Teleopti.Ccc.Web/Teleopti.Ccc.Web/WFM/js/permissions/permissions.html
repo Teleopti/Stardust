@@ -12,66 +12,54 @@
 				<div class="sub-header">
 					<h2 translate>Roles</h2>
 				</div>
-				<div class="con-row">
-					<div class="con-flex">
-						<div class="role-nav">
-							<div class="con-row">
-								<div class="con-flex">
-									<form ng-submit="createRole(); reset()">
-										<label for="addRole" class="input-prepend">
-											<i class="mdi mdi-plus">
-												<md-tooltip>{{'AddRole'|translate}}</md-tooltip>
-											</i>
-											<input type="text" id="addRole" ng-model="roleName" placeholder="{{'CreateNewRole' | translate}}" class="role-input role" />
-										</label>
+				<div class="role-nav">
+					<form ng-submit="createRole(); reset()" class="full-padding">
+						<label for="addRole" class="input-prepend">
+							<i class="mdi mdi-plus">
+								<md-tooltip>{{'AddRole'|translate}}</md-tooltip>
+							</i>
+							<input type="text" id="addRole" ng-model="roleName" placeholder="{{'CreateNewRole' | translate}}" class="role-input role"/>
+						</label>
+					</form>
+					<form ng-submit="createRole(); reset()" class="full-padding">
+						<label for="filterRoles" class="input-prepend">
+							<i class="mdi mdi-filter-outline">
+								<md-tooltip>{{'FilterRoles'|translate}}</md-tooltip>
+							</i>
+							<input type="text" id="filterRoles" name="filterRole" ng-model="searchRoles.DescriptionText" placeholder="{{'RoleFilterThreeDots' | translate}}" />
+						</label>
+					</form>
+					<div id="searchRoleResults">
+						<ul class="wfm-list role-list-height">
+							<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role)" ng-dblclick="doubleClickEdit(editing, role)" selection-model>
+								<span ng-if="role.editing===false;" class="list-item-container" ng-class="{'text-truncation': role.editing===false}">{{role.DescriptionText}}</span>
+								<span ng-if="role.editing===true;" ng-blur="cancelEdit(role)">
+									<form ng-submit="submitRole(role, tempName)" name="editRoleForm" required>
+										<input type="text" ng-blur="cancelEdit(role)" ng-model="tempName" placeholder="{{'Name' | translate}}" />
 									</form>
-								</div>
-							</div>
-
-							<div class="con-row">
-								<div class="con-flex">
-									<label for="filterRoles" class="input-prepend">
-										<i class="mdi mdi-filter-outline">
-											<md-tooltip>{{'FilterRoles'|translate}}</md-tooltip>
+								</span>
+								<span ng-cloak ng-show="role.Id === selectedRole" ng-if="!role.editing" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
+								<div ng-show="!role.editing" class="wfm-leave-behind" ng-mousedown="showRole(role)" ng-class="{'hide-list-actions': role.editing===true, 'hide-list-actions-none': role.BuiltIn === true}">
+									<span>
+										<i ng-click="copyRole(role);" class="mdi mdi-content-copy">
+											<md-tooltip>
+												{{'Copy' | translate}}
+											</md-tooltip>
 										</i>
-										<input type="text" id="filterRoles" name="filterRole" ng-model="searchRoles.DescriptionText" placeholder="{{'RoleFilterThreeDots' | translate}}" />
-									</label>
+										<i ng-click="doubleClickEdit(editing, role)" class="mdi mdi-pencil">
+											<md-tooltip>
+												{{'Edit' | translate}}
+											</md-tooltip>
+										</i>
+										<i ng-click="removeRole(role)" class="mdi mdi-delete">
+											<md-tooltip>
+												{{'Delete' | translate}}
+											</md-tooltip>
+										</i>
+									</span>
 								</div>
-							</div>
-
-							<div id="searchRoleResults">
-								<ul class="wfm-list role-list-height">
-									<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role)" ng-dblclick="doubleClickEdit(editing, role)" selection-model>
-										<span ng-if="role.editing===false;" class="list-item-container" ng-class="{'text-truncation': role.editing===false}">{{role.DescriptionText}}</span>
-										<span ng-if="role.editing===true;" ng-blur="cancelEdit(role)">
-											<form ng-submit="submitRole(role, tempName)" name="editRoleForm" required>
-												<input type="text" ng-blur="cancelEdit(role)" ng-model="tempName" placeholder="{{'Name' | translate}}"  />
-											</form>
-										</span>
-										<span ng-cloak ng-show="role.Id === selectedRole" ng-if="!role.editing" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
-										<div ng-show="!role.editing" class="wfm-leave-behind" ng-mousedown="showRole(role)" ng-class="{'hide-list-actions': role.editing===true, 'hide-list-actions-none': role.BuiltIn === true}">
-											<span>
-												<i ng-click="copyRole(role);" class="mdi mdi-content-copy">
-													<md-tooltip>
-														{{'Copy' | translate}}
-													</md-tooltip>
-												</i>
-												<i ng-click="doubleClickEdit(editing, role)" class="mdi mdi-pencil">
-													<md-tooltip>
-														{{'Edit' | translate}}
-													</md-tooltip>
-												</i>
-												<i ng-click="removeRole(role)" class="mdi mdi-delete">
-													<md-tooltip>
-														{{'Delete' | translate}}
-													</md-tooltip>
-												</i>
-											</span>
-										</div>
-									</li>
-								</ul>
-							</div>
-						</div>
+							</li>
+						</ul>
 					</div>
 				</div>
 			</div>
