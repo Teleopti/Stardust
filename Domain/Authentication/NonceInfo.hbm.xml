@@ -10,6 +10,6 @@
 		
 		<property name="Context" />
 		<property name="Nonce" />
-		<property name="Expiration" />
+		<property name="Timestamp" />
 	</class>
 </hibernate-mapping>

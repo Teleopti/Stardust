@@ -105,15 +105,59 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
 		}
 
 		[Test]
-		public void ShouldStoreNonce()
+		public void ShouldStoreNonceIfNotExists()
 		{
 			var nonceInfoRepository = MockRepository.GenerateMock<INonceInfoRepository>();
 			var target = new NonStandardProviderApplicationStore(null, nonceInfoRepository);
 
-			var result = target.StoreNonce("context", "nonce", DateTime.UtcNow);
+			const string context = "context";
+			const string nonce = "nonce";
+			var timestampUtc = DateTime.UtcNow;
+			var result = target.StoreNonce(context, nonce, timestampUtc);
 
+			nonceInfoRepository.AssertWasCalled(x => x.Find(context, nonce, timestampUtc));
 
+			nonceInfoRepository.AssertWasCalled(x => x.Add(Arg<NonceInfo>.Matches(
+				c => c.Context == context && c.Nonce == nonce && c.Timestamp == timestampUtc)));
 
+			result.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldNotStoreNonceIfExists()
+		{
+			var nonceInfoRepository = MockRepository.GenerateMock<INonceInfoRepository>();
+			var target = new NonStandardProviderApplicationStore(null, nonceInfoRepository);
+
+			const string context = "context";
+			const string nonce = "nonce";
+			var timestampUtc = DateTime.UtcNow;
+			nonceInfoRepository.Stub(x => x.Find(context, nonce, timestampUtc)).Return(new NonceInfo());
+			var result = target.StoreNonce(context, nonce, timestampUtc);
+
+			nonceInfoRepository.AssertWasCalled(x => x.Find(context, nonce, timestampUtc));
+
+			nonceInfoRepository.AssertWasNotCalled(x => x.Add(Arg<NonceInfo>.Matches(
+				c => c.Context == context && c.Nonce == nonce && c.Timestamp == timestampUtc)));
+
+			result.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldNotStoreNonceIfExpired()
+		{
+			var nonceInfoRepository = MockRepository.GenerateMock<INonceInfoRepository>();
+			var target = new NonStandardProviderApplicationStore(null, nonceInfoRepository);
+
+			const string context = "context";
+			const string nonce = "nonce";
+			var timestampUtc = DateTime.UtcNow.Subtract(TimeSpan.FromHours(1));
+			var result = target.StoreNonce(context, nonce, timestampUtc);
+
+			nonceInfoRepository.AssertWasNotCalled(x => x.Find(context, nonce, timestampUtc));
+			nonceInfoRepository.AssertWasNotCalled(x => x.Add(Arg<NonceInfo>.Matches(
+				c => c.Context == context && c.Nonce == nonce && c.Timestamp == timestampUtc)));
+			result.Should().Be.False();
 		}
 	}
 

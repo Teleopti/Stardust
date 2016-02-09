@@ -250,6 +250,7 @@
     <Compile Include="Authentication\INonceInfoRepository.cs" />
     <Compile Include="Authentication\LoadUserUnauthorized.cs" />
     <Compile Include="Authentication\LoadUserUnauthorizedFake.cs" />
+    <Compile Include="Authentication\NonceInfoRepository.cs" />
     <Compile Include="Authentication\NonStandardProviderApplicationStore.cs" />
     <Compile Include="Config\ThrowingLoadPasswordPolicyService.cs" />
     <Compile Include="DistributedLock\DistributedLockAcquirer.cs" />

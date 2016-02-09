@@ -7,6 +7,6 @@ namespace Teleopti.Ccc.Domain.Authentication
 	{
 		public virtual string Context { get; set; }
 		public virtual string Nonce { get; set; }
-		public virtual DateTime Expiration { get; set; }
+		public virtual DateTime Timestamp { get; set; }
 	}
 }
