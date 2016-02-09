@@ -69,5 +69,49 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
 			result.Any(x=>x.Handle==handle).Should().Be.True();
 			result.Any(x=>x.Handle==handle2).Should().Be.True();
 		}
+
+
+		[Test]
+		public void ShouldAdd()
+		{
+			const string bucket = "bucket";
+			const string handle = "handle";
+			var cryptoKey = Guid.NewGuid().ToByteArray();
+			var cryptoKeyExpiration = DateTime.Today;
+			var target = new CryptoKeyInfoRepository(CurrUnitOfWork);
+			var cryptoKeyInfo = new CryptoKeyInfo
+			{
+				Bucket = bucket,
+				Handle = handle,
+				CryptoKey = cryptoKey,
+				CryptoKeyExpiration = cryptoKeyExpiration
+			};
+			target.Add(cryptoKeyInfo);
+
+			Assert.IsTrue(UnitOfWork.Contains(cryptoKeyInfo));
+		}
+
+		[Test]
+		public void ShouldRemove()
+		{
+			const string bucket = "bucket";
+			const string handle = "handle";
+			var cryptoKey = Guid.NewGuid().ToByteArray();
+			var cryptoKeyExpiration = DateTime.Today;
+			PersistAndRemoveFromUnitOfWork(new CryptoKeyInfo
+			{
+				Bucket = bucket,
+				Handle = handle,
+				CryptoKey = cryptoKey,
+				CryptoKeyExpiration = cryptoKeyExpiration
+			});
+			var target = new CryptoKeyInfoRepository(CurrUnitOfWork);
+			target.Find(bucket, handle).Should().Not.Be.Null();
+			target.Remove(bucket, handle);
+
+			Session.Flush();
+
+			target.Find(bucket, handle).Should().Be.Null();
+		}
 	}
 }

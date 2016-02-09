@@ -429,6 +429,7 @@
     <Compile Include="Auditing\Revision.cs" />
     <Compile Include="Auditing\ScheduleAuditingReportData.cs" />
     <Compile Include="Authentication\CryptoKeyInfo.cs" />
+    <Compile Include="Authentication\NonceInfo.cs" />
     <Compile Include="Backlog\FlatDistributionSetter.cs" />
     <Compile Include="Backlog\IncomingTask.cs" />
     <Compile Include="Backlog\IncomingTaskFactory.cs" />
@@ -2629,6 +2630,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Authentication\CryptoKeyInfo.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Authentication\NonceInfo.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="FeatureFlags\toggles.txt" />

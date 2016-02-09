@@ -32,5 +32,17 @@ namespace Teleopti.Ccc.Infrastructure.Authentication
 				.Add(Restrictions.Eq("Bucket", bucket));
 			return crit.List<CryptoKeyInfo>();
 		}
+
+		public void Add(CryptoKeyInfo cryptoKeyInfo)
+		{
+			_currentUnitOfWork.Current().Session().SaveOrUpdate(cryptoKeyInfo);
+		}
+
+		public void Remove(string bucket, string handle)
+		{
+			var cryptoKeyInfo = Find(bucket, handle);
+			if (cryptoKeyInfo != null)
+				_currentUnitOfWork.Current().Session().Delete(cryptoKeyInfo);
+		}
 	}
 }
