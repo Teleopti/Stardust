@@ -267,7 +267,7 @@ namespace Manager.Integration.Test
             List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(1);
 
             var timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count,
-                                                                 5);
+                                                                 3);
             List<Task> tasks = new List<Task>();
 
             foreach (var jobRequestModel in requests)
@@ -308,8 +308,50 @@ namespace Manager.Integration.Test
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.Dispose();
 
+            Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.Count > 0);
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
 
+            LogHelper.LogInfoWithLineNumber("Finished test.",
+                                            Logger);
+        }
+
+        [Test]
+        public void ShouldBeAbleToSendJobToManager()
+        {
+            LogHelper.LogInfoWithLineNumber("Starting test.",
+                                            Logger);
+
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
+            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(1);
+
+            var timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count);
+            List<Task> tasks = new List<Task>();
+
+            foreach (var jobRequestModel in requests)
+            {
+                tasks.Add(ManagerApiHelper.CreateManagerDoThisTask(jobRequestModel));
+            }
+
+            ManagerApiHelper.CheckJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(requests.Count,
+                                                                                         5000,
+                                                                                         cancellationTokenSource,
+                                                                                         StatusConstants.SuccessStatus,
+                                                                                         StatusConstants.DeletedStatus,
+                                                                                         StatusConstants.FailedStatus,
+                                                                                         StatusConstants.CanceledStatus);
+
+            ManagerApiHelper.CheckJobHistoryStatusTimer.Start();
+
+            Parallel.ForEach(tasks,
+                             task => { task.Start(); });
+
+            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+
+            ManagerApiHelper.CheckJobHistoryStatusTimer.Dispose();
+
+            Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.Count > 0);
+           
             LogHelper.LogInfoWithLineNumber("Finished test.",
                                             Logger);
         }
