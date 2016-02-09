@@ -170,8 +170,6 @@ namespace Manager.Integration.Test
 
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-            JobHelper.GiveNodesTimeToInitialize();
-
             List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(1);
 
             var timeout = JobHelper.GenerateTimeoutTimeInSeconds(requests.Count,
