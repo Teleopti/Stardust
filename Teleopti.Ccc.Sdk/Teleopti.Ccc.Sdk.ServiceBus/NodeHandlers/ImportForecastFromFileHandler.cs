@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 				using (var uow = state.Get().Application.CreateAndOpenUnitOfWork())
 				{
 					var person = _personRepository.Get(parameters.OwnerPersonId);
-					Thread.CurrentPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity(person.Name.FirstName, state.Get(), null, null),person) ;
+					Thread.CurrentPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity(person.Name.FirstName, state.Get(), null, null, parameters.LogOnDatasource),person) ;
 				}
 				var personId = parameters.OwnerPersonId;
 				// before this we need to set up a person as it is logged on
