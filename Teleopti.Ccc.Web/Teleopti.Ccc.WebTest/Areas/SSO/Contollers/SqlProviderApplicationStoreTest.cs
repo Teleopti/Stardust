@@ -7,11 +7,12 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Authentication;
 using Teleopti.Ccc.Infrastructure.Authentication;
+using Teleopti.Ccc.Web.Areas.SSO.Controllers;
 
-namespace Teleopti.Ccc.InfrastructureTest.Authentication
+namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 {
 	[TestFixture]
-	public class NonStandardProviderApplicationStoreTest
+	public class SqlProviderApplicationStoreTest
 	{
 		[Test]
 		public void ShouldGetKey()
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
 				CryptoKeyExpiration = DateTime.UtcNow
 			};
 			cryptoKeyInfoRepository.Stub(x => x.Find("bucket", "handle")).Return(cryptoKeyInfo);
-			var target = new NonStandardProviderApplicationStore(cryptoKeyInfoRepository, null);
+			var target = new SqlProviderApplicationStore(cryptoKeyInfoRepository, null);
 			var cryptoKey = target.GetKey("bucket", "handle");
 			cryptoKey.Should().Not.Be.Null();
 			cryptoKey.Key.Should().Have.SameSequenceAs(cryptoKeyInfo.CryptoKey);
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
 		public void ShouldReturnNullIfKeyNotExist()
 		{
 			var cryptoKeyInfoRepository = MockRepository.GenerateMock<ICryptoKeyInfoRepository>();
-			var target = new NonStandardProviderApplicationStore(cryptoKeyInfoRepository, null);
+			var target = new SqlProviderApplicationStore(cryptoKeyInfoRepository, null);
 			var cryptoKey = target.GetKey("bucket", "handle");
 			cryptoKey.Should().Be.Null();
 		}
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
             var cryptoKeyInfoRepository = MockRepository.GenerateMock<ICryptoKeyInfoRepository>();
 
             cryptoKeyInfoRepository.Stub(x => x.Find("bucket")).Return(new List<CryptoKeyInfo>());
-			var target = new NonStandardProviderApplicationStore(cryptoKeyInfoRepository, null);
+			var target = new SqlProviderApplicationStore(cryptoKeyInfoRepository, null);
             var cryptoKeys = target.GetKeys("bucket");
             cryptoKeys.Should().Not.Be.Null().And.Be.Empty();
 	    }
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
             var cryptoKeyInfoRepository = MockRepository.GenerateMock<ICryptoKeyInfoRepository>();
 
             cryptoKeyInfoRepository.Stub(x => x.Find(cryptoKeyInfo.Bucket)).Return(new List<CryptoKeyInfo> {cryptoKeyInfo});
-			var target = new NonStandardProviderApplicationStore(cryptoKeyInfoRepository, null);
+			var target = new SqlProviderApplicationStore(cryptoKeyInfoRepository, null);
             var cryptoKeys = target.GetKeys(cryptoKeyInfo.Bucket);
             cryptoKeys.Should().Not.Be.Null().And.Not.Be.Empty();
             cryptoKeys.First().Key.Should().Be.EqualTo(cryptoKeyInfo.Handle);
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
 		{
 			var cryptoKeyInfoRepository = MockRepository.GenerateMock<ICryptoKeyInfoRepository>();
 
-			var target = new NonStandardProviderApplicationStore(cryptoKeyInfoRepository, null);
+			var target = new SqlProviderApplicationStore(cryptoKeyInfoRepository, null);
 
 			var key = Guid.NewGuid().ToByteArray();
 			var cryptoKeyExpiration = DateTime.UtcNow;
@@ -95,7 +96,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
 		{
 			var cryptoKeyInfoRepository = MockRepository.GenerateMock<ICryptoKeyInfoRepository>();
 
-			var target = new NonStandardProviderApplicationStore(cryptoKeyInfoRepository, null);
+			var target = new SqlProviderApplicationStore(cryptoKeyInfoRepository, null);
 
 			const string bucket = "bucket";
 			const string handle = "handle";
@@ -108,7 +109,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
 		public void ShouldStoreNonceIfNotExists()
 		{
 			var nonceInfoRepository = MockRepository.GenerateMock<INonceInfoRepository>();
-			var target = new NonStandardProviderApplicationStore(null, nonceInfoRepository);
+			var target = new SqlProviderApplicationStore(null, nonceInfoRepository);
 
 			const string context = "context";
 			const string nonce = "nonce";
@@ -127,7 +128,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
 		public void ShouldNotStoreNonceIfExists()
 		{
 			var nonceInfoRepository = MockRepository.GenerateMock<INonceInfoRepository>();
-			var target = new NonStandardProviderApplicationStore(null, nonceInfoRepository);
+			var target = new SqlProviderApplicationStore(null, nonceInfoRepository);
 
 			const string context = "context";
 			const string nonce = "nonce";
@@ -147,7 +148,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
 		public void ShouldNotStoreNonceIfExpired()
 		{
 			var nonceInfoRepository = MockRepository.GenerateMock<INonceInfoRepository>();
-			var target = new NonStandardProviderApplicationStore(null, nonceInfoRepository);
+			var target = new SqlProviderApplicationStore(null, nonceInfoRepository);
 
 			const string context = "context";
 			const string nonce = "nonce";

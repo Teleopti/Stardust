@@ -323,6 +323,7 @@
     <Compile Include="Areas\SeatPlanner\Controllers\LocationHierarchyControllerTest.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\SeatMapControllerTest.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\TeamHierarchyControllerTest.cs" />
+    <Compile Include="Areas\SSO\Contollers\SqlProviderApplicationStoreTest.cs" />
     <Compile Include="Areas\Start\Controllers\ConfigControllerTest.cs" />
     <Compile Include="Areas\Start\Controllers\FakeAuthenticator.cs" />
     <Compile Include="Areas\Start\Core\Config\FakeLoadPasswordPolicyService.cs" />

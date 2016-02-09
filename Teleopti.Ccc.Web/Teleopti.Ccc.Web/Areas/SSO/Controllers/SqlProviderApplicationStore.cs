@@ -1,20 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DotNetOpenAuth.Messaging;
 using DotNetOpenAuth.Messaging.Bindings;
 using DotNetOpenAuth.OpenId;
 using Teleopti.Ccc.Domain.Authentication;
+using Teleopti.Ccc.Infrastructure.Authentication;
 
-namespace Teleopti.Ccc.Infrastructure.Authentication
+namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 {
-	public class NonStandardProviderApplicationStore : IOpenIdApplicationStore, ICryptoKeyStore, INonceStore
+	public class SqlProviderApplicationStore : IOpenIdApplicationStore, ICryptoKeyStore, INonceStore
 	{
 		private readonly ICryptoKeyInfoRepository _cryptoKeyInfoRepository;
 		private readonly INonceInfoRepository _nonceInfoRepository;
 		private readonly TimeSpan maximumMessageAge = TimeSpan.FromMinutes(5);
 
-		public NonStandardProviderApplicationStore(ICryptoKeyInfoRepository cryptoKeyInfoRepository, INonceInfoRepository nonceInfoRepository)
+		public SqlProviderApplicationStore(ICryptoKeyInfoRepository cryptoKeyInfoRepository, INonceInfoRepository nonceInfoRepository)
 		{
 			_cryptoKeyInfoRepository = cryptoKeyInfoRepository;
 			_nonceInfoRepository = nonceInfoRepository;

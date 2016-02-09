@@ -655,6 +655,7 @@
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\SeatBookingViewModel.cs" />
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\SeatPlanViewModel.cs" />
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\SeatViewModel.cs" />
+    <Compile Include="Areas\SSO\Controllers\SqlProviderApplicationStore.cs" />
     <Compile Include="Areas\SSO\Core\ISsoAuthenticator.cs" />
     <Compile Include="Areas\SSO\Core\SsoAuthenticator.cs" />
     <Compile Include="Areas\Start\Controllers\ApiLogonInputModel.cs" />
