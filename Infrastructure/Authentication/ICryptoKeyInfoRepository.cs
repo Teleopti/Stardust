@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Authentication;
 
 namespace Teleopti.Ccc.Infrastructure.Authentication
 {

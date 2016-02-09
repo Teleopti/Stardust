@@ -1,23 +1,21 @@
 using System;
 using NHibernate.Criterion;
-using Teleopti.Ccc.Domain.Authentication;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
 namespace Teleopti.Ccc.Infrastructure.Authentication
 {
 	public class NonceInfoRepository : INonceInfoRepository
 	{
-		private readonly ICurrentUnitOfWork _currentUnitOfWork;
+		private readonly ICurrentTenantSession _currentTenantSession;
 
-		public NonceInfoRepository(ICurrentUnitOfWork currentUnitOfWork)
+		public NonceInfoRepository(ICurrentTenantSession currentTenantSession)
 		{
-			_currentUnitOfWork = currentUnitOfWork;
+			_currentTenantSession = currentTenantSession;
 		}
 
 		public NonceInfo Find(string context, string nonce, DateTime timestamp)
 		{
-			var session = _currentUnitOfWork.Current().Session();
+			var session = _currentTenantSession.CurrentSession();
 			var crit = session.CreateCriteria(typeof(NonceInfo))
 				.Add(Restrictions.Eq("Context", context))
 				.Add(Restrictions.Eq("Nonce", nonce))
@@ -27,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.Authentication
 
 		public void Add(NonceInfo nonceInfo)
 		{
-			_currentUnitOfWork.Current().Session().SaveOrUpdate(nonceInfo);
+			_currentTenantSession.CurrentSession().SaveOrUpdate(nonceInfo);
 		}
 	}
 }

@@ -36,7 +36,9 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 			{
 				"Teleopti.Ccc.Infrastructure.MultiTenancy.Server.PersonInfo.dbconf.xml",
 				"Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Tenant.dbconf.xml",
-				"Teleopti.Ccc.Infrastructure.MultiTenancy.Admin.TenantAdminUser.dbconf.xml"
+				"Teleopti.Ccc.Infrastructure.MultiTenancy.Admin.TenantAdminUser.dbconf.xml",
+				"Teleopti.Ccc.Infrastructure.Authentication.CryptoKeyInfo.dbconf.xml",
+				"Teleopti.Ccc.Infrastructure.Authentication.NonceInfo.dbconf.xml"
 			}, typeof (TenantUnitOfWorkManager).Assembly);
 
 			return new TenantUnitOfWorkManager(cfg.BuildSessionFactory());

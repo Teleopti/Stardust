@@ -5,7 +5,6 @@ using DotNetOpenAuth.Messaging.Bindings;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Authentication;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Web.Areas.SSO.Controllers;
 

@@ -12,6 +12,7 @@ using DotNetOpenAuth.OpenId.Provider.Behaviors;
 using Microsoft.IdentityModel.Claims;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.SSO.Core;
@@ -47,7 +48,9 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		}
 
 		[ValidateInput(false)]
-		public ActionResult Provider()
+		[TenantUnitOfWork]
+		[NoTenantAuthentication]
+		public virtual ActionResult Provider()
 		{
 			logger.Debug("Start of the OpenIdController.Provider()");
 			if (isHeadRequest())
@@ -96,7 +99,9 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult ProcessAuthRequest(string pendingRequest, bool isPersistent)
+		[TenantUnitOfWork]
+		[NoTenantAuthentication]
+		public virtual ActionResult ProcessAuthRequest(string pendingRequest, bool isPersistent)
 		{
 			var request = getPendingRequest(pendingRequest);
 			if (request == null)

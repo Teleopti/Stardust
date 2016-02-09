@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using DotNetOpenAuth.Messaging.Bindings;
 using DotNetOpenAuth.OpenId;
-using Teleopti.Ccc.Domain.Authentication;
 using Teleopti.Ccc.Infrastructure.Authentication;
 
 namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
@@ -23,13 +22,14 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		public CryptoKey GetKey(string bucket, string handle)
 		{
 			var cryptoKeyInfo = _cryptoKeyInfoRepository.Find(bucket, handle);
-			return cryptoKeyInfo == null ? null : new CryptoKey(cryptoKeyInfo.CryptoKey, cryptoKeyInfo.CryptoKeyExpiration);
+			return cryptoKeyInfo == null ? null : new CryptoKey(cryptoKeyInfo.CryptoKey, DateTime.SpecifyKind(cryptoKeyInfo.CryptoKeyExpiration, DateTimeKind.Utc));
 		}
 
 		public IEnumerable<KeyValuePair<string, CryptoKey>> GetKeys(string bucket)
 		{
+			
 			return _cryptoKeyInfoRepository.Find(bucket)
-				.Select(x => new KeyValuePair<string, CryptoKey>(x.Handle, new CryptoKey(x.CryptoKey, x.CryptoKeyExpiration)));
+				.Select(x => new KeyValuePair<string, CryptoKey>(x.Handle, new CryptoKey(x.CryptoKey, DateTime.SpecifyKind(x.CryptoKeyExpiration, DateTimeKind.Utc))));
 		}
 
 		public void StoreKey(string bucket, string handle, CryptoKey key)

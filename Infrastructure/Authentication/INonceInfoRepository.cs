@@ -1,6 +1,5 @@
 using System;
 using NHibernate;
-using Teleopti.Ccc.Domain.Authentication;
 
 namespace Teleopti.Ccc.Infrastructure.Authentication
 {

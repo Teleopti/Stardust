@@ -1,24 +1,22 @@
 using System.Collections.Generic;
 using NHibernate;
 using NHibernate.Criterion;
-using Teleopti.Ccc.Domain.Authentication;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
 namespace Teleopti.Ccc.Infrastructure.Authentication
 {
 	public class CryptoKeyInfoRepository : ICryptoKeyInfoRepository
 	{
-		private readonly ICurrentUnitOfWork _currentUnitOfWork;
+		private readonly ICurrentTenantSession _currentTenantSession;
 
-		public CryptoKeyInfoRepository(ICurrentUnitOfWork currentUnitOfWork)
+		public CryptoKeyInfoRepository(ICurrentTenantSession currentTenantSession)
 		{
-			_currentUnitOfWork = currentUnitOfWork;
+			_currentTenantSession = currentTenantSession;
 		}
 
 		public CryptoKeyInfo Find(string bucket, string handle)
 		{
-			var session = _currentUnitOfWork.Current().Session();
+			var session = _currentTenantSession.CurrentSession();
 			ICriteria crit = session.CreateCriteria(typeof(CryptoKeyInfo))
 				.Add(Restrictions.Eq("Bucket", bucket))
 				.Add(Restrictions.Eq("Handle", handle));
@@ -27,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.Authentication
 
 		public IEnumerable<CryptoKeyInfo> Find(string bucket)
 		{
-			var session = _currentUnitOfWork.Current().Session();
+			var session = _currentTenantSession.CurrentSession();
 			ICriteria crit = session.CreateCriteria(typeof (CryptoKeyInfo))
 				.Add(Restrictions.Eq("Bucket", bucket));
 			return crit.List<CryptoKeyInfo>();
@@ -35,14 +33,14 @@ namespace Teleopti.Ccc.Infrastructure.Authentication
 
 		public void Add(CryptoKeyInfo cryptoKeyInfo)
 		{
-			_currentUnitOfWork.Current().Session().SaveOrUpdate(cryptoKeyInfo);
+			_currentTenantSession.CurrentSession().SaveOrUpdate(cryptoKeyInfo);
 		}
 
 		public void Remove(string bucket, string handle)
 		{
 			var cryptoKeyInfo = Find(bucket, handle);
 			if (cryptoKeyInfo != null)
-				_currentUnitOfWork.Current().Session().Delete(cryptoKeyInfo);
+				_currentTenantSession.CurrentSession().Delete(cryptoKeyInfo);
 		}
 	}
 }

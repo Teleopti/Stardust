@@ -1,7 +1,7 @@
 using System;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 
-namespace Teleopti.Ccc.Domain.Authentication
+namespace Teleopti.Ccc.Infrastructure.Authentication
 {
 	public class CryptoKeyInfo: Entity
 	{
