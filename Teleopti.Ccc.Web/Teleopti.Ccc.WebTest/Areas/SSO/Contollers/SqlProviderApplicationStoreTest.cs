@@ -6,7 +6,9 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Authentication;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.SSO.Controllers;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 {
@@ -17,13 +19,14 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		public void ShouldGetKey()
 		{
 			var cryptoKeyInfoRepository = MockRepository.GenerateMock<ICryptoKeyInfoRepository>();
+			var now = new Now();
 			var cryptoKeyInfo = new CryptoKeyInfo
 			{
 				CryptoKey = Guid.NewGuid().ToByteArray(),
-				CryptoKeyExpiration = DateTime.UtcNow
+				CryptoKeyExpiration = now.UtcDateTime()
 			};
 			cryptoKeyInfoRepository.Stub(x => x.Find("bucket", "handle")).Return(cryptoKeyInfo);
-			var target = new SqlProviderApplicationStore(cryptoKeyInfoRepository, null);
+			var target = new SqlProviderApplicationStore(cryptoKeyInfoRepository, null, now);
 			var cryptoKey = target.GetKey("bucket", "handle");
 			cryptoKey.Should().Not.Be.Null();
 			cryptoKey.Key.Should().Have.SameSequenceAs(cryptoKeyInfo.CryptoKey);
@@ -34,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		public void ShouldReturnNullIfKeyNotExist()
 		{
 			var cryptoKeyInfoRepository = MockRepository.GenerateMock<ICryptoKeyInfoRepository>();
-			var target = new SqlProviderApplicationStore(cryptoKeyInfoRepository, null);
+			var target = new SqlProviderApplicationStore(cryptoKeyInfoRepository, null, new Now());
 			var cryptoKey = target.GetKey("bucket", "handle");
 			cryptoKey.Should().Be.Null();
 		}
@@ -45,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
             var cryptoKeyInfoRepository = MockRepository.GenerateMock<ICryptoKeyInfoRepository>();
 
             cryptoKeyInfoRepository.Stub(x => x.Find("bucket")).Return(new List<CryptoKeyInfo>());
-			var target = new SqlProviderApplicationStore(cryptoKeyInfoRepository, null);
+			var target = new SqlProviderApplicationStore(cryptoKeyInfoRepository, null, new Now());
             var cryptoKeys = target.GetKeys("bucket");
             cryptoKeys.Should().Not.Be.Null().And.Be.Empty();
 	    }
@@ -53,10 +56,11 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
         [Test]
         public void ShouldReturnKeysForBucket()
         {
-            var cryptoKeyInfo = new CryptoKeyInfo
+			var now = new Now();
+			var cryptoKeyInfo = new CryptoKeyInfo
             {
                 CryptoKey = Guid.NewGuid().ToByteArray(),
-                CryptoKeyExpiration = DateTime.UtcNow,
+				CryptoKeyExpiration = now.UtcDateTime(),
                 Bucket = "bucket",
                 Handle = "handle"
             };
@@ -64,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
             var cryptoKeyInfoRepository = MockRepository.GenerateMock<ICryptoKeyInfoRepository>();
 
             cryptoKeyInfoRepository.Stub(x => x.Find(cryptoKeyInfo.Bucket)).Return(new List<CryptoKeyInfo> {cryptoKeyInfo});
-			var target = new SqlProviderApplicationStore(cryptoKeyInfoRepository, null);
+	        var target = new SqlProviderApplicationStore(cryptoKeyInfoRepository, null, now);
             var cryptoKeys = target.GetKeys(cryptoKeyInfo.Bucket);
             cryptoKeys.Should().Not.Be.Null().And.Not.Be.Empty();
             cryptoKeys.First().Key.Should().Be.EqualTo(cryptoKeyInfo.Handle);
@@ -77,10 +81,11 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		{
 			var cryptoKeyInfoRepository = MockRepository.GenerateMock<ICryptoKeyInfoRepository>();
 
-			var target = new SqlProviderApplicationStore(cryptoKeyInfoRepository, null);
+			var now = new Now();
+			var target = new SqlProviderApplicationStore(cryptoKeyInfoRepository, null, now);
 
 			var key = Guid.NewGuid().ToByteArray();
-			var cryptoKeyExpiration = DateTime.UtcNow;
+			var cryptoKeyExpiration = now.UtcDateTime();
 			const string bucket = "bucket";
 			const string handle = "handle";
 			target.StoreKey(bucket, handle, new CryptoKey(key, cryptoKeyExpiration));
@@ -95,7 +100,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		{
 			var cryptoKeyInfoRepository = MockRepository.GenerateMock<ICryptoKeyInfoRepository>();
 
-			var target = new SqlProviderApplicationStore(cryptoKeyInfoRepository, null);
+			var target = new SqlProviderApplicationStore(cryptoKeyInfoRepository, null, new Now());
 
 			const string bucket = "bucket";
 			const string handle = "handle";
@@ -108,14 +113,17 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		public void ShouldStoreNonceIfNotExists()
 		{
 			var nonceInfoRepository = MockRepository.GenerateMock<INonceInfoRepository>();
-			var target = new SqlProviderApplicationStore(null, nonceInfoRepository);
+			var now = new Now();
+			var testableNow = new TestableNow(DateTime.UtcNow.AddSeconds(15));
+			var target = new SqlProviderApplicationStore(null, nonceInfoRepository, testableNow);
 
 			const string context = "context";
 			const string nonce = "nonce";
-			var timestampUtc = DateTime.UtcNow;
+			var timestampUtc = now.UtcDateTime();
 			var result = target.StoreNonce(context, nonce, timestampUtc);
 
 			nonceInfoRepository.AssertWasCalled(x => x.Find(context, nonce, timestampUtc));
+			nonceInfoRepository.AssertWasCalled(x => x.ClearExpired(testableNow.UtcDateTime().Subtract(TimeSpan.FromMinutes(5))));
 
 			nonceInfoRepository.AssertWasCalled(x => x.Add(Arg<NonceInfo>.Matches(
 				c => c.Context == context && c.Nonce == nonce && c.Timestamp == timestampUtc)));
@@ -127,11 +135,12 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		public void ShouldNotStoreNonceIfExists()
 		{
 			var nonceInfoRepository = MockRepository.GenerateMock<INonceInfoRepository>();
-			var target = new SqlProviderApplicationStore(null, nonceInfoRepository);
+			var now = new Now();
+			var target = new SqlProviderApplicationStore(null, nonceInfoRepository, now);
 
 			const string context = "context";
 			const string nonce = "nonce";
-			var timestampUtc = DateTime.UtcNow;
+			var timestampUtc = now.UtcDateTime();
 			nonceInfoRepository.Stub(x => x.Find(context, nonce, timestampUtc)).Return(new NonceInfo());
 			var result = target.StoreNonce(context, nonce, timestampUtc);
 
@@ -147,11 +156,12 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		public void ShouldNotStoreNonceIfExpired()
 		{
 			var nonceInfoRepository = MockRepository.GenerateMock<INonceInfoRepository>();
-			var target = new SqlProviderApplicationStore(null, nonceInfoRepository);
+			var now = new Now();
+			var target = new SqlProviderApplicationStore(null, nonceInfoRepository, now);
 
 			const string context = "context";
 			const string nonce = "nonce";
-			var timestampUtc = DateTime.UtcNow.Subtract(TimeSpan.FromHours(1));
+			var timestampUtc = now.UtcDateTime().Subtract(TimeSpan.FromHours(1));
 			var result = target.StoreNonce(context, nonce, timestampUtc);
 
 			nonceInfoRepository.AssertWasNotCalled(x => x.Find(context, nonce, timestampUtc));
@@ -160,6 +170,4 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			result.Should().Be.False();
 		}
 	}
-
-	
 }

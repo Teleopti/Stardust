@@ -27,5 +27,14 @@ namespace Teleopti.Ccc.Infrastructure.Authentication
 		{
 			_currentTenantSession.CurrentSession().SaveOrUpdate(nonceInfo);
 		}
+
+		public void ClearExpired(DateTime expiredTimestamp)
+		{
+			var session = _currentTenantSession.CurrentSession();
+			var expired = session.CreateCriteria(typeof (NonceInfo))
+				.Add(Restrictions.Lt("Timestamp", expiredTimestamp)).List();
+			foreach (var exp in expired)
+				session.Delete(exp);
+		}
 	}
 }

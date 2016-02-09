@@ -1,6 +1,7 @@
 using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
@@ -46,6 +47,38 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
 
 				var result = Target.Find(context, nonce, expiration);
 				result.Should().Be.Null();
+			}
+		}
+
+		[Test]
+		public void ShouldClearExpiredNonces()
+		{
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				const string context = "context";
+				const string nonce = "nonce";
+				var timestamp = DateTime.Today;
+
+				var expired = timestamp.Subtract(TimeSpan.FromMinutes(3));
+				Target.Add(new NonceInfo
+				{
+					Context = context,
+					Nonce = nonce,
+					Timestamp = expired
+				});
+
+				var nonExpired = timestamp.Add(TimeSpan.FromMinutes(3));
+				Target.Add(new NonceInfo
+				{
+					Context = context,
+					Nonce = nonce,
+					Timestamp = nonExpired
+				});
+
+				Target.ClearExpired(timestamp);
+
+				Target.Find(context, nonce, expired).Should().Be.Null();
+				Target.Find(context, nonce, nonExpired).Should().Not.Be.Null();
 			}
 		}
 	}

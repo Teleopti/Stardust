@@ -4,6 +4,7 @@ using System.Linq;
 using DotNetOpenAuth.Messaging.Bindings;
 using DotNetOpenAuth.OpenId;
 using Teleopti.Ccc.Infrastructure.Authentication;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 {
@@ -11,12 +12,14 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 	{
 		private readonly ICryptoKeyInfoRepository _cryptoKeyInfoRepository;
 		private readonly INonceInfoRepository _nonceInfoRepository;
+		private readonly INow _now;
 		private readonly TimeSpan maximumMessageAge = TimeSpan.FromMinutes(5);
 
-		public SqlProviderApplicationStore(ICryptoKeyInfoRepository cryptoKeyInfoRepository, INonceInfoRepository nonceInfoRepository)
+		public SqlProviderApplicationStore(ICryptoKeyInfoRepository cryptoKeyInfoRepository, INonceInfoRepository nonceInfoRepository, INow now)
 		{
 			_cryptoKeyInfoRepository = cryptoKeyInfoRepository;
 			_nonceInfoRepository = nonceInfoRepository;
+			_now = now;
 		}
 
 		public CryptoKey GetKey(string bucket, string handle)
@@ -50,7 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 
 		public bool StoreNonce(string context, string nonce, DateTime timestamp)
 		{
-			if (ToUniversalTimeSafe(timestamp) + maximumMessageAge < DateTime.UtcNow)
+			if (ToUniversalTimeSafe(timestamp) + maximumMessageAge < _now.UtcDateTime())
 				return false;
 			var nonceInfo = _nonceInfoRepository.Find(context, nonce, timestamp);
 			if (nonceInfo == null)
@@ -61,6 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 					Nonce = nonce,
 					Timestamp = timestamp
 				});
+				_nonceInfoRepository.ClearExpired(_now.UtcDateTime().Subtract(maximumMessageAge));
 				return true;
 			}
 			return false;

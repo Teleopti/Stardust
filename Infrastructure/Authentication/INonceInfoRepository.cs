@@ -1,5 +1,4 @@
 using System;
-using NHibernate;
 
 namespace Teleopti.Ccc.Infrastructure.Authentication
 {
@@ -7,5 +6,6 @@ namespace Teleopti.Ccc.Infrastructure.Authentication
 	{
 		NonceInfo Find(string context, string nonce, DateTime timestamp);
 		void Add(NonceInfo nonceInfo);
+		void ClearExpired(DateTime expiredTimestamp);
 	}
 }
