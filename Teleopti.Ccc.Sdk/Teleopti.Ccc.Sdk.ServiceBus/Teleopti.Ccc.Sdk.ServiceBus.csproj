@@ -235,7 +235,6 @@
     <Compile Include="AgentBadge\RunningEtlJobChecker.cs" />
     <Compile Include="AutofacServiceBus.cs" />
     <Compile Include="InternalServiceBusSender.cs" />
-    <Compile Include="NodeHandlerSender.cs" />
     <Compile Include="NodeHandlers\ImportForecastFromFileHandler.cs" />
     <Compile Include="NodeHandlers\NodeHandlersModule.cs" />
     <Compile Include="PayrollBusBootStrapper.cs" />

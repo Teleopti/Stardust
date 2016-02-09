@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<ImportForecastFromFileHandler>().As<IHandle<ImportForecastsFileToSkill>>();
-			builder.RegisterType<NodeHandlerSender>().As<IServiceBusSender>();
 		}
 	}
 }
