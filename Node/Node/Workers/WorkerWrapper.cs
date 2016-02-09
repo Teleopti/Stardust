@@ -72,8 +72,6 @@ namespace Stardust.Node.Workers
         private JobToDo CurrentMessageToProcess { get; set; }
         private TrySendNodeStartUpNotificationToManagerTimer NodeStartUpNotificationToManagerTimer { get; set; }
 
-        private bool SendNodeStartUpNotificationSucceded { get; set; }
-
 
         public string WhoamI { get; private set; }
 
@@ -252,7 +250,6 @@ namespace Stardust.Node.Workers
         private void NodeStartUpNotificationToManagerTimer_TrySendNodeStartUpNotificationSucceded(object sender,
                                                                                                   EventArgs e)
         {
-            SendNodeStartUpNotificationSucceded = true;
             NodeStartUpNotificationToManagerTimer.Stop();
 
             PingToManagerTimer.Start();

@@ -2,8 +2,6 @@
 using System.Net.Http;
 using System.Threading;
 using System.Web.Http.Results;
-using Autofac;
-using Autofac.Core;
 using Newtonsoft.Json;
 using NodeTest.Attributes;
 using NodeTest.Fakes;
@@ -13,7 +11,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Stardust.Node.API;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Workers;
 
 namespace NodeTest
 {

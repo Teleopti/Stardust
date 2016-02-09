@@ -56,7 +56,7 @@ namespace NodeConsoleHost
             return false;
         }
 
-        private static void Main(string[] args)
+        private static void Main()
         {
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
 
@@ -65,7 +65,7 @@ namespace NodeConsoleHost
             SetConsoleCtrlHandler(ConsoleCtrlCheck,
                                   true);
 
-            System.Console.CancelKeyPress += ConsoleOnCancelKeyPress;
+            Console.CancelKeyPress += ConsoleOnCancelKeyPress;
 
             WhoAmI = "[NODE CONSOLE HOST, " + Environment.MachineName.ToUpper() + "]";
 

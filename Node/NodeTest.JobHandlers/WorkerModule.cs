@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Autofac;
+﻿using Autofac;
 using Stardust.Node.Interfaces;
 
 namespace NodeTest.JobHandlers

@@ -17,7 +17,7 @@ namespace Stardust.Node.Helpers
 
         public static void LogErrorWithLineNumber(ILog logger,
                                                   string info,
-                                                  System.Exception exception = null,
+                                                  Exception exception = null,
                                                   [CallerFilePath] string file = "",
                                                   [CallerMemberName] string member = "",
                                                   [CallerLineNumber] int line = 0)
@@ -37,7 +37,7 @@ namespace Stardust.Node.Helpers
 
         public static void LogFatalWithLineNumber(ILog logger,
                                                   string info,
-                                                  System.Exception exception = null,
+                                                  Exception exception = null,
                                                   [CallerFilePath] string file = "",
                                                   [CallerMemberName] string member = "",
                                                   [CallerLineNumber] int line = 0)

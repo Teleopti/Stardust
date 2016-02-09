@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using log4net;
 using Stardust.Node.Interfaces;
 
 namespace Stardust.Node.API

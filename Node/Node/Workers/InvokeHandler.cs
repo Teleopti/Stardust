@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Reflection;
 using System.Threading;
 using Autofac;
 using log4net;
-using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 
 namespace Stardust.Node.Workers

@@ -24,14 +24,14 @@ namespace NodeTest
         }
 
         [Test]
-        [ExpectedException(typeof (System.ArgumentNullException))]
+        [ExpectedException(typeof (ArgumentNullException))]
         public void ShouldThrowExceptionWhenConstructorArgumentIsStringEmpty()
         {
             var nodeUriBuilderToTest = new NodeUriBuilderHelper(string.Empty);
         }
 
         [Test]
-        [ExpectedException(typeof (System.UriFormatException))]
+        [ExpectedException(typeof (UriFormatException))]
         public void ShouldThrowExceptionWhenConstructorArgumentStringIsIvalidUri()
         {
             var nodeUriBuilderToTest = new NodeUriBuilderHelper("invalid uri");

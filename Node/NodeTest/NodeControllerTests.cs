@@ -3,7 +3,6 @@ using System.Configuration;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
-using System.Threading;
 using System.Web.Http.Results;
 using log4net;
 using log4net.Config;
@@ -223,11 +222,11 @@ namespace NodeTest
                                                "i lingonskogen");
             var ser = JsonConvert.SerializeObject(parameters);
 
-            var JobToDo2 = new JobToDo {Id = Guid.NewGuid(), Name = "Another name", Serialized = ser};
+            var jobToDo2 = new JobToDo {Id = Guid.NewGuid(), Name = "Another name", Serialized = ser};
 
             _nodeController.StartJob(_jobToDo);
 
-            var actionResult = _nodeController.StartJob(JobToDo2);
+            var actionResult = _nodeController.StartJob(jobToDo2);
 
             _sendJobDoneTimer.Wait.Wait(TimeSpan.FromMinutes(1));
             Assert.IsInstanceOf(typeof (ConflictResult),
