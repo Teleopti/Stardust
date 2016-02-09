@@ -16,6 +16,7 @@ namespace Teleopti.MessagingTest
 		private readonly IMessageBrokerServer _server;
 		private Exception _exception;
 		public readonly IList<RequestInfo> Requests = new List<RequestInfo>();
+		private bool _downFriendly;
 
 		public MessageBrokerServerBridge(IMessageBrokerServer server)
 		{
@@ -26,6 +27,7 @@ namespace Teleopti.MessagingTest
 		{
 			_server.NotifyClients(message);
 		}
+
 		public void Post(HttpClient client, string uri, HttpContent httpContent)
 		{
 			Requests.Add(new RequestInfo { Client = client, Uri = uri, HttpContent = httpContent });
@@ -42,6 +44,8 @@ namespace Teleopti.MessagingTest
 		{
 			Requests.Add(new RequestInfo { Client = client, Uri = uri });
 
+			if (_downFriendly)
+				return "<html><body>A 'friendly' response</body></html>";
 			if (_exception != null)
 				throw _exception;
 
@@ -53,6 +57,11 @@ namespace Teleopti.MessagingTest
 			}
 
 			return null;
+		}
+
+		public void DownFriendly()
+		{
+			_downFriendly = true;
 		}
 
 		public void Down()

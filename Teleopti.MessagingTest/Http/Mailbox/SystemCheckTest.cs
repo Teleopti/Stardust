@@ -57,6 +57,18 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 		}
 
 		[Test]
+		public void ShouldNotBeOkWhenPollingWhenServerIsDownWithFriendlyResponse()
+		{
+			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
+			Time.Passes("60".Seconds());
+
+			Server.DownFriendly();
+			Time.Passes("60".Seconds());
+
+			SystemCheck.IsOk().Should().Be.False();
+		}
+
+		[Test]
 		public void ShouldBeOk()
 		{
 			Target.RegisterSubscription(string.Empty, Guid.Empty,(sender, args)=>{}, typeof(ITestType), false, true);
@@ -104,5 +116,6 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 			Time.Passes("30".Seconds());
 			SystemCheck.IsOk().Should().Be.True();
 		}
+		
 	}
 }

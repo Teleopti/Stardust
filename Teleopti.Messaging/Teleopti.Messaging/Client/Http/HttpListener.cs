@@ -81,7 +81,11 @@ namespace Teleopti.Messaging.Client.Http
 				if (!success)
 					break;
 
-				var messages = _jsonDeserializer.DeserializeObject<Message[]>(content);
+	            Message[] messages;
+				success = tryParse<Message[]>(content, out messages);
+				if (!success)
+					break;
+
 				messages.ForEach(m => _eventHandlers.CallHandlers(m));
 			}
 
@@ -90,16 +94,43 @@ namespace Teleopti.Messaging.Client.Http
 			_isPolling = false;
 		}
 
+		private bool tryParse<T>(string content, out T result)
+		{
+			try
+			{
+				result = _jsonDeserializer.DeserializeObject<T>(content);
+				return true;
+			}
+			catch (Exception)
+			{
+				result = default(T);
+				return false;
+			}
+		}
+
 		private bool tryPop(Subscription subscription, Action<string> content)
 		{
-			return tryServerRequest(() =>
+			try
 			{
 				var c = _client.GetOrThrow("MessageBroker/PopMessages/?route=" + subscription.Route() + "&id=" + subscription.MailboxId);
 				if (content != null)
 					content(c);
-			});
+				return true;
+			}
+			catch (HttpRequestException)
+			{
+				return false;
+			}
+			catch (AggregateException e)
+			{
+				if (e.InnerException.GetType() == typeof(HttpRequestException))
+					return false;
+				if (e.InnerException.GetType() == typeof(TaskCanceledException))
+					return false;
+				throw;
+			}
 		}
-		
+
 		public bool IsAlive()
 		{
 			return _isAlive;
@@ -116,26 +147,6 @@ namespace Teleopti.Messaging.Client.Http
 				_timer.Dispose();
 		}
 
-		private bool tryServerRequest(Action action)
-		{
-			try
-			{
-				action();
-				return true;
-			}
-			catch (HttpRequestException)
-			{
-				return false;
-			}
-			catch (AggregateException e)
-			{
-				if (e.InnerException.GetType() == typeof(HttpRequestException))
-					return false;
-				if (e.InnerException.GetType() == typeof(TaskCanceledException))
-					return false;
-				throw;
-			}
-		}
 
 	}
 }
