@@ -54,9 +54,9 @@ namespace Manager.Integration.Test
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
-            //var task = AppDomainHelper.CreateAppDomainForManagerIntegrationConsoleHost("Debug",
-            //                                                                           1);
-            //task.Start();
+            var task = AppDomainHelper.CreateAppDomainForManagerIntegrationConsoleHost("Debug",
+                                                                                       1);
+            task.Start();
 
             JobHelper.GiveNodesTimeToInitialize();
         }
