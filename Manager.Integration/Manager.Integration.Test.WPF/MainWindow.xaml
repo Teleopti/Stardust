@@ -30,23 +30,22 @@
     </Window.DataContext>
     <Grid Margin="10,5,10,10">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="22*" />
             <ColumnDefinition />
+            <ColumnDefinition Width="120" />
             <ColumnDefinition Width="20" />
-            <ColumnDefinition Width="160" />
+            <ColumnDefinition Width="120" />
             <ColumnDefinition Width="20" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <TextBlock x:Name="TextBlock"
-                   TextWrapping="Wrap"
-                   VerticalAlignment="Center"
-                   Text="{Binding Status}"
-                   Margin="0,7.02" />
         <TabControl x:Name="TabControl"
                     Grid.Row="1"
-                    Grid.ColumnSpan="4">
+                    Grid.ColumnSpan="6"
+                    Grid.Column="0"
+                    d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin">
             <TabControl.Effect>
                 <DropShadowEffect Color="#FFECDDDD" />
             </TabControl.Effect>
@@ -296,10 +295,25 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button x:Name="button"
+        <Button x:Name="Button"
                 Content="Clear Logging Table"
-                Grid.Column="2"
-                Command="{Binding ClearDatabaseCommand}" />
+                Grid.Column="4"
+                Command="{Binding ClearDatabaseCommand}"
+                d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin" />
+        <ToggleButton x:Name="ToggleButton"
+                      Content="{Binding ToggleRefreshStatus}"
+                      Grid.Row="0"
+                      Grid.Column="2"
+                      Command="{Binding ToggleRefreshCommand}"
+                      IsChecked="{Binding RefreshEnabled, Mode=OneWay}"
+                      IsThreeState="True" />
+        <ProgressBar Grid.Row="0"
+                     Grid.Column="0"
+                     Maximum="5"
+                     Value="{Binding RefreshProgressValue}"
+                     BorderThickness="0"
+                     Margin="0,5"
+                     Background="{x:Null}" />
 
 
     </Grid>

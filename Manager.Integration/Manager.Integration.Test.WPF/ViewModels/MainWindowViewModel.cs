@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -45,13 +44,18 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
         public MainWindowViewModel()
         {
-            ClearDatabaseCommand = new ClearDatabaseCommand(this);
+            GetData();
 
+            ClearDatabaseCommand = new ClearDatabaseCommand(this);
+            ToggleRefreshCommand=new ToggleRefreshCommand(this);
+            
             RefreshTimer = new Timer(5000);
 
             RefreshTimer.Elapsed += RefreshTimerOnElapsed;
 
             RefreshTimer.Start();
+
+            RefreshEnabled = true;
         }
 
         private void RefreshTimerOnElapsed(object sender,
@@ -95,6 +99,10 @@ namespace Manager.Integration.Test.WPF.ViewModels
         private string _jobDefinitionDataHeader;
         private ClearDatabaseCommand _clearDatabaseCommand;
         private List<Logging> _loggingData;
+        private ToggleRefreshCommand _toggleRefreshCommand;
+        private string _toggleRefreshStatus;
+        private bool _refreshEnabled;
+        private int _refreshProgressValue;
 
         public ClearDatabaseCommand ClearDatabaseCommand
         {
@@ -120,6 +128,8 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
         private void GetData()
         {
+            RefreshProgressValue = 0;
+
             Status = "Refresh started...";
 
             using (ManagerDbEntities managerDbEntities = new ManagerDbEntities())
@@ -128,11 +138,15 @@ namespace Manager.Integration.Test.WPF.ViewModels
                     managerDbEntities.Loggings.OrderByDescending(logging => logging.Id)
                         .ToList();
 
+                ++RefreshProgressValue;
+
                 LoggingHeader = LoggingHeaderConstant + " ( " + LoggingData.Count + " )";
 
                 JobHistoryData =
                     managerDbEntities.JobHistories.OrderByDescending(history => history.Created)
                         .ToList();
+
+                ++RefreshProgressValue;
 
                 JobHistoryHeader = JobHistoryHeaderConstant + " ( " + JobHistoryData.Count + " )";
                 
@@ -140,17 +154,25 @@ namespace Manager.Integration.Test.WPF.ViewModels
                     managerDbEntities.JobHistoryDetails.OrderByDescending(history => history.Created)
                         .ToList();
 
+
+                ++RefreshProgressValue;
+
                 JobHistoryDetailHeader = JobHistoryDetailHeaderConstant + " ( " + JobHistoryDetailData.Count + " )";
 
                 JobDefinitionData =
                     managerDbEntities.JobDefinitions
                         .ToList();
 
+
+                ++RefreshProgressValue;
+
                 JobDefinitionDataHeader = JobDefinitionHeaderConstant + " ( " + JobDefinitionData.Count + " )";
 
                 WorkerNodesData  =
                     managerDbEntities.WorkerNodes
                         .ToList();
+
+                ++RefreshProgressValue;
 
                 WorkerNodeHeader = WorkerNodeHeaderConstant + " ( " + WorkerNodesData.Count + " )";
             }
@@ -219,6 +241,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
             set
             {
                 _jobDefinitionData = value;
+
                 OnPropertyChanged();
             }
         }
@@ -260,6 +283,71 @@ namespace Manager.Integration.Test.WPF.ViewModels
             }
 
             GetData();
+        }
+
+        public ToggleRefreshCommand ToggleRefreshCommand
+        {
+            get { return _toggleRefreshCommand; }
+            set
+            {
+                _toggleRefreshCommand = value;
+
+                OnPropertyChanged();
+            }
+        }
+
+        public bool RefreshEnabled
+        {
+            get { return _refreshEnabled; }
+            set
+            {
+                _refreshEnabled = value;
+                
+                if (_refreshEnabled)
+                {
+                    ToggleRefreshStatus = "Refresh Enabled";
+
+                    this.RefreshTimer.Start();
+                }
+                else
+                {
+                    ToggleRefreshStatus = "Refresh Disabled";
+
+                    RefreshProgressValue = 0;
+
+                    this.RefreshTimer.Stop();
+                }
+
+                OnPropertyChanged();
+            }
+        }
+
+        public string ToggleRefreshStatus
+        {
+            get { return _toggleRefreshStatus; }
+
+            set
+            {
+                _toggleRefreshStatus = value;
+
+                OnPropertyChanged();
+            }
+        }
+
+        public int RefreshProgressValue
+        {
+            get { return _refreshProgressValue; }
+            set
+            {
+                _refreshProgressValue = value;
+
+                OnPropertyChanged();
+            }
+        }
+
+        public void ToggleRefresh()
+        {
+            this.RefreshEnabled = !RefreshEnabled;
         }
     }
 }
