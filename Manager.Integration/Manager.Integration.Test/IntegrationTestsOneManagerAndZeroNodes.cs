@@ -25,10 +25,7 @@ namespace Manager.Integration.Test
         [SetUp]
         public void Setup()
         {
-            if (_clearDatabase)
-            {
-                DatabaseHelper.TryClearDatabase();
-            }
+
         }
 
         [TestFixtureSetUp]
@@ -47,9 +44,10 @@ namespace Manager.Integration.Test
             _debugMode = false;
             _buildMode = "Release";
 #endif
-
-            LogHelper.LogInfoWithLineNumber("Start.",
-                                            Logger);
+            if (_clearDatabase)
+            {
+                DatabaseHelper.TryClearDatabase();
+            }
 
             ManagerApiHelper = new ManagerApiHelper();
 

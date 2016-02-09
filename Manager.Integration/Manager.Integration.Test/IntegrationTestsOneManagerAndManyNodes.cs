@@ -23,14 +23,6 @@ namespace Manager.Integration.Test
         private static readonly ILog Logger =
             LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndManyNodes));
 
-        [SetUp]
-        public void Setup()
-        {
-            if (_clearDatabase)
-            {
-                DatabaseHelper.TryClearDatabase();
-            }
-        }
 
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
@@ -42,6 +34,7 @@ namespace Manager.Integration.Test
 
             TryCreateSqlLoggingTable();
 
+
 #if (DEBUG)
             // Do nothing.
 #else
@@ -50,6 +43,11 @@ namespace Manager.Integration.Test
             _debugMode = false;
             _buildMode = "Release";
 #endif
+
+            if (_clearDatabase)
+            {
+                DatabaseHelper.TryClearDatabase();
+            }
 
             ManagerApiHelper = new ManagerApiHelper();
 
