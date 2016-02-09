@@ -24,5 +24,13 @@ namespace Manager.Integration.Test.WPF.Commands
         }
 
         public event EventHandler CanExecuteChanged;
+
+        protected virtual void OnCanExecuteChanged()
+        {
+            if (CanExecuteChanged != null)
+            {
+                CanExecuteChanged(this,EventArgs.Empty);
+            }
+        }
     }
 }
