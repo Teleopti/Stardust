@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Authentication;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.InfrastructureTest.Helper;
-using Extensions = Teleopti.Ccc.Domain.Collection.Extensions;
 
 namespace Teleopti.Ccc.InfrastructureTest.Authentication
 {
