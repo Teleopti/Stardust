@@ -22,19 +22,17 @@ namespace Manager.Integration.Test
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndZeroNodes));
 
-        [SetUp]
-        public void Setup()
-        {
-
-        }
 
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
             TryCreateSqlLoggingTable();
+
 
 #if (DEBUG)
             // Do nothing.
@@ -44,6 +42,7 @@ namespace Manager.Integration.Test
             _debugMode = false;
             _buildMode = "Release";
 #endif
+
             if (_clearDatabase)
             {
                 DatabaseHelper.TryClearDatabase();
@@ -55,10 +54,13 @@ namespace Manager.Integration.Test
             {
                 if (_debugMode)
                 {
-                    ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
+                    var task = new Task(() =>
+                    {
+                        StartManagerIntegrationConsoleHostProcess =
+                            ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
+                    });
 
-                    StartManagerIntegrationConsoleHostProcess =
-                        ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
+                    task.Start();
                 }
                 else
                 {
@@ -67,10 +69,21 @@ namespace Manager.Integration.Test
 
                     task.Start();
                 }
-            }
 
-            LogHelper.LogInfoWithLineNumber("Finished.",
-                                            Logger);
+                JobHelper.GiveNodesTimeToInitialize();
+            }
+        }
+
+
+        private void CurrentDomain_UnhandledException(object sender,
+                                                      UnhandledExceptionEventArgs e)
+        {
+            Exception exp = (Exception)e.ExceptionObject;
+
+
+            LogHelper.LogFatalWithLineNumber(exp.Message,
+                                             Logger,
+                                             exp);
         }
 
         private static void TryCreateSqlLoggingTable()
@@ -92,53 +105,47 @@ namespace Manager.Integration.Test
         [TearDown]
         public void TearDown()
         {
-            LogHelper.LogInfoWithLineNumber("Start.",
-                                            Logger);
-
             if (ManagerApiHelper != null &&
                 ManagerApiHelper.CheckJobHistoryStatusTimer != null)
             {
                 ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
-                ManagerApiHelper.CheckJobHistoryStatusTimer.CancelAllRequest();
             }
-
-            LogHelper.LogInfoWithLineNumber("Finished.",
-                                            Logger);
         }
 
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
         {
-            LogHelper.LogInfoWithLineNumber("Start.",
-                                            Logger);
-
             if (ManagerApiHelper != null &&
                 ManagerApiHelper.CheckJobHistoryStatusTimer != null)
             {
-                ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
-                ManagerApiHelper.CheckJobHistoryStatusTimer.CancelAllRequest();
+                ManagerApiHelper.CheckJobHistoryStatusTimer.Dispose();
             }
 
             if (AppDomainHelper.AppDomains != null &&
-                AppDomainHelper.AppDomains.Values.Any())
+                AppDomainHelper.AppDomains.Any())
             {
                 foreach (var appDomain in AppDomainHelper.AppDomains.Values)
                 {
                     try
                     {
                         AppDomain.Unload(appDomain);
+
                     }
 
-                    catch (Exception)
+                    catch (AppDomainUnloadedException)
                     {
+                    }
+
+                    catch (Exception exp)
+                    {
+                        LogHelper.LogErrorWithLineNumber(exp.Message,
+                                                         Logger,
+                                                         exp);
                     }
                 }
             }
 
             ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
-
-            LogHelper.LogInfoWithLineNumber("Finished.",
-                                            Logger);
         }
 
         private const int NumberOfNodesToStart = 0;
