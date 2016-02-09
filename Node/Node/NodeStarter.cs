@@ -26,18 +26,30 @@ namespace Stardust.Node
 
         public void Stop()
         {
-            QuitEvent.Set();
+            var workerWrapper =
+                Container.Resolve<IWorkerWrapper>();
 
+            if (workerWrapper != null)
+            {
+                workerWrapper.Dispose();
+            }
+
+            QuitEvent.Set();
         }
+
+        private IContainer Container { get; set; }
 
         public void Start(INodeConfiguration nodeConfiguration,
                           IContainer container)
         {
+            Container = container;
+
             // Start OWIN host 
             using (WebApp.Start(nodeConfiguration.BaseAddress.ToString(),
                                 appBuilder =>
                                 {
                                     var builder = new ContainerBuilder();
+
                                     builder.RegisterType<InvokeHandler>()
                                         .SingleInstance();
 
@@ -72,6 +84,7 @@ namespace Stardust.Node
                                     config.MapHttpAttributeRoutes();
                                     config.Services.Add(typeof (IExceptionLogger),
                                                         new GlobalExceptionLogger());
+
                                     appBuilder.UseAutofacMiddleware(container);
                                     appBuilder.UseAutofacWebApi(config);
                                     appBuilder.UseWebApi(config);
@@ -87,14 +100,6 @@ namespace Stardust.Node
                                                 WhoAmI + ": Listening on port " + nodeConfiguration.BaseAddress);
 
                 QuitEvent.WaitOne();
-
-                var workerWrapper=
-                    container.Resolve<IWorkerWrapper>();
-
-                if (workerWrapper != null)
-                {
-                    workerWrapper.Dispose();
-                }
             }
         }
     }

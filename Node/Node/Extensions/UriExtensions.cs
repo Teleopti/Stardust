@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Stardust.Node.Constants;
@@ -45,7 +46,8 @@ namespace Stardust.Node.Extensions
         }
 
         public static async Task<HttpResponseMessage> PostAsync(this Uri uri,
-                                                                Uri apiEndpoint)
+                                                                Uri apiEndpoint,
+                                                                CancellationToken cancellationToken)
         {
             // Call API.
             HttpResponseMessage response;
@@ -61,7 +63,8 @@ namespace Stardust.Node.Extensions
                                             MediaTypeConstants.ApplicationJson);
 
                 response = await client.PostAsync(apiEndpoint,
-                                                  str);
+                                                  str,
+                                                  cancellationToken);
             }
 
             return response;

@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
-using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
 
@@ -27,13 +26,18 @@ namespace NodeTest.Fakes.Timers
         }
 
 
-        public override Task<HttpResponseMessage> TrySendNodeStartUpToManager(Uri nodeAddress)
+        public override Task<HttpResponseMessage> TrySendNodeStartUpToManager(Uri nodeAddress,
+                                                                              CancellationToken cancellationToken)
         {
             Wait.Set();
 
             var response = new HttpResponseMessage(HttpStatusCode.OK);
-            var request = new HttpRequestMessage(HttpMethod.Post, CallbackTemplateUri);
+
+            var request = new HttpRequestMessage(HttpMethod.Post,
+                                                 CallbackTemplateUri);
+
             response.RequestMessage = request;
+
             return Task.FromResult(response);
         }
     }

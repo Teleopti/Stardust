@@ -1,17 +1,31 @@
 ﻿using System;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using log4net;
 using Stardust.Node.Extensions;
 using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
+using Timer = System.Timers.Timer;
 
 namespace Stardust.Node.Timers
 {
     public class TrySendNodeStartUpNotificationToManagerTimer : Timer
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (TrySendNodeStartUpNotificationToManagerTimer));
+
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (CancellationTokenSource != null &&
+                !CancellationTokenSource.IsCancellationRequested)
+            {
+                CancellationTokenSource.Cancel();
+            }            
+        }
 
         public TrySendNodeStartUpNotificationToManagerTimer(INodeConfiguration nodeConfiguration,
                                                             Uri callbackTemplateUri,
@@ -20,6 +34,8 @@ namespace Stardust.Node.Timers
         {
             nodeConfiguration.ThrowArgumentNullException();
             callbackTemplateUri.ThrowArgumentNullExceptionWhenNull();
+
+            CancellationTokenSource = new CancellationTokenSource();
 
             NodeConfiguration = nodeConfiguration;
             CallbackTemplateUri = callbackTemplateUri;
@@ -39,10 +55,12 @@ namespace Stardust.Node.Timers
 
         public event EventHandler TrySendNodeStartUpNotificationSucceded;
 
-        public virtual async Task<HttpResponseMessage> TrySendNodeStartUpToManager(Uri nodeAddress)
+        public virtual async Task<HttpResponseMessage> TrySendNodeStartUpToManager(Uri nodeAddress,
+                                                                                   CancellationToken cancellationToken)
         {
             var httpResponseMessage =
-                await nodeAddress.PostAsync(CallbackTemplateUri);
+                await nodeAddress.PostAsync(CallbackTemplateUri,
+                                            cancellationToken);
 
             return httpResponseMessage;
         }
@@ -56,6 +74,8 @@ namespace Stardust.Node.Timers
             }
         }
 
+        private CancellationTokenSource CancellationTokenSource { get; set; }
+
         private async void OnTimedEvent(object sender,
                                         ElapsedEventArgs e)
         {
@@ -64,7 +84,8 @@ namespace Stardust.Node.Timers
                 LogHelper.LogInfoWithLineNumber(Logger,
                                                 "Trying to send init to manager. Manager Uri : ( " + CallbackTemplateUri + " )");
                 var httpResponseMessage =
-                    await TrySendNodeStartUpToManager(NodeConfiguration.BaseAddress);
+                    await TrySendNodeStartUpToManager(NodeConfiguration.BaseAddress,
+                                                      CancellationTokenSource.Token);
 
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {

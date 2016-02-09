@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using log4net;
 using Stardust.Node.Extensions;
 using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
+using Timer = System.Timers.Timer;
 
 namespace Stardust.Node.Timers
 {
@@ -20,6 +22,8 @@ namespace Stardust.Node.Timers
             nodeConfiguration.ThrowArgumentNullException();
             callbackUri.ThrowArgumentNullExceptionWhenNull();
 
+            CancellationTokenSource = new CancellationTokenSource();
+
             NodeConfiguration = nodeConfiguration;
             CallbackUri = callbackUri;
 
@@ -30,26 +34,48 @@ namespace Stardust.Node.Timers
             AutoReset = true;
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (CancellationTokenSource != null &&
+                !CancellationTokenSource.IsCancellationRequested)
+            {
+                CancellationTokenSource.Cancel();
+            }
+        }
+
         public string WhoAmI { get; private set; }
 
         public INodeConfiguration NodeConfiguration { get; private set; }
+
         public Uri CallbackUri { get; private set; }
 
 
-        public async Task<HttpResponseMessage> SendPing(Uri nodeAddress)
+        private async Task<HttpResponseMessage> SendPing(Uri nodeAddress,
+                                                         CancellationToken cancellationToken)
         {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return null;
+            }
+
             var httpResponseMessage =
-                await nodeAddress.PostAsync(CallbackUri);
+                await nodeAddress.PostAsync(CallbackUri,
+                                            cancellationToken);
 
             return httpResponseMessage;
         }
+
+        private CancellationTokenSource CancellationTokenSource { get; set; }
 
         private async void OnTimedEvent(object sender,
                                         ElapsedEventArgs e)
         {
             try
             {
-                await SendPing(NodeConfiguration.BaseAddress);
+                await SendPing(NodeConfiguration.BaseAddress,
+                               CancellationTokenSource.Token);
             }
 
             catch

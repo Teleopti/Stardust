@@ -333,21 +333,36 @@ namespace Stardust.Node.Workers
 
         public void Dispose()
         {
+            if (CancellationTokenSource != null &&
+                !CancellationTokenSource.IsCancellationRequested)
+            {
+                CancellationTokenSource.Cancel();
+            }
+
             if (PingToManagerTimer != null)
+            {
                 PingToManagerTimer.Dispose();
+            }
 
             if (TrySendJobCanceledStatusToManagerTimer != null)
+            {
                 TrySendJobCanceledStatusToManagerTimer.Dispose();
+            }
 
             if (TrySendJobDoneStatusToManagerTimer != null)
+            {
                 TrySendJobDoneStatusToManagerTimer.Dispose();
+            }
 
             if (TrySendJobFaultedStatusToManagerTimer != null)
+            {
                 TrySendJobFaultedStatusToManagerTimer.Dispose();
+            }
 
             if (NodeStartUpNotificationToManagerTimer != null)
+            {
                 NodeStartUpNotificationToManagerTimer.Dispose();
-            
+            }
         }
     }
 }
