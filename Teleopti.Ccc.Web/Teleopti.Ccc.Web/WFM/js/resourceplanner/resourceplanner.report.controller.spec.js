@@ -11,6 +11,7 @@ describe('ResourceplannerReportCtrl', function () {
 		$httpBackend = _$httpBackend_;
 		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'mock');
 		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
+		$httpBackend.whenGET("../ToggleHandler/AllToggles").respond(200, {});
 	}));
 	var result = {};
 
@@ -97,6 +98,18 @@ describe('ResourceplannerReportCtrl', function () {
 		scope.$digest();
 		expect(scope.optimizeDayOffIsEnabled()).toBe(true);
 	}));
+	it('should call keep alive each 10th minute to make sure session is alive', inject(function ($controller, $interval, PlanningPeriodSvrc) {
+		var scope = $rootScope.$new();
 
+		var numberOfKeepAliveCalls = 0;
 
+		PlanningPeriodSvrc.keepAlive = function () { numberOfKeepAliveCalls++; };
+
+		$controller('ResourceplannerReportCtrl', { $scope: scope, $stateParams: result.withNoIssues() });
+
+		var twentyFiveMinutes = 1000 * 60 * 25;
+		$interval.flush(twentyFiveMinutes);
+
+		expect(numberOfKeepAliveCalls).toBe(2);
+	}));
 });

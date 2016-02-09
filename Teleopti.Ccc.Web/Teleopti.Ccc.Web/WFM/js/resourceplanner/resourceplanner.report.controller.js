@@ -3,8 +3,8 @@
 	'use strict';
 	angular.module('wfm.resourceplanner')
 		.controller('ResourceplannerReportCtrl', [
-			'$scope', '$state','$translate', '$stateParams', 'ResourcePlannerReportSrvc', 'PlanningPeriodSvrc', 'growl', 'Toggle',
-			function($scope, $state,$translate, $stateParams, ResourcePlannerReportSrvc, PlanningPeriodSvrc, growl, toggleService) {
+			'$scope', '$state','$translate', '$stateParams', 'ResourcePlannerReportSrvc', 'PlanningPeriodSvrc', 'growl', 'Toggle', '$interval',
+			function($scope, $state,$translate, $stateParams, ResourcePlannerReportSrvc, PlanningPeriodSvrc, growl, toggleService, $interval) {
 				var toggledOptimization = false;
 				var scheduleResult = $stateParams.interResult.SkillResultList ? $stateParams.interResult.SkillResultList : [];
 				$scope.issues = $stateParams.result.BusinessRulesValidationResults ? $stateParams.result.BusinessRulesValidationResults : [];
@@ -21,17 +21,28 @@
 				}
 				$scope.intraOptimize = function() {
 					$scope.optimizeRunning = true;
-					ResourcePlannerReportSrvc.intraOptimize.save({
-						id: $stateParams.id
-					}).$promise.then(function(result) {
-						$scope.optimizeRunning = false;
-						$scope.dayNodes = result.SkillResultList;
-						notifyOptimization('successfull');
-					}, function(reason) {
-						$scope.optimizeRunning = false;
-						notifyOptimization('error');
-					});
+					//to make sure long optimization request doesn't create a new cookie based on current time
+					//we call keepAlive here again
+					PlanningPeriodSvrc.keepAlive().then(function() {
+							ResourcePlannerReportSrvc.intraOptimize.save({
+								id: $stateParams.id
+							}).$promise.then(function(result) {
+								$scope.optimizeRunning = false;
+								$scope.dayNodes = result.SkillResultList;
+								notifyOptimization('successfull');
+							}, function(reason) {
+								$scope.optimizeRunning = false;
+								notifyOptimization('error');
+							});
+						}
+					);
 				};
+
+				var tenMinutes = 1000 * 60 * 10;
+				var keepAliveRef = $interval(function () {
+					PlanningPeriodSvrc.keepAlive();
+				}, tenMinutes);
+
 				var notifyOptimization = function(status) {
 					//translate me better
 					if (status === 'successfull') {
@@ -88,6 +99,8 @@
 						});
 					});
 				};
-			}
-		]);
+				$scope.$on('$destroy', function () {
+					$interval.cancel(keepAliveRef);
+				});
+			}]);
 })();
