@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		{
 			var state = stateForPerson(model, personId);
 			state.Time = state.Time > time ? state.Time : time;
-			state.MovedFrom = true;
+			state.Moved = true;
 			return true;
 		}
 
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		{
 			var state = stateForPerson(model, personId);
 			state.Time = state.Time > time ? state.Time : time;
-			state.MovedFrom = false;
+			state.Moved = false;
 			return true;
 		}
 
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				.Count(x =>
 					x.OutOfAdherence &&
 					!x.Deleted && 
-					!x.MovedFrom);
+					!x.Moved);
 		}
 
 		[ReadModelUnitOfWork]

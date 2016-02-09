@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 			{
 				var personId = Guid.NewGuid();
 				var originSiteId = Guid.NewGuid();
-				var destinationSiteid = Guid.NewGuid();
+				var destinationSiteId = Guid.NewGuid();
 
 				var setup = new IEvent[]
 				{
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 					new PersonInAdherenceEvent
 					{
 						PersonId = Guid.NewGuid(),
-						SiteId = destinationSiteid,
+						SiteId = destinationSiteId,
 						Timestamp = "2015-02-18 12:02".Utc()
 					},
 				};
@@ -217,18 +217,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 					{
 						PersonId = personId,
 						Timestamp = "2015-02-18 12:04".Utc(),
-						SiteId = destinationSiteid
+						SiteId = destinationSiteId
 					},
 					new PersonInAdherenceEvent
 					{
 						PersonId = personId,
-						SiteId = destinationSiteid,
+						SiteId = destinationSiteId,
 						Timestamp = "2015-02-18 12:06".Utc()
 					},
 					new PersonOutOfAdherenceEvent
 					{
 						PersonId = personId,
-						SiteId = destinationSiteid,
+						SiteId = destinationSiteId,
 						Timestamp = "2015-02-18 12:08".Utc()
 					}
 				};
@@ -238,7 +238,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 					.TestCases(setup, i =>
 					{
 						i.OriginSite = originSiteId;
-						i.DestinationSite = destinationSiteid;
+						i.DestinationSite = destinationSiteId;
 					});
 
 			}

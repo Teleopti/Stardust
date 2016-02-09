@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		public Guid PersonId { get; set; }
 		public bool OutOfAdherence { get; set; }
 		public bool Deleted { get; set; }
+		public bool Moved { get; set; }
 		public DateTime Time { get; set; }
 	}
 }

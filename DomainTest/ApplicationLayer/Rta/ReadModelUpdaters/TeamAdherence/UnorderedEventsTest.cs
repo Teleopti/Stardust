@@ -44,6 +44,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 			Persister.Get(testCase.Team).Count.Should().Be(0);
 		}
 
+		[Test]
+		[TestCaseSource(typeof(UnorderedEventsTest), "OutTeamChangeInOut")]
+		public void ShouldHandleTeamChanges(TestCase testCase)
+		{
+			testCase.Events.ForEach(e => Target.Handle((dynamic)e));
+			Persister.Get(testCase.OriginTeam).Count.Should().Be(0);
+			Persister.Get(testCase.DestinationTeam).Count.Should().Be(1);
+		}
+
 		public static IEnumerable OutInOut_OutIn
 		{
 			get
@@ -172,6 +181,70 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 					.TestCases(null, i => i.Team = teamId);
 			}
 		}
+
+		public static IEnumerable OutTeamChangeInOut
+		{
+			get
+			{
+				var personId = Guid.NewGuid();
+				var originTeamId = Guid.NewGuid();
+				var destinationTeamId = Guid.NewGuid();
+
+				var setup = new IEvent[]
+				{
+					new PersonInAdherenceEvent
+					{
+						PersonId = Guid.NewGuid(),
+						TeamId = originTeamId,
+						Timestamp = "2015-02-18 12:02".Utc()
+					},
+					new PersonInAdherenceEvent
+					{
+						PersonId = Guid.NewGuid(),
+						TeamId = destinationTeamId,
+						Timestamp = "2015-02-18 12:02".Utc()
+					},
+				};
+
+				var events = new IEvent[]
+				{
+					new PersonOutOfAdherenceEvent
+					{
+						PersonId = personId,
+						TeamId = originTeamId,
+						Timestamp = "2015-02-18 12:02".Utc()
+					},
+					new PersonAssociationChangedEvent
+					{
+						PersonId = personId,
+						Timestamp = "2015-02-18 12:04".Utc(),
+						TeamId = destinationTeamId
+					},
+					new PersonInAdherenceEvent
+					{
+						PersonId = personId,
+						TeamId = destinationTeamId,
+						Timestamp = "2015-02-18 12:06".Utc()
+					},
+					new PersonOutOfAdherenceEvent
+					{
+						PersonId = personId,
+						TeamId = destinationTeamId,
+						Timestamp = "2015-02-18 12:08".Utc()
+					}
+				};
+
+				return events
+					.Permutations()
+					.TestCases(setup, i =>
+					{
+						i.OriginTeam = originTeamId;
+						i.DestinationTeam = destinationTeamId;
+					});
+
+			}
+		}
+
 	}
 
 }

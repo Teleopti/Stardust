@@ -195,6 +195,7 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteAdherence\SiteChangesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteAdherence\PersonTerminatedTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamAdherence\PersonTerminatedTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamAdherence\SiteChangesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TestCaseExtensions.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ExceptionTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StartTime\AlarmStartTimeTest.cs" />

@@ -76,11 +76,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		public virtual void Handle(PersonAssociationChangedEvent @event)
 		{
 			if (@event.TeamId != null)
-				return;
-			updateAllModels(
-				@event.PersonId,
-				@event.Timestamp,
-				deletePerson);
+			{
+				updateAllModels(
+					@event.PersonId,
+					@event.Timestamp,
+					(m, p, t) =>
+						m.TeamId == @event.TeamId
+							? movePersonTo(m, p, t)
+							: movePersonFrom(m, p, t)
+					);
+			}
+			else
+			{
+				updateAllModels(
+					@event.PersonId,
+					@event.Timestamp,
+					deletePerson);
+			}
 		}
 
 		private void updateModel(Guid personId, DateTime time, Guid siteId, Guid teamId, UpdateAction update)
@@ -121,6 +133,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			var state = stateForPerson(model, personId);
 			state.Time = time;
 			state.Deleted = true;
+			return true;
+		}
+
+		private static bool movePersonFrom(TeamOutOfAdherenceReadModel model, Guid personId, DateTime time)
+		{
+			var state = stateForPerson(model, personId);
+			state.Time = state.Time > time ? state.Time : time;
+			state.Moved = true;
+			return true;
+		}
+
+		private static bool movePersonTo(TeamOutOfAdherenceReadModel model, Guid personId, DateTime time)
+		{
+			var state = stateForPerson(model, personId);
+			state.Time = state.Time > time ? state.Time : time;
+			state.Moved = false;
 			return true;
 		}
 
@@ -169,7 +197,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			model.Count = model.State
 				.Count(x =>
 					x.OutOfAdherence &&
-					!x.Deleted);
+					!x.Deleted &&
+					!x.Moved);
 		}
 		
 		[ReadModelUnitOfWork]
