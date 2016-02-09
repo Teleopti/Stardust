@@ -114,6 +114,13 @@ namespace Manager.Integration.Test.Timers
             Stop();
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            CancelAllRequest();
+
+            base.Dispose(disposing);            
+        }
+
         public void CancelAllRequest()
         {
             if (CancellationTokenSource != null && !CancellationTokenSource.IsCancellationRequested)

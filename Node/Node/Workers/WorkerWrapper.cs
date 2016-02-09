@@ -333,6 +333,8 @@ namespace Stardust.Node.Workers
 
         public void Dispose()
         {
+            LogHelper.LogInfoWithLineNumber(Logger,"Start disposing.");
+
             if (CancellationTokenSource != null &&
                 !CancellationTokenSource.IsCancellationRequested)
             {
@@ -363,6 +365,8 @@ namespace Stardust.Node.Workers
             {
                 NodeStartUpNotificationToManagerTimer.Dispose();
             }
+
+            LogHelper.LogInfoWithLineNumber(Logger, "Finished disposing.");
         }
     }
 }
