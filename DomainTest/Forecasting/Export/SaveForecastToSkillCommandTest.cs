@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
@@ -42,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 			_target = new SaveForecastToSkillCommand(_skillDayLoadHelper, _skillDayRepository, _scenarioRepository);
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldImportForecastsToSkill()
 		{
 			var period = new DateOnlyPeriod(2011, 1, 1, 2011, 1, 1);
@@ -55,25 +53,25 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 			_targetSkill.AddWorkload(skillDay.WorkloadDayCollection[0].Workload);
 
 			var secondBusinessUnit = _mocks.DynamicMock<IBusinessUnit>();
-            var intervalStartTime = new DateTime(2011, 1, 1, 6, 15, 0, DateTimeKind.Utc);
-            var intervalEndTime = new DateTime(2011, 1, 1, 6, 30, 0, DateTimeKind.Utc);
+			var intervalStartTime = new DateTime(2011, 1, 1, 6, 15, 0, DateTimeKind.Utc);
+			var intervalEndTime = new DateTime(2011, 1, 1, 6, 30, 0, DateTimeKind.Utc);
 			var intervalPeriod = new DateTimePeriod(intervalStartTime, intervalEndTime);
 
-            var forecasts = new List<IForecastsRow>
-                                {
-                                    new ForecastsRow
-                                        {
-                                            Tasks = 12,
-                                            TaskTime = 110.02,
-                                            AfterTaskTime = 121.30,
-                                            Agents = 2,
-                                            UtcDateTimeFrom = intervalStartTime,
-                                            UtcDateTimeTo = intervalEndTime,
-                                            LocalDateTimeFrom = new DateTime(2011, 1, 1, 8, 15, 0),
-                                            LocalDateTimeTo = new DateTime(2011, 1, 1, 8, 30, 0),
-                                            SkillName = "Insurance"
-                                        }
-                                };
+			var forecasts = new List<IForecastsRow>
+										  {
+												new ForecastsRow
+													 {
+														  Tasks = 12,
+														  TaskTime = 110.02,
+														  AfterTaskTime = 121.30,
+														  Agents = 2,
+														  UtcDateTimeFrom = intervalStartTime,
+														  UtcDateTimeTo = intervalEndTime,
+														  LocalDateTimeFrom = new DateTime(2011, 1, 1, 8, 15, 0),
+														  LocalDateTimeTo = new DateTime(2011, 1, 1, 8, 30, 0),
+														  SkillName = "Insurance"
+													 }
+										  };
 
 			_targetSkill.SetBusinessUnit(secondBusinessUnit);
 			skillDay.SetBusinessUnit(secondBusinessUnit);
@@ -81,19 +79,16 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 			using (_mocks.Record())
 			{
 				Expect.Call(_scenarioRepository.LoadDefaultScenario(secondBusinessUnit)).Return(targetScenario);
-				Expect.Call(_skillDayLoadHelper.LoadSchedulerSkillDays(period, new[] { _targetSkill }, targetScenario)).Return(
-					new Dictionary<ISkill, IList<ISkillDay>> { { _targetSkill, new[] { skillDay } } });
-				Expect.Call(_skillDayRepository.GetAllSkillDays(period, new[] { skillDay }, _targetSkill, targetScenario, null)).IgnoreArguments().
-					Return(new[] { skillDay });
+				Expect.Call(_skillDayRepository.FindRange(period, _targetSkill, targetScenario)).Return(new[] { skillDay });
 			}
 			using (_mocks.Playback())
 			{
-                _target.Execute(new DateOnly(2011, 1, 1), _targetSkill, forecasts, ImportForecastsMode.ImportWorkload);
-			    skillDay.SkillDataPeriodCollection[0].ManualAgents.Should().Be.EqualTo(null);
+				_target.Execute(new DateOnly(2011, 1, 1), _targetSkill, forecasts, ImportForecastsMode.ImportWorkload);
+				skillDay.SkillDataPeriodCollection[0].ManualAgents.Should().Be.EqualTo(null);
 				var taskPeriod = skillDay.WorkloadDayCollection[0].TaskPeriodList.FirstOrDefault(p => p.Period.StartDateTime == intervalPeriod.StartDateTime);
-			    taskPeriod.Tasks.Should().Be.EqualTo(12);
-			    taskPeriod.AverageTaskTime.Should().Be.EqualTo(TimeSpan.FromSeconds(110.02));
-			    taskPeriod.AverageAfterTaskTime.Should().Be.EqualTo(TimeSpan.FromSeconds(121.30));
+				taskPeriod.Tasks.Should().Be.EqualTo(12);
+				taskPeriod.AverageTaskTime.Should().Be.EqualTo(TimeSpan.FromSeconds(110.02));
+				taskPeriod.AverageAfterTaskTime.Should().Be.EqualTo(TimeSpan.FromSeconds(121.30));
 			}
 		}
 	}
