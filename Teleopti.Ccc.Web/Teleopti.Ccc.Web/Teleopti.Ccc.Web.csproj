@@ -1414,7 +1414,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.signalr.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.shiftHelpers.js" />
     <Content Include="WFM\js\global\wfmpagination\wfmpagination.directive.js" />
-    <Content Include="WFM\js\global\wfmmodal\wfmmodal.directive.js" />
+	<Content Include="WFM\js\global\wfmmodal\wfmmodal.directive.js" />
     <Content Include="WFM\js\teamSchedule\html\timeline.html" />
     <Content Include="WFM\js\teamSchedule\_modules.js" />
     <Content Include="WFM\vendor\uigrid.directive.ext.js" />
@@ -2231,6 +2231,7 @@
     <Content Include="WFM\css\_permissions.scss" />
     <Content Include="WFM\vendor\c3\c3-angular.min.js.map" />
     <Content Include="WFM\css\_resourceplanner.scss" />
+    <Content Include="WFM\css\_cardlist.scss" />
     <Content Include="WFM\css\_seatplan.scss" />
     <Content Include="WFM\css\_print.scss" />
     <Content Include="WFM\css\_rta.scss" />

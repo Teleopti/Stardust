@@ -1,0 +1,70 @@
+﻿@charset "UTF-8";
+
+.wfm-card-list {
+	width: 100%;
+}
+
+.wfm-card-list-container {
+}
+
+md-content {
+	padding-bottom: 10px;
+
+}
+
+.wfm-card-unselected {
+	margin-top: 10px;
+	margin-bottom: 10px;
+
+	width: 90%;
+	margin-left: auto !important;
+	margin-right: auto !important;
+}
+
+.wfm-card-selected {
+	margin-top: 25px;
+	margin-bottom: 25px;
+	width: 95%;
+	margin-left: auto !important;
+	margin-right: auto !important;
+	transition-property: width, height;
+	transition-duration: 0.2s;
+	transition-timing-function: ease-out;
+}
+
+wfm-card:first-child .wfm-card-selected {
+	margin-top: 10px;
+}
+
+wfm-card:last-child .wfm-card-selected {
+	margin-bottom: 10px;
+}
+
+.wfm-card-title {
+	cursor: pointer;
+	min-height: 35px;
+	line-height: 35px;
+	padding: 0 16px;
+}
+
+.wfm-card-unselected{
+	background-color: rgba(152,214,255,0.7);
+	transition: background-color 0.3s linear;
+	transition: box-shadow 0.3s linear;
+}
+
+.wfm-card-unselected:hover{
+	background-color: rgba(152,214,255,1);
+	box-shadow: 0 8px 17px 0 rgba(0,0,0,.2);
+}
+
+.wfm-card-selected .wfm-card-title{
+	background-color: rgba(152,214,255,1);
+	transition: background-color 0.3s linear;
+	transition: box-shadow 0.3s linear;
+}
+
+.wfm-card-content {
+	padding: 10px 16px;
+	background-color: $white;
+}
