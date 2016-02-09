@@ -26,24 +26,12 @@ namespace Stardust.Node
 
         public void Stop()
         {
-            var workerWrapper =
-                Container.Resolve<IWorkerWrapper>();
-
-            if (workerWrapper != null)
-            {
-                workerWrapper.Dispose();
-            }
-
             QuitEvent.Set();
         }
-
-        private IContainer Container { get; set; }
 
         public void Start(INodeConfiguration nodeConfiguration,
                           IContainer container)
         {
-            Container = container;
-
             // Start OWIN host 
             using (WebApp.Start(nodeConfiguration.BaseAddress.ToString(),
                                 appBuilder =>

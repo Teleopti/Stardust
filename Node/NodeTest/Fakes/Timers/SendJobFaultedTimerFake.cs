@@ -22,7 +22,8 @@ namespace NodeTest.Fakes.Timers
         {
         }
 
-        public override Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo)
+        protected override Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo,
+                                              CancellationToken cancellationToken)
         {
             NumberOfTimeCalled++;
 

@@ -118,7 +118,7 @@ namespace Manager.Integration.Test
             if (ManagerApiHelper != null &&
                 ManagerApiHelper.CheckJobHistoryStatusTimer != null)
             {
-                ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
+                ManagerApiHelper.CheckJobHistoryStatusTimer.Dispose();
             }
 
             if (AppDomainHelper.AppDomains != null &&
@@ -351,8 +351,7 @@ namespace Manager.Integration.Test
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
-            ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
-            ManagerApiHelper.CheckJobHistoryStatusTimer.CancelAllRequest();
+            ManagerApiHelper.CheckJobHistoryStatusTimer.Dispose();
 
             bool condition =
                 ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus);

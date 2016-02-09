@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
-using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
 
@@ -22,14 +21,16 @@ namespace NodeTest.Fakes.Timers
         {
         }
 
-        public override Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo)
+        protected override Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo,
+                                                                   CancellationToken cancellationToken)
         {
             InvokeTriggerTrySendStatusSucceded();
 
             Wait.Set();
 
             var response = new HttpResponseMessage(HttpStatusCode.OK);
-            var request = new HttpRequestMessage(HttpMethod.Post, "JobDoneTrigger");
+            var request = new HttpRequestMessage(HttpMethod.Post,
+                                                 "JobDoneTrigger");
             response.RequestMessage = request;
             return Task.FromResult(response);
         }

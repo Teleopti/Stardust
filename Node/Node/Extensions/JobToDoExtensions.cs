@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Stardust.Node.Constants;
@@ -38,7 +39,8 @@ namespace Stardust.Node.Extensions
         }
 
         public static async Task<HttpResponseMessage> PostAsync(this JobToDo jobToDo,
-                                                                Uri apiEndpoint)
+                                                                Uri apiEndpoint,
+                                                                CancellationToken cancellationToken)
         {
             // Validate arguments.
             ValidateJobDefinitionAndApiEndpoint(jobToDo,
@@ -54,7 +56,8 @@ namespace Stardust.Node.Extensions
                 Uri uri = jobToDo.CreateUri(apiEndpoint.ToString());
 
                 response = await client.PostAsync(uri,
-                                                  null);
+                                                  null, 
+                                                  cancellationToken);
             }
 
             return response;

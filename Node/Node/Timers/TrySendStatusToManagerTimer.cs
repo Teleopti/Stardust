@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using log4net;
 using Stardust.Node.Extensions;
 using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
+using Timer = System.Timers.Timer;
 
 namespace Stardust.Node.Timers
 {
@@ -23,6 +25,8 @@ namespace Stardust.Node.Timers
             callbackTemplateUri.ThrowArgumentNullExceptionWhenNull();
 
             // Assign values.
+            CancellationTokenSource = new CancellationTokenSource();
+
             NodeConfiguration = nodeConfiguration;
 
             WhoAmI = NodeConfiguration.CreateWhoIAm(Environment.MachineName);
@@ -33,6 +37,8 @@ namespace Stardust.Node.Timers
 
             AutoReset = true;
         }
+
+        private CancellationTokenSource CancellationTokenSource { get; set; }
 
         public string WhoAmI { get; private set; }
 
@@ -53,12 +59,14 @@ namespace Stardust.Node.Timers
             }
         }
 
-        public virtual async Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo)
+        protected virtual async Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo,
+                                                                        CancellationToken cancellationToken)
         {
             try
             {
                 var httpResponseMessage =
-                    await jobToDo.PostAsync(CallbackTemplateUri);
+                    await jobToDo.PostAsync(CallbackTemplateUri,
+                                            cancellationToken);
 
                 return httpResponseMessage;
             }
@@ -70,6 +78,23 @@ namespace Stardust.Node.Timers
                                                  exp);
                 throw;
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            "Start disposing.");
+
+            base.Dispose(disposing);
+
+            if (CancellationTokenSource != null &&
+                !CancellationTokenSource.IsCancellationRequested)
+            {
+                CancellationTokenSource.Cancel();
+            }            
+
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            "Finished disposing.");
         }
 
         private async void OnTimedEvent(object sender,
@@ -85,9 +110,9 @@ namespace Stardust.Node.Timers
             try
             {
                 var httpResponseMessage = await TrySendStatus(new JobToDo
-                                                                {
-                                                                    Id = JobToDo.Id
-                                                                });
+                {
+                    Id = JobToDo.Id
+                },CancellationTokenSource.Token);
 
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {

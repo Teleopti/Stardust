@@ -49,11 +49,6 @@ namespace Stardust.Node.Extensions
                                                                 Uri apiEndpoint,
                                                                 CancellationToken cancellationToken)
         {
-            if (cancellationToken)
-            {
-                return null;
-            }
-
             // Call API.
             HttpResponseMessage response;
 

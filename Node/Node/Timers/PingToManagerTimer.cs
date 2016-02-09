@@ -36,13 +36,17 @@ namespace Stardust.Node.Timers
 
         protected override void Dispose(bool disposing)
         {
-            base.Dispose(disposing);
+            LogHelper.LogDebugWithLineNumber(Logger,"Start disposing.");
 
             if (CancellationTokenSource != null &&
                 !CancellationTokenSource.IsCancellationRequested)
             {
                 CancellationTokenSource.Cancel();
             }
+
+            base.Dispose(disposing);
+
+            LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
         }
 
         public string WhoAmI { get; private set; }

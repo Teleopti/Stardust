@@ -56,7 +56,6 @@ namespace NodeConsoleHost
             return false;
         }
 
-
         private static void Main(string[] args)
         {
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
@@ -101,8 +100,12 @@ namespace NodeConsoleHost
             LogHelper.LogInfoWithLineNumber(Logger,
                                             WhoAmI + " : ConsoleOnCancelKeyPress called.");
 
-            _nodeStarter.Stop();
-
+            if (_nodeStarter != null)
+            {
+                _nodeStarter.Stop();
+            }
+            
+        
             QuitEvent.Set();
 
             e.Cancel = true;
@@ -117,8 +120,11 @@ namespace NodeConsoleHost
         {
             LogHelper.LogInfoWithLineNumber(Logger,
                                             WhoAmI + " : CurrentDomain_DomainUnload called.");
-
-            _nodeStarter.Stop();
+            
+            if (_nodeStarter != null)
+            {
+                _nodeStarter.Stop();
+            }            
 
             QuitEvent.Set();
         }
