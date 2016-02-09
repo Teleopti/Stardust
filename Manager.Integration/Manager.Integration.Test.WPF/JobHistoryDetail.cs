@@ -7,16 +7,15 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System;
+
 namespace Manager.Integration.Test.WPF
 {
-    using System;
-    using System.Collections.Generic;
-    
     public partial class JobHistoryDetail
     {
         public int Id { get; set; }
-        public System.Guid JobId { get; set; }
-        public System.DateTime Created { get; set; }
+        public Guid JobId { get; set; }
+        public DateTime Created { get; set; }
         public string Detail { get; set; }
     }
 }

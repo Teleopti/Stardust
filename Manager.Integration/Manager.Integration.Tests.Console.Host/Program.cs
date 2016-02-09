@@ -17,6 +17,7 @@ using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.Properties;
 using Microsoft.Owin.Hosting;
 using Owin;
+using Configuration = Manager.IntegrationTest.Console.Host.Models.Configuration;
 
 namespace Manager.IntegrationTest.Console.Host
 {
@@ -95,17 +96,17 @@ namespace Manager.IntegrationTest.Console.Host
         public static void AddOrUpdateAppDomains(string key,
                                                  AppDomain value)
         {
-            AppDomain appdomain = AppDomains.AddOrUpdate(key,
-                                                         value,
-                                                         (name,
-                                                          val) => value);
+            AppDomains.AddOrUpdate(key,
+                                   value,
+                                   (name,
+                                    val) => value);
         }
 
 
         private static void StartSelfHosting()
         {
-            Models.Configuration configuration =
-                new Models.Configuration(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
+            Configuration configuration =
+                new Configuration(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
 
             using (WebApp.Start(configuration.BaseAddress.ToString(),
                                 appBuilder =>
@@ -265,7 +266,7 @@ namespace Manager.IntegrationTest.Console.Host
                         ApplicationBase = directoryNodeAssemblyLocationFullPath.FullName,
                         ApplicationName = Settings.Default.NodeAssemblyName,
                         ShadowCopyFiles = "true",
-                        ConfigurationFile = nodeconfigurationFile.Value.FullName,
+                        ConfigurationFile = nodeconfigurationFile.Value.FullName
                     };
 
                     var nodeAppDomain = AppDomain.CreateDomain(nodeconfigurationFile.Key,
@@ -403,14 +404,14 @@ namespace Manager.IntegrationTest.Console.Host
         public static void UnloadAppDomainById(string id)
         {
             var appDomainToUnload =
-                Program.AppDomains.FirstOrDefault(pair => pair.Key == id);
+                AppDomains.FirstOrDefault(pair => pair.Key == id);
 
             AppDomain.Unload(appDomainToUnload.Value);
 
             AppDomain appdomainToRemove;
 
-            bool ok=Program.AppDomains.TryRemove(id,
-                                                 out appdomainToRemove);
+            AppDomains.TryRemove(id,
+                                         out appdomainToRemove);
         }
     }
 }

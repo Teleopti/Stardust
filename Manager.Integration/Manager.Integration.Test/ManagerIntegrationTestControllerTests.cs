@@ -8,6 +8,7 @@ using System.Threading;
 using log4net;
 using log4net.Config;
 using Manager.Integration.Test.Helpers;
+using Manager.Integration.Test.Properties;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
@@ -71,7 +72,7 @@ namespace Manager.Integration.Test
             using (var client = new HttpClient())
             {
                 UriBuilder uriBuilder = 
-                    new UriBuilder(Properties.Settings.Default.ManagerIntegrationTestControllerBaseAddress);
+                    new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
 
                 uriBuilder.Path += "appdomain/" + "Node1.config";
 
@@ -100,7 +101,7 @@ namespace Manager.Integration.Test
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 UriBuilder uriBuilder = 
-                    new UriBuilder(Properties.Settings.Default.ManagerIntegrationTestControllerBaseAddress);
+                    new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
 
                 uriBuilder.Path += "appdomain";
 
@@ -113,6 +114,8 @@ namespace Manager.Integration.Test
 
                 List<string> list =
                     JsonConvert.DeserializeObject<List<string>>(content);
+
+                Assert.IsTrue(list.Any());
             }
 
             Logger.Info("Finished tests.");

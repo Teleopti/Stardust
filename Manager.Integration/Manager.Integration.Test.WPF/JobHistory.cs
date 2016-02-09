@@ -7,19 +7,18 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System;
+
 namespace Manager.Integration.Test.WPF
 {
-    using System;
-    using System.Collections.Generic;
-    
     public partial class JobHistory
     {
-        public System.Guid JobId { get; set; }
+        public Guid JobId { get; set; }
         public string Name { get; set; }
         public string CreatedBy { get; set; }
-        public System.DateTime Created { get; set; }
-        public Nullable<System.DateTime> Started { get; set; }
-        public Nullable<System.DateTime> Ended { get; set; }
+        public DateTime Created { get; set; }
+        public Nullable<DateTime> Started { get; set; }
+        public Nullable<DateTime> Ended { get; set; }
         public string Serialized { get; set; }
         public string Type { get; set; }
         public string SentTo { get; set; }

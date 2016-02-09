@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Input;
 using Manager.Integration.Test.WPF.ViewModels;
 
@@ -16,7 +17,7 @@ namespace Manager.Integration.Test.WPF.Commands
         }
 
         private void MainWindowViewModel_PropertyChanged(object sender,
-                                                         System.ComponentModel.PropertyChangedEventArgs e)
+                                                         PropertyChangedEventArgs e)
         {
             OnCanExecuteChanged();
         }

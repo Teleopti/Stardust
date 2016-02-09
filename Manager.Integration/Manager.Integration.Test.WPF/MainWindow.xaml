@@ -105,17 +105,17 @@
                                     <DataTrigger Binding="{Binding Level}"
                                                  Value="ERROR">
                                         <Setter Property="Background"
-                                                Value="Red"></Setter>
+                                                Value="Red" />
                                         <Setter Property="Foreground"
-                                                Value="White"></Setter>
+                                                Value="White" />
                                     </DataTrigger>
 
                                     <DataTrigger Binding="{Binding Level}"
                                                  Value="FATAL">
                                         <Setter Property="Background"
-                                                Value="DarkRed"></Setter>
+                                                Value="DarkRed" />
                                         <Setter Property="Foreground"
-                                                Value="White"></Setter>
+                                                Value="White" />
                                     </DataTrigger>
 
                                 </Style.Triggers>
@@ -297,7 +297,7 @@
         </TabControl>
         <Button x:Name="Button"
                 Content="Clear Logging Table"
-                Grid.Column="4"
+                Grid.Row="0" Grid.Column="4"
                 Command="{Binding ClearDatabaseCommand}"
                 d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin" />
         <ToggleButton x:Name="ToggleButton"

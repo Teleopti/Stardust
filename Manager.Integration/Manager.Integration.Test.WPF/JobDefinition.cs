@@ -7,14 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System;
+
 namespace Manager.Integration.Test.WPF
 {
-    using System;
-    using System.Collections.Generic;
-    
     public partial class JobDefinition
     {
-        public System.Guid Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Serialized { get; set; }
         public string Type { get; set; }

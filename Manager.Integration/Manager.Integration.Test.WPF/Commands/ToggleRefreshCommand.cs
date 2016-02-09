@@ -29,7 +29,8 @@ namespace Manager.Integration.Test.WPF.Commands
         {
             if (CanExecuteChanged != null)
             {
-                CanExecuteChanged(this,EventArgs.Empty);
+                CanExecuteChanged(this,
+                                  EventArgs.Empty);
             }
         }
     }

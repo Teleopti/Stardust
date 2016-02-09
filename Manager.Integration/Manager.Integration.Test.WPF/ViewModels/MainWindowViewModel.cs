@@ -24,7 +24,6 @@ namespace Manager.Integration.Test.WPF.ViewModels
                 _workerNodeHeader = value;
 
                 OnPropertyChanged();
-
             }
         }
 
@@ -47,8 +46,8 @@ namespace Manager.Integration.Test.WPF.ViewModels
             GetData();
 
             ClearDatabaseCommand = new ClearDatabaseCommand(this);
-            ToggleRefreshCommand=new ToggleRefreshCommand(this);
-            
+            ToggleRefreshCommand = new ToggleRefreshCommand(this);
+
             RefreshTimer = new Timer(5000);
 
             RefreshTimer.Elapsed += RefreshTimerOnElapsed;
@@ -81,7 +80,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            if (this.PropertyChanged != null)
+            if (PropertyChanged != null)
             {
                 PropertyChanged(this,
                                 new PropertyChangedEventArgs(propertyName));
@@ -149,7 +148,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
                 ++RefreshProgressValue;
 
                 JobHistoryHeader = JobHistoryHeaderConstant + " ( " + JobHistoryData.Count + " )";
-                
+
                 JobHistoryDetailData =
                     managerDbEntities.JobHistoryDetails.OrderByDescending(history => history.Created)
                         .ToList();
@@ -168,7 +167,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
                 JobDefinitionDataHeader = JobDefinitionHeaderConstant + " ( " + JobDefinitionData.Count + " )";
 
-                WorkerNodesData  =
+                WorkerNodesData =
                     managerDbEntities.WorkerNodes
                         .ToList();
 
@@ -302,12 +301,12 @@ namespace Manager.Integration.Test.WPF.ViewModels
             set
             {
                 _refreshEnabled = value;
-                
+
                 if (_refreshEnabled)
                 {
                     ToggleRefreshStatus = "Refresh Enabled";
 
-                    this.RefreshTimer.Start();
+                    RefreshTimer.Start();
                 }
                 else
                 {
@@ -315,7 +314,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
                     RefreshProgressValue = 0;
 
-                    this.RefreshTimer.Stop();
+                    RefreshTimer.Stop();
                 }
 
                 OnPropertyChanged();
@@ -347,7 +346,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
         public void ToggleRefresh()
         {
-            this.RefreshEnabled = !RefreshEnabled;
+            RefreshEnabled = !RefreshEnabled;
         }
     }
 }

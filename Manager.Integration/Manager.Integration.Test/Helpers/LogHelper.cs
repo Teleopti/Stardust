@@ -2,7 +2,6 @@
 using System.IO;
 using System.Runtime.CompilerServices;
 using log4net;
-using log4net.Repository.Hierarchy;
 
 namespace Manager.Integration.Test.Helpers
 {
@@ -10,7 +9,7 @@ namespace Manager.Integration.Test.Helpers
     {
         public static void LogErrorWithLineNumber(string info,
                                                   ILog logger,
-                                                  System.Exception exception = null,
+                                                  Exception exception = null,
                                                   [CallerFilePath] string file = "",
                                                   [CallerMemberName] string member = "",
                                                   [CallerLineNumber] int line = 0)
@@ -38,7 +37,7 @@ namespace Manager.Integration.Test.Helpers
 
         public static void LogFatalWithLineNumber(string info,
                                                   ILog logger,
-                                                  System.Exception exception = null,
+                                                  Exception exception = null,
                                                   [CallerFilePath] string file = "",
                                                   [CallerMemberName] string member = "",
                                                   [CallerLineNumber] int line = 0)

@@ -39,8 +39,8 @@ namespace Manager.Integration.Test.Timers
             bool guidAlreadyExists = Guids.ContainsKey(key);
 
             string oldStatus;
-            var success = Guids.TryGetValue(key,
-                                            out oldStatus);
+            Guids.TryGetValue(key,
+                              out oldStatus);
 
             var newstatus = Guids.AddOrUpdate(key,
                                               value,

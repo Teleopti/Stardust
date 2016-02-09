@@ -87,7 +87,7 @@ namespace Manager.Integration.Test.Helpers
 
                         response.EnsureSuccessStatusCode();
 
-                        var str = await response.Content.ReadAsStringAsync();
+                        await response.Content.ReadAsStringAsync();
                     }
                 }
                 catch (Exception exp)

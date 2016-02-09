@@ -35,7 +35,7 @@ namespace Manager.Integration.Test.Scripts
                 {
                     try
                     {
-                        int res = command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
                     }
 
                     catch (Exception exp)

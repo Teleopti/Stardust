@@ -7,14 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System;
+
 namespace Manager.Integration.Test.WPF
 {
-    using System;
-    using System.Collections.Generic;
-    
     public partial class WorkerNode
     {
-        public System.Guid Id { get; set; }
+        public Guid Id { get; set; }
         public string Url { get; set; }
     }
 }

@@ -54,8 +54,8 @@ namespace Manager.Integration.Test.Helpers
                     new FileInfo(Path.Combine(managerAppDomainSetup.ApplicationBase,
                                               managerAppDomainSetup.ApplicationName));
 
-                var ret = appDomain.ExecuteAssembly(assemblyToExecute.FullName,
-                                                    managerAppDomainSetup.AppDomainInitializerArguments);
+                appDomain.ExecuteAssembly(assemblyToExecute.FullName,
+                                          managerAppDomainSetup.AppDomainInitializerArguments);
 
             });
         }
@@ -63,10 +63,10 @@ namespace Manager.Integration.Test.Helpers
         public static void AddOrUpdateAppDomains(string key,
                                                  AppDomain value)
         {
-            AppDomain appdomain = AppDomains.AddOrUpdate(key,
-                                                         value,
-                                                         (name,
-                                                          val) => value);
+            AppDomains.AddOrUpdate(key,
+                                   value,
+                                   (name,
+                                    val) => value);
         }
     }
 }

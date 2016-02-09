@@ -7,15 +7,14 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System;
+
 namespace Manager.Integration.Test.WPF
 {
-    using System;
-    using System.Collections.Generic;
-    
     public partial class Logging
     {
         public int Id { get; set; }
-        public System.DateTime Date { get; set; }
+        public DateTime Date { get; set; }
         public string Thread { get; set; }
         public string Level { get; set; }
         public string Logger { get; set; }

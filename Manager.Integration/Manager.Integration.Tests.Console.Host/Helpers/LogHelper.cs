@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Runtime.CompilerServices;
 using log4net;
 
@@ -8,7 +9,7 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
     {
         public static void LogErrorWithLineNumber(ILog logger,
                                                   string info,
-                                                  System.Exception exception = null,
+                                                  Exception exception = null,
                                                   [CallerFilePath] string file = "",
                                                   [CallerMemberName] string member = "",
                                                   [CallerLineNumber] int line = 0)
@@ -26,7 +27,7 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 
         public static void LogFatalWithLineNumber(ILog logger,
                                                   string info,
-                                                  System.Exception exception = null,
+                                                  Exception exception = null,
                                                   [CallerFilePath] string file = "",
                                                   [CallerMemberName] string member = "",
                                                   [CallerLineNumber] int line = 0)
