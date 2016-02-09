@@ -96,6 +96,7 @@ namespace NodeTest
         {
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "Starting test...");
+
             _workerWrapper = new WorkerWrapper(new ThrowExceptionInvokeHandlerFake(),
                                                _nodeConfigurationFake,
                                                _nodeStartupNotification,
@@ -121,6 +122,7 @@ namespace NodeTest
         {
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "Starting test...");
+
             _workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
                                                _nodeConfigurationFake,
                                                _nodeStartupNotification,
@@ -146,6 +148,7 @@ namespace NodeTest
         {
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "Starting test...");
+
             _workerWrapper = new WorkerWrapper(new LongRunningInvokeHandlerFake(),
                                                _nodeConfigurationFake,
                                                _nodeStartupNotification,
@@ -179,6 +182,7 @@ namespace NodeTest
         {
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "Starting test...");
+
             _workerWrapper = new WorkerWrapper(new LongRunningInvokeHandlerFake(),
                                                _nodeConfigurationFake,
                                                _nodeStartupNotification,
@@ -235,6 +239,7 @@ namespace NodeTest
         {
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "Starting test...");
+
             IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
                                                              _nodeConfigurationFake,
                                                              _nodeStartupNotification,
@@ -251,6 +256,7 @@ namespace NodeTest
         {
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "Starting test...");
+
             IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
                                                              _nodeConfigurationFake,
                                                              _nodeStartupNotification,
@@ -267,6 +273,7 @@ namespace NodeTest
         {
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "Starting test...");
+
             IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
                                                              _nodeConfigurationFake,
                                                              _nodeStartupNotification,
@@ -283,6 +290,7 @@ namespace NodeTest
         {
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "Starting test...");
+
             IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
                                                              null,
                                                              null,
@@ -300,6 +308,7 @@ namespace NodeTest
         {
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "Starting test...");
+
             IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
                                                              _nodeConfigurationFake,
                                                              null,
@@ -316,6 +325,7 @@ namespace NodeTest
         {
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "Starting test...");
+
             IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
                                                              _nodeConfigurationFake,
                                                              _nodeStartupNotification,
@@ -331,6 +341,7 @@ namespace NodeTest
         {
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "Starting test...");
+
             var actionResult = _workerWrapper.StartJob(new JobToDo(),
                                                        new HttpRequestMessage());
 
@@ -344,6 +355,7 @@ namespace NodeTest
         {
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "Starting test...");
+
             var actionResult = _workerWrapper.StartJob(new JobToDo(),
                                                        new HttpRequestMessage());
 
