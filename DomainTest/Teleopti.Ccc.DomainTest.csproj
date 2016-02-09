@@ -192,8 +192,10 @@
     <Compile Include="ApplicationLayer\PersonAssociationChanged\TerminalDateChangedTest.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChanged\TerminatedTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\TerminatedPersonTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteAdherence\SiteChangesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteAdherence\PersonTerminatedTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamAdherence\PersonTerminatedTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TestCaseExtensions.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ExceptionTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StartTime\AlarmStartTimeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StartTime\IsAlarmTest.cs" />

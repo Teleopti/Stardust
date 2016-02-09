@@ -22,29 +22,35 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 
 		[Test]
 		[TestCaseSource(typeof(UnorderedEventsTest), "OutInOut_OutIn")]
-		public void ShouldHandleAdherenceChanges(IEnumerable<IEvent> events)
+		public void ShouldHandleAdherenceChanges(TestCase testCase)
 		{
-			events.ForEach(e => Target.Handle((dynamic)e));
-			var siteId = events.OfType<PersonOutOfAdherenceEvent>().First().SiteId;
-			Persister.Get(siteId).Count.Should().Be(1);
+			testCase.Events.ForEach(e => Target.Handle((dynamic)e));
+			Persister.Get(testCase.Site).Count.Should().Be(1);
 		}
 
 		[Test]
 		[TestCaseSource(typeof(UnorderedEventsTest), "OutDeleteInOut")]
-		public void ShouldHandleDeletions(IEnumerable<IEvent> events)
+		public void ShouldHandleDeletions(TestCase testCase)
 		{
-			events.ForEach(e => Target.Handle((dynamic)e));
-			var siteId = events.OfType<PersonOutOfAdherenceEvent>().First().SiteId;
-			Persister.Get(siteId).Count.Should().Be(0);
+			testCase.Events.ForEach(e => Target.Handle((dynamic)e));
+			Persister.Get(testCase.Site).Count.Should().Be(0);
 		}
 
 		[Test]
 		[TestCaseSource(typeof(UnorderedEventsTest), "OutTerminatedInOut")]
-		public void ShouldHandleTerminations(IEnumerable<IEvent> events)
+		public void ShouldHandleTerminations(TestCase testCase)
 		{
-			events.ForEach(e => Target.Handle((dynamic)e));
-			var siteId = events.OfType<PersonOutOfAdherenceEvent>().First().SiteId;
-			Persister.Get(siteId).Count.Should().Be(0);
+			testCase.Events.ForEach(e => Target.Handle((dynamic)e));
+			Persister.Get(testCase.Site).Count.Should().Be(0);
+		}
+
+		[Test]
+		[TestCaseSource(typeof(UnorderedEventsTest), "OutSiteChangeInOut")]
+		public void ShouldHandleSiteChanges(TestCase testCase)
+		{
+			testCase.Events.ForEach(e => Target.Handle((dynamic)e));
+			Persister.Get(testCase.OriginSite).Count.Should().Be(0);
+			Persister.Get(testCase.DestinationSite).Count.Should().Be(1);
 		}
 
 		public static IEnumerable OutInOut_OutIn
@@ -90,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 				};
 				return events
 					.Permutations()
-					.TestCases();
+					.TestCases(null, i => i.Site = siteId);
 			}
 		}
 
@@ -130,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 				return events
 					.Permutations()
 					.Where(p => !(p.First() is PersonDeletedEvent))
-					.TestCases();
+					.TestCases(null, i => i.Site = siteId);
 			}
 		}
 
@@ -152,7 +158,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 					{
 						PersonId = personId,
 						Timestamp = "2015-02-18 12:04".Utc(),
-						TeamId = null
+						SiteId = null
 					},
 					new PersonInAdherenceEvent
 					{
@@ -171,9 +177,72 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 				return events
 					.Permutations()
 					.Where(p => !(p.First() is PersonAssociationChangedEvent))
-					.TestCases();
+					.TestCases(null, i => i.Site = siteId);
 			}
 		}
-		
+
+		public static IEnumerable OutSiteChangeInOut
+		{
+			get
+			{
+				var personId = Guid.NewGuid();
+				var originSiteId = Guid.NewGuid();
+				var destinationSiteid = Guid.NewGuid();
+
+				var setup = new IEvent[]
+				{
+					new PersonInAdherenceEvent
+					{
+						PersonId = Guid.NewGuid(),
+						SiteId = originSiteId,
+						Timestamp = "2015-02-18 12:02".Utc()
+					},
+					new PersonInAdherenceEvent
+					{
+						PersonId = Guid.NewGuid(),
+						SiteId = destinationSiteid,
+						Timestamp = "2015-02-18 12:02".Utc()
+					},
+				};
+
+				var events = new IEvent[]
+				{
+					new PersonOutOfAdherenceEvent
+					{
+						PersonId = personId,
+						SiteId = originSiteId,
+						Timestamp = "2015-02-18 12:02".Utc()
+					},
+					new PersonAssociationChangedEvent
+					{
+						PersonId = personId,
+						Timestamp = "2015-02-18 12:04".Utc(),
+						SiteId = destinationSiteid
+					},
+					new PersonInAdherenceEvent
+					{
+						PersonId = personId,
+						SiteId = destinationSiteid,
+						Timestamp = "2015-02-18 12:06".Utc()
+					},
+					new PersonOutOfAdherenceEvent
+					{
+						PersonId = personId,
+						SiteId = destinationSiteid,
+						Timestamp = "2015-02-18 12:08".Utc()
+					}
+				};
+
+				return events
+					.Permutations()
+					.TestCases(setup, i =>
+					{
+						i.OriginSite = originSiteId;
+						i.DestinationSite = destinationSiteid;
+					});
+
+			}
+		}
+
 	}
 }

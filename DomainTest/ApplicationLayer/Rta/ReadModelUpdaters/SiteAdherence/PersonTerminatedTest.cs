@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 			Target.Handle(new PersonAssociationChangedEvent
 			{
 				PersonId = personId,
-				TeamId = null
+				SiteId = null
 			});
 
 			Persister.Get(siteId1).Count.Should().Be(0);
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 		{
 			var siteId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = personId });
+			Target.Handle(new PersonOutOfAdherenceEvent {SiteId = siteId, PersonId = personId});
 
 			Target.Handle(new PersonAssociationChangedEvent
 			{

@@ -257,7 +257,6 @@
     <Compile Include="IoC\ToggleOffAttribute.cs" />
     <Compile Include="LinqPerumationExtension.cs" />
     <Compile Include="SkillExtensions.cs" />
-    <Compile Include="TestCaseExtensions.cs" />
     <Compile Include="TestData\Analytics\DimDayOff.cs" />
     <Compile Include="IoC\ToggleAttribute.cs" />
     <Compile Include="TestData\Analytics\Absence.cs" />

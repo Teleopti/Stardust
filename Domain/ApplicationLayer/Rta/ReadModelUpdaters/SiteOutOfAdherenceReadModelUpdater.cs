@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -74,11 +73,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		public virtual void Handle(PersonAssociationChangedEvent @event)
 		{
 			if (@event.SiteId != null)
-				return;
-			updateAllModels(
-				@event.PersonId,
-				@event.Timestamp,
-				deletePerson);
+			{
+				updateAllModels(
+					@event.PersonId,
+					@event.Timestamp,
+					(m, p, t) =>
+						m.SiteId == @event.SiteId
+							? movePersonTo(m, p, t)
+							: movePersonFrom(m, p, t)
+					);
+			}
+			else
+			{
+				updateAllModels(
+					@event.PersonId,
+					@event.Timestamp,
+					deletePerson);
+			}
 		}
 
 		private void updateModel(Guid personId, DateTime time, Guid businessUnitId, Guid siteId, UpdateAction update)
@@ -86,7 +97,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			var model = modelFor(businessUnitId, siteId);
 			updateModel(model, personId, time, update);
 		}
-
+		
 		private void updateAllModels(Guid personId, DateTime time, UpdateAction update)
 		{
 			_persister.GetAll()
@@ -119,6 +130,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			var state = stateForPerson(model, personId);
 			state.Time = time;
 			state.Deleted = true;
+			return true;
+		}
+
+		private static bool movePersonFrom(SiteOutOfAdherenceReadModel model, Guid personId, DateTime time)
+		{
+			var state = stateForPerson(model, personId);
+			state.Time = state.Time > time ? state.Time : time;
+			state.MovedFrom = true;
+			return true;
+		}
+
+		private static bool movePersonTo(SiteOutOfAdherenceReadModel model, Guid personId, DateTime time)
+		{
+			var state = stateForPerson(model, personId);
+			state.Time = state.Time > time ? state.Time : time;
+			state.MovedFrom = false;
 			return true;
 		}
 
@@ -167,7 +194,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			model.Count = model.State
 				.Count(x =>
 					x.OutOfAdherence &&
-					!x.Deleted);
+					!x.Deleted && 
+					!x.MovedFrom);
 		}
 
 		[ReadModelUnitOfWork]

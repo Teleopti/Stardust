@@ -22,29 +22,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 
 		[Test]
 		[TestCaseSource(typeof(UnorderedEventsTest), "OutInOut_OutIn")]
-		public void ShouldHandleAdherenceChanges(IEnumerable<IEvent> events)
+		public void ShouldHandleAdherenceChanges(TestCase testCase)
 		{
-			events.ForEach(e => Target.Handle((dynamic)e));
-			var teamId = events.OfType<PersonOutOfAdherenceEvent>().First().TeamId;
-			Persister.Get(teamId).Count.Should().Be(1);
+			testCase.Events.ForEach(e => Target.Handle((dynamic)e));
+			Persister.Get(testCase.Team).Count.Should().Be(1);
 		}
 
 		[Test]
 		[TestCaseSource(typeof(UnorderedEventsTest), "OutDeleteInOut")]
-		public void ShouldHandleDeletions(IEnumerable<IEvent> events)
+		public void ShouldHandleDeletions(TestCase testCase)
 		{
-			events.ForEach(e => Target.Handle((dynamic)e));
-			var teamId = events.OfType<PersonOutOfAdherenceEvent>().First().TeamId;
-			Persister.Get(teamId).Count.Should().Be(0);
+			testCase.Events.ForEach(e => Target.Handle((dynamic)e));
+			Persister.Get(testCase.Team).Count.Should().Be(0);
 		}
 
 		[Test]
 		[TestCaseSource(typeof(UnorderedEventsTest), "OutTerminatedInOut")]
-		public void ShouldHandleTerminations(IEnumerable<IEvent> events)
+		public void ShouldHandleTerminations(TestCase testCase)
 		{
-			events.ForEach(e => Target.Handle((dynamic)e));
-			var teanId = events.OfType<PersonOutOfAdherenceEvent>().First().TeamId;
-			Persister.Get(teanId).Count.Should().Be(0);
+			testCase.Events.ForEach(e => Target.Handle((dynamic)e));
+			Persister.Get(testCase.Team).Count.Should().Be(0);
 		}
 
 		public static IEnumerable OutInOut_OutIn
@@ -91,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 
 				return events
 					.Permutations()
-					.TestCases();
+					.TestCases(null, i => i.Team = teamId);
 			}
 		}
 
@@ -131,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 				return events
 					.Permutations()
 					.Where(p => !(p.First() is PersonDeletedEvent))
-					.TestCases();
+					.TestCases(null, i => i.Team = teamId);
 			}
 		}
 
@@ -172,7 +169,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 				return events
 					.Permutations()
 					.Where(p => !(p.First() is PersonAssociationChangedEvent))
-					.TestCases();
+					.TestCases(null, i => i.Team = teamId);
 			}
 		}
 	}
