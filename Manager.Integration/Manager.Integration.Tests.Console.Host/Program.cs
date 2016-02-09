@@ -71,10 +71,9 @@ namespace Manager.IntegrationTest.Console.Host
                     {
                     }
                 }
-
+                QuitEvent.Set();
                 return true;
             }
-
             return false;
         }
 
@@ -129,8 +128,9 @@ namespace Manager.IntegrationTest.Console.Host
             {
                 LogHelper.LogInfoWithLineNumber(Logger,
                                                 "Started listening on port : ( " + configuration.BaseAddress + " )");
-
-                QuitEvent.WaitOne();
+                
+                    QuitEvent.WaitOne();
+                
             }
         }
 
@@ -142,7 +142,7 @@ namespace Manager.IntegrationTest.Console.Host
 
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
-            SetConsoleCtrlHandler(ConsoleCtrlCheck,
+            SetConsoleCtrlHandler(new HandlerRoutine(ConsoleCtrlCheck),
                                   true);
 
             System.Console.CancelKeyPress += Console_CancelKeyPress;
@@ -289,8 +289,6 @@ namespace Manager.IntegrationTest.Console.Host
 
             StartSelfHosting();
 
-            QuitEvent.WaitOne();
-
             foreach (var appDomain in AppDomains.Values)
             {
                 try
@@ -324,7 +322,7 @@ namespace Manager.IntegrationTest.Console.Host
                                                         EventArgs eventArgs)
         {
             LogHelper.LogInfoWithLineNumber(Logger,
-                                            string.Empty);
+                                            "Unloading IntegrationConsoleHost");
 
             foreach (var appDomain in AppDomains.Values)
             {
@@ -340,7 +338,10 @@ namespace Manager.IntegrationTest.Console.Host
             QuitEvent.Set();
         }
 
+
+
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
+
 
         private static void Console_CancelKeyPress(object sender,
                                                    ConsoleCancelEventArgs e)

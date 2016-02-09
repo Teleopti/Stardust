@@ -48,6 +48,8 @@ namespace ManagerConsoleHost
             _managerStarter.Start(config);
 
             QuitEvent.WaitOne();
+
+
         }
 
         [DllImport("Kernel32")]

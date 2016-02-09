@@ -41,7 +41,7 @@ namespace Stardust.Manager
                 }
 			    else
 			    {
-			        LogHelper.LogInfoWithLineNumber(Logger, "response = " + response + "Sent to " + postUri.ToString());
+			        LogHelper.LogInfoWithLineNumber(Logger, "response = " + response.Content + "Sent to " + postUri);
 			    }
 					
 			}
