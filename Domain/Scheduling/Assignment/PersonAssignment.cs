@@ -58,22 +58,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		private DateTimePeriod mergedMainShiftAndPersonalPeriods()
 		{
+			//this is quite strange... probably wrong impl if eg only overtime or personal layer exists together with dayoff
+			//just changed this impl for perf reasons, but kept old "strange" (?) behaviour.
 			DateTimePeriod? mergedPeriod = null;
 			foreach (var shiftLayer in ShiftLayers)
 			{
 				mergedPeriod = DateTimePeriod.MaximumPeriod(shiftLayer.Period, mergedPeriod);
 			}
-			if (_dayOffTemplate != null && !mergedPeriod.HasValue)
-			{
-				var dayOff = DayOff();
-				mergedPeriod = new DateTimePeriod(dayOff.Anchor, dayOff.Anchor.AddTicks(1));
-			}
-			if (!mergedPeriod.HasValue)
-			{
-				//gillar inte att man måste hoppa till personaggregatet här. stämpla assignmentet med tidszon istället?
-				mergedPeriod = new DateOnlyPeriod(Date, Date).ToDateTimePeriod(Person.PermissionInformation.DefaultTimeZone());
-			}
-			return mergedPeriod.Value;
+			if (mergedPeriod.HasValue)
+				return mergedPeriod.Value;
+
+			var dayOff = DayOff();
+			return dayOff == null ? 
+				new DateOnlyPeriod(Date, Date).ToDateTimePeriod(Person.PermissionInformation.DefaultTimeZone()) :	//don't like to jump to person aggregate here... "stämpla" assignment with a timezone instead.
+				new DateTimePeriod(dayOff.Anchor, dayOff.Anchor.AddTicks(1));
 		}
 
 		public virtual bool BelongsToScenario(IScenario scenario)
