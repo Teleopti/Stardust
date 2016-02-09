@@ -643,7 +643,7 @@
     <Compile Include="Helper\IBackgroundWorkerWrapper.cs" />
     <Compile Include="ICurrentApplicationData.cs" />
     <Compile Include="Logon\ApplicationFunctionsForRole.cs" />
-    <Compile Include="Logon\AsSuperUser.cs" />
+    <Compile Include="Logon\AsSystem.cs" />
     <Compile Include="Intraday\IIntradaySkillStatusService.cs" />
     <Compile Include="Intraday\IntradaySkillStatusService.cs" />
     <Compile Include="Intraday\SkillActualTasksProvider.cs" />
@@ -1808,7 +1808,7 @@
     <Compile Include="Security\Principal\UnsafePersonProvider.cs" />
     <Compile Include="Security\Principal\UserCulture.cs" />
     <Compile Include="Security\RegExpSpecification.cs" />
-    <Compile Include="Security\SuperUser.cs" />
+    <Compile Include="Security\SystemUser.cs" />
     <Compile Include="Specification\All.cs" />
     <Compile Include="Specification\Not.cs" />
     <Compile Include="Specification\PersonRequestSpecification.cs" />

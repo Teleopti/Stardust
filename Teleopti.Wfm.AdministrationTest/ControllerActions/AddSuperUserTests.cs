@@ -14,7 +14,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnFalseWhenNoTenant()
 		{
-			var result = Target.AddSuperUserToTenant(new AddSuperUserToTenantModel());
+			var result = Target.AddSystemUserToTenant(new AddSuperUserToTenantModel());
 			result.Content.Success.Should().Be.False();
 			//if this happen we do it wrong in the javascript
 			result.Content.Message.Should().Be.EqualTo("The Tenant name can not be empty.");
@@ -24,7 +24,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldReturnFalseWhenNoTenantInDb()
 		{
 			DataSourceHelper.CreateDatabasesAndDataSource(new NoPersistCallbacks(), "TestData");
-			var result = Target.AddSuperUserToTenant(new AddSuperUserToTenantModel {Tenant = "tenantThatNotExists", UserName = "userName", Password = "PassaDej0"});
+			var result = Target.AddSystemUserToTenant(new AddSuperUserToTenantModel {Tenant = "tenantThatNotExists", UserName = "userName", Password = "PassaDej0"});
 			result.Content.Success.Should().Be.False();
 			//if this happen we do it wrong in the javascript
 			result.Content.Message.Should().Be.EqualTo("Can not find this Tenant in the database.");
@@ -33,7 +33,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnFalseWhenNoUsernameOrPassword()
 		{
-			var result = Target.AddSuperUserToTenant(new AddSuperUserToTenantModel { Tenant = "TestData" });
+			var result = Target.AddSystemUserToTenant(new AddSuperUserToTenantModel { Tenant = "TestData" });
 			result.Content.Success.Should().Be.False();
 			result.Content.Message.Should().Be.EqualTo("The user name can not be empty.");
 		}
@@ -43,7 +43,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		{
 			DataSourceHelper.CreateDatabasesAndDataSource(new NoPersistCallbacks(), "TestData");
 			var result =
-				Target.AddSuperUserToTenant(new AddSuperUserToTenantModel
+				Target.AddSystemUserToTenant(new AddSuperUserToTenantModel
 				{
 					Tenant = "TestData",
 					FirstName = "Adam",

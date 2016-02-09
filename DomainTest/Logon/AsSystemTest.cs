@@ -10,14 +10,14 @@ namespace Teleopti.Ccc.DomainTest.Logon
 {
 	[DomainTest]
 	[LoggedOff]
-	public class AsSuperUserTest
+	public class AsSystemTest
 	{
 		public FakeDatabase Database;
-		public AsSuperUser Target;
+		public AsSystem Target;
 		public ICurrentTeleoptiPrincipal Principal;
 
-		[Test, Ignore]
-		public void Should()
+		[Test]
+		public void ShouldSignInAsSystem()
 		{
 			var businessUnid = Guid.NewGuid();
 			Database
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Logon
 
 			Target.Logon("tenant", businessUnid);
 
-			Principal.Current().Identity.Name.Should().Be("SuperUser");
+			Principal.Current().Identity.Name.Should().Be("System");
 		}
 	}
 }

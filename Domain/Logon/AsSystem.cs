@@ -10,26 +10,29 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Logon
 {
-	public class AsSuperUser
+	public class AsSystem
 	{
 		private readonly ILogOnOff _logOnOff;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly ClaimSetForApplicationRole _claimSetForApplicationRole;
 		private readonly IDataSourceForTenant _dataSourceForTenant;
+		private readonly ICurrentTeleoptiPrincipal _principal;
 		private readonly claimCache _claimCache;
 
-		public AsSuperUser(
+		public AsSystem(
 			ILogOnOff logOnOff,
 			IRepositoryFactory repositoryFactory,
 			ClaimSetForApplicationRole claimSetForApplicationRole,
 			IDataSourceForTenant dataSourceForTenant,
-			ITime time
+			ITime time,
+			ICurrentTeleoptiPrincipal principal
 			)
 		{
 			_logOnOff = logOnOff;
 			_repositoryFactory = repositoryFactory;
 			_claimSetForApplicationRole = claimSetForApplicationRole;
 			_dataSourceForTenant = dataSourceForTenant;
+			_principal = principal;
 			_claimCache = new claimCache(time);
 		}
 
@@ -40,10 +43,10 @@ namespace Teleopti.Ccc.Domain.Logon
 		
 		public void Logon(IDataSource dataSource, Guid businessUnitId)
 		{
-			IPerson superUser;
+			IPerson systemUser;
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				superUser = _repositoryFactory.CreatePersonRepository(uow).LoadPersonAndPermissions(SuperUser.Id_AvoidUsing_This);
+				systemUser = _repositoryFactory.CreatePersonRepository(uow).LoadPersonAndPermissions(SystemUser.Id_AvoidUsing_This);
 			}
 
 			using (var unitOfWork = dataSource.Application.CreateAndOpenUnitOfWork())
@@ -51,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Logon
 				var businessUnit = _repositoryFactory.CreateBusinessUnitRepository(unitOfWork).Get(businessUnitId);
 				unitOfWork.Remove(businessUnit); //To make sure that business unit doesn't belong to this uow any more
 				
-				_logOnOff.LogOn(dataSource, superUser, businessUnit);
+				_logOnOff.LogOn(dataSource, systemUser, businessUnit);
 
 				setCorrectPermissionsOnUser(dataSource.Application);
 			}
@@ -59,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Logon
 
 		private void setCorrectPermissionsOnUser(IUnitOfWorkFactory unitOfWorkFactory)
 		{
-			var person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(_repositoryFactory.CreatePersonRepository(unitOfWorkFactory.CurrentUnitOfWork()));
+			var person = _principal.Current().GetPerson(_repositoryFactory.CreatePersonRepository(unitOfWorkFactory.CurrentUnitOfWork()));
 			foreach (var applicationRole in person.PermissionInformation.ApplicationRoleCollection)
 			{
 				var cachedClaim = _claimCache.Get(unitOfWorkFactory.Name, applicationRole.Id.GetValueOrDefault());
@@ -68,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Logon
 					cachedClaim = _claimSetForApplicationRole.Transform(applicationRole, unitOfWorkFactory.Name);
 					_claimCache.Add(cachedClaim, unitOfWorkFactory.Name, applicationRole.Id.GetValueOrDefault());
 				}
-				TeleoptiPrincipal.CurrentPrincipal.AddClaimSet(cachedClaim);
+				_principal.Current().AddClaimSet(cachedClaim);
 			}
 		}
 

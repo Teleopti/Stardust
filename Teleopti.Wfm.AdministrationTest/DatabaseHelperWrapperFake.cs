@@ -16,7 +16,7 @@ namespace Teleopti.Wfm.AdministrationTest
 		{
 		}
 
-		public void AddSuperUser(string connectionToNewDb, Guid personId, string firstName, string lastName)
+		public void AddSystemUser(string connectionToNewDb, Guid personId, string firstName, string lastName)
 		{
 		}
 

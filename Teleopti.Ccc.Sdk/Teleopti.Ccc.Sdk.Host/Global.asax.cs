@@ -191,18 +191,18 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			builder.RegisterType<SkillDayLoadHelper>().As<ISkillDayLoadHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleSaveHandler>().As<IScheduleSaveHandler>().InstancePerLifetimeScope();
 
-			//remove this crap when we get rid of local superuser in appdb
+			//remove this crap when we get rid of local systemuser in appdb
 			builder.Register(c => 
-				new tenantPeopleLoaderButSkipIfSuperUser_Hackish(new TenantPeopleLoader(c.Resolve<ITenantLogonDataManager>()), c.Resolve<ICurrentPersonContainer>()))
+				new tenantPeopleLoaderButSkipIfSystemUser_Hackish(new TenantPeopleLoader(c.Resolve<ITenantLogonDataManager>()), c.Resolve<ICurrentPersonContainer>()))
 				.As<ITenantPeopleLoader>().InstancePerLifetimeScope();
 		}
 
-		private class tenantPeopleLoaderButSkipIfSuperUser_Hackish : ITenantPeopleLoader
+		private class tenantPeopleLoaderButSkipIfSystemUser_Hackish : ITenantPeopleLoader
 		{
 			private readonly TenantPeopleLoader _orgLoader;
 			private readonly ICurrentPersonContainer _currentPersonContainer;
 
-			public tenantPeopleLoaderButSkipIfSuperUser_Hackish(TenantPeopleLoader orgLoader, ICurrentPersonContainer currentPersonContainer)
+			public tenantPeopleLoaderButSkipIfSystemUser_Hackish(TenantPeopleLoader orgLoader, ICurrentPersonContainer currentPersonContainer)
 			{
 				_orgLoader = orgLoader;
 				_currentPersonContainer = currentPersonContainer;
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 			public void FillDtosWithLogonInfo(IList<PersonDto> personDtos)
 			{
-				if (_currentPersonContainer.Current().Person.Id.Value == SuperUser.Id_AvoidUsing_This)
+				if (_currentPersonContainer.Current().Person.Id.Value == SystemUser.Id_AvoidUsing_This)
 					return;
 				_orgLoader.FillDtosWithLogonInfo(personDtos);
 			}

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			_execute = execute;
 		}
 
-		public void AddSuperUser(Guid personId, string firstName, string lastName)
+		public void AddSystemUser(Guid personId, string firstName, string lastName)
 		{
 			var sql = string.Format(@"INSERT INTO Person 
 (Id, [Version], UpdatedBy, UpdatedOn, Email, Note, EmploymentNumber,FirstName, LastName, DefaultTimeZone,IsDeleted,FirstDayOfWeek)

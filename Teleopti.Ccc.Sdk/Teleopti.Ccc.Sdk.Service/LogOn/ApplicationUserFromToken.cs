@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
         private readonly PersonCache _personCache = new PersonCache();
         private CustomUserNameSecurityToken _customUserNameSecurityToken;
         private IDataSource _dataSource;
-	    private readonly Guid CustomPersonId = SuperUser.Id_AvoidUsing_This;
+	    private readonly Guid CustomPersonId = SystemUser.Id_AvoidUsing_This;
 
         private bool tryGetPersonFromStore()
         {
@@ -36,9 +36,9 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 
 	    private AuthenticationQuerierResult logOnSystem()
 	    {
-		    IPerson superUser;
-		    if (attemptSuperUserLogOn(out superUser)) 
-					return new AuthenticationQuerierResult {Success = true, Person = superUser};
+		    IPerson systemUser;
+		    if (attemptSystemUserLogOn(out systemUser)) 
+					return new AuthenticationQuerierResult {Success = true, Person = systemUser};
 
 		    var authQuerier = new AuthenticationQuerier(new TenantServerConfiguration(ConfigurationManager.AppSettings["TenantServer"]),
 				    new PostHttpRequest(), new NewtonsoftJsonSerializer(),
@@ -54,16 +54,15 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 				    }, string.Empty);
 	    }
 
-	    private bool attemptSuperUserLogOn(out IPerson superUser)
+	    private bool attemptSystemUserLogOn(out IPerson systemUser)
 	    {
-		    Guid systemUser;
-		    if (Guid.TryParse(_customUserNameSecurityToken.UserName, out systemUser) && systemUser == CustomPersonId)
+		    Guid systemUserId;
+		    if (Guid.TryParse(_customUserNameSecurityToken.UserName, out systemUserId) && systemUserId == CustomPersonId)
 		    {
-			    superUser = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(_dataSource.Application,
-				    CustomPersonId);
+			    systemUser = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(_dataSource.Application, CustomPersonId);
 			    return true;
 		    }
-		    superUser = null;
+		    systemUser = null;
 		    return false;
 	    }
 

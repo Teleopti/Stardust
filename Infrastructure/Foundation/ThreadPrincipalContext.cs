@@ -7,19 +7,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public class ThreadPrincipalContext : ICurrentPrincipalContext
 	{
-		//private readonly IPrincipalFactory _factory;
-
-		//public ThreadPrincipalContext(IPrincipalFactory factory)
-		//{
-		//	_factory = factory;
-		//}
-
-		//public void SetCurrentPrincipal(IPerson loggedOnUser, IDataSource dataSource, IBusinessUnit businessUnit)
-		//{
-		//	var principal = _factory.MakePrincipal(loggedOnUser, dataSource, businessUnit);
-		//	SetCurrentPrincipal(principal);
-		//}
-
 		public void SetCurrentPrincipal(ITeleoptiPrincipal principal)
 		{
 			Thread.CurrentPrincipal = principal;

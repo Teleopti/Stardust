@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 
 	
 		[Test]
-		public void ShouldReturnPersonsBusinessUnitCollectionIfNoSuperUser()
+		public void ShouldReturnPersonsBusinessUnitCollectionIfNotSystemUser()
 		{
 			var businessUnits = new List<IBusinessUnit>();
 
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		}
 
 		[Test]
-		public void ShouldReturnAllBusinessUnitsInDataSourceIfSuperUser()
+		public void ShouldReturnAllBusinessUnitsInDataSourceIfSystemUser()
 		{
 			var businessUnits = new List<IBusinessUnit>();
 			var unitOfWorkFactory = mocks.StrictMock<IUnitOfWorkFactory>();

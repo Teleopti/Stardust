@@ -108,7 +108,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			_buList = null;
 			var dataSource = _tenants.DataSourceForTenant(dataSourceName);
 			var person = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(dataSource.Application,
-				SuperUser.Id_AvoidUsing_This);
+				SystemUser.Id_AvoidUsing_This);
 			_choosenDb = new DataSourceContainer(dataSource, person);
 			if (_choosenDb.User == null)
 			{

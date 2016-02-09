@@ -2,7 +2,6 @@ using System.Diagnostics;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Web;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
@@ -25,11 +24,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			_appDomain = appDomain;
 			_thread = thread;
 		}
-
-		//public void SetCurrentPrincipal(IPerson loggedOnUser, IDataSource dataSource, IBusinessUnit businessUnit)
-		//{
-		//	selectContext().SetCurrentPrincipal(loggedOnUser, dataSource, businessUnit);
-		//}
 
 		public void SetCurrentPrincipal(ITeleoptiPrincipal principal)
 		{

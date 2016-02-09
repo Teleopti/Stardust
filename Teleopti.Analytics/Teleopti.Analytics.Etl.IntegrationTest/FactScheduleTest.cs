@@ -608,7 +608,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 	//	public bool SelectDataSourceContainer(string dataSourceName)
 	//	{
-	//	//	var person = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(_choosenDb.DataSource.Application, SuperUser.Id_AvoidUsing_This);
+	//	//	var person = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(_choosenDb.DataSource.Application, SystemUser.Id_AvoidUsing_This);
 	//	//	_choosenDb.SetUser(person);
 	//		return true;
 	//	}

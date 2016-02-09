@@ -103,10 +103,10 @@ namespace Teleopti.Wfm.Administration.Core
 			helper.AddPermissions(login, sqlVersion);
 		}
 
-		public void AddSuperUser(string connectionToNewDb, Guid personId, string firstName, string lastName)
+		public void AddSystemUser(string connectionToNewDb, Guid personId, string firstName, string lastName)
 		{
 			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
-			helper.ConfigureSystem().AddSuperUser(personId, firstName, lastName);
+			helper.ConfigureSystem().AddSystemUser(personId, firstName, lastName);
 		}
 
 		public SqlVersion Version(string connectionToNewDb)

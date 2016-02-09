@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<TokenIdentityProvider>().As<ITokenIdentityProvider>().SingleInstance();
 			builder.RegisterType<TeleoptiPrincipalFactory>().As<IPrincipalFactory>().SingleInstance();
-			builder.RegisterType<AsSuperUser>().SingleInstance();
+			builder.RegisterType<AsSystem>().SingleInstance();
 			builder.RegisterType<LogOnOff>().As<ILogOnOff>().SingleInstance();
 			builder.RegisterType<RepositoryFactory>().As<IRepositoryFactory>().SingleInstance();
 			builder.RegisterType<AvailableBusinessUnitsProvider>().As<IAvailableBusinessUnitsProvider>().SingleInstance();

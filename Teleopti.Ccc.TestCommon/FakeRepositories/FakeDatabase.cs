@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_contractSchedules = contractSchedules;
 
 			// created by app config app
-			this.WithPerson(SuperUser.Id_AvoidUsing_This, "System");
+			this.WithPerson(SystemUser.Id_AvoidUsing_This, "System");
 		}
 
 		public FakeDatabase WithTenant(string tenant)

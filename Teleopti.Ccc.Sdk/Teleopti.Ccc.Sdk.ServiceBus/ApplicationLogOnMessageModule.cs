@@ -19,14 +19,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ApplicationLogOnMessageModule));
 		private readonly DataSourceForTenantWrapper _dataSourceForTenant;
-		private readonly Lazy<AsSuperUser> _asSuperUser;
+		private readonly Lazy<AsSystem> _asSystem;
 
 		public ApplicationLogOnMessageModule(
 			DataSourceForTenantWrapper dataSourceForTenant,
-			Lazy<AsSuperUser> asSuperUser)
+			Lazy<AsSystem> asSystem)
 		{
 			_dataSourceForTenant = dataSourceForTenant;
-			_asSuperUser = asSuperUser;
+			_asSystem = asSystem;
 		}
 
 		public void Init(ITransport transport, IServiceBus bus)
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			if (checkLicense(dataSource))
 			{
-				_asSuperUser.Value.Logon(dataSource, logOnInfo.LogOnBusinessUnitId);
+				_asSystem.Value.Logon(dataSource, logOnInfo.LogOnBusinessUnitId);
 				setWcfAuthenticationHeader(dataSource, logOnInfo.LogOnBusinessUnitId);
 			}
 
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 			AuthenticationMessageHeader.BusinessUnit = businessUnitId;
 			AuthenticationMessageHeader.DataSource = dataSource.Application.Name;
-			AuthenticationMessageHeader.UserName = SuperUser.Id_AvoidUsing_This.ToString(); //rk - is this really correct - why the guid as username?
+			AuthenticationMessageHeader.UserName = SystemUser.Id_AvoidUsing_This.ToString(); //rk - is this really correct - why the guid as username?
 			AuthenticationMessageHeader.Password = "custom";
 			AuthenticationMessageHeader.UseWindowsIdentity = false;
 		}

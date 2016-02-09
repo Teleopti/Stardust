@@ -92,7 +92,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			
 
-			addSuperUserToTenant(newTenant, "first", "user", model.FirstUser, model.FirstUserPassword);
+			addSystemUserToTenant(newTenant, "first", "user", model.FirstUser, model.FirstUserPassword);
 
 			return Json(new TenantResultModel { Success = true, Message = "Successfully created a new Tenant.", TenantId = newTenant.Id });
 		}
@@ -278,7 +278,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[HttpPost]
 		[TenantUnitOfWork]
 		[Route("AddSuperUserToTenant")]
-		public virtual JsonResult<TenantResultModel> AddSuperUserToTenant(AddSuperUserToTenantModel model)
+		public virtual JsonResult<TenantResultModel> AddSystemUserToTenant(AddSuperUserToTenantModel model)
 		{
 			if (string.IsNullOrEmpty(model.Tenant))
 			{
@@ -293,7 +293,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			{
 				return Json(new TenantResultModel {Success = false, Message = "Can not find this Tenant in the database."});
 			}
-         return Json(addSuperUserToTenant(tenant,model.FirstName, model.LastName, model.UserName, model.Password));
+         return Json(addSystemUserToTenant(tenant,model.FirstName, model.LastName, model.UserName, model.Password));
 		}
 		
 		[HttpPost]
@@ -348,14 +348,14 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return new TenantResultModel { Success = true, Message = "The user name and password are ok." };
 		}
 
-		private TenantResultModel addSuperUserToTenant(Tenant tenant, string firstName, string lastName, string userName, string password)
+		private TenantResultModel addSystemUserToTenant(Tenant tenant, string firstName, string lastName, string userName, string password)
 		{
 			var checkUser = checkFirstUserInternal(userName, password);
 			if (!checkUser.Success)
 				return checkUser;
 
 			var personId = Guid.NewGuid();
-			_databaseHelperWrapper.AddSuperUser(tenant.DataSourceConfiguration.ApplicationConnectionString, personId, firstName, lastName);
+			_databaseHelperWrapper.AddSystemUser(tenant.DataSourceConfiguration.ApplicationConnectionString, personId, firstName, lastName);
 
 			var personInfo = new PersonInfo(tenant, personId);
 
