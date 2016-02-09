@@ -70,9 +70,9 @@ namespace Manager.Integration.Test
 
                     task.Start();
                 }
-            }
 
-            JobHelper.GiveNodesTimeToInitialize();
+                JobHelper.GiveNodesTimeToInitialize();
+            }            
         }
 
         private void CurrentDomain_UnhandledException(object sender,
@@ -150,9 +150,9 @@ namespace Manager.Integration.Test
 
         private const int NumberOfNodesToStart = 1;
 
-        private bool _startUpManagerAndNodeManually = false;
+        private bool _startUpManagerAndNodeManually = true;
 
-        private bool _clearDatabase = true;
+        private bool _clearDatabase = false;
 
         private bool _debugMode = false;
 
@@ -322,7 +322,7 @@ namespace Manager.Integration.Test
 
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(NumberOfNodesToStart * 2);
+            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(NumberOfNodesToStart * 1);
 
             TimeSpan timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count);
 
@@ -346,9 +346,7 @@ namespace Manager.Integration.Test
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
 
-            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
-
-            ManagerApiHelper.CheckJobHistoryStatusTimer.Dispose();
+            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);           
 
             bool condition =
                 ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus);

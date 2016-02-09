@@ -136,7 +136,10 @@ namespace Manager.IntegrationTest.Console.Host
 
         private static void Main(string[] args)
         {
+            LogHelper.LogInfoWithLineNumber(Logger,"Start.");
+
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
             SetConsoleCtrlHandler(ConsoleCtrlCheck,
@@ -168,9 +171,7 @@ namespace Manager.IntegrationTest.Console.Host
                 CopyManagerConfigurationFile(ManagerConfigurationFile,
                                              CopiedManagerConfigName);
 
-            var tasks = new List<Task>();
-
-            var managerTask = new Task(() =>
+            new Task(() =>
             {
                 var managerAssemblyLocationFullPath = Settings.Default.ManagerAssemblyLocationFullPath;
 
@@ -196,10 +197,10 @@ namespace Manager.IntegrationTest.Console.Host
                 var assemblyFile = new FileInfo(Path.Combine(managerAppDomainSetup.ApplicationBase,
                                                              managerAppDomainSetup.ApplicationName));
 
-                managerAppDomain.ExecuteAssembly(assemblyFile.FullName);
-            });
+                LogHelper.LogInfoWithLineNumber(Logger, "Execute assembly : " + assemblyFile.FullName);
 
-            tasks.Add(managerTask);
+                managerAppDomain.ExecuteAssembly(assemblyFile.FullName);
+            }).Start();
 
             var directoryNodeConfigurationFileFullPath =
                 new DirectoryInfo(AddEndingSlash(Settings.Default.NodeConfigurationFileFullPath + _buildMode));
@@ -259,7 +260,7 @@ namespace Manager.IntegrationTest.Console.Host
 
             foreach (var nodeconfigurationFile in nodeconfigurationFiles)
             {
-                var nodeTask = new Task(() =>
+                new Task(() =>
                 {
                     var nodeAppDomainSetup = new AppDomainSetup
                     {
@@ -280,15 +281,10 @@ namespace Manager.IntegrationTest.Console.Host
                         new FileInfo(Path.Combine(nodeAppDomainSetup.ApplicationBase,
                                                   nodeAppDomainSetup.ApplicationName));
 
+                    LogHelper.LogInfoWithLineNumber(Logger, "Execute assembly : " + assemblyToExecute.FullName);
+
                     nodeAppDomain.ExecuteAssembly(assemblyToExecute.FullName);
-                });
-
-                tasks.Add(nodeTask);
-            }
-
-            foreach (var task in tasks)
-            {
-                task.Start();
+                }).Start();
             }
 
             StartSelfHosting();
@@ -403,15 +399,18 @@ namespace Manager.IntegrationTest.Console.Host
 
         public static void UnloadAppDomainById(string id)
         {
-            var appDomainToUnload =
+            KeyValuePair<string, AppDomain> appDomainToUnload =
                 AppDomains.FirstOrDefault(pair => pair.Key == id);
 
-            AppDomain.Unload(appDomainToUnload.Value);
+            if (appDomainToUnload.Value != null)
+            {
+                AppDomain.Unload(appDomainToUnload.Value);
 
-            AppDomain appdomainToRemove;
+                AppDomain appdomainToRemove;
 
-            AppDomains.TryRemove(id,
-                                         out appdomainToRemove);
+                AppDomains.TryRemove(id,
+                                     out appdomainToRemove);
+            }
         }
     }
 }

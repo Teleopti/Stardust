@@ -22,6 +22,15 @@ namespace NodeTest
     [TestFixture]
     public class WorkerWrapperTests
     {
+        [TearDown]
+        public void TearDown()
+        {
+            if (_workerWrapper != null)
+            {
+                _workerWrapper.Dispose();
+            }            
+        }
+
         [SetUp]
         public void Setup()
         {
@@ -77,7 +86,8 @@ namespace NodeTest
         public void TestFixtureTearDown()
         {
             LogHelper.LogInfoWithLineNumber(Logger,
-                                            "Closing WorkerWrapperTests...");
+                                            "Start closing down.");
+
         }
 
         private Uri CallBackUriTemplateFake { get; set; }
@@ -342,6 +352,15 @@ namespace NodeTest
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "Starting test...");
 
+            _workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
+                                               _nodeConfigurationFake,
+                                               _nodeStartupNotification,
+                                               _pingToManagerFake,
+                                               _sendJobDoneTimer,
+                                               _sendJobCanceledTimer,
+                                               _sendJobFaultedTimer,
+                                               new PostHttpRequestFake());
+
             var actionResult = _workerWrapper.StartJob(new JobToDo(),
                                                        new HttpRequestMessage());
 
@@ -356,6 +375,15 @@ namespace NodeTest
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "Starting test...");
 
+            _workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
+                                               _nodeConfigurationFake,
+                                               _nodeStartupNotification,
+                                               _pingToManagerFake,
+                                               _sendJobDoneTimer,
+                                               _sendJobCanceledTimer,
+                                               _sendJobFaultedTimer,
+                                               new PostHttpRequestFake());
+
             var actionResult = _workerWrapper.StartJob(new JobToDo(),
                                                        new HttpRequestMessage());
 
@@ -369,6 +397,16 @@ namespace NodeTest
         {
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "Starting test...");
+
+            _workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
+                                               _nodeConfigurationFake,
+                                               _nodeStartupNotification,
+                                               _pingToManagerFake,
+                                               _sendJobDoneTimer,
+                                               _sendJobCanceledTimer,
+                                               _sendJobFaultedTimer,
+                                               new PostHttpRequestFake());
+
             var actionResult = _workerWrapper.StartJob(null,
                                                        new HttpRequestMessage());
 
