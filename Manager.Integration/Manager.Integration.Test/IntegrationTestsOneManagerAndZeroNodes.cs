@@ -193,6 +193,7 @@ namespace Manager.Integration.Test
             ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
             ManagerApiHelper.CheckJobHistoryStatusTimer.CancelAllRequest();
 
+            Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.Count > 0);
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.NullStatus));
 
             LogHelper.LogInfoWithLineNumber("Finshed test.",
