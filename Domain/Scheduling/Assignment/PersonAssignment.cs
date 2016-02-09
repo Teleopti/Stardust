@@ -59,17 +59,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private DateTimePeriod mergedMainShiftAndPersonalPeriods()
 		{
 			DateTimePeriod? mergedPeriod = null;
-			foreach (var mainShiftActivityLayer in MainActivities())
+			foreach (var shiftLayer in ShiftLayers)
 			{
-				mergedPeriod = DateTimePeriod.MaximumPeriod(mainShiftActivityLayer.Period, mergedPeriod);
-			}
-			foreach (var personalLayer in PersonalActivities())
-			{
-				mergedPeriod = DateTimePeriod.MaximumPeriod(personalLayer.Period, mergedPeriod);
-			}
-			foreach (var overtimeLayer in OvertimeActivities())
-			{
-				mergedPeriod = DateTimePeriod.MaximumPeriod(overtimeLayer.Period, mergedPeriod);
+				mergedPeriod = DateTimePeriod.MaximumPeriod(shiftLayer.Period, mergedPeriod);
 			}
 			if (_dayOffTemplate != null && !mergedPeriod.HasValue)
 			{
