@@ -60,8 +60,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 10).AddDays(1), true, false));
 			}
 
-			IList<IScheduleDay> ret;
-
 			using (_mocks.Playback())
 			{
 				_target.DeleteWithResourceCalculation(_list, _rollbackService, true, false);
