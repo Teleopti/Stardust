@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if(_resourceCalculateDaysDecider.IsNightShift(scheduleDay))
 				_deleteAndResourceCalculateService.DeleteWithResourceCalculation(listToDelete, _rollbackService, schedulingOptions.ConsiderShortBreaks, false);
 			else
-				_deleteAndResourceCalculateService.DeleteWithoutResourceCalculationOnNextDay(listToDelete, _rollbackService, schedulingOptions.ConsiderShortBreaks, false);
+				_deleteAndResourceCalculateService.DeleteWithoutResourceCalculationOnNextDay(scheduleDay, _rollbackService, schedulingOptions.ConsiderShortBreaks, false);
 			    
             if (!tryScheduleDay(dateToBeRemoved, schedulingOptions, effectiveRestriction, WorkShiftLengthHintOption.AverageWorkTime)) 
                 return true;

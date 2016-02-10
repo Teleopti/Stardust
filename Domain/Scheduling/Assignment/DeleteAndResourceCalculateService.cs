@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -6,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	public interface IDeleteAndResourceCalculateService
 	{
 		void DeleteWithResourceCalculation(IEnumerable<IScheduleDay> daysToDelete, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation);
-		void DeleteWithoutResourceCalculationOnNextDay(IEnumerable<IScheduleDay> daysToDelete, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation);
+		void DeleteWithoutResourceCalculationOnNextDay(IScheduleDay dayToDelete, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation);
 	}
 
 	public class DeleteAndResourceCalculateService : IDeleteAndResourceCalculateService
@@ -14,7 +15,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private readonly IDeleteSchedulePartService _deleteSchedulePartService;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
-		public DeleteAndResourceCalculateService(IDeleteSchedulePartService deleteSchedulePartService, IResourceOptimizationHelper resourceOptimizationHelper)
+		public DeleteAndResourceCalculateService(IDeleteSchedulePartService deleteSchedulePartService, 
+																					IResourceOptimizationHelper resourceOptimizationHelper)
 		{
 			_deleteSchedulePartService = deleteSchedulePartService;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
@@ -26,10 +28,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			resourceCalculate(daysToDelete, considerShortBreaks, true, doIntraIntervalCalculation);
 		}
 
-		public void DeleteWithoutResourceCalculationOnNextDay(IEnumerable<IScheduleDay> daysToDelete, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation)
+		public void DeleteWithoutResourceCalculationOnNextDay(IScheduleDay dayToDelete, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
-			_deleteSchedulePartService.Delete(daysToDelete, rollbackService);
-			resourceCalculate(daysToDelete, considerShortBreaks, false, doIntraIntervalCalculation);
+			var date = dayToDelete.DateOnlyAsPeriod.DateOnly;
+			_deleteSchedulePartService.Delete(new []{ dayToDelete}, rollbackService);
+			_resourceOptimizationHelper.ResourceCalculateDate(date, considerShortBreaks, doIntraIntervalCalculation);
 		}
 
 		private void resourceCalculate(IEnumerable<IScheduleDay> daysToDelete, bool considerShortBreaks, bool resourceCalculateNextDay, bool doIntraIntervalCalculation)
