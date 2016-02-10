@@ -67,7 +67,6 @@
     <Compile Include="Constants\ManagerRouteConstants.cs" />
     <Compile Include="Constants\MediaTypeConstants.cs" />
     <Compile Include="Constants\StatusConstants.cs" />
-    <Compile Include="DebugStuffTest.cs" />
     <Compile Include="EventArgs\GuidAddedEventArgs.cs" />
     <Compile Include="Helpers\AppDomainHelper.cs" />
     <Compile Include="Helpers\DatabaseHelper.cs" />
