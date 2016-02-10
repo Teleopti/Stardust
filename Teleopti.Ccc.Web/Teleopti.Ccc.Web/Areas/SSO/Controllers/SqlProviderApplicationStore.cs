@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 {
-	public class SqlProviderApplicationStore : IOpenIdApplicationStore, ICryptoKeyStore, INonceStore
+	public class SqlProviderApplicationStore : IOpenIdApplicationStore
 	{
 		private readonly ICryptoKeyInfoRepository _cryptoKeyInfoRepository;
 		private readonly INonceInfoRepository _nonceInfoRepository;
@@ -53,24 +53,24 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 
 		public bool StoreNonce(string context, string nonce, DateTime timestamp)
 		{
-			if (ToUniversalTimeSafe(timestamp) + maximumMessageAge < _now.UtcDateTime())
+			if (toUniversalTimeSafe(timestamp) + maximumMessageAge < _now.UtcDateTime())
 				return false;
 			var nonceInfo = _nonceInfoRepository.Find(context, nonce, timestamp);
 			if (nonceInfo == null)
 			{
-				_nonceInfoRepository.Add(new NonceInfo
+                _nonceInfoRepository.ClearExpired(_now.UtcDateTime().Subtract(maximumMessageAge));
+                _nonceInfoRepository.Add(new NonceInfo
 				{
 					Context = context,
 					Nonce = nonce,
 					Timestamp = timestamp
 				});
-				_nonceInfoRepository.ClearExpired(_now.UtcDateTime().Subtract(maximumMessageAge));
 				return true;
 			}
 			return false;
 		}
 
-		private DateTime ToUniversalTimeSafe(DateTime value)
+		private static DateTime toUniversalTimeSafe(DateTime value)
 		{
 			return value.Kind == DateTimeKind.Unspecified ? value : value.ToUniversalTime();
 		}

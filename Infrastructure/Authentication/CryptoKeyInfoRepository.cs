@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.Authentication
 		public CryptoKeyInfo Find(string bucket, string handle)
 		{
 			var session = _currentTenantSession.CurrentSession();
-			ICriteria crit = session.CreateCriteria(typeof(CryptoKeyInfo))
+			var crit = session.CreateCriteria<CryptoKeyInfo>()
 				.Add(Restrictions.Eq("Bucket", bucket))
 				.Add(Restrictions.Eq("Handle", handle));
 			return crit.UniqueResult<CryptoKeyInfo>();
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.Authentication
 		public IEnumerable<CryptoKeyInfo> Find(string bucket)
 		{
 			var session = _currentTenantSession.CurrentSession();
-			ICriteria crit = session.CreateCriteria(typeof (CryptoKeyInfo))
+			var crit = session.CreateCriteria<CryptoKeyInfo>()
 				.Add(Restrictions.Eq("Bucket", bucket));
 			return crit.List<CryptoKeyInfo>();
 		}
