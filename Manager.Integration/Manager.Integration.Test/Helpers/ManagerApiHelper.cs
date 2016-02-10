@@ -42,8 +42,6 @@ namespace Manager.Integration.Test.Helpers
             {
                 using (var client = new HttpClient())
                 {
-                    try
-                    {
                         DefineDefaultRequestHeaders(client);
 
                         var sez = JsonConvert.SerializeObject(jobRequestModel);
@@ -63,12 +61,6 @@ namespace Manager.Integration.Test.Helpers
 
                         CheckJobHistoryStatusTimer.AddOrUpdateGuidStatus(jobId,
                                                                          null);
-                    }
-                    catch (Exception ex)
-                    {
-                        LogHelper.LogErrorWithLineNumber("ManagerApiHelper CreateManagerDoThisTask problem with Post Async" + ex,
-                                                         Logger);
-                    }
                 }
             });
         }
