@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using log4net.Config;
 using NUnit.Framework;
 
 namespace Manager.Integration.Test
@@ -19,6 +20,9 @@ namespace Manager.Integration.Test
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
+            var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+            XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
+
             MyTask = new Task(() =>
             {
                 var path =

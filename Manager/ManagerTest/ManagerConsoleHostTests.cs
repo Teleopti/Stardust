@@ -2,14 +2,19 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using log4net;
+using log4net.Config;
 using NUnit.Framework;
+using Stardust.Manager.Helpers;
 
-namespace Stardust.Manager
+namespace ManagerTest
 {
     [TestFixture()]
     [Ignore]
     public class ManagerConsoleHostTests
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(ManagerConsoleHostTests));
+
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
         {
@@ -19,6 +24,11 @@ namespace Stardust.Manager
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
+            var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+            XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
+
+            LogHelper.LogInfoWithLineNumber(Logger,string.Empty);
+
             MyTask = new Task(() =>
             {
                 var path =

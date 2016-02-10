@@ -71,11 +71,12 @@ namespace ManagerConsoleHost
 
         private static bool ConsoleCtrlCheck(CtrlTypes ctrlType)
         {
-            Console.WriteLine(WhoAmI + " : ConsoleCtrlCheck called.");
-
             if (ctrlType == CtrlTypes.CtrlCloseEvent ||
                 ctrlType == CtrlTypes.CtrlShutdownEvent)
             {
+                LogHelper.LogInfoWithLineNumber(Logger,
+                                                WhoAmI + " : ConsoleCtrlCheck called.");
+
                 if (ManagerStarter != null)
                 {
                     ManagerStarter.Stop();
@@ -89,7 +90,6 @@ namespace ManagerConsoleHost
             return false;
         }
 
-
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
 
         //private static ManagerStarter _managerStarter;
@@ -97,7 +97,8 @@ namespace ManagerConsoleHost
         private static void CurrentDomain_DomainUnload(object sender,
                                                        EventArgs e)
         {
-            Console.WriteLine(WhoAmI + " : CurrentDomain_DomainUnload called.");
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            WhoAmI + " : CurrentDomain_DomainUnload called.");
 
             if (ManagerStarter != null)
             {
