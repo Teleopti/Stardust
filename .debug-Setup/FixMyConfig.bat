@@ -24,24 +24,27 @@ SET /P AnalyticsDB=AnalyticsDB?
 SET SourceSettings=%ROOTDIR%\config\settings.txt
 SET AppliedSettings=%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\settings.txt
 
-COPY "%SourceSettings%" "%AppliedSettings%"
+COPY "%SourceSettings%" "%AppliedSettings%" >> NUL
 
 ::Replace some parameters according to current RestoreToLocal.bat
 cscript .\common\replace.vbs "TeleoptiAnalytics_Demo" "%AnalyticsDB%" "%AppliedSettings%" > NUL
 cscript .\common\replace.vbs "TeleoptiApp_Demo" "%CCC7DB%" "%AppliedSettings%" > NUL
 
-IF NOT EXIST "%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\Teleopti.Support.Tool.exe" (
-	::Build Teleopti.Support.Tool.exe
-	ECHO Building %ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj
-	IF EXIST "%ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" %MSBUILD% /property:Configuration=%Configuration% /t:rebuild "%ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" > "%ROOTDIR%\Teleopti.Support.Tool.build.log"
-)
-
 ::add fixed encryption/decryption keys to match the ones used in WebTest
 ECHO %validationKey%>"%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\validation.key"
 ECHO %decryptionKey%>"%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\decryption.key"
 
+:: Build Teleopti.Support.Tool.exe if not built and source files are available 
+IF NOT EXIST "%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\Teleopti.Support.Tool.exe" (
+	IF EXIST "%ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" (
+		%MSBUILD% /property:Configuration=%Configuration% /t:rebuild "%ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" > "%ROOTDIR%\Teleopti.Support.Tool.build.log"
+	)
+)
+
 ::Run supportTool to replace all config
 "%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\Teleopti.Support.Tool.exe" -MODebug
+
+ECHO Done!
 
 ENDLOCAL
 goto:eof
