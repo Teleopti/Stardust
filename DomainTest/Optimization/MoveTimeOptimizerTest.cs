@@ -360,7 +360,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			//delete
 
             Expect.Call(_rollbackService.ModificationCollection).Return(new List<IScheduleDay>()).Repeat.Any();
-			Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(null, null, true, false)).IgnoreArguments()
+			Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation((IEnumerable<IScheduleDay>) null, null, true, false)).IgnoreArguments()
 				.Return(null);
 		}
 

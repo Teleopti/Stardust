@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 .Return(_removedSchedulePart).Repeat.AtLeastOnce();
             Expect.Call(_scheduleMatrix.GetScheduleDayByKey(_removedDate))
                 .Return(_removedScheduleDay).Repeat.AtLeastOnce();
-			Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithoutResourceCalculationOnNextDay(null, _rollbackService, true, false)).IgnoreArguments();
+			Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation((IScheduleDay) null, _rollbackService, true, false)).IgnoreArguments();
             Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_removedSchedulePart, _schedulingOptions))
                 .Return(_effectiveRestriction);
 			Expect.Call(_scheduleService.SchedulePersonOnDay(_removedSchedulePart, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, _rollbackService)).IgnoreArguments()
@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() =>_rollbackService.ClearModificationCollection());
                 Expect.Call(() =>_rollbackService.Rollback());
                 Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_removedDate, null, false)).IgnoreArguments().Return(true);
-				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithoutResourceCalculationOnNextDay(null, _rollbackService, true, false)).IgnoreArguments();
+				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation((IScheduleDay) null, _rollbackService, true, false)).IgnoreArguments();
                 Expect.Call(() =>_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_removedDate, _removedDate)));
 	            Expect.Call(_removedSchedulePart.PersonAssignment()).Return(_personAssignment);
 				Expect.Call(_personAssignment.Period).Return(_dateOnlyAsDateTimePeriod.Period()).Repeat.AtLeastOnce();
@@ -332,7 +332,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_removedScheduleDay.DaySchedulePart())
                     .Return(_removedSchedulePart).Repeat.AtLeastOnce();
 
-				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithoutResourceCalculationOnNextDay(null, _rollbackService, true, false)).IgnoreArguments();
+				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation((IScheduleDay) null, _rollbackService, true, false)).IgnoreArguments();
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_removedSchedulePart, _schedulingOptions))
                     .Return(_effectiveRestriction);
 				Expect.Call(_scheduleService.SchedulePersonOnDay(_removedSchedulePart, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, _rollbackService)).IgnoreArguments()
@@ -395,7 +395,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_removedScheduleDay).Repeat.AtLeastOnce();
                 Expect.Call(_removedScheduleDay.DaySchedulePart())
                     .Return(_removedSchedulePart).Repeat.AtLeastOnce();
-				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithoutResourceCalculationOnNextDay(null, _rollbackService, true, false)).IgnoreArguments();
+				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation((IScheduleDay) null, _rollbackService, true, false)).IgnoreArguments();
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_removedSchedulePart, _schedulingOptions))
                     .Return(_effectiveRestriction);
 				Expect.Call(_scheduleService.SchedulePersonOnDay(_removedSchedulePart, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, _rollbackService)).IgnoreArguments()

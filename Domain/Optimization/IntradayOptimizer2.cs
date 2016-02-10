@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay, schedulingOptions);
             
             //delete schedule
-				_deleteAndResourceCalculateService.DeleteWithoutResourceCalculationOnNextDay(scheduleDay, _rollbackService, schedulingOptions.ConsiderShortBreaks, false);
+				_deleteAndResourceCalculateService.DeleteWithResourceCalculation(scheduleDay, _rollbackService, schedulingOptions.ConsiderShortBreaks, false);
 			    
             if (!tryScheduleDay(dateToBeRemoved, schedulingOptions, effectiveRestriction, WorkShiftLengthHintOption.AverageWorkTime)) 
                 return true;
