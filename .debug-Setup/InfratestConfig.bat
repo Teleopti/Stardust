@@ -33,6 +33,7 @@ SET AppliedSettings=%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\settings
 COPY "%SourceSettings%" "%AppliedSettings%" >> NUL
 
 ::Replace some config values
+echo %ROOTDIR%\.debug-setup\common\replace.vbs "TeleoptiAnalytics_Demo" "%AnalyticsDB%" "%AppliedSettings%"
 cscript %ROOTDIR%\.debug-setup\common\replace.vbs "TeleoptiAnalytics_Demo" "%AnalyticsDB%" "%AppliedSettings%" > NUL
 cscript %ROOTDIR%\.debug-setup\common\replace.vbs "TeleoptiApp_Demo" "%CCC7DB%" "%AppliedSettings%" > NUL
 cscript %ROOTDIR%\.debug-setup\common\replace.vbs "TOGGLE_MODE_VALUE" "%ToggleMode%" "%AppliedSettings%" > NUL
