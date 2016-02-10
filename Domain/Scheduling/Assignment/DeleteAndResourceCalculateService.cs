@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			foreach (var pair in dic)
 			{
 				_resourceOptimizationHelper.ResourceCalculateDate(pair.Key, considerShortBreaks, doIntraIntervalCalculation);
-				if (!dic.ContainsKey(pair.Key.AddDays(1)) && resourceCalculateNextDay)
+				if (resourceCalculateNextDay && !dic.ContainsKey(pair.Key.AddDays(1)))
 					_resourceOptimizationHelper.ResourceCalculateDate(pair.Key.AddDays(1), considerShortBreaks, doIntraIntervalCalculation);
 			}
 		}
