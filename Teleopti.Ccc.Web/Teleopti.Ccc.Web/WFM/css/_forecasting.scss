@@ -129,3 +129,7 @@
 	transition: .1s all ease-in-out;
   stroke-width: 5!important;
 }
+
+forecast-result-chart >.c3 > svg{
+	max-width: 100%;
+}
