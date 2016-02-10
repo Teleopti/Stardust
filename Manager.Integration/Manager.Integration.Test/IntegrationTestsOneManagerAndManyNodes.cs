@@ -121,7 +121,7 @@ namespace Manager.Integration.Test
 
             List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(2*NumberOfNodesToStart);
 
-            var timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count);
+            var timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count, 2);
 
             List<Task> tasks = new List<Task>();
 
@@ -154,8 +154,6 @@ namespace Manager.Integration.Test
                              task => { task.Start(); });
 
             managerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
-
-            managerApiHelper.CheckJobHistoryStatusTimer.Dispose();
 
             Assert.IsTrue(managerApiHelper.CheckJobHistoryStatusTimer.Guids.Count > 0);
             Assert.IsTrue(managerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.CanceledStatus ||
