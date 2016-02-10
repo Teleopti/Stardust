@@ -347,13 +347,11 @@
     <Content Include="ConfigFiles\AzureConfigFiles.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ConfigFiles\BuildServerConfigFiles.txt" />
     <Content Include="ConfigFiles\ConfigFiles.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ConfigFiles\DeployConfigFiles.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="settings.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\Teleopti-WFM-main-icon256.png" />
@@ -420,7 +418,6 @@
 XCOPY "$(ProjectDir)SQLServerPerformance" "$(ProjectDir)bin\$(Configuration)\SQLServerPerformance" /S /Y /I
 XCOPY "$(ProjectDir)StartStopSystem" "$(ProjectDir)bin\$(Configuration)\StartStopSystem" /S /Y /I
 XCOPY "$(ProjectDir)WiseIISConfig" "$(ProjectDir)bin\$(Configuration)\WiseIISConfig" /S /Y /I
-COPY "$(ProjectDir)..\.debug-Setup\config\settings.txt" "$(ProjectDir)settings.txt"
 </PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
