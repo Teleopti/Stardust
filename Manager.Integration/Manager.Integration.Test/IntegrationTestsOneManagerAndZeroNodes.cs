@@ -186,7 +186,11 @@ namespace Manager.Integration.Test
                                                                                          5000,
                                                                                          cancellationTokenSource,
                                                                                          StatusConstants.NullStatus,
-                                                                                         StatusConstants.EmptyStatus);
+                                                                                         StatusConstants.EmptyStatus,
+                                                                                         StatusConstants.CanceledStatus,
+                                                                                         StatusConstants.DeletedStatus,
+                                                                                         StatusConstants.SuccessStatus,
+                                                                                         StatusConstants.FailedStatus);
 
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
@@ -196,7 +200,7 @@ namespace Manager.Integration.Test
             ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
             ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
-            ManagerApiHelper.CheckJobHistoryStatusTimer.CancelAllRequest();
+            ManagerApiHelper.CheckJobHistoryStatusTimer.Dispose();
 
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.Count > 0);
             Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.NullStatus));
