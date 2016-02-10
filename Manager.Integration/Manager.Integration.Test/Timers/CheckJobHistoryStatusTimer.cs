@@ -107,13 +107,6 @@ namespace Manager.Integration.Test.Timers
             }
         }
 
-        public void StopAll()
-        {
-            CancelAllRequest();
-
-            Stop();
-        }
-
         protected override void Dispose(bool disposing)
         {
             CancelAllRequest();
