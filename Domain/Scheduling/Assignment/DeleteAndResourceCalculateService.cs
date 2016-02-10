@@ -26,16 +26,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public void DeleteWithResourceCalculation(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
 			_deleteSchedulePartService.Delete(list, rollbackService);
-			resourceCalculate(list, considerShortBreaks, false, doIntraIntervalCalculation);
+			resourceCalculate(list, considerShortBreaks, true, doIntraIntervalCalculation);
 		}
 
 		public void DeleteWithoutResourceCalculationOnNextDay(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
 			_deleteSchedulePartService.Delete(list, rollbackService);
-			resourceCalculate(list, considerShortBreaks, true, doIntraIntervalCalculation);
+			resourceCalculate(list, considerShortBreaks, false, doIntraIntervalCalculation);
 		}
 
-		private void resourceCalculate(IEnumerable<IScheduleDay> list, bool considerShortBreaks, bool skipNextDay, bool doIntraIntervalCalculation)
+		private void resourceCalculate(IEnumerable<IScheduleDay> list, bool considerShortBreaks, bool resourceCalculateNextDay, bool doIntraIntervalCalculation)
 		{
 			IDictionary<DateOnly, IList<IScheduleDay>> dic = new Dictionary<DateOnly, IList<IScheduleDay>>();
 			foreach (var scheduleDay in list)
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			foreach (var pair in dic)
 			{
 				_resourceOptimizationHelper.ResourceCalculateDate(pair.Key, considerShortBreaks, doIntraIntervalCalculation);
-				if (!dic.ContainsKey(pair.Key.AddDays(1)) && !skipNextDay)
+				if (!dic.ContainsKey(pair.Key.AddDays(1)) && resourceCalculateNextDay)
 					_resourceOptimizationHelper.ResourceCalculateDate(pair.Key.AddDays(1), considerShortBreaks, doIntraIntervalCalculation);
 			}
 		}
