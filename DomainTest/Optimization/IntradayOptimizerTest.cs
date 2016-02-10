@@ -149,9 +149,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             // NO rollback
             _rollbackService.ClearModificationCollection();
 	        Expect.Call(_optimizationLimits.HasOverLimitExceeded(_overLimitCounts, _scheduleMatrix)).Return(false);
-
-			Expect.Call(_removedSchedulePart.PersonAssignment()).Return(_personAssignment);
-			Expect.Call(_personAssignment.Period).Return(_dateOnlyAsDateTimePeriod.Period()).Repeat.AtLeastOnce();
         }
 
         private void makePeriodBetter()
@@ -229,8 +226,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_removedDate, null, false)).IgnoreArguments().Return(true);
 				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation((IScheduleDay) null, _rollbackService, true, false)).IgnoreArguments();
                 Expect.Call(() =>_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_removedDate, _removedDate)));
-	            Expect.Call(_removedSchedulePart.PersonAssignment()).Return(_personAssignment);
-				Expect.Call(_personAssignment.Period).Return(_dateOnlyAsDateTimePeriod.Period()).Repeat.AtLeastOnce();
             }
 
             using (_mockRepository.Playback())
@@ -345,9 +340,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _rollbackService.ClearModificationCollection();
                 _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_removedDate, _removedDate));
 	            Expect.Call(_optimizationLimits.HasOverLimitExceeded(_overLimitCounts, _scheduleMatrix)).Return(false);
-
-				Expect.Call(_removedSchedulePart.PersonAssignment()).Return(_personAssignment);
-				Expect.Call(_personAssignment.Period).Return(_dateOnlyAsDateTimePeriod.Period()).Repeat.AtLeastOnce();
             }
 
             using (_mockRepository.Playback())
@@ -407,9 +399,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
                 Expect.Call(_rollbackService.ModificationCollection).Return(new List<IScheduleDay>()).Repeat.AtLeastOnce();
                 _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_removedDate, _removedDate));
-
-				Expect.Call(_removedSchedulePart.PersonAssignment()).Return(_personAssignment);
-				Expect.Call(_personAssignment.Period).Return(_dateOnlyAsDateTimePeriod.Period()).Repeat.AtLeastOnce();
             }
 
             using (_mockRepository.Playback())

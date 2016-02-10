@@ -33,8 +33,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public void DeleteWithResourceCalculation(IScheduleDay dayToDelete, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
-			var date = dayToDelete.DateOnlyAsPeriod.DateOnly;
 			_deleteSchedulePartService.Delete(new []{ dayToDelete}, rollbackService);
+
+			var date = dayToDelete.DateOnlyAsPeriod.DateOnly;
 			_resourceOptimizationHelper.ResourceCalculateDate(date, considerShortBreaks, doIntraIntervalCalculation);
 			if (_resourceCalculateDaysDecider.IsNightShift(dayToDelete))
 			{
