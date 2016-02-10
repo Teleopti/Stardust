@@ -147,8 +147,7 @@ namespace Manager.Integration.Test
 
             managerApiHelper.Dispose();
 
-            LogHelper.LogInfoWithLineNumber("Finshed test.",
-                                            Logger);
+            Assert.IsTrue(managerApiHelper.CheckJobHistoryStatusTimer.Guids.Count > 0);
         }
     }
 }
