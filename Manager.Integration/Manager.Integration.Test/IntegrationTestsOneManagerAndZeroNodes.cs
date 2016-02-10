@@ -145,9 +145,10 @@ namespace Manager.Integration.Test
 
             managerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
-            managerApiHelper.Dispose();
-
             Assert.IsTrue(managerApiHelper.CheckJobHistoryStatusTimer.Guids.Count > 0);
+
+            managerApiHelper.Dispose();
+            
         }
     }
 }
