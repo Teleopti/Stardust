@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -25,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public void DeleteWithResourceCalculation(IEnumerable<IScheduleDay> daysToDelete, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
 			_deleteSchedulePartService.Delete(daysToDelete, rollbackService);
-			resourceCalculate(daysToDelete, considerShortBreaks, true, doIntraIntervalCalculation);
+			resourceCalculate(daysToDelete, considerShortBreaks, doIntraIntervalCalculation);
 		}
 
 		public void DeleteWithoutResourceCalculationOnNextDay(IScheduleDay dayToDelete, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation)
@@ -35,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_resourceOptimizationHelper.ResourceCalculateDate(date, considerShortBreaks, doIntraIntervalCalculation);
 		}
 
-		private void resourceCalculate(IEnumerable<IScheduleDay> daysToDelete, bool considerShortBreaks, bool resourceCalculateNextDay, bool doIntraIntervalCalculation)
+		private void resourceCalculate(IEnumerable<IScheduleDay> daysToDelete, bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
 			var dic = new Dictionary<DateOnly, IList<IScheduleDay>>();
 			foreach (var scheduleDay in daysToDelete)
@@ -53,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			foreach (var pair in dic)
 			{
 				_resourceOptimizationHelper.ResourceCalculateDate(pair.Key, considerShortBreaks, doIntraIntervalCalculation);
-				if (resourceCalculateNextDay && !dic.ContainsKey(pair.Key.AddDays(1)))
+				if (!dic.ContainsKey(pair.Key.AddDays(1)))
 					_resourceOptimizationHelper.ResourceCalculateDate(pair.Key.AddDays(1), considerShortBreaks, doIntraIntervalCalculation);
 			}
 		}
