@@ -30,15 +30,15 @@ Scenario: Only run featuretest if a certain feature is disabled when loading the
 
 ## When running locally, one of these tests should fail
 ## They are here so build server can verify it's running in correct mode
-@DevMode
+@IsInDevMode
 @NoBrowser
-Scenario: Verify environment is set correctly to DEV mode, should fail otherwise
+Scenario: Verify environment is set correctly to DEV mode
 	When I query toggle service for 'TestToggle'
 	Then I should get 'true' back
 
-@CustomerMode
+@IsInCustomerMode
 @NoBrowser
-Scenario: Verify environment is set correctly to CUSTOMER mode, should fail otherwise
+Scenario: Verify environment is set correctly to CUSTOMER mode
 	When I query toggle service for 'TestToggle'
 	Then I should get 'false' back
 ##########################################################################
