@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
 					LogOnDatasource = _unitOfWorkFactory.Name,
 					LogOnBusinessUnitId = _model.SelectedSkill.BusinessUnit.Id.GetValueOrDefault()
 				};
-				if (_toggleManager.IsEnabled(Toggles.Wfm_UseManagersAndNodes))
+				if (_toggleManager.IsEnabled(Toggles.Wfm_ForecastFileImportOnStardust_37047))
 				{
 					var ser = JsonConvert.SerializeObject(message);
 					var jobModel = new JobRequestModel

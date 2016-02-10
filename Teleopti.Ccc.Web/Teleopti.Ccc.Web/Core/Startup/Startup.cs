@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				application.UseAutofacWebApi(config);
 
 				var toggles = container.Resolve<IToggleManager>();
-				if (toggles.IsEnabled(Toggles.Wfm_UseManagersAndNodes))
+				if (toggles.IsEnabled(Toggles.Wfm_Use_Stardust))
 				{
 					var managerThread = new Thread(startManager);
 					managerThread.Start();

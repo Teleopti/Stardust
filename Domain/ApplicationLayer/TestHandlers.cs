@@ -61,4 +61,46 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 	{
 	}
 
+	[UseNotOnToggle(Toggles.TestToggle)]
+	public class HandlerNotUsedOnTestToggle :
+		IHandleEvent<TestToggleEvent>,
+		IRunOnHangfire,
+		IRecreatable,
+		IInitializeble
+	{
+		public void Handle(TestToggleEvent @event)
+		{
+		}
+
+		public void DeleteAll()
+		{
+		}
+
+		public bool Initialized()
+		{
+			return true;
+		}
+	}
+
+	
+	public class HandlerMethodNotUsedOnTestToggle :
+		IHandleEvent<TestToggleEvent>,
+		IRunOnHangfire,
+		IRecreatable,
+		IInitializeble
+	{
+		[UseNotOnToggle(Toggles.TestToggle)]
+		public void Handle(TestToggleEvent @event)
+		{
+		}
+
+		public void DeleteAll()
+		{
+		}
+
+		public bool Initialized()
+		{
+			return true;
+		}
+	}
 }

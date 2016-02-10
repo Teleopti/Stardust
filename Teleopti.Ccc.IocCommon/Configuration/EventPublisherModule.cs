@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SyncAllEventPublisher>().SingleInstance();
 			builder.RegisterType<ServiceBusAsSyncEventPublisher>().SingleInstance();
 			builder.RegisterType<MultiEventPublisherServiceBusAsSync>().SingleInstance();
+			builder.RegisterType<StardustEventPublisher>().SingleInstance();
 
 			if (_configuration.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
 				builder.RegisterType<MultiEventPublisher>().As<IEventPublisher>().SingleInstance();

@@ -2064,6 +2064,7 @@
     <Compile Include="UndoRedo\UndoRedoContainer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="UseNotOnToggle.cs" />
     <Compile Include="UseOnToggle.cs" />
     <Compile Include="WebReport\ReportDataForecastVersusActualWorkload.cs" />
     <Compile Include="WebReport\ReportDataQueueStatAbandoned.cs" />

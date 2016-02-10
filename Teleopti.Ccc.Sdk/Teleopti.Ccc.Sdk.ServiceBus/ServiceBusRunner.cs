@@ -12,12 +12,14 @@ using Stardust.Node.API;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus.Container;
 using Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -61,7 +63,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()));
 			_sharedContainer = new ContainerBuilder().Build();
 			new ContainerConfiguration(_sharedContainer, toggleManager).Configure(null);
-			if (toggleManager.IsEnabled(Toggles.Wfm_UseManagersAndNodes))
+			if (toggleManager.IsEnabled(Toggles.Wfm_Use_Stardust))
 			{
 				var nodeThread = new Thread(StartNode);
 				nodeThread.Start();
@@ -90,7 +92,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private static IContainer makeContainer(IToggleManager toggleManager, IContainer sharedContainer)
 		{
 			var container = new ContainerBuilder().Build();
-			new ContainerConfiguration(container, toggleManager).Configure(sharedContainer);
+				new ContainerConfiguration(container, toggleManager).Configure(sharedContainer);
 			return container;
 		}
 
@@ -166,7 +168,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					.GetReferencedAssemblies()
 					.FirstOrDefault(x => x.Name.Equals(ConfigurationManager.AppSettings["HandlerAssembly"]));
 			if(assemblyName == null)
-				throw new Exception("Can not find the Asembly specified in AppSettings['HandlerAssembly']");
+				throw new Exception("Can not find the Assembly specified in AppSettings['HandlerAssembly']");
 
 			var assembly = Assembly.Load(assemblyName);
 			var nodeConfig = new NodeConfiguration(new Uri(ConfigurationManager.AppSettings["NodeBaseAddress"]),
@@ -174,9 +176,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					 assembly, 
 					 ConfigurationManager.AppSettings["NodeName"]);
 
-			//var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()));
-			//var sharedContainer = new ContainerBuilder().Build();
-			//new ContainerConfiguration(sharedContainer, toggleManager).Configure(null);
 			var iocArgs = new IocArgs(new ConfigReader());
 			var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));
 			var builder = new ContainerBuilder();
@@ -184,15 +183,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterModule(new TenantServerModule(configuration));
 			builder.RegisterModule<NodeHandlersModule>();
 			var container = builder.Build();
-			iocArgs.SharedContainer = container;
 
-			var b2 = new ContainerBuilder();
-			b2.RegisterModule(new CommonModule(configuration));
-			b2.RegisterModule(new TenantServerModule(configuration));
-			b2.RegisterModule<NodeHandlersModule>();
-			b2.Update(container);
-
-			var state = container.Resolve<IDataSourceScope>();
+			var messageBroker = container.Resolve<IMessageBrokerComposite>();
+			new InitializeMessageBroker(messageBroker).Start(ConfigurationManager.AppSettings.ToDictionary());
 
 			new NodeStarter().Start(nodeConfig, container);
 		}

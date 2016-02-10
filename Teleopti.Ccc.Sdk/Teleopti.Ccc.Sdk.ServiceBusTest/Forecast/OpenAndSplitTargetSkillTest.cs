@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 		private IMessageBrokerComposite _messageBroker;
 		private IEventPublisher _serviceBus;
 		private IOpenAndSplitSkillCommand _command;
-		private OpenAndSplitTargetSkillHandler _target;
+		private OpenAndSplitTargetSkillBase _target;
 		private IUnitOfWork _unitOfWork;
 		private IJobResult _jobResult;
 		private IDisableBusinessUnitFilter _disableFilter;
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			_jobResult = _mocks.DynamicMock<IJobResult>();
 			_command = _mocks.StrictMock<IOpenAndSplitSkillCommand>();
 			_disableFilter = _mocks.DynamicMock<IDisableBusinessUnitFilter>();
-			_target = new OpenAndSplitTargetSkillHandler(_currentunitOfWorkFactory, _command, _skillRepository,
+			_target = new OpenAndSplitTargetSkillBase(_currentunitOfWorkFactory, _command, _skillRepository,
 				_jobResultRepository, _feedback, _messageBroker,
 				_serviceBus, _disableFilter);
 		}

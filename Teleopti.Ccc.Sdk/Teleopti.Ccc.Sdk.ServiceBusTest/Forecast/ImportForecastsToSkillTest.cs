@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 	[TestFixture]
 	public class ImportForecastsToSkillTest
 	{
-		private ImportForecastsToSkillHandler _target;
+		private ImportForecastsToSkillBase _target;
 		private MockRepository _mocks;
 		private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private ISkillRepository _skillRepository;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			_jobResult = _mocks.DynamicMock<IJobResult>();
 			_disableFilter = _mocks.DynamicMock<IDisableBusinessUnitFilter>();
 			_saveForecastToSkillCommand = _mocks.StrictMock<ISaveForecastToSkillCommand>();
-			_target = new ImportForecastsToSkillHandler(_unitOfWorkFactory, _saveForecastToSkillCommand,
+			_target = new ImportForecastsToSkillBase(_unitOfWorkFactory, _saveForecastToSkillCommand,
 																		_skillRepository, _jobResultRepository, _feedback,
 																		_messageBroker, _disableFilter);
 		}

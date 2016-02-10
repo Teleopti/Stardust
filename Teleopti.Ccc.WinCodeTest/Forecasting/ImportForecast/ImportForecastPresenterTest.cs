@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
 			_jobResultRep.Stub(x => x.Add(null)).IgnoreArguments();
 			uow.Stub(x => x.PersistAll());
 
-			_toggleMan.Stub(x => x.IsEnabled(Toggles.Wfm_UseManagersAndNodes)).Return(true);
+			_toggleMan.Stub(x => x.IsEnabled(Toggles.Wfm_Use_Stardust)).Return(true);
 			_httpPost.Stub(x => x.Send<Guid>("", "")).IgnoreArguments().Return(Guid.NewGuid());
 			_messageSender.AssertWasNotCalled((x => x.Send(null, true)));
 

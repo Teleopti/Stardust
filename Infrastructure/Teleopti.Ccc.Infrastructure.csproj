@@ -226,6 +226,7 @@
     <Compile Include="ApplicationLayer\EventPopulatingPublisher.cs" />
     <Compile Include="ApplicationLayer\NoServiceBusSender.cs" />
     <Compile Include="ApplicationLayer\MultiEventPublisherServiceBusAsSync.cs" />
+    <Compile Include="ApplicationLayer\StardustEventPublisher.cs" />
     <Compile Include="ApplicationLayer\ServiceBusEventProcessor.cs" />
     <Compile Include="ApplicationLayer\SyncAllEventPublisher.cs" />
     <Compile Include="ApplicationLayer\ServiceBusAsSyncEventPublisher.cs" />

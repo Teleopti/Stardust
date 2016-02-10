@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -40,6 +41,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			#region All implementation of IPersistCallback
 			var businessUnit = CurrentBusinessUnit.Make();
+			//needed here?
+			builder.RegisterType<StardustEventPublisher>().SingleInstance();
 
 			/**************************************/
 			/*         Order dependant            */

@@ -54,8 +54,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					{
 						var runOnHangfire = typeof (IRunOnHangfire).IsAssignableFrom(t);
 						var runOnServiceBus = typeof (IRunOnServiceBus).IsAssignableFrom(t);
-						if (!(runOnHangfire ^ runOnServiceBus))
-							throw new Exception(string.Format("All events handlers need to implement IRunOnHangfire or IRunOnServiceBus. {0} does not.", t.Name));
+						var runOnStardust = typeof (IRunOnStardust).IsAssignableFrom(t);
+						if (!(runOnHangfire ^ runOnServiceBus ^ runOnStardust))
+							throw new Exception(string.Format("All events handlers need to implement IRunOnHangfire or IRunOnServiceBus or IRunOnStardust. {0} does not.", t.Name));
 					}
 
 					return hasHandleInterfaces;

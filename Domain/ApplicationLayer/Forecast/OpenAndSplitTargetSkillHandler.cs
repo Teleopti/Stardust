@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -11,9 +11,9 @@ using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
-	public class OpenAndSplitTargetSkillHandler : IHandleEvent<OpenAndSplitTargetSkill>, IRunOnServiceBus
+	public class OpenAndSplitTargetSkillBase 
 	{
-		private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IOpenAndSplitSkillCommand _command;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IJobResultRepository _jobResultRepository;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		private readonly IEventPublisher _eventPublisher;
 		private readonly IDisableBusinessUnitFilter _disableBusinessUnitFilter;
 
-		public OpenAndSplitTargetSkillHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory,
+		public OpenAndSplitTargetSkillBase(ICurrentUnitOfWorkFactory unitOfWorkFactory,
 			IOpenAndSplitSkillCommand command, ISkillRepository skillRepository, IJobResultRepository jobResultRepository,
 			IJobResultFeedback feedback, IMessageBrokerComposite messageBroker, IEventPublisher eventPublisher,
 			IDisableBusinessUnitFilter disableBusinessUnitFilter)
@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			_disableBusinessUnitFilter = disableBusinessUnitFilter;
 		}
 
-		[SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Info(System.String)"), SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Error(System.String,System.Exception)"), SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		public void Handle(OpenAndSplitTargetSkill message)
 		{
 			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
@@ -117,5 +116,39 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		{
 			unitOfWork.PersistAll();
 		}
+	}
+
+	[UseOnToggle(Toggles.Wfm_ForecastFileImportOnStardust_37047)]
+	public class OpenAndSplitTargetSkillStardust : OpenAndSplitTargetSkillBase, IHandleEvent<OpenAndSplitTargetSkill>, IRunOnStardust
+	{
+		public OpenAndSplitTargetSkillStardust(ICurrentUnitOfWorkFactory unitOfWorkFactory, IOpenAndSplitSkillCommand command,
+			ISkillRepository skillRepository, IJobResultRepository jobResultRepository, IJobResultFeedback feedback,
+			IMessageBrokerComposite messageBroker, IEventPublisher eventPublisher,
+			IDisableBusinessUnitFilter disableBusinessUnitFilter)
+			: base(
+				unitOfWorkFactory, command, skillRepository, jobResultRepository, feedback, messageBroker, eventPublisher,
+				disableBusinessUnitFilter)
+		{
+		}
+
+		public new void Handle(OpenAndSplitTargetSkill  @event)
+		{ base.Handle(@event);}
+	}
+
+	[UseNotOnToggle(Toggles.Wfm_ForecastFileImportOnStardust_37047)]
+	public class OpenAndSplitTargetSkillBus : OpenAndSplitTargetSkillBase, IHandleEvent<OpenAndSplitTargetSkill>, IRunOnServiceBus
+	{
+		public OpenAndSplitTargetSkillBus(ICurrentUnitOfWorkFactory unitOfWorkFactory, IOpenAndSplitSkillCommand command,
+			ISkillRepository skillRepository, IJobResultRepository jobResultRepository, IJobResultFeedback feedback,
+			IMessageBrokerComposite messageBroker, IEventPublisher eventPublisher,
+			IDisableBusinessUnitFilter disableBusinessUnitFilter)
+			: base(
+				unitOfWorkFactory, command, skillRepository, jobResultRepository, feedback, messageBroker, eventPublisher,
+				disableBusinessUnitFilter)
+		{
+		}
+
+		public new void Handle(OpenAndSplitTargetSkill @event)
+		{ base.Handle(@event); }
 	}
 }

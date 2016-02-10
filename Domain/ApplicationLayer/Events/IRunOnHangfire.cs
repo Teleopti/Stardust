@@ -7,4 +7,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	public interface IRunOnServiceBus
 	{
 	}
+
+	public interface IRunOnStardust
+	{
+	}
 }

@@ -10,7 +10,14 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 	{
 		public static bool TypeEnabledByToggle(this Type type, IIocConfiguration iocConfiguration)
 		{
-			var attributes = type.GetCustomAttributes(typeof(UseOnToggle), false);
+			var attributes = type.GetCustomAttributes(typeof(UseNotOnToggle), false);
+			if (!attributes.IsEmpty())
+			{
+				var theToggle = ((UseNotOnToggle)attributes.First()).Toggle;
+				return !iocConfiguration.Toggle(theToggle);
+			}
+
+			attributes = type.GetCustomAttributes(typeof(UseOnToggle), false);
 			if (attributes.IsEmpty()) return true;
 
 			var toggle = ((UseOnToggle)attributes.First()).Toggle;
@@ -19,7 +26,14 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 
 		public static bool MethodEnabledByToggle(this MethodInfo method, IIocConfiguration iocConfiguration)
 		{
-			var attributes = method.GetCustomAttributes(typeof(UseOnToggle), false);
+			var attributes = method.GetCustomAttributes(typeof(UseNotOnToggle), false);
+			if (!attributes.IsEmpty())
+			{
+				var theToggle = ((UseNotOnToggle)attributes.First()).Toggle;
+				return !iocConfiguration.Toggle(theToggle);
+			}
+
+			attributes = method.GetCustomAttributes(typeof(UseOnToggle), false);
 			if (attributes.IsEmpty()) return true;
 
 			var toggle = ((UseOnToggle)attributes.First()).Toggle;

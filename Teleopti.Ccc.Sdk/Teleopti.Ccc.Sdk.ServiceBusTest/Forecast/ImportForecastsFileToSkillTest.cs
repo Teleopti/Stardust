@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 	[TestFixture]
 	public class ImportForecastsFileToSkillTest
 	{
-		private ImportForecastsFileToSkillHandler _target;
+		private ImportForecastsFileToSkillBase _target;
 		private MockRepository _mocks;
 		private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private ISkillRepository _skillRepository;
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			_jobResult = _mocks.DynamicMock<IJobResult>();
 			_forecastFile = _mocks.DynamicMock<IForecastFile>();
 			_analyzeQuery = _mocks.StrictMock<IForecastsAnalyzeQuery>();
-			_target = new ImportForecastsFileToSkillHandler(_unitOfWorkFactory, _skillRepository, _jobResultRepository,
+			_target = new ImportForecastsFileToSkillBase(_unitOfWorkFactory, _skillRepository, _jobResultRepository,
 																			 _importForecastsRepository, _contentProvider, _analyzeQuery, _feedback,
 																			 _messageBroker, _serviceBus);
 		}

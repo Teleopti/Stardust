@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			{
 				Resolver.ResolveServiceBusHandlersForEvent(x);
 				Resolver.ResolveHangfireHandlersForEvent(x);
+				Resolver.ResolveStardustHandlersForEvent(x);
 			});
 		}
 
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			{
 				Resolver.ResolveServiceBusHandlersForEvent(x);
 				Resolver.ResolveHangfireHandlersForEvent(x);
+				Resolver.ResolveStardustHandlersForEvent(x);
 			});
 		}
 

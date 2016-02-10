@@ -165,8 +165,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.16\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
     </Reference>
-    <Reference Include="Stardust.Node, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Stardust.Node.1.0.0.105\lib\net451\Stardust.Node.dll</HintPath>
+    <Reference Include="Stardust.Node, Version=1.0.0.164, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Stardust.Node.1.0.0.164\lib\net451\Stardust.Node.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

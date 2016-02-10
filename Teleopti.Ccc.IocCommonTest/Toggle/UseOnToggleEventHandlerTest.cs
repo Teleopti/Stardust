@@ -92,6 +92,30 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 				.Not.Contain(typeof(HandlerUsedOnTestToggle_WithMethodUsedOnTestToggle2));
 		}
 
+		[Test]
+		[Toggle(Toggles.TestToggle)]
+		public void ShouldNotResolveHandlerNotUsedOnTestToggle()
+		{
+			var handlers = Container
+				.Resolve<IEnumerable<IHandleEvent<TestToggleEvent>>>()
+				.Select(ProxyUtil.GetUnproxiedType).ToList();
 
+			handlers.Should()
+				.Not.Contain(typeof(HandlerNotUsedOnTestToggle));
+			handlers.Should()
+				.Contain(typeof(HandlerUsedOnTestToggle));
+		}
+
+		[Test]
+		[Toggle(Toggles.TestToggle)]
+		public void ShouldNotResolveHandlerWithHandleNotUsedOnTestToggle()
+		{
+			var handlers = Container
+				.Resolve<IEnumerable<IHandleEvent<TestToggleEvent>>>()
+				.Select(ProxyUtil.GetUnproxiedType);
+
+			handlers.Should()
+				.Not.Contain(typeof(HandlerMethodNotUsedOnTestToggle));
+		}
 	}
 }

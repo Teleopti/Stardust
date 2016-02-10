@@ -4,45 +4,35 @@ using Autofac;
 using Stardust.Node.Interfaces;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.Forecasting.Export;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 {
 	public class ImportForecastFromFileHandler : IHandle<ImportForecastsFileToSkill>
 	{
 		private readonly IComponentContext _componentContext;
-		private readonly IDataSourceScope _dataSourceScope;
-		private readonly IPersonRepository _personRepository;
+		private readonly IJobResultFeedback _feedback;
+		private Action<string> _sendProgress;
 
-		public ImportForecastFromFileHandler(IComponentContext componentContext, IDataSourceScope dataSourceScope, IPersonRepository personRepository)
+		public ImportForecastFromFileHandler(IComponentContext componentContext,IJobResultFeedback feedback)
 		{
 			_componentContext = componentContext;
-			_dataSourceScope = dataSourceScope;
-			_personRepository = personRepository;
+			_feedback = feedback;
+		}
+
+		private void feedbackFeedbackChanged(object sender, FeedbackEventArgs e)
+		{
+			if(!string.IsNullOrEmpty(e.JobResultDetail.Message))
+				_sendProgress(e.JobResultDetail.Message);
 		}
 
 		public void Handle(ImportForecastsFileToSkill parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress)
 		{
-			//var ngt = _componentContext.Resolve<IBusinessUnitRepository>();
-
-			// here we use the one in the message
-			
-			using (_dataSourceScope.OnThisThreadUse(parameters.LogOnDatasource))
-			{
-				var state = _componentContext.Resolve<DataSourceState>();
-
-				using (var uow = state.Get().Application.CreateAndOpenUnitOfWork())
-				{
-					var person = _personRepository.Get(parameters.OwnerPersonId);
-					Thread.CurrentPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity(person.Name.FirstName, state.Get(), null, null, parameters.LogOnDatasource),person) ;
-				}
-				var personId = parameters.OwnerPersonId;
-				// before this we need to set up a person as it is logged on
-				var theRealOne = _componentContext.Resolve<IHandleEvent<ImportForecastsFileToSkill>>();
-				theRealOne.Handle(parameters);
-			}
+			_feedback.FeedbackChanged += feedbackFeedbackChanged;
+			_sendProgress = sendProgress;
+			var theRealOne = _componentContext.Resolve<IHandleEvent<ImportForecastsFileToSkill>>();
+			theRealOne.Handle(parameters);
+			_feedback.FeedbackChanged -= feedbackFeedbackChanged;
 		}
 	}
 }

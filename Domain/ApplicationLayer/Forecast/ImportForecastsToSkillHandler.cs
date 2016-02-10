@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -11,7 +12,7 @@ using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
-	public class ImportForecastsToSkillHandler : IHandleEvent<ImportForecastsToSkill>, IRunOnServiceBus
+	public class ImportForecastsToSkillBase 
 	{
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly ISaveForecastToSkillCommand _saveForecastToSkillCommand;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly IDisableBusinessUnitFilter _disableBusinessUnitFilter;
 
-		public ImportForecastsToSkillHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory,
+		public ImportForecastsToSkillBase(ICurrentUnitOfWorkFactory unitOfWorkFactory,
 			  ISaveForecastToSkillCommand saveForecastToSkillCommand,
 			  ISkillRepository skillRepository,
 			  IJobResultRepository jobResultRepository,
@@ -38,7 +39,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			_disableBusinessUnitFilter = disableBusinessUnitFilter;
 		}
 
-		[SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)"), SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Info(System.String)"), SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Error(System.String,System.Exception)"), SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Error(System.String)"), SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		public void Handle(ImportForecastsToSkill message)
 		{
 			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
@@ -90,7 +90,41 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		private void endProcessing(IUnitOfWork unitOfWork)
 		{
 			unitOfWork.PersistAll();
-			_feedback.Dispose();
+			_feedback.Clear();
 		}
+	}
+
+	[UseNotOnToggle(Toggles.Wfm_ForecastFileImportOnStardust_37047)]
+	public class ImportForecastsToSkillBusHander: ImportForecastsToSkillBase, IHandleEvent<ImportForecastsToSkill>, IRunOnServiceBus
+	{
+		public ImportForecastsToSkillBusHander(ICurrentUnitOfWorkFactory unitOfWorkFactory,
+			ISaveForecastToSkillCommand saveForecastToSkillCommand, ISkillRepository skillRepository,
+			IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBrokerComposite messageBroker,
+			IDisableBusinessUnitFilter disableBusinessUnitFilter)
+			: base(
+				unitOfWorkFactory, saveForecastToSkillCommand, skillRepository, jobResultRepository, feedback, messageBroker,
+				disableBusinessUnitFilter)
+		{
+		}
+
+		public new void Handle(ImportForecastsToSkill @event)
+		{ base.Handle(@event);}
+	}
+
+	[UseOnToggle(Toggles.Wfm_ForecastFileImportOnStardust_37047)]
+	public class ImportForecastsToSkillStardustHander : ImportForecastsToSkillBase, IHandleEvent<ImportForecastsToSkill>, IRunOnStardust
+	{
+		public ImportForecastsToSkillStardustHander(ICurrentUnitOfWorkFactory unitOfWorkFactory,
+			ISaveForecastToSkillCommand saveForecastToSkillCommand, ISkillRepository skillRepository,
+			IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBrokerComposite messageBroker,
+			IDisableBusinessUnitFilter disableBusinessUnitFilter)
+			: base(
+				unitOfWorkFactory, saveForecastToSkillCommand, skillRepository, jobResultRepository, feedback, messageBroker,
+				disableBusinessUnitFilter)
+		{
+		}
+
+		public new void Handle(ImportForecastsToSkill @event)
+		{ base.Handle(@event); }
 	}
 }

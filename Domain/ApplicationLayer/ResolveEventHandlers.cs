@@ -36,6 +36,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				.OfType<IRunOnServiceBus>();
 		}
 
+		public IEnumerable<object> ResolveStardustHandlersForEvent(IEvent @event)
+		{
+			return resolveHandlersForEvent(@event)
+				.OfType<IRunOnStardust>();
+		}
+
 		public MethodInfo HandleMethodFor(Type handler, IEvent @event)
 		{
 			return handler
