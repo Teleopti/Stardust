@@ -1,6 +1,4 @@
-﻿
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
@@ -21,10 +19,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	public class TeamBlockClearer : ITeamBlockClearer
 	{
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
+		private readonly IDeleteSchedulePartService _deleteSchedulePartService;
 
-		public TeamBlockClearer(IDeleteAndResourceCalculateService deleteAndResourceCalculateService)
+		public TeamBlockClearer(IDeleteAndResourceCalculateService deleteAndResourceCalculateService, IDeleteSchedulePartService deleteSchedulePartService)
 		{
 			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
+			_deleteSchedulePartService = deleteSchedulePartService;
 		}
 
 		public void ClearTeamBlock(ISchedulingOptions schedulingOptions,
@@ -57,9 +57,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			{
 				addDaysToRemove(teamBlock, unlockedDates, person, toRemove);
 			}
-
-			_deleteAndResourceCalculateService.DeleteWithoutResourceCalculation(toRemove,
-				schedulePartModifyAndRollbackService);
+			_deleteSchedulePartService.Delete(toRemove, schedulePartModifyAndRollbackService);
 		}
 
 		private static void addDaysToRemove(ITeamBlockInfo teamBlock, IList<DateOnly> unlockedDates , IPerson person, IList<IScheduleDay> toRemove)

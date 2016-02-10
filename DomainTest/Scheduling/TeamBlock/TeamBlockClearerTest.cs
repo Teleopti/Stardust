@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			_mocks = new MockRepository();
 			_deleteAndResourceCalculateService = _mocks.StrictMock<IDeleteAndResourceCalculateService>();
-			_target = new TeamBlockClearer(_deleteAndResourceCalculateService);
+			_target = new TeamBlockClearer(_deleteAndResourceCalculateService, null);
 			_schedulingOptions = new SchedulingOptions();
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_person1 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
