@@ -110,24 +110,22 @@
 
 .c3-circles-vcampaign > .c3-circle{
  stroke:$red-700!important;
- fill:$red-700!important;
+ fill:$white!important;
 }
 
 .c3-circles-voverride > .c3-circle{
  stroke:$purple-500!important;
- fill:$purple-500!important;
+ fill:$white!important;
 }
 
 .c3-circles-vcombo > .c3-circle{
  stroke:$gray-300!important;
- fill:$gray-300!important;
+ fill:$white!important;
 }
 
 .c3-circles-vcombo > .c3-circle,
 .c3-circles-voverride > .c3-circle,
 .c3-circles-vcampaign > .c3-circle{
-	cy:-10!important;
 	transition: .1s all ease-in-out;
-	transform: translate(0,15px);
-  stroke-width: 3!important;
+  stroke-width: 5!important;
 }
