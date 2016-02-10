@@ -14,7 +14,7 @@ namespace ManagerConsoleHost
     public class Program
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (Program));
-
+         
         private static string WhoAmI { get; set; }
 
         public static void Main(string[] args)
