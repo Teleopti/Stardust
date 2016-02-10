@@ -63,10 +63,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			using (_mocks.Playback())
 			{
-				ret = _target.DeleteWithResourceCalculation(_list, _rollbackService, true, false);
+				_target.DeleteWithResourceCalculation(_list, _rollbackService, true, false);
 			}
 
-			Assert.AreEqual(2, ret.Count);
+			Assert.AreEqual(2, _list.Count);
 		}
 
 		[Test]
@@ -92,14 +92,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 					() =>
 						_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 3), true, false));
 			}
-			IList<IScheduleDay> ret;
-
 			using (_mocks.Playback())
 			{
-				ret = _target.DeleteWithResourceCalculation(_list, _rollbackService, true, false);
+				_target.DeleteWithResourceCalculation(_list, _rollbackService, true, false);
 			}
 
-			Assert.AreEqual(2, ret.Count);
+			Assert.AreEqual(2, _list.Count);
 		}
 	}
 }

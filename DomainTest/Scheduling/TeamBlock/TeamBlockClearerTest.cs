@@ -64,10 +64,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				      .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_scheduleDayPro}));
 				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(_deleteAndResourceCalculateService.DeleteWithResourceCalculation(_toRemoveList,
+				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_toRemoveList,
 				                                                                             _rollbackService,
-				                                                                             _schedulingOptions.ConsiderShortBreaks, false))
-					  .Return(_toRemoveList);
+				                                                                             _schedulingOptions.ConsiderShortBreaks, false));
 			}
 
 			using (_mocks.Playback())
@@ -81,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay>(), _rollbackService, _schedulingOptions.ConsiderShortBreaks, false)).Return(_toRemoveList);
+				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay>(), _rollbackService, _schedulingOptions.ConsiderShortBreaks, false));
 			}
 
 			using (_mocks.Playback())
@@ -102,10 +101,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_matrix.GetScheduleDayByKey(DateOnly.MinValue)).Return(_scheduleDayPro);
 				Expect.Call(_matrix.UnlockedDays)
 					  .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>()));
-				Expect.Call(_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay>(),
+				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay>(),
 																							 _rollbackService,
-																							 _schedulingOptions.ConsiderShortBreaks, false))
-					  .Return(new List<IScheduleDay>());
+																							 _schedulingOptions.ConsiderShortBreaks, false));
 			}
 
 			using (_mocks.Playback())
@@ -122,10 +120,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay>(), 
+				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay>(), 
 																							 _rollbackService,
-																							 _schedulingOptions.ConsiderShortBreaks, false))
-					  .Return(new List<IScheduleDay>());
+																							 _schedulingOptions.ConsiderShortBreaks, false));
 			}
 
 			using (_mocks.Playback())
