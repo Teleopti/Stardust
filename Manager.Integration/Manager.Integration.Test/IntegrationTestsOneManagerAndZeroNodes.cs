@@ -51,10 +51,10 @@ namespace Manager.Integration.Test
 
             if (!_startUpManagerAndNodeManually)
             {
-                var task = AppDomainHelper.CreateAppDomainForManagerIntegrationConsoleHost(_buildMode,
-                                                                                           NumberOfNodesToStart);
+                    var task = AppDomainHelper.CreateAppDomainForManagerIntegrationConsoleHost(_buildMode,
+                                                                                               NumberOfNodesToStart);
 
-                task.Start();
+                    task.Start();
 
                 JobHelper.GiveNodesTimeToInitialize();
             }
@@ -81,7 +81,7 @@ namespace Manager.Integration.Test
                                           Settings.Default.CreateLoggingTableSqlScriptLocationAndFileName));
 
             ScriptExecuteHelper.ExecuteScriptFile(scriptFile,
-                                              ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString);
+                                                  ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString);
 
             LogHelper.LogInfoWithLineNumber("Run sql script to create logging file finished.",
                                             Logger);
@@ -90,7 +90,7 @@ namespace Manager.Integration.Test
         [TearDown]
         public void TearDown()
         {
-        }
+            }
 
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
@@ -117,7 +117,7 @@ namespace Manager.Integration.Test
                                                          exp);
                     }
                 }
-            }            
+            }
         }
 
         private const int NumberOfNodesToStart = 0;
@@ -126,7 +126,7 @@ namespace Manager.Integration.Test
 
         private bool _clearDatabase = false;
 
-        private string _buildMode = "Debug";       
+        private string _buildMode = "Debug";
 
         [Test]
         public void JobShouldJustBeQueuedIfNoNodes()
@@ -156,6 +156,12 @@ namespace Manager.Integration.Test
                 tasks.Add(managerApiHelper.CreateManagerDoThisTask(jobRequestModel));
             }
 
+            ManagerApiHelper.CheckJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(requests.Count,
+                                                                                         5000,
+                                                                                         cancellationTokenSource,
+                                                                                         StatusConstants.NullStatus,
+                                                                                         StatusConstants.EmptyStatus);
+
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
 
@@ -163,8 +169,8 @@ namespace Manager.Integration.Test
 
             managerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
-            Assert.IsTrue(managerApiHelper.CheckJobHistoryStatusTimer.Guids.Count > 0);
-            Assert.IsTrue(managerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.NullStatus));
+            ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
+            ManagerApiHelper.CheckJobHistoryStatusTimer.CancelAllRequest();
 
             managerApiHelper.Dispose();
 
