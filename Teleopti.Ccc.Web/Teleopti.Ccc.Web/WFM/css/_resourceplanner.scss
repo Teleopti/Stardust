@@ -35,6 +35,12 @@
 	width:auto;
 	float:left;
 	margin: 5px;
+	min-width:20rem;
+
+	.head-actions{
+		margin-top:0;
+		float: none;
+	}
 }
 
 .card-dot{
