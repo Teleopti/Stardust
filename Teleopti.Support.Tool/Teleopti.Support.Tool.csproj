@@ -347,7 +347,9 @@
     <Content Include="ConfigFiles\AzureConfigFiles.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="ConfigFiles\BuildServerConfigFiles.txt" />
+    <Content Include="ConfigFiles\BuildServerConfigFiles.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ConfigFiles\ConfigFiles.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
