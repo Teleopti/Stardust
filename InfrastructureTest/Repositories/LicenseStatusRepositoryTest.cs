@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void ShouldCreateInstanceWithUnitOfWorkFactory()
         {
-            var repository = new LicenseRepository(UnitOfWorkFactory.Current);
+            var repository = new LicenseRepository(CurrUnitOfWork);
             Assert.IsNotNull(repository);
         }
 

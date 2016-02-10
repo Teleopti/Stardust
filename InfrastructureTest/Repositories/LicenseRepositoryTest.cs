@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void ShouldCreateInstanceWithUnitOfWorkFactory()
         {
-            var repository = new LicenseRepository(UnitOfWorkFactory.Current);
+            var repository = new LicenseRepository(CurrUnitOfWork);
             Assert.IsNotNull(repository);
         }
         #endregion

@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Win.Main
 
 		private void buttonAdvViewActive_Click(object sender, EventArgs e)
 		{
-			var rep = new LicenseRepository(UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current());
+			var rep = new LicenseRepository(new FromFactory(() => UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current()));
 			var arr = rep.GetActiveAgents();
 			
 			var strings = new string[arr.Count+1];

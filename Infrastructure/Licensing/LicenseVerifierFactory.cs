@@ -1,5 +1,6 @@
 using System;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Licensing
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 										IUnitOfWorkFactory unitOfWorkFactory)  
 		{
 			return new LicenseVerifier(licenseFeedback, unitOfWorkFactory,
-																  new LicenseRepository(unitOfWorkFactory));
+																  new LicenseRepository(new FromFactory(() => unitOfWorkFactory)));
 		}
 	}
 }

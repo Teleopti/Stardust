@@ -28,12 +28,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-#pragma warning disable 618
-        public LicenseRepository(IUnitOfWorkFactory unitOfWorkFactory) : base(unitOfWorkFactory)
-#pragma warning restore 618
-        {
-        }
-
 				public LicenseRepository(ICurrentUnitOfWork currentUnitOfWork)
 					: base(currentUnitOfWork)
 	    {
