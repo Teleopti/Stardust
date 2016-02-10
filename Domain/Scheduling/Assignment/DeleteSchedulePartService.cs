@@ -11,12 +11,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     {
         IList<IScheduleDay> Delete(IList<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, IBackgroundWorkerWrapper backgroundWorker);
         IList<IScheduleDay> Delete(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService);
-
-        IList<IScheduleDay> Delete(IList<IScheduleDay> list, DeleteOption options, IBackgroundWorkerWrapper backgroundWorker,
-                                   IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTagSetter tagSetter, INewBusinessRuleCollection businessRuleCollection);
-
-    	IList<IScheduleDay> Delete(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService,
-    	                           DeleteOption deleteOption);
     }
 
     /// <summary>
@@ -91,30 +85,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	        IList<IScheduleDay> retList = Delete(list, deleteOption, rollbackService, bgWorker);
 
 	        return retList;
-        }
-
-		public IList<IScheduleDay> Delete(IList<IScheduleDay> list, DeleteOption options, IBackgroundWorkerWrapper backgroundWorker, IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTagSetter tagSetter, INewBusinessRuleCollection businessRuleCollection)
-        {
-            IList<IScheduleDay> cloneList = new List<IScheduleDay>();
-            IList<IScheduleDay> returnList = new List<IScheduleDay>();
-            foreach (IScheduleDay part in list)
-            {
-                var clonePart = preparePart(options, part);
-                cloneList.Add(clonePart);
-                if (backgroundWorker.CancellationPending)
-                    return returnList;
-            }
-	        var scheduleDictionary = _scheduleResultStateHolder().Schedules;
-	        scheduleDictionary.Modify(ScheduleModifier.Scheduler, cloneList,
-                                                        businessRuleCollection, scheduleDayChangeCallback,
-                                                        tagSetter);
-
-            foreach (IScheduleDay scheduleDay in cloneList)
-            {
-                returnList.Add(scheduleDictionary[scheduleDay.Person].ReFetch(scheduleDay));
-            }
-
-            return returnList;
         }
 
     	private IScheduleDay preparePart(DeleteOption options, IScheduleDay part)
