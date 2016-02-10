@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using NHibernate;
-using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -25,11 +24,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		protected Repository(IUnitOfWork unitOfWork)
         {
 			_currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
-        }
-		[Obsolete("Should be removed. Don't impl this ctor if you create a new repository!")]
-		protected Repository(IUnitOfWorkFactory unitOfWorkFactory)
-        {
-			_currentUnitOfWork = new FromFactory(() => unitOfWorkFactory);
         }
 
 		protected Repository(ICurrentUnitOfWork currentUnitOfWork)

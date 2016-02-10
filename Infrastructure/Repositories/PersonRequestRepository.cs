@@ -27,13 +27,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public PersonRequestRepository(IUnitOfWorkFactory unitOfWorkFactory)
-#pragma warning disable 618
-			: base(unitOfWorkFactory)
-#pragma warning restore 618
-		{
-		}
-
 		public PersonRequestRepository(ICurrentUnitOfWork currentUnitOfWork)
 			: base(currentUnitOfWork)
 		{
