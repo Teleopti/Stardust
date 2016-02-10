@@ -32,15 +32,15 @@ SET AppliedSettings=%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\settings
 
 COPY "%SourceSettings%" "%AppliedSettings%" >> NUL
 
-::Replace some parameters according to current RestoreToLocal.bat
-cscript .\common\replace.vbs "TeleoptiAnalytics_Demo" "%AnalyticsDB%" "%AppliedSettings%" > NUL
-cscript .\common\replace.vbs "TeleoptiApp_Demo" "%CCC7DB%" "%AppliedSettings%" > NUL
-cscript .\common\replace.vbs "TOGGLE_MODE_VALUE" "%ToggleMode%" "%AppliedSettings%" > NUL
+::Replace some config values
+cscript %ROOTDIR%\.debug-setup\common\replace.vbs "TeleoptiAnalytics_Demo" "%AnalyticsDB%" "%AppliedSettings%" > NUL
+cscript %ROOTDIR%\.debug-setup\common\replace.vbs "TeleoptiApp_Demo" "%CCC7DB%" "%AppliedSettings%" > NUL
+cscript %ROOTDIR%\.debug-setup\common\replace.vbs "TOGGLE_MODE_VALUE" "%ToggleMode%" "%AppliedSettings%" > NUL
 
 :: Build Teleopti.Support.Tool.exe if not built and source files are available 
-IF NOT EXIST "%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\Teleopti.Support.Tool.exe" (
-	IF EXIST "%ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" (
-		%MSBUILD% /property:Configuration=%Configuration% /t:rebuild "%ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" > "%ROOTDIR%\Teleopti.Support.Tool.build.log"
+IF NOT EXIST "%ROOTDIR%\Teleopti.Support.Tool\bin\%Configuration%\Teleopti.Support.Tool.exe" (
+	IF EXIST "%ROOTDIR%\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" (
+		%MSBUILD% /property:Configuration=%Configuration% /t:rebuild "%ROOTDIR%\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" > "%ROOTDIR%\Teleopti.Support.Tool.build.log"
 	)
 )
 
