@@ -12,7 +12,7 @@
 				<div class="con-flex">
 					<form name="form" class="wfm-form" novalidate>
 						<div class="form-input-wrap">
-							<label for="nameId">Area name: <input type="text" ng-model="form.name" name="Name" required="" id="nameId"/></label>
+							<label for="skillAreaName">Area name: <input type="text" ng-model="skillAreaName" name="Name" required="" id="skillAreaName" /></label>
 							<div ng-cloak class="animate-input-message" ng-show ="form.$submitted || form.Name.$touched">
 								<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">{{'Required'|translate}}</div>
 							</div>
@@ -42,19 +42,19 @@
 
 				<div class="con-row">
 					<div class="con-flex">
-						<ul class="wfm-list" style="max-height:700px;">
-							<li ng-click="me=!me" ng-hide="selectedFilter==true && !me" ng-repeat="skill in skills | filter:areaFilter">
+						<ul class="skill-area-list wfm-list" style="max-height:700px;">
+							<li ng-click="skill.isSelected=!skill.isSelected" ng-hide="selectedFilter==true && !skill.isSelected" ng-repeat="skill in skills | filter:areaFilter">
 								<span class="list-item-container">
 									{{skill.Name}}
 								</span>
-								<span ng-cloak ng-show="me" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
+								<span ng-cloak ng-show="skill.isSelected" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
 							</li>
 						</ul>
 					</div>
 				</div>
 				<div class="con-footer">
 					<button class="wfm-btn wfm-btn-invis-default" ng-click="exitConfigMode()">Cancel</button>
-					<button class="wfm-btn wfm-btn-invis-primary" ng-click="exitConfigMode()">Save area</button>
+					<button class="skill-area-save wfm-btn wfm-btn-invis-primary" ng-click="saveSkillArea()">Save area</button>
 				</div>
 			</div>
 		</div>

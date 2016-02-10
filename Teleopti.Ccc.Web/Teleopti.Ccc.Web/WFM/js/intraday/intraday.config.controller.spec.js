@@ -38,6 +38,5 @@ describe('IntradayConfigCtrl', function () {
 
 		expect(scope.skills[0].Id).toEqual("fa9b5393-ef48-40d1-b7cc-09e797589f81");
 		expect(scope.skills[0].Name).toEqual("my skill");
-		
 	});
 });

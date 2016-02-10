@@ -103,6 +103,9 @@ wfm.config([
 			templateUrl: 'js/permissions/permissions.html',
 			controller: 'PermissionsCtrl'
 		}).state('intraday', {
+			params: {
+				skillAreaId: undefined
+			},
 			url: '/intraday',
 			templateUrl: 'js/intraday/intraday.html',
 			controller: 'IntradayCtrl'

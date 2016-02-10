@@ -643,6 +643,7 @@
     <Compile Include="Helper\IBackgroundWorkerWrapper.cs" />
     <Compile Include="ICurrentApplicationData.cs" />
     <Compile Include="Logon\ApplicationFunctionsForRole.cs" />
+    <Compile Include="Intraday\CreateSkillArea.cs" />
     <Compile Include="Intraday\FetchSkillArea.cs" />
     <Compile Include="Logon\AsSystem.cs" />
     <Compile Include="Intraday\FetchSkillInIntraday.cs" />

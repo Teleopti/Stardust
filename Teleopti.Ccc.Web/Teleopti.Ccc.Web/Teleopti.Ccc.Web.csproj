@@ -472,6 +472,7 @@
     <Compile Include="Areas\Global\UserController.cs" />
     <Compile Include="Areas\HealthCheck\Controllers\HealthCheckApiController.cs" />
     <Compile Include="Areas\Intraday\IntradayAreaModule.cs" />
+    <Compile Include="Areas\Intraday\IntradaySkillAreaController.cs" />
     <Compile Include="Areas\Intraday\IntradaySkillController.cs" />
     <Compile Include="Areas\Intraday\IntradaySkillStatusController.cs" />
     <Compile Include="Areas\MultiTenancy\ChangePasswordController.cs" />

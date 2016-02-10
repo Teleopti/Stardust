@@ -17,6 +17,14 @@
 					}).query().$promise;
 				};
 
+				this.createSkillArea = $resource('../api/intraday/skillarea', {}, {
+						query: {
+							method: 'POST',
+							params: {},
+							isArray: false
+						}
+					});
+
 				this.formatDateTime = function (time) {
 					if (time === null || time === undefined || time === '') return '--:--:--';
 					var momentTime = moment(time);

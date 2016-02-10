@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Given(@"I name the Skill Area '(.*)'")]
 		public void GivenINameTheSkillArea(string skillAreaName)
 		{
-			Browser.Interactions.FillWith(".skill-area-name input", skillAreaName);
+			Browser.Interactions.FillWith("#skillAreaName", skillAreaName);
 		}
 
 		[Given(@"I select the skill '(.*)'")]

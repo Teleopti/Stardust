@@ -2,8 +2,10 @@
 	'use strict';
 	angular.module('wfm.intraday')
 		.controller('IntradayCtrl', [
-		'$scope', '$state', 'intradayService',
-		function ($scope, $state, intradayService) {
+		'$scope', '$state', 'intradayService', '$stateParams',
+		function ($scope, $state, intradayService, $stateParams) {
+
+			$scope.SkillAreaId = $stateParams.skillAreaId;
 			intradayService.skillList.query().$promise.then(function (result) {
 				$scope.skillList = result;
 				$scope.selectedSkill = $scope.skillList[0];

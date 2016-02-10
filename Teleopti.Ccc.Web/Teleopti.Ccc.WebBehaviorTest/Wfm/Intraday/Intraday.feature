@@ -16,7 +16,7 @@ Scenario: Create Skill Area
     And I name the Skill Area 'my Area'
     And I select the skill 'Skill A'
     When I am done creating Skill Area 
-	Then I should see that Skill Area 'my pack' is selected in monitor view
+	Then I should see that Skill Area 'my Area' is selected in monitor view
     And I should see details for 'Skill A'
 
 Scenario: Remove Skill Area
