@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			DateTime schedulingTime = DateTime.Now;
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService =
-				new DeleteAndResourceCalculateService(new DeleteSchedulePartService(_resultStateHolder), _resourceOptimizationHelper);
+				new DeleteAndResourceCalculateService(new DeleteSchedulePartService(_resultStateHolder), _resourceOptimizationHelper, new ResourceCalculateDaysDecider());
 			ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(_resultStateHolder(),
 				_scheduleDayChangeCallback,
 				tagSetter);

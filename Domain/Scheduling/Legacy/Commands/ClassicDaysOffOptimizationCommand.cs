@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var optimizationLimits = new OptimizationLimits(optimizerOverLimitDecider, _minWeekWorkTimeRule);
 
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService =
-				new DeleteAndResourceCalculateService(new DeleteSchedulePartService(scheduleResultStateHolder), _resourceOptimizationHelper);
+				new DeleteAndResourceCalculateService(new DeleteSchedulePartService(scheduleResultStateHolder), _resourceOptimizationHelper, new ResourceCalculateDaysDecider());
 			INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService =
 				new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(),
 					deleteAndResourceCalculateService,

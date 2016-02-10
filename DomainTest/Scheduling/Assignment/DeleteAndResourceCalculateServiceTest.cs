@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
 			_deleteSchedulePartService = _mocks.StrictMock<IDeleteSchedulePartService>();
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
-			_target = new DeleteAndResourceCalculateService(_deleteSchedulePartService, _resourceOptimizationHelper);
+			_target = new DeleteAndResourceCalculateService(_deleteSchedulePartService, _resourceOptimizationHelper, new ResourceCalculateDaysDecider());
 			_part1 = _mocks.StrictMock<IScheduleDay>();
 			_part2 = _mocks.StrictMock<IScheduleDay>();
 			_list = new List<IScheduleDay> {_part1, _part2};

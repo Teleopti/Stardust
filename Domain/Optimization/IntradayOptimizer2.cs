@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
         private readonly IResourceCalculateDelayer _resourceCalculateDelayer;
 	    private readonly IScheduleMatrixPro _matrix;
-	    private readonly IResourceCalculateDaysDecider _resourceCalculateDaysDecider;
 
 	    public IntradayOptimizer2(
             IScheduleResultDailyValueCalculator dailyValueCalculator,
@@ -51,8 +50,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
             IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
             IResourceCalculateDelayer resourceCalculateDelayer,
-			IScheduleMatrixPro matrix,
-			IResourceCalculateDaysDecider resourceCalculateDaysDecider)
+			IScheduleMatrixPro matrix)
         {
             _dailyValueCalculator = dailyValueCalculator;
             _personalSkillsDataExtractor = personalSkillsDataExtractor;
@@ -69,7 +67,6 @@ namespace Teleopti.Ccc.Domain.Optimization
     	    _deleteAndResourceCalculateService = deleteAndResourceCalculateService;
             _resourceCalculateDelayer = resourceCalculateDelayer;
 	        _matrix = matrix;
-		    _resourceCalculateDaysDecider = resourceCalculateDaysDecider;
         }
 
         public bool Execute()
@@ -104,11 +101,6 @@ namespace Teleopti.Ccc.Domain.Optimization
             var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay, schedulingOptions);
             
             //delete schedule
-			IList<IScheduleDay> listToDelete = new List<IScheduleDay> { scheduleDay };
-
-			if(_resourceCalculateDaysDecider.IsNightShift(scheduleDay))
-				_deleteAndResourceCalculateService.DeleteWithResourceCalculation(listToDelete, _rollbackService, schedulingOptions.ConsiderShortBreaks, false);
-			else
 				_deleteAndResourceCalculateService.DeleteWithoutResourceCalculationOnNextDay(scheduleDay, _rollbackService, schedulingOptions.ConsiderShortBreaks, false);
 			    
             if (!tryScheduleDay(dateToBeRemoved, schedulingOptions, effectiveRestriction, WorkShiftLengthHintOption.AverageWorkTime)) 

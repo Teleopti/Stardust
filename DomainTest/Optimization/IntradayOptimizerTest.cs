@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	    private OverLimitResults _overLimitCounts;
 	    private IDateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
 	    private IPersonAssignment _personAssignment;
-	    private IResourceCalculateDaysDecider _resourceCalculateDaysDecider;
 
 	    [SetUp]
         public void Setup()
@@ -74,7 +73,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	        _overLimitCounts = new OverLimitResults(0, 0, 0, 0, 0);
 			_dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_removedDate, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 		    _personAssignment = _mockRepository.StrictMock<IPersonAssignment>();
-			_resourceCalculateDaysDecider = new ResourceCalculateDaysDecider();
 
 
             _target = new IntradayOptimizer2(
@@ -92,8 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _mainShiftOptimizeActivitySpecificationSetter,
                 _deleteAndResourceCalculateService,
                 _resourceCalculateDelayer,
-				_scheduleMatrix,
-				_resourceCalculateDaysDecider);
+				_scheduleMatrix);
         }
 
         [Test]

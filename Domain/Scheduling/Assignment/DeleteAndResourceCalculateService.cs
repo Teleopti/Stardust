@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -13,12 +14,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	{
 		private readonly IDeleteSchedulePartService _deleteSchedulePartService;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private readonly IResourceCalculateDaysDecider _resourceCalculateDaysDecider;
 
 		public DeleteAndResourceCalculateService(IDeleteSchedulePartService deleteSchedulePartService, 
-																					IResourceOptimizationHelper resourceOptimizationHelper)
+																					IResourceOptimizationHelper resourceOptimizationHelper,
+																					IResourceCalculateDaysDecider resourceCalculateDaysDecider)
 		{
 			_deleteSchedulePartService = deleteSchedulePartService;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
+			_resourceCalculateDaysDecider = resourceCalculateDaysDecider;
 		}
 
 		public void DeleteWithResourceCalculation(IEnumerable<IScheduleDay> daysToDelete, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation)
@@ -32,6 +36,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var date = dayToDelete.DateOnlyAsPeriod.DateOnly;
 			_deleteSchedulePartService.Delete(new []{ dayToDelete}, rollbackService);
 			_resourceOptimizationHelper.ResourceCalculateDate(date, considerShortBreaks, doIntraIntervalCalculation);
+			if (_resourceCalculateDaysDecider.IsNightShift(dayToDelete))
+			{
+				_resourceOptimizationHelper.ResourceCalculateDate(date.AddDays(1), considerShortBreaks, doIntraIntervalCalculation);
+			}
 		}
 
 		private void resourceCalculate(IEnumerable<IScheduleDay> daysToDelete, bool considerShortBreaks, bool doIntraIntervalCalculation)
