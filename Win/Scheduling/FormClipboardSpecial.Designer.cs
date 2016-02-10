@@ -70,12 +70,12 @@
 			// 
 			// checkBoxShiftAsOvertime
 			// 
-			this.checkBoxShiftAsOvertime.BeforeTouchSize = new System.Drawing.Size(129, 20);
+			this.checkBoxShiftAsOvertime.BeforeTouchSize = new System.Drawing.Size(204, 20);
 			this.checkBoxShiftAsOvertime.DrawFocusRectangle = false;
 			this.checkBoxShiftAsOvertime.Location = new System.Drawing.Point(14, 168);
 			this.checkBoxShiftAsOvertime.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxShiftAsOvertime.Name = "checkBoxShiftAsOvertime";
-			this.checkBoxShiftAsOvertime.Size = new System.Drawing.Size(129, 20);
+			this.checkBoxShiftAsOvertime.Size = new System.Drawing.Size(204, 20);
 			this.checkBoxShiftAsOvertime.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxShiftAsOvertime.TabIndex = 30;
 			this.checkBoxShiftAsOvertime.Text = "xxShiftAsOvertime";
@@ -84,12 +84,12 @@
 			// 
 			// checkBoxOvertimeAvailability
 			// 
-			this.checkBoxOvertimeAvailability.BeforeTouchSize = new System.Drawing.Size(148, 20);
+			this.checkBoxOvertimeAvailability.BeforeTouchSize = new System.Drawing.Size(158, 20);
 			this.checkBoxOvertimeAvailability.DrawFocusRectangle = false;
 			this.checkBoxOvertimeAvailability.Location = new System.Drawing.Point(224, 104);
 			this.checkBoxOvertimeAvailability.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxOvertimeAvailability.Name = "checkBoxOvertimeAvailability";
-			this.checkBoxOvertimeAvailability.Size = new System.Drawing.Size(148, 20);
+			this.checkBoxOvertimeAvailability.Size = new System.Drawing.Size(158, 20);
 			this.checkBoxOvertimeAvailability.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxOvertimeAvailability.TabIndex = 29;
 			this.checkBoxOvertimeAvailability.Text = "xxOvertimeAvailability";
@@ -98,12 +98,12 @@
 			// 
 			// checkBoxStudentAvailability
 			// 
-			this.checkBoxStudentAvailability.BeforeTouchSize = new System.Drawing.Size(142, 20);
+			this.checkBoxStudentAvailability.BeforeTouchSize = new System.Drawing.Size(158, 20);
 			this.checkBoxStudentAvailability.DrawFocusRectangle = false;
 			this.checkBoxStudentAvailability.Location = new System.Drawing.Point(224, 130);
 			this.checkBoxStudentAvailability.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxStudentAvailability.Name = "checkBoxStudentAvailability";
-			this.checkBoxStudentAvailability.Size = new System.Drawing.Size(142, 20);
+			this.checkBoxStudentAvailability.Size = new System.Drawing.Size(158, 20);
 			this.checkBoxStudentAvailability.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxStudentAvailability.TabIndex = 7;
 			this.checkBoxStudentAvailability.Text = "xxStudentAvailability";
@@ -112,12 +112,12 @@
 			// 
 			// checkBoxPreferences
 			// 
-			this.checkBoxPreferences.BeforeTouchSize = new System.Drawing.Size(108, 20);
+			this.checkBoxPreferences.BeforeTouchSize = new System.Drawing.Size(204, 20);
 			this.checkBoxPreferences.DrawFocusRectangle = false;
 			this.checkBoxPreferences.Location = new System.Drawing.Point(14, 130);
 			this.checkBoxPreferences.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxPreferences.Name = "checkBoxPreferences";
-			this.checkBoxPreferences.Size = new System.Drawing.Size(108, 20);
+			this.checkBoxPreferences.Size = new System.Drawing.Size(204, 20);
 			this.checkBoxPreferences.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxPreferences.TabIndex = 6;
 			this.checkBoxPreferences.Text = "xxPreferences";
@@ -126,12 +126,12 @@
 			// 
 			// checkBoxOvertime
 			// 
-			this.checkBoxOvertime.BeforeTouchSize = new System.Drawing.Size(91, 20);
+			this.checkBoxOvertime.BeforeTouchSize = new System.Drawing.Size(158, 20);
 			this.checkBoxOvertime.DrawFocusRectangle = false;
 			this.checkBoxOvertime.Location = new System.Drawing.Point(224, 77);
 			this.checkBoxOvertime.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxOvertime.Name = "checkBoxOvertime";
-			this.checkBoxOvertime.Size = new System.Drawing.Size(91, 20);
+			this.checkBoxOvertime.Size = new System.Drawing.Size(158, 20);
 			this.checkBoxOvertime.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxOvertime.TabIndex = 5;
 			this.checkBoxOvertime.Text = "xxOvertime";
@@ -174,12 +174,12 @@
 			// 
 			// checkBoxPersonalAssignments
 			// 
-			this.checkBoxPersonalAssignments.BeforeTouchSize = new System.Drawing.Size(120, 20);
+			this.checkBoxPersonalAssignments.BeforeTouchSize = new System.Drawing.Size(158, 20);
 			this.checkBoxPersonalAssignments.DrawFocusRectangle = false;
 			this.checkBoxPersonalAssignments.Location = new System.Drawing.Point(224, 50);
 			this.checkBoxPersonalAssignments.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxPersonalAssignments.Name = "checkBoxPersonalAssignments";
-			this.checkBoxPersonalAssignments.Size = new System.Drawing.Size(120, 20);
+			this.checkBoxPersonalAssignments.Size = new System.Drawing.Size(158, 20);
 			this.checkBoxPersonalAssignments.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxPersonalAssignments.TabIndex = 4;
 			this.checkBoxPersonalAssignments.Text = "xxPersonalShifts";
@@ -188,12 +188,12 @@
 			// 
 			// checkBoxDayOffs
 			// 
-			this.checkBoxDayOffs.BeforeTouchSize = new System.Drawing.Size(86, 20);
+			this.checkBoxDayOffs.BeforeTouchSize = new System.Drawing.Size(204, 20);
 			this.checkBoxDayOffs.DrawFocusRectangle = false;
 			this.checkBoxDayOffs.Location = new System.Drawing.Point(14, 104);
 			this.checkBoxDayOffs.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxDayOffs.Name = "checkBoxDayOffs";
-			this.checkBoxDayOffs.Size = new System.Drawing.Size(86, 20);
+			this.checkBoxDayOffs.Size = new System.Drawing.Size(204, 20);
 			this.checkBoxDayOffs.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxDayOffs.TabIndex = 3;
 			this.checkBoxDayOffs.Text = "xxDaysOff";
@@ -202,12 +202,12 @@
 			// 
 			// checkBoxAbsences
 			// 
-			this.checkBoxAbsences.BeforeTouchSize = new System.Drawing.Size(97, 20);
+			this.checkBoxAbsences.BeforeTouchSize = new System.Drawing.Size(204, 20);
 			this.checkBoxAbsences.DrawFocusRectangle = false;
 			this.checkBoxAbsences.Location = new System.Drawing.Point(14, 76);
 			this.checkBoxAbsences.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAbsences.Name = "checkBoxAbsences";
-			this.checkBoxAbsences.Size = new System.Drawing.Size(97, 20);
+			this.checkBoxAbsences.Size = new System.Drawing.Size(204, 20);
 			this.checkBoxAbsences.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxAbsences.TabIndex = 2;
 			this.checkBoxAbsences.Text = "xxAbsences";
@@ -216,13 +216,13 @@
 			// 
 			// checkBoxAssignments
 			// 
-			this.checkBoxAssignments.BeforeTouchSize = new System.Drawing.Size(72, 20);
+			this.checkBoxAssignments.BeforeTouchSize = new System.Drawing.Size(204, 20);
 			this.checkBoxAssignments.DrawFocusRectangle = false;
 			this.checkBoxAssignments.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.checkBoxAssignments.Location = new System.Drawing.Point(14, 50);
 			this.checkBoxAssignments.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAssignments.Name = "checkBoxAssignments";
-			this.checkBoxAssignments.Size = new System.Drawing.Size(72, 20);
+			this.checkBoxAssignments.Size = new System.Drawing.Size(204, 20);
 			this.checkBoxAssignments.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxAssignments.TabIndex = 1;
 			this.checkBoxAssignments.Text = "xxShifts";
