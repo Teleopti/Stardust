@@ -66,7 +66,10 @@ CREATE TABLE [Stardust].[JobHistoryDetail](
 	[JobId] [uniqueidentifier] NOT NULL,
 	[Created] DateTime NOT NULL,
 	[Detail] [nvarchar](max) NULL
-)
+CONSTRAINT [PK_JobHistoryDetail] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+))
 
 GO
 ALTER TABLE [Stardust].[JobHistoryDetail] ADD CONSTRAINT
