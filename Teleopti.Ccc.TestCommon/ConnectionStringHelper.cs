@@ -1,10 +1,12 @@
-﻿namespace Teleopti.Ccc.TestCommon
+﻿using System.Globalization;
+
+namespace Teleopti.Ccc.TestCommon
 {
 	public static class ConnectionStringHelper
 	{
 		public static string ConnectionStringUsedInTests
 		{
-			get { return IniFileInfo.ConnectionString; }
+			get { return InfraTestConfigReader.SQL_AUTH_STRING + string.Format(CultureInfo.InvariantCulture, ";Initial Catalog={0}", InfraTestConfigReader.DB_CCC7); }
 		}
 
 		public static string NonValidConnectionStringUsedInTests
@@ -14,7 +16,7 @@
 
 		public static string ConnectionStringUsedInTestsMatrix
 		{
-			get { return IniFileInfo.ConnectionStringMatrix; }
+			get { return InfraTestConfigReader.SQL_AUTH_STRING + string.Format(CultureInfo.InvariantCulture, ";Initial Catalog={0}", InfraTestConfigReader.DB_ANALYTICS); }
 		}
 
 	}

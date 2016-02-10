@@ -102,7 +102,6 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Common\DatabaseHandlerTest.cs" />
     <Compile Include="Common\ProgramHelperTest.cs" />
     <Compile Include="Creators\AbsenceCreatorTest.cs" />
     <Compile Include="Creators\ActivityCreatorTest.cs" />
