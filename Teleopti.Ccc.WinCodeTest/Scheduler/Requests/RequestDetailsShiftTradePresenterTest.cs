@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 			{
 				Expect.Call(schedules[tradingPerson]).Return(scheduleRange);
 				Expect.Call(scheduleRange.ScheduledDay(dateOnly)).Return(scheduleDay);
-				Expect.Call(scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
+				Expect.Call(scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.DayOff);
 			}
 
 			using (_mocks.Playback())
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 			{
 				Expect.Call(schedules[tradingPerson]).Return(scheduleRange);
 				Expect.Call(scheduleRange.ScheduledDay(dateOnly)).Return(scheduleDay);
-				Expect.Call(scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
 			}
 
 			using (_mocks.Playback())

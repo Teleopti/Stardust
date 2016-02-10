@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 			var scheduleDay = scheduleRange.ScheduledDay(currentDate);
 			if (scheduleDay != null)
 			{
-				SchedulePartView schedulePartView = scheduleDay.SignificantPart();
+				var schedulePartView = scheduleDay.SignificantPartForDisplay();
 				if (schedulePartView == SchedulePartView.DayOff)
 				{
 					return true;
