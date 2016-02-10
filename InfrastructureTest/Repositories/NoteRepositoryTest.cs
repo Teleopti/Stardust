@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             INote note = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(note);
-            var repository = new NoteRepository(UnitOfWork);
+            var repository = new NoteRepository(CurrUnitOfWork);
             Assert.AreEqual(1, repository.Find(new DateTimePeriod(2010, 4, 1, 2010, 4, 2), note.Scenario).Count);
         }
 
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             INote note = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(note);
-            var repository = new NoteRepository(UnitOfWork);
+            var repository = new NoteRepository(CurrUnitOfWork);
             Assert.AreEqual(0, repository.Find(new DateTimePeriod(2010, 4, 14, 2010, 4, 21), note.Scenario).Count);
         }
 
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             INote note = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(note);
-            var repository = new NoteRepository(UnitOfWork);
+            var repository = new NoteRepository(CurrUnitOfWork);
             Assert.AreEqual(note, repository.LoadAggregate(note.Id.Value));
         }
 
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             INote note = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(note);
-            var repository = new NoteRepository(UnitOfWork);
+            var repository = new NoteRepository(CurrUnitOfWork);
             Assert.AreEqual(1, repository.Find(new DateOnlyPeriod(2010, 4, 1, 2010, 4, 2), new List<IPerson>{note.Person}, note.Scenario).Count);
         }
     }

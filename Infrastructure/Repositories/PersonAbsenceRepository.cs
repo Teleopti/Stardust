@@ -16,13 +16,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	///</summary>
 	public class PersonAbsenceRepository : Repository<IPersonAbsence>, IPersonAbsenceRepository
 	{
-		public PersonAbsenceRepository(IUnitOfWork unitOfWork)
-#pragma warning disable 618
-			: base(unitOfWork)
-#pragma warning restore 618
-		{
-		}
-
 		public PersonAbsenceRepository(ICurrentUnitOfWork currentUnitOfWork)
 			: base(currentUnitOfWork)
 		{
@@ -35,8 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// <param name="persons">The persons.</param>
 		/// <param name="period">The period.</param>
 		/// <returns></returns>
-		public ICollection<IPersonAbsence> Find(IEnumerable<IPerson> persons,
-						      DateTimePeriod period)
+		public ICollection<IPersonAbsence> Find(IEnumerable<IPerson> persons, DateTimePeriod period)
 		{
 			InParameter.NotNull("persons", persons);
 

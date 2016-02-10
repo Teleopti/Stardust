@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var personAbsence = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(personAbsence);
 
-            var loaded = new PersonAbsenceRepository(UnitOfWork).LoadAggregate(personAbsence.Id.Value);
+            var loaded = new PersonAbsenceRepository(CurrUnitOfWork).LoadAggregate(personAbsence.Id.Value);
             Assert.AreEqual(personAbsence.Id, loaded.Id);
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.Layer.Payload));
         }
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyLoadGraphByIdReturnsNullIfNotExists()
         {
-            var loaded = new PersonAbsenceRepository(UnitOfWork).LoadAggregate(Guid.NewGuid());
+            var loaded = new PersonAbsenceRepository(CurrUnitOfWork).LoadAggregate(Guid.NewGuid());
             Assert.IsNull(loaded);
         }
 
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             personAbsence.LastChange = date;
             PersistAndRemoveFromUnitOfWork(personAbsence);
 
-            IPersonAbsence loaded = new PersonAbsenceRepository(UnitOfWork).LoadAggregate(personAbsence.Id.Value);
+            IPersonAbsence loaded = new PersonAbsenceRepository(CurrUnitOfWork).LoadAggregate(personAbsence.Id.Value);
             Assert.AreEqual(date.Value, loaded.LastChange.Value);
         }
 
@@ -102,11 +102,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             var personAbsence = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(personAbsence);
-	        var currentUnitOfWork = new ThisUnitOfWork(UnitOfWork);
-	        new PersonRepository(currentUnitOfWork).Remove(personAbsence.Person);
+	        new PersonRepository(CurrUnitOfWork).Remove(personAbsence.Person);
             PersistAndRemoveFromUnitOfWork(personAbsence.Person);
 
-			Assert.AreEqual(0, new PersonAbsenceRepository(UnitOfWork).Find(new DateTimePeriod(1900, 1, 1, 2111, 1, 1), defaultScenario).Count);
+			Assert.AreEqual(0, new PersonAbsenceRepository(CurrUnitOfWork).Find(new DateTimePeriod(1900, 1, 1, 2111, 1, 1), defaultScenario).Count);
         }
 
         [Test]
@@ -139,7 +138,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			
 			var searchPeriod = new DateTimePeriod(2007, 1, 1, 2008, 1, 1);
 
-			var retList = new PersonAbsenceRepository(UnitOfWork).AffectedPeriods(agent, defaultScenario, searchPeriod, absenceSick);
+			var retList = new PersonAbsenceRepository(CurrUnitOfWork).AffectedPeriods(agent, defaultScenario, searchPeriod, absenceSick);
 
 			Assert.IsTrue(retList.Contains(period1));
 			Assert.IsFalse(retList.Contains(period2), "invalid absence");
@@ -166,7 +165,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personAbsence2);
 
 			var searchPeriod = new DateTimePeriod(2007, 1, 1, 2008, 1, 1);
-			var retList = new PersonAbsenceRepository(UnitOfWork).AffectedPeriods(agent, defaultScenario, searchPeriod);
+			var retList = new PersonAbsenceRepository(CurrUnitOfWork).AffectedPeriods(agent, defaultScenario, searchPeriod);
 
 			Assert.IsTrue(retList.Contains(period1));
 			Assert.IsTrue(retList.Contains(period2));
@@ -193,7 +192,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(agAbsInValid2);
 
 			var searchPeriod = new DateTimePeriod(2007, 1, 1, 2008, 1, 1);
-			var retList = new PersonAbsenceRepository(UnitOfWork).AffectedPeriods(agent, defaultScenario, searchPeriod, absenceSick);
+			var retList = new PersonAbsenceRepository(CurrUnitOfWork).AffectedPeriods(agent, defaultScenario, searchPeriod, absenceSick);
 
 			Assert.IsTrue(retList.Contains(period1));
 			Assert.IsFalse(retList.Contains(period2), "invalid scenario");
@@ -220,7 +219,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(agAbsInValid2);
 
 			var searchPeriod = new DateTimePeriod(2007, 1, 1, 2008, 1, 1);
-			var retList = new PersonAbsenceRepository(UnitOfWork).AffectedPeriods(agent, defaultScenario, searchPeriod, absenceSick);
+			var retList = new PersonAbsenceRepository(CurrUnitOfWork).AffectedPeriods(agent, defaultScenario, searchPeriod, absenceSick);
 
 			Assert.IsTrue(retList.Contains(period1));
 			Assert.IsFalse(retList.Contains(period2), "invalid scenario");
@@ -246,7 +245,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(agAbsValid1);
 			PersistAndRemoveFromUnitOfWork(agAbsInValid2);
 
-			var retList = new PersonAbsenceRepository(UnitOfWork).AffectedPeriods(agent, defaultScenario, period1, absenceSick);
+			var retList = new PersonAbsenceRepository(CurrUnitOfWork).AffectedPeriods(agent, defaultScenario, period1, absenceSick);
 
 			Assert.IsTrue(retList.Contains(period1));
 			Assert.IsFalse(retList.Contains(period2), "invalid period");
@@ -288,7 +287,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 new DateTimePeriod(new DateTime(2007, 8, 1, 9, 15, 0, DateTimeKind.Utc),
                                    new DateTime(2007, 8, 2, 10, 30, 0, DateTimeKind.Utc));
 
-			var retList = new PersonAbsenceRepository(UnitOfWork).Find(agList, searchPeriod);
+			var retList = new PersonAbsenceRepository(CurrUnitOfWork).Find(agList, searchPeriod);
 
             verifyRelatedObjectsAreEagerlyLoaded(retList);
             Assert.IsTrue(retList.Contains(agAbsValid1));
@@ -304,7 +303,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [ExpectedException(typeof (ArgumentNullException))]
         public void AgentListMustNotBeNullWhenCallingFindByAgentAndPeriod()
         {
-			new PersonAbsenceRepository(UnitOfWork).Find(null, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+			new PersonAbsenceRepository(CurrUnitOfWork).Find(null, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
         }
 
         [Test]
@@ -321,7 +320,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(personAbsence1);
             PersistAndRemoveFromUnitOfWork(personAbsence2);
 
-			ICollection<IPersonAbsence> retList = new PersonAbsenceRepository(UnitOfWork).Find(new DateTimePeriod(2000, 1, 1, 2007, 1, 3), defaultScenario);
+			ICollection<IPersonAbsence> retList = new PersonAbsenceRepository(CurrUnitOfWork).Find(new DateTimePeriod(2000, 1, 1, 2007, 1, 3), defaultScenario);
             verifyRelatedObjectsAreEagerlyLoaded(retList);
             Assert.AreEqual(1, retList.Count);
         }
@@ -356,7 +355,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             IList<IPerson> persons = new List<IPerson>();
             persons.Add(dummyAgent2);
-			ICollection<IPersonAbsence> retList = new PersonAbsenceRepository(UnitOfWork).Find(persons, new DateTimePeriod(2000, 1, 1, 2007, 1, 3), defaultScenario);
+			ICollection<IPersonAbsence> retList = new PersonAbsenceRepository(CurrUnitOfWork).Find(persons, new DateTimePeriod(2000, 1, 1, 2007, 1, 3), defaultScenario);
             verifyRelatedObjectsAreEagerlyLoaded(retList);
             Assert.AreEqual(1, retList.Count);
         }
@@ -374,7 +373,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 																	new AbsenceLayer(absenceSick, new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
 			PersistAndRemoveFromUnitOfWork(ass);
 
-			new PersonAbsenceRepository(UnitOfWork).Find(new DateTimePeriod(1900, 1, 1, 2100, 1, 1), scenarioWrongBu).Should().Be.Empty();
+			new PersonAbsenceRepository(CurrUnitOfWork).Find(new DateTimePeriod(1900, 1, 1, 2100, 1, 1), scenarioWrongBu).Should().Be.Empty();
 		}
 
         private static void verifyRelatedObjectsAreEagerlyLoaded(IEnumerable<IPersonAbsence> personAbsenceCollection)

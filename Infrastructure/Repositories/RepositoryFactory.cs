@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// <returns></returns>
 		public IPersonAbsenceRepository CreatePersonAbsenceRepository(IUnitOfWork unitOfWork)
 		{
-			return new PersonAbsenceRepository(unitOfWork);
+			return new PersonAbsenceRepository(new ThisUnitOfWork(unitOfWork));
 		}
 
 		public IPersonAbsenceAccountRepository CreatePersonAbsenceAccountRepository(IUnitOfWork unitOfWork)
@@ -292,7 +292,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IPayrollExportRepository CreatePayrollExportRepository(IUnitOfWork unitOfWork)
 		{
-			return new PayrollExportRepository(unitOfWork);
+			return new PayrollExportRepository(new ThisUnitOfWork(unitOfWork));
 		}
 
 		public IMultiplicatorRepository CreateMultiplicatorRepository(IUnitOfWork unitOfWork)
@@ -352,7 +352,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public INoteRepository CreateNoteRepository(IUnitOfWork unitOfWork)
 		{
-			return new NoteRepository(unitOfWork);
+			return new NoteRepository(new ThisUnitOfWork(unitOfWork));
 		}
 
 		public IPublicNoteRepository CreatePublicNoteRepository(IUnitOfWork unitOfWork)
