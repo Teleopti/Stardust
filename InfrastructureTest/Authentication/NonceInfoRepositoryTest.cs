@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -107,12 +106,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
                     Nonce = nonce,
                     Timestamp = expired
                 });
-                for (var b = 0; b < 10000; b++)
+                for (var b = 0; b < 1000; b++)
                 {
                     Target.Add(new NonceInfo
                     {
                         Context = context,
-                        Nonce = Guid.NewGuid().ToString(),
+                        Nonce = Guid.NewGuid().ToString().Substring(0,8),
                         Timestamp = expired
                     });
                 }
@@ -130,13 +129,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
                         var nonceInfo = Target.Find(context, n, nonExpired);
                         if (nonceInfo == null)
                         {
-                            
-                            Target.Add(new NonceInfo
-                            {
-                                Context = context,
-                                Nonce = n,
-                                Timestamp = nonExpired
-                            });
+
+	                        Target.Add(new NonceInfo
+	                        {
+		                        Context = context,
+		                        Nonce = n.Substring(0, 8),
+		                        Timestamp = nonExpired
+	                        });
 
                             Target.ClearExpired(timestamp);
                         }                       
