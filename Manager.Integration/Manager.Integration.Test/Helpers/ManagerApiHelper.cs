@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using Manager.Integration.Test.Constants;
@@ -10,24 +11,24 @@ using Newtonsoft.Json;
 
 namespace Manager.Integration.Test.Helpers
 {
-    public class ManagerApiHelper
+    public class ManagerApiHelper : IDisposable
     {
         private static readonly ILog Logger =
             LogManager.GetLogger(typeof (ManagerApiHelper));
 
-        public ManagerApiHelper()
-        {
-            ManagerUriBuilder = new ManagerUriBuilder();
-        }
 
         public ManagerUriBuilder ManagerUriBuilder { get; private set; }
 
         public ManagerApiHelper(CheckJobHistoryStatusTimer checkJobHistoryStatusTimer)
         {
+            CancellationTokenSource = new CancellationTokenSource();
+
+            ManagerUriBuilder = new ManagerUriBuilder();
+
             CheckJobHistoryStatusTimer = checkJobHistoryStatusTimer;
         }
 
-        public CheckJobHistoryStatusTimer CheckJobHistoryStatusTimer { get; set; }
+        public CheckJobHistoryStatusTimer CheckJobHistoryStatusTimer { get; private set; }
 
         public void DefineDefaultRequestHeaders(HttpClient client)
         {
@@ -41,8 +42,6 @@ namespace Manager.Integration.Test.Helpers
             {
                 using (var client = new HttpClient())
                 {
-                    try
-                    {
                         DefineDefaultRequestHeaders(client);
 
                         var sez = JsonConvert.SerializeObject(jobRequestModel);
@@ -52,7 +51,8 @@ namespace Manager.Integration.Test.Helpers
                         HttpResponseMessage response = await client.PostAsync(uri,
                                                                               new StringContent(sez,
                                                                                                 Encoding.UTF8,
-                                                                                                MediaTypeConstants.ApplicationJson));
+                                                                                                MediaTypeConstants.ApplicationJson),
+                                                                              CancellationTokenSource.Token);
                         response.EnsureSuccessStatusCode();
 
                         var str = await response.Content.ReadAsStringAsync();
@@ -61,18 +61,19 @@ namespace Manager.Integration.Test.Helpers
 
                         CheckJobHistoryStatusTimer.AddOrUpdateGuidStatus(jobId,
                                                                          null);
-                    }
-                    catch (Exception ex)
-                    {
-                        LogHelper.LogErrorWithLineNumber("ManagerApiHelper CreateManagerDoThisTask problem with Post Async" + ex,
-                                                         Logger);
-                    }
                 }
             });
         }
 
+        private CancellationTokenSource CancellationTokenSource { get; set; }
+
         public Task CreateManagerCancelTask(Guid guid)
         {
+            if (CancellationTokenSource.IsCancellationRequested)
+            {
+                return null;
+            }
+
             return new Task(async () =>
             {
                 try
@@ -83,7 +84,8 @@ namespace Manager.Integration.Test.Helpers
 
                         var uri = ManagerUriBuilder.GetCancelJobUri(guid);
 
-                        var response = await client.DeleteAsync(uri);
+                        var response = await client.DeleteAsync(uri,
+                                                                CancellationTokenSource.Token);
 
                         response.EnsureSuccessStatusCode();
 
@@ -97,6 +99,20 @@ namespace Manager.Integration.Test.Helpers
                                                      exp);
                 }
             });
+        }
+
+        public void Dispose()
+        {
+            if (CancellationTokenSource != null &&
+                !CancellationTokenSource.IsCancellationRequested)
+            {
+                CancellationTokenSource.Cancel();
+            }
+
+            if (CheckJobHistoryStatusTimer != null)
+            {
+                CheckJobHistoryStatusTimer.Dispose();
+            }
         }
     }
 }

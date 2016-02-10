@@ -8,19 +8,14 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.CodeDom.Compiler;
-using System.Configuration;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-
 namespace Manager.IntegrationTest.Console.Host.Properties {
     
     
-    [CompilerGenerated()]
-    [GeneratedCode("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
-    internal sealed partial class Settings : ApplicationSettingsBase {
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
+    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
-        private static Settings defaultInstance = ((Settings)(Synchronized(new Settings())));
+        private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
         
         public static Settings Default {
             get {
@@ -28,127 +23,127 @@ namespace Manager.IntegrationTest.Console.Host.Properties {
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("ManagerConsoleHost.exe")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ManagerConsoleHost.exe")]
         public string ManagerAssemblyName {
             get {
                 return ((string)(this["ManagerAssemblyName"]));
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("NodeConsoleHost.exe")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("NodeConsoleHost.exe")]
         public string NodeAssemblyName {
             get {
                 return ((string)(this["NodeAssemblyName"]));
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("ManagerConsoleHost.exe.config")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ManagerConsoleHost.exe.config")]
         public string ManagerConfigurationFileName {
             get {
                 return ((string)(this["ManagerConfigurationFileName"]));
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("NodeConsoleHost.exe.config")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("NodeConsoleHost.exe.config")]
         public string NodeConfigurationFileName {
             get {
                 return ((string)(this["NodeConfigurationFileName"]));
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("1")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
         public int NumberOfNodesToStart {
             get {
                 return ((int)(this["NumberOfNodesToStart"]));
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [SpecialSetting(SpecialSetting.WebServiceUrl)]
-        [DefaultSettingValue("http://localhost:9000/jobmanager/")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:9000/jobmanager/")]
         public string ManagerLocationUri {
             get {
                 return ((string)(this["ManagerLocationUri"]));
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("NodeTest.JobHandlers, Version=1.0.0.0")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("NodeTest.JobHandlers, Version=1.0.0.0")]
         public string HandlerAssembly {
             get {
                 return ((string)(this["HandlerAssembly"]));
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("9050")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("9050")]
         public int NodeEndpointPortNumberStart {
             get {
                 return ((int)(this["NodeEndpointPortNumberStart"]));
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("../../../../Manager/ManagerConsoleHost/bin/")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("../../../../Manager/ManagerConsoleHost/bin/")]
         public string ManagerAssemblyLocationFullPath {
             get {
                 return ((string)(this["ManagerAssemblyLocationFullPath"]));
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("../../../../Manager/ManagerConsoleHost/bin/")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("../../../../Manager/ManagerConsoleHost/bin/")]
         public string ManagerConfigurationFileFullPath {
             get {
                 return ((string)(this["ManagerConfigurationFileFullPath"]));
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("../../../../Node/NodeConsoleHost/bin/")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("../../../../Node/NodeConsoleHost/bin/")]
         public string NodeAssemblyLocationFullPath {
             get {
                 return ((string)(this["NodeAssemblyLocationFullPath"]));
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("../../../../Node/NodeConsoleHost/bin/")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("../../../../Node/NodeConsoleHost/bin/")]
         public string NodeConfigurationFileFullPath {
             get {
                 return ((string)(this["NodeConfigurationFileFullPath"]));
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("http://localhost:PORTNUMBER/jobnode/")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:PORTNUMBER/jobnode/")]
         public string NodeEndpointUriTemplate {
             get {
                 return ((string)(this["NodeEndpointUriTemplate"]));
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("http://localhost:9100/managerIntegrationTestController/")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:9100/managerIntegrationTestController/")]
         public string ManagerIntegrationTestControllerBaseAddress {
             get {
                 return ((string)(this["ManagerIntegrationTestControllerBaseAddress"]));

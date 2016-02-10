@@ -98,6 +98,7 @@
     <Compile Include="ManagerUriBuilderTests.cs" />
     <Compile Include="NodeConfigurationTests.cs" />
     <Compile Include="NodeConfigurationUriBuilderHelperTests.cs" />
+    <Compile Include="NodeConsoleHostTests.cs" />
     <Compile Include="NodeControllerTests.cs" />
     <Compile Include="NodeUriBuilderTests.cs" />
     <Compile Include="ProgressCallbackTests.cs" />

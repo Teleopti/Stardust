@@ -15,7 +15,7 @@
       <Value Profile="(Default)">NodeConsoleHost.exe.config</Value>
     </Setting>
     <Setting Name="NumberOfNodesToStart" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">1</Value>
+      <Value Profile="(Default)">2</Value>
     </Setting>
     <Setting Name="ManagerLocationUri" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">http://localhost:9000/jobmanager/</Value>

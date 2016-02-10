@@ -11,26 +11,24 @@ namespace Manager.Integration.Test.Scripts
         private static readonly ILog Logger =
             LogManager.GetLogger(typeof (ScriptExecuteHelper));
 
-        public static void ExecuteScriptFile(FileInfo scriptFile,
-                                             string connectionstring)
+        public static void ExecuteScript(string script,
+                                         string connectionstring)
         {
+            if (string.IsNullOrEmpty(script))
+            {
+                throw new ArgumentException("script is empty.");
+            }
+
             if (string.IsNullOrEmpty(connectionstring))
             {
                 throw new ArgumentNullException("connectionstring");
-            }
-
-            string line = File.ReadAllText(scriptFile.FullName);
-
-            if (string.IsNullOrEmpty(line))
-            {
-                throw new ArgumentException("script file is empty.");
             }
 
             using (var con = new SqlConnection(connectionstring))
             {
                 con.Open();
 
-                using (SqlCommand command = new SqlCommand(line,
+                using (SqlCommand command = new SqlCommand(script,
                                                            con))
                 {
                     try
@@ -44,11 +42,19 @@ namespace Manager.Integration.Test.Scripts
                                                          Logger,
                                                          exp);
                     }
-
                 }
 
                 con.Close();
             }
+        }
+
+        public static void ExecuteScriptFile(FileInfo scriptFile,
+                                             string connectionstring)
+        {
+            string script = File.ReadAllText(scriptFile.FullName);
+
+            ExecuteScript(script,
+                          connectionstring);
         }
     }
 }

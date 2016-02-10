@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -22,11 +21,10 @@ namespace Manager.Integration.Test
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndZeroNodes));
 
-        [SetUp]
-        public void Setup()
-        {
+        private bool _clearDatabase = true;
+        private bool _startUpManagerAndNodeManually = false;
+        private string _buildMode = "Debug";
 
-        }
 
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
@@ -36,41 +34,30 @@ namespace Manager.Integration.Test
 
             TryCreateSqlLoggingTable();
 
+
 #if (DEBUG)
             // Do nothing.
 #else
             _clearDatabase = true;
             _startUpManagerAndNodeManually = false;
-            _debugMode = false;
             _buildMode = "Release";
 #endif
+
             if (_clearDatabase)
             {
                 DatabaseHelper.TryClearDatabase();
             }
 
-            ManagerApiHelper = new ManagerApiHelper();
 
             if (!_startUpManagerAndNodeManually)
             {
-                if (_debugMode)
-                {
-                    ProcessHelper.ShutDownAllManagerIntegrationConsoleHostProcesses();
+                var task = AppDomainHelper.CreateAppDomainForManagerIntegrationConsoleHost(_buildMode,
+                                                                                           NumberOfNodesToStart);
 
-                    StartManagerIntegrationConsoleHostProcess =
-                        ProcessHelper.StartManagerIntegrationConsoleHostProcess(NumberOfNodesToStart);
-                }
-                else
-                {
-                    var task = AppDomainHelper.CreateAppDomainForManagerIntegrationConsoleHost(_buildMode,
-                                                                                               NumberOfNodesToStart);
+                task.Start();
 
-                    task.Start();
-                }
+                JobHelper.GiveNodesTimeToInitialize();
             }
-
-            LogHelper.LogInfoWithLineNumber("Finished.",
-                                            Logger);
         }
 
         private static void TryCreateSqlLoggingTable()
@@ -92,35 +79,13 @@ namespace Manager.Integration.Test
         [TearDown]
         public void TearDown()
         {
-            LogHelper.LogInfoWithLineNumber("Start.",
-                                            Logger);
-
-            if (ManagerApiHelper != null &&
-                ManagerApiHelper.CheckJobHistoryStatusTimer != null)
-            {
-                ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
-                ManagerApiHelper.CheckJobHistoryStatusTimer.CancelAllRequest();
-            }
-
-            LogHelper.LogInfoWithLineNumber("Finished.",
-                                            Logger);
         }
 
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
         {
-            LogHelper.LogInfoWithLineNumber("Start.",
-                                            Logger);
-
-            if (ManagerApiHelper != null &&
-                ManagerApiHelper.CheckJobHistoryStatusTimer != null)
-            {
-                ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
-                ManagerApiHelper.CheckJobHistoryStatusTimer.CancelAllRequest();
-            }
-
             if (AppDomainHelper.AppDomains != null &&
-                AppDomainHelper.AppDomains.Values.Any())
+                AppDomainHelper.AppDomains.Any())
             {
                 foreach (var appDomain in AppDomainHelper.AppDomains.Values)
                 {
@@ -129,31 +94,21 @@ namespace Manager.Integration.Test
                         AppDomain.Unload(appDomain);
                     }
 
-                    catch (Exception)
+                    catch (AppDomainUnloadedException)
                     {
+                    }
+
+                    catch (Exception exp)
+                    {
+                        LogHelper.LogErrorWithLineNumber(exp.Message,
+                                                         Logger,
+                                                         exp);
                     }
                 }
             }
-
-            ProcessHelper.CloseProcess(StartManagerIntegrationConsoleHostProcess);
-
-            LogHelper.LogInfoWithLineNumber("Finished.",
-                                            Logger);
         }
 
         private const int NumberOfNodesToStart = 0;
-
-        private bool _startUpManagerAndNodeManually = false;
-
-        private bool _clearDatabase = true;
-
-        private bool _debugMode = false;
-
-        private string _buildMode = "Debug";
-
-        private Process StartManagerIntegrationConsoleHostProcess { get; set; }
-
-        private ManagerApiHelper ManagerApiHelper { get; set; }
 
         [Test]
         public void JobShouldJustBeQueuedIfNoNodes()
@@ -163,40 +118,37 @@ namespace Manager.Integration.Test
 
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-            JobHelper.GiveNodesTimeToInitialize();
-
             List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(1);
 
             var timeout = JobHelper.GenerateTimeoutTimeInSeconds(requests.Count,
                                                                  30);
 
+            var managerApiHelper = new ManagerApiHelper(new CheckJobHistoryStatusTimer(requests.Count,
+                                                                                       5000,
+                                                                                       cancellationTokenSource,
+                                                                                       StatusConstants.SuccessStatus,
+                                                                                       StatusConstants.DeletedStatus,
+                                                                                       StatusConstants.FailedStatus,
+                                                                                       StatusConstants.CanceledStatus));
+
             List<Task> tasks = new List<Task>();
 
             foreach (var jobRequestModel in requests)
             {
-                tasks.Add(ManagerApiHelper.CreateManagerDoThisTask(jobRequestModel));
+                tasks.Add(managerApiHelper.CreateManagerDoThisTask(jobRequestModel));
             }
-
-            ManagerApiHelper.CheckJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(requests.Count,
-                                                                                         5000,
-                                                                                         cancellationTokenSource,
-                                                                                         StatusConstants.NullStatus,
-                                                                                         StatusConstants.EmptyStatus);
 
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
 
-            ManagerApiHelper.CheckJobHistoryStatusTimer.Start();
+            managerApiHelper.CheckJobHistoryStatusTimer.Start();
 
-            ManagerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+            managerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
-            ManagerApiHelper.CheckJobHistoryStatusTimer.Stop();
-            ManagerApiHelper.CheckJobHistoryStatusTimer.CancelAllRequest();
+            Assert.IsTrue(managerApiHelper.CheckJobHistoryStatusTimer.Guids.Count > 0);
 
-            Assert.IsTrue(ManagerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.NullStatus));
-
-            LogHelper.LogInfoWithLineNumber("Finshed test.",
-                                            Logger);
+            managerApiHelper.Dispose();
+            
         }
     }
 }

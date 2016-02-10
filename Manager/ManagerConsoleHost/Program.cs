@@ -11,21 +11,19 @@ using Stardust.Manager.Models;
 
 namespace ManagerConsoleHost
 {
-    internal class Program
+    public class Program
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (Program));
-
+         
         private static string WhoAmI { get; set; }
 
-        private static void Main(string[] args)
+        public static void Main(string[] args)
         {
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
             SetConsoleCtrlHandler(ConsoleCtrlCheck,
                                   true);
-
-            System.Console.CancelKeyPress += ConsoleOnCancelKeyPress;
 
             AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
 
@@ -43,12 +41,14 @@ namespace ManagerConsoleHost
                     ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString
             };
 
-            _managerStarter = new ManagerStarter();
+            ManagerStarter = new ManagerStarter();
 
-            _managerStarter.Start(config);
+            ManagerStarter.Start(config);
 
             QuitEvent.WaitOne();
         }
+
+        private static ManagerStarter ManagerStarter { get; set; }
 
         [DllImport("Kernel32")]
         public static extern bool SetConsoleCtrlHandler(HandlerRoutine handler,
@@ -76,7 +76,10 @@ namespace ManagerConsoleHost
             if (ctrlType == CtrlTypes.CtrlCloseEvent ||
                 ctrlType == CtrlTypes.CtrlShutdownEvent)
             {
-                _managerStarter.Stop();
+                if (ManagerStarter != null)
+                {
+                    ManagerStarter.Stop();
+                }
 
                 QuitEvent.Set();
 
@@ -89,26 +92,17 @@ namespace ManagerConsoleHost
 
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
 
-        private static void ConsoleOnCancelKeyPress(object sender,
-                                                    ConsoleCancelEventArgs e)
-        {
-            Console.WriteLine(WhoAmI + " : ConsoleOnCancelKeyPress called.");
-
-            _managerStarter.Stop();
-
-            QuitEvent.Set();
-
-            e.Cancel = true;
-        }
-
-        private static ManagerStarter _managerStarter;
+        //private static ManagerStarter _managerStarter;
 
         private static void CurrentDomain_DomainUnload(object sender,
                                                        EventArgs e)
         {
             Console.WriteLine(WhoAmI + " : CurrentDomain_DomainUnload called.");
 
-            _managerStarter.Stop();
+            if (ManagerStarter != null)
+            {
+                ManagerStarter.Stop();
+            }
 
             QuitEvent.Set();
         }
@@ -116,11 +110,14 @@ namespace ManagerConsoleHost
         private static void CurrentDomain_UnhandledException(object sender,
                                                              UnhandledExceptionEventArgs e)
         {
-            Exception exp = (Exception) e.ExceptionObject;
+            if (!e.IsTerminating)
+            {
+                Exception exp = e.ExceptionObject as Exception;
 
-            LogHelper.LogErrorWithLineNumber(Logger,
-                                             WhoAmI + ": Unhandeled Exception",
-                                             exp);
+                LogHelper.LogErrorWithLineNumber(Logger,
+                                                 WhoAmI + ": Unhandled Exception",
+                                                 exp);
+            }
         }
     }
 }

@@ -57,6 +57,8 @@ namespace Manager.Integration.Test
             var task = AppDomainHelper.CreateAppDomainForManagerIntegrationConsoleHost("Debug",
                                                                                        1);
             task.Start();
+
+            JobHelper.GiveNodesTimeToInitialize();
         }
 
         [Test]
@@ -66,9 +68,7 @@ namespace Manager.Integration.Test
                                             Logger);
 
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-
-            JobHelper.GiveNodesTimeToInitialize();
-
+            
             using (var client = new HttpClient())
             {
                 UriBuilder uriBuilder = 
