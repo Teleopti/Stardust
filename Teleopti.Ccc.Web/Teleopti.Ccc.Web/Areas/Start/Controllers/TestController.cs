@@ -222,24 +222,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				Message = "Time is set to " + _now.UtcDateTime() + " in UTC"
 			});
 		}
-
-		public ViewResult CheckFeature(string featureName)
-		{
-			var result = false;
-			Toggles featureToggle;
-
-			if (Enum.TryParse(featureName, out featureToggle))
-			{
-				result = _toggleManager.IsEnabled(featureToggle);
-			}
-
-			return View("Message", new TestMessageViewModel
-			{
-				Title = string.Format("Feature {0}", featureName),
-				Message = result.ToString()
-			});
-		}
-
+		
 		private static void clearAllConnectionPools()
 		{
 			SqlConnection.ClearAllPools();
