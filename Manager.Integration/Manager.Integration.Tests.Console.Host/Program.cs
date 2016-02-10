@@ -61,19 +61,11 @@ namespace Manager.IntegrationTest.Console.Host
             if (ctrlType == CtrlTypes.CtrlCloseEvent ||
                 ctrlType == CtrlTypes.CtrlShutdownEvent)
             {
-                foreach (var appDomain in AppDomains.Values)
-                {
-                    try
-                    {
-                        AppDomain.Unload(appDomain);
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }
                 QuitEvent.Set();
+
                 return true;
             }
+
             return false;
         }
 
@@ -137,7 +129,7 @@ namespace Manager.IntegrationTest.Console.Host
 
         private static Dictionary<string, FileInfo> NodeconfigurationFiles { get; set; }
 
-        private static void Main(string[] args)
+        public static void Main(string[] args)
         {
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "Start.");
@@ -149,11 +141,7 @@ namespace Manager.IntegrationTest.Console.Host
             SetConsoleCtrlHandler(ConsoleCtrlCheck,
                                   true);
 
-            System.Console.CancelKeyPress += Console_CancelKeyPress;
-
             AppDomain.CurrentDomain.DomainUnload += CurrentDomainOnDomainUnload;
-
-            AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
@@ -222,17 +210,6 @@ namespace Manager.IntegrationTest.Console.Host
             }
 
             StartSelfHosting();
-
-            foreach (var appDomain in AppDomains.Values)
-            {
-                try
-                {
-                    AppDomain.Unload(appDomain);
-                }
-                catch (Exception)
-                {
-                }
-            }
         }
 
         private static Evidence CurrentDomainEvidence { get; set; }
@@ -335,18 +312,14 @@ namespace Manager.IntegrationTest.Console.Host
         private static void CurrentDomain_UnhandledException(object sender,
                                                              UnhandledExceptionEventArgs e)
         {
-            Exception exp = (Exception) e.ExceptionObject;
+            if (!e.IsTerminating)
+            {
+                Exception exp = e.ExceptionObject as Exception;
 
-            LogHelper.LogErrorWithLineNumber(Logger,
-                                             string.Empty,
-                                             exp.InnerException);
-        }
-
-        private static void CurrentDomain_ProcessExit(object sender,
-                                                      EventArgs e)
-        {
-            LogHelper.LogInfoWithLineNumber(Logger,
-                                            string.Empty);
+                LogHelper.LogErrorWithLineNumber(Logger,
+                                                 string.Empty,
+                                                 exp.InnerException);
+            }
         }
 
         private static void CurrentDomainOnDomainUnload(object sender,
@@ -372,25 +345,6 @@ namespace Manager.IntegrationTest.Console.Host
 
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
 
-
-        private static void Console_CancelKeyPress(object sender,
-                                                   ConsoleCancelEventArgs e)
-        {
-            foreach (var appDomain in AppDomains.Values)
-            {
-                try
-                {
-                    AppDomain.Unload(appDomain);
-                }
-                catch (Exception)
-                {
-                }
-            }
-
-            QuitEvent.Set();
-
-            e.Cancel = true;
-        }
 
         public static FileInfo CreateNodeConfigurationFile(FileInfo nodeConfigurationFile,
                                                            string newConfigurationFileName,

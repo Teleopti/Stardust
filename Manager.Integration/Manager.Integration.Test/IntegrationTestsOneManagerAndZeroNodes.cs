@@ -21,12 +21,14 @@ namespace Manager.Integration.Test
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndZeroNodes));
 
+        private bool _clearDatabase = true;
+        private bool _startUpManagerAndNodeManually = false;
+        private string _buildMode = "Debug";
+
 
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
@@ -38,7 +40,6 @@ namespace Manager.Integration.Test
 #else
             _clearDatabase = true;
             _startUpManagerAndNodeManually = false;
-            _debugMode = false;
             _buildMode = "Release";
 #endif
 
@@ -57,17 +58,6 @@ namespace Manager.Integration.Test
 
                 JobHelper.GiveNodesTimeToInitialize();
             }
-        }
-
-        private void CurrentDomain_UnhandledException(object sender,
-                                                      UnhandledExceptionEventArgs e)
-        {
-            Exception exp = (Exception) e.ExceptionObject;
-
-
-            LogHelper.LogFatalWithLineNumber(exp.Message,
-                                             Logger,
-                                             exp);
         }
 
         private static void TryCreateSqlLoggingTable()
@@ -119,12 +109,6 @@ namespace Manager.Integration.Test
         }
 
         private const int NumberOfNodesToStart = 0;
-
-        private bool _startUpManagerAndNodeManually = false;
-
-        private bool _clearDatabase = false;
-
-        private string _buildMode = "Debug";
 
         [Test]
         public void JobShouldJustBeQueuedIfNoNodes()

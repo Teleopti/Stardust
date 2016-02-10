@@ -46,7 +46,7 @@ namespace NodeConsoleHost
             if (ctrlType == CtrlTypes.CtrlCloseEvent ||
                 ctrlType == CtrlTypes.CtrlShutdownEvent)
             {
-                _nodeStarter.Stop();
+                NodeStarter.Stop();
 
                 QuitEvent.Set();
 
@@ -56,7 +56,7 @@ namespace NodeConsoleHost
             return false;
         }
 
-        private static void Main()
+        public static void Main()
         {
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
 
@@ -64,8 +64,6 @@ namespace NodeConsoleHost
 
             SetConsoleCtrlHandler(ConsoleCtrlCheck,
                                   true);
-
-            Console.CancelKeyPress += ConsoleOnCancelKeyPress;
 
             WhoAmI = "[NODE CONSOLE HOST, " + Environment.MachineName.ToUpper() + "]";
 
@@ -84,9 +82,9 @@ namespace NodeConsoleHost
             builder.RegisterModule(new WorkerModule());
             Container = builder.Build();
 
-            _nodeStarter = new NodeStarter();
+            NodeStarter = new NodeStarter();
 
-            _nodeStarter.Start(nodeConfig,
+            NodeStarter.Start(nodeConfig,
                                Container);
 
             QuitEvent.WaitOne();
@@ -94,24 +92,7 @@ namespace NodeConsoleHost
 
         private static string WhoAmI { get; set; }
 
-        private static void ConsoleOnCancelKeyPress(object sender,
-                                                    ConsoleCancelEventArgs e)
-        {
-            LogHelper.LogInfoWithLineNumber(Logger,
-                                            WhoAmI + " : ConsoleOnCancelKeyPress called.");
-
-            if (_nodeStarter != null)
-            {
-                _nodeStarter.Stop();
-            }
-            
-        
-            QuitEvent.Set();
-
-            e.Cancel = true;
-        }
-
-        private static INodeStarter _nodeStarter;
+        private static INodeStarter NodeStarter { get; set; }
 
         public static IContainer Container { get; set; }
 
@@ -121,9 +102,9 @@ namespace NodeConsoleHost
             LogHelper.LogInfoWithLineNumber(Logger,
                                             WhoAmI + " : CurrentDomain_DomainUnload called.");
             
-            if (_nodeStarter != null)
+            if (NodeStarter != null)
             {
-                _nodeStarter.Stop();
+                NodeStarter.Stop();
             }            
 
             QuitEvent.Set();
@@ -132,11 +113,14 @@ namespace NodeConsoleHost
         private static void CurrentDomain_UnhandledException(object sender,
                                                              UnhandledExceptionEventArgs e)
         {
-            Exception exp = (Exception) e.ExceptionObject;
+            if (!e.IsTerminating)
+            {
+                Exception exp = e.ExceptionObject as Exception;
 
-            LogHelper.LogErrorWithLineNumber(Logger,
-                                             WhoAmI + " : CurrentDomain_UnhandledException called.",
-                                             exp);
+                LogHelper.LogErrorWithLineNumber(Logger,
+                                                 WhoAmI + " : CurrentDomain_UnhandledException called.",
+                                                 exp);
+            }
         }
     }
 }
