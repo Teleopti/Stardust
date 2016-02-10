@@ -2519,7 +2519,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var request = _requestView.SelectedAdapters().FirstOrDefault();
 			if (request == null) return;
 
-			selectCellFromPersonDate(request.PersonRequest.Person, new DateOnly(request.FirstDateInRequest));
+			var localDate = TimeZoneHelper.ConvertFromUtc(request.FirstDateInRequest);
+			selectCellFromPersonDate(request.PersonRequest.Person, new DateOnly(localDate));
 		}
 
 		private void setupRequestViewButtonStates()
