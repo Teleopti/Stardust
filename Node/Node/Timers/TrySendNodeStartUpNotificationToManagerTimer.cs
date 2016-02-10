@@ -15,16 +15,19 @@ namespace Stardust.Node.Timers
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (TrySendNodeStartUpNotificationToManagerTimer));
 
-
         protected override void Dispose(bool disposing)
         {
+            LogHelper.LogInfoWithLineNumber(Logger, "Start disposing.");
+
             base.Dispose(disposing);
 
             if (CancellationTokenSource != null &&
                 !CancellationTokenSource.IsCancellationRequested)
             {
                 CancellationTokenSource.Cancel();
-            }            
+            }
+
+            LogHelper.LogInfoWithLineNumber(Logger, "Finished disposing.");
         }
 
         public TrySendNodeStartUpNotificationToManagerTimer(INodeConfiguration nodeConfiguration,

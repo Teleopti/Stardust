@@ -20,17 +20,22 @@ namespace Stardust.Manager
         public WorkerNodeRepository(string connectionString)
         {
             _connectionString = connectionString;
+
             InitDs();
         }
 
         private void InitDs()
         {
             _jdDataSet = new DataSet();
+
             _jdDataTable = new DataTable("[Stardust].WorkerNodes");
+
             _jdDataTable.Columns.Add(new DataColumn("Id",
                                                     typeof (Guid)));
+
             _jdDataTable.Columns.Add(new DataColumn("Url",
                                                     typeof (string)));
+
             _jdDataSet.Tables.Add(_jdDataTable);
         }
 
@@ -49,7 +54,9 @@ namespace Stardust.Manager
                     CommandType = CommandType.Text
                 };
                 connection.Open();
+
                 var reader = command.ExecuteReader();
+
                 if (reader.HasRows)
                 {
                     while (reader.Read())
@@ -62,9 +69,11 @@ namespace Stardust.Manager
                         listToReturn.Add(jobDefinition);
                     }
                 }
+
                 reader.Close();
                 connection.Close();
             }
+
             return listToReturn;
         }
 
@@ -84,7 +93,9 @@ namespace Stardust.Manager
                         CommandType = CommandType.Text
                     };
                     connection.Open();
+
                     var reader = command.ExecuteReader();
+
                     if (reader.HasRows)
                     {
                         while (reader.Read())
@@ -97,6 +108,7 @@ namespace Stardust.Manager
                             listToReturn.Add(jobDefinition);
                         }
                     }
+
                     reader.Close();
                     connection.Close();
                 }
@@ -124,16 +136,21 @@ namespace Stardust.Manager
             dr["Url"] = job.Url.ToString();
             _jdDataTable.Rows.Add(dr);
 
-
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                var da = new SqlDataAdapter("Select * From [Stardust].WorkerNodes",
-                                            connection);
-                var builder = new SqlCommandBuilder(da);
-                builder.GetInsertCommand();
-                da.Update(_jdDataSet,
-                          "[Stardust].WorkerNodes");
+
+                using (var da = new SqlDataAdapter("Select * From [Stardust].WorkerNodes",
+                                                   connection))
+                {
+                    var builder = new SqlCommandBuilder(da);
+
+                    builder.GetInsertCommand();
+
+                    da.Update(_jdDataSet,
+                              "[Stardust].WorkerNodes");
+                }
+
                 connection.Close();
             }
         }
@@ -143,20 +160,24 @@ namespace Stardust.Manager
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                var da = new SqlDataAdapter("Select * From [Stardust].WorkerNodes",
-                                            connection);
-                var command = new SqlCommand(
-                    "DELETE FROM [Stardust].WorkerNodes WHERE Id = @ID",
-                    connection);
-                var parameter = command.Parameters.Add(
-                    "@ID",
-                    SqlDbType.UniqueIdentifier,
-                    16,
-                    "Id");
-                parameter.Value = nodeId;
 
-                da.DeleteCommand = command;
-                da.DeleteCommand.ExecuteNonQuery();
+                using (var da = new SqlDataAdapter("Select * From [Stardust].WorkerNodes",
+                                                   connection))
+                {
+                    using (var command = new SqlCommand("DELETE FROM [Stardust].WorkerNodes WHERE Id = @ID",
+                                                        connection))
+                    {
+                        var parameter = command.Parameters.Add("@ID",
+                                                               SqlDbType.UniqueIdentifier,
+                                                               16,
+                                                               "Id");
+                        parameter.Value = nodeId;
+
+                        da.DeleteCommand = command;
+                        da.DeleteCommand.ExecuteNonQuery();
+                    }
+                }
+
                 connection.Close();
             }
         }

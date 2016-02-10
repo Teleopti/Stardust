@@ -82,9 +82,6 @@ namespace Stardust.Node.Timers
 
         protected override void Dispose(bool disposing)
         {
-            LogHelper.LogInfoWithLineNumber(Logger,
-                                            "Start disposing.");
-
             base.Dispose(disposing);
 
             if (CancellationTokenSource != null &&
@@ -92,9 +89,6 @@ namespace Stardust.Node.Timers
             {
                 CancellationTokenSource.Cancel();
             }            
-
-            LogHelper.LogInfoWithLineNumber(Logger,
-                                            "Finished disposing.");
         }
 
         private async void OnTimedEvent(object sender,

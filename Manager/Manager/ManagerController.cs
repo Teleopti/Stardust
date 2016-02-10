@@ -22,6 +22,7 @@ namespace Stardust.Manager
                                  JobManager jobManager)
         {
             WhoAmI = "[MANAGER, " + Environment.MachineName.ToUpper() + "]";
+
             _nodeManager = nodeManager;
             _jobManager = jobManager;
         }
@@ -33,7 +34,10 @@ namespace Stardust.Manager
             {
                 return new BadRequestResult(Request);
             }
-            if (string.IsNullOrEmpty(job.Name) || string.IsNullOrEmpty(job.Serialized) || string.IsNullOrEmpty(job.Type) || string.IsNullOrEmpty(job.UserName))
+            if (string.IsNullOrEmpty(job.Name) || 
+                string.IsNullOrEmpty(job.Serialized) || 
+                string.IsNullOrEmpty(job.Type) || 
+                string.IsNullOrEmpty(job.UserName))
             {
                 return new BadRequestResult(Request);
             }
@@ -87,7 +91,7 @@ namespace Stardust.Manager
 
             _jobManager.SetEndResultOnJobAndRemoveIt(jobId,
                                                      "Success");
-            
+
             //should we do this here also or only on heartbeats
             _jobManager.CheckAndAssignNextJob();
 

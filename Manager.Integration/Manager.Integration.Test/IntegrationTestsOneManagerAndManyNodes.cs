@@ -155,12 +155,9 @@ namespace Manager.Integration.Test
 
             managerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
-            managerApiHelper.CheckJobHistoryStatusTimer.Dispose();
-
             Assert.IsTrue(managerApiHelper.CheckJobHistoryStatusTimer.Guids.Count > 0);
             Assert.IsTrue(managerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.CanceledStatus ||
                                                                                         pair.Value == StatusConstants.DeletedStatus));
-
             managerApiHelper.Dispose();
 
             LogHelper.LogInfoWithLineNumber("Finished test.",
