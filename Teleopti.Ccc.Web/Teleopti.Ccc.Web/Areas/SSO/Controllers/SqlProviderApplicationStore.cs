@@ -58,13 +58,13 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			var nonceInfo = _nonceInfoRepository.Find(context, nonce, timestamp);
 			if (nonceInfo == null)
 			{
-                _nonceInfoRepository.ClearExpired(_now.UtcDateTime().Subtract(maximumMessageAge));
                 _nonceInfoRepository.Add(new NonceInfo
 				{
 					Context = context,
 					Nonce = nonce,
 					Timestamp = timestamp
 				});
+				_nonceInfoRepository.ClearExpired(_now.UtcDateTime().Subtract(maximumMessageAge));
 				return true;
 			}
 			return false;
