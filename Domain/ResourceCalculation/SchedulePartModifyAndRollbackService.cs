@@ -97,11 +97,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             modifyWithNoValidation(_rollbackStack.Pop(), ScheduleModifier.UndoRedo, _scheduleTagSetter);
         }
 
-        public int StackLength
-        {
-            get { return _rollbackStack.Count; }
-        }
-
         public IEnumerable<IScheduleDay> ModificationCollection
         {
             get

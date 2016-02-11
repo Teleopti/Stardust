@@ -68,8 +68,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             {
                 _target.Modify(schedulePart);
             }
-
-            Assert.AreEqual(1, _target.StackLength);
             Assert.AreEqual(1, _target.ModificationCollection.Count());
 
         }
@@ -102,8 +100,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			{
 				_target.Modify(schedulePart, rules);
 			}
-
-			Assert.AreEqual(1, _target.StackLength);
 			Assert.AreEqual(1, _target.ModificationCollection.Count());
 
 		}
@@ -138,8 +134,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			{
 				_target.ModifyStrictly(schedulePart,_tagSetter, rules);
 			}
-
-			Assert.AreEqual(0, _target.StackLength);
 			Assert.AreEqual(0, _target.ModificationCollection.Count());
 
 		}
@@ -177,10 +171,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 _target.Modify(schedulePart);
                 _target.Rollback();
             }
-
-            Assert.AreEqual(0, _target.StackLength);
             Assert.AreEqual(0, _target.ModificationCollection.Count());
-
         }
 
 
@@ -217,14 +208,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 _target.Modify(schedulePart);
             }
 
-            Assert.AreEqual(1, _target.StackLength);
             Assert.AreEqual(1, _target.ModificationCollection.Count());
             //check twice to ensure getting modifictioncollection does not empty the list
-            Assert.AreEqual(1, _target.StackLength);
             Assert.AreEqual(1, _target.ModificationCollection.Count());
 
             _target.ClearModificationCollection();
-            Assert.AreEqual(0, _target.StackLength);
             Assert.AreEqual(0, _target.ModificationCollection.Count());
         }
 
@@ -257,7 +245,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			var result = _target.ModifyParts(new List<IScheduleDay>{schedulePart, schedulePart2} );
 			
-			Assert.AreEqual(2, _target.StackLength);
 			Assert.AreEqual(2, _target.ModificationCollection.Count());
 			Assert.AreEqual(1, result.Count());
 

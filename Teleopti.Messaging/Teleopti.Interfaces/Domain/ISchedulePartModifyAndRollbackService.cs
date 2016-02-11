@@ -23,7 +23,6 @@ namespace Teleopti.Interfaces.Domain
 
 	    void Rollback();
 	    void RollbackLast();
-	    int StackLength { get; }
 	    IEnumerable<IScheduleDay> ModificationCollection { get; }
 	    void ClearModificationCollection();
 
