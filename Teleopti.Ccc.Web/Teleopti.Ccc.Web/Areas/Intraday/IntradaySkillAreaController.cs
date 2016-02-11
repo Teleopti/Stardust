@@ -8,7 +8,6 @@ using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Intraday
 {
-	//[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebModifySkill)]
 	public class IntradaySkillAreaController : ApiController
 	{
 		private readonly CreateSkillArea _createSkillArea;
@@ -18,6 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			_createSkillArea = createSkillArea;
 		}
 
+		[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebModifySkillArea)]
 		[UnitOfWork, HttpPost, Route("api/intraday/skillarea")]
 		public virtual IHttpActionResult CreateSkillArea([FromBody]SkillAreaInput input)
 		{
