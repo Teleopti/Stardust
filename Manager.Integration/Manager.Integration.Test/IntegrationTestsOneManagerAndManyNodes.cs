@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -12,6 +11,7 @@ using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Properties;
 using Manager.Integration.Test.Scripts;
+using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Timers;
 using NUnit.Framework;
 
@@ -27,6 +27,8 @@ namespace Manager.Integration.Test
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
@@ -48,16 +50,26 @@ namespace Manager.Integration.Test
                 DatabaseHelper.TryClearDatabase();
             }
 
-            var task = AppDomainHelper.CreateAppDomainForManagerIntegrationConsoleHost(_buildMode,
-                                                                                       NumberOfNodesToStart);
+            CancellationTokenSource = new CancellationTokenSource();
 
-            task.Start();
+            AppDomainTask = new AppDomainTask(_buildMode);
+
+            AppDomainTask.StartTask(CancellationTokenSource,
+                                    NumberOfNodesToStart);
 
             JobHelper.GiveNodesTimeToInitialize();
 
             LogHelper.LogInfoWithLineNumber("Finshed TestFixtureSetUp",
                                             Logger);
+        }
 
+        public AppDomainTask AppDomainTask { get; set; }
+
+        private CancellationTokenSource CancellationTokenSource { get; set; }
+
+        private void CurrentDomain_UnhandledException(object sender,
+                                                      UnhandledExceptionEventArgs e)
+        {
         }
 
         private static void TryCreateSqlLoggingTable()
@@ -87,52 +99,10 @@ namespace Manager.Integration.Test
             LogHelper.LogInfoWithLineNumber("Start TestFixtureTearDown",
                                             Logger);
 
-            if (AppDomainHelper.AppDomains != null &&
-                AppDomainHelper.AppDomains.Any())
-            {
-                LogHelper.LogInfoWithLineNumber("Start unloading app domains.",
-                                                Logger);
-
-                foreach (var appDomain in AppDomainHelper.AppDomains.Values)
-                {
-                    string friendlyName = appDomain.FriendlyName;
-
-                    try
-                    {
-                        LogHelper.LogInfoWithLineNumber("Try unload appdomain with friendly name : " + friendlyName,
-                                                        Logger);
-
-                        AppDomain.Unload(appDomain);
-
-                        LogHelper.LogInfoWithLineNumber("Unload appdomain with friendly name : " + friendlyName,
-                                                        Logger);
-
-                    }
-
-                    catch (AppDomainUnloadedException appDomainUnloadedException)
-                    {
-                        LogHelper.LogWarningWithLineNumber(appDomainUnloadedException.Message,
-                                                            Logger);
-
-                    }
-
-                    catch (Exception exp)
-                    {
-                        LogHelper.LogErrorWithLineNumber(exp.Message,
-                                                         Logger,
-                                                         exp);
-                    }
-                }
-
-                LogHelper.LogInfoWithLineNumber("Finished unloading app domains.",
-                                                Logger);
-
-            }
-            Thread.Sleep(TimeSpan.FromSeconds(10));
+            AppDomainTask.Dispose();
 
             LogHelper.LogInfoWithLineNumber("Finished TestFixtureTearDown",
                                             Logger);
-
         }
 
         private const int NumberOfNodesToStart = 1;
@@ -151,7 +121,8 @@ namespace Manager.Integration.Test
 
             List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(2*NumberOfNodesToStart);
 
-            var timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count, 3);
+            var timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count,
+                                                                 5);
 
             List<Task> tasks = new List<Task>();
 
@@ -204,7 +175,8 @@ namespace Manager.Integration.Test
 
             List<JobRequestModel> requests = JobHelper.GenerateFailingJobParamsRequests(1);
 
-            var timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count);
+            var timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count,
+                                                                 5);
 
             List<Task> tasks = new List<Task>();
 
@@ -247,7 +219,7 @@ namespace Manager.Integration.Test
             List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(1);
 
             var timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count,
-                                                                 3);
+                                                                 5);
             List<Task> tasks = new List<Task>();
 
             var managerApiHelper = new ManagerApiHelper(new CheckJobHistoryStatusTimer(requests.Count,
@@ -306,7 +278,7 @@ namespace Manager.Integration.Test
 
             List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(NumberOfNodesToStart*1);
 
-            TimeSpan timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count);
+            TimeSpan timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count, 5);
 
             List<Task> tasks = new List<Task>();
 
@@ -336,7 +308,7 @@ namespace Manager.Integration.Test
             Assert.IsTrue(condition);
             Assert.IsTrue(managerApiHelper.CheckJobHistoryStatusTimer.Guids.Count > 0);
 
-            //managerApiHelper.Dispose();
+            managerApiHelper.Dispose();
 
             LogHelper.LogInfoWithLineNumber("Finished test.",
                                             Logger);

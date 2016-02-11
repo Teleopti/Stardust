@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
@@ -11,6 +10,7 @@ using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Properties;
 using Manager.Integration.Test.Scripts;
+using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Timers;
 using NUnit.Framework;
 
@@ -28,6 +28,8 @@ namespace Manager.Integration.Test
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
@@ -48,16 +50,27 @@ namespace Manager.Integration.Test
                 DatabaseHelper.TryClearDatabase();
             }
 
-            var task = AppDomainHelper.CreateAppDomainForManagerIntegrationConsoleHost(_buildMode,
-                                                                                       NumberOfNodesToStart);
+            CancellationTokenSource = new CancellationTokenSource();
 
-            task.Start();
+            AppDomainTask = new AppDomainTask(_buildMode);
+
+            AppDomainTask.StartTask(CancellationTokenSource,
+                                    NumberOfNodesToStart);
 
             JobHelper.GiveNodesTimeToInitialize();
 
             LogHelper.LogInfoWithLineNumber("Finshed TestFixtureSetUp",
                                             Logger);
+        }
 
+        public AppDomainTask AppDomainTask { get; set; }
+
+
+        private CancellationTokenSource CancellationTokenSource { get; set; }
+
+        private void CurrentDomain_UnhandledException(object sender,
+                                                      UnhandledExceptionEventArgs e)
+        {
         }
 
         private static void TryCreateSqlLoggingTable()
@@ -87,51 +100,10 @@ namespace Manager.Integration.Test
             LogHelper.LogInfoWithLineNumber("Start TestFixtureTearDown",
                                             Logger);
 
-            if (AppDomainHelper.AppDomains != null &&
-                AppDomainHelper.AppDomains.Any())
-            {
-                LogHelper.LogInfoWithLineNumber("Start unloading app domains.",
-                                                Logger);
+            AppDomainTask.Dispose();
 
-                foreach (var appDomain in AppDomainHelper.AppDomains.Values)
-                {
-                    string friendlyName = appDomain.FriendlyName;
-
-                    try
-                    {
-                        LogHelper.LogInfoWithLineNumber("Try unload appdomain with friendly name : " + friendlyName,
-                                                        Logger);
-
-                        AppDomain.Unload(appDomain);
-
-                        LogHelper.LogInfoWithLineNumber("Unload appdomain with friendly name : " + friendlyName,
-                                                        Logger);
-
-                    }
-
-                    catch (AppDomainUnloadedException appDomainUnloadedException)
-                    {
-                        LogHelper.LogWarningWithLineNumber(appDomainUnloadedException.Message,
-                                                            Logger);
-
-                    }
-
-                    catch (Exception exp)
-                    {
-                        LogHelper.LogErrorWithLineNumber(exp.Message,
-                                                         Logger,
-                                                         exp);
-                    }
-                }
-
-                LogHelper.LogInfoWithLineNumber("Finished unloading app domains.",
-                                                Logger);
-
-            }
-            Thread.Sleep(TimeSpan.FromSeconds(10));
             LogHelper.LogInfoWithLineNumber("Finished TestFixtureTearDown",
                                             Logger);
-
         }
 
         private const int NumberOfNodesToStart = 0;
@@ -173,7 +145,7 @@ namespace Manager.Integration.Test
 
             Assert.IsTrue(managerApiHelper.CheckJobHistoryStatusTimer.Guids.Count > 0);
 
-            managerApiHelper.Dispose();            
+            managerApiHelper.Dispose();
         }
     }
 }

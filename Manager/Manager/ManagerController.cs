@@ -18,6 +18,15 @@ namespace Stardust.Manager
 
         public string WhoAmI { get; private set; }
 
+        protected override void Dispose(bool disposing)
+        {
+            LogHelper.LogInfoWithLineNumber(Logger,"Start disposing manager controller.");
+
+            base.Dispose(disposing);
+
+            LogHelper.LogInfoWithLineNumber(Logger, "Finished disposing manager controller.");
+        }
+
         public ManagerController(INodeManager nodeManager,
                                  JobManager jobManager)
         {
@@ -34,6 +43,7 @@ namespace Stardust.Manager
             {
                 return new BadRequestResult(Request);
             }
+
             if (string.IsNullOrEmpty(job.Name) || 
                 string.IsNullOrEmpty(job.Serialized) || 
                 string.IsNullOrEmpty(job.Type) || 

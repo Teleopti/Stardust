@@ -5,10 +5,12 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
+using System.Threading.Tasks;
 using log4net;
 using log4net.Config;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Properties;
+using Manager.Integration.Test.Tasks;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
@@ -33,43 +35,7 @@ namespace Manager.Integration.Test
             LogHelper.LogInfoWithLineNumber("Start TestFixtureTearDown",
                                             Logger);
 
-            if (AppDomainHelper.AppDomains != null &&
-                AppDomainHelper.AppDomains.Any())
-            {
-                LogHelper.LogInfoWithLineNumber("Start unloading app domains.",
-                                                Logger);
-
-                foreach (var appDomain in AppDomainHelper.AppDomains.Values)
-                {
-                    string friendlyName = appDomain.FriendlyName;
-
-                    try
-                    {
-                        LogHelper.LogInfoWithLineNumber("Try unload appdomain with friendly name : " + friendlyName,
-                                                        Logger);
-                        AppDomain.Unload(appDomain);
-
-                        LogHelper.LogInfoWithLineNumber("Unload appdomain with friendly name : " + friendlyName,
-                                                        Logger);
-                    }
-
-                    catch (AppDomainUnloadedException appDomainUnloadedException)
-                    {
-                        LogHelper.LogWarningWithLineNumber(appDomainUnloadedException.Message,
-                                                           Logger);
-                    }
-
-                    catch (Exception exp)
-                    {
-                        LogHelper.LogErrorWithLineNumber(exp.Message,
-                                                         Logger,
-                                                         exp);
-                    }
-                }
-
-                LogHelper.LogInfoWithLineNumber("Finished unloading app domains.",
-                                                Logger);
-            }
+            AppDomainTask.Dispose();
 
             LogHelper.LogInfoWithLineNumber("Finished TestFixtureTearDown",
                                             Logger);
@@ -96,15 +62,24 @@ namespace Manager.Integration.Test
                 DatabaseHelper.TryClearDatabase();
             }
 
-            var task = AppDomainHelper.CreateAppDomainForManagerIntegrationConsoleHost(_buildMode,
-                                                                                       NumberOfNodesToStart);
-            task.Start();
+
+            CancellationTokenSource = new CancellationTokenSource();
+
+            AppDomainTask = new AppDomainTask(_buildMode);
+
+            AppDomainTask.StartTask(CancellationTokenSource,
+                                    NumberOfNodesToStart);
 
             JobHelper.GiveNodesTimeToInitialize();
 
             LogHelper.LogInfoWithLineNumber("Finshed TestFixtureSetUp",
                                             Logger);
         }
+
+        public AppDomainTask AppDomainTask { get; set; }
+
+
+        private CancellationTokenSource CancellationTokenSource { get; set; }
 
         [Test]
         public async void ShouldUnloadNode1AppDomain()

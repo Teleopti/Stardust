@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using Manager.Integration.Test.Properties;
@@ -19,10 +20,11 @@ namespace Manager.Integration.Test.Helpers
         }
 
         public static Task CreateAppDomainForManagerIntegrationConsoleHost(string buildmode,
-                                                                           int numberOfNodes)
+                                                                           int numberOfNodes,
+                                                                           CancellationTokenSource cancellationTokenSource)
         {
-            return new Task(() =>
-            {
+            return new Task(() => 
+            {                
                 var assemblyLocationFullPath =
                     Path.Combine(Settings.Default.ManagerIntegrationConsoleHostLocation,
                                  buildmode);
@@ -50,9 +52,6 @@ namespace Manager.Integration.Test.Helpers
                                                              AppDomain.CurrentDomain.Evidence,
                                                              managerAppDomainSetup);
 
-                AddOrUpdateAppDomains(managerAppDomainSetup.ApplicationName,
-                                      appDomain);
-
                 FileInfo assemblyToExecute =
                     new FileInfo(Path.Combine(managerAppDomainSetup.ApplicationBase,
                                               managerAppDomainSetup.ApplicationName));
@@ -62,7 +61,9 @@ namespace Manager.Integration.Test.Helpers
 
                 appDomain.ExecuteAssembly(assemblyToExecute.FullName,
                                           managerAppDomainSetup.AppDomainInitializerArguments);
-            });
+
+            }, cancellationTokenSource.Token);
+
         }
 
         public static void AddOrUpdateAppDomains(string key,

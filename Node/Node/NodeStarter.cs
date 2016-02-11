@@ -41,6 +41,9 @@ namespace Stardust.Node
                                     builder.RegisterType<InvokeHandler>()
                                         .SingleInstance();
 
+                                    builder.RegisterType<NodeController>()
+                                        .SingleInstance();
+
                                     builder.RegisterApiControllers(typeof (NodeController).Assembly);
 
                                     builder.RegisterInstance(nodeConfiguration);
@@ -69,6 +72,7 @@ namespace Stardust.Node
                                     {
                                         DependencyResolver = new AutofacWebApiDependencyResolver(container)
                                     };
+
                                     config.MapHttpAttributeRoutes();
                                     config.Services.Add(typeof (IExceptionLogger),
                                                         new GlobalExceptionLogger());

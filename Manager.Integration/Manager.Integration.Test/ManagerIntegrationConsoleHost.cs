@@ -58,50 +58,18 @@ namespace Manager.Integration.Test
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
-            LogHelper.LogInfoWithLineNumber("Started TestFixtureSetUp.",
-                                            Logger);
+            CancellationTokenSource = new CancellationTokenSource();
 
-            MyTask = new Task(() =>
-            {
-                var path =
-                    @"C:\Users\antons\Documents\Stardust\Manager.Integration\Manager.Integration.Tests.Console.Host\bin\Debug";
+            var task = AppDomainHelper.CreateAppDomainForManagerIntegrationConsoleHost("Debug",
+                                                                                       1,
+                                                                                       CancellationTokenSource);
 
-                var exe = "Manager.IntegrationTest.Console.Host.exe";
+            task.Start();
 
-                var config = "Manager.IntegrationTest.Console.Host.exe.config";
-
-                var appDomainSetup = new AppDomainSetup
-                {
-                    ApplicationBase = path,
-                    ApplicationName = exe,
-                    ConfigurationFile = config
-                };
-
-                MyAppDomain = AppDomain.CreateDomain(exe,
-                                                     null,
-                                                     appDomainSetup);
-
-
-                LogHelper.LogInfoWithLineNumber("Started Manager.IntegrationTest.Console.Host (appdomain) with friendly name " + MyAppDomain.FriendlyName,
-                                                Logger);
-
-                MyAppDomain.ExecuteAssembly(Path.Combine(path,
-                                                         exe));
-            });
-
-            MyTask.Start();
-
-            LogHelper.LogInfoWithLineNumber("Start sleep for 90 seconds.",
-                                            Logger);
-
-            Thread.Sleep(TimeSpan.FromSeconds(90));
-
-            LogHelper.LogInfoWithLineNumber("Finished sleep for 90 seconds.",
-                                            Logger);
-
-            LogHelper.LogInfoWithLineNumber("Finished TestFixtureSetUp.",
-                                            Logger);
+            JobHelper.GiveNodesTimeToInitialize();
         }
+
+        private CancellationTokenSource CancellationTokenSource { get; set; }
 
         public Task MyTask { get; set; }
 

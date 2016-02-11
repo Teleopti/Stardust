@@ -85,6 +85,7 @@
     <Compile Include="ManagerIntegrationTestControllerTests.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Scripts\ScriptExecuteHelper.cs" />
+    <Compile Include="Tasks\AppDomainTask.cs" />
     <Compile Include="TestJobParams.cs" />
     <Compile Include="JobRequestModel.cs" />
     <Compile Include="IntegrationTestsOneManagerAndManyNodes.cs" />

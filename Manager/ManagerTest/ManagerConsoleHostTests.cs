@@ -89,7 +89,6 @@ namespace ManagerTest
                                                      null,
                                                      appDomainSetup);
 
-
                 MyAppDomain.ExecuteAssembly(Path.Combine(path,
                                                          exe));
             });

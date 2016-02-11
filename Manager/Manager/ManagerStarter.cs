@@ -34,9 +34,12 @@ namespace Stardust.Manager
                                 appBuilder =>
                                 {
                                     var builder = new ContainerBuilder();
+
                                     builder.RegisterType<NodeManager>()
                                         .As<INodeManager>();
+
                                     builder.RegisterType<JobManager>();
+
                                     builder.RegisterType<HttpSender>()
                                         .As<IHttpSender>();
 
@@ -47,6 +50,9 @@ namespace Stardust.Manager
                                     builder.Register(
                                         c => new WorkerNodeRepository(managerConfiguration.ConnectionString))
                                         .As<IWorkerNodeRepository>();
+
+                                    builder.RegisterType<ManagerController>()
+                                        .SingleInstance();
 
                                     builder.RegisterApiControllers(typeof (ManagerController).Assembly);
 
@@ -59,9 +65,12 @@ namespace Stardust.Manager
                                     {
                                         DependencyResolver = new AutofacWebApiDependencyResolver(container)
                                     };
+
                                     config.MapHttpAttributeRoutes();
+
                                     config.Services.Add(typeof (IExceptionLogger),
                                                         new GlobalExceptionLogger());
+
                                     appBuilder.UseAutofacMiddleware(container);
                                     appBuilder.UseAutofacWebApi(config);
                                     appBuilder.UseWebApi(config);
