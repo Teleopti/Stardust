@@ -53,7 +53,26 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Target.DoCalculation(agent1, date)
 				.Should().Be.False();
 		}
-		
+
+		[Test]
+		public void ShouldDoCalculationIfAgentsWithSameSkillIsUnderLimit()
+		{
+			LimitForNoResourceCalculation.SetFromTest(10);
+
+			var date = new DateOnly(2000, 1, 1);
+			var agent1 = new Person();
+			var agent2 = new Person();
+			agent1.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()));
+			agent2.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()));
+			var skill = new Skill("_", "", Color.Empty, 1, new SkillTypePhone(new Description("_"), ForecastSource.OutboundTelephony));
+			agent1.AddSkill(skill, date);
+			agent2.AddSkill(skill, date);
+			SchedulingResultStateHolder.PersonsInOrganization = new[] { agent1, agent2 };
+
+			Target.DoCalculation(agent1, date)
+				.Should().Be.True();
+		}
+
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
