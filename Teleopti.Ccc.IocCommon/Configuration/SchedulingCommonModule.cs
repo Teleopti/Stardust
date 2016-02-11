@@ -333,7 +333,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<FindFilter>().SingleInstance();
 			builder.RegisterType<ViolatedSchedulePeriodBusinessRule>().SingleInstance();
 			builder.RegisterType<DayOffBusinessRuleValidation>().SingleInstance();
-			builder.RegisterType<AlwaysResourceCalculateAfterDelete>().As<IResourceCalculateAfterDeleteDecider>().SingleInstance();
+			if (_configuration.Toggle(Toggles.ResourcePlanner_SkillGroupDeleteAfterCalculation_37048))
+			{
+				builder.RegisterType<ResourceCalculateAfterDeleteDecider>().As<IResourceCalculateAfterDeleteDecider>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<AlwaysResourceCalculateAfterDelete>().As<IResourceCalculateAfterDeleteDecider>().SingleInstance();
+			}
 		}
 
 		private static void registerMoveTimeOptimizationClasses(ContainerBuilder builder)

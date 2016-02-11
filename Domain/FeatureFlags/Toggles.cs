@@ -104,7 +104,9 @@
 		Scheduler_IntradayOptimization_36617,
 		Scheduler_AgentSkillAnalyzer_12345,
 		Wfm_Use_Stardust,
-		Wfm_ForecastFileImportOnStardust_37047
+		Wfm_ForecastFileImportOnStardust_37047,
+
+		ResourcePlanner_SkillGroupDeleteAfterCalculation_37048
 		// ReSharper restore InconsistentNaming
 	}
 }
