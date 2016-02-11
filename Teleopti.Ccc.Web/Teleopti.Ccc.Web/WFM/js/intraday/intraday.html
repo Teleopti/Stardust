@@ -1,52 +1,89 @@
-<div ui-view>
-	<div class="view-header">
-		<div class="view-title">
-			<h1><i class="mdi mdi-compass-outline"></i> {{'Intraday'|translate}}</h1>
+	<div ui-view>
+		<div class="view-header">
+			<div class="view-title">
+				<h1><i class="mdi mdi-compass-outline"></i> {{'Intraday'|translate}}</h1>
+			<p>
+				{{SkillAreaId}}
+			</p>
+			</div>
+			<div class="fab-wrapper">
+				<button class="skill-area-create wfm-fab  material-depth-1" ng-click="configMode();">
+					<i class="mdi mdi-plus"></i>
+					<md-tooltip>Add new area</md-tooltip>
+				</button>
+			</div>
 		</div>
-		<div class="fab-wrapper">
-			<button class="skill-area-create wfm-fab  material-depth-1" ng-click="configMode();"><i class="mdi mdi-plus"></i></button>
-		</div>
-	</div>
 
-	<div class="intraday">
-		<div class="row">
-			<div class="col-md-4">
-				<form class="wfm-form">
-					<div class="form-input-wrap">
-						<label for="skill-select">Select skill:</label>
-						<select id="skill-select" ng-model="selectedSkill" ng-change="skillChange(selectedSkill)" ng-options="skill.SkillName for skill in skillList" name="skill-select" required></select>
-						<noscript><input type="submit" value="Submit"></noscript>
-					</div>
-				</form>
-			</div>
-			<div>{{SkillAreaId}}</div>
-			<div class="col-md-8">
-				<p>{{'LatestAcquiredTime'|translate}}: {{format(selectedSkill.Measures[0].LatestDate)}}</p>
+		<div class="con-row">
+			<div class="panel con-flex material-depth-1">
+				<div class="sub-header con-row">
+					<h2 class="con-flex">Select to monitor either a skill or an area</h2>
+					<span class="con-flex">
+						<select >
+							<option value="" disabled selected>Pick a skill...</option>
+							<option ng-repeat="item in demos | orderBy : 'id'">{{item.id}}</option>
+						</select>
+					</span>
+					<span class="con-flex">
+						<select ng-model="areaName">
+							<option value="" disabled selected>Pick an area...</option>
+							<option ng-repeat="item in demos2 | orderBy : 'id'">{{item.id}}</option>
+						</select>
+					</span>
+					<div class="con-flex split-1-2"></div>
+
+				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-md-4">
-				<div class="material-depth-1">
-					<div class="sub-header" translate>{{selectedSkill.SkillName}}</div>
-					<div class="wfm-block">
-						<div class="info-row">
-							<div class="measure">Offered calls: </div>
-							<div class="value">{{selectedSkill.Measures[0].ActualCalls}}</div>
+
+		<div class="con-row animate-show" ng-show="areaName">
+			<div class="panel con-flex material-depth-1">
+				<div class="sub-header">
+					<h2>{{areaName}}</h2>
+					<div class="head-actions panel-menu">
+						<div tabindex=0 class="context-menu card-context">
+							<i class="mdi mdi-dots-vertical"></i>
+							<span class="context-menu-left">
+								<ul class="wfm-list">
+									<li ng-click="showIncluded=!showIncluded">
+										<i ng-hide="showIncluded" class="mdi mdi-eye-off"></i>
+										<i ng-show="showIncluded" class="mdi mdi-eye"></i>
+										included skills
+									</li>
+									<li ng-click='toggleModal()'><i class="mdi mdi-delete"></i>Delete this area</li>
+								</ul>
+							</span>
 						</div>
-						<div class="info-row">
-							<div class="measure">Forecasted calls: </div>
-							<div class="value">{{selectedSkill.Measures[0].ForecastedCalls}}</div>
-						</div>
-						<div class="info-row">
-							<div class="measure">Relative difference: </div>
-							<div class="value">{{selectedSkill.Measures[0].Value}}</div>
-						</div>
-						<div class="info-row">
-							<div class="text-danger">{{selectedSkill.Measures[0].StringValue}}</div>
-						</div>
+					</div>
+				</div>
+				<div ng-show="showIncluded" class="con-row">
+					<div class="con-flex">
+						<h3>This area contains:</h3>
+							<span ng-repeat="item in demos | orderBy : 'id'">{{item.id}}, </span>
+					</div>
+				</div>
+
+				<div class="con-row">
+					<div class="con-flex">
+						Forecasted calls:
+					</div>
+					<div class="con-flex">
+						Acctual calls:
+					</div>
+					<div class="con-flex">
+						Area total:
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</div>
+
+		<modal-dialog show='modalShown' ng-cloak>
+			<div class="modal-inner-content">
+				Are you sure you want to delete {{areaName}}?
+			</div>
+			<div class="modal-actions">
+				<aside>
+					<button ng-click='toggleModal(); areaName=null' class="wfm-btn wfm-btn-invis-default">Yes, delete it</button>
+				</aside>
+			</div>
+		</modal-dialog>
