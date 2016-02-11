@@ -10,7 +10,7 @@ namespace Teleopti.Interfaces.Domain
 	    void Modify(IScheduleDay schedulePart);
 	    void Modify(IScheduleDay schedulePart, INewBusinessRuleCollection newBusinessRuleCollection);
 
-	    IEnumerable<IBusinessRuleResponse> Modify(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter);
+	    void Modify(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter);
 
 	    void ModifyStrictly(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter, INewBusinessRuleCollection newBusinessRuleCollection);
 

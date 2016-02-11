@@ -36,15 +36,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_modificationStack.Push(schedulePart);
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public IEnumerable<IBusinessRuleResponse> Modify(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter)
+		public void Modify(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter)
         {
             IScheduleRange range = _stateHolder.Schedules[schedulePart.Person];
             IScheduleDay partToSave = range.ReFetch(schedulePart);
-            var responses = modifyWithNoValidation(schedulePart, ScheduleModifier.Scheduler, scheduleTagSetter);
+            modifyWithNoValidation(schedulePart, ScheduleModifier.Scheduler, scheduleTagSetter);
             _rollbackStack.Push(partToSave);
             _modificationStack.Push(schedulePart);
-        	return responses;
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -104,9 +102,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			                                              _scheduleDayChangeCallback, _scheduleTagSetter);
     	}
 
-		private IEnumerable<IBusinessRuleResponse> modifyWithNoValidation(IScheduleDay schedulePart, ScheduleModifier modifier, IScheduleTagSetter scheduleTagSetter)
+		private void modifyWithNoValidation(IScheduleDay schedulePart, ScheduleModifier modifier, IScheduleTagSetter scheduleTagSetter)
         {
-           return _stateHolder.Schedules.Modify(modifier, schedulePart, NewBusinessRuleCollection.AllForScheduling(_stateHolder), _scheduleDayChangeCallback, scheduleTagSetter);
+           _stateHolder.Schedules.Modify(modifier, schedulePart, NewBusinessRuleCollection.AllForScheduling(_stateHolder), _scheduleDayChangeCallback, scheduleTagSetter);
         }
 
 		private IEnumerable<IBusinessRuleResponse> modifyWithNoValidation(IScheduleDay schedulePart, ScheduleModifier modifier, IScheduleTagSetter scheduleTagSetter, INewBusinessRuleCollection newBusinessRuleCollection)
