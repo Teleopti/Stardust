@@ -341,6 +341,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<AlwaysResourceCalculateAfterDelete>().As<IResourceCalculateAfterDeleteDecider>().SingleInstance();
 			}
+			builder.RegisterType<LimitForNoResourceCalculation>().As<ILimitForNoResourceCalculation>().AsSelf().SingleInstance();
 		}
 
 		private static void registerMoveTimeOptimizationClasses(ContainerBuilder builder)

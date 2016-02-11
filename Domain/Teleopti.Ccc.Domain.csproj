@@ -717,7 +717,9 @@
     <Compile Include="Repositories\ILoadAllSkillInIntradays.cs" />
     <Compile Include="Repositories\ISkillAreaRepository.cs" />
     <Compile Include="Scheduling\Assignment\AlwaysResourceCalculateAfterDelete.cs" />
+    <Compile Include="Scheduling\Assignment\ILimitForNoResourceCalculation.cs" />
     <Compile Include="Scheduling\Assignment\IResourceCalculateAfterDeleteDecider.cs" />
+    <Compile Include="Scheduling\Assignment\LimitForNoResourceCalculation.cs" />
     <Compile Include="Scheduling\Assignment\ResourceCalculateAfterDeleteDecider.cs" />
     <Compile Include="Scheduling\DayOffBusinessRuleValidation.cs" />
     <Compile Include="Scheduling\FullScheduling.cs" />
