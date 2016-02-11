@@ -21,21 +21,47 @@ namespace Manager.Integration.Test
         private static readonly ILog Logger =
             LogManager.GetLogger(typeof (ManagerIntegrationTestControllerTests));
 
+        private const int NumberOfNodesToStart = 1;
+
+        private bool _clearDatabase = true;
+        private string _buildMode = "Debug";
+
+#if (DEBUG)
+        // Do nothing.
+#else
+            _clearDatabase = true;
+            _buildMode = "Release";
+#endif
+
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
         {
+            LogHelper.LogInfoWithLineNumber("Start TestFixtureTearDown",
+                                            Logger);
+
             if (AppDomainHelper.AppDomains != null &&
                 AppDomainHelper.AppDomains.Any())
             {
+                LogHelper.LogInfoWithLineNumber("Start unloading app domains.",
+                                                Logger);
+
                 foreach (var appDomain in AppDomainHelper.AppDomains.Values)
                 {
                     try
                     {
+                        LogHelper.LogInfoWithLineNumber("Try unload appdomain with friendly name : " + appDomain.FriendlyName,
+                                                        Logger);
+
                         AppDomain.Unload(appDomain);
+
+                        LogHelper.LogInfoWithLineNumber("Unload appdomain with friendly name : " + appDomain.FriendlyName,
+                                                        Logger);
                     }
 
                     catch (AppDomainUnloadedException)
                     {
+                        LogHelper.LogInfoWithLineNumber("Appdomain with friendly name : " + appDomain.FriendlyName + "  has already been unloade.",
+                                                        Logger);
                     }
 
                     catch (Exception exp)
@@ -45,7 +71,13 @@ namespace Manager.Integration.Test
                                                          exp);
                     }
                 }
+
+                LogHelper.LogInfoWithLineNumber("Finished unloading app domains.",
+                                                Logger);
             }
+
+            LogHelper.LogInfoWithLineNumber("Finished TestFixtureTearDown",
+                                            Logger);
         }
 
         [TestFixtureSetUp]
@@ -54,11 +86,22 @@ namespace Manager.Integration.Test
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
-            var task = AppDomainHelper.CreateAppDomainForManagerIntegrationConsoleHost("Debug",
-                                                                                       1);
+            LogHelper.LogInfoWithLineNumber("Start TestFixtureSetUp",
+                                            Logger);
+
+            if (_clearDatabase)
+            {
+                DatabaseHelper.TryClearDatabase();
+            }
+
+            var task = AppDomainHelper.CreateAppDomainForManagerIntegrationConsoleHost(_buildMode,
+                                                                                       NumberOfNodesToStart);
             task.Start();
 
             JobHelper.GiveNodesTimeToInitialize();
+
+            LogHelper.LogInfoWithLineNumber("Finshed TestFixtureSetUp",
+                                            Logger);
         }
 
         [Test]
@@ -68,10 +111,10 @@ namespace Manager.Integration.Test
                                             Logger);
 
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-            
+
             using (var client = new HttpClient())
             {
-                UriBuilder uriBuilder = 
+                UriBuilder uriBuilder =
                     new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
 
                 uriBuilder.Path += "appdomain/" + "Node1.config";
@@ -100,7 +143,7 @@ namespace Manager.Integration.Test
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                UriBuilder uriBuilder = 
+                UriBuilder uriBuilder =
                     new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
 
                 uriBuilder.Path += "appdomain";
@@ -115,10 +158,20 @@ namespace Manager.Integration.Test
                 List<string> list =
                     JsonConvert.DeserializeObject<List<string>>(content);
 
+                if (list.Any())
+                {
+                    foreach (var l in list)
+                    {
+                        LogHelper.LogInfoWithLineNumber(l,
+                                                        Logger);
+                    }
+                }
+
                 Assert.IsTrue(list.Any());
             }
 
-            Logger.Info("Finished tests.");
+            LogHelper.LogInfoWithLineNumber("Finished test.",
+                                            Logger);
         }
     }
 }

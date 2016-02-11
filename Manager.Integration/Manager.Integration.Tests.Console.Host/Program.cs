@@ -203,10 +203,7 @@ namespace Manager.IntegrationTest.Console.Host
 
             foreach (var nodeconfigurationFile in NodeconfigurationFiles)
             {
-                new Task(() =>
-                {
-                    CreateNodeAppDomain(nodeconfigurationFile);
-                }).Start();
+                new Task(() => { CreateNodeAppDomain(nodeconfigurationFile); }).Start();
             }
 
             StartSelfHosting();
@@ -239,7 +236,7 @@ namespace Manager.IntegrationTest.Console.Host
                                                          managerAppDomainSetup.ApplicationName));
 
             LogHelper.LogInfoWithLineNumber(Logger,
-                                            "Execute assembly : " + assemblyFile.FullName);
+                                            "Manager (appdomain) will start with friendly name : " +  managerAppDomain.FriendlyName);
 
             managerAppDomain.ExecuteAssembly(assemblyFile.FullName);
         }
@@ -268,7 +265,7 @@ namespace Manager.IntegrationTest.Console.Host
                                           nodeAppDomainSetup.ApplicationName));
 
             LogHelper.LogInfoWithLineNumber(Logger,
-                                            "Execute assembly : " + assemblyToExecute.FullName);
+                                            "Node (appdomain) will start with friendly name : " + nodeAppDomain.FriendlyName);
 
             nodeAppDomain.ExecuteAssembly(assemblyToExecute.FullName);
         }
@@ -390,13 +387,15 @@ namespace Manager.IntegrationTest.Console.Host
             if (appDomainToUnload.Value != null)
             {
                 AppDomain.Unload(appDomainToUnload.Value);
-                
-                AddOrUpdateAppDomains(id,null);
+
+                AddOrUpdateAppDomains(id,
+                                      null);
             }
         }
 
-        public static void StartNewNode()
+        public static bool StartNewNode()
         {
+            return true;
         }
 
         public static bool NodeExists(string id)

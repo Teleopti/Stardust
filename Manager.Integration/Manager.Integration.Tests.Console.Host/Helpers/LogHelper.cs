@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using log4net;
+using log4net.Repository.Hierarchy;
 
 namespace Manager.IntegrationTest.Console.Host.Helpers
 {
@@ -72,6 +75,25 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
                                            member,
                                            line,
                                            info));
+            }
+        }
+
+        public static void LogInfoWithLineNumber(ILog logger,
+                                                 IEnumerable<string> info,
+                                                 [CallerFilePath] string file = "",
+                                                 [CallerMemberName] string member = "",
+                                                 [CallerLineNumber] int line = 0)
+        {
+            if (info.Any())
+            {
+                foreach (var s in info)
+                {
+                    LogInfoWithLineNumber(logger,
+                                          s,
+                                          file,
+                                          member,
+                                          line);
+                }
             }
         }
 

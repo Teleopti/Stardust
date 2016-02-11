@@ -22,7 +22,6 @@ namespace Manager.Integration.Test
         private static readonly ILog Logger = LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndZeroNodes));
 
         private bool _clearDatabase = true;
-        private bool _startUpManagerAndNodeManually = false;
         private string _buildMode = "Debug";
 
 
@@ -32,8 +31,10 @@ namespace Manager.Integration.Test
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
-            TryCreateSqlLoggingTable();
+            LogHelper.LogInfoWithLineNumber("Start TestFixtureSetUp",
+                                            Logger);
 
+            TryCreateSqlLoggingTable();
 
 #if (DEBUG)
             // Do nothing.
@@ -49,15 +50,16 @@ namespace Manager.Integration.Test
             }
 
 
-            if (!_startUpManagerAndNodeManually)
-            {
-                var task = AppDomainHelper.CreateAppDomainForManagerIntegrationConsoleHost(_buildMode,
-                                                                                           NumberOfNodesToStart);
+            var task = AppDomainHelper.CreateAppDomainForManagerIntegrationConsoleHost(_buildMode,
+                                                                                       NumberOfNodesToStart);
 
-                task.Start();
+            task.Start();
 
-                JobHelper.GiveNodesTimeToInitialize();
-            }
+            JobHelper.GiveNodesTimeToInitialize();
+
+            LogHelper.LogInfoWithLineNumber("Finshed TestFixtureSetUp",
+                                            Logger);
+
         }
 
         private static void TryCreateSqlLoggingTable()
@@ -84,18 +86,34 @@ namespace Manager.Integration.Test
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
         {
+            LogHelper.LogInfoWithLineNumber("Start TestFixtureTearDown",
+                                            Logger);
+
             if (AppDomainHelper.AppDomains != null &&
                 AppDomainHelper.AppDomains.Any())
             {
+                LogHelper.LogInfoWithLineNumber("Start unloading app domains.",
+                                                Logger);
+
                 foreach (var appDomain in AppDomainHelper.AppDomains.Values)
                 {
                     try
                     {
+                        LogHelper.LogInfoWithLineNumber("Try unload appdomain with friendly name : " + appDomain.FriendlyName,
+                                                        Logger);
+
                         AppDomain.Unload(appDomain);
+
+                        LogHelper.LogInfoWithLineNumber("Unload appdomain with friendly name : " + appDomain.FriendlyName,
+                                                        Logger);
+
                     }
 
                     catch (AppDomainUnloadedException)
                     {
+                        LogHelper.LogInfoWithLineNumber("Appdomain with friendly name : " + appDomain.FriendlyName + "  has already been unloade.",
+                                                        Logger);
+
                     }
 
                     catch (Exception exp)
@@ -105,7 +123,15 @@ namespace Manager.Integration.Test
                                                          exp);
                     }
                 }
+
+                LogHelper.LogInfoWithLineNumber("Finished unloading app domains.",
+                                                Logger);
+
             }
+
+            LogHelper.LogInfoWithLineNumber("Finished TestFixtureTearDown",
+                                            Logger);
+
         }
 
         private const int NumberOfNodesToStart = 0;

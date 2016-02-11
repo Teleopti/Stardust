@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using log4net;
@@ -16,6 +17,9 @@ namespace Manager.IntegrationTest.Console.Host
         public ManagerIntegrationTestController()
         {
             WhoAmI = "[MANAGER INTEGRATION TEST CONTROLLER, " + Environment.MachineName.ToUpper() + "]";
+
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            WhoAmI);
         }
 
         [HttpPost, Route("appdomain")]
@@ -35,6 +39,9 @@ namespace Manager.IntegrationTest.Console.Host
 
             if (string.IsNullOrEmpty(id))
             {
+                LogHelper.LogWarningWithLineNumber(Logger,
+                                                   "Bad request, id : " + id);
+
                 return BadRequest(id);
             }
 
@@ -42,14 +49,18 @@ namespace Manager.IntegrationTest.Console.Host
 
             if (nodeExist)
             {
+                LogHelper.LogWarningWithLineNumber(Logger,
+                                                   "Shut down Node with id : " + id);
+
                 Program.ShutDownNode(id);
 
                 return Ok(id);
             }
-            else
-            {
-                return NotFound();
-            }                       
+
+            LogHelper.LogWarningWithLineNumber(Logger,
+                                               "Id not found, id : " + id);
+
+            return NotFound();
         }
 
         [HttpGet, Route("appdomain")]
@@ -58,7 +69,12 @@ namespace Manager.IntegrationTest.Console.Host
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "Called API controller.");
 
-            return Ok(Program.AppDomains.Keys.ToList());
+            List<string> appDomainsList = Program.AppDomains.Keys.ToList();
+
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            appDomainsList);
+
+            return Ok(appDomainsList);
         }
     }
 }
