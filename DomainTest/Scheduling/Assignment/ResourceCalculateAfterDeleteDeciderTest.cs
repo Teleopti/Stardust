@@ -40,24 +40,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			LimitForNoResourceCalculation.SetFromTest(1);
 
+			var date = new DateOnly(2000, 1, 1);
 			var agent1 = new Person();
 			var agent2 = new Person();
-
-			var period1 = new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team());
-			var period2 = new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team());
-
+			agent1.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()));
+			agent2.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()));
 			var skill = new Skill("_", "", Color.Empty, 1, new SkillTypePhone(new Description("_"), ForecastSource.OutboundTelephony));
-
-			period1.AddPersonSkill(new PersonSkill(skill, new Percent()));
-			period2.AddPersonSkill(new PersonSkill(skill, new Percent()));
-
-			agent1.AddPersonPeriod(period1);
-			agent2.AddPersonPeriod(period2);
-
+			agent1.AddSkill(skill, date);
+			agent2.AddSkill(skill, date);
 			SchedulingResultStateHolder.PersonsInOrganization = new[] { agent1, agent2 };
 
-			Target.DoCalculation(agent1, new DateOnly(2000, 1, 1)).Should().Be.False();
+			Target.DoCalculation(agent1, date)
+				.Should().Be.False();
 		}
+		
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
