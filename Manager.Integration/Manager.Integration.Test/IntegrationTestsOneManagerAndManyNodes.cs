@@ -141,7 +141,7 @@ namespace Manager.Integration.Test
 
         private string _buildMode = "Debug";
 
-        [Test][Ignore]
+        [Test]
         public void CreateSeveralRequestShouldReturnBothCancelAndDeleteStatuses()
         {
             LogHelper.LogInfoWithLineNumber("Start test.",
