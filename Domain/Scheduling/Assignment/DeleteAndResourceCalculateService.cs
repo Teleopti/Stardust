@@ -15,17 +15,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private readonly IDeleteSchedulePartService _deleteSchedulePartService;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IResourceCalculateDaysDecider _resourceCalculateDaysDecider;
-		private readonly ISkillGroupInfo _skillGroupInfo;
+		private readonly IResourceCalculateAfterDeleteDecider _resourceCalculateAfterDeleteDecider;
 
 		public DeleteAndResourceCalculateService(IDeleteSchedulePartService deleteSchedulePartService, 
 																					IResourceOptimizationHelper resourceOptimizationHelper,
 																					IResourceCalculateDaysDecider resourceCalculateDaysDecider,
-																					ISkillGroupInfo skillGroupInfo)
+																					IResourceCalculateAfterDeleteDecider resourceCalculateAfterDeleteDecider)
 		{
 			_deleteSchedulePartService = deleteSchedulePartService;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_resourceCalculateDaysDecider = resourceCalculateDaysDecider;
-			_skillGroupInfo = skillGroupInfo;
+			_resourceCalculateAfterDeleteDecider = resourceCalculateAfterDeleteDecider;
 		}
 
 		public void DeleteWithResourceCalculation(IEnumerable<IScheduleDay> daysToDelete, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation)
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			_deleteSchedulePartService.Delete(new []{ dayToDelete}, rollbackService);
 
-			if (_skillGroupInfo.ResourceCalculateAfterDelete(dayToDelete.Person, dayToDelete.DateOnlyAsPeriod.DateOnly))
+			if (_resourceCalculateAfterDeleteDecider.DoCalculation(dayToDelete.Person, dayToDelete.DateOnlyAsPeriod.DateOnly))
 			{
 				var date = dayToDelete.DateOnlyAsPeriod.DateOnly;
 				_resourceOptimizationHelper.ResourceCalculateDate(date, considerShortBreaks, doIntraIntervalCalculation);

@@ -716,8 +716,8 @@
     <Compile Include="Repositories\ISeatPlanRepository.cs" />
     <Compile Include="Repositories\ILoadAllSkillInIntradays.cs" />
     <Compile Include="Repositories\ISkillAreaRepository.cs" />
-    <Compile Include="Scheduling\Assignment\DontConsiderSkillGroupInfo.cs" />
-    <Compile Include="Scheduling\Assignment\ISkillGroupInfo.cs" />
+    <Compile Include="Scheduling\Assignment\AlwaysResourceCalculateAfterDelete.cs" />
+    <Compile Include="Scheduling\Assignment\IResourceCalculateAfterDeleteDecider.cs" />
     <Compile Include="Scheduling\DayOffBusinessRuleValidation.cs" />
     <Compile Include="Scheduling\FullScheduling.cs" />
     <Compile Include="Scheduling\IScheduleDictionaryPersister.cs" />
