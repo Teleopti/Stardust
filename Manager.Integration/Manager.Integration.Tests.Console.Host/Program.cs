@@ -333,12 +333,10 @@ namespace Manager.IntegrationTest.Console.Host
                 foreach (var appDomain in AppDomains.Values)
                 {
                     string friendlyName = appDomain.FriendlyName;
-
+                    LogHelper.LogInfoWithLineNumber(Logger,
+                                                        "Try unload appdomain with friendly name : " + friendlyName);
                     try
                     {
-                        LogHelper.LogInfoWithLineNumber(Logger,
-                                                        "Try unload appdomain with friendly name : " + friendlyName);
-
                         AppDomain.Unload(appDomain);
 
                         LogHelper.LogInfoWithLineNumber(Logger,
@@ -412,9 +410,8 @@ namespace Manager.IntegrationTest.Console.Host
 
         public static void ShutDownNode(string id)
         {
-            KeyValuePair<string, AppDomain> appDomainToUnload =
-                AppDomains.FirstOrDefault(pair => pair.Key == id);
-
+            KeyValuePair<string, AppDomain> appDomainToUnload = AppDomains.FirstOrDefault(pair => pair.Key == id);
+            
             if (appDomainToUnload.Value != null)
             {
                 string friendlyName = appDomainToUnload.Value.FriendlyName;
@@ -441,8 +438,18 @@ namespace Manager.IntegrationTest.Console.Host
                                                      exp);
                 }
 
-                AddOrUpdateAppDomains(id,
-                                      null);
+                //AddOrUpdateAppDomains(id,
+                //                      null);
+            }
+            try
+            {
+                AppDomain tmp = AppDomains.Values.FirstOrDefault();
+                if (tmp != null)
+                    LogHelper.LogInfoWithLineNumber(Logger,"The appDomain " + tmp.FriendlyName + "is not unloaded!");
+            }
+            catch
+            {
+                LogHelper.LogInfoWithLineNumber(Logger,"The appDomain is unloaded!");
             }
         }
 
