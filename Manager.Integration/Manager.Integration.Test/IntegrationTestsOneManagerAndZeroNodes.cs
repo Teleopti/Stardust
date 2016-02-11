@@ -16,7 +16,7 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
-    [TestFixture][Ignore]
+    [TestFixture]
     public class IntegrationTestsOneManagerAndZeroNodes
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndZeroNodes));
@@ -28,11 +28,13 @@ namespace Manager.Integration.Test
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
+            LogHelper.LogInfoWithLineNumber("Start TestFixtureSetUp",
+                                            Logger);
+
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
-            LogHelper.LogInfoWithLineNumber("Start TestFixtureSetUp",
-                                            Logger);
+            
 
             TryCreateSqlLoggingTable();
 
