@@ -133,6 +133,8 @@ namespace Manager.Integration.Test
             try
             {
                 AppDomain tmp = AppDomainHelper.AppDomains.Values.FirstOrDefault();
+                if (tmp != null)
+                    LogHelper.LogInfoWithLineNumber("The appDomain " + tmp.FriendlyName + "is not unloaded!", Logger);
             }
             catch
             {
