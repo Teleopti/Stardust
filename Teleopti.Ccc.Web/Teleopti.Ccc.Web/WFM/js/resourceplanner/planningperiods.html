@@ -12,7 +12,7 @@
 	<div class="view-header">
 		<div class="view-title">
 			<!--TRANSLATE ME-->
-			<h1><i class="mdi mdi-calendar"></i> {{planningPeriod.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{planningPeriod.EndDate | amDateFormat:"L"}} 				<i ng-show="initialized" ng-click="changeDateToggle = !changeDateToggle;suggestions(planningPeriod.Id)" class="mdi mdi-pencil searchbaricon update-planning-peroid"><md-tooltip>{{'ChangePlanningPeriod' | translate }}</md-tooltip></i></h1>
+			<h1><i class="mdi mdi-calendar"></i> {{planningPeriod.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{planningPeriod.EndDate | amDateFormat:"L"}} 				<i ng-show="initialized" ng-click="changeDateToggle = !changeDateToggle;suggestions(planningPeriod.Id)" class="mdi mdi-pencil pointer update-planning-peroid"><md-tooltip>{{'ChangePlanningPeriod' | translate }}</md-tooltip></i></h1>
 
 			<div ng-if="planningPeriod.State != 'New'" class="text-info schedule-warning">
 				{{'PlanningPeriodIsScheduled' | translate }}
@@ -70,10 +70,10 @@
 				<h2>{{node.Name}}</h2>
 				<div class="head-actions panel-menu">
 					<div tabindex=0 class="context-menu card-context" ng-click="editRuleset(node)">
-						<i class=" filter-header mdi mdi-pencil searchbaricon"><md-tooltip>{{'EditFilter' | translate }}</md-tooltip></i>
+						<i class=" filter-header mdi mdi-pencil pointer"><md-tooltip>{{'EditFilter' | translate }}</md-tooltip></i>
 					</div>
 					<div ng-show="!node.Default" tabindex=0 class="context-menu card-context" ng-click="destoryRuleset(node)">
-						<i class=" filter-header mdi mdi-delete searchbaricon"><md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip></i>
+						<i class=" filter-header mdi mdi-delete pointer"><md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip></i>
 					</div>
 
 				</div>

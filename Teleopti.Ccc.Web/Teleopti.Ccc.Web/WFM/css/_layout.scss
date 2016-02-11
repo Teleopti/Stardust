@@ -2,22 +2,6 @@ html, body{
 	background:#f3f3f3!important;
 }
 
-.line-right{
-	text-align:right;
-}
-
-.padding-reset{
-	padding:0!important;
-}
-
-.pointer{
-	    cursor:pointer; // extract in styleguide helpers ?
-}
-
-.full-padding {
-	padding: $full-padding; 
-}
-
 /*override bootstrap*/
 .col-md-4, .col-md-8, .col-md-12 { /* please bootstrap, don't make any assumption about padding' */
 	padding: 0;
@@ -147,9 +131,6 @@ input::-ms-clear {
 	}
 
 /*nav-context-menu*/
-.searchbaricon{
-	cursor:pointer;
-}
 
 .nav-row{
 	padding-top:5px;
@@ -168,10 +149,6 @@ input::-ms-clear {
 
 	.card-context{
 		margin:5px 0;
-	}
-
-	.white-text{
-		color:$white;
 	}
 
 	.nav-tools{
@@ -249,10 +226,11 @@ md-progress-circular .md-inner .md-half-circle {
 	border-top-color: $pink-500!important;
 }
 
-/*temp fixes*/
 .wfm-card-unselected{
 	background: $white;
 }
+
+/*temp fixes*/
 
 .click-modal .dialog {
 left:25%;
@@ -263,7 +241,6 @@ left:25%;
 		right:1%;
 	}
 }
-
 
 .wfm-form input, .wfm-form select {
 	margin-right: 0;
