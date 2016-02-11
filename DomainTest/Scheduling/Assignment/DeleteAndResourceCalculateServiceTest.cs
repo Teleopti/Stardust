@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
 			_deleteSchedulePartService = _mocks.StrictMock<IDeleteSchedulePartService>();
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
-			_target = new DeleteAndResourceCalculateService(_deleteSchedulePartService, _resourceOptimizationHelper, new ResourceCalculateDaysDecider());
+			_target = new DeleteAndResourceCalculateService(_deleteSchedulePartService, _resourceOptimizationHelper, new ResourceCalculateDaysDecider(), new DontConsiderSkillGroupInfo());
 			_part1 = _mocks.StrictMock<IScheduleDay>();
 			_part2 = _mocks.StrictMock<IScheduleDay>();
 			_list = new List<IScheduleDay> {_part1, _part2};

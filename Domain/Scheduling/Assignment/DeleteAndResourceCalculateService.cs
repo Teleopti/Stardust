@@ -15,14 +15,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private readonly IDeleteSchedulePartService _deleteSchedulePartService;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IResourceCalculateDaysDecider _resourceCalculateDaysDecider;
+		private readonly ISkillGroupInfo _skillGroupInfo;
 
 		public DeleteAndResourceCalculateService(IDeleteSchedulePartService deleteSchedulePartService, 
 																					IResourceOptimizationHelper resourceOptimizationHelper,
-																					IResourceCalculateDaysDecider resourceCalculateDaysDecider)
+																					IResourceCalculateDaysDecider resourceCalculateDaysDecider,
+																					ISkillGroupInfo skillGroupInfo)
 		{
 			_deleteSchedulePartService = deleteSchedulePartService;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_resourceCalculateDaysDecider = resourceCalculateDaysDecider;
+			_skillGroupInfo = skillGroupInfo;
 		}
 
 		public void DeleteWithResourceCalculation(IEnumerable<IScheduleDay> daysToDelete, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation)
@@ -35,11 +38,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			_deleteSchedulePartService.Delete(new []{ dayToDelete}, rollbackService);
 
-			var date = dayToDelete.DateOnlyAsPeriod.DateOnly;
-			_resourceOptimizationHelper.ResourceCalculateDate(date, considerShortBreaks, doIntraIntervalCalculation);
-			if (_resourceCalculateDaysDecider.IsNightShift(dayToDelete))
+			if (_skillGroupInfo.ResourceCalculateAfterDelete(dayToDelete.Person, dayToDelete.DateOnlyAsPeriod.DateOnly))
 			{
-				_resourceOptimizationHelper.ResourceCalculateDate(date.AddDays(1), considerShortBreaks, doIntraIntervalCalculation);
+				var date = dayToDelete.DateOnlyAsPeriod.DateOnly;
+				_resourceOptimizationHelper.ResourceCalculateDate(date, considerShortBreaks, doIntraIntervalCalculation);
+				if (_resourceCalculateDaysDecider.IsNightShift(dayToDelete))
+				{
+					_resourceOptimizationHelper.ResourceCalculateDate(date.AddDays(1), considerShortBreaks, doIntraIntervalCalculation);
+				}
 			}
 		}
 

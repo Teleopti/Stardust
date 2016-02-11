@@ -333,6 +333,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<FindFilter>().SingleInstance();
 			builder.RegisterType<ViolatedSchedulePeriodBusinessRule>().SingleInstance();
 			builder.RegisterType<DayOffBusinessRuleValidation>().SingleInstance();
+			builder.RegisterType<DontConsiderSkillGroupInfo>().As<ISkillGroupInfo>().SingleInstance();
 		}
 
 		private static void registerMoveTimeOptimizationClasses(ContainerBuilder builder)
