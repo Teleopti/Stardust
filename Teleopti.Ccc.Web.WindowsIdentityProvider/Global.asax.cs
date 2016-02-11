@@ -1,5 +1,21 @@
-﻿using System.Web.Mvc;
+﻿using System.Configuration;
+using System.Web.Mvc;
 using System.Web.Routing;
+using Autofac;
+using Autofac.Integration.Mvc;
+using DotNetOpenAuth.OpenId;
+using DotNetOpenAuth.OpenId.Provider;
+using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Infrastructure.Aop;
+using Teleopti.Ccc.Infrastructure.Authentication;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.Web.Auth.OpenIdApplicationStore;
+using Teleopti.Ccc.Web.WindowsIdentityProvider.Core;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.WindowsIdentityProvider
 {
@@ -32,6 +48,47 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider
 
 			RegisterGlobalFilters(GlobalFilters.Filters);
 			RegisterRoutes(RouteTable.Routes);
+
+			var builder = new ContainerBuilder();
+			registerIoc(builder);
+
+			var container = builder.Build();
+			DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+		}
+
+		private static void registerIoc(ContainerBuilder builder)
+		{
+			var configReader = new ConfigReader();
+			builder.RegisterControllers(typeof (MvcApplication).Assembly).ApplyAspects();
+			builder.RegisterType<OpenIdProviderWrapper>().As<IOpenIdProviderWrapper>().SingleInstance();
+			builder.RegisterType<WindowsAccountProvider>().As<IWindowsAccountProvider>().SingleInstance();
+			builder.RegisterType<CurrentHttpContext>().As<ICurrentHttpContext>().SingleInstance();
+			builder.RegisterType<ProviderEndpointWrapper>().As<IProviderEndpointWrapper>().SingleInstance();
+			builder.RegisterType<Now>().As<INow>().SingleInstance();
+			builder.Register(context => configReader).As<IConfigReader>().SingleInstance();
+			var usePersistentCryptoKeys = ConfigurationManager.AppSettings["UsePersistentCryptoKeys"];
+			if (!string.IsNullOrEmpty(usePersistentCryptoKeys) && usePersistentCryptoKeys.ToLowerInvariant() == "true")
+			{
+				builder.RegisterType<SqlProviderApplicationStore>().As<IOpenIdApplicationStore>().SingleInstance();
+				builder.RegisterType<OpenIdProvider>().SingleInstance();
+			}
+			else
+			{
+				builder.Register(context => new OpenIdProvider(OpenIdProvider.HttpApplicationStore))
+					.As<OpenIdProvider>()
+					.SingleInstance();
+			}
+
+			var args = new IocArgs(configReader)
+			{
+				DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForWeb()
+			};
+			var configuration = new IocConfiguration(args, new FalseToggleManager());
+			builder.RegisterModule(new TenantServerModule(configuration));
+			builder.RegisterModule(new CommonModule(configuration));
+			builder.RegisterType<WindowsIpTenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
+			builder.RegisterType<CryptoKeyInfoRepository>().As<ICryptoKeyInfoRepository>().SingleInstance();
+			builder.RegisterType<NonceInfoRepository>().As<INonceInfoRepository>().SingleInstance();
 		}
 	}
 }

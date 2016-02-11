@@ -9,6 +9,7 @@ using DotNetOpenAuth.OpenId;
 using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
 using DotNetOpenAuth.OpenId.Provider;
 using log4net;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Web.WindowsIdentityProvider.Core;
 
 namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
@@ -20,13 +21,6 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 		private readonly ICurrentHttpContext _currentHttpContext;
 		private readonly IProviderEndpointWrapper _providerEndpointWrapper;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(OpenIdController));
-
-		public OpenIdController()
-			: this(
-				new OpenIdProviderWrapper(new OpenIdProvider(OpenIdProvider.HttpApplicationStore)),
-				new WindowsAccountProvider(new CurrentHttpContext()), new CurrentHttpContext(), new ProviderEndpointWrapper())
-		{
-		}
 
 		public OpenIdController(IOpenIdProviderWrapper openIdProviderWrapper, IWindowsAccountProvider windowsAccountProvider, ICurrentHttpContext currentHttpContext, IProviderEndpointWrapper providerEndpointWrapper)
 		{
@@ -46,7 +40,9 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 		}
 
 		[ValidateInput(false)]
-		public ActionResult Provider()
+		[TenantUnitOfWork]
+		[NoTenantAuthentication]
+		public virtual ActionResult Provider()
 		{
 			logger.Info("Start of the OpenIdController.Provider()");
 			if (isHeadRequest())
@@ -74,7 +70,9 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 		}
 
 		[Authorize]
-		public ActionResult TriggerWindowsAuthorization()
+		[TenantUnitOfWork]
+		[NoTenantAuthentication]
+		public virtual ActionResult TriggerWindowsAuthorization()
 		{
 			logger.Info("Start of the OpenIdController.TriggerWindowsAuthorization()");
 
