@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -76,13 +77,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IIntradayOptimizer2Creator creator = new IntradayOptimizer2Creator(
 				decisionMaker,
 				scheduleService,
-				_schedulerStateHolder,
 				_container.Resolve<ISkillStaffPeriodToSkillIntervalDataMapper>(),
 				_container.Resolve<ISkillIntervalDataDivider>(),
 				_container.Resolve<ISkillIntervalDataAggregator>(),
 				_container.Resolve<IEffectiveRestrictionCreator>(),
 				_container.Resolve<IMinWeekWorkTimeRule>(),
-				_container.Resolve<IResourceOptimizationHelper>());
+				_container.Resolve<IResourceOptimizationHelper>(),
+				_container.Resolve<IDeleteAndResourceCalculateService>());
 
 			IList<IIntradayOptimizer2> optimizers = creator.Create(matrixContainerList,
 				workShiftContainerList, optimizerPreferences,
@@ -130,7 +131,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					_container.Resolve<IEffectiveRestrictionCreator>(),
 					_container.Resolve<IMinWeekWorkTimeRule>(),
 					_container.Resolve<IResourceOptimizationHelper>(),
-					dayOffOptimizationPreferenceProvider);
+					dayOffOptimizationPreferenceProvider,
+					_container.Resolve<IDeleteAndResourceCalculateService>());
 
 			IList<IMoveTimeOptimizer> optimizers = creator.Create();
 			IScheduleOptimizationService service = new MoveTimeOptimizerContainer(optimizers, periodValueCalculator);

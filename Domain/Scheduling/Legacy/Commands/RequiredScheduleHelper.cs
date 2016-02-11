@@ -46,9 +46,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly ITeamBlockRemoveShiftCategoryBackToLegalService _teamBlockRemoveShiftCategoryBackToLegalService;
-		
+		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 
-		public RequiredScheduleHelper(ISchedulePeriodListShiftCategoryBackToLegalStateService shiftCategoryBackToLegalState, IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak, Func<ISchedulingResultStateHolder> resultStateHolder, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService, IStudentSchedulingService studentSchedulingService, Func<IOptimizationPreferences> optimizationPreferences, IScheduleService scheduleService, IResourceOptimizationHelper resourceOptimizationHelper, IGridlockManager gridlockManager, IDaysOffSchedulingService daysOffSchedulingService, Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder, IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleDayEquator scheduleDayEquator, IMatrixListFactory matrixListFactory, ITeamBlockRemoveShiftCategoryBackToLegalService teamBlockRemoveShiftCategoryBackToLegalService)
+
+		public RequiredScheduleHelper(ISchedulePeriodListShiftCategoryBackToLegalStateService shiftCategoryBackToLegalState, 
+				IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak, 
+				Func<ISchedulingResultStateHolder> resultStateHolder, 
+				Func<IFixedStaffSchedulingService> fixedStaffSchedulingService, 
+				IStudentSchedulingService studentSchedulingService, 
+				Func<IOptimizationPreferences> optimizationPreferences, 
+				IScheduleService scheduleService, 
+				IResourceOptimizationHelper resourceOptimizationHelper, 
+				IGridlockManager gridlockManager, 
+				IDaysOffSchedulingService daysOffSchedulingService, 
+				Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder, 
+				IScheduleDayChangeCallback scheduleDayChangeCallback, 
+				IScheduleDayEquator scheduleDayEquator, 
+				IMatrixListFactory matrixListFactory, 
+				ITeamBlockRemoveShiftCategoryBackToLegalService teamBlockRemoveShiftCategoryBackToLegalService,
+				IDeleteAndResourceCalculateService deleteAndResourceCalculateService)
 		{
 			_shiftCategoryBackToLegalState = shiftCategoryBackToLegalState;
 			_ruleSetBagsOfGroupOfPeopleCanHaveShortBreak = ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
@@ -65,6 +81,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_scheduleDayEquator = scheduleDayEquator;
 			_matrixListFactory = matrixListFactory;
 			_teamBlockRemoveShiftCategoryBackToLegalService = teamBlockRemoveShiftCategoryBackToLegalService;
+			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
 		}
 
 		public void RemoveShiftCategoryBackToLegalState(
@@ -148,14 +165,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			};
 
 			DateTime schedulingTime = DateTime.Now;
-			IDeleteAndResourceCalculateService deleteAndResourceCalculateService =
-				new DeleteAndResourceCalculateService(new DeleteSchedulePartService(_resultStateHolder), _resourceOptimizationHelper, new ResourceCalculateDaysDecider());
-			ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(_resultStateHolder(),
+				ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(_resultStateHolder(),
 				_scheduleDayChangeCallback,
 				tagSetter);
 			INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService =
 				new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(),
-					deleteAndResourceCalculateService,
+					_deleteAndResourceCalculateService,
 					_scheduleService, _allResults,
 					new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks));
 

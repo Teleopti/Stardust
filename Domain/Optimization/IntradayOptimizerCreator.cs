@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -15,34 +14,34 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly IIntradayDecisionMaker _decisionMaker;
 		private readonly IScheduleService _scheduleService;
-		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
 		private readonly ISkillIntervalDataDivider _skillIntervalDataDivider;
 		private readonly ISkillIntervalDataAggregator _skillIntervalDataAggregator;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private readonly IMinWeekWorkTimeRule _minWeekWorkTimeRule;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 
 		public IntradayOptimizer2Creator(
 			IIntradayDecisionMaker decisionMaker,
 			IScheduleService scheduleService,
-			Func<ISchedulerStateHolder> schedulerStateHolder,
 			ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
 			ISkillIntervalDataDivider skillIntervalDataDivider,
 			ISkillIntervalDataAggregator skillIntervalDataAggregator,
 			IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			IMinWeekWorkTimeRule minWeekWorkTimeRule,
-			IResourceOptimizationHelper resourceOptimizationHelper)
+			IResourceOptimizationHelper resourceOptimizationHelper,
+			IDeleteAndResourceCalculateService deleteAndResourceCalculateService)
 		{
 			_decisionMaker = decisionMaker;
 			_scheduleService = scheduleService;
-			_schedulerStateHolder = schedulerStateHolder;
 			_skillStaffPeriodToSkillIntervalDataMapper = skillStaffPeriodToSkillIntervalDataMapper;
 			_skillIntervalDataDivider = skillIntervalDataDivider;
 			_skillIntervalDataAggregator = skillIntervalDataAggregator;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 			_minWeekWorkTimeRule = minWeekWorkTimeRule;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
+			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
 		}
 
 		/// <summary>
@@ -74,9 +73,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 				                                                                                                           _skillStaffPeriodToSkillIntervalDataMapper,
 				                                                                                                           _skillIntervalDataDivider,
 				                                                                                                           _skillIntervalDataAggregator);
-
-				IDeleteSchedulePartService deleteSchedulePartService =
-					new DeleteSchedulePartService(()=> _schedulerStateHolder().SchedulingResultState);
 				
 				IScheduleMatrixOriginalStateContainer workShiftStateContainer = workShiftContainerList[index];
 
@@ -92,7 +88,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
 
 				var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
-				var deleteAndResourceCalculateService = new DeleteAndResourceCalculateService(deleteSchedulePartService, _resourceOptimizationHelper, new ResourceCalculateDaysDecider());
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
 
 				IIntradayOptimizer2 optimizer =
@@ -109,7 +104,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 						workShiftStateContainer,
 						schedulingOptionsCreator,
 						mainShiftOptimizeActivitySpecificationSetter,
-						deleteAndResourceCalculateService,
+						_deleteAndResourceCalculateService,
 						resourceCalculateDelayer,
 						scheduleMatrix);
 

@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly Func<IWorkShiftFinderResultHolder> _workShiftFinderResultHolder;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
+		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 
 		public ClassicDaysOffOptimizationCommand(IOptimizerHelperHelper optimizerHelperHelper, Func<IPersonSkillProvider> personSkillProvider,
 			IScheduleMatrixLockableBitArrayConverterEx bitArrayConverter,
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IResourceOptimizationHelper resourceOptimizationHelper, IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			IMinWeekWorkTimeRule minWeekWorkTimeRule, IDayOffOptimizerValidator dayOffOptimizerValidator,
 			ISchedulingOptionsCreator schedulingOptionsCreator, Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
-			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended)
+			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended, IDeleteAndResourceCalculateService deleteAndResourceCalculateService)
 		{
 			_optimizerHelperHelper = optimizerHelperHelper;
 			_personSkillProvider = personSkillProvider;
@@ -61,6 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_workShiftFinderResultHolder = workShiftFinderResultHolder;
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
+			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
 		}
 
 		public void Execute(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences, 
@@ -167,11 +169,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(restrictionChecker, optimizerPreferences, originalStateContainer, daysOffPreferences);
 			var optimizationLimits = new OptimizationLimits(optimizerOverLimitDecider, _minWeekWorkTimeRule);
 
-			IDeleteAndResourceCalculateService deleteAndResourceCalculateService =
-				new DeleteAndResourceCalculateService(new DeleteSchedulePartService(scheduleResultStateHolder), _resourceOptimizationHelper, new ResourceCalculateDaysDecider());
 			INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService =
 				new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(),
-					deleteAndResourceCalculateService,
+					_deleteAndResourceCalculateService,
 					scheduleService, _workShiftFinderResultHolder,
 					resourceCalculateDelayer);
 			var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();

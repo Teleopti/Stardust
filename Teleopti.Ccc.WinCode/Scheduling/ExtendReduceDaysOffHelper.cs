@@ -23,7 +23,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly OptimizerHelperHelper _optimizerHelper;
 		private readonly Func<IWorkShiftFinderResultHolder> _allResults;
 
-		public ExtendReduceDaysOffHelper(ILifetimeScope container, OptimizerHelperHelper optimizerHelper, Func<IWorkShiftFinderResultHolder> allResults)
+		public ExtendReduceDaysOffHelper(ILifetimeScope container, 
+				OptimizerHelperHelper optimizerHelper, 
+				Func<IWorkShiftFinderResultHolder> allResults)
 		{
 			_container = container;
 			_optimizerHelper = optimizerHelper;
@@ -66,10 +68,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var scheduleServiceForFlexibleAgents =
 				_container.Resolve<IScheduleService>(new TypedParameter(typeof(IWorkShiftFinderService),
 					workShiftFinderServiceForFlexibleAgents));
+			var deleteAndResourceCalculateService = _container.Resolve<IDeleteAndResourceCalculateService>();
 
 			var schedulePartModifyAndRollbackService =
 				_container.Resolve<ISchedulePartModifyAndRollbackService>();
-			var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
 			var effectiveRestrictionCreator =
 				_container.Resolve<IEffectiveRestrictionCreator>();
 			var resourceCalculateDaysDecider =
@@ -107,7 +109,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 				INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService =
 					new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(),
-						new DeleteAndResourceCalculateService(new DeleteSchedulePartService(()=>schedulerStateHolder.SchedulingResultState), resourceOptimizationHelper, new ResourceCalculateDaysDecider()),
+						deleteAndResourceCalculateService,
 						scheduleServiceForFlexibleAgents, _allResults, resourceCalculateDelayer);
 
 				IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =

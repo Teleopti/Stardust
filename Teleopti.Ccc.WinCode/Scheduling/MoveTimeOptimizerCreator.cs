@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IMinWeekWorkTimeRule _minWeekWorkTimeRule;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IDayOffOptimizationPreferenceProvider _dayOffOptimizationPreferenceProvider;
+		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 
 		public MoveTimeOptimizerCreator(
 			IList<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainerList,
@@ -33,7 +34,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			IMinWeekWorkTimeRule minWeekWorkTimeRule,
 			IResourceOptimizationHelper resourceOptimizationHelper,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
+			IDeleteAndResourceCalculateService deleteAndResourceCalculateService)
 		{
 			_scheduleMatrixContainerList = scheduleMatrixContainerList;
 			_workShiftContainerList = workShiftContainerList;
@@ -46,6 +48,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_minWeekWorkTimeRule = minWeekWorkTimeRule;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_dayOffOptimizationPreferenceProvider = dayOffOptimizationPreferenceProvider;
+			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
 		}
 
 		/// <summary>
@@ -85,8 +88,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				var schedulingOptionsCreator = new SchedulingOptionsCreator();
 				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
 
-				IDeleteAndResourceCalculateService deleteAndResourceCalculateService = new DeleteAndResourceCalculateService(deleteSchedulePartService, _resourceOptimizationHelper, new ResourceCalculateDaysDecider());
-
 				IMoveTimeOptimizer optimizer =
 					new MoveTimeOptimizer(
 						periodValueCalculator,
@@ -95,7 +96,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						_scheduleService,
 						_optimizerPreferences,
 						_rollbackService,
-						deleteAndResourceCalculateService,
+						_deleteAndResourceCalculateService,
 						_resourceOptimizationHelper,
 						_effectiveRestrictionCreator,
 						workShiftContainer,

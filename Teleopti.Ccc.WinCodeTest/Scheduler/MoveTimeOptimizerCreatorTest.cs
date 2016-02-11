@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -76,7 +77,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 												   _effectiveRestrictionCreator,
 												   _minWeekWorkTimeRule,
 												   _resourceOptimizationHelper,
-												   _dayOffOptimizationPreferenceProvider);
+												   _dayOffOptimizationPreferenceProvider,
+													 MockRepository.GenerateStub<IDeleteAndResourceCalculateService>());
 		}
 
 		[Test]
