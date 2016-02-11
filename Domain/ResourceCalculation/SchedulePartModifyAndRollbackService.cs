@@ -29,7 +29,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public void Modify(IScheduleDay schedulePart, INewBusinessRuleCollection newBusinessRuleCollection)
 		{
-			Modify(schedulePart, _scheduleTagSetter, newBusinessRuleCollection);
+			IScheduleRange range = _stateHolder.Schedules[schedulePart.Person];
+			IScheduleDay partToSave = range.ReFetch(schedulePart);
+			modifyWithNoValidation(schedulePart, ScheduleModifier.Scheduler, _scheduleTagSetter, newBusinessRuleCollection);
+			_rollbackStack.Push(partToSave);
+			_modificationStack.Push(schedulePart);
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -57,16 +61,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			                                              NewBusinessRuleCollection.AllForScheduling(_stateHolder),
 			                                              _scheduleDayChangeCallback, scheduleTagSetter);
 			return responses;
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Modify(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter, INewBusinessRuleCollection newBusinessRuleCollection)
-		{
-			IScheduleRange range = _stateHolder.Schedules[schedulePart.Person];
-			IScheduleDay partToSave = range.ReFetch(schedulePart);
-			modifyWithNoValidation(schedulePart, ScheduleModifier.Scheduler, scheduleTagSetter, newBusinessRuleCollection);
-			_rollbackStack.Push(partToSave);
-			_modificationStack.Push(schedulePart);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
