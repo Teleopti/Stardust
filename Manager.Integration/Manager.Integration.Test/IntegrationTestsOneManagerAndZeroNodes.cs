@@ -99,16 +99,14 @@ namespace Manager.Integration.Test
                 {
                     string friendlyName = appDomain.FriendlyName;
 
+                    LogHelper.LogInfoWithLineNumber("Try unload appdomain with friendly name : " + friendlyName,
+                                      Logger);
                     try
                     {
-                        LogHelper.LogInfoWithLineNumber("Try unload appdomain with friendly name : " + friendlyName,
-                                                        Logger);
-
                         AppDomain.Unload(appDomain);
 
-                        LogHelper.LogInfoWithLineNumber("Unload appdomain with friendly name : " + friendlyName,
+                        LogHelper.LogInfoWithLineNumber("Unloaded appdomain with friendly name : " + friendlyName,
                                                         Logger);
-
                     }
 
                     catch (AppDomainUnloadedException appDomainUnloadedException)
@@ -131,9 +129,15 @@ namespace Manager.Integration.Test
 
             }
             Thread.Sleep(TimeSpan.FromSeconds(10));
-            LogHelper.LogInfoWithLineNumber("Finished TestFixtureTearDown",
-                                            Logger);
 
+            try
+            {
+                AppDomain tmp = AppDomainHelper.AppDomains.Values.FirstOrDefault();
+            }
+            catch
+            {
+                LogHelper.LogInfoWithLineNumber("The appDomain is unloaded!", Logger);
+            }
         }
 
         private const int NumberOfNodesToStart = 0;
