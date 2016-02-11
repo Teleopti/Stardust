@@ -27,7 +27,7 @@ namespace Manager.Integration.Test
         private string _buildMode = "Debug";
 
 
-                [TestFixtureTearDown]
+        [TestFixtureTearDown]
         public void TestFixtureTearDown()
         {
             LogHelper.LogInfoWithLineNumber("Start TestFixtureTearDown",
@@ -41,21 +41,22 @@ namespace Manager.Integration.Test
 
                 foreach (var appDomain in AppDomainHelper.AppDomains.Values)
                 {
+                    string friendlyName = appDomain.FriendlyName;
+
                     try
                     {
-                        LogHelper.LogInfoWithLineNumber("Try unload appdomain with friendly name : " + appDomain.FriendlyName,
+                        LogHelper.LogInfoWithLineNumber("Try unload appdomain with friendly name : " + friendlyName,
                                                         Logger);
-
                         AppDomain.Unload(appDomain);
 
-                        LogHelper.LogInfoWithLineNumber("Unload appdomain with friendly name : " + appDomain.FriendlyName,
+                        LogHelper.LogInfoWithLineNumber("Unload appdomain with friendly name : " + friendlyName,
                                                         Logger);
                     }
 
-                    catch (AppDomainUnloadedException)
+                    catch (AppDomainUnloadedException appDomainUnloadedException)
                     {
-                        LogHelper.LogInfoWithLineNumber("Appdomain with friendly name : " + appDomain.FriendlyName + "  has already been unloade.",
-                                                        Logger);
+                        LogHelper.LogWarningWithLineNumber(appDomainUnloadedException.Message,
+                                                           Logger);
                     }
 
                     catch (Exception exp)
@@ -77,15 +78,14 @@ namespace Manager.Integration.Test
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
-
 #if (DEBUG)
-        // Do nothing.
+    // Do nothing.
 #else
-        _clearDatabase = true;
-        _buildMode = "Debug";
+            _clearDatabase = true;
+            _buildMode = "Debug";
 #endif
 
-        var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+            var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
             LogHelper.LogInfoWithLineNumber("Start TestFixtureSetUp",

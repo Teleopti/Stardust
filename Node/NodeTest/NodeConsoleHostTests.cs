@@ -2,7 +2,9 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using log4net;
 using NUnit.Framework;
+using Stardust.Node.Helpers;
 
 namespace NodeTest
 {
@@ -10,10 +12,43 @@ namespace NodeTest
     [Ignore]
     public class NodeConsoleHostTests
     {
+        private static readonly ILog Logger =
+            LogManager.GetLogger(typeof (NodeConsoleHostTests));
+
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
         {
-            AppDomain.Unload(MyAppDomain);
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            "Start TestFixtureTearDown");
+
+            string friendlyName = MyAppDomain.FriendlyName;
+
+            try
+            {
+                LogHelper.LogInfoWithLineNumber(Logger,
+                                                "Try unload appdomain with friendly name : " + friendlyName);
+
+                AppDomain.Unload(MyAppDomain);
+
+                LogHelper.LogInfoWithLineNumber(Logger,
+                                                "Unload appdomain with friendly name : " + friendlyName);
+            }
+
+            catch (AppDomainUnloadedException appDomainUnloadedException)
+            {
+                LogHelper.LogWarningWithLineNumber(Logger,
+                                                   appDomainUnloadedException.Message);
+            }
+
+            catch (Exception exp)
+            {
+                LogHelper.LogErrorWithLineNumber(Logger,
+                                                 exp.Message,
+                                                 exp);
+            }
+
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            "Finished TestFixtureTearDown");
         }
 
         [TestFixtureSetUp]

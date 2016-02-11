@@ -95,22 +95,24 @@ namespace Manager.Integration.Test
 
                 foreach (var appDomain in AppDomainHelper.AppDomains.Values)
                 {
+                    string friendlyName = appDomain.FriendlyName;
+
                     try
                     {
-                        LogHelper.LogInfoWithLineNumber("Try unload appdomain with friendly name : " + appDomain.FriendlyName,
+                        LogHelper.LogInfoWithLineNumber("Try unload appdomain with friendly name : " + friendlyName,
                                                         Logger);
 
                         AppDomain.Unload(appDomain);
 
-                        LogHelper.LogInfoWithLineNumber("Unload appdomain with friendly name : " + appDomain.FriendlyName,
+                        LogHelper.LogInfoWithLineNumber("Unload appdomain with friendly name : " + friendlyName,
                                                         Logger);
 
                     }
 
-                    catch (AppDomainUnloadedException)
+                    catch (AppDomainUnloadedException appDomainUnloadedException)
                     {
-                        LogHelper.LogInfoWithLineNumber("Appdomain with friendly name : " + appDomain.FriendlyName + "  has already been unloade.",
-                                                        Logger);
+                        LogHelper.LogWarningWithLineNumber(appDomainUnloadedException.Message,
+                                                            Logger);
 
                     }
 
@@ -137,8 +139,6 @@ namespace Manager.Integration.Test
         private bool _clearDatabase = true;
 
         private string _buildMode = "Debug";
-
-        private Process StartManagerIntegrationConsoleHostProcess { get; set; }
 
         [Test]
         public void CreateSeveralRequestShouldReturnBothCancelAndDeleteStatuses()
@@ -335,7 +335,7 @@ namespace Manager.Integration.Test
             Assert.IsTrue(condition);
             Assert.IsTrue(managerApiHelper.CheckJobHistoryStatusTimer.Guids.Count > 0);
 
-            managerApiHelper.Dispose();
+            //managerApiHelper.Dispose();
 
             LogHelper.LogInfoWithLineNumber("Finished test.",
                                             Logger);

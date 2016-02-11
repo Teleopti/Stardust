@@ -332,20 +332,23 @@ namespace Manager.IntegrationTest.Console.Host
 
                 foreach (var appDomain in AppDomains.Values)
                 {
-                    LogHelper.LogInfoWithLineNumber(Logger,
-                                                    "Try unload appdomain with friendly name : " + appDomain.FriendlyName);
+                    string friendlyName = appDomain.FriendlyName;
+
                     try
                     {
+                        LogHelper.LogInfoWithLineNumber(Logger,
+                                                        "Try unload appdomain with friendly name : " + friendlyName);
+
                         AppDomain.Unload(appDomain);
 
                         LogHelper.LogInfoWithLineNumber(Logger,
-                                                        "Unload appdomain with friendly name : " + appDomain.FriendlyName);
+                                                        "Unload appdomain with friendly name : " + friendlyName);
                     }
 
-                    catch (AppDomainUnloadedException)
+                    catch (AppDomainUnloadedException appDomainUnloadedException)
                     {
-                        LogHelper.LogInfoWithLineNumber(Logger,
-                                                        "Appdomain with friendly name : " + appDomain.FriendlyName + "  has already been unloade.");
+                        LogHelper.LogWarningWithLineNumber(Logger,
+                                                           appDomainUnloadedException.Message);
                     }
 
                     catch (Exception exp)
@@ -414,7 +417,29 @@ namespace Manager.IntegrationTest.Console.Host
 
             if (appDomainToUnload.Value != null)
             {
-                AppDomain.Unload(appDomainToUnload.Value);
+                string friendlyName = appDomainToUnload.Value.FriendlyName;
+
+                try
+                {                    
+                    LogHelper.LogInfoWithLineNumber(Logger,"Try unload appdomain with friendly name : " + friendlyName);
+
+                    AppDomain.Unload(appDomainToUnload.Value);
+
+                    LogHelper.LogInfoWithLineNumber(Logger,"Unload appdomain with friendly name : " + friendlyName);
+                }
+
+                catch (AppDomainUnloadedException appDomainUnloadedException)
+                {
+                    LogHelper.LogWarningWithLineNumber(Logger,
+                                                       appDomainUnloadedException.Message);
+                }
+
+                catch (Exception exp)
+                {
+                    LogHelper.LogErrorWithLineNumber(Logger,
+                                                     exp.Message,
+                                                     exp);
+                }
 
                 AddOrUpdateAppDomains(id,
                                       null);

@@ -2,12 +2,15 @@
 using System.Collections.Concurrent;
 using System.IO;
 using System.Threading.Tasks;
+using log4net;
 using Manager.Integration.Test.Properties;
 
 namespace Manager.Integration.Test.Helpers
 {
     public static class AppDomainHelper
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (AppDomainHelper));
+
         public static ConcurrentDictionary<string, AppDomain> AppDomains { get; private set; }
 
         static AppDomainHelper()
@@ -54,9 +57,11 @@ namespace Manager.Integration.Test.Helpers
                     new FileInfo(Path.Combine(managerAppDomainSetup.ApplicationBase,
                                               managerAppDomainSetup.ApplicationName));
 
+                LogHelper.LogInfoWithLineNumber("Try start ManagerIntegrationConsoleHost (appdomain) with friendly name " + appDomain.FriendlyName,
+                                                Logger);
+
                 appDomain.ExecuteAssembly(assemblyToExecute.FullName,
                                           managerAppDomainSetup.AppDomainInitializerArguments);
-
             });
         }
 

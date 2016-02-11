@@ -13,12 +13,51 @@ namespace ManagerTest
     [Ignore]
     public class ManagerConsoleHostTests
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(ManagerConsoleHostTests));
+        private static readonly ILog Logger =
+            LogManager.GetLogger(typeof (ManagerConsoleHostTests));
 
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
         {
-            AppDomain.Unload(MyAppDomain);
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            "Start TestFixtureTearDown");
+
+            if (MyAppDomain != null)
+            {
+                LogHelper.LogInfoWithLineNumber(Logger,
+                                                "Start unloading app domain.");
+
+                string friendlyName = MyAppDomain.FriendlyName;
+                try
+                {
+                    LogHelper.LogInfoWithLineNumber(Logger,
+                                                    "Try unload appdomain with friendly name : " + friendlyName);
+
+                    AppDomain.Unload(MyAppDomain);
+
+                    LogHelper.LogInfoWithLineNumber(Logger,
+                                                    "Unload appdomain with friendly name : " + friendlyName);
+                }
+
+                catch (AppDomainUnloadedException appDomainUnloadedException)
+                {
+                    LogHelper.LogWarningWithLineNumber(Logger,
+                                                       appDomainUnloadedException.Message);
+                }
+
+                catch (Exception exp)
+                {
+                    LogHelper.LogErrorWithLineNumber(Logger,
+                                                     exp.Message,
+                                                     exp);
+                }
+
+                LogHelper.LogInfoWithLineNumber(Logger,
+                                                "Finished unloading app domain.");
+            }
+
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            "Finished TestFixtureTearDown");
         }
 
         [TestFixtureSetUp]
@@ -27,7 +66,8 @@ namespace ManagerTest
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
-            LogHelper.LogInfoWithLineNumber(Logger,string.Empty);
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            string.Empty);
 
             MyTask = new Task(() =>
             {
