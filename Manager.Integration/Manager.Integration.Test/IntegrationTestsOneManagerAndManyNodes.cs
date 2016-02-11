@@ -194,7 +194,7 @@ namespace Manager.Integration.Test
                                             Logger);
         }
 
-        [Test][Ignore]
+        [Test]
         public void JobShouldHaveStatusFailedIfFailed()
         {
             LogHelper.LogInfoWithLineNumber("Starting test.",
@@ -244,10 +244,9 @@ namespace Manager.Integration.Test
 
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-            List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(1);
+            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(1);
 
-            var timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count,
-                                                                 3);
+            var timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count);
             List<Task> tasks = new List<Task>();
 
             var managerApiHelper = new ManagerApiHelper(new CheckJobHistoryStatusTimer(requests.Count,
@@ -281,7 +280,7 @@ namespace Manager.Integration.Test
             };
 
             managerApiHelper.CheckJobHistoryStatusTimer.Start();
-
+        
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
 
