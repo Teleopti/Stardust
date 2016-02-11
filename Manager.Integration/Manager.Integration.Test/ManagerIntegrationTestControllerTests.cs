@@ -26,14 +26,8 @@ namespace Manager.Integration.Test
         private bool _clearDatabase = true;
         private string _buildMode = "Debug";
 
-#if (DEBUG)
-        // Do nothing.
-#else
-            _clearDatabase = true;
-            _buildMode = "Release";
-#endif
 
-        [TestFixtureTearDown]
+                [TestFixtureTearDown]
         public void TestFixtureTearDown()
         {
             LogHelper.LogInfoWithLineNumber("Start TestFixtureTearDown",
@@ -83,7 +77,15 @@ namespace Manager.Integration.Test
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
-            var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+
+#if (DEBUG)
+        // Do nothing.
+#else
+        _clearDatabase = true;
+        _buildMode = "Debug";
+#endif
+
+        var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
             LogHelper.LogInfoWithLineNumber("Start TestFixtureSetUp",

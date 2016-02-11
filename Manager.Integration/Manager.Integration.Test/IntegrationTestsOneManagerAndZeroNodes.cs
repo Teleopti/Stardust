@@ -40,7 +40,6 @@ namespace Manager.Integration.Test
             // Do nothing.
 #else
             _clearDatabase = true;
-            _startUpManagerAndNodeManually = false;
             _buildMode = "Release";
 #endif
 
