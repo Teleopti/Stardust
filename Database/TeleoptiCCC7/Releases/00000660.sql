@@ -1,69 +1,52 @@
+create schema [auth] authorization [dbo]
+go
 
-CREATE SCHEMA [Stardust]
-GO
 
-CREATE TABLE [Stardust].[JobDefinitions](
+CREATE TABLE [auth].[CryptoKeyStore](
 	[Id] [uniqueidentifier] NOT NULL,
-	[Name] [nvarchar](max) NULL,
-	[Serialized] [nvarchar](max) NULL,
-	[Type] [nvarchar](max) NULL,
-	[UserName] nvarchar(500) NOT NULL,
-	[AssignedNode] [nvarchar](max) NULL,
-	[JobProgress] [nvarchar](max) NULL,
-	[Status] [nvarchar](max) NULL,
- CONSTRAINT [PK_JobDefinitions] PRIMARY KEY CLUSTERED 
+	[Bucket] [nvarchar](256) NOT NULL,
+	[Handle] [nvarchar](16) NOT NULL,
+	[CryptoKey] [varbinary](50) NOT NULL,
+	[CryptoKeyExpiration] [datetime] NOT NULL,
+ CONSTRAINT [PK_CryptoKeyStore] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-))
-GO
-
-CREATE TABLE [Stardust].[WorkerNodes](
-	[Id] [uniqueidentifier] NOT NULL,
-	[Url] [nvarchar](450) NOT NULL,
- CONSTRAINT [PK_WorkerNodes] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-))
-
-GO
-CREATE UNIQUE NONCLUSTERED INDEX [UQ_WorkerNodes_Url] ON [Stardust].[WorkerNodes]
-(
-	[Url] ASC
 )
+) ON [PRIMARY]
+
 GO
 
-CREATE TABLE [Stardust].[JobHistory](
-	[JobId] [uniqueidentifier] NOT NULL,
-	[Name] [nvarchar](max) NULL,
-	[CreatedBy] nvarchar(500) NOT NULL,
-	[Created] DateTime NOT NULL,
-	[Started] DateTime NULL,
-	[Ended] DateTime NULL,
-	[Serialized] [nvarchar](max) NULL,
-	[Type] [nvarchar](max) NULL,
-	[SentTo] nvarchar(max) NULL,
-	[Result] [nvarchar](max) NULL
-CONSTRAINT [PK_JobHistory] PRIMARY KEY CLUSTERED 
+CREATE UNIQUE NONCLUSTERED INDEX [IX_BucketHandle_CryptoKeyStore] ON [auth].[CryptoKeyStore]
 (
-	[JobId] ASC
-))
-
-GO
-ALTER TABLE [Stardust].[JobHistory] ADD CONSTRAINT
-	DF_JobHistory_Created DEFAULT getutcdate() FOR Created
+	[Bucket] ASC,
+	[Handle] ASC
+) ON [PRIMARY]
 GO
 
-CREATE TABLE [Stardust].[JobHistoryDetail](
-	[Id] int NOT NULL IDENTITY (1, 1),
-	[JobId] [uniqueidentifier] NOT NULL,
-	[Created] DateTime NOT NULL,
-	[Detail] [nvarchar](max) NULL
-CONSTRAINT [PK_JobHistoryDetail] PRIMARY KEY CLUSTERED 
+
+CREATE TABLE [auth].[NonceStore](
+	[Id] [uniqueidentifier] NOT NULL,
+	[Timestamp] [datetime] NOT NULL,
+	[Nonce] [nvarchar](16) NOT NULL,
+	[Context] [nvarchar](256) Not NULL,
+ CONSTRAINT [PK_NonceStore] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-))
+)
+) ON [PRIMARY]
 
 GO
-ALTER TABLE [Stardust].[JobHistoryDetail] ADD CONSTRAINT
-	DF_JobHistoryDetail_Created DEFAULT getutcdate() FOR Created
+
+CREATE NONCLUSTERED INDEX [IX_Timestamp_NonceStore] ON [auth].[NonceStore]
+(
+	[Timestamp] ASC
+) ON [PRIMARY]
+GO
+
+CREATE UNIQUE NONCLUSTERED INDEX [IX_TimestampNonceContext_NonceStore] ON [auth].[NonceStore]
+(
+	[Timestamp] ASC,
+	[Nonce] ASC,
+	[Context] ASC
+) ON [PRIMARY]
 GO
