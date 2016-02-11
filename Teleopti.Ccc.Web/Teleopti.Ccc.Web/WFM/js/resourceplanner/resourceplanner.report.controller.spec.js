@@ -112,4 +112,13 @@ describe('ResourceplannerReportCtrl', function () {
 
 		expect(numberOfKeepAliveCalls).toBe(2);
 	}));
+	it('should update relative difference when new data is available', inject(function ($controller, $interval, PlanningPeriodSvrc) {
+		var scope = $rootScope.$new();
+		var mockstateParams = {id:"",result:{},planningperiod:{},interResult:{SkillResultList:[{SkillName:'test',SkillDetails:[{RelativeDifference:2,Date:'2015-11-14'}]}]}}
+		$controller('ResourceplannerReportCtrl', { $scope: scope, $stateParams: mockstateParams });
+		scope.$digest();
+		scope.dayNodes = [{SkillDetails:[{RelativeDifference:1,Date:'2015-11-14'}]}];
+		scope.$digest();
+		expect(scope.dayNodes[0].SkillDetails[0].parseDif).toBe("100.0" );
+	}));
 });

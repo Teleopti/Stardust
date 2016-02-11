@@ -14079,7 +14079,7 @@ Help us improve your experience by sending an error report</value>
     <comment>Seat property information title of seatmap right panel</comment>
   </data>
   <data name="IntraOptimize" xml:space="preserve">
-    <value>Intra optimize</value>
+    <value>Optimize Intraday</value>
     <comment>describing action for starting intraday optimization on selected schedule</comment>
   </data>
   <data name="ShowErrors" xml:space="preserve">
