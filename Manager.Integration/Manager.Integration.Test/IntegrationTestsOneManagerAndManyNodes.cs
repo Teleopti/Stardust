@@ -236,7 +236,7 @@ namespace Manager.Integration.Test
                                             Logger);
         }
 
-        [Test][Ignore]
+        [Test]
         public void CancelWrongJobs()
         {
             LogHelper.LogInfoWithLineNumber("Starting test.",
