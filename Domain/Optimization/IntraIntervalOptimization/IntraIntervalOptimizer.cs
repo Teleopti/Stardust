@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			var originalMainShift = daySchedule.GetEditorShift();
 			_mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(schedulingOptions, optimizationPreferences, originalMainShift, dateOnly);
 
-			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(daySchedule, rollbackService, true, true);
+			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new[] {daySchedule}, rollbackService, true, true);
 
 			var skillDaysOnDay = schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { dateOnly });
 			var skillDaysOnDayAfter = schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { dateOnly.AddDays(1) });
