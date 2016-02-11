@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 		public AllTags()
 		{
 			// behavior test
-			Add("TOGGLEMODE", InfraTestConfigReader.TOGGLE_MODE);
+			Add("ToggleMode", InfraTestConfigReader.TOGGLE_MODE);
 			Add("MachineKey", CryptoCreator.MachineKeyCreator.StaticMachineKeyForBehaviorTest());
 			Add("TimeLoggerConfiguration", "<logger name='Teleopti.LogTime'><level value='DEBUG'/></logger>");
 
