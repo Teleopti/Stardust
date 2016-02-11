@@ -126,6 +126,7 @@ namespace Manager.Integration.Test
                                                 Logger);
 
             }
+            Thread.Sleep(TimeSpan.FromSeconds(10));
 
             LogHelper.LogInfoWithLineNumber("Finished TestFixtureTearDown",
                                             Logger);
