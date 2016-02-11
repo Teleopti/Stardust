@@ -336,7 +336,7 @@ namespace Manager.Integration.Test
             Assert.IsTrue(condition);
             Assert.IsTrue(managerApiHelper.CheckJobHistoryStatusTimer.Guids.Count > 0);
 
-            //managerApiHelper.Dispose();
+            managerApiHelper.Dispose();
 
             LogHelper.LogInfoWithLineNumber("Finished test.",
                                             Logger);
