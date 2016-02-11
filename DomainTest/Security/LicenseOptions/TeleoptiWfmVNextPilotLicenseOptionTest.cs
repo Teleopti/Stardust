@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Security.LicenseOptions
 			var target = new TeleoptiWfmVNextPilotLicenseOption();
 			target.EnableApplicationFunctions(inputList);
 			IList<IApplicationFunction> resultList = target.EnabledApplicationFunctions;
-			Assert.AreEqual(6, resultList.Count);
+			Assert.AreEqual(8, resultList.Count);
 		}
 	}
 }
