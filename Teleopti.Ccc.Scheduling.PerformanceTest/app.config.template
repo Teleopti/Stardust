@@ -8,7 +8,7 @@
 		<!-- These needs to be set dynamically on build machine -->
 		<add key="DB_ANALYTICS" value="YourAnalyticsDb" />
 		<add key="DB_CCC7" value="YourAppDb" />
-		<add key="SQL_SERVER_NAME" value="." />
+		<add key="SQL_AUTH_STRING" value="Data Source=.;Integrated Security=SSPI" />
 		<add key="UserName" value="logonName"/>
 		<add key="Password" value="logonPassword"/>
 		<add key="BusinessUnitName" value="TheBusinessUnit name"/>
