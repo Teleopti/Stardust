@@ -27,10 +27,15 @@ namespace Teleopti.Support.Tool.Tool
 			var searchReplaceListInSettingsFile = _reader.GetSearchReplaceList(File.ReadAllText(CurrentPath()));
 			var hostName = searchReplaceListInSettingsFile.SingleOrDefault(x => x.SearchFor == "$(HOST_NAME)");
 			var dnsAlias = searchReplaceListInSettingsFile.SingleOrDefault(x => x.SearchFor == "$(DNS_ALIAS)");
+			var stardust = searchReplaceListInSettingsFile.SingleOrDefault(x => x.SearchFor == "$(STARDUST)");
 			if (hostName != null && dnsAlias != null)
 			{
 				hostName.ReplaceWith = dnsAlias.ReplaceWith.Replace(@"http://", "").Replace(@"https://", "").TrimEnd('/');
+				if (stardust != null)
+					stardust.ReplaceWith = stardust.ReplaceWith.Replace(stardust.ReplaceWith, dnsAlias.ReplaceWith);
 			}
+			if (stardust != null)
+				stardust.ReplaceWith = stardust.ReplaceWith.TrimEnd('/');
 			return searchReplaceListInSettingsFile;
 		}
 

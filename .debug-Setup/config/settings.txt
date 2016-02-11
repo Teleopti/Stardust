@@ -26,6 +26,7 @@ $(LocalWiki)|http://localhost/TeleoptiWFM/LocalWiki/
 $(WEB_BROKER_FOR_WEB)|http://localhost:52858
 $(WEB_BROKER)|http://localhost:52858/
 $(WEB_BROKER_BACKPLANE)|
+$(STARDUST)|http://localhost/
 $(DEFAULT_IDENTITY_PROVIDER)|Teleopti
 $(WindowsClaimProvider)|<add identifier="urn:Windows" displayName="Windows" url="http://localhost:52859/" protocolHandler="OpenIdHandler" />
 $(TeleoptiClaimProvider)|<add identifier="urn:Teleopti" displayName="Teleopti" url="http://localhost:52858/sso/" protocolHandler="OpenIdHandler" />

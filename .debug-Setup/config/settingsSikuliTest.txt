@@ -23,6 +23,7 @@ $(LocalWiki)|http://localhost/TeleoptiWFM/LocalWiki/
 $(WEB_BROKER_FOR_WEB)|http://localhost:52858
 $(WEB_BROKER)|http://localhost:52858/
 $(WEB_BROKER_BACKPLANE)|
+$(STARDUST)|http://localhost/
 $(WEB_DEPLOY)|false
 $(URL)|http://localhost:52858/
 <compilation debug="false"|<compilation debug="true"
