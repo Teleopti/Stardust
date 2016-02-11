@@ -17,7 +17,7 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
-    [TestFixture][Ignore]
+    [TestFixture]
     public class IntegrationTestsOneManagerAndManyNodes
     {
         private static readonly ILog Logger =
@@ -141,7 +141,7 @@ namespace Manager.Integration.Test
 
         private string _buildMode = "Debug";
 
-        [Test]
+        [Test][Ignore]
         public void CreateSeveralRequestShouldReturnBothCancelAndDeleteStatuses()
         {
             LogHelper.LogInfoWithLineNumber("Start test.",
@@ -194,7 +194,7 @@ namespace Manager.Integration.Test
                                             Logger);
         }
 
-        [Test]
+        [Test][Ignore]
         public void JobShouldHaveStatusFailedIfFailed()
         {
             LogHelper.LogInfoWithLineNumber("Starting test.",
@@ -236,7 +236,7 @@ namespace Manager.Integration.Test
                                             Logger);
         }
 
-        [Test]
+        [Test][Ignore]
         public void CancelWrongJobs()
         {
             LogHelper.LogInfoWithLineNumber("Starting test.",

@@ -16,7 +16,7 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
-    [TestFixture]
+    [TestFixture][Ignore]
     public class IntegrationTestsOneManagerAndZeroNodes
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndZeroNodes));
@@ -166,6 +166,8 @@ namespace Manager.Integration.Test
 
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
+
+
 
             managerApiHelper.CheckJobHistoryStatusTimer.Start();
 
