@@ -236,7 +236,7 @@ namespace Manager.IntegrationTest.Console.Host
                                                          managerAppDomainSetup.ApplicationName));
 
             LogHelper.LogInfoWithLineNumber(Logger,
-                                            "Manager (appdomain) will start with friendly name : " +  managerAppDomain.FriendlyName);
+                                            "Manager (appdomain) will start with friendly name : " + managerAppDomain.FriendlyName);
 
             managerAppDomain.ExecuteAssembly(assemblyFile.FullName);
         }
@@ -323,20 +323,48 @@ namespace Manager.IntegrationTest.Console.Host
                                                         EventArgs eventArgs)
         {
             LogHelper.LogInfoWithLineNumber(Logger,
-                                            "Unloading IntegrationConsoleHost");
+                                            "Start CurrentDomainOnDomainUnload.");
 
-            foreach (var appDomain in AppDomains.Values)
+            if (AppDomains.Any())
             {
-                try
+                LogHelper.LogInfoWithLineNumber(Logger,
+                                                "Start unloading app domains.");
+
+                foreach (var appDomain in AppDomains.Values)
                 {
-                    AppDomain.Unload(appDomain);
+                    LogHelper.LogInfoWithLineNumber(Logger,
+                                                    "Try unload appdomain with friendly name : " + appDomain.FriendlyName);
+                    try
+                    {
+                        AppDomain.Unload(appDomain);
+
+                        LogHelper.LogInfoWithLineNumber(Logger,
+                                                        "Unload appdomain with friendly name : " + appDomain.FriendlyName);
+                    }
+
+                    catch (AppDomainUnloadedException)
+                    {
+                        LogHelper.LogInfoWithLineNumber(Logger,
+                                                        "Appdomain with friendly name : " + appDomain.FriendlyName + "  has already been unloade.");
+                    }
+
+                    catch (Exception exp)
+                    {
+                        LogHelper.LogErrorWithLineNumber(Logger,
+                                                         exp.Message,
+                                                         exp);
+                    }
                 }
-                catch (Exception)
-                {
-                }
+
+
+                LogHelper.LogInfoWithLineNumber(Logger,
+                                                "Finished unloading app domains.");
             }
 
             QuitEvent.Set();
+
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            "Finished CurrentDomainOnDomainUnload.");
         }
 
 
