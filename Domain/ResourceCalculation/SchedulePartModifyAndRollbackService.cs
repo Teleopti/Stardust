@@ -47,22 +47,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         	return responses;
         }
 
-		public IEnumerable<IBusinessRuleResponse> Modify(IEnumerable<IScheduleDay> schedulePartList, IScheduleTagSetter scheduleTagSetter)
-		{
-			var scheduleParts = schedulePartList as IList<IScheduleDay> ?? schedulePartList.ToList();
-			foreach (var scheduleDay in scheduleParts)
-			{
-				IScheduleDay partToSave = scheduleDay.ReFetch();
-				_rollbackStack.Push(partToSave);
-				_modificationStack.Push(scheduleDay);
-			}
-
-			var responses = _stateHolder.Schedules.Modify(ScheduleModifier.Scheduler, scheduleParts,
-			                                              NewBusinessRuleCollection.AllForScheduling(_stateHolder),
-			                                              _scheduleDayChangeCallback, scheduleTagSetter);
-			return responses;
-		}
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void ModifyStrictly(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter, INewBusinessRuleCollection newBusinessRuleCollection)
 		{
@@ -105,12 +89,19 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             _modificationStack.Clear();
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public IEnumerable<IBusinessRuleResponse> ModifyParts(IEnumerable<IScheduleDay> scheduleParts)
+		public IEnumerable<IBusinessRuleResponse> ModifyParts(IEnumerable<IScheduleDay> scheduleDays)
     	{
-			var ret = Modify(scheduleParts, _scheduleTagSetter);
-    	
-    		return ret;
+						var scheduleParts = scheduleDays as IList<IScheduleDay> ?? scheduleDays.ToList();
+			foreach (var scheduleDay in scheduleParts)
+			{
+				var partToSave = scheduleDay.ReFetch();
+				_rollbackStack.Push(partToSave);
+				_modificationStack.Push(scheduleDay);
+			}
+
+			return _stateHolder.Schedules.Modify(ScheduleModifier.Scheduler, scheduleParts,
+			                                              NewBusinessRuleCollection.AllForScheduling(_stateHolder),
+			                                              _scheduleDayChangeCallback, _scheduleTagSetter);
     	}
 
 		private IEnumerable<IBusinessRuleResponse> modifyWithNoValidation(IScheduleDay schedulePart, ScheduleModifier modifier, IScheduleTagSetter scheduleTagSetter)
