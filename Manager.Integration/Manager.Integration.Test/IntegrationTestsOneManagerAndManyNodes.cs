@@ -121,7 +121,7 @@ namespace Manager.Integration.Test
 
             List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(2*NumberOfNodesToStart);
 
-            var timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count, 2);
+            var timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count, 3);
 
             List<Task> tasks = new List<Task>();
 
