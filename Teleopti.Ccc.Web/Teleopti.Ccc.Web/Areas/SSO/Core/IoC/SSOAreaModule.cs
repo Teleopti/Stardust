@@ -3,7 +3,7 @@ using Autofac;
 using DotNetOpenAuth.OpenId;
 using DotNetOpenAuth.OpenId.Provider;
 using Teleopti.Ccc.Infrastructure.Web;
-using Teleopti.Ccc.Web.Areas.SSO.Controllers;
+using Teleopti.Ccc.Web.Auth.OpenIdApplicationStore;
 
 namespace Teleopti.Ccc.Web.Areas.SSO.Core.IoC
 {

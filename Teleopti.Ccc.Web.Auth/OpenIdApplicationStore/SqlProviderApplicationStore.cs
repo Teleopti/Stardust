@@ -6,7 +6,7 @@ using DotNetOpenAuth.OpenId;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
+namespace Teleopti.Ccc.Web.Auth.OpenIdApplicationStore
 {
 	public class SqlProviderApplicationStore : IOpenIdApplicationStore
 	{

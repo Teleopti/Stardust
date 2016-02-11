@@ -1,16 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using DotNetOpenAuth.Messaging.Bindings;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.Web.Areas.SSO.Controllers;
+using Teleopti.Ccc.Web.Auth.OpenIdApplicationStore;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
+namespace Teleopti.Ccc.Web.AuthTest.OpenIdApplicationStore
 {
 	[TestFixture]
 	public class SqlProviderApplicationStoreTest
