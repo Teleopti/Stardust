@@ -22,11 +22,8 @@ namespace Teleopti.Interfaces.Domain
 	    void ModifyStrictly(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter, INewBusinessRuleCollection newBusinessRuleCollection);
 
 	    void Rollback();
-	    void RollbackLast();
 	    IEnumerable<IScheduleDay> ModificationCollection { get; }
 	    void ClearModificationCollection();
-
-	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 	    IEnumerable<IBusinessRuleResponse> ModifyParts(IEnumerable<IScheduleDay> scheduleParts);
     }
 }

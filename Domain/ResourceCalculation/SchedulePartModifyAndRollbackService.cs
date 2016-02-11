@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_rollbackStack.Push(partToSave);
 			_modificationStack.Push(schedulePart);
 			if (responses.Any())
-				RollbackLast();
+				rollbackLast();
 		}
 	
         public void Rollback()
@@ -87,12 +87,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             {
                 while (_rollbackStack.Count > 0)
                 {
-                    RollbackLast();
+                    rollbackLast();
                 }
             }
         }
 
-        public void RollbackLast()
+        private void rollbackLast()
         {
             modifyWithNoValidation(_rollbackStack.Pop(), ScheduleModifier.UndoRedo, _scheduleTagSetter);
         }
