@@ -24,17 +24,16 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 				using (new TimeoutScope(browserActivator, TimeSpan.FromDays(1)))
 				{
 					browserInteractions.AssertExists(".test-scheduling-result, .test-errorMessage, .server-busy, #Login-container, .test-alert");
-
-					//no server error
-					browserInteractions.AssertNotExists("body", ".test-errorMessage");
-					//no failing request
-					browserInteractions.AssertNotExists("body", ".test-alert");
-					//not showing "server busy"
-					browserInteractions.AssertNotExists("body", ".server-busy");
-					//not redirected to logon page
-					browserInteractions.AssertNotExists("body", "#Login-container");
-					browserInteractions.AssertExists(".test-scheduling-result");
 				}
+				//no server error
+				browserInteractions.AssertNotExists("body", ".test-errorMessage");
+				//no failing request
+				browserInteractions.AssertNotExists("body", ".test-alert");
+				//not showing "server busy"
+				browserInteractions.AssertNotExists("body", ".server-busy");
+				//not redirected to logon page
+				browserInteractions.AssertNotExists("body", "#Login-container");
+				browserInteractions.AssertExists(".test-scheduling-result");
 			}
 		}
 
