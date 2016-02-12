@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	{
 		private readonly Func<ISchedulingResultStateHolder> _scheduleResultStateHolder;
 		private readonly VirtualSkillGroupsCreator _virtualSkillGroupsCreator;
+		//this is WRONG! Fix later during PBI work - used by "singleinstance" components "higher up" in the hiearchy
 		private VirtualSkillGroupsCreatorResult _fetchedResult;
 
 		public VirtualSkillGroupsResultProvider(Func<ISchedulingResultStateHolder> scheduleResultStateHolder, VirtualSkillGroupsCreator virtualSkillGroupsCreator)
