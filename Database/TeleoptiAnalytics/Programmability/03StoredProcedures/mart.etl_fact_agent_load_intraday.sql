@@ -261,6 +261,15 @@ SELECT
 		AND temp.date_id=bt.date_id
 		AND temp.local_date_id=bt.local_date_id
 
+	--Remove intervals outside scope
+	DELETE #bridge_time_zone
+	WHERE (date_id < @target_date_id_utc)
+	OR (date_id > @source_date_id_utc)
+
+	DELETE  #bridge_time_zone
+	WHERE (date_id=@target_date_id_utc AND interval_id < @target_interval_id_utc)
+	OR (date_id=@source_date_id_utc	AND interval_id > @source_interval_id_utc)
+
 	-------------
 	-- Delete rows last known date_id and interval_id
 	-------------
