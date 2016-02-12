@@ -156,8 +156,8 @@ namespace Manager.IntegrationTest.Console.Host
                                                _buildMode));
 
             NodeConfigurationFile =
-                new FileInfo(DirectoryNodeConfigurationFileFullPath.FullName +
-                             Settings.Default.NodeConfigurationFileName);
+                new FileInfo(Path.Combine(DirectoryNodeConfigurationFileFullPath.FullName,
+                             Settings.Default.NodeConfigurationFileName));
 
             NodeconfigurationFiles = new Dictionary<string, FileInfo>();
 
