@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.Intraday
@@ -12,9 +14,21 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_skillAreaRepository = skillAreaRepository;
 		}
 
-		public IEnumerable<SkillArea> GetAll()
+		public IEnumerable<SkillAreaViewModel> GetAll()
 		{
-			return _skillAreaRepository.LoadAll();
+			var skillAreas = _skillAreaRepository.LoadAll();
+
+			return skillAreas.Select(skillArea => new SkillAreaViewModel
+			{
+				Id = skillArea.Id.Value,
+				Name = skillArea.Name,
+				Skills = skillArea.Skills.Select(skill => new SkillInIntradayViewModel
+				{
+					Id = skill.Id,
+					Name = skill.Name,
+					IsDeleted = skill.IsDeleted
+				}).ToArray()
+			}).ToArray();
 		}
 	}
 }

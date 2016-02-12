@@ -13,7 +13,7 @@
 		
 		<property name="Name" not-null="true" type="string" length="50"/>
 
-		<bag name="SkillCollection" table="SkillAreaSkillCollection" cascade="none">
+		<bag name="Skills" table="SkillAreaSkillCollection" cascade="none">
 			<key foreign-key="FK_SkillAreaSkillCollection_SkillArea">
 				<column name="SkillArea"
 						not-null="true"

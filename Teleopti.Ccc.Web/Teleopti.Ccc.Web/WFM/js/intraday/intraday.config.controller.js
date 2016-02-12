@@ -12,7 +12,7 @@
 					$state.go('intraday', {});
 				};
 
-				intradayService.getSkills().then(function(skills) {
+				intradayService.getSkills.query().$promise.then(function(skills) {
 					$scope.skills = skills;
 				});
 

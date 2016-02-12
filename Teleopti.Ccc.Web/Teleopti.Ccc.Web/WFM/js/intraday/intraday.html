@@ -21,13 +21,13 @@
 					<span class="con-flex">
 						<select >
 							<option value="" disabled selected>Pick a skill...</option>
-							<option ng-repeat="item in demos | orderBy : 'id'">{{item.id}}</option>
+							<option ng-repeat="skill in skills | orderBy : 'Name'">{{skill.Name}}</option>
 						</select>
 					</span>
 					<span class="con-flex">
 						<select ng-model="areaName">
 							<option value="" disabled selected>Pick an area...</option>
-							<option ng-repeat="item in demos2 | orderBy : 'id'">{{item.id}}</option>
+							<option ng-repeat="skillArea in skillAreas | orderBy : 'Name'">{{skillArea.Name}}</option>
 						</select>
 					</span>
 					<div class="con-flex split-1-2"></div>
@@ -39,7 +39,7 @@
 		<div class="con-row animate-show" ng-show="areaName">
 			<div class="panel con-flex material-depth-1">
 				<div class="sub-header">
-					<h2>{{areaName}}</h2>
+					<h2 class="intraday-monitor-item">{{areaName}}</h2>
 					<div class="head-actions panel-menu">
 						<div tabindex=0 class="context-menu card-context">
 							<i class="mdi mdi-dots-vertical"></i>

@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_skillAreaRepository.Add(new SkillArea
 			{
 				Name = name,
-				SkillCollection = skills.Select(x => new SkillInIntraday
+				Skills = skills.Select(x => new SkillInIntraday
 				{
 					Id = x
 				}).ToArray()

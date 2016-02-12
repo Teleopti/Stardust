@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 	angular.module('wfm.intraday')
 		.service('intradayService', [
@@ -7,23 +7,29 @@
 					query: { method: 'GET', params: {}, isArray: true }
 				});
 
-				this.getSkills = function (data) {
-					return $resource('../api/intraday/skills', {}, {
-						query: {
-							method: 'GET',
-							params: {},
-							isArray: true
-						}
-					}).query().$promise;
-				};
+				this.getSkills = $resource('../api/intraday/skills', {}, {
+					query: {
+						method: 'GET',
+						params: {},
+						isArray: true
+					}
+				});
 
 				this.createSkillArea = $resource('../api/intraday/skillarea', {}, {
-						query: {
-							method: 'POST',
-							params: {},
-							isArray: false
-						}
-					});
+					query: {
+						method: 'POST',
+						params: {},
+						isArray: false
+					}
+				});
+
+				this.getSkillAreas = $resource('../api/intraday/skillarea', {}, {
+					query: {
+						method: 'GET',
+						params: {},
+						isArray: true
+					}
+				});
 
 				this.formatDateTime = function (time) {
 					if (time === null || time === undefined || time === '') return '--:--:--';
@@ -35,5 +41,5 @@
 					}
 				};
 			}
-	]);
+		]);
 })();

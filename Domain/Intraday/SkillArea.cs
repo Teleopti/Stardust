@@ -7,14 +7,14 @@ namespace Teleopti.Ccc.Domain.Intraday
 {
 	public class SkillArea : VersionedAggregateRootWithBusinessUnit, IDeleteTag
 	{
-		private ICollection<SkillInIntraday> _skillCollection;
+		private ICollection<SkillInIntraday> _skills;
 		private string _name;
 		private bool _isDeleted;
 
-		public virtual ICollection<SkillInIntraday> SkillCollection
+		public virtual ICollection<SkillInIntraday> Skills
 		{
-			get { return _skillCollection; }
-			set { _skillCollection = value; }
+			get { return _skills; }
+			set { _skills = value; }
 		}
 
 		public virtual string Name

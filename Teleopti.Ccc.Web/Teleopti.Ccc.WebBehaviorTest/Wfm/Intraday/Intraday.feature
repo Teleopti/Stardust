@@ -16,8 +16,9 @@ Scenario: Create Skill Area
     And I name the Skill Area 'my Area'
     And I select the skill 'Skill A'
     When I am done creating Skill Area 
-	Then I should see that Skill Area 'my Area' is selected in monitor view
-    And I should see details for 'Skill A'
+	 Then I should see that Skill Area 'my Area' is selectable
+	 And I select to view details for skill area 'my Area'
+    And I should monitor 'my Area'
 
 Scenario: Remove Skill Area
     Given I am viewing intraday page

@@ -6,18 +6,17 @@
 		function ($scope, $state, intradayService, $stateParams) {
 
 			$scope.SkillAreaId = $stateParams.skillAreaId;
-			intradayService.skillList.query().$promise.then(function (result) {
-				$scope.skillList = result;
-				$scope.selectedSkill = $scope.skillList[0];
-				$scope.skillChange($scope.selectedSkill);
+
+			intradayService.getSkillAreas.query().$promise.then(function (result) {
+				$scope.skillAreas = result;
+			});
+
+			intradayService.getSkills.query().$promise.then(function (result) {
+				$scope.skills = result;
 			});
 
 			$scope.format = intradayService.formatDateTime;
-
-			$scope.skillChange = function (skill) {
-				$scope.selectedSkill = skill;
-			}
-
+			
 			$scope.configMode = function () {
 				$state.go('intraday.config', {});
 			};
@@ -63,20 +62,6 @@
 				{id: 'My area'},
 				{id: 'Your area'}
 			];
-
-			$scope.reload = setInterval(function () {
-				intradayService.skillList.query().$promise.then(function (result) {
-					result.forEach(function (resultItem) {
-						$scope.skillList.forEach(function (skillItem) {
-							if (resultItem.SkillName == skillItem.SkillName) {
-								skillItem.Severity = resultItem.Severity;
-								skillItem.Measures = resultItem.Measures;
-								skillItem.LatestDate = resultItem.LatestDate;
-							}
-						});
-					});
-				});
-			}, 60000);
 		}
 	]);
 })()

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 
@@ -68,16 +69,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.Click(".skill-area-save");
 		}
 
-		[Then(@"I should see that Skill Area '(.*)' is selected in monitor view")]
-		public void ThenIShouldSeeThatSkillAreaIsSelectedInMonitorView(string skillAreaName)
+		[Then(@"I should see that Skill Area '(.*)' is selectable")]
+		public void ThenIShouldSeeThatSkillAreaIsSelectable(string skillAreaName)
 		{
-			Browser.Interactions.AssertAnyContains(".skill-area-select selected", skillAreaName);
+			Browser.Interactions.AssertAnyContains(".skill-area-select", skillAreaName);
 		}
 
-		[Then(@"I should see details for '(.*)'")]
-		public void ThenIShouldSeeDetailsFor(string skillName)
+		[Then(@"I select to view details for skill area '(.*)'")]
+		public void ThenISelectToViewDetailsForSkillArea(string skillArea)
 		{
-			Browser.Interactions.AssertAnyContains(".skill-area-table-item", skillName);
+			Browser.Interactions.SelectOptionByTextUsingJQuery(".skill-area-select", skillArea);
+		}
+
+		[Then(@"I should monitor '(.*)'")]
+		public void ThenIShouldMonitor(string monitorItem)
+		{
+			Browser.Interactions.AssertAnyContains(".intraday-monitor-item", monitorItem);
 		}
 
 		[Given(@"there is a Skill Area called '(.*)'")]

@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return new SkillArea
 			{
 				Name = "skill area 1 name",
-				SkillCollection = new[]
+				Skills = new[]
 				{
 					skills.First()
 				}
@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			SkillArea skillArea = CreateAggregateWithCorrectBusinessUnit();
 			Assert.AreEqual(skillArea.Name, loadedAggregateFromDatabase.Name);
-			Assert.AreEqual(skillArea.SkillCollection.Count, loadedAggregateFromDatabase.SkillCollection.Count);
-			Assert.AreEqual(skillArea.SkillCollection.First().Name, loadedAggregateFromDatabase.SkillCollection.First().Name);
+			Assert.AreEqual(skillArea.Skills.Count, loadedAggregateFromDatabase.Skills.Count);
+			Assert.AreEqual(skillArea.Skills.First().Name, loadedAggregateFromDatabase.Skills.First().Name);
 		}
 
 		protected override Repository<SkillArea> TestRepository(ICurrentUnitOfWork currentUnitOfWork)

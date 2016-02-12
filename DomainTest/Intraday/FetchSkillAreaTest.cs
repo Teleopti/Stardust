@@ -1,10 +1,16 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.TestData;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Intraday
 {
@@ -14,32 +20,42 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public FetchSkillArea Target;
 		public FakeSkillAreaRepository SkillAreaRepository;
 
+
 		[Test]
 		public void ShouldGetAll()
 		{
-			var existingSkillArea = new SkillArea();
-			SkillAreaRepository.Has(existingSkillArea);
+			SkillAreaRepository.Has(new SkillArea { Skills = new List<SkillInIntraday>() }.WithId());
+			SkillAreaRepository.Has(new SkillArea { Skills = new List<SkillInIntraday>() }.WithId());
 
-			Target.GetAll().Should().Have.SameValuesAs(existingSkillArea);
+			Target.GetAll().Count()
+				.Should().Be.EqualTo(2);
 		}
-	}
-
-	[DomainTest]
-	public class CreateSkillAreaTest
-	{
-		public CreateSkillArea Target;
-		public FakeSkillAreaRepository SkillAreaRepository;
 
 		[Test]
-		public void ShouldCreate()
+		public void ShouldMapViewModelCorrectly()
 		{
-			var newGuid = Guid.NewGuid();
-			const string name = "new skill area";
-			Target.Create(name, new[] {newGuid});
-			SkillAreaRepository.LoadAll()
-				.First(x => x.Name == name)
-				.SkillCollection.First().Id
-				.Should().Be.EqualTo(newGuid);
+			var existingSkillArea = new SkillArea
+			{
+				Name = RandomName.Make(),
+				Skills = new List<SkillInIntraday>
+				{
+					new SkillInIntraday { Id = Guid.NewGuid(), Name = RandomName.Make(), IsDeleted = false }
+				}
+			}.WithId();
+
+			SkillAreaRepository.Has(existingSkillArea);
+
+			var result = Target.GetAll().Single();
+
+			result.Should().Be.OfType<SkillAreaViewModel>();
+			result.Id.Should().Be.EqualTo(existingSkillArea.Id);
+			result.Name.Should().Be.EqualTo(existingSkillArea.Name);
+			result.Skills.Count().Should().Be.EqualTo(1);
+			var skill = existingSkillArea.Skills.First();
+			var mappedSkill = result.Skills.First();
+			mappedSkill.Id.Should().Be.EqualTo(skill.Id);
+			mappedSkill.Name.Should().Be.EqualTo(skill.Name);
+			mappedSkill.IsDeleted.Should().Be.EqualTo(skill.IsDeleted);
 		}
 	}
 }
