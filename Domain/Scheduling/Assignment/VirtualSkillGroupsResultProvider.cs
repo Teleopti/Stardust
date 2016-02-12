@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	{
 		private readonly Func<ISchedulingResultStateHolder> _scheduleResultStateHolder;
 		private readonly VirtualSkillGroupsCreator _virtualSkillGroupsCreator;
+		private VirtualSkillGroupsCreatorResult _fetchedResult;
 
 		public VirtualSkillGroupsResultProvider(Func<ISchedulingResultStateHolder> scheduleResultStateHolder, VirtualSkillGroupsCreator virtualSkillGroupsCreator)
 		{
@@ -17,8 +18,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public VirtualSkillGroupsCreatorResult Fetch(DateOnly date)
 		{
-			//första gången här per X
-			return _virtualSkillGroupsCreator.GroupOnDate(date, _scheduleResultStateHolder().PersonsInOrganization);
+			return _fetchedResult ??
+						 (_fetchedResult = _virtualSkillGroupsCreator.GroupOnDate(date, _scheduleResultStateHolder().PersonsInOrganization));
 		}
 	}
 }

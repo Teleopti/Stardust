@@ -225,6 +225,7 @@
     <Compile Include="ResourceCalculation\DoubleMatrixExtensions.cs" />
     <Compile Include="Scheduling\Assignment\DeleteAndResourceCalculateServiceSkipResCalcTest.cs" />
     <Compile Include="Scheduling\Assignment\ResourceCalculateAfterDeleteDeciderTest.cs" />
+    <Compile Include="Scheduling\Assignment\VirtualSkillGroupsKeepStateTest.cs" />
     <Compile Include="Scheduling\PeriodExctractorFromSchedulePartsTest.cs" />
     <Compile Include="Scheduling\TeamBlock\DayOff\MissingDayOffBestSpotDeciderTest.cs" />
     <Compile Include="SeatPlanning\CommonSeatAllocatorTests.cs" />
