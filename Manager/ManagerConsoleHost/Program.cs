@@ -36,7 +36,7 @@ namespace ManagerConsoleHost
 
             var config = new ManagerConfiguration
             {
-                BaseAdress = ConfigurationManager.AppSettings["baseAddress"],
+                BaseAddress = new Uri(ConfigurationManager.AppSettings["baseAddress"]),
                 ConnectionString =
                     ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString
             };

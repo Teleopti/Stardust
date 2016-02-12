@@ -30,7 +30,9 @@ namespace Stardust.Manager
         {
             WhoAmI = "[MANAGER, " + Environment.MachineName.ToUpper() + "]";
 
-            using (WebApp.Start(managerConfiguration.BaseAdress,
+            string managerAddress = managerConfiguration.BaseAddress.Scheme + "://+:" + managerConfiguration.BaseAddress.Port + "/";
+
+            using (WebApp.Start(managerAddress,
                                 appBuilder =>
                                 {
                                     var builder = new ContainerBuilder();
@@ -75,7 +77,7 @@ namespace Stardust.Manager
 
             {
                 LogHelper.LogInfoWithLineNumber(Logger,
-                                                WhoAmI + ": Started listening on port : ( " + managerConfiguration.BaseAdress + " )");
+                                                WhoAmI + ": Started listening on port : ( " + managerConfiguration.BaseAddress + " )");
 
                 QuitEvent.WaitOne();
             }

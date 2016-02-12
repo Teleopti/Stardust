@@ -18,14 +18,14 @@ namespace Stardust.Manager
 
         public string WhoAmI { get; private set; }
 
-        protected override void Dispose(bool disposing)
-        {
-            LogHelper.LogInfoWithLineNumber(Logger,"Start disposing manager controller.");
+        //protected override void Dispose(bool disposing)
+        //{
+        //    LogHelper.LogInfoWithLineNumber(Logger,"Start disposing manager controller.");
 
-            base.Dispose(disposing);
+        //    base.Dispose(disposing);
 
-            LogHelper.LogInfoWithLineNumber(Logger, "Finished disposing manager controller.");
-        }
+        //    LogHelper.LogInfoWithLineNumber(Logger, "Finished disposing manager controller.");
+        //}
 
         public ManagerController(INodeManager nodeManager,
                                  JobManager jobManager)
