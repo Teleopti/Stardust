@@ -2,66 +2,58 @@
 	'use strict';
 	angular.module('wfm.intraday')
 		.controller('IntradayCtrl', [
-		'$scope', '$state', 'intradayService', '$stateParams',
-		function ($scope, $state, intradayService, $stateParams) {
+		'$scope', '$state', 'intradayService', '$stateParams', '$filter',
+		function ($scope, $state, intradayService, $stateParams, $filter) {
 
-			$scope.SkillAreaId = $stateParams.skillAreaId;
+			$scope.selectedSkillArea = undefined;
 
-			intradayService.getSkillAreas.query().$promise.then(function (result) {
-				$scope.skillAreas = result;
+			$scope.$on('$stateChangeSuccess', function (evt, to, params, from) {
+				if (params.newSkillArea == true) {
+					reloadSkillAreas();
+				}
 			});
+			
+			$scope.newSkillArea = $stateParams.newSkillArea;
+
+			var reloadSkillAreas = function() {
+				intradayService.getSkillAreas.query().$promise.then(function (result) {
+					$scope.skillAreas = result;
+				});
+			};
+
+			reloadSkillAreas();
+
 
 			intradayService.getSkills.query().$promise.then(function (result) {
 				$scope.skills = result;
 			});
 
+			$scope.changeSkillArea = function (skillAreaId) {
+				//var result = $scope.skillAreas.filter(function( obj ) {
+				//	return obj.Id == skillAreaId;
+				//});
+
+				//$scope.selectedSkillArea = result[0];
+				$scope.selectedSkillArea = $filter('filter')($scope.skillAreas, { Id: skillAreaId })[0];
+				console.log($scope.selectedSkillArea.Id);
+				console.log($scope.selectedSkillArea.Name);
+			};
+
+			$scope.testableHub = '';
+			$scope.test = function() {
+				$scope.testableHub = $scope.selectedSkillAreaId;
+			};
+
 			$scope.format = intradayService.formatDateTime;
-			
+
 			$scope.configMode = function () {
-				$state.go('intraday.config', {});
+				$state.go('intraday.config', { isNewSkillArea: false });
 			};
 
 			$scope.modalShown = false;
-			$scope.toggleModal = function() {
+			$scope.toggleModal = function () {
 				$scope.modalShown = !$scope.modalShown;
 			};
-
-			$scope.demos = [
-				{id: 'Skill name1'},
-				{id: 'Skill name2'},
-				{id: 'Skill name3'},
-				{id: 'Skill name4'},
-				{id: 'Skill name5'},
-				{id: 'Skill name6'},
-				{id: 'Skill name7'},
-				{id: 'Skill name8'},
-				{id: 'Skill name9'},
-				{id: 'Skill name10'},
-				{id: 'Skill name11'},
-				{id: 'Skill name12'},
-				{id: 'Skill name13'},
-				{id: 'Skill name14'},
-				{id: 'Skill name15'},
-				{id: 'Skill name16'},
-				{id: 'Skill name17'},
-				{id: 'Skill name18'},
-				{id: 'Skill name19'},
-				{id: 'Skill name20'},
-				{id: 'Skill name21'},
-				{id: 'Skill name22'},
-				{id: 'Skill name23'},
-				{id: 'Skill name24'},
-				{id: 'Skill name25'},
-				{id: 'Skill name26'},
-				{id: 'Skill name27'}
-			];
-
-			$scope.demos2 = [
-				{id: 'This area'},
-				{id: 'Another area'},
-				{id: 'My area'},
-				{id: 'Your area'}
-			];
 		}
-	]);
+		]);
 })()

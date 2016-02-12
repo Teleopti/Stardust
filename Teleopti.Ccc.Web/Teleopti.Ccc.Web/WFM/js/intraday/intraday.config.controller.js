@@ -9,7 +9,7 @@
 				$scope.skillAreaName = '';
 
 				$scope.exitConfigMode = function () {
-					$state.go('intraday', {});
+					$state.go('intraday', { isNewSkillArea: false });
 				};
 
 				intradayService.getSkills.query().$promise.then(function(skills) {
@@ -29,7 +29,7 @@
 							Skills: selectedSkillIds
 						}
 					).$promise.then(function(result) {
-						$state.go('intraday', {skillAreaId: undefined});
+						$state.go('intraday', { isNewSkillArea: true });
 					});
 				};
 			}
