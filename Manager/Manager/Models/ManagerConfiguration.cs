@@ -1,8 +1,10 @@
-﻿namespace Stardust.Manager.Models
+﻿using System;
+
+namespace Stardust.Manager.Models
 {
 	public class ManagerConfiguration
 	{
 		public string ConnectionString { get; set; }
-		public string BaseAdress { get; set; } 
+		public Uri BaseAddress { get; set; } 
 	}
 }
