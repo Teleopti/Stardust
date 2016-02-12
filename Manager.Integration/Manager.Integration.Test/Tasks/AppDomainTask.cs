@@ -28,7 +28,7 @@ namespace Manager.Integration.Test.Tasks
         public Task StartTask(CancellationTokenSource cancellationTokenSource,
                               int numberOfNodes)
         {
-            return Task.Factory.StartNew(() =>
+            Task= Task.Factory.StartNew(() =>
             {
                 Task.Factory.StartNew(() =>
                 {
@@ -85,6 +85,8 @@ namespace Manager.Integration.Test.Tasks
                 }, cancellationTokenSource.Token);
 
             }, cancellationTokenSource.Token);
+
+            return Task;
         }
 
         public void Dispose()
@@ -100,7 +102,10 @@ namespace Manager.Integration.Test.Tasks
                 AppDomain.Unload(MyAppDomain);
             }
 
-            Task.Dispose();
+            if (Task != null)
+            {
+                Task.Dispose();
+            }            
         }
     }
 }

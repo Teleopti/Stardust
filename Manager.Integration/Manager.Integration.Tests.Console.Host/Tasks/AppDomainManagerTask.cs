@@ -98,7 +98,10 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
                 AppDomain.Unload(MyAppDomain);
             }
 
-            Task.Dispose();
+            if (Task != null)
+            {
+                Task.Dispose();
+            }            
         }
     }
 }
