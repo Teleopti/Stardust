@@ -14,6 +14,8 @@ using MvcContrib.TestHelper.Fakes;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers;
 using Teleopti.Ccc.Web.WindowsIdentityProvider.Core;
 
@@ -29,7 +31,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 			request.Stub(x => x.AcceptTypes).Return(new[] { "application/xrds+xml" });
 			var context = new FakeHttpContext("/");
 			context.SetRequest(request);
-			var target = new OpenIdController(null, null, null, null);
+			var target = new OpenIdController(null, null, null);
 			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
 
 			var result = target.Identifier();
@@ -43,7 +45,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 			var request = MockRepository.GenerateStub<FakeHttpRequest>("/", new Uri("http://mock/"), new Uri("http://mock/"));
 			var context = new FakeHttpContext("/");
 			context.SetRequest(request);
-			var target = new OpenIdController(null, null, null, null);
+			var target = new OpenIdController(null, null, null);
 			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
 
 			var result = target.Identifier();
@@ -55,24 +57,24 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 		public void ShouldTriggerWindowsAuthorizationWhenResponseIsNotReady()
 		{
 			var openIdProviderWapper = MockRepository.GenerateMock<IOpenIdProviderWrapper>();
-			var request = MockRepository.GenerateMock<IAuthenticationRequest>();
-			var providerEndpointWrapper = MockRepository.GenerateMock<IProviderEndpointWrapper>();
+			var request = new FakeAuthenticationRequest(RelyingPartyDiscoveryResult.Success);
 			var httpRequest = MockRepository.GenerateStub<HttpRequestBase>();
 			var httpContext = MockRepository.GenerateStub<HttpContextBase>();
 			var currentHttpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
 
-			request.Stub(x => x.IsResponseReady).Return(false);
 			openIdProviderWapper.Stub(x => x.GetRequest()).Return(request);
 			httpContext.Stub(x => x.Request).Return(httpRequest);
 			currentHttpContext.Stub(x => x.Current()).Return(httpContext);
 			httpRequest.Stub(x => x.HttpMethod).Return("GET");
-			providerEndpointWrapper.Expect(x => x.PendingRequest).PropertyBehavior();
 
-			var target = new OpenIdController(openIdProviderWapper, null, currentHttpContext, providerEndpointWrapper);
-			var result = (RedirectToRouteResult)target.Provider();
+			var target = new OpenIdController(openIdProviderWapper, null, currentHttpContext)
+			{
+				Url = new UrlHelper(new RequestContext(httpContext, new RouteData()))
+			};
+			var result = (ViewResult)target.Provider();
 
-			providerEndpointWrapper.PendingRequest.Should().Be.SameInstanceAs(request);
-			result.RouteValues.ContainsValue("TriggerWindowsAuthorization").Should().Be.True();
+
+			((string) result.ViewBag.PendingRequest).Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -80,7 +82,6 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 		{
 			var openIdProviderWapper = MockRepository.GenerateMock<IOpenIdProviderWrapper>();
 			var request = MockRepository.GenerateMock<IAuthenticationRequest>();
-			var providerEndpointWrapper = MockRepository.GenerateMock<IProviderEndpointWrapper>();
 			var httpRequest = MockRepository.GenerateStub<HttpRequestBase>();
 			var httpContext = MockRepository.GenerateStub<HttpContextBase>();
 			var currentHttpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
@@ -90,9 +91,8 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 			httpContext.Stub(x => x.Request).Return(httpRequest);
 			currentHttpContext.Stub(x => x.Current()).Return(httpContext);
 			httpRequest.Stub(x => x.HttpMethod).Return("HEAD");
-			providerEndpointWrapper.Expect(x => x.PendingRequest).PropertyBehavior();
 
-			var target = new OpenIdController(openIdProviderWapper, null, currentHttpContext, providerEndpointWrapper);
+			var target = new OpenIdController(openIdProviderWapper, null, currentHttpContext);
 			var result = target.Provider();
 
 			(result is EmptyResult).Should().Be.True();
@@ -109,7 +109,6 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 			var httpContext = MockRepository.GenerateStub<HttpContextBase>();
 			var outgoingWebResponse = MockRepository.GenerateMock<OutgoingWebResponse>();
 			var windowsAccountProvider = MockRepository.GenerateMock<IWindowsAccountProvider>();
-			var providerEndpointWrapper = MockRepository.GenerateMock<IProviderEndpointWrapper>();
 
 			httpContext.Stub(x => x.Request).Return(httpRequest);
 			currentHttpContext.Stub(x => x.Current()).Return(httpContext);
@@ -118,7 +117,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 			openIdProviderWapper.Stub(x => x.GetRequest()).Return(request);
 			openIdProviderWapper.Stub(x => x.PrepareResponse(request)).Return(outgoingWebResponse);
 			
-			var target = new OpenIdController(openIdProviderWapper, windowsAccountProvider, currentHttpContext, providerEndpointWrapper);
+			var target = new OpenIdController(openIdProviderWapper, windowsAccountProvider, currentHttpContext);
 			target.Provider();
 
 			openIdProviderWapper.AssertWasCalled(x => x.PrepareResponse(request));
@@ -129,15 +128,12 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 		public void ShouldAuthenticateMeIfImAWindowsUserWhenTriggerWindowsAuthorization()
 		{
 			var openIdProviderWapper = MockRepository.GenerateMock<IOpenIdProviderWrapper>();
-			var request = MockRepository.GenerateMock<IAuthenticationRequest>();
+			var request =new FakeAuthenticationRequest(RelyingPartyDiscoveryResult.Success);
 			var httpResponse = MockRepository.GenerateStub<HttpResponseBase>();
 			var httpRequest = MockRepository.GenerateStub<HttpRequestBase>();
 			var currentHttpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
 			var httpContext = MockRepository.GenerateStub<HttpContextBase>();
 			
-			request.Expect(x => x.IsAuthenticated).PropertyBehavior();
-			request.Expect(x => x.LocalIdentifier).PropertyBehavior();
-			request.Expect(x => x.IsReturnUrlDiscoverable(null)).IgnoreArguments().Return(RelyingPartyDiscoveryResult.Success);
 			openIdProviderWapper.Stub(x => x.GetRequest()).Return(request);
 
 			var windowsAccountProvider = MockRepository.GenerateMock<IWindowsAccountProvider>();
@@ -149,15 +145,10 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 			httpContext.Stub(x => x.Request).Return(httpRequest);
 			currentHttpContext.Stub(x => x.Current()).Return(httpContext);
 
-			var providerEndpointWrapper = MockRepository.GenerateMock<IProviderEndpointWrapper>();
-			providerEndpointWrapper.Stub(x => x.PendingRequest).Return(request);
+			var target = new OpenIdController(openIdProviderWapper, windowsAccountProvider, currentHttpContext);
+			target.TriggerWindowsAuthorization(Convert.ToBase64String(SerializationHelper.SerializeAsBinary(request).ToCompressedByteArray()));
 
-			var target = new OpenIdController(openIdProviderWapper, windowsAccountProvider, currentHttpContext, providerEndpointWrapper);
-			target.TriggerWindowsAuthorization();
-
-			request.IsAuthenticated.Should().Be.EqualTo(true);
-			request.LocalIdentifier.ToString().Should().Be("http://mock/OpenId/AskUser/domainName#user$$$Name");
-			openIdProviderWapper.AssertWasCalled(x => x.SendResponse(request));
+			openIdProviderWapper.AssertWasCalled(x => x.SendResponse(Arg<IAuthenticationRequest>.Matches(r => r.IsAuthenticated.GetValueOrDefault() && r.LocalIdentifier.ToString() == "http://mock/OpenId/AskUser/domainName#user$$$Name")));
 		}
 
 		[Test]
@@ -165,25 +156,21 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 		{
 			var openIdProviderWapper = MockRepository.GenerateMock<IOpenIdProviderWrapper>();
 			var currentHttpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
-			var request = MockRepository.GenerateMock<IAuthenticationRequest>();
-			request.Expect(x => x.IsAuthenticated).PropertyBehavior();
+			var request = new FakeAuthenticationRequest(RelyingPartyDiscoveryResult.Success);
 			openIdProviderWapper.Stub(x => x.GetRequest()).Return(request);
 			var windowsAccountProvider = MockRepository.GenerateMock<IWindowsAccountProvider>();
 			windowsAccountProvider.Stub(x => x.RetrieveWindowsAccount()).Return(null);
-			var providerEndpointWrapper = MockRepository.GenerateMock<IProviderEndpointWrapper>();
-			providerEndpointWrapper.Stub(x => x.PendingRequest).Return(request);
 
-			var target = new OpenIdController(openIdProviderWapper, windowsAccountProvider, currentHttpContext, providerEndpointWrapper);
-			target.TriggerWindowsAuthorization();
+			var target = new OpenIdController(openIdProviderWapper, windowsAccountProvider, currentHttpContext);
+			target.TriggerWindowsAuthorization(Convert.ToBase64String(SerializationHelper.SerializeAsBinary(request).ToCompressedByteArray()));
 
-			request.IsAuthenticated.Should().Be.EqualTo(false);
-			openIdProviderWapper.AssertWasNotCalled(x => x.SendResponse(request));
+			openIdProviderWapper.AssertWasNotCalled(x => x.SendResponse(Arg<IAuthenticationRequest>.Matches(r=>!r.IsAuthenticated.GetValueOrDefault())));
 		}
 
 		[Test]
 		public void ShouldReturnAskUserView()
 		{
-			var target = new OpenIdController(null, null, null, null);
+			var target = new OpenIdController(null, null, null);
 
 			var result = target.AskUser();
 
@@ -194,29 +181,23 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 		public void ShouldNotAuthenticateIfNoServiceDocument()
 		{
 			var openIdProviderWapper = MockRepository.GenerateMock<IOpenIdProviderWrapper>();
-			var request = MockRepository.GenerateMock<IAuthenticationRequest>();
-			request.Expect(x => x.IsAuthenticated).PropertyBehavior();
-			request.Expect(x => x.LocalIdentifier).PropertyBehavior();
-			request.Expect(x => x.IsReturnUrlDiscoverable(null)).IgnoreArguments().Return(RelyingPartyDiscoveryResult.NoServiceDocument);
+			var request = new FakeAuthenticationRequest(RelyingPartyDiscoveryResult.NoServiceDocument);
 			openIdProviderWapper.Stub(x => x.GetRequest()).Return(request);
 
 			var windowsAccountProvider = MockRepository.GenerateMock<IWindowsAccountProvider>();
 			var currentHttpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
-			var providerEndpointWrapper = MockRepository.GenerateMock<IProviderEndpointWrapper>();
-			providerEndpointWrapper.Stub(x => x.PendingRequest).Return(request);
 
-			var target = new OpenIdController(openIdProviderWapper, windowsAccountProvider, currentHttpContext, providerEndpointWrapper);
-			target.TriggerWindowsAuthorization();
+			var target = new OpenIdController(openIdProviderWapper, windowsAccountProvider, currentHttpContext);
+			target.TriggerWindowsAuthorization(Convert.ToBase64String(SerializationHelper.SerializeAsBinary(request).ToCompressedByteArray()));
 
-			request.IsAuthenticated.Should().Be.EqualTo(false);
-			
+			openIdProviderWapper.AssertWasNotCalled(x=>x.SendResponse(Arg<IAuthenticationRequest>.Is.Anything));
 		}
 
 		[Test]
 		public void ShouldSetIsPersistentToTrue()
 		{
 			var openIdProviderWapper = MockRepository.GenerateMock<IOpenIdProviderWrapper>();
-			var request = new FakeAuthenticationRequest();
+			var request = new FakeAuthenticationRequest(RelyingPartyDiscoveryResult.Success);
 			var httpResponse = MockRepository.GenerateStub<HttpResponseBase>();
 			var httpRequest = MockRepository.GenerateStub<HttpRequestBase>();
 			var currentHttpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
@@ -233,20 +214,27 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 			httpContext.Stub(x => x.Request).Return(httpRequest);
 			currentHttpContext.Stub(x => x.Current()).Return(httpContext);
 
-			var providerEndpointWrapper = MockRepository.GenerateMock<IProviderEndpointWrapper>();
-			providerEndpointWrapper.Stub(x => x.PendingRequest).Return(request);
+			var target = new OpenIdController(openIdProviderWapper, windowsAccountProvider, currentHttpContext);
+			target.TriggerWindowsAuthorization(Convert.ToBase64String(SerializationHelper.SerializeAsBinary(request).ToCompressedByteArray()));
 
-			var target = new OpenIdController(openIdProviderWapper, windowsAccountProvider, currentHttpContext, providerEndpointWrapper);
-			target.TriggerWindowsAuthorization();
-
-			var fetchResponse = request.GetExtension<FetchResponse>();
-			fetchResponse.GetAttributeValue(ClaimTypes.IsPersistent).Should().Be.EqualTo("true");
+			openIdProviderWapper.AssertWasCalled(
+				x =>
+					x.SendResponse(
+						Arg<IAuthenticationRequest>.Matches(
+							r => r.GetExtension<FetchResponse>().GetAttributeValue(ClaimTypes.IsPersistent) == "true")));
 		}
 	}
 
+	[Serializable]
 	public class FakeAuthenticationRequest : IAuthenticationRequest
 	{
+		private readonly RelyingPartyDiscoveryResult _relyingPartyDiscoveryResult;
 		private readonly IList<IOpenIdMessageExtension> extensionList = new List<IOpenIdMessageExtension>();
+
+		public FakeAuthenticationRequest(RelyingPartyDiscoveryResult relyingPartyDiscoveryResult)
+		{
+			_relyingPartyDiscoveryResult = relyingPartyDiscoveryResult;
+		}
 
 		public void AddResponseExtension(IOpenIdMessageExtension extension)
 		{
@@ -272,7 +260,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 		public ProviderSecuritySettings SecuritySettings { get; set; }
 		public RelyingPartyDiscoveryResult IsReturnUrlDiscoverable(IDirectWebRequestHandler webRequestHandler)
 		{
-			return RelyingPartyDiscoveryResult.Success;
+			return _relyingPartyDiscoveryResult;
 		}
 
 		public ProtocolVersion RelyingPartyVersion { get; private set; }

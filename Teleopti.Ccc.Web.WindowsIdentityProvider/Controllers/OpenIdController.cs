@@ -9,7 +9,9 @@ using DotNetOpenAuth.OpenId;
 using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
 using DotNetOpenAuth.OpenId.Provider;
 using log4net;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.Web.WindowsIdentityProvider.Core;
 
 namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
@@ -19,15 +21,13 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 		private readonly IOpenIdProviderWrapper _openIdProvider;
 		private readonly IWindowsAccountProvider _windowsAccountProvider;
 		private readonly ICurrentHttpContext _currentHttpContext;
-		private readonly IProviderEndpointWrapper _providerEndpointWrapper;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(OpenIdController));
 
-		public OpenIdController(IOpenIdProviderWrapper openIdProviderWrapper, IWindowsAccountProvider windowsAccountProvider, ICurrentHttpContext currentHttpContext, IProviderEndpointWrapper providerEndpointWrapper)
+		public OpenIdController(IOpenIdProviderWrapper openIdProviderWrapper, IWindowsAccountProvider windowsAccountProvider, ICurrentHttpContext currentHttpContext)
 		{
 			_openIdProvider = openIdProviderWrapper;
 			_windowsAccountProvider = windowsAccountProvider;
 			_currentHttpContext = currentHttpContext;
-			_providerEndpointWrapper = providerEndpointWrapper;
 		}
 
 		public ActionResult Identifier()
@@ -59,9 +59,10 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 			}
 
 			// handles request from browser
-			_providerEndpointWrapper.PendingRequest = (IHostProcessedRequest)request;
-
-			return RedirectToAction("TriggerWindowsAuthorization");
+			var pendingRequest = Convert.ToBase64String(SerializationHelper.SerializeAsBinary(request).ToCompressedByteArray());
+			ViewBag.ReturnUrl = Url.Action("TriggerWindowsAuthorization");
+			ViewBag.PendingRequest = pendingRequest;
+			return View("Redirect");
 		}
 
 		private bool isHeadRequest()
@@ -69,10 +70,17 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 			return _currentHttpContext.Current().Request.HttpMethod.Equals("HEAD", StringComparison.InvariantCultureIgnoreCase);
 		}
 
+		private IHostProcessedRequest getPendingRequest(string request)
+		{
+			var pendingRequest = SerializationHelper.Deserialize<IHostProcessedRequest>(Convert.FromBase64String(request).ToUncompressedString());
+
+			return pendingRequest;
+		}
+
 		[Authorize]
 		[TenantUnitOfWork]
 		[NoTenantAuthentication]
-		public virtual ActionResult TriggerWindowsAuthorization()
+		public virtual ActionResult TriggerWindowsAuthorization(string pendingRequest)
 		{
 			logger.Info("Start of the OpenIdController.TriggerWindowsAuthorization()");
 
@@ -80,16 +88,15 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 			var useLocalhostIdentifier = !string.IsNullOrEmpty(useLocalhostIdentifierSetting) && bool.Parse(useLocalhostIdentifierSetting);
 			if (useLocalhostIdentifier)
 			{
-				return makeWindowsAuthenticationUsingLocalhostIdentifier();
+				return makeWindowsAuthenticationUsingLocalhostIdentifier(getPendingRequest(pendingRequest));
 			}
 
-			return makeWindowsAuthentication();
+			return makeWindowsAuthentication(getPendingRequest(pendingRequest));
 		}
 
-		private ActionResult makeWindowsAuthentication()
+		private ActionResult makeWindowsAuthentication(IHostProcessedRequest pendingRequest)
 		{
-			var idrequest = _providerEndpointWrapper.PendingRequest as IAuthenticationRequest;
-			_providerEndpointWrapper.PendingRequest = null;
+			var idrequest = pendingRequest as IAuthenticationRequest;
 
 			var relyingPartyDiscoveryResult = idrequest.IsReturnUrlDiscoverable(_openIdProvider.WebRequestHandler());
 			if (relyingPartyDiscoveryResult != RelyingPartyDiscoveryResult.Success)
@@ -124,10 +131,9 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 			return new EmptyResult();
 		}
 
-		private ActionResult makeWindowsAuthenticationUsingLocalhostIdentifier()
+		private ActionResult makeWindowsAuthenticationUsingLocalhostIdentifier(IHostProcessedRequest pendingRequest)
 		{
-			var idrequest = _providerEndpointWrapper.PendingRequest as IAuthenticationRequest;
-			_providerEndpointWrapper.PendingRequest = null;
+			var idrequest = pendingRequest as IAuthenticationRequest;
 
 			var requestMessageProperty = idrequest.GetType()
 				.GetProperty("RequestMessage", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);

@@ -1,0 +1,19 @@
+﻿@{
+	Layout = null;
+}
+<html>
+<head>
+	<meta charset="UTF-8">
+	<script type="text/javascript">
+		function submit() {
+			document.getElementById("redirect_form").submit();
+		}
+	</script>
+</head>
+<body onload="submit();">
+	<form action="@ViewBag.ReturnUrl" id="redirect_form" method="POST">
+		<input type="hidden" name="pendingRequest" value="@ViewBag.PendingRequest" />
+		If you are not redirected automatically, follow the <a href="javascript:void(0)" onclick="submit();">link</a>
+	</form>
+</body>
+</html>
