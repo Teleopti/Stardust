@@ -308,8 +308,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.16\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
     </Reference>
-    <Reference Include="Stardust.Manager, Version=1.0.0.164, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Stardust.Manager.1.0.0.164\lib\net451\Stardust.Manager.dll</HintPath>
+    <Reference Include="Stardust.Manager, Version=1.0.0.189, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Stardust.Manager.1.0.0.189\lib\net451\Stardust.Manager.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Data" />

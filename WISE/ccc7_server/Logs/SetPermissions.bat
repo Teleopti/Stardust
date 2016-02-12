@@ -98,4 +98,8 @@ ECHO Permission on TeleoptiCCC folder OK: "%BatchPath%\..\TeleoptiCCC%"
 ping 127.0.0.1 -n 2 >NUL
 )
 
+ECHO Adding permissions to listen to ports for Stardust Manger and Node
+netsh http add urlacl url=http://+:9000/ user=Everyone listen=yes
+netsh http add urlacl url=http://+:9001/ user=Everyone listen=yes
+
 GOTO :EOF

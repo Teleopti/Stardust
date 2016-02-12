@@ -132,12 +132,21 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		private static void startManager()
 		{
-			var config = new ManagerConfiguration
+			try
 			{
-				BaseAdress = ConfigurationManager.AppSettings["ManagerBaseAddress"],
-				ConnectionString = ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString
-			};
-			new ManagerStarter().Start(config);
+				var config = new ManagerConfiguration
+				{
+					BaseAddress = new Uri(ConfigurationManager.AppSettings["ManagerBaseAddress"]),
+					ConnectionString = ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString
+				};
+				new ManagerStarter().Start(config);
+			}
+			catch (Exception)
+			{
+				// for now just catch it because it will happen both for web and for RTA
+				//throw;
+			}
+			
 		}
 	}
 }
