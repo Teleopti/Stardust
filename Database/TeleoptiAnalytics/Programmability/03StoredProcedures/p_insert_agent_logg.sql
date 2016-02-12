@@ -39,10 +39,10 @@ DECLARE @last_logg_date smalldatetime,
 SET NOCOUNT ON
 
 /*
-@start_date anvõnds om man vill agga frÕn specifikt datum
-@end_date anvõnds om man vill agga till ett specifikt datum
-@rel_start_date anvõnds om man t ex vill agg bakÕt en dag hela tiden. Skickar dÕ in -1
-@rel_start_int anvõnds om man t ex vill agg bakÕt fyra intervall hela tiden. Skickar dÕ in -4
+@start_date used to re-aggregte _from_ a specific date
+@end_date used to re-aggregte _to_ a specific date
+@rel_start_date used when you need to pickup a date window backwards in time. e.g use -1 for going back 1 day
+@rel_start_int used when you need a slinding interval windows backwards in time. e.g use -4 to step back 4 instervals
 */
 /********************************************************/
 /* Fetch latest log date and interval                   */
@@ -66,12 +66,6 @@ SELECT @int_per_day= int_value
 FROM ccc_system_info 
 WHERE [id]=1
 
-
-/* 
-
-Hõr blir det lite nytt  
-
-*/
 IF ( @start_date > '1970-01-01' ) 
 BEGIN
 	SELECT @last_logg_date = @start_date
@@ -92,19 +86,19 @@ BEGIN
 
 		IF  (@rel_start_int + @last_logg_interval < @int_per_day - 1)
 		BEGIN
-			/* Hõr ligger intervallet fortfarande inom dagen sÕ det õr bara att plussa */
+			/* the interval is within the same day, just add */
 			SELECT @last_logg_interval = @last_logg_interval + @rel_start_int
 		END
 		ELSE IF  (@rel_start_int + @last_logg_interval >= @int_per_day)
 		BEGIN
-			/* Hõr har intervallet gÕtt ÷ver till nõsta dag vi ÷kar pÕ dagen en dag och õndrar intervallet */
+			/* the interval is on the next date. Add one day, switch interval value */
 			SELECT @last_logg_date = dateadd ( day,1,@last_logg_date)
 			SELECT @last_logg_interval = (@last_logg_interval + @rel_start_int) - (@int_per_day - 1)
 		END 
 	END 
 	ELSE
 	BEGIN
-		/* Hõr õr intervallet igÕr */
+		/* The interval is on "yesterday" */
 		SELECT @last_logg_date = dateadd ( day,-1,@last_logg_date)
 		SELECT @last_logg_interval = (@int_per_day - 1) - (@last_logg_interval - @rel_start_int)
 	END 
@@ -171,9 +165,30 @@ CREATE TABLE #tmp_alogg (
 /***************************************************************/
 /* Execute the correct procedure for this log object	   */
 /***************************************************************/
+DECLARE @schema varchar(100)
+DECLARE @proc_name varchar(100)
+DECLARE @logdb_name varchar(100)
+
+SELECT
+	@logdb_name=logdb_name
+FROM log_object
+WHERE log_object_id = @log_object_id
+
+SELECT
+	@schema=SUBSTRING(proc_name, 1, CASE CHARINDEX('.', proc_name) WHEN 0 THEN LEN(proc_name) ELSE CHARINDEX('.', proc_name)-1 END),
+	@proc_name=SUBSTRING(proc_name, CASE CHARINDEX('.', proc_name) WHEN 0 THEN LEN(proc_name)+1 ELSE CHARINDEX('.', proc_name)+1 END, 1000)
+FROM log_object_detail
+WHERE log_object_id = @log_object_id
+AND detail_id = 2
+
+If @proc_name='' --no schema provided in log_object_detail
+BEGIN
+	SET @proc_name=@schema
+	SET @schema='dbo'
+END
+
 DECLARE @txt varchar(8000)
-SELECT @txt = (SELECT logdb_name FROM log_object WHERE log_object_id = @log_object_id)+'..'+
-	(SELECT proc_name FROM log_object_detail WHERE log_object_id = @log_object_id AND detail_id = 2)+'
+SELECT @txt = @logdb_name+'.'+@schema+'.'+@proc_name+'
 '+convert(varchar(5),@log_object_id)+',
 '+''''+convert(varchar(10),@last_logg_date,120)+''''+',
 '+convert(varchar(5),@last_logg_interval)+',
@@ -215,12 +230,8 @@ END
 /**********************************************************************/
 BEGIN TRANSACTION 
 /**********************************************************************/
-/*   Ta bort det senaste loggintervallet i agent_Logg	*/
+/*   Remove the latest logg interval in agent_Logg	*/
 /**********************************************************************/
-/*
-	Hõr blir det nytt
-	
-*/
 
 DECLARE @mindate smalldatetime, @mininterval int
 DECLARE @maxdate smalldatetime, @maxinterval int
