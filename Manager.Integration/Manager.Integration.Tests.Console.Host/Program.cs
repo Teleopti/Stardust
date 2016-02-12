@@ -119,18 +119,17 @@ namespace Manager.IntegrationTest.Console.Host
 
         public static void Main(string[] args)
         {
+            CurrentDomainConfigurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+            XmlConfigurator.ConfigureAndWatch(new FileInfo(CurrentDomainConfigurationFile));
+
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "Start.");
 
-            CurrentDomainConfigurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
-
-            XmlConfigurator.ConfigureAndWatch(new FileInfo(CurrentDomainConfigurationFile));
 
             SetConsoleCtrlHandler(ConsoleCtrlCheck,
                                   true);
 
             AppDomain.CurrentDomain.DomainUnload += CurrentDomainOnDomainUnload;
-
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
             AppDomains = new ConcurrentDictionary<string, AppDomain>();

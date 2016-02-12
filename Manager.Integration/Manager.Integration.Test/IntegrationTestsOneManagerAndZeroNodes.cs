@@ -34,7 +34,6 @@ namespace Manager.Integration.Test
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
 
-
             TryCreateSqlLoggingTable();
 
 #if (DEBUG)
@@ -54,7 +53,7 @@ namespace Manager.Integration.Test
             AppDomainTask = new AppDomainTask(_buildMode);
 
             Task = AppDomainTask.StartTask(CancellationTokenSource,
-                                                                                       NumberOfNodesToStart);
+                                           NumberOfNodesToStart);
 
             JobHelper.GiveNodesTimeToInitialize(60);
 
@@ -140,7 +139,7 @@ namespace Manager.Integration.Test
 
             Assert.IsTrue(managerApiHelper.CheckJobHistoryStatusTimer.Guids.Count > 0);
 
-            managerApiHelper.Dispose();            
+            managerApiHelper.Dispose();
         }
     }
 }

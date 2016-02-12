@@ -54,14 +54,16 @@ namespace Manager.Integration.Test
 
             AppDomainTask = new AppDomainTask(_buildMode);
 
-            AppDomainTask.StartTask(CancellationTokenSource,
-                                    NumberOfNodesToStart);
+            Task = AppDomainTask.StartTask(CancellationTokenSource,
+                                           NumberOfNodesToStart);
 
             JobHelper.GiveNodesTimeToInitialize();
 
             LogHelper.LogInfoWithLineNumber("Finshed TestFixtureSetUp",
                                             Logger);
         }
+
+        public Task Task { get; set; }
 
         public AppDomainTask AppDomainTask { get; set; }
 
@@ -117,8 +119,6 @@ namespace Manager.Integration.Test
             LogHelper.LogInfoWithLineNumber("Start test.",
                                             Logger);
 
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-
             List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(2*NumberOfNodesToStart);
 
             var timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count,
@@ -167,8 +167,6 @@ namespace Manager.Integration.Test
             LogHelper.LogInfoWithLineNumber("Starting test.",
                                             Logger);
 
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-
             List<JobRequestModel> requests = JobHelper.GenerateFailingJobParamsRequests(1);
 
             var timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count,
@@ -205,8 +203,6 @@ namespace Manager.Integration.Test
         {
             LogHelper.LogInfoWithLineNumber("Starting test.",
                                             Logger);
-
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
             List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(1);
 
@@ -261,8 +257,6 @@ namespace Manager.Integration.Test
         {
             LogHelper.LogInfoWithLineNumber("Start test.",
                                             Logger);
-
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
             List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(NumberOfNodesToStart*1);
 
