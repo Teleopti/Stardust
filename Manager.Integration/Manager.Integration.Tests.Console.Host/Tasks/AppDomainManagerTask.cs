@@ -14,8 +14,9 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
             LogManager.GetLogger(typeof (AppDomainManagerTask));
 
         public string Buildmode { get; set; }
-        public DirectoryInfo DirectoryManagerAssemblyLocationFullPath { get; set; }
-        public FileInfo ConfigurationFileInfo { get; set; }
+        private DirectoryInfo DirectoryManagerAssemblyLocationFullPath { get; set; }
+
+        private FileInfo ConfigurationFileInfo { get; set; }
 
         public AppDomainManagerTask(string buildmode,
                                     DirectoryInfo directoryManagerAssemblyLocationFullPath,
@@ -26,7 +27,17 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
             ConfigurationFileInfo = configurationFileInfo;
         }
 
-        private AppDomain MyAppDomain { get; set; }
+        public string GetAppDomainFriendlyName()
+        {
+            if (MyAppDomain != null)
+            {
+                return MyAppDomain.FriendlyName;
+            }
+
+            return null;
+        }
+
+        public AppDomain MyAppDomain { get; private set; }
 
         public Task Task { get; private set; }
 
@@ -87,6 +98,8 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 
         public void Dispose()
         {
+            LogHelper.LogInfoWithLineNumber(Logger, "Start disposing.");
+
             if (CancellationTokenSource != null &&
                 !CancellationTokenSource.IsCancellationRequested)
             {
@@ -101,7 +114,9 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
             if (Task != null)
             {
                 Task.Dispose();
-            }            
+            }
+
+            LogHelper.LogInfoWithLineNumber(Logger, "Finished disposing.");
         }
     }
 }

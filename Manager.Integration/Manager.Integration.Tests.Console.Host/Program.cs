@@ -5,7 +5,6 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Security.Policy;
 using System.Threading;
 using System.Web.Http;
 using Autofac;
@@ -69,18 +68,6 @@ namespace Manager.IntegrationTest.Console.Host
             return false;
         }
 
-        public static ConcurrentDictionary<string, AppDomain> AppDomains { get; set; }
-
-        public static void AddOrUpdateAppDomains(string key,
-                                                 AppDomain value)
-        {
-            AppDomains.AddOrUpdate(key,
-                                   value,
-                                   (name,
-                                    val) => value);
-        }
-
-
         private static void StartSelfHosting()
         {
             Configuration configuration =
@@ -131,7 +118,7 @@ namespace Manager.IntegrationTest.Console.Host
             AppDomain.CurrentDomain.DomainUnload += CurrentDomainOnDomainUnload;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-            AppDomains = new ConcurrentDictionary<string, AppDomain>();
+            
 
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "started.");
@@ -329,50 +316,42 @@ namespace Manager.IntegrationTest.Console.Host
                                             true);
         }
 
-        public static void ShutDownNode(string id)
+
+        public static void ShutDownNode(string friendlyName)
         {
-            KeyValuePair<string, AppDomain> appDomainToUnload = AppDomains.FirstOrDefault(pair => pair.Key == id);
 
-            if (appDomainToUnload.Value != null)
+            if (AppDomainManagerTask != null &&
+                AppDomainManagerTask.GetAppDomainFriendlyName()
+                .Equals(friendlyName,
+                        StringComparison.InvariantCultureIgnoreCase))
             {
-                string friendlyName = appDomainToUnload.Value.FriendlyName;
+                AppDomainManagerTask.Dispose();
 
-                try
+                AppDomainManagerTask = null;
+            }
+
+            if (AppDomainNodeTasks != null && AppDomainNodeTasks.Any())
+            {
+                AppDomainNodeTask nodeToDispose = null;
+
+                foreach (var appDomainNodeTask in AppDomainNodeTasks)
                 {                    
-                    LogHelper.LogInfoWithLineNumber(Logger,
-                                                    "Try unload appdomain with friendly name : " + friendlyName);
+                    if (appDomainNodeTask.GetAppDomainFriendlyName()
+                        .Equals(friendlyName,
+                                StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        nodeToDispose = appDomainNodeTask;
 
-                    AppDomain.Unload(appDomainToUnload.Value);
-
-                    LogHelper.LogInfoWithLineNumber(Logger,
-                                                    "Unload appdomain with friendly name : " + friendlyName);
+                        break;
+                    }
                 }
 
-                catch (AppDomainUnloadedException appDomainUnloadedException)
+                if (nodeToDispose != null)
                 {
-                    LogHelper.LogWarningWithLineNumber(Logger,
-                                                       appDomainUnloadedException.Message);
-                }
+                    nodeToDispose.Dispose();
 
-                catch (Exception exp)
-                {
-                    LogHelper.LogErrorWithLineNumber(Logger,
-                                                     exp.Message,
-                                                     exp);
+                    AppDomainNodeTasks.Remove(nodeToDispose);
                 }
-
-                //AddOrUpdateAppDomains(id,
-                //                      null);
-            }
-            try
-            {
-                AppDomain tmp = AppDomains.Values.FirstOrDefault();
-                if (tmp != null)
-                    LogHelper.LogInfoWithLineNumber(Logger,"The appDomain " + tmp.FriendlyName + "is not unloaded!");
-            }
-            catch
-            {
-                LogHelper.LogInfoWithLineNumber(Logger,"The appDomain is unloaded!");
             }
         }
 
@@ -384,6 +363,34 @@ namespace Manager.IntegrationTest.Console.Host
         public static bool NodeExists(string id)
         {
             return true;
+        }
+
+        public static List<string> GetInstantiatedAppDomains()
+        {
+            List<string> listToReturn = null;
+
+            if (AppDomainManagerTask == null && 
+                (AppDomainNodeTasks == null || !AppDomainNodeTasks.Any()))
+            {
+                return listToReturn;
+            }
+
+            listToReturn = new List<string>();
+
+            if (AppDomainManagerTask != null)
+            {
+                listToReturn.Add(AppDomainManagerTask.GetAppDomainFriendlyName());
+            }
+
+            if (AppDomainNodeTasks != null)
+            {
+                foreach (var appDomainNodeTask in AppDomainNodeTasks)
+                {
+                    listToReturn.Add(appDomainNodeTask.GetAppDomainFriendlyName());
+                }
+            }
+
+            return listToReturn;
         }
     }
 }

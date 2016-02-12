@@ -2,9 +2,6 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Manager.Integration.Test.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="ManagerLocationUri" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">http://localhost:9000/jobmanager/</Value>
-    </Setting>
     <Setting Name="ManagerIntegrationConsoleHostLocation" Type="System.String" Scope="Application">
       <Value Profile="(Default)">../../../Manager.Integration.Tests.Console.Host/bin/</Value>
     </Setting>
@@ -22,6 +19,9 @@
     </Setting>
     <Setting Name="ManagerIntegrationTestControllerBaseAddress" Type="System.String" Scope="Application">
       <Value Profile="(Default)">http://localhost:9100/managerIntegrationTestController/</Value>
+    </Setting>
+    <Setting Name="ManagerLocationUri" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://localhost:9000/</Value>
     </Setting>
   </Settings>
 </SettingsFile>

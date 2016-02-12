@@ -69,7 +69,7 @@ namespace Manager.IntegrationTest.Console.Host
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "Called API controller.");
 
-            List<string> appDomainsList = Program.AppDomains.Keys.ToList();
+            List<string> appDomainsList = Program.GetInstantiatedAppDomains();
 
             LogHelper.LogInfoWithLineNumber(Logger,
                                             appDomainsList);

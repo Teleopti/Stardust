@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
-using System.Threading.Tasks;
 using log4net;
 using log4net.Config;
 using Manager.Integration.Test.Helpers;
@@ -17,7 +16,6 @@ using NUnit.Framework;
 namespace Manager.Integration.Test
 {
     [TestFixture]
-    [Ignore]
     public class ManagerIntegrationTestControllerTests
     {
         private static readonly ILog Logger =
@@ -35,7 +33,10 @@ namespace Manager.Integration.Test
             LogHelper.LogInfoWithLineNumber("Start TestFixtureTearDown",
                                             Logger);
 
-            AppDomainTask.Dispose();
+            if (AppDomainTask != null)
+            {
+                AppDomainTask.Dispose();
+            }
 
             LogHelper.LogInfoWithLineNumber("Finished TestFixtureTearDown",
                                             Logger);
@@ -45,7 +46,7 @@ namespace Manager.Integration.Test
         public void TestFixtureSetUp()
         {
 #if (DEBUG)
-    // Do nothing.
+            // Do nothing.
 #else
             _clearDatabase = true;
             _buildMode = "Debug";
@@ -70,7 +71,7 @@ namespace Manager.Integration.Test
             AppDomainTask.StartTask(CancellationTokenSource,
                                     NumberOfNodesToStart);
 
-            JobHelper.GiveNodesTimeToInitialize();
+            JobHelper.GiveNodesTimeToInitialize(60);
 
             LogHelper.LogInfoWithLineNumber("Finshed TestFixtureSetUp",
                                             Logger);
@@ -89,6 +90,8 @@ namespace Manager.Integration.Test
 
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
+            HttpResponseMessage response;
+
             using (var client = new HttpClient())
             {
                 UriBuilder uriBuilder =
@@ -96,16 +99,19 @@ namespace Manager.Integration.Test
 
                 uriBuilder.Path += "appdomain/" + "Node1.config";
 
-                var response = await client.DeleteAsync(uriBuilder.Uri,
-                                                        cancellationTokenSource.Token);
+                response = await client.DeleteAsync(uriBuilder.Uri,
+                                                    cancellationTokenSource.Token);
 
                 response.EnsureSuccessStatusCode();
             }
 
-            Logger.Info("Finished tests.");
+            Assert.IsTrue(response.IsSuccessStatusCode);
+
+            LogHelper.LogInfoWithLineNumber("Finished test.",
+                                            Logger);
         }
 
-        [Test]
+        [Test()]
         public async void ShouldReturnAllAppDomainKeys()
         {
             LogHelper.LogInfoWithLineNumber("Start test.",
@@ -114,6 +120,8 @@ namespace Manager.Integration.Test
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
             JobHelper.GiveNodesTimeToInitialize();
+
+            HttpResponseMessage response;
 
             using (var client = new HttpClient())
             {
@@ -125,8 +133,8 @@ namespace Manager.Integration.Test
 
                 uriBuilder.Path += "appdomain";
 
-                var response = await client.GetAsync(uriBuilder.Uri,
-                                                     cancellationTokenSource.Token);
+                response = await client.GetAsync(uriBuilder.Uri,
+                                                 cancellationTokenSource.Token);
 
                 response.EnsureSuccessStatusCode();
 
@@ -146,6 +154,8 @@ namespace Manager.Integration.Test
 
                 Assert.IsTrue(list.Any());
             }
+
+            Assert.IsTrue(response.IsSuccessStatusCode);
 
             LogHelper.LogInfoWithLineNumber("Finished test.",
                                             Logger);

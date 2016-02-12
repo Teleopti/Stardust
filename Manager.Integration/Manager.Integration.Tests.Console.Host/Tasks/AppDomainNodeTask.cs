@@ -85,9 +85,20 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
             return Task;
         }
 
+        public string GetAppDomainFriendlyName()
+        {
+            if (MyAppDomain != null)
+            {
+                return MyAppDomain.FriendlyName;
+            }
+
+            return null;
+        }
 
         public void Dispose()
         {
+            LogHelper.LogInfoWithLineNumber(Logger,"Start disposing.");
+
             if (CancellationTokenSource != null &&
                 !CancellationTokenSource.IsCancellationRequested)
             {
@@ -103,6 +114,8 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
             {
                 Task.Dispose();
             }
+
+            LogHelper.LogInfoWithLineNumber(Logger, "Finshed disposing.");
         }
     }
 }

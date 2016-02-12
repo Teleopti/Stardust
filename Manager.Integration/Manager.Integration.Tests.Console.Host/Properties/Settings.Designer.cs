@@ -70,16 +70,6 @@ namespace Manager.IntegrationTest.Console.Host.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:9000/jobmanager/")]
-        public string ManagerLocationUri {
-            get {
-                return ((string)(this["ManagerLocationUri"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("NodeTest.JobHandlers, Version=1.0.0.0")]
         public string HandlerAssembly {
             get {
@@ -134,19 +124,29 @@ namespace Manager.IntegrationTest.Console.Host.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:PORTNUMBER/jobnode/")]
-        public string NodeEndpointUriTemplate {
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:9100/managerIntegrationTestController/")]
+        public string ManagerIntegrationTestControllerBaseAddress {
             get {
-                return ((string)(this["NodeEndpointUriTemplate"]));
+                return ((string)(this["ManagerIntegrationTestControllerBaseAddress"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:9100/managerIntegrationTestController/")]
-        public string ManagerIntegrationTestControllerBaseAddress {
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:9000/")]
+        public string ManagerLocationUri {
             get {
-                return ((string)(this["ManagerIntegrationTestControllerBaseAddress"]));
+                return ((string)(this["ManagerLocationUri"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:PORTNUMBER/")]
+        public string NodeEndpointUriTemplate {
+            get {
+                return ((string)(this["NodeEndpointUriTemplate"]));
             }
         }
     }
