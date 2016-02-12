@@ -103,8 +103,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			{
 				HttpOnly = true,
 				Secure = _sessionSpecificCookieDataProviderSettings.AuthenticationRequireSsl,
-				Path = _sessionSpecificCookieDataProviderSettings.AuthenticationCookiePath,
-				Expires = _now.LocalDateTime().Add(TimeSpan.FromDays(31))
+				Path = _sessionSpecificCookieDataProviderSettings.AuthenticationCookiePath
 			};
 			if (!string.IsNullOrEmpty(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieDomain))
 			{
