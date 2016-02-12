@@ -92,8 +92,6 @@ namespace ManagerConsoleHost
 
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
 
-        //private static ManagerStarter _managerStarter;
-
         private static void CurrentDomain_DomainUnload(object sender,
                                                        EventArgs e)
         {

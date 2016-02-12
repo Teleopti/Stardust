@@ -54,14 +54,16 @@ namespace Manager.Integration.Test
 
             AppDomainTask = new AppDomainTask(_buildMode);
 
-            AppDomainTask.StartTask(CancellationTokenSource,
-                                    NumberOfNodesToStart);
+            Task = AppDomainTask.StartTask(CancellationTokenSource,
+                                           NumberOfNodesToStart);
 
-            JobHelper.GiveNodesTimeToInitialize();
+            JobHelper.GiveNodesTimeToInitialize(60);
 
             LogHelper.LogInfoWithLineNumber("Finshed TestFixtureSetUp",
                                             Logger);
         }
+
+        public Task Task { get; set; }
 
         public AppDomainTask AppDomainTask { get; set; }
 
@@ -114,16 +116,12 @@ namespace Manager.Integration.Test
             LogHelper.LogInfoWithLineNumber("Start test.",
                                             Logger);
 
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-
             List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(1);
 
             var timeout = JobHelper.GenerateTimeoutTimeInSeconds(requests.Count,
                                                                  30);
 
             var managerApiHelper = new ManagerApiHelper(new CheckJobHistoryStatusTimer(requests.Count,
-                                                                                       5000,
-                                                                                       cancellationTokenSource,
                                                                                        StatusConstants.SuccessStatus,
                                                                                        StatusConstants.DeletedStatus,
                                                                                        StatusConstants.FailedStatus,
@@ -138,8 +136,6 @@ namespace Manager.Integration.Test
 
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
-
-            managerApiHelper.CheckJobHistoryStatusTimer.Start();
 
             managerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 

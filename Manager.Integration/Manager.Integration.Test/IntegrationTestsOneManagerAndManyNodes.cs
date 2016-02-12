@@ -127,8 +127,6 @@ namespace Manager.Integration.Test
             List<Task> tasks = new List<Task>();
 
             var managerApiHelper = new ManagerApiHelper(new CheckJobHistoryStatusTimer(requests.Count,
-                                                                                       5000,
-                                                                                       cancellationTokenSource,
                                                                                        StatusConstants.SuccessStatus,
                                                                                        StatusConstants.DeletedStatus,
                                                                                        StatusConstants.FailedStatus,
@@ -148,8 +146,6 @@ namespace Manager.Integration.Test
 
                 cancelJobTask.Start();
             };
-
-            managerApiHelper.CheckJobHistoryStatusTimer.Start();
 
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
@@ -181,8 +177,6 @@ namespace Manager.Integration.Test
             List<Task> tasks = new List<Task>();
 
             var managerApiHelper = new ManagerApiHelper(new CheckJobHistoryStatusTimer(requests.Count,
-                                                                                       5000,
-                                                                                       cancellationTokenSource,
                                                                                        StatusConstants.SuccessStatus,
                                                                                        StatusConstants.DeletedStatus,
                                                                                        StatusConstants.FailedStatus,
@@ -191,8 +185,6 @@ namespace Manager.Integration.Test
             {
                 tasks.Add(managerApiHelper.CreateManagerDoThisTask(jobRequestModel));
             }
-
-            managerApiHelper.CheckJobHistoryStatusTimer.Start();
 
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
@@ -223,8 +215,6 @@ namespace Manager.Integration.Test
             List<Task> tasks = new List<Task>();
 
             var managerApiHelper = new ManagerApiHelper(new CheckJobHistoryStatusTimer(requests.Count,
-                                                                                       5000,
-                                                                                       cancellationTokenSource,
                                                                                        StatusConstants.SuccessStatus,
                                                                                        StatusConstants.DeletedStatus,
                                                                                        StatusConstants.FailedStatus,
@@ -252,8 +242,6 @@ namespace Manager.Integration.Test
                 cancelJobTask.Start();
             };
 
-            managerApiHelper.CheckJobHistoryStatusTimer.Start();
-
             Parallel.ForEach(tasks,
                              task => { task.Start(); });
 
@@ -278,13 +266,12 @@ namespace Manager.Integration.Test
 
             List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(NumberOfNodesToStart*1);
 
-            TimeSpan timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count, 5);
+            TimeSpan timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count,
+                                                                      5);
 
             List<Task> tasks = new List<Task>();
 
             var managerApiHelper = new ManagerApiHelper(new CheckJobHistoryStatusTimer(requests.Count,
-                                                                                       5000,
-                                                                                       cancellationTokenSource,
                                                                                        StatusConstants.SuccessStatus,
                                                                                        StatusConstants.DeletedStatus,
                                                                                        StatusConstants.FailedStatus,
@@ -294,8 +281,6 @@ namespace Manager.Integration.Test
             {
                 tasks.Add(managerApiHelper.CreateManagerDoThisTask(jobRequestModel));
             }
-
-            managerApiHelper.CheckJobHistoryStatusTimer.Start();
 
             Parallel.ForEach(tasks,
                              task => { task.Start(); });

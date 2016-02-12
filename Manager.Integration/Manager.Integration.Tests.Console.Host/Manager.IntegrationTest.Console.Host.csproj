@@ -129,6 +129,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Tasks\AppDomainManagerTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

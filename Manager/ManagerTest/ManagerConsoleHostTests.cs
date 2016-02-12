@@ -21,44 +21,17 @@ namespace ManagerTest
         {
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "Start TestFixtureTearDown");
+            
 
-            if (MyAppDomain != null)
-            {
-                LogHelper.LogInfoWithLineNumber(Logger,
-                                                "Start unloading app domain.");
+            AppDomain.Unload(MyAppDomain);
 
-                string friendlyName = MyAppDomain.FriendlyName;
-                try
-                {
-                    LogHelper.LogInfoWithLineNumber(Logger,
-                                                    "Try unload appdomain with friendly name : " + friendlyName);
-
-                    AppDomain.Unload(MyAppDomain);
-
-                    LogHelper.LogInfoWithLineNumber(Logger,
-                                                    "Unload appdomain with friendly name : " + friendlyName);
-                }
-
-                catch (AppDomainUnloadedException appDomainUnloadedException)
-                {
-                    LogHelper.LogWarningWithLineNumber(Logger,
-                                                       appDomainUnloadedException.Message);
-                }
-
-                catch (Exception exp)
-                {
-                    LogHelper.LogErrorWithLineNumber(Logger,
-                                                     exp.Message,
-                                                     exp);
-                }
-
-                LogHelper.LogInfoWithLineNumber(Logger,
-                                                "Finished unloading app domain.");
-            }
+            MyTask.Dispose();
 
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "Finished TestFixtureTearDown");
         }
+
+        private CancellationTokenSource CancellationTokenSource { get; set; }
 
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
@@ -68,6 +41,9 @@ namespace ManagerTest
 
             LogHelper.LogInfoWithLineNumber(Logger,
                                             string.Empty);
+
+
+            CancellationTokenSource =new CancellationTokenSource();
 
             MyTask = new Task(() =>
             {
@@ -91,11 +67,13 @@ namespace ManagerTest
 
                 MyAppDomain.ExecuteAssembly(Path.Combine(path,
                                                          exe));
-            });
+
+
+            }, CancellationTokenSource.Token);
 
             MyTask.Start();
 
-            Thread.Sleep(TimeSpan.FromSeconds(15));
+            Thread.Sleep(TimeSpan.FromSeconds(60));
         }
 
         public Task MyTask { get; set; }

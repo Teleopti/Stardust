@@ -25,49 +25,66 @@ namespace Manager.Integration.Test.Tasks
 
         private CancellationTokenSource CancellationTokenSource { get; set; }
 
-        public void StartTask(CancellationTokenSource cancellationTokenSource,
+        public Task StartTask(CancellationTokenSource cancellationTokenSource,
                               int numberOfNodes)
         {
-            CancellationTokenSource = cancellationTokenSource;
-
-            this.Task = new Task(() =>
+            return Task.Factory.StartNew(() =>
             {
-                var assemblyLocationFullPath =
-                    Path.Combine(Settings.Default.ManagerIntegrationConsoleHostLocation,
-                                 Buildmode);
-
-                var directoryManagerAssemblyLocationFullPath =
-                    new DirectoryInfo(assemblyLocationFullPath);
-
-                var configFileName =
-                    new FileInfo(Path.Combine(directoryManagerAssemblyLocationFullPath.FullName,
-                                              Settings.Default.ManagerIntegrationConsoleHostConfigurationFile));
-
-                var managerAppDomainSetup = new AppDomainSetup
+                Task.Factory.StartNew(() =>
                 {
-                    ApplicationBase = directoryManagerAssemblyLocationFullPath.FullName,
-                    ApplicationName = Settings.Default.ManagerIntegrationConsoleHostAssemblyName,
-                    ShadowCopyFiles = "true",
-                    AppDomainInitializerArguments = new[]
+                    while (!CancellationTokenSource.IsCancellationRequested)
                     {
-                        numberOfNodes.ToString()
-                    },
-                    ConfigurationFile = configFileName.FullName
-                };
+                        Thread.Sleep(TimeSpan.FromMilliseconds(100));
+                    }
 
-                MyAppDomain = AppDomain.CreateDomain(managerAppDomainSetup.ApplicationName,
-                                                     AppDomain.CurrentDomain.Evidence,
-                                                     managerAppDomainSetup);
+                    if (cancellationTokenSource.IsCancellationRequested)
+                    {
+                        CancellationTokenSource.Token.ThrowIfCancellationRequested();
+                    }
 
-                FileInfo assemblyToExecute =
-                    new FileInfo(Path.Combine(managerAppDomainSetup.ApplicationBase,
-                                              managerAppDomainSetup.ApplicationName));
+                }, cancellationTokenSource.Token);
 
-                MyAppDomain.ExecuteAssembly(assemblyToExecute.FullName,
-                                            managerAppDomainSetup.AppDomainInitializerArguments);
-            }, CancellationTokenSource.Token);
 
-            this.Task.Start();
+                Task.Factory.StartNew(() =>
+                {
+                    var assemblyLocationFullPath =
+                        Path.Combine(Settings.Default.ManagerIntegrationConsoleHostLocation,
+                                     Buildmode);
+
+                    var directoryManagerAssemblyLocationFullPath =
+                        new DirectoryInfo(assemblyLocationFullPath);
+
+                    var configFileName =
+                        new FileInfo(Path.Combine(directoryManagerAssemblyLocationFullPath.FullName,
+                                                  Settings.Default.ManagerIntegrationConsoleHostConfigurationFile));
+
+                    var managerAppDomainSetup = new AppDomainSetup
+                    {
+                        ApplicationBase = directoryManagerAssemblyLocationFullPath.FullName,
+                        ApplicationName = Settings.Default.ManagerIntegrationConsoleHostAssemblyName,
+                        ShadowCopyFiles = "true",
+                        AppDomainInitializerArguments = new[]
+                        {
+                            numberOfNodes.ToString()
+                        },
+                        ConfigurationFile = configFileName.FullName
+                    };
+
+                    MyAppDomain = AppDomain.CreateDomain(managerAppDomainSetup.ApplicationName,
+                                                         AppDomain.CurrentDomain.Evidence,
+                                                         managerAppDomainSetup);
+
+                    FileInfo assemblyToExecute =
+                        new FileInfo(Path.Combine(managerAppDomainSetup.ApplicationBase,
+                                                  managerAppDomainSetup.ApplicationName));
+
+                    MyAppDomain.ExecuteAssembly(assemblyToExecute.FullName,
+                                                managerAppDomainSetup.AppDomainInitializerArguments);
+
+
+                }, cancellationTokenSource.Token);
+
+            }, cancellationTokenSource.Token);
         }
 
         public void Dispose()
@@ -84,7 +101,6 @@ namespace Manager.Integration.Test.Tasks
             }
 
             Task.Dispose();
-
         }
     }
 }

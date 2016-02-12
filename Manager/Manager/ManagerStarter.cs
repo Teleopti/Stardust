@@ -51,9 +51,6 @@ namespace Stardust.Manager
                                         c => new WorkerNodeRepository(managerConfiguration.ConnectionString))
                                         .As<IWorkerNodeRepository>();
 
-                                    builder.RegisterType<ManagerController>()
-                                        .SingleInstance();
-
                                     builder.RegisterApiControllers(typeof (ManagerController).Assembly);
 
                                     builder.RegisterInstance(managerConfiguration);

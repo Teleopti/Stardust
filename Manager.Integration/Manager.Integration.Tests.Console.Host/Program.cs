@@ -15,6 +15,7 @@ using log4net;
 using log4net.Config;
 using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.Properties;
+using Manager.IntegrationTest.Console.Host.Tasks;
 using Microsoft.Owin.Hosting;
 using Owin;
 using Configuration = Manager.IntegrationTest.Console.Host.Models.Configuration;
@@ -67,19 +68,6 @@ namespace Manager.IntegrationTest.Console.Host
             }
 
             return false;
-        }
-
-        private static string AddEndingSlash(string path)
-        {
-            if (!string.IsNullOrEmpty(path))
-            {
-                if (!path.EndsWith(@"\"))
-                {
-                    path += @"\";
-                }
-            }
-
-            return path;
         }
 
         public static ConcurrentDictionary<string, AppDomain> AppDomains { get; set; }
@@ -153,20 +141,20 @@ namespace Manager.IntegrationTest.Console.Host
                                             "started.");
 
             DirectoryManagerConfigurationFileFullPath =
-                new DirectoryInfo(AddEndingSlash(Settings.Default.ManagerConfigurationFileFullPath + _buildMode));
+                new DirectoryInfo(Path.Combine(Settings.Default.ManagerConfigurationFileFullPath,
+                                               _buildMode));
 
             ManagerConfigurationFile =
-                new FileInfo(DirectoryManagerConfigurationFileFullPath.FullName +
-                             Settings.Default.ManagerConfigurationFileName);
+                new FileInfo(Path.Combine(DirectoryManagerConfigurationFileFullPath.FullName,
+                                          Settings.Default.ManagerConfigurationFileName));
 
             CopiedManagerConfigurationFile =
                 CopyManagerConfigurationFile(ManagerConfigurationFile,
                                              CopiedManagerConfigName);
 
-            new Task(StartNewManager).Start();
-
             DirectoryNodeConfigurationFileFullPath =
-                new DirectoryInfo(AddEndingSlash(Settings.Default.NodeConfigurationFileFullPath + _buildMode));
+                new DirectoryInfo(Path.Combine(Settings.Default.NodeConfigurationFileFullPath,
+                                               _buildMode));
 
             NodeConfigurationFile =
                 new FileInfo(DirectoryNodeConfigurationFileFullPath.FullName +
@@ -198,8 +186,19 @@ namespace Manager.IntegrationTest.Console.Host
                 }
             }
 
+            CancellationTokenSource = new CancellationTokenSource();
+
+            AppDomainManagerTask =
+                new AppDomainManagerTask(_buildMode,
+                                         DirectoryManagerAssemblyLocationFullPath,
+                                         CopiedManagerConfigurationFile);
+
+            AppDomainManagerTask.StartTask(CancellationTokenSource,
+                                            NumberOfNodesToStart);
+
             DirectoryNodeAssemblyLocationFullPath =
-                new DirectoryInfo(AddEndingSlash(Settings.Default.NodeAssemblyLocationFullPath + _buildMode));
+                new DirectoryInfo(Path.Combine(Settings.Default.NodeAssemblyLocationFullPath,
+                                               _buildMode));
 
             foreach (var nodeconfigurationFile in NodeconfigurationFiles)
             {
@@ -209,37 +208,13 @@ namespace Manager.IntegrationTest.Console.Host
             StartSelfHosting();
         }
 
+        public static CancellationTokenSource CancellationTokenSource { get; set; }
+
+
+        public static AppDomainManagerTask AppDomainManagerTask { get; set; }
+
         private static Evidence CurrentDomainEvidence { get; set; }
 
-        private static void StartNewManager()
-        {
-            DirectoryManagerAssemblyLocationFullPath =
-                new DirectoryInfo(AddEndingSlash(Settings.Default.ManagerAssemblyLocationFullPath + _buildMode));
-
-            // Start manager.
-            var managerAppDomainSetup = new AppDomainSetup
-            {
-                ApplicationBase = DirectoryManagerAssemblyLocationFullPath.FullName,
-                ApplicationName = Settings.Default.ManagerAssemblyName,
-                ShadowCopyFiles = "true",
-                ConfigurationFile = CopiedManagerConfigurationFile.FullName
-            };
-
-            AppDomain managerAppDomain = AppDomain.CreateDomain(managerAppDomainSetup.ApplicationName,
-                                                                CurrentDomainEvidence,
-                                                                managerAppDomainSetup);
-
-            AddOrUpdateAppDomains(CopiedManagerConfigurationFile.Name,
-                                  managerAppDomain);
-
-            var assemblyFile = new FileInfo(Path.Combine(managerAppDomainSetup.ApplicationBase,
-                                                         managerAppDomainSetup.ApplicationName));
-
-            LogHelper.LogInfoWithLineNumber(Logger,
-                                            "Manager (appdomain) will start with friendly name : " + managerAppDomain.FriendlyName);
-
-            managerAppDomain.ExecuteAssembly(assemblyFile.FullName);
-        }
 
         public static DirectoryInfo DirectoryManagerAssemblyLocationFullPath { get; set; }
 
@@ -325,44 +300,7 @@ namespace Manager.IntegrationTest.Console.Host
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "Start CurrentDomainOnDomainUnload.");
 
-            if (AppDomains.Any())
-            {
-                LogHelper.LogInfoWithLineNumber(Logger,
-                                                "Start unloading app domains.");
-
-                foreach (var appDomain in AppDomains.Values)
-                {
-                    string friendlyName = appDomain.FriendlyName;
-
-                    try
-                    {
-                        LogHelper.LogInfoWithLineNumber(Logger,
-                                                        "Try unload appdomain with friendly name : " + friendlyName);
-
-                        AppDomain.Unload(appDomain);
-
-                        LogHelper.LogInfoWithLineNumber(Logger,
-                                                        "Unload appdomain with friendly name : " + friendlyName);
-                    }
-
-                    catch (AppDomainUnloadedException appDomainUnloadedException)
-                    {
-                        LogHelper.LogWarningWithLineNumber(Logger,
-                                                           appDomainUnloadedException.Message);
-                    }
-
-                    catch (Exception exp)
-                    {
-                        LogHelper.LogErrorWithLineNumber(Logger,
-                                                         exp.Message,
-                                                         exp);
-                    }
-                }
-
-
-                LogHelper.LogInfoWithLineNumber(Logger,
-                                                "Finished unloading app domains.");
-            }
+            AppDomainManagerTask.Dispose();
 
             QuitEvent.Set();
 
@@ -420,12 +358,14 @@ namespace Manager.IntegrationTest.Console.Host
                 string friendlyName = appDomainToUnload.Value.FriendlyName;
 
                 try
-                {                    
-                    LogHelper.LogInfoWithLineNumber(Logger,"Try unload appdomain with friendly name : " + friendlyName);
+                {
+                    LogHelper.LogInfoWithLineNumber(Logger,
+                                                    "Try unload appdomain with friendly name : " + friendlyName);
 
                     AppDomain.Unload(appDomainToUnload.Value);
 
-                    LogHelper.LogInfoWithLineNumber(Logger,"Unload appdomain with friendly name : " + friendlyName);
+                    LogHelper.LogInfoWithLineNumber(Logger,
+                                                    "Unload appdomain with friendly name : " + friendlyName);
                 }
 
                 catch (AppDomainUnloadedException appDomainUnloadedException)

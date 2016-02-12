@@ -6,16 +6,14 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
 using log4net;
 using Manager.Integration.Test.EventArgs;
 using Manager.Integration.Test.Helpers;
 using Newtonsoft.Json;
-using Timer = System.Timers.Timer;
 
 namespace Manager.Integration.Test.Timers
 {
-    public class CheckJobHistoryStatusTimer : Timer
+    public class CheckJobHistoryStatusTimer : IDisposable
     {
         private CancellationTokenSource CancellationTokenSource { get; set; }
 
@@ -107,13 +105,6 @@ namespace Manager.Integration.Test.Timers
             }
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            CancelAllRequest();
-
-            base.Dispose(disposing);            
-        }
-
         public void CancelAllRequest()
         {
             if (CancellationTokenSource != null && !CancellationTokenSource.IsCancellationRequested)
@@ -123,112 +114,123 @@ namespace Manager.Integration.Test.Timers
         }
 
         public CheckJobHistoryStatusTimer(int numberOfGuidsToWatch,
-                                          double delay,
-                                          CancellationTokenSource cancellationTokenSource,
-                                          params string[] statusToLookFor) : base(delay)
+                                          params string[] statusToLookFor)
         {
             if (numberOfGuidsToWatch <= 0)
             {
                 throw new ArgumentException();
             }
 
-            if (cancellationTokenSource == null)
-            {
-                throw new ArgumentNullException("cancellationTokenSource");
-            }
-
             ManagerUriBuilder = new ManagerUriBuilder();
 
             NumberOfGuidsToWatch = numberOfGuidsToWatch;
-            CancellationTokenSource = cancellationTokenSource;
+
             StatusToLookFor = statusToLookFor;
 
             ManualResetEventSlim = new ManualResetEventSlim();
 
             Guids = new ConcurrentDictionary<Guid, string>();
 
-            Elapsed += CheckRequestStatusTimer_Elapsed;
+            CancellationTokenSource = new CancellationTokenSource();
 
-            AutoReset = true;
+            MyTask = StartTask(CancellationTokenSource);
         }
 
-        private async void CheckRequestStatusTimer_Elapsed(object sender,
-                                                           ElapsedEventArgs e)
+        public Task MyTask { get; set; }
+
+        private Task StartTask(CancellationTokenSource cancellationTokenSource)
         {
-            if (CancellationTokenSource.IsCancellationRequested)
+            return Task.Factory.StartNew((async () =>
             {
-                return;
-            }
+                while (!cancellationTokenSource.IsCancellationRequested)
+                {
+                    if (CancellationTokenSource.IsCancellationRequested)
+                    {
+                        CancellationTokenSource.Token.ThrowIfCancellationRequested();
+                    }
 
-            Enabled = false;
+                    if (Guids.Count == NumberOfGuidsToWatch)
+                    {
+                        ConcurrentDictionary<Guid, string> correctStatusConcurrentDictionary = new ConcurrentDictionary<Guid, string>();
 
+                        foreach (var status in StatusToLookFor)
+                        {
+                            var dictionaryStatus =
+                                Guids.Where(pair => !string.IsNullOrEmpty(pair.Value) &&
+                                                    pair.Value.Equals(status,
+                                                                      StringComparison.InvariantCultureIgnoreCase))
+                                    .ToDictionary(pair => pair.Key,
+                                                  pair => pair.Value);
+
+                            foreach (var st in dictionaryStatus)
+                            {
+                                var addOrUpdate = correctStatusConcurrentDictionary.AddOrUpdate(st.Key,
+                                                                                                st.Value,
+                                                                                                (guid,
+                                                                                                 s) => st.Value);
+                            }
+                        }
+
+                        if (correctStatusConcurrentDictionary.Count == NumberOfGuidsToWatch)
+                        {
+                            ManualResetEventSlim.Set();
+
+                            return;
+                        }
+
+
+                        IEnumerable<Guid> inCorrectStatusConcurrentDictionary = Guids.Keys.Except(correctStatusConcurrentDictionary.Keys);
+
+
+                        foreach (var guid in inCorrectStatusConcurrentDictionary)
+                        {
+                            var response = await GetJobHistory(guid);
+
+                            if (response.IsSuccessStatusCode)
+                            {
+                                string jobSerialized = await response.Content.ReadAsStringAsync();
+
+                                try
+                                {
+                                    var jobHistory =
+                                        JsonConvert.DeserializeObject<JobHistory>(jobSerialized);
+
+                                    AddOrUpdateGuidStatus(guid,
+                                                          jobHistory.Result);
+                                }
+                                catch (Exception exp)
+                                {
+                                    LogHelper.LogErrorWithLineNumber(exp.Message,
+                                                                     Logger,
+                                                                     exp);
+                                }
+                            }
+                        }
+
+                    }
+
+                    Thread.Sleep(TimeSpan.FromSeconds(10));
+                }                
+            }), cancellationTokenSource.Token);
+       }
+
+        public void Dispose()
+        {
             try
             {
-                if (Guids.Count == NumberOfGuidsToWatch)
+                if (CancellationTokenSource != null &&
+                    !CancellationTokenSource.IsCancellationRequested)
                 {
-                    ConcurrentDictionary<Guid, string> correctStatusConcurrentDictionary = new ConcurrentDictionary<Guid, string>();
-
-                    foreach (var status in StatusToLookFor)
-                    {
-                        var dictionaryStatus =
-                            Guids.Where(pair => !string.IsNullOrEmpty(pair.Value) &&
-                                                pair.Value.Equals(status,
-                                                                  StringComparison.InvariantCultureIgnoreCase))
-                                .ToDictionary(pair => pair.Key,
-                                              pair => pair.Value);
-
-                        foreach (var st in dictionaryStatus)
-                        {
-                            var addOrUpdate = correctStatusConcurrentDictionary.AddOrUpdate(st.Key,
-                                                                                            st.Value,
-                                                                                            (guid,
-                                                                                             s) => st.Value);
-                        }
-                    }
-
-
-                    if (correctStatusConcurrentDictionary.Count == NumberOfGuidsToWatch)
-                    {
-                        Stop();
-
-                        ManualResetEventSlim.Set();
-
-                        return;
-                    }
-
-                    IEnumerable<Guid> inCorrectStatusConcurrentDictionary = Guids.Keys.Except(correctStatusConcurrentDictionary.Keys);
-
-                    foreach (var guid in inCorrectStatusConcurrentDictionary)
-                    {
-                        var response = await GetJobHistory(guid);
-
-                        if (response.IsSuccessStatusCode)
-                        {
-                            string jobSerialized = await response.Content.ReadAsStringAsync();
-
-                            try
-                            {
-                                var jobHistory =
-                                    JsonConvert.DeserializeObject<JobHistory>(jobSerialized);
-
-                                AddOrUpdateGuidStatus(guid,
-                                                      jobHistory.Result);
-                            }
-                            catch (Exception exp)
-                            {
-                                LogHelper.LogErrorWithLineNumber(exp.Message,
-                                                                 Logger,
-                                                                 exp);
-                            }
-                        }
-                    }
+                    CancellationTokenSource.Cancel();
                 }
             }
 
-            finally
+            catch (OperationCanceledException)
             {
-                Enabled = true;
+                
             }
+         
+            MyTask.Dispose();   
         }
     }
 }
