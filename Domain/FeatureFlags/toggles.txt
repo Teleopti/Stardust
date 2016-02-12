@@ -108,8 +108,8 @@ WfmIntraday_MonitorActualvsForecasted_35176 = RC
 MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211 = RC
 MyTimeWeb_ShiftTradeBoardNoReadModel_36662 = RC
 Scheduler_AgentSkillAnalyzer_12345 = DEV
-Wfm_Use_Stardust = RC
-Wfm_ForecastFileImportOnStardust_37047 = RC
+Wfm_Use_Stardust = false
+Wfm_ForecastFileImportOnStardust_37047 = false
 
 # need to be turned off in dev env as well currently
 ResourcePlanner_SkillGroupDeleteAfterCalculation_37048 = false
