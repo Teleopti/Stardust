@@ -1,29 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Teleopti.Ccc.Domain.DayOffPlanning;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
+﻿using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public class ResourceCalculateAfterDeleteDecider : IResourceCalculateAfterDeleteDecider
 	{
+		private readonly VirtualSkillGroupsResultProvider _virtualSkillGroupsResultProvider;
 		private readonly ILimitForNoResourceCalculation _limitForNoResourceCalculation;
-		private readonly Func<ISchedulingResultStateHolder> _scheduleResultStateHolder;
 
-		public ResourceCalculateAfterDeleteDecider(ILimitForNoResourceCalculation limitForNoResourceCalculation, Func<ISchedulingResultStateHolder> scheduleResultStateHolder)
+		public ResourceCalculateAfterDeleteDecider(VirtualSkillGroupsResultProvider virtualSkillGroupsResultProvider, 
+							ILimitForNoResourceCalculation limitForNoResourceCalculation)
 		{
+			_virtualSkillGroupsResultProvider = virtualSkillGroupsResultProvider;
 			_limitForNoResourceCalculation = limitForNoResourceCalculation;
-			_scheduleResultStateHolder = scheduleResultStateHolder;
 		}
 
 		public bool DoCalculation(IPerson agent, DateOnly date)
 		{
-			var virtualSkillGroupCreator = new VirtualSkillGroupsCreator();
-			var result = virtualSkillGroupCreator.GroupOnDate(date, _scheduleResultStateHolder().PersonsInOrganization);
-
-			return result.GetNumberOfAgentsInSkillGroupFromPerson(agent) < _limitForNoResourceCalculation.NumberOfAgents;
+			var skillGroupResult = _virtualSkillGroupsResultProvider.Fetch(date);
+			return skillGroupResult.GetNumberOfAgentsInSkillGroupFromPerson(agent) < _limitForNoResourceCalculation.NumberOfAgents;
 		}
 	}
 }
