@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var agent2 = new Person();
 			agent1.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()));
 			agent2.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()));
-			var skill = new Skill("_", "", Color.Empty, 1, new SkillTypePhone(new Description("_"), ForecastSource.OutboundTelephony));
+			var skill = new Skill("_", "", Color.Empty, 1, new SkillTypePhone(new Description("_"), ForecastSource.OutboundTelephony)).WithId();
 			var deletedSkill = new Skill("_", "", Color.Empty, 1, new SkillTypePhone(new Description("_"), ForecastSource.OutboundTelephony));
 			deletedSkill.SetDeleted();
 			agent1.AddSkill(skill, date);
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var agent2 = new Person();
 			agent1.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()));
 			agent2.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()));
-			var skill = new Skill("_", "", Color.Empty, 1, new SkillTypePhone(new Description("_"), ForecastSource.OutboundTelephony));
+			var skill = new Skill("_", "", Color.Empty, 1, new SkillTypePhone(new Description("_"), ForecastSource.OutboundTelephony)).WithId();
 			var inActiveSkill = new Skill("_", "", Color.Empty, 1, new SkillTypePhone(new Description("_"), ForecastSource.OutboundTelephony));
 			
 			agent1.AddSkill(skill, date);
