@@ -148,11 +148,10 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Core\Log4NetMvCLogger.cs" />
     <Compile Include="Core\WindowsIpTenantAuthentication.cs" />
     <Compile Include="Core\CustomErrorReporting.cs" />
-    <Compile Include="Core\IProviderEndpointWrapper.cs" />
     <Compile Include="Controllers\OpenIdController.cs" />
-    <Compile Include="Core\ProviderEndpointWrapper.cs" />
     <Compile Include="Core\CurrentHttpContext.cs" />
     <Compile Include="Core\ICurrentHttpContext.cs" />
     <Compile Include="Core\IOpenIdProviderWrapper.cs" />
@@ -208,6 +207,9 @@
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
       <Name>Teleopti.Interfaces</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\OpenId\Redirect.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

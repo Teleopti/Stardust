@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider
 		public static void RegisterGlobalFilters(GlobalFilterCollection filters)
 		{
 			filters.Add(new HandleErrorAttribute());
+			filters.Add(new Log4NetMvCLogger());
 		}
 
 		public static void RegisterRoutes(RouteCollection routes)
@@ -63,7 +64,6 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider
 			builder.RegisterType<OpenIdProviderWrapper>().As<IOpenIdProviderWrapper>().SingleInstance();
 			builder.RegisterType<WindowsAccountProvider>().As<IWindowsAccountProvider>().SingleInstance();
 			builder.RegisterType<CurrentHttpContext>().As<ICurrentHttpContext>().SingleInstance();
-			builder.RegisterType<ProviderEndpointWrapper>().As<IProviderEndpointWrapper>().SingleInstance();
 			builder.RegisterType<Now>().As<INow>().SingleInstance();
 			builder.Register(context => configReader).As<IConfigReader>().SingleInstance();
 			var usePersistentCryptoKeys = ConfigurationManager.AppSettings["UsePersistentCryptoKeys"];
