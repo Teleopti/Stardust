@@ -111,7 +111,7 @@ namespace Manager.Integration.Test
 
         private string _buildMode = "Debug";
 
-        [Test]
+        [Test, Ignore]
         public void CreateSeveralRequestShouldReturnBothCancelAndDeleteStatuses()
         {
             LogHelper.LogInfoWithLineNumber("Start test.",
@@ -161,7 +161,7 @@ namespace Manager.Integration.Test
                                             Logger);
         }
 
-        [Test]
+        [Test, Ignore]
         public void JobShouldHaveStatusFailedIfFailed()
         {
             LogHelper.LogInfoWithLineNumber("Starting test.",
@@ -200,7 +200,7 @@ namespace Manager.Integration.Test
                                             Logger);
         }
 
-        [Test]
+        [Test, Ignore]
         public void CancelWrongJobs()
         {
             LogHelper.LogInfoWithLineNumber("Starting test.",
@@ -208,7 +208,7 @@ namespace Manager.Integration.Test
 
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-            List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(1);
+            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(1);
 
             var timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count,
                                                                  5);

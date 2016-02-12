@@ -33,8 +33,7 @@ namespace Manager.Integration.Test
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
-            LogHelper.LogInfoWithLineNumber("Start TestFixtureSetUp",
-                                            Logger);
+
 
             TryCreateSqlLoggingTable();
 
@@ -55,7 +54,7 @@ namespace Manager.Integration.Test
             AppDomainTask = new AppDomainTask(_buildMode);
 
             Task = AppDomainTask.StartTask(CancellationTokenSource,
-                                           NumberOfNodesToStart);
+                                                                                       NumberOfNodesToStart);
 
             JobHelper.GiveNodesTimeToInitialize(60);
 
@@ -141,7 +140,7 @@ namespace Manager.Integration.Test
 
             Assert.IsTrue(managerApiHelper.CheckJobHistoryStatusTimer.Guids.Count > 0);
 
-            managerApiHelper.Dispose();
+            managerApiHelper.Dispose();            
         }
     }
 }
