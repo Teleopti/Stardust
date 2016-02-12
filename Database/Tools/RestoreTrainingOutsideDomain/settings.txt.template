@@ -25,5 +25,6 @@ $(WEB_BROKER_BACKPLANE)|http://REPLACEME/TeleoptiCCC/Broker.backplane/backplane
 $(RTA_STATE_CODE)|ACW,ADMIN,EMAIL,IDLE,InCall,LOGGED ON,OFF,Ready,WEB
 $(RTA_SERVICE)|http://REPLACEME/TeleoptiCCC/RTA/TeleoptiRtaService.svc
 $(CONFIGURATION_FILES_PATH)|c:\Program Files (x86)\Teleopti\ConfigurationFiles
+$(USE_PERSISTENT_CRYPTOKEYS)|false
 $(ETLPM_BINDING_NAME)|Etl_Pm_Http_Binding
 $(WEB_DEPLOY)|true
