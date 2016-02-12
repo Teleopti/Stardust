@@ -146,7 +146,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				// for now just catch it because it will happen both for web and for RTA
 				//throw;
 			}
-			
 		}
 	}
 }
