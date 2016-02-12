@@ -130,6 +130,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Tasks\AppDomainManagerTask.cs" />
+    <Compile Include="Tasks\AppDomainNodeTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

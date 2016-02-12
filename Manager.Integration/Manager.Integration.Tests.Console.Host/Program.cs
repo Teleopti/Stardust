@@ -7,7 +7,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Policy;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Web.Http;
 using Autofac;
 using Autofac.Integration.WebApi;
@@ -134,8 +133,6 @@ namespace Manager.IntegrationTest.Console.Host
 
             AppDomains = new ConcurrentDictionary<string, AppDomain>();
 
-            CurrentDomainEvidence = AppDomain.CurrentDomain.Evidence;
-
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "started.");
 
@@ -192,16 +189,24 @@ namespace Manager.IntegrationTest.Console.Host
                                          DirectoryManagerAssemblyLocationFullPath,
                                          CopiedManagerConfigurationFile);
 
-            AppDomainManagerTask.StartTask(CancellationTokenSource,
-                                            NumberOfNodesToStart);
+            AppDomainManagerTask.StartTask(CancellationTokenSource);
 
             DirectoryNodeAssemblyLocationFullPath =
                 new DirectoryInfo(Path.Combine(Settings.Default.NodeAssemblyLocationFullPath,
                                                _buildMode));
 
-            foreach (var nodeconfigurationFile in NodeconfigurationFiles)
+            AppDomainNodeTasks = new List<AppDomainNodeTask>();
+
+            foreach (KeyValuePair<string, FileInfo> nodeconfigurationFile in NodeconfigurationFiles)
             {
-                new Task(() => { CreateNodeAppDomain(nodeconfigurationFile); }).Start();
+                AppDomainNodeTask appDomainNodeTask = 
+                    new AppDomainNodeTask(_buildMode, 
+                                          DirectoryNodeAssemblyLocationFullPath, 
+                                          nodeconfigurationFile.Value);
+                
+                appDomainNodeTask.StartTask(CancellationTokenSource);
+
+                AppDomainNodeTasks.Add(appDomainNodeTask);
             }
 
             StartSelfHosting();
@@ -209,40 +214,12 @@ namespace Manager.IntegrationTest.Console.Host
 
         public static CancellationTokenSource CancellationTokenSource { get; set; }
 
+        private static List<AppDomainNodeTask>  AppDomainNodeTasks { get; set; }
 
         public static AppDomainManagerTask AppDomainManagerTask { get; set; }
 
-        private static Evidence CurrentDomainEvidence { get; set; }
-
-
         public static DirectoryInfo DirectoryManagerAssemblyLocationFullPath { get; set; }
 
-        private static void CreateNodeAppDomain(KeyValuePair<string, FileInfo> nodeconfigurationFile)
-        {
-            var nodeAppDomainSetup = new AppDomainSetup
-            {
-                ApplicationBase = DirectoryNodeAssemblyLocationFullPath.FullName,
-                ApplicationName = Settings.Default.NodeAssemblyName,
-                ShadowCopyFiles = "true",
-                ConfigurationFile = nodeconfigurationFile.Value.FullName
-            };
-
-            var nodeAppDomain = AppDomain.CreateDomain(nodeconfigurationFile.Key,
-                                                       CurrentDomainEvidence,
-                                                       nodeAppDomainSetup);
-
-            AddOrUpdateAppDomains(nodeconfigurationFile.Value.Name,
-                                  nodeAppDomain);
-
-            var assemblyToExecute =
-                new FileInfo(Path.Combine(nodeAppDomainSetup.ApplicationBase,
-                                          nodeAppDomainSetup.ApplicationName));
-
-            LogHelper.LogInfoWithLineNumber(Logger,
-                                            "Node (appdomain) will start with friendly name : " + nodeAppDomain.FriendlyName);
-
-            nodeAppDomain.ExecuteAssembly(assemblyToExecute.FullName);
-        }
 
         private static DirectoryInfo DirectoryNodeAssemblyLocationFullPath { get; set; }
 
@@ -300,6 +277,11 @@ namespace Manager.IntegrationTest.Console.Host
                                             "Start CurrentDomainOnDomainUnload.");
 
             AppDomainManagerTask.Dispose();
+
+            foreach (var appDomainNodeTask in AppDomainNodeTasks)
+            {
+                appDomainNodeTask.Dispose();
+            }
 
             QuitEvent.Set();
 

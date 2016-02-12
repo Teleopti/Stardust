@@ -32,8 +32,7 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 
         private CancellationTokenSource CancellationTokenSource { get; set; }
 
-        public Task StartTask(CancellationTokenSource cancellationTokenSource,
-                              int numberOfNodes)
+        public Task StartTask(CancellationTokenSource cancellationTokenSource)
         {
             Task= Task.Factory.StartNew(() =>
             {
