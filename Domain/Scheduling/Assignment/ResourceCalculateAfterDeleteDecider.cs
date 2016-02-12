@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			var virtualSkillGroupsCreator = new VirtualSkillGroupsCreator();
 			var result = virtualSkillGroupsCreator.GroupOnDate(date, _scheduleResultStateHolder().PersonsInOrganization);
-			var persons =  result.GetPersonsForSkillKey(agent.Period(date).PersonSkillCollection.First().Id.ToString());
+			var persons =  result.GetPersonsForSkillGroupKey(agent.Period(date).PersonSkillCollection.First().Skill.Id.ToString());
 
 			return persons.Count() < _limitForNoResourceCalculation.NumberOfAgents;
 		}
