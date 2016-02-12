@@ -63,9 +63,9 @@ namespace Manager.Integration.Test
                                             Logger);
         }
 
-        public Task Task { get; set; }
+        private Task Task { get; set; }
 
-        public AppDomainTask AppDomainTask { get; set; }
+        private AppDomainTask AppDomainTask { get; set; }
 
         private CancellationTokenSource CancellationTokenSource { get; set; }
 
@@ -101,7 +101,10 @@ namespace Manager.Integration.Test
             LogHelper.LogInfoWithLineNumber("Start TestFixtureTearDown",
                                             Logger);
 
-            AppDomainTask.Dispose();
+            if (AppDomainTask != null)
+            {
+                AppDomainTask.Dispose();
+            }            
 
             LogHelper.LogInfoWithLineNumber("Finished TestFixtureTearDown",
                                             Logger);
