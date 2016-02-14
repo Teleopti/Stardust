@@ -94,6 +94,12 @@ wfm-right-panel{
 		z-index:1;
 	}
 	
+	.sidenav-header{
+		.chevron{
+			cursor:pointer;
+		}	
+	}
+
 	.panel-content{
 		position:absolute;
 		top:41px;

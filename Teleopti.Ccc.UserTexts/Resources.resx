@@ -14106,4 +14106,8 @@ Help us improve your experience by sending an error report</value>
     <value>Show only absences</value>
     <comment>use in WFM TeamSchedule, the switch description</comment>
   </data>
+  <data name="HidePanel" xml:space="preserve">
+    <value>Hide Panel</value>
+    <comment>Tooltip text of wfm right panel hide button</comment>
+  </data>
 </root>

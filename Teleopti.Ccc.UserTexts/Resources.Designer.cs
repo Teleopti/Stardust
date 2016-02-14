@@ -11679,6 +11679,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hide Panel.
+        /// </summary>
+        public static string HidePanel {
+            get {
+                return ResourceManager.GetString("HidePanel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to High.
         /// </summary>
         public static string High {
@@ -12563,7 +12572,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Intra optimize.
+        ///   Looks up a localized string similar to Optimize Intraday.
         /// </summary>
         public static string IntraOptimize {
             get {
