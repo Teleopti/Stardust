@@ -140,6 +140,7 @@ Then I should see 'NewCampaign' in campaign list
 
 Scenario: Delete a campaign
 When I view campaign 'Campaign4'
+And I click delete campaign button
 And I confirm to delete the campaign
 And after that I am redirected to the campaign list page 
 And I set the starting month for viewing period to '2015-09-01'
