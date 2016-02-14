@@ -118,7 +118,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 			Browser.Interactions.WaitScopeCondition(".test-campaign-edit", "isCampaignLoaded()", true, () =>
 			{
 				Browser.Interactions.ClickVisibleOnly(".test-delete-campaign");
-				Browser.Interactions.ClickVisibleOnly(".modal-box .test-confirm-delete");
+				Browser.Interactions.WaitScopeCondition(".modal-box", "showRemoveCampaignConfirmDialog", true, () =>
+				{
+					Browser.Interactions.ClickVisibleOnly(".modal-box .test-confirm-delete");	
+				});
 			});			
 		}
 
