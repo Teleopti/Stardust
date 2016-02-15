@@ -138,7 +138,6 @@
     <Compile Include="WorkerNodeRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="Manager.nuspec" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
