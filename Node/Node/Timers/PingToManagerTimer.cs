@@ -59,11 +59,6 @@ namespace Stardust.Node.Timers
         private async Task<HttpResponseMessage> SendPing(Uri nodeAddress,
                                                          CancellationToken cancellationToken)
         {
-            if (cancellationToken.IsCancellationRequested)
-            {
-                return null;
-            }
-
             var httpResponseMessage =
                 await nodeAddress.PostAsync(CallbackUri,
                                             cancellationToken);

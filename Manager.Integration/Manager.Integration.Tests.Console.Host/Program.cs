@@ -73,9 +73,10 @@ namespace Manager.IntegrationTest.Console.Host
             Configuration configuration =
                 new Configuration(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
 
-            string integrationAddress = configuration.BaseAddress.Scheme + "://+:" + configuration.BaseAddress.Port + "/";
-            
-            using (WebApp.Start(integrationAddress,
+
+            string address = configuration.BaseAddress.Scheme + "://+:" + configuration.BaseAddress.Port + "/";
+
+            using (WebApp.Start(address,
                                 appBuilder =>
                                 {
                                     var builder = new ContainerBuilder();
@@ -265,12 +266,12 @@ namespace Manager.IntegrationTest.Console.Host
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "Start CurrentDomainOnDomainUnload.");
 
-            AppDomainManagerTask.Dispose();
-
             foreach (var appDomainNodeTask in AppDomainNodeTasks)
             {
                 appDomainNodeTask.Dispose();
             }
+
+            AppDomainManagerTask.Dispose();
 
             QuitEvent.Set();
 

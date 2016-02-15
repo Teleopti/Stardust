@@ -34,7 +34,7 @@ namespace Manager.Integration.Test.Tasks
                 {
                     while (!cancellationTokenSource.IsCancellationRequested)
                     {
-                        Thread.Sleep(TimeSpan.FromMilliseconds(100));
+                        Thread.Sleep(TimeSpan.FromMilliseconds(500));
                     }
 
                     if (cancellationTokenSource.IsCancellationRequested)
@@ -99,7 +99,14 @@ namespace Manager.Integration.Test.Tasks
 
             if (MyAppDomain != null)
             {
-                AppDomain.Unload(MyAppDomain);
+                try
+                {
+                    AppDomain.Unload(MyAppDomain);
+                }
+                catch (Exception)
+                {
+
+                }
             }
 
             if (Task != null)

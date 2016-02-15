@@ -33,6 +33,7 @@ namespace Stardust.Node
                           IContainer container)
         {
             string nodeAddress = nodeConfiguration.BaseAddress.Scheme + "://+:" + nodeConfiguration.BaseAddress.Port + "/";
+
             // Start OWIN host 
             using (WebApp.Start(nodeAddress,
                                 appBuilder =>
