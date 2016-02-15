@@ -3,42 +3,26 @@
 	'use strict';
 
 	angular.module('wfm')
-		.service('WfmShortcuts', ['$state', 'ShortCuts', function($state, ShortCuts) {
+		.service('WfmShortcuts', ['$state', 'ShortCuts', 'AreasSvrc', 'keyCodes',function($state, ShortCuts, AreasSvrc, keyCodes) {
 			var service = {};
 
-			service.init = function() {
-				var keys = [16];
+			var goToState = function(state) {
+				$state.go(state);
+			};
 
-				ShortCuts.registerKeySequence(49, keys, function() {
-					$state.go('forecasting')
-				});
-				ShortCuts.registerKeySequence(50, keys, function() {
-					$state.go('resourceplanner')
-				});
-				ShortCuts.registerKeySequence(51, keys, function() {
-					$state.go('permissions')
-				});
-				ShortCuts.registerKeySequence(52, keys, function() {
-					$state.go('outbound')
-				});
-				ShortCuts.registerKeySequence(53, keys, function() {
-					$state.go('people')
-				});
-				ShortCuts.registerKeySequence(54, keys, function() {
-					$state.go('requests')
-				});
-				ShortCuts.registerKeySequence(55, keys, function() {
-					$state.go('seatPlan')
-				});
-				ShortCuts.registerKeySequence(56, keys, function() {
-					$state.go('seatMap')
-				});
-				ShortCuts.registerKeySequence(57, keys, function() {
-					$state.go('rta')
-				});
-				ShortCuts.registerKeySequence(48, keys, function() {
-					$state.go('intraday')
-				});
+			AreasSvrc.getAreas().then(function(result){
+				registerGlobalShortcuts(result);
+			});
+
+			function registerGlobalShortcuts(result) {
+				var keys = [keyCodes.SHIFT];
+				var j = keyCodes.ONE;
+				var state;
+				for (var i = 0; i < result.length && j <= keyCodes.NINE; i++) {
+					state = result[i].InternalName;
+					ShortCuts.registerKeySequence(j, keys, goToState.bind(this, state));
+					j++;
+				}
 			};
 
 			return service;

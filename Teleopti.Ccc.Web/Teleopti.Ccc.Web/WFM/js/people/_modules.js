@@ -8,6 +8,8 @@
 		'ngMaterial',
 		'ngFileUpload',
 		'ui.indeterminate',
-		'wfm.pagination'
+		'wfm.pagination',
+		'pascalprecht.translate',
+		'ui.router'
 	]);
 })();

@@ -194,8 +194,6 @@ wfm.config([
 			});
 		})();
 
-		WfmShortcuts.init();
-
 		function refreshContext(event, next, toParams) {
 			currentUserInfo.initContext().then(function() {
 				$rootScope.isAuthenticated = true;

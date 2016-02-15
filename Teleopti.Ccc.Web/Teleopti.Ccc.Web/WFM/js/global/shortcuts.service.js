@@ -57,7 +57,7 @@
 				if (arr[0].length === 0)
 					match = true;
 
-				if (match) arr[1]();
+				if (match) arr[1].apply();
 				return match;
 			};
 

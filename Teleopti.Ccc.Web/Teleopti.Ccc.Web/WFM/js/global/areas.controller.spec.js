@@ -19,7 +19,7 @@ describe('AreasCtrl', function() {
 		var scope = $rootScope.$new();
 
 		var svrc = {
-			getAreas: {
+			getAreasFromServer: {
 				query: function () {
 					var queryDeferred = $q.defer();
 					var result = [];
@@ -37,14 +37,12 @@ describe('AreasCtrl', function() {
 		var scope = $rootScope.$new();
 
 		var svrc = {
-			getAreas: {
-				query: function () {
-					var queryDeferred = $q.defer();
-					var item = new Object();
-					var result = [{ Name: 'Forecaster', internalName: "Forecaster", _links: [] }, { name: 'Scheduling', links: [item] }];
-					queryDeferred.resolve(result);
-					return { $promise: queryDeferred.promise };
-				}
+			getAreas: function() {
+				var queryDeferred = $q.defer();
+						var item = new Object();
+						var result = [{ Name: 'Forecaster', internalName: "Forecaster", _links: [] }, { name: 'Scheduling', links: [item] }];
+						queryDeferred.resolve(result);
+						return queryDeferred.promise ;
 			}
 		};
 

@@ -8,7 +8,7 @@ notification.controller('AreasCtrl', [
 		$scope.filters = [];
 
 		$scope.loadAreas = function () {
-			AreasSvrc.getAreas.query({}).$promise.then(function (result) {
+			AreasSvrc.getAreas().then(function (result) {
 				for (var i = 0; i < result.length; i++) {
 					result[i].filters = [];
 				}

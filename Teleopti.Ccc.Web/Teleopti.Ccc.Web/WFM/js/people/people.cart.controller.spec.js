@@ -5,20 +5,19 @@ describe("PeopleCartCtrl", function() {
 	var $q,
 		$rootScope,
 		$httpBackend,
-		controller;
+		controller,
+		$state;
 
 	beforeEach(function() {
-		module('wfm');
-		module('externalModules');
+		module('wfm.people');
 	});
 
-	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_, _$controller_) {
+	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_, _$controller_,_$state_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
+		$state = _$state_;
 		controller = setUpController(_$controller_);
-		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'mock');
-		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
 		$httpBackend.whenGET(/ToggleHandler\/(.*)/).respond(function() {
 			return [200, {
 				IsEnabled: false
@@ -208,6 +207,7 @@ describe("PeopleCartCtrl", function() {
 	it("should empty the cart when clearing cart", inject(function() {
 		var scope = $rootScope.$new();
 		scope.$digest(); // this is needed to resolve the promise
+		spyOn($state, 'go');
 
 		controller.clearCart();
 
