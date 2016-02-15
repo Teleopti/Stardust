@@ -107,7 +107,15 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 
             if (MyAppDomain != null)
             {
-                AppDomain.Unload(MyAppDomain);
+                try
+                {
+                    AppDomain.Unload(MyAppDomain);
+                }
+
+                catch (Exception)
+                {
+
+                }
             }
 
             if (Task != null)

@@ -263,12 +263,12 @@ namespace Manager.IntegrationTest.Console.Host
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "Start CurrentDomainOnDomainUnload.");
 
-            AppDomainManagerTask.Dispose();
-
             foreach (var appDomainNodeTask in AppDomainNodeTasks)
             {
                 appDomainNodeTask.Dispose();
             }
+
+            AppDomainManagerTask.Dispose();
 
             QuitEvent.Set();
 

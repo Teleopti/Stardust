@@ -99,7 +99,14 @@ namespace Manager.Integration.Test.Tasks
 
             if (MyAppDomain != null)
             {
-                AppDomain.Unload(MyAppDomain);
+                try
+                {
+                    AppDomain.Unload(MyAppDomain);
+                }
+                catch (Exception)
+                {
+
+                }
             }
 
             if (Task != null)
