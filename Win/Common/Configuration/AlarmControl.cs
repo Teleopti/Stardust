@@ -116,8 +116,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				if(!rulesAreOk(type)) return;
 				_rtaRuleRepository.Add(type);
 			}
-			if (_decorators.Any(x=> x is AdherenceColumn))
-				_rules.ForEach(checkAdherenceType);
 		}
 
 		private bool rulesAreOk(IRtaRule type)
@@ -139,13 +137,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 			return true;
 		}
-
-		private static void checkAdherenceType(IRtaRule _rtaRule)
-		{
-			if (!_rtaRule.Adherence.HasValue)
-				throw new ValidationException(Resources.AdherenceCannotBeEmpty);
-		}
-
+		
 		public void Unload()
 		{
 			_rules.Clear();
