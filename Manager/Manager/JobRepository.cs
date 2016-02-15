@@ -629,9 +629,11 @@ namespace Stardust.Manager
 				{
 					if (reader.HasRows)
 					{
-						reader.Read();
-						var jobHist = NewJobHistoryModel(reader);
-						returnList.Add(jobHist);
+						while (reader.Read())
+						{
+							var jobHist = NewJobHistoryModel(reader);
+							returnList.Add(jobHist);
+						}
 					}
 
 					reader.Close();
