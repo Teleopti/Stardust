@@ -1,11 +1,8 @@
 using System;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using Hangfire;
 using Hangfire.States;
 using Hangfire.Storage;
-using NHibernate.Util;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
