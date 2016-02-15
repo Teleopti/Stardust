@@ -26,6 +26,13 @@
 			autoCloseTimeout = options.timeout;
 		}
 	}
+
+	function htmlDecode(notifyText) {
+		var div = document.createElement("div");
+		div.innerHTML = notifyText;
+		return div.childNodes[0].nodeValue;
+	}
+
 	function _notify(notifyText) {
 		return noty({
 			text: notifyText,
@@ -51,7 +58,7 @@
 				if (webNotification() && !isShowing(notifyText)) {
 					var timeout = 5000;
 					var iconUrl = baseUrl + 'content/favicon.ico?v=2';
-					var decodedText = $('<div />').html(notifyText).text();
+					var decodedText = htmlDecode(notifyText);
 					var notification = window.webkitNotifications.createNotification(iconUrl, header, decodedText);
 					notification.show();
 					webNotifications.push({ notification: notification, text: notifyText });
@@ -85,7 +92,7 @@
 			clearInterval(blinkTitleTimer);
 		}
 		blinkTitleTimer = window.setInterval(function () {
-			var decodedTitle = $('<div/>').html(notifyText).text();
+			var decodedTitle = htmlDecode(notifyText);
 			top.document.title == decodedTitle ?
 										top.document.title = originalDocumentTitle :
 										top.document.title = decodedTitle;
@@ -105,7 +112,7 @@
 			_pinnedNotification();
 			_blinkDocumentTitle(notifyText);
 			if (typeof envelopeNotification !== 'undefined') {
-				envelopeNotification(notifyText);
+				envelopeNotification(htmlDecode(notifyText));
 			}
 		}
 	};
