@@ -32,16 +32,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var period = new DateOnlyPeriod(2000, 1, 1, 2001, 1,1);
 			const int numberOfThreads = 10;
 
-			var results = new ConcurrentDictionary<VirtualSkillGroupsCreatorResult, byte>();
+			var uniqueResults = new ConcurrentDictionary<VirtualSkillGroupsCreatorResult, byte>();
 			Parallel.For(0, numberOfThreads, i =>
 			{
 				using (Context.Create(period))
 				{
-					results.GetOrAdd(Target.Fetch(), result => { return 0; });
+					uniqueResults.GetOrAdd(Target.Fetch(), result => { return 0; });
 				}
 			});
 
-			results.Count.Should().Be.EqualTo(numberOfThreads);
+			uniqueResults.Count.Should().Be.EqualTo(numberOfThreads);
 		}
 
 		[Test]
