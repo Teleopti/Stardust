@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning
 {
@@ -84,6 +85,17 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 			public IList<string> GroupKeys
 			{
 				get { return _groupKeys; }
+			}
+
+			public IList<IPerson> PersonsInIsland(VirtualSkillGroupsCreatorResult skillGroupsCreatorResult)
+			{
+				var result = new List<IPerson>();
+				foreach (var groupKey in _groupKeys)
+				{
+					result.AddRange(skillGroupsCreatorResult.GetPersonsForSkillGroupKey(groupKey));
+				}
+
+				return result;
 			}
 		}
 	}
