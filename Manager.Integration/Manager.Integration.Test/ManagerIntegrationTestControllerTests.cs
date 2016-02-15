@@ -21,7 +21,7 @@ namespace Manager.Integration.Test
         private static readonly ILog Logger =
             LogManager.GetLogger(typeof (ManagerIntegrationTestControllerTests));
 
-        private const int NumberOfNodesToStart = 1;
+        private const int NumberOfNodesToStart = 5;
 
         private bool _clearDatabase = true;
         private string _buildMode = "Debug";
@@ -82,7 +82,7 @@ namespace Manager.Integration.Test
 
         private CancellationTokenSource CancellationTokenSource { get; set; }
 
-        [Test]
+        [Test, Ignore]
         public async void ShouldUnloadNode1AppDomain()
         {
             LogHelper.LogInfoWithLineNumber("Start test.",
@@ -99,10 +99,20 @@ namespace Manager.Integration.Test
 
                 uriBuilder.Path += "appdomain/" + "Node1.config";
 
+                Uri uri = uriBuilder.Uri;
+
+                LogHelper.LogInfoWithLineNumber("Start calling Delete Async ( " + uri + " ) ",
+                                                Logger);
+
                 response = await client.DeleteAsync(uriBuilder.Uri,
                                                     cancellationTokenSource.Token);
 
                 response.EnsureSuccessStatusCode();
+
+                LogHelper.LogInfoWithLineNumber("Succeded calling Delete Async ( " + uri + " ) ",
+                                                Logger);
+
+
             }
 
             Assert.IsTrue(response.IsSuccessStatusCode);
@@ -111,7 +121,7 @@ namespace Manager.Integration.Test
                                             Logger);
         }
 
-        [Test()]
+        [Test, Ignore]
         public async void ShouldReturnAllAppDomainKeys()
         {
             LogHelper.LogInfoWithLineNumber("Start test.",
@@ -133,10 +143,18 @@ namespace Manager.Integration.Test
 
                 uriBuilder.Path += "appdomain";
 
+                Uri uri = uriBuilder.Uri;
+
+                LogHelper.LogInfoWithLineNumber("Start calling Get Async ( " + uri + " ) ",
+                                                Logger);
+
                 response = await client.GetAsync(uriBuilder.Uri,
                                                  cancellationTokenSource.Token);
 
                 response.EnsureSuccessStatusCode();
+
+                LogHelper.LogInfoWithLineNumber("Succeded calling Get Async ( " + uri + " ) ",
+                                                Logger);
 
                 string content = await response.Content.ReadAsStringAsync();
 

@@ -116,7 +116,7 @@ namespace Manager.Integration.Test
 
         private string _buildMode = "Debug";
 
-        [Test, Ignore]
+        [Test]
         public void CreateSeveralRequestShouldReturnBothCancelAndDeleteStatuses()
         {
             LogHelper.LogInfoWithLineNumber("Start test.",
@@ -164,7 +164,7 @@ namespace Manager.Integration.Test
                                             Logger);
         }
 
-        [Test, Ignore]
+        [Test]
         public void JobShouldHaveStatusFailedIfFailed()
         {
             LogHelper.LogInfoWithLineNumber("Starting test.",
@@ -201,7 +201,7 @@ namespace Manager.Integration.Test
                                             Logger);
         }
 
-        [Test, Ignore]
+        [Test]
         public void CancelWrongJobs()
         {
             LogHelper.LogInfoWithLineNumber("Starting test.",

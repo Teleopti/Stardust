@@ -203,6 +203,9 @@
                             <DataGridTextColumn Binding="{Binding CreatedBy}"
                                                 ClipboardContentBinding="{Binding CreatedBy}"
                                                 Header="Created By" />
+                            <DataGridTextColumn Binding="{Binding Result}"
+                                                ClipboardContentBinding="{Binding Result}"
+                                                Header="Result" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

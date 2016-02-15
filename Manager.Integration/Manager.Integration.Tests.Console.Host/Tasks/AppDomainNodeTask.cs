@@ -42,14 +42,14 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
             {
                 Task.Factory.StartNew(() =>
                 {
-                    while (!CancellationTokenSource.IsCancellationRequested)
+                    while (!cancellationTokenSource.IsCancellationRequested)
                     {
-                        Thread.Sleep(TimeSpan.FromMilliseconds(100));
+                        Thread.Sleep(TimeSpan.FromMilliseconds(500));
                     }
 
-                    if (CancellationTokenSource.IsCancellationRequested)
+                    if (cancellationTokenSource.IsCancellationRequested)
                     {
-                        CancellationTokenSource.Token.ThrowIfCancellationRequested();
+                        cancellationTokenSource.Token.ThrowIfCancellationRequested();
                     }
                 },
                 cancellationTokenSource.Token);
@@ -107,7 +107,15 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 
             if (MyAppDomain != null)
             {
-                AppDomain.Unload(MyAppDomain);
+                try
+                {
+                    AppDomain.Unload(MyAppDomain);
+                }
+
+                catch (Exception)
+                {
+
+                }
             }
 
             if (Task != null)
