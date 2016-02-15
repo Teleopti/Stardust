@@ -572,18 +572,9 @@ namespace Stardust.Manager
 
         public JobHistory History(Guid jobId)
         {
-            const string selectCommand = @"SELECT 
-                                             JobId    
-                                            ,Name
-                                            ,CreatedBy
-                                            ,Created
-                                            ,Started
-                                            ,Ended
-                                            ,SentTo,
-															Result
-                                        FROM [Stardust].JobHistory WHERE JobId = @JobId";
+	        var selectCommand = SelectHistoryCommand(true);
 
-            using (var connection = new SqlConnection(_connectionString))
+	        using (var connection = new SqlConnection(_connectionString))
             {
                 var command = new SqlCommand
                 {
@@ -605,19 +596,10 @@ namespace Stardust.Manager
                 {
                     if (reader.HasRows)
                     {
-                        var jobHist = new JobHistory();
-                        reader.Read();
+						reader.Read();
+						var jobHist = NewJobHistoryModel(reader);
 
-                        jobHist.Id = (Guid) reader.GetValue(reader.GetOrdinal("JobId"));
-                        jobHist.Name = (string) reader.GetValue(reader.GetOrdinal("Name"));
-                        jobHist.CreatedBy = (string) reader.GetValue(reader.GetOrdinal("CreatedBy"));
-                        jobHist.SentTo = getValue<string>(reader.GetValue(reader.GetOrdinal("SentTo")));
-                        jobHist.Result = getValue<string>(reader.GetValue(reader.GetOrdinal("Result")));
-                        jobHist.Created = (DateTime) (reader.GetValue(reader.GetOrdinal("Created")));
-                        jobHist.Started = getDateTime(reader.GetValue(reader.GetOrdinal("Started")));
-                        jobHist.Ended = getDateTime(reader.GetValue(reader.GetOrdinal("Ended")));
-
-                        return jobHist;
+	                    return jobHist;
                     }
 
                     reader.Close();
@@ -628,7 +610,71 @@ namespace Stardust.Manager
             }
         }
 
-        private DateTime? getDateTime(object databaseValue)
+		public IList<JobHistory> HistoryList()
+		{
+			var selectCommand = SelectHistoryCommand(false);
+			var returnList = new List<JobHistory>();
+			using (var connection = new SqlConnection(_connectionString))
+			{
+				var command = new SqlCommand
+				{
+					Connection = connection,
+					CommandText = selectCommand,
+					CommandType = CommandType.Text
+				};
+
+				connection.Open();
+
+				using (var reader = command.ExecuteReader())
+				{
+					if (reader.HasRows)
+					{
+						reader.Read();
+						var jobHist = NewJobHistoryModel(reader);
+						returnList.Add(jobHist);
+					}
+
+					reader.Close();
+					connection.Close();
+				}
+
+				return returnList;
+			}
+		}
+
+		private JobHistory NewJobHistoryModel(SqlDataReader reader)
+	    {
+		    var jobHist = new JobHistory
+		    {
+			    Id = (Guid) reader.GetValue(reader.GetOrdinal("JobId")),
+			    Name = (string) reader.GetValue(reader.GetOrdinal("Name")),
+			    CreatedBy = (string) reader.GetValue(reader.GetOrdinal("CreatedBy")),
+			    SentTo = getValue<string>(reader.GetValue(reader.GetOrdinal("SentTo"))),
+			    Result = getValue<string>(reader.GetValue(reader.GetOrdinal("Result"))),
+			    Created = (DateTime) (reader.GetValue(reader.GetOrdinal("Created"))),
+			    Started = getDateTime(reader.GetValue(reader.GetOrdinal("Started"))),
+			    Ended = getDateTime(reader.GetValue(reader.GetOrdinal("Ended")))
+		    };
+		    return jobHist;
+	    }
+
+	    private static string SelectHistoryCommand(bool addParameter)
+	    {
+		    string selectCommand = @"SELECT 
+                                             JobId    
+                                            ,Name
+                                            ,CreatedBy
+                                            ,Created
+                                            ,Started
+                                            ,Ended
+                                            ,SentTo,
+															Result
+                                        FROM [Stardust].JobHistory";
+			if (addParameter) selectCommand += " WHERE JobId = @JobId";
+		    return selectCommand;
+	    }
+
+	    private DateTime? getDateTime(object databaseValue)
         {
             if (databaseValue.Equals(DBNull.Value))
             {

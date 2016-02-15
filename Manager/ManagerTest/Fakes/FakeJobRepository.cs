@@ -63,5 +63,10 @@ namespace ManagerTest.Fakes
 		{
 			throw new NotImplementedException();
 		}
+
+		public IList<JobHistory> HistoryList()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
