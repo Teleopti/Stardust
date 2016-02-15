@@ -29,19 +29,9 @@
 			});
 
 			$scope.changeSkillArea = function (skillAreaId) {
-				//var result = $scope.skillAreas.filter(function( obj ) {
-				//	return obj.Id == skillAreaId;
-				//});
-
-				//$scope.selectedSkillArea = result[0];
 				$scope.selectedSkillArea = $filter('filter')($scope.skillAreas, { Id: skillAreaId })[0];
 				console.log($scope.selectedSkillArea.Id);
 				console.log($scope.selectedSkillArea.Name);
-			};
-
-			$scope.testableHub = '';
-			$scope.test = function() {
-				$scope.testableHub = $scope.selectedSkillAreaId;
 			};
 
 			$scope.format = intradayService.formatDateTime;
