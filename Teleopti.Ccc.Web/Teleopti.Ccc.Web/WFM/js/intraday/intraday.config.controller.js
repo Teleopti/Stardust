@@ -16,6 +16,14 @@
 					$scope.skills = skills;
 				});
 
+				$scope.skillSelected = function () {
+					var selectedSkills = $filter('filter')($scope.skills, { isSelected: true });
+					var selectedSkillIds = selectedSkills.map(function (skill) {
+						return skill.Id;
+					});
+					return selectedSkillIds.length>0;
+				}
+
 				$scope.saveSkillArea = function () {
 					var selectedSkills = $filter('filter')($scope.skills, { isSelected: true });
 
