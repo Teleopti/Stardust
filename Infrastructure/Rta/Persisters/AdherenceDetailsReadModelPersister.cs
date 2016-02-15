@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				"	Model AS ModelJson, " +
 				"	[State] AS StateJson, " +
 				"	[Version] " +
-				"FROM ReadModel.AdherenceDetails WHERE" +
+				"FROM ReadModel.AdherenceDetails WITH (UPDLOCK) WHERE" +
 				"	PersonId =:PersonId AND " +
 				"	BelongsToDate =:Date ")
 				.AddScalar("PersonId", NHibernateUtil.Guid)

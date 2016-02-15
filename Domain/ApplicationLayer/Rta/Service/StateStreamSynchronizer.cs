@@ -60,7 +60,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private void processStatesTo(object handler, IEnumerable<AgentStateReadModel> states)
 		{	
-			using (_distributedLockAcquirer.LockForTypeOf(handler))
 			using (_eventPublisherScope.OnThisThreadPublishTo(new SyncPublishTo(_resolver, handler)))
 			{
 				states.ForEach(s =>

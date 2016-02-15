@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var publishTo = handlers.Single(o => ProxyUtil.GetUnproxiedType(o) == handlerT);
 
 			using (_dataSourceScope.OnThisThreadUse(tenant))
-			using (_distributedLockAcquirer.LockForTypeOf(publishTo))
 				new SyncPublishTo(_resolver, publishTo).Publish(@event);
 		}
 	}

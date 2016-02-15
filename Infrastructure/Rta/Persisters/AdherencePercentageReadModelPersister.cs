@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				"	ShiftHasEnded, " +
 				"	[State] AS StateJson, " +
 				"	[Version] " +
-				"FROM ReadModel.AdherencePercentage WHERE" +
+				"FROM ReadModel.AdherencePercentage WITH (UPDLOCK) WHERE" +
 				"	PersonId =:PersonId AND " +
 				"	BelongsToDate =:Date ")
 				.AddScalar("PersonId", NHibernateUtil.Guid)

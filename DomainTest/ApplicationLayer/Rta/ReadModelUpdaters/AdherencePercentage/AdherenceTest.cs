@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 
 			Persister.PersistedModel.TimeInAdherence.Should().Be(TimeSpan.Zero);
 		}
-
+		
 		[Test]
 		public void ShouldUpdateTimeInAdherenceWhenPersonOutOfAdherence()
 		{

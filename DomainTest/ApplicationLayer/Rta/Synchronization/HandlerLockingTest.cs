@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 	[RtaTest]
 	[Toggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	[TestFixture]
+	[Ignore("Distributed lock removed for now. Persisters will throw and job retried when updating the same models.")]
 	public class HandlerLockingTest : ISetup
 	{
 		public FakeRtaDatabase Database;

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public TheService Service { get; set; }
 
 		[Test]
-		public void ShouldCalculateCorrectlyWhenMultipleWorkersUpdatesSameModel()
+		public void ShouldNotRetryWhenMultipleWorkersUpdatesSameModel()
 		{
 			var date = "2016-02-08".Date();
 			var personId = Guid.NewGuid();
@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			20.Times(() => simulator.ProcessAsync(() => Service.AddState(date, personId)));
 			simulator.WaitForAll();
 
+			simulator.RetryCount.Should().Be(0);
 			Service.Get(date, personId).State.Adherence.Should().Have.Count.EqualTo(21);
 		}
 
