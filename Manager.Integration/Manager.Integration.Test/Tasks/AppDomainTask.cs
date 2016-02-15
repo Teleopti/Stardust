@@ -32,14 +32,14 @@ namespace Manager.Integration.Test.Tasks
             {
                 Task.Factory.StartNew(() =>
                 {
-                    while (!CancellationTokenSource.IsCancellationRequested)
+                    while (!cancellationTokenSource.IsCancellationRequested)
                     {
                         Thread.Sleep(TimeSpan.FromMilliseconds(100));
                     }
 
                     if (cancellationTokenSource.IsCancellationRequested)
                     {
-                        CancellationTokenSource.Token.ThrowIfCancellationRequested();
+                        cancellationTokenSource.Token.ThrowIfCancellationRequested();
                     }
 
                 }, cancellationTokenSource.Token);

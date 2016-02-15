@@ -42,14 +42,14 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
             {
                 Task.Factory.StartNew(() =>
                 {
-                    while (!CancellationTokenSource.IsCancellationRequested)
+                    while (!cancellationTokenSource.IsCancellationRequested)
                     {
                         Thread.Sleep(TimeSpan.FromMilliseconds(100));
                     }
 
-                    if (CancellationTokenSource.IsCancellationRequested)
+                    if (cancellationTokenSource.IsCancellationRequested)
                     {
-                        CancellationTokenSource.Token.ThrowIfCancellationRequested();
+                        cancellationTokenSource.Token.ThrowIfCancellationRequested();
                     }
                 },
                 cancellationTokenSource.Token);

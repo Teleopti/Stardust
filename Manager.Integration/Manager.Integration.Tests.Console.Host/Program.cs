@@ -73,7 +73,9 @@ namespace Manager.IntegrationTest.Console.Host
             Configuration configuration =
                 new Configuration(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
 
-            using (WebApp.Start(configuration.BaseAddress.ToString(),
+            string integrationAddress = configuration.BaseAddress.Scheme + "://+:" + configuration.BaseAddress.Port + "/";
+            
+            using (WebApp.Start(integrationAddress,
                                 appBuilder =>
                                 {
                                     var builder = new ContainerBuilder();
