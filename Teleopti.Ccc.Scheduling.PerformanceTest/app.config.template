@@ -3,7 +3,7 @@
 	<appSettings>
 		<add key="SitePath" value="..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web"/>
 		<add key="WEB_BROKER_BACKPLANE" value="" />
-		<add key="ToggleMode" value="ALL" />
+		<add key="TOGGLE_MODE" value="ALL" />
 		
 		<!-- These needs to be set dynamically on build machine -->
 		<add key="DB_ANALYTICS" value="YourAnalyticsDb" />
