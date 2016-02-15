@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Interfaces.Domain;
 
@@ -29,12 +28,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		public GroupScheduleShiftViewModel Projection(IScheduleDay scheduleDay, bool canViewConfidential)
 		{
 			var scheduleVm = new GroupScheduleShiftViewModel();
-			var layers = new List<GroupScheduleLayerViewModel>();
+			var projections = new List<GroupScheduleProjectionViewModel>();
 			var userTimeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			scheduleVm.PersonId = scheduleDay.Person.Id.GetValueOrDefault().ToString();
 			scheduleVm.Name = _commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(scheduleDay.Person);
 			scheduleVm.Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToFixedDateFormat();
-			var projection = _projectionProvider.Projection(scheduleDay);
+			var visualLayerCollection = _projectionProvider.Projection(scheduleDay);
 			var significantPart = scheduleDay.SignificantPart();
 			var personAssignment = scheduleDay.PersonAssignment();
 			var overtimeActivities = personAssignment != null
@@ -58,12 +57,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					break;
 			}
 
-			if (projection != null && projection.HasLayers)
+			if (visualLayerCollection != null && visualLayerCollection.HasLayers)
 			{
-				scheduleVm.WorkTimeMinutes = projection.WorkTime().TotalMinutes;
-				scheduleVm.ContractTimeMinutes = projection.ContractTime().TotalMinutes;
+				scheduleVm.WorkTimeMinutes = visualLayerCollection.WorkTime().TotalMinutes;
+				scheduleVm.ContractTimeMinutes = visualLayerCollection.ContractTime().TotalMinutes;
 
-				foreach (var layer in projection)
+				foreach (var layer in visualLayerCollection)
 				{
 					var isPayloadAbsence = layer.Payload is IAbsence;
 					var isAbsenceConfidential = isPayloadAbsence && (layer.Payload as IAbsence).Confidential;
@@ -76,7 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							: (layer.Payload as IAbsence).Description)
 						: layer.DisplayDescription();
 
-					layers.Add(new GroupScheduleLayerViewModel
+					projections.Add(new GroupScheduleProjectionViewModel
 					{
 						Description = description.Name,
 						Color =
@@ -92,7 +91,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					});
 				}
 			}
-			scheduleVm.Projection = layers;
+			scheduleVm.Projection = projections;
 			return scheduleVm;
 		}
 

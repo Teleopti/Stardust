@@ -414,6 +414,7 @@
     <Compile Include="Areas\Anywhere\Core\GetSiteAdherence.cs" />
     <Compile Include="Areas\Anywhere\Core\GetBusinessUnitId.cs" />
     <Compile Include="Areas\Anywhere\Core\GetTeamAdherence.cs" />
+    <Compile Include="Areas\Anywhere\Core\GroupScheduleProjectionViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\IGetSiteAdherence.cs" />
     <Compile Include="Areas\Anywhere\Controllers\ReportsController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AgentsController.cs" />
@@ -447,7 +448,6 @@
     <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecification.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleData.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleDayOffViewModel.cs" />
-    <Compile Include="Areas\Anywhere\Core\GroupScheduleLayerViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleShiftViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelMapper.cs" />

@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 						PersonId = person.Id.GetValueOrDefault().ToString(),
 						Name = nameDescriptionSetting.BuildCommonNameDescription(person),
 						Date = dateInUserTimeZone.Date.ToFixedDateFormat(),
-						Projection = new List<GroupScheduleLayerViewModel>()
+						Projection = new List<GroupScheduleProjectionViewModel>()
 					});
 				}
 
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							PersonId = person.Id.GetValueOrDefault().ToString(),
 							Name = nameDescriptionSetting.BuildCommonNameDescription(person),
 							Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToFixedDateFormat(),
-							Projection = new List<GroupScheduleLayerViewModel>()
+							Projection = new List<GroupScheduleProjectionViewModel>()
 						});
 				}
 			}

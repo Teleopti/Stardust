@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public double WorkTimeMinutes { get; set; }
 		public double ContractTimeMinutes { get; set; }
 
-		public IEnumerable<GroupScheduleLayerViewModel> Projection { get; set; }
+		public IEnumerable<GroupScheduleProjectionViewModel> Projection { get; set; }
 		public bool IsFullDayAbsence { get; set; }
 		public GroupScheduleDayOffViewModel DayOff { get; set; }
 	}

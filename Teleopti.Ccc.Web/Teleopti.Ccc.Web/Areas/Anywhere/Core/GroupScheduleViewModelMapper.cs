@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				.ToArray();
 		}
 
-		private static GroupScheduleShiftViewModel makeViewModel(IPerson person, IPersonScheduleDayReadModel readModel, Model model, Shift shift, IEnumerable<GroupScheduleLayerViewModel> layers, TimeZoneInfo userTimeZone, ICommonNameDescriptionSetting commonNameDescriptionSetting)
+		private static GroupScheduleShiftViewModel makeViewModel(IPerson person, IPersonScheduleDayReadModel readModel, Model model, Shift shift, IEnumerable<GroupScheduleProjectionViewModel> layers, TimeZoneInfo userTimeZone, ICommonNameDescriptionSetting commonNameDescriptionSetting)
 		{
 			GroupScheduleDayOffViewModel dayOff = null;
 			if (model.DayOff != null)
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			};
 		}
 
-		private static IEnumerable<GroupScheduleLayerViewModel> mapLayers(TimeZoneInfo userTimeZone, Shift shift, bool canSeeConfidentialAbsence)
+		private static IEnumerable<GroupScheduleProjectionViewModel> mapLayers(TimeZoneInfo userTimeZone, Shift shift, bool canSeeConfidentialAbsence)
 		{
 			var layers = shift.Projection ?? new SimpleLayer[] { };
 
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				let color = canSeeLayerInfo ? l.Color : ConfidentialPayloadValues.DisplayColorHex
 				let description = canSeeLayerInfo ? l.Description : ConfidentialPayloadValues.Description.Name
 				let start = TimeZoneInfo.ConvertTimeFromUtc(l.Start, userTimeZone)
-				select new GroupScheduleLayerViewModel
+				select new GroupScheduleProjectionViewModel
 				{
 					Color = color,
 					Description = description,

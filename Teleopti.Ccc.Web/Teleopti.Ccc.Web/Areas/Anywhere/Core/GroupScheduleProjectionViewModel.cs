@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
-	public class GroupScheduleLayerViewModel
+	public class GroupScheduleProjectionViewModel
 	{
 		public string Color { get; set; }
 		public string Description { get; set; }
