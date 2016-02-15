@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -32,20 +32,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var period = new DateOnlyPeriod(2000, 1, 1, 2001, 1,1);
 			const int numberOfThreads = 10;
 
-			var results = new HashSet<VirtualSkillGroupsCreatorResult>();
-			var tasks = new List<Task>(10);
-			for (var i = 0; i < numberOfThreads; i++)
+			var results = new ConcurrentDictionary<VirtualSkillGroupsCreatorResult, byte>();
+			Parallel.For(0, numberOfThreads, i =>
 			{
-				tasks.Add(Task.Factory.StartNew(() =>
+				using (Context.Create(period))
 				{
-					using (Context.Create(period))
-					{
-						results.Add(Target.Fetch());
-					}
-				}));
-			}
-
-			Task.WaitAll(tasks.ToArray());
+					results.GetOrAdd(Target.Fetch(), result => { return 0; });
+				}
+			});
 
 			results.Count.Should().Be.EqualTo(numberOfThreads);
 		}
