@@ -1,5 +1,6 @@
-﻿using Autofac;
-using Autofac.Core;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.DayOffPlanning;
@@ -13,35 +14,55 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	public class VirtualSkillGroupsKeepStateTest
 	{
 		public VirtualSkillGroupsResultProvider Target;
-		public ILifetimeScope LifetimeScope;
+		public VirtualSkillContext Context;
 
 		[Test]
 		public void ShouldKeepResultInternally()
 		{
-			var date = new DateOnly(2000, 1, 1);
-			Target.Fetch(date)
-				.Should().Be.SameInstanceAs(Target.Fetch(date));
+			using (Context.Create(new DateOnlyPeriod()))
+			{
+				Target.Fetch()
+					.Should().Be.SameInstanceAs(Target.Fetch());
+			}
 		}
 
 		[Test]
-		public void ShouldNotKeepResultBetweenDifferentLifetimeScopes()
+		public void ShouldNotKeepResultBetweenThreads()
 		{
-			var date = new DateOnly(2000, 1, 1);
-			VirtualSkillGroupsCreatorResult result1;
-			VirtualSkillGroupsCreatorResult result2;
+			var period = new DateOnlyPeriod(2000, 1, 1, 2001, 1,1);
+			const int numberOfThreads = 10;
 
-			using (var newScope = LifetimeScope.BeginLifetimeScope())
+			var results = new HashSet<VirtualSkillGroupsCreatorResult>();
+			var tasks = new List<Task>(10);
+			for (var i = 0; i < numberOfThreads; i++)
 			{
-				var innerTarget = newScope.Resolve<VirtualSkillGroupsResultProvider>();
-				result1 = innerTarget.Fetch(date);
-			}
-			using (var newScope = LifetimeScope.BeginLifetimeScope())
-			{
-				var innerTarget = newScope.Resolve<VirtualSkillGroupsResultProvider>();
-				result2 = innerTarget.Fetch(date);
+				tasks.Add(Task.Factory.StartNew(() =>
+				{
+					using (Context.Create(period))
+					{
+						results.Add(Target.Fetch());
+					}
+				}));
 			}
 
-			result1.Should().Not.Be.SameInstanceAs(result2);
+			Task.WaitAll(tasks.ToArray());
+
+			results.Count.Should().Be.EqualTo(numberOfThreads);
+		}
+
+		[Test]
+		public void CannotFetchResultBeforeContextIsCreated()
+		{
+			Assert.Throws<NotSupportedException>(() => Target.Fetch());
+		}
+
+		[Test]
+		public void CannotCreateNestedContexts()
+		{
+			using (Context.Create(new DateOnlyPeriod(2000,1,1,2000,1,2)))
+			{
+				Assert.Throws<NotSupportedException>(() => Context.Create(new DateOnlyPeriod(2000, 1, 1, 2000, 1, 2)));
+			}
 		}
 	}
 }

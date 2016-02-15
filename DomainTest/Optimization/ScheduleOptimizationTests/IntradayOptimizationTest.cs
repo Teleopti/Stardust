@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -19,6 +20,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 {
 	[DomainTest]
+	[Toggle(Toggles.ResourcePlanner_SkillGroupDeleteAfterCalculation_37048)]
 	public class IntradayOptimizationTest
 	{
 		public FakeSkillRepository SkillRepository;

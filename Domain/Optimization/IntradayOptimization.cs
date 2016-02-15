@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
@@ -33,6 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
 		private readonly IIntradayOptimizer2Creator _intradayOptimizer2Creator;
+		private readonly VirtualSkillContext _virtualSkillContext;
 
 		public IntradayOptimization(IDailyValueByAllSkillsExtractor dailyValueByAllSkillsExtractor, 
 									OptimizationPreferencesFactory optimizationPreferencesFactory,
@@ -48,7 +50,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 									IScheduleDictionaryPersister persister,
 									IOptimizerHelperHelper optimizerHelperHelper,
 									WeeklyRestSolverExecuter weeklyRestSolverExecuter,
-									IIntradayOptimizer2Creator intradayOptimizer2Creator
+									IIntradayOptimizer2Creator intradayOptimizer2Creator,
+									VirtualSkillContext virtualSkillContext
 									)
 		{
 			_dailyValueByAllSkillsExtractor = dailyValueByAllSkillsExtractor;
@@ -66,6 +69,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_optimizerHelperHelper = optimizerHelperHelper;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
 			_intradayOptimizer2Creator = intradayOptimizer2Creator;
+			_virtualSkillContext = virtualSkillContext;
 		}
 
 		public virtual OptimizationResultModel Optimize(Guid planningPeriodId)
@@ -113,9 +117,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_optimizerHelperHelper.LockDaysForIntradayOptimization(matrixListForIntraDayOptimizationOriginal, period);
 
 			_resourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoBackgroundWorker(), false);
-			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
+			using (_virtualSkillContext.Create(period))
 			{
-				service.Execute(optimizers, period, optimizationPreferences.Advanced.TargetValueCalculation);
+				using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
+				{
+					service.Execute(optimizers, period, optimizationPreferences.Advanced.TargetValueCalculation);
+				}
 			}
 
 			_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, webScheduleState.AllSchedules, webScheduleState.PeopleSelection.AllPeople, dayOffOptimizationPreference);

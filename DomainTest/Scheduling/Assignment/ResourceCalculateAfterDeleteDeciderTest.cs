@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public IResourceCalculateAfterDeleteDecider Target;
 		public FakeSchedulingResultStateHolder SchedulingResultStateHolder;
 		public LimitForNoResourceCalculation LimitForNoResourceCalculation;
+		public VirtualSkillContext Context;
 
 		[Test]
 		public void ShouldAlwaysDoCalculationIfNoOtherAgentHasSameSkills()
@@ -33,8 +34,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			SchedulingResultStateHolder.PersonsInOrganization = new[] { me };
 
-			Target.DoCalculation(me, new DateOnly(2000,1,1))
-				.Should().Be.True();
+			using (Context.Create(new DateOnlyPeriod( new DateOnly(2000, 1, 1), new DateOnly(2000, 1, 1))))
+			{
+				Target.DoCalculation(me, new DateOnly(2000, 1, 1))
+					.Should().Be.True();
+			}
 		}
 
 		[Test]
@@ -52,8 +56,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			agent2.AddSkill(skill, date);
 			SchedulingResultStateHolder.PersonsInOrganization = new[] { agent1, agent2 };
 
-			Target.DoCalculation(agent1, date)
-				.Should().Be.False();
+			using (Context.Create(new DateOnlyPeriod(date, date)))
+			{
+				Target.DoCalculation(agent1, date)
+					.Should().Be.False();
+			}
 		}
 
 		[Test]
@@ -71,8 +78,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			agent2.AddSkill(skill, date);
 			SchedulingResultStateHolder.PersonsInOrganization = new[] { agent1, agent2 };
 
-			Target.DoCalculation(agent1, date)
-				.Should().Be.False();
+			using (Context.Create(new DateOnlyPeriod(date, date)))
+			{
+				Target.DoCalculation(agent1, date)
+					.Should().Be.False();
+			}
 		}
 
 		[Test]
@@ -90,8 +100,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			agent2.AddSkill(skill, date);
 			SchedulingResultStateHolder.PersonsInOrganization = new[] { agent1, agent2 };
 
-			Target.DoCalculation(agent1, date)
-				.Should().Be.True();
+			using (Context.Create(new DateOnlyPeriod(date, date)))
+			{
+				Target.DoCalculation(agent1, date)
+					.Should().Be.True();
+			}
 		}
 
 		[Test]
@@ -115,8 +128,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			otherAgent2.AddSkill(commonSkill, date);
 			SchedulingResultStateHolder.PersonsInOrganization = new[] { me, otherAgent1, otherAgent2 };
 
-			Target.DoCalculation(me, date)
-				.Should().Be.True();
+			using (Context.Create(new DateOnlyPeriod(date, date)))
+			{
+				Target.DoCalculation(me, date)
+					.Should().Be.True();
+			}
 		}
 
 		[Test]
@@ -137,8 +153,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			agent2.AddSkill(deletedSkill, date);
 			SchedulingResultStateHolder.PersonsInOrganization = new[] { agent1, agent2 };
 
-			Target.DoCalculation(agent1, date)
-				.Should().Be.False();
+			using (Context.Create(new DateOnlyPeriod(date, date)))
+			{
+				Target.DoCalculation(agent1, date)
+					.Should().Be.False();
+			}
 		}
 
 		[Test]
@@ -160,8 +179,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			((PersonSkill)agent2.Period(date).PersonSkillCollection.Last()).Active = false;
 			SchedulingResultStateHolder.PersonsInOrganization = new[] { agent1, agent2 };
 
-			Target.DoCalculation(agent1, date)
-				.Should().Be.False();
+			using (Context.Create(new DateOnlyPeriod(date, date)))
+			{
+				Target.DoCalculation(agent1, date)
+					.Should().Be.False();
+			}
 		}
 
 		[Test]
@@ -173,8 +195,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			SchedulingResultStateHolder.PersonsInOrganization = new[] { person };
 
-			Target.DoCalculation(person, date)
-				.Should().Be.False();
+			using (Context.Create(new DateOnlyPeriod(date, date)))
+			{
+				Target.DoCalculation(person, date)
+					.Should().Be.False();
+			}
 		}
 
 		[Test]
@@ -187,9 +212,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			me.AddSkill(skill, date);
 			SchedulingResultStateHolder.PersonsInOrganization = new[] { me, new Person(), new Person(), new Person(), new Person() };
 
-			Target.DoCalculation(me, date)
-				.Should().Be.True();
+			using (Context.Create(new DateOnlyPeriod(date, date)))
+			{
+				Target.DoCalculation(me, date)
+					.Should().Be.True();
+			}
 		}
+
 
 
 		public void Setup(ISystem system, IIocConfiguration configuration)

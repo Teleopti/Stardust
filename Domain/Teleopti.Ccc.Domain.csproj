@@ -723,6 +723,7 @@
     <Compile Include="Scheduling\Assignment\IResourceCalculateAfterDeleteDecider.cs" />
     <Compile Include="Scheduling\Assignment\LimitForNoResourceCalculation.cs" />
     <Compile Include="Scheduling\Assignment\ResourceCalculateAfterDeleteDecider.cs" />
+    <Compile Include="Scheduling\Assignment\VirtualSkillContext.cs" />
     <Compile Include="Scheduling\Assignment\VirtualSkillGroupsResultProvider.cs" />
     <Compile Include="Scheduling\DayOffBusinessRuleValidation.cs" />
     <Compile Include="Scheduling\FullScheduling.cs" />

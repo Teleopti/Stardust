@@ -115,7 +115,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ScheduleDayForPerson>().As<IScheduleDayForPerson>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleRangeForPerson>().As<IScheduleRangeForPerson>().InstancePerLifetimeScope();
 			builder.RegisterType<PreSchedulingStatusChecker>().As<IPreSchedulingStatusChecker>().InstancePerLifetimeScope();
-			builder.RegisterType<VirtualSkillGroupsResultProvider>().InstancePerLifetimeScope();
+			builder.RegisterType<VirtualSkillGroupsResultProvider>().SingleInstance();
+			builder.RegisterType<VirtualSkillContext>().InstancePerLifetimeScope();
 
 			builder.RegisterType<VirtualSkillGroupsCreator>().SingleInstance();
 

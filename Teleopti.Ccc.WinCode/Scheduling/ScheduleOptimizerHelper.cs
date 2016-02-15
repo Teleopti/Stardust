@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IScheduleMatrixLockableBitArrayConverterEx _bitArrayConverter;
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly Func<IPersonSkillProvider> _personalSkillProvider;
+		private readonly VirtualSkillContext _virtualSkillContext;
 
 		public ScheduleOptimizerHelper(ILifetimeScope container, OptimizerHelperHelper optimizerHelper, IRequiredScheduleHelper requiredScheduleHelper)
 		{
@@ -57,7 +58,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_bitArrayConverter = _container.Resolve<IScheduleMatrixLockableBitArrayConverterEx>();
 			_matrixListFactory = _container.Resolve<IMatrixListFactory>();
 			_personalSkillProvider = () => _container.Resolve<IPersonSkillProvider>();
-
+			_virtualSkillContext = _container.Resolve<VirtualSkillContext>();
 		}
 
 		private void optimizeIntraday(IList<IScheduleMatrixOriginalStateContainer> matrixContainerList,
@@ -91,12 +92,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				dayOffOptimizationPreferenceProvider);
 			var service = new IntradayOptimizerContainer(_container.Resolve<IDailyValueByAllSkillsExtractor>());
 
-			using (createResourceCalculationContext())
+			using (_virtualSkillContext.Create(selectedPeriod))
 			{
-				service.ReportProgress += resourceOptimizerPersonOptimized;
-				service.Execute(optimizers, selectedPeriod, optimizerPreferences.Advanced.TargetValueCalculation);
-				service.ReportProgress -= resourceOptimizerPersonOptimized;
-			}			
+				using (createResourceCalculationContext())
+				{
+					service.ReportProgress += resourceOptimizerPersonOptimized;
+					service.Execute(optimizers, selectedPeriod, optimizerPreferences.Advanced.TargetValueCalculation);
+					service.ReportProgress -= resourceOptimizerPersonOptimized;
+				}
+			}
 		}
 
 		private void optimizeWorkShifts(
