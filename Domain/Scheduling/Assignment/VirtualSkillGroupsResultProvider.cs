@@ -7,9 +7,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	{
 		public VirtualSkillGroupsCreatorResult Fetch()
 		{
-			if (VirtualSkillContext.VirtualSkillGroupResult == null)
+			var current = VirtualSkillContext.VirtualSkillGroupResult;
+			if (current == null)
 				throw new NotSupportedException("VirtualSkillGroupResult not in context.");
-			return VirtualSkillContext.VirtualSkillGroupResult;
+
+			return current;
 		}
 	}
 }
