@@ -644,6 +644,9 @@
     <Compile Include="ICurrentApplicationData.cs" />
     <Compile Include="Intraday\SkillAreaViewModel.cs" />
     <Compile Include="Intraday\SkillInIntradayViewModel.cs" />
+    <Compile Include="IslandScheduling\IIslandSchedulerStateHolder.cs" />
+    <Compile Include="IslandScheduling\IslandScheduler.cs" />
+    <Compile Include="IslandScheduling\IslandSchedulerStateProvider.cs" />
     <Compile Include="Logon\ApplicationFunctionsForRole.cs" />
     <Compile Include="Intraday\CreateSkillArea.cs" />
     <Compile Include="Intraday\FetchSkillArea.cs" />

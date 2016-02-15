@@ -810,6 +810,8 @@
     </Compile>
     <Compile Include="Reporting\ReportViewerToolbarTexts.cs" />
     <Compile Include="Scheduling\BackgroundWorkerWrapper.cs" />
+    <Compile Include="Scheduling\IslandScheduling\IslandLifeTimeScope.cs" />
+    <Compile Include="Scheduling\IslandScheduling\IslandScheduleConsolidater.cs" />
     <Compile Include="Scheduling\PublishScheduleDateView.cs">
       <SubType>Form</SubType>
     </Compile>
