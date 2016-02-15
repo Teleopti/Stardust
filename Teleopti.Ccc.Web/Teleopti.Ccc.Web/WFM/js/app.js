@@ -182,8 +182,8 @@ wfm.config([
 		$httpProvider.interceptors.push('httpInterceptor');
 	}
 ]).run([
-	'$rootScope', '$state', '$translate', 'HelpService', '$timeout', 'CurrentUserInfo', 'Toggle', '$q', 'RtaState',
-	function($rootScope, $state, $translate, HelpService, $timeout, currentUserInfo, toggleService, $q, RtaState) {
+	'$rootScope', '$state', '$translate', 'HelpService', '$timeout', 'CurrentUserInfo', 'Toggle', '$q', 'RtaState', 'WfmShortcuts',
+	function($rootScope, $state, $translate, HelpService, $timeout, currentUserInfo, toggleService, $q, RtaState, WfmShortcuts) {
 		$rootScope.isAuthenticated = false;
 
 		(function broadcastEventOnToggle() {
@@ -193,6 +193,8 @@ wfm.config([
 				}, 500);
 			});
 		})();
+
+		WfmShortcuts.init();
 
 		function refreshContext(event, next, toParams) {
 			currentUserInfo.initContext().then(function() {

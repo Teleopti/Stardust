@@ -21,12 +21,11 @@
 
 		it('should receive registered key sequence and store in table', inject(function(ShortCuts){
 			var specialKeySequence = [17];
-			var stateName = 'rta';
 			var keyCode = 49;
-			var keySequenceName = keyCode + stateName;
+			var keySequenceName = keyCode;
 			var callback = function (){};
 
-			ShortCuts.registerKeySequence(keyCode, stateName, specialKeySequence, callback);
+			ShortCuts.registerKeySequence(keyCode, specialKeySequence, callback);
 
 			expect(ShortCuts.keySequenceTable[keySequenceName].length).toEqual(2);
 			expect(ShortCuts.keySequenceTable[keySequenceName][0]).toEqual(specialKeySequence);
@@ -35,9 +34,8 @@
 
 		it('should execute callback function for given key sequence', inject(function(ShortCuts){
 			var specialKeySequence = [17];
-			var stateName = 'rta';
 			var keyCode = 49;
-			var keySequenceName = keyCode + stateName;
+			var keySequenceName = keyCode;
 			var callback = function (){};
 			var specialKeyEvent = {
 				keyCode: 17
@@ -45,9 +43,8 @@
 			var normalKeyEvent = {
 				keyCode: 49
 			};
-			ShortCuts.state = stateName;
 
-			ShortCuts.registerKeySequence(keyCode, stateName, specialKeySequence, callback);
+			ShortCuts.registerKeySequence(keyCode, specialKeySequence, callback);
 			ShortCuts.handleKeyEvent(specialKeyEvent)
 
 			expect(ShortCuts.handleKeyEvent(normalKeyEvent)).toEqual(true);

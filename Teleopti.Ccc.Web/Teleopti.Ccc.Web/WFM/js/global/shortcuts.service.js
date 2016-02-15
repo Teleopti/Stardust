@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 
-	angular.module('shortcutsService', ['ui.router'])
+	angular.module('shortcutsService', [])
 		.constant('keyCodes', {
 			ENTER: 13,
 			UP: 38,
@@ -20,7 +20,7 @@
 			EIGHT: 56,
 			NINE: 57
 		})
-		.service('ShortCuts', ['$document', '$timeout', '$state', 'keyCodes', function($document, $timeout, $state, keyCodes) {
+		.service('ShortCuts', ['$document', 'keyCodes', function($document, keyCodes) {
 			var service = {};
 			var specialKeys = {};
 			specialKeys[keyCodes.SHIFT] = false;
@@ -28,14 +28,9 @@
 			specialKeys[keyCodes.ALT] = false;
 
 			service.keySequenceTable = {};
-			service.state = null;
 
 			$document.on('keydown', function(event) {
-				if(event.ctrlKey)
-				event.preventDefault();
-				$timeout(function() {
 				service.handleKeyEvent(event);
-				});
 			});
 
 			$document.on('keyup', function(event){
@@ -46,13 +41,10 @@
 
 			service.handleKeyEvent = function(event) {
 				var arr = [];
-				if (service.checkSpecialKey(event))
+				if (service.checkSpecialKey(event) || !service.keySequenceTable[event.keyCode])
 					return;
 
-				 if (service.state === null)
-					arr = service.keySequenceTable[event.keyCode + $state.current.name];
-					else
-					arr = service.keySequenceTable[event.keyCode + service.state];
+				arr = service.keySequenceTable[event.keyCode];
 
 				var i = 0;
 				var match = false;
@@ -69,8 +61,8 @@
 				return match;
 			};
 
-			service.registerKeySequence = function(keyCode, stateName, specialKeySequence, callback) {
-				service.keySequenceTable[keyCode + stateName] = [specialKeySequence, callback];
+			service.registerKeySequence = function(keyCode, specialKeySequence, callback) {
+				service.keySequenceTable[keyCode] = [specialKeySequence, callback];
 			};
 
 			service.checkSpecialKey = function(event) {
