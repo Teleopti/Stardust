@@ -34,7 +34,7 @@ namespace Manager.Integration.Test.Tasks
                 {
                     while (!CancellationTokenSource.IsCancellationRequested)
                     {
-                        Thread.Sleep(TimeSpan.FromMilliseconds(100));
+                        Thread.Sleep(TimeSpan.FromMilliseconds(500));
                     }
 
                     if (cancellationTokenSource.IsCancellationRequested)
