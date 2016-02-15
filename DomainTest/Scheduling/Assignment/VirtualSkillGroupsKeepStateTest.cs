@@ -61,7 +61,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			using (Context.Create(new DateOnlyPeriod(2000,1,1,2000,1,2)))
 			{
-				Assert.Throws<NotSupportedException>(() => Context.Create(new DateOnlyPeriod(2000, 1, 1, 2000, 1, 2)));
+				Assert.Throws<NotSupportedException>(() =>
+				{
+					using (Context.Create(new DateOnlyPeriod(2000, 1, 1, 2000, 1, 2)))
+					{
+					}
+				});
 			}
 		}
 	}
