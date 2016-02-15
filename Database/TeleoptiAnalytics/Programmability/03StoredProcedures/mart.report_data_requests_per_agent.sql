@@ -88,10 +88,18 @@ SELECT * FROM mart.PermittedTeamsMultipleTeams(@person_code, @report_id, @site_i
 IF mart.GroupPageCodeIsBusinessHierarchy(@group_page_code) = 0
 	BEGIN
 		-- Some Group Page was picked
+		--Agents = "All"
+		IF @group_page_agent_set = '00000000-0000-0000-0000-000000000002'
+		BEGIN
+			INSERT INTO #selected_agents
+			select * from #rights_agents
+		END
+		ELSE
+		BEGIN
 		-- Split the person codes
 		INSERT INTO #selected_agents
 		SELECT * FROM mart.TwolistPersonCodeToIdMultipleTeams(@group_page_agent_set, @date_from, @date_to, @site_id, @team_set)
-
+		END
 	END
 ELSE
 	BEGIN
