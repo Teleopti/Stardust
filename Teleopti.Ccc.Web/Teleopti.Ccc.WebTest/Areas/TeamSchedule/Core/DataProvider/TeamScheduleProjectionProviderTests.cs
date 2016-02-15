@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -45,8 +46,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var scheduleDayOnePerson1 = ScheduleDayFactory.Create(new DateOnly(date), person1, scenario);
 			var phoneActivityPeriod = new DateTimePeriod(date.AddHours(8), date.AddHours(16));
 			var lunchActivityPeriod = new DateTimePeriod(date.AddHours(11), date.AddHours(12));
+			var absencePeriod = new DateTimePeriod(date.AddHours(12), date.AddHours(13));
 			var phoneActivity = ActivityFactory.CreateActivity("Phone", Color.Blue);
 			var lunchActivity = ActivityFactory.CreateActivity("Lunch", Color.Red);
+			var testAbsence = AbsenceFactory.CreateAbsence("test");
 
 			phoneActivity.InContractTime = true;
 			lunchActivity.InContractTime = true;
@@ -56,20 +59,37 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			assignment1Person1.AddActivity(lunchActivity, lunchActivityPeriod);
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
+			var absenceLayer = new AbsenceLayer(testAbsence, absencePeriod);
+			scheduleDayOnePerson1.CreateAndAddAbsence(absenceLayer);
 
 			var vm = target.Projection(scheduleDayOnePerson1, true);
 
 			vm.DayOff.Should().Be(null);
 			vm.Name.Should().Be("agent1");
-			vm.Projection.Count().Should().Be(3);
+			vm.Projection.Count().Should().Be(4);
 			vm.IsFullDayAbsence.Should().Be(false);
 			vm.Date.Should().Be(date.ToFixedDateFormat());
-			
+
+			var absenceProjection = vm.Projection.ElementAt(2);
+
+			vm.Projection.First().ParentAbsence.Should().Be(null);
+			vm.Projection.Second().ParentAbsence.Should().Be(null);
+			absenceProjection.ParentAbsence.Should().Be(absenceLayer.Payload.Id);
+			vm.Projection.Last().ParentAbsence.Should().Be(null);
+
 			vm.Projection.First().Description.Should().Be(phoneActivity.Description.Name);
-			vm.Projection.Last().Description.Should().Be(phoneActivity.Description.Name);
 			vm.Projection.Second().Description.Should().Be(lunchActivity.Description.Name);
-			vm.ContractTimeMinutes.Should().Be(getTimeSpanInMinutesFromPeriod(phoneActivityPeriod));
-			vm.WorkTimeMinutes.Should().Be(getTimeSpanInMinutesFromPeriod(phoneActivityPeriod) - getTimeSpanInMinutesFromPeriod(lunchActivityPeriod));
+			absenceProjection.Description.Should().Be(testAbsence.Name);
+			vm.Projection.Last().Description.Should().Be(phoneActivity.Description.Name);
+
+			var expectedContactTime = getTimeSpanInMinutesFromPeriod(phoneActivityPeriod) -
+									  getTimeSpanInMinutesFromPeriod(absencePeriod);
+			vm.ContractTimeMinutes.Should().Be(expectedContactTime);
+
+			var expectedWorktimeMinutes = getTimeSpanInMinutesFromPeriod(phoneActivityPeriod) -
+										  getTimeSpanInMinutesFromPeriod(lunchActivityPeriod) -
+										  getTimeSpanInMinutesFromPeriod(absencePeriod);
+			vm.WorkTimeMinutes.Should().Be(expectedWorktimeMinutes);
 		}
 
 		[Test]

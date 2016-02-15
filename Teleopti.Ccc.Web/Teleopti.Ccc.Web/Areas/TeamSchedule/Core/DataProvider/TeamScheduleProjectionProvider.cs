@@ -77,6 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 					projections.Add(new GroupScheduleProjectionViewModel
 					{
+						ParentAbsence = isPayloadAbsence ? ((IAbsence)layer.Payload).Id : null,
 						Description = description.Name,
 						Color =
 							isPayloadAbsence
