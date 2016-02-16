@@ -19,7 +19,8 @@
 			var reloadSkillAreas = function() {
 				intradayService.getSkillAreas.query().$promise.then(function (result) {
 					$scope.skillAreas = $filter('orderBy')(result, 'Name');
-					$scope.selectedSkillArea = $scope.skillAreas[0];
+					if ($scope.skillAreas.length > 0)
+						$scope.selectedSkillArea = $scope.skillAreas[0];
 				});
 			};
 
@@ -38,8 +39,23 @@
 			};
 
 			$scope.modalShown = false;
+
 			$scope.toggleModal = function () {
 				$scope.modalShown = !$scope.modalShown;
+			};
+
+			$scope.deleteSkillArea = function () {
+				intradayService.deleteSkillArea.remove(
+				{
+					 id: $scope.selectedSkillArea.Id
+				}).$promise.then(function (result) {
+					$scope.skillAreas.splice($scope.skillAreas.indexOf($scope.selectedSkillArea), 1);
+					$scope.selectedSkillArea = undefined;
+				}, function(error) {
+					console.log('error ' + error);
+				});
+
+				$scope.toggleModal();
 			};
 			
 			$scope.querySearch = function (query, myArray) {

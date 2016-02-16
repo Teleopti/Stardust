@@ -31,6 +31,14 @@
 					}
 				});
 
+				this.deleteSkillArea = $resource('../api/intraday/skillarea/:id', {id:'@id'}, {
+					remove: {
+						method: 'DELETE',
+						params: {},
+						isArray: false
+					}
+				});
+
 				this.formatDateTime = function (time) {
 					if (time === null || time === undefined || time === '') return '--:--:--';
 					var momentTime = moment(time);

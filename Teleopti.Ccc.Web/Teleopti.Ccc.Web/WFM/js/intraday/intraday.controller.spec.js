@@ -19,7 +19,12 @@ describe('IntradayCtrl', function () {
 		skillAreas = [
 		{
 			Id: "fa9b5393-ef48-40d1-b7cc-09e797589f81",
-			Name: "my skill area",
+			Name: "my skill area 1",
+			Skills: skills
+		},
+		{
+			Id: "836cebb6-cee8-41a1-bb62-729f4b3a63f4",
+			Name: "my skill area 2",
 			Skills: skills
 		}];
 	});
@@ -34,6 +39,9 @@ describe('IntradayCtrl', function () {
 
 		$httpBackend.whenGET("../api/intraday/skills")
 			.respond(200, skills);
+
+		$httpBackend.whenDELETE("../api/intraday/skillarea/836cebb6-cee8-41a1-bb62-729f4b3a63f4")
+			.respond(200, {});
 	}));
 
 	var createController = function () {
@@ -48,7 +56,7 @@ describe('IntradayCtrl', function () {
 		createController();
 
 		expect(scope.skillAreas[0].Id).toEqual("fa9b5393-ef48-40d1-b7cc-09e797589f81");
-		expect(scope.skillAreas[0].Name).toEqual("my skill area");
+		expect(scope.skillAreas[0].Name).toEqual("my skill area 1");
 		expect(scope.skillAreas[0].Skills[0].Id).toEqual("5f15b334-22d1-4bc1-8e41-72359805d30f");
 		expect(scope.skillAreas[0].Skills[0].Name).toEqual("skill x");
 	});
@@ -58,5 +66,25 @@ describe('IntradayCtrl', function () {
 
 		expect(scope.skills[0].Id).toEqual("5f15b334-22d1-4bc1-8e41-72359805d30f");
 		expect(scope.skills[0].Name).toEqual("skill x");
+	});
+
+	it('should default select first skill area if exist', function() {
+		createController();
+
+		expect(scope.selectedSkillArea.Name).toEqual("my skill area 1");
+	});
+
+	it('should delete selected skill area', function() {
+		createController();
+
+		scope.selectedSkillArea = scope.skillAreas[1];
+		scope.deleteSkillArea();
+
+		expect(scope.skillAreas.length).toEqual(2);
+		
+		$httpBackend.flush();
+
+		expect(scope.selectedSkillArea).toEqual(undefined);
+		expect(scope.skillAreas.length).toEqual(1);
 	});
 });
