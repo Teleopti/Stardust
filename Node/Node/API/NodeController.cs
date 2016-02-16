@@ -66,7 +66,8 @@ namespace Stardust.Node.API
                                             startJobMessage);
 
 
-            return CreateOkStatusCode(jobToDo);
+        //    return CreateOkStatusCode(jobToDo);
+            return Ok();
         }
 
         [HttpDelete, AllowAnonymous, Route(NodeRouteConstants.CancelJob)]

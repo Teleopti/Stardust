@@ -3,10 +3,17 @@ using System.Configuration;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Web.Http;
+using System.Web.Http.ExceptionHandling;
+using Autofac;
+using Autofac.Integration.WebApi;
 using log4net;
 using log4net.Config;
+using Microsoft.Owin.Hosting;
+using Owin;
 using Stardust.Manager;
 using Stardust.Manager.Helpers;
+using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
 
 namespace ManagerConsoleHost
@@ -23,29 +30,69 @@ namespace ManagerConsoleHost
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
             SetConsoleCtrlHandler(ConsoleCtrlCheck,
-                                  true);
+                true);
 
             AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
 
             WhoAmI = "[MANAGER CONSOLE HOST, " + Environment.MachineName.ToUpper() + "]";
 
             LogHelper.LogInfoWithLineNumber(Logger,
-                                            WhoAmI + " : started.");
+                WhoAmI + " : started.");
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-            var config = new ManagerConfiguration
+            var managerConfiguration = new ManagerConfiguration
             {
                 BaseAddress = new Uri(ConfigurationManager.AppSettings["baseAddress"]),
                 ConnectionString =
                     ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString
             };
 
-            ManagerStarter = new ManagerStarter();
+            
 
-            ManagerStarter.Start(config);
+            string managerAddress = managerConfiguration.BaseAddress.Scheme + "://+:" +
+                                    managerConfiguration.BaseAddress.Port + "/";
 
-            QuitEvent.WaitOne();
+            using (WebApp.Start(managerAddress,
+                appBuilder =>
+                {
+                    var builder = new ContainerBuilder();
+
+                    builder.RegisterType<NodeManager>()
+                        .As<INodeManager>();
+
+                    builder.RegisterType<JobManager>();
+
+                    builder.RegisterType<HttpSender>()
+                        .As<IHttpSender>();
+
+                    builder.Register(
+                        c => new JobRepository(managerConfiguration.ConnectionString))
+                        .As<IJobRepository>();
+
+                    builder.Register(
+                        c => new WorkerNodeRepository(managerConfiguration.ConnectionString))
+                        .As<IWorkerNodeRepository>();
+
+                    builder.RegisterApiControllers(typeof (ManagerController).Assembly);
+
+                    builder.RegisterInstance(managerConfiguration);
+
+                    var container = builder.Build();
+
+                    // Configure Web API for self-host. 
+                    appBuilder.UseStardustManager(container, ConfigurationManager.AppSettings["routeName"]);
+                    
+                }))
+            {
+                LogHelper.LogInfoWithLineNumber(Logger,
+                    WhoAmI + ": Started listening on port : ( " + managerConfiguration.BaseAddress + " )");
+
+                ManagerStarter = new ManagerStarter();
+                ManagerStarter.Start(managerConfiguration);
+
+                QuitEvent.WaitOne();
+            }
         }
 
         private static ManagerStarter ManagerStarter { get; set; }
