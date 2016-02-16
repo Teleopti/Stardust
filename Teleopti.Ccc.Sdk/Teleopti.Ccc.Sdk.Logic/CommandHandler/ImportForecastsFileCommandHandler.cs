@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 _jobResultRepository.Add(jobResult);
                 jobResultId = jobResult.Id.GetValueOrDefault();
                 unitOfWork.PersistAll();
-            }
+            
             
             var message = new ImportForecastsFileToSkill
             {
@@ -56,7 +56,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 OwnerPersonId = person.Id.GetValueOrDefault(Guid.Empty),
                 ImportMode = (ImportForecastsMode)((int)command.ImportForecastsMode)
             };
-			_busSender.Send(message, true);
+
+				_busSender.Send(message, true);
+			}
 			command.Result = new CommandResultDto { AffectedId = jobResultId, AffectedItems = 1 };
         }
     }
