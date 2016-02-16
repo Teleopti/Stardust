@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly ConcurrentDictionary<ActivitySkillsCombination, InnerPeriodResourceDetail> _resourceDictionary = 
 			new ConcurrentDictionary<ActivitySkillsCombination, InnerPeriodResourceDetail>();
 		
-		public void AppendResource(ActivitySkillsCombination key, SkillCombination skillCombination, int heads, double resource, DateTimePeriod? fractionPeriod)
+		public void AppendResource(ActivitySkillsCombination key, SkillCombination skillCombination, double heads, double resource, DateTimePeriod? fractionPeriod)
 		{
 			_resourceDictionary.AddOrUpdate(key,
 				new InnerPeriodResourceDetail(heads, resource, skillCombination.SkillEfficiencies,
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public PeriodResourceDetail GetResources(Guid activityKey, Guid skillKey)
 		{
-			var count = 0;
+			var count = 0d;
 			var resource = 0d;
 			foreach (var pair in _resourceDictionary)
 			{
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						currentResource = currentResource * foundEfficiency.Resource;
 					}
 					
-					count += pair.Value.Count;
+					count += pair.Value.Resource;
 					resource += currentResource;
 				}
 			}
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public PeriodResourceDetail GetResources(IEnumerable<Guid> activityKeys, Guid skillKey)
 		{
-			var count = 0;
+			var count = 0d;
 			var resource = 0d;
 			foreach (var pair in _resourceDictionary)
 			{

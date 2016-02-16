@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				_activityRequiresSeat.TryAdd(resourceLayer.PayloadId,true);
 			}
-			resources.AppendResource(key, skills, MinSkillResolution, resourceLayer.Resource, resourceLayer.FractionPeriod);
+			resources.AppendResource(key, skills, 1d, resourceLayer.Resource, resourceLayer.FractionPeriod);
 		}
 
 		public void RemoveResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer)
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 							{
 								Skills = skills,
 								Resource = previousResource + pair.Resource.Resource,
-								Count = previousCount + pair.Resource.Count / MinSkillResolution,
+								Count = previousCount + pair.Resource.Count,
 								SkillEffiencies = accumulatedEffiencies
 							};
 							
