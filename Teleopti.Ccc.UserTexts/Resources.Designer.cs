@@ -8321,6 +8321,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Double click here to edit text.
+        /// </summary>
+        public static string DoubleClickHereToEditText {
+            get {
+                return ResourceManager.GetString("DoubleClickHereToEditText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Value of gold threshold for adherence should be larger than the rest..
         /// </summary>
         public static string DoubleTextBoxGoldThresholdForAdherence {

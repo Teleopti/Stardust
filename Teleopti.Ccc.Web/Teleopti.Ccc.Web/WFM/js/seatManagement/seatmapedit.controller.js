@@ -6,10 +6,10 @@
 		.controller('SeatMapEditCtrl', seatMapEditDirectiveController);
 
 	seatMapEditDirectiveController.$inject = [
-		'$scope', '$document', '$window', 'seatMapCanvasUtilsService', 'seatMapCanvasEditService', 'growl'
+		'$scope', '$document', '$window', 'seatMapCanvasUtilsService', 'seatMapCanvasEditService', 'growl', '$translate'
 	];
 
-	function seatMapEditDirectiveController($scope, $document, $window, utils, editor, growl) {
+	function seatMapEditDirectiveController($scope, $document, $window, utils, editor, growl, $translate) {
 
 		var vm = this;
 		vm.newLocationName = '';
@@ -81,7 +81,7 @@
 		};
 
 		vm.addText = function() {
-			editor.addText(canvas(), 'Double click here to edit text');
+			editor.addText(canvas(), $translate.instant('DoubleClickHereToEditText'));
 		};
 
 		vm.copy = function () {

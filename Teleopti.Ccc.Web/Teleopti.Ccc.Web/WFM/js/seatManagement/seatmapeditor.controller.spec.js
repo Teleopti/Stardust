@@ -4,6 +4,7 @@ describe('seatmap editor controller tests', function () {
 
 	var $q,
 		$rootScope,
+		$translate,
 		controller,
 		seatMapServiceParams,
 		seatMapCanvasUtilsService,
@@ -14,16 +15,16 @@ describe('seatmap editor controller tests', function () {
 		module('wfm.seatMap');
 	});
 
-	beforeEach(inject(function (_$q_, _$rootScope_, _$controller_, _seatMapCanvasUtilsService_, _seatMapCanvasEditService_, seatMapService) {
+	beforeEach(inject(function (_$q_, _$rootScope_, _$controller_, _seatMapCanvasUtilsService_, _seatMapCanvasEditService_, seatMapService, _$translate_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
+		$translate = _$translate_;
 		seatMapCanvasUtilsService = _seatMapCanvasUtilsService_;
 		seatMapCanvasEditService = _seatMapCanvasEditService_;
 		seatMapCanvasUtilsService.loadSeatMap = function () { };
 
 		setupFakeSeatMapService(seatMapService);
 		setUpController(_$controller_);
-
 	}));
 
 
@@ -54,7 +55,6 @@ describe('seatmap editor controller tests', function () {
 
 
 	function setUpController($controller) {
-
 		var scope = $rootScope.$new();
 		var canvas = new fabric.CanvasWithViewport('c');
 

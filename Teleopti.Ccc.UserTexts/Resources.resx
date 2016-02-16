@@ -14110,4 +14110,8 @@ Help us improve your experience by sending an error report</value>
     <value>Hide Panel</value>
     <comment>Tooltip text of wfm right panel hide button</comment>
   </data>
+  <data name="DoubleClickHereToEditText" xml:space="preserve">
+    <value>Double click here to edit text</value>
+    <comment>Text info when adding a Text in seatmap</comment>
+  </data>
 </root>

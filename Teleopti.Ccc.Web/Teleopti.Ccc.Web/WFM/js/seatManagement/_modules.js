@@ -1,2 +1,2 @@
-﻿angular.module('wfm.seatMap', ['ngImageInputWithPreview', 'angular-growl', 'ngAnimate', 'ngResource', 'ngMaterial', 'wfm.permissions', 'ui.indeterminate', 'angularResizable', 'wfm.rightPanel']);
-angular.module('wfm.seatPlan', ['angular-growl', 'ngAnimate', 'restPlanningPeriodService', 'wfm.cardList', 'ngMaterial']);
+﻿angular.module('wfm.seatMap', ['ngImageInputWithPreview', 'angular-growl', 'ngAnimate', 'ngResource', 'ngMaterial', 'wfm.permissions', 'ui.indeterminate', 'angularResizable', 'wfm.rightPanel', 'pascalprecht.translate']);
+angular.module('wfm.seatPlan', ['angular-growl', 'ngAnimate', 'restPlanningPeriodService', 'wfm.cardList', 'ngMaterial', 'pascalprecht.translate']);
