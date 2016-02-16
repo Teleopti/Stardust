@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         TimeSpan CalculatePeriodOffset(IScheduleDay source, IScheduleDay target, bool ignoreTimeZoneChanges, DateTimePeriod sourceShiftPeriod);
 
         TimeSpan CalculatePeriodOffset(DateTimePeriod sourcePeriod, DateTimePeriod targetPeriod);
+		TimeSpan CalculatePeriodOffsetConsiderDaylightSavings(IScheduleDay source, IScheduleDay target, DateTimePeriod sourceShiftPeriod);
     }
 
     /// <summary>
@@ -34,7 +35,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return CalculatePeriodOffsetWithTimeZoneChanges(sourcePeriod, targetPeriod);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public TimeSpan CalculatePeriodOffsetConsiderDaylightSavings(IScheduleDay source, IScheduleDay target, DateTimePeriod sourceShiftPeriod)
+	    {
+			var periodDifference = CalculatePeriodDifference(source.Period, target.Period);
+			var targetShiftPeriod = sourceShiftPeriod.MovePeriod(periodDifference);
+			var dayLightSavingsRecorrection = CalculateDaylightSavingsRecorrection(sourceShiftPeriod, targetShiftPeriod);
+			return periodDifference.Add(dayLightSavingsRecorrection);
+	    }
+
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public TimeSpan CalculatePeriodOffset(IScheduleDay source, IScheduleDay target, bool ignoreTimeZoneChanges, DateTimePeriod sourceShiftPeriod)
         {
             if (ignoreTimeZoneChanges)

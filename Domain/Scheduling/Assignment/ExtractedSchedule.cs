@@ -631,20 +631,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		private void mergePersonalStuff(IScheduleDay source)
 		{
-			IPersonAssignment sourceAss = source.PersonAssignment();
+			var sourceAss = source.PersonAssignment();
+			if (sourceAss == null) return;
 
-			if (sourceAss != null)
-			{
-				var destAss = PersonAssignment(true);
-
-				IPeriodOffsetCalculator periodOffsetCalculator = new PeriodOffsetCalculator();
+			var destAss = PersonAssignment(true);
+			var periodOffsetCalculator = new PeriodOffsetCalculator();
 				
-				foreach (var personalLayer in sourceAss.PersonalActivities())
-				{
-					TimeSpan periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source.Period, Period);
-					destAss.AddPersonalActivity(personalLayer.Payload, personalLayer.Period.MovePeriod(periodOffset));
-				}
-
+			foreach (var personalLayer in sourceAss.PersonalActivities())
+			{
+				var periodOffset = periodOffsetCalculator.CalculatePeriodOffsetConsiderDaylightSavings(source, this, sourceAss.Period);	
+				destAss.AddPersonalActivity(personalLayer.Payload, personalLayer.Period.MovePeriod(periodOffset));
 			}
 		}
 
@@ -696,20 +692,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			var dateOnlyPerson = DateOnlyAsPeriod.DateOnly;
 			var period = Person.Period(dateOnlyPerson);
-			var diff = CalculatePeriodOffset(source.Period);
+			if (period == null) return;
+			var personAss = source.PersonAssignment();
+			if (personAss == null) return;
 
-			if (period != null)
+			var periodOffsetCalculator = new PeriodOffsetCalculator();
+			var diff = periodOffsetCalculator.CalculatePeriodOffsetConsiderDaylightSavings(source, this, personAss.Period);
+
+			foreach (var layer in personAss.OvertimeActivities())
 			{
-				var personAss = source.PersonAssignment();
-				if (personAss != null)
+				if (period.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Contains(layer.DefinitionSet))
 				{
-					foreach (var layer in personAss.OvertimeActivities())
-					{
-						if (period.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Contains(layer.DefinitionSet))
-						{
-							CreateAndAddOvertime(layer.Payload, layer.Period.MovePeriod(diff), layer.DefinitionSet);
-						}
-					}
+					CreateAndAddOvertime(layer.Payload, layer.Period.MovePeriod(diff), layer.DefinitionSet);
 				}
 			}
 		}

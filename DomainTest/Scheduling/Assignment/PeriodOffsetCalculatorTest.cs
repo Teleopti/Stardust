@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -201,6 +202,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 Assert.AreEqual(new TimeSpan(31, 0, 0, 0), offSet);
             }
         }
+
+		[Test]
+	    public void ShouldCalculatePeriodOffsetWithDaylightSavings()
+	    {
+			_sourceDateTimePeriod = new DateTimePeriod(2016, 03, 25, 23, 2016, 03, 26, 23);
+			_targetDateTimePeriod = new DateTimePeriod(2016, 03, 26, 23, 2016, 03, 27, 22);
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_sourceScheduleDay.Period).Return(_sourceDateTimePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_targetScheduleDay.Period).Return(_targetDateTimePeriod).Repeat.AtLeastOnce();
+			}
+			using (_mocks.Playback())
+			{
+				var offSet = _target.CalculatePeriodOffsetConsiderDaylightSavings(_sourceScheduleDay, _targetScheduleDay, new DateTimePeriod(2016, 3, 26, 9, 2016, 3, 26, 10));
+				offSet.Should().Be.EqualTo(TimeSpan.FromHours(23));
+			}    
+	    }
 
         [Test]
         public void VerifyCalculatePeriodOffsetCalculatesWithDaylightSavingsWithinTimeZoneEvenIfIgnoreTimeZoneChanges()

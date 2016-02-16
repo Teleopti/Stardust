@@ -966,6 +966,53 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
+		public void ShouldConsiderDaylightSavingsWhenMergePersonalStuff()
+		{
+			var person1 = PersonFactory.CreatePerson();
+			var scenario = ScenarioFactory.CreateScenarioAggregate();
+			var underlyingDictionary = new Dictionary<IPerson, IScheduleRange>();
+			var dic = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(rangePeriod), underlyingDictionary);
+
+			var sourcePeriod =  new DateTimePeriod(2016, 3, 25, 23, 2016, 3, 26,23);
+			var destinationPeriod = new DateTimePeriod(2016, 3, 26, 23, 2016, 3, 27, 22);
+			var shiftSourcePeriod = new DateTimePeriod(2016, 3, 26, 9, 2016, 3, 26, 10);
+
+			var source = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(sourcePeriod.StartDateTime));
+			var destination = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(destinationPeriod.StartDateTime));
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person1, scenario);
+
+			personAssignment.AddPersonalActivity(ActivityFactory.CreateActivity("activity"), shiftSourcePeriod);
+			source.Add(personAssignment);
+
+			destination.Merge(source, false);
+			destination.PersonAssignment().Period.Should().Be.EqualTo(shiftSourcePeriod.MovePeriod(TimeSpan.FromHours(23)));
+		}
+
+		[Test]
+		public void ShouldConsiderDaylightSavingsWhenMergeOvertime()
+		{
+			var person1 = PersonFactory.CreatePerson();
+			var scenario = ScenarioFactory.CreateScenarioAggregate();
+			var underlyingDictionary = new Dictionary<IPerson, IScheduleRange>();
+			var dic = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(rangePeriod), underlyingDictionary);
+
+			var sourcePeriod = new DateTimePeriod(2016, 3, 25, 23, 2016, 3, 26, 23);
+			var destinationPeriod = new DateTimePeriod(2016, 3, 26, 23, 2016, 3, 27, 22);
+			var shiftSourcePeriod = new DateTimePeriod(2016, 3, 26, 9, 2016, 3, 26, 10);
+
+			var source = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(sourcePeriod.StartDateTime));
+			var destination = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(destinationPeriod.StartDateTime));
+
+			var definitionSet = new MultiplicatorDefinitionSet("Overtime", MultiplicatorType.Overtime);
+			PersonFactory.AddDefinitionSetToPerson(person1, definitionSet);
+			var activity = ActivityFactory.CreateActivity("activity");
+			source.CreateAndAddOvertime(activity, shiftSourcePeriod, definitionSet);
+
+			((ExtractedSchedule)destination).MergeOvertime(source);
+			destination.PersonAssignment().Period.Should().Be.EqualTo(shiftSourcePeriod.MovePeriod(TimeSpan.FromHours(23)));
+		}
+
+		[Test]
 		public void VerifyCopyPasteToAnotherTimeZoneChangesDateOnlyAsPeriod()
 		{
 			var scenario = ScenarioFactory.CreateScenarioAggregate();
