@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Http;
+﻿using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
 using Autofac;
 using Autofac.Integration.WebApi;
@@ -11,11 +6,10 @@ using Microsoft.Owin;
 using Microsoft.Owin.FileSystems;
 using Microsoft.Owin.StaticFiles;
 using Owin;
-using Stardust.Manager;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
 
-namespace ManagerConsoleHost
+namespace Stardust.Manager
 {
     public static class AppBuilderExtension
     {
