@@ -1,11 +1,11 @@
 ﻿using System;
 using Autofac;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Rta;
 
@@ -152,10 +152,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			else
 				builder.RegisterType<ConfiguredKeyAuthenticator>().As<IAuthenticator>().SingleInstance();
 			
-			if (_config.Toggle(Toggles.RTA_MultiTenancy_32539))
-				builder.RegisterType<TenantDataSourceScope>().As<IRtaDataSourceScope>().SingleInstance();
-			else
-				builder.RegisterType<ConnectionStringDataSourceScope>().As<IRtaDataSourceScope>().SingleInstance();
 		}
 	}
 }

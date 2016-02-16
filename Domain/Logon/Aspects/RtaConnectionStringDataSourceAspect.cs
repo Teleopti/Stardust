@@ -5,9 +5,9 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects
+namespace Teleopti.Ccc.Domain.Logon.Aspects
 {
-	public class ConnectionStringDataSourceScope : IRtaDataSourceScope
+	public class RtaConnectionStringDataSourceAspect : IDataSourceAspect
 	{
 		private readonly IDataSourceScope _dataSource;
 		private readonly Lazy<IDataSource> _rtaConfigurationDataSource;
@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects
 		[ThreadStatic]
 		private static IDisposable _scope;
 
-		public ConnectionStringDataSourceScope(IDataSourceScope dataSource, IConfigReader configReader, Func<IDataSourceForTenant> dataSourceForTenant)
+		public RtaConnectionStringDataSourceAspect(IDataSourceScope dataSource, IConfigReader configReader, Func<IDataSourceForTenant> dataSourceForTenant)
 		{
 			_dataSource = dataSource;
 			_rtaConfigurationDataSource = new Lazy<IDataSource>(() => dataSourceFromRtaConfiguration(configReader, dataSourceForTenant));

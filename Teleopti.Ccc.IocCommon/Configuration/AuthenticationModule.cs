@@ -1,8 +1,9 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
+using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
@@ -22,17 +23,34 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class AuthenticationModule : Module
 	{
+		private readonly IIocConfiguration _config;
+
+		public AuthenticationModule(IIocConfiguration config)
+		{
+			_config = config;
+		}
+
 		protected override void Load(ContainerBuilder builder)
 		{
+			if (_config.Toggle(Toggles.RTA_MultiTenancy_32539))
+				builder.RegisterType<DataSourceAspect>().As<IDataSourceAspect>().SingleInstance();
+			else
+				builder.RegisterType<RtaConnectionStringDataSourceAspect>().As<IDataSourceAspect>().SingleInstance();
+			builder.RegisterType<TenantFromArguments>().SingleInstance();
+			builder.RegisterType<AsSystemAspect>().SingleInstance();
+
+			builder.RegisterType<AsSystem>().SingleInstance();
+			builder.RegisterType<LogOnOff>().As<ILogOnOff>().SingleInstance();
 			builder.RegisterType<WindowsAppDomainPrincipalContext>().SingleInstance();
 			builder.RegisterType<WebRequestPrincipalContext>().SingleInstance();
 			builder.RegisterType<ThreadPrincipalContext>().SingleInstance();
 			builder.RegisterType<SelectivePrincipalContext>().As<ICurrentPrincipalContext>().SingleInstance();
-
 			builder.RegisterType<TokenIdentityProvider>().As<ITokenIdentityProvider>().SingleInstance();
 			builder.RegisterType<TeleoptiPrincipalFactory>().As<IPrincipalFactory>().SingleInstance();
-			builder.RegisterType<AsSystem>().SingleInstance();
-			builder.RegisterType<LogOnOff>().As<ILogOnOff>().SingleInstance();
+			builder.RegisterType<RoleToPrincipalCommand>().As<IRoleToPrincipalCommand>().InstancePerDependency();
+			builder.RegisterType<ApplicationFunctionsForRole>().As<ApplicationFunctionsForRole>().InstancePerDependency();
+			builder.RegisterType<ClaimSetForApplicationRole>().As<ClaimSetForApplicationRole>().InstancePerDependency();
+
 			builder.RegisterType<RepositoryFactory>().As<IRepositoryFactory>().SingleInstance();
 			builder.RegisterType<AvailableBusinessUnitsProvider>().As<IAvailableBusinessUnitsProvider>().SingleInstance();
 
@@ -44,12 +62,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			})
 				.As<IPasswordPolicy>()
 				.SingleInstance();
-			builder.RegisterType<RoleToPrincipalCommand>().As<IRoleToPrincipalCommand>().InstancePerDependency();
-			builder.RegisterType<ApplicationFunctionsForRole>().As<ApplicationFunctionsForRole>().InstancePerDependency();
 			builder.RegisterType<LicensedFunctionsProvider>().As<ILicensedFunctionsProvider>().SingleInstance();
 			builder.RegisterType<ApplicationFunctionsProvider>().As<IApplicationFunctionsProvider>().SingleInstance();
 			builder.RegisterType<ApplicationFunctionsToggleFilter>().As<IApplicationFunctionsToggleFilter>().SingleInstance();
-			builder.RegisterType<ClaimSetForApplicationRole>().As<ClaimSetForApplicationRole>().InstancePerDependency();
 			builder.RegisterType<DefinedRaptorApplicationFunctionFactory>().As<IDefinedRaptorApplicationFunctionFactory>().InstancePerDependency();
 
 			builder.RegisterType<CurrentApplicationData>().As<ICurrentApplicationData>().SingleInstance();

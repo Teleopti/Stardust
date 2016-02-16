@@ -245,10 +245,10 @@
     <Compile Include="ApplicationLayer\PersonAssociationChangedEventPublisher.cs" />
     <Compile Include="ApplicationLayer\RecurringIdAttribute.cs" />
     <Compile Include="ApplicationLayer\ResolveEventHandlers.cs" />
-    <Compile Include="ApplicationLayer\Rta\Aspects\TenantDataSourceScope.cs" />
-    <Compile Include="ApplicationLayer\Rta\Aspects\RtaDataSourceScopeAttribute.cs" />
-    <Compile Include="ApplicationLayer\Rta\Aspects\IRtaDataSourceScope.cs" />
-    <Compile Include="ApplicationLayer\Rta\Aspects\ConnectionStringDataSourceScope.cs" />
+    <Compile Include="Logon\Aspects\DataSourceAspect.cs" />
+    <Compile Include="Logon\Aspects\DataSourceAttribute.cs" />
+    <Compile Include="Logon\Aspects\IDataSourceAspect.cs" />
+    <Compile Include="Logon\Aspects\RtaConnectionStringDataSourceAspect.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAppliedAlarmStartTime.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAppliedIsAlarm.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\InvalidPlatformException.cs" />
@@ -652,6 +652,7 @@
     <Compile Include="Logon\ApplicationFunctionsForRole.cs" />
     <Compile Include="Intraday\CreateSkillArea.cs" />
     <Compile Include="Intraday\FetchSkillArea.cs" />
+    <Compile Include="Logon\Aspects\TenantFromArguments.cs" />
     <Compile Include="Logon\AsSystem.cs" />
     <Compile Include="Intraday\FetchSkillInIntraday.cs" />
     <Compile Include="Intraday\IIntradaySkillStatusService.cs" />
@@ -663,6 +664,8 @@
     <Compile Include="Intraday\SkillStatusMeasure.cs" />
     <Compile Include="Intraday\SkillStatusModel.cs" />
     <Compile Include="Intraday\SkillTaskDetails.cs" />
+    <Compile Include="Logon\AsSystemAspect.cs" />
+    <Compile Include="Logon\AsSystemAttribute.cs" />
     <Compile Include="Logon\ICurrentPrincipalContext.cs" />
     <Compile Include="Logon\IPrincipalFactory.cs" />
     <Compile Include="Logon\IRoleToPrincipalCommand.cs" />

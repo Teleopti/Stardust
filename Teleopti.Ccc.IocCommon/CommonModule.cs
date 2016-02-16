@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule(new MessageBrokerModule(_configuration));
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule(new UnitOfWorkModule(_configuration));
-			builder.RegisterModule<AuthenticationModule>();
+			builder.RegisterModule(new AuthenticationModule(_configuration));
 			builder.RegisterModule<ForecasterModule>();
 			builder.RegisterModule(new EventHandlersModule(_configuration));
 			builder.RegisterModule(new EventPublisherModule(_configuration));

@@ -21,10 +21,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Tenant
 			tenant.RtaKey = key;
 			_data.Add(tenant);
 		}
-
+		
 		public void Has(string tenant)
 		{
 			Has(new Infrastructure.MultiTenancy.Server.Tenant(tenant));
+		}
+
+		public void Has(string tenant, string rtaKey)
+		{
+			Has(new Infrastructure.MultiTenancy.Server.Tenant(tenant) {RtaKey = rtaKey});
 		}
 
 		public void WasRemoved(string tenant)

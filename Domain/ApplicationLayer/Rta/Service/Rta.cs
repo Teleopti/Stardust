@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Resolvers;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[InfoLog]
-		[RtaDataSourceScope]
+		[DataSource]
 		public virtual void SaveStateSnapshot(IEnumerable<ExternalUserStateInputModel> states)
 		{
 			_initializor.EnsureTenantInitialized();
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[InfoLog]
-		[RtaDataSourceScope]
+		[DataSource]
 		public virtual void SaveStateBatch(IEnumerable<ExternalUserStateInputModel> states)
 		{
 			_initializor.EnsureTenantInitialized();
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[InfoLog]
-		[RtaDataSourceScope]
+		[DataSource]
 		public virtual void SaveState(ExternalUserStateInputModel input)
 		{
 			validateAuthenticationKey(input);
@@ -228,20 +228,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[InfoLog]
-		[RtaDataSourceScope]
+		[DataSource]
 		public virtual void ReloadSchedulesOnNextCheckForActivityChanges(string tenant, Guid personId)
 		{
 			_cacheInvalidator.InvalidateSchedules(personId);
 		}
 
 		[InfoLog]
-		[RtaDataSourceScope]
+		[DataSource]
 		public virtual void CheckForActivityChanges(string tenant)
 		{
 			_activityChangeProcessor.CheckForActivityChanges();
 		}
 
-		[RtaDataSourceScope]
+		[DataSource]
 		public virtual void Touch(string tenant)
 		{
 			_initializor.EnsureTenantInitialized();

@@ -215,9 +215,10 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteAdherence\PersonDeletedTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamAdherence\PersonDeletedTest.cs" />
     <Compile Include="Intraday\CreateSkillAreaTest.cs" />
-    <Compile Include="Logon\AsSystemTest.cs" />
+    <Compile Include="Logon\AsSystemAspectTest.cs" />
     <Compile Include="Intraday\FetchSkillAreaTest.cs" />
     <Compile Include="Intraday\FetchSkillInIntradayTest.cs" />
+    <Compile Include="Logon\DataSourceAspectAuthenticationKeyTest.cs" />
     <Compile Include="Optimization\DayOffOptimizationPreferenceProviderTest.cs" />
     <Compile Include="Optimization\Filter\FindFilterTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\DayOffOptimizationLockDaysTest.cs" />
@@ -241,7 +242,7 @@
     <Compile Include="ApplicationLayer\MoveActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\PersonChangedMessageLegacyHandlerTest.cs" />
     <Compile Include="ApplicationLayer\RemoveAbsenceCommandHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\Aspects\RtaDataSourceScopeTest.cs" />
+    <Compile Include="Logon\DataSourceAspectTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Cache\CacheTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherenceDetails\NeutralAdherenceTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\ShiftTest.cs" />
@@ -1553,6 +1554,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Aop\TestDoubles\" />
+    <Folder Include="ApplicationLayer\Rta\Aspects\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

@@ -143,6 +143,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			this.WithPerson(SystemUser.Id_AvoidUsing_This, "System");
 		}
 
+		public FakeDatabase WithTenant(string tenant, string rtaKey)
+		{
+			_tenants.Has(tenant, rtaKey);
+			return this;
+		}
+
 		public FakeDatabase WithTenant(string tenant)
 		{
 			_tenants.Has(tenant);
