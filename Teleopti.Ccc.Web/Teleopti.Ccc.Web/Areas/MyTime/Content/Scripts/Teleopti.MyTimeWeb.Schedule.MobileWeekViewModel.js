@@ -146,7 +146,17 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function(scheduleDay, absenceRe
 		return false;
 	};
 	self.hasOvertime = scheduleDay.HasOvertime && !scheduleDay.IsFullDayAbsence;
-	if (self.summaryColor() == null && self.hasOvertime) self.summaryTimeSpan = scheduleDay.Periods[0].TimeSpan;
+
+	if (self.summaryColor() == null && self.hasOvertime) {
+		var timespan = [];
+		var count = scheduleDay.Periods.length;
+		for (var i = 0; i < count; i++) {
+			timespan.push(scheduleDay.Periods[i].TimeSpan);
+		}
+		timespan.sort();
+		self.summaryTimeSpan(timespan[0].slice(0,-8) + timespan[count-1].slice(-8));
+	}
+
 	self.hasShift = self.summaryColor() != null ? true : false;
 
     self.backgroundColor = scheduleDay.Summary ? scheduleDay.Summary.Color : null;
