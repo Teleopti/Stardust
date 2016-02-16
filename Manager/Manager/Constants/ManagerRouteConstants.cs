@@ -22,6 +22,8 @@
 
         public const string GetJobHistory = "job/" + JobIdOptionalParameter;
 
-        public const string GetJobHistoryList = "StardustDashboard/jobhistory/" ;
-    }
+        public const string JobHistoryList = "StardustDashboard/jobhistory/" ;
+
+		public const string JobHistoryDetails = "StardustDashboard/jobhistorydetails";
+	}
 }

@@ -8,6 +8,10 @@
 					templateUrl: 'listJob.html',
 					controller: 'listJobController'
 				})
+			.when('/details/:jobId', {
+				templateUrl: 'jobdetails.html',
+				controller: 'detailsController'
+			})
 			;
 		});
 }())
