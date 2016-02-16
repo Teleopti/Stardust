@@ -4,6 +4,7 @@ using System.Web;
 using System.Web.Security;
 using Microsoft.IdentityModel.Web;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Domain;
 
@@ -25,12 +26,12 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			_dataStringSerializer = dataStringSerializer;
 		}
 
-		public void StoreInCookie(SessionSpecificData data, bool isPersistent)
+		public void StoreInCookie(SessionSpecificData data, bool isPersistent, bool isLogonFromBrowser)
 		{
 			var userData = _dataStringSerializer.Serialize(data);
 			var userName = data.PersonId.ToString();
 
-			MakeCookie(userName, userData, isPersistent);
+			MakeCookie(userName, userData, isPersistent, isLogonFromBrowser);
 		}
 
 		public SessionSpecificData GrabFromCookie()
@@ -93,7 +94,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			_httpContext.Current().Response.Cookies.Add(cookie);
 		}
 
-		public void MakeCookie(string userName, string userData, bool isPersistent)
+		public void MakeCookie(string userName, string userData, bool isPersistent, bool isLogonFromBrowser)
 		{
 			var ticket = makeTicket(userName, userData, isPersistent);
 
@@ -105,7 +106,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 				Secure = _sessionSpecificCookieDataProviderSettings.AuthenticationRequireSsl,
 				Path = _sessionSpecificCookieDataProviderSettings.AuthenticationCookiePath
 			};
-			if (isPersistent)
+			if (isPersistent && isLogonFromBrowser)
 				cookie.Expires = _now.LocalDateTime().Add(TimeSpan.FromDays(5000));
 
 			if (!string.IsNullOrEmpty(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieDomain))

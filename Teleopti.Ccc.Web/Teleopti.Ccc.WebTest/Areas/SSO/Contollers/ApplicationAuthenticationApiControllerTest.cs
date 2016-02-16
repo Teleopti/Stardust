@@ -37,14 +37,15 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			{
 				UserName = "user",
 				Password = "pwd",
-				RememberMe = false
+				RememberMe = false,
+				IsLogonFromBrowser = true
 			};
 			authenticator.Stub(
 				x => x.AuthenticateApplicationUser(authenticationModel.UserName, authenticationModel.Password)).Return(result);
 
 			target.CheckPassword(authenticationModel);
 
-			formsAuthentication.AssertWasCalled(x => x.SetAuthCookie(authenticationModel.UserName + TokenIdentityProvider.ApplicationIdentifier, false));
+			formsAuthentication.AssertWasCalled(x => x.SetAuthCookie(authenticationModel.UserName + TokenIdentityProvider.ApplicationIdentifier, authenticationModel.RememberMe, authenticationModel.IsLogonFromBrowser));
 		}
 
 		[Test]
@@ -138,7 +139,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 
 			target.CheckPassword(authenticationModel);
 
-			formsAuthentication.AssertWasCalled(x => x.SetAuthCookie(authenticationModel.UserName + TokenIdentityProvider.ApplicationIdentifier, authenticationModel.RememberMe));
+			formsAuthentication.AssertWasCalled(x => x.SetAuthCookie(authenticationModel.UserName + TokenIdentityProvider.ApplicationIdentifier, authenticationModel.RememberMe, false));
 		}
 
 		[Test]

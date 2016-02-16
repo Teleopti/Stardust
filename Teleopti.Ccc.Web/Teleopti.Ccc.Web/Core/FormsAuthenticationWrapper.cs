@@ -27,9 +27,9 @@ namespace Teleopti.Ccc.Web.Core
 			_now = now;
 		}
 
-		public void SetAuthCookie(string userName, bool isPersistent)
+		public void SetAuthCookie(string userName, bool isPersistent, bool isLogonFromFatClient)
 		{
-			_sessionSpecificForIdentityProviderDataProvider.MakeCookie(userName, userName, isPersistent);
+			_sessionSpecificForIdentityProviderDataProvider.MakeCookie(userName, userName, isPersistent, isLogonFromFatClient);
 		}
 
 		public void SignOut()

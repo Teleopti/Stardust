@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			_principalAuthorization = principalAuthorization;
 		}
 
-		public void LogOn(string dataSourceName, Guid businessUnitId, Guid personId, string tenantPassword, bool isPersistent)
+		public void LogOn(string dataSourceName, Guid businessUnitId, Guid personId, string tenantPassword, bool isPersistent, bool isLogonFromBrowser)
 		{
 			var dataSource = _dataSourceForTenant.Tenant(dataSourceName);
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			}
 
 			var sessionSpecificData = new SessionSpecificData(businessUnitId, dataSourceName, personId, tenantPassword);
-			_sessionSpecificDataProvider.StoreInCookie(sessionSpecificData, isPersistent);
+			_sessionSpecificDataProvider.StoreInCookie(sessionSpecificData, isPersistent, isLogonFromBrowser);
 			_sessionSpecificDataProvider.RemoveAuthBridgeCookie();
 		}
 	}

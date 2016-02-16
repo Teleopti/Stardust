@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Logon
 {
-    public class LogOnOff : ILogOnOff
+	public class LogOnOff : ILogOnOff
     {
         private readonly ICurrentPrincipalContext _currentPrincipalContext;
 	    private readonly IPrincipalFactory _principalFactory;

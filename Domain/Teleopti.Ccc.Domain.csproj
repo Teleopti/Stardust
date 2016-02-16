@@ -669,6 +669,7 @@
     <Compile Include="Logon\ITokenIdentityProvider.cs" />
     <Compile Include="Logon\LogOnOff.cs" />
     <Compile Include="Logon\RoleToPrincipalCommand.cs" />
+    <Compile Include="Logon\UserAgentConstant.cs" />
     <Compile Include="MessageBroker\Client\IMessageBrokerComposite.cs" />
     <Compile Include="MessageBroker\Legacy\EventMessage.cs" />
     <Compile Include="MessageBroker\Legacy\EventMessageFactory.cs" />

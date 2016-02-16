@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Models
 		public string UserName { get; set; }
 		public string Password { get; set; }
 		public bool RememberMe { get; set; }
+		public bool IsLogonFromBrowser { get; set; }
 	}
 
 	public class ApplicationAuthenticationConverter : IModelBinder
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Models
 			ValueProviderResult username = bindingContext.ValueProvider.GetValue("username");
 			ValueProviderResult password = bindingContext.ValueProvider.GetValue("password");
 			ValueProviderResult rememberMe = bindingContext.ValueProvider.GetValue("rememberMe");
+			ValueProviderResult isLogonFromBrowser = bindingContext.ValueProvider.GetValue("isLogonFromBrowser");
 			if (username == null || password == null)
 			{
 				return false;
@@ -36,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Models
 				return false;
 			}
 
-			bindingContext.Model = new ApplicationAuthenticationModel{UserName = username.RawValue.ToString(),Password = password.RawValue.ToString(), RememberMe = bool.Parse(rememberMe.RawValue.ToString())};
+			bindingContext.Model = new ApplicationAuthenticationModel { UserName = username.RawValue.ToString(), Password = password.RawValue.ToString(), RememberMe = bool.Parse(rememberMe.RawValue.ToString()), IsLogonFromBrowser = bool.Parse(isLogonFromBrowser.RawValue.ToString()) };
 			return true;
 		}
 	}

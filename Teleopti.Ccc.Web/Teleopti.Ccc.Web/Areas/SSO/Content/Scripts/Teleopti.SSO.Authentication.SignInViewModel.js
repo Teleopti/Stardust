@@ -4,8 +4,8 @@ Teleopti.SSO.Authentication.SignInViewModel = function (data) {
 
 	this.UserName = ko.observable('');
 	this.Password = ko.observable('');
-	this.IsLogonFromFatClient = typeof isTeleoptiProvider !== 'undefined';
-	this.RememberMe = ko.observable(self.IsLogonFromFatClient);
+	this.IsLogonFromBrowser = typeof isTeleoptiProvider === 'undefined';
+	this.RememberMe = ko.observable(!self.IsLogonFromBrowser);
 	this.ErrorMessage = ko.observable();
 	this.HasErrorMessage = ko.computed(function () {
 		var errorMessage = self.ErrorMessage();
@@ -25,7 +25,8 @@ Teleopti.SSO.Authentication.SignInViewModel = function (data) {
 				type: "application",
 				username: self.UserName(),
 				password: self.Password(),
-				rememberMe: self.RememberMe()
+				rememberMe: self.RememberMe(),
+				IsLogonFromBrowser: self.IsLogonFromBrowser
 			},
 			errormessage: function (message) {
 				self.ErrorMessage(message);

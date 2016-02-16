@@ -75,10 +75,10 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			businessUnitRepository.Stub(x => x.Get(buId)).Return(choosenBusinessUnit);
 			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
 
-			target.LogOn(dataSourceName, buId, personId, null, true);
+			target.LogOn(dataSourceName, buId, personId, null, true, false);
 
 			logOnOff.AssertWasCalled(x => x.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit));
-			sessionSpecificDataProvider.AssertWasCalled(x => x.StoreInCookie(null, true), o => o.IgnoreArguments());
+			sessionSpecificDataProvider.AssertWasCalled(x => x.StoreInCookie(null, true, false), o => o.IgnoreArguments());
 		}
 
 		[Test]
@@ -103,11 +103,11 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			personRepository.Stub(x => x.Get(personId)).Return(logonPerson);
 			businessUnitRepository.Stub(x => x.Get(buId)).Return(choosenBusinessUnit);
 			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(true);
-			
-			target.LogOn(dataSourceName, buId, personId, null, false);
+
+			target.LogOn(dataSourceName, buId, personId, null, false, false);
 
 			logOnOff.AssertWasCalled(x => x.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit));
-			sessionSpecificDataProvider.AssertWasCalled(x => x.StoreInCookie(null, false), o => o.IgnoreArguments());
+			sessionSpecificDataProvider.AssertWasCalled(x => x.StoreInCookie(null, false, false), o => o.IgnoreArguments());
 		}
 
 		[Test]
@@ -134,10 +134,10 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(false);
 			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(false);
 
-			Assert.Throws<PermissionException>(() => target.LogOn(dataSourceName, buId, personId, null, false));
+			Assert.Throws<PermissionException>(() => target.LogOn(dataSourceName, buId, personId, null, false, false));
 
 			logOnOff.AssertWasCalled(x => x.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit));
-			sessionSpecificDataProvider.AssertWasNotCalled(x => x.StoreInCookie(null, false), o => o.IgnoreArguments());
+			sessionSpecificDataProvider.AssertWasNotCalled(x => x.StoreInCookie(null, false, false), o => o.IgnoreArguments());
 		}
 
 		[Test]
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			businessUnitRepository.Stub(x => x.Get(buId)).Return(choosenBusinessUnit);
 			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
 
-			target.LogOn(dataSourceName, buId, personId, null, true);
+			target.LogOn(dataSourceName, buId, personId, null, true, false);
 
 			sessionSpecificDataProvider.AssertWasCalled(x=>x.RemoveAuthBridgeCookie());
 		}

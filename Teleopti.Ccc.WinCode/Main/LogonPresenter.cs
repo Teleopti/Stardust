@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.WinCode.Main
 		private readonly IAuthenticationQuerier _authenticationQuerier;
 		private readonly IWindowsUserProvider _windowsUserProvider;
 		private readonly IAvailableBusinessUnitsProvider _availableBusinessUnitsProvider;
-		public const string UserAgent = "WIN";
 
 
 		public LogonPresenter(ILogonView view, LogonModel model, ILoginInitializer initializer, ILogOnOff logOnOff,
@@ -183,7 +182,7 @@ namespace Teleopti.Ccc.WinCode.Main
 				var settings = _sharedSettingsQuerier.GetSharedSettings();
 				_view.InitStateHolderWithoutDataSource(_messageBroker, settings);
 			}
-			var authenticationResult = _authenticationQuerier.TryLogon(new ApplicationLogonClientModel{UserName = _model.UserName, Password = _model.Password}, UserAgent);
+			var authenticationResult = _authenticationQuerier.TryLogon(new ApplicationLogonClientModel { UserName = _model.UserName, Password = _model.Password }, UserAgentConstant.UserAgentWin);
 				
 			if (authenticationResult.Success)
 			{
@@ -198,7 +197,7 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private bool winLogin()
 		{
-			var authenticationResult = _authenticationQuerier.TryLogon(new IdentityLogonClientModel {Identity = _windowsUserProvider.Identity()}, UserAgent);
+			var authenticationResult = _authenticationQuerier.TryLogon(new IdentityLogonClientModel { Identity = _windowsUserProvider.Identity() }, UserAgentConstant.UserAgentWin);
 
 			if (authenticationResult.Success)
 			{
@@ -214,7 +213,7 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		public bool webLogin(Guid businessunitId)
 		{
-			var authenticationResult = _authenticationQuerier.TryLogon(new IdLogonClientModel { Id = _model.PersonId }, UserAgent);
+			var authenticationResult = _authenticationQuerier.TryLogon(new IdLogonClientModel { Id = _model.PersonId }, UserAgentConstant.UserAgentWin);
 			if (!StateHolderReader.IsInitialized)
 			{
 				var settings = _sharedSettingsQuerier.GetSharedSettings();

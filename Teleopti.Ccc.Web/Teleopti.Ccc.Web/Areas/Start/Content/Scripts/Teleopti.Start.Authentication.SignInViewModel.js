@@ -3,6 +3,7 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 	var self = this;
 
 	this.ErrorMessage = ko.observable();
+	this.IsLogonFromBrowser = typeof isTeleoptiProvider === 'undefined';
 	this.ShowSignInAsAnotherUser = ko.observable(false);
 	this.HasErrorMessage = ko.computed(function () {
 		var errorMessage = self.ErrorMessage();
@@ -18,6 +19,7 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 
 		state.TryToSignIn({
 			data: {
+				IsLogonFromBrowser: self.IsLogonFromBrowser
 			},
 			errormessage: function (message) {
 				self.ErrorMessage(message);
