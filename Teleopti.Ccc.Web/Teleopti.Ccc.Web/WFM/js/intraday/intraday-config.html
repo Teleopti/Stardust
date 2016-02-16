@@ -44,7 +44,7 @@
 				</ul>
 				<dl ng-show="!skillSelected()">
 					<dd class="animate-input-message">
-						<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">{{'Required'|translate}}</div>
+						<div class="form-input-message" ng-class="{formInvalidInput:!skillSelected()}">{{'Required'|translate}}</div>
 					</dd>
 				</dl>
 			</div>
