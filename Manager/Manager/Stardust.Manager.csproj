@@ -114,7 +114,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppBuilderExtension.cs" />
-    <Compile Include="Constants\ManagerRouteConstants.cs" />
     <Compile Include="Constants\NodeRouteConstants.cs" />
     <Compile Include="GlobalExceptionLogger.cs" />
     <Compile Include="Helpers\LogHelper.cs" />

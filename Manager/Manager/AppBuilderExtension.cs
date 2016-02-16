@@ -55,7 +55,7 @@ namespace Stardust.Manager
                 routeTemplate: "{controller}/status/{action}/{jobId}",
                 defaults: new {controller = routeName, jobId = RouteParameter.Optional }
                 );
-
+            
             config.Routes.MapHttpRoute(
                 name: "Manager3",
                 routeTemplate: "{controller}/{action}/{model}",

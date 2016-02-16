@@ -26,8 +26,7 @@ namespace Stardust.Manager
             _nodeManager = nodeManager;
             _jobManager = jobManager;
         }
-
-        //  [HttpPost, Route(ManagerRouteConstants.StartJob)]
+        
         [HttpPost, ActionName("job")]
         public IHttpActionResult DoThisJob([FromBody] JobRequestModel job)
         {
@@ -66,18 +65,6 @@ namespace Stardust.Manager
             return Ok(jobReceived.Id);
         }
 
-        //   [HttpPost, Route(ManagerRouteConstants.Heartbeat)]
-        [HttpPost, ActionName("heartbeat")]
-        public void Heartbeat([FromBody] Uri nodeUri)
-        {
-            _jobManager.CheckAndAssignNextJob();
-
-            LogHelper.LogInfoWithLineNumber(Logger,
-                WhoAmI + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
-        }
-
-
-        //   [HttpDelete, Route(ManagerRouteConstants.CancelJob)]
         [HttpDelete, ActionName("job")]
         public void CancelThisJob(Guid jobId)
         {
@@ -87,7 +74,38 @@ namespace Stardust.Manager
             _jobManager.CancelThisJob(jobId);
         }
 
-        //    [HttpPost, Route(ManagerRouteConstants.JobDone)]
+        [HttpGet, ActionName("job")]
+        public IHttpActionResult JobHistoryList()
+        {
+            return Ok(_jobManager.GetJobHistoryList());
+        }
+
+        [HttpGet, ActionName("job")]
+        public IHttpActionResult JobHistory(Guid jobId)
+        {
+            JobHistory jobHistory = _jobManager.GetJobHistory(jobId);
+
+            return Ok(jobHistory);
+        }
+
+        [HttpGet, ActionName("jobdetail")]
+        public IHttpActionResult JobHistoryDetails(Guid jobId)
+        {
+            return Ok(_jobManager.JobHistoryDetails(jobId));
+        }
+        
+
+        [HttpPost, ActionName("heartbeat")]
+        public void Heartbeat([FromBody] Uri nodeUri)
+        {
+            _jobManager.CheckAndAssignNextJob();
+
+            LogHelper.LogInfoWithLineNumber(Logger,
+                WhoAmI + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
+        }
+
+       
+        
         [HttpPost, ActionName("done")]
         public IHttpActionResult JobDone(Guid jobId)
         {
@@ -102,8 +120,7 @@ namespace Stardust.Manager
 
             return Ok();
         }
-
-        //        [HttpPost, Route(ManagerRouteConstants.JobFailed)]
+        
         [HttpPost, ActionName("fail")]
         public IHttpActionResult JobFailed(Guid jobId)
         {
@@ -114,8 +131,7 @@ namespace Stardust.Manager
                 "Failed");
             return Ok();
         }
-
-        //    [HttpPost, Route(ManagerRouteConstants.JobHasBeenCanceled)]
+        
         [HttpPost, ActionName("cancel")]
         public IHttpActionResult JobCanceled(Guid jobId)
         {
@@ -127,8 +143,7 @@ namespace Stardust.Manager
 
             return Ok();
         }
-
-        //  [HttpPost, Route(ManagerRouteConstants.JobProgress)]
+        
         [HttpPost, ActionName("progress")]
         public IHttpActionResult JobProgress([FromBody] JobProgressModel model)
         {
@@ -139,7 +154,6 @@ namespace Stardust.Manager
 
         // to handle that scenario where the node comes up after a crash
         //this end point should be called when the node comes up
-        //  [HttpPost, Route(ManagerRouteConstants.NodeHasBeenInitialized)]
         [HttpPost, ActionName("nodeinit")]
         public IHttpActionResult NodeInitialized([FromBody] Uri nodeUri)
         {
@@ -153,32 +167,12 @@ namespace Stardust.Manager
             return Ok();
         }
 
-        //     [HttpGet, Route(ManagerRouteConstants.GetJobHistory)]
-        [HttpGet]
-        public IHttpActionResult JobHistory(Guid jobId)
-        {
-            JobHistory jobHistory = _jobManager.GetJobHistory(jobId);
-
-            return Ok(jobHistory);
-        }
-
         [HttpGet]
         public IHttpActionResult Ping()
         {
             return Ok();
         }
         
-     /*   [HttpGet, Route(ManagerRouteConstants.JobHistoryList)]
-		public IHttpActionResult JobHistoryList()
-		{
-			return Ok(_jobManager.GetJobHistoryList());
-		}
-
-		[HttpPost, Route(ManagerRouteConstants.JobHistoryDetails)]
-		public IHttpActionResult JobHistoryDetails([FromBody]Guid jobId)
-		{
-			return Ok(_jobManager.JobHistoryDetails(jobId));
-		}*/
         
     }
 }
