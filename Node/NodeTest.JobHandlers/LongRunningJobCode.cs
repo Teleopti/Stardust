@@ -11,9 +11,6 @@ namespace NodeTest.JobHandlers
 
         public LongRunningJobCode()
         {
-            LogHelper.LogInfoWithLineNumber(Logger,
-                                            "'Long Running Job Code' class constructor called.");
-
             WhoAmI = "[NODETEST.JOBHANDLERS.LongRunningJobCode, " + Environment.MachineName.ToUpper() + "]";
         }
 
@@ -24,11 +21,7 @@ namespace NodeTest.JobHandlers
                                Action<string> progress)
         {
             LogHelper.LogInfoWithLineNumber(Logger,
-                                            "'Long Running Job Code' Do The Thing method called.");
-
-            LogHelper.LogInfoWithLineNumber(Logger,
-                                            "'Long Running Job Code' Do The Thing method called. Will sleep for 20 seconds.");
-            Thread.Sleep(TimeSpan.FromSeconds(20));
+                                            "Start.");
 
             TestJobProgress jobProgress;
 
@@ -36,7 +29,7 @@ namespace NodeTest.JobHandlers
             {
                 jobProgress = new TestJobProgress
                 {
-                    Text = WhoAmI + ": Long running job. Cancellation is requested " + message.Name,
+                    Text = WhoAmI + ": No job steps has been executed. Long running job name : ( " + message.Name + " ) has been canceled.",
                     ConsoleColor = ConsoleColor.Yellow
                 };
 
@@ -45,41 +38,67 @@ namespace NodeTest.JobHandlers
                 cancellationTokenSource.Token.ThrowIfCancellationRequested();
             }
 
-            // -----------------------------------------------------------
-            // Start execution.
-            // -----------------------------------------------------------
+
+            int jobSteps = 0;
+
+            int maxNumberOfJobSteps = 10;
+
+            string progressMessage = null;
+
+            while (jobSteps <= maxNumberOfJobSteps)
+            {
+                jobSteps++;
+
+                progressMessage = 
+                    WhoAmI + ": Executed job step ( " + jobSteps + " ). Long running job name : ( " + message.Name + " ) is running.";
+
+                jobProgress = new TestJobProgress
+                {
+                    Text = progressMessage,
+                    ConsoleColor = ConsoleColor.Yellow
+                };
+
+                LogHelper.LogInfoWithLineNumber(Logger,
+                                                progressMessage);
+
+
+                // Is Cancellation Requested.
+                if (cancellationTokenSource.IsCancellationRequested)
+                {
+                    progressMessage =
+                        WhoAmI + ": Execution canceled after job step ( " + jobSteps + " ). Long running job name : ( " + message.Name + " ) has been canceled.";
+
+                    jobProgress = new TestJobProgress
+                    {
+                        Text = progressMessage,
+                        ConsoleColor = ConsoleColor.Yellow
+                    };
+
+                    progress(jobProgress.Text);
+
+                    LogHelper.LogInfoWithLineNumber(Logger,
+                                                    progressMessage);
+
+                    cancellationTokenSource.Token.ThrowIfCancellationRequested();
+                }
+
+
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+            }
+
+            progressMessage = 
+                WhoAmI + ": Executed all job steps. Long running job name : ( " + message.Name + " ) has completed.";
+
             jobProgress = new TestJobProgress
             {
-                Text = WhoAmI + ": Start a long running job. Will take 10 seconds to complete. " + message.Name,
+                Text = progressMessage,
                 ConsoleColor = ConsoleColor.Green
             };
 
             progress(jobProgress.Text);
 
             LogHelper.LogInfoWithLineNumber(Logger,
-                                            "'Long Running Job Code' : Will sleep for 10 seconds.");
-            Thread.Sleep(TimeSpan.FromSeconds(10));
-
-            if (cancellationTokenSource.IsCancellationRequested)
-            {
-                jobProgress = new TestJobProgress
-                {
-                    Text = WhoAmI + ": Long running job. Cancellation is requested " + message.Name,
-                    ConsoleColor = ConsoleColor.Yellow
-                };
-
-                progress(jobProgress.Text);
-
-                cancellationTokenSource.Token.ThrowIfCancellationRequested();
-            }
-
-            jobProgress = new TestJobProgress
-            {
-                Text = WhoAmI + ": Long running job. No cancellation requested. Job completed." + message.Name,
-                ConsoleColor = ConsoleColor.Green
-            };
-
-            progress(jobProgress.Text);
+                                            progressMessage);
         }
     }
 }
