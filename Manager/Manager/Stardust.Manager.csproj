@@ -126,6 +126,7 @@
     <Compile Include="Models\JobDefinition.cs" />
     <Compile Include="Models\JobHistory.cs" />
     <Compile Include="JobManager.cs" />
+    <Compile Include="Models\JobHistoryDetail.cs" />
     <Compile Include="Models\JobProgressModel.cs" />
     <Compile Include="JobRepository.cs" />
     <Compile Include="Models\JobRequestModel.cs" />
@@ -153,10 +154,19 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="StardustDashboard\jobdetails.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StardustDashboard\left_round.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="StardustDashboard\listJob.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="StardustDashboard\Scripts\App\app.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StardustDashboard\Scripts\App\detailsController.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="StardustDashboard\Scripts\App\listJobController.js">

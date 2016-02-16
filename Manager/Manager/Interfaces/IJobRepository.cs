@@ -18,5 +18,6 @@ namespace Stardust.Manager.Interfaces
 		void ReportProgress(Guid jobId, string detail);
 		JobHistory History(Guid jobId);
 		IList<JobHistory> HistoryList();
+		IList<JobHistoryDetail> JobHistoryDetails(Guid jobId);
 	}
 }

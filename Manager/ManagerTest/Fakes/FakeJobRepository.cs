@@ -68,5 +68,10 @@ namespace ManagerTest.Fakes
 		{
 			throw new NotImplementedException();
 		}
+
+		public IList<JobHistoryDetail> JobHistoryDetails(Guid jobId)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

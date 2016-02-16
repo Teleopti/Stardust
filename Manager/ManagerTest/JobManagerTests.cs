@@ -146,6 +146,7 @@ namespace ManagerTest
 			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(2);
 			JobManager.SetEndResultOnJobAndRemoveIt(jobId, "Success");
 			JobManager.GetJobHistoryList().Should().Not.Be.Empty();
+			JobManager.JobHistoryDetails(jobId).Should().Not.Be.Empty();
 		}
 
 		[Test]
