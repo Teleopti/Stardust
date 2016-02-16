@@ -66,8 +66,9 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 			{
 				skillGroupKeyPersonListDic.Add(key, new List<IPerson> {person});
 				skillGroupKeyUniqueNameDic.Add(key, "Group " + skillGroupKeyPersonListDic.Count);
-				personSkillGroupDic.Add(person, key);
 			}
+
+			personSkillGroupDic.Add(person, key);
 		}
 	}
 
