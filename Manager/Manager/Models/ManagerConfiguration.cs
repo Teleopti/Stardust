@@ -6,5 +6,7 @@ namespace Stardust.Manager.Models
 	{
 		public string ConnectionString { get; set; }
 		public Uri BaseAddress { get; set; } 
-	}
+
+        public string routeName { get; set; }
+    }
 }
