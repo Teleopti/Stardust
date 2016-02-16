@@ -12,11 +12,13 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 	{
 		private readonly CreateSkillArea _createSkillArea;
 		private readonly FetchSkillArea _fetchSkillArea;
+		private readonly DeleteSkillArea _deleteSkillArea;
 
-		public IntradaySkillAreaController(CreateSkillArea createSkillArea, FetchSkillArea fetchSkillArea)
+		public IntradaySkillAreaController(CreateSkillArea createSkillArea, FetchSkillArea fetchSkillArea, DeleteSkillArea deleteSkillArea)
 		{
 			_createSkillArea = createSkillArea;
 			_fetchSkillArea = fetchSkillArea;
+			_deleteSkillArea = deleteSkillArea;
 		}
 
 		[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebModifySkillArea)]
@@ -33,6 +35,14 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		{
 			var skillAreas = _fetchSkillArea.GetAll();
 			return Ok(skillAreas);
+		}
+
+		[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebModifySkillArea)]
+		[UnitOfWork, HttpDelete, Route("api/intraday/skillarea/{id}")]
+		public virtual IHttpActionResult DeleteSkillArea(Guid id)
+		{
+			_deleteSkillArea.Do(id);
+			return Ok();
 		}
 	}
 

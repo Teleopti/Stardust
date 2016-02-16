@@ -68,23 +68,15 @@ describe('IntradayCtrl', function () {
 		expect(scope.skills[0].Name).toEqual("skill x");
 	});
 
-	it('should default select first skill area if exist', function() {
-		createController();
-
-		expect(scope.selectedSkillArea.Name).toEqual("my skill area 1");
-	});
-
 	it('should delete selected skill area', function() {
 		createController();
-
-		scope.selectedSkillArea = scope.skillAreas[1];
-		scope.deleteSkillArea();
+		scope.deleteSkillArea(scope.skillAreas[1]);
 
 		expect(scope.skillAreas.length).toEqual(2);
 		
 		$httpBackend.flush();
 
-		expect(scope.selectedSkillArea).toEqual(undefined);
+		expect(scope.selectedItem).toEqual(null);
 		expect(scope.skillAreas.length).toEqual(1);
 	});
 });

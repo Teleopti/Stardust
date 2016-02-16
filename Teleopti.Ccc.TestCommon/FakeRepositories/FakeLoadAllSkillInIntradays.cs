@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Remove(SkillArea root)
 		{
-			throw new NotImplementedException();
+			_skillAreas.Remove(root);
 		}
 
 		public SkillArea Get(Guid id)

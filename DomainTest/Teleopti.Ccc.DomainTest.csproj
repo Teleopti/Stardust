@@ -216,6 +216,7 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamAdherence\PersonDeletedTest.cs" />
     <Compile Include="Intraday\CreateSkillAreaTest.cs" />
     <Compile Include="Logon\AsSystemAspectTest.cs" />
+    <Compile Include="Intraday\DeleteSkillAreaTest.cs" />
     <Compile Include="Intraday\FetchSkillAreaTest.cs" />
     <Compile Include="Intraday\FetchSkillInIntradayTest.cs" />
     <Compile Include="Logon\DataSourceAspectAuthenticationKeyTest.cs" />

@@ -5,9 +5,6 @@
 		'$scope', '$state', 'intradayService', '$stateParams', '$filter',
 		function ($scope, $state, intradayService, $stateParams, $filter) {
 
-			$scope.selectedSkillArea = undefined;
-			$scope.selectedSkill = undefined;
-
 			$scope.$on('$stateChangeSuccess', function (evt, to, params, from) {
 				if (params.newSkillArea == true) {
 					reloadSkillAreas();
@@ -17,19 +14,17 @@
 			$scope.newSkillArea = $stateParams.newSkillArea;
 
 			var reloadSkillAreas = function() {
-				intradayService.getSkillAreas.query().$promise.then(function (result) {
-					$scope.skillAreas = $filter('orderBy')(result, 'Name');
-					if ($scope.skillAreas.length > 0)
-						$scope.selectedSkillArea = $scope.skillAreas[0];
+				intradayService.getSkillAreas.query().
+					$promise.then(function (result) {
+						$scope.skillAreas = $filter('orderBy')(result, 'Name');
 				});
 			};
 
 			reloadSkillAreas();
 
-
-			intradayService.getSkills.query().$promise.then(function (result) {
-				$scope.skills = result;
-				$scope.selectedSkill = $scope.skills[0];
+			intradayService.getSkills.query().
+				$promise.then(function (result) {
+					$scope.skills = result;
 			});
 
 			$scope.format = intradayService.formatDateTime;
@@ -44,34 +39,49 @@
 				$scope.modalShown = !$scope.modalShown;
 			};
 
-			$scope.deleteSkillArea = function () {
+			$scope.deleteSkillArea = function (skillArea) {
 				intradayService.deleteSkillArea.remove(
 				{
-					 id: $scope.selectedSkillArea.Id
-				}).$promise.then(function (result) {
-					$scope.skillAreas.splice($scope.skillAreas.indexOf($scope.selectedSkillArea), 1);
-					$scope.selectedSkillArea = undefined;
+					 id: skillArea.Id
+				})
+				.$promise.then(function (result) {
+					$scope.skillAreas.splice($scope.skillAreas.indexOf(skillArea), 1);
+					$scope.selectedItem = null;
+					$scope.isSkillAreaActive = false;
 				}, function(error) {
 					console.log('error ' + error);
 				});
 
 				$scope.toggleModal();
 			};
-			
-			$scope.querySearch = function (query, myArray) {
+
+			$scope.querySearch = function(query, myArray) {
 				var results = query ? myArray.filter(createFilterFor(query)) : myArray, deferred;
 				return results;
-			}
+			};
 
 			function createFilterFor(query) {
 				var lowercaseQuery = angular.lowercase(query);
 				return function filterFn(item) {
-					console.log('"'+item.Name + '" ' + query);
-					console.log(item.Name.indexOf(lowercaseQuery));
 					var lowercaseName = angular.lowercase(item.Name);
 					return (lowercaseName.indexOf(lowercaseQuery) === 0);
 				};
-			}
+			};
+
+			$scope.selectedItemChange = function (item, type) {
+				if (type == 'skill' && this.selectedSkill) {
+					$scope.selectedItem = item;
+					this.selectedSkillArea = null;
+					this.searchSkillAreaText = '';
+					$scope.isSkillAreaActive = false;
+				}
+				if (type == 'skillArea' && this.selectedSkillArea) {
+					$scope.selectedItem = item;
+					this.selectedSkill = null;
+					this.searchSkillText = '';
+					$scope.isSkillAreaActive = true;
+				}
+			};
 		}
 		]);
 })()
