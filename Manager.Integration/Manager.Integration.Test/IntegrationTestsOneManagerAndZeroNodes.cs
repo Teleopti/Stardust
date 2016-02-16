@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
@@ -112,37 +113,57 @@ namespace Manager.Integration.Test
         private const int NumberOfNodesToStart = 0;
 
         [Test]
-        public void JobShouldJustBeQueuedIfNoNodes()
+        public void JobsShouldJustBeQueuedIfNoNodesTest()
         {
-            LogHelper.LogInfoWithLineNumber("Start test.",
+            LogHelper.LogInfoWithLineNumber("Start.",
                                             Logger);
 
-            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(1);
+            List<JobRequestModel> createNewJobRequests =
+                JobHelper.GenerateTestJobParamsRequests(1);
 
-            var timeout = JobHelper.GenerateTimeoutTimeInSeconds(requests.Count,
-                                                                 30);
+            LogHelper.LogInfoWithLineNumber(createNewJobRequests.Count + " jobs will be created.",
+                                            Logger);
 
-            var managerApiHelper = new ManagerApiHelper(new CheckJobHistoryStatusTimer(requests.Count,
-                                                                                       StatusConstants.SuccessStatus,
-                                                                                       StatusConstants.DeletedStatus,
-                                                                                       StatusConstants.FailedStatus,
-                                                                                       StatusConstants.CanceledStatus));
 
-            List<Task> tasks = new List<Task>();
+            TimeSpan timeout = 
+                JobHelper.GenerateTimeoutTimeInSeconds(createNewJobRequests.Count);
 
-            foreach (var jobRequestModel in requests)
+            List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
+
+            var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
+                                                                            StatusConstants.SuccessStatus,
+                                                                            StatusConstants.DeletedStatus,
+                                                                            StatusConstants.FailedStatus,
+                                                                            StatusConstants.CanceledStatus);
+
+            foreach (var jobRequestModel in createNewJobRequests)
             {
-                tasks.Add(managerApiHelper.CreateManagerDoThisTask(jobRequestModel));
+                var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
+
+                jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
+
+                jobManagerTaskCreators.Add(jobManagerTaskCreator);
             }
 
-            Parallel.ForEach(tasks,
-                             task => { task.Start(); });
+            StartJobTaskHelper startJobTaskHelper = new StartJobTaskHelper();
 
-            managerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+            var taskHlp = startJobTaskHelper.ExecuteTasks(jobManagerTaskCreators,
+                                                          CancellationTokenSource,
+                                                          timeout);
 
-            Assert.IsTrue(managerApiHelper.CheckJobHistoryStatusTimer.Guids.Count > 0);
+            checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
-            managerApiHelper.Dispose();
+            Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count);
+
+            taskHlp.Dispose();
+
+            foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
+            {
+                jobManagerTaskCreator.Dispose();
+            }
+
+            LogHelper.LogInfoWithLineNumber("Finished.",
+                                            Logger);
         }
     }
 }

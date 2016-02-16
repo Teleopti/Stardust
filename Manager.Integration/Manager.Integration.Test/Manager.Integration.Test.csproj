@@ -72,7 +72,7 @@
     <Compile Include="Helpers\DatabaseHelper.cs" />
     <Compile Include="Helpers\JobHelper.cs" />
     <Compile Include="Helpers\LogHelper.cs" />
-    <Compile Include="Helpers\ManagerApiHelper.cs" />
+    <Compile Include="Helpers\JobManagerTaskCreator.cs" />
     <Compile Include="Helpers\ProcessHelper.cs" />
     <Compile Include="Helpers\SecurityHelper.cs" />
     <Compile Include="Helpers\ManagerUriBuilder.cs" />
@@ -86,6 +86,7 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Scripts\ScriptExecuteHelper.cs" />
     <Compile Include="Tasks\AppDomainTask.cs" />
+    <Compile Include="Tasks\StartJobTaskHelper.cs" />
     <Compile Include="TestJobParams.cs" />
     <Compile Include="JobRequestModel.cs" />
     <Compile Include="IntegrationTestsOneManagerAndManyNodes.cs" />
