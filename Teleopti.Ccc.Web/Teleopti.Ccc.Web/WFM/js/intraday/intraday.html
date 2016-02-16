@@ -15,17 +15,36 @@
 				<div class="sub-header con-row">
 					<h2 class="con-flex">Select to monitor either a skill or an area</h2>
 					<span class="con-flex">
-						<select >
-							<option value="" disabled selected>Pick a skill...</option>
-							<option ng-repeat="skill in skills | orderBy : 'Name'">{{skill.Name}}</option>
-						</select>
+						<md-autocomplete md-selected-item="selectedSkill"
+											  md-search-text="searchSkillText"
+											  md-items="skill in querySearch(searchSkillText, skills)"
+											  md-item-text="skill.Name"
+											  md-min-length="0"
+											  placeholder="Select skill">
+							<md-item-template>
+								<span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
+							</md-item-template>
+							<md-not-found>
+								No skills matching "{{searchSkillText}}" were found.
+							</md-not-found>
+						</md-autocomplete>
 					</span>
 					<span class="con-flex">
-						<select ng-model="selectedSkillAreaId" ng-change="changeSkillArea(selectedSkillAreaId)">
-							<option value="" disabled selected>Pick an area...</option>
-							<option ng-repeat="skillArea in skillAreas | orderBy : 'Name'" value="{{skillArea.Id}}">{{skillArea.Name}}</option>
-						</select>
+						<md-autocomplete md-selected-item="selectedSkillArea"
+											  md-search-text="searchSkillAreaText"
+											  md-items="skillArea in querySearch(searchSkillAreaText, skillAreas)"
+											  md-item-text="skillArea.Name"
+											  md-min-length="0"
+											  placeholder="Select skill area">
+							<md-item-template>
+								<span md-highlight-text="searchSkillAreaText" md-highlight-flags="^i">{{skillArea.Name}}</span>
+							</md-item-template>
+							<md-not-found>
+								No skill areas matching "{{searchSkillAreaText}}" were found.
+							</md-not-found>
+						</md-autocomplete>
 					</span>
+					{{selectedSkill.Name}}
 					<div class="con-flex split-1-2"></div>
 					
 				</div>

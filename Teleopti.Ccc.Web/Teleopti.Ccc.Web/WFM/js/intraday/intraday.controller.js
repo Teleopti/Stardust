@@ -6,6 +6,7 @@
 		function ($scope, $state, intradayService, $stateParams, $filter) {
 
 			$scope.selectedSkillArea = undefined;
+			$scope.selectedSkill = undefined;
 
 			$scope.$on('$stateChangeSuccess', function (evt, to, params, from) {
 				if (params.newSkillArea == true) {
@@ -17,7 +18,8 @@
 
 			var reloadSkillAreas = function() {
 				intradayService.getSkillAreas.query().$promise.then(function (result) {
-					$scope.skillAreas = result;
+					$scope.skillAreas = $filter('orderBy')(result, 'Name');
+					$scope.selectedSkillArea = $scope.skillAreas[0];
 				});
 			};
 
@@ -26,13 +28,8 @@
 
 			intradayService.getSkills.query().$promise.then(function (result) {
 				$scope.skills = result;
+				$scope.selectedSkill = $scope.skills[0];
 			});
-
-			$scope.changeSkillArea = function (skillAreaId) {
-				$scope.selectedSkillArea = $filter('filter')($scope.skillAreas, { Id: skillAreaId })[0];
-				console.log($scope.selectedSkillArea.Id);
-				console.log($scope.selectedSkillArea.Name);
-			};
 
 			$scope.format = intradayService.formatDateTime;
 
@@ -44,6 +41,21 @@
 			$scope.toggleModal = function () {
 				$scope.modalShown = !$scope.modalShown;
 			};
+			
+			$scope.querySearch = function (query, myArray) {
+				var results = query ? myArray.filter(createFilterFor(query)) : myArray, deferred;
+				return results;
+			}
+
+			function createFilterFor(query) {
+				var lowercaseQuery = angular.lowercase(query);
+				return function filterFn(item) {
+					console.log('"'+item.Name + '" ' + query);
+					console.log(item.Name.indexOf(lowercaseQuery));
+					var lowercaseName = angular.lowercase(item.Name);
+					return (lowercaseName.indexOf(lowercaseQuery) === 0);
+				};
+			}
 		}
 		]);
 })()
