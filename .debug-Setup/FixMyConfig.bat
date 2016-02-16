@@ -42,7 +42,8 @@ IF NOT EXIST "%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\Teleopti.Su
 )
 
 SET Kommandompigg=%WORKING_DIRECTORY%SetUrlAcl.ps1
-powershell.exe -ExecutionPolicy Bypass -File "%Kommandompigg%"
+::powershell.exe -ExecutionPolicy Bypass -File "%Kommandompigg%"
+PowerShell.exe -NoProfile -Command "& {Start-Process PowerShell.exe -ArgumentList '-NoProfile -ExecutionPolicy Bypass -File ""%Kommandompigg%""' -Verb RunAs}"
 
 ::Run supportTool to replace all config
 "%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\Teleopti.Support.Tool.exe" -MODebug
