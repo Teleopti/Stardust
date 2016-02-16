@@ -242,19 +242,12 @@
     <Compile Include="SettingsInRegistry.cs" />
     <Compile Include="Tool\CommandLineArgument.cs" />
     <Compile Include="Tool\CompositeCommand.cs" />
-    <Compile Include="Tool\ConfigFileTagReplacer.cs" />
-    <Compile Include="Tool\CryptoCreator.cs" />
     <Compile Include="Tool\CustomSection.cs" />
     <Compile Include="Tool\CustomSectionContainer.cs" />
     <Compile Include="Tool\ISupportCommand.cs" />
-    <Compile Include="Tool\MachineKeyChecker.cs" />
     <Compile Include="Tool\ModeFile.cs" />
     <Compile Include="Tool\MoveCustomReportsCommand.cs" />
-    <Compile Include="Tool\RefreshConfigFile.cs" />
     <Compile Include="Tool\RefreshConfigsRunner.cs" />
-    <Compile Include="Tool\SearchReplace.cs" />
-    <Compile Include="Tool\SettingsFileManager.cs" />
-    <Compile Include="Tool\SettingsReader.cs" />
     <Compile Include="Tool\SetToggleModeCommand.cs" />
     <Compile Include="Tool\SsoConfigurationBackupHandler.cs" />
     <Compile Include="Tool\SsoConfigurationRestoreHandler.cs" />
@@ -409,6 +402,12 @@
   <ItemGroup>
     <Folder Include="Controls\Patch\" />
     <Folder Include="Controls\Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Teleopti.Support.Library\Teleopti.Support.Library.csproj">
+      <Project>{96BAA3E0-A623-412E-BFE7-D3BE03A2288A}</Project>
+      <Name>Teleopti.Support.Library</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

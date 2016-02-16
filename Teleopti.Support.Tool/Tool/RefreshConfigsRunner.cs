@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using log4net;
 using log4net.Appender;
+using Teleopti.Support.Library.Config;
 
 namespace Teleopti.Support.Tool.Tool
 {

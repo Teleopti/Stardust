@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Teleopti.Support.Tool.Tool
+namespace Teleopti.Support.Library.Config
 {
     public class RefreshConfigFile : IRefreshConfigFile
     {
@@ -15,7 +15,14 @@ namespace Teleopti.Support.Tool.Tool
             _machineKeyChecker = machineKeyChecker;
         }
 
-        public void ReplaceFile(string oldFilePath, string newFilePath, IList<SearchReplace> searchReplaces, bool doNotOverWrite)
+		public void SplitAndReplace(string oldAndNewFile, IList<SearchReplace> searchReplaces, bool doNotOverWrite)
+		{
+			var files = oldAndNewFile.Split(',');
+			if (files.Length.Equals(2))
+				ReplaceFile(files[0], files[1], searchReplaces, doNotOverWrite);
+		}
+
+		public void ReplaceFile(string oldFilePath, string newFilePath, IList<SearchReplace> searchReplaces, bool doNotOverWrite)
         {
             oldFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, oldFilePath);
             newFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, newFilePath);
@@ -28,13 +35,6 @@ namespace Teleopti.Support.Tool.Tool
             File.Copy(newFilePath, oldFilePath,true);
             _configFileTagReplacer.ReplaceTags(oldFilePath,searchReplaces);
            _machineKeyChecker.CheckForMachineKey(oldFilePath);
-        }
-
-        public void SplitAndReplace(string oldAndNewFile, IList<SearchReplace> searchReplaces, bool doNotOverWrite)
-        {
-            var files = oldAndNewFile.Split(',');
-            if (files.Length.Equals(2))
-                ReplaceFile(files[0], files[1], searchReplaces, doNotOverWrite);
         }
 
         public string GetDirectories(string fullPath)

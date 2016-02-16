@@ -4,12 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace Teleopti.Support.Tool.Tool
+namespace Teleopti.Support.Library.Config
 {
     public interface IMachineKeyChecker
     {
         bool CheckForMachineKey(string filePath);
     }
+
     public class MachineKeyChecker : IMachineKeyChecker
     {
         public bool CheckForMachineKey(string filePath)

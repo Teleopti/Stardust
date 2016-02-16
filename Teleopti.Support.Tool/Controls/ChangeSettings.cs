@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using Teleopti.Support.Library.Config;
 using Teleopti.Support.Tool.Tool;
 
 namespace Teleopti.Support.Tool.Controls
@@ -50,8 +51,7 @@ namespace Teleopti.Support.Tool.Controls
 			var fileMan = new SettingsFileManager(new SettingsReader());
 			fileMan.SaveReplaceList(_settings);
 
-			var refreshRunner = new RefreshConfigsRunner(fileMan, new RefreshConfigFile(new ConfigFileTagReplacer(),
-																												new MachineKeyChecker()));
+			var refreshRunner = new RefreshConfigsRunner(fileMan, new RefreshConfigFile(new ConfigFileTagReplacer(), new MachineKeyChecker()));
 			refreshRunner.Execute(new ModeFile(mode));
 
 			if (mode.Equals("DEPLOY"))

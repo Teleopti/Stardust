@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
-namespace Teleopti.Support.Tool.Tool
+namespace Teleopti.Support.Library.Config
 {
 	public interface IConfigFileTagReplacer
 	{
@@ -14,7 +14,7 @@ namespace Teleopti.Support.Tool.Tool
 	{
 		public void ReplaceTags(string fileToProcess, IList<SearchReplace> searchReplaces)
 		{
-			string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileToProcess);
+			var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileToProcess);
 			var text = File.ReadAllText(path);
 			foreach (var searchReplace in searchReplaces)
 			{

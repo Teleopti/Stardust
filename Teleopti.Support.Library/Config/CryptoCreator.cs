@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 
-namespace Teleopti.Support.Tool.Tool
+namespace Teleopti.Support.Library.Config
 {
     public class CryptoCreator
     {

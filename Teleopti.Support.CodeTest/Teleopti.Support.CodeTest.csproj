@@ -81,6 +81,10 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Teleopti.Support.Library\Teleopti.Support.Library.csproj">
+      <Project>{96BAA3E0-A623-412E-BFE7-D3BE03A2288A}</Project>
+      <Name>Teleopti.Support.Library</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj">
       <Project>{807a8afe-c46b-4907-b287-bd4aec6dae01}</Project>
       <Name>Teleopti.Support.Tool</Name>

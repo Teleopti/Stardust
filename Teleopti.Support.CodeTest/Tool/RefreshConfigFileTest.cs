@@ -2,6 +2,7 @@
 using System.IO;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Support.Library.Config;
 using Teleopti.Support.Tool.Tool;
 
 namespace Teleopti.Support.CodeTest.Tool
