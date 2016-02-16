@@ -250,7 +250,7 @@ namespace NodeTest
             LogHelper.LogInfoWithLineNumber(Logger, "Starting test...");
             var actionResult = _nodeController.StartJob(_jobToDo);
             _sendJobDoneTimer.Wait.Wait(TimeSpan.FromMinutes(1));
-            Assert.IsInstanceOf(typeof (OkNegotiatedContentResult<string>),
+            Assert.IsInstanceOf(typeof (OkResult),
                                 actionResult);
         }
     }

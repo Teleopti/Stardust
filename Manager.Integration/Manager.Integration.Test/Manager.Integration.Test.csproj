@@ -96,9 +96,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Timers\CheckJobHistoryStatusTimer.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Timers\CheckJobHistoryStatusTimer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
