@@ -9,6 +9,12 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class MessageBrokerCompositeDummy : IMessageBrokerComposite
 	{
+		public MessageBrokerCompositeDummy()
+		{
+			IsAlive = true;
+			IsPollingAlive = true;
+		}
+
 		public void Dispose()
 		{
 		}
@@ -44,8 +50,9 @@ namespace Teleopti.Ccc.TestCommon
 		{
 		}
 
-		public bool IsAlive { get; }
-		public bool IsPollingAlive { get; }
+		public bool IsAlive { get; set; }
+		public bool IsPollingAlive { get; set; }
+
 		public string ServerUrl { get; set; }
 
 		public void StartBrokerService(bool useLongPolling = false)
