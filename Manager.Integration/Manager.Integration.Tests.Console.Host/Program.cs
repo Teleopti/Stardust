@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Web.Http;
@@ -119,9 +120,7 @@ namespace Manager.IntegrationTest.Console.Host
 
             AppDomain.CurrentDomain.DomainUnload += CurrentDomainOnDomainUnload;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-
             
-
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "started.");
 
