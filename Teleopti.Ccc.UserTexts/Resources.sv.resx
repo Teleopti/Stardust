@@ -13042,4 +13042,25 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
   <data name="ShowErrors" xml:space="preserve">
     <value>Visa fel</value>
   </data>
+  <data name="IntraOptimize" xml:space="preserve">
+    <value>Optimera inom dagen</value>
+  </data>
+  <data name="Anonymous" xml:space="preserve">
+    <value>Anonym</value>
+  </data>
+  <data name="InvalidNumber" xml:space="preserve">
+    <value>Ogiltigt värde</value>
+  </data>
+  <data name="ShowRightPanel" xml:space="preserve">
+    <value>Visa högerpanelen</value>
+  </data>
+  <data name="ShowOnlyAbsence" xml:space="preserve">
+    <value>Visa endast frånvaro</value>
+  </data>
+  <data name="HidePanel" xml:space="preserve">
+    <value>Göm panelen</value>
+  </data>
+  <data name="DoubleClickHereToEditText" xml:space="preserve">
+    <value>Dubbelklicka här för att ändra texten</value>
+  </data>
 </root>
