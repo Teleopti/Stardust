@@ -120,6 +120,55 @@ namespace Manager.Integration.Test
         private string _buildMode = "Debug";
 
         [Test]
+        public void JobShouldHaveStatusFailedIfFailedTest()
+        {
+            LogHelper.LogInfoWithLineNumber("Start.",
+                                            Logger);
+
+            List<JobRequestModel> createNewJobRequests = JobHelper.GenerateFailingJobParamsRequests(1);
+
+            var timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
+                                                                 5);
+
+            List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
+
+            var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
+                                                                            StatusConstants.SuccessStatus,
+                                                                            StatusConstants.DeletedStatus,
+                                                                            StatusConstants.FailedStatus,
+                                                                            StatusConstants.CanceledStatus);
+            foreach (var jobRequestModel in createNewJobRequests)
+            {
+                var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
+
+                jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
+
+                jobManagerTaskCreators.Add(jobManagerTaskCreator);
+            }
+
+            StartJobTaskHelper startJobTaskHelper = new StartJobTaskHelper();
+
+            var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
+                                                                      CancellationTokenSource,
+                                                                      timeout);
+
+            checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+
+            Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count);
+            Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.FailedStatus));
+
+            taskHlp.Dispose();
+
+            foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
+            {
+                jobManagerTaskCreator.Dispose();
+            }
+
+            LogHelper.LogInfoWithLineNumber("Finished.",
+                                            Logger);
+        }
+
+        [Test]
         public void CancelWrongJobsTest()
         {
             LogHelper.LogInfoWithLineNumber("Start.",
@@ -166,8 +215,8 @@ namespace Manager.Integration.Test
             StartJobTaskHelper startJobTaskHelper = new StartJobTaskHelper();
 
             var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
-                                                          CancellationTokenSource,
-                                                          timeout);
+                                                                      CancellationTokenSource,
+                                                                      timeout);
 
             checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
@@ -192,7 +241,7 @@ namespace Manager.Integration.Test
                                             Logger);
 
             List<JobRequestModel> createNewJobRequests =
-                JobHelper.GenerateTestJobParamsRequests(NumberOfNodesToStart * 1);
+                JobHelper.GenerateTestJobParamsRequests(NumberOfNodesToStart*1);
 
             LogHelper.LogInfoWithLineNumber("( " + createNewJobRequests.Count + " ) jobs will be created.",
                                             Logger);
@@ -221,8 +270,8 @@ namespace Manager.Integration.Test
             StartJobTaskHelper startJobTaskHelper = new StartJobTaskHelper();
 
             var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
-                                                          CancellationTokenSource,
-                                                          timeout);
+                                                                      CancellationTokenSource,
+                                                                      timeout);
 
             checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
