@@ -108,7 +108,7 @@ namespace Manager.Integration.Test
             if (AppDomainTask != null)
             {
                 AppDomainTask.Dispose();
-            }
+            }            
 
             LogHelper.LogInfoWithLineNumber("Finished TestFixtureTearDown",
                                             Logger);
@@ -121,7 +121,7 @@ namespace Manager.Integration.Test
         private string _buildMode = "Debug";
 
         [Test, Ignore]
-        public void CancelWrongJobsTest()
+        public void CreateSeveralRequestShouldReturnBothCancelAndDeleteStatuses()
         {
             LogHelper.LogInfoWithLineNumber("Start.",
                                             Logger);
@@ -132,14 +132,14 @@ namespace Manager.Integration.Test
                                             Logger);
 
             TimeSpan timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
-                                                                      5);
+                                                                 5);
 
             List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 
             var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
-                                                                            StatusConstants.SuccessStatus,
-                                                                            StatusConstants.DeletedStatus,
-                                                                            StatusConstants.FailedStatus,
+                                                                                       StatusConstants.SuccessStatus,
+                                                                                       StatusConstants.DeletedStatus,
+                                                                                       StatusConstants.FailedStatus,
                                                                             StatusConstants.CanceledStatus);
 
             foreach (var jobRequestModel in createNewJobRequests)
@@ -166,9 +166,11 @@ namespace Manager.Integration.Test
 
             StartJobTaskHelper startJobTaskHelper = new StartJobTaskHelper();
 
-            var taskHlp = startJobTaskHelper.ExecuteTasks(jobManagerTaskCreators,
-                                                          CancellationTokenSource,
-                                                          timeout);
+        [Test, Ignore]
+        public void JobShouldHaveStatusFailedIfFailed()
+        {
+            LogHelper.LogInfoWithLineNumber("Starting test.",
+                                            Logger);
 
             checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
@@ -199,16 +201,21 @@ namespace Manager.Integration.Test
             LogHelper.LogInfoWithLineNumber(createNewJobRequests.Count + " jobs will be created." ,
                                             Logger);
 
+        [Test, Ignore]
+        public void CancelWrongJobs()
+        {
+            LogHelper.LogInfoWithLineNumber("Starting test.",
+                                            Logger);
 
             TimeSpan timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
-                                                                      5);
+                                                                 5);
 
             List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 
             var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
-                                                                            StatusConstants.SuccessStatus,
-                                                                            StatusConstants.DeletedStatus,
-                                                                            StatusConstants.FailedStatus,
+                                                                                       StatusConstants.SuccessStatus,
+                                                                                       StatusConstants.DeletedStatus,
+                                                                                       StatusConstants.FailedStatus,
                                                                             StatusConstants.CanceledStatus);
 
             foreach (var jobRequestModel in createNewJobRequests)
@@ -218,7 +225,7 @@ namespace Manager.Integration.Test
                 jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
 
                 jobManagerTaskCreators.Add(jobManagerTaskCreator);
-            }
+        }
 
             StartJobTaskHelper startJobTaskHelper = new StartJobTaskHelper();
 
