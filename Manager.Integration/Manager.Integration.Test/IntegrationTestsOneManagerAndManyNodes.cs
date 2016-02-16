@@ -119,7 +119,7 @@ namespace Manager.Integration.Test
 
         private string _buildMode = "Debug";
 
-        [Test, Ignore]
+        [Test]
         public void CancelWrongJobsTest()
         {
             LogHelper.LogInfoWithLineNumber("Start.",
@@ -127,11 +127,10 @@ namespace Manager.Integration.Test
 
             List<JobRequestModel> createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(1);
 
-            LogHelper.LogInfoWithLineNumber(createNewJobRequests.Count + " jobs will be created.",
+            LogHelper.LogInfoWithLineNumber("( " + createNewJobRequests.Count + " ) jobs will be created.",
                                             Logger);
 
-            TimeSpan timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
-                                                                      5);
+            TimeSpan timeout = JobHelper.GenerateTimeoutTimeInSeconds(createNewJobRequests.Count);
 
             List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 
@@ -159,14 +158,14 @@ namespace Manager.Integration.Test
 
                 jobManagerTaskCreator.CreateDeleteJobToManagerTask(newGuid);
 
-                jobManagerTaskCreator.StartDeleteJobToManagerTask(timeout);
+                jobManagerTaskCreator.StartAndWaitDeleteJobToManagerTask(timeout);
 
                 jobManagerTaskCreator.Dispose();
             };
 
             StartJobTaskHelper startJobTaskHelper = new StartJobTaskHelper();
 
-            var taskHlp = startJobTaskHelper.ExecuteTasks(jobManagerTaskCreators,
+            var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
                                                           CancellationTokenSource,
                                                           timeout);
 
@@ -193,9 +192,9 @@ namespace Manager.Integration.Test
                                             Logger);
 
             List<JobRequestModel> createNewJobRequests =
-                JobHelper.GenerateTestJobParamsRequests(NumberOfNodesToStart*1);
+                JobHelper.GenerateTestJobParamsRequests(NumberOfNodesToStart * 1);
 
-            LogHelper.LogInfoWithLineNumber(createNewJobRequests.Count + " jobs will be created.",
+            LogHelper.LogInfoWithLineNumber("( " + createNewJobRequests.Count + " ) jobs will be created.",
                                             Logger);
 
 
@@ -221,7 +220,7 @@ namespace Manager.Integration.Test
 
             StartJobTaskHelper startJobTaskHelper = new StartJobTaskHelper();
 
-            var taskHlp = startJobTaskHelper.ExecuteTasks(jobManagerTaskCreators,
+            var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
                                                           CancellationTokenSource,
                                                           timeout);
 

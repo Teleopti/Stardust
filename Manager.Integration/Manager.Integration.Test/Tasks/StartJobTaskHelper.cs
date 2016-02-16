@@ -3,24 +3,66 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using log4net;
 using Manager.Integration.Test.Helpers;
 
 namespace Manager.Integration.Test.Tasks
 {
     public class StartJobTaskHelper
     {
-        public Task ExecuteTasks(IEnumerable<JobManagerTaskCreator> jobManagerTaskCreators,
-                                 CancellationTokenSource cancellationTokenSource,
-                                 TimeSpan timeOut)
+        private static readonly ILog Logger =
+            LogManager.GetLogger(typeof (StartJobTaskHelper));
+
+        public Task ExecuteDeleteJobTasks(IEnumerable<JobManagerTaskCreator> jobManagerTaskCreators,
+                                          CancellationTokenSource cancellationTokenSource,
+                                          TimeSpan timeOut)
         {
             return Task.Factory.StartNew(() =>
             {
+                LogHelper.LogInfoWithLineNumber("Start.",
+                                                Logger);
+
                 if (jobManagerTaskCreators != null && jobManagerTaskCreators.Any())
                 {
-                    // 1. Start all tasks.
                     foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
                     {
-                        jobManagerTaskCreator.StartCreateNewJobToManagerTask(timeOut);
+                        jobManagerTaskCreator.StartAndWaitDeleteJobToManagerTask(timeOut);
+                    }
+
+                    IEnumerable<JobManagerTaskCreator> notSuccededTasks =
+                        jobManagerTaskCreators.Where(manager => manager.DeleteJobToManagerSucceeded == false);
+
+                    while (notSuccededTasks.Any())
+                    {
+                        foreach (var notSuccededTask in notSuccededTasks)
+                        {
+                            notSuccededTask.StartAndWaitDeleteJobToManagerTask(timeOut);
+                        }
+
+                        notSuccededTasks =
+                            jobManagerTaskCreators.Where(manager => manager.DeleteJobToManagerSucceeded == false);
+                    }
+                }
+
+                LogHelper.LogInfoWithLineNumber("Finished.",
+                                                Logger);
+            });
+        }
+
+        public Task ExecuteCreateNewJobTasks(IEnumerable<JobManagerTaskCreator> jobManagerTaskCreators,
+                                             CancellationTokenSource cancellationTokenSource,
+                                             TimeSpan timeOut)
+        {
+            return Task.Factory.StartNew(() =>
+            {
+                LogHelper.LogInfoWithLineNumber("Start.",
+                                                Logger);
+
+                if (jobManagerTaskCreators != null && jobManagerTaskCreators.Any())
+                {
+                    foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
+                    {
+                        jobManagerTaskCreator.StartAndWaitCreateNewJobToManagerTask(timeOut);
                     }
 
                     IEnumerable<JobManagerTaskCreator> notSuccededTasks =
@@ -30,13 +72,16 @@ namespace Manager.Integration.Test.Tasks
                     {
                         foreach (var notSuccededTask in notSuccededTasks)
                         {
-                            notSuccededTask.StartCreateNewJobToManagerTask(timeOut);
+                            notSuccededTask.StartAndWaitCreateNewJobToManagerTask(timeOut);
                         }
 
                         notSuccededTasks =
                             jobManagerTaskCreators.Where(manager => manager.CreateNewJobToManagerSucceeded == false);
                     }
                 }
+
+                LogHelper.LogInfoWithLineNumber("Finished.",
+                                                Logger);
             });
         }
     }

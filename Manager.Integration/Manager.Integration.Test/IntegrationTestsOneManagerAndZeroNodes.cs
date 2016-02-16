@@ -20,7 +20,8 @@ namespace Manager.Integration.Test
     [TestFixture]
     public class IntegrationTestsOneManagerAndZeroNodes
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndZeroNodes));
+        private static readonly ILog Logger = 
+            LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndZeroNodes));
 
         private bool _clearDatabase = true;
         private string _buildMode = "Debug";
@@ -121,7 +122,7 @@ namespace Manager.Integration.Test
             List<JobRequestModel> createNewJobRequests =
                 JobHelper.GenerateTestJobParamsRequests(1);
 
-            LogHelper.LogInfoWithLineNumber(createNewJobRequests.Count + " jobs will be created.",
+            LogHelper.LogInfoWithLineNumber("( " + createNewJobRequests.Count + " ) jobs will be created.",
                                             Logger);
 
 
@@ -147,7 +148,7 @@ namespace Manager.Integration.Test
 
             StartJobTaskHelper startJobTaskHelper = new StartJobTaskHelper();
 
-            var taskHlp = startJobTaskHelper.ExecuteTasks(jobManagerTaskCreators,
+            var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
                                                           CancellationTokenSource,
                                                           timeout);
 

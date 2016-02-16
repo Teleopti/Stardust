@@ -35,14 +35,24 @@ namespace Manager.Integration.Test.Helpers
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeConstants.ApplicationJson));
         }
 
-        public void StartDeleteJobToManagerTask(TimeSpan timeout)
+        public void StartDeleteJobToManagerTask()
+        {
+            DeleteJobToManagerTask.Start();
+        }
+
+        public void StartAndWaitDeleteJobToManagerTask(TimeSpan timeout)
         {
             DeleteJobToManagerTask.Start();
 
             DeleteJobToManagerTask.Wait(timeout);
         }
 
-        public void StartCreateNewJobToManagerTask(TimeSpan timeout)
+        public void StartCreateNewJobToManagerTask()
+        {
+            NewJobToManagerTask.Start();
+        }
+
+        public void StartAndWaitCreateNewJobToManagerTask(TimeSpan timeout)
         {
             NewJobToManagerTask.Start();
 
@@ -69,7 +79,7 @@ namespace Manager.Integration.Test.Helpers
 
                     try
                     {
-                        LogHelper.LogInfoWithLineNumber("Start calling post async. Uri ( " + uri + " )",
+                        LogHelper.LogInfoWithLineNumber("Start calling post async. Uri ( " + uri + " ). Job name : ( " + jobRequestModel.Name + " )",
                                                         Logger);
 
                         HttpResponseMessage response = await client.PostAsync(uri,
@@ -88,19 +98,27 @@ namespace Manager.Integration.Test.Helpers
 
                             CheckJobHistoryStatusTimer.AddOrUpdateGuidStatus(jobId,
                                                                              null);
-                        }
 
-                        LogHelper.LogInfoWithLineNumber("Finished calling post async. Uri ( " + uri + " )",
-                                                        Logger);
+                            LogHelper.LogInfoWithLineNumber("Finished calling post async. Uri : ( " + uri + " ). ( jobId, jobName ) : ( " + jobId + ", " + jobRequestModel.Name + " )",
+                                                            Logger);
+                        }
                     }
 
-                    catch (Exception)
+                    catch (HttpRequestException)
                     {
-                        // Supress all errors is OK.                            
+                        LogHelper.LogErrorWithLineNumber("HttpRequestException when calling post async, will soon try again. Uri ( " + uri + " ). Job name : ( " + jobRequestModel.Name + " ).",
+                                                         Logger);
+                    }
+
+                    catch (Exception exp)
+                    {
+                        LogHelper.LogErrorWithLineNumber(exp.Message,
+                                                         Logger,
+                                                         exp);
                     }
                 }
             },
-                                           CancellationTokenSource.Token);
+            CancellationTokenSource.Token);
         }
 
         private Task NewJobToManagerTask { get; set; }
@@ -121,7 +139,7 @@ namespace Manager.Integration.Test.Helpers
 
                     try
                     {
-                        LogHelper.LogInfoWithLineNumber("Start calling delete async. Uri ( " + uri + " )",
+                        LogHelper.LogInfoWithLineNumber("Start calling delete async. Uri ( " + uri + " ). Job id : ( " + guid + " )",
                                                         Logger);
 
                         var response = await client.DeleteAsync(uri,
@@ -134,17 +152,25 @@ namespace Manager.Integration.Test.Helpers
                             await response.Content.ReadAsStringAsync();
                         }
 
-                        LogHelper.LogInfoWithLineNumber("Finished calling delete async. Uri ( " + uri + " )",
+                        LogHelper.LogInfoWithLineNumber("Finished calling delete async. Uri ( " + uri + " ). Job id : ( " + guid + " )",
                                                         Logger);
                     }
 
-                    catch (Exception)
+                    catch (HttpRequestException)
                     {
-                        // Supress all errors is OK.    
+                        LogHelper.LogErrorWithLineNumber("HttpRequestException when calling delete async, will soon try again. Uri ( " + uri + " ). Job id : ( " + guid + " )",
+                                                         Logger);
+                    }
+
+                    catch (Exception exp)
+                    {
+                        LogHelper.LogErrorWithLineNumber(exp.Message,
+                                                         Logger,
+                                                         exp);
                     }
                 }
             },
-                                              CancellationTokenSource.Token);
+           CancellationTokenSource.Token);
         }
 
         private Task DeleteJobToManagerTask { get; set; }
