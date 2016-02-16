@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;

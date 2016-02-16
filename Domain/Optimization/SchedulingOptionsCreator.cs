@@ -12,8 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 	public class SchedulingOptionsCreator : ISchedulingOptionsCreator
 	{
-		public ISchedulingOptions CreateSchedulingOptions(
-			IOptimizationPreferences optimizationPreferences)
+		public ISchedulingOptions CreateSchedulingOptions(IOptimizationPreferences optimizationPreferences)
 		{
 			ISchedulingOptions schedulingOptions = new SchedulingOptions();
 
