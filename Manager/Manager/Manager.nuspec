@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>Stardust.Manager</id>
-		<version>1.0.0</version>
+		<version>$version$</version>
 		<authors>Teleopti</authors>
 		<owners>Teleopti</owners>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
