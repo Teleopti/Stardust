@@ -160,5 +160,11 @@ namespace Stardust.Manager
 
             return Ok(jobHistory);
         }
-    }
+
+		[HttpGet, Route(ManagerRouteConstants.GetJobHistoryList)]
+		public IHttpActionResult JobHistoryList()
+		{
+			return Ok(_jobManager.GetJobHistoryList());
+		}
+	}
 }

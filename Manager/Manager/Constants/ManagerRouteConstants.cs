@@ -21,5 +21,7 @@
         public const string Heartbeat = "heartbeat";
 
         public const string GetJobHistory = "job/" + JobIdOptionalParameter;
+
+        public const string GetJobHistoryList = "StardustDashboard/jobhistory/" ;
     }
 }

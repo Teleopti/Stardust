@@ -74,6 +74,7 @@ namespace Manager.IntegrationTest.Console.Host
             Configuration configuration =
                 new Configuration(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
 
+
             string address = configuration.BaseAddress.Scheme + "://+:" + configuration.BaseAddress.Port + "/";
 
             using (WebApp.Start(address,
