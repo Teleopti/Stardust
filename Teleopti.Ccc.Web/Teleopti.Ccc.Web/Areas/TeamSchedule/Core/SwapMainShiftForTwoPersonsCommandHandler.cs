@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -10,7 +9,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -76,8 +74,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			var period = new DateTimePeriod(date.ToUniversalTime(), date.AddDays(1).ToUniversalTime());
 			var options = new ScheduleDictionaryLoadOptions(true, true);
 			var schedulePeriod = new ScheduleDateTimePeriod(period);
-			var personProvider = new PersonProvider(people);
-			
+			var personProvider = new PersonProvider(people)
+			{
+				DoLoadByPerson = true
+			};
+
 			return _scheduleStorage.FindSchedulesForPersons(schedulePeriod, scenario, personProvider, options, people);
 		}
 
