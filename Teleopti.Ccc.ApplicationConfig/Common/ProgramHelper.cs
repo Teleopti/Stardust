@@ -71,14 +71,14 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 				new NoPersistCallbacks(),
 				DataSourceConfigurationSetter.ForApplicationConfig(),
 				new CurrentHttpContext(),
-				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
+				() => null
 				);
 			var dataSource = dataSourcesFactory.Create(DatabaseHandler.DataSourceSettings(argument.DestinationConnectionString), "");
 			
 			var state = new State();
-			var applicationData = new ApplicationData(ConfigurationManager.AppSettings.ToDictionary(), null, null);
+			var applicationData = new ApplicationData(ConfigurationManager.AppSettings.ToDictionary(), null);
 			state.SetApplicationData(applicationData);
-			StateHolder.Initialize(state);
+			StateHolder.Initialize(state, null);
 
 			var repositoryFactory = new RepositoryFactory();
 

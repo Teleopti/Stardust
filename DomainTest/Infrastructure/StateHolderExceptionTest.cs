@@ -5,7 +5,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.DomainTest.Helper;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.DomainTest.Infrastructure
 {

@@ -3,8 +3,8 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker.Events;
 using log4net;
+using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 
 namespace Teleopti.Ccc.WinCode.Intraday
 {

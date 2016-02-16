@@ -8,7 +8,6 @@ using System.Reflection;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Interfaces.MessageBroker.Events;
 using log4net;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;

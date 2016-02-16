@@ -147,7 +147,6 @@
     <Compile Include="Client\MutableUrl.cs" />
     <Compile Include="Client\NoMessageSender.cs" />
     <Compile Include="Client\SignalR\DisabledSignalRClient.cs" />
-    <Compile Include="Events\EventMessage.cs" />
     <Compile Include="Exceptions\BrokerNotInstantiatedException.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -158,7 +157,6 @@
     <Compile Include="Client\Composite\DoNotSend.cs" />
     <Compile Include="Client\SignalR\IStateAccessor.cs" />
     <Compile Include="Client\SignalR\IConnectionKeepAliveStrategy.cs" />
-    <Compile Include="Events\EventMessageFactory.cs" />
     <Compile Include="Client\SignalR\SignalRListener.cs" />
     <Compile Include="Client\Composite\MessageCreator.cs" />
     <Compile Include="Client\SignalR\RecreateOnNoPingReply.cs" />
@@ -211,7 +209,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Core\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

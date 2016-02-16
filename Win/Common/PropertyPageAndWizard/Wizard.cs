@@ -5,6 +5,7 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard

@@ -2,9 +2,9 @@
 using System.Text;
 using System.Threading.Tasks;
 using Owin;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
-using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 {

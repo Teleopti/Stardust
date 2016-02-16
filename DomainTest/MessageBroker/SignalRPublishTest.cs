@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.DomainTest.MessageBroker
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 		[Test]
 		public void ShouldPublishToSignalR()
 		{
-			var notification = new Interfaces.MessageBroker.Message();
+			var notification = new Message();
 			Server.NotifyClients(notification);
 			SignalR.SentMessage.Should().Be(notification);
 		}
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 		[Test]
 		public void ShouldPublishToAllRoutes()
 		{
-			var notification = new Interfaces.MessageBroker.Message();
+			var notification = new Message();
 
 			Server.NotifyClients(notification);
 
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 		[Test]
 		public void ShouldPublishMultipleNotifications()
 		{
-			var notifications = new[] { new Interfaces.MessageBroker.Message(), new Interfaces.MessageBroker.Message() };
+			var notifications = new[] { new Message(), new Message() };
 			Server.NotifyClientsMultiple(notifications);
 			SignalR.SentMessages.Should().Have.SameValuesAs(notifications);
 		}

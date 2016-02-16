@@ -1,15 +1,15 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Interfaces.MessageBroker;
-using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.MessageBroker.ImplementationDetailTests
 {
 	[TestFixture]
 	public class NotificationTest
 	{
-		private Interfaces.MessageBroker.Message target;
+		private Message target;
 		private Guid moduleId;
 		private Guid domainId;
 		private Guid domainReferenceId;
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker.ImplementationDetailTests
 			businessUnitId = Guid.NewGuid();
 			startDate = DateTime.Today.AddDays(-5);
 			endDate = startDate.AddDays(1);
-			target = new Interfaces.MessageBroker.Message
+			target = new Message
 			         	{
 			         		BinaryData = "test",
 			         		DomainId = Subscription.IdToString(domainId),

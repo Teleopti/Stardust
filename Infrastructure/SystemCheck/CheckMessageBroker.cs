@@ -1,5 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client.Composite;
+﻿using Teleopti.Ccc.Domain.MessageBroker.Client;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.SystemCheck
 {

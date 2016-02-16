@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.WinCode.Payroll.Interfaces
 {

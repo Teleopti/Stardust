@@ -1,4 +1,4 @@
-using Teleopti.Interfaces.MessageBroker.Client;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 
 namespace Teleopti.Messaging.Client
 {

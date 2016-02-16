@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.MessageBroker;
-using Teleopti.Interfaces.MessageBroker;
-using Teleopti.Interfaces.MessageBroker.Client;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 
 namespace Teleopti.Messaging.Client.SignalR
 {

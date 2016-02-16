@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Interfaces.MessageBroker;
-using Teleopti.Interfaces.MessageBroker.Client;
+using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 
 namespace Teleopti.Ccc.TestCommon
 {

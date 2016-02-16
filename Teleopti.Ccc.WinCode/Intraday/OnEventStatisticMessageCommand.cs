@@ -1,5 +1,5 @@
 ﻿using System;
-using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 
 namespace Teleopti.Ccc.WinCode.Intraday
 {

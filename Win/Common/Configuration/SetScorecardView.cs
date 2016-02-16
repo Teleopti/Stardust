@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Win.Common.Configuration.Columns;
 using Teleopti.Ccc.WinCode.Common.Configuration;
@@ -78,7 +79,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void LoadControl()
 		{
-			_presenter = new SetScorecardPresenter(this, _unitOfWork, StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging,
+			_presenter = new SetScorecardPresenter(this, _unitOfWork, MessageBrokerInStateHolder.Instance,
 												   new ScorecardProvider(new ScorecardRepository(_unitOfWork), true),
 												   new SiteProvider(new SiteRepository(_unitOfWork)),
 												   new TeamProvider(new TeamRepository(_unitOfWork)));

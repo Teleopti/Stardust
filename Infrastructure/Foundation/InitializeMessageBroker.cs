@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using log4net;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Messaging.Exceptions;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation

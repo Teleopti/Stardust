@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
@@ -78,8 +79,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 																new RtaStateGroupRepository(currentUnitOfWork),
 																new ActivityRepository(currentUnitOfWork),
 																new RtaMapRepository(currentUnitOfWork),
-																StateHolderReader.Instance.StateReader.ApplicationScopeData
-																				 .Messaging, _view);
+																MessageBrokerInStateHolder.Instance, 
+																_view);
 			_view.LoadGrid();
 		}
 

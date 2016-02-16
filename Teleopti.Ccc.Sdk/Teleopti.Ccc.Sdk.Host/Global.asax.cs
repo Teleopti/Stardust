@@ -16,6 +16,8 @@ using log4net;
 using log4net.Config;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
@@ -40,7 +42,6 @@ using Teleopti.Ccc.Sdk.WcfService;
 using Teleopti.Ccc.Sdk.WcfService.Factory;
 using Teleopti.Ccc.Sdk.WcfService.LogOn;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.Sdk.WcfHost
 {
@@ -165,7 +166,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 				c.Resolve<ICurrentPersistCallbacks>(),
 				DataSourceConfigurationSetter.ForSdk(),
 				new CurrentHttpContext(),
-				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
+				() => MessageBrokerInStateHolder.Instance
 				)).As<IDataSourcesFactory>().SingleInstance();
 			builder.RegisterType<SetNoLicenseActivator>().As<ISetLicenseActivator>().SingleInstance();
 		}

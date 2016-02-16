@@ -9,7 +9,6 @@ using Rhino.Mocks.Interfaces;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.PropertyPageAndWizard
 {

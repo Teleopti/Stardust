@@ -1,5 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Events;
+﻿using Teleopti.Ccc.Domain.MessageBroker.Legacy;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Persisters.Refresh
 {

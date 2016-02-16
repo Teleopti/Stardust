@@ -1,5 +1,5 @@
 ﻿using System;
-using Teleopti.Interfaces.MessageBroker.Core;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 
 namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests.TestDoubles
 {

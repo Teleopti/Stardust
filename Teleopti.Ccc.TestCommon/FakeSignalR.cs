@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Ccc.Domain.MessageBroker.Server;
 
 namespace Teleopti.Ccc.TestCommon
 {
@@ -29,15 +30,15 @@ namespace Teleopti.Ccc.TestCommon
 
 
 
-		public Interfaces.MessageBroker.Message SentMessage;
+		public Message SentMessage;
 		public string SentToGroup;
 		public string SentRoute;
 
 		public IList<string> SentToGroups = new List<string>();
 		public IList<string> SentRoutes = new List<string>();
-		public IList<Interfaces.MessageBroker.Message> SentMessages = new List<Interfaces.MessageBroker.Message>();
+		public IList<Message> SentMessages = new List<Message>();
 
-		public void CallOnEventMessage(string groupName, string route, Interfaces.MessageBroker.Message message)
+		public void CallOnEventMessage(string groupName, string route, Message message)
 		{
 			SentToGroup = groupName;
 			SentRoute = route;

@@ -2,10 +2,10 @@
 using System.Configuration;
 using System.Xml.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
-using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.WinCode.Main
 {
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WinCode.Main
 
 			var state = new State();
 			initializer.Start(state, passwordPolicyService, appSettings);
-			new InitializeMessageBroker(state.ApplicationScopeData.Messaging).Start(appSettings);
+			new InitializeMessageBroker(messageBroker).Start(appSettings);
 		}
 	}
 }

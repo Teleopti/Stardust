@@ -1,12 +1,12 @@
 using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using BusinessUnitFactory = Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData.BusinessUnitFactory;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer

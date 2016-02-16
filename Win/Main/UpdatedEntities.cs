@@ -1,5 +1,4 @@
 ﻿using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Win.Main
 {

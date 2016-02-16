@@ -10,7 +10,6 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest
 {
@@ -22,13 +21,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         {
             MockRepository mocks = new MockRepository();
             IState state = mocks.StrictMock<IState>();
-            IMessageBrokerComposite messageBroker = mocks.DynamicMock<IMessageBrokerComposite>();
 	        var ds = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
-            IApplicationData applicationData = StateHolderProxyHelper.CreateApplicationData(messageBroker);
+            IApplicationData applicationData = StateHolderProxyHelper.CreateApplicationData(null);
             IBusinessUnit businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
-
-            Expect.Call(messageBroker.IsAlive).Return(false).Repeat.Any();
-            mocks.Replay(messageBroker);
 
             IPerson per = new Person { Name = new Name("Peter", "Westlin Junior") };
             per.SetId(Guid.NewGuid());

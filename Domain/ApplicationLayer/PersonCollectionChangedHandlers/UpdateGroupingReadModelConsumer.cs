@@ -1,5 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {

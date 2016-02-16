@@ -1,8 +1,8 @@
 ﻿using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.WinCode.Intraday
 {

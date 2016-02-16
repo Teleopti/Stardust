@@ -4,9 +4,9 @@ using System.Web;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
-using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.WebTest.Core.Startup
 {

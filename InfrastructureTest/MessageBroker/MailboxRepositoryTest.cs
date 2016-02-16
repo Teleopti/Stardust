@@ -5,8 +5,8 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork;
-using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 {

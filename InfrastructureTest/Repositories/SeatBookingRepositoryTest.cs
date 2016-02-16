@@ -14,9 +14,9 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {

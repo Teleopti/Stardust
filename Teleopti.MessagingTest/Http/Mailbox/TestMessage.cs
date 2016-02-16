@@ -1,5 +1,5 @@
 using System;
-using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Ccc.Domain.MessageBroker;
 
 namespace Teleopti.MessagingTest.Http.Mailbox
 {

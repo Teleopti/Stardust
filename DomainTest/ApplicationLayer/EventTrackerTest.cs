@@ -3,9 +3,9 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			});
 
 			messageBrokerSender.AssertWasCalled(x => x.Send(
-				Arg<Interfaces.MessageBroker.Message>.Matches(e =>
+				Arg<Message>.Matches(e =>
 					e.DataSource == "datasource" &&
 					e.BusinessUnitId == @event.LogOnBusinessUnitId.ToString() &&
 					e.ModuleId == @event.InitiatorId.ToString() &&

@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 			loggedOnPerson = PersonFactory.CreatePerson("logged on person");
 
-			ApplicationData = new ApplicationData(appSettings, null, null);
+			ApplicationData = new ApplicationData(appSettings, null);
 
 			BusinessUnitFactory.BusinessUnitUsedInTest = BusinessUnitFactory.CreateSimpleBusinessUnit("Business unit used in test");
 			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, DataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
@@ -138,12 +138,13 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 			var mocks = new MockRepository();
 			var stateMock = mocks.StrictMock<IState>();
 			BusinessUnitFactory.BusinessUnitUsedInTest.SetId(Guid.NewGuid());
-			StateHolderProxyHelper.ClearAndSetStateHolder(mocks,
-																  loggedOnPerson,
-																  BusinessUnitFactory.BusinessUnitUsedInTest,
-																  ApplicationData,
-																	DataSource,
-																  stateMock);
+			StateHolderProxyHelper.ClearAndSetStateHolder(
+				mocks,
+				loggedOnPerson,
+				BusinessUnitFactory.BusinessUnitUsedInTest,
+				ApplicationData,
+				DataSource,
+				stateMock);
 
 			using (IUnitOfWork uowTemp = DataSource.Application.CreateAndOpenUnitOfWork())
 			{

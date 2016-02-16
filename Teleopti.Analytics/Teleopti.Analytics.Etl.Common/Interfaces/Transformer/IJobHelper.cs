@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 {

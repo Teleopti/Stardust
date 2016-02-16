@@ -2,8 +2,8 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Interfaces;
-using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Messaging.Client.Http
 {

@@ -17,7 +17,7 @@ using Teleopti.Ccc.WinCode.Payroll;
 using Teleopti.Ccc.WinCode.Payroll.Interfaces;
 using Teleopti.Interfaces.Domain;
 using System.Linq;
-using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 
 namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
 {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.MessageBroker;
-using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Messaging.Client.Http;
 
 namespace Teleopti.MessagingTest

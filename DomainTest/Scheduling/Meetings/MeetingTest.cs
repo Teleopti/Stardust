@@ -3,12 +3,12 @@ using System.Linq;
 using NUnit.Framework;
 using System.Collections.Generic;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 {

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Ccc.Domain.MessageBroker.Server;
 
 namespace Teleopti.Ccc.DomainTest.MessageBroker.ImplementationDetailTests
 {

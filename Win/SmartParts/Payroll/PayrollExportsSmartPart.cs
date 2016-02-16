@@ -9,6 +9,7 @@ using System.Xml.XPath;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Coders;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -17,7 +18,6 @@ using Teleopti.Ccc.WinCode.Payroll.PayrollExportPages.PayrollExportSmartPart;
 using Teleopti.Common.UI.SmartPartControls.SmartParts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Win.SmartParts.Payroll
 {

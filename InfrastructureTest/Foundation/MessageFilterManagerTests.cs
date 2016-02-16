@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 

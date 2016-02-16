@@ -2,12 +2,12 @@
 using System.Diagnostics.CodeAnalysis;
 using Teleopti.Ccc.Domain.Coders;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
+using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client.Composite;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 {
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 		[SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public JobStatusView(JobStatusModel model)  : this()
 		{
-			Presenter = new JobStatusPresenter(this,model, StateHolder.Instance.StateReader.ApplicationScopeData.Messaging);
+			Presenter = new JobStatusPresenter(this,model, MessageBrokerInStateHolder.Instance);
 			progressBar1.Maximum = model.ProgressMax;
 		}
 

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {

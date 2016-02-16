@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Interfaces;
-using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
 {

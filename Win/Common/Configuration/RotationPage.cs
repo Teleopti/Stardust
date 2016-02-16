@@ -11,7 +11,10 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
+using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Win.Common.Configuration.Columns;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
@@ -19,9 +22,6 @@ using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Settings;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Interfaces.MessageBroker.Client.Composite;
-using Teleopti.Interfaces.MessageBroker.Events;
 using Rotation = Teleopti.Ccc.Domain.Scheduling.Restriction.Rotation;
 
 namespace Teleopti.Ccc.Win.Common.Configuration
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void initMessageBroker()
 		{
-			_messageBroker = StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging;
+			_messageBroker = MessageBrokerInStateHolder.Instance;
 			_messageBroker.RegisterEventSubscription(messageBrokerDayOffMessage, typeof (IDayOffTemplate));
 			_messageBroker.RegisterEventSubscription(messageBrokerShiftCategoryMessage, typeof (IShiftCategory));
 		}

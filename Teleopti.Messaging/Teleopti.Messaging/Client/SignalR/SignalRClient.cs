@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 using log4net;
 using Microsoft.AspNet.SignalR.Client;
 using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker;
-using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Messaging.Client.SignalR.Wrappers;
 
 namespace Teleopti.Messaging.Client.SignalR

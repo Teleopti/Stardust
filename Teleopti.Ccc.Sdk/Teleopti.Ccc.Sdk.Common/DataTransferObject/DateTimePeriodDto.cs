@@ -20,11 +20,6 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         {
             UtcStartTime = period.StartDateTime;
             UtcEndTime = period.EndDateTime;
-            if (StateHolderReader.IsInitialized)
-            {
-                LocalStartDateTime = period.LocalStartDateTime;
-                LocalEndDateTime = period.LocalEndDateTime;
-            }
         }
 
 		public DateTimePeriodDto()

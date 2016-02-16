@@ -133,6 +133,7 @@
     <Compile Include="Domain\ComplexRuleSetEventArgs.cs" />
     <Compile Include="Domain\DateOnlyExtensions.cs" />
     <Compile Include="Domain\DateOnlyPeriodExtensions.cs" />
+    <Compile Include="Domain\DomainUpdateType.cs" />
     <Compile Include="Domain\GamificationSettingRuleSet.cs" />
     <Compile Include="Domain\FairnessType.cs" />
     <Compile Include="Domain\ForecastActualDifferNotification.cs" />
@@ -144,8 +145,10 @@
     <Compile Include="Domain\IAgentBadgeWithRankTransaction.cs" />
     <Compile Include="Domain\IAgentBadgeWithRankTransactionRepository.cs" />
     <Compile Include="Domain\IAgentBadgeWithRankRepository.cs" />
+    <Compile Include="Domain\IApplicationData.cs" />
     <Compile Include="Domain\IOverrideTask.cs" />
     <Compile Include="Domain\IPaging.cs" />
+    <Compile Include="Domain\IRootChangeInfo.cs" />
     <Compile Include="Domain\ISaveSeatMapCommand.cs" />
     <Compile Include="Domain\IScheduleChangedMessage.cs" />
     <Compile Include="Domain\IBacklogTask.cs" />
@@ -183,6 +186,7 @@
     <Compile Include="Domain\IShiftExchangeCriteria.cs" />
     <Compile Include="Domain\IShiftExchangeOffer.cs" />
     <Compile Include="Domain\IStaffingCalculatorServiceFacade.cs" />
+    <Compile Include="Domain\IStateReader.cs" />
     <Compile Include="Domain\ITeamGamificationSetting.cs" />
     <Compile Include="Domain\ITeamGroupedBooking.cs" />
     <Compile Include="Domain\ITeleoptiDiagnosticsInformation.cs" />
@@ -260,7 +264,6 @@
     <Compile Include="Domain\IJobResult.cs" />
     <Compile Include="Domain\IJobResultDetail.cs" />
     <Compile Include="Domain\IProjectionProvider.cs" />
-    <Compile Include="Domain\IProvideCustomChangeInfo.cs" />
     <Compile Include="Domain\IProxyForId.cs" />
     <Compile Include="Domain\IRelativeDailyDifferencesByAllSkillsExtractor.cs" />
     <Compile Include="Domain\IRemoveShiftCategoryOnBestDateService.cs" />
@@ -538,7 +541,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Domain\IAggregateRoot.cs" />
-    <Compile Include="Domain\IApplicationData.cs" />
     <Compile Include="Domain\IApplicationFunction.cs" />
     <Compile Include="Domain\IApplicationRole.cs" />
     <Compile Include="Domain\IAuthorizationSettings.cs" />
@@ -599,7 +601,6 @@
     <Compile Include="Domain\IWorkTimeMinMaxRestrictionCreator.cs" />
     <Compile Include="Domain\IWriteSideRepository.cs" />
     <Compile Include="Domain\IWriteSideRepositoryTypedId.cs" />
-    <Compile Include="Domain\MeetingChangedDetail.cs" />
     <Compile Include="Domain\MeetingChangedEntity.cs" />
     <Compile Include="Domain\MinMaxStaffBroken.cs" />
     <Compile Include="Domain\Now.cs" />
@@ -638,12 +639,14 @@
     <Compile Include="Domain\StaffingThreshold.cs" />
     <Compile Include="Domain\StaffingThresholds.cs" />
     <Compile Include="Domain\StartTimeLimitation.cs" />
+    <Compile Include="Domain\StateHolderReader.cs" />
     <Compile Include="Domain\TeleoptiAuthenticationHeaderNames.cs" />
     <Compile Include="Domain\TeleoptiDiagnosticsInformation.cs" />
     <Compile Include="Domain\ThisCulture.cs" />
     <Compile Include="Domain\TimeFormatsType.cs" />
     <Compile Include="Domain\MultiplicatorType.cs" />
     <Compile Include="Domain\TimeOfDay.cs" />
+    <Compile Include="Domain\TimeZoneHelper.cs" />
     <Compile Include="Domain\TimeZoneInfoExtensions.cs" />
     <Compile Include="Domain\TrackedCommandInfo.cs" />
     <Compile Include="Domain\ValidatedRequest.cs" />
@@ -741,9 +744,6 @@
     <Compile Include="Infrastructure\IQueryFilter.cs" />
     <Compile Include="Infrastructure\IReadModelUnitOfWorkFactory.cs" />
     <Compile Include="Infrastructure\IReportUrl.cs" />
-    <Compile Include="Infrastructure\IRootChangeInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Domain\IRuleSetBag.cs" />
     <Compile Include="Domain\IScenario.cs" />
     <Compile Include="Domain\IPerstistableScheduleData.cs" />
@@ -757,7 +757,6 @@
     <Compile Include="Domain\ISkillDayTemplate.cs" />
     <Compile Include="Domain\ISkillRestrictionSet.cs" />
     <Compile Include="Domain\ISkillType.cs" />
-    <Compile Include="Domain\IStateReader.cs" />
     <Compile Include="Domain\IStatisticTask.cs" />
     <Compile Include="Domain\ITask.cs" />
     <Compile Include="Domain\ITaskOwner.cs">
@@ -800,9 +799,6 @@
     <Compile Include="Domain\ServiceAgreement.cs" />
     <Compile Include="Domain\ServiceLevel.cs" />
     <Compile Include="Domain\SkillPersonData.cs" />
-    <Compile Include="Domain\StateHolderReader.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Domain\TaskPeriodType.cs" />
     <Compile Include="Domain\TemplateTarget.cs">
       <SubType>Code</SubType>
@@ -812,7 +808,6 @@
     </Compile>
     <Compile Include="Domain\TimePeriod.cs" />
     <Compile Include="Domain\TimePeriodWithSegment.cs" />
-    <Compile Include="Domain\TimeZoneHelper.cs" />
     <Compile Include="Domain\WorkTime.cs" />
     <Compile Include="Domain\WorkTimeDirective.cs" />
     <Compile Include="Infrastructure\IInitiatorIdentifier.cs" />
@@ -830,30 +825,6 @@
     <Compile Include="Infrastructure\MessageBrokerException.cs" />
     <Compile Include="IPlanningPeriod.cs" />
     <Compile Include="Domain\IValidatedRequest.cs" />
-    <Compile Include="MessageBroker\Client\IMessageBrokerUrl.cs" />
-    <Compile Include="MessageBroker\Client\IMessageSender.cs" />
-    <Compile Include="MessageBroker\Client\ISignalRClient.cs" />
-    <Compile Include="MessageBroker\Core\Consts.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MessageBroker\Core\IFramer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MessageBroker\Core\IMessageFilterManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MessageBroker\Events\DomainUpdateType.cs" />
-    <Compile Include="MessageBroker\Events\EventMessageArgs.cs" />
-    <Compile Include="MessageBroker\Events\IEventMessage.cs" />
-    <Compile Include="Domain\ITrackingMessageSender.cs" />
-    <Compile Include="MessageBroker\Client\Composite\IMessageBrokerComposite.cs" />
-    <Compile Include="MessageBroker\Events\IEventMessageFactory.cs" />
-    <Compile Include="MessageBroker\Client\Composite\IMessageListener.cs" />
-    <Compile Include="MessageBroker\Client\Composite\IMessageCreator.cs" />
-    <Compile Include="MessageBroker\Events\TrackingMessage.cs" />
-    <Compile Include="MessageBroker\Mailbox.cs" />
-    <Compile Include="MessageBroker\Message.cs" />
-    <Compile Include="MessageBroker\Subscription.cs" />
     <Compile Include="Messages\Denormalize\Legacy\PersonChangedMessage.cs" />
     <Compile Include="Messages\Denormalize\ScheduleChanged.cs" />
     <Compile Include="Messages\Denormalize\DenormalizeScheduleProjection.cs" />

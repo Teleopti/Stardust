@@ -4,7 +4,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Ccc.Domain.MessageBroker.Legacy;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Common.UI.SmartPartControls.SmartParts
 {

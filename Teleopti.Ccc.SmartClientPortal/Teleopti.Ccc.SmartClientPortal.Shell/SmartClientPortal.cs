@@ -569,7 +569,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			var smartPartWorker = new SmartPartWorker(smartPartPath, gridWorkspace);
 			var smartPartCommand = new SmartPartCommand(smartPartWorker);
 			SmartPartInvoker.SmartPartCommand = smartPartCommand;
-			SmartPartEnvironment.MessageBroker = StateHolder.Instance.StateReader.ApplicationScopeData.Messaging;
+			SmartPartEnvironment.MessageBroker = MessageBrokerInStateHolder.Instance;
 			SmartPartEnvironment.SmartPartWorkspace = gridWorkspace;
 		}
 

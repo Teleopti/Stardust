@@ -1,12 +1,12 @@
 using log4net.Config;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.DomainTest.Common;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.DomainTest
 {

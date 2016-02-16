@@ -8,20 +8,15 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client.Composite;
-using Teleopti.Messaging.Client;
-using Teleopti.Messaging.Client.SignalR;
 
 namespace Teleopti.Ccc.TestCommon
 {
-    /// <summary>
-    /// Helper to set StateHolder proxy to a certain state. Useful in tests.
-    /// </summary>
     public static class StateHolderProxyHelper
     {
 		public static WindowsAppDomainPrincipalContext DefaultPrincipalContext { get; set; }
@@ -39,7 +34,7 @@ namespace Teleopti.Ccc.TestCommon
 			ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(
 				name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
 
-			var applicationData = new ApplicationData(appSettings, null, null);
+			var applicationData = new ApplicationData(appSettings, null);
 			CreateSessionData(person, dataSource, businessUnit, principalContext);
 			var state = new FakeState { ApplicationScopeData = applicationData};
 			ClearAndSetStateHolder(state);
@@ -51,10 +46,6 @@ namespace Teleopti.Ccc.TestCommon
 			PrincipalAuthorization.SetInstance(null);
 	    }
 
-        /// <summary>
-        /// Clears the and set state holder.
-        /// </summary>
-        /// <param name="stateMock">The state mock.</param>
         public static void ClearAndInitializeStateHolder(IState stateMock)
         {
             MockRepository mocks = new MockRepository();
@@ -68,30 +59,24 @@ namespace Teleopti.Ccc.TestCommon
         public static void ClearAndSetStateHolder(IState state)
         {
             ClearStateHolder();
-            StateHolder.Initialize(state);
+            StateHolder.Initialize(state, new MessageBrokerCompositeDummy());
         }
 
-		public static void ClearAndSetStateHolder(MockRepository mocks,
-										  IPerson loggedOnPerson,
-										  IBusinessUnit businessUnit,
-										  IApplicationData appData,
-											IDataSource logonDataSource,
-										  IState stateMock)
-		{
-			var principalContext = new WindowsAppDomainPrincipalContext();
-			var principal = new TeleoptiPrincipalFactory().MakePrincipal(loggedOnPerson, logonDataSource, businessUnit, null);
-			principalContext.SetCurrentPrincipal(principal);
+	    public static void ClearAndSetStateHolder(MockRepository mocks, IPerson loggedOnPerson, IBusinessUnit businessUnit, IApplicationData appData, IDataSource logonDataSource, IState stateMock)
+	    {
+		    var principalContext = new WindowsAppDomainPrincipalContext();
+		    var principal = new TeleoptiPrincipalFactory().MakePrincipal(loggedOnPerson, logonDataSource, businessUnit, null);
+		    principalContext.SetCurrentPrincipal(principal);
 
-			PrincipalAuthorization.SetInstance(new PrincipalAuthorizationWithFullPermission());
+		    PrincipalAuthorization.SetInstance(new PrincipalAuthorizationWithFullPermission());
 
-			SetStateReaderExpectations(stateMock, appData);
+		    SetStateReaderExpectations(stateMock, appData);
 
-			ClearAndSetStateHolder(stateMock);
-			mocks.Replay(stateMock);
-		}
+		    ClearAndSetStateHolder(stateMock);
+		    mocks.Replay(stateMock);
+	    }
 
-
-    	public static void SetStateReaderExpectations(IStateReader stateMock, IApplicationData applicationData)
+	    public static void SetStateReaderExpectations(IStateReader stateMock, IApplicationData applicationData)
         {
             Expect.Call(stateMock.ApplicationScopeData)
                 .Return(applicationData)
@@ -113,7 +98,7 @@ namespace Teleopti.Ccc.TestCommon
             IDictionary<string, string> appSettings = new Dictionary<string, string>();
             ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(
                 name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
-			var applicationData = new ApplicationData(appSettings, messageBroker, null);
+			var applicationData = new ApplicationData(appSettings, null);
 
             return applicationData;
         }

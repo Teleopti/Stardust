@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
@@ -14,20 +15,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
 			_jsonSerializer = jsonSerializer;
 		}
 
-		public Interfaces.MessageBroker.Message CreateNotification(IAdherenceAggregatorInfo state)
+		public Message CreateNotification(IAdherenceAggregatorInfo state)
 		{
 			var numberOfOutOfAdherence = _aggregationState.GetOutOfAdherenceForSite(state.Person.SiteId);
 			return createSiteNotification(numberOfOutOfAdherence, state.Person.BusinessUnitId, state.Person.SiteId);
 		}
 
-		private Interfaces.MessageBroker.Message createSiteNotification(int numberOfOutOfAdherence, Guid businessUnitId, Guid siteId)
+		private Message createSiteNotification(int numberOfOutOfAdherence, Guid businessUnitId, Guid siteId)
 		{
 			var siteAdherenceMessage = new SiteAdherenceMessage
 			{
 				OutOfAdherence = numberOfOutOfAdherence
 			};
 
-			return new Interfaces.MessageBroker.Message
+			return new Message
 			{
 				BinaryData = _jsonSerializer.SerializeObject(siteAdherenceMessage),
 				BusinessUnitId = businessUnitId.ToString(),

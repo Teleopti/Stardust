@@ -4,7 +4,7 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.ModelBinding;
 using Teleopti.Ccc.Domain.MessageBroker;
-using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Ccc.Domain.MessageBroker.Server;
 
 namespace Teleopti.Ccc.Web.Broker
 {

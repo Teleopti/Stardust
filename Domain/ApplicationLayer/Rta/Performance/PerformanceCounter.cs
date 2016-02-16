@@ -1,7 +1,8 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance
 {
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance
 			{
 				LastTimestamp = _now.UtcDateTime();
 				var message = new PerformanceCountDone {StartTime = FirstTimestamp, EndTime = LastTimestamp};
-				_messageSender.Send(new Interfaces.MessageBroker.Message
+				_messageSender.Send(new Message
 				{
 					BinaryData = _serializer.SerializeObject(message),
 					DomainType = message.GetType().Name,

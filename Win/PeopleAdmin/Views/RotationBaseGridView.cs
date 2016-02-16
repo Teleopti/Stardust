@@ -18,7 +18,6 @@ using Teleopti.Ccc.Win.Common.Controls.Columns;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 {

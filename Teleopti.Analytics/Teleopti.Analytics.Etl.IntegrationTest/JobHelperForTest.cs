@@ -1,8 +1,8 @@
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {

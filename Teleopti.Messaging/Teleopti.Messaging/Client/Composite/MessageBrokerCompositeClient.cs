@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
+using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker;
-using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Interfaces.MessageBroker.Client.Composite;
-using Teleopti.Interfaces.MessageBroker.Core;
-using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Client.Http;
 using Teleopti.Messaging.Client.SignalR;
 

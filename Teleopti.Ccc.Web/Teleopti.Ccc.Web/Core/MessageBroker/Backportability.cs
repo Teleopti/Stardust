@@ -2,7 +2,7 @@
 using log4net;
 using Microsoft.AspNet.SignalR;
 using Teleopti.Ccc.Domain.MessageBroker;
-using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Ccc.Domain.MessageBroker.Server;
 
 namespace Teleopti.Ccc.Web.Broker
 {

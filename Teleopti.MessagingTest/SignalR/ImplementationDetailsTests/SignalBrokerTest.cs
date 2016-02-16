@@ -4,10 +4,10 @@ using Microsoft.AspNet.SignalR.Client.Transports;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Ccc.Domain.MessageBroker.Legacy;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Messaging.Client.SignalR;
 using Teleopti.Messaging.Client.SignalR.Wrappers;
-using Teleopti.Messaging.Events;
 using Teleopti.MessagingTest.SignalR.ImplementationDetailsTests.TestDoubles;
 
 namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests

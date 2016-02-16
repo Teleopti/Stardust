@@ -13,7 +13,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks
 {

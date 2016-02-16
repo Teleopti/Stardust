@@ -5,9 +5,8 @@ using System.Text;
 using Microsoft.VisualBasic.Devices;
 using Newtonsoft.Json;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client.Composite;
-using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Diagnostics

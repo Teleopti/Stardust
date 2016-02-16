@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 
 namespace Teleopti.Ccc.Infrastructure.Persisters.Refresh
 {

@@ -2,7 +2,7 @@ using System;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.MessageBroker;
-using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Ccc.Domain.MessageBroker.Server;
 
 namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 {

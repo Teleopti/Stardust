@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					var state = new State();
 					var appSettings = ConfigurationManager.AppSettings.ToDictionary();
 					initializeApplication.Start(state, null, ConfigurationManager.AppSettings.ToDictionary());
-					new InitializeMessageBroker(state.ApplicationScopeData.Messaging).Start(appSettings);
+					new InitializeMessageBroker(initializeApplication.Messaging).Start(appSettings);
 
 					//////////TODO: Remove this code when bus no longer has to "loop" tenants/datasources later (DataSourceForTenant.DoOnAllTenants_AvoidUsingThis)/////
 					using (tenantUnitOfWork.EnsureUnitOfWorkIsStarted())

@@ -9,12 +9,12 @@ using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Proxy;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using IsolationLevel = System.Data.IsolationLevel;
 using TransactionException = NHibernate.TransactionException;
 

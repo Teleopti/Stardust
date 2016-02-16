@@ -1,6 +1,4 @@
-using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Interfaces.MessageBroker.Client.Composite;
-using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 
 namespace Teleopti.Common.UI.SmartPartControls.SmartParts
 {

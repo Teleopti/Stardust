@@ -2,8 +2,8 @@
 using System.Globalization;
 using System.IO;
 using System.Text;
+using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Core;
 
 namespace Teleopti.Ccc.Domain.Coders
 {

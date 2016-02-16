@@ -1,9 +1,9 @@
 using System;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Infrastructure.MessageBroker.Scheduling
 {
@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker.Scheduling
 	{
 		public void Subscribe(Guid scenario, DateTimePeriod period, EventHandler<EventMessageArgs> onEventMessage)
 		{
-			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription(
+			MessageBrokerInStateHolder.Instance.RegisterEventSubscription(
 				onEventMessage,
 				scenario,
 				typeof(Scenario),
@@ -21,7 +21,17 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker.Scheduling
 				false,
 				true);
 
-			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription(
+			MessageBrokerInStateHolder.Instance.RegisterEventSubscription(
+				onEventMessage,
+				scenario,
+				typeof(Scenario),
+				typeof(IScheduleChangedMessage),
+				period.StartDateTime,
+				period.EndDateTime,
+				false,
+				true);
+
+			MessageBrokerInStateHolder.Instance.RegisterEventSubscription(
 				onEventMessage,
 				typeof(IPersistableScheduleData),
 				period.StartDateTime,
@@ -29,13 +39,13 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker.Scheduling
 				true,
 				true);
 
-			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription(
+			MessageBrokerInStateHolder.Instance.RegisterEventSubscription(
 				onEventMessage,
 				typeof(IMeeting),
 				true,
 				true);
 
-			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription(
+			MessageBrokerInStateHolder.Instance.RegisterEventSubscription(
 				onEventMessage,
 				typeof(IPersonRequest),
 				true,
@@ -44,7 +54,7 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker.Scheduling
 
 		public void Unsubscribe(EventHandler<EventMessageArgs> onEventMessage)
 		{
-			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.UnregisterSubscription(onEventMessage);
+			MessageBrokerInStateHolder.Instance.UnregisterSubscription(onEventMessage);
 		}
 	}
 }

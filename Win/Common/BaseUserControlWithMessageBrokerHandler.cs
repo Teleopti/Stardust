@@ -1,8 +1,8 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Win.Common
 {
@@ -33,14 +33,14 @@ namespace Teleopti.Ccc.Win.Common
         /// <param name="type">The type.</param>
         public void RegisterForMessageBrokerEvents(Type type)
         {
-            StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription
+            MessageBrokerInStateHolder.Instance.RegisterEventSubscription
                 (OnEventMessageHandler, type);
 
         }
 
         public void UnregisterMessageBrokerEvent()
         {
-            StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.UnregisterSubscription(OnEventMessageHandler);
+			MessageBrokerInStateHolder.Instance.UnregisterSubscription(OnEventMessageHandler);
         }
 
         

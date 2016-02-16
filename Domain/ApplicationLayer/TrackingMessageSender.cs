@@ -1,8 +1,8 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			{
 				initiatorId = initiatorInfo.InitiatorId;
 			}
-			_sender.Send(new Interfaces.MessageBroker.Message
+			_sender.Send(new Message
 			{
 				DataSource = dataSource,
 				BusinessUnitId = businessUnitId.ToString(),

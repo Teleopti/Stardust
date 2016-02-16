@@ -1,10 +1,9 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.MessageBroker;
-using Teleopti.Interfaces.MessageBroker;
-using Teleopti.Interfaces.MessageBroker.Client.Composite;
-using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Ccc.Domain.MessageBroker.Legacy;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Messaging.Client.SignalR
+namespace Teleopti.Messaging.Client.Composite
 {
 	public class DoNotSend : IMessageCreator
 	{
