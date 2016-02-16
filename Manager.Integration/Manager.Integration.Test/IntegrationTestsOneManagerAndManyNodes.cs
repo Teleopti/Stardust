@@ -199,8 +199,7 @@ namespace Manager.Integration.Test
 
             List<JobRequestModel> createNewJobRequests = JobHelper.GenerateFailingJobParamsRequests(1);
 
-            var timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
-                                                                 5);
+            var timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count);
 
             List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 
@@ -319,8 +318,7 @@ namespace Manager.Integration.Test
                                             Logger);
 
 
-            TimeSpan timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
-                                                                      5);
+            TimeSpan timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count);
 
             List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 

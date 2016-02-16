@@ -18,8 +18,6 @@ namespace Stardust.Manager
 {
 	public class ManagerStarter
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(ManagerStarter));
-
 		private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
 
 		public void Stop()

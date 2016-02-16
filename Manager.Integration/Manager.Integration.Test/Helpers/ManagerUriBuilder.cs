@@ -19,8 +19,6 @@ namespace Manager.Integration.Test.Helpers
             _uriBuilder = new UriBuilder(_managerLocationUri);
 
             _uriTemplateBuilder = new UriBuilder(_managerLocationUri);
-
-            _uriBuilder = new UriBuilder(_managerLocationUri);
         }
 
         public Uri GetLocationUri()
