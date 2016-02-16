@@ -64,44 +64,6 @@ describe("PersonSchedule", function () {
 		verifyShift(timeLine, personSchedule.Shifts[0], schedule);
 	}));
 
-	it("Should indicate overnight shift", inject(function () {
-		var queryDate = "2015-10-26";
-
-		var timeLineStart = 1200;
-		var timeLineEnd = 1720;
-
-		var timeLine = {
-			Offset: moment(queryDate),
-			StartMinute: timeLineStart,
-			EndMinute: timeLineEnd,
-			LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
-		};
-
-		var schedule = {
-			"PersonId": "221B-Baker-Street",
-			"Name": "Sherlock Holmes",
-			"Date": queryDate,
-			"Projection": [
-				{
-					"Color": "Red",
-					"Description": "Phone",
-					"Start": queryDate + " 20:00",
-					"Minutes": 180
-				},
-				{
-					"Color": "Yellow",
-					"Description": "Email",
-					"Start": queryDate + " 23:00",
-					"Minutes": 120 // End = "2015-10-26 16:00"
-				}
-			],
-			DayOff: null
-		};
-
-		var personSchedule = target.Create(schedule, timeLine);
-		expect(personSchedule.IsOvernightShift).toEqual(true);
-	}));
-
 	it("Can get correct dayoff schedule", inject(function () {
 		var queryDate = "2015-10-26";
 

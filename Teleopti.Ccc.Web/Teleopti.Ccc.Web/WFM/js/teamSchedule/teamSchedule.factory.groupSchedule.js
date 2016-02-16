@@ -12,25 +12,22 @@ angular.module('wfm.teamSchedule').factory('GroupScheduleFactory', ['CurrentUser
 			var timeLine = timeLineFactory.Create(groupSchedules, queryDate);
 			return {
 				TimeLine: timeLine,
-				Schedules: createSchedulesFromGroupSchedules(groupSchedules, timeLine, queryDate)
+				Schedules: createSchedulesFromGroupSchedules(groupSchedules, timeLine)
 			};
 		}
 
-		function createSchedulesFromGroupSchedules(groupSchedules, timeLine, queryDate) {
+		function createSchedulesFromGroupSchedules(groupSchedules, timeLine) {
 			var existedSchedulesDictionary = {};
 			var schedules = [];
 
 			groupSchedules.forEach(function (schedule) {
-				var scheduleDateInUserTimeZone = moment.tz(schedule.Date, currentUserInfo.DefaultTimeZone);
-				var isOverNightShift = scheduleDateInUserTimeZone < queryDate;
-
 				var existedPersonSchedule = existedSchedulesDictionary[schedule.PersonId];
 				if (existedPersonSchedule == null) {
-					var personScheduleVm = personSchedule.Create(schedule, timeLine, isOverNightShift);
+					var personScheduleVm = personSchedule.Create(schedule, timeLine);
 					existedSchedulesDictionary[schedule.PersonId] = personScheduleVm;
 					schedules.push(personScheduleVm);
 				} else {
-					existedPersonSchedule.Merge(schedule, timeLine, isOverNightShift);
+					existedPersonSchedule.Merge(schedule, timeLine);
 				}
 			});
 

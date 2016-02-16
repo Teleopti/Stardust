@@ -8,20 +8,10 @@
 			Create: create
 		};
 
-		function create(schedule, timeLine, isOverNightShift) {
+		function create(schedule, timeLine) {
 			if (!schedule) schedule = {};
 
-			var isOvernightShift = false;
-			if (schedule.Projection != undefined && schedule.Projection != null && schedule.Projection.length > 0) {
-				var shiftStartTime = moment(schedule.Projection[0].Start);
-				var lastProjection = schedule.Projection[schedule.Projection.length - 1];
-				var shiftEndTime = moment(lastProjection.Start);
-				shiftEndTime = shiftEndTime.add(lastProjection.Minutes, 'minutes');
-				isOvernightShift = shiftStartTime.startOf('day').format("YYYY-MM-DD HH:mm:ss")
-					!== shiftEndTime.startOf('day').format("YYYY-MM-DD HH:mm:ss");
-			}
-
-			var projectionVms = createProjections(schedule.Projection, timeLine, isOverNightShift);
+			var projectionVms = createProjections(schedule.Projection, timeLine);
 			var dayOffVm = createDayOffViewModel(schedule.DayOff, timeLine);
 			
 			var personSchedule = {
@@ -34,23 +24,22 @@
 				DayOffs: dayOffVm == undefined ? [] : [dayOffVm],
 				Merge: merge,
 				IsSelected: false,
-				IsOvernightShift: isOvernightShift,
 				AllowSwap: function () {
-					return !this.IsFullDayAbsence && this.Shifts.length < 2;
+					return !this.IsFullDayAbsence;
 				}
 			}
 
 			return personSchedule;
 		};
 
-		function createProjections(projections, timeLine, isOverNightShift) {
+		function createProjections(projections, timeLine) {
 			if (projections == undefined || projections == null || projections.length === 0) {
 				return undefined;
 			}
 			
 			var projectionVms = [];
 			projections.forEach(function (projection) {
-				var proj = createShiftProjectionViewModel(projection, timeLine, isOverNightShift);
+				var proj = createShiftProjectionViewModel(projection, timeLine);
 				if (proj !== undefined) {
 					projectionVms.push(proj);
 				}
@@ -88,7 +77,7 @@
 			return dayOffVm;
 		};
 
-		function createShiftProjectionViewModel(projection, timeLine, isOverNightShift) {
+		function createShiftProjectionViewModel(projection, timeLine) {
 			if (!projection) projection = {};
 
 			var startTime = moment(projection.Start);
@@ -111,15 +100,14 @@
 				IsOvertime: projection.IsOvertime,
 				Color: projection.Color,
 				Description: projection.Description,
-				IsOverNight: isOverNightShift,
 				Start: projection.Start
 			};
 
 			return shiftProjectionVm;
 		}
 
-		function merge(otherSchedule, timeLine, isOverNightShift) {
-			var otherProjections = createProjections(otherSchedule.Projection, timeLine, isOverNightShift);
+		function merge(otherSchedule, timeLine) {
+			var otherProjections = createProjections(otherSchedule.Projection, timeLine);
 			if (otherProjections != undefined) {
 				this.Shifts.push({ Projections: otherProjections });
 			}
@@ -129,8 +117,6 @@
 			if (otherDayOffVm != undefined) {
 				this.DayOffs.push(otherDayOffVm);
 			}
-
-			this.IsOvernightShift = true;
 		}
 
 		return personScheduleFactory;
