@@ -57,6 +57,9 @@ namespace Manager.Integration.Test
             Task = AppDomainTask.StartTask(CancellationTokenSource,
                                            NumberOfNodesToStart);
 
+            LogHelper.LogInfoWithLineNumber("JobHelper.GiveNodesTimeToInitialize",
+                                            Logger);
+
             JobHelper.GiveNodesTimeToInitialize();
 
             LogHelper.LogInfoWithLineNumber("Finshed TestFixtureSetUp",
@@ -104,7 +107,7 @@ namespace Manager.Integration.Test
             if (AppDomainTask != null)
             {
                 AppDomainTask.Dispose();
-            }            
+            }
 
             LogHelper.LogInfoWithLineNumber("Finished TestFixtureTearDown",
                                             Logger);
@@ -117,182 +120,172 @@ namespace Manager.Integration.Test
         private string _buildMode = "Debug";
 
         [Test]
-        public void CreateSeveralRequestShouldReturnBothCancelAndDeleteStatuses()
+        public void JobShouldHaveStatusFailedIfFailedTest()
         {
-            LogHelper.LogInfoWithLineNumber("Start test.",
+            LogHelper.LogInfoWithLineNumber("Start.",
                                             Logger);
 
-            List<JobRequestModel> requests = JobHelper.GenerateLongRunningParamsRequests(2*NumberOfNodesToStart);
+            List<JobRequestModel> createNewJobRequests = JobHelper.GenerateFailingJobParamsRequests(1);
 
-            var timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count,
+            var timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
                                                                  5);
 
-            List<Task> tasks = new List<Task>();
+            List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 
-            var managerApiHelper = new ManagerApiHelper(new CheckJobHistoryStatusTimer(requests.Count,
-                                                                                       StatusConstants.SuccessStatus,
-                                                                                       StatusConstants.DeletedStatus,
-                                                                                       StatusConstants.FailedStatus,
-                                                                                       StatusConstants.CanceledStatus));
-
-            foreach (var jobRequestModel in requests)
+            var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
+                                                                            StatusConstants.SuccessStatus,
+                                                                            StatusConstants.DeletedStatus,
+                                                                            StatusConstants.FailedStatus,
+                                                                            StatusConstants.CanceledStatus);
+            foreach (var jobRequestModel in createNewJobRequests)
             {
-                tasks.Add(managerApiHelper.CreateManagerDoThisTask(jobRequestModel));
+                var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
+
+                jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
+
+                jobManagerTaskCreators.Add(jobManagerTaskCreator);
             }
 
-            managerApiHelper.CheckJobHistoryStatusTimer.GuidAddedEventHandler += (sender,
-                                                                                  args) =>
+            StartJobTaskHelper startJobTaskHelper = new StartJobTaskHelper();
+
+            var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
+                                                                      CancellationTokenSource,
+                                                                      timeout);
+
+            checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+
+            Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count);
+            Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.FailedStatus));
+
+            taskHlp.Dispose();
+
+            foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
             {
-                Thread.Sleep(TimeSpan.FromSeconds(1));
+                jobManagerTaskCreator.Dispose();
+            }
 
-                var cancelJobTask = managerApiHelper.CreateManagerCancelTask(args.Guid);
-
-                cancelJobTask.Start();
-            };
-
-            Parallel.ForEach(tasks,
-                             task => { task.Start(); });
-
-            managerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
-
-            Assert.IsTrue(managerApiHelper.CheckJobHistoryStatusTimer.Guids.Count > 0);
-            Assert.IsTrue(managerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.CanceledStatus ||
-                                                                                        pair.Value == StatusConstants.DeletedStatus));
-            managerApiHelper.Dispose();
-
-            LogHelper.LogInfoWithLineNumber("Finished test.",
+            LogHelper.LogInfoWithLineNumber("Finished.",
                                             Logger);
         }
 
         [Test]
-        public void JobShouldHaveStatusFailedIfFailed()
+        public void CancelWrongJobsTest()
         {
-            LogHelper.LogInfoWithLineNumber("Starting test.",
+            LogHelper.LogInfoWithLineNumber("Start.",
                                             Logger);
 
-            List<JobRequestModel> requests = JobHelper.GenerateFailingJobParamsRequests(1);
+            List<JobRequestModel> createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(1);
 
-            var timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count,
-                                                                 5);
+            LogHelper.LogInfoWithLineNumber("( " + createNewJobRequests.Count + " ) jobs will be created.",
+                                            Logger);
 
-            List<Task> tasks = new List<Task>();
+            TimeSpan timeout = JobHelper.GenerateTimeoutTimeInSeconds(createNewJobRequests.Count);
 
-            var managerApiHelper = new ManagerApiHelper(new CheckJobHistoryStatusTimer(requests.Count,
-                                                                                       StatusConstants.SuccessStatus,
-                                                                                       StatusConstants.DeletedStatus,
-                                                                                       StatusConstants.FailedStatus,
-                                                                                       StatusConstants.CanceledStatus));
-            foreach (var jobRequestModel in requests)
+            List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
+
+            var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
+                                                                            StatusConstants.SuccessStatus,
+                                                                            StatusConstants.DeletedStatus,
+                                                                            StatusConstants.FailedStatus,
+                                                                            StatusConstants.CanceledStatus);
+
+            foreach (var jobRequestModel in createNewJobRequests)
             {
-                tasks.Add(managerApiHelper.CreateManagerDoThisTask(jobRequestModel));
+                var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
+
+                jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
+
+                jobManagerTaskCreators.Add(jobManagerTaskCreator);
             }
 
-            Parallel.ForEach(tasks,
-                             task => { task.Start(); });
-
-            managerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
-
-            Assert.IsTrue(managerApiHelper.CheckJobHistoryStatusTimer.Guids.Count > 0);
-            Assert.IsTrue(managerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.FailedStatus));
-
-            managerApiHelper.Dispose();
-
-            LogHelper.LogInfoWithLineNumber("Finished test.",
-                                            Logger);
-        }
-
-        [Test]
-        public void CancelWrongJobs()
-        {
-            LogHelper.LogInfoWithLineNumber("Starting test.",
-                                            Logger);
-
-            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(1);
-
-            var timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count,
-                                                                 5);
-            List<Task> tasks = new List<Task>();
-
-            var managerApiHelper = new ManagerApiHelper(new CheckJobHistoryStatusTimer(requests.Count,
-                                                                                       StatusConstants.SuccessStatus,
-                                                                                       StatusConstants.DeletedStatus,
-                                                                                       StatusConstants.FailedStatus,
-                                                                                       StatusConstants.CanceledStatus));
-
-            foreach (var jobRequestModel in requests)
-            {
-                tasks.Add(managerApiHelper.CreateManagerDoThisTask(jobRequestModel));
-
-                LogHelper.LogDebugWithLineNumber("Created task for add job :" + jobRequestModel.Name,
-                                                 Logger);
-            }
-
-
-            managerApiHelper.CheckJobHistoryStatusTimer.GuidAddedEventHandler += (sender,
-                                                                                  args) =>
+            checkJobHistoryStatusTimer.GuidAddedEventHandler += (sender,
+                                                                 args) =>
             {
                 var newGuid = Guid.NewGuid();
 
-                var cancelJobTask = managerApiHelper.CreateManagerCancelTask(newGuid);
+                var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
 
-                LogHelper.LogDebugWithLineNumber("CancelWrongJobs : Created task for cancel job :" + newGuid,
-                                                 Logger);
+                jobManagerTaskCreator.CreateDeleteJobToManagerTask(newGuid);
 
-                cancelJobTask.Start();
+                jobManagerTaskCreator.StartAndWaitDeleteJobToManagerTask(timeout);
+
+                jobManagerTaskCreator.Dispose();
             };
 
-            Parallel.ForEach(tasks,
-                             task => { task.Start(); });
+            StartJobTaskHelper startJobTaskHelper = new StartJobTaskHelper();
 
-            managerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+            var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
+                                                                      CancellationTokenSource,
+                                                                      timeout);
 
-            Assert.IsTrue(managerApiHelper.CheckJobHistoryStatusTimer.Guids.Count > 0);
-            Assert.IsTrue(managerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
+            checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
-            managerApiHelper.Dispose();
+            Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count);
+            Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
 
-            LogHelper.LogInfoWithLineNumber("Finished test.",
+            taskHlp.Dispose();
+
+            foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
+            {
+                jobManagerTaskCreator.Dispose();
+            }
+
+            LogHelper.LogInfoWithLineNumber("Finished.",
                                             Logger);
         }
 
         [Test]
-        public void ShouldBeAbleToCreateManySuccessJobRequest()
+        public void ShouldBeAbleToCreateManySuccessJobRequestTest()
         {
-            LogHelper.LogInfoWithLineNumber("Start test.",
+            LogHelper.LogInfoWithLineNumber("Start.",
                                             Logger);
 
-            List<JobRequestModel> requests = JobHelper.GenerateTestJobParamsRequests(NumberOfNodesToStart*1);
+            List<JobRequestModel> createNewJobRequests =
+                JobHelper.GenerateTestJobParamsRequests(NumberOfNodesToStart*1);
 
-            TimeSpan timeout = JobHelper.GenerateTimeoutTimeInMinutes(requests.Count,
+            LogHelper.LogInfoWithLineNumber("( " + createNewJobRequests.Count + " ) jobs will be created.",
+                                            Logger);
+
+
+            TimeSpan timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
                                                                       5);
 
-            List<Task> tasks = new List<Task>();
+            List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 
-            var managerApiHelper = new ManagerApiHelper(new CheckJobHistoryStatusTimer(requests.Count,
-                                                                                       StatusConstants.SuccessStatus,
-                                                                                       StatusConstants.DeletedStatus,
-                                                                                       StatusConstants.FailedStatus,
-                                                                                       StatusConstants.CanceledStatus));
+            var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
+                                                                            StatusConstants.SuccessStatus,
+                                                                            StatusConstants.DeletedStatus,
+                                                                            StatusConstants.FailedStatus,
+                                                                            StatusConstants.CanceledStatus);
 
-            foreach (var jobRequestModel in requests)
+            foreach (var jobRequestModel in createNewJobRequests)
             {
-                tasks.Add(managerApiHelper.CreateManagerDoThisTask(jobRequestModel));
+                var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
+
+                jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
+
+                jobManagerTaskCreators.Add(jobManagerTaskCreator);
             }
 
-            Parallel.ForEach(tasks,
-                             task => { task.Start(); });
+            StartJobTaskHelper startJobTaskHelper = new StartJobTaskHelper();
 
-            managerApiHelper.CheckJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+            var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
+                                                                      CancellationTokenSource,
+                                                                      timeout);
 
-            bool condition =
-                managerApiHelper.CheckJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus);
+            checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
-            Assert.IsTrue(condition);
-            Assert.IsTrue(managerApiHelper.CheckJobHistoryStatusTimer.Guids.Count > 0);
+            Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count);
+            Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
 
-            managerApiHelper.Dispose();
+            taskHlp.Dispose();
 
-            LogHelper.LogInfoWithLineNumber("Finished test.",
+            foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
+            {
+                jobManagerTaskCreator.Dispose();
+            }
+
+            LogHelper.LogInfoWithLineNumber("Finished.",
                                             Logger);
         }
     }

@@ -84,5 +84,15 @@ namespace Stardust.Manager
         {
             return _jobRepository.History(jobId);
         }
-    }
+
+		public IList<JobHistory> GetJobHistoryList()
+		{
+			return _jobRepository.HistoryList();
+		}
+
+	    public IList<JobHistoryDetail> JobHistoryDetails(Guid jobId)
+	    {
+			return _jobRepository.JobHistoryDetails(jobId);
+		}
+	}
 }

@@ -1,0 +1,23 @@
+﻿<div ng-controller="detailsController as vm">
+	<a style=" padding-top: 25px; padding-right: 50px" href="#"><img alt="back" title="Back to Start" src="left_round.png" /></a>
+	<h2>List jobs</h2>
+	<div>
+		<table>
+			<thead>
+				<tr>
+					<th>Created</th>
+					<th>Detail</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="detail in vm.JobDetails">
+					<td>{{detail.Created}}</td>
+					<td>{{detail.Detail}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+</div>
+
+

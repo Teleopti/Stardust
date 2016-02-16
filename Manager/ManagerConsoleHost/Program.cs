@@ -9,7 +9,10 @@ using Autofac;
 using Autofac.Integration.WebApi;
 using log4net;
 using log4net.Config;
+using Microsoft.Owin;
+using Microsoft.Owin.FileSystems;
 using Microsoft.Owin.Hosting;
+using Microsoft.Owin.StaticFiles;
 using Owin;
 using Stardust.Manager;
 using Stardust.Manager.Helpers;
@@ -82,7 +85,15 @@ namespace ManagerConsoleHost
 
                     // Configure Web API for self-host. 
                     appBuilder.UseStardustManager(container, ConfigurationManager.AppSettings["routeName"]);
-                    
+
+                    appBuilder.UseDefaultFiles(new DefaultFilesOptions
+                    {
+                        FileSystem = new PhysicalFileSystem(@".\StardustDashboard"),
+                        RequestPath = new PathString("/StardustDashboard")
+                    });
+
+                    appBuilder.UseStaticFiles();
+
                 }))
             {
                 LogHelper.LogInfoWithLineNumber(Logger,

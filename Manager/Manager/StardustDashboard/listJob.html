@@ -1,0 +1,34 @@
+﻿<div ng-controller="listJobController as vm">
+
+	<h2>List jobs</h2>
+	<div>
+		<table>
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Created By</th>
+					<th>Created</th>
+					<th>Started</th>
+					<th>Ended</th>
+					<th>Sent to</th>
+					<th>Result</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="job in vm.Jobs">
+					<td>{{job.Name}}</td>
+					<td>{{job.CreatedBy}}</td>
+					<td>{{job.Created}}</td>
+					<td>{{job.Started}}</td>
+					<td>{{job.Ended}}</td>
+					<td>{{job.SentTo}}</td>
+					<td><a href="#details\{{job.Id}}">{{job.Result}}</a></td>
+					
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+</div>
+
+

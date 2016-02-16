@@ -178,6 +178,23 @@
                               VerticalGridLinesBrush="#FFF5EFEF"
                               SelectionUnit="Cell"
                               IsReadOnly="True">
+
+
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Result}"
+                                                 Value="Success">
+                                        <Setter Property="Background"
+                                                Value="LightGreen" />
+                                        <Setter Property="Foreground"
+                                                Value="Black" />
+                                    </DataTrigger>
+
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                        
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Row">
                                 <DataGridTextColumn.Binding>
@@ -203,6 +220,7 @@
                             <DataGridTextColumn Binding="{Binding CreatedBy}"
                                                 ClipboardContentBinding="{Binding CreatedBy}"
                                                 Header="Created By" />
+                            
                             <DataGridTextColumn Binding="{Binding Result}"
                                                 ClipboardContentBinding="{Binding Result}"
                                                 Header="Result" />
@@ -245,7 +263,7 @@
             </TabItem>
             <TabItem Header="{Binding JobDefinitionDataHeader, FallbackValue='Job Definition'}">
                 <Grid Background="#FFE5E5E5">
-                    <DataGrid ItemsSource="{Binding JobDefinitionsData}"
+                    <DataGrid ItemsSource="{Binding JobDefinitionData}"
                               HorizontalGridLinesBrush="#FFF5EFEF"
                               VerticalGridLinesBrush="#FFF5EFEF"
                               AutoGenerateColumns="False"

@@ -22,6 +22,7 @@
 			<dependency id="Microsoft.AspNet.WebApi.WebHost" version="5.2.3"  />
 			<dependency id="Microsoft.Owin" version="3.0.1"  />
 			<dependency id="Microsoft.Owin.Hosting" version="3.0.1"  />
+			<dependency id="Microsoft.Owin.StaticFiles" version="3.0.1" />
 			<dependency id="Microsoft.Owin.Host.HttpListener" version="3.0.1"  />
 			<dependency id="Newtonsoft.Json" version="6.0.7"  />
 			<dependency id="Owin" version="1.0"  />
@@ -29,5 +30,9 @@
 	</metadata>
 	<files>
 		<file src="bin\Release\Stardust.Manager.dll" target="lib\net451"/>
+		<file src="bin\Release\StardustDashboard\*.*" target="StardustDashboard"/>
+		<file src="bin\Release\StardustDashboard\Scripts\*.*" target="StardustDashboard/Scripts"/>
+		<file src="bin\Release\StardustDashboard\Scripts\App\*.*" target="StardustDashboard/Scripts/App"/>
 	</files>
+	
 </package>
