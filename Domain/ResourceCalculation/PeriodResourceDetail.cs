@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public struct PeriodResourceDetail
 	{
 		private double _resource;
-		private double _count;
+		private int _count;
 
-		public PeriodResourceDetail(double count, double resource) : this()
+		public PeriodResourceDetail(int count, double resource) : this()
 		{
 			Count = count;
 			Resource = resource;
@@ -25,14 +25,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 
-		public double Count
+		public int Count
 		{
 			get { return _count; }
 			set
 			{
-				var roundedValue = Math.Round(value, 5);
-				InParameter.ValueMustBePositive("Resource", roundedValue);
-				_count = roundedValue;
+				InParameter.ValueMustBePositive("Count", value);
+				_count = value;
 			}
 		}
 	}
@@ -41,11 +40,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public struct InnerPeriodResourceDetail
 	{
 		private double _resource;
-		private double _count;
+		private int _count;
 		private readonly SkillEffiencyResource[] _effiencyResources;
 		private readonly DateTimePeriod[] _fractionPeriods;
 
-		public InnerPeriodResourceDetail(double count, double resource, SkillEffiencyResource[] effiencyResources, DateTimePeriod[] fractionPeriods)
+		public InnerPeriodResourceDetail(int count, double resource, SkillEffiencyResource[] effiencyResources, DateTimePeriod[] fractionPeriods)
 			: this()
 		{
 			Count = count;
@@ -65,14 +64,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 
-		public double Count
+		public int Count
 		{
 			get { return _count; }
 			private set
 			{
-				var roundedValue = Math.Round(value, 5);
-				InParameter.ValueMustBePositive("Resource", roundedValue);
-				_count = roundedValue;
+				InParameter.ValueMustBePositive("Count", value);
+				_count = value;
 			}
 		}
 
