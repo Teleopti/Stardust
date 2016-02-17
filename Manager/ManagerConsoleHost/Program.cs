@@ -100,7 +100,7 @@ namespace ManagerConsoleHost
 
                 if (ManagerStarter != null)
                 {
-                    ManagerStarter.Stop();
+                   // ManagerStarter.Stop();
                 }
 
                 QuitEvent.Set();
@@ -119,7 +119,7 @@ namespace ManagerConsoleHost
 
             if (ManagerStarter != null)
             {
-                ManagerStarter.Stop();
+               // ManagerStarter.Stop();
             }
 
             QuitEvent.Set();
