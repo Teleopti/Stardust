@@ -41,7 +41,6 @@ using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
@@ -116,10 +115,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<SeatLimitationWorkShiftCalculator2>()
 				.As<ISeatLimitationWorkShiftCalculator2>()
-				.InstancePerLifetimeScope();
+				.SingleInstance();
 			builder.RegisterType<SeatImpactOnPeriodForProjection>()
 				.As<ISeatImpactOnPeriodForProjection>()
-				.InstancePerLifetimeScope();
+				.SingleInstance();
 			builder.RegisterType<LongestPeriodForAssignmentCalculator>()
 				.As<ILongestPeriodForAssignmentCalculator>()
 				.InstancePerLifetimeScope();
