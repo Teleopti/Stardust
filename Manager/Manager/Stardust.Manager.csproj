@@ -140,7 +140,9 @@
     <Compile Include="WorkerNodeRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Manager.nuspec" />
+    <None Include="Manager.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

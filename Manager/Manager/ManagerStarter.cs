@@ -1,16 +1,6 @@
-﻿using System;
-using System.Threading;
-using System.Web.Http;
-using System.Web.Http.ExceptionHandling;
+﻿using System.Threading;
 using Autofac;
 using Autofac.Integration.WebApi;
-using log4net;
-using Microsoft.Owin;
-using Microsoft.Owin.FileSystems;
-using Microsoft.Owin.Hosting;
-using Microsoft.Owin.StaticFiles;
-using Owin;
-using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
 
@@ -24,14 +14,38 @@ namespace Stardust.Manager
 		{
 			QuitEvent.Set();
 		}
-        
-        public void Start(ManagerConfiguration managerConfiguration)
-        {
 
-            QuitEvent.WaitOne();
+		public void Start(ManagerConfiguration managerConfiguration, IContainer container)
+		{
+			var builder = new ContainerBuilder();
 
-        }
-        
-    }
+			builder.RegisterType<NodeManager>()
+				 .As<INodeManager>();
+
+			builder.RegisterType<JobManager>();
+
+			builder.RegisterType<HttpSender>()
+				 .As<IHttpSender>();
+
+			builder.Register(
+				 c => new JobRepository(managerConfiguration.ConnectionString))
+				 .As<IJobRepository>();
+
+			builder.Register(
+				 c => new WorkerNodeRepository(managerConfiguration.ConnectionString))
+				 .As<IWorkerNodeRepository>();
+
+			builder.RegisterApiControllers(typeof(ManagerController).Assembly);
+
+			builder.RegisterInstance(managerConfiguration);
+
+			builder.Update(container);
+
+
+			QuitEvent.WaitOne();
+
+		}
+
+	}
 
 }

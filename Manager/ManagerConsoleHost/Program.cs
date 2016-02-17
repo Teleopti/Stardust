@@ -3,6 +3,7 @@ using System.Configuration;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Autofac;
 using log4net;
 using log4net.Config;
 using Microsoft.Owin.Hosting;
@@ -66,18 +67,20 @@ namespace ManagerConsoleHost
             var managerAddress = managerConfiguration.BaseAddress.Scheme + "://+:" +
                                  managerConfiguration.BaseAddress.Port + "/";
 
-            using (WebApp.Start(managerAddress,
+			var container = new ContainerBuilder().Build();
+
+				using (WebApp.Start(managerAddress,
                 appBuilder =>
                 {
                     // Configure Web API for self-host. 
-                    appBuilder.UseStardustManager(managerConfiguration);
+                    appBuilder.UseStardustManager(managerConfiguration, container);
                 }))
             {
                 LogHelper.LogInfoWithLineNumber(Logger,
                     WhoAmI + ": Started listening on port : ( " + managerConfiguration.BaseAddress + " )");
 
                 ManagerStarter = new ManagerStarter();
-                ManagerStarter.Start(managerConfiguration);
+                ManagerStarter.Start(managerConfiguration, container);
 
                 QuitEvent.WaitOne();
             }
