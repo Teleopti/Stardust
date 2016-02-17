@@ -17,16 +17,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public interface IRequiredScheduleHelper
 	{
-		void ScheduleSelectedStudents(IList<IScheduleDay> allSelectedSchedules, IBackgroundWorkerWrapper backgroundWorker,
+		void ScheduleSelectedStudents(IList<IScheduleDay> allSelectedSchedules, ISchedulingProgress backgroundWorker,
 			ISchedulingOptions schedulingOptions);
 
 		void RemoveShiftCategoryBackToLegalState(
 			IList<IScheduleMatrixPro> matrixList,
-			IBackgroundWorkerWrapper backgroundWorker, IOptimizationPreferences optimizationPreferences,
+			ISchedulingProgress backgroundWorker, IOptimizationPreferences optimizationPreferences,
 			ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allMatrixes);
 
 		void ScheduleSelectedPersonDays(IList<IScheduleDay> allSelectedSchedules, IList<IScheduleMatrixPro> matrixList,
-			IList<IScheduleMatrixPro> matrixListAll, IBackgroundWorkerWrapper backgroundWorker, ISchedulingOptions schedulingOptions);
+			IList<IScheduleMatrixPro> matrixListAll, ISchedulingProgress backgroundWorker, ISchedulingOptions schedulingOptions);
 	}
 
 	public class RequiredScheduleHelper : IRequiredScheduleHelper
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public void RemoveShiftCategoryBackToLegalState(
 			IList<IScheduleMatrixPro> matrixList,
-			IBackgroundWorkerWrapper backgroundWorker, IOptimizationPreferences optimizationPreferences,
+			ISchedulingProgress backgroundWorker, IOptimizationPreferences optimizationPreferences,
 			ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allMatrixes)
 		{
 			if (matrixList == null)
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		public void ScheduleSelectedPersonDays(IList<IScheduleDay> allSelectedSchedules, IList<IScheduleMatrixPro> matrixList,
-			IList<IScheduleMatrixPro> matrixListAll, IBackgroundWorkerWrapper backgroundWorker, ISchedulingOptions schedulingOptions)
+			IList<IScheduleMatrixPro> matrixListAll, ISchedulingProgress backgroundWorker, ISchedulingOptions schedulingOptions)
 		{
 			if (matrixList == null) throw new ArgumentNullException("matrixList");
 
@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 		}
 
-		public void ScheduleSelectedStudents(IList<IScheduleDay> allSelectedSchedules, IBackgroundWorkerWrapper backgroundWorker,
+		public void ScheduleSelectedStudents(IList<IScheduleDay> allSelectedSchedules, ISchedulingProgress backgroundWorker,
 			ISchedulingOptions schedulingOptions)
 		{
 			if (allSelectedSchedules == null) throw new ArgumentNullException("allSelectedSchedules");
@@ -325,19 +325,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		void GetBackToLegalState(IList<IScheduleMatrixPro> matrixList,
 			ISchedulerStateHolder schedulerStateHolder,
-			IBackgroundWorkerWrapper backgroundWorker,
+			ISchedulingProgress backgroundWorker,
 			ISchedulingOptions schedulingOptions,
 			DateOnlyPeriod selectedPeriod,
 			IList<IScheduleMatrixPro> allMatrixes);
 
 		void DaysOffBackToLegalState(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
-			IBackgroundWorkerWrapper backgroundWorker,
+			ISchedulingProgress backgroundWorker,
 			IDayOffTemplate dayOffTemplate,
 			bool reschedule,
 			ISchedulingOptions schedulingOptions,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 
-		void ReOptimize(IBackgroundWorkerWrapper backgroundWorker, IList<IScheduleDay> selectedDays, ISchedulingOptions schedulingOptions, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
+		void ReOptimize(ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedDays, ISchedulingOptions schedulingOptions, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 
 		IList<IScheduleMatrixOriginalStateContainer> CreateScheduleMatrixOriginalStateContainers(IList<IScheduleDay> scheduleDays, DateOnlyPeriod selectedPeriod);
 	}

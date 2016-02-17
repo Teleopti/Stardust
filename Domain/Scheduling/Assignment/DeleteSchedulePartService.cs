@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
     public interface IDeleteSchedulePartService
     {
-        IList<IScheduleDay> Delete(IEnumerable<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, IBackgroundWorkerWrapper backgroundWorker);
+        IList<IScheduleDay> Delete(IEnumerable<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingProgress backgroundWorker);
         IList<IScheduleDay> Delete(IEnumerable<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService);
     }
 
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             _scheduleResultStateHolder = scheduleResultStateHolder;
         }
 
-        public IList<IScheduleDay> Delete(IEnumerable<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, IBackgroundWorkerWrapper backgroundWorker)
+        public IList<IScheduleDay> Delete(IEnumerable<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingProgress backgroundWorker)
         {
             IList<IScheduleDay> returnList = new List<IScheduleDay>();
             if (backgroundWorker == null)
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return returnList;
         }
 
-		public IList<IScheduleDay> Delete(IList<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, IBackgroundWorkerWrapper backgroundWorker, INewBusinessRuleCollection newBusinessRuleCollection)
+		public IList<IScheduleDay> Delete(IList<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingProgress backgroundWorker, INewBusinessRuleCollection newBusinessRuleCollection)
 		{
 			InParameter.ListCannotBeEmpty("list", list);
 			if (backgroundWorker == null)

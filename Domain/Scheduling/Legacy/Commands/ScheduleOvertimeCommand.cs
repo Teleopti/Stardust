@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_scheduleOvertimeService = scheduleOvertimeService;
 		}
 
-		public void Exectue(IOvertimePreferences overtimePreferences, IBackgroundWorkerWrapper backgroundWorker, IList<IScheduleDay> selectedSchedules, IResourceCalculateDelayer resourceCalculateDelayer, IGridlockManager gridlockManager)
+		public void Exectue(IOvertimePreferences overtimePreferences, ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedSchedules, IResourceCalculateDelayer resourceCalculateDelayer, IGridlockManager gridlockManager)
 		{
 			var selectedDates = selectedSchedules.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct();
 			var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 		}
 
-		private CancelSignal onDayScheduled(IBackgroundWorkerWrapper backgroundWorker, SchedulingServiceBaseEventArgs args)
+		private CancelSignal onDayScheduled(ISchedulingProgress backgroundWorker, SchedulingServiceBaseEventArgs args)
 		{
 			if (backgroundWorker.CancellationPending)
 			{
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			return new CancelSignal();
 		}
 
-		private bool checkIfCancelPressed(IBackgroundWorkerWrapper backgroundWorker)
+		private bool checkIfCancelPressed(ISchedulingProgress backgroundWorker)
 		{
 			if (backgroundWorker.CancellationPending)
 				return true;

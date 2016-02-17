@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_personSkillProvider = personSkillProvider;
 		}
 
-		public void ResourceCalculateAllDays(IBackgroundWorkerWrapper backgroundWorker, bool doIntraIntervalCalculation)
+		public void ResourceCalculateAllDays(ISchedulingProgress backgroundWorker, bool doIntraIntervalCalculation)
 		{
 			var stateHolder = _stateHolder();
 			if (!stateHolder.SchedulingResultState.Skills.Any()) return;
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 		}
 
-		public void ResourceCalculateMarkedDays(IBackgroundWorkerWrapper backgroundWorker, bool considerShortBreaks, bool doIntraIntervalCalculation)
+		public void ResourceCalculateMarkedDays(ISchedulingProgress backgroundWorker, bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
 			var stateHolder = _stateHolder();
 			if (!stateHolder.DaysToRecalculate.Any()) return;
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 		}
 
-		private void resourceCalculateDays(IBackgroundWorkerWrapper backgroundWorker, bool considerShortBreaks, ICollection<DateOnly> datesList, bool doIntraIntervalCalculation)
+		private void resourceCalculateDays(ISchedulingProgress backgroundWorker, bool considerShortBreaks, ICollection<DateOnly> datesList, bool doIntraIntervalCalculation)
 		{
 			if (datesList.Count == 0)
 				return;

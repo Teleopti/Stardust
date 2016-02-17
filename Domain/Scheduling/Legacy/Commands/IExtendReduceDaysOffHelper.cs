@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public interface IExtendReduceDaysOffHelper
 	{
 		void RunExtendReduceDayOffOptimization(IOptimizationPreferences optimizerPreferences,
-			IBackgroundWorkerWrapper backgroundWorker, IList<IScheduleDay> selectedDays,
+			ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedDays,
 			ISchedulerStateHolder schedulerStateHolder,
 			DateOnlyPeriod selectedPeriod,
 			IList<IScheduleMatrixOriginalStateContainer> originalStateListForMoveMax,

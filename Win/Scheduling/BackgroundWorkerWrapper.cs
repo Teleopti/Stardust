@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.Helper;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-	public class BackgroundWorkerWrapper : IBackgroundWorkerWrapper
+	public class BackgroundWorkerWrapper : ISchedulingProgress
 	{
 		private readonly BackgroundWorker _backgroundWorker;
 

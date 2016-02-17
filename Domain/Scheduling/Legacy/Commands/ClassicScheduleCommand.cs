@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public interface IClassicScheduleCommand
 	{
-		void Execute(ISchedulingOptions schedulingOptions, IBackgroundWorkerWrapper backgroundWorker,
+		void Execute(ISchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
 			IRequiredScheduleHelper requiredScheduleOptimizerHelper, IList<IScheduleDay> selectedSchedules, 
 			bool runWeeklyRestSolver, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 	}
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_periodExctractor = periodExctractor;
 		}
 
-		public void Execute(ISchedulingOptions schedulingOptions, IBackgroundWorkerWrapper backgroundWorker,
+		public void Execute(ISchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
 			IRequiredScheduleHelper requiredScheduleOptimizerHelper, IList<IScheduleDay> selectedSchedules, bool runWeeklyRestSolver, 
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 
 		private void solveWeeklyRest(ISchedulingOptions schedulingOptions, IList<IScheduleDay> selectedSchedules, ISchedulerStateHolder schedulerStateHolder, 
-									DateOnlyPeriod selectedPeriod, IBackgroundWorkerWrapper backgroundWorker, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+									DateOnlyPeriod selectedPeriod, ISchedulingProgress backgroundWorker, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper(), 1, schedulingOptions.ConsiderShortBreaks);
 			ISchedulePartModifyAndRollbackService rollbackService =

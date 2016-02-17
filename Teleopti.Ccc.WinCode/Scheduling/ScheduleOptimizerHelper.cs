@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	public class ScheduleOptimizerHelper : IScheduleOptimizerHelper
 	{
 		private Func<IWorkShiftFinderResultHolder> _allResults;
-		private IBackgroundWorkerWrapper _backgroundWorker;
+		private ISchedulingProgress _backgroundWorker;
 		private readonly ILifetimeScope _container;
 		private readonly OptimizerHelperHelper _optimizerHelper;
 		private readonly IRequiredScheduleHelper _requiredScheduleHelper;
@@ -163,13 +163,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			return new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources);
 		}
 
-		private void classicDaysOffOptimization(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization, DateOnlyPeriod selectedPeriod, IBackgroundWorkerWrapper backgroundWorkerWrapper)
+		private void classicDaysOffOptimization(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization, DateOnlyPeriod selectedPeriod, ISchedulingProgress schedulingProgress)
 		{
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
 			var dayOffOptimzePreferences = _container.Resolve<IDaysOffPreferences>();
 			var dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(dayOffOptimzePreferences);
 			var classicDaysOffOptimizationCommand = _container.Resolve<ClassicDaysOffOptimizationCommand>();
-			classicDaysOffOptimizationCommand.Execute(matrixOriginalStateContainerListForDayOffOptimization, selectedPeriod, optimizerPreferences, _schedulerStateHolder(), backgroundWorkerWrapper, dayOffOptimizationPreferenceProvider);
+			classicDaysOffOptimizationCommand.Execute(matrixOriginalStateContainerListForDayOffOptimization, selectedPeriod, optimizerPreferences, _schedulerStateHolder(), schedulingProgress, dayOffOptimizationPreferenceProvider);
 		}
 	
 		public IEditableShift PrepareAndChooseBestShift(IScheduleDay schedulePart,
@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		public void GetBackToLegalState(IList<IScheduleMatrixPro> matrixList,
 			ISchedulerStateHolder schedulerStateHolder,
-			IBackgroundWorkerWrapper backgroundWorker,
+			ISchedulingProgress backgroundWorker,
 			ISchedulingOptions schedulingOptions,
 			DateOnlyPeriod selectedPeriod,
 			IList<IScheduleMatrixPro> allMatrixes)
@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		}
 
 		public void DaysOffBackToLegalState(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
-			IBackgroundWorkerWrapper backgroundWorker,
+			ISchedulingProgress backgroundWorker,
 			IDayOffTemplate dayOffTemplate,
 			bool reschedule,
 			ISchedulingOptions schedulingOptions,
@@ -353,7 +353,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		}
 
-		public void ReOptimize(IBackgroundWorkerWrapper backgroundWorker, IList<IScheduleDay> selectedDays,
+		public void ReOptimize(ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedDays,
 			ISchedulingOptions schedulingOptions, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			_backgroundWorker = backgroundWorker;
@@ -590,7 +590,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IOptimizationPreferences optimizerPreferences,
 			IList<IScheduleMatrixOriginalStateContainer> matrixContainerList,
 			IList<IScheduleMatrixOriginalStateContainer> workShiftContainerList,
-			IBackgroundWorkerWrapper backgroundWorker,
+			ISchedulingProgress backgroundWorker,
 			DateOnlyPeriod selectedPeriod,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
@@ -616,7 +616,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IList<IScheduleMatrixOriginalStateContainer> scheduleMatrixOriginalStateContainerList,
 			IList<IScheduleMatrixOriginalStateContainer> workshiftOriginalStateContainerList,
 			DateOnlyPeriod selectedPeriod,
-			IBackgroundWorkerWrapper backgroundWorker,
+			ISchedulingProgress backgroundWorker,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			_backgroundWorker = backgroundWorker;

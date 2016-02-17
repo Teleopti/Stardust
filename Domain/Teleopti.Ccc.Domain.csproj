@@ -641,7 +641,7 @@
     <Compile Include="Aop\IReadModelUnitOfWorkAspect.cs" />
     <Compile Include="GenericDisposable.cs" />
     <Compile Include="Helper\DateExtensions.cs" />
-    <Compile Include="Helper\IBackgroundWorkerWrapper.cs" />
+    <Compile Include="Helper\ISchedulingProgress.cs" />
     <Compile Include="ICurrentApplicationData.cs" />
     <Compile Include="Intraday\DeleteSkillArea.cs" />
     <Compile Include="Intraday\SkillAreaViewModel.cs" />

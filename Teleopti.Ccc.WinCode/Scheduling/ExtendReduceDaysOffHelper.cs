@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		}
 
 		public void RunExtendReduceDayOffOptimization(IOptimizationPreferences optimizerPreferences,
-			IBackgroundWorkerWrapper backgroundWorker, IList<IScheduleDay> selectedDays,
+			ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedDays,
 			ISchedulerStateHolder schedulerStateHolder,
 			DateOnlyPeriod selectedPeriod,
 			IList<IScheduleMatrixOriginalStateContainer> originalStateListForMoveMax,

@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	public class ExtendReduceTimeHelper : IExtendReduceTimeHelper
 	{
 		private readonly ILifetimeScope _container;
-		private IBackgroundWorkerWrapper _backgroundWorker;
+		private ISchedulingProgress _backgroundWorker;
 
 		public ExtendReduceTimeHelper(ILifetimeScope container)
 		{
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		}
 
 		public void RunExtendReduceTimeOptimization(IOptimizationPreferences optimizerPreferences,
-			IBackgroundWorkerWrapper backgroundWorker, IList<IScheduleDay> selectedDays,
+			ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedDays,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			DateOnlyPeriod selectedPeriod,
 			IList<IScheduleMatrixOriginalStateContainer> originalStateListForMoveMax,

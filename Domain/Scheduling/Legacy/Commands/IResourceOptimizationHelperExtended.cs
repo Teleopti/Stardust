@@ -4,7 +4,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
     public interface IResourceOptimizationHelperExtended
     {
-        void ResourceCalculateAllDays(IBackgroundWorkerWrapper backgroundWorker, bool doIntraIntervalCalculation);
-	    void ResourceCalculateMarkedDays(IBackgroundWorkerWrapper backgroundWorker, bool considerShortBreaks, bool doIntraIntervalCalculation);
+        void ResourceCalculateAllDays(ISchedulingProgress backgroundWorker, bool doIntraIntervalCalculation);
+	    void ResourceCalculateMarkedDays(ISchedulingProgress backgroundWorker, bool considerShortBreaks, bool doIntraIntervalCalculation);
     }
 }

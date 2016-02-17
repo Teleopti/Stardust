@@ -9,6 +9,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	{
 		void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, 
 			IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod, 
-			IList<IScheduleMatrixPro> allVisibleMatrixes, IBackgroundWorkerWrapper backgroundWorker, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
+			IList<IScheduleMatrixPro> allVisibleMatrixes, ISchedulingProgress backgroundWorker, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 	}
 }

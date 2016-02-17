@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class TeamBlockMoveTimeBetweenDaysCommand : ITeamBlockMoveTimeBetweenDaysCommand
 	{
-		private IBackgroundWorkerWrapper _backgroundWorker;
+		private ISchedulingProgress _backgroundWorker;
 		private readonly ITeamBlockMoveTimeBetweenDaysService _teamBlockMoveTimeBetweenDaysService;
 
 		public TeamBlockMoveTimeBetweenDaysCommand(ITeamBlockMoveTimeBetweenDaysService teamBlockMoveTimeBetweenDaysService)
@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamBlockMoveTimeBetweenDaysService = teamBlockMoveTimeBetweenDaysService;
 		}
 
-		public void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allVisibleMatrixes, IBackgroundWorkerWrapper backgroundWorker, IPeriodValueCalculator periodValueCalculator, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> matrixesOnSelectedperiod)
+		public void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allVisibleMatrixes, ISchedulingProgress backgroundWorker, IPeriodValueCalculator periodValueCalculator, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> matrixesOnSelectedperiod)
 		{
 			_backgroundWorker = backgroundWorker;
 			_teamBlockMoveTimeBetweenDaysService.ReportProgress += moveTimePerformed;

@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public class IntraIntervalOptimizationCommand : IIntraIntervalOptimizationCommand
 	{
 		private readonly IIntraIntervalOptimizationService _intervalOptimizationService;
-		private IBackgroundWorkerWrapper _backgroundWorker;
+		private ISchedulingProgress _backgroundWorker;
 		private string _optimizationstep;
 
 		public IntraIntervalOptimizationCommand(IIntraIntervalOptimizationService intervalOptimizationService)
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public void Execute(IOptimizationPreferences optimizationPreferences,
 			DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedSchedules, ISchedulingResultStateHolder schedulingResultStateHolder, 
 			IList<IScheduleMatrixPro> allScheduleMatrixPros, ISchedulePartModifyAndRollbackService rollbackService, 
-			IResourceCalculateDelayer resourceCalculateDelayer, IBackgroundWorkerWrapper backgroundWorker)
+			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingProgress backgroundWorker)
 		{
 			_optimizationstep = UserTexts.Resources.IntraIntervalOptimization + ": ";
 			_backgroundWorker = backgroundWorker;

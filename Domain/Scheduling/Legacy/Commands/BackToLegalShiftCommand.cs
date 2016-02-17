@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly IPersonListExtractorFromScheduleParts _extractor;
 		private readonly PeriodExctractorFromScheduleParts _periodExctractor;
-		private IBackgroundWorkerWrapper _backgroundWorker;
+		private ISchedulingProgress _backgroundWorker;
 
 		public BackToLegalShiftCommand(ITeamBlockInfoFactory teamBlockInfoFactory,
 			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_periodExctractor = periodExctractor;
 		}
 
-		public void Execute(IBackgroundWorkerWrapper backgroundWorker,
+		public void Execute(ISchedulingProgress backgroundWorker,
 			IList<IScheduleDay> selectedSchedules,
 			ISchedulingResultStateHolder schedulingResultStateHolder)
 		{

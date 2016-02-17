@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public interface IExtendReduceTimeHelper
 	{
 		void RunExtendReduceTimeOptimization(IOptimizationPreferences optimizerPreferences,
-			IBackgroundWorkerWrapper backgroundWorker, IList<IScheduleDay> selectedDays,
+			ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedDays,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			DateOnlyPeriod selectedPeriod,
 			IList<IScheduleMatrixOriginalStateContainer> originalStateListForMoveMax,

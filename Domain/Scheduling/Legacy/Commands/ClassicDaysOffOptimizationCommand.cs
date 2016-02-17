@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		public void Execute(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences, 
-							ISchedulerStateHolder schedulerStateHolder, IBackgroundWorkerWrapper backgroundWorker, 
+							ISchedulerStateHolder schedulerStateHolder, ISchedulingProgress backgroundWorker, 
 							IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider();

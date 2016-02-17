@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public interface IOptimizationCommand
 	{
-		void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, IBackgroundWorkerWrapper backgroundWorker,
+		void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, ISchedulingProgress backgroundWorker,
 			ISchedulerStateHolder schedulerStateHolder, IList<IScheduleDay> selectedScheduleDays,
 			IGroupPagePerDateHolder groupPagePerDateHolder, IScheduleOptimizerHelper scheduleOptimizerHelper,
 			IOptimizationPreferences optimizationPreferences, bool optimizationMethodBackToLegalState,
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_personExtractor = personExtractor;
 		}
 
-		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, IBackgroundWorkerWrapper backgroundWorker,
+		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, ISchedulingProgress backgroundWorker,
 			ISchedulerStateHolder schedulerStateHolder, IList<IScheduleDay> selectedScheduleDays,
 			IGroupPagePerDateHolder groupPagePerDateHolder, IScheduleOptimizerHelper scheduleOptimizerHelper,
 			IOptimizationPreferences optimizationPreferences, bool optimizationMethodBackToLegalState,
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		private void runWeeklyRestSolver(IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, 
 										IList<IScheduleMatrixPro> allMatrixes, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, 
-										IResourceCalculateDelayer resourceCalculateDelayer, IBackgroundWorkerWrapper backgroundWorker, 
+										IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingProgress backgroundWorker, 
 										IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var singleAgentEntry = GroupPageLight.SingleAgentGroup(String.Empty);

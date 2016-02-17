@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IWorkShiftMinMaxCalculator> _workShiftMinMaxCalculator;
 		private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
 		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
-		private IBackgroundWorkerWrapper _backgroundWorker;
+		private ISchedulingProgress _backgroundWorker;
 		private int _scheduledCount;
 		private ISchedulingOptions _schedulingOptions;
 		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_periodExctractor = periodExctractor;
 		}
 
-		public IWorkShiftFinderResultHolder Execute(ISchedulingOptions schedulingOptions, IBackgroundWorkerWrapper backgroundWorker,
+		public IWorkShiftFinderResultHolder Execute(ISchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
 			IList<IPerson> selectedPersons, IList<IScheduleDay> selectedSchedules,
 			ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{

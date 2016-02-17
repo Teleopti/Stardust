@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
 		private readonly ITeamDayOffModifier _teamDayOffModifier;
-		private IBackgroundWorkerWrapper _backgroundWorker;
+		private ISchedulingProgress _backgroundWorker;
 		private readonly ITeamBlockSchedulingOptions _teamBlockScheudlingOptions;
 		private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 		private readonly IEqualNumberOfCategoryFairnessService _equalNumberOfCategoryFairness;
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 		}
 
-		public void Execute(IBackgroundWorkerWrapper backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
+		public void Execute(ISchedulingProgress backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService rollbackServiceWithResourceCalculation, IScheduleTagSetter tagSetter,
 			ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer,
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		}
 
-		private void optimizeMoveTimeBetweenDays(IBackgroundWorkerWrapper backgroundWorker, DateOnlyPeriod selectedPeriod,
+		private void optimizeMoveTimeBetweenDays(ISchedulingProgress backgroundWorker, DateOnlyPeriod selectedPeriod,
 			IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService rollbackServiceWithResourceCalculation, ISchedulingOptions schedulingOptions,
 			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> matrixesOnSelectedperiod,
