@@ -14,10 +14,11 @@
 				$scope.newSkillArea = $stateParams.newSkillArea;
 
 				var reloadSkillAreas = function() {
-					intradayService.getSkillAreas.query().
-						$promise.then(function(result) {
-							$scope.skillAreas = $filter('orderBy')(result, 'Name');
-						});
+					intradayService.getSkillAreas.query()
+						.$promise.then(function (result) {
+							$scope.skillAreas = $filter('orderBy')(result.SkillAreas, 'Name');
+							$scope.HasPermissionToModifySkillArea = result.HasPermissionToModifySkillArea;
+					});
 				};
 
 				reloadSkillAreas();

@@ -6,6 +6,7 @@ describe('IntradayCtrl', function () {
 
 	var skillAreas = [];
 	var skills = [];
+	var skillAreaInfo;
 
 	beforeEach(module('wfm.intraday'));
 
@@ -27,6 +28,11 @@ describe('IntradayCtrl', function () {
 			Name: "my skill area 2",
 			Skills: skills
 		}];
+
+		skillAreaInfo = {
+			HasPermissionToModifySkillArea: true,
+			SkillAreas: skillAreas
+		};
 	});
 
 	beforeEach(inject(function (_$httpBackend_, _$controller_, _$rootScope_) {
@@ -35,7 +41,7 @@ describe('IntradayCtrl', function () {
 		scope = _$rootScope_.$new();
 
 		$httpBackend.whenGET("../api/intraday/skillarea")
-			.respond(200, skillAreas);
+			.respond(200, skillAreaInfo);
 
 		$httpBackend.whenGET("../api/intraday/skills")
 			.respond(200, skills);
@@ -78,5 +84,11 @@ describe('IntradayCtrl', function () {
 
 		expect(scope.selectedItem).toEqual(null);
 		expect(scope.skillAreas.length).toEqual(1);
+	});
+
+	it('should have permission to modify skill area', function() {
+		createController();
+
+		expect(scope.HasPermissionToModifySkillArea).toEqual(true);
 	});
 });
