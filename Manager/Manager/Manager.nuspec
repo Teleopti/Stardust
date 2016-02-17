@@ -30,6 +30,9 @@
 	</metadata>
 	<files>
 		<file src="bin\Release\Stardust.Manager.dll" target="lib\net451"/>
+	   <file src="bin\Release\StardustDashboard\*.*" target="StardustDashboard"/>
+       <file src="bin\Release\StardustDashboard\Scripts\*.*" target="StardustDashboard/Scripts"/>
+      <file src="bin\Release\StardustDashboard\Scripts\App\*.*" target="StardustDashboard/Scripts/App"/>
 	</files>
 	
 </package>

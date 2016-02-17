@@ -78,7 +78,7 @@ namespace ManagerTest
 
         public Task MyTask { get; set; }
 
-        [Test, Ignore("hur fan kan denna faila?")]
+        [Test]
         public void Test1()
         {
             Assert.IsTrue(true);
