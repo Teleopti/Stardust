@@ -164,6 +164,8 @@
     <Content Include="StardustDashboard\listJob.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="StardustDashboard\Scripts\angular-route.min.js" />
+    <Content Include="StardustDashboard\Scripts\angular.min.js" />
     <Content Include="StardustDashboard\Scripts\App\app.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
