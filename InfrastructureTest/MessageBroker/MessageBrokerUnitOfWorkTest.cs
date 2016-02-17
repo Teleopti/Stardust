@@ -1,17 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
-using Autofac;
 using NHibernate;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -20,16 +16,23 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.InfrastructureTest.MessageBrokerUnitOfWork
+namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 {
-	public class MessageBrokerUnitOfWorkTestAttribute : InfrastructureTestAttribute
+	[TestFixture]
+	[InfrastructureTest]
+	public class MessageBrokerUnitOfWorkTest : ISetup
 	{
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			base.Setup(system, configuration);
+		public TheService TheService;
+		public NestedService1 NestedService1;
+		public NestedService2 NestedService2;
+		public MutableFakeCurrentHttpContext HttpContext;
+		public ICurrentMessageBrokerUnitOfWork UnitOfWork;
+		public IDataSourcesFactory DataSourcesFactory;
+		public FakeConfigReader ConfigReader;
 
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
 			system.AddService<TheService>();
 			system.AddService<NestedService1>();
 			system.AddService<NestedService2>();
@@ -39,21 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBrokerUnitOfWork
 			var config = new FakeConfigReader();
 			config.FakeConnectionString("MessageBroker", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
 			system.UseTestDouble(config).For<IConfigReader>();
-
 		}
-	}
-
-	[TestFixture]
-	[MessageBrokerUnitOfWorkTest]
-	public class MessageBrokerUnitOfWorkTest
-	{
-		public TheService TheService;
-		public NestedService1 NestedService1;
-		public NestedService2 NestedService2;
-		public MutableFakeCurrentHttpContext HttpContext;
-		public ICurrentMessageBrokerUnitOfWork UnitOfWork;
-		public IDataSourcesFactory DataSourcesFactory;
-		public FakeConfigReader ConfigReader;
 
 		[Test]
 		[TestTable("TestTable")]

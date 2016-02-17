@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
-	[RtaDatabaseTest]
+	[MultiDatabaseTest]
 	public class DatabaseReaderLoadPersonOrganizationDataTest
 	{
 		public IDatabaseReader Reader;

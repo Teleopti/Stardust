@@ -178,6 +178,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AnalyticsDatabaseTestAttribute.cs" />
     <Compile Include="Aop\Bug32045.cs" />
     <Compile Include="Aop\OrderedAspectsTest.cs" />
     <Compile Include="Aop\ValidationTest.cs" />
@@ -195,10 +196,10 @@
     <Compile Include="Foundation\CouldNotCreateTransactionExceptionTest.cs" />
     <Compile Include="Foundation\HttpRequestTrueTest.cs" />
     <Compile Include="Licensing\SetLicenseActivatorTest.cs" />
-    <Compile Include="MessageBrokerUnitOfWork\MessageBrokerUnitOfWorkTest.cs" />
+    <Compile Include="MessageBroker\MessageBrokerUnitOfWorkTest.cs" />
     <Compile Include="MessageBroker\MailboxRepositoryTest.cs" />
     <Compile Include="MessageBroker\MessageBrokerServerTest.cs" />
-    <Compile Include="MessageBroker\MessageBrokerTestAttribute.cs" />
+    <Compile Include="MultiDatabaseTestAttribute.cs" />
     <Compile Include="MultiTenancy\Admin\DeleteTenantTest.cs" />
     <Compile Include="MultiTenancy\Admin\FindTenantAdminUserByEmailTest.cs" />
     <Compile Include="MultiTenancy\Admin\LoadAllTenantsTest.cs" />
@@ -252,7 +253,6 @@
     <Compile Include="Rta\Persisters\SiteOutOfAdherenceReadModelPersisterConcurrencyTest.cs" />
     <Compile Include="Rta\Persisters\TeamOutOfAdherenceReadModelPersisterConcurrencyTest.cs" />
     <Compile Include="Rta\PublishRtaEventsToHangfireTest.cs" />
-    <Compile Include="Rta\RtaDatabaseTestAttribute.cs" />
     <Compile Include="UnitOfWork\PersistCallbacks\FatClientOptimizationEventPublishingTest.cs" />
     <Compile Include="UnitOfWork\PersistCallbacks\PersonAbsenceEventPublishingTest.cs" />
     <Compile Include="UnitOfWork\PersistCallbacks\ScheduleChangedMessageDictionaryPersisterTest.cs" />
@@ -265,7 +265,6 @@
     <Compile Include="Repositories\PlanningPeriodRepositoryTest.cs" />
     <Compile Include="Repositories\SeatBookingRepositoryTest.cs" />
     <Compile Include="Repositories\SeatPlanRepositoryTest.cs" />
-    <Compile Include="RestoreDatabaseAfterTestAttribute.cs" />
     <Compile Include="Rta\DatabaseReaderTest.cs" />
     <Compile Include="Rta\InfrastructureTest.cs" />
     <Compile Include="Rta\Persisters\AdherenceDetailsReadModelPersisterTest.cs" />

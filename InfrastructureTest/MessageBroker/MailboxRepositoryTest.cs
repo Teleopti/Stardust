@@ -10,7 +10,7 @@ using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork;
 
 namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 {
-	[TestFixture, Category("LongRunning")]
+	[TestFixture]
 	[MessageBrokerUnitOfWorkTest]
 	public class MailboxRepositoryTest
 	{

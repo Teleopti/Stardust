@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
-	[RtaDatabaseTest]
+	[MultiDatabaseTest]
 	public class DatabaseReaderAgentStateTest
 	{
 		public IAgentStateReadModelReader Reader;
@@ -190,14 +190,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			result.NextStart.Should().Be(agentStateReadModel.NextStart);
 		}
 
-
 		[Test]
 		public void ShouldNotCrashWhenBusinessUnitIdIsNull()
 		{
 			var personId = Guid.NewGuid();
-			RtaDatabaseTestAttribute.ApplySql(string.Format(@"					
+			var sql = string.Format(@"					
 						insert into rta.ActualAgentState (PersonId,  PlatformTypeId, ReceivedTime, BatchId, OriginalDataSourceId, BusinessUnitId)
-						values('{0}', '{1}', '{2}', '{2}', '2', null)", personId, Guid.NewGuid(), "2015-04-21 8:00"));
+						values('{0}', '{1}', '{2}', '{2}', '2', null)", personId, Guid.NewGuid(), "2015-04-21 8:00");
+			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
+			{
+				connection.Open();
+				using (var command = new SqlCommand(sql, connection))
+					command.ExecuteNonQuery();
+			}
 			
 			Assert.DoesNotThrow(() => Reader.GetMissingAgentStatesFromBatch("2015-04-21 8:15".Utc(), "2"));
 		}

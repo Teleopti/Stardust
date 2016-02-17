@@ -9,8 +9,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
-	[Category("LongRunning")]
-	[RtaDatabaseTest]
+	[MultiDatabaseTest]
 	public class ActualAgentStateReadModelPersistingTest
 	{
 		public IAgentStateReadModelPersister Target;

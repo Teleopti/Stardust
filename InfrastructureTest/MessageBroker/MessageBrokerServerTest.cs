@@ -6,8 +6,8 @@ using Teleopti.Ccc.Domain.MessageBroker.Server;
 
 namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 {
-	[TestFixture, Category("LongRunning")]
-	[MessageBrokerTest]
+	[TestFixture]
+	[AnalyticsDatabaseTest]
 	public class MessageBrokerServerTest
 	{
 		public IMessageBrokerServer Broker;

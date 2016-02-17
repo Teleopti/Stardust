@@ -1,5 +1,4 @@
-﻿using System;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest
@@ -19,6 +18,5 @@ namespace Teleopti.Ccc.InfrastructureTest
 		{
 			_loginWithOpenUnitOfWork.Teardown();
 		}
-
 	}
 }

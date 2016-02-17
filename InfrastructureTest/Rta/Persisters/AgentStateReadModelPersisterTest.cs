@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 {
 	[TestFixture]
-	[RtaDatabaseTest]
+	[MultiDatabaseTest]
 	public class AgentStateReadModelPersisterTest
 	{
 		public IAgentStateReadModelPersister Target;

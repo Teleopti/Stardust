@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
+using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.Rta;
@@ -49,6 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			base.Setup(system, configuration);
 			system.AddModule(new TenantServerModule(configuration));
 			system.AddService(TenantUnitOfWorkManager.Create(ConnectionStringHelper.ConnectionStringUsedInTests));
+			system.UseTestDouble(new FakeSignalR()).For<ISignalR>();
 			system.UseTestDouble<FakeConnectionStrings>().For<IConnectionStrings>();
 			system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
 			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>(); // Does not fake all message senders, just adds one to the list

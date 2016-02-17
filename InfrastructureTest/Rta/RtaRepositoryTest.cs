@@ -5,7 +5,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -14,8 +13,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
-    [Category("LongRunning")]
-	[RtaDatabaseTest]
+	[MultiDatabaseTest]
 	public class RtaRepositoryTest : DatabaseTest
     {
         private IAgentStateReadModelReader target;
