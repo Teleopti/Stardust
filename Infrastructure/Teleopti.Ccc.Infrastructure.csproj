@@ -442,7 +442,6 @@
     <Compile Include="Toggle\IApplicationFunctionsToggleFilter.cs" />
     <Compile Include="Toggle\IToggleFiller.cs" />
     <Compile Include="Toggle\IToggleManager.cs" />
-    <Compile Include="Toggle\ScheduleCommandToggle.cs" />
     <Compile Include="Toggle\ToggleEnabledResult.cs" />
     <Compile Include="Toggle\ToggleQuerier.cs" />
     <Compile Include="Toggle\TogglesActive.cs" />

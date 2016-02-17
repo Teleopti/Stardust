@@ -1147,7 +1147,6 @@
     <Compile Include="Scheduling\Legacy\Commands\IntraIntervalOptimizationCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IOptimizerHelperHelper.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IResourceOptimizationHelperExtended.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\IScheduleCommandToggle.cs" />
     <Compile Include="Scheduling\Legacy\Commands\RequiredScheduleHelper.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IScheduleOvertimeCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ISchedulerStateHolder.cs" />
