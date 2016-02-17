@@ -10,11 +10,6 @@ namespace Stardust.Manager
 	{
 		private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
 
-		public void Stop()
-		{
-			QuitEvent.Set();
-		}
-
 		public void Start(ManagerConfiguration managerConfiguration, IContainer container)
 		{
 			var builder = new ContainerBuilder();
@@ -40,12 +35,6 @@ namespace Stardust.Manager
 			builder.RegisterInstance(managerConfiguration);
 
 			builder.Update(container);
-
-
-			QuitEvent.WaitOne();
-
 		}
-
 	}
-
 }
