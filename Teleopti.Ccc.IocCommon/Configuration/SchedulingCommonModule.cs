@@ -75,13 +75,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftBackToLegalStateServiceFactory>().As<IWorkShiftBackToLegalStateServiceFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<PersonListExtractorFromScheduleParts>().As<IPersonListExtractorFromScheduleParts>().SingleInstance();
 
-			builder.RegisterType<DayOffOptimizationDecisionMakerFactory>().SingleInstance();
-			builder.RegisterType<FlexibelDayOffOptimizationDecisionMakerFactory>().SingleInstance();
-			builder.Register(c => _configuration.Toggle(Toggles.Scheduler_OptimizeFlexibleDayOffs_22409)
-				? (IDayOffOptimizationDecisionMakerFactory)c.Resolve<FlexibelDayOffOptimizationDecisionMakerFactory>()
-				: c.Resolve<DayOffOptimizationDecisionMakerFactory>())
-				.As<IDayOffOptimizationDecisionMakerFactory>()
-				.SingleInstance();
+			builder.RegisterType<FlexibelDayOffOptimizationDecisionMakerFactory>().As<IDayOffOptimizationDecisionMakerFactory>().SingleInstance();
 
 			builder.RegisterType<ScheduleOvertimeCommand>().As<IScheduleOvertimeCommand>();
 			builder.RegisterType<TeamBlockMoveTimeBetweenDaysCommand>().As<ITeamBlockMoveTimeBetweenDaysCommand>();
@@ -255,12 +249,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShiftCategoryPeriodRemover>().As<IShiftCategoryPeriodRemover>();
 			builder.RegisterType<ShiftCategoryLimitCounter>().As<IShiftCategoryLimitCounter>();
 
-			builder.RegisterType<TeamBlockDayOffsInPeriodValidator>().As<TeamBlockDayOffsInPeriodValidator>();
-			builder.RegisterType<TeamBlockDayOffsInPeriodValidatorOff>().As<TeamBlockDayOffsInPeriodValidatorOff>();
-			builder.Register(c => _configuration.Toggle(Toggles.Scheduler_OptimizeFlexibleDayOffs_22409)
-				? (ITeamBlockDayOffsInPeriodValidator)c.Resolve<TeamBlockDayOffsInPeriodValidator>()
-				: c.Resolve<TeamBlockDayOffsInPeriodValidatorOff>())
-				.As<ITeamBlockDayOffsInPeriodValidator>();
+			builder.RegisterType<TeamBlockDayOffsInPeriodValidator>().As<TeamBlockDayOffsInPeriodValidator>().As<ITeamBlockDayOffsInPeriodValidator>().SingleInstance();
 
 			//ITeamBlockRestrictionOverLimitValidator
 			builder.RegisterType<BestSpotForAddingDayOffFinder>().As<IBestSpotForAddingDayOffFinder>().InstancePerLifetimeScope();

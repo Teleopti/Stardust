@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Interfaces.Domain;
@@ -16,7 +13,6 @@ namespace Teleopti.Ccc.Win.Optimization
         private IGeneralPreferences _generalPreferences;
         private IEnumerable<IScheduleTag> _scheduleTags;
     	private IEventAggregator _eventAggregator;
-		private IToggleManager _toggleManager;
 
         public GeneralPreferencesPanel()
         {
@@ -27,13 +23,11 @@ namespace Teleopti.Ccc.Win.Optimization
 	    public void Initialize(
 		    IGeneralPreferences generalPreferences,
 		    IEnumerable<IScheduleTag> scheduleTags,
-		    IEventAggregator eventAggregator,
-		    IToggleManager toggleManager)
+		    IEventAggregator eventAggregator)
 	    {
 		    _generalPreferences = generalPreferences;
 		    _scheduleTags = addKeepOriginalScheduleTag(scheduleTags);
 		    _eventAggregator = eventAggregator;
-		    _toggleManager = toggleManager;
 
 		    if (_eventAggregator != null)
 			    _eventAggregator.GetEvent<GenericEvent<ExtraPreferencesPanelUseBlockScheduling>>()
@@ -66,10 +60,7 @@ namespace Teleopti.Ccc.Win.Optimization
 
         public bool IsFlexibleWorkTimeOptimizationStepsChecked()
         {
-	        if (_toggleManager.IsEnabled(Toggles.Scheduler_OptimizeFlexibleDayOffs_22409))
 				return checkBoxShiftsForFlexibleWorkTime.Checked;
-
-            return checkBoxShiftsForFlexibleWorkTime.Checked || checkBoxDaysOffFromFlexibleWorkTime.Checked;
         }
 
 	    public bool IsTimeBetweenDaysChecked()

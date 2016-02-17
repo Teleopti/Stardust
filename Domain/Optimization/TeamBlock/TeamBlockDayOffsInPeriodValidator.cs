@@ -36,12 +36,4 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return true;
 		}
 	}
-
-	public class TeamBlockDayOffsInPeriodValidatorOff : ITeamBlockDayOffsInPeriodValidator
-	{
-		public bool Validate(ITeamInfo teamInfo, ISchedulingResultStateHolder schedulingResultStateHolder)
-		{
-			return true;
-		}
-	}
 }

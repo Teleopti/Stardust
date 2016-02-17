@@ -49,7 +49,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 		private readonly IAllTeamMembersInSelectionSpecification _allTeamMembersInSelectionSpecification;
 		private readonly ITeamBlockMoveTimeBetweenDaysCommand _teamBlockMoveTimeBetweenDaysCommand;
-		private readonly IScheduleCommandToggle _toggleManager;
 		private readonly IIntraIntervalOptimizationCommand _intraIntervalOptimizationCommand;
 		private readonly IOptimizerHelperHelper _optimizerHelper;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
@@ -82,7 +81,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ITeamBlockScheduler teamBlockScheduler, IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification,
 			ITeamBlockMoveTimeBetweenDaysCommand teamBlockMoveTimeBetweenDaysCommand,
-			IScheduleCommandToggle toggleManager,
 			IIntraIntervalOptimizationCommand intraIntervalOptimizationCommand,
 			IOptimizerHelperHelper optimizerHelper,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
@@ -116,7 +114,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
 			_allTeamMembersInSelectionSpecification = allTeamMembersInSelectionSpecification;
 			_teamBlockMoveTimeBetweenDaysCommand = teamBlockMoveTimeBetweenDaysCommand;
-			_toggleManager = toggleManager;
 			_intraIntervalOptimizationCommand = intraIntervalOptimizationCommand;
 			_optimizerHelper = optimizerHelper;
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
@@ -154,7 +151,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					allMatrixes, rollbackServiceWithResourceCalculation,
 					schedulingOptions, teamInfoFactory, resourceCalculateDelayer, dayOffOptimizationPreferenceProvider);
 
-			if (optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime && _toggleManager.IsEnabled(Toggles.Scheduler_OptimizeFlexibleDayOffs_22409))
+			if (optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)
 			{
 				var optimizeDayOffs = optimizationPreferences.General.OptimizationStepDaysOff;
 				optimizationPreferences.General.OptimizationStepDaysOff = false;

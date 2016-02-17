@@ -1137,7 +1137,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						_schedulerState.CommonStateHolder.ActiveScheduleTags,
 						_schedulerState.CommonStateHolder.ActiveActivities,
 						SchedulerState.DefaultSegmentLength, _schedulerState.Schedules,
-						_scheduleView.AllSelectedPersons(), _container.Resolve<IToggleManager>(), _daysOffPreferences))
+						_scheduleView.AllSelectedPersons(), _daysOffPreferences))
 				{
 					if (optimizationPreferencesDialog.ShowDialog(this) == DialogResult.OK)
 					{

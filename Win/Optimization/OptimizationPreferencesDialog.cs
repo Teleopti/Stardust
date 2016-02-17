@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
@@ -41,7 +39,6 @@ namespace Teleopti.Ccc.Win.Optimization
 		private readonly int _resolution;
 		private readonly IScheduleDictionary _scheduleDictionary;
 		private readonly IEnumerable<IPerson> _selectedPersons;
-		private readonly IToggleManager _toggleManager;
 		private readonly IList<GroupPageLight> _groupPagesForTeamBlockPer;
 
 		public OptimizationPreferencesDialog(
@@ -52,7 +49,6 @@ namespace Teleopti.Ccc.Win.Optimization
 			int resolution,
 			IScheduleDictionary scheduleDictionary,
 			IEnumerable<IPerson> selectedPersons, 
-			IToggleManager toggleManager,
 			IDaysOffPreferences daysOffPreferences)
 			: this()
 		{
@@ -68,7 +64,6 @@ namespace Teleopti.Ccc.Win.Optimization
 			_resolution = resolution;
 			_scheduleDictionary = scheduleDictionary;
 			_selectedPersons = selectedPersons;
-			_toggleManager = toggleManager;
 			_eventAggregator = new EventAggregator();
 		}
 
@@ -81,7 +76,7 @@ namespace Teleopti.Ccc.Win.Optimization
 		private void formLoad(object sender, EventArgs e)
 		{
 			loadPersonalSettings();
-			generalPreferencesPanel1.Initialize(Preferences.General, _scheduleTags, _eventAggregator, _toggleManager);
+			generalPreferencesPanel1.Initialize(Preferences.General, _scheduleTags, _eventAggregator);
 			dayOffPreferencesPanel1.Initialize(DaysOffPreferences);
 			extraPreferencesPanel1.Initialize(Preferences.Extra, _groupPagesProvider, _availableActivity);
 			advancedPreferencesPanel1.Initialize(Preferences.Advanced);
@@ -190,8 +185,6 @@ namespace Teleopti.Ccc.Win.Optimization
 				if (!validateNotImplementedOptimizationSteps())
 				{
 					var steps = Resources.ShiftsForFlexibleWorkTime;
-					if (!_toggleManager.IsEnabled(Toggles.Scheduler_OptimizeFlexibleDayOffs_22409))
-						steps = steps + ", " + Resources.DaysOffFromFlexibleWorkTime;
 
 					var message = String.Format(CultureInfo.CurrentCulture, Resources.UnsupportedTeamBlockOptimizationStep, steps);
 					MessageBox.Show(this, message, Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK, MessageBoxIcon.Warning);

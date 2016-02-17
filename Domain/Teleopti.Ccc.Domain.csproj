@@ -1123,7 +1123,6 @@
     <Compile Include="Scheduling\Legacy\Commands\BackToLegalShiftCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ClassicScheduleCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\CommonStateHolder.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\DayOffOptimizationDecisionMakerFactory.cs" />
     <Compile Include="Scheduling\Legacy\Commands\DaysOnlyHelper.cs" />
     <Compile Include="Scheduling\Legacy\Commands\NoBackgroundWorker.cs" />
     <Compile Include="Scheduling\Legacy\Commands\Gridlock.cs" />

@@ -91,7 +91,6 @@
 		WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
 		WfmTeamSchedule_RemoveAbsence_36705,
 
-		Scheduler_OptimizeFlexibleDayOffs_22409,
 		ResourcePlanner_WeeklyRestSolver_35043,
 
 		Wfm_Requests_Basic_35986,
