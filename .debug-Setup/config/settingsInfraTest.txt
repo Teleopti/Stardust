@@ -35,6 +35,7 @@ $(UrlAuthenticationBridge)|http://localhost:52857/
 $(URL)|http://localhost:52858/
 $(CONFIGURATION_FILES_PATH)|c:\nhib
 $(USE_PERSISTENT_CRYPTOKEYS)|false
+$(USE_SQL_SERVER_BACKPLANE)|false
 <compilation debug="false"|<compilation debug="true"
 <compilation targetFramework="4.0"|<compilation debug="true" targetFramework="4.0"
 <compilation targetFramework="4.5"|<compilation debug="true" targetFramework="4.5"
