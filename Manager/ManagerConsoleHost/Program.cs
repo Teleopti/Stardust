@@ -3,10 +3,12 @@ using System.Configuration;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Web.Http;
 using Autofac;
 using log4net;
 using log4net.Config;
 using Microsoft.Owin.Hosting;
+using Owin;
 using Stardust.Manager;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Models;
@@ -68,19 +70,22 @@ namespace ManagerConsoleHost
                                  managerConfiguration.BaseAddress.Port + "/";
 
 			var container = new ContainerBuilder().Build();
-
+	        var config = new HttpConfiguration();
 				using (WebApp.Start(managerAddress,
                 appBuilder =>
                 {
                     // Configure Web API for self-host. 
                     appBuilder.UseStardustManager(managerConfiguration, container);
-                }))
+						 appBuilder.UseAutofacMiddleware(container);
+						 appBuilder.UseAutofacWebApi(config);
+						 appBuilder.UseWebApi(config);
+					 }))
             {
                 LogHelper.LogInfoWithLineNumber(Logger,
                     WhoAmI + ": Started listening on port : ( " + managerConfiguration.BaseAddress + " )");
 
                 ManagerStarter = new ManagerStarter();
-                ManagerStarter.Start(managerConfiguration, container);
+                ManagerStarter.Start(managerConfiguration, container,config);
 
                 QuitEvent.WaitOne();
             }
