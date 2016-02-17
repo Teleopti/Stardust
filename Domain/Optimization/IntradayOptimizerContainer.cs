@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     { 
 	    public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
-		public void Execute(IEnumerable<IList<IIntradayOptimizer2>> optimizersPerAgent, DateOnlyPeriod period, TargetValueOptions targetValueOptions)
+		public void Execute(IEnumerable<IList<IIntradayOptimizer2>> optimizersPerAgent, DateOnlyPeriod period)
 		{
 			foreach (var optimizers in optimizersPerAgent)
 			{

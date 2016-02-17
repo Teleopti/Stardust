@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 				{
-					service.Execute(optimizers, period, optimizationPreferences.Advanced.TargetValueCalculation);
+					service.Execute(optimizers, period);
 				}
 			}
 

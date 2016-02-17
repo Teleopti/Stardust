@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				using (createResourceCalculationContext())
 				{
 					service.ReportProgress += resourceOptimizerPersonOptimized;
-					service.Execute(optimizers, selectedPeriod, optimizerPreferences.Advanced.TargetValueCalculation);
+					service.Execute(optimizers, selectedPeriod);
 					service.ReportProgress -= resourceOptimizerPersonOptimized;
 				}
 			}

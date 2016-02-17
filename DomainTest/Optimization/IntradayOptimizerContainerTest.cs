@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private bool _eventExecuted;
 	    private int _timesExecuted;
 	    private DateOnlyPeriod _period;
-	    private TargetValueOptions _targetValueOptions;
 
 	    [SetUp]
         public void Setup()
@@ -34,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _target = new IntradayOptimizerContainer();
 	        _timesExecuted = 0;
 		    _period = new DateOnlyPeriod();
-		    _targetValueOptions = TargetValueOptions.StandardDeviation;
         }
 
         [Test]
@@ -51,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
 			{
 				_target.ReportProgress += _target_ReportProgress;
-				_target.Execute(_optimizerList, _period, _targetValueOptions);
+				_target.Execute(_optimizerList, _period);
                 _target.ReportProgress -= _target_ReportProgress;
                 Assert.IsTrue(_eventExecuted);
             }
@@ -70,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			}
 			using (_mocks.Playback())
 			{
-				_target.Execute(_optimizerList, _period, _targetValueOptions);
+				_target.Execute(_optimizerList, _period);
 				Assert.AreEqual(1, _timesExecuted);
 				_target.ReportProgress -= targetReportProgress2;
 			}
@@ -106,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
             using (_mocks.Playback())
             {
-				_target.Execute(_optimizerList, _period, _targetValueOptions);
+				_target.Execute(_optimizerList, _period);
             }
         }
     }
