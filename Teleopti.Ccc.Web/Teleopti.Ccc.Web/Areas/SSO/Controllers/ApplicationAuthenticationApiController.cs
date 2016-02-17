@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				ModelState.AddModelError("Error", errString);
 				return BadRequest(ModelState);
 			}
-			_formsAuthentication.SetAuthCookie(model.UserName + TokenIdentityProvider.ApplicationIdentifier, false, false);
+			_formsAuthentication.SetAuthCookie(model.UserName + TokenIdentityProvider.ApplicationIdentifier, false, true);
 			return Ok(true);
 		}
 	}

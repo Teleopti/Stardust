@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 		[TenantUnitOfWork]
 		[NoTenantAuthentication]
-		public virtual ViewResult Logon(string businessUnitName, string userName, string password, bool isPersistent = false)
+		public virtual ViewResult Logon(string businessUnitName, string userName, string password, bool isPersistent = false, bool isLogonFromBrowser = true)
 		{
 			var result = _authenticator.AuthenticateApplicationUser(userName, password);
 			var businessUnits = _businessUnitProvider.RetrieveBusinessUnitsForPerson(result.DataSource, result.Person);
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 			if (result.Successful)
 			{
-				_formsAuthentication.SetAuthCookie(userName + TokenIdentityProvider.ApplicationIdentifier, isPersistent, false);
+				_formsAuthentication.SetAuthCookie(userName + TokenIdentityProvider.ApplicationIdentifier, isPersistent, isLogonFromBrowser);
 				tenantPassword = _findPersonInfo.GetById(result.Person.Id.Value).TenantPassword;
 			}
 
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			};
 			var claimsIdentity = new ClaimsIdentity(claims, "IssuerForTest");
 			_httpContext.Current().User = new ClaimsPrincipal(new IClaimsIdentity[] { claimsIdentity });
-			_logon.LogOn(result.DataSource.DataSourceName, businessUnit.Id.Value, result.Person.Id.Value, tenantPassword, isPersistent, false);
+			_logon.LogOn(result.DataSource.DataSourceName, businessUnit.Id.Value, result.Person.Id.Value, tenantPassword, isPersistent, true);
 
 			return View("Message", new TestMessageViewModel
 			{
@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		public ViewResult CorruptMyCookie()
 		{
 			var wrong = Convert.ToBase64String(Convert.FromBase64String("Totally wrong"));
-			_sessionSpecificDataProvider.MakeCookie("UserName", wrong, false, false);
+			_sessionSpecificDataProvider.MakeCookie("UserName", wrong, false, true);
 
 			return View("Message", new TestMessageViewModel
 			{
@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		public ViewResult NonExistingDatasourceCookie()
 		{
 			var data = new SessionSpecificData(Guid.NewGuid(), "datasource", Guid.NewGuid(), "tenantpassword");
-			_sessionSpecificDataProvider.StoreInCookie(data, false, false);
+			_sessionSpecificDataProvider.StoreInCookie(data, false, true);
 
 			return View("Message", new TestMessageViewModel
 			{

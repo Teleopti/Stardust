@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 
 	public class FakeFormsAuthentication : IFormsAuthentication
 	{
-		public void SetAuthCookie(string userName, bool isPersistent, bool isLogonFromFatClient)
+		public void SetAuthCookie(string userName, bool isPersistent, bool isLogonFromBrowser)
 		{
 			throw new NotImplementedException();
 		}
