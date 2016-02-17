@@ -106,7 +106,8 @@
 		Wfm_Use_Stardust,
 		Wfm_ForecastFileImportOnStardust_37047,
 
-		ResourcePlanner_SkillGroupDeleteAfterCalculation_37048
+		ResourcePlanner_SkillGroupDeleteAfterCalculation_37048,
+		ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049
 		// ReSharper restore InconsistentNaming
 	}
 }
