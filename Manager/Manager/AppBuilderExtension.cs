@@ -15,12 +15,18 @@ namespace Stardust.Manager
 
 		public static void UseStardustManager(this IAppBuilder appBuilder, ManagerConfiguration managerConfiguration, ILifetimeScope lifetimeScope)
 		{
-            appBuilder.UseDefaultFiles();
+            appBuilder.UseDefaultFiles(new DefaultFilesOptions
+            {
+                FileSystem = new PhysicalFileSystem(@".\StardustDashboard"),
+                RequestPath = new PathString("/StardustDashboard")
+            });
+
             appBuilder.UseStaticFiles();
 
             string routeName = managerConfiguration.routeName;
-            
-            var config = new HttpConfiguration();
+
+			var config = new HttpConfiguration();
+
 
 			config.Routes.MapHttpRoute(
 				 name: "Manager",
