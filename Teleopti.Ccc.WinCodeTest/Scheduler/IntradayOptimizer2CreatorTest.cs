@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
@@ -97,11 +98,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			}
 			using (_mocks.Playback())
 			{
-				IList<IIntradayOptimizer2> optimizers = _target.Create(_scheduleMatrixContainerList,
-																							_workShiftContainerList, new OptimizationPreferences(), 
-																							_rollbackService,
-													 _dayOffOptimizationPreferenceProvider);
-				Assert.AreEqual(_scheduleMatrixContainerList.Count, optimizers.Count);
+				var optimizers = _target.Create(_scheduleMatrixContainerList, _workShiftContainerList, new OptimizationPreferences(), 
+								_rollbackService,
+								 _dayOffOptimizationPreferenceProvider);
+
+				Assert.AreEqual(_scheduleMatrixContainerList.Count, optimizers.Single().Count);
 			}
 		}
 	}

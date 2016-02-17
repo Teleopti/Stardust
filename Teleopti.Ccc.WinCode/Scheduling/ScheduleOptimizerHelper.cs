@@ -86,11 +86,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				_container.Resolve<IResourceOptimizationHelper>(),
 				_container.Resolve<IDeleteAndResourceCalculateService>());
 
-			IList<IIntradayOptimizer2> optimizers = creator.Create(matrixContainerList,
+			var optimizers = creator.Create(matrixContainerList,
 				workShiftContainerList, optimizerPreferences,
 				rollbackService,
 				dayOffOptimizationPreferenceProvider);
-			var service = new IntradayOptimizerContainer(_container.Resolve<IDailyValueByAllSkillsExtractor>());
+			var service = new IntradayOptimizerContainer();
 
 			using (_virtualSkillContext.Create(selectedPeriod))
 			{

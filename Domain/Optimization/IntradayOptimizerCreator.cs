@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		/// Creates the list of optimizers.
 		/// </summary>
 		/// <returns></returns>
-		public IList<IIntradayOptimizer2> Create(IEnumerable<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainers,
+		public   IEnumerable<IList<IIntradayOptimizer2>> Create(IEnumerable<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainers,
 			IEnumerable<IScheduleMatrixOriginalStateContainer> workShiftContainers, IOptimizationPreferences optimizerPreferences,
 			ISchedulePartModifyAndRollbackService rollbackService,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
@@ -109,7 +109,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 				result.Add(optimizer);
 			}
-			return result;
+
+			return new[] {result};
 		}
 	}
 }

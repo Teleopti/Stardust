@@ -13,13 +13,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IntradayOptimizerContainer _target;
         private MockRepository _mocks;
 
-        private IList<IIntradayOptimizer2> _optimizerList;
+        private IEnumerable<IList<IIntradayOptimizer2>> _optimizerList;
         private IIntradayOptimizer2 _optimizer1;
         private IIntradayOptimizer2 _optimizer2;
         private IPerson _person = PersonFactory.CreatePerson();
         private bool _eventExecuted;
 	    private int _timesExecuted;
-	    private IDailyValueByAllSkillsExtractor _dailyValueByAllSkillsExtractor;
 	    private DateOnlyPeriod _period;
 	    private TargetValueOptions _targetValueOptions;
 
@@ -29,9 +28,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _mocks = new MockRepository();
             _optimizer1 = _mocks.StrictMock<IIntradayOptimizer2>();
             _optimizer2 = _mocks.StrictMock<IIntradayOptimizer2>();
-            _optimizerList = new List<IIntradayOptimizer2> { _optimizer1, _optimizer2 };
-		    _dailyValueByAllSkillsExtractor = _mocks.StrictMultiMock<IDailyValueByAllSkillsExtractor>();
-            _target = new IntradayOptimizerContainer(_dailyValueByAllSkillsExtractor);
+            _optimizerList =  new []{ new List<IIntradayOptimizer2> { _optimizer1, _optimizer2 }};
+
+
+            _target = new IntradayOptimizerContainer();
 	        _timesExecuted = 0;
 		    _period = new DateOnlyPeriod();
 		    _targetValueOptions = TargetValueOptions.StandardDeviation;
@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             using (_mocks.Record())
             {
-				Expect.Call(_dailyValueByAllSkillsExtractor.ValueForPeriod(_period, _targetValueOptions)).Return(3).Repeat.Any();
                 Expect.Call(_optimizer1.Execute()).Return(false);
                 Expect.Call(_optimizer2.Execute()).Return(false);
 
@@ -64,7 +63,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_target.ReportProgress += targetReportProgress2;
 			using (_mocks.Record())
 			{
-				Expect.Call(_dailyValueByAllSkillsExtractor.ValueForPeriod(_period, _targetValueOptions)).Return(3).Repeat.Any();
 				Expect.Call(_optimizer1.Execute()).Return(false).Repeat.Any();
 				Expect.Call(_optimizer2.Execute()).Return(false).Repeat.Any();
 				Expect.Call(_optimizer1.ContainerOwner).Return(_person).Repeat.Any();
@@ -95,7 +93,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             using (_mocks.Record())
             {
-				Expect.Call(_dailyValueByAllSkillsExtractor.ValueForPeriod(_period, _targetValueOptions)).Return(3).Repeat.Any();
                 Expect.Call(_optimizer1.Execute()).Return(true);
                 Expect.Call(_optimizer2.Execute()).Return(true);
                 

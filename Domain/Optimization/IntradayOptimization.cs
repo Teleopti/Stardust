@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
@@ -19,7 +17,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class IntradayOptimization
 	{
-		private readonly IDailyValueByAllSkillsExtractor _dailyValueByAllSkillsExtractor;
 		private readonly OptimizationPreferencesFactory _optimizationPreferencesFactory;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
@@ -36,8 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IIntradayOptimizer2Creator _intradayOptimizer2Creator;
 		private readonly VirtualSkillContext _virtualSkillContext;
 
-		public IntradayOptimization(IDailyValueByAllSkillsExtractor dailyValueByAllSkillsExtractor, 
-									OptimizationPreferencesFactory optimizationPreferencesFactory,
+		public IntradayOptimization(OptimizationPreferencesFactory optimizationPreferencesFactory,
 									Func<ISchedulerStateHolder> schedulerStateHolder,
 									Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 									DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
@@ -54,7 +50,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 									VirtualSkillContext virtualSkillContext
 									)
 		{
-			_dailyValueByAllSkillsExtractor = dailyValueByAllSkillsExtractor;
 			_optimizationPreferencesFactory = optimizationPreferencesFactory;
 			_schedulerStateHolder = schedulerStateHolder;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
@@ -103,7 +98,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			var optimizers = _intradayOptimizer2Creator.Create(matrixOriginalStateContainerListForIntradayOptimizationOriginal,
 				matrixOriginalStateContainerListForIntradayOptimizationWork, optimizationPreferences, rollbackService, dayOffOptimizationPreference);
-			var service = new IntradayOptimizerContainer(_dailyValueByAllSkillsExtractor);
+			var service = new IntradayOptimizerContainer();
 			var minutesPerInterval = 15;
 
 			if (_schedulerStateHolder().SchedulingResultState.Skills.Any())
