@@ -15,10 +15,12 @@ namespace Stardust.Manager
 
 		public static void UseStardustManager(this IAppBuilder appBuilder, ManagerConfiguration managerConfiguration, ILifetimeScope lifetimeScope)
 		{
-			string routeName = managerConfiguration.routeName;
+            appBuilder.UseDefaultFiles();
+            appBuilder.UseStaticFiles();
 
-
-			var config = new HttpConfiguration();
+            string routeName = managerConfiguration.routeName;
+            
+            var config = new HttpConfiguration();
 
 			config.Routes.MapHttpRoute(
 				 name: "Manager",
@@ -26,25 +28,25 @@ namespace Stardust.Manager
 				 defaults: new { controller = routeName, jobId = RouteParameter.Optional }
 				 );
 
-			config.Routes.MapHttpRoute(
-				 name: "Manager2",
-				 routeTemplate: "{controller}/status/{action}/{jobId}",
-				 defaults: new { controller = routeName, jobId = RouteParameter.Optional }
-				 );
+            config.Routes.MapHttpRoute(
+                 name: "Manager2",
+                 routeTemplate: "{controller}/status/{action}/{jobId}",
+                 defaults: new { controller = routeName, jobId = RouteParameter.Optional }
+                 );
 
-			config.Routes.MapHttpRoute(
-				 name: "Manager3",
-				 routeTemplate: "{controller}/{action}/{model}",
-				 defaults: new { controller = routeName }
-				 );
+            config.Routes.MapHttpRoute(
+                 name: "Manager3",
+                 routeTemplate: "{controller}/{action}/{model}",
+                 defaults: new { controller = routeName }
+                 );
 
-			config.Routes.MapHttpRoute(
-				name: "Manager4",
-				routeTemplate: "{controller}/{action}/{nodeUri}",
-				defaults: new { controller = routeName }
-				);
+            config.Routes.MapHttpRoute(
+                name: "Manager4",
+                routeTemplate: "{controller}/{action}/{nodeUri}",
+                defaults: new { controller = routeName }
+                );
 
-			config.Services.Add(typeof(IExceptionLogger),
+            config.Services.Add(typeof(IExceptionLogger),
 				 new GlobalExceptionLogger());
 
 			config.DependencyResolver = new AutofacWebApiDependencyResolver(lifetimeScope);
@@ -52,13 +54,7 @@ namespace Stardust.Manager
 			appBuilder.UseAutofacWebApi(config);
 			appBuilder.UseWebApi(config);
 
-			appBuilder.UseDefaultFiles(new DefaultFilesOptions
-			{
-				FileSystem = new PhysicalFileSystem(@".\StardustDashboard"),
-				RequestPath = new PathString("/StardustDashboard")
-			});
-
-			appBuilder.UseStaticFiles();
+			
 		}
 	}
 }
