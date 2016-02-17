@@ -44,13 +44,13 @@ describe('IntradayCtrl', function () {
 			.respond(200, {});
 	}));
 
-	var createController = function () {
+	var createController = function() {
 		$controller('IntradayCtrl', {
 			$scope: scope
 		});
 		scope.$digest();
 		$httpBackend.flush();
-	}
+	};
 
 	it('should display list of skill areas', function () {
 		createController();
