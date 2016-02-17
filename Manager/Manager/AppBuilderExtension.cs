@@ -17,6 +17,13 @@ namespace Stardust.Manager
 		{
 			string routeName = managerConfiguration.routeName;
 
+			appBuilder.UseDefaultFiles(new DefaultFilesOptions
+			{
+				FileSystem = new PhysicalFileSystem(@".\StardustDashboard"),
+				RequestPath = new PathString("/StardustDashboard")
+			});
+
+			appBuilder.UseStaticFiles();
 
 			var config = new HttpConfiguration();
 
@@ -52,13 +59,7 @@ namespace Stardust.Manager
 			appBuilder.UseAutofacWebApi(config);
 			appBuilder.UseWebApi(config);
 
-			appBuilder.UseDefaultFiles(new DefaultFilesOptions
-			{
-				FileSystem = new PhysicalFileSystem(@".\StardustDashboard"),
-				RequestPath = new PathString("/StardustDashboard")
-			});
-
-			appBuilder.UseStaticFiles();
+			
 		}
 	}
 }
