@@ -59,15 +59,15 @@ namespace ManagerConsoleHost
 
             var managerConfiguration = new ManagerConfiguration
             {
-                BaseAddress = new Uri(ConfigurationManager.AppSettings["baseAddress"]),
                 ConnectionString =
                     ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString,
-                routeName = ConfigurationManager.AppSettings["baseAddress"]
+                routeName = ConfigurationManager.AppSettings["routeName"]
             };
 
+            Uri baseAddress = new Uri(ConfigurationManager.AppSettings["baseAddress"]);
 
-            var managerAddress = managerConfiguration.BaseAddress.Scheme + "://+:" +
-                                 managerConfiguration.BaseAddress.Port + "/";
+            var managerAddress = baseAddress.Scheme + "://+:" +
+                                 baseAddress.Port + "/";
 
 			var container = new ContainerBuilder().Build();
 	        var config = new HttpConfiguration();
@@ -82,7 +82,7 @@ namespace ManagerConsoleHost
 					 }))
             {
                 LogHelper.LogInfoWithLineNumber(Logger,
-                    WhoAmI + ": Started listening on port : ( " + managerConfiguration.BaseAddress + " )");
+                    WhoAmI + ": Started listening on port : ( " + baseAddress + " )");
 
                 ManagerStarter = new ManagerStarter();
                 ManagerStarter.Start(managerConfiguration, container,config);
