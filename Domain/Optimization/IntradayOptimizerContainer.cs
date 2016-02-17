@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -15,17 +16,16 @@ namespace Teleopti.Ccc.Domain.Optimization
     { 
 	    public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
-		public void Execute(IEnumerable<IList<IIntradayOptimizer2>> optimizersPerAgent, DateOnlyPeriod period)
+		public void Execute(IEnumerable<IList<IIntradayOptimizer2>> optimizersPerSkillGroup, DateOnlyPeriod period)
 		{
-			foreach (var optimizers in optimizersPerAgent)
+			foreach (var optimizers in optimizersPerSkillGroup)
 			{
 				var shuffledOptimizers = optimizers.GetRandom(optimizers.Count, true);
 
 				var cancel = false;
 				foreach (var batchOptimizers in shuffledOptimizers.Batch(100))
 				{
-
-					IList<IIntradayOptimizer2> activeOptimizers = new List<IIntradayOptimizer2>(batchOptimizers);
+					var activeOptimizers = batchOptimizers.ToList();
 					while (activeOptimizers.Count > 0)
 					{
 						var batchShuffledOptimizers = activeOptimizers.GetRandom(activeOptimizers.Count, true);
