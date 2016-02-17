@@ -12,11 +12,8 @@ namespace Stardust.Manager
 {
 	public static class AppBuilderExtension
 	{
-
 		public static void UseStardustManager(this IAppBuilder appBuilder, ManagerConfiguration managerConfiguration, ILifetimeScope lifetimeScope)
 		{
-			string routeName = managerConfiguration.routeName;
-
 			appBuilder.UseDefaultFiles(new DefaultFilesOptions
 			{
 				FileSystem = new PhysicalFileSystem(@".\StardustDashboard"),
