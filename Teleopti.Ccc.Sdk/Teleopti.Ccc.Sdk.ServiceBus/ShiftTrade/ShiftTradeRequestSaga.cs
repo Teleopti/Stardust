@@ -46,9 +46,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
 
         private IPersonRequestCheckAuthorization _authorization;
     	private IScenario _defaultScenario;
-		private readonly IToggleManager _toggleManager;
 
-		public ShiftTradeRequestSaga(ICurrentUnitOfWorkFactory unitOfWorkFactory, ISchedulingResultStateHolder schedulingResultStateHolder, IShiftTradeValidator validator, IRequestFactory requestFactory, ICurrentScenario scenarioRepository, IPersonRequestRepository personRequestRepository, IScheduleStorage scheduleStorage, IPersonRepository personRepository, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDifferenceSaver scheduleDictionarySaver, ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation, IDifferenceCollectionService<IPersistableScheduleData> differenceService, IToggleManager toggleManager)
+		public ShiftTradeRequestSaga(ICurrentUnitOfWorkFactory unitOfWorkFactory, ISchedulingResultStateHolder schedulingResultStateHolder, IShiftTradeValidator validator, IRequestFactory requestFactory, ICurrentScenario scenarioRepository, IPersonRequestRepository personRequestRepository, IScheduleStorage scheduleStorage, IPersonRepository personRepository, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDifferenceSaver scheduleDictionarySaver, ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation, IDifferenceCollectionService<IPersistableScheduleData> differenceService)
         {
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
@@ -62,7 +61,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
             _scheduleDictionarySaver = scheduleDictionarySaver;
     	    _loadSchedulingDataForRequestWithoutResourceCalculation = loadSchedulingDataForRequestWithoutResourceCalculation;
 				_differenceService = differenceService;
-			_toggleManager = toggleManager;
 
 			Logger.Info("New instance of Shift Trade saga was created");
         }
@@ -235,7 +233,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
             var rules = NewBusinessRuleCollection.All(_schedulingResultStateHolder);
             rules.Remove(typeof (NewPersonAccountRule));
             rules.Remove(typeof (OpenHoursRule));
-				rules.Add(new NonMainShiftActivityRule(new ScheduleCommandToggle(_toggleManager)));
+				rules.Add(new NonMainShiftActivityRule());
             rules.SetUICulture(_personRequest.Person.PermissionInformation.UICulture());
             return rules;
         }

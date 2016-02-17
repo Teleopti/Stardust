@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -12,12 +10,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 	public class NonMainShiftActivityRule : INewBusinessRule
 	{
 		private bool _haltModify = true;
-		private readonly IScheduleCommandToggle _toggleManager;
-
-		public NonMainShiftActivityRule(IScheduleCommandToggle toggleManager)
-		{
-			_toggleManager = toggleManager;
-		}		
 
 		public string ErrorMessage
 		{
@@ -45,24 +37,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				var assignment = scheduleDay.PersonAssignment();
 				var dateOnly = assignment.Date;
 				var person = scheduleDay.Person;
-				bool hasNonMainShiftMeeting;
-				bool hasNonMainShiftActivity;
 
-				if (_toggleManager.IsEnabled(Toggles.MyTimeWeb_AutoShiftTradeWithMeetingAndPersonalActivity_33281))
-				{
-					hasNonMainShiftMeeting = isMeetingOverSchedule(scheduleDay);
-					hasNonMainShiftActivity = isPersonalActivityOverSchedule(scheduleDay);
-				}
-				else
-				{
-					hasNonMainShiftMeeting = scheduleDay.PersonMeetingCollection().Any();
-					hasNonMainShiftActivity = assignment.PersonalActivities() != null && assignment.PersonalActivities().Any();
-				}
-				
-				if (assignment != null)
-				{
-					hasNonMainShiftActivity = hasNonMainShiftActivity || hasNonMainShiftMeeting || (assignment.OvertimeActivities() != null && assignment.OvertimeActivities().Any());
-				}
+				var hasNonMainShiftMeeting = isMeetingOverSchedule(scheduleDay);
+				var hasNonMainShiftActivity = isPersonalActivityOverSchedule(scheduleDay);
+				hasNonMainShiftActivity = hasNonMainShiftActivity || hasNonMainShiftMeeting || (assignment.OvertimeActivities() != null && assignment.OvertimeActivities().Any());
+
 				if (hasNonMainShiftActivity)
 				{
 					string message = string.Format(CultureInfo.CurrentCulture,

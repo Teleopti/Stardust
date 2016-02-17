@@ -13,7 +13,6 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
-using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -70,7 +69,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 		    target = new ShiftTradeRequestSaga(unitOfWorkFactory, schedulingResultState, validator, requestFactory,
 		                                       scenarioRepository, personRequestRepository, scheduleStorage,
 		                                       personRepository, personRequestCheckAuthorization, scheduleDictionarySaver,
-		                                       loader, differenceCollectionService, null);
+		                                       loader, differenceCollectionService);
 		    prepareUnitOfWork();
 	    }
 
