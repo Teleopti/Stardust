@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             //TODO use a new Delete method with a rollbackservice
             var options = new DeleteOption {MainShift = true};
 
-            var retList = _deleteSchedulePartService.Delete(schedulePartList, options, _schedulePartModifyAndRollbackService, new NoBackgroundWorker());
+            var retList = _deleteSchedulePartService.Delete(schedulePartList, options, _schedulePartModifyAndRollbackService, new NoSchedulingProgress());
             
             ICollection<DateOnly> daysToRecalculate = new HashSet<DateOnly>();
             foreach (var part in schedulePartList)

@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public IList<IScheduleDay> Delete(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService, DeleteOption deleteOption)
 		{
-			var bgWorker = new NoBackgroundWorker();
+			var bgWorker = new NoSchedulingProgress();
 			IList<IScheduleDay> retList = Delete(list, deleteOption, rollbackService, bgWorker);
 
 			return retList;
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         public IList<IScheduleDay> Delete(IEnumerable<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService)
         {
             var deleteOption = new DeleteOption {Default = true};
-            var bgWorker = new NoBackgroundWorker();
+            var bgWorker = new NoSchedulingProgress();
 	        IList<IScheduleDay> retList = Delete(list, deleteOption, rollbackService, bgWorker);
 
 	        return retList;

@@ -372,7 +372,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 					),
 				selectedPeriod,
 				matrixlist,
-				new NoBackgroundWorker(),
+				new NoSchedulingProgress(),
 				dayOffOptimizationPreferenceProvider
 				);
 		}

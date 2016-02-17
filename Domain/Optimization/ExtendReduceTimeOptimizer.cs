@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             var scheduleDayPro = _matrix.GetScheduleDayByKey(dateOnly);
             var scheduleDay = scheduleDayPro.DaySchedulePart();
 
-	        _deleteService.Delete(new List<IScheduleDay> {scheduleDay}, deleteOption, _rollbackService, new NoBackgroundWorker());
+	        _deleteService.Delete(new List<IScheduleDay> {scheduleDay}, deleteOption, _rollbackService, new NoSchedulingProgress());
         }
 
         private bool tryScheduleDay(DateOnly day, ISchedulingOptions schedulingOptions, WorkShiftLengthHintOption workShiftLengthHintOption)

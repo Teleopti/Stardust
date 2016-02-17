@@ -60,7 +60,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		[LogTime]
 		public virtual void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences,
-			
 			ISchedulingProgress backgroundWorker,
 			ISchedulerStateHolder schedulerStateHolder, IList<IScheduleDay> selectedScheduleDays,
 			IGroupPagePerDateHolder groupPagePerDateHolder, IRequiredScheduleHelper requiredScheduleOptimizerHelper,

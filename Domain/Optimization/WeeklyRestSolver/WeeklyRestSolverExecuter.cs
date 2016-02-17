@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			var matrixes = _matrixListFactory.CreateMatrixListForSelection(scheduleDays);
 
 			_weeklyRestSolverCommand.Execute(schedulingOptions,
-				optimizationPreferences, people, rollbackService, resourceCalcDelayer, period, matrixes, new NoBackgroundWorker(), dayOffOptimizationPreferenceProvider);
+				optimizationPreferences, people, rollbackService, resourceCalcDelayer, period, matrixes, new NoSchedulingProgress(), dayOffOptimizationPreferenceProvider);
 		}
 	}
 }

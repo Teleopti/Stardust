@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
             var deleteOption = new DeleteOption { Default = true };
 
-			_deleteSchedulePartService.Delete(new List<IScheduleDay> { scheduleDayToDelete }, deleteOption, rollbackService, new NoBackgroundWorker());
+			_deleteSchedulePartService.Delete(new List<IScheduleDay> { scheduleDayToDelete }, deleteOption, rollbackService, new NoSchedulingProgress());
         }
 
 

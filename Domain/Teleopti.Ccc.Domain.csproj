@@ -1124,7 +1124,7 @@
     <Compile Include="Scheduling\Legacy\Commands\ClassicScheduleCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\CommonStateHolder.cs" />
     <Compile Include="Scheduling\Legacy\Commands\DaysOnlyHelper.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\NoBackgroundWorker.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\NoSchedulingProgress.cs" />
     <Compile Include="Scheduling\Legacy\Commands\Gridlock.cs" />
     <Compile Include="Scheduling\Legacy\Commands\GridlockDictionary.cs" />
     <Compile Include="Scheduling\Legacy\Commands\GridlockManager.cs" />

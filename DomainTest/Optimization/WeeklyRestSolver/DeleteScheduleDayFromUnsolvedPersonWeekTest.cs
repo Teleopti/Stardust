@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 	            Expect.Call(_scheduleDayIsLockedSpecification.IsSatisfy(scheduleDay, _scheduleMatrixPro))
 		            .Return(false);
                 Expect.Call(_deleteSchedulePartService.Delete(scheduleDayList, deleteOption, rollbackService,
-                    new NoBackgroundWorker())).IgnoreArguments();
+                    new NoSchedulingProgress())).IgnoreArguments();
             }
             using (_mock.Playback())
             {

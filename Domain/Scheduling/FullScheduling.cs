@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
 					GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
 					TagToUseOnScheduling = NullScheduleTag.Instance
-				}), new NoBackgroundWorker(), _schedulerStateHolder(), webScheduleState.AllSchedules, _groupPagePerDateHolder(),
+				}), new NoSchedulingProgress(), _schedulerStateHolder(), webScheduleState.AllSchedules, _groupPagePerDateHolder(),
 					_requiredScheduleHelper(),
 					new OptimizationPreferences(), false, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 			}

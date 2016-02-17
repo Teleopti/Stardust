@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixListForDayOffOptimization, optimizationPreferences, period);
 
 			_classicDaysOffOptimizationCommand.Execute(matrixOriginalStateContainerListForDayOffOptimization, period, optimizationPreferences, _schedulerStateHolder(),
-				new NoBackgroundWorker(), dayOffOptimizationPreferenceProvider);
+				new NoSchedulingProgress(), dayOffOptimizationPreferenceProvider);
 
 			_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, webScheduleState.AllSchedules, webScheduleState.PeopleSelection.AllPeople, dayOffOptimizationPreferenceProvider);
 

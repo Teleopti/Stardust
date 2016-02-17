@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         private IPerson _person;
         private IScheduleRange _scheduleRange1;
     	private ISchedulePartModifyAndRollbackService _rollbackService;
-        private NoBackgroundWorker _backgroundWorker;
+        private NoSchedulingProgress _schedulingProgress;
         
         [SetUp]
         public void Setup()
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 			_person = _mocks.StrictMock<IPerson>();
 			_scheduleRange1 = _mocks.StrictMock<IScheduleRange>();
-            _backgroundWorker = new NoBackgroundWorker();
+            _schedulingProgress = new NoSchedulingProgress();
         }
 
 		[Test]
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             using (_mocks.Playback())
             {
                 _deleteOption.MainShift = true;
-                _deleteService.Delete(_list, _deleteOption, _rollbackService, _backgroundWorker);
+                _deleteService.Delete(_list, _deleteOption, _rollbackService, _schedulingProgress);
             }
         }
 
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			using (_mocks.Playback())
 			{
 				_deleteOption.MainShiftSpecial = true;
-				_deleteService.Delete(_list, _deleteOption, _rollbackService, _backgroundWorker);
+				_deleteService.Delete(_list, _deleteOption, _rollbackService, _schedulingProgress);
 			}
 		}
 
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             using (_mocks.Playback())
             {
                 _deleteOption.PersonalShift = true;
-                _deleteService.Delete(_list, _deleteOption, _rollbackService, _backgroundWorker);
+                _deleteService.Delete(_list, _deleteOption, _rollbackService, _schedulingProgress);
             }
         }
 
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             using (_mocks.Playback())
             {
                 _deleteOption.DayOff = true;
-                _deleteService.Delete(_list, _deleteOption, _rollbackService, _backgroundWorker);
+                _deleteService.Delete(_list, _deleteOption, _rollbackService, _schedulingProgress);
             }
         }
 
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             {
                 _deleteOption.Default = true;
 
-                _deleteService.Delete(_list, _deleteOption, _rollbackService, _backgroundWorker);
+                _deleteService.Delete(_list, _deleteOption, _rollbackService, _schedulingProgress);
             }
         }
 
@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             using (_mocks.Playback())
             {
                 _deleteOption.Absence = true;
-                _deleteService.Delete(_list, _deleteOption, _rollbackService, _backgroundWorker);
+                _deleteService.Delete(_list, _deleteOption, _rollbackService, _schedulingProgress);
             }
         }
 
@@ -239,12 +239,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             {
                 _deleteOption.Default = true;
 
-                _deleteService.Delete(_list, _deleteOption, _rollbackService, _backgroundWorker);
-                _deleteService.Delete(_list, _deleteOption, _rollbackService, _backgroundWorker);
-                _deleteService.Delete(_list, _deleteOption, _rollbackService, _backgroundWorker);
-                _deleteService.Delete(_list, _deleteOption, _rollbackService, _backgroundWorker);
-                _deleteService.Delete(_list, _deleteOption, _rollbackService, _backgroundWorker);
-                _deleteService.Delete(_list, _deleteOption, _rollbackService, _backgroundWorker);
+                _deleteService.Delete(_list, _deleteOption, _rollbackService, _schedulingProgress);
+                _deleteService.Delete(_list, _deleteOption, _rollbackService, _schedulingProgress);
+                _deleteService.Delete(_list, _deleteOption, _rollbackService, _schedulingProgress);
+                _deleteService.Delete(_list, _deleteOption, _rollbackService, _schedulingProgress);
+                _deleteService.Delete(_list, _deleteOption, _rollbackService, _schedulingProgress);
+                _deleteService.Delete(_list, _deleteOption, _rollbackService, _schedulingProgress);
             }
         }
 
@@ -308,7 +308,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             using (_mocks.Playback())
             {
                 _deleteOption.Overtime = true;
-                _deleteService.Delete(_list, _deleteOption, _rollbackService, _backgroundWorker);
+                _deleteService.Delete(_list, _deleteOption, _rollbackService, _schedulingProgress);
             }
         }
 
@@ -330,7 +330,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             using (_mocks.Playback())
             {
                 _deleteOption.Preference = true;
-                _deleteService.Delete(_list, _deleteOption, _rollbackService, _backgroundWorker);
+                _deleteService.Delete(_list, _deleteOption, _rollbackService, _schedulingProgress);
             }
         }
 
@@ -352,7 +352,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             using (_mocks.Playback())
             {
                 _deleteOption.StudentAvailability = true;
-                _deleteService.Delete(_list, _deleteOption, _rollbackService, _backgroundWorker);
+                _deleteService.Delete(_list, _deleteOption, _rollbackService, _schedulingProgress);
             }
         }
 
@@ -375,7 +375,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				Expect.Call(() => _rollbackService.Modify(_part2, rules));
 			}
 
-			var ret = _deleteService.Delete(_list, _deleteOption, _rollbackService, _backgroundWorker, rules);
+			var ret = _deleteService.Delete(_list, _deleteOption, _rollbackService, _schedulingProgress, rules);
 			Assert.AreEqual(2, ret.Count);
 		}
 
@@ -397,7 +397,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				Expect.Call(() => _rollbackService.Modify(_part2));
             }
 
-            IList<IScheduleDay> ret = _deleteService.Delete(_list, _deleteOption, _rollbackService, _backgroundWorker);
+            IList<IScheduleDay> ret = _deleteService.Delete(_list, _deleteOption, _rollbackService, _schedulingProgress);
             Assert.AreEqual(2, ret.Count);
         }
     }

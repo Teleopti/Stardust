@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.IslandScheduling
 			}
 
 			scheduleCommand
-				.Execute(optimizerOriginalPreferences, new NoBackgroundWorker(), schedulerStateHolder, islandSelectedScheduleDays,
+				.Execute(optimizerOriginalPreferences, new NoSchedulingProgress(), schedulerStateHolder, islandSelectedScheduleDays,
 					groupPagePerDateHolder, requiredScheduleHelper, new OptimizationPreferences(), false,
 					dayOffOptimizePreferenceProvider);
 
