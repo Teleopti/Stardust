@@ -1,5 +1,6 @@
 ﻿using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 				Browser.Interactions.FillWith(selector, criteria.Value);
 			}
 
-			Browser.Interactions.Click("#go-advanced-search");
+			Browser.Interactions.ClickUsingJQuery("#go-advanced-search");
 		}
 
 		[When(@"I open the action panel")]
