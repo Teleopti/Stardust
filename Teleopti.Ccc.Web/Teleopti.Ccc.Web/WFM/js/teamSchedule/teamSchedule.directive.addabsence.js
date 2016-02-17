@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 (function () {
-	angular.module('wfm.teamSchedule').directive('addAbsence', ['$locale', '$translate', absencePanel]);
+	angular.module('wfm.teamSchedule').directive('addAbsence', ['$locale', '$translate', 'guidgenerator', absencePanel]);
 
 	function absencePanel($locale) {
 		return {
@@ -12,7 +12,7 @@
 				agentIdList: '&',
 				actionsAfterAbsenceApply: '&'
 			},
-			controller: ['$translate', 'TeamSchedule', addAbsenceCtrl],
+			controller: ['$translate', 'TeamSchedule', 'guidgenerator', addAbsenceCtrl],
 			controllerAs: 'vm',
 			bindToController: true,
 			link: function (scope, element, attr) {
@@ -21,8 +21,7 @@
 		};
 	};
 
-
-	function addAbsenceCtrl($translate, teamScheduleSvc) {
+	function addAbsenceCtrl($translate, teamScheduleSvc, guidgenerator) {
 		var vm = this;
 
 		vm.selectedAbsenceStartDate = vm.defaultDateTime();
@@ -45,17 +44,18 @@
 			return vm.isFullDayAbsence && moment(vm.selectedAbsenceEndDate).startOf('day') >= moment(vm.selectedAbsenceStartDate).startOf('day');
 		}
 
-		vm.applyAbsence = function() {
+		vm.applyAbsence = function () {
+			var trackId = guidgenerator.newGuid();
 			if (vm.isFullDayAbsence) {
 				teamScheduleSvc.applyFullDayAbsence.post({
 					PersonIds: vm.agentIdList(),
 					AbsenceId: vm.selectedAbsenceId,
 					StartDate: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD"),
 					EndDate: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD"),
-					TrackedCommandInfo: { TrackId: "" } // TODO: Generate unique track id
+					TrackedCommandInfo: { TrackId: trackId }
 				}).$promise.then(function(result) {
 					vm.actionsAfterAbsenceApply({
-						result: result,
+						result: { TrackId: trackId, Errors: result },
 						successMessageTemplate: 'AddAbsenceSuccessedResult',
 						failMessageTemplate: 'AddAbsenceTotalResult'
 					});
@@ -66,10 +66,10 @@
 					AbsenceId: vm.selectedAbsenceId,
 					StartTime: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD HH:mm"),
 					EndTime: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD HH:mm"),
-					TrackedCommandInfo: { TrackId: "" } // TODO: Generate unique track id
+					TrackedCommandInfo: { TrackId: trackId }
 				}).$promise.then(function(result) {
 					vm.actionsAfterAbsenceApply({
-						result: result,
+						result: { TrackId: trackId, Errors: result },
 						successMessageTemplate: 'AddAbsenceSuccessedResult',
 						failMessageTemplate: 'AddAbsenceTotalResult'
 					});

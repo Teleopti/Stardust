@@ -18,6 +18,7 @@
 		vm.isSwitchAbsence = false;
 		// The original schedule got from server side
 		vm.rawSchedules = [];
+		vm.lastCommandTrackId = "";
 
 		vm.searchOptions = {
 			keyword: '',
@@ -57,8 +58,13 @@
 		};
 
 		function updateShiftStatusForSelectedPerson() {
+			var selectedPersonIdList = vm.getSelectedPersonIdList();
+			if (selectedPersonIdList.length === 0) {
+				return;
+			}
+
 			var params = {
-				personIds: vm.getSelectedPersonIdList(),
+				personIds: selectedPersonIdList,
 				date: vm.scheduleDateMoment().format('YYYY-MM-DD')
 			};
 
@@ -207,13 +213,17 @@
 			var selectedPersonIds = vm.getSelectedPersonIdList();
 			if (selectedPersonIds.length !== 2) return;
 
+			var trackId = guidgenerator.newGuid();
 			teamScheduleSvc.swapShifts.post({
 				PersonIdFrom: selectedPersonIds[0],
 				PersonIdTo: selectedPersonIds[1],
 				ScheduleDate: vm.scheduleDateMoment().format("YYYY-MM-DD"),
-				TrackedCommandInfo: { TrackId: guidgenerator.newGuid() }
+				TrackedCommandInfo: { TrackId: trackId }
 			}).$promise.then(function (result) {
-				vm.afterActionCallback(result, "FinishedSwapShifts", "FailedToSwapShifts");
+				vm.afterActionCallback({
+					TrackId: trackId,
+					Errors: result
+				}, "FinishedSwapShifts", "FailedToSwapShifts");
 			});
 		}
 
@@ -347,7 +357,7 @@
 			vm.showErrorDetails = !vm.showErrorDetails;
 		}
 
-		var handleActionResult = function (result, successMessageTemplate, failMessageTemplate) {
+		var handleActionResult = function (errors, successMessageTemplate, failMessageTemplate) {
 			var selectedPersonList = vm.getSelectedPersonIdList();
 			var total = selectedPersonList.length;
 
@@ -356,22 +366,22 @@
 			vm.showErrorDetails = false;
 
 			var message;
-			if (result.length > 0) {
-				var successCount = total - result.length;
-				message = replaceParameters($translate.instant(failMessageTemplate), [total, successCount, result.length]);
-				notificationService.notifyFailure(message);
-				vm.errorTitle = message;
-				vm.errorDetails = result;
-				vm.showErrorDetails = true;
-			}
-			else {
+			if (errors == undefined || errors.length === 0) {
 				message = replaceParameters($translate.instant(successMessageTemplate), [total]);
 				notificationService.notifySuccess(message);
+			} else {
+				var successCount = total - errors.length;
+				message = replaceParameters($translate.instant(failMessageTemplate), [total, successCount, errors.length]);
+				notificationService.notifyFailure(message);
+				vm.errorTitle = message;
+				vm.errorDetails = errors;
+				vm.showErrorDetails = true;
 			}
 		}
 
 		vm.afterActionCallback = function (result, successMessageTemplate, failMessageTemplate) {
-			handleActionResult(result, successMessageTemplate, failMessageTemplate);
+			vm.lastCommandTrackId = result.TrackId;
+			handleActionResult(result.Errors, successMessageTemplate, failMessageTemplate);
 
 			vm.updateSchedules(vm.getSelectedPersonIdList());
 			vm.personIdSelectionDic = {};
@@ -423,6 +433,7 @@
 		function scheduleChangedEventHandler(messages) {
 			var personIds = messages.filter(isMessageNeedToBeHandled())
 									.map(function (message) { return message.DomainReferenceId; });
+
 			personIds = removeDuplicatePersonId(personIds);
 			personIds.length !== 0 && vm.updateSchedules(personIds);
 		}
@@ -431,7 +442,11 @@
 			var personIds = vm.groupScheduleVm.Schedules.map(function(schedule) { return schedule.PersonId; });
 			var scheduleDate = vm.scheduleDateMoment();
 
-			return function(message) {
+			return function (message) {
+				if (message.TrackId === vm.lastCommandTrackId) {
+					return false;
+				}
+
 				var isMessageInsidePeopleList = personIds.indexOf(message.DomainReferenceId) > -1;
 				var startDate = moment(message.StartDate.substring(1, message.StartDate.length));
 				var endDate = moment(message.EndDate.substring(1, message.EndDate.length));
