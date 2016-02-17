@@ -23,8 +23,11 @@ namespace Teleopti.Ccc.Web.Broker
 			if (settingsFromParser.ConnectionTimeout.HasValue)
 				GlobalHost.Configuration.ConnectionTimeout = settingsFromParser.ConnectionTimeout.Value;
 
-			if (settingsFromParser.ScaleOutBackplaneUrl != null)
+			if (settingsFromParser.ScaleOutBackplaneUrl != null && !settingsFromParser.UseSqlServerBackplane)
 				GlobalHost.DependencyResolver.UseSignalRServer(settingsFromParser.ScaleOutBackplaneUrl);
+
+		    if (settingsFromParser.UseSqlServerBackplane)
+		        GlobalHost.DependencyResolver.UseSqlServer(settingsFromParser.SqlServerBackplaneConnectionString);
 
 			if (!settingsFromParser.EnablePerformanceCounters)
 				GlobalHost.DependencyResolver.Register(typeof(IPerformanceCounterManager), () => new FakePerformanceCounterInitializer());
@@ -75,6 +78,10 @@ namespace Teleopti.Ccc.Web.Broker
 			ScaleoutErrorsTotal = _fakePerformanceCounter;
 			ScaleoutErrorsPerSec = _fakePerformanceCounter;
 			ScaleoutSendQueueLength = _fakePerformanceCounter;
+		    ConnectionsCurrentForeverFrame = _fakePerformanceCounter;
+		    ConnectionsCurrentLongPolling = _fakePerformanceCounter;
+		    ConnectionsCurrentServerSentEvents = _fakePerformanceCounter;
+		    ConnectionsCurrentWebSockets = _fakePerformanceCounter;
 		}
 
 		public void Initialize(string instanceName, CancellationToken hostShutdownToken)
@@ -123,7 +130,11 @@ namespace Teleopti.Ccc.Web.Broker
 		public IPerformanceCounter ConnectionsConnected { get; private set; }
 		public IPerformanceCounter ConnectionsReconnected { get; private set; }
 		public IPerformanceCounter ConnectionsDisconnected { get; private set; }
-		public IPerformanceCounter ConnectionsCurrent { get; private set; }
+	    public IPerformanceCounter ConnectionsCurrentForeverFrame { get; private set; }
+	    public IPerformanceCounter ConnectionsCurrentLongPolling { get; private set; }
+	    public IPerformanceCounter ConnectionsCurrentServerSentEvents { get; private set; }
+	    public IPerformanceCounter ConnectionsCurrentWebSockets { get; private set; }
+	    public IPerformanceCounter ConnectionsCurrent { get; private set; }
 		public IPerformanceCounter ConnectionMessagesReceivedTotal { get; private set; }
 		public IPerformanceCounter ConnectionMessagesSentTotal { get; private set; }
 		public IPerformanceCounter ConnectionMessagesReceivedPerSec { get; private set; }

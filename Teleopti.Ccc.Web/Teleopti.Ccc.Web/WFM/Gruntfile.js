@@ -135,7 +135,7 @@
 				'vendor/ui-bootstrap-custom-build/datepicker.directive.ext.js',
 				'vendor/ui-bootstrap-custom-build/timepicker.directive.ext.js',
 				'vendor/uigrid.directive.ext.js',
-				'../Content/signalr/jquery.signalR-2.1.2.js',
+				'../Content/signalr/jquery.signalR-2.2.0.js',
 				'../Content/signalr/broker-hubs.js'
 				],
 				dest: 'dist/modules.js'

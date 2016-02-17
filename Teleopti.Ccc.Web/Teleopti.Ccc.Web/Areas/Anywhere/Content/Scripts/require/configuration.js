@@ -10,7 +10,7 @@ var requireconfiguration = {
 		moment: '../../../../Content/moment/moment',
 		bootstrap: '../../../../Content/bootstrap/Scripts/bootstrap.min',
 		signals: '../../../../Content/signals/signals',
-		signalr: '../../../../Content/signalr/jquery.signalR-2.1.2.min',
+		signalr: '../../../../Content/signalr/jquery.signalR-2.2.0.min',
 		crossroads: '../../../../Content/crossroads/crossroads',
 		hasher: '../../../../Content/hasher/hasher',
 		swipeListener: '../../../../Content/jquery-plugin/jquery.swipeListener',

@@ -51,7 +51,13 @@ namespace Teleopti.Ccc.Web.Broker
 			value = ConfigurationManager.AppSettings["MessagesPerSecond"];
 			settings.MessagesPerSecond = string.IsNullOrEmpty(value) ? 80 : Convert.ToInt32(value);
 
-			return settings;
+		    value = ConfigurationManager.AppSettings["UseSqlServerBackplane"];
+		    settings.UseSqlServerBackplane = !string.IsNullOrEmpty(value) && Convert.ToBoolean(value);
+
+		    if (settings.UseSqlServerBackplane)
+		        settings.SqlServerBackplaneConnectionString =
+		            ConfigurationManager.ConnectionStrings["MessageBroker"].ConnectionString;
+            return settings;
 		}
 
 		public TimeSpan? KeepAlive { get; set; }
@@ -62,5 +68,7 @@ namespace Teleopti.Ccc.Web.Broker
 		public bool ThrottleMessages { get; set; }
 		public int MessagesPerSecond { get; set; }
 		public bool EnablePerformanceCounters { get; set; }
+	    public bool UseSqlServerBackplane { get; set; }
+	    public string SqlServerBackplaneConnectionString { get; set; }
 	}
 }
