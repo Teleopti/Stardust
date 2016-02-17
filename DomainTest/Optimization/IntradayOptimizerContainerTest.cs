@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IntradayOptimizerContainer _target;
         private MockRepository _mocks;
 
-        private IEnumerable<IList<IIntradayOptimizer2>> _optimizerList;
+        private IList<IIntradayOptimizer2> _optimizerList;
         private IIntradayOptimizer2 _optimizer1;
         private IIntradayOptimizer2 _optimizer2;
         private IPerson _person = PersonFactory.CreatePerson();
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _mocks = new MockRepository();
             _optimizer1 = _mocks.StrictMock<IIntradayOptimizer2>();
             _optimizer2 = _mocks.StrictMock<IIntradayOptimizer2>();
-            _optimizerList =  new []{ new List<IIntradayOptimizer2> { _optimizer1, _optimizer2 }};
+            _optimizerList =  new List<IIntradayOptimizer2> { _optimizer1, _optimizer2 };
 
 
             _target = new IntradayOptimizerContainer();

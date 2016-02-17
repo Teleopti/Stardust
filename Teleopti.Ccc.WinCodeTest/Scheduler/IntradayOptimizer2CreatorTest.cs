@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 								_rollbackService,
 								 _dayOffOptimizationPreferenceProvider);
 
-				Assert.AreEqual(_scheduleMatrixContainerList.Count, optimizers.Single().Count);
+				Assert.AreEqual(_scheduleMatrixContainerList.Count, optimizers.Count);
 			}
 		}
 	}
