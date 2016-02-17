@@ -63,7 +63,6 @@ Scenario: match entire quoted search term
 	Then I should see 'Smith' in people list
 	And I should not see 'Andeen' in people list
 
-@ignore
 Scenario: match entire quoted search term in different fields
 	When I view people
 	And I search with
