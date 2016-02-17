@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
@@ -27,12 +28,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ViolatedSchedulePeriodBusinessRule _violatedSchedulePeriodBusinessRule;
 		private readonly DayOffBusinessRuleValidation _dayOffBusinessRuleValidation;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
+		private readonly ISchedulingProgress _schedulingProgress;
 
 		public FullScheduling(WebSchedulingSetup webSchedulingSetup,
 			Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder,
 			Func<IRequiredScheduleHelper> requiredScheduleHelper, Func<IGroupPagePerDateHolder> groupPagePerDateHolder,
 			IScheduleDictionaryPersister persister, ViolatedSchedulePeriodBusinessRule violatedSchedulePeriodBusinessRule,
-			DayOffBusinessRuleValidation dayOffBusinessRuleValidation, ICurrentUnitOfWork currentUnitOfWork)
+			DayOffBusinessRuleValidation dayOffBusinessRuleValidation, ICurrentUnitOfWork currentUnitOfWork, ISchedulingProgress schedulingProgress)
 		{
 			_webSchedulingSetup = webSchedulingSetup;
 			_scheduleCommand = scheduleCommand;
@@ -43,6 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_violatedSchedulePeriodBusinessRule = violatedSchedulePeriodBusinessRule;
 			_dayOffBusinessRuleValidation = dayOffBusinessRuleValidation;
 			_currentUnitOfWork = currentUnitOfWork;
+			_schedulingProgress = schedulingProgress;
 		}
 
 		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period)
@@ -93,7 +96,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
 					GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
 					TagToUseOnScheduling = NullScheduleTag.Instance
-				}), new NoSchedulingProgress(), _schedulerStateHolder(), webScheduleState.AllSchedules, _groupPagePerDateHolder(),
+				}), _schedulingProgress, _schedulerStateHolder(), webScheduleState.AllSchedules, _groupPagePerDateHolder(),
 					_requiredScheduleHelper(),
 					new OptimizationPreferences(), false, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 			}

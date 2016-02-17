@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.GroupPageCreator;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
@@ -330,6 +331,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<AlwaysResourceCalculateAfterDelete>().As<IResourceCalculateAfterDeleteDecider>().SingleInstance();
 			}
 			builder.RegisterType<LimitForNoResourceCalculation>().As<ILimitForNoResourceCalculation>().AsSelf().SingleInstance();
+			builder.RegisterType<NoSchedulingProgress>().As<ISchedulingProgress>().SingleInstance();
 		}
 
 		private static void registerMoveTimeOptimizationClasses(ContainerBuilder builder)
