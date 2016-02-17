@@ -119,7 +119,7 @@ namespace Manager.Integration.Test
 
         private string _buildMode = "Debug";
 
-        [Test]
+        [Test, Ignore("it")]
         public void CreateSeveralRequestShouldReturnBothCancelAndDeleteStatusesTest()
         {
             LogHelper.LogInfoWithLineNumber("Start.",
