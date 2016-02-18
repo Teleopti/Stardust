@@ -58,13 +58,13 @@ namespace ManagerTest.Fakes
         public async Task<HttpResponseMessage> GetAsync(Uri url)
 #pragma warning restore 1998
         {
-     //       CalledNodes.Add(url.ToString(), null);
+            CalledNodes.Add(url.ToString(), null);
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
         public  Task<bool> TryGetAsync(Uri url)
         {
-       //     CalledNodes.Add(url.ToString(), null);
+            CalledNodes.Add(url.ToString(), null);
 
             var task = new Task<bool>(() => true);
             task.Start();
