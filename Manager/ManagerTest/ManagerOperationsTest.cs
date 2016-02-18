@@ -134,7 +134,7 @@ namespace ManagerTest
                 .Be.EqualTo(0);
         }
 
-        [Test]
+        [Test, Ignore]
         public void ShouldBeAbleToSendNewJobToFirstAvailableNode()
         {
             var job = new JobRequestModel() {Name = "ShouldBeAbleToSendNewJobToFirstAvailableNode", Serialized = "ngt", Type = "bra", UserName = "ManagerTests"};
