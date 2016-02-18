@@ -197,6 +197,7 @@
     <Compile Include="Foundation\HttpRequestTrueTest.cs" />
     <Compile Include="Licensing\SetLicenseActivatorTest.cs" />
     <Compile Include="MessageBroker\ConcurrencyRunner.cs" />
+    <Compile Include="MessageBroker\ExceptionExtensions.cs" />
     <Compile Include="MessageBroker\MailboxConcurrencyTest.cs" />
     <Compile Include="MessageBroker\MessageBrokerUnitOfWorkTest.cs" />
     <Compile Include="MessageBroker\MailboxRepositoryTest.cs" />

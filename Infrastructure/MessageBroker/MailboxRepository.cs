@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
@@ -35,7 +34,6 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 
 		public void Persist(Mailbox model)
 		{
-			Debug.WriteLine("Persist" + model.Messages.Count());
 			_unitOfWork.Current().CreateSqlQuery(
 				"MERGE INTO [msg].Mailbox AS T " +
 				"USING (" +
@@ -134,12 +132,11 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 
 		public void Purge()
 		{
-			var result = _unitOfWork.Current().CreateSqlQuery(
-				"DELETE FROM [msg].Mailbox " +
+			_unitOfWork.Current().CreateSqlQuery(
+				"DELETE FROM [msg].Mailbox WITH (TABLOCK) " +
 				"WHERE ExpiresAt <= :utcDateTime;")
 				.SetParameter("utcDateTime", _now.UtcDateTime())
 				.ExecuteUpdate();
-			Debug.WriteLine("Purge " + result);
 		}
 
 	}

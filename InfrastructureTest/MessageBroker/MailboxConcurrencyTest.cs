@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
@@ -17,7 +18,6 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 		public FakeTime Time;
 		
 		[Test]
-		[Ignore]
 		[Setting("MessageBrokerMailboxPurgeIntervalInSeconds", 0)]
 		[Setting("MessageBrokerMailboxExpirationInSeconds", 0)]
 		public void ShouldNotDeadlockWhenPurging()
@@ -33,10 +33,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 				Server.PopMessages(messages.GetRandom().Routes().First(), Guid.NewGuid().ToString());
 				Server.NotifyClients(messages.GetRandom());
 			}).Times(100);
-			
-			run.WaitAll();
 
-			Assert.DoesNotThrow(() => run.ThrowAnyException());
+			Assert.DoesNotThrow(() => run.WaitForException<SqlException>());
 		}
 
 	}
