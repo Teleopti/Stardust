@@ -64,8 +64,6 @@ namespace ManagerTest.Fakes
 
         public  Task<bool> TryGetAsync(Uri url)
         {
-            CalledNodes.Add(url.ToString(), null);
-
             var task = new Task<bool>(() => true);
             task.Start();
             task.Wait();
