@@ -239,7 +239,7 @@ namespace Manager.Integration.Test
                                             Logger);
         }
 
-        [Test]
+        [Test, Ignore]
         public void CancelWrongJobsTest()
         {
             LogHelper.LogInfoWithLineNumber("Start.",
