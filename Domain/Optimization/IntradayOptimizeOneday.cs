@@ -54,6 +54,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public bool Execute(DateOnly dateToBeRemoved)
 		{
+			if (daysOverMax())
+				return false;
+
 			double? oldPeriodValue = calculatePeriodValue(dateToBeRemoved);
 
 			var lastOverLimitCounts = _optimizationLimits.OverLimitsCounts(_matrix);

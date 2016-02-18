@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				_resourceOptimizationHelper,_effectiveRestrictionCreator,_optimizationLimits,_workShiftOriginalStateContainer,_schedulingOptionsCreator,
 				_mainShiftOptimizeActivitySpecificationSetter,_deleteAndResourceCalculateService,_resourceCalculateDelayer,_scheduleMatrix);
 
-			_target=new IntradayOptimizer2(_personalSkillsDataExtractor,_decisionMaker,_optimizationLimits,_scheduleMatrix, intradayOptimizeOneday);
+			_target=new IntradayOptimizer2(_personalSkillsDataExtractor,_decisionMaker, _scheduleMatrix, intradayOptimizeOneday);
 
         }
 
@@ -145,30 +145,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             Expect.Call(_dailyValueCalculator.DayValue(new DateOnly())).IgnoreArguments().Return(2);
             Expect.Call(_dailyValueCalculator.DayValue(new DateOnly())).IgnoreArguments().Return(1);
-        }
-
-        [Test]
-        public void VerifyExecuteWithDecisionMakerFailure()
-        {
-            using (_mockRepository.Record())
-            {
-				makeDecisionMakerFailure();
-            }
-
-            using (_mockRepository.Playback())
-            {
-                bool result = _target.Execute();
-                Assert.IsFalse(result);
-            }
-        }
-
-        private void makeDecisionMakerFailure()
-        {
-	        Expect.Call(_optimizationLimits.MoveMaxDaysOverLimit()).Return(false).Repeat.AtLeastOnce();
-
-            Expect.Call(_decisionMaker.Execute(_scheduleMatrix, _personalSkillsDataExtractor))
-                .IgnoreArguments()
-                .Return(null);
         }
 
         [Test]

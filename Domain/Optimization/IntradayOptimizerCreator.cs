@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
 
-				var optimizer = new IntradayOptimizer2(personalSkillsDataExtractor, _decisionMaker, optimizationLimits, scheduleMatrix,
+				var optimizer = new IntradayOptimizer2(personalSkillsDataExtractor, _decisionMaker,  scheduleMatrix,
 					new IntradayOptimizeOneday(dailyValueCalculator, _scheduleService, optimizerPreferences, rollbackService,
 						_resourceOptimizationHelper,
 						_effectiveRestrictionCreator, optimizationLimits, workShiftStateContainer, schedulingOptionsCreator,
