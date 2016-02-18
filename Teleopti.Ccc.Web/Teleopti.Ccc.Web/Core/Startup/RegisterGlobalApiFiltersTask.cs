@@ -32,30 +32,33 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		public Task Execute(IAppBuilder application)
 		{
-			_globalConfiguration.Configure(c => c.Filters.Add(new AuthorizeTeleoptiAttribute(new[]
+			_globalConfiguration.Configure(c =>
 			{
-				typeof (DangerousController),
-				typeof (MessageBrokerController),
-				typeof (ToggleHandlerController),
-				typeof (AuthenticateController),
-				typeof (PersonInfoController),
-				typeof (ApplicationAuthenticationApiController),
-				typeof (AuthenticationApiController),
-				typeof (StateController),
-				typeof (LanguageController),
-				typeof (ConfigController),
-				typeof (JavascriptLoggingController),
-				typeof (ChangePasswordController)
-			})));
+				c.Filters.Add(new AuthorizeTeleoptiAttribute(new[]
+				{
+					typeof (DangerousController),
+					typeof (MessageBrokerController),
+					typeof (ToggleHandlerController),
+					typeof (AuthenticateController),
+					typeof (PersonInfoController),
+					typeof (ApplicationAuthenticationApiController),
+					typeof (AuthenticationApiController),
+					typeof (StateController),
+					typeof (LanguageController),
+					typeof (ConfigController),
+					typeof (JavascriptLoggingController),
+					typeof (ChangePasswordController)
+				}));
 
-            _globalConfiguration.Configure(c => c.Services.Add(typeof(IExceptionLogger), new Log4NetWebApiLogger(_log4NetLogger)));
-            _globalConfiguration.Configure(c =>
-			{
+				c.Services.Add(typeof (IExceptionLogger), new Log4NetWebApiLogger(_log4NetLogger));
+
 				c.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new DefaultContractResolver();
 				c.Formatters.JsonFormatter.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Unspecified;
 				c.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new DateOnlyConverter());
+
+				c.MessageHandlers.Add(new CancelledTaskBugWorkaroundMessageHandler());
 			});
-			_globalConfiguration.Configure(c => c.MessageHandlers.Add(new CancelledTaskBugWorkaroundMessageHandler()));
+			
 			return Task.FromResult(false);
 		}
 	}
