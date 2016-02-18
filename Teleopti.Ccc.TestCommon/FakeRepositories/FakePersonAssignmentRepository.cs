@@ -97,10 +97,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			foreach (var date in period.DayCollection())
 			{
 				var ass = new PersonAssignment(agent, scenario, date);
-				ass.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
+				ass.AddActivity(activity, timePeriod);
 				ass.SetShiftCategory(shiftCategory);
 				Add(ass);
 			}
+		}
+
+		public void Has(IPerson agent, IScenario scenario, IActivity activity, IShiftCategory shiftCategory, DateOnly date, TimePeriod timePeriod)
+		{
+			Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(date, date), timePeriod);
 		}
 	}
 }

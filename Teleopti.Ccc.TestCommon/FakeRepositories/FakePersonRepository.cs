@@ -5,7 +5,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -37,8 +36,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			person.AddPersonPeriod(new PersonPeriod(startDate, new PersonContract(new Contract("."), new PartTimePercentage("."), new ContractSchedule(".")), team));
 			_persons.Add(person);
 		}
-		
 
+		public IPerson Has(IContract contract, ISchedulePeriod schedulePeriod, ISkill skill)
+		{
+			return Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team {Site = new Site("site")}, schedulePeriod, skill);
+		}
 
 		public void Add(IPerson person)
 		{
