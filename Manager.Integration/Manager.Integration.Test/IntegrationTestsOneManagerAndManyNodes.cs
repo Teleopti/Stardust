@@ -17,7 +17,7 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
-    [TestFixture]
+    [TestFixture, Ignore]
     public class IntegrationTestsOneManagerAndManyNodes
     {
         private static readonly ILog Logger =
@@ -239,7 +239,7 @@ namespace Manager.Integration.Test
                                             Logger);
         }
 
-        [Test, Ignore]
+        [Test]
         public void CancelWrongJobsTest()
         {
             LogHelper.LogInfoWithLineNumber("Start.",
