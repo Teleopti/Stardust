@@ -9,7 +9,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class IntradayOptimizerContainerConsiderLargeGroups : IIntradayOptimizerContainer
 	{
 		private readonly IIntradayOptimizerLimiter _intradayOptimizerLimiter;
+
+		//försök ta bort event senare...
+#pragma warning disable 0067
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
+#pragma warning restore 0067
 
 		public IntradayOptimizerContainerConsiderLargeGroups(IIntradayOptimizerLimiter intradayOptimizerLimiter)
 		{
