@@ -54,15 +54,21 @@ namespace ManagerTest.Fakes
 
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
-
-        public Task<HttpResponseMessage> GetAsync(Uri url)
+#pragma warning disable 1998
+        public async Task<HttpResponseMessage> GetAsync(Uri url)
+#pragma warning restore 1998
         {
-            throw new NotImplementedException();
+            //  throw new NotImplementedException();
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
-        public Task<bool> TryGetAsync(Uri url)
+        public  Task<bool> TryGetAsync(Uri url)
         {
-            throw new NotImplementedException();
+            var task = new Task<bool>(() => true);
+            task.Start();
+            task.Wait();
+
+            return task;
         }
     }
 }
