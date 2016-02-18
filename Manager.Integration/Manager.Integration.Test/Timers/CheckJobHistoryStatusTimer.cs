@@ -230,7 +230,10 @@ namespace Manager.Integration.Test.Timers
                 
             }
          
-            MyTask.Dispose();   
+            if (MyTask != null)
+            {
+                MyTask.Dispose();
+            }            
         }
     }
 }

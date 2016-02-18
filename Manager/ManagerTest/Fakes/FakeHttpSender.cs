@@ -51,7 +51,18 @@ namespace ManagerTest.Fakes
 #pragma warning restore 1998
         {
             CalledNodes.Add(url.ToString(), null);
+
             return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+
+        public Task<HttpResponseMessage> GetAsync(Uri url)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> TryGetAsync(Uri url)
+        {
+            throw new NotImplementedException();
         }
     }
 }

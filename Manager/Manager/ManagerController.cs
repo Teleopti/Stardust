@@ -2,7 +2,6 @@ using System;
 using System.Web.Http;
 using System.Web.Http.Results;
 using log4net;
-using Stardust.Manager.Constants;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
@@ -19,14 +18,14 @@ namespace Stardust.Manager
         public string WhoAmI { get; private set; }
 
         public ManagerController(INodeManager nodeManager,
-            JobManager jobManager)
+                                 JobManager jobManager)
         {
             WhoAmI = "[MANAGER, " + Environment.MachineName.ToUpper() + "]";
 
             _nodeManager = nodeManager;
             _jobManager = jobManager;
         }
-        
+
         [HttpPost, ActionName("job")]
         public IHttpActionResult DoThisJob([FromBody] JobRequestModel job)
         {
@@ -55,12 +54,12 @@ namespace Stardust.Manager
             _jobManager.Add(jobReceived);
 
             string msg = string.Format("{0} : New job received from client ( jobId, jobName ) : ( {1}, {2} )",
-                WhoAmI,
-                jobReceived.Id,
-                jobReceived.Name);
+                                       WhoAmI,
+                                       jobReceived.Id,
+                                       jobReceived.Name);
 
             LogHelper.LogInfoWithLineNumber(Logger,
-                msg);
+                                            msg);
 
             return Ok(jobReceived.Id);
         }
@@ -69,7 +68,7 @@ namespace Stardust.Manager
         public void CancelThisJob(Guid jobId)
         {
             LogHelper.LogInfoWithLineNumber(Logger,
-                WhoAmI + ": Received job cancel from client ( jobId ) : ( " + jobId + " )");
+                                            WhoAmI + ": Received job cancel from client ( jobId ) : ( " + jobId + " )");
 
             _jobManager.CancelThisJob(jobId);
         }
@@ -93,57 +92,60 @@ namespace Stardust.Manager
         {
             return Ok(_jobManager.JobHistoryDetails(jobId));
         }
-        
+
 
         [HttpPost, ActionName("heartbeat")]
         public void Heartbeat([FromBody] Uri nodeUri)
         {
-            _jobManager.CheckAndAssignNextJob();
+            //_jobManager.CheckAndAssignNextJob();
 
             LogHelper.LogInfoWithLineNumber(Logger,
-                WhoAmI + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
+                                            WhoAmI + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
         }
 
-       
-        
+
         [HttpPost, ActionName("done")]
         public IHttpActionResult JobDone(Guid jobId)
         {
             LogHelper.LogInfoWithLineNumber(Logger,
-                WhoAmI + ": Received job done from a Node ( jobId ) : ( " + jobId + " )");
+                                            WhoAmI + ": Received job done from a Node ( jobId ) : ( " + jobId + " )");
 
             _jobManager.SetEndResultOnJobAndRemoveIt(jobId,
-                "Success");
+                                                     "Success");
 
-            //should we do this here also or only on heartbeats
             _jobManager.CheckAndAssignNextJob();
 
             return Ok();
         }
-        
+
         [HttpPost, ActionName("fail")]
         public IHttpActionResult JobFailed(Guid jobId)
         {
             LogHelper.LogErrorWithLineNumber(Logger,
-                WhoAmI + ": Received job failed from a Node ( jobId ) : ( " + jobId + " )");
+                                             WhoAmI + ": Received job failed from a Node ( jobId ) : ( " + jobId + " )");
 
             _jobManager.SetEndResultOnJobAndRemoveIt(jobId,
-                "Failed");
+                                                     "Failed");
+
+            _jobManager.CheckAndAssignNextJob();
+
             return Ok();
         }
-        
+
         [HttpPost, ActionName("cancel")]
         public IHttpActionResult JobCanceled(Guid jobId)
         {
             LogHelper.LogInfoWithLineNumber(Logger,
-                WhoAmI + ": Received cancel from a Node ( jobId ) : ( " + jobId + " )");
+                                            WhoAmI + ": Received cancel from a Node ( jobId ) : ( " + jobId + " )");
 
             _jobManager.SetEndResultOnJobAndRemoveIt(jobId,
-                "Canceled");
+                                                     "Canceled");
+
+            _jobManager.CheckAndAssignNextJob();
 
             return Ok();
         }
-        
+
         [HttpPost, ActionName("progress")]
         public IHttpActionResult JobProgress([FromBody] JobProgressModel model)
         {
@@ -157,12 +159,11 @@ namespace Stardust.Manager
         [HttpPost, ActionName("nodeinit")]
         public IHttpActionResult NodeInitialized([FromBody] Uri nodeUri)
         {
-
             _nodeManager.FreeJobIfAssingedToNode(nodeUri);
             _nodeManager.AddIfNeeded(nodeUri);
 
             LogHelper.LogInfoWithLineNumber(Logger,
-                WhoAmI + ": Received init from Node. Node Uri : ( " + nodeUri + " )");
+                                            WhoAmI + ": Received init from Node. Node Uri : ( " + nodeUri + " )");
 
             return Ok();
         }
@@ -172,9 +173,5 @@ namespace Stardust.Manager
         {
             return Ok();
         }
-        
-        
     }
 }
-   
- 

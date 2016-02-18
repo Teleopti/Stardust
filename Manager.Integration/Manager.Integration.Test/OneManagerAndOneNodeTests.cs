@@ -17,11 +17,11 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
-    [TestFixture]
-    public class IntegrationTestsOneManagerAndManyNodes
+    [TestFixture, Ignore]
+    public class OneManagerAndOneNodeTests
     {
         private static readonly ILog Logger =
-            LogManager.GetLogger(typeof (IntegrationTestsOneManagerAndManyNodes));
+            LogManager.GetLogger(typeof (OneManagerAndOneNodeTests));
 
 
         [TestFixtureSetUp]
@@ -54,8 +54,8 @@ namespace Manager.Integration.Test
 
             AppDomainTask = new AppDomainTask(_buildMode);
 
-            Task = AppDomainTask.StartTask(CancellationTokenSource,
-                                           NumberOfNodesToStart);
+            Task = AppDomainTask.StartTask(cancellationTokenSource: CancellationTokenSource,
+                                           numberOfNodes: 1);
 
             LogHelper.LogInfoWithLineNumber("JobHelper.GiveNodesTimeToInitialize",
                                             Logger);
@@ -113,13 +113,11 @@ namespace Manager.Integration.Test
                                             Logger);
         }
 
-        private const int NumberOfNodesToStart = 1;
-
         private bool _clearDatabase = true;
 
         private string _buildMode = "Debug";
 
-        [Test]
+        [Test, Ignore]
         public void CreateSeveralRequestShouldReturnBothCancelAndDeleteStatusesTest()
         {
             LogHelper.LogInfoWithLineNumber("Start.",
@@ -148,7 +146,7 @@ namespace Manager.Integration.Test
                 jobManagerTaskCreators.Add(jobManagerTaskCreator);
             }
 
-            StartJobTaskHelper startJobTaskHelper = new StartJobTaskHelper();
+            var startJobTaskHelper = new StartJobTaskHelper();
 
             var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
                                                                       CancellationTokenSource,
@@ -312,11 +310,10 @@ namespace Manager.Integration.Test
                                             Logger);
 
             List<JobRequestModel> createNewJobRequests =
-                JobHelper.GenerateTestJobParamsRequests(NumberOfNodesToStart*1);
+                JobHelper.GenerateTestJobParamsRequests(1);
 
             LogHelper.LogInfoWithLineNumber("( " + createNewJobRequests.Count + " ) jobs will be created.",
                                             Logger);
-
 
             TimeSpan timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count);
 

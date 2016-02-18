@@ -16,18 +16,20 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 
         private FileInfo NodeconfigurationFile { get; set; }
 
-        public string NodeAssemblyName { get; set; }
+        private string NodeAssemblyName { get; set; }
 
         private static readonly ILog Logger =
             LogManager.GetLogger(typeof (AppDomainNodeTask));
 
         public AppDomainNodeTask(string buildMode,
                                  DirectoryInfo directoryNodeAssemblyLocationFullPath,
-                                 FileInfo nodeconfigurationFile)
+                                 FileInfo nodeconfigurationFile,
+                                 string nodeAssemblyName)
         {
             BuildMode = buildMode;
             DirectoryNodeAssemblyLocationFullPath = directoryNodeAssemblyLocationFullPath;
             NodeconfigurationFile = nodeconfigurationFile;
+            NodeAssemblyName = nodeAssemblyName;
         }
 
         private AppDomain MyAppDomain { get; set; }
@@ -60,7 +62,7 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
                     var nodeAppDomainSetup = new AppDomainSetup
                     {
                         ApplicationBase = DirectoryNodeAssemblyLocationFullPath.FullName,
-                        ApplicationName = Settings.Default.NodeAssemblyName,
+                        ApplicationName = NodeAssemblyName,
                         ShadowCopyFiles = "true",
                         ConfigurationFile = NodeconfigurationFile.FullName
                     };
