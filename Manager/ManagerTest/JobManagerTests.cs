@@ -149,7 +149,7 @@ namespace ManagerTest
 			JobManager.JobHistoryDetails(jobId).Should().Not.Be.Empty();
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldRemoveJobOnBadRequest()
 		{
 			var jobId = Guid.NewGuid();
@@ -166,8 +166,8 @@ namespace ManagerTest
 				
          JobManager.CheckAndAssignNextJob();
 			var job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
-		//	job.Should().Be.Null();
-			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(1);
+			job.Should().Be.Null();
+			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(2);
 			JobRepository.History(jobId).Result.Should().Contain("Removed");
 		}
 

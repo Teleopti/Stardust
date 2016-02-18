@@ -134,7 +134,7 @@ namespace ManagerTest
                 .Be.EqualTo(0);
         }
 
-        [Test, Ignore]
+        [Test]
         public void ShouldBeAbleToSendNewJobToFirstAvailableNode()
         {
             var job = new JobRequestModel() {Name = "ShouldBeAbleToSendNewJobToFirstAvailableNode", Serialized = "ngt", Type = "bra", UserName = "ManagerTests"};
@@ -151,7 +151,7 @@ namespace ManagerTest
                 .Be.EqualTo(3);
             HttpSender.CalledNodes.Keys.First()
                 .Should()
-                .Contain("localhost:9051/");
+                .Contain("localhost:9050/ping");
         }
 
         [Test]
@@ -168,7 +168,7 @@ namespace ManagerTest
                 .Contain(_nodeUri1.ToString());
         }
 
-        [Test, Ignore]
+        [Test, Ignore]  //Don't do it this way anymore
         public void ShouldDistributePersistedJobsOnHeartbeat()
         {
             string userName = "ManagerTests";
