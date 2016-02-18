@@ -203,11 +203,9 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="timeSpan">A time span.</param>
         /// <returns></returns>
         public DateTimePeriod MovePeriod(TimeSpan timeSpan)
-        {
-            if (timeSpan.Ticks > 0)
-                return ChangeEndTime(timeSpan).ChangeStartTime(timeSpan);
-            return ChangeStartTime(timeSpan).ChangeEndTime(timeSpan);
-        }
+	    {
+		    return new DateTimePeriod(StartDateTime.Add(timeSpan), EndDateTime.Add(timeSpan), false);
+	    }
 
         /// <summary>
         /// Returns if the param DateTimePeriod is contained entirely

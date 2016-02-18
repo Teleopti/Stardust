@@ -5,29 +5,23 @@ using System.Linq;
 using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Time
 {
-    /// <summary>
-    /// Tests DateTimePeriod struct
-    /// </summary>
     [TestFixture]
     public class DateTimePeriodTest
     {
         private readonly DateTime _start = new DateTime(2007, 06, 01, 12, 31, 0, DateTimeKind.Utc);
         private readonly DateTime _end = new DateTime(2008, 02, 28, 0, 0, 0, DateTimeKind.Utc);
         private DateTimePeriod _period;
-        private TimeZoneInfo _TimeZoneInfo;
+        private TimeZoneInfo _timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Pacific SA Standard Time");
 
-        [SetUp]
+		[SetUp]
         public void TestSetup()
         {
             _period = new DateTimePeriod(_start, _end);
-            TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific SA Standard Time");
-            _TimeZoneInfo = (timeZone);
         }
 
         /// <summary>
@@ -922,9 +916,9 @@ namespace Teleopti.Ccc.DomainTest.Time
         [Test]
         public void VerifyToDateOnlyPeriod()
         {
-            DateOnly startDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(_start, _TimeZoneInfo));
-            DateOnly endDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(_end, _TimeZoneInfo));
-            DateOnlyPeriod dateOnlyPeriod = _period.ToDateOnlyPeriod(_TimeZoneInfo);
+            DateOnly startDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(_start, _timeZoneInfo));
+            DateOnly endDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(_end, _timeZoneInfo));
+            DateOnlyPeriod dateOnlyPeriod = _period.ToDateOnlyPeriod(_timeZoneInfo);
             Assert.AreEqual(dateOnlyPeriod.StartDate, startDate);
             Assert.AreEqual(dateOnlyPeriod.EndDate, endDate);
         }
@@ -932,13 +926,13 @@ namespace Teleopti.Ccc.DomainTest.Time
         [Test]
         public void VerifyToDateOnlyPeriodWorksBothWays()
         {
-            DateOnly startDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(_start, _TimeZoneInfo));
-            DateOnly endDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(_end, _TimeZoneInfo));
-            DateOnlyPeriod dateOnlyPeriod = _period.ToDateOnlyPeriod(_TimeZoneInfo);
+            DateOnly startDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(_start, _timeZoneInfo));
+            DateOnly endDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(_end, _timeZoneInfo));
+            DateOnlyPeriod dateOnlyPeriod = _period.ToDateOnlyPeriod(_timeZoneInfo);
             Assert.AreEqual(dateOnlyPeriod.StartDate, startDate);
             Assert.AreEqual(dateOnlyPeriod.EndDate, endDate);
-            DateTimePeriod dateTimePeriod = dateOnlyPeriod.ToDateTimePeriod(_TimeZoneInfo);
-            DateOnlyPeriod dateOnlyPeriodAfterBeingDateTimePeriod = dateTimePeriod.ToDateOnlyPeriod(_TimeZoneInfo);
+            DateTimePeriod dateTimePeriod = dateOnlyPeriod.ToDateTimePeriod(_timeZoneInfo);
+            DateOnlyPeriod dateOnlyPeriodAfterBeingDateTimePeriod = dateTimePeriod.ToDateOnlyPeriod(_timeZoneInfo);
             Assert.AreEqual(dateOnlyPeriodAfterBeingDateTimePeriod.StartDate, startDate);
             Assert.AreEqual(dateOnlyPeriodAfterBeingDateTimePeriod.EndDate, endDate);
         }
@@ -947,11 +941,11 @@ namespace Teleopti.Ccc.DomainTest.Time
         public void VerifyToDateOnlyPeriodWorksBothWaysWithOneDate()
         {
             DateTime dateTime = new DateTime(2007,12,31,23,0,0,DateTimeKind.Utc);
-            _TimeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-            DateOnly startDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(dateTime, _TimeZoneInfo));
-            DateOnly endDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(dateTime, _TimeZoneInfo));
+            _timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            DateOnly startDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(dateTime, _timeZoneInfo));
+            DateOnly endDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(dateTime, _timeZoneInfo));
             _period = new DateTimePeriod(dateTime,dateTime);
-            DateOnlyPeriod dateOnlyPeriod = _period.ToDateOnlyPeriod(_TimeZoneInfo);
+            DateOnlyPeriod dateOnlyPeriod = _period.ToDateOnlyPeriod(_timeZoneInfo);
             Assert.AreEqual(dateOnlyPeriod.StartDate, startDate);
             Assert.AreEqual(dateOnlyPeriod.EndDate, endDate);
         }
