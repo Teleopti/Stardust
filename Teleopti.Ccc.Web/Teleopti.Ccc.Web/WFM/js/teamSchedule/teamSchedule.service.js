@@ -60,6 +60,14 @@ angular.module("wfm.teamSchedule").service("TeamSchedule", [
 			}
 		});
 
+		service.removeAbsence = $resource("../api/TeamSchedule/RemoveAbsence", {}, {
+			post: {
+				method: "POST",
+				params: {},
+				isArray: false
+			}
+		});
+
 		service.swapShifts = $resource("../api/TeamSchedule/SwapShifts", {}, {
 			post: {
 				method: "POST",

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -28,11 +29,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly IAbsencePersister _absencePersister;
 		private readonly ISettingsPersisterAndProvider<AgentsPerPageSetting> _agentsPerPagePersisterAndProvider;
 		private readonly ISwapMainShiftForTwoPersonsCommandHandler _swapMainShiftForTwoPersonsHandler;
+		private readonly IHandleCommand<RemovePersonAbsenceCommand> _removePersonAbsenceCommandHandler;
 
 		public TeamScheduleController(ITeamScheduleViewModelFactory teamScheduleViewModelFactory, ILoggedOnUser loggonUser,
 			IPrincipalAuthorization principalAuthorization, IAbsencePersister absencePersister,
 			ISettingsPersisterAndProvider<AgentsPerPageSetting> agentsPerPagePersisterAndProvider,
-			ISwapMainShiftForTwoPersonsCommandHandler swapMainShiftForTwoPersonsHandler)
+			ISwapMainShiftForTwoPersonsCommandHandler swapMainShiftForTwoPersonsHandler,
+			IHandleCommand<RemovePersonAbsenceCommand> removePersonAbsenceCommandHandler)
 		{
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
 			_loggonUser = loggonUser;
@@ -40,6 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			_absencePersister = absencePersister;
 			_agentsPerPagePersisterAndProvider = agentsPerPagePersisterAndProvider;
 			_swapMainShiftForTwoPersonsHandler = swapMainShiftForTwoPersonsHandler;
+			_removePersonAbsenceCommandHandler = removePersonAbsenceCommandHandler;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamSchedule/GetPermissions")]
@@ -147,6 +151,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			}
 
 			return Ok(failResults);
+		}
+
+		[HttpPost, UnitOfWork, Route("api/TeamSchedule/RemoveAbsence")]
+		public virtual IHttpActionResult RemoveAbsence(RemovePersonAbsenceCommand command)
+		{
+			setTrackedCommandInfo(command.TrackedCommandInfo);
+			_removePersonAbsenceCommandHandler.Handle(command);
+			return Ok();
 		}
 
 		[HttpPost, UnitOfWork, Route("api/TeamSchedule/UpdateAgentsPerPage")]
