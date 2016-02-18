@@ -726,9 +726,11 @@
     <Compile Include="Optimization\IIntradayOptimizer2.cs" />
     <Compile Include="Optimization\IIntraDayOptimizer2Creator.cs" />
     <Compile Include="Optimization\IIntradayOptimizerContainer.cs" />
+    <Compile Include="Optimization\IIntradayOptimizerLimiter.cs" />
     <Compile Include="Optimization\IntradayOptimization.cs" />
     <Compile Include="Optimization\IntradayOptimizerContainerConsiderLargeGroups.cs" />
     <Compile Include="Optimization\IntradayOptimizerCreator.cs" />
+    <Compile Include="Optimization\IntradayOptmizerLimiter.cs" />
     <Compile Include="Optimization\OptimizationPreferencesFactory.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimizationAndSingleAgentTeam.cs" />
     <Compile Include="Optimization\IDayOffRulesRepository.cs" />
