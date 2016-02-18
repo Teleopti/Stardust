@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public void Execute(IEnumerable<IIntradayOptimizer2> optimizers, DateOnlyPeriod period)
 		{
-			if (_intradayOptimizerLimiter.SizeOfGroupLimit < new Percent(0.5))
+			if (_intradayOptimizerLimiter.MinPercentOfGroupLimit < new Percent(0.5))
 				return;
 
 

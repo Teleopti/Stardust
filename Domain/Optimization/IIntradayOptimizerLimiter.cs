@@ -4,7 +4,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IIntradayOptimizerLimiter
 	{
-		Percent SizeOfGroupLimit { get; }
+		Percent MinPercentOfGroupLimit { get; }
 		int MinSizeLimit { get; }
 	}
 }

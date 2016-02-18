@@ -4,12 +4,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class IntradayOptmizerLimiter : IIntradayOptimizerLimiter
 	{
-		private Percent _sizeOfGroupLimit = new Percent(0.5);
+		private Percent _minPercentOfGroupLimit = new Percent(0.5);
 		private int _minSizeLimit = 100;
 
-		public Percent SizeOfGroupLimit
+		public Percent MinPercentOfGroupLimit
 		{
-			get { return _sizeOfGroupLimit; }
+			get { return _minPercentOfGroupLimit; }
 		}
 
 		public int MinSizeLimit
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public void SetFromTest(Percent sizeOfGroupLimit, int minSizeLimit)
 		{
-			_sizeOfGroupLimit = sizeOfGroupLimit;
+			_minPercentOfGroupLimit = sizeOfGroupLimit;
 			_minSizeLimit = minSizeLimit;
 		}
 	}
