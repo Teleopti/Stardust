@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			}
 			catch (InvalidUserCodeException e)
 			{
-				Log.Error("User code was not valid.", e);
+				Log.Info("User code was not valid.", e);
 				return -100;
 			}
 			catch (AggregateException e)
