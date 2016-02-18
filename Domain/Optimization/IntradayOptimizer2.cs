@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IScheduleResultDataExtractor _personalSkillsDataExtractor;
 		private readonly IIntradayDecisionMaker _decisionMaker;
 		private readonly IScheduleMatrixPro _matrix;
-		private readonly IntradayOptimizeOneday _optimizeOneday;
 
 		public IntradayOptimizer2(
 						IScheduleResultDataExtractor personalSkillsDataExtractor,
@@ -26,19 +25,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_personalSkillsDataExtractor = personalSkillsDataExtractor;
 			_decisionMaker = decisionMaker;
 			_matrix = matrix;
-			_optimizeOneday = optimizeOneday;
+			IntradayOptimizeOneday = optimizeOneday;
 		}
 
 		public bool Execute()
 		{
 			var dayToBeMoved = _decisionMaker.Execute(_matrix, _personalSkillsDataExtractor);
 
-			return dayToBeMoved.HasValue && _optimizeOneday.Execute(dayToBeMoved.Value);
+			return dayToBeMoved.HasValue && IntradayOptimizeOneday.Execute(dayToBeMoved.Value);
 		}
 
 		public IPerson ContainerOwner
 		{
 			get { return _matrix.Person; }
 		}
+
+		public IntradayOptimizeOneday IntradayOptimizeOneday { get; private set; }
 	}
 }

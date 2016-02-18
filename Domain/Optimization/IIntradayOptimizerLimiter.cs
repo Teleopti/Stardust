@@ -1,10 +1,7 @@
-using Teleopti.Interfaces.Domain;
-
 namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IIntradayOptimizerLimiter
 	{
-		Percent MinPercentOfGroupLimit { get; }
-		int MinSizeLimit { get; }
+		bool CanJumpOutEarly(int sizeOfAgentSkillGroup, int totalNumberOfAgentsInSkillGroup, int optimizedNumberOfAgentsInSkillGroup);
 	}
 }

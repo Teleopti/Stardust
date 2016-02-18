@@ -105,6 +105,13 @@ namespace Teleopti.Ccc.Domain.Collection
 			return RandomIterator(list, numberOfElements, onlyUnique);
 		}
 
+		public static IEnumerable<T> RandomIterator<T>(this IEnumerable<T> list)
+		{
+			InParameter.NotNull("list", list);
+			return RandomIterator(list, list.Count(), true);
+		}
+
+
 		private static IEnumerable<T> RandomIterator<T>(IEnumerable<T> list, int numberOfElements, bool onlyUnique)
 		{
 			List<T> buffer = new List<T>(list);

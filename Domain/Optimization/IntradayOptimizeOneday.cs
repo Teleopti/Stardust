@@ -52,12 +52,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_matrix = matrix;
 		}
 
-		public bool Execute(DateOnly dateToBeRemoved)
+		//change to void when toggle is gone
+		public bool Execute(DateOnly dateOnly)
 		{
 			if (daysOverMax())
 				return false;
 
-			double? oldPeriodValue = calculatePeriodValue(dateToBeRemoved);
+			double? oldPeriodValue = calculatePeriodValue(dateOnly);
 
 			var lastOverLimitCounts = _optimizationLimits.OverLimitsCounts(_matrix);
 
@@ -67,14 +68,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 			ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 			schedulingOptions.UseCustomTargetTime = _workShiftOriginalStateContainer.OriginalWorkTime();
 
-			var originalShift = _workShiftOriginalStateContainer.OldPeriodDaysState[dateToBeRemoved].GetEditorShift();
+			var originalShift = _workShiftOriginalStateContainer.OldPeriodDaysState[dateOnly].GetEditorShift();
 			if (originalShift == null) return false;
 
-			_mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(schedulingOptions, _optimizerPreferences, originalShift, dateToBeRemoved);
+			_mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(schedulingOptions, _optimizerPreferences, originalShift, dateOnly);
 
 			_rollbackService.ClearModificationCollection();
 
-			IScheduleDayPro scheduleDayPro = _matrix.GetScheduleDayByKey(dateToBeRemoved);
+			IScheduleDayPro scheduleDayPro = _matrix.GetScheduleDayByKey(dateOnly);
 			IScheduleDay scheduleDay = scheduleDayPro.DaySchedulePart();
 
 			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay, schedulingOptions);
@@ -82,13 +83,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 			//delete schedule
 			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(scheduleDay, _rollbackService, schedulingOptions.ConsiderShortBreaks, false);
 
-			if (!tryScheduleDay(dateToBeRemoved, schedulingOptions, effectiveRestriction, WorkShiftLengthHintOption.AverageWorkTime))
+			if (!tryScheduleDay(dateOnly, schedulingOptions, effectiveRestriction, WorkShiftLengthHintOption.AverageWorkTime))
 				return true;
 
 			// Step: Check that there are no white spots
 
 			double newValidatedPeriodValue = double.MaxValue;
-			double? newPeriodValue = calculatePeriodValue(dateToBeRemoved);
+			double? newPeriodValue = calculatePeriodValue(dateOnly);
 			if (newPeriodValue.HasValue)
 				newValidatedPeriodValue = newPeriodValue.Value;
 
@@ -96,21 +97,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (isPeriodWorse)
 			{
 				_rollbackService.Rollback();
-				_resourceCalculateDelayer.CalculateIfNeeded(dateToBeRemoved, null, false);
-				lockDay(dateToBeRemoved);
+				_resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);
+				lockDay(dateOnly);
 				return true;
 			}
 
 			if (_optimizationLimits.HasOverLimitExceeded(lastOverLimitCounts, _matrix) || daysOverMax())
 			{
 				_rollbackService.Rollback();
-				_resourceCalculateDelayer.CalculateIfNeeded(dateToBeRemoved, null, false);
-				lockDay(dateToBeRemoved);
+				_resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);
+				lockDay(dateOnly);
 				return false;
 			}
 
 			// Always lock days we moved
-			lockDay(dateToBeRemoved);
+			lockDay(dateOnly);
 
 			return true;
 		}

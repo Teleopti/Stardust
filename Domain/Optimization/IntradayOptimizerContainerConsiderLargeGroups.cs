@@ -22,29 +22,18 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public void Execute(IEnumerable<IIntradayOptimizer2> optimizers, DateOnlyPeriod period)
 		{
-			var numberOfAgents = optimizers.Count(); //this is wrong!
-			var optimizedAgents = 0;
+			var numberOfAgents = optimizers.Count(); //this is wrong but maybe good enough?
 
-			var shuffledOptimizers = optimizers.GetRandom(optimizers.Count(), true);
-
-			var activeOptimizers = shuffledOptimizers.ToList();
-			while (activeOptimizers.Count > 0)
+			foreach (var date in period.DayCollection().RandomIterator())
 			{
-				var batchShuffledOptimizers = activeOptimizers.GetRandom(activeOptimizers.Count, true);
-
-				foreach (var optimizer in batchShuffledOptimizers)
+				var optimizedAgents = 0;
+				foreach (var optimizer in optimizers)
 				{
-					if (optimizedAgents/numberOfAgents >= _intradayOptimizerLimiter.MinPercentOfGroupLimit.ValueAsPercent())
-					{
-						return;
-					}
+					if (_intradayOptimizerLimiter.CanJumpOutEarly(-1, numberOfAgents, optimizedAgents))
+						break;
 
-					var result = optimizer.Execute();
-					if (!result)
-					{
-						optimizedAgents++;
-						activeOptimizers.Remove(optimizer);
-					}
+					optimizer.IntradayOptimizeOneday.Execute(date);
+					optimizedAgents++;
 				}
 			}
 		}

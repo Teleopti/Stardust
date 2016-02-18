@@ -18,5 +18,8 @@ namespace Teleopti.Ccc.Domain.Optimization
         /// </summary>
         /// <value>The container owner.</value>
         IPerson ContainerOwner { get; }
+
+		//should be removed. if not possible for now, at least when toggle 37049 is removed (then IIntradayoptimizer2 could be removed completely)
+		IntradayOptimizeOneday IntradayOptimizeOneday { get; }
     }
 }
