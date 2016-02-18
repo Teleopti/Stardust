@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				workShiftContainerList, optimizerPreferences,
 				rollbackService,
 				dayOffOptimizationPreferenceProvider);
-			var service = new IntradayOptimizerContainer();
+			var service = _container.Resolve<IIntradayOptimizerContainer>();
 
 			using (_virtualSkillContext.Create(selectedPeriod))
 			{

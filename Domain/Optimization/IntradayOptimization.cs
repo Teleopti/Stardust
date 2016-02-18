@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
 		private readonly IIntradayOptimizer2Creator _intradayOptimizer2Creator;
 		private readonly VirtualSkillContext _virtualSkillContext;
+		private readonly IIntradayOptimizerContainer _intradayOptimizerContainer;
 
 		public IntradayOptimization(OptimizationPreferencesFactory optimizationPreferencesFactory,
 									Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -47,7 +48,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 									IOptimizerHelperHelper optimizerHelperHelper,
 									WeeklyRestSolverExecuter weeklyRestSolverExecuter,
 									IIntradayOptimizer2Creator intradayOptimizer2Creator,
-									VirtualSkillContext virtualSkillContext
+									VirtualSkillContext virtualSkillContext,
+									IIntradayOptimizerContainer intradayOptimizerContainer
 									)
 		{
 			_optimizationPreferencesFactory = optimizationPreferencesFactory;
@@ -65,6 +67,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
 			_intradayOptimizer2Creator = intradayOptimizer2Creator;
 			_virtualSkillContext = virtualSkillContext;
+			_intradayOptimizerContainer = intradayOptimizerContainer;
 		}
 
 		public virtual OptimizationResultModel Optimize(Guid planningPeriodId)
@@ -98,7 +101,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			var optimizers = _intradayOptimizer2Creator.Create(matrixOriginalStateContainerListForIntradayOptimizationOriginal,
 				matrixOriginalStateContainerListForIntradayOptimizationWork, optimizationPreferences, rollbackService, dayOffOptimizationPreference);
-			var service = new IntradayOptimizerContainer();
 			var minutesPerInterval = 15;
 
 			if (_schedulerStateHolder().SchedulingResultState.Skills.Any())
@@ -116,7 +118,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 				{
-					service.Execute(optimizers, period);
+					_intradayOptimizerContainer.Execute(optimizers, period);
 				}
 			}
 

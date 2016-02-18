@@ -332,6 +332,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 			builder.RegisterType<LimitForNoResourceCalculation>().As<ILimitForNoResourceCalculation>().AsSelf().SingleInstance();
 			builder.RegisterType<NoSchedulingProgress>().As<ISchedulingProgress>().SingleInstance();
+			if (_configuration.Toggle(Toggles.ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049))
+			{
+				builder.RegisterType<IntradayOptimizerContainerConsiderLargeGroups>().As<IIntradayOptimizerContainer>().InstancePerLifetimeScope();
+			}
+			else
+			{
+				builder.RegisterType<IntradayOptimizerContainer>().As<IIntradayOptimizerContainer>().InstancePerLifetimeScope();
+			}
 		}
 
 		private static void registerMoveTimeOptimizationClasses(ContainerBuilder builder)

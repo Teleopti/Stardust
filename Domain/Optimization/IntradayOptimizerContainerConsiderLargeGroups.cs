@@ -7,14 +7,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	/// <summary>
-    /// Contains the logic of an intraday optimization iteration for one matrix.
-    /// - Order the list of IntradayOptimizers
-    /// - Manages the list of IntradayOptimizers according to the result of Optimizers
-    /// </summary>
-    public class IntradayOptimizerContainer : IIntradayOptimizerContainer
-    { 
-	    public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
+	public class IntradayOptimizerContainerConsiderLargeGroups : IIntradayOptimizerContainer
+	{
+		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
 		public void Execute(IEnumerable<IIntradayOptimizer2> optimizers, DateOnlyPeriod period)
 		{
@@ -50,15 +45,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 		}
 
-        private CancelSignal onReportProgress(ResourceOptimizerProgressEventArgs args)
-        {
-        	var handler = ReportProgress;
-            if (handler != null)
-            {
-                handler(this, args);
-                if (args.Cancel) return new CancelSignal{ShouldCancel = true};
-            }
+		private CancelSignal onReportProgress(ResourceOptimizerProgressEventArgs args)
+		{
+			var handler = ReportProgress;
+			if (handler != null)
+			{
+				handler(this, args);
+				if (args.Cancel) return new CancelSignal { ShouldCancel = true };
+			}
 			return new CancelSignal();
-        }
-    }
+		}
+	}
 }

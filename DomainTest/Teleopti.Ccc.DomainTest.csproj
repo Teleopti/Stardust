@@ -224,6 +224,7 @@
     <Compile Include="Optimization\Filter\FindFilterTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\DayOffOptimizationLockDaysTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\FullSchedulingTest.cs" />
+    <Compile Include="Optimization\ScheduleOptimizationTests\IntradayOptimizationStopIfLargeGroupTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\IntradayOptimizationTest.cs" />
     <Compile Include="ResourceCalculation\DoubleMatrixExtensions.cs" />
     <Compile Include="Scheduling\Assignment\DeleteAndResourceCalculateServiceSkipResCalcTest.cs" />
