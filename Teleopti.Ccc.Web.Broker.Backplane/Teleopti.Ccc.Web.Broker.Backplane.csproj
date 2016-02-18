@@ -57,7 +57,7 @@
   <ItemGroup>
     <Reference Include="Contrib.SignalR.SignalRMessageBus.Backend, Version=1.2.1.0, Culture=neutral, PublicKeyToken=cd2e232b0d2204e6, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Contrib.SignalR.SignalRMessageBus.Backend.2.1.2\lib\net451\Contrib.SignalR.SignalRMessageBus.Backend.dll</HintPath>
+      <HintPath>..\packages\Contrib.SignalR.SignalRMessageBus.Backend.2.2.0\lib\net451\Contrib.SignalR.SignalRMessageBus.Backend.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
