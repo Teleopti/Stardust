@@ -172,6 +172,8 @@ namespace Stardust.Manager
             _nodeManager.FreeJobIfAssingedToNode(nodeUri);
             _nodeManager.AddIfNeeded(nodeUri);
 
+            _jobManager.CheckAndAssignNextJob(); 
+
             LogHelper.LogInfoWithLineNumber(Logger,
                 WhoAmI + ": Received init from Node. Node Uri : ( " + nodeUri + " )");
 
