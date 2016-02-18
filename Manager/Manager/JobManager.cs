@@ -62,14 +62,14 @@ namespace Stardust.Manager
                     {
                         numberOfTries++;
 
-                        Thread.Sleep(TimeSpan.FromMilliseconds(500));
+                        Thread.Sleep(TimeSpan.FromMilliseconds(100));
 
                         LogHelper.LogInfoWithLineNumber(Logger,
                                                         "Try again to test available node is alive : Url ( " + postUri + " )");
 
                         success = _httpSender.TryGetAsync(postUri);
 
-                        if (numberOfTries == 3)
+                        if (numberOfTries == 5)
                         {
                             break;
                         }
