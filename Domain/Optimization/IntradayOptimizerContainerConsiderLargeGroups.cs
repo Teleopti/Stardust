@@ -22,10 +22,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public void Execute(IEnumerable<IIntradayOptimizer2> optimizers, DateOnlyPeriod period)
 		{
-			if (_intradayOptimizerLimiter.MinPercentOfGroupLimit < new Percent(0.5))
-				return;
-
-
+			var numberOfAgents = optimizers.Count(); //this is wrong!
+			var optimizedAgents = 0;
 
 			var shuffledOptimizers = optimizers.GetRandom(optimizers.Count(), true);
 
@@ -36,9 +34,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 				foreach (var optimizer in batchShuffledOptimizers)
 				{
+					if (optimizedAgents/numberOfAgents >= _intradayOptimizerLimiter.MinPercentOfGroupLimit.ValueAsPercent())
+					{
+						return;
+					}
+
 					var result = optimizer.Execute();
 					if (!result)
 					{
+						optimizedAgents++;
 						activeOptimizers.Remove(optimizer);
 					}
 				}

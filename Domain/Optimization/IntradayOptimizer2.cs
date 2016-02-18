@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-    /// <summary>
+	/// <summary>
     /// Intraday optimization container, which contatins a logic to try to do one move on one matrix
     /// - Checks for old and new period value.
     /// - Reschedule moved days.
