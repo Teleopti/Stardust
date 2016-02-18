@@ -54,23 +54,34 @@ namespace Stardust.Manager
                     LogHelper.LogInfoWithLineNumber(Logger,
                                                     "Test available node is alive : Url ( " + postUri + " )");
 
+                    int numberOfTries = 0;
+
                     Task<bool> success= _httpSender.TryGetAsync(postUri);
 
-                    while (success == null ||
-                        !success.Result)
+                    while (success == null || !success.Result)
                     {
+                        numberOfTries++;
+
                         Thread.Sleep(TimeSpan.FromMilliseconds(500));
 
                         LogHelper.LogInfoWithLineNumber(Logger,
                                                         "Try again to test available node is alive : Url ( " + postUri + " )");
 
                         success = _httpSender.TryGetAsync(postUri);
+
+                        if (numberOfTries == 10)
+                        {
+                            break;
+                        }
                     }
 
-                    LogHelper.LogInfoWithLineNumber(Logger,
-                                                    "Node Url ( " + postUri + " ) is available and alive.");
+                    if (success.Result)
+                    {
+                        LogHelper.LogInfoWithLineNumber(Logger,
+                                                        "Node Url ( " + postUri + " ) is available and alive.");
 
-                    upNodes.Add(availableNode);
+                        upNodes.Add(availableNode);
+                    }
                 }
 
                 _jobRepository.CheckAndAssignNextJob(upNodes,

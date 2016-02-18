@@ -18,20 +18,20 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
-    [TestFixture, Ignore]
+    [TestFixture]
     public class OneManagerAndFiveNodesLoadTests
     {
         private static readonly ILog Logger =
             LogManager.GetLogger(typeof (OneManagerAndFiveNodesLoadTests));
 
-        private string ManagerDBConnectionString { get; set; }
+        private string ManagerDbConnectionString { get; set; }
 
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-            ManagerDBConnectionString =
+            ManagerDbConnectionString =
                 ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString;
 
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
@@ -40,7 +40,7 @@ namespace Manager.Integration.Test
             LogHelper.LogInfoWithLineNumber("Start TestFixtureSetUp",
                                             Logger);
 
-            TryCreateSqlLoggingTable(ManagerDBConnectionString);
+            TryCreateSqlLoggingTable(ManagerDbConnectionString);
 
 
 #if (DEBUG)
@@ -145,7 +145,7 @@ namespace Manager.Integration.Test
 
             TimeSpan timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count);
 
-            SqlNotifier sqlNotifier = new SqlNotifier(ManagerDBConnectionString);
+            SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
             Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(5,
                                                                       cancellationTokenSource);

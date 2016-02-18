@@ -9,6 +9,7 @@ using log4net;
 using log4net.Config;
 using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
+using Manager.Integration.Test.Notifications;
 using Manager.Integration.Test.Properties;
 using Manager.Integration.Test.Scripts;
 using Manager.Integration.Test.Tasks;
@@ -17,17 +18,19 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
-    [TestFixture, Ignore]
+    [TestFixture]
     public class OneManagerAndOneNodeTests
     {
         private static readonly ILog Logger =
             LogManager.GetLogger(typeof (OneManagerAndOneNodeTests));
 
-
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
+            ManagerDbConnectionString =
+                ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString;
 
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
@@ -57,14 +60,11 @@ namespace Manager.Integration.Test
             Task = AppDomainTask.StartTask(cancellationTokenSource: CancellationTokenSource,
                                            numberOfNodes: 1);
 
-            LogHelper.LogInfoWithLineNumber("JobHelper.GiveNodesTimeToInitialize",
-                                            Logger);
-
-            JobHelper.GiveNodesTimeToInitialize();
-
             LogHelper.LogInfoWithLineNumber("Finshed TestFixtureSetUp",
                                             Logger);
         }
+
+        private string ManagerDbConnectionString { get; set; }
 
         private Task Task { get; set; }
 
@@ -129,6 +129,18 @@ namespace Manager.Integration.Test
             var timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
                                                                  5);
 
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
+            SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
+
+            Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(1,
+                                                                      cancellationTokenSource);
+            task.Start();
+
+            sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
+
+            sqlNotifier.Dispose();
+
             List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 
             var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
@@ -150,7 +162,7 @@ namespace Manager.Integration.Test
 
             var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
                                                                       CancellationTokenSource,
-                                                                      timeout);            
+                                                                      timeout);
 
             checkJobHistoryStatusTimer.GuidAddedEventHandler += (sender,
                                                                  args) =>
@@ -166,8 +178,8 @@ namespace Manager.Integration.Test
                     jobManagerTaskCreator.StartAndWaitDeleteJobToManagerTask(timeout);
 
                     jobManagerTaskCreator.Dispose();
-
-                }, CancellationTokenSource.Token);
+                },
+                                      CancellationTokenSource.Token);
             };
 
             checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
@@ -175,8 +187,8 @@ namespace Manager.Integration.Test
             Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count);
 
             Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.CanceledStatus ||
-                                                                        pair.Value == StatusConstants.DeletedStatus));
-                        
+                                                                       pair.Value == StatusConstants.DeletedStatus));
+
             taskHlp.Dispose();
 
             foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
@@ -198,6 +210,19 @@ namespace Manager.Integration.Test
             List<JobRequestModel> createNewJobRequests = JobHelper.GenerateFailingJobParamsRequests(1);
 
             var timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count);
+
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
+            SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
+
+            Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(1,
+                                                                      cancellationTokenSource);
+            task.Start();
+
+            sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
+
+            sqlNotifier.Dispose();
+
 
             List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 
@@ -249,6 +274,18 @@ namespace Manager.Integration.Test
                                             Logger);
 
             TimeSpan timeout = JobHelper.GenerateTimeoutTimeInSeconds(createNewJobRequests.Count);
+
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
+            SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
+
+            Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(1,
+                                                                      cancellationTokenSource);
+            task.Start();
+
+            sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
+
+            sqlNotifier.Dispose();
 
             List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 
@@ -303,6 +340,10 @@ namespace Manager.Integration.Test
                                             Logger);
         }
 
+        /// <summary>
+        ///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
+        ///     netsh http add urlacl url=http://+:9050/ user=everyone listen=yes
+        /// </summary>
         [Test]
         public void ShouldBeAbleToCreateManySuccessJobRequestTest()
         {
@@ -316,6 +357,18 @@ namespace Manager.Integration.Test
                                             Logger);
 
             TimeSpan timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count);
+
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
+            SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
+
+            Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(1,
+                                                                      cancellationTokenSource);
+            task.Start();
+
+            sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
+
+            sqlNotifier.Dispose();
 
             List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 

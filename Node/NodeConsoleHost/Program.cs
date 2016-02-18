@@ -57,15 +57,16 @@ namespace NodeConsoleHost
         }
 
         public static void Main()
-        {
+        {            
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
-
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
             SetConsoleCtrlHandler(ConsoleCtrlCheck,
                                   true);
 
-            WhoAmI = "[NODE CONSOLE HOST, " + Environment.MachineName.ToUpper() + "]";
+            string nodeName = ConfigurationManager.AppSettings["NodeName"];
+
+            WhoAmI = "[NODE CONSOLE HOST ( " + nodeName + " ), " + Environment.MachineName.ToUpper() + "]";
 
             LogHelper.LogInfoWithLineNumber(Logger,
                                             WhoAmI + " : started.");

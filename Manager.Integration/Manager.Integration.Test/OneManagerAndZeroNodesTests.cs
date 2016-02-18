@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
@@ -17,10 +16,10 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
-    [TestFixture, Ignore]
+    [TestFixture]
     public class OneManagerAndZeroNodesTests
     {
-        private static readonly ILog Logger = 
+        private static readonly ILog Logger =
             LogManager.GetLogger(typeof (OneManagerAndZeroNodesTests));
 
         private bool _clearDatabase = true;
@@ -31,6 +30,9 @@ namespace Manager.Integration.Test
         public void TestFixtureSetUp()
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
+            ManagerDbConnectionString =
+                ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString;
 
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
@@ -54,13 +56,15 @@ namespace Manager.Integration.Test
             AppDomainTask = new AppDomainTask(_buildMode);
 
             Task = AppDomainTask.StartTask(cancellationTokenSource: CancellationTokenSource,
-                                           numberOfNodes:0);
+                                           numberOfNodes: 0);
 
             JobHelper.GiveNodesTimeToInitialize(60);
 
             LogHelper.LogInfoWithLineNumber("Finshed TestFixtureSetUp",
                                             Logger);
         }
+
+        private string ManagerDbConnectionString { get; set; }
 
         private Task Task { get; set; }
 
@@ -123,7 +127,7 @@ namespace Manager.Integration.Test
                                             Logger);
 
 
-            TimeSpan timeout = 
+            TimeSpan timeout =
                 JobHelper.GenerateTimeoutTimeInSeconds(createNewJobRequests.Count);
 
             List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
@@ -146,8 +150,8 @@ namespace Manager.Integration.Test
             StartJobTaskHelper startJobTaskHelper = new StartJobTaskHelper();
 
             var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
-                                                          CancellationTokenSource,
-                                                          timeout);
+                                                                      CancellationTokenSource,
+                                                                      timeout);
 
             checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
