@@ -69,7 +69,7 @@ namespace Stardust.Manager
 
                         success = _httpSender.TryGetAsync(postUri);
 
-                        if (numberOfTries == 10)
+                        if (numberOfTries == 3)
                         {
                             break;
                         }
