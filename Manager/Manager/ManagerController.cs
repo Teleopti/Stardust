@@ -12,11 +12,9 @@ namespace Stardust.Manager
     public class ManagerController : ApiController
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (ManagerController));
-
-        private readonly INodeManager _nodeManager;
         private readonly JobManager _jobManager;
 
-        public string WhoAmI { get; private set; }
+        private readonly INodeManager _nodeManager;
 
         public ManagerController(INodeManager nodeManager,
             JobManager jobManager)
@@ -26,8 +24,11 @@ namespace Stardust.Manager
             _nodeManager = nodeManager;
             _jobManager = jobManager;
         }
-        
-        [HttpPost, ActionName("job")]
+
+        public string WhoAmI { get; private set; }
+
+        [HttpPost, Route(ManagerRouteConstants.Job)]
+       // [HttpPost, ActionName("job")]
         public IHttpActionResult DoThisJob([FromBody] JobRequestModel job)
         {
             if (job == null)
@@ -43,7 +44,7 @@ namespace Stardust.Manager
                 return new BadRequestResult(Request);
             }
 
-            var jobReceived = new JobDefinition()
+            var jobReceived = new JobDefinition
             {
                 Name = job.Name,
                 Serialized = job.Serialized,
@@ -54,7 +55,7 @@ namespace Stardust.Manager
             };
             _jobManager.Add(jobReceived);
 
-            string msg = string.Format("{0} : New job received from client ( jobId, jobName ) : ( {1}, {2} )",
+            var msg = string.Format("{0} : New job received from client ( jobId, jobName ) : ( {1}, {2} )",
                 WhoAmI,
                 jobReceived.Id,
                 jobReceived.Name);
@@ -65,7 +66,8 @@ namespace Stardust.Manager
             return Ok(jobReceived.Id);
         }
 
-        [HttpDelete, ActionName("job")]
+        [HttpDelete, Route(ManagerRouteConstants.CancelJob)]
+        //    [HttpDelete, ActionName("job")]
         public void CancelThisJob(Guid jobId)
         {
             LogHelper.LogInfoWithLineNumber(Logger,
@@ -74,28 +76,31 @@ namespace Stardust.Manager
             _jobManager.CancelThisJob(jobId);
         }
 
-        [HttpGet, ActionName("job")]
+        [HttpGet, Route(ManagerRouteConstants.GetJobHistoryList)]
+     //   [HttpGet, ActionName("job")]
         public IHttpActionResult JobHistoryList()
         {
             return Ok(_jobManager.GetJobHistoryList());
         }
 
-        [HttpGet, ActionName("job")]
+        [HttpGet, Route(ManagerRouteConstants.GetJobHistory)]
+        //  [HttpGet, ActionName("job")]
         public IHttpActionResult JobHistory(Guid jobId)
         {
-            JobHistory jobHistory = _jobManager.GetJobHistory(jobId);
+            var jobHistory = _jobManager.GetJobHistory(jobId);
 
             return Ok(jobHistory);
         }
 
-        [HttpGet, ActionName("jobdetail")]
+        [HttpGet, Route(ManagerRouteConstants.JobDetail)]
+        //    [HttpGet, ActionName("jobdetail")]
         public IHttpActionResult JobHistoryDetails(Guid jobId)
         {
             return Ok(_jobManager.JobHistoryDetails(jobId));
         }
-        
 
-        [HttpPost, ActionName("heartbeat")]
+        [HttpPost, Route(ManagerRouteConstants.Heartbeat)]
+        //     [HttpPost, ActionName("heartbeat")]
         public void Heartbeat([FromBody] Uri nodeUri)
         {
             _jobManager.CheckAndAssignNextJob();
@@ -104,9 +109,8 @@ namespace Stardust.Manager
                 WhoAmI + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
         }
 
-       
-        
-        [HttpPost, ActionName("done")]
+        [HttpPost, Route(ManagerRouteConstants.JobDone)]
+        //  [HttpPost, ActionName("done")]
         public IHttpActionResult JobDone(Guid jobId)
         {
             LogHelper.LogInfoWithLineNumber(Logger,
@@ -120,8 +124,9 @@ namespace Stardust.Manager
 
             return Ok();
         }
-        
-        [HttpPost, ActionName("fail")]
+
+        [HttpPost, Route(ManagerRouteConstants.JobFailed)]
+        //  [HttpPost, ActionName("fail")]
         public IHttpActionResult JobFailed(Guid jobId)
         {
             LogHelper.LogErrorWithLineNumber(Logger,
@@ -131,8 +136,9 @@ namespace Stardust.Manager
                 "Failed");
             return Ok();
         }
-        
-        [HttpPost, ActionName("cancel")]
+
+        [HttpPost, Route(ManagerRouteConstants.JobHasBeenCanceled)]
+        //   [HttpPost, ActionName("cancel")]
         public IHttpActionResult JobCanceled(Guid jobId)
         {
             LogHelper.LogInfoWithLineNumber(Logger,
@@ -143,8 +149,9 @@ namespace Stardust.Manager
 
             return Ok();
         }
-        
-        [HttpPost, ActionName("progress")]
+
+        [HttpPost, Route(ManagerRouteConstants.JobProgress)]
+        //  [HttpPost, ActionName("progress")]
         public IHttpActionResult JobProgress([FromBody] JobProgressModel model)
         {
             _jobManager.ReportProgress(model);
@@ -154,10 +161,10 @@ namespace Stardust.Manager
 
         // to handle that scenario where the node comes up after a crash
         //this end point should be called when the node comes up
-        [HttpPost, ActionName("nodeinit")]
+        [HttpPost, Route(ManagerRouteConstants.NodeHasBeenInitialized)]
+        // [HttpPost, ActionName("nodeinit")]
         public IHttpActionResult NodeInitialized([FromBody] Uri nodeUri)
         {
-
             _nodeManager.FreeJobIfAssingedToNode(nodeUri);
             _nodeManager.AddIfNeeded(nodeUri);
 
@@ -167,14 +174,10 @@ namespace Stardust.Manager
             return Ok();
         }
 
-        [HttpGet]
+        [HttpGet, Route(ManagerRouteConstants.Ping)]
         public IHttpActionResult Ping()
         {
             return Ok();
         }
-        
-        
     }
 }
-   
- 
