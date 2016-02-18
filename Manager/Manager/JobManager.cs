@@ -42,7 +42,7 @@ namespace Stardust.Manager
                 if (availableNodes != null && availableNodes.Any())
                 {
                     LogHelper.LogInfoWithLineNumber(Logger,
-                                    "Found ( " + availableNodes.Count + " )");
+                                    "Found ( " + availableNodes.Count + " ) available nodes");
                 }
 
                 foreach (var availableNode in availableNodes)

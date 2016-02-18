@@ -85,15 +85,23 @@ namespace Stardust.Manager
 
         public async Task<HttpResponseMessage> GetAsync(Uri url)
         {
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                                   "GetAsync Start");
             try
             {
                 using (var client = new HttpClient())
                 {
+                    LogHelper.LogInfoWithLineNumber(Logger,
+                                                    "start using Httpclient");
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
+                    LogHelper.LogInfoWithLineNumber(Logger,
+                                                    "GetAsync with" + url);
                     var response = await client.GetAsync(url);
 
+                    LogHelper.LogInfoWithLineNumber(Logger,
+                                                    "OK");
                     return response;
                 }
             }
@@ -110,23 +118,34 @@ namespace Stardust.Manager
 
         public async Task<bool> TryGetAsync(Uri url)
         {
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                                    "TryGetAsync Start");
             try
             {
                 using (var client = new HttpClient())
                 {
+                    LogHelper.LogInfoWithLineNumber(Logger,
+                                                    "start using Httpclient");
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var response = await client.GetAsync(url);
+                    LogHelper.LogInfoWithLineNumber(Logger,
+                                                    "before GetAsync");
 
+                    var response = await GetAsync(url);
+                    //      var response = await client.GetAsync(url);
+
+                    LogHelper.LogInfoWithLineNumber(Logger,
+                                                    "OK");
                     return response.IsSuccessStatusCode;
-                }                
+                }
             }
 
             catch (HttpRequestException exp)
             {
                 LogHelper.LogWarningWithLineNumber(Logger,
                                                    exp.Message);
+
             }
 
             catch (Exception exp)
@@ -137,7 +156,8 @@ namespace Stardust.Manager
 
                 throw;
             }
-
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                                    "Return false");
             return false;
         }
     }
