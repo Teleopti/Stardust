@@ -179,7 +179,7 @@ namespace Manager.Integration.Test
 
                     jobManagerTaskCreator.Dispose();
                 },
-                                      CancellationTokenSource.Token);
+                CancellationTokenSource.Token);
             };
 
             checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
