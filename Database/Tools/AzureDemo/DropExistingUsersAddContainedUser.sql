@@ -1,14 +1,22 @@
---========================
 /*
---from SQLCMD
-:SETVAR DESTANALYTICS TeleoptiCCC
-:SETVAR DESTUSER debuguser
-:SETVAR DESTPWD Jkjdsfkjer##9982
+
+DO NOT!! run this on your production database, that will drop all users!
+
+--manuell instructions
+Run this script in both your restored/copied databases:
+e.g
+Bug28762_Acme_TeleoptiAnalytics
+Bug28762_Acme_TeleoptiApp
+
+See instruction for what to change below!
+
+This script will update the tenant info in your db copy to point to MySelf, (rather that poiting back to the production DB)
+
 */
---manuell
-declare @DESTANALYTICS VARCHAR(100) = '$(DESTANALYTICS)' -- <-- Edit me <--
-declare @DESTUSER VARCHAR(100) = '$(DESTUSER)'
-declare @DESTPWD VARCHAR(100) = '$(DESTPWD)'
+
+declare @DESTANALYTICS VARCHAR(100) = '$(DESTANALYTICS)' -- <-- Edit me e.g: Bug28762_Acme_TeleoptiAnalytics
+declare @DESTUSER VARCHAR(100) = '$(DESTUSER)'  -- < -- put your new debug SQL login here
+declare @DESTPWD VARCHAR(100) = '$(DESTPWD)' -- < -- put your new debug SQL password here
 --========================
 
 SET NOCOUNT ON
