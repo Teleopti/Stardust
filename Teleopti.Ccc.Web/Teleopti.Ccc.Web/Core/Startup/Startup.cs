@@ -92,12 +92,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				application.UseAutofacMvc();
 				application.UseAutofacWebApi(config);
 
-				var toggles = container.Resolve<IToggleManager>();
-				if (toggles.IsEnabled(Toggles.Wfm_Use_Stardust))
-				{
-					var managerThread = new Thread(startManager);
-					managerThread.Start();
-				}
 			}
 			catch (Exception ex)
 			{
@@ -130,22 +124,5 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			}
 		}
 
-		private static void startManager()
-		{
-			try
-			{
-				var config = new ManagerConfiguration
-				{
-					BaseAddress = new Uri(ConfigurationManager.AppSettings["ManagerBaseAddress"]),
-					ConnectionString = ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString
-				};
-				new ManagerStarter().Start(config);
-			}
-			catch (Exception)
-			{
-				// for now just catch it because it will happen both for web and for RTA
-				//throw;
-			}
-		}
 	}
 }
