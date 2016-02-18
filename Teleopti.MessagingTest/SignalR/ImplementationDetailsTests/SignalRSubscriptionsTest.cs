@@ -138,7 +138,7 @@ namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests
 		[Test]
 		public void ShouldSubscribeToNotificationsOnFirstConnection()
 		{
-			var time = new FakeTime();
+			var time = FakeTime.Make();
 			var wasEventHandlerCalled = false;
 			var hubProxy1 = new HubProxyFake();
 			var hubConnection1 = stubHubConnection(hubProxy1);
@@ -157,7 +157,7 @@ namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests
 		[Test]
 		public void ShouldSubscribeToNotificationsOnRecreatedConnection()
 		{
-			var time = new FakeTime();
+			var time = FakeTime.Make();
 			var wasEventHandlerCalled = false;
 			var hubProxy1 = new HubProxyFake();
 			var hubProxy2 = new HubProxyFake();

@@ -27,7 +27,7 @@ namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests
 		[Test]
 		public void ShouldRecreateConnectionWhenNoReplyFromPingInXMinutes()
 		{
-			var time = new FakeTime(new DateTime(2001, 1, 1, 12, 0, 0, DateTimeKind.Utc));
+			var time = FakeTime.Make(new DateTime(2001, 1, 1, 12, 0, 0, DateTimeKind.Utc));
 			var hubProxy1 = new HubProxyFake();
 			var hubProxy2 = new HubProxyFake();
 			var hubConnection1 = stubHubConnection(hubProxy1);
@@ -46,7 +46,7 @@ namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests
 		[Test]
 		public void ShouldNotRecreateUntilTimeout()
 		{
-			var time = new FakeTime();
+			var time = FakeTime.Make();
 			var hubProxy = new HubProxyFake();
 			var hubConnection = stubHubConnection(hubProxy);
 			var target = new MultiConnectionSignalRClientForTest(new[] { hubConnection }, new RecreateOnNoPingReply(TimeSpan.FromMinutes(2)), time);
@@ -63,7 +63,7 @@ namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests
 		[Test]
 		public void ShouldSendNotificationsOnCurrentConnection()
 		{
-			var time = new FakeTime(new DateTime(2013, 1, 1, 12, 0, 0, DateTimeKind.Utc));
+			var time = FakeTime.Make(new DateTime(2013, 1, 1, 12, 0, 0, DateTimeKind.Utc));
 			var hubProxy1 = new HubProxyFake();
 			var hubProxy2 = new HubProxyFake();
 			var hubConnection1 = stubHubConnection(hubProxy1);
@@ -85,7 +85,7 @@ namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests
 		[Test]
 		public void ShouldCreateConnectionsInTheBackground()
 		{
-			var time = new FakeTime();
+			var time = FakeTime.Make();
 			var hubProxy1 = new HubProxyFake();
 			var hubProxy2 = new HubProxyFake();
 			var hubConnection1 = stubHubConnection(hubProxy1);
@@ -102,7 +102,7 @@ namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests
 		[Test]
 		public void ShouldStartRecreatedConnection()
 		{
-			var time = new FakeTime();
+			var time = FakeTime.Make();
 			var hubProxy1 = new HubProxyFake();
 			var hubProxy2 = new HubProxyFake();
 			var hubConnection1 = stubHubConnection(hubProxy1);
@@ -119,7 +119,7 @@ namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests
 		[Test]
 		public void ShouldStopPingOnClose()
 		{
-			var time = new FakeTime();
+			var time = FakeTime.Make();
 			var hubProxy1 = new HubProxyFake();
 			var hubProxy2 = new HubProxyFake();
 			var hubConnection1 = stubHubConnection(hubProxy1);
@@ -137,7 +137,7 @@ namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests
 		[Test]
 		public void ShouldUseLongPollingWhenReconnectingIfStartedWithLongPolling()
 		{
-			var time = new FakeTime();
+			var time = FakeTime.Make();
 			var hubProxy1 = new HubProxyFake();
 			var hubProxy2 = new HubProxyFake();
 			var hubConnection1 = new HubConnectionMock(hubProxy1);

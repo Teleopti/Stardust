@@ -3,24 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.Domain;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeTime : ITime
 	{
-		private readonly TestableNow _now;
+		private readonly MutableNow _now;
 		private readonly IList<FakeTimer> _timers = new List<FakeTimer>();
-
-		public FakeTime(DateTime time) : this(new TestableNow(time))
+		
+		public static FakeTime Make(DateTime time)
 		{
+			return new FakeTime(new MutableNow(time));
 		}
 
-		public FakeTime() : this(new TestableNow())
+		public static FakeTime Make()
 		{
+			return new FakeTime(new MutableNow());
 		}
 
-		public FakeTime(TestableNow now)
+		public FakeTime(MutableNow now)
 		{
 			_now = now;
 		}
@@ -74,7 +77,7 @@ namespace Teleopti.Ccc.TestCommon
 				select s;
 			foreach (var s in seconds)
 			{
-				_now.Change(_now.UtcDateTime().AddSeconds(1));
+				_now.Is(_now.UtcDateTime().AddSeconds(1));
 				handleCallbackCall();
 			}
 		}

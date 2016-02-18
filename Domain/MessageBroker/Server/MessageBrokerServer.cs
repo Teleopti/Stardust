@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using log4net;
@@ -19,10 +20,11 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 		private readonly IBeforeSubscribe _beforeSubscribe;
 		public ILog Logger = LogManager.GetLogger(typeof (MessageBrokerServer));
 		private readonly TimeSpan _expirationInterval;
+		private readonly TimeSpan _purgeInterval;
 		private DateTime _nextPurge;
 	    private readonly MessageBrokerTracer _tracer = new MessageBrokerTracer();
 
-	    public MessageBrokerServer(
+		public MessageBrokerServer(
 			IActionScheduler actionScheduler,
 			ISignalR signalR,
 			IBeforeSubscribe beforeSubscribe,
@@ -35,7 +37,8 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 			_mailboxRepository = mailboxRepository;
 			_now = now;
 			_beforeSubscribe = beforeSubscribe ?? new SubscriptionPassThrough();
-			_expirationInterval = TimeSpan.FromSeconds(config.ReadValue("MessageBrokerMailboxExpirationInSeconds", 900));
+			_expirationInterval = TimeSpan.FromSeconds(config.ReadValue("MessageBrokerMailboxExpirationInSeconds", 60 * 15));
+			_purgeInterval = TimeSpan.FromSeconds(config.ReadValue("MessageBrokerMailboxPurgeIntervalInSeconds", 60 * 5));
 		}
 
 		public string AddSubscription(Subscription subscription, string connectionId)
@@ -124,7 +127,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 		private void purgeSometimes()
 		{
 			if (_now.UtcDateTime() < _nextPurge) return;
-			_nextPurge = _now.UtcDateTime().AddMinutes(5); 
+			_nextPurge = _now.UtcDateTime().Add(_purgeInterval);
 			_mailboxRepository.Purge();
 		}
 

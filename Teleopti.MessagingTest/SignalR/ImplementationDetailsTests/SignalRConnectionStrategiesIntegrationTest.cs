@@ -24,7 +24,7 @@ namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests
 		[Test]
 		public void ShouldRestartHubConnectionWhenRecreatedConnectionClosed()
 		{
-			var time = new FakeTime();
+			var time = FakeTime.Make();
 			var hubProxy1 = new HubProxyFake();
 			var hubProxy2 = new HubProxyFake();
 			var hubConnection1 = stubHubConnection(hubProxy1);
@@ -45,7 +45,7 @@ namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests
 		[Test]
 		public void ShouldNotRestartPreviousHubConnectionWhenConnectionHasBeenRecreated()
 		{
-			var time = new FakeTime();
+			var time = FakeTime.Make();
 			var hubProxy1 = new HubProxyFake();
 			var hubProxy2 = new HubProxyFake();
 			var hubConnection1 = stubHubConnection(hubProxy1);

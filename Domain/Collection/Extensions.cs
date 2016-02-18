@@ -121,20 +121,9 @@ namespace Teleopti.Ccc.Domain.Collection
 			}
 		}
 
-		/// <summary>
-		/// Gets a random Element from IEnumerable
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="list">The list.</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: henrika
-		/// Created date: 2008-04-18
-		/// </remarks>
-		public static T GetRandom<T>(this IEnumerable<T> list)
+		public static T GetRandom<T>(this IEnumerable<T> source)
 		{
-			InParameter.NotNull("list", list);
-			return list.ElementAt(_random.Next(0, list.Count()));
+			return source.ElementAt(_random.Next(0, source.Count()));
 		}
 
 		public static bool IsEmpty<T>(this IEnumerable<T> source)
@@ -147,8 +136,6 @@ namespace Teleopti.Ccc.Domain.Collection
 			return source == null || !source.Any();
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter"
-			)]
 		public static IEnumerable<T> CopyEnumerable<T>(this IEnumerable source)
 		{
 			return source.Cast<T>().ToList();

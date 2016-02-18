@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
@@ -34,9 +35,9 @@ namespace Teleopti.Ccc.TestCommon
 		public string SentToGroup;
 		public string SentRoute;
 
-		public IList<string> SentToGroups = new List<string>();
-		public IList<string> SentRoutes = new List<string>();
-		public IList<Message> SentMessages = new List<Message>();
+		public ConcurrentBag<string> SentToGroups = new ConcurrentBag<string>();
+		public ConcurrentBag<string> SentRoutes = new ConcurrentBag<string>();
+		public ConcurrentBag<Message> SentMessages = new ConcurrentBag<Message>();
 
 		public void CallOnEventMessage(string groupName, string route, Message message)
 		{

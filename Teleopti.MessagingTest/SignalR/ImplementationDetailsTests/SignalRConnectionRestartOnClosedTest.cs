@@ -25,7 +25,7 @@ namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests
 		[Test]
 		public void ShouldRestartHubConnectionWhenConnectionClosed()
 		{
-			var time = new FakeTime();
+			var time = FakeTime.Make();
 			var hubProxy = new HubProxyFake();
 			var hubConnection = stubHubConnection(hubProxy);
 			var target = new SignalRClientForTest(hubConnection, new RestartOnClosed(TimeSpan.FromSeconds(4)), time);
@@ -40,7 +40,7 @@ namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests
 		[Test]
 		public void ShouldContinueToRestartHubConnectionWhenConnectionClosed()
 		{
-			var time = new FakeTime();
+			var time = FakeTime.Make();
 			var hubProxy = new HubProxyFake();
 			var hubConnection = stubHubConnection(hubProxy);
 			var target = new SignalRClientForTest(hubConnection, new RestartOnClosed(TimeSpan.FromSeconds(4)), time);
@@ -63,7 +63,7 @@ namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests
 		[Test]
 		public void ShouldStopRestartingWhenDisposed()
 		{
-			var time = new FakeTime();
+			var time = FakeTime.Make();
 			var hubProxy = new HubProxyFake();
 			var hubConnection = stubHubConnection(hubProxy);
 			var target = new SignalRClientForTest(hubConnection, new RestartOnClosed(TimeSpan.FromSeconds(4)), time);
@@ -79,7 +79,7 @@ namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests
 		[Test, Ignore("This does not test anything, and we dont know if we want this behavior")]
 		public void ShouldRestartHubConnectionWhenStartFails()
 		{
-			var time = new FakeTime();
+			var time = FakeTime.Make();
 			var hubProxy = new HubProxyFake();
 			var hubConnection = stubHubConnection(hubProxy);
 			var target = new SignalRClientForTest(hubConnection, new RestartOnClosed(TimeSpan.FromSeconds(0)), time);
@@ -93,7 +93,7 @@ namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests
 		[Test]
 		public void ShouldUseLongPollingWhenReconnectingIfStartedWithLongPolling()
 		{
-			var time = new FakeTime();
+			var time = FakeTime.Make();
 			var hubProxy = new HubProxyFake();
 			var hubConnection = new HubConnectionMock(hubProxy);
 			var target = new SignalRClientForTest(hubConnection, new RestartOnClosed(TimeSpan.FromSeconds(4)), time);

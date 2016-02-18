@@ -5,6 +5,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Auth.OpenIdApplicationStore;
@@ -114,7 +115,7 @@ namespace Teleopti.Ccc.Web.AuthTest.OpenIdApplicationStore
 		{
 			var nonceInfoRepository = MockRepository.GenerateMock<INonceInfoRepository>();
 			var now = new Now();
-			var testableNow = new TestableNow(DateTime.UtcNow.AddSeconds(15));
+			var testableNow = new MutableNow(DateTime.UtcNow.AddSeconds(15));
 			var target = new SqlProviderApplicationStore(null, nonceInfoRepository, testableNow);
 
 			const string context = "context";

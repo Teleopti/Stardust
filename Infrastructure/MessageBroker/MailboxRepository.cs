@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
@@ -34,10 +35,24 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 
 		public void Persist(Mailbox model)
 		{
+			Debug.WriteLine("Persist" + model.Messages.Count());
 			_unitOfWork.Current().CreateSqlQuery(
 				"MERGE INTO [msg].Mailbox AS T " +
-				"USING (VALUES (:Id, :Route, :Notifications )) AS S (Id, Route, Notifications) " +
-				"ON T.Id = S.Id AND T.Route = S.Route " +
+				"USING (" +
+				"	VALUES " +
+				"	(" +
+				"		:Id, " +
+				"		:Route, " +
+				"		:Notifications" +
+				"	)" +
+				") AS S (" +
+				"		Id, " +
+				"		Route, " +
+				"		Notifications" +
+				"	) " +
+				"ON " +
+				"	T.Id = S.Id AND " +
+				"	T.Route = S.Route " +
 				"WHEN NOT MATCHED THEN " +
 				"	INSERT " +
 				"	(" +
@@ -65,24 +80,15 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 
 		public Mailbox Load(Guid id)
 		{
-			return Load(id, null).SingleOrDefault();
+			return load(id, null).SingleOrDefault();
 		}
 		
 		public IEnumerable<Mailbox> Load(string[] routes)
 		{
-			return Load(null, routes);
+			return load(null, routes);
 		}
 
-		public void Purge()
-		{
-			_unitOfWork.Current().CreateSqlQuery(
-				"DELETE FROM [msg].Mailbox "+
-				"WHERE ExpiresAt < :utcDateTime;")
-				.SetParameter("utcDateTime", _now.UtcDateTime())
-				.ExecuteUpdate();
-		}
-
-		public IEnumerable<Mailbox> Load(Guid? id, string[] routes)
+		private IEnumerable<Mailbox> load(Guid? id, string[] routes)
 		{
 			var where = "Id =:Id";
 			if (routes != null)
@@ -124,6 +130,16 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 			}
 
 			public string NotificationsJson { private get; set; }
+		}
+
+		public void Purge()
+		{
+			var result = _unitOfWork.Current().CreateSqlQuery(
+				"DELETE FROM [msg].Mailbox " +
+				"WHERE ExpiresAt <= :utcDateTime;")
+				.SetParameter("utcDateTime", _now.UtcDateTime())
+				.ExecuteUpdate();
+			Debug.WriteLine("Purge " + result);
 		}
 
 	}
