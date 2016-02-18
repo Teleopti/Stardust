@@ -10,18 +10,49 @@ using Stardust.Manager.Models;
 
 namespace Stardust.Manager
 {
-	public static class AppBuilderExtension
-	{
-		public static void UseStardustManager(this IAppBuilder appBuilder, ManagerConfiguration managerConfiguration, ILifetimeScope lifetimeScope)
-		{
-			appBuilder.UseDefaultFiles(new DefaultFilesOptions
-			{
-				FileSystem = new PhysicalFileSystem(@".\StardustDashboard"),
-				RequestPath = new PathString("/StardustDashboard")
-			});
+    public static class AppBuilderExtension
+    {
+        public static void UseStardustManager(this IAppBuilder appBuilder, ManagerConfiguration managerConfiguration,
+            ILifetimeScope lifetimeScope)
+        {
+            appBuilder.UseDefaultFiles(new DefaultFilesOptions
+            {
+                FileSystem = new PhysicalFileSystem(@".\StardustDashboard"),
+                RequestPath = new PathString("/StardustDashboard")
+            });
 
-			appBuilder.UseStaticFiles();
+            appBuilder.UseStaticFiles();
 
-		}
-	}
+
+            appBuilder.Map(
+                managerConfiguration.Route,
+                inner =>
+                {
+                    var config = new HttpConfiguration();
+
+                    config.DependencyResolver = new AutofacWebApiDependencyResolver(lifetimeScope);
+
+                    config.Routes.MapHttpRoute("Manager", "{controller}/{action}/{jobId}",
+                        new {action = "job", jobId = RouteParameter.Optional}
+                        );
+
+                    config.Routes.MapHttpRoute("Manager2", "{controller}/status/{action}/{jobId}",
+                        new {jobId = RouteParameter.Optional}
+                        );
+
+                    config.Routes.MapHttpRoute("Manager3", "{controller}/{action}/{model}"
+                        );
+
+                    config.Routes.MapHttpRoute("Manager4", "{controller}/{action}/{nodeUri}"
+                        );
+
+                    config.Services.Add(typeof (IExceptionLogger),
+                        new GlobalExceptionLogger());
+
+
+                    inner.UseAutofacWebApi(config);
+                    inner.UseWebApi(config);
+                });
+        }
+    }
 }

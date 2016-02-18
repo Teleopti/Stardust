@@ -10,9 +10,9 @@ namespace Stardust.Manager
 {
 	public class ManagerStarter
 	{
-		public void Start(ManagerConfiguration managerConfiguration, IContainer container, HttpConfiguration config)
+		public void Start(ManagerConfiguration managerConfiguration, IContainer container)
 		{
-			string routeName = managerConfiguration.routeName;
+
 			var builder = new ContainerBuilder();
 
 			builder.RegisterType<NodeManager>()
@@ -37,34 +37,8 @@ namespace Stardust.Manager
 
 			builder.Update(container);
 
-			config.Routes.MapHttpRoute(
-				 name: "Manager",
-				 routeTemplate: "{controller}/{action}/{jobId}",
-				 defaults: new { controller = routeName, jobId = RouteParameter.Optional }
-				 );
+       //     string routeName = managerConfiguration.routeName;
 
-			config.Routes.MapHttpRoute(
-				 name: "Manager2",
-				 routeTemplate: "{controller}/status/{action}/{jobId}",
-				 defaults: new { controller = routeName, jobId = RouteParameter.Optional }
-				 );
-
-			config.Routes.MapHttpRoute(
-				 name: "Manager3",
-				 routeTemplate: "{controller}/{action}/{model}",
-				 defaults: new { controller = routeName }
-				 );
-
-			config.Routes.MapHttpRoute(
-				name: "Manager4",
-				routeTemplate: "{controller}/{action}/{nodeUri}",
-				defaults: new { controller = routeName }
-				);
-
-			config.Services.Add(typeof(IExceptionLogger),
-				 new GlobalExceptionLogger());
-
-			config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
 			//appBuilder.UseAutofacMiddleware(lifetimeScope);
 			
 			//appBuilder.UseWebApi(config);

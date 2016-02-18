@@ -61,7 +61,7 @@ namespace ManagerConsoleHost
             {
                 ConnectionString =
                     ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString,
-                routeName = ConfigurationManager.AppSettings["routeName"]
+                Route = ConfigurationManager.AppSettings["route"]
             };
 
             Uri baseAddress = new Uri(ConfigurationManager.AppSettings["baseAddress"]);
@@ -70,22 +70,24 @@ namespace ManagerConsoleHost
                                  baseAddress.Port + "/";
 
 			var container = new ContainerBuilder().Build();
-	        var config = new HttpConfiguration();
-				using (WebApp.Start(managerAddress,
+            var config = new HttpConfiguration();
+
+            using (WebApp.Start(managerAddress,
                 appBuilder =>
                 {
+                    appBuilder.UseAutofacMiddleware(container);
                     // Configure Web API for self-host. 
                     appBuilder.UseStardustManager(managerConfiguration, container);
-						 appBuilder.UseAutofacMiddleware(container);
-						 appBuilder.UseAutofacWebApi(config);
-						 appBuilder.UseWebApi(config);
-					 }))
+
+                    appBuilder.UseAutofacWebApi(config);
+                    appBuilder.UseWebApi(config);
+                }))
             {
                 LogHelper.LogInfoWithLineNumber(Logger,
                     WhoAmI + ": Started listening on port : ( " + baseAddress + " )");
-
+           
                 ManagerStarter = new ManagerStarter();
-                ManagerStarter.Start(managerConfiguration, container,config);
+                ManagerStarter.Start(managerConfiguration, container );
 
                 QuitEvent.WaitOne();
             }

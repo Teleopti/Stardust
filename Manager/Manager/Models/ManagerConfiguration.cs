@@ -6,6 +6,6 @@ namespace Stardust.Manager.Models
 	{
 		public string ConnectionString { get; set; }
 
-        public string routeName { get; set; }
+        public string Route { get; set; }
     }
 }

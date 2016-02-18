@@ -20,15 +20,6 @@ namespace Stardust.Node.API
             _workerWrapper = workerWrapper;
         }
 
-        //protected override void Dispose(bool disposing)
-        //{
-        //    LogHelper.LogInfoWithLineNumber(Logger,"Start disposing.");
-
-        //    base.Dispose(disposing);
-
-        //    LogHelper.LogInfoWithLineNumber(Logger, "Finished disposing.");
-        //}
-
         [HttpPost, AllowAnonymous, Route(NodeRouteConstants.Job)]
         public IHttpActionResult StartJob(JobToDo jobToDo)
         {
