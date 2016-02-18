@@ -100,6 +100,46 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		}
 
 		[Test]
+		public void ShouldOptimizeAllIfGroupIsTooSmallNoMatterPercentSetting()
+		{
+			IntradayOptmizerLimiter.SetFromTest(new Percent(0.01), 3);
+
+			var phoneActivity = ActivityFactory.CreateActivity("phone");
+			var skill = SkillRepository.Has("skill", phoneActivity);
+			var dateOnly = new DateOnly(2015, 10, 12);
+			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
+			var scenario = ScenarioRepository.Has("some name");
+			var schedulePeriod = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
+			var contract = new Contract("contract")
+			{
+				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36)),
+				PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9)
+			};
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(8, 15, 8, 15, 15), new TimePeriodWithSegment(17, 15, 17, 15, 15), shiftCategory));
+			var agent1 = PersonRepository.Has(contract, schedulePeriod, skill);
+			agent1.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
+			var agent2 = PersonRepository.Has(contract, schedulePeriod, skill);
+			agent2.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
+			SkillDayRepository.Has(new List<ISkillDay>
+			{
+				skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)))
+			});
+			PersonAssignmentRepository.Has(agent1, scenario, phoneActivity, shiftCategory, dateOnly, new TimePeriod(8, 0, 17, 0));
+			PersonAssignmentRepository.Has(agent2, scenario, phoneActivity, shiftCategory, dateOnly, new TimePeriod(8, 0, 17, 0));
+
+			Target.Optimize(planningPeriod.Id.Value);
+
+			var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, agent1.PermissionInformation.DefaultTimeZone());
+			var oldAssPeriod = new DateTimePeriod(dateTime.AddHours(8), dateTime.AddHours(17));
+			PersonAssignmentRepository
+				.LoadAll()
+				.Select(ass => ass.Period.StartDateTime)
+				.Any(start => start == oldAssPeriod.StartDateTime)
+				.Should().Be.False();
+		}
+
+		[Test]
 		public void ShouldOptimizeHalfGroupIf50PercentShouldBeOptimized()
 		{
 			IntradayOptmizerLimiter.SetFromTest(new Percent(0.5), 0);
