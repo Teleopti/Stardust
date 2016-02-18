@@ -176,7 +176,8 @@ namespace Manager.IntegrationTest.Console.Host
             AppDomainManagerTask =
                 new AppDomainManagerTask(_buildMode,
                                          DirectoryManagerAssemblyLocationFullPath,
-                                         CopiedManagerConfigurationFile);
+                                         CopiedManagerConfigurationFile,
+                                         Settings.Default.ManagerAssemblyName);
 
             AppDomainManagerTask.StartTask(CancellationTokenSource);
 
@@ -191,7 +192,8 @@ namespace Manager.IntegrationTest.Console.Host
                 AppDomainNodeTask appDomainNodeTask = 
                     new AppDomainNodeTask(_buildMode, 
                                           DirectoryNodeAssemblyLocationFullPath, 
-                                          nodeconfigurationFile.Value);
+                                          nodeconfigurationFile.Value,
+                                          Settings.Default.NodeAssemblyName);
                 
                 appDomainNodeTask.StartTask(CancellationTokenSource);
 

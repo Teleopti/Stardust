@@ -17,14 +17,17 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
         private DirectoryInfo DirectoryManagerAssemblyLocationFullPath { get; set; }
 
         private FileInfo ConfigurationFileInfo { get; set; }
+        public string ManagerAssemblyName { get; set; }
 
         public AppDomainManagerTask(string buildmode,
                                     DirectoryInfo directoryManagerAssemblyLocationFullPath,
-                                    FileInfo configurationFileInfo)
+                                    FileInfo configurationFileInfo,
+                                    string managerAssemblyName)
         {
             Buildmode = buildmode;
             DirectoryManagerAssemblyLocationFullPath = directoryManagerAssemblyLocationFullPath;
             ConfigurationFileInfo = configurationFileInfo;
+            ManagerAssemblyName = managerAssemblyName;
         }
 
         public string GetAppDomainFriendlyName()
@@ -71,7 +74,7 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
                     var managerAppDomainSetup = new AppDomainSetup
                     {
                         ApplicationBase = DirectoryManagerAssemblyLocationFullPath.FullName,
-                        ApplicationName = Settings.Default.ManagerAssemblyName,
+                        ApplicationName = ManagerAssemblyName,
                         ShadowCopyFiles = "true",
                         ConfigurationFile = ConfigurationFileInfo.FullName
                     };

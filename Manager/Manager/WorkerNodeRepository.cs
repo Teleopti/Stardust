@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using log4net;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
@@ -41,6 +42,8 @@ namespace Stardust.Manager
 
         public List<WorkerNode> LoadAll()
         {
+            LogHelper.LogInfoWithLineNumber(Logger,"Start LoadAll.");
+
             const string selectCommand = @"SELECT  Id ,Url FROM [Stardust].WorkerNodes";
 
             var listToReturn = new List<WorkerNode>();
@@ -66,6 +69,7 @@ namespace Stardust.Manager
                             Id = (Guid) reader.GetValue(reader.GetOrdinal("Id")),
                             Url = new Uri((string) reader.GetValue(reader.GetOrdinal("Url")))
                         };
+
                         listToReturn.Add(jobDefinition);
                     }
                 }
@@ -74,14 +78,29 @@ namespace Stardust.Manager
                 connection.Close();
             }
 
+            if (listToReturn != null && listToReturn.Any())
+            {
+                LogHelper.LogInfoWithLineNumber(Logger, "Found ( " + listToReturn.Count + " ) availabe nodes.");
+            }
+            else
+            {
+                LogHelper.LogInfoWithLineNumber(Logger, "No nodes found.");
+            }
+
+            LogHelper.LogInfoWithLineNumber(Logger, "Finished LoadAll.");
+
             return listToReturn;
         }
 
         public List<WorkerNode> LoadAllFreeNodes()
         {
-            const string selectCommand = @"SELECT * FROM [Stardust].WorkerNodes WHERE Url NOT IN (SELECT ISNULL(AssignedNode,'') FROM [Stardust].JobDefinitions)";
+            LogHelper.LogInfoWithLineNumber(Logger, "Start LoadAllFreeNodes.");
+
+            const string selectCommand =
+                @"SELECT * FROM [Stardust].WorkerNodes WHERE Url NOT IN (SELECT ISNULL(AssignedNode,'') FROM [Stardust].JobDefinitions)";
 
             var listToReturn = new List<WorkerNode>();
+
             try
             {
                 using (var connection = new SqlConnection(_connectionString))
@@ -113,18 +132,33 @@ namespace Stardust.Manager
                     connection.Close();
                 }
             }
+
             catch (TimeoutException exception)
             {
                 LogHelper.LogErrorWithLineNumber(Logger,
                                                  "Can not get WorkerNodes, maybe there is a lock in Stardust.JobDefinitions table",
                                                  exception);
             }
+
             catch (Exception exception)
             {
                 LogHelper.LogErrorWithLineNumber(Logger,
                                                  "Can not get WorkerNodes",
                                                  exception);
             }
+
+
+            if (listToReturn != null && listToReturn.Any())
+            {
+                LogHelper.LogInfoWithLineNumber(Logger, "Found ( " + listToReturn.Count + " ) availabe nodes.");
+            }
+            else
+            {
+                LogHelper.LogInfoWithLineNumber(Logger, "No nodes found.");
+            }
+
+
+            LogHelper.LogInfoWithLineNumber(Logger, "Finished LoadAllFreeNodes.");
 
             return listToReturn;
         }

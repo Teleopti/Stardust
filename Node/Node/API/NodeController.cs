@@ -23,6 +23,8 @@ namespace Stardust.Node.API
         [HttpPost, AllowAnonymous, Route(NodeRouteConstants.Job)]
         public IHttpActionResult StartJob(JobToDo jobToDo)
         {
+            LogHelper.LogInfoWithLineNumber(Logger,string.Empty);
+
             if (jobToDo == null)
             {
                 throw new ArgumentNullException();
@@ -56,22 +58,24 @@ namespace Stardust.Node.API
             LogHelper.LogInfoWithLineNumber(Logger,
                                             startJobMessage);
 
-
-        //    return CreateOkStatusCode(jobToDo);
             return Ok();
         }
 
         [HttpDelete, AllowAnonymous, Route(NodeRouteConstants.CancelJob)]
         public IHttpActionResult TryCancelJob(Guid jobId)
         {
+            LogHelper.LogInfoWithLineNumber(Logger, "Start.");
+
             if (jobId == null)
             {
                 throw new ArgumentNullException();
             }
+
             if (jobId == Guid.Empty)
             {
                 throw new ArgumentNullException();
             }
+
             LogHelper.LogInfoWithLineNumber(Logger,
                                             _workerWrapper.WhoamI + ": Try cancel job ( jobId ) : ( " + jobId + " )");
 
@@ -81,6 +85,7 @@ namespace Stardust.Node.API
             {
                 return NotFound();
             }
+
             if (_workerWrapper.IsCancellationRequested)
             {
                 return Conflict();
@@ -92,16 +97,17 @@ namespace Stardust.Node.API
             {
                 return Ok();
             }
+
             LogHelper.LogInfoWithLineNumber(Logger,
                                             _workerWrapper.WhoamI + ": Could not cancel job since job not found on this node. Manager sent job ( jobId ) : ( " +
                                             jobId + " )");
             return NotFound();
         }
 
-        [HttpPost, AllowAnonymous, Route(NodeRouteConstants.IsAlive)]
+        [HttpGet, AllowAnonymous, Route(NodeRouteConstants.IsAlive)]
         public IHttpActionResult IsAlive()
         {
-            return new OkResult(Request);
+            return Ok();
         }
 
         private IHttpActionResult CreateOkStatusCode(JobToDo jobToDo)

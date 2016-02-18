@@ -269,6 +269,21 @@
                               AutoGenerateColumns="False"
                               SelectionUnit="Cell"
                               IsReadOnly="True">
+
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Status}"
+                                                 Value="Started">
+                                        <Setter Property="Background"
+                                                Value="LightGreen" />
+                                        <Setter Property="Foreground"
+                                                Value="Black" />
+                                    </DataTrigger>
+
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Row">
                                 <DataGridTextColumn.Binding>

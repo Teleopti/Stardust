@@ -24,7 +24,7 @@ namespace Stardust.Manager
             _nodeManager = nodeManager;
             _jobManager = jobManager;
         }
-
+        
         public string WhoAmI { get; private set; }
 
         [HttpPost, Route(ManagerRouteConstants.Job)]
@@ -98,12 +98,12 @@ namespace Stardust.Manager
         {
             return Ok(_jobManager.JobHistoryDetails(jobId));
         }
-
+        
         [HttpPost, Route(ManagerRouteConstants.Heartbeat)]
         //     [HttpPost, ActionName("heartbeat")]
         public void Heartbeat([FromBody] Uri nodeUri)
         {
-            _jobManager.CheckAndAssignNextJob();
+            //_jobManager.CheckAndAssignNextJob();
 
             LogHelper.LogInfoWithLineNumber(Logger,
                 WhoAmI + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
@@ -119,12 +119,11 @@ namespace Stardust.Manager
             _jobManager.SetEndResultOnJobAndRemoveIt(jobId,
                 "Success");
 
-            //should we do this here also or only on heartbeats
             _jobManager.CheckAndAssignNextJob();
 
             return Ok();
         }
-
+        
         [HttpPost, Route(ManagerRouteConstants.JobFailed)]
         //  [HttpPost, ActionName("fail")]
         public IHttpActionResult JobFailed(Guid jobId)
@@ -134,9 +133,12 @@ namespace Stardust.Manager
 
             _jobManager.SetEndResultOnJobAndRemoveIt(jobId,
                 "Failed");
+
+            _jobManager.CheckAndAssignNextJob();
+
             return Ok();
         }
-
+        
         [HttpPost, Route(ManagerRouteConstants.JobHasBeenCanceled)]
         //   [HttpPost, ActionName("cancel")]
         public IHttpActionResult JobCanceled(Guid jobId)
@@ -147,9 +149,11 @@ namespace Stardust.Manager
             _jobManager.SetEndResultOnJobAndRemoveIt(jobId,
                 "Canceled");
 
+            _jobManager.CheckAndAssignNextJob();
+
             return Ok();
         }
-
+        
         [HttpPost, Route(ManagerRouteConstants.JobProgress)]
         //  [HttpPost, ActionName("progress")]
         public IHttpActionResult JobProgress([FromBody] JobProgressModel model)
