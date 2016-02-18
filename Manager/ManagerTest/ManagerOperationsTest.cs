@@ -16,7 +16,7 @@ using Stardust.Manager.Models;
 namespace ManagerTest
 {
     [ManagerOperationTests]
-    [TestFixture]
+    [TestFixture, Ignore]
     public class ManagerOperationsTest : DatabaseTest
     {
         public ManagerController Target;
