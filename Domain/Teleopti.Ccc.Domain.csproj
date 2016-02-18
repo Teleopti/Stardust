@@ -728,6 +728,7 @@
     <Compile Include="Optimization\IIntradayOptimizerContainer.cs" />
     <Compile Include="Optimization\IIntradayOptimizerLimiter.cs" />
     <Compile Include="Optimization\IntradayOptimization.cs" />
+    <Compile Include="Optimization\IntradayOptimizeOneday.cs" />
     <Compile Include="Optimization\IntradayOptimizerContainerConsiderLargeGroups.cs" />
     <Compile Include="Optimization\IntradayOptimizerCreator.cs" />
     <Compile Include="Optimization\IntradayOptmizerLimiter.cs" />

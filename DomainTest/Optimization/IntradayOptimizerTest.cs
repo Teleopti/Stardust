@@ -75,22 +75,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		    _personAssignment = _mockRepository.StrictMock<IPersonAssignment>();
 
 
-            _target = new IntradayOptimizer2(
-                _dailyValueCalculator,
-                _personalSkillsDataExtractor,
-                _decisionMaker,
-                _scheduleService,
-                _optimizerPreferences,
-                _rollbackService,
-                _resourceOptimizationHelper,
-                _effectiveRestrictionCreator,
-                _optimizationLimits,
-                _workShiftOriginalStateContainer,
-                _schedulingOptionsCreator,
-                _mainShiftOptimizeActivitySpecificationSetter,
-                _deleteAndResourceCalculateService,
-                _resourceCalculateDelayer,
-				_scheduleMatrix);
+			var intradayOptimizeOneday = new IntradayOptimizeOneday(_dailyValueCalculator,_scheduleService,_optimizerPreferences,_rollbackService,
+				_resourceOptimizationHelper,_effectiveRestrictionCreator,_optimizationLimits,_workShiftOriginalStateContainer,_schedulingOptionsCreator,
+				_mainShiftOptimizeActivitySpecificationSetter,_deleteAndResourceCalculateService,_resourceCalculateDelayer,_scheduleMatrix);
+
+			_target=new IntradayOptimizer2(_personalSkillsDataExtractor,_decisionMaker,_optimizationLimits,_scheduleMatrix, intradayOptimizeOneday);
+
         }
 
         [Test]
@@ -174,7 +164,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void makeDecisionMakerFailure()
         {
-	        Expect.Call(_optimizationLimits.OverLimitsCounts(_scheduleMatrix)).Return(_overLimitCounts);
 	        Expect.Call(_optimizationLimits.MoveMaxDaysOverLimit()).Return(false).Repeat.AtLeastOnce();
 
             Expect.Call(_decisionMaker.Execute(_scheduleMatrix, _personalSkillsDataExtractor))

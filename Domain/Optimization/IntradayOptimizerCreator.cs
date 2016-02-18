@@ -88,23 +88,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 				var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
-				IIntradayOptimizer2 optimizer =
-					new IntradayOptimizer2(
-						dailyValueCalculator,
-						personalSkillsDataExtractor,
-						_decisionMaker,
-						_scheduleService,
-						optimizerPreferences,
-						rollbackService,
+
+				var optimizer = new IntradayOptimizer2(personalSkillsDataExtractor, _decisionMaker, optimizationLimits, scheduleMatrix,
+					new IntradayOptimizeOneday(dailyValueCalculator, _scheduleService, optimizerPreferences, rollbackService,
 						_resourceOptimizationHelper,
-						_effectiveRestrictionCreator,
-						optimizationLimits,
-						workShiftStateContainer,
-						schedulingOptionsCreator,
-						mainShiftOptimizeActivitySpecificationSetter,
-						_deleteAndResourceCalculateService,
-						resourceCalculateDelayer,
-						scheduleMatrix);
+						_effectiveRestrictionCreator, optimizationLimits, workShiftStateContainer, schedulingOptionsCreator,
+						mainShiftOptimizeActivitySpecificationSetter, _deleteAndResourceCalculateService, resourceCalculateDelayer,
+						scheduleMatrix));
 
 				result.Add(optimizer);
 			}
