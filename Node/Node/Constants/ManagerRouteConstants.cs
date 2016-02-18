@@ -14,6 +14,6 @@
 
         public const string JobFailed = "status/fail/" + JobIdOptionalParameter;
 
-        public const string JobProgress = "progress";
+        public const string JobProgress = "status/progress";
     }
 }
