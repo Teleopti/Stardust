@@ -109,3 +109,4 @@ Scheduler_AgentSkillAnalyzer_12345 = DEV
 Wfm_Use_Stardust = false
 Wfm_ForecastFileImportOnStardust_37047 = false
 ResourcePlanner_SkillGroupDeleteAfterCalculation_37048 = RC
+ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049 = false
