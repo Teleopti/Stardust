@@ -15,15 +15,6 @@ namespace Stardust.Manager
         public static void UseStardustManager(this IAppBuilder appBuilder, ManagerConfiguration managerConfiguration,
             ILifetimeScope lifetimeScope)
         {
-            appBuilder.UseDefaultFiles(new DefaultFilesOptions
-            {
-                FileSystem = new PhysicalFileSystem(@".\StardustDashboard"),
-                RequestPath = new PathString("/StardustDashboard")
-            });
-
-            appBuilder.UseStaticFiles();
-
-
             appBuilder.Map(
                 managerConfiguration.Route,
                 inner =>
