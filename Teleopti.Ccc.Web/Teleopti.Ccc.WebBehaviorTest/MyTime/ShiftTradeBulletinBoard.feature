@@ -198,7 +198,6 @@ Scenario: Should possible make shift trade with empty day in Bulletin board
 	Then Shift trade bulletin board view should not be visible
 	And I should see a shift trade request in the list with subject 'A nice subject'
 	
-@ignore
 @OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
 @OnlyRunIfEnabled('MyTimeWeb_TradeWithDayOffAndEmptyDay_31317')
 Scenario: Should see the anonymous name when viewing empty day in Bulletin board
@@ -219,7 +218,7 @@ Scenario: Should see the anonymous name when viewing empty day in Bulletin board
 	| WishShiftType | EmptyDay         |
 	And the time is '2029-12-27'
 	When I view Shift Trade Bulletin Board for date '2030-01-01'
-	Then I should see agent name as Anonymous
+	Then I should see agent name as Anonym
 	
 	
 @OnlyRunIfEnabled('MyTimeWeb_SeeAnnouncedShifts_31639')
