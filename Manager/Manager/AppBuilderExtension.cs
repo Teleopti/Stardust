@@ -6,83 +6,46 @@ using Microsoft.Owin;
 using Microsoft.Owin.FileSystems;
 using Microsoft.Owin.StaticFiles;
 using Owin;
-using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
 
 namespace Stardust.Manager
 {
     public static class AppBuilderExtension
     {
-
-        public static void UseStardustManager(this IAppBuilder appBuilder, ManagerConfiguration managerConfiguration)
+        public static void UseStardustManager(this IAppBuilder appBuilder, ManagerConfiguration managerConfiguration,
+            ILifetimeScope lifetimeScope)
         {
-            string routeName = managerConfiguration.routeName;
+            appBuilder.Map(
+                managerConfiguration.Route,
+                inner =>
+                {
+                    var config = new HttpConfiguration();
 
-            var builder = new ContainerBuilder();
+                    config.DependencyResolver = new AutofacWebApiDependencyResolver(lifetimeScope);
 
-            builder.RegisterType<NodeManager>()
-                .As<INodeManager>();
+                    config.MapHttpAttributeRoutes();
 
-            builder.RegisterType<JobManager>();
+                    //config.Routes.MapHttpRoute("Manager", "{controller}/{action}/{jobId}",
+                    //    new {action = "job", jobId = RouteParameter.Optional}
+                    //    );
 
-            builder.RegisterType<HttpSender>()
-                .As<IHttpSender>();
+                    //config.Routes.MapHttpRoute("Manager2", "{controller}/status/{action}/{jobId}",
+                    //    new {jobId = RouteParameter.Optional}
+                    //    );
 
-            builder.Register(
-                c => new JobRepository(managerConfiguration.ConnectionString))
-                .As<IJobRepository>();
+                    //config.Routes.MapHttpRoute("Manager3", "{controller}/{action}/{model}"
+                    //    );
 
-            builder.Register(
-                c => new WorkerNodeRepository(managerConfiguration.ConnectionString))
-                .As<IWorkerNodeRepository>();
+                    //config.Routes.MapHttpRoute("Manager4", "{controller}/{action}/{nodeUri}"
+                    //    );
 
-            builder.RegisterApiControllers(typeof(ManagerController).Assembly);
+                    config.Services.Add(typeof (IExceptionLogger),
+                        new GlobalExceptionLogger());
 
-            builder.RegisterInstance(managerConfiguration);
 
-            var container = builder.Build();
-
-            var config = new HttpConfiguration();
-            
-            config.Routes.MapHttpRoute(
-                name: "Manager",
-                routeTemplate: "{controller}/{action}/{jobId}",
-                defaults: new {controller = routeName, jobId = RouteParameter.Optional}
-                );
-
-            config.Routes.MapHttpRoute(
-                name: "Manager2",
-                routeTemplate: "{controller}/status/{action}/{jobId}",
-                defaults: new {controller = routeName, jobId = RouteParameter.Optional }
-                );
-            
-            config.Routes.MapHttpRoute(
-                name: "Manager3",
-                routeTemplate: "{controller}/{action}/{model}",
-                defaults: new { controller = routeName }
-                );
-
-            config.Routes.MapHttpRoute(
-               name: "Manager4",
-               routeTemplate: "{controller}/{action}/{nodeUri}",
-               defaults: new { controller = routeName }
-               );
-
-            config.Services.Add(typeof (IExceptionLogger),
-                new GlobalExceptionLogger());
-
-            config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
-            appBuilder.UseAutofacMiddleware(container);
-            appBuilder.UseAutofacWebApi(config);
-            appBuilder.UseWebApi(config);
-
-            appBuilder.UseDefaultFiles(new DefaultFilesOptions
-            {
-                FileSystem = new PhysicalFileSystem(@".\StardustDashboard"),
-                RequestPath = new PathString("/StardustDashboard")
-            });
-
-            appBuilder.UseStaticFiles();
+                    inner.UseAutofacWebApi(config);
+                    inner.UseWebApi(config);
+                });
         }
     }
 }

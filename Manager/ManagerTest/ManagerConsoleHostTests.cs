@@ -78,12 +78,6 @@ namespace ManagerTest
 
         public Task MyTask { get; set; }
 
-        [Test]
-        public void Test1()
-        {
-            Assert.IsTrue(true);
-        }
-
         public AppDomain MyAppDomain { get; set; }
     }
 }

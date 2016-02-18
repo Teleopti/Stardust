@@ -5,8 +5,7 @@ namespace Stardust.Manager.Models
 	public class ManagerConfiguration
 	{
 		public string ConnectionString { get; set; }
-		public Uri BaseAddress { get; set; } 
 
-        public string routeName { get; set; }
+        public string Route { get; set; }
     }
 }

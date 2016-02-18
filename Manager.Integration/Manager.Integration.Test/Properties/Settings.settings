@@ -21,7 +21,7 @@
       <Value Profile="(Default)">http://localhost:9100/managerIntegrationTestController/</Value>
     </Setting>
     <Setting Name="ManagerLocationUri" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">http://localhost:9000/manager/</Value>
+      <Value Profile="(Default)">http://localhost:9000/StardustDashboard/</Value>
     </Setting>
   </Settings>
 </SettingsFile>

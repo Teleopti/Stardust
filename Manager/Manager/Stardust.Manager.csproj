@@ -114,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppBuilderExtension.cs" />
+    <Compile Include="Constants\ManagerRouteConstans.cs" />
     <Compile Include="Constants\NodeRouteConstants.cs" />
     <Compile Include="GlobalExceptionLogger.cs" />
     <Compile Include="Helpers\LogHelper.cs" />
@@ -140,7 +141,9 @@
     <Compile Include="WorkerNodeRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Manager.nuspec" />
+    <None Include="Manager.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -164,6 +167,8 @@
     <Content Include="StardustDashboard\listJob.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="StardustDashboard\Scripts\angular-route.min.js" />
+    <Content Include="StardustDashboard\Scripts\angular.min.js" />
     <Content Include="StardustDashboard\Scripts\App\app.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

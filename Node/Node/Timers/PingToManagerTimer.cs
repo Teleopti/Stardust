@@ -79,7 +79,7 @@ namespace Stardust.Node.Timers
 
             catch
             {
-                LogHelper.LogErrorWithLineNumber(Logger,
+                LogHelper.LogInfoWithLineNumber(Logger,
                                                  WhoAmI + ": Heartbeat failed. Is the manager up and running?");
             }
         }

@@ -3,9 +3,12 @@ using System.Configuration;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Web.Http;
+using Autofac;
 using log4net;
 using log4net.Config;
 using Microsoft.Owin.Hosting;
+using Owin;
 using Stardust.Manager;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Models;
@@ -56,28 +59,35 @@ namespace ManagerConsoleHost
 
             var managerConfiguration = new ManagerConfiguration
             {
-                BaseAddress = new Uri(ConfigurationManager.AppSettings["baseAddress"]),
                 ConnectionString =
                     ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString,
-                routeName = ConfigurationManager.AppSettings["baseAddress"]
+                Route = ConfigurationManager.AppSettings["route"]
             };
 
+            Uri baseAddress = new Uri(ConfigurationManager.AppSettings["baseAddress"]);
 
-            var managerAddress = managerConfiguration.BaseAddress.Scheme + "://+:" +
-                                 managerConfiguration.BaseAddress.Port + "/";
+            var managerAddress = baseAddress.Scheme + "://+:" +
+                                 baseAddress.Port + "/";
+
+			var container = new ContainerBuilder().Build();
+            var config = new HttpConfiguration();
 
             using (WebApp.Start(managerAddress,
                 appBuilder =>
                 {
+                    appBuilder.UseAutofacMiddleware(container);
                     // Configure Web API for self-host. 
-                    appBuilder.UseStardustManager(managerConfiguration);
+                    appBuilder.UseStardustManager(managerConfiguration, container);
+
+                    appBuilder.UseAutofacWebApi(config);
+                    appBuilder.UseWebApi(config);
                 }))
             {
                 LogHelper.LogInfoWithLineNumber(Logger,
-                    WhoAmI + ": Started listening on port : ( " + managerConfiguration.BaseAddress + " )");
-
+                    WhoAmI + ": Started listening on port : ( " + baseAddress + " )");
+           
                 ManagerStarter = new ManagerStarter();
-                ManagerStarter.Start(managerConfiguration);
+                ManagerStarter.Start(managerConfiguration, container );
 
                 QuitEvent.WaitOne();
             }
@@ -97,7 +107,7 @@ namespace ManagerConsoleHost
 
                 if (ManagerStarter != null)
                 {
-                    ManagerStarter.Stop();
+                   // ManagerStarter.Stop();
                 }
 
                 QuitEvent.Set();
@@ -116,7 +126,7 @@ namespace ManagerConsoleHost
 
             if (ManagerStarter != null)
             {
-                ManagerStarter.Stop();
+               // ManagerStarter.Stop();
             }
 
             QuitEvent.Set();
