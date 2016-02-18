@@ -33,7 +33,7 @@ namespace Stardust.Manager
                         await client.PostAsync(url,
                                                new StringContent(sez,
                                                                  Encoding.Unicode,
-                                                                 "application/json"));
+                                                                 "application/json")).ConfigureAwait(false);
 
                     LogHelper.LogInfoWithLineNumber(Logger,
                                                     "Finished.");
