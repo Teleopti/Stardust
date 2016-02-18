@@ -18,7 +18,7 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
-    [TestFixture]
+    [TestFixture, Ignore]
     public class OneManagerAndOneNodeTests
     {
         private static readonly ILog Logger =
