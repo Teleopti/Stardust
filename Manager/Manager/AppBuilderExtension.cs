@@ -9,8 +9,7 @@ namespace Stardust.Manager
 {
     public static class AppBuilderExtension
     {
-        public static void UseStardustManager(this IAppBuilder appBuilder, ManagerConfiguration managerConfiguration,
-            ILifetimeScope lifetimeScope)
+        public static void UseStardustManager(this IAppBuilder appBuilder, ManagerConfiguration managerConfiguration)
         {
             appBuilder.Map(
                 managerConfiguration.Route,
@@ -18,27 +17,10 @@ namespace Stardust.Manager
                 {
                     var config = new HttpConfiguration();
 
-                    config.DependencyResolver = new AutofacWebApiDependencyResolver(lifetimeScope);
-
                     config.MapHttpAttributeRoutes();
-
-                    //config.Routes.MapHttpRoute("Manager", "{controller}/{action}/{jobId}",
-                    //    new {action = "job", jobId = RouteParameter.Optional}
-                    //    );
-
-                    //config.Routes.MapHttpRoute("Manager2", "{controller}/status/{action}/{jobId}",
-                    //    new {jobId = RouteParameter.Optional}
-                    //    );
-
-                    //config.Routes.MapHttpRoute("Manager3", "{controller}/{action}/{model}"
-                    //    );
-
-                    //config.Routes.MapHttpRoute("Manager4", "{controller}/{action}/{nodeUri}"
-                    //    );
-
+					
                     config.Services.Add(typeof (IExceptionLogger),
                         new GlobalExceptionLogger());
-
 
                     inner.UseAutofacWebApi(config);
                     inner.UseWebApi(config);

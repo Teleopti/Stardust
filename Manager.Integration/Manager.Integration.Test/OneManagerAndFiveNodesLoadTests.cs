@@ -172,18 +172,18 @@ namespace Manager.Integration.Test
 
             sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
 
-            sqlNotifier.Dispose();
+            //sqlNotifier.Dispose();
 
             LogHelper.LogInfoWithLineNumber("All 5 nodes has strated.",
-                                             Logger);
+                                                Logger);
 
             //---------------------------------------------
             // Execute all jobs. 
             //---------------------------------------------
-            StartJobTaskHelper startJobTaskHelper = new StartJobTaskHelper();
+                StartJobTaskHelper startJobTaskHelper = new StartJobTaskHelper();
 
-            Task taskHelper = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
-                                                                          CancellationTokenSource,
+                Task taskHelper = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
+                                                                              CancellationTokenSource,
                                                                           TimeSpan.FromMilliseconds(200));
 
             //---------------------------------------------

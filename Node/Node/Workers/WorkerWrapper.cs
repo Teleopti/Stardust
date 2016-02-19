@@ -104,8 +104,12 @@ namespace Stardust.Node.Workers
                 {
                     return new ConflictResult(requestMessage);
                 }
+	            if (string.IsNullOrEmpty(jobToDo.Type))
+	            {
+					return new BadRequestResult(requestMessage);
+				}
 
-                typ = NodeConfiguration.HandlerAssembly.GetType(jobToDo.Type);
+				typ = NodeConfiguration.HandlerAssembly.GetType(jobToDo.Type);
 
                 if (typ == null)
                 {

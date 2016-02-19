@@ -10,7 +10,7 @@ namespace Stardust.Manager
 {
 	public class ManagerStarter
 	{
-		public void Start(ManagerConfiguration managerConfiguration, IContainer container)
+		public void Start(ManagerConfiguration managerConfiguration, IComponentContext componentContext)
 		{
 
 			var builder = new ContainerBuilder();
@@ -35,13 +35,7 @@ namespace Stardust.Manager
 
 			builder.RegisterInstance(managerConfiguration);
 
-			builder.Update(container);
-
-       //     string routeName = managerConfiguration.routeName;
-
-			//appBuilder.UseAutofacMiddleware(lifetimeScope);
-			
-			//appBuilder.UseWebApi(config);
+			builder.Update(componentContext.ComponentRegistry);
 		}
 	}
 }
