@@ -33,7 +33,7 @@ namespace Stardust.Manager
                         await client.PostAsync(url,
                                                new StringContent(sez,
                                                                  Encoding.Unicode,
-                                                                 "application/json"));
+                                                                 "application/json")).ConfigureAwait(false);
 
                     LogHelper.LogInfoWithLineNumber(Logger,
                                                     "Finished.");
@@ -91,9 +91,9 @@ namespace Stardust.Manager
                 {
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+                    
                     var response = await client.GetAsync(url);
-
+                    
                     return response;
                 }
             }
@@ -117,16 +117,17 @@ namespace Stardust.Manager
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var response = await client.GetAsync(url);
-
+                    var response = await client.GetAsync(url,HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+                    
                     return response.IsSuccessStatusCode;
-                }                
+                }
             }
 
             catch (HttpRequestException exp)
             {
                 LogHelper.LogWarningWithLineNumber(Logger,
                                                    exp.Message);
+
             }
 
             catch (Exception exp)
@@ -137,7 +138,8 @@ namespace Stardust.Manager
 
                 throw;
             }
-
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                                    "Return false");
             return false;
         }
     }

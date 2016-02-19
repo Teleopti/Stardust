@@ -148,10 +148,10 @@ namespace ManagerTest
             Target.Heartbeat(_nodeUri1);
 
             HttpSender.CalledNodes.Count.Should()
-                .Be.EqualTo(3);
+                .Be.EqualTo(1);
             HttpSender.CalledNodes.Keys.First()
                 .Should()
-                .Contain("localhost:9050/ping");
+                .Contain("localhost:9051/job");
         }
 
         [Test]

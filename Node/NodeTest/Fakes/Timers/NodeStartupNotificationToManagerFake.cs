@@ -25,7 +25,7 @@ namespace NodeTest.Fakes.Timers
         {
         }
 
-
+          
         public override Task<HttpResponseMessage> TrySendNodeStartUpToManager(Uri nodeAddress,
                                                                               CancellationToken cancellationToken)
         {

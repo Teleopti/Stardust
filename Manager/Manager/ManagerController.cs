@@ -1,6 +1,7 @@
 using System;
 using System.Web.Http;
 using System.Web.Http.Results;
+using System.Web.UI.WebControls;
 using log4net;
 using Stardust.Manager.Constants;
 using Stardust.Manager.Helpers;
@@ -103,7 +104,7 @@ namespace Stardust.Manager
         //     [HttpPost, ActionName("heartbeat")]
         public void Heartbeat([FromBody] Uri nodeUri)
         {
-            //_jobManager.CheckAndAssignNextJob();
+            _jobManager.CheckAndAssignNextJob();
 
             LogHelper.LogInfoWithLineNumber(Logger,
                 WhoAmI + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
@@ -118,9 +119,7 @@ namespace Stardust.Manager
 
             _jobManager.SetEndResultOnJobAndRemoveIt(jobId,
                 "Success");
-
-            _jobManager.CheckAndAssignNextJob();
-
+            
             return Ok();
         }
         
@@ -134,8 +133,6 @@ namespace Stardust.Manager
             _jobManager.SetEndResultOnJobAndRemoveIt(jobId,
                 "Failed");
 
-            _jobManager.CheckAndAssignNextJob();
-
             return Ok();
         }
         
@@ -148,8 +145,6 @@ namespace Stardust.Manager
 
             _jobManager.SetEndResultOnJobAndRemoveIt(jobId,
                 "Canceled");
-
-            _jobManager.CheckAndAssignNextJob();
 
             return Ok();
         }
@@ -183,5 +178,6 @@ namespace Stardust.Manager
         {
             return Ok();
         }
-    }
+        
+	}
 }
