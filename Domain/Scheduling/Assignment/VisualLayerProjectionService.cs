@@ -58,10 +58,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	                    var workingLayer = (IVisualLayer)_layerCollectionOriginal[inverseLoop];
 	                    if (workingLayer.Period.Contains(currentTime))
                         {
-                            DateTime layerEndTime = findLayerEndTime(inverseLoop, workingLayer, currentTime);
-                            IVisualLayer newLayer = _standardVisualLayerFactory.CreateResultLayer(workingLayer.Payload, 
-                                                                            workingLayer,
-                                                                            new DateTimePeriod(currentTime,layerEndTime));
+                            var layerEndTime = findLayerEndTime(inverseLoop, workingLayer, currentTime);
+	                        var newLayer = _standardVisualLayerFactory.CreateResultLayer(workingLayer.Payload,
+		                        workingLayer, new DateTimePeriod(currentTime, layerEndTime), workingLayer.PersonAbsenceId);
                             workingColl.Add(newLayer);
                             currentTime = layerEndTime;
                             layerFound = true;

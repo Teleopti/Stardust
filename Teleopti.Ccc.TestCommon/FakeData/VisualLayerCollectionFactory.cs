@@ -62,12 +62,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return coll;
 		}
 
-		private static IList<IVisualLayer> createVisualLayerCollectionWithAbsence(IPerson person,TimeSpan start, TimeSpan end)
+		private static IList<IVisualLayer> createVisualLayerCollectionWithAbsence(IPerson person, TimeSpan start, TimeSpan end)
 		{
 			IList<IVisualLayer> visualLayers = new List<IVisualLayer>();
-			IVisualLayer originalVisualLayer = factory.CreateShiftSetupLayer(new Activity("for test"), new DateTimePeriod(WorkShift.BaseDate.Add(start), WorkShift.BaseDate.Add(end)),person);
-			IAbsence holidayAbsence = AbsenceFactory.CreateAbsence("TestHoliday");
-			IVisualLayer absenceVisualLayer = factory.CreateAbsenceSetupLayer(holidayAbsence, originalVisualLayer, originalVisualLayer.Period);
+			var originalVisualLayer = factory.CreateShiftSetupLayer(new Activity("for test"),
+				new DateTimePeriod(WorkShift.BaseDate.Add(start), WorkShift.BaseDate.Add(end)), person);
+			var holidayAbsence = AbsenceFactory.CreateAbsence("TestHoliday");
+			var absenceVisualLayer = factory.CreateAbsenceSetupLayer(holidayAbsence, originalVisualLayer,
+				originalVisualLayer.Period, Guid.NewGuid());
 			visualLayers.Add(absenceVisualLayer);
 			return visualLayers;
 		}

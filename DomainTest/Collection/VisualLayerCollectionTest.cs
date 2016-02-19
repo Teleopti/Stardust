@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		private IVisualLayer createAbsenceLayer(IAbsence absence, DateTimePeriod period)
 		{
 			IVisualLayer actLayer = visualLayerFactory.CreateShiftSetupLayer(ActivityFactory.CreateActivity("for test"), period, dummyPerson);
-			return visualLayerFactory.CreateAbsenceSetupLayer(absence, actLayer, period);
+			return visualLayerFactory.CreateAbsenceSetupLayer(absence, actLayer, period, actLayer.PersonAbsenceId);
 		}
 
 		[Test]
@@ -326,9 +326,9 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
 			absence.InContractTime = true;
 
-			internalCollection.Add(visualLayerFactory.CreateAbsenceSetupLayer(absence, createLayer(activity1Period, true), absence1Period));
-			internalCollection.Add(visualLayerFactory.CreateAbsenceSetupLayer(absence, createLayer(activityNotInContractTimePeriod, false), absence2Period));
-			internalCollection.Add(visualLayerFactory.CreateAbsenceSetupLayer(absence, createLayer(activity2Period, true), absence3Period));
+			internalCollection.Add(visualLayerFactory.CreateAbsenceSetupLayer(absence, createLayer(activity1Period, true), absence1Period, null));
+			internalCollection.Add(visualLayerFactory.CreateAbsenceSetupLayer(absence, createLayer(activityNotInContractTimePeriod, false), absence2Period, null));
+			internalCollection.Add(visualLayerFactory.CreateAbsenceSetupLayer(absence, createLayer(activity2Period, true), absence3Period, null));
 			internalCollection.Add(createLayer(afterAbsencePeriod, true));
 			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
 			{
@@ -590,7 +590,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			IActivity underActivity = ActivityFactory.CreateActivity("for test");
 			underActivity.InWorkTime = inWorkTime;
 			IVisualLayer underLayer = visualLayerFactory.CreateShiftSetupLayer(underActivity, period, dummyPerson);
-			IVisualLayer ret = visualLayerFactory.CreateAbsenceSetupLayer(absence, underLayer, period);
+			IVisualLayer ret = visualLayerFactory.CreateAbsenceSetupLayer(absence, underLayer, period, underLayer.PersonAbsenceId);
 			return ret;
 		}
 
@@ -626,7 +626,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			IActivity underActivity = ActivityFactory.CreateActivity("for test");
 			underActivity.InPaidTime = inPaidTime;
 			IVisualLayer underLayer = visualLayerFactory.CreateShiftSetupLayer(underActivity, period, dummyPerson);
-			IVisualLayer ret = visualLayerFactory.CreateAbsenceSetupLayer(absence, underLayer, period);
+			IVisualLayer ret = visualLayerFactory.CreateAbsenceSetupLayer(absence, underLayer, period, underLayer.PersonAbsenceId);
 			return ret;
 		}
 
@@ -637,7 +637,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			IActivity underActivity = ActivityFactory.CreateActivity("for test");
 			underActivity.InContractTime = activityInContractTime;
 			IVisualLayer underLayer = visualLayerFactory.CreateShiftSetupLayer(underActivity, period, dummyPerson);
-			IVisualLayer ret = visualLayerFactory.CreateAbsenceSetupLayer(absence, underLayer, period);
+			IVisualLayer ret = visualLayerFactory.CreateAbsenceSetupLayer(absence, underLayer, period, underLayer.PersonAbsenceId);
 			return ret;
 		}
 
@@ -657,9 +657,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
 		private IVisualLayer createVisualLayerWithAbsenceForReadyTime(DateTimePeriod period, bool activityInReadyTime)
 		{
-			IActivity payload = createActivity(activityInReadyTime);
-			IVisualLayer actLayer = visualLayerFactory.CreateShiftSetupLayer(payload, period, dummyPerson);
-			return visualLayerFactory.CreateAbsenceSetupLayer(AbsenceFactory.CreateAbsence("vacation"), actLayer, period);
+			var payload = createActivity(activityInReadyTime);
+			var actLayer = visualLayerFactory.CreateShiftSetupLayer(payload, period, dummyPerson);
+			return visualLayerFactory.CreateAbsenceSetupLayer(AbsenceFactory.CreateAbsence("vacation"), actLayer, period,
+				actLayer.PersonAbsenceId);
 		}
 	}
 }

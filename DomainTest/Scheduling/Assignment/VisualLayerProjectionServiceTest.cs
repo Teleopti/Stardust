@@ -419,17 +419,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyReferencedActivityLayer()
 		{
-			IVisualLayerFactory layerFactory = new VisualLayerFactory();
-			IActivity refAct = ActivityFactory.CreateActivity("f");
-			DateTimePeriod period = new DateTimePeriod(2000,1,1,2001,1,2);
-			IVisualLayer actLayer = layerFactory.CreateShiftSetupLayer(refAct, period, person);
-			IVisualLayer layer = layerFactory.CreateAbsenceSetupLayer(AbsenceFactory.CreateAbsence("vacation"), actLayer, period);
-			VisualLayerProjectionService target = new VisualLayerProjectionService(person);
-			target.Add(layer);
-			foreach (VisualLayer vlayer in target.CreateProjection())
+			var layerFactory = new VisualLayerFactory();
+			var refAct = ActivityFactory.CreateActivity("f");
+			var period = new DateTimePeriod(2000,1,1,2001,1,2);
+			var actLayer = layerFactory.CreateShiftSetupLayer(refAct, period, person);
+			var absenceLayer = layerFactory.CreateAbsenceSetupLayer(AbsenceFactory.CreateAbsence("vacation"), actLayer, period,
+				actLayer.PersonAbsenceId);
+			var target = new VisualLayerProjectionService(person);
+			target.Add(absenceLayer);
+			foreach (var vlayer in target.CreateProjection())
 			{
-				Assert.IsNotNull(vlayer);
-				Assert.AreSame(refAct, vlayer.HighestPriorityActivity);
+				var layer = vlayer as VisualLayer;
+				Assert.IsNotNull(layer);
+				Assert.AreSame(refAct, layer.HighestPriorityActivity);
 			}
 		}
 

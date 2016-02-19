@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.Domain.Collection
 					DateTimePeriod? intersectionPeriod = layerPeriod.Intersection(periodToSearch);
 					if (intersectionPeriod.HasValue)
 					{
-						IVisualLayer newLayer = visualLayerFactory.CreateResultLayer(layer.Payload, layer, intersectionPeriod.Value);
+						IVisualLayer newLayer = visualLayerFactory.CreateResultLayer(layer.Payload, layer, intersectionPeriod.Value, layer.PersonAbsenceId);
 						retColl.Add(newLayer);
 						foundIndex = index;
 					}

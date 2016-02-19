@@ -83,8 +83,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ScheduleSortingCommands
         	IProjectionService projectionService8 = _mocks.StrictMock<IProjectionService>();
 
 			var layerFactory = new VisualLayerFactory();
-			var activityLayerInBottom = layerFactory.CreateShiftSetupLayer( ActivityFactory.CreateActivity("underliggande"),absencePeriod,person1);
-			var absenceLayer = layerFactory.CreateAbsenceSetupLayer(AbsenceFactory.CreateAbsence("Sick"), activityLayerInBottom, dateTimePeriod);
+	        var activityLayerInBottom = layerFactory.CreateShiftSetupLayer(
+		        ActivityFactory.CreateActivity("underliggande"), absencePeriod, person1);
+	        var absenceLayer = layerFactory.CreateAbsenceSetupLayer(AbsenceFactory.CreateAbsence("Sick"),
+		        activityLayerInBottom, dateTimePeriod, activityLayerInBottom.PersonAbsenceId);
 
 			IVisualLayerCollection layerCollection1 = VisualLayerCollectionFactory.CreateForWorkShift(person1, new TimeSpan(7, 0, 0), new TimeSpan(17, 30, 0));
 			IVisualLayerCollection layerCollection2 = VisualLayerCollectionFactory.CreateForWorkShift(person2, new TimeSpan(6, 0, 0), new TimeSpan(16, 0, 0));

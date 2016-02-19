@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using System;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
@@ -27,29 +28,33 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public IVisualLayer CreateMeetingSetupLayer(IMeetingPayload meetingPayload, IVisualLayer originalLayer, DateTimePeriod period)
 		{
 			return new VisualLayer(meetingPayload, period, meetingPayload.Meeting.Activity, originalLayer.Person)
-			          	{
-			          		DefinitionSet = originalLayer.DefinitionSet
-			          	};
+			{
+				DefinitionSet = originalLayer.DefinitionSet
+			};
 		}
 
 
-		public IVisualLayer CreateAbsenceSetupLayer(IAbsence absence, IVisualLayer originalLayer, DateTimePeriod period)
+		public IVisualLayer CreateAbsenceSetupLayer(IAbsence absence, IVisualLayer originalLayer, DateTimePeriod period,
+			Guid? personAbsenceId)
 		{
-			return new VisualLayer(absence, period, ((VisualLayer)originalLayer).HighestPriorityActivity,originalLayer.Person)
-			       	{
-			       		HighestPriorityAbsence = absence,
-							DefinitionSet = originalLayer.DefinitionSet
-			       	};
+			return new VisualLayer(absence, period, ((VisualLayer) originalLayer).HighestPriorityActivity, originalLayer.Person,
+				personAbsenceId)
+			{
+				HighestPriorityAbsence = absence,
+				DefinitionSet = originalLayer.DefinitionSet
+			};
 		}
 
-		public IVisualLayer CreateResultLayer(IPayload payload, IVisualLayer originalLayer, DateTimePeriod period)
+		public IVisualLayer CreateResultLayer(IPayload payload, IVisualLayer originalLayer, DateTimePeriod period,
+			Guid? personAbsenceId = null)
 		{
-			var castedLayer = ((VisualLayer)originalLayer);
-			return new VisualLayer(payload, period, castedLayer.HighestPriorityActivity,originalLayer.Person)
-			          	{
-			          		HighestPriorityAbsence = castedLayer.HighestPriorityAbsence, 
-								DefinitionSet = originalLayer.DefinitionSet
-			          	};
+			var castedLayer = ((VisualLayer) originalLayer);
+			return new VisualLayer(payload, period, castedLayer.HighestPriorityActivity, originalLayer.Person)
+			{
+				HighestPriorityAbsence = castedLayer.HighestPriorityAbsence,
+				DefinitionSet = originalLayer.DefinitionSet,
+				PersonAbsenceId = personAbsenceId
+			};
 		}
 	}
 }

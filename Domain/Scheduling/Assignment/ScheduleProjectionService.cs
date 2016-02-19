@@ -166,10 +166,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				foreach (var visualLayer in assignmentProjection)
 				{
 					var intersectPeriod = visualLayer.Period.Intersection(personAbsence.Period);
-					if (intersectPeriod.HasValue)
-					{
-						projectionService.Add(layerFactory.CreateAbsenceSetupLayer(personAbsence.Layer.Payload, visualLayer, intersectPeriod.Value));
-					}
+					if (!intersectPeriod.HasValue) continue;
+					var absenceLayer = layerFactory.CreateAbsenceSetupLayer(personAbsence.Layer.Payload, visualLayer, intersectPeriod.Value, personAbsence.Id);
+					projectionService.Add(absenceLayer);
 				}
 			}
 		}

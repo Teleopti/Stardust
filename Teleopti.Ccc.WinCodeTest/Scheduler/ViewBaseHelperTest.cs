@@ -84,8 +84,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _personAbsence = CreatePersonAbsence();
             _personAbsenceCollection = new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence> { _personAbsence });
             _visualLayers = new List<IVisualLayer>();
-            IVisualLayer actLayer = _layerFactory.CreateShiftSetupLayer(ActivityFactory.CreateActivity("activity"), _personAbsence.Period, _agent);
-            _visualLayer = _layerFactory.CreateAbsenceSetupLayer(_personAbsence.Layer.Payload, actLayer, _personAbsence.Period);
+			var actLayer = _layerFactory.CreateShiftSetupLayer(ActivityFactory.CreateActivity("activity"),
+				_personAbsence.Period, _agent);
+			_visualLayer = _layerFactory.CreateAbsenceSetupLayer(_personAbsence.Layer.Payload, actLayer, _personAbsence.Period,
+				actLayer.PersonAbsenceId);
             _visualLayerCollection = new VisualLayerCollection(_agent, _visualLayers, new ProjectionPayloadMerger());
 
             _underlyingDictionary = new Dictionary<IPerson, IScheduleRange>();

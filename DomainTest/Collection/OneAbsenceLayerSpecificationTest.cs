@@ -66,11 +66,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
             Assert.IsTrue(target.IsSatisfiedBy(new VisualLayerCollection(null, vList, new ProjectionPayloadMerger())));
         }
 
-        private IVisualLayer correctAbsenceLayer()
-        {
-            IVisualLayer actLayer = visualLayerFactory.CreateShiftSetupLayer(new Activity("sdf"),
-                                                                 new DateTimePeriod(2000, 1, 1, 2001, 1, 1),person);
-            return visualLayerFactory.CreateAbsenceSetupLayer(new Absence(), actLayer, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-        }
+	    private IVisualLayer correctAbsenceLayer()
+	    {
+		    var actLayer = visualLayerFactory.CreateShiftSetupLayer(new Activity("sdf"),
+			    new DateTimePeriod(2000, 1, 1, 2001, 1, 1), person);
+		    return visualLayerFactory.CreateAbsenceSetupLayer(new Absence(), actLayer,
+			    new DateTimePeriod(2000, 1, 1, 2001, 1, 1), actLayer.PersonAbsenceId);
+	    }
     }
 }

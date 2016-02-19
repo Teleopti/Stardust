@@ -56,5 +56,6 @@ namespace Teleopti.Interfaces.Domain
 		IPerson Person { get; }
 
 		IVisualLayer CloneWithNewPeriod(DateTimePeriod newPeriod);
+		Guid? PersonAbsenceId { get; set; }
 	}
 }

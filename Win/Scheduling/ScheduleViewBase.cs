@@ -547,9 +547,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 						var absenceCollection = scheduleRange.PersonAbsenceCollection();
 						IPersonAbsence personAbsence = absenceCollection[absenceCollection.Count - 1];
 						IVisualLayerFactory layerFactory = new VisualLayerFactory();
-						IVisualLayer actLayer = layerFactory.CreateShiftSetupLayer(new Activity("activity"), personAbsence.Period, personAbsence.Person);
-	
-						DrawLayer(e, layerFactory.CreateAbsenceSetupLayer(personAbsence.Layer.Payload, actLayer, personAbsence.Period), timeSpans, scheduleRange.Person, significantPart);
+						IVisualLayer actLayer = layerFactory.CreateShiftSetupLayer(new Activity("activity"), personAbsence.Period,
+							personAbsence.Person);
+
+						var layer = layerFactory.CreateAbsenceSetupLayer(personAbsence.Layer.Payload, actLayer, personAbsence.Period,
+							actLayer.PersonAbsenceId);
+						DrawLayer(e, layer, timeSpans, scheduleRange.Person, significantPart);
 					}
                 }
             }

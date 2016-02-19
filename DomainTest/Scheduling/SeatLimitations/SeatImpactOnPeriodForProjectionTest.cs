@@ -102,18 +102,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 		[Test]
 		public void ShouldNotCalculateIfPayloadNotActivity()
 		{
-			IVisualLayer absenceLayer;
-			IVisualLayer baseactivityLayer;
+			var period = new DateTimePeriod(new DateTime(2010, 1, 1, 9, 0, 0, DateTimeKind.Utc),
+				new DateTime(2010, 1, 1, 9, 30, 0, DateTimeKind.Utc));
 
-			DateTimePeriod period = new DateTimePeriod(new DateTime(2010, 1, 1, 9, 0, 0, DateTimeKind.Utc),
-															 new DateTime(2010, 1, 1, 9, 30, 0, DateTimeKind.Utc));
-
-			baseactivityLayer = _visualLayerFactory.CreateShiftSetupLayer(_phone, period, _person2);
-			absenceLayer = _visualLayerFactory.CreateAbsenceSetupLayer(_absence, baseactivityLayer, period);
-			_layerCollection3 = new VisualLayerCollection(_person2, new List<IVisualLayer> { absenceLayer, _visualLayer1 }, new ProjectionPayloadMerger());
+			var baseactivityLayer = _visualLayerFactory.CreateShiftSetupLayer(_phone, period, _person2);
+			var absenceLayer = _visualLayerFactory.CreateAbsenceSetupLayer(_absence, baseactivityLayer, period,
+				baseactivityLayer.PersonAbsenceId);
+			_layerCollection3 = new VisualLayerCollection(_person2, new List<IVisualLayer> {absenceLayer, _visualLayer1},
+				new ProjectionPayloadMerger());
 			_shiftList = new List<IVisualLayerCollection> {_layerCollection3 };
 
-			double result = _target.CalculatePeriod(_skillStaffPeriod, _shiftList);
+			var result = _target.CalculatePeriod(_skillStaffPeriod, _shiftList);
 			Assert.AreEqual(0.5, result);
 		}
 

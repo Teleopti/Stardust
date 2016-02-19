@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
         [Test]
         public void VerifyWrongPayload()
         {
-            IList<IVisualLayer> vList = new List<IVisualLayer> { createLayer(payload), createAbseLayer(new Absence()) };
+            IList<IVisualLayer> vList = new List<IVisualLayer> { createLayer(payload), createAbsenceLayer(new Absence()) };
             Assert.IsFalse(target.IsSatisfiedBy(new VisualLayerCollection(person, vList, new ProjectionPayloadMerger())));
         }
 
@@ -66,10 +66,11 @@ namespace Teleopti.Ccc.DomainTest.Collection
             return visualLayerFactory.CreateShiftSetupLayer(activity, new DateTimePeriod(2000, 1, 1, 2001, 1, 1), person);
         }
 
-        private IVisualLayer createAbseLayer(IAbsence abs)
+        private IVisualLayer createAbsenceLayer(IAbsence abs)
         {
-            IVisualLayer actLayer = createLayer(payload);
-            return visualLayerFactory.CreateAbsenceSetupLayer(abs, actLayer, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
+            var actLayer = createLayer(payload);
+	        return visualLayerFactory.CreateAbsenceSetupLayer(abs, actLayer, new DateTimePeriod(2000, 1, 1, 2001, 1, 1),
+		        actLayer.PersonAbsenceId);
         }
     }
 }

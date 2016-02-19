@@ -117,25 +117,27 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
             {
                 Expect.Call(visualLayerCollection.GetEnumerator()).Return(visualLayers.GetEnumerator());
             }
-            using (mocks.Playback())
-            {
-                var visualShiftStart = TimeSpan.Zero;
-                var shiftEnd = new TimeSpan(4, 0, 0);
-                var endTimeLine = new TimeSpan(4, 0, 0);
+	        using (mocks.Playback())
+	        {
+		        var visualShiftStart = TimeSpan.Zero;
+		        var shiftEnd = new TimeSpan(4, 0, 0);
+		        var endTimeLine = new TimeSpan(4, 0, 0);
 
-                minMaxTime = new TimePeriod(new TimeSpan(0, 0, 0), endTimeLine);
-                var result = target.CreatePeriodViewModels(visualLayerCollection, minMaxTime, localDate, timeZone);
+		        minMaxTime = new TimePeriod(new TimeSpan(0, 0, 0), endTimeLine);
+		        var result = target.CreatePeriodViewModels(visualLayerCollection, minMaxTime, localDate, timeZone);
 
-                var layerDetails = result.Single();
-                layerDetails.StyleClassName.Should().Be.EqualTo("color_008000");
-                layerDetails.Summary.Should().Be.EqualTo("8:00");
-                layerDetails.Title.Should().Be.EqualTo("Phone");
-                layerDetails.TimeSpan.Should().Be.EqualTo("20:00 - 04:00 +1");
-                layerDetails.Meeting.Should().Be.Null();
-                layerDetails.Color.Should().Be.EqualTo("0,128,0");
-                layerDetails.StartPositionPercentage.Should().Be.EqualTo((visualShiftStart - TimeSpan.Zero).Ticks / (decimal)(endTimeLine - TimeSpan.Zero).Ticks);
-                layerDetails.EndPositionPercentage.Should().Be.EqualTo((shiftEnd - TimeSpan.Zero).Ticks / (decimal)(endTimeLine - TimeSpan.Zero).Ticks);
-            }
+		        var layerDetails = result.Single();
+		        layerDetails.StyleClassName.Should().Be.EqualTo("color_008000");
+		        layerDetails.Summary.Should().Be.EqualTo("8:00");
+		        layerDetails.Title.Should().Be.EqualTo("Phone");
+		        layerDetails.TimeSpan.Should().Be.EqualTo("20:00 - 04:00 +1");
+		        layerDetails.Meeting.Should().Be.Null();
+		        layerDetails.Color.Should().Be.EqualTo("0,128,0");
+		        layerDetails.StartPositionPercentage.Should()
+			        .Be.EqualTo((visualShiftStart - TimeSpan.Zero).Ticks/(decimal) (endTimeLine - TimeSpan.Zero).Ticks);
+		        layerDetails.EndPositionPercentage.Should()
+			        .Be.EqualTo((shiftEnd - TimeSpan.Zero).Ticks/(decimal) (endTimeLine - TimeSpan.Zero).Ticks);
+	        }
         }
 
         [Test]
@@ -144,7 +146,10 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
             absence.SetId(Guid.NewGuid());
 
-            var visualLayers = new List<IVisualLayer> { factory.CreateAbsenceSetupLayer(absence, visualActivityLayer, period) };
+            var visualLayers = new List<IVisualLayer>
+            {
+	            factory.CreateAbsenceSetupLayer(absence, visualActivityLayer, period, Guid.NewGuid())
+            };
             using (mocks.Record())
             {
                 Expect.Call(visualLayerCollection.GetEnumerator()).Return(visualLayers.GetEnumerator());
@@ -168,7 +173,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
         [Test]
         public void ShouldCreatePeriodViewModelFromOvertimeLayer()
         {
-            var definitionSet = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("Overtime", MultiplicatorType.Overtime);
+	        var definitionSet = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("Overtime",
+		        MultiplicatorType.Overtime);
 
             ((VisualLayer)visualActivityLayer).DefinitionSet = definitionSet;
             var visualLayers = new List<IVisualLayer> { visualActivityLayer };
@@ -196,9 +202,11 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
         [Test]
         public void ShouldCreatePeriodViewModelFromMeetingLayer()
         {
-            var person = PersonFactory.CreatePerson();
-            var meeting = new Meeting(person, new[] { new MeetingPerson(person, false) }, "subj", "loc", "desc", activity,
-                                      null);
+            var testPerson = PersonFactory.CreatePerson();
+	        var meeting = new Meeting(testPerson, new[]
+	        {
+		        new MeetingPerson(testPerson, false)
+	        }, "subj", "loc", "desc", activity, null);
             IMeetingPayload meetingPayload = new MeetingPayload(meeting);
 
             var visualLayers = new List<IVisualLayer> { factory.CreateMeetingSetupLayer(meetingPayload, visualActivityLayer, period) };
@@ -225,59 +233,79 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
         }
 
 	    [Test]
-		public void ShouldCreateOvertimeAvailabilityPeriodViewModelNotSpanToTomorrow()
+	    public void ShouldCreateOvertimeAvailabilityPeriodViewModelNotSpanToTomorrow()
 	    {
 		    var start = new TimeSpan(12, 0, 0);
 		    var end = new TimeSpan(24, 0, 1);
-		    var result=target.CreateOvertimeAvailabilityPeriodViewModels(new OvertimeAvailability(new Person(), DateOnly.Today, start, end), null, minMaxTime);
-		    result.First().Title.Should().Be.EqualTo(Resources.OvertimeAvailabilityWeb);
-		    result.First().TimeSpan.Should().Equals(TimeHelper.TimeOfDayFromTimeSpan(start, CultureInfo.CurrentCulture) + " - " + TimeHelper.TimeOfDayFromTimeSpan(end, CultureInfo.CurrentCulture));
-		    result.First().StartPositionPercentage.Should().Be.EqualTo((decimal) (start - minMaxTime.StartTime).Ticks/(minMaxTime.EndTime - minMaxTime.StartTime).Ticks);
-			result.First().EndPositionPercentage.Should().Be.EqualTo(1);
-			result.First().IsOvertimeAvailability.Should().Be.True();
-			result.First().Color.Should().Be.EqualTo(Color.Gray.ToCSV());
+		    var result =
+			    target.CreateOvertimeAvailabilityPeriodViewModels(
+				    new OvertimeAvailability(new Person(), DateOnly.Today, start, end), null, minMaxTime).First();
+
+		    result.Title.Should().Be.EqualTo(Resources.OvertimeAvailabilityWeb);
+		    result.TimeSpan.Should()
+			    .Equals(TimeHelper.TimeOfDayFromTimeSpan(start, CultureInfo.CurrentCulture) + " - " +
+						TimeHelper.TimeOfDayFromTimeSpan(end, CultureInfo.CurrentCulture));
+		    result.StartPositionPercentage.Should()
+			    .Be.EqualTo((decimal) (start - minMaxTime.StartTime).Ticks/(minMaxTime.EndTime - minMaxTime.StartTime).Ticks);
+		    result.EndPositionPercentage.Should().Be.EqualTo(1);
+		    result.IsOvertimeAvailability.Should().Be.True();
+		    result.Color.Should().Be.EqualTo(Color.Gray.ToCSV());
 	    }
 
-		[Test]
-		public void ShouldCreateOvertimeAvailabilityPeriodViewModel()
-		{
-			var start = new TimeSpan(12, 0, 0);
-			var end = new TimeSpan(13, 0, 0);
-			var result = target.CreateOvertimeAvailabilityPeriodViewModels(new OvertimeAvailability(new Person(), DateOnly.Today, start, end), null, minMaxTime);
-			result.First().Title.Should().Be.EqualTo(Resources.OvertimeAvailabilityWeb);
-			result.First().TimeSpan.Should().Equals(TimeHelper.TimeOfDayFromTimeSpan(start, CultureInfo.CurrentCulture) + " - " + TimeHelper.TimeOfDayFromTimeSpan(end, CultureInfo.CurrentCulture));
-			result.First().StartPositionPercentage.Should().Be.EqualTo((decimal)(start - minMaxTime.StartTime).Ticks / (minMaxTime.EndTime - minMaxTime.StartTime).Ticks);
-			result.First().EndPositionPercentage.Should().Be.EqualTo((decimal)(end - minMaxTime.StartTime).Ticks / (minMaxTime.EndTime - minMaxTime.StartTime).Ticks);
-			result.First().IsOvertimeAvailability.Should().Be.True();
-			result.First().Color.Should().Be.EqualTo(Color.Gray.ToCSV());
-		}
+	    [Test]
+	    public void ShouldCreateOvertimeAvailabilityPeriodViewModel()
+	    {
+		    var start = new TimeSpan(12, 0, 0);
+		    var end = new TimeSpan(13, 0, 0);
+		    var result =
+			    target.CreateOvertimeAvailabilityPeriodViewModels(
+				    new OvertimeAvailability(new Person(), DateOnly.Today, start, end), null, minMaxTime).First();
 
-		[Test]
-		public void ShouldCreateOvertimeAvailabilityPeriodViewModelForYesterday()
-		{
-			var start = new TimeSpan(12, 0, 0);
-			var end = new TimeSpan(25, 0, 0);
-			var overtimeAvailabilityYesterday = new OvertimeAvailability(new Person(), DateOnly.Today, start, end);
-			var overtimeAvailabilityViewModel = new OvertimeAvailabilityViewModel();
-			_mapper.Stub(x => x.Map<IOvertimeAvailability, OvertimeAvailabilityViewModel>(overtimeAvailabilityYesterday))
-			       .Return(overtimeAvailabilityViewModel);
+		    result.Title.Should().Be.EqualTo(Resources.OvertimeAvailabilityWeb);
+		    result.TimeSpan.Should()
+			    .Equals(TimeHelper.TimeOfDayFromTimeSpan(start, CultureInfo.CurrentCulture) + " - " +
+						TimeHelper.TimeOfDayFromTimeSpan(end, CultureInfo.CurrentCulture));
+		    result.StartPositionPercentage.Should()
+			    .Be.EqualTo((decimal) (start - minMaxTime.StartTime).Ticks/(minMaxTime.EndTime - minMaxTime.StartTime).Ticks);
+		    result.EndPositionPercentage.Should()
+			    .Be.EqualTo((decimal) (end - minMaxTime.StartTime).Ticks/(minMaxTime.EndTime - minMaxTime.StartTime).Ticks);
+		    result.IsOvertimeAvailability.Should().Be.True();
+		    result.Color.Should().Be.EqualTo(Color.Gray.ToCSV());
+	    }
 
-			var result = target.CreateOvertimeAvailabilityPeriodViewModels(null, overtimeAvailabilityYesterday, minMaxTime);
-			result.First().Title.Should().Be.EqualTo(Resources.OvertimeAvailabilityWeb);
-			result.First().TimeSpan.Should().Equals(TimeHelper.TimeOfDayFromTimeSpan(start, CultureInfo.CurrentCulture) + " - " + TimeHelper.TimeOfDayFromTimeSpan(end, CultureInfo.CurrentCulture));
-			result.First().StartPositionPercentage.Should().Be.EqualTo(0);
-			result.First().EndPositionPercentage.Should().Be.EqualTo((decimal)(end.Subtract(new TimeSpan(1, 0, 0, 0)) - minMaxTime.StartTime).Ticks / (minMaxTime.EndTime - minMaxTime.StartTime).Ticks);
-			result.First().IsOvertimeAvailability.Should().Be.True();
-			result.First().OvertimeAvailabilityYesterday.Should().Be.SameInstanceAs(overtimeAvailabilityViewModel);
-			result.First().Color.Should().Be.EqualTo(Color.Gray.ToCSV());
-		}
+	    [Test]
+	    public void ShouldCreateOvertimeAvailabilityPeriodViewModelForYesterday()
+	    {
+		    var start = new TimeSpan(12, 0, 0);
+		    var end = new TimeSpan(25, 0, 0);
+		    var overtimeAvailabilityYesterday = new OvertimeAvailability(new Person(), DateOnly.Today, start, end);
+		    var overtimeAvailabilityViewModel = new OvertimeAvailabilityViewModel();
+		    _mapper.Stub(x => x.Map<IOvertimeAvailability, OvertimeAvailabilityViewModel>(overtimeAvailabilityYesterday))
+			    .Return(overtimeAvailabilityViewModel);
 
-		[Test]
+		    var result =
+			    target.CreateOvertimeAvailabilityPeriodViewModels(null, overtimeAvailabilityYesterday, minMaxTime).First();
+
+		    result.Title.Should().Be.EqualTo(Resources.OvertimeAvailabilityWeb);
+		    result.TimeSpan.Should()
+			    .Equals(TimeHelper.TimeOfDayFromTimeSpan(start, CultureInfo.CurrentCulture) + " - " +
+						TimeHelper.TimeOfDayFromTimeSpan(end, CultureInfo.CurrentCulture));
+		    result.StartPositionPercentage.Should().Be.EqualTo(0);
+		    result.EndPositionPercentage.Should()
+			    .Be.EqualTo((decimal) (end.Subtract(new TimeSpan(1, 0, 0, 0)) - minMaxTime.StartTime).Ticks/
+							(minMaxTime.EndTime - minMaxTime.StartTime).Ticks);
+		    result.IsOvertimeAvailability.Should().Be.True();
+		    result.OvertimeAvailabilityYesterday.Should().Be.SameInstanceAs(overtimeAvailabilityViewModel);
+		    result.Color.Should().Be.EqualTo(Color.Gray.ToCSV());
+	    }
+
+	    [Test]
 		public void ShouldNotCreateOvertimeAvailabilityPeriodViewModelForYesterdayIfNotSpanToToday()
 		{
 			var start = new TimeSpan(12, 0, 0);
 			var end = new TimeSpan(13, 0, 0);
-			var result = target.CreateOvertimeAvailabilityPeriodViewModels(null, new OvertimeAvailability(new Person(), DateOnly.Today, start, end), minMaxTime);
+		    var result = target.CreateOvertimeAvailabilityPeriodViewModels(null,
+			    new OvertimeAvailability(new Person(), DateOnly.Today, start, end), minMaxTime);
 			result.Should().Be.Empty();
 		}
 
