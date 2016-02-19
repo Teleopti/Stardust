@@ -150,7 +150,7 @@ namespace ManagerTest
 			JobManager.JobHistoryDetails(jobId).Should().Not.Be.Empty();
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldRemoveJobOnBadRequest()
 		{
 			var jobId = Guid.NewGuid();
