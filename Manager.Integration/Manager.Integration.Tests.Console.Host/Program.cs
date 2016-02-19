@@ -198,6 +198,9 @@ namespace Manager.IntegrationTest.Console.Host
                 appDomainNodeTask.StartTask(CancellationTokenSource);
 
                 AppDomainNodeTasks.Add(appDomainNodeTask);
+
+                // Wait 5 seconds for a new node to start up.
+                Thread.Sleep(TimeSpan.FromSeconds(5));
             }
 
             StartSelfHosting();

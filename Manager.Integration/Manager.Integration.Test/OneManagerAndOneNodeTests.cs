@@ -169,7 +169,14 @@ namespace Manager.Integration.Test
             {
                 Task.Factory.StartNew(() =>
                 {
-                    Thread.Sleep(TimeSpan.FromSeconds(20));
+                    NodeStatusNotifier nodeStartedNotifier =
+                        new NodeStatusNotifier(ManagerDbConnectionString);
+
+                    nodeStartedNotifier.StartJobDefinitionStatusNotifier(args.Guid,
+                                                                 "Started",
+                                                                 CancellationTokenSource);
+
+                    nodeStartedNotifier.NotifyWhenNodeStarted.Wait(timeout);
 
                     var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
 
@@ -177,9 +184,10 @@ namespace Manager.Integration.Test
 
                     jobManagerTaskCreator.StartAndWaitDeleteJobToManagerTask(timeout);
 
+                    nodeStartedNotifier.Dispose();
                     jobManagerTaskCreator.Dispose();
-                },
-                CancellationTokenSource.Token);
+
+                }, CancellationTokenSource.Token);
             };
 
             checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);

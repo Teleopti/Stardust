@@ -145,15 +145,15 @@ namespace Manager.Integration.Test
 
             TimeSpan timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count);
 
-            SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
+            //SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
-            Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(5,
-                                                                      cancellationTokenSource);
-            task.Start();
+            //Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(5,
+            //                                                          cancellationTokenSource);
+            //task.Start();
 
-            sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
+            //sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
 
-            sqlNotifier.Dispose();
+            //sqlNotifier.Dispose();
 
             for (int i = 0; i < 10; i++)
             {

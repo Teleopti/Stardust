@@ -76,6 +76,7 @@
     <Compile Include="Helpers\ProcessHelper.cs" />
     <Compile Include="Helpers\SecurityHelper.cs" />
     <Compile Include="Helpers\ManagerUriBuilder.cs" />
+    <Compile Include="Notifications\NodeStatusNotifier.cs" />
     <Compile Include="Notifications\SqlNotifier.cs" />
     <Compile Include="OneManagerAndFiveNodesLoadTests.cs" />
     <Compile Include="OneManagerAndZeroNodesTests.cs" />
