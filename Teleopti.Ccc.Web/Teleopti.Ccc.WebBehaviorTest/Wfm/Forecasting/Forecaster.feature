@@ -145,7 +145,8 @@ Scenario: Remove override values for one day
 	And I select to modify the forecast
 	And I clear override values
 	Then I should see that there are no override values for the first day 
-
+	
+	@ignore
 Scenario: Remove override values for one day when campaign exists
 	Given I am viewing forecast page
 	And I select workload 'TheWorkload1'
