@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public FakePersonRepository PersonRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
+		public OptimizationPreferencesFactory OptimizationPreferencesFactory;
 
 		[Test]
 		public void ShouldOptimizeNoneIf0PercentShouldBeOptimized()
@@ -111,8 +112,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		}
 
 		[Test]
-		public void ShouldSkipRestOfPeriodWhenOnlyOneDayCouldBeOptimized()
+		public void ShouldSkipOptimizationForRestOfPeriodIfExecuterThinkThatsAGoodIdea()
 		{
+			var prefUsedInThisTest = OptimizationPreferencesFactory.Create();
+			prefUsedInThisTest.Shifts.KeepShifts = true;
+			prefUsedInThisTest.Shifts.KeepShiftsValue = int.MaxValue;
+			OptimizationPreferencesFactory.SetFromTestsOnly(prefUsedInThisTest);
 			IntradayOptmizerLimiter.SetFromTest(new Percent(1), 0);
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
 			var skill = SkillRepository.Has("skill", phoneActivity);
@@ -120,14 +125,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var dateOnly = new DateOnly(2015, 10, 12);
 			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
 			var agent = PersonRepository.Has(new Contract("_"), new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1), skill);
-			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, new ShiftCategory("_"), dateOnly, new TimePeriod(8, 0, 17, 0));
-			SkillDayRepository.Has(new[] { skill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60)) });
+			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, new ShiftCategory("_"), new DateOnlyPeriod(dateOnly, dateOnly.AddDays(7)), new TimePeriod(8, 0, 16, 0));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddDays(6)), TimeSpan.FromMinutes(60)));
 
 			Target.Optimize(planningPeriod.Id.Value);
 
 			TrackOptimizeDaysForAgents.NumberOfOptimizations()
-				.Should().Be.EqualTo(2);	
+				.Should().Be.EqualTo(1);
 		}
+
+
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{

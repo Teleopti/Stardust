@@ -85,7 +85,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				_container.Resolve<IMinWeekWorkTimeRule>(),
 				_container.Resolve<IResourceOptimizationHelper>(),
 				_container.Resolve<IDeleteAndResourceCalculateService>(),
-				_container.Resolve<IIntradayOptimizeOneDayCallback>());
+				_container.Resolve<IIntradayOptimizeOneDayCallback>(),
+				_container.Resolve<IIntradatOptimizeOneDay_HackForToggle37049_RemoveMeLater>());
 
 			var optimizers = creator.Create(matrixContainerList,
 				workShiftContainerList, optimizerPreferences,

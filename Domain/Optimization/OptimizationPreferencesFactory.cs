@@ -4,12 +4,19 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class OptimizationPreferencesFactory
 	{
+		private OptimizationPreferences _setFromTests;
+
 		public OptimizationPreferences Create()
 		{
-			return new OptimizationPreferences
+			return _setFromTests ?? new OptimizationPreferences
 			{
-				General = new GeneralPreferences { ScheduleTag = NullScheduleTag.Instance, OptimizationStepDaysOff = true }
+				General = new GeneralPreferences {ScheduleTag = NullScheduleTag.Instance, OptimizationStepDaysOff = true}
 			};
-		} 
+		}
+
+		public void SetFromTestsOnly(OptimizationPreferences optimizationPreferences)
+		{
+			_setFromTests = optimizationPreferences;
+		}
 	}
 }
