@@ -40,8 +40,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     	private IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
         private IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 	    private OverLimitResults _overLimitCounts;
-	    private IDateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
-	    private IPersonAssignment _personAssignment;
 
 	    [SetUp]
         public void Setup()
@@ -71,13 +69,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _deleteAndResourceCalculateService = _mockRepository.StrictMock<IDeleteAndResourceCalculateService>();
             _resourceCalculateDelayer = _mockRepository.StrictMock<IResourceCalculateDelayer>();
 	        _overLimitCounts = new OverLimitResults(0, 0, 0, 0, 0);
-			_dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_removedDate, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
-		    _personAssignment = _mockRepository.StrictMock<IPersonAssignment>();
 
 
 			var intradayOptimizeOneday = new IntradayOptimizeOneday(_dailyValueCalculator,_scheduleService,_optimizerPreferences,_rollbackService,
 				_resourceOptimizationHelper,_effectiveRestrictionCreator,_optimizationLimits,_workShiftOriginalStateContainer,_schedulingOptionsCreator,
-				_mainShiftOptimizeActivitySpecificationSetter,_deleteAndResourceCalculateService,_resourceCalculateDelayer,_scheduleMatrix);
+				_mainShiftOptimizeActivitySpecificationSetter,_deleteAndResourceCalculateService,_resourceCalculateDelayer,_scheduleMatrix, MockRepository.GenerateStub<IIntradayOptimizeOneDayCallback>());
 
 			_target=new IntradayOptimizer2(_personalSkillsDataExtractor,_decisionMaker, _scheduleMatrix, intradayOptimizeOneday);
 

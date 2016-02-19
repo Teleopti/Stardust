@@ -723,11 +723,13 @@
     <Compile Include="Optimization\IDayOffOptimizationPreferenceProvider.cs" />
     <Compile Include="Optimization\IDayOffRulesModelPersister.cs" />
     <Compile Include="Optimization\IFetchDayOffRulesModel.cs" />
+    <Compile Include="Optimization\IIntradayOptimizeOneDayCallback.cs" />
     <Compile Include="Optimization\IIntradayOptimizer2.cs" />
     <Compile Include="Optimization\IIntraDayOptimizer2Creator.cs" />
     <Compile Include="Optimization\IIntradayOptimizerContainer.cs" />
     <Compile Include="Optimization\IIntradayOptimizerLimiter.cs" />
     <Compile Include="Optimization\IntradayOptimization.cs" />
+    <Compile Include="Optimization\IntradayOptimizeOnDayCallBackDoNothing.cs" />
     <Compile Include="Optimization\IntradayOptimizeOneday.cs" />
     <Compile Include="Optimization\IntradayOptimizerContainerConsiderLargeGroups.cs" />
     <Compile Include="Optimization\IntradayOptimizerCreator.cs" />

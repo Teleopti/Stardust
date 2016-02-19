@@ -31,10 +31,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return agent;
 		}
 
-		public void Has(IPerson person, ITeam team, DateOnly startDate)
+		public IPerson Has(IPerson person, ITeam team, DateOnly startDate)
 		{
 			person.AddPersonPeriod(new PersonPeriod(startDate, new PersonContract(new Contract("."), new PartTimePercentage("."), new ContractSchedule(".")), team));
 			_persons.Add(person);
+			return person;
 		}
 
 		public IPerson Has(IContract contract, ISchedulePeriod schedulePeriod, ISkill skill)

@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					if (_intradayOptimizerLimiter.CanJumpOutEarly(numberOfAgents, optimizedAgents))
 						break;
 
+					//borde kunna ta bort optimizern här om false
 					optimizer.IntradayOptimizeOneday.Execute(date);
 					optimizedAgents++;
 				}

@@ -341,6 +341,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<IntradayOptimizerContainer>().As<IIntradayOptimizerContainer>().InstancePerLifetimeScope();
 			}
 			builder.RegisterType<IntradayOptmizerLimiter>().As<IIntradayOptimizerLimiter>().AsSelf().SingleInstance();
+			builder.RegisterType<IntradayOptimizeOnDayCallBackDoNothing>().As<IIntradayOptimizeOneDayCallback>().SingleInstance();
 		}
 
 		private static void registerMoveTimeOptimizationClasses(ContainerBuilder builder)

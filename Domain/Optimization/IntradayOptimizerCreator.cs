@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IMinWeekWorkTimeRule _minWeekWorkTimeRule;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
+		private readonly IIntradayOptimizeOneDayCallback _intradayOptimizeOneDayCallback;
 
 		public IntradayOptimizer2Creator(
 			IIntradayDecisionMaker decisionMaker,
@@ -30,7 +31,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			IMinWeekWorkTimeRule minWeekWorkTimeRule,
 			IResourceOptimizationHelper resourceOptimizationHelper,
-			IDeleteAndResourceCalculateService deleteAndResourceCalculateService)
+			IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
+			IIntradayOptimizeOneDayCallback intradayOptimizeOneDayCallback)
 		{
 			_decisionMaker = decisionMaker;
 			_scheduleService = scheduleService;
@@ -41,6 +43,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_minWeekWorkTimeRule = minWeekWorkTimeRule;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
+			_intradayOptimizeOneDayCallback = intradayOptimizeOneDayCallback;
 		}
 
 		/// <summary>
@@ -94,7 +97,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 						_resourceOptimizationHelper,
 						_effectiveRestrictionCreator, optimizationLimits, workShiftStateContainer, schedulingOptionsCreator,
 						mainShiftOptimizeActivitySpecificationSetter, _deleteAndResourceCalculateService, resourceCalculateDelayer,
-						scheduleMatrix));
+						scheduleMatrix, _intradayOptimizeOneDayCallback));
 
 				result.Add(optimizer);
 			}

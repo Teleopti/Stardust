@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private readonly IResourceCalculateDelayer _resourceCalculateDelayer;
 		private readonly IScheduleMatrixPro _matrix;
+		private readonly IIntradayOptimizeOneDayCallback _intradayOptimizeOneDayCallback;
 
 		public IntradayOptimizeOneday(IScheduleResultDailyValueCalculator dailyValueCalculator,
 			IScheduleService scheduleService,
@@ -35,7 +36,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
 			IResourceCalculateDelayer resourceCalculateDelayer,
-			IScheduleMatrixPro matrix)
+			IScheduleMatrixPro matrix,
+			IIntradayOptimizeOneDayCallback intradayOptimizeOneDayCallback)
 		{
 			_dailyValueCalculator = dailyValueCalculator;
 			_scheduleService = scheduleService;
@@ -50,11 +52,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
 			_resourceCalculateDelayer = resourceCalculateDelayer;
 			_matrix = matrix;
+			_intradayOptimizeOneDayCallback = intradayOptimizeOneDayCallback;
 		}
 
 		//change to void when toggle is gone
 		public bool Execute(DateOnly dateOnly)
 		{
+			_intradayOptimizeOneDayCallback.Optimizing(_matrix.Person, dateOnly);
+
 			if (daysOverMax())
 				return false;
 

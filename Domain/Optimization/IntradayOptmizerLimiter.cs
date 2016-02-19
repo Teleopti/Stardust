@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public bool CanJumpOutEarly(int totalNumberOfAgentsInSkillGroup, int optimizedNumberOfAgentsInSkillGroup)
 		{
 			return totalNumberOfAgentsInSkillGroup >= _minSizeLimit &&
-						 (optimizedNumberOfAgentsInSkillGroup/totalNumberOfAgentsInSkillGroup) >= _minPercentOfGroupLimit.Value;
+				((double)optimizedNumberOfAgentsInSkillGroup/totalNumberOfAgentsInSkillGroup) >= _minPercentOfGroupLimit.Value;
 		}
 	}
 }

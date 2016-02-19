@@ -78,7 +78,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 												   _effectiveRestrictionCreator,
 												   _minWeekWorkTimeRule,
 												   _resourceOptimizationHelper,
-													 MockRepository.GenerateStub<IDeleteAndResourceCalculateService>());
+													 MockRepository.GenerateStub<IDeleteAndResourceCalculateService>(),
+													 MockRepository.GenerateStub<IIntradayOptimizeOneDayCallback>());
 		}
 
 		[Test]
