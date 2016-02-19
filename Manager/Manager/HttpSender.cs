@@ -110,24 +110,15 @@ namespace Stardust.Manager
 
         public async Task<bool> TryGetAsync(Uri url)
         {
-            LogHelper.LogInfoWithLineNumber(Logger,
-                                                    "TryGetAsync Start");
             try
             {
                 using (var client = new HttpClient())
                 {
-                    LogHelper.LogInfoWithLineNumber(Logger,
-                                                    "start using Httpclient");
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    LogHelper.LogInfoWithLineNumber(Logger,
-                                                    "before client.GetAsync(" + url + ")");
-
                     var response = await client.GetAsync(url,HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
-
-                    LogHelper.LogInfoWithLineNumber(Logger,
-                                                    "OK");
+                    
                     return response.IsSuccessStatusCode;
                 }
             }

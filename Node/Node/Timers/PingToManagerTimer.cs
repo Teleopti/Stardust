@@ -17,7 +17,7 @@ namespace Stardust.Node.Timers
 
         public PingToManagerTimer(INodeConfiguration nodeConfiguration,
                                   Uri callbackUri,
-                                  double interval = 10000) : base(interval)
+                                  double interval = 60000) : base(interval)
         {
             nodeConfiguration.ThrowArgumentNullException();
             callbackUri.ThrowArgumentNullExceptionWhenNull();

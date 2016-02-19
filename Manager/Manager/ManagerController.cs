@@ -104,7 +104,7 @@ namespace Stardust.Manager
         //     [HttpPost, ActionName("heartbeat")]
         public void Heartbeat([FromBody] Uri nodeUri)
         {
-            //_jobManager.CheckAndAssignNextJob();
+            _jobManager.CheckAndAssignNextJob();
 
             LogHelper.LogInfoWithLineNumber(Logger,
                 WhoAmI + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
@@ -119,9 +119,7 @@ namespace Stardust.Manager
 
             _jobManager.SetEndResultOnJobAndRemoveIt(jobId,
                 "Success");
-
-            _jobManager.CheckAndAssignNextJob();
-
+            
             return Ok();
         }
         
@@ -135,8 +133,6 @@ namespace Stardust.Manager
             _jobManager.SetEndResultOnJobAndRemoveIt(jobId,
                 "Failed");
 
-            _jobManager.CheckAndAssignNextJob();
-
             return Ok();
         }
         
@@ -149,8 +145,6 @@ namespace Stardust.Manager
 
             _jobManager.SetEndResultOnJobAndRemoveIt(jobId,
                 "Canceled");
-
-            _jobManager.CheckAndAssignNextJob();
 
             return Ok();
         }
@@ -173,8 +167,6 @@ namespace Stardust.Manager
             _nodeManager.FreeJobIfAssingedToNode(nodeUri);
             _nodeManager.AddIfNeeded(nodeUri);
 
-            _jobManager.CheckAndAssignNextJob(); 
-
             LogHelper.LogInfoWithLineNumber(Logger,
                 WhoAmI + ": Received init from Node. Node Uri : ( " + nodeUri + " )");
 
@@ -186,12 +178,6 @@ namespace Stardust.Manager
         {
             return Ok();
         }
-
-		//just for testing
-	    [HttpGet, Route(ManagerRouteConstants.UppNodes)]
-		 public IHttpActionResult Nods()
-	    {
-		     return Ok(_jobManager.UpNodes());
-			}
+        
 	}
 }
