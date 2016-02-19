@@ -9,69 +9,73 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public static class VisualLayerCollectionFactory
 	{
-		private static IVisualLayerFactory factory = new VisualLayerFactory();
+		private static readonly IVisualLayerFactory factory = new VisualLayerFactory();
 
 		public static IVisualLayerCollection CreateForWorkShift(IPerson person, TimeSpan start, TimeSpan end)
 		{
-			IList<IVisualLayer> coll = createVisualLayerCollection(person, start, end);
-			IVisualLayerCollection retColl = new VisualLayerCollection(person, coll, new ProjectionPayloadMerger());
-			return retColl;
+			var coll = createVisualLayerCollection(person, start, end);
+			return new VisualLayerCollection(person, coll, new ProjectionPayloadMerger());
 		}
 
-		public static IVisualLayerCollection CreateForWorkShift(IPerson person, TimeSpan start, TimeSpan end, IActivity activity)
+		public static IVisualLayerCollection CreateForWorkShift(IPerson person, TimeSpan start, TimeSpan end,
+			IActivity activity)
 		{
-			IList<IVisualLayer> coll = createVisualLayerCollection(person, start, end, activity);
-			IVisualLayerCollection retColl = new VisualLayerCollection(person, coll, new ProjectionPayloadMerger());
-			return retColl;
+			var coll = createVisualLayerCollection(person, start, end, activity);
+			return new VisualLayerCollection(person, coll, new ProjectionPayloadMerger());
 		}
 
 		public static IVisualLayerCollection CreateForWorkShift(IPerson person, TimeSpan start, TimeSpan end, TimePeriod lunch)
 		{
-			VisualLayerProjectionService projSvc = new VisualLayerProjectionService(person);
-			IActivity lunchAct = new Activity("lunch");
-			lunchAct.InContractTime = false;
+			var projSvc = new VisualLayerProjectionService(person);
+			var lunchAct = new Activity("lunch") {InContractTime = false};
 			lunchAct.SetId(Guid.NewGuid());
-			IActivity testAct = new Activity("for test");
+
+			var testAct = new Activity("for test");
 			testAct.SetId(Guid.NewGuid());
+
 			projSvc.Add(factory.CreateShiftSetupLayer(testAct, new DateTimePeriod(WorkShift.BaseDate.Add(start),
-				WorkShift.BaseDate.Add(end)),person));
+				WorkShift.BaseDate.Add(end)), person));
 			projSvc.Add(factory.CreateShiftSetupLayer(lunchAct, new DateTimePeriod(
-						WorkShift.BaseDate.Add(lunch.StartTime),
-						WorkShift.BaseDate.Add(lunch.EndTime)),person));
+				WorkShift.BaseDate.Add(lunch.StartTime),
+				WorkShift.BaseDate.Add(lunch.EndTime)), person));
 			return projSvc.CreateProjection();
 		}
 
 		public static IVisualLayerCollection CreateForAbsence(IPerson person, TimeSpan start, TimeSpan end)
 		{
-			IList<IVisualLayer> coll = createVisualLayerCollectionWithAbsence(person, start, end);
-			IVisualLayerCollection retColl = new VisualLayerCollection(person, coll, new ProjectionPayloadMerger());
-			return retColl;
+			var coll = createVisualLayerCollectionWithAbsence(person, start, end);
+			return new VisualLayerCollection(person, coll, new ProjectionPayloadMerger());
 		}
 
-		private static IList<IVisualLayer> createVisualLayerCollection(IPerson person,TimeSpan start, TimeSpan end)
+		private static IEnumerable<IVisualLayer> createVisualLayerCollection(IPerson person, TimeSpan start, TimeSpan end)
 		{
-			IList<IVisualLayer> coll = new List<IVisualLayer>();
-			coll.Add(factory.CreateShiftSetupLayer(new Activity("for test"), new DateTimePeriod(WorkShift.BaseDate.Add(start), WorkShift.BaseDate.Add(end)),person));
-			return coll;
+			return new List<IVisualLayer>
+			{
+				factory.CreateShiftSetupLayer(new Activity("for test"),
+					new DateTimePeriod(WorkShift.BaseDate.Add(start), WorkShift.BaseDate.Add(end)), person)
+			};
 		}
 
-		private static IList<IVisualLayer> createVisualLayerCollection(IPerson person, TimeSpan start, TimeSpan end, IActivity activity)
+		private static IEnumerable<IVisualLayer> createVisualLayerCollection(IPerson person, TimeSpan start, TimeSpan end,
+			IActivity activity)
 		{
-			IList<IVisualLayer> coll = new List<IVisualLayer>();
-			coll.Add(factory.CreateShiftSetupLayer(activity, new DateTimePeriod(WorkShift.BaseDate.Add(start), WorkShift.BaseDate.Add(end)), person));
-			return coll;
+			return new List<IVisualLayer>
+			{
+				factory.CreateShiftSetupLayer(activity,
+					new DateTimePeriod(WorkShift.BaseDate.Add(start), WorkShift.BaseDate.Add(end)), person)
+			};
 		}
 
-		private static IList<IVisualLayer> createVisualLayerCollectionWithAbsence(IPerson person, TimeSpan start, TimeSpan end)
+		private static IEnumerable<IVisualLayer> createVisualLayerCollectionWithAbsence(IPerson person, TimeSpan start,
+			TimeSpan end)
 		{
-			IList<IVisualLayer> visualLayers = new List<IVisualLayer>();
 			var originalVisualLayer = factory.CreateShiftSetupLayer(new Activity("for test"),
 				new DateTimePeriod(WorkShift.BaseDate.Add(start), WorkShift.BaseDate.Add(end)), person);
 			var holidayAbsence = AbsenceFactory.CreateAbsence("TestHoliday");
 			var absenceVisualLayer = factory.CreateAbsenceSetupLayer(holidayAbsence, originalVisualLayer,
 				originalVisualLayer.Period, Guid.NewGuid());
-			visualLayers.Add(absenceVisualLayer);
-			return visualLayers;
+
+			return new List<IVisualLayer> {absenceVisualLayer};
 		}
 	}
 }
