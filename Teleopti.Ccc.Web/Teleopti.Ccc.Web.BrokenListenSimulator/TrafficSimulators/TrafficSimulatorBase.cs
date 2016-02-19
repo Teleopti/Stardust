@@ -46,5 +46,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators
             httpClientHandler.Dispose();
             HttpClient.Dispose();
         }
+
+        public abstract void CallbackAction();
     }
 }

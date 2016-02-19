@@ -23,6 +23,8 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
                 DomainReferenceId = data.User.ToString(),
                 DataSource = DataSource.CurrentName(),
                 BusinessUnitId = Subscription.IdToString(BusinessUnit.Current().Id.Value),
+                LowerBoundary = Subscription.DateToString(Consts.MinDate),
+                UpperBoundary = Subscription.DateToString(Consts.MaxDate),
             }, callback);
 
             AddSubscription(new Subscription
@@ -31,6 +33,8 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
                 DomainReferenceId = data.User.ToString(),
                 DataSource = DataSource.CurrentName(),
                 BusinessUnitId = Subscription.IdToString(BusinessUnit.Current().Id.Value),
+                LowerBoundary = Subscription.DateToString(Consts.MinDate),
+                UpperBoundary = Subscription.DateToString(Consts.MaxDate),
             }, callback);
 
             AddSubscription(new Subscription
@@ -39,6 +43,8 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
                 DomainReferenceId = data.User.ToString(),
                 DataSource = DataSource.CurrentName(),
                 BusinessUnitId = Subscription.IdToString(BusinessUnit.Current().Id.Value),
+                LowerBoundary = Subscription.DateToString(Consts.MinDate),
+                UpperBoundary = Subscription.DateToString(Consts.MaxDate),
             }, callback);
         }
     }
