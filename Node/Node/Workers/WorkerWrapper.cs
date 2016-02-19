@@ -286,7 +286,8 @@ namespace Stardust.Node.Workers
                 TrySendStatusToManagerTimer.Stop();
 
                 // Remove event handler.
-                TrySendStatusToManagerTimer.TrySendStatusSucceded -= TrySendStatusToManagerTimer_TrySendStatusSucceded;
+                TrySendStatusToManagerTimer.TrySendStatusSucceded -= 
+                    TrySendStatusToManagerTimer_TrySendStatusSucceded;
 
                 TrySendStatusToManagerTimer = null;
             }
@@ -298,7 +299,8 @@ namespace Stardust.Node.Workers
 
                 TrySendStatusToManagerTimer.JobToDo = jobToDo;
 
-                TrySendStatusToManagerTimer.TrySendStatusSucceded += TrySendStatusToManagerTimer_TrySendStatusSucceded;
+                TrySendStatusToManagerTimer.TrySendStatusSucceded += 
+                    TrySendStatusToManagerTimer_TrySendStatusSucceded;
 
                 TrySendStatusToManagerTimer.Start();
             }
