@@ -49,9 +49,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ListenSimulators\SimulateSchedulingScreen.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SimulatedSchedulingScreen.cs" />
+    <Compile Include="ListenSimulators\SimulateBase.cs" />
+    <Compile Include="ListenSimulators\SimulateMyTimeScreen.cs" />
+    <Compile Include="SimulationData\MyTimeData.cs" />
+    <Compile Include="SimulationData\SchedulingData.cs" />
+    <Compile Include="SimulationData\SimulationDataBase.cs" />
+    <Compile Include="TrafficSimulators\SimulateMyTimeScreenTraffic.cs" />
+    <Compile Include="TrafficSimulators\TrafficSimulatorBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
