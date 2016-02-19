@@ -74,7 +74,6 @@ namespace Manager.IntegrationTest.Console.Host
             Configuration configuration =
                 new Configuration(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
 
-
             string address = configuration.BaseAddress.Scheme + "://+:" + configuration.BaseAddress.Port + "/";
 
             using (WebApp.Start(address,
@@ -326,6 +325,8 @@ namespace Manager.IntegrationTest.Console.Host
 
         public static void ShutDownNode(string friendlyName)
         {
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            "Started.");
 
             if (AppDomainManagerTask != null &&
                 AppDomainManagerTask.GetAppDomainFriendlyName()
@@ -355,11 +356,22 @@ namespace Manager.IntegrationTest.Console.Host
 
                 if (nodeToDispose != null)
                 {
+                    LogHelper.LogInfoWithLineNumber(Logger,
+                                                    "Start to dispose appdomain with friendly name :" + friendlyName);
+
                     nodeToDispose.Dispose();
 
                     AppDomainNodeTasks.Remove(nodeToDispose);
+
+                    LogHelper.LogInfoWithLineNumber(Logger,
+                                                    "Finished to dispose appdomain with friendly name :" + friendlyName);
+
                 }
             }
+
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            "Finished.");
+
         }
 
         public static bool StartNewNode()

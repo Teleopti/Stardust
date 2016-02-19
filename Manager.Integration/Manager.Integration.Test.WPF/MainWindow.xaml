@@ -150,8 +150,8 @@
                                 </DataGridTextColumn.Binding>
                             </DataGridTextColumn>
 
-                            <DataGridTextColumn Binding="{Binding Date, StringFormat=yyyy-mm-dd hh:mm:ss}"
-                                                ClipboardContentBinding="{Binding Date, StringFormat=yyyy-mm-dd hh:mm:ss}"
+                            <DataGridTextColumn Binding="{Binding Date, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                ClipboardContentBinding="{Binding Date, StringFormat=yyyy-MM-dd HH:mm:ss}"
                                                 Header="Date" />
 
                             <DataGridTextColumn Binding="{Binding Message}"
@@ -203,7 +203,7 @@
 
                                     <TextBlock Grid.Column="2"
                                                Grid.Row="1"
-                                               Text="{Binding Date, StringFormat=yyyy-mm-dd hh:mm:ss}"/>
+                                               Text="{Binding Date, StringFormat=yyyy-MM-dd HH:mm:ss}"/>
 
                                     <TextBlock Grid.Column="1"
                                                Grid.Row="2">Message</TextBlock>
