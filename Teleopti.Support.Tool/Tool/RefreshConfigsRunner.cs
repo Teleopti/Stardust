@@ -21,12 +21,12 @@ namespace Teleopti.Support.Tool.Tool
 
         public void Execute(ModeFile mode)
         {
-	        var settings = _manager.GetReplaceList();
+	        var searchReplaces = _manager.GetTags();
             
             try
             {
 				var file = mode.FileContents();
-				Array.ForEach(file,f => _refreshConfigFile.SplitAndReplace(f, settings, false));
+	            Array.ForEach(file, f => _refreshConfigFile.ReplaceFile(f, searchReplaces));
             }
             catch (Exception e)
             {

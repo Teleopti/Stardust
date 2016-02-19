@@ -45,8 +45,8 @@ namespace Teleopti.Support.Tool.Tool
 		{
 			var restoreCommand = new SsoConfigurationRestoreHandler(new CustomSection(), new SsoFilePathReader());
 			Command = new CompositeCommand(
-					new RefreshConfigsRunner(new SettingsFileManager(new SettingsReader()),
-					new RefreshConfigFile(new ConfigFileTagReplacer(), new MachineKeyChecker())), restoreCommand,
+					new RefreshConfigsRunner(new SettingsFileManager(new TextToTags()),
+					new RefreshConfigFile(new FileConfigurator(), new MachineKeyChecker())), restoreCommand,
 					new MoveCustomReportsCommand());
 
 			foreach (string s in _argumentCollection)

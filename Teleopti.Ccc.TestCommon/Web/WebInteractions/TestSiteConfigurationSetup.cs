@@ -2,6 +2,7 @@
 using System.IO;
 using IISExpressAutomation;
 using Teleopti.Ccc.Domain;
+using Teleopti.Support.Library.Config;
 
 namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 {
@@ -62,7 +63,13 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			// maybe this SO thread contains alternatives:
 			// http://stackoverflow.com/questions/4772092/starting-and-stopping-iis-express-programmatically
 			var runningConfig = "iisexpress.running.config";
-			FileConfigurator.ConfigureByTags("iisexpress.config", runningConfig, new AllTags());
+
+			new FileConfigurator().Configure(
+				"iisexpress.config",
+				runningConfig,
+				new TagsForTestSite()
+				);
+
 			var parameters = new Parameters
 			{
 				Systray = false,
@@ -140,20 +147,10 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			var sourceFile = Path.Combine(Paths.FindProjectPath(@"BuildArtifacts\"), o.SourceFileName);
 			var targetFile = Path.Combine(o.TargetFolder, "web.config");
 
-			var tags = new AllTags
-			{
-				{"BehaviorTestServer", "true"},
-				{"HangfireDashboard", "true"},
-				{"HangfireDashboardStatistics", "true"},
-				{"HangfireDashboardCounters", "true"},
-				{"HangfireDashboardDisplayNames", "true"},
-				{"HangfireJobExpirationSeconds", TimeSpan.FromDays(1).TotalSeconds.ToString()}
-			};
-
-			FileConfigurator.ConfigureByTags(
+			new FileConfigurator().Configure(
 				sourceFile,
 				targetFile,
-				tags
+				new TagsForTestSite()
 				);
 		}
 

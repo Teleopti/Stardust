@@ -1,46 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace Teleopti.Support.Library.Config
 {
 	public interface ISettingsFileManager
 	{
-		IList<SearchReplace> GetReplaceList();
-		void SaveReplaceList(IList<SearchReplace> searchReplaces);
+		Tags GetTags();
+		void SaveTagAndValues(IList<SearchReplace> searchReplaces);
 	}
 
 	public class SettingsFileManager : ISettingsFileManager
 	{
 
-		private readonly SettingsReader _reader;
+		private readonly TextToTags _textToTags;
 
-		public SettingsFileManager(SettingsReader reader)
+		public SettingsFileManager(TextToTags textToTags)
 		{
-			_reader = reader;
+			_textToTags = textToTags;
 		}
 
-		public IList<SearchReplace> GetReplaceList()
+		public Tags GetTags()
 		{
-			var searchReplaceListInSettingsFile = _reader.GetSearchReplaceList(File.ReadAllText(CurrentPath()));
-			var hostName = searchReplaceListInSettingsFile.SingleOrDefault(x => x.SearchFor == "$(HOST_NAME)");
-			var dnsAlias = searchReplaceListInSettingsFile.SingleOrDefault(x => x.SearchFor == "$(DNS_ALIAS)");
-			var stardust = searchReplaceListInSettingsFile.SingleOrDefault(x => x.SearchFor == "$(STARDUST)");
-			if (hostName != null && dnsAlias != null)
-			{
-				hostName.ReplaceWith = dnsAlias.ReplaceWith.Replace(@"http://", "").Replace(@"https://", "").TrimEnd('/');
-				if (stardust != null)
-					stardust.ReplaceWith = stardust.ReplaceWith.Replace(stardust.ReplaceWith, dnsAlias.ReplaceWith);
-			}
-			if (stardust != null)
-				stardust.ReplaceWith = stardust.ReplaceWith.TrimEnd('/');
-			return searchReplaceListInSettingsFile;
+			var tags = _textToTags.ParseText(File.ReadAllText(findSettingsFileByBlackMagic()));
+			// this cant be good, but I wont change the behavior
+			tags.FixSomeValuesAfterReading();
+			return tags;
 		}
 
-		public void SaveReplaceList(IList<SearchReplace> searchReplaces)
+		public void SaveTagAndValues(IList<SearchReplace> searchReplaces)
 		{
-			var path = CurrentPath();
+			var path = findSettingsFileByBlackMagic();
 			var text = "";
 			foreach (var searchReplace in searchReplaces)
 			{
@@ -49,7 +39,7 @@ namespace Teleopti.Support.Library.Config
 			File.WriteAllText(path, text);
 		}
 
-		private static string CurrentPath()
+		private static string findSettingsFileByBlackMagic()
 		{
 			var directoryInfo = Directory.GetParent(Directory.GetCurrentDirectory()).Parent;
 			string path = "";

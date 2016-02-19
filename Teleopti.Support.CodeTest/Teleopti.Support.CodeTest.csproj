@@ -65,12 +65,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Tool\CommandLineArgumentTest.cs" />
-    <Compile Include="Tool\ConfigFileTagReplacerTest.cs" />
     <Compile Include="Tool\MachineKeyCheckerTests.cs" />
-    <Compile Include="Tool\RefreshConfigFileTest.cs" />
-    <Compile Include="Tool\RefreshConfigsRunnerTests.cs" />
-    <Compile Include="Tool\SettingsFileManagerTests.cs" />
-    <Compile Include="Tool\SettingsReaderTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">

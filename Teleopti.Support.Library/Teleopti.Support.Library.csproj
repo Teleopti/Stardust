@@ -43,13 +43,14 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Config\ConfigFileTagReplacer.cs" />
+    <Compile Include="Config\FileConfigurator.cs" />
     <Compile Include="Config\CryptoCreator.cs" />
+    <Compile Include="Config\Extensions.cs" />
     <Compile Include="Config\MachineKeyChecker.cs" />
     <Compile Include="Config\SettingsFileManager.cs" />
-    <Compile Include="Config\SettingsReader.cs" />
+    <Compile Include="Config\Tags.cs" />
+    <Compile Include="Config\TextToTags.cs" />
     <Compile Include="Config\RefreshConfigFile.cs" />
-    <Compile Include="Config\SearchReplace.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

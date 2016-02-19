@@ -501,7 +501,7 @@
     <Compile Include="Web\FakeHttpResponse.cs" />
     <Compile Include="Web\FakeHttpSessionState.cs" />
     <Compile Include="Web\MutableFakeCurrentHttpContext.cs" />
-    <Compile Include="Web\WebInteractions\AllTags.cs" />
+    <Compile Include="Web\WebInteractions\TagsForTestSite.cs" />
     <Compile Include="Web\WebInteractions\BrowserDriver\BrowserInteractionsAngularExtensions.cs" />
     <Compile Include="Web\WebInteractions\BrowserDriver\BrowserInteractionsControlExtensions.cs" />
     <Compile Include="Web\WebInteractions\BrowserDriver\BrowserInteractionsJQueryExtensions.cs" />
@@ -523,7 +523,6 @@
     <Compile Include="Web\WebInteractions\BrowserDriver\NoBrowserInteractions.cs" />
     <Compile Include="Web\WebInteractions\BrowserDriver\TimeoutScope.cs" />
     <Compile Include="Web\WebInteractions\CryptoCreator.cs" />
-    <Compile Include="Web\WebInteractions\FileConfigurator.cs" />
     <Compile Include="Web\WebInteractions\Http.cs" />
     <Compile Include="Web\WebInteractions\Paths.cs" />
     <Compile Include="Web\WebInteractions\TestSiteConfigurationSetup.cs" />
@@ -560,6 +559,10 @@
     <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Messaging\Teleopti.Messaging.csproj">
       <Project>{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}</Project>
       <Name>Teleopti.Messaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Support.Library\Teleopti.Support.Library.csproj">
+      <Project>{96BAA3E0-A623-412E-BFE7-D3BE03A2288A}</Project>
+      <Name>Teleopti.Support.Library</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
