@@ -127,13 +127,7 @@ namespace Manager.Integration.Test
             LogHelper.LogInfoWithLineNumber("Start.",
                                             Logger);
 
-            List<Task> taskHelpers = new List<Task>();
-
-            List<JobManagerTaskCreator> allJobManagerTaskCreators = new List<JobManagerTaskCreator>();
-
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-
-            List<Task> listOfTasks = new List<Task>();
 
             List<JobRequestModel> createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(50);
 
@@ -143,68 +137,84 @@ namespace Manager.Integration.Test
                                                                             StatusConstants.FailedStatus,
                                                                             StatusConstants.CanceledStatus);
 
+            //---------------------------------------------
+            // Create timeout time.
+            //---------------------------------------------
             TimeSpan timeout = 
                 JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count);
 
+            //---------------------------------------------
+            // Create jobs.
+            //---------------------------------------------
+            List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
+
+            foreach (var jobRequestModel in createNewJobRequests)
+            {
+                var jobManagerTaskCreator =
+                    new JobManagerTaskCreator(checkJobHistoryStatusTimer);
+
+                jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
+
+                jobManagerTaskCreators.Add(jobManagerTaskCreator);
+            }
+
+            //---------------------------------------------
+            // Notify when all 5 nodes are upp. 
+            //---------------------------------------------
             SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
-            // We start to send job as soon as one node is up.
-            Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(1,
+            Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(5,
                                                                       cancellationTokenSource);
             task.Start();
+
+            LogHelper.LogInfoWithLineNumber("Waiting for all 5 nodes to start up.",
+                                             Logger);
 
             sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
 
             sqlNotifier.Dispose();
 
-            for (int i = 0; i < 10; i++)
-            {
-                var jobs =
-                    createNewJobRequests.Skip(i*5)
-                        .Take(5)
-                        .ToList();
+            LogHelper.LogInfoWithLineNumber("All 5 nodes has strated.",
+                                             Logger);
 
-                LogHelper.LogInfoWithLineNumber("( " + jobs.Count + " ) jobs will be created.",
-                                                Logger);
+            //---------------------------------------------
+            // Execute all jobs. 
+            //---------------------------------------------
+            StartJobTaskHelper startJobTaskHelper = new StartJobTaskHelper();
 
-                List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
+            Task taskHelper = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
+                                                                          CancellationTokenSource,
+                                                                          TimeSpan.FromMilliseconds(200));
 
-                foreach (var jobRequestModel in jobs)
-                {
-                    var jobManagerTaskCreator = 
-                        new JobManagerTaskCreator(checkJobHistoryStatusTimer);
-
-                    jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
-
-                    jobManagerTaskCreators.Add(jobManagerTaskCreator);
-
-                    allJobManagerTaskCreators.Add(jobManagerTaskCreator);
-                }
-
-                StartJobTaskHelper startJobTaskHelper = new StartJobTaskHelper();
-
-                Task taskHelper = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
-                                                                              CancellationTokenSource,
-                                                                              timeout);
-                taskHelpers.Add(taskHelper);
-
-                Thread.Sleep(TimeSpan.FromSeconds(10));
-            }
-
+            //---------------------------------------------
+            // Wait for all jobs to finish.
+            //---------------------------------------------
             checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
+            //---------------------------------------------
+            // Assert.
+            //---------------------------------------------
+            Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count);
+            Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
+
+            //---------------------------------------------
+            // Cancel tasks.
+            //---------------------------------------------
             CancellationTokenSource.Cancel();
 
-            foreach (var taskHelper in taskHelpers)
-            {
-                taskHelper.Dispose();
-            }
-
-            foreach (var jobManagerTaskCreator in allJobManagerTaskCreators)
+            //---------------------------------------------
+            // Dispose.
+            //---------------------------------------------
+            foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
             {
                 jobManagerTaskCreator.Dispose();
             }
 
+            taskHelper.Dispose();
+
+            //---------------------------------------------
+            // Log.
+            //---------------------------------------------
             LogHelper.LogInfoWithLineNumber("Finished.",
                                             Logger);
         }
