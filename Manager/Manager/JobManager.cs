@@ -28,7 +28,25 @@ namespace Stardust.Manager
             _httpSender = httpSender;
         }
 
-        public void CheckAndAssignNextJob()
+
+	    public IList<WorkerNode> UpNodes()
+	    {
+			var upNodes = new List<WorkerNode>();
+			var availableNodes = _nodeRepository.LoadAllFreeNodes();
+		    foreach (var availableNode in availableNodes)
+		    {
+				var nodeUriBuilder = new NodeUriBuilderHelper(availableNode.Url);
+				Uri postUri = nodeUriBuilder.GetIsAliveTemplateUri();
+				var success = _httpSender.TryGetAsync(postUri);
+			    if (success == null || success.Result)
+			    {
+				    upNodes.Add(availableNode);
+			    }
+			}
+		    return upNodes;
+	    }
+
+		  public void CheckAndAssignNextJob()
         {
             LogHelper.LogInfoWithLineNumber(Logger,
                                             "Start CheckAndAssignNextJob.");

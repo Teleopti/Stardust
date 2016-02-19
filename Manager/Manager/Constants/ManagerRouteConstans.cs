@@ -31,5 +31,7 @@
         public const string Ping = "ping";
 
         public const string JobDetail = "jobdetail/" + JobIdOptionalParameter;
+
+	    public const string UppNodes = "upnodes/";
     }
 }

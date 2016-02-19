@@ -53,7 +53,7 @@ namespace ManagerTest
 			FakeHttpSender.CalledNodes.Should().Be.Empty();
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldSendJobToNode()
 		{
 			var jobId = Guid.NewGuid();
@@ -101,7 +101,7 @@ namespace ManagerTest
 			job.Should().Be.Null();
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldCallNodeToCancelIfStarted()
 		{
 			var jobId = Guid.NewGuid();
@@ -126,7 +126,7 @@ namespace ManagerTest
 			job.Status.Should().Be.EqualTo("Canceling");
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldSetEndResultInHistoryAndRemoveTheJob()
 		{
 			var jobId = Guid.NewGuid();
@@ -149,7 +149,7 @@ namespace ManagerTest
 			JobManager.JobHistoryDetails(jobId).Should().Not.Be.Empty();
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldRemoveJobOnBadRequest()
 		{
 			var jobId = Guid.NewGuid();

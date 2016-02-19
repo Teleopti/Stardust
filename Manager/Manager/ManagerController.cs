@@ -1,6 +1,7 @@
 using System;
 using System.Web.Http;
 using System.Web.Http.Results;
+using System.Web.UI.WebControls;
 using log4net;
 using Stardust.Manager.Constants;
 using Stardust.Manager.Helpers;
@@ -185,5 +186,12 @@ namespace Stardust.Manager
         {
             return Ok();
         }
-    }
+
+		//just for testing
+	    [HttpGet, Route(ManagerRouteConstants.UppNodes)]
+		 public IHttpActionResult Nods()
+	    {
+		     return Ok(_jobManager.UpNodes());
+			}
+	}
 }
