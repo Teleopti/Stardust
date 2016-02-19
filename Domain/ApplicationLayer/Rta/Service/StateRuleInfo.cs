@@ -3,13 +3,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public class StateAlarmInfo
+	public class StateRuleInfo
 	{
 		private readonly StateMapping _stateMapping;
 		private readonly RuleMapping _ruleMapping;
 		private readonly StoredStateInfo _stored;
 
-		public StateAlarmInfo(
+		public StateRuleInfo(
 			string stateCode,
 			Guid platformTypeId,
 			ExternalUserStateInputModel input,

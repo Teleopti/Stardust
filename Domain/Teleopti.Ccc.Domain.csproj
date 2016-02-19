@@ -250,8 +250,7 @@
     <Compile Include="Logon\Aspects\DataSourceAttribute.cs" />
     <Compile Include="Logon\Aspects\IDataSourceAspect.cs" />
     <Compile Include="Logon\Aspects\RtaConnectionStringDataSourceAspect.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\IAppliedAlarmStartTime.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\IAppliedIsAlarm.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\IAppliedAlarm.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\InvalidPlatformException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\InvalidSourceException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\InvalidUserCodeException.cs" />
@@ -274,7 +273,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\TenantsInitializedInRta.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\TenantAuthenticator.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\DatabaseLoader.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\StateAlarmInfo.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\StateRuleInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\TenantLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModelBuilders\AdherencePercentageViewModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ActivityEventPublisher.cs" />

@@ -14,8 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IEventPublisherScope _eventPublisherScope;
 		private readonly ICurrentEventPublisher _eventPublisher;
 		private readonly ConcurrentDictionary<Guid, object> personLocks = new ConcurrentDictionary<Guid, object>();
-		private readonly IAppliedAlarmStartTime _appliedAlarmStartTime;
-		private readonly IAppliedIsAlarm _appliedIsAlarm;
+		private readonly IAppliedAlarm _appliedAlarm;
 
 		public RtaProcessor(
 			IDatabaseLoader databaseLoader,
@@ -26,8 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IAppliedAdherence appliedAdherence,
 			IEventPublisherScope eventPublisherScope,
 			ICurrentEventPublisher eventPublisher, 
-			IAppliedAlarmStartTime appliedAlarmStartTime,
-			IAppliedIsAlarm appliedIsAlarm)
+			IAppliedAlarm appliedAlarm)
 		{
 			_databaseLoader = databaseLoader;
 			_stateMapper = stateMapper;
@@ -37,8 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_appliedAdherence = appliedAdherence;
 			_eventPublisherScope = eventPublisherScope;
 			_eventPublisher = eventPublisher;
-			_appliedAlarmStartTime = appliedAlarmStartTime;
-			_appliedIsAlarm = appliedIsAlarm;
+			_appliedAlarm = appliedAlarm;
 		}
 
 		public void Process(
@@ -54,8 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					_stateMapper,
 					_databaseLoader,
 					_appliedAdherence,
-					_appliedAlarmStartTime,
-					_appliedIsAlarm);
+					_appliedAlarm);
 
 				context.AgentStateReadModelUpdater.Update(info);
 				context.MessageSender.Send(info);

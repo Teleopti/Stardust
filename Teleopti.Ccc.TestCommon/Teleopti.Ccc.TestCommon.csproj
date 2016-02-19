@@ -225,7 +225,6 @@
     <Compile Include="FakeRepositories\FakeTeamRepository.cs" />
     <Compile Include="FakeRepositories\FakeWorkflowControlSetRepository.cs" />
     <Compile Include="FakeRepositories\FakeDayOffRulesRepository.cs" />
-    <Compile Include="FakeRepositories\Rta\IProperAlarm.cs" />
     <Compile Include="FakeRequestApprovalServiceFactory.cs" />
     <Compile Include="FakeRepositories\FakeDatabase.cs" />
     <Compile Include="IoC\AllTogglesOffAttribute.cs" />

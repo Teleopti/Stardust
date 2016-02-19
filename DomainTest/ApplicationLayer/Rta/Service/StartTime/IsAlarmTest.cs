@@ -47,7 +47,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 			Database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2015-12-15 8:00", "2015-12-15 9:00")
-				.WithRule("phone", phone, 0, Adherence.In, TimeSpan.FromMinutes(5));
+				.WithRule("phone", phone, 0, Adherence.In)
+				.WithAlarm(TimeSpan.FromMinutes(5));
 			Now.Is("2015-12-15 8:00");
 
 			Target.SaveState(new ExternalUserStateForTest

@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 					RuleId = ruleId,
 					RuleName = rule.Description.Name,
-					Adherence = _appliedAdherence.ForAlarm(m.RtaRule),
+					Adherence = _appliedAdherence.ForRule(m.RtaRule),
 					StaffingEffect = (int)rule.StaffingEffect,
 					DisplayColor = rule.DisplayColor.ToArgb(),
 

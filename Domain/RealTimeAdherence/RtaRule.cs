@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         private TimeSpan _thresholdTime;
         private double _staffingEffect;
 		private Adherence? _adherence;
-		private bool _isAlarm = true;
+		private bool _isAlarm = ServiceLocatorForEntity.AppliedAlarm.RuleDefaultAlarm();
 
 		public RtaRule(Description description, Color color, TimeSpan thresholdTime, double staffingEffect)
         {
@@ -28,9 +29,10 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         }
 
 		public RtaRule()
-        {}
+		{
+		}
 
-        public virtual double StaffingEffect
+		public virtual double StaffingEffect
         {
             get { return _staffingEffect; }
             set{ _staffingEffect = value;}
@@ -91,7 +93,10 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             get { return _thresholdTime; }
             set
             {
-                if (value<TimeSpan.Zero) throw new ArgumentOutOfRangeException("value", "A negative threshold time cannot be used for alarm");
+	            if (value < TimeSpan.Zero)
+		            throw new ArgumentOutOfRangeException("value", "A negative threshold time cannot be used for alarm");
+	            if (value > TimeSpan.Zero)
+		            IsAlarm = true;
                 _thresholdTime = value;
             }
         }

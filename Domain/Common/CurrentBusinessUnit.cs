@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -16,10 +17,17 @@ namespace Teleopti.Ccc.Domain.Common
 				return _currentBusinessUnit = Common.CurrentBusinessUnit.Make();
 			}
 		}
-		
+
 		public static void SetInstanceFromContainer(ICurrentBusinessUnit instance)
 		{
 			_currentBusinessUnit = instance;
+		}
+
+		public static IAppliedAlarm AppliedAlarm { get; private set; }
+
+		public static void SetInstanceFromContainer(IAppliedAlarm instance)
+		{
+			AppliedAlarm = instance;
 		}
 
 	}

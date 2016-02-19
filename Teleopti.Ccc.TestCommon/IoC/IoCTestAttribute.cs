@@ -127,13 +127,14 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		private void setupBuilder(ISystem system)
 		{
 			var configReader = Config();
+			var toggleManager = Toggles();
 			var args = new IocArgs(configReader)
 			{
 				ThrottleMessages = false // the throttler shouldnt be started in ioc common at all, but...
 			};
 			if (_fixture is ISetupConfiguration)
 				(_fixture as ISetupConfiguration).SetupConfiguration(args);
-			var configuration = new IocConfiguration(args, Toggles());
+			var configuration = new IocConfiguration(args, toggleManager);
 			
 			system.AddModule(new CommonModule(configuration));
 
@@ -148,6 +149,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<SetNoLicenseActivator>().For<ISetLicenseActivator>();
 
 			system.UseTestDouble(configReader).For<IConfigReader>();
+			// we really shouldnt inject this, but if we do, maybe its better its correct...
+			system.UseTestDouble(toggleManager).For<IToggleManager>();
 
 			system.AddService(this);
 

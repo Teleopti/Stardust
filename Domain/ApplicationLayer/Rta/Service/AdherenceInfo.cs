@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly ExternalUserStateInputModel _input;
 		private readonly PersonOrganizationData _person;
 		private readonly StoredStateInfo _stored;
-		private readonly StateAlarmInfo _stateAlarmInfo;
+		private readonly StateRuleInfo _stateRuleInfo;
 		private readonly ScheduleInfo _scheduleInfo;
 		private readonly IAppliedAdherence _appliedAdherence;
 		private readonly IStateMapper _stateMapper;
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			ExternalUserStateInputModel input, 
 			PersonOrganizationData person,
 			StoredStateInfo stored,
-			StateAlarmInfo stateAlarmInfo,
+			StateRuleInfo stateRuleInfo,
 			ScheduleInfo scheduleInfo, 
 			IAppliedAdherence appliedAdherence,
 			IStateMapper stateMapper)
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_input = input;
 			_person = person;
 			_stored = stored;
-			_stateAlarmInfo = stateAlarmInfo;
+			_stateRuleInfo = stateRuleInfo;
 			_scheduleInfo = scheduleInfo;
 			_appliedAdherence = appliedAdherence;
 			_stateMapper = stateMapper;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public EventAdherence AdherenceForNewStateAndCurrentActivity()
 		{
-			return _appliedAdherence.ForEvent(_stateAlarmInfo.Adherence(), _stateAlarmInfo.StaffingEffect());
+			return _appliedAdherence.ForEvent(_stateRuleInfo.Adherence(), _stateRuleInfo.StaffingEffect());
 		}
 
 		public EventAdherence AdherenceForStoredState()

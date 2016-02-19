@@ -29,7 +29,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 			Database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2015-12-10 8:00", "2015-12-10 9:00")
-				.WithRule("phone", phone, 0, Adherence.In, TimeSpan.FromMinutes(5));
+				.WithRule("phone", phone, 0, Adherence.In)
+				.WithAlarm(TimeSpan.FromMinutes(5));
 			Now.Is("2015-12-10 8:00");
 
 			Target.SaveState(new ExternalUserStateForTest
@@ -40,7 +41,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 
 			Database.PersistedReadModel.AlarmStartTime.Should().Be("2015-12-10 8:05".Utc());
 		}
-
 
 		[Test]
 		public void ShouldNotHaveAlarmStartTimeWhenNotInAlarm()
@@ -62,18 +62,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 			Database.PersistedReadModel.AlarmStartTime.Should().Be(null);
 		}
 
-
 		[Test]
 		public void ShouldNotUpdateAlarmStartTimeWhenStillInSameAlarm()
 		{
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
-			var inAdherenceRule = Guid.NewGuid();
+			var rule = Guid.NewGuid();
 			Database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2015-12-10 8:00", "2015-12-10 9:00")
-				.WithRule("phone", phone, inAdherenceRule, 0, Adherence.In, "5".Minutes())
-				.WithRule("ACW", phone, inAdherenceRule, 0, Adherence.In, "5".Minutes())
+				.WithRule(rule, "phone", phone)
+				.WithAlarm("5".Minutes())
+				.WithRule(rule, "ACW", phone)
+				.WithAlarm("5".Minutes())
 				;
 			Now.Is("2015-12-10 8:00");
 

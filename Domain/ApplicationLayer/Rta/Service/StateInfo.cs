@@ -6,25 +6,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class StateInfo : IAdherenceAggregatorInfo
 	{
-		private readonly IAppliedAlarmStartTime _appliedAlarmStartTime;
-		private readonly IAppliedIsAlarm _appliedIsAlarm;
+		private readonly IAppliedAlarm _appliedAlarm;
 
 		public StateInfo(
 			RtaProcessContext context,
 			IStateMapper stateMapper,
 			IDatabaseLoader databaseLoader,
 			IAppliedAdherence appliedAdherence,
-			IAppliedAlarmStartTime appliedAlarmStartTime,
-			IAppliedIsAlarm appliedIsAlarm)
+			IAppliedAlarm appliedAlarm)
 		{
-			_appliedAlarmStartTime = appliedAlarmStartTime;
-			_appliedIsAlarm = appliedIsAlarm;
+			_appliedAlarm = appliedAlarm;
 			Input = context.Input;
 			Person = context.Person;
 			CurrentTime = context.CurrentTime;
 			Stored = context.PreviousStateInfoLoader.Load(context.Person.PersonId);
 			Schedule = new ScheduleInfo(databaseLoader, Person.PersonId, CurrentTime, Stored);
-			State = new StateAlarmInfo(stateCode, platformTypeId, Input, Person, Stored, Schedule, stateMapper);
+			State = new StateRuleInfo(stateCode, platformTypeId, Input, Person, Stored, Schedule, stateMapper);
 			Adherence = new AdherenceInfo(Input, Person, Stored, State, Schedule, appliedAdherence, stateMapper);
 		}
 
@@ -55,17 +52,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private bool isAlarm
 		{
-			get { return _appliedIsAlarm.IsAlarm(State); }
+			get { return _appliedAlarm.IsAlarm(State); }
 		}
 
 		private DateTime? alarmStartTime
 		{
-		    get { return _appliedAlarmStartTime.For(State, Stored, CurrentTime); }
+		    get { return _appliedAlarm.StartTime(State, Stored, CurrentTime); }
 		}
 
 		public ExternalUserStateInputModel Input { get; set; }
 		public PersonOrganizationData Person { get; private set; }
-	    public StateAlarmInfo State { get; private set; }
+	    public StateRuleInfo State { get; private set; }
 		public StoredStateInfo Stored { get; private set; }
 		public ScheduleInfo Schedule { get; private set; }
 		public AdherenceInfo Adherence { get; private set; }
