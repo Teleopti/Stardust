@@ -21,7 +21,7 @@ namespace Stardust.Manager
 					
                     config.Services.Add(typeof (IExceptionLogger),
                         new GlobalExceptionLogger());
-
+				
                     inner.UseAutofacWebApi(config);
                     inner.UseWebApi(config);
                 });
