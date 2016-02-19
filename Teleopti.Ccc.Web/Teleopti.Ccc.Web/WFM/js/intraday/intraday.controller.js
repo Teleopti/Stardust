@@ -5,6 +5,17 @@
 			'$scope', '$state', 'intradayService', '$stateParams', '$filter',
 			function($scope, $state, intradayService, $stateParams, $filter) {
 
+				var autocompleteSkill;
+				var autocompleteSkillArea;
+
+				var getAutoCompleteControls = function() {
+					var autocompleteSkillDOM = document.querySelector('.autocomplete-skill');
+					autocompleteSkill = angular.element(autocompleteSkillDOM).scope();
+
+					var autocompleteSkillAreaDOM = document.querySelector('.autocomplete-skillarea');
+					autocompleteSkillArea = angular.element(autocompleteSkillAreaDOM).scope();
+				};
+
 				$scope.$on('$stateChangeSuccess', function(evt, to, params, from) {
 					if (params.newSkillArea == true) {
 						reloadSkillAreas();
@@ -16,21 +27,32 @@
 				var reloadSkillAreas = function() {
 					intradayService.getSkillAreas.query()
 						.$promise.then(function (result) {
+							getAutoCompleteControls();
 							$scope.skillAreas = $filter('orderBy')(result.SkillAreas, 'Name');
 							$scope.HasPermissionToModifySkillArea = result.HasPermissionToModifySkillArea;
-					});
+							if ($scope.skillAreas.length > 0) {
+								$scope.selectedItem = $scope.skillAreas[0];
+								if (autocompleteSkillArea)
+									autocompleteSkillArea.selectedSkillArea = $scope.selectedItem;
+							}
+								
+							intradayService.getSkills.query().
+								$promise.then(function(result) {
+									$scope.skills = result;
+									if (!$scope.selectedItem) {
+										$scope.selectedItem = $scope.skills[0];
+										if (autocompleteSkill)
+											autocompleteSkill.selectedSkill = $scope.selectedItem;
+									}
+								});
+						});
 				};
 
 				reloadSkillAreas();
-
-				intradayService.getSkills.query().
-					$promise.then(function(result) {
-						$scope.skills = result;
-					});
-
+				
 				$scope.format = intradayService.formatDateTime;
 
-				$scope.configMode = function() {
+				$scope.configMode = function () {
 					$state.go('intraday.config', { isNewSkillArea: false });
 				};
 
@@ -49,8 +71,6 @@
 							$scope.skillAreas.splice($scope.skillAreas.indexOf(skillArea), 1);
 							$scope.selectedItem = null;
 							clearSkillAreaSelection();
-						}, function(error) {
-							console.log('error ' + error);
 						});
 
 					$scope.toggleModal();
@@ -69,33 +89,32 @@
 					};
 				};
 
-				var skillAreaCtrl, skillCtrl;
-
-				$scope.selectedItemChange = function(item, type) {
-					if (type == 'skill' && this.selectedSkill) {
-						skillCtrl = this;
+				$scope.selectedSkillChange = function(item) {
+					if (this.selectedSkill) {
 						$scope.selectedItem = item;
 						clearSkillAreaSelection();
 					}
-					if (type == 'skillArea' && this.selectedSkillArea) {
-						skillAreaCtrl = this;
-						$scope.isSkillAreaActive = true;
+				};
+
+				$scope.selectedSkillAreaChange = function(item) {
+					if (this.selectedSkillArea) {
 						$scope.selectedItem = item;
 						clearSkillSelection();
 					}
 				};
 
 				function clearSkillSelection() {
-					if (!skillCtrl) return;
-					skillCtrl.selectedSkill = null;
-					skillCtrl.searchSkillText = '';
+					if (!autocompleteSkill) return;
+					
+					autocompleteSkill.selectedSkill = null;
+					autocompleteSkill.searchSkillText = '';
 				};
 
 				function clearSkillAreaSelection() {
-					if (!skillAreaCtrl) return;
-					skillAreaCtrl.selectedSkillArea = null;
-					skillAreaCtrl.searchSkillAreaText = '';
-					$scope.isSkillAreaActive = false;
+					if (!autocompleteSkillArea) return;
+					
+					autocompleteSkillArea.selectedSkillArea = null;
+					autocompleteSkillArea.searchSkillAreaText = '';
 				};
 			}
 		]);

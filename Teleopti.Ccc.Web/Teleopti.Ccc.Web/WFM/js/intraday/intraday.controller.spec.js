@@ -41,10 +41,14 @@ describe('IntradayCtrl', function () {
 		scope = _$rootScope_.$new();
 
 		$httpBackend.whenGET("../api/intraday/skillarea")
-			.respond(200, skillAreaInfo);
+			.respond(function() {
+			return [200, skillAreaInfo];
+		});
 
 		$httpBackend.whenGET("../api/intraday/skills")
-			.respond(200, skills);
+			.respond(function() {
+			return [200, skills];
+		});
 
 		$httpBackend.whenDELETE("../api/intraday/skillarea/836cebb6-cee8-41a1-bb62-729f4b3a63f4")
 			.respond(200, {});
@@ -84,6 +88,18 @@ describe('IntradayCtrl', function () {
 
 		expect(scope.selectedItem).toEqual(null);
 		expect(scope.skillAreas.length).toEqual(1);
+	});
+
+	it('should monitor first skill if no skill areas', function() {
+		skillAreaInfo.SkillAreas = [];
+		createController();
+
+		expect(scope.selectedItem).toEqual(scope.skills[0]);
+	});
+
+	it('should monitor first skill area if there are any', function () {
+		createController();
+		expect(scope.selectedItem).toEqual(scope.skillAreas[0]);
 	});
 
 	it('should have permission to modify skill area', function() {

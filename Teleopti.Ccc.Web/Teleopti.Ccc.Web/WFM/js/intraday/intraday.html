@@ -1,105 +1,128 @@
-	<div ui-view>
-		<div class="view-header">
-			<div class="view-title">
-				<h1><i class="mdi mdi-compass-outline"></i> {{'Intraday'|translate}}</h1>
-			</div>
-			<div class="fab-wrapper" ng-if="HasPermissionToModifySkillArea">
-				<button class="skill-area-create wfm-fab  material-depth-1" ng-click="configMode();">
-					<i class="mdi mdi-plus"></i>
-					<md-tooltip>Add new area</md-tooltip>
-				</button>
+<div ui-view>
+	<div class="view-header">
+		<div class="view-title">
+			<h1><i class="mdi mdi-compass-outline"></i> {{'Intraday'|translate}}</h1>
+		</div>
+		<!--<div class="fab-wrapper" ng-if="HasPermissionToModifySkillArea">-->
+		<div class="fab-wrapper">
+			<button class="skill-area-create wfm-fab  material-depth-1" ng-click="configMode();">
+				<i class="mdi mdi-plus"></i>
+				<md-tooltip>Add new area</md-tooltip>
+			</button>
+		</div>
+	</div>
+	<div class="con-row">
+		<div class="panel con-flex material-depth-1">
+			<div class="sub-header con-row">
+				<h2 class="con-flex">Select to monitor either a skill or an area</h2>
+				<span class="con-flex">
+					<md-autocomplete class="autocomplete-skill" md-selected-item="selectedSkill"
+									 md-search-text="searchSkillText"
+									 md-selected-item-change="selectedSkillChange(skill)"
+									 md-items="skill in querySearch(searchSkillText, skills)"
+									 md-item-text="skill.Name"
+									 md-min-length="0"
+									 placeholder="Select skill">
+						<md-item-template>
+							<span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
+						</md-item-template>
+						<md-not-found>
+							No skills matching "{{searchSkillText}}" were found.
+						</md-not-found>
+					</md-autocomplete>
+				</span>
+				<span class="con-flex">
+					<md-autocomplete class="autocomplete-skillarea" md-selected-item="selectedSkillArea"
+									 md-search-text="searchSkillAreaText"
+									 md-selected-item-change="selectedSkillAreaChange(skillArea)"
+									 md-items="skillArea in querySearch(searchSkillAreaText, skillAreas)"
+									 md-item-text="skillArea.Name"
+									 md-min-length="0"
+									 placeholder="Select skill area">
+						<md-item-template>
+							<span md-highlight-text="searchSkillAreaText" md-highlight-flags="^i">{{skillArea.Name}}</span>
+						</md-item-template>
+						<md-not-found>
+							No skill areas matching "{{searchSkillAreaText}}" were found.
+						</md-not-found>
+					</md-autocomplete>
+				</span>
+				<div class="con-flex split-1-2"></div>
+
 			</div>
 		</div>
-		<div class="con-row">
-			<div class="panel con-flex material-depth-1">
-				<div class="sub-header con-row">
-					<h2 class="con-flex">Select to monitor either a skill or an area</h2>
-					<span class="con-flex">
-						<md-autocomplete md-selected-item="selectedSkill"
-											  md-search-text="searchSkillText"
-											  md-selected-item-change="selectedItemChange(skill, 'skill')"
-											  md-items="skill in querySearch(searchSkillText, skills)"
-											  md-item-text="skill.Name"
-											  md-min-length="0"
-											  placeholder="Select skill">
-							<md-item-template>
-								<span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
-							</md-item-template>
-							<md-not-found>
-								No skills matching "{{searchSkillText}}" were found.
-							</md-not-found>
-						</md-autocomplete>
-					</span>
-					<span class="con-flex">
-						<md-autocomplete md-selected-item="selectedSkillArea"
-											  md-search-text="searchSkillAreaText"
-											  md-selected-item-change="selectedItemChange(skillArea, 'skillArea')"
-											  md-items="skillArea in querySearch(searchSkillAreaText, skillAreas)"
-											  md-item-text="skillArea.Name"
-											  md-min-length="0"
-											  placeholder="Select skill area">
-							<md-item-template>
-								<span md-highlight-text="searchSkillAreaText" md-highlight-flags="^i">{{skillArea.Name}}</span>
-							</md-item-template>
-							<md-not-found>
-								No skill areas matching "{{searchSkillAreaText}}" were found.
-							</md-not-found>
-						</md-autocomplete>
-					</span>
-					<div class="con-flex split-1-2"></div>
-					
-				</div>
+	</div>
+
+	<div class="skill-monitor con-row animate-show" ng-show="selectedSkill.Name">
+		<div class="panel con-flex material-depth-1">
+			<div class="sub-header">
+				<h2 class="intraday-monitor-item">{{ selectedSkill.Name }}</h2>
 			</div>
-		</div>
-
-		<div class="con-row animate-show" ng-show="selectedItem.Name">
-			<div class="panel con-flex material-depth-1">
-				<div class="sub-header">
-					<h2 class="intraday-monitor-item">{{ selectedItem.Name }}</h2>
-					<div class="head-actions panel-menu" ng-show="isSkillAreaActive">
-						<div tabindex=0 class="context-menu card-context">
-							<i class="mdi mdi-dots-vertical"></i>
-							<span class="context-menu-left">
-								<ul class="wfm-list">
-									<li ng-click="showIncluded=!showIncluded">
-										<i ng-hide="showIncluded" class="mdi mdi-eye-off"></i>
-										<i ng-show="showIncluded" class="mdi mdi-eye"></i>
-										included skills
-									</li>
-									<li ng-click='toggleModal()'><i class="mdi mdi-delete"></i>Delete this area</li>
-								</ul>
-							</span>
-						</div>
-					</div>
+			<div class="con-row">
+				<div class="con-flex">
+					Forecasted calls:
 				</div>
-				<div ng-show="showIncluded && isSkillAreaActive" class="con-row">
-					<div class="con-flex">
-						<h3>This area contains:</h3>
-						<span ng-repeat="skill in selectedSkillArea.Skills | orderBy : 'Name'">{{skill.Name}}, </span>
-					</div>
+				<div class="con-flex">
+					Acctual calls:
 				</div>
-
-				<div class="con-row">
-					<div class="con-flex">
-						Forecasted calls:
-					</div>
-					<div class="con-flex">
-						Acctual calls:
-					</div>
-					<div class="con-flex">
-						Area total:
-					</div>
+				<div class="con-flex">
+					Area total:
 				</div>
 			</div>
 		</div>
+	</div>
 
-		<modal-dialog show='modalShown' ng-cloak>
-			<div class="modal-inner-content">
-				Are you sure you want to delete {{selectedItem.Name}}?
+
+	<div class="skill-area-monitor con-row animate-show" ng-show="selectedSkillArea.Name">
+		<div class="panel con-flex material-depth-1">
+			<div class="sub-header">
+				<h2 class="intraday-monitor-item">{{ selectedSkillArea.Name }}</h2>
+				<div class="head-actions panel-menu">
+					<div tabindex=0 class="context-menu card-context">
+						<i class="mdi mdi-dots-vertical"></i>
+						<span class="context-menu-left">
+							<ul class="wfm-list">
+								<li ng-click="showIncluded=!showIncluded">
+									<i ng-hide="showIncluded" class="mdi mdi-eye-off"></i>
+									<i ng-show="showIncluded" class="mdi mdi-eye"></i>
+									included skills
+								</li>
+								<li ng-click='toggleModal()'><i class="mdi mdi-delete"></i>Delete this area</li>
+							</ul>
+						</span>
+					</div>
+				</div>
 			</div>
-			<div class="modal-actions">
-				<aside>
-					<button ng-click='deleteSkillArea(selectedSkillArea)' class="wfm-btn wfm-btn-invis-default">Yes, delete it</button>
-				</aside>
+			<div ng-show="showIncluded" class="con-row">
+				<div class="con-flex">
+					<h3>This area contains:</h3>
+					<span ng-repeat="skill in selectedSkillArea.Skills | orderBy : 'Name'">{{skill.Name}}, </span>
+				</div>
 			</div>
-		</modal-dialog>
+
+			<div class="con-row">
+				<div class="con-flex">
+					Forecasted calls:
+				</div>
+				<div class="con-flex">
+					Acctual calls:
+				</div>
+				<div class="con-flex">
+					Area total:
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<modal-dialog show='modalShown' ng-cloak>
+		<div class="modal-inner-content">
+			Are you sure you want to delete {{selectedSkillArea.Name}}?
+		</div>
+		<div class="modal-actions">
+			<aside>
+				<button ng-click='deleteSkillArea(selectedSkillArea)' class="wfm-btn wfm-btn-invis-default">Yes, delete it</button>
+			</aside>
+		</div>
+	</modal-dialog>
+
+</div>
