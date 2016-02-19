@@ -98,10 +98,8 @@
     <Compile Include="ManagerUriBuilderTests.cs" />
     <Compile Include="NodeConfigurationTests.cs" />
     <Compile Include="NodeConfigurationUriBuilderHelperTests.cs" />
-    <Compile Include="NodeConsoleHostTests.cs" />
     <Compile Include="NodeControllerTests.cs" />
     <Compile Include="NodeUriBuilderTests.cs" />
-    <Compile Include="ProgressCallbackTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TrySendStatusToManagerTimerTests.cs" />
     <Compile Include="WorkerWrapperTests.cs" />
