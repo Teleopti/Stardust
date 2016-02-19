@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<LogObjectDetail> Load()
 		{
-			using (var uow = _currentDataSource.Current().Statistic.CreateAndOpenStatelessUnitOfWork())
+			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 			{
 				const string tsql = "EXEC [mart].[raptor_log_object_detail]";
 				return uow.Session().CreateSQLQuery(tsql)

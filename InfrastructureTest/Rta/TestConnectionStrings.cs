@@ -3,7 +3,7 @@ using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
-	public class FakeConnectionStrings : IConnectionStrings
+	public class TestConnectionStrings : IConnectionStrings
 	{
 		public string Application()
 		{

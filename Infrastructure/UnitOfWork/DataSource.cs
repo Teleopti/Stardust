@@ -9,11 +9,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			InParameter.NotNull("application", application);
 			Application = application;
-			Statistic = statistic;
+			Analytics = statistic;
 			ReadModel = readModel;
 		}
 
-		public IUnitOfWorkFactory Statistic { get; private set; }
+		public IUnitOfWorkFactory Analytics { get; private set; }
 
 		public IUnitOfWorkFactory Application { get; private set; }
 
@@ -26,13 +26,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public void ResetStatistic()
 		{
-			Statistic = null;
+			Analytics = null;
 		}
 
 		public void Dispose()
 		{
-			if (Statistic != null)
-				Statistic.Dispose();
+			if (Analytics != null)
+				Analytics.Dispose();
 			Application.Dispose();
 		}
 	}

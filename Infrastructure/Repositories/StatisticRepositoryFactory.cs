@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				identity = principal.Identity as ITeleoptiIdentity;
 			}
-        	if (identity == null || identity.DataSource.Statistic == null)
+        	if (identity == null || identity.DataSource.Analytics == null)
                 return new StatisticRepositoryEmpty();
             
             return new StatisticRepository();
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			  {
 				  identity = principal.Identity as ITeleoptiIdentity;
 			  }
-			  if (identity == null || identity.DataSource.Statistic == null)
+			  if (identity == null || identity.DataSource.Analytics == null)
 				  return null; //have empty here too
  
 			  return new AnalyticsScheduleRepository();
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				{
 					identity = principal.Identity as ITeleoptiIdentity;
 				}
-				if (identity == null || identity.DataSource.Statistic == null)
+				if (identity == null || identity.DataSource.Analytics == null)
 					return null; //have empty here too
 
 				return new IntervalLengthFetcher();

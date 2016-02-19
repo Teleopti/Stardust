@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			system.AddModule(new TenantServerModule(configuration));
 			system.AddService(TenantUnitOfWorkManager.Create(ConnectionStringHelper.ConnectionStringUsedInTests));
 			system.UseTestDouble(new FakeSignalR()).For<ISignalR>();
-			system.UseTestDouble<FakeConnectionStrings>().For<IConnectionStrings>();
+			system.UseTestDouble<TestConnectionStrings>().For<IConnectionStrings>();
 			system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
 			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>(); // Does not fake all message senders, just adds one to the list
 			system.UseTestDouble<SetNoLicenseActivator>().For<ISetLicenseActivator>();

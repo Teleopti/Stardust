@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -15,33 +14,56 @@ namespace Teleopti.Interfaces.Domain
 		public Guid? SiteId { get; set; }
 		public DateTime ReceivedTime { get; set; }
 
-		public string StateCode { get; set; }
-		public string State { get; set; }
-		public Guid? StateId { get; set; }
-		public DateTime? StateStartTime { get; set; }
-
 		public Guid? ScheduledId { get; set; }
 		public string Scheduled { get; set; }
 		public Guid? ScheduledNextId { get; set; }
 		public string ScheduledNext { get; set; }
 		public DateTime? NextStart { get; set; }
+
+		public string StateCode { get; set; }
+		public string StateName { get; set; }
+		public Guid? StateId { get; set; }
+		public DateTime? StateStartTime { get; set; }
 		
-		public Guid? AlarmId { get; set; }
-		public DateTime? AlarmStartTime { get; set; }
+		public Guid? RuleId { get; set; }
+		public string RuleName { get; set; }
 		public DateTime? RuleStartTime { get; set; }
-		public string AlarmName { get; set; }
-		public int? Color { get; set; }
+		public int? RuleColor { get; set; }
 		public double? StaffingEffect { get; set; }
 		public int? Adherence { get; set; }
-		public bool IsRuleAlarm { get; set; }
+
+		public bool IsAlarm { get; set; }
+		public DateTime? AlarmStartTime { get; set; }
 		public int? AlarmColor { get; set; }
 
 		public override string ToString()
 		{
-			return string.Format(CultureInfo.InvariantCulture,
-				"PersonId: {0}, StateCode: {1} StateGroup: {2}, Scheduled: {3}, StateStartTime: {4}, Scheduled next: {5}, NextStart: {6}, Alarm: {7}, RuleStartTime: {8}, BatchId: {9}, AlarmStartTime: {10}, IsRuleAlarm: {11}",
-				PersonId, StateCode, State, Scheduled, StateStartTime, ScheduledNext, NextStart, AlarmName, RuleStartTime, BatchId, AlarmStartTime, IsRuleAlarm);
-
+			return string.Format(
+				"PersonId: {0}, " +
+				"BatchId: {9}, " +
+				"StateCode: {1} " +
+				"State: {2}, " +
+				"Scheduled: {3}, " +
+				"StateStartTime: {4}, " +
+				"ScheduledNext: {5}, " +
+				"NextStart: {6}, " +
+				"RuleName: {7}, " +
+				"RuleStartTime: {8}, " +
+				"IsAlarm: {10}, " +
+				"AlarmStartTime: {11}",
+				PersonId,
+				BatchId,
+				StateCode, 
+				StateName, 
+				Scheduled, 
+				StateStartTime, 
+				ScheduledNext, 
+				NextStart,
+				RuleName, 
+				RuleStartTime,
+				IsAlarm, 
+				AlarmStartTime
+				);
 		}
 
 	}

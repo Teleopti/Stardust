@@ -122,8 +122,8 @@ namespace Teleopti.Ccc.InfrastructureTest
 		public void AfterTestSuite()
 		{
 			DataSource.Application.Dispose();
-			if (DataSource.Statistic != null)
-				DataSource.Statistic.Dispose();
+			if (DataSource.Analytics != null)
+				DataSource.Analytics.Dispose();
 		}
 
 		public static void CheckThatDbIsEmtpy()

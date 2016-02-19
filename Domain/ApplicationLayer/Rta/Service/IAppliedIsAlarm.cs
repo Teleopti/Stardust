@@ -17,7 +17,7 @@
 	{
 		public bool IsAlarm(StateAlarmInfo state)
 		{
-			return state.IsInAlarm();
+			return state.IsAlarm();
 		}
 	}
 }

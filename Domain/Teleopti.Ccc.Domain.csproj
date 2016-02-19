@@ -298,7 +298,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\Aggregator\TeamAdherenceMessage.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StoredStateInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateReadModelUpdater.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\AlarmMapping.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\RuleMapping.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AlarmMappingLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\BelongsToDateDecorator.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModelBuilders\AdherenceDetailsViewModelBuilder.cs" />

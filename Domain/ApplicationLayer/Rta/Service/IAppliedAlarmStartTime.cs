@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		public DateTime? For(StateAlarmInfo state, StoredStateInfo stored, DateTime currentTime)
 		{
-			if (state.IsInAlarm())
+			if (state.IsAlarm())
 			{
 				if (state.HasRuleChanged())
 					return currentTime.AddTicks(state.AlarmThresholdTime());

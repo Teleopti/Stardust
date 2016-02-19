@@ -41,7 +41,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 			//default
 			var connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
 			if (_baseConfiguration.JobHelper != null)
-				connectionString = _baseConfiguration.JobHelper.SelectedDataSource.Statistic.ConnectionString;
+				connectionString = _baseConfiguration.JobHelper.SelectedDataSource.Analytics.ConnectionString;
 			var previousSelectedItem = SelectedBusinessUnit;
 			BusinessUnitCollection = BusinessUnitItemMapper.Map(connectionString);
 			SelectedBusinessUnit = BusinessUnitCollection.FirstOrDefault(bu => previousSelectedItem != null && bu.Id == previousSelectedItem.Id);

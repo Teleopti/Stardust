@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 
 			Sender.NotificationsOfType<AgentStateReadModel>().Last().DeseralizeActualAgentState()
-				.State.Should().Be("alarm");
+				.StateName.Should().Be("alarm");
 		}
 
 		[Test]

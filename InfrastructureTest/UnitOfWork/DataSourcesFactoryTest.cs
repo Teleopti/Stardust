@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			IDataSource res = target.Create(nHibSettings(), string.Empty);
 			Assert.AreEqual(DataSourceConfigurationSetter.NoDataSourceName, res.Application.Name);
-			Assert.IsNull(res.Statistic);
+			Assert.IsNull(res.Analytics);
 			Assert.IsInstanceOf<NHibernateUnitOfWorkFactory>(res.Application);
 		}
 
@@ -42,9 +42,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			IDataSource res = target.Create(nHibSettings(), ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
 			Assert.AreEqual(DataSourceConfigurationSetter.NoDataSourceName, res.Application.Name);
-			Assert.AreEqual(DataSourcesFactory.AnalyticsDataSourceName, res.Statistic.Name);
+			Assert.AreEqual(DataSourcesFactory.AnalyticsDataSourceName, res.Analytics.Name);
 			Assert.IsInstanceOf<NHibernateUnitOfWorkFactory>(res.Application);
-			Assert.IsInstanceOf<NHibernateUnitOfWorkMatrixFactory>(res.Statistic);
+			Assert.IsInstanceOf<NHibernateUnitOfWorkMatrixFactory>(res.Analytics);
 		}
 
 		[Test]
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			{
 				appSession.Connection.ConnectionString.Should().Contain("unit tests");
 			}
-			using (var appSession = ((NHibernateUnitOfWorkFactory)res.Statistic).SessionFactory.OpenSession())
+			using (var appSession = ((NHibernateUnitOfWorkFactory)res.Analytics).SessionFactory.OpenSession())
 			{
 				appSession.Connection.ConnectionString.Should().Contain("unit tests");
 			}

@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 			var agentName = _personNameProvider.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name);
 			var buName = _currentBusinessUnit.Current().Name;
 			
-			using (var commonReports = new CommonReports(((TeleoptiIdentity)Thread.CurrentPrincipal.Identity).DataSource.Statistic.ConnectionString, id.Value))
+			using (var commonReports = new CommonReports(((TeleoptiIdentity)Thread.CurrentPrincipal.Identity).DataSource.Analytics.ConnectionString, id.Value))
 			{
 				commonReports.LoadReportInfo();
 				var name = "";

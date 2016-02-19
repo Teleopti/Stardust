@@ -48,14 +48,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 					PersonId = personId,
 					SiteId = siteId,
 					TeamId = teamId,
-					State = "state",
+					StateName = "state",
 					StateStartTime = "2015-10-22 08:00".Utc(),
 					Scheduled = "phone",
 					ScheduledNext = "lunch",
 					NextStart = "2015-10-22 09:00".Utc(),
-					AlarmName = "in adherence",
+					RuleName = "in adherence",
 					RuleStartTime = "2015-10-22 08:00".Utc(),
-					Color = 0
+					RuleColor = 0
 				}
 			};
 			Now.Is("2015-10-22 08:30".Utc());
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 				new AgentStateReadModel
 				{
 					AlarmStartTime = "2015-12-22 08:00".Utc(),
-					Color = Color.Orange.ToArgb(),
+					RuleColor = Color.Orange.ToArgb(),
 					AlarmColor = Color.Red.ToArgb()
 				}
 			};

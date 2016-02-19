@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 
 			var sent = Sender.NotificationOfType<AgentStateReadModel>().DeseralizeActualAgentState();
-			sent.State.Should().Be("my state");
+			sent.StateName.Should().Be("my state");
 		}
 
 		[Test]

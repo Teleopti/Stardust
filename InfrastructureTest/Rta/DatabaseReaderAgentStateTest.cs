@@ -64,12 +64,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var state = new AgentStateReadModelForTest
 			{
 				PersonId = Guid.NewGuid(),
-				AlarmId = Guid.NewGuid(),
-				AlarmName = "alarm",
+				RuleId = Guid.NewGuid(),
+				RuleName = "alarm",
 				RuleStartTime = "2014-11-11 10:33".Utc(),
 				BatchId = "2014-11-11 10:34".Utc(),
 				BusinessUnitId = Guid.NewGuid(),
-				Color = 3,
+				RuleColor = 3,
 				NextStart = "2014-11-11 10:35".Utc(),
 				OriginalDataSourceId = "1",
 				PlatformTypeId = Guid.NewGuid(),
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				ScheduledNextId = Guid.NewGuid(),
 				StaffingEffect = 1,
 				Adherence = (int) Adherence.Neutral,
-				State = "state",
+				StateName = "state",
 				StateCode = "statecode",
 				StateId = Guid.NewGuid(),
 				StateStartTime = "2014-11-11 10:37".Utc(),
@@ -91,12 +91,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var result = target.GetActualAgentStates().Single();
 
 			result.PersonId.Should().Be(state.PersonId);
-			result.AlarmId.Should().Be(state.AlarmId);
-			result.AlarmName.Should().Be(state.AlarmName);
+			result.RuleId.Should().Be(state.RuleId);
+			result.RuleName.Should().Be(state.RuleName);
 			result.RuleStartTime.Should().Be(state.RuleStartTime);
 			result.BatchId.Should().Be(state.BatchId);
 			result.BusinessUnitId.Should().Be(state.BusinessUnitId);
-			result.Color.Should().Be(state.Color);
+			result.RuleColor.Should().Be(state.RuleColor);
 			result.NextStart.Should().Be(state.NextStart);
 			result.OriginalDataSourceId.Should().Be(state.OriginalDataSourceId);
 			result.PlatformTypeId.Should().Be(state.PlatformTypeId);
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			result.ScheduledNextId.Should().Be(state.ScheduledNextId);
 			result.StaffingEffect.Should().Be(state.StaffingEffect);
 			result.Adherence.Should().Be(state.Adherence);
-			result.State.Should().Be(state.State);
+			result.StateName.Should().Be(state.StateName);
 			result.StateCode.Should().Be(state.StateCode);
 			result.StateId.Should().Be(state.StateId);
 			result.StateStartTime.Should().Be(state.StateStartTime);
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				PersonId = personId,
 				StateCode = "phone",
 				PlatformTypeId = Guid.NewGuid(),
-				State = "Ready",
+				StateName = "Ready",
 				StateId = Guid.NewGuid(),
 				Scheduled = "Phone",
 				ScheduledId = Guid.NewGuid(),
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			result.BusinessUnitId.Should().Be(agentStateReadModel.BusinessUnitId);
 			result.StateCode.Should().Be(agentStateReadModel.StateCode);
 			result.PlatformTypeId.Should().Be(agentStateReadModel.PlatformTypeId);
-			result.State.Should().Be(agentStateReadModel.State);
+			result.StateName.Should().Be(agentStateReadModel.StateName);
 			result.StateId.Should().Be(agentStateReadModel.StateId);
 			result.Scheduled.Should().Be(agentStateReadModel.Scheduled);
 			result.ScheduledId.Should().Be(agentStateReadModel.ScheduledId);

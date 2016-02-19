@@ -1086,7 +1086,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			var dataSource = ((TeleoptiIdentity)princip.Identity).DataSource;
 			var bu = ((TeleoptiIdentity)princip.Identity).BusinessUnit.Id;
 
-			ParameterSelector.ConnectionString = dataSource.Statistic.ConnectionString;
+			ParameterSelector.ConnectionString = dataSource.Analytics.ConnectionString;
 			ParameterSelector.UserCode = id.GetValueOrDefault();
 			ParameterSelector.BusinessUnitCode = bu.GetValueOrDefault();
 			ParameterSelector.LanguageId = ((TeleoptiPrincipalCacheable)princip).Person.PermissionInformation.UICulture().LCID;

@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -154,7 +155,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IAgentStateReadModelReader CreateRtaRepository()
 		{
-			return new AgentStateReadModelReader(null);
+			return new AgentStateReadModelReader(null, CurrentAnalyticsUnitOfWorkFactory.Make());
 		}
 
 		/// <summary>

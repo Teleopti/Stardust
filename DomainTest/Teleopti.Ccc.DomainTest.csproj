@@ -1556,7 +1556,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Aop\TestDoubles\" />
-    <Folder Include="ApplicationLayer\Rta\Aspects\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

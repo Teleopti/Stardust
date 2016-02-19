@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<EtlJobStatusModel> Load(DateOnly date, bool showOnlyErrors)
 		{
-			using (var uow = _currentDataSource.Current().Statistic.CreateAndOpenStatelessUnitOfWork())
+			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 			{
 				const string tsql = "EXEC [mart].[etl_job_execution_history] :start_date,:end_date,:business_unit_id,:show_only_errors";
 				return uow.Session().CreateSQLQuery(tsql)

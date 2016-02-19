@@ -36,12 +36,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
 			{
 				PersonId = agentStateReadModel.PersonId,
 				Activity = agentStateReadModel.Scheduled,
-				Alarm = agentStateReadModel.AlarmName,
-				AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(agentStateReadModel.Color ?? 0)),
+				Alarm = agentStateReadModel.RuleName,
+				AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(agentStateReadModel.RuleColor ?? 0)),
 				RuleStartTime = agentStateReadModel.RuleStartTime,
 				NextActivity = agentStateReadModel.ScheduledNext,
 				NextActivityStartTime = agentStateReadModel.NextStart,
-				State = agentStateReadModel.State,
+				State = agentStateReadModel.StateName,
 				StateStartTime = agentStateReadModel.StateStartTime
 			};
 		}

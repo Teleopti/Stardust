@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[AllBusinessUnitsUnitOfWork]
-		public virtual IEnumerable<AlarmMapping> Load()
+		public virtual IEnumerable<RuleMapping> Load()
 		{
 			var mappings = _rtaMapRepository.LoadAll();
 			return (
@@ -38,20 +38,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				let activityId = m.Activity != null ? m.Activity.Id.Value : (Guid?) null
 				let rule = m.RtaRule ?? new RtaRule()
 				let ruleId = rule.Id.HasValue ? rule.Id.Value : Guid.Empty
-				select new AlarmMapping
+				select new RuleMapping
 				{
 					BusinessUnitId = businessUnitId,
 					PlatformTypeId = platformTypeId,
 					StateCode = statecode,
 					ActivityId = activityId,
+
 					RuleId = ruleId,
-					IsAlarm = rule.IsAlarm,
-					AlarmName = rule.Description.Name,
+					RuleName = rule.Description.Name,
 					Adherence = _appliedAdherence.ForAlarm(m.RtaRule),
-					StaffingEffect = (int) rule.StaffingEffect,
+					StaffingEffect = (int)rule.StaffingEffect,
 					DisplayColor = rule.DisplayColor.ToArgb(),
+
+					IsAlarm = rule.IsAlarm,
+					ThresholdTime = rule.ThresholdTime.Ticks,
 					AlarmColor = rule.AlarmColor.ToArgb(),
-					ThresholdTime = rule.ThresholdTime.Ticks
 				}
 				).ToArray();
 		}

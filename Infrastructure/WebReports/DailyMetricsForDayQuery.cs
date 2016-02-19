@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 
 		public DailyMetricsForDayResult Execute(DateOnly date)
 		{
-			using (var uow = _currentDataSource.Current().Statistic.CreateAndOpenStatelessUnitOfWork())
+			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(tsql)
 					.AddScalar("AnsweredCalls", NHibernateUtil.Int32)

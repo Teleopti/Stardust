@@ -32,12 +32,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 				return new AgentStatusViewModel
 				{
 					PersonId = x.PersonId,
-					State = x.State,
+					State = x.StateName,
 					StateStartTime = x.StateStartTime,
 					Activity = x.Scheduled,
 					NextActivity = x.ScheduledNext,
 					NextActivityStartTime = formatTime(x.NextStart),
-					Alarm = x.AlarmName,
+					Alarm = x.RuleName,
 					AlarmStart = x.AlarmStartTime,
 					Color = colorTransition(x, timeInAlarm),
 					TimeInState = x.StateStartTime.HasValue ? (int) (_now.UtcDateTime() - x.StateStartTime.Value).TotalSeconds : 0,
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 		{
 			return timeInAlarm.HasValue
 				? ColorTranslator.ToHtml(Color.FromArgb(x.AlarmColor ?? Color.White.ToArgb()))
-				: ColorTranslator.ToHtml(Color.FromArgb(x.Color ?? Color.White.ToArgb()));
+				: ColorTranslator.ToHtml(Color.FromArgb(x.RuleColor ?? Color.White.ToArgb()));
 		}
 
 		private int? calculateTimeInAlarm(AgentStateReadModel x)

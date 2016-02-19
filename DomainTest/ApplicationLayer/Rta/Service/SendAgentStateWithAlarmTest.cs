@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Target.SaveState(state);
 
 			Sender.NotificationOfType<AgentStateReadModel>().DeseralizeActualAgentState()
-				.AlarmId.Should().Be(alarmId);
+				.RuleId.Should().Be(alarmId);
 		}
 
 		[Test, Ignore]

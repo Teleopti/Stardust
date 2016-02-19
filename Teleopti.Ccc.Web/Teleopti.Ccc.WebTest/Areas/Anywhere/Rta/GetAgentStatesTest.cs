@@ -68,14 +68,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			{
 				PersonId = personId,
 				SiteId = siteId,
-				State = "state",
+				StateName = "state",
 				StateStartTime = "2015-10-22 08:00".Utc(),
 				Scheduled = "phone",
 				ScheduledNext = "lunch",
 				NextStart = "2015-10-22 09:00".Utc(),
-				AlarmName = "in adherence",
+				RuleName = "in adherence",
 				RuleStartTime = "2015-10-22 08:00".Utc(),
-				Color = 0
+				RuleColor = 0
 			});
 			Now.Is("2015-10-22 08:30".Utc());
 
@@ -101,14 +101,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			{
 				PersonId = personId,
 				TeamId = teamId,
-				State = "state",
+				StateName = "state",
 				StateStartTime = "2015-10-22 08:00".Utc(),
 				Scheduled = "phone",
 				ScheduledNext = "lunch",
 				NextStart = "2015-10-22 09:00".Utc(),
-				AlarmName = "in adherence",
+				RuleName = "in adherence",
 				RuleStartTime = "2015-10-22 08:00".Utc(),
-				Color = 0
+				RuleColor = 0
 			});
 			Now.Is("2015-10-22 08:30".Utc());
 
@@ -137,13 +137,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 				{
 					PersonId = personId1,
 					SiteId = siteId1,
-					IsRuleAlarm = true
+					IsAlarm = true
 				})
 				.Has(new AgentStateReadModel
 				{
 					PersonId = personId2,
 					SiteId = siteId2,
-					IsRuleAlarm = false
+					IsAlarm = false
 				});
 
 			var agentStates = Target.ForSites(new[] {siteId1, siteId2}, true, null);

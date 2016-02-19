@@ -7,7 +7,6 @@ using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -18,14 +17,17 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	public class AgentStateReadModelReader : IAgentStateReadModelReader
 	{
 		private readonly IConnectionStrings _connectionStrings;
+		private readonly ICurrentAnalyticsUnitOfWorkFactory _unitOfWorkFactory;
 
 		public AgentStateReadModelReader(
-			IConnectionStrings connectionStrings
+			IConnectionStrings connectionStrings,
+			ICurrentAnalyticsUnitOfWorkFactory unitOfWorkFactory
 			)
 		{
 			_connectionStrings = connectionStrings;
+			_unitOfWorkFactory = unitOfWorkFactory;
 		}
-
+		
 		public IList<AgentStateReadModel> Load(IEnumerable<IPerson> persons)
         {
             var guids = persons.Select(person => person.Id.GetValueOrDefault()).ToList();
@@ -34,13 +36,13 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		
 		public IList<AgentStateReadModel> Load(IEnumerable<Guid> personGuids)
 		{
-            using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+            using (var uow = _unitOfWorkFactory.Current().CreateAndOpenStatelessUnitOfWork())
 			{
 				var ret = new List<AgentStateReadModel>();
 				foreach (var personList in personGuids.Batch(400))
 				{
 					ret.AddRange(((NHibernateStatelessUnitOfWork)uow).Session
-						.CreateSQLQuery(@"SELECT * FROM RTA.ActualAgentState WITH (NOLOCK) WHERE PersonId IN(:persons)")
+						.CreateSQLQuery(selectActualAgentState() + "WITH (NOLOCK) WHERE PersonId IN(:persons)")
 						.SetParameterList("persons", personList)
 						.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateReadModel)))
 						.SetReadOnly(true)
@@ -52,9 +54,9 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		
 		public IList<AgentStateReadModel> LoadForTeam(Guid teamId)
 		{
-			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			using (var uow = _unitOfWorkFactory.Current().CreateAndOpenStatelessUnitOfWork())
 			{
-				return uow.Session().CreateSQLQuery(@"SELECT * FROM RTA.ActualAgentState WITH (NOLOCK) WHERE TeamId = :teamId")
+				return uow.Session().CreateSQLQuery(selectActualAgentState() + "WITH (NOLOCK) WHERE TeamId = :teamId")
 					.SetParameter("teamId", teamId)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateReadModel)))
 					.SetReadOnly(true)
@@ -64,7 +66,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		
 		public IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds, bool? inAlarmOnly, bool? alarmTimeDesc)
 		{
-			var query = @"SELECT * FROM RTA.ActualAgentState WITH (NOLOCK) WHERE SiteId IN (:siteIds)";
+			var query = selectActualAgentState() + @"WITH (NOLOCK) WHERE SiteId IN (:siteIds)";
 			if (inAlarmOnly.HasValue)
 				query += " AND IsRuleAlarm = " + Convert.ToInt32(inAlarmOnly.Value);
 			if(alarmTimeDesc.HasValue)
@@ -73,7 +75,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				else
 					query += " ORDER BY AlarmStartTime DESC";
 				
-			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			using (var uow = _unitOfWorkFactory.Current().CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(query)
 					.SetParameterList("siteIds", siteIds)
@@ -85,7 +87,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds, bool? inAlarmOnly, bool? alarmTimeDesc)
 		{
-			var query = @"SELECT *	FROM RTA.ActualAgentState WITH (NOLOCK) WHERE TeamId IN (:teamIds)";
+			var query = selectActualAgentState() + @"WITH (NOLOCK) WHERE TeamId IN (:teamIds)";
 			if (inAlarmOnly.HasValue)
 				query += " AND IsRuleAlarm = " + Convert.ToInt32(inAlarmOnly.Value);
 			if (alarmTimeDesc.HasValue)
@@ -94,7 +96,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				else
 					query += " ORDER BY AlarmStartTime DESC";
 
-			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			using (var uow = _unitOfWorkFactory.Current().CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(query)
 					.SetParameterList("teamIds", teamIds)
@@ -104,22 +106,15 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			}
 		}
 
-		private IUnitOfWorkFactory StatisticUnitOfWorkFactory()
-        {
-            var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
-            return identity.DataSource.Statistic;
-        }
-
 		public IEnumerable<AgentStateReadModel> GetActualAgentStates()
 		{
-			return queryActualAgentStates2("SELECT * FROM Rta.ActualAgentState", new parameters[] { });
+			return queryActualAgentStates(null, null);
 		}
 
 		[InfoLog]
 		public virtual AgentStateReadModel GetCurrentActualAgentState(Guid personId)
 		{
-			var agentState = queryActualAgentStates2(
-				"SELECT * FROM Rta.ActualAgentState WHERE PersonId = @PersonId",
+			var agentState = queryActualAgentStates("WHERE PersonId = @PersonId",
 				new[]
 				{
 					new parameters
@@ -134,14 +129,13 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		[InfoLog]
 		public virtual IEnumerable<AgentStateReadModel> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
 		{
-			return queryActualAgentStates2(@"
-											SELECT * FROM RTA.ActualAgentState 
-											WHERE OriginalDataSourceId = @datasource_id
-											AND (
-												BatchId < @batch_id
-												OR 
-												BatchId IS NULL
-												)",
+			return queryActualAgentStates(
+				@"WHERE OriginalDataSourceId = @datasource_id
+				AND (
+					BatchId < @batch_id
+					OR 
+					BatchId IS NULL
+					)",
 				new[]
 				{
 					new parameters
@@ -157,19 +151,19 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 					},
 				})
 				.ToArray();
-
 		}
 
-		private IEnumerable<AgentStateReadModel> queryActualAgentStates2(string sql, IEnumerable<parameters> parameters)
+		private IEnumerable<AgentStateReadModel> queryActualAgentStates(string @where, IEnumerable<parameters> parameters)
 		{
-			using (
-				var connection = new SqlConnection(_connectionStrings.Analytics()))
+			var sql = selectActualAgentState() + (@where ?? "");
+			using (var connection = new SqlConnection(_connectionStrings.Analytics()))
 			{
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.Text;
-				
 				command.CommandText = sql;
-				parameters.ForEach(x => command.Parameters.AddWithValue(x.Name, x.Value));
+				parameters
+					.EmptyIfNull()
+					.ForEach(x => command.Parameters.AddWithValue(x.Name, x.Value));
 				
 				connection.Open();
 				using (var reader = command.ExecuteReader(CommandBehavior.CloseConnection))
@@ -178,32 +172,36 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 					{
 						yield return new AgentStateReadModel
 						{
+							PersonId = reader.Guid("PersonId"),
+							BatchId = reader.NullableDateTime("BatchId"),
+							OriginalDataSourceId = reader.String("OriginalDataSourceId"),
 							PlatformTypeId = reader.Guid("PlatformTypeId"),
 							BusinessUnitId = reader.NullableGuid("BusinessUnitId") ?? Guid.Empty,
-							StateCode = reader.String("StateCode"),
-							StateId = reader.NullableGuid("StateId"),
-							State = reader.String("State"),
+							TeamId = reader.NullableGuid("TeamId"),
+							SiteId = reader.NullableGuid("SiteId"),
+							ReceivedTime = reader.DateTime("ReceivedTime"),
+
 							ScheduledId = reader.NullableGuid("ScheduledId"),
 							Scheduled = reader.String("Scheduled"),
 							ScheduledNextId = reader.NullableGuid("ScheduledNextId"),
 							ScheduledNext = reader.String("ScheduledNext"),
-							ReceivedTime = reader.DateTime("ReceivedTime"),
-							Color = reader.NullableInt("Color"),
-							AlarmColor = reader.NullableInt("AlarmColor"),
-							AlarmId = reader.NullableGuid("AlarmId"),
-							AlarmName = reader.String("AlarmName"),
-							StateStartTime = reader.NullableDateTime("StateStartTime"),
 							NextStart = reader.NullableDateTime("NextStart"),
-							BatchId = reader.NullableDateTime("BatchId"),
-							OriginalDataSourceId = reader.String("OriginalDataSourceId"),
+
+							StateCode = reader.String("StateCode"),
+							StateId = reader.NullableGuid("StateId"),
+							StateName = reader.String("StateName"),
+							StateStartTime = reader.NullableDateTime("StateStartTime"),
+
+							RuleId = reader.NullableGuid("RuleId"),
+							RuleName = reader.String("RuleName"),
+							RuleColor = reader.NullableInt("RuleColor"),
 							RuleStartTime = reader.NullableDateTime("RuleStartTime"),
-							AlarmStartTime = reader.NullableDateTime("AlarmStartTime"),
-							IsRuleAlarm = reader.Boolean("IsRuleAlarm"),
-							PersonId = reader.Guid("PersonId"),
 							StaffingEffect = reader.NullableDouble("StaffingEffect"),
 							Adherence = reader.NullableInt("Adherence"),
-							TeamId = reader.NullableGuid("TeamId"),
-							SiteId = reader.NullableGuid("SiteId")
+
+							IsAlarm = reader.Boolean("IsAlarm"),
+							AlarmStartTime = reader.NullableDateTime("AlarmStartTime"),
+							AlarmColor = reader.NullableInt("AlarmColor"),
 						};
 					}
 				}
@@ -215,5 +213,43 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			public string Name { get; set; }
 			public object Value { get; set; }
 		}
+
+		private static string selectActualAgentState()
+		{
+			return @"SELECT 
+						PersonId,
+						BatchId,
+						BusinessUnitId,
+						SiteId,
+						TeamId,
+						OriginalDataSourceId,
+						PlatformTypeId,
+						ReceivedTime,
+
+						Scheduled,
+						ScheduledId,
+						ScheduledNext,
+						ScheduledNextId,
+						NextStart,
+
+						StateCode,
+						State AS StateName,
+						StateId,
+						StateStartTime,
+
+						AlarmId AS RuleId,
+						AlarmName AS RuleName,
+						Color AS RuleColor,
+						RuleStartTime,
+						StaffingEffect,
+						Adherence,
+
+						IsRuleAlarm AS IsAlarm,
+						AlarmStartTime,
+						AlarmColor
+
+					FROM RTA.ActualAgentState ";
+		}
+
 	}
 }

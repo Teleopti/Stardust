@@ -125,8 +125,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			rtaStateHolder.BackToRecord();
 			AgentStateReadModel agentStateReadModel = new AgentStateReadModel();
 			agentStateReadModel.RuleStartTime = DateTime.UtcNow.AddMinutes(-45);
-			agentStateReadModel.State = "MyCurrentStateDescription";
-			agentStateReadModel.AlarmName = "MyAlarmName";
+			agentStateReadModel.StateName = "MyCurrentStateDescription";
+			agentStateReadModel.RuleName = "MyAlarmName";
 			var dictionary = new Dictionary<Guid, AgentStateReadModel> { { (Guid)person.Id, agentStateReadModel } };
 
 			target.Models.Add(new DayLayerModel(person, new DateTimePeriod(DateTime.UtcNow.Date, DateTime.UtcNow.Date),
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			mocks.VerifyAll();
 
 			Assert.That(target.Models.First().Person.Id, Is.EqualTo(person.Id));
-			Assert.That(target.Models.First().AlarmDescription, Is.EqualTo(agentStateReadModel.AlarmName));
+			Assert.That(target.Models.First().AlarmDescription, Is.EqualTo(agentStateReadModel.RuleName));
 		}
 		
         [Test]
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 					PersonId = guid,
 					ScheduledNext = "New Next Activity",
 					RuleStartTime = DateTime.UtcNow.AddMinutes(-10),
-					AlarmName = "New Alarm Name"
+					RuleName = "New Alarm Name"
 				};
 			var customEventArgs = new CustomEventArgs<AgentStateReadModel>(actualAgentState);
 			person.SetId(guid);
@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			var result = target.Models.FirstOrDefault(d => d.Person.Id == guid);
 			result.NextActivityDescription.Should().Be.EqualTo(actualAgentState.ScheduledNext);
-			result.AlarmDescription.Should().Be.EqualTo(actualAgentState.AlarmName);
+			result.AlarmDescription.Should().Be.EqualTo(actualAgentState.RuleName);
 		}
 
 		[Test]
@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			var actualAgentState = new AgentStateReadModel
 			{
 				PersonId = person.Id.Value,
-				AlarmId = Guid.NewGuid()
+				RuleId = Guid.NewGuid()
 			};
 			var rtaStateHolder = new RtaStateHolder(new SchedulingResultStateHolder(), MockRepository.GenerateMock<IRtaStateGroupRepository>());
 			rtaStateHolder.SetFilteredPersons(new [] {person});

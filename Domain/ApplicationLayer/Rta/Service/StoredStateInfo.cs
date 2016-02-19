@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			ActivityId = fromStorage.ScheduledId;
 			NextActivityId = fromStorage.ScheduledNextId;
 			NextActivityStartTime = fromStorage.NextStart;
-			RuleId = fromStorage.AlarmId;
+			RuleId = fromStorage.RuleId;
 			AlarmStartTime = fromStorage.AlarmStartTime;
 			RuleStartTime = fromStorage.RuleStartTime;
 			StateStartTime = fromStorage.StateStartTime;

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			DataSource target = new DataSource(application, statistics, null);
 			Assert.AreSame(application, target.Application);
-			Assert.AreSame(statistics, target.Statistic);
+			Assert.AreSame(statistics, target.Analytics);
 		}
 
 		[Test]
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			DataSource target = new DataSource(application, statistics, null);
 			target.ResetStatistic();
-			Assert.IsNull(target.Statistic);
+			Assert.IsNull(target.Analytics);
 		}
 
 		[Test]

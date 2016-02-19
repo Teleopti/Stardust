@@ -22,15 +22,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_stateCodeAdder = stateCodeAdder;
 		}
 
-		public AlarmMapping AlarmFor(Guid businessUnitId, Guid platformTypeId, string stateCode, Guid? activityId)
+		public RuleMapping RuleFor(Guid businessUnitId, Guid platformTypeId, string stateCode, Guid? activityId)
 		{
-			var match = queryAlarm(businessUnitId, platformTypeId, stateCode, activityId);
+			var match = queryRule(businessUnitId, platformTypeId, stateCode, activityId);
 			if (activityId != null && match == null)
-				match = queryAlarm(businessUnitId, platformTypeId, stateCode, null);
+				match = queryRule(businessUnitId, platformTypeId, stateCode, null);
 			return match;
 		}
 
-		private AlarmMapping queryAlarm(Guid businessUnitId, Guid platformTypeId, string stateCode, Guid? activityId)
+		private RuleMapping queryRule(Guid businessUnitId, Guid platformTypeId, string stateCode, Guid? activityId)
 		{
 			return (from m in _alarmMappingLoader.Load()
 				where

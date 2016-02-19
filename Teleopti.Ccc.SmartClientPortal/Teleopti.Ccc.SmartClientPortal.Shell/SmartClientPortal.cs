@@ -450,7 +450,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 #if(DEBUG)
 			string outPut = string.Concat(UnitOfWorkFactory.Current.NumberOfLiveUnitOfWorks.ToString(), " Raptor UOW:s");
-			IUnitOfWorkFactory matrix = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).DataSource.Statistic;
+			IUnitOfWorkFactory matrix = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).DataSource.Analytics;
 			if(matrix!=null)
 				outPut +=string.Concat(", ", matrix.NumberOfLiveUnitOfWorks, " Matrix UOW:s");
 			Roger65(outPut);

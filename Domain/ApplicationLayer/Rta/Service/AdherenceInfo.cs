@@ -62,10 +62,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private EventAdherence adherenceFor(string stateCode, Guid platformTypeId, Guid? activityId)
 		{
-			var alarm = _stateMapper.AlarmFor(_person.BusinessUnitId, platformTypeId, stateCode, activityId);
-			if (alarm == null)
+			var rule = _stateMapper.RuleFor(_person.BusinessUnitId, platformTypeId, stateCode, activityId);
+			if (rule == null)
 				return _appliedAdherence.ForEvent(null, null);
-			return _appliedAdherence.ForEvent(alarm.Adherence, alarm.StaffingEffect);
+			return _appliedAdherence.ForEvent(rule.Adherence, rule.StaffingEffect);
 		}
 
 		public static EventAdherence AggregatorAdherence(AgentStateReadModel readModel)

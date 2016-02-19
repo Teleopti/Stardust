@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 
 		public ICollection<DetailedAdherenceForDayResult> Execute(DateOnly date)
 		{
-			using (var uow = _currentDataSource.Current().Statistic.CreateAndOpenStatelessUnitOfWork())
+			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(tsql)
 					.AddScalar("ShiftDate", NHibernateUtil.DateTime)

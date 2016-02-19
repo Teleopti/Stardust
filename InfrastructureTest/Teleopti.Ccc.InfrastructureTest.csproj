@@ -250,7 +250,6 @@
     <Compile Include="Rta\DatabaseReaderLoadAllPersonOrganizationDataTest.cs" />
     <Compile Include="Rta\DatabaseReaderLoadPersonOrganizationDataTest.cs" />
     <Compile Include="Rta\Persisters\AdherenceDetailsReadModelPersisterConcurrencyTest.cs" />
-    <Compile Include="Rta\Persisters\AgentStateReadModelPersisterTest.cs" />
     <Compile Include="Rta\Persisters\RetryingQueueSimulator.cs" />
     <Compile Include="Rta\Persisters\AdherencePercentageReadModelPersisterConcurrencyTest.cs" />
     <Compile Include="Rta\Persisters\SiteOutOfAdherenceReadModelPersisterConcurrencyTest.cs" />
@@ -300,12 +299,12 @@
     <Compile Include="Repositories\TeamGamificationSettingRepositoryTest.cs" />
     <Compile Include="Rta\AgentStateReadModelForTest.cs" />
     <Compile Include="Rta\DatabaseReaderAgentStateTest.cs" />
-    <Compile Include="Rta\ActualAgentStateReadModelPersistingTest.cs" />
-    <Compile Include="Rta\FakeConnectionStrings.cs" />
+    <Compile Include="Rta\Persisters\AgentStateReadModelPersisterTest.cs" />
+    <Compile Include="Rta\TestConnectionStrings.cs" />
     <Compile Include="InfrastructureTestAttribute.cs" />
     <Compile Include="Rta\RtaLoadExternalLogOnProcTest.cs" />
     <Compile Include="Repositories\BusinessUnitFilterOverriderTest.cs" />
-    <Compile Include="Rta\RtaRepositoryTest.cs" />
+    <Compile Include="Rta\AgentStateReadModelReaderTest.cs" />
     <Compile Include="Repositories\RtaStateGroupRepositoryNotSignedInTest.cs" />
     <Compile Include="Toggle\ApplicationFunctionFeatureFlagTest.cs" />
     <Compile Include="Toggle\TogglesActiveTest.cs" />

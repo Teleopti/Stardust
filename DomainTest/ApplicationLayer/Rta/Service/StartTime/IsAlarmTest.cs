@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 				StateCode = "phone"
 			});
 
-			Database.PersistedReadModel.IsRuleAlarm.Should().Be(true);
+			Database.PersistedReadModel.IsAlarm.Should().Be(true);
 		}
 		
 		[Test]
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 				StateCode = "phone"
 			});
 
-			Database.PersistedReadModel.IsRuleAlarm.Should().Be(true);
+			Database.PersistedReadModel.IsAlarm.Should().Be(true);
 		}
 
 		[Test]
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 				StateCode = "phone"
 			});
 
-			Database.PersistedReadModel.IsRuleAlarm.Should().Be(false);
+			Database.PersistedReadModel.IsAlarm.Should().Be(false);
 		}
 	}
 }

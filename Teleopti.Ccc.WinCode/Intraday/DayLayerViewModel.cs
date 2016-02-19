@@ -126,8 +126,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			    
 				ModelEditable.EditItem(dayLayerModel);
 			    dayLayerModel.StaffingEffect = agentState.StaffingEffect ?? 0;
-				dayLayerModel.ColorValue = agentState.Color ?? 0;
-			    dayLayerModel.AlarmDescription = agentState.AlarmName;
+				dayLayerModel.ColorValue = agentState.RuleColor ?? 0;
+			    dayLayerModel.AlarmDescription = agentState.RuleName;
 			    ModelEditable.CommitEdit();
 		    }
 	    }
@@ -148,12 +148,12 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			dayLayerModel.EnteredCurrentState = agentStateReadModel.StateStartTime ?? DateTime.MinValue;
 			dayLayerModel.NextActivityDescription = agentStateReadModel.ScheduledNext;
 			dayLayerModel.NextActivityStartDateTime = agentStateReadModel.NextStart ?? DateTime.MinValue;
-			dayLayerModel.CurrentStateDescription = agentStateReadModel.State;
+			dayLayerModel.CurrentStateDescription = agentStateReadModel.StateName;
 			dayLayerModel.RuleStartTime = agentStateReadModel.RuleStartTime ?? DateTime.MinValue;
-			dayLayerModel.HasAlarm = agentStateReadModel.AlarmId != Guid.Empty;
+			dayLayerModel.HasAlarm = agentStateReadModel.RuleId != Guid.Empty;
 			dayLayerModel.StaffingEffect = agentStateReadModel.StaffingEffect ?? 0;
-			dayLayerModel.ColorValue = agentStateReadModel.Color ?? 0;
-			dayLayerModel.AlarmDescription = agentStateReadModel.AlarmName;
+			dayLayerModel.ColorValue = agentStateReadModel.RuleColor ?? 0;
+			dayLayerModel.AlarmDescription = agentStateReadModel.RuleName;
 			
 			ModelEditable.CommitEdit();
 		}

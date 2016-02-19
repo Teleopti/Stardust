@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class StateAlarmInfo
 	{
 		private readonly StateMapping _stateMapping;
-		private readonly AlarmMapping _alarmMapping;
+		private readonly RuleMapping _ruleMapping;
 		private readonly StoredStateInfo _stored;
 
 		public StateAlarmInfo(
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			)
 		{
 			_stateMapping = stateMapper.StateFor(person.BusinessUnitId, platformTypeId, stateCode, input.StateDescription);
-			_alarmMapping = stateMapper.AlarmFor(person.BusinessUnitId, platformTypeId, stateCode, schedule.CurrentActivityId()) ?? new AlarmMapping();
+			_ruleMapping = stateMapper.RuleFor(person.BusinessUnitId, platformTypeId, stateCode, schedule.CurrentActivityId()) ?? new RuleMapping();
 			_stored = stored;
 		}
 
@@ -39,49 +39,57 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return _stateMapping.StateGroupName;
 		}
 
-		public double? StaffingEffect()
+
+
+		public bool HasRuleChanged()
 		{
-			return _alarmMapping.StaffingEffect;
+			return _ruleMapping.RuleId != _stored.RuleId();
 		}
 
-		public Adherence? Adherence()
-		{
-			return _alarmMapping.Adherence;
-		}
+
 
 		public Guid? RuleId()
 		{
-			return _alarmMapping.RuleId;
+			return _ruleMapping.RuleId;
 		}
 
-		public string AlarmName()
+		public string RuleName()
 		{
-			return _alarmMapping.AlarmName;
-		}
-
-		public long AlarmThresholdTime()
-		{
-			return _alarmMapping.ThresholdTime;
+			return _ruleMapping.RuleName;
 		}
 
 		public int? RuleDisplayColor()
 		{
-			return _alarmMapping.DisplayColor;
+			return _ruleMapping.DisplayColor;
+		}
+
+		public double? StaffingEffect()
+		{
+			return _ruleMapping.StaffingEffect;
+		}
+
+		public Adherence? Adherence()
+		{
+			return _ruleMapping.Adherence;
+		}
+
+
+
+		public bool IsAlarm()
+		{
+			return _ruleMapping.IsAlarm;
+		}
+
+		public long AlarmThresholdTime()
+		{
+			return _ruleMapping.ThresholdTime;
 		}
 
 		public int? AlarmColor()
 		{
-			return _alarmMapping.AlarmColor;
+			return _ruleMapping.AlarmColor;
 		}
 
-		public bool IsInAlarm()
-		{
-			return _alarmMapping.IsAlarm;
-		}
 
-		public bool HasRuleChanged()
-		{
-			return _alarmMapping.RuleId != _stored.RuleId();
-		}
 	}
 }

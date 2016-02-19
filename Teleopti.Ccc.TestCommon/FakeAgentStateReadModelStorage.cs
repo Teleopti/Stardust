@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.TestCommon
 				from m in _data.Values
 				where s == m.SiteId
 				select m;
-			sites = inAlarmOnly.HasValue ? sites.Where(x => x.IsRuleAlarm == inAlarmOnly.Value).ToArray() : sites.ToArray();
+			sites = inAlarmOnly.HasValue ? sites.Where(x => x.IsAlarm == inAlarmOnly.Value).ToArray() : sites.ToArray();
 			return sites;
 		}
 

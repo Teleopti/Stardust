@@ -1,24 +1,26 @@
-﻿using Teleopti.Ccc.Domain.Common;
+﻿using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class ConnectionStrings : IConnectionStrings
 	{
-		private readonly ICurrentDataSource _dataSource;
+		private readonly ICurrentUnitOfWorkFactory _application;
+		private readonly ICurrentAnalyticsUnitOfWorkFactory _analytics;
 
-		public ConnectionStrings(ICurrentDataSource dataSource)
+		public ConnectionStrings(ICurrentUnitOfWorkFactory application, ICurrentAnalyticsUnitOfWorkFactory analytics)
 		{
-			_dataSource = dataSource;
+			_application = application;
+			_analytics = analytics;
 		}
 
 		public string Application()
 		{
-			return _dataSource.Current().Application.ConnectionString;
+			return _application.Current().ConnectionString;
 		}
 
 		public string Analytics()
 		{
-			return _dataSource.Current().Statistic.ConnectionString;
+			return _analytics.Current().ConnectionString;
 		}
 	}
 }

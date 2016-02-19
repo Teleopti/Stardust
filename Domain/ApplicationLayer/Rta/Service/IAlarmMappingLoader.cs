@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public interface IAlarmMappingLoader
 	{
-		IEnumerable<AlarmMapping> Load();
+		IEnumerable<RuleMapping> Load();
 	}
 }
