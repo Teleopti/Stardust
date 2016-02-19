@@ -11,6 +11,10 @@
 $UrlToCheck1 = $UrlToTest + '/Web'
 $UrlToCheck2 = $UrlToTest + '/AuthenticationBridge'
 $UrlToCheck3 = $UrlToTest + '/SDK/TeleoptiCCCSdkService.svc'
+
+$username = 'toptinet\tfsintegration'
+$password = 'm8kemew0rk'
+
 function Check-URL ($UrlToCheck)
 {
     do {
@@ -19,7 +23,7 @@ Write-Host "Checking if $UrlToCheck is accessible..." -fore cyan
 # Create the request.
 $HTTP_Request = [System.Net.WebRequest]::Create($UrlToCheck)
 # Pass default credentials (To be able to ping SDK)
-$http_request.UseDefaultCredentials = $true
+$HTTP_Request.Credentials = New-Object System.Net.NetworkCredential -ArgumentList $username, $password
 # Response from site
 $HTTP_Response = $HTTP_Request.GetResponse()
 # HTTP code as an integer.
