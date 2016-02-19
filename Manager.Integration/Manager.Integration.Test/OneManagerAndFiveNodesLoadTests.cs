@@ -159,7 +159,7 @@ namespace Manager.Integration.Test
             }
 
             //---------------------------------------------
-            // Notify when all 5 nodes are upp. 
+            // Notify when all 5 nodes are up. 
             //---------------------------------------------
             SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
