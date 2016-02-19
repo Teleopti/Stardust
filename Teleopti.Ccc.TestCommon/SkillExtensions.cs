@@ -57,6 +57,14 @@ namespace Teleopti.Ccc.TestCommon
 			return skillDay;
 		}
 
+
+		public static IList<ISkillDay> CreateSkillDayWithDemand(this ISkill skill, IScenario scenario, DateOnlyPeriod period, TimeSpan demand)
+		{
+			return period.DayCollection()
+				.Select(dateOnly => CreateSkillDayWithDemand(skill, scenario, dateOnly, demand))
+				.ToList();
+		}
+
 		public static IList<ISkillDay> CreateSkillDaysWithDemandOnConsecutiveDays(this ISkill skill, IScenario scenario, DateOnly startDate, params TimeSpan[] demands)
 		{
 			var skillDays = new List<ISkillDay>();

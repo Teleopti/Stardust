@@ -23,18 +23,23 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public void Execute(IEnumerable<IIntradayOptimizer2> optimizers, DateOnlyPeriod period)
 		{
 			var numberOfAgents = optimizers.Count(); //this is wrong - should be per skillgroup (also maybe not counting duplicate scheduleperiods if important)
+			var tempOptimizers = optimizers.ToList();
 
-			foreach (var date in period.DayCollection().RandomIterator())
+			foreach (var date in period.DayCollection())
 			{
 				var optimizedAgents = 0;
-				foreach (var optimizer in optimizers)
+
+				for (int i = tempOptimizers.Count() - 1; i >= 0; i--)
 				{
 					if (_intradayOptimizerLimiter.CanJumpOutEarly(numberOfAgents, optimizedAgents))
 						break;
 
 					//borde kunna ta bort optimizern här om false
-					optimizer.IntradayOptimizeOneday.Execute(date);
-					optimizedAgents++;
+					var result = tempOptimizers[i].IntradayOptimizeOneday.Execute(date);
+					if (!result)
+						tempOptimizers.RemoveAt(i);
+
+					optimizedAgents++;	
 				}
 			}
 		}
