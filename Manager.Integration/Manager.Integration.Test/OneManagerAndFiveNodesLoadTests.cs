@@ -143,17 +143,19 @@ namespace Manager.Integration.Test
                                                                             StatusConstants.FailedStatus,
                                                                             StatusConstants.CanceledStatus);
 
-            TimeSpan timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count);
+            TimeSpan timeout = 
+                JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count);
 
-            //SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
+            SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
-            //Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(5,
-            //                                                          cancellationTokenSource);
-            //task.Start();
+            // We start to send job as soon as one node is up.
+            Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(1,
+                                                                      cancellationTokenSource);
+            task.Start();
 
-            //sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
+            sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
 
-            //sqlNotifier.Dispose();
+            sqlNotifier.Dispose();
 
             for (int i = 0; i < 10; i++)
             {
@@ -169,7 +171,8 @@ namespace Manager.Integration.Test
 
                 foreach (var jobRequestModel in jobs)
                 {
-                    var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
+                    var jobManagerTaskCreator = 
+                        new JobManagerTaskCreator(checkJobHistoryStatusTimer);
 
                     jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
 

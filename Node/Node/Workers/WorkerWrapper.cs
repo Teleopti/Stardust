@@ -140,9 +140,12 @@ namespace Stardust.Node.Workers
             // Define task.
             //----------------------------------------------------
             Task = new Task(() =>
-            {
+            {                
                 // Set ping to manager every 30 seconds during job.
                 PingToManagerTimer.Interval = 30000;
+
+                LogHelper.LogDebugWithLineNumber(Logger,
+                                                "Ping to manager interval is now set to go every " +  (PingToManagerTimer.Interval /10000) + " seconds during job execution." );
 
                 Handler.Invoke(deSer,
                                CancellationTokenSource,
@@ -153,7 +156,11 @@ namespace Stardust.Node.Workers
             Task.ContinueWith(t =>
             {
                 // Set ping to manager every 10 seconds when job finished.
-                PingToManagerTimer.Interval = 10000; 
+                PingToManagerTimer.Interval = 10000;
+
+                LogHelper.LogDebugWithLineNumber(Logger,
+                                                "Ping to manager interval is now set to go every " + (PingToManagerTimer.Interval / 10000) + " seconds when node is idle.");
+
 
                 string logInfo = null;
 
