@@ -3,11 +3,11 @@
 (function () {
 	angular.module('wfm.teamSchedule')
 		.controller('TeamScheduleCtrl', ['$scope', '$q', '$locale', '$translate', 'TeamSchedule',
-			'GroupScheduleFactory', 'teamScheduleNotificationService', 'Toggle', 'SignalR', '$mdComponentRegistry', '$mdSidenav',
-			'$mdUtil', 'guidgenerator', TeamScheduleController]);
+			'GroupScheduleFactory', 'teamScheduleNotificationService', 'Toggle', 'SignalR', '$mdComponentRegistry',
+			'$mdSidenav', '$mdUtil', 'guidgenerator', 'ShortCuts', 'keyCodes', TeamScheduleController]);
 
-	function TeamScheduleController($scope, $q, $locale, $translate, teamScheduleSvc, groupScheduleFactory,
-		notificationService, toggleSvc, signalRSvc, $mdComponentRegistry, $mdSidenav, $mdUtil, guidgenerator) {
+	function TeamScheduleController($scope, $q, $locale, $translate, teamScheduleSvc, groupScheduleFactory, notificationService,
+		toggleSvc, signalRSvc, $mdComponentRegistry, $mdSidenav, $mdUtil, guidgenerator, shortCuts, keyCodes) {
 		var vm = this;
 
 		vm.isLoading = false;
@@ -281,11 +281,6 @@
 
 		$scope.$watch("vm.isOpen()", function (newValue, oldValue) {
 			vm.menuState = newValue ? 'closed' : 'open';
-			if (newValue) {
-				suspendDocumentListeners();
-			} else {
-				createDocumentListeners();
-			}
 		}, true);
 
 		vm.currentCommand = function () {
@@ -397,8 +392,16 @@
 			return debounceFn;
 		};
 
+		function registerShortCuts() {
+			shortCuts.registerKeySequence(65, [keyCodes.ALT], function () {
+				toggleAddAbsencePanel(); // Alt+A for add absence
+			});
+			shortCuts.registerKeySequence(83, [keyCodes.ALT], function () {
+				swapShifts(); // Alt+S for swap shifts
+			});
+		}
+
 		vm.init = function () {
-			createDocumentListeners();
 			vm.toggleForSelectAgentsPerPageEnabled = toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230;
 			vm.toggleForAbsenceReportingEnabled = toggleSvc.WfmTeamSchedule_AbsenceReporting_35995;
 			vm.searchOptions.isAdvancedSearchEnabled = toggleSvc.WfmPeople_AdvancedSearch_32973;
@@ -406,22 +409,17 @@
 			vm.toggleForRemoveAbsenceEnabled = toggleSvc.WfmTeamSchedule_RemoveAbsence_36705;
 			toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303 && monitorScheduleChanged();
 			vm.schedulePageReset();
+			registerShortCuts();
 		};
 
 		$q.all([
-			teamScheduleSvc.PromiseForloadedPermissions(updatePermissions),
-			teamScheduleSvc.PromiseForGetAgentsPerPageSetting(updateAgentPerPageSetting)
+			teamScheduleSvc.PromiseForloadedPermissions(function(result) {
+				vm.permissions = result;
+			}),
+			teamScheduleSvc.PromiseForGetAgentsPerPageSetting(function(result) {
+				result.Agents > 0 && (vm.paginationOptions.pageSize = result.Agents);
+			})
 		]).then(vm.init);
-
-		function updateAgentPerPageSetting(result) {
-			if (result.Agents !== 0) {
-				vm.paginationOptions.pageSize = result.Agents;
-			}
-		};
-
-		function updatePermissions(result) {
-			vm.permissions = result;
-		};
 
 		function monitorScheduleChanged() {
 			signalRSvc.subscribeBatchMessage(
@@ -431,11 +429,15 @@
 		}
 
 		function scheduleChangedEventHandler(messages) {
-			var personIds = messages.filter(isMessageNeedToBeHandled())
-									.map(function (message) { return message.DomainReferenceId; });
+			var personIds = messages.filter(isMessageNeedToBeHandled()).map(function(message) {
+				 return message.DomainReferenceId;
+			});
 
-			personIds = removeDuplicatePersonId(personIds);
-			personIds.length !== 0 && vm.updateSchedules(personIds);
+			var uniquePersonIds = [];
+			personIds.forEach(function (personId) {
+				if (uniquePersonIds.indexOf(personId) === -1) uniquePersonIds.push(personId);
+			});
+			uniquePersonIds.length !== 0 && vm.updateSchedules(uniquePersonIds);
 		}
 
 		function isMessageNeedToBeHandled() {
@@ -443,9 +445,7 @@
 			var scheduleDate = vm.scheduleDateMoment();
 
 			return function (message) {
-				if (message.TrackId === vm.lastCommandTrackId) {
-					return false;
-				}
+				if (message.TrackId === vm.lastCommandTrackId) { return false; }
 
 				var isMessageInsidePeopleList = personIds.indexOf(message.DomainReferenceId) > -1;
 				var startDate = moment(message.StartDate.substring(1, message.StartDate.length));
@@ -456,51 +456,5 @@
 				return isMessageInsidePeopleList && isScheduleDateInMessageRange;
 			}
 		}
-
-		function removeDuplicatePersonId(personIds) {
-			var result = [];
-			personIds.forEach(function(personId) {
-				if (result.indexOf(personId) === -1) result.push(personId);
-			});
-			return result;
-		}
-
-		function createDocumentListeners() {
-			vm.originalKeydownEvent = document.onkeydown;
-			document.onkeydown = onKeyDownHandler;
-			$scope.$on('$destroy', suspendDocumentListeners);
-		};
-
-		function suspendDocumentListeners() {
-			document.onkeydown = vm.originalKeydownEvent;
-		};
-
-		function preventDefaultEvent(event) {
-			// ie <11 doesnt have e.preventDefault();
-			if (event.preventDefault) event.preventDefault();
-			event.returnValue = false;
-		};
-
-		function onKeyDownHandler(event) {
-			var key = window.event ? window.event.keyCode : event.keyCode;
-
-			switch (key) {
-				case 65: // Alt+A
-					if (event.altKey) {
-						preventDefaultEvent(event);
-						$scope.$evalAsync(toggleAddAbsencePanel);
-					}
-					break;
-				case 83: // Alt+S
-					if (event.altKey) {
-						preventDefaultEvent(event);
-						$scope.$evalAsync(swapShifts);
-					}
-					break;
-
-				default:
-					break;
-			}
-		};
 	};
 }());

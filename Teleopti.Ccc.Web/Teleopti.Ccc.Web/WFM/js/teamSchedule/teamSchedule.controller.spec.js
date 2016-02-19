@@ -11,6 +11,7 @@ describe("TeamScheduleControllerTest", function() {
 		module('wfm.teamSchedule');
 		module('externalModules');
 		module('wfm.notice');
+		module('shortcutsService');
 
 		module(function ($provide) {
 			$provide.service('CurrentUserInfo', setupMockCurrentUserInfoService);
