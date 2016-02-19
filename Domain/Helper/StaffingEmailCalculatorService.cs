@@ -43,17 +43,16 @@ namespace Teleopti.Ccc.Domain.Helper
             return 0;
         }
 
-        public double Utilization(double agents, double callsPerHour, double averageHandlingTime, TimeSpan periodLength)
-        {
-            return 1; //Always 100%
-        }
-
 		public double ServiceLevelAchievedOcc(double agents, double serviceTime, double calls, double aht, TimeSpan intervalLength,
-			double sla, double forecastedAgents)
+			double sla, double forecastedAgents, int maxParellelTasks)
 		{
 			return 0;
 			//return ServiceLevelAchieved(agents, serviceTime, calls, aht, intervalLength, (int)sla*100);
 		}
 
+		public double Utilization(double demandWithoutEfficiency, double tasks, double aht, TimeSpan periodLength, int maxParallelTasks)
+		{
+			return 1; //Always 100%
+		}
     }
 }

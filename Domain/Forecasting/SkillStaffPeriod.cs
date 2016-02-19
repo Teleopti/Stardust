@@ -388,22 +388,24 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 _estimatedServiceLevel = new Percent(_staffingCalculatorService.ServiceLevelAchievedOcc(
                     ScheduledAgentsIncoming,
                     Payload.ServiceAgreementData.ServiceLevel.Seconds,
-					Payload.TaskData.Tasks / SkillDay.Skill.MaxParallelTasks,
+					Payload.TaskData.Tasks,
 					Payload.TaskData.AverageHandlingTaskTime.TotalSeconds,
                     Period.ElapsedTime(),
                     Payload.ServiceAgreementData.ServiceLevel.Percent.Value, 
-					Payload.ForecastedIncomingDemandWithoutShrinkage));
+					Payload.ForecastedIncomingDemandWithoutShrinkage,
+					SkillDay.Skill.MaxParallelTasks));
 
                 var shrinkage = Payload.UseShrinkage ? 1 + Payload.Shrinkage.Value : 1;
                 var scheduledAgentsIncomingWithShrinkage = ScheduledAgentsIncoming / shrinkage;
                 _estimatedServiceLevelShrinkage = new Percent(_staffingCalculatorService.ServiceLevelAchievedOcc(
                     scheduledAgentsIncomingWithShrinkage,
                     Payload.ServiceAgreementData.ServiceLevel.Seconds,
-                    Payload.TaskData.Tasks / SkillDay.Skill.MaxParallelTasks,
+                    Payload.TaskData.Tasks,
 					Payload.TaskData.AverageHandlingTaskTime.TotalSeconds,
                     Period.ElapsedTime(),
 					Payload.ServiceAgreementData.ServiceLevel.Percent.Value,
-					Payload.ForecastedIncomingDemandWithoutShrinkage));
+					Payload.ForecastedIncomingDemandWithoutShrinkage,
+					SkillDay.Skill.MaxParallelTasks));
 
             }
         }
@@ -451,13 +453,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
             double minOcc =
                 Payload.MultiskillMinOccupancy.GetValueOrDefault(Payload.ServiceAgreementData.MinOccupancy).Value;
 
+			var maxParallel = SkillDay.Skill.MaxParallelTasks;
+
             if (Payload.TaskData.Tasks == 0 && Payload.ServiceAgreementData.MinOccupancy.Value == 0)
                 traffic = 0;
             else
             {
 				if (!Payload.ManualAgents.HasValue && !Payload.NoneBlendDemand.HasValue)
-				{
-					var maxParallel = SkillDay.Skill.MaxParallelTasks;
+				{					
 					traffic = _staffingCalculatorService.AgentsUseOccupancy(
 					Payload.ServiceAgreementData.ServiceLevel.Percent.Value,
 					(int)Math.Round(Payload.ServiceAgreementData.ServiceLevel.Seconds),
@@ -494,7 +497,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 			castedPayLoad.CalculatedOccupancy = _staffingCalculatorService.Utilization(demandWithoutEfficiency, Payload.TaskData.Tasks,
                                                       Payload.TaskData.AverageTaskTime.TotalSeconds +
-                                                      Payload.TaskData.AverageAfterTaskTime.TotalSeconds, Period.ElapsedTime());
+                                                      Payload.TaskData.AverageAfterTaskTime.TotalSeconds, Period.ElapsedTime(), maxParallel);
             if (periods != null)
             {
                 int thisIndex = periods.IndexOf(this);

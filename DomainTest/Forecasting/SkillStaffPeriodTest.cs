@@ -117,123 +117,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             }
         }
 
-
-	    [Test]
-	    public void Bug31872WrongEslCalculationWithShrinkage()
-	    {
-			var payload = _target.Payload;
-		    payload.Efficiency = new Percent(1);
-		    double demand = new StaffingCalculatorServiceFacade().TeleoptiAgents(payload.ServiceAgreementData.ServiceLevel.
-			    Percent.Value, (int)payload.ServiceAgreementData.ServiceLevel.Seconds, payload.TaskData.Tasks, payload.TaskData.AverageHandlingTaskTime.TotalSeconds,
-			    _target.Period.ElapsedTime());
-			typeof(SkillStaff).GetField("_forecastedIncomingDemand", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(_target.Payload, demand);
-
-			payload.Shrinkage = new Percent(0.3);
-
-			ISkillDay skillDayPhone =
-				SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("Phone", SkillTypeFactory.CreateSkillType(), 60), new DateOnly(2009, 1, 1));
-			_target.SetSkillDay(skillDayPhone);
-
-			//without shrinkage, shrinkage toggle off
-			_target.SetCalculatedResource65(demand);
-			_target.PickResources65();
-			Assert.AreEqual(payload.ServiceAgreementData.ServiceLevel.
-				Percent.Value, _target.EstimatedServiceLevel.Value, 0.001);
-
-			//with shrinkage 30%, shrinkage toggle on
-			
-		    payload.UseShrinkage = true;			
-			_target.SetCalculatedResource65(demand * (1 + payload.Shrinkage.Value));
-			_target.PickResources65();
-			Assert.AreEqual(payload.ServiceAgreementData.ServiceLevel.
-				Percent.Value, _target.EstimatedServiceLevelShrinkage.Value, 0.001);
-
-			//without shrinkage,  shrinkage toggle on
-			payload.UseShrinkage = false;
-			_target.SetCalculatedResource65(demand);
-			_target.PickResources65();
-			Assert.AreEqual(payload.ServiceAgreementData.ServiceLevel.
-				Percent.Value, _target.EstimatedServiceLevelShrinkage.Value, 0.001);
-
-			//setup for occ toggle
-			_target = new SkillStaffPeriod(_tp, _task, _sa, new StaffingCalculatorServiceFacade());
-			payload = _target.Payload;
-			payload.Efficiency = new Percent(1);
-			_target.IsAvailable = true;
-			_target.SetSkillDay(skillDayPhone);
-			typeof(SkillStaff).GetField("_forecastedIncomingDemand", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(_target.Payload, demand);
-			payload.Shrinkage = new Percent(0.3);
-
-			//with shrinkage 30%, shrinkage toggle on, occ toggle on
-			payload.UseShrinkage = true;
-			_target.SetCalculatedResource65(demand * (1 + payload.Shrinkage.Value));
-			_target.PickResources65();
-			Assert.AreEqual(payload.ServiceAgreementData.ServiceLevel.
-				Percent.Value, _target.EstimatedServiceLevelShrinkage.Value, 0.001);
-
-			//without shrinkage,  shrinkage toggle on, occ toggle on
-			payload.UseShrinkage = false;
-			_target.SetCalculatedResource65(demand);
-			_target.PickResources65();
-			Assert.AreEqual(payload.ServiceAgreementData.ServiceLevel.
-				Percent.Value, _target.EstimatedServiceLevelShrinkage.Value, 0.001);
-	    }
-
-
-        /// <summary>
-        /// Verifies the estimated service level.
-        /// </summary>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2009-03-05
-        /// </remarks>
-        [Test]
-        public void VerifyEstimatedServiceLevel()
-        {
-            //Email and other except phone
-			ISkillDay skillDayEmail =
-				SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("Email", SkillTypeFactory.CreateSkillTypeEmail(), 60), new DateOnly(2009, 1, 1));
-			_target.SetSkillDay(skillDayEmail);
-            _target.PickResources65();
-
-            //Demand is 0
-            Assert.IsTrue(new Percent(1) == _target.EstimatedServiceLevel);
-            Assert.IsTrue(new Percent(1) == _target.EstimatedServiceLevelShrinkage);
-            double demand = 172.2;
-            typeof(SkillStaff).GetField("_forecastedIncomingDemand", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(_target.Payload, demand);
-
-            _target.PickResources65();
-
-            //Normal non phone calculation
-            Assert.IsTrue(new Percent(1) > _target.EstimatedServiceLevel);
-            Assert.IsTrue(new Percent(1) > _target.EstimatedServiceLevelShrinkage);
-            demand = 10.2;
-            typeof(SkillStaff).GetField("_forecastedIncomingDemand", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(_target.Payload, demand);
-
-            _target.PickResources65();
-
-            //Over 100% non phone
-            Assert.AreEqual(new Percent(1), _target.EstimatedServiceLevel);
-            Assert.AreEqual(new Percent(1), _target.EstimatedServiceLevelShrinkage);
-
-            //Phone, Erlang calc is used
-            double serviceLevel =
-                _staffingCalculatorService.ServiceLevelAchieved(_target.Payload.CalculatedResource,
-                                                                _target.Payload.ServiceAgreementData.ServiceLevel.
-                                                                    Seconds,
-                                                                _target.Payload.TaskData.Tasks,
-                                                                _target.Payload.TaskData.AverageTaskTime.TotalSeconds,
-                                                                _target.Period.ElapsedTime(),
-                                                                (int)
-                                                                _target.Payload.ServiceAgreementData.ServiceLevel.
-                                                                    Percent.Value *
-                                                                100);
-            ISkillDay skillDayPhone =
-                SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("Phone", SkillTypeFactory.CreateSkillType(), 60), new DateOnly(2009, 1, 1));
-            _target.SetSkillDay(skillDayPhone);
-            Assert.AreEqual(new Percent(serviceLevel), _target.EstimatedServiceLevel);
-        }
-
         /// <summary>
         /// Verifies the actual service level.
         /// </summary>
@@ -324,7 +207,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		        _target.Payload.TaskData.AverageAfterTaskTime.TotalSeconds,
 		        _target.Period.ElapsedTime(),
 				(int)_target.Payload.ServiceAgreementData.ServiceLevel.Percent.Value * 100,
-		        _target.Payload.ForecastedIncomingDemandWithoutShrinkage
+		        _target.Payload.ForecastedIncomingDemandWithoutShrinkage, 1
 		        );
 			
 			_target.PickResources65();
@@ -404,7 +287,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			using (mocks.Record())
 			{
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1)).IgnoreArguments().Return(10d);
-				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d);
 				_target.Payload.ManualAgents = null;
 			}
 			using (mocks.Playback())
@@ -575,7 +458,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             using(mocks.Record())
             {
                 Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1)).IgnoreArguments().Return(10d);
-                Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d);
             }
             using(mocks.Playback())
             {
@@ -602,11 +485,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			var periods = new List<ISkillStaffPeriod> {period};
 
 			calcService.Expect(c => c.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments().Return(100);
-			calcService.Expect(c => c.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(83);
+			calcService.Expect(c => c.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(83);
 			
 			period.CalculateStaff(periods);
 
-			var args = calcService.GetArgumentsForCallsMadeOn(c => c.Utilization(1, 1, 1, TimeSpan.MinValue), s => s.IgnoreArguments());
+			var args = calcService.GetArgumentsForCallsMadeOn(c => c.Utilization(1, 1, 1, TimeSpan.MinValue, 1), s => s.IgnoreArguments());
 			args[0][0].Should().Be.EqualTo(100d);
 		}
        
@@ -629,7 +512,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             using (mocks.Record())
             {
                 Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1)).IgnoreArguments().Return(6d);
-                Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d);
             }
             using (mocks.Playback())
             {
@@ -665,7 +548,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             using (mocks.Record())
             {
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments().Return(5d);
-                Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d);
             }
             using (mocks.Playback())
             {
@@ -699,7 +582,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             using (mocks.Record())
             {
                 Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1)).IgnoreArguments().Return(0d);
-                Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d);
             }
             using (mocks.Playback())
             {
@@ -768,8 +651,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                                 .Return(0d);
                 Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1)).IgnoreArguments()
                                .Return(2d);
-                Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(6);
-				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d).Repeat.Times(6);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
 
             using (mocks.Playback())
@@ -876,8 +759,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                                 .Return(0d);
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                                .Return(2d);
-                Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(4);
-                Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d).Repeat.Times(4);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
 
             using (mocks.Playback())
@@ -957,8 +840,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                                 .Return(2d);
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                                .Return(2d);
-                Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(4);
-				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d).Repeat.Times(4);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
 
             using (mocks.Playback())
@@ -1065,8 +948,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                     .Return(2d);
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(2d);
-                Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(4);
-				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d).Repeat.Times(4);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
 
             using (mocks.Playback())
@@ -1166,8 +1049,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                     .Return(2d);
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(2d);
-                Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(4);
-				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d).Repeat.Times(4);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
 
             using (mocks.Playback())
@@ -1237,8 +1120,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(3d);
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(6d);
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(6d);
-                Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(9);
-				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d).Repeat.Times(9);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
 
             using (mocks.Playback())
@@ -1353,8 +1236,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(2d);
-                Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(6);
-				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d).Repeat.Times(6);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
 
             using (mocks.Playback())
@@ -1423,8 +1306,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(2d);
-                Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(6);
-				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d).Repeat.Times(6);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
 
             using (mocks.Playback())
@@ -1507,8 +1390,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(4d);
-                Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(6);
-				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1)).IgnoreArguments().Repeat.
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d).Repeat.Times(6);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1, 1)).IgnoreArguments().Repeat.
                     Any().Return(7);
             }
             using (mocks.Playback())
@@ -1559,8 +1442,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(4d);
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(4d);
-                Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(6);
-				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d).Repeat.Times(6);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
             using (mocks.Playback())
             {
@@ -1929,8 +1812,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                     .Return(2d);
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(2d);
-                Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(4);
-				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d).Repeat.Times(4);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
 
             using (mocks.Playback())
@@ -2241,8 +2124,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                     .Return(4d);
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(4d);
-                Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(7);
-                Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d).Repeat.Times(7);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
             return periodlist;
         }
