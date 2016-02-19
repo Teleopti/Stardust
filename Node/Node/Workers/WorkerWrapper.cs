@@ -104,8 +104,8 @@ namespace Stardust.Node.Workers
                 {
                     return new ConflictResult(requestMessage);
                 }
-
-                typ = NodeConfiguration.HandlerAssembly.GetType(jobToDo.Type);
+	            LogHelper.LogInfoWithLineNumber(Logger, "GetType: " + jobToDo.Type);
+				typ = NodeConfiguration.HandlerAssembly.GetType(jobToDo.Type);
 
                 if (typ == null)
                 {
