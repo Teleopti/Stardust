@@ -176,7 +176,7 @@ namespace Manager.Integration.Test
                                                                          "Started",
                                                                          CancellationTokenSource);
 
-                    nodeStartedNotifier.NotifyWhenNodeStarted.Wait(timeout);
+                    nodeStartedNotifier.JobDefinitionStatusNotify.Wait(timeout);
 
                     var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
 
@@ -321,6 +321,21 @@ namespace Manager.Integration.Test
             checkJobHistoryStatusTimer.GuidAddedEventHandler += (sender,
                                                                  args) =>
             {
+                //-----------------------------------
+                // Wait for job to start.
+                //-----------------------------------
+                NodeStatusNotifier nodeStartedNotifier =
+                    new NodeStatusNotifier(ManagerDbConnectionString);
+
+                nodeStartedNotifier.StartJobDefinitionStatusNotifier(args.Guid,
+                                                                     "Started",
+                                                                     CancellationTokenSource);
+
+                nodeStartedNotifier.JobDefinitionStatusNotify.Wait(timeout);
+
+                //-----------------------------------
+                // Send wrong id to cancel.
+                //-----------------------------------
                 var newGuid = Guid.NewGuid();
 
                 var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
