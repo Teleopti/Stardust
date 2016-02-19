@@ -68,8 +68,7 @@ namespace NodeTest.JobHandlers
 
                     jobProgress = new TestJobProgress
                     {
-                        Text = progressMessage,
-                        ConsoleColor = ConsoleColor.Yellow
+                        Text = progressMessage
                     };
 
                     progress(jobProgress.Text);
@@ -81,7 +80,7 @@ namespace NodeTest.JobHandlers
                 }
 
 
-                Thread.Sleep(TimeSpan.FromSeconds(3));
+                Thread.Sleep(TimeSpan.FromSeconds(2));
             }
 
             progressMessage = 
