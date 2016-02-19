@@ -197,6 +197,7 @@
     <Compile Include="ApplicationLayer\Events\DayOffAddedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\DayUnscheduledEvent.cs" />
     <Compile Include="ApplicationLayer\Events\EventAdherence.cs" />
+    <Compile Include="ApplicationLayer\Events\ScheduleOnNode.cs" />
     <Compile Include="ApplicationLayer\Events\TenantHearbeatEvent.cs" />
     <Compile Include="ApplicationLayer\Events\IRunOnHangfire.cs" />
     <Compile Include="ApplicationLayer\Events\ITrackInfo.cs" />
@@ -769,6 +770,7 @@
     <Compile Include="Scheduling\Legacy\Commands\IDisableBusinessUnitFilter.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IScheduleDayForPerson.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IScheduleRangeForPerson.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\SchedulingProgress.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ScheduleDayForPerson.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ScheduleRangeForPerson.cs" />
     <Compile Include="Scheduling\Legacy\Commands\TargetScheduleSummaryCalculator.cs" />
