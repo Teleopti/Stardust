@@ -18,7 +18,7 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
-    [TestFixture, Ignore]
+    [TestFixture]
     public class OneManagerAndOneNodeTests
     {
         private static readonly ILog Logger =
@@ -117,7 +117,7 @@ namespace Manager.Integration.Test
 
         private string _buildMode = "Debug";
 
-        [Test, Ignore]
+        [Test]
         public void CreateSeveralRequestShouldReturnBothCancelAndDeleteStatusesTest()
         {
             LogHelper.LogInfoWithLineNumber("Start.",
@@ -173,10 +173,10 @@ namespace Manager.Integration.Test
                         new NodeStatusNotifier(ManagerDbConnectionString);
 
                     nodeStartedNotifier.StartJobDefinitionStatusNotifier(args.Guid,
-                                                                 "Started",
-                                                                 CancellationTokenSource);
+                                                                         "Started",
+                                                                         CancellationTokenSource);
 
-                    nodeStartedNotifier.NotifyWhenNodeStarted.Wait(timeout);
+                    nodeStartedNotifier.JobDefinitionStatusNotify.Wait(timeout);
 
                     var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
 
@@ -186,8 +186,8 @@ namespace Manager.Integration.Test
 
                     nodeStartedNotifier.Dispose();
                     jobManagerTaskCreator.Dispose();
-
-                }, CancellationTokenSource.Token);
+                },
+                CancellationTokenSource.Token);
             };
 
             checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
@@ -321,6 +321,21 @@ namespace Manager.Integration.Test
             checkJobHistoryStatusTimer.GuidAddedEventHandler += (sender,
                                                                  args) =>
             {
+                //-----------------------------------
+                // Wait for job to start.
+                //-----------------------------------
+                NodeStatusNotifier nodeStartedNotifier =
+                    new NodeStatusNotifier(ManagerDbConnectionString);
+
+                nodeStartedNotifier.StartJobDefinitionStatusNotifier(args.Guid,
+                                                                     "Started",
+                                                                     CancellationTokenSource);
+
+                nodeStartedNotifier.JobDefinitionStatusNotify.Wait(timeout);
+
+                //-----------------------------------
+                // Send wrong id to cancel.
+                //-----------------------------------
                 var newGuid = Guid.NewGuid();
 
                 var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
