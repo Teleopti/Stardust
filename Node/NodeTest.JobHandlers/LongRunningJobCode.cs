@@ -29,8 +29,7 @@ namespace NodeTest.JobHandlers
             {
                 jobProgress = new TestJobProgress
                 {
-                    Text = WhoAmI + ": No job steps has been executed. Long running job name : ( " + message.Name + " ) has been canceled.",
-                    ConsoleColor = ConsoleColor.Yellow
+                    Text = WhoAmI + ": No job steps has been executed. Long running job name : ( " + message.Name + " ) has been canceled."
                 };
 
                 progress(jobProgress.Text);
@@ -54,8 +53,7 @@ namespace NodeTest.JobHandlers
 
                 jobProgress = new TestJobProgress
                 {
-                    Text = progressMessage,
-                    ConsoleColor = ConsoleColor.Yellow
+                    Text = progressMessage
                 };
 
                 LogHelper.LogInfoWithLineNumber(Logger,
@@ -83,7 +81,7 @@ namespace NodeTest.JobHandlers
                 }
 
 
-                Thread.Sleep(TimeSpan.FromSeconds(5));
+                Thread.Sleep(TimeSpan.FromSeconds(3));
             }
 
             progressMessage = 
@@ -91,8 +89,7 @@ namespace NodeTest.JobHandlers
 
             jobProgress = new TestJobProgress
             {
-                Text = progressMessage,
-                ConsoleColor = ConsoleColor.Green
+                Text = progressMessage
             };
 
             progress(jobProgress.Text);

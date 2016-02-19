@@ -3,92 +3,76 @@ using System.Threading;
 
 namespace NodeTest.JobHandlers
 {
-    public class TestJobCode
-    {
-        public TestJobCode()
-        {
-            WhoAmI = "[NODETEST.JOBHANDLERS.TESTJOBCODE, " + Environment.MachineName.ToUpper() + "]";
-        }
+	public class TestJobCode
+	{
 
-        public string WhoAmI { get; private set; }
+		public void DoTheThing(TestJobParams message,
+							   CancellationTokenSource cancellationTokenSource,
+							   Action<string> progress)
+		{
+			// -----------------------------------------------------------
+			// Start execution.
+			// -----------------------------------------------------------
+			var jobProgress = new TestJobProgress
+			{
+				Text = "Starting job: " + message.Name
+			};
 
-        public void DoTheThing(TestJobParams message,
-                               CancellationTokenSource cancellationTokenSource,
-                               Action<string> progress)
-        {
-            // -----------------------------------------------------------
-            // Start execution.
-            // -----------------------------------------------------------
-            var jobProgress = new TestJobProgress
-            {
-                Text = WhoAmI + ": Start job 3 steps for job name : " + message.Name,
-                ConsoleColor = ConsoleColor.Green
-            };
+			progress(jobProgress.Text);
+			Thread.Sleep(TimeSpan.FromSeconds(3));
+			// -----------------------------------------------------------
+			// Simulate execution step 1, will take 10 seconds.
+			// -----------------------------------------------------------
+			if (cancellationTokenSource.IsCancellationRequested)
+			{
+				jobProgress.Text = "Job " + message.Name + " has been cancelled before started.";
+				progress(jobProgress.Text);
 
-            progress(jobProgress.Text);
+				cancellationTokenSource.Token.ThrowIfCancellationRequested();
+			}
+			else
+			{
 
-            // -----------------------------------------------------------
-            // Simulate execution step 1, will take 10 seconds.
-            // -----------------------------------------------------------
+				jobProgress.Text = "(" + message.Name + ") First job step done";
+				progress(jobProgress.Text);
+				Thread.Sleep(TimeSpan.FromSeconds(3));
+				if (cancellationTokenSource.IsCancellationRequested)
+				{
+					jobProgress.Text = "Job " + message.Name + " has been cancelled.";
+					progress(jobProgress.Text);
 
-            jobProgress.Text = WhoAmI + ": Start job step 1, for job name : " + message.Name;
-            progress(jobProgress.Text);
+					cancellationTokenSource.Token.ThrowIfCancellationRequested();
+				}
+				else
+				{
+					// -----------------------------------------------------------
+					// Simulate execution step 2.
+					// -----------------------------------------------------------
+					jobProgress.Text = "(" + message.Name + ") Second job step done";
+					progress(jobProgress.Text);
+					Thread.Sleep(TimeSpan.FromSeconds(3));
+					if (cancellationTokenSource.IsCancellationRequested)
+					{
+						jobProgress.Text = "Job " + message.Name + " has been cancelled.";
+						progress(jobProgress.Text);
 
-            jobProgress.Text = WhoAmI + ": Finished job step 1, for job name : " + message.Name;
-            progress(jobProgress.Text);
+						cancellationTokenSource.Token.ThrowIfCancellationRequested();
+					}
+					else
+					{
+						// -----------------------------------------------------------
+						// Simulate execution step 3.
+						// -----------------------------------------------------------
+						jobProgress.Text = "(" + message.Name + ") Last job step done";
+						progress(jobProgress.Text);
+						// -----------------------------------------------------------
+						// Execution Finished.
+						// -----------------------------------------------------------
 
-            if (cancellationTokenSource.IsCancellationRequested)
-            {
-                jobProgress.ConsoleColor = ConsoleColor.Yellow;
-                jobProgress.Text = WhoAmI + ": Job has been cancelled, for job name : " +
-                                   message.Name;
-                progress(jobProgress.Text);
-
-                cancellationTokenSource.Token.ThrowIfCancellationRequested();
-            }
-            else
-            {
-                // -----------------------------------------------------------
-                // Simulate execution step 2.
-                // -----------------------------------------------------------
-                jobProgress.ConsoleColor = ConsoleColor.Green;
-                jobProgress.Text = WhoAmI + ": Start job step 2, for job name : " + message.Name;
-                progress(jobProgress.Text);
-
-                jobProgress.Text = WhoAmI + ": Finished job step 2, for job name : " + message.Name;
-                progress(jobProgress.Text);
-
-                if (cancellationTokenSource.IsCancellationRequested)
-                {
-                    jobProgress.ConsoleColor = ConsoleColor.Yellow;
-                    jobProgress.Text = WhoAmI + ": Job has been cancelled, for job name : " +
-                                       message.Name;
-                    progress(jobProgress.Text);
-                    cancellationTokenSource.Token.ThrowIfCancellationRequested();
-                }
-                else
-                {
-                    // -----------------------------------------------------------
-                    // Simulate execution step 3.
-                    // -----------------------------------------------------------
-                    jobProgress.ConsoleColor = ConsoleColor.Green;
-                    jobProgress.Text = WhoAmI + ": Start job step 3, for job name : " +
-                                       message.Name;
-                    progress(jobProgress.Text);
-
-                    jobProgress.Text = WhoAmI + ": Finished job step 3, for job name : " +
-                                       message.Name;
-                    progress(jobProgress.Text);
-                    // -----------------------------------------------------------
-                    // Execution Finished.
-                    // -----------------------------------------------------------
-
-                    jobProgress.Text = WhoAmI + ": Finished all 3 steps, for job name : " +
-                                       message.Name;
-                    progress(jobProgress.Text);
-                    //jobDone
-                }
-            }
-        }
-    }
+						//jobDone
+					}
+				}
+			}
+		}
+	}
 }
