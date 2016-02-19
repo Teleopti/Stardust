@@ -3067,6 +3067,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			_backgroundWorkerRunning = true;
 			backgroundWorker.RunWorkerAsync(argument);
+
 		}
 
 		private void _backgroundWorkerScheduling_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
