@@ -688,7 +688,6 @@
     <Compile Include="Optimization\MatrixNoMainShiftLockerTest.cs" />
     <Compile Include="Optimization\RelativeDailyStandardDeviationsByAllSkillsExtractorTest.cs" />
     <Compile Include="Optimization\IntradayOptimizerContainerTest.cs" />
-    <Compile Include="Optimization\IntradayOptimizerTest.cs" />
     <Compile Include="Optimization\RelativeDailyStandardDeviationsByPersonalSkillsExtractorTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerContainerTest.cs" />
     <Compile Include="Optimization\MatrixOvertimeLockerTest.cs" />
