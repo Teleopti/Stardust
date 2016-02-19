@@ -1,8 +1,8 @@
-﻿$global:value = (netsh http show urlacl url=http://+:14000/)
+﻿$global:value = (netsh http show urlacl url=http://+:14100/)
 
-if(!($global:value  -like '*http://+:14000/*'))
+if(!($global:value  -like '*http://+:14100/*'))
 {
-    $global:value = (netsh http add urlacl url=http://+:14000/ user=Everyone listen=yes)
+    $global:value = (netsh http add urlacl url=http://+:14100/ user=Everyone listen=yes)
 
     if($global:value  -like '*Error: 5*')
     {
@@ -10,7 +10,6 @@ if(!($global:value  -like '*http://+:14000/*'))
         start-sleep -seconds 5
         Exit   
     }
-    netsh http add urlacl url=http://+:14100/ user=Everyone listen=yes
 }
 
 

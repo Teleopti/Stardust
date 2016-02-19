@@ -56,6 +56,7 @@ using Teleopti.Ccc.Web.Core.Hangfire;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
+using Teleopti.Ccc.Web.Core.Startup;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
 using Teleopti.Interfaces.Domain;
@@ -696,6 +697,31 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 					.Should()
 					.Not
 					.Contain(typeof (HangfireServerStartupTask));
+			}
+		}
+
+		[Test]
+		public void ShouldResolveStardustServerStartupTaskIfToggleEnabled()
+		{
+			using (var container = buildContainer(Toggles.Wfm_Use_Stardust, true))
+			{
+				container.Resolve<IEnumerable<IBootstrapperTask>>()
+					.Select(x => x.GetType())
+					.Should()
+					.Contain(typeof(StardustStartupTask));
+			}
+		}
+
+		[Test]
+		public void ShouldNotResolveStardustServerStartupTaskIfToggleDisabled()
+		{
+			using (var container = buildContainer(Toggles.Wfm_Use_Stardust, false))
+			{
+				container.Resolve<IEnumerable<IBootstrapperTask>>()
+					.Select(x => x.GetType())
+					.Should()
+					.Not
+					.Contain(typeof(StardustStartupTask));
 			}
 		}
 	}

@@ -314,9 +314,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.16\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
     </Reference>
-    <Reference Include="Stardust.Manager, Version=1.0.0.250, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Stardust.Manager.1.0.0.250\lib\net451\Stardust.Manager.dll</HintPath>
+    <Reference Include="Stardust.Manager, Version=1.0.0.280, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Stardust.Manager.1.0.0.280\lib\net451\Stardust.Manager.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.IdentityModel" />
@@ -1029,6 +1029,8 @@
     <Compile Include="Core\Startup\FindAreaRegistrations.cs" />
     <Compile Include="Core\Startup\GlobalConfigurationWrapper.cs" />
     <Compile Include="Core\Hangfire\HangfireServerStartupTask.cs" />
+    <Compile Include="Core\Startup\StardustServerStarter.cs" />
+    <Compile Include="Core\Startup\StardustStartupTask.cs" />
     <Compile Include="Core\Startup\IFindAreaRegistrations.cs" />
     <Compile Include="Core\Startup\IGlobalConfiguration.cs" />
     <Compile Include="Core\Startup\InitializeApplication\BundleScripts.cs" />

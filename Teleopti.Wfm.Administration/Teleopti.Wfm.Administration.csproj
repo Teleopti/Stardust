@@ -145,6 +145,14 @@
     <Content Include="Scripts\App\changePasswordController.js" />
     <Content Include="Scripts\App\addSuperUserController.js" />
     <Content Include="Scripts\App\tokenHeaderService.js" />
+    <Content Include="StardustDashboard\default.html" />
+    <Content Include="StardustDashboard\jobdetails.html" />
+    <Content Include="StardustDashboard\left_round.png" />
+    <Content Include="StardustDashboard\listJob.html" />
+    <Content Include="Scripts\StardustApp\app.js" />
+    <Content Include="Scripts\StardustApp\detailsController.js" />
+    <Content Include="Scripts\StardustApp\listJobController.js" />
+    <Content Include="StardustDashboard\style.css" />
     <Content Include="userdetails.html" />
     <Content Include="details.html" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />

@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			builder.RegisterType<RegisterAreas>().SingleInstance().As<IRegisterAreas>();
 			builder.RegisterType<GlobalConfigurationWrapper>().SingleInstance().As<IGlobalConfiguration>();
 			builder.RegisterType<FindAreaRegistrations>().SingleInstance().As<IFindAreaRegistrations>();
+			builder.RegisterType<StardustServerStarter>().SingleInstance();
 		}
 	}
 }

@@ -78,21 +78,35 @@ namespace Teleopti.Ccc.Web.Core.Startup
 					DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
 					GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
 
-					GlobalHost.DependencyResolver = new Autofac.Integration.SignalR.AutofacDependencyResolver(container.BeginLifetimeScope());
+					GlobalHost.DependencyResolver =
+						new Autofac.Integration.SignalR.AutofacDependencyResolver(container.BeginLifetimeScope());
 					container.Resolve<IEnumerable<IHubPipelineModule>>().ForEach(m => GlobalHost.HubPipeline.AddModule(m));
 				}
 
-				ApplicationStartModule.TasksFromStartup = _bootstrapper.Run(container.Resolve<IEnumerable<IBootstrapperTask>>(), application).ToArray();
+				ApplicationStartModule.TasksFromStartup =
+					_bootstrapper.Run(container.Resolve<IEnumerable<IBootstrapperTask>>(), application).ToArray();
 
-				SignalRConfiguration.Configure(SignalRSettings.Load(), () => application.MapSignalR(new HubConfiguration { EnableJSONP = true }));
+				SignalRConfiguration.Configure(SignalRSettings.Load(),
+					() => application.MapSignalR(new HubConfiguration { EnableJSONP = true }));
 				FederatedAuthentication.WSFederationAuthenticationModule.SignedIn += WSFederationAuthenticationModule_SignedIn;
-				FederatedAuthentication.ServiceConfiguration.SecurityTokenHandlers.AddOrReplace(new MachineKeySessionSecurityTokenHandler());
+				FederatedAuthentication.ServiceConfiguration.SecurityTokenHandlers.AddOrReplace(
+					new MachineKeySessionSecurityTokenHandler());
 
 				application.UseAutofacMiddleware(container);
 				application.UseAutofacMvc();
 				application.UseAutofacWebApi(config);
 
+				//var managerConfiguration = new ManagerConfiguration
+				//{
+				//	ConnectionString =
+				//	ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString,
+				//	Route = ConfigurationManager.AppSettings["RouteName"]
+				//};
+
+
+				//new ManagerStarter().Start(managerConfiguration, container);
 			}
+
 			catch (Exception ex)
 			{
 				log.Error(ex);
