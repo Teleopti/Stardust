@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -14,16 +15,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private ResourceCalculationDataContainer _target;
 	    private readonly DateOnly _date = new DateOnly(2013, 8, 16);
 		private readonly DateTimePeriod _period = new DateTimePeriod(new DateTime(2013, 8, 16, 12, 0, 0, DateTimeKind.Utc), new DateTime(2013, 8, 16, 12, 15, 0, DateTimeKind.Utc));
-		private readonly IActivity _activity = ActivityFactory.CreateActivity("Phone");
-		private readonly ISkill _skill = SkillFactory.CreateSkill("Skill1");
+		private readonly IActivity _activity = ActivityFactory.CreateActivity("Phone").WithId();
+		private readonly ISkill _skill = SkillFactory.CreateSkill("Skill1").WithId();
 	    private IPerson _person;
 
 	    [SetUp]
         public void Setup()
 		{
 			_skill.Activity = _activity;
-			_skill.SetId(Guid.NewGuid());
-			_activity.SetId(Guid.NewGuid());
 			_person = PersonFactory.CreatePersonWithPersonPeriod(_date, new[] { _skill });
             _target = new ResourceCalculationDataContainer(new PersonSkillProvider(), 15);
         }
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 					                     Resource = 0.8
 				                     });
 			var result = _target.SkillResources(_skill, _period);
-			result.Item2.Should().Be.EqualTo(0.8);
+			result.Item2.Should().Be.EqualTo(1);
 			result.Item1.Should().Be.EqualTo(0.8);
 		}
 
@@ -301,15 +300,31 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 									 Resource = 0.7
 								 });
 			var result = _target.SkillResources(_skill, _period.ChangeEndTime(TimeSpan.FromMinutes(15)));
-			result.Item2.Should().Be.EqualTo(0.75);
+			result.Item2.Should().Be.EqualTo(1);
 			result.Item1.Should().Be.EqualTo(0.75);
+		}
+
+		[Test]
+		public void ShouldConsiderProficiencyWhenGettingSkillResources()
+		{
+			_person.ChangeSkillProficiency(_skill,new Percent(0.75), _person.Period(_date));
+			_target.AddResources(_person, _date,
+								 new ResourceLayer
+								 {
+									 PayloadId = _activity.Id.GetValueOrDefault(),
+									 Period = _period,
+									 RequiresSeat = false,
+									 Resource = 0.8
+								 });
+			var result = _target.SkillResources(_skill, _period);
+			result.Item2.Should().Be.EqualTo(1);
+			result.Item1.Should().Be.EqualTo(0.6);
 		}
 
 		[Test]
 		public void ShouldGetZeroResourcesOnSkillWithOtherActivity()
 		{
-			_skill.Activity = ActivityFactory.CreateActivity("Phone 2");
-			_skill.Activity.SetId(Guid.NewGuid());
+			_skill.Activity = ActivityFactory.CreateActivity("Phone 2").WithId();
 			_target.AddResources(_person, _date,
 								 new ResourceLayer
 								 {

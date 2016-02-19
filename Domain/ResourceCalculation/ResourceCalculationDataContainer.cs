@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				PeriodResource interval;
 				if (!_dictionary.TryGetValue(dateTimePeriod, out interval)) continue;
 
-				var detail = interval.GetResources(activityKey, skillKey);
+				var detail = interval.GetResources(skillKey, activityKey);
 				result = new PeriodResourceDetail(result.Count + detail.Count, result.Resource + detail.Resource);
 			}
 			return new Tuple<double, double>(result.Resource / periodSplit.Count, result.Count / periodSplit.Count);
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public double ActivityResourcesWhereSeatRequired(ISkill skill, DateTimePeriod period)
 		{
-			var activityKeys = _activityRequiresSeat.Keys;
+			var activityKeys = _activityRequiresSeat.Keys.ToArray();
 			var skillKey = skill.Id.GetValueOrDefault();
 
 			double resource = 0;
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				PeriodResource interval;
 				if (!_dictionary.TryGetValue(dateTimePeriod, out interval)) continue;
 
-				resource += interval.GetResources(activityKeys, skillKey).Resource;
+				resource += interval.GetResources(skillKey, activityKeys).Resource;
 
 			}
 			return resource / periodSplit.Count;

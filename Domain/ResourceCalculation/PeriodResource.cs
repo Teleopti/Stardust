@@ -76,13 +76,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			});
 		}
 
-		public PeriodResourceDetail GetResources(Guid activityKey, Guid skillKey)
+		public PeriodResourceDetail GetResources(Guid skillKey, params Guid[] activityKeys)
 		{
 			var count = 0d;
 			var resource = 0d;
 			foreach (var pair in _resourceDictionary)
 			{
-				if ((Guid.Empty == activityKey || pair.Key.HasActivity(activityKey)) && (pair.Key.ContainsSkill(skillKey)))
+				if (activityKeys.Any(a => pair.Key.HasActivity(a) || a == Guid.Empty) && pair.Key.ContainsSkill(skillKey))
 				{
 					double currentResource = pair.Value.Resource;
 					var foundEfficiency = pair.Value.EffiencyResources.FirstOrDefault(s => s.Skill == skillKey);
@@ -90,8 +90,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					{
 						currentResource = currentResource * foundEfficiency.Resource;
 					}
-					
-					count += pair.Value.Resource;
+
+					count += pair.Value.Count;
 					resource += currentResource;
 				}
 			}
@@ -109,28 +109,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				}
 			}
 			return result;
-		}
-
-		public PeriodResourceDetail GetResources(IEnumerable<Guid> activityKeys, Guid skillKey)
-		{
-			var count = 0d;
-			var resource = 0d;
-			foreach (var pair in _resourceDictionary)
-			{
-				if (pair.Key.ContainsSkill(skillKey) && activityKeys.Any(a => pair.Key.HasActivity(a)))
-				{
-					double currentResource = pair.Value.Resource;
-					var foundEfficiency = pair.Value.EffiencyResources.FirstOrDefault(s => s.Skill == skillKey);
-					if (foundEfficiency.Skill == skillKey)
-					{
-						currentResource = currentResource * foundEfficiency.Resource;
-					}
-
-					count += pair.Value.Count;
-					resource += currentResource;
-				}
-			}
-			return new PeriodResourceDetail(count, resource);
 		}
 
 		public IEnumerable<SkillKeyResource> GetSkillKeyResources(Guid activityKey)
