@@ -69,9 +69,10 @@ namespace ManagerTest
 				Status = "Added",
 				Type = ""
 			});
+
 			WorkerNodeRepository.Add(new WorkerNode {Id = nodeId , Url = _nodeUri1 });
-         JobManager.CheckAndAssignNextJob();
-			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(2);
+            JobManager.CheckAndAssignNextJob();
+			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(1);
 
 			var job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
 			job.AssignedNode.Should().Be.EqualTo(_nodeUri1.ToString());
@@ -118,9 +119,9 @@ namespace ManagerTest
 			JobManager.CheckAndAssignNextJob();
 			var job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
 			job.Status.Should().Be.EqualTo("Started");
-			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(2);
+			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(1);
 			JobManager.CancelThisJob(jobId);
-			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(3);
+			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(2);
 			job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
 			// how will we handle status?
 			job.Status.Should().Be.EqualTo("Canceling");
@@ -143,7 +144,7 @@ namespace ManagerTest
 			JobManager.CheckAndAssignNextJob();
 			var job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
 			job.Status.Should().Be.EqualTo("Started");
-			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(2);
+			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(1);
 			JobManager.SetEndResultOnJobAndRemoveIt(jobId, "Success");
 			JobManager.GetJobHistoryList().Should().Not.Be.Empty();
 			JobManager.JobHistoryDetails(jobId).Should().Not.Be.Empty();
@@ -162,12 +163,12 @@ namespace ManagerTest
 				Type = ""
 			});
 			WorkerNodeRepository.Add(new WorkerNode { Id = Guid.NewGuid(), Url = _nodeUri1 });
-			FakeHttpSender.Responses = new List<HttpResponseMessage> { new HttpResponseMessage(HttpStatusCode.OK) , new HttpResponseMessage(HttpStatusCode.BadRequest) };
+			FakeHttpSender.Responses = new List<HttpResponseMessage> { new HttpResponseMessage(HttpStatusCode.BadRequest) };
 				
-         JobManager.CheckAndAssignNextJob();
+            JobManager.CheckAndAssignNextJob();
 			var job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
 			job.Should().Be.Null();
-			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(2);
+			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(1);
 			JobRepository.History(jobId).Result.Should().Contain("Removed");
 		}
 
