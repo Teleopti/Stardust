@@ -70,16 +70,16 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			vm.IsFullDayAbsence.Should().Be(false);
 			vm.Date.Should().Be(date.ToFixedDateFormat());
 
-			var absenceProjection = vm.Projection.ElementAt(2);
+			var personAbsenceProjection = vm.Projection.ElementAt(2);
 
-			vm.Projection.First().ParentAbsence.Should().Be(null);
-			vm.Projection.Second().ParentAbsence.Should().Be(null);
-			absenceProjection.ParentAbsence.Should().Be(absenceLayer.Payload.Id);
-			vm.Projection.Last().ParentAbsence.Should().Be(null);
+			vm.Projection.First().ParentPersonAbsence.Should().Be(null);
+			vm.Projection.Second().ParentPersonAbsence.Should().Be(null);
+			personAbsenceProjection.ParentPersonAbsence.Should().Be(absenceLayer.Payload.Id);
+			vm.Projection.Last().ParentPersonAbsence.Should().Be(null);
 
 			vm.Projection.First().Description.Should().Be(phoneActivity.Description.Name);
 			vm.Projection.Second().Description.Should().Be(lunchActivity.Description.Name);
-			absenceProjection.Description.Should().Be(testAbsence.Name);
+			personAbsenceProjection.Description.Should().Be(testAbsence.Name);
 			vm.Projection.Last().Description.Should().Be(phoneActivity.Description.Name);
 
 			var expectedContactTime = getTimeSpanInMinutesFromPeriod(phoneActivityPeriod) -

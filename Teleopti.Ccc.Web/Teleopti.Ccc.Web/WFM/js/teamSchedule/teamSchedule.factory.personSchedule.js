@@ -95,7 +95,7 @@
 			var length = lengthMinutes * timeLine.LengthPercentPerMinute;
 
 			var shiftProjectionVm = {
-				ParentAbsence: projection.ParentAbsence,
+				ParentPersonAbsence: projection.ParentPersonAbsence,
 				StartPosition: startPosition,
 				Length: length,
 				IsOvertime: projection.IsOvertime,
