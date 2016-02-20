@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 		{
 			_feedback.FeedbackChanged += feedbackFeedbackChanged;
 			_sendProgress = sendProgress;
-			var theRealOne = _componentContext.Resolve<FullScheduling>();
+			//var theRealOne = _componentContext.Resolve<FullScheduling>();
 
 			_feedback.FeedbackChanged -= feedbackFeedbackChanged;
 		}
