@@ -186,6 +186,7 @@
     <Compile Include="FakeRecurringEventPublisher.cs" />
     <Compile Include="FakeRepositories\FakeAbsenceRepository.cs" />
     <Compile Include="FakeRepositories\FakeAgentDayScheduleTagRepository.cs" />
+    <Compile Include="FakeRepositories\FakeBudgetDayRepository.cs" />
     <Compile Include="FakeRepositories\FakeBusinessUnitRepository.cs" />
     <Compile Include="FakeRepositories\FakeContractRepository.cs" />
     <Compile Include="FakeRepositories\FakeContractScheduleRepository.cs" />
@@ -210,6 +211,7 @@
     <Compile Include="FakeRepositories\FakePublicNoteRepository.cs" />
     <Compile Include="FakeRepositories\FakeRepositoryFactory.cs" />
     <Compile Include="FakeRepositories\FakeScheduleStorage.cs" />
+    <Compile Include="FakeRepositories\FakeScheduleProjectionReadOnlyRepository.cs" />
     <Compile Include="FakeRepositories\FakeScheduleTagRepository.cs" />
     <Compile Include="FakeRepositories\FakeSeatBookingRepository.cs" />
     <Compile Include="FakeRepositories\FakeSeatMapRepository.cs" />

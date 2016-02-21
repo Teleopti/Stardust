@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using System.Linq;
-using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using log4net;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Requests;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus
+namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceReport
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
     public class NewAbsenceReportConsumer : ConsumerOf<NewAbsenceReportCreated>
@@ -32,12 +30,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 	    private readonly IUpdateScheduleProjectionReadModel _updateScheduleProjectionReadModel;
 	    private readonly ILoadSchedulesForRequestWithoutResourceCalculation _loadSchedulesForRequestWithoutResourceCalculation;
 	    private readonly IPersonRepository _personRepository;
+	    private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 
 	    public NewAbsenceReportConsumer(ICurrentUnitOfWorkFactory unitOfWorkFactory, ICurrentScenario scenarioRepository,
 		    ISchedulingResultStateHolder schedulingResultStateHolder, IRequestFactory factory,
 		    IScheduleDifferenceSaver scheduleDictionarySaver,
 		    IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel,
-		    ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulesForRequestWithoutResourceCalculation, IPersonRepository personRepository)
+		    ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulesForRequestWithoutResourceCalculation,
+			IPersonRepository personRepository, 
+			IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
 	    {
 		    _unitOfWorkFactory = unitOfWorkFactory;
 		    _scenarioRepository = scenarioRepository;
@@ -47,6 +48,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		    _updateScheduleProjectionReadModel = updateScheduleProjectionReadModel;
 		    _loadSchedulesForRequestWithoutResourceCalculation = loadSchedulesForRequestWithoutResourceCalculation;
 		    _personRepository = personRepository;
+		    _businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 
 		    _loadDataActions = new List<LoadDataAction>
 		    {
@@ -130,9 +132,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					    _schedulingResultStateHolder.Schedules.TakeSnapshot();
 					    _schedulingResultStateHolder.Schedules.SetUndoRedoContainer(undoRedoContainer);
 
-					    var allNewRules = NewBusinessRuleCollection.Minimum();
-					    var requestApprovalServiceScheduler = _factory.GetRequestApprovalService(allNewRules,
-						    _scenarioRepository.Current());
+					    var businessRules =_businessRulesForPersonalAccountUpdate.FromScheduleRange(_schedulingResultStateHolder.Schedules[person]);
+					    
+						var requestApprovalServiceScheduler = _factory.GetRequestApprovalService(businessRules,_scenarioRepository.Current());
+
 					    var brokenBusinessRules = requestApprovalServiceScheduler.ApproveAbsence(reportedAbsence, period, person);
 
 					    if (Logger.IsDebugEnabled)
@@ -160,9 +163,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 						    return;
 					    }
 
-					    _updateScheduleProjectionReadModel.Execute(_schedulingResultStateHolder.Schedules[person], dateOnlyPeriod);
+						unitOfWork.PersistAll();
 
-					    unitOfWork.PersistAll();
+					    _updateScheduleProjectionReadModel.Execute(_schedulingResultStateHolder.Schedules[person], dateOnlyPeriod);
+		
 				    }
 			    }
 		    }

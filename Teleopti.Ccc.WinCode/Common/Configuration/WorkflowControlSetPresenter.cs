@@ -86,6 +86,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			_view.SetAnonymousTrading(_selectedModel.AnonymousTrading);
 			_view.SetLockTrading(_selectedModel.LockTrading);
 			_view.SetFairnessType(_selectedModel.GetFairnessType());
+			_view.SetAbsenceRequestWaitlisting (_selectedModel.AbsenceRequestWaitlistingEnabled);
         }
 
         public IWorkflowControlSetModel SelectedModel
@@ -575,6 +576,11 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 		 public void SetLockTrading(bool lockTrading)
 	    {
 			_selectedModel.LockTrading = lockTrading;
+	    }
+
+	    public void SetAbsenceRequestWaitlisting (bool enableAbsenceRequestWaitlisting)
+	    {
+		    _selectedModel.AbsenceRequestWaitlistingEnabled = enableAbsenceRequestWaitlisting;
 	    }
     }
 }

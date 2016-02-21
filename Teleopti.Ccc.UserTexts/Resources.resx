@@ -14114,4 +14114,20 @@ Help us improve your experience by sending an error report</value>
     <value>Double click here to edit text</value>
     <comment>Text info when adding a Text in seatmap</comment>
   </data>
+  <data name="EnableWaitlisting" xml:space="preserve">
+    <value>Enable Waitlisting</value>
+    <comment>Used on the Absence Request Tab of the Workflow Control Set options page.  Controls if Absence Requests are to be waitlisted when auto denied.</comment>
+  </data>
+  <data name="AbsenceRequestForOneDayHasBeenWaitlisted" xml:space="preserve">
+    <value>The absence request {0} was unable to be accepted at this time and was waitlisted.</value>
+    <comment>Auto message from requests - when request is denied but waitlisting is enabled on the related workflow control set.</comment>
+  </data>
+  <data name="AbsenceRequestHasBeenWaitlisted" xml:space="preserve">
+    <value>An absence request for {0} to {1} was unable to be accepted at this time and was waitlisted.</value>
+    <comment>enabled on the related workflow control set.</comment>
+  </data>
+  <data name="Waitlisted" xml:space="preserve">
+    <value>Waitlisted</value>
+    <comment>Used for the status of a denied absence request when waitlisting is enabled on the related workflow control set.</comment>
+  </data>
 </root>

@@ -56,17 +56,21 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		{
 			var timeZone = Person.PermissionInformation.DefaultTimeZone();
 			var culture = Person.PermissionInformation.Culture();
+			var hasBeenWaitlisted = absenceRequestIsWaitlisted();
+
+			var absenceRequestMsgForOneDay = hasBeenWaitlisted ? "AbsenceRequestForOneDayHasBeenWaitlisted" : "AbsenceRequestForOneDayHasBeenDeniedDot";
+			var absenceRequestMsg = hasBeenWaitlisted ? "AbsenceRequestHasBeenWaitlisted" : "AbsenceRequestHasBeenDeniedDot";
+			
 			if (isRequestForOneLocalDay(timeZone))
 			{
 			    TextForNotification =
-			        string.Format(culture, UserTexts.Resources.ResourceManager.GetString("AbsenceRequestForOneDayHasBeenDeniedDot", culture),
+					string.Format(culture, UserTexts.Resources.ResourceManager.GetString(absenceRequestMsgForOneDay, culture),
 			            Period.StartDateTimeLocal(timeZone).Date.ToString("d", culture));                
 			}
 			else
 			{
-
-			    TextForNotification =
-			        string.Format(culture,UserTexts.Resources.ResourceManager.GetString("AbsenceRequestHasBeenDeniedDot", culture),
+				TextForNotification =
+					string.Format(culture, UserTexts.Resources.ResourceManager.GetString(absenceRequestMsg, culture),
                        Period.StartDateTimeLocal(timeZone).Date.ToString(
                                                         culture.DateTimeFormat.ShortDatePattern, culture),
                                                     Period.EndDateTimeLocal(timeZone).Date.ToString(
@@ -74,7 +78,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			}
 		}
 
-    	private bool isRequestForOneLocalDay(TimeZoneInfo timeZone)
+	    private bool absenceRequestIsWaitlisted()
+	    {
+			var personRequest = (PersonRequest)Parent;
+		    return Person.WorkflowControlSet != null && Person.WorkflowControlSet.WaitlistingIsEnabled (this) && !personRequest.WasManuallyDenied;
+	    }
+
+	    private bool isRequestForOneLocalDay(TimeZoneInfo timeZone)
     	{
     		return Period.StartDateTimeLocal(timeZone).Date == Period.EndDateTimeLocal(timeZone).Date;
     	}

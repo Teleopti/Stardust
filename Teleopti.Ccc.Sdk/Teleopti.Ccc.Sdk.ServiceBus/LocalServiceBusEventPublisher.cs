@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -21,8 +22,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		public void Publish(params IEvent[] events)
 		{
-			_eventInfrastructureInfoPopulator.PopulateEventContext(events);
-			_bus.Send(events);
+			if (events.Any())
+			{
+				_eventInfrastructureInfoPopulator.PopulateEventContext (events);
+				_bus.Send (events);
+			}
 		}
 
 		public void DelaySend(DateTime time, object message)

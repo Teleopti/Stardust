@@ -9,9 +9,11 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Sdk.ServiceBus;
+using Teleopti.Ccc.Sdk.ServiceBus.AbsenceReport;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Requests;
@@ -68,12 +70,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_loaderWithoutResourceCalculation = MockRepository.GenerateMock<ILoadSchedulesForRequestWithoutResourceCalculation>();
 			MockRepository.GenerateMock<IBudgetGroupAllowanceSpecification>();
 			MockRepository.GenerateMock<IBudgetGroupHeadCountSpecification>();
-			MockRepository.GenerateMock<IResourceOptimizationHelper>();
+			var businessRules = MockRepository.GenerateMock<IBusinessRulesForPersonalAccountUpdate>();
+
 			_updateScheduleProjectionReadModel = MockRepository.GenerateMock<IUpdateScheduleProjectionReadModel>();
 
 			_target = new NewAbsenceReportConsumer(_unitOfWorkFactory, _scenarioRepository,
 				_schedulingResultStateHolder, _factory, _scheduleDictionarySaver, _updateScheduleProjectionReadModel,
-				_loaderWithoutResourceCalculation, _personRepository);
+				_loaderWithoutResourceCalculation, _personRepository, businessRules);
 			prepareUnitOfWork();
 		}
 

@@ -250,6 +250,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The absence request {0} was unable to be accepted at this time and was waitlisted..
+        /// </summary>
+        public static string AbsenceRequestForOneDayHasBeenWaitlisted {
+            get {
+                return ResourceManager.GetString("AbsenceRequestForOneDayHasBeenWaitlisted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An absence request {0} - {1} was approved..
         /// </summary>
         public static string AbsenceRequestHasBeenApprovedDot {
@@ -264,6 +273,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AbsenceRequestHasBeenDeniedDot {
             get {
                 return ResourceManager.GetString("AbsenceRequestHasBeenDeniedDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An absence request for {0} to {1} was unable to be accepted at this time and was waitlisted..
+        /// </summary>
+        public static string AbsenceRequestHasBeenWaitlisted {
+            get {
+                return ResourceManager.GetString("AbsenceRequestHasBeenWaitlisted", resourceCulture);
             }
         }
         
@@ -8938,6 +8956,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string EnableScheduleAuditTrail {
             get {
                 return ResourceManager.GetString("EnableScheduleAuditTrail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable Waitlisting.
+        /// </summary>
+        public static string EnableWaitlisting {
+            get {
+                return ResourceManager.GetString("EnableWaitlisting", resourceCulture);
             }
         }
         
@@ -30803,6 +30830,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string WaitingThreeDots {
             get {
                 return ResourceManager.GetString("WaitingThreeDots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Waitlisted.
+        /// </summary>
+        public static string Waitlisted {
+            get {
+                return ResourceManager.GetString("Waitlisted", resourceCulture);
             }
         }
         

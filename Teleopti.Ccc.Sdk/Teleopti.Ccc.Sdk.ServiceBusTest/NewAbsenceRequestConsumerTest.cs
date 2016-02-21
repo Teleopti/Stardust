@@ -6,17 +6,18 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
+using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Sdk.ServiceBus;
+using Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		private readonly DateOnlyPeriod _dateOnlyPeriod = new DateOnlyPeriod(2010, 3, 30, 2010, 3, 30);
 		private IWorkflowControlSet _workflowControlSet;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
-		private IAbsenceRequestOpenPeriodMerger _merger;
+		//private IAbsenceRequestOpenPeriodMerger _merger;
 		private IScheduleDictionary _scheduleDictionary;
 		private IPersonAbsenceAccountProvider _personAbsenceAccountProvider;
 		private IRequestApprovalService _requestApprovalService;
@@ -84,19 +85,25 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_resourceOptimizationHelper = MockRepository.GenerateMock<IResourceOptimizationHelper>();
 			_updateScheduleProjectionReadModel = MockRepository.GenerateMock<IUpdateScheduleProjectionReadModel>();
 
+			var businessRules = MockRepository.GenerateMock<IBusinessRulesForPersonalAccountUpdate>();
+
 			_personAccountUpdater = MockRepository.GenerateMock<IPersonAccountUpdater>();
 			
 			_validatedRequest = new ValidatedRequest { IsValid = true, ValidationErrors = "" };
-
+			
 			_absenceRequest.Stub(x => x.Person).Return(_person);
-			_target = new NewAbsenceRequestConsumer(_unitOfWorkFactory, _personAbsenceAccountProvider,
-													_scenarioRepository, _personRequestRepository,
-													_schedulingResultStateHolder, _merger, _factory,
-													_scheduleDictionarySaver, _scheduleIsInvalidSpecification,
-													_authorization, _resourceOptimizationHelper,
-													_updateScheduleProjectionReadModel, _budgetGroupAllowanceSpecification, _loader, _loaderWithoutResourceCalculation, _alreadyAbsentSpecification,
-													_budgetGroupHeadCountSpecification, _prereqLoader, _personAccountUpdater, 
-													new FakeToggleManager(Toggles.Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850));
+			var absenceRequestStatusUpdater = new AbsenceRequestUpdater (_personAbsenceAccountProvider,
+				_prereqLoader, _scenarioRepository, _loader, _loaderWithoutResourceCalculation, _factory,
+				_alreadyAbsentSpecification, _scheduleIsInvalidSpecification, _authorization, _budgetGroupHeadCountSpecification,
+				_resourceOptimizationHelper, _budgetGroupAllowanceSpecification, _scheduleDictionarySaver, _personAccountUpdater,
+				new FalseToggleManager(), businessRules);
+
+
+			var absenceProcessor = new AbsenceRequestProcessor(absenceRequestStatusUpdater, _updateScheduleProjectionReadModel, _schedulingResultStateHolder);
+			var absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor(_personRequestRepository, absenceRequestStatusUpdater, _schedulingResultStateHolder, _updateScheduleProjectionReadModel);
+
+			_target = new NewAbsenceRequestConsumer( 
+				_unitOfWorkFactory, _scenarioRepository, _personRequestRepository, absenceRequestWaitlistProcessor, absenceProcessor);
 
 			PrepareUnitOfWork();
 		}
@@ -104,7 +111,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		private void CreateServices()
 		{
 			_requestApprovalService = MockRepository.GenerateMock<IRequestApprovalService>();
-			_merger = MockRepository.GenerateMock<IAbsenceRequestOpenPeriodMerger>();
+			//_merger = MockRepository.GenerateMock<IAbsenceRequestOpenPeriodMerger>();
 		}
 
 		private void CreateInfrastructure()
@@ -138,6 +145,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		{
 			_personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			_personAbsenceAccountProvider = MockRepository.GenerateMock<IPersonAbsenceAccountProvider>();
+			MockRepository.GenerateMock<IPersonAbsenceAccountRepository>();
 		}
 
 		[Test]
@@ -195,8 +203,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 			_personAccountUpdater.Stub(x => x.UpdateForAbsence(_person, _absence, new DateOnly(_period.StartDateTime)))
 				.Return(true);
-			
-			_merger.Stub(x => x.Merge(periodList)).Return(absenceRequestOpenDatePeriod);
+
+			_workflowControlSet.Stub(x => x.GetMergedAbsenceRequestOpenPeriod(_absenceRequest)).Return(absenceRequestOpenDatePeriod);
 			_workflowControlSet.Stub(x => x.GetExtractorForAbsence(_absence)).Return(openAbsenceRequestPeriodExtractor);
 			openAbsenceRequestPeriodExtractor.Stub(x => x.Projection).Return(openAbsenceRequestPeriodProjection);
 			openAbsenceRequestPeriodProjection.Stub(
@@ -239,8 +247,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_personAbsenceAccountProvider.Stub(x => x.Find(_person)).Return(_personAccountCollection);
 			_personAccountUpdater.Stub(x => x.UpdateForAbsence(_person, _absence, new DateOnly(_period.StartDateTime)))
 				.Return(true);
-			
-			_merger.Stub(x => x.Merge(periodList)).Return(absenceRequestOpenDatePeriod);
+
+			_workflowControlSet.Stub(x => x.GetMergedAbsenceRequestOpenPeriod(_absenceRequest)).Return(absenceRequestOpenDatePeriod);
 			_workflowControlSet.Stub(x => x.GetExtractorForAbsence(_absence)).Return(openAbsenceRequestPeriodExtractor);
 			openAbsenceRequestPeriodExtractor.Stub(x => x.Projection).Return(openAbsenceRequestPeriodProjection);
 			openAbsenceRequestPeriodProjection.Stub(
@@ -282,8 +290,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_personAbsenceAccountProvider.Stub(x => x.Find(_person)).Return(_personAccountCollection);
 			_personAccountUpdater.Stub(x => x.UpdateForAbsence(_person, _absence, new DateOnly(_period.StartDateTime)))
 				.Return(true);
-			
-			_merger.Stub(x => x.Merge(periodList)).Return(absenceRequestOpenDatePeriod);
+
+			_workflowControlSet.Stub(x => x.GetMergedAbsenceRequestOpenPeriod(_absenceRequest)).Return(absenceRequestOpenDatePeriod);
 			_workflowControlSet.Stub(x => x.GetExtractorForAbsence(_absence)).Return(openAbsenceRequestPeriodExtractor);
 			openAbsenceRequestPeriodExtractor.Stub(x => x.Projection).Return(openAbsenceRequestPeriodProjection);
 			openAbsenceRequestPeriodProjection.Stub(x => x.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture())).IgnoreArguments().Return(periodList);
@@ -318,8 +326,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_personAbsenceAccountProvider.Stub(x => x.Find(_person)).Return(_personAccountCollection);
 			_personAccountUpdater.Stub(x => x.UpdateForAbsence(_person, _absence, new DateOnly(_period.StartDateTime)))
 				.Return(true);
-			
-			_merger.Stub(x => x.Merge(periodList)).Return(absenceRequestOpenDatePeriod);
+
+			_workflowControlSet.Stub(x => x.GetMergedAbsenceRequestOpenPeriod(_absenceRequest)).Return(absenceRequestOpenDatePeriod);
 			_workflowControlSet.Stub(x => x.GetExtractorForAbsence(_absence)).Return(openAbsenceRequestPeriodExtractor);
 			openAbsenceRequestPeriodExtractor.Stub(x => x.Projection).Return(openAbsenceRequestPeriodProjection);
 			openAbsenceRequestPeriodProjection.Stub(x => x.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture())).IgnoreArguments().Return(periodList);
@@ -355,8 +363,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_personAbsenceAccountProvider.Stub(x => x.Find(_person)).Return(_personAccountCollection);
 			_personAccountUpdater.Stub(x => x.UpdateForAbsence(_person, _absence, new DateOnly(_period.StartDateTime)))
 				.Return(true);
-			
-			_merger.Stub(x => x.Merge(periodList)).Return(absenceRequestOpenDatePeriod);
+
+			_workflowControlSet.Stub(x => x.GetMergedAbsenceRequestOpenPeriod(_absenceRequest)).Return(absenceRequestOpenDatePeriod);
 			_workflowControlSet.Stub(x => x.GetExtractorForAbsence(_absence)).Return(openAbsenceRequestPeriodExtractor);
 			openAbsenceRequestPeriodExtractor.Stub(x => x.Projection).Return(openAbsenceRequestPeriodProjection);
 			openAbsenceRequestPeriodProjection.Stub(x => x.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture())).IgnoreArguments().Return(periodList);
@@ -370,7 +378,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			ExpectPersistOfDictionary();
 
 			_target.Consume(_message);
-			_unitOfWork.AssertWasCalled(x => x.PersistAll(), o => o.Repeat.Times(3));
+			_unitOfWork.AssertWasCalled(x => x.PersistAll(), o => o.Repeat.Twice());
 			_updateScheduleProjectionReadModel.AssertWasCalled(x => x.Execute(_scheduleRange, _dateOnlyPeriod));
 			processAbsenceRequest.AssertWasCalled(x => x.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(), new RequiredForHandlingAbsenceRequest(), validatorList), o => o.IgnoreArguments());
 		}
@@ -393,8 +401,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_personAbsenceAccountProvider.Stub(x => x.Find(_person)).Return(_personAccountCollection);
 			_personAccountUpdater.Stub(x => x.UpdateForAbsence(_person, _absence, new DateOnly(_period.StartDateTime)))
 				.Return(true);
-			
-			_merger.Stub(x => x.Merge(periodList)).Return(absenceRequestOpenDatePeriod);
+
+			_workflowControlSet.Stub(x => x.GetMergedAbsenceRequestOpenPeriod(_absenceRequest)).Return(absenceRequestOpenDatePeriod);
 			_workflowControlSet.Stub(x => x.GetExtractorForAbsence(_absence)).Return(openAbsenceRequestPeriodExtractor);
 			openAbsenceRequestPeriodExtractor.Stub(x => x.Projection).Return(openAbsenceRequestPeriodProjection);
 			openAbsenceRequestPeriodProjection.Stub(x => x.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture())).IgnoreArguments().Return(periodList);
@@ -432,7 +440,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				x => x.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture()))
 											  .IgnoreArguments()
 											  .Return(periodList);
-			_merger.Stub(x => x.Merge(periodList)).Return(absenceRequestOpenDatePeriod);
+			_workflowControlSet.Stub(x => x.GetMergedAbsenceRequestOpenPeriod(_absenceRequest)).Return(absenceRequestOpenDatePeriod);
 			_personAbsenceAccountProvider.Stub(x => x.Find(_person)).Return(_personAccountCollection);
 			_personAccountUpdater.Stub(x => x.UpdateForAbsence(_person, _absence, new DateOnly(_period.StartDateTime)))
 				.Return(false);
@@ -478,8 +486,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 			_personAccountUpdater.Stub(x => x.UpdateForAbsence(_person, _absence, new DateOnly(_period.StartDateTime)))
 				.Return(false);
-			
-			_merger.Stub(x => x.Merge(periodList)).Return(absenceRequestOpenDatePeriod);
+
+			_workflowControlSet.Stub(x => x.GetMergedAbsenceRequestOpenPeriod(_absenceRequest)).Return(absenceRequestOpenDatePeriod);
 			_workflowControlSet.Stub(x => x.GetExtractorForAbsence(_absence)).Return(openAbsenceRequestPeriodExtractor);
 			openAbsenceRequestPeriodExtractor.Stub(x => x.Projection).Return(openAbsenceRequestPeriodProjection);
 			openAbsenceRequestPeriodProjection.Stub(
@@ -536,9 +544,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_personAbsenceAccountProvider.Stub(x => x.Find(_person)).Return(_personAccountCollection);
 			_personAccountUpdater.Stub(x => x.UpdateForAbsence(_person, _absence, new DateOnly(_period.StartDateTime)))
 				.Return(true);
-			
 
-			_merger.Stub(x => x.Merge(periodList)).Return(absenceRequestOpenDatePeriod);
+
+			_workflowControlSet.Stub(x => x.GetMergedAbsenceRequestOpenPeriod(_absenceRequest)).Return(absenceRequestOpenDatePeriod);
 			_workflowControlSet.Stub(x => x.GetExtractorForAbsence(_absence)).Return(openAbsenceRequestPeriodExtractor);
 			openAbsenceRequestPeriodExtractor.Stub(x => x.Projection).Return(openAbsenceRequestPeriodProjection);
 			openAbsenceRequestPeriodProjection.Stub(x => x.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture())).IgnoreArguments().Return(periodList);
@@ -553,7 +561,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_loaderWithoutResourceCalculation.AssertWasCalled(x => x.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person }));
 		}
 
-		[Test]
+	/*	[Test]
 		public void ShouldTrackAbsenceTwoTimes()
 		{
 			var processAbsenceRequest = MockRepository.GenerateMock<IProcessAbsenceRequest>();
@@ -577,8 +585,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_personAbsenceAccountProvider.Stub(x => x.Find(_person)).Return(_personAccountCollection);
 			_personAccountUpdater.Stub(x => x.UpdateForAbsence(_person, _absence, new DateOnly(_period.StartDateTime)))
 				.Return(true);
-			
-			_merger.Stub(x => x.Merge(periodList)).Return(absenceRequestOpenDatePeriod);
+
+			_workflowControlSet.Stub(x => x.GetMergedAbsenceRequestOpenPeriod(_absenceRequest)).Return(absenceRequestOpenDatePeriod);
 			_workflowControlSet.Stub(x => x.GetExtractorForAbsence(_absence)).Return(openAbsenceRequestPeriodExtractor);
 			openAbsenceRequestPeriodExtractor.Stub(x => x.Projection).Return(openAbsenceRequestPeriodProjection);
 			openAbsenceRequestPeriodProjection.Stub(x => x.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture())).IgnoreArguments().Return(periodList);
@@ -594,9 +602,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 			_target.Consume(_message);
 			_updateScheduleProjectionReadModel.AssertWasCalled(x => x.Execute(_scheduleRange, _dateOnlyPeriod));
-			_unitOfWork.AssertWasCalled(x => x.PersistAll(), o => o.Repeat.Times(3));
+			_unitOfWork.AssertWasCalled(x => x.PersistAll(), o => o.Repeat.Twice());
 			tracker.AssertWasCalled(x => x.Track(personAbsenceAccount.AccountCollection().First(), _absence, new List<IScheduleDay>()), o => o.Repeat.Twice().IgnoreArguments());
-		}
+		}*/
 
 		[Test]
 		public void VerifyAbsenceRequestGetsDeniedWhenNoWorkflowControlSet()

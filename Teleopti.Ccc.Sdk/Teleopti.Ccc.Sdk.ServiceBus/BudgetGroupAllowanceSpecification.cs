@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Specification;
+using Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest;
 using Teleopti.Interfaces.Domain;
 using log4net;
 using Teleopti.Ccc.Domain.Collection;

@@ -166,12 +166,21 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 	    public virtual void Deny(IPerson denyPerson, string denyReasonTextResourceKey,
                                  IPersonRequestCheckAuthorization authorization)
-        {
-            authorization.VerifyEditRequestPermission(this);
-            IRequest request = getRequest();
-            if (request != null) request.Deny(denyPerson);
-            RequestState.Deny();
-            _denyReason = denyReasonTextResourceKey ?? string.Empty;
+	    {
+		    authorization.VerifyEditRequestPermission(this);
+            
+		    if (!IsDenied)
+			{
+				RequestState.Deny();    
+		    }
+
+			IRequest request = getRequest();
+			if (request != null)
+			{
+				request.Deny(denyPerson);
+			}
+
+			_denyReason = denyReasonTextResourceKey ?? string.Empty;		    
             notifyOnStatusChange();
         }
 
@@ -411,6 +420,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             get { return RequestState.IsPending; }
         }
 
+		public virtual bool WasManuallyDenied
+	    {
+		    get { return RequestState is deniedPersonRequest; }
+	    }
+
         public virtual bool IsDenied
         {
             get { return RequestState.IsDenied; }
@@ -630,9 +644,39 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
                 get { return true; }
             }
 
+			protected internal override void Approve(bool isAutoGrant)
+			{
+				//ROBTODO - we wish to allow this transition when we have a waitlist, 
+				// What is the best  way to handle this but still allow the base.Approve functionality to
+				// restrict this otherwise?
+
+				//base.Approve(isAutoGrant);
+
+
+				PersonRequest.moveToApproved(isAutoGrant);
+			}
+
+
             protected internal override string StatusText
             {
-                get { return Resources.Denied; }
+	            get
+	            {
+					var absenceRequest = PersonRequest.getRequest() as IAbsenceRequest;
+
+					if (absenceRequest != null)
+					{
+						var workflowControlSet = PersonRequest.Person.WorkflowControlSet;
+						if (workflowControlSet != null)
+						{
+							if (workflowControlSet.WaitlistingIsEnabled (absenceRequest))
+							{
+								return Resources.ResourceManager.GetString("Waitlisted");
+							}
+						}
+					}
+					
+					return Resources.Denied;
+	            }
             }
         }
 
@@ -660,7 +704,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
             protected internal override string StatusText
             {
-                get { return Resources.Pending; }
+	            get
+	            {
+					return Resources.Pending;
+	            }
             }
 
             protected internal override bool IsPending

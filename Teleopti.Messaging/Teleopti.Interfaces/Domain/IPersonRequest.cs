@@ -89,7 +89,7 @@ namespace Teleopti.Interfaces.Domain
         /// </value>
         bool IsPending { get; }
 
-        /// <summary>
+		/// <summary>
         /// Gets a value indicating whether this instance is denied.
         /// </summary>
         /// <value><c>true</c> if this instance is denied; otherwise, <c>false</c>.</value>
@@ -101,6 +101,9 @@ namespace Teleopti.Interfaces.Domain
 		/// <value><c>true</c> if this instance is auto denied; otherwise, <c>false</c>.</value>
 		bool IsAutoDenied { get; }
 
+		// Was manually denied by an administrator.
+		bool WasManuallyDenied { get; }
+			
         /// <summary>
         /// Gets a value indicating whether this instance is approved.
         /// </summary>

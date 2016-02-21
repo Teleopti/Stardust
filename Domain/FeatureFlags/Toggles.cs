@@ -97,6 +97,7 @@
 		Wfm_Requests_People_Search_36294,
 		Wfm_Requests_Performance_36295,
 		Wfm_Requests_ApproveDeny_36297,
+		Wfm_Requests_Waitlist_36232,
 
 		Report_UseOpenXmlFormat_35797,
 		Scheduler_IntradayOptimization_36617,

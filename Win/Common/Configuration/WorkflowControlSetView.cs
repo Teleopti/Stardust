@@ -73,6 +73,22 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				checkBoxAdvLockTrading.Hide();
 			}
+
+			if (!toggleManager.IsEnabled (Toggles.Wfm_Requests_Waitlist_36232))
+			{
+				hideAbsenceRequestWaitlistingOptions();
+			}
+		}
+
+		private void hideAbsenceRequestWaitlistingOptions()
+		{
+			checkBoxEnableAbsenceRequestWaitlisting.Hide();
+
+			var rowIndex = tableLayoutPanelBasic.GetRow (tableLayoutPanelAbsenceRequestMiscellaneous);
+			tableLayoutPanelAbsenceRequestPeriods.RowStyles[rowIndex].Height = 0;
+
+			rowIndex = tableLayoutPanelBasic.GetRow (checkBoxEnableAbsenceRequestWaitlisting);
+			tableLayoutPanelAbsenceRequestPeriods.RowStyles[rowIndex].Height = 0;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
@@ -366,6 +382,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			panelOpenPreference.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 			tableLayoutPanelOpenForAbsenceRequests.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 			panelTolerance.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			tableLayoutPanelAbsenceRequestMiscellaneous.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 
 			labelSubHeader1.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 			labelBasic.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
@@ -383,6 +400,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			labelMatchingSkills.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 			label3.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 			labelAllowedAbsencesForReport.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+			labelAbsenceRequestMiscellaneous.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 		}
 
 		protected override void SetCommonTexts()
@@ -702,6 +720,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			checkBoxAdvAnonymousTrading.CheckStateChanged -= checkBoxAdvAnonymousTrading_CheckStateChanged;
 			checkBoxAdvAnonymousTrading.Checked = anonymousTrading;
 			checkBoxAdvAnonymousTrading.CheckStateChanged += checkBoxAdvAnonymousTrading_CheckStateChanged;
+		}
+
+		public void SetAbsenceRequestWaitlisting (bool absenceRequestWaitlistingEnabled)
+		{
+			checkBoxEnableAbsenceRequestWaitlisting.CheckStateChanged -=checkBoxEnableAbsenceRequestWaitlisting_CheckStateChanged;
+			checkBoxEnableAbsenceRequestWaitlisting.Checked = absenceRequestWaitlistingEnabled;
+			checkBoxEnableAbsenceRequestWaitlisting.CheckStateChanged += checkBoxEnableAbsenceRequestWaitlisting_CheckStateChanged;
 		}
 
 		public void SetLockTrading(bool lockTrading)
@@ -1083,6 +1108,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			_presenter.SetLockTrading(checkBoxAdvLockTrading.Checked);
 		}
+
+		private void checkBoxEnableAbsenceRequestWaitlisting_CheckStateChanged(object sender, EventArgs e)
+		{
+			_presenter.SetAbsenceRequestWaitlisting(checkBoxEnableAbsenceRequestWaitlisting.Checked);
+		}
+
+		
 	
 	}
 }

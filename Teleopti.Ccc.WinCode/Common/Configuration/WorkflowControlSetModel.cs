@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         bool IsDirty { get; set; }
 	    bool AnonymousTrading { get; set; }
 	    bool LockTrading { get; set; }
+	    bool AbsenceRequestWaitlistingEnabled { get; set; }
     }
 
     public class WorkflowControlSetModel : IWorkflowControlSetModel
@@ -412,5 +413,18 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 				IsDirty = true;
 			}
 		}
+
+	    public bool AbsenceRequestWaitlistingEnabled
+	    {
+
+			get { return DomainEntity.AbsenceRequestWaitlistEnabled; }
+			set
+			{
+				if (DomainEntity.AbsenceRequestWaitlistEnabled == value) return;
+				DomainEntity.AbsenceRequestWaitlistEnabled = value;
+				IsDirty = true;
+			}
+
+	    }
     }
 }

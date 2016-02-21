@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
-using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
@@ -18,7 +12,6 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 {
@@ -217,96 +210,5 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		}
 	}
 
-	public class FakeScheduleProjectionReadOnlyRepository : IScheduleProjectionReadOnlyRepository
-	{
-		public IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period, IBudgetGroup budgetGroup, IScenario scenario)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void ClearPeriodForPerson(DateOnlyPeriod period, Guid scenarioId, Guid personId)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddProjectedLayer(DateOnly belongsToDate, Guid scenarioId, Guid personId, ProjectionChangedEventLayer layer)
-		{
-			throw new NotImplementedException();
-		}
-
-		public int GetNumberOfAbsencesPerDayAndBudgetGroup(Guid budgetGroupId, DateOnly currentDate)
-		{
-			throw new NotImplementedException();
-		}
-
-		public bool IsInitialized()
-		{
-			throw new NotImplementedException();
-		}
-
-		public DateTime? GetNextActivityStartTime(DateTime dateTime, Guid personId)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IEnumerable<ProjectionChangedEventLayer> ForPerson(DateOnly date, Guid personId, Guid scenarioId)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IEnumerable<ProjectionChangedEventLayer> ForPerson(DateOnlyPeriod datePeriod, Guid personId, Guid scenarioId)
-		{
-			throw new NotImplementedException();
-		}
-	}
-
-	public class FakeBudgetDayRepository : IBudgetDayRepository
-	{
-		public void Add(IBudgetDay entity)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void Remove(IBudgetDay entity)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IBudgetDay Get(Guid id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IList<IBudgetDay> LoadAll()
-		{
-			throw new NotImplementedException();
-		}
-
-		public IBudgetDay Load(Guid id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public long CountAllEntities()
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddRange(IEnumerable<IBudgetDay> entityCollection)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IUnitOfWork UnitOfWork { get; private set; }
-		public DateOnly FindLastDayWithStaffEmployed(IScenario scenario, IBudgetGroup budgetGroup, DateOnly lastDateToSearch)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IList<IBudgetDay> Find(IScenario scenario, IBudgetGroup budgetGroup, DateOnlyPeriod dateOnlyPeriod)
-		{
-			throw new NotImplementedException();
-		}
-	}
 
 }

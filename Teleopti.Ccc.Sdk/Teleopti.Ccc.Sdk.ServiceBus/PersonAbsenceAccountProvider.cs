@@ -20,8 +20,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             IPersonAccountCollection result = new PersonAccountCollection(person);
             foreach (var account in allAccounts)
             {
-                _personAbsenceAccountRepository.UnitOfWork.Remove(account);
-                result.Add(account.EntityClone());
+	            if (_personAbsenceAccountRepository.UnitOfWork != null)
+	            {
+		            _personAbsenceAccountRepository.UnitOfWork.Remove (account);
+	            }
+	            result.Add(account.EntityClone());
             }
             return result;
         }

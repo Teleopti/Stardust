@@ -55,7 +55,7 @@ namespace Teleopti.Interfaces.Domain
         private readonly IUndoRedoContainer _undoRedoContainer;
         private readonly IRequestApprovalService _requestApprovalService;
         private readonly IPersonRequestCheckAuthorization _authorization;
-	    private readonly Action _afterUndoCallback;
+	    private Action _afterUndoCallback;
 
 	    /// <summary>
         /// 
@@ -98,6 +98,7 @@ namespace Teleopti.Interfaces.Domain
 	    public Action AfterUndoCallback
 	    {
 		    get { return _afterUndoCallback; }
+			set { _afterUndoCallback = value; }
 	    }
     }
 }

@@ -138,6 +138,9 @@
     <Compile Include="Domain\FairnessType.cs" />
     <Compile Include="Domain\ForecastActualDifferNotification.cs" />
     <Compile Include="Domain\HourSlot.cs" />
+    <Compile Include="Domain\IAbsenceRequestProcessor.cs" />
+    <Compile Include="Domain\IAbsenceRequestUpdater.cs" />
+    <Compile Include="Domain\IAbsenceRequestWaitlistProcessor.cs" />
     <Compile Include="Domain\IAgentBadgeInfo.cs" />
     <Compile Include="Domain\IAgentBadgeTransaction.cs" />
     <Compile Include="Domain\IAgentBadgeTransactionRepository.cs" />

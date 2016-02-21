@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -59,7 +57,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPersonAccountCollection Find(IPerson person)
 		{
-			throw new NotImplementedException();
+			var personAbsenceAccounts  = _absenceAccounts.Where (account => account.Person == person);
+			var personAccountCollection = new PersonAccountCollection (person);
+			personAbsenceAccounts.ForEach (personAccountCollection.Add);
+			return personAccountCollection;
 		}
 
 		public IDictionary<IPerson, IPersonAccountCollection> FindByUsers(IEnumerable<IPerson> persons)

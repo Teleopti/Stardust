@@ -27,7 +27,7 @@
 					  type="string"
 					  length="50"/>
     
-    <list name="AbsenceRequestOpenPeriods" cascade="all-delete-orphan" inverse="true">
+    <list name="AbsenceRequestOpenPeriods" cascade="all-delete-orphan" inverse="true" lazy="false">
       <key column="Parent" />
       <index type="Byte" column ="OrderIndex" />
       <one-to-many class="AbsenceRequestOpenPeriod"/>
@@ -135,6 +135,8 @@
     <property name="AutoGrantShiftTradeRequest" type="bool" not-null="true"/>
 		
 	<property name="AnonymousTrading" type="bool" not-null="true"/>
+
+	<property name="AbsenceRequestWaitlistEnabled" type="bool" not-null="true"/>
 		
 	<property name="LockTrading" type="bool" not-null="true"/>
     

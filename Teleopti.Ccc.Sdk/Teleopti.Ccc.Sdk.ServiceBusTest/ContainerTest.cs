@@ -15,6 +15,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Sdk.ServiceBus;
+using Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest;
 using Teleopti.Ccc.Sdk.ServiceBus.Container;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;

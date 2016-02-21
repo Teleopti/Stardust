@@ -223,8 +223,13 @@
     <Compile Include="..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Areas\Rta\ITeleoptiRtaService.cs">
       <Link>Rta\ITeleoptiRtaService.cs</Link>
     </Compile>
+    <Compile Include="AbsenceReport\NewAbsenceReportConsumer.cs" />
+    <Compile Include="AbsenceRequest\AbsenceRequestBudgetGroupValidationHelper.cs" />
+    <Compile Include="AbsenceRequest\AbsenceRequestProcessor.cs" />
+    <Compile Include="AbsenceRequest\AbsenceRequestUpdater.cs" />
+    <Compile Include="AbsenceRequest\AbsenceRequestWaitlistProcessor.cs" />
+    <Compile Include="AbsenceRequest\NewAbsenceRequestConsumer.cs" />
     <Compile Include="AgentBadge\AgentBadgeWithRankCalculator.cs" />
-    <Compile Include="AbsenceRequestBudgetGroupValidationHelper.cs" />
     <Compile Include="AgentBadge\AgentBadgeCalculator.cs" />
     <Compile Include="AgentBadge\BadgeCalculationInitConsumer.cs" />
     <Compile Include="AgentBadge\CalculateBadgeConsumer.cs" />
@@ -241,7 +246,6 @@
     <Compile Include="PayrollBusBootStrapper.cs" />
     <Compile Include="Payroll\InitializePayrollFormatsToDb.cs" />
     <Compile Include="Rta\FactQueueUpdatedConsumer.cs" />
-    <Compile Include="NewAbsenceReportConsumer.cs" />
     <Compile Include="NotificationModule.cs" />
     <Compile Include="ServiceBusCommonModule.cs" />
     <Compile Include="ApplicationLayer\EventsConsumer.cs" />
@@ -308,7 +312,6 @@
     <Compile Include="RequestFactory.cs" />
     <Compile Include="BusBootStrapper.cs" />
     <Compile Include="ApplicationLogOnMessageModule.cs" />
-    <Compile Include="NewAbsenceRequestConsumer.cs" />
     <Compile Include="BusinessUnitStarter.cs" />
     <Compile Include="ScheduleIsInvalidSpecification.cs" />
     <Compile Include="SchedulingContainerInstaller.cs" />

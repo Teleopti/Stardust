@@ -7,285 +7,287 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {
-    public class WorkflowControlSet : VersionedAggregateRootWithBusinessUnit, IWorkflowControlSet, IDeleteTag
-    {
-        private string _name = string.Empty;
-        private bool _isDeleted;
-        private IList<IAbsenceRequestOpenPeriod> _absenceRequestOpenPeriods;
-        private ISet<ISkill> _mustMatchSkills;
-        private ISet<IShiftCategory> _allowedPreferenceShiftCategories;
-        private ISet<IDayOffTemplate> _allowedPreferenceDayOffs;
-        private ISet<IAbsence> _allowedPreferenceAbsences;
-        private ISet<IAbsence> _allowedAbsencesForReport;
-        private DateOnly preferencePeriodFromDate;
-        private DateOnly preferencePeriodToDate;
-        private DateOnly preferenceInputFromDate;
-        private DateOnly preferenceInputToDate;
-        private DateOnly studentAvailabilityPeriodFromDate;
-        private DateOnly studentAvailabilityPeriodToDate;
-        private DateOnly studentAvailabilityInputFromDate;
-        private DateOnly studentAvailabilityInputToDate;
-        private bool _autoGrantShiftTradeRequest;
-        private bool _anonymousTrading;
-        private bool _lockTrading;
-        private DateTime? _schedulePublishedToDate;
-        private int? _writeProtection;
-        private TimeSpan _shiftTradeTargetTimeFlexibility;
-        private MinMax<int> _shiftTradeOpenPeriodDaysForward;
-        private IActivity _allowedPreferenceActivity;
-	    private int fairnessTypeAsInt = (int)FairnessType.EqualNumberOfShiftCategory;
+	public class WorkflowControlSet : VersionedAggregateRootWithBusinessUnit, IWorkflowControlSet, IDeleteTag
+	{
+		private string _name = string.Empty;
+		private bool _isDeleted;
+		private IList<IAbsenceRequestOpenPeriod> _absenceRequestOpenPeriods;
+		private ISet<ISkill> _mustMatchSkills;
+		private ISet<IShiftCategory> _allowedPreferenceShiftCategories;
+		private ISet<IDayOffTemplate> _allowedPreferenceDayOffs;
+		private ISet<IAbsence> _allowedPreferenceAbsences;
+		private ISet<IAbsence> _allowedAbsencesForReport;
+		private DateOnly preferencePeriodFromDate;
+		private DateOnly preferencePeriodToDate;
+		private DateOnly preferenceInputFromDate;
+		private DateOnly preferenceInputToDate;
+		private DateOnly studentAvailabilityPeriodFromDate;
+		private DateOnly studentAvailabilityPeriodToDate;
+		private DateOnly studentAvailabilityInputFromDate;
+		private DateOnly studentAvailabilityInputToDate;
+		private bool _autoGrantShiftTradeRequest;
+		private bool _anonymousTrading;
+		private bool _lockTrading;
+		private bool _absenceRequestWaitlistEnabled;
+		private DateTime? _schedulePublishedToDate;
+		private int? _writeProtection;
+		private TimeSpan _shiftTradeTargetTimeFlexibility;
+		private MinMax<int> _shiftTradeOpenPeriodDaysForward;
+		private IActivity _allowedPreferenceActivity;
+		private int fairnessTypeAsInt = (int)FairnessType.EqualNumberOfShiftCategory;
 
-	    public WorkflowControlSet()
-        {
-            _absenceRequestOpenPeriods = new List<IAbsenceRequestOpenPeriod>();
-            _allowedPreferenceShiftCategories = new HashSet<IShiftCategory>();
+		public WorkflowControlSet()
+		{
+			_absenceRequestOpenPeriods = new List<IAbsenceRequestOpenPeriod>();
+			_allowedPreferenceShiftCategories = new HashSet<IShiftCategory>();
 			_allowedPreferenceDayOffs = new HashSet<IDayOffTemplate>();
 			_allowedPreferenceAbsences = new HashSet<IAbsence>();
 			_allowedAbsencesForReport = new HashSet<IAbsence>();
 			_mustMatchSkills = new HashSet<ISkill>();
-            preferencePeriodFromDate = new DateOnly(DateHelper.MinSmallDateTime);
-            preferencePeriodToDate = new DateOnly(DateHelper.MaxSmallDateTime);
-            preferenceInputFromDate = new DateOnly(DateHelper.MinSmallDateTime);
-            preferenceInputToDate = new DateOnly(DateHelper.MaxSmallDateTime);
-            studentAvailabilityPeriodFromDate = new DateOnly(DateHelper.MinSmallDateTime);
-            studentAvailabilityPeriodToDate = new DateOnly(DateHelper.MaxSmallDateTime);
-            studentAvailabilityInputFromDate = new DateOnly(DateHelper.MinSmallDateTime);
-            studentAvailabilityInputToDate = new DateOnly(DateHelper.MaxSmallDateTime);
-        }
-
-        public WorkflowControlSet(string description)
-            : this()
-        {
-            _name = description;
-        }
-
-	    public virtual FairnessType GetFairnessType()
-	    {
-		    return (FairnessType) fairnessTypeAsInt;
-	    }
-
-	    public virtual void SetFairnessType(FairnessType fairnessType)
-		{
-			fairnessTypeAsInt = (int) fairnessType;
+			preferencePeriodFromDate = new DateOnly(DateHelper.MinSmallDateTime);
+			preferencePeriodToDate = new DateOnly(DateHelper.MaxSmallDateTime);
+			preferenceInputFromDate = new DateOnly(DateHelper.MinSmallDateTime);
+			preferenceInputToDate = new DateOnly(DateHelper.MaxSmallDateTime);
+			studentAvailabilityPeriodFromDate = new DateOnly(DateHelper.MinSmallDateTime);
+			studentAvailabilityPeriodToDate = new DateOnly(DateHelper.MaxSmallDateTime);
+			studentAvailabilityInputFromDate = new DateOnly(DateHelper.MinSmallDateTime);
+			studentAvailabilityInputToDate = new DateOnly(DateHelper.MaxSmallDateTime);
 		}
 
-	    public virtual string Name { 
-            get { return _name; } 
-            set { _name = value; } 
-        }
+		public WorkflowControlSet(string description)
+			: this()
+		{
+			_name = description;
+		}
 
-        public virtual IActivity AllowedPreferenceActivity
-        {
-            get { return _allowedPreferenceActivity; }
-            set { _allowedPreferenceActivity = value; }
-        }
+		public virtual FairnessType GetFairnessType()
+		{
+			return (FairnessType)fairnessTypeAsInt;
+		}
 
-        public virtual void AddOpenAbsenceRequestPeriod(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
-        {
-            absenceRequestOpenPeriod.SetParent(this);
-            _absenceRequestOpenPeriods.Add(absenceRequestOpenPeriod);
-        }
+		public virtual void SetFairnessType(FairnessType fairnessType)
+		{
+			fairnessTypeAsInt = (int)fairnessType;
+		}
 
-        public virtual IOpenAbsenceRequestPeriodExtractor GetExtractorForAbsence(IAbsence absence)
-        {
-            return new OpenAbsenceRequestPeriodExtractor(this, absence);
-        }
+		public virtual string Name
+		{
+			get { return _name; }
+			set { _name = value; }
+		}
 
-        public virtual void MovePeriodDown(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
-        {
-            var index = _absenceRequestOpenPeriods.IndexOf(absenceRequestOpenPeriod);
-            if (index < _absenceRequestOpenPeriods.Count - 1)
-            {
-                _absenceRequestOpenPeriods.Remove(absenceRequestOpenPeriod);
-                _absenceRequestOpenPeriods.Insert(index + 1, absenceRequestOpenPeriod);
-            }
-        }
+		public virtual IActivity AllowedPreferenceActivity
+		{
+			get { return _allowedPreferenceActivity; }
+			set { _allowedPreferenceActivity = value; }
+		}
 
-        public virtual void MovePeriodUp(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
-        {
-            var index = _absenceRequestOpenPeriods.IndexOf(absenceRequestOpenPeriod);
-            if (index > 0)
-            {
-                _absenceRequestOpenPeriods.Remove(absenceRequestOpenPeriod);
-                _absenceRequestOpenPeriods.Insert(index - 1, absenceRequestOpenPeriod);
-            }
-        }
+		public virtual void AddOpenAbsenceRequestPeriod(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
+		{
+			absenceRequestOpenPeriod.SetParent(this);
+			_absenceRequestOpenPeriods.Add(absenceRequestOpenPeriod);
+		}
 
-        public virtual int RemoveOpenAbsenceRequestPeriod(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
-        {
-            var orderIndex = _absenceRequestOpenPeriods.IndexOf(absenceRequestOpenPeriod);
-            _absenceRequestOpenPeriods.Remove(absenceRequestOpenPeriod);
+		public virtual IOpenAbsenceRequestPeriodExtractor GetExtractorForAbsence(IAbsence absence)
+		{
+			return new OpenAbsenceRequestPeriodExtractor(this, absence);
+		}
 
-            return orderIndex;
-        }
+		public virtual void MovePeriodDown(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
+		{
+			var index = _absenceRequestOpenPeriods.IndexOf(absenceRequestOpenPeriod);
+			if (index < _absenceRequestOpenPeriods.Count - 1)
+			{
+				_absenceRequestOpenPeriods.Remove(absenceRequestOpenPeriod);
+				_absenceRequestOpenPeriods.Insert(index + 1, absenceRequestOpenPeriod);
+			}
+		}
 
-        public virtual void InsertPeriod(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod, int orderIndex)
-        {
-            absenceRequestOpenPeriod.SetParent(this);
-            _absenceRequestOpenPeriods.Insert(orderIndex, absenceRequestOpenPeriod);
-        }
+		public virtual void MovePeriodUp(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
+		{
+			var index = _absenceRequestOpenPeriods.IndexOf(absenceRequestOpenPeriod);
+			if (index > 0)
+			{
+				_absenceRequestOpenPeriods.Remove(absenceRequestOpenPeriod);
+				_absenceRequestOpenPeriods.Insert(index - 1, absenceRequestOpenPeriod);
+			}
+		}
 
-        public virtual ReadOnlyCollection<IAbsenceRequestOpenPeriod> AbsenceRequestOpenPeriods { get { return new ReadOnlyCollection<IAbsenceRequestOpenPeriod>(_absenceRequestOpenPeriods); } }
+		public virtual int RemoveOpenAbsenceRequestPeriod(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
+		{
+			var orderIndex = _absenceRequestOpenPeriods.IndexOf(absenceRequestOpenPeriod);
+			_absenceRequestOpenPeriods.Remove(absenceRequestOpenPeriod);
 
-        public virtual bool IsDeleted { get { return _isDeleted; } }
+			return orderIndex;
+		}
 
-        public virtual void SetDeleted()
-        {
-            _isDeleted = true;
-        }
+		public virtual void InsertPeriod(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod, int orderIndex)
+		{
+			absenceRequestOpenPeriod.SetParent(this);
+			_absenceRequestOpenPeriods.Insert(orderIndex, absenceRequestOpenPeriod);
+		}
 
-        public virtual object Clone()
-        {
-            return NoneEntityClone();
-        }
+		public virtual ReadOnlyCollection<IAbsenceRequestOpenPeriod> AbsenceRequestOpenPeriods { get { return new ReadOnlyCollection<IAbsenceRequestOpenPeriod>(_absenceRequestOpenPeriods); } }
 
-        public virtual IWorkflowControlSet NoneEntityClone()
-        {
-            var clone = EntityCloneInternal(p => p.NoneEntityClone());
-            clone.SetId(null);
-            return clone;
-        }
+		public virtual bool IsDeleted { get { return _isDeleted; } }
 
-        private IWorkflowControlSet EntityCloneInternal(Func<IAbsenceRequestOpenPeriod,IAbsenceRequestOpenPeriod> periodCreator)
-        {
-            var clone = (WorkflowControlSet)MemberwiseClone();
-            clone._absenceRequestOpenPeriods = new List<IAbsenceRequestOpenPeriod>();
-            foreach (var openPeriod in _absenceRequestOpenPeriods)
-            {
-                var periodClone = periodCreator(openPeriod);
-                periodClone.SetParent(clone);
-                clone._absenceRequestOpenPeriods.Add(periodClone);
-            }
-	        clone._allowedPreferenceDayOffs = new HashSet<IDayOffTemplate>(_allowedPreferenceDayOffs);
-	        clone._allowedPreferenceShiftCategories = new HashSet<IShiftCategory>(_allowedPreferenceShiftCategories);
-	        clone._allowedPreferenceAbsences = new HashSet<IAbsence>(_allowedPreferenceAbsences);
+		public virtual void SetDeleted()
+		{
+			_isDeleted = true;
+		}
+
+		public virtual object Clone()
+		{
+			return NoneEntityClone();
+		}
+
+		public virtual IWorkflowControlSet NoneEntityClone()
+		{
+			var clone = EntityCloneInternal(p => p.NoneEntityClone());
+			clone.SetId(null);
+			return clone;
+		}
+
+		private IWorkflowControlSet EntityCloneInternal(Func<IAbsenceRequestOpenPeriod, IAbsenceRequestOpenPeriod> periodCreator)
+		{
+			var clone = (WorkflowControlSet)MemberwiseClone();
+			clone._absenceRequestOpenPeriods = new List<IAbsenceRequestOpenPeriod>();
+			foreach (var openPeriod in _absenceRequestOpenPeriods)
+			{
+				var periodClone = periodCreator(openPeriod);
+				periodClone.SetParent(clone);
+				clone._absenceRequestOpenPeriods.Add(periodClone);
+			}
+			clone._allowedPreferenceDayOffs = new HashSet<IDayOffTemplate>(_allowedPreferenceDayOffs);
+			clone._allowedPreferenceShiftCategories = new HashSet<IShiftCategory>(_allowedPreferenceShiftCategories);
+			clone._allowedPreferenceAbsences = new HashSet<IAbsence>(_allowedPreferenceAbsences);
 			clone._allowedAbsencesForReport = new HashSet<IAbsence>(_allowedAbsencesForReport);
-	        clone._mustMatchSkills = new HashSet<ISkill>(_mustMatchSkills);
-            return clone;
-        }
+			clone._mustMatchSkills = new HashSet<ISkill>(_mustMatchSkills);
+			return clone;
+		}
 
-        public virtual IWorkflowControlSet EntityClone()
-        {
-            return EntityCloneInternal(p => p.EntityClone());
-        }
+		public virtual IWorkflowControlSet EntityClone()
+		{
+			return EntityCloneInternal(p => p.EntityClone());
+		}
 
-        public virtual DateTime? SchedulePublishedToDate
-        {
-            get { return _schedulePublishedToDate; }
-            set { _schedulePublishedToDate = value; }
-        }
+		public virtual DateTime? SchedulePublishedToDate
+		{
+			get { return _schedulePublishedToDate; }
+			set { _schedulePublishedToDate = value; }
+		}
 
-        public virtual DateOnlyPeriod PreferencePeriod
-        {
-            get { return new DateOnlyPeriod(preferencePeriodFromDate, preferencePeriodToDate); }
-            set
-            {
-                preferencePeriodFromDate = value.StartDate;
-                preferencePeriodToDate = value.EndDate;
-            }
-        }
+		public virtual DateOnlyPeriod PreferencePeriod
+		{
+			get { return new DateOnlyPeriod(preferencePeriodFromDate, preferencePeriodToDate); }
+			set
+			{
+				preferencePeriodFromDate = value.StartDate;
+				preferencePeriodToDate = value.EndDate;
+			}
+		}
 
-        public virtual DateOnlyPeriod PreferenceInputPeriod
-        {
-            get { return new DateOnlyPeriod(preferenceInputFromDate, preferenceInputToDate); }
-            set
-            {
-                preferenceInputFromDate = value.StartDate;
-                preferenceInputToDate = value.EndDate;
-            }
-        }
+		public virtual DateOnlyPeriod PreferenceInputPeriod
+		{
+			get { return new DateOnlyPeriod(preferenceInputFromDate, preferenceInputToDate); }
+			set
+			{
+				preferenceInputFromDate = value.StartDate;
+				preferenceInputToDate = value.EndDate;
+			}
+		}
 
-        public virtual DateOnlyPeriod StudentAvailabilityPeriod
-        {
-            get { return new DateOnlyPeriod(studentAvailabilityPeriodFromDate, studentAvailabilityPeriodToDate); }
-            set
-            {
-                studentAvailabilityPeriodFromDate = value.StartDate;
-                studentAvailabilityPeriodToDate = value.EndDate;
-            }
-        }
+		public virtual DateOnlyPeriod StudentAvailabilityPeriod
+		{
+			get { return new DateOnlyPeriod(studentAvailabilityPeriodFromDate, studentAvailabilityPeriodToDate); }
+			set
+			{
+				studentAvailabilityPeriodFromDate = value.StartDate;
+				studentAvailabilityPeriodToDate = value.EndDate;
+			}
+		}
 
-        public virtual DateOnlyPeriod StudentAvailabilityInputPeriod
-        {
-            get { return new DateOnlyPeriod(studentAvailabilityInputFromDate, studentAvailabilityInputToDate); }
-            set
-            {
-                studentAvailabilityInputFromDate = value.StartDate;
-                studentAvailabilityInputToDate = value.EndDate;
-            }
-        }
+		public virtual DateOnlyPeriod StudentAvailabilityInputPeriod
+		{
+			get { return new DateOnlyPeriod(studentAvailabilityInputFromDate, studentAvailabilityInputToDate); }
+			set
+			{
+				studentAvailabilityInputFromDate = value.StartDate;
+				studentAvailabilityInputToDate = value.EndDate;
+			}
+		}
 
-        public virtual int? WriteProtection
-        {
-            get { return _writeProtection; }
-            set { _writeProtection = value; }
-        }
+		public virtual int? WriteProtection
+		{
+			get { return _writeProtection; }
+			set { _writeProtection = value; }
+		}
 
-        public virtual TimeSpan ShiftTradeTargetTimeFlexibility
-        {
-            get { return _shiftTradeTargetTimeFlexibility; }
-            set { _shiftTradeTargetTimeFlexibility = value; }
-        }
+		public virtual TimeSpan ShiftTradeTargetTimeFlexibility
+		{
+			get { return _shiftTradeTargetTimeFlexibility; }
+			set { _shiftTradeTargetTimeFlexibility = value; }
+		}
 
-	    public virtual IEnumerable<ISkill> MustMatchSkills { get { return _mustMatchSkills; } }
+		public virtual IEnumerable<ISkill> MustMatchSkills { get { return _mustMatchSkills; } }
 
-        public virtual void AddSkillToMatchList(ISkill skill)
-        {
-            if (!_mustMatchSkills.Contains(skill))
-                _mustMatchSkills.Add(skill);
-        }
+		public virtual void AddSkillToMatchList(ISkill skill)
+		{
+			if (!_mustMatchSkills.Contains(skill))
+				_mustMatchSkills.Add(skill);
+		}
 
-        public virtual void RemoveSkillFromMatchList(ISkill skill)
-        {
-            if (_mustMatchSkills.Contains(skill))
-                _mustMatchSkills.Remove(skill);
-        }
+		public virtual void RemoveSkillFromMatchList(ISkill skill)
+		{
+			if (_mustMatchSkills.Contains(skill))
+				_mustMatchSkills.Remove(skill);
+		}
 
-        public virtual MinMax<int> ShiftTradeOpenPeriodDaysForward
-        {
-            get { return _shiftTradeOpenPeriodDaysForward; }
-            set { _shiftTradeOpenPeriodDaysForward = value; }
-        }
+		public virtual MinMax<int> ShiftTradeOpenPeriodDaysForward
+		{
+			get { return _shiftTradeOpenPeriodDaysForward; }
+			set { _shiftTradeOpenPeriodDaysForward = value; }
+		}
 
-        public virtual void AddAllowedPreferenceShiftCategory(IShiftCategory shiftCategory)
-        {
-            _allowedPreferenceShiftCategories.Add(shiftCategory);
-        }
+		public virtual void AddAllowedPreferenceShiftCategory(IShiftCategory shiftCategory)
+		{
+			_allowedPreferenceShiftCategories.Add(shiftCategory);
+		}
 
-        public virtual void RemoveAllowedPreferenceShiftCategory(IShiftCategory shiftCategory)
-        {
-            if (_allowedPreferenceShiftCategories.Contains(shiftCategory))
-                _allowedPreferenceShiftCategories.Remove(shiftCategory);
-        }
+		public virtual void RemoveAllowedPreferenceShiftCategory(IShiftCategory shiftCategory)
+		{
+			if (_allowedPreferenceShiftCategories.Contains(shiftCategory))
+				_allowedPreferenceShiftCategories.Remove(shiftCategory);
+		}
 
-        public virtual IEnumerable<IShiftCategory> AllowedPreferenceShiftCategories
-        {
-            get { return _allowedPreferenceShiftCategories; }
+		public virtual IEnumerable<IShiftCategory> AllowedPreferenceShiftCategories
+		{
+			get { return _allowedPreferenceShiftCategories; }
 			set { _allowedPreferenceShiftCategories = new HashSet<IShiftCategory>(new List<IShiftCategory>(value)); }
 		}
 
-        public virtual void AddAllowedPreferenceDayOff(IDayOffTemplate dayOff)
-        {
-            _allowedPreferenceDayOffs.Add(dayOff);
-        }
+		public virtual void AddAllowedPreferenceDayOff(IDayOffTemplate dayOff)
+		{
+			_allowedPreferenceDayOffs.Add(dayOff);
+		}
 
-        public virtual void RemoveAllowedPreferenceDayOff(IDayOffTemplate dayOff)
-        {
-            if (_allowedPreferenceDayOffs.Contains(dayOff))
-                _allowedPreferenceDayOffs.Remove(dayOff);
-        }
+		public virtual void RemoveAllowedPreferenceDayOff(IDayOffTemplate dayOff)
+		{
+			if (_allowedPreferenceDayOffs.Contains(dayOff))
+				_allowedPreferenceDayOffs.Remove(dayOff);
+		}
 
-        public virtual IEnumerable<IDayOffTemplate> AllowedPreferenceDayOffs
-        {
-            get { return _allowedPreferenceDayOffs; }
+		public virtual IEnumerable<IDayOffTemplate> AllowedPreferenceDayOffs
+		{
+			get { return _allowedPreferenceDayOffs; }
 			set { _allowedPreferenceDayOffs = new HashSet<IDayOffTemplate>(new List<IDayOffTemplate>(value)); }
 		}
 
-        public virtual bool AutoGrantShiftTradeRequest
-        {
-            get { return _autoGrantShiftTradeRequest; }
-            set { _autoGrantShiftTradeRequest = value; }
-        }
+		public virtual bool AutoGrantShiftTradeRequest
+		{
+			get { return _autoGrantShiftTradeRequest; }
+			set { _autoGrantShiftTradeRequest = value; }
+		}
 
 		public virtual bool AnonymousTrading
 		{
@@ -293,22 +295,22 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			set { _anonymousTrading = value; }
 		}
 
-	    public virtual IEnumerable<IAbsence> AllowedPreferenceAbsences
-        {
-            get { return _allowedPreferenceAbsences; }
+		public virtual IEnumerable<IAbsence> AllowedPreferenceAbsences
+		{
+			get { return _allowedPreferenceAbsences; }
 			set { _allowedPreferenceAbsences = new HashSet<IAbsence>(new List<IAbsence>(value)); }
-        }
+		}
 
-        public virtual void AddAllowedPreferenceAbsence(IAbsence absence)
-        {
-            _allowedPreferenceAbsences.Add(absence);
-        }
+		public virtual void AddAllowedPreferenceAbsence(IAbsence absence)
+		{
+			_allowedPreferenceAbsences.Add(absence);
+		}
 
-        public virtual void RemoveAllowedPreferenceAbsence(IAbsence absence)
-        {
-            if(_allowedPreferenceAbsences.Contains(absence))
-            _allowedPreferenceAbsences.Remove(absence);
-        }
+		public virtual void RemoveAllowedPreferenceAbsence(IAbsence absence)
+		{
+			if (_allowedPreferenceAbsences.Contains(absence))
+				_allowedPreferenceAbsences.Remove(absence);
+		}
 
 		public virtual IEnumerable<IAbsence> AllowedAbsencesForReport
 		{
@@ -322,7 +324,13 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			set { _lockTrading = value; }
 		}
 
-	    public virtual void AddAllowedAbsenceForReport(IAbsence absence)
+		public virtual bool AbsenceRequestWaitlistEnabled
+		{
+			get { return _absenceRequestWaitlistEnabled; }
+			set { _absenceRequestWaitlistEnabled = value; }
+		}
+
+		public virtual void AddAllowedAbsenceForReport(IAbsence absence)
 		{
 			_allowedAbsencesForReport.Add(absence);
 		}
@@ -332,5 +340,32 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			if (_allowedAbsencesForReport.Contains(absence))
 				_allowedAbsencesForReport.Remove(absence);
 		}
-    }
+
+		public virtual bool WaitlistingIsEnabled(IAbsenceRequest absenceRequest)
+		{
+			if (AbsenceRequestWaitlistEnabled)
+			{
+				return GetMergedAbsenceRequestOpenPeriod(absenceRequest).AbsenceRequestProcess is GrantAbsenceRequest;
+			}
+
+			return false;
+		}
+
+		public virtual IAbsenceRequestOpenPeriod GetMergedAbsenceRequestOpenPeriod(IAbsenceRequest absenceRequest)
+		{
+			var agentTimeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
+			var dateOnlyPeriod = absenceRequest.Period.ToDateOnlyPeriod(agentTimeZone);
+
+			return getMergedOpenPeriods(absenceRequest, dateOnlyPeriod);
+		}
+
+		private IAbsenceRequestOpenPeriod getMergedOpenPeriods(IAbsenceRequest absenceRequest, DateOnlyPeriod dateOnlyPeriod)
+		{
+			var extractor = GetExtractorForAbsence(absenceRequest.Absence);
+			extractor.ViewpointDate = DateOnly.Today;
+
+			var openPeriods = extractor.Projection.GetProjectedPeriods(dateOnlyPeriod, absenceRequest.Person.PermissionInformation.Culture());
+			return new AbsenceRequestOpenPeriodMerger().Merge(openPeriods);
+		}
+	}
 }
