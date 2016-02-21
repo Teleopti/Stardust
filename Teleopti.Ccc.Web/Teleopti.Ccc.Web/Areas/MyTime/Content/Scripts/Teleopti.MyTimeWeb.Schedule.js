@@ -53,28 +53,41 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 	}
 
-	function _shouldApplyDaylightSavingAdjustment(time) {
+	function _ensureDST(userTime) {
+		//whether in DST is judged in UTC time
+
 		if (daylightSavingAdjustment != null) {
-			var daylightSavingStart = moment(daylightSavingAdjustment.StartDateTime);
-			var daylightSavingEnd = moment(daylightSavingAdjustment.EndDateTime);
-			var period = { start: daylightSavingStart, end: daylightSavingEnd };
+			var userTimestamp = userTime.valueOf();
+			var dstStartTimestamp = moment(daylightSavingAdjustment.StartDateTime + '+00:00').valueOf();
+			var dstEndTimestamp = moment(daylightSavingAdjustment.EndDateTime + '+00:00').add(-daylightSavingAdjustment.AdjustmentOffsetInMinutes, 'minutes').valueOf();// EndDateTime has DST
 
-			if (daylightSavingStart < daylightSavingEnd) {
-				return _isTheTimeWithinThePeriod(time, period);
-			} else {
-				return _isTheTimeBeyondThePeriod(time, period);
+			if (dstStartTimestamp < dstEndTimestamp) {
+				if (dstStartTimestamp < userTimestamp && userTimestamp < dstEndTimestamp) {
+					adjustToDST(userTime);
+				} else {
+					resetToUserTimeWithoutDST(userTime);
+				}
+			} else { // for DST like Brasilia
+				if (userTimestamp < dstEndTimestamp) {
+					adjustToDST(userTime);
+				} else if (dstEndTimestamp <= userTimestamp && userTimestamp <= dstStartTimestamp) {
+					resetToUserTimeWithoutDST(userTime);
+				}
+				else {
+					adjustToDST(userTime);
+				}
 			}
+
 		}
-		return false;
 	};
 
-	function _isTheTimeWithinThePeriod(time, period) {
-		return period.start <= time && time <= period.end;
-	};
+	function adjustToDST(userTime) {
+		userTime.zone(-daylightSavingAdjustment.AdjustmentOffsetInMinutes - baseUtcOffsetInMinutes);
+	}
 
-	function _isTheTimeBeyondThePeriod(time, period) {
-		return time <= period.end || period.start <= time;
-	};
+	function resetToUserTimeWithoutDST(userTime) {
+		userTime.zone(-baseUtcOffsetInMinutes);
+	}
 
 	function getTeleoptiUtcMomentTimeForScenarioTest() {
 		var teleoptiTimeString = moment(Date.prototype.getTeleoptiTime());
@@ -85,17 +98,15 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	function _startUpTimeIndicator() {
 		setInterval(function () {
 
-			var currentDateTime = Date.prototype.getTeleoptiTimeChangedByScenario === true
+			var currentUserDateTime = Date.prototype.getTeleoptiTimeChangedByScenario === true
 								? getTeleoptiUtcMomentTimeForScenarioTest().utc().add(baseUtcOffsetInMinutes, 'minutes')
-								: moment().utc().add(baseUtcOffsetInMinutes, 'minutes');
+								: moment().zone(-baseUtcOffsetInMinutes);//work in user timezone, just make life easier
 
 
-			if (_shouldApplyDaylightSavingAdjustment(currentDateTime)) {
-				currentDateTime.add(daylightSavingAdjustment.AdjustmentOffsetInMinutes, 'minutes');
-			}
+			_ensureDST(currentUserDateTime);
 
-			if (timeIndicatorDateTime == undefined || currentDateTime.minutes() != timeIndicatorDateTime.minutes()) {
-				timeIndicatorDateTime = currentDateTime;
+			if (timeIndicatorDateTime == undefined || currentUserDateTime.minutes() != timeIndicatorDateTime.minutes()) {
+				timeIndicatorDateTime = currentUserDateTime;
 				_setTimeIndicator(timeIndicatorDateTime);
 			}
 
