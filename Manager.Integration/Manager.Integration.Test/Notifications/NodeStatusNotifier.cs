@@ -9,13 +9,13 @@ namespace Manager.Integration.Test.Notifications
     {
         public string ConnectionString { get; set; }
 
-        public ManualResetEventSlim NotifyWhenNodeStarted { get; set; }
+        public ManualResetEventSlim JobDefinitionStatusNotify { get; set; }
 
         public NodeStatusNotifier(string connectionString)
         {
             ConnectionString = connectionString;
 
-            NotifyWhenNodeStarted = new ManualResetEventSlim();
+            JobDefinitionStatusNotify = new ManualResetEventSlim();
         }
 
         private CancellationTokenSource CancellationTokenSource { get; set; }
@@ -48,13 +48,13 @@ namespace Manager.Integration.Test.Notifications
                                                         status);
 
                         while (!cancellationTokenSource.IsCancellationRequested &&
-                               !NotifyWhenNodeStarted.IsSet)
+                               !JobDefinitionStatusNotify.IsSet)
                         {
                             int numberOfRows = (int) command.ExecuteScalar();
 
                             if (numberOfRows == 1)
                             {
-                                NotifyWhenNodeStarted.Set();
+                                JobDefinitionStatusNotify.Set();
                             }
 
                             Thread.Sleep(TimeSpan.FromSeconds(1));

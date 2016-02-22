@@ -168,7 +168,7 @@ namespace ManagerTest
                 .Contain(_nodeUri1.ToString());
         }
 
-        [Test, Ignore]  //Don't do it this way anymore
+        [Test]  //Don't do it this way anymore
         public void ShouldDistributePersistedJobsOnHeartbeat()
         {
             string userName = "ManagerTests";
@@ -182,7 +182,7 @@ namespace ManagerTest
             Target.NodeInitialized(_nodeUri1);
             Target.Heartbeat(_nodeUri1);
             HttpSender.CalledNodes.Count.Should()
-                .Be.EqualTo(2);
+                .Be.EqualTo(1);
         }
 
         [Test]

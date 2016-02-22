@@ -149,7 +149,7 @@ namespace Stardust.Node.Workers
                 PingToManagerTimer.Interval = 30000;
 
                 LogHelper.LogDebugWithLineNumber(Logger,
-                                                "Ping to manager interval is now set to go every " +  (PingToManagerTimer.Interval /10000) + " seconds during job execution." );
+                                                "Ping to manager interval is now set to go every " +  (PingToManagerTimer.Interval /1000) + " seconds during job execution." );
 
                 Handler.Invoke(deSer,
                                CancellationTokenSource,
@@ -163,7 +163,7 @@ namespace Stardust.Node.Workers
                 PingToManagerTimer.Interval = 10000;
 
                 LogHelper.LogDebugWithLineNumber(Logger,
-                                                "Ping to manager interval is now set to go every " + (PingToManagerTimer.Interval / 10000) + " seconds when node is idle.");
+                                                "Ping to manager interval is now set to go every " + (PingToManagerTimer.Interval / 1000) + " seconds when node is idle.");
 
 
                 string logInfo = null;
@@ -286,7 +286,8 @@ namespace Stardust.Node.Workers
                 TrySendStatusToManagerTimer.Stop();
 
                 // Remove event handler.
-                TrySendStatusToManagerTimer.TrySendStatusSucceded -= TrySendStatusToManagerTimer_TrySendStatusSucceded;
+                TrySendStatusToManagerTimer.TrySendStatusSucceded -= 
+                    TrySendStatusToManagerTimer_TrySendStatusSucceded;
 
                 TrySendStatusToManagerTimer = null;
             }
@@ -298,7 +299,8 @@ namespace Stardust.Node.Workers
 
                 TrySendStatusToManagerTimer.JobToDo = jobToDo;
 
-                TrySendStatusToManagerTimer.TrySendStatusSucceded += TrySendStatusToManagerTimer_TrySendStatusSucceded;
+                TrySendStatusToManagerTimer.TrySendStatusSucceded += 
+                    TrySendStatusToManagerTimer_TrySendStatusSucceded;
 
                 TrySendStatusToManagerTimer.Start();
             }

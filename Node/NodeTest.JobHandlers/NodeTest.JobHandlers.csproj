@@ -55,10 +55,14 @@
     <Compile Include="FailingJobCode.cs" />
     <Compile Include="FailingJobParams.cs" />
     <Compile Include="LongRunningJobParams.cs" />
+    <Compile Include="FastJobCode.cs" />
+    <Compile Include="FastJobParams.cs" />
     <Compile Include="TestJobParams.cs" />
+    <Compile Include="FastJobProgress.cs" />
     <Compile Include="TestJobProgress.cs" />
     <Compile Include="TestJobCode.cs" />
     <Compile Include="FailingJobWorker.cs" />
+    <Compile Include="FastJobWorker.cs" />
     <Compile Include="TestJobWorker.cs" />
     <Compile Include="WorkerModule.cs" />
   </ItemGroup>

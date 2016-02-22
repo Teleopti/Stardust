@@ -95,7 +95,7 @@
                               HorizontalGridLinesBrush="#FFF5EFEF"
                               VerticalGridLinesBrush="#FFF5EFEF"
                               IsReadOnly="True"
-                              RowDetailsVisibilityMode="Collapsed"
+                              RowDetailsVisibilityMode="VisibleWhenSelected"
                               CanUserDeleteRows="False"
                               Grid.Row="1">
 
@@ -130,6 +130,17 @@
                         </DataGrid.LayoutTransform>
 
                         <DataGrid.Columns>
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Expander IsExpanded="True"
+                                                  Expanded="Expander_OnExpanded"
+                                                  Collapsed="Expander_OnCollapsed">
+                                        </Expander>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            
                             <DataGridTextColumn Header="Row">
                                 <DataGridTextColumn.Binding>
                                     <MultiBinding Converter="{StaticResource RowNumberConverter}">
@@ -139,8 +150,8 @@
                                 </DataGridTextColumn.Binding>
                             </DataGridTextColumn>
 
-                            <DataGridTextColumn Binding="{Binding Date, StringFormat=yyyy-mm-dd hh:mm:ss}"
-                                                ClipboardContentBinding="{Binding Date, StringFormat=yyyy-mm-dd hh:mm:ss}"
+                            <DataGridTextColumn Binding="{Binding Date, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                ClipboardContentBinding="{Binding Date, StringFormat=yyyy-MM-dd HH:mm:ss}"
                                                 Header="Date" />
 
                             <DataGridTextColumn Binding="{Binding Message}"
@@ -160,6 +171,74 @@
                                                 Header="Exception" />
 
                         </DataGrid.Columns>
+
+                        <DataGrid.RowDetailsTemplate>
+                            <DataTemplate>
+                                <Grid Background="#FFD5F5F5"
+                                      Margin="10,10,10,10"
+                                      ShowGridLines="False">
+                                    <Grid.Effect>
+                                        <DropShadowEffect Color="#FFECDDDD" />
+                                    </Grid.Effect>
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="5" />
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="5" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="5" />
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="5" />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Column="1"
+                                               Grid.Row="1">Date</TextBlock>
+
+                                    <TextBlock Grid.Column="2"
+                                               Grid.Row="1"
+                                               Text="{Binding Date, StringFormat=yyyy-MM-dd HH:mm:ss}"/>
+
+                                    <TextBlock Grid.Column="1"
+                                               Grid.Row="2">Message</TextBlock>
+
+                                    <TextBlock Grid.Column="2"
+                                               Grid.Row="2" 
+                                               TextWrapping="Wrap"
+                                               Text="{Binding Message}" />
+
+                                    <TextBlock Grid.Column="1"
+                                               Grid.Row="3">Logger</TextBlock>
+
+                                    <TextBlock Grid.Column="2"
+                                               Grid.Row="3"
+                                               Text="{Binding Logger}" />
+
+                                    <TextBlock Grid.Column="1"
+                                               Grid.Row="4">Level</TextBlock>
+
+                                    <TextBlock Grid.Column="2"
+                                               Grid.Row="4"
+                                               Text="{Binding Level}" />
+
+                                    <TextBlock Grid.Column="1"
+                                               Grid.Row="5">Exception</TextBlock>
+
+                                    <TextBlock Grid.Column="2"
+                                               Grid.Row="5"
+                                               TextWrapping="Wrap"
+                                               Text="{Binding Exception}" />
+
+
+                                </Grid>
+                            </DataTemplate>
+                        </DataGrid.RowDetailsTemplate>
                     </DataGrid>
                     <Slider Grid.Row="0"
                             x:Name="UiScaleSlider"
@@ -194,7 +273,7 @@
                                 </Style.Triggers>
                             </Style>
                         </DataGrid.RowStyle>
-                        
+
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Row">
                                 <DataGridTextColumn.Binding>
@@ -220,7 +299,7 @@
                             <DataGridTextColumn Binding="{Binding CreatedBy}"
                                                 ClipboardContentBinding="{Binding CreatedBy}"
                                                 Header="Created By" />
-                            
+
                             <DataGridTextColumn Binding="{Binding Result}"
                                                 ClipboardContentBinding="{Binding Result}"
                                                 Header="Result" />
@@ -333,7 +412,8 @@
         </TabControl>
         <Button x:Name="Button"
                 Content="Clear Logging Table"
-                Grid.Row="0" Grid.Column="4"
+                Grid.Row="0"
+                Grid.Column="4"
                 Command="{Binding ClearDatabaseCommand}"
                 d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin" />
         <ToggleButton x:Name="ToggleButton"
