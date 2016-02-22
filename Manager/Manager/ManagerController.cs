@@ -66,12 +66,13 @@ namespace Stardust.Manager
         }
 
         [HttpDelete, Route(ManagerRouteConstants.CancelJob)]
-        public void CancelThisJob(Guid jobId)
+        public IHttpActionResult CancelThisJob(Guid jobId)
         {
             LogHelper.LogInfoWithLineNumber(Logger,
                 WhoAmI + ": Received job cancel from client ( jobId ) : ( " + jobId + " )");
 
             _jobManager.CancelThisJob(jobId);
+	        return Ok();
         }
 
         [HttpGet, Route(ManagerRouteConstants.GetJobHistoryList)]

@@ -142,8 +142,7 @@ namespace Manager.Integration.Test.Helpers
                         LogHelper.LogInfoWithLineNumber("Start calling delete async. Uri ( " + uri + " ). Job id : ( " + guid + " )",
                                                         Logger);
 
-                        var response = await client.DeleteAsync(uri,
-                                                                CancellationTokenSource.Token);
+                        var response = await client.DeleteAsync(uri);
 
                         DeleteJobToManagerSucceeded = response.IsSuccessStatusCode;
 

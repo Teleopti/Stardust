@@ -372,7 +372,7 @@ namespace Manager.Integration.Test
             StartJobTaskHelper startJobTaskHelper = new StartJobTaskHelper();
 
             var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
-                                                                      CancellationTokenSource,
+                                                                      new CancellationTokenSource(), 
                                                                       timeout);
 
             checkJobHistoryStatusTimer.GuidAddedEventHandler += (sender,
@@ -386,7 +386,7 @@ namespace Manager.Integration.Test
 
                 nodeStartedNotifier.StartJobDefinitionStatusNotifier(args.Guid,
                                                                      "Started",
-                                                                     CancellationTokenSource);
+																	 new CancellationTokenSource());
 
                 nodeStartedNotifier.JobDefinitionStatusNotify.Wait(timeout);
 
