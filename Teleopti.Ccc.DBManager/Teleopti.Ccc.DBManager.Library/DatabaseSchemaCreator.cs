@@ -32,7 +32,10 @@ namespace Teleopti.Ccc.DBManager.Library
 			applyReleases(databaseType);
 			applyProgrammability(databaseType);
 			if (databaseType == DatabaseType.TeleoptiAnalytics)
+			{
 				_executeSql.ExecuteCustom(c => new HangfireSchemaCreator().ApplyHangfire(c));
+				_executeSql.ExecuteCustom(c => new SignalRSqlBackplaneSchemaCreator().ApplySignalRSqlBackplane(c));
+			}
 			addInstallLogRow();
 		}
 
