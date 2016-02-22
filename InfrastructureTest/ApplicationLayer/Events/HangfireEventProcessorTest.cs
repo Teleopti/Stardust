@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -11,7 +8,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -35,7 +31,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			system.AddService<AHandler>();
 			system.AddService<AnotherHandler>();
 			system.AddService<AspectedHandler>();
-			system.AddService<NonConcurrenctSafeHandler>();
 		}
 
 		[Test]
@@ -70,26 +65,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 			Aspected.HandledEvents.Single().Should().Be.OfType<AnEvent>();
 		}
-
-		[Test]
-		public void ShouldNotPublishToSameHandlerInParallel()
-		{
-			Action job = () =>
-			{
-				10.Times(() =>
-				{
-					Target.Process(null, null, typeof (AnEvent).AssemblyQualifiedName, "{}", typeof (NonConcurrenctSafeHandler).AssemblyQualifiedName);
-				});
-			};
-			var worker1 = Task.Factory.StartNew(job);
-			var worker2 = Task.Factory.StartNew(job);
-
-			Exceptions.Ignore(async () => await Task.WhenAll(worker1, worker2));
-
-			worker1.Exception.Should().Be.Null();
-			worker2.Exception.Should().Be.Null();
-		}
-
+		
 		[Test]
 		public void ShouldAcceptTypeNameWithoutVersionCultureAndPublicKeyToken()
 		{
@@ -157,20 +133,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 				HandledEvents.Add(@event);
 			}
 		}
-
-		public class NonConcurrenctSafeHandler : IHandleEvent<AnEvent>, IRunOnHangfire
-		{
-			private bool _isHandling = false;
-
-			public void Handle(AnEvent @event)
-			{
-				if (_isHandling)
-					throw new Exception("Please dont execute me in parallel! >:-[");
-				_isHandling = true;
-				Thread.Sleep(10); // do some work
-				_isHandling = false;
-			}
-		}
-
+		
 	}
 }

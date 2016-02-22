@@ -88,6 +88,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			loaded.AlarmColor.ToArgb().Should().Be(Color.AntiqueWhite.ToArgb());
 		}
-
+		
 	}
 }
