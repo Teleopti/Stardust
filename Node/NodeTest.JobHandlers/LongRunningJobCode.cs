@@ -80,7 +80,7 @@ namespace NodeTest.JobHandlers
                 }
 
 
-                Thread.Sleep(TimeSpan.FromSeconds(5));
+                Thread.Sleep(TimeSpan.FromSeconds(10));
             }
 
             progressMessage = 

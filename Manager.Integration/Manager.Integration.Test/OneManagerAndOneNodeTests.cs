@@ -198,9 +198,10 @@ namespace Manager.Integration.Test
                     jobManagerTaskCreator.StartAndWaitDeleteJobToManagerTask(timeout);
 
                     nodeStartedNotifier.Dispose();
+
                     jobManagerTaskCreator.Dispose();
                 },
-                                      CancellationTokenSource.Token);
+                CancellationTokenSource.Token);
             };
 
             checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
