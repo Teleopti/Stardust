@@ -100,7 +100,7 @@ namespace NodeConsoleHost
         private static void CurrentDomain_DomainUnload(object sender,
                                                        EventArgs e)
         {
-            LogHelper.LogInfoWithLineNumber(Logger,
+            LogHelper.LogDebugWithLineNumber(Logger,
                                             WhoAmI + " : CurrentDomain_DomainUnload called.");
             
             if (NodeStarter != null)

@@ -42,7 +42,7 @@ namespace Stardust.Manager
 
         public List<WorkerNode> LoadAll()
         {
-            LogHelper.LogInfoWithLineNumber(Logger,"Start LoadAll.");
+            LogHelper.LogDebugWithLineNumber(Logger,"Start LoadAll.");
 
             const string selectCommand = @"SELECT  Id ,Url FROM [Stardust].WorkerNodes";
 
@@ -80,21 +80,21 @@ namespace Stardust.Manager
 
             if (listToReturn != null && listToReturn.Any())
             {
-                LogHelper.LogInfoWithLineNumber(Logger, "Found ( " + listToReturn.Count + " ) availabe nodes.");
+                LogHelper.LogDebugWithLineNumber(Logger, "Found ( " + listToReturn.Count + " ) availabe nodes.");
             }
             else
             {
-                LogHelper.LogInfoWithLineNumber(Logger, "No nodes found.");
+                LogHelper.LogDebugWithLineNumber(Logger, "No nodes found.");
             }
 
-            LogHelper.LogInfoWithLineNumber(Logger, "Finished LoadAll.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Finished LoadAll.");
 
             return listToReturn;
         }
 
         public List<WorkerNode> LoadAllFreeNodes()
         {
-            LogHelper.LogInfoWithLineNumber(Logger, "Start LoadAllFreeNodes.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Start LoadAllFreeNodes.");
 
             const string selectCommand =
                 @"SELECT * FROM [Stardust].WorkerNodes WHERE Url NOT IN (SELECT ISNULL(AssignedNode,'') FROM [Stardust].JobDefinitions)";
@@ -150,15 +150,15 @@ namespace Stardust.Manager
 
             if (listToReturn != null && listToReturn.Any())
             {
-                LogHelper.LogInfoWithLineNumber(Logger, "Found ( " + listToReturn.Count + " ) availabe nodes.");
+                LogHelper.LogDebugWithLineNumber(Logger, "Found ( " + listToReturn.Count + " ) availabe nodes.");
             }
             else
             {
-                LogHelper.LogInfoWithLineNumber(Logger, "No nodes found.");
+                LogHelper.LogDebugWithLineNumber(Logger, "No nodes found.");
             }
 
 
-            LogHelper.LogInfoWithLineNumber(Logger, "Finished LoadAllFreeNodes.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Finished LoadAllFreeNodes.");
 
             return listToReturn;
         }

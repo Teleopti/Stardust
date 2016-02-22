@@ -21,7 +21,7 @@ namespace NodeTest.JobHandlers
                                Action<string> progress)
         {
             LogHelper.LogInfoWithLineNumber(Logger,
-                                            "Start.");
+                                            "Starting Long Running Job");
 
             TestJobProgress jobProgress;
 
@@ -55,8 +55,9 @@ namespace NodeTest.JobHandlers
                 {
                     Text = progressMessage
                 };
+				progress(jobProgress.Text);
 
-                LogHelper.LogInfoWithLineNumber(Logger,
+				LogHelper.LogInfoWithLineNumber(Logger,
                                                 progressMessage);
 
 

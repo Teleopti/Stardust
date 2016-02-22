@@ -75,7 +75,7 @@ namespace NodeTest
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
         {
-            LogHelper.LogInfoWithLineNumber(Logger, "Closing NodeControllerTests...");
+            LogHelper.LogDebugWithLineNumber(Logger, "Start TestFixtureTearDown");
         }
 
         private NodeConfigurationFake _nodeConfigurationFake;

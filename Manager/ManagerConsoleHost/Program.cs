@@ -102,13 +102,8 @@ namespace ManagerConsoleHost
             if (ctrlType == CtrlTypes.CtrlCloseEvent ||
                 ctrlType == CtrlTypes.CtrlShutdownEvent)
             {
-                LogHelper.LogInfoWithLineNumber(Logger,
+                LogHelper.LogDebugWithLineNumber(Logger,
                     WhoAmI + " : ConsoleCtrlCheck called.");
-
-                if (ManagerStarter != null)
-                {
-                   // ManagerStarter.Stop();
-                }
 
                 QuitEvent.Set();
 
@@ -121,7 +116,7 @@ namespace ManagerConsoleHost
         private static void CurrentDomain_DomainUnload(object sender,
             EventArgs e)
         {
-            LogHelper.LogInfoWithLineNumber(Logger,
+            LogHelper.LogDebugWithLineNumber(Logger,
                 WhoAmI + " : CurrentDomain_DomainUnload called.");
 
             if (ManagerStarter != null)

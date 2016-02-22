@@ -17,7 +17,7 @@ namespace Stardust.Node.Timers
 
         protected override void Dispose(bool disposing)
         {
-            LogHelper.LogInfoWithLineNumber(Logger, "Start disposing.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Start disposing.");
 
             base.Dispose(disposing);
 
@@ -27,7 +27,7 @@ namespace Stardust.Node.Timers
                 CancellationTokenSource.Cancel();
             }
 
-            LogHelper.LogInfoWithLineNumber(Logger, "Finished disposing.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
         }
 
         public TrySendNodeStartUpNotificationToManagerTimer(INodeConfiguration nodeConfiguration,
@@ -84,7 +84,7 @@ namespace Stardust.Node.Timers
         {
             try
             {
-                LogHelper.LogInfoWithLineNumber(Logger,
+                LogHelper.LogDebugWithLineNumber(Logger,
                                                 "Trying to send init to manager. Manager Uri : ( " + CallbackTemplateUri + " )");
                 var httpResponseMessage =
                     await TrySendNodeStartUpToManager(NodeConfiguration.BaseAddress,
@@ -99,7 +99,7 @@ namespace Stardust.Node.Timers
                 }
                 else
                 {
-                    LogHelper.LogWarningWithLineNumber(Logger,
+                    LogHelper.LogInfoWithLineNumber(Logger,
                                                        WhoAmI + ": Node start up notification to manager failed.");
                 }
             }

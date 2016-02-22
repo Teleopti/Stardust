@@ -17,7 +17,7 @@ namespace Stardust.Manager
         public async Task<HttpResponseMessage> PostAsync(Uri url,
                                                          object data)
         {
-            LogHelper.LogInfoWithLineNumber(Logger,
+            LogHelper.LogDebugWithLineNumber(Logger,
                                             "Start.");
 
             try
@@ -35,7 +35,7 @@ namespace Stardust.Manager
                                                                  Encoding.Unicode,
                                                                  "application/json")).ConfigureAwait(false);
 
-                    LogHelper.LogInfoWithLineNumber(Logger,
+                    LogHelper.LogDebugWithLineNumber(Logger,
                                                     "Finished.");
 
                     return response;
@@ -54,7 +54,7 @@ namespace Stardust.Manager
 
         public async Task<HttpResponseMessage> DeleteAsync(Uri url)
         {
-            LogHelper.LogInfoWithLineNumber(Logger,
+            LogHelper.LogDebugWithLineNumber(Logger,
                                             "Start.");
 
             try
@@ -66,7 +66,7 @@ namespace Stardust.Manager
 
                     var response = await client.DeleteAsync(url);
 
-                    LogHelper.LogInfoWithLineNumber(Logger,
+                    LogHelper.LogDebugWithLineNumber(Logger,
                                                     "Finished.");
 
                     return response;
@@ -138,7 +138,7 @@ namespace Stardust.Manager
 
                 throw;
             }
-            LogHelper.LogInfoWithLineNumber(Logger,
+            LogHelper.LogDebugWithLineNumber(Logger,
                                                     "Return false");
             return false;
         }

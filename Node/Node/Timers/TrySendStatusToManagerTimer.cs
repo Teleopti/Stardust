@@ -130,7 +130,7 @@ namespace Stardust.Node.Timers
                                                JobToDo.Name,
                                                httpResponseMessage.ReasonPhrase);
 
-                    LogHelper.LogWarningWithLineNumber(Logger,
+                    LogHelper.LogInfoWithLineNumber(Logger,
                                                        msg);
                 }
             }

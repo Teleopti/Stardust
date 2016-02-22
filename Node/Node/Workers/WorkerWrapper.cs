@@ -113,7 +113,7 @@ namespace Stardust.Node.Workers
 
                 if (typ == null)
                 {
-                    LogHelper.LogInfoWithLineNumber(Logger,
+                    LogHelper.LogWarningWithLineNumber(Logger,
                                                     string.Format(WhoamI + ": The job type [{0}] could not be resolved. The job cannot be started.",
                                                                   jobToDo.Type));
 
@@ -177,7 +177,7 @@ namespace Stardust.Node.Workers
                                           CurrentMessageToProcess.Id,
                                           CurrentMessageToProcess.Name);
 
-                        LogHelper.LogInfoWithLineNumber(Logger,
+                        LogHelper.LogDebugWithLineNumber(Logger,
                                                         logInfo);
 
                         SetNodeStatusTimer(TrySendJobDoneStatusToManagerTimer,
@@ -192,7 +192,7 @@ namespace Stardust.Node.Workers
                                           CurrentMessageToProcess.Id,
                                           CurrentMessageToProcess.Name);
 
-                        LogHelper.LogInfoWithLineNumber(Logger,
+                        LogHelper.LogDebugWithLineNumber(Logger,
                                                         logInfo);
 
                         SetNodeStatusTimer(TrySendJobCanceledStatusToManagerTimer,
@@ -207,7 +207,7 @@ namespace Stardust.Node.Workers
                                           CurrentMessageToProcess.Id,
                                           CurrentMessageToProcess.Name);
 
-                        LogHelper.LogInfoWithLineNumber(Logger,
+                        LogHelper.LogDebugWithLineNumber(Logger,
                                                         logInfo);
 
 
@@ -234,14 +234,14 @@ namespace Stardust.Node.Workers
                 id != Guid.Empty &&
                 CurrentMessageToProcess.Id == id)
             {
-                LogHelper.LogInfoWithLineNumber(Logger,
+                LogHelper.LogDebugWithLineNumber(Logger,
                                                 WhoamI + " : Cancel job method called. Will call cancel on canellation token source.");
 
                 CancellationTokenSource.Cancel();
 
                 if (CancellationTokenSource.IsCancellationRequested)
                 {
-                    LogHelper.LogInfoWithLineNumber(Logger,
+                    LogHelper.LogDebugWithLineNumber(Logger,
                                                     WhoamI + " : Cancel job method called. CancellationTokenSource.IsCancellationRequested is now true.");
                 }
             }
@@ -349,7 +349,7 @@ namespace Stardust.Node.Workers
 
         public void Dispose()
         {
-            LogHelper.LogInfoWithLineNumber(Logger,"Start disposing.");
+            LogHelper.LogDebugWithLineNumber(Logger,"Start disposing.");
 
             if (CancellationTokenSource != null &&
                 !CancellationTokenSource.IsCancellationRequested)
@@ -382,7 +382,7 @@ namespace Stardust.Node.Workers
                 NodeStartUpNotificationToManagerTimer.Dispose();
             }
 
-            LogHelper.LogInfoWithLineNumber(Logger, "Finished disposing.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
         }
     }
 }

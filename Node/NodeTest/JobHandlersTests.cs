@@ -37,7 +37,7 @@ namespace NodeTest
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
         {
-            LogHelper.LogInfoWithLineNumber(Logger, "Closing JobHandlersTests...");
+            LogHelper.LogDebugWithLineNumber(Logger, "Closing JobHandlersTests...");
         }
 
         private IContainer Container { get; set; }
@@ -45,7 +45,7 @@ namespace NodeTest
 
         private void ProgressCallback(string message)
         {
-           LogHelper.LogInfoWithLineNumber(Logger, message);
+           LogHelper.LogDebugWithLineNumber(Logger, message);
         }
 
         [Test]

@@ -135,7 +135,7 @@ namespace Stardust.Manager
 
 		public List<JobDefinition> LoadAll()
 		{
-            LogHelper.LogInfoWithLineNumber(Logger, "Start.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
             const string selectCommand = @"SELECT 
                                              Id    
@@ -200,7 +200,7 @@ namespace Stardust.Manager
                 LogHelper.LogErrorWithLineNumber(Logger, exp.Message, exp);
             }
 
-            LogHelper.LogInfoWithLineNumber(Logger, "Finshed.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Finshed.");
 
             return null;
 		}
@@ -208,7 +208,7 @@ namespace Stardust.Manager
 
 		public void DeleteJob(Guid jobId)
 		{
-            LogHelper.LogInfoWithLineNumber(Logger, "Start.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
 		    try
 		    {
@@ -242,12 +242,12 @@ namespace Stardust.Manager
                 LogHelper.LogErrorWithLineNumber(Logger, exp.Message, exp);
             }
 
-            LogHelper.LogInfoWithLineNumber(Logger, "Finished.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
         }
 
 		public void FreeJobIfNodeIsAssigned(string url)
 		{
-            LogHelper.LogInfoWithLineNumber(Logger,"Start.");
+            LogHelper.LogDebugWithLineNumber(Logger,"Start.");
 
 		    try
 		    {
@@ -281,29 +281,29 @@ namespace Stardust.Manager
 		        LogHelper.LogErrorWithLineNumber(Logger,exp.Message,exp);
 		    }
 
-            LogHelper.LogInfoWithLineNumber(Logger, "Finished.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
         }
 
 		public async void CheckAndAssignNextJob(List<WorkerNode> availableNodes,
 												IHttpSender httpSender)
 		{
-            LogHelper.LogInfoWithLineNumber(Logger, "Start CheckAndAssignNextJob.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Start CheckAndAssignNextJob.");
 
 			if (!availableNodes.Any())
 			{
-                LogHelper.LogInfoWithLineNumber(Logger, "Could not find any availabe nodes. Procedure will return.");
+                LogHelper.LogDebugWithLineNumber(Logger, "Could not find any availabe nodes. Procedure will return.");
 
                 return;
 			}
 
 		    try
 		    {
-		        LogHelper.LogInfoWithLineNumber(Logger,
+		        LogHelper.LogDebugWithLineNumber(Logger,
 		                                        "Found ( " + availableNodes.Count + " ) availabe nodes.");
 
 		        foreach (var availableNode in availableNodes)
 		        {
-		            LogHelper.LogInfoWithLineNumber(Logger,
+		            LogHelper.LogDebugWithLineNumber(Logger,
 		                                            "Available node : ( id, Url ) : ( " + availableNode.Id + ", " + availableNode.Url + " )");
 		        }
 
@@ -365,7 +365,7 @@ namespace Stardust.Manager
 
 		                                var urijob = builderHelper.GetJobTemplateUri();
 
-                                        LogHelper.LogInfoWithLineNumber(Logger,
+                                        LogHelper.LogDebugWithLineNumber(Logger,
                                                                         "Post async Uri : ( "  + urijob + " )" );
 
 		                                var response = await httpSender.PostAsync(urijob,
@@ -476,7 +476,7 @@ namespace Stardust.Manager
 		public async void CancelThisJob(Guid jobId,
 										IHttpSender httpSender)
 		{
-            LogHelper.LogInfoWithLineNumber(Logger, "Start.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
             try
 		    {
@@ -544,7 +544,7 @@ namespace Stardust.Manager
 
                                 var uriCancel = builderHelper.GetCancelJobUri(jobId);
 
-                                LogHelper.LogInfoWithLineNumber(Logger,
+                                LogHelper.LogDebugWithLineNumber(Logger,
                                                                "Send delete async : " + uriCancel);
 
                                 var response =
@@ -586,14 +586,14 @@ namespace Stardust.Manager
 		        LogHelper.LogErrorWithLineNumber(Logger,exp.Message,exp);
 		    }
 
-            LogHelper.LogInfoWithLineNumber(Logger, "Finished.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
 
 		}
 
 		public void SetEndResultOnJob(Guid jobId,
 												string result)
 		{
-            LogHelper.LogInfoWithLineNumber(Logger, "Start.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
             try
 		    {
@@ -637,14 +637,14 @@ namespace Stardust.Manager
                 LogHelper.LogErrorWithLineNumber(Logger, exp.Message, exp);
             }
 
-            LogHelper.LogInfoWithLineNumber(Logger, "Finished.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
 
 		}
 
 		public void ReportProgress(Guid jobId,
 											string detail)
 		{
-            LogHelper.LogInfoWithLineNumber(Logger, "Start.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
 		    try
 		    {
@@ -682,12 +682,12 @@ namespace Stardust.Manager
                 LogHelper.LogErrorWithLineNumber(Logger, exp.Message, exp);
             }
 
-            LogHelper.LogInfoWithLineNumber(Logger, "Finished.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
         }
 
 		public JobHistory History(Guid jobId)
 		{
-            LogHelper.LogInfoWithLineNumber(Logger, "Start.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
 		    try
 		    {
@@ -734,14 +734,14 @@ namespace Stardust.Manager
                 LogHelper.LogErrorWithLineNumber(Logger, exp.Message, exp);
             }
 
-            LogHelper.LogInfoWithLineNumber(Logger, "Finished.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
 
 		    return null;
 		}
 
 		public IList<JobHistory> HistoryList()
 		{
-            LogHelper.LogInfoWithLineNumber(Logger, "Start.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
 		    try
 		    {
@@ -783,14 +783,14 @@ namespace Stardust.Manager
                 LogHelper.LogErrorWithLineNumber(Logger, exp.Message, exp);
             }
             
-            LogHelper.LogInfoWithLineNumber(Logger, "Finished.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
 
 		    return null;
 		}
 
 		private JobHistory NewJobHistoryModel(SqlDataReader reader)
 		{
-            LogHelper.LogInfoWithLineNumber(Logger, "Start.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
 		    try
 		    {
@@ -814,7 +814,7 @@ namespace Stardust.Manager
                 LogHelper.LogErrorWithLineNumber(Logger, exp.Message, exp);
             }
 
-            LogHelper.LogInfoWithLineNumber(Logger, "Finished.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
 
 		    return null;
 
@@ -840,7 +840,7 @@ namespace Stardust.Manager
 
 		public IList<JobHistoryDetail> JobHistoryDetails(Guid jobId)
 		{
-            LogHelper.LogInfoWithLineNumber(Logger, "Start.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
 		    try
 		    {
@@ -887,7 +887,7 @@ namespace Stardust.Manager
                 LogHelper.LogErrorWithLineNumber(Logger, exp.Message, exp);
             }
 
-            LogHelper.LogInfoWithLineNumber(Logger, "Finished.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
 
 		    return null;
 		}

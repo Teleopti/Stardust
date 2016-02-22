@@ -48,7 +48,7 @@ namespace Stardust.Manager
 
 		  public void CheckAndAssignNextJob()
         {
-            LogHelper.LogInfoWithLineNumber(Logger,
+            LogHelper.LogDebugWithLineNumber(Logger,
                                             "Start CheckAndAssignNextJob.");
 
             try
@@ -59,7 +59,7 @@ namespace Stardust.Manager
 
                 if (availableNodes != null && availableNodes.Any())
                 {
-                    LogHelper.LogInfoWithLineNumber(Logger,
+                    LogHelper.LogDebugWithLineNumber(Logger,
                                     "Found ( " + availableNodes.Count + " ) available nodes");
                 }
 
@@ -69,7 +69,7 @@ namespace Stardust.Manager
 
                     Uri postUri = nodeUriBuilder.GetIsAliveTemplateUri();
 
-                    LogHelper.LogInfoWithLineNumber(Logger,
+                    LogHelper.LogDebugWithLineNumber(Logger,
                                                     "Test available node is alive : Url ( " + postUri + " )");
                     
 
@@ -77,7 +77,7 @@ namespace Stardust.Manager
 
                     if (success.Result)
                     {
-                        LogHelper.LogInfoWithLineNumber(Logger,
+                        LogHelper.LogDebugWithLineNumber(Logger,
                                                         "Node Url ( " + postUri + " ) is available and alive.");
 
                         upNodes.Add(availableNode);
@@ -88,7 +88,7 @@ namespace Stardust.Manager
                 _jobRepository.CheckAndAssignNextJob(upNodes,
                                                      _httpSender);
 
-                LogHelper.LogInfoWithLineNumber(Logger,
+                LogHelper.LogDebugWithLineNumber(Logger,
                                                 "Finished CheckAndAssignNextJob.");
             }
 

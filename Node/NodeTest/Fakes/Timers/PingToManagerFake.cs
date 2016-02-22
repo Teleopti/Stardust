@@ -23,7 +23,7 @@ namespace NodeTest.Fakes.Timers
         private void OnTimedEvent(object sender,
                                   ElapsedEventArgs e)
         {
-            LogHelper.LogInfoWithLineNumber(Logger,
+            LogHelper.LogDebugWithLineNumber(Logger,
                                             "Try ping to manager fake.");
 
             Wait.Set();
