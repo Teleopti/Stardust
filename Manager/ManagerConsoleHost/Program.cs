@@ -77,7 +77,7 @@ namespace ManagerConsoleHost
                 {
                     appBuilder.UseAutofacMiddleware(container);
                     // Configure Web API for self-host. 
-                    appBuilder.UseStardustManager(managerConfiguration);
+                    appBuilder.UseStardustManager(managerConfiguration, container);
 
                     appBuilder.UseAutofacWebApi(config);
                     appBuilder.UseWebApi(config);

@@ -7,24 +7,24 @@ using Stardust.Manager.Models;
 
 namespace Stardust.Manager
 {
-    public static class AppBuilderExtension
-    {
-        public static void UseStardustManager(this IAppBuilder appBuilder, ManagerConfiguration managerConfiguration)
-        {
-            appBuilder.Map(
-                managerConfiguration.Route,
-                inner =>
-                {
-                    var config = new HttpConfiguration();
+	public static class AppBuilderExtension
+	{
+		public static void UseStardustManager(this IAppBuilder appBuilder, ManagerConfiguration managerConfiguration, ILifetimeScope lifetimeScope)
+		{
+			appBuilder.Map(
+				 managerConfiguration.Route,
+				 inner =>
+				 {
+					 var config = new HttpConfiguration();
+					 config.DependencyResolver = new AutofacWebApiDependencyResolver(lifetimeScope);
+					 config.MapHttpAttributeRoutes();
 
-                    config.MapHttpAttributeRoutes();
-					
-                    config.Services.Add(typeof (IExceptionLogger),
-                        new GlobalExceptionLogger());
+					 config.Services.Add(typeof(IExceptionLogger),
+							  new GlobalExceptionLogger());
 
-                    inner.UseAutofacWebApi(config);
-                    inner.UseWebApi(config);
-                });
-        }
-    }
+					 inner.UseAutofacWebApi(config);
+					 inner.UseWebApi(config);
+				 });
+		}
+	}
 }
