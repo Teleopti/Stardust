@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TechTalk.SpecFlow;
+﻿using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
@@ -69,29 +64,42 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.Click(".skill-area-save");
 		}
 
-		[Then(@"I should see that Skill Area '(.*)' is selectable")]
-		public void ThenIShouldSeeThatSkillAreaIsSelectable(string skillAreaName)
+		[Then(@"I select to monitor skill area '(.*)'")]
+		[When(@"I select to monitor skill area '(.*)'")]
+		public void ThenISelectToMonitorSkillArea(string skillArea)
 		{
-			Browser.Interactions.AssertAnyContains(".skill-area-select", skillAreaName);
+			Browser.Interactions.Javascript(string.Format("$('#ul-1 li:contains(\"{0}\")').click()", skillArea));
+			Browser.Interactions.AssertAnyContains(".intraday-monitor-item", skillArea);
 		}
 
-		[Then(@"I select to view details for skill area '(.*)'")]
-		public void ThenISelectToViewDetailsForSkillArea(string skillArea)
+		[Then(@"I should no longer be able to monitor '(.*)'")]
+		public void ThenIShouldNoLongerBeAbleToMonitor(string skillArea)
 		{
-			Browser.Interactions.SelectOptionByTextUsingJQuery(".skill-area-select", skillArea);
+			Browser.Interactions.AssertNotExistsUsingJQuery("#ul-1", string.Format("$('#ul-1 li:contains(\"{0}\")')", skillArea));
 		}
-
+		
 		[Then(@"I should monitor '(.*)'")]
 		public void ThenIShouldMonitor(string monitorItem)
 		{
 			Browser.Interactions.AssertAnyContains(".intraday-monitor-item", monitorItem);
 		}
 
-		[Given(@"there is a Skill Area called '(.*)'")]
-		public void GivenThereIsASkillAreaCalled(string p0)
+		[When(@"I select to remove '(.*)'")]
+		public void WhenISelectToRemove(string skillArea)
 		{
-			ScenarioContext.Current.Pending();
+			Browser.Interactions.Click(".skill-area-options");
+			Browser.Interactions.Click(".skill-area-delete");
+			Browser.Interactions.Click(".skill-area-delete-confirm");
 		}
 
+		[Given(@"there is a Skill Area called '(.*)' that monitors skill '(.*)'")]
+		public void GivenThereIsASkillAreaCalledThatMonitorsSkill(string skillArea, string skill)
+		{
+			DataMaker.Data().Apply(new SkillAreaConfigurable()
+			{
+				Name = skillArea,
+				Skill = skill 
+			});
+		}
 	}
 }

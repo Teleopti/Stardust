@@ -279,6 +279,7 @@
     <Compile Include="TestData\Analytics\Tables\sys_configuration.cs" />
     <Compile Include="TestData\Core\ILogonName.cs" />
     <Compile Include="TestData\Core\ITenantUserSetup.cs" />
+    <Compile Include="TestData\Setups\Configurable\SkillAreaConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\OutboundCampaignConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\PersonEmptyDayConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\PlanningPeriodConfigurable.cs" />

@@ -12,7 +12,7 @@
 	</div>
 	<div class="con-row">
 		<div class="panel con-flex material-depth-1">
-			<div class="sub-header con-row">
+			<div class="con-row">
 				<h2 class="con-flex">Select to monitor either a skill or an area</h2>
 				<span class="con-flex">
 					<md-autocomplete class="autocomplete-skill" md-selected-item="selectedSkill"
@@ -78,7 +78,7 @@
 				<h2 class="intraday-monitor-item">{{ selectedSkillArea.Name }}</h2>
 				<div class="head-actions panel-menu">
 					<div tabindex=0 class="context-menu card-context">
-						<i class="mdi mdi-dots-vertical"></i>
+						<i class="skill-area-options mdi mdi-dots-vertical"></i>
 						<span class="context-menu-left">
 							<ul class="wfm-list">
 								<li ng-click="showIncluded=!showIncluded">
@@ -86,7 +86,7 @@
 									<i ng-show="showIncluded" class="mdi mdi-eye"></i>
 									included skills
 								</li>
-								<li ng-click='toggleModal()'><i class="mdi mdi-delete"></i>Delete this area</li>
+								<li ng-click='toggleModal()'><i class="skill-area-delete mdi mdi-delete"></i>Delete this area</li>
 							</ul>
 						</span>
 					</div>
@@ -119,7 +119,7 @@
 		</div>
 		<div class="modal-actions">
 			<aside>
-				<button ng-click='deleteSkillArea(selectedSkillArea)' class="wfm-btn wfm-btn-invis-default">Yes, delete it</button>
+				<button ng-click='deleteSkillArea(selectedSkillArea)' class="skill-area-delete-confirm wfm-btn wfm-btn-invis-default">Yes, delete it</button>
 			</aside>
 		</div>
 	</modal-dialog>
