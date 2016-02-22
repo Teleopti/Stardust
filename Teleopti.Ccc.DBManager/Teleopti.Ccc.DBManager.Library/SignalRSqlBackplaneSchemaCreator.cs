@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DBManager.Library
 					System.Reflection.BindingFlags.Instance,
 					null, new object[]
 					{
-						sqlConnection.ConnectionString,
+						sqlConnectionToConnectionString(sqlConnection),
 						"Messages", 
 						1, 
 						new TraceSource("SignalR." + typeof(SqlMessageBus).Name)
@@ -26,6 +26,15 @@ namespace Teleopti.Ccc.DBManager.Library
 
 			var method = installerType.GetMethod("Install");
 			method.Invoke(instantiatedType, new object[] { });
+		}
+
+		private static string sqlConnectionToConnectionString(SqlConnection conn)
+		{
+			var property = conn.GetType().GetProperty("ConnectionOptions", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+			var optionsObject = property.GetValue(conn, null);
+			var method = optionsObject.GetType().GetMethod("UsersConnectionString");
+			var connStr = method.Invoke(optionsObject, new object[] { false }) as string; // argument is "hidePassword" so we set it to false
+			return connStr;
 		}
 	}
 }
