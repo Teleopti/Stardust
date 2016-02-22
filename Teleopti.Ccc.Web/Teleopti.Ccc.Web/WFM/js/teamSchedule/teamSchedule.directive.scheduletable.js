@@ -37,7 +37,7 @@
 		};
 
 		vm.ToggleProjectionSelection = function (projection, allProjections) {
-			if (!toggleSvc.WfmTeamSchedule_RemovePlannedAbsence_36705
+			if (!toggleSvc.WfmTeamSchedule_RemoveAbsence_36705
 				|| projection.ParentPersonAbsence == undefined || projection.ParentPersonAbsence == null) {
 				return;
 			}
