@@ -142,8 +142,6 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             foreach (var dateOnly in period.DayCollection())
             {
-                if (!_effectivePeriodDays.ContainsKey(dateOnly))
-                    throw new ArgumentOutOfRangeException("period");
                 if (_unLockedDays.ContainsKey(dateOnly))
                     _unLockedDays.Remove(dateOnly);
             }

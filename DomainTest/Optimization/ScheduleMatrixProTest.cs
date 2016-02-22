@@ -71,13 +71,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Assert.AreEqual(7, _target.UnlockedDays.Count);
 		}
 
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void VerifyLockingOutsidePeriod()
-        {
-            DateOnlyPeriod partlyOutsidePeriod = new DateOnlyPeriod(2010, 1, 9, 2010, 1, 15);
-            _target.LockPeriod(partlyOutsidePeriod);
-        }
-
         [Test]
         public void VerifyFullWeeksPeriodIsSet()
         {

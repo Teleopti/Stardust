@@ -144,6 +144,31 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				.Should().Be.EqualTo(1);
 		}
 
+		[Test]
+		public void ShouldOptimizeHalfGroupIf50PercentShouldBeOptimized_WhenAgentsHaveMultipleSchedulePeriods()
+		{
+			IntradayOptmizerLimiter.SetFromTest(new Percent(0.5), 0);
+			const int numberOfAgents = 10;
+			var phoneActivity = ActivityFactory.CreateActivity("phone");
+			var skill = SkillRepository.Has("skill", phoneActivity);
+			var scenario = ScenarioRepository.Has("some name");
+			var dateOnly = new DateOnly(2015, 10, 12);
+			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
+			SkillDayRepository.Has(new[] { skill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60)) });
+			for (var i = 0; i < numberOfAgents; i++)
+			{
+				var agent = PersonRepository.Has(new Contract("_"), new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1), skill);
+				agent.AddSchedulePeriod(new SchedulePeriod(dateOnly.AddDays(1), SchedulePeriodType.Day, 1));
+				PersonAssignmentRepository.Has(agent, scenario, phoneActivity, new ShiftCategory("_"), dateOnly, new TimePeriod(8, 0, 17, 0));
+				PersonAssignmentRepository.Has(agent, scenario, phoneActivity, new ShiftCategory("_"), dateOnly.AddDays(1), new TimePeriod(8, 0, 17, 0));
+			}
+
+			Target.Optimize(planningPeriod.Id.Value);
+
+			TrackOptimizeDaysForAgents.NumberOfOptimizationsFor(dateOnly).Should().Be.EqualTo(5);
+			TrackOptimizeDaysForAgents.NumberOfOptimizationsFor(dateOnly.AddDays(1)).Should().Be.EqualTo(5);
+		}
+
 
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
