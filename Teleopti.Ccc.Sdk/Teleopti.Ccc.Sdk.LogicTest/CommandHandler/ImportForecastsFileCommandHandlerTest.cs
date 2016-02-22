@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 	[TestFixture]
 	public class ImportForecastsFileCommandHandlerTest
 	{
-		private MockRepository _mock;
 		private IMessagePopulatingServiceBusSender _busSender;
 		private IUnitOfWorkFactory _unitOfWorkFactory;
 		private IJobResultRepository _jobResultRepository;
@@ -36,19 +35,21 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		private IPostHttpRequest _postHttpRequest;
 		private IToggleManager _toggleManager;
 		private IJsonSerializer _jsonSer;
+		private ICurrentBusinessUnit _currentBu;
 
 		[SetUp]
 		public void Setup()
 		{
-			_mock = new MockRepository();
-			_busSender = _mock.StrictMock<IMessagePopulatingServiceBusSender>();
-			_unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
-			_currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
-			_jobResultRepository = _mock.StrictMock<IJobResultRepository>();
-			_postHttpRequest = _mock.DynamicMock<IPostHttpRequest>();
-			_toggleManager = _mock.DynamicMock<IToggleManager>();
-			_jsonSer = _mock.DynamicMock<IJsonSerializer>();
-			_target = new ImportForecastsFileCommandHandler(_busSender, _currentUnitOfWorkFactory, _jobResultRepository, _postHttpRequest, _toggleManager, _jsonSer);
+			_busSender = MockRepository.GenerateStrictMock<IMessagePopulatingServiceBusSender>();
+			_unitOfWorkFactory = MockRepository.GenerateStrictMock<IUnitOfWorkFactory>();
+			_currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+			_jobResultRepository = MockRepository.GenerateStrictMock<IJobResultRepository>();
+			_postHttpRequest = MockRepository.GenerateMock<IPostHttpRequest>();
+			_toggleManager = MockRepository.GenerateMock<IToggleManager>();
+			_jsonSer = MockRepository.GenerateMock<IJsonSerializer>();
+			_currentBu = MockRepository.GenerateMock<ICurrentBusinessUnit>();
+			_target = new ImportForecastsFileCommandHandler(_busSender, _currentUnitOfWorkFactory, _jobResultRepository,
+				_postHttpRequest, _toggleManager, _jsonSer, _currentBu);
 
 			_person = PersonFactory.CreatePerson("test");
 			_person.SetId(Guid.NewGuid());
@@ -60,92 +61,45 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_importForecastsFileCommandDto = new ImportForecastsFileCommandDto
 			{
 				ImportForecastsMode =
-																		ImportForecastsOptionsDto.ImportWorkloadAndStaffing,
+					ImportForecastsOptionsDto.ImportWorkloadAndStaffing,
 				TargetSkillId = _targetSkill.Id.GetValueOrDefault(),
 				UploadedFileId = _fileId
 			};
 			_jobResult = new JobResult(JobCategory.ForecastsImport, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today),
-													  _person, DateTime.UtcNow);
+				_person, DateTime.UtcNow);
 		}
 
 		[Test]
-		public void ShouldThrowFaultExceptionIfServiceBusIsNotAvailable()
-		{
-			var unitOfWork = _mock.StrictMock<IUnitOfWork>();
-
-			using (_mock.Record())
-			{
-				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-				Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
-				Expect.Call(() => _jobResultRepository.Add(_jobResult)).IgnoreArguments();
-				Expect.Call(() => unitOfWork.PersistAll());
-				Expect.Call(unitOfWork.Dispose);
-				Expect.Call(() => _busSender.Send(new ImportForecastsFileToSkill(), true)).IgnoreArguments();
-			}
-			using (_mock.Playback())
-			{
-				_target.Handle(_importForecastsFileCommandDto);
-			}
-		}
-
-		[Test]
-		[ExpectedException(typeof(FaultException))]
+		[ExpectedException(typeof (FaultException))]
 		public void ShouldThrowFaultExceptionIfCommandIsNull()
 		{
-			var unitOfWork = _mock.StrictMock<IUnitOfWork>();
-
-			using (_mock.Record())
-			{
-				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-				Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
-				Expect.Call(() => _jobResultRepository.Add(_jobResult)).IgnoreArguments();
-				Expect.Call(() => unitOfWork.PersistAll());
-				Expect.Call(unitOfWork.Dispose);
-				Expect.Call(() => _busSender.Send(new ImportForecastsFileToSkill(), true)).IgnoreArguments();
-			}
-			using (_mock.Playback())
-			{
-				_target.Handle(null);
-			}
+			_target.Handle(null);
 		}
 
 		[Test]
 		public void ShouldHandleImportForecastFileCommandSuccessfully()
 		{
-			var unitOfWork = _mock.StrictMock<IUnitOfWork>();
+			var unitOfWork = MockRepository.GenerateStrictMock<IUnitOfWork>();
 
-			using (_mock.Record())
-			{
-				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-				Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
-				Expect.Call(() => _jobResultRepository.Add(_jobResult)).IgnoreArguments();
-				Expect.Call(() => unitOfWork.PersistAll());
-				Expect.Call(unitOfWork.Dispose);
-				Expect.Call(() => _busSender.Send(new ImportForecastsFileToSkill(), true)).IgnoreArguments();
-			}
-			using (_mock.Playback())
-			{
-				_target.Handle(_importForecastsFileCommandDto);
-			}
+			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			_currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory).Repeat.Twice();
+			_currentBu.Stub(x => x.Current()).Return(new BusinessUnit("BU"));
+			_unitOfWorkFactory.Stub(x => x.Name).Return("WFM");
+			_jobResultRepository.Stub(x => x.Add(_jobResult)).IgnoreArguments();
+			unitOfWork.Stub(x => x.PersistAll());
+			unitOfWork.Stub(x => x.Dispose());
+			_busSender.Stub(x => x.Send(new ImportForecastsFileToSkill(), true)).IgnoreArguments();
+
+			_target.Handle(_importForecastsFileCommandDto);
 		}
-
+		
 		[Test]
-		[ExpectedException(typeof(FaultException))]
+		[ExpectedException(typeof (FaultException))]
 		public void ShouldThrowExceptionIfNotPermitted()
 		{
-			var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
-
-			using (_mock.Record())
+			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
 			{
-				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-				Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
-			}
-			using (_mock.Playback())
-			{
-				using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
-				{
-					_target.Handle(_importForecastsFileCommandDto);
-				}
+				_target.Handle(_importForecastsFileCommandDto);
 			}
 		}
 	}

@@ -27,11 +27,13 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		private readonly IPostHttpRequest _postHttpRequest;
 		private readonly IToggleManager _toggleManager;
 		private readonly IJsonSerializer _jsonSerializer;
+		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 
 		public ImportForecastsFileCommandHandler(IMessagePopulatingServiceBusSender busSender,
 			ICurrentUnitOfWorkFactory unitOfWorkFactory,
 			IJobResultRepository jobResultRepository,
-			IPostHttpRequest postHttpRequest, IToggleManager toggleManager, IJsonSerializer jsonSerializer)
+			IPostHttpRequest postHttpRequest, IToggleManager toggleManager, IJsonSerializer jsonSerializer,
+			ICurrentBusinessUnit currentBusinessUnit)
 		{
 			_busSender = busSender;
 			_unitOfWorkFactory = unitOfWorkFactory;
@@ -39,6 +41,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			_postHttpRequest = postHttpRequest;
 			_toggleManager = toggleManager;
 			_jsonSerializer = jsonSerializer;
+			_currentBusinessUnit = currentBusinessUnit;
 		}
 
 		public void Handle(ImportForecastsFileCommandDto command)
@@ -65,7 +68,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					UploadedFileId = command.UploadedFileId,
 					TargetSkillId = command.TargetSkillId,
 					OwnerPersonId = person.Id.GetValueOrDefault(Guid.Empty),
-					ImportMode = (ImportForecastsMode)((int)command.ImportForecastsMode)
+					ImportMode = (ImportForecastsMode)((int)command.ImportForecastsMode),
+					LogOnDatasource = _unitOfWorkFactory.Current().Name,
+					LogOnBusinessUnitId = _currentBusinessUnit.Current().Id.GetValueOrDefault()
+
 				};
 				if (_toggleManager.IsEnabled(Toggles.Wfm_ForecastFileImportOnStardust_37047))
 				{
