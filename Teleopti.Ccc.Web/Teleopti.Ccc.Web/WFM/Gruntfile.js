@@ -120,6 +120,8 @@
 				'node_modules/angular-gantt/assets/angular-gantt-plugins.js',
 				'node_modules/angular-gantt/assets/angular-gantt-table-plugin.js',
 				'node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.js',
+				'node_modules/teleopti-styleguide/dist/wfmdirectives.min.js',
+				'node_modules/teleopti-styleguide/dist/templates.js',
 				'node_modules/filesaver.js/FileSaver.min.js',
 				'node_modules/jquery/dist/jquery.min.js',
 				'vendor/hammerjs/hammer.min.js',

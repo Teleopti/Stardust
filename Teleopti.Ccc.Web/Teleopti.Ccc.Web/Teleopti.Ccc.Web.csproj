@@ -1309,7 +1309,6 @@
     <Content Include="WFM\js\global\exceptionhandler.js" />
     <Content Include="WFM\js\global\http.spec.js" />
     <Content Include="WFM\js\global\notification.controller.spec.js" />
-    <Content Include="WFM\js\global\numeric-value\numeric-value.directive.js" />
     <Content Include="WFM\js\global\personalize.controller.js" />
     <Content Include="WFM\js\global\shortcuts.service.js" />
     <Content Include="WFM\js\global\shortcuts.service.spec.js" />
@@ -1404,7 +1403,6 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.guidgenerator.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.notification.js" />
     <Content Include="WFM\js\global\wfm.i18n.service.js" />
-    <Content Include="WFM\js\global\timerangepicker\wfm-time-range-picker.directive.js" />
     <Content Include="WFM\js\global\currentuserinfo.service.js" />
     <Content Include="WFM\js\intraday\intraday.controller.js" />
     <Content Include="WFM\js\intraday\intraday.config.controller.js" />
@@ -1456,15 +1454,11 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.signalr.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.swapShifts.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.shiftHelpers.js" />
-    <Content Include="WFM\js\global\wfmpagination\wfmpagination.directive.js" />
-    <Content Include="WFM\js\global\wfmmodal\wfmmodal.directive.js" />
     <Content Include="WFM\js\teamSchedule\html\timeline.html" />
     <Content Include="WFM\js\teamSchedule\_modules.js" />
     <Content Include="WFM\vendor\uigrid.directive.ext.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali-ext.js" />
     <Content Include="WFM\js\forecasting\c3-fix-forecast.js" />
-    <Content Include="WFM\js\global\daterangepicker\wfm-date-range-picker.directive.js" />
-    <Content Include="WFM\js\global\daterangepicker\wfm-date-range-picker.tpl.html" />
     <Content Include="WFM\js\forecasting\html\forecasting-advanced.html" />
     <Content Include="WFM\js\forecasting\forecasting.advanced.controller.js" />
     <Content Include="WFM\js\outbound\angular-gantt.ext.js" />
@@ -1541,10 +1535,6 @@
     <Content Include="Content\jalaali-calendar-datepicker\moment-datepicker-jalaali-ext.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali.js" />
     <Content Include="WFM\js\global\businessunits\businessunits.controller.js" />
-    <Content Include="WFM\js\global\wfmcardlist\wfmcard.directive.js" />
-    <Content Include="WFM\js\global\wfmcardlist\wfmcard.html" />
-    <Content Include="WFM\js\global\wfmcardlist\wfmcardlist.directive.js" />
-    <Content Include="WFM\js\global\wfmcardlist\wfmcardlist.html" />
     <Content Include="WFM\js\global\toggle.service.js" />
     <Content Include="WFM\js\outbound\c3-fix.js" />
     <Content Include="WFM\js\outbound\outbound.service.activity.js" />

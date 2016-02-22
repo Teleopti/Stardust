@@ -1,54 +1,62 @@
 <section class="wfm-accordion" ng-controller="AreasCtrl" data-ng-init="loadAreas()">
 	<!--Refactor me -->
 
-	<div ng-claok class="ng-cloak" ng-if="areas.length < 1 && areasLoaded" >
-        <modal-dialog show='unauthModal' ng-cloak ng-click="dismissUnauthModal()">
-            <h1 class="modal-title">Unauthorized</h1>
-            <div class="modal-inner-content">
-                You don't have access to these pages.<br />
-                If you are already registered, make sure you logged in with the right credentials.
-            </div>
-            <div class="modal-actions">
-                <aside>
-                    <button class="wfm-btn wfm-btn-invis-primary">Go back</button>
-                </aside>
-            </div>
-        </modal-dialog>
+	<div ng-cloak class="ng-cloak" ng-if="areas.length < 1 && areasLoaded" >
+		<div ng-cloak class="modal-box">
+
+		<div class="modalbg">
+			<div class="dialog">
+				<div class="modal-header">
+					Unauthorized
+				</div>
+				<div class="modal-inner-content">
+					You don't have access to these pages.<br/>
+	If you are already registered, make sure you logged in with the right credentials.
+				</div>
+				<div class="modal-footer">
+					<aside>
+						<a class="wfm-btn wfm-btn-invis-primary" href="javascript:history.back()">Go back</a>
+					</aside>
+				</div>
+			</div>
+		</div>
+
+</div>
 	</div>
 	<div ng-repeat="accordionTitle in areas">
 		<a ui-sref={{accordionTitle.InternalName}} ui-sref-opts="{reload: true}" ui-sref-active="nav-item-active">
 			<div class="nav-item sidenav-header accordion-head" ng-click="accordionToggle = !accordionToggle">
-				<i ng-if="accordionTitle.InternalName == 'forecasting'" class="mdi mdi-chart-line side-nav-icon">
+				<i ng-if="accordionTitle.InternalName == 'forecasting'" class="mdi mdi-chart-line">
 					<md-tooltip class="sidenav-tooltip">{{accordionTitle.Name | translate}}</md-tooltip>
 				</i>
-				<i ng-if="accordionTitle.InternalName == 'resourceplanner'" class="mdi mdi-calendar side-nav-icon">
+				<i ng-if="accordionTitle.InternalName == 'resourceplanner'" class="mdi mdi-calendar">
 					<md-tooltip class="sidenav-tooltip">{{accordionTitle.Name | translate}}</md-tooltip>
 				</i>
-				<i ng-if="accordionTitle.InternalName == 'permissions'" class="mdi mdi-account-key side-nav-icon">
+				<i ng-if="accordionTitle.InternalName == 'permissions'" class="mdi mdi-account-key">
 					<md-tooltip class="sidenav-tooltip">{{accordionTitle.Name | translate}}</md-tooltip>
 				</i>
-				<i ng-if="accordionTitle.InternalName == 'outbound'" class="mdi mdi-phone-forward side-nav-icon">
+				<i ng-if="accordionTitle.InternalName == 'outbound'" class="mdi mdi-phone-forward">
 					<md-tooltip class="sidenav-tooltip">{{accordionTitle.Name | translate}}</md-tooltip>
 				</i>
-				<i ng-if="accordionTitle.InternalName == 'people'" class="mdi mdi-account-multiple side-nav-icon">
+				<i ng-if="accordionTitle.InternalName == 'people'" class="mdi mdi-account-multiple">
 					<md-tooltip class="sidenav-tooltip">{{accordionTitle.Name | translate}}</md-tooltip>
 				</i>
-				<i ng-if="accordionTitle.InternalName == 'seatPlan'" class="mdi mdi-tab-unselected side-nav-icon">
+				<i ng-if="accordionTitle.InternalName == 'seatPlan'" class="mdi mdi-tab-unselected">
 					<md-tooltip class="sidenav-tooltip">{{accordionTitle.Name | translate}}</md-tooltip>
 				</i>
-				<i ng-if="accordionTitle.InternalName == 'seatMap'" class="mdi mdi-tab side-nav-icon">
+				<i ng-if="accordionTitle.InternalName == 'seatMap'" class="mdi mdi-tab">
 					<md-tooltip class="sidenav-tooltip">{{accordionTitle.Name | translate}}</md-tooltip>
 				</i>
-				<i ng-if="accordionTitle.InternalName == 'rta'" class="mdi mdi-alarm side-nav-icon">
+				<i ng-if="accordionTitle.InternalName == 'rta'" class="mdi mdi-alarm">
 					<md-tooltip class="sidenav-tooltip">{{accordionTitle.Name | translate}}</md-tooltip>
 				</i>
-				<i ng-if="accordionTitle.InternalName == 'intraday'" class="mdi mdi-compass-outline side-nav-icon">
+				<i ng-if="accordionTitle.InternalName == 'intraday'" class="mdi mdi-compass-outline">
 					<md-tooltip class="sidenav-tooltip">{{accordionTitle.Name | translate}}</md-tooltip>
 				</i>
-				<i ng-if="accordionTitle.InternalName == 'requests'" class="mdi mdi-numeric-9-plus-box-multiple-outline side-nav-icon">
+				<i ng-if="accordionTitle.InternalName == 'requests'" class="mdi mdi-numeric-9-plus-box-multiple-outline">
 					<md-tooltip class="sidenav-tooltip">{{accordionTitle.Name | translate}}</md-tooltip>
 				</i>
-				<i ng-if="accordionTitle.InternalName == 'myTeamSchedule'" class="mdi mdi-account-multiple side-nav-icon">
+				<i ng-if="accordionTitle.InternalName == 'myTeamSchedule'" class="mdi mdi-account-multiple">
 					<md-tooltip class="sidenav-tooltip">{{accordionTitle.Name | translate}}</md-tooltip>
 				</i>
 				<span>{{accordionTitle.Name | translate}}</span>
