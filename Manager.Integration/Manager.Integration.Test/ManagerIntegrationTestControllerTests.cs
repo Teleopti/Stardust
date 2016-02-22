@@ -19,7 +19,7 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
-    [TestFixture, Ignore]
+    [TestFixture]
     public class ManagerIntegrationTestControllerTests
     {
         private static readonly ILog Logger =
@@ -115,7 +115,7 @@ namespace Manager.Integration.Test
         ///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
         ///     netsh http add urlacl url=http://+:9100/ user=everyone listen=yes
         /// </summary>
-        [Test]
+        [Test, Ignore]
         public async void ShouldUnloadNode1AppDomain()
         {
             LogHelper.LogInfoWithLineNumber("Start test.",
@@ -241,7 +241,6 @@ namespace Manager.Integration.Test
 
                 LogHelper.LogInfoWithLineNumber("Start calling Get Async ( " + uri + " ) ",
                                                 Logger);
-
 
                 try
                 {

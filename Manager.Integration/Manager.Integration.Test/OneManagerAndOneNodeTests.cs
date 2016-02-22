@@ -201,15 +201,31 @@ namespace Manager.Integration.Test
 
                     jobManagerTaskCreator.Dispose();
                 },
-                CancellationTokenSource.Token);
+                                      CancellationTokenSource.Token);
             };
 
             checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
-            Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count);
+            bool condition =
+                checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count;
 
-            Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.CanceledStatus ||
-                                                                       pair.Value == StatusConstants.DeletedStatus));
+            Assert.IsTrue(condition,
+                          "Must have equal number of rows.");
+
+            Assert.IsFalse(checkJobHistoryStatusTimer.Guids.Any(pair => pair.Value == StatusConstants.SuccessStatus),
+                           "Invalid SUCCEESS status.");
+
+            Assert.IsFalse(checkJobHistoryStatusTimer.Guids.Any(pair => pair.Value == StatusConstants.NullStatus),
+                           "Invalid NULL status.");
+
+            Assert.IsFalse(checkJobHistoryStatusTimer.Guids.Any(pair => pair.Value == StatusConstants.EmptyStatus),
+                           "Invalid EMPTY status.");
+
+            var allCancelOrDeleteStatus = checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.CanceledStatus ||
+                                                                                       pair.Value == StatusConstants.DeletedStatus);
+
+            Assert.IsTrue(allCancelOrDeleteStatus,
+                          "All rows shall have CANCEL or DELETE status.");
 
             taskHlp.Dispose();
 
