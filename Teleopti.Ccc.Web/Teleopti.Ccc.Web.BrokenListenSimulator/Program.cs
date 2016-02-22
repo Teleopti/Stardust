@@ -7,7 +7,6 @@ using Autofac;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
@@ -22,28 +21,28 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
     class Program
     {
 		private const int clients = 1;
-		private const int screens = 10000; //200 + 5 + 2;
-		private const int updates = 3;
+		private const int screens = 3000; //200 + 5 + 2;
+		private const int updates = 1;
 		private const int subscriptionsToEvent = 2;
 
 	    static void Main(string[] args)
         {
             var myTimeData = new MyTimeData
             {
-				//BaseUrl = @"http://qawfmfarmhost/TeleoptiWFM/Web/",
-				//User = new Guid("9d42c9bf-f766-473f-970c-9b5e015b2564"),
-				//AbsenseId = new Guid("435CC5C8-89C0-4714-96FD-9B5E015AB330"),
-				//DataSource = "Teleopti WFM",
-				//BusinessUnit = Guid.Parse("928DD0BC-BF40-412E-B970-9B5E015AADEA"),
-				//Scenario = Guid.Parse("E21D813C-238C-4C3F-9B49-9B5E015AB432"),
-				//BusinessUnitName = "TeleoptiCCCDemo"
-
-				BaseUrl = "http://teleopti745/TeleoptiWFM/Web/",
+				BaseUrl = @"http://qawfmfarmhost/TeleoptiWFM/Web/",
 				User = new Guid("9d42c9bf-f766-473f-970c-9b5e015b2564"),
-                DataSource = "Teleopti WFM",
-				AbsenseId = new Guid("4b4c15f0-5c3c-479e-8f9f-9bb900b80624"),
+				AbsenseId = new Guid("435CC5C8-89C0-4714-96FD-9B5E015AB330"),
+				DataSource = "Teleopti WFM",
 				BusinessUnit = Guid.Parse("928DD0BC-BF40-412E-B970-9B5E015AADEA"),
-                Scenario = Guid.Parse("E21D813C-238C-4C3F-9B49-9B5E015AB432")
+				Scenario = Guid.Parse("E21D813C-238C-4C3F-9B49-9B5E015AB432"),
+				BusinessUnitName = "TeleoptiCCCDemo"
+
+				//BaseUrl = "http://teleopti745/TeleoptiWFM/Web/",
+				//User = new Guid("9d42c9bf-f766-473f-970c-9b5e015b2564"),
+				//DataSource = "Teleopti WFM",
+				//AbsenseId = new Guid("4b4c15f0-5c3c-479e-8f9f-9bb900b80624"),
+				//BusinessUnit = Guid.Parse("928DD0BC-BF40-412E-B970-9B5E015AADEA"),
+				//Scenario = Guid.Parse("E21D813C-238C-4C3F-9B49-9B5E015AB432")
             };
             simulate(myTimeData);
 
@@ -97,7 +96,6 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
                         .AsClosedTypesOf(typeof(SimulateBase<>)).InstancePerDependency();
 
 
-
                     var container = builder.Build();
 
                     var url = container.Resolve<IMessageBrokerUrl>();
@@ -109,22 +107,20 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
                     while (!messageBroker.IsAlive)
                         Task.Delay(500);
 
-                    Enumerable.Range(1, screens).ForEach(screen =>
-                    {
-                        var schedulingScreen = container.Resolve<SimulateBase<T>>();
-                        schedulingScreen.Simulate(data, screen, client, stats.Callback);
-
-                    //Console.WriteLine("client/screen " + client + "/" + screen);
-                });
+					Enumerable.Range(1, screens).ForEach(screen =>
+					{
+						var schedulingScreen = container.Resolve<SimulateBase<T>>();
+						schedulingScreen.Simulate(data, screen, client, stats.Callback);
+					});
 
                 });
-
+				Console.WriteLine("Done subscribing, took {0}", s.Elapsed);
 
                 trafficSimulator.Start(data.BaseUrl, data.BusinessUnitName, null, null);
                 trafficSimulator.Simulate(data);
 
                 stats.Stopwatch.Start();
-                Console.WriteLine("Done subscribing and simulating traffic, took {0}", s.Elapsed);
+                Console.WriteLine("Done simulating traffic, took {0}", s.Elapsed);
 
                 while (stats.Stopwatch.IsRunning && stats.Stopwatch.Elapsed < TimeSpan.FromSeconds(600))
                 {
