@@ -27,7 +27,7 @@ namespace Stardust.Node.API
 
             if (jobToDo == null)
             {
-                throw new ArgumentNullException();
+                return BadRequest("jobToDo is null");
             }
 
             if (_workerWrapper.IsTaskExecuting)
@@ -66,15 +66,10 @@ namespace Stardust.Node.API
         {
             LogHelper.LogInfoWithLineNumber(Logger, "Start.");
 
-            if (jobId == null)
-            {
-                throw new ArgumentNullException();
-            }
-
             if (jobId == Guid.Empty)
             {
-                throw new ArgumentNullException();
-            }
+				return BadRequest("jobId is empty");
+			}
 
             LogHelper.LogInfoWithLineNumber(Logger,
                                             _workerWrapper.WhoamI + ": Try cancel job ( jobId ) : ( " + jobId + " )");
@@ -110,22 +105,10 @@ namespace Stardust.Node.API
             return Ok();
         }
 
-        private IHttpActionResult CreateOkStatusCode(JobToDo jobToDo)
-        {
-            ValidateJobDefintionValues(jobToDo);
-
-            return Ok(_workerWrapper.WhoamI + ": Work started for job ( jobId, jobName )  : ( " + jobToDo.Id + ", " + jobToDo.Name + " )");
-        }
-
         private IHttpActionResult CreateConflictStatusCode()
         {
             return Conflict();
         }
 
-        private static void ValidateJobDefintionValues(JobToDo jobToDo)
-        {
-            jobToDo.ThrowExceptionWhenNull();
-            jobToDo.Name.ThrowArgumentExceptionIfNullOrEmpty();
-        }
     }
 }

@@ -103,8 +103,6 @@ namespace Stardust.Manager
         public void Add(JobDefinition job)
         {
             _jobRepository.Add(job);
-
-         //   CheckAndAssignNextJob();
         }
 
         public void CancelThisJob(Guid id)
