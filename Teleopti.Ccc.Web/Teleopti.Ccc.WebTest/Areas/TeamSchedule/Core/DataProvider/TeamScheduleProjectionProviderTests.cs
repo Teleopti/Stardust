@@ -60,7 +60,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
 			var absenceLayer = new AbsenceLayer(testAbsence, absencePeriod);
-			scheduleDayOnePerson1.CreateAndAddAbsence(absenceLayer);
+			var personAbsence = scheduleDayOnePerson1.CreateAndAddAbsence(absenceLayer);
+			personAbsence.SetId(Guid.NewGuid());
 
 			var vm = target.Projection(scheduleDayOnePerson1, true);
 
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 			vm.Projection.First().ParentPersonAbsence.Should().Be(null);
 			vm.Projection.Second().ParentPersonAbsence.Should().Be(null);
-			personAbsenceProjection.ParentPersonAbsence.Should().Be(absenceLayer.Payload.Id);
+			personAbsenceProjection.ParentPersonAbsence.Should().Be(personAbsence.Id);
 			vm.Projection.Last().ParentPersonAbsence.Should().Be(null);
 
 			vm.Projection.First().Description.Should().Be(phoneActivity.Description.Name);

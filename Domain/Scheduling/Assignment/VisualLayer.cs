@@ -125,14 +125,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			get { return HighestPriorityActivity != null ? HighestPriorityActivity.Id.GetValueOrDefault() : Guid.Empty; }
     	}
 
-	    public IVisualLayer CloneWithNewPeriod(DateTimePeriod newPeriod)
-	    {
-		    var ret = new VisualLayer(Payload, newPeriod, HighestPriorityActivity, Person)
-			    {
-				    HighestPriorityAbsence = HighestPriorityAbsence,
-						DefinitionSet = DefinitionSet
-			    };
-		    return ret;
-	    }
+		public IVisualLayer CloneWithNewPeriod(DateTimePeriod newPeriod)
+		{
+			var ret = new VisualLayer(Payload, newPeriod, HighestPriorityActivity, Person, PersonAbsenceId)
+			{
+				HighestPriorityAbsence = HighestPriorityAbsence,
+				DefinitionSet = DefinitionSet
+			};
+			return ret;
+		}
     }
 }
