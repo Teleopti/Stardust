@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 
 		   if (_aggregateSkillSkill == null)
-				_aggregateSkillSkill = new Skill(textBoxSummeryName.Text, textBoxSummeryName.Text, Color.Pink, 15, _skills[0].SkillType);
+				_aggregateSkillSkill = new Skill(textBoxSummeryName.Text, textBoxSummeryName.Text, Color.Pink, 15, new SkillTypePhone(new Description("Aggregate"), ForecastSource.InboundTelephony));
 			else
 			{
 				var skill = (ISkill) AggregateSkillSkill;
