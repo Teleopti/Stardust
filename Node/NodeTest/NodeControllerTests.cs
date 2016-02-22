@@ -103,8 +103,7 @@ namespace NodeTest
                       new PostHttpRequestFake());
 
             _nodeController = new NodeController(_workerWrapper) { Request = new HttpRequestMessage() };
-
-            LogHelper.LogInfoWithLineNumber(Logger, "Starting test...");
+			
             var actionResultCancel = _nodeController.TryCancelJob(_jobToDo.Id);
             Assert.IsInstanceOf(typeof (NotFoundResult),
                                 actionResultCancel);
@@ -123,8 +122,7 @@ namespace NodeTest
                       new PostHttpRequestFake());
 
             _nodeController = new NodeController(_workerWrapper) { Request = new HttpRequestMessage() };
-
-            LogHelper.LogInfoWithLineNumber(Logger, "Starting test...");
+			
             var wrongJobToDo = new JobToDo
             {
                 Id = Guid.NewGuid(),
@@ -153,8 +151,7 @@ namespace NodeTest
                       new PostHttpRequestFake());
 
             _nodeController = new NodeController(_workerWrapper) { Request = new HttpRequestMessage() };
-
-            LogHelper.LogInfoWithLineNumber(Logger, "Starting test...");
+			
             _nodeController.StartJob(_jobToDo);
 
             var actionResult = _nodeController.TryCancelJob(_jobToDo.Id);
@@ -166,8 +163,7 @@ namespace NodeTest
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
-        public void ShouldThrowArgumentNullExceptionWhenJobDefinitionIsNullCancelJob()
+        public void ShouldReturnBadRequestWhenJobDefinitionIsNullCancelJob()
         {
             _workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
                       _nodeConfigurationFake,
@@ -180,12 +176,12 @@ namespace NodeTest
 
             _nodeController = new NodeController(_workerWrapper) { Request = new HttpRequestMessage() };
 
-            LogHelper.LogInfoWithLineNumber(Logger, "Starting test...");
-            _nodeController.TryCancelJob(Guid.Empty);
-        }
+			var actionResult = _nodeController.TryCancelJob(Guid.Empty);
+			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult),
+								actionResult);
+		}
 
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
         public void ShouldThrowArgumentNullExceptionWhenJobDefinitionIsNullStartJob()
         {
             _workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
@@ -198,10 +194,12 @@ namespace NodeTest
                       new PostHttpRequestFake());
 
             _nodeController = new NodeController(_workerWrapper) { Request = new HttpRequestMessage() };
-
-            LogHelper.LogInfoWithLineNumber(Logger, "Starting test...");
-            _nodeController.StartJob(null);
-        }
+			
+           
+			var actionResult = _nodeController.StartJob(null);
+			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult),
+								actionResult);
+		}
 
         [Test]
         public void StartJobShouldReturnConflictWhenAlreadyProcessingJob()
@@ -216,8 +214,7 @@ namespace NodeTest
                       new PostHttpRequestFake());
 
             _nodeController = new NodeController(_workerWrapper) { Request = new HttpRequestMessage() };
-
-            LogHelper.LogInfoWithLineNumber(Logger, "Starting test...");
+			
             var parameters = new TestJobParams("hejhopp",
                                                "i lingonskogen");
             var ser = JsonConvert.SerializeObject(parameters);
@@ -246,8 +243,7 @@ namespace NodeTest
                       new PostHttpRequestFake());
 
             _nodeController = new NodeController(_workerWrapper) { Request = new HttpRequestMessage() };
-
-            LogHelper.LogInfoWithLineNumber(Logger, "Starting test...");
+			
             var actionResult = _nodeController.StartJob(_jobToDo);
             _sendJobDoneTimer.Wait.Wait(TimeSpan.FromMinutes(1));
             Assert.IsInstanceOf(typeof (OkResult),
