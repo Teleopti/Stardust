@@ -67,7 +67,7 @@ namespace Manager.Integration.Test
             // Do nothing.
 #else
             _clearDatabase = true;
-            _buildMode = "Debug";
+            _buildMode = "Release";
 #endif
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
@@ -115,7 +115,7 @@ namespace Manager.Integration.Test
         ///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
         ///     netsh http add urlacl url=http://+:9100/ user=everyone listen=yes
         /// </summary>
-        [Test, Ignore]
+        [Test]
         public async void ShouldUnloadNode1AppDomain()
         {
             LogHelper.LogInfoWithLineNumber("Start test.",
@@ -193,7 +193,7 @@ namespace Manager.Integration.Test
         ///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
         ///     netsh http add urlacl url=http://+:9100/ user=everyone listen=yes
         /// </summary>
-        [Test, Ignore]
+        [Test]
         public async void ShouldReturnAllAppDomainKeys()
         {
             LogHelper.LogInfoWithLineNumber("Start test.",
