@@ -106,7 +106,8 @@
 		Wfm_ForecastFileImportOnStardust_37047,
 
 		ResourcePlanner_SkillGroupDeleteAfterCalculation_37048,
-		ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049
-		// ReSharper restore InconsistentNaming
-	}
+		ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049,
+        ETL_SpeedUpPersonPeriodIntraday_37162
+        // ReSharper restore InconsistentNaming
+    }
 }

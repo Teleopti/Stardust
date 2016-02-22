@@ -113,3 +113,4 @@ Wfm_Use_Stardust = false
 Wfm_ForecastFileImportOnStardust_37047 = false
 ResourcePlanner_SkillGroupDeleteAfterCalculation_37048 = RC
 ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049 = false
+ETL_SpeedUpPersonPeriodIntraday_37162 = false
