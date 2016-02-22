@@ -29,7 +29,6 @@ namespace Stardust.Manager
         public string WhoAmI { get; private set; }
 
         [HttpPost, Route(ManagerRouteConstants.Job)]
-       // [HttpPost, ActionName("job")]
         public IHttpActionResult DoThisJob([FromBody] JobRequestModel job)
         {
             if (job == null)
@@ -51,7 +50,6 @@ namespace Stardust.Manager
                 Serialized = job.Serialized,
                 Type = job.Type,
                 UserName = job.UserName,
-                //Should we do it here or?
                 Id = Guid.NewGuid()
             };
             _jobManager.Add(jobReceived);
@@ -68,7 +66,6 @@ namespace Stardust.Manager
         }
 
         [HttpDelete, Route(ManagerRouteConstants.CancelJob)]
-        //    [HttpDelete, ActionName("job")]
         public void CancelThisJob(Guid jobId)
         {
             LogHelper.LogInfoWithLineNumber(Logger,
@@ -78,14 +75,12 @@ namespace Stardust.Manager
         }
 
         [HttpGet, Route(ManagerRouteConstants.GetJobHistoryList)]
-     //   [HttpGet, ActionName("job")]
         public IHttpActionResult JobHistoryList()
         {
             return Ok(_jobManager.GetJobHistoryList());
         }
 
         [HttpGet, Route(ManagerRouteConstants.GetJobHistory)]
-        //  [HttpGet, ActionName("job")]
         public IHttpActionResult JobHistory(Guid jobId)
         {
             var jobHistory = _jobManager.GetJobHistory(jobId);
@@ -94,14 +89,12 @@ namespace Stardust.Manager
         }
 
         [HttpGet, Route(ManagerRouteConstants.JobDetail)]
-        //    [HttpGet, ActionName("jobdetail")]
         public IHttpActionResult JobHistoryDetails(Guid jobId)
         {
             return Ok(_jobManager.JobHistoryDetails(jobId));
         }
         
         [HttpPost, Route(ManagerRouteConstants.Heartbeat)]
-        //     [HttpPost, ActionName("heartbeat")]
         public void Heartbeat([FromBody] Uri nodeUri)
         {
             _jobManager.CheckAndAssignNextJob();
@@ -111,7 +104,6 @@ namespace Stardust.Manager
         }
 
         [HttpPost, Route(ManagerRouteConstants.JobDone)]
-        //  [HttpPost, ActionName("done")]
         public IHttpActionResult JobDone(Guid jobId)
         {
             LogHelper.LogInfoWithLineNumber(Logger,
@@ -124,7 +116,6 @@ namespace Stardust.Manager
         }
         
         [HttpPost, Route(ManagerRouteConstants.JobFailed)]
-        //  [HttpPost, ActionName("fail")]
         public IHttpActionResult JobFailed(Guid jobId)
         {
             LogHelper.LogErrorWithLineNumber(Logger,
@@ -137,7 +128,6 @@ namespace Stardust.Manager
         }
         
         [HttpPost, Route(ManagerRouteConstants.JobHasBeenCanceled)]
-        //   [HttpPost, ActionName("cancel")]
         public IHttpActionResult JobCanceled(Guid jobId)
         {
             LogHelper.LogInfoWithLineNumber(Logger,
@@ -150,7 +140,6 @@ namespace Stardust.Manager
         }
         
         [HttpPost, Route(ManagerRouteConstants.JobProgress)]
-        //  [HttpPost, ActionName("progress")]
         public IHttpActionResult JobProgress([FromBody] JobProgressModel model)
         {
             _jobManager.ReportProgress(model);
@@ -161,7 +150,6 @@ namespace Stardust.Manager
         // to handle that scenario where the node comes up after a crash
         //this end point should be called when the node comes up
         [HttpPost, Route(ManagerRouteConstants.NodeHasBeenInitialized)]
-        // [HttpPost, ActionName("nodeinit")]
         public IHttpActionResult NodeInitialized([FromBody] Uri nodeUri)
         {
             _nodeManager.FreeJobIfAssingedToNode(nodeUri);
