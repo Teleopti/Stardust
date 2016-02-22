@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 						 ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString,
 				Route = ConfigurationManager.AppSettings["RouteName"]
 			};
-			;
+			
 			app.UseStardustManager(managerConfiguration, _scope);
 
 			new ManagerStarter().Start(managerConfiguration, _componentContext);
