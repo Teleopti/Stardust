@@ -84,12 +84,12 @@
     <Compile Include="EventArgs\GuidStatusChangedEventArgs.cs" />
     <Compile Include="FailingJobParams.cs" />
     <Compile Include="JobHistory.cs" />
-    <Compile Include="ManagerIntegrationConsoleHost.cs" />
     <Compile Include="ManagerIntegrationTestControllerTests.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Scripts\ScriptExecuteHelper.cs" />
     <Compile Include="Tasks\AppDomainTask.cs" />
     <Compile Include="Tasks\StartJobTaskHelper.cs" />
+    <Compile Include="FastJobParams.cs" />
     <Compile Include="TestJobParams.cs" />
     <Compile Include="JobRequestModel.cs" />
     <Compile Include="OneManagerAndOneNodeTests.cs" />

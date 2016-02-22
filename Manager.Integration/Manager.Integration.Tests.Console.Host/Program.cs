@@ -73,8 +73,9 @@ namespace Manager.IntegrationTest.Console.Host
         {
             Configuration configuration =
                 new Configuration(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
-
-            string address = configuration.BaseAddress.Scheme + "://+:" + configuration.BaseAddress.Port + "/";
+            
+            string address = 
+                configuration.BaseAddress.Scheme + "://+:" + configuration.BaseAddress.Port + "/";
 
             using (WebApp.Start(address,
                                 appBuilder =>
@@ -96,7 +97,7 @@ namespace Manager.IntegrationTest.Console.Host
                                 }))
             {
                 LogHelper.LogInfoWithLineNumber(Logger,
-                                                "Started listening on port : ( " + configuration.BaseAddress + " )");
+                                                "Started listening on port : ( " + address + " )");
 
                 QuitEvent.WaitOne();
             }
@@ -121,9 +122,6 @@ namespace Manager.IntegrationTest.Console.Host
             AppDomain.CurrentDomain.DomainUnload += CurrentDomainOnDomainUnload;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             
-            LogHelper.LogInfoWithLineNumber(Logger,
-                                            "started.");
-
             DirectoryManagerConfigurationFileFullPath =
                 new DirectoryInfo(Path.Combine(Settings.Default.ManagerConfigurationFileFullPath,
                                                _buildMode));
@@ -170,7 +168,6 @@ namespace Manager.IntegrationTest.Console.Host
                 }
             }
 
-            CancellationTokenSource = new CancellationTokenSource();
 
             AppDomainManagerTask =
                 new AppDomainManagerTask(_buildMode,
@@ -178,7 +175,7 @@ namespace Manager.IntegrationTest.Console.Host
                                          CopiedManagerConfigurationFile,
                                          Settings.Default.ManagerAssemblyName);
 
-            AppDomainManagerTask.StartTask(CancellationTokenSource);
+            AppDomainManagerTask.StartTask(new CancellationTokenSource());
 
             DirectoryNodeAssemblyLocationFullPath =
                 new DirectoryInfo(Path.Combine(Settings.Default.NodeAssemblyLocationFullPath,
@@ -194,7 +191,7 @@ namespace Manager.IntegrationTest.Console.Host
                                           nodeconfigurationFile.Value,
                                           Settings.Default.NodeAssemblyName);
                 
-                appDomainNodeTask.StartTask(CancellationTokenSource);
+                appDomainNodeTask.StartTask(new CancellationTokenSource());
 
                 AppDomainNodeTasks.Add(appDomainNodeTask);
 
@@ -204,8 +201,6 @@ namespace Manager.IntegrationTest.Console.Host
 
             StartSelfHosting();
         }
-
-        public static CancellationTokenSource CancellationTokenSource { get; set; }
 
         private static List<AppDomainNodeTask>  AppDomainNodeTasks { get; set; }
 

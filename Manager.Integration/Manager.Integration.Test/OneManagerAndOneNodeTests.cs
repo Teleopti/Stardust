@@ -129,18 +129,26 @@ namespace Manager.Integration.Test
             var timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
                                                                  5);
 
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
+            //--------------------------------------------
+            // Notify when node is up.
+            //--------------------------------------------
+            CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
             SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
             Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(1,
-                                                                      cancellationTokenSource);
+                                                                      sqlNotiferCancellationTokenSource);
             task.Start();
 
             sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
 
             sqlNotifier.Dispose();
 
+
+            //--------------------------------------------
+            // Start actual test.
+            //--------------------------------------------
             List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 
             var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
@@ -187,7 +195,7 @@ namespace Manager.Integration.Test
                     nodeStartedNotifier.Dispose();
                     jobManagerTaskCreator.Dispose();
                 },
-                CancellationTokenSource.Token);
+                                      CancellationTokenSource.Token);
             };
 
             checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
@@ -217,21 +225,28 @@ namespace Manager.Integration.Test
 
             List<JobRequestModel> createNewJobRequests = JobHelper.GenerateFailingJobParamsRequests(1);
 
-            var timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count);
+            var timeout =
+                JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
+                                                       5);
 
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            //--------------------------------------------
+            // Notify when node is up.
+            //--------------------------------------------
+            CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
             SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
             Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(1,
-                                                                      cancellationTokenSource);
+                                                                      sqlNotiferCancellationTokenSource);
             task.Start();
 
             sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
 
             sqlNotifier.Dispose();
 
-
+            //--------------------------------------------
+            // Start actual test.
+            //--------------------------------------------
             List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 
             var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
@@ -281,20 +296,28 @@ namespace Manager.Integration.Test
             LogHelper.LogInfoWithLineNumber("( " + createNewJobRequests.Count + " ) jobs will be created.",
                                             Logger);
 
-            TimeSpan timeout = JobHelper.GenerateTimeoutTimeInSeconds(createNewJobRequests.Count);
+            TimeSpan timeout =
+                JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
+                                                       5);
 
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            //--------------------------------------------
+            // Notify when node is up.
+            //--------------------------------------------
+            CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
             SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
             Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(1,
-                                                                      cancellationTokenSource);
+                                                                      sqlNotiferCancellationTokenSource);
             task.Start();
 
             sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
 
             sqlNotifier.Dispose();
 
+            //--------------------------------------------
+            // Start actual test.
+            //--------------------------------------------
             List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 
             var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
@@ -345,6 +368,8 @@ namespace Manager.Integration.Test
                 jobManagerTaskCreator.StartAndWaitDeleteJobToManagerTask(timeout);
 
                 jobManagerTaskCreator.Dispose();
+
+                nodeStartedNotifier.Dispose();
             };
 
             checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
@@ -379,20 +404,28 @@ namespace Manager.Integration.Test
             LogHelper.LogInfoWithLineNumber("( " + createNewJobRequests.Count + " ) jobs will be created.",
                                             Logger);
 
-            TimeSpan timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count);
+            TimeSpan timeout =
+                JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
+                                                       5);
 
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            //--------------------------------------------
+            // Notify when node is up.
+            //--------------------------------------------
+            CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
             SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
             Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(1,
-                                                                      cancellationTokenSource);
+                                                                      sqlNotiferCancellationTokenSource);
             task.Start();
 
             sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
 
             sqlNotifier.Dispose();
 
+            //--------------------------------------------
+            // Start actual test.
+            //--------------------------------------------
             List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 
             var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
@@ -420,6 +453,8 @@ namespace Manager.Integration.Test
 
             Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count);
             Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
+
+            CancellationTokenSource.Cancel();
 
             taskHlp.Dispose();
 

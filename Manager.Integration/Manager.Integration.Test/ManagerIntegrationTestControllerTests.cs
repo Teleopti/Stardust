@@ -19,7 +19,7 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
-    [TestFixture, Ignore]
+    [TestFixture]
     public class ManagerIntegrationTestControllerTests
     {
         private static readonly ILog Logger =
@@ -111,17 +111,22 @@ namespace Manager.Integration.Test
 
         private CancellationTokenSource CancellationTokenSource { get; set; }
 
+        /// <summary>
+        ///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
+        ///     netsh http add urlacl url=http://+:9100/ user=everyone listen=yes
+        /// </summary>
         [Test]
         public async void ShouldUnloadNode1AppDomain()
         {
             LogHelper.LogInfoWithLineNumber("Start test.",
                                             Logger);
 
-            CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
             //---------------------------------------------
-            // Notify when all 5 nodes are up. 
+            // Notify when all 5 nodes are up and running. 
             //---------------------------------------------
+            CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
+
             SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
             Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(5,
@@ -180,23 +185,25 @@ namespace Manager.Integration.Test
 
             cancellationTokenSource.Cancel();
 
-            task.Dispose();
-
             LogHelper.LogInfoWithLineNumber("Finished test.",
                                             Logger);
         }
 
+        /// <summary>
+        ///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
+        ///     netsh http add urlacl url=http://+:9100/ user=everyone listen=yes
+        /// </summary>
         [Test]
         public async void ShouldReturnAllAppDomainKeys()
         {
             LogHelper.LogInfoWithLineNumber("Start test.",
                                             Logger);
 
-            CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
-
             //---------------------------------------------
             // Notify when all 5 nodes are up. 
             //---------------------------------------------
+            CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
+
             SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
             Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(5,
@@ -241,9 +248,29 @@ namespace Manager.Integration.Test
                     response = await client.GetAsync(uriBuilder.Uri,
                                                      cancellationTokenSource.Token);
 
-                    LogHelper.LogInfoWithLineNumber("Succeded calling Get Async ( " + uri + " ) ",
-                                                    Logger);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        LogHelper.LogInfoWithLineNumber("Succeeded calling Get Async ( " + uri + " ) ",
+                                                        Logger);
+
+                        string content = await response.Content.ReadAsStringAsync();
+
+                        List<string> list =
+                            JsonConvert.DeserializeObject<List<string>>(content);
+
+                        if (list.Any())
+                        {
+                            foreach (var l in list)
+                            {
+                                LogHelper.LogInfoWithLineNumber(l,
+                                                                Logger);
+                            }
+                        }
+
+                        Assert.IsTrue(list.Any());
+                    }
                 }
+
                 catch (Exception exp)
                 {
                     LogHelper.LogErrorWithLineNumber(exp.Message,
@@ -251,21 +278,6 @@ namespace Manager.Integration.Test
                                                      exp);
                 }
 
-                string content = await response.Content.ReadAsStringAsync();
-
-                List<string> list =
-                    JsonConvert.DeserializeObject<List<string>>(content);
-
-                if (list.Any())
-                {
-                    foreach (var l in list)
-                    {
-                        LogHelper.LogInfoWithLineNumber(l,
-                                                        Logger);
-                    }
-                }
-
-                Assert.IsTrue(list.Any());
             }
 
             Assert.IsTrue(response.IsSuccessStatusCode);

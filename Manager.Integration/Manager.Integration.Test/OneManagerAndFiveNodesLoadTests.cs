@@ -127,8 +127,6 @@ namespace Manager.Integration.Test
             LogHelper.LogInfoWithLineNumber("Start.",
                                             Logger);
 
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-
             List<JobRequestModel> createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(50);
 
             var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
@@ -161,10 +159,12 @@ namespace Manager.Integration.Test
             //---------------------------------------------
             // Notify when all 5 nodes are up. 
             //---------------------------------------------
+            CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
+
             SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
             Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(5,
-                                                                      cancellationTokenSource);
+                                                                      sqlNotiferCancellationTokenSource);
             task.Start();
 
             LogHelper.LogInfoWithLineNumber("Waiting for all 5 nodes to start up.",
@@ -174,7 +174,7 @@ namespace Manager.Integration.Test
 
             sqlNotifier.Dispose();
 
-            LogHelper.LogInfoWithLineNumber("All 5 nodes has strated.",
+            LogHelper.LogInfoWithLineNumber("All 5 nodes has started.",
                                             Logger);
 
             //---------------------------------------------

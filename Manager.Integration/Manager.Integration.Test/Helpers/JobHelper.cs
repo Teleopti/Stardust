@@ -96,6 +96,36 @@ namespace Manager.Integration.Test.Helpers
             return requestModels;
         }
 
+        public static List<JobRequestModel> GenerateFastJobParamsRequests(int numberOfJobRequests)
+        {
+            List<JobRequestModel> requestModels = null;
+
+            if (numberOfJobRequests > 0)
+            {
+                requestModels = new List<JobRequestModel>();
+
+                for (int i = 1; i <= numberOfJobRequests; i++)
+                {
+                    FastJobParams fastJobParams = new FastJobParams("Dummy data " + i,
+                                                                    "Name data " + i);
+
+                    string fastJobParamsJson = JsonConvert.SerializeObject(fastJobParams);
+
+                    var job = new JobRequestModel
+                    {
+                        Name = "Job Name " + i,
+                        Serialized = fastJobParamsJson,
+                        Type = "NodeTest.JobHandlers.FastJobParams",
+                        UserName = SecurityHelper.GetLoggedInUser()
+                    };
+
+                    requestModels.Add(job);
+                }
+            }
+
+            return requestModels;
+        }
+
         public static List<JobRequestModel> GenerateTestJobParamsRequests(int numberOfJobRequests)
         {
             List<JobRequestModel> requestModels = null;

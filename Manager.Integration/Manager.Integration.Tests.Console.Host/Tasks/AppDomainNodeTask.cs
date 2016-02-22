@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using Manager.IntegrationTest.Console.Host.Helpers;
-using Manager.IntegrationTest.Console.Host.Properties;
 
 namespace Manager.IntegrationTest.Console.Host.Tasks
 {
@@ -99,7 +98,8 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 
         public void Dispose()
         {
-            LogHelper.LogInfoWithLineNumber(Logger,"Start disposing.");
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            "Start disposing.");
 
             if (CancellationTokenSource != null &&
                 !CancellationTokenSource.IsCancellationRequested)
@@ -116,7 +116,6 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 
                 catch (Exception)
                 {
-
                 }
             }
 
@@ -125,7 +124,8 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
                 Task.Dispose();
             }
 
-            LogHelper.LogInfoWithLineNumber(Logger, "Finshed disposing.");
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            "Finshed disposing.");
         }
     }
 }
