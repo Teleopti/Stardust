@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators
 {
     public abstract class TrafficSimulatorBase<T> : IDisposable
     {
-        //const string baseUrl = "http://teleopti745/TeleoptiWFM/Web/";
         private string _baseUrl;
         private CookieContainer cookieContainer;
         private HttpClientHandler httpClientHandler;
@@ -20,10 +19,10 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators
             cookieContainer = new CookieContainer();
             httpClientHandler = new HttpClientHandler { CookieContainer = cookieContainer };
             HttpClient = new HttpClient(httpClientHandler) { BaseAddress = new Uri(_baseUrl) };
-            LogOn(businessUnitName ?? "Teleopti%20WFM%20Demo", user ?? "demo", password ?? "demo");
+            logOn(businessUnitName ?? "Teleopti%20WFM%20Demo", user ?? "demo", password ?? "demo");
         }
 
-        private void LogOn(string businessUnitName, string user, string password)
+        private void logOn(string businessUnitName, string user, string password)
         {
             var message = new HttpRequestMessage(HttpMethod.Get, string.Format("Test/Logon?businessUnitName={0}&userName={1}&password={2}", businessUnitName, user, password));
             var response = HttpClient.SendAsync(message).GetAwaiter().GetResult();

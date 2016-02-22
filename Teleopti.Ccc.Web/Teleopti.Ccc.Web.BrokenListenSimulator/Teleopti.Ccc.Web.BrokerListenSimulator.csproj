@@ -57,6 +57,7 @@
     <Compile Include="SimulationData\MyTimeData.cs" />
     <Compile Include="SimulationData\SchedulingData.cs" />
     <Compile Include="SimulationData\SimulationDataBase.cs" />
+    <Compile Include="Stats.cs" />
     <Compile Include="TrafficSimulators\SimulateMyTimeScreenTraffic.cs" />
     <Compile Include="TrafficSimulators\TrafficSimulatorBase.cs" />
   </ItemGroup>
