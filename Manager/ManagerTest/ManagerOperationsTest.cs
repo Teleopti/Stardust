@@ -168,7 +168,7 @@ namespace ManagerTest
                 .Contain(_nodeUri1.ToString());
         }
 
-        [Test]  //Don't do it this way anymore
+        [Test]  
         public void ShouldDistributePersistedJobsOnHeartbeat()
         {
             string userName = "ManagerTests";

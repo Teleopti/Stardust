@@ -19,7 +19,7 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
-    [TestFixture]
+    [TestFixture, Ignore]
     public class ManagerIntegrationTestControllerTests
     {
         private static readonly ILog Logger =
@@ -91,8 +91,7 @@ namespace Manager.Integration.Test
 
             AppDomainTask = new AppDomainTask(_buildMode);
 
-            Task = AppDomainTask.StartTask(cancellationTokenSource: CancellationTokenSource,
-                                           numberOfNodes: 2);
+            Task = AppDomainTask.StartTask(CancellationTokenSource, 2);
 
             LogHelper.LogInfoWithLineNumber("Finshed TestFixtureSetUp",
                                             Logger);
@@ -164,8 +163,7 @@ namespace Manager.Integration.Test
 
                 try
                 {
-                    response = await client.DeleteAsync(uriBuilder.Uri,
-                                                        cancellationTokenSource.Token);
+                    response = await client.DeleteAsync(uriBuilder.Uri, cancellationTokenSource.Token);
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -244,8 +242,7 @@ namespace Manager.Integration.Test
 
                 try
                 {
-                    response = await client.GetAsync(uriBuilder.Uri,
-                                                     cancellationTokenSource.Token);
+                    response = await client.GetAsync(uriBuilder.Uri, cancellationTokenSource.Token);
 
                     if (response.IsSuccessStatusCode)
                     {
