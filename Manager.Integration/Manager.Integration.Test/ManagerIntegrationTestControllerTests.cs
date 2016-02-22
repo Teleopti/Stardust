@@ -92,7 +92,7 @@ namespace Manager.Integration.Test
             AppDomainTask = new AppDomainTask(_buildMode);
 
             Task = AppDomainTask.StartTask(cancellationTokenSource: CancellationTokenSource,
-                                           numberOfNodes: 5);
+                                           numberOfNodes: 2);
 
             LogHelper.LogInfoWithLineNumber("Finshed TestFixtureSetUp",
                                             Logger);
@@ -123,24 +123,24 @@ namespace Manager.Integration.Test
 
 
             //---------------------------------------------
-            // Notify when all 5 nodes are up and running. 
+            // Notify when all 2 nodes are up and running. 
             //---------------------------------------------
             CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
             SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
-            Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(5,
+            Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(2,
                                                                       sqlNotiferCancellationTokenSource);
             task.Start();
 
-            LogHelper.LogInfoWithLineNumber("Waiting for all 5 nodes to start up.",
+            LogHelper.LogInfoWithLineNumber("Waiting for all 2 nodes to start up.",
                                             Logger);
 
-            sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(10));
+            sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(30));
 
             sqlNotifier.Dispose();
 
-            LogHelper.LogInfoWithLineNumber("All 5 nodes has started.",
+            LogHelper.LogInfoWithLineNumber("All 2 nodes has started.",
                                             Logger);
 
             //---------------------------------------------
@@ -200,24 +200,24 @@ namespace Manager.Integration.Test
                                             Logger);
 
             //---------------------------------------------
-            // Notify when all 5 nodes are up. 
+            // Notify when 2 nodes are up. 
             //---------------------------------------------
             CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
             SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
-            Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(5,
+            Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(2,
                                                                       sqlNotiferCancellationTokenSource);
             task.Start();
 
-            LogHelper.LogInfoWithLineNumber("Waiting for all 5 nodes to start up.",
+            LogHelper.LogInfoWithLineNumber("Waiting for 2 nodes to start up.",
                                             Logger);
 
-            sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(10));
+            sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(30));
 
             sqlNotifier.Dispose();
 
-            LogHelper.LogInfoWithLineNumber("All 5 nodes has started.",
+            LogHelper.LogInfoWithLineNumber("All 2 nodes has started.",
                                             Logger);
 
             //---------------------------------------------
