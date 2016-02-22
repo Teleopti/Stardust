@@ -5,9 +5,16 @@ describe('TeamSchedule ScheduleTable ControllerTest', function() {
 
 	beforeEach(function() {
 		module('wfm.teamSchedule');
+		module(function($provide) {
+			$provide.service('Toggle', function() {
+				return {
+					WfmTeamSchedule_RemovePlannedAbsence_36705: true
+				};
+			});
+		});
 	});
 
-	beforeEach(inject(function($controller) {
+	beforeEach(inject(function ($controller) {
 		controller = setUpController($controller);
 	}));
 
