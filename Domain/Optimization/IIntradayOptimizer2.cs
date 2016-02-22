@@ -7,11 +7,11 @@ namespace Teleopti.Ccc.Domain.Optimization
     /// </summary>
     public interface IIntradayOptimizer2
     {
-        /// <summary>
-        /// Executes this instance.
-        /// </summary>
-        /// <returns></returns>
-        bool Execute();
+		/// <summary>
+		/// Executes this instance.
+		/// </summary>
+		/// <returns></returns>
+		DateOnly? Execute();
 
         /// <summary>
         /// Gets the container owner.
@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.Optimization
         /// <value>The container owner.</value>
         IPerson ContainerOwner { get; }
 
-		//should be removed. if not possible for now, at least when toggle 37049 is removed (then IIntradayoptimizer2 could be removed completely)
-		IntradayOptimizeOneday IntradayOptimizeOneday { get; }
+	    void LockDay(DateOnly value);
     }
 }

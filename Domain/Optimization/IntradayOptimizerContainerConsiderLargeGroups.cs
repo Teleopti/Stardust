@@ -23,25 +23,55 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public void Execute(IEnumerable<IIntradayOptimizer2> optimizers, DateOnlyPeriod period)
 		{
 			var numberOfAgents = optimizers.Count(); //this is wrong - should be per skillgroup (also maybe not counting duplicate scheduleperiods if important)
-			var tempOptimizers = optimizers.ToList();
+			var optimizedPerDay = new Dictionary<DateOnly, int>();
+			var optimizersToLoop = optimizers.ToList();
 
-			foreach (var date in period.DayCollection())
+			while (optimizersToLoop.Any())
 			{
-				var optimizedAgents = 0;
-
-				for (int i = tempOptimizers.Count() - 1; i >= 0; i--)
+				var optimizer = optimizersToLoop.GetRandom();
+				var result = optimizer.Execute();
+				if (!result.HasValue)
 				{
-					if (_intradayOptimizerLimiter.CanJumpOutEarly(numberOfAgents, optimizedAgents))
-						break;
-
-					//borde kunna ta bort optimizern här om false
-					var result = tempOptimizers[i].IntradayOptimizeOneday.Execute(date);
-					if (!result)
-						tempOptimizers.RemoveAt(i);
-
-					optimizedAgents++;	
+					optimizersToLoop.Remove(optimizer);
+				}
+				else
+				{
+					if(optimizedPerDay.ContainsKey(result.Value))
+						optimizedPerDay[result.Value]++;
+					else
+					{
+						optimizedPerDay[result.Value] = 1;
+					}
+					if (_intradayOptimizerLimiter.CanJumpOutEarly(numberOfAgents, optimizedPerDay[result.Value]))
+					{
+						optimizersToLoop.ForEach(x => x.LockDay(result.Value));
+					}
 				}
 			}
+			return;
+
+
+
+			//var numberOfAgents = optimizers.Count(); //this is wrong - should be per skillgroup (also maybe not counting duplicate scheduleperiods if important)
+			//var tempOptimizers = optimizers.ToList();
+
+			//foreach (var date in period.DayCollection())
+			//{
+			//	var optimizedAgents = 0;
+
+			//	for (int i = tempOptimizers.Count() - 1; i >= 0; i--)
+			//	{
+			//		if (_intradayOptimizerLimiter.CanJumpOutEarly(numberOfAgents, optimizedAgents))
+			//			break;
+
+			//		//borde kunna ta bort optimizern här om false
+			//		var result = tempOptimizers[i].IntradayOptimizeOneday.Execute(date);
+			//		if (!result)
+			//			tempOptimizers.RemoveAt(i);
+
+			//		optimizedAgents++;	
+			//	}
+			//}
 		}
 	}
 }

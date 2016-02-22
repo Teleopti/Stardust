@@ -35,13 +35,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 						executes++;
 						var result = optimizer.Execute();
 
-						if (!result)
+						if (!result.HasValue)
 						{
 							activeOptimizers.Remove(optimizer);
 						}
 						var who = Resources.OptimizingIntraday + Resources.Colon + "(" + activeOptimizers.Count + ")" + executes + " " +
 										optimizer.ContainerOwner.Name.ToString(NameOrderOption.FirstNameLastName);
-						var success = !result ? " " + Resources.wasNotSuccessful : " " + Resources.wasSuccessful;
+						var success = !result.HasValue ? " " + Resources.wasNotSuccessful : " " + Resources.wasSuccessful;
 						var progressResult =
 							onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, who + success, () => cancel = true));
 						if (cancel || progressResult.ShouldCancel) return;
