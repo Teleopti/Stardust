@@ -8,17 +8,10 @@ namespace Teleopti.Ccc.Domain.Common
 		private static ICurrentBusinessUnit _currentBusinessUnit;
 		private static IAppliedAlarm _appliedAlarm;
 
-		static ServiceLocatorForEntity()
-		{
-			// for tests and projects not using IoC
-			_appliedAlarm = new AllRulesIsAlarm();
-			_currentBusinessUnit = Common.CurrentBusinessUnit.Make();
-		}
 
 
-
-		public static ICurrentBusinessUnit CurrentBusinessUnit { get { return _currentBusinessUnit; } }
-		public static IAppliedAlarm AppliedAlarm { get { return _appliedAlarm; } }
+		public static ICurrentBusinessUnit CurrentBusinessUnit { get { return _currentBusinessUnit ?? Common.CurrentBusinessUnit.Make(); } }
+		public static IAppliedAlarm AppliedAlarm { get { return _appliedAlarm ?? new AllRulesIsAlarm(); } }
 
 
 
