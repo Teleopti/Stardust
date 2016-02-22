@@ -41,8 +41,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.AddModule(new OutboundScheduledResourcesProviderModule());
 			//
 
-			fakePrincipal(system);
-
 			// Tenant (and datasource) stuff
 			system.AddModule(new TenantServerModule(configuration));
 			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
@@ -81,8 +79,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeAgentStateReadModelStorage>().For<IAgentStateReadModelReader, IAgentStateReadModelPersister>();
 			system.UseTestDouble<FakeTeamOutOfAdherenceReadModelPersister>().For<ITeamOutOfAdherenceReadModelPersister>();
 			system.UseTestDouble<FakeSiteOutOfAdherenceReadModelPersister>().For<ISiteOutOfAdherenceReadModelPersister>();
-			system.UseTestDouble<FakeAdherenceDetailsReadModelPersister>().For<IAdherenceDetailsReadModelPersister>();
-			system.UseTestDouble<FakeAdherencePercentageReadModelPersister>().For<IAdherencePercentageReadModelPersister>();
+			system.UseTestDouble<FakeAdherenceDetailsReadModelPersister>().For<IAdherenceDetailsReadModelPersister, IAdherenceDetailsReadModelReader>();
+			system.UseTestDouble<FakeAdherencePercentageReadModelPersister>().For<IAdherencePercentageReadModelPersister, IAdherencePercentageReadModelReader>();
 			//
 
 			system.UseTestDouble<FakeScheduleDictionaryPersister>().For<IScheduleDictionaryPersister>();
@@ -90,6 +88,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			// Repositories
 			system.AddService<FakeDatabase>();
 			system.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
+			system.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
 			system.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
 			system.UseTestDouble<FakeSkillDayRepository>().For<ISkillDayRepository>();
 			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
@@ -127,23 +126,5 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeSkillAreaRepository>().For<ISkillAreaRepository>();
 		}
 
-		private void fakePrincipal(ISystem system)
-		{
-			var principal = new FakeCurrentTeleoptiPrincipal();
-			var signedIn = QueryAllAttributes<LoggedOffAttribute>().IsEmpty();
-			if (signedIn)
-			{
-				// because DomainTest project has a SetupFixtureForAssembly that creates a principal and sets it to that static thing... 
-				var thePrincipal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
-				if (thePrincipal == null)
-					// add more when required, but we have to sure its the correct "things" added
-					// for example, which datasource? if the test creates one, it should probably be that one...
-					// and for businessunit, it should probably not just be just "newing up" one
-					// MAYBE the principal should be create on demand (Func<ITeleoptiPrincipal>), adding whatever is the ICurrent* stuff at the time
-					thePrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null, null), null);
-				principal.Fake(thePrincipal);
-			}
-			system.UseTestDouble(principal).For<ICurrentTeleoptiPrincipal, ICurrentPrincipalContext>();
-		}
 	}
 }

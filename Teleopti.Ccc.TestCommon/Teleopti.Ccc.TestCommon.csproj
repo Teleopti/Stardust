@@ -186,6 +186,7 @@
     <Compile Include="FakeRecurringEventPublisher.cs" />
     <Compile Include="FakeRepositories\FakeAbsenceRepository.cs" />
     <Compile Include="FakeRepositories\FakeAgentDayScheduleTagRepository.cs" />
+    <Compile Include="FakeRepositories\FakeApplicationRoleRepository.cs" />
     <Compile Include="FakeRepositories\FakeBudgetDayRepository.cs" />
     <Compile Include="FakeRepositories\FakeBusinessUnitRepository.cs" />
     <Compile Include="FakeRepositories\FakeContractRepository.cs" />
@@ -232,9 +233,7 @@
     <Compile Include="MessageBrokerCompositeDummy.cs" />
     <Compile Include="ObjectCopyExtension.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAdherenceDetailsReadModelPersister.cs" />
-    <Compile Include="FakeRepositories\Rta\FakeAdherenceDetailsReadModelReader.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAdherencePercentageReadModelPersister.cs" />
-    <Compile Include="FakeRepositories\Rta\FakeAdherencePercentageReadModelReader.cs" />
     <Compile Include="FakeRepositories\FakeRtaRuleRepository.cs" />
     <Compile Include="FakeRepositories\Rta\FakeRtaDatabase.cs" />
     <Compile Include="FakeRepositories\FakeRtaStateGroupRepository.cs" />

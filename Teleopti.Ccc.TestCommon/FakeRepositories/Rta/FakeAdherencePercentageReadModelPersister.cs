@@ -29,6 +29,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			models.ForEach(x => _data.Add(x));
 		}
 
+		public void Has(AdherencePercentageReadModel adherencePercentageReadModel)
+		{
+			_data.Add(adherencePercentageReadModel);
+		}
+
 		public void Persist(AdherencePercentageReadModel model)
 		{
 			_data.Add(model);

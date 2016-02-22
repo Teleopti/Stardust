@@ -1,5 +1,4 @@
 using System;
-using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
@@ -8,7 +7,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -19,17 +17,17 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 {
-	[IoCTest]
+	[DomainTest]
 	[TestFixture]
 	public class AdherencePercentageViewModelBuilderTest : ISetup
 	{
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeAdherencePercentageReadModelReader>().For<IAdherencePercentageReadModelReader>();
-			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository, IRepository<IPerson>>();
+			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
+			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserCulture>();
 		}
 
-		public FakeAdherencePercentageReadModelReader Reader;
+		public FakeAdherencePercentageReadModelPersister Reader;
 		public IAdherencePercentageViewModelBuilder Target;
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;

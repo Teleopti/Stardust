@@ -5,12 +5,16 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebTest.Areas.Search
+namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeApplicationRoleRepository : IApplicationRoleRepository
 	{
+		private readonly List<IApplicationRole> _roles = new List<IApplicationRole>();
 
-		private List<IApplicationRole> _roles = new List<IApplicationRole>();
+		public void Has(IApplicationRole entity)
+		{
+			Add(entity);
+		}
 
 		public void Add(IApplicationRole entity)
 		{
@@ -48,6 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }
+
 		public IList<IApplicationRole> LoadAllApplicationRolesSortedByName()
 		{
 			return _roles.OrderBy(x => x.Name).ToList();

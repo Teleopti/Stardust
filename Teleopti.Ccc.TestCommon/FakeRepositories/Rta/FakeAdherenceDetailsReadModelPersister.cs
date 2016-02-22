@@ -20,6 +20,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_data = data;
 		}
 
+		public void Has(AdherenceDetailsReadModel data)
+		{
+			_data = new[] { data };
+		}
+
 		public AdherenceDetailsModel Model
 		{
 			get { return _data.Single().Model; }

@@ -5,6 +5,7 @@ using System.Reflection;
 using NHibernate;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Kpi;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -200,7 +201,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 
 			ISession sess = _sessionFactory.OpenSession();
 
-			var role = sess.Get<ApplicationRole>(new Guid("193AD35C-7735-44D7-AC0C-B8EDA0011E5F"));
+			var role = sess.Get<ApplicationRole>(SystemUser.SuperRoleId);
 			if (role != null)
 			{
 				user.PermissionInformation.AddApplicationRole(role);

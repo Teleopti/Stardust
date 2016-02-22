@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
@@ -9,7 +8,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -21,21 +19,21 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 {
 	[TestFixture]
-	[IoCTest]
+	[DomainTest]
 	public class AdherenceDetailsViewModelBuilderTest : ISetup
 	{
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			system.UseTestDouble<FakeAdherenceDetailsReadModelReader>().For<IAdherenceDetailsReadModelReader>();
-			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository, IRepository<IPerson>>();
-		}
-
-		public FakeAdherenceDetailsReadModelReader Reader;
+		public FakeAdherenceDetailsReadModelPersister Reader;
 		public IAdherenceDetailsViewModelBuilder Target;
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
 		public FakeUserCulture Culture;
 		public FakePersonRepository PersonRepository;
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
+			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserCulture>();
+		}
 
 		[Test]
 		public void ShouldBuildViewModel()
@@ -640,7 +638,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 
 			result.First().AdherencePercent.Should().Be(50);
 		}
-
 
 	}
 }

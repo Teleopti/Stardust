@@ -1,11 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using NHibernate.Util;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Logon;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.DomainTest.Logon
@@ -17,27 +24,25 @@ namespace Teleopti.Ccc.DomainTest.Logon
 		public FakeDatabase Database;
 		public Service TheService;
 		public ICurrentTeleoptiPrincipal Principal;
+		public IPrincipalAuthorization PrincipalAuthorization;
+		public IDefinedRaptorApplicationFunctionFactory ApplicationFunctions;
+		public IUserTimeZone TimeZone;
+		public IUserCulture Culture;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddService<Service>();
+			//system.AddService<PrincipalAuthorization>();
 		}
 
 		public class Service
 		{
-			private readonly ICurrentTeleoptiPrincipal _principal;
-			public ITeleoptiPrincipal RanWithPrincipal;
-
-			public Service(ICurrentTeleoptiPrincipal principal)
-			{
-				_principal = principal;
-			}
-
 			[AsSystem]
-			public virtual void Call(Input input)
+			public virtual void Do(Input input, Action action)
 			{
-				RanWithPrincipal = _principal.Current();
+				action.Invoke();
 			}
+
 		}
 
 		public class Input : ILogOnContext
@@ -49,14 +54,90 @@ namespace Teleopti.Ccc.DomainTest.Logon
 		[Test]
 		public void ShouldSignInAsSystem()
 		{
+			ITeleoptiPrincipal ranWithPrincipal = null;
 			var businessUnid = Guid.NewGuid();
 			Database
 				.WithTenant("tenant")
 				.WithBusinessUnit(businessUnid);
 
-			TheService.Call(new Input {LogOnDatasource = "tenant", LogOnBusinessUnitId = businessUnid});
+			TheService.Do(
+				new Input {LogOnDatasource = "tenant", LogOnBusinessUnitId = businessUnid},
+				() =>
+				{
+					ranWithPrincipal = Principal.Current();
+				});
 
-			TheService.RanWithPrincipal.Identity.Name.Should().Be("System");
+			ranWithPrincipal.Identity.Name.Should().Be("System");
+		}
+
+		[Test]
+		public void ShouldHaveUtcTimeZone()
+		{
+			var businessUnid = Guid.NewGuid();
+			Database
+				.WithTenant("tenant")
+				.WithBusinessUnit(businessUnid);
+			TimeZoneInfo timeZone = null;
+
+			TheService.Do(new Input {LogOnDatasource = "tenant", LogOnBusinessUnitId = businessUnid},
+				() =>
+				{
+					timeZone = TimeZone.TimeZone();
+				});
+
+			timeZone.Should().Be.EqualTo(TimeZoneInfo.Utc);
+		}
+
+		[Test]
+		public void ShouldHaveEnglishCulture()
+		{
+			var businessUnid = Guid.NewGuid();
+			Database
+				.WithTenant("tenant")
+				.WithBusinessUnit(businessUnid);
+			CultureInfo culture = null;
+
+			TheService.Do(new Input { LogOnDatasource = "tenant", LogOnBusinessUnitId = businessUnid },
+				() =>
+				{
+					culture = Culture.GetCulture();
+				});
+
+			culture.Should().Be.EqualTo(CultureInfoFactory.CreateEnglishCulture());
+		}
+
+		[Test, Ignore("wip")]
+		public void ShouldHaveAllPermissions()
+		{
+			var permissions = new List<bool>();
+			var businessUnid = Guid.NewGuid();
+			Database
+				.WithTenant("tenant")
+				.WithBusinessUnit(businessUnid);
+
+			TheService.Do(new Input { LogOnDatasource = "tenant", LogOnBusinessUnitId = businessUnid },
+				() =>
+				{
+					ApplicationFunctions.ApplicationFunctionList.ForEach(f =>
+					{
+						permissions.Add(PrincipalAuthorization.IsPermitted(f.FunctionPath));
+					});
+				});
+
+			permissions.Should().Have.SameValuesAs(new[] { true });
+		}
+
+		[Test, Ignore("todo")]
+		public void ShouldSignOut()
+		{
+			var businessUnid = Guid.NewGuid();
+			Database
+				.WithTenant("tenant")
+				.WithBusinessUnit(businessUnid);
+
+			TheService.Do(new Input {LogOnDatasource = "tenant", LogOnBusinessUnitId = businessUnid}, () => { });
+
+			Principal.Current().Should().Be.Null();
 		}
 
 	}
