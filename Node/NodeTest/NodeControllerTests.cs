@@ -182,7 +182,7 @@ namespace NodeTest
 		}
 
         [Test]
-        public void ShouldThrowArgumentNullExceptionWhenJobDefinitionIsNullStartJob()
+        public void ShouldReturnBadRequestWhenJobDefinitionIsNullStartJob()
         {
             _workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
                       _nodeConfigurationFake,
