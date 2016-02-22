@@ -53,6 +53,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 			Persister.Get(testCase.DestinationTeam).Count.Should().Be(1);
 		}
 
+		[Test]
+		[TestCaseSource(typeof(UnorderedEventsTest), "OutTerminateReactivateDelete")]
+		public void ShouldHandleReactivation(TestCase testCase)
+		{
+			testCase.Events.ForEach(e => Target.Handle((dynamic)e));
+			Persister.Get(testCase.OriginTeam).Count.Should().Be(0);
+		}
+
 		public static IEnumerable OutInOut_OutIn
 		{
 			get
@@ -241,6 +249,57 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 						i.OriginTeam = originTeamId;
 						i.DestinationTeam = destinationTeamId;
 					});
+
+			}
+		}
+
+		public static IEnumerable OutTerminateReactivateDelete
+		{
+			get
+			{
+				var personId = Guid.NewGuid();
+				var teamId = Guid.NewGuid();
+
+				var setup = new IEvent[]
+				{
+					new PersonInAdherenceEvent
+					{
+						PersonId = Guid.NewGuid(),
+						TeamId = teamId,
+						Timestamp = "2015-02-18 12:02".Utc()
+					}
+				};
+
+				var events = new IEvent[]
+				{
+					new PersonOutOfAdherenceEvent
+					{
+						PersonId = personId,
+						TeamId = teamId,
+						Timestamp = "2015-02-18 12:02".Utc()
+					},
+					new PersonAssociationChangedEvent
+					{
+						PersonId = personId,
+						Timestamp = "2015-02-18 12:04".Utc(),
+						TeamId = null
+					},
+					new PersonAssociationChangedEvent
+					{
+						PersonId = personId,
+						Timestamp = "2015-02-18 12:06".Utc(),
+						TeamId = teamId
+					},
+					new PersonDeletedEvent
+					{
+						PersonId = personId,
+						Timestamp = "2015-02-18 12:08".Utc()
+					},
+				};
+
+				return events
+					.Permutations()
+					.TestCases(setup, i => i.OriginTeam = teamId);
 
 			}
 		}

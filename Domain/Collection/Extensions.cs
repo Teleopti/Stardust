@@ -236,6 +236,11 @@ namespace Teleopti.Ccc.Domain.Collection
 			return source.ElementAt(1);
 		}
 
+		public static IEnumerable<T> Except<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+		{
+			return source.Where(x => !predicate(x));
+		}
+
 		public static IEnumerable<T> Append<T>(this IEnumerable<T> source, T item)
 		{
 			foreach (var a in source)

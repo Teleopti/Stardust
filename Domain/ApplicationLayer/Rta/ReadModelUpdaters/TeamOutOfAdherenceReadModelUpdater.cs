@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				updateAllModels(
 					@event.PersonId,
 					@event.Timestamp,
-					deletePerson);
+					movePersonFrom);
 			}
 		}
 
@@ -177,9 +177,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			var latestUpdate = model.State.Max(x => x.Time);
 			if (latestUpdate == DateTime.MinValue)
 				return;
-			var safeToRemoveOlderThan = latestUpdate.Subtract(TimeSpan.FromMinutes(10));
 			model.State = model.State
-				.Where(x => x.OutOfAdherence || x.Time > safeToRemoveOlderThan)
+				.Except(x =>
+				{
+					var bufferTimeOut = x.Time < latestUpdate.Subtract(TimeSpan.FromMinutes(10));
+					if (x.Moved || x.Deleted)
+						return bufferTimeOut;
+					if (x.OutOfAdherence)
+						return false;
+					return bufferTimeOut;
+				})
 				.ToArray();
 		}
 

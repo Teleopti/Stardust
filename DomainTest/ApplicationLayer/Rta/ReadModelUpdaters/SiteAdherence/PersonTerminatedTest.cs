@@ -67,5 +67,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 
 			Persister.Get(siteId).Count.Should().Be(1);
 		}
+
+		[Test]
+		public void ShouldReactivatePerson()
+		{
+			var siteId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
+			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = personId });
+			Target.Handle(new PersonAssociationChangedEvent
+			{
+				PersonId = personId,
+				SiteId = null
+			});
+
+			Target.Handle(new PersonAssociationChangedEvent
+			{
+				PersonId = personId,
+				SiteId = siteId
+			});
+
+			Persister.Get(siteId).Count.Should().Be(1);
+		}
+
 	}
 }

@@ -67,5 +67,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 
 			Persister.Get(teamId).Count.Should().Be(1);
 		}
+
+		[Test]
+		public void ShouldReactivatePerson()
+		{
+			var teamId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
+			Target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId, PersonId = personId });
+			Target.Handle(new PersonAssociationChangedEvent
+			{
+				PersonId = personId,
+				TeamId = null
+			});
+
+			Target.Handle(new PersonAssociationChangedEvent
+			{
+				PersonId = personId,
+				TeamId = teamId
+			});
+
+			Persister.Get(teamId).Count.Should().Be(1);
+		}
+		
 	}
 }

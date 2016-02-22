@@ -84,22 +84,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 
 			Persister.Get(teamId).Count.Should().Be(1);
 		}
-
-		[Test]
-		public void ShouldIgnoreAdherenceChangesForDeletedPersonsForAWhile()
-		{
-			var teamId = Guid.NewGuid();
-			var personId = Guid.NewGuid();
-			Target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId, PersonId = personId, Timestamp = "2015-12-04 08:00".Utc() });
-
-			Target.Handle(new PersonDeletedEvent
-			{
-				PersonId = personId,
-				Timestamp = "2015-12-04 10:00".Utc()
-			});
-			Target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId, PersonId = personId, Timestamp = "2015-12-04 10:05".Utc() });
-
-			Persister.Get(teamId).Count.Should().Be(0);
-		}
 	}
 }

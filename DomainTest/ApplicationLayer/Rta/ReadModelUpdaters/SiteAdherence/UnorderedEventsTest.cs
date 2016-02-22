@@ -53,6 +53,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 			Persister.Get(testCase.DestinationSite).Count.Should().Be(1);
 		}
 
+		[Test]
+		[TestCaseSource(typeof(UnorderedEventsTest), "OutTerminateReactivateDelete")]
+		public void ShouldHandleReactivation(TestCase testCase)
+		{
+			testCase.Events.ForEach(e => Target.Handle((dynamic)e));
+			Persister.Get(testCase.OriginSite).Count.Should().Be(0);
+		}
+
 		public static IEnumerable OutInOut_OutIn
 		{
 			get
@@ -240,6 +248,57 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 						i.OriginSite = originSiteId;
 						i.DestinationSite = destinationSiteId;
 					});
+
+			}
+		}
+
+		public static IEnumerable OutTerminateReactivateDelete
+		{
+			get
+			{
+				var personId = Guid.NewGuid();
+				var siteId = Guid.NewGuid();
+
+				var setup = new IEvent[]
+				{
+					new PersonInAdherenceEvent
+					{
+						PersonId = Guid.NewGuid(),
+						SiteId = siteId,
+						Timestamp = "2015-02-18 12:02".Utc()
+					}
+				};
+
+				var events = new IEvent[]
+				{
+					new PersonOutOfAdherenceEvent
+					{
+						PersonId = personId,
+						SiteId = siteId,
+						Timestamp = "2015-02-18 12:02".Utc()
+					},
+					new PersonAssociationChangedEvent
+					{
+						PersonId = personId,
+						Timestamp = "2015-02-18 12:04".Utc(),
+						SiteId = null
+					},
+					new PersonAssociationChangedEvent
+					{
+						PersonId = personId,
+						Timestamp = "2015-02-18 12:06".Utc(),
+						SiteId = siteId
+					},
+					new PersonDeletedEvent
+					{
+						PersonId = personId,
+						Timestamp = "2015-02-18 12:08".Utc()
+					},
+				};
+
+				return events
+					.Permutations()
+					.TestCases(setup, i => i.OriginSite = siteId);
 
 			}
 		}
