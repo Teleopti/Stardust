@@ -79,8 +79,7 @@ namespace NodeTest.JobHandlers
                     cancellationTokenSource.Token.ThrowIfCancellationRequested();
                 }
 
-
-                Thread.Sleep(TimeSpan.FromSeconds(10));
+                Thread.Sleep(TimeSpan.FromSeconds(60));
             }
 
             progressMessage = 

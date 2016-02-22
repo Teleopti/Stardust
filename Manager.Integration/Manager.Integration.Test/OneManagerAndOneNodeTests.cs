@@ -213,7 +213,7 @@ namespace Manager.Integration.Test
                           "Must have equal number of rows.");
 
             Assert.IsFalse(checkJobHistoryStatusTimer.Guids.Any(pair => pair.Value == StatusConstants.SuccessStatus),
-                           "Invalid SUCCEESS status.");
+                           "Invalid SUCCESS status.");
 
             Assert.IsFalse(checkJobHistoryStatusTimer.Guids.Any(pair => pair.Value == StatusConstants.NullStatus),
                            "Invalid NULL status.");
