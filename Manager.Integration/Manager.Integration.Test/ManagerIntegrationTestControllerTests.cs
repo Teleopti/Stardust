@@ -121,10 +121,12 @@ namespace Manager.Integration.Test
             LogHelper.LogInfoWithLineNumber("Start test.",
                                             Logger);
 
-
             //---------------------------------------------
             // Notify when all 2 nodes are up and running. 
             //---------------------------------------------
+            LogHelper.LogInfoWithLineNumber("Waiting for all 2 nodes to start up.",
+                                            Logger);
+
             CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
             SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
@@ -133,8 +135,6 @@ namespace Manager.Integration.Test
                                                                       sqlNotiferCancellationTokenSource);
             task.Start();
 
-            LogHelper.LogInfoWithLineNumber("Waiting for all 2 nodes to start up.",
-                                            Logger);
 
             sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(30));
 
@@ -169,7 +169,7 @@ namespace Manager.Integration.Test
 
                     if (response.IsSuccessStatusCode)
                     {
-                        LogHelper.LogInfoWithLineNumber("Succeded calling Delete Async ( " + uri + " ) ",
+                        LogHelper.LogInfoWithLineNumber("Succeeded calling Delete Async ( " + uri + " ) ",
                                                         Logger);
                     }
                 }
@@ -202,6 +202,9 @@ namespace Manager.Integration.Test
             //---------------------------------------------
             // Notify when 2 nodes are up. 
             //---------------------------------------------
+            LogHelper.LogInfoWithLineNumber("Waiting for 2 nodes to start up.",
+                                            Logger);
+
             CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
             SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
@@ -209,9 +212,6 @@ namespace Manager.Integration.Test
             Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(2,
                                                                       sqlNotiferCancellationTokenSource);
             task.Start();
-
-            LogHelper.LogInfoWithLineNumber("Waiting for 2 nodes to start up.",
-                                            Logger);
 
             sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(30));
 
@@ -277,7 +277,6 @@ namespace Manager.Integration.Test
                                                      Logger,
                                                      exp);
                 }
-
             }
 
             Assert.IsTrue(response.IsSuccessStatusCode);

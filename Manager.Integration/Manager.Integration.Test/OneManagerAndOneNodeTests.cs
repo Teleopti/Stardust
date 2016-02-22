@@ -133,6 +133,9 @@ namespace Manager.Integration.Test
             //--------------------------------------------
             // Notify when node is up.
             //--------------------------------------------
+            LogHelper.LogInfoWithLineNumber("Waiting for node to start.",
+                                            Logger);
+
             CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
             SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
@@ -145,6 +148,8 @@ namespace Manager.Integration.Test
 
             sqlNotifier.Dispose();
 
+            LogHelper.LogInfoWithLineNumber("Node have started.",
+                                            Logger);
 
             //--------------------------------------------
             // Start actual test.
@@ -232,6 +237,9 @@ namespace Manager.Integration.Test
             //--------------------------------------------
             // Notify when node is up.
             //--------------------------------------------
+            LogHelper.LogInfoWithLineNumber("Waiting for node to start.",
+                                            Logger);
+
             CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
             SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
@@ -243,6 +251,9 @@ namespace Manager.Integration.Test
             sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
 
             sqlNotifier.Dispose();
+
+            LogHelper.LogInfoWithLineNumber("Node have started.",
+                                            Logger);
 
             //--------------------------------------------
             // Start actual test.
@@ -303,6 +314,9 @@ namespace Manager.Integration.Test
             //--------------------------------------------
             // Notify when node is up.
             //--------------------------------------------
+            LogHelper.LogInfoWithLineNumber("Waiting for node to start.",
+                                            Logger);
+
             CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
             SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
@@ -314,6 +328,9 @@ namespace Manager.Integration.Test
             sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
 
             sqlNotifier.Dispose();
+
+            LogHelper.LogInfoWithLineNumber("Node have started.",
+                                            Logger);
 
             //--------------------------------------------
             // Start actual test.
@@ -411,6 +428,9 @@ namespace Manager.Integration.Test
             //--------------------------------------------
             // Notify when node is up.
             //--------------------------------------------
+            LogHelper.LogInfoWithLineNumber("Waiting for node to start.",
+                                            Logger);
+
             CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
             SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
@@ -422,6 +442,9 @@ namespace Manager.Integration.Test
             sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
 
             sqlNotifier.Dispose();
+
+            LogHelper.LogInfoWithLineNumber("Node have started.",
+                                            Logger);
 
             //--------------------------------------------
             // Start actual test.
