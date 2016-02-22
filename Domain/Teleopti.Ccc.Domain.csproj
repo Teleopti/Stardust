@@ -247,10 +247,10 @@
     <Compile Include="ApplicationLayer\RecurringIdAttribute.cs" />
     <Compile Include="ApplicationLayer\ResolveEventHandlers.cs" />
     <Compile Include="Common\ServiceLocatorForEntity.cs" />
-    <Compile Include="Logon\Aspects\DataSourceAspect.cs" />
-    <Compile Include="Logon\Aspects\DataSourceAttribute.cs" />
-    <Compile Include="Logon\Aspects\IDataSourceAspect.cs" />
-    <Compile Include="Logon\Aspects\RtaConnectionStringDataSourceAspect.cs" />
+    <Compile Include="Logon\Aspects\TenantScopeAspect.cs" />
+    <Compile Include="Logon\Aspects\TenantScopeAttribute.cs" />
+    <Compile Include="Logon\Aspects\ITenantScopeAspect.cs" />
+    <Compile Include="Logon\Aspects\RtaConnectionStringTenantScopeAspect.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAppliedAlarm.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\InvalidPlatformException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\InvalidSourceException.cs" />

@@ -33,9 +33,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			if (_config.Toggle(Toggles.RTA_MultiTenancy_32539))
-				builder.RegisterType<DataSourceAspect>().As<IDataSourceAspect>().SingleInstance();
+				builder.RegisterType<TenantScopeAspect>().As<ITenantScopeAspect>().SingleInstance();
 			else
-				builder.RegisterType<RtaConnectionStringDataSourceAspect>().As<IDataSourceAspect>().SingleInstance();
+				builder.RegisterType<RtaConnectionStringTenantScopeAspect>().As<ITenantScopeAspect>().SingleInstance();
 			builder.RegisterType<TenantFromArguments>().SingleInstance();
 			builder.RegisterType<AsSystemAspect>().SingleInstance();
 

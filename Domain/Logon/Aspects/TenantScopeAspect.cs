@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.Domain.Logon.Aspects
 {
-	public class DataSourceAspect : IDataSourceAspect
+	public class TenantScopeAspect : ITenantScopeAspect
 	{
 		private readonly IDataSourceScope _dataSource;
 		private readonly TenantFromArguments _tenant;
@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Logon.Aspects
 		[ThreadStatic]
 		private static IDisposable _scope;
 
-		public DataSourceAspect(IDataSourceScope dataSource, TenantFromArguments tenant)
+		public TenantScopeAspect(IDataSourceScope dataSource, TenantFromArguments tenant)
 		{
 			_dataSource = dataSource;
 			_tenant = tenant;

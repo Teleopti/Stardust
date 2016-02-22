@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Logon
 
 			public IDataSource RanWithDataSource;
 
-			[DataSource]
+			[TenantScope]
 			public virtual void Does(object input)
 			{
 				RanWithDataSource = _dataSource.Current();

@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[InfoLog]
-		[DataSource]
+		[TenantScope]
 		public virtual void SaveStateSnapshot(IEnumerable<ExternalUserStateInputModel> states)
 		{
 			_initializor.EnsureTenantInitialized();
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[InfoLog]
-		[DataSource]
+		[TenantScope]
 		public virtual void SaveStateBatch(IEnumerable<ExternalUserStateInputModel> states)
 		{
 			_initializor.EnsureTenantInitialized();
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[InfoLog]
-		[DataSource]
+		[TenantScope]
 		public virtual void SaveState(ExternalUserStateInputModel input)
 		{
 			validateAuthenticationKey(input);
@@ -228,20 +228,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[InfoLog]
-		[DataSource]
+		[TenantScope]
 		public virtual void ReloadSchedulesOnNextCheckForActivityChanges(string tenant, Guid personId)
 		{
 			_cacheInvalidator.InvalidateSchedules(personId);
 		}
 
 		[InfoLog]
-		[DataSource]
+		[TenantScope]
 		public virtual void CheckForActivityChanges(string tenant)
 		{
 			_activityChangeProcessor.CheckForActivityChanges();
 		}
 
-		[DataSource]
+		[TenantScope]
 		public virtual void Touch(string tenant)
 		{
 			_initializor.EnsureTenantInitialized();
