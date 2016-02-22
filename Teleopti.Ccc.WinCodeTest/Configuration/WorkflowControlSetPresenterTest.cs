@@ -883,6 +883,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 				Expect.Call(() => _view.SetAnonymousTrading(false));
 				Expect.Call(() => _view.SetLockTrading(false));
                 Expect.Call(() => _view.SetFairnessType(FairnessType.EqualNumberOfShiftCategory));
+				Expect.Call(() => _view.SetAbsenceRequestWaitlisting(false));
             }
             using (_mocks.Playback())
             {
@@ -1078,6 +1079,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Expect.Call(() => view.SetAnonymousTrading(false)).IgnoreArguments();
             Expect.Call(() => view.SetLockTrading(false)).IgnoreArguments();
 			Expect.Call(() => view.SetFairnessType(FairnessType.EqualNumberOfShiftCategory)).IgnoreArguments();
+	        Expect.Call (() => view.SetAbsenceRequestWaitlisting (false)).IgnoreArguments();
             Expect.Call(view.EnableAllAuthorized);
         }
     }
