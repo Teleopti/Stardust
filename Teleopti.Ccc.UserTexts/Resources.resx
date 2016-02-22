@@ -14099,7 +14099,7 @@ Help us improve your experience by sending an error report</value>
     <comment>Show right panel tooltip text</comment>
   </data>
   <data name="OnlySupportSeatRolesSetting" xml:space="preserve">
-    <value>Only support seat roles setting</value>
+    <value>Only supports seat roles setting</value>
     <comment>Seat roles setting warning text in seatmap</comment>
   </data>
   <data name="ShowOnlyAbsence" xml:space="preserve">
@@ -14111,7 +14111,7 @@ Help us improve your experience by sending an error report</value>
     <comment>Tooltip text of wfm right panel hide button</comment>
   </data>
   <data name="DoubleClickHereToEditText" xml:space="preserve">
-    <value>Double click here to edit text</value>
+    <value>Double-click here to edit text</value>
     <comment>Text info when adding a Text in seatmap</comment>
   </data>
   <data name="EnableWaitlisting" xml:space="preserve">
@@ -14119,11 +14119,11 @@ Help us improve your experience by sending an error report</value>
     <comment>Used on the Absence Request Tab of the Workflow Control Set options page.  Controls if Absence Requests are to be waitlisted when auto denied.</comment>
   </data>
   <data name="AbsenceRequestForOneDayHasBeenWaitlisted" xml:space="preserve">
-    <value>The absence request {0} was unable to be accepted at this time and was waitlisted.</value>
+    <value>The absence request for {0} could not be approved at this time and was waitlisted.</value>
     <comment>Auto message from requests - when request is denied but waitlisting is enabled on the related workflow control set.</comment>
   </data>
   <data name="AbsenceRequestHasBeenWaitlisted" xml:space="preserve">
-    <value>An absence request for {0} to {1} was unable to be accepted at this time and was waitlisted.</value>
+    <value>The absence request for {0} to {1} could not be approved at this time and was waitlisted.</value>
     <comment>enabled on the related workflow control set.</comment>
   </data>
   <data name="Waitlisted" xml:space="preserve">

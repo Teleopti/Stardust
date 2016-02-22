@@ -8231,7 +8231,7 @@ Periode: {3}</value>
     <value>Ist offen</value>
   </data>
   <data name="PublishSchedulesToColon" xml:space="preserve">
-    <value>Pläne veröffentlichen bis zum:</value>
+    <value>Pläne veröffentlichen bis zum (einschliesslich Präferenzperiode):</value>
   </data>
   <data name="PublishedColon" xml:space="preserve">
     <value>Veröffentlicht</value>

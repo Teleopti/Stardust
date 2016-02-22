@@ -13063,4 +13063,19 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
   <data name="DoubleClickHereToEditText" xml:space="preserve">
     <value>Dubbelklicka här för att ändra texten</value>
   </data>
+  <data name="OnlySupportSeatRolesSetting" xml:space="preserve">
+    <value>Stöder endast inställning av roll för sittplatser</value>
+  </data>
+  <data name="EnableWaitlisting" xml:space="preserve">
+    <value>Aktivera väntelista</value>
+  </data>
+  <data name="AbsenceRequestForOneDayHasBeenWaitlisted" xml:space="preserve">
+    <value>Din frånvaroförfrågan för {0} kunde inte godkännas nu och har placerats på väntelistan. </value>
+  </data>
+  <data name="AbsenceRequestHasBeenWaitlisted" xml:space="preserve">
+    <value>Din frånvaroförfrågan för perioden {0} till {1} kunde inte godkännas nu och har placerats på väntelistan. </value>
+  </data>
+  <data name="Waitlisted" xml:space="preserve">
+    <value>På väntelistan</value>
+  </data>
 </root>
