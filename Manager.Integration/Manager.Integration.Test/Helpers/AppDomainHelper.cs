@@ -56,7 +56,7 @@ namespace Manager.Integration.Test.Helpers
                     new FileInfo(Path.Combine(managerAppDomainSetup.ApplicationBase,
                                               managerAppDomainSetup.ApplicationName));
 
-                LogHelper.LogInfoWithLineNumber("Try start ManagerIntegrationConsoleHost (appdomain) with friendly name " + appDomain.FriendlyName,
+                LogHelper.LogDebugWithLineNumber("Try start ManagerIntegrationConsoleHost (appdomain) with friendly name " + appDomain.FriendlyName,
                                                 Logger);
 
                 appDomain.ExecuteAssembly(assemblyToExecute.FullName,

@@ -37,7 +37,7 @@ namespace Manager.Integration.Test
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
-            LogHelper.LogInfoWithLineNumber("Start TestFixtureSetUp",
+            LogHelper.LogDebugWithLineNumber("Start TestFixtureSetUp",
                                             Logger);
 
             TryCreateSqlLoggingTable(ManagerDbConnectionString);
@@ -62,7 +62,7 @@ namespace Manager.Integration.Test
             Task = AppDomainTask.StartTask(cancellationTokenSource: CancellationTokenSource,
                                            numberOfNodes: 5);
 
-            LogHelper.LogInfoWithLineNumber("Finshed TestFixtureSetUp",
+            LogHelper.LogDebugWithLineNumber("Finshed TestFixtureSetUp",
                                             Logger);
         }
 
@@ -79,7 +79,7 @@ namespace Manager.Integration.Test
 
         private static void TryCreateSqlLoggingTable(string connectionString)
         {
-            LogHelper.LogInfoWithLineNumber("Run sql script to create logging file started.",
+            LogHelper.LogDebugWithLineNumber("Run sql script to create logging file started.",
                                             Logger);
 
             FileInfo scriptFile =
@@ -89,7 +89,7 @@ namespace Manager.Integration.Test
             ScriptExecuteHelper.ExecuteScriptFile(scriptFile,
                                                   connectionString);
 
-            LogHelper.LogInfoWithLineNumber("Run sql script to create logging file finished.",
+            LogHelper.LogDebugWithLineNumber("Run sql script to create logging file finished.",
                                             Logger);
         }
 
@@ -101,7 +101,7 @@ namespace Manager.Integration.Test
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
         {
-            LogHelper.LogInfoWithLineNumber("Start TestFixtureTearDown",
+            LogHelper.LogDebugWithLineNumber("Start TestFixtureTearDown",
                                             Logger);
 
             if (AppDomainTask != null)
@@ -109,7 +109,7 @@ namespace Manager.Integration.Test
                 AppDomainTask.Dispose();
             }
 
-            LogHelper.LogInfoWithLineNumber("Finished TestFixtureTearDown",
+            LogHelper.LogDebugWithLineNumber("Finished TestFixtureTearDown",
                                             Logger);
         }
 
@@ -124,7 +124,7 @@ namespace Manager.Integration.Test
         [Test]
         public void ShouldBeAbleToCreateManySuccessJobRequestTest()
         {
-            LogHelper.LogInfoWithLineNumber("Start.",
+            LogHelper.LogDebugWithLineNumber("Start.",
                                             Logger);
 
             List<JobRequestModel> createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(50);
@@ -167,14 +167,14 @@ namespace Manager.Integration.Test
                                                                       sqlNotiferCancellationTokenSource);
             task.Start();
 
-            LogHelper.LogInfoWithLineNumber("Waiting for all 5 nodes to start up.",
+            LogHelper.LogDebugWithLineNumber("Waiting for all 5 nodes to start up.",
                                             Logger);
 
             sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
 
             sqlNotifier.Dispose();
 
-            LogHelper.LogInfoWithLineNumber("All 5 nodes have started.",
+            LogHelper.LogDebugWithLineNumber("All 5 nodes have started.",
                                             Logger);
 
             //---------------------------------------------
@@ -215,7 +215,7 @@ namespace Manager.Integration.Test
             //---------------------------------------------
             // Log.
             //---------------------------------------------
-            LogHelper.LogInfoWithLineNumber("Finished.",
+            LogHelper.LogDebugWithLineNumber("Finished.",
                                             Logger);
         }
     }

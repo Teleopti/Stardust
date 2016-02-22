@@ -18,7 +18,7 @@ namespace Manager.Integration.Test.Helpers
 
         public static void TryClearDatabase(string connectionStringName = "ManagerConnectionString")
         {
-            LogHelper.LogInfoWithLineNumber("Start.",Logger);
+            LogHelper.LogDebugWithLineNumber("Start.",Logger);
 
             DirectoryInfo directoryManagerIntegrationConsoleHost =
                 new DirectoryInfo(Settings.Default.ManagerIntegrationConsoleHostLocation + _buildMode);
@@ -39,9 +39,9 @@ namespace Manager.Integration.Test.Helpers
             Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap,
                                                                                    ConfigurationUserLevel.None);
 
-            LogHelper.LogInfoWithLineNumber("Open configuration file : " + config.FilePath, Logger);
+            LogHelper.LogDebugWithLineNumber("Open configuration file : " + config.FilePath, Logger);
 
-            LogHelper.LogInfoWithLineNumber("Get connection string for : " + connectionStringName, Logger);
+            LogHelper.LogDebugWithLineNumber("Get connection string for : " + connectionStringName, Logger);
 
             var connectionString =
                 config.ConnectionStrings.ConnectionStrings[connectionStringName];
@@ -53,7 +53,7 @@ namespace Manager.Integration.Test.Helpers
                 using (SqlCommand command = new SqlCommand("truncate table Stardust.JobDefinitions",
                                                            connection))
                 {
-                    LogHelper.LogInfoWithLineNumber(command.CommandText, Logger);
+                    LogHelper.LogDebugWithLineNumber(command.CommandText, Logger);
 
                     command.ExecuteNonQuery();
                 }
@@ -61,7 +61,7 @@ namespace Manager.Integration.Test.Helpers
                 using (SqlCommand command = new SqlCommand("truncate table Stardust.JobHistory",
                                                            connection))
                 {
-                    LogHelper.LogInfoWithLineNumber(command.CommandText, Logger);
+                    LogHelper.LogDebugWithLineNumber(command.CommandText, Logger);
 
                     command.ExecuteNonQuery();
                 }
@@ -69,7 +69,7 @@ namespace Manager.Integration.Test.Helpers
                 using (SqlCommand command = new SqlCommand("truncate table Stardust.JobHistoryDetail",
                                                            connection))
                 {
-                    LogHelper.LogInfoWithLineNumber(command.CommandText, Logger);
+                    LogHelper.LogDebugWithLineNumber(command.CommandText, Logger);
 
                     command.ExecuteNonQuery();
                 }
@@ -77,7 +77,7 @@ namespace Manager.Integration.Test.Helpers
                 using (SqlCommand command = new SqlCommand("truncate table Stardust.WorkerNodes",
                                                            connection))
                 {
-                    LogHelper.LogInfoWithLineNumber(command.CommandText, Logger);
+                    LogHelper.LogDebugWithLineNumber(command.CommandText, Logger);
 
                     command.ExecuteNonQuery();
                 }

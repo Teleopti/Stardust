@@ -60,7 +60,7 @@ namespace Manager.Integration.Test
 
             JobHelper.GiveNodesTimeToInitialize(60);
 
-            LogHelper.LogInfoWithLineNumber("Finshed TestFixtureSetUp",
+            LogHelper.LogDebugWithLineNumber("Finshed TestFixtureSetUp",
                                             Logger);
         }
 
@@ -80,7 +80,7 @@ namespace Manager.Integration.Test
 
         private static void TryCreateSqlLoggingTable()
         {
-            LogHelper.LogInfoWithLineNumber("Run sql script to create logging file started.",
+            LogHelper.LogDebugWithLineNumber("Run sql script to create logging file started.",
                                             Logger);
 
             FileInfo scriptFile =
@@ -90,7 +90,7 @@ namespace Manager.Integration.Test
             ScriptExecuteHelper.ExecuteScriptFile(scriptFile,
                                                   ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString);
 
-            LogHelper.LogInfoWithLineNumber("Run sql script to create logging file finished.",
+            LogHelper.LogDebugWithLineNumber("Run sql script to create logging file finished.",
                                             Logger);
         }
 
@@ -102,7 +102,7 @@ namespace Manager.Integration.Test
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
         {
-            LogHelper.LogInfoWithLineNumber("Start TestFixtureTearDown",
+            LogHelper.LogDebugWithLineNumber("Start TestFixtureTearDown",
                                             Logger);
 
             if (AppDomainTask != null)
@@ -110,20 +110,20 @@ namespace Manager.Integration.Test
                 AppDomainTask.Dispose();
             }
 
-            LogHelper.LogInfoWithLineNumber("Finished TestFixtureTearDown",
+            LogHelper.LogDebugWithLineNumber("Finished TestFixtureTearDown",
                                             Logger);
         }
 
         [Test]
         public void JobsShouldJustBeQueuedIfNoNodesTest()
         {
-            LogHelper.LogInfoWithLineNumber("Start.",
+            LogHelper.LogDebugWithLineNumber("Start.",
                                             Logger);
 
             List<JobRequestModel> createNewJobRequests =
                 JobHelper.GenerateTestJobParamsRequests(1);
 
-            LogHelper.LogInfoWithLineNumber("( " + createNewJobRequests.Count + " ) jobs will be created.",
+            LogHelper.LogDebugWithLineNumber("( " + createNewJobRequests.Count + " ) jobs will be created.",
                                             Logger);
 
 
@@ -164,7 +164,7 @@ namespace Manager.Integration.Test
                 jobManagerTaskCreator.Dispose();
             }
 
-            LogHelper.LogInfoWithLineNumber("Finished.",
+            LogHelper.LogDebugWithLineNumber("Finished.",
                                             Logger);
         }
     }

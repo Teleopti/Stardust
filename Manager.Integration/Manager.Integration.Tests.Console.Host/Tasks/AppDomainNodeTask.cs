@@ -73,7 +73,7 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
                     var assemblyToExecute = new FileInfo(Path.Combine(nodeAppDomainSetup.ApplicationBase,
                                                                       nodeAppDomainSetup.ApplicationName));
 
-                    LogHelper.LogInfoWithLineNumber(Logger,
+                    LogHelper.LogDebugWithLineNumber(Logger,
                                                     "Node (appdomain) will start with friendly name : " + MyAppDomain.FriendlyName);
 
 
@@ -98,7 +98,7 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 
         public void Dispose()
         {
-            LogHelper.LogInfoWithLineNumber(Logger,
+            LogHelper.LogDebugWithLineNumber(Logger,
                                             "Start disposing.");
 
             if (CancellationTokenSource != null &&
@@ -124,7 +124,7 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
                 Task.Dispose();
             }
 
-            LogHelper.LogInfoWithLineNumber(Logger,
+            LogHelper.LogDebugWithLineNumber(Logger,
                                             "Finshed disposing.");
         }
     }

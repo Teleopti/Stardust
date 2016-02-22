@@ -35,7 +35,7 @@ namespace Manager.Integration.Test
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
-            LogHelper.LogInfoWithLineNumber("Start TestFixtureSetUp",
+            LogHelper.LogDebugWithLineNumber("Start TestFixtureSetUp",
                                             Logger);
 
             TryCreateSqlLoggingTable();
@@ -57,10 +57,9 @@ namespace Manager.Integration.Test
 
             AppDomainTask = new AppDomainTask(_buildMode);
 
-            Task = AppDomainTask.StartTask(cancellationTokenSource: CancellationTokenSource,
-                                           numberOfNodes: 1);
+            Task = AppDomainTask.StartTask(CancellationTokenSource, 1);
 
-            LogHelper.LogInfoWithLineNumber("Finshed TestFixtureSetUp",
+            LogHelper.LogDebugWithLineNumber("Finshed TestFixtureSetUp",
                                             Logger);
         }
 
@@ -79,7 +78,7 @@ namespace Manager.Integration.Test
 
         private static void TryCreateSqlLoggingTable()
         {
-            LogHelper.LogInfoWithLineNumber("Run sql script to create logging file started.",
+            LogHelper.LogDebugWithLineNumber("Run sql script to create logging file started.",
                                             Logger);
 
             FileInfo scriptFile =
@@ -89,7 +88,7 @@ namespace Manager.Integration.Test
             ScriptExecuteHelper.ExecuteScriptFile(scriptFile,
                                                   ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString);
 
-            LogHelper.LogInfoWithLineNumber("Run sql script to create logging file finished.",
+            LogHelper.LogDebugWithLineNumber("Run sql script to create logging file finished.",
                                             Logger);
         }
 
@@ -101,7 +100,7 @@ namespace Manager.Integration.Test
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
         {
-            LogHelper.LogInfoWithLineNumber("Start TestFixtureTearDown",
+            LogHelper.LogDebugWithLineNumber("Start TestFixtureTearDown",
                                             Logger);
 
             if (AppDomainTask != null)
@@ -109,7 +108,7 @@ namespace Manager.Integration.Test
                 AppDomainTask.Dispose();
             }
 
-            LogHelper.LogInfoWithLineNumber("Finished TestFixtureTearDown",
+            LogHelper.LogDebugWithLineNumber("Finished TestFixtureTearDown",
                                             Logger);
         }
 
@@ -120,7 +119,7 @@ namespace Manager.Integration.Test
         [Test]
         public void CreateSeveralRequestShouldReturnBothCancelAndDeleteStatusesTest()
         {
-            LogHelper.LogInfoWithLineNumber("Start.",
+            LogHelper.LogDebugWithLineNumber("Start.",
                                             Logger);
 
             List<JobRequestModel> createNewJobRequests =
@@ -133,7 +132,7 @@ namespace Manager.Integration.Test
             //--------------------------------------------
             // Notify when node is up.
             //--------------------------------------------
-            LogHelper.LogInfoWithLineNumber("Waiting for node to start.",
+            LogHelper.LogDebugWithLineNumber("Waiting for node to start.",
                                             Logger);
 
             CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
@@ -148,7 +147,7 @@ namespace Manager.Integration.Test
 
             sqlNotifier.Dispose();
 
-            LogHelper.LogInfoWithLineNumber("Node have started.",
+            LogHelper.LogDebugWithLineNumber("Node have started.",
                                             Logger);
 
             //--------------------------------------------
@@ -234,7 +233,7 @@ namespace Manager.Integration.Test
                 jobManagerTaskCreator.Dispose();
             }
 
-            LogHelper.LogInfoWithLineNumber("Finished.",
+            LogHelper.LogDebugWithLineNumber("Finished.",
                                             Logger);
         }
 
@@ -242,7 +241,7 @@ namespace Manager.Integration.Test
         [Test]
         public void JobShouldHaveStatusFailedIfFailedTest()
         {
-            LogHelper.LogInfoWithLineNumber("Start.",
+            LogHelper.LogDebugWithLineNumber("Start.",
                                             Logger);
 
             List<JobRequestModel> createNewJobRequests = JobHelper.GenerateFailingJobParamsRequests(1);
@@ -254,7 +253,7 @@ namespace Manager.Integration.Test
             //--------------------------------------------
             // Notify when node is up.
             //--------------------------------------------
-            LogHelper.LogInfoWithLineNumber("Waiting for node to start.",
+            LogHelper.LogDebugWithLineNumber("Waiting for node to start.",
                                             Logger);
 
             CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
@@ -269,7 +268,7 @@ namespace Manager.Integration.Test
 
             sqlNotifier.Dispose();
 
-            LogHelper.LogInfoWithLineNumber("Node have started.",
+            LogHelper.LogDebugWithLineNumber("Node have started.",
                                             Logger);
 
             //--------------------------------------------
@@ -309,19 +308,19 @@ namespace Manager.Integration.Test
                 jobManagerTaskCreator.Dispose();
             }
 
-            LogHelper.LogInfoWithLineNumber("Finished.",
+            LogHelper.LogDebugWithLineNumber("Finished.",
                                             Logger);
         }
 
         [Test]
         public void CancelWrongJobsTest()
         {
-            LogHelper.LogInfoWithLineNumber("Start.",
+            LogHelper.LogDebugWithLineNumber("Start.",
                                             Logger);
 
             List<JobRequestModel> createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(1);
 
-            LogHelper.LogInfoWithLineNumber("( " + createNewJobRequests.Count + " ) jobs will be created.",
+            LogHelper.LogDebugWithLineNumber("( " + createNewJobRequests.Count + " ) jobs will be created.",
                                             Logger);
 
             TimeSpan timeout =
@@ -331,7 +330,7 @@ namespace Manager.Integration.Test
             //--------------------------------------------
             // Notify when node is up.
             //--------------------------------------------
-            LogHelper.LogInfoWithLineNumber("Waiting for node to start.",
+            LogHelper.LogDebugWithLineNumber("Waiting for node to start.",
                                             Logger);
 
             CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
@@ -346,7 +345,7 @@ namespace Manager.Integration.Test
 
             sqlNotifier.Dispose();
 
-            LogHelper.LogInfoWithLineNumber("Node have started.",
+            LogHelper.LogDebugWithLineNumber("Node have started.",
                                             Logger);
 
             //--------------------------------------------
@@ -418,7 +417,7 @@ namespace Manager.Integration.Test
                 jobManagerTaskCreator.Dispose();
             }
 
-            LogHelper.LogInfoWithLineNumber("Finished.",
+            LogHelper.LogDebugWithLineNumber("Finished.",
                                             Logger);
         }
 
@@ -429,13 +428,13 @@ namespace Manager.Integration.Test
         [Test]
         public void ShouldBeAbleToCreateManySuccessJobRequestTest()
         {
-            LogHelper.LogInfoWithLineNumber("Start.",
+            LogHelper.LogDebugWithLineNumber("Start.",
                                             Logger);
 
             List<JobRequestModel> createNewJobRequests =
                 JobHelper.GenerateTestJobParamsRequests(1);
 
-            LogHelper.LogInfoWithLineNumber("( " + createNewJobRequests.Count + " ) jobs will be created.",
+            LogHelper.LogDebugWithLineNumber("( " + createNewJobRequests.Count + " ) jobs will be created.",
                                             Logger);
 
             TimeSpan timeout =
@@ -445,7 +444,7 @@ namespace Manager.Integration.Test
             //--------------------------------------------
             // Notify when node is up.
             //--------------------------------------------
-            LogHelper.LogInfoWithLineNumber("Waiting for node to start.",
+            LogHelper.LogDebugWithLineNumber("Waiting for node to start.",
                                             Logger);
 
             CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
@@ -460,7 +459,7 @@ namespace Manager.Integration.Test
 
             sqlNotifier.Dispose();
 
-            LogHelper.LogInfoWithLineNumber("Node have started.",
+            LogHelper.LogDebugWithLineNumber("Node have started.",
                                             Logger);
 
             //--------------------------------------------
@@ -503,7 +502,7 @@ namespace Manager.Integration.Test
                 jobManagerTaskCreator.Dispose();
             }
 
-            LogHelper.LogInfoWithLineNumber("Finished.",
+            LogHelper.LogDebugWithLineNumber("Finished.",
                                             Logger);
         }
     }

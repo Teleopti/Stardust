@@ -25,7 +25,7 @@ namespace Manager.IntegrationTest.Console.Host
         [HttpPost, Route("appdomain")]
         public void StartNewNode()
         {
-            LogHelper.LogInfoWithLineNumber(Logger,
+            LogHelper.LogDebugWithLineNumber(Logger,
                                             "Called API controller.");
 
             Program.StartNewNode();
@@ -34,7 +34,7 @@ namespace Manager.IntegrationTest.Console.Host
         [HttpDelete, Route("appdomain/{id}")]
         public IHttpActionResult DeleteAppDomain(string id)
         {
-            LogHelper.LogInfoWithLineNumber(Logger,
+            LogHelper.LogDebugWithLineNumber(Logger,
                                             "Called API controller.");
 
             if (string.IsNullOrEmpty(id))
@@ -66,13 +66,10 @@ namespace Manager.IntegrationTest.Console.Host
         [HttpGet, Route("appdomain")]
         public IHttpActionResult GetAllAppDomains()
         {
-            LogHelper.LogInfoWithLineNumber(Logger,
+            LogHelper.LogDebugWithLineNumber(Logger,
                                             "Called API controller.");
 
             List<string> appDomainsList = Program.GetInstantiatedAppDomains();
-
-            LogHelper.LogInfoWithLineNumber(Logger,
-                                            appDomainsList);
 
             return Ok(appDomainsList);
         }

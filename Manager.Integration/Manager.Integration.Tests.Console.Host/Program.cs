@@ -110,7 +110,7 @@ namespace Manager.IntegrationTest.Console.Host
             CurrentDomainConfigurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(CurrentDomainConfigurationFile));
 
-            LogHelper.LogInfoWithLineNumber(Logger,
+            LogHelper.LogDebugWithLineNumber(Logger,
                                             "Start.");
 
 
@@ -170,7 +170,7 @@ namespace Manager.IntegrationTest.Console.Host
 
             if (args.Any())
             {
-                LogHelper.LogInfoWithLineNumber(Logger,
+                LogHelper.LogDebugWithLineNumber(Logger,
                                                 "Has command arguments.");
 
                 NumberOfNodesToStart = Convert.ToInt32(args[0]);
@@ -183,12 +183,12 @@ namespace Manager.IntegrationTest.Console.Host
             {
                 for (var i = 1; i <= NumberOfNodesToStart; i++)
                 {
-                    LogHelper.LogInfoWithLineNumber(Logger,
+                    LogHelper.LogDebugWithLineNumber(Logger,
                                                     "Start creating node configuration file for node id : " + i);
 
                     var nodeConfig = CreateNodeConfigurationFile(i);
 
-                    LogHelper.LogInfoWithLineNumber(Logger,
+                    LogHelper.LogDebugWithLineNumber(Logger,
                                                     "Finished creating node configuration file for node : ( id, config file ) : ( " + i + ", " + nodeConfig.FullName + " )");
                 }
             }
@@ -308,7 +308,7 @@ namespace Manager.IntegrationTest.Console.Host
         private static void CurrentDomainOnDomainUnload(object sender,
                                                         EventArgs eventArgs)
         {
-            LogHelper.LogInfoWithLineNumber(Logger,
+            LogHelper.LogDebugWithLineNumber(Logger,
                                             "Start CurrentDomainOnDomainUnload.");
 
             foreach (var appDomainNodeTask in AppDomainNodeTasks)
@@ -320,7 +320,7 @@ namespace Manager.IntegrationTest.Console.Host
 
             QuitEvent.Set();
 
-            LogHelper.LogInfoWithLineNumber(Logger,
+            LogHelper.LogDebugWithLineNumber(Logger,
                                             "Finished CurrentDomainOnDomainUnload.");
         }
 
@@ -367,7 +367,7 @@ namespace Manager.IntegrationTest.Console.Host
 
         public static void ShutDownNode(string friendlyName)
         {
-            LogHelper.LogInfoWithLineNumber(Logger,
+            LogHelper.LogDebugWithLineNumber(Logger,
                                             "Started.");
 
             if (AppDomainManagerTask != null &&
@@ -398,19 +398,19 @@ namespace Manager.IntegrationTest.Console.Host
 
                 if (nodeToDispose != null)
                 {
-                    LogHelper.LogInfoWithLineNumber(Logger,
+                    LogHelper.LogDebugWithLineNumber(Logger,
                                                     "Start to dispose appdomain with friendly name :" + friendlyName);
 
                     nodeToDispose.Dispose();
 
                     AppDomainNodeTasks.Remove(nodeToDispose);
 
-                    LogHelper.LogInfoWithLineNumber(Logger,
+                    LogHelper.LogDebugWithLineNumber(Logger,
                                                     "Finished to dispose appdomain with friendly name :" + friendlyName);
                 }
             }
 
-            LogHelper.LogInfoWithLineNumber(Logger,
+            LogHelper.LogDebugWithLineNumber(Logger,
                                             "Finished.");
         }
 

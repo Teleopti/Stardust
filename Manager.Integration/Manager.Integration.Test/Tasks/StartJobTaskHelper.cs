@@ -19,7 +19,7 @@ namespace Manager.Integration.Test.Tasks
         {
             return Task.Factory.StartNew(() =>
             {
-                LogHelper.LogInfoWithLineNumber("Start.",
+                LogHelper.LogDebugWithLineNumber("Start.",
                                                 Logger);
 
                 if (jobManagerTaskCreators != null && jobManagerTaskCreators.Any())
@@ -44,7 +44,7 @@ namespace Manager.Integration.Test.Tasks
                     }
                 }
 
-                LogHelper.LogInfoWithLineNumber("Finished.",
+                LogHelper.LogDebugWithLineNumber("Finished.",
                                                 Logger);
             });
         }
@@ -55,7 +55,7 @@ namespace Manager.Integration.Test.Tasks
         {
             return Task.Factory.StartNew(() =>
             {
-                LogHelper.LogInfoWithLineNumber("Start.",
+                LogHelper.LogDebugWithLineNumber("Start.",
                                                 Logger);
 
                 if (jobManagerTaskCreators != null && jobManagerTaskCreators.Any())
@@ -80,7 +80,7 @@ namespace Manager.Integration.Test.Tasks
                     }
                 }
 
-                LogHelper.LogInfoWithLineNumber("Finished.",
+                LogHelper.LogDebugWithLineNumber("Finished.",
                                                 Logger);
             });
         }
