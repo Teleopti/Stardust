@@ -62,6 +62,10 @@
 			text-align: center;
 		}
 
+		.layer.selected{
+			border: 2px dashed grey;
+		}
+
 		.layer:first-of-type {
 			-webkit-border-radius: 4px 0px 0px 4px;
 			-moz-border-radius: 4px 0px 0px 4px;

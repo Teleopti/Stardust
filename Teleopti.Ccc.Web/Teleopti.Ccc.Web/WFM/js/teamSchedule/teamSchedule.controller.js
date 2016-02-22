@@ -19,6 +19,7 @@
 		// The original schedule got from server side
 		vm.rawSchedules = [];
 		vm.lastCommandTrackId = "";
+		vm.selectedPersonAbsences = [];
 
 		vm.searchOptions = {
 			keyword: '',

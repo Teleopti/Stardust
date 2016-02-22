@@ -50,7 +50,8 @@
 			<i class='mdi mdi-alert'></i>{{'TooManyResultsForSearchKeywords'|translate}}
 		</div>
 		<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
-		<schedule-table schedule-vm="vm.groupScheduleVm" person-selection="vm.personIdSelectionDic" select-mode="vm.toggleForAbsenceReportingEnabled" />
+		<schedule-table schedule-vm="vm.groupScheduleVm" person-selection="vm.personIdSelectionDic"
+						selected-person-absences="vm.selectedPersonAbsences" select-mode="vm.toggleForAbsenceReportingEnabled" />
 	</div>
 
 	<div class="con-footer" ng-if="vm.paginationOptions.totalPages > 0">

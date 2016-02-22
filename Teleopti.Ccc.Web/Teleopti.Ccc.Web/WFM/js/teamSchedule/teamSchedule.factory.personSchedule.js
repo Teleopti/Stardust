@@ -101,7 +101,13 @@
 				IsOvertime: projection.IsOvertime,
 				Color: projection.Color,
 				Description: projection.Description,
-				Start: projection.Start
+				Start: projection.Start,
+				Selected: false,
+				ToggleSelection: function () {
+					// Only person absence will be selected
+					this.Selected = (this.ParentPersonAbsence != undefined && this.ParentPersonAbsence != null)
+						? !this.Selected : false;
+				}
 			};
 
 			return shiftProjectionVm;

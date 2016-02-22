@@ -32,7 +32,6 @@ describe('TeamSchedule ScheduleTable ControllerTest', function() {
 		expect(controller.isPersonSelected(schedules[2])).toEqual(false);
 	}));
 
-
 	it('can select and deselect current page', inject(function() {
 		var schedules = [
 			createSchedule('1111', '2015-01-01', null, [{ startHour: 8, endHour: 16 }]),
@@ -54,6 +53,63 @@ describe('TeamSchedule ScheduleTable ControllerTest', function() {
 		controller.toggleAllSelectionInCurrentPage();
 		selectedPersonList = getSelectedPersonIdList(controller);
 		expect(selectedPersonList.length).toEqual(0);
+	}));
+
+	it('can select and deselect person absence', inject(function () {
+		var personAbsence1 = {
+			ParentPersonAbsence: "PersonAbsenceId-111",
+			Start: "2016-02-19 08:00",
+			Selected: false,
+			ToggleSelection: function() {
+				this.Selected = !this.Selected;
+			}
+		};
+		var personAbsence2 = {
+			ParentPersonAbsence: "PersonAbsenceId-222",
+			Start: "2016-02-19 15:00",
+			Selected: false,
+			ToggleSelection: function () {
+				this.Selected = !this.Selected;
+			}
+		};
+		var personAbsence3 = {
+			ParentPersonAbsence: "PersonAbsenceId-111",
+			Start: "2016-02-19 15:30",
+			Selected: false,
+			ToggleSelection: function () {
+				this.Selected = !this.Selected;
+			}
+		}
+		var allProjections = [personAbsence1, personAbsence2, personAbsence3];
+		var schedules = [
+			{
+				"PersonId": "1234",
+				"Date": "2016-02-19",
+				"Shifts": [
+					{
+						"Projections": allProjections
+					}
+				]
+			}
+		];
+
+		controller.scheduleVm = { Schedules: schedules };
+		controller.selectedPersonAbsences = [];
+
+		controller.ToggleProjectionSelection(personAbsence2, allProjections);
+		expect(personAbsence1.Selected).toEqual(false);
+		expect(personAbsence2.Selected).toEqual(true);
+		expect(personAbsence3.Selected).toEqual(false);
+
+		controller.ToggleProjectionSelection(personAbsence1, allProjections);
+		expect(personAbsence1.Selected).toEqual(true);
+		expect(personAbsence2.Selected).toEqual(true);
+		expect(personAbsence3.Selected).toEqual(true);
+
+		controller.ToggleProjectionSelection(personAbsence3, allProjections);
+		expect(personAbsence1.Selected).toEqual(false);
+		expect(personAbsence2.Selected).toEqual(true);
+		expect(personAbsence3.Selected).toEqual(false);
 	}));
 
 	it("can display person selection status correctly", inject(function () {
@@ -107,7 +163,6 @@ describe('TeamSchedule ScheduleTable ControllerTest', function() {
 
 			if (dayOff == null) {
 				projectionInfoArray.forEach(function (projectionInfo) {
-
 					var dateMomentCopy = moment(dateMoment);
 
 					projections.push({
