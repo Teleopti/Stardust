@@ -10,33 +10,33 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.RealTimeAdherence
 {
 	public class RtaRule : VersionedAggregateRootWithBusinessUnit, IRtaRule
-    {
-        private Description _description;
-        private Color _displayColor;
+	{
+		private Description _description;
+		private Color _displayColor;
 		private Color _alarmColor;
-        private TimeSpan _thresholdTime;
-        private double _staffingEffect;
+		private TimeSpan _thresholdTime;
+		private double _staffingEffect;
 		private Adherence? _adherence;
 		private bool _isAlarm = ServiceLocatorForEntity.AppliedAlarm.RuleDefaultAlarm();
 
 		public RtaRule(Description description, Color color, TimeSpan thresholdTime, double staffingEffect)
-        {
-            _description = description;
-            _displayColor = color;
-            _thresholdTime = thresholdTime;
-            _staffingEffect = staffingEffect;
+		{
+			_description = description;
+			_displayColor = color;
+			_thresholdTime = thresholdTime;
+			_staffingEffect = staffingEffect;
 			_alarmColor = color;
-        }
+		}
 
 		public RtaRule()
 		{
 		}
 
 		public virtual double StaffingEffect
-        {
-            get { return _staffingEffect; }
-            set{ _staffingEffect = value;}
-        }
+		{
+			get { return _staffingEffect; }
+			set{ _staffingEffect = value;}
+		}
 
 		public virtual Adherence? Adherence
 		{
@@ -89,47 +89,47 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 		public virtual Color AlarmColor { get { return _alarmColor; } set { _alarmColor = value; } }
 
 		public virtual TimeSpan ThresholdTime
-        {
-            get { return _thresholdTime; }
-            set
-            {
-	            if (value < TimeSpan.Zero)
-		            throw new ArgumentOutOfRangeException("value", "A negative threshold time cannot be used for alarm");
-	            if (value > TimeSpan.Zero)
-		            IsAlarm = true;
-                _thresholdTime = value;
-            }
-        }
+		{
+			get { return _thresholdTime; }
+			set
+			{
+				if (value < TimeSpan.Zero)
+					throw new ArgumentOutOfRangeException("value", "A negative threshold time cannot be used for alarm");
+				if (value > TimeSpan.Zero)
+					IsAlarm = true;
+				_thresholdTime = value;
+			}
+		}
 
-        public virtual Description Description
-        {
-            get { return _description; }
-            set { _description = value; }
-        }
+		public virtual Description Description
+		{
+			get { return _description; }
+			set { _description = value; }
+		}
 
-        public virtual Color DisplayColor
-        {
-            get { return _displayColor; }
-            set { _displayColor = value; }
-        }
+		public virtual Color DisplayColor
+		{
+			get { return _displayColor; }
+			set { _displayColor = value; }
+		}
 
 		public virtual Description ConfidentialDescription(IPerson assignedPerson)
-        {
-            return Description;
-        }
+		{
+			return Description;
+		}
 
 		public virtual Color ConfidentialDisplayColor(IPerson assignedPerson)
-        {
-            return DisplayColor;
-        }
+		{
+			return DisplayColor;
+		}
 
-        public virtual bool InContractTime { get; set; }
-        public virtual ITracker Tracker { get; set; }
+		public virtual bool InContractTime { get; set; }
+		public virtual ITracker Tracker { get; set; }
 
-        public virtual IPayload UnderlyingPayload
-        {
-            get { return this; }
-        }
-    }
+		public virtual IPayload UnderlyingPayload
+		{
+			get { return this; }
+		}
+	}
 
 }

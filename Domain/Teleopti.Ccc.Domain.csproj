@@ -246,6 +246,7 @@
     <Compile Include="ApplicationLayer\PersonAssociationChangedEventPublisher.cs" />
     <Compile Include="ApplicationLayer\RecurringIdAttribute.cs" />
     <Compile Include="ApplicationLayer\ResolveEventHandlers.cs" />
+    <Compile Include="Common\ServiceLocatorForEntity.cs" />
     <Compile Include="Logon\Aspects\DataSourceAspect.cs" />
     <Compile Include="Logon\Aspects\DataSourceAttribute.cs" />
     <Compile Include="Logon\Aspects\IDataSourceAspect.cs" />
