@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				_execute,
 				databaseFolder,
 				Logger);
-			schemaCreator.Create(DatabaseType);
+			schemaCreator.Create(DatabaseType, Version());
 		}
 
 		public int DatabaseVersion()

@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 							var dbCreator = new DatabaseSchemaCreator(databaseVersionInformation,
 								schemaVersionInformation, executeSql, databaseFolder, _logger);
-							dbCreator.Create(commandLineArgument.TargetDatabaseType);
+							dbCreator.Create(commandLineArgument.TargetDatabaseType, sqlVersion);
 						}
 						else
 						{
