@@ -23,14 +23,15 @@ namespace Stardust.Node.API
         [HttpPost, AllowAnonymous, Route(NodeRouteConstants.Job)]
         public IHttpActionResult StartJob(JobToDo jobToDo)
         {
-            LogHelper.LogInfoWithLineNumber(Logger, "Received Start Job Request. jobId: " + jobToDo.Id);
-
             if (jobToDo == null)
             {
-                return BadRequest("jobToDo is null");
+				LogHelper.LogInfoWithLineNumber(Logger, "Received Start Job Request. jobId is null");
+				return BadRequest("jobToDo is null");
             }
 
-            if (_workerWrapper.IsTaskExecuting)
+			LogHelper.LogInfoWithLineNumber(Logger, "Received Start Job Request. jobId: " + jobToDo.Id);
+
+			if (_workerWrapper.IsTaskExecuting)
             {
                 string msg = string.Format("{0} : New job request from manager rejected, node is working on another job ( jobId, jobName ) : ( {1}, {2} )",
                                            _workerWrapper.WhoamI,
