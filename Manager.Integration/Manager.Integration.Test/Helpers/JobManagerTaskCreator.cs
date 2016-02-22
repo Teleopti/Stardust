@@ -85,8 +85,7 @@ namespace Manager.Integration.Test.Helpers
                         HttpResponseMessage response = await client.PostAsync(uri,
                                                                               new StringContent(sez,
                                                                                                 Encoding.UTF8,
-                                                                                                MediaTypeConstants.ApplicationJson),
-                                                                              CancellationTokenSource.Token);
+                                                                                                MediaTypeConstants.ApplicationJson));
 
                         CreateNewJobToManagerSucceeded = response.IsSuccessStatusCode;
 

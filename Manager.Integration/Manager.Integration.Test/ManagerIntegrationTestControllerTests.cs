@@ -193,7 +193,7 @@ namespace Manager.Integration.Test
         ///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
         ///     netsh http add urlacl url=http://+:9100/ user=everyone listen=yes
         /// </summary>
-        [Test]
+        [Test, Ignore]
         public async void ShouldReturnAllAppDomainKeys()
         {
             LogHelper.LogInfoWithLineNumber("Start test.",
