@@ -17,7 +17,8 @@ INSERT INTO #badPkName
 	on s1.schema_id = s3.schema_id
 	WHERE OBJECTPROPERTY(s1.object_id, N'IsPrimaryKey') = 1
 	AND s1.name <> 'PK_'+s2.name
-	AND s3.name <> N'HangFire' --Exclude 'Hangfire'-schema
+	AND s3.name <> N'HangFire'  --Exclude 'Hangfire'-schema
+	AND s3.name <> N'SignalR'  --Exclude 'SignalR'-schema
 
 DECLARE @tablename sysname
 DECLARE @pkname sysname
