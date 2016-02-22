@@ -26,7 +26,7 @@ Write-Host ""
 else {
 
 Write-Host ""
-Write-Host "Jenkins deploy failure! Check http://tritonweb:8080/job/TritonWeb-AutoDeploy for more information!" -ForegroundColor Red
+Write-Host "Jenkins deploy failure! Check http://$ServerURL/job/$ServerName-AutoDeploy for more information!" -ForegroundColor Red
 Write-Host ""
 Exit
 }
