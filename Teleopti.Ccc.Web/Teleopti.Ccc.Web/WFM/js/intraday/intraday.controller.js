@@ -2,8 +2,8 @@
 	'use strict';
 	angular.module('wfm.intraday')
 		.controller('IntradayCtrl', [
-			'$scope', '$state', 'intradayService', '$stateParams', '$filter',
-			function($scope, $state, intradayService, $stateParams, $filter) {
+			'$scope', '$state', 'intradayService', '$stateParams', '$filter', 'growl',
+			function($scope, $state, intradayService, $stateParams, $filter, growl) {
 
 				var autocompleteSkill;
 				var autocompleteSkillArea;
@@ -37,7 +37,7 @@
 							}
 								
 							intradayService.getSkills.query().
-								$promise.then(function(result) {
+								$promise.then(function (result) {
 									$scope.skills = result;
 									if (!$scope.selectedItem) {
 										$scope.selectedItem = $scope.skills[0];
@@ -71,9 +71,17 @@
 							$scope.skillAreas.splice($scope.skillAreas.indexOf(skillArea), 1);
 							$scope.selectedItem = null;
 							clearSkillAreaSelection();
+							notifySkillAreaDeletion();
 						});
 
 					$scope.toggleModal();
+				};
+
+				var notifySkillAreaDeletion = function () {
+				    growl.success("<i class='mdi mdi-thumb-up'></i> Deleted Area", {
+				        ttl: 5000,
+				        disableCountDown: true
+				    });
 				};
 
 				$scope.querySearch = function(query, myArray) {
