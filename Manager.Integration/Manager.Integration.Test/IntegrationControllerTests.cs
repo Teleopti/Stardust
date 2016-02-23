@@ -142,7 +142,6 @@ namespace Manager.Integration.Test
                                                                       sqlNotiferCancellationTokenSource);
             task.Start();
 
-
             sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(30));
 
             sqlNotifier.Dispose();
