@@ -129,8 +129,9 @@ namespace Stardust.Manager
 
             catch (HttpRequestException exp)
             {
-                LogHelper.LogWarningWithLineNumber(Logger,
-                                                   exp.Message);
+                LogHelper.LogErrorWithLineNumber(Logger,
+                                                   exp.Message,
+												   exp);
             }
 
             catch (Exception exp)
