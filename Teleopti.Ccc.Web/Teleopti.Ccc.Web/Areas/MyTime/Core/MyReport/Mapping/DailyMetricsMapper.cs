@@ -1,8 +1,5 @@
-﻿using System;
-using System.Globalization;
-using Teleopti.Ccc.Domain.FeatureFlags;
+﻿using System.Globalization;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MyReport;
@@ -14,13 +11,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping
 	{
 		private readonly IUserCulture _userCulture;
 		private readonly IPermissionProvider _permissionProvider;
-		private readonly IToggleManager _toggleManager;
 
-		public DailyMetricsMapper(IUserCulture userCulture, IPermissionProvider permissionProvider, IToggleManager toggleManager)
+		public DailyMetricsMapper(IUserCulture userCulture, IPermissionProvider permissionProvider)
 		{
 			_userCulture = userCulture;
 			_permissionProvider = permissionProvider;
-			_toggleManager = toggleManager;
 		}
 
 		public DailyMetricsViewModel Map(DailyMetricsForDayResult dataModel)

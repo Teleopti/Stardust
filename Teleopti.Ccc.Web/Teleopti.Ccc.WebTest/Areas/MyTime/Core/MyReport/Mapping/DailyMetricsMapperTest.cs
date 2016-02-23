@@ -3,9 +3,7 @@ using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -18,7 +16,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 	{
 		private DailyMetricsMapper _target;
 		private IPermissionProvider _permissionProvider;
-		private IToggleManager _toggleManager;
 
 		[SetUp]
 		public void Setup()
@@ -27,9 +24,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 			var userCulture = MockRepository.GenerateMock<IUserCulture>();
 			userCulture.Expect(x => x.GetCulture()).Return(culture);
 			_permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			_toggleManager = MockRepository.GenerateMock<IToggleManager>();
 
-			_target = new DailyMetricsMapper(userCulture, _permissionProvider, _toggleManager);
+			_target = new DailyMetricsMapper(userCulture, _permissionProvider);
 		}
 
 		[Test]
