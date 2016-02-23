@@ -8,7 +8,7 @@ COLOR A
 cls
 SET DefaultDB=%1
 IF NOT "%DefaultDB%"=="" SET IFFLOW=y
-IF "%DefaultDB%"=="" SET DefaultDB=DemoSales
+IF "%DefaultDB%"=="" SET DefaultDB=Demov7
 
 ::Default values
 SET configuration=Debug
