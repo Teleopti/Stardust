@@ -20,7 +20,7 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
-	[TestFixture, Ignore]
+	[TestFixture]
     public class IntegrationControllerTests
     {
         private static readonly ILog Logger =

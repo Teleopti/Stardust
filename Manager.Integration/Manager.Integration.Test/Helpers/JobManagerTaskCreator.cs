@@ -147,7 +147,7 @@ namespace Manager.Integration.Test.Helpers
 					}
 				}
 			},
-			                               CancellationTokenSource.Token);
+			CancellationTokenSource.Token);
 		}
 
 		public void CreateDeleteJobToManagerTask(Guid guid)
@@ -196,7 +196,7 @@ namespace Manager.Integration.Test.Helpers
 					}
 				}
 			},
-			                                  CancellationTokenSource.Token);
+			CancellationTokenSource.Token);
 		}
 	}
 }
