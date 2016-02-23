@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: Intraday
+﻿Feature: Intraday
     In order to be in control of my part of the business
     As an intraday analyst
     I want to be able to monitor my part of the business
@@ -20,8 +19,8 @@ Scenario: Create Skill Area
     And I should monitor 'my Area'
 
 Scenario: Remove Skill Area
-	Given there is a Skill Area called 'Area one' that monitors skill 'Skill A'
+	Given there is a Skill Area called 'Area A' that monitors skill 'Skill A'
     And I am viewing intraday page
-	When I select to monitor skill area 'Area one'
-    And I select to remove 'Area one'
-	Then I should no longer be able to monitor 'Area one'
+    When I select to remove 'Area A'
+	Then I should no longer be able to monitor 'Area A'
+	
