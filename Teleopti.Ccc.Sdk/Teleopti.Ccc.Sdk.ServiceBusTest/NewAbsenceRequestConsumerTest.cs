@@ -372,7 +372,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			absenceRequestOpenDatePeriod.Stub(x => x.GetSelectedValidatorList()).Return(validatorList);
 			_factory.Stub(x => x.GetRequestApprovalService(null, _scenario)).IgnoreArguments().Return(_requestApprovalService);
 			_unitOfWork.Stub(x => x.Merge(personAbsenceAccount)).Return(personAbsenceAccount);
-			_personRequest.Stub(x => x.IsApproved).Return(true).Repeat.Twice();
+			_personRequest.Stub(x => x.IsApproved).Return(true);
 			_alreadyAbsentSpecification.Stub(x => x.IsSatisfiedBy(_absenceRequest)).Return(false);
 			ExpectLoadOfSchedules();
 			ExpectPersistOfDictionary();
@@ -498,7 +498,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			absenceRequestOpenDatePeriod.Stub(x => x.GetSelectedValidatorList()).Return(validatorList);
 			_factory.Stub(x => x.GetRequestApprovalService(null, _scenario)).IgnoreArguments().Return(_requestApprovalService);
 
-			_personRequest.Stub(x => x.IsApproved).Return(true).Repeat.Twice();
+			_personRequest.Stub(x => x.IsApproved).Return(true);
 			_scheduleIsInvalidSpecification.Stub(x => x.IsSatisfiedBy(_schedulingResultStateHolder)).Return(false);
 
 			_target.Consume(_message);

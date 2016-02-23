@@ -6,6 +6,7 @@ using log4net;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -73,7 +74,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
 			IAbsenceRequestValidator[] validatorList = null;
 			IPersonAccountBalanceCalculator personAccountBalanceCalculator = null;
 			IRequestApprovalService requestApprovalServiceScheduler = null;
-
+			IPersonAbsenceAccount affectedPersonAbsenceAccount = null;
 			var agentTimeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
 			var dateOnlyPeriod = absenceRequest.Period.ToDateOnlyPeriod(agentTimeZone);
 
@@ -92,19 +93,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
 				}
 
 				var allAccounts = _personAbsenceAccountProvider.Find(absenceRequest.Person);
-				var personAccount = allAccounts.Find(absenceRequest.Absence);
+				affectedPersonAbsenceAccount = allAccounts.Find(absenceRequest.Absence);
 
 				var mergedPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod(absenceRequest);
-				
 				validatorList = mergedPeriod.GetSelectedValidatorList().ToArray();
 				_process = mergedPeriod.AbsenceRequestProcess;
 
 				setupSchedulingResultStateHolder(absenceRequest, validatorList, undoRedoContainer, allAccounts);
 				checkIfPersonIsAlreadyAbsentDuringRequestPeriod(absenceRequest, personRequest);
 
-				personAccountBalanceCalculator = getPersonAccountBalanceCalculator(personAccount, absenceRequest, personRequest, dateOnlyPeriod);
-				
-				var businessRules = getBusinessRulesForAddingAbsence(absenceRequest);
+				personAccountBalanceCalculator = getPersonAccountBalanceCalculator(affectedPersonAbsenceAccount, absenceRequest, personRequest, dateOnlyPeriod);
+
+				//TODO: problems calculating personal account when using the Deny process stop us from doing this currently.  
+				// Existing workarounds use the trackAccount methods, calling it many times.  We should investigate a better way of doing this.
+				//var businessRules = getBusinessRulesForAddingAbsence(absenceRequest); 
+				var businessRules = NewBusinessRuleCollection.Minimum();
+
 				requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(businessRules, _scenarioRepository.Current());
 				tryApproveAbsenceAndCheckBusinessRules(absenceRequest, requestApprovalServiceScheduler);
 
@@ -114,7 +118,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
 			var requiredForProcessingAbsenceRequest = new RequiredForProcessingAbsenceRequest(
 				undoRedoContainer,
 				requestApprovalServiceScheduler,
-				_authorization);
+				_authorization,
+				()
+							=>
+				{
+					if (affectedPersonAbsenceAccount != null)
+						trackAccounts(affectedPersonAbsenceAccount, dateOnlyPeriod, absenceRequest);
+				});
 
 			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(
 				_schedulingResultStateHolder,
@@ -123,19 +133,60 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
 				_budgetGroupAllowanceSpecification,
 				_budgetGroupHeadCountSpecification);
 
-			return processRequest( personRequest, absenceRequest, requiredForProcessingAbsenceRequest, requiredForHandlingAbsenceRequest, validatorList);
-		}
 
-		private void setupSchedulingResultStateHolder (IAbsenceRequest absenceRequest, IEnumerable<IAbsenceRequestValidator> validatorList, UndoRedoContainer undoRedoContainer, IEnumerable<IPersonAbsenceAccount> allAccounts)
+			var returnValue = processRequest(personRequest, absenceRequest, requiredForProcessingAbsenceRequest, requiredForHandlingAbsenceRequest, validatorList);
+
+			//Ugly fix to get the number updated for person account. Don't try this at home!
+			if (personRequest.IsApproved)
+			{
+				if (affectedPersonAbsenceAccount != null)
+				{
+					trackAccounts (affectedPersonAbsenceAccount, dateOnlyPeriod, absenceRequest);
+					unitOfWork.Merge (affectedPersonAbsenceAccount);
+				}
+			}
+
+			return returnValue;
+
+		}
+		
+		private void trackAccounts(IPersonAbsenceAccount personAbsenceAccount, DateOnlyPeriod period, IAbsenceRequest absenceRequest)
 		{
-			loadDataForResourceCalculation (absenceRequest, validatorList);
-			setupUndoContainersAndTakeSnapshot (undoRedoContainer, allAccounts);
+			var scheduleRange = _schedulingResultStateHolder.Schedules[absenceRequest.Person];
+
+			foreach (IAccount account in personAbsenceAccount.Find(period))
+			{
+				var intersectingPeriod = account.Period().Intersection(period);
+				if (intersectingPeriod.HasValue)
+				{
+					IList<IScheduleDay> scheduleDays =
+						new List<IScheduleDay>(scheduleRange.ScheduledDayCollection(intersectingPeriod.Value));
+
+					if (logger.IsInfoEnabled)
+					{
+						logger.InfoFormat("Remaining before tracking: {0}", account.Remaining);
+					}
+
+					absenceRequest.Absence.Tracker.Track(account, absenceRequest.Absence, scheduleDays);
+
+					if (logger.IsInfoEnabled)
+					{
+						logger.InfoFormat("Remaining after tracking: {0}", account.Remaining);
+					}
+
+				}
+			}
+		}
+		
+		private void setupSchedulingResultStateHolder(IAbsenceRequest absenceRequest, IEnumerable<IAbsenceRequestValidator> validatorList, UndoRedoContainer undoRedoContainer, IEnumerable<IPersonAbsenceAccount> allAccounts)
+		{
+			loadDataForResourceCalculation(absenceRequest, validatorList);
+			setupUndoContainersAndTakeSnapshot(undoRedoContainer, allAccounts);
 		}
 
 		private INewBusinessRuleCollection getBusinessRulesForAddingAbsence(IRequest absenceRequest)
 		{
-			return _businessRulesForPersonalAccountUpdate.FromScheduleRange(
-					_schedulingResultStateHolder.Schedules[absenceRequest.Person]);
+			return _businessRulesForPersonalAccountUpdate.FromScheduleRange(_schedulingResultStateHolder.Schedules[absenceRequest.Person]);
 		}
 
 		private void setupUndoContainersAndTakeSnapshot(UndoRedoContainer undoRedoContainer, IEnumerable<IPersonAbsenceAccount> allAccounts)
@@ -176,11 +227,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
 					logger.Error("A validation error occurred. Review the error log. Processing cannot continue.", validationException);
 					return false;
 				}
+
 			}
 
 			return true;
 		}
-		
+
 		private void updatePersonAccountBalancesForAbsence(IUnitOfWork unitOfWork, IAbsenceRequest absenceRequest)
 		{
 			if (_personAccountUpdater.UpdateForAbsence(
@@ -280,8 +332,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
 			}
 			else
 			{
+				trackAccounts(personAccount, dateOnlyPeriod, absenceRequest);
 				//We must have the current and all after...
 				var affectedAccounts = personAccount.Find(new DateOnlyPeriod(dateOnlyPeriod.StartDate, DateOnly.MaxValue));
+
 				personAccountBalanceCalculator = new PersonAccountBalanceCalculator(affectedAccounts);
 			}
 

@@ -61,11 +61,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			build.RegisterModule(new NotificationModule(_toggleManager));
 			build.RegisterModule<IntraIntervalSolverServiceModule>();
 			build.RegisterModule<NodeHandlersModule>();
-
-			//ROBTODO: test
 			build.RegisterModule<PersonAccountModule>();
-
-
+			
 			build.RegisterType<AgentBadgeCalculator>().As<IAgentBadgeCalculator>();
 			build.RegisterType<AgentBadgeWithRankCalculator>().As<IAgentBadgeWithRankCalculator>();
 			build.RegisterType<RunningEtlJobChecker>().As<IRunningEtlJobChecker>();
