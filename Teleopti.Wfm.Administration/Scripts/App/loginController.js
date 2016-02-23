@@ -25,7 +25,7 @@
 		vm.Id = sessionStorage.getItem(idKey);
 
 		vm.user = sessionStorage.getItem(userKey);
-
+		$scope.selected = 1;
 		function showError(jqXHR) {
 			vm.Message = jqXHR.Message + ': ' + jqXHR.ExceptionMessage;
 		}

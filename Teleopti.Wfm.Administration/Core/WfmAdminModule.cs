@@ -16,6 +16,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Support.Security;
 using Teleopti.Wfm.Administration.Controllers;
+using Teleopti.Wfm.Administration.Core.Stardust;
 
 namespace Teleopti.Wfm.Administration.Core
 {
@@ -51,6 +52,9 @@ namespace Teleopti.Wfm.Administration.Core
 			
 			builder.Register(c => new LoadPasswordPolicyService(ConfigurationManager.AppSettings["ConfigurationFilesPath"])).SingleInstance().As<ILoadPasswordPolicyService>();
 			builder.RegisterType<PasswordPolicy>().SingleInstance().As<IPasswordPolicy>();
+
+			builder.RegisterType<StardustHelper>().SingleInstance();
+			builder.Register(c => new StardustRepository(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)).SingleInstance();
 
 			// OPTIONAL: Enable property injection into action filters.
 			builder.RegisterFilterProvider();

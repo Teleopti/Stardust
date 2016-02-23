@@ -7,6 +7,7 @@
 	<title>Teleopti WFM Administration</title>
 	<link href="Content/bootstrap.min.css" rel="stylesheet" type="text/css"/>
 	<link href="Content/Site.css" rel="stylesheet" type="text/css" />
+	<link href="StardustDashboard/style.css" rel="stylesheet" />
 	<!--<link href="Content/angular-material.min.css" rel="stylesheet" />-->
 	<script src="Scripts/angular.min.js"></script>
 	<script src="Scripts/angular-route.min.js"></script>
@@ -40,7 +41,14 @@
 			
 		</div>
 	</div>
-
+<div>
+	<ul class="nav nav-tabs">
+		<li ng:click="selected=1" ng:class="{'active' : selected==1 }"><a href="#">Tenant administration</a></li>
+		<li ng:click="selected=2" ng:class="{'active' : selected==2 }"><a href="#StardustDashboard">See Stardust jobs</a></li>
+		<!--<li><a href="#">Healthcheck</a></li>
+		<li><a href="#">Menu 3</a></li>-->
+	</ul>
+</div>
 <div ng-show="loginVm.user != null">
 	<div ng-view></div>
 </div>
@@ -85,5 +93,7 @@
 	<script src="Scripts/App/adduserController.js"></script>
 	<script src="Scripts/App/changePasswordController.js"></script>
 	<script src="Scripts/App/addSuperUserController.js"></script>
+	<script src="Scripts/StardustApp/listJobController.js"></script>
+	<script src="Scripts/StardustApp/detailsController.js"></script>
 </body>
 </html>

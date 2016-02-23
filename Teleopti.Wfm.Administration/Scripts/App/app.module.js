@@ -42,5 +42,13 @@
 		.when('/other', {
 			templateUrl: 'other.html',
 			controller: 'otherController'
+		})
+		.when('/StardustDashboard', {
+			templateUrl: 'StardustDashboard/listJob.html',
+			controller: 'listJobController'
+		})
+		.when('/jobdetails/:jobId', {
+			templateUrl: 'StardustDashboard/jobdetails.html',
+			controller: 'detailsController'
 		});
 });

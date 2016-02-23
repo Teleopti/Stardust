@@ -59,6 +59,10 @@
       <HintPath>..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
@@ -145,11 +149,8 @@
     <Content Include="Scripts\App\changePasswordController.js" />
     <Content Include="Scripts\App\addSuperUserController.js" />
     <Content Include="Scripts\App\tokenHeaderService.js" />
-    <Content Include="StardustDashboard\default.html" />
     <Content Include="StardustDashboard\jobdetails.html" />
-    <Content Include="StardustDashboard\left_round.png" />
     <Content Include="StardustDashboard\listJob.html" />
-    <Content Include="Scripts\StardustApp\app.js" />
     <Content Include="Scripts\StardustApp\detailsController.js" />
     <Content Include="Scripts\StardustApp\listJobController.js" />
     <Content Include="StardustDashboard\style.css" />
@@ -208,10 +209,14 @@
     <Compile Include="Controllers\DatabaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\StardustController.cs" />
     <Compile Include="Core\DatabaseUpgrader.cs" />
     <Compile Include="Core\DbPathProvider.cs" />
     <Compile Include="Core\DbPathProviderFake.cs" />
     <Compile Include="Core\IDatabaseHelperWrapper.cs" />
+    <Compile Include="Core\LogHelper.cs" />
+    <Compile Include="Core\Stardust\StardustHelper.cs" />
+    <Compile Include="Core\Stardust\StardustRepository.cs" />
     <Compile Include="Core\TenantLogger.cs" />
     <Compile Include="Core\TenantUpgrader.cs" />
     <Compile Include="Core\TokenQuerier.cs" />
@@ -225,6 +230,8 @@
     <Compile Include="Core\TenantTokenAuthenticationAttribute.cs" />
     <Compile Include="Models\ImportUserModel.cs" />
     <Compile Include="Models\ConflictModel.cs" />
+    <Compile Include="Models\Stardust\JobHistory.cs" />
+    <Compile Include="Models\Stardust\JobHistoryDetail.cs" />
     <Compile Include="Models\UpdateTenantModel.cs" />
     <Compile Include="Models\VersionResultModel.cs" />
     <Compile Include="Core\AdminTenantAuthentication.cs" />
