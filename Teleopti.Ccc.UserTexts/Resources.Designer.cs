@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The absence request {0} was unable to be accepted at this time and was waitlisted..
+        ///   Looks up a localized string similar to The absence request for {0} could not be approved at this time and was waitlisted..
         /// </summary>
         public static string AbsenceRequestForOneDayHasBeenWaitlisted {
             get {
@@ -277,7 +277,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An absence request for {0} to {1} was unable to be accepted at this time and was waitlisted..
+        ///   Looks up a localized string similar to The absence request for {0} to {1} could not be approved at this time and was waitlisted..
         /// </summary>
         public static string AbsenceRequestHasBeenWaitlisted {
             get {
@@ -876,6 +876,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AddEfficiencyShrinkageRow {
             get {
                 return ResourceManager.GetString("AddEfficiencyShrinkageRow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add empty period.
+        /// </summary>
+        public static string AddEmptyPeriod {
+            get {
+                return ResourceManager.GetString("AddEmptyPeriod", resourceCulture);
             }
         }
         
@@ -7745,6 +7754,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete period.
+        /// </summary>
+        public static string DeletePeriod {
+            get {
+                return ResourceManager.GetString("DeletePeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete Personal Shift.
         /// </summary>
         public static string DeletePersonalShift {
@@ -8339,7 +8357,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Double click here to edit text.
+        ///   Looks up a localized string similar to Double-click here to edit text.
         /// </summary>
         public static string DoubleClickHereToEditText {
             get {
@@ -18138,7 +18156,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Only support seat roles setting.
+        ///   Looks up a localized string similar to Only supports seat roles setting.
         /// </summary>
         public static string OnlySupportSeatRolesSetting {
             get {

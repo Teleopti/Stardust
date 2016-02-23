@@ -14130,4 +14130,12 @@ Help us improve your experience by sending an error report</value>
     <value>Waitlisted</value>
     <comment>Used for the status of a denied absence request when waitlisting is enabled on the related workflow control set.</comment>
   </data>
+  <data name="AddEmptyPeriod" xml:space="preserve">
+    <value>Add empty period</value>
+    <comment>Add empty period text in outbound campaign edit.</comment>
+  </data>
+  <data name="DeletePeriod" xml:space="preserve">
+    <value>Delete period</value>
+    <comment>Tooltip text in working-hours-picker in outbound campaign edit.</comment>
+  </data>
 </root>
