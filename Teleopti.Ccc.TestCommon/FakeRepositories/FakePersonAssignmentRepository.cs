@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -106,6 +105,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public void Has(IPerson agent, IScenario scenario, IActivity activity, IShiftCategory shiftCategory, DateOnly date, TimePeriod timePeriod)
 		{
 			Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(date, date), timePeriod);
+		}
+
+		public void Clear()
+		{
+			_personAssignments.Clear();
 		}
 	}
 }

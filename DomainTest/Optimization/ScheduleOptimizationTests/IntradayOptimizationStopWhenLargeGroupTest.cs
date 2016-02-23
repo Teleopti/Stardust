@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -199,7 +201,40 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			TrackOptimizeDaysForAgents.NumberOfOptimizationsFor(dateOnly).Should().Be.EqualTo(9);
 		}
 
+		[Test]
+		public void ShouldPickAgentRandomly()
+		{
+			IntradayOptmizerLimiter.SetFromTest(new Percent(0.5), 0);
+			const int numberOfAgents = 2;
+			const int retriesBeforeGivingUp = 50;
+			var phoneActivity = ActivityFactory.CreateActivity("phone");
+			var skill = SkillRepository.Has("skill", phoneActivity);
+			var scenario = ScenarioRepository.Has("some name");
+			var dateOnly = new DateOnly(2015, 10, 12);
+			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
+			SkillDayRepository.Has(new[] { skill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60)) });
+			var agents = new List<IPerson>();
+			for (var i = 0; i < numberOfAgents; i++)
+			{
+				agents.Add(PersonRepository.Has(new Contract("_"), new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1), skill));
+			}
 
+			var optimizedAgentsInAnyOfLoops = new HashSet<IPerson>();
+			for (var retries = 0; retries < retriesBeforeGivingUp; retries++)
+			{
+				PersonAssignmentRepository.Clear();
+				TrackOptimizeDaysForAgents.Clear();
+				for (var i = 0; i < numberOfAgents; i++)
+				{
+					PersonAssignmentRepository.Has(agents[i], scenario, phoneActivity, new ShiftCategory("_"), dateOnly, new TimePeriod(8, 0, 17, 0));
+				}
+				Target.Optimize(planningPeriod.Id.Value);
+				optimizedAgentsInAnyOfLoops.Add(TrackOptimizeDaysForAgents.OptimizedAgentsOn(dateOnly).Single());
+				if (optimizedAgentsInAnyOfLoops.Count == 2)
+					return;
+			}
+			Assert.Fail("Tried to optimize 2 agents {0} times. A limit is set to 50% and it's always the same agent that are optimized. Giving up.", numberOfAgents);
+		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{

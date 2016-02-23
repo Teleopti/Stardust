@@ -19,6 +19,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			return _tracked.Count(x => x.Date.Equals(date));
 		}
 
+		public IEnumerable<IPerson> OptimizedAgentsOn(DateOnly dateOnly)
+		{
+			return _tracked.Where(x => x.Date == dateOnly).Select(x => x.Agent);
+		}
+
 		public int NumberOfOptimizations()
 		{
 			return _tracked.Count;
@@ -28,6 +33,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		{
 			public IPerson Agent { get; set; }
 			public DateOnly Date { get; set; }
+		}
+
+		public void Clear()
+		{
+			_tracked.Clear();
 		}
 	}
 }
