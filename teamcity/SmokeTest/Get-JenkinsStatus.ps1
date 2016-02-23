@@ -29,5 +29,5 @@ Write-Host ""
 Write-Host "Jenkins deploy failure! Check http://$ServerURL/job/$ServerName-AutoDeploy for more information!" -ForegroundColor Red
 Write-Host ""
 Throw $_
-Exit
+exit(1)
 }
