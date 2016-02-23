@@ -61,8 +61,8 @@ namespace Teleopti.Ccc.InfrastructureTest
 			// ..either fake the whole license thing...
 			// ..or fake the repository..
 			// ..or put a license in the database.
-			//system.UseTestDouble<SetNoLicenseActivator>().For<ISetLicenseActivator>();
-			system.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository>();
+			system.UseTestDouble<SetNoLicenseActivator>().For<ISetLicenseActivator>();
+			//system.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository>();
 		}
 
 		protected override void BeforeTest()
