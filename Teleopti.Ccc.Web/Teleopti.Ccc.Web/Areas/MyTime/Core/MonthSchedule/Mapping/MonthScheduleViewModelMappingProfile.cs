@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 						return null;
 					}))
 				.ForMember(d => d.HasOvertime, c => c.ResolveUsing(
-					s => s.ScheduleDay != null && s.ScheduleDay.PersonAssignment().ShiftLayers.OfType<OvertimeShiftLayer>().Any()))
+					s => s.ScheduleDay != null && s.ScheduleDay.PersonAssignment() != null && s.ScheduleDay.PersonAssignment().ShiftLayers.OfType<OvertimeShiftLayer>().Any()))
 				.ForMember(d => d.IsDayOff, c => c.ResolveUsing(s =>
 					{
 						var significantPart = s.ScheduleDay.SignificantPartForDisplay();

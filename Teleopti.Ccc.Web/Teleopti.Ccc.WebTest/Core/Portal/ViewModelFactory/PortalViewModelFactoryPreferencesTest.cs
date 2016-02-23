@@ -94,6 +94,42 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			result.Controller("Preference").Should().Not.Be.Null();
 		}
 
+		[Test]
+		public void ShouldNotHavePreferencesNavigationItemIfJalaliCalendarIsUsedAndPermissionToExtendedPreferences()
+		{
+			var permissionProvider = NoPermissionToStandardPreferences();
+			var userCulture = MockRepository.GenerateMock<IUserCulture>();
+			userCulture.Expect(x => x.GetCulture()).Return(CultureInfo.GetCultureInfo("fa-IR"));
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
+				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
+				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
+				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
+				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(),
+				userCulture);
+
+			var result = target.CreatePortalViewModel();
+
+			result.Controller("Preference").Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldNotHavePreferencesNavigationItemIfJalaliCalendarIsUsedAndPermissionToStandardPreferences()
+		{
+			var permissionProvider = NoPermissionToExtendedPreferences();
+			var userCulture = MockRepository.GenerateMock<IUserCulture>();
+			userCulture.Expect(x => x.GetCulture()).Return(CultureInfo.GetCultureInfo("fa-IR"));
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
+				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
+				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
+				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
+				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(),
+				userCulture);
+
+			var result = target.CreatePortalViewModel();
+
+			result.Controller("Preference").Should().Be.Null();
+		}
+
 		private IPermissionProvider NoPermissionToPreferences()
 		{
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();

@@ -57,18 +57,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		public PortalViewModel CreatePortalViewModel()
 		{
 			var navigationItems = new List<NavigationItem> {createWeekScheduleNavigationItem()};
+			var culture = _userCulture == null ? CultureInfo.InvariantCulture : _userCulture.GetCulture();
+			var useJalaaliCalendar = culture.IetfLanguageTag == "fa-IR";
 			var reportsItems = _reportsNavigationProvider.GetNavigationItems();
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule))
 			{
 				navigationItems.Add(createTeamScheduleNavigationItem());
 			}
-			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StudentAvailability))
+			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StudentAvailability) && !useJalaaliCalendar)
 			{
 				navigationItems.Add(createStudentAvailabilityNavigationItem());
 			}
 			if (
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences) ||
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb))
+				!useJalaaliCalendar && (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences) ||
+				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb)))
 			{
 				navigationItems.Add(createPreferenceNavigationItem());
 			}
@@ -109,8 +111,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			}
 
 			var showBadge = badgeToggleEnabled && badgeFeatureEnabled && hasBadgePermission;
-			var culture = _userCulture == null ? CultureInfo.InvariantCulture : _userCulture.GetCulture();
+			
 
+			
 			return new PortalViewModel
 			{
 				ReportNavigationItems = reportsList,
@@ -122,7 +125,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 					_permissionProvider.HasApplicationFunctionPermission(
 						DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger),
 				ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t"),
-				UseJalaaliCalendar = CultureInfo.CurrentCulture.IetfLanguageTag == "fa-IR",
+				UseJalaaliCalendar = useJalaaliCalendar,
 				DateFormat = culture.DateTimeFormat.ShortDatePattern.ToUpper(),
 				TimeFormat = culture.DateTimeFormat.ShortTimePattern,
 				AMDesignator = culture.DateTimeFormat.AMDesignator,

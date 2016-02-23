@@ -64,7 +64,59 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var result = target.CreatePortalViewModel();
 
 			var studentAvailability =
-				(from i in result.NavigationItems where i.Controller == "StudentAvailability" select i).SingleOrDefault();
+				(from i in result.NavigationItems where i.Controller == "Availability" select i).SingleOrDefault();
+			studentAvailability.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldNotHaveStudentAvailabilityNavigationItemIfPermitted()
+		{
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			permissionProvider.Stub(
+				x => x.HasApplicationFunctionPermission(
+					Arg<string>.Is.Equal(DefinedRaptorApplicationFunctionPaths.StudentAvailability))).Return(true);
+			permissionProvider.Stub(
+				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StudentAvailability)).Return(true);
+
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
+				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
+				MockRepository.GenerateMock<IReportsNavigationProvider>(),
+				MockRepository.GenerateMock<IBadgeProvider>(),
+				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
+				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(),
+				_userCulture);
+
+			var result = target.CreatePortalViewModel();
+
+			var studentAvailability =
+				(from i in result.NavigationItems where i.Controller == "Availability" select i).SingleOrDefault();
+			studentAvailability.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldNotHaveStudentAvailabilityNavigationItemIfJalaliCalendarIsUsed()
+		{
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			permissionProvider.Stub(
+				x => x.HasApplicationFunctionPermission(
+					Arg<string>.Is.Equal(DefinedRaptorApplicationFunctionPaths.StudentAvailability))).Return(true);
+			permissionProvider.Stub(
+				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StudentAvailability)).Return(true);
+			var culture = CultureInfo.GetCultureInfo("fa-IR");
+			var userCulture = MockRepository.GenerateMock<IUserCulture>();
+			userCulture.Expect(x => x.GetCulture()).Return(culture);
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
+				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
+				MockRepository.GenerateMock<IReportsNavigationProvider>(),
+				MockRepository.GenerateMock<IBadgeProvider>(),
+				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
+				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(),
+				userCulture);
+
+			var result = target.CreatePortalViewModel();
+
+			var studentAvailability =
+				(from i in result.NavigationItems where i.Controller == "Availability" select i).SingleOrDefault();
 			studentAvailability.Should().Be.Null();
 		}
 	}
