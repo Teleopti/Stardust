@@ -38,7 +38,6 @@ Portal_ResetBadges_30544 = true
 MyTimeWeb_FullDayAbsenceConfiguration_30552 = true
 Settings_AlertViaEmailFromSMSLink_30444 = true
 Badge_Leaderboard_30584 = true
-MyTeam_Reports_31070 = true
 MyTimeWeb_AbsenceReport_31011 = true
 ETL_SpeedUpETL_30791 = true
 #Cannot be relreased yet due to performance and IO #

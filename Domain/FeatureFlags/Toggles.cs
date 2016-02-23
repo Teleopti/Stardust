@@ -28,7 +28,6 @@
 
 		MessageBroker_SchedulingScreenMailbox_32733,
 
-		MyTeam_Reports_31070,
 		MyTeam_AbsenceBackToWork_31478,
 
 		RTA_NotifyViaSMS_31567,

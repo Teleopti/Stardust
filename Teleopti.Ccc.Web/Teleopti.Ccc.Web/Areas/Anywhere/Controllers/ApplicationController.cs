@@ -181,7 +181,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				FirstDayOfWeek = (int) CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek,
 				ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t"),
 
-				MyTeam_Reports_31070 = _toggles.IsEnabled(Toggles.MyTeam_Reports_31070),
 				MyTeam_AbsenceBackToWork_31478 = _toggles.IsEnabled(Toggles.MyTeam_AbsenceBackToWork_31478),
 				MyTeam_MakeTeamScheduleConsistent_31897 = _toggles.IsEnabled(Toggles.MyTeam_MakeTeamScheduleConsistent_31897),
 

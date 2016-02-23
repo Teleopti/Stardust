@@ -304,9 +304,8 @@ define([
 	};
 
 	initReportsMenu(function (data) {
-		menu.fillReports(data);
-		if (resources.MyTeam_Reports_31070)
-			menu.ReportsVisible(menu.reports().length > 0);
+		menu.fillReports(data);		
+		menu.ReportsVisible(menu.reports().length > 0);
 		reportsLoadDeffered.resolve();
 	});
 
