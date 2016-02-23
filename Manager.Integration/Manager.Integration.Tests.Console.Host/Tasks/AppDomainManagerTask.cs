@@ -4,11 +4,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using Manager.IntegrationTest.Console.Host.Helpers;
+using Manager.IntegrationTest.Console.Host.Interfaces;
 using Manager.IntegrationTest.Console.Host.Properties;
 
 namespace Manager.IntegrationTest.Console.Host.Tasks
 {
-    public class AppDomainManagerTask : IDisposable
+    public class AppDomainManagerTask : IAppDomain,IDisposable
     {
         private static readonly ILog Logger =
             LogManager.GetLogger(typeof (AppDomainManagerTask));

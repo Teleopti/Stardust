@@ -18,7 +18,7 @@ namespace Stardust.Manager
                                                          object data)
         {
             LogHelper.LogDebugWithLineNumber(Logger,
-                                            "Start.");
+                                             "Start.");
 
             try
             {
@@ -33,10 +33,11 @@ namespace Stardust.Manager
                         await client.PostAsync(url,
                                                new StringContent(sez,
                                                                  Encoding.Unicode,
-                                                                 "application/json")).ConfigureAwait(false);
+                                                                 "application/json"))
+                            .ConfigureAwait(false);
 
                     LogHelper.LogDebugWithLineNumber(Logger,
-                                                    "Finished.");
+                                                     "Finished.");
 
                     return response;
                 }
@@ -55,7 +56,7 @@ namespace Stardust.Manager
         public async Task<HttpResponseMessage> DeleteAsync(Uri url)
         {
             LogHelper.LogDebugWithLineNumber(Logger,
-                                            "Start.");
+                                             "Start.");
 
             try
             {
@@ -67,7 +68,7 @@ namespace Stardust.Manager
                     var response = await client.DeleteAsync(url);
 
                     LogHelper.LogDebugWithLineNumber(Logger,
-                                                    "Finished.");
+                                                     "Finished.");
 
                     return response;
                 }
@@ -91,9 +92,9 @@ namespace Stardust.Manager
                 {
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    
+
                     var response = await client.GetAsync(url);
-                    
+
                     return response;
                 }
             }
@@ -117,8 +118,11 @@ namespace Stardust.Manager
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var response = await client.GetAsync(url,HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
-                    
+                    var response =
+                        await client.GetAsync(url,
+                                              HttpCompletionOption.ResponseHeadersRead)
+                            .ConfigureAwait(false);
+
                     return response.IsSuccessStatusCode;
                 }
             }
@@ -127,7 +131,6 @@ namespace Stardust.Manager
             {
                 LogHelper.LogWarningWithLineNumber(Logger,
                                                    exp.Message);
-
             }
 
             catch (Exception exp)
@@ -139,7 +142,7 @@ namespace Stardust.Manager
                 throw;
             }
             LogHelper.LogDebugWithLineNumber(Logger,
-                                                    "Return false");
+                                             "Return false");
             return false;
         }
     }

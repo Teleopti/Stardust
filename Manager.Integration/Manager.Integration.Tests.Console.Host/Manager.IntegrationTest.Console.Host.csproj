@@ -121,6 +121,7 @@
   <ItemGroup>
     <Compile Include="Helpers\LogHelper.cs" />
     <Compile Include="IntegrationController.cs" />
+    <Compile Include="Interfaces\IAppDomain.cs" />
     <Compile Include="Models\Configuration.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

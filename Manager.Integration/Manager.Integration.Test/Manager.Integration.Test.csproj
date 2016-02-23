@@ -100,6 +100,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Timers\CheckJobHistoryStatusTimer.cs" />
+    <Compile Include="Validators\IntegerValidators.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

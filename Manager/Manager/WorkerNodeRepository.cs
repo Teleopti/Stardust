@@ -27,6 +27,8 @@ namespace Stardust.Manager
 
         private void InitDs()
         {
+            LogHelper.LogInfoWithLineNumber(Logger,"Start InitDs.");
+
             _jdDataSet = new DataSet();
 
             _jdDataTable = new DataTable("[Stardust].WorkerNodes");
@@ -38,6 +40,8 @@ namespace Stardust.Manager
                                                     typeof (string)));
 
             _jdDataSet.Tables.Add(_jdDataTable);
+
+            LogHelper.LogInfoWithLineNumber(Logger, "Finished InitDs.");
         }
 
         public List<WorkerNode> LoadAll()
@@ -80,11 +84,13 @@ namespace Stardust.Manager
 
             if (listToReturn != null && listToReturn.Any())
             {
-                LogHelper.LogDebugWithLineNumber(Logger, "Found ( " + listToReturn.Count + " ) availabe nodes.");
+                LogHelper.LogDebugWithLineNumber(Logger, 
+                                                "Found ( " + listToReturn.Count + " ) availabe nodes.");
             }
             else
             {
-                LogHelper.LogDebugWithLineNumber(Logger, "No nodes found.");
+                LogHelper.LogDebugWithLineNumber(Logger, 
+                                                  "No nodes found.");
             }
 
             LogHelper.LogDebugWithLineNumber(Logger, "Finished LoadAll.");

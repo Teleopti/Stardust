@@ -14,6 +14,7 @@ using Manager.Integration.Test.Properties;
 using Manager.Integration.Test.Scripts;
 using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Timers;
+using Manager.Integration.Test.Validators;
 using NUnit.Framework;
 
 namespace Manager.Integration.Test
@@ -163,8 +164,9 @@ namespace Manager.Integration.Test
 
             SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
-            Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(5,
-                                                                      sqlNotiferCancellationTokenSource);
+            Task task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(5,
+                                                                   sqlNotiferCancellationTokenSource,
+																   IntegerValidators.Value1IsEqualToValue2Validator);
             task.Start();
 
             LogHelper.LogDebugWithLineNumber("Waiting for all 5 nodes to start up.",

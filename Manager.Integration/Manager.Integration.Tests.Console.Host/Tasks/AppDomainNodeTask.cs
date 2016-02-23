@@ -4,10 +4,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using Manager.IntegrationTest.Console.Host.Helpers;
+using Manager.IntegrationTest.Console.Host.Interfaces;
 
 namespace Manager.IntegrationTest.Console.Host.Tasks
 {
-    public class AppDomainNodeTask : IDisposable
+    public class AppDomainNodeTask : IAppDomain,IDisposable
     {
         private string BuildMode { get; set; }
 

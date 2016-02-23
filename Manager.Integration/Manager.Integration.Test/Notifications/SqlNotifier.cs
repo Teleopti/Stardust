@@ -22,10 +22,11 @@ namespace Manager.Integration.Test.Notifications
 
         private CancellationTokenSource NotifyWhenAllNodesAreUpTaskCancellationTokenSource { get; set; }
 
-        private Task NotifyWhenAllNodesAreUpTask { get; set; }
+        private Task NotifyWhenNodesAreUpTask { get; set; }
 
-        public Task CreateNotifyWhenAllNodesAreUpTask(int numberOfNodes,
-                                                      CancellationTokenSource cancellationTokenSource)
+        public Task CreateNotifyWhenNodesAreUpTask(int numberOfNodes,
+                                                      CancellationTokenSource cancellationTokenSource,
+                                                      Func<int,int,bool> validator)
         {
             if (numberOfNodes <= 0)
             {
@@ -41,7 +42,7 @@ namespace Manager.Integration.Test.Notifications
 
             NotifyWhenAllNodesAreUpTaskCancellationTokenSource = cancellationTokenSource;
 
-            NotifyWhenAllNodesAreUpTask = new Task(() =>
+            NotifyWhenNodesAreUpTask = new Task(() =>
             {
                 int nodes = numberOfNodes;
 
@@ -58,7 +59,7 @@ namespace Manager.Integration.Test.Notifications
                         {
                             int rowCount = (int) command.ExecuteScalar();
 
-                            if (nodes == rowCount)
+                            if (validator(rowCount,nodes))
                             {
                                 NotifyWhenAllNodesAreUp.Set();
                             }
@@ -75,9 +76,9 @@ namespace Manager.Integration.Test.Notifications
                     cancellationTokenSource.Token.ThrowIfCancellationRequested();
                 }
             },
-                                                   NotifyWhenAllNodesAreUpTaskCancellationTokenSource.Token);
+            NotifyWhenAllNodesAreUpTaskCancellationTokenSource.Token);
 
-            return NotifyWhenAllNodesAreUpTask;
+            return NotifyWhenNodesAreUpTask;
         }
 
         public void Dispose()
@@ -92,12 +93,12 @@ namespace Manager.Integration.Test.Notifications
             }
 
             // Wait for task to complete.
-            while (NotifyWhenAllNodesAreUpTask.Status == TaskStatus.Running)
+            while (NotifyWhenNodesAreUpTask.Status == TaskStatus.Running)
             {
                 Thread.Sleep(TimeSpan.FromMilliseconds(500));
             }
 
-            NotifyWhenAllNodesAreUpTask.Dispose();
+            NotifyWhenNodesAreUpTask.Dispose();
 
             LogHelper.LogDebugWithLineNumber("Finished dispose.",
                                              Logger);

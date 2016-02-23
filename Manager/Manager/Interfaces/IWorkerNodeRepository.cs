@@ -7,8 +7,10 @@ namespace Stardust.Manager.Interfaces
 	public interface IWorkerNodeRepository 
 	{
 		List<WorkerNode> LoadAll();
+
 		void Add(WorkerNode workerNode);
-		void DeleteNode(Guid nodeId);
+
+        void DeleteNode(Guid nodeId);
 
 		List<WorkerNode> LoadAllFreeNodes();
 	}

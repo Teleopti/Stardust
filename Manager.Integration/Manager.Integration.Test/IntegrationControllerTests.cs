@@ -14,6 +14,7 @@ using Manager.Integration.Test.Notifications;
 using Manager.Integration.Test.Properties;
 using Manager.Integration.Test.Scripts;
 using Manager.Integration.Test.Tasks;
+using Manager.Integration.Test.Validators;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
@@ -138,8 +139,9 @@ namespace Manager.Integration.Test
 
             SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
-            Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(2,
-                                                                      sqlNotiferCancellationTokenSource);
+            Task task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(2,
+                                                                   sqlNotiferCancellationTokenSource,
+                                                                   IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
             task.Start();
 
             sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(30));
@@ -204,6 +206,7 @@ namespace Manager.Integration.Test
                                              Logger);
         }
 
+
         /// <summary>
         ///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
         ///     netsh http add urlacl url=http://+:9100/ user=everyone listen=yes
@@ -224,8 +227,9 @@ namespace Manager.Integration.Test
 
             SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
-            Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(2,
-                                                                      sqlNotiferCancellationTokenSource);
+            Task task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(2,
+                                                                   sqlNotiferCancellationTokenSource,
+																   IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
             task.Start();
 
             sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(30));
@@ -302,8 +306,9 @@ namespace Manager.Integration.Test
 
             SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
-            Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(2,
-                                                                      sqlNotiferCancellationTokenSource);
+            Task task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(2,
+                                                                   sqlNotiferCancellationTokenSource,
+																   IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
             task.Start();
 
             sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(30));
