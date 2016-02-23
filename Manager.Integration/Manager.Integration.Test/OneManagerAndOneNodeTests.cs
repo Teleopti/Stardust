@@ -140,7 +140,7 @@ namespace Manager.Integration.Test
 
 			var timeout =
 				JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
-                                                                 5);
+                                                                 2);
 
             //--------------------------------------------
             // Notify when node is up.
@@ -247,7 +247,7 @@ namespace Manager.Integration.Test
 				JobHelper.GenerateLongRunningParamsRequests(1);
 
 			var timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
-                                                       5);
+                                                       2);
 
 
             //--------------------------------------------
@@ -371,7 +371,7 @@ namespace Manager.Integration.Test
 
 			var timeout =
                 JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
-                                                       5);
+                                                       2);
 
             //--------------------------------------------
             // Notify when node is up.
@@ -454,7 +454,7 @@ namespace Manager.Integration.Test
 
 			var timeout =
                 JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
-                                                       5);
+                                                       2);
 
             //--------------------------------------------
             // Notify when node is up.

@@ -32,7 +32,11 @@ namespace Manager.Integration.Test
 
         private string ManagerDbConnectionString { get; set; }
 
-        [TestFixtureSetUp]
+		private bool _clearDatabase = true;
+
+		private string _buildMode = "Debug";
+
+		[TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -120,10 +124,6 @@ namespace Manager.Integration.Test
             LogHelper.LogDebugWithLineNumber("Finished TestFixtureTearDown",
                                             Logger);
         }
-
-		private bool _clearDatabase = true;
-
-		private string _buildMode = "Debug";
 
         /// <summary>
         ///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
