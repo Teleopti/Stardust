@@ -27,7 +27,7 @@ namespace Stardust.Manager
 
         private void InitDs()
         {
-            LogHelper.LogInfoWithLineNumber(Logger,"Start InitDs.");
+            LogHelper.LogDebugWithLineNumber(Logger,"Start InitDs.");
 
             _jdDataSet = new DataSet();
 
@@ -41,7 +41,7 @@ namespace Stardust.Manager
 
             _jdDataSet.Tables.Add(_jdDataTable);
 
-            LogHelper.LogInfoWithLineNumber(Logger, "Finished InitDs.");
+            LogHelper.LogDebugWithLineNumber(Logger, "Finished InitDs.");
         }
 
         public List<WorkerNode> LoadAll()
