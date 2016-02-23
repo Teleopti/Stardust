@@ -17,7 +17,7 @@
 		</div>
 		<div class="con-flex">
 			<div class="wfm-switch" style="padding-top: 8px;" ng-if="vm.toggleForRemoveAbsenceEnabled">
-				<input type="checkbox" id="switchAbsence" ng-model="vm.isSwitchAbsence" ng-change="vm.loadSchedules()" />
+				<input type="checkbox" id="switchAbsence" ng-model="vm.onlyLoadScheduleWithAbsence" ng-change="vm.loadSchedules()" />
 				<label for="switchAbsence">
 					<span class="wfm-switch-label" translate>ShowOnlyAbsence</span>
 					<span class="wfm-switch-toggle"></span>
@@ -50,7 +50,7 @@
 			<i class='mdi mdi-alert'></i>{{'TooManyResultsForSearchKeywords'|translate}}
 		</div>
 		<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
-		<schedule-table schedule-vm="vm.groupScheduleVm" person-selection="vm.personIdSelectionDic"
+		<schedule-table schedule-vm="vm.groupScheduleVm" person-selection="vm.selectedPersonInfo()"
 						selected-person-absences="vm.selectedPersonAbsences" select-mode="vm.toggleForAbsenceReportingEnabled" />
 	</div>
 

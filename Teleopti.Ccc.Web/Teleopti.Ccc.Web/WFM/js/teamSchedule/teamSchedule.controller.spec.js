@@ -30,9 +30,10 @@ describe("TeamScheduleControllerTest", function() {
 
 	it("can select one person", inject(function () {
 		rootScope.$digest();
-		
+
+		var selectedPersons = controller.selectedPersonInfo();
 		var personSchedule1 = controller.groupScheduleVm.Schedules[0];
-		controller.personIdSelectionDic[personSchedule1.PersonId].isSelected = true;
+		selectedPersons[personSchedule1.PersonId].isSelected = true;
 		var selectedPersonList = controller.getSelectedPersonIdList();
 
 		expect(selectedPersonList.length).toEqual(1);
@@ -42,8 +43,9 @@ describe("TeamScheduleControllerTest", function() {
 	it("can deselect one person", inject(function () {
 		rootScope.$digest();
 
+		var selectedPersons = controller.selectedPersonInfo();
 		var personSchedule1 = controller.groupScheduleVm.Schedules[0];
-		controller.personIdSelectionDic[personSchedule1.PersonId].isSelected = false;
+		selectedPersons[personSchedule1.PersonId].isSelected = false;
 		var selectedPersonList = controller.getSelectedPersonIdList();
 
 		expect(selectedPersonList.length).toEqual(0);

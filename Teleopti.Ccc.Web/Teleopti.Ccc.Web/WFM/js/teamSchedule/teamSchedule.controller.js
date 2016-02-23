@@ -2,20 +2,20 @@
 
 (function () {
 	angular.module('wfm.teamSchedule')
-		.controller('TeamScheduleCtrl', ['$scope', '$q', '$locale', '$translate', 'TeamSchedule',
-			'GroupScheduleFactory', 'teamScheduleNotificationService', 'Toggle', 'SignalR', '$mdComponentRegistry',
+		.controller('TeamScheduleCtrl', ['$scope', '$q', '$locale', '$translate', 'TeamSchedule', 'GroupScheduleFactory',
+			'teamScheduleNotificationService', 'PersonSelection', 'Toggle', 'SignalR', '$mdComponentRegistry',
 			'$mdSidenav', '$mdUtil', 'guidgenerator', 'ShortCuts', 'keyCodes', TeamScheduleController]);
 
-	function TeamScheduleController($scope, $q, $locale, $translate, teamScheduleSvc, groupScheduleFactory, notificationService,
-		toggleSvc, signalRSvc, $mdComponentRegistry, $mdSidenav, $mdUtil, guidgenerator, shortCuts, keyCodes) {
+	function TeamScheduleController($scope, $q, $locale, $translate, teamScheduleSvc, groupScheduleFactory,
+		notificationService, personSelectionSvc, toggleSvc, signalRSvc, $mdComponentRegistry, $mdSidenav, $mdUtil,
+		guidgenerator, shortCuts, keyCodes) {
 		var vm = this;
 
 		vm.isLoading = false;
-		vm.personIdSelectionDic = {};
 		vm.scheduleDate = new Date();
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 		vm.toggleForSelectAgentsPerPageEnabled = false;
-		vm.isSwitchAbsence = false;
+		vm.onlyLoadScheduleWithAbsence = false;
 		// The original schedule got from server side
 		vm.rawSchedules = [];
 		vm.lastCommandTrackId = "";
@@ -42,7 +42,7 @@
 		};
 
 		vm.selectAllVisible = function () {
-			var selectedPersonIdList = vm.getSelectedPersonIdList();
+			var selectedPersonIdList = personSelectionSvc.getSelectedPersonIdList();
 			return vm.paginationOptions.totalPages > 1 && selectedPersonIdList.length < vm.total;
 		};
 
@@ -59,7 +59,7 @@
 		};
 
 		function updateShiftStatusForSelectedPerson() {
-			var selectedPersonIdList = vm.getSelectedPersonIdList();
+			var selectedPersonIdList = personSelectionSvc.getSelectedPersonIdList();
 			if (selectedPersonIdList.length === 0) {
 				return;
 			}
@@ -71,7 +71,7 @@
 
 			teamScheduleSvc.getSchedules.query(params).$promise.then(function (result) {
 				vm.groupScheduleVm = groupScheduleFactory.Create(result.Schedules, vm.scheduleDateMoment());
-				setupPersonIdSelectionDic(vm.groupScheduleVm.Schedules);
+				personSelectionSvc.updatePersonInfo(vm.groupScheduleVm.Schedules);
 			});
 		}
 
@@ -82,7 +82,7 @@
 
 		vm.onKeyWordInSearchInputChanged = function () {
 			if (vm.searchOptions.searchKeywordChanged) {
-				vm.personIdSelectionDic = {};
+				personSelectionSvc.clearPersonInfo();
 			}
 			vm.schedulePageReset();
 		};
@@ -99,7 +99,7 @@
 				date: options.date != undefined ? options.date : vm.scheduleDateMoment().format("YYYY-MM-DD"),
 				pageSize: options.pageSize != undefined ? options.pageSize : vm.paginationOptions.pageSize,
 				currentPageIndex: options.currentPageIndex != undefined ? options.currentPageIndex : vm.paginationOptions.pageNumber,
-				isOnlyAbsences: vm.isSwitchAbsence
+				isOnlyAbsences: vm.onlyLoadScheduleWithAbsence
 			};
 			return params;
 		}
@@ -111,7 +111,7 @@
 			vm.total = result.Total;
 			vm.searchOptions.searchKeywordChanged = false;
 			vm.searchOptions.keyword = result.Keyword;
-			setupPersonIdSelectionDic(vm.groupScheduleVm.Schedules);
+			personSelectionSvc.updatePersonInfo(vm.groupScheduleVm.Schedules);
 		};
 
 		vm.loadSchedules = function() {
@@ -145,27 +145,9 @@
 			});
 		};
 
-		function setupPersonIdSelectionDic(schedules) {
-			schedules.forEach(function (personSchedule) {				
-				var allowSwap = personSchedule.AllowSwap();
-				var selectedPerson = vm.personIdSelectionDic[personSchedule.PersonId];
-				if (selectedPerson === undefined || selectedPerson === null) {
-					vm.personIdSelectionDic[personSchedule.PersonId] = {
-						isSelected: false,
-						allowSwap: allowSwap
-					};
-				} else {
-					selectedPerson.allowSwap = allowSwap;
-				}
-			});
-		};
-
 		vm.selectAllForAllPages = function () {
 			vm.loadAllResults(function (result) {
-				setupPersonIdSelectionDic(result.Schedules);
-				for (var key in vm.personIdSelectionDic) {
-					vm.personIdSelectionDic[key].isSelected = true;
-				}
+				personSelectionSvc.selectAllPerson(result.Schedules);
 			});
 		};
 
@@ -180,38 +162,31 @@
 				shortcut: "Alt+A",
 				panelName: 'report-absence',
 				action: toggleAddAbsencePanel,
-				enabled: function() { return vm.isAnyAgentSelected(); },
-				active: function () { return vm.canActiveAddAbsence(); }
+				enabled: function() { return personSelectionSvc.isAnyAgentSelected(); },
+				active: function() { return vm.canActiveAddAbsence(); }
 			},
 			{
 				label: "SwapShifts",
 				shortcut: "Alt+S",
 				panelName: "", // No panel needed,
 				action: swapShifts,
-				enabled: canSwapShifts,
-				active: function () { return vm.canActiveSwapShifts(); }
+				enabled: function() { return personSelectionSvc.canSwapShifts() },
+				active: function() { return vm.canActiveSwapShifts(); }
 			}
 		];
 
 		function toggleAddAbsencePanel() {
-			if (vm.isAnyAgentSelected() && vm.canActiveAddAbsence()) {
+			if (personSelectionSvc.isAnyAgentSelected() && vm.canActiveAddAbsence()) {
 				vm.setEarliestStartOfSelectedSchedule();
 				vm.toggleMenuState();
 				vm.setCurrentCommand("addAbsence")();
 			}
 		};
 
-		function canSwapShifts() {
-			var selectedPersonInfos = vm.getSelectedPersonInfoList();
-			if (selectedPersonInfos.length !== 2) return false;
-
-			return selectedPersonInfos[0].allowSwap && selectedPersonInfos[1].allowSwap;
-		}
-
 		function swapShifts() {
-			if (!canSwapShifts()) return;
+			if (!personSelectionSvc.canSwapShifts()) return;
 
-			var selectedPersonIds = vm.getSelectedPersonIdList();
+			var selectedPersonIds = personSelectionSvc.getSelectedPersonIdList();
 			if (selectedPersonIds.length !== 2) return;
 
 			var trackId = guidgenerator.newGuid();
@@ -234,7 +209,7 @@
 			for (var i = 0; i < vm.groupScheduleVm.Schedules.length; i++) {
 				var schedule = vm.groupScheduleVm.Schedules[i];
 				var scheduleStart = getScheduleStartTime(schedule);
-				if (vm.personIdSelectionDic[schedule.PersonId].isSelected && scheduleStart < earlistStart) {
+				if (personSelectionSvc.personInfo[schedule.PersonId].isSelected && scheduleStart < earlistStart) {
 					startUpdated = true;
 					earlistStart = scheduleStart;
 				}
@@ -260,11 +235,6 @@
 
 			return scheduleStart;
 		}
-
-		vm.isAnyAgentSelected = function () {
-			var selectedPersonList = vm.getSelectedPersonIdList();
-			return selectedPersonList.length > 0;
-		};
 
 		vm.menuState = 'open';
 		vm.toggleMenuState = function () {
@@ -319,29 +289,13 @@
 			}
 		};
 
-		vm.getSelectedPersonInfoList = function() {
-			var result = [];
-			for (var key in vm.personIdSelectionDic) {
-				var schedule = vm.personIdSelectionDic[key];
-				if (schedule.isSelected) {
-					result.push({
-						personId: key,
-						allowSwap: schedule.allowSwap
-					});
-				}
-			}
-			return result;
+		vm.selectedPersonInfo = function () {
+			return personSelectionSvc.personInfo;
 		}
 
-		vm.getSelectedPersonIdList = function () {
-			var personIds = [];
-			var list = vm.getSelectedPersonInfoList();
-			angular.forEach(list, function (element) {
-				personIds.push(element.personId);
-			});
-			return personIds;
+		vm.getSelectedPersonIdList = function() {
+			return personSelectionSvc.getSelectedPersonIdList();
 		}
-
 		function replaceParameters(text, params) {
 			params.forEach(function (element, index) {
 				text = text.replace('{' + index + '}', element);
@@ -354,7 +308,7 @@
 		}
 
 		var handleActionResult = function (errors, successMessageTemplate, failMessageTemplate) {
-			var selectedPersonList = vm.getSelectedPersonIdList();
+			var selectedPersonList = personSelectionSvc.getSelectedPersonIdList();
 			var total = selectedPersonList.length;
 
 			vm.errorTitle = "";
@@ -379,9 +333,8 @@
 			vm.lastCommandTrackId = result.TrackId;
 			handleActionResult(result.Errors, successMessageTemplate, failMessageTemplate);
 
-			vm.updateSchedules(vm.getSelectedPersonIdList());
-			vm.personIdSelectionDic = {};
-			setupPersonIdSelectionDic(vm.groupScheduleVm.Schedules);
+			vm.updateSchedules(personSelectionSvc.getSelectedPersonIdList());
+			personSelectionSvc.resetPersonInfo(vm.groupScheduleVm.Schedules);
 
 			vm.setCurrentCommand("");
 		}
