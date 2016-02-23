@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
+		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 
 		public ScheduleOptimization(WebSchedulingSetup webSchedulingSetup, Func<ISchedulerStateHolder> schedulerStateHolder,
 			ClassicDaysOffOptimizationCommand classicDaysOffOptimizationCommand,
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			WeeklyRestSolverExecuter weeklyRestSolverExecuter, OptimizationPreferencesFactory optimizationPreferencesFactory,
 			IMatrixListFactory matrixListFactory, IScheduleDayEquator scheduleDayEquator,
 			DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
-			IOptimizerHelperHelper optimizerHelperHelper)
+			IOptimizerHelperHelper optimizerHelperHelper, Func<IPersonSkillProvider> personSkillProvider)
 		{
 			_webSchedulingSetup = webSchedulingSetup;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_scheduleDayEquator = scheduleDayEquator;
 			_dayOffOptimizationPreferenceProviderUsingFiltersFactory = dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 			_optimizerHelperHelper = optimizerHelperHelper;
+			_personSkillProvider = personSkillProvider;
 		}
 
 		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
@@ -80,10 +82,24 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixListForDayOffOptimization, optimizationPreferences, period);
 
-			_classicDaysOffOptimizationCommand.Execute(matrixOriginalStateContainerListForDayOffOptimization, period, optimizationPreferences, _schedulerStateHolder(),
-				new NoSchedulingProgress(), dayOffOptimizationPreferenceProvider);
+			var minutesPerInterval = 15;
+			var schedulerStateHolder = _schedulerStateHolder();
+			if (schedulerStateHolder.SchedulingResultState.Skills.Any())
+			{
+				minutesPerInterval = schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution);
+			}
 
-			_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, webScheduleState.AllSchedules, webScheduleState.PeopleSelection.AllPeople, dayOffOptimizationPreferenceProvider);
+			var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
+			var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
+			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
+			{
+				_classicDaysOffOptimizationCommand.Execute(matrixOriginalStateContainerListForDayOffOptimization, period,
+					optimizationPreferences, _schedulerStateHolder(),
+					new NoSchedulingProgress(), dayOffOptimizationPreferenceProvider);
+
+				_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, webScheduleState.AllSchedules,
+					webScheduleState.PeopleSelection.AllPeople, dayOffOptimizationPreferenceProvider);
+			}
 
 			//should maybe happen _after_ all schedules are persisted?
 			planningPeriod.Scheduled();

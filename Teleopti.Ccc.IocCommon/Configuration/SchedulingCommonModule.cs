@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ResourceOptimizationHelperExtended>().As<IResourceOptimizationHelperExtended>().InstancePerLifetimeScope();
 			builder.RegisterType<RequiredScheduleHelper>().As<IRequiredScheduleHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<CommonStateHolder>().As<ICommonStateHolder>().InstancePerLifetimeScope();
-			builder.RegisterType<PeriodExctractorFromScheduleParts>().SingleInstance();
+			builder.RegisterType<PeriodExtractorFromScheduleParts>().SingleInstance();
 
 			builder.RegisterType<IslandScheduler>().As<IslandScheduler>().InstancePerLifetimeScope();
 			builder.RegisterModule<WeeklyRestSolverModule>();

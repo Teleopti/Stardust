@@ -304,41 +304,4 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_studentSchedulingService.DayScheduled -= onDayScheduled;
 		}
 	}
-
-	public class TeleoptiProgressChangeMessage
-	{
-		public string Message { get; set; }
-
-		public TeleoptiProgressChangeMessage(string message)
-		{
-			Message = message;
-		}
-	}
-
-	public interface IScheduleOptimizerHelper
-	{
-		IEditableShift PrepareAndChooseBestShift(IScheduleDay schedulePart,
-			ISchedulingOptions schedulingOptions,
-			IWorkShiftFinderService finderService);
-
-		void ResetWorkShiftFinderResults();
-
-		void GetBackToLegalState(IList<IScheduleMatrixPro> matrixList,
-			ISchedulerStateHolder schedulerStateHolder,
-			ISchedulingProgress backgroundWorker,
-			ISchedulingOptions schedulingOptions,
-			DateOnlyPeriod selectedPeriod,
-			IList<IScheduleMatrixPro> allMatrixes);
-
-		void DaysOffBackToLegalState(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
-			ISchedulingProgress backgroundWorker,
-			IDayOffTemplate dayOffTemplate,
-			bool reschedule,
-			ISchedulingOptions schedulingOptions,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
-
-		void ReOptimize(ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedDays, ISchedulingOptions schedulingOptions, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
-
-		IList<IScheduleMatrixOriginalStateContainer> CreateScheduleMatrixOriginalStateContainers(IList<IScheduleDay> scheduleDays, DateOnlyPeriod selectedPeriod);
-	}
 }

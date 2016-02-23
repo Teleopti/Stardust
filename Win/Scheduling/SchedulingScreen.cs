@@ -1232,14 +1232,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				swapSelectedSchedules();
 
-				ISchedulingOptions schedulingOptions = new SchedulingOptions {UseRotations = false};
+				var bestShiftChooser = _container.Resolve<BestShiftChooser>();
+				var schedulingOptions = new SchedulingOptions {UseRotations = false};
 				var finderService = _container.Resolve<IWorkShiftFinderService>();
 				// This is not working now I presume (SelectedSchedules is probably not correct)
 				foreach (IScheduleDay schedulePart in _scheduleView.SelectedSchedules())
 				{
 					if (!schedulePart.HasDayOff())
 					{
-						IEditableShift selectedShift = _scheduleOptimizerHelper.PrepareAndChooseBestShift(schedulePart, schedulingOptions,
+						IEditableShift selectedShift = bestShiftChooser.PrepareAndChooseBestShift(schedulePart, schedulingOptions,
 							finderService);
 						if (selectedShift != null)
 						{
@@ -2161,8 +2162,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void _backgroundWorkerResourceCalculator_DoWork(object sender, DoWorkEventArgs e)
 		{
 			setThreadCulture();
-			_optimizationHelperExtended.ResourceCalculateMarkedDays(
-				new BackgroundWorkerWrapper(_backgroundWorkerResourceCalculator), SchedulerState.ConsiderShortBreaks, true);
+			if(!_schedulerState.SchedulingResultState.Skills.Any()) return;
+
+			var period = new DateOnlyPeriod(_schedulerState.DaysToRecalculate.Min().AddDays(-1), _schedulerState.DaysToRecalculate.Max());
+			var extractor = new ScheduleProjectionExtractor(new PersonSkillProvider(), _schedulerState.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
+			var resources = extractor.CreateRelevantProjectionList(_schedulerState.Schedules, period.ToDateTimePeriod(_schedulerState.TimeZoneInfo));
+			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
+			{
+				_optimizationHelperExtended.ResourceCalculateMarkedDays(
+					new BackgroundWorkerWrapper(_backgroundWorkerResourceCalculator), SchedulerState.ConsiderShortBreaks, true);
+			}
 		}
 
 		private void validateAllPersons()
@@ -3196,7 +3205,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_undoRedo.CreateBatch(Resources.UndoRedoScheduling);
 			var argument = (SchedulingAndOptimizeArgument) e.Argument;
 			var scheduleDays = argument.SelectedScheduleDays;
-			var selectedPeriod = new PeriodExctractorFromScheduleParts().ExtractPeriod(scheduleDays).Value;
+			var selectedPeriod = new PeriodExtractorFromScheduleParts().ExtractPeriod(scheduleDays).Value;
 			turnOffCalculateMinMaxCacheIfNeeded(_optimizerOriginalPreferences.SchedulingOptions);
 			_optimizerOriginalPreferences.SchedulingOptions.NotAllowedShiftCategories.Clear();
 			AdvanceLoggingService.LogSchedulingInfo(_optimizerOriginalPreferences.SchedulingOptions,
@@ -3505,7 +3514,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_undoRedo.CreateBatch(Resources.UndoRedoReOptimize);
 			var argument = (SchedulingAndOptimizeArgument) e.Argument;
 			var scheduleDays = argument.SelectedScheduleDays;
-			var selectedPeriod = new PeriodExctractorFromScheduleParts().ExtractPeriod(scheduleDays).Value;
+			var selectedPeriod = new PeriodExtractorFromScheduleParts().ExtractPeriod(scheduleDays).Value;
 			var dateOnlyList = selectedPeriod.DayCollection();
 			_schedulerState.SchedulingResultState.SkillDaysOnDateOnly(dateOnlyList);
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
@@ -3513,7 +3522,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			schedulingOptions.NotAllowedShiftCategories.Clear();
 			turnOffCalculateMinMaxCacheIfNeeded(schedulingOptions);
 			AdvanceLoggingService.LogOptimizationInfo(optimizerPreferences, scheduleDays.Select(x => x.Person).Distinct().Count(),
-				dateOnlyList.Count(), () => runBackgroupWorkerOptimization(e));
+				dateOnlyList.Count, () => runBackgroupWorkerOptimization(e));
 			_undoRedo.CommitBatch();
 		}
 

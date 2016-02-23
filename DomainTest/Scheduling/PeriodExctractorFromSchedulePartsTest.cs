@@ -10,12 +10,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 	[TestFixture]
 	public class PeriodExctractorFromSchedulePartsTest
 	{
-		private PeriodExctractorFromScheduleParts _target;
+		private PeriodExtractorFromScheduleParts _target;
 
 		[SetUp]
 		public void Setup()
 		{
-			_target = new PeriodExctractorFromScheduleParts();
+			_target = new PeriodExtractorFromScheduleParts();
 		}
 
 		[Test]

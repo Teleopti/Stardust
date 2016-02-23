@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	public class PeriodExctractorFromScheduleParts
+	public class PeriodExtractorFromScheduleParts
 	{
 		public DateOnlyPeriod? ExtractPeriod(IEnumerable<IScheduleDay> scheduleDays)
 		{

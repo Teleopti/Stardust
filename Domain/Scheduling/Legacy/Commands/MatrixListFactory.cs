@@ -13,18 +13,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IMatrixUserLockLocker _matrixUserLockLocker;
 		private readonly IMatrixNotPermittedLocker _matrixNotPermittedLocker;
 		private readonly IPersonListExtractorFromScheduleParts _personExtractor;
-		private readonly PeriodExctractorFromScheduleParts _periodExctractor;
+		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
 
 		public MatrixListFactory(Func<ISchedulerStateHolder> schedulerStateHolder,
 			IMatrixUserLockLocker matrixUserLockLocker,
 			IMatrixNotPermittedLocker matrixNotPermittedLocker, IPersonListExtractorFromScheduleParts personExtractor,
-			PeriodExctractorFromScheduleParts periodExctractor)
+			PeriodExtractorFromScheduleParts periodExtractor)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_matrixUserLockLocker = matrixUserLockLocker;
 			_matrixNotPermittedLocker = matrixNotPermittedLocker;
 			_personExtractor = personExtractor;
-			_periodExctractor = periodExctractor;
+			_periodExtractor = periodExtractor;
 		}
 
 		public IList<IScheduleMatrixPro> CreateMatrixListAllForLoadedPeriod(DateOnlyPeriod selectedPeriod)
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public IList<IScheduleMatrixPro> CreateMatrixListForSelection(IList<IScheduleDay> scheduleDays)
 		{
 			var matrixes = new List<IScheduleMatrixPro>();
-			var selectedPeriod = _periodExctractor.ExtractPeriod(scheduleDays);
+			var selectedPeriod = _periodExtractor.ExtractPeriod(scheduleDays);
 			if (!selectedPeriod.HasValue)
 				return matrixes;
 
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			foreach (var person in selectedPersons)
 			{
 				var daysForPerson = scheduleDaysLookup[person].ToList();
-				var selectedPeriod = _periodExctractor.ExtractPeriod(daysForPerson);
+				var selectedPeriod = _periodExtractor.ExtractPeriod(daysForPerson);
 				if (!selectedPeriod.HasValue) continue;
 				var startDate = selectedPeriod.Value.StartDate;
 				var date = startDate;

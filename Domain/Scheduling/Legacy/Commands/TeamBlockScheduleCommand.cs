@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 		private readonly ITeamMatrixChecker _teamMatrixChecker;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
-		private readonly PeriodExctractorFromScheduleParts _periodExctractor;
+		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
 
 		public TeamBlockScheduleCommand(IFixedStaffSchedulingService fixedStaffSchedulingService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ITeamBlockScheduler teamBlockScheduler, IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			ITeamMatrixChecker teamMatrixChecker,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
-			PeriodExctractorFromScheduleParts periodExctractor)
+			PeriodExtractorFromScheduleParts periodExtractor)
 		{
 			_fixedStaffSchedulingService = fixedStaffSchedulingService;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
 			_teamMatrixChecker = teamMatrixChecker;
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
-			_periodExctractor = periodExctractor;
+			_periodExtractor = periodExtractor;
 		}
 
 		public IWorkShiftFinderResultHolder Execute(ISchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			else
 				_groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
 
-			var selectedPeriod = _periodExctractor.ExtractPeriod(selectedSchedules);
+			var selectedPeriod = _periodExtractor.ExtractPeriod(selectedSchedules);
 
 			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixListForSelection(selectedSchedules);
 			if (matrixesOfSelectedScheduleDays.Count == 0)

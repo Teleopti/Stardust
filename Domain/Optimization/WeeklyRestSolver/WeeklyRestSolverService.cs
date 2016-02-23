@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 						}
 						else
 						{
-							while(possiblePositionsToFix.Count() != 0)
+							while(possiblePositionsToFix.Count != 0)
 							{
 								var progressResult = onDayScheduled(new ResourceOptimizerProgressEventArgs(0, 0,
 									string.Format(UserTexts.Resources.ResolvingWeeklyRestFor, personWeek.Person.Name.FirstName,

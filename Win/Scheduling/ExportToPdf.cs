@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (!personDic.ContainsKey(part.Person))
 					personDic.Add(part.Person, _schedulerStateHolder.CommonAgentNameScheduleExport(part.Person));
 			}
-			var period = new PeriodExctractorFromScheduleParts().ExtractPeriod(selection).Value;
+			var period = new PeriodExtractorFromScheduleParts().ExtractPeriod(selection).Value;
 
 			string path;
 

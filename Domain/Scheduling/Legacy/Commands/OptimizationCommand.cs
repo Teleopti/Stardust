@@ -12,16 +12,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-	public interface IOptimizationCommand
-	{
-		void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, ISchedulingProgress backgroundWorker,
-			ISchedulerStateHolder schedulerStateHolder, IList<IScheduleDay> selectedScheduleDays,
-			IGroupPagePerDateHolder groupPagePerDateHolder, IScheduleOptimizerHelper scheduleOptimizerHelper,
-			IOptimizationPreferences optimizationPreferences, bool optimizationMethodBackToLegalState,
-			IDaysOffPreferences daysOffPreferences,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
-	}
-
 	public class OptimizationCommand : IOptimizationCommand
 	{
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
@@ -32,9 +22,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamBlockOptimizationCommand _teamBlockOptimizationCommand;
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
-		private readonly PeriodExctractorFromScheduleParts _periodExctractor;
+		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IPersonListExtractorFromScheduleParts _personExtractor;
+		private readonly ScheduleMatrixOriginalStateContainerCreator _scheduleMatrixOriginalStateContainerCreator;
 
 		public OptimizationCommand(Func<IPersonSkillProvider> personSkillProvider, IGroupPageCreator groupPageCreator,
 			IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
@@ -43,9 +34,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ITeamBlockOptimizationCommand teamBlockOptimizationCommand,
 			IMatrixListFactory matrixListFactory,
 			IWeeklyRestSolverCommand weeklyRestSolverCommand,
-			PeriodExctractorFromScheduleParts periodExctractor,
+			PeriodExtractorFromScheduleParts periodExtractor,
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
-			IPersonListExtractorFromScheduleParts personExtractor)
+			IPersonListExtractorFromScheduleParts personExtractor,
+			ScheduleMatrixOriginalStateContainerCreator scheduleMatrixOriginalStateContainerCreator)
 		{
 			_personSkillProvider = personSkillProvider;
 			_groupPageCreator = groupPageCreator;
@@ -55,9 +47,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamBlockOptimizationCommand = teamBlockOptimizationCommand;
 			_matrixListFactory = matrixListFactory;
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
-			_periodExctractor = periodExctractor;
+			_periodExtractor = periodExtractor;
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 			_personExtractor = personExtractor;
+			_scheduleMatrixOriginalStateContainerCreator = scheduleMatrixOriginalStateContainerCreator;
 		}
 
 		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, ISchedulingProgress backgroundWorker,
@@ -75,9 +68,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, false);
 			}
 			var selectedSchedules = selectedScheduleDays;
-			var selectedPeriod = _periodExctractor.ExtractPeriod(selectedSchedules);
+			var selectedPeriod = _periodExtractor.ExtractPeriod(selectedSchedules);
 			if (!selectedPeriod.HasValue) return;
-			
+
 			DateOnlyPeriod groupPagePeriod = schedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
 
 			GroupPageLight selectedGroupPage;
@@ -91,74 +84,82 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				selectedGroupPage = optimizationPreferences.Extra.TeamGroupPage;
 			}
 
-			var groupPersonGroupPagePerDate = _groupPageCreator.CreateGroupPagePerDate(groupPagePeriod.DayCollection(), _groupScheduleGroupPageDataProvider, selectedGroupPage);
-			
+			var groupPersonGroupPagePerDate = _groupPageCreator.CreateGroupPagePerDate(groupPagePeriod.DayCollection(),
+				_groupScheduleGroupPageDataProvider, selectedGroupPage);
+
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			var stateHolder = schedulerStateHolder.SchedulingResultState;
 
-			IList<IScheduleMatrixPro> allMatrixes = new List<IScheduleMatrixPro>();
-			switch (optimizationMethodBackToLegalState)
+			var minutesPerInterval = 15;
+
+			if (stateHolder.Skills.Any())
 			{
+				minutesPerInterval = stateHolder.Skills.Min(s => s.DefaultResolution);
+			}
 
-				case true:
-					var scheduleMatrixOriginalStateContainers = scheduleOptimizerHelper.CreateScheduleMatrixOriginalStateContainers(selectedSchedules, selectedPeriod.Value);
-					IList<IDayOffTemplate> displayList = schedulerStateHolder.CommonStateHolder.ActiveDayOffs.ToList();
-					scheduleOptimizerHelper.DaysOffBackToLegalState(scheduleMatrixOriginalStateContainers,
-						backgroundWorker, displayList[0], false,
-						optimizerOriginalPreferences.SchedulingOptions,
-						dayOffOptimizationPreferenceProvider);
+			var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
+			var resources = extractor.CreateRelevantProjectionList(stateHolder.Schedules);
+			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
+			{
+				IList<IScheduleMatrixPro> allMatrixes = new List<IScheduleMatrixPro>();
+				switch (optimizationMethodBackToLegalState)
+				{
 
-					_resourceOptimizationHelperExtended().ResourceCalculateMarkedDays(null,
-						optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, false);
-					IList<IScheduleMatrixPro> matrixList = _matrixListFactory.CreateMatrixListForSelection(selectedSchedules);
+					case true:
+						var scheduleMatrixOriginalStateContainers =
+							_scheduleMatrixOriginalStateContainerCreator.CreateScheduleMatrixOriginalStateContainers(selectedSchedules,
+								selectedPeriod.Value);
+						IList<IDayOffTemplate> displayList = schedulerStateHolder.CommonStateHolder.ActiveDayOffs.ToList();
+						scheduleOptimizerHelper.DaysOffBackToLegalState(scheduleMatrixOriginalStateContainers,
+							backgroundWorker, displayList[0], false,
+							optimizerOriginalPreferences.SchedulingOptions,
+							dayOffOptimizationPreferenceProvider);
+
+						_resourceOptimizationHelperExtended().ResourceCalculateMarkedDays(null,
+							optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, false);
+						IList<IScheduleMatrixPro> matrixList = _matrixListFactory.CreateMatrixListForSelection(selectedSchedules);
 
 
-					if (optimizationPreferences.Extra.UseTeams)
-					{
-						allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod.Value);
-					}
+						if (optimizationPreferences.Extra.UseTeams)
+						{
+							allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod.Value);
+						}
 
-					scheduleOptimizerHelper.GetBackToLegalState(matrixList, schedulerStateHolder, backgroundWorker,
-						optimizerOriginalPreferences.SchedulingOptions, selectedPeriod.Value,
-						allMatrixes);
-					break;
-				case false:
-					var selectedPersons = _personExtractor.ExtractPersons(selectedSchedules);
-					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
-					var tagSetter = new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling);
-					var rollbackService = new SchedulePartModifyAndRollbackService(stateHolder,
-						_scheduleDayChangeCallback,
-						tagSetter);
+						scheduleOptimizerHelper.GetBackToLegalState(matrixList, schedulerStateHolder, backgroundWorker,
+							optimizerOriginalPreferences.SchedulingOptions, selectedPeriod.Value,
+							allMatrixes);
+						break;
+					case false:
+						var selectedPersons = _personExtractor.ExtractPersons(selectedSchedules);
+						var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
+							schedulingOptions.ConsiderShortBreaks);
+						var tagSetter = new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling);
+						var rollbackService = new SchedulePartModifyAndRollbackService(stateHolder,
+							_scheduleDayChangeCallback,
+							tagSetter);
 
-					var minutesPerInterval = 15;
-
-					if (stateHolder.Skills.Any())
-					{
-						minutesPerInterval = stateHolder.Skills.Min(s => s.DefaultResolution);
-					}
-
-					var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
-					var resources = extractor.CreateRelevantProjectionList(stateHolder.Schedules);
-					using (new ResourceCalculationContext(resources))
-					{
 						if (optimizationPreferences.Extra.UseTeamBlockOption || optimizationPreferences.Extra.UseTeams)
 						{
-							_teamBlockOptimizationCommand.Execute(backgroundWorker, selectedPeriod.Value, selectedPersons, optimizationPreferences,
-								rollbackService, tagSetter, schedulingOptions, resourceCalculateDelayer, selectedSchedules, dayOffOptimizationPreferenceProvider);
+							_teamBlockOptimizationCommand.Execute(backgroundWorker, selectedPeriod.Value, selectedPersons,
+								optimizationPreferences,
+								rollbackService, tagSetter, schedulingOptions, resourceCalculateDelayer, selectedSchedules,
+								dayOffOptimizationPreferenceProvider);
 
 							break;
 						}
 
 						groupPagePerDateHolder.GroupPersonGroupPagePerDate = groupPersonGroupPagePerDate;
-						scheduleOptimizerHelper.ReOptimize(backgroundWorker, selectedSchedules, schedulingOptions, dayOffOptimizationPreferenceProvider);
+						scheduleOptimizerHelper.ReOptimize(backgroundWorker, selectedSchedules, schedulingOptions,
+							dayOffOptimizationPreferenceProvider);
 
 						allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod.Value);
 						runWeeklyRestSolver(optimizationPreferences, schedulingOptions, selectedPeriod.Value, allMatrixes, selectedPersons,
 							rollbackService, resourceCalculateDelayer, backgroundWorker, dayOffOptimizationPreferenceProvider);
 
 						break;
-					}
+				}
 			}
+		
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
 		}
 
@@ -173,8 +174,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService, resourceCalculateDelayer, 
 											selectedPeriod, allMatrixes, backgroundWorker, dayOffOptimizationPreferenceProvider);
 		}
-
-
+		
 		private static void setThreadCulture()
 		{
 			Thread.CurrentThread.CurrentCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;

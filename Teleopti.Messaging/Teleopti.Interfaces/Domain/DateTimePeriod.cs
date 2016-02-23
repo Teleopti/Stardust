@@ -160,8 +160,7 @@ namespace Teleopti.Interfaces.Domain
 	    {
 		    DateTime startDateTimeTemp = new DateTime(startYear, startMonth, startDay, startHour, 0, 0, DateTimeKind.Utc);
 		    DateTime endDateTimeTemp = new DateTime(endYear, endMonth, endDay, endHour, 0, 0, DateTimeKind.Utc);
-
-		    validateDateTime(startDateTimeTemp, endDateTimeTemp);
+			
 		    period = new MinMax<DateTime>(startDateTimeTemp, endDateTimeTemp);
 	    }
 
@@ -242,13 +241,7 @@ namespace Teleopti.Interfaces.Domain
         /// </returns>
         public bool ContainsPart(DateTimePeriod containsPeriod)
         {
-            if (ContainsPart(containsPeriod.StartDateTime) || ContainsPart(containsPeriod.EndDateTime))
-                return true;
-
-            if (containsPeriod.Contains(this))
-                return true;
-
-            return false;
+			return containsPeriod.StartDateTime <= EndDateTime && containsPeriod.EndDateTime >= StartDateTime;
         }
 
         /// <summary>

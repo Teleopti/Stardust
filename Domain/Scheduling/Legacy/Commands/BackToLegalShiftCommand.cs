@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly IPersonListExtractorFromScheduleParts _extractor;
-		private readonly PeriodExctractorFromScheduleParts _periodExctractor;
+		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
 		private ISchedulingProgress _backgroundWorker;
 
 		public BackToLegalShiftCommand(ITeamBlockInfoFactory teamBlockInfoFactory,
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IResourceOptimizationHelper resourceOptimizationHelper,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
 			IPersonListExtractorFromScheduleParts extractor,
-			PeriodExctractorFromScheduleParts periodExctractor)
+			PeriodExtractorFromScheduleParts periodExtractor)
 		{
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 			_extractor = extractor;
-			_periodExctractor = periodExctractor;
+			_periodExtractor = periodExtractor;
 		}
 
 		public void Execute(ISchedulingProgress backgroundWorker,
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,
 				_teamBlockSchedulingOptions);
-			var selectedPeriod = _periodExctractor.ExtractPeriod(selectedSchedules);
+			var selectedPeriod = _periodExtractor.ExtractPeriod(selectedSchedules);
 			var allMatrixes = selectedPeriod.HasValue ? _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod.Value) : new List<IScheduleMatrixPro>();
 			var selectedPersons = _extractor.ExtractPersons(selectedSchedules);
 			var selectedTeamBlocks = teamBlockGenerator.Generate(allMatrixes, selectedPeriod.GetValueOrDefault(), selectedPersons, schedulingOptions);

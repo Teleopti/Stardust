@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public class ClassicDaysOffOptimizationCommand
 	{
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
-		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 		private readonly IScheduleMatrixLockableBitArrayConverterEx _bitArrayConverter;
 		private readonly IWorkShiftBackToLegalStateServiceFactory _workShiftBackToLegalStateServiceFactory;
 		private readonly IScheduleService _scheduleService;
@@ -35,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 
-		public ClassicDaysOffOptimizationCommand(IOptimizerHelperHelper optimizerHelperHelper, Func<IPersonSkillProvider> personSkillProvider,
+		public ClassicDaysOffOptimizationCommand(IOptimizerHelperHelper optimizerHelperHelper, 
 			IScheduleMatrixLockableBitArrayConverterEx bitArrayConverter,
 			IWorkShiftBackToLegalStateServiceFactory workShiftBackToLegalStateServiceFactory, IScheduleService scheduleService,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
@@ -47,7 +46,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended, IDeleteAndResourceCalculateService deleteAndResourceCalculateService)
 		{
 			_optimizerHelperHelper = optimizerHelperHelper;
-			_personSkillProvider = personSkillProvider;
 			_bitArrayConverter = bitArrayConverter;
 			_workShiftBackToLegalStateServiceFactory = workShiftBackToLegalStateServiceFactory;
 			_scheduleService = scheduleService;
@@ -65,9 +63,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
 		}
 
-		public void Execute(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences, 
-							ISchedulerStateHolder schedulerStateHolder, ISchedulingProgress backgroundWorker, 
-							IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+		public void Execute(
+			IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization,
+			DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences,
+			ISchedulerStateHolder schedulerStateHolder, ISchedulingProgress backgroundWorker,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider();
 
@@ -86,10 +86,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IList<IDayOffOptimizerContainer> optimizerContainers = new List<IDayOffOptimizerContainer>();
 			for (int index = 0; index < matrixOriginalStateContainerListForDayOffOptimization.Count; index++)
 			{
-				IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer = matrixOriginalStateContainerListForDayOffOptimization[index];
+				IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer =
+					matrixOriginalStateContainerListForDayOffOptimization[index];
 				IScheduleMatrixPro matrix = matrixOriginalStateContainerListForDayOffOptimization[index].ScheduleMatrix;
 
-				var dayOffOptimizationPreference = dayOffOptimizationPreferenceProvider.ForAgent(matrix.Person, matrix.EffectivePeriodDays.First().Day);
+				var dayOffOptimizationPreference = dayOffOptimizationPreferenceProvider.ForAgent(matrix.Person,
+					matrix.EffectivePeriodDays.First().Day);
 
 				IScheduleResultDataExtractor personalSkillsDataExtractor =
 					dataExtractorProvider.CreatePersonalSkillDataExtractor(matrix, optimizationPreferences.Advanced);
@@ -97,37 +99,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					_optimizerHelperHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced, personalSkillsDataExtractor);
 				IDayOffOptimizerContainer optimizerContainer =
 					createOptimizer(matrix, dayOffOptimizationPreference, optimizationPreferences,
-						rollbackService, schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate, _scheduleService, localPeriodValueCalculator,
-						rollbackServiceDayOffConflict, matrixOriginalStateContainer, dataExtractorProvider, () => schedulerStateHolder.SchedulingResultState);
+						rollbackService, schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate, _scheduleService,
+						localPeriodValueCalculator,
+						rollbackServiceDayOffConflict, matrixOriginalStateContainer, dataExtractorProvider,
+						() => schedulerStateHolder.SchedulingResultState);
 
-				if(matrix.SchedulePeriod.DaysOff() > 0)
+				if (matrix.SchedulePeriod.DaysOff() > 0)
 					optimizerContainers.Add(optimizerContainer);
 			}
 
-			var minutesPerInterval = 15;
-
-			if (schedulerStateHolder.SchedulingResultState.Skills.Any())
-			{
-				minutesPerInterval = schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution);
-			}
-
 			IScheduleResultDataExtractor allSkillsDataExtractor =
-				_optimizerHelperHelper.CreateAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod, schedulerStateHolder.SchedulingResultState);
+				_optimizerHelperHelper.CreateAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod,
+					schedulerStateHolder.SchedulingResultState);
 			IPeriodValueCalculator periodValueCalculator =
 				_optimizerHelperHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced, allSkillsDataExtractor);
 
 			IDayOffOptimizationService service = new DayOffOptimizationService(periodValueCalculator);
 
-			var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
-			var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
 			_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, false);
-			using (new ResourceCalculationContext(resources))
-			{				
-				EventHandler<ResourceOptimizerProgressEventArgs> handler = (s, e) => backgroundWorker.ReportProgress(0, e);
-				service.ReportProgress += handler;
-				service.Execute(optimizerContainers);
-				service.ReportProgress -= handler;
-			}			
+
+			EventHandler<ResourceOptimizerProgressEventArgs> handler = (s, e) => backgroundWorker.ReportProgress(0, e);
+			service.ReportProgress += handler;
+			service.Execute(optimizerContainers);
+			service.ReportProgress -= handler;
 		}
 
 		private IDayOffOptimizerContainer createOptimizer(

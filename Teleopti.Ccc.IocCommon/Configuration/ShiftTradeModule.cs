@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<GridlockManager>().As<IGridlockManager>().InstancePerLifetimeScope();
 			builder.RegisterType<MatrixNotPermittedLocker>().As<IMatrixNotPermittedLocker>().InstancePerLifetimeScope();
 			builder.RegisterType<PersonListExtractorFromScheduleParts>().As<IPersonListExtractorFromScheduleParts>().InstancePerLifetimeScope();
-			builder.RegisterType<PeriodExctractorFromScheduleParts>().As<PeriodExctractorFromScheduleParts>().InstancePerLifetimeScope();
+			builder.RegisterType<PeriodExtractorFromScheduleParts>().As<PeriodExtractorFromScheduleParts>().InstancePerLifetimeScope();
 			builder.RegisterType<MatrixListFactory>().As<IMatrixListFactory>().InstancePerLifetimeScope();
 
 			builder.RegisterType<ShiftTradeSkillSpecification>().As<IShiftTradeLightSpecification>();

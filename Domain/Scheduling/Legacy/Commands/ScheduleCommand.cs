@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IWorkShiftFinderResultHolder> _workShiftFinderResultHolder;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
-		private readonly PeriodExctractorFromScheduleParts _periodExctractor;
+		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
 
 		public ScheduleCommand(Func<IPersonSkillProvider> personSkillProvider,
 			IResourceOptimizationHelper resourceOptimizationHelper,
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 			IWeeklyRestSolverCommand weeklyRestSolverCommand,
-			PeriodExctractorFromScheduleParts periodExctractor
+			PeriodExtractorFromScheduleParts periodExtractor
 			)
 		{
 			_personSkillProvider = personSkillProvider;
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_workShiftFinderResultHolder = workShiftFinderResultHolder;
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
-			_periodExctractor = periodExctractor;
+			_periodExtractor = periodExtractor;
 		}
 
 		[LogTime]
@@ -82,19 +82,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			var selectedPersons = selectedScheduleDays.Select(x => x.Person).Distinct().ToList();
 
-			if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
+			var minutesPerInterval = 15;
+			if (schedulerStateHolder.SchedulingResultState.Skills.Length > 0)
 			{
-				schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
+				minutesPerInterval = schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution);
+			}
+			var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
+			var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
+			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
+			{
+				if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
+				{
+					schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
 
-				var minutesPerInterval = 15;
-				if (schedulerStateHolder.SchedulingResultState.Skills.Length > 0)
-				{
-					minutesPerInterval = schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution);
-				}
-				var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
-				var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
-				using (new ResourceCalculationContext(resources))
-				{
 					if (schedulingOptions.UseBlock || schedulingOptions.UseTeam)
 					{
 						var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
@@ -116,44 +116,44 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 							selectedScheduleDays, runWeeklyRestSolver, dayOffOptimizationPreferenceProvider);
 					}
 				}
-			}
-			else
-			{
-				requiredScheduleOptimizerHelper.ScheduleSelectedStudents(selectedScheduleDays, backgroundWorker, schedulingOptions);
-			}
-
-			//shiftcategorylimitations
-			if (!backgroundWorker.CancellationPending)
-			{
-				schedulingOptions.UseShiftCategoryLimitations = useShiftCategoryLimitations;
-				if (schedulingOptions.UseShiftCategoryLimitations)
+				else
 				{
-					IList<IScheduleMatrixPro> allMatrixes = new List<IScheduleMatrixPro>();
-					var selectedPeriod = _periodExctractor.ExtractPeriod(selectedScheduleDays);
-					if (!selectedPeriod.HasValue) return;
+					requiredScheduleOptimizerHelper.ScheduleSelectedStudents(selectedScheduleDays, backgroundWorker, schedulingOptions);
+				}
 
-					if (schedulingOptions.UseTeam)
+				//shiftcategorylimitations
+				if (!backgroundWorker.CancellationPending)
+				{
+					schedulingOptions.UseShiftCategoryLimitations = useShiftCategoryLimitations;
+					if (schedulingOptions.UseShiftCategoryLimitations)
 					{
-						allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod.Value);
+						IList<IScheduleMatrixPro> allMatrixes = new List<IScheduleMatrixPro>();
+						var selectedPeriod = _periodExtractor.ExtractPeriod(selectedScheduleDays);
+						if (!selectedPeriod.HasValue) return;
+
+						if (schedulingOptions.UseTeam)
+						{
+							allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod.Value);
+						}
+
+						IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays =
+							_matrixListFactory.CreateMatrixListForSelection(selectedScheduleDays);
+						if (matrixesOfSelectedScheduleDays.Count == 0)
+							return;
+
+
+						requiredScheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays,
+							backgroundWorker,
+							optimizationPreferences,
+							schedulingOptions,
+							selectedPeriod.Value, allMatrixes);
+						
+						ExecuteWeeklyRestSolverCommand(schedulerStateHolder, schedulingOptions, optimizationPreferences, selectedPersons,
+							selectedPeriod.Value, matrixesOfSelectedScheduleDays, backgroundWorker, dayOffOptimizationPreferenceProvider);
 					}
-
-					IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays =
-						_matrixListFactory.CreateMatrixListForSelection(selectedScheduleDays);
-					if (matrixesOfSelectedScheduleDays.Count == 0)
-						return;
-
-
-					requiredScheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays,
-						backgroundWorker,
-						optimizationPreferences,
-						schedulingOptions,
-						selectedPeriod.Value, allMatrixes);
-
-
-					ExecuteWeeklyRestSolverCommand(schedulerStateHolder, schedulingOptions, optimizationPreferences, selectedPersons,
-						selectedPeriod.Value, matrixesOfSelectedScheduleDays, backgroundWorker, dayOffOptimizationPreferenceProvider);
 				}
 			}
+
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
 		}
 

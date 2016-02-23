@@ -631,6 +631,7 @@
     <Compile Include="Scheduling\AuditHistory\NextPageCommand.cs" />
     <Compile Include="Scheduling\AuditHistory\PreviousPageCommand.cs" />
     <Compile Include="Scheduling\AuditHistory\RevisionDisplayRow.cs" />
+    <Compile Include="Scheduling\BestShiftChooser.cs" />
     <Compile Include="Scheduling\CalculateMinMaxCacheDecider.cs" />
     <Compile Include="Scheduling\AgentOvertimeAvailabilityPresenter.cs" />
     <Compile Include="Scheduling\AgentOvertimeAvailabilityAddCommand.cs" />

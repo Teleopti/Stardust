@@ -48,35 +48,32 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_personSkillProvider = personSkillProvider;
 		}
 
-        public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool breakIfPersonCannotSchedule,
-			ISchedulePartModifyAndRollbackService rollbackService)
-        {
-            var skills = _schedulingResultStateHolder.Skills;
-            if (skills.Length == 0) return false;
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
-																		schedulingOptions.ConsiderShortBreaks);
-
-            var extractor = new ScheduleProjectionExtractor(_personSkillProvider, skills.Min(s => s.DefaultResolution));
-			var resources = extractor.CreateRelevantProjectionList(_schedulingResultStateHolder.Schedules);
-	        using (new ResourceCalculationContext(resources))
-	        {
-		        schedulingOptions.OnlyShiftsWhenUnderstaffed = true;
-		        doTheSchedulingLoop(selectedParts, schedulingOptions, breakIfPersonCannotSchedule, true,
-		                            resourceCalculateDelayer, rollbackService);
-
-		        schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
-		        doTheSchedulingLoop(selectedParts, schedulingOptions, breakIfPersonCannotSchedule, true,
-		                            resourceCalculateDelayer, rollbackService);
-
-		        schedulingOptions.OnlyShiftsWhenUnderstaffed = true;
-
-		        return doTheSchedulingLoop(selectedParts, schedulingOptions, breakIfPersonCannotSchedule, false,
-		                                   resourceCalculateDelayer, rollbackService);
-	        }
-        }
+	    public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions,
+		    bool breakIfPersonCannotSchedule,
+		    ISchedulePartModifyAndRollbackService rollbackService)
+	    {
+		    var skills = _schedulingResultStateHolder.Skills;
+		    if (skills.Length == 0) return false;
+		    var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
+			    schedulingOptions.ConsiderShortBreaks);
 
 
-        public IList<IWorkShiftFinderResult> FinderResults
+		    schedulingOptions.OnlyShiftsWhenUnderstaffed = true;
+		    doTheSchedulingLoop(selectedParts, schedulingOptions, breakIfPersonCannotSchedule, true,
+			    resourceCalculateDelayer, rollbackService);
+
+		    schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
+		    doTheSchedulingLoop(selectedParts, schedulingOptions, breakIfPersonCannotSchedule, true,
+			    resourceCalculateDelayer, rollbackService);
+
+		    schedulingOptions.OnlyShiftsWhenUnderstaffed = true;
+
+		    return doTheSchedulingLoop(selectedParts, schedulingOptions, breakIfPersonCannotSchedule, false,
+			    resourceCalculateDelayer, rollbackService);
+	    }
+
+
+	    public IList<IWorkShiftFinderResult> FinderResults
         {
             get
             {

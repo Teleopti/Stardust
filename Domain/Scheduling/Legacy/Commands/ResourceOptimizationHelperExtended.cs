@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
@@ -15,28 +14,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	{
 		private readonly IResourceOptimizationHelper _basicHelper;
 		private readonly Func<ISchedulerStateHolder> _stateHolder;
-		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 
-		public ResourceOptimizationHelperExtended(IResourceOptimizationHelper basicHelper, Func<ISchedulerStateHolder> stateHolder, Func<IPersonSkillProvider> personSkillProvider)
+		public ResourceOptimizationHelperExtended(IResourceOptimizationHelper basicHelper, Func<ISchedulerStateHolder> stateHolder)
 		{
 			_basicHelper = basicHelper;
 			_stateHolder = stateHolder;
-			_personSkillProvider = personSkillProvider;
 		}
 
 		public void ResourceCalculateAllDays(ISchedulingProgress backgroundWorker, bool doIntraIntervalCalculation)
 		{
 			var stateHolder = _stateHolder();
 			if (!stateHolder.SchedulingResultState.Skills.Any()) return;
-
-			var period = new DateOnlyPeriod(stateHolder.RequestedPeriod.DateOnlyPeriod.StartDate.AddDays(-10), stateHolder.RequestedPeriod.DateOnlyPeriod.EndDate.AddDays(2));
-			var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), stateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
-			var resources = extractor.CreateRelevantProjectionList(stateHolder.Schedules, period.ToDateTimePeriod(stateHolder.TimeZoneInfo));
+			
 			backgroundWorker.ReportProgress(1);
-			using (new ResourceCalculationContext(resources))
-			{
-				resourceCalculateDays(backgroundWorker, stateHolder.ConsiderShortBreaks, stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection(), doIntraIntervalCalculation);
-			}
+
+			resourceCalculateDays(backgroundWorker, stateHolder.ConsiderShortBreaks,
+				stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection(), doIntraIntervalCalculation);
 		}
 
 		private void prepareAndCalculateDate(DateOnly date, bool considerShortBreaks, bool doIntraIntervalCalculation)
@@ -47,21 +40,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 		}
 
-		public void ResourceCalculateMarkedDays(ISchedulingProgress backgroundWorker, bool considerShortBreaks, bool doIntraIntervalCalculation)
+		public void ResourceCalculateMarkedDays(ISchedulingProgress backgroundWorker, bool considerShortBreaks,
+			bool doIntraIntervalCalculation)
 		{
 			var stateHolder = _stateHolder();
 			if (!stateHolder.DaysToRecalculate.Any()) return;
-			if (!stateHolder.SchedulingResultState.Skills.Any()) return;
 
-			var period = new DateOnlyPeriod(stateHolder.DaysToRecalculate.Min().AddDays(-1), stateHolder.DaysToRecalculate.Max());
-			var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), stateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
-			var resources = extractor.CreateRelevantProjectionList(stateHolder.Schedules, period.ToDateTimePeriod(stateHolder.TimeZoneInfo));
-			using (new ResourceCalculationContext(resources))
-			{
-				resourceCalculateDays(backgroundWorker, considerShortBreaks,
-					stateHolder.DaysToRecalculate.ToList(), doIntraIntervalCalculation);
-				stateHolder.ClearDaysToRecalculate();
-			}
+			resourceCalculateDays(backgroundWorker, considerShortBreaks,
+				stateHolder.DaysToRecalculate.ToList(), doIntraIntervalCalculation);
+			stateHolder.ClearDaysToRecalculate();
 		}
 
 		private void resourceCalculateDays(ISchedulingProgress backgroundWorker, bool considerShortBreaks, ICollection<DateOnly> datesList, bool doIntraIntervalCalculation)

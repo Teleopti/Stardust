@@ -23,27 +23,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly Func<IResourceOptimizationHelper> _resourceOptimizationHelper;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly PeriodExctractorFromScheduleParts _periodExctractor;
+		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
 
 		public ClassicScheduleCommand(IMatrixListFactory matrixListFactory, IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			Func<IResourceOptimizationHelper> resourceOptimizationHelper,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
-			PeriodExctractorFromScheduleParts periodExctractor)
+			PeriodExtractorFromScheduleParts periodExtractor)
 		{
 			_matrixListFactory = matrixListFactory;
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_schedulerStateHolder = schedulerStateHolder;
-			_periodExctractor = periodExctractor;
+			_periodExtractor = periodExtractor;
 		}
 
 		public void Execute(ISchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
 			IRequiredScheduleHelper requiredScheduleOptimizerHelper, IList<IScheduleDay> selectedSchedules, bool runWeeklyRestSolver, 
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-			var selectedPeriod = _periodExctractor.ExtractPeriod(selectedSchedules);
+			var selectedPeriod = _periodExtractor.ExtractPeriod(selectedSchedules);
 
 			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixListForSelection(selectedSchedules);
 			if (matrixesOfSelectedScheduleDays.Count == 0)

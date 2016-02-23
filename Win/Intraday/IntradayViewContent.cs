@@ -10,6 +10,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -120,7 +121,16 @@ namespace Teleopti.Ccc.Win.Intraday
 		private void backgroundWorkerResourcesDoWork(object sender, DoWorkEventArgs e)
 		{
 			//Claes & Roger: we don't know if intrainterval calc needs to be done. We keep this as before
-			_resourceOptimizationHelperExtended.ResourceCalculateMarkedDays(new BackgroundWorkerWrapper(_backgroundWorkerResources), true, true);
+			if(!_schedulerStateHolder.SchedulingResultState.Skills.Any()) return;
+
+			var period = new DateOnlyPeriod(_schedulerStateHolder.DaysToRecalculate.Min().AddDays(-1), _schedulerStateHolder.DaysToRecalculate.Max());
+			var extractor = new ScheduleProjectionExtractor(new PersonSkillProvider(), _schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
+			var resources = extractor.CreateRelevantProjectionList(_schedulerStateHolder.Schedules, period.ToDateTimePeriod(_schedulerStateHolder.TimeZoneInfo));
+			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
+			{
+				_resourceOptimizationHelperExtended.ResourceCalculateMarkedDays(
+					new BackgroundWorkerWrapper(_backgroundWorkerResources), true, true);
+			}
 		}
 
 		private void calculateResources()
