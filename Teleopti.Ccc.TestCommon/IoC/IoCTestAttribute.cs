@@ -1,22 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using Autofac;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.Logon;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.IoC
@@ -146,8 +140,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble(new MutableNow("2014-12-18 13:31")).For<INow>();
 			system.UseTestDouble<FakeTime>().For<ITime>();
 
-			fakePrincipal(system);
-
 			//don't check license for every test
 			system.UseTestDouble<SetNoLicenseActivator>().For<ISetLicenseActivator>();
 
@@ -201,25 +193,5 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			injectMembers();
 		}
 
-		private void fakePrincipal(ISystem system)
-		{
-			var principal = new FakeCurrentTeleoptiPrincipal();
-			var signedIn = QueryAllAttributes<LoggedOffAttribute>().IsEmpty();
-			if (signedIn)
-			{
-				// because DomainTest project has a SetupFixtureForAssembly that creates a principal and sets it to that static thing... 
-				var thePrincipal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
-				if (thePrincipal == null)
-				{
-					var person = new Person {Name = new Name("Fake", "Login")};
-					person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-					person.PermissionInformation.SetCulture(CultureInfoFactory.CreateEnglishCulture());
-					person.PermissionInformation.SetUICulture(CultureInfoFactory.CreateEnglishCulture());
-					thePrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("Fake Login", null, null, null, null), person);
-				}
-				principal.Fake(thePrincipal);
-			}
-			system.UseTestDouble(principal).For<ICurrentTeleoptiPrincipal, ICurrentPrincipalContext>();
-		}
 	}
 }

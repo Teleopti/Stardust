@@ -1,9 +1,11 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker;
@@ -124,6 +126,29 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeMultiplicatorDefinitionSetRepository>().For<IMultiplicatorDefinitionSetRepository>();
 			system.UseTestDouble<FakeLoadAllSkillInIntradays>().For<ILoadAllSkillInIntradays>();
 			system.UseTestDouble<FakeSkillAreaRepository>().For<ISkillAreaRepository>();
+
+			fakePrincipal(system);
+		}
+
+		private void fakePrincipal(ISystem system)
+		{
+			var principal = new FakeCurrentTeleoptiPrincipal();
+			var signedIn = QueryAllAttributes<LoggedOffAttribute>().IsEmpty();
+			if (signedIn)
+			{
+				// because DomainTest project has a SetupFixtureForAssembly that creates a principal and sets it to that static thing... 
+				var thePrincipal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
+				if (thePrincipal == null)
+				{
+					var person = new Person { Name = new Name("Fake", "Login") };
+					person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+					person.PermissionInformation.SetCulture(CultureInfoFactory.CreateEnglishCulture());
+					person.PermissionInformation.SetUICulture(CultureInfoFactory.CreateEnglishCulture());
+					thePrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("Fake Login", null, null, null, null), person);
+				}
+				principal.Fake(thePrincipal);
+			}
+			system.UseTestDouble(principal).For<ICurrentTeleoptiPrincipal, ICurrentPrincipalContext>();
 		}
 
 	}
