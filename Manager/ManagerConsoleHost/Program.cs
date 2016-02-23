@@ -46,14 +46,14 @@ namespace ManagerConsoleHost
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
             SetConsoleCtrlHandler(ConsoleCtrlCheck,
-                true);
+                                  true);
 
             AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
 
             WhoAmI = "[MANAGER CONSOLE HOST, " + Environment.MachineName.ToUpper() + "]";
 
             LogHelper.LogInfoWithLineNumber(Logger,
-                WhoAmI + " : started.");
+                                            WhoAmI + " : started.");
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
@@ -69,25 +69,27 @@ namespace ManagerConsoleHost
             var managerAddress = baseAddress.Scheme + "://+:" +
                                  baseAddress.Port + "/";
 
-			var container = new ContainerBuilder().Build();
+            var container = new ContainerBuilder().Build();
             var config = new HttpConfiguration();
 
             using (WebApp.Start(managerAddress,
-                appBuilder =>
-                {
-                    appBuilder.UseAutofacMiddleware(container);
-                    // Configure Web API for self-host. 
-                    appBuilder.UseStardustManager(managerConfiguration, container);
+                                appBuilder =>
+                                {
+                                    appBuilder.UseAutofacMiddleware(container);
+                                    // Configure Web API for self-host. 
+                                    appBuilder.UseStardustManager(managerConfiguration,
+                                                                  container);
 
-                    appBuilder.UseAutofacWebApi(config);
-                    appBuilder.UseWebApi(config);
-                }))
+                                    appBuilder.UseAutofacWebApi(config);
+                                    appBuilder.UseWebApi(config);
+                                }))
             {
                 LogHelper.LogInfoWithLineNumber(Logger,
-                    WhoAmI + ": Started listening on port : ( " + baseAddress + " )");
-           
+                                                WhoAmI + ": Started listening on port : ( " + baseAddress + " )");
+
                 ManagerStarter = new ManagerStarter();
-                ManagerStarter.Start(managerConfiguration, container );
+                ManagerStarter.Start(managerConfiguration,
+                                     container);
 
                 QuitEvent.WaitOne();
             }
@@ -95,7 +97,7 @@ namespace ManagerConsoleHost
 
         [DllImport("Kernel32")]
         public static extern bool SetConsoleCtrlHandler(HandlerRoutine handler,
-            bool add);
+                                                        bool add);
 
         private static bool ConsoleCtrlCheck(CtrlTypes ctrlType)
         {
@@ -103,7 +105,7 @@ namespace ManagerConsoleHost
                 ctrlType == CtrlTypes.CtrlShutdownEvent)
             {
                 LogHelper.LogDebugWithLineNumber(Logger,
-                    WhoAmI + " : ConsoleCtrlCheck called.");
+                                                 WhoAmI + " : ConsoleCtrlCheck called.");
 
                 QuitEvent.Set();
 
@@ -114,29 +116,29 @@ namespace ManagerConsoleHost
         }
 
         private static void CurrentDomain_DomainUnload(object sender,
-            EventArgs e)
+                                                       EventArgs e)
         {
             LogHelper.LogDebugWithLineNumber(Logger,
-                WhoAmI + " : CurrentDomain_DomainUnload called.");
+                                             WhoAmI + " : CurrentDomain_DomainUnload called.");
 
             if (ManagerStarter != null)
             {
-               // ManagerStarter.Stop();
+                // ManagerStarter.Stop();
             }
 
             QuitEvent.Set();
         }
 
         private static void CurrentDomain_UnhandledException(object sender,
-            UnhandledExceptionEventArgs e)
+                                                             UnhandledExceptionEventArgs e)
         {
-            if (!e.IsTerminating)
-            {
-                var exp = e.ExceptionObject as Exception;
+            var exp = e.ExceptionObject as Exception;
 
-                LogHelper.LogErrorWithLineNumber(Logger,
-                    WhoAmI + ": Unhandled Exception",
-                    exp);
+            if (exp != null)
+            {
+                LogHelper.LogFatalWithLineNumber(Logger,
+                                                 exp.Message,
+                                                 exp);
             }
         }
     }

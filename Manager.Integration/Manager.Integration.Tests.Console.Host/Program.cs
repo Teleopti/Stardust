@@ -111,7 +111,7 @@ namespace Manager.IntegrationTest.Console.Host
             XmlConfigurator.ConfigureAndWatch(new FileInfo(CurrentDomainConfigurationFile));
 
             LogHelper.LogDebugWithLineNumber(Logger,
-                                            "Start.");
+                                             "Start.");
 
 
             SetConsoleCtrlHandler(ConsoleCtrlCheck,
@@ -171,7 +171,7 @@ namespace Manager.IntegrationTest.Console.Host
             if (args.Any())
             {
                 LogHelper.LogDebugWithLineNumber(Logger,
-                                                "Has command arguments.");
+                                                 "Has command arguments.");
 
                 NumberOfNodesToStart = Convert.ToInt32(args[0]);
             }
@@ -184,12 +184,12 @@ namespace Manager.IntegrationTest.Console.Host
                 for (var i = 1; i <= NumberOfNodesToStart; i++)
                 {
                     LogHelper.LogDebugWithLineNumber(Logger,
-                                                    "Start creating node configuration file for node id : " + i);
+                                                     "Start creating node configuration file for node id : " + i);
 
                     var nodeConfig = CreateNodeConfigurationFile(i);
 
                     LogHelper.LogDebugWithLineNumber(Logger,
-                                                    "Finished creating node configuration file for node : ( id, config file ) : ( " + i + ", " + nodeConfig.FullName + " )");
+                                                     "Finished creating node configuration file for node : ( id, config file ) : ( " + i + ", " + nodeConfig.FullName + " )");
                 }
             }
 
@@ -214,7 +214,7 @@ namespace Manager.IntegrationTest.Console.Host
                 new DirectoryInfo(Path.Combine(Settings.Default.NodeAssemblyLocationFullPath,
                                                _buildMode));
 
-            LogHelper.LogDebugWithLineNumber(Logger, 
+            LogHelper.LogDebugWithLineNumber(Logger,
                                              "DirectoryNodeAssemblyLocationFullPath : " + DirectoryNodeAssemblyLocationFullPath.FullName);
 
             AppDomainNodeTasks = new List<AppDomainNodeTask>();
@@ -295,13 +295,13 @@ namespace Manager.IntegrationTest.Console.Host
         private static void CurrentDomain_UnhandledException(object sender,
                                                              UnhandledExceptionEventArgs e)
         {
-            if (!e.IsTerminating)
-            {
-                Exception exp = e.ExceptionObject as Exception;
+            Exception exp = e.ExceptionObject as Exception;
 
-                LogHelper.LogErrorWithLineNumber(Logger,
-                                                 string.Empty,
-                                                 exp.InnerException);
+            if (exp != null)
+            {
+                LogHelper.LogFatalWithLineNumber(Logger,
+                                                 exp.Message,
+                                                 exp);
             }
         }
 
@@ -309,7 +309,7 @@ namespace Manager.IntegrationTest.Console.Host
                                                         EventArgs eventArgs)
         {
             LogHelper.LogDebugWithLineNumber(Logger,
-                                            "Start CurrentDomainOnDomainUnload.");
+                                             "Start CurrentDomainOnDomainUnload.");
 
             foreach (var appDomainNodeTask in AppDomainNodeTasks)
             {
@@ -321,7 +321,7 @@ namespace Manager.IntegrationTest.Console.Host
             QuitEvent.Set();
 
             LogHelper.LogDebugWithLineNumber(Logger,
-                                            "Finished CurrentDomainOnDomainUnload.");
+                                             "Finished CurrentDomainOnDomainUnload.");
         }
 
 
@@ -365,10 +365,12 @@ namespace Manager.IntegrationTest.Console.Host
         }
 
 
-        public static void ShutDownNode(string friendlyName)
+        public static bool ShutDownAppDomainWithFriendlyName(string friendlyName)
         {
+            bool ret = false;
+
             LogHelper.LogDebugWithLineNumber(Logger,
-                                            "Started.");
+                                             "Started.");
 
             if (AppDomainManagerTask != null &&
                 AppDomainManagerTask.GetAppDomainFriendlyName()
@@ -378,6 +380,8 @@ namespace Manager.IntegrationTest.Console.Host
                 AppDomainManagerTask.Dispose();
 
                 AppDomainManagerTask = null;
+
+                ret = true;
             }
 
             if (AppDomainNodeTasks != null && AppDomainNodeTasks.Any())
@@ -399,27 +403,26 @@ namespace Manager.IntegrationTest.Console.Host
                 if (nodeToDispose != null)
                 {
                     LogHelper.LogDebugWithLineNumber(Logger,
-                                                    "Start to dispose appdomain with friendly name :" + friendlyName);
+                                                     "Start to dispose appdomain with friendly name :" + friendlyName);
 
                     nodeToDispose.Dispose();
 
                     AppDomainNodeTasks.Remove(nodeToDispose);
 
                     LogHelper.LogDebugWithLineNumber(Logger,
-                                                    "Finished to dispose appdomain with friendly name :" + friendlyName);
+                                                     "Finished to dispose appdomain with friendly name :" + friendlyName);
+
+                    ret = true;
                 }
             }
 
             LogHelper.LogDebugWithLineNumber(Logger,
-                                            "Finished.");
+                                             "Finished.");
+
+            return ret;
         }
 
         public static bool StartNewNode()
-        {
-            return true;
-        }
-
-        public static bool NodeExists(string id)
         {
             return true;
         }

@@ -47,14 +47,15 @@ namespace Manager.IntegrationTest.Console.Host
                 return BadRequest(id);
             }
 
-            bool nodeExist = Program.NodeExists(id);
+            LogHelper.LogInfoWithLineNumber(Logger,
+                                            "Try shut down Node with id : " + id);
 
-            if (nodeExist)
+            bool success= Program.ShutDownAppDomainWithFriendlyName(id);
+
+            if (success)
             {
-                LogHelper.LogWarningWithLineNumber(Logger,
-                                                   "Shut down Node with id : " + id);
-
-                Program.ShutDownNode(id);
+                LogHelper.LogInfoWithLineNumber(Logger,
+                                                "Node has been shut down, with id : " + id);
 
                 return Ok(id);
             }

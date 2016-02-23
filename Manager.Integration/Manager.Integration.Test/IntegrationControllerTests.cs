@@ -100,6 +100,14 @@ namespace Manager.Integration.Test
         private static void CurrentDomain_UnhandledException(object sender,
                                                              UnhandledExceptionEventArgs e)
         {
+            var exception = e.ExceptionObject as Exception;
+
+            if (exception != null)
+            {
+                LogHelper.LogFatalWithLineNumber(exception.Message,
+                                                 Logger,
+                                                 exception);
+            }
         }
 
         private string ManagerDbConnectionString { get; set; }

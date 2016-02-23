@@ -57,7 +57,7 @@ namespace NodeConsoleHost
         }
 
         public static void Main()
-        {            
+        {
             var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
@@ -86,7 +86,7 @@ namespace NodeConsoleHost
             NodeStarter = new NodeStarter();
 
             NodeStarter.Start(nodeConfig,
-                               Container);
+                              Container);
 
             QuitEvent.WaitOne();
         }
@@ -101,12 +101,12 @@ namespace NodeConsoleHost
                                                        EventArgs e)
         {
             LogHelper.LogDebugWithLineNumber(Logger,
-                                            WhoAmI + " : CurrentDomain_DomainUnload called.");
-            
+                                             WhoAmI + " : CurrentDomain_DomainUnload called.");
+
             if (NodeStarter != null)
             {
                 NodeStarter.Stop();
-            }            
+            }
 
             QuitEvent.Set();
         }
@@ -114,12 +114,12 @@ namespace NodeConsoleHost
         private static void CurrentDomain_UnhandledException(object sender,
                                                              UnhandledExceptionEventArgs e)
         {
-            if (!e.IsTerminating)
-            {
-                Exception exp = e.ExceptionObject as Exception;
+            Exception exp = e.ExceptionObject as Exception;
 
-                LogHelper.LogErrorWithLineNumber(Logger,
-                                                 WhoAmI + " : CurrentDomain_UnhandledException called.",
+            if (exp != null)
+            {
+                LogHelper.LogFatalWithLineNumber(Logger,
+                                                 exp.Message,
                                                  exp);
             }
         }
