@@ -243,8 +243,7 @@ $(document).ready(function () {
 		};
 
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
-		viewModel.isPossibleSchedulesForAllEnabled(true);
-
+		
 		viewModel.loadTeams();
 
 		equal(viewModel.availableTeams().length, 4);
@@ -556,18 +555,5 @@ $(document).ready(function () {
 		equal(viewModel.filterStartTimeList()[0].text, "0:00 - 2:00");
 		equal(viewModel.filterStartTimeList()[12].text, "DO");
 	});
-
-	test("should load toggles", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) {
-			return toggleName == 'Request_SeePossibleShiftTradesFromAllTeams_28770';
-		};
-
-		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
-		viewModel.featureCheck();
-
-		
-		equal(viewModel.isPossibleSchedulesForAllEnabled(), true);
 	
-	});
-
 });
