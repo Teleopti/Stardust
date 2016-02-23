@@ -27,17 +27,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		private FakeScheduleResourceProvider _scheduledResourcesProvider;
 		private FakeCampaignWarningProvider _campaignWarningProvider;
 		private FakeOutboundScheduledResourcesCacher _outboundScheduledResourcesCacher;
-		private IUserTimeZone _userTimeZone;
 
 		private IOutboundCampaign doneCampaign;
 		private IOutboundCampaign plannedCampaign;
 		private IOutboundCampaign scheduledCampaign;
 		private IOutboundCampaign ongoingCampaign;
 
+		private readonly TimeZoneInfo timeZone = TimeZoneInfoFactory.HelsinkiTimeZoneInfo();
+
 		[SetUp]
 		public void SetUp()
 		{
-			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(2), "", ""));
 			_outboundCampaignRepository = new FakeCampaignRepository();
 			_scheduledResourcesProvider = new FakeScheduleResourceProvider();
 			_campaignWarningProvider = new FakeCampaignWarningProvider();
@@ -51,15 +51,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			scheduledCampaign = GetTestCampaign(1);
 			ongoingCampaign = GetTestCampaign(2);
 
-			target = new CampaignListProvider(_outboundCampaignRepository, _scheduledResourcesProvider, _campaignWarningProvider, _userTimeZone, _outboundScheduledResourcesCacher);
+			target = new CampaignListProvider(_outboundCampaignRepository, _scheduledResourcesProvider, _campaignWarningProvider, _outboundScheduledResourcesCacher);
 		}
 
 		[Test]
 		public void ShouldGetCampaigns()
 		{
-			var campaign1 = createCampaign("campaign1", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1), _userTimeZone);
+			var campaign1 = createCampaign("campaign1", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1));
 			_outboundCampaignRepository.Add(campaign1);
-			var campaign2 = createCampaign("campaign2", new DateOnlyPeriod(2015, 11, 1, 2015, 12, 1), _userTimeZone);
+			var campaign2 = createCampaign("campaign2", new DateOnlyPeriod(2015, 11, 1, 2015, 12, 1));
 			_outboundCampaignRepository.Add(campaign2);
 
 			var period = new GanttPeriod
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		{
 			setCampaigns();
 			var scheduledResourcesProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
-			target = new CampaignListProvider(_outboundCampaignRepository, scheduledResourcesProvider, null, _userTimeZone, _outboundScheduledResourcesCacher);
+			target = new CampaignListProvider(_outboundCampaignRepository, scheduledResourcesProvider, null, _outboundScheduledResourcesCacher);
 
 			target.LoadData(null);
 
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldUpdateCacheScheduleAfterLoadingData()
 		{
-			var campaign = createCampaign("campaign", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1), _userTimeZone);
+			var campaign = createCampaign("campaign", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1));
 			_outboundCampaignRepository.Add(campaign);
 			_scheduledResourcesProvider.SetScheduledTimeOnDate(new DateOnly(2015, 10, 15), campaign.Skill, new TimeSpan(8, 0, 0) );
 			target.LoadData(null);
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void ShouldUpdateCacheForecastAfterLoadingData()
 		{
 
-			var campaign = createCampaign("campaign", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1), _userTimeZone);
+			var campaign = createCampaign("campaign", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1));
 			_outboundCampaignRepository.Add(campaign);
 			_scheduledResourcesProvider.SetForecastedTimeOnDate(new DateOnly(2015, 10, 15), campaign.Skill, new TimeSpan(8, 0, 0));
 			target.LoadData(null);
@@ -119,9 +119,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldGetAllCampaignsStatus()
 		{
-			var campaign1 = createCampaign("campaign1", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1), _userTimeZone);
+			var campaign1 = createCampaign("campaign1", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1));
 			_outboundCampaignRepository.Add(campaign1);
-			var campaign2 = createCampaign("campaign2", new DateOnlyPeriod(2015, 11, 1, 2015, 12, 1), _userTimeZone);
+			var campaign2 = createCampaign("campaign2", new DateOnlyPeriod(2015, 11, 1, 2015, 12, 1));
 			_outboundCampaignRepository.Add(campaign2);
 
 			var period = new GanttPeriod
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldGetCampaignId()
 		{
-			var campaign = createCampaign("campaign", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1), _userTimeZone);
+			var campaign = createCampaign("campaign", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1));
 			_outboundCampaignRepository.Add(campaign);
 		
 			var period = new GanttPeriod
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldGetCampaignName()
 		{
-			var campaign = createCampaign("campaign", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1), _userTimeZone);
+			var campaign = createCampaign("campaign", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1));
 			_outboundCampaignRepository.Add(campaign);
 
 			var period = new GanttPeriod
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldGetCampaignStartDate()
 		{
-			var campaign = createCampaign("campaign", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1), _userTimeZone);
+			var campaign = createCampaign("campaign", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1));
 			_outboundCampaignRepository.Add(campaign);
 
 			var period = new GanttPeriod
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldGetCampaignEndDate()
 		{
-			var campaign = createCampaign("campaign", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1), _userTimeZone);
+			var campaign = createCampaign("campaign", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1));
 			_outboundCampaignRepository.Add(campaign);
 
 			var period = new GanttPeriod
@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldGetScheduledInfoTrue()
 		{
-			var campaign = createCampaign("campaign", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1), _userTimeZone);
+			var campaign = createCampaign("campaign", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1));
 			_outboundCampaignRepository.Add(campaign);
 
 			_scheduledResourcesProvider.SetScheduledTimeOnDate(new DateOnly(2015, 10, 15), campaign.Skill, new TimeSpan(8, 0, 0) );
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldGetScheduledInfoFalse()
 		{
-			var campaign = createCampaign("campaign", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1), _userTimeZone);
+			var campaign = createCampaign("campaign", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1));
 			_outboundCampaignRepository.Add(campaign);
 			
 			var period = new GanttPeriod
@@ -236,7 +236,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void ShouldGetWarningInfo()
 		{
 			
-			var campaign = createCampaign("campaign", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1), _userTimeZone);
+			var campaign = createCampaign("campaign", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1));
 			_outboundCampaignRepository.Add(campaign);
 
 			_campaignWarningProvider.SetCampaignRuleCheckResponse(campaign, new List<CampaignWarning>()
@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldResetCache()
 		{
-			var campaign1 = createCampaign("campaign1", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1), _userTimeZone);
+			var campaign1 = createCampaign("campaign1", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1));
 			var forcast = new Dictionary<DateOnly, TimeSpan> {{new DateOnly(2015,10,26), TimeSpan.Zero}};
 			_outboundScheduledResourcesCacher.SetForecastedTime(campaign1, forcast);
 
@@ -283,14 +283,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldLoadDataWhenThereIsNewCampaign()
 		{
-			var campaign1 = createCampaign("campaign1", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1), _userTimeZone);
+			var campaign1 = createCampaign("campaign1", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1));
 			_outboundCampaignRepository.Add(campaign1);
-			var campaign2 = createCampaign("campaign2", new DateOnlyPeriod(2015, 11, 1, 2015, 12, 1), _userTimeZone);
+			var campaign2 = createCampaign("campaign2", new DateOnlyPeriod(2015, 11, 1, 2015, 12, 1));
 			_outboundCampaignRepository.Add(campaign2);
 			var forcast = new Dictionary<DateOnly, TimeSpan> { { new DateOnly(2015,10,26), TimeSpan.Zero } };
 			_outboundScheduledResourcesCacher.SetForecastedTime(campaign1, forcast);
 			var scheduledResourcesProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
-			target = new CampaignListProvider(_outboundCampaignRepository, scheduledResourcesProvider, _campaignWarningProvider, _userTimeZone, _outboundScheduledResourcesCacher);
+			target = new CampaignListProvider(_outboundCampaignRepository, scheduledResourcesProvider, _campaignWarningProvider, _outboundScheduledResourcesCacher);
 
 			target.CheckAndUpdateCache(new GanttPeriod()
 			{
@@ -304,12 +304,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldNotLoadDataWhenThereIsNewCampaign()
 		{
-			var campaign1 = createCampaign("campaign1", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1), _userTimeZone);
+			var campaign1 = createCampaign("campaign1", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1));
 			_outboundCampaignRepository.Add(campaign1);
 			var forcast = new Dictionary<DateOnly, TimeSpan> { { new DateOnly(2015,10,26), TimeSpan.Zero } };
 			_outboundScheduledResourcesCacher.SetForecastedTime(campaign1, forcast);
 			var scheduledResourcesProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
-			target = new CampaignListProvider(_outboundCampaignRepository, scheduledResourcesProvider, _campaignWarningProvider, _userTimeZone, _outboundScheduledResourcesCacher);
+			target = new CampaignListProvider(_outboundCampaignRepository, scheduledResourcesProvider, _campaignWarningProvider, _outboundScheduledResourcesCacher);
 
 			target.CheckAndUpdateCache(new GanttPeriod()
 			{
@@ -325,23 +325,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var today = DateOnly.Today;	
 			var campaigns = new[]
 			{
-				createCampaign("A", new DateOnlyPeriod(today.AddDays(7), today.AddDays(14)), _userTimeZone ),
-				createCampaign("B", new DateOnlyPeriod(today.AddDays(7), today.AddDays(21)), _userTimeZone ),
-				createCampaign("C", new DateOnlyPeriod(today.AddDays(-7), today.AddDays(7)), _userTimeZone ),
-				createCampaign("D", new DateOnlyPeriod(today.AddDays(-14), today.AddDays(-7)), _userTimeZone ),				
+				createCampaign("A", new DateOnlyPeriod(today.AddDays(7), today.AddDays(14)) ),
+				createCampaign("B", new DateOnlyPeriod(today.AddDays(7), today.AddDays(21)) ),
+				createCampaign("C", new DateOnlyPeriod(today.AddDays(-7), today.AddDays(7)) ),
+				createCampaign("D", new DateOnlyPeriod(today.AddDays(-14), today.AddDays(-7)) ),				
 			};
 
 			return campaigns[index];
 		}
 
-		private IOutboundCampaign createCampaign(string name, DateOnlyPeriod period, IUserTimeZone userTimeZone)
+		private IOutboundCampaign createCampaign(string name, DateOnlyPeriod period)
 		{
-			var campaign = new Domain.Outbound.Campaign()
+			var campaign = new Domain.Outbound.Campaign
 			{
 				Name = name,
-				SpanningPeriod = period.ToDateTimePeriod(userTimeZone.TimeZone()),
+				SpanningPeriod = period.ToDateTimePeriod(timeZone),
 				BelongsToPeriod = period,
-				Skill = SkillFactory.CreateSkill(name, userTimeZone.TimeZone())
+				Skill = SkillFactory.CreateSkill(name, timeZone)
 			};
 
 			campaign.SetId(Guid.NewGuid());
@@ -359,8 +359,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 
 		private DateOnlyPeriod getCampaignPeriod(IList<IOutboundCampaign> campaigns)
 		{
-			var earliestStart = campaigns.Min(c => c.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).StartDate);
-			var latestEnd = campaigns.Max(c => c.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).EndDate);
+			var periods = campaigns.Select(c => c.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc)).ToArray();
+			var earliestStart = periods.Min(c => c.StartDate);
+			var latestEnd = periods.Max(c => c.EndDate);
 			var campaignPeriod = new DateOnlyPeriod(earliestStart, latestEnd);
 
 			return campaignPeriod;

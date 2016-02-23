@@ -282,26 +282,7 @@ namespace Teleopti.Interfaces.Domain
         {
             return new DateTimePeriod(StartDateTime.Add(timeSpan), EndDateTime, false);
         }
-
-        /// <summary>
-        /// Gets every UTC date in this DateTimePeriod as a collection.
-        /// </summary>
-        /// <value>The date collection.</value>
-        public IList<DateTime> DateCollection()
-        {
-            IList<DateTime> returnList = new List<DateTime>();
-
-            DateTime startDay = StartDateTime.Date;
-            DateTime endDay = EndDateTime.Date;
-
-            while (startDay <= endDay)
-            {
-                returnList.Add(startDay);
-                startDay = startDay.Date.AddDays(1);
-            }
-            return returnList;
-        }
-
+		
         /// <summary>
         /// Returns an IList of DateTimePeriods corresponding to each affected hour.
         /// </summary>

@@ -339,21 +339,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.IsFalse(_period.ContainsPart(checkTimeOutside));
             Assert.IsTrue(_period.ContainsPart(checkTimeInside));
         }
-
-        /// <summary>
-        /// Verifies the date collection property.
-        /// </summary>
-        [Test]
-        public void VerifyDateCollection()
-        {
-            DateTime startDate = new DateTime(2007, 6, 1, 12, 31, 0, DateTimeKind.Utc);
-            DateTime endDate = new DateTime(2007, 6, 5, 0, 0, 1, DateTimeKind.Utc);
-            _period = new DateTimePeriod(startDate, endDate);
-
-            ICollection<DateTime> resultDates = _period.DateCollection();
-            Assert.AreEqual(5, resultDates.Count);
-        }
-
+		
         /// <summary>
         /// Verifies the six parameter constructor.
         /// </summary>

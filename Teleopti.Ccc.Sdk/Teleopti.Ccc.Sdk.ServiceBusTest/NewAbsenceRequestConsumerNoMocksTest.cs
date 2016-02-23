@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 			var newRequest = createAbsenceRequest(person, absence, requestDateTimePeriod);
 			var newAbsenceRequestConsumer = createNewAbsenceRequestConsumer(true, false);
-			newAbsenceRequestConsumer.Consume(new NewAbsenceRequestCreated() { PersonRequestId = newRequest.Id.Value });
+			newAbsenceRequestConsumer.Consume(new NewAbsenceRequestCreated { PersonRequestId = newRequest.Id.Value });
 
 			Assert.AreEqual(24, accountDay.Remaining.TotalDays);
 		}
@@ -451,9 +451,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 		private void createEightHourShiftForDaysInDateCollection(DateTimePeriod requestDateTimePeriod, IPerson personOne)
 		{
-			foreach (var day in requestDateTimePeriod.DateCollection())
+			foreach (var day in requestDateTimePeriod.ToDateOnlyPeriod(personOne.PermissionInformation.DefaultTimeZone()).DayCollection())
 			{
-				var assignment = createAssignment(personOne, day.AddHours(8), day.AddHours(17), _currentScenario);
+				var assignment = createAssignment(personOne, DateTime.SpecifyKind(day.Date.AddHours(8),DateTimeKind.Utc), DateTime.SpecifyKind(day.Date.AddHours(17),DateTimeKind.Utc), _currentScenario);
 				_scheduleRepository.Set(new[] { assignment });
 			}
 		}
