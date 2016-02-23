@@ -8,7 +8,8 @@ namespace ManagerTest.Fakes
 {
 	public class FakeJobRepository : IJobRepository
 	{
-		private List<JobDefinition> _jobs = new List<JobDefinition>(); 
+		private readonly List<JobDefinition> _jobs = new List<JobDefinition>();
+
 		public void Add(JobDefinition job)
 		{
 			_jobs.Add(job);
@@ -19,11 +20,6 @@ namespace ManagerTest.Fakes
 			return _jobs;
 		}
 
-		public void AssignDesignatedNode(Guid id, string url)
-		{
-			var job = _jobs.FirstOrDefault(x => x.Id == id);
-			job.AssignedNode = url;
-		}
 		public void DeleteJob(Guid jobId)
 		{
 			var j = _jobs.FirstOrDefault(x => x.Id.Equals(jobId));
@@ -72,6 +68,12 @@ namespace ManagerTest.Fakes
 		public IList<JobHistoryDetail> JobHistoryDetails(Guid jobId)
 		{
 			throw new NotImplementedException();
+		}
+
+		public void AssignDesignatedNode(Guid id, string url)
+		{
+			var job = _jobs.FirstOrDefault(x => x.Id == id);
+			job.AssignedNode = url;
 		}
 	}
 }

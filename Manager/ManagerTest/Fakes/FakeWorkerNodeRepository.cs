@@ -7,7 +7,8 @@ namespace ManagerTest.Fakes
 {
 	public class FakeWorkerNodeRepository : IWorkerNodeRepository
 	{
-		private readonly List<WorkerNode> _workerNodes =new List<WorkerNode>(); 
+		private readonly List<WorkerNode> _workerNodes = new List<WorkerNode>();
+
 		public List<WorkerNode> LoadAll()
 		{
 			return _workerNodes;

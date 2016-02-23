@@ -16,7 +16,8 @@ namespace ManagerTest.Database
 		{
 			return
 				Convert.ToBoolean(_executeMaster.ExecuteScalar("SELECT database_id FROM sys.databases WHERE Name = @databaseName",
-					parameters: new Dictionary<string, object> { { "@databaseName", databaseName } }));
+				                                               parameters:
+					                                               new Dictionary<string, object> {{"@databaseName", databaseName}}));
 		}
 
 		public void Drop(string databaseName)

@@ -10,210 +10,210 @@ using Stardust.Manager.Models;
 
 namespace Stardust.Manager
 {
-    public class WorkerNodeRepository : IWorkerNodeRepository
-    {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (WorkerNodeRepository));
+	public class WorkerNodeRepository : IWorkerNodeRepository
+	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (WorkerNodeRepository));
 
-        private readonly string _connectionString;
-        private DataSet _jdDataSet;
-        private DataTable _jdDataTable;
+		private readonly string _connectionString;
+		private DataSet _jdDataSet;
+		private DataTable _jdDataTable;
 
-        public WorkerNodeRepository(string connectionString)
-        {
-            _connectionString = connectionString;
+		public WorkerNodeRepository(string connectionString)
+		{
+			_connectionString = connectionString;
 
-            InitDs();
-        }
+			InitDs();
+		}
 
-        private void InitDs()
-        {
-            _jdDataSet = new DataSet();
+		public List<WorkerNode> LoadAll()
+		{
+			LogHelper.LogDebugWithLineNumber(Logger, "Start LoadAll.");
 
-            _jdDataTable = new DataTable("[Stardust].WorkerNodes");
+			const string selectCommand = @"SELECT  Id ,Url FROM [Stardust].WorkerNodes";
 
-            _jdDataTable.Columns.Add(new DataColumn("Id",
-                                                    typeof (Guid)));
+			var listToReturn = new List<WorkerNode>();
 
-            _jdDataTable.Columns.Add(new DataColumn("Url",
-                                                    typeof (string)));
+			using (var connection = new SqlConnection(_connectionString))
+			{
+				var command = new SqlCommand
+				{
+					Connection = connection,
+					CommandText = selectCommand,
+					CommandType = CommandType.Text
+				};
+				connection.Open();
 
-            _jdDataSet.Tables.Add(_jdDataTable);
-        }
+				var reader = command.ExecuteReader();
 
-        public List<WorkerNode> LoadAll()
-        {
-            LogHelper.LogDebugWithLineNumber(Logger,"Start LoadAll.");
+				if (reader.HasRows)
+				{
+					while (reader.Read())
+					{
+						var jobDefinition = new WorkerNode
+						{
+							Id = (Guid) reader.GetValue(reader.GetOrdinal("Id")),
+							Url = new Uri((string) reader.GetValue(reader.GetOrdinal("Url")))
+						};
 
-            const string selectCommand = @"SELECT  Id ,Url FROM [Stardust].WorkerNodes";
+						listToReturn.Add(jobDefinition);
+					}
+				}
 
-            var listToReturn = new List<WorkerNode>();
+				reader.Close();
+				connection.Close();
+			}
 
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                var command = new SqlCommand
-                {
-                    Connection = connection,
-                    CommandText = selectCommand,
-                    CommandType = CommandType.Text
-                };
-                connection.Open();
+			if (listToReturn != null && listToReturn.Any())
+			{
+				LogHelper.LogDebugWithLineNumber(Logger, "Found ( " + listToReturn.Count + " ) availabe nodes.");
+			}
+			else
+			{
+				LogHelper.LogDebugWithLineNumber(Logger, "No nodes found.");
+			}
 
-                var reader = command.ExecuteReader();
+			LogHelper.LogDebugWithLineNumber(Logger, "Finished LoadAll.");
 
-                if (reader.HasRows)
-                {
-                    while (reader.Read())
-                    {
-                        var jobDefinition = new WorkerNode()
-                        {
-                            Id = (Guid) reader.GetValue(reader.GetOrdinal("Id")),
-                            Url = new Uri((string) reader.GetValue(reader.GetOrdinal("Url")))
-                        };
+			return listToReturn;
+		}
 
-                        listToReturn.Add(jobDefinition);
-                    }
-                }
+		public List<WorkerNode> LoadAllFreeNodes()
+		{
+			LogHelper.LogDebugWithLineNumber(Logger, "Start LoadAllFreeNodes.");
 
-                reader.Close();
-                connection.Close();
-            }
+			const string selectCommand =
+				@"SELECT * FROM [Stardust].WorkerNodes WHERE Url NOT IN (SELECT ISNULL(AssignedNode,'') FROM [Stardust].JobDefinitions)";
 
-            if (listToReturn != null && listToReturn.Any())
-            {
-                LogHelper.LogDebugWithLineNumber(Logger, "Found ( " + listToReturn.Count + " ) availabe nodes.");
-            }
-            else
-            {
-                LogHelper.LogDebugWithLineNumber(Logger, "No nodes found.");
-            }
+			var listToReturn = new List<WorkerNode>();
 
-            LogHelper.LogDebugWithLineNumber(Logger, "Finished LoadAll.");
+			try
+			{
+				using (var connection = new SqlConnection(_connectionString))
+				{
+					var command = new SqlCommand
+					{
+						Connection = connection,
+						CommandText = selectCommand,
+						CommandType = CommandType.Text
+					};
+					connection.Open();
 
-            return listToReturn;
-        }
+					var reader = command.ExecuteReader();
 
-        public List<WorkerNode> LoadAllFreeNodes()
-        {
-            LogHelper.LogDebugWithLineNumber(Logger, "Start LoadAllFreeNodes.");
+					if (reader.HasRows)
+					{
+						while (reader.Read())
+						{
+							var jobDefinition = new WorkerNode
+							{
+								Id = (Guid) reader.GetValue(reader.GetOrdinal("Id")),
+								Url = new Uri((string) reader.GetValue(reader.GetOrdinal("Url")))
+							};
+							listToReturn.Add(jobDefinition);
+						}
+					}
 
-            const string selectCommand =
-                @"SELECT * FROM [Stardust].WorkerNodes WHERE Url NOT IN (SELECT ISNULL(AssignedNode,'') FROM [Stardust].JobDefinitions)";
+					reader.Close();
+					connection.Close();
+				}
+			}
 
-            var listToReturn = new List<WorkerNode>();
+			catch (TimeoutException exception)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger,
+				                                 "Can not get WorkerNodes, maybe there is a lock in Stardust.JobDefinitions table",
+				                                 exception);
+			}
 
-            try
-            {
-                using (var connection = new SqlConnection(_connectionString))
-                {
-                    var command = new SqlCommand
-                    {
-                        Connection = connection,
-                        CommandText = selectCommand,
-                        CommandType = CommandType.Text
-                    };
-                    connection.Open();
-
-                    var reader = command.ExecuteReader();
-
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            var jobDefinition = new WorkerNode()
-                            {
-                                Id = (Guid) reader.GetValue(reader.GetOrdinal("Id")),
-                                Url = new Uri((string) reader.GetValue(reader.GetOrdinal("Url")))
-                            };
-                            listToReturn.Add(jobDefinition);
-                        }
-                    }
-
-                    reader.Close();
-                    connection.Close();
-                }
-            }
-
-            catch (TimeoutException exception)
-            {
-                LogHelper.LogErrorWithLineNumber(Logger,
-                                                 "Can not get WorkerNodes, maybe there is a lock in Stardust.JobDefinitions table",
-                                                 exception);
-            }
-
-            catch (Exception exception)
-            {
-                LogHelper.LogErrorWithLineNumber(Logger,
-                                                 "Can not get WorkerNodes",
-                                                 exception);
-            }
+			catch (Exception exception)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger,
+				                                 "Can not get WorkerNodes",
+				                                 exception);
+			}
 
 
-            if (listToReturn != null && listToReturn.Any())
-            {
-                LogHelper.LogDebugWithLineNumber(Logger, "Found ( " + listToReturn.Count + " ) availabe nodes.");
-            }
-            else
-            {
-                LogHelper.LogDebugWithLineNumber(Logger, "No nodes found.");
-            }
+			if (listToReturn != null && listToReturn.Any())
+			{
+				LogHelper.LogDebugWithLineNumber(Logger, "Found ( " + listToReturn.Count + " ) availabe nodes.");
+			}
+			else
+			{
+				LogHelper.LogDebugWithLineNumber(Logger, "No nodes found.");
+			}
 
 
-            LogHelper.LogDebugWithLineNumber(Logger, "Finished LoadAllFreeNodes.");
+			LogHelper.LogDebugWithLineNumber(Logger, "Finished LoadAllFreeNodes.");
 
-            return listToReturn;
-        }
+			return listToReturn;
+		}
 
-        public void Add(WorkerNode job)
-        {
-            var dr = _jdDataTable.NewRow();
-            dr["Id"] = job.Id;
-            dr["Url"] = job.Url.ToString();
-            _jdDataTable.Rows.Add(dr);
+		public void Add(WorkerNode job)
+		{
+			var dr = _jdDataTable.NewRow();
+			dr["Id"] = job.Id;
+			dr["Url"] = job.Url.ToString();
+			_jdDataTable.Rows.Add(dr);
 
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
+			using (var connection = new SqlConnection(_connectionString))
+			{
+				connection.Open();
 
-                using (var da = new SqlDataAdapter("Select * From [Stardust].WorkerNodes",
-                                                   connection))
-                {
-                    var builder = new SqlCommandBuilder(da);
+				using (var da = new SqlDataAdapter("Select * From [Stardust].WorkerNodes",
+				                                   connection))
+				{
+					var builder = new SqlCommandBuilder(da);
 
-                    builder.GetInsertCommand();
+					builder.GetInsertCommand();
 
-                    da.Update(_jdDataSet,
-                              "[Stardust].WorkerNodes");
-                }
+					da.Update(_jdDataSet,
+					          "[Stardust].WorkerNodes");
+				}
 
-                connection.Close();
-            }
-        }
+				connection.Close();
+			}
+		}
 
-        public void DeleteNode(Guid nodeId)
-        {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
+		public void DeleteNode(Guid nodeId)
+		{
+			using (var connection = new SqlConnection(_connectionString))
+			{
+				connection.Open();
 
-                using (var da = new SqlDataAdapter("Select * From [Stardust].WorkerNodes",
-                                                   connection))
-                {
-                    using (var command = new SqlCommand("DELETE FROM [Stardust].WorkerNodes WHERE Id = @ID",
-                                                        connection))
-                    {
-                        var parameter = command.Parameters.Add("@ID",
-                                                               SqlDbType.UniqueIdentifier,
-                                                               16,
-                                                               "Id");
-                        parameter.Value = nodeId;
+				using (var da = new SqlDataAdapter("Select * From [Stardust].WorkerNodes",
+				                                   connection))
+				{
+					using (var command = new SqlCommand("DELETE FROM [Stardust].WorkerNodes WHERE Id = @ID",
+					                                    connection))
+					{
+						var parameter = command.Parameters.Add("@ID",
+						                                       SqlDbType.UniqueIdentifier,
+						                                       16,
+						                                       "Id");
+						parameter.Value = nodeId;
 
-                        da.DeleteCommand = command;
-                        da.DeleteCommand.ExecuteNonQuery();
-                    }
-                }
+						da.DeleteCommand = command;
+						da.DeleteCommand.ExecuteNonQuery();
+					}
+				}
 
-                connection.Close();
-            }
-        }
-    }
+				connection.Close();
+			}
+		}
+
+		private void InitDs()
+		{
+			_jdDataSet = new DataSet();
+
+			_jdDataTable = new DataTable("[Stardust].WorkerNodes");
+
+			_jdDataTable.Columns.Add(new DataColumn("Id",
+			                                        typeof (Guid)));
+
+			_jdDataTable.Columns.Add(new DataColumn("Url",
+			                                        typeof (string)));
+
+			_jdDataSet.Tables.Add(_jdDataTable);
+		}
+	}
 }

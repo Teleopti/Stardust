@@ -10,8 +10,8 @@ namespace ManagerTest.Database
 {
 	public class ExecuteSql
 	{
-		private readonly Func<SqlConnection> _openConnection;
 		private readonly SqlTransientErrorChecker _errorChecker = new SqlTransientErrorChecker();
+		private readonly Func<SqlConnection> _openConnection;
 
 		public ExecuteSql(Func<SqlConnection> openConnection)
 		{
@@ -30,7 +30,7 @@ namespace ManagerTest.Database
 		{
 			parameters = parameters ?? new Dictionary<string, object>();
 
-			int result = 0;
+			var result = 0;
 			handleWithRetry(sql, s =>
 			{
 				var regex = new Regex("^GO", RegexOptions.IgnoreCase | RegexOptions.Multiline);
@@ -55,12 +55,11 @@ namespace ManagerTest.Database
 							{
 								command.CommandText = statement;
 								command.CommandType = CommandType.Text;
-								result = (int)(command.ExecuteScalar() ?? default(int));
+								result = (int) (command.ExecuteScalar() ?? default(int));
 							}
 
 							transaction.Commit();
 						}
-
 					}
 				}
 			}, 0);
@@ -140,12 +139,12 @@ namespace ManagerTest.Database
 					handleWithRetry(sql, action, ++attempt);
 				}
 
-				string message = exception.Message;
+				var message = exception.Message;
 				SqlException sqlException;
 				if ((sqlException = exception as SqlException) != null)
 				{
 					message = message + Environment.NewLine + "Error numbers: " +
-							  string.Join(", ", sqlException.Errors.OfType<SqlError>().Select(e => e.Number));
+					          string.Join(", ", sqlException.Errors.OfType<SqlError>().Select(e => e.Number));
 				}
 
 				throw;

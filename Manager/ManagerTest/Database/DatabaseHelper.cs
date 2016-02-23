@@ -5,13 +5,12 @@ namespace ManagerTest.Database
 {
 	public class DatabaseHelper
 	{
-		private readonly DatabaseSchemaCreator _databaseSchemaCreator;
-		private readonly DatabaseCreator _databaseCreator;
-
 		private readonly string _connectionString;
-		private readonly string _databaseName;
-		private readonly string _masterDatabaseName ;
 		private readonly string _createScriptPath;
+		private readonly DatabaseCreator _databaseCreator;
+		private readonly string _databaseName;
+		private readonly DatabaseSchemaCreator _databaseSchemaCreator;
+		private readonly string _masterDatabaseName;
 		private readonly string _schemaScriptsPath;
 
 		public DatabaseHelper()
@@ -22,7 +21,7 @@ namespace ManagerTest.Database
 			_schemaScriptsPath = ConfigurationManager.AppSettings["ReleaseScriptPath"];
 			_masterDatabaseName = "master";
 			var executeMaster = new ExecuteSql(() => openConnection(true));
-			
+
 			_databaseSchemaCreator = new DatabaseSchemaCreator(new SchemaVersionInformation(), executeMaster);
 			_databaseCreator = new DatabaseCreator(executeMaster);
 		}
@@ -44,6 +43,5 @@ namespace ManagerTest.Database
 			conn.Open();
 			return conn;
 		}
-
 	}
 }

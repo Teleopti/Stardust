@@ -10,137 +10,136 @@ using Stardust.Manager.Interfaces;
 
 namespace Stardust.Manager
 {
-    public class HttpSender : IHttpSender
-    {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (HttpSender));
+	public class HttpSender : IHttpSender
+	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (HttpSender));
 
-        public async Task<HttpResponseMessage> PostAsync(Uri url,
-                                                         object data)
-        {
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                            "Start.");
+		public async Task<HttpResponseMessage> PostAsync(Uri url,
+		                                                 object data)
+		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Start.");
 
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    string sez = JsonConvert.SerializeObject(data);
+			try
+			{
+				using (var client = new HttpClient())
+				{
+					var sez = JsonConvert.SerializeObject(data);
 
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+					client.DefaultRequestHeaders.Accept.Clear();
+					client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var response =
-                        await client.PostAsync(url,
-                                               new StringContent(sez,
-                                                                 Encoding.Unicode,
-                                                                 "application/json")).ConfigureAwait(false);
+					var response =
+						await client.PostAsync(url,
+						                       new StringContent(sez,
+						                                         Encoding.Unicode,
+						                                         "application/json")).ConfigureAwait(false);
 
-                    LogHelper.LogDebugWithLineNumber(Logger,
-                                                    "Finished.");
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Finished.");
 
-                    return response;
-                }
-            }
+					return response;
+				}
+			}
 
-            catch (Exception exp)
-            {
-                LogHelper.LogErrorWithLineNumber(Logger,
-                                                 exp.Message,
-                                                 exp);
+			catch (Exception exp)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger,
+				                                 exp.Message,
+				                                 exp);
 
-                throw;
-            }
-        }
+				throw;
+			}
+		}
 
-        public async Task<HttpResponseMessage> DeleteAsync(Uri url)
-        {
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                            "Start.");
+		public async Task<HttpResponseMessage> DeleteAsync(Uri url)
+		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Start.");
 
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+			try
+			{
+				using (var client = new HttpClient())
+				{
+					client.DefaultRequestHeaders.Accept.Clear();
+					client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var response = await client.DeleteAsync(url);
+					var response = await client.DeleteAsync(url);
 
-                    LogHelper.LogDebugWithLineNumber(Logger,
-                                                    "Finished.");
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Finished.");
 
-                    return response;
-                }
-            }
+					return response;
+				}
+			}
 
-            catch (Exception exp)
-            {
-                LogHelper.LogErrorWithLineNumber(Logger,
-                                                 exp.Message,
-                                                 exp);
+			catch (Exception exp)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger,
+				                                 exp.Message,
+				                                 exp);
 
-                throw;
-            }
-        }
+				throw;
+			}
+		}
 
-        public async Task<HttpResponseMessage> GetAsync(Uri url)
-        {
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    
-                    var response = await client.GetAsync(url);
-                    
-                    return response;
-                }
-            }
+		public async Task<HttpResponseMessage> GetAsync(Uri url)
+		{
+			try
+			{
+				using (var client = new HttpClient())
+				{
+					client.DefaultRequestHeaders.Accept.Clear();
+					client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            catch (Exception exp)
-            {
-                LogHelper.LogErrorWithLineNumber(Logger,
-                                                 exp.Message,
-                                                 exp);
+					var response = await client.GetAsync(url);
 
-                throw;
-            }
-        }
+					return response;
+				}
+			}
 
-        public async Task<bool> TryGetAsync(Uri url)
-        {
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+			catch (Exception exp)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger,
+				                                 exp.Message,
+				                                 exp);
 
-                    var response = await client.GetAsync(url,HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
-                    
-                    return response.IsSuccessStatusCode;
-                }
-            }
+				throw;
+			}
+		}
 
-            catch (HttpRequestException exp)
-            {
-                LogHelper.LogWarningWithLineNumber(Logger,
-                                                   exp.Message);
+		public async Task<bool> TryGetAsync(Uri url)
+		{
+			try
+			{
+				using (var client = new HttpClient())
+				{
+					client.DefaultRequestHeaders.Accept.Clear();
+					client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            }
+					var response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
 
-            catch (Exception exp)
-            {
-                LogHelper.LogErrorWithLineNumber(Logger,
-                                                 exp.Message,
-                                                 exp);
+					return response.IsSuccessStatusCode;
+				}
+			}
 
-                throw;
-            }
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                                    "Return false");
-            return false;
-        }
-    }
+			catch (HttpRequestException exp)
+			{
+				LogHelper.LogWarningWithLineNumber(Logger,
+				                                   exp.Message);
+			}
+
+			catch (Exception exp)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger,
+				                                 exp.Message,
+				                                 exp);
+
+				throw;
+			}
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Return false");
+			return false;
+		}
+	}
 }

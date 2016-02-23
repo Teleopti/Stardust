@@ -29,7 +29,9 @@ namespace ManagerTest.Database
 				script = replaceScriptTags(script, databaseName);
 				_executeMaster.ExecuteTransactionlessNonQuery(script, 10800);
 			}
-			catch {	}
+			catch
+			{
+			}
 		}
 
 		private string replaceScriptTags(string script, string name)
@@ -37,6 +39,5 @@ namespace ManagerTest.Database
 			script = script.Replace("$(DBNAME)", name);
 			return script;
 		}
-
 	}
 }

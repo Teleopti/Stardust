@@ -1,7 +1,6 @@
 using System;
 using System.Web.Http;
 using System.Web.Http.Results;
-using System.Web.UI.WebControls;
 using log4net;
 using Stardust.Manager.Constants;
 using Stardust.Manager.Helpers;
@@ -10,163 +9,162 @@ using Stardust.Manager.Models;
 
 namespace Stardust.Manager
 {
-    public class ManagerController : ApiController
-    {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (ManagerController));
-        private readonly JobManager _jobManager;
+	public class ManagerController : ApiController
+	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (ManagerController));
+		private readonly JobManager _jobManager;
 
-        private readonly INodeManager _nodeManager;
+		private readonly INodeManager _nodeManager;
 
-        public ManagerController(INodeManager nodeManager,
-            JobManager jobManager)
-        {
-            WhoAmI = "[MANAGER, " + Environment.MachineName.ToUpper() + "]";
+		public ManagerController(INodeManager nodeManager,
+		                         JobManager jobManager)
+		{
+			WhoAmI = "[MANAGER, " + Environment.MachineName.ToUpper() + "]";
 
-            _nodeManager = nodeManager;
-            _jobManager = jobManager;
-        }
-        
-        public string WhoAmI { get; private set; }
+			_nodeManager = nodeManager;
+			_jobManager = jobManager;
+		}
 
-        [HttpPost, Route(ManagerRouteConstants.Job)]
-        public IHttpActionResult DoThisJob([FromBody] JobRequestModel job)
-        {
-            if (job == null)
-            {
-                return new BadRequestResult(Request);
-            }
+		public string WhoAmI { get; private set; }
 
-            if (string.IsNullOrEmpty(job.Name) ||
-                string.IsNullOrEmpty(job.Serialized) ||
-                string.IsNullOrEmpty(job.Type) ||
-                string.IsNullOrEmpty(job.UserName))
-            {
-                return new BadRequestResult(Request);
-            }
+		[HttpPost, Route(ManagerRouteConstants.Job)]
+		public IHttpActionResult DoThisJob([FromBody] JobRequestModel job)
+		{
+			if (job == null)
+			{
+				return new BadRequestResult(Request);
+			}
 
-            var jobReceived = new JobDefinition
-            {
-                Name = job.Name,
-                Serialized = job.Serialized,
-                Type = job.Type,
-                UserName = job.UserName,
-                Id = Guid.NewGuid()
-            };
-            _jobManager.Add(jobReceived);
+			if (string.IsNullOrEmpty(job.Name) ||
+			    string.IsNullOrEmpty(job.Serialized) ||
+			    string.IsNullOrEmpty(job.Type) ||
+			    string.IsNullOrEmpty(job.UserName))
+			{
+				return new BadRequestResult(Request);
+			}
 
-            var msg = string.Format("{0} : New job received from client ( jobId, jobName ) : ( {1}, {2} )",
-                WhoAmI,
-                jobReceived.Id,
-                jobReceived.Name);
+			var jobReceived = new JobDefinition
+			{
+				Name = job.Name,
+				Serialized = job.Serialized,
+				Type = job.Type,
+				UserName = job.UserName,
+				Id = Guid.NewGuid()
+			};
+			_jobManager.Add(jobReceived);
 
-            LogHelper.LogInfoWithLineNumber(Logger,
-                msg);
+			var msg = string.Format("{0} : New job received from client ( jobId, jobName ) : ( {1}, {2} )",
+			                        WhoAmI,
+			                        jobReceived.Id,
+			                        jobReceived.Name);
 
-            return Ok(jobReceived.Id);
-        }
+			LogHelper.LogInfoWithLineNumber(Logger,
+			                                msg);
 
-        [HttpDelete, Route(ManagerRouteConstants.CancelJob)]
-        public IHttpActionResult CancelThisJob(Guid jobId)
-        {
-            LogHelper.LogInfoWithLineNumber(Logger,
-                WhoAmI + ": Received job cancel from client ( jobId ) : ( " + jobId + " )");
+			return Ok(jobReceived.Id);
+		}
 
-            _jobManager.CancelThisJob(jobId);
-	        return Ok();
-        }
+		[HttpDelete, Route(ManagerRouteConstants.CancelJob)]
+		public IHttpActionResult CancelThisJob(Guid jobId)
+		{
+			LogHelper.LogInfoWithLineNumber(Logger,
+			                                WhoAmI + ": Received job cancel from client ( jobId ) : ( " + jobId + " )");
 
-        [HttpGet, Route(ManagerRouteConstants.GetJobHistoryList)]
-        public IHttpActionResult JobHistoryList()
-        {
-            return Ok(_jobManager.GetJobHistoryList());
-        }
+			_jobManager.CancelThisJob(jobId);
+			return Ok();
+		}
 
-        [HttpGet, Route(ManagerRouteConstants.GetJobHistory)]
-        public IHttpActionResult JobHistory(Guid jobId)
-        {
-            var jobHistory = _jobManager.GetJobHistory(jobId);
+		[HttpGet, Route(ManagerRouteConstants.GetJobHistoryList)]
+		public IHttpActionResult JobHistoryList()
+		{
+			return Ok(_jobManager.GetJobHistoryList());
+		}
 
-            return Ok(jobHistory);
-        }
+		[HttpGet, Route(ManagerRouteConstants.GetJobHistory)]
+		public IHttpActionResult JobHistory(Guid jobId)
+		{
+			var jobHistory = _jobManager.GetJobHistory(jobId);
 
-        [HttpGet, Route(ManagerRouteConstants.JobDetail)]
-        public IHttpActionResult JobHistoryDetails(Guid jobId)
-        {
-            return Ok(_jobManager.JobHistoryDetails(jobId));
-        }
-        
-        [HttpPost, Route(ManagerRouteConstants.Heartbeat)]
-        public void Heartbeat([FromBody] Uri nodeUri)
-        {
-            _jobManager.CheckAndAssignNextJob();
+			return Ok(jobHistory);
+		}
 
-            LogHelper.LogInfoWithLineNumber(Logger,
-                WhoAmI + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
-        }
+		[HttpGet, Route(ManagerRouteConstants.JobDetail)]
+		public IHttpActionResult JobHistoryDetails(Guid jobId)
+		{
+			return Ok(_jobManager.JobHistoryDetails(jobId));
+		}
 
-        [HttpPost, Route(ManagerRouteConstants.JobDone)]
-        public IHttpActionResult JobDone(Guid jobId)
-        {
-            LogHelper.LogInfoWithLineNumber(Logger,
-                WhoAmI + ": Received job done from a Node ( jobId ) : ( " + jobId + " )");
+		[HttpPost, Route(ManagerRouteConstants.Heartbeat)]
+		public void Heartbeat([FromBody] Uri nodeUri)
+		{
+			_jobManager.CheckAndAssignNextJob();
 
-            _jobManager.SetEndResultOnJobAndRemoveIt(jobId,
-                "Success");
-            
-            return Ok();
-        }
-        
-        [HttpPost, Route(ManagerRouteConstants.JobFailed)]
-        public IHttpActionResult JobFailed(Guid jobId)
-        {
-            LogHelper.LogErrorWithLineNumber(Logger,
-                WhoAmI + ": Received job failed from a Node ( jobId ) : ( " + jobId + " )");
+			LogHelper.LogInfoWithLineNumber(Logger,
+			                                WhoAmI + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
+		}
 
-            _jobManager.SetEndResultOnJobAndRemoveIt(jobId,
-                "Failed");
+		[HttpPost, Route(ManagerRouteConstants.JobDone)]
+		public IHttpActionResult JobDone(Guid jobId)
+		{
+			LogHelper.LogInfoWithLineNumber(Logger,
+			                                WhoAmI + ": Received job done from a Node ( jobId ) : ( " + jobId + " )");
 
-            return Ok();
-        }
-        
-        [HttpPost, Route(ManagerRouteConstants.JobHasBeenCanceled)]
-        public IHttpActionResult JobCanceled(Guid jobId)
-        {
-            LogHelper.LogInfoWithLineNumber(Logger,
-                WhoAmI + ": Received cancel from a Node ( jobId ) : ( " + jobId + " )");
+			_jobManager.SetEndResultOnJobAndRemoveIt(jobId,
+			                                         "Success");
 
-            _jobManager.SetEndResultOnJobAndRemoveIt(jobId,
-                "Canceled");
+			return Ok();
+		}
 
-            return Ok();
-        }
-        
-        [HttpPost, Route(ManagerRouteConstants.JobProgress)]
-        public IHttpActionResult JobProgress([FromBody] JobProgressModel model)
-        {
-            _jobManager.ReportProgress(model);
+		[HttpPost, Route(ManagerRouteConstants.JobFailed)]
+		public IHttpActionResult JobFailed(Guid jobId)
+		{
+			LogHelper.LogErrorWithLineNumber(Logger,
+			                                 WhoAmI + ": Received job failed from a Node ( jobId ) : ( " + jobId + " )");
 
-            return Ok();
-        }
+			_jobManager.SetEndResultOnJobAndRemoveIt(jobId,
+			                                         "Failed");
 
-        // to handle that scenario where the node comes up after a crash
-        //this end point should be called when the node comes up
-        [HttpPost, Route(ManagerRouteConstants.NodeHasBeenInitialized)]
-        public IHttpActionResult NodeInitialized([FromBody] Uri nodeUri)
-        {
-            _nodeManager.FreeJobIfAssingedToNode(nodeUri);
-            _nodeManager.AddIfNeeded(nodeUri);
+			return Ok();
+		}
 
-            LogHelper.LogInfoWithLineNumber(Logger,
-                WhoAmI + ": Received init from Node. Node Uri : ( " + nodeUri + " )");
+		[HttpPost, Route(ManagerRouteConstants.JobHasBeenCanceled)]
+		public IHttpActionResult JobCanceled(Guid jobId)
+		{
+			LogHelper.LogInfoWithLineNumber(Logger,
+			                                WhoAmI + ": Received cancel from a Node ( jobId ) : ( " + jobId + " )");
 
-            return Ok();
-        }
+			_jobManager.SetEndResultOnJobAndRemoveIt(jobId,
+			                                         "Canceled");
 
-        [HttpGet, Route(ManagerRouteConstants.Ping)]
-        public IHttpActionResult Ping()
-        {
-            return Ok();
-        }
-        
+			return Ok();
+		}
+
+		[HttpPost, Route(ManagerRouteConstants.JobProgress)]
+		public IHttpActionResult JobProgress([FromBody] JobProgressModel model)
+		{
+			_jobManager.ReportProgress(model);
+
+			return Ok();
+		}
+
+		// to handle that scenario where the node comes up after a crash
+		//this end point should be called when the node comes up
+		[HttpPost, Route(ManagerRouteConstants.NodeHasBeenInitialized)]
+		public IHttpActionResult NodeInitialized([FromBody] Uri nodeUri)
+		{
+			_nodeManager.FreeJobIfAssingedToNode(nodeUri);
+			_nodeManager.AddIfNeeded(nodeUri);
+
+			LogHelper.LogInfoWithLineNumber(Logger,
+			                                WhoAmI + ": Received init from Node. Node Uri : ( " + nodeUri + " )");
+
+			return Ok();
+		}
+
+		[HttpGet, Route(ManagerRouteConstants.Ping)]
+		public IHttpActionResult Ping()
+		{
+			return Ok();
+		}
 	}
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Configuration;
 using Autofac;
 using ManagerTest.Fakes;

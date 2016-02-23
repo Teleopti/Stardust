@@ -5,106 +5,106 @@ using Stardust.Manager.Helpers;
 
 namespace ManagerTest
 {
-    [TestFixture]
-    public class NodeUriBuilderHelperTests
-    {
-        private NodeUriBuilderHelper NodeUriBuilderHelperToTest { get; set; }
+	[TestFixture]
+	public class NodeUriBuilderHelperTests
+	{
+		[SetUp]
+		public void Setup()
+		{
+			Guid = Guid.NewGuid();
 
-        private UriBuilder UriBuilder { get; set; }
+			UriToTest = "http://localhost:9000";
 
-        private Guid Guid { get; set; }
+			UriBuilder = new UriBuilder(UriToTest)
+			{
+				Path = NodeRouteConstants.Job
+			};
 
-        private string UriToTest { get; set; }
+			JobTemplateUri = UriBuilder.Uri;
 
-        private Uri JobTemplateUri { get; set; }
+			UriBuilder.Path = NodeRouteConstants.CancelJob;
+			CancelJobTemplateUri = UriBuilder.Uri;
 
-        private Uri CancelJobTemplateUri { get; set; }
+			UriBuilder.Path =
+				NodeRouteConstants.CancelJob.Replace(NodeRouteConstants.JobIdOptionalParameter,
+				                                     Guid.ToString());
 
-        private Uri CancelJobUri { get; set; }
+			CancelJobUri = UriBuilder.Uri;
+		}
 
-        private Uri CancelJobTUri { get; set; }
+		private NodeUriBuilderHelper NodeUriBuilderHelperToTest { get; set; }
 
-        [SetUp]
-        public void Setup()
-        {
-            Guid = Guid.NewGuid();
+		private UriBuilder UriBuilder { get; set; }
 
-            UriToTest = "http://localhost:9000";
+		private Guid Guid { get; set; }
 
-            UriBuilder = new UriBuilder(UriToTest)
-            {
-                Path = NodeRouteConstants.Job
-            };
+		private string UriToTest { get; set; }
 
-            JobTemplateUri = UriBuilder.Uri;
+		private Uri JobTemplateUri { get; set; }
 
-            UriBuilder.Path = NodeRouteConstants.CancelJob;
-            CancelJobTemplateUri = UriBuilder.Uri;
+		private Uri CancelJobTemplateUri { get; set; }
 
-            UriBuilder.Path =
-                NodeRouteConstants.CancelJob.Replace(NodeRouteConstants.JobIdOptionalParameter,
-                                                     Guid.ToString());
+		private Uri CancelJobUri { get; set; }
 
-            CancelJobUri = UriBuilder.Uri;
-        }
+		private Uri CancelJobTUri { get; set; }
 
-        [Test]
-        [ExpectedException(typeof (System.UriFormatException))]
-        public void ShouldThrowExceptionWhenConstructorArgumentIsStringEmpty()
-        {
-            NodeUriBuilderHelperToTest = new NodeUriBuilderHelper(string.Empty);
-        }
+		[Test]
+		public void ShouldInstantiateWhenConstructorArgumentStringIsIvalidUri()
+		{
+			NodeUriBuilderHelperToTest = new NodeUriBuilderHelper(UriToTest);
 
-        [Test]
-        [ExpectedException(typeof (System.UriFormatException))]
-        public void ShouldThrowExceptionWhenConstructorArgumentStringIsIvalidUri()
-        {
-            NodeUriBuilderHelperToTest = new NodeUriBuilderHelper("invalid uri");
-        }
+			Assert.IsNotNull(NodeUriBuilderHelperToTest);
+		}
 
-        [Test]
-        public void ShouldInstantiateWhenConstructorArgumentStringIsIvalidUri()
-        {
-            NodeUriBuilderHelperToTest = new NodeUriBuilderHelper(UriToTest);
+		[Test]
+		public void ShouldReturnCorrectCancelJobTemplateUri()
+		{
+			NodeUriBuilderHelperToTest = new NodeUriBuilderHelper(UriToTest);
 
-            Assert.IsNotNull(NodeUriBuilderHelperToTest);
-        }
+			Assert.IsTrue(NodeUriBuilderHelperToTest.GetCancelJobTemplateUri() == CancelJobTemplateUri);
+		}
 
-        [Test]
-        public void ShouldReturnCorrectUriInformation()
-        {
-            var uri = new Uri(UriToTest);
+		[Test]
+		public void ShouldReturnCorrectCancelJobUri()
+		{
+			NodeUriBuilderHelperToTest = new NodeUriBuilderHelper(UriToTest);
 
-            NodeUriBuilderHelperToTest = new NodeUriBuilderHelper(UriToTest);
+			Assert.IsTrue(NodeUriBuilderHelperToTest.GetCancelJobUri(Guid) == CancelJobUri);
+		}
 
-            Assert.IsTrue(NodeUriBuilderHelperToTest.GetHostName() == uri.Host);
-            Assert.IsTrue(NodeUriBuilderHelperToTest.GetScheme() == uri.Scheme);
-            Assert.IsTrue(NodeUriBuilderHelperToTest.GetPort() == uri.Port);
-            Assert.IsTrue(NodeUriBuilderHelperToTest.GetLocationUri() == uri);
-        }
+		[Test]
+		public void ShouldReturnCorrectJobTemplateUri()
+		{
+			NodeUriBuilderHelperToTest = new NodeUriBuilderHelper(UriToTest);
 
-        [Test]
-        public void ShouldReturnCorrectJobTemplateUri()
-        {
-            NodeUriBuilderHelperToTest = new NodeUriBuilderHelper(UriToTest);
+			Assert.IsTrue(NodeUriBuilderHelperToTest.GetJobTemplateUri() == JobTemplateUri);
+		}
 
-            Assert.IsTrue(NodeUriBuilderHelperToTest.GetJobTemplateUri() == JobTemplateUri);
-        }
+		[Test]
+		public void ShouldReturnCorrectUriInformation()
+		{
+			var uri = new Uri(UriToTest);
 
-        [Test]
-        public void ShouldReturnCorrectCancelJobTemplateUri()
-        {
-            NodeUriBuilderHelperToTest = new NodeUriBuilderHelper(UriToTest);
+			NodeUriBuilderHelperToTest = new NodeUriBuilderHelper(UriToTest);
 
-            Assert.IsTrue(NodeUriBuilderHelperToTest.GetCancelJobTemplateUri() == CancelJobTemplateUri);
-        }
+			Assert.IsTrue(NodeUriBuilderHelperToTest.GetHostName() == uri.Host);
+			Assert.IsTrue(NodeUriBuilderHelperToTest.GetScheme() == uri.Scheme);
+			Assert.IsTrue(NodeUriBuilderHelperToTest.GetPort() == uri.Port);
+			Assert.IsTrue(NodeUriBuilderHelperToTest.GetLocationUri() == uri);
+		}
 
-        [Test]
-        public void ShouldReturnCorrectCancelJobUri()
-        {
-            NodeUriBuilderHelperToTest = new NodeUriBuilderHelper(UriToTest);
+		[Test]
+		[ExpectedException(typeof (UriFormatException))]
+		public void ShouldThrowExceptionWhenConstructorArgumentIsStringEmpty()
+		{
+			NodeUriBuilderHelperToTest = new NodeUriBuilderHelper(string.Empty);
+		}
 
-            Assert.IsTrue(NodeUriBuilderHelperToTest.GetCancelJobUri(Guid) == CancelJobUri);
-        }
-    }
+		[Test]
+		[ExpectedException(typeof (UriFormatException))]
+		public void ShouldThrowExceptionWhenConstructorArgumentStringIsIvalidUri()
+		{
+			NodeUriBuilderHelperToTest = new NodeUriBuilderHelper("invalid uri");
+		}
+	}
 }
