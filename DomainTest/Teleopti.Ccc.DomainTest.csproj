@@ -222,6 +222,7 @@
     <Compile Include="Intraday\FetchSkillAreaTest.cs" />
     <Compile Include="Intraday\FetchSkillInIntradayTest.cs" />
     <Compile Include="Logon\DataSourceAspectAuthenticationKeyTest.cs" />
+    <Compile Include="Optimization\AgentsToSkillGroupsTest.cs" />
     <Compile Include="Optimization\DayOffOptimizationPreferenceProviderTest.cs" />
     <Compile Include="Optimization\Filter\FindFilterTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\DayOffOptimizationLockDaysTest.cs" />

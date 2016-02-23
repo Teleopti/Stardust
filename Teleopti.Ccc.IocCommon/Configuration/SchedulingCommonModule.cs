@@ -344,6 +344,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<IntradayOptimizerContainer>().As<IIntradayOptimizerContainer>().InstancePerLifetimeScope();
 				builder.RegisterType<ReturnValueForStuffCheckingSpecificDayOldBehavior>().As<IIntradatOptimizeOneDay_HackForToggle37049_RemoveMeLater>().SingleInstance();
 			}
+			builder.RegisterType<AgentsToSkillGroups>().SingleInstance();
 			builder.RegisterType<IntradayOptmizerLimiter>().As<IIntradayOptimizerLimiter>().AsSelf().SingleInstance();
 			builder.RegisterType<IntradayOptimizeOnDayCallBackDoNothing>().As<IIntradayOptimizeOneDayCallback>().SingleInstance();
 		}

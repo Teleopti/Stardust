@@ -113,6 +113,11 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 			return personList;
 		}
 
+		public IEnumerable<IEnumerable<IPerson>> GetSkillGroupTree()
+		{
+			return GetKeys().Select(GetPersonsForSkillGroupKey);
+		}
+
 		public int GetNumberOfAgentsInSkillGroupFromPerson(IPerson person)
 		{
 			string key;
