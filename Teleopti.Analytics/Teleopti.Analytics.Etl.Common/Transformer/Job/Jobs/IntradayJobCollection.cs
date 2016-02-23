@@ -19,8 +19,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new DimQualityQuestLoadJobStep(jobParameters));          // BU independent
 			Add(new RaptorQueueSynchronizationStep(jobParameters));
 			Add(new RaptorAgentLogOnSynchronizationStep(jobParameters));
-			Add(new StagePersonJobStep(jobParameters));
-			Add(new StageAgentSkillJobStep(jobParameters));
+		    if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162))
+            {
+		        Add(new StagePersonJobStep(jobParameters));
+		    }
+		    Add(new StageAgentSkillJobStep(jobParameters));
 			Add(new StageStateGroupJobStep(jobParameters));
 			Add(new StageActivityJobStep(jobParameters));
 			Add(new StageAbsenceJobStep(jobParameters));
@@ -47,13 +50,19 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			// DIM AND BRIDGE TABLES AND QUEUE/AGENT SYNC
 			Add(new DimBusinessUnitJobStep(jobParameters));
 			Add(new DimScorecardJobStep(jobParameters));
-			Add(new DimSiteJobStep(jobParameters));
-			Add(new DimTeamJobStep(jobParameters));
-			Add(new DimSkillJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162))
+		    {
+		        Add(new DimSiteJobStep(jobParameters));
+		        Add(new DimTeamJobStep(jobParameters));
+		    }
+		    Add(new DimSkillJobStep(jobParameters));
 			Add(new DimSkillSetJobStep(jobParameters));
 			Add(new DimStateGroupJobStep(jobParameters));
-			Add(new DimPersonJobStep(jobParameters));
-			Add(new DimActivityJobStep(jobParameters));
+            if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162))
+		    {
+		        Add(new DimPersonJobStep(jobParameters));
+		    }
+		    Add(new DimActivityJobStep(jobParameters));
 			Add(new DimAbsenceJobStep(jobParameters));
 			Add(new DimScenarioJobStep(jobParameters));
 			Add(new DimShiftCategoryJobStep(jobParameters));

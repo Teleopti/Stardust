@@ -118,5 +118,76 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
             // More data to check?
         }
+
+        [Test]
+        public void AddNewPersonInApp_AfterIntradayToggleOn_NoPersonPeriodInAnalytics()
+        {
+            var analyticsDataFactory = new AnalyticsDataFactory();
+            var dates = new CurrentWeekDates();
+
+            analyticsDataFactory.Setup(new EternityAndNotDefinedDate());
+            analyticsDataFactory.Setup(dates);
+            analyticsDataFactory.Persist();
+
+            const string timeZoneId = "W. Europe Standard Time";
+            var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
+
+            var raptorRepository = new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, "");
+            var fakeContainerHolder = new FakeContainerHolder();
+            fakeContainerHolder.EnableToggle(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162);
+
+            var jobParameters = new JobParameters(
+                dateList, 1, "UTC", 15, "", "False",
+                CultureInfo.CurrentCulture, fakeContainerHolder
+                , false
+                )
+            {
+                Helper = new JobHelperForTest(raptorRepository, null),
+                DataSource = SqlCommands.DataSourceIdGet(datasourceName)
+            };
+
+            // When adding a person in app db
+            var personName = "Test person";
+            var step = new StagePersonJobStep(jobParameters);
+            var site = new SiteConfigurable { BusinessUnit = TestState.BusinessUnit.Name, Name = "Västerhaninge" };
+            var team = new TeamConfigurable { Name = "Yellow", Site = "Västerhaninge" };
+            var contract = new ContractConfigurable { Name = "Kontrakt" };
+            var contractSchedule = new ContractScheduleConfigurable { Name = "Kontraktsschema" };
+            var partTimePercentage = new PartTimePercentageConfigurable { Name = "ppp" };
+
+            Data.Apply(site);
+            Data.Apply(team);
+            Data.Apply(contract);
+            Data.Apply(contractSchedule);
+            Data.Apply(partTimePercentage);
+
+            var personPeriodConfiguable = new PersonPeriodConfigurable
+            {
+                BudgetGroup = "",
+                Contract = contract.Name,
+                ContractSchedule = contractSchedule.ContractSchedule.Description.Name,
+                PartTimePercentage = partTimePercentage.Name,
+                Team = team.Name,
+                StartDate = DateTime.Today,
+                ExternalLogon = ""
+            };
+
+            var personApp = TestState.TestDataFactory.Person(personName).Person;
+            Data.Person(personName).Apply(personPeriodConfiguable);
+
+            // When Run an Intraday job (or event depending on toggle?)
+            StepRunner.RunIntraday(jobParameters);
+
+            // Question which other tables should have been affected as well. Skills? Teams? Sites? bridge_group_page_person?
+            var repo = new AnalyticsPersonRepository();
+
+            var analyticsPersonPeriods =
+                repo.GetPersonPeriods(personApp.Id.GetValueOrDefault());
+
+            Assert.AreEqual(0, analyticsPersonPeriods.Count(),
+                "Person should not exist in Analytics");
+
+            // More data to check?
+        }
     }
 }
