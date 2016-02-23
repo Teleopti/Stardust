@@ -91,8 +91,9 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
             // Question which other tables should have been affected as well. Skills? Teams? Sites? bridge_group_page_person?
             var repo = new AnalyticsPersonRepository();
+            
             var analyticsPersonPeriods =
-                repo.GetPersonPeriods(personApp.Id.Value == null ? Guid.Empty : personApp.Id.Value);
+                repo.GetPersonPeriods(personApp.Id.GetValueOrDefault());
 
             Assert.AreEqual(1, analyticsPersonPeriods.Count(),
                 "Not correct number of person period in analytics database.");
