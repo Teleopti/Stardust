@@ -8,11 +8,13 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using Autofac;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
@@ -33,6 +35,7 @@ using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Ccc.Win.Meetings;
 using Teleopti.Ccc.Win.Optimization;
 using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
+using Teleopti.Ccc.Win.Scheduling.IslandScheduling;
 using Teleopti.Ccc.Win.Scheduling.LockMenuBuilders;
 using Teleopti.Ccc.Win.Scheduling.PropertyPanel;
 using Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals;
@@ -94,6 +97,7 @@ using Teleopti.Ccc.WpfControls.Controls.Notes;
 using Teleopti.Ccc.WpfControls.Controls.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Task = Teleopti.Ccc.Domain.Forecasting.Task;
 
 #endregion
 
@@ -207,6 +211,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private DateTime _lastSaved = DateTime.Now;
 		private SchedulingScreenPermissionHelper _permissionHelper;
 		private readonly CutPasteHandlerFactory _cutPasteHandlerFactory;
+		private readonly IComponentContext _componentContext;
 		private Form _mainWindow;
 		private bool _cancelButtonPressed;
 		private IDaysOffPreferences _daysOffPreferences;
@@ -359,6 +364,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			: this()
 		{
 			Application.DoEvents();
+			_componentContext = componentContext;
 			_mainWindow = ownerWindow;
 
 			_container = componentContext.Resolve<ILifetimeScope>().BeginLifetimeScope();
@@ -1099,7 +1105,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_scheduleView == null)
 				return;
 
-			if (_scheduleView.AllSelectedDates().Count == 0)
+			var selectedSchedules = _scheduleView.SelectedSchedules();
+			if (!selectedSchedules.Any())
 				return;
 
 			IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
@@ -1114,7 +1121,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					Cursor = Cursors.WaitCursor;
 					disableAllExceptCancelInRibbon();
 					_backgroundWorkerRunning = true;
-					_backgroundWorkerOptimization.RunWorkerAsync(new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
+					_backgroundWorkerOptimization.RunWorkerAsync(new SchedulingAndOptimizeArgument(selectedSchedules)
 					{
 						OptimizationMethod = OptimizationMethod.BackToLegalState,
 						DaysOffPreferences = daysOffPreferences
@@ -1129,7 +1136,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (_scheduleView != null)
 			{
-				if (_scheduleView.AllSelectedDates().Count == 0)
+				var selectedSchedules = _scheduleView.SelectedSchedules();
+				if (!selectedSchedules.Any())
 					return;
 
 				using (var optimizationPreferencesDialog =
@@ -1137,11 +1145,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 						_schedulerState.CommonStateHolder.ActiveScheduleTags,
 						_schedulerState.CommonStateHolder.ActiveActivities,
 						SchedulerState.DefaultSegmentLength, _schedulerState.Schedules,
-						_scheduleView.AllSelectedPersons(), _daysOffPreferences))
+						_scheduleView.AllSelectedPersons(selectedSchedules), _daysOffPreferences))
 				{
 					if (optimizationPreferencesDialog.ShowDialog(this) == DialogResult.OK)
 					{
-						var optimizationPreferences = new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
+						var optimizationPreferences = new SchedulingAndOptimizeArgument(selectedSchedules)
 						{
 							OptimizationMethod = OptimizationMethod.Optimize,
 							DaysOffPreferences = _daysOffPreferences
@@ -1831,7 +1839,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_scenario.DefaultScenario)
 				toolStripMenuItemViewHistory.Enabled = _isAuditingSchedules;
 
-			toolStripMenuItemSwitchToViewPointOfSelectedAgent.Enabled = _scheduleView.SelectedSchedules().Count > 0;
+			toolStripMenuItemSwitchToViewPointOfSelectedAgent.Enabled = _scheduleView.SelectedSchedules().Any();
 
 			foreach (ToolStripMenuItem downItem in toolStripMenuItemViewPointTimeZone.DropDownItems)
 			{
@@ -2302,7 +2310,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						_currentIntraDayDate = selectedDate;
 					}
 
-					if (selectedSchedules.Count > 0)
+					if (selectedSchedules.Any())
 						_dateNavigateControl.SetSelectedDateNoInvoke(selectedSchedules[0].DateOnlyAsPeriod.DateOnly);
 
 					_lastGridSelection = e.Range;
@@ -2958,7 +2966,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (_scheduleView != null)
 			{
-				if (_scheduleView.AllSelectedDates().Count == 0)
+				var selectedSchedules = _scheduleView.SelectedSchedules();
+				if (!selectedSchedules.Any())
 					return;
 
 				_optimizerOriginalPreferences.SchedulingOptions.ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff;
@@ -2970,7 +2979,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					if (backToLegalShift)
 					{
 						startBackgroundScheduleWork(_backgroundWorkerScheduling,
-							new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
+							new SchedulingAndOptimizeArgument(selectedSchedules)
 							{
 								OptimizationMethod = OptimizationMethod.BackToLegalShift
 							}, true);
@@ -2989,7 +2998,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 						{
 							options.Refresh();
 							startBackgroundScheduleWork(_backgroundWorkerScheduling,
-								new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()), true);
+								new SchedulingAndOptimizeArgument(selectedSchedules), true);
+
 						}
 					}
 				}
@@ -3005,13 +3015,57 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
+		//POC that scheduling getting faster if running islands in paralell
+		private async void runIslandScheduling()
+		{
+			var creator = new VirtualSkillGroupsCreator();
+			var skillGroupsCreatorResult = creator.GroupOnDate(_scheduleView.SelectedDateLocal(), _schedulerState.AllPermittedPersons);
+			var skillGroupIslandsAnalyzer = new SkillGroupIslandsAnalyzer();
+			var islandList = skillGroupIslandsAnalyzer.FindIslands(skillGroupsCreatorResult);
+			var factory = new TaskFactory<IScheduleDictionary>();
+			var tasks = new System.Threading.Tasks.Task<IScheduleDictionary>[islandList.Count];
+			for (int i = 0; i < islandList.Count; i++)
+			{
+				var islandLifeTimeScope = new IslandLifeTimeScope(_componentContext);
+				int i1 = i;
+				tasks[i1] = factory.StartNew(
+					y =>
+						islandLifeTimeScope.ScheduleAsIsland(skillGroupsCreatorResult, islandList[i1], _optimizerOriginalPreferences,
+							_scheduleView.SelectedSchedules(),
+							_optimizationPreferences, _schedulerState), TaskCreationOptions.LongRunning);
+			}
+			await System.Threading.Tasks.Task.WhenAll(tasks);
+			var consolidateTasks = new System.Threading.Tasks.Task[islandList.Count];
+			for (int index = 0; index < tasks.Length; index++)
+			{
+				var index1 = index;
+				var task = tasks[index1];
+				consolidateTasks[index1] = System.Threading.Tasks.Task.Factory.StartNew(
+					() => new IslandScheduleConsolidater().Consolidate(_schedulerState.Schedules, task.Result), TaskCreationOptions.LongRunning);
+
+			}
+			await System.Threading.Tasks.Task.WhenAll(consolidateTasks);
+
+			for (int index = 0; index < tasks.Length; index++)
+			{
+				tasks[index].Dispose();
+				consolidateTasks[index].Dispose();
+			}
+
+			//Next line will start work on another background thread.
+			//No code after next line please.
+			_backgroundWorkerRunning = false;
+			RecalculateResources();
+		}
+
 		private void scheduleHourlyEmployees()
 		{
 			if (_backgroundWorkerScheduling.IsBusy) return;
 
 			if (_scheduleView != null)
 			{
-				if (_scheduleView.AllSelectedDates().Count == 0)
+				var selectedSchedules = _scheduleView.SelectedSchedules();
+				if (!selectedSchedules.Any())
 					return;
 
 				_optimizerOriginalPreferences.SchedulingOptions.ScheduleEmploymentType = ScheduleEmploymentType.HourlyStaff;
@@ -3028,7 +3082,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						_optimizerOriginalPreferences.SchedulingOptions.OnlyShiftsWhenUnderstaffed = true;
 						Refresh();
 						startBackgroundScheduleWork(_backgroundWorkerScheduling,
-							new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()), true);
+							new SchedulingAndOptimizeArgument(selectedSchedules), true);
 					}
 				}
 			}
@@ -3067,8 +3121,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			_backgroundWorkerRunning = true;
 			backgroundWorker.RunWorkerAsync(argument);
-
-
+			//runIslandScheduling();
 		}
 
 		private void _backgroundWorkerScheduling_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -4463,7 +4516,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				_grid.ContextMenuStrip = null;
 				scheduleParts = _scheduleView.SelectedSchedules();
-				selectedPersons = new List<IPerson>(_scheduleView.AllSelectedPersons());
+				selectedPersons = new List<IPerson>(_scheduleView.AllSelectedPersons(scheduleParts));
 				sortCommand = _scheduleView.Presenter.SortCommand;
 				currentSortColumn = _scheduleView.Presenter.CurrentSortColumn;
 				isAscendingSort = _scheduleView.Presenter.IsAscendingSort;
@@ -4585,14 +4638,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (level == ZoomLevel.DayView)
 			{
-
 				_grid.Model.Selections.Clear(true);
 				_grid.Model.Selections.SelectRange(
 					GridRangeInfo.Cell(_grid.CurrentCell.RowIndex, _grid.CurrentCell.ColIndex), true);
 
 				if (_scheduleView != null)
 				{
-					scheduleParts = _scheduleView.SelectedSchedules();
 					_scheduleView.SetSelectionFromParts(scheduleParts);
 				}
 			}
@@ -6363,19 +6414,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripMenuItemFindMatching_Click(object sender, EventArgs e)
 		{
 			IScheduleDay selected;
-			if (tryGetFirstSelectedSchedule(out selected))
+			if (tryGetFirstSelectedSchedule(_scheduleView.SelectedSchedules(), out selected))
 			{
 				findMatching(selected);
 			}
 		}
 
-		private bool tryGetFirstSelectedSchedule(out IScheduleDay scheduleDay)
+		private bool tryGetFirstSelectedSchedule(IEnumerable<IScheduleDay> selectedSchedules, out IScheduleDay scheduleDay)
 		{
 			scheduleDay = null;
-			var selectedSchedules = _scheduleView.SelectedSchedules();
-			if (selectedSchedules.Count == 0) return false;
+			if (!selectedSchedules.Any()) 
+				return false;
 
-			scheduleDay = selectedSchedules[0];
+			scheduleDay = selectedSchedules.First();
 			return true;
 		}
 
@@ -6428,7 +6479,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (!_scenario.DefaultScenario || !_isAuditingSchedules) return;
 			IScheduleDay selected;
-			if (!tryGetFirstSelectedSchedule(out selected)) return;
+			if (!tryGetFirstSelectedSchedule(_scheduleView.SelectedSchedules(), out selected)) return;
 
 			bool isLocked = _gridLockManager.HasLocks && _gridLockManager.Gridlocks(selected) != null;
 
@@ -6545,24 +6596,26 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void addPreferenceToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			IScheduleDay selectedDay;
-			if (!tryGetFirstSelectedSchedule(out selectedDay)) return;
+			var selectedSchedules = _scheduleView.SelectedSchedules();
+			if (!tryGetFirstSelectedSchedule(selectedSchedules, out selectedDay)) return;
 
 			using (var view = new AgentPreferenceView(selectedDay, _schedulerState))
 			{
 				view.ShowDialog(this);
-				updateRestrictions(_scheduleView.SelectedSchedules()[0]);
+				updateRestrictions(selectedSchedules.First());
 			}
 		}
 
 		private void addStudentAvailabilityToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			IScheduleDay selectedDay;
-			if (!tryGetFirstSelectedSchedule(out selectedDay)) return;
+			var selectedSchedules = _scheduleView.SelectedSchedules();
+			if (!tryGetFirstSelectedSchedule(selectedSchedules, out selectedDay)) return;
 
 			using (var view = new AgentStudentAvailabilityView(selectedDay, _schedulerState.SchedulingResultState))
 			{
 				view.ShowDialog(this);
-				updateRestrictions(_scheduleView.SelectedSchedules()[0]);
+				updateRestrictions(selectedSchedules.First());
 			}
 		}
 
@@ -6581,7 +6634,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void addOvertimeAvailabilityToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			IScheduleDay selectedDay;
-			if (!tryGetFirstSelectedSchedule(out selectedDay)) return;
+			if (!tryGetFirstSelectedSchedule(_scheduleView.SelectedSchedules(), out selectedDay)) return;
 
 			using (var view = new AgentOvertimeAvailabilityView(selectedDay, _schedulerState.SchedulingResultState))
 			{
@@ -6668,7 +6721,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripMenuItemSwitchViewPointToTimeZoneOfSelectedAgent_Click(object sender, EventArgs e)
 		{
 			IScheduleDay scheduleDay;
-			if (tryGetFirstSelectedSchedule(out scheduleDay))
+			if (tryGetFirstSelectedSchedule(_scheduleView.SelectedSchedules(), out scheduleDay))
 			{
 				TimeZoneGuard.Instance.TimeZone = scheduleDay.Person.PermissionInformation.DefaultTimeZone();
 
@@ -6732,7 +6785,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 					MultiplicatorDefinitionSet.Where(set => set.MultiplicatorType == MultiplicatorType.Overtime).ToList();
 				var resolution = 15;
 				IScheduleDay scheduleDay;
-				if (tryGetFirstSelectedSchedule(out scheduleDay))
+				var selectedSchedules = _scheduleView.SelectedSchedules();
+				if (tryGetFirstSelectedSchedule(selectedSchedules, out scheduleDay))
 				{
 					var person = scheduleDay.Person;
 					if (scheduleDay.DateOnlyAsPeriod.DateOnly < person.TerminalDate)
@@ -6754,7 +6808,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					if (options.ShowDialog(this) != DialogResult.OK) return;
 					options.Refresh();
 					startBackgroundScheduleWork(_backgroundWorkerOvertimeScheduling,
-						new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()) {OvertimePreferences = options.Preferences},
+						new SchedulingAndOptimizeArgument(selectedSchedules) { OvertimePreferences = options.Preferences },
 						true);
 				}
 			}

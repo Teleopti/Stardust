@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.IslandScheduling;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -20,9 +21,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	/// <summary>
 	/// Class for holding winclient state
 	/// </summary>
-	public class SchedulerStateHolder : ISchedulerStateHolder, IClearReferredShiftTradeRequests
+	public class SchedulerStateHolder : ISchedulerStateHolder, IClearReferredShiftTradeRequests, IIslandSchedulerStateHolder
 	{
-		private readonly ISchedulingResultStateHolder _schedulingResultState;
+		private ISchedulingResultStateHolder _schedulingResultState;
 		private readonly IList<IPerson> _allPermittedPersons;
 		private readonly ICollection<DateOnly> _daysToResourceCalculate = new HashSet<DateOnly>();
 		private DateTimePeriod? _loadedPeriod;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private CommonNameDescriptionSetting _commonNameDescription = new CommonNameDescriptionSetting();
 		private CommonNameDescriptionSettingScheduleExport _commonNameDescriptionScheduleExport = new CommonNameDescriptionSettingScheduleExport();
 		private DefaultSegment _defaultSegment = new DefaultSegment();
-		private readonly ICommonStateHolder _commonStateHolder;
+		private ICommonStateHolder _commonStateHolder;
         private IDictionary<Guid, IPerson> _filteredAgents;
 		private IDictionary<Guid, IPerson> _filteredPersonsOvertimeAvailability;
 		private IDictionary<Guid, IPerson> _filteredPersonsHourlyAvailability;
@@ -467,6 +468,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public bool HourlyAvailabilityFilter()
 		{
 			return _filterOnHourlyAvailability;
+		}
+
+		public void SetCommonStateHolder(ICommonStateHolder commonStateHolder)
+		{
+			_commonStateHolder = commonStateHolder;
 		}
 	}
 }

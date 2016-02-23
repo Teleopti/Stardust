@@ -49,5 +49,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         void GridClipboardPaste(PasteOptions options, IUndoRedoContainer undoRedo);
 
         ICollection<DateOnly> AllSelectedDates();
+	    ICollection<DateOnly> AllSelectedDates(IEnumerable<IScheduleDay> selectedSchedules);
     }
 }

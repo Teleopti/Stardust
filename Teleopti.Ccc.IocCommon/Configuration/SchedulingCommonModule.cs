@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.IslandScheduling;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
@@ -95,6 +96,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CommonStateHolder>().As<ICommonStateHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<PeriodExctractorFromScheduleParts>().SingleInstance();
 
+			builder.RegisterType<IslandScheduler>().As<IslandScheduler>().InstancePerLifetimeScope();
 			builder.RegisterModule<WeeklyRestSolverModule>();
 			builder.RegisterModule<EqualNumberOfCategoryFairnessModule>();
 			

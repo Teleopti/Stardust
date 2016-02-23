@@ -1221,15 +1221,21 @@ namespace Teleopti.Ccc.Win.Scheduling
             TheGrid.CurrentCell.MoveTo(TheGrid.Rows.HeaderCount + 1, (int)ColumnType.StartScheduleColumns);
         }
 
+		public virtual ICollection<DateOnly> AllSelectedDates(IEnumerable<IScheduleDay> selectedSchedules)
+	    {
+			ICollection<DateOnly> ret = new HashSet<DateOnly>();
+			foreach (IScheduleDay part in selectedSchedules)
+			{
+				DateOnly dateOnly = part.DateOnlyAsPeriod.DateOnly;
+				ret.Add(dateOnly);
+			}
+			return ret;
+	    }
+
         public virtual ICollection<DateOnly> AllSelectedDates()
         {
-            ICollection<DateOnly> ret = new HashSet<DateOnly>();
-            foreach (IScheduleDay part in SelectedSchedules())
-            {
-                DateOnly dateOnly = part.DateOnlyAsPeriod.DateOnly;
-                ret.Add(dateOnly);
-            }
-            return ret;
+	        var selectedSchedules = SelectedSchedules();
+	        return AllSelectedDates(selectedSchedules);
         }
 
 	    public virtual IEnumerable<IPerson> AllSelectedPersons(IEnumerable<IScheduleDay> selectedSchedules)

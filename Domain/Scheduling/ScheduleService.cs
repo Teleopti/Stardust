@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private readonly Hashtable _finderResults = new Hashtable();
 
         public ScheduleService(
-            IWorkShiftFinderService finderService, 
+			IWorkShiftFinderService finderService, 
             IMatrixListFactory scheduleMatrixListCreator,
             IShiftCategoryLimitationChecker shiftCategoryLimitationChecker, 
             IEffectiveRestrictionCreator effectiveRestrictionCreator)

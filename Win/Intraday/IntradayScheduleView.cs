@@ -98,7 +98,12 @@ namespace Teleopti.Ccc.Win.Intraday
             return new List<DateOnly>();
         }
 
-        public void InvalidateSelectedRows(IEnumerable<IScheduleDay> schedules)
+	    public ICollection<DateOnly> AllSelectedDates(IEnumerable<IScheduleDay> selectedSchedules)
+	    {
+			return new List<DateOnly>();
+	    }
+
+	    public void InvalidateSelectedRows(IEnumerable<IScheduleDay> schedules)
         {
             foreach (IScheduleDay schedulePart in schedules)
             {
