@@ -190,6 +190,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			newAbsenceRequestConsumer.Consume(new NewAbsenceRequestCreated() { PersonRequestId = newRequest.Id.Value });
 
 			Assert.IsTrue(existingDeniedRequest.IsApproved);
+			Assert.IsNullOrEmpty (existingDeniedRequest.DenyReason);
 			//new request should be denied as is a request for the same day as the accepted absence request
 			Assert.IsTrue(newRequest.IsAutoDenied);
 		}
