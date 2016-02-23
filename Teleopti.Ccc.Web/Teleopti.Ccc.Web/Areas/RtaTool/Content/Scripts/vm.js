@@ -8,19 +8,20 @@
 	rta
 ) {
 
-	return function (fetchAgents) {
+	return function () {
 		var self = this;
 
-		fetchAgents = fetchAgents || rta.FetchAgents;
-
-		self.agents = ko.observableArray();
 		self.authenticationKey = ko.observable('!#¤atAbgT%');
+		self.error = ko.observable();
 
-		ko.utils.arrayForEach(fetchAgents(), function (data) {
-			var agent = new agentvm();
-			agent.fill(data, self.authenticationKey);
-
-			self.agents().push(agent);
+		self.agents = ko.computed(function () {
+			var agents = [];
+			ko.utils.arrayForEach(rta.Agents(), function (a) {
+				a.authenticationKey = self.authenticationKey;
+				a.error = self.error;
+				agents.push(new agentvm(a));
+			});
+			return agents;
 		});
 		
 	};

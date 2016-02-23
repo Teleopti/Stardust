@@ -1828,16 +1828,12 @@
     <Content Include="Areas\PerformanceTool\Content\Scripts\vm_test.js" />
     <Content Include="Areas\PerformanceTool\Views\Application\index.aspx" />
     <Content Include="Areas\RtaTool\Content\Scripts\agentvm.js" />
-    <Content Include="Areas\RtaTool\Content\Scripts\agentvm_test.js" />
     <Content Include="Areas\RtaTool\Content\Scripts\main.js" />
     <Content Include="Areas\RtaTool\Content\Scripts\require\configuration.js" />
     <Content Include="Areas\RtaTool\Content\Scripts\rta.js" />
     <Content Include="Areas\RtaTool\Content\Scripts\statecodevm.js" />
-    <Content Include="Areas\RtaTool\Content\Scripts\Tests.html" />
-    <Content Include="Areas\RtaTool\Content\Scripts\tests.main.js" />
     <Content Include="Areas\RtaTool\Content\Scripts\view.js" />
     <Content Include="Areas\RtaTool\Content\Scripts\vm.js" />
-    <Content Include="Areas\RtaTool\Content\Scripts\vm_test.js" />
     <Content Include="Areas\RtaTool\Views\Application\Index.aspx" />
     <Content Include="Areas\SSO\Content\Css\login.css" />
     <Content Include="Areas\SSO\Content\Css\Site.css" />

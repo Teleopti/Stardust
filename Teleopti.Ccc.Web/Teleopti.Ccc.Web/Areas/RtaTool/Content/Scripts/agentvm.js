@@ -10,48 +10,23 @@
 	statecodevm
 ) {
 
-	return function (rtaServerCall, rtaStateCodes) {
+	return function (data) {
 		var self = this;
 
-		self.name = ko.observable();
-		self.usercode = ko.observable();
-		self.authenticationKey = ko.observable();
-		
-		rtaServerCall = rtaServerCall || rta.ServerCall;
-		rtaStateCodes = rtaStateCodes || rta.FetchStateCodes;
+		self.name = ko.observable(data.name);
+		self.usercode = ko.observable(data.usercode);
 
-		self.statecodes = ko.observableArray();
-
-
-		ko.utils.arrayForEach(rtaStateCodes(), function (data) {
-			var svm = new statecodevm(data, function () {
-				var state = makeAgentState(data.code, data.loggedon);
-				rtaServerCall(state);
+		self.statecodes = ko.computed(function() {
+			var codes = [];
+			ko.utils.arrayForEach(rta.StateCodes(), function(c) {
+				c.authenticationKey = data.authenticationKey;
+				c.error = data.error;
+				c.usercode = data.usercode;
+				codes.push(new statecodevm(c));
 			});
-			self.statecodes().push(svm);
+			return codes;
 		});
 
-		self.fill = function (agent, authenticationKey) {
-			self.name(agent.name);
-			self.usercode(agent.usercode);
-			self.authenticationKey = authenticationKey;
-		}
-
-		var makeAgentState = function (stateCode, isLoggedOn) {
-			return  {
-				AuthenticationKey: self.authenticationKey(),
-				UserCode: self.usercode(),
-				StateCode: stateCode,
-				StateDescription: stateCode,
-				IsLoggedOn: isLoggedOn,
-				SecondsInState: 0,
-				TimeStamp: moment.utc().format('YYYY-MM-DD HH:mm:ss'),
-				PlatformTypeId: '00000000-0000-0000-0000-000000000000',
-				SourceId: 1,
-				BatchId: moment.utc().format('YYYY-MM-DD HH:mm:ss'),
-				IsSnapshot: false
-			};
-		}
 	};
 });
 

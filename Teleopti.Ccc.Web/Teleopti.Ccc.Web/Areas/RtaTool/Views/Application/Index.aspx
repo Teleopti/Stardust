@@ -29,22 +29,21 @@
     <!--[if lt IE 7]>
         <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this application.</p>
     <![endif]-->
-		<h3>RTA Tool</h3>
-		<form >
-				<input type="text" data-bind="value: authenticationKey" />
-		</form>
-		<table class="table table-striped">
-			<tbody data-bind="foreach: agents">
-				<tr>
-					<td>
-						<div class="agent-name" data-bind="text: name"></div>
-					</td>
-					<td data-bind="foreach: $data.statecodes">
-							<button class="btn btn-danger btn-sm" data-bind="click: $data.sendState, text: $data.code"></button>	
-					</td>
-				</tr>
-			</tbody>
-		</table>
+	<h3>RTA Tool</h3>
+	<input type="text" data-bind="value: authenticationKey" />
+	<table class="table table-striped">
+		<tbody data-bind="foreach: agents">
+			<tr>
+				<td>
+					<div class="agent-name" data-bind="text: name"></div>
+				</td>
+				<td data-bind="foreach: $data.statecodes">
+					<button class="btn btn-danger btn-sm" data-bind="click: $data.sendState, text: $data.code"></button>	
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="alert-danger" data-bind="text: error"></div>
 
 </body>
 </html>

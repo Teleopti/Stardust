@@ -7,11 +7,8 @@ define([
     viewmodel
 	) {
 
-
     var vm = new viewmodel();
-
     ko.applyBindings(vm);
-	
 
 });
 
