@@ -24,10 +24,10 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 				using (new TimeoutScope(browserActivator, TimeSpan.FromDays(1)))
 				{
 					browserInteractions.AssertExists(".test-is-done, .test-was-failing");
-
-					browserInteractions.AssertNotExists("body", ".test-was-failing");
-					browserInteractions.AssertExists(".test-is-done");
 				}
+
+				browserInteractions.AssertNotExists("body", ".test-was-failing");
+				browserInteractions.AssertExists(".test-is-done");
 			}
 		}
 
