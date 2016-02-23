@@ -235,7 +235,7 @@ Scenario: Time line should cover scheduled night shift
 	When I view Add Shift Trade Request for date '2030-01-03'
 	Then I should see the time line hours span from '22:00' to '07:00'
 
-@OnlyRunIfEnabled('Request_ShiftTradeRequestForMoreDays_20918')
+
 Scenario: Sending shift trade request closes the Add Shift Trade Request view
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -507,7 +507,7 @@ Scenario: Show MySchedule when it is day off
 	When I view Add Shift Trade Request for date '2030-01-01'
 	Then I should see MySchedule is dayoff
 
-@OnlyRunIfEnabled('Request_ShiftTradeRequestForMoreDays_20918')
+
 Scenario: Should be able to add a day to a shift trade
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -527,7 +527,7 @@ Scenario: Should be able to add a day to a shift trade
 	And I choose 'OtherAgent' to make a shift trade
 	Then I should see 'OtherAgent' in my shift trade list for date '2030-03-01'
 
-@OnlyRunIfEnabled('Request_ShiftTradeRequestForMoreDays_20918')
+
 Scenario: Should be able to remove a day from a shift trade
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -548,7 +548,7 @@ Scenario: Should be able to remove a day from a shift trade
 	When I remove the selected day from the shift trade list
 	Then I should not see schedule on date '2030-01-01' in my shift trade list with 'OtherAgent'
 
-@OnlyRunIfEnabled('Request_ShiftTradeRequestForMoreDays_20918')
+
 Scenario: Should navigate to next day for the agent I am going to trade with
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -580,7 +580,7 @@ Scenario: Should navigate to next day for the agent I am going to trade with
 	Then I should see 'OtherAgent' in my shift trade list for date '2030-01-01'
 	And I should see 'OtherAgent' can be added for date '2030-01-02'
 
-@OnlyRunIfEnabled('Request_ShiftTradeRequestForMoreDays_20918')
+
 Scenario: Should navigate to previous day for the agent I am going to trade with
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -612,7 +612,7 @@ Scenario: Should navigate to previous day for the agent I am going to trade with
 	Then I should see 'OtherAgent' in my shift trade list for date '2030-01-02'
 	And I should see 'OtherAgent' can be added for date '2030-01-01'
 
-@OnlyRunIfEnabled('Request_ShiftTradeRequestForMoreDays_20918')
+
 Scenario: Should be able to choose a date in calender and show the shift for the agent I am going to trade with
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -644,7 +644,7 @@ Scenario: Should be able to choose a date in calender and show the shift for the
 	Then I should see 'OtherAgent' in my shift trade list for date '2030-01-01'
 	And I should see 'OtherAgent' can be added for date '2030-01-05'
 
-@OnlyRunIfEnabled('Request_ShiftTradeRequestForMoreDays_20918')
+
 Scenario: Should be able to cancel a not sent shift trade and go back to overview
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -665,7 +665,7 @@ Scenario: Should be able to cancel a not sent shift trade and go back to overvie
 	When I click cancel button
 	Then I should see 'OtherAgent' last in the list
 
-@OnlyRunIfEnabled('Request_ShiftTradeRequestForMoreDays_20918')
+
 Scenario: The added days should be sorted by date
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -697,7 +697,7 @@ Scenario: The added days should be sorted by date
 	And I add 'OtherAgent' to my shift trade list
 	Then I should see 'OtherAgent' for date '2030-01-03' at top of my shift trade list
 
-@OnlyRunIfEnabled('Request_ShiftTradeRequestForMoreDays_20918')
+
 Scenario: Should cancel the current shift trade when switch to another team to trade
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'

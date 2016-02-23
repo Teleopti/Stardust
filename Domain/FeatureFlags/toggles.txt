@@ -26,7 +26,6 @@
 ## This will be exactly the same as not specifying MyFeature at all in this file
 ############################################################################
 
-Request_ShiftTradeRequestForMoreDays_20918 = true
 Request_SeePossibleShiftTradesFromAllTeams_28770 = true
 Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850 = true
 Portal_NewLandingpage_29415 = true

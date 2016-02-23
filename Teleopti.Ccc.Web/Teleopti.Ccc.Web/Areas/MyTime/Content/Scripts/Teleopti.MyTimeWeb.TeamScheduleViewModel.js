@@ -2,7 +2,6 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 	var self = this;
 
 	self.isPossibleSchedulesForAllEnabled = ko.observable(false);
-	self.isTradeForMultiDaysEnabled = ko.observable(false);
 	self.isTeamScheduleSortingFeatureEnabled = ko.observable(false);
 	self.isShiftTradeBulletinBoardEnabled = ko.observable(false);
 	self.isTeamScheduleNoReadModelEnable = ko.observable(false);
@@ -14,9 +13,7 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 	self.errorMessage = ko.observable();
 
 	self.featureCheck = function () {
-		var tradeForMultiDaysEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("Request_ShiftTradeRequestForMoreDays_20918");
-		self.isTradeForMultiDaysEnabled(tradeForMultiDaysEnabled);
-
+		
 		var possibleSchedulesForAllEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("Request_SeePossibleShiftTradesFromAllTeams_28770");
 		self.isPossibleSchedulesForAllEnabled(possibleSchedulesForAllEnabled);
 	

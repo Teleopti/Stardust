@@ -143,10 +143,8 @@
 				<thead>
 					<tr>
 						<td>&nbsp;</td>
-						<td></td>
-						<!-- ko if: isTradeForMultiDaysEnabled-->
-						<td></td>
-						<!--/ko-->
+						<td></td>						
+						<td></td>						
 					</tr>
 				</thead>
 				<tbody>
@@ -198,9 +196,7 @@
 						</td>
 						<!--/ko-->
 						
-						<!-- ko if: isTradeForMultiDaysEnabled-->
 						<td class="shift-trade-button-cell"></td>
-						<!--/ko-->
 					</tr>
 
 				</tbody>
@@ -227,7 +223,7 @@
 							</div>
 							<!--/ko-->
 						</td>
-						<!-- ko if: $root.isTradeForMultiDaysEnabled-->
+						
 						<td class="shift-trade-button-cell">
 							<!-- ko if: $root.isAddVisible-->
 							<button id="shift-trade-add" type="button" class="btn btn-primary btn-xs" data-bind="click: $root.add">
@@ -235,7 +231,7 @@
 							</button>
 							<!-- /ko -->
 						</td>
-						<!-- /ko -->
+						
 					</tr>
 				</tbody>
 			</table>

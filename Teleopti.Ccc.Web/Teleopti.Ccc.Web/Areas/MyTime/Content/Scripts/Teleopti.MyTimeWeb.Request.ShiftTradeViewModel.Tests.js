@@ -198,7 +198,7 @@ $(document).ready(function () {
 
 	test("should clean data when prepare load without Multi shifts trade Enabled", function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
-		viewModel.isTradeForMultiDaysEnabled(false);
+	
 		viewModel.isDetailVisible = function () {
 			return false;
 		}
@@ -559,14 +559,13 @@ $(document).ready(function () {
 
 	test("should load toggles", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) {
-			return toggleName == 'Request_ShiftTradeRequestForMoreDays_20918'
-				|| toggleName == 'Request_SeePossibleShiftTradesFromAllTeams_28770';
+			return toggleName == 'Request_SeePossibleShiftTradesFromAllTeams_28770';
 		};
 
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
 		viewModel.featureCheck();
 
-		equal(viewModel.isTradeForMultiDaysEnabled(), true);
+		
 		equal(viewModel.isPossibleSchedulesForAllEnabled(), true);
 	
 	});
