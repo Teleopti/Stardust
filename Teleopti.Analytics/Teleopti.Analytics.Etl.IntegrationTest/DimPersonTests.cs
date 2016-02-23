@@ -13,6 +13,7 @@ using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {
