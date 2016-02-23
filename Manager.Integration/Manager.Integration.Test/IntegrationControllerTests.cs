@@ -26,8 +26,8 @@ namespace Manager.Integration.Test
         private static readonly ILog Logger =
             LogManager.GetLogger(typeof (IntegrationControllerTests));
 
-		private readonly bool _clearDatabase = true;
-		private readonly string _buildMode = "Debug";
+		private bool _clearDatabase = true;
+		private string _buildMode = "Debug";
 
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
