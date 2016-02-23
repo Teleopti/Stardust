@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -8,11 +7,8 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
@@ -21,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 {
 	[TestFixture]
 	[MyTimeWebTest]
-	public class ScheduleViewModelFactoryTest2 : ISetup
+	public class ScheduleViewModelFactoryTest2
 	{
 		public IScheduleViewModelFactory Target;
 		public ICurrentScenario Scenario;
@@ -30,13 +26,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		public MutableNow Now;
 		public FakeUserCulture Culture;
 		public FakeUserTimeZone TimeZone;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
-			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateEnglishCulture())).For<IUserCulture>();
-		}
-
+		
 		[Test]
 		public void ShouldMap()
 		{

@@ -1,6 +1,6 @@
-﻿using Teleopti.Ccc.Domain.AgentInfo.Requests;
+﻿using System;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -16,7 +16,6 @@ using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.WebTest.Areas.Global;
 using Teleopti.Ccc.WebTest.Core.Common;
-using Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
@@ -43,10 +42,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 			system.UseTestDouble<SyncCommandDispatcher>().For<ICommandDispatcher>();
 			system.UseTestDouble<FakeRequestApprovalServiceFactory>().For<IRequestApprovalServiceFactory>();
 			system.UseTestDouble<FakeScheduleDataReadScheduleStorage>().For<IScheduleStorage>();
-			
+
+			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
+			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateEnglishCulture())).For<IUserCulture>();
+
+
 		}
-		
-		
+
+
 
 	}
 }

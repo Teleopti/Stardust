@@ -1,3 +1,4 @@
+using System;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
@@ -16,7 +17,6 @@ using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.WebTest.Core.Common;
-using Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.IoC
@@ -51,6 +51,9 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			system.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
 			system.UseTestDouble<FakeShiftTradeLightValidator>().For<IShiftTradeLightValidator>();
 			system.UseTestDouble<FakePersonContractProvider>().For<FakePersonContractProvider>();
+
+			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
+			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateEnglishCulture())).For<IUserCulture>();
 
 			system.AddService<AutoMapperConfiguration>();
 
