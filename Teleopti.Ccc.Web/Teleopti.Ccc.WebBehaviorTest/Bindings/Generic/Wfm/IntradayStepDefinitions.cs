@@ -1,4 +1,5 @@
-﻿using TechTalk.SpecFlow;
+﻿using Microsoft.Owin.Security.Provider;
+using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
@@ -68,14 +69,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I select to monitor skill area '(.*)'")]
 		public void ThenISelectToMonitorSkillArea(string skillArea)
 		{
-			Browser.Interactions.Javascript(string.Format("$('#ul-1 li:contains(\"{0}\")').click()", skillArea));
+			var listId = "#" + Browser.Interactions.Javascript("return $('#skill-area-id input').attr(\"aria-owns\")");
+			Browser.Interactions.Javascript(string.Format("$('{0} li:contains(\"{1}\")').click()", listId, skillArea));
 			Browser.Interactions.AssertAnyContains(".intraday-monitor-item", skillArea);
 		}
 
 		[Then(@"I should no longer be able to monitor '(.*)'")]
 		public void ThenIShouldNoLongerBeAbleToMonitor(string skillArea)
 		{
-			Browser.Interactions.AssertNotExistsUsingJQuery("#ul-1", string.Format("$('#ul-1 li:contains(\"{0}\")')", skillArea));
+			Browser.Interactions.Javascript("document.querySelector(\"#skill-area-input\").focus();");
+			var listId = "#" + Browser.Interactions.Javascript("return $('#skill-area-id input').attr(\"aria-owns\")");
+			Browser.Interactions.AssertNotExistsUsingJQuery(listId, string.Format("{0} li:contains(\"{1}\")", listId, skillArea));
 		}
 		
 		[Then(@"I should monitor '(.*)'")]

@@ -15,7 +15,9 @@
 			<div class="con-row">
 				<h2 class="con-flex">Select to monitor either a skill or an area</h2>
 				<span class="con-flex">
-					<md-autocomplete class="autocomplete-skill" md-selected-item="selectedSkill"
+					<md-autocomplete id="skill-id"
+									 class="autocomplete-skill"
+									 md-selected-item="selectedSkill"
 									 md-search-text="searchSkillText"
 									 md-selected-item-change="selectedSkillChange(skill)"
 									 md-items="skill in querySearch(searchSkillText, skills)"
@@ -31,7 +33,10 @@
 					</md-autocomplete>
 				</span>
 				<span class="con-flex">
-					<md-autocomplete class="autocomplete-skillarea" md-selected-item="selectedSkillArea"
+					<md-autocomplete id="skill-area-id"
+									 class="autocomplete-skillarea"
+									 md-input-id="skill-area-input"
+									 md-selected-item="selectedSkillArea"
 									 md-search-text="searchSkillAreaText"
 									 md-selected-item-change="selectedSkillAreaChange(skillArea)"
 									 md-items="skillArea in querySearch(searchSkillAreaText, skillAreas)"
