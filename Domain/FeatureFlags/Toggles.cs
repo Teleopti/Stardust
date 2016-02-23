@@ -14,7 +14,6 @@
 		Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635,
 		Request_ShiftTradeRequestForMoreDays_20918,
 		Request_SeePossibleShiftTradesFromAllTeams_28770,
-		Request_FilterPossibleShiftTradeByTime_24560,
 		Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850,
 		Settings_SetAgentDescription_23257,
 		Settings_AlertViaEmailFromSMSLink_30444,

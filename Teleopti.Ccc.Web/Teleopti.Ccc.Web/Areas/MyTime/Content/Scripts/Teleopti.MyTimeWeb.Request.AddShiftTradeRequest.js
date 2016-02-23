@@ -40,7 +40,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function($) {
 			vm.chooseAgent(null);
 			_setWeekStart(vm);
 			vm.goToFirstPage();
-			if (vm.isFilterByTimeEnabled) vm.loadFilterTimes();
+			vm.loadFilterTimes();
 		}
 
 		$(window).bind('resize.addShiftTrade', function(){
