@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Specific
     {
         public void Apply(ICurrentUnitOfWork currentUnitOfWork)
         {
-            var license = new License { XmlString = File.ReadAllText("License.xml") };
+            var license = new License { XmlString = File.ReadAllText("TestLicense.xml") };
             var licenseRepository = new LicenseRepository(currentUnitOfWork);
             licenseRepository.Add(license);
         }

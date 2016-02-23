@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default
 
 		private string licenseText
 		{
-			get { return _licenseText ?? (_licenseText = File.ReadAllText("License.xml")); }
+			get { return _licenseText ?? (_licenseText = File.ReadAllText("TestLicense.xml")); }
 		}
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return new ILicense[]
 			{
-				new License {XmlString = File.ReadAllText("License.xml")}
+				new License {XmlString = File.ReadAllText("TestLicense.xml")}
 			}.ToList();
 		}
 
