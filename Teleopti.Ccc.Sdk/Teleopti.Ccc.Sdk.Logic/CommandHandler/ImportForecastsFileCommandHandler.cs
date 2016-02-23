@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 						UserName = person.Name.FirstName
 					};
 					var mess = _jsonSerializer.SerializeObject(jobModel);
-					jobResultId = _postHttpRequest.Send<Guid>(ConfigurationManager.AppSettings["ManagerLocation"] + "job", mess);
+					_postHttpRequest.Send<Guid>(ConfigurationManager.AppSettings["ManagerLocation"] + "job", mess);
 				}
 				else
 					_busSender.Send(message, true);
