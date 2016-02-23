@@ -390,6 +390,7 @@
     <Compile Include="Persisters\Outbound\OutboundSkillPersister.cs" />
     <Compile Include="Persisters\Schedules\SchedulePersistResult.cs" />
     <Compile Include="Persisters\WorkflowControlSetPublishDatePersister.cs" />
+    <Compile Include="Repositories\Analytics\AnalyticsPersonRepository.cs" />
     <Compile Include="Repositories\ExistingForecastRepository.cs" />
     <Compile Include="Repositories\IQueryExtensions.cs" />
     <Compile Include="Repositories\IOutboundCampaignRepository.cs" />

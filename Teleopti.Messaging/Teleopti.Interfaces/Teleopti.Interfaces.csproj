@@ -673,7 +673,9 @@
     <Compile Include="Infrastructure\Analytics\IAnalyticsFactSchedulePerson.cs" />
     <Compile Include="Infrastructure\Analytics\IAnalyticsFactScheduleTime.cs" />
     <Compile Include="Infrastructure\Analytics\IAnalyticsGeneric.cs" />
+    <Compile Include="Infrastructure\Analytics\IAnalyticsPersonPeriod.cs" />
     <Compile Include="Infrastructure\Analytics\IAnalyticsPersonBusinessUnit.cs" />
+    <Compile Include="Infrastructure\Analytics\IAnalyticsPersonPeriodRepository.cs" />
     <Compile Include="Infrastructure\Analytics\IAnalyticsShiftLength.cs" />
     <Compile Include="Infrastructure\Analytics\IFactScheduleRow.cs" />
     <Compile Include="Infrastructure\DomainObjectNotInFilterException.cs" />
