@@ -273,7 +273,8 @@ namespace Manager.Integration.Test
                 }
             }
 
-            Assert.IsTrue(response.IsSuccessStatusCode);
+            Assert.IsTrue(response.IsSuccessStatusCode,
+                          "Response code should be success.");
 
             cancellationTokenSource.Cancel();
 
@@ -358,7 +359,8 @@ namespace Manager.Integration.Test
                             }
                         }
 
-                        Assert.IsTrue(list.Any());
+                        Assert.IsTrue(list.Any(),
+                                      "Should return a list of appdomain keys.");
                     }
                 }
 
@@ -370,7 +372,8 @@ namespace Manager.Integration.Test
                 }
             }
 
-            Assert.IsTrue(response.IsSuccessStatusCode);
+            Assert.IsTrue(response.IsSuccessStatusCode,
+                          "Response code should be success.");
 
             cancellationTokenSource.Cancel();
 
