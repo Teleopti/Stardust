@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.InfrastructureTest
 			system.UseTestDouble<TestConnectionStrings>().For<IConnectionStrings>();
 			system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
 			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>(); // Does not fake all message senders, just adds one to the list
-			system.UseTestDouble<SetNoLicenseActivator>().For<ISetLicenseActivator>();
 		}
 
 		protected override void BeforeTest()

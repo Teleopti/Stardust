@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Infrastructure;
@@ -10,11 +11,16 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 	// "#¤%"#¤"#¤"#¤"#¤ static data
 	public class LicenseVerifierFactory : ILicenseVerifierFactory
 	{
-		public ILicenseVerifier Create(ILicenseFeedback licenseFeedback, 
-										IUnitOfWorkFactory unitOfWorkFactory)  
+		private readonly ILicenseRepository _licenseRepository;
+
+		public LicenseVerifierFactory(ILicenseRepository licenseRepository)
 		{
-			return new LicenseVerifier(licenseFeedback, unitOfWorkFactory,
-																  new LicenseRepository(new FromFactory(() => unitOfWorkFactory)));
+			_licenseRepository = licenseRepository;
+		}
+
+		public ILicenseVerifier Create(ILicenseFeedback licenseFeedback, IUnitOfWorkFactory unitOfWorkFactory)
+		{
+			return new LicenseVerifier(licenseFeedback, unitOfWorkFactory, _licenseRepository);
 		}
 	}
 }
