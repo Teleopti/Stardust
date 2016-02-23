@@ -7,125 +7,125 @@ using Manager.IntegrationTest.Console.Host.Helpers;
 
 namespace Manager.IntegrationTest.Console.Host.Tasks
 {
-    public class AppDomainNodeTask : IDisposable
-    {
-        private string BuildMode { get; set; }
+	public class AppDomainNodeTask : IDisposable
+	{
+		private static readonly ILog Logger =
+			LogManager.GetLogger(typeof (AppDomainNodeTask));
 
-        private DirectoryInfo DirectoryNodeAssemblyLocationFullPath { get; set; }
+		public AppDomainNodeTask(string buildMode,
+		                         DirectoryInfo directoryNodeAssemblyLocationFullPath,
+		                         FileInfo nodeconfigurationFile,
+		                         string nodeAssemblyName)
+		{
+			BuildMode = buildMode;
+			DirectoryNodeAssemblyLocationFullPath = directoryNodeAssemblyLocationFullPath;
+			NodeconfigurationFile = nodeconfigurationFile;
+			NodeAssemblyName = nodeAssemblyName;
+		}
 
-        private FileInfo NodeconfigurationFile { get; set; }
+		private string BuildMode { get; set; }
 
-        private string NodeAssemblyName { get; set; }
+		private DirectoryInfo DirectoryNodeAssemblyLocationFullPath { get; }
 
-        private static readonly ILog Logger =
-            LogManager.GetLogger(typeof (AppDomainNodeTask));
+		private FileInfo NodeconfigurationFile { get; }
 
-        public AppDomainNodeTask(string buildMode,
-                                 DirectoryInfo directoryNodeAssemblyLocationFullPath,
-                                 FileInfo nodeconfigurationFile,
-                                 string nodeAssemblyName)
-        {
-            BuildMode = buildMode;
-            DirectoryNodeAssemblyLocationFullPath = directoryNodeAssemblyLocationFullPath;
-            NodeconfigurationFile = nodeconfigurationFile;
-            NodeAssemblyName = nodeAssemblyName;
-        }
+		private string NodeAssemblyName { get; }
 
-        private AppDomain MyAppDomain { get; set; }
+		private AppDomain MyAppDomain { get; set; }
 
-        public Task Task { get; private set; }
+		public Task Task { get; private set; }
 
-        private CancellationTokenSource CancellationTokenSource { get; set; }
+		private CancellationTokenSource CancellationTokenSource { get; set; }
 
-        public Task StartTask(CancellationTokenSource cancellationTokenSource)
-        {
-            Task = Task.Factory.StartNew(() =>
-            {
-                Task.Factory.StartNew(() =>
-                {
-                    while (!cancellationTokenSource.IsCancellationRequested)
-                    {
-                        Thread.Sleep(TimeSpan.FromMilliseconds(500));
-                    }
+		public void Dispose()
+		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Start disposing.");
 
-                    if (cancellationTokenSource.IsCancellationRequested)
-                    {
-                        cancellationTokenSource.Token.ThrowIfCancellationRequested();
-                    }
-                },
-                cancellationTokenSource.Token);
+			if (CancellationTokenSource != null &&
+			    !CancellationTokenSource.IsCancellationRequested)
+			{
+				CancellationTokenSource.Cancel();
+			}
+
+			if (MyAppDomain != null)
+			{
+				try
+				{
+					AppDomain.Unload(MyAppDomain);
+				}
+
+				catch (Exception)
+				{
+				}
+			}
+
+			if (Task != null)
+			{
+				Task.Dispose();
+			}
+
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Finshed disposing.");
+		}
+
+		public Task StartTask(CancellationTokenSource cancellationTokenSource)
+		{
+			Task = Task.Factory.StartNew(() =>
+			{
+				Task.Factory.StartNew(() =>
+				{
+					while (!cancellationTokenSource.IsCancellationRequested)
+					{
+						Thread.Sleep(TimeSpan.FromMilliseconds(500));
+					}
+
+					if (cancellationTokenSource.IsCancellationRequested)
+					{
+						cancellationTokenSource.Token.ThrowIfCancellationRequested();
+					}
+				},
+				                      cancellationTokenSource.Token);
 
 
-                Task.Factory.StartNew(() =>
-                {
-                    var nodeAppDomainSetup = new AppDomainSetup
-                    {
-                        ApplicationBase = DirectoryNodeAssemblyLocationFullPath.FullName,
-                        ApplicationName = NodeAssemblyName,
-                        ShadowCopyFiles = "true",
-                        ConfigurationFile = NodeconfigurationFile.FullName
-                    };
+				Task.Factory.StartNew(() =>
+				{
+					var nodeAppDomainSetup = new AppDomainSetup
+					{
+						ApplicationBase = DirectoryNodeAssemblyLocationFullPath.FullName,
+						ApplicationName = NodeAssemblyName,
+						ShadowCopyFiles = "true",
+						ConfigurationFile = NodeconfigurationFile.FullName
+					};
 
-                    MyAppDomain = AppDomain.CreateDomain(NodeconfigurationFile.Name,
-                                                         null,
-                                                         nodeAppDomainSetup);
+					MyAppDomain = AppDomain.CreateDomain(NodeconfigurationFile.Name,
+					                                     null,
+					                                     nodeAppDomainSetup);
 
-                    var assemblyToExecute = new FileInfo(Path.Combine(nodeAppDomainSetup.ApplicationBase,
-                                                                      nodeAppDomainSetup.ApplicationName));
+					var assemblyToExecute = new FileInfo(Path.Combine(nodeAppDomainSetup.ApplicationBase,
+					                                                  nodeAppDomainSetup.ApplicationName));
 
-                    LogHelper.LogDebugWithLineNumber(Logger,
-                                                    "Node (appdomain) will start with friendly name : " + MyAppDomain.FriendlyName);
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Node (appdomain) will start with friendly name : " + MyAppDomain.FriendlyName);
 
 
-                    MyAppDomain.ExecuteAssembly(assemblyToExecute.FullName);
-                },
-                cancellationTokenSource.Token);
-            },
-            cancellationTokenSource.Token);
+					MyAppDomain.ExecuteAssembly(assemblyToExecute.FullName);
+				},
+				                      cancellationTokenSource.Token);
+			},
+			                             cancellationTokenSource.Token);
 
-            return Task;
-        }
+			return Task;
+		}
 
-        public string GetAppDomainFriendlyName()
-        {
-            if (MyAppDomain != null)
-            {
-                return MyAppDomain.FriendlyName;
-            }
+		public string GetAppDomainFriendlyName()
+		{
+			if (MyAppDomain != null)
+			{
+				return MyAppDomain.FriendlyName;
+			}
 
-            return null;
-        }
-
-        public void Dispose()
-        {
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                            "Start disposing.");
-
-            if (CancellationTokenSource != null &&
-                !CancellationTokenSource.IsCancellationRequested)
-            {
-                CancellationTokenSource.Cancel();
-            }
-
-            if (MyAppDomain != null)
-            {
-                try
-                {
-                    AppDomain.Unload(MyAppDomain);
-                }
-
-                catch (Exception)
-                {
-                }
-            }
-
-            if (Task != null)
-            {
-                Task.Dispose();
-            }
-
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                            "Finshed disposing.");
-        }
-    }
+			return null;
+		}
+	}
 }

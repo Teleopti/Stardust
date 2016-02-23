@@ -1,15 +1,15 @@
 ﻿namespace Manager.Integration.Test
 {
-    public class TestJobParams
-    {
-        public TestJobParams(string dummy,
-                             string name)
-        {
-            Name = name;
-            Dummy = dummy;
-        }
+	public class TestJobParams
+	{
+		public TestJobParams(string dummy,
+		                     string name)
+		{
+			Name = name;
+			Dummy = dummy;
+		}
 
-        public string Dummy { get; private set; }
-        public string Name { get; private set; }
-    }
+		public string Dummy { get; private set; }
+		public string Name { get; private set; }
+	}
 }

@@ -7,100 +7,100 @@ using Manager.Integration.Test.Helpers;
 
 namespace Manager.Integration.Test.Notifications
 {
-    public class SqlNotifier : IDisposable
-    {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (SqlNotifier));
+	public class SqlNotifier : IDisposable
+	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (SqlNotifier));
 
-        public string ConnectionString { get; set; }
+		public SqlNotifier(string connectionString)
+		{
+			ConnectionString = connectionString;
+		}
 
-        public SqlNotifier(string connectionString)
-        {
-            ConnectionString = connectionString;
-        }
+		public string ConnectionString { get; set; }
 
-        public ManualResetEventSlim NotifyWhenAllNodesAreUp { get; set; }
+		public ManualResetEventSlim NotifyWhenAllNodesAreUp { get; set; }
 
-        private CancellationTokenSource NotifyWhenAllNodesAreUpTaskCancellationTokenSource { get; set; }
+		private CancellationTokenSource NotifyWhenAllNodesAreUpTaskCancellationTokenSource { get; set; }
 
-        private Task NotifyWhenAllNodesAreUpTask { get; set; }
+		private Task NotifyWhenAllNodesAreUpTask { get; set; }
 
-        public Task CreateNotifyWhenAllNodesAreUpTask(int numberOfNodes,
-                                                      CancellationTokenSource cancellationTokenSource)
-        {
-            if (numberOfNodes <= 0)
-            {
-                throw new ArgumentException("invalid number of nodes");
-            }
+		public void Dispose()
+		{
+			LogHelper.LogDebugWithLineNumber("Start dispose.",
+			                                 Logger);
 
-            if (cancellationTokenSource == null)
-            {
-                throw new ArgumentNullException("cancellationTokenSource");
-            }
+			if (NotifyWhenAllNodesAreUpTaskCancellationTokenSource != null &&
+			    !NotifyWhenAllNodesAreUpTaskCancellationTokenSource.IsCancellationRequested)
+			{
+				NotifyWhenAllNodesAreUpTaskCancellationTokenSource.Cancel();
+			}
 
-            NotifyWhenAllNodesAreUp = new ManualResetEventSlim();
+			// Wait for task to complete.
+			while (NotifyWhenAllNodesAreUpTask.Status == TaskStatus.Running)
+			{
+				Thread.Sleep(TimeSpan.FromMilliseconds(500));
+			}
 
-            NotifyWhenAllNodesAreUpTaskCancellationTokenSource = cancellationTokenSource;
+			NotifyWhenAllNodesAreUpTask.Dispose();
 
-            NotifyWhenAllNodesAreUpTask = new Task(() =>
-            {
-                int nodes = numberOfNodes;
+			LogHelper.LogDebugWithLineNumber("Finished dispose.",
+			                                 Logger);
+		}
 
-                while (!cancellationTokenSource.IsCancellationRequested &&
-                       !NotifyWhenAllNodesAreUp.IsSet)
-                {
-                    using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
-                    {
-                        sqlConnection.Open();
+		public Task CreateNotifyWhenAllNodesAreUpTask(int numberOfNodes,
+		                                              CancellationTokenSource cancellationTokenSource)
+		{
+			if (numberOfNodes <= 0)
+			{
+				throw new ArgumentException("invalid number of nodes");
+			}
 
-                        using (SqlCommand command =
-                            new SqlCommand("SELECT COUNT(*) FROM Stardust.WorkerNodes",
-                                           sqlConnection))
-                        {
-                            int rowCount = (int) command.ExecuteScalar();
+			if (cancellationTokenSource == null)
+			{
+				throw new ArgumentNullException("cancellationTokenSource");
+			}
 
-                            if (nodes == rowCount)
-                            {
-                                NotifyWhenAllNodesAreUp.Set();
-                            }
-                        }
+			NotifyWhenAllNodesAreUp = new ManualResetEventSlim();
 
-                        sqlConnection.Close();
-                    }
+			NotifyWhenAllNodesAreUpTaskCancellationTokenSource = cancellationTokenSource;
 
-                    Thread.Sleep(TimeSpan.FromSeconds(5));
-                }
+			NotifyWhenAllNodesAreUpTask = new Task(() =>
+			{
+				var nodes = numberOfNodes;
 
-                if (cancellationTokenSource.IsCancellationRequested)
-                {
-                    cancellationTokenSource.Token.ThrowIfCancellationRequested();
-                }
-            },
-                                                   NotifyWhenAllNodesAreUpTaskCancellationTokenSource.Token);
+				while (!cancellationTokenSource.IsCancellationRequested &&
+				       !NotifyWhenAllNodesAreUp.IsSet)
+				{
+					using (var sqlConnection = new SqlConnection(ConnectionString))
+					{
+						sqlConnection.Open();
 
-            return NotifyWhenAllNodesAreUpTask;
-        }
+						using (var command =
+							new SqlCommand("SELECT COUNT(*) FROM Stardust.WorkerNodes",
+							               sqlConnection))
+						{
+							var rowCount = (int) command.ExecuteScalar();
 
-        public void Dispose()
-        {
-            LogHelper.LogDebugWithLineNumber("Start dispose.",
-                                             Logger);
+							if (nodes == rowCount)
+							{
+								NotifyWhenAllNodesAreUp.Set();
+							}
+						}
 
-            if (NotifyWhenAllNodesAreUpTaskCancellationTokenSource != null &&
-                !NotifyWhenAllNodesAreUpTaskCancellationTokenSource.IsCancellationRequested)
-            {
-                NotifyWhenAllNodesAreUpTaskCancellationTokenSource.Cancel();
-            }
+						sqlConnection.Close();
+					}
 
-            // Wait for task to complete.
-            while (NotifyWhenAllNodesAreUpTask.Status == TaskStatus.Running)
-            {
-                Thread.Sleep(TimeSpan.FromMilliseconds(500));
-            }
+					Thread.Sleep(TimeSpan.FromSeconds(5));
+				}
 
-            NotifyWhenAllNodesAreUpTask.Dispose();
+				if (cancellationTokenSource.IsCancellationRequested)
+				{
+					cancellationTokenSource.Token.ThrowIfCancellationRequested();
+				}
+			},
+			                                       NotifyWhenAllNodesAreUpTaskCancellationTokenSource.Token);
 
-            LogHelper.LogDebugWithLineNumber("Finished dispose.",
-                                             Logger);
-        }
-    }
+			return NotifyWhenAllNodesAreUpTask;
+		}
+	}
 }

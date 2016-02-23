@@ -2,12 +2,12 @@
 
 namespace Manager.Integration.Test.Helpers
 {
-    public static class SecurityHelper
-    {
-        public static string GetLoggedInUser()
-        {
-            return WindowsIdentity.GetCurrent()
-                .Name;
-        }
-    }
+	public static class SecurityHelper
+	{
+		public static string GetLoggedInUser()
+		{
+			return WindowsIdentity.GetCurrent()
+				.Name;
+		}
+	}
 }

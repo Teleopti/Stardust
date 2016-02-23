@@ -18,492 +18,494 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
-    [TestFixture]
-    public class OneManagerAndOneNodeTests
-    {
-        private static readonly ILog Logger =
-            LogManager.GetLogger(typeof (OneManagerAndOneNodeTests));
+	[TestFixture]
+	public class OneManagerAndOneNodeTests
+	{
+		[TearDown]
+		public void TearDown()
+		{
+		}
 
-        [TestFixtureSetUp]
-        public void TestFixtureSetUp()
-        {
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+		private static readonly ILog Logger =
+			LogManager.GetLogger(typeof (OneManagerAndOneNodeTests));
 
-            ManagerDbConnectionString =
-                ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString;
+		[TestFixtureSetUp]
+		public void TestFixtureSetUp()
+		{
+			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-            var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
-            XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
+			ManagerDbConnectionString =
+				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString;
 
-            LogHelper.LogDebugWithLineNumber("Start TestFixtureSetUp",
-                                            Logger);
+			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
-            TryCreateSqlLoggingTable();
+			LogHelper.LogDebugWithLineNumber("Start TestFixtureSetUp",
+			                                 Logger);
+
+			TryCreateSqlLoggingTable();
 
 
 #if (DEBUG)
-            // Do nothing.
+			// Do nothing.
 #else
             _clearDatabase = true;
             _buildMode = "Release";
 #endif
 
-            if (_clearDatabase)
-            {
-                DatabaseHelper.TryClearDatabase();
-            }
+			if (_clearDatabase)
+			{
+				DatabaseHelper.TryClearDatabase();
+			}
 
-            CancellationTokenSource = new CancellationTokenSource();
+			CancellationTokenSource = new CancellationTokenSource();
 
-            AppDomainTask = new AppDomainTask(_buildMode);
+			AppDomainTask = new AppDomainTask(_buildMode);
 
-            Task = AppDomainTask.StartTask(CancellationTokenSource, 1);
+			Task = AppDomainTask.StartTask(CancellationTokenSource, 1);
 
-            LogHelper.LogDebugWithLineNumber("Finshed TestFixtureSetUp",
-                                            Logger);
-        }
+			LogHelper.LogDebugWithLineNumber("Finshed TestFixtureSetUp",
+			                                 Logger);
+		}
 
-        private string ManagerDbConnectionString { get; set; }
+		private string ManagerDbConnectionString { get; set; }
 
-        private Task Task { get; set; }
+		private Task Task { get; set; }
 
-        private AppDomainTask AppDomainTask { get; set; }
+		private AppDomainTask AppDomainTask { get; set; }
 
-        private CancellationTokenSource CancellationTokenSource { get; set; }
+		private CancellationTokenSource CancellationTokenSource { get; set; }
 
-        private void CurrentDomain_UnhandledException(object sender,
-                                                      UnhandledExceptionEventArgs e)
-        {
-        }
+		private void CurrentDomain_UnhandledException(object sender,
+		                                              UnhandledExceptionEventArgs e)
+		{
+		}
 
-        private static void TryCreateSqlLoggingTable()
-        {
-            LogHelper.LogDebugWithLineNumber("Run sql script to create logging file started.",
-                                            Logger);
+		private static void TryCreateSqlLoggingTable()
+		{
+			LogHelper.LogDebugWithLineNumber("Run sql script to create logging file started.",
+			                                 Logger);
 
-            FileInfo scriptFile =
-                new FileInfo(Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
-                                          Settings.Default.CreateLoggingTableSqlScriptLocationAndFileName));
+			var scriptFile =
+				new FileInfo(Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
+				                          Settings.Default.CreateLoggingTableSqlScriptLocationAndFileName));
 
-            ScriptExecuteHelper.ExecuteScriptFile(scriptFile,
-                                                  ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString);
+			ScriptExecuteHelper.ExecuteScriptFile(scriptFile,
+			                                      ConfigurationManager.ConnectionStrings["ManagerConnectionString"]
+				                                      .ConnectionString);
 
-            LogHelper.LogDebugWithLineNumber("Run sql script to create logging file finished.",
-                                            Logger);
-        }
+			LogHelper.LogDebugWithLineNumber("Run sql script to create logging file finished.",
+			                                 Logger);
+		}
 
-        [TearDown]
-        public void TearDown()
-        {
-        }
+		[TestFixtureTearDown]
+		public void TestFixtureTearDown()
+		{
+			LogHelper.LogDebugWithLineNumber("Start TestFixtureTearDown",
+			                                 Logger);
 
-        [TestFixtureTearDown]
-        public void TestFixtureTearDown()
-        {
-            LogHelper.LogDebugWithLineNumber("Start TestFixtureTearDown",
-                                            Logger);
+			if (AppDomainTask != null)
+			{
+				AppDomainTask.Dispose();
+			}
 
-            if (AppDomainTask != null)
-            {
-                AppDomainTask.Dispose();
-            }
+			LogHelper.LogDebugWithLineNumber("Finished TestFixtureTearDown",
+			                                 Logger);
+		}
 
-            LogHelper.LogDebugWithLineNumber("Finished TestFixtureTearDown",
-                                            Logger);
-        }
+		private readonly bool _clearDatabase = true;
 
-        private bool _clearDatabase = true;
+		private readonly string _buildMode = "Debug";
 
-        private string _buildMode = "Debug";
+		[Test]
+		public void CancelWrongJobsTest()
+		{
+			LogHelper.LogDebugWithLineNumber("Start.",
+			                                 Logger);
 
-        [Test]
-        public void CreateSeveralRequestShouldReturnBothCancelAndDeleteStatusesTest()
-        {
-            LogHelper.LogDebugWithLineNumber("Start.",
-                                            Logger);
+			var createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(1);
 
-            List<JobRequestModel> createNewJobRequests =
-                JobHelper.GenerateLongRunningParamsRequests(1);
+			LogHelper.LogDebugWithLineNumber("( " + createNewJobRequests.Count + " ) jobs will be created.",
+			                                 Logger);
 
-            var timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
-                                                                 5);
+			var timeout =
+				JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
+				                                       5);
 
+			//--------------------------------------------
+			// Notify when node is up.
+			//--------------------------------------------
+			LogHelper.LogDebugWithLineNumber("Waiting for node to start.",
+			                                 Logger);
 
-            //--------------------------------------------
-            // Notify when node is up.
-            //--------------------------------------------
-            LogHelper.LogDebugWithLineNumber("Waiting for node to start.",
-                                            Logger);
+			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
-            CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
+			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
-            SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
+			var task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(1,
+			                                                         sqlNotiferCancellationTokenSource);
+			task.Start();
 
-            Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(1,
-                                                                      sqlNotiferCancellationTokenSource);
-            task.Start();
+			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
 
-            sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
+			sqlNotifier.Dispose();
 
-            sqlNotifier.Dispose();
+			LogHelper.LogDebugWithLineNumber("Node have started.",
+			                                 Logger);
 
-            LogHelper.LogDebugWithLineNumber("Node have started.",
-                                            Logger);
+			//--------------------------------------------
+			// Start actual test.
+			//--------------------------------------------
+			var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 
-            //--------------------------------------------
-            // Start actual test.
-            //--------------------------------------------
-            List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
+			var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
+			                                                                StatusConstants.SuccessStatus,
+			                                                                StatusConstants.DeletedStatus,
+			                                                                StatusConstants.FailedStatus,
+			                                                                StatusConstants.CanceledStatus);
 
-            var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
-                                                                            StatusConstants.SuccessStatus,
-                                                                            StatusConstants.DeletedStatus,
-                                                                            StatusConstants.FailedStatus,
-                                                                            StatusConstants.CanceledStatus);
+			foreach (var jobRequestModel in createNewJobRequests)
+			{
+				var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
 
-            foreach (var jobRequestModel in createNewJobRequests)
-            {
-                var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
+				jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
 
-                jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
+				jobManagerTaskCreators.Add(jobManagerTaskCreator);
+			}
 
-                jobManagerTaskCreators.Add(jobManagerTaskCreator);
-            }
+			var startJobTaskHelper = new StartJobTaskHelper();
 
-            var startJobTaskHelper = new StartJobTaskHelper();
+			var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
+			                                                          new CancellationTokenSource(),
+			                                                          timeout);
 
-            var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
-                                                                      CancellationTokenSource,
-                                                                      timeout);
+			checkJobHistoryStatusTimer.GuidAddedEventHandler += (sender,
+			                                                     args) =>
+			{
+				//-----------------------------------
+				// Wait for job to start.
+				//-----------------------------------
+				var nodeStartedNotifier =
+					new NodeStatusNotifier(ManagerDbConnectionString);
 
-            checkJobHistoryStatusTimer.GuidAddedEventHandler += (sender,
-                                                                 args) =>
-            {
-                Task.Factory.StartNew(() =>
-                {
-                    NodeStatusNotifier nodeStartedNotifier =
-                        new NodeStatusNotifier(ManagerDbConnectionString);
+				nodeStartedNotifier.StartJobDefinitionStatusNotifier(args.Guid,
+				                                                     "Started",
+				                                                     new CancellationTokenSource());
 
-                    nodeStartedNotifier.StartJobDefinitionStatusNotifier(args.Guid,
-                                                                         "Started",
-                                                                         CancellationTokenSource);
+				nodeStartedNotifier.JobDefinitionStatusNotify.Wait(timeout);
 
-                    nodeStartedNotifier.JobDefinitionStatusNotify.Wait(timeout);
+				//-----------------------------------
+				// Send wrong id to cancel.
+				//-----------------------------------
+				var newGuid = Guid.NewGuid();
 
-                    var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
+				var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
 
-                    jobManagerTaskCreator.CreateDeleteJobToManagerTask(args.Guid);
+				jobManagerTaskCreator.CreateDeleteJobToManagerTask(newGuid);
 
-                    jobManagerTaskCreator.StartAndWaitDeleteJobToManagerTask(timeout);
+				jobManagerTaskCreator.StartAndWaitDeleteJobToManagerTask(timeout);
 
-                    nodeStartedNotifier.Dispose();
+				jobManagerTaskCreator.Dispose();
 
-                    jobManagerTaskCreator.Dispose();
-                },
-                                      CancellationTokenSource.Token);
-            };
+				nodeStartedNotifier.Dispose();
+			};
 
-            checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
-            bool condition =
-                checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count;
+			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count);
+			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
 
-            Assert.IsTrue(condition,
-                          "Must have equal number of rows.");
+			taskHlp.Dispose();
 
-            Assert.IsFalse(checkJobHistoryStatusTimer.Guids.Any(pair => pair.Value == StatusConstants.SuccessStatus),
-                           "Invalid SUCCESS status.");
+			foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
+			{
+				jobManagerTaskCreator.Dispose();
+			}
 
-            Assert.IsFalse(checkJobHistoryStatusTimer.Guids.Any(pair => pair.Value == StatusConstants.NullStatus),
-                           "Invalid NULL status.");
+			LogHelper.LogDebugWithLineNumber("Finished.",
+			                                 Logger);
+		}
 
-            Assert.IsFalse(checkJobHistoryStatusTimer.Guids.Any(pair => pair.Value == StatusConstants.EmptyStatus),
-                           "Invalid EMPTY status.");
+		[Test]
+		public void CreateSeveralRequestShouldReturnBothCancelAndDeleteStatusesTest()
+		{
+			LogHelper.LogDebugWithLineNumber("Start.",
+			                                 Logger);
 
-            var allCancelOrDeleteStatus = checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.CanceledStatus ||
-                                                                                       pair.Value == StatusConstants.DeletedStatus);
+			var createNewJobRequests =
+				JobHelper.GenerateLongRunningParamsRequests(1);
 
-            Assert.IsTrue(allCancelOrDeleteStatus,
-                          "All rows shall have CANCEL or DELETE status.");
+			var timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
+			                                                     5);
 
-            taskHlp.Dispose();
 
-            foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
-            {
-                jobManagerTaskCreator.Dispose();
-            }
+			//--------------------------------------------
+			// Notify when node is up.
+			//--------------------------------------------
+			LogHelper.LogDebugWithLineNumber("Waiting for node to start.",
+			                                 Logger);
 
-            LogHelper.LogDebugWithLineNumber("Finished.",
-                                            Logger);
-        }
+			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
+			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
-        [Test]
-        public void JobShouldHaveStatusFailedIfFailedTest()
-        {
-            LogHelper.LogDebugWithLineNumber("Start.",
-                                            Logger);
+			var task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(1,
+			                                                         sqlNotiferCancellationTokenSource);
+			task.Start();
 
-            List<JobRequestModel> createNewJobRequests = JobHelper.GenerateFailingJobParamsRequests(1);
+			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
 
-            var timeout =
-                JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
-                                                       5);
+			sqlNotifier.Dispose();
 
-            //--------------------------------------------
-            // Notify when node is up.
-            //--------------------------------------------
-            LogHelper.LogDebugWithLineNumber("Waiting for node to start.",
-                                            Logger);
+			LogHelper.LogDebugWithLineNumber("Node have started.",
+			                                 Logger);
 
-            CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
+			//--------------------------------------------
+			// Start actual test.
+			//--------------------------------------------
+			var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 
-            SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
+			var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
+			                                                                StatusConstants.SuccessStatus,
+			                                                                StatusConstants.DeletedStatus,
+			                                                                StatusConstants.FailedStatus,
+			                                                                StatusConstants.CanceledStatus);
 
-            Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(1,
-                                                                      sqlNotiferCancellationTokenSource);
-            task.Start();
+			foreach (var jobRequestModel in createNewJobRequests)
+			{
+				var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
 
-            sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
+				jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
 
-            sqlNotifier.Dispose();
+				jobManagerTaskCreators.Add(jobManagerTaskCreator);
+			}
 
-            LogHelper.LogDebugWithLineNumber("Node have started.",
-                                            Logger);
+			var startJobTaskHelper = new StartJobTaskHelper();
 
-            //--------------------------------------------
-            // Start actual test.
-            //--------------------------------------------
-            List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
+			var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
+			                                                          CancellationTokenSource,
+			                                                          timeout);
 
-            var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
-                                                                            StatusConstants.SuccessStatus,
-                                                                            StatusConstants.DeletedStatus,
-                                                                            StatusConstants.FailedStatus,
-                                                                            StatusConstants.CanceledStatus);
-            foreach (var jobRequestModel in createNewJobRequests)
-            {
-                var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
+			checkJobHistoryStatusTimer.GuidAddedEventHandler += (sender,
+			                                                     args) =>
+			{
+				Task.Factory.StartNew(() =>
+				{
+					var nodeStartedNotifier =
+						new NodeStatusNotifier(ManagerDbConnectionString);
 
-                jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
+					nodeStartedNotifier.StartJobDefinitionStatusNotifier(args.Guid,
+					                                                     "Started",
+					                                                     CancellationTokenSource);
 
-                jobManagerTaskCreators.Add(jobManagerTaskCreator);
-            }
+					nodeStartedNotifier.JobDefinitionStatusNotify.Wait(timeout);
 
-            StartJobTaskHelper startJobTaskHelper = new StartJobTaskHelper();
+					var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
 
-            var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
-                                                                      CancellationTokenSource,
-                                                                      timeout);
+					jobManagerTaskCreator.CreateDeleteJobToManagerTask(args.Guid);
 
-            checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+					jobManagerTaskCreator.StartAndWaitDeleteJobToManagerTask(timeout);
 
-            Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count);
-            Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.FailedStatus));
+					nodeStartedNotifier.Dispose();
 
-            taskHlp.Dispose();
+					jobManagerTaskCreator.Dispose();
+				},
+				                      CancellationTokenSource.Token);
+			};
 
-            foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
-            {
-                jobManagerTaskCreator.Dispose();
-            }
+			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
-            LogHelper.LogDebugWithLineNumber("Finished.",
-                                            Logger);
-        }
+			var condition =
+				checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count;
 
-        [Test]
-        public void CancelWrongJobsTest()
-        {
-            LogHelper.LogDebugWithLineNumber("Start.",
-                                            Logger);
+			Assert.IsTrue(condition,
+			              "Must have equal number of rows.");
 
-            List<JobRequestModel> createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(1);
+			Assert.IsFalse(checkJobHistoryStatusTimer.Guids.Any(pair => pair.Value == StatusConstants.SuccessStatus),
+			               "Invalid SUCCESS status.");
 
-            LogHelper.LogDebugWithLineNumber("( " + createNewJobRequests.Count + " ) jobs will be created.",
-                                            Logger);
+			Assert.IsFalse(checkJobHistoryStatusTimer.Guids.Any(pair => pair.Value == StatusConstants.NullStatus),
+			               "Invalid NULL status.");
 
-            TimeSpan timeout =
-                JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
-                                                       5);
+			Assert.IsFalse(checkJobHistoryStatusTimer.Guids.Any(pair => pair.Value == StatusConstants.EmptyStatus),
+			               "Invalid EMPTY status.");
 
-            //--------------------------------------------
-            // Notify when node is up.
-            //--------------------------------------------
-            LogHelper.LogDebugWithLineNumber("Waiting for node to start.",
-                                            Logger);
+			var allCancelOrDeleteStatus =
+				checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.CanceledStatus ||
+				                                             pair.Value == StatusConstants.DeletedStatus);
 
-            CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
+			Assert.IsTrue(allCancelOrDeleteStatus,
+			              "All rows shall have CANCEL or DELETE status.");
 
-            SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
+			taskHlp.Dispose();
 
-            Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(1,
-                                                                      sqlNotiferCancellationTokenSource);
-            task.Start();
+			foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
+			{
+				jobManagerTaskCreator.Dispose();
+			}
 
-            sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
+			LogHelper.LogDebugWithLineNumber("Finished.",
+			                                 Logger);
+		}
 
-            sqlNotifier.Dispose();
 
-            LogHelper.LogDebugWithLineNumber("Node have started.",
-                                            Logger);
+		[Test]
+		public void JobShouldHaveStatusFailedIfFailedTest()
+		{
+			LogHelper.LogDebugWithLineNumber("Start.",
+			                                 Logger);
 
-            //--------------------------------------------
-            // Start actual test.
-            //--------------------------------------------
-            List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
+			var createNewJobRequests = JobHelper.GenerateFailingJobParamsRequests(1);
 
-            var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
-                                                                            StatusConstants.SuccessStatus,
-                                                                            StatusConstants.DeletedStatus,
-                                                                            StatusConstants.FailedStatus,
-                                                                            StatusConstants.CanceledStatus);
+			var timeout =
+				JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
+				                                       5);
 
-            foreach (var jobRequestModel in createNewJobRequests)
-            {
-                var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
+			//--------------------------------------------
+			// Notify when node is up.
+			//--------------------------------------------
+			LogHelper.LogDebugWithLineNumber("Waiting for node to start.",
+			                                 Logger);
 
-                jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
+			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
-                jobManagerTaskCreators.Add(jobManagerTaskCreator);
-            }
+			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
-            StartJobTaskHelper startJobTaskHelper = new StartJobTaskHelper();
+			var task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(1,
+			                                                         sqlNotiferCancellationTokenSource);
+			task.Start();
 
-            var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
-                                                                      new CancellationTokenSource(), 
-                                                                      timeout);
+			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
 
-            checkJobHistoryStatusTimer.GuidAddedEventHandler += (sender,
-                                                                 args) =>
-            {
-                //-----------------------------------
-                // Wait for job to start.
-                //-----------------------------------
-                NodeStatusNotifier nodeStartedNotifier =
-                    new NodeStatusNotifier(ManagerDbConnectionString);
+			sqlNotifier.Dispose();
 
-                nodeStartedNotifier.StartJobDefinitionStatusNotifier(args.Guid,
-                                                                     "Started",
-																	 new CancellationTokenSource());
+			LogHelper.LogDebugWithLineNumber("Node have started.",
+			                                 Logger);
 
-                nodeStartedNotifier.JobDefinitionStatusNotify.Wait(timeout);
+			//--------------------------------------------
+			// Start actual test.
+			//--------------------------------------------
+			var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 
-                //-----------------------------------
-                // Send wrong id to cancel.
-                //-----------------------------------
-                var newGuid = Guid.NewGuid();
+			var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
+			                                                                StatusConstants.SuccessStatus,
+			                                                                StatusConstants.DeletedStatus,
+			                                                                StatusConstants.FailedStatus,
+			                                                                StatusConstants.CanceledStatus);
+			foreach (var jobRequestModel in createNewJobRequests)
+			{
+				var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
 
-                var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
+				jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
 
-                jobManagerTaskCreator.CreateDeleteJobToManagerTask(newGuid);
+				jobManagerTaskCreators.Add(jobManagerTaskCreator);
+			}
 
-                jobManagerTaskCreator.StartAndWaitDeleteJobToManagerTask(timeout);
+			var startJobTaskHelper = new StartJobTaskHelper();
 
-                jobManagerTaskCreator.Dispose();
+			var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
+			                                                          CancellationTokenSource,
+			                                                          timeout);
 
-                nodeStartedNotifier.Dispose();
-            };
+			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
-            checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count);
+			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.FailedStatus));
 
-            Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count);
-            Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
+			taskHlp.Dispose();
 
-            taskHlp.Dispose();
+			foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
+			{
+				jobManagerTaskCreator.Dispose();
+			}
 
-            foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
-            {
-                jobManagerTaskCreator.Dispose();
-            }
+			LogHelper.LogDebugWithLineNumber("Finished.",
+			                                 Logger);
+		}
 
-            LogHelper.LogDebugWithLineNumber("Finished.",
-                                            Logger);
-        }
+		/// <summary>
+		///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
+		///     netsh http add urlacl url=http://+:9050/ user=everyone listen=yes
+		/// </summary>
+		[Test]
+		public void ShouldBeAbleToCreateManySuccessJobRequestTest()
+		{
+			LogHelper.LogDebugWithLineNumber("Start.",
+			                                 Logger);
 
-        /// <summary>
-        ///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
-        ///     netsh http add urlacl url=http://+:9050/ user=everyone listen=yes
-        /// </summary>
-        [Test]
-        public void ShouldBeAbleToCreateManySuccessJobRequestTest()
-        {
-            LogHelper.LogDebugWithLineNumber("Start.",
-                                            Logger);
+			var createNewJobRequests =
+				JobHelper.GenerateTestJobParamsRequests(1);
 
-            List<JobRequestModel> createNewJobRequests =
-                JobHelper.GenerateTestJobParamsRequests(1);
+			LogHelper.LogDebugWithLineNumber("( " + createNewJobRequests.Count + " ) jobs will be created.",
+			                                 Logger);
 
-            LogHelper.LogDebugWithLineNumber("( " + createNewJobRequests.Count + " ) jobs will be created.",
-                                            Logger);
+			var timeout =
+				JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
+				                                       5);
 
-            TimeSpan timeout =
-                JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
-                                                       5);
+			//--------------------------------------------
+			// Notify when node is up.
+			//--------------------------------------------
+			LogHelper.LogDebugWithLineNumber("Waiting for node to start.",
+			                                 Logger);
 
-            //--------------------------------------------
-            // Notify when node is up.
-            //--------------------------------------------
-            LogHelper.LogDebugWithLineNumber("Waiting for node to start.",
-                                            Logger);
+			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
-            CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
+			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
-            SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
+			var task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(1,
+			                                                         sqlNotiferCancellationTokenSource);
+			task.Start();
 
-            Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(1,
-                                                                      sqlNotiferCancellationTokenSource);
-            task.Start();
+			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
 
-            sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
+			sqlNotifier.Dispose();
 
-            sqlNotifier.Dispose();
+			LogHelper.LogDebugWithLineNumber("Node have started.",
+			                                 Logger);
 
-            LogHelper.LogDebugWithLineNumber("Node have started.",
-                                            Logger);
+			//--------------------------------------------
+			// Start actual test.
+			//--------------------------------------------
+			var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 
-            //--------------------------------------------
-            // Start actual test.
-            //--------------------------------------------
-            List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
+			var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
+			                                                                StatusConstants.SuccessStatus,
+			                                                                StatusConstants.DeletedStatus,
+			                                                                StatusConstants.FailedStatus,
+			                                                                StatusConstants.CanceledStatus);
 
-            var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
-                                                                            StatusConstants.SuccessStatus,
-                                                                            StatusConstants.DeletedStatus,
-                                                                            StatusConstants.FailedStatus,
-                                                                            StatusConstants.CanceledStatus);
+			foreach (var jobRequestModel in createNewJobRequests)
+			{
+				var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
 
-            foreach (var jobRequestModel in createNewJobRequests)
-            {
-                var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
+				jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
 
-                jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
+				jobManagerTaskCreators.Add(jobManagerTaskCreator);
+			}
 
-                jobManagerTaskCreators.Add(jobManagerTaskCreator);
-            }
+			var startJobTaskHelper = new StartJobTaskHelper();
 
-            StartJobTaskHelper startJobTaskHelper = new StartJobTaskHelper();
+			var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
+			                                                          CancellationTokenSource,
+			                                                          timeout);
 
-            var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
-                                                                      CancellationTokenSource,
-                                                                      timeout);
+			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
-            checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count);
+			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
 
-            Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count);
-            Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
+			CancellationTokenSource.Cancel();
 
-            CancellationTokenSource.Cancel();
+			taskHlp.Dispose();
 
-            taskHlp.Dispose();
+			foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
+			{
+				jobManagerTaskCreator.Dispose();
+			}
 
-            foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
-            {
-                jobManagerTaskCreator.Dispose();
-            }
-
-            LogHelper.LogDebugWithLineNumber("Finished.",
-                                            Logger);
-        }
-    }
+			LogHelper.LogDebugWithLineNumber("Finished.",
+			                                 Logger);
+		}
+	}
 }

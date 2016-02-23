@@ -8,124 +8,121 @@ using Manager.IntegrationTest.Console.Host.Properties;
 
 namespace Manager.IntegrationTest.Console.Host.Tasks
 {
-    public class AppDomainManagerTask : IDisposable
-    {
-        private static readonly ILog Logger =
-            LogManager.GetLogger(typeof (AppDomainManagerTask));
+	public class AppDomainManagerTask : IDisposable
+	{
+		private static readonly ILog Logger =
+			LogManager.GetLogger(typeof (AppDomainManagerTask));
 
-        public string Buildmode { get; set; }
-        private DirectoryInfo DirectoryManagerAssemblyLocationFullPath { get; set; }
+		public AppDomainManagerTask(string buildmode,
+		                            DirectoryInfo directoryManagerAssemblyLocationFullPath,
+		                            FileInfo configurationFileInfo,
+		                            string managerAssemblyName)
+		{
+			Buildmode = buildmode;
+			DirectoryManagerAssemblyLocationFullPath = directoryManagerAssemblyLocationFullPath;
+			ConfigurationFileInfo = configurationFileInfo;
+			ManagerAssemblyName = managerAssemblyName;
+		}
 
-        private FileInfo ConfigurationFileInfo { get; set; }
-        public string ManagerAssemblyName { get; set; }
+		public string Buildmode { get; set; }
+		private DirectoryInfo DirectoryManagerAssemblyLocationFullPath { get; set; }
 
-        public AppDomainManagerTask(string buildmode,
-                                    DirectoryInfo directoryManagerAssemblyLocationFullPath,
-                                    FileInfo configurationFileInfo,
-                                    string managerAssemblyName)
-        {
-            Buildmode = buildmode;
-            DirectoryManagerAssemblyLocationFullPath = directoryManagerAssemblyLocationFullPath;
-            ConfigurationFileInfo = configurationFileInfo;
-            ManagerAssemblyName = managerAssemblyName;
-        }
+		private FileInfo ConfigurationFileInfo { get; }
+		public string ManagerAssemblyName { get; set; }
 
-        public string GetAppDomainFriendlyName()
-        {
-            if (MyAppDomain != null)
-            {
-                return MyAppDomain.FriendlyName;
-            }
+		public AppDomain MyAppDomain { get; private set; }
 
-            return null;
-        }
+		public Task Task { get; private set; }
 
-        public AppDomain MyAppDomain { get; private set; }
+		private CancellationTokenSource CancellationTokenSource { get; set; }
 
-        public Task Task { get; private set; }
+		public void Dispose()
+		{
+			LogHelper.LogDebugWithLineNumber(Logger, "Start disposing.");
 
-        private CancellationTokenSource CancellationTokenSource { get; set; }
+			if (CancellationTokenSource != null &&
+			    !CancellationTokenSource.IsCancellationRequested)
+			{
+				CancellationTokenSource.Cancel();
+			}
 
-        public Task StartTask(CancellationTokenSource cancellationTokenSource)
-        {
-            Task= Task.Factory.StartNew(() =>
-            {
-                Task.Factory.StartNew(() =>
-                {
-                    while (!cancellationTokenSource.IsCancellationRequested)
-                    {
-                        Thread.Sleep(TimeSpan.FromMilliseconds(500));
-                    }
+			if (MyAppDomain != null)
+			{
+				try
+				{
+					AppDomain.Unload(MyAppDomain);
+				}
+				catch (Exception)
+				{
+				}
+			}
 
-                    if (cancellationTokenSource.IsCancellationRequested)
-                    {
-                        cancellationTokenSource.Token.ThrowIfCancellationRequested();
-                    }
+			if (Task != null)
+			{
+				Task.Dispose();
+			}
 
-                }, cancellationTokenSource.Token);
+			LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
+		}
 
-                Task.Factory.StartNew(() =>
-                {
-                    DirectoryManagerAssemblyLocationFullPath =
-                        new DirectoryInfo(Path.Combine(Settings.Default.ManagerAssemblyLocationFullPath,
-                                                       Buildmode));
+		public string GetAppDomainFriendlyName()
+		{
+			if (MyAppDomain != null)
+			{
+				return MyAppDomain.FriendlyName;
+			}
 
-                    // Start manager.
-                    var managerAppDomainSetup = new AppDomainSetup
-                    {
-                        ApplicationBase = DirectoryManagerAssemblyLocationFullPath.FullName,
-                        ApplicationName = ManagerAssemblyName,
-                        ShadowCopyFiles = "true",
-                        ConfigurationFile = ConfigurationFileInfo.FullName
-                    };
+			return null;
+		}
 
-                    MyAppDomain = AppDomain.CreateDomain(managerAppDomainSetup.ApplicationName,
-                                                         null,
-                                                         managerAppDomainSetup);
+		public Task StartTask(CancellationTokenSource cancellationTokenSource)
+		{
+			Task = Task.Factory.StartNew(() =>
+			{
+				Task.Factory.StartNew(() =>
+				{
+					while (!cancellationTokenSource.IsCancellationRequested)
+					{
+						Thread.Sleep(TimeSpan.FromMilliseconds(500));
+					}
 
-                    var assemblyFile = new FileInfo(Path.Combine(managerAppDomainSetup.ApplicationBase,
-                                                                 managerAppDomainSetup.ApplicationName));
+					if (cancellationTokenSource.IsCancellationRequested)
+					{
+						cancellationTokenSource.Token.ThrowIfCancellationRequested();
+					}
+				}, cancellationTokenSource.Token);
 
-                    LogHelper.LogDebugWithLineNumber(Logger,
-                                                    "Manager (appdomain) will start with friendly name : " + MyAppDomain.FriendlyName);
+				Task.Factory.StartNew(() =>
+				{
+					DirectoryManagerAssemblyLocationFullPath =
+						new DirectoryInfo(Path.Combine(Settings.Default.ManagerAssemblyLocationFullPath,
+						                               Buildmode));
 
-                    MyAppDomain.ExecuteAssembly(assemblyFile.FullName);
+					// Start manager.
+					var managerAppDomainSetup = new AppDomainSetup
+					{
+						ApplicationBase = DirectoryManagerAssemblyLocationFullPath.FullName,
+						ApplicationName = ManagerAssemblyName,
+						ShadowCopyFiles = "true",
+						ConfigurationFile = ConfigurationFileInfo.FullName
+					};
 
-                },
-                cancellationTokenSource.Token);
+					MyAppDomain = AppDomain.CreateDomain(managerAppDomainSetup.ApplicationName,
+					                                     null,
+					                                     managerAppDomainSetup);
 
-            }, cancellationTokenSource.Token);
+					var assemblyFile = new FileInfo(Path.Combine(managerAppDomainSetup.ApplicationBase,
+					                                             managerAppDomainSetup.ApplicationName));
 
-            return Task;
-        }
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Manager (appdomain) will start with friendly name : " + MyAppDomain.FriendlyName);
 
-        public void Dispose()
-        {
-            LogHelper.LogDebugWithLineNumber(Logger, "Start disposing.");
+					MyAppDomain.ExecuteAssembly(assemblyFile.FullName);
+				},
+				                      cancellationTokenSource.Token);
+			}, cancellationTokenSource.Token);
 
-            if (CancellationTokenSource != null &&
-                !CancellationTokenSource.IsCancellationRequested)
-            {
-                CancellationTokenSource.Cancel();
-            }
-
-            if (MyAppDomain != null)
-            {
-                try
-                {
-                    AppDomain.Unload(MyAppDomain);
-                }
-                catch (Exception)
-                {
-                }
-            }
-
-            if (Task != null)
-            {
-                Task.Dispose();
-            }
-
-            LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
-        }
-    }
+			return Task;
+		}
+	}
 }
