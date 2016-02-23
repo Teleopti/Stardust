@@ -100,7 +100,6 @@ namespace Manager.Integration.Test.Helpers
                                            string processFileName,
                                            int numberOfNodesToStart)
         {
-            Console.WriteLine("StartProcess, processFileName " + processFileName);
 
             var process = CreateProcess(processDirectory,
                                         processFileName,
