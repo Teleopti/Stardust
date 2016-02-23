@@ -89,10 +89,6 @@ define([
 
 			viewModel.Loading(true);
 
-			if (resources.MyTeam_MoveActivity_25206) {
-				viewModel.isMoveActivityFeatureEnabled(true);
-			}
-
 			viewModel.SetViewOptions(options);
 
 			var groupPagesDeferred = $.Deferred();

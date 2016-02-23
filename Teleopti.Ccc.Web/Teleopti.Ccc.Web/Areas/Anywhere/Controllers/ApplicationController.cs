@@ -183,7 +183,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 
 				MyTeam_Reports_31070 = _toggles.IsEnabled(Toggles.MyTeam_Reports_31070),
 				MyTeam_AbsenceBackToWork_31478 = _toggles.IsEnabled(Toggles.MyTeam_AbsenceBackToWork_31478),
-				MyTeam_MoveActivity_25206 = _toggles.IsEnabled(Toggles.MyTeam_MoveActivity_25206),
 				MyTeam_MakeTeamScheduleConsistent_31897 = _toggles.IsEnabled(Toggles.MyTeam_MakeTeamScheduleConsistent_31897),
 
 				RTA_AdherenceDetails_34267 = _toggles.IsEnabled(Toggles.RTA_AdherenceDetails_34267),

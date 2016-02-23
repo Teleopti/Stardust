@@ -29,7 +29,6 @@
 
 		MessageBroker_SchedulingScreenMailbox_32733,
 
-		MyTeam_MoveActivity_25206,
 		MyTeam_Reports_31070,
 		MyTeam_AbsenceBackToWork_31478,
 

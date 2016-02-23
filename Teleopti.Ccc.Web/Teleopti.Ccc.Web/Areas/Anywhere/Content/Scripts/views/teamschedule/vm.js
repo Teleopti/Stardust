@@ -218,9 +218,8 @@ define([
 			});
 		};
 
-		this.isMoveActivityFeatureEnabled = ko.observable(false);
 		this.HasPermissionForMovingActivity = ko.computed(function() {
-			return self.isMoveActivityFeatureEnabled() && self.permissionMoveActivity();
+			return self.permissionMoveActivity();
 		});
 	};
 });
