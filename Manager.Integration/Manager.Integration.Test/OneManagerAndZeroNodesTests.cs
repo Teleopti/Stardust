@@ -27,8 +27,8 @@ namespace Manager.Integration.Test
 		private static readonly ILog Logger =
 			LogManager.GetLogger(typeof (OneManagerAndZeroNodesTests));
 
-		private readonly bool _clearDatabase = true;
-		private readonly string _buildMode = "Debug";
+		private bool _clearDatabase = true;
+		private string _buildMode = "Debug";
 
 
 		[TestFixtureSetUp]
