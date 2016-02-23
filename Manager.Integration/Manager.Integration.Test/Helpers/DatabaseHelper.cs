@@ -50,8 +50,7 @@ namespace Manager.Integration.Test.Helpers
 			using (var connection = new SqlConnection(connectionString.ConnectionString))
 			{
 				connection.Open();
-				try
-				{
+				
 					using (var command = new SqlCommand("truncate table Stardust.JobDefinitions",
 													connection))
 					{
@@ -59,14 +58,7 @@ namespace Manager.Integration.Test.Helpers
 
 						command.ExecuteNonQuery();
 					}
-				}
-				catch (Exception exp)
-				{
-					LogHelper.LogErrorWithLineNumber(exp.Message,Logger, exp);
-				}
-
-				try
-				{
+				
 					using (var command = new SqlCommand("truncate table Stardust.JobHistory",
 													connection))
 					{
@@ -74,14 +66,7 @@ namespace Manager.Integration.Test.Helpers
 
 						command.ExecuteNonQuery();
 					}
-				}
-				catch (Exception exp)
-				{
-					LogHelper.LogErrorWithLineNumber(exp.Message, Logger, exp);
-				}
-
-				try
-				{
+			
 					using (var command = new SqlCommand("truncate table Stardust.JobHistoryDetail",
 													connection))
 					{
@@ -89,14 +74,7 @@ namespace Manager.Integration.Test.Helpers
 
 						command.ExecuteNonQuery();
 					}
-				}
-				catch (Exception exp)
-				{
-					LogHelper.LogErrorWithLineNumber(exp.Message, Logger, exp);
-				}
-
-				try
-				{
+				
 					using (var command = new SqlCommand("truncate table Stardust.WorkerNodes",
 													connection))
 					{
@@ -104,14 +82,9 @@ namespace Manager.Integration.Test.Helpers
 
 						command.ExecuteNonQuery();
 					}
-				}
-				catch (Exception exp)
-				{
-					LogHelper.LogErrorWithLineNumber(exp.Message, Logger, exp);
-				}
-
-
+				
 				connection.Close();
+				LogHelper.LogDebugWithLineNumber("Stop.", Logger);
 			}
 		}
 	}

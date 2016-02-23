@@ -66,7 +66,7 @@ namespace Manager.Integration.Test
 			Task = AppDomainTask.StartTask(CancellationTokenSource,
 			                               1);
 
-            LogHelper.LogDebugWithLineNumber("Finshed TestFixtureSetUp",
+            LogHelper.LogDebugWithLineNumber("Finished TestFixtureSetUp",
                                             Logger);
         }
 
