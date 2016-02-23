@@ -11,12 +11,12 @@ namespace Manager.Integration.Test.Notifications
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (SqlNotifier));
 
-        public string ConnectionString { get; set; }
-
         public SqlNotifier(string connectionString)
         {
             ConnectionString = connectionString;
         }
+
+		public string ConnectionString { get; set; }
 
         public ManualResetEventSlim NotifyWhenAllNodesAreUp { get; set; }
 
@@ -44,20 +44,20 @@ namespace Manager.Integration.Test.Notifications
 
             NotifyWhenNodesAreUpTask = new Task(() =>
             {
-                int nodes = numberOfNodes;
+				var nodes = numberOfNodes;
 
                 while (!cancellationTokenSource.IsCancellationRequested &&
                        !NotifyWhenAllNodesAreUp.IsSet)
                 {
-                    using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
+					using (var sqlConnection = new SqlConnection(ConnectionString))
                     {
                         sqlConnection.Open();
 
-                        using (SqlCommand command =
+						using (var command =
                             new SqlCommand("SELECT COUNT(*) FROM Stardust.WorkerNodes",
                                            sqlConnection))
                         {
-                            int rowCount = (int) command.ExecuteScalar();
+							var rowCount = (int) command.ExecuteScalar();
 
                             if (validator(rowCount,nodes))
                             {
@@ -76,7 +76,7 @@ namespace Manager.Integration.Test.Notifications
                     cancellationTokenSource.Token.ThrowIfCancellationRequested();
                 }
             },
-            NotifyWhenAllNodesAreUpTaskCancellationTokenSource.Token);
+                                                   NotifyWhenAllNodesAreUpTaskCancellationTokenSource.Token);
 
             return NotifyWhenNodesAreUpTask;
         }

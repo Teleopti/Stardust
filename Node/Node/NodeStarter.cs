@@ -16,85 +16,92 @@ using Stardust.Node.Workers;
 
 namespace Stardust.Node
 {
-    public class NodeStarter : INodeStarter
-    {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeStarter));
+	public class NodeStarter : INodeStarter
+	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeStarter));
 
-        private string WhoAmI { get; set; }
+		private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
 
-        private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
+		private string WhoAmI { get; set; }
 
-        public void Stop()
-        {
-            QuitEvent.Set();
-        }
+		public void Stop()
+		{
+			QuitEvent.Set();
+		}
 
-        public void Start(INodeConfiguration nodeConfiguration,
-                          IContainer container)
-        {
-            string nodeAddress = nodeConfiguration.BaseAddress.Scheme + "://+:" + nodeConfiguration.BaseAddress.Port + "/";
+		public void Start(INodeConfiguration nodeConfiguration,
+		                  IContainer container)
+		{
+			var nodeAddress = nodeConfiguration.BaseAddress.Scheme + "://+:" + nodeConfiguration.BaseAddress.Port + "/";
 
-            // Start OWIN host 
-            using (WebApp.Start(nodeAddress,
-                                appBuilder =>
-                                {
-                                    var builder = new ContainerBuilder();
+			// Start OWIN host 
+			using (WebApp.Start(nodeAddress,
+			                    appBuilder =>
+			                    {
+				                    var builder = new ContainerBuilder();
 
-                                    builder.RegisterType<InvokeHandler>()
-                                        .SingleInstance();
+				                    builder.RegisterType<InvokeHandler>()
+					                    .SingleInstance();
 
-                                    builder.RegisterType<NodeController>()
-                                        .SingleInstance();
+				                    builder.RegisterType<NodeController>()
+					                    .SingleInstance();
 
-                                    builder.RegisterApiControllers(typeof (NodeController).Assembly);
+				                    builder.RegisterApiControllers(typeof (NodeController).Assembly);
 
-                                    builder.RegisterInstance(nodeConfiguration);
+				                    builder.RegisterInstance(nodeConfiguration);
 
-                                    // Register IWorkerWrapper.
-                                    builder.Register<IWorkerWrapper>(c => new WorkerWrapper(c.Resolve<InvokeHandler>(),
-                                                                                            nodeConfiguration,
-                                                                                            new TrySendNodeStartUpNotificationToManagerTimer(nodeConfiguration,
-                                                                                                                                             nodeConfiguration.GetManagerNodeHasBeenInitializedUri()),
-                                                                                            new PingToManagerTimer(nodeConfiguration,
-                                                                                                                   nodeConfiguration.GetManagerNodeHeartbeatUri()),
-                                                                                            new TrySendJobDoneStatusToManagerTimer(nodeConfiguration),
-                                                                                            new TrySendJobCanceledToManagerTimer(nodeConfiguration),
-                                                                                            new TrySendJobFaultedToManagerTimer(nodeConfiguration),
-                                                                                            new PostHttpRequest()))
-                                        .SingleInstance();
+				                    // Register IWorkerWrapper.
+				                    builder.Register<IWorkerWrapper>(c => new WorkerWrapper(c.Resolve<InvokeHandler>(),
+				                                                                            nodeConfiguration,
+				                                                                            new TrySendNodeStartUpNotificationToManagerTimer
+					                                                                            (nodeConfiguration,
+					                                                                             nodeConfiguration
+						                                                                             .GetManagerNodeHasBeenInitializedUri()),
+				                                                                            new PingToManagerTimer(
+					                                                                            nodeConfiguration,
+					                                                                            nodeConfiguration
+						                                                                            .GetManagerNodeHeartbeatUri()),
+				                                                                            new TrySendJobDoneStatusToManagerTimer(
+					                                                                            nodeConfiguration),
+				                                                                            new TrySendJobCanceledToManagerTimer(
+					                                                                            nodeConfiguration),
+				                                                                            new TrySendJobFaultedToManagerTimer(
+					                                                                            nodeConfiguration),
+				                                                                            new PostHttpRequest()))
+					                    .SingleInstance();
 
 
-                                    builder.Update(container);
+				                    builder.Update(container);
 
-                                    //to start it
-                                    container.Resolve<IWorkerWrapper>();
+				                    //to start it
+				                    container.Resolve<IWorkerWrapper>();
 
-                                    // Configure Web API for self-host. 
-                                    var config = new HttpConfiguration
-                                    {
-                                        DependencyResolver = new AutofacWebApiDependencyResolver(container)
-                                    };
+				                    // Configure Web API for self-host. 
+				                    var config = new HttpConfiguration
+				                    {
+					                    DependencyResolver = new AutofacWebApiDependencyResolver(container)
+				                    };
 
-                                    config.MapHttpAttributeRoutes();
-                                    config.Services.Add(typeof (IExceptionLogger),
-                                                        new GlobalExceptionLogger());
+				                    config.MapHttpAttributeRoutes();
+				                    config.Services.Add(typeof (IExceptionLogger),
+				                                        new GlobalExceptionLogger());
 
-                                    appBuilder.UseAutofacMiddleware(container);
-                                    appBuilder.UseAutofacWebApi(config);
-                                    appBuilder.UseWebApi(config);
-                                }))
+				                    appBuilder.UseAutofacMiddleware(container);
+				                    appBuilder.UseAutofacWebApi(config);
+				                    appBuilder.UseWebApi(config);
+			                    }))
 
-            {
-                WhoAmI = nodeConfiguration.CreateWhoIAm(Environment.MachineName);
+			{
+				WhoAmI = nodeConfiguration.CreateWhoIAm(Environment.MachineName);
 
-                LogHelper.LogInfoWithLineNumber(Logger,
-                                                WhoAmI + ": Node started on machine.");
+				LogHelper.LogInfoWithLineNumber(Logger,
+				                                WhoAmI + ": Node started on machine.");
 
-                LogHelper.LogInfoWithLineNumber(Logger,
-                                                WhoAmI + ": Listening on port " + nodeConfiguration.BaseAddress);
+				LogHelper.LogInfoWithLineNumber(Logger,
+				                                WhoAmI + ": Listening on port " + nodeConfiguration.BaseAddress);
 
-                QuitEvent.WaitOne();
-            }
-        }
-    }
+				QuitEvent.WaitOne();
+			}
+		}
+	}
 }

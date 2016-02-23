@@ -46,7 +46,7 @@ namespace Stardust.Manager
 
         public List<WorkerNode> LoadAll()
         {
-            LogHelper.LogDebugWithLineNumber(Logger,"Start LoadAll.");
+			LogHelper.LogDebugWithLineNumber(Logger, "Start LoadAll.");
 
             const string selectCommand = @"SELECT  Id ,Url FROM [Stardust].WorkerNodes";
 
@@ -68,7 +68,7 @@ namespace Stardust.Manager
                 {
                     while (reader.Read())
                     {
-                        var jobDefinition = new WorkerNode()
+						var jobDefinition = new WorkerNode
                         {
                             Id = (Guid) reader.GetValue(reader.GetOrdinal("Id")),
                             Url = new Uri((string) reader.GetValue(reader.GetOrdinal("Url")))
@@ -125,7 +125,7 @@ namespace Stardust.Manager
                     {
                         while (reader.Read())
                         {
-                            var jobDefinition = new WorkerNode()
+							var jobDefinition = new WorkerNode
                             {
                                 Id = (Guid) reader.GetValue(reader.GetOrdinal("Id")),
                                 Url = new Uri((string) reader.GetValue(reader.GetOrdinal("Url")))
@@ -220,6 +220,21 @@ namespace Stardust.Manager
 
                 connection.Close();
             }
+		}
+
+		private void InitDs()
+		{
+			_jdDataSet = new DataSet();
+
+			_jdDataTable = new DataTable("[Stardust].WorkerNodes");
+
+			_jdDataTable.Columns.Add(new DataColumn("Id",
+			                                        typeof (Guid)));
+
+			_jdDataTable.Columns.Add(new DataColumn("Url",
+			                                        typeof (string)));
+
+			_jdDataSet.Tables.Add(_jdDataTable);
         }
     }
 }

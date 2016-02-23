@@ -10,14 +10,6 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 {
     public class AppDomainNodeTask : IAppDomain,IDisposable
     {
-        private string BuildMode { get; set; }
-
-        private DirectoryInfo DirectoryNodeAssemblyLocationFullPath { get; set; }
-
-        private FileInfo NodeconfigurationFile { get; set; }
-
-        private string NodeAssemblyName { get; set; }
-
         private static readonly ILog Logger =
             LogManager.GetLogger(typeof (AppDomainNodeTask));
 
@@ -32,11 +24,51 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
             NodeAssemblyName = nodeAssemblyName;
         }
 
+		private string BuildMode { get; set; }
+
+		private DirectoryInfo DirectoryNodeAssemblyLocationFullPath { get; }
+
+		private FileInfo NodeconfigurationFile { get; }
+
+		private string NodeAssemblyName { get; }
+
         private AppDomain MyAppDomain { get; set; }
 
         public Task Task { get; private set; }
 
         private CancellationTokenSource CancellationTokenSource { get; set; }
+
+		public void Dispose()
+		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Start disposing.");
+
+			if (CancellationTokenSource != null &&
+			    !CancellationTokenSource.IsCancellationRequested)
+			{
+				CancellationTokenSource.Cancel();
+			}
+
+			if (MyAppDomain != null)
+			{
+				try
+				{
+					AppDomain.Unload(MyAppDomain);
+				}
+
+				catch (Exception)
+				{
+				}
+			}
+
+			if (Task != null)
+			{
+				Task.Dispose();
+			}
+
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Finshed disposing.");
+		}
 
         public Task StartTask(CancellationTokenSource cancellationTokenSource)
         {
@@ -95,38 +127,6 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
             }
 
             return null;
-        }
-
-        public void Dispose()
-        {
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                            "Start disposing.");
-
-            if (CancellationTokenSource != null &&
-                !CancellationTokenSource.IsCancellationRequested)
-            {
-                CancellationTokenSource.Cancel();
-            }
-
-            if (MyAppDomain != null)
-            {
-                try
-                {
-                    AppDomain.Unload(MyAppDomain);
-                }
-
-                catch (Exception)
-                {
-                }
-            }
-
-            if (Task != null)
-            {
-                Task.Dispose();
-            }
-
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                            "Finshed disposing.");
         }
     }
 }

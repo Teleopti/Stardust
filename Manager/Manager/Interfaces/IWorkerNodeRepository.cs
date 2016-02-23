@@ -4,7 +4,7 @@ using Stardust.Manager.Models;
 
 namespace Stardust.Manager.Interfaces
 {
-	public interface IWorkerNodeRepository 
+	public interface IWorkerNodeRepository
 	{
 		List<WorkerNode> LoadAll();
 

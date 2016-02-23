@@ -1,83 +1,80 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
-using System.Web.Http.Results;
 using log4net;
 using Manager.IntegrationTest.Console.Host.Helpers;
 
 namespace Manager.IntegrationTest.Console.Host
 {
-    public class IntegrationController : ApiController
-    {
-        private static readonly ILog Logger =
-            LogManager.GetLogger(typeof (IntegrationController));
+	public class IntegrationController : ApiController
+	{
+		private static readonly ILog Logger =
+			LogManager.GetLogger(typeof (IntegrationController));
 
-        public string WhoAmI { get; private set; }
+		public IntegrationController()
+		{
+			WhoAmI = "[INTEGRATION CONTROLLER, " + Environment.MachineName.ToUpper() + "]";
 
-        public IntegrationController()
-        {
-            WhoAmI = "[INTEGRATION CONTROLLER, " + Environment.MachineName.ToUpper() + "]";
+			LogHelper.LogInfoWithLineNumber(Logger,
+			                                WhoAmI);
+		}
 
-            LogHelper.LogInfoWithLineNumber(Logger,
-                                            WhoAmI);
-        }
+		public string WhoAmI { get; }
 
-        [HttpPost, Route("appdomain")]
-        public IHttpActionResult StartNewNode()
-        {
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                            "Called API controller.");
+		[HttpPost, Route("appdomain")]
+		public IHttpActionResult StartNewNode()
+		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Called API controller.");
 
-            string friendlyname;
+			string friendlyname;
 
-            Program.StartNewNode(out friendlyname);
+			Program.StartNewNode(out friendlyname);
 
-            return Ok(friendlyname);
-        }
+			return Ok(friendlyname);
+		}
 
-        [HttpDelete, Route("appdomain/{id}")]
-        public IHttpActionResult DeleteAppDomain(string id)
-        {
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                            "Called API controller.");
+		[HttpDelete, Route("appdomain/{id}")]
+		public IHttpActionResult DeleteAppDomain(string id)
+		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Called API controller.");
 
-            if (string.IsNullOrEmpty(id))
-            {
-                LogHelper.LogWarningWithLineNumber(Logger,
-                                                   "Bad request, id : " + id);
+			if (string.IsNullOrEmpty(id))
+			{
+				LogHelper.LogWarningWithLineNumber(Logger,
+				                                   "Bad request, id : " + id);
 
-                return BadRequest(id);
-            }
+				return BadRequest(id);
+			}
 
-            LogHelper.LogInfoWithLineNumber(Logger,
-                                            "Try shut down Node with id : " + id);
+			LogHelper.LogInfoWithLineNumber(Logger,
+			                                "Try shut down Node with id : " + id);
 
-            bool success= Program.ShutDownAppDomainWithFriendlyName(id);
+			var success = Program.ShutDownAppDomainWithFriendlyName(id);
 
-            if (success)
-            {
-                LogHelper.LogInfoWithLineNumber(Logger,
-                                                "Node has been shut down, with id : " + id);
+			if (success)
+			{
+				LogHelper.LogInfoWithLineNumber(Logger,
+				                                "Node has been shut down, with id : " + id);
 
-                return Ok(id);
-            }
+				return Ok(id);
+			}
 
-            LogHelper.LogWarningWithLineNumber(Logger,
-                                               "Id not found, id : " + id);
+			LogHelper.LogWarningWithLineNumber(Logger,
+			                                   "Id not found, id : " + id);
 
-            return NotFound();
-        }
+			return NotFound();
+		}
 
-        [HttpGet, Route("appdomain")]
-        public IHttpActionResult GetAllAppDomains()
-        {
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                            "Called API controller.");
+		[HttpGet, Route("appdomain")]
+		public IHttpActionResult GetAllAppDomains()
+		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Called API controller.");
 
-            List<string> appDomainsList = Program.GetInstantiatedAppDomains();
+			var appDomainsList = Program.GetInstantiatedAppDomains();
 
-            return Ok(appDomainsList);
-        }
-    }
+			return Ok(appDomainsList);
+		}
+	}
 }

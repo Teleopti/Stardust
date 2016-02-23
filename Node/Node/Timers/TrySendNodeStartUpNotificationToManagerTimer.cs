@@ -11,104 +11,104 @@ using Timer = System.Timers.Timer;
 
 namespace Stardust.Node.Timers
 {
-    public class TrySendNodeStartUpNotificationToManagerTimer : Timer
-    {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (TrySendNodeStartUpNotificationToManagerTimer));
+	public class TrySendNodeStartUpNotificationToManagerTimer : Timer
+	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (TrySendNodeStartUpNotificationToManagerTimer));
 
-        protected override void Dispose(bool disposing)
-        {
-            LogHelper.LogDebugWithLineNumber(Logger, "Start disposing.");
+		public TrySendNodeStartUpNotificationToManagerTimer(INodeConfiguration nodeConfiguration,
+		                                                    Uri callbackTemplateUri,
+		                                                    double interval = 3000,
+		                                                    bool autoReset = true) : base(interval)
+		{
+			nodeConfiguration.ThrowArgumentNullException();
+			callbackTemplateUri.ThrowArgumentNullExceptionWhenNull();
 
-            base.Dispose(disposing);
+			CancellationTokenSource = new CancellationTokenSource();
 
-            if (CancellationTokenSource != null &&
-                !CancellationTokenSource.IsCancellationRequested)
-            {
-                CancellationTokenSource.Cancel();
-            }
+			NodeConfiguration = nodeConfiguration;
+			CallbackTemplateUri = callbackTemplateUri;
 
-            LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
-        }
+			WhoAmI = NodeConfiguration.CreateWhoIAm(Environment.MachineName);
 
-        public TrySendNodeStartUpNotificationToManagerTimer(INodeConfiguration nodeConfiguration,
-                                                            Uri callbackTemplateUri,
-                                                            double interval = 3000,
-                                                            bool autoReset = true) : base(interval)
-        {
-            nodeConfiguration.ThrowArgumentNullException();
-            callbackTemplateUri.ThrowArgumentNullExceptionWhenNull();
+			Elapsed += OnTimedEvent;
 
-            CancellationTokenSource = new CancellationTokenSource();
+			AutoReset = autoReset;
+		}
 
-            NodeConfiguration = nodeConfiguration;
-            CallbackTemplateUri = callbackTemplateUri;
+		public string WhoAmI { get; private set; }
 
-            WhoAmI = NodeConfiguration.CreateWhoIAm(Environment.MachineName);
+		public INodeConfiguration NodeConfiguration { get; private set; }
 
-            Elapsed += OnTimedEvent;
+		public Uri CallbackTemplateUri { get; private set; }
 
-            AutoReset = autoReset;
-        }
+		private CancellationTokenSource CancellationTokenSource { get; set; }
 
-        public string WhoAmI { get; private set; }
+		protected override void Dispose(bool disposing)
+		{
+			LogHelper.LogDebugWithLineNumber(Logger, "Start disposing.");
 
-        public INodeConfiguration NodeConfiguration { get; private set; }
+			base.Dispose(disposing);
 
-        public Uri CallbackTemplateUri { get; private set; }
+			if (CancellationTokenSource != null &&
+			    !CancellationTokenSource.IsCancellationRequested)
+			{
+				CancellationTokenSource.Cancel();
+			}
 
-        public event EventHandler TrySendNodeStartUpNotificationSucceded;
+			LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
+		}
 
-        public virtual async Task<HttpResponseMessage> TrySendNodeStartUpToManager(Uri nodeAddress,
-                                                                                   CancellationToken cancellationToken)
-        {
-            var httpResponseMessage =
-                await nodeAddress.PostAsync(CallbackTemplateUri,
-                                            cancellationToken);
+		public event EventHandler TrySendNodeStartUpNotificationSucceded;
 
-            return httpResponseMessage;
-        }
+		public virtual async Task<HttpResponseMessage> TrySendNodeStartUpToManager(Uri nodeAddress,
+		                                                                           CancellationToken cancellationToken)
+		{
+			var httpResponseMessage =
+				await nodeAddress.PostAsync(CallbackTemplateUri,
+				                            cancellationToken);
 
-        private void TrySendNodeStartUpNotificationSuccededInvoke()
-        {
-            if (TrySendNodeStartUpNotificationSucceded != null)
-            {
-                TrySendNodeStartUpNotificationSucceded(this,
-                                                       EventArgs.Empty);
-            }
-        }
+			return httpResponseMessage;
+		}
 
-        private CancellationTokenSource CancellationTokenSource { get; set; }
+		private void TrySendNodeStartUpNotificationSuccededInvoke()
+		{
+			if (TrySendNodeStartUpNotificationSucceded != null)
+			{
+				TrySendNodeStartUpNotificationSucceded(this,
+				                                       EventArgs.Empty);
+			}
+		}
 
-        private async void OnTimedEvent(object sender,
-                                        ElapsedEventArgs e)
-        {
-            try
-            {
-                LogHelper.LogDebugWithLineNumber(Logger,
-                                                "Trying to send init to manager. Manager Uri : ( " + CallbackTemplateUri + " )");
-                var httpResponseMessage =
-                    await TrySendNodeStartUpToManager(NodeConfiguration.BaseAddress,
-                                                      CancellationTokenSource.Token);
+		private async void OnTimedEvent(object sender,
+		                                ElapsedEventArgs e)
+		{
+			try
+			{
+				LogHelper.LogDebugWithLineNumber(Logger,
+				                                 "Trying to send init to manager. Manager Uri : ( " + CallbackTemplateUri + " )");
+				var httpResponseMessage =
+					await TrySendNodeStartUpToManager(NodeConfiguration.BaseAddress,
+					                                  CancellationTokenSource.Token);
 
-                if (httpResponseMessage.IsSuccessStatusCode)
-                {
-                    LogHelper.LogDebugWithLineNumber(Logger,
-                                                     WhoAmI + ": Node start up notification to manager succeded.");
+				if (httpResponseMessage.IsSuccessStatusCode)
+				{
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 WhoAmI + ": Node start up notification to manager succeded.");
 
-                    TrySendNodeStartUpNotificationSuccededInvoke();
-                }
-                else
-                {
-                    LogHelper.LogInfoWithLineNumber(Logger,
-                                                       WhoAmI + ": Node start up notification to manager failed.");
-                }
-            }
+					TrySendNodeStartUpNotificationSuccededInvoke();
+				}
+				else
+				{
+					LogHelper.LogInfoWithLineNumber(Logger,
+					                                WhoAmI + ": Node start up notification to manager failed.");
+				}
+			}
 
-            catch
-            {
-                LogHelper.LogErrorWithLineNumber(Logger,
-                                                 WhoAmI + ": Node start up notification to manager failed.");
-            }
-        }
-    }
+			catch
+			{
+				LogHelper.LogErrorWithLineNumber(Logger,
+				                                 WhoAmI + ": Node start up notification to manager failed.");
+			}
+		}
+	}
 }

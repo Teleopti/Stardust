@@ -6,55 +6,55 @@ using Manager.Integration.Test.Helpers;
 
 namespace Manager.Integration.Test.Scripts
 {
-    public static class ScriptExecuteHelper
-    {
-        private static readonly ILog Logger =
-            LogManager.GetLogger(typeof (ScriptExecuteHelper));
+	public static class ScriptExecuteHelper
+	{
+		private static readonly ILog Logger =
+			LogManager.GetLogger(typeof (ScriptExecuteHelper));
 
-        public static void ExecuteScript(string script,
-                                         string connectionstring)
-        {
-            if (string.IsNullOrEmpty(script))
-            {
-                throw new ArgumentException("script is empty.");
-            }
+		public static void ExecuteScript(string script,
+		                                 string connectionstring)
+		{
+			if (string.IsNullOrEmpty(script))
+			{
+				throw new ArgumentException("script is empty.");
+			}
 
-            if (string.IsNullOrEmpty(connectionstring))
-            {
-                throw new ArgumentNullException("connectionstring");
-            }
+			if (string.IsNullOrEmpty(connectionstring))
+			{
+				throw new ArgumentNullException("connectionstring");
+			}
 
-            using (var con = new SqlConnection(connectionstring))
-            {
-                con.Open();
+			using (var con = new SqlConnection(connectionstring))
+			{
+				con.Open();
 
-                using (SqlCommand command = new SqlCommand(script,
-                                                           con))
-                {
-                    try
-                    {
-                        command.ExecuteNonQuery();
-                    }
+				using (var command = new SqlCommand(script,
+				                                    con))
+				{
+					try
+					{
+						command.ExecuteNonQuery();
+					}
 
-                    catch (Exception exp)
-                    {
-                        LogHelper.LogErrorWithLineNumber(exp.Message,
-                                                         Logger,
-                                                         exp);
-                    }
-                }
+					catch (Exception exp)
+					{
+						LogHelper.LogErrorWithLineNumber(exp.Message,
+						                                 Logger,
+						                                 exp);
+					}
+				}
 
-                con.Close();
-            }
-        }
+				con.Close();
+			}
+		}
 
-        public static void ExecuteScriptFile(FileInfo scriptFile,
-                                             string connectionstring)
-        {
-            string script = File.ReadAllText(scriptFile.FullName);
+		public static void ExecuteScriptFile(FileInfo scriptFile,
+		                                     string connectionstring)
+		{
+			var script = File.ReadAllText(scriptFile.FullName);
 
-            ExecuteScript(script,
-                          connectionstring);
-        }
-    }
+			ExecuteScript(script,
+			              connectionstring);
+		}
+	}
 }

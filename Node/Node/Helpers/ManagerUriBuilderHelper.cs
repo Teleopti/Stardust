@@ -4,108 +4,108 @@ using Stardust.Node.Extensions;
 
 namespace Stardust.Node.Helpers
 {
-    public class ManagerUriBuilderHelper
-    {
-        private UriBuilder UriBuilder { get; set; }
+	public class ManagerUriBuilderHelper
+	{
+		public ManagerUriBuilderHelper(Uri locationUri) : this(locationUri.ToString())
+		{
+		}
 
-        private UriBuilder UriTemplateBuilder { get; set; }
+		public ManagerUriBuilderHelper(string location)
+		{
+			location.ThrowArgumentNullExceptionIfNullOrEmpty();
 
-        public ManagerUriBuilderHelper(Uri locationUri) : this(locationUri.ToString())
-        {
-        }
+			UriBuilder = new UriBuilder(location);
 
-        public ManagerUriBuilderHelper(string location)
-        {
-            location.ThrowArgumentNullExceptionIfNullOrEmpty();
+			UriTemplateBuilder = new UriBuilder(location);
 
-            UriBuilder = new UriBuilder(location);
+			UriBuilder.Scheme.ThrowArgumentNullExceptionIfNullOrEmpty();
+		}
 
-            UriTemplateBuilder = new UriBuilder(location);
+		private UriBuilder UriBuilder { get; set; }
 
-            UriBuilder.Scheme.ThrowArgumentNullExceptionIfNullOrEmpty();
-        }
+		private UriBuilder UriTemplateBuilder { get; set; }
 
-        public string GetHostName()
-        {
-            return UriBuilder.Host;
-        }
+		public string GetHostName()
+		{
+			return UriBuilder.Host;
+		}
 
-        public int GetPort()
-        {
-            return UriBuilder.Port;
-        }
+		public int GetPort()
+		{
+			return UriBuilder.Port;
+		}
 
-        public string GetScheme()
-        {
-            return UriBuilder.Scheme;
-        }
+		public string GetScheme()
+		{
+			return UriBuilder.Scheme;
+		}
 
-        public Uri GetLocationUri()
-        {
-            return UriBuilder.Uri;
-        }
+		public Uri GetLocationUri()
+		{
+			return UriBuilder.Uri;
+		}
 
-        public Uri GetJobProgressTemplateUri()
-        {
-            return CreateUri(ManagerRouteConstants.JobProgress);
-        }
+		public Uri GetJobProgressTemplateUri()
+		{
+			return CreateUri(ManagerRouteConstants.JobProgress);
+		}
 
-        public Uri GetHeartbeatTemplateUri()
-        {
-            return CreateUri(ManagerRouteConstants.Heartbeat);
-        }
+		public Uri GetHeartbeatTemplateUri()
+		{
+			return CreateUri(ManagerRouteConstants.Heartbeat);
+		}
 
-        public Uri GetNodeHasBeenInitializedTemplateUri()
-        {
-            return CreateUri(ManagerRouteConstants.NodeHasBeenInitialized);
-        }
+		public Uri GetNodeHasBeenInitializedTemplateUri()
+		{
+			return CreateUri(ManagerRouteConstants.NodeHasBeenInitialized);
+		}
 
-        public Uri GetJobHasFailedTemplateUri()
-        {
-            return CreateUri(ManagerRouteConstants.JobFailed);
-        }
+		public Uri GetJobHasFailedTemplateUri()
+		{
+			return CreateUri(ManagerRouteConstants.JobFailed);
+		}
 
-        public Uri GetJobHasFailedUri(Guid guid)
-        {
-            string path = ManagerRouteConstants.JobFailed.Replace(ManagerRouteConstants.JobIdOptionalParameter,
-                                                                  guid.ToString());
+		public Uri GetJobHasFailedUri(Guid guid)
+		{
+			var path = ManagerRouteConstants.JobFailed.Replace(ManagerRouteConstants.JobIdOptionalParameter,
+			                                                   guid.ToString());
 
-            return CreateUri(path);
-        }
+			return CreateUri(path);
+		}
 
-        public Uri GetJobHasBeenCanceledTemplateUri()
-        {
-            return CreateUri(ManagerRouteConstants.JobHasBeenCanceled);
-        }
+		public Uri GetJobHasBeenCanceledTemplateUri()
+		{
+			return CreateUri(ManagerRouteConstants.JobHasBeenCanceled);
+		}
 
-        public Uri GetJobHasBeenCanceledUri(Guid guid)
-        {
-            string path = ManagerRouteConstants.JobHasBeenCanceled.Replace(ManagerRouteConstants.JobIdOptionalParameter,
-                                                                           guid.ToString());
+		public Uri GetJobHasBeenCanceledUri(Guid guid)
+		{
+			var path = ManagerRouteConstants.JobHasBeenCanceled.Replace(ManagerRouteConstants.JobIdOptionalParameter,
+			                                                            guid.ToString());
 
-            return CreateUri(path);
-        }
+			return CreateUri(path);
+		}
 
-        public Uri GetJobDoneTemplateUri()
-        {
-            return CreateUri(ManagerRouteConstants.JobDone);
-        }
+		public Uri GetJobDoneTemplateUri()
+		{
+			return CreateUri(ManagerRouteConstants.JobDone);
+		}
 
-        public Uri GetJobDoneUri(Guid guid)
-        {
-            string path = ManagerRouteConstants.JobDone.Replace(ManagerRouteConstants.JobIdOptionalParameter,
-                                                                guid.ToString());
+		public Uri GetJobDoneUri(Guid guid)
+		{
+			var path = ManagerRouteConstants.JobDone.Replace(ManagerRouteConstants.JobIdOptionalParameter,
+			                                                 guid.ToString());
 
-            return CreateUri(path);
-        }
+			return CreateUri(path);
+		}
 
-        public Uri CreateUri(string path)
-        {
-            UriBuilder.Path = UriTemplateBuilder.Path;
+		public Uri CreateUri(string path)
+		{
+			UriBuilder.Path = UriTemplateBuilder.Path;
 
-            UriBuilder.Path += path;
+			UriBuilder.Path += path;
 
-            return UriBuilder.Uri;
-        }
-    }
+			return UriBuilder.Uri;
+		}
+	}
 }

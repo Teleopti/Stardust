@@ -15,374 +15,380 @@ using Timer = System.Timers.Timer;
 
 namespace Stardust.Node.Workers
 {
-    public class WorkerWrapper : IWorkerWrapper
-    {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (WorkerWrapper));
+	public class WorkerWrapper : IWorkerWrapper
+	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (WorkerWrapper));
 
-        private readonly IPostHttpRequest _postHttpRequest;
+		private readonly IPostHttpRequest _postHttpRequest;
 
-        private readonly object _startJobLock = new object();
+		private readonly object _startJobLock = new object();
 
-        public WorkerWrapper(IInvokeHandler invokeHandler,
-                             INodeConfiguration nodeConfiguration,
-                             TrySendNodeStartUpNotificationToManagerTimer nodeStartUpNotificationToManagerTimer,
-                             Timer pingToManagerTimer,
-                             TrySendStatusToManagerTimer trySendJobDoneStatusToManagerTimer,
-                             TrySendStatusToManagerTimer trySendJobCanceledStatusToManagerTimer,
-                             TrySendStatusToManagerTimer trySendJobFaultedStatusToManagerTimer,
-                             IPostHttpRequest postHttpRequest)
-        {
-            _postHttpRequest = postHttpRequest;
+		public WorkerWrapper(IInvokeHandler invokeHandler,
+		                     INodeConfiguration nodeConfiguration,
+		                     TrySendNodeStartUpNotificationToManagerTimer nodeStartUpNotificationToManagerTimer,
+		                     Timer pingToManagerTimer,
+		                     TrySendStatusToManagerTimer trySendJobDoneStatusToManagerTimer,
+		                     TrySendStatusToManagerTimer trySendJobCanceledStatusToManagerTimer,
+		                     TrySendStatusToManagerTimer trySendJobFaultedStatusToManagerTimer,
+		                     IPostHttpRequest postHttpRequest)
+		{
+			_postHttpRequest = postHttpRequest;
 
-            invokeHandler.ThrowArgumentNullExceptionWhenNull();
-            nodeConfiguration.ThrowArgumentNullException();
+			invokeHandler.ThrowArgumentNullExceptionWhenNull();
+			nodeConfiguration.ThrowArgumentNullException();
 
-            nodeStartUpNotificationToManagerTimer.ThrowArgumentNullExceptionWhenNull();
-            pingToManagerTimer.ThrowArgumentNullExceptionWhenNull();
-            trySendJobDoneStatusToManagerTimer.ThrowArgumentNullExceptionWhenNull();
-            trySendJobCanceledStatusToManagerTimer.ThrowArgumentNullExceptionWhenNull();
-            trySendJobFaultedStatusToManagerTimer.ThrowArgumentNullExceptionWhenNull();
+			nodeStartUpNotificationToManagerTimer.ThrowArgumentNullExceptionWhenNull();
+			pingToManagerTimer.ThrowArgumentNullExceptionWhenNull();
+			trySendJobDoneStatusToManagerTimer.ThrowArgumentNullExceptionWhenNull();
+			trySendJobCanceledStatusToManagerTimer.ThrowArgumentNullExceptionWhenNull();
+			trySendJobFaultedStatusToManagerTimer.ThrowArgumentNullExceptionWhenNull();
 
-            Handler = invokeHandler;
-            NodeConfiguration = nodeConfiguration;
+			Handler = invokeHandler;
+			NodeConfiguration = nodeConfiguration;
 
-            WhoamI = NodeConfiguration.CreateWhoIAm(Environment.MachineName);
+			WhoamI = NodeConfiguration.CreateWhoIAm(Environment.MachineName);
 
-            NodeStartUpNotificationToManagerTimer = nodeStartUpNotificationToManagerTimer;
-            NodeStartUpNotificationToManagerTimer.TrySendNodeStartUpNotificationSucceded +=
-                NodeStartUpNotificationToManagerTimer_TrySendNodeStartUpNotificationSucceded;
+			NodeStartUpNotificationToManagerTimer = nodeStartUpNotificationToManagerTimer;
+			NodeStartUpNotificationToManagerTimer.TrySendNodeStartUpNotificationSucceded +=
+				NodeStartUpNotificationToManagerTimer_TrySendNodeStartUpNotificationSucceded;
 
-            PingToManagerTimer = pingToManagerTimer;
+			PingToManagerTimer = pingToManagerTimer;
 
-            TrySendJobDoneStatusToManagerTimer = trySendJobDoneStatusToManagerTimer;
-            TrySendJobCanceledStatusToManagerTimer = trySendJobCanceledStatusToManagerTimer;
-            TrySendJobFaultedStatusToManagerTimer = trySendJobFaultedStatusToManagerTimer;
+			TrySendJobDoneStatusToManagerTimer = trySendJobDoneStatusToManagerTimer;
+			TrySendJobCanceledStatusToManagerTimer = trySendJobCanceledStatusToManagerTimer;
+			TrySendJobFaultedStatusToManagerTimer = trySendJobFaultedStatusToManagerTimer;
 
-            NodeStartUpNotificationToManagerTimer.Start();
-        }
+			NodeStartUpNotificationToManagerTimer.Start();
+		}
 
-        private IInvokeHandler Handler { get; set; }
-        private Timer PingToManagerTimer { get; set; }
-        private TrySendStatusToManagerTimer TrySendJobDoneStatusToManagerTimer { get; set; }
-        private TrySendStatusToManagerTimer TrySendJobCanceledStatusToManagerTimer { get; set; }
-        private TrySendStatusToManagerTimer TrySendJobFaultedStatusToManagerTimer { get; set; }
+		private IInvokeHandler Handler { get; set; }
+		private Timer PingToManagerTimer { get; set; }
+		private TrySendStatusToManagerTimer TrySendJobDoneStatusToManagerTimer { get; set; }
+		private TrySendStatusToManagerTimer TrySendJobCanceledStatusToManagerTimer { get; set; }
+		private TrySendStatusToManagerTimer TrySendJobFaultedStatusToManagerTimer { get; set; }
 
-        private TrySendStatusToManagerTimer TrySendStatusToManagerTimer { get; set; }
-        private INodeConfiguration NodeConfiguration { get; set; }
-        private JobToDo CurrentMessageToProcess { get; set; }
-        private TrySendNodeStartUpNotificationToManagerTimer NodeStartUpNotificationToManagerTimer { get; set; }
+		private TrySendStatusToManagerTimer TrySendStatusToManagerTimer { get; set; }
+		private INodeConfiguration NodeConfiguration { get; set; }
+		private JobToDo CurrentMessageToProcess { get; set; }
+		private TrySendNodeStartUpNotificationToManagerTimer NodeStartUpNotificationToManagerTimer { get; set; }
 
 
-        public string WhoamI { get; private set; }
+		public string WhoamI { get; private set; }
 
-        public CancellationTokenSource CancellationTokenSource { get; set; }
+		public CancellationTokenSource CancellationTokenSource { get; set; }
 
-        public Task Task { get; private set; }
+		public Task Task { get; private set; }
 
-        public bool IsTaskExecuting
-        {
-            get
-            {
-                return Task.IsNotNull() &&
-                       (Task.Status == TaskStatus.Running || Task.Status == TaskStatus.WaitingForActivation);
-            }
-        }
+		public bool IsTaskExecuting
+		{
+			get
+			{
+				return Task.IsNotNull() &&
+				       (Task.Status == TaskStatus.Running || Task.Status == TaskStatus.WaitingForActivation);
+			}
+		}
 
-        public IHttpActionResult StartJob(JobToDo jobToDo,
-                                          HttpRequestMessage requestMessage)
-        {
-            Type typ;
-            lock (_startJobLock)
-            {
-                if (jobToDo == null || jobToDo.Id == Guid.Empty)
-                {
-                    return new BadRequestResult(requestMessage);
-                }
+		public IHttpActionResult StartJob(JobToDo jobToDo,
+		                                  HttpRequestMessage requestMessage)
+		{
+			Type typ;
+			lock (_startJobLock)
+			{
+				if (jobToDo == null || jobToDo.Id == Guid.Empty)
+				{
+					return new BadRequestResult(requestMessage);
+				}
 
-                if (CurrentMessageToProcess != null &&
-                    CurrentMessageToProcess.Id != jobToDo.Id)
-                {
-                    return new ConflictResult(requestMessage);
-                }
-	            if (string.IsNullOrEmpty(jobToDo.Type))
-	            {
+				if (CurrentMessageToProcess != null &&
+				    CurrentMessageToProcess.Id != jobToDo.Id)
+				{
+					return new ConflictResult(requestMessage);
+				}
+				if (string.IsNullOrEmpty(jobToDo.Type))
+				{
 					return new BadRequestResult(requestMessage);
 				}
 
 				typ = NodeConfiguration.HandlerAssembly.GetType(jobToDo.Type);
 
-                if (typ == null)
-                {
-                    LogHelper.LogWarningWithLineNumber(Logger,
-                                                    string.Format(WhoamI + ": The job type [{0}] could not be resolved. The job cannot be started.",
-                                                                  jobToDo.Type));
+				if (typ == null)
+				{
+					LogHelper.LogWarningWithLineNumber(Logger,
+					                                   string.Format(
+						                                   WhoamI +
+						                                   ": The job type [{0}] could not be resolved. The job cannot be started.",
+						                                   jobToDo.Type));
 
-                    return new BadRequestResult(requestMessage);
-                }
+					return new BadRequestResult(requestMessage);
+				}
 
-                CurrentMessageToProcess = jobToDo;
-            }
+				CurrentMessageToProcess = jobToDo;
+			}
 
-            CancellationTokenSource = new CancellationTokenSource();
-            object deSer;
-            try
-            {
-                deSer = JsonConvert.DeserializeObject(jobToDo.Serialized,
-                                                      typ);
-            }
-            catch (Exception)
-            {
-                CurrentMessageToProcess = null;
-                return new BadRequestResult(requestMessage);
-            }
-            if (deSer == null)
-            {
-                return new BadRequestResult(requestMessage);
-            }
+			CancellationTokenSource = new CancellationTokenSource();
+			object deSer;
+			try
+			{
+				deSer = JsonConvert.DeserializeObject(jobToDo.Serialized,
+				                                      typ);
+			}
+			catch (Exception)
+			{
+				CurrentMessageToProcess = null;
+				return new BadRequestResult(requestMessage);
+			}
+			if (deSer == null)
+			{
+				return new BadRequestResult(requestMessage);
+			}
 
-            //----------------------------------------------------
-            // Define task.
-            //----------------------------------------------------
-            Task = new Task(() =>
-            {                
-                // Set ping to manager every 30 seconds during job.
-                PingToManagerTimer.Interval = 30000;
+			//----------------------------------------------------
+			// Define task.
+			//----------------------------------------------------
+			Task = new Task(() =>
+			{
+				// Set ping to manager every 30 seconds during job.
+				PingToManagerTimer.Interval = 30000;
 
-                LogHelper.LogDebugWithLineNumber(Logger,
-                                                "Ping to manager interval is now set to go every " +  (PingToManagerTimer.Interval /1000) + " seconds during job execution." );
+				LogHelper.LogDebugWithLineNumber(Logger,
+				                                 "Ping to manager interval is now set to go every " +
+				                                 PingToManagerTimer.Interval/1000 + " seconds during job execution.");
 
-                Handler.Invoke(deSer,
-                               CancellationTokenSource,
-                               ProgressCallback);
-            },
-            CancellationTokenSource.Token);
+				Handler.Invoke(deSer,
+				               CancellationTokenSource,
+				               ProgressCallback);
+			},
+			                CancellationTokenSource.Token);
 
-            Task.ContinueWith(t =>
-            {
-                // Set ping to manager every 10 seconds when job finished.
-                PingToManagerTimer.Interval = 10000;
+			Task.ContinueWith(t =>
+			{
+				// Set ping to manager every 10 seconds when job finished.
+				PingToManagerTimer.Interval = 10000;
 
-                LogHelper.LogDebugWithLineNumber(Logger,
-                                                "Ping to manager interval is now set to go every " + (PingToManagerTimer.Interval / 1000) + " seconds when node is idle.");
-
-
-                string logInfo = null;
-
-                switch (t.Status)
-                {
-                    case TaskStatus.RanToCompletion:
-                        logInfo =
-                            string.Format("{0} : The task has completed for job ( jobId, jobName ) : ( {1}, {2} )",
-                                          WhoamI,
-                                          CurrentMessageToProcess.Id,
-                                          CurrentMessageToProcess.Name);
-
-                        LogHelper.LogDebugWithLineNumber(Logger,
-                                                        logInfo);
-
-                        SetNodeStatusTimer(TrySendJobDoneStatusToManagerTimer,
-                                           CurrentMessageToProcess);
-                        break;
+				LogHelper.LogDebugWithLineNumber(Logger,
+				                                 "Ping to manager interval is now set to go every " +
+				                                 PingToManagerTimer.Interval/1000 + " seconds when node is idle.");
 
 
-                    case TaskStatus.Canceled:
-                        logInfo =
-                            string.Format("{0} : The task has been canceled for job ( jobId, jobName ) : ( {1}, {2} )",
-                                          WhoamI,
-                                          CurrentMessageToProcess.Id,
-                                          CurrentMessageToProcess.Name);
+				string logInfo = null;
 
-                        LogHelper.LogDebugWithLineNumber(Logger,
-                                                        logInfo);
+				switch (t.Status)
+				{
+					case TaskStatus.RanToCompletion:
+						logInfo =
+							string.Format("{0} : The task has completed for job ( jobId, jobName ) : ( {1}, {2} )",
+							              WhoamI,
+							              CurrentMessageToProcess.Id,
+							              CurrentMessageToProcess.Name);
 
-                        SetNodeStatusTimer(TrySendJobCanceledStatusToManagerTimer,
-                                           CurrentMessageToProcess);
+						LogHelper.LogDebugWithLineNumber(Logger,
+						                                 logInfo);
 
-                        break;
-
-                    case TaskStatus.Faulted:
-                        logInfo =
-                            string.Format("{0} : The task faulted for job ( jobId, jobName ) : ( {1}, {2} )",
-                                          WhoamI,
-                                          CurrentMessageToProcess.Id,
-                                          CurrentMessageToProcess.Name);
-
-                        LogHelper.LogDebugWithLineNumber(Logger,
-                                                        logInfo);
+						SetNodeStatusTimer(TrySendJobDoneStatusToManagerTimer,
+						                   CurrentMessageToProcess);
+						break;
 
 
-                        SetNodeStatusTimer(TrySendJobFaultedStatusToManagerTimer,
-                                           CurrentMessageToProcess);
+					case TaskStatus.Canceled:
+						logInfo =
+							string.Format("{0} : The task has been canceled for job ( jobId, jobName ) : ( {1}, {2} )",
+							              WhoamI,
+							              CurrentMessageToProcess.Id,
+							              CurrentMessageToProcess.Name);
 
-                        break;
-                }
-            });
+						LogHelper.LogDebugWithLineNumber(Logger,
+						                                 logInfo);
 
-            Task.Start();
+						SetNodeStatusTimer(TrySendJobCanceledStatusToManagerTimer,
+						                   CurrentMessageToProcess);
 
-            return new OkResult(requestMessage);
-        }
+						break;
 
-        public JobToDo GetCurrentMessageToProcess()
-        {
-            return CurrentMessageToProcess;
-        }
+					case TaskStatus.Faulted:
+						logInfo =
+							string.Format("{0} : The task faulted for job ( jobId, jobName ) : ( {1}, {2} )",
+							              WhoamI,
+							              CurrentMessageToProcess.Id,
+							              CurrentMessageToProcess.Name);
 
-        public void CancelJob(Guid id)
-        {
-            if (CurrentMessageToProcess != null &&
-                id != Guid.Empty &&
-                CurrentMessageToProcess.Id == id)
-            {
-                LogHelper.LogDebugWithLineNumber(Logger,
-                                                WhoamI + " : Cancel job method called. Will call cancel on canellation token source.");
+						LogHelper.LogDebugWithLineNumber(Logger,
+						                                 logInfo);
 
-                CancellationTokenSource.Cancel();
 
-                if (CancellationTokenSource.IsCancellationRequested)
-                {
-                    LogHelper.LogDebugWithLineNumber(Logger,
-                                                    WhoamI + " : Cancel job method called. CancellationTokenSource.IsCancellationRequested is now true.");
-                }
-            }
-            else
-            {
-                if (id != Guid.Empty)
-                {
-                    LogHelper.LogWarningWithLineNumber(Logger,
-                                                       WhoamI + " : Can not cancel job with id : " + id);
-                }
-            }
-        }
+						SetNodeStatusTimer(TrySendJobFaultedStatusToManagerTimer,
+						                   CurrentMessageToProcess);
 
-        public bool IsCancellationRequested
-        {
-            get
-            {
-                return CancellationTokenSource != null &&
-                       CancellationTokenSource.IsCancellationRequested;
-            }
-        }
+						break;
+				}
+			});
 
-        private void NodeStartUpNotificationToManagerTimer_TrySendNodeStartUpNotificationSucceded(object sender,
-                                                                                                  EventArgs e)
-        {
-            NodeStartUpNotificationToManagerTimer.Stop();
+			Task.Start();
 
-            PingToManagerTimer.Start();
-        }
+			return new OkResult(requestMessage);
+		}
 
-        public void ResetCurrentMessage()
-        {
-            CurrentMessageToProcess = null;
-        }
+		public JobToDo GetCurrentMessageToProcess()
+		{
+			return CurrentMessageToProcess;
+		}
 
-        private void SetNodeStatusTimer(TrySendStatusToManagerTimer newTrySendStatusToManagerTimer,
-                                        JobToDo jobToDo)
-        {
-            // Stop and dispose old timer.
-            if (TrySendStatusToManagerTimer != null)
-            {
-                TrySendStatusToManagerTimer.Stop();
+		public void CancelJob(Guid id)
+		{
+			if (CurrentMessageToProcess != null &&
+			    id != Guid.Empty &&
+			    CurrentMessageToProcess.Id == id)
+			{
+				LogHelper.LogDebugWithLineNumber(Logger,
+				                                 WhoamI +
+				                                 " : Cancel job method called. Will call cancel on canellation token source.");
 
-                // Remove event handler.
-                TrySendStatusToManagerTimer.TrySendStatusSucceded -= 
-                    TrySendStatusToManagerTimer_TrySendStatusSucceded;
+				CancellationTokenSource.Cancel();
 
-                TrySendStatusToManagerTimer = null;
-            }
+				if (CancellationTokenSource.IsCancellationRequested)
+				{
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 WhoamI +
+					                                 " : Cancel job method called. CancellationTokenSource.IsCancellationRequested is now true.");
+				}
+			}
+			else
+			{
+				if (id != Guid.Empty)
+				{
+					LogHelper.LogWarningWithLineNumber(Logger,
+					                                   WhoamI + " : Can not cancel job with id : " + id);
+				}
+			}
+		}
 
-            // Set new timer, if exists.
-            if (newTrySendStatusToManagerTimer != null)
-            {
-                TrySendStatusToManagerTimer = newTrySendStatusToManagerTimer;
+		public bool IsCancellationRequested
+		{
+			get
+			{
+				return CancellationTokenSource != null &&
+				       CancellationTokenSource.IsCancellationRequested;
+			}
+		}
 
-                TrySendStatusToManagerTimer.JobToDo = jobToDo;
+		public void Dispose()
+		{
+			LogHelper.LogDebugWithLineNumber(Logger, "Start disposing.");
 
-                TrySendStatusToManagerTimer.TrySendStatusSucceded += 
-                    TrySendStatusToManagerTimer_TrySendStatusSucceded;
+			if (CancellationTokenSource != null &&
+			    !CancellationTokenSource.IsCancellationRequested)
+			{
+				CancellationTokenSource.Cancel();
+			}
 
-                TrySendStatusToManagerTimer.Start();
-            }
-            else
-            {
-                TrySendStatusToManagerTimer = null;
-            }
-        }
+			if (PingToManagerTimer != null)
+			{
+				PingToManagerTimer.Dispose();
+			}
 
-        private void TrySendStatusToManagerTimer_TrySendStatusSucceded(object sender,
-                                                                       EventArgs e)
-        {
-            // Dispose timer.
-            SetNodeStatusTimer(null,
-                               null);
+			if (TrySendJobCanceledStatusToManagerTimer != null)
+			{
+				TrySendJobCanceledStatusToManagerTimer.Dispose();
+			}
 
-            // Reset jobToDo, so it can start processing new work.
-            ResetCurrentMessage();
-        }
+			if (TrySendJobDoneStatusToManagerTimer != null)
+			{
+				TrySendJobDoneStatusToManagerTimer.Dispose();
+			}
 
-        private void ProgressCallback(string message)
-        {
-            LogHelper.LogInfoWithLineNumber(Logger,
-                                            message);
+			if (TrySendJobFaultedStatusToManagerTimer != null)
+			{
+				TrySendJobFaultedStatusToManagerTimer.Dispose();
+			}
 
-            var progressModel = new JobProgressModel
-            {
-                JobId = CurrentMessageToProcess.Id,
-                ProgressDetail = message
-            };
+			if (NodeStartUpNotificationToManagerTimer != null)
+			{
+				NodeStartUpNotificationToManagerTimer.Dispose();
+			}
 
-            var json = JsonConvert.SerializeObject(progressModel);
+			LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
+		}
 
-            try
-            {
-                _postHttpRequest.Send<IHttpActionResult>(NodeConfiguration.ManagerLocation + ManagerRouteConstants.JobProgress,
-                                                         json);
-            }
-            catch (Exception exception)
-            {
-                LogHelper.LogErrorWithLineNumber(Logger,
-                                                 WhoamI + ": Exception occured.",
-                                                 exception);
-            }
-        }
+		private void NodeStartUpNotificationToManagerTimer_TrySendNodeStartUpNotificationSucceded(object sender,
+		                                                                                          EventArgs e)
+		{
+			NodeStartUpNotificationToManagerTimer.Stop();
 
-        public void Dispose()
-        {
-            LogHelper.LogDebugWithLineNumber(Logger,"Start disposing.");
+			PingToManagerTimer.Start();
+		}
 
-            if (CancellationTokenSource != null &&
-                !CancellationTokenSource.IsCancellationRequested)
-            {
-                CancellationTokenSource.Cancel();
-            }
+		public void ResetCurrentMessage()
+		{
+			CurrentMessageToProcess = null;
+		}
 
-            if (PingToManagerTimer != null)
-            {
-                PingToManagerTimer.Dispose();
-            }
+		private void SetNodeStatusTimer(TrySendStatusToManagerTimer newTrySendStatusToManagerTimer,
+		                                JobToDo jobToDo)
+		{
+			// Stop and dispose old timer.
+			if (TrySendStatusToManagerTimer != null)
+			{
+				TrySendStatusToManagerTimer.Stop();
 
-            if (TrySendJobCanceledStatusToManagerTimer != null)
-            {
-                TrySendJobCanceledStatusToManagerTimer.Dispose();
-            }
+				// Remove event handler.
+				TrySendStatusToManagerTimer.TrySendStatusSucceded -=
+					TrySendStatusToManagerTimer_TrySendStatusSucceded;
 
-            if (TrySendJobDoneStatusToManagerTimer != null)
-            {
-                TrySendJobDoneStatusToManagerTimer.Dispose();
-            }
+				TrySendStatusToManagerTimer = null;
+			}
 
-            if (TrySendJobFaultedStatusToManagerTimer != null)
-            {
-                TrySendJobFaultedStatusToManagerTimer.Dispose();
-            }
+			// Set new timer, if exists.
+			if (newTrySendStatusToManagerTimer != null)
+			{
+				TrySendStatusToManagerTimer = newTrySendStatusToManagerTimer;
 
-            if (NodeStartUpNotificationToManagerTimer != null)
-            {
-                NodeStartUpNotificationToManagerTimer.Dispose();
-            }
+				TrySendStatusToManagerTimer.JobToDo = jobToDo;
 
-            LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
-        }
-    }
+				TrySendStatusToManagerTimer.TrySendStatusSucceded +=
+					TrySendStatusToManagerTimer_TrySendStatusSucceded;
+
+				TrySendStatusToManagerTimer.Start();
+			}
+			else
+			{
+				TrySendStatusToManagerTimer = null;
+			}
+		}
+
+		private void TrySendStatusToManagerTimer_TrySendStatusSucceded(object sender,
+		                                                               EventArgs e)
+		{
+			// Dispose timer.
+			SetNodeStatusTimer(null,
+			                   null);
+
+			// Reset jobToDo, so it can start processing new work.
+			ResetCurrentMessage();
+		}
+
+		private void ProgressCallback(string message)
+		{
+			LogHelper.LogInfoWithLineNumber(Logger,
+			                                message);
+
+			var progressModel = new JobProgressModel
+			{
+				JobId = CurrentMessageToProcess.Id,
+				ProgressDetail = message
+			};
+
+			var json = JsonConvert.SerializeObject(progressModel);
+
+			try
+			{
+				_postHttpRequest.Send<IHttpActionResult>(NodeConfiguration.ManagerLocation + ManagerRouteConstants.JobProgress,
+				                                         json);
+			}
+			catch (Exception exception)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger,
+				                                 WhoamI + ": Exception occured.",
+				                                 exception);
+			}
+		}
+	}
 }

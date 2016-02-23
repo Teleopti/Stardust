@@ -8,71 +8,70 @@ using Manager.Integration.Test.Properties;
 
 namespace Manager.Integration.Test.Helpers
 {
-    public static class AppDomainHelper
-    {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (AppDomainHelper));
+	public static class AppDomainHelper
+	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (AppDomainHelper));
 
-        public static ConcurrentDictionary<string, AppDomain> AppDomains { get; private set; }
+		static AppDomainHelper()
+		{
+			AppDomains = new ConcurrentDictionary<string, AppDomain>();
+		}
 
-        static AppDomainHelper()
-        {
-            AppDomains = new ConcurrentDictionary<string, AppDomain>();
-        }
+		public static ConcurrentDictionary<string, AppDomain> AppDomains { get; }
 
-        public static Task CreateAppDomainForManagerIntegrationConsoleHost(string buildmode,
-                                                                           int numberOfNodes,
-                                                                           CancellationTokenSource cancellationTokenSource)
-        {
-            return new Task(() => 
-            {                
-                var assemblyLocationFullPath =
-                    Path.Combine(Settings.Default.ManagerIntegrationConsoleHostLocation,
-                                 buildmode);
+		public static Task CreateAppDomainForManagerIntegrationConsoleHost(string buildmode,
+		                                                                   int numberOfNodes,
+		                                                                   CancellationTokenSource cancellationTokenSource)
+		{
+			return new Task(() =>
+			{
+				var assemblyLocationFullPath =
+					Path.Combine(Settings.Default.ManagerIntegrationConsoleHostLocation,
+					             buildmode);
 
-                var directoryManagerAssemblyLocationFullPath =
-                    new DirectoryInfo(assemblyLocationFullPath);
+				var directoryManagerAssemblyLocationFullPath =
+					new DirectoryInfo(assemblyLocationFullPath);
 
-                var configFileName =
-                    new FileInfo(Path.Combine(directoryManagerAssemblyLocationFullPath.FullName,
-                                              Settings.Default.ManagerIntegrationConsoleHostConfigurationFile));
+				var configFileName =
+					new FileInfo(Path.Combine(directoryManagerAssemblyLocationFullPath.FullName,
+					                          Settings.Default.ManagerIntegrationConsoleHostConfigurationFile));
 
-                var managerAppDomainSetup = new AppDomainSetup
-                {
-                    ApplicationBase = directoryManagerAssemblyLocationFullPath.FullName,
-                    ApplicationName = Settings.Default.ManagerIntegrationConsoleHostAssemblyName,
-                    ShadowCopyFiles = "true",
-                    AppDomainInitializerArguments = new[]
-                    {
-                        numberOfNodes.ToString()
-                    },
-                    ConfigurationFile = configFileName.FullName
-                };
+				var managerAppDomainSetup = new AppDomainSetup
+				{
+					ApplicationBase = directoryManagerAssemblyLocationFullPath.FullName,
+					ApplicationName = Settings.Default.ManagerIntegrationConsoleHostAssemblyName,
+					ShadowCopyFiles = "true",
+					AppDomainInitializerArguments = new[]
+					{
+						numberOfNodes.ToString()
+					},
+					ConfigurationFile = configFileName.FullName
+				};
 
-                AppDomain appDomain = AppDomain.CreateDomain(managerAppDomainSetup.ApplicationName,
-                                                             AppDomain.CurrentDomain.Evidence,
-                                                             managerAppDomainSetup);
+				var appDomain = AppDomain.CreateDomain(managerAppDomainSetup.ApplicationName,
+				                                       AppDomain.CurrentDomain.Evidence,
+				                                       managerAppDomainSetup);
 
-                FileInfo assemblyToExecute =
-                    new FileInfo(Path.Combine(managerAppDomainSetup.ApplicationBase,
-                                              managerAppDomainSetup.ApplicationName));
+				var assemblyToExecute =
+					new FileInfo(Path.Combine(managerAppDomainSetup.ApplicationBase,
+					                          managerAppDomainSetup.ApplicationName));
 
-                LogHelper.LogDebugWithLineNumber("Try start ManagerIntegrationConsoleHost (appdomain) with friendly name " + appDomain.FriendlyName,
-                                                Logger);
+				LogHelper.LogDebugWithLineNumber(
+					"Try start ManagerIntegrationConsoleHost (appdomain) with friendly name " + appDomain.FriendlyName,
+					Logger);
 
-                appDomain.ExecuteAssembly(assemblyToExecute.FullName,
-                                          managerAppDomainSetup.AppDomainInitializerArguments);
+				appDomain.ExecuteAssembly(assemblyToExecute.FullName,
+				                          managerAppDomainSetup.AppDomainInitializerArguments);
+			}, cancellationTokenSource.Token);
+		}
 
-            }, cancellationTokenSource.Token);
-
-        }
-
-        public static void AddOrUpdateAppDomains(string key,
-                                                 AppDomain value)
-        {
-            AppDomains.AddOrUpdate(key,
-                                   value,
-                                   (name,
-                                    val) => value);
-        }
-    }
+		public static void AddOrUpdateAppDomains(string key,
+		                                         AppDomain value)
+		{
+			AppDomains.AddOrUpdate(key,
+			                       value,
+			                       (name,
+			                        val) => value);
+		}
+	}
 }

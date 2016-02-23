@@ -22,6 +22,11 @@ namespace Manager.Integration.Test
     [TestFixture]
     public class OneManagerAndFiveNodesLoadTests
     {
+		[TearDown]
+		public void TearDown()
+		{
+		}
+
         private static readonly ILog Logger =
             LogManager.GetLogger(typeof (OneManagerAndFiveNodesLoadTests));
 
@@ -60,8 +65,7 @@ namespace Manager.Integration.Test
 
             AppDomainTask = new AppDomainTask(_buildMode);
 
-            Task = AppDomainTask.StartTask(cancellationTokenSource: CancellationTokenSource,
-                                           numberOfNodes: 5);
+			Task = AppDomainTask.StartTask(CancellationTokenSource, 5);
 
             LogHelper.LogDebugWithLineNumber("Finshed TestFixtureSetUp",
                                             Logger);
@@ -83,7 +87,7 @@ namespace Manager.Integration.Test
             LogHelper.LogDebugWithLineNumber("Run sql script to create logging file started.",
                                             Logger);
 
-            FileInfo scriptFile =
+			var scriptFile =
                 new FileInfo(Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
                                           Settings.Default.CreateLoggingTableSqlScriptLocationAndFileName));
 
@@ -92,11 +96,6 @@ namespace Manager.Integration.Test
 
             LogHelper.LogDebugWithLineNumber("Run sql script to create logging file finished.",
                                             Logger);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
         }
 
         [TestFixtureTearDown]
@@ -114,9 +113,9 @@ namespace Manager.Integration.Test
                                             Logger);
         }
 
-        private bool _clearDatabase = true;
+		private readonly bool _clearDatabase = true;
 
-        private string _buildMode = "Debug";
+		private readonly string _buildMode = "Debug";
 
         /// <summary>
         ///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
@@ -128,7 +127,7 @@ namespace Manager.Integration.Test
             LogHelper.LogDebugWithLineNumber("Start.",
                                             Logger);
 
-            List<JobRequestModel> createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(50);
+			var createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(50);
 
             var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
                                                                             StatusConstants.SuccessStatus,
@@ -139,13 +138,13 @@ namespace Manager.Integration.Test
             //---------------------------------------------
             // Create timeout time.
             //---------------------------------------------
-            TimeSpan timeout =
+			var timeout =
                 JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count);
 
             //---------------------------------------------
             // Create jobs.
             //---------------------------------------------
-            List<JobManagerTaskCreator> jobManagerTaskCreators = new List<JobManagerTaskCreator>();
+			var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 
             foreach (var jobRequestModel in createNewJobRequests)
             {
@@ -160,9 +159,9 @@ namespace Manager.Integration.Test
             //---------------------------------------------
             // Notify when all 5 nodes are up. 
             //---------------------------------------------
-            CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
+			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
-            SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
+			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
             Task task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(5,
                                                                    sqlNotiferCancellationTokenSource,
@@ -182,9 +181,9 @@ namespace Manager.Integration.Test
             //---------------------------------------------
             // Execute all jobs. 
             //---------------------------------------------
-            StartJobTaskHelper startJobTaskHelper = new StartJobTaskHelper();
+			var startJobTaskHelper = new StartJobTaskHelper();
 
-            Task taskHelper = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
+			var taskHelper = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
                                                                           CancellationTokenSource,
                                                                           TimeSpan.FromMilliseconds(200));
 

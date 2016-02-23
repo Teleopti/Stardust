@@ -19,474 +19,479 @@ using Configuration = Manager.IntegrationTest.Console.Host.Models.Configuration;
 
 namespace Manager.IntegrationTest.Console.Host
 {
-    public static class Program
-    {
-        private const string CopiedManagerConfigName = "Manager.config";
+	public static class Program
+	{
+		private const string CopiedManagerConfigName = "Manager.config";
 
 #if (DEBUG)
-        private static string _buildMode = "Debug";
+		private static readonly string _buildMode = "Debug";
 #else
         private static string _buildMode = "Release";
 #endif
 
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (Program));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (Program));
 
-        public static FileInfo ManagerConfigurationFile { get; set; }
+		public static FileInfo ManagerConfigurationFile { get; set; }
 
-        public static FileInfo CopiedManagerConfigurationFile { get; set; }
+		public static FileInfo CopiedManagerConfigurationFile { get; set; }
 
-        [DllImport("Kernel32")]
-        public static extern bool SetConsoleCtrlHandler(HandlerRoutine handler,
-                                                        bool add);
+		[DllImport("Kernel32")]
+		public static extern bool SetConsoleCtrlHandler(HandlerRoutine handler,
+		                                                bool add);
 
-        // A delegate type to be used as the handler routine 
-        // for SetConsoleCtrlHandler.
-        public delegate bool HandlerRoutine(CtrlTypes ctrlType);
+		// A delegate type to be used as the handler routine 
+		// for SetConsoleCtrlHandler.
+		public delegate bool HandlerRoutine(CtrlTypes ctrlType);
 
-        // An enumerated type for the control messages
-        // sent to the handler routine.
-        public enum CtrlTypes
-        {
-            CtrlCEvent = 0,
-            CtrlBreakEvent,
-            CtrlCloseEvent,
-            CtrlLogoffEvent = 5,
-            CtrlShutdownEvent
-        }
+		// An enumerated type for the control messages
+		// sent to the handler routine.
+		public enum CtrlTypes
+		{
+			CtrlCEvent = 0,
+			CtrlBreakEvent,
+			CtrlCloseEvent,
+			CtrlLogoffEvent = 5,
+			CtrlShutdownEvent
+		}
 
-        private static bool ConsoleCtrlCheck(CtrlTypes ctrlType)
-        {
-            if (ctrlType == CtrlTypes.CtrlCloseEvent ||
-                ctrlType == CtrlTypes.CtrlShutdownEvent)
-            {
-                QuitEvent.Set();
+		private static bool ConsoleCtrlCheck(CtrlTypes ctrlType)
+		{
+			if (ctrlType == CtrlTypes.CtrlCloseEvent ||
+			    ctrlType == CtrlTypes.CtrlShutdownEvent)
+			{
+				QuitEvent.Set();
 
-                return true;
-            }
+				return true;
+			}
 
-            return false;
-        }
+			return false;
+		}
 
-        private static void StartSelfHosting()
-        {
-            Configuration configuration =
-                new Configuration(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
+		private static void StartSelfHosting()
+		{
+			var configuration =
+				new Configuration(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
 
-            string address =
-                configuration.BaseAddress.Scheme + "://+:" + configuration.BaseAddress.Port + "/";
+			var address =
+				configuration.BaseAddress.Scheme + "://+:" + configuration.BaseAddress.Port + "/";
 
-            using (WebApp.Start(address,
-                                appBuilder =>
-                                {
-                                    var builder = new ContainerBuilder();
+			using (WebApp.Start(address,
+			                    appBuilder =>
+			                    {
+				                    var builder = new ContainerBuilder();
 
-                                    var container = builder.Build();
+				                    var container = builder.Build();
 
-                                    var config = new HttpConfiguration
-                                    {
-                                        DependencyResolver = new AutofacWebApiDependencyResolver(container)
-                                    };
+				                    var config = new HttpConfiguration
+				                    {
+					                    DependencyResolver = new AutofacWebApiDependencyResolver(container)
+				                    };
 
-                                    config.MapHttpAttributeRoutes();
+				                    config.MapHttpAttributeRoutes();
 
-                                    appBuilder.UseAutofacMiddleware(container);
-                                    appBuilder.UseAutofacWebApi(config);
-                                    appBuilder.UseWebApi(config);
-                                }))
-            {
-                LogHelper.LogInfoWithLineNumber(Logger,
-                                                "Started listening on port : ( " + address + " )");
+				                    appBuilder.UseAutofacMiddleware(container);
+				                    appBuilder.UseAutofacWebApi(config);
+				                    appBuilder.UseWebApi(config);
+			                    }))
+			{
+				LogHelper.LogInfoWithLineNumber(Logger,
+				                                "Started listening on port : ( " + address + " )");
 
-                QuitEvent.WaitOne();
-            }
-        }
+				QuitEvent.WaitOne();
+			}
+		}
 
-        private static int NumberOfNodesToStart { get; set; }
+		private static int NumberOfNodesToStart { get; set; }
 
-        private static Dictionary<string, FileInfo> NodeconfigurationFiles { get; set; }
+		private static Dictionary<string, FileInfo> NodeconfigurationFiles { get; set; }
 
-        public static void Main(string[] args)
-        {
-            CurrentDomainConfigurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
-            XmlConfigurator.ConfigureAndWatch(new FileInfo(CurrentDomainConfigurationFile));
+		public static void Main(string[] args)
+		{
+			CurrentDomainConfigurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+			XmlConfigurator.ConfigureAndWatch(new FileInfo(CurrentDomainConfigurationFile));
 
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                             "Start.");
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Start.");
 
 
-            SetConsoleCtrlHandler(ConsoleCtrlCheck,
-                                  true);
+			SetConsoleCtrlHandler(ConsoleCtrlCheck,
+			                      true);
 
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                             "AppDomain.CurrentDomain.DomainUnload");
-            AppDomain.CurrentDomain.DomainUnload += CurrentDomainOnDomainUnload;
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "AppDomain.CurrentDomain.DomainUnload");
+			AppDomain.CurrentDomain.DomainUnload += CurrentDomainOnDomainUnload;
 
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                             "AppDomain.CurrentDomain.UnhandledException");
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "AppDomain.CurrentDomain.UnhandledException");
+			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-            DirectoryManagerConfigurationFileFullPath =
-                new DirectoryInfo(Path.Combine(Settings.Default.ManagerConfigurationFileFullPath,
-                                               _buildMode));
+			DirectoryManagerConfigurationFileFullPath =
+				new DirectoryInfo(Path.Combine(Settings.Default.ManagerConfigurationFileFullPath,
+				                               _buildMode));
 
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                             "DirectoryManagerConfigurationFileFullPath : " + DirectoryManagerConfigurationFileFullPath.FullName);
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "DirectoryManagerConfigurationFileFullPath : " +
+			                                 DirectoryManagerConfigurationFileFullPath.FullName);
 
 
-            ManagerConfigurationFile =
-                new FileInfo(Path.Combine(DirectoryManagerConfigurationFileFullPath.FullName,
-                                          Settings.Default.ManagerConfigurationFileName));
+			ManagerConfigurationFile =
+				new FileInfo(Path.Combine(DirectoryManagerConfigurationFileFullPath.FullName,
+				                          Settings.Default.ManagerConfigurationFileName));
 
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                             "ManagerConfigurationFile : " + ManagerConfigurationFile.FullName);
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "ManagerConfigurationFile : " + ManagerConfigurationFile.FullName);
 
-            CopiedManagerConfigurationFile =
-                CopyManagerConfigurationFile(ManagerConfigurationFile,
-                                             CopiedManagerConfigName);
+			CopiedManagerConfigurationFile =
+				CopyManagerConfigurationFile(ManagerConfigurationFile,
+				                             CopiedManagerConfigName);
 
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                             "CopiedManagerConfigurationFile : " + CopiedManagerConfigurationFile.FullName);
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "CopiedManagerConfigurationFile : " + CopiedManagerConfigurationFile.FullName);
 
-            DirectoryNodeConfigurationFileFullPath =
-                new DirectoryInfo(Path.Combine(Settings.Default.NodeConfigurationFileFullPath,
-                                               _buildMode));
+			DirectoryNodeConfigurationFileFullPath =
+				new DirectoryInfo(Path.Combine(Settings.Default.NodeConfigurationFileFullPath,
+				                               _buildMode));
 
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                             "DirectoryNodeConfigurationFileFullPath : " + DirectoryNodeConfigurationFileFullPath.FullName);
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "DirectoryNodeConfigurationFileFullPath : " +
+			                                 DirectoryNodeConfigurationFileFullPath.FullName);
 
-            NodeConfigurationFile =
-                new FileInfo(Path.Combine(DirectoryNodeConfigurationFileFullPath.FullName,
-                                          Settings.Default.NodeConfigurationFileName));
+			NodeConfigurationFile =
+				new FileInfo(Path.Combine(DirectoryNodeConfigurationFileFullPath.FullName,
+				                          Settings.Default.NodeConfigurationFileName));
 
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                             "NodeConfigurationFile : " + NodeConfigurationFile.FullName);
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "NodeConfigurationFile : " + NodeConfigurationFile.FullName);
 
-            NodeconfigurationFiles = new Dictionary<string, FileInfo>();
+			NodeconfigurationFiles = new Dictionary<string, FileInfo>();
 
-            PortStartNumber =
-                Settings.Default.NodeEndpointPortNumberStart;
+			PortStartNumber =
+				Settings.Default.NodeEndpointPortNumberStart;
 
-            NumberOfNodesToStart = Settings.Default.NumberOfNodesToStart;
+			NumberOfNodesToStart = Settings.Default.NumberOfNodesToStart;
 
-            if (args.Any())
-            {
-                LogHelper.LogDebugWithLineNumber(Logger,
-                                                 "Has command arguments.");
+			if (args.Any())
+			{
+				LogHelper.LogDebugWithLineNumber(Logger,
+				                                 "Has command arguments.");
 
-                NumberOfNodesToStart = Convert.ToInt32(args[0]);
-            }
+				NumberOfNodesToStart = Convert.ToInt32(args[0]);
+			}
 
-            LogHelper.LogInfoWithLineNumber(Logger,
-                                            NumberOfNodesToStart + " number of nodes will be started.");
+			LogHelper.LogInfoWithLineNumber(Logger,
+			                                NumberOfNodesToStart + " number of nodes will be started.");
 
-            if (NumberOfNodesToStart > 0)
-            {
-                for (var i = 1; i <= NumberOfNodesToStart; i++)
-                {
-                    LogHelper.LogDebugWithLineNumber(Logger,
-                                                     "Start creating node configuration file for node id : " + i);
+			if (NumberOfNodesToStart > 0)
+			{
+				for (var i = 1; i <= NumberOfNodesToStart; i++)
+				{
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Start creating node configuration file for node id : " + i);
 
-                    var nodeConfig = CreateNodeConfigurationFile(i);
+					var nodeConfig = CreateNodeConfigurationFile(i);
 
-                    LogHelper.LogDebugWithLineNumber(Logger,
-                                                     "Finished creating node configuration file for node : ( id, config file ) : ( " + i + ", " + nodeConfig.FullName + " )");
-                }
-            }
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Finished creating node configuration file for node : ( id, config file ) : ( " +
+					                                 i + ", " + nodeConfig.FullName + " )");
+				}
+			}
 
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                             "AppDomainManagerTask");
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "AppDomainManagerTask");
 
-            AppDomainManagerTask =
-                new AppDomainManagerTask(_buildMode,
-                                         DirectoryManagerAssemblyLocationFullPath,
-                                         CopiedManagerConfigurationFile,
-                                         Settings.Default.ManagerAssemblyName);
+			AppDomainManagerTask =
+				new AppDomainManagerTask(_buildMode,
+				                         DirectoryManagerAssemblyLocationFullPath,
+				                         CopiedManagerConfigurationFile,
+				                         Settings.Default.ManagerAssemblyName);
 
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                             "Start: AppDomainManagerTask.StartTask");
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Start: AppDomainManagerTask.StartTask");
 
-            AppDomainManagerTask.StartTask(new CancellationTokenSource());
+			AppDomainManagerTask.StartTask(new CancellationTokenSource());
 
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                             "Finished: AppDomainManagerTask.StartTask");
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Finished: AppDomainManagerTask.StartTask");
 
-            DirectoryNodeAssemblyLocationFullPath =
-                new DirectoryInfo(Path.Combine(Settings.Default.NodeAssemblyLocationFullPath,
-                                               _buildMode));
+			DirectoryNodeAssemblyLocationFullPath =
+				new DirectoryInfo(Path.Combine(Settings.Default.NodeAssemblyLocationFullPath,
+				                               _buildMode));
 
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                             "DirectoryNodeAssemblyLocationFullPath : " + DirectoryNodeAssemblyLocationFullPath.FullName);
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "DirectoryNodeAssemblyLocationFullPath : " +
+			                                 DirectoryNodeAssemblyLocationFullPath.FullName);
 
-            AppDomainNodeTasks = new List<AppDomainNodeTask>();
+			AppDomainNodeTasks = new List<AppDomainNodeTask>();
 
-            foreach (KeyValuePair<string, FileInfo> nodeconfigurationFile in NodeconfigurationFiles)
-            {
-                LogHelper.LogDebugWithLineNumber(Logger,
-                                                 "AppDomainNodeTask");
+			foreach (var nodeconfigurationFile in NodeconfigurationFiles)
+			{
+				LogHelper.LogDebugWithLineNumber(Logger,
+				                                 "AppDomainNodeTask");
 
-                AppDomainNodeTask appDomainNodeTask =
-                    new AppDomainNodeTask(_buildMode,
-                                          DirectoryNodeAssemblyLocationFullPath,
-                                          nodeconfigurationFile.Value,
-                                          Settings.Default.NodeAssemblyName);
+				var appDomainNodeTask =
+					new AppDomainNodeTask(_buildMode,
+					                      DirectoryNodeAssemblyLocationFullPath,
+					                      nodeconfigurationFile.Value,
+					                      Settings.Default.NodeAssemblyName);
 
-                LogHelper.LogDebugWithLineNumber(Logger,
-                                                 "Start : AppDomainNodeTask.StartTask");
+				LogHelper.LogDebugWithLineNumber(Logger,
+				                                 "Start : AppDomainNodeTask.StartTask");
 
-                appDomainNodeTask.StartTask(new CancellationTokenSource());
+				appDomainNodeTask.StartTask(new CancellationTokenSource());
 
-                LogHelper.LogDebugWithLineNumber(Logger,
-                                                 "Finished : AppDomainNodeTask.StartTask");
+				LogHelper.LogDebugWithLineNumber(Logger,
+				                                 "Finished : AppDomainNodeTask.StartTask");
 
-                AppDomainNodeTasks.Add(appDomainNodeTask);
+				AppDomainNodeTasks.Add(appDomainNodeTask);
 
-                // Wait 5 seconds for a new node to start up.
-                Thread.Sleep(TimeSpan.FromSeconds(5));
-            }
+				// Wait 5 seconds for a new node to start up.
+				Thread.Sleep(TimeSpan.FromSeconds(5));
+			}
 
-            StartSelfHosting();
-        }
+			StartSelfHosting();
+		}
 
-        private static List<AppDomainNodeTask> AppDomainNodeTasks { get; set; }
+		private static List<AppDomainNodeTask> AppDomainNodeTasks { get; set; }
 
-        public static AppDomainManagerTask AppDomainManagerTask { get; set; }
+		public static AppDomainManagerTask AppDomainManagerTask { get; set; }
 
-        public static DirectoryInfo DirectoryManagerAssemblyLocationFullPath { get; set; }
+		public static DirectoryInfo DirectoryManagerAssemblyLocationFullPath { get; set; }
 
 
-        private static DirectoryInfo DirectoryNodeAssemblyLocationFullPath { get; set; }
+		private static DirectoryInfo DirectoryNodeAssemblyLocationFullPath { get; set; }
 
-        private static string CurrentDomainConfigurationFile { get; set; }
+		private static string CurrentDomainConfigurationFile { get; set; }
 
-        private static DirectoryInfo DirectoryManagerConfigurationFileFullPath { get; set; }
+		private static DirectoryInfo DirectoryManagerConfigurationFileFullPath { get; set; }
 
-        private static DirectoryInfo DirectoryNodeConfigurationFileFullPath { get; set; }
+		private static DirectoryInfo DirectoryNodeConfigurationFileFullPath { get; set; }
 
-        private static FileInfo NodeConfigurationFile { get; set; }
+		private static FileInfo NodeConfigurationFile { get; set; }
 
-        private static int PortStartNumber { get; set; }
+		private static int PortStartNumber { get; set; }
 
-        private static FileInfo CreateNodeConfigurationFile(int i)
-        {
-            var nodeName = "Node" + i;
+		private static FileInfo CreateNodeConfigurationFile(int i)
+		{
+			var nodeName = "Node" + i;
 
-            var configName = nodeName + ".config";
+			var configName = nodeName + ".config";
 
-            var portNumber = PortStartNumber + (i - 1);
+			var portNumber = PortStartNumber + (i - 1);
 
-            var endPointUri =
-                new Uri(Settings.Default.NodeEndpointUriTemplate.Replace("PORTNUMBER",
-                                                                         portNumber.ToString()));
+			var endPointUri =
+				new Uri(Settings.Default.NodeEndpointUriTemplate.Replace("PORTNUMBER",
+				                                                         portNumber.ToString()));
 
-            FileInfo copiedConfigurationFile =
-                CreateNodeConfigurationFile(NodeConfigurationFile,
-                                            configName,
-                                            nodeName,
-                                            new Uri(Settings.Default.ManagerLocationUri),
-                                            endPointUri,
-                                            Settings.Default.HandlerAssembly);
+			var copiedConfigurationFile =
+				CreateNodeConfigurationFile(NodeConfigurationFile,
+				                            configName,
+				                            nodeName,
+				                            new Uri(Settings.Default.ManagerLocationUri),
+				                            endPointUri,
+				                            Settings.Default.HandlerAssembly);
 
-            NodeconfigurationFiles.Add(nodeName,
-                                       copiedConfigurationFile);
+			NodeconfigurationFiles.Add(nodeName,
+			                           copiedConfigurationFile);
 
-            return copiedConfigurationFile;
-        }
+			return copiedConfigurationFile;
+		}
 
-        private static void CurrentDomain_UnhandledException(object sender,
-                                                             UnhandledExceptionEventArgs e)
-        {
-            Exception exp = e.ExceptionObject as Exception;
+		private static void CurrentDomain_UnhandledException(object sender,
+		                                                     UnhandledExceptionEventArgs e)
+		{
+			var exp = e.ExceptionObject as Exception;
 
-            if (exp != null)
-            {
-                LogHelper.LogFatalWithLineNumber(Logger,
-                                                 exp.Message,
-                                                 exp);
-            }
-        }
+			if (exp != null)
+			{
+				LogHelper.LogFatalWithLineNumber(Logger,
+				                                 exp.Message,
+				                                 exp);
+			}
+		}
 
-        private static void CurrentDomainOnDomainUnload(object sender,
-                                                        EventArgs eventArgs)
-        {
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                             "Start CurrentDomainOnDomainUnload.");
+		private static void CurrentDomainOnDomainUnload(object sender,
+		                                                EventArgs eventArgs)
+		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Start CurrentDomainOnDomainUnload.");
 
-            foreach (var appDomainNodeTask in AppDomainNodeTasks)
-            {
-                appDomainNodeTask.Dispose();
-            }
+			foreach (var appDomainNodeTask in AppDomainNodeTasks)
+			{
+				appDomainNodeTask.Dispose();
+			}
 
-            AppDomainManagerTask.Dispose();
+			AppDomainManagerTask.Dispose();
 
-            QuitEvent.Set();
+			QuitEvent.Set();
 
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                             "Finished CurrentDomainOnDomainUnload.");
-        }
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Finished CurrentDomainOnDomainUnload.");
+		}
 
 
-        private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
+		private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
 
 
-        public static FileInfo CreateNodeConfigurationFile(FileInfo nodeConfigurationFile,
-                                                           string newConfigurationFileName,
-                                                           string nodeName,
-                                                           Uri managerEndpoint,
-                                                           Uri nodeEndPoint,
-                                                           string handlerAssembly)
-        {
-            var copiedNodeConfigFile = nodeConfigurationFile.CopyTo(newConfigurationFileName,
-                                                                    true);
+		public static FileInfo CreateNodeConfigurationFile(FileInfo nodeConfigurationFile,
+		                                                   string newConfigurationFileName,
+		                                                   string nodeName,
+		                                                   Uri managerEndpoint,
+		                                                   Uri nodeEndPoint,
+		                                                   string handlerAssembly)
+		{
+			var copiedNodeConfigFile = nodeConfigurationFile.CopyTo(newConfigurationFileName,
+			                                                        true);
 
-            // Change app settings.
-            var configFileMap = new ExeConfigurationFileMap
-            {
-                ExeConfigFilename = copiedNodeConfigFile.FullName
-            };
+			// Change app settings.
+			var configFileMap = new ExeConfigurationFileMap
+			{
+				ExeConfigFilename = copiedNodeConfigFile.FullName
+			};
 
-            var config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap,
-                                                                         ConfigurationUserLevel.None);
+			var config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap,
+			                                                             ConfigurationUserLevel.None);
 
-            config.AppSettings.Settings["NodeName"].Value = nodeName;
-            config.AppSettings.Settings["BaseAddress"].Value = nodeEndPoint.ToString();
-            config.AppSettings.Settings["ManagerLocation"].Value = managerEndpoint.ToString();
-            config.AppSettings.Settings["HandlerAssembly"].Value = handlerAssembly;
+			config.AppSettings.Settings["NodeName"].Value = nodeName;
+			config.AppSettings.Settings["BaseAddress"].Value = nodeEndPoint.ToString();
+			config.AppSettings.Settings["ManagerLocation"].Value = managerEndpoint.ToString();
+			config.AppSettings.Settings["HandlerAssembly"].Value = handlerAssembly;
 
-            config.Save();
+			config.Save();
 
-            return copiedNodeConfigFile;
-        }
+			return copiedNodeConfigFile;
+		}
 
-        public static FileInfo CopyManagerConfigurationFile(FileInfo managerConfigFile,
-                                                            string newConfigFileName)
-        {
-            return managerConfigFile.CopyTo(newConfigFileName,
-                                            true);
-        }
+		public static FileInfo CopyManagerConfigurationFile(FileInfo managerConfigFile,
+		                                                    string newConfigFileName)
+		{
+			return managerConfigFile.CopyTo(newConfigFileName,
+			                                true);
+		}
 
 
-        public static bool ShutDownAppDomainWithFriendlyName(string friendlyName)
-        {
-            bool ret = false;
+		public static bool ShutDownAppDomainWithFriendlyName(string friendlyName)
+		{
+			var ret = false;
 
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                             "Started.");
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Started.");
 
-            if (AppDomainManagerTask != null &&
-                AppDomainManagerTask.GetAppDomainFriendlyName()
-                    .Equals(friendlyName,
-                            StringComparison.InvariantCultureIgnoreCase))
-            {
-                AppDomainManagerTask.Dispose();
+			if (AppDomainManagerTask != null &&
+			    AppDomainManagerTask.GetAppDomainFriendlyName()
+				    .Equals(friendlyName,
+				            StringComparison.InvariantCultureIgnoreCase))
+			{
+				AppDomainManagerTask.Dispose();
 
-                AppDomainManagerTask = null;
+				AppDomainManagerTask = null;
 
-                ret = true;
-            }
+				ret = true;
+			}
 
-            if (AppDomainNodeTasks != null && AppDomainNodeTasks.Any())
-            {
-                AppDomainNodeTask nodeToDispose = null;
+			if (AppDomainNodeTasks != null && AppDomainNodeTasks.Any())
+			{
+				AppDomainNodeTask nodeToDispose = null;
 
-                foreach (var appDomainNodeTask in AppDomainNodeTasks)
-                {
-                    if (appDomainNodeTask.GetAppDomainFriendlyName()
-                        .Equals(friendlyName,
-                                StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        nodeToDispose = appDomainNodeTask;
+				foreach (var appDomainNodeTask in AppDomainNodeTasks)
+				{
+					if (appDomainNodeTask.GetAppDomainFriendlyName()
+						.Equals(friendlyName,
+						        StringComparison.InvariantCultureIgnoreCase))
+					{
+						nodeToDispose = appDomainNodeTask;
 
-                        break;
-                    }
-                }
+						break;
+					}
+				}
 
-                if (nodeToDispose != null)
-                {
-                    LogHelper.LogDebugWithLineNumber(Logger,
-                                                     "Start to dispose appdomain with friendly name :" + friendlyName);
+				if (nodeToDispose != null)
+				{
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Start to dispose appdomain with friendly name :" + friendlyName);
 
-                    nodeToDispose.Dispose();
+					nodeToDispose.Dispose();
 
-                    AppDomainNodeTasks.Remove(nodeToDispose);
+					AppDomainNodeTasks.Remove(nodeToDispose);
 
-                    LogHelper.LogDebugWithLineNumber(Logger,
-                                                     "Finished to dispose appdomain with friendly name :" + friendlyName);
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Finished to dispose appdomain with friendly name :" + friendlyName);
 
-                    ret = true;
-                }
-            }
+					ret = true;
+				}
+			}
 
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                             "Finished.");
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Finished.");
 
-            return ret;
-        }
+			return ret;
+		}
 
-        public static void StartNewNode(out string friendlyName)
-        {
-            friendlyName = null;
+		public static void StartNewNode(out string friendlyName)
+		{
+			friendlyName = null;
 
-            NumberOfNodesToStart++;
+			NumberOfNodesToStart++;
 
-            if (NumberOfNodesToStart > 0)
-            {
-                LogHelper.LogDebugWithLineNumber(Logger,
-                                                 "Start creating node configuration file for node id : " + NumberOfNodesToStart);
+			if (NumberOfNodesToStart > 0)
+			{
+				LogHelper.LogDebugWithLineNumber(Logger,
+				                                 "Start creating node configuration file for node id : " + NumberOfNodesToStart);
 
-                FileInfo nodeConfig = CreateNodeConfigurationFile(NumberOfNodesToStart);
+				var nodeConfig = CreateNodeConfigurationFile(NumberOfNodesToStart);
 
-                friendlyName = nodeConfig.Name;
+				friendlyName = nodeConfig.Name;
 
-                LogHelper.LogDebugWithLineNumber(Logger,
-                                                 "AppDomainNodeTask");
+				LogHelper.LogDebugWithLineNumber(Logger,
+				                                 "AppDomainNodeTask");
 
-                AppDomainNodeTask appDomainNodeTask =
-                    new AppDomainNodeTask(_buildMode,
-                                          DirectoryNodeAssemblyLocationFullPath,
-                                          nodeConfig,
-                                          Settings.Default.NodeAssemblyName);
+				var appDomainNodeTask =
+					new AppDomainNodeTask(_buildMode,
+					                      DirectoryNodeAssemblyLocationFullPath,
+					                      nodeConfig,
+					                      Settings.Default.NodeAssemblyName);
 
-                LogHelper.LogDebugWithLineNumber(Logger,
-                                                 "Start : AppDomainNodeTask.StartTask");
+				LogHelper.LogDebugWithLineNumber(Logger,
+				                                 "Start : AppDomainNodeTask.StartTask");
 
-                appDomainNodeTask.StartTask(new CancellationTokenSource());
+				appDomainNodeTask.StartTask(new CancellationTokenSource());
 
-                LogHelper.LogDebugWithLineNumber(Logger,
-                                                 "Finished : AppDomainNodeTask.StartTask");
+				LogHelper.LogDebugWithLineNumber(Logger,
+				                                 "Finished : AppDomainNodeTask.StartTask");
 
-                AppDomainNodeTasks.Add(appDomainNodeTask);
+				AppDomainNodeTasks.Add(appDomainNodeTask);
 
-                LogHelper.LogDebugWithLineNumber(Logger,
-                                                 "Finished creating node configuration file for node : ( id, config file ) : ( " + NumberOfNodesToStart + ", " + nodeConfig.FullName + " )");
-            }
-        }
+				LogHelper.LogDebugWithLineNumber(Logger,
+				                                 "Finished creating node configuration file for node : ( id, config file ) : ( " +
+				                                 NumberOfNodesToStart + ", " + nodeConfig.FullName + " )");
+			}
+		}
 
-        public static List<string> GetInstantiatedAppDomains()
-        {
-            List<string> listToReturn = null;
+		public static List<string> GetInstantiatedAppDomains()
+		{
+			List<string> listToReturn = null;
 
-            if (AppDomainManagerTask == null &&
-                (AppDomainNodeTasks == null || !AppDomainNodeTasks.Any()))
-            {
-                return listToReturn;
-            }
+			if (AppDomainManagerTask == null &&
+			    (AppDomainNodeTasks == null || !AppDomainNodeTasks.Any()))
+			{
+				return listToReturn;
+			}
 
-            listToReturn = new List<string>();
+			listToReturn = new List<string>();
 
-            if (AppDomainManagerTask != null)
-            {
-                listToReturn.Add(AppDomainManagerTask.GetAppDomainFriendlyName());
-            }
+			if (AppDomainManagerTask != null)
+			{
+				listToReturn.Add(AppDomainManagerTask.GetAppDomainFriendlyName());
+			}
 
-            if (AppDomainNodeTasks != null)
-            {
-                foreach (var appDomainNodeTask in AppDomainNodeTasks)
-                {
-                    listToReturn.Add(appDomainNodeTask.GetAppDomainFriendlyName());
-                }
-            }
+			if (AppDomainNodeTasks != null)
+			{
+				foreach (var appDomainNodeTask in AppDomainNodeTasks)
+				{
+					listToReturn.Add(appDomainNodeTask.GetAppDomainFriendlyName());
+				}
+			}
 
-            return listToReturn;
-        }
-    }
+			return listToReturn;
+		}
+	}
 }

@@ -6,34 +6,34 @@ using Stardust.Node.Interfaces;
 
 namespace NodeTest.JobHandlers
 {
-    public class TestJobWorker : IHandle<TestJobParams>
+	public class TestJobWorker : IHandle<TestJobParams>
 
-    {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (TestJobWorker));
+	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (TestJobWorker));
 
-        private readonly TestJobCode _testJobCode;
+		private readonly TestJobCode _testJobCode;
 
-        public TestJobWorker(TestJobCode testJobCode)
-        {
-            _testJobCode = testJobCode;
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                            "'Test Job Worker' class constructor called.");
-        }
+		public TestJobWorker(TestJobCode testJobCode)
+		{
+			_testJobCode = testJobCode;
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "'Test Job Worker' class constructor called.");
+		}
 
-        public CancellationTokenSource CancellationTokenSource { get; set; }
+		public CancellationTokenSource CancellationTokenSource { get; set; }
 
-        public void Handle(TestJobParams parameters,
-                           CancellationTokenSource cancellationTokenSource,
-                           Action<string> sendProgress)
-        {
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                            "'Test Job Worker' handle method called.");
+		public void Handle(TestJobParams parameters,
+		                   CancellationTokenSource cancellationTokenSource,
+		                   Action<string> sendProgress)
+		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "'Test Job Worker' handle method called.");
 
-            CancellationTokenSource = cancellationTokenSource;
+			CancellationTokenSource = cancellationTokenSource;
 
-            _testJobCode.DoTheThing(parameters,
-                                    cancellationTokenSource,
-                                    sendProgress);
-        }
-    }
+			_testJobCode.DoTheThing(parameters,
+			                        cancellationTokenSource,
+			                        sendProgress);
+		}
+	}
 }

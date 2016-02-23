@@ -20,6 +20,5 @@ namespace ManagerTest.Database
 			var versions = from f in scriptFiles select ReleaseNumberOfFile(f);
 			return versions.Max();
 		}
-
 	}
 }

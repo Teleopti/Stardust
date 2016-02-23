@@ -10,29 +10,26 @@ namespace ManagerTest
 	[TestFixture]
 	public class ManagerModuleTest
 	{
-		private ContainerBuilder _containerBuilder;
-
 		[SetUp]
 		public void SetUp()
 		{
 			_containerBuilder = new ContainerBuilder();
-			
+
 			_containerBuilder.RegisterType<NodeManager>().As<INodeManager>();
 			_containerBuilder.RegisterType<JobManager>();
 			_containerBuilder.RegisterType<HttpSender>().As<IHttpSender>();
 			_containerBuilder.RegisterType<ManagerController>();
 
 			_containerBuilder.Register(
-				 c => new JobRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString))
-				 .As<IJobRepository>();
+				c => new JobRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString))
+				.As<IJobRepository>();
 
 			_containerBuilder.Register(
-				 c => new WorkerNodeRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString))
-				 .As<IWorkerNodeRepository>();
-
-			
-
+				c => new WorkerNodeRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString))
+				.As<IWorkerNodeRepository>();
 		}
+
+		private ContainerBuilder _containerBuilder;
 
 		[Test]
 		public void ShouldResolveManagerController()
@@ -66,7 +63,5 @@ namespace ManagerTest
 				}
 			}
 		}
-
-		
 	}
 }

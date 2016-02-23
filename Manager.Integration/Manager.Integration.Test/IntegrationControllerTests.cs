@@ -20,14 +20,14 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
-    [TestFixture]
+	[TestFixture, Ignore]
     public class IntegrationControllerTests
     {
         private static readonly ILog Logger =
             LogManager.GetLogger(typeof (IntegrationControllerTests));
 
-        private bool _clearDatabase = true;
-        private string _buildMode = "Debug";
+		private readonly bool _clearDatabase = true;
+		private readonly string _buildMode = "Debug";
 
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
@@ -49,7 +49,7 @@ namespace Manager.Integration.Test
             LogHelper.LogDebugWithLineNumber("Run sql script to create logging file started.",
                                              Logger);
 
-            FileInfo scriptFile =
+			var scriptFile =
                 new FileInfo(Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
                                           Settings.Default.CreateLoggingTableSqlScriptLocationAndFileName));
 
@@ -135,9 +135,9 @@ namespace Manager.Integration.Test
             LogHelper.LogDebugWithLineNumber("Waiting for all 2 nodes to start up.",
                                              Logger);
 
-            CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
+			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
-            SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
+			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
             Task task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(2,
                                                                    sqlNotiferCancellationTokenSource,
@@ -154,7 +154,7 @@ namespace Manager.Integration.Test
             //---------------------------------------------
             // Start actual test.
             //---------------------------------------------
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+			var cancellationTokenSource = new CancellationTokenSource();
 
             HttpResponseMessage response = null;
 
@@ -162,12 +162,12 @@ namespace Manager.Integration.Test
 
             using (var client = new HttpClient())
             {
-                UriBuilder uriBuilder =
+				var uriBuilder =
                     new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
 
                 uriBuilder.Path += "appdomain/";
 
-                Uri uri = uriBuilder.Uri;
+				var uri = uriBuilder.Uri;
 
                 LogHelper.LogDebugWithLineNumber("Start calling Post Async ( " + uri + " ) ",
                                                  Logger);
@@ -212,20 +212,20 @@ namespace Manager.Integration.Test
         ///     netsh http add urlacl url=http://+:9100/ user=everyone listen=yes
         /// </summary>
         [Test]
-        public async void ShouldUnloadNode1AppDomain()
+		public async void ShouldReturnAllAppDomainKeys()
         {
             LogHelper.LogDebugWithLineNumber("Start test.",
                                              Logger);
 
             //---------------------------------------------
-            // Notify when all 2 nodes are up and running. 
+			// Notify when 2 nodes are up. 
             //---------------------------------------------
-            LogHelper.LogDebugWithLineNumber("Waiting for all 2 nodes to start up.",
+			LogHelper.LogDebugWithLineNumber("Waiting for 2 nodes to start up.",
                                              Logger);
 
-            CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
+			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
-            SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
+			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
             Task task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(2,
                                                                    sqlNotiferCancellationTokenSource,
@@ -242,33 +242,54 @@ namespace Manager.Integration.Test
             //---------------------------------------------
             // Start actual test.
             //---------------------------------------------
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-
             HttpResponseMessage response = null;
+
+			var cancellationTokenSource = new CancellationTokenSource();
 
             using (var client = new HttpClient())
             {
-                UriBuilder uriBuilder =
+				client.DefaultRequestHeaders.Accept.Clear();
+				client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+				var uriBuilder =
                     new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
 
-                uriBuilder.Path += "appdomain/" + "Node1.config";
+				uriBuilder.Path += "appdomain";
 
-                Uri uri = uriBuilder.Uri;
+				var uri = uriBuilder.Uri;
 
-                LogHelper.LogDebugWithLineNumber("Start calling Delete Async ( " + uri + " ) ",
+				LogHelper.LogDebugWithLineNumber("Start calling Get Async ( " + uri + " ) ",
                                                  Logger);
 
                 try
                 {
-                    response = await client.DeleteAsync(uriBuilder.Uri,
+					response = await client.GetAsync(uriBuilder.Uri,
                                                         cancellationTokenSource.Token);
 
                     if (response.IsSuccessStatusCode)
                     {
-                        LogHelper.LogDebugWithLineNumber("Succeeded calling Delete Async ( " + uri + " ) ",
+						LogHelper.LogDebugWithLineNumber("Succeeded calling Get Async ( " + uri + " ) ",
+						                                 Logger);
+
+						var content = await response.Content.ReadAsStringAsync();
+
+						var list =
+							JsonConvert.DeserializeObject<List<string>>(content);
+
+						if (list.Any())
+						{
+							foreach (var l in list)
+							{
+								LogHelper.LogDebugWithLineNumber(l,
                                                          Logger);
                     }
                 }
+
+						Assert.IsTrue(list.Any(),
+						              "Should return a list of appdomain keys.");
+					}
+				}
+
                 catch (Exception exp)
                 {
                     LogHelper.LogErrorWithLineNumber(exp.Message,
@@ -281,6 +302,8 @@ namespace Manager.Integration.Test
                           "Response code should be success.");
 
             cancellationTokenSource.Cancel();
+
+			task.Dispose();
 
             LogHelper.LogDebugWithLineNumber("Finished test.",
                                              Logger);
@@ -291,20 +314,20 @@ namespace Manager.Integration.Test
         ///     netsh http add urlacl url=http://+:9100/ user=everyone listen=yes
         /// </summary>
         [Test]
-        public async void ShouldReturnAllAppDomainKeys()
+		public async void ShouldUnloadNode1AppDomain()
         {
             LogHelper.LogDebugWithLineNumber("Start test.",
                                              Logger);
 
             //---------------------------------------------
-            // Notify when 2 nodes are up. 
+			// Notify when all 2 nodes are up and running. 
             //---------------------------------------------
-            LogHelper.LogDebugWithLineNumber("Waiting for 2 nodes to start up.",
+			LogHelper.LogDebugWithLineNumber("Waiting for all 2 nodes to start up.",
                                              Logger);
 
-            CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
+			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
-            SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
+			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
             Task task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(2,
                                                                    sqlNotiferCancellationTokenSource,
@@ -321,54 +344,33 @@ namespace Manager.Integration.Test
             //---------------------------------------------
             // Start actual test.
             //---------------------------------------------
-            HttpResponseMessage response = null;
+			var cancellationTokenSource = new CancellationTokenSource();
 
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            HttpResponseMessage response = null;
 
             using (var client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                UriBuilder uriBuilder =
+				var uriBuilder =
                     new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
 
-                uriBuilder.Path += "appdomain";
+				uriBuilder.Path += "appdomain/" + "Node1.config";
 
-                Uri uri = uriBuilder.Uri;
+				var uri = uriBuilder.Uri;
 
-                LogHelper.LogDebugWithLineNumber("Start calling Get Async ( " + uri + " ) ",
+				LogHelper.LogDebugWithLineNumber("Start calling Delete Async ( " + uri + " ) ",
                                                  Logger);
 
                 try
                 {
-                    response = await client.GetAsync(uriBuilder.Uri,
+					response = await client.DeleteAsync(uriBuilder.Uri,
                                                      cancellationTokenSource.Token);
 
                     if (response.IsSuccessStatusCode)
                     {
-                        LogHelper.LogDebugWithLineNumber("Succeeded calling Get Async ( " + uri + " ) ",
-                                                         Logger);
-
-                        string content = await response.Content.ReadAsStringAsync();
-
-                        List<string> list =
-                            JsonConvert.DeserializeObject<List<string>>(content);
-
-                        if (list.Any())
-                        {
-                            foreach (var l in list)
-                            {
-                                LogHelper.LogDebugWithLineNumber(l,
+						LogHelper.LogDebugWithLineNumber("Succeeded calling Delete Async ( " + uri + " ) ",
                                                                  Logger);
                             }
                         }
-
-                        Assert.IsTrue(list.Any(),
-                                      "Should return a list of appdomain keys.");
-                    }
-                }
-
                 catch (Exception exp)
                 {
                     LogHelper.LogErrorWithLineNumber(exp.Message,
@@ -381,8 +383,6 @@ namespace Manager.Integration.Test
                           "Response code should be success.");
 
             cancellationTokenSource.Cancel();
-
-            task.Dispose();
 
             LogHelper.LogDebugWithLineNumber("Finished test.",
                                              Logger);

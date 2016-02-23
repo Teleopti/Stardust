@@ -14,12 +14,6 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
         private static readonly ILog Logger =
             LogManager.GetLogger(typeof (AppDomainManagerTask));
 
-        public string Buildmode { get; set; }
-        private DirectoryInfo DirectoryManagerAssemblyLocationFullPath { get; set; }
-
-        private FileInfo ConfigurationFileInfo { get; set; }
-        public string ManagerAssemblyName { get; set; }
-
         public AppDomainManagerTask(string buildmode,
                                     DirectoryInfo directoryManagerAssemblyLocationFullPath,
                                     FileInfo configurationFileInfo,
@@ -31,6 +25,47 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
             ManagerAssemblyName = managerAssemblyName;
         }
 
+		public string Buildmode { get; set; }
+		private DirectoryInfo DirectoryManagerAssemblyLocationFullPath { get; set; }
+
+		private FileInfo ConfigurationFileInfo { get; }
+		public string ManagerAssemblyName { get; set; }
+
+		public AppDomain MyAppDomain { get; private set; }
+
+		public Task Task { get; private set; }
+
+		private CancellationTokenSource CancellationTokenSource { get; set; }
+
+		public void Dispose()
+		{
+			LogHelper.LogDebugWithLineNumber(Logger, "Start disposing.");
+
+			if (CancellationTokenSource != null &&
+			    !CancellationTokenSource.IsCancellationRequested)
+			{
+				CancellationTokenSource.Cancel();
+			}
+
+			if (MyAppDomain != null)
+			{
+				try
+				{
+					AppDomain.Unload(MyAppDomain);
+				}
+				catch (Exception)
+				{
+				}
+			}
+
+			if (Task != null)
+			{
+				Task.Dispose();
+			}
+
+			LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
+		}
+
         public string GetAppDomainFriendlyName()
         {
             if (MyAppDomain != null)
@@ -41,15 +76,9 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
             return null;
         }
 
-        public AppDomain MyAppDomain { get; private set; }
-
-        public Task Task { get; private set; }
-
-        private CancellationTokenSource CancellationTokenSource { get; set; }
-
         public Task StartTask(CancellationTokenSource cancellationTokenSource)
         {
-            Task= Task.Factory.StartNew(() =>
+			Task = Task.Factory.StartNew(() =>
             {
                 Task.Factory.StartNew(() =>
                 {
@@ -62,7 +91,6 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
                     {
                         cancellationTokenSource.Token.ThrowIfCancellationRequested();
                     }
-
                 }, cancellationTokenSource.Token);
 
                 Task.Factory.StartNew(() =>
@@ -91,42 +119,11 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
                                                     "Manager (appdomain) will start with friendly name : " + MyAppDomain.FriendlyName);
 
                     MyAppDomain.ExecuteAssembly(assemblyFile.FullName);
-
                 },
                 cancellationTokenSource.Token);
-
             }, cancellationTokenSource.Token);
 
             return Task;
-        }
-
-        public void Dispose()
-        {
-            LogHelper.LogDebugWithLineNumber(Logger, "Start disposing.");
-
-            if (CancellationTokenSource != null &&
-                !CancellationTokenSource.IsCancellationRequested)
-            {
-                CancellationTokenSource.Cancel();
-            }
-
-            if (MyAppDomain != null)
-            {
-                try
-                {
-                    AppDomain.Unload(MyAppDomain);
-                }
-                catch (Exception)
-                {
-                }
-            }
-
-            if (Task != null)
-            {
-                Task.Dispose();
-            }
-
-            LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
         }
     }
 }

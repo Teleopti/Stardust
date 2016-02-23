@@ -9,30 +9,30 @@ using Stardust.Node.Timers;
 
 namespace NodeTest.Fakes.Timers
 {
-    public class SendJobDoneWithEventTriggerTimerFake : TrySendStatusToManagerTimer
-    {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (SendJobDoneWithEventTriggerTimerFake));
+	public class SendJobDoneWithEventTriggerTimerFake : TrySendStatusToManagerTimer
+	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (SendJobDoneWithEventTriggerTimerFake));
 
-        public ManualResetEventSlim Wait = new ManualResetEventSlim();
+		public ManualResetEventSlim Wait = new ManualResetEventSlim();
 
-        public SendJobDoneWithEventTriggerTimerFake(INodeConfiguration nodeConfiguration,
-                                                    Uri callbackTemplateUri) : base(nodeConfiguration,
-                                                                                    callbackTemplateUri)
-        {
-        }
+		public SendJobDoneWithEventTriggerTimerFake(INodeConfiguration nodeConfiguration,
+		                                            Uri callbackTemplateUri) : base(nodeConfiguration,
+		                                                                            callbackTemplateUri)
+		{
+		}
 
-        protected override Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo,
-                                                                   CancellationToken cancellationToken)
-        {
-            InvokeTriggerTrySendStatusSucceded();
+		protected override Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo,
+		                                                           CancellationToken cancellationToken)
+		{
+			InvokeTriggerTrySendStatusSucceded();
 
-            Wait.Set();
+			Wait.Set();
 
-            var response = new HttpResponseMessage(HttpStatusCode.OK);
-            var request = new HttpRequestMessage(HttpMethod.Post,
-                                                 "JobDoneTrigger");
-            response.RequestMessage = request;
-            return Task.FromResult(response);
-        }
-    }
+			var response = new HttpResponseMessage(HttpStatusCode.OK);
+			var request = new HttpRequestMessage(HttpMethod.Post,
+			                                     "JobDoneTrigger");
+			response.RequestMessage = request;
+			return Task.FromResult(response);
+		}
+	}
 }

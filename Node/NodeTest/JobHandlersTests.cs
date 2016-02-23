@@ -12,67 +12,66 @@ using Stardust.Node.Workers;
 
 namespace NodeTest
 {
-    [TestFixture]
-    public class JobHandlersTests
-    {
-        [TestFixtureSetUp]
-        public void TestFixtureSetUp()
-        {
-            var builder = new ContainerBuilder();
+	[TestFixture]
+	public class JobHandlersTests
+	{
+		[TestFixtureSetUp]
+		public void TestFixtureSetUp()
+		{
+			var builder = new ContainerBuilder();
 
-            builder.RegisterInstance<IHandle<TestJobParams>>(new TestJobWorker(new TestJobCode()));
+			builder.RegisterInstance<IHandle<TestJobParams>>(new TestJobWorker(new TestJobCode()));
 
-            builder.RegisterType<InvokeHandler>()
-                .SingleInstance();
+			builder.RegisterType<InvokeHandler>()
+				.SingleInstance();
 
-            Container = builder.Build();
+			Container = builder.Build();
 
 #if DEBUG
-            var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
-            XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
+			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 #endif
+		}
 
-        }
+		[TestFixtureTearDown]
+		public void TestFixtureTearDown()
+		{
+			LogHelper.LogDebugWithLineNumber(Logger, "Closing JobHandlersTests...");
+		}
 
-        [TestFixtureTearDown]
-        public void TestFixtureTearDown()
-        {
-            LogHelper.LogDebugWithLineNumber(Logger, "Closing JobHandlersTests...");
-        }
+		private IContainer Container { get; set; }
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (JobHandlersTests));
 
-        private IContainer Container { get; set; }
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(JobHandlersTests));
+		private void ProgressCallback(string message)
+		{
+			LogHelper.LogDebugWithLineNumber(Logger, message);
+		}
 
-        private void ProgressCallback(string message)
-        {
-           LogHelper.LogDebugWithLineNumber(Logger, message);
-        }
+		[Test]
+		public void ShouldBeAbleToInvokeAHandler()
+		{
+			var invokehandler = Container.Resolve<InvokeHandler>();
 
-        [Test]
-        public void ShouldBeAbleToInvokeAHandler()
-        {
-            var invokehandler = Container.Resolve<InvokeHandler>();
+			invokehandler.Invoke(new TestJobParams("Dummy data",
+			                                       "Name data"),
+			                     new CancellationTokenSource(),
+			                     ProgressCallback);
+		}
 
-            invokehandler.Invoke(new TestJobParams("Dummy data",
-                                                   "Name data"),
-                                 new CancellationTokenSource(),
-                                 ProgressCallback);
-        }
+		[Test]
+		public void ShouldBeAbleToResolveAHandlerFromContainer()
+		{
+			var handler = Container.Resolve<IHandle<TestJobParams>>();
 
-        [Test]
-        public void ShouldBeAbleToResolveAHandlerFromContainer()
-        {
-            var handler = Container.Resolve<IHandle<TestJobParams>>();
+			Assert.IsNotNull(handler);
+		}
 
-            Assert.IsNotNull(handler);
-        }
+		[Test]
+		public void ShouldBeAbleToResolveInvokeHandlerFromContainer()
+		{
+			var invokehandler = Container.Resolve<InvokeHandler>();
 
-        [Test]
-        public void ShouldBeAbleToResolveInvokeHandlerFromContainer()
-        {
-            var invokehandler = Container.Resolve<InvokeHandler>();
-
-            Assert.IsNotNull(invokehandler);
-        }
-    }
+			Assert.IsNotNull(invokehandler);
+		}
+	}
 }

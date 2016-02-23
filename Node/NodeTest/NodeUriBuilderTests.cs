@@ -5,83 +5,83 @@ using Stardust.Node.Helpers;
 
 namespace NodeTest
 {
-    [TestFixture]
-    public class NodeUriBuilderTests
-    {
-        private string UriToTest { get; set; }
+	[TestFixture]
+	public class NodeUriBuilderTests
+	{
+		private string UriToTest { get; set; }
 
-        [TestFixtureSetUp]
-        public void TestFixtureSetup()
-        {
-            UriToTest = "http://localhost:9000/jobmanager/";
-        }
+		[TestFixtureSetUp]
+		public void TestFixtureSetup()
+		{
+			UriToTest = "http://localhost:9000/jobmanager/";
+		}
 
-        [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
-        public void ShouldThrowExceptionWhenConstructorArgumentIsStringNull()
-        {
-            var nodeUriBuilderToTest = new NodeUriBuilderHelper(location: null);
-        }
+		[Test]
+		public void ShouldInstantiateWhenConstructorArgumentStringIsIvalidUri()
+		{
+			var nodeUriBuilderToTest = new NodeUriBuilderHelper(UriToTest);
 
-        [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
-        public void ShouldThrowExceptionWhenConstructorArgumentIsStringEmpty()
-        {
-            var nodeUriBuilderToTest = new NodeUriBuilderHelper(string.Empty);
-        }
+			Assert.IsNotNull(nodeUriBuilderToTest);
+		}
 
-        [Test]
-        [ExpectedException(typeof (UriFormatException))]
-        public void ShouldThrowExceptionWhenConstructorArgumentStringIsIvalidUri()
-        {
-            var nodeUriBuilderToTest = new NodeUriBuilderHelper("invalid uri");
-        }
+		[Test]
+		public void ShouldReturnCorrectUriWhenPathArgumentIsAssigned()
+		{
+			var path = NodeRouteConstants.IsAlive;
 
-        [Test]
-        public void ShouldInstantiateWhenConstructorArgumentStringIsIvalidUri()
-        {
-            var nodeUriBuilderToTest = new NodeUriBuilderHelper(UriToTest);
+			var uriBuilder = new UriBuilder(UriToTest)
+			{
+				Path = path
+			};
 
-            Assert.IsNotNull(nodeUriBuilderToTest);
-        }
+			var nodeUriBuilderToTest = new NodeUriBuilderHelper(UriToTest);
 
-        [Test]
-        public void ShouldReturnCorrectUriWhenPathArgumentIsAssigned()
-        {
-            string path = NodeRouteConstants.IsAlive;
+			var uriToTest = nodeUriBuilderToTest.CreateUri(path);
 
-            var uriBuilder = new UriBuilder(UriToTest)
-            {
-                Path = path
-            };
+			Assert.IsTrue(uriBuilder.Uri == uriToTest);
+		}
 
-            var nodeUriBuilderToTest = new NodeUriBuilderHelper(UriToTest);
+		[Test]
+		public void ShouldReturnCorrectUriWhenTemplateAndGuidArgumentsAreAssigned()
+		{
+			var guid = Guid.NewGuid();
 
-            var uriToTest = nodeUriBuilderToTest.CreateUri(path);
+			var path =
+				NodeRouteConstants.CancelJob.Replace(NodeRouteConstants.JobIdOptionalParameter,
+				                                     guid.ToString());
 
-            Assert.IsTrue(uriBuilder.Uri == uriToTest);
-        }
+			var uriBuilder = new UriBuilder(UriToTest)
+			{
+				Path = path
+			};
 
-        [Test]
-        public void ShouldReturnCorrectUriWhenTemplateAndGuidArgumentsAreAssigned()
-        {
-            var guid = Guid.NewGuid();
+			var nodeUriBuilderToTest = new NodeUriBuilderHelper(UriToTest);
 
-            string path =
-                NodeRouteConstants.CancelJob.Replace(NodeRouteConstants.JobIdOptionalParameter,
-                                                     guid.ToString());
+			var uriToTest = nodeUriBuilderToTest.CreateUri(NodeRouteConstants.CancelJob,
+			                                               guid);
 
-            var uriBuilder = new UriBuilder(UriToTest)
-            {
-                Path = path
-            };
+			Assert.IsTrue(uriBuilder.Uri == uriToTest);
+		}
 
-            var nodeUriBuilderToTest = new NodeUriBuilderHelper(UriToTest);
+		[Test]
+		[ExpectedException(typeof (ArgumentNullException))]
+		public void ShouldThrowExceptionWhenConstructorArgumentIsStringEmpty()
+		{
+			var nodeUriBuilderToTest = new NodeUriBuilderHelper(string.Empty);
+		}
 
-            var uriToTest = nodeUriBuilderToTest.CreateUri(NodeRouteConstants.CancelJob,
-                                                           guid);
+		[Test]
+		[ExpectedException(typeof (ArgumentNullException))]
+		public void ShouldThrowExceptionWhenConstructorArgumentIsStringNull()
+		{
+			var nodeUriBuilderToTest = new NodeUriBuilderHelper(location: null);
+		}
 
-            Assert.IsTrue(uriBuilder.Uri == uriToTest);
-        }
-    }
+		[Test]
+		[ExpectedException(typeof (UriFormatException))]
+		public void ShouldThrowExceptionWhenConstructorArgumentStringIsIvalidUri()
+		{
+			var nodeUriBuilderToTest = new NodeUriBuilderHelper("invalid uri");
+		}
+	}
 }

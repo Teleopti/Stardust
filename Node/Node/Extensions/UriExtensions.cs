@@ -9,75 +9,74 @@ using Stardust.Node.Constants;
 
 namespace Stardust.Node.Extensions
 {
-    public static class UriExtensions
-    {
+	public static class UriExtensions
+	{
+		public static void ThrowArgumentNullExceptionWhenNull(this Uri uri)
+		{
+			if (uri.IsNull())
+			{
+				throw new ArgumentNullException();
+			}
+		}
 
-        public static void ThrowArgumentNullExceptionWhenNull(this Uri uri)
-        {
-            if (uri.IsNull())
-            {
-                throw new ArgumentNullException();
-            }
-        }
+		public static void ThrowArgumentExceptionWhenNull(this Uri uri)
+		{
+			if (uri.IsNull())
+			{
+				throw new ArgumentException();
+			}
+		}
 
-        public static void ThrowArgumentExceptionWhenNull(this Uri uri)
-        {
-            if (uri.IsNull())
-            {
-                throw new ArgumentException();
-            }
-        }
+		public static bool IsValid(this Uri uri)
+		{
+			uri.ThrowArgumentExceptionWhenNull();
 
-        public static bool IsValid(this Uri uri)
-        {
-            uri.ThrowArgumentExceptionWhenNull();
+			return uri.Host.HasValue();
+		}
 
-            return uri.Host.HasValue();
-        }
+		public static bool IsNull(this Uri uri)
+		{
+			return uri == null;
+		}
 
-        public static bool IsNull(this Uri uri)
-        {
-            return uri == null;
-        }
+		public static bool IsNotNull(this Uri uri)
+		{
+			return uri != null;
+		}
 
-        public static bool IsNotNull(this Uri uri)
-        {
-            return uri != null;
-        }
+		public static async Task<HttpResponseMessage> PostAsync(this Uri uri,
+		                                                        Uri apiEndpoint,
+		                                                        CancellationToken cancellationToken)
+		{
+			// Call API.
+			HttpResponseMessage response;
 
-        public static async Task<HttpResponseMessage> PostAsync(this Uri uri,
-                                                                Uri apiEndpoint,
-                                                                CancellationToken cancellationToken)
-        {
-            // Call API.
-            HttpResponseMessage response;
+			using (var client = new HttpClient())
+			{
+				client.DefineDefaultRequestHeaders();
 
-            using (var client = new HttpClient())
-            {
-                client.DefineDefaultRequestHeaders();
+				var sez = JsonConvert.SerializeObject(uri);
 
-                var sez = JsonConvert.SerializeObject(uri);
+				var str = new StringContent(sez,
+				                            Encoding.Unicode,
+				                            MediaTypeConstants.ApplicationJson);
 
-                var str = new StringContent(sez,
-                                            Encoding.Unicode,
-                                            MediaTypeConstants.ApplicationJson);
+				response = await client.PostAsync(apiEndpoint,
+				                                  str,
+				                                  cancellationToken);
+			}
 
-                response = await client.PostAsync(apiEndpoint,
-                                                  str,
-                                                  cancellationToken);
-            }
+			return response;
+		}
 
-            return response;
-        }
+		private static void DefineDefaultRequestHeaders(this HttpClient client)
+		{
+			// Validate.
+			client.ThrowArgumentExceptionWhenNull();
 
-        private static void DefineDefaultRequestHeaders(this HttpClient client)
-        {
-            // Validate.
-            client.ThrowArgumentExceptionWhenNull();
-
-            // Create request headers.
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeConstants.ApplicationJson));
-        }
-    }
+			// Create request headers.
+			client.DefaultRequestHeaders.Accept.Clear();
+			client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeConstants.ApplicationJson));
+		}
+	}
 }

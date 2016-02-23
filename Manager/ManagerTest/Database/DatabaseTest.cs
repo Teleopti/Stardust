@@ -7,7 +7,7 @@ namespace ManagerTest.Database
 		[SetUp]
 		public void BaseTestSetup()
 		{
-			var databaseHelper =new  DatabaseHelper();
+			var databaseHelper = new DatabaseHelper();
 			databaseHelper.Create();
 		}
 	}

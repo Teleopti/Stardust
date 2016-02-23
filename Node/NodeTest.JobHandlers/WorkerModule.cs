@@ -3,7 +3,7 @@ using Stardust.Node.Interfaces;
 
 namespace NodeTest.JobHandlers
 {
-	public class WorkerModule :Module
+	public class WorkerModule : Module
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
@@ -13,7 +13,7 @@ namespace NodeTest.JobHandlers
 			builder.RegisterType<LongRunningJobWorker>().As<IHandle<LongRunningJobParams>>();
 			builder.RegisterType<FailingJobWorker>().As<IHandle<FailingJobParams>>();
 
-				 // Register handlers.
+			// Register handlers.
 			//builder.RegisterAssemblyTypes(nodeConfiguration.HandlerAssembly)
 			//										 .Where(IsHandler)
 			//										 .AsImplementedInterfaces()

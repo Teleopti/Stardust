@@ -9,8 +9,27 @@ namespace ManagerTest
 	public class BaseTestsAttribute : Attribute, ITestAction
 	{
 		private IContainer _container;
-		private Type _fixtureType;
 		private object _fixture;
+		private Type _fixtureType;
+
+		public void BeforeTest(TestDetails test)
+		{
+			_fixture = test.Fixture;
+			_fixtureType = _fixture.GetType();
+
+			buildContainer();
+			injectMembers();
+		}
+
+		public void AfterTest(TestDetails test)
+		{
+			//throw new NotImplementedException();
+		}
+
+		public ActionTargets Targets
+		{
+			get { return ActionTargets.Test; }
+		}
 
 		private void injectMembers()
 		{
@@ -33,16 +52,7 @@ namespace ManagerTest
 			}
 		}
 
-		public void BeforeTest(TestDetails test)
-		{
-			_fixture = test.Fixture;
-			_fixtureType = _fixture.GetType();
-
-			buildContainer();
-			injectMembers();
-		}
-
-		private  void buildContainer()
+		private void buildContainer()
 		{
 			var builder = new ContainerBuilder();
 			SetUp(builder);
@@ -51,17 +61,6 @@ namespace ManagerTest
 
 		protected virtual void SetUp(ContainerBuilder builder)
 		{
-			
-		}
-
-		public void AfterTest(TestDetails test)
-		{
-			//throw new NotImplementedException();
-		}
-
-		public ActionTargets Targets
-		{
-			get { return ActionTargets.Test; }
 		}
 	}
 }

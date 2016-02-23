@@ -3,19 +3,19 @@ using Stardust.Node.Interfaces;
 
 namespace Stardust.Node.Helpers
 {
-    public class NodeConfigurationUriBuilderHelper
-    {
-        public ManagerUriBuilderHelper ManagerUriBuilder { get; set; }
+	public class NodeConfigurationUriBuilderHelper
+	{
+		public NodeConfigurationUriBuilderHelper(INodeConfiguration configuration)
+		{
+			configuration.ThrowArgumentNullException();
 
-        public NodeUriBuilderHelper NodeUriBuilder { get; set; }
+			ManagerUriBuilder = new ManagerUriBuilderHelper(configuration.ManagerLocation);
 
-        public NodeConfigurationUriBuilderHelper(INodeConfiguration configuration)
-        {
-            configuration.ThrowArgumentNullException();
+			NodeUriBuilder = new NodeUriBuilderHelper(configuration.BaseAddress);
+		}
 
-            ManagerUriBuilder = new ManagerUriBuilderHelper(configuration.ManagerLocation);
+		public ManagerUriBuilderHelper ManagerUriBuilder { get; set; }
 
-            NodeUriBuilder = new NodeUriBuilderHelper(configuration.BaseAddress);
-        }
-    }
+		public NodeUriBuilderHelper NodeUriBuilder { get; set; }
+	}
 }

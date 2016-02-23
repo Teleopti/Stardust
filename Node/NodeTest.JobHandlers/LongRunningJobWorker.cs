@@ -6,33 +6,33 @@ using Stardust.Node.Interfaces;
 
 namespace NodeTest.JobHandlers
 {
-    public class LongRunningJobWorker : IHandle<LongRunningJobParams>
+	public class LongRunningJobWorker : IHandle<LongRunningJobParams>
 
-    {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (LongRunningJobWorker));
+	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (LongRunningJobWorker));
 
-        public LongRunningJobWorker()
-        {
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                            "'Long running Job Worker' class constructor called.");
-        }
+		public LongRunningJobWorker()
+		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "'Long running Job Worker' class constructor called.");
+		}
 
-        public CancellationTokenSource CancellationTokenSource { get; set; }
+		public CancellationTokenSource CancellationTokenSource { get; set; }
 
-        public void Handle(LongRunningJobParams parameters,
-                           CancellationTokenSource cancellationTokenSource,
-                           Action<string> sendProgress)
-        {
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                            "'Long running Job Worker' handle method called.");
+		public void Handle(LongRunningJobParams parameters,
+		                   CancellationTokenSource cancellationTokenSource,
+		                   Action<string> sendProgress)
+		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "'Long running Job Worker' handle method called.");
 
-            CancellationTokenSource = cancellationTokenSource;
+			CancellationTokenSource = cancellationTokenSource;
 
-            var doTheRealThing = new LongRunningJobCode();
+			var doTheRealThing = new LongRunningJobCode();
 
-            doTheRealThing.DoTheThing(parameters,
-                                      cancellationTokenSource,
-                                      sendProgress);
-        }
-    }
+			doTheRealThing.DoTheThing(parameters,
+			                          cancellationTokenSource,
+			                          sendProgress);
+		}
+	}
 }
