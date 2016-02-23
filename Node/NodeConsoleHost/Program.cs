@@ -15,113 +15,113 @@ using Stardust.Node.Interfaces;
 
 namespace NodeConsoleHost
 {
-    public class Program
-    {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (Program));
+	public class Program
+	{
+		// A delegate type to be used as the handler routine 
+		// for SetConsoleCtrlHandler.
+		public delegate bool HandlerRoutine(CtrlTypes ctrlType);
 
-        private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
+		// An enumerated type for the control messages
+		// sent to the handler routine.
+		public enum CtrlTypes
+		{
+			CtrlCEvent = 0,
+			CtrlBreakEvent,
+			CtrlCloseEvent,
+			CtrlLogoffEvent = 5,
+			CtrlShutdownEvent
+		}
+
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (Program));
+
+		private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
+
+		private static string WhoAmI { get; set; }
+
+		private static INodeStarter NodeStarter { get; set; }
+
+		public static IContainer Container { get; set; }
 
 
-        [DllImport("Kernel32")]
-        public static extern bool SetConsoleCtrlHandler(HandlerRoutine handler,
-                                                        bool add);
+		[DllImport("Kernel32")]
+		public static extern bool SetConsoleCtrlHandler(HandlerRoutine handler,
+		                                                bool add);
 
-        // A delegate type to be used as the handler routine 
-        // for SetConsoleCtrlHandler.
-        public delegate bool HandlerRoutine(CtrlTypes ctrlType);
+		private static bool ConsoleCtrlCheck(CtrlTypes ctrlType)
+		{
+			if (ctrlType == CtrlTypes.CtrlCloseEvent ||
+			    ctrlType == CtrlTypes.CtrlShutdownEvent)
+			{
+				NodeStarter.Stop();
 
-        // An enumerated type for the control messages
-        // sent to the handler routine.
-        public enum CtrlTypes
-        {
-            CtrlCEvent = 0,
-            CtrlBreakEvent,
-            CtrlCloseEvent,
-            CtrlLogoffEvent = 5,
-            CtrlShutdownEvent
-        }
+				QuitEvent.Set();
 
-        private static bool ConsoleCtrlCheck(CtrlTypes ctrlType)
-        {
-            if (ctrlType == CtrlTypes.CtrlCloseEvent ||
-                ctrlType == CtrlTypes.CtrlShutdownEvent)
-            {
-                NodeStarter.Stop();
+				return true;
+			}
 
-                QuitEvent.Set();
+			return false;
+		}
 
-                return true;
-            }
+		public static void Main()
+		{
+			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
-            return false;
-        }
+			SetConsoleCtrlHandler(ConsoleCtrlCheck,
+			                      true);
 
-        public static void Main()
-        {
-            var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
-            XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
+			var nodeName = ConfigurationManager.AppSettings["NodeName"];
 
-            SetConsoleCtrlHandler(ConsoleCtrlCheck,
-                                  true);
+			WhoAmI = "[NODE CONSOLE HOST ( " + nodeName + " ), " + Environment.MachineName.ToUpper() + "]";
 
-            string nodeName = ConfigurationManager.AppSettings["NodeName"];
+			LogHelper.LogInfoWithLineNumber(Logger,
+			                                WhoAmI + " : started.");
 
-            WhoAmI = "[NODE CONSOLE HOST ( " + nodeName + " ), " + Environment.MachineName.ToUpper() + "]";
+			AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
+			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-            LogHelper.LogInfoWithLineNumber(Logger,
-                                            WhoAmI + " : started.");
+			var nodeConfig = new NodeConfiguration(new Uri(ConfigurationManager.AppSettings["BaseAddress"]),
+			                                       new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
+			                                       Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
+			                                       ConfigurationManager.AppSettings["NodeName"]);
 
-            AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+			var builder = new ContainerBuilder();
+			builder.RegisterModule(new WorkerModule());
+			Container = builder.Build();
 
-            var nodeConfig = new NodeConfiguration(new Uri(ConfigurationManager.AppSettings["BaseAddress"]),
-                                                   new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
-                                                   Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
-                                                   ConfigurationManager.AppSettings["NodeName"]);
+			NodeStarter = new NodeStarter();
 
-            var builder = new ContainerBuilder();
-            builder.RegisterModule(new WorkerModule());
-            Container = builder.Build();
+			NodeStarter.Start(nodeConfig,
+			                  Container);
 
-            NodeStarter = new NodeStarter();
+			QuitEvent.WaitOne();
+		}
 
-            NodeStarter.Start(nodeConfig,
-                              Container);
+		private static void CurrentDomain_DomainUnload(object sender,
+		                                               EventArgs e)
+		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 WhoAmI + " : CurrentDomain_DomainUnload called.");
 
-            QuitEvent.WaitOne();
-        }
+			if (NodeStarter != null)
+			{
+				NodeStarter.Stop();
+			}
 
-        private static string WhoAmI { get; set; }
+			QuitEvent.Set();
+		}
 
-        private static INodeStarter NodeStarter { get; set; }
+		private static void CurrentDomain_UnhandledException(object sender,
+		                                                     UnhandledExceptionEventArgs e)
+		{
+			var exp = e.ExceptionObject as Exception;
 
-        public static IContainer Container { get; set; }
-
-        private static void CurrentDomain_DomainUnload(object sender,
-                                                       EventArgs e)
-        {
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                             WhoAmI + " : CurrentDomain_DomainUnload called.");
-
-            if (NodeStarter != null)
-            {
-                NodeStarter.Stop();
-            }
-
-            QuitEvent.Set();
-        }
-
-        private static void CurrentDomain_UnhandledException(object sender,
-                                                             UnhandledExceptionEventArgs e)
-        {
-            Exception exp = e.ExceptionObject as Exception;
-
-            if (exp != null)
-            {
-                LogHelper.LogFatalWithLineNumber(Logger,
-                                                 exp.Message,
-                                                 exp);
-            }
-        }
-    }
+			if (exp != null)
+			{
+				LogHelper.LogFatalWithLineNumber(Logger,
+				                                 exp.Message,
+				                                 exp);
+			}
+		}
+	}
 }

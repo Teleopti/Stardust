@@ -3,113 +3,114 @@ using System.Web.Http;
 using System.Web.Http.Results;
 using log4net;
 using Stardust.Node.Constants;
-using Stardust.Node.Extensions;
 using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 
 namespace Stardust.Node.API
 {
-    public class NodeController : ApiController
-    {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeController));
+	public class NodeController : ApiController
+	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeController));
 
-        private readonly IWorkerWrapper _workerWrapper;
+		private readonly IWorkerWrapper _workerWrapper;
 
-        public NodeController(IWorkerWrapper workerWrapper)
-        {
-            _workerWrapper = workerWrapper;
-        }
+		public NodeController(IWorkerWrapper workerWrapper)
+		{
+			_workerWrapper = workerWrapper;
+		}
 
-        [HttpPost, AllowAnonymous, Route(NodeRouteConstants.Job)]
-        public IHttpActionResult StartJob(JobToDo jobToDo)
-        {
-            if (jobToDo == null)
-            {
+		[HttpPost, AllowAnonymous, Route(NodeRouteConstants.Job)]
+		public IHttpActionResult StartJob(JobToDo jobToDo)
+		{
+			if (jobToDo == null)
+			{
 				LogHelper.LogInfoWithLineNumber(Logger, "Received Start Job Request. jobId is null");
 				return BadRequest("jobToDo is null");
-            }
+			}
 
 			LogHelper.LogInfoWithLineNumber(Logger, "Received Start Job Request. jobId: " + jobToDo.Id);
 
 			if (_workerWrapper.IsTaskExecuting)
-            {
-                string msg = string.Format("{0} : New job request from manager rejected, node is working on another job ( jobId, jobName ) : ( {1}, {2} )",
-                                           _workerWrapper.WhoamI,
-                                           jobToDo.Id,
-                                           jobToDo.Name);
+			{
+				var msg =
+					string.Format(
+						"{0} : New job request from manager rejected, node is working on another job ( jobId, jobName ) : ( {1}, {2} )",
+						_workerWrapper.WhoamI,
+						jobToDo.Id,
+						jobToDo.Name);
 
-                LogHelper.LogWarningWithLineNumber(Logger,
-                                                msg);
+				LogHelper.LogWarningWithLineNumber(Logger,
+				                                   msg);
 
-                return CreateConflictStatusCode();
-            }
+				return CreateConflictStatusCode();
+			}
 
-            var response = _workerWrapper.StartJob(jobToDo,
-                                                   Request);
-            if (response.GetType() != typeof (OkResult))
-            {
-                return response;
-            }
+			var response = _workerWrapper.StartJob(jobToDo,
+			                                       Request);
+			if (response.GetType() != typeof (OkResult))
+			{
+				return response;
+			}
 
-            string startJobMessage = string.Format("{0} : Starting job ( jobId, jobName ) : ( {1}, {2} )",
-                                                   _workerWrapper.WhoamI,
-                                                   jobToDo.Id,
-                                                   jobToDo.Name);
+			var startJobMessage = string.Format("{0} : Starting job ( jobId, jobName ) : ( {1}, {2} )",
+			                                    _workerWrapper.WhoamI,
+			                                    jobToDo.Id,
+			                                    jobToDo.Name);
 
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                            startJobMessage);
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 startJobMessage);
 
-            return Ok();
-        }
+			return Ok();
+		}
 
-        [HttpDelete, AllowAnonymous, Route(NodeRouteConstants.CancelJob)]
-        public IHttpActionResult TryCancelJob(Guid jobId)
-        {
-            LogHelper.LogInfoWithLineNumber(Logger, "Received TryCancel request. jobId: " + jobId);
+		[HttpDelete, AllowAnonymous, Route(NodeRouteConstants.CancelJob)]
+		public IHttpActionResult TryCancelJob(Guid jobId)
+		{
+			LogHelper.LogInfoWithLineNumber(Logger, "Received TryCancel request. jobId: " + jobId);
 
-            if (jobId == Guid.Empty)
-            {
+			if (jobId == Guid.Empty)
+			{
 				return BadRequest("jobId is empty");
 			}
 
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                            _workerWrapper.WhoamI + ": Try cancel job ( jobId ) : ( " + jobId + " )");
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 _workerWrapper.WhoamI + ": Try cancel job ( jobId ) : ( " + jobId + " )");
 
-            var currentJob = _workerWrapper.GetCurrentMessageToProcess();
+			var currentJob = _workerWrapper.GetCurrentMessageToProcess();
 
-            if (currentJob == null || currentJob.Id != jobId)
-            {
-                return NotFound();
-            }
+			if (currentJob == null || currentJob.Id != jobId)
+			{
+				return NotFound();
+			}
 
-            if (_workerWrapper.IsCancellationRequested)
-            {
-                return Conflict();
-            }
+			if (_workerWrapper.IsCancellationRequested)
+			{
+				return Conflict();
+			}
 
-            _workerWrapper.CancelJob(jobId);
+			_workerWrapper.CancelJob(jobId);
 
-            if (_workerWrapper.IsCancellationRequested)
-            {
-                return Ok();
-            }
+			if (_workerWrapper.IsCancellationRequested)
+			{
+				return Ok();
+			}
 
-            LogHelper.LogWarningWithLineNumber(Logger,
-                                            _workerWrapper.WhoamI + ": Could not cancel job since job not found on this node. Manager sent job ( jobId ) : ( " +
-                                            jobId + " )");
-            return NotFound();
-        }
+			LogHelper.LogWarningWithLineNumber(Logger,
+			                                   _workerWrapper.WhoamI +
+			                                   ": Could not cancel job since job not found on this node. Manager sent job ( jobId ) : ( " +
+			                                   jobId + " )");
+			return NotFound();
+		}
 
-        [HttpGet, AllowAnonymous, Route(NodeRouteConstants.IsAlive)]
-        public IHttpActionResult IsAlive()
-        {
-            return Ok();
-        }
+		[HttpGet, AllowAnonymous, Route(NodeRouteConstants.IsAlive)]
+		public IHttpActionResult IsAlive()
+		{
+			return Ok();
+		}
 
-        private IHttpActionResult CreateConflictStatusCode()
-        {
-            return Conflict();
-        }
-
-    }
+		private IHttpActionResult CreateConflictStatusCode()
+		{
+			return Conflict();
+		}
+	}
 }

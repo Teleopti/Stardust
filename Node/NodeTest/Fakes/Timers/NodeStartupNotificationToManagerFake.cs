@@ -9,36 +9,36 @@ using Stardust.Node.Timers;
 
 namespace NodeTest.Fakes.Timers
 {
-    public class NodeStartupNotificationToManagerFake : TrySendNodeStartUpNotificationToManagerTimer
-    {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeStartupNotificationToManagerFake));
+	public class NodeStartupNotificationToManagerFake : TrySendNodeStartUpNotificationToManagerTimer
+	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeStartupNotificationToManagerFake));
 
-        public ManualResetEventSlim Wait = new ManualResetEventSlim();
+		public ManualResetEventSlim Wait = new ManualResetEventSlim();
 
-        public NodeStartupNotificationToManagerFake(INodeConfiguration nodeConfiguration,
-                                                    Uri callbackTemplateUri,
-                                                    double interval = 1000,
-                                                    bool autoReset = false) : base(nodeConfiguration,
-                                                                                   callbackTemplateUri,
-                                                                                   interval,
-                                                                                   autoReset)
-        {
-        }
+		public NodeStartupNotificationToManagerFake(INodeConfiguration nodeConfiguration,
+		                                            Uri callbackTemplateUri,
+		                                            double interval = 1000,
+		                                            bool autoReset = false) : base(nodeConfiguration,
+		                                                                           callbackTemplateUri,
+		                                                                           interval,
+		                                                                           autoReset)
+		{
+		}
 
-          
-        public override Task<HttpResponseMessage> TrySendNodeStartUpToManager(Uri nodeAddress,
-                                                                              CancellationToken cancellationToken)
-        {
-            Wait.Set();
 
-            var response = new HttpResponseMessage(HttpStatusCode.OK);
+		public override Task<HttpResponseMessage> TrySendNodeStartUpToManager(Uri nodeAddress,
+		                                                                      CancellationToken cancellationToken)
+		{
+			Wait.Set();
 
-            var request = new HttpRequestMessage(HttpMethod.Post,
-                                                 CallbackTemplateUri);
+			var response = new HttpResponseMessage(HttpStatusCode.OK);
 
-            response.RequestMessage = request;
+			var request = new HttpRequestMessage(HttpMethod.Post,
+			                                     CallbackTemplateUri);
 
-            return Task.FromResult(response);
-        }
-    }
+			response.RequestMessage = request;
+
+			return Task.FromResult(response);
+		}
+	}
 }

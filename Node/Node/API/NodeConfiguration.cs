@@ -4,43 +4,42 @@ using Stardust.Node.Interfaces;
 
 namespace Stardust.Node.API
 {
-    public class NodeConfiguration : INodeConfiguration
-    {
+	public class NodeConfiguration : INodeConfiguration
+	{
+		public NodeConfiguration(Uri baseAddress,
+		                         Uri managerLocation,
+		                         Assembly handlerAssembly,
+		                         string nodeName)
+		{
+			if (baseAddress == null)
+			{
+				throw new ArgumentNullException("baseAddress");
+			}
 
-        public NodeConfiguration(Uri baseAddress,
-                                 Uri managerLocation,
-                                 Assembly handlerAssembly,
-                                 string nodeName)
-        {
-            if (baseAddress == null)
-            {
-                throw new ArgumentNullException("baseAddress");
-            }
+			if (managerLocation == null)
+			{
+				throw new ArgumentNullException("managerLocation");
+			}
 
-            if (managerLocation == null)
-            {
-                throw new ArgumentNullException("managerLocation");
-            }
+			if (handlerAssembly == null)
+			{
+				throw new ArgumentNullException("handlerAssembly");
+			}
 
-            if (handlerAssembly == null)
-            {
-                throw new ArgumentNullException("handlerAssembly");
-            }
+			if (string.IsNullOrEmpty(nodeName))
+			{
+				throw new ArgumentNullException("nodeName");
+			}
 
-            if (string.IsNullOrEmpty(nodeName))
-            {
-                throw new ArgumentNullException("nodeName");
-            }
+			BaseAddress = baseAddress;
+			ManagerLocation = managerLocation;
+			HandlerAssembly = handlerAssembly;
+			NodeName = nodeName;
+		}
 
-            BaseAddress = baseAddress;
-            ManagerLocation = managerLocation;
-            HandlerAssembly = handlerAssembly;
-            NodeName = nodeName;
-        }
-
-        public Uri BaseAddress { get; private set; }
-        public Uri ManagerLocation { get; private set; }
-        public string NodeName { get; private set; }
-        public Assembly HandlerAssembly { get; private set; }
-    }
+		public Uri BaseAddress { get; private set; }
+		public Uri ManagerLocation { get; private set; }
+		public string NodeName { get; private set; }
+		public Assembly HandlerAssembly { get; private set; }
+	}
 }

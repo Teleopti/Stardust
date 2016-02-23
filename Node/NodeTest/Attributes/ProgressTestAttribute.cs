@@ -11,80 +11,80 @@ using Stardust.Node.Workers;
 
 namespace NodeTest.Attributes
 {
-    public class ProgressTestAttribute : BaseTestsAttribute
-    {
-        protected override void SetUp(ContainerBuilder builder)
-        {
-            var baseAddress = new Uri(ConfigurationManager.AppSettings["BaseAddress"]);
+	public class ProgressTestAttribute : BaseTestsAttribute
+	{
+		private Uri CallBackUriTemplateFake { get; set; }
 
-            var managerLocation = new Uri(ConfigurationManager.AppSettings["ManagerLocation"]);
+		protected override void SetUp(ContainerBuilder builder)
+		{
+			var baseAddress = new Uri(ConfigurationManager.AppSettings["BaseAddress"]);
 
-            var handlerAssembly = Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]);
+			var managerLocation = new Uri(ConfigurationManager.AppSettings["ManagerLocation"]);
 
-            var nodeName = ConfigurationManager.AppSettings["NodeName"];
+			var handlerAssembly = Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]);
 
-            CallBackUriTemplateFake = managerLocation;
+			var nodeName = ConfigurationManager.AppSettings["NodeName"];
 
-            var nodeConfiguration = new NodeConfiguration(baseAddress,
-                                                          managerLocation,
-                                                          handlerAssembly,
-                                                          nodeName);
+			CallBackUriTemplateFake = managerLocation;
 
-            builder.RegisterAssemblyTypes(nodeConfiguration.HandlerAssembly)
-                .Where(IsHandler)
-                .AsImplementedInterfaces()
-                .SingleInstance();
+			var nodeConfiguration = new NodeConfiguration(baseAddress,
+			                                              managerLocation,
+			                                              handlerAssembly,
+			                                              nodeName);
 
-            builder.RegisterType<InvokeHandler>();
+			builder.RegisterAssemblyTypes(nodeConfiguration.HandlerAssembly)
+				.Where(IsHandler)
+				.AsImplementedInterfaces()
+				.SingleInstance();
 
-            builder.RegisterType<SendJobFaultedTimerFake>()
-                .SingleInstance();
+			builder.RegisterType<InvokeHandler>();
 
-            builder.RegisterType<SendJobCanceledTimerFake>()
-                .SingleInstance();
+			builder.RegisterType<SendJobFaultedTimerFake>()
+				.SingleInstance();
 
-            builder.RegisterType<SendJobDoneTimerFake>()
-                .SingleInstance();
+			builder.RegisterType<SendJobCanceledTimerFake>()
+				.SingleInstance();
 
-            builder.RegisterType<NodeController>();
+			builder.RegisterType<SendJobDoneTimerFake>()
+				.SingleInstance();
 
-            builder.RegisterType<PostHttpRequestFake>()
-                .SingleInstance();
+			builder.RegisterType<NodeController>();
 
-            builder.RegisterInstance(nodeConfiguration);
+			builder.RegisterType<PostHttpRequestFake>()
+				.SingleInstance();
 
-            builder.RegisterInstance(new SendJobDoneTimerFake(nodeConfiguration,
-                                                              CallBackUriTemplateFake));
+			builder.RegisterInstance(nodeConfiguration);
 
-            builder.RegisterInstance(new SendJobCanceledTimerFake(nodeConfiguration,
-                                                                  CallBackUriTemplateFake));
+			builder.RegisterInstance(new SendJobDoneTimerFake(nodeConfiguration,
+			                                                  CallBackUriTemplateFake));
 
-            builder.RegisterInstance(new SendJobFaultedTimerFake(nodeConfiguration,
-                                                                 CallBackUriTemplateFake));
+			builder.RegisterInstance(new SendJobCanceledTimerFake(nodeConfiguration,
+			                                                      CallBackUriTemplateFake));
 
-            builder.RegisterInstance(new NodeStartupNotificationToManagerFake(nodeConfiguration,
-                                                                              CallBackUriTemplateFake));
+			builder.RegisterInstance(new SendJobFaultedTimerFake(nodeConfiguration,
+			                                                     CallBackUriTemplateFake));
 
-            // Register IWorkerWrapper.
-            builder.Register<IWorkerWrapper>(c => new WorkerWrapper(c.Resolve<InvokeHandler>(),
-                                                                    nodeConfiguration,
-                                                                    c.Resolve<NodeStartupNotificationToManagerFake>(),
-                                                                    new PingToManagerFake(),
-                                                                    c.Resolve<SendJobDoneTimerFake>(),
-                                                                    c.Resolve<SendJobCanceledTimerFake>(),
-                                                                    c.Resolve<SendJobFaultedTimerFake>(),
-                                                                    c.Resolve<PostHttpRequestFake>()))
-                .SingleInstance();
-        }
+			builder.RegisterInstance(new NodeStartupNotificationToManagerFake(nodeConfiguration,
+			                                                                  CallBackUriTemplateFake));
 
-        private Uri CallBackUriTemplateFake { get; set; }
+			// Register IWorkerWrapper.
+			builder.Register<IWorkerWrapper>(c => new WorkerWrapper(c.Resolve<InvokeHandler>(),
+			                                                        nodeConfiguration,
+			                                                        c.Resolve<NodeStartupNotificationToManagerFake>(),
+			                                                        new PingToManagerFake(),
+			                                                        c.Resolve<SendJobDoneTimerFake>(),
+			                                                        c.Resolve<SendJobCanceledTimerFake>(),
+			                                                        c.Resolve<SendJobFaultedTimerFake>(),
+			                                                        c.Resolve<PostHttpRequestFake>()))
+				.SingleInstance();
+		}
 
-        private bool IsHandler(Type arg)
-        {
-            return arg.GetInterfaces()
-                .Any(x =>
-                         x.IsGenericType &&
-                         x.GetGenericTypeDefinition() == typeof (IHandle<>));
-        }
-    }
+		private bool IsHandler(Type arg)
+		{
+			return arg.GetInterfaces()
+				.Any(x =>
+					     x.IsGenericType &&
+					     x.GetGenericTypeDefinition() == typeof (IHandle<>));
+		}
+	}
 }

@@ -5,24 +5,25 @@ using Stardust.Node.Interfaces;
 
 namespace Stardust.Node.Timers
 {
-    public class TrySendJobDoneStatusToManagerTimer : TrySendStatusToManagerTimer
-    {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(TrySendJobDoneStatusToManagerTimer));
+	public class TrySendJobDoneStatusToManagerTimer : TrySendStatusToManagerTimer
+	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (TrySendJobDoneStatusToManagerTimer));
 
-        public TrySendJobDoneStatusToManagerTimer(INodeConfiguration nodeConfiguration,
-                                                  double interval = 10000) : base(nodeConfiguration,
-                                                                                  nodeConfiguration.GetManagerJobDoneTemplateUri(),
-                                                                                  interval)
-        {
-        }
+		public TrySendJobDoneStatusToManagerTimer(INodeConfiguration nodeConfiguration,
+		                                          double interval = 10000) : base(nodeConfiguration,
+		                                                                          nodeConfiguration
+			                                                                          .GetManagerJobDoneTemplateUri(),
+		                                                                          interval)
+		{
+		}
 
-        protected override void Dispose(bool disposing)
-        {
-            LogHelper.LogDebugWithLineNumber(Logger, "Start disposing.");
+		protected override void Dispose(bool disposing)
+		{
+			LogHelper.LogDebugWithLineNumber(Logger, "Start disposing.");
 
-            base.Dispose(disposing);
+			base.Dispose(disposing);
 
-            LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
-        }
-    }
+			LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
+		}
+	}
 }

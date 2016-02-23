@@ -2,10 +2,10 @@
 
 namespace Stardust.Node.Interfaces
 {
-    public interface INodeStarter
-    {
-        void Stop();
+	public interface INodeStarter
+	{
+		void Stop();
 
-        void Start(INodeConfiguration nodeConfiguration, IContainer container);
-    }
+		void Start(INodeConfiguration nodeConfiguration, IContainer container);
+	}
 }

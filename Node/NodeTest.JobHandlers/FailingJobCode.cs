@@ -5,36 +5,36 @@ using Stardust.Node.Helpers;
 
 namespace NodeTest.JobHandlers
 {
-    public class FailingJobCode
-    {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (FailingJobCode));
+	public class FailingJobCode
+	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (FailingJobCode));
 
-        public FailingJobCode()
-        {
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                            "'Failing Job Code' class constructor called.");
+		public FailingJobCode()
+		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "'Failing Job Code' class constructor called.");
 
-            WhoAmI = "[NODETEST.JOBHANDLERS.FailingJobCode, " + Environment.MachineName.ToUpper() + "]";
-        }
+			WhoAmI = "[NODETEST.JOBHANDLERS.FailingJobCode, " + Environment.MachineName.ToUpper() + "]";
+		}
 
-        public string WhoAmI { get; set; }
+		public string WhoAmI { get; set; }
 
-        public void DoTheThing(FailingJobParams message,
-                               CancellationTokenSource cancellationTokenSource,
-                               Action<string> progress)
-        {
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                            "'Failing Job Code' Do The Thing method called.");
+		public void DoTheThing(FailingJobParams message,
+		                       CancellationTokenSource cancellationTokenSource,
+		                       Action<string> progress)
+		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "'Failing Job Code' Do The Thing method called.");
 
-            var jobProgress = new TestJobProgress
-            {
-                Text = WhoAmI + ": This job will soon throw exeception.",
-                ConsoleColor = ConsoleColor.DarkRed
-            };
+			var jobProgress = new TestJobProgress
+			{
+				Text = WhoAmI + ": This job will soon throw exeception.",
+				ConsoleColor = ConsoleColor.DarkRed
+			};
 
-            progress(jobProgress.Text);
+			progress(jobProgress.Text);
 
-            throw new Exception(message.Error);
-        }
-    }
+			throw new Exception(message.Error);
+		}
+	}
 }

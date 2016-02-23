@@ -11,8 +11,8 @@ namespace NodeTest.JobHandlers
 		}
 
 		public void DoTheThing(TestJobParams message,
-							   CancellationTokenSource cancellationTokenSource,
-							   Action<string> progress)
+		                       CancellationTokenSource cancellationTokenSource,
+		                       Action<string> progress)
 		{
 			// -----------------------------------------------------------
 			// Start execution.

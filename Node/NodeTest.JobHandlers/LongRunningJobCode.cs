@@ -5,96 +5,98 @@ using Stardust.Node.Helpers;
 
 namespace NodeTest.JobHandlers
 {
-    public class LongRunningJobCode
-    {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (LongRunningJobCode));
+	public class LongRunningJobCode
+	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (LongRunningJobCode));
 
-        public LongRunningJobCode()
-        {
-            WhoAmI = "[NODETEST.JOBHANDLERS.LongRunningJobCode, " + Environment.MachineName.ToUpper() + "]";
-        }
+		public LongRunningJobCode()
+		{
+			WhoAmI = "[NODETEST.JOBHANDLERS.LongRunningJobCode, " + Environment.MachineName.ToUpper() + "]";
+		}
 
-        public string WhoAmI { get; private set; }
+		public string WhoAmI { get; private set; }
 
-        public void DoTheThing(LongRunningJobParams message,
-                               CancellationTokenSource cancellationTokenSource,
-                               Action<string> progress)
-        {
-            LogHelper.LogInfoWithLineNumber(Logger,
-                                            "Starting Long Running Job");
+		public void DoTheThing(LongRunningJobParams message,
+		                       CancellationTokenSource cancellationTokenSource,
+		                       Action<string> progress)
+		{
+			LogHelper.LogInfoWithLineNumber(Logger,
+			                                "Starting Long Running Job");
 
-            TestJobProgress jobProgress;
+			TestJobProgress jobProgress;
 
-            if (cancellationTokenSource.IsCancellationRequested)
-            {
-                jobProgress = new TestJobProgress
-                {
-                    Text = WhoAmI + ": No job steps has been executed. Long running job name : ( " + message.Name + " ) has been canceled."
-                };
+			if (cancellationTokenSource.IsCancellationRequested)
+			{
+				jobProgress = new TestJobProgress
+				{
+					Text =
+						WhoAmI + ": No job steps has been executed. Long running job name : ( " + message.Name + " ) has been canceled."
+				};
 
-                progress(jobProgress.Text);
+				progress(jobProgress.Text);
 
-                cancellationTokenSource.Token.ThrowIfCancellationRequested();
-            }
+				cancellationTokenSource.Token.ThrowIfCancellationRequested();
+			}
 
 
-            int jobSteps = 0;
+			var jobSteps = 0;
 
-            int maxNumberOfJobSteps = 10;
+			var maxNumberOfJobSteps = 10;
 
-            string progressMessage = null;
+			string progressMessage = null;
 
-            while (jobSteps <= maxNumberOfJobSteps)
-            {
-                jobSteps++;
+			while (jobSteps <= maxNumberOfJobSteps)
+			{
+				jobSteps++;
 
-                progressMessage = 
-                    WhoAmI + ": Executed job step ( " + jobSteps + " ). Long running job name : ( " + message.Name + " ) is running.";
+				progressMessage =
+					WhoAmI + ": Executed job step ( " + jobSteps + " ). Long running job name : ( " + message.Name + " ) is running.";
 
-                jobProgress = new TestJobProgress
-                {
-                    Text = progressMessage
-                };
+				jobProgress = new TestJobProgress
+				{
+					Text = progressMessage
+				};
 				progress(jobProgress.Text);
 
 				LogHelper.LogInfoWithLineNumber(Logger,
-                                                progressMessage);
+				                                progressMessage);
 
 
-                // Is Cancellation Requested.
-                if (cancellationTokenSource.IsCancellationRequested)
-                {
-                    progressMessage =
-                        WhoAmI + ": Execution canceled after job step ( " + jobSteps + " ). Long running job name : ( " + message.Name + " ) has been canceled.";
+				// Is Cancellation Requested.
+				if (cancellationTokenSource.IsCancellationRequested)
+				{
+					progressMessage =
+						WhoAmI + ": Execution canceled after job step ( " + jobSteps + " ). Long running job name : ( " + message.Name +
+						" ) has been canceled.";
 
-                    jobProgress = new TestJobProgress
-                    {
-                        Text = progressMessage
-                    };
+					jobProgress = new TestJobProgress
+					{
+						Text = progressMessage
+					};
 
-                    progress(jobProgress.Text);
+					progress(jobProgress.Text);
 
-                    LogHelper.LogInfoWithLineNumber(Logger,
-                                                    progressMessage);
+					LogHelper.LogInfoWithLineNumber(Logger,
+					                                progressMessage);
 
-                    cancellationTokenSource.Token.ThrowIfCancellationRequested();
-                }
+					cancellationTokenSource.Token.ThrowIfCancellationRequested();
+				}
 
-                Thread.Sleep(TimeSpan.FromSeconds(60));
-            }
+				Thread.Sleep(TimeSpan.FromSeconds(60));
+			}
 
-            progressMessage = 
-                WhoAmI + ": Executed all job steps. Long running job name : ( " + message.Name + " ) has completed.";
+			progressMessage =
+				WhoAmI + ": Executed all job steps. Long running job name : ( " + message.Name + " ) has completed.";
 
-            jobProgress = new TestJobProgress
-            {
-                Text = progressMessage
-            };
+			jobProgress = new TestJobProgress
+			{
+				Text = progressMessage
+			};
 
-            progress(jobProgress.Text);
+			progress(jobProgress.Text);
 
-            LogHelper.LogInfoWithLineNumber(Logger,
-                                            progressMessage);
-        }
-    }
+			LogHelper.LogInfoWithLineNumber(Logger,
+			                                progressMessage);
+		}
+	}
 }

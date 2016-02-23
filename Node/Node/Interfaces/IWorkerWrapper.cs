@@ -6,19 +6,18 @@ using System.Web.Http;
 
 namespace Stardust.Node.Interfaces
 {
-    public interface IWorkerWrapper : IDisposable
-    {
+	public interface IWorkerWrapper : IDisposable
+	{
+		string WhoamI { get; }
+		CancellationTokenSource CancellationTokenSource { get; set; }
+		bool IsCancellationRequested { get; }
+		bool IsTaskExecuting { get; }
+		Task Task { get; }
 
-        string WhoamI { get; }
-        CancellationTokenSource CancellationTokenSource { get; set; }
-        bool IsCancellationRequested { get; }
-        bool IsTaskExecuting { get; }
-        Task Task { get; }
+		JobToDo GetCurrentMessageToProcess();
+		void CancelJob(Guid id);
 
-        JobToDo GetCurrentMessageToProcess();
-        void CancelJob(Guid id);
-
-        IHttpActionResult StartJob(JobToDo jobToDo,
-                                   HttpRequestMessage requestMessage);
-    }
+		IHttpActionResult StartJob(JobToDo jobToDo,
+		                           HttpRequestMessage requestMessage);
+	}
 }

@@ -11,77 +11,77 @@ using Timer = System.Timers.Timer;
 
 namespace Stardust.Node.Timers
 {
-    public class PingToManagerTimer : Timer
-    {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (PingToManagerTimer));
+	public class PingToManagerTimer : Timer
+	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (PingToManagerTimer));
 
-        public PingToManagerTimer(INodeConfiguration nodeConfiguration,
-                                  Uri callbackUri,
-                                  double defaultInterval = 10000) : base(defaultInterval)
-        {
-            nodeConfiguration.ThrowArgumentNullException();
-            callbackUri.ThrowArgumentNullExceptionWhenNull();
+		public PingToManagerTimer(INodeConfiguration nodeConfiguration,
+		                          Uri callbackUri,
+		                          double defaultInterval = 10000) : base(defaultInterval)
+		{
+			nodeConfiguration.ThrowArgumentNullException();
+			callbackUri.ThrowArgumentNullExceptionWhenNull();
 
-            CancellationTokenSource = new CancellationTokenSource();
+			CancellationTokenSource = new CancellationTokenSource();
 
-            NodeConfiguration = nodeConfiguration;
-            CallbackUri = callbackUri;
+			NodeConfiguration = nodeConfiguration;
+			CallbackUri = callbackUri;
 
-            WhoAmI = NodeConfiguration.CreateWhoIAm(Environment.MachineName);
+			WhoAmI = NodeConfiguration.CreateWhoIAm(Environment.MachineName);
 
-            Elapsed += OnTimedEvent;
+			Elapsed += OnTimedEvent;
 
-            AutoReset = true;
-        }
+			AutoReset = true;
+		}
 
-        protected override void Dispose(bool disposing)
-        {
-            LogHelper.LogDebugWithLineNumber(Logger,"Start disposing.");
+		public string WhoAmI { get; private set; }
 
-            if (CancellationTokenSource != null &&
-                !CancellationTokenSource.IsCancellationRequested)
-            {
-                CancellationTokenSource.Cancel();
-            }
+		public INodeConfiguration NodeConfiguration { get; private set; }
 
-            base.Dispose(disposing);
+		public Uri CallbackUri { get; private set; }
 
-            LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
-        }
+		private CancellationTokenSource CancellationTokenSource { get; set; }
 
-        public string WhoAmI { get; private set; }
+		protected override void Dispose(bool disposing)
+		{
+			LogHelper.LogDebugWithLineNumber(Logger, "Start disposing.");
 
-        public INodeConfiguration NodeConfiguration { get; private set; }
+			if (CancellationTokenSource != null &&
+			    !CancellationTokenSource.IsCancellationRequested)
+			{
+				CancellationTokenSource.Cancel();
+			}
 
-        public Uri CallbackUri { get; private set; }
+			base.Dispose(disposing);
+
+			LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
+		}
 
 
-        private async Task<HttpResponseMessage> SendPing(Uri nodeAddress,
-                                                         CancellationToken cancellationToken)
-        {
-            var httpResponseMessage =
-                await nodeAddress.PostAsync(CallbackUri,
-                                            cancellationToken);
+		private async Task<HttpResponseMessage> SendPing(Uri nodeAddress,
+		                                                 CancellationToken cancellationToken)
+		{
+			var httpResponseMessage =
+				await nodeAddress.PostAsync(CallbackUri,
+				                            cancellationToken);
 
-            return httpResponseMessage;
-        }
+			return httpResponseMessage;
+		}
 
-        private CancellationTokenSource CancellationTokenSource { get; set; }
+		private async void OnTimedEvent(object sender,
+		                                ElapsedEventArgs e)
+		{
+			try
+			{
+				await SendPing(NodeConfiguration.BaseAddress,
+				               CancellationTokenSource.Token);
+			}
 
-        private async void OnTimedEvent(object sender,
-                                        ElapsedEventArgs e)
-        {
-            try
-            {
-                await SendPing(NodeConfiguration.BaseAddress,
-                               CancellationTokenSource.Token);
-            }
-
-            catch
-            {
-                LogHelper.LogInfoWithLineNumber(Logger,
-                                                 WhoAmI + ": Heartbeat failed. Is the manager up and running?");
-            }
-        }
-    }
+			catch
+			{
+				LogHelper.LogInfoWithLineNumber(Logger,
+				                                WhoAmI + ": Heartbeat failed. Is the manager up and running?");
+			}
+		}
+	}
 }

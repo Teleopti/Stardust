@@ -8,31 +8,31 @@ using Stardust.Node.Timers;
 
 namespace NodeTest.Fakes.Timers
 {
-    public class SendJobFaultedTimerFake : TrySendStatusToManagerTimer
-    {
-        public int NumberOfTimeCalled;
+	public class SendJobFaultedTimerFake : TrySendStatusToManagerTimer
+	{
+		public int NumberOfTimeCalled;
 
-        public ManualResetEventSlim Wait = new ManualResetEventSlim();
+		public ManualResetEventSlim Wait = new ManualResetEventSlim();
 
-        public SendJobFaultedTimerFake(INodeConfiguration nodeConfiguration ,
-                                       Uri callbackTemplateUri ,
-                                       double interval = 1000) : base(nodeConfiguration,
-                                                                       callbackTemplateUri,
-                                                                       interval)
-        {
-        }
+		public SendJobFaultedTimerFake(INodeConfiguration nodeConfiguration,
+		                               Uri callbackTemplateUri,
+		                               double interval = 1000) : base(nodeConfiguration,
+		                                                              callbackTemplateUri,
+		                                                              interval)
+		{
+		}
 
-        protected override Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo,
-                                              CancellationToken cancellationToken)
-        {
-            NumberOfTimeCalled++;
+		protected override Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo,
+		                                                           CancellationToken cancellationToken)
+		{
+			NumberOfTimeCalled++;
 
-            Wait.Set();
+			Wait.Set();
 
-            var response = new HttpResponseMessage(HttpStatusCode.OK);
-            var request = new HttpRequestMessage(HttpMethod.Post, "Faulted");
-            response.RequestMessage = request;
-            return Task.FromResult(response);
-        }
-    }
+			var response = new HttpResponseMessage(HttpStatusCode.OK);
+			var request = new HttpRequestMessage(HttpMethod.Post, "Faulted");
+			response.RequestMessage = request;
+			return Task.FromResult(response);
+		}
+	}
 }

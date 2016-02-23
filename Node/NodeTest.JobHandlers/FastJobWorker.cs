@@ -6,35 +6,35 @@ using Stardust.Node.Interfaces;
 
 namespace NodeTest.JobHandlers
 {
-    public class FastJobWorker : IHandle<FastJobParams>
+	public class FastJobWorker : IHandle<FastJobParams>
 
-    {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (FastJobWorker));
+	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (FastJobWorker));
 
-        private readonly FastJobCode _fastJobCode;
+		private readonly FastJobCode _fastJobCode;
 
-        public FastJobWorker(FastJobCode fastJobCode)
-        {
-            _fastJobCode = fastJobCode;
+		public FastJobWorker(FastJobCode fastJobCode)
+		{
+			_fastJobCode = fastJobCode;
 
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                            "'Fast Job Worker' class constructor called.");
-        }
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "'Fast Job Worker' class constructor called.");
+		}
 
-        public CancellationTokenSource CancellationTokenSource { get; set; }
+		public CancellationTokenSource CancellationTokenSource { get; set; }
 
-        public void Handle(FastJobParams parameters,
-                           CancellationTokenSource cancellationTokenSource,
-                           Action<string> sendProgress)
-        {
-            LogHelper.LogDebugWithLineNumber(Logger,
-                                            "'Fast Job Worker' handle method called.");
+		public void Handle(FastJobParams parameters,
+		                   CancellationTokenSource cancellationTokenSource,
+		                   Action<string> sendProgress)
+		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "'Fast Job Worker' handle method called.");
 
-            CancellationTokenSource = cancellationTokenSource;
+			CancellationTokenSource = cancellationTokenSource;
 
-            _fastJobCode.DoTheThing(parameters,
-                                    cancellationTokenSource,
-                                    sendProgress);
-        }
-    }
+			_fastJobCode.DoTheThing(parameters,
+			                        cancellationTokenSource,
+			                        sendProgress);
+		}
+	}
 }

@@ -2,10 +2,10 @@
 
 namespace NodeTest.Attributes
 {
-    public class WorkerWrapperTestsAttribute : BaseTestsAttribute
-    {
-        protected override void SetUp(ContainerBuilder builder)
-        {
-        }
-    }
+	public class WorkerWrapperTestsAttribute : BaseTestsAttribute
+	{
+		protected override void SetUp(ContainerBuilder builder)
+		{
+		}
+	}
 }

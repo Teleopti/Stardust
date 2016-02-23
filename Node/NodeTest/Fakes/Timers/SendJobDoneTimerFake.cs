@@ -9,33 +9,33 @@ using Stardust.Node.Timers;
 
 namespace NodeTest.Fakes.Timers
 {
-    public class SendJobDoneTimerFake : TrySendStatusToManagerTimer
-    {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (SendJobDoneTimerFake));
+	public class SendJobDoneTimerFake : TrySendStatusToManagerTimer
+	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (SendJobDoneTimerFake));
 
-        public ManualResetEventSlim Wait = new ManualResetEventSlim();
+		public int NumberOfTimeCalled;
 
-        public int NumberOfTimeCalled;
+		public ManualResetEventSlim Wait = new ManualResetEventSlim();
 
-        public SendJobDoneTimerFake(INodeConfiguration nodeConfiguration,
-                                    Uri callbackTemplateUri,
-                                    double interval = 1000) : base(nodeConfiguration,
-                                                                    callbackTemplateUri,
-                                                                    interval)
-        {
-        }
+		public SendJobDoneTimerFake(INodeConfiguration nodeConfiguration,
+		                            Uri callbackTemplateUri,
+		                            double interval = 1000) : base(nodeConfiguration,
+		                                                           callbackTemplateUri,
+		                                                           interval)
+		{
+		}
 
-        protected override Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo,
-                                              CancellationToken cancellationToken)
-        {
-            NumberOfTimeCalled++;
+		protected override Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo,
+		                                                           CancellationToken cancellationToken)
+		{
+			NumberOfTimeCalled++;
 
-            Wait.Set();
+			Wait.Set();
 
-            var response = new HttpResponseMessage(HttpStatusCode.OK);
-            var request = new HttpRequestMessage(HttpMethod.Post, "JobDone");
-            response.RequestMessage = request;
-            return Task.FromResult(response);
-        }
-    }
+			var response = new HttpResponseMessage(HttpStatusCode.OK);
+			var request = new HttpRequestMessage(HttpMethod.Post, "JobDone");
+			response.RequestMessage = request;
+			return Task.FromResult(response);
+		}
+	}
 }
