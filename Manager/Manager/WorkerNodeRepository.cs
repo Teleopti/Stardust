@@ -221,20 +221,5 @@ namespace Stardust.Manager
                 connection.Close();
             }
 		}
-
-		private void InitDs()
-		{
-			_jdDataSet = new DataSet();
-
-			_jdDataTable = new DataTable("[Stardust].WorkerNodes");
-
-			_jdDataTable.Columns.Add(new DataColumn("Id",
-			                                        typeof (Guid)));
-
-			_jdDataTable.Columns.Add(new DataColumn("Url",
-			                                        typeof (string)));
-
-			_jdDataSet.Tables.Add(_jdDataTable);
-        }
     }
 }
