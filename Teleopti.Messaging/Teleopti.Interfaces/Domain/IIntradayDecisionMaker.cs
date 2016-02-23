@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
@@ -9,6 +11,6 @@ namespace Teleopti.Interfaces.Domain
         /// Excecutes the specified lockable bit array.
         /// </summary>
         /// <returns></returns>
-		DateOnly? Execute(IScheduleMatrixPro matrix, IScheduleResultDataExtractor dataExtractor);
+		DateOnly? Execute(IScheduleMatrixPro matrix, IScheduleResultDataExtractor dataExtractor, IEnumerable<DateOnly> skipDates);
     }
 }

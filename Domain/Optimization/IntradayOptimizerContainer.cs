@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					{
 						if (cancel) return;
 						executes++;
-						var result = optimizer.Execute();
+						var result = optimizer.Execute(Enumerable.Empty<DateOnly>());
 
 						if (!result.HasValue)
 						{

@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			TrackOptimizeDaysForAgents.NumberOfOptimizationsFor(dateOnly.AddDays(1)).Should().Be.EqualTo(5);
 		}
 
-		[Test, Ignore("not yet green")] //one test here verifying skill groups are used. more detailed tests in AgentsToSkillGroupsTest
+		[Test] //one test here verifying skill groups are used. more detailed tests in AgentsToSkillGroupsTest
 		public void ShouldHaveDifferentCountersForDifferentSkillGroups()
 		{
 			IntradayOptmizerLimiter.SetFromTest(new Percent(0.5), 5);

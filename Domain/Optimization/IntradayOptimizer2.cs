@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -29,9 +30,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_optimizeOneday = optimizeOneday;
 		}
 
-		public DateOnly? Execute()
+		public DateOnly? Execute(IEnumerable<DateOnly> skipDates)
 		{
-			var dayToBeMoved = _decisionMaker.Execute(_matrix, _personalSkillsDataExtractor);
+			var dayToBeMoved = _decisionMaker.Execute(_matrix, _personalSkillsDataExtractor, skipDates);
 
 			if (dayToBeMoved.HasValue && _optimizeOneday.Execute(dayToBeMoved.Value))
 				return dayToBeMoved.Value;

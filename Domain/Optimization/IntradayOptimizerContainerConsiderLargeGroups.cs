@@ -28,14 +28,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var agentSkillGroups =_agentsToSkillGroups.ToSkillGroups();
 			foreach (var agents in agentSkillGroups)
 			{
-				var optimizersToLoop = optimizers.ToList();
+				var optimizersToLoop = optimizers.Where(x => agents.Contains(x.ContainerOwner)).ToList();
 				var numberOfAgents = agents.Count();
 				var optimizedPerDay = new Dictionary<DateOnly, int>();
+				var skipDates = new List<DateOnly>();
 
 				while (optimizersToLoop.Any())
 				{
 					var optimizer = optimizersToLoop.GetRandom();
-					var result = optimizer.Execute();
+					var result = optimizer.Execute(skipDates);
 					if (result.HasValue)
 					{
 						//TODO: currently 4 lookups in dic -> reduce if necessary
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 						}
 						if (_intradayOptimizerLimiter.CanJumpOutEarly(numberOfAgents, optimizedPerDay[result.Value]))
 						{
-							optimizersToLoop.ForEach(x => x.LockDay(result.Value));
+							skipDates.Add(result.Value);
 						}
 					}
 					else

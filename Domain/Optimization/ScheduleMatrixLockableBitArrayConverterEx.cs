@@ -1,11 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
+	//Could probably be removed/refactored later. Especially when toggle 37049 is gone. "Find most important day" could be based on all group instead
+	//For now - just make tests go green....
 	public interface IScheduleMatrixLockableBitArrayConverterEx
 	{
+		ILockableBitArray Convert(IScheduleMatrixPro matrix, bool useWeekBefore, bool useWeekAfter, IEnumerable<DateOnly> skipDates);
 		ILockableBitArray Convert(IScheduleMatrixPro matrix, bool useWeekBefore, bool useWeekAfter);
 	}
 
@@ -13,19 +17,24 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		public ILockableBitArray Convert(IScheduleMatrixPro matrix, bool useWeekBefore, bool useWeekAfter)
 		{
-			if (!useWeekBefore && !useWeekAfter)
-				return arrayFromList(matrix, matrix.FullWeeksPeriodDays, false, false);
-
-			if (useWeekBefore && !useWeekAfter)
-				return arrayFromList(matrix, matrix.WeekBeforeOuterPeriodDays, true, false);
-
-			if (!useWeekBefore)
-				return arrayFromList(matrix, matrix.WeekAfterOuterPeriodDays, false, true);
-
-			return arrayFromList(matrix, matrix.OuterWeeksPeriodDays, true, true);
+			return Convert(matrix, useWeekBefore, useWeekAfter, Enumerable.Empty<DateOnly>());
 		}
 
-		private static ILockableBitArray arrayFromList(IScheduleMatrixPro matrix, IList<IScheduleDayPro> list, bool useWeekBefore, bool useWeekAfter)
+		public ILockableBitArray Convert(IScheduleMatrixPro matrix, bool useWeekBefore, bool useWeekAfter, IEnumerable<DateOnly> skipDates)
+		{
+			if (!useWeekBefore && !useWeekAfter)
+				return arrayFromList(matrix, matrix.FullWeeksPeriodDays, false, false, skipDates);
+
+			if (useWeekBefore && !useWeekAfter)
+				return arrayFromList(matrix, matrix.WeekBeforeOuterPeriodDays, true, false, skipDates);
+
+			if (!useWeekBefore)
+				return arrayFromList(matrix, matrix.WeekAfterOuterPeriodDays, false, true, skipDates);
+
+			return arrayFromList(matrix, matrix.OuterWeeksPeriodDays, true, true, skipDates);
+		}
+
+		private static ILockableBitArray arrayFromList(IScheduleMatrixPro matrix, IList<IScheduleDayPro> list, bool useWeekBefore, bool useWeekAfter, IEnumerable<DateOnly> dontUseOnDates)
 		{
 			ILockableBitArray ret = new LockableBitArray(list.Count, useWeekBefore, useWeekAfter, null);
 			int index = 0;
@@ -36,6 +45,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				if (!matrix.UnlockedDays.Contains(scheduleDayPro))
 					ret.Lock(index, true);
 				if (significant == SchedulePartView.FullDayAbsence)
+					ret.Lock(index, true);
+				if(dontUseOnDates.Contains(scheduleDayPro.Day))
 					ret.Lock(index, true);
 				index++;
 			}

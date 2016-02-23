@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.DayOffPlanning;
@@ -94,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             }
 
             // day counterparts are > febr 9, 10, 11, 12
-			DateOnly? result = _target.Execute(_scheduleMatrix, _dataExtractor);
+			DateOnly? result = _target.Execute(_scheduleMatrix, _dataExtractor, Enumerable.Empty<DateOnly>());
 
             DateOnly expected = new DateOnly(2010, 02, 11);
 

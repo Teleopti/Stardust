@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
         /// Gets and returns the working day with the highest standard deviation.
         /// </summary>
         /// <returns></returns>
-        public DateOnly? Execute(IScheduleMatrixPro matrix, IScheduleResultDataExtractor dataExtractor)
+        public DateOnly? Execute(IScheduleMatrixPro matrix, IScheduleResultDataExtractor dataExtractor, IEnumerable<DateOnly> skipDates)
         {
-            ILockableBitArray bitArray = _matrixConverter.Convert(matrix, false, false);
+            ILockableBitArray bitArray = _matrixConverter.Convert(matrix, false, false, skipDates);
 
 			IList<double?> values = dataExtractor.Values();
 

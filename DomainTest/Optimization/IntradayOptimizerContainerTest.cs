@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
@@ -40,8 +41,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             using (_mocks.Record())
             {
-                Expect.Call(_optimizer1.Execute()).Return(null);
-                Expect.Call(_optimizer2.Execute()).Return(null);
+                Expect.Call(_optimizer1.Execute(Enumerable.Empty<DateOnly>())).Return(null);
+                Expect.Call(_optimizer2.Execute(Enumerable.Empty<DateOnly>())).Return(null);
 
                 Expect.Call(_optimizer1.ContainerOwner).Return(_person).Repeat.Any();
                 Expect.Call(_optimizer2.ContainerOwner).Return(_person).Repeat.Any();
@@ -61,8 +62,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_target.ReportProgress += targetReportProgress2;
 			using (_mocks.Record())
 			{
-				Expect.Call(_optimizer1.Execute()).Return(null).Repeat.Any();
-				Expect.Call(_optimizer2.Execute()).Return(null).Repeat.Any();
+				Expect.Call(_optimizer1.Execute(Enumerable.Empty<DateOnly>())).Return(null).Repeat.Any();
+				Expect.Call(_optimizer2.Execute(Enumerable.Empty<DateOnly>())).Return(null).Repeat.Any();
 				Expect.Call(_optimizer1.ContainerOwner).Return(_person).Repeat.Any();
 				Expect.Call(_optimizer2.ContainerOwner).Return(_person).Repeat.Any();
 			}
@@ -91,13 +92,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             using (_mocks.Record())
             {
-                Expect.Call(_optimizer1.Execute()).Return(new DateOnly(2000, 1, 1));
-                Expect.Call(_optimizer2.Execute()).Return(new DateOnly(2000, 1, 1));
+                Expect.Call(_optimizer1.Execute(Enumerable.Empty<DateOnly>())).Return(new DateOnly(2000, 1, 1));
+                Expect.Call(_optimizer2.Execute(Enumerable.Empty<DateOnly>())).Return(new DateOnly(2000, 1, 1));
                 
-                Expect.Call(_optimizer1.Execute()).Return(new DateOnly(2000, 1, 1));
-                Expect.Call(_optimizer2.Execute()).Return(null);
+                Expect.Call(_optimizer1.Execute(Enumerable.Empty<DateOnly>())).Return(new DateOnly(2000, 1, 1));
+                Expect.Call(_optimizer2.Execute(Enumerable.Empty<DateOnly>())).Return(null);
 
-                Expect.Call(_optimizer1.Execute()).Return(null);
+                Expect.Call(_optimizer1.Execute(Enumerable.Empty<DateOnly>())).Return(null);
 
                 Expect.Call(_optimizer1.ContainerOwner).Return(_person).Repeat.Any();
                 Expect.Call(_optimizer2.ContainerOwner).Return(_person).Repeat.Any();

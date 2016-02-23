@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		/// Executes this instance.
 		/// </summary>
 		/// <returns></returns>
-		DateOnly? Execute();
+		DateOnly? Execute(IEnumerable<DateOnly> skipDates);
 
         /// <summary>
         /// Gets the container owner.
