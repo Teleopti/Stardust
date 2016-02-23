@@ -85,17 +85,17 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         {
 
             ILockableBitArray bitArray = createBitArray();
-
+	        var skipDates = Enumerable.Empty<DateOnly>();
             using (_mocks.Record())
             {
                 simpleMatrixExpectations();
 
-                Expect.Call(_matrixConverter.Convert(_scheduleMatrix, false, false)).Return(bitArray).Repeat.Any();
+                Expect.Call(_matrixConverter.Convert(_scheduleMatrix, false, false, skipDates)).Return(bitArray).Repeat.Any();
                 Expect.Call(_dataExtractor.Values()).Return(_values).Repeat.Any();
             }
 
             // day counterparts are > febr 9, 10, 11, 12
-			DateOnly? result = _target.Execute(_scheduleMatrix, _dataExtractor, Enumerable.Empty<DateOnly>());
+			DateOnly? result = _target.Execute(_scheduleMatrix, _dataExtractor, skipDates);
 
             DateOnly expected = new DateOnly(2010, 02, 11);
 

@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     { 
 	    public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
-		public void Execute(IEnumerable<IIntradayOptimizer2> optimizers, DateOnlyPeriod period)
+		public void Execute(IEnumerable<IIntradayOptimizer2> optimizers)
 		{
 			var shuffledOptimizers = optimizers.GetRandom(optimizers.Count(), true);
 

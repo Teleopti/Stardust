@@ -7,6 +7,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public interface IIntradayOptimizerContainer
 	{
 		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
-		void Execute(IEnumerable<IIntradayOptimizer2> optimizers, DateOnlyPeriod period);
+		void Execute(IEnumerable<IIntradayOptimizer2> optimizers);
 	}
 }

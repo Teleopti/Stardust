@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IPerson _person = PersonFactory.CreatePerson();
         private bool _eventExecuted;
 	    private int _timesExecuted;
-	    private DateOnlyPeriod _period;
 
 	    [SetUp]
         public void Setup()
@@ -33,7 +32,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             _target = new IntradayOptimizerContainer();
 	        _timesExecuted = 0;
-		    _period = new DateOnlyPeriod();
         }
 
         [Test]
@@ -50,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
 			{
 				_target.ReportProgress += _target_ReportProgress;
-				_target.Execute(_optimizerList, _period);
+				_target.Execute(_optimizerList);
                 _target.ReportProgress -= _target_ReportProgress;
                 Assert.IsTrue(_eventExecuted);
             }
@@ -69,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			}
 			using (_mocks.Playback())
 			{
-				_target.Execute(_optimizerList, _period);
+				_target.Execute(_optimizerList);
 				Assert.AreEqual(1, _timesExecuted);
 				_target.ReportProgress -= targetReportProgress2;
 			}
@@ -105,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
             using (_mocks.Playback())
             {
-				_target.Execute(_optimizerList, _period);
+				_target.Execute(_optimizerList);
             }
         }
     }

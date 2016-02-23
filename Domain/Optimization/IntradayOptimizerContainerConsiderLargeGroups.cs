@@ -16,21 +16,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 #pragma warning restore 0067
 
-		public IntradayOptimizerContainerConsiderLargeGroups(AgentsToSkillGroups agentsToSkillGroups, 
+		public IntradayOptimizerContainerConsiderLargeGroups(AgentsToSkillGroups agentsToSkillGroups,
 																										IIntradayOptimizerLimiter intradayOptimizerLimiter)
 		{
 			_agentsToSkillGroups = agentsToSkillGroups;
 			_intradayOptimizerLimiter = intradayOptimizerLimiter;
 		}
 
-		public void Execute(IEnumerable<IIntradayOptimizer2> optimizers, DateOnlyPeriod period)
+		public void Execute(IEnumerable<IIntradayOptimizer2> optimizers)
 		{
-			var agentSkillGroups =_agentsToSkillGroups.ToSkillGroups();
+			var agentSkillGroups = _agentsToSkillGroups.ToSkillGroups();
 			foreach (var agents in agentSkillGroups)
 			{
 				var optimizersToLoop = optimizers.Where(x => agents.Contains(x.ContainerOwner)).ToList();
 				var numberOfAgents = agents.Count();
-				var optimizedPerDay = new Dictionary<DateOnly, int>();
+				var optimizedPerDay = new Dictionary<DateOnly, optimizeCounter>();
 				var skipDates = new List<DateOnly>();
 
 				while (optimizersToLoop.Any())
@@ -39,16 +39,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 					var result = optimizer.Execute(skipDates);
 					if (result.HasValue)
 					{
-						//TODO: currently 4 lookups in dic -> reduce if necessary
-						if (optimizedPerDay.ContainsKey(result.Value))
+						optimizeCounter optimizeCounter;
+						if (!optimizedPerDay.TryGetValue(result.Value, out optimizeCounter))
 						{
-							optimizedPerDay[result.Value]++;
+							optimizeCounter = new optimizeCounter(_intradayOptimizerLimiter);
+							optimizedPerDay[result.Value] = optimizeCounter;
 						}
-						else
-						{
-							optimizedPerDay[result.Value] = 1;
-						}
-						if (_intradayOptimizerLimiter.CanJumpOutEarly(numberOfAgents, optimizedPerDay[result.Value]))
+
+						optimizeCounter.Increase();
+						if (optimizeCounter.HasReachedLimit(numberOfAgents))
 						{
 							skipDates.Add(result.Value);
 						}
@@ -58,6 +57,27 @@ namespace Teleopti.Ccc.Domain.Optimization
 						optimizersToLoop.Remove(optimizer);
 					}
 				}
+			}
+		}
+
+		private class optimizeCounter
+		{
+			private readonly IIntradayOptimizerLimiter _intradayOptimizerLimiter;
+			private int numberOfOptimizations;
+
+			public optimizeCounter(IIntradayOptimizerLimiter intradayOptimizerLimiter)
+			{
+				_intradayOptimizerLimiter = intradayOptimizerLimiter;
+			}
+
+			public void Increase()
+			{
+				numberOfOptimizations++;
+			}
+
+			public bool HasReachedLimit(int numberOfAgentsInGroup)
+			{
+				return _intradayOptimizerLimiter.CanJumpOutEarly(numberOfAgentsInGroup, numberOfOptimizations);
 			}
 		}
 	}
