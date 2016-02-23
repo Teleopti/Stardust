@@ -3,10 +3,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using Teleopti.Ccc.Web.BrokenListenSimulator.SimulationData;
 
 namespace Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators
 {
-    public abstract class TrafficSimulatorBase<T> : IDisposable
+    public abstract class TrafficSimulatorBase<T> : IDisposable where T: SimulationDataBase
     {
         private string _baseUrl;
         private CookieContainer cookieContainer;
@@ -36,8 +37,8 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators
             HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public abstract void Simulate(T data);
-
+        public abstract void AddFullDayAbsenceForThePersonByNextNDays(T data, int days);
+		public abstract void AddFullDayAbsenceForAllPeopleWithPartTimePercentage100ByNextNDays(T data, int days);
         
 
         public void Dispose()

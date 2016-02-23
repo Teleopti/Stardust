@@ -1,23 +1,84 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Web.BrokenListenSimulator.SimulationData;
 
 namespace Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators
 {
     public class SimulateMyTimeScreenTraffic : TrafficSimulatorBase<MyTimeData>
     {       
-        public override void Simulate(MyTimeData data)
+        public override void AddFullDayAbsenceForThePersonByNextNDays(MyTimeData data, int days)
         {
-            AddFullDayAbsense(data.User, DateTime.Today, data.AbsenseId);
-
-            AddFullDayAbsense(data.User, DateTime.Today + TimeSpan.FromDays(1), data.AbsenseId);
-
-            AddFullDayAbsense(data.User, DateTime.Today + TimeSpan.FromDays(2), data.AbsenseId);
+			var today = DateTime.Today;
+			var allTasks = new List<Task>();
+	        for (var i = 0; i < days; i++)
+	        {
+				var dateTime = today + TimeSpan.FromDays(i);
+				var fullDayAbsenseAsync = addFullDayAbsenseAsync(data.User, dateTime, dateTime, data.AbsenseId);
+				allTasks.Add(fullDayAbsenseAsync);
+				Console.WriteLine("Added full day absense for 1 person for {0} days", days);
+	        }
+			requestsStatus(allTasks);
         }
 
-        public override void CallbackAction()
+	    public override void AddFullDayAbsenceForAllPeopleWithPartTimePercentage100ByNextNDays(MyTimeData data, int days)
+	    {
+		    var today = DateTime.Today;
+		    var people = getPeopleForPartTimePercentaget100(today);
+		    var allTasks = new List<Task>();
+			for (var i = 0; i < days; i++)
+		    {
+			    var li = i;
+			    people.ForEach(p =>
+				{
+					var dateTime = today + TimeSpan.FromDays(li);
+					var fullDayAbsenseAsync = addFullDayAbsenseAsync(p, dateTime, dateTime, data.AbsenseId);
+					allTasks.Add(fullDayAbsenseAsync);
+				});
+				Console.WriteLine("Added full day absense for {0} people for {1} days", people.Count(), days);
+		    }
+		    requestsStatus(allTasks);
+	    }
+
+	    private static void requestsStatus(List<Task> allTasks)
+	    {
+		    var stopwatch = new Stopwatch();
+		    stopwatch.Start();
+
+		    while (stopwatch.IsRunning && stopwatch.Elapsed < TimeSpan.FromSeconds(600))
+		    {
+			    Thread.Sleep(TimeSpan.FromSeconds(5));
+			    Console.WriteLine("addFullDayAbsenseAsync {0} completed,{1} not completed", allTasks.Count(x => x.IsCompleted),
+				    allTasks.Count(x => !x.IsCompleted));
+			    if (allTasks.All(x => x.IsCompleted))
+			    {
+				    break;
+			    }
+		    }
+	    }
+
+	    private IEnumerable<Guid> getPeopleForPartTimePercentaget100(DateTime day)
+	    {
+		    var message = new HttpRequestMessage(HttpMethod.Get, string.Format("api/GroupSchedule/Get?groupId={0}&date={1}", "b7eda58d-c0a0-4051-b648-9b5e015b240e", day.Date));
+			var response = HttpClient.SendAsync(message).GetAwaiter().GetResult();
+			Console.WriteLine("GetScheduleForPartTimePercentaget100");
+			if (!response.IsSuccessStatusCode)
+			{
+				throw new Exception("Unable to GetScheduleForPartTimePercentaget100");
+			}
+			var result = JsonConvert.DeserializeObject<dynamic>(response.Content.ReadAsStringAsync().GetAwaiter().GetResult());
+			dynamic[] schedules = result.Schedules.ToObject<dynamic[]>();
+			return schedules.Select(x => new Guid(x.PersonId.ToObject<string>()));
+	    }
+
+	    public override void CallbackAction()
         {
             //var taskList = new List<Task>();
             //Enumerable.Range(1, 1).ForEach(iteration =>
@@ -27,24 +88,18 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators
             //Task.WaitAll(taskList.ToArray());
         }
 
-        public async void AddFullDayAbsense(Guid user, DateTime day, Guid absenceId)
+        private Task<HttpResponseMessage> addFullDayAbsenseAsync(Guid user, DateTime start, DateTime end, Guid absenceId)
         {
             var body =
                 string.Format(
-                    "{{\"StartDate\":\"{2}\",\"EndDate\":\"{2}\",\"AbsenceId\":\"{3}\",\"PersonId\":\"{0}\",\"TrackedCommandInfo\":{{\"TrackId\":\"{1}\"}}}}",
-                    user, Guid.NewGuid(), day.Date, absenceId);
+                    "{{\"StartDate\":\"{2}\",\"EndDate\":\"{4}\",\"AbsenceId\":\"{3}\",\"PersonId\":\"{0}\",\"TrackedCommandInfo\":{{\"TrackId\":\"{1}\"}}}}",
+                    user, Guid.NewGuid(), start.Date, absenceId, end.Date);
             var message = new HttpRequestMessage(HttpMethod.Post, "api/PersonScheduleCommand/AddFullDayAbsence")
             {
                 Content = new StringContent(body, Encoding.UTF8, "application/json")
             };
 
-            var response = await HttpClient.SendAsync(message);
-
-            Console.WriteLine("Added full day absense");
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception("Unable to generate schedule change");
-            }
+            return HttpClient.SendAsync(message);
         }
 
         public Task FetchSchedule()
@@ -52,7 +107,6 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators
             var message = new HttpRequestMessage(HttpMethod.Get, string.Format("MyTime/Schedule/FetchData?date=&_={0}", Guid.NewGuid()));
             var response = HttpClient.SendAsync(message);
             return response;
-            //if (!response.IsSuccessStatusCode) throw new Exception("Unable to fetch schedule");
         }
     }
 }
