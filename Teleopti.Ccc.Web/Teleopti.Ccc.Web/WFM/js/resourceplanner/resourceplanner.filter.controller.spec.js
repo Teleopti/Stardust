@@ -177,17 +177,6 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.selectedResults[0]).toEqual(singleResult);
 	}));
 
-	it('should show that more results exists', inject(function ($controller,$stateParams) {
-		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
-
-		for (var i = 0; i < maxHits; i++) {
-			scope.results.push({ Id: i });
-		}
-
-		expect(scope.moreResultsExists()).toEqual(true);
-	}));
-
 	it('should not show that more results exists', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });

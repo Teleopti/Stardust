@@ -4,7 +4,7 @@
 		.controller('ResourceplannerFilterCtrl', [
 			'$scope', 'ResourcePlannerFilterSrvc', 'ResourcePlannerSvrc', '$state', '$stateParams', 'growl',
 			function($scope, ResourcePlannerFilterSrvc, ResourcePlannerSvrc, $state, $stateParams, growl) {
-				var maxHits = 5;
+				var maxHits = 100;
 				$scope.name = "";
 				$scope.isEnabled = true;
 				$scope.selectedItem;
