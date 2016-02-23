@@ -41,7 +41,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			if (info.Adherence.AdherenceChangedFromActivityChange())
 			{
-				var timeOfAdherenceChange = activityStartTime ?? info.Schedule.PreviousActivity().EndDateTime;
+				DateTime timeOfAdherenceChange ;
+				if (activityStartTime != null)
+					timeOfAdherenceChange = activityStartTime.Value;
+				else if (info.Schedule.PreviousActivity() != null)
+					timeOfAdherenceChange = info.Schedule.PreviousActivity().EndDateTime;
+				else
+					timeOfAdherenceChange = info.CurrentTime;
+					
 				_adherenceEventPublisher.Publish(info, timeOfAdherenceChange, info.Adherence.AdherenceForStoredStateAndCurrentActivity());
 			}
 		}
