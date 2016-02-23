@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Results;
 using log4net;
 using Manager.IntegrationTest.Console.Host.Helpers;
 
@@ -28,9 +29,11 @@ namespace Manager.IntegrationTest.Console.Host
             LogHelper.LogDebugWithLineNumber(Logger,
                                             "Called API controller.");
 
-            Program.StartNewNode();
+            string friendlyname;
 
-            return Ok();
+            Program.StartNewNode(out friendlyname);
+
+            return Ok(friendlyname);
         }
 
         [HttpDelete, Route("appdomain/{id}")]

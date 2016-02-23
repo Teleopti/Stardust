@@ -123,6 +123,92 @@ namespace Manager.Integration.Test
         ///     netsh http add urlacl url=http://+:9100/ user=everyone listen=yes
         /// </summary>
         [Test]
+        public async void ShouldBeAbleToStartNewNode()
+        {
+            LogHelper.LogDebugWithLineNumber("Start test.",
+                                             Logger);
+
+            //---------------------------------------------
+            // Notify when all 2 nodes are up and running. 
+            //---------------------------------------------
+            LogHelper.LogDebugWithLineNumber("Waiting for all 2 nodes to start up.",
+                                             Logger);
+
+            CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
+
+            SqlNotifier sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
+
+            Task task = sqlNotifier.CreateNotifyWhenAllNodesAreUpTask(2,
+                                                                      sqlNotiferCancellationTokenSource);
+            task.Start();
+
+            sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(30));
+
+            sqlNotifier.Dispose();
+
+            LogHelper.LogDebugWithLineNumber("All 2 nodes has started.",
+                                             Logger);
+
+            //---------------------------------------------
+            // Start actual test.
+            //---------------------------------------------
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
+            HttpResponseMessage response = null;
+
+            string nodeName = null;
+
+            using (var client = new HttpClient())
+            {
+                UriBuilder uriBuilder =
+                    new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
+
+                uriBuilder.Path += "appdomain/";
+
+                Uri uri = uriBuilder.Uri;
+
+                LogHelper.LogDebugWithLineNumber("Start calling Post Async ( " + uri + " ) ",
+                                                 Logger);
+
+                try
+                {
+                    response = await client.PostAsync(uriBuilder.Uri,
+                                                      null,
+                                                      cancellationTokenSource.Token);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        nodeName = await response.Content.ReadAsStringAsync();
+
+                        LogHelper.LogDebugWithLineNumber("Succeeded calling Post Async ( " + uri + " ) ",
+                                                         Logger);
+                    }
+                }
+                catch (Exception exp)
+                {
+                    LogHelper.LogErrorWithLineNumber(exp.Message,
+                                                     Logger,
+                                                     exp);
+                }
+            }
+
+            Assert.IsTrue(response.IsSuccessStatusCode,
+                          "Response code should be success.");
+
+            Assert.IsNotNull(nodeName,
+                             "Node must have a friendly name.");
+
+            cancellationTokenSource.Cancel();
+
+            LogHelper.LogDebugWithLineNumber("Finished test.",
+                                             Logger);
+        }
+
+        /// <summary>
+        ///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
+        ///     netsh http add urlacl url=http://+:9100/ user=everyone listen=yes
+        /// </summary>
+        [Test]
         public async void ShouldUnloadNode1AppDomain()
         {
             LogHelper.LogDebugWithLineNumber("Start test.",

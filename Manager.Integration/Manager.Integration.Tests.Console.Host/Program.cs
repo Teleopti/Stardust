@@ -422,9 +422,43 @@ namespace Manager.IntegrationTest.Console.Host
             return ret;
         }
 
-        public static bool StartNewNode()
+        public static void StartNewNode(out string friendlyName)
         {
-            return true;
+            friendlyName = null;
+
+            NumberOfNodesToStart++;
+
+            if (NumberOfNodesToStart > 0)
+            {
+                LogHelper.LogDebugWithLineNumber(Logger,
+                                                 "Start creating node configuration file for node id : " + NumberOfNodesToStart);
+
+                FileInfo nodeConfig = CreateNodeConfigurationFile(NumberOfNodesToStart);
+
+                friendlyName = nodeConfig.Name;
+
+                LogHelper.LogDebugWithLineNumber(Logger,
+                                                 "AppDomainNodeTask");
+
+                AppDomainNodeTask appDomainNodeTask =
+                    new AppDomainNodeTask(_buildMode,
+                                          DirectoryNodeAssemblyLocationFullPath,
+                                          nodeConfig,
+                                          Settings.Default.NodeAssemblyName);
+
+                LogHelper.LogDebugWithLineNumber(Logger,
+                                                 "Start : AppDomainNodeTask.StartTask");
+
+                appDomainNodeTask.StartTask(new CancellationTokenSource());
+
+                LogHelper.LogDebugWithLineNumber(Logger,
+                                                 "Finished : AppDomainNodeTask.StartTask");
+
+                AppDomainNodeTasks.Add(appDomainNodeTask);
+
+                LogHelper.LogDebugWithLineNumber(Logger,
+                                                 "Finished creating node configuration file for node : ( id, config file ) : ( " + NumberOfNodesToStart + ", " + nodeConfig.FullName + " )");
+            }
         }
 
         public static List<string> GetInstantiatedAppDomains()
