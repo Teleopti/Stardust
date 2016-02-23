@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -48,5 +49,6 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators
         }
 
         public abstract void CallbackAction();
+		public abstract IEnumerable<Guid> GetPeopleForPartTimePercentaget100(DateTime today);
     }
 }

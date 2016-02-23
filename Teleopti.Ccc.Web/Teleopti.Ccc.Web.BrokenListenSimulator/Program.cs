@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
@@ -76,10 +77,40 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 				}
 				Console.WriteLine("Done simulating traffic, took {0}", sw.Elapsed);
 			}
+			else if (args.Any() && args[0] == "-p")
+			{
+				myTimeData.User = new Guid(args[1]);
+				simulate(myTimeData, 1, 100);
+			}
+			else if (args.Any() && args[0] == "-s")
+			{
+				var builder = new ContainerBuilder();
+				builder.RegisterAssemblyTypes(typeof(TrafficSimulatorBase<>).Assembly)
+					.Where(t => t.IsClosedTypeOf(typeof(TrafficSimulatorBase<>)))
+					.AsClosedTypesOf(typeof(TrafficSimulatorBase<>)).InstancePerDependency();
+				var container = builder.Build();
+				TrafficSimulatorBase<MyTimeData> trafficSimulator;
+				if (container.TryResolve(out trafficSimulator))
+				{
+					trafficSimulator.Start(myTimeData.BaseUrl, myTimeData.BusinessUnitName, null, null);
+					var people = trafficSimulator.GetPeopleForPartTimePercentaget100(DateTime.Today);
+					foreach (var person in people)
+					{
+						var startInfo = new ProcessStartInfo
+						{
+							FileName = typeof(Program).Assembly.GetName().Name+".exe",
+							Arguments = "-p " + person
+						};
+						var process = new Process { StartInfo = startInfo };
+						process.Start();
+						Thread.Sleep(200);
+					}
+				}
+			}
 			else
 			{
 				// start listen simulator
-				simulate(myTimeData, 1, 1);//200 + 5 + 2;
+				simulate(myTimeData, 1, 100);//200 + 5 + 2;
 			}
 		}
 

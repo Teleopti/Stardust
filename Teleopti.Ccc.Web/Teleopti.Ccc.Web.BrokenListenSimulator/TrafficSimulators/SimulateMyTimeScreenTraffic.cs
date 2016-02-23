@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators
 	    public override void AddFullDayAbsenceForAllPeopleWithPartTimePercentage100ByNextNDays(MyTimeData data, int days)
 	    {
 		    var today = DateTime.Today;
-		    var people = getPeopleForPartTimePercentaget100(today);
+		    var people = GetPeopleForPartTimePercentaget100(today);
 		    var allTasks = new List<Task>();
 			for (var i = 0; i < days; i++)
 		    {
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators
 		    }
 	    }
 
-	    private IEnumerable<Guid> getPeopleForPartTimePercentaget100(DateTime day)
+	    public override IEnumerable<Guid> GetPeopleForPartTimePercentaget100(DateTime day)
 	    {
 		    var message = new HttpRequestMessage(HttpMethod.Get, string.Format("api/GroupSchedule/Get?groupId={0}&date={1}", "b7eda58d-c0a0-4051-b648-9b5e015b240e", day.Date));
 			var response = HttpClient.SendAsync(message).GetAwaiter().GetResult();
