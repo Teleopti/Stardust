@@ -57,20 +57,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					 arg.MessageId, logOnInfo.LogOnDatasource, logOnInfo.LogOnBusinessUnitId, DateTime.UtcNow);
 			}
 
-			var dataSource = _dataSourceForTenant.DataSource()().Tenant(logOnInfo.LogOnDatasource);
-			if (dataSource == null)
-			{
-				Logger.ErrorFormat("No datasource matching the name {0} was found.", logOnInfo.LogOnDatasource);
-				throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "No datasource matching the name {0} was found.", logOnInfo.LogOnDatasource));
-			}
-
 			if (Logger.IsInfoEnabled)
 				Logger.Info("UnitOfWorkFactory configured");
 
-			if (checkLicense(dataSource))
+			if (checkLicense(logOnInfo.LogOnDatasource))
 			{
-				_asSystem.Value.Logon(dataSource, logOnInfo.LogOnBusinessUnitId);
-				setWcfAuthenticationHeader(dataSource, logOnInfo.LogOnBusinessUnitId);
+				_asSystem.Value.Logon(logOnInfo.LogOnDatasource, logOnInfo.LogOnBusinessUnitId);
+				setWcfAuthenticationHeader(logOnInfo.LogOnDatasource, logOnInfo.LogOnBusinessUnitId);
 			}
 
 			if (Logger.IsInfoEnabled)
@@ -79,9 +72,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			return false;
 		}
 
-		private static bool checkLicense(IDataSource dataSource)
+		private bool checkLicense(string tenant)
 		{
-			if (DefinedLicenseDataFactory.HasLicense(dataSource.DataSourceName))
+			var dataSource = _dataSourceForTenant.DataSource()().Tenant(tenant);
+			if (dataSource == null)
+			{
+				Logger.ErrorFormat("No datasource matching the name {0} was found.", tenant);
+				throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "No datasource matching the name {0} was found.", tenant));
+			}
+
+			if (DefinedLicenseDataFactory.HasLicense(tenant))
 				return true;
 
 			var licenseVerifier = new LicenseVerifier(
@@ -100,10 +100,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			return true;
 		}
 
-		private static void setWcfAuthenticationHeader(IDataSource dataSource, Guid businessUnitId)
+		private static void setWcfAuthenticationHeader(string dataSourceName, Guid businessUnitId)
 		{
 			AuthenticationMessageHeader.BusinessUnit = businessUnitId;
-			AuthenticationMessageHeader.DataSource = dataSource.Application.Name;
+			AuthenticationMessageHeader.DataSource = dataSourceName;
 			AuthenticationMessageHeader.UserName = SystemUser.Id_AvoidUsing_This.ToString(); //rk - is this really correct - why the guid as username?
 			AuthenticationMessageHeader.Password = "custom";
 			AuthenticationMessageHeader.UseWindowsIdentity = false;

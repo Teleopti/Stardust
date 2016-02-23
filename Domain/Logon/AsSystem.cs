@@ -38,11 +38,8 @@ namespace Teleopti.Ccc.Domain.Logon
 
 		public void Logon(string tenant, Guid businessUnitId)
 		{
-			Logon(_dataSourceForTenant.Tenant(tenant), businessUnitId);
-		}
-		
-		public void Logon(IDataSource dataSource, Guid businessUnitId)
-		{
+			var dataSource = _dataSourceForTenant.Tenant(tenant);
+
 			IPerson systemUser;
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
