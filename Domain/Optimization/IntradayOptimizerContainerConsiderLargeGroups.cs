@@ -25,59 +25,23 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public void Execute(IEnumerable<IIntradayOptimizer2> optimizers)
 		{
-			var agentSkillGroups = _agentsToSkillGroups.ToSkillGroups();
-			foreach (var agents in agentSkillGroups)
+			foreach (var agents in _agentsToSkillGroups.ToSkillGroups())
 			{
 				var optimizersToLoop = optimizers.Where(x => agents.Contains(x.ContainerOwner)).ToList();
-				var numberOfAgents = agents.Count();
-				var optimizedPerDay = new Dictionary<DateOnly, optimizeCounter>();
-				var skipDates = new List<DateOnly>();
-
+				var datesToSkip = new IntradayDatesToSkip(_intradayOptimizerLimiter, agents.Count());
 				while (optimizersToLoop.Any())
 				{
 					var optimizer = optimizersToLoop.GetRandom();
-					var result = optimizer.Execute(skipDates);
+					var result = optimizer.Execute(datesToSkip.SkipDates);
 					if (result.HasValue)
 					{
-						optimizeCounter optimizeCounter;
-						if (!optimizedPerDay.TryGetValue(result.Value, out optimizeCounter))
-						{
-							optimizeCounter = new optimizeCounter(_intradayOptimizerLimiter);
-							optimizedPerDay[result.Value] = optimizeCounter;
-						}
-
-						optimizeCounter.Increase();
-						if (optimizeCounter.HasReachedLimit(numberOfAgents))
-						{
-							skipDates.Add(result.Value);
-						}
+						datesToSkip.DayWasOptimized(result.Value);
 					}
 					else
 					{
 						optimizersToLoop.Remove(optimizer);
 					}
 				}
-			}
-		}
-
-		private class optimizeCounter
-		{
-			private readonly IIntradayOptimizerLimiter _intradayOptimizerLimiter;
-			private int numberOfOptimizations;
-
-			public optimizeCounter(IIntradayOptimizerLimiter intradayOptimizerLimiter)
-			{
-				_intradayOptimizerLimiter = intradayOptimizerLimiter;
-			}
-
-			public void Increase()
-			{
-				numberOfOptimizations++;
-			}
-
-			public bool HasReachedLimit(int numberOfAgentsInGroup)
-			{
-				return _intradayOptimizerLimiter.CanJumpOutEarly(numberOfAgentsInGroup, numberOfOptimizations);
 			}
 		}
 	}
