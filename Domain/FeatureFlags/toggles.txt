@@ -26,7 +26,6 @@
 ## This will be exactly the same as not specifying MyFeature at all in this file
 ############################################################################
 
-MyReport_AgentQueueMetrics_22254 = true
 MyTeam_MoveActivity_25206 = true
 Request_ShiftTradeRequestForMoreDays_20918 = true
 Request_GiveCommentWhenDenyOrApproveShiftTradeRequest_28341 = true

@@ -306,7 +306,6 @@
     <Compile Include="Repositories\BusinessUnitFilterOverriderTest.cs" />
     <Compile Include="Rta\AgentStateReadModelReaderTest.cs" />
     <Compile Include="Repositories\RtaStateGroupRepositoryNotSignedInTest.cs" />
-    <Compile Include="Toggle\ApplicationFunctionFeatureFlagTest.cs" />
     <Compile Include="Toggle\TogglesActiveTest.cs" />
     <Compile Include="Licensing\CheckLicenseExistsTest.cs" />
     <Compile Include="Licensing\LicenseActivatorProviderTest.cs" />

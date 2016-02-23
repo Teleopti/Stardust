@@ -18,10 +18,6 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 		public AllFunctions FilteredFunctions()
 		{
 			var functions = _applicationFunctionsProvider.AllFunctions();
-			if (!_toggleManager.IsEnabled(Toggles.MyReport_AgentQueueMetrics_22254))
-			{
-				hideMyReportQueueMetrics(functions);
-			}
 			if (!_toggleManager.IsEnabled (Toggles.SeatPlanner_Logon_32003))
 			{
 				hideSeatPlanner (functions);
@@ -36,15 +32,6 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			}
 
 			return functions;
-		}
-
-		private static void hideMyReportQueueMetrics(AllFunctions functions)
-		{
-			var foundFunction = functions.FindByForeignId(DefinedRaptorApplicationFunctionForeignIds.MyReportQueueMetrics);
-			if (foundFunction != null)
-			{
-				foundFunction.SetHidden();
-			}
 		}
 
 		private static void hideSeatPlanner (AllFunctions functions)

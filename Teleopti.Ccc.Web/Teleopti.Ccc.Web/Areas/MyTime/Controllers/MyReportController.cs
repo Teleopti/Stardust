@@ -59,9 +59,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[MyReportQueueMetricsPermission]
         public ViewResult QueueMetrics()
         {
-            if(!_toggleManager.IsEnabled(Toggles.MyReport_AgentQueueMetrics_22254))
-                throw new HttpException(404, "Not found");
-            
             var culture = _userCulture == null ? CultureInfo.InvariantCulture : _userCulture.GetCulture();
             ViewBag.DatePickerFormat = culture.DateTimeFormat.ShortDatePattern.ToUpper();
             return View("DailyQueueMetricsPartial");

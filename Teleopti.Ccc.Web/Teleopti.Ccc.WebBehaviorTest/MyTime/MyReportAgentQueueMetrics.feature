@@ -1,5 +1,4 @@
-﻿@OnlyRunIfEnabled('MyReport_AgentQueueMetrics_22254')
-Feature: My Report Agent Queue Metrics
+﻿Feature: My Report Agent Queue Metrics
 	In order to improve my own performance
 	As an agent
 	I need to see metrics for a specific day

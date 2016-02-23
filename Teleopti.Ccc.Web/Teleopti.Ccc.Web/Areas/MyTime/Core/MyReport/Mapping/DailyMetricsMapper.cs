@@ -31,8 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping
 			}
 			var culture = _userCulture == null ? CultureInfo.InvariantCulture : _userCulture.GetCulture();
 			var queueMetricsEnabled =
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.MyReportQueueMetrics) &&
-				_toggleManager.IsEnabled(Toggles.MyReport_AgentQueueMetrics_22254);
+				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.MyReportQueueMetrics);
 
 			return new DailyMetricsViewModel
 			{
