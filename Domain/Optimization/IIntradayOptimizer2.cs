@@ -19,7 +19,5 @@ namespace Teleopti.Ccc.Domain.Optimization
         /// </summary>
         /// <value>The container owner.</value>
         IPerson ContainerOwner { get; }
-
-	    void LockDay(DateOnly value);
     }
 }

@@ -43,11 +43,5 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			get { return _matrix.Person; }
 		}
-
-		public void LockDay(DateOnly date)
-		{
-			_matrix.LockPeriod(new DateOnlyPeriod(date, date));
-		}
 	}
-
 }
