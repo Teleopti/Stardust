@@ -121,9 +121,9 @@ namespace Manager.Integration.Test
                                             Logger);
         }
 
-		private readonly bool _clearDatabase = true;
+		private bool _clearDatabase = true;
 
-		private readonly string _buildMode = "Debug";
+		private string _buildMode = "Debug";
 
         /// <summary>
         ///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.

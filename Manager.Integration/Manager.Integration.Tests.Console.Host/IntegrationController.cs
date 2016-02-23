@@ -18,7 +18,7 @@ namespace Manager.IntegrationTest.Console.Host
 			                                WhoAmI);
 		}
 
-		public string WhoAmI { get; }
+		public string WhoAmI { get; set; }
 
 		[HttpPost, Route("appdomain")]
 		public IHttpActionResult StartNewNode()
