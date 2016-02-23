@@ -14138,4 +14138,20 @@ Help us improve your experience by sending an error report</value>
     <value>Delete period</value>
     <comment>Tooltip text in working-hours-picker in outbound campaign edit.</comment>
   </data>
+  <data name="AgentDetails" xml:space="preserve">
+    <value>Agent details</value>
+    <comment>Agent details</comment>
+  </data>
+  <data name="InAlarm" xml:space="preserve">
+    <value>In alarm</value>
+    <comment>In alarm</comment>
+  </data>
+  <data name="SelectSites" xml:space="preserve">
+    <value>Select sites</value>
+    <comment>Select sites</comment>
+  </data>
+  <data name="SelectTeams" xml:space="preserve">
+    <value>Select teams</value>
+    <comment>Select teams</comment>
+  </data>
 </root>
