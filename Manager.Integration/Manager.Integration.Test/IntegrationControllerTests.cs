@@ -19,11 +19,11 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
-    [TestFixture, Ignore]
-    public class ManagerIntegrationTestControllerTests
+    [TestFixture]
+    public class IntegrationControllerTests
     {
         private static readonly ILog Logger =
-            LogManager.GetLogger(typeof (ManagerIntegrationTestControllerTests));
+            LogManager.GetLogger(typeof (IntegrationControllerTests));
 
         private bool _clearDatabase = true;
         private string _buildMode = "Debug";
@@ -32,7 +32,7 @@ namespace Manager.Integration.Test
         public void TestFixtureTearDown()
         {
             LogHelper.LogDebugWithLineNumber("Start TestFixtureTearDown",
-                                            Logger);
+                                             Logger);
 
             if (AppDomainTask != null)
             {
@@ -40,13 +40,13 @@ namespace Manager.Integration.Test
             }
 
             LogHelper.LogDebugWithLineNumber("Finished TestFixtureTearDown",
-                                            Logger);
+                                             Logger);
         }
 
         private static void TryCreateSqlLoggingTable(string connectionString)
         {
             LogHelper.LogDebugWithLineNumber("Run sql script to create logging file started.",
-                                            Logger);
+                                             Logger);
 
             FileInfo scriptFile =
                 new FileInfo(Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
@@ -56,9 +56,8 @@ namespace Manager.Integration.Test
                                                   connectionString);
 
             LogHelper.LogDebugWithLineNumber("Run sql script to create logging file finished.",
-                                            Logger);
+                                             Logger);
         }
-
 
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
@@ -78,7 +77,7 @@ namespace Manager.Integration.Test
             XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
             LogHelper.LogDebugWithLineNumber("Start TestFixtureSetUp",
-                                            Logger);
+                                             Logger);
 
             TryCreateSqlLoggingTable(ManagerDbConnectionString);
 
@@ -91,14 +90,15 @@ namespace Manager.Integration.Test
 
             AppDomainTask = new AppDomainTask(_buildMode);
 
-            Task = AppDomainTask.StartTask(CancellationTokenSource, 2);
+            Task = AppDomainTask.StartTask(CancellationTokenSource,
+                                           2);
 
             LogHelper.LogDebugWithLineNumber("Finshed TestFixtureSetUp",
-                                            Logger);
+                                             Logger);
         }
 
-        private void CurrentDomain_UnhandledException(object sender,
-                                                      UnhandledExceptionEventArgs e)
+        private static void CurrentDomain_UnhandledException(object sender,
+                                                             UnhandledExceptionEventArgs e)
         {
         }
 
@@ -118,13 +118,13 @@ namespace Manager.Integration.Test
         public async void ShouldUnloadNode1AppDomain()
         {
             LogHelper.LogDebugWithLineNumber("Start test.",
-                                            Logger);
+                                             Logger);
 
             //---------------------------------------------
             // Notify when all 2 nodes are up and running. 
             //---------------------------------------------
             LogHelper.LogDebugWithLineNumber("Waiting for all 2 nodes to start up.",
-                                            Logger);
+                                             Logger);
 
             CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
@@ -140,7 +140,7 @@ namespace Manager.Integration.Test
             sqlNotifier.Dispose();
 
             LogHelper.LogDebugWithLineNumber("All 2 nodes has started.",
-                                            Logger);
+                                             Logger);
 
             //---------------------------------------------
             // Start actual test.
@@ -159,16 +159,17 @@ namespace Manager.Integration.Test
                 Uri uri = uriBuilder.Uri;
 
                 LogHelper.LogDebugWithLineNumber("Start calling Delete Async ( " + uri + " ) ",
-                                                Logger);
+                                                 Logger);
 
                 try
                 {
-                    response = await client.DeleteAsync(uriBuilder.Uri, cancellationTokenSource.Token);
+                    response = await client.DeleteAsync(uriBuilder.Uri,
+                                                        cancellationTokenSource.Token);
 
                     if (response.IsSuccessStatusCode)
                     {
                         LogHelper.LogDebugWithLineNumber("Succeeded calling Delete Async ( " + uri + " ) ",
-                                                        Logger);
+                                                         Logger);
                     }
                 }
                 catch (Exception exp)
@@ -184,7 +185,7 @@ namespace Manager.Integration.Test
             cancellationTokenSource.Cancel();
 
             LogHelper.LogDebugWithLineNumber("Finished test.",
-                                            Logger);
+                                             Logger);
         }
 
         /// <summary>
@@ -195,13 +196,13 @@ namespace Manager.Integration.Test
         public async void ShouldReturnAllAppDomainKeys()
         {
             LogHelper.LogDebugWithLineNumber("Start test.",
-                                            Logger);
+                                             Logger);
 
             //---------------------------------------------
             // Notify when 2 nodes are up. 
             //---------------------------------------------
             LogHelper.LogDebugWithLineNumber("Waiting for 2 nodes to start up.",
-                                            Logger);
+                                             Logger);
 
             CancellationTokenSource sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
@@ -216,7 +217,7 @@ namespace Manager.Integration.Test
             sqlNotifier.Dispose();
 
             LogHelper.LogDebugWithLineNumber("All 2 nodes has started.",
-                                            Logger);
+                                             Logger);
 
             //---------------------------------------------
             // Start actual test.
@@ -238,16 +239,17 @@ namespace Manager.Integration.Test
                 Uri uri = uriBuilder.Uri;
 
                 LogHelper.LogDebugWithLineNumber("Start calling Get Async ( " + uri + " ) ",
-                                                Logger);
+                                                 Logger);
 
                 try
                 {
-                    response = await client.GetAsync(uriBuilder.Uri, cancellationTokenSource.Token);
+                    response = await client.GetAsync(uriBuilder.Uri,
+                                                     cancellationTokenSource.Token);
 
                     if (response.IsSuccessStatusCode)
                     {
                         LogHelper.LogDebugWithLineNumber("Succeeded calling Get Async ( " + uri + " ) ",
-                                                        Logger);
+                                                         Logger);
 
                         string content = await response.Content.ReadAsStringAsync();
 
@@ -259,7 +261,7 @@ namespace Manager.Integration.Test
                             foreach (var l in list)
                             {
                                 LogHelper.LogDebugWithLineNumber(l,
-                                                                Logger);
+                                                                 Logger);
                             }
                         }
 
@@ -282,7 +284,7 @@ namespace Manager.Integration.Test
             task.Dispose();
 
             LogHelper.LogDebugWithLineNumber("Finished test.",
-                                            Logger);
+                                             Logger);
         }
     }
 }

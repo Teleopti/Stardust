@@ -84,7 +84,7 @@
     <Compile Include="EventArgs\GuidStatusChangedEventArgs.cs" />
     <Compile Include="FailingJobParams.cs" />
     <Compile Include="JobHistory.cs" />
-    <Compile Include="ManagerIntegrationTestControllerTests.cs" />
+    <Compile Include="IntegrationControllerTests.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Scripts\ScriptExecuteHelper.cs" />
     <Compile Include="Tasks\AppDomainTask.cs" />

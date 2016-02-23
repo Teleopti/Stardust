@@ -35,7 +35,7 @@
     <Setting Name="NodeConfigurationFileFullPath" Type="System.String" Scope="Application">
       <Value Profile="(Default)">../../../../Node/NodeConsoleHost/bin/</Value>
     </Setting>
-    <Setting Name="ManagerIntegrationTestControllerBaseAddress" Type="System.String" Scope="Application">
+    <Setting Name="IntegrationControllerBaseAddress" Type="System.String" Scope="Application">
       <Value Profile="(Default)">http://localhost:9100/managerIntegrationTestController/</Value>
     </Setting>
     <Setting Name="ManagerLocationUri" Type="(Web Service URL)" Scope="Application">

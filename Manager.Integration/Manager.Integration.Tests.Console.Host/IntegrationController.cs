@@ -7,28 +7,30 @@ using Manager.IntegrationTest.Console.Host.Helpers;
 
 namespace Manager.IntegrationTest.Console.Host
 {
-    public class ManagerIntegrationTestController : ApiController
+    public class IntegrationController : ApiController
     {
         private static readonly ILog Logger =
-            LogManager.GetLogger(typeof (ManagerIntegrationTestController));
+            LogManager.GetLogger(typeof (IntegrationController));
 
         public string WhoAmI { get; private set; }
 
-        public ManagerIntegrationTestController()
+        public IntegrationController()
         {
-            WhoAmI = "[MANAGER INTEGRATION TEST CONTROLLER, " + Environment.MachineName.ToUpper() + "]";
+            WhoAmI = "[INTEGRATION CONTROLLER, " + Environment.MachineName.ToUpper() + "]";
 
             LogHelper.LogInfoWithLineNumber(Logger,
                                             WhoAmI);
         }
 
         [HttpPost, Route("appdomain")]
-        public void StartNewNode()
+        public IHttpActionResult StartNewNode()
         {
             LogHelper.LogDebugWithLineNumber(Logger,
                                             "Called API controller.");
 
             Program.StartNewNode();
+
+            return Ok();
         }
 
         [HttpDelete, Route("appdomain/{id}")]

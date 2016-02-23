@@ -428,29 +428,26 @@ namespace Manager.IntegrationTest.Console.Host
         {
             List<string> listToReturn = null;
 
-            //if (AppDomainManagerTask == null &&
-            //    (AppDomainNodeTasks == null || !AppDomainNodeTasks.Any()))
-            //{
-            //    return listToReturn;
-            //}
+            if (AppDomainManagerTask == null &&
+                (AppDomainNodeTasks == null || !AppDomainNodeTasks.Any()))
+            {
+                return listToReturn;
+            }
 
             listToReturn = new List<string>();
 
-            //if (AppDomainManagerTask != null)
-            //{
-            //    listToReturn.Add(AppDomainManagerTask.GetAppDomainFriendlyName());
-            //}
+            if (AppDomainManagerTask != null)
+            {
+                listToReturn.Add(AppDomainManagerTask.GetAppDomainFriendlyName());
+            }
 
-            //if (AppDomainNodeTasks != null)
-            //{
-            //    foreach (var appDomainNodeTask in AppDomainNodeTasks)
-            //    {
-            //        listToReturn.Add(appDomainNodeTask.GetAppDomainFriendlyName());
-            //    }
-            //}
-
-            listToReturn.Add("Node1.config");
-            listToReturn.Add("Node2.config");
+            if (AppDomainNodeTasks != null)
+            {
+                foreach (var appDomainNodeTask in AppDomainNodeTasks)
+                {
+                    listToReturn.Add(appDomainNodeTask.GetAppDomainFriendlyName());
+                }
+            }
 
             return listToReturn;
         }
