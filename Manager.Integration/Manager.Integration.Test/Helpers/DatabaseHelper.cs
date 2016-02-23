@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.IO;
 using log4net;
@@ -45,42 +46,70 @@ namespace Manager.Integration.Test.Helpers
 
 			var connectionString =
 				config.ConnectionStrings.ConnectionStrings[connectionStringName];
-
+			
 			using (var connection = new SqlConnection(connectionString.ConnectionString))
 			{
 				connection.Open();
-
-				using (var command = new SqlCommand("truncate table Stardust.JobDefinitions",
-				                                    connection))
+				try
 				{
-					LogHelper.LogDebugWithLineNumber(command.CommandText, Logger);
+					using (var command = new SqlCommand("truncate table Stardust.JobDefinitions",
+													connection))
+					{
+						LogHelper.LogDebugWithLineNumber(command.CommandText, Logger);
 
-					command.ExecuteNonQuery();
+						command.ExecuteNonQuery();
+					}
+				}
+				catch (Exception exp)
+				{
+					LogHelper.LogErrorWithLineNumber(exp.Message,Logger, exp);
 				}
 
-				using (var command = new SqlCommand("truncate table Stardust.JobHistory",
-				                                    connection))
+				try
 				{
-					LogHelper.LogDebugWithLineNumber(command.CommandText, Logger);
+					using (var command = new SqlCommand("truncate table Stardust.JobHistory",
+													connection))
+					{
+						LogHelper.LogDebugWithLineNumber(command.CommandText, Logger);
 
-					command.ExecuteNonQuery();
+						command.ExecuteNonQuery();
+					}
+				}
+				catch (Exception exp)
+				{
+					LogHelper.LogErrorWithLineNumber(exp.Message, Logger, exp);
 				}
 
-				using (var command = new SqlCommand("truncate table Stardust.JobHistoryDetail",
-				                                    connection))
+				try
 				{
-					LogHelper.LogDebugWithLineNumber(command.CommandText, Logger);
+					using (var command = new SqlCommand("truncate table Stardust.JobHistoryDetail",
+													connection))
+					{
+						LogHelper.LogDebugWithLineNumber(command.CommandText, Logger);
 
-					command.ExecuteNonQuery();
+						command.ExecuteNonQuery();
+					}
+				}
+				catch (Exception exp)
+				{
+					LogHelper.LogErrorWithLineNumber(exp.Message, Logger, exp);
 				}
 
-				using (var command = new SqlCommand("truncate table Stardust.WorkerNodes",
-				                                    connection))
+				try
 				{
-					LogHelper.LogDebugWithLineNumber(command.CommandText, Logger);
+					using (var command = new SqlCommand("truncate table Stardust.WorkerNodes",
+													connection))
+					{
+						LogHelper.LogDebugWithLineNumber(command.CommandText, Logger);
 
-					command.ExecuteNonQuery();
+						command.ExecuteNonQuery();
+					}
 				}
+				catch (Exception exp)
+				{
+					LogHelper.LogErrorWithLineNumber(exp.Message, Logger, exp);
+				}
+
 
 				connection.Close();
 			}

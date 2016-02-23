@@ -71,11 +71,26 @@ namespace Manager.Integration.Test
 
 			Task = AppDomainTask.StartTask(CancellationTokenSource, 5);
 
-            LogHelper.LogDebugWithLineNumber("Finshed TestFixtureSetUp",
+            LogHelper.LogDebugWithLineNumber("Finished TestFixtureSetUp",
                                             Logger);
         }
 
-        private Task Task { get; set; }
+		[TestFixtureTearDown]
+		public void TestFixtureTearDown()
+		{
+			LogHelper.LogDebugWithLineNumber("Start TestFixtureTearDown",
+											Logger);
+
+			if (AppDomainTask != null)
+			{
+				AppDomainTask.Dispose();
+			}
+
+			LogHelper.LogDebugWithLineNumber("Finished TestFixtureTearDown",
+											Logger);
+		}
+
+		private Task Task { get; set; }
 
         private AppDomainTask AppDomainTask { get; set; }
 
@@ -107,21 +122,6 @@ namespace Manager.Integration.Test
                                                   connectionString);
 
             LogHelper.LogDebugWithLineNumber("Run sql script to create logging file finished.",
-                                            Logger);
-        }
-
-        [TestFixtureTearDown]
-        public void TestFixtureTearDown()
-        {
-            LogHelper.LogDebugWithLineNumber("Start TestFixtureTearDown",
-                                            Logger);
-
-            if (AppDomainTask != null)
-            {
-                AppDomainTask.Dispose();
-            }
-
-            LogHelper.LogDebugWithLineNumber("Finished TestFixtureTearDown",
                                             Logger);
         }
 
