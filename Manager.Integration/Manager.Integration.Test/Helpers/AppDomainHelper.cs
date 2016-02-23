@@ -17,7 +17,7 @@ namespace Manager.Integration.Test.Helpers
 			AppDomains = new ConcurrentDictionary<string, AppDomain>();
 		}
 
-		public static ConcurrentDictionary<string, AppDomain> AppDomains { get; }
+		public static ConcurrentDictionary<string, AppDomain> AppDomains { get; set; }
 
 		public static Task CreateAppDomainForManagerIntegrationConsoleHost(string buildmode,
 		                                                                   int numberOfNodes,
@@ -62,7 +62,8 @@ namespace Manager.Integration.Test.Helpers
 
 				appDomain.ExecuteAssembly(assemblyToExecute.FullName,
 				                          managerAppDomainSetup.AppDomainInitializerArguments);
-			}, cancellationTokenSource.Token);
+			},
+			                cancellationTokenSource.Token);
 		}
 
 		public static void AddOrUpdateAppDomains(string key,

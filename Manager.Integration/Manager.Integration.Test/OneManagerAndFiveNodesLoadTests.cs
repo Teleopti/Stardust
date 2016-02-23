@@ -80,9 +80,17 @@ namespace Manager.Integration.Test
         private void CurrentDomain_UnhandledException(object sender,
                                                       UnhandledExceptionEventArgs e)
         {
-        }
+			var exp = e.ExceptionObject as Exception;
 
-        private static void TryCreateSqlLoggingTable(string connectionString)
+			if (exp != null)
+			{
+				LogHelper.LogFatalWithLineNumber(exp.Message,
+												 Logger,
+												 exp);
+			}
+		}
+
+		private static void TryCreateSqlLoggingTable(string connectionString)
         {
             LogHelper.LogDebugWithLineNumber("Run sql script to create logging file started.",
                                             Logger);

@@ -26,11 +26,11 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 
 		private string BuildMode { get; set; }
 
-		private DirectoryInfo DirectoryNodeAssemblyLocationFullPath { get; }
+		private DirectoryInfo DirectoryNodeAssemblyLocationFullPath { get; set; }
 
-		private FileInfo NodeconfigurationFile { get; }
+		private FileInfo NodeconfigurationFile { get; set; }
 
-		private string NodeAssemblyName { get; }
+		private string NodeAssemblyName { get; set; }
 
         private AppDomain MyAppDomain { get; set; }
 

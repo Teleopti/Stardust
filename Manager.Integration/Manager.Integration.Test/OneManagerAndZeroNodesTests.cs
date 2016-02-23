@@ -60,7 +60,8 @@ namespace Manager.Integration.Test
 
 			AppDomainTask = new AppDomainTask(_buildMode);
 
-			Task = AppDomainTask.StartTask(CancellationTokenSource, 0);
+			Task = AppDomainTask.StartTask(CancellationTokenSource,
+			                               0);
 
 			JobHelper.GiveNodesTimeToInitialize(60);
 
@@ -80,6 +81,14 @@ namespace Manager.Integration.Test
 		private void CurrentDomain_UnhandledException(object sender,
 		                                              UnhandledExceptionEventArgs e)
 		{
+			var exp = e.ExceptionObject as Exception;
+
+			if (exp != null)
+			{
+				LogHelper.LogFatalWithLineNumber(exp.Message,
+				                                 Logger,
+				                                 exp);
+			}
 		}
 
 		private static void TryCreateSqlLoggingTable()

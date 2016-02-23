@@ -43,15 +43,15 @@ namespace Manager.Integration.Test.Timers
 			MyTask = StartTask(CancellationTokenSource);
 		}
 
-		private CancellationTokenSource CancellationTokenSource { get; }
+		private CancellationTokenSource CancellationTokenSource { get; set; }
 
-		private int NumberOfGuidsToWatch { get; }
-		public string[] StatusToLookFor { get; }
-		public ManualResetEventSlim ManualResetEventSlim { get; }
+		private int NumberOfGuidsToWatch { get; set; }
+		public string[] StatusToLookFor { get; set; }
+		public ManualResetEventSlim ManualResetEventSlim { get; set; }
 
-		public ConcurrentDictionary<Guid, string> Guids { get; }
+		public ConcurrentDictionary<Guid, string> Guids { get; set; }
 
-		public ManagerUriBuilder ManagerUriBuilder { get; }
+		public ManagerUriBuilder ManagerUriBuilder { get; set; }
 
 		public Task MyTask { get; set; }
 
