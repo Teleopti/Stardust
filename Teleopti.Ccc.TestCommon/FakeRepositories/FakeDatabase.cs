@@ -158,7 +158,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				TimeZoneInfo.Utc,
 				CultureInfoFactory.CreateEnglishCulture(),
 				CultureInfoFactory.CreateEnglishCulture());
-			_person.PermissionInformation.AddApplicationRole(superRole);
+			//_person.PermissionInformation.AddApplicationRole(superRole);
+
 		}
 
 		public FakeDatabase WithTenant(string tenant, string rtaKey)

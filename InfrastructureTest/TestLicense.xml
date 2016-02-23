@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<License>
+  <CustomerName>This license is stolen!</CustomerName>
+  <ExpirationDate>2009-02-02T12:00:00</ExpirationDate>
+  <ExpirationGracePeriod>P30D</ExpirationGracePeriod>
+  <MaxActiveAgents>10000</MaxActiveAgents>
+  <MaxActiveAgentsGrace>10</MaxActiveAgentsGrace>
+  <TeleoptiCCC>
+    <Base>true</Base>
+    <AgentSelfService>true</AgentSelfService>
+    <ShiftTrades>true</ShiftTrades>
+    <AgentScheduleMessenger>true</AgentScheduleMessenger>
+    <HolidayPlanner>true</HolidayPlanner>
+    <RealtimeAdherence>true</RealtimeAdherence>
+    <PerformanceManager>true</PerformanceManager>
+    <PayrollIntegration>true</PayrollIntegration>
+    <MyTimeWeb>true</MyTimeWeb>
+  </TeleoptiCCC>
+  <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+    <SignedInfo>
+      <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" />
+      <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+      <Reference URI="">
+        <Transforms>
+          <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+        </Transforms>
+        <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+        <DigestValue>NHySKLliEw/DpIviQoTR29afKEI=</DigestValue>
+      </Reference>
+    </SignedInfo>
+    <SignatureValue>NtlWb5htLSGR5qC0R5J+04l1vyWFrmP16yzmojFnzTQ/OpaZN6znXxhcXdg656Iobhzpopx6xkvbcqYYOm3kgmN3qXNTK2+F4t52uHa15FiEjQmvx2NBu3BuiRzpswU8U+Zc0O0pE3vyAYhA/4mU1OojlSNwLiOpdT2al21/YeM=</SignatureValue>
+  </Signature>
+</License>
