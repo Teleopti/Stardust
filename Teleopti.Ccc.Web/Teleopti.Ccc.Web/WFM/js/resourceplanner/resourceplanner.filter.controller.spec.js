@@ -66,7 +66,7 @@ describe('ResourcePlannerCtrl', function () {
 			.respond(200, [singleResult]);
 		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
-		scope.searchString = searchString;
+		scope.query(searchString);
 		$httpBackend.flush();
 
 		var result = scope.results[0];
@@ -87,7 +87,7 @@ describe('ResourcePlannerCtrl', function () {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams  });
 
-		scope.searchString = searchString;
+		scope.query(searchString);
 		$httpBackend.flush();
 
 		expect(scope.selectedResults.length).toEqual(0);
@@ -114,8 +114,7 @@ describe('ResourcePlannerCtrl', function () {
 			if (value)
 				expectedToHaveBeenTrue = true;
 		});
-
-		scope.searchString = searchString;
+		scope.query(searchString);
 
 
 		$httpBackend.flush();
@@ -134,7 +133,7 @@ describe('ResourcePlannerCtrl', function () {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams  });
 
-		scope.searchString = searchString;
+		scope.query(searchString);
 
 		$httpBackend.flush();
 
@@ -199,17 +198,7 @@ describe('ResourcePlannerCtrl', function () {
 
 		expect(scope.moreResultsExists()).toEqual(false);
 	}));
-	it('should clear result when no input', inject(function ($controller,$stateParams) {
-		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
-		var loadedResult = {};
-		scope.results = [loadedResult];
-		scope.searchString = "";
-		scope.$digest();
-
-		expect(scope.results.length).toEqual(0);
-	}));
 	it('should not clear selected when no input', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
@@ -543,65 +532,7 @@ describe('ResourcePlannerCtrl', function () {
 		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 		expect(scope.name).toBe('Default')
 	}));
-	it('should be on first element in results when pressing down key', inject(function ($controller, $stateParams){
-		var scope = $rootScope.$new();
-		var event = {
-			keyCode: 40
-		};
-		$controller('ResourceplannerFilterCtrl', { $scope: scope, $stateParams:mockStateParams });
-		scope.results = [{Id: '1'},{Id: '2'}];
 
-		scope.onKeydown(event);
 
-		expect(scope.results[0].selected).toBe(true);
-	}));
-	it('should be on second element in results when pressing down key two times', inject(function ($controller, $stateParams){
-		var scope = $rootScope.$new();
-		var event = {
-			keyCode: 40
-		};
-		$controller('ResourceplannerFilterCtrl', { $scope: scope, $stateParams:mockStateParams });
-		scope.results = [{Id: '1'},{Id: '2'}];
-
-		scope.onKeydown(event);
-		scope.onKeydown(event);
-
-		expect(scope.results[0].selected).toBe(false);
-		expect(scope.results[1].selected).toBe(true);
-	}));
-	it('should be on first element when pressing down key two times and up key ones', inject(function ($controller, $stateParams){
-		var scope = $rootScope.$new();
-		var eventUp = {
-			keyCode: 38
-		};
-		var eventDown = {
-			keyCode: 40
-		};
-		$controller('ResourceplannerFilterCtrl', { $scope: scope, $stateParams:mockStateParams });
-		scope.results = [{Id: '1'},{Id: '2'}];
-
-		scope.onKeydown(eventDown);
-		scope.onKeydown(eventDown);
-		scope.onKeydown(eventUp);
-
-		expect(scope.results[0].selected).toBe(true);
-		expect(scope.results[1].selected).toBe(false);
-	}));
-	it('should select current element in results when pressing enter key', inject(function ($controller, $stateParams){
-		var scope = $rootScope.$new();
-		var eventEnter = {
-			keyCode: 13
-		};
-		var eventDown = {
-			down: 40
-		};
-		$controller('ResourceplannerFilterCtrl', { $scope: scope, $stateParams:mockStateParams });
-		scope.selectedResults = [];
-
-		scope.onKeydown(eventDown);
-		scope.onKeydown(eventEnter);
-
-		expect(scope.selectedResults.length).toEqual(1);
-}));
 
 });

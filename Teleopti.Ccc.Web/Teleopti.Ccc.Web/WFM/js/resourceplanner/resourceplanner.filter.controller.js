@@ -4,53 +4,10 @@
 		.controller('ResourceplannerFilterCtrl', [
 			'$scope', 'ResourcePlannerFilterSrvc', 'ResourcePlannerSvrc', '$state', '$stateParams', 'growl',
 			function($scope, ResourcePlannerFilterSrvc, ResourcePlannerSvrc, $state, $stateParams, growl) {
-
-				var keys = {
-					up: 38,
-					down: 40,
-					enter: 13
-				};
-				var position = -1;
-
-				var upArrow = function () {
-					if (position > 0) {
-						position--;
-						$scope.results[position].selected = true;
-						$scope.results[position + 1].selected = false;
-					}
-				};
-
-				var downArrow = function () {
-					if (position === $scope.results.length - 1) {
-						return;
-					}
-					position++;
-					$scope.results[position].selected = true;
-					if (position > 0){
-						$scope.results[position - 1].selected = false;
-					}
-				};
-
-				var enterKey = function () {
-					$scope.selectResultItem($scope.results[position]);
-				};
-
-				$scope.onKeydown = function($event) {
-					if ($event.keyCode === keys.up) {
-						upArrow();
-					}
-					if ($event.keyCode === keys.down) {
-						downArrow();
-					}
-					if ($event.keyCode === keys.enter) {
-						enterKey();
-					}
-				};
-
 				var maxHits = 5;
 				$scope.name = "";
-				$scope.searchString = '';
 				$scope.isEnabled = true;
+				$scope.selectedItem;
 				$scope.results = [];
 				$scope.default = false;
 				$scope.selectedResults = [];
@@ -115,28 +72,21 @@
 						});
 					}
 				};
-
-				$scope.$watch(function() {
-						return $scope.searchString;
-					},
-					function(input) {
-						if (input === '' || input === undefined) {
-							$scope.results = [];
-							return;
-						}
-
-						$scope.isSearching = true;
-						ResourcePlannerFilterSrvc.getData({
-							searchString: input,
-							maxHits: maxHits
-						}).then(function(results) {
-							$scope.results = results.data;
-							$scope.isSearching = false;
-						}, function() {
-							$scope.isSearching = false;
-						});
-					}
-				);
+				$scope.query = function(input) {
+					if (input === "") {
+						return
+					};
+					$scope.isSearching = true;
+					ResourcePlannerFilterSrvc.getData({
+						searchString: input,
+						maxHits: maxHits
+					}).then(function(results) {
+						$scope.results = results.data;
+						$scope.isSearching = false;
+					}, function() {
+						$scope.isSearching = false;
+					});
+				}
 				$scope.isValid = function() {
 					return $scope.isValidDayOffsPerWeek() &&
 						$scope.isValidConsecDaysOff() &&
@@ -145,7 +95,6 @@
 						$scope.isValidName();
 
 				};
-
 				$scope.isValidDayOffsPerWeek = function() {
 					return $scope.dayOffsPerWeek.MinDayOffsPerWeek <= $scope.dayOffsPerWeek.MaxDayOffsPerWeek;
 				};
@@ -179,6 +128,9 @@
 					return check;
 				};
 				$scope.selectResultItem = function(item) {
+					if (item===null) {
+						return
+					}
 					if (isVaildUnit(item)) {
 						$scope.selectedResults.push(item);
 						$scope.clearInput();
