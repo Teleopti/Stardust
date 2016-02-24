@@ -8,6 +8,7 @@ thead {
 }
 
 th {
+	padding: 10px;
 	border-bottom: 2px;
 	border-bottom-color: darkblue;
 	border-bottom-style: solid
