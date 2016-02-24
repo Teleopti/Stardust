@@ -3,11 +3,11 @@
 (function () {
 	angular.module('wfm.teamSchedule')
 		.controller('TeamScheduleCtrl', ['$scope', '$q', '$locale', '$translate', 'TeamSchedule', 'GroupScheduleFactory',
-			'teamScheduleNotificationService', 'PersonSelection', 'Toggle', 'SignalR', '$mdComponentRegistry',
+			'teamScheduleNotificationService', 'PersonSelection', 'ScheduleManagement', 'Toggle', 'SignalR', '$mdComponentRegistry',
 			'$mdSidenav', '$mdUtil', 'guidgenerator', 'ShortCuts', 'keyCodes', TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $locale, $translate, teamScheduleSvc, groupScheduleFactory,
-		notificationService, personSelectionSvc, toggleSvc, signalRSvc, $mdComponentRegistry, $mdSidenav, $mdUtil,
+		notificationService, personSelectionSvc, scheduleMgmtSvc, toggleSvc, signalRSvc, $mdComponentRegistry, $mdSidenav, $mdUtil,
 		guidgenerator, shortCuts, keyCodes) {
 		var vm = this;
 
@@ -16,8 +16,6 @@
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 		vm.toggleForSelectAgentsPerPageEnabled = false;
 		vm.onlyLoadScheduleWithAbsence = false;
-		// The original schedule got from server side
-		vm.rawSchedules = [];
 		vm.lastCommandTrackId = "";
 		vm.selectedPersonAbsences = [];
 
@@ -26,6 +24,10 @@
 			isAdvancedSearchEnabled: false,
 			searchKeywordChanged: false
 		};
+
+		vm.groupScheduleVm = function() {
+			return scheduleMgmtSvc.groupScheduleVm;
+		}
 
 		vm.agentsPerPageSelection = [20, 50, 100, 500];
 
@@ -70,8 +72,8 @@
 			};
 
 			teamScheduleSvc.getSchedules.query(params).$promise.then(function (result) {
-				vm.groupScheduleVm = groupScheduleFactory.Create(result.Schedules, vm.scheduleDateMoment());
-				personSelectionSvc.updatePersonInfo(vm.groupScheduleVm.Schedules);
+				scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment());
+				personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 			});
 		}
 
@@ -106,19 +108,18 @@
 
 		function afterSchedulesLoadedForSearchCondition(result) {
 			vm.paginationOptions.totalPages = result.Schedules.length > 0 ? Math.ceil(result.Total / vm.paginationOptions.pageSize) : 0;
-			vm.groupScheduleVm = groupScheduleFactory.Create(result.Schedules, vm.scheduleDateMoment());
-			vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
+			vm.scheduleCount = scheduleMgmtSvc.groupScheduleVm.Schedules.length;
 			vm.total = result.Total;
 			vm.searchOptions.searchKeywordChanged = false;
 			vm.searchOptions.keyword = result.Keyword;
-			personSelectionSvc.updatePersonInfo(vm.groupScheduleVm.Schedules);
+			personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 		};
 
 		vm.loadSchedules = function() {
 			vm.isLoading = true;
 			var params = getParamsForLoadingSchedules();
-			teamScheduleSvc.searchSchedules.query(params).$promise.then(function(result) {
-				vm.rawSchedules = result.Schedules;
+			teamScheduleSvc.searchSchedules.query(params).$promise.then(function (result) {
+				scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment());
 				afterSchedulesLoadedForSearchCondition(result);
 				vm.isLoading = false;
 			});
@@ -126,21 +127,7 @@
 
 		vm.updateSchedules = function (personIdList) {
 			vm.isLoading = true;
-
-			var peopleInCurrentPage = [];
-			angular.forEach(vm.rawSchedules, function (schedule) {
-				if (personIdList.indexOf(schedule.PersonId) > -1) {
-					peopleInCurrentPage.push(schedule.PersonId);
-					schedule.ContractTimeMinutes = 0;
-					schedule.Projection = null;
-					schedule.WorkTimeMinutes = 0;
-				}
-			});
-
-			var params = { personIds: peopleInCurrentPage, date: vm.scheduleDateMoment().format('YYYY-MM-DD') };
-			teamScheduleSvc.getSchedules.query(params).$promise.then(function (result) {
-				vm.rawSchedules = vm.rawSchedules.concat(result.Schedules);
-				vm.groupScheduleVm = groupScheduleFactory.Create(vm.rawSchedules, vm.scheduleDateMoment());
+			scheduleMgmtSvc.updateScheduleForPeoples(personIdList, vm.scheduleDateMoment(), function () {
 				vm.isLoading = false;
 			});
 		};
@@ -155,25 +142,6 @@
 			var params = getParamsForLoadingSchedules({ pageSize: vm.total });
 			teamScheduleSvc.searchSchedules.query(params).$promise.then(callback);
 		};
-
-		vm.commands = [
-			{
-				label: "AddAbsence",
-				shortcut: "Alt+A",
-				panelName: 'report-absence',
-				action: toggleAddAbsencePanel,
-				enabled: function() { return personSelectionSvc.isAnyAgentSelected(); },
-				active: function() { return vm.canActiveAddAbsence(); }
-			},
-			{
-				label: "SwapShifts",
-				shortcut: "Alt+S",
-				panelName: "", // No panel needed,
-				action: swapShifts,
-				enabled: function() { return personSelectionSvc.canSwapShifts() },
-				active: function() { return vm.canActiveSwapShifts(); }
-			}
-		];
 
 		function toggleAddAbsencePanel() {
 			if (personSelectionSvc.isAnyAgentSelected() && vm.canActiveAddAbsence()) {
@@ -203,37 +171,28 @@
 			});
 		}
 
+		vm.commands = [
+			{
+				label: "AddAbsence",
+				shortcut: "Alt+A",
+				panelName: 'report-absence',
+				action: toggleAddAbsencePanel,
+				enabled: function () { return personSelectionSvc.isAnyAgentSelected(); },
+				active: function () { return vm.canActiveAddAbsence(); }
+			},
+			{
+				label: "SwapShifts",
+				shortcut: "Alt+S",
+				panelName: "", // No panel needed,
+				action: swapShifts,
+				enabled: function () { return personSelectionSvc.canSwapShifts() },
+				active: function () { return vm.canActiveSwapShifts(); }
+			}
+		];
+
 		vm.setEarliestStartOfSelectedSchedule = function () {
-			var startUpdated = false;
-			var earlistStart = new Date("2099-12-31");
-			for (var i = 0; i < vm.groupScheduleVm.Schedules.length; i++) {
-				var schedule = vm.groupScheduleVm.Schedules[i];
-				var scheduleStart = getScheduleStartTime(schedule);
-				if (personSelectionSvc.personInfo[schedule.PersonId].isSelected && scheduleStart < earlistStart) {
-					startUpdated = true;
-					earlistStart = scheduleStart;
-				}
-			}
-
-			if (!startUpdated) {
-				// Set to 08:00 for empty schedule or day off
-				earlistStart = moment(vm.scheduleDate).startOf('day').add(8, 'hour').toDate();
-			}
-
-			vm.earliestStartTime =  earlistStart;
-		}
-
-		function getScheduleStartTime(schedule) {
-			var scheduleStart = new Date("2099-12-31");
-			angular.forEach(schedule.Shifts, function (shift) {
-				var firstProjection = shift.Projections[0];
-				var start = moment(firstProjection.Start).toDate();
-				if (!firstProjection.IsOverNight && start < scheduleStart) {
-					scheduleStart = start;
-				}
-			});
-
-			return scheduleStart;
+			var selectedPersonIds = personSelectionSvc.getSelectedPersonIdList();
+			vm.earliestStartTime = scheduleMgmtSvc.getEarliestStartOfSelectedSchedule(selectedPersonIds);
 		}
 
 		vm.menuState = 'open';
@@ -264,6 +223,13 @@
 				};
 			}
 			return undefined;
+		};
+
+		function buildToggler(navId) {
+			var debounceFn = $mdUtil.debounce(function () {
+				$mdSidenav(navId).toggle().then(function () { });
+			}, 200);
+			return debounceFn;
 		};
 
 		vm.setCurrentCommand = function (cmdName) {
@@ -334,17 +300,10 @@
 			handleActionResult(result.Errors, successMessageTemplate, failMessageTemplate);
 
 			vm.updateSchedules(personSelectionSvc.getSelectedPersonIdList());
-			personSelectionSvc.resetPersonInfo(vm.groupScheduleVm.Schedules);
+			personSelectionSvc.resetPersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 
 			vm.setCurrentCommand("");
 		}
-
-		function buildToggler(navId) {
-			var debounceFn = $mdUtil.debounce(function () {
-				$mdSidenav(navId).toggle().then(function () { });
-			}, 200);
-			return debounceFn;
-		};
 
 		function registerShortCuts() {
 			shortCuts.registerKeySequence(65, [keyCodes.ALT], function () {
@@ -355,47 +314,8 @@
 			});
 		}
 
-		vm.init = function () {
-			vm.toggleForSelectAgentsPerPageEnabled = toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230;
-			vm.toggleForAbsenceReportingEnabled = toggleSvc.WfmTeamSchedule_AbsenceReporting_35995;
-			vm.searchOptions.isAdvancedSearchEnabled = toggleSvc.WfmPeople_AdvancedSearch_32973;
-			vm.toggleForSwapShiftEnabled = toggleSvc.WfmTeamSchedule_SwapShifts_36231;
-			vm.toggleForRemoveAbsenceEnabled = toggleSvc.WfmTeamSchedule_RemoveAbsence_36705;
-			toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303 && monitorScheduleChanged();
-			vm.schedulePageReset();
-			registerShortCuts();
-		};
-
-		$q.all([
-			teamScheduleSvc.PromiseForloadedPermissions(function(result) {
-				vm.permissions = result;
-			}),
-			teamScheduleSvc.PromiseForGetAgentsPerPageSetting(function(result) {
-				result.Agents > 0 && (vm.paginationOptions.pageSize = result.Agents);
-			})
-		]).then(vm.init);
-
-		function monitorScheduleChanged() {
-			signalRSvc.subscribeBatchMessage(
-				{ DomainType: 'IScheduleChangedInDefaultScenario' }
-				, scheduleChangedEventHandler
-				, 300);
-		}
-
-		function scheduleChangedEventHandler(messages) {
-			var personIds = messages.filter(isMessageNeedToBeHandled()).map(function(message) {
-				 return message.DomainReferenceId;
-			});
-
-			var uniquePersonIds = [];
-			personIds.forEach(function (personId) {
-				if (uniquePersonIds.indexOf(personId) === -1) uniquePersonIds.push(personId);
-			});
-			uniquePersonIds.length !== 0 && vm.updateSchedules(uniquePersonIds);
-		}
-
 		function isMessageNeedToBeHandled() {
-			var personIds = vm.groupScheduleVm.Schedules.map(function(schedule) { return schedule.PersonId; });
+			var personIds = scheduleMgmtSvc.groupScheduleVm.Schedules.map(function (schedule) { return schedule.PersonId; });
 			var scheduleDate = vm.scheduleDateMoment();
 
 			return function (message) {
@@ -410,5 +330,44 @@
 				return isMessageInsidePeopleList && isScheduleDateInMessageRange;
 			}
 		}
+
+		function scheduleChangedEventHandler(messages) {
+			var personIds = messages.filter(isMessageNeedToBeHandled()).map(function (message) {
+				return message.DomainReferenceId;
+			});
+
+			var uniquePersonIds = [];
+			personIds.forEach(function (personId) {
+				if (uniquePersonIds.indexOf(personId) === -1) uniquePersonIds.push(personId);
+			});
+			uniquePersonIds.length !== 0 && vm.updateSchedules(uniquePersonIds);
+		}
+
+		function monitorScheduleChanged() {
+			signalRSvc.subscribeBatchMessage(
+				{ DomainType: 'IScheduleChangedInDefaultScenario' }
+				, scheduleChangedEventHandler
+				, 300);
+		}
+
+		vm.init = function () {
+			vm.toggleForSelectAgentsPerPageEnabled = toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230;
+			vm.toggleForAbsenceReportingEnabled = toggleSvc.WfmTeamSchedule_AbsenceReporting_35995;
+			vm.searchOptions.isAdvancedSearchEnabled = toggleSvc.WfmPeople_AdvancedSearch_32973;
+			vm.toggleForSwapShiftEnabled = toggleSvc.WfmTeamSchedule_SwapShifts_36231;
+			vm.toggleForRemoveAbsenceEnabled = toggleSvc.WfmTeamSchedule_RemoveAbsence_36705;
+			toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303 && monitorScheduleChanged();
+			vm.schedulePageReset();
+			registerShortCuts();
+		};
+
+		$q.all([
+			teamScheduleSvc.PromiseForloadedPermissions(function (result) {
+				vm.permissions = result;
+			}),
+			teamScheduleSvc.PromiseForGetAgentsPerPageSetting(function (result) {
+				result.Agents > 0 && (vm.paginationOptions.pageSize = result.Agents);
+			})
+		]).then(vm.init);
 	};
 }());

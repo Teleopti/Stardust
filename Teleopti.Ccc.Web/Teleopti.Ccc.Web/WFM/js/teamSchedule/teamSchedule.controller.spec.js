@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-describe("TeamScheduleControllerTest", function() {
+describe("[Test for TeamScheduleController]:", function() {
 	var $q,
 		rootScope,
 		controller,
@@ -32,7 +32,7 @@ describe("TeamScheduleControllerTest", function() {
 		rootScope.$digest();
 
 		var selectedPersons = controller.selectedPersonInfo();
-		var personSchedule1 = controller.groupScheduleVm.Schedules[0];
+		var personSchedule1 = controller.groupScheduleVm().Schedules[0];
 		selectedPersons[personSchedule1.PersonId].isSelected = true;
 		var selectedPersonList = controller.getSelectedPersonIdList();
 
@@ -44,7 +44,7 @@ describe("TeamScheduleControllerTest", function() {
 		rootScope.$digest();
 
 		var selectedPersons = controller.selectedPersonInfo();
-		var personSchedule1 = controller.groupScheduleVm.Schedules[0];
+		var personSchedule1 = controller.groupScheduleVm().Schedules[0];
 		selectedPersons[personSchedule1.PersonId].isSelected = false;
 		var selectedPersonList = controller.getSelectedPersonIdList();
 
