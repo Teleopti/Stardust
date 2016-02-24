@@ -6,16 +6,24 @@ namespace Teleopti.Interfaces.Domain
 	{
 		[ThreadStatic]
 		private static IResourceCalculationDataContainerWithSingleOperation _container;
-
+		
 		public ResourceCalculationContext(IResourceCalculationDataContainerWithSingleOperation resources)
 		{
 			_container = resources;
 		}
 
 		public static IResourceCalculationDataContainerWithSingleOperation Fetch()
-		{
-			return _container;
-		}
+
+		private static T _container;
+		
+        /// <summary>
+        /// Gets the container without creating a new if the instance doesn't exist
+        /// </summary>
+        /// <returns></returns>
+        public static T Container()
+        {
+            return _container;
+        }
 
 		public static bool InContext
 		{

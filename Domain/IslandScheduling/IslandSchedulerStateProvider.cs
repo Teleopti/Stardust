@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.IslandScheduling
 						rangeToLoadFrom.Period.ToDateOnlyPeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone));
 
 				stateholderToLoad.Schedules.Modify(ScheduleModifier.Scheduler, allSchedules, NewBusinessRuleCollection.Minimum(),
-					new DoNothingScheduleDayChangeCallBack(), new NoScheduleTagSetter());
+					new ResourceCalculationOnlyScheduleDayChangeCallback(), new NoScheduleTagSetter());
 			}
 		}
 

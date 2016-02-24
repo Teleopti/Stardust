@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			resourceCalculateDelayer.Pause();
 			var firstLeftNudge = true;
 			var firstRightNudge = true;
-			var rollbackServiceKeep = new SchedulePartModifyAndRollbackService(schedulingResultStateHolder, new DoNothingScheduleDayChangeCallBack(), new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+			var rollbackServiceKeep = new SchedulePartModifyAndRollbackService(schedulingResultStateHolder, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
 
 			while (!restTimeEnsured)
 			{

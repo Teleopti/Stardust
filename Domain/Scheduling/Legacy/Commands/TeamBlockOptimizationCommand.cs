@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			{
 				var rollbackServiceWithoutResourceCalculation =
 					new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState,
-						new DoNothingScheduleDayChangeCallBack(), tagSetter);
+						new ResourceCalculationOnlyScheduleDayChangeCallback(), tagSetter);
 				_optimizerHelper.LockDaysForDayOffOptimization(allMatrixes, optimizationPreferences, selectedPeriod);
 
 				_equalNumberOfCategoryFairness.ReportProgress += resourceOptimizerPersonOptimized;

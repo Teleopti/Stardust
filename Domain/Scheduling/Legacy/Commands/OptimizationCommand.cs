@@ -60,17 +60,31 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IDaysOffPreferences daysOffPreferences,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-			setThreadCulture();
-			bool lastCalculationState = schedulerStateHolder.SchedulingResultState.SkipResourceCalculation;
-			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = false;
-			if (lastCalculationState)
-			{
-				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, false);
-			}
 			var selectedSchedules = selectedScheduleDays;
 			var selectedPeriod = _periodExtractor.ExtractPeriod(selectedSchedules);
 			if (!selectedPeriod.HasValue) return;
 
+			setThreadCulture();
+			bool lastCalculationState = schedulerStateHolder.SchedulingResultState.SkipResourceCalculation;
+			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = false;
+			
+			var stateHolder = schedulerStateHolder.SchedulingResultState;
+			var minutesPerInterval = 15;
+
+			if (stateHolder.Skills.Any())
+			{
+				minutesPerInterval = stateHolder.Skills.Min(s => s.DefaultResolution);
+			}
+
+			var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
+			var resources = extractor.CreateRelevantProjectionList(stateHolder.Schedules);
+			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
+			{
+				if (lastCalculationState)
+			{
+				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, false);
+			}
+			
 			DateOnlyPeriod groupPagePeriod = schedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
 
 			GroupPageLight selectedGroupPage;
@@ -88,19 +102,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				_groupScheduleGroupPageDataProvider, selectedGroupPage);
 
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
-			var stateHolder = schedulerStateHolder.SchedulingResultState;
-
-			var minutesPerInterval = 15;
-
-			if (stateHolder.Skills.Any())
-			{
-				minutesPerInterval = stateHolder.Skills.Min(s => s.DefaultResolution);
-			}
-
-			var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
-			var resources = extractor.CreateRelevantProjectionList(stateHolder.Schedules);
-			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
-			{
+			
 				IList<IScheduleMatrixPro> allMatrixes = new List<IScheduleMatrixPro>();
 				switch (optimizationMethodBackToLegalState)
 				{

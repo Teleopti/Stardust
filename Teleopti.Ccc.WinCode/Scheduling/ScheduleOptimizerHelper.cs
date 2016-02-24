@@ -518,7 +518,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			var matrixListForFairness = _container.Resolve<IMatrixListFactory>().CreateMatrixListAllForLoadedPeriod(selectedPeriod);
 			_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixListForFairness, optimizationPreferences, selectedPeriod);
-			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(), new DoNothingScheduleDayChangeCallBack(), tagSetter);
+			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(), new ResourceCalculationOnlyScheduleDayChangeCallback(), tagSetter);
 
 			var equalNumberOfCategoryFairnessService = _container.Resolve<IEqualNumberOfCategoryFairnessService>();
 			equalNumberOfCategoryFairnessService.ReportProgress += resourceOptimizerPersonOptimized;

@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public void RemoveResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer)
 		{
+			System.Diagnostics.Trace.WriteLine(System.Environment.StackTrace);
 			PeriodResource resources;
 			if (!_dictionary.TryGetValue(resourceLayer.Period, out resources))
 			{

@@ -155,11 +155,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(part1, preferences.SchedulingOptions)).Return(
             		_effectiveRestriction).IgnoreArguments().Repeat.AtLeastOnce();
 				Expect.Call(_schedulingResultStateHolder.SkipResourceCalculation).Return(false).Repeat.Any();
-				Expect.Call(_schedulingResultStateHolder.Schedules).Return(schedules).Repeat.AtLeastOnce();
 				Expect.Call(_schedulingResultStateHolder.Skills).Return(new [] { _skill1 }).Repeat.AtLeastOnce();
-#pragma warning disable 612,618
-				Expect.Call(() => schedules.ExtractAllScheduleData(null)).IgnoreArguments().Repeat.AtLeastOnce();
-#pragma warning restore 612,618
            }
 
             _studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder,
@@ -315,10 +311,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 					_effectiveRestriction).IgnoreArguments().Repeat.AtLeastOnce();
                 Expect.Call(_schedulingResultStateHolder.SkipResourceCalculation).Return(false).Repeat.Any();
                 Expect.Call(_schedulingResultStateHolder.Skills).Return(new []{_skill1});
-	            Expect.Call(_schedulingResultStateHolder.Schedules).Return(schedules);
-#pragma warning disable 612,618
-	            Expect.Call(() => schedules.ExtractAllScheduleData(null)).IgnoreArguments();
-#pragma warning restore 612,618
             }
 
             _studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder,

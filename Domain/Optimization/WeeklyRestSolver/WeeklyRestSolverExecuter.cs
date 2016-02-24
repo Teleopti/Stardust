@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		{
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			var rollbackService = new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState,
-				new DoNothingScheduleDayChangeCallBack(), new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+				new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
 			var resourceCalcDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
 			var matrixes = _matrixListFactory.CreateMatrixListForSelection(scheduleDays);
 

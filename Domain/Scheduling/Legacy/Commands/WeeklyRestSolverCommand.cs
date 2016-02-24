@@ -54,15 +54,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				_teamBlockSchedulingOptions);
 
 			var schedulerStateHolder = _schedulerStateHolder();
-			var minutesPerInterval = 15;
-			if (schedulerStateHolder.SchedulingResultState.Skills.Any())
+
+			IDisposable contextDisposal = null;
+			if (!ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>.InContext)
 			{
-				minutesPerInterval = schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution);
+				var minutesPerInterval = 15;
+				if (schedulerStateHolder.SchedulingResultState.Skills.Any())
+				{
+					minutesPerInterval = schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution);
+				}
+				var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
+				var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
+				contextDisposal = new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources);
 			}
-			var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
-			var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
-			using (new ResourceCalculationContext(resources))
-			{
+			
 				EventHandler<ResourceOptimizerProgressEventArgs> onResolvingWeek = (sender, e) =>
 				{
 					e.Cancel = backgroundWorker.CancellationPending;
@@ -74,6 +79,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					rollbackService, resourceCalculateDelayer, schedulerStateHolder.SchedulingResultState, allVisibleMatrixes,
 					optimizationPreferences, schedulingOptions, dayOffOptimizationPreferenceProvider);
 				weeklyRestSolverService.ResolvingWeek -= onResolvingWeek;
+
+			if (contextDisposal != null)
+			{
+				contextDisposal.Dispose();
 			}
 		}
 	}

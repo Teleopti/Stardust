@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.InstancePerLifetimeScope();
 			builder.RegisterType<SchedulerStateScheduleDayChangedCallback>()
 				.As<IScheduleDayChangeCallback>()
-				.InstancePerLifetimeScope();
+				.InstancePerDependency();
 			builder.RegisterType<ResourceCalculateDaysDecider>().As<IResourceCalculateDaysDecider>().SingleInstance();
 			builder.RegisterType<PeopleAndSkillLoaderDecider>().As<IPeopleAndSkillLoaderDecider>().SingleInstance();
 			builder.RegisterGeneric(typeof(PairMatrixService<>)).As(typeof(IPairMatrixService<>)).SingleInstance();

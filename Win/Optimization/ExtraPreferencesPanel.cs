@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Win.Optimization
 		private void bindActivityList()
         {
             comboBoxTeamActivity.DataSource = _availableActivity ;
-			comboBoxTeamActivity.DisplayMember = "DisplayName";
+			comboBoxTeamActivity.DisplayMember = "Name";
             comboBoxTeamActivity.ValueMember = "Name";
         }
     

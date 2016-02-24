@@ -2162,15 +2162,24 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void _backgroundWorkerResourceCalculator_DoWork(object sender, DoWorkEventArgs e)
 		{
 			setThreadCulture();
-			if(!_schedulerState.SchedulingResultState.Skills.Any()) return;
+			if (!_schedulerState.SchedulingResultState.Skills.Any()) return;
 
-			var period = new DateOnlyPeriod(_schedulerState.DaysToRecalculate.Min().AddDays(-1), _schedulerState.DaysToRecalculate.Max());
-			var extractor = new ScheduleProjectionExtractor(new PersonSkillProvider(), _schedulerState.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
-			var resources = extractor.CreateRelevantProjectionList(_schedulerState.Schedules, period.ToDateTimePeriod(_schedulerState.TimeZoneInfo));
-			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
+			IDisposable disposableContext = null;
+			if (!ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>.InContext)
 			{
-				_optimizationHelperExtended.ResourceCalculateMarkedDays(
-					new BackgroundWorkerWrapper(_backgroundWorkerResourceCalculator), SchedulerState.ConsiderShortBreaks, true);
+				var period = new DateOnlyPeriod(_schedulerState.DaysToRecalculate.Min().AddDays(-1),
+					_schedulerState.DaysToRecalculate.Max());
+				var extractor = new ScheduleProjectionExtractor(new PersonSkillProvider(),
+					_schedulerState.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
+				var resources = extractor.CreateRelevantProjectionList(_schedulerState.Schedules,
+					period.ToDateTimePeriod(_schedulerState.TimeZoneInfo));
+				disposableContext = new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources);
+			}
+			_optimizationHelperExtended.ResourceCalculateMarkedDays(
+				new BackgroundWorkerWrapper(_backgroundWorkerResourceCalculator), SchedulerState.ConsiderShortBreaks, true);
+			if (disposableContext != null)
+			{
+				disposableContext.Dispose();
 			}
 		}
 
