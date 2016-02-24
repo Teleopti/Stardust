@@ -63,10 +63,11 @@ namespace Manager.Integration.Test
 
             AppDomainTask = new AppDomainTask(_buildMode);
 
-			Task = AppDomainTask.StartTask(CancellationTokenSource,
-			                               1);
+			Task = AppDomainTask.StartTask(numberOfManagers: 1,
+										   numberOfNodes: 1,
+										   cancellationTokenSource: CancellationTokenSource);
 
-            LogHelper.LogDebugWithLineNumber("Finished TestFixtureSetUp",
+			LogHelper.LogDebugWithLineNumber("Finished TestFixtureSetUp",
                                             Logger);
         }
 

@@ -60,8 +60,9 @@ namespace Manager.Integration.Test
 
 			AppDomainTask = new AppDomainTask(_buildMode);
 
-			Task = AppDomainTask.StartTask(CancellationTokenSource,
-			                               0);
+			Task = AppDomainTask.StartTask(numberOfManagers: 1,
+										   numberOfNodes: 0,
+										   cancellationTokenSource: CancellationTokenSource);
 
 			JobHelper.GiveNodesTimeToInitialize(60);
 

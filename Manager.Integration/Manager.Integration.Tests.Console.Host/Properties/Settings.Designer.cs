@@ -125,19 +125,9 @@ namespace Manager.IntegrationTest.Console.Host.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:9100/managerIntegrationTestController/")]
-        public string ManagerIntegrationTestControllerBaseAddress {
+        public string IntegrationControllerBaseAddress {
             get {
-                return ((string)(this["ManagerIntegrationTestControllerBaseAddress"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:9000/")]
-        public string ManagerLocationUri {
-            get {
-                return ((string)(this["ManagerLocationUri"]));
+                return ((string)(this["IntegrationControllerBaseAddress"]));
             }
         }
         
@@ -147,6 +137,25 @@ namespace Manager.IntegrationTest.Console.Host.Properties {
         public string NodeEndpointUriTemplate {
             get {
                 return ((string)(this["NodeEndpointUriTemplate"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:9000/StardustDashboard/")]
+        public string ManagerLocationUri {
+            get {
+                return ((string)(this["ManagerLocationUri"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int NumberOfManagersToStart {
+            get {
+                return ((int)(this["NumberOfManagersToStart"]));
             }
         }
     }

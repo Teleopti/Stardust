@@ -21,6 +21,10 @@ namespace Manager.IntegrationTest.Console.Host
 {
 	public static class Program
 	{
+		private const string ManagersCommandArgument = "Managers";
+
+		private const string NodesCommandArgument = "Nodes";
+
 		private const string CopiedManagerConfigName = "Manager.config";
 
 #if (DEBUG)
@@ -70,7 +74,7 @@ namespace Manager.IntegrationTest.Console.Host
 		private static void StartSelfHosting()
 		{
 			var configuration =
-				new Configuration(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
+				new Configuration(Settings.Default.IntegrationControllerBaseAddress);
 
 			var address =
 				configuration.BaseAddress.Scheme + "://+:" + configuration.BaseAddress.Port + "/";
@@ -100,6 +104,8 @@ namespace Manager.IntegrationTest.Console.Host
 				QuitEvent.WaitOne();
 			}
 		}
+
+		private static int NumberOfManagersToStart { get; set; }
 
 		private static int NumberOfNodesToStart { get; set; }
 
@@ -168,6 +174,10 @@ namespace Manager.IntegrationTest.Console.Host
 			PortStartNumber =
 				Settings.Default.NodeEndpointPortNumberStart;
 
+			//---------------------------------------------------------
+			// Number of managers and number of nodes to start up.
+			//---------------------------------------------------------
+			NumberOfManagersToStart = Settings.Default.NumberOfManagersToStart;
 			NumberOfNodesToStart = Settings.Default.NumberOfNodesToStart;
 
 			if (args.Any())
@@ -175,8 +185,26 @@ namespace Manager.IntegrationTest.Console.Host
 				LogHelper.LogDebugWithLineNumber(Logger,
 				                                 "Has command arguments.");
 
-				NumberOfNodesToStart = Convert.ToInt32(args[0]);
+				foreach (var s in args)
+				{
+					var values = s.Split('=');
+
+					// Managers.
+					if (values[0].Equals(ManagersCommandArgument, StringComparison.InvariantCultureIgnoreCase))
+					{
+						NumberOfManagersToStart = Convert.ToInt32(values[1]);
+					}
+
+					// Nodes.
+					if (values[0].Equals(NodesCommandArgument, StringComparison.InvariantCultureIgnoreCase))
+					{
+						NumberOfNodesToStart = Convert.ToInt32(values[1]);
+					}
+				}
 			}
+
+			LogHelper.LogInfoWithLineNumber(Logger,
+											NumberOfManagersToStart + " number of managers will be started.");
 
 			LogHelper.LogInfoWithLineNumber(Logger,
 			                                NumberOfNodesToStart + " number of nodes will be started.");
@@ -196,23 +224,34 @@ namespace Manager.IntegrationTest.Console.Host
 				}
 			}
 
+			//-------------------------------------------------------
+			// App domain manager tasks.
+			//-------------------------------------------------------
 			LogHelper.LogDebugWithLineNumber(Logger,
 			                                 "AppDomainManagerTask");
 
-			AppDomainManagerTask =
+			AppDomainManagerTasks = new List<AppDomainManagerTask>();
+
+			var appDomainManagerTask =
 				new AppDomainManagerTask(_buildMode,
 				                         DirectoryManagerAssemblyLocationFullPath,
 				                         CopiedManagerConfigurationFile,
 				                         Settings.Default.ManagerAssemblyName);
 
+			AppDomainManagerTasks.Add(appDomainManagerTask);
+
 			LogHelper.LogDebugWithLineNumber(Logger,
 			                                 "Start: AppDomainManagerTask.StartTask");
 
-			AppDomainManagerTask.StartTask(new CancellationTokenSource());
+			appDomainManagerTask.StartTask(new CancellationTokenSource());
+			
 
 			LogHelper.LogDebugWithLineNumber(Logger,
 			                                 "Finished: AppDomainManagerTask.StartTask");
 
+
+			//-------------------------------------------------------
+			//-------------------------------------------------------
 			DirectoryNodeAssemblyLocationFullPath =
 				new DirectoryInfo(Path.Combine(Settings.Default.NodeAssemblyLocationFullPath,
 				                               _buildMode));
@@ -253,7 +292,7 @@ namespace Manager.IntegrationTest.Console.Host
 
 		private static List<AppDomainNodeTask> AppDomainNodeTasks { get; set; }
 
-		public static AppDomainManagerTask AppDomainManagerTask { get; set; }
+		public static List<AppDomainManagerTask> AppDomainManagerTasks { get; set; }
 
 		public static DirectoryInfo DirectoryManagerAssemblyLocationFullPath { get; set; }
 
@@ -315,13 +354,22 @@ namespace Manager.IntegrationTest.Console.Host
 			LogHelper.LogDebugWithLineNumber(Logger,
 			                                 "Start CurrentDomainOnDomainUnload.");
 
+			//-------------------------------------------
+			// Shut down nodes.
+			//-------------------------------------------
 			foreach (var appDomainNodeTask in AppDomainNodeTasks)
 			{
 				appDomainNodeTask.Dispose();
 			}
 
-			AppDomainManagerTask.Dispose();
-
+			//-------------------------------------------
+			// Shut down managers.
+			//-------------------------------------------
+			foreach (var appDomainManagerTask in AppDomainManagerTasks)
+			{
+				appDomainManagerTask.Dispose();
+			}
+			
 			QuitEvent.Set();
 
 			LogHelper.LogDebugWithLineNumber(Logger,
@@ -369,24 +417,12 @@ namespace Manager.IntegrationTest.Console.Host
 		}
 
 
-		public static bool ShutDownAppDomainWithFriendlyName(string friendlyName)
+		public static bool ShutDownNodeAppDomain(string friendlyName)
 		{
 			var ret = false;
 
 			LogHelper.LogDebugWithLineNumber(Logger,
 			                                 "Started.");
-
-			if (AppDomainManagerTask != null &&
-			    AppDomainManagerTask.GetAppDomainFriendlyName()
-				    .Equals(friendlyName,
-				            StringComparison.InvariantCultureIgnoreCase))
-			{
-				AppDomainManagerTask.Dispose();
-
-				AppDomainManagerTask = null;
-
-				ret = true;
-			}
 
 			if (AppDomainNodeTasks != null && AppDomainNodeTasks.Any())
 			{
@@ -466,22 +502,11 @@ namespace Manager.IntegrationTest.Console.Host
 			}
 		}
 
-		public static List<string> GetInstantiatedAppDomains()
+		public static List<string> GetAllNodes()
 		{
 			List<string> listToReturn = null;
 
-			if (AppDomainManagerTask == null &&
-			    (AppDomainNodeTasks == null || !AppDomainNodeTasks.Any()))
-			{
-				return listToReturn;
-			}
-
 			listToReturn = new List<string>();
-
-			if (AppDomainManagerTask != null)
-			{
-				listToReturn.Add(AppDomainManagerTask.GetAppDomainFriendlyName());
-			}
 
 			if (AppDomainNodeTasks != null)
 			{

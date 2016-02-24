@@ -20,7 +20,7 @@ namespace Manager.IntegrationTest.Console.Host
 
 		public string WhoAmI { get; set; }
 
-		[HttpPost, Route("appdomain")]
+		[HttpPost, Route("appdomain/nodes")]
 		public IHttpActionResult StartNewNode()
 		{
 			LogHelper.LogDebugWithLineNumber(Logger,
@@ -33,8 +33,8 @@ namespace Manager.IntegrationTest.Console.Host
 			return Ok(friendlyname);
 		}
 
-		[HttpDelete, Route("appdomain/{id}")]
-		public IHttpActionResult DeleteAppDomain(string id)
+		[HttpDelete, Route("appdomain/nodes/{id}")]
+		public IHttpActionResult DeleteNode(string id)
 		{
 			LogHelper.LogDebugWithLineNumber(Logger,
 			                                 "Called API controller.");
@@ -50,7 +50,7 @@ namespace Manager.IntegrationTest.Console.Host
 			LogHelper.LogInfoWithLineNumber(Logger,
 			                                "Try shut down Node with id : " + id);
 
-			var success = Program.ShutDownAppDomainWithFriendlyName(id);
+			var success = Program.ShutDownNodeAppDomain(id);
 
 			if (success)
 			{
@@ -66,13 +66,13 @@ namespace Manager.IntegrationTest.Console.Host
 			return NotFound();
 		}
 
-		[HttpGet, Route("appdomain")]
-		public IHttpActionResult GetAllAppDomains()
+		[HttpGet, Route("appdomain/nodes")]
+		public IHttpActionResult GetAllNodes()
 		{
 			LogHelper.LogDebugWithLineNumber(Logger,
 			                                 "Called API controller.");
 
-			var appDomainsList = Program.GetInstantiatedAppDomains();
+			var appDomainsList = Program.GetAllNodes();
 
 			return Ok(appDomainsList);
 		}

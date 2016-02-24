@@ -91,8 +91,9 @@ namespace Manager.Integration.Test
 
             AppDomainTask = new AppDomainTask(_buildMode);
 
-            Task = AppDomainTask.StartTask(CancellationTokenSource,
-                                           2);
+            Task = AppDomainTask.StartTask(numberOfManagers:1,
+                                           numberOfNodes:2,
+										   cancellationTokenSource: CancellationTokenSource);
 
             LogHelper.LogDebugWithLineNumber("Finshed TestFixtureSetUp",
                                              Logger);
@@ -212,7 +213,7 @@ namespace Manager.Integration.Test
         ///     netsh http add urlacl url=http://+:9100/ user=everyone listen=yes
         /// </summary>
         [Test]
-		public async void ShouldReturnAllAppDomainKeys()
+		public async void ShouldReturnAllNodes()
         {
             LogHelper.LogDebugWithLineNumber("Start test.",
                                              Logger);
@@ -254,7 +255,7 @@ namespace Manager.Integration.Test
 				var uriBuilder =
                     new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
 
-				uriBuilder.Path += "appdomain";
+				uriBuilder.Path += "appdomain/nodes";
 
 				var uri = uriBuilder.Uri;
 
@@ -353,7 +354,7 @@ namespace Manager.Integration.Test
 				var uriBuilder =
                     new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
 
-				uriBuilder.Path += "appdomain/" + "Node1.config";
+				uriBuilder.Path += "appdomain/nodes/" + "Node1.config";
 
 				var uri = uriBuilder.Uri;
 

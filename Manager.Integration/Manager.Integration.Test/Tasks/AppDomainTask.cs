@@ -50,8 +50,9 @@ namespace Manager.Integration.Test.Tasks
 			}
 		}
 
-		public Task StartTask(CancellationTokenSource cancellationTokenSource,
-		                      int numberOfNodes)
+		public Task StartTask(int numberOfManagers,
+		                      int numberOfNodes,
+							  CancellationTokenSource cancellationTokenSource)
 		{
 			Task = Task.Factory.StartNew(() =>
 			{
@@ -71,6 +72,11 @@ namespace Manager.Integration.Test.Tasks
 
 				Task.Factory.StartNew(() =>
 				{
+					string[] commandArguments = new string[2];
+
+					commandArguments[0] = "Managers=" + numberOfManagers;
+					commandArguments[1] = "Nodes=" + numberOfNodes;
+
 					var assemblyLocationFullPath =
 						Path.Combine(Settings.Default.ManagerIntegrationConsoleHostLocation,
 						             Buildmode);
@@ -87,10 +93,7 @@ namespace Manager.Integration.Test.Tasks
 						ApplicationBase = directoryManagerAssemblyLocationFullPath.FullName,
 						ApplicationName = Settings.Default.ManagerIntegrationConsoleHostAssemblyName,
 						ShadowCopyFiles = "true",
-						AppDomainInitializerArguments = new[]
-						{
-							numberOfNodes.ToString()
-						},
+						AppDomainInitializerArguments = commandArguments,
 						ConfigurationFile = configFileName.FullName
 					};
 
