@@ -14,7 +14,7 @@ namespace Manager.Integration.Test.Helpers
 
 			if (string.IsNullOrEmpty(connectionString))
 			{
-				LogHelper.LogErrorWithLineNumber("Invalid connection string value.",Logger);
+				LogHelper.LogErrorWithLineNumber("Invalid connection string value.", Logger);
 
 				throw new ArgumentNullException("connectionString");
 			}

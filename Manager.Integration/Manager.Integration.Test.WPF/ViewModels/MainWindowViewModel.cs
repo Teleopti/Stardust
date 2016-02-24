@@ -48,7 +48,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
             ClearDatabaseCommand = new ClearDatabaseCommand(this);
             ToggleRefreshCommand = new ToggleRefreshCommand(this);
 
-            RefreshTimer = new Timer(5000);
+            RefreshTimer = new Timer(1000);
 
             RefreshTimer.Elapsed += RefreshTimerOnElapsed;
 

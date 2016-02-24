@@ -284,9 +284,21 @@
                                 </DataGridTextColumn.Binding>
                             </DataGridTextColumn>
 
+                            <DataGridTextColumn Binding="{Binding SentTo}"
+                                                ClipboardContentBinding="{Binding SentTo}"
+                                                Header="Sent to" />
+
+                            <DataGridTextColumn Binding="{Binding Name}"
+                                                ClipboardContentBinding="{Binding Name}"
+                                                Header="Job name" />
+
                             <DataGridTextColumn Binding="{Binding Created, StringFormat=yyyy-mm-dd hh:mm:ss}"
                                                 ClipboardContentBinding="{Binding Created, StringFormat=yyyy-mm-dd hh:mm:ss}"
                                                 Header="Created" />
+
+                            <DataGridTextColumn Binding="{Binding Result}"
+                                                ClipboardContentBinding="{Binding Result}"
+                                                Header="Result" />
 
                             <DataGridTextColumn Binding="{Binding Started, StringFormat=yyyy-mm-dd hh:mm:ss}"
                                                 ClipboardContentBinding="{Binding Started, StringFormat=yyyy-mm-dd hh:mm:ss}"
@@ -296,13 +308,14 @@
                                                 ClipboardContentBinding="{Binding Ended, StringFormat=yyyy-mm-dd hh:mm:ss}"
                                                 Header="Ended" />
 
+                            <DataGridTextColumn Binding="{Binding Type}"
+                                                ClipboardContentBinding="{Binding Type}"
+                                                Header="Type" />
+
                             <DataGridTextColumn Binding="{Binding CreatedBy}"
                                                 ClipboardContentBinding="{Binding CreatedBy}"
-                                                Header="Created By" />
+                                                Header="Created by" />
 
-                            <DataGridTextColumn Binding="{Binding Result}"
-                                                ClipboardContentBinding="{Binding Result}"
-                                                Header="Result" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
