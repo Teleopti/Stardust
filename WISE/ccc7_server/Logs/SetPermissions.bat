@@ -85,6 +85,8 @@ date /t >> "%BatchLogFile%"
 time /t >> "%BatchLogFile%"
 ECHO "%BatchPath%\SetPermissionsSubForIISRoot.bat" "%WindowsNT%" "%SPLevel%" "%BatchPath%\..\TeleoptiCCC" >> "%BatchLogFile%"
 CALL "%BatchPath%\SetPermissionsSubForIISRoot.bat" "%WindowsNT%" "%SPLevel%" "%BatchPath%\..\TeleoptiCCC" >> "%BatchLogFile%"
+ECHO "%BatchPath%\SetPermissionsSubForIISRoot.bat" "%WindowsNT%" "%SPLevel%" "%BatchPath%\..\DatabaseInstaller" >> "%BatchLogFile%"
+CALL "%BatchPath%\SetPermissionsSubForIISRoot.bat" "%WindowsNT%" "%SPLevel%" "%BatchPath%\..\DatabaseInstaller" >> "%BatchLogFile%"
 ECHO The errorcode from SetPermissionsSubForIISRoot is: %localError% >> "%BatchLogFile%"
 ECHO ============== >> "%BatchLogFile%"
 
