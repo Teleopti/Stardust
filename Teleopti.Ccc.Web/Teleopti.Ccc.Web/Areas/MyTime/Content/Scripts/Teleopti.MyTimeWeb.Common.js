@@ -56,7 +56,8 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 			referenceId: _userData.AgentId,
 			callback: options.successCallback,
 			errCallback: options.errorCallback,
-			domainType: options.domainType
+			domainType: options.domainType,
+            page: options.page
 		});
 	};
 
@@ -224,7 +225,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 
 	return {
 		Init: function (settings) {
-			_settings = settings;
+		    _settings = settings;
 		},
 		PartialInit: function () {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();

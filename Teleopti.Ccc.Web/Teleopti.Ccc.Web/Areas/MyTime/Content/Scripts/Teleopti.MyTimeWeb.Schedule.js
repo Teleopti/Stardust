@@ -28,6 +28,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	var completelyLoaded;
 	var daylightSavingAdjustment;
 	var baseUtcOffsetInMinutes;
+    var currentPage = 'Teleopti.MyTimeWeb.Schedule';
 	
 	function _bindData(data) {
 		vm.Initialize(data);
@@ -260,7 +261,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		};
 
 		function displayOvertimeAvailability() {
-			self.CancelAddingNewRequest();
+		    self.CancelAddingNewRequest();
 			_fetchData();
 		}
 
@@ -324,7 +325,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}
 
 		function reloadSchedule() {
-			self.CancelAddingNewRequest();
+		    self.CancelAddingNewRequest();
 			_fetchData();
 		}
 	};
@@ -724,7 +725,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		
 		Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker({
 			successCallback: Teleopti.MyTimeWeb.Schedule.ReloadScheduleListener,
-			domainType: 'IScheduleChangedInDefaultScenario'
+			domainType: 'IScheduleChangedInDefaultScenario',
+			page: currentPage
 		});
 
 	}
@@ -801,7 +803,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			};
 		},
 		PartialDispose: function () {
-			_cleanBindings();
+		    _cleanBindings();
+		    Teleopti.MyTimeWeb.MessageBroker.RemoveListeners(currentPage);
 		},
 		SetTimeIndicator: function (date) {
 			_setTimeIndicator(date);

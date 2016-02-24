@@ -13,14 +13,18 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 		}
 
 		hub.client.onEventMessage = function (notification, route) {
-			//cant use "dictionary" array. may be multiple subscription with same route
+		    //cant use "dictionary" array. may be multiple subscription with same route
 			$.each(listeners, function(key, value) {
-				if (value.Route == route) {
-					value.Callback(notification);
+			    if (value.Route == route) {
+			        try {
+			            value.Callback(notification);
+			        } catch (e) {
+			            console.log('Failed to run callback for notification', e);
+			        } 
+					
 				}
 			});
 		};
-
 		conn = $.connection.hub.start();
 	}
 	
@@ -38,11 +42,17 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 					'DomainReferenceId': options.referenceId
 				})
 				.done(function (route) {
-					listeners.push({ Route: route, Callback: options.callback });
+					listeners.push({ Route: route, Callback: options.callback, Page: options.page });
 				});
 			});
 	}
-
+	function _remove(arr, lambda) {
+	    for(var i = arr.length; i--;) {
+	        if(lambda(arr[i])) {
+	            arr.splice(i, 1);
+	        }
+	    }
+	}
 	return {
 		AddSubscription: function (options) {
 			/// <summary>Adds an event subscription.</summary>
@@ -64,6 +74,16 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 		},
 		Stop: function() {
 			$.connection.hub.stop(false, true);
+		},
+	    
+		RemoveListeners: function(page) {
+		    /// <summary>Removes all message callbacks that are used on the current page.</summary>
+		    /// <param name="page">
+            // The name of the current page
+		    /// </param>
+		    _remove(listeners, function(item) {
+		        return item.Page != undefined && item.Page === page;
+		    });
 		}
 	};
 })(jQuery)
