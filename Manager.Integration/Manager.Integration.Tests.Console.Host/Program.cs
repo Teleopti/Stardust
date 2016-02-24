@@ -25,7 +25,6 @@ namespace Manager.IntegrationTest.Console.Host
 
 		private const string NodesCommandArgument = "Nodes";
 
-		private const string CopiedManagerConfigName = "Manager.config";
 
 #if (DEBUG)
 		private static readonly string _buildMode = "Debug";
@@ -37,7 +36,7 @@ namespace Manager.IntegrationTest.Console.Host
 
 		public static FileInfo ManagerConfigurationFile { get; set; }
 
-		public static FileInfo CopiedManagerConfigurationFile { get; set; }
+		public static Dictionary<Uri, FileInfo> CopiedManagerConfigurationFiles { get; set; }
 
 		[DllImport("Kernel32")]
 		public static extern bool SetConsoleCtrlHandler(HandlerRoutine handler,
@@ -119,64 +118,8 @@ namespace Manager.IntegrationTest.Console.Host
 			LogHelper.LogDebugWithLineNumber(Logger,
 			                                 "Start.");
 
-
 			SetConsoleCtrlHandler(ConsoleCtrlCheck,
 			                      true);
-
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "AppDomain.CurrentDomain.DomainUnload");
-			AppDomain.CurrentDomain.DomainUnload += CurrentDomainOnDomainUnload;
-
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "AppDomain.CurrentDomain.UnhandledException");
-			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-
-			DirectoryManagerAssemblyLocationFullPath =
-				new DirectoryInfo(Path.Combine(Settings.Default.ManagerAssemblyLocationFullPath,
-				                               _buildMode));
-
-			DirectoryManagerConfigurationFileFullPath =
-				new DirectoryInfo(Path.Combine(Settings.Default.ManagerConfigurationFileFullPath,
-				                               _buildMode));
-
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "DirectoryManagerConfigurationFileFullPath : " +
-			                                 DirectoryManagerConfigurationFileFullPath.FullName);
-
-
-			ManagerConfigurationFile =
-				new FileInfo(Path.Combine(DirectoryManagerConfigurationFileFullPath.FullName,
-				                          Settings.Default.ManagerConfigurationFileName));
-
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "ManagerConfigurationFile : " + ManagerConfigurationFile.FullName);
-
-			CopiedManagerConfigurationFile =
-				CopyManagerConfigurationFile(ManagerConfigurationFile,
-				                             CopiedManagerConfigName);
-
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "CopiedManagerConfigurationFile : " + CopiedManagerConfigurationFile.FullName);
-
-			DirectoryNodeConfigurationFileFullPath =
-				new DirectoryInfo(Path.Combine(Settings.Default.NodeConfigurationFileFullPath,
-				                               _buildMode));
-
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "DirectoryNodeConfigurationFileFullPath : " +
-			                                 DirectoryNodeConfigurationFileFullPath.FullName);
-
-			NodeConfigurationFile =
-				new FileInfo(Path.Combine(DirectoryNodeConfigurationFileFullPath.FullName,
-				                          Settings.Default.NodeConfigurationFileName));
-
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "NodeConfigurationFile : " + NodeConfigurationFile.FullName);
-
-			NodeconfigurationFiles = new Dictionary<string, FileInfo>();
-
-			PortStartNumber =
-				Settings.Default.NodeEndpointPortNumberStart;
 
 			//---------------------------------------------------------
 			// Number of managers and number of nodes to start up.
@@ -213,6 +156,73 @@ namespace Manager.IntegrationTest.Console.Host
 			LogHelper.LogInfoWithLineNumber(Logger,
 			                                NumberOfNodesToStart + " number of nodes will be started.");
 
+
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "AppDomain.CurrentDomain.DomainUnload");
+			AppDomain.CurrentDomain.DomainUnload += CurrentDomainOnDomainUnload;
+
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "AppDomain.CurrentDomain.UnhandledException");
+			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
+			DirectoryManagerAssemblyLocationFullPath =
+				new DirectoryInfo(Path.Combine(Settings.Default.ManagerAssemblyLocationFullPath,
+				                               _buildMode));
+
+			DirectoryManagerConfigurationFileFullPath =
+				new DirectoryInfo(Path.Combine(Settings.Default.ManagerConfigurationFileFullPath,
+				                               _buildMode));
+
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "DirectoryManagerConfigurationFileFullPath : " +
+			                                 DirectoryManagerConfigurationFileFullPath.FullName);
+
+
+			ManagerConfigurationFile =
+				new FileInfo(Path.Combine(DirectoryManagerConfigurationFileFullPath.FullName,
+				                          Settings.Default.ManagerConfigurationFileName));
+
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "ManagerConfigurationFile : " + ManagerConfigurationFile.FullName);
+
+			CopiedManagerConfigurationFiles = new Dictionary<Uri, FileInfo>();
+
+			for (var i = 0; i < NumberOfManagersToStart; i++)
+			{
+				var portNumber = Settings.Default.ManagerEndpointPortNumberStart + i;
+
+				Uri uri;
+
+				var copiedManagerConfigurationFile =
+					CopyManagerConfigurationFile(ManagerConfigurationFile, i + 1, portNumber, out uri);
+
+				CopiedManagerConfigurationFiles.Add(uri, copiedManagerConfigurationFile);
+			}
+
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Created " + CopiedManagerConfigurationFiles.Count + " manager configuration files.");
+
+
+			DirectoryNodeConfigurationFileFullPath =
+				new DirectoryInfo(Path.Combine(Settings.Default.NodeConfigurationFileFullPath,
+				                               _buildMode));
+
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "DirectoryNodeConfigurationFileFullPath : " +
+			                                 DirectoryNodeConfigurationFileFullPath.FullName);
+
+			NodeConfigurationFile =
+				new FileInfo(Path.Combine(DirectoryNodeConfigurationFileFullPath.FullName,
+				                          Settings.Default.NodeConfigurationFileName));
+
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "NodeConfigurationFile : " + NodeConfigurationFile.FullName);
+
+			NodeconfigurationFiles = new Dictionary<string, FileInfo>();
+
+			PortStartNumber =
+				Settings.Default.NodeEndpointPortNumberStart;
+
 			if (NumberOfNodesToStart > 0)
 			{
 				for (var i = 1; i <= NumberOfNodesToStart; i++)
@@ -232,27 +242,28 @@ namespace Manager.IntegrationTest.Console.Host
 			// App domain manager tasks.
 			//-------------------------------------------------------
 			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "AppDomainManagerTask");
+			                                 "AppDomainManagerTasks");
 
 			AppDomainManagerTasks = new List<AppDomainManagerTask>();
 
-			var appDomainManagerTask =
-				new AppDomainManagerTask(_buildMode,
-				                         DirectoryManagerAssemblyLocationFullPath,
-				                         CopiedManagerConfigurationFile,
-				                         Settings.Default.ManagerAssemblyName);
+			foreach (var copiedManagerConfigurationFile in CopiedManagerConfigurationFiles.Values)
+			{
+				var appDomainManagerTask =
+					new AppDomainManagerTask(_buildMode,
+					                         DirectoryManagerAssemblyLocationFullPath,
+					                         copiedManagerConfigurationFile,
+					                         Settings.Default.ManagerAssemblyName);
 
-			AppDomainManagerTasks.Add(appDomainManagerTask);
+				AppDomainManagerTasks.Add(appDomainManagerTask);
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Start: AppDomainManagerTask.StartTask");
+				LogHelper.LogDebugWithLineNumber(Logger,
+				                                 "Start: AppDomainManagerTask.StartTask");
 
-			appDomainManagerTask.StartTask(new CancellationTokenSource());
-
+				appDomainManagerTask.StartTask(new CancellationTokenSource());
+			}
 
 			LogHelper.LogDebugWithLineNumber(Logger,
 			                                 "Finished: AppDomainManagerTask.StartTask");
-
 
 			//-------------------------------------------------------
 			//-------------------------------------------------------
@@ -414,12 +425,36 @@ namespace Manager.IntegrationTest.Console.Host
 		}
 
 		public static FileInfo CopyManagerConfigurationFile(FileInfo managerConfigFile,
-		                                                    string newConfigFileName)
+		                                                    int i,
+		                                                    int portNumber,
+		                                                    out Uri uri)
 		{
-			return managerConfigFile.CopyTo(newConfigFileName,
-			                                true);
-		}
+			var newConfigFileName = "Manager" + i + ".config";
 
+			var copyManagerConfigurationFile = managerConfigFile.CopyTo(newConfigFileName,
+			                                                            true);
+
+
+			var configFileMap = new ExeConfigurationFileMap
+			{
+				ExeConfigFilename = copyManagerConfigurationFile.FullName
+			};
+
+			var config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap,
+			                                                             ConfigurationUserLevel.None);
+			UriBuilder uriBuilder =
+				new UriBuilder(config.AppSettings.Settings["BaseAddress"].Value)
+				{
+					Port = portNumber
+				};
+
+			uri = uriBuilder.Uri;
+
+			config.AppSettings.Settings["BaseAddress"].Value = uri.ToString();
+			config.Save();
+
+			return copyManagerConfigurationFile;
+		}
 
 		public static bool ShutDownNodeAppDomain(string friendlyName)
 		{

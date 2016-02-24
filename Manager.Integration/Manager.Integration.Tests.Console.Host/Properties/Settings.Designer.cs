@@ -158,5 +158,14 @@ namespace Manager.IntegrationTest.Console.Host.Properties {
                 return ((int)(this["NumberOfManagersToStart"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("9000")]
+        public int ManagerEndpointPortNumberStart {
+            get {
+                return ((int)(this["ManagerEndpointPortNumberStart"]));
+            }
+        }
     }
 }
