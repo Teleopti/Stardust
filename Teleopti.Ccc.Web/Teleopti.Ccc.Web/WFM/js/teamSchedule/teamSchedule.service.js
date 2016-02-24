@@ -68,14 +68,6 @@ angular.module("wfm.teamSchedule").service("TeamSchedule", [
 			}
 		});
 
-		service.swapShifts = $resource("../api/TeamSchedule/SwapShifts", {}, {
-			post: {
-				method: "POST",
-				params: {},
-				isArray: true
-			}
-		});
-
 		service.PromiseForGetAgentsPerPageSetting = function(callback) {
 			return $q(function (resolve) {
 				service.getAgentsPerPageSetting.post().$promise.then(function (result) {

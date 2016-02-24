@@ -3,11 +3,11 @@
 (function () {
 	angular.module('wfm.teamSchedule')
 		.controller('TeamScheduleCtrl', ['$scope', '$q', '$locale', '$translate', 'TeamSchedule', 'GroupScheduleFactory',
-			'teamScheduleNotificationService', 'PersonSelection', 'ScheduleManagement', 'Toggle', 'SignalR', '$mdComponentRegistry',
+			'teamScheduleNotificationService', 'PersonSelection', 'ScheduleManagement', 'SwapShifts', 'Toggle', 'SignalR', '$mdComponentRegistry',
 			'$mdSidenav', '$mdUtil', 'guidgenerator', 'ShortCuts', 'keyCodes', TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $locale, $translate, teamScheduleSvc, groupScheduleFactory,
-		notificationService, personSelectionSvc, scheduleMgmtSvc, toggleSvc, signalRSvc, $mdComponentRegistry, $mdSidenav, $mdUtil,
+		notificationService, personSelectionSvc, scheduleMgmtSvc, swapShiftsSvc, toggleSvc, signalRSvc, $mdComponentRegistry, $mdSidenav, $mdUtil,
 		guidgenerator, shortCuts, keyCodes) {
 		var vm = this;
 
@@ -155,19 +155,10 @@
 			if (!personSelectionSvc.canSwapShifts()) return;
 
 			var selectedPersonIds = personSelectionSvc.getSelectedPersonIdList();
-			if (selectedPersonIds.length !== 2) return;
-
-			var trackId = guidgenerator.newGuid();
-			teamScheduleSvc.swapShifts.post({
-				PersonIdFrom: selectedPersonIds[0],
-				PersonIdTo: selectedPersonIds[1],
-				ScheduleDate: vm.scheduleDateMoment().format("YYYY-MM-DD"),
-				TrackedCommandInfo: { TrackId: trackId }
-			}).$promise.then(function (result) {
-				vm.afterActionCallback({
-					TrackId: trackId,
-					Errors: result
-				}, "FinishedSwapShifts", "FailedToSwapShifts");
+			var personIdFrom = selectedPersonIds[0];
+			var personIdTo = selectedPersonIds[1];
+			swapShiftsSvc.PromiseForSwapShifts(personIdFrom, personIdTo, vm.scheduleDateMoment(), function(result) {
+				vm.afterActionCallback(result, "FinishedSwapShifts", "FailedToSwapShifts");
 			});
 		}
 
@@ -262,6 +253,7 @@
 		vm.getSelectedPersonIdList = function() {
 			return personSelectionSvc.getSelectedPersonIdList();
 		}
+
 		function replaceParameters(text, params) {
 			params.forEach(function (element, index) {
 				text = text.replace('{' + index + '}', element);

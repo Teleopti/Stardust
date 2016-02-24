@@ -1448,6 +1448,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.scheduleManagement.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.scheduleManagement.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.signalr.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.service.swapShifts.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.shiftHelpers.js" />
     <Content Include="WFM\js\global\wfmpagination\wfmpagination.directive.js" />
     <Content Include="WFM\js\global\wfmmodal\wfmmodal.directive.js" />
