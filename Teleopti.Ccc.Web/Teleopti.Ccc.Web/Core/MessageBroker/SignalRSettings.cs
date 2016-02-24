@@ -64,12 +64,16 @@ namespace Teleopti.Ccc.Web.Broker
 					settings.AzureServiceBusBackplaneConnectionString =
 						ConfigurationManager.ConnectionStrings["AzureServiceBusBackplane"].ConnectionString;
 					break;
+                case SignalRBackplaneType.Redis:
+                    settings.RedisBackplaneConnectionString =
+                        ConfigurationManager.ConnectionStrings["RedisBackplane"].ConnectionString;
+			        break;
 			}
             return settings;
 		}
 
 
-		private static SignalRBackplaneType parseSignalRBackplaneType(string value)
+	    private static SignalRBackplaneType parseSignalRBackplaneType(string value)
 		{
 			if (string.IsNullOrEmpty(value))
 				return SignalRBackplaneType.Nothing;
@@ -89,12 +93,14 @@ namespace Teleopti.Ccc.Web.Broker
 		public bool EnablePerformanceCounters { get; set; }
 	    public string SqlServerBackplaneConnectionString { get; set; }
 		public string AzureServiceBusBackplaneConnectionString { get; set; }
-	}
+        public string RedisBackplaneConnectionString { get; set; }
+    }
 
 	public enum SignalRBackplaneType
 	{
 		Nothing,
 		SqlServer,
-		AzureServiceBus
+		AzureServiceBus,
+        Redis
 	}
 }

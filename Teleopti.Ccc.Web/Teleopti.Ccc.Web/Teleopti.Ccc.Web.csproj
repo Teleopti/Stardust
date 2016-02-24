@@ -209,6 +209,10 @@
       <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Core.2.2.0\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Redis, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Redis.2.2.0\lib\net45\Microsoft.AspNet.SignalR.Redis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.ServiceBus">
       <HintPath>..\..\packages\Microsoft.AspNet.SignalR.ServiceBus.2.2.0\lib\net45\Microsoft.AspNet.SignalR.ServiceBus.dll</HintPath>
     </Reference>
@@ -323,6 +327,10 @@
     <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.16, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.16\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
+    </Reference>
+    <Reference Include="StackExchange.Redis.StrongName, Version=1.0.316.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\StackExchange.Redis.StrongName.1.0.322\lib\net45\StackExchange.Redis.StrongName.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Stardust.Manager, Version=1.0.0.293, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Stardust.Manager.1.0.0.293\lib\net451\Stardust.Manager.dll</HintPath>

@@ -31,6 +31,9 @@ namespace Teleopti.Ccc.Web.Broker
 				case SignalRBackplaneType.AzureServiceBus:
 					GlobalHost.DependencyResolver.UseServiceBus(settingsFromParser.AzureServiceBusBackplaneConnectionString, "Teleopti WFM");
 					break;
+                case SignalRBackplaneType.Redis:
+			        GlobalHost.DependencyResolver.UseRedis(new RedisScaleoutConfiguration(settingsFromParser.RedisBackplaneConnectionString, "Teleopti WFM"));
+			        break;
 				default:
 					if (settingsFromParser.ScaleOutBackplaneUrl != null)
 					{
