@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         {
             if (ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>.InContext)
             {
-                var container = ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>.Container();
+                var container = ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>.Fetch();
                 container.RemoveScheduleDayFromContainer(_dayBefore, container.MinSkillResolution);
                 container.AddScheduleDayToContainer(partAfter, container.MinSkillResolution);
             }

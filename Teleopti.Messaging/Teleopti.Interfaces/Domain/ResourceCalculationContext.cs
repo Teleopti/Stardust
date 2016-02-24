@@ -7,14 +7,10 @@ namespace Teleopti.Interfaces.Domain
 		[ThreadStatic]
 		private static T _container;
 
-        /// <summary>
-        /// Gets the container without creating a new if the instance doesn't exist
-        /// </summary>
-        /// <returns></returns>
-        public static T Container()
-        {
-            return _container;
-        }
+		public static T Fetch()
+		{
+			return _container;
+		}
 
 		public ResourceCalculationContext(T resources)
 		{
