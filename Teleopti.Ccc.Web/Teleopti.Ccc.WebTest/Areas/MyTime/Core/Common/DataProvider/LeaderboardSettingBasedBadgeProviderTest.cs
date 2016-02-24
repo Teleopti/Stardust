@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			team1.SetId(Guid.NewGuid());
 
 			_toggleManager = MockRepository.GenerateMock<IToggleManager>();
-			_toggleManager.Stub(x => x.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185)).Return(true);
+		
 			agentBadges = new[]
 			{
 				new AgentBadge

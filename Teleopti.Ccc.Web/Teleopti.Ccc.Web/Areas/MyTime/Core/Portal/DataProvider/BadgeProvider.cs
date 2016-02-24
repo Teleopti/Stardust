@@ -41,12 +41,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			if (currentUser == null) return badgeVmList;
 			_teamGamificationSetting =
 				_teamGamificationSettingRepo.FindTeamGamificationSettingsByTeam(currentUser.MyTeam(DateOnly.Today));
-			var toggleEnabled = _toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185);
-
+		
 			var allBadges = getBadgesWithoutRank(currentUser);
-			var allBadgesWithRank = (toggleEnabled)
-				? getBadgesWithRank(currentUser)
-				: new List<BadgeViewModel>();
+			var allBadgesWithRank = getBadgesWithRank(currentUser);
+				
 
 			return mergeBadges(allBadges, allBadgesWithRank);
 		}

@@ -312,10 +312,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			if (_gamificationSettingRuleSetList.Count > 0) return;
 			_gamificationSettingRuleSetList.Add(GamificationSettingRuleSet.RuleWithRatioConvertor, Resources.RuleWithRatioConvertor);
-			if (_toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185))
-			{
-				_gamificationSettingRuleSetList.Add(GamificationSettingRuleSet.RuleWithDifferentThreshold, Resources.RuleWithDifferentThreshold);
-			}
+			
+			_gamificationSettingRuleSetList.Add(GamificationSettingRuleSet.RuleWithDifferentThreshold, Resources.RuleWithDifferentThreshold);
+			
 
 			comboBoxAdvBadgeSettingRuleSets.DataSource = new BindingSource(_gamificationSettingRuleSetList, null);
 			comboBoxAdvBadgeSettingRuleSets.DisplayMember = "Value";
@@ -389,10 +388,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// Formats the name.
 			Description description = PageHelper.CreateNewName(_gamificationSettingList, "Description.Name", Resources.NewGamificationSetting);
 			IGamificationSetting newGamificationSetting = new GamificationSetting(description.Name) { Description = description };
-			if (!_toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185))
-			{
-				newGamificationSetting.GamificationSettingRuleSet = GamificationSettingRuleSet.RuleWithRatioConvertor;
-			}
 
 			return new GamificationSettingView(newGamificationSetting);
 		}

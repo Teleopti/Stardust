@@ -64,14 +64,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			_personRepo = personRepo;
 			_nameFormatSettings = nameFormatSettings;
 
-			toggleEnabled = _toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185);
 		}
 
 		public IEnumerable<AgentBadgeOverview> PermittedAgentBadgeOverviewsForEveryoneOrMyOwn(string functionPath,
 			LeaderboardQuery query)
 		{
 			teamSettings = _teamSettingRepository.FindAllTeamGamificationSettingsSortedByTeam();
-			toggleEnabled = _toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185);
 			var queryDate = query.Date;
 
 			var detailsForPage = _groupingRepository.AvailableGroups(new ReadOnlyGroupPage {PageId = Group.PageMainId}, queryDate);
@@ -87,7 +85,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		public IEnumerable<AgentBadgeOverview> PermittedAgentBadgeOverviewsForSite(string functionPath, LeaderboardQuery query)
 		{
 			teamSettings = _teamSettingRepository.FindAllTeamGamificationSettingsSortedByTeam();
-			toggleEnabled = _toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185);
 			var queryDate = query.Date;
 
 			var site = _siteRepository.Get(query.SelectedId);
@@ -104,7 +101,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		public IEnumerable<AgentBadgeOverview> PermittedAgentBadgeOverviewsForTeam(string functionPath, LeaderboardQuery query)
 		{
 			teamSettings = _teamSettingRepository.FindAllTeamGamificationSettingsSortedByTeam();
-			toggleEnabled = _toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185);
 			var queryDate = query.Date;
 
 			var team = _teamRepository.Get(query.SelectedId);
@@ -152,20 +148,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				var agentBadgesConvertedFromRatio = _agentBadgeRepository.Find(permittedAgentIdListWithSetting);
 				agentWithBadgesConvertedFromRatio.AddRange(getAgentWithBadges(agentBadgesConvertedFromRatio,
 					teamSetting.GamificationSetting.SilverToBronzeBadgeRate, teamSetting.GamificationSetting.GoldToSilverBadgeRate));
-				if (toggleEnabled)
-				{
-					agentIdListWithDifferentThreshold.AddRange(permittedAgentIdListWithSetting);
-				}
+				
+				agentIdListWithDifferentThreshold.AddRange(permittedAgentIdListWithSetting);
+				
 
 			}
 
-			if (toggleEnabled)
-			{
-				var agentBadgesWithRank = _agentBadgeWithRankRepository.Find(agentIdListWithDifferentThreshold);
-				var agentWithRankedBadges = getAgentWithBadges(agentBadgesWithRank).ToList();
-				return mergeAgentWithBadges(agentWithBadgesConvertedFromRatio, agentWithRankedBadges);
-			}
-			return agentWithBadgesConvertedFromRatio;
+			
+			var agentBadgesWithRank = _agentBadgeWithRankRepository.Find(agentIdListWithDifferentThreshold);
+			var agentWithRankedBadges = getAgentWithBadges(agentBadgesWithRank).ToList();
+			return mergeAgentWithBadges(agentWithBadgesConvertedFromRatio, agentWithRankedBadges);
+						
 		}
 
 		private static IEnumerable<agentWithBadge> getAgentWithBadges(IEnumerable<AgentBadge> agentBadges,

@@ -65,9 +65,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		}
 
 		public void Consume(CalculateBadgeMessage message)
-		{
-			var toggleCalculateBadgeWithRankEnabled = _toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185);
-
+		{			
 			if (logger.IsDebugEnabled)
 			{
 				logger.DebugFormat(
@@ -141,7 +139,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						var adherenceReportSetting = _globalSettingRep.FindValueByKey(AdherenceReportSetting.Key,
 							new AdherenceReportSetting());
 
-						if (toggleCalculateBadgeWithRankEnabled && isRuleWithDifferentThreshold)
+						if (isRuleWithDifferentThreshold)
 						{
 							var newAwardedBadgesWithRankForAdherence =
 								_badgeWithRankCalculator.CalculateAdherenceBadges(agentsWithSetting, message.TimeZoneCode, calculateDate,
@@ -168,7 +166,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 					if (setting.AHTBadgeEnabled)
 					{
-						if (toggleCalculateBadgeWithRankEnabled && isRuleWithDifferentThreshold)
+						if (isRuleWithDifferentThreshold)
 						{
 							var newAwardedBadgesWithRankForAht =
 								_badgeWithRankCalculator.CalculateAHTBadges(agentsWithSetting, message.TimeZoneCode, calculateDate, setting,
@@ -195,7 +193,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 					if (setting.AnsweredCallsBadgeEnabled)
 					{
-						if (toggleCalculateBadgeWithRankEnabled && isRuleWithDifferentThreshold)
+						if (isRuleWithDifferentThreshold)
 						{
 							var newAwardedBadgesWithRankForAnsweredCalls =
 								_badgeWithRankCalculator.CalculateAnsweredCallsBadges(agentsWithSetting, message.TimeZoneCode, calculateDate,

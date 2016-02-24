@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
@@ -53,7 +54,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			badgeWithRankRepository = MockRepository.GenerateMock<IAgentBadgeWithRankRepository>();
 			personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			toggleManager = MockRepository.GenerateMock<IToggleManager>();
-			toggleManager.Stub(x => x.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185)).Return(false);
 
 			personRepository.Stub(
 				x => x.FindPeopleInOrganization(new DateOnlyPeriod(new DateOnly(2014, 8, 7), new DateOnly(2014, 8, 9)), false))
@@ -85,6 +85,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 
 			// Mock badge with rank calculator
 			badgeWithRankCalculator = MockRepository.GenerateMock<IAgentBadgeWithRankCalculator>();
+
+			badgeWithRankCalculator.Stub(
+				x =>
+					x.CalculateAdherenceBadges(new List<IPerson>(), "", DateOnly.Today, AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime, new GamificationSetting("test"),
+						_businessUnitId)).Return(new List<IAgentBadgeWithRankTransaction>()).IgnoreArguments();
+
+			badgeWithRankCalculator.Stub(
+				x =>
+					x.CalculateAnsweredCallsBadges(new List<IPerson>(), "", DateOnly.Today, new GamificationSetting("test"),
+						_businessUnitId)).Return(new List<IAgentBadgeWithRankTransaction>()).IgnoreArguments();
+
+
 
 			etlJobChecker = MockRepository.GenerateMock<IRunningEtlJobChecker>();
 			etlJobChecker.Stub(x => x.NightlyEtlJobStillRunning()).Return(false);
@@ -133,16 +145,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 
 			target.Consume(message);
 
-			calculator.AssertWasNotCalled(
+			badgeWithRankCalculator.AssertWasNotCalled(
 				x => x.CalculateAHTBadges(persons, "", DateOnly.Today, newSetting, _businessUnitId),
 				o => o.IgnoreArguments());
 
-			calculator.AssertWasCalled(
+			badgeWithRankCalculator.AssertWasCalled(
 				x => x.CalculateAdherenceBadges(persons, "", DateOnly.Today,
 					AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime, newSetting, _businessUnitId),
 				o => o.IgnoreArguments());
 
-			calculator.AssertWasCalled(
+			badgeWithRankCalculator.AssertWasCalled(
 				x => x.CalculateAnsweredCallsBadges(persons, "", DateOnly.Today, newSetting, _businessUnitId),
 				o => o.IgnoreArguments());
 

@@ -102,42 +102,6 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		#endregion
 
 		[Test]
-		public void ShouldReturnBadgesWithoutRankIfCalculateBadgeWithRankToggleIsNotEnableWhenUsingTeamGamification()
-		{
-			var myTeam = loggedOnUser.CurrentUser().MyTeam(DateOnly.Today);
-			teamSettingRepository.Stub(x => x.FindTeamGamificationSettingsByTeam(myTeam)).Return(new TeamGamificationSetting
-			{
-				Team = myTeam,
-				GamificationSetting = new GamificationSetting("setting")
-				{
-					SilverToBronzeBadgeRate = 5,
-					GoldToSilverBadgeRate = 5
-				}
-			});
-
-			toggleManager.Stub(x => x.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185)).Return(false);
-			toggleManager.Stub(x => x.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318)).Return(true);
-			target = new BadgeProvider(loggedOnUser, badgeRepository, badgeWithRankRepository, teamSettingRepository, toggleManager);
-			
-			var result = target.GetBadges().ToList();
-
-			var adherenceBadge = result.Single(x => (x.BadgeType == BadgeType.Adherence));
-			Assert.AreEqual(adherenceBadge.GoldBadge, 0);
-			Assert.AreEqual(adherenceBadge.SilverBadge, 2);
-			Assert.AreEqual(adherenceBadge.BronzeBadge, 2);
-
-			var answeredCallBadge = result.Single(x => (x.BadgeType == BadgeType.AnsweredCalls));
-			Assert.AreEqual(answeredCallBadge.GoldBadge, 0);
-			Assert.AreEqual(answeredCallBadge.SilverBadge, 1);
-			Assert.AreEqual(answeredCallBadge.BronzeBadge, 1);
-
-			var ahtBadge = result.Single(x => (x.BadgeType == BadgeType.AverageHandlingTime));
-			Assert.AreEqual(ahtBadge.GoldBadge, 0);
-			Assert.AreEqual(ahtBadge.SilverBadge, 1);
-			Assert.AreEqual(ahtBadge.BronzeBadge, 2);
-		}
-
-		[Test]
 		public void ShouldGetTotalBadgesIfCalculateBadgeWithRankToggleIsEnableWhenUsingTeamGamification()
 		{
 			var myTeam = loggedOnUser.CurrentUser().MyTeam(DateOnly.Today);
@@ -151,7 +115,6 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 				}
 			});
 
-			toggleManager.Stub(x => x.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185)).Return(true);
 			toggleManager.Stub(x => x.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318)).Return(true);
 
 			target = new BadgeProvider(loggedOnUser, badgeRepository, badgeWithRankRepository, teamSettingRepository, toggleManager);
