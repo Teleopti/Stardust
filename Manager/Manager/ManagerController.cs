@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
 using log4net;
@@ -97,8 +98,11 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.Heartbeat)]
 		public void Heartbeat([FromBody] Uri nodeUri)
 		{
-			_jobManager.CheckAndAssignNextJob();
-
+			Task.Factory.StartNew(() =>
+			{
+				_jobManager.CheckAndAssignNextJob();
+			});
+			
 			LogHelper.LogInfoWithLineNumber(Logger,
 			                                WhoAmI + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
 		}
