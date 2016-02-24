@@ -297,7 +297,7 @@ Scenario: Should modify shift trade post
 	| Start time     | 8:00       |
 	| End time       | 16:00      |
 
-@OnlyRunIfEnabled('MyTimeWeb_AnonymousTrades_31638')
+
 Scenario: Should not show agent name in shift trade board list
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Anonymous trade 30 days forward'
@@ -321,7 +321,7 @@ Scenario: Should not show agent name in shift trade board list
 	When I view Shift Trade Bulletin Board for date '2030-01-01'
 	Then I should not see agent name in the possible schedule trade list
 
-@OnlyRunIfEnabled('MyTimeWeb_AnonymousTrades_31638')
+
 Scenario: Should not show subject and message box
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Anonymous trade 30 days forward'
@@ -346,7 +346,7 @@ Scenario: Should not show subject and message box
 	When I click OtherAgent shift
 	Then I should see a confirm message on bulletin trade board
 	
-@OnlyRunIfEnabled('MyTimeWeb_AnonymousTrades_31638')
+
 Scenario: Should not show agent name in shift trade request detail view
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Anonymous trade 30 days forward'

@@ -51,12 +51,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			dateOnlyPeriodsVisualizer1.Culture = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
 			timeSpanTextBox1.TimeSpanBoxWidth = timeSpanTextBox1.Width;
 			dateTimePickerAdvViewpoint.SetCultureInfoSafe(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
-
-			if (!toggleManager.IsEnabled(Toggles.MyTimeWeb_AnonymousTrades_31638))
-			{
-				checkBoxAdvAnonymousTrading.Hide();
-			}			
-
+				
 			if (!toggleManager.IsEnabled (Toggles.Wfm_Requests_Waitlist_36232))
 			{
 				hideAbsenceRequestWaitlistingOptions();

@@ -44,10 +44,8 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 				data: {
 					ID: id
 				},
-				success: function(data) {
-					if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_AnonymousTrades_31638')) {
-						self.isAnonymousTrading(data.AnonymousTrading);
-					}
+				success: function(data) {				
+					self.isAnonymousTrading(data.AnonymousTrading);					
 					self.isLockTrading(data.LockTrading);
 				}
 			});

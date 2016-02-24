@@ -30,7 +30,6 @@
 
 		Portal_NewLandingpage_29415,
 		Show_StaticPageOnNoInternet_29415,
-		MyTimeWeb_AnonymousTrades_31638,
 		MyTimeWeb_AvailabilityVerifyHours_31654,
 		MyTimeWeb_SortSchedule_32092,
 		MyTimeWeb_EnhanceTeamSchedule_32580,

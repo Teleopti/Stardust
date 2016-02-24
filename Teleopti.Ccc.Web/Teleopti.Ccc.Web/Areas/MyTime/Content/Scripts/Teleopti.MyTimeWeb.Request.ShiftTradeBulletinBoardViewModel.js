@@ -46,7 +46,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function (ajax) {
 	self.filteredEndTimesText = ko.observableArray();
 	self.preloadTimeFilterFinished = true;
 	self.isAnonymousTrading = ko.observable(false);
-	self.Toggle31638Enabled = ko.observable(false);
 	self.Toggle36662Enabled = ko.observable(Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeBoardNoReadModel_36662'));
 
 	self.isDetailVisible = ko.computed(function () {
@@ -125,7 +124,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function (ajax) {
 	});
 
 	self.hideMessageBox = ko.computed(function () {
-		return self.Toggle31638Enabled() && self.isAnonymousTrading();
+		return self.isAnonymousTrading();
 	});
 
 	self.filterStartEndTimeClick = function () {
@@ -687,8 +686,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function (ajax) {
 			type: 'GET',
 			success: function (data, textStatus, jqXHR) {
 				if (data.HasWorkflowControlSet) {
-					self.Toggle31638Enabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_AnonymousTrades_31638'));
-					if (self.Toggle31638Enabled()) self.isAnonymousTrading(data.MiscSetting.AnonymousTrading);
+					self.isAnonymousTrading(data.MiscSetting.AnonymousTrading);
 					var now = moment(new Date(data.NowYear, data.NowMonth - 1, data.NowDay));
 					self.setDatePickerRange(now, data.OpenPeriodRelativeStart, data.OpenPeriodRelativeEnd);
 					var requestedDate = moment(now).add('days', data.OpenPeriodRelativeStart);
