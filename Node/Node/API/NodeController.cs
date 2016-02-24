@@ -24,15 +24,23 @@ namespace Stardust.Node.API
 		{
 			if (jobToDo == null)
 			{
-				LogHelper.LogInfoWithLineNumber(Logger, "Received Start Job Request. jobId is null");
+				LogHelper.LogInfoWithLineNumber(Logger, _workerWrapper.WhoamI + "Received Start Job Request. jobId is null");
 				return BadRequest("jobToDo is null");
 			}
 
-			LogHelper.LogInfoWithLineNumber(Logger, "Received Start Job Request. jobId: " + jobToDo.Id);
+			var msg =
+					string.Format(
+						"{0} : Received Start Job Request. ( jobId, jobName ) : ( {1}, {2} )",
+						_workerWrapper.WhoamI,
+						jobToDo.Id,
+						jobToDo.Name);
+
+			LogHelper.LogInfoWithLineNumber(Logger,
+											   msg);
 
 			if (_workerWrapper.IsTaskExecuting)
 			{
-				var msg =
+				var msgExecuting =
 					string.Format(
 						"{0} : New job request from manager rejected, node is working on another job ( jobId, jobName ) : ( {1}, {2} )",
 						_workerWrapper.WhoamI,
@@ -40,7 +48,7 @@ namespace Stardust.Node.API
 						jobToDo.Name);
 
 				LogHelper.LogWarningWithLineNumber(Logger,
-				                                   msg);
+												   msgExecuting);
 
 				return CreateConflictStatusCode();
 			}
@@ -66,7 +74,7 @@ namespace Stardust.Node.API
 		[HttpDelete, AllowAnonymous, Route(NodeRouteConstants.CancelJob)]
 		public IHttpActionResult TryCancelJob(Guid jobId)
 		{
-			LogHelper.LogInfoWithLineNumber(Logger, "Received TryCancel request. jobId: " + jobId);
+			LogHelper.LogInfoWithLineNumber(Logger, _workerWrapper.WhoamI + "Received TryCancel request. jobId: " + jobId);
 
 			if (jobId == Guid.Empty)
 			{
