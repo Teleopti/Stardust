@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
 			var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
 			_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, false);
-			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
+			using (new ResourceCalculationContext(resources))
 			{				
 				EventHandler<ResourceOptimizerProgressEventArgs> handler = (s, e) => backgroundWorker.ReportProgress(0, e);
 				service.ReportProgress += handler;

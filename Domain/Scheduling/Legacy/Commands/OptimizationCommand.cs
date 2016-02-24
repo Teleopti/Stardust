@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 					var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
 					var resources = extractor.CreateRelevantProjectionList(stateHolder.Schedules);
-					using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
+					using (new ResourceCalculationContext(resources))
 					{
 						if (optimizationPreferences.Extra.UseTeamBlockOption || optimizationPreferences.Extra.UseTeams)
 						{

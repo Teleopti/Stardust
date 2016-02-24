@@ -2,19 +2,19 @@ using System;
 
 namespace Teleopti.Interfaces.Domain
 {
-	public class ResourceCalculationContext<T> : IDisposable where T : class
+	public class ResourceCalculationContext : IDisposable
 	{
 		[ThreadStatic]
-		private static T _container;
+		private static IResourceCalculationDataContainerWithSingleOperation _container;
 
-		public static T Fetch()
-		{
-			return _container;
-		}
-
-		public ResourceCalculationContext(T resources)
+		public ResourceCalculationContext(IResourceCalculationDataContainerWithSingleOperation resources)
 		{
 			_container = resources;
+		}
+
+		public static IResourceCalculationDataContainerWithSingleOperation Fetch()
+		{
+			return _container;
 		}
 
 		public static bool InContext

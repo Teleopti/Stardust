@@ -151,8 +151,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			}
 		}
 
-		private ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>
-			createResourceCalculationContext()
+		private ResourceCalculationContext createResourceCalculationContext()
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			var minutesPerInterval = 15;
@@ -162,7 +161,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			}
 			var extractor = new ScheduleProjectionExtractor(_personalSkillProvider(), minutesPerInterval);
 			var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
-			return new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources);
+			return new ResourceCalculationContext(resources);
 		}
 
 		private void classicDaysOffOptimization(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization, DateOnlyPeriod selectedPeriod, ISchedulingProgress schedulingProgress)

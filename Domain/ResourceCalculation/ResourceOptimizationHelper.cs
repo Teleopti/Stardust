@@ -51,9 +51,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				IResourceCalculationDataContainerWithSingleOperation relevantProjections;
 				IDisposable context = null;
-				if (ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>.InContext)
+				if (ResourceCalculationContext.InContext)
 				{
-					relevantProjections = ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>.Container();
+					relevantProjections = ResourceCalculationContext.Fetch();
 				}
 				else
 				{
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					relevantProjections = extractor.CreateRelevantProjectionList(stateHolder.Schedules,
 						TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
 							localDate.AddDays(-1).Date, localDate.AddDays(1).Date, stateHolder.TimeZoneInfo));
-					context = new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(relevantProjections);
+					context = new ResourceCalculationContext(relevantProjections);
 				}
 
 				ResourceCalculateDate(relevantProjections, localDate, considerShortBreaks);

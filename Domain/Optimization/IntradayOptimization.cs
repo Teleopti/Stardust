@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
 			using (_virtualSkillContext.Create(period))
 			{
-				using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
+				using (new ResourceCalculationContext(resources))
 				{
 					_intradayOptimizerContainer.Execute(optimizers);
 				}
