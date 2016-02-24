@@ -36,12 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		[Test]
 		public void ShouldUseShiftThatCoverHigherDemand()
 		{
-			//before:	shift with phone 8 - 17
-			//demand:	higher 17 - 18
-			//after:	shift 8:15 - 17:15
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
-			phoneActivity.RequiresSkill = true;
-			
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var dateOnly = new DateOnly(2015, 10, 12);
 			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
@@ -53,20 +48,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(8, 15, 8, 15, 15), new TimePeriodWithSegment(17, 15, 17, 15, 15), shiftCategory));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
-
 			SkillDayRepository.Has(new List<ISkillDay>
 				{
 					skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)))
 				});
 
-			var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, agent.PermissionInformation.DefaultTimeZone());
-			var assignment = new PersonAssignment(agent, scenario, dateOnly);
-			assignment.SetShiftCategory(shiftCategory);
-			assignment.AddActivity(phoneActivity, new DateTimePeriod(dateTime.AddHours(8), dateTime.AddHours(17)));
-			PersonAssignmentRepository.Add(assignment);
-
+			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly, new TimePeriod(8, 0, 17, 0));
+			
 			Target.Optimize(planningPeriod.Id.Value);
 
+			var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, agent.PermissionInformation.DefaultTimeZone());
 			PersonAssignmentRepository.GetSingle(dateOnly).Period
 				.Should().Be.EqualTo(new DateTimePeriod(dateTime.AddHours(8).AddMinutes(15), dateTime.AddHours(17).AddMinutes(15)));
 		}
@@ -78,7 +69,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			//demand:	higher 17 - 18
 			//after:	shift 8 - 17
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
-			phoneActivity.RequiresSkill = true;
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var dateOnly = new DateOnly(2015, 10, 12);
 			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
@@ -115,7 +105,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		{
 			var weeklyRest = TimeSpan.FromHours(38);
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
-			phoneActivity.RequiresSkill = true;
 			phoneActivity.InWorkTime = true;
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var dateOnly = new DateOnly(2015, 10, 12);
@@ -129,9 +118,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(8, 15, 8, 15, 15), new TimePeriodWithSegment(17, 15, 17, 15, 15), shiftCategory));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
-
 			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, new DateOnlyPeriod(dateOnly, dateOnly.AddDays(7)), new TimePeriod(8, 0, 16, 0));
+
 			Target.Optimize(planningPeriod.Id.Value);
+
 			var agentRange = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(agent, new ScheduleDictionaryLoadOptions(false, false, false), weekPeriod, scenario)[agent];
 			CheckWeeklyRestRule.IsSatisfyBy(agentRange, weekPeriod, weeklyRest).Should().Be.True();	
 		}
@@ -140,7 +130,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public void ShouldNotCalculateDayAfterIfTodayIsNotANightShift()
 		{
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
-			phoneActivity.RequiresSkill = true;
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var dateOnly = new DateOnly(2015, 10, 12);
 			var planningPeriod = PlanningPeriodRepository.Has(dateOnly.AddDays(-6), 1);
@@ -152,24 +141,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(8, 15, 8, 15, 15), new TimePeriodWithSegment(17, 15, 17, 15, 15), shiftCategory));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
-
 			SkillDayRepository.Has(new List<ISkillDay>
 				{
 					skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360))),
 					skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly.AddDays(1), TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)))
 				});
-
-			var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, agent.PermissionInformation.DefaultTimeZone());
-			var assignment = new PersonAssignment(agent, scenario, dateOnly);
-			assignment.SetShiftCategory(shiftCategory);
-			assignment.AddActivity(phoneActivity, new DateTimePeriod(dateTime.AddHours(8), dateTime.AddHours(17)));
-			PersonAssignmentRepository.Add(assignment);
-
-			var assignmentDayAfter = new PersonAssignment(agent, scenario, dateOnly.AddDays(1));
-			assignmentDayAfter.SetShiftCategory(shiftCategory);
-			assignmentDayAfter.AddActivity(phoneActivity, new DateTimePeriod(dateTime.AddDays(1).AddHours(8), dateTime.AddDays(1).AddHours(17)));
-			PersonAssignmentRepository.Add(assignmentDayAfter);
-
+			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly, new TimePeriod(8, 0, 17, 0));
+			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly.AddDays(1), new TimePeriod(8, 0, 17, 0));
+			
 			Target.Optimize(planningPeriod.Id.Value);
 
 			var skillDays = SkillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(dateOnly.AddDays(1), dateOnly.AddDays(1)), new List<ISkill> {skill}, scenario);
@@ -184,7 +163,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public void ShouldCalculateDayAfterIfTodayIsANightShift()
 		{
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
-			phoneActivity.RequiresSkill = true;
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var dateOnly = new DateOnly(2015, 10, 12);
 			var planningPeriod = PlanningPeriodRepository.Has(dateOnly.AddDays(-6), 1);
@@ -196,29 +174,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(8, 15, 8, 15, 15), new TimePeriodWithSegment(17, 15, 17, 15, 15), shiftCategory));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
-
 			SkillDayRepository.Has(new List<ISkillDay>
 			{
 				skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360))),
 				skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly.AddDays(1), TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)))
 			});
-
-			var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, agent.PermissionInformation.DefaultTimeZone());
-			var assignment = new PersonAssignment(agent, scenario, dateOnly);
-			assignment.SetShiftCategory(shiftCategory);
-			assignment.AddActivity(phoneActivity, new DateTimePeriod(dateTime.AddHours(17), dateTime.AddHours(26)));
-			PersonAssignmentRepository.Add(assignment);
-
-			var assignmentDayAfter = new PersonAssignment(agent, scenario, dateOnly.AddDays(1));
-			assignmentDayAfter.SetShiftCategory(shiftCategory);
-			assignmentDayAfter.AddActivity(phoneActivity, new DateTimePeriod(dateTime.AddDays(1).AddHours(8), dateTime.AddDays(1).AddHours(17)));
-			PersonAssignmentRepository.Add(assignmentDayAfter);
+			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly, new TimePeriod(17, 0, 26, 0));
+			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly.AddDays(1), new TimePeriod(8, 0, 17, 0));
 
 			Target.Optimize(planningPeriod.Id.Value);
 
 			var skillDays = SkillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(dateOnly.AddDays(1), dateOnly.AddDays(1)), new List<ISkill> { skill }, scenario);
 			var skillStaffPeriods = skillDays.First().SkillStaffPeriodCollection;
-
 			skillStaffPeriods.Any(skillStaffPeriod => skillStaffPeriod.CalculatedResource > 0d)
 				.Should().Be.True();
 		}
@@ -238,17 +205,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(8, 15, 8, 15, 15), new TimePeriodWithSegment(17, 15, 17, 15, 15), shiftCategory));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
-
 			SkillDayRepository.Has(new List<ISkillDay>
 				{
 					skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)))
 				});
-
-			var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, agent.PermissionInformation.DefaultTimeZone());
-			var assignment = new PersonAssignment(agent, scenario, dateOnly);
-			assignment.SetShiftCategory(shiftCategory);
-			assignment.AddActivity(phoneActivity, new DateTimePeriod(dateTime.AddHours(8), dateTime.AddHours(8).AddMinutes(10)));
-			PersonAssignmentRepository.Add(assignment);
+			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly, new TimePeriod(8, 0, 8, 10));
 
 			Target.Optimize(planningPeriod.Id.Value);
 
