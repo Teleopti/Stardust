@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var shuffledOptimizers = optimizers.GetRandom(optimizers.Count(), true);
 
-			var cancel = false;
 			foreach (var batchOptimizers in shuffledOptimizers.Batch(100))
 			{
 				var activeOptimizers = batchOptimizers.ToList();
@@ -31,7 +30,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 					var executes = 0;
 					foreach (var optimizer in batchShuffledOptimizers)
 					{
-						if (cancel) return;
 						executes++;
 						var result = optimizer.Execute(Enumerable.Empty<DateOnly>());
 
@@ -39,26 +37,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 						{
 							activeOptimizers.Remove(optimizer);
 						}
-						var who = Resources.OptimizingIntraday + Resources.Colon + "(" + activeOptimizers.Count + ")" + executes + " " +
-										optimizer.ContainerOwner.Name.ToString(NameOrderOption.FirstNameLastName);
-						var success = !result.HasValue ? " " + Resources.wasNotSuccessful : " " + Resources.wasSuccessful;
-						var progressResult =
-							onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, who + success, () => cancel = true));
-						if (cancel || progressResult.ShouldCancel) return;
+						var who = Resources.OptimizingIntraday + Resources.Colon + "(" + activeOptimizers.Count + ")" + executes + " " + optimizer.ContainerOwner.Name.ToString(NameOrderOption.FirstNameLastName);
+						var success = result.HasValue ? " " + Resources.wasSuccessful : " " + Resources.wasNotSuccessful;
+						var shouldCancel = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, who + success));
+						if (shouldCancel) return;
 					}
 				}
 			}
 		}
 
-        private CancelSignal onReportProgress(ResourceOptimizerProgressEventArgs args)
+        private bool onReportProgress(ResourceOptimizerProgressEventArgs args)
         {
         	var handler = ReportProgress;
-            if (handler != null)
-            {
-                handler(this, args);
-                if (args.Cancel) return new CancelSignal{ShouldCancel = true};
-            }
-			return new CancelSignal();
+	        if (handler == null) return false;
+	        handler(this, args);
+	        return args.Cancel;
         }
     }
 }
