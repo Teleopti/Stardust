@@ -322,12 +322,12 @@ namespace Manager.Integration.Test.WPF.ViewModels
 					managerDbEntities.JobHistories.OrderByDescending(history => history.Created)
 						.ToList();
 
-				JobHistoryDataGroupBySentToData  = new ListCollectionView(JobHistoryData);
+				JobHistoryDataGroupBySentToData = new ListCollectionView(JobHistoryData);
 
 				if (JobHistoryDataGroupBySentToData.GroupDescriptions != null)
 				{
 					JobHistoryDataGroupBySentToData.GroupDescriptions.Add(new PropertyGroupDescription("SentTo"));
-				}					
+				}
 
 				++RefreshProgressValue;
 
