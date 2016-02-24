@@ -106,7 +106,7 @@ namespace Stardust.Node.Timers
 
 			catch
 			{
-				LogHelper.LogErrorWithLineNumber(Logger,
+				LogHelper.LogWarningWithLineNumber(Logger,
 				                                 WhoAmI + ": Node start up notification to manager failed.");
 			}
 		}
