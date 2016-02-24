@@ -24,11 +24,11 @@ namespace Stardust.Node.API
 		{
 			if (jobToDo == null)
 			{
-				LogHelper.LogInfoWithLineNumber(Logger, "Received Start Job Request. jobId is null");
+				LogHelper.LogInfoWithLineNumber(Logger, _workerWrapper.WhoamI + "Received Start Job Request. jobId is null");
 				return BadRequest("jobToDo is null");
 			}
 
-			LogHelper.LogInfoWithLineNumber(Logger, "Received Start Job Request. jobId: " + jobToDo.Id);
+			LogHelper.LogInfoWithLineNumber(Logger, _workerWrapper.WhoamI + "Received Start Job Request. jobId: " + jobToDo.Id);
 
 			if (_workerWrapper.IsTaskExecuting)
 			{
@@ -66,7 +66,7 @@ namespace Stardust.Node.API
 		[HttpDelete, AllowAnonymous, Route(NodeRouteConstants.CancelJob)]
 		public IHttpActionResult TryCancelJob(Guid jobId)
 		{
-			LogHelper.LogInfoWithLineNumber(Logger, "Received TryCancel request. jobId: " + jobId);
+			LogHelper.LogInfoWithLineNumber(Logger, _workerWrapper.WhoamI + "Received TryCancel request. jobId: " + jobId);
 
 			if (jobId == Guid.Empty)
 			{
