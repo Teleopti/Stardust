@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 				typeof (IScheduleChangedInDefaultScenario),
 				DomainUpdateType.NotApplicable, 
 				null,
-				message.TrackId);
+				message.TrackId == Guid.Empty ? Guid.NewGuid(): message.TrackId);
 		}
 	}
 }
