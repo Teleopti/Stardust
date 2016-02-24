@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[TestFixture]
 	[InfrastructureTest]
-	[Toggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	[Toggle(Toggles.RTA_TerminatedPersons_36042)]
 	public class HangfireRecurringEventPublisherTest : ISetup
 	{

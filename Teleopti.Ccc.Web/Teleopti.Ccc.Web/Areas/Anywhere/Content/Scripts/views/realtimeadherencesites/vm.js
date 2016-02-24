@@ -81,10 +81,6 @@
 					url: "api/Sites",
 					success: function (data) {
 						that.fill(data);
-
-						if (!resources.RTA_NewEventHangfireRTA_34333)
-							loadCurrentData();
-
 					}
 				});
 				subscriptions.unsubscribeAdherence();
@@ -93,18 +89,6 @@
 				}, that.BusinessUnitId(), function () {
 					$('.realtimeadherencesites').attr("data-subscription-done", " ");
 				});
-			};
-
-			var loadCurrentData = function () {
-				for (var i = 0; i < that.sites().length; i++) {
-					var site = that.sites()[i];
-					ajax.ajax({
-						url: "api/Sites/GetOutOfAdherence?siteId=" + site.Id,
-						success: function (d) {
-							that.update(d);
-						}
-					});
-				}
 			};
 
 			return that;

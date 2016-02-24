@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public class StateInfo : IAdherenceAggregatorInfo
+	public class StateInfo
 	{
 		private readonly IAppliedAlarm _appliedAlarm;
 
@@ -105,11 +105,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			};
 		}
 		
-		public EventAdherence AggregatorAdherence
-		{
-		    get { return Adherence.AdherenceForNewStateAndCurrentActivity(); }
-		}
-
 	    public bool Send
 		{
 			get

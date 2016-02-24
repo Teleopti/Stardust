@@ -60,13 +60,12 @@
 						<div class="agent-menu">
 							<div class="btn-group">
 								<!-- ko if: $root.permissionAddActivity -->
-							    <a class="btn btn-sm change-schedule" data-bind="attr: { href: ScheduleChangeUrl }">
-							        <i class="glyphicon glyphicon-pencil"></i> 
-                                    <span data-bind="text: $root.Resources.ModifySchedule"></span>
-							    </a>
+								<a class="btn btn-sm change-schedule" data-bind="attr: { href: ScheduleChangeUrl }">
+									<i class="glyphicon glyphicon-pencil"></i> 
+									<span data-bind="text: $root.Resources.ModifySchedule"></span>
+								</a>
 								<!-- /ko -->
 							</div>
-							<!-- ko if: $root.agentAdherenceEnabled -->
 							<!-- ko if: DisplayAdherencePercentage -->
 							<div class="adherence btn-group">
 								<!-- ko if: $root.agentAdherenceDetailsEnabled -->
@@ -84,7 +83,6 @@
 									<span data-bind="text: LastAdherenceUpdate"></span>
 								</div>
 							</div>
-							<!-- /ko -->
 							<!-- /ko -->
 						</div>
 					</td>

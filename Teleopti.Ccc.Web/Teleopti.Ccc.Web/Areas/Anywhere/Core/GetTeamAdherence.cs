@@ -12,18 +12,15 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	{
 		private readonly ISiteRepository _siteRepository;
 		private readonly INumberOfAgentsInTeamReader _numberOfAgentsInTeamReader;
-		private readonly ITeamAdherenceAggregator _teamAdherenceAggregator;
 		private readonly ITeamOutOfAdherenceReadModelReader _teamOutOfAdherenceReadModelReader;
 
 		public GetTeamAdherence(
 			ISiteRepository siteRepository, 
 			INumberOfAgentsInTeamReader numberOfAgentsInTeamReader,
-			ITeamAdherenceAggregator teamAdherenceAggregator, 
 			ITeamOutOfAdherenceReadModelReader teamOutOfAdherenceReadModelReader)
 		{
 			_siteRepository = siteRepository;
 			_numberOfAgentsInTeamReader = numberOfAgentsInTeamReader;
-			_teamAdherenceAggregator = teamAdherenceAggregator;
 			_teamOutOfAdherenceReadModelReader = teamOutOfAdherenceReadModelReader;
 		}
 
@@ -40,7 +37,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				NumberOfAgents = tryGetNumberOfAgents(numberOfAgents, team),
 				SiteId = siteId
 			});
-
 		}
 
 		private static int tryGetNumberOfAgents(IDictionary<Guid, int> numberOfAgents, ITeam team)
@@ -49,17 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			int result;
 			return numberOfAgents != null && numberOfAgents.TryGetValue(teamId, out result) ? result : 0;
 		}
-
-		public TeamOutOfAdherence GetOutOfAdherence(Guid teamId)
-		{
-			var outOfAdherence = _teamAdherenceAggregator.Aggregate(teamId);
-			return new TeamOutOfAdherence
-			{
-				Id = teamId,
-				OutOfAdherence = outOfAdherence
-			};
-		}
-
+		
 		public IEnumerable<TeamOutOfAdherence> GetOutOfAdherenceForTeamsOnSite(Guid siteId)
 		{
 			var adherence = _teamOutOfAdherenceReadModelReader.Read(siteId);

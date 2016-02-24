@@ -56,8 +56,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
 		private readonly LoadStatisticsAndActualHeadsCommand _loadStatisticsAndActualHeadsCommand;
 		private readonly Queue<MessageForRetryCommand> _messageForRetryQueue = new Queue<MessageForRetryCommand>();
 		private readonly IPoller _poller;
-		private readonly IToggleManager _toggleManger;
-		private bool? _pollingEnabled;
 		private readonly IPersonAccountPersister _personAccountPersister;
 
 
@@ -75,7 +73,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			OnEventScheduleMessageCommand onEventScheduleMessageCommand,
 			OnEventMeetingMessageCommand onEventMeetingMessageCommand,
 			LoadStatisticsAndActualHeadsCommand loadStatisticsAndActualHeadsCommand,
-			IPoller poller, IToggleManager toggleManger, IPersonAccountPersister personAccountPersister)
+			IPoller poller,
+			IPersonAccountPersister personAccountPersister)
 		{
 			_eventAggregator = eventAggregator;
 			_scheduleDictionarySaver = scheduleDictionarySaver;
@@ -99,7 +98,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
 			_intradayDate = HistoryOnly ? SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod.StartDate : DateOnly.Today;
 			_poller = poller;
-			_toggleManger = toggleManger;
 			_personAccountPersister = personAccountPersister;
 		}
 
@@ -107,12 +105,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 		{
 			get { return _earlyWarningEnabled; }
 		}
-
-		public bool? PollingEnabled
-		{
-			get { return _pollingEnabled ?? (_pollingEnabled = _toggleManger.IsEnabled(Toggles.RTA_NewEventHangfireRTA_34333)); }
-		}
-
+		
 		public bool RealTimeAdherenceEnabled
 		{
 			get { return _realTimeAdherenceEnabled; }
@@ -142,27 +135,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
 																 typeof(IForecastData),
 																 period.StartDateTime,
 																 period.EndDateTime);
-
-			if (!_realTimeAdherenceEnabled || HistoryOnly || PollingEnabled.Equals(true)) return;
-
-			if (SchedulerStateHolder.FilteredPersonDictionary.Count > 100)
-			{
-				_messageBroker.RegisterEventSubscription(OnEventActualAgentStateMessageHandler,
-														typeof(AgentStateReadModel),
-														DateTime.UtcNow,
-														DateTime.UtcNow.AddDays(1));
-			}
-			else
-			{
-				foreach (var person in SchedulerStateHolder.FilteredPersonDictionary.Values)
-				{
-					_messageBroker.RegisterEventSubscription(OnEventActualAgentStateMessageHandler,
-															person.Id.GetValueOrDefault(),
-															typeof(AgentStateReadModel),
-															DateTime.UtcNow,
-															DateTime.UtcNow.AddDays(1));
-				}
-			}
 		}
 
 		public void OnEventActualAgentStateMessageHandler(object sender, EventMessageArgs e)
@@ -322,15 +294,10 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			listenForMessageBroker();
 			_eventAggregator.GetEvent<IntradayLoadProgress>().Publish(Resources.LoadingInitialStatesThreeDots);
 			if (!_realTimeAdherenceEnabled || HistoryOnly) return;
-			if (PollingEnabled.Equals(true))
-			{
-				string pollingInterval;
-				if (!StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings.TryGetValue("RtaPollingInterval", out pollingInterval))
-					pollingInterval = "5000";
-				_poller.Poll(Convert.ToInt32(pollingInterval), loadExternalAgentStates);
-			}
-			else
-				loadExternalAgentStates();
+			string pollingInterval;
+			if (!StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings.TryGetValue("RtaPollingInterval", out pollingInterval))
+				pollingInterval = "5000";
+			_poller.Poll(Convert.ToInt32(pollingInterval), loadExternalAgentStates);
 		}
 
 		private void loadExternalAgentStates()
@@ -406,8 +373,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			_messageBroker.UnregisterSubscription(OnEventScheduleMessageHandler);
 			_messageBroker.UnregisterSubscription(OnEventStatisticMessageHandler);
 			_messageBroker.UnregisterSubscription(OnEventMeetingMessageHandler);
-			if (PollingEnabled.Equals(false))
-				_messageBroker.UnregisterSubscription(OnEventActualAgentStateMessageHandler);
 		}
 
 		public void Save()

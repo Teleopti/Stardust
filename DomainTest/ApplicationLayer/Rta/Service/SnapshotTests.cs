@@ -14,8 +14,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	[TestFixture]
 	public class SnapshotTests
 	{
+		public FakeAgentStateReadModelStorage Persister;
 		public FakeRtaDatabase Database;
-		public FakeMessageSender Sender;
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 
@@ -43,7 +43,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 					StateCode = "statecode"
 				}
 			});
-			Sender.AllNotifications.Clear();
 
 			Target.SaveStateSnapshot(new[]
 			{
@@ -54,8 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				},
 			});
 
-			Sender.NotificationsOfType<AgentStateReadModel>()
-				.Select(x => x.DeseralizeActualAgentState())
+			Persister.Models			
 				.Single(x => x.PersonId == personId)
 				.StateCode.Should().Be("CCC Logged out");
 		}
@@ -100,9 +98,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 					SourceId = "source1",
 				}
 			});
-
-			Sender.NotificationsOfType<AgentStateReadModel>()
-				.Select(x => x.DeseralizeActualAgentState())
+			
+			Persister.Models
 				.Single(x => x.PersonId == personId)
 				.StateCode.Should().Be("statecode");
 		}
@@ -132,7 +129,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				SourceId = "source1",
 				StateCode = "statecode1",
 			});
-			Sender.AllNotifications.Clear();
 
 			Target.SaveStateSnapshot(new[]
 			{
@@ -144,8 +140,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				}
 			});
 
-			Sender.NotificationsOfType<AgentStateReadModel>()
-				.Select(x => x.DeseralizeActualAgentState())
+			Persister.Models
 				.Single(x => x.PersonId == personId)
 				.StateCode.Should().Be("CCC Logged out");
 		}
@@ -187,8 +182,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				}
 			});
 
-			Sender.NotificationsOfType<AgentStateReadModel>()
-				.Select(x => x.DeseralizeActualAgentState())
+			Persister.Models
 				.Single(x => x.PersonId == personId)
 				.StateCode.Should().Be("statecode1");
 		}
@@ -227,8 +221,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				},
 			});
 
-			Sender.NotificationsOfType<AgentStateReadModel>()
-				.Select(x => x.DeseralizeActualAgentState())
+			Persister.Models
 				.Single(x => x.PersonId == personId)
 				.StateCode.Should().Be("statecode2");
 		}
@@ -260,7 +253,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 					PlatformTypeId = platformTypeId.ToString()
 				}
 			});
-			Sender.AllNotifications.Clear();
 
 			Target.SaveStateSnapshot(new[]
 			{
@@ -272,8 +264,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				},
 			});
 
-			Sender.NotificationsOfType<AgentStateReadModel>()
-				.Select(x => x.DeseralizeActualAgentState())
+			Persister.Models
 				.Single(x => x.PersonId == personId)
 				.PlatformTypeId.Should().Be.EqualTo(Guid.Empty);
 		}

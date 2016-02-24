@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 	public class FakeRtaDatabase : IDatabaseReader, IFakeDataBuilder
 	{
 		private readonly IConfigReader _config;
-		private readonly IToggleManager _toggles;
 		private readonly INow _now;
 		public readonly FakeAgentStateReadModelStorage AgentStateReadModels;
 		public readonly FakeRtaStateGroupRepository RtaStateGroupRepository;
@@ -93,7 +92,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public FakeRtaDatabase(
 			IConfigReader config,
-			IToggleManager toggles,
 			INow now,
 			FakeAgentStateReadModelStorage agentStateReadModels,
 			FakeRtaStateGroupRepository rtaStateGroupRepository,
@@ -107,7 +105,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			)
 		{
 			_config = config;
-			_toggles = toggles;
 			_now = now;
 			AgentStateReadModels = agentStateReadModels;
 			RtaStateGroupRepository = rtaStateGroupRepository;

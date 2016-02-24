@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
 	[TestFixture]
 	[RtaTest]
-	[Toggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	public class NoBrokerTest
 	{
 		public Domain.ApplicationLayer.Rta.Service.Rta target;

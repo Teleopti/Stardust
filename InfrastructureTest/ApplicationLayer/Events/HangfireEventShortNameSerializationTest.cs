@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[TestFixture]
 	[InfrastructureTest]
-	[Toggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	public class HangfireEventShortNameSerializationTest : ISetup
 	{
 		public FakeHangfireEventClient JobClient;

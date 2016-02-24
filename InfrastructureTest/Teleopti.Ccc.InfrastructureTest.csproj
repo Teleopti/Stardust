@@ -508,8 +508,6 @@
     <Compile Include="Rta\NumberOfAgentsInTeamReaderTest.cs" />
     <Compile Include="Rta\NumberOfAgentsInSiteReaderTest.cs" />
     <Compile Include="Rta\DatabaseReaderPersonOrganizationDataTest.cs" />
-    <Compile Include="Rta\TeamAdherenceAggregatorTest.cs" />
-    <Compile Include="Rta\SiteAdherenceAggregatorTest.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\ExecuteTarget.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\FetchPersonIdAndTimeZoneTest.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\PersonAssignmentDateSetterTest.cs" />

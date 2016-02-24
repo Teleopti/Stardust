@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
 	[InfrastructureTest]
-	[Toggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	public class PublishRtaEventsToHangfireTest : ISetup
 	{
 		public IEventPublisher Target;

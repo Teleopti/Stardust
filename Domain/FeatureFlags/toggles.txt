@@ -44,7 +44,6 @@ Badge_Leaderboard_30584 = true
 MyTeam_Reports_31070 = true
 MyTimeWeb_AbsenceReport_31011 = true
 ETL_SpeedUpETL_30791 = true
-RTA_NewEventHangfireRTA_34333 = true
 #Cannot be relreased yet due to performance and IO #
 RTA_AdherenceDetails_34267 = RC
 RTA_NotifyViaSMS_31567 = true

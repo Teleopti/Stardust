@@ -254,7 +254,6 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\ShiftTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\NeutralAdherenceTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ActualAgentStateExtension.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\Aggregator\AdherenceAggregatorInitializeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherenceDetails\ActivityTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherenceDetails\BelongsToDateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherenceDetails\LastUpdateTest.cs" />
@@ -296,11 +295,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\PersonStateChangedEventTest.cs" />
     <Compile Include="ApplicationLayer\Rta\RtaExtensions.cs" />
     <Compile Include="ApplicationLayer\Rta\RtaTestAttribute.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\SendAdherenceMessagesTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\SendAgentStateTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\SendAgentStateWithAlarmTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\SendAgentStateWithStateTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\Aggregator\SiteAdherenceTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\PersistAgentStateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteAdherence\UpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteAdherence\UnorderedEventsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\SnapshotTests.cs" />
@@ -311,7 +306,6 @@
     <Compile Include="ApplicationLayer\Rta\Synchronization\HandlerLockingTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Synchronization\SiteAdherenceTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Synchronization\TeamAdherenceTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\Aggregator\TeamAdherenceTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamAdherence\UpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamAdherence\UnorderedEventsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UnrecognizedStateTest.cs" />

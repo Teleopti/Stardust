@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
 	[TestFixture]
 	[RtaTest]
-	[Toggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	public class IncorrectOutOfAdherenceCount35829
 	{
 		public FakeRtaDatabase Database;

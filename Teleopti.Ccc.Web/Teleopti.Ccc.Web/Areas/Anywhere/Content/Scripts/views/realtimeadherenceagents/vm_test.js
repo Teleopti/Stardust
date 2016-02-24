@@ -691,7 +691,6 @@
                             AdherencePercent: personId === "guid1" ? 12 : 0
                         });
                     });
-                    vm.agentAdherenceEnabled(true);
 
                     vm.fillAgents([{ PersonId: "guid1" }]);
 
@@ -700,26 +699,12 @@
                     assert.equals(vm.Agents()[0].HistoricalAdherence(), '12%');
                 },
 
-                "should only fetch historical data if agentAdherence is enabled": function () {
-                    var hasFetchedHistoricalAdherence = false;
-                    var vm = viewModel(function () {
-                        hasFetchedHistoricalAdherence = true;
-                    });
-                    vm.agentAdherenceEnabled(false);
-                    vm.fillAgents([{ PersonId: "guid1" }]);
-
-                    vm.SelectAgent("guid1");
-
-                    assert.isFalse(hasFetchedHistoricalAdherence);
-                },
-
                 "should update time since last update": function () {
                     var vm = viewModel(function (callback) {
                         callback({
                             LastTimestamp: "0:10:00"
                         });
                     });
-                    vm.agentAdherenceEnabled(true);
                     vm.fillAgents([{ PersonId: "guid1" }]);
 
                     vm.SelectAgent("guid1");
@@ -731,7 +716,6 @@
                     var vm = viewModel(function (callback) {
                         callback({});
                     });
-                    vm.agentAdherenceEnabled(true);
                     vm.fillAgents([{ PersonId: "guid1" }]);
 
                     vm.SelectAgent("guid1");
@@ -745,7 +729,6 @@
                             AdherencePercent: 12
                         });
                     });
-                    vm.agentAdherenceEnabled(true);
                     vm.fillAgents([{ PersonId: "guid1" }]);
 
                     vm.SelectAgent("guid1");
@@ -759,7 +742,6 @@
                             AdherencePercent: 21
                         });
                     });
-                    vm.agentAdherenceEnabled(true);
 
                     vm.fillAgents([{ PersonId: "guid1" }]);
                     vm.fillAgentsStates([{ PersonId: "guid1" }]);

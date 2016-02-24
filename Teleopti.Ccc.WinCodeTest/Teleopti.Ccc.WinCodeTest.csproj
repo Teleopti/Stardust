@@ -428,7 +428,6 @@
     <Compile Include="Intraday\OnEventScheduleMessageCommandTest.cs" />
     <Compile Include="Intraday\DayLayerModelTest.cs" />
     <Compile Include="Intraday\DispatcherWrapperTest.cs" />
-    <Compile Include="Intraday\IntradayMessageBrokerRetryTest.cs" />
     <Compile Include="Intraday\OnEventForecastMessageCommandTest.cs" />
     <Compile Include="Intraday\OnEventStatisticMessageCommandTest.cs" />
     <Compile Include="Intraday\OpenIntradayTodayCommandTest.cs" />
@@ -771,7 +770,6 @@
     <Compile Include="Common\Chart\ChartSettingsManagerTest.cs" />
     <Compile Include="Forecasting\TextManagerTest.cs" />
     <Compile Include="Intraday\DayLayerViewModelTest.cs" />
-    <Compile Include="Intraday\IntradayPresenterTest.cs" />
     <Compile Include="PeopleAdmin\Comparers\OptionalColumnComparerTest.cs" />
     <Compile Include="PeopleAdmin\Comparers\PeopleAdminCultureComparerTest.cs" />
     <Compile Include="PeopleAdmin\Comparers\PersonAccountDateComparerTest.cs" />

@@ -678,7 +678,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolveHangfireServerStartupTaskIfToggleEnabled()
 		{
-			using (var container = buildContainer(Toggles.RTA_NewEventHangfireRTA_34333, true))
+			using (var container = buildContainer())
 			{
 				container.Resolve<IEnumerable<IBootstrapperTask>>()
 					.Select(x => x.GetType())
@@ -686,20 +686,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 					.Contain(typeof (HangfireServerStartupTask));
 			}
 		}
-
-		[Test]
-		public void ShouldNotResolveHangfireServerStartupTaskIfToggleDisabled()
-		{
-			using (var container = buildContainer(Toggles.RTA_NewEventHangfireRTA_34333, false))
-			{
-				container.Resolve<IEnumerable<IBootstrapperTask>>()
-					.Select(x => x.GetType())
-					.Should()
-					.Not
-					.Contain(typeof (HangfireServerStartupTask));
-			}
-		}
-
+		
 		[Test]
 		public void ShouldResolveStardustServerStartupTaskIfToggleEnabled()
 		{

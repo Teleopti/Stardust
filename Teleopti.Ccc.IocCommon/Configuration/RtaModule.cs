@@ -2,14 +2,11 @@
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Rta;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -31,28 +28,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CacheInvalidator>().As<ICacheInvalidator>().SingleInstance();
 			builder.RegisterType<RtaProcessor>().SingleInstance();
 			builder.RegisterType<AgentStateReadModelUpdater>().As<IAgentStateReadModelUpdater>().SingleInstance();
-
-			if (_config.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
-			{
-				builder.RegisterType<NoMessage>().As<IAgentStateMessageSender>().SingleInstance();
-				builder.RegisterType<NoAggregation>().As<IAdherenceAggregator>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<AgentStateMessageSender>().As<IAgentStateMessageSender>().SingleInstance();
-				builder.RegisterType<AdherenceAggregator>().As<IAdherenceAggregator>().SingleInstance();
-			}
-
+			
 			if (_config.Toggle(Toggles.RTA_DeletedPersons_36041))
 				builder.RegisterType<LoadFromDatabase>().As<IPersonLoader>().SingleInstance();
 			else
 				builder.RegisterType<LoadByResolve>().As<IPersonLoader>().SingleInstance();
-			builder.RegisterType<OrganizationForPerson>().SingleInstance().As<IOrganizationForPerson>();
 
-			if (_config.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
-				builder.RegisterType<StateStreamSynchronizer>().As<IStateStreamSynchronizer>().SingleInstance();
-			else
-				builder.RegisterType<NoStateStreamSynchronizer>().As<IStateStreamSynchronizer>().SingleInstance();
+			builder.RegisterType<StateStreamSynchronizer>().SingleInstance();
 
 			builder.RegisterType<StateMapper>().As<IStateMapper>().SingleInstance();
 
@@ -97,28 +79,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AgentStateViewModelBuilder>().SingleInstance().As<IAgentStateViewModelBuilder>();
 			builder.RegisterType<RtaDecoratingEventPublisher>().As<IRtaDecoratingEventPublisher>().SingleInstance();
 
-			if (_config.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
-			{
-				builder.RegisterType<ShiftEventPublisher>().SingleInstance().As<IShiftEventPublisher>();
-				builder.RegisterType<AdherenceEventPublisher>().SingleInstance().As<IAdherenceEventPublisher>();
-			}
-			else
-			{
-				builder.RegisterType<NoEvents>().SingleInstance().As<IShiftEventPublisher>();
-				builder.RegisterType<NoEvents>().SingleInstance().As<IAdherenceEventPublisher>();
-			}
-
-			if (_config.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
-			{
-				builder.RegisterType<StateEventPublisher>().SingleInstance().As<IStateEventPublisher>();
-				builder.RegisterType<ActivityEventPublisher>().SingleInstance().As<IActivityEventPublisher>();
-			}
-			else
-			{
-				builder.RegisterType<NoEvents>().SingleInstance().As<IStateEventPublisher>();
-				builder.RegisterType<NoEvents>().SingleInstance().As<IActivityEventPublisher>();
-			}
-
+			builder.RegisterType<ShiftEventPublisher>().SingleInstance().As<IShiftEventPublisher>();
+			builder.RegisterType<AdherenceEventPublisher>().SingleInstance().As<IAdherenceEventPublisher>();
+			builder.RegisterType<StateEventPublisher>().SingleInstance().As<IStateEventPublisher>();
+			builder.RegisterType<ActivityEventPublisher>().SingleInstance().As<IActivityEventPublisher>();
+			
 			if (_config.Toggle(Toggles.RTA_CalculatePercentageInAgentTimezone_31236))
 			{
 				builder.RegisterType<BelongsToDateDecorator>().As<IRtaEventDecorator>().SingleInstance();

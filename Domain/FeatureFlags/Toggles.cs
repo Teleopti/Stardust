@@ -21,7 +21,6 @@
 		Settings_SetAgentDescription_23257,
 		Settings_AlertViaEmailFromSMSLink_30444,
 
-		RTA_NewEventHangfireRTA_34333,
 		RTA_AdherenceDetails_34267,
 		RTA_CalculatePercentageInAgentTimezone_31236,
 		RTA_NeutralAdherence_30930,

@@ -16,21 +16,18 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 	{
 		private readonly ISiteRepository _siteRepository;
 		private readonly INumberOfAgentsInSiteReader _numberOfAgentsInSiteReader;
-		private readonly ISiteAdherenceAggregator _siteAdherenceAggregator;
 		private readonly IGetSiteAdherence _getAdherence;
 		private readonly IPersonalAvailableDataProvider _personalAvailableDataProvider;
 		private readonly INow _now;
 
 		public SitesController(ISiteRepository siteRepository,
 			INumberOfAgentsInSiteReader numberOfAgentsInSiteReader,
-			ISiteAdherenceAggregator siteAdherenceAggregator, 
 			IGetSiteAdherence getAdherence,
 			IPersonalAvailableDataProvider personalAvailableDataProvider, 
 			INow now)
 		{
 			_siteRepository = siteRepository;
 			_numberOfAgentsInSiteReader = numberOfAgentsInSiteReader;
-			_siteAdherenceAggregator = siteAdherenceAggregator;
 			_getAdherence = getAdherence;
 			_personalAvailableDataProvider = personalAvailableDataProvider;
 			_now = now;
@@ -68,17 +65,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			{
 				Id = site.Id.GetValueOrDefault(),
 				Name = site.Description.Name
-			});
-		}
-		
-		[UnitOfWork, HttpGet, Route("api/Sites/GetOutOfAdherence")]
-		public virtual IHttpActionResult GetOutOfAdherence(Guid siteId)
-		{
-			var outOfAdherence = _siteAdherenceAggregator.Aggregate(siteId);
-			return Ok(new SiteOutOfAdherence
-			{
-				Id = siteId,
-				OutOfAdherence = outOfAdherence
 			});
 		}
 		

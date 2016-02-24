@@ -4,17 +4,14 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
-using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
 	[TestFixture]
 	[RtaTest]
-	[Toggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	public class PersonShiftStartEventTest
 	{
 		public FakeRtaDatabase Database;

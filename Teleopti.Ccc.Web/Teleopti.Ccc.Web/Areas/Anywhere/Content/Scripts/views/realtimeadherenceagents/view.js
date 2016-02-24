@@ -85,9 +85,6 @@
 
 			var populateTeam = function(teamId) {
 				populate("api/Agents/ForTeam?teamId=" + teamId, function() {
-					if (!resources.RTA_NewEventHangfireRTA_34333) {
-						loadStatesForTeam(teamId);
-					}
 					subscriptions.subscribeAdherence(function(notification) {
 							viewModel.updateFromNotification(notification);
 						},
@@ -122,29 +119,10 @@
 
 			if (options.id === 'MultipleTeams') {
 				var teams = amplify.store('MultipleTeams');
-				if (!resources.RTA_NewEventHangfireRTA_34333) {
-					for (var i = 0; i < teams.length; i++) {
-						populateTeam(teams[i]);
-					}
-				} else {
-					populateTeams(teams);
-				}
+				populateTeams(teams);
 			} else if (options.id === 'MultipleSites') {
 				var sites = amplify.store('MultipleSites');
-				if (!resources.RTA_NewEventHangfireRTA_34333) {
-					for (var site = 0; site < sites.length; site++) {
-						ajax.ajax({
-							url: "api/Teams/ForSite?siteId=" + sites[site],
-							success: function(data) {
-								for (var teamInSite = 0; teamInSite < data.length; teamInSite++) {
-									populateTeam(data[teamInSite].Id);
-								}
-							}
-						});
-					}
-				} else {
-					populateSites(sites);
-				}
+				populateSites(sites);
 			} else {
 				populateTeam(options.id);
 			}
@@ -155,7 +133,6 @@
 				viewModel.notifyViaSMSEnabled(resources.RTA_NotifyViaSMS_31567 && viewModel.permissionSendMessage());
 			});
 
-			viewModel.agentAdherenceEnabled(resources.RTA_NewEventHangfireRTA_34333);
 			viewModel.agentAdherenceDetailsEnabled(resources.RTA_AdherenceDetails_34267);
 		},
 		dispose: function (options) {

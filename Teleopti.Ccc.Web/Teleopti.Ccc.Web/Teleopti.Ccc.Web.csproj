@@ -1476,15 +1476,10 @@
     <Content Include="Areas\Anywhere\Content\Scripts\helpers_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\knockout.justgagebinding.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\signalrhubs.started.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\subscriptions.adherenceagents.poller.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\subscriptions.adherenceteams.poller.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\require\raphaelloader.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timezone-current.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timezone-display.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\subscriptions.adherenceagents.broker.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\subscriptions.adherenceagents.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesites\subscriptions.adherencesites.broker.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\subscriptions.adherenceteams.broker.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\subscriptions.adherenceteams.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.trackingmessages.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.personschedule.js" />
@@ -1503,7 +1498,6 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\absencelistitem_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\moveactivityform.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm_test.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesites\subscriptions.adherencesites.poller.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\filter.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\agent.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\getadherence.js" />

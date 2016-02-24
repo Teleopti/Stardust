@@ -3,17 +3,12 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
-using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 {
 	[RtaTest]
-	[Toggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	[TestFixture]
 	public class InitializeProcessTest
 	{

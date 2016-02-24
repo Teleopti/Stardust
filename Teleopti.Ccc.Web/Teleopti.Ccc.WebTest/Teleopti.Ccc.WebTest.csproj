@@ -226,14 +226,12 @@
     <Compile Include="Areas\Anywhere\Rta\AgentsControllerTest.cs" />
     <Compile Include="Areas\Anywhere\BusinessUnitControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Rta\FakeNumberOfAgentsInTeamReader.cs" />
-    <Compile Include="Areas\Anywhere\Rta\FakeTeamAdherenceAggregator.cs" />
     <Compile Include="Areas\Anywhere\Rta\FakeTeamOutOfAdherenceReadModelReader.cs" />
     <Compile Include="Areas\Anywhere\GroupPageControllerTest.cs" />
     <Compile Include="Areas\Anywhere\ReportsControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Rta\AgentStateViewModelBuilderTest.cs" />
     <Compile Include="Areas\Anywhere\Rta\GetAgentStatesTest.cs" />
     <Compile Include="Areas\Anywhere\Rta\GetAgentsTest.cs" />
-    <Compile Include="Areas\Anywhere\SitesControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Rta\TeamsControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Rta\GetSiteAdherenceTest.cs" />
     <Compile Include="Areas\Anywhere\Rta\GetTeamAdherenceTest.cs" />

@@ -1,6 +1,5 @@
 using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -67,12 +66,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				return _appliedAdherence.ForEvent(null, null);
 			return _appliedAdherence.ForEvent(rule.Adherence, rule.StaffingEffect);
 		}
-
-		public static EventAdherence AggregatorAdherence(AgentStateReadModel readModel)
-		{
-			return new ByStaffingEffect().ForEvent(null, readModel.StaffingEffect);
-		}
-
 
 
 

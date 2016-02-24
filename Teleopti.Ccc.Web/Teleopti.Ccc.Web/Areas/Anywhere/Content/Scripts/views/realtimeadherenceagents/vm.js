@@ -39,7 +39,6 @@
 			that.groupId = ko.observable();
 			that.BusinessUnitId = "";
 			that.rootURI = ko.observable();
-			that.agentAdherenceEnabled = ko.observable(false);
 			that.agentAdherenceDetailsEnabled = ko.observable(false);
 			that.notifyViaSMSEnabled = ko.observable(false);
 			that.AgentAdherence = ko.observable();
@@ -173,13 +172,11 @@
 				}
 
 				deselectAllAgentsExcept(agentStateClicked);
-				if (that.agentAdherenceEnabled()) {
-					fetchHistoricalAdherence(function (data) {
-						agentStateClicked.DisplayAdherencePercentage(data.AdherencePercent != undefined || data.LastTimestamp != undefined);
-						agentStateClicked.HistoricalAdherence(data.AdherencePercent == undefined ? '-' : data.AdherencePercent + '%');
-						agentStateClicked.LastAdherenceUpdate(data.LastTimestamp);
-					}, agentStateClicked.PersonId);
-				}
+				fetchHistoricalAdherence(function (data) {
+					agentStateClicked.DisplayAdherencePercentage(data.AdherencePercent != undefined || data.LastTimestamp != undefined);
+					agentStateClicked.HistoricalAdherence(data.AdherencePercent == undefined ? '-' : data.AdherencePercent + '%');
+					agentStateClicked.LastAdherenceUpdate(data.LastTimestamp);
+				}, agentStateClicked.PersonId);
 				agentStateClicked.Selected(!agentStateClicked.Selected());
 
 			};

@@ -6,7 +6,6 @@
 Background:
 	Given there is a switch
 
-@OnlyRunIfEnabled('RTA_NewEventHangfireRTA_34333')
 Scenario: Should be able to see adherence percentage from agent state overview
 	Given there is an activity named 'Phone'
 	And there is a site named 'Paris'

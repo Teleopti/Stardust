@@ -7,14 +7,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 	{
 		void Start();
 	}
-
-	public class NoHangfireClient : IHangfireClientStarter
-	{
-		public void Start()
-		{
-		}
-	}
-
+	
 	public class HangfireClientStarter : IHangfireClientStarter
 	{
 		private readonly IConfigReader _config;

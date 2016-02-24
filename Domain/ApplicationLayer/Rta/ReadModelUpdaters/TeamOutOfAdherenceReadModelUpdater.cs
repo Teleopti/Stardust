@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
-	[UseOnToggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	public class TeamOutOfAdherenceReadModelUpdater : 
 		IRunOnHangfire,
 		IHandleEvent<PersonInAdherenceEvent>, 

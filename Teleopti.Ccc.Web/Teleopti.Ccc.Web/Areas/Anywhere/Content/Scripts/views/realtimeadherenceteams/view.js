@@ -34,12 +34,7 @@
 			ajax.ajax({
 				url: "api/Teams/ForSite?siteId=" + siteId,
 				success: function (data) {
-
 					viewModel.fill(data);
-
-					if (!resources.RTA_NewEventHangfireRTA_34333)
-						loadCurrentData();
-
 				}
 			});
 
@@ -63,18 +58,6 @@
 					});
 				}
 			});
-
-			var loadCurrentData = function () {
-				for (var i = 0; i < viewModel.teams().length; i++) {
-					var team = viewModel.teams()[i];
-					ajax.ajax({
-						url: "api/Teams/GetOutOfAdherence?teamId=" + team.Id,
-						success: function (d) {
-							viewModel.update(d);
-						}
-					});
-				}
-			};
 		},
 		dispose : function(options) {
 			unsubscriber.unsubscribeAdherence();

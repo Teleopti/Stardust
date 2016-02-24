@@ -37,10 +37,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<RecurringJobManager>()
 				.SingleInstance();
 
-			if (_configuration.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
-				builder.RegisterType<HangfireClientStarter>().As<IHangfireClientStarter>().SingleInstance();
-			else
-				builder.RegisterType<NoHangfireClient>().As<IHangfireClientStarter>().SingleInstance();
+			builder.RegisterType<HangfireClientStarter>().As<IHangfireClientStarter>().SingleInstance();
 
 			builder.RegisterType<HangfireUtilties>().SingleInstance();
 		}

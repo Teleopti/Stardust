@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
@@ -15,6 +16,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	{
 		public FakeRtaDatabase Database;
 		public FakeMessageSender Sender;
+		public IAgentStateReadModelReader Reader;
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 
@@ -34,8 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 
-			Sender.NotificationsOfType<AgentStateReadModel>().Last().DeseralizeActualAgentState()
-				.StateCode.Should().Be("phone");
+			Database.PersistedReadModel.StateCode.Should().Be("phone");
 		}
 
 		[Test]
@@ -58,8 +59,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 
-			Sender.NotificationsOfType<AgentStateReadModel>().Last().DeseralizeActualAgentState()
-				.StateName.Should().Be("alarm");
+			Database.PersistedReadModel.StateName.Should().Be("alarm");
 		}
 
 		[Test]

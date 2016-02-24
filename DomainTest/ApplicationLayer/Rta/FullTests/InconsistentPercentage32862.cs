@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 {
 	[DomainTest]
 	[TestFixture]
-	[Toggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	[Toggle(Toggles.RTA_NeutralAdherence_30930)]
 	public class InconsistentPercentage32862 : ISetup
 	{

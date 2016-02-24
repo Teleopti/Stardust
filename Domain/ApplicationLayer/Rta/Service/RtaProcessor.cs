@@ -54,8 +54,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					_appliedAlarm);
 
 				context.AgentStateReadModelUpdater.Update(info);
-				context.MessageSender.Send(info);
-				context.AdherenceAggregator.Aggregate(info);
 
 				using (_eventPublisherScope.OnThisThreadPublishTo(eventCollector))
 				{

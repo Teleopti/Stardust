@@ -1,15 +1,52 @@
 define([
-	'resources',
-	'views/realtimeadherenceteams/subscriptions.adherenceteams.broker',
-	'views/realtimeadherenceteams/subscriptions.adherenceteams.poller'
+	'jquery',
+	'ajax'
 ], function (
-	resources,
-	broker,
-	poller
+	$,
+	ajax
 	) {
+	var poller = null;
 
-	if (resources.RTA_NewEventHangfireRTA_34333)
-		return poller;
-	return broker;
+	var unsubscribeAdherence = function () {
+		if (!poller)
+			return;
+		clearInterval(poller);
+		poller = null;
+	};
+
+	var mapAsNotification = function (data) {
+		return {
+			DomainId: data.Id,
+			BinaryData: JSON.stringify(data)
+		}
+	}
+
+	var load = function (callback, businessUnitId, siteId) {
+		ajax.ajax({
+			headers: { 'X-Business-Unit-Filter': businessUnitId },
+			url: "api/Teams/GetOutOfAdherenceForTeamsOnSite?siteId=" + siteId,
+			success: function (data) {
+				for (var i = 0; i < data.length; i++) {
+					callback(mapAsNotification(data[i]));
+				}
+			}
+		});
+	};
+
+	return {
+		subscribeAdherence: function (callback, businessUnitId, siteId, subscriptionDone) {
+			unsubscribeAdherence();
+
+			var poll = function () {
+				load(callback, businessUnitId, siteId);
+			};
+			setTimeout(poll, 100);
+			poller = setInterval(poll, 5000);
+
+			subscriptionDone();
+		},
+
+		unsubscribeAdherence: unsubscribeAdherence
+	};
 
 });

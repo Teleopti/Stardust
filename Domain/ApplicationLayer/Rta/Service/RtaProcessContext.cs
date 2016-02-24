@@ -1,6 +1,5 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -12,8 +11,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			PersonOrganizationData person, 
 			INow now, 
 			IAgentStateReadModelUpdater agentStateReadModelUpdater, 
-			IAgentStateMessageSender messageSender, 
-			IAdherenceAggregator adherenceAggregator, 
 			IPreviousStateInfoLoader previousStateInfoLoader)
 		{
 			Person = person;
@@ -22,8 +19,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			PreviousStateInfoLoader = previousStateInfoLoader;
 			AgentStateReadModelUpdater = agentStateReadModelUpdater ?? new DontUpdateAgentStateReadModel();
-			MessageSender = messageSender ?? new NoMessage();
-			AdherenceAggregator = adherenceAggregator ?? new NoAggregation();
 		}
 
 		public PersonOrganizationData Person { get; private set; }
@@ -32,8 +27,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public IPreviousStateInfoLoader PreviousStateInfoLoader { get; private set; }
 		public IAgentStateReadModelUpdater AgentStateReadModelUpdater { get; private set; }
-		public IAgentStateMessageSender MessageSender { get; private set; }
-		public IAdherenceAggregator AdherenceAggregator { get; private set; }
 
 	}
 }

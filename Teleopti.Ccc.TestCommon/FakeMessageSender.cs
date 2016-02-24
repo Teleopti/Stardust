@@ -15,9 +15,6 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 		public Message LastMessage;
-		public Message LastTeamMessage;
-		public Message LastSiteMessage;
-		public Message LastAgentsMessage;
 		public ICollection<Message> AllNotifications;
 
 		public void Send(Message message)
@@ -25,13 +22,6 @@ namespace Teleopti.Ccc.TestCommon
 			lock (AllNotifications)
 			{
 				LastMessage = message;
-
-				if (message.DomainType.Contains("Team"))
-					LastTeamMessage = message;
-				else if (message.DomainType.Contains("Agents"))
-					LastAgentsMessage = message;
-				else
-					LastSiteMessage = message;
 				lock (AllNotifications)
 					AllNotifications.Add(message);
 			}

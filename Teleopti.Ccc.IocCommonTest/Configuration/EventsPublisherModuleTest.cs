@@ -62,25 +62,10 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldResolveHangfireOrBusPublisherIfToggleEnabled()
 		{
-			using (var container = buildContainer(Toggles.RTA_NewEventHangfireRTA_34333, true))
+			using (var container = buildContainer())
 			{
 				container.Resolve<IEventPublisher>().Should().Be.OfType<MultiEventPublisher>();
 			}
-		}
-
-		private ILifetimeScope buildContainer(Toggles toggle, bool value)
-		{
-			var toggleManager = MockRepository.GenerateStub<IToggleManager>();
-			toggleManager.Stub(x => x.IsEnabled(toggle)).Return(value);
-			return buildContainer(toggleManager);
-		}
-
-		private ILifetimeScope buildContainer(IToggleManager toggleManager)
-		{
-			var builder = new ContainerBuilder();
-			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()), toggleManager)));
-			builder.RegisterInstance(MockRepository.GenerateMock<IServiceBusSender>()).As<IServiceBusSender>();
-			return builder.Build();
 		}
 
 		private static ILifetimeScope buildContainer()

@@ -186,7 +186,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				MyTeam_MoveActivity_25206 = _toggles.IsEnabled(Toggles.MyTeam_MoveActivity_25206),
 				MyTeam_MakeTeamScheduleConsistent_31897 = _toggles.IsEnabled(Toggles.MyTeam_MakeTeamScheduleConsistent_31897),
 
-				RTA_NewEventHangfireRTA_34333 = _toggles.IsEnabled(Toggles.RTA_NewEventHangfireRTA_34333),
 				RTA_AdherenceDetails_34267 = _toggles.IsEnabled(Toggles.RTA_AdherenceDetails_34267),
 				RTA_NotifyViaSMS_31567 = _toggles.IsEnabled(Toggles.RTA_NotifyViaSMS_31567),
 

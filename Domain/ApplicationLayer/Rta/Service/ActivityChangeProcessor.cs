@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
@@ -14,8 +12,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IDatabaseLoader _databaseLoader;
 		private readonly RtaProcessor _processor;
 		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
-		private readonly IAgentStateMessageSender _agentStateMessageSender;
-		private readonly IAdherenceAggregator _adherenceAggregator;
 		private readonly IPreviousStateInfoLoader _previousStateInfoLoader;
 
 		public ActivityChangeProcessor(
@@ -24,8 +20,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IDatabaseLoader databaseLoader, 
 			RtaProcessor processor,
 			IAgentStateReadModelUpdater agentStateReadModelUpdater,
-			IAgentStateMessageSender agentStateMessageSender,
-			IAdherenceAggregator adherenceAggregator,
 			IPreviousStateInfoLoader previousStateInfoLoader
 			)
 		{
@@ -34,8 +28,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_databaseLoader = databaseLoader;
 			_processor = processor;
 			_agentStateReadModelUpdater = agentStateReadModelUpdater;
-			_agentStateMessageSender = agentStateMessageSender;
-			_adherenceAggregator = adherenceAggregator;
 			_previousStateInfoLoader = previousStateInfoLoader;
 		}
 
@@ -102,8 +94,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					person,
 					_now,
 					_agentStateReadModelUpdater,
-					_agentStateMessageSender,
-					_adherenceAggregator,
 					_previousStateInfoLoader
 					));
 		}

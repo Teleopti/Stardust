@@ -29,7 +29,6 @@ using Teleopti.Ccc.Web.Areas.Outbound.core.IoC;
 using Teleopti.Ccc.Web.Areas.People.Core.IoC;
 using Teleopti.Ccc.Web.Areas.PerformanceTool.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Permissions;
-using Teleopti.Ccc.Web.Areas.Permissions.Controllers;
 using Teleopti.Ccc.Web.Areas.Requests.Core.IOC;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
 using Teleopti.Ccc.Web.Areas.Rta;
@@ -40,7 +39,6 @@ using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.IoC;
 using Teleopti.Ccc.Web.Broker;
-using Teleopti.Ccc.Web.Core.Hangfire;
 using Teleopti.Ccc.Web.Core.Logging;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
@@ -108,8 +106,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterType<NumberOfAgentsInSiteReader>().As<INumberOfAgentsInSiteReader>().SingleInstance();
 			builder.RegisterType<NumberOfAgentsInTeamReader>().As<INumberOfAgentsInTeamReader>().SingleInstance();
-			builder.RegisterType<SiteAdherenceAggregator>().As<ISiteAdherenceAggregator>().SingleInstance();
-			builder.RegisterType<TeamAdherenceAggregator>().As<ITeamAdherenceAggregator>().SingleInstance();
 			builder.RegisterType<PersonInRoleQuerier>().As<IPersonInRoleQuerier>().SingleInstance();
 			builder.RegisterType<PersonToRoleAssociation>().SingleInstance();
 

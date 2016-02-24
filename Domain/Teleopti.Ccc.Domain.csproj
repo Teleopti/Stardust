@@ -279,7 +279,6 @@
     <Compile Include="ApplicationLayer\Rta\ViewModelBuilders\AdherencePercentageViewModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ActivityEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ActualAgentStateExtension.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\AdherenceAggregatorInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModelBuilders\AdherenceDetailViewModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherenceDetailsReadModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherenceDetailsReadModelUpdater.cs" />
@@ -287,16 +286,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\AdherenceInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentageReadModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentageReadModelUpdater.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\Aggregator\AdherenceAggregator.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\Aggregator\AgentAdherenceAggregator.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\Aggregator\AgentsAdherenceMessage.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\Aggregator\AggregationState.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\Aggregator\IOrganizationForPerson.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\Aggregator\OrganizationForPerson.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\Aggregator\SiteAdherenceAggregator.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\Aggregator\SiteAdherenceMessage.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\Aggregator\TeamAdherenceAggregator.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\Aggregator\TeamAdherenceMessage.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StoredStateInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\RuleMapping.cs" />
@@ -311,7 +300,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\IActivityEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IAdherenceDetailsReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAdherenceEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\IAgentStateMessageSender.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAgentStateReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAlarmMappingLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAppliedAdherence.cs" />
@@ -330,7 +318,6 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IRecreatable.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IStateMappingLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\ITeamOutOfAdherenceReadModelPersister.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\NoEvents.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\NotificationCreator.cs" />
     <Compile Include="ApplicationLayer\Rta\Performance\PersonGenerator.cs" />
     <Compile Include="ApplicationLayer\Rta\Performance\ScheduleGenerator.cs" />

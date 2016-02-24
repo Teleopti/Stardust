@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Resolvers;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Interfaces.Domain;
@@ -25,19 +24,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IPersonLoader _personLoader;
 		private readonly INow _now;
 		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
-		private readonly IAgentStateMessageSender _messageSender;
-		private readonly IAdherenceAggregator _adherenceAggregator;
 		private readonly IStateMapper _stateMapper;
 
 		public Rta(
-			IAdherenceAggregator adherenceAggregator,
 			IAgentStateReadModelReader agentStateReadModelReader,
 			IPreviousStateInfoLoader previousStateInfoLoader,
 			ICacheInvalidator cacheInvalidator,
 			IStateMapper stateMapper,
 			INow now,
 			IAgentStateReadModelUpdater agentStateReadModelUpdater,
-			IAgentStateMessageSender messageSender,
 			IDatabaseLoader databaseLoader,
 			RtaProcessor processor,
 			IAuthenticator authenticator,
@@ -57,8 +52,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_personLoader = personLoader;
 			_now = now;
 			_agentStateReadModelUpdater = agentStateReadModelUpdater;
-			_messageSender = messageSender;
-			_adherenceAggregator = adherenceAggregator;
 		}
 
 		[InfoLog]
@@ -221,8 +214,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					person,
 					_now,
 					_agentStateReadModelUpdater,
-					_messageSender,
-					_adherenceAggregator,
 					_previousStateInfoLoader
 					));
 		}
