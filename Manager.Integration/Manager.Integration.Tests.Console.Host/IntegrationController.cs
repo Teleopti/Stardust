@@ -20,6 +20,19 @@ namespace Manager.IntegrationTest.Console.Host
 
 		public string WhoAmI { get; set; }
 
+		[HttpPost, Route("appdomain/managers")]
+		public IHttpActionResult StartNewManager()
+		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+											 "Called API controller.");
+
+			string friendlyname;
+
+			Program.StartNewManager(out friendlyname);
+
+			return Ok(friendlyname);
+		}
+
 		[HttpPost, Route("appdomain/nodes")]
 		public IHttpActionResult StartNewNode()
 		{

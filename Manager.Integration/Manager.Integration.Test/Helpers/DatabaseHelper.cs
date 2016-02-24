@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
 using log4net;
+using Manager.Integration.Test.Annotations;
 
 namespace Manager.Integration.Test.Helpers
 {

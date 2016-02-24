@@ -131,9 +131,9 @@ namespace Manager.IntegrationTest.Console.Host
 			                                 "AppDomain.CurrentDomain.UnhandledException");
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-			DirectoryManagerAssemblyLocationFullPath = 
+			DirectoryManagerAssemblyLocationFullPath =
 				new DirectoryInfo(Path.Combine(Settings.Default.ManagerAssemblyLocationFullPath,
-											   _buildMode));
+				                               _buildMode));
 
 			DirectoryManagerConfigurationFileFullPath =
 				new DirectoryInfo(Path.Combine(Settings.Default.ManagerConfigurationFileFullPath,
@@ -208,7 +208,7 @@ namespace Manager.IntegrationTest.Console.Host
 			}
 
 			LogHelper.LogInfoWithLineNumber(Logger,
-											NumberOfManagersToStart + " number of managers will be started.");
+			                                NumberOfManagersToStart + " number of managers will be started.");
 
 			LogHelper.LogInfoWithLineNumber(Logger,
 			                                NumberOfNodesToStart + " number of nodes will be started.");
@@ -248,7 +248,7 @@ namespace Manager.IntegrationTest.Console.Host
 			                                 "Start: AppDomainManagerTask.StartTask");
 
 			appDomainManagerTask.StartTask(new CancellationTokenSource());
-			
+
 
 			LogHelper.LogDebugWithLineNumber(Logger,
 			                                 "Finished: AppDomainManagerTask.StartTask");
@@ -373,7 +373,7 @@ namespace Manager.IntegrationTest.Console.Host
 			{
 				appDomainManagerTask.Dispose();
 			}
-			
+
 			QuitEvent.Set();
 
 			LogHelper.LogDebugWithLineNumber(Logger,
@@ -534,6 +534,11 @@ namespace Manager.IntegrationTest.Console.Host
 			}
 
 			return listToReturn;
+		}
+
+		public static void StartNewManager(out string friendlyname)
+		{
+			friendlyname = "New Manager";
 		}
 	}
 }
