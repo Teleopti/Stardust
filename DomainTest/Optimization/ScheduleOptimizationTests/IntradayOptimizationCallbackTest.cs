@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -13,7 +14,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 {
-	//[Toggle(Toggles.ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049)]
+	[Toggle(Toggles.ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049)]
 	[DomainTest]
 	public class IntradayOptimizationCallbackTest
 	{
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			callbackTracker.SuccessfulOptimizations().Should().Be.EqualTo(10);
 		}
 
-		[Test, Ignore("not yet fixed")]
+		[Test]
 		public void ShouldDoUnsuccesfulCallbacksWhenDemandDoesntExists()
 		{
 			const int numberOfAgents = 10;
@@ -70,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			{
 				Target.Optimize(planningPeriod.Id.Value);
 			}
-			callbackTracker.UnSuccessfulOptimizations().Should().Be.GreaterThan(0);
+			callbackTracker.UnSuccessfulOptimizations().Should().Be.GreaterThanOrEqualTo(10);
 		}
 	}
 }
