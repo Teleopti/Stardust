@@ -65,7 +65,8 @@ namespace Stardust.Manager
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var response = await client.DeleteAsync(url);
+                    var response = await client.DeleteAsync(url)
+                            .ConfigureAwait(false);
 
                     LogHelper.LogDebugWithLineNumber(Logger,
                                                     "Finished.");
@@ -93,7 +94,9 @@ namespace Stardust.Manager
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     
-                    var response = await client.GetAsync(url);
+                    var response = await client.GetAsync(url,
+											  HttpCompletionOption.ResponseHeadersRead)
+                            .ConfigureAwait(false);
                     
                     return response;
                 }
