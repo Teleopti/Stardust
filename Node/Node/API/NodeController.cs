@@ -28,11 +28,19 @@ namespace Stardust.Node.API
 				return BadRequest("jobToDo is null");
 			}
 
-			LogHelper.LogInfoWithLineNumber(Logger, _workerWrapper.WhoamI + "Received Start Job Request. jobId: " + jobToDo.Id);
+			var msg =
+					string.Format(
+						"{0} : Received Start Job Request. ( jobId, jobName ) : ( {1}, {2} )",
+						_workerWrapper.WhoamI,
+						jobToDo.Id,
+						jobToDo.Name);
+
+			LogHelper.LogInfoWithLineNumber(Logger,
+											   msg);
 
 			if (_workerWrapper.IsTaskExecuting)
 			{
-				var msg =
+				var msgExecuting =
 					string.Format(
 						"{0} : New job request from manager rejected, node is working on another job ( jobId, jobName ) : ( {1}, {2} )",
 						_workerWrapper.WhoamI,
@@ -40,7 +48,7 @@ namespace Stardust.Node.API
 						jobToDo.Name);
 
 				LogHelper.LogWarningWithLineNumber(Logger,
-				                                   msg);
+												   msgExecuting);
 
 				return CreateConflictStatusCode();
 			}
