@@ -1,5 +1,4 @@
-﻿@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
-Feature: Publish shift exchange offer
+﻿Feature: Publish shift exchange offer
 	In order to trade for a shift that I rather want
 	As an agent 
 	I want to announce my current shift to trade with others

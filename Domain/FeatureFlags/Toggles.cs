@@ -34,7 +34,6 @@
 		Portal_NewLandingpage_29415,
 		Show_StaticPageOnNoInternet_29415,
 		MyTimeWeb_AbsenceReport_31011,
-		MyTimeWeb_ShiftTradeExchangeBulletin_31296,
 		MyTimeWeb_SeeAnnouncedShifts_31639,
 		MyTimeWeb_AnonymousTrades_31638,
 		MyTimeWeb_LockTrades_31637,

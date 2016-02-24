@@ -19,7 +19,7 @@
 					<a class="initialize-shift-trade" href="#" data-bind="click: initializeShiftTrade"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
 				</li>
 			}
-			<!-- ko if: isShiftTradeBulletinBoardEnabled-->
+			
 			@if (Model.ShiftTradeBulletinBoardPermission)
 			{
 				<li class="col-xs-12 col-sm-3">
@@ -30,7 +30,6 @@
 					<a class="initialize-post-shift-for-trade" href="#" data-bind="click: initializePostShiftForTrade"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
 				</li>
 			}
-			<!--/ko-->
 		</ul>
 	</div>
 </div>

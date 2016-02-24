@@ -72,7 +72,7 @@
 					<a id="addShiftTradeRequest" href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
 				</li>
 			}
-			<!-- ko if: isShiftTradeBulletinBoardEnabled-->
+			
 			@if (Model.RequestPermission.ShiftTradeBulletinBoardPermission)
 			{
 				<li data-bind="css: { active: addShiftTradeBulletinBoardActive }" class="col-xs-12 col-sm-4">
@@ -83,7 +83,7 @@
 					<a id="addPostShiftForTrade" href=" #" class="postshiftfortrade-request-add" data-bind="click: addPostShiftForTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
 				</li>
 			}
-			<!--/ko-->
+			
 		</ul>
 	</div>
 </div>

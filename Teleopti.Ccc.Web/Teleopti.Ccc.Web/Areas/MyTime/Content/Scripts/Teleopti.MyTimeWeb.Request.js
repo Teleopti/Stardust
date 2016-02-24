@@ -26,7 +26,6 @@ Teleopti.MyTimeWeb.Request = (function ($) {
         self.addShiftTradeRequestActive = ko.observable(false);
         self.addShiftTradeBulletinBoardActive = ko.observable(false);
         self.addPostShiftForTradeActive = ko.observable(false);
-        self.isShiftTradeBulletinBoardEnabled = ko.observable(false);
 
         self.addTextRequest = function () {
             self.resetToolbarActiveButtons();
@@ -74,8 +73,6 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 
     function _initNavigationViewModel() {
     	requestNavigationViewModel = new RequestNavigationViewModel();
-		var toggleEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ShiftTradeExchangeBulletin_31296");
-		requestNavigationViewModel.isShiftTradeBulletinBoardEnabled(toggleEnabled);
 		ko.applyBindings(requestNavigationViewModel, $('div.navbar.subnavbar')[0]);
 	}
 

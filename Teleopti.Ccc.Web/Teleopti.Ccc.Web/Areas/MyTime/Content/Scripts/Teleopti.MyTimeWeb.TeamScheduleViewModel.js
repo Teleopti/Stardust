@@ -2,7 +2,6 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 	var self = this;
 
 	self.isTeamScheduleSortingFeatureEnabled = ko.observable(false);
-	self.isShiftTradeBulletinBoardEnabled = ko.observable(false);
 	self.isTeamScheduleNoReadModelEnable = ko.observable(false);
 
 	self.isLoading = ko.observable(true);
@@ -12,13 +11,7 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 	self.errorMessage = ko.observable();
 
 	self.featureCheck = function () {
-		
-		
-	
 		self.isTeamScheduleSortingFeatureEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_SortSchedule_32092"));
-
-		self.isShiftTradeBulletinBoardEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ShiftTradeExchangeBulletin_31296"));
-
 		self.isTeamScheduleNoReadModelEnable(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_TeamScheduleNoReadModel_36210"));
 
 	};

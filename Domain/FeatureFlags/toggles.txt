@@ -39,7 +39,6 @@ ETL_SpeedUpETL_30791 = true
 #Cannot be relreased yet due to performance and IO #
 RTA_AdherenceDetails_34267 = RC
 RTA_NotifyViaSMS_31567 = true
-MyTimeWeb_ShiftTradeExchangeBulletin_31296 = true
 MyTimeWeb_SeeAnnouncedShifts_31639 = true
 MyTimeWeb_AnonymousTrades_31638 = true
 MyTimeWeb_LockTrades_31637 = true

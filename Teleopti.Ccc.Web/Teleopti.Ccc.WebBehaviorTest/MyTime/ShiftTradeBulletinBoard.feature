@@ -44,7 +44,6 @@ Background:
 	And there is a dayoff named 'Day Off'
 	
 
-@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
 Scenario: Shift trade in Bulletin board should start from tomorrow
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -53,7 +52,6 @@ Scenario: Shift trade in Bulletin board should start from tomorrow
 	When I click to shift trade bulletin board
 	Then I cannot navigate to the bulletin previous date	
 
-@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
 Scenario: Should show my shift and other shift in bulletin board
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -81,7 +79,6 @@ Scenario: Should show my shift and other shift in bulletin board
 	| End time		| 17:00 |
 	And I should see a possible schedule trade with 'OtherAgent'
 
-@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
 Scenario: Should possible make shift trade in Bulletin board
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -111,7 +108,6 @@ Scenario: Should possible make shift trade in Bulletin board
 	Then Shift trade bulletin board view should not be visible
 	And I should see a shift trade request in the list with subject 'A nice subject'
 
-@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
 Scenario: Should possible make shift trade in Bulletin board with day off
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -140,7 +136,6 @@ Scenario: Should possible make shift trade in Bulletin board with day off
 	Then Shift trade bulletin board view should not be visible
 	And I should see a shift trade request in the list with subject 'A nice subject'
 
-@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
 Scenario: Should possibly make my empty day trade with main shift day in Bulletin board
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -168,7 +163,6 @@ Scenario: Should possibly make my empty day trade with main shift day in Bulleti
 	Then Shift trade bulletin board view should not be visible
 	And I should see a shift trade request in the list with subject 'A nice subject'
 
-@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
 Scenario: Should possible make shift trade with empty day in Bulletin board
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -194,7 +188,6 @@ Scenario: Should possible make shift trade with empty day in Bulletin board
 	Then Shift trade bulletin board view should not be visible
 	And I should see a shift trade request in the list with subject 'A nice subject'
 	
-@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
 Scenario: Should see the anonymous name when viewing empty day in Bulletin board
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Anonymous trade 30 days forward'

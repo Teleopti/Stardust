@@ -219,8 +219,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 											DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard);
 									var shiftExchangePermission =
 										_permissionProvider.HasApplicationFunctionPermission(
-											DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard) &&
-										_toggleManager.IsEnabled(Toggles.MyTimeWeb_ShiftTradeExchangeBulletin_31296);
+											DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard);
 									var personalAccountPermission =
 										_permissionProvider.HasApplicationFunctionPermission(
 											DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount);
