@@ -43,7 +43,6 @@ namespace Manager.IntegrationTest.Console.Host
 			{
 				LogHelper.LogWarningWithLineNumber(Logger,
 				                                   "Bad request, id : " + id);
-
 				return BadRequest(id);
 			}
 

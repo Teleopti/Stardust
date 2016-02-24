@@ -84,7 +84,7 @@ namespace Manager.Integration.Test
 
             if (_clearDatabase)
             {
-                DatabaseHelper.TryClearDatabase();
+                DatabaseHelper.TryClearDatabase(ManagerDbConnectionString);
             }
 
             CancellationTokenSource = new CancellationTokenSource();
@@ -166,7 +166,7 @@ namespace Manager.Integration.Test
 				var uriBuilder =
                     new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
 
-                uriBuilder.Path += "appdomain/";
+                uriBuilder.Path += "appdomain/nodes";
 
 				var uri = uriBuilder.Uri;
 

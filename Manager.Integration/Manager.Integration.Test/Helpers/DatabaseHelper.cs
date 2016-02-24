@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Configuration;
 using System.Data.SqlClient;
-using System.IO;
 using log4net;
-using Manager.Integration.Test.Properties;
 
 namespace Manager.Integration.Test.Helpers
 {
@@ -11,78 +8,51 @@ namespace Manager.Integration.Test.Helpers
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (DatabaseHelper));
 
-#if (DEBUG)
-		private static readonly string _buildMode = "Debug";
-#else
-        private static string _buildMode = "Release";
-#endif
-
-		public static void TryClearDatabase(string connectionStringName = "ManagerConnectionString")
+		public static void TryClearDatabase(string connectionString)
 		{
-			LogHelper.LogDebugWithLineNumber("Start.", Logger);
-
-			var directoryManagerIntegrationConsoleHost =
-				new DirectoryInfo(Settings.Default.ManagerIntegrationConsoleHostLocation + _buildMode);
-
-			var configFileMap = new ExeConfigurationFileMap
+			if (string.IsNullOrEmpty(connectionString))
 			{
-				ExeConfigFilename = Path.Combine(directoryManagerIntegrationConsoleHost.FullName,
-				                                 Settings.Default.ManagerConfigurationFileName)
-			};
-
-			if (!File.Exists(configFileMap.ExeConfigFilename))
-			{
-				LogHelper.LogErrorWithLineNumber(configFileMap.ExeConfigFilename + " does not exists.", Logger);
-
-				return;
+				throw new ArgumentNullException("connectionString");
 			}
 
-			var config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap,
-			                                                             ConfigurationUserLevel.None);
+			LogHelper.LogDebugWithLineNumber("Start.", Logger);
 
-			LogHelper.LogDebugWithLineNumber("Open configuration file : " + config.FilePath, Logger);
-
-			LogHelper.LogDebugWithLineNumber("Get connection string for : " + connectionStringName, Logger);
-
-			var connectionString =
-				config.ConnectionStrings.ConnectionStrings[connectionStringName];
-			
-			using (var connection = new SqlConnection(connectionString.ConnectionString))
+			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				
-					using (var command = new SqlCommand("truncate table Stardust.JobDefinitions",
-													connection))
-					{
-						LogHelper.LogDebugWithLineNumber(command.CommandText, Logger);
 
-						command.ExecuteNonQuery();
-					}
-				
-					using (var command = new SqlCommand("truncate table Stardust.JobHistory",
-													connection))
-					{
-						LogHelper.LogDebugWithLineNumber(command.CommandText, Logger);
+				using (var command = new SqlCommand("truncate table Stardust.JobDefinitions",
+					connection))
+				{
+					LogHelper.LogDebugWithLineNumber(command.CommandText, Logger);
 
-						command.ExecuteNonQuery();
-					}
-			
-					using (var command = new SqlCommand("truncate table Stardust.JobHistoryDetail",
-													connection))
-					{
-						LogHelper.LogDebugWithLineNumber(command.CommandText, Logger);
+					command.ExecuteNonQuery();
+				}
 
-						command.ExecuteNonQuery();
-					}
-				
-					using (var command = new SqlCommand("truncate table Stardust.WorkerNodes",
-													connection))
-					{
-						LogHelper.LogDebugWithLineNumber(command.CommandText, Logger);
+				using (var command = new SqlCommand("truncate table Stardust.JobHistory",
+					connection))
+				{
+					LogHelper.LogDebugWithLineNumber(command.CommandText, Logger);
 
-						command.ExecuteNonQuery();
-					}
-				
+					command.ExecuteNonQuery();
+				}
+
+				using (var command = new SqlCommand("truncate table Stardust.JobHistoryDetail",
+					connection))
+				{
+					LogHelper.LogDebugWithLineNumber(command.CommandText, Logger);
+
+					command.ExecuteNonQuery();
+				}
+
+				using (var command = new SqlCommand("truncate table Stardust.WorkerNodes",
+					connection))
+				{
+					LogHelper.LogDebugWithLineNumber(command.CommandText, Logger);
+
+					command.ExecuteNonQuery();
+				}
+
 				connection.Close();
 				LogHelper.LogDebugWithLineNumber("Stop.", Logger);
 			}

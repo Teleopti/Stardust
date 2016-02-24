@@ -95,10 +95,6 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 
                 Task.Factory.StartNew(() =>
                 {
-                    DirectoryManagerAssemblyLocationFullPath =
-                        new DirectoryInfo(Path.Combine(Settings.Default.ManagerAssemblyLocationFullPath,
-                                                       Buildmode));
-
                     // Start manager.
                     var managerAppDomainSetup = new AppDomainSetup
                     {
@@ -119,8 +115,7 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
                                                     "Manager (appdomain) will start with friendly name : " + MyAppDomain.FriendlyName);
 
                     MyAppDomain.ExecuteAssembly(assemblyFile.FullName);
-                },
-                cancellationTokenSource.Token);
+                }, cancellationTokenSource.Token);
             }, cancellationTokenSource.Token);
 
             return Task;

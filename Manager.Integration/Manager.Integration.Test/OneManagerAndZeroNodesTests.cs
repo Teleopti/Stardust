@@ -53,7 +53,7 @@ namespace Manager.Integration.Test
 
 			if (_clearDatabase)
 			{
-				DatabaseHelper.TryClearDatabase();
+				DatabaseHelper.TryClearDatabase(ManagerDbConnectionString);
 			}
 
 			CancellationTokenSource = new CancellationTokenSource();
