@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading;
+using System.Web.Http.Results;
 using Autofac;
 using log4net;
+using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 
 namespace Stardust.Node.Workers
@@ -26,12 +28,30 @@ namespace Stardust.Node.Workers
 		                   CancellationTokenSource cancellationTokenSource,
 		                   Action<string> progressCallback)
 		{
+
 			var handler =
 				ComponentContext.Resolve(typeof (IHandle<>).MakeGenericType(query.GetType()));
+
+			if (handler == null)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger,
+												   string.Format("The job type [{0}] could not be resolved. The job cannot be started.",
+													   query.GetType()));
+
+				throw new Exception("The handler " + query.GetType() + " could not be resolved");
+			}
 
 			var method = handler.GetType()
 				.GetMethod("Handle");
 
+			if (method == null)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger,
+												   string.Format("The method for handler [{0}] could not be found. ",
+													   handler.GetType()));
+
+				throw new Exception("The method 'Handle' for handler " + handler.GetType() + " could not be found");
+			}
 
 			try //this is to throw right exception and not cause faulted on cancellation
 			{
