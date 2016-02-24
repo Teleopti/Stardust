@@ -29,7 +29,6 @@
 
 		RTA_NotifyViaSMS_31567,
 
-		MyTimeWeb_FullDayAbsenceConfiguration_30552,
 		Portal_ResetBadges_30544,
 		Badge_Leaderboard_30584,
 		Portal_NewLandingpage_29415,

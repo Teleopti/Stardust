@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			setColors();
 			SetTexts();
             
-            fullDayAbsenceSettingVisibility(_toggleManager.IsEnabled(Toggles.MyTimeWeb_FullDayAbsenceConfiguration_30552));
+            fullDayAbsenceSettingVisibility(true);
 			SetupTimeStampTextBoxes();
 
 		}
