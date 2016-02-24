@@ -10,6 +10,7 @@ using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Intraday
 {
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebIntraday)]
 	public class IntradaySkillAreaController : ApiController
 	{
 		private readonly CreateSkillArea _createSkillArea;
@@ -33,7 +34,6 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			return Ok();
 		}
 
-		[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebIntraday)]
 		[UnitOfWork, HttpGet, Route("api/intraday/skillarea")]
 		public virtual IHttpActionResult GetSkillAreas()
 		{
@@ -49,6 +49,12 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		public virtual IHttpActionResult DeleteSkillArea(Guid id)
 		{
 			_deleteSkillArea.Do(id);
+			return Ok();
+		}
+
+		[UnitOfWork, HttpGet, Route("api/intraday/monitordata/{id}")]
+		public virtual IHttpActionResult MonitorData(Guid Id)
+		{
 			return Ok();
 		}
 	}

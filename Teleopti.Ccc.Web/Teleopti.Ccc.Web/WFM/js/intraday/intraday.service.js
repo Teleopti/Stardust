@@ -39,6 +39,14 @@
 					}
 				});
 
+				this.getMonitorData = $resource('../api/intraday/monitordata/:id', { id: '@id' }, {
+					query: {
+						method: 'GET',
+						params: {},
+						isArray: false
+					}
+				});
+
 				this.formatDateTime = function (time) {
 					if (time === null || time === undefined || time === '') return '--:--:--';
 					var momentTime = moment(time);

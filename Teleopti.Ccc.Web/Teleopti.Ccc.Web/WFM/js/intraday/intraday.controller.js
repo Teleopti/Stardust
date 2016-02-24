@@ -106,9 +106,21 @@
 
 				$scope.selectedSkillAreaChange = function(item) {
 					if (this.selectedSkillArea) {
-						$scope.selectedItem = item;
-						clearSkillSelection();
+						$scope.skillAreaSelected(item);
 					}
+				};
+
+				$scope.skillAreaSelected = function(item) {
+					$scope.selectedItem = item;
+					clearSkillSelection();
+
+					intradayService.getMonitorData.query(
+						{
+							id: $scope.selectedItem.Id
+						})
+						.$promise.then(function (result) {
+							$scope.HasMonitorData = false;
+						});
 				};
 
 				function clearSkillSelection() {

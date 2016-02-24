@@ -62,12 +62,15 @@
 			<div class="sub-header">
 				<h2 class="intraday-monitor-item">{{ selectedSkill.Name }}</h2>
 			</div>
-			<div class="con-row">
+			<div class="con-row text-warning" ng-show="!HasMonitorData">
+				<span>No data is available for this skill.</span>
+			</div>
+			<div class="con-row" ng-show="HasMonitorData">
 				<div class="con-flex">
 					Forecasted calls:
 				</div>
 				<div class="con-flex">
-					Acctual calls:
+					Actual calls:
 				</div>
 				<div class="con-flex">
 					Area total:
@@ -100,16 +103,18 @@
 			<div ng-show="showIncluded" class="con-row">
 				<div class="con-flex">
 					<h3>This area contains:</h3>
-					<span ng-repeat="skill in selectedSkillArea.Skills | orderBy : 'Name'">{{skill.Name}}, </span>
+					<span ng-repeat="skill in selectedSkillArea.Skills | orderBy : 'Name'">{{skill.Name}} | </span>
 				</div>
 			</div>
-
-			<div class="con-row">
+			<div class="con-row text-warning" ng-show="!HasMonitorData">
+				<span>No data is available for this skill area.</span>
+			</div>
+			<div class="con-row" ng-show="HasMonitorData">
 				<div class="con-flex">
 					Forecasted calls:
 				</div>
 				<div class="con-flex">
-					Acctual calls:
+					Actual calls:
 				</div>
 				<div class="con-flex">
 					Area total:

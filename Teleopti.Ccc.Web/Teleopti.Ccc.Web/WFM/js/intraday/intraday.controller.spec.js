@@ -52,6 +52,9 @@ describe('IntradayCtrl', function () {
 
 		$httpBackend.whenDELETE("../api/intraday/skillarea/836cebb6-cee8-41a1-bb62-729f4b3a63f4")
 			.respond(200, {});
+
+		$httpBackend.whenGET("../api/intraday/monitordata/fa9b5393-ef48-40d1-b7cc-09e797589f81")
+			.respond(200, {});
 	}));
 
 	var createController = function() {
@@ -106,5 +109,13 @@ describe('IntradayCtrl', function () {
 		createController();
 
 		expect(scope.HasPermissionToModifySkillArea).toEqual(true);
+	});
+
+	it('should show friendly message if no data for skill area', function () {
+		createController();
+		scope.skillAreaSelected(scope.skillAreas[0]);
+		$httpBackend.flush();
+
+		expect(scope.HasMonitorData).toEqual(false);
 	});
 });
