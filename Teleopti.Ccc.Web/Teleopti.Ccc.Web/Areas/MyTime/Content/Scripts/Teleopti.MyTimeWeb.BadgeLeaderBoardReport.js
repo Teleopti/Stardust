@@ -109,17 +109,6 @@
 		}
 	}
 
-	function featureCheck() {
-		var toggleEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_OrganisationalBasedLeaderboard_31184");
-		vm.showOptions(toggleEnabled);
-		if (toggleEnabled) {
-			vm.loadOptions();
-		} else {
-			vm.selectedOptionType = 3;
-			vm.loadData();
-		}
-	}
-
 	return {
 		Init: function () {
 			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('BadgeLeaderBoardReport/Index',
@@ -130,7 +119,7 @@
 				return;
 			}
 			bindData();
-			featureCheck();
+			vm.loadOptions();
 
 		},
 		BadgeLeaderBoardReportPartialDispose: function () {

@@ -54,7 +54,6 @@ MyTimeWeb_LockTrades_31637 = true
 MyTimeWeb_AvailabilityVerifyHours_31654 = true
 MyTeam_AbsenceBackToWork_31478 = true
 Gamification_NewBadgeCalculation_31185 = true
-MyTimeWeb_OrganisationalBasedLeaderboard_31184 = true
 ETL_OnlyLatestQueueAgentStatistics_30787 = true
 Portal_DifferentiateBadgeSettingForAgents_31318 = true
 Backlog_Module_23980 = DEV

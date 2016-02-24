@@ -1,5 +1,4 @@
-﻿@OnlyRunIfEnabled('MyTimeWeb_OrganisationalBasedLeaderboard_31184')
-@OnlyRunIfEnabled('Portal_DifferentiateBadgeSettingForAgents_31318')
+﻿@OnlyRunIfEnabled('Portal_DifferentiateBadgeSettingForAgents_31318')
 Feature: GamificationOrganisationalBasedLeaderboard
 	The leaderboard can be based on site/team/everyone
 	As an agent
