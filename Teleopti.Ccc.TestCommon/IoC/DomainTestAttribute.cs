@@ -126,6 +126,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeMultiplicatorDefinitionSetRepository>().For<IMultiplicatorDefinitionSetRepository>();
 			system.UseTestDouble<FakeLoadAllSkillInIntradays>().For<ILoadAllSkillInIntradays>();
 			system.UseTestDouble<FakeSkillAreaRepository>().For<ISkillAreaRepository>();
+			system.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository>();
 
 			fakePrincipal(system);
 		}

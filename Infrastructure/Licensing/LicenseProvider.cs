@@ -34,14 +34,14 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
         {
             if (licenseService == null) throw new ArgumentNullException("licenseService");
 
-            ILicenseActivator licenseActivator = new LicenseActivator(licenseService.CustomerName,
-                                                                      licenseService.ExpirationDate,
-                                                                      licenseService.MaxActiveAgents,
-																	  licenseService.MaxSeats,
-																	  licenseService.LicenseType,
-																																			new Percent(licenseService.MaxActiveAgentsGrace), 
-																																			LicenseActivator.IsThisAlmostTooManyActiveAgents,
-																																			LicenseActivator.IsThisTooManyActiveAgents);
+	        ILicenseActivator licenseActivator = new LicenseActivator(licenseService.CustomerName,
+		        licenseService.ExpirationDate,
+		        licenseService.MaxActiveAgents,
+		        licenseService.MaxSeats,
+		        licenseService.LicenseType,
+		        new Percent(licenseService.MaxActiveAgentsGrace),
+		        LicenseActivator.IsThisAlmostTooManyActiveAgents,
+		        LicenseActivator.IsThisTooManyActiveAgents);
 
             if (licenseService.TeleoptiCccPilotCustomersBaseEnabled)
                 licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersBase);
