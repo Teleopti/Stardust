@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 					Title = Resources.MyReport,
 					IsWebReport = true
 				});
-			if (_toggleManager.IsEnabled(Toggles.Badge_Leaderboard_30584) && _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard))
+			if (_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard))
 			{
 				reportsList.Add(new ReportNavigationItem
 				{

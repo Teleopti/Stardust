@@ -29,7 +29,6 @@
 
 		RTA_NotifyViaSMS_31567,
 
-		Badge_Leaderboard_30584,
 		Portal_NewLandingpage_29415,
 		Show_StaticPageOnNoInternet_29415,
 		MyTimeWeb_AbsenceReport_31011,

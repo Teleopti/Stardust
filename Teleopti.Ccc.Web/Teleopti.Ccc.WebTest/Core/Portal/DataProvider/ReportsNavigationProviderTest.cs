@@ -109,7 +109,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		[Test]
 		public void ShouldReturnBadgeLeaderBoardReportsWhenOnlyHasLeaderBoardReportPermission()
 		{
-			_toggleManagger.Stub(x => x.IsEnabled(Toggles.Badge_Leaderboard_30584)).Return(true);
 			_principalAuthorization.Expect(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard)).Return(true);
 			_reportsProvider.Stub(x => x.GetReports()).Return(new List<IApplicationFunction>());
 			var result = _target.GetNavigationItems();
