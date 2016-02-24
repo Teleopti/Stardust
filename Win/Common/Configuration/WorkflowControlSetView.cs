@@ -52,18 +52,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			timeSpanTextBox1.TimeSpanBoxWidth = timeSpanTextBox1.Width;
 			dateTimePickerAdvViewpoint.SetCultureInfoSafe(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 
-			if (!toggleManager.IsEnabled(Toggles.MyTimeWeb_AbsenceReport_31011))
-			{
-				twoListSelectorAbsencesForReport.Hide();
-				var rowIndex = tableLayoutPanelBasic.GetRow(twoListSelectorAbsencesForReport);
-				tableLayoutPanelBasic.RowStyles[rowIndex].Height = 0;
-
-				labelAllowedAbsencesForReport.Hide();
-				panel9.Hide();
-				rowIndex = tableLayoutPanelBasic.GetRow(panel9);
-				tableLayoutPanelBasic.RowStyles[rowIndex].Height = 0;
-			}
-
 			if (!toggleManager.IsEnabled(Toggles.MyTimeWeb_AnonymousTrades_31638))
 			{
 				checkBoxAdvAnonymousTrading.Hide();
