@@ -74,7 +74,7 @@ namespace Stardust.Node.API
 		[HttpDelete, AllowAnonymous, Route(NodeRouteConstants.CancelJob)]
 		public IHttpActionResult TryCancelJob(Guid jobId)
 		{
-			LogHelper.LogInfoWithLineNumber(Logger, _workerWrapper.WhoamI + "Received TryCancel request. jobId: " + jobId);
+			LogHelper.LogInfoWithLineNumber(Logger, _workerWrapper.WhoamI + " : Received TryCancel request. jobId: " + jobId);
 
 			if (jobId == Guid.Empty)
 			{

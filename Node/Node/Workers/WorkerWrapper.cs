@@ -368,7 +368,7 @@ namespace Stardust.Node.Workers
 		private void ProgressCallback(string message)
 		{
 			LogHelper.LogInfoWithLineNumber(Logger,
-			                                message);
+			                               WhoamI + " : " + message);
 
 			var progressModel = new JobProgressModel
 			{
@@ -386,7 +386,7 @@ namespace Stardust.Node.Workers
 			catch (Exception exception)
 			{
 				LogHelper.LogErrorWithLineNumber(Logger,
-				                                 WhoamI + ": Exception occured.",
+				                                 WhoamI + " : Exception occured.",
 				                                 exception);
 			}
 		}
