@@ -5,29 +5,30 @@
   $ServerName
  )
 
-#$job_status = invoke-webrequest "http://tritonweb:8080/job/TritonWeb-AutoDeploy/lastBuild/api/json" | Select-String -pattern "`"result`":`"SUCCESS`""
-
 $ServerURL = "$ServerName" + ':8080'
 
 $Check_webstatus = invoke-webrequest "http://$ServerURL/job/$ServerName-AutoDeploy/lastBuild/api/json"
-
 $Job_status = ConvertFrom-Json $Check_webstatus
 
-$Job_status.result
+# Check if deploy is still running
+do {($job_status.building)  
 
-if ($Job_status.result -eq "SUCCESS") {
+$Check_webstatus = invoke-webrequest "http://$ServerURL/job/$ServerName-AutoDeploy/lastBuild/api/json"
+$Job_status = ConvertFrom-Json $Check_webstatus
 
-Write-Host ""
-Write-Host "Jenkins deploy successfully completed!" -ForegroundColor Green
-Write-Host ""
+"Waiting for Jenkins deploy to complete..."
+Start-Sleep -Seconds 10
 
-}
+} while ($Job_status.building -eq "True")
 
-else {
+#Check if deploy was success
+$Check_webstatus = invoke-webrequest "http://$ServerURL/job/$ServerName-AutoDeploy/lastBuild/api/json"
+$Job_status = ConvertFrom-Json $Check_webstatus
 
-Write-Host ""
-Write-Host "Jenkins deploy failure! Check http://$ServerURL/job/$ServerName-AutoDeploy for more information!" -ForegroundColor Red
-Write-Host ""
+if ($Job_status.result -eq "SUCCESS") { Write-Host "Jenkins deploy successfully completed!" }
+
+else { 
+Write-Host "Jenkins deploy failed! Check http://$ServerURL/job/$ServerName-AutoDeploy for more information!"
 Throw $_
 exit(1)
 }
