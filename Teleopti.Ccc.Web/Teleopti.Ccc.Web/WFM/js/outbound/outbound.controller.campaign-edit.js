@@ -21,10 +21,11 @@
 	    $scope.remove = remove;
 	    $scope.backToList = backToList;
 	    $scope.showRemoveCampaignConfirmDialog = false;
-	    $scope.removeCampaign = removeCampaign;
+	    $scope.removeCampaign = removeCampaign;	  
 		$scope.cancelRemoveCampaign = cancelRemoveCampaign;
 		$scope.isCampaignLoaded = function () { return angular.isDefined($scope.campaign); };
 
+	    $scope.directRemoveCampaign = false;
 
 
 		function editCampaign() {
@@ -51,8 +52,9 @@
             setPristineForms();
         }
 
-		function removeCampaign() {
-			$scope.showRemoveCampaignConfirmDialog = true;
+        function removeCampaign() {
+        	if ($scope.directRemoveCampaign) remove();
+			else $scope.showRemoveCampaignConfirmDialog = true;
 		}
 
 		function cancelRemoveCampaign() {

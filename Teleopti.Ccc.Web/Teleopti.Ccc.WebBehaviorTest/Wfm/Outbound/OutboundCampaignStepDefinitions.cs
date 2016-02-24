@@ -110,20 +110,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 			Browser.Interactions.AssertScopeValueEmpty(".test-campaign-create", "campaign.Name");		
 			Browser.Interactions.AssertScopeValue(".test-campaign-create", "isCreating", false);			
 			Navigation.GoToOutbound();
-		}
-
-		[When(@"I click delete campaign button")]
-		public void WhenIClickDeleteCampaignButton()
-		{
-			Browser.Interactions.AssertScopeValue(".test-campaign-edit", "isCampaignLoaded()", true);
-			Browser.Interactions.ClickVisibleOnly(".test-delete-campaign");				
-		}
+		}		
 
 		[When(@"I confirm to delete the campaign")]
 		public void WhenIConfirmToDeleteTheCampaign()
 		{
-			Browser.Interactions.AssertScopeValue(".modal-box", "showRemoveCampaignConfirmDialog", true);			
-			Browser.Interactions.ClickVisibleOnly(".modal-box .test-confirm-delete");			
+			Browser.Interactions.AssertScopeValue(".test-campaign-edit", "isCampaignLoaded()", true);
+			Browser.Interactions.SetScopeValues(".test-campaign-edit", new Dictionary<string, string>
+			{
+				{"directRemoveCampaign", "true"}
+			});
+			Browser.Interactions.ClickVisibleOnly(".test-delete-campaign");				
 		}
 
 		[When(@"after that I am redirected to the campaign list page")]
