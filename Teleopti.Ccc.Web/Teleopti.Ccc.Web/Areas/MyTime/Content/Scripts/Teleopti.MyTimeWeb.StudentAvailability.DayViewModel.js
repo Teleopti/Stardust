@@ -16,7 +16,7 @@ if (typeof (Teleopti.MyTimeWeb.StudentAvailability) === 'undefined') {
 }
 
 
-Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajaxForDate, toggleAvailabilityVerifyHours31654Enabled) {
+Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajaxForDate) {
 	var self = this;
 
 	this.Date = "";
@@ -25,7 +25,6 @@ Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajaxForDate, tog
 	this.AjaxError = ko.observable('');
 	this.AvailableTimeSpan = ko.observable('');
 	this.HasAvailability = ko.observable(false);
-	this.ToggleAvailabilityVerifyHours31654Enabled = ko.observable(toggleAvailabilityVerifyHours31654Enabled);
 
 	this.FeedbackError = ko.observable();
 	this.PossibleStartTimes = ko.observable();

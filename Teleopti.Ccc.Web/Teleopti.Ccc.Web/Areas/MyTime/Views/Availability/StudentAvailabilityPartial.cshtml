@@ -48,13 +48,12 @@
 		}
 		else
 		{
-			<!-- ko if: ToggleAvailabilityVerifyHours31654Enabled() -->
 			@Html.Raw(string.Format(Resources.YouShouldWorkAtLeastParameterHDotYouAreNowAvailableForBetweenParameterHAndParameterHDot,
 					 "<span data-bind='text: TargetContractTimeLower' class='feedback-detail'>-</span>",
 					 "<span data-bind='text: PossibleResultContractTimeLower' class='feedback-detail'>-</span>",
 					 "<span data-bind='text: PossibleResultContractTimeUpper' class='feedback-detail'>-</span>"))
 			@Html.Raw("</br>")
-			<!-- /ko -->
+		
 			@String.Format("{0} : {1} | ", Resources.StudentAvailabilityPeriod, Model.StudentAvailabilityPeriod.Period)
 			@String.Format("{0} : {1}", Resources.IsOpen, Model.StudentAvailabilityPeriod.OpenPeriod)
 		}
@@ -94,7 +93,7 @@
 									<h2 class="error" data-bind="text: AjaxError"></h2>
 									<!-- /ko -->
 									<div class="fullwidth day-content-text" data-bind="visible: HasAvailability(), text: AvailableTimeSpan"></div>
-									<!-- ko if: ToggleAvailabilityVerifyHours31654Enabled() -->
+									
 									<!-- ko if: !HasAvailability() && EditableIsInOpenPeriod -->
 									<div class="fullwidth day-content-text" style="padding-top: 15px">
 										<i class="glyphicon glyphicon-plus canAddAvailibility"></i>
@@ -119,7 +118,6 @@
 											<span data-bind="text: PossibleContractTimes"></span>
 										</div>
 									</div>
-									<!-- /ko -->
 									<!-- /ko -->
 									<!-- /ko -->
 								</div>

@@ -16,10 +16,9 @@ if (typeof (Teleopti) === 'undefined') {
 	}
 }
 
-Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel = function (ajax, dayViewModels, date, toggleEnabled) {
+Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel = function (ajax, dayViewModels, date) {
 	var self = this;
 
-	this.ToggleAvailabilityVerifyHours31654Enabled = ko.observable(toggleEnabled);
 	this.DayViewModels = dayViewModels;
 	
 	this.LoadFeedback = function () {
@@ -81,7 +80,7 @@ Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel = function (ajax,
 	});
 
 	this.StudentAvailabilityFeedbackClass = ko.computed(function () {
-		return self.ToggleAvailabilityVerifyHours31654Enabled() && self.StudentAvailabilityTimeIsOutOfRange()
+		return self.StudentAvailabilityTimeIsOutOfRange()
 			? 'alert-danger' : 'alert-info';
 	}).extend({ throttle: 1 });
 

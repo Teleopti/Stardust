@@ -36,7 +36,6 @@ ETL_SpeedUpETL_30791 = true
 #Cannot be relreased yet due to performance and IO #
 RTA_AdherenceDetails_34267 = RC
 RTA_NotifyViaSMS_31567 = true
-MyTimeWeb_AvailabilityVerifyHours_31654 = true
 Gamification_NewBadgeCalculation_31185 = true
 ETL_OnlyLatestQueueAgentStatistics_30787 = true
 Portal_DifferentiateBadgeSettingForAgents_31318 = true

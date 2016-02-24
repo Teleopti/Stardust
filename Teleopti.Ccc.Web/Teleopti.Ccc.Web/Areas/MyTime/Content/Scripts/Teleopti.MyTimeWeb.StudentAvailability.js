@@ -20,10 +20,6 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	var editFormViewModel = null;
 	var vm = null;
 	var periodFeedbackVM = null;
-	var toggleAvailabilityVerifyHours31654Enabled = (function () {
-		var toggleEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_AvailabilityVerifyHours_31654");
-		return toggleEnabled;
-	});
     
     var selectionViewModel = function() {
         var self = this;
@@ -117,9 +113,8 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
     
 	function _initViewModels() {
 		dayViewModels = {};
-		var toggle31654Enabled = toggleAvailabilityVerifyHours31654Enabled();
 		$('li[data-mytime-date]').each(function (index, element) {
-			var dayViewModel = new Teleopti.MyTimeWeb.StudentAvailability.DayViewModel(_ajaxForDate, toggle31654Enabled);
+			var dayViewModel = new Teleopti.MyTimeWeb.StudentAvailability.DayViewModel(_ajaxForDate);
 			dayViewModel.ReadElement(element);
 			dayViewModel.LoadFeedback();
 			dayViewModels[dayViewModel.Date] = dayViewModel;
@@ -132,7 +127,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 		_loadStudentAvailabilityAndSchedules(from, to).then(function() { vm.isInitFinished(true); });
 
 		var periodData = $('#StudentAvailability-body').data('mytime-periodselection');
-		periodFeedbackVM = new Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel(ajax, dayViewModels, periodData.Date, toggle31654Enabled);
+		periodFeedbackVM = new Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel(ajax, dayViewModels, periodData.Date);
 		periodFeedbackVM.LoadFeedback();
 
 		var template = $('#StudentAvailability-period');
