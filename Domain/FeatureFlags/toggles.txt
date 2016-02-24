@@ -85,6 +85,7 @@ RTA_TerminatedPersons_36042 = RC
 RTA_TeamChanges_36043 = RC
 Wfm_RTA_34621 = true
 Wfm_RTA_ProperAlarm_34975 = true
+Wfm_RTA_ProperReleaseToggle_36750 = DEV
 WfmPeople_AdjustSkill_34138 = true
 ResourcePlanner_WeeklyRestSolver_35043 = true
 MyTimeWeb_KeepUrlAfterLogon_34762 = true

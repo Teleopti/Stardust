@@ -27,37 +27,45 @@
 			</div>
 		</div>
 		<script>
-			window.onload = function () {
-				var xmlhttp;
-				xmlhttp = new XMLHttpRequest();
-				var isWfmEnabled = false;
+			function loadToggle(toggle, callback) {
+				var xmlhttp = new XMLHttpRequest();
 				xmlhttp.onreadystatechange = function () {
 					if (xmlhttp.readyState == 4) {
 						if (xmlhttp.status == 200) {
 							if (xmlhttp.responseText.length > 0) {
 								var result = JSON.parse(xmlhttp.responseText);
-								isWfmEnabled = result.IsEnabled;
+								callback( result.IsEnabled);
 							} else {
-								isWfmEnabled = false;
+								callback(false);
 							}
-							toggleLaunchWfm(isWfmEnabled);
 						}
 					}
 				};
-				xmlhttp.open("GET", "Web/ToggleHandler/IsEnabled?toggle=Wfm_MinimumScaffolding_32659", true);
+				xmlhttp.open("GET", "Web/ToggleHandler/IsEnabled?toggle=" + toggle, true);
 				xmlhttp.send();
+
+				callback(true);
 			};
 
-			function toggleLaunchWfm(isEnabled) {
-				if (!isEnabled) {
-					document.getElementById("webwfm").style.display = "none";
-					document.getElementById("webwfm").style.visibility = "hidden";
-				} else {
-					document.getElementById("webwfm").style.visibility = "visible";
-					document.getElementById("webwfm").style.display = "block";
-				}
+			window.onload = function () {
 
+				loadToggle('Wfm_MinimumScaffolding_32659', function (value) {
+					if (value) {
+						document.getElementById("webwfm").style.visibility = "visible";
+						document.getElementById("webwfm").style.display = "block";
+					} else {
+						document.getElementById("webwfm").style.display = "none";
+						document.getElementById("webwfm").style.visibility = "hidden";
+					}
+				});
 
+				loadToggle('Wfm_RTA_ProperReleaseToggle_36750', function (value) {
+					if (value) {
+						document.getElementById("webrta").href = "/TeleoptiWFM/Web/Wfm#rta";
+					} else {
+						document.getElementById("webrta").href = "/TeleoptiWFM/Web/Anywhere#realtimeadherencesites";
+					}
+				});
 			};
 
 		</script>
@@ -76,7 +84,7 @@
 				</a>
 			</div>
 			<div class="col-md-3">
-				<a class="block pink" href="/TeleoptiWFM/Web/Anywhere#realtimeadherencesites">
+				<a id="webrta" class="block pink" href="">
 					<span>Real-time Analysts</span>
 				</a>
 			</div>
