@@ -25,13 +25,21 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 		{
 			var myTimeData = new MyTimeData
 			{
-				BaseUrl = @"http://qawfmfarmhost/TeleoptiWFM/Web/",
-				User = new Guid("9d42c9bf-f766-473f-970c-9b5e015b2564"),
-				AbsenseId = new Guid("435CC5C8-89C0-4714-96FD-9B5E015AB330"),
+				BaseUrl = @"https://teleoptiscaleout.teleopticloud.com/Web/",
+				User = new Guid("10957AD5-5489-48E0-959A-9B5E015B2B5C"),
+				AbsenseId = new Guid("07d71222-2525-4efc-8129-a474009bd03b"),
 				DataSource = "Teleopti WFM",
-				BusinessUnit = Guid.Parse("928DD0BC-BF40-412E-B970-9B5E015AADEA"),
-				Scenario = Guid.Parse("E21D813C-238C-4C3F-9B49-9B5E015AB432"),
-				BusinessUnitName = "TeleoptiCCCDemo"
+				BusinessUnit = new Guid("928DD0BC-BF40-412E-B970-9B5E015AADEA"),
+				Scenario = new Guid("E21D813C-238C-4C3F-9B49-9B5E015AB432"),
+				BusinessUnitName = "Teleopti WFM Demo"
+
+				//BaseUrl = @"http://qawfmfarmhost/TeleoptiWFM/Web/",
+				//User = new Guid("9d42c9bf-f766-473f-970c-9b5e015b2564"),
+				//AbsenseId = new Guid("435CC5C8-89C0-4714-96FD-9B5E015AB330"),
+				//DataSource = "Teleopti WFM",
+				//BusinessUnit = Guid.Parse("928DD0BC-BF40-412E-B970-9B5E015AADEA"),
+				//Scenario = Guid.Parse("E21D813C-238C-4C3F-9B49-9B5E015AB432"),
+				//BusinessUnitName = "TeleoptiCCCDemo"
 
 				//BaseUrl = "http://teleopti745/TeleoptiWFM/Web/",
 				//User = new Guid("9d42c9bf-f766-473f-970c-9b5e015b2564"),

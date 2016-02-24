@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators
 		    while (stopwatch.IsRunning && stopwatch.Elapsed < TimeSpan.FromSeconds(600))
 		    {
 			    Thread.Sleep(TimeSpan.FromSeconds(5));
-			    Console.WriteLine("addFullDayAbsenseAsync {0} completed,{1} not completed", allTasks.Count(x => x.IsCompleted),
-				    allTasks.Count(x => !x.IsCompleted));
+			    Console.WriteLine("addFullDayAbsenseAsync {0} completed,{1} not completed, {2} faulted, {3} canceled", allTasks.Count(x => x.IsCompleted),
+					allTasks.Count(x => !x.IsCompleted), allTasks.Count(x => x.IsFaulted), allTasks.Count(x => x.IsCanceled));
 			    if (allTasks.All(x => x.IsCompleted))
 			    {
 				    break;
