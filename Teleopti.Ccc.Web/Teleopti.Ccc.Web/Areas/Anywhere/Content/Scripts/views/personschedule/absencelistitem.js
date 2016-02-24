@@ -80,8 +80,7 @@ define([
 			this.AboutToRemove = ko.observable(false);
 			this.Removing = ko.observable(false);
 
-			this.IsBackToWorkFormVisible = ko.observable(false);
-			this.IsBackToWorkFormFeatureEnabled = ko.observable(resources.MyTeam_AbsenceBackToWork_31478);
+			this.IsBackToWorkFormVisible = ko.observable(false);		
 
 			this.ScheduleDate = ko.observable(moment(data.StartTime).startOf('day'));
 			this.ianaTimeZoneOther = ko.observable(data.IanaTimeZoneOther);
