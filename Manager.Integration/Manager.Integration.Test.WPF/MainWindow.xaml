@@ -249,6 +249,7 @@
                             VerticalAlignment="Center" />
                 </Grid>
             </TabItem>
+            
             <TabItem Header="{Binding JobHistoryHeader, FallbackValue='Job History'}">
                 <Grid Background="#FFE5E5E5">
                     <DataGrid ItemsSource="{Binding JobHistoryData}"
@@ -317,6 +318,109 @@
                                                 Header="Created by" />
 
                         </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="{Binding JobHistoryGroupBySentToHeader, FallbackValue='Job History Group By Sent To'}">
+                <Grid Background="#FFE5E5E5">
+                    <DataGrid ItemsSource="{Binding JobHistoryDataGroupBySentToData}"
+                              AutoGenerateColumns="False"
+                              HorizontalGridLinesBrush="#FFF5EFEF"
+                              VerticalGridLinesBrush="#FFF5EFEF"
+                              SelectionUnit="Cell"
+                              IsReadOnly="True">
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Result}"
+                                                 Value="Success">
+                                        <Setter Property="Background"
+                                                Value="LightGreen" />
+                                        <Setter Property="Foreground"
+                                                Value="Black" />
+                                    </DataTrigger>
+
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Row">
+                                <DataGridTextColumn.Binding>
+                                    <MultiBinding Converter="{StaticResource RowNumberConverter}">
+                                        <Binding />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}" />
+                                    </MultiBinding>
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Binding="{Binding SentTo}"
+                                                ClipboardContentBinding="{Binding SentTo}"
+                                                Header="Sent to" />
+
+                            <DataGridTextColumn Binding="{Binding Name}"
+                                                ClipboardContentBinding="{Binding Name}"
+                                                Header="Job name" />
+
+                            <DataGridTextColumn Binding="{Binding Created, StringFormat=yyyy-mm-dd hh:mm:ss}"
+                                                ClipboardContentBinding="{Binding Created, StringFormat=yyyy-mm-dd hh:mm:ss}"
+                                                Header="Created" />
+
+                            <DataGridTextColumn Binding="{Binding Result}"
+                                                ClipboardContentBinding="{Binding Result}"
+                                                Header="Result" />
+
+                            <DataGridTextColumn Binding="{Binding Started, StringFormat=yyyy-mm-dd hh:mm:ss}"
+                                                ClipboardContentBinding="{Binding Started, StringFormat=yyyy-mm-dd hh:mm:ss}"
+                                                Header="Started" />
+
+                            <DataGridTextColumn Binding="{Binding Ended, StringFormat=yyyy-mm-dd hh:mm:ss}"
+                                                ClipboardContentBinding="{Binding Ended, StringFormat=yyyy-mm-dd hh:mm:ss}"
+                                                Header="Ended" />
+
+                            <DataGridTextColumn Binding="{Binding Type}"
+                                                ClipboardContentBinding="{Binding Type}"
+                                                Header="Type" />
+
+                            <DataGridTextColumn Binding="{Binding CreatedBy}"
+                                                ClipboardContentBinding="{Binding CreatedBy}"
+                                                Header="Created by" />
+
+                        </DataGrid.Columns>
+                        <DataGrid.GroupStyle>
+                            <GroupStyle>
+                                <GroupStyle.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding SentTo}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                                </GroupStyle.HeaderTemplate>
+
+                                <GroupStyle.ContainerStyle>
+                                    <Style TargetType="{x:Type GroupItem}">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type GroupItem}">
+                                                    <Expander>
+                                                        <Expander.Header>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <TextBlock Text="{Binding SentTo}" />
+                                                                <TextBlock Text="{Binding ItemCount}" />
+                                                                <TextBlock Text=" Items" />
+                                                            </StackPanel>
+                                                        </Expander.Header>
+                                                        <ItemsPresenter />
+                                                    </Expander>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </GroupStyle.ContainerStyle>
+
+                            </GroupStyle>
+                        </DataGrid.GroupStyle>
                     </DataGrid>
                 </Grid>
             </TabItem>
