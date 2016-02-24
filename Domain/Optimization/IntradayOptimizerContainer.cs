@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -13,12 +11,18 @@ namespace Teleopti.Ccc.Domain.Optimization
     /// - Manages the list of IntradayOptimizers according to the result of Optimizers
     /// </summary>
     public class IntradayOptimizerContainer : IIntradayOptimizerContainer
-    { 
-	    public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
+    {
+		private readonly IntradayOptimizationCallbackContext _intradayOptimizationCallbackContext;
+
+		public IntradayOptimizerContainer(IntradayOptimizationCallbackContext intradayOptimizationCallbackContext)
+		{
+			_intradayOptimizationCallbackContext = intradayOptimizationCallbackContext;
+		}
 
 		public void Execute(IEnumerable<IIntradayOptimizer2> optimizers)
 		{
 			var shuffledOptimizers = optimizers.GetRandom(optimizers.Count(), true);
+			var callback = _intradayOptimizationCallbackContext.Current();
 
 			foreach (var batchOptimizers in shuffledOptimizers.Batch(100))
 			{
@@ -37,21 +41,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 						{
 							activeOptimizers.Remove(optimizer);
 						}
-						var who = Resources.OptimizingIntraday + Resources.Colon + "(" + activeOptimizers.Count + ")" + executes + " " + optimizer.ContainerOwner.Name.ToString(NameOrderOption.FirstNameLastName);
-						var success = result.HasValue ? " " + Resources.wasSuccessful : " " + Resources.wasNotSuccessful;
-						var shouldCancel = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, who + success));
-						if (shouldCancel) return;
+						callback.Optimizing(optimizer.ContainerOwner, result.HasValue, activeOptimizers.Count, executes);
+						if (callback.IsCancelled())
+							return;
 					}
 				}
 			}
 		}
-
-        private bool onReportProgress(ResourceOptimizerProgressEventArgs args)
-        {
-        	var handler = ReportProgress;
-	        if (handler == null) return false;
-	        handler(this, args);
-	        return args.Cancel;
-        }
     }
 }

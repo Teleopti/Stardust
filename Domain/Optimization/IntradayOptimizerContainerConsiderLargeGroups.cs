@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -10,11 +8,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly AgentsToSkillGroups _agentsToSkillGroups;
 		private readonly IIntradayOptimizerLimiter _intradayOptimizerLimiter;
-
-		//försök ta bort event senare...
-#pragma warning disable 0067
-		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
-#pragma warning restore 0067
 
 		public IntradayOptimizerContainerConsiderLargeGroups(AgentsToSkillGroups agentsToSkillGroups,
 																										IIntradayOptimizerLimiter intradayOptimizerLimiter)

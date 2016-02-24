@@ -98,10 +98,35 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			{
 				using (createResourceCalculationContext())
 				{
-					service.ReportProgress += resourceOptimizerPersonOptimized;
-					service.Execute(optimizers);
-					service.ReportProgress -= resourceOptimizerPersonOptimized;
+					using (_container.Resolve<IntradayOptimizationCallbackContext>().Create(new intradayOptimizationCallback(_backgroundWorker)))
+					{
+						service.Execute(optimizers);
+					}
 				}
+			}
+		}
+
+		private class intradayOptimizationCallback : IIntradayOptimizationCallback
+		{
+			private readonly ISchedulingProgress _backgroundWorker;
+
+			public intradayOptimizationCallback(ISchedulingProgress backgroundWorker)
+			{
+				_backgroundWorker = backgroundWorker;
+			}
+
+			public void Optimizing(IPerson agent, bool wasSuccessful, int numberOfOptimizers, int executedOptimizers)
+			{
+				var who = Resources.OptimizingIntraday + Resources.Colon + "(" + numberOfOptimizers + ")" + executedOptimizers + " " + agent.Name.ToString(NameOrderOption.FirstNameLastName);
+				var success = wasSuccessful ? " " + Resources.wasSuccessful : " " + Resources.wasNotSuccessful;
+				var e = new ResourceOptimizerProgressEventArgs(0, 0, who + success);
+
+				_backgroundWorker.ReportProgress(1, e);
+			}
+
+			public bool IsCancelled()
+			{
+				return _backgroundWorker.CancellationPending;
 			}
 		}
 

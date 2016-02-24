@@ -718,11 +718,13 @@
     <Compile Include="Optimization\IIntradayOptimizerLimiter.cs" />
     <Compile Include="Optimization\IntradayDatesToSkip.cs" />
     <Compile Include="Optimization\IntradayOptimization.cs" />
+    <Compile Include="Optimization\IntradayOptimizationCallbackContext.cs" />
     <Compile Include="Optimization\IntradayOptimizeOnDayCallBackDoNothing.cs" />
     <Compile Include="Optimization\IntradayOptimizeOneday.cs" />
     <Compile Include="Optimization\IntradayOptimizerContainerConsiderLargeGroups.cs" />
     <Compile Include="Optimization\IntradayOptimizerCreator.cs" />
     <Compile Include="Optimization\IntradayOptmizerLimiter.cs" />
+    <Compile Include="Optimization\IIntradayOptimizationCallback.cs" />
     <Compile Include="Optimization\OptimizationPreferencesFactory.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimizationAndSingleAgentTeam.cs" />
     <Compile Include="Optimization\IDayOffRulesRepository.cs" />

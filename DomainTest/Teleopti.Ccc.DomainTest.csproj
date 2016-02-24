@@ -227,8 +227,10 @@
     <Compile Include="Optimization\Filter\FindFilterTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\DayOffOptimizationLockDaysTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\FullSchedulingTest.cs" />
+    <Compile Include="Optimization\ScheduleOptimizationTests\IntradayOptimizationFeedbackTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\IntradayOptimizationStopWhenLargeGroupTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\IntradayOptimizationTest.cs" />
+    <Compile Include="Optimization\ScheduleOptimizationTests\TrackIntradayOptimizationCallback.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\TrackOptimizeDaysForAgents.cs" />
     <Compile Include="ResourceCalculation\DoubleMatrixExtensions.cs" />
     <Compile Include="Scheduling\Assignment\DeleteAndResourceCalculateServiceSkipResCalcTest.cs" />
@@ -684,7 +686,6 @@
     <Compile Include="Optimization\MatrixMeetingDayLockerTest.cs" />
     <Compile Include="Optimization\MatrixNoMainShiftLockerTest.cs" />
     <Compile Include="Optimization\RelativeDailyStandardDeviationsByAllSkillsExtractorTest.cs" />
-    <Compile Include="Optimization\IntradayOptimizerContainerTest.cs" />
     <Compile Include="Optimization\RelativeDailyStandardDeviationsByPersonalSkillsExtractorTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerContainerTest.cs" />
     <Compile Include="Optimization\MatrixOvertimeLockerTest.cs" />
