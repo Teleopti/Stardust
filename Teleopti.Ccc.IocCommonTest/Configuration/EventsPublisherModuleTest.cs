@@ -4,9 +4,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
@@ -23,22 +21,9 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { BehaviorTestServer = true}, new FalseToggleManager())));
 			var container = builder.Build();
 
-			container.Resolve<SyncAllEventPublisher>().Should().Not.Be.Null();
-			container.Resolve<IEventPublisher>().Should().Be.OfType<SyncAllEventPublisher>();
+			container.Resolve<IEventPublisher>().Should().Be.OfType<MultiEventPublisherServiceBusAsSync>();
 		}
-
-		[Test]
-		public void ShouldResolveServiceBusEventPublisher()
-		{
-			var builder = new ContainerBuilder();
-			builder.RegisterModule(CommonModule.ForTest());
-			builder.RegisterInstance(MockRepository.GenerateMock<IServiceBusSender>()).As<IServiceBusSender>();
-			var container = builder.Build();
-
-			container.Resolve<ServiceBusEventPublisher>().Should().Not.Be.Null();
-			container.Resolve<IEventPublisher>().Should().Be.OfType<ServiceBusEventPublisher>();
-		}
-
+		
 		[Test]
 		public void ShouldResolvePopulatingEventPublisher()
 		{

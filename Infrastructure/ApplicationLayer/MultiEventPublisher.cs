@@ -8,18 +8,15 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		private readonly HangfireEventPublisher _hangfirePublisher;
 		private readonly ServiceBusEventPublisher _serviceBusPublisher;
 		private readonly StardustEventPublisher _stardustEventPublisher;
-		private readonly ResolveEventHandlers _resolver;
 
 		public MultiEventPublisher(
 			HangfireEventPublisher hangfirePublisher, 
 			ServiceBusEventPublisher serviceBusPublisher,
-			StardustEventPublisher stardustEventPublisher,
-			ResolveEventHandlers resolver)
+			StardustEventPublisher stardustEventPublisher)
 		{
 			_hangfirePublisher = hangfirePublisher;
 			_serviceBusPublisher = serviceBusPublisher;
 			_stardustEventPublisher = stardustEventPublisher;
-			_resolver = resolver;
 		}
 
 		public void Publish(params IEvent[] events)
