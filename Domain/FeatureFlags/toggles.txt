@@ -110,6 +110,5 @@ Scheduler_AgentSkillAnalyzer_12345 = DEV
 Wfm_Use_Stardust = RC
 Wfm_ForecastFileImportOnStardust_37047 = RC
 ResourcePlanner_SkillGroupDeleteAfterCalculation_37048 = RC
-ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049 = false
 ETL_SpeedUpPersonPeriodIntraday_37162 = false
 Scheduler_IntradayOptimization_36617 = RC
