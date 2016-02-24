@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 			var myTimeData = new MyTimeData
 			{
 				BaseUrl = @"https://teleoptiscaleout.teleopticloud.com/Web/",
-				User = new Guid("10957AD5-5489-48E0-959A-9B5E015B2B5C"),
+				User = new Guid("9D42C9BF-F766-473F-970C-9B5E015B2564"),
 				AbsenseId = new Guid("07d71222-2525-4efc-8129-a474009bd03b"),
 				DataSource = "Teleopti WFM",
 				BusinessUnit = new Guid("928DD0BC-BF40-412E-B970-9B5E015AADEA"),
