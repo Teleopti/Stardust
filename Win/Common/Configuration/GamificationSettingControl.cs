@@ -118,12 +118,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		}
 
 		public void InitializeDialogControl()
-		{
-			if (!_toggleManager.IsEnabled(Toggles.Portal_ResetBadges_30544))
-			{
-				reset.Hide();
-			}
-
+		{			
 			setColors();
 			SetTexts();
 		}

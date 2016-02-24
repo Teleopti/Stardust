@@ -31,7 +31,6 @@ Portal_NewLandingpage_29415 = true
 Show_StaticPageOnNoInternet_29415 = false
 Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635 = true
 Settings_SetAgentDescription_23257 = true
-Portal_ResetBadges_30544 = true
 Settings_AlertViaEmailFromSMSLink_30444 = true
 Badge_Leaderboard_30584 = true
 MyTimeWeb_AbsenceReport_31011 = true
