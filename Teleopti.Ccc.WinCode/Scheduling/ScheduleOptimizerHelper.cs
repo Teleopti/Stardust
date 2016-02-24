@@ -94,14 +94,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			using (_virtualSkillContext.Create(selectedPeriod))
 			{
-				using (
-					_container.Resolve<IntradayOptimizationCallbackContext>()
-						.Create(new intradayOptimizationCallback(_backgroundWorker)))
+				using (_container.Resolve<IntradayOptimizationCallbackContext>().Create(new intradayOptimizationCallback(_backgroundWorker)))
 				{
 					service.Execute(optimizers);
 				}
-
-				service.Execute(optimizers);
 			}
 		}
 
