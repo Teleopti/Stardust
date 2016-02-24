@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 	{
 		public ExternalUserStateForTest()
 		{
-			AuthenticationKey = ConfiguredKeyAuthenticator.LegacyAuthenticationKey;
+			AuthenticationKey = LegacyAuthenticationKey.TheKey;
 			PlatformTypeId = Guid.Empty.ToString();
 			SourceId = "sourceId";
 			UserCode = "8808";
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_dataSourceForTenant = dataSourceForTenant;
 			WithBusinessUnit(Guid.NewGuid());
 			WithDefaultsFromState(new ExternalUserStateForTest());
-			WithTenant("default", ConfiguredKeyAuthenticator.LegacyAuthenticationKey);
+			WithTenant("default", LegacyAuthenticationKey.TheKey);
 		}
 
 		public StoredStateInfo StoredState

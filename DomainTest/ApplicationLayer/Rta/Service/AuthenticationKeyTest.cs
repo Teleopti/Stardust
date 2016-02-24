@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldAcceptIfThirdAndFourthLetterOfAuthenticationKeyIsCorrupted_BecauseOfEncodingIssuesWithThe3rdLetterOfTheDefaultKeyAndWeAreNotAllowedToChangeTheDefault()
 		{
 			Database.WithDataFromState(new ExternalUserStateForTest());
-			var state = new ExternalUserStateForTest { AuthenticationKey = ConfiguredKeyAuthenticator.LegacyAuthenticationKey };
+			var state = new ExternalUserStateForTest { AuthenticationKey = LegacyAuthenticationKey.TheKey };
 			state.AuthenticationKey = state.AuthenticationKey.Remove(2, 2).Insert(2, "_");
 
 			Assert.DoesNotThrow(() => Target.SaveState(state));

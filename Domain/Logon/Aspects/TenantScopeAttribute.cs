@@ -4,7 +4,7 @@ namespace Teleopti.Ccc.Domain.Logon.Aspects
 {
 	public class TenantScopeAttribute : AspectAttribute
 	{
-		public TenantScopeAttribute() : base(typeof(ITenantScopeAspect))
+		public TenantScopeAttribute() : base(typeof(TenantScopeAspect))
 		{
 		}
 	}

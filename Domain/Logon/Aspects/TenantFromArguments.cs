@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Logon.Aspects
 			dynamic dynamic = argument;
 			var key = tryGet(() => dynamic.AuthenticationKey);
 			if (key != null)
-				return _tenants.TenantNameByKey(ConfiguredKeyAuthenticator.MakeLegacyKeyEncodingSafe(key));
+				return _tenants.TenantNameByKey(LegacyAuthenticationKey.MakeEncodingSafe(key));
 			return tryGet(() => dynamic.Tenant);
 
 		}

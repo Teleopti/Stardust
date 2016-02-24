@@ -1,6 +1,5 @@
 using Autofac;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -45,7 +44,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule(new MessageBrokerModule(_configuration));
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule(new UnitOfWorkModule(_configuration));
-			builder.RegisterModule(new AuthenticationModule(_configuration));
+			builder.RegisterModule(new AuthenticationModule());
 			builder.RegisterModule<ForecasterModule>();
 			builder.RegisterModule(new EventHandlersModule(_configuration));
 			builder.RegisterModule(new EventPublisherModule(_configuration));

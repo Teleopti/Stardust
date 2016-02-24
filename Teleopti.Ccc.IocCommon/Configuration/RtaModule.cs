@@ -112,11 +112,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.OnActivated(e => ServiceLocatorForEntity.SetInstanceFromContainer(e.Instance))
 					.OnRelease(e => ServiceLocatorForEntity.SetInstanceFromContainer(null as IAppliedAlarm));
 
-			if (_config.Toggle(Toggles.RTA_MultiTenancy_32539))
-				builder.RegisterType<TenantAuthenticator>().As<IAuthenticator>().SingleInstance();
-			else
-				builder.RegisterType<ConfiguredKeyAuthenticator>().As<IAuthenticator>().SingleInstance();
-			
 		}
 	}
 }

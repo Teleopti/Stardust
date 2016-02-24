@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Ccc.Domain.Repositories;
@@ -23,19 +22,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class AuthenticationModule : Module
 	{
-		private readonly IIocConfiguration _config;
-
-		public AuthenticationModule(IIocConfiguration config)
-		{
-			_config = config;
-		}
-
 		protected override void Load(ContainerBuilder builder)
 		{
-			if (_config.Toggle(Toggles.RTA_MultiTenancy_32539))
-				builder.RegisterType<TenantScopeAspect>().As<ITenantScopeAspect>().SingleInstance();
-			else
-				builder.RegisterType<RtaConnectionStringTenantScopeAspect>().As<ITenantScopeAspect>().SingleInstance();
+			builder.RegisterType<TenantScopeAspect>().SingleInstance();
+
 			builder.RegisterType<TenantFromArguments>().SingleInstance();
 			builder.RegisterType<AsSystemAspect>().SingleInstance();
 

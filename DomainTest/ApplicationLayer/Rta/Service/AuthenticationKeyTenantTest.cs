@@ -8,7 +8,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
 	[RtaTest]
-	[Toggle(Toggles.RTA_MultiTenancy_32539)]
 	[TestFixture]
 	public class AuthenticationKeyTenantTest
 	{
@@ -49,12 +48,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			Database
 				.WithUser("user")
-				.WithTenant(ConfiguredKeyAuthenticator.LegacyAuthenticationKey);
+				.WithTenant(LegacyAuthenticationKey.TheKey);
 
 			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "user",
-				AuthenticationKey = ConfiguredKeyAuthenticator.LegacyAuthenticationKey
+				AuthenticationKey = LegacyAuthenticationKey.TheKey
 			});
 
 			Database.StoredState.Should().Not.Be.Null();
@@ -63,11 +62,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldNotAcceptLegacyAuthenticationKeyIf2Tenants()
 		{
-			Database.WithTenant(ConfiguredKeyAuthenticator.LegacyAuthenticationKey);
+			Database.WithTenant(LegacyAuthenticationKey.TheKey);
 			Database.WithTenant("key");
 			var state = new ExternalUserStateForTest
 			{
-				AuthenticationKey = ConfiguredKeyAuthenticator.LegacyAuthenticationKey
+				AuthenticationKey = LegacyAuthenticationKey.TheKey
 			};
 
 			Assert.Throws(typeof(LegacyAuthenticationKeyException), () => Target.SaveState(state));
@@ -80,12 +79,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			Database
 				.WithUser("user")
-				.WithTenant(ConfiguredKeyAuthenticator.LegacyAuthenticationKey);
+				.WithTenant(LegacyAuthenticationKey.TheKey);
 
 			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "user",
-				AuthenticationKey = ConfiguredKeyAuthenticator.LegacyAuthenticationKey.Remove(2, 2).Insert(2, "_")
+				AuthenticationKey = LegacyAuthenticationKey.TheKey.Remove(2, 2).Insert(2, "_")
 			});
 
 			Database.StoredState.Should().Not.Be.Null();
@@ -94,13 +93,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldNotAcceptIfThirdAndFourthLetterOfAuthenticationKeyIsCorrupted_BecauseOfEncodingIssuesWithThe3rdLetterOfTheDefaultKeyAndWeAreNotAllowedToChangeTheDefault()
 		{
-			Database.WithTenant(ConfiguredKeyAuthenticator.LegacyAuthenticationKey);
+			Database.WithTenant(LegacyAuthenticationKey.TheKey);
 			Database.WithTenant("key");
 
 			var state = new ExternalUserStateForTest
 			{
 				UserCode = "user",
-				AuthenticationKey = ConfiguredKeyAuthenticator.LegacyAuthenticationKey.Remove(2, 2).Insert(2, "_")
+				AuthenticationKey = LegacyAuthenticationKey.TheKey.Remove(2, 2).Insert(2, "_")
 			};
 
 			Assert.Throws(typeof(LegacyAuthenticationKeyException), () => Target.SaveState(state));

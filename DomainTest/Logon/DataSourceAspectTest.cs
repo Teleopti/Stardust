@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.DomainTest.Logon
 	[DomainTest]
 	[LoggedOff]
 	[TestFixture]
-	[Toggle(Toggles.RTA_MultiTenancy_32539)]
 	public class DataSourceAspectTest : ISetup
 	{
 		public Service TheService;

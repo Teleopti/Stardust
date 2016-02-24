@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
 	[TestFixture]
 	[RtaTest]
-	[Toggle(Toggles.RTA_MultiTenancy_32539)]
 	public class CheckForActivityChangesTest
 	{
 		public FakeRtaDatabase Database;

@@ -80,7 +80,6 @@ MyTimeWeb_ShowSeatBooking_34799 = true
 MyTimeWeb_PreferenceShowNightViolation_33152 = true
 MessageBroker_SchedulingScreenMailbox_32733 = true
 WfmPeople_ImportUsers_33665 = true
-RTA_MultiTenancy_32539 = true
 RTA_DeletedPersons_36041 = true
 RTA_TerminatedPersons_36042 = RC
 RTA_TeamChanges_36043 = RC

@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.DomainTest.Logon
 	[DomainTest]
 	[LoggedOff]
 	[TestFixture]
-	[Toggle(Toggles.RTA_MultiTenancy_32539)]
 	public class DataSourceAspectAuthenticationKeyTest : ISetup
 	{
 		public Service TheService;
@@ -99,11 +98,11 @@ namespace Teleopti.Ccc.DomainTest.Logon
 		[Test]
 		public void ShouldFindTenantWhenAuthenticationKeyIsSentInWrongEncoding()
 		{
-			Database.WithTenant("tenant", ConfiguredKeyAuthenticator.LegacyAuthenticationKey);
+			Database.WithTenant("tenant", LegacyAuthenticationKey.TheKey);
 
 			TheService.Does(new Input
 			{
-				AuthenticationKey = ConfiguredKeyAuthenticator.LegacyAuthenticationKey.Remove(2, 2).Insert(2, "_")
+				AuthenticationKey = LegacyAuthenticationKey.TheKey.Remove(2, 2).Insert(2, "_")
 			});
 
 			TheService.RanWithDataSource.DataSourceName.Should().Be("tenant");

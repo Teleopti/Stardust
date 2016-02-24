@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Tenant
 		public void Has(Infrastructure.MultiTenancy.Server.Tenant tenant)
 		{
 			// making the key safe is done for real in db scripts when the default tenant is added
-			var key = ConfiguredKeyAuthenticator.MakeLegacyKeyEncodingSafe(tenant.RtaKey);
+			var key = LegacyAuthenticationKey.MakeEncodingSafe(tenant.RtaKey);
 			// when a test adds its own tenant with the legacy key, lets not add duplicates
 			if (_data.Any(x => x.RtaKey == key))
 				return;

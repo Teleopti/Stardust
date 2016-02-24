@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly DataSourceResolver _dataSourceResolver;
 		private readonly ICacheInvalidator _cacheInvalidator;
 		private readonly RtaProcessor _processor;
-		private readonly IAuthenticator _authenticator;
+		private readonly TenantLoader _tenantLoader;
 		private readonly RtaInitializor _initializor;
 		private readonly ActivityChangeProcessor _activityChangeProcessor;
 		private readonly IPersonLoader _personLoader;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IAgentStateReadModelUpdater agentStateReadModelUpdater,
 			IDatabaseLoader databaseLoader,
 			RtaProcessor processor,
-			IAuthenticator authenticator,
+			TenantLoader tenantLoader,
 			RtaInitializor initializor,
 			ActivityChangeProcessor activityChangeProcessor,
 			IPersonLoader personLoader)
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_stateMapper = stateMapper;
 			_cacheInvalidator = cacheInvalidator;
 			_processor = processor;
-			_authenticator = authenticator;
+			_tenantLoader = tenantLoader;
 			_initializor = initializor;
 			_activityChangeProcessor = activityChangeProcessor;
 			_personLoader = personLoader;
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private void validateAuthenticationKey(ExternalUserStateInputModel input)
 		{
 			input.MakeLegacyKeyEncodingSafe();
-			if (!_authenticator.Authenticate(input.AuthenticationKey))
+			if (!_tenantLoader.Authenticate(input.AuthenticationKey))
 				throw new InvalidAuthenticationKeyException(
 					"You supplied an invalid authentication key. Please verify the key and try again.");
 		}
