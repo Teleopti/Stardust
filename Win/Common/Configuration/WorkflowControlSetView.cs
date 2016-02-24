@@ -56,11 +56,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				checkBoxAdvAnonymousTrading.Hide();
 			}			
-			
-			if (!toggleManager.IsEnabled(Toggles.MyTimeWeb_LockTrades_31637))
-			{
-				checkBoxAdvLockTrading.Hide();
-			}
 
 			if (!toggleManager.IsEnabled (Toggles.Wfm_Requests_Waitlist_36232))
 			{

@@ -37,7 +37,6 @@ ETL_SpeedUpETL_30791 = true
 RTA_AdherenceDetails_34267 = RC
 RTA_NotifyViaSMS_31567 = true
 MyTimeWeb_AnonymousTrades_31638 = true
-MyTimeWeb_LockTrades_31637 = true
 MyTimeWeb_AvailabilityVerifyHours_31654 = true
 MyTeam_AbsenceBackToWork_31478 = true
 Gamification_NewBadgeCalculation_31185 = true
