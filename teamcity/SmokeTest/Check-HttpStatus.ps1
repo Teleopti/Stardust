@@ -20,6 +20,8 @@ function Check-URL ($UrlToCheck)
     do {
 start-sleep -seconds 2
 Write-Host "Checking if $UrlToCheck is accessible..." -fore cyan
+# Ignore SSL cert 
+[System.Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}
 # Create the request.
 $HTTP_Request = [System.Net.WebRequest]::Create($UrlToCheck)
 # Pass default credentials (To be able to ping SDK)
