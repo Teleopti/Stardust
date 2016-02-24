@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			var period = new DateOnlyPeriod(_schedulerStateHolder.DaysToRecalculate.Min().AddDays(-1), _schedulerStateHolder.DaysToRecalculate.Max());
 			var extractor = new ScheduleProjectionExtractor(new PersonSkillProvider(), _schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
 			var resources = extractor.CreateRelevantProjectionList(_schedulerStateHolder.Schedules, period.ToDateTimePeriod(_schedulerStateHolder.TimeZoneInfo));
-			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
+			using (new ResourceCalculationContext(resources))
 			{
 				_resourceOptimizationHelperExtended.ResourceCalculateMarkedDays(
 					new BackgroundWorkerWrapper(_backgroundWorkerResources), true, true);

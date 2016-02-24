@@ -78,31 +78,31 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
 			var resources = extractor.CreateRelevantProjectionList(stateHolder.Schedules);
-			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
+			using (new ResourceCalculationContext(resources))
 			{
 				if (lastCalculationState)
-			{
-				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, false);
-			}
-			
-			DateOnlyPeriod groupPagePeriod = schedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
+				{
+					_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, false);
+				}
 
-			GroupPageLight selectedGroupPage;
+				DateOnlyPeriod groupPagePeriod = schedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
 
-			if (optimizationMethodBackToLegalState)
-			{
-				selectedGroupPage = optimizerOriginalPreferences.SchedulingOptions.GroupOnGroupPageForTeamBlockPer;
-			}
-			else
-			{
-				selectedGroupPage = optimizationPreferences.Extra.TeamGroupPage;
-			}
+				GroupPageLight selectedGroupPage;
 
-			var groupPersonGroupPagePerDate = _groupPageCreator.CreateGroupPagePerDate(groupPagePeriod.DayCollection(),
-				_groupScheduleGroupPageDataProvider, selectedGroupPage);
+				if (optimizationMethodBackToLegalState)
+				{
+					selectedGroupPage = optimizerOriginalPreferences.SchedulingOptions.GroupOnGroupPageForTeamBlockPer;
+				}
+				else
+				{
+					selectedGroupPage = optimizationPreferences.Extra.TeamGroupPage;
+				}
 
-			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
-			
+				var groupPersonGroupPagePerDate = _groupPageCreator.CreateGroupPagePerDate(groupPagePeriod.DayCollection(),
+					_groupScheduleGroupPageDataProvider, selectedGroupPage);
+
+				var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
+
 				IList<IScheduleMatrixPro> allMatrixes = new List<IScheduleMatrixPro>();
 				switch (optimizationMethodBackToLegalState)
 				{
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						break;
 				}
 			}
-		
+
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
 		}
 

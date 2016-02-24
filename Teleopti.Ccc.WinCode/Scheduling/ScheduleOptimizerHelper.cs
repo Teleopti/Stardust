@@ -94,10 +94,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			using (_virtualSkillContext.Create(selectedPeriod))
 			{
+<<<<<<< local
 					using (_container.Resolve<IntradayOptimizationCallbackContext>().Create(new intradayOptimizationCallback(_backgroundWorker)))
 					{
 						service.Execute(optimizers);
 					}
+=======
+				service.ReportProgress += resourceOptimizerPersonOptimized;
+				service.Execute(optimizers);
+				service.ReportProgress -= resourceOptimizerPersonOptimized;
+>>>>>>> other
 			}
 		}
 
@@ -167,8 +173,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				service.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
 
-		private ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>
-			resourceCalculationContext()
+		private ResourceCalculationContext resourceCalculationContext()
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			var minutesPerInterval = 15;

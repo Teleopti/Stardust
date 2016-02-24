@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				using (new ResourceCalculationContext(resources))
 				{
 					_resourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
-					_intradayOptimizerContainer.Execute(optimizers, period);
+					_intradayOptimizerContainer.Execute(optimizers);
 					_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, webScheduleState.AllSchedules, webScheduleState.PeopleSelection.AllPeople, dayOffOptimizationPreference);
 				}
 			}

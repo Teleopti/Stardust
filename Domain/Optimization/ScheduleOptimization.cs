@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
 			var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
-			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
+			using (new ResourceCalculationContext(resources))
 			{
 				_classicDaysOffOptimizationCommand.Execute(matrixOriginalStateContainerListForDayOffOptimization, period,
 					optimizationPreferences, _schedulerStateHolder(),

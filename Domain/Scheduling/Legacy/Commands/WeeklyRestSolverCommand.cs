@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var schedulerStateHolder = _schedulerStateHolder();
 
 			IDisposable contextDisposal = null;
-			if (!ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>.InContext)
+			if (!ResourceCalculationContext.InContext)
 			{
 				var minutesPerInterval = 15;
 				if (schedulerStateHolder.SchedulingResultState.Skills.Any())
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				}
 				var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
 				var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
-				contextDisposal = new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources);
+				contextDisposal = new ResourceCalculationContext(resources);
 			}
 			
 				EventHandler<ResourceOptimizerProgressEventArgs> onResolvingWeek = (sender, e) =>

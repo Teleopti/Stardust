@@ -2165,7 +2165,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (!_schedulerState.SchedulingResultState.Skills.Any()) return;
 
 			IDisposable disposableContext = null;
-			if (!ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>.InContext)
+			if (!ResourceCalculationContext.InContext)
 			{
 				var period = new DateOnlyPeriod(_schedulerState.DaysToRecalculate.Min().AddDays(-1),
 					_schedulerState.DaysToRecalculate.Max());
@@ -2173,7 +2173,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_schedulerState.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
 				var resources = extractor.CreateRelevantProjectionList(_schedulerState.Schedules,
 					period.ToDateTimePeriod(_schedulerState.TimeZoneInfo));
-				disposableContext = new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources);
+				disposableContext = new ResourceCalculationContext(resources);
 			}
 			_optimizationHelperExtended.ResourceCalculateMarkedDays(
 				new BackgroundWorkerWrapper(_backgroundWorkerResourceCalculator), SchedulerState.ConsiderShortBreaks, true);

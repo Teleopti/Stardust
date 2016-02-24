@@ -13,16 +13,8 @@ namespace Teleopti.Interfaces.Domain
 		}
 
 		public static IResourceCalculationDataContainerWithSingleOperation Fetch()
-
-		private static T _container;
-		
-        /// <summary>
-        /// Gets the container without creating a new if the instance doesn't exist
-        /// </summary>
-        /// <returns></returns>
-        public static T Container()
-        {
-            return _container;
+		{
+			return _container;
         }
 
 		public static bool InContext
