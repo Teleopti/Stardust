@@ -336,11 +336,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<NoSchedulingProgress>().As<ISchedulingProgress>().SingleInstance();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049))
 			{
-				builder.RegisterType<IntradayOptimizerContainerConsiderLargeGroups>().As<IIntradayOptimizerContainer>().InstancePerLifetimeScope();
+				builder.RegisterType<IntradayOptimizerContainerConsiderLargeGroups>().As<IIntradayOptimizerContainer>().SingleInstance();
 			}
 			else
 			{
-				builder.RegisterType<IntradayOptimizerContainer>().As<IIntradayOptimizerContainer>().InstancePerLifetimeScope();
+				builder.RegisterType<IntradayOptimizerContainer>().As<IIntradayOptimizerContainer>().SingleInstance();
 			}
 			builder.RegisterType<AgentsToSkillGroups>().SingleInstance();
 			builder.RegisterType<IntradayOptmizerLimiter>().As<IIntradayOptimizerLimiter>().AsSelf().SingleInstance();
