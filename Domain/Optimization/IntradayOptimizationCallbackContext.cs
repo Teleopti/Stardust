@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		private class nullIntradayOptimizationCallback : IIntradayOptimizationCallback
 		{
-			public void Optimizing(IPerson agent, bool wasSuccessful, int numberOfOptimizers, int executedOptimizers)
+			public void Optimizing(IntradayOptimizationCallbackInfo callbackInfo)
 			{
 			}
 

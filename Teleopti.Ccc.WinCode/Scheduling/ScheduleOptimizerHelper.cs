@@ -115,11 +115,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				_backgroundWorker = backgroundWorker;
 			}
 
-			public void Optimizing(IPerson agent, bool wasSuccessful, int numberOfOptimizers, int executedOptimizers)
+			public void Optimizing(IntradayOptimizationCallbackInfo callbackInfo)
 			{
-				var who = Resources.OptimizingIntraday + Resources.Colon + "(" + numberOfOptimizers + ")" + executedOptimizers + " " +
-						  agent.Name.ToString(NameOrderOption.FirstNameLastName);
-				var success = wasSuccessful ? " " + Resources.wasSuccessful : " " + Resources.wasNotSuccessful;
+				var who = Resources.OptimizingIntraday + Resources.Colon + "(" + callbackInfo.NumberOfOptimizers + ")" + callbackInfo.ExecutedOptimizers + " " + callbackInfo.Agent.Name.ToString(NameOrderOption.FirstNameLastName);
+				var success = callbackInfo.WasSuccessful ? " " + Resources.wasSuccessful : " " + Resources.wasNotSuccessful;
 				var e = new ResourceOptimizerProgressEventArgs(0, 0, who + success);
 
 				_backgroundWorker.ReportProgress(1, e);

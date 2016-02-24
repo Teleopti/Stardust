@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 						{
 							activeOptimizers.Remove(optimizer);
 						}
-						callback.Optimizing(optimizer.ContainerOwner, result.HasValue, activeOptimizers.Count, executes);
+						callback.Optimizing(new IntradayOptimizationCallbackInfo(optimizer.ContainerOwner, result.HasValue, activeOptimizers.Count, executes));
 						if (callback.IsCancelled())
 							return;
 					}
