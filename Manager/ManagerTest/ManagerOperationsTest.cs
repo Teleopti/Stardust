@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http.Results;
 using ManagerTest.Database;
@@ -64,25 +65,6 @@ namespace ManagerTest
 				.Be.EqualTo(_nodeUri1.ToString());
 		}
 
-		[Test]
-		public void ShouldAddNodeReferenceToJobDefinition()
-		{
-			var job = new JobRequestModel
-			{
-				Name = "ShouldAddNodeReferenceToJobDefinition",
-				Serialized = "ngt",
-				Type = "bra",
-				UserName = "ManagerTests"
-			};
-
-			Target.NodeInitialized(_nodeUri1);
-			Target.DoThisJob(job);
-			Target.Heartbeat(_nodeUri1);
-			JobRepository.LoadAll()
-				.First()
-				.AssignedNode.Should()
-				.Contain(_nodeUri1.ToString());
-		}
 
 		[Test]
 		public void ShouldBeAbleToAcknowledgeWhenJobIsReceived()
@@ -176,82 +158,7 @@ namespace ManagerTest
 				.Count.Should()
 				.Be.EqualTo(1);
 		}
-
-		[Test]
-		public void ShouldBeAbleToSendNewJobToAvailableNode()
-		{
-			var job = new JobRequestModel
-			{
-				Name = "ShouldBeAbleToSendNewJobToAvailableNode",
-				Serialized = "ngt",
-				Type = "bra",
-				UserName = "ManagerTests"
-			};
-			Target.NodeInitialized(_nodeUri1);
-			Target.DoThisJob(job);
-			Target.Heartbeat(_nodeUri1);
-			HttpSender.CalledNodes.Keys.First()
-				.Should()
-				.Contain(_nodeUri1.ToString());
-		}
-
-		[Test]
-		public void ShouldBeAbleToSendNewJobToFirstAvailableNode()
-		{
-			var job = new JobRequestModel
-			{
-				Name = "ShouldBeAbleToSendNewJobToFirstAvailableNode",
-				Serialized = "ngt",
-				Type = "bra",
-				UserName = "ManagerTests"
-			};
-			thisNodeIsBusy(_nodeUri1.ToString());
-
-			Target.NodeInitialized(_nodeUri1);
-			Target.NodeInitialized(_nodeUri2);
-
-			Target.DoThisJob(job);
-
-			Target.Heartbeat(_nodeUri1);
-
-			HttpSender.CalledNodes.Count.Should()
-				.Be.EqualTo(1);
-			HttpSender.CalledNodes.Keys.First()
-				.Should()
-				.Contain("localhost:9051/job");
-		}
-
-		[Test]
-		public void ShouldDistributePersistedJobsOnHeartbeat()
-		{
-			var userName = "ManagerTests";
-			var job1Id = Guid.NewGuid();
-			var job2Id = Guid.NewGuid();
-			var job1 = new JobDefinition
-			{
-				Id = job1Id,
-				AssignedNode = "local",
-				Name = "job",
-				UserName = userName,
-				Serialized = "Fake Serialized",
-				Type = "Fake Type"
-			};
-			var job2 = new JobDefinition
-			{
-				Id = job2Id,
-				Name = "Job2",
-				UserName = userName,
-				Serialized = "Fake Serialized",
-				Type = "Fake Type"
-			};
-			JobRepository.Add(job1);
-			JobRepository.Add(job2);
-
-			Target.NodeInitialized(_nodeUri1);
-			Target.Heartbeat(_nodeUri1);
-			HttpSender.CalledNodes.Count.Should()
-				.Be.EqualTo(1);
-		}
+		
 
 		[Test]
 		public void ShouldGetUniqueJobIdWhilePersistingJob()
