@@ -65,6 +65,17 @@ namespace Manager.IntegrationTest.Console.Host
 			return NotFound();
 		}
 
+		[HttpGet, Route("appdomain/managers")]
+		public IHttpActionResult GetAllManagers()
+		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+											 "Called API controller.");
+
+			var appDomainsList = Program.GetAllmanagers();
+
+			return Ok(appDomainsList);
+		}
+
 		[HttpGet, Route("appdomain/nodes")]
 		public IHttpActionResult GetAllNodes()
 		{

@@ -506,11 +506,24 @@ namespace Manager.IntegrationTest.Console.Host
 			}
 		}
 
+		public static List<string> GetAllmanagers()
+		{
+			var listToReturn = new List<string>();
+
+			if (AppDomainManagerTasks != null)
+			{
+				foreach (var appDomainManagerTask in AppDomainManagerTasks)
+				{
+					listToReturn.Add(appDomainManagerTask.GetAppDomainFriendlyName());
+				}
+			}
+
+			return listToReturn;
+		}
+
 		public static List<string> GetAllNodes()
 		{
-			List<string> listToReturn = null;
-
-			listToReturn = new List<string>();
+			var listToReturn = new List<string>();
 
 			if (AppDomainNodeTasks != null)
 			{
