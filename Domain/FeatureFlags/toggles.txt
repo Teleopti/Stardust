@@ -27,7 +27,6 @@
 ############################################################################
 
 Request_ShiftTradeRequestForMoreDays_20918 = true
-Request_GiveCommentWhenDenyOrApproveShiftTradeRequest_28341 = true
 Request_SeePossibleShiftTradesFromAllTeams_28770 = true
 Request_FilterPossibleShiftTradeByTime_24560 = true
 Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850 = true

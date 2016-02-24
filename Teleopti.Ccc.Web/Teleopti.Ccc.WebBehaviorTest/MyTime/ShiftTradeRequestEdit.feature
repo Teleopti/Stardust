@@ -373,7 +373,6 @@ Scenario: Do not show resend and cancel buttons to sender when shifttrade is not
 	Then I should not see resend shifttrade button for the request
 	And I should not see cancel shifttrade button for the request
 
-@OnlyRunIfEnabled('Request_GiveCommentWhenDenyOrApproveShiftTradeRequest_28341')
 Scenario:  Should input comment when seeing a shift trade request from other agent in pending status
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -385,7 +384,6 @@ Scenario:  Should input comment when seeing a shift trade request from other age
 	When I click on the existing request in the list
 	Then I could edit message for the reason why I approve or deny this request
 
-@OnlyRunIfEnabled('Request_GiveCommentWhenDenyOrApproveShiftTradeRequest_28341')
 Scenario:  Should see the updated comment after approved
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -400,7 +398,6 @@ Scenario:  Should see the updated comment after approved
 	And I am viewing requests
 	Then I should see 'OK, you owe me a dinner' in message area
 	
-@OnlyRunIfEnabled('Request_GiveCommentWhenDenyOrApproveShiftTradeRequest_28341')
 Scenario:  Should see the updated comment after denied
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'

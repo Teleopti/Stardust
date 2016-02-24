@@ -29,10 +29,9 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 	self.ToggleSelected = function () {
 	    self.IsSelected(!self.IsSelected());
 	};
-	self.IsEditMessageEnabled = ko.observable(false);
+	self.IsEditMessageEnabled = ko.observable(true);
 	self.loadIsEditMessageEnabled = function () {
-		var toggleEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("Request_GiveCommentWhenDenyOrApproveShiftTradeRequest_28341");
-		self.IsEditMessageEnabled(toggleEnabled);
+		self.IsEditMessageEnabled();
 	};
 	self.isAnonymousTrading = ko.observable(false);
 	self.isLockTrading = ko.observable(false);

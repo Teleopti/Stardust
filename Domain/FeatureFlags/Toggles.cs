@@ -13,7 +13,6 @@
 
 		Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635,
 		Request_ShiftTradeRequestForMoreDays_20918,
-		Request_GiveCommentWhenDenyOrApproveShiftTradeRequest_28341,
 		Request_SeePossibleShiftTradesFromAllTeams_28770,
 		Request_FilterPossibleShiftTradeByTime_24560,
 		Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850,
