@@ -332,7 +332,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
 			}
 			else
 			{
-				trackAccounts(personAccount, dateOnlyPeriod, absenceRequest);
 				//We must have the current and all after...
 				var affectedAccounts = personAccount.Find(new DateOnlyPeriod(dateOnlyPeriod.StartDate, DateOnly.MaxValue));
 
