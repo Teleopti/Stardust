@@ -8,16 +8,6 @@ namespace Teleopti.Interfaces.Domain
 		private static T _container;
 
         /// <summary>
-        /// Gets the container, creating a new instance if none exists
-        /// </summary>
-        /// <param name="createContainer"></param>
-        /// <returns></returns>
-		public static T Container(Func<T> createContainer)
-		{
-			return _container ?? createContainer();
-		}
-
-        /// <summary>
         /// Gets the container without creating a new if the instance doesn't exist
         /// </summary>
         /// <returns></returns>
