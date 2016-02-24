@@ -51,14 +51,33 @@ namespace Teleopti.Ccc.Web.Broker
 			value = ConfigurationManager.AppSettings["MessagesPerSecond"];
 			settings.MessagesPerSecond = string.IsNullOrEmpty(value) ? 80 : Convert.ToInt32(value);
 
-		    value = ConfigurationManager.AppSettings["UseSqlServerBackplane"];
-		    settings.UseSqlServerBackplane = !string.IsNullOrEmpty(value) && Convert.ToBoolean(value);
+			value = ConfigurationManager.AppSettings["SignalRBackplaneType"];
+			settings.SignalRBackplaneType = parseSignalRBackplaneType(value);
 
-		    if (settings.UseSqlServerBackplane)
-		        settings.SqlServerBackplaneConnectionString =
-		            ConfigurationManager.ConnectionStrings["MessageBroker"].ConnectionString;
+			switch (settings.SignalRBackplaneType)
+			{
+				case SignalRBackplaneType.SqlServer:
+					settings.SqlServerBackplaneConnectionString =
+						ConfigurationManager.ConnectionStrings["MessageBroker"].ConnectionString;
+					break;
+				case SignalRBackplaneType.AzureServiceBus:
+					settings.AzureServiceBusBackplaneConnectionString =
+						ConfigurationManager.ConnectionStrings["AzureServiceBusBackplane"].ConnectionString;
+					break;
+			}
             return settings;
 		}
+
+
+		private static SignalRBackplaneType parseSignalRBackplaneType(string value)
+		{
+			if (string.IsNullOrEmpty(value))
+				return SignalRBackplaneType.Nothing;
+			SignalRBackplaneType result;
+			return !Enum.TryParse(value, true, out result) ? SignalRBackplaneType.Nothing : result;
+		}
+
+		public SignalRBackplaneType SignalRBackplaneType { get; set; }
 
 		public TimeSpan? KeepAlive { get; set; }
 		public TimeSpan? ConnectionTimeout { get; set; }
@@ -68,7 +87,14 @@ namespace Teleopti.Ccc.Web.Broker
 		public bool ThrottleMessages { get; set; }
 		public int MessagesPerSecond { get; set; }
 		public bool EnablePerformanceCounters { get; set; }
-	    public bool UseSqlServerBackplane { get; set; }
 	    public string SqlServerBackplaneConnectionString { get; set; }
+		public string AzureServiceBusBackplaneConnectionString { get; set; }
+	}
+
+	public enum SignalRBackplaneType
+	{
+		Nothing,
+		SqlServer,
+		AzureServiceBus
 	}
 }

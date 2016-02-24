@@ -23,11 +23,21 @@ namespace Teleopti.Ccc.Web.Broker
 			if (settingsFromParser.ConnectionTimeout.HasValue)
 				GlobalHost.Configuration.ConnectionTimeout = settingsFromParser.ConnectionTimeout.Value;
 
-			if (settingsFromParser.ScaleOutBackplaneUrl != null && !settingsFromParser.UseSqlServerBackplane)
-				GlobalHost.DependencyResolver.UseSignalRServer(settingsFromParser.ScaleOutBackplaneUrl);
-
-		    if (settingsFromParser.UseSqlServerBackplane)
-		        GlobalHost.DependencyResolver.UseSqlServer(settingsFromParser.SqlServerBackplaneConnectionString);
+			switch (settingsFromParser.SignalRBackplaneType)
+			{
+				case SignalRBackplaneType.SqlServer:
+					GlobalHost.DependencyResolver.UseSqlServer(settingsFromParser.SqlServerBackplaneConnectionString);
+					break;
+				case SignalRBackplaneType.AzureServiceBus:
+					GlobalHost.DependencyResolver.UseServiceBus(settingsFromParser.AzureServiceBusBackplaneConnectionString, "Teleopti WFM");
+					break;
+				default:
+					if (settingsFromParser.ScaleOutBackplaneUrl != null)
+					{
+						GlobalHost.DependencyResolver.UseSignalRServer(settingsFromParser.ScaleOutBackplaneUrl);
+					}
+					break;
+			}
 
 			if (!settingsFromParser.EnablePerformanceCounters)
 				GlobalHost.DependencyResolver.Register(typeof(IPerformanceCounterManager), () => new FakePerformanceCounterInitializer());

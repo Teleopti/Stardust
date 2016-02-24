@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			AddTag("DEFAULT_IDENTITY_PROVIDER", "Teleopti");
 			AddTag("WEB_DEPLOY", bool.FalseString.ToLowerInvariant());
 			AddTag("USE_PERSISTENT_CRYPTOKEYS", bool.FalseString.ToLowerInvariant());
-			AddTag("USE_SQL_SERVER_BACKPLANE", bool.FalseString.ToLowerInvariant());
 			AddTag("WindowsClaimProvider", TestSiteConfigurationSetup.WindowsClaimProvider);
 			AddTag("TeleoptiClaimProvider", TestSiteConfigurationSetup.TeleoptiClaimProvider);
 			AddTag("MATRIX_WEB_SITE_URL", "http://localhost:52510");
