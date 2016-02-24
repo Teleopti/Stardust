@@ -17,7 +17,7 @@ $Check_webstatus = invoke-webrequest "http://$ServerURL/job/$ServerName-AutoDepl
 $Job_status = ConvertFrom-Json $Check_webstatus
 
 "Waiting for Jenkins deploy to complete..."
-Start-Sleep -Seconds 10
+Start-Sleep -Seconds 15
 
 } while ($Job_status.building -eq "True")
 
