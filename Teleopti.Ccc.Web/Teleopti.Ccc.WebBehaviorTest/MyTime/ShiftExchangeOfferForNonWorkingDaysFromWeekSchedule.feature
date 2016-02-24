@@ -1,5 +1,4 @@
-﻿@OnlyRunIfEnabled('MyTimeWeb_TradeWithDayOffAndEmptyDay_31317')
-Feature: Publish shift exchange offer for non-working day
+﻿Feature: Publish shift exchange offer for non-working day
 	In order to trade for a non-working day 
 	As an agent 
 	I want to announce my current shift to trade with others

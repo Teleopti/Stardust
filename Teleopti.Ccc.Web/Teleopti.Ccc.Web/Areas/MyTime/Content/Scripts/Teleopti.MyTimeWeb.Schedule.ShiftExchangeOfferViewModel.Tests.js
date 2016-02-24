@@ -16,7 +16,6 @@ $(document).ready(function() {
 		var option2 = { Id: 'empty-day', Description: 'Empty Day' };
 
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel(ajax, function () { });
-		viewModel.Toggle31317Enabled(true);
 		viewModel.WishShiftTypeOption(option2);
 		viewModel.AllShiftTypes([option1, option2]);
 		viewModel.DateTo(moment('2015-01-15'));

@@ -1,5 +1,4 @@
-﻿
-Feature: Shift trade bulletin board from requests
+﻿Feature: Shift trade bulletin board from requests
 	In order to make a shift trade with someone who has the same wishs
 	As an agent
 	I want to be able to see and pick a shift trade from bulletin board
@@ -113,7 +112,6 @@ Scenario: Should possible make shift trade in Bulletin board
 	And I should see a shift trade request in the list with subject 'A nice subject'
 
 @OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
-@OnlyRunIfEnabled('MyTimeWeb_TradeWithDayOffAndEmptyDay_31317')
 Scenario: Should possible make shift trade in Bulletin board with day off
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -143,7 +141,6 @@ Scenario: Should possible make shift trade in Bulletin board with day off
 	And I should see a shift trade request in the list with subject 'A nice subject'
 
 @OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
-@OnlyRunIfEnabled('MyTimeWeb_TradeWithDayOffAndEmptyDay_31317')
 Scenario: Should possibly make my empty day trade with main shift day in Bulletin board
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -172,7 +169,6 @@ Scenario: Should possibly make my empty day trade with main shift day in Bulleti
 	And I should see a shift trade request in the list with subject 'A nice subject'
 
 @OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
-@OnlyRunIfEnabled('MyTimeWeb_TradeWithDayOffAndEmptyDay_31317')
 Scenario: Should possible make shift trade with empty day in Bulletin board
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -199,7 +195,6 @@ Scenario: Should possible make shift trade with empty day in Bulletin board
 	And I should see a shift trade request in the list with subject 'A nice subject'
 	
 @OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
-@OnlyRunIfEnabled('MyTimeWeb_TradeWithDayOffAndEmptyDay_31317')
 Scenario: Should see the anonymous name when viewing empty day in Bulletin board
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Anonymous trade 30 days forward'

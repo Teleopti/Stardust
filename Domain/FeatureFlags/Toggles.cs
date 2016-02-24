@@ -48,7 +48,6 @@
 		MyTimeWeb_LockTrades_31637,
 		MyTimeWeb_AvailabilityVerifyHours_31654,
 		MyTimeWeb_OrganisationalBasedLeaderboard_31184,
-		MyTimeWeb_TradeWithDayOffAndEmptyDay_31317,
 		MyTimeWeb_SortSchedule_32092,
 		MyTimeWeb_EnhanceTeamSchedule_32580,
 		MyTimeWeb_PreferenceShowNightViolation_33152,

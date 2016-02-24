@@ -44,7 +44,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function (ajax) {
 	self.isEmptyDayFiltered = ko.observable(false);
 	self.filterEndTimeList = ko.observableArray();
 	self.filteredEndTimesText = ko.observableArray();
-	self.Toggle31317Enabled = ko.observable(false);
 	self.preloadTimeFilterFinished = true;
 	self.isAnonymousTrading = ko.observable(false);
 	self.Toggle31638Enabled = ko.observable(false);
@@ -656,8 +655,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function (ajax) {
 	};
 
 	self.loadFilterTimes = function () {
-		self.Toggle31317Enabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_TradeWithDayOffAndEmptyDay_31317'));
-
 		if (self.filterStartTimeList().length == 0) {
 			var dayOffNames = "";
 			ajax.Ajax({
@@ -675,7 +672,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function (ajax) {
 							else dayOffNames += name;
 						});
 						self.filterStartTimeList.push(new Teleopti.MyTimeWeb.Request.FilterStartTimeView(dayOffNames, 0, 24, false, true, false));
-						if (self.Toggle31317Enabled) self.filterStartTimeList.push(new Teleopti.MyTimeWeb.Request.FilterStartTimeView(data.EmptyDayText, 0, 24, false, false, true));
+						self.filterStartTimeList.push(new Teleopti.MyTimeWeb.Request.FilterStartTimeView(data.EmptyDayText, 0, 24, false, false, true));
 						self.preloadTimeFilterFinished = true;
 					}
 				}

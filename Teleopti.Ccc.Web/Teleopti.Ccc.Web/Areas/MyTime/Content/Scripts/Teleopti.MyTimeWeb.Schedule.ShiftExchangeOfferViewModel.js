@@ -32,14 +32,12 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	self.Id = ko.observable(null);
 	self.WeekStart = ko.observable(1);
 
-	self.Toggle31317Enabled = ko.observable(false);
-
 	self.AllShiftTypes = ko.observable([]);
 
 	self.WishShiftTypeOption = ko.observable();
 
 	self.RequireDetails = ko.computed(function() {
-		return !self.Toggle31317Enabled() || (self.WishShiftTypeOption() && self.WishShiftTypeOption().RequireDetails);
+		return self.WishShiftTypeOption() && self.WishShiftTypeOption().RequireDetails;
 	});
 
 	self.getFormattedDateForServiceCall = function(date) {
@@ -47,7 +45,6 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	};
 	
 	self.LoadOptions = function (setShiftType) {
-		self.Toggle31317Enabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_TradeWithDayOffAndEmptyDay_31317'));
 		self.getWishShiftTypes(setShiftType);
 		Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
 			self.WeekStart(data.WeekStart);
@@ -201,10 +198,6 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	});
 
 	self.SaveShiftExchangeOffer = function () {
-		var wishShiftTypeId = self.Toggle31317Enabled()
-			? self.WishShiftTypeOption().Id
-			: self.AllShiftTypes()[0].Id;
-
 		ajax.Ajax({
 			url: "ShiftExchange/NewOffer",
 			dataType: "json",
@@ -215,7 +208,7 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 				EndTime: self.endTimeInternal(),
 				EndTimeNextDay: self.EndTimeNextDay(),
 				Id: self.Id(),
-				WishShiftType: wishShiftTypeId
+				WishShiftType: self.WishShiftTypeOption().Id
 			},
 			type: 'POST',
 			success: function(data, textStatus, jqXHR) {
