@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Licensing;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -49,17 +50,21 @@ namespace Teleopti.Ccc.InfrastructureTest
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			base.Setup(system, configuration);
+
+			// Tenant stuff
 			system.AddModule(new TenantServerModule(configuration));
+			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
 			system.AddService(TenantUnitOfWorkManager.Create(ConnectionStringHelper.ConnectionStringUsedInTests));
+
+			// Hangfire bus maybe? ;)
+			system.UseTestDouble<FakeHangfireEventClient>().For<IHangfireEventClient>();
+			system.UseTestDouble<FakeServiceBusSender>().For<IServiceBusSender>();
+
 			system.UseTestDouble(new FakeSignalR()).For<ISignalR>();
 			system.UseTestDouble<TestConnectionStrings>().For<IConnectionStrings>();
 			system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
 			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>(); // Does not fake all message senders, just adds one to the list
 			system.UseTestDouble<SetNoLicenseActivator>().For<ISetLicenseActivator>();
-
-			// maybe?
-			system.UseTestDouble<FakeHangfireEventClient>().For<IHangfireEventClient>();
-			system.UseTestDouble<FakeServiceBusSender>().For<IServiceBusSender>();
 		}
 
 		protected override void BeforeTest()
