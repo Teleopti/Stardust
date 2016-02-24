@@ -209,7 +209,7 @@ Scenario: Should see the anonymous name when viewing empty day in Bulletin board
 	Then I should see agent name as Anonym
 	
 	
-@OnlyRunIfEnabled('MyTimeWeb_SeeAnnouncedShifts_31639')
+
 Scenario: Should list announced shift
 	Given  I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -227,7 +227,7 @@ Scenario: Should list announced shift
 	When I am viewing requests
 	Then I should see the request of type 'Shift Trade Post' in the list
 
-@OnlyRunIfEnabled('MyTimeWeb_SeeAnnouncedShifts_31639')
+
 Scenario: Delete shift exchange offer in request list
 	Given  I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -245,7 +245,7 @@ Scenario: Delete shift exchange offer in request list
 	When I delete the existing request in the list
 	Then I should not see any requests in the list
 
-@OnlyRunIfEnabled('MyTimeWeb_SeeAnnouncedShifts_31639')
+
 Scenario: View shift trade post details
 	Given  I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -268,7 +268,7 @@ Scenario: View shift trade post details
 	| Start time     | 6:00       |
 	| End time       | 14:00      |
 
-@OnlyRunIfEnabled('MyTimeWeb_SeeAnnouncedShifts_31639')
+
 Scenario: Should modify shift trade post
 	Given  I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'

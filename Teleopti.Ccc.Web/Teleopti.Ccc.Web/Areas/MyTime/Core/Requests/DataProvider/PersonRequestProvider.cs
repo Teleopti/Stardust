@@ -45,10 +45,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				types.Remove(RequestType.ShiftTradeRequest);
 			}
 
-			if (!_toggleManager.IsEnabled(Toggles.MyTimeWeb_SeeAnnouncedShifts_31639))
-			{
-				types.Remove(RequestType.ShiftExchangeOffer);
-			}
 			return _repository.FindAllRequestsForAgentByType(_loggedOnUser.CurrentUser(), paging, types.ToArray());
 
 		}

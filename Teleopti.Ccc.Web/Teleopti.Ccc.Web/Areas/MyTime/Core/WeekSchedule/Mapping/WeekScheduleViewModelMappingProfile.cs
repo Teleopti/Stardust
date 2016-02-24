@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						var overtimeAvailabilityPeriodViewModels = periodViewModelFactory.CreateOvertimeAvailabilityPeriodViewModels(s.OvertimeAvailability, s.OvertimeAvailabilityYesterday, s.MinMaxTime);
 						return periodsViewModels.Concat(overtimeAvailabilityPeriodViewModels);
 					}))
-				.ForMember(d => d.TextRequestCount, o => o.ResolveUsing(s => s.PersonRequests == null ? 0 : s.PersonRequests.Count(r => (r.Request is TextRequest || r.Request is AbsenceRequest || (r.Request is ShiftExchangeOffer && _toggleManager.IsEnabled(Toggles.MyTimeWeb_SeeAnnouncedShifts_31639))))))
+				.ForMember(d => d.TextRequestCount, o => o.ResolveUsing(s => s.PersonRequests == null ? 0 : s.PersonRequests.Count(r => (r.Request is TextRequest || r.Request is AbsenceRequest || (r.Request is ShiftExchangeOffer)))))
 				.ForMember(d => d.ProbabilityClass, c => c.MapFrom(s => s.ProbabilityClass))
 				.ForMember(d => d.ProbabilityText, c => c.MapFrom(s => s.ProbabilityText))
 

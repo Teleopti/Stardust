@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
-			toggleManager.Stub(x => x.IsEnabled(Toggles.MyTimeWeb_SeeAnnouncedShifts_31639)).Return(true);
 			var person = new Person();
 			var target = new PersonRequestProvider(repository, loggedOnUser, userTimeZone, toggleManager, new FakePermissionProvider());
 			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(3));
@@ -86,7 +85,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var repository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
-			toggleManager.Stub(x => x.IsEnabled(Toggles.MyTimeWeb_SeeAnnouncedShifts_31639)).Return(true);
 			var target = new PersonRequestProvider(repository, loggedOnUser, null, toggleManager, new FakePermissionProvider());
 			var person = new Person();
 			var paging = new Paging();
@@ -113,7 +111,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var repository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
-			toggleManager.Stub(x => x.IsEnabled(Toggles.MyTimeWeb_SeeAnnouncedShifts_31639)).Return(false);
 			var target = new PersonRequestProvider(repository, loggedOnUser, null, toggleManager, new FakePermissionProvider());
 			var person = new Person();
 			var paging = new Paging{ Skip = 0, Take = 5 };
