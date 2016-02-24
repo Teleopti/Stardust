@@ -337,12 +337,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_configuration.Toggle(Toggles.ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049))
 			{
 				builder.RegisterType<IntradayOptimizerContainerConsiderLargeGroups>().As<IIntradayOptimizerContainer>().InstancePerLifetimeScope();
-				builder.RegisterType<ReturnValueForStuffCheckingSpecificDayNewBehavior>().As<IIntradatOptimizeOneDay_HackForToggle37049_RemoveMeLater>().SingleInstance();
 			}
 			else
 			{
 				builder.RegisterType<IntradayOptimizerContainer>().As<IIntradayOptimizerContainer>().InstancePerLifetimeScope();
-				builder.RegisterType<ReturnValueForStuffCheckingSpecificDayOldBehavior>().As<IIntradatOptimizeOneDay_HackForToggle37049_RemoveMeLater>().SingleInstance();
 			}
 			builder.RegisterType<AgentsToSkillGroups>().SingleInstance();
 			builder.RegisterType<IntradayOptmizerLimiter>().As<IIntradayOptimizerLimiter>().AsSelf().SingleInstance();

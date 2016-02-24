@@ -7,19 +7,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public interface IIntradatOptimizeOneDay_HackForToggle37049_RemoveMeLater
-	{
-		bool ReturnValueIfEditableShiftDoesntExists { get; }
-	}
-	public class ReturnValueForStuffCheckingSpecificDayOldBehavior : IIntradatOptimizeOneDay_HackForToggle37049_RemoveMeLater
-	{
-		public bool ReturnValueIfEditableShiftDoesntExists { get { return false; } }
-	}
-	public class ReturnValueForStuffCheckingSpecificDayNewBehavior : IIntradatOptimizeOneDay_HackForToggle37049_RemoveMeLater
-	{
-		public bool ReturnValueIfEditableShiftDoesntExists { get { return true; } }
-	}
-
 	public class IntradayOptimizeOneday
 	{
 		private readonly IScheduleResultDailyValueCalculator _dailyValueCalculator;
@@ -36,7 +23,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IResourceCalculateDelayer _resourceCalculateDelayer;
 		private readonly IScheduleMatrixPro _matrix;
 		private readonly IIntradayOptimizeOneDayCallback _intradayOptimizeOneDayCallback;
-		private readonly IIntradatOptimizeOneDay_HackForToggle37049_RemoveMeLater _hackForToggle37049;
 
 		public IntradayOptimizeOneday(IScheduleResultDailyValueCalculator dailyValueCalculator,
 			IScheduleService scheduleService,
@@ -51,8 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			IScheduleMatrixPro matrix,
-			IIntradayOptimizeOneDayCallback intradayOptimizeOneDayCallback,
-			IIntradatOptimizeOneDay_HackForToggle37049_RemoveMeLater hackForToggle37049)
+			IIntradayOptimizeOneDayCallback intradayOptimizeOneDayCallback)
 		{
 			_dailyValueCalculator = dailyValueCalculator;
 			_scheduleService = scheduleService;
@@ -68,7 +53,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resourceCalculateDelayer = resourceCalculateDelayer;
 			_matrix = matrix;
 			_intradayOptimizeOneDayCallback = intradayOptimizeOneDayCallback;
-			_hackForToggle37049 = hackForToggle37049;
 		}
 
 		//change to void when toggle is gone
@@ -84,13 +68,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var lastOverLimitCounts = _optimizationLimits.OverLimitsCounts(_matrix);
 
 			if (!oldPeriodValue.HasValue)
-				return _hackForToggle37049.ReturnValueIfEditableShiftDoesntExists;
+				return false;
 
 			ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 			schedulingOptions.UseCustomTargetTime = _workShiftOriginalStateContainer.OriginalWorkTime();
 
 			var originalShift = _workShiftOriginalStateContainer.OldPeriodDaysState[dateOnly].GetEditorShift();
-			if (originalShift == null) return _hackForToggle37049.ReturnValueIfEditableShiftDoesntExists;
+			if (originalShift == null) return false;
 
 			_mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(schedulingOptions, _optimizerPreferences, originalShift, dateOnly);
 
