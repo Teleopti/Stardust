@@ -1443,6 +1443,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.controller.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.js" />
     <Content Include="WFM\js\teamSchedule\html\schedule.html" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.service.personAbsence.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.personSelection.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.personSelection.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.scheduleManagement.spec.js" />

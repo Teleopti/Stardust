@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 (function () {
-	angular.module('wfm.teamSchedule').directive('addAbsence', ['$locale', '$translate', 'guidgenerator', absencePanel]);
+	angular.module('wfm.teamSchedule').directive('addAbsence', ['$locale', '$translate', 'guidgenerator', 'PersonAbsence', absencePanel]);
 
 	function absencePanel($locale) {
 		return {
@@ -12,7 +12,7 @@
 				agentIdList: '&',
 				actionsAfterAbsenceApply: '&'
 			},
-			controller: ['$translate', 'TeamSchedule', 'guidgenerator', addAbsenceCtrl],
+			controller: ['$translate', 'PersonAbsence', 'guidgenerator', addAbsenceCtrl],
 			controllerAs: 'vm',
 			bindToController: true,
 			link: function (scope, element, attr) {
@@ -21,7 +21,7 @@
 		};
 	};
 
-	function addAbsenceCtrl($translate, teamScheduleSvc, guidgenerator) {
+	function addAbsenceCtrl($translate, personAbsenceSvc, guidgenerator) {
 		var vm = this;
 
 		vm.selectedAbsenceStartDate = vm.defaultDateTime();
@@ -30,7 +30,8 @@
 			IsAddIntradayAbsenceAvailable: vm.permissions().IsAddIntradayAbsenceAvailable,
 			IsAddFullDayAbsenceAvailable: vm.permissions().IsAddFullDayAbsenceAvailable
 		};
-		vm.isFullDayAbsence = isFullDayAbsenceDefaultValue();
+		vm.isFullDayAbsence = vm.absencePermissions.IsAddFullDayAbsenceAvailable
+				&& !vm.absencePermissions.IsAddIntradayAbsenceAvailable;
 
 		vm.isDataChangeValid = function () {
 			return vm.selectedAbsenceId !== undefined && (vm.isAbsenceTimeValid() || vm.isAbsenceDateValid());
@@ -46,48 +47,30 @@
 
 		vm.applyAbsence = function () {
 			var trackId = guidgenerator.newGuid();
+			var afterAppliedAbsence = function(result) {
+				vm.actionsAfterAbsenceApply({
+					result: { TrackId: trackId, Errors: result },
+					successMessageTemplate: 'AddAbsenceSuccessedResult',
+					failMessageTemplate: 'AddAbsenceTotalResult'
+				});
+			}
 			if (vm.isFullDayAbsence) {
-				teamScheduleSvc.applyFullDayAbsence.post({
+				personAbsenceSvc.applyFullDayAbsence.post({
 					PersonIds: vm.agentIdList(),
 					AbsenceId: vm.selectedAbsenceId,
 					StartDate: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD"),
 					EndDate: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD"),
 					TrackedCommandInfo: { TrackId: trackId }
-				}).$promise.then(function(result) {
-					vm.actionsAfterAbsenceApply({
-						result: { TrackId: trackId, Errors: result },
-						successMessageTemplate: 'AddAbsenceSuccessedResult',
-						failMessageTemplate: 'AddAbsenceTotalResult'
-					});
-				});
+				}).$promise.then(function(result) { afterAppliedAbsence(result) });
 			} else {
-				teamScheduleSvc.applyIntradayAbsence.post({
+				personAbsenceSvc.applyIntradayAbsence.post({
 					PersonIds: vm.agentIdList(),
 					AbsenceId: vm.selectedAbsenceId,
 					StartTime: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD HH:mm"),
 					EndTime: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD HH:mm"),
 					TrackedCommandInfo: { TrackId: trackId }
-				}).$promise.then(function(result) {
-					vm.actionsAfterAbsenceApply({
-						result: { TrackId: trackId, Errors: result },
-						successMessageTemplate: 'AddAbsenceSuccessedResult',
-						failMessageTemplate: 'AddAbsenceTotalResult'
-					});
-				});
+				}).$promise.then(function (result) { afterAppliedAbsence(result) });
 			}
-		};
-
-		vm.init = function ($scope, $locale) {
-			updateDateAndTimeFormat($scope, $locale);
-			teamScheduleSvc.PromiseForloadedAvailableAbsenceTypes(updateAvailableAbsenceTypes);
-		};
-
-		function isFullDayAbsenceDefaultValue() {
-			return vm.absencePermissions.IsAddFullDayAbsenceAvailable && !vm.absencePermissions.IsAddIntradayAbsenceAvailable;
-		};
-
-		function updateAvailableAbsenceTypes(result) {
-			vm.AvailableAbsenceTypes = result;
 		};
 
 		function updateDateAndTimeFormat($scope, $locale) {
@@ -95,5 +78,12 @@
 			$scope.vm.showMeridian = timeFormat.indexOf("h:") >= 0 || timeFormat.indexOf("h.") >= 0;
 			$scope.$on('$localeChangeSuccess', updateDateAndTimeFormat);
 		}
+
+		vm.init = function ($scope, $locale) {
+			updateDateAndTimeFormat($scope, $locale);
+			personAbsenceSvc.loadAbsences.query().$promise.then(function (result) {
+				vm.AvailableAbsenceTypes = result;
+			});
+		};
 	};
 })();
