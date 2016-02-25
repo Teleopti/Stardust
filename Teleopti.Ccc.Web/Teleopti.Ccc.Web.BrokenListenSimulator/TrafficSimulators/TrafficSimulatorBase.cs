@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators
             HttpClient.Dispose();
         }
 
-        public abstract void CallbackAction();
+        
 		public abstract IEnumerable<Guid> GetPeopleForPartTimePercentaget100(DateTime today);
     }
 }

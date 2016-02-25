@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
@@ -11,11 +14,14 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
 {
     public class SimulateMyTimeScreen : SimulateBase<MyTimeData>
     {
+		public static IList<Task<HttpResponseMessage>> AllTasks = new List<Task<HttpResponseMessage>>();
+
         public SimulateMyTimeScreen(IMessageBrokerUrl url, ICurrentDataSource dataSource, ICurrentBusinessUnit businessUnit, ICurrentScenario scenario, IJsonSerializer serializer, IMessageBrokerComposite messageBroker) : base(url, dataSource, businessUnit, scenario, serializer, messageBroker)
         {
+			
         }
 
-        public override void Simulate(MyTimeData data, EventHandler<EventMessageArgs> callback)
+        public override void Simulate(MyTimeData data, Action callback)
         {
             AddSubscription(new Subscription
             {
@@ -25,7 +31,11 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
                 BusinessUnitId = Subscription.IdToString(BusinessUnit.Current().Id.Value),
                 LowerBoundary = Subscription.DateToString(Consts.MinDate),
                 UpperBoundary = Subscription.DateToString(Consts.MaxDate),
-            }, callback);
+            }, (sender, args) =>
+            {
+				callback();
+				CallbackAction();
+            });
 
             AddSubscription(new Subscription
             {
@@ -35,7 +45,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
                 BusinessUnitId = Subscription.IdToString(BusinessUnit.Current().Id.Value),
                 LowerBoundary = Subscription.DateToString(Consts.MinDate),
                 UpperBoundary = Subscription.DateToString(Consts.MaxDate),
-            }, callback);
+			}, (sender, args) => callback());
 
             AddSubscription(new Subscription
             {
@@ -45,7 +55,25 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
                 BusinessUnitId = Subscription.IdToString(BusinessUnit.Current().Id.Value),
                 LowerBoundary = Subscription.DateToString(Consts.MinDate),
                 UpperBoundary = Subscription.DateToString(Consts.MaxDate),
-            }, callback);
+			}, (sender, args) => callback());
         }
+
+		public override void CallbackAction()
+		{
+			AllTasks.Add(FetchSchedule());
+		}
+
+	    public override void LogOn(MyTimeData data)
+	    {
+		    LogOn(data.BusinessUnitName, data.Username, data.Password);
+	    }
+
+	    public Task<HttpResponseMessage> FetchSchedule()
+		{
+			Console.WriteLine("FetchData for date {0}", DateTime.Today);
+			var message = new HttpRequestMessage(HttpMethod.Get, string.Format("MyTime/Schedule/FetchData?date=&_={0}", Guid.NewGuid()));
+			var response = HttpClient.SendAsync(message);
+			return response;
+		}
     }
 }

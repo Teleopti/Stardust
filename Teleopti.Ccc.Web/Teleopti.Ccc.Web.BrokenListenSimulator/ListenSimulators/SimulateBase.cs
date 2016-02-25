@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Common;
@@ -21,7 +23,12 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
         protected readonly ICurrentScenario Scenario;
 		private readonly IJsonSerializer _serializer;
 		private readonly IMessageBrokerComposite _messageBroker;
-		private readonly HttpClient _httpClient;
+		protected readonly HttpClient HttpClient;
+
+
+		protected string BaseUrl;
+		private readonly CookieContainer cookieContainer;
+		private HttpClientHandler httpClientHandler;
 
 	    protected SimulateBase(
 			IMessageBrokerUrl url,
@@ -37,7 +44,25 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
 			Scenario = scenario;
 			_serializer = serializer;
 			_messageBroker = messageBroker;
-			_httpClient = new HttpClient();
+
+			BaseUrl = url.Url;
+			cookieContainer = new CookieContainer();
+			httpClientHandler = new HttpClientHandler { CookieContainer = cookieContainer };
+			HttpClient = new HttpClient(httpClientHandler) { BaseAddress = new Uri(BaseUrl) };
+		}
+
+		public void LogOn(string businessUnitName, string user, string password)
+		{
+			var message = new HttpRequestMessage(HttpMethod.Get, string.Format("Test/Logon?businessUnitName={0}&userName={1}&password={2}", businessUnitName, user, password));
+			var response = HttpClient.SendAsync(message).GetAwaiter().GetResult();
+
+			if (!response.IsSuccessStatusCode) throw new Exception("Unable to log on");
+			var headers = response.Headers;
+			foreach (var cookie in headers.GetValues("Set-Cookie").Select(item => item.Split(';').First().Split('=')))
+			{
+				cookieContainer.Add(new Uri(BaseUrl), new Cookie(cookie.First(), cookie.Last()));
+			}
+			HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 		}
 
 		private string url(string call)
@@ -49,13 +74,13 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
 			return _url.Url.TrimEnd('/') + "/" + call;
 		}
 
-	    public void Simulate(T data, int screen, int client, EventHandler<EventMessageArgs> callback)
+	    public void Simulate(T data, int screen, int client, Action callback)
 	    {
 	        _number = string.Format("#{0}/{1}", screen, client);
             //Console.WriteLine("Starting screen {0}/{1}", screen, client);
             Simulate(data, callback);
 	    }
-        public abstract void Simulate(T data, EventHandler<EventMessageArgs> callback);
+        public abstract void Simulate(T data, Action callback);
 
         private void addMailbox(Subscription subscription)
 		{
@@ -76,14 +101,14 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
 
 		private async void post(string url, string content)
 		{
-			var result = await _httpClient.PostAsync(url, new StringContent(content, Encoding.UTF8, "application/json"));
+			var result = await HttpClient.PostAsync(url, new StringContent(content, Encoding.UTF8, "application/json"));
 			if (result.StatusCode != HttpStatusCode.OK)
 				throw new Exception("POST failed! " + result.StatusCode);
 		}
 
 		private async Task<string> get(string url)
 		{
-			var result = await _httpClient.GetAsync(url);
+			var result = await HttpClient.GetAsync(url);
 			if (result.StatusCode != HttpStatusCode.OK)
 				throw new Exception("GET failed! " + result.StatusCode);
 			return await result.Content.ReadAsStringAsync();
@@ -98,6 +123,9 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
 		{
             Console.WriteLine(_number + " callbacked");
         }
+
+		public abstract void CallbackAction();
+		public abstract void LogOn(T data);
 	}
 
 

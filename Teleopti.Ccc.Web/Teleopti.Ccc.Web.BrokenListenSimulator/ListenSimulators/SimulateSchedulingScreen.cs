@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
         {
         }
 
-        public override void Simulate(SchedulingData data, EventHandler<EventMessageArgs> callback)
+        public override void Simulate(SchedulingData data, Action callback)
         {
             AddSubscription(new Subscription
             {
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
                 UpperBoundary = Subscription.DateToString(data.EndDate),
                 DataSource = DataSource.CurrentName(),
                 BusinessUnitId = Subscription.IdToString(BusinessUnit.Current().Id.Value),
-            }, callback);
+            }, (sender, args) => callback());
 
             AddSubscription(new Subscription
             {
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
                 UpperBoundary = Subscription.DateToString(data.EndDate),
                 DataSource = DataSource.CurrentName(),
                 BusinessUnitId = Subscription.IdToString(BusinessUnit.Current().Id.Value),
-            }, callback);
+			}, (sender, args) => callback());
 
             AddSubscription(new Subscription
             {
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
                 UpperBoundary = Subscription.DateToString(Consts.MaxDate),
                 DataSource = DataSource.CurrentName(),
                 BusinessUnitId = Subscription.IdToString(BusinessUnit.Current().Id.Value),
-            }, callback);
+			}, (sender, args) => callback());
 
             AddSubscription(new Subscription
             {
@@ -59,7 +59,17 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
                 UpperBoundary = Subscription.DateToString(Consts.MaxDate),
                 DataSource = DataSource.CurrentName(),
                 BusinessUnitId = Subscription.IdToString(BusinessUnit.Current().Id.Value),
-            }, callback);
+			}, (sender, args) => callback());
         }
+
+	    public override void CallbackAction()
+	    {
+		    
+	    }
+
+	    public override void LogOn(SchedulingData data)
+	    {
+		    throw new NotImplementedException();
+	    }
     }
 }

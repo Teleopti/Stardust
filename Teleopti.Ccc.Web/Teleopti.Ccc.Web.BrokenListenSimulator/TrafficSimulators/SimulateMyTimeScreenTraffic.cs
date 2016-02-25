@@ -78,16 +78,6 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators
 			return schedules.Select(x => new Guid(x.PersonId.ToObject<string>()));
 	    }
 
-	    public override void CallbackAction()
-        {
-            //var taskList = new List<Task>();
-            //Enumerable.Range(1, 1).ForEach(iteration =>
-            //{
-            //    taskList.Add(FetchSchedule());
-            //});
-            //Task.WaitAll(taskList.ToArray());
-        }
-
         private Task<HttpResponseMessage> addFullDayAbsenseAsync(Guid user, DateTime start, DateTime end, Guid absenceId)
         {
             var body =
@@ -100,13 +90,6 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators
             };
 
             return HttpClient.SendAsync(message);
-        }
-
-        public Task FetchSchedule()
-        {
-            var message = new HttpRequestMessage(HttpMethod.Get, string.Format("MyTime/Schedule/FetchData?date=&_={0}", Guid.NewGuid()));
-            var response = HttpClient.SendAsync(message);
-            return response;
         }
     }
 }
