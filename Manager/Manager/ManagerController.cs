@@ -100,6 +100,7 @@ namespace Stardust.Manager
 		{
 			Task.Factory.StartNew(() =>
 			{
+				_jobManager.RegisterHeartbeat(nodeUri);
 				_jobManager.CheckAndAssignNextJob();
 			});
 			
