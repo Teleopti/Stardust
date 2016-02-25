@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 	public class ScheduleCommand : IScheduleCommand
 	{
-		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly ITeamBlockScheduleCommand _teamBlockScheduleCommand;
@@ -33,9 +32,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
+		private readonly NormalResourceCalculationContext _normalResourceCalculationContext;
 
-		public ScheduleCommand(Func<IPersonSkillProvider> personSkillProvider,
-			IResourceOptimizationHelper resourceOptimizationHelper,
+		public ScheduleCommand(IResourceOptimizationHelper resourceOptimizationHelper,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			ITeamBlockScheduleCommand teamBlockScheduleCommand,
 			IClassicScheduleCommand classicScheduleCommand,
@@ -43,10 +42,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 			IWeeklyRestSolverCommand weeklyRestSolverCommand,
-			PeriodExtractorFromScheduleParts periodExtractor
+			PeriodExtractorFromScheduleParts periodExtractor,
+			NormalResourceCalculationContext normalResourceCalculationContext
 			)
 		{
-			_personSkillProvider = personSkillProvider;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_teamBlockScheduleCommand = teamBlockScheduleCommand;
@@ -56,6 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
 			_periodExtractor = periodExtractor;
+			_normalResourceCalculationContext = normalResourceCalculationContext;
 		}
 
 		[LogTime]
@@ -82,14 +82,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			var selectedPersons = selectedScheduleDays.Select(x => x.Person).Distinct().ToList();
 
-			var minutesPerInterval = 15;
-			if (schedulerStateHolder.SchedulingResultState.Skills.Length > 0)
-			{
-				minutesPerInterval = schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution);
-			}
-			var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
-			var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
-			using (new ResourceCalculationContext(resources))
+			using (_normalResourceCalculationContext.Create())
 			{
 				if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
 				{

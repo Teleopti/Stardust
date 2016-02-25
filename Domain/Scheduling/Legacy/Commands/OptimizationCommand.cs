@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class OptimizationCommand : IOptimizationCommand
 	{
-		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 		private readonly IGroupPageCreator _groupPageCreator;
 		private readonly IGroupScheduleGroupPageDataProvider _groupScheduleGroupPageDataProvider;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
@@ -26,8 +25,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IPersonListExtractorFromScheduleParts _personExtractor;
 		private readonly ScheduleMatrixOriginalStateContainerCreator _scheduleMatrixOriginalStateContainerCreator;
+		private readonly NormalResourceCalculationContext _normalResourceCalculationContext;
 
-		public OptimizationCommand(Func<IPersonSkillProvider> personSkillProvider, IGroupPageCreator groupPageCreator,
+		public OptimizationCommand(IGroupPageCreator groupPageCreator,
 			IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
 			IResourceOptimizationHelper resourceOptimizationHelper,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
@@ -37,9 +37,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			PeriodExtractorFromScheduleParts periodExtractor,
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 			IPersonListExtractorFromScheduleParts personExtractor,
-			ScheduleMatrixOriginalStateContainerCreator scheduleMatrixOriginalStateContainerCreator)
+			ScheduleMatrixOriginalStateContainerCreator scheduleMatrixOriginalStateContainerCreator,
+			NormalResourceCalculationContext normalResourceCalculationContext)
 		{
-			_personSkillProvider = personSkillProvider;
 			_groupPageCreator = groupPageCreator;
 			_groupScheduleGroupPageDataProvider = groupScheduleGroupPageDataProvider;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 			_personExtractor = personExtractor;
 			_scheduleMatrixOriginalStateContainerCreator = scheduleMatrixOriginalStateContainerCreator;
+			_normalResourceCalculationContext = normalResourceCalculationContext;
 		}
 
 		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, ISchedulingProgress backgroundWorker,
@@ -67,18 +68,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			setThreadCulture();
 			bool lastCalculationState = schedulerStateHolder.SchedulingResultState.SkipResourceCalculation;
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = false;
-			
-			var stateHolder = schedulerStateHolder.SchedulingResultState;
-			var minutesPerInterval = 15;
 
-			if (stateHolder.Skills.Any())
-			{
-				minutesPerInterval = stateHolder.Skills.Min(s => s.DefaultResolution);
-			}
-
-			var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
-			var resources = extractor.CreateRelevantProjectionList(stateHolder.Schedules);
-			using (new ResourceCalculationContext(resources))
+			using (_normalResourceCalculationContext.Create())
 			{
 				if (lastCalculationState)
 				{
@@ -136,7 +127,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
 							schedulingOptions.ConsiderShortBreaks);
 						var tagSetter = new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling);
-						var rollbackService = new SchedulePartModifyAndRollbackService(stateHolder,
+						var rollbackService = new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,
 							_scheduleDayChangeCallback,
 							tagSetter);
 

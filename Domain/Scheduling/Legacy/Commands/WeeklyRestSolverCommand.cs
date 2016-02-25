@@ -20,13 +20,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
+		private readonly NormalResourceCalculationContext _normalResourceCalculationContext;
 
 		public WeeklyRestSolverCommand(ITeamBlockInfoFactory teamBlockInfoFactory,
 			ITeamBlockSchedulingOptions teamBlockSchedulingOptions, Func<IWeeklyRestSolverService> weeklyRestSolverService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
-			Func<IPersonSkillProvider> personSkillProvider)
+			Func<IPersonSkillProvider> personSkillProvider,
+			NormalResourceCalculationContext normalResourceCalculationContext)
 		{
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
@@ -35,6 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 			_personSkillProvider = personSkillProvider;
+			_normalResourceCalculationContext = normalResourceCalculationContext;
 		}
 
 		public void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, 
@@ -58,14 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IDisposable contextDisposal = null;
 			if (!ResourceCalculationContext.InContext)
 			{
-				var minutesPerInterval = 15;
-				if (schedulerStateHolder.SchedulingResultState.Skills.Any())
-				{
-					minutesPerInterval = schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution);
-				}
-				var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
-				var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
-				contextDisposal = new ResourceCalculationContext(resources);
+				contextDisposal = _normalResourceCalculationContext.Create();
 			}
 			
 				EventHandler<ResourceOptimizerProgressEventArgs> onResolvingWeek = (sender, e) =>
