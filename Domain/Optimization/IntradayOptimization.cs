@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -72,14 +71,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public virtual OptimizationResultModel Optimize(Guid planningPeriodId)
 		{
-			var planningPeriod = SetupAndOptimize(planningPeriodId);
+			var period = SetupAndOptimize(planningPeriodId);
 			_persister.Persist(_schedulerStateHolder().Schedules);
-			return CreateResult(planningPeriod);
+			return CreateResult(period);
 		}
 
 		[UnitOfWork]
 		[LogTime]
-		protected virtual IPlanningPeriod SetupAndOptimize(Guid planningPeriodId)
+		protected virtual DateOnlyPeriod SetupAndOptimize(Guid planningPeriodId)
 		{
 			var optimizationPreferences = _optimizationPreferencesFactory.Create();
 			var dayOffOptimizationPreference = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
@@ -113,14 +112,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 				}
 			}
 
-			return planningPeriod;
+			return period;
 		}
 
 		[LogTime]
-		protected virtual OptimizationResultModel CreateResult(IPlanningPeriod planningPeriod)
+		protected virtual OptimizationResultModel CreateResult(DateOnlyPeriod period)
 		{
 			var result = new OptimizationResultModel();
-			result.Map(_schedulerStateHolder().SchedulingResultState.SkillDays, planningPeriod.Range);
+			result.Map(_schedulerStateHolder().SchedulingResultState.SkillDays, period);
 			return result;
 		}
 	}

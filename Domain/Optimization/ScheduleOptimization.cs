@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -52,22 +51,22 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
 		{
-			var planningPeriod = SetupAndOptimize(planningPeriodId);
+			var period = SetupAndOptimize(planningPeriodId);
 			_persister.Persist(_schedulerStateHolder().Schedules);
-			return CreateResult(planningPeriod);
+			return CreateResult(period);
 		}
 
 		[LogTime]
-		protected virtual OptimizationResultModel CreateResult(IPlanningPeriod planningPeriod)
+		protected virtual OptimizationResultModel CreateResult(DateOnlyPeriod period)
 		{
 			var result = new OptimizationResultModel();
-			result.Map(_schedulerStateHolder().SchedulingResultState.SkillDays, planningPeriod.Range);
+			result.Map(_schedulerStateHolder().SchedulingResultState.SkillDays, period);
 			return result;
 		}
 
 		[UnitOfWork]
 		[LogTime]
-		protected virtual IPlanningPeriod SetupAndOptimize(Guid planningPeriodId)
+		protected virtual DateOnlyPeriod SetupAndOptimize(Guid planningPeriodId)
 		{
 			var optimizationPreferences = _optimizationPreferencesFactory.Create();
 			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
@@ -95,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			//should maybe happen _after_ all schedules are persisted?
 			planningPeriod.Scheduled();
 
-			return planningPeriod;
+			return period;
 		}
 	}
 }
