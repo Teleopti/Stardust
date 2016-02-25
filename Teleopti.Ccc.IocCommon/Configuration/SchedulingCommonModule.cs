@@ -312,6 +312,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ScheduleOptimization>().InstancePerLifetimeScope().ApplyAspects(); //should be singleinstance but not yet possible
 			builder.RegisterType<FullScheduling>().InstancePerLifetimeScope().ApplyAspects(); //should be singleinstance but not yet possible
 			builder.RegisterType<IntradayOptimization>().InstancePerLifetimeScope().ApplyAspects(); //should be singleinstance but not yet possible
+			builder.RegisterType<OptimizationResult>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<VirtualSkillGroupsCreator>().As<VirtualSkillGroupsCreator>().SingleInstance();
 			builder.RegisterType<IntradayDecisionMaker>().As<IIntradayDecisionMaker>().SingleInstance();
 			builder.RegisterType<WebSchedulingSetup>();

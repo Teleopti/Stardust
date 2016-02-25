@@ -3,7 +3,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -29,6 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IIntradayOptimizer2Creator _intradayOptimizer2Creator;
 		private readonly IIntradayOptimizerContainer _intradayOptimizerContainer;
 		private readonly IntradayOptimizationContext _intradayOptimizationContext;
+		private readonly OptimizationResult _optimizationResult;
 
 		public IntradayOptimization(OptimizationPreferencesFactory optimizationPreferencesFactory,
 									Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -43,7 +43,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 									WeeklyRestSolverExecuter weeklyRestSolverExecuter,
 									IIntradayOptimizer2Creator intradayOptimizer2Creator,
 									IIntradayOptimizerContainer intradayOptimizerContainer,
-									IntradayOptimizationContext intradayOptimizationContext
+									IntradayOptimizationContext intradayOptimizationContext,
+									OptimizationResult optimizationResult
 									)
 		{
 			_optimizationPreferencesFactory = optimizationPreferencesFactory;
@@ -60,13 +61,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_intradayOptimizer2Creator = intradayOptimizer2Creator;
 			_intradayOptimizerContainer = intradayOptimizerContainer;
 			_intradayOptimizationContext = intradayOptimizationContext;
+			_optimizationResult = optimizationResult;
 		}
 
 		public virtual OptimizationResultModel Optimize(Guid planningPeriodId)
 		{
 			var period = SetupAndOptimize(planningPeriodId);
 			_persister.Persist(_schedulerStateHolder().Schedules);
-			return CreateResult(period);
+			return _optimizationResult.Create(period);
 		}
 
 		[UnitOfWork]
@@ -92,14 +94,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 
 			return period;
-		}
-
-		[LogTime]
-		protected virtual OptimizationResultModel CreateResult(DateOnlyPeriod period)
-		{
-			var result = new OptimizationResultModel();
-			result.Map(_schedulerStateHolder().SchedulingResultState.SkillDays, period);
-			return result;
 		}
 	}
 }

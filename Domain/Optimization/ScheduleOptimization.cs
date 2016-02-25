@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly OptimizationResult _optimizationResult;
 
 		public ScheduleOptimization(WebSchedulingSetup webSchedulingSetup, Func<ISchedulerStateHolder> schedulerStateHolder,
 			ClassicDaysOffOptimizationCommand classicDaysOffOptimizationCommand,
@@ -33,7 +34,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			WeeklyRestSolverExecuter weeklyRestSolverExecuter, OptimizationPreferencesFactory optimizationPreferencesFactory,
 			IMatrixListFactory matrixListFactory, IScheduleDayEquator scheduleDayEquator,
 			DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
-			IOptimizerHelperHelper optimizerHelperHelper, ResourceCalculationContextFactory resourceCalculationContextFactory)
+			IOptimizerHelperHelper optimizerHelperHelper, ResourceCalculationContextFactory resourceCalculationContextFactory,
+			OptimizationResult optimizationResult)
 		{
 			_webSchedulingSetup = webSchedulingSetup;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -47,21 +49,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_dayOffOptimizationPreferenceProviderUsingFiltersFactory = dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 			_optimizerHelperHelper = optimizerHelperHelper;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
+			_optimizationResult = optimizationResult;
 		}
 
 		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
 		{
 			var period = SetupAndOptimize(planningPeriodId);
 			_persister.Persist(_schedulerStateHolder().Schedules);
-			return CreateResult(period);
-		}
-
-		[LogTime]
-		protected virtual OptimizationResultModel CreateResult(DateOnlyPeriod period)
-		{
-			var result = new OptimizationResultModel();
-			result.Map(_schedulerStateHolder().SchedulingResultState.SkillDays, period);
-			return result;
+			return _optimizationResult.Create(period);
 		}
 
 		[UnitOfWork]
