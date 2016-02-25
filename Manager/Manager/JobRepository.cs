@@ -36,8 +36,6 @@ namespace Stardust.Manager
 			                                       typeof (string)));
 			jdDataTable.Columns.Add(new DataColumn("AssignedNode",
 			                                       typeof (string)));
-			jdDataTable.Columns.Add(new DataColumn("JobProgress",
-			                                       typeof (string)));
 			jdDataTable.Columns.Add(new DataColumn("UserName",
 			                                       typeof (string)));
 			jdDataTable.Columns.Add(new DataColumn("Status",
@@ -50,7 +48,6 @@ namespace Stardust.Manager
 			dr["Type"] = job.Type;
 			dr["UserName"] = job.UserName;
 			dr["AssignedNode"] = DBNull.Value;
-			dr["JobProgress"] = DBNull.Value;
 			dr["Status"] = DBNull.Value;
 			jdDataTable.Rows.Add(dr);
 
@@ -139,8 +136,7 @@ namespace Stardust.Manager
                                             ,Type
                                             ,UserName
                                             ,AssignedNode
-                                            ,JobProgress,
-											Status
+											,Status
                                         FROM [Stardust].JobDefinitions";
 
 			try
@@ -174,8 +170,7 @@ namespace Stardust.Manager
 								Type = (string) reader.GetValue(reader.GetOrdinal("Type")),
 								UserName = (string) reader.GetValue(reader.GetOrdinal("UserName")),
 								AssignedNode = getValue<string>(reader.GetValue(reader.GetOrdinal("AssignedNode"))),
-								Status = getValue<string>(reader.GetValue(reader.GetOrdinal("Status"))),
-								JobProgress = getValue<string>(reader.GetValue(reader.GetOrdinal("JobProgress")))
+								Status = getValue<string>(reader.GetValue(reader.GetOrdinal("Status")))
 							};
 
 							listToReturn.Add(jobDefinition);

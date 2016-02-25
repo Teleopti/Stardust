@@ -10,6 +10,9 @@ GO
 CREATE SCHEMA [Stardust]
 GO;
 
+IF OBJECT_ID('[Stardust].[JobDefinitions]', 'U') IS NOT NULL 
+  DROP TABLE [Stardust].[JobDefinitions]; 
+
 CREATE TABLE [Stardust].[JobDefinitions](
 	[Id] [uniqueidentifier] NOT NULL,
 	[Name] [nvarchar](max) NULL,
@@ -17,7 +20,6 @@ CREATE TABLE [Stardust].[JobDefinitions](
 	[Type] [nvarchar](max) NULL,
 	[UserName] nvarchar(500) NOT NULL,
 	[AssignedNode] [nvarchar](max) NULL,
-	[JobProgress] [nvarchar](max) NULL,
 	[Status] [nvarchar](max) NULL,
  CONSTRAINT [PK_JobDefinitions] PRIMARY KEY CLUSTERED 
 (
