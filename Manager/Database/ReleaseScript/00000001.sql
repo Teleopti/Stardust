@@ -8,10 +8,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE SCHEMA [Stardust]
-GO;
-
-IF OBJECT_ID('[Stardust].[JobDefinitions]', 'U') IS NOT NULL 
-  DROP TABLE [Stardust].[JobDefinitions]; 
+GO 
 
 CREATE TABLE [Stardust].[JobDefinitions](
 	[Id] [uniqueidentifier] NOT NULL,
@@ -20,15 +17,12 @@ CREATE TABLE [Stardust].[JobDefinitions](
 	[Type] [nvarchar](max) NULL,
 	[UserName] nvarchar(500) NOT NULL,
 	[AssignedNode] [nvarchar](max) NULL,
-	[Status] [nvarchar](max) NULL,
+	[Status] [nvarchar](max) NULL
  CONSTRAINT [PK_JobDefinitions] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 ))
 GO
-
-IF OBJECT_ID('[Stardust].[WorkerNodes]', 'U') IS NOT NULL 
-  DROP TABLE [Stardust].[WorkerNodes]; 
 
 CREATE TABLE [Stardust].[WorkerNodes](
 	[Id] [uniqueidentifier] NOT NULL,
@@ -46,6 +40,7 @@ CREATE UNIQUE NONCLUSTERED INDEX [UQ_WorkerNodes_Url] ON [Stardust].[WorkerNodes
 	[Url] ASC
 )
 GO
+
 
 CREATE TABLE [Stardust].[JobHistory](
 	[JobId] [uniqueidentifier] NOT NULL,
@@ -68,6 +63,7 @@ ALTER TABLE [Stardust].[JobHistory] ADD CONSTRAINT
 	DF_JobHistory_Created DEFAULT getutcdate() FOR Created
 GO
 
+
 CREATE TABLE [Stardust].[JobHistoryDetail](
 	[Id] int NOT NULL IDENTITY (1, 1),
 	[JobId] [uniqueidentifier] NOT NULL,
@@ -81,4 +77,18 @@ CONSTRAINT [PK_JobHistoryDetail] PRIMARY KEY CLUSTERED
 GO
 ALTER TABLE [Stardust].[JobHistoryDetail] ADD CONSTRAINT
 	DF_JobHistoryDetail_Created DEFAULT getutcdate() FOR Created
+GO
+
+  CREATE TABLE [Stardust].[Logging] (
+    [Id] [int] IDENTITY (1, 1) NOT NULL,
+    [Date] [datetime] NOT NULL,
+    [Thread] [varchar] (255) NOT NULL,
+    [Level] [varchar] (50) NOT NULL,
+    [Logger] [varchar] (255) NOT NULL,
+    [Message] [varchar] (4000) NOT NULL,
+    [Exception] [varchar] (2000) NULL
+CONSTRAINT [PK_Logging] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+))
 GO

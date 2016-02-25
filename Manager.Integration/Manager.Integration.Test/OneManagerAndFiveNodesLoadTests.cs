@@ -50,8 +50,6 @@ namespace Manager.Integration.Test
 			LogHelper.LogDebugWithLineNumber("Start TestFixtureSetUp",
 			                                 Logger);
 
-			TryCreateSqlLoggingTable(ManagerDbConnectionString);
-
 
 #if (DEBUG)
 			// Do nothing.
@@ -109,22 +107,6 @@ namespace Manager.Integration.Test
 				                                 Logger,
 				                                 exp);
 			}
-		}
-
-		private static void TryCreateSqlLoggingTable(string connectionString)
-		{
-			LogHelper.LogDebugWithLineNumber("Run sql script to create logging file started.",
-			                                 Logger);
-
-			var scriptFile =
-				new FileInfo(Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
-				                          Settings.Default.CreateLoggingTableSqlScriptLocationAndFileName));
-
-			ScriptExecuteHelper.ExecuteScriptFile(scriptFile,
-			                                      connectionString);
-
-			LogHelper.LogDebugWithLineNumber("Run sql script to create logging file finished.",
-			                                 Logger);
 		}
 
 		/// <summary>
