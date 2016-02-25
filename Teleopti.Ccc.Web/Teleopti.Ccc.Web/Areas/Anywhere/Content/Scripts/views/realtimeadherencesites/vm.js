@@ -26,6 +26,7 @@
 			that.sites = ko.observableArray();
 			that.sitesToOpen = ko.observableArray();
 			that.BusinessUnitId = ko.observable();
+			that.Wfm_RTA_ProperReleaseToggle_36750 = ko.observable();
 
 			var siteForId = function (id) {
 				if (!id)

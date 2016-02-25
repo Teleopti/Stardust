@@ -38,6 +38,7 @@
 		display: function(options) {
 			viewModel = realTimeAdherenceViewModel();
 			viewModel.BusinessUnitId(options.buid);
+			viewModel.Wfm_RTA_ProperReleaseToggle_36750(resources.Wfm_RTA_ProperReleaseToggle_36750);
 			ko.cleanNode(options.bindingElement);
 			ko.applyBindings(viewModel, options.bindingElement);
 

@@ -8,9 +8,8 @@
 				$scope.getAdherencePercent = RtaFormatService.numberToPercent;
 				$scope.checkboxesChecked = 0;
 				var selectedSiteIds = [];
-
-				growl.success("Here is the new design for RTA. For a limited time you can go back to the old design <a href='/Anywhere#realtimeadherencesites'>here.</a><br/>\
-				We appreciate your <a href='http://www.teleopti.com/wfm/customers/customer-center/service_desk/feedback.aspx'>feedback.</a> ", {
+				growl.success("RTA has been improved! We appreciate your <a href='http://www.teleopti.com/wfm/customers/customer-center/service_desk/feedback.aspx'>feedback.</a>\
+				Old <a href='/Anywhere#realtimeadherencesites'>RTA</a> can be accessed for a limited time.", {
 								ttl: 0,
 								disableCountDown: true
 				});

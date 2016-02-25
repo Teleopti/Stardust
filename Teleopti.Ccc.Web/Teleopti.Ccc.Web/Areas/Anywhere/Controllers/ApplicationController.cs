@@ -185,6 +185,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 
 				RTA_AdherenceDetails_34267 = _toggles.IsEnabled(Toggles.RTA_AdherenceDetails_34267),
 				RTA_NotifyViaSMS_31567 = _toggles.IsEnabled(Toggles.RTA_NotifyViaSMS_31567),
+				Wfm_RTA_ProperReleaseToggle_36750 = _toggles.IsEnabled(Toggles.Wfm_RTA_ProperReleaseToggle_36750)
 
 			}, Formatting.Indented);
 
