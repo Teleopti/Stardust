@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IPersonListExtractorFromScheduleParts _personExtractor;
 		private readonly ScheduleMatrixOriginalStateContainerCreator _scheduleMatrixOriginalStateContainerCreator;
-		private readonly NormalResourceCalculationContext _normalResourceCalculationContext;
+		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		public OptimizationCommand(IGroupPageCreator groupPageCreator,
 			IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 			IPersonListExtractorFromScheduleParts personExtractor,
 			ScheduleMatrixOriginalStateContainerCreator scheduleMatrixOriginalStateContainerCreator,
-			NormalResourceCalculationContext normalResourceCalculationContext)
+			ResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 			_groupPageCreator = groupPageCreator;
 			_groupScheduleGroupPageDataProvider = groupScheduleGroupPageDataProvider;
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 			_personExtractor = personExtractor;
 			_scheduleMatrixOriginalStateContainerCreator = scheduleMatrixOriginalStateContainerCreator;
-			_normalResourceCalculationContext = normalResourceCalculationContext;
+			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 		}
 
 		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, ISchedulingProgress backgroundWorker,
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			bool lastCalculationState = schedulerStateHolder.SchedulingResultState.SkipResourceCalculation;
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = false;
 
-			using (_normalResourceCalculationContext.Create())
+			using (_resourceCalculationContextFactory.Create())
 			{
 				if (lastCalculationState)
 				{

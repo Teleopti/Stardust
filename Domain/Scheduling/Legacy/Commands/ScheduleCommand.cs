@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
-		private readonly NormalResourceCalculationContext _normalResourceCalculationContext;
+		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		public ScheduleCommand(IResourceOptimizationHelper resourceOptimizationHelper,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 			IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			PeriodExtractorFromScheduleParts periodExtractor,
-			NormalResourceCalculationContext normalResourceCalculationContext
+			ResourceCalculationContextFactory resourceCalculationContextFactory
 			)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
 			_periodExtractor = periodExtractor;
-			_normalResourceCalculationContext = normalResourceCalculationContext;
+			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 		}
 
 		[LogTime]
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			var selectedPersons = selectedScheduleDays.Select(x => x.Person).Distinct().ToList();
 
-			using (_normalResourceCalculationContext.Create())
+			using (_resourceCalculationContextFactory.Create())
 			{
 				if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
 				{

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
-		private readonly NormalResourceCalculationContext _normalResourceCalculationContext;
+		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		public WeeklyRestSolverCommand(ITeamBlockInfoFactory teamBlockInfoFactory,
 			ITeamBlockSchedulingOptions teamBlockSchedulingOptions, Func<IWeeklyRestSolverService> weeklyRestSolverService,
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
 			Func<IPersonSkillProvider> personSkillProvider,
-			NormalResourceCalculationContext normalResourceCalculationContext)
+			ResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 			_personSkillProvider = personSkillProvider;
-			_normalResourceCalculationContext = normalResourceCalculationContext;
+			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 		}
 
 		public void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, 
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IDisposable contextDisposal = null;
 			if (!ResourceCalculationContext.InContext)
 			{
-				contextDisposal = _normalResourceCalculationContext.Create();
+				contextDisposal = _resourceCalculationContextFactory.Create();
 			}
 			
 				EventHandler<ResourceOptimizerProgressEventArgs> onResolvingWeek = (sender, e) =>

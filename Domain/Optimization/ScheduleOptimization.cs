@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
-		private readonly NormalResourceCalculationContext _normalResourceCalculationContext;
+		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		public ScheduleOptimization(WebSchedulingSetup webSchedulingSetup, Func<ISchedulerStateHolder> schedulerStateHolder,
 			ClassicDaysOffOptimizationCommand classicDaysOffOptimizationCommand,
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			WeeklyRestSolverExecuter weeklyRestSolverExecuter, OptimizationPreferencesFactory optimizationPreferencesFactory,
 			IMatrixListFactory matrixListFactory, IScheduleDayEquator scheduleDayEquator,
 			DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
-			IOptimizerHelperHelper optimizerHelperHelper, NormalResourceCalculationContext normalResourceCalculationContext)
+			IOptimizerHelperHelper optimizerHelperHelper, ResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 			_webSchedulingSetup = webSchedulingSetup;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_scheduleDayEquator = scheduleDayEquator;
 			_dayOffOptimizationPreferenceProviderUsingFiltersFactory = dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 			_optimizerHelperHelper = optimizerHelperHelper;
-			_normalResourceCalculationContext = normalResourceCalculationContext;
+			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 		}
 
 		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixListForDayOffOptimization, optimizationPreferences, period);
 
-			using (_normalResourceCalculationContext.Create())
+			using (_resourceCalculationContextFactory.Create())
 			{
 				_classicDaysOffOptimizationCommand.Execute(matrixOriginalStateContainerListForDayOffOptimization, period,
 					optimizationPreferences, _schedulerStateHolder(),

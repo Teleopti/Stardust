@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IIntradayOptimizer2Creator _intradayOptimizer2Creator;
 		private readonly VirtualSkillContext _virtualSkillContext;
 		private readonly IIntradayOptimizerContainer _intradayOptimizerContainer;
-		private readonly NormalResourceCalculationContext _normalResourceCalculationContext;
+		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		public IntradayOptimization(OptimizationPreferencesFactory optimizationPreferencesFactory,
 									Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 									IIntradayOptimizer2Creator intradayOptimizer2Creator,
 									VirtualSkillContext virtualSkillContext,
 									IIntradayOptimizerContainer intradayOptimizerContainer,
-									NormalResourceCalculationContext normalResourceCalculationContext
+									ResourceCalculationContextFactory resourceCalculationContextFactory
 									)
 		{
 			_optimizationPreferencesFactory = optimizationPreferencesFactory;
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_intradayOptimizer2Creator = intradayOptimizer2Creator;
 			_virtualSkillContext = virtualSkillContext;
 			_intradayOptimizerContainer = intradayOptimizerContainer;
-			_normalResourceCalculationContext = normalResourceCalculationContext;
+			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 		}
 
 		public virtual OptimizationResultModel Optimize(Guid planningPeriodId)
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			using (_virtualSkillContext.Create(period))
 			{
-				using (_normalResourceCalculationContext.Create())
+				using (_resourceCalculationContextFactory.Create())
 				{
 					_resourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
 					_intradayOptimizerContainer.Execute(optimizers);

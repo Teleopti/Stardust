@@ -5,12 +5,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class NormalResourceCalculationContext
+	public class ResourceCalculationContextFactory
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 
-		public NormalResourceCalculationContext(Func<ISchedulerStateHolder> schedulerStateHolder, Func<IPersonSkillProvider> personSkillProvider)
+		public ResourceCalculationContextFactory(Func<ISchedulerStateHolder> schedulerStateHolder, Func<IPersonSkillProvider> personSkillProvider)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_personSkillProvider = personSkillProvider;
