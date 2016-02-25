@@ -3042,6 +3042,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var islandList = skillGroupIslandsAnalyzer.FindIslands(skillGroupsCreatorResult);
 			var factory = new TaskFactory<IScheduleDictionary>();
 			var tasks = new System.Threading.Tasks.Task<IScheduleDictionary>[islandList.Count];
+			var selectedSchedules = _scheduleView.SelectedSchedules();
 			for (int i = 0; i < islandList.Count; i++)
 			{
 				var islandLifeTimeScope = new IslandLifeTimeScope(_componentContext);
@@ -3049,7 +3050,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				tasks[i1] = factory.StartNew(
 					y =>
 						islandLifeTimeScope.ScheduleAsIsland(skillGroupsCreatorResult, islandList[i1], _optimizerOriginalPreferences,
-							_scheduleView.SelectedSchedules(),
+							selectedSchedules,
 							_optimizationPreferences, _schedulerState), TaskCreationOptions.LongRunning);
 			}
 			await System.Threading.Tasks.Task.WhenAll(tasks);
