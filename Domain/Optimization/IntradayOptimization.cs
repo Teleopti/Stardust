@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 		private readonly WebSchedulingSetup _webSchedulingSetup;
-		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
@@ -33,13 +32,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IIntradayOptimizer2Creator _intradayOptimizer2Creator;
 		private readonly VirtualSkillContext _virtualSkillContext;
 		private readonly IIntradayOptimizerContainer _intradayOptimizerContainer;
+		private readonly NormalResourceCalculationContext _normalResourceCalculationContext;
 
 		public IntradayOptimization(OptimizationPreferencesFactory optimizationPreferencesFactory,
 									Func<ISchedulerStateHolder> schedulerStateHolder,
 									Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 									DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
 									WebSchedulingSetup webSchedulingSetup,
-									Func<IPersonSkillProvider> personSkillProvider,
 									IMatrixListFactory matrixListFactory,
 									IScheduleDayEquator scheduleDayEquator,
 									IPlanningPeriodRepository planningPeriodRepository,
@@ -49,7 +48,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 									WeeklyRestSolverExecuter weeklyRestSolverExecuter,
 									IIntradayOptimizer2Creator intradayOptimizer2Creator,
 									VirtualSkillContext virtualSkillContext,
-									IIntradayOptimizerContainer intradayOptimizerContainer
+									IIntradayOptimizerContainer intradayOptimizerContainer,
+									NormalResourceCalculationContext normalResourceCalculationContext
 									)
 		{
 			_optimizationPreferencesFactory = optimizationPreferencesFactory;
@@ -57,7 +57,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_dayOffOptimizationPreferenceProviderUsingFiltersFactory = dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 			_webSchedulingSetup = webSchedulingSetup;
-			_personSkillProvider = personSkillProvider;
 			_matrixListFactory = matrixListFactory;
 			_scheduleDayEquator = scheduleDayEquator;
 			_planningPeriodRepository = planningPeriodRepository;
@@ -68,6 +67,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_intradayOptimizer2Creator = intradayOptimizer2Creator;
 			_virtualSkillContext = virtualSkillContext;
 			_intradayOptimizerContainer = intradayOptimizerContainer;
+			_normalResourceCalculationContext = normalResourceCalculationContext;
 		}
 
 		public virtual OptimizationResultModel Optimize(Guid planningPeriodId)
@@ -101,21 +101,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			var optimizers = _intradayOptimizer2Creator.Create(matrixOriginalStateContainerListForIntradayOptimizationOriginal,
 				matrixOriginalStateContainerListForIntradayOptimizationWork, optimizationPreferences, rollbackService, dayOffOptimizationPreference);
-			var minutesPerInterval = 15;
-
-			if (_schedulerStateHolder().SchedulingResultState.Skills.Any())
-			{
-				minutesPerInterval = _schedulerStateHolder().SchedulingResultState.Skills.Min(s => s.DefaultResolution);
-			}
-
-			var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
-			var resources = extractor.CreateRelevantProjectionList(_schedulerStateHolder().Schedules);
-
 			_optimizerHelperHelper.LockDaysForIntradayOptimization(matrixListForIntraDayOptimizationOriginal, period);
 
 			using (_virtualSkillContext.Create(period))
 			{
-				using (new ResourceCalculationContext(resources))
+				using (_normalResourceCalculationContext.Create())
 				{
 					_resourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
 					_intradayOptimizerContainer.Execute(optimizers);

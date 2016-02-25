@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
-		private readonly Func<IPersonSkillProvider> _personSkillProvider;
+		private readonly NormalResourceCalculationContext _normalResourceCalculationContext;
 
 		public ScheduleOptimization(WebSchedulingSetup webSchedulingSetup, Func<ISchedulerStateHolder> schedulerStateHolder,
 			ClassicDaysOffOptimizationCommand classicDaysOffOptimizationCommand,
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			WeeklyRestSolverExecuter weeklyRestSolverExecuter, OptimizationPreferencesFactory optimizationPreferencesFactory,
 			IMatrixListFactory matrixListFactory, IScheduleDayEquator scheduleDayEquator,
 			DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
-			IOptimizerHelperHelper optimizerHelperHelper, Func<IPersonSkillProvider> personSkillProvider)
+			IOptimizerHelperHelper optimizerHelperHelper, NormalResourceCalculationContext normalResourceCalculationContext)
 		{
 			_webSchedulingSetup = webSchedulingSetup;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_scheduleDayEquator = scheduleDayEquator;
 			_dayOffOptimizationPreferenceProviderUsingFiltersFactory = dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 			_optimizerHelperHelper = optimizerHelperHelper;
-			_personSkillProvider = personSkillProvider;
+			_normalResourceCalculationContext = normalResourceCalculationContext;
 		}
 
 		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
@@ -82,16 +82,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixListForDayOffOptimization, optimizationPreferences, period);
 
-			var minutesPerInterval = 15;
-			var schedulerStateHolder = _schedulerStateHolder();
-			if (schedulerStateHolder.SchedulingResultState.Skills.Any())
-			{
-				minutesPerInterval = schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution);
-			}
-
-			var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
-			var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
-			using (new ResourceCalculationContext(resources))
+			using (_normalResourceCalculationContext.Create())
 			{
 				_classicDaysOffOptimizationCommand.Execute(matrixOriginalStateContainerListForDayOffOptimization, period,
 					optimizationPreferences, _schedulerStateHolder(),
