@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				if (optimizedAgentsInAnyOfLoops.Count == 2)
 					return;
 			}
-			Assert.Fail("Tried to optimize 2 agents {0} times. A limit is set to 50% and it's always the same agent that are optimized. Giving up.", numberOfAgents);
+			Assert.Fail("Tried to optimize 2 agents {0} times. A limit is set to 50% and it's always the same agent that are optimized. Giving up.", retriesBeforeGivingUp);
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
