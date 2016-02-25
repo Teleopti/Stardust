@@ -20,7 +20,7 @@ namespace Stardust.Manager
 		{
 			try
 			{
-				var node = new WorkerNode {Url = nodeUrl, Id = Guid.NewGuid()};
+				var node = new WorkerNode {Url = nodeUrl, Id = Guid.NewGuid(), Heartbeat = DateTime.Now, Alive = "true"};
 				_nodeRepository.Add(node);
 			}
 			catch (SqlException exception)
