@@ -83,14 +83,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var webScheduleState = _webSchedulingSetup.Setup(period);
 
 			var matrixListForIntraDayOptimizationOriginal = _matrixListFactory.CreateMatrixListForSelection(webScheduleState.AllSchedules);
-			var matrixOriginalStateContainerListForIntradayOptimizationOriginal =
-				matrixListForIntraDayOptimizationOriginal.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator));
-
-			var matrixOriginalStateContainerListForIntradayOptimizationWork =
-				_matrixListFactory.CreateMatrixListForSelection(webScheduleState.AllSchedules).Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator));
-
-			var optimizers = _intradayOptimizer2Creator.Create(matrixOriginalStateContainerListForIntradayOptimizationOriginal,
-				matrixOriginalStateContainerListForIntradayOptimizationWork, optimizationPreferences, dayOffOptimizationPreference);
+			var matrixOriginalStateContainerListForIntradayOptimizationOriginal = matrixListForIntraDayOptimizationOriginal.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator)).ToList();
+			var optimizers = _intradayOptimizer2Creator.Create(matrixOriginalStateContainerListForIntradayOptimizationOriginal, matrixOriginalStateContainerListForIntradayOptimizationOriginal.ToList(), optimizationPreferences, dayOffOptimizationPreference);
 			_optimizerHelperHelper.LockDaysForIntradayOptimization(matrixListForIntraDayOptimizationOriginal, period);
 
 			using (_virtualSkillContext.Create(period))
