@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 		public void Setup()
 		{
 			TestSiteConfigurationSetup.Setup(TestSiteConfigurationSetup.PathToIISExpress64);
-
 			TestDataSetup.Setup();
 		}
 

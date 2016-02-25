@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[AfterScenario("PasswordPolicy")]
 		public void AfterPasswordPolicyScenario()
 		{
-			var targetTestPasswordPolicyFile = Path.Combine(Paths.SitePath(),  "PasswordPolicy.xml");
+			var targetTestPasswordPolicyFile = Path.Combine(Paths.WebPath(),  "PasswordPolicy.xml");
 			if (File.Exists(targetTestPasswordPolicyFile))
 				File.Delete(targetTestPasswordPolicyFile);
 			_timeoutScope.Dispose();
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"There is a password policy with")]
 		public void GivenThereIsAPasswordPolicyWith(Table table)
 		{
-			var targetTestPasswordPolicyFile = Path.Combine(Paths.SitePath(), "PasswordPolicy.xml");
+			var targetTestPasswordPolicyFile = Path.Combine(Paths.WebPath(), "PasswordPolicy.xml");
 			if (File.Exists(targetTestPasswordPolicyFile))
 				return;
 			var contents = File.ReadAllText("Data\\PasswordPolicy.xml");

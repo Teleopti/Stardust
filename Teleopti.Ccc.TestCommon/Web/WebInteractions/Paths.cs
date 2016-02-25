@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 
@@ -7,12 +6,12 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 {
 	public static class Paths
 	{
-		public static string SitePath()
+		private static readonly Lazy<string> _webPath = new Lazy<string>(() =>
 		{
-			return ConfigurationManager.AppSettings["SitePath"];
-		}
+			var path = FindProjectPath(@"Teleopti.Ccc.Web\Teleopti.Ccc.Web\");
+			return new DirectoryInfo(path).FullName;
+		});
 
-		private static readonly Lazy<string> _webPath = new Lazy<string>(() => new DirectoryInfo(SitePath()).FullName);
 		public static string WebPath()
 		{
 			return _webPath.Value;
