@@ -16,7 +16,6 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -127,9 +126,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeMultiplicatorDefinitionSetRepository>().For<IMultiplicatorDefinitionSetRepository>();
 			system.UseTestDouble<FakeLoadAllSkillInIntradays>().For<ILoadAllSkillInIntradays>();
 			system.UseTestDouble<FakeSkillAreaRepository>().For<ISkillAreaRepository>();
-
-			system.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository>();
-			system.UseTestDouble<FakeLicenseVerifierFactory>().For<ILicenseVerifierFactory>(); // because the real one cant inject the repo
 
 			fakePrincipal(system);
 		}

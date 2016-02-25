@@ -230,7 +230,6 @@
     <Compile Include="FakeRepositories\FakeDatabase.cs" />
     <Compile Include="IoC\AllTogglesOffAttribute.cs" />
     <Compile Include="IoC\AllTogglesOnAttribute.cs" />
-    <Compile Include="FakeRepositories\FakeLicenseRepository.cs" />
     <Compile Include="MessageBrokerCompositeDummy.cs" />
     <Compile Include="ObjectCopyExtension.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAdherenceDetailsReadModelPersister.cs" />

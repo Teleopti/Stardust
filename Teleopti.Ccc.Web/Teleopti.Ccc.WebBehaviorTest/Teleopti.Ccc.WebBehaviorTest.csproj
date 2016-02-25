@@ -1179,11 +1179,11 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>SignOut.feature.cs</LastGenOutput>
     </None>
-    <Content Include="..\..\TestLicense.xml">
-      <Link>TestLicense.xml</Link>
+    <Content Include="Data\PasswordPolicy.xml">
+      <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\PasswordPolicy.xml">
+    <Content Include="License.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
