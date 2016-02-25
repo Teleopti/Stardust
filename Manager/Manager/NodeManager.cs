@@ -10,13 +10,11 @@ namespace Stardust.Manager
 	{
 		private readonly IJobRepository _jobRepository;
 		private readonly IWorkerNodeRepository _nodeRepository;
-		private CheckHeartbeatsTimer _checkHeartbeatsTimer;
 
 		public NodeManager(IWorkerNodeRepository nodeRepository, IJobRepository jobRepository)
 		{
 			_nodeRepository = nodeRepository;
 			_jobRepository = jobRepository;
-			_checkHeartbeatsTimer = new CheckHeartbeatsTimer(_nodeRepository);
 		}
 
 		public void AddIfNeeded(Uri nodeUrl)

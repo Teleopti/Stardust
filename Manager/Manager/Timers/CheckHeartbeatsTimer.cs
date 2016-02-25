@@ -18,11 +18,11 @@ namespace Stardust.Manager.Timers
 		private static readonly ILog Logger =
 			LogManager.GetLogger(typeof (CheckHeartbeatsTimer));
 
-		private IWorkerNodeRepository _workerNodeRepository;
+		private JobManager _jobManager;
 
-		public CheckHeartbeatsTimer(IWorkerNodeRepository workerNodeRepository, double interval = 10000) : base(interval)
+		public CheckHeartbeatsTimer(JobManager jobManager, double interval = 10000) : base(interval)
 		{
-			_workerNodeRepository = workerNodeRepository;
+			_jobManager = jobManager;
 			Elapsed += OnTimedEvent;
 			AutoReset = true;
 
@@ -32,7 +32,7 @@ namespace Stardust.Manager.Timers
 		private void OnTimedEvent(object sender,
 										ElapsedEventArgs e)
 		{
-				_workerNodeRepository.CheckNodesAreAlive(TimeSpan.FromSeconds(10));
+			_jobManager.CheckNodesAreAlive(TimeSpan.FromSeconds(10));
 				LogHelper.LogInfoWithLineNumber(Logger, " Check Heartbeat");
 		}
 

@@ -234,7 +234,7 @@ namespace Stardust.Manager
             }
 		}
 
-	    public void CheckNodesAreAlive(TimeSpan timeSpan)
+	    public List<string> CheckNodesAreAlive(TimeSpan timeSpan)
 	    {
 		    string selectCommand = @"SELECT Id, Url, Heartbeat, Alive 
 									 FROM Stardust.WorkerNodes";
@@ -246,6 +246,8 @@ namespace Stardust.Manager
 			LogHelper.LogDebugWithLineNumber(Logger, "Start");
 
 		    DateTime currentDateTime = DateTime.Now;
+
+		    List<string> deadNodes = new List<string>();
 
 			using (var connection = new SqlConnection(_connectionString))
 		    {
@@ -285,6 +287,7 @@ namespace Stardust.Manager
 
 										commandUpdate.ExecuteNonQuery();
 									}
+									deadNodes.Add(url);
 								}
 							}
 						}
@@ -294,7 +297,8 @@ namespace Stardust.Manager
 		    }
 
 		    LogHelper.LogDebugWithLineNumber(Logger, "Finished");
-		}
+		    return deadNodes;
+	    }
 
 		public void RegisterHeartbeat(Uri nodeUri)
 	    {

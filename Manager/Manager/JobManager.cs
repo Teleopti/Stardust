@@ -5,6 +5,7 @@ using log4net;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
+using Stardust.Manager.Timers;
 
 namespace Stardust.Manager
 {
@@ -14,6 +15,7 @@ namespace Stardust.Manager
 		private readonly IHttpSender _httpSender;
 		private readonly IJobRepository _jobRepository;
 		private readonly IWorkerNodeRepository _workerNodeRepository;
+		private CheckHeartbeatsTimer _checkHeartbeatsTimer;
 
 		public JobManager(IJobRepository jobRepository,
 		                  IWorkerNodeRepository workerNodeRepository,
@@ -22,8 +24,29 @@ namespace Stardust.Manager
 			_jobRepository = jobRepository;
 			_workerNodeRepository = workerNodeRepository;
 			_httpSender = httpSender;
+			_checkHeartbeatsTimer = new CheckHeartbeatsTimer(this);
 		}
 
+		public void CheckNodesAreAlive(TimeSpan timeSpan)
+		{
+			List<string> deadNodes = _workerNodeRepository.CheckNodesAreAlive(timeSpan);
+
+			List<JobDefinition> jobs = _jobRepository.LoadAll();
+
+			if (deadNodes != null)
+			{
+				foreach (string node in deadNodes)
+				{
+					foreach (JobDefinition job in jobs)
+					{
+						if (job.AssignedNode == node)
+						{
+							SetEndResultOnJobAndRemoveIt(job.Id, "fatal");
+						}
+					}
+				}
+			}
+		}
 
 		public IList<WorkerNode> Nodes()
 		{
