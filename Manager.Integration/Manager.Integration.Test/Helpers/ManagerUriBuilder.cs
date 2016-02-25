@@ -38,6 +38,11 @@ namespace Manager.Integration.Test.Helpers
 			return CreateUri(path);
 		}
 
+		public Uri GetNodesUri()
+		{
+			return CreateUri(ManagerRouteConstants.Nodes);
+		}
+
 
 		public Uri GetCancelJobUri(Guid guid)
 		{
