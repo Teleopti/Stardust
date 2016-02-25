@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -26,8 +27,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
         public void Handle(PersonCollectionChangedEvent @event)
         {
-            Console.WriteLine("Handle PersonCollectionChangedEvent");
-
             // Check if new person
             IAnalyticsPersonPeriod t = new AnalyticsPersonPeriod();
 
@@ -36,10 +35,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
                 Console.WriteLine(personCodeGuid.ToString());
                 var person = _personRepository.FindPeople(new Guid[] { personCodeGuid }).First();
                 Console.WriteLine(person.Name + " " + person.Email);
-                
+
                 var test = _analyticsPersonPeriodRepository.GetPersonPeriods(personCodeGuid);
 
                 Console.WriteLine("Person periods: " + person.PersonPeriodCollection.Count());
+
+
+                var businessUnitId = MapBusinessId(person.PersonPeriodCollection.First().Team.BusinessUnitExplicit.Id.GetValueOrDefault());
+
 
                 if (test.IsEmpty() && person.PersonPeriodCollection.Any())
                 {
@@ -47,6 +50,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
                     foreach (var personPeriod in person.PersonPeriodCollection)
                     {
+                        var siteId = MapSiteId(businessUnitId, personPeriod.Team.Site.Id.GetValueOrDefault(),
+                            personPeriod.Team.Site.Description.Name);
+                        var teamId = MapTeamId(personPeriod.Team.Id.GetValueOrDefault(), siteId,
+                            personPeriod.Team.Description.Name, businessUnitId);
+	                    var skillsetId =
+		                    MapSkillsetId(
+			                    personPeriod.PersonSkillCollection.Select(a => a.Skill.Id.GetValueOrDefault()).ToList(),
+			                    businessUnitId);
+
                         _analyticsPersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod()
                         {
                             PersonCode = personCodeGuid,
@@ -67,16 +79,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
                             ContractName = personPeriod.PersonContract.Contract.Description.Name,
                             ParttimeCode = personPeriod.PersonContract.PartTimePercentage.Id.GetValueOrDefault(),
                             ParttimePercentage = personPeriod.PersonContract.PartTimePercentage.Percentage.ToString(),
-                            TeamId = -1,
+                            TeamId = teamId,
                             TeamCode = personPeriod.Team.Id.GetValueOrDefault(),
-                            TeamName = personPeriod.Team.SiteAndTeam,
-                            SiteId = -1,
+                            TeamName = personPeriod.Team.Description.Name,
+                            SiteId = siteId,
                             SiteCode = personPeriod.Team.Site.Id.GetValueOrDefault(),
                             SiteName = personPeriod.Team.Site.Description.Name,
-                            BusinessUnitId = -1,
+                            BusinessUnitId = businessUnitId,
                             BusinessUnitCode = personPeriod.Team.BusinessUnitExplicit.Id.GetValueOrDefault(),
                             BusinessUnitName = personPeriod.Team.BusinessUnitExplicit.Name,
-                            SkillsetId = -1,
+                            SkillsetId = skillsetId,
                             Email = person.Email,
                             Note = person.Note,
                             EmploymentStartDate = personPeriod.Period.StartDate.Date,
@@ -101,6 +113,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
                     }
                 }
             }
+        }
+
+        private int MapTeamId(Guid teamCode, int siteId, string teamName, int businessUnitId)
+        {
+            return _analyticsPersonPeriodRepository.TeamId(teamCode, siteId, teamName, businessUnitId);
+        }
+
+        public int MapBusinessId(Guid businessUnitCode)
+        {
+            return _analyticsPersonPeriodRepository.BusinessUnitId(businessUnitCode);
+        }
+
+        public int MapSiteId(int businessUnitId, Guid siteCode, string siteName)
+        {
+            return _analyticsPersonPeriodRepository.SiteId(siteCode, siteName, businessUnitId);
+        }
+
+        public int MapSkillsetId(List<Guid> skillCodes, int businessUnitId)
+        {
+            var listOfSkillIds = _analyticsPersonPeriodRepository.Skills(businessUnitId)
+                .Where(a => skillCodes.Contains(a.SkillCode)).ToList();
+            return _analyticsPersonPeriodRepository.SkillSetId(listOfSkillIds);
         }
     }
 

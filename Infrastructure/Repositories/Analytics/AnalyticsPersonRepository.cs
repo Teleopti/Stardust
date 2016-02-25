@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -10,6 +11,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
     public class AnalyticsPersonRepository : IAnalyticsPersonPeriodRepository
     {
+        public int BusinessUnitId(Guid businessUnitCode)
+        {
+            using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+            {
+                return uow.Session().CreateSQLQuery(@"select business_unit_id from mart.dim_business_unit WITH (NOLOCK) WHERE business_unit_code=:businessUnitCode")
+                    .SetGuid("businessUnitCode", businessUnitCode)
+                    .UniqueResult<int>();
+            }
+        }
+
         public IList<IAnalyticsPersonPeriod> GetPersonPeriods(Guid personCode)
         {
             using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
@@ -58,10 +69,74 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
                         , windows_domain WindowsDomain
                         , windows_username WindowsUsername from mart.dim_person WITH (NOLOCK) WHERE person_code =:code ")
                     .SetGuid("code", personCode)
-                    .SetResultTransformer(Transformers.AliasToBean(typeof (AnalyticsPersonPeriod)))
+                    .SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsPersonPeriod)))
                     .SetReadOnly(true)
                     //.SetTimeout(120)
                     .List<IAnalyticsPersonPeriod>();
+            }
+        }
+
+        public int SiteId(Guid siteCode, string siteName, int businessUnitId)
+        {
+            using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+            {
+                return uow.Session().CreateSQLQuery(@"mart.etl_dim_site_id_get @site_code=:siteCode , @site_name=:siteName, @business_unit_id=:businessUnitId")
+                    .SetGuid("siteCode", siteCode)
+                    .SetString("siteName", siteName)
+                    .SetInt32("businessUnitId", businessUnitId)
+                    .UniqueResult<int>();
+            }
+        }
+
+        public int TeamId(Guid teamCode, int siteId, string teamName, int businessUnitId)
+        {
+            using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+            {
+                return uow.Session().CreateSQLQuery(@"mart.etl_dim_team_id_get @team_code=:teamCode,@team_name=:teamName, @site_id=:siteId , @business_unit_id=:businessUnitId")
+                    .SetGuid("teamCode", teamCode)
+                    .SetString("teamName", teamName)
+                    .SetInt32("siteId", siteId)
+                    .SetInt32("businessUnitId", businessUnitId)
+                    .UniqueResult<int>();
+            }
+        }
+
+        public int SkillSetId(IList<IAnalyticsSkill> skills)
+        {
+            using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+            {
+                var skillSetCode = string.Join(",", skills.Select(a => a.SkillId).OrderBy(a => a));
+                return uow.Session().CreateSQLQuery(
+                    @"select skillset_id
+                      from mart.dim_skillset WITH (NOLOCK) 
+                      where skillset_code=:skillsetCode")
+                    .SetString("skillsetCode", skillSetCode)
+                    .UniqueResult<int>();
+            }
+        }
+
+        public IList<IAnalyticsSkill> Skills(int businessUnitId)
+        {
+            using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+            {
+                return uow.Session().CreateSQLQuery(
+                    @"select 
+	                    skill_id SkillId, 
+	                    skill_code SkillCode,
+	                    skill_name SkillName,
+	                    time_zone_id TimeZoneId,
+	                    forecast_method_code ForecastMethodCode,
+	                    forecast_method_name ForecastMethodName,
+	                    business_unit_id BusinessUnitId,
+	                    datasource_id DatasourceId,
+	                    insert_date InsertDate,
+	                    update_date UpdateDate,
+	                    datasource_update_date DatasourceUpdateDate,
+	                    is_deleted IsDeleted
+                    from mart.dim_skill WITH (NOLOCK)")
+                    .SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsSkill)))
+                    .SetReadOnly(true)
+                    .List<IAnalyticsSkill>();
             }
         }
 
@@ -174,9 +249,25 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
         private IUnitOfWorkFactory statisticUnitOfWorkFactory()
         {
-            var identity = ((ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity);
+            var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
             return identity.DataSource.Analytics;
         }
+    }
+
+    public class AnalyticsSkill : IAnalyticsSkill
+    {
+        public int SkillId { get; set; }
+        public Guid SkillCode { get; set; }
+        public string SkillName { get; set; }
+        public int TimeZoneId { get; set; }
+        public Guid ForecastMethodCode { get; set; }
+        public string ForecastMethodName { get; set; }
+        public int BusinessUnitId { get; set; }
+        public int DatasourceId { get; set; }
+        public DateTime InsertDate { get; set; }
+        public DateTime UpdateDate { get; set; }
+        public DateTime DatasourceUpdateDate { get; set; }
+        public bool IsDeleted { get; set; }
     }
 
     public class AnalyticsPersonPeriod : IAnalyticsPersonPeriod

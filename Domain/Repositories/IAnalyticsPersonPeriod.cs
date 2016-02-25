@@ -10,8 +10,14 @@ namespace Teleopti.Ccc.Domain.Repositories
 {
     public interface IAnalyticsPersonPeriodRepository
     {
+        int SiteId(Guid siteCode, string siteName, int businessUnitId);
+        int BusinessUnitId(Guid businessUnitCode);
 
         IList<IAnalyticsPersonPeriod> GetPersonPeriods(Guid personCode);
         void AddPersonPeriod(IAnalyticsPersonPeriod personPeriod);
+        int TeamId(Guid teamCode, int siteId, string teamName, int businessUnitId);
+
+        int SkillSetId(IList<IAnalyticsSkill> skills);
+        IList<IAnalyticsSkill> Skills(int businessUnitId);
     }
 }
