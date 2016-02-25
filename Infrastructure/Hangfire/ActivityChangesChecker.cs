@@ -8,9 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
-
 	// with Hangfire 1.5, we think we can inject our server component without deriving from SqlServerStorage
-	[CLSCompliant(false)]
 	public class SqlStorageWithActivityChangesCheckerComponent : SqlServerStorage
 	{
 		private readonly ActivityChangesChecker _activityChangesChecker;

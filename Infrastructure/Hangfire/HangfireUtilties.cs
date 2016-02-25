@@ -6,7 +6,6 @@ using Hangfire.Storage;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
-	[CLSCompliant(false)]
 	public class HangfireUtilties
 	{
 		private readonly JobStorage _storage;

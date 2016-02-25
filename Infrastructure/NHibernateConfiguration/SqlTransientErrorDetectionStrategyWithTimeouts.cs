@@ -5,7 +5,6 @@ using NHibernate.SqlAzure.RetryStrategies;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
-	[CLSCompliant(false)]
 	public class SqlTransientErrorDetectionStrategyWithTimeouts : SqlAzureTransientErrorDetectionStrategyWithTimeouts
 	{
 		protected override bool IsConnectionTimeout(Exception ex)

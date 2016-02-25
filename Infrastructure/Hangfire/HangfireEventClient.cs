@@ -9,7 +9,6 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
-	[CLSCompliant(false)]
 	public class HangfireEventClient : IHangfireEventClient
 	{
 		private readonly Lazy<IBackgroundJobClient> _jobClient;

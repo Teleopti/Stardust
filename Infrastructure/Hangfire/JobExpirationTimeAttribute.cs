@@ -5,7 +5,6 @@ using Hangfire.Storage;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
-	[CLSCompliant(false)]
 	public class JobExpirationTimeAttribute : JobFilterAttribute, IApplyStateFilter
 	{
 		public int JobExpirationTimeoutSeconds { get; set;  }

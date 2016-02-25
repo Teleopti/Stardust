@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Config;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
-	[CLSCompliant(false)]
 	public class HangfireServerStarter
 	{
 		private readonly ILifetimeScope _lifetimeScope;
