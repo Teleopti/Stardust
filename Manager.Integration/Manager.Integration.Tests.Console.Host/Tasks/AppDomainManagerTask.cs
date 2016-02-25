@@ -8,7 +8,8 @@ using Manager.IntegrationTest.Console.Host.Interfaces;
 
 namespace Manager.IntegrationTest.Console.Host.Tasks
 {
-	public class AppDomainManagerTask : IAppDomain, IDisposable
+	public class AppDomainManagerTask : IAppDomain, 
+										IDisposable
 	{
 		private static readonly ILog Logger =
 			LogManager.GetLogger(typeof (AppDomainManagerTask));
@@ -36,11 +37,11 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 
 		private CancellationTokenSource CancellationTokenSource { get; set; }
 
-		public string GetAppDomainFriendlyName()
+		public string GetAppDomainUniqueId()
 		{
-			if (MyAppDomain != null)
+			if (MyAppDomain != null && ConfigurationFileInfo != null)
 			{
-				return MyAppDomain.FriendlyName;
+				return ConfigurationFileInfo.Name;
 			}
 
 			return null;

@@ -2,6 +2,6 @@
 {
     public interface IAppDomain
     {
-        string GetAppDomainFriendlyName();
+        string GetAppDomainUniqueId();
     }
 }

@@ -464,19 +464,11 @@ namespace Manager.IntegrationTest.Console.Host
 
 			if (AppDomainManagerTasks != null && AppDomainManagerTasks.Any())
 			{
-				AppDomainManagerTask managerToDispose = null;
+				AppDomainManagerTask managerToDispose =
+					AppDomainManagerTasks.FirstOrDefault(task => task.GetAppDomainUniqueId()
+										 .Equals(friendlyName,
+												 StringComparison.InvariantCultureIgnoreCase));
 
-				foreach (var appDomainManagerTask in AppDomainManagerTasks)
-				{
-					if (appDomainManagerTask.GetAppDomainFriendlyName()
-						.Equals(friendlyName,
-						        StringComparison.InvariantCultureIgnoreCase))
-					{
-						managerToDispose = appDomainManagerTask;
-
-						break;
-					}
-				}
 
 				if (managerToDispose != null)
 				{
@@ -509,20 +501,10 @@ namespace Manager.IntegrationTest.Console.Host
 
 			if (AppDomainNodeTasks != null && AppDomainNodeTasks.Any())
 			{
-				AppDomainNodeTask nodeToDispose = null;
-
-				foreach (var appDomainNodeTask in AppDomainNodeTasks)
-				{
-					if (appDomainNodeTask.GetAppDomainFriendlyName()
-						.Equals(friendlyName,
-						        StringComparison.InvariantCultureIgnoreCase))
-					{
-						nodeToDispose = appDomainNodeTask;
-
-						break;
-					}
-				}
-
+				var nodeToDispose =
+					AppDomainNodeTasks.
+						FirstOrDefault(task => task.GetAppDomainUniqueId().Equals(friendlyName,
+						                                                          StringComparison.InvariantCultureIgnoreCase));
 				if (nodeToDispose != null)
 				{
 					LogHelper.LogDebugWithLineNumber(Logger,
@@ -593,7 +575,7 @@ namespace Manager.IntegrationTest.Console.Host
 			{
 				foreach (var appDomainManagerTask in AppDomainManagerTasks)
 				{
-					listToReturn.Add(appDomainManagerTask.GetAppDomainFriendlyName());
+					listToReturn.Add(appDomainManagerTask.GetAppDomainUniqueId());
 				}
 			}
 
@@ -608,7 +590,7 @@ namespace Manager.IntegrationTest.Console.Host
 			{
 				foreach (var appDomainNodeTask in AppDomainNodeTasks)
 				{
-					listToReturn.Add(appDomainNodeTask.GetAppDomainFriendlyName());
+					listToReturn.Add(appDomainNodeTask.GetAppDomainUniqueId());
 				}
 			}
 
@@ -647,7 +629,7 @@ namespace Manager.IntegrationTest.Console.Host
 			LogHelper.LogDebugWithLineNumber(Logger,
 			                                 "Finished: AppDomainManagerTask.StartTask");
 
-			friendlyname = appDomainManagerTask.GetAppDomainFriendlyName();
+			friendlyname = appDomainManagerTask.GetAppDomainUniqueId();
 		}
 	}
 }
