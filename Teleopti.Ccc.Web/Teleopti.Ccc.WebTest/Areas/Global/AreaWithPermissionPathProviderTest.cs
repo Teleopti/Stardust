@@ -71,11 +71,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		{
 			PermissionProvider.Enable();
 			ToggleManager.Enable(Toggles.WfmTeamSchedule_AbsenceReporting_35995);
-			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.AngelMyTeamSchedules);
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 			var areas = Target.GetWfmAreasWithPermissions();
 
-			areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.AngelMyTeamSchedules);
+			areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 			areas.Single().Name.Invoke().Should().Be(Resources.MyTeam);
 			areas.Single().InternalName.Should().Be("myTeam");
 		}

@@ -128,7 +128,6 @@
 		public const string WebModifySkill = "0125";
 		public const string WebIntraday = "0127";
 		public const string WebModifySkillArea = "0128";
-		public const string AngelMyTeamSchedules = "0129";
 
 		//Seat Planner
 		public const string SeatPlanner = "0107";

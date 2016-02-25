@@ -64,7 +64,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.PayrollIntegration, "xxPayrollIntegration", DefinedRaptorApplicationFunctionForeignIds.PayrollIntegration, 200);
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.SeatPlanner, "xxSeatPlanner", DefinedRaptorApplicationFunctionForeignIds.SeatPlanner, null);
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.Outbound, "xxOutbound", DefinedRaptorApplicationFunctionForeignIds.Outbound, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AngelMyTeamSchedules, "xxMyTeam", DefinedRaptorApplicationFunctionForeignIds.AngelMyTeamSchedules, null);
 
 			// Global
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifySchedule, "xxModifySchedule", DefinedRaptorApplicationFunctionForeignIds.ModifySchedule, null);
@@ -182,14 +181,14 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			string parentPath = ApplicationFunction.GetParentPath(functionPath);
 
 			var newFunction = new ApplicationFunction
-			{
-				FunctionCode = codeName,
-				FunctionDescription = functionDescription,
-				Parent = ApplicationFunction.FindByPath(applicationFunctionList, parentPath),
-				ForeignId = definedKey,
-				ForeignSource = DefinedForeignSourceNames.SourceRaptor,
-				SortOrder = sortOrder
-			};
+													{
+														FunctionCode = codeName,
+														FunctionDescription = functionDescription,
+														Parent = ApplicationFunction.FindByPath(applicationFunctionList, parentPath),
+														ForeignId = definedKey,
+														ForeignSource = DefinedForeignSourceNames.SourceRaptor,
+														SortOrder = sortOrder
+													};
 			applicationFunctionList.Add(newFunction);
 		}
 	}
