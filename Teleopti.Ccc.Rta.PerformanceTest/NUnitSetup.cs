@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 
 namespace Teleopti.Ccc.Rta.PerformanceTest
@@ -10,6 +11,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 		public void Setup()
 		{
 			TestSiteConfigurationSetup.Setup(TestSiteConfigurationSetup.PathToIISExpress64);
+
+			TestDataSetup.Setup();
 		}
 
 		[TearDown]
