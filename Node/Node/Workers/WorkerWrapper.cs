@@ -204,6 +204,7 @@ namespace Stardust.Node.Workers
 
 						break;
 
+
 					case TaskStatus.Faulted:
 						logInfo =
 							string.Format("{0} : The task faulted for job ( jobId, jobName ) : ( {1}, {2} )",
@@ -222,7 +223,7 @@ namespace Stardust.Node.Workers
 
 						break;
 				}
-			});
+			}, TaskContinuationOptions.LongRunning);
 
 			Task.Start();
 
