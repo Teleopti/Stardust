@@ -4,17 +4,18 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using log4net.Config;
 using Manager.Integration.Test.Helpers;
+using Manager.Integration.Test.Models;
 using Manager.Integration.Test.Notifications;
 using Manager.Integration.Test.Properties;
 using Manager.Integration.Test.Scripts;
 using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Validators;
+using Newtonsoft.Json;
 using NUnit.Framework;
 
 
@@ -25,7 +26,7 @@ namespace Manager.Integration.Test
 	{
 
 		private static readonly ILog Logger =
-			LogManager.GetLogger(typeof(NodeFailureTests));
+			LogManager.GetLogger(typeof (NodeFailureTests));
 
 		private bool _clearDatabase = true;
 		private string _buildMode = "Debug";
@@ -43,7 +44,7 @@ namespace Manager.Integration.Test
 		public void TestFixtureTearDown()
 		{
 			LogHelper.LogDebugWithLineNumber("Start TestFixtureTearDown",
-											 Logger);
+			                                 Logger);
 
 			if (AppDomainTask != null)
 			{
@@ -51,23 +52,23 @@ namespace Manager.Integration.Test
 			}
 
 			LogHelper.LogDebugWithLineNumber("Finished TestFixtureTearDown",
-											 Logger);
+			                                 Logger);
 		}
 
 		private static void TryCreateSqlLoggingTable(string connectionString)
 		{
 			LogHelper.LogDebugWithLineNumber("Run sql script to create logging file started.",
-											 Logger);
+			                                 Logger);
 
 			var scriptFile =
 				new FileInfo(Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
-										  Settings.Default.CreateLoggingTableSqlScriptLocationAndFileName));
+				                          Settings.Default.CreateLoggingTableSqlScriptLocationAndFileName));
 
 			ScriptExecuteHelper.ExecuteScriptFile(scriptFile,
-												  connectionString);
+			                                      connectionString);
 
 			LogHelper.LogDebugWithLineNumber("Run sql script to create logging file finished.",
-											 Logger);
+			                                 Logger);
 		}
 
 		[TestFixtureSetUp]
@@ -87,7 +88,7 @@ namespace Manager.Integration.Test
 			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
 			LogHelper.LogDebugWithLineNumber("Start TestFixtureSetUp",
-											 Logger);
+			                                 Logger);
 
 			TryCreateSqlLoggingTable(ManagerDbConnectionString);
 
@@ -101,55 +102,56 @@ namespace Manager.Integration.Test
 			AppDomainTask = new AppDomainTask(_buildMode);
 
 			Task = AppDomainTask.StartTask(numberOfManagers: 1,
-										   numberOfNodes: 2,
-										   cancellationTokenSource: CancellationTokenSource);
+			                               numberOfNodes: 2,
+			                               cancellationTokenSource: CancellationTokenSource);
 
 			LogHelper.LogDebugWithLineNumber("Finshed TestFixtureSetUp",
-											 Logger);
+			                                 Logger);
 		}
 
 		[Test]
 		public async void ShouldRemoveNodeWhenDead()
 		{
 			LogHelper.LogDebugWithLineNumber("Start test.",
-											 Logger);
+			                                 Logger);
 
 
 			//---------------------------------------------
-			// Notify when all 2 nodes are up and running. 
+			// Notify when all 1 nodes are up and running. 
 			//---------------------------------------------
 
 
-			LogHelper.LogDebugWithLineNumber("Waiting for all 2 nodes to start up.",
-											 Logger);
+			LogHelper.LogDebugWithLineNumber("Waiting for all 1 nodes to start up.",
+			                                 Logger);
 
 			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
 			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
-			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(2,
-																  sqlNotiferCancellationTokenSource,
-																  IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
+			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(1,
+			                                                      sqlNotiferCancellationTokenSource,
+			                                                      IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
 			task.Start();
 
 			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(30));
 
 			sqlNotifier.Dispose();
 
-			LogHelper.LogDebugWithLineNumber("All 2 nodes has started.",
-											 Logger);
+			LogHelper.LogDebugWithLineNumber("All 1 nodes has started.",
+			                                 Logger);
 
 
 
 			//---------------------------------------------
-			// Start actual test.
+			// Kill the node.
 			//---------------------------------------------
 
 
-			var cancellationTokenSource = new CancellationTokenSource();
+		var cancellationTokenSource = new CancellationTokenSource();
 
 			HttpResponseMessage response = null;
 
+			Uri uri;
 			using (var client = new HttpClient())
 			{
 				var uriBuilder =
@@ -157,34 +159,66 @@ namespace Manager.Integration.Test
 
 				uriBuilder.Path += "appdomain/nodes/" + "Node1.config";
 
-				var uri = uriBuilder.Uri;
+				uri = uriBuilder.Uri;
 
 				LogHelper.LogDebugWithLineNumber("Start calling Delete Async ( " + uri + " ) ",
-												 Logger);
+				                                 Logger);
 
 				try
 				{
 					response = await client.DeleteAsync(uriBuilder.Uri,
-														cancellationTokenSource.Token);
+					                                    cancellationTokenSource.Token);
 
 					if (response.IsSuccessStatusCode)
 					{
 						LogHelper.LogDebugWithLineNumber("Succeeded calling Delete Async ( " + uri + " ) ",
-														 Logger);
+						                                 Logger);
 					}
 				}
 				catch (Exception exp)
 				{
 					LogHelper.LogErrorWithLineNumber(exp.Message,
-													 Logger,
-													 exp);
+					                                 Logger,
+					                                 exp);
 				}
 			}
 
 			cancellationTokenSource.Cancel();
 
+			//---------------------------------------------
+			// Wait for timeout, node must be considered dead.
+			//---------------------------------------------
 
 
+			WaitForNodeTimeout();  
+
+
+			//---------------------------------------------
+			// Check if node is dead.
+			//---------------------------------------------
+
+			ManagerUriBuilder managerUriBuilder = new ManagerUriBuilder();
+
+			uri = managerUriBuilder.GetNodesUri();
+			
+			using (var client = new HttpClient())
+			{
+				 var responseNodes = await client.GetAsync(uri);
+				responseNodes.EnsureSuccessStatusCode();
+				var ser = responseNodes.Content.ReadAsStringAsync();
+				
+				List<WorkerNode> workerNodes = JsonConvert.DeserializeObject<List<WorkerNode>>(ser.Result);
+
+				WorkerNode node = workerNodes.FirstOrDefault();
+
+				Assert.IsTrue(node.Alive == "false");  
+			}
+		}
+
+		private void WaitForNodeTimeout()
+		{
+			//MUST BE CHANGED TO FIT CONFIGURATION
+			Thread.Sleep(TimeSpan.FromSeconds(30));
 		}
 	}
 }

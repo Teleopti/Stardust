@@ -9,5 +9,7 @@
 		public const string CancelJob = "job/" + JobIdOptionalParameter;
 
 		public const string GetJobHistory = "job/" + JobIdOptionalParameter;
+
+		public const string Nodes = "nodes/";
 	}
 }
