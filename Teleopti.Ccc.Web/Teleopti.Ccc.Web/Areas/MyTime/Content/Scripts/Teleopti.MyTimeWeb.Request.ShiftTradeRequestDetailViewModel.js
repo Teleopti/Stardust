@@ -451,8 +451,8 @@ ShiftTradeRequestDetailedDayViewModel = function(data) {
 };
 
 Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel = function(chooseHistory, canvasPixelWidth) {
-	var self = this;
-	self.agentName = chooseHistory.tradedSchedule.agentName;
+	var self = this;	
+	self.agentName = chooseHistory.tradedSchedule? chooseHistory.tradedSchedule.agentName: '';
 	self.selectedDateInFormat = ko.observable(chooseHistory.date.format(Teleopti.MyTimeWeb.Common.DateFormat));
 	self.selectedDate = ko.observable(chooseHistory.date);
 	self.timeLineStartTime = ko.observable();

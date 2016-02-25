@@ -667,12 +667,11 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 			data: {
 				date: date
 			},
-			success: function (data, textStatus, jqXHR) {
+			success: function (data, textStatus, jqXHR) {				
 				self.selectedTeam(null);
 				self.availableTeams(data);
-				self.setTeamAll();
+				if (data && data.length > 0) self.setTeamAll();
 				self.selectedTeam(teamToSelect);
-
 			},
 			error: function (e) {
 				//console.log(e);

@@ -262,8 +262,7 @@ $(document).ready(function () {
 		};
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
 
-		viewModel.loadTeams();
-
+		viewModel.loadTeams();		
 		equal(viewModel.availableTeams().length, 0);
 	});
 
@@ -288,8 +287,8 @@ $(document).ready(function () {
 		viewModel.loadTeams();
 
 		equal(viewModel.selectedTeam(), "A");
-		equal(viewModel.availableTeams().length, 3);
-		var teamTwo = viewModel.availableTeams()[1];
+		equal(viewModel.availableTeams().length, 4);
+		var teamTwo = viewModel.availableTeams()[2];
 		equal(teamTwo.id, "B");
 		equal(teamTwo.text, "Team B");
 	});
