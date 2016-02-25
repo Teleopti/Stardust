@@ -25,6 +25,12 @@ namespace Stardust.Manager
 		}
 
 
+		public IList<WorkerNode> Nodes()
+		{
+			return _nodeRepository.LoadAll();
+		}
+
+
 		public IList<WorkerNode> UpNodes()
 		{
 			var upNodes = new List<WorkerNode>();

@@ -32,6 +32,6 @@
 
 		public const string JobDetail = "jobdetail/" + JobIdOptionalParameter;
 
-		public const string UppNodes = "upnodes/";
+		public const string Nodes = "nodes/";
 	}
 }
