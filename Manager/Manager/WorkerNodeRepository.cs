@@ -7,6 +7,7 @@ using log4net;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
+using Stardust.Manager.Timers;
 
 namespace Stardust.Manager
 {
@@ -21,7 +22,6 @@ namespace Stardust.Manager
         public WorkerNodeRepository(string connectionString)
         {
             _connectionString = connectionString;
-
             InitDs();
         }
 
@@ -240,7 +240,7 @@ namespace Stardust.Manager
 									 FROM Stardust.WorkerNodes";
 
 			string updateCommandText = @"UPDATE Stardust.WorkerNodes 
-											Alive = @Alive
+											SET Alive = @Alive
 										WHERE Url = @Url";
 
 			LogHelper.LogDebugWithLineNumber(Logger, "Start");
@@ -271,10 +271,12 @@ namespace Stardust.Manager
 									string url = readAllWorkerNodes["Url"].ToString();
 
 									string alive = "false";
+									var connection2 = new SqlConnection(_connectionString);
 
 									using (SqlCommand commandUpdate = new SqlCommand(updateCommandText,
-																					 connection))
+																					 connection2))
 									{
+										connection2.Open();
 										commandUpdate.Parameters.Add("@Alive",
 																	SqlDbType.NVarChar).Value = alive;
 
