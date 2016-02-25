@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default
+namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 {
 	public class DefaultData : IEnumerable<IHashableDataSetup>
 	{

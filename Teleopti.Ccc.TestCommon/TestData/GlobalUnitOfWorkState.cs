@@ -2,7 +2,7 @@ using System;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data
+namespace Teleopti.Ccc.TestCommon.TestData
 {
 	public static class GlobalUnitOfWorkState
 	{

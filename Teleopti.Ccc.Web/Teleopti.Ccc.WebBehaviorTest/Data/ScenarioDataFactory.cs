@@ -4,7 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data

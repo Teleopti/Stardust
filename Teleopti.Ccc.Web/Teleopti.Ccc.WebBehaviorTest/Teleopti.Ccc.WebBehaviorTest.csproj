@@ -229,14 +229,7 @@
     <Compile Include="Data\Setups\Configurable\GamificationSettingConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\PersonEmptyDayConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\TeamGamificationSettingConfigurable.cs" />
-    <Compile Include="Data\Setups\Default\DefaultData.cs" />
-    <Compile Include="Data\Setups\Default\DefaultLicense.cs" />
-    <Compile Include="Data\Setups\Default\DefaultPersonThatCreatesDbData.cs" />
-    <Compile Include="Data\Setups\Default\DefaultRaptorApplicationFunctions.cs" />
-    <Compile Include="Data\Setups\Default\DefaultMatrixApplicationFunctions.cs" />
     <Compile Include="Data\Setups\DoNotUse\Agent_ThingThatReallyAppliesSetupsInConstructor.cs" />
-    <Compile Include="Data\Setups\Default\IHashableDataSetup.cs" />
-    <Compile Include="Data\SystemSetup.cs" />
     <Compile Include="Data\TenantUnitOfWorkState.cs" />
     <Compile Include="MultiTenancy\MultiTenancyStepDefinition.cs" />
     <Compile Include="MultiTenancy\Tenants.feature.cs">
@@ -423,7 +416,6 @@
     <Compile Include="Bindings\Generic\GroupPageStepDefinitions.cs" />
     <Compile Include="Data\Setups\Configurable\PersonalShiftConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\PersonDayOffConfigurable.cs" />
-    <Compile Include="Data\Setups\Default\DefaultScenario.cs" />
     <Compile Include="Data\Setups\Configurable\AbsenceRequestConfigurable.cs" />
     <Compile Include="Bindings\Generic\PartTimePercentageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NothingStepDefinitions.cs" />
@@ -660,15 +652,11 @@
       <DependentUpon>Asm.feature</DependentUpon>
     </Compile>
     <Compile Include="Data\Setups\Configurable\ShiftConfigurable.cs" />
-    <Compile Include="Data\Setups\Default\DefaultBusinessUnit.cs" />
     <Compile Include="Data\Setups\Configurable\RoleForUser.cs" />
     <Compile Include="Data\Setups\Configurable\WorkflowControlSetForUser.cs" />
     <Compile Include="MyTime\AbsenceRequestFromScheduleStepDefinitions.cs" />
     <Compile Include="Data\Setups\Configurable\RoleConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\PersonPeriodConfigurable.cs" />
-    <Compile Include="Data\GlobalDataMaker.cs" />
-    <Compile Include="Data\GlobalPrincipalState.cs" />
-    <Compile Include="Data\GlobalUnitOfWorkState.cs" />
     <Compile Include="Data\ScenarioUnitOfWorkState.cs" />
     <Compile Include="Data\Setups\DoNotUse\IUserRoleSetup.cs" />
     <Compile Include="MyTime\PreferencesExtended.feature.cs">
@@ -749,7 +737,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Data\Setups\DoNotUse\ExistingTextRequest.cs" />
-    <Compile Include="Data\Setups\Default\DefaultPassword.cs" />
     <Compile Include="Data\Setups\DoNotUse\AnotherStandardPreference.cs" />
     <Compile Include="Data\Setups\DoNotUse\BasePreference.cs" />
     <Compile Include="Data\IDelayedSetup.cs" />
@@ -795,7 +782,6 @@
       <DependentUpon>SignInWithProviders.feature</DependentUpon>
     </Compile>
     <Compile Include="MyTime\StudentAvailabilityStepDefinitions.cs" />
-    <Compile Include="Data\TestDataSetup.cs" />
     <Compile Include="Core\Browser.cs" />
     <Compile Include="Core\Extensions\FuncExtensions.cs" />
     <Compile Include="Core\Navigation\Navigation.cs" />

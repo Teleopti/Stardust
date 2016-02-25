@@ -49,6 +49,7 @@
     </Compile>
     <Compile Include="ActualAgentStateUpdateTest.cs" />
     <Compile Include="BackgroundWorkTest.cs" />
+    <Compile Include="NUnitSetup.cs" />
     <Compile Include="StateSendTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -59,6 +60,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
+      <Project>{68a028b6-864c-4969-8830-9c3c6bd56a98}</Project>
+      <Name>Teleopti.Ccc.TestCommon</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

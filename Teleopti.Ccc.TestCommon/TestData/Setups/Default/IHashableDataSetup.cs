@@ -1,6 +1,6 @@
 ﻿using Teleopti.Ccc.TestCommon.TestData.Core;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default
+namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 {
 	public interface IHashableDataSetup : IDataSetup
 	{

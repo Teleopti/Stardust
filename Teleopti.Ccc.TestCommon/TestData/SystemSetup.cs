@@ -9,7 +9,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data
+namespace Teleopti.Ccc.TestCommon.TestData
 {
 	public static class SystemSetup
 	{

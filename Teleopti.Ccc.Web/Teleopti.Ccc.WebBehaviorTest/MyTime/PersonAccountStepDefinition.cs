@@ -2,10 +2,10 @@
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 using PersonAbsenceConfigurable = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable.PersonAbsenceConfigurable;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime

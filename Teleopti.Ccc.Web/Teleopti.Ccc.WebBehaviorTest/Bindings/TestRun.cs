@@ -1,8 +1,8 @@
 using System;
-using System.IO;
-using System.Linq;
 using log4net;
+using log4net.Config;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 		public void Setup()
 		{
-			log4net.Config.XmlConfigurator.Configure();
+			XmlConfigurator.Configure();
 
 			log.Debug("Preparing for test run");
 

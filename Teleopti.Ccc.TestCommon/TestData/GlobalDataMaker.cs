@@ -1,6 +1,6 @@
 using Teleopti.Ccc.TestCommon.TestData.Core;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data
+namespace Teleopti.Ccc.TestCommon.TestData
 {
 	public class GlobalDataMaker
 	{

@@ -2,7 +2,7 @@ using System.Security.Principal;
 using System.Threading;
 using Teleopti.Ccc.Domain.Security.Principal;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data
+namespace Teleopti.Ccc.TestCommon.TestData
 {
 	public static class GlobalPrincipalState
 	{

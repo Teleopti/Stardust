@@ -279,6 +279,18 @@
     <Compile Include="TestData\Analytics\Tables\sys_configuration.cs" />
     <Compile Include="TestData\Core\ILogonName.cs" />
     <Compile Include="TestData\Core\ITenantUserSetup.cs" />
+    <Compile Include="TestData\GlobalDataMaker.cs" />
+    <Compile Include="TestData\GlobalPrincipalState.cs" />
+    <Compile Include="TestData\GlobalUnitOfWorkState.cs" />
+    <Compile Include="TestData\Setups\Default\DefaultBusinessUnit.cs" />
+    <Compile Include="TestData\Setups\Default\DefaultData.cs" />
+    <Compile Include="TestData\Setups\Default\DefaultLicense.cs" />
+    <Compile Include="TestData\Setups\Default\DefaultMatrixApplicationFunctions.cs" />
+    <Compile Include="TestData\Setups\Default\DefaultPassword.cs" />
+    <Compile Include="TestData\Setups\Default\DefaultPersonThatCreatesDbData.cs" />
+    <Compile Include="TestData\Setups\Default\DefaultRaptorApplicationFunctions.cs" />
+    <Compile Include="TestData\Setups\Default\DefaultScenario.cs" />
+    <Compile Include="TestData\Setups\Default\IHashableDataSetup.cs" />
     <Compile Include="TestData\Setups\Configurable\SkillAreaConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\OutboundCampaignConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\PersonEmptyDayConfigurable.cs" />
@@ -292,6 +304,8 @@
     <Compile Include="TestData\Setups\Configurable\WorkloadConfigurable.cs" />
     <Compile Include="TestData\Setups\Specific\IranianCulture.cs" />
     <Compile Include="TestData\Setups\Specific\IstanbulTimeZone.cs" />
+    <Compile Include="TestData\SystemSetup.cs" />
+    <Compile Include="TestData\TestDataSetup.cs" />
     <Compile Include="ThreadCulture.cs" />
     <Compile Include="DummyInfrastructureInfoPopulator.cs" />
     <Compile Include="EntityExtensions.cs" />

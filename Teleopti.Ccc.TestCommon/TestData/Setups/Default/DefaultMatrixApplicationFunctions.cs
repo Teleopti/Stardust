@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default
+namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 {
 	public class DefaultMatrixApplicationFunctions : IHashableDataSetup
 	{

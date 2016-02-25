@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default
+﻿namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 {
 	public static class DefaultPassword
 	{
