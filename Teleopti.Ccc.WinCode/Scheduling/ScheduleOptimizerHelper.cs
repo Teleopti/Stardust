@@ -104,7 +104,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private class intradayOptimizationCallback : IIntradayOptimizationCallback
 		{
 			private readonly ISchedulingProgress _backgroundWorker;
-			private int counter;
+			private int _counter;
+			private readonly string output = Resources.OptimizingIntraday + Resources.Colon + "({0}){1} {2} {3}";
 
 			public intradayOptimizationCallback(ISchedulingProgress backgroundWorker)
 			{
@@ -113,9 +114,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			public void Optimizing(IntradayOptimizationCallbackInfo callbackInfo)
 			{
-				var who = Resources.OptimizingIntraday + Resources.Colon + "(" + callbackInfo.NumberOfOptimizers + ")" + counter++ + " " + callbackInfo.Agent.Name.ToString(NameOrderOption.FirstNameLastName);
-				var success = callbackInfo.WasSuccessful ? " " + Resources.wasSuccessful : " " + Resources.wasNotSuccessful;
-				var e = new ResourceOptimizerProgressEventArgs(0, 0, who + success);
+				var e = new ResourceOptimizerProgressEventArgs(0, 0,
+					string.Format(output, callbackInfo.NumberOfOptimizers, _counter++,
+						callbackInfo.Agent.Name.ToString(NameOrderOption.FirstNameLastName),
+						callbackInfo.WasSuccessful ? Resources.wasSuccessful : Resources.wasNotSuccessful));
 
 				_backgroundWorker.ReportProgress(1, e);
 			}
