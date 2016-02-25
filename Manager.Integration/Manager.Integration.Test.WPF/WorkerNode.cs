@@ -16,7 +16,7 @@ namespace Manager.Integration.Test.WPF
     {
         public System.Guid Id { get; set; }
         public string Url { get; set; }
-        public Nullable<System.DateTime> Hearbeat { get; set; }
+        public Nullable<System.DateTime> Heartbeat { get; set; }
         public string Alive { get; set; }
     }
 }

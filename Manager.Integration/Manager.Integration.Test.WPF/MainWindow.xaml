@@ -76,9 +76,9 @@
                                                 ClipboardContentBinding="{Binding Url}"
                                                 Header="Url" />
 
-                            <DataGridTextColumn Binding="{Binding Hearbeat}"
-                                                ClipboardContentBinding="{Binding Hearbeat}"
-                                                Header="Hearbeat" />
+                            <DataGridTextColumn Binding="{Binding Heartbeat, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                ClipboardContentBinding="{Binding Heartbeat, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                Header="Heartbeat" />
 
                             <DataGridTextColumn Binding="{Binding Id}"
                                                 ClipboardContentBinding="{Binding Id}"

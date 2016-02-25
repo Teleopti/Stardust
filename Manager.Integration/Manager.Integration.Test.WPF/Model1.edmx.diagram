@@ -5,11 +5,11 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="f3b9ed14273e47909c513e7f44e87001" Name="Diagram1">
-        <EntityTypeShape EntityType="ManagerDbModel.JobDefinition" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ManagerDbModel.JobHistory" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ManagerDbModel.WorkerNode" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ManagerDbModel.JobHistoryDetail" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ManagerDbModel.Logging" Width="1.5" PointX="2.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ManagerDbModel.JobDefinition" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ManagerDbModel.JobHistory" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ManagerDbModel.JobHistoryDetail" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ManagerDbModel.WorkerNode" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="ManagerDbModel.Logging" Width="1.5" PointX="2.75" PointY="4.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

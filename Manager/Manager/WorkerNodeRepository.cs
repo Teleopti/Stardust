@@ -266,7 +266,7 @@ namespace Stardust.Manager
 											SqlDbType.NVarChar).Value = "true";
 
 					command.Parameters.Add("@Url",
-											SqlDbType.NVarChar).Value = nodeUri;
+											SqlDbType.NVarChar).Value = nodeUri.ToString();
 
 					command.ExecuteNonQuery();
 				}
