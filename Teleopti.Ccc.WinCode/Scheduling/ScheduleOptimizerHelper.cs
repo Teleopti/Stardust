@@ -171,19 +171,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			service.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
 
-		private ResourceCalculationContext resourceCalculationContext()
-		{
-			var schedulerStateHolder = _schedulerStateHolder();
-			var minutesPerInterval = 15;
-			if (schedulerStateHolder.SchedulingResultState.Skills.Any())
-			{
-				minutesPerInterval = schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution);
-			}
-			var extractor = new ScheduleProjectionExtractor(_personalSkillProvider(), minutesPerInterval);
-			var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
-			return new ResourceCalculationContext(resources);
-		}
-
 		private void classicDaysOffOptimization(
 			IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization,
 			DateOnlyPeriod selectedPeriod, ISchedulingProgress schedulingProgress)
@@ -257,8 +244,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				_optimizerHelper.CreateSmartDayOffSolverContainers(matrixOriginalStateContainers,
 					scheduleMatrixLockableBitArrayConverterEx, dayOffOptimizationPreferenceProvider);
 
-			using (resourceCalculationContext())
-			{
 				using (PerformanceOutput.ForOperation("SmartSolver for " + solverContainers.Count + " containers"))
 				{
 					foreach (ISmartDayOffBackToLegalStateSolverContainer backToLegalStateSolverContainer in solverContainers)
@@ -331,7 +316,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 							}
 						}
 					}
-				}
 			}
 
 			if (reschedule)
@@ -365,8 +349,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			using (PerformanceOutput.ForOperation("Optimizing"))
 			{
-				using (resourceCalculationContext())
-				{
 					var continuedStep = false;
 					if (optimizerPreferences.General.OptimizationStepDaysOff)
 					{
@@ -452,7 +434,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 							runIntraInterval(schedulingOptions, optimizerPreferences, selectedPeriod, selectedDays, tagSetter);
 						}
 					}
-				}
 			}
 
 			//set back
