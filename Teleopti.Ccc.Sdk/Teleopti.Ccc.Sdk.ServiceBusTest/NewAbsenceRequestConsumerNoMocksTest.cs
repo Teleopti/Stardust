@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
-using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -554,7 +553,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				new BudgetGroupAllowanceSpecification(_schedulingResultStateHolder, _currentScenario, _fakeBudgetDayRepository,
 					_scheduleProjectionReadOnlyRepository),
 				new FakeScheduleDifferenceSaver(_scheduleRepository),
-				_personAccountUpdaterDummy, toggleManager, new BusinessRulesForPersonalAccountUpdate(_personAbsenceAccountRepository, _schedulingResultStateHolder));
+				_personAccountUpdaterDummy, toggleManager);
 
 			var absenceProcessor = new AbsenceRequestProcessor (absenceRequestStatusUpdater, _scheduleProjectionReadModel, _schedulingResultStateHolder);
 			var absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor (_personRequestRepository, absenceRequestStatusUpdater, _schedulingResultStateHolder, _scheduleProjectionReadModel);

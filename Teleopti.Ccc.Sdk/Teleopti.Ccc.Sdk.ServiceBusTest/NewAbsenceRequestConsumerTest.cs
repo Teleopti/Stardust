@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
@@ -11,7 +10,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
-using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -85,8 +83,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_resourceOptimizationHelper = MockRepository.GenerateMock<IResourceOptimizationHelper>();
 			_updateScheduleProjectionReadModel = MockRepository.GenerateMock<IUpdateScheduleProjectionReadModel>();
 
-			var businessRules = MockRepository.GenerateMock<IBusinessRulesForPersonalAccountUpdate>();
-
 			_personAccountUpdater = MockRepository.GenerateMock<IPersonAccountUpdater>();
 			
 			_validatedRequest = new ValidatedRequest { IsValid = true, ValidationErrors = "" };
@@ -96,7 +92,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				_prereqLoader, _scenarioRepository, _loader, _loaderWithoutResourceCalculation, _factory,
 				_alreadyAbsentSpecification, _scheduleIsInvalidSpecification, _authorization, _budgetGroupHeadCountSpecification,
 				_resourceOptimizationHelper, _budgetGroupAllowanceSpecification, _scheduleDictionarySaver, _personAccountUpdater,
-				new FalseToggleManager(), businessRules);
+				new FalseToggleManager());
 
 
 			var absenceProcessor = new AbsenceRequestProcessor(absenceRequestStatusUpdater, _updateScheduleProjectionReadModel, _schedulingResultStateHolder);

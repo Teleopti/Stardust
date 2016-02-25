@@ -2,9 +2,7 @@
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -59,18 +57,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
 			foreach (var request in waitlistedRequests)
 			{
 				processRequest(unitOfWork, request);
-			}
 
-			try
-			{
-				unitOfWork.PersistAll();
-			}
-			catch (OptimisticLockException ex)
-			{
-				logger.Error("A optimistic locking error occurred. Review the error log. Processing cannot continue this time.", ex);
+				try
+				{
+					unitOfWork.PersistAll();
+				}
+				catch (OptimisticLockException ex)
+				{
+					logger.Error("A optimistic locking error occurred. Review the error log. Processing cannot continue this time.", ex);
+				}
 			}
 
 			clearStateHolder(); 
+			
 		}
 
 		private void processRequest(IUnitOfWork unitOfWork, IPersonRequest request)

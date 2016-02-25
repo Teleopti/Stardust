@@ -45,9 +45,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
 		private IProcessAbsenceRequest _process;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IToggleManager _toggleManager;
-		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 
-		public AbsenceRequestUpdater(IPersonAbsenceAccountProvider personAbsenceAccountProvider, IResourceCalculationPrerequisitesLoader prereqLoader, ICurrentScenario scenarioRepository, ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation, ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulesForRequestWithoutResourceCalculation, IRequestFactory requestFactory, IAlreadyAbsentSpecification alreadyAbsentSpecification, IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, IPersonRequestCheckAuthorization authorization, IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification, IResourceOptimizationHelper resourceOptimizationHelper, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, IScheduleDifferenceSaver scheduleDictionarySaver, IPersonAccountUpdater personAccountUpdater, IToggleManager toggleManager, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
+		public AbsenceRequestUpdater(IPersonAbsenceAccountProvider personAbsenceAccountProvider, IResourceCalculationPrerequisitesLoader prereqLoader, ICurrentScenario scenarioRepository, ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation, ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulesForRequestWithoutResourceCalculation, IRequestFactory requestFactory, IAlreadyAbsentSpecification alreadyAbsentSpecification, IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, IPersonRequestCheckAuthorization authorization, IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification, IResourceOptimizationHelper resourceOptimizationHelper, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, IScheduleDifferenceSaver scheduleDictionarySaver, IPersonAccountUpdater personAccountUpdater, IToggleManager toggleManager)
 		{
 			_personAbsenceAccountProvider = personAbsenceAccountProvider;
 			_prereqLoader = prereqLoader;
@@ -64,7 +63,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
 			_scheduleDictionarySaver = scheduleDictionarySaver;
 			_personAccountUpdater = personAccountUpdater;
 			_toggleManager = toggleManager;
-			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 		}
 
 		public bool UpdateAbsenceRequest(IPersonRequest personRequest, IAbsenceRequest absenceRequest, IUnitOfWork unitOfWork, ISchedulingResultStateHolder schedulingResultStateHolder)
@@ -99,19 +97,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
 				validatorList = mergedPeriod.GetSelectedValidatorList().ToArray();
 				_process = mergedPeriod.AbsenceRequestProcess;
 
-				setupSchedulingResultStateHolder(absenceRequest, validatorList, undoRedoContainer, allAccounts);
-				checkIfPersonIsAlreadyAbsentDuringRequestPeriod(absenceRequest, personRequest);
-
+				loadDataForResourceCalculation(absenceRequest, validatorList);
+				
 				personAccountBalanceCalculator = getPersonAccountBalanceCalculator(affectedPersonAbsenceAccount, absenceRequest, personRequest, dateOnlyPeriod);
 
-				//TODO: problems calculating personal account when using the Deny process stop us from doing this currently.  
-				// Existing workarounds use the trackAccount methods, calling it many times.  We should investigate a better way of doing this.
-				//var businessRules = getBusinessRulesForAddingAbsence(absenceRequest); 
+				setupUndoContainersAndTakeSnapshot(undoRedoContainer, allAccounts);
+				
+				checkIfPersonIsAlreadyAbsentDuringRequestPeriod(absenceRequest, personRequest);
+
 				var businessRules = NewBusinessRuleCollection.Minimum();
 
 				requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(businessRules, _scenarioRepository.Current());
-				tryApproveAbsenceAndCheckBusinessRules(absenceRequest, requestApprovalServiceScheduler);
+				simulateApproveAbsence(absenceRequest, requestApprovalServiceScheduler);
 
+				//Will issue a rollback for simulated schedule data
 				handleInvalidSchedule();
 			}
 
@@ -153,10 +152,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
 		private void trackAccounts(IPersonAbsenceAccount personAbsenceAccount, DateOnlyPeriod period, IAbsenceRequest absenceRequest)
 		{
 			var scheduleRange = _schedulingResultStateHolder.Schedules[absenceRequest.Person];
+			var rangePeriod = scheduleRange.Period.ToDateOnlyPeriod(absenceRequest.Person.PermissionInformation.DefaultTimeZone());
 
 			foreach (IAccount account in personAbsenceAccount.Find(period))
 			{
-				var intersectingPeriod = account.Period().Intersection(period);
+				var intersectingPeriod = account.Period().Intersection(rangePeriod);
 				if (intersectingPeriod.HasValue)
 				{
 					IList<IScheduleDay> scheduleDays =
@@ -168,26 +168,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
 					}
 
 					absenceRequest.Absence.Tracker.Track(account, absenceRequest.Absence, scheduleDays);
-
+					
 					if (logger.IsInfoEnabled)
 					{
 						logger.InfoFormat("Remaining after tracking: {0}", account.Remaining);
 					}
-
 				}
 			}
 		}
 		
-		private void setupSchedulingResultStateHolder(IAbsenceRequest absenceRequest, IEnumerable<IAbsenceRequestValidator> validatorList, UndoRedoContainer undoRedoContainer, IEnumerable<IPersonAbsenceAccount> allAccounts)
-		{
-			loadDataForResourceCalculation(absenceRequest, validatorList);
-			setupUndoContainersAndTakeSnapshot(undoRedoContainer, allAccounts);
-		}
-
-		private INewBusinessRuleCollection getBusinessRulesForAddingAbsence(IRequest absenceRequest)
-		{
-			return _businessRulesForPersonalAccountUpdate.FromScheduleRange(_schedulingResultStateHolder.Schedules[absenceRequest.Person]);
-		}
 
 		private void setupUndoContainersAndTakeSnapshot(UndoRedoContainer undoRedoContainer, IEnumerable<IPersonAbsenceAccount> allAccounts)
 		{
@@ -296,7 +285,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
 		}
 
 
-		private static void tryApproveAbsenceAndCheckBusinessRules(IAbsenceRequest absenceRequest, IRequestApprovalService requestApprovalServiceScheduler)
+		private static void simulateApproveAbsence(IAbsenceRequest absenceRequest, IRequestApprovalService requestApprovalServiceScheduler)
 		{
 			var brokenBusinessRules = requestApprovalServiceScheduler.ApproveAbsence(absenceRequest.Absence, absenceRequest.Period, absenceRequest.Person);
 			if (logger.IsDebugEnabled)
@@ -332,6 +321,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
 			}
 			else
 			{
+				trackAccounts (personAccount, dateOnlyPeriod, absenceRequest);
+
 				//We must have the current and all after...
 				var affectedAccounts = personAccount.Find(new DateOnlyPeriod(dateOnlyPeriod.StartDate, DateOnly.MaxValue));
 
