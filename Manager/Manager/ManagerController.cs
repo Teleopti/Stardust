@@ -171,5 +171,12 @@ namespace Stardust.Manager
 		{
 			return Ok();
 		}
+
+		[HttpGet, Route(ManagerRouteConstants.Nodes)]
+		public IHttpActionResult Nodes()
+		{
+			return Ok(_jobManager.Nodes());
+		}
+
 	}
 }
