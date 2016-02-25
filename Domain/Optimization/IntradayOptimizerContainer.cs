@@ -31,17 +31,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 				{
 					var batchShuffledOptimizers = activeOptimizers.GetRandom(activeOptimizers.Count, true);
 
-					var executes = 0;
 					foreach (var optimizer in batchShuffledOptimizers)
 					{
-						executes++;
 						var result = optimizer.Execute(Enumerable.Empty<DateOnly>());
 
 						if (!result.HasValue)
 						{
 							activeOptimizers.Remove(optimizer);
 						}
-						callback.Optimizing(new IntradayOptimizationCallbackInfo(optimizer.ContainerOwner, result.HasValue, activeOptimizers.Count, executes));
+						callback.Optimizing(new IntradayOptimizationCallbackInfo(optimizer.ContainerOwner, result.HasValue, activeOptimizers.Count));
 						if (callback.IsCancelled())
 							return;
 					}

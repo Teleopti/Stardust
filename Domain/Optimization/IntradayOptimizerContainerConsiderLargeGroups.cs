@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var callback = _intradayOptimizationCallbackContext.Current();
 			foreach (var agents in _agentsToSkillGroups.ToSkillGroups())
 			{
-				var executes = 0;
 				var optimizersToLoop = optimizers.Where(x => agents.Contains(x.ContainerOwner)).ToList();
 				var datesToSkip = new IntradayDatesToSkip(_intradayOptimizerLimiter, agents.Count());
 				while (optimizersToLoop.Any())
@@ -39,10 +38,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 					{
 						optimizersToLoop.Remove(optimizer);
 					}
-					callback.Optimizing(new IntradayOptimizationCallbackInfo(optimizer.ContainerOwner, result.HasValue, optimizersToLoop.Count, executes));
+					callback.Optimizing(new IntradayOptimizationCallbackInfo(optimizer.ContainerOwner, result.HasValue, optimizersToLoop.Count)); //these numbers are just strange - tried to keep as before, but needs to be looked at
 					if (callback.IsCancelled())
 						return;
-					executes++;
 				}
 			}
 		}
