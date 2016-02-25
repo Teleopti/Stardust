@@ -14,7 +14,7 @@ namespace ManagerTest
 
 		private readonly Uri _nodeUri1 = new Uri("http://localhost:9050/");
 
-
+		 
 		[Test, Ignore]
 		public void HeartbeatTimestampShouldBeChangedOnHeartbeat()
 		{
