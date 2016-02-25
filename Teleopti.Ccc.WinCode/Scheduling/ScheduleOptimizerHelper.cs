@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private ResourceOptimizerProgressEventArgs _progressEvent;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly IScheduleMatrixLockableBitArrayConverterEx _bitArrayConverter;
-		private readonly VirtualSkillContext _virtualSkillContext;
 
 		public ScheduleOptimizerHelper(ILifetimeScope container, OptimizerHelperHelper optimizerHelper,
 			IRequiredScheduleHelper requiredScheduleHelper)
@@ -55,7 +54,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
 			_optimizerHelperHelper = _container.Resolve<IOptimizerHelperHelper>();
 			_bitArrayConverter = _container.Resolve<IScheduleMatrixLockableBitArrayConverterEx>();
-			_virtualSkillContext = _container.Resolve<VirtualSkillContext>();
 		}
 
 		private void optimizeIntraday(IList<IScheduleMatrixOriginalStateContainer> matrixContainerList,
@@ -85,12 +83,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				dayOffOptimizationPreferenceProvider);
 			var service = _container.Resolve<IIntradayOptimizerContainer>();
 
-			using (_virtualSkillContext.Create(selectedPeriod))
+			using (_container.Resolve<IntradayOptimizationContext>().Create(selectedPeriod))
 			{
-				using (_container.Resolve<IntradayOptimizationCallbackContext>().Create(new intradayOptimizationCallback(_backgroundWorker)))
-				{
-					service.Execute(optimizers);
-				}
+				service.Execute(optimizers);
 			}
 		}
 

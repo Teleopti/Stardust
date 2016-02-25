@@ -88,7 +88,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public void ExtractAllScheduleData(IScheduleExtractor extractor)
 		{
-			throw new NotImplementedException();
 		}
 
 		public void ExtractAllScheduleData(IScheduleExtractor extractor, DateTimePeriod period)

@@ -225,6 +225,7 @@
     <Compile Include="Optimization\AgentsToSkillGroupsTest.cs" />
     <Compile Include="Optimization\DayOffOptimizationPreferenceProviderTest.cs" />
     <Compile Include="Optimization\Filter\FindFilterTest.cs" />
+    <Compile Include="Optimization\IntradayOptimizationContextHandleNestedResourcesTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\DayOffOptimizationLockDaysTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\FullSchedulingTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\IntradayOptimizationCallbackTest.cs" />

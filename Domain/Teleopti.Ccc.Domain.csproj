@@ -744,6 +744,7 @@
     <Compile Include="ResourceCalculation\ResourceCalculationContextFactory.cs" />
     <Compile Include="Scheduling\Assignment\AlwaysResourceCalculateAfterDelete.cs" />
     <Compile Include="Scheduling\Assignment\ILimitForNoResourceCalculation.cs" />
+    <Compile Include="Scheduling\Assignment\IntradayOptimizationContext.cs" />
     <Compile Include="Scheduling\Assignment\IResourceCalculateAfterDeleteDecider.cs" />
     <Compile Include="Scheduling\Assignment\LimitForNoResourceCalculation.cs" />
     <Compile Include="Scheduling\Assignment\ResourceCalculateAfterDeleteDecider.cs" />

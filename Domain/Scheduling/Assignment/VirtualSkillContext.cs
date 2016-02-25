@@ -4,7 +4,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	//change to shared "scheduling context" or similar later?
 	public class VirtualSkillContext
 	{
 		private readonly Func<ISchedulingResultStateHolder> _scheduleResultStateHolder;
