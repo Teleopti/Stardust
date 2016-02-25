@@ -10,7 +10,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Common.Services;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Common.Library
 {
-    [CLSCompliant(false)]
     public abstract class SmartClientApplication<TWorkItem, TShell> : WPFFormShellApplication<TWorkItem, TShell>
         where TWorkItem : WorkItem, new()
         where TShell : Form

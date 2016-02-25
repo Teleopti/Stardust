@@ -5,7 +5,6 @@ using System.Web.Mvc;
 
 namespace Teleopti.Ccc.Web.Core.Logging
 {
-	[CLSCompliant(false)]
 	public class Log4NetMvCLogger : HandleErrorAttribute
 	{
 		private readonly Log4NetLogger _log4NetLogger;

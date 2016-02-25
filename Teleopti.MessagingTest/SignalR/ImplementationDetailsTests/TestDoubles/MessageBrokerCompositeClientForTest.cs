@@ -11,7 +11,7 @@ namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests.TestDoubles
 {
 	public class MessageBrokerCompositeClientForTest : MessageBrokerCompositeClient
 	{
-		[CLSCompliant(false)]
+		
 		public static MessageBrokerCompositeClientForTest Make(
 			IMessageFilterManager typeFilter,
 			IHubConnectionWrapper hubConnection

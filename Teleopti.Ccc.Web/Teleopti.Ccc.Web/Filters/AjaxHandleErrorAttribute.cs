@@ -1,12 +1,10 @@
-﻿using System;
-using System.Web;
+﻿using System.Web;
 using System.Web.Mvc;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Models.Shared;
 
 namespace Teleopti.Ccc.Web.Filters
 {
-	[CLSCompliant(false)]
 	public sealed class AjaxHandleErrorAttribute : HandleErrorAttribute
 	{
 		private readonly IErrorMessageProvider _errorMessageProvider;

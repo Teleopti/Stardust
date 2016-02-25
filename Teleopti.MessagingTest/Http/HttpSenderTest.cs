@@ -24,7 +24,7 @@ namespace Teleopti.MessagingTest.Http
 			server.Requests.Should().Have.Count.EqualTo(1);
 		}
 
-		[CLSCompliant(false)]
+		
 		[Test]
 		public void ShouldPostToCorrectUrl(
 			[Values(

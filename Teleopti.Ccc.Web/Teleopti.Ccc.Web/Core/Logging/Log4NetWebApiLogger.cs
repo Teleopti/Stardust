@@ -4,7 +4,6 @@ using System.Web.Http.Filters;
 
 namespace Teleopti.Ccc.Web.Core.Logging
 {
-	[CLSCompliant(false)]
 	public class Log4NetWebApiLoggerFilter : ExceptionFilterAttribute
 	{
 		private readonly Log4NetLogger _log4NetLogger;
@@ -21,7 +20,6 @@ namespace Teleopti.Ccc.Web.Core.Logging
 		}
 	}
 
-    [CLSCompliant(false)]
     public class Log4NetWebApiLogger : ExceptionLogger
     {
         //  #36971 Inheriting from ExceptionLogger will not log for cancelled requests

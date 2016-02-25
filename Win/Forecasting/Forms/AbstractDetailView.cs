@@ -14,7 +14,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms
 {
-    [CLSCompliant( true)]
     public partial class AbstractDetailView : BaseUserControl
     {
         private readonly SkillDayCalculator _skillDayCalculator;

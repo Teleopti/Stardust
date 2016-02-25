@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Web.Filters
 {
-	[CLSCompliant(false)]
 	public class AuthorizeTeleoptiAttribute : AuthorizeAttribute
 	{
 		private readonly Type[] _excludeControllerTypes;

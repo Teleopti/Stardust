@@ -405,7 +405,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Teleopti.Support.Library\Teleopti.Support.Library.csproj">
-      <Project>{96BAA3E0-A623-412E-BFE7-D3BE03A2288A}</Project>
+      <Project>{96baa3e0-a623-412e-bfe7-d3be03a2288a}</Project>
       <Name>Teleopti.Support.Library</Name>
     </ProjectReference>
   </ItemGroup>

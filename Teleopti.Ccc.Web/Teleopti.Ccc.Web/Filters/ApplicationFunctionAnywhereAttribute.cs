@@ -1,9 +1,7 @@
-﻿using System;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
+﻿using Teleopti.Ccc.Domain.Security.AuthorizationData;
 
 namespace Teleopti.Ccc.Web.Filters
 {
-	[CLSCompliant(false)]
 	public sealed class AddFullDayAbsencePermissionAttribute : ApplicationFunctionApiAttribute
 	{
 		public AddFullDayAbsencePermissionAttribute()
@@ -12,7 +10,6 @@ namespace Teleopti.Ccc.Web.Filters
 		}
 	}
 
-	[CLSCompliant(false)]
 	public sealed class AddIntradayAbsencePermissionAttribute : ApplicationFunctionApiAttribute
 	{
 		public AddIntradayAbsencePermissionAttribute()
@@ -21,7 +18,6 @@ namespace Teleopti.Ccc.Web.Filters
 		}
 	}
 
-	[CLSCompliant(false)]
 	public sealed class SwapShiftPermissionAttribute : ApplicationFunctionApiAttribute
 	{
 		public SwapShiftPermissionAttribute()
@@ -30,7 +26,6 @@ namespace Teleopti.Ccc.Web.Filters
 		}
 	}
 
-	[CLSCompliant(false)]
 	public sealed class RemoveAbsencePermissionAttribute : ApplicationFunctionApiAttribute
 	{
 		public RemoveAbsencePermissionAttribute()
@@ -39,7 +34,6 @@ namespace Teleopti.Ccc.Web.Filters
 		}
 	}
 
-	[CLSCompliant(false)]
 	public sealed class AddActivityPermissionAttribute : ApplicationFunctionApiAttribute
 	{
 		public AddActivityPermissionAttribute()
@@ -48,7 +42,6 @@ namespace Teleopti.Ccc.Web.Filters
 		}
 	}
 
-	[CLSCompliant(false)]
 	public sealed class MoveActivityPermissionAttribute : ApplicationFunctionApiAttribute
 	{
 		public MoveActivityPermissionAttribute()

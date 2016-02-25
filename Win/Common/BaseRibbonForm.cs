@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Win.Common
     /// Created by: östenp
     /// Created date: 2007-01-15
     /// </remarks>
-    [CLSCompliant(true)]
+    
     public class BaseRibbonForm : RibbonForm, ILocalized, IViewBase, IHelpForm
     {
         private readonly IList<ControlHelpContext> _manualHelpContextList = new List<ControlHelpContext>();

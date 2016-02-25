@@ -1,14 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Web.Http;
-using System.Web.Http.Controllers;
-using System.Web.Http.ModelBinding;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
 
 namespace Teleopti.Ccc.Web.Broker
 {
-	[CLSCompliant(false)]
 	public class MessageBrokerController : ApiController
 	{
 		private readonly IMessageBrokerServer _server;

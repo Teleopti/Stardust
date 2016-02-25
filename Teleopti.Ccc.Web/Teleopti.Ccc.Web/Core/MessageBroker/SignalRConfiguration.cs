@@ -50,7 +50,6 @@ namespace Teleopti.Ccc.Web.Broker
 		}
 	}
 
-	[CLSCompliant(false)]
 	public class FakePerformanceCounterInitializer : IPerformanceCounterManager
 	{
 		private readonly fakePerformanceCounter _fakePerformanceCounter = new fakePerformanceCounter();

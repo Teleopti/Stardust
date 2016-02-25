@@ -30,7 +30,6 @@ namespace Teleopti.Analytics.Portal {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-				[CLSCompliant(false)]
         protected global::System.Web.UI.WebControls.Label _labelErrorMessage;
         
         /// <summary>
@@ -41,7 +40,6 @@ namespace Teleopti.Analytics.Portal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         /// 
-				[CLSCompliant(false)]
         protected global::System.Web.UI.WebControls.Label _labelPossibleSolutionHeader;
         
         /// <summary>
@@ -51,7 +49,6 @@ namespace Teleopti.Analytics.Portal {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-				[CLSCompliant(false)]
 				protected global::System.Web.UI.WebControls.Label _labelPossibleSolution;
         
         /// <summary>
@@ -61,7 +58,6 @@ namespace Teleopti.Analytics.Portal {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-				[CLSCompliant(false)]
 				protected global::System.Web.UI.WebControls.Label _labelTechnicalDetailHeader;
         
         /// <summary>
@@ -71,7 +67,6 @@ namespace Teleopti.Analytics.Portal {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-				[CLSCompliant(false)]
 				protected global::System.Web.UI.WebControls.Label _labelUser;
         
         /// <summary>
@@ -81,7 +76,6 @@ namespace Teleopti.Analytics.Portal {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-				[CLSCompliant(false)]
 				protected global::System.Web.UI.WebControls.Label _labelWebAuthMode;
         
         /// <summary>
@@ -91,7 +85,6 @@ namespace Teleopti.Analytics.Portal {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-				[CLSCompliant(false)]
 				protected global::System.Web.UI.WebControls.Label _labelClientAuthMode;
     }
 }

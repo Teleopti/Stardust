@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.AspNet.SignalR.Hubs;
 using log4net;
 using Teleopti.Ccc.Domain.MessageBroker;
@@ -8,7 +7,6 @@ using Teleopti.Ccc.Domain.MessageBroker.Server;
 namespace Teleopti.Ccc.Web.Broker
 {
 	[HubName("MessageBrokerHub")]
-	[CLSCompliant(false)]
 	public class MessageBrokerHub : BackportableHub
 	{
 		public ILog Logger = LogManager.GetLogger(typeof(MessageBrokerHub));

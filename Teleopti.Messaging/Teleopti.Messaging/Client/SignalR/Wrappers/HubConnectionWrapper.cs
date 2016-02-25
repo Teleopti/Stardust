@@ -7,7 +7,6 @@ using Microsoft.AspNet.SignalR.Client.Transports;
 
 namespace Teleopti.Messaging.Client.SignalR.Wrappers
 {
-	[CLSCompliant(false)]
 	public class HubConnectionWrapper : IHubConnectionWrapper
 	{
 		private readonly HubConnection _hubConnection;

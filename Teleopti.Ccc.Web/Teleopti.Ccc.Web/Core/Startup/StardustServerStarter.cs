@@ -1,4 +1,3 @@
-using System;
 using System.Configuration;
 using Autofac;
 using Owin;
@@ -7,7 +6,6 @@ using Stardust.Manager.Models;
 
 namespace Teleopti.Ccc.Web.Core.Startup
 {
-	[CLSCompliant(false)]
 	public class StardustServerStarter
 	{
 		private readonly IComponentContext  _componentContext;

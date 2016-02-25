@@ -8,7 +8,7 @@ using Teleopti.Messaging.Client.SignalR.Wrappers;
 
 namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests.TestDoubles
 {
-	[CLSCompliant(false)]
+	
 	public class HubConnectionMock :IHubConnectionWrapper
 	{
 		private readonly IHubProxyWrapper _proxy;

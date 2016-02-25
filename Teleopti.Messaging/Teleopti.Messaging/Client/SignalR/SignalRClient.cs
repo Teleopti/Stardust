@@ -108,8 +108,7 @@ namespace Teleopti.Messaging.Client.SignalR
 			_connection = null;
 			_stateAccessor = null;
 		}
-
-		[CLSCompliant(false)]
+		
 		protected virtual IHubConnectionWrapper MakeHubConnection()
 		{
 			return new HubConnectionWrapper(new HubConnection(Url));

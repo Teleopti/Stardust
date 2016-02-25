@@ -9,8 +9,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 		public string Route { get; set; }
 		public IEnumerable<Message> Messages { get { return _messages; }}
 		public DateTime ExpiresAt { get; set; }
-
-		[CLSCompliant(false)]
+		
 		protected List<Message> _messages;
 
 		public Mailbox()

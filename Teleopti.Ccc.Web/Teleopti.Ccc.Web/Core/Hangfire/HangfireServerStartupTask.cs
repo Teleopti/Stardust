@@ -7,7 +7,6 @@ using Teleopti.Ccc.Web.Core.Startup.Booter;
 namespace Teleopti.Ccc.Web.Core.Hangfire
 {
 	[TaskPriority(100)]
-	[CLSCompliant(false)]
 	public class HangfireServerStartupTask : IBootstrapperTask
 	{
 		private readonly HangfireServerStarter _starter;

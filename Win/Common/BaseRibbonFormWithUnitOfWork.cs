@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Win.Common
     /// Created by: östenp
     /// Created date: 2007-01-15
     /// </remarks>
-    [CLSCompliant(true)]
+    
     public class BaseRibbonFormWithUnitOfWork : BaseRibbonForm 
     {
         private bool _formUowCreatedHere;

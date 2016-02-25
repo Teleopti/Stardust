@@ -32,7 +32,6 @@ using ClaimTypes = System.IdentityModel.Claims.ClaimTypes;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
-	[CLSCompliant(false)]
 	public class TestController : Controller
 	{
 		private readonly IMutateNow _mutateNow;

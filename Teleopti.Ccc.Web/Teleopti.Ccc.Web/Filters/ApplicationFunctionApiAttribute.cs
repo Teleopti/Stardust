@@ -7,7 +7,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 
 namespace Teleopti.Ccc.Web.Filters
 {
-	[CLSCompliant(false)]
 	public class ApplicationFunctionApiAttribute : AuthorizeTeleoptiAttribute
 	{
 		private readonly string[] _applicationFunctionPaths;

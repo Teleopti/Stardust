@@ -13,7 +13,6 @@ using Teleopti.Messaging.Exceptions;
 
 namespace Teleopti.Messaging.Client.SignalR
 {
-	[CLSCompliant(false)]
 	public class SignalRConnection : IHandleHubConnection, IStateAccessor
 	{
 		private IHubProxyWrapper _hubProxy;

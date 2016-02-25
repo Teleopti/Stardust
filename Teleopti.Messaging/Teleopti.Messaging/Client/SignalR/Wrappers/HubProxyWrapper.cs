@@ -4,7 +4,6 @@ using Microsoft.AspNet.SignalR.Client;
 
 namespace Teleopti.Messaging.Client.SignalR.Wrappers
 {
-	[CLSCompliant(false)]
 	public class HubProxyWrapper : IHubProxyWrapper
 	{
 		private readonly IHubProxy _hubProxy;

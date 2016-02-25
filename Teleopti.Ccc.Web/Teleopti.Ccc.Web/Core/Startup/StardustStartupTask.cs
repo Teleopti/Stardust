@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Owin;
 using Teleopti.Ccc.Domain;
@@ -9,7 +8,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 {
 	[UseOnToggle(Toggles.Wfm_Use_Stardust)]
 	[TaskPriority(100)]
-	[CLSCompliant(false)]
 	public class StardustStartupTask : IBootstrapperTask
 	{
 		private readonly StardustServerStarter _starter;

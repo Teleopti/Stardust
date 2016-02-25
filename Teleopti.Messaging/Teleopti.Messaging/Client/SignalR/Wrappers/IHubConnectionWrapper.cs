@@ -6,7 +6,6 @@ using Microsoft.AspNet.SignalR.Client.Transports;
 
 namespace Teleopti.Messaging.Client.SignalR.Wrappers
 {
-	[CLSCompliant(false)]
 	public interface IHubConnectionWrapper
 	{
 		ConnectionState State { get; }

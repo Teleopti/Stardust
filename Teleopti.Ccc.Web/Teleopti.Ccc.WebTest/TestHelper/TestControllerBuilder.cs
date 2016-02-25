@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebTest.TestHelper
 	/// </summary>
 	public class TestControllerBuilder
 	{
-		[CLSCompliant(false)]
+		
 		protected TempDataDictionary _tempData;
 
 		/// <summary>

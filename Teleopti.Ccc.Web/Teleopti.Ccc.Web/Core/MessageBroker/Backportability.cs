@@ -6,13 +6,11 @@ using Teleopti.Ccc.Domain.MessageBroker.Server;
 
 namespace Teleopti.Ccc.Web.Broker
 {
-	[CLSCompliant(false)]
 	public class BackportableHub : Hub
 	{
 
 	}
 
-	[CLSCompliant(false)]
 	public class SignalR : ISignalR
 	{
 		public ILog Logger = LogManager.GetLogger(typeof(MessageBrokerServer));

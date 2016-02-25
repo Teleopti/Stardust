@@ -103,7 +103,7 @@ using Task = Teleopti.Ccc.Domain.Forecasting.Task;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-	[CLSCompliant(true)]
+	
 	public partial class SchedulingScreen : BaseRibbonForm
 	{
 		private readonly ILifetimeScope _container;

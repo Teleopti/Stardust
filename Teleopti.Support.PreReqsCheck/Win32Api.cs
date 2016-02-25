@@ -1,12 +1,10 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace CheckPreRequisites
 {
    /// <summary>
    /// Contains Windows API constants, structures and functions for retrieving information about the operating system.
    /// </summary>
-   [CLSCompliant(false)]
    public static class Win32Api
    {
       public const byte VER_NT_WORKSTATION = 1;

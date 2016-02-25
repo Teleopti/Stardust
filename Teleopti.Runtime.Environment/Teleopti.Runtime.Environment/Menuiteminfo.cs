@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace Teleopti.Runtime.Environment
 {
-	[CLSCompliant(false)]
+	
     [StructLayout(LayoutKind.Sequential)]
     public struct MenuItemInfo
     {

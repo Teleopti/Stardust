@@ -4,7 +4,7 @@ using log4net;
 
 namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Core
 {
-	[CLSCompliant(false)]
+	
 	public class Log4NetMvCLogger : HandleErrorAttribute
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(Log4NetMvCLogger));

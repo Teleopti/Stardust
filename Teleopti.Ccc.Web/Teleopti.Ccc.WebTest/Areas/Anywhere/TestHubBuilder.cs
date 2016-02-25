@@ -6,7 +6,7 @@ using Microsoft.AspNet.SignalR.Hubs;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 {
-	[CLSCompliant(false)]
+	
 	public class TestHubBuilder
 	{
 		public void SetupHub(Hub hub)

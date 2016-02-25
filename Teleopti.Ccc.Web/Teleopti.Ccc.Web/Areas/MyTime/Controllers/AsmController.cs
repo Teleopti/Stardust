@@ -12,7 +12,6 @@ using Teleopti.Ccc.Web.Filters;
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
 	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)]
-	[CLSCompliant(false)]
 	public class AsmController : Controller
 	{
 		private readonly IAsmViewModelFactory _asmModelFactory;
