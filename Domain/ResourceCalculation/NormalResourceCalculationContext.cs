@@ -18,14 +18,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public IDisposable Create()
 		{
+			var schedulerStateHolder = _schedulerStateHolder();
 			var minutesPerInterval = 15;
 
-			if (_schedulerStateHolder().SchedulingResultState.Skills.Any())
+			if (schedulerStateHolder.SchedulingResultState.Skills.Any())
 			{
-				minutesPerInterval = _schedulerStateHolder().SchedulingResultState.Skills.Min(s => s.DefaultResolution);
+				minutesPerInterval = schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution);
 			}
 			var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
-			var resources = extractor.CreateRelevantProjectionList(_schedulerStateHolder().Schedules);
+			var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
 			return new ResourceCalculationContext(resources);
 		} 
 	}
