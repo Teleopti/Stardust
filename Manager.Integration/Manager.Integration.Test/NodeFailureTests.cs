@@ -21,7 +21,7 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
-	[TestFixture, Ignore]
+	[TestFixture]
 	class NodeFailureTests
 	{
 
