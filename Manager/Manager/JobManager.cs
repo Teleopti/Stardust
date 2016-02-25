@@ -27,7 +27,7 @@ namespace Stardust.Manager
 
 		public IList<WorkerNode> Nodes()
 		{
-			return _nodeRepository.LoadAll();
+			return _workerNodeRepository.LoadAll();
 		}
 
 
