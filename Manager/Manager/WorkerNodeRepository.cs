@@ -234,7 +234,67 @@ namespace Stardust.Manager
             }
 		}
 
-	    public void RegisterHeartbeat(Uri nodeUri)
+	    public void CheckNodesAreAlive(TimeSpan timeSpan)
+	    {
+		    string selectCommand = @"SELECT Id, Url, Heartbeat, Alive 
+									 FROM Stardust.WorkerNodes";
+
+			string updateCommandText = @"UPDATE Stardust.WorkerNodes 
+											Alive = @Alive
+										WHERE Url = @Url";
+
+			LogHelper.LogDebugWithLineNumber(Logger, "Start");
+
+		    DateTime currentDateTime = DateTime.Now;
+
+			using (var connection = new SqlConnection(_connectionString))
+		    {
+			    connection.Open();
+
+			    using (SqlCommand commandSelectAll = new SqlCommand(selectCommand,
+																	connection))
+			    {
+				    using (SqlDataReader readAllWorkerNodes = commandSelectAll.ExecuteReader())
+				    {
+						if (readAllWorkerNodes.HasRows)
+						{
+							while (readAllWorkerNodes.Read())
+							{
+								DateTime heartBeatDateTime =
+									(DateTime)readAllWorkerNodes["Heartbeat"];
+
+								double dateDiff =
+									(currentDateTime - heartBeatDateTime).TotalSeconds;
+
+								if (dateDiff > timeSpan.TotalSeconds)
+								{
+									string url = readAllWorkerNodes["Url"].ToString();
+
+									string alive = "false";
+
+									using (SqlCommand commandUpdate = new SqlCommand(updateCommandText,
+																					 connection))
+									{
+										commandUpdate.Parameters.Add("@Alive",
+																SqlDbType.NVarChar).Value = alive;
+
+										commandUpdate.Parameters.Add("@Url",
+																SqlDbType.NVarChar).Value = url;
+
+										commandUpdate.ExecuteNonQuery();
+									}
+								}
+							}
+						}
+						readAllWorkerNodes.Close();
+					}
+				}
+		    }
+
+		    LogHelper.LogDebugWithLineNumber(Logger, "Finished");
+		}
+
+		public void RegisterHeartbeat(Uri nodeUri)
 	    {
 			// Validate argument.
 		    if (nodeUri == null || 

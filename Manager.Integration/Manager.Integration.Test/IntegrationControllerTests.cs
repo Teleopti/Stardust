@@ -193,8 +193,6 @@ namespace Manager.Integration.Test
 				}
 			}
 
-			Thread.Sleep(TimeSpan.FromMinutes(5));
-
 			Assert.IsNotNull(response,
 			                 "Response can not be null.");
 
