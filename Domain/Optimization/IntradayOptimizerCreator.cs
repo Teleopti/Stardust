@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -21,6 +25,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private readonly IIntradayOptimizeOneDayCallback _intradayOptimizeOneDayCallback;
+		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
+		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 
 		public IntradayOptimizer2Creator(
 			IIntradayDecisionMaker decisionMaker,
@@ -32,7 +38,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IMinWeekWorkTimeRule minWeekWorkTimeRule,
 			IResourceOptimizationHelper resourceOptimizationHelper,
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
-			IIntradayOptimizeOneDayCallback intradayOptimizeOneDayCallback)
+			IIntradayOptimizeOneDayCallback intradayOptimizeOneDayCallback,
+			Func<ISchedulerStateHolder> schedulerStateHolder,
+			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback)
 		{
 			_decisionMaker = decisionMaker;
 			_scheduleService = scheduleService;
@@ -44,6 +52,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
 			_intradayOptimizeOneDayCallback = intradayOptimizeOneDayCallback;
+			_schedulerStateHolder = schedulerStateHolder;
+			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
 		/// <summary>
@@ -52,9 +62,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 		/// <returns></returns>
 		public IList<IIntradayOptimizer2> Create(IEnumerable<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainers,
 			IEnumerable<IScheduleMatrixOriginalStateContainer> workShiftContainers, IOptimizationPreferences optimizerPreferences,
-			ISchedulePartModifyAndRollbackService rollbackService,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
+			ISchedulePartModifyAndRollbackService rollbackService =
+				new SchedulePartModifyAndRollbackService(
+					_schedulerStateHolder().SchedulingResultState,
+					_scheduleDayChangeCallback(),
+					new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
+
 			IList<IIntradayOptimizer2> result = new List<IIntradayOptimizer2>();
 			var scheduleMatrixContainerList = scheduleMatrixContainers.ToList();
 			var workShiftContainerList = workShiftContainers.ToList();

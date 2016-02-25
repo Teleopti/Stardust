@@ -63,12 +63,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			DateOnlyPeriod selectedPeriod,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-			ISchedulePartModifyAndRollbackService rollbackService =
-				new SchedulePartModifyAndRollbackService(
-					_stateHolder(),
-					_scheduleDayChangeCallback(),
-					new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
-
 			var decisionMaker = new IntradayDecisionMaker(_bitArrayConverter);
 			var scheduleService = _container.Resolve<IScheduleService>();
 
@@ -82,11 +76,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				_container.Resolve<IMinWeekWorkTimeRule>(),
 				_container.Resolve<IResourceOptimizationHelper>(),
 				_container.Resolve<IDeleteAndResourceCalculateService>(),
-				_container.Resolve<IIntradayOptimizeOneDayCallback>());
+				_container.Resolve<IIntradayOptimizeOneDayCallback>(),
+				_container.Resolve<Func<ISchedulerStateHolder>>(),
+				_container.Resolve<Func<IScheduleDayChangeCallback>>());
 
 			var optimizers = creator.Create(matrixContainerList,
 				workShiftContainerList, optimizerPreferences,
-				rollbackService,
 				dayOffOptimizationPreferenceProvider);
 			var service = _container.Resolve<IIntradayOptimizerContainer>();
 

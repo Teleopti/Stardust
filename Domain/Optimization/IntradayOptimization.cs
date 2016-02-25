@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -18,7 +17,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly OptimizationPreferencesFactory _optimizationPreferencesFactory;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 		private readonly WebSchedulingSetup _webSchedulingSetup;
 		private readonly IMatrixListFactory _matrixListFactory;
@@ -35,7 +33,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public IntradayOptimization(OptimizationPreferencesFactory optimizationPreferencesFactory,
 									Func<ISchedulerStateHolder> schedulerStateHolder,
-									Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 									DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
 									WebSchedulingSetup webSchedulingSetup,
 									IMatrixListFactory matrixListFactory,
@@ -53,7 +50,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			_optimizationPreferencesFactory = optimizationPreferencesFactory;
 			_schedulerStateHolder = schedulerStateHolder;
-			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_dayOffOptimizationPreferenceProviderUsingFiltersFactory = dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 			_webSchedulingSetup = webSchedulingSetup;
 			_matrixListFactory = matrixListFactory;
@@ -93,13 +89,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var matrixOriginalStateContainerListForIntradayOptimizationWork =
 				_matrixListFactory.CreateMatrixListForSelection(webScheduleState.AllSchedules).Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator));
 
-			var rollbackService = new SchedulePartModifyAndRollbackService(
-					_schedulerStateHolder().SchedulingResultState,
-					_scheduleDayChangeCallback(),
-					new ScheduleTagSetter(optimizationPreferences.General.ScheduleTag));
-
 			var optimizers = _intradayOptimizer2Creator.Create(matrixOriginalStateContainerListForIntradayOptimizationOriginal,
-				matrixOriginalStateContainerListForIntradayOptimizationWork, optimizationPreferences, rollbackService, dayOffOptimizationPreference);
+				matrixOriginalStateContainerListForIntradayOptimizationWork, optimizationPreferences, dayOffOptimizationPreference);
 			_optimizerHelperHelper.LockDaysForIntradayOptimization(matrixListForIntraDayOptimizationOriginal, period);
 
 			using (_virtualSkillContext.Create(period))
