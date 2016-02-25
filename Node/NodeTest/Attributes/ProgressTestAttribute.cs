@@ -30,7 +30,9 @@ namespace NodeTest.Attributes
 			var nodeConfiguration = new NodeConfiguration(baseAddress,
 			                                              managerLocation,
 			                                              handlerAssembly,
-			                                              nodeName);
+			                                              nodeName,
+														  pingToManagerIdleDelay:10000,
+														  pingToManagerRunningDelay:30000);
 
 			builder.RegisterAssemblyTypes(nodeConfiguration.HandlerAssembly)
 				.Where(IsHandler)

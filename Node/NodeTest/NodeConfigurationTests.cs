@@ -13,7 +13,9 @@ namespace NodeTest
 			var nodeConfiguration = new NodeConfiguration(null,
 			                                              null,
 			                                              null,
-			                                              null);
+			                                              null,
+			                                              pingToManagerIdleDelay: 10000,
+			                                              pingToManagerRunningDelay: 30000);
 		}
 	}
 }

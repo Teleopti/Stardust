@@ -9,7 +9,9 @@ namespace Stardust.Node.API
 		public NodeConfiguration(Uri baseAddress,
 		                         Uri managerLocation,
 		                         Assembly handlerAssembly,
-		                         string nodeName)
+		                         string nodeName,
+		                         double pingToManagerIdleDelay,
+		                         double pingToManagerRunningDelay)
 		{
 			if (baseAddress == null)
 			{
@@ -35,8 +37,13 @@ namespace Stardust.Node.API
 			ManagerLocation = managerLocation;
 			HandlerAssembly = handlerAssembly;
 			NodeName = nodeName;
+
+			PingToManagerIdleDelay = pingToManagerIdleDelay;
+			PingToManagerRunningDelay = pingToManagerRunningDelay;
 		}
 
+		public double PingToManagerIdleDelay { get; set; }
+		public double PingToManagerRunningDelay { get; set; }
 		public Uri BaseAddress { get; private set; }
 		public Uri ManagerLocation { get; private set; }
 		public string NodeName { get; private set; }

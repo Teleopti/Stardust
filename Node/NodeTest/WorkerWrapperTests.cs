@@ -69,12 +69,20 @@ namespace NodeTest
 			var handlerAssembly = Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]);
 			var nodeName = ConfigurationManager.AppSettings["NodeName"];
 
+			var pingToManagerIdleDelay =
+				Convert.ToDouble(ConfigurationManager.AppSettings["PingToManagerIdleDelay"]);
+
+			var pingToManagerRunningDelay =
+				Convert.ToDouble(ConfigurationManager.AppSettings["PingToManagerRunningDelay"]);
+
 			CallBackUriTemplateFake = managerLocation;
 
 			_nodeConfigurationFake = new NodeConfigurationFake(baseAddress,
 			                                                   managerLocation,
 			                                                   handlerAssembly,
-			                                                   nodeName);
+			                                                   nodeName,
+															   pingToManagerIdleDelay,
+															   pingToManagerRunningDelay);
 
 #if DEBUG
 			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;

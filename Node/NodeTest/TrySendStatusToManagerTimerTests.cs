@@ -33,7 +33,9 @@ namespace NodeTest
 			_nodeConfiguration = new NodeConfiguration(baseAddress,
 			                                           managerLocation,
 			                                           handlerAssembly,
-			                                           nodeName);
+			                                           nodeName,
+			                                           pingToManagerIdleDelay: 10000,
+			                                           pingToManagerRunningDelay: 30000);
 
 #if DEBUG
 			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;

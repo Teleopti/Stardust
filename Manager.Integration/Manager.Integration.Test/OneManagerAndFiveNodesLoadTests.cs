@@ -19,69 +19,69 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test
 {
-    [TestFixture]
-    public class OneManagerAndFiveNodesLoadTests
-    {
+	[TestFixture]
+	public class OneManagerAndFiveNodesLoadTests
+	{
 		[TearDown]
 		public void TearDown()
 		{
 		}
 
-        private static readonly ILog Logger =
-            LogManager.GetLogger(typeof (OneManagerAndFiveNodesLoadTests));
+		private static readonly ILog Logger =
+			LogManager.GetLogger(typeof (OneManagerAndFiveNodesLoadTests));
 
-        private string ManagerDbConnectionString { get; set; }
+		private string ManagerDbConnectionString { get; set; }
 
 		private bool _clearDatabase = true;
 
 		private string _buildMode = "Debug";
 
 		[TestFixtureSetUp]
-        public void TestFixtureSetUp()
-        {
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+		public void TestFixtureSetUp()
+		{
+			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-            ManagerDbConnectionString =
-                ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString;
+			ManagerDbConnectionString =
+				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString;
 
-            var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
-            XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
+			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
-            LogHelper.LogDebugWithLineNumber("Start TestFixtureSetUp",
-                                            Logger);
+			LogHelper.LogDebugWithLineNumber("Start TestFixtureSetUp",
+			                                 Logger);
 
-            TryCreateSqlLoggingTable(ManagerDbConnectionString);
+			TryCreateSqlLoggingTable(ManagerDbConnectionString);
 
 
 #if (DEBUG)
-            // Do nothing.
+			// Do nothing.
 #else
             _clearDatabase = true;
             _buildMode = "Release";
 #endif
 
-            if (_clearDatabase)
-            {
-                DatabaseHelper.TryClearDatabase(ManagerDbConnectionString);
-            }
+			if (_clearDatabase)
+			{
+				DatabaseHelper.TryClearDatabase(ManagerDbConnectionString);
+			}
 
-            CancellationTokenSource = new CancellationTokenSource();
+			CancellationTokenSource = new CancellationTokenSource();
 
-            AppDomainTask = new AppDomainTask(_buildMode);
+			AppDomainTask = new AppDomainTask(_buildMode);
 
 			Task = AppDomainTask.StartTask(numberOfManagers: 1,
-										   numberOfNodes: 5,
-										   cancellationTokenSource: CancellationTokenSource);
+			                               numberOfNodes: 5,
+			                               cancellationTokenSource: CancellationTokenSource);
 
 			LogHelper.LogDebugWithLineNumber("Finished TestFixtureSetUp",
-                                            Logger);
-        }
+			                                 Logger);
+		}
 
 		[TestFixtureTearDown]
 		public void TestFixtureTearDown()
 		{
 			LogHelper.LogDebugWithLineNumber("Start TestFixtureTearDown",
-											Logger);
+			                                 Logger);
 
 			if (AppDomainTask != null)
 			{
@@ -89,145 +89,145 @@ namespace Manager.Integration.Test
 			}
 
 			LogHelper.LogDebugWithLineNumber("Finished TestFixtureTearDown",
-											Logger);
+			                                 Logger);
 		}
 
 		private Task Task { get; set; }
 
-        private AppDomainTask AppDomainTask { get; set; }
+		private AppDomainTask AppDomainTask { get; set; }
 
-        private CancellationTokenSource CancellationTokenSource { get; set; }
+		private CancellationTokenSource CancellationTokenSource { get; set; }
 
-        private void CurrentDomain_UnhandledException(object sender,
-                                                      UnhandledExceptionEventArgs e)
-        {
+		private void CurrentDomain_UnhandledException(object sender,
+		                                              UnhandledExceptionEventArgs e)
+		{
 			var exp = e.ExceptionObject as Exception;
 
 			if (exp != null)
 			{
 				LogHelper.LogFatalWithLineNumber(exp.Message,
-												 Logger,
-												 exp);
+				                                 Logger,
+				                                 exp);
 			}
 		}
 
 		private static void TryCreateSqlLoggingTable(string connectionString)
-        {
-            LogHelper.LogDebugWithLineNumber("Run sql script to create logging file started.",
-                                            Logger);
+		{
+			LogHelper.LogDebugWithLineNumber("Run sql script to create logging file started.",
+			                                 Logger);
 
 			var scriptFile =
-                new FileInfo(Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
-                                          Settings.Default.CreateLoggingTableSqlScriptLocationAndFileName));
+				new FileInfo(Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
+				                          Settings.Default.CreateLoggingTableSqlScriptLocationAndFileName));
 
-            ScriptExecuteHelper.ExecuteScriptFile(scriptFile,
-                                                  connectionString);
+			ScriptExecuteHelper.ExecuteScriptFile(scriptFile,
+			                                      connectionString);
 
-            LogHelper.LogDebugWithLineNumber("Run sql script to create logging file finished.",
-                                            Logger);
-        }
+			LogHelper.LogDebugWithLineNumber("Run sql script to create logging file finished.",
+			                                 Logger);
+		}
 
-        /// <summary>
-        ///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
-        ///     netsh http add urlacl url=http://+:9050/ user=everyone listen=yes
-        /// </summary>
-        [Test]
-        public void ShouldBeAbleToCreateManySuccessJobRequestTest()
-        {
-            LogHelper.LogDebugWithLineNumber("Start.",
-                                            Logger);
+		/// <summary>
+		///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
+		///     netsh http add urlacl url=http://+:9050/ user=everyone listen=yes
+		/// </summary>
+		[Test]
+		public void ShouldBeAbleToCreateManySuccessJobRequestTest()
+		{
+			LogHelper.LogDebugWithLineNumber("Start.",
+			                                 Logger);
 
 			var createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(50);
 
-            var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
-                                                                            StatusConstants.SuccessStatus,
-                                                                            StatusConstants.DeletedStatus,
-                                                                            StatusConstants.FailedStatus,
-                                                                            StatusConstants.CanceledStatus);
+			var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
+			                                                                StatusConstants.SuccessStatus,
+			                                                                StatusConstants.DeletedStatus,
+			                                                                StatusConstants.FailedStatus,
+			                                                                StatusConstants.CanceledStatus);
 
-            //---------------------------------------------
-            // Create timeout time.
-            //---------------------------------------------
+			//---------------------------------------------
+			// Create timeout time.
+			//---------------------------------------------
 			var timeout =
-                JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count);
+				JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count);
 
-            //---------------------------------------------
-            // Create jobs.
-            //---------------------------------------------
+			//---------------------------------------------
+			// Create jobs.
+			//---------------------------------------------
 			var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 
-            foreach (var jobRequestModel in createNewJobRequests)
-            {
-                var jobManagerTaskCreator =
-                    new JobManagerTaskCreator(checkJobHistoryStatusTimer);
+			foreach (var jobRequestModel in createNewJobRequests)
+			{
+				var jobManagerTaskCreator =
+					new JobManagerTaskCreator(checkJobHistoryStatusTimer);
 
-                jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
+				jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
 
-                jobManagerTaskCreators.Add(jobManagerTaskCreator);
-            }
+				jobManagerTaskCreators.Add(jobManagerTaskCreator);
+			}
 
-            //---------------------------------------------
-            // Notify when all 5 nodes are up. 
-            //---------------------------------------------
+			//---------------------------------------------
+			// Notify when all 5 nodes are up. 
+			//---------------------------------------------
 			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
 			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
-            Task task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(5,
-                                                                   sqlNotiferCancellationTokenSource,
-																   IntegerValidators.Value1IsEqualToValue2Validator);
-            task.Start();
+			Task task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(5,
+			                                                       sqlNotiferCancellationTokenSource,
+			                                                       IntegerValidators.Value1IsEqualToValue2Validator);
+			task.Start();
 
-            LogHelper.LogDebugWithLineNumber("Waiting for all 5 nodes to start up.",
-                                            Logger);
+			LogHelper.LogDebugWithLineNumber("Waiting for all 5 nodes to start up.",
+			                                 Logger);
 
-            sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
+			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
 
-            sqlNotifier.Dispose();
+			sqlNotifier.Dispose();
 
-            LogHelper.LogDebugWithLineNumber("All 5 nodes have started.",
-                                            Logger);
+			LogHelper.LogDebugWithLineNumber("All 5 nodes have started.",
+			                                 Logger);
 
-            //---------------------------------------------
-            // Execute all jobs. 
-            //---------------------------------------------
+			//---------------------------------------------
+			// Execute all jobs. 
+			//---------------------------------------------
 			var startJobTaskHelper = new StartJobTaskHelper();
 
 			var taskHelper = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
-                                                                          CancellationTokenSource,
-                                                                          TimeSpan.FromMilliseconds(200));
+			                                                             CancellationTokenSource,
+			                                                             TimeSpan.FromMilliseconds(200));
 
-            //---------------------------------------------
-            // Wait for all jobs to finish.
-            //---------------------------------------------
-            checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+			//---------------------------------------------
+			// Wait for all jobs to finish.
+			//---------------------------------------------
+			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
-            //---------------------------------------------
-            // Assert.
-            //---------------------------------------------
-            Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count);
-            Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
+			//---------------------------------------------
+			// Assert.
+			//---------------------------------------------
+			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count);
+			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
 
-            //---------------------------------------------
-            // Cancel tasks.
-            //---------------------------------------------
-            CancellationTokenSource.Cancel();
+			//---------------------------------------------
+			// Cancel tasks.
+			//---------------------------------------------
+			CancellationTokenSource.Cancel();
 
-            //---------------------------------------------
-            // Dispose.
-            //---------------------------------------------
-            foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
-            {
-                jobManagerTaskCreator.Dispose();
-            }
+			//---------------------------------------------
+			// Dispose.
+			//---------------------------------------------
+			foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
+			{
+				jobManagerTaskCreator.Dispose();
+			}
 
-            taskHelper.Dispose();
+			taskHelper.Dispose();
 
-            //---------------------------------------------
-            // Log.
-            //---------------------------------------------
-            LogHelper.LogDebugWithLineNumber("Finished.",
-                                            Logger);
-        }
-    }
+			//---------------------------------------------
+			// Log.
+			//---------------------------------------------
+			LogHelper.LogDebugWithLineNumber("Finished.",
+			                                 Logger);
+		}
+	}
 }

@@ -276,10 +276,10 @@ namespace Stardust.Manager
 																					 connection))
 									{
 										commandUpdate.Parameters.Add("@Alive",
-																SqlDbType.NVarChar).Value = alive;
+																	SqlDbType.NVarChar).Value = alive;
 
 										commandUpdate.Parameters.Add("@Url",
-																SqlDbType.NVarChar).Value = url;
+																	SqlDbType.NVarChar).Value = url;
 
 										commandUpdate.ExecuteNonQuery();
 									}
