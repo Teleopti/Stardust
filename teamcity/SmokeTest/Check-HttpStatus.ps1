@@ -4,8 +4,8 @@
   [Parameter(Mandatory=$true)]
   $UrlToTest,
   [int32]
-  [Parameter(Mandatory=$true)]
-  $WaitingTime
+  [Parameter(Mandatory=$false)]
+  $WaitingTime=1
   )
 
 $UrlToCheck1 = $UrlToTest + '/Web'
