@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private ResourceOptimizerProgressEventArgs _progressEvent;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly IScheduleMatrixLockableBitArrayConverterEx _bitArrayConverter;
-		private readonly Func<IPersonSkillProvider> _personalSkillProvider;
 		private readonly VirtualSkillContext _virtualSkillContext;
 
 		public ScheduleOptimizerHelper(ILifetimeScope container, OptimizerHelperHelper optimizerHelper,
@@ -56,7 +55,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
 			_optimizerHelperHelper = _container.Resolve<IOptimizerHelperHelper>();
 			_bitArrayConverter = _container.Resolve<IScheduleMatrixLockableBitArrayConverterEx>();
-			_personalSkillProvider = () => _container.Resolve<IPersonSkillProvider>();
 			_virtualSkillContext = _container.Resolve<VirtualSkillContext>();
 		}
 
