@@ -242,6 +242,7 @@
     <Compile Include="ApplicationLayer\ITimestamped.cs" />
     <Compile Include="ApplicationLayer\ITrackingMessageSender.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\PersonFinderReadOnlyUpdater.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\PersonPeriodAnalyticsUpdater.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateGroupingReadModelConsumer.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChangedEventPublisher.cs" />
     <Compile Include="ApplicationLayer\RecurringIdAttribute.cs" />
@@ -738,6 +739,7 @@
     <Compile Include="Outbound\OutboundAssignedStaffProvider.cs" />
     <Compile Include="Outbound\SkillTypeProvider.cs" />
     <Compile Include="Repositories\IAgentBadgeRepository.cs" />
+    <Compile Include="Repositories\IAnalyticsPersonPeriod.cs" />
     <Compile Include="Repositories\IIntradayStatistics.cs" />
     <Compile Include="Repositories\ISeatPlanRepository.cs" />
     <Compile Include="Repositories\ILoadAllSkillInIntradays.cs" />
@@ -2635,6 +2637,7 @@
     <EmbeddedResource Include="Scheduling\Assignment\ShiftLayer.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

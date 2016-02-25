@@ -9,6 +9,7 @@ namespace Teleopti.Interfaces.Infrastructure.Analytics
 	    DateTime ValidFromDate { get; set; }
 	    DateTime ValidToDate { get; set; }
         int ValidFromDateId { get; set; }
+        int ValidFromIntervalId { get; set; }
         int ValidToDateId { get; set; }
         int ValidToIntervalId { get; set; }
         Guid PersonPeriodCode { get; set; }
@@ -46,6 +47,12 @@ namespace Teleopti.Interfaces.Infrastructure.Analytics
         bool ToBeDeleted { get; set; }
         string WindowsDomain { get; set; }
         string WindowsUsername { get; set; }
-        
-    }
+	    int ValidToDateIdMaxDate { get; set; }
+	    int ValidToIntervalIdMaxDate { get; set; }
+	    int ValidFromDateIdLocal { get; set; }
+	    int ValidToDateIdLocal { get; set; }
+	    DateTime ValidFromDateLocal { get; set; }
+	    DateTime ValidToDateLocal { get; set; }
+
+	}
 }
