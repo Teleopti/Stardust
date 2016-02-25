@@ -184,8 +184,8 @@ namespace Stardust.Manager
             var dr = _jdDataTable.NewRow();
             dr["Id"] = job.Id;
             dr["Url"] = job.Url.ToString();
-	        dr["Heartbeat"] = DateTime.Now;
-	        dr["Alive"] = "true";
+	        dr["Heartbeat"] = job.Heartbeat;
+	        dr["Alive"] = job.Alive;
 			_jdDataTable.Rows.Add(dr);
 
             using (var connection = new SqlConnection(_connectionString))
@@ -238,5 +238,18 @@ namespace Stardust.Manager
 	    {
 		//Update relevant row in DB
 		}
-    }
+
+		public WorkerNode LoadWorkerNode(Uri nodeUri)
+		{
+			List<WorkerNode> workerNodes = LoadAll();
+			foreach (WorkerNode node in workerNodes)
+			{
+				if (node.Url == nodeUri)
+				{
+					return node;
+				}
+			}
+			return null;
+		}
+	}
 }

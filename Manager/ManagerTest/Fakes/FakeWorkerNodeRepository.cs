@@ -33,5 +33,10 @@ namespace ManagerTest.Fakes
 		{
 			throw new NotImplementedException();
 		}
+
+		public WorkerNode LoadWorkerNode(Uri nodeUri)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
