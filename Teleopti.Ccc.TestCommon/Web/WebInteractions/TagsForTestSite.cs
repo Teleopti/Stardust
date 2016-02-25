@@ -3,44 +3,39 @@ using Teleopti.Support.Library.Config;
 
 namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 {
-	public class TagsForTestSite : Tags
+	public class TagsForTestSite
 	{
-		public TagsForTestSite()
+		public Tags Make()
 		{
+			var tags = new SettingsFileManager().ReadFile();
+
 			// behavior test
-			AddTag("ToggleMode", InfraTestConfigReader.TOGGLE_MODE);
-			AddTag("MachineKey", CryptoCreator.MachineKeyCreator.StaticMachineKeyForBehaviorTest());
-			AddTag("TimeLoggerConfiguration", "<logger name='Teleopti.LogTime'><level value='DEBUG'/></logger>");
-			AddTag("BehaviorTestServer", "true");
-			AddTag("HangfireDashboard", "true");
-			AddTag("HangfireDashboardStatistics", "true");
-			AddTag("HangfireDashboardCounters", "true");
-			AddTag("HangfireDashboardDisplayNames", "true");
-			AddTag("HangfireJobExpirationSeconds", TimeSpan.FromDays(1).TotalSeconds.ToString());
+			tags.SetVariantsOf("ToggleMode", InfraTestConfigReader.TOGGLE_MODE);
+			tags.SetVariantsOf("MachineKey", CryptoCreator.MachineKeyCreator.StaticMachineKeyForBehaviorTest());
+			tags.SetVariantsOf("TimeLoggerConfiguration", "<logger name='Teleopti.LogTime'><level value='DEBUG'/></logger>");
+			tags.SetVariantsOf("BehaviorTestServer", "true");
+			tags.SetVariantsOf("HangfireDashboard", "true");
+			tags.SetVariantsOf("HangfireDashboardStatistics", "true");
+			tags.SetVariantsOf("HangfireDashboardCounters", "true");
+			tags.SetVariantsOf("HangfireDashboardDisplayNames", "true");
+			tags.SetVariantsOf("HangfireJobExpirationSeconds", TimeSpan.FromDays(1).TotalSeconds.ToString());
 
 			// iisexpress
-			AddTag("Port", TestSiteConfigurationSetup.Port.ToString());
-			AddTag("PortAuthenticationBridge", TestSiteConfigurationSetup.PortAuthenticationBridge.ToString());
-			AddTag("PortWindowsIdentityProvider", TestSiteConfigurationSetup.PortWindowsIdentityProvider.ToString());
-			AddTag("SitePath", Paths.WebPath());
-			AddTag("SitePathAuthenticationBridge", Paths.WebAuthenticationBridgePath());
-			AddTag("SitePathWindowsIdentityProvider", Paths.WebWindowsIdentityProviderPath());
+			tags.SetVariantsOf("Port", TestSiteConfigurationSetup.Port.ToString());
+			tags.SetVariantsOf("PortAuthenticationBridge", TestSiteConfigurationSetup.PortAuthenticationBridge.ToString());
+			tags.SetVariantsOf("PortWindowsIdentityProvider", TestSiteConfigurationSetup.PortWindowsIdentityProvider.ToString());
+			tags.SetVariantsOf("SitePath", Paths.WebPath());
+			tags.SetVariantsOf("SitePathAuthenticationBridge", Paths.WebAuthenticationBridgePath());
+			tags.SetVariantsOf("SitePathWindowsIdentityProvider", Paths.WebWindowsIdentityProviderPath());
 
 			// settings.txt
-			AddTag("SQL_AUTH_STRING", InfraTestConfigReader.SQL_AUTH_STRING);
-			AddTag("DB_ANALYTICS", InfraTestConfigReader.DB_ANALYTICS);
-			AddTag("SQL_SERVER_NAME", InfraTestConfigReader.SQL_SERVER_NAME);
-			AddTag("WEB_BROKER_BACKPLANE", InfraTestConfigReader.WEB_BROKER_BACKPLANE);
-			AddTag("DB_CCC7", InfraTestConfigReader.DB_CCC7);
-			AddTag("URL", TestSiteConfigurationSetup.URL.ToString());
-			AddTag("UrlAuthenticationBridge", TestSiteConfigurationSetup.UrlAuthenticationBridge.ToString());
-			AddTag("WEB_BROKER_FOR_WEB", TestSiteConfigurationSetup.URL.ToString());
-			AddTag("DEFAULT_IDENTITY_PROVIDER", "Teleopti");
-			AddTag("WEB_DEPLOY", bool.FalseString.ToLowerInvariant());
-			AddTag("USE_PERSISTENT_CRYPTOKEYS", bool.FalseString.ToLowerInvariant());
-			AddTag("WindowsClaimProvider", TestSiteConfigurationSetup.WindowsClaimProvider);
-			AddTag("TeleoptiClaimProvider", TestSiteConfigurationSetup.TeleoptiClaimProvider);
-			AddTag("MATRIX_WEB_SITE_URL", "http://localhost:52510");
+			tags.SetVariantsOf("URL", TestSiteConfigurationSetup.URL.ToString());
+			tags.SetVariantsOf("UrlAuthenticationBridge", TestSiteConfigurationSetup.UrlAuthenticationBridge.ToString());
+			tags.SetVariantsOf("WEB_BROKER_FOR_WEB", TestSiteConfigurationSetup.URL.ToString());
+			tags.SetVariantsOf("WindowsClaimProvider", TestSiteConfigurationSetup.WindowsClaimProvider);
+			tags.SetVariantsOf("TeleoptiClaimProvider", TestSiteConfigurationSetup.TeleoptiClaimProvider);
+
+			return tags;
 		}
 	}
 }

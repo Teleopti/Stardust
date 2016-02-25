@@ -21,7 +21,7 @@ namespace Teleopti.Support.Tool.Tool
 
         public void Execute(ModeFile mode)
         {
-	        var searchReplaces = _manager.GetTags();
+	        var searchReplaces = _manager.ReadFile();
             
             try
             {

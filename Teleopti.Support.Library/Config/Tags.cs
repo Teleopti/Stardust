@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Xml;
 
@@ -24,35 +25,39 @@ namespace Teleopti.Support.Library.Config
 	{
 		private readonly IList<SearchReplace> _searchReplaces = new List<SearchReplace>();
 
-		public void AddSearchReplace(string searchFor, string replaceWith)
+		public void Set(string searchFor, string replaceWith)
 		{
-			_searchReplaces.Add(new SearchReplace(searchFor, replaceWith));
+			var existing = _searchReplaces.FirstOrDefault(x => x.SearchFor == searchFor);
+			if (existing != null)
+				existing.ReplaceWith = replaceWith;
+			else
+				_searchReplaces.Add(new SearchReplace(searchFor, replaceWith));
 		}
 
-		public void AddTag(string tag, string replaceWith)
+		public void SetVariantsOf(string tag, string replaceWith)
 		{
-			addSimple(tag, replaceWith);
-			addAsXmlComment(tag, replaceWith);
-			addAsXmlAppSetting(tag, replaceWith);
+			simple(tag, replaceWith);
+			xmlComment(tag, replaceWith);
+			xmlAppSetting(tag, replaceWith);
 		}
 
-		private void addSimple(string tag, string replaceWith)
+		private void simple(string tag, string replaceWith)
 		{
 			var searchFor = string.Format("$({0})", tag);
-			AddSearchReplace(searchFor, replaceWith);
+			Set(searchFor, replaceWith);
 		}
 
-		private void addAsXmlComment(string tag, string replaceWith)
+		private void xmlComment(string tag, string replaceWith)
 		{
 			var searchFor = string.Format("<!--$({0})-->", tag);
-			AddSearchReplace(searchFor, replaceWith);
+			Set(searchFor, replaceWith);
 		}
 
-		private void addAsXmlAppSetting(string tag, string replaceWith)
+		private void xmlAppSetting(string tag, string replaceWith)
 		{
 			var searchFor = string.Format("<!--$({0}AppSetting)-->", tag);
 			replaceWith = string.Format(@"<add key=""{0}"" value=""{1}"" />", tag, replaceWith);
-			AddSearchReplace(searchFor, replaceWith);
+			Set(searchFor, replaceWith);
 		}
 
 		public void FixSomeValuesAfterReading()
