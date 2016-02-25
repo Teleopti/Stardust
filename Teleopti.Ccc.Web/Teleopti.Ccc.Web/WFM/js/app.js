@@ -164,7 +164,7 @@ wfm.config([
 		}).state('seatMap', {
 			url: '/seatMap',
 			templateUrl: 'js/seatManagement/html/seatmap.html'
-		}).state('myTeam', {
+		}).state('myTeamSchedule', {
 			url: '/teamSchedule',
 			templateUrl: 'js/teamSchedule/html/schedule.html',
 			controller: 'TeamScheduleCtrl as vm'

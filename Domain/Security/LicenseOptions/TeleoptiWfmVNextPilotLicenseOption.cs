@@ -14,15 +14,24 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 
 		public override void EnableApplicationFunctions(IList<IApplicationFunction> allApplicationFunctions)
 		{
+			var applicationFunctions = new[]
+			{
+				DefinedRaptorApplicationFunctionPaths.WebForecasts,
+				DefinedRaptorApplicationFunctionPaths.WebPermissions,
+				DefinedRaptorApplicationFunctionPaths.WebSchedules,
+				DefinedRaptorApplicationFunctionPaths.WebPeople,
+				DefinedRaptorApplicationFunctionPaths.WebRequests,
+				DefinedRaptorApplicationFunctionPaths.WebModifySkill,
+				DefinedRaptorApplicationFunctionPaths.WebIntraday,
+				DefinedRaptorApplicationFunctionPaths.WebModifySkillArea,
+				DefinedRaptorApplicationFunctionPaths.AngelMyTeamSchedules
+			};
+
 			EnabledApplicationFunctions.Clear();
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.WebForecasts));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.WebPermissions));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.WebSchedules));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.WebPeople));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.WebRequests));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.WebModifySkill));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.WebIntraday));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.WebModifySkillArea));
+			foreach (var func in applicationFunctions)
+			{
+				EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, func));
+			}
 		}
 	}
 }

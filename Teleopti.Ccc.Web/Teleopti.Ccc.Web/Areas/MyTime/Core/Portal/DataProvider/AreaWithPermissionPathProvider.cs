@@ -18,19 +18,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 
 		private static readonly IEnumerable<AreaWithPermissionPath> wfmAreaWithPermissionPaths = new List<AreaWithPermissionPath>
 		{
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebForecasts,() => Resources.Forecasts,"forecasting"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebSchedules,() => Resources.OpenSchedulePage,"resourceplanner", new Link{href = "api/ResourcePlanner/Filter",rel = "filters"}),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPermissions,() => Resources.OpenPermissionPage,"permissions"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.Outbound,() => Resources.Outbound,"outbound"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPeople,() => Resources.People,"people"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebRequests,() => Resources.Requests,"requests"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner,() => Resources.SeatPlan,"seatPlan"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner,() => Resources.SeatMap,"seatMap"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview,() => Resources.RealTimeAdherence,"rta"),
-            new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebIntraday,() => Resources.Intraday,"intraday"),
-            new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules,() => Resources.MyTeam,"myTeam")
-        };
-
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebForecasts, () => Resources.Forecasts, "forecasting"),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebSchedules, () => Resources.OpenSchedulePage, "resourceplanner", new Link {href = "api/ResourcePlanner/Filter", rel = "filters"}),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPermissions, () => Resources.OpenPermissionPage, "permissions"),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.Outbound, () => Resources.Outbound, "outbound"),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPeople, () => Resources.People, "people"),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebRequests, () => Resources.Requests, "requests"),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner, () => Resources.SeatPlan, "seatPlan"),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner, () => Resources.SeatMap, "seatMap"),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, () => Resources.RealTimeAdherence, "rta"),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebIntraday, () => Resources.Intraday, "intraday"),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.AngelMyTeamSchedules, () => Resources.MyTeam, "myTeamSchedule")
+		};
 
 		public AreaWithPermissionPathProvider(IPermissionProvider permissionProvider, IToggleManager toggleManager)
 		{
