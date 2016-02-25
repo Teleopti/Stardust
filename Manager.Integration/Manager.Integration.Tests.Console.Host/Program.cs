@@ -434,7 +434,6 @@ namespace Manager.IntegrationTest.Console.Host
 			var copyManagerConfigurationFile = managerConfigFile.CopyTo(newConfigFileName,
 			                                                            true);
 
-
 			var configFileMap = new ExeConfigurationFileMap
 			{
 				ExeConfigFilename = copyManagerConfigurationFile.FullName
@@ -442,7 +441,7 @@ namespace Manager.IntegrationTest.Console.Host
 
 			var config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap,
 			                                                             ConfigurationUserLevel.None);
-			UriBuilder uriBuilder =
+			var uriBuilder =
 				new UriBuilder(config.AppSettings.Settings["BaseAddress"].Value)
 				{
 					Port = portNumber
@@ -456,7 +455,52 @@ namespace Manager.IntegrationTest.Console.Host
 			return copyManagerConfigurationFile;
 		}
 
-		public static bool ShutDownNodeAppDomain(string friendlyName)
+		public static bool ShutDownManager(string friendlyName)
+		{
+			var ret = false;
+
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Started.");
+
+			if (AppDomainManagerTasks != null && AppDomainManagerTasks.Any())
+			{
+				AppDomainManagerTask managerToDispose = null;
+
+				foreach (var appDomainManagerTask in AppDomainManagerTasks)
+				{
+					if (appDomainManagerTask.GetAppDomainFriendlyName()
+						.Equals(friendlyName,
+						        StringComparison.InvariantCultureIgnoreCase))
+					{
+						managerToDispose = appDomainManagerTask;
+
+						break;
+					}
+				}
+
+				if (managerToDispose != null)
+				{
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Start to manager (appdomain) with friendly name :" + friendlyName);
+
+					managerToDispose.Dispose();
+
+					AppDomainManagerTasks.Remove(managerToDispose);
+
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Finished to dispose manager (appdomain) with friendly name :" + friendlyName);
+
+					ret = true;
+				}
+			}
+
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Finished.");
+
+			return ret;
+		}
+
+		public static bool ShutDownNode(string friendlyName)
 		{
 			var ret = false;
 
@@ -573,7 +617,37 @@ namespace Manager.IntegrationTest.Console.Host
 
 		public static void StartNewManager(out string friendlyname)
 		{
-			friendlyname = "New Manager";
+			NumberOfManagersToStart++;
+
+			var portNumber = Settings.Default.ManagerEndpointPortNumberStart + (NumberOfManagersToStart - 1);
+
+			Uri uri;
+
+			var copiedManagerConfigurationFile =
+				CopyManagerConfigurationFile(ManagerConfigurationFile,
+				                             NumberOfManagersToStart + 1,
+				                             portNumber,
+				                             out uri);
+
+			CopiedManagerConfigurationFiles.Add(uri, copiedManagerConfigurationFile);
+
+			var appDomainManagerTask =
+				new AppDomainManagerTask(_buildMode,
+				                         DirectoryManagerAssemblyLocationFullPath,
+				                         copiedManagerConfigurationFile,
+				                         Settings.Default.ManagerAssemblyName);
+
+			AppDomainManagerTasks.Add(appDomainManagerTask);
+
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Start: AppDomainManagerTask.StartTask");
+
+			appDomainManagerTask.StartTask(new CancellationTokenSource());
+
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Finished: AppDomainManagerTask.StartTask");
+
+			friendlyname = appDomainManagerTask.GetAppDomainFriendlyName();
 		}
 	}
 }

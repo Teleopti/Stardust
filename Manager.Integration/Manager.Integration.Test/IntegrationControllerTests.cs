@@ -120,6 +120,96 @@ namespace Manager.Integration.Test
 
 		private CancellationTokenSource CancellationTokenSource { get; set; }
 
+
+		[Test]
+		public async void ShouldBeAbleToStartNewManager()
+		{
+			LogHelper.LogDebugWithLineNumber("Start test.",
+			                                 Logger);
+
+			//---------------------------------------------
+			// Notify when all 2 nodes are up and running. 
+			//---------------------------------------------
+			LogHelper.LogDebugWithLineNumber("Waiting for all 2 nodes to start up.",
+			                                 Logger);
+
+			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
+
+			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
+
+			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(2,
+			                                                      sqlNotiferCancellationTokenSource,
+			                                                      IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
+			task.Start();
+
+			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(30));
+
+			sqlNotifier.Dispose();
+
+			LogHelper.LogDebugWithLineNumber("All 2 nodes has started.",
+			                                 Logger);
+
+
+			//---------------------------------------------
+			// Start actual test.
+			//---------------------------------------------
+			var cancellationTokenSource = new CancellationTokenSource();
+
+			HttpResponseMessage response = null;
+
+			string managerName = null;
+
+			using (var client = new HttpClient())
+			{
+				var uriBuilder =
+					new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
+
+				uriBuilder.Path += "appdomain/managers";
+
+				var uri = uriBuilder.Uri;
+
+				LogHelper.LogDebugWithLineNumber("Start calling Post Async ( " + uri + " ) ",
+				                                 Logger);
+
+				try
+				{
+					response = await client.PostAsync(uriBuilder.Uri,
+					                                  null,
+					                                  cancellationTokenSource.Token);
+
+					if (response.IsSuccessStatusCode)
+					{
+						managerName = await response.Content.ReadAsStringAsync();
+
+						LogHelper.LogDebugWithLineNumber("Succeeded calling Post Async ( " + uri + " ) ",
+						                                 Logger);
+					}
+				}
+				catch (Exception exp)
+				{
+					LogHelper.LogErrorWithLineNumber(exp.Message,
+					                                 Logger,
+					                                 exp);
+				}
+			}
+
+			Thread.Sleep(TimeSpan.FromMinutes(5));
+
+			Assert.IsNotNull(response,
+			                 "Response can not be null.");
+
+			Assert.IsTrue(response.IsSuccessStatusCode,
+			              "Response code should be success.");
+
+			Assert.IsNotNull(managerName,
+			                 "Manager must have a friendly name.");
+
+			cancellationTokenSource.Cancel();
+
+			LogHelper.LogDebugWithLineNumber("Finished test.",
+			                                 Logger);
+		}
+
 		/// <summary>
 		///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
 		///     netsh http add urlacl url=http://+:9100/ user=everyone listen=yes
@@ -196,7 +286,7 @@ namespace Manager.Integration.Test
 			}
 
 			Assert.IsNotNull(response,
-							"Response can not be null.");
+			                 "Response can not be null.");
 
 			Assert.IsTrue(response.IsSuccessStatusCode,
 			              "Response code should be success.");
@@ -421,12 +511,91 @@ namespace Manager.Integration.Test
 			                                 Logger);
 		}
 
+		[Test]
+		public async void ShouldBeAbleToShutDownManager1()
+		{
+			LogHelper.LogDebugWithLineNumber("Start test.",
+											 Logger);
+
+			//---------------------------------------------
+			// Notify when all 2 nodes are up and running. 
+			//---------------------------------------------
+			LogHelper.LogDebugWithLineNumber("Waiting for all 2 nodes to start up.",
+											 Logger);
+
+			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
+
+			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
+
+			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(2,
+																  sqlNotiferCancellationTokenSource,
+																  IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
+			task.Start();
+
+			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(30));
+
+			sqlNotifier.Dispose();
+
+			LogHelper.LogDebugWithLineNumber("All 2 nodes has started.",
+											 Logger);
+
+			//---------------------------------------------
+			// Start actual test.
+			//---------------------------------------------
+			var cancellationTokenSource = new CancellationTokenSource();
+
+			HttpResponseMessage response = null;
+
+			using (var client = new HttpClient())
+			{
+				var uriBuilder =
+					new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
+
+				uriBuilder.Path += "appdomain/managers/" + "Manager1.config";
+
+				var uri = uriBuilder.Uri;
+
+				LogHelper.LogDebugWithLineNumber("Start calling Delete Async ( " + uri + " ) ",
+												 Logger);
+
+				try
+				{
+					response = await client.DeleteAsync(uriBuilder.Uri,
+														cancellationTokenSource.Token);
+
+					if (response.IsSuccessStatusCode)
+					{
+						LogHelper.LogDebugWithLineNumber("Succeeded calling Delete Async ( " + uri + " ) ",
+														 Logger);
+					}
+				}
+				catch (Exception exp)
+				{
+					LogHelper.LogErrorWithLineNumber(exp.Message,
+													 Logger,
+													 exp);
+				}
+			}
+
+			Assert.IsNotNull(response,
+							 "Response can not be null.");
+
+			Assert.IsTrue(response.IsSuccessStatusCode,
+						  "Response code should be success.");
+
+
+			cancellationTokenSource.Cancel();
+
+			LogHelper.LogDebugWithLineNumber("Finished test.",
+											 Logger);
+		}
+
 		/// <summary>
 		///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
 		///     netsh http add urlacl url=http://+:9100/ user=everyone listen=yes
 		/// </summary>
 		[Test]
-		public async void ShouldUnloadNode1AppDomain()
+		public async void ShouldBeAbleToShutDownNode1()
 		{
 			LogHelper.LogDebugWithLineNumber("Start test.",
 			                                 Logger);
@@ -496,6 +665,7 @@ namespace Manager.Integration.Test
 
 			Assert.IsTrue(response.IsSuccessStatusCode,
 			              "Response code should be success.");
+
 
 			cancellationTokenSource.Cancel();
 

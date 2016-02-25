@@ -46,6 +46,38 @@ namespace Manager.IntegrationTest.Console.Host
 			return Ok(friendlyname);
 		}
 
+		[HttpDelete, Route("appdomain/managers/{id}")]
+		public IHttpActionResult DeleteManager(string id)
+		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+											 "Called API controller.");
+
+			if (string.IsNullOrEmpty(id))
+			{
+				LogHelper.LogWarningWithLineNumber(Logger,
+												   "Bad request, id : " + id);
+				return BadRequest(id);
+			}
+
+			LogHelper.LogInfoWithLineNumber(Logger,
+											"Try shut down Manager with id : " + id);
+
+			var success = Program.ShutDownManager(id);
+
+			if (success)
+			{
+				LogHelper.LogInfoWithLineNumber(Logger,
+												"Manager has been shut down, with id : " + id);
+
+				return Ok(id);
+			}
+
+			LogHelper.LogWarningWithLineNumber(Logger,
+											   "Id not found, id : " + id);
+
+			return NotFound();
+		}
+
 		[HttpDelete, Route("appdomain/nodes/{id}")]
 		public IHttpActionResult DeleteNode(string id)
 		{
@@ -62,7 +94,7 @@ namespace Manager.IntegrationTest.Console.Host
 			LogHelper.LogInfoWithLineNumber(Logger,
 			                                "Try shut down Node with id : " + id);
 
-			var success = Program.ShutDownNodeAppDomain(id);
+			var success = Program.ShutDownNode(id);
 
 			if (success)
 			{

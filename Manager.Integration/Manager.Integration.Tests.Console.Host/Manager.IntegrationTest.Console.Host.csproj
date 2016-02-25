@@ -119,6 +119,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\ManagerRouteConstants.cs" />
     <Compile Include="Helpers\LogHelper.cs" />
     <Compile Include="IntegrationController.cs" />
     <Compile Include="Interfaces\IAppDomain.cs" />
