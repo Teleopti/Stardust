@@ -13,14 +13,14 @@ namespace Stardust.Manager
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (JobManager));
 		private readonly IHttpSender _httpSender;
 		private readonly IJobRepository _jobRepository;
-		private readonly IWorkerNodeRepository _nodeRepository;
+		private readonly IWorkerNodeRepository _workerNodeRepository;
 
 		public JobManager(IJobRepository jobRepository,
-		                  IWorkerNodeRepository nodeRepository,
+		                  IWorkerNodeRepository workerNodeRepository,
 		                  IHttpSender httpSender)
 		{
 			_jobRepository = jobRepository;
-			_nodeRepository = nodeRepository;
+			_workerNodeRepository = workerNodeRepository;
 			_httpSender = httpSender;
 		}
 
@@ -28,7 +28,7 @@ namespace Stardust.Manager
 		public IList<WorkerNode> UpNodes()
 		{
 			var upNodes = new List<WorkerNode>();
-			var availableNodes = _nodeRepository.LoadAllFreeNodes();
+			var availableNodes = _workerNodeRepository.LoadAllFreeNodes();
 			foreach (var availableNode in availableNodes)
 			{
 				var nodeUriBuilder = new NodeUriBuilderHelper(availableNode.Url);
@@ -47,7 +47,7 @@ namespace Stardust.Manager
 			LogHelper.LogDebugWithLineNumber(Logger,
 											 "Start RegisterHeartbeat.");
 
-			_nodeRepository.RegisterHeartbeat(nodeUri);
+			_workerNodeRepository.RegisterHeartbeat(nodeUri);
 
 			LogHelper.LogDebugWithLineNumber(Logger,
 												 "Finished RegisterHeartbeat.");
@@ -60,7 +60,7 @@ namespace Stardust.Manager
 
 			try
 			{
-				var availableNodes = _nodeRepository.LoadAllFreeNodes();
+				var availableNodes = _workerNodeRepository.LoadAllFreeNodes();
 
 				var upNodes = new List<WorkerNode>();
 

@@ -236,7 +236,43 @@ namespace Stardust.Manager
 
 	    public void RegisterHeartbeat(Uri nodeUri)
 	    {
-		//Update relevant row in DB
+			// Validate argument.
+		    if (nodeUri == null || 
+				string.IsNullOrEmpty(nodeUri.ToString()))
+		    {
+			    return;
+		    }
+
+			LogHelper.LogDebugWithLineNumber(Logger,
+											 "Start register heartbeat for url : " + nodeUri);
+
+			// Update row.
+		    string updateCommandText = @"UPDATE Stardust.WorkerNodes 
+										SET Heartbeat = @Heartbeat,
+											Alive = @Alive
+										WHERE Url = @Url";
+
+			using (var connection = new SqlConnection(_connectionString))
+			{
+				connection.Open();
+
+				using (SqlCommand command = new SqlCommand(updateCommandText, 
+														  connection))
+				{
+					command.Parameters.Add("@Heartbeat", 
+											SqlDbType.DateTime).Value = DateTime.Now;
+
+					command.Parameters.Add("@Alive",
+											SqlDbType.NVarChar).Value = "true";
+
+					command.Parameters.Add("@Url",
+											SqlDbType.NVarChar).Value = nodeUri;
+
+					command.ExecuteNonQuery();
+				}
+
+				connection.Close();
+			}
 		}
-    }
+	}
 }

@@ -68,13 +68,23 @@
                                 </DataGridTextColumn.Binding>
                             </DataGridTextColumn>
 
-                            <DataGridTextColumn Binding="{Binding Id}"
-                                                ClipboardContentBinding="{Binding Id}"
-                                                Header="Id" />
+                            <DataGridTextColumn Binding="{Binding Alive}"
+                                                ClipboardContentBinding="{Binding Alive}"
+                                                Header="Alive" />
 
                             <DataGridTextColumn Binding="{Binding Url}"
                                                 ClipboardContentBinding="{Binding Url}"
                                                 Header="Url" />
+
+                            <DataGridTextColumn Binding="{Binding Hearbeat}"
+                                                ClipboardContentBinding="{Binding Hearbeat}"
+                                                Header="Hearbeat" />
+
+                            <DataGridTextColumn Binding="{Binding Id}"
+                                                ClipboardContentBinding="{Binding Id}"
+                                                Header="Id" />
+
+
 
                         </DataGrid.Columns>
                     </DataGrid>

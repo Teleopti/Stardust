@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="ManagerDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="ManagerDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="JobDefinitions">
           <Key>
             <PropertyRef Name="Id" />
@@ -71,6 +71,8 @@ warning 6002: The table/view 'ManagerDb.Stardust.Logging' does not have a primar
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Url" Type="nvarchar" MaxLength="450" Nullable="false" />
+          <Property Name="Hearbeat" Type="datetime" />
+          <Property Name="Alive" Type="nvarchar(max)" />
         </EntityType>
         <EntityContainer Name="ManagerDbModelStoreContainer">
           <EntitySet Name="JobDefinitions" EntityType="Self.JobDefinitions" Schema="Stardust" store:Type="Tables" />
@@ -96,8 +98,7 @@ warning 6002: The table/view 'ManagerDb.Stardust.Logging' does not have a primar
     FROM [Stardust].[Logging] AS [Logging]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ManagerDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -135,6 +136,8 @@ warning 6002: The table/view 'ManagerDb.Stardust.Logging' does not have a primar
           </Key>
           <Property Name="Id" Type="Guid" Nullable="false" />
           <Property Name="Url" Type="String" MaxLength="450" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Hearbeat" Type="DateTime" Precision="3" />
+          <Property Name="Alive" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="JobHistoryDetail">
           <Key>
@@ -210,6 +213,8 @@ warning 6002: The table/view 'ManagerDb.Stardust.Logging' does not have a primar
           <EntitySetMapping Name="WorkerNodes">
             <EntityTypeMapping TypeName="ManagerDbModel.WorkerNode">
               <MappingFragment StoreEntitySet="WorkerNodes">
+                <ScalarProperty Name="Alive" ColumnName="Alive" />
+                <ScalarProperty Name="Hearbeat" ColumnName="Hearbeat" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Url" ColumnName="Url" />
               </MappingFragment>
