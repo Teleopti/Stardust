@@ -33,10 +33,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		private readonly IPersonNameProvider _personNameProvider;
 		private readonly ISiteRepository _siteRepository;
 		private readonly ITeamRepository _teamRepository;
-		private readonly IToggleManager _toggleManager;
 		private readonly IGroupingReadOnlyRepository _groupingRepository;
 		private readonly ISettingsPersisterAndProvider<NameFormatSettings> _nameFormatSettings;
-		private bool toggleEnabled;
 
 		private ReadOnlyGroupDetail[] permittedPersonList;
 		private readonly ITeamGamificationSettingRepository _teamSettingRepository;
@@ -48,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			IPermissionProvider permissionProvider,
 			IPersonNameProvider personNameProvider,
 			ISiteRepository siteRepository, ITeamRepository teamRepository,
-			IToggleManager toggleManager, IGroupingReadOnlyRepository groupingRepository,
+			IGroupingReadOnlyRepository groupingRepository,
 			ITeamGamificationSettingRepository teamSettingRepository, IPersonRepository personRepo, 
 			ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettings)
 		{
@@ -58,7 +56,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			_personNameProvider = personNameProvider;
 			_siteRepository = siteRepository;
 			_teamRepository = teamRepository;
-			_toggleManager = toggleManager;
 			_groupingRepository = groupingRepository;
 			_teamSettingRepository = teamSettingRepository;
 			_personRepo = personRepo;

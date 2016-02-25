@@ -1,17 +1,15 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using System;
-using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -19,7 +17,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.BadgeLeaderBoardReport;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 {
@@ -70,7 +67,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		private DateOnly date;
 		private Team team0;
 		private Team team1;
-		private IToggleManager _toggleManager;
 		private IGroupingReadOnlyRepository groupingRepository;
 		private ITeamGamificationSettingRepository teamSettingRepository;
 		private IPersonRepository personRepository;
@@ -84,8 +80,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			team1 = TeamFactory.CreateSimpleTeam("team1");
 			team1.SetId(Guid.NewGuid());
 
-			_toggleManager = MockRepository.GenerateMock<IToggleManager>();
-		
 			agentBadges = new[]
 			{
 				new AgentBadge
@@ -168,7 +162,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var nameProvider =
 				new PersonNameProvider(new FakeNameFormatSettingsPersisterAndProvider(new NameFormatSettings {NameFormatId = 0}));
 			target = new LeaderboardSettingBasedBadgeProvider(agentBadgeRepository, agentBadgeWithRankRepository,
-				permissionProvider, nameProvider, siteRepository, teamRepository, _toggleManager, groupingRepository,
+				permissionProvider, nameProvider, siteRepository, teamRepository, groupingRepository,
 				teamSettingRepository, personRepository, new FakeNameFormatSettingsPersisterAndProvider(new NameFormatSettings { NameFormatId = 0 }));
 		}
 
