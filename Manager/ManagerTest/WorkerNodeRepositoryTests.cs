@@ -15,7 +15,7 @@ namespace ManagerTest
 		private readonly Uri _nodeUri1 = new Uri("http://localhost:9050/");
 
 		 
-		[Test, Ignore]
+		[Test]
 		public void HeartbeatTimestampShouldBeChangedOnHeartbeat()
 		{
 			var node = new WorkerNode
@@ -30,9 +30,11 @@ namespace ManagerTest
 			node = WorkerNodeRepository.LoadWorkerNode(_nodeUri1);
 			var beforeHeartbeat = node.Heartbeat;
 
+			Thread.Sleep(TimeSpan.FromSeconds(1)); // to create a difference between heartbeats
+
 			WorkerNodeRepository.RegisterHeartbeat(_nodeUri1);
 
-			Thread.Sleep(TimeSpan.FromSeconds(2));  //Do another way?
+			Thread.Sleep(TimeSpan.FromSeconds(1));  // to let the task that writes heartbeat finish
 
 			node = WorkerNodeRepository.LoadWorkerNode(_nodeUri1);
 			var afterHeartbeat = node.Heartbeat;
