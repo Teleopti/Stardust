@@ -2,12 +2,18 @@
 	'use strict';
 	angular.module('wfm.rta')
 		.controller('RtaCtrl', [
-			'$scope', '$filter', '$state', '$stateParams', '$interval', 'RtaService', 'RtaOrganizationService', 'RtaFormatService',
-			function($scope, $filter, $state, $stateParams, $interval, RtaService, RtaOrganizationService, RtaFormatService) {
+			'$scope', '$filter', '$state', '$stateParams', '$interval', 'RtaService', 'RtaOrganizationService', 'RtaFormatService','growl',
+			function($scope, $filter, $state, $stateParams, $interval, RtaService, RtaOrganizationService, RtaFormatService, growl) {
 
 				$scope.getAdherencePercent = RtaFormatService.numberToPercent;
 				$scope.checkboxesChecked = 0;
 				var selectedSiteIds = [];
+
+				growl.success("Here is the new design for RTA. For a limited time you can go back to the old design <a href='/Anywhere#realtimeadherencesites'>here.</a><br/>\
+				We appreciate your <a href='http://www.teleopti.com/wfm/customers/customer-center/service_desk/feedback.aspx'>feedback.</a> ", {
+								ttl: 0,
+								disableCountDown: true
+				});
 
 				var polling = $interval(function() {
 					RtaService.getAdherenceForAllSites().then(updateAdherence);
