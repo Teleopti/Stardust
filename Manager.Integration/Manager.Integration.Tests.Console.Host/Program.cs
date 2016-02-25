@@ -464,10 +464,10 @@ namespace Manager.IntegrationTest.Console.Host
 
 			if (AppDomainManagerTasks != null && AppDomainManagerTasks.Any())
 			{
-				AppDomainManagerTask managerToDispose =
+				var managerToDispose =
 					AppDomainManagerTasks.FirstOrDefault(task => task.GetAppDomainUniqueId()
-										 .Equals(friendlyName,
-												 StringComparison.InvariantCultureIgnoreCase));
+						                                     .Equals(friendlyName,
+						                                             StringComparison.InvariantCultureIgnoreCase));
 
 
 				if (managerToDispose != null)
@@ -601,7 +601,8 @@ namespace Manager.IntegrationTest.Console.Host
 		{
 			NumberOfManagersToStart++;
 
-			var portNumber = Settings.Default.ManagerEndpointPortNumberStart + (NumberOfManagersToStart - 1);
+			var portNumber = 
+				Settings.Default.ManagerEndpointPortNumberStart + (NumberOfManagersToStart - 1);
 
 			Uri uri;
 
@@ -611,7 +612,8 @@ namespace Manager.IntegrationTest.Console.Host
 				                             portNumber,
 				                             out uri);
 
-			CopiedManagerConfigurationFiles.Add(uri, copiedManagerConfigurationFile);
+			CopiedManagerConfigurationFiles.Add(uri, 
+												copiedManagerConfigurationFile);
 
 			var appDomainManagerTask =
 				new AppDomainManagerTask(_buildMode,
