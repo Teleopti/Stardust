@@ -33,7 +33,7 @@ namespace Stardust.Manager.Timers
 										ElapsedEventArgs e)
 		{
 			_jobManager.CheckNodesAreAlive(TimeSpan.FromSeconds(10));
-				LogHelper.LogInfoWithLineNumber(Logger, " Check Heartbeat");
+				LogHelper.LogDebugWithLineNumber(Logger, " Check Heartbeat");
 		}
 
 	}
