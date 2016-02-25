@@ -18,8 +18,8 @@
         function addCampaign() {
         	$scope.isFormValidForPage = $scope.isFormValid();
 	        checkIsWorkingHoursValid();
-	        $scope.isCampaignDurationValidForPage = $scope.isCampaignDurationValid();
-	        if (!$scope.isFormValidForPage || !$scope.isWorkingHoursValidForPage || !$scope.isCampaignDurationValidForPage) return;
+	      
+	        if (!$scope.isFormValidForPage || !$scope.isWorkingHoursValidForPage ) return;
 
             $scope.isCreating = true;
 	        outboundService.addCampaign($scope.campaign, function (campaign) {
@@ -37,9 +37,11 @@
 
         function init() {
             $scope.campaign = {
-                Activity: {},
-                StartDate: new Date(),
-                EndDate: new Date(),
+            	Activity: {},
+				SpanningPeriod: {
+					startDate: new Date(),
+					endDate: new Date()
+				},              
                 WorkingHours: []
             };
 	        $scope.isCreating = false;

@@ -80,8 +80,10 @@ describe('OutboundService Test', function () {
 	it('Create campaign should work', function() {
 		var campaign = {
 			Name: 'NEW',
-			StartDate: new Date(),
-			EndDate: new Date(),
+			SpanningPeriod: {
+				startDate: new Date(),
+				endDate: new Date()
+			},			
 			WorkingHours: []
 		};
 
@@ -106,8 +108,10 @@ describe('OutboundService Test', function () {
 		
 		var campaign = {
 			Name: 'NEW',
-			StartDate: new Date(),
-			EndDate: new Date(),
+			SpanningPeriod: {
+				startDate: new Date(),
+				endDate: new Date()
+			},
 			WorkingHours: [
 				{
 					StartTime: startTime,

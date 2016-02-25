@@ -171,7 +171,10 @@
 
 		function normalizeCampaign(campaign) {
 		    var campaign = angular.copy(campaign);
-			
+
+		    campaign.StartDate = campaign.SpanningPeriod.startDate;
+		    campaign.EndDate = campaign.SpanningPeriod.endDate;
+
 		    campaign.StartDate = miscService.sendDateToServer(campaign.StartDate);
 			campaign.EndDate = miscService.sendDateToServer(campaign.EndDate);
 
@@ -272,6 +275,10 @@
 
 			});
 		    campaignCopy.WorkingHours = reformattedWorkingHours;
+			campaignCopy.SpanningPeriod = {
+				startDate: campaignCopy.StartDate,
+				endDate: campaignCopy.EndDate
+			};
 		    return campaignCopy;
 		};
 

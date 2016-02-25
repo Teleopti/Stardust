@@ -21,30 +21,9 @@
         function setupValidators(scope) {
         	scope.isFormValid = isFormValid;
         	scope.isWorkingHoursValid = isWorkingHoursValid;
-        	scope.isCampaignDurationValid = isCampaignDurationValid;
 	        scope.isInputValid = isInputValid;
             scope.flashErrorIcons = flashErrorIcons;
-	        var campaignDurationError = [];
-
-	        scope.$watch(function() {
-		        return scope.campaign.spanningPeriodErrors;
-	        }, function (newValue, oldValue) {		        
-				if (oldValue && oldValue.length > 0) {
-					angular.forEach(oldValue, function (v) {
-						campaignDurationError = [];
-					});
-				}
-	        	if (newValue && newValue.length > 0) {
-	        		angular.forEach(newValue, function (v) {
-				        campaignDurationError.push(v);
-			        });
-				}
-	        }, true);
-
-	        function isCampaignDurationValid() {
-		        return campaignDurationError.length > 0 ? false : true;
-	        }
-
+	     
 			function isFormValid() {
 				return scope.form.$valid;
 			}
@@ -60,7 +39,7 @@
             }
 
             function isInputValid() {
-            	return scope.isFormValid() && scope.isWorkingHoursValid() && scope.isCampaignDurationValid();
+            	return scope.isFormValid() && scope.isWorkingHoursValid();
             }
 
             function flashErrorIcons() {

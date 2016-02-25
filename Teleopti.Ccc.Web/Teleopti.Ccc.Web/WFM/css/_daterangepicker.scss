@@ -1,135 +1,76 @@
 ﻿.wfm-date-range-picker-wrap {
-	position:relative;
-
-	.no-boxshadow{
-		box-shadow:none;	
-	}
-
-	.picker-template-dropdown{
-		display:inline-block;
-		button{
-			margin-right:0;
-			marign-left:0;
-			padding:5px;
-		}
-		input{
-			text-align:center;
-			width:200px;
-		}
-		.ng-invalid-order .invalid-order{
-			display:block;
-		}
-		.ng-invalid-empty .invalid-empty{
-			display:block;
-		}
-		.relative{
-			position:relative;
-		}
-		.inline-block{
-			display:inline-block;
-		}
-		.hor-m-5{
-		    margin-left:5px;
-			margin-right:5px;
-		}
-		.pointer{
-			cursor:pointer;
-		}
-		.middle{
-			vertical-align:middle;
-		}
-		.in-date-range button {
-			background-color: $green-100;
-		 }
-		.picker-wrapper{
-			position:absolute;
-			top:23px;
-			left:50%;
-			margin-left:-109px;
-			box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
-			background-color:#fff;
-			z-index:100;
-			padding:5px;
-		}
-		.iconfix{
-			height:22px;
-			width:22px;
-			display:inline-block;
-			text-align:center;
-			padding-top:1px;
-		}
-		.error-msg-container{
-			position: absolute;
-			top: 22px;
-			left: 0;
-			margin:0;
-			padding:2px;
-			width:100%;
-			z-index:101;
-			height:25px;
-			text-align:center;
-		}
-	}
-	.pin-down{
-		box-shadow: inset 0 2px 5px 0 rgba(0,0,0,.26);
-		background-color: #ececec;
-	}
-  .wrong-sign {
-    display: none;
-    color: $red-600 ;
-  }
-  .right-sign {
-    display: none;
-    color: $green-100;
-  }
-  .error-msg-container {
-    display: none;
-    margin-top: 10px;
-  }
-  .ng-valid {
-    .right-sign {
-      display: block;
+  .inline-datepicker-wrap {
+    display: inline-block;
+    position: relative;
+    .dropdown-menu {
+      position:absolute;
+      box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
+      background-color: $gray-100;
+      z-index:100;
+      margin-top: 0px;
     }
-  }
-  .ng-invalid {
-    .wrong-sign {
-      display: block;
+    .start-date-input + .dropdown-menu {
+      margin-left:-60px;
     }
-	.mdi-calendar{
-		color:#F44336;
-	}
-	.start-date-input{
-		 border-bottom-color:#F44336;
-	}
-	.end-date-input{
-		 border-bottom-color:#F44336;
-	}
+    .end-date-input + .dropdown-menu {
+      margin-right: -60px;      
+    }             
   }
-  .picker-template-inline {
-	    .ng-invalid-order .invalid-order{
-			display:block;
-		}
-		.ng-invalid-empty .invalid-empty{
-			display:block;
-		}
+    
+  .pin-down {
+    box-shadow: inset 0 2px 5px 0 rgba(0,0,0,.26);
+    background-color: $gray-300;
+  }  
+
+  .popup-control {
+    height:22px;
+    width:22px;
+    display:inline-block;
+    text-align:center;
+    padding-top:1px;
+    cursor:pointer;
   }
-  .wfm-datepicker-wrap td.in-date-range button {
+
+  .inline-vertical-fix {
+    position: relative;
+    top: 4px;
+  }
+    
+  &.ng-invalid .popup-control .mdi-calendar{
+    color: $red-800;
+  }    
+  
+  input {
+    text-align:center;
+    width:200px;
+  }
+  input.ng-invalid {
+    border-bottom: 2px solid $red-800;     
+  }    
+  .in-date-range button {
     background-color: $green-100;
   }
-  .error-msg-container {
-    display: none;
-  }
-  .wfm-date-picker-wrap {
-    display: inline-block;
-  }
-  .datepickerfix{
-    position:absolute;
-    top:8px;
-    right:10px;
-    height:18px;
-    width:18px;
-  }
-  .sub-header {
-    position: relative;
-  }
+  .hor-m-5{
+    margin-left:5px;
+    margin-right:5px;
+  }  
+}
+
+.error-msg-container {
+  display: none;
+  margin-top: 5px;
+}
+
+.error-msg-container.error-msg-popup-container {
+  position: absolute;
+  width: 490px;
+}
+
+
+date-range-picker.ng-invalid.ng-invalid-empty .error-msg-container.ng-invalid-empty {
+  display: block !important;
+}  
+
+date-range-picker.ng-invalid.ng-invalid-order .error-msg-container.ng-invalid-order {
+  display: block !important;
 }

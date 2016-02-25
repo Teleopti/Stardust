@@ -94,6 +94,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 				{ "campaign.ConnectAverageHandlingTime", instance.ConnectAverageHandlingTime.ToString() },
 				{ "campaign.RightPartyAverageHandlingTime", instance.RightPartyAverageHandlingTime.ToString() },
 				{ "campaign.UnproductiveTime", instance.UnproductiveTime.ToString() },
+				{ "campaign.SpanningPeriod", "{" + string.Format("startDate: new Date('{0}'), endDate: new Date('{1}')", instance.StartDate, instance.EndDate) + "}" },
+
 				{ "campaign.StartDate", string.Format("new Date('{0}')", instance.StartDate)},
 				{ "campaign.EndDate", string.Format("new Date('{0}')", instance.EndDate) },
 				{ "campaign.WorkingHours", instance.GetWorkingHoursString()},
@@ -143,6 +145,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 
 			Browser.Interactions.SetScopeValues(".test-campaign-edit", new Dictionary<string, string>
 			{				
+				{ "campaign.SpanningPeriod", "{" + string.Format("startDate: new Date('{0}'), endDate: new Date('{1}')", instance.StartDate, instance.EndDate) + "}" },
 				{ "campaign.StartDate", string.Format("new Date('{0}')", instance.StartDate)},
 				{ "campaign.EndDate", string.Format("new Date('{0}')", instance.EndDate) },
 				{ "campaignSpanningPeriodForm.$pristine", "false" }
@@ -283,16 +286,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		[Then(@"I should see the campaign start date to be '(.*)'")]
 		public void ThenIShouldSeeTheCampaignStartDateToBe(int date)
 		{
-			Browser.Interactions.AssertAnyContains(".datepicker-start-date .btn-info.active", date.ToString());
+			Browser.Interactions.AssertAnyContains(".date-range-start-date .btn-info.active", date.ToString());
 		}
 
 		[Then(@"I should see the campaign end date to be '(.*)'")]
 		public void ThenIShouldSeeTheCampaignEndDateToBe(int date)
 		{
-			Browser.Interactions.AssertAnyContains(".datepicker-end-date .btn-info.active", date.ToString());
+			Browser.Interactions.AssertAnyContains(".date-range-end-date .btn-info.active", date.ToString());
 		}
-
-
 
 		private int getZeroValidationTolerance()
 		{

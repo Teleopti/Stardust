@@ -31,8 +31,8 @@
 		function editCampaign() {
 			$scope.isFormValidForPage = $scope.isFormValid();
 			checkIsWorkingHoursValid();
-			$scope.isCampaignDurationValidForPage = $scope.isCampaignDurationValid();
-			if (!$scope.isFormValidForPage || !$scope.isWorkingHoursValidForPage || !$scope.isCampaignDurationValidForPage) return;
+		
+			if (!$scope.isFormValidForPage || !$scope.isWorkingHoursValidForPage) return;
 			$scope.isEditing = true;
             outboundService.editCampaign($scope.campaign, function (campaign) {
                 outboundNotificationService.notifyCampaignUpdateSuccess(angular.copy(campaign));

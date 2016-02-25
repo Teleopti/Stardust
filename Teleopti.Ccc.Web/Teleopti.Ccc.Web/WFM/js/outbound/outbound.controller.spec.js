@@ -54,8 +54,7 @@ describe('OutboundCreateCtrl', function() {
 
 	it('Start Day and End Day should be set to start with', function() {
 		var test = setUpTarget();
-		expect(test.scope.campaign.StartDate).toBeDefined();
-		expect(test.scope.campaign.EndDate).toBeDefined();
+		expect(test.scope.campaign.SpanningPeriod).toBeDefined();
 	});
 
 	it('Default to invalid', function() {
@@ -79,19 +78,6 @@ describe('OutboundCreateCtrl', function() {
 		completeValidCampaign(test.scope.campaign);
 		test.scope.addCampaign();
 		expect(test.scope.campaign.WorkingHours.length).toEqual(0);
-	});
-
-	it('Invalid date range should fail', function () {
-
-		var test = setUpTarget();
-		test.scope.form = { $valid: true, $error: { required: [] } };
-		completeValidCampaign(test.scope.campaign);
-		test.scope.campaign.spanningPeriodErrors = [];
-		test.scope.$digest();
-		expect(test.scope.isCampaignDurationValid()).toBeTruthy();
-		test.scope.campaign.spanningPeriodErrors = ['something wrong'];
-		test.scope.$digest();
-		expect(test.scope.isCampaignDurationValid()).not.toBeTruthy();
 	});
 
 	it('At least one working hour has been selected for any weekday for the campaign to be valid', function() {		
