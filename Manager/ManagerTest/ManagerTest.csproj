@@ -101,7 +101,7 @@
     <Compile Include="ManagerOperationsTest.cs" />
     <Compile Include="ManagerOperationTestsAttribute.cs" />
     <Compile Include="ManagerTestsAttribute.cs" />
-    <Compile Include="NodeManagerTests.cs" />
+    <Compile Include="WorkerNodeRepositoryTests.cs" />
     <Compile Include="NodeUriBuilderHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
