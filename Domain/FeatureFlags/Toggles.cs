@@ -25,7 +25,6 @@
 
 		MessageBroker_SchedulingScreenMailbox_32733,
 
-
 		RTA_NotifyViaSMS_31567,
 
 		Portal_NewLandingpage_29415,
