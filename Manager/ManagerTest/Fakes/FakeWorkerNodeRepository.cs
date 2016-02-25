@@ -28,5 +28,10 @@ namespace ManagerTest.Fakes
 		{
 			throw new NotImplementedException();
 		}
+
+		public void RegisterHeartbeat(Uri nodeUri)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

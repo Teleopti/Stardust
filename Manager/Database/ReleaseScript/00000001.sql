@@ -25,9 +25,14 @@ CREATE TABLE [Stardust].[JobDefinitions](
 ))
 GO
 
+IF OBJECT_ID('[Stardust].[WorkerNodes]', 'U') IS NOT NULL 
+  DROP TABLE [Stardust].[WorkerNodes]; 
+
 CREATE TABLE [Stardust].[WorkerNodes](
 	[Id] [uniqueidentifier] NOT NULL,
 	[Url] [nvarchar](450) NOT NULL,
+	[Heartbeat] DateTime NULL,
+	[Alive] [nvarchar](max) NULL
  CONSTRAINT [PK_WorkerNodes] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

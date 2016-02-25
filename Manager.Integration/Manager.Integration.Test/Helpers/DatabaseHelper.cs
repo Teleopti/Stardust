@@ -11,8 +11,6 @@ namespace Manager.Integration.Test.Helpers
 
 		public static void TryClearDatabase(string connectionString)
 		{
-			LogHelper.LogDebugWithLineNumber("Start.", Logger);
-
 			if (string.IsNullOrEmpty(connectionString))
 			{
 				LogHelper.LogErrorWithLineNumber("Invalid connection string value.", Logger);
@@ -81,8 +79,6 @@ namespace Manager.Integration.Test.Helpers
 				connection.Close();
 
 				LogHelper.LogDebugWithLineNumber("Finished truncating database tables.", Logger);
-
-				LogHelper.LogDebugWithLineNumber("Finsihed.", Logger);
 			}
 		}
 	}

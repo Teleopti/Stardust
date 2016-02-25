@@ -39,7 +39,13 @@ namespace Stardust.Manager
             _jdDataTable.Columns.Add(new DataColumn("Url",
                                                     typeof (string)));
 
-            _jdDataSet.Tables.Add(_jdDataTable);
+			_jdDataTable.Columns.Add(new DataColumn("Heartbeat",
+													typeof(DateTime)));
+
+			_jdDataTable.Columns.Add(new DataColumn("Alive",
+													typeof(string)));
+
+			_jdDataSet.Tables.Add(_jdDataTable);
 
             LogHelper.LogDebugWithLineNumber(Logger, "Finished InitDs.");
         }
@@ -48,7 +54,7 @@ namespace Stardust.Manager
         {
 			LogHelper.LogDebugWithLineNumber(Logger, "Start LoadAll.");
 
-            const string selectCommand = @"SELECT  Id ,Url FROM [Stardust].WorkerNodes";
+            const string selectCommand = @"SELECT * FROM [Stardust].WorkerNodes";
 
             var listToReturn = new List<WorkerNode>();
 
@@ -71,8 +77,10 @@ namespace Stardust.Manager
 						var jobDefinition = new WorkerNode
                         {
                             Id = (Guid) reader.GetValue(reader.GetOrdinal("Id")),
-                            Url = new Uri((string) reader.GetValue(reader.GetOrdinal("Url")))
-                        };
+                            Url = new Uri((string) reader.GetValue(reader.GetOrdinal("Url"))),
+							Alive = (string)reader.GetValue(reader.GetOrdinal("Alive")),
+							Heartbeat = (DateTime)reader.GetValue(reader.GetOrdinal("Heartbeat"))
+						};
 
                         listToReturn.Add(jobDefinition);
                     }
@@ -128,8 +136,10 @@ namespace Stardust.Manager
 							var jobDefinition = new WorkerNode
                             {
                                 Id = (Guid) reader.GetValue(reader.GetOrdinal("Id")),
-                                Url = new Uri((string) reader.GetValue(reader.GetOrdinal("Url")))
-                            };
+                                Url = new Uri((string) reader.GetValue(reader.GetOrdinal("Url"))),
+								Alive = (string)reader.GetValue(reader.GetOrdinal("Alive")),
+								Heartbeat = (DateTime)reader.GetValue(reader.GetOrdinal("Heartbeat"))
+							};
                             listToReturn.Add(jobDefinition);
                         }
                     }
@@ -174,7 +184,9 @@ namespace Stardust.Manager
             var dr = _jdDataTable.NewRow();
             dr["Id"] = job.Id;
             dr["Url"] = job.Url.ToString();
-            _jdDataTable.Rows.Add(dr);
+	        dr["Heartbeat"] = DateTime.Now;
+	        dr["Alive"] = "true";
+			_jdDataTable.Rows.Add(dr);
 
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -220,6 +232,11 @@ namespace Stardust.Manager
 
                 connection.Close();
             }
+		}
+
+	    public void RegisterHeartbeat(Uri nodeUri)
+	    {
+		//Update relevant row in DB
 		}
     }
 }

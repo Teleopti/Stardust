@@ -211,10 +211,12 @@ namespace Stardust.Node.Workers
 							              CurrentMessageToProcess.Id,
 							              CurrentMessageToProcess.Name);
 
-						LogHelper.LogDebugWithLineNumber(Logger,
-						                                 logInfo);
-
-
+						foreach (var e in t.Exception.InnerExceptions)
+						{
+							LogHelper.LogErrorWithLineNumber(Logger,
+														 logInfo, e);
+						}
+						
 						SetNodeStatusTimer(TrySendJobFaultedStatusToManagerTimer,
 						                   CurrentMessageToProcess);
 
