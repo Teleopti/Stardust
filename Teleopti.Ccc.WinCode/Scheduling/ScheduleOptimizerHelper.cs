@@ -85,7 +85,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			using (_container.Resolve<IntradayOptimizationContext>().Create(selectedPeriod))
 			{
-				service.Execute(optimizers);
+				using (_container.Resolve<IntradayOptimizationCallbackContext>().Create(new intradayOptimizationCallback(_backgroundWorker)))
+				{
+					service.Execute(optimizers);
+				}
 			}
 		}
 
