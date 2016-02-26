@@ -24,6 +24,8 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 		private PeopleSearchProvider target;
 		private IOptionalColumnRepository optionalColumnRepository;
 		private IPermissionProvider permissionProvider;
+		private IPersonAbsenceRepository personAbsenceRepository;
+		private ILoggedOnUser loggedOnUser;
 
 		[SetUp]
 		public void Setup()
@@ -31,9 +33,11 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 			searchRepository = MockRepository.GenerateMock<IPersonFinderReadOnlyRepository>();
 			personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			optionalColumnRepository = MockRepository.GenerateMock<IOptionalColumnRepository>();
+			personAbsenceRepository = MockRepository.GenerateMock<IPersonAbsenceRepository>();
 			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			target = new PeopleSearchProvider(searchRepository, personRepository,
-				new FakePermissionProvider(), optionalColumnRepository);
+				new FakePermissionProvider(), optionalColumnRepository, personAbsenceRepository, loggedOnUser);
 		}
 
 		[Test]
@@ -131,6 +135,32 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 			var result = target.SearchPermittedPeople(searchCriteria, 10, 1, DateOnly.Today, new Dictionary<string, bool>(), DefinedRaptorApplicationFunctionPaths.WebPeople);
 			var peopleList = result.People;
 			peopleList.Count().Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldSearchPermittedPeopleWithAbsence()
+		{
+			personRepository.Stub(x => x.FindPeople(new List<Guid>())).IgnoreArguments().Return(new List<IPerson>());
+			personAbsenceRepository.Stub(x => x.Find(new List<IPerson>(), new DateTimePeriod())).IgnoreArguments().Return(new List<IPersonAbsence> { createPersonAbsence(new DateTimePeriod())});
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(new Person());
+			target = new PeopleSearchProvider(searchRepository, personRepository, new FakePermissionProvider(), optionalColumnRepository, personAbsenceRepository, loggedOnUser);
+
+			var searchCriteria = new Dictionary<PersonFinderField, string>
+			{
+				{
+					PersonFinderField.All, "John"
+				}
+			};
+
+			var result = target.SearchPermittedPeopleWithAbsence(searchCriteria, DateOnly.MaxValue, DefinedRaptorApplicationFunctionPaths.WebPeople);
+			result.Count().Should().Be.EqualTo(1);
+		}
+
+		private IPersonAbsence createPersonAbsence(DateTimePeriod dateTimePeriod)
+		{
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			var person = PersonFactory.CreatePersonWithGuid("John", "Smith");
+			return PersonAbsenceFactory.CreatePersonAbsence(person, scenario, dateTimePeriod);
 		}
 	}
 }

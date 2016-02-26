@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			var criteriaDictionary = SearchTermParser.Parse(keyword);
 
 			var result =
-				_teamScheduleViewModelFactory.CreateViewModel(criteriaDictionary, currentDate, pageSize, currentPageIndex);
+				_teamScheduleViewModelFactory.CreateViewModel(criteriaDictionary, currentDate, pageSize, currentPageIndex, isOnlyAbsences);
 			result.Keyword = keyword;
 
 			return Json(result);

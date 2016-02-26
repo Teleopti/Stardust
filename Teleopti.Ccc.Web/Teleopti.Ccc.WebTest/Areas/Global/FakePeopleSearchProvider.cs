@@ -24,6 +24,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			return _persons;
 		}
 
+		public IEnumerable<IPerson> SearchPermittedPeopleWithAbsence(IDictionary<PersonFinderField, string> criteriaDictionary, DateOnly dateInUserTimeZone,
+			string function)
+		{
+			throw new NotImplementedException();
+		}
+
 		public IEnumerable<Guid> GetPermittedPersonIdList(IDictionary<PersonFinderField, string> criteriaDictionary, int pageSize, int currentPageIndex,
 			DateOnly currentDate, IDictionary<string, bool> sortedColumns, string function)
 		{
