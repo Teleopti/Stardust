@@ -174,14 +174,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var nodeConfig = new NodeConfiguration(new Uri(ConfigurationManager.AppSettings["NodeBaseAddress"]),
 					 new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
 					 assembly, 
-					 ConfigurationManager.AppSettings["NodeName"]);
+					 ConfigurationManager.AppSettings["NodeName"],10000, 30000);
 
 			var iocArgs = new IocArgs(new ConfigReader());
 			var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterModule(new TenantServerModule(configuration));
-			builder.RegisterModule<NodeHandlersModule>();
+			builder.RegisterModule(new NodeHandlersModule(configuration));
 			var container = builder.Build();
 
 			var messageBroker = container.Resolve<IMessageBrokerComposite>();

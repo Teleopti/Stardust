@@ -11,7 +11,6 @@ using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
-using Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 {
@@ -60,7 +59,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			build.RegisterModule<CommandHandlersModule>();
 			build.RegisterModule(new NotificationModule(_toggleManager));
 			build.RegisterModule<IntraIntervalSolverServiceModule>();
-			build.RegisterModule<NodeHandlersModule>();
 			build.RegisterModule<PersonAccountModule>();
 			
 			build.RegisterType<AgentBadgeCalculator>().As<IAgentBadgeCalculator>();
