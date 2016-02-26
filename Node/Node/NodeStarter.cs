@@ -67,7 +67,7 @@ namespace Stardust.Node
 					                                                                            nodeConfiguration),
 				                                                                            new TrySendJobFaultedToManagerTimer(
 					                                                                            nodeConfiguration),
-				                                                                            new PostHttpRequest()))
+				                                                                            new HttpSender()))
 					                    .SingleInstance();
 
 

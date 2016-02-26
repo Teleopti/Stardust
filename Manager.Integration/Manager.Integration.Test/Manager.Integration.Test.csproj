@@ -122,6 +122,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Manager.Integration.Tests.Console.Host\Manager.IntegrationTest.Console.Host.csproj">
+      <Project>{8FC65E40-C783-48D2-9B50-BAF7A7EC8298}</Project>
+      <Name>Manager.IntegrationTest.Console.Host</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

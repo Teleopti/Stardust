@@ -137,13 +137,15 @@ namespace Manager.IntegrationTest.Console.Host
 					var values = s.Split('=');
 
 					// Managers.
-					if (values[0].Equals(ManagersCommandArgument, StringComparison.InvariantCultureIgnoreCase))
+					if (values[0].Equals(ManagersCommandArgument,
+					                     StringComparison.InvariantCultureIgnoreCase))
 					{
 						NumberOfManagersToStart = Convert.ToInt32(values[1]);
 					}
 
 					// Nodes.
-					if (values[0].Equals(NodesCommandArgument, StringComparison.InvariantCultureIgnoreCase))
+					if (values[0].Equals(NodesCommandArgument,
+					                     StringComparison.InvariantCultureIgnoreCase))
 					{
 						NumberOfNodesToStart = Convert.ToInt32(values[1]);
 					}
@@ -194,9 +196,13 @@ namespace Manager.IntegrationTest.Console.Host
 				Uri uri;
 
 				var copiedManagerConfigurationFile =
-					CopyManagerConfigurationFile(ManagerConfigurationFile, i + 1, portNumber, out uri);
+					CopyManagerConfigurationFile(ManagerConfigurationFile,
+					                             i + 1,
+					                             portNumber,
+					                             out uri);
 
-				CopiedManagerConfigurationFiles.Add(uri, copiedManagerConfigurationFile);
+				CopiedManagerConfigurationFiles.Add(uri,
+				                                    copiedManagerConfigurationFile);
 			}
 
 			LogHelper.LogDebugWithLineNumber(Logger,
@@ -230,7 +236,8 @@ namespace Manager.IntegrationTest.Console.Host
 					LogHelper.LogDebugWithLineNumber(Logger,
 					                                 "Start creating node configuration file for node id : " + i);
 
-					var nodeConfig = CreateNodeConfigurationFile(i);
+					var nodeConfig = CreateNodeConfigurationFile(i, 
+																CopiedManagerConfigurationFiles.First().Value);
 
 					LogHelper.LogDebugWithLineNumber(Logger,
 					                                 "Finished creating node configuration file for node : ( id, config file ) : ( " +
@@ -324,7 +331,8 @@ namespace Manager.IntegrationTest.Console.Host
 
 		private static int PortStartNumber { get; set; }
 
-		private static FileInfo CreateNodeConfigurationFile(int i)
+		private static FileInfo CreateNodeConfigurationFile(int i,
+		                                                    FileInfo copiedManagerConfigurationFile)
 		{
 			var nodeName = "Node" + i;
 
@@ -340,7 +348,7 @@ namespace Manager.IntegrationTest.Console.Host
 				CreateNodeConfigurationFile(NodeConfigurationFile,
 				                            configName,
 				                            nodeName,
-				                            new Uri(Settings.Default.ManagerLocationUri),
+											copiedManagerConfigurationFile,
 				                            endPointUri,
 				                            Settings.Default.HandlerAssembly);
 
@@ -398,28 +406,64 @@ namespace Manager.IntegrationTest.Console.Host
 		public static FileInfo CreateNodeConfigurationFile(FileInfo nodeConfigurationFile,
 		                                                   string newConfigurationFileName,
 		                                                   string nodeName,
-		                                                   Uri managerEndpoint,
+		                                                   FileInfo copiedManagerConfigurationFile,
 		                                                   Uri nodeEndPoint,
 		                                                   string handlerAssembly)
 		{
+			//-------------------------------------------------------
+			// Open Manager configuration file.
+			//-------------------------------------------------------
+			var managerExeConfigurationFileMap = new ExeConfigurationFileMap
+			{
+				ExeConfigFilename = copiedManagerConfigurationFile.FullName
+			};
+
+			var managerConfig = 
+				ConfigurationManager.OpenMappedExeConfiguration(managerExeConfigurationFileMap,
+			                                                    ConfigurationUserLevel.None);
+
+			var managerEndpointBaseAddress =
+				managerConfig.AppSettings.Settings["baseAddress"].Value;
+
+			var managerEndpointRoute=
+				managerConfig.AppSettings.Settings["route"].Value;
+
+			if (managerEndpointRoute.StartsWith("/"))
+			{
+				managerEndpointRoute =  managerEndpointRoute.Substring(1);
+			}
+
+			if (!managerEndpointRoute.EndsWith("/"))
+			{
+				managerEndpointRoute += "/";
+			}
+
+			UriBuilder managerUriBuilder = 
+				new UriBuilder(managerEndpointBaseAddress);
+
+			managerUriBuilder.Path += managerEndpointRoute;
+
+			//-------------------------------------------------------
+			// Create Node configuration file.
+			//-------------------------------------------------------
 			var copiedNodeConfigFile = nodeConfigurationFile.CopyTo(newConfigurationFileName,
 			                                                        true);
 
-			// Change app settings.
-			var configFileMap = new ExeConfigurationFileMap
+			var nodeExeConfigurationFileMap = new ExeConfigurationFileMap
 			{
 				ExeConfigFilename = copiedNodeConfigFile.FullName
 			};
 
-			var config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap,
-			                                                             ConfigurationUserLevel.None);
+			var nodeConfig = 
+				ConfigurationManager.OpenMappedExeConfiguration(nodeExeConfigurationFileMap,
+			                                                    ConfigurationUserLevel.None);
 
-			config.AppSettings.Settings["NodeName"].Value = nodeName;
-			config.AppSettings.Settings["BaseAddress"].Value = nodeEndPoint.ToString();
-			config.AppSettings.Settings["ManagerLocation"].Value = managerEndpoint.ToString();
-			config.AppSettings.Settings["HandlerAssembly"].Value = handlerAssembly;
+			nodeConfig.AppSettings.Settings["NodeName"].Value = nodeName;
+			nodeConfig.AppSettings.Settings["BaseAddress"].Value = nodeEndPoint.ToString();
+			nodeConfig.AppSettings.Settings["ManagerLocation"].Value = managerUriBuilder.Uri.ToString();
+			nodeConfig.AppSettings.Settings["HandlerAssembly"].Value = handlerAssembly;
 
-			config.Save();
+			nodeConfig.Save();
 
 			return copiedNodeConfigFile;
 		}
@@ -538,7 +582,8 @@ namespace Manager.IntegrationTest.Console.Host
 				LogHelper.LogDebugWithLineNumber(Logger,
 				                                 "Start creating node configuration file for node id : " + NumberOfNodesToStart);
 
-				var nodeConfig = CreateNodeConfigurationFile(NumberOfNodesToStart);
+				var nodeConfig = CreateNodeConfigurationFile(NumberOfNodesToStart,
+															CopiedManagerConfigurationFiles.First().Value);
 
 				friendlyName = nodeConfig.Name;
 
@@ -601,7 +646,7 @@ namespace Manager.IntegrationTest.Console.Host
 		{
 			NumberOfManagersToStart++;
 
-			var portNumber = 
+			var portNumber =
 				Settings.Default.ManagerEndpointPortNumberStart + (NumberOfManagersToStart - 1);
 
 			Uri uri;
@@ -612,8 +657,8 @@ namespace Manager.IntegrationTest.Console.Host
 				                             portNumber,
 				                             out uri);
 
-			CopiedManagerConfigurationFiles.Add(uri, 
-												copiedManagerConfigurationFile);
+			CopiedManagerConfigurationFiles.Add(uri,
+			                                    copiedManagerConfigurationFile);
 
 			var appDomainManagerTask =
 				new AppDomainManagerTask(_buildMode,

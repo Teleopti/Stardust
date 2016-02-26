@@ -1,30 +1,61 @@
-﻿using Stardust.Node.Interfaces;
+﻿using System;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using Stardust.Node.Interfaces;
 
 namespace NodeTest.Fakes
 {
-	public class PostHttpRequestFake : IPostHttpRequest
+	public class PostHttpRequestFake : IHttpSender
 	{
-		private object _value;
 		public string CalledUrl { get; private set; }
+
 		public string SentJson { get; private set; }
 
-		public T Send<T>(string url,
-		                 string json,
-		                 string userAgent = null)
+		public Task<HttpResponseMessage> PostAsync(Uri url, object data, CancellationToken cancellationToken)
 		{
-			SentJson = json;
-			CalledUrl = url;
-			if (_value != null)
-			{
-				return (T) _value;
-			}
+			SentJson = data.ToString();
+			CalledUrl = url.ToString();
 
-			return default(T);
+			return null;
 		}
 
-		public void SetReturnValue<T>(T value)
+		public Task<HttpResponseMessage> PostAsync(Uri url, object data)
 		{
-			_value = value;
+			SentJson = data.ToString();
+			CalledUrl = url.ToString();
+
+			return null;
+		}
+
+		public Task<HttpResponseMessage> DeleteAsync(Uri url)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<HttpResponseMessage> DeleteAsync(Uri url, CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<HttpResponseMessage> GetAsync(Uri url)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<HttpResponseMessage> GetAsync(Uri url, CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<bool> TryGetAsync(Uri url)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<bool> TryGetAsync(Uri url, CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

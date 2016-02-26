@@ -10,8 +10,6 @@ using log4net.Config;
 using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Notifications;
-using Manager.Integration.Test.Properties;
-using Manager.Integration.Test.Scripts;
 using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Timers;
 using Manager.Integration.Test.Validators;
@@ -155,9 +153,9 @@ namespace Manager.Integration.Test
 
 			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
-			Task task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(5,
-			                                                       sqlNotiferCancellationTokenSource,
-			                                                       IntegerValidators.Value1IsEqualToValue2Validator);
+			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(5,
+			                                                      sqlNotiferCancellationTokenSource,
+			                                                      IntegerValidators.Value1IsEqualToValue2Validator);
 			task.Start();
 
 			LogHelper.LogDebugWithLineNumber("Waiting for all 5 nodes to start up.",

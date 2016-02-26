@@ -110,9 +110,13 @@ namespace NodeTest
 			                                   _sendJobFaultedTimer,
 			                                   new PostHttpRequestFake());
 
-			_nodeController = new NodeController(_workerWrapper) {Request = new HttpRequestMessage()};
+			_nodeController = new NodeController(_workerWrapper)
+			{
+				Request = new HttpRequestMessage()
+			};
 
 			var actionResultCancel = _nodeController.TryCancelJob(_jobToDo.Id);
+
 			Assert.IsInstanceOf(typeof (NotFoundResult),
 			                    actionResultCancel);
 		}

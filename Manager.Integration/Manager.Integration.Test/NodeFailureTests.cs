@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
@@ -12,19 +11,19 @@ using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Models;
 using Manager.Integration.Test.Notifications;
 using Manager.Integration.Test.Properties;
-using Manager.Integration.Test.Scripts;
 using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Validators;
+using Manager.IntegrationTest.Console.Host.Helpers;
+using Manager.IntegrationTest.Console.Host.Interfaces;
 using Newtonsoft.Json;
 using NUnit.Framework;
-
+using LogHelper = Manager.Integration.Test.Helpers.LogHelper;
 
 namespace Manager.Integration.Test
 {
 	[TestFixture]
 	class NodeFailureTests
 	{
-
 		private static readonly ILog Logger =
 			LogManager.GetLogger(typeof (NodeFailureTests));
 
@@ -91,6 +90,12 @@ namespace Manager.Integration.Test
 			                                 Logger);
 		}
 
+		private void WaitForNodeTimeout()
+		{
+			//MUST BE CHANGED TO FIT CONFIGURATION
+			Thread.Sleep(TimeSpan.FromSeconds(30));
+		}
+
 		[Test]
 		public async void ShouldRemoveNodeWhenDead()
 		{
@@ -123,46 +128,39 @@ namespace Manager.Integration.Test
 			                                 Logger);
 
 
-
 			//---------------------------------------------
 			// Kill the node.
 			//---------------------------------------------
+			var cancellationTokenSource = new CancellationTokenSource();
 
+			IHttpSender httpSender = new HttpSender();
 
-		var cancellationTokenSource = new CancellationTokenSource();
+			var uriBuilder =
+				new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
 
-			HttpResponseMessage response = null;
+			uriBuilder.Path += "appdomain/nodes/" + "Node1.config";
 
-			Uri uri;
-			using (var client = new HttpClient())
+			var uri = uriBuilder.Uri;
+
+			LogHelper.LogDebugWithLineNumber("Start calling Delete Async ( " + uri + " ) ",
+			                                 Logger);
+
+			try
 			{
-				var uriBuilder =
-					new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
+				var response = await httpSender.DeleteAsync(uriBuilder.Uri,
+				                                            cancellationTokenSource.Token);
 
-				uriBuilder.Path += "appdomain/nodes/" + "Node1.config";
-
-				uri = uriBuilder.Uri;
-
-				LogHelper.LogDebugWithLineNumber("Start calling Delete Async ( " + uri + " ) ",
-				                                 Logger);
-
-				try
+				if (response.IsSuccessStatusCode)
 				{
-					response = await client.DeleteAsync(uriBuilder.Uri,
-					                                    cancellationTokenSource.Token);
-
-					if (response.IsSuccessStatusCode)
-					{
-						LogHelper.LogDebugWithLineNumber("Succeeded calling Delete Async ( " + uri + " ) ",
-						                                 Logger);
-					}
+					LogHelper.LogDebugWithLineNumber("Succeeded calling Delete Async ( " + uri + " ) ",
+					                                 Logger);
 				}
-				catch (Exception exp)
-				{
-					LogHelper.LogErrorWithLineNumber(exp.Message,
-					                                 Logger,
-					                                 exp);
-				}
+			}
+			catch (Exception exp)
+			{
+				LogHelper.LogErrorWithLineNumber(exp.Message,
+				                                 Logger,
+				                                 exp);
 			}
 
 			cancellationTokenSource.Cancel();
@@ -170,37 +168,26 @@ namespace Manager.Integration.Test
 			//---------------------------------------------
 			// Wait for timeout, node must be considered dead.
 			//---------------------------------------------
-
-
-			WaitForNodeTimeout();  
-
+			WaitForNodeTimeout();
 
 			//---------------------------------------------
 			// Check if node is dead.
 			//---------------------------------------------
-
-			ManagerUriBuilder managerUriBuilder = new ManagerUriBuilder();
+			var managerUriBuilder = new ManagerUriBuilder();
 
 			uri = managerUriBuilder.GetNodesUri();
 			
-			using (var client = new HttpClient())
-			{
-				 var responseNodes = await client.GetAsync(uri);
-				responseNodes.EnsureSuccessStatusCode();
-				var ser = responseNodes.Content.ReadAsStringAsync();
-				
-				List<WorkerNode> workerNodes = JsonConvert.DeserializeObject<List<WorkerNode>>(ser.Result);
+			var responseNodes = await httpSender.GetAsync(uri);
 
-				WorkerNode node = workerNodes.FirstOrDefault();
+			responseNodes.EnsureSuccessStatusCode();
+			var ser = responseNodes.Content.ReadAsStringAsync();
 
-				Assert.IsTrue(node.Alive == "false");  
-			}
-		}
+			var workerNodes = JsonConvert.DeserializeObject<List<WorkerNode>>(ser.Result);
 
-		private void WaitForNodeTimeout()
-		{
-			//MUST BE CHANGED TO FIT CONFIGURATION
-			Thread.Sleep(TimeSpan.FromSeconds(30));
+			var node = workerNodes.FirstOrDefault();
+
+			Assert.NotNull(node);
+			Assert.IsTrue(node.Alive == "false");
 		}
 	}
 }

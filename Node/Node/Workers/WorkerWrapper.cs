@@ -19,7 +19,7 @@ namespace Stardust.Node.Workers
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (WorkerWrapper));
 
-		private readonly IPostHttpRequest _postHttpRequest;
+		private readonly IHttpSender _httpSender;
 
 		private readonly object _startJobLock = new object();
 
@@ -30,9 +30,9 @@ namespace Stardust.Node.Workers
 		                     TrySendStatusToManagerTimer trySendJobDoneStatusToManagerTimer,
 		                     TrySendStatusToManagerTimer trySendJobCanceledStatusToManagerTimer,
 		                     TrySendStatusToManagerTimer trySendJobFaultedStatusToManagerTimer,
-		                     IPostHttpRequest postHttpRequest)
+		                     IHttpSender httpSender)
 		{
-			_postHttpRequest = postHttpRequest;
+			_httpSender = httpSender;
 
 			invokeHandler.ThrowArgumentNullExceptionWhenNull();
 			nodeConfiguration.ThrowArgumentNullException();
@@ -215,9 +215,9 @@ namespace Stardust.Node.Workers
 							foreach (var e in t.Exception.InnerExceptions)
 							{
 								LogHelper.LogErrorWithLineNumber(Logger,
-																 logInfo, e);
+								                                 logInfo, e);
 							}
-						}							
+						}
 
 						SetNodeStatusTimer(TrySendJobFaultedStatusToManagerTimer,
 						                   CurrentMessageToProcess);
@@ -372,7 +372,7 @@ namespace Stardust.Node.Workers
 		private void ProgressCallback(string message)
 		{
 			LogHelper.LogInfoWithLineNumber(Logger,
-			                               WhoamI + " : " + message);
+			                                WhoamI + " : " + message);
 
 			var progressModel = new JobProgressModel
 			{
@@ -384,9 +384,14 @@ namespace Stardust.Node.Workers
 
 			try
 			{
-				_postHttpRequest.Send<IHttpActionResult>(NodeConfiguration.ManagerLocation + ManagerRouteConstants.JobProgress,
-				                                         json);
+				var uriBuilder =
+					new UriBuilder(NodeConfiguration.ManagerLocation);
+
+				uriBuilder.Path += ManagerRouteConstants.JobProgress;
+
+				_httpSender.PostAsync(uriBuilder.Uri, json);
 			}
+
 			catch (Exception exception)
 			{
 				LogHelper.LogErrorWithLineNumber(Logger,

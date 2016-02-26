@@ -49,7 +49,10 @@ namespace Stardust.Node.Extensions
 
 			var nodeConfigurationUriBuilder = new NodeConfigurationUriBuilderHelper(nodeConfiguration);
 
-			return nodeConfigurationUriBuilder.ManagerUriBuilder.GetNodeHasBeenInitializedTemplateUri();
+			var ret =
+				nodeConfigurationUriBuilder.ManagerUriBuilder.GetNodeHasBeenInitializedTemplateUri();
+
+			return ret;
 		}
 
 		public static Uri GetManagerNodeHeartbeatUri(this INodeConfiguration nodeConfiguration)

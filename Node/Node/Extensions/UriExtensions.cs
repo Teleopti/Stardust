@@ -4,13 +4,18 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using log4net;
 using Newtonsoft.Json;
 using Stardust.Node.Constants;
+using Stardust.Node.Helpers;
 
 namespace Stardust.Node.Extensions
 {
 	public static class UriExtensions
 	{
+		private static readonly ILog Logger =
+			LogManager.GetLogger(typeof (UriExtensions));
+
 		public static void ThrowArgumentNullExceptionWhenNull(this Uri uri)
 		{
 			if (uri.IsNull())
@@ -48,9 +53,11 @@ namespace Stardust.Node.Extensions
 		                                                        Uri apiEndpoint,
 		                                                        CancellationToken cancellationToken)
 		{
-			// Call API.
-			HttpResponseMessage response;
+			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
+			//----------------------------------------------
+			// Call API.
+			//----------------------------------------------
 			using (var client = new HttpClient())
 			{
 				client.DefineDefaultRequestHeaders();
@@ -61,12 +68,25 @@ namespace Stardust.Node.Extensions
 				                            Encoding.Unicode,
 				                            MediaTypeConstants.ApplicationJson);
 
-				response = await client.PostAsync(apiEndpoint,
-				                                  str,
-				                                  cancellationToken);
+				try
+				{
+					var response = await client.PostAsync(apiEndpoint,
+					                                      str,
+					                                      cancellationToken);
+					return response;
+				}
+
+				catch (Exception exp)
+				{
+					LogHelper.LogErrorWithLineNumber(Logger,
+					                                 exp.Message,
+					                                 exp);
+				}
 			}
 
-			return response;
+			LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
+
+			return null;
 		}
 
 		private static void DefineDefaultRequestHeaders(this HttpClient client)

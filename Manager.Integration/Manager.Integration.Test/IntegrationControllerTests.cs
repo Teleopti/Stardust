@@ -4,7 +4,6 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
@@ -12,11 +11,13 @@ using log4net.Config;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Notifications;
 using Manager.Integration.Test.Properties;
-using Manager.Integration.Test.Scripts;
 using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Validators;
+using Manager.IntegrationTest.Console.Host.Helpers;
+using Manager.IntegrationTest.Console.Host.Interfaces;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using LogHelper = Manager.Integration.Test.Helpers.LogHelper;
 
 namespace Manager.Integration.Test
 {
@@ -102,6 +103,167 @@ namespace Manager.Integration.Test
 
 		private CancellationTokenSource CancellationTokenSource { get; set; }
 
+		[Test]
+		public async void ShouldBeAbleToShutDownManager1()
+		{
+			LogHelper.LogDebugWithLineNumber("Start test.",
+			                                 Logger);
+
+			//---------------------------------------------
+			// Notify when all 2 nodes are up and running. 
+			//---------------------------------------------
+			LogHelper.LogDebugWithLineNumber("Waiting for all 2 nodes to start up.",
+			                                 Logger);
+
+			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
+
+			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
+
+			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(2,
+			                                                      sqlNotiferCancellationTokenSource,
+			                                                      IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
+			task.Start();
+
+			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(30));
+
+			sqlNotifier.Dispose();
+
+			LogHelper.LogDebugWithLineNumber("All 2 nodes has started.",
+			                                 Logger);
+
+			//---------------------------------------------
+			// Start actual test.
+			//---------------------------------------------
+			var cancellationTokenSource = new CancellationTokenSource();
+
+			HttpResponseMessage response = null;
+
+			IHttpSender httpSender = new HttpSender();
+
+
+			var uriBuilder =
+				new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
+
+			uriBuilder.Path += "appdomain/managers/" + "Manager1.config";
+
+			var uri = uriBuilder.Uri;
+
+			LogHelper.LogDebugWithLineNumber("Start calling Delete Async ( " + uri + " ) ",
+			                                 Logger);
+
+			try
+			{
+				response = await httpSender.DeleteAsync(uriBuilder.Uri,
+				                                        cancellationTokenSource.Token);
+
+				if (response.IsSuccessStatusCode)
+				{
+					LogHelper.LogDebugWithLineNumber("Succeeded calling Delete Async ( " + uri + " ) ",
+					                                 Logger);
+				}
+			}
+			catch (Exception exp)
+			{
+				LogHelper.LogErrorWithLineNumber(exp.Message,
+				                                 Logger,
+				                                 exp);
+			}
+
+			Assert.IsNotNull(response,
+			                 "Response can not be null.");
+
+			Assert.IsTrue(response.IsSuccessStatusCode,
+			              "Response code should be success.");
+
+
+			cancellationTokenSource.Cancel();
+
+			LogHelper.LogDebugWithLineNumber("Finished test.",
+			                                 Logger);
+		}
+
+		/// <summary>
+		///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
+		///     netsh http add urlacl url=http://+:9100/ user=everyone listen=yes
+		/// </summary>
+		[Test]
+		public async void ShouldBeAbleToShutDownNode1()
+		{
+			LogHelper.LogDebugWithLineNumber("Start test.",
+			                                 Logger);
+
+			//---------------------------------------------
+			// Notify when all 2 nodes are up and running. 
+			//---------------------------------------------
+			LogHelper.LogDebugWithLineNumber("Waiting for all 2 nodes to start up.",
+			                                 Logger);
+
+			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
+
+			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
+
+			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(2,
+			                                                      sqlNotiferCancellationTokenSource,
+			                                                      IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
+			task.Start();
+
+			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(30));
+
+			sqlNotifier.Dispose();
+
+			LogHelper.LogDebugWithLineNumber("All 2 nodes has started.",
+			                                 Logger);
+
+			//---------------------------------------------
+			// Start actual test.
+			//---------------------------------------------
+			var cancellationTokenSource = new CancellationTokenSource();
+
+			HttpResponseMessage response = null;
+
+			IHttpSender httpSender = new HttpSender();
+
+			var uriBuilder =
+				new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
+
+			uriBuilder.Path += "appdomain/nodes/" + "Node1.config";
+
+			var uri = uriBuilder.Uri;
+
+			LogHelper.LogDebugWithLineNumber("Start calling Delete Async ( " + uri + " ) ",
+			                                 Logger);
+
+			try
+			{
+				response = await httpSender.DeleteAsync(uriBuilder.Uri,
+				                                        cancellationTokenSource.Token);
+
+				if (response.IsSuccessStatusCode)
+				{
+					LogHelper.LogDebugWithLineNumber("Succeeded calling Delete Async ( " + uri + " ) ",
+					                                 Logger);
+				}
+			}
+			catch (Exception exp)
+			{
+				LogHelper.LogErrorWithLineNumber(exp.Message,
+				                                 Logger,
+				                                 exp);
+			}
+
+			Assert.IsNotNull(response,
+			                 "Response can not be null.");
+
+			Assert.IsTrue(response.IsSuccessStatusCode,
+			              "Response code should be success.");
+
+
+			cancellationTokenSource.Cancel();
+
+			LogHelper.LogDebugWithLineNumber("Finished test.",
+			                                 Logger);
+		}
+
 
 		[Test]
 		public async void ShouldBeAbleToStartNewManager()
@@ -135,44 +297,41 @@ namespace Manager.Integration.Test
 			//---------------------------------------------
 			// Start actual test.
 			//---------------------------------------------
-			var cancellationTokenSource = new CancellationTokenSource();
-
 			HttpResponseMessage response = null;
 
 			string managerName = null;
 
-			using (var client = new HttpClient())
+			IHttpSender httpSender = new HttpSender();
+
+			var uriBuilder =
+				new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
+
+			uriBuilder.Path += "appdomain/managers";
+
+			var uri = uriBuilder.Uri;
+
+			LogHelper.LogDebugWithLineNumber("Start calling Post Async ( " + uri + " ) ",
+			                                 Logger);
+
+			try
 			{
-				var uriBuilder =
-					new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
+				response = await httpSender.PostAsync(uriBuilder.Uri,
+				                                      null);
 
-				uriBuilder.Path += "appdomain/managers";
-
-				var uri = uriBuilder.Uri;
-
-				LogHelper.LogDebugWithLineNumber("Start calling Post Async ( " + uri + " ) ",
-				                                 Logger);
-
-				try
+				if (response.IsSuccessStatusCode)
 				{
-					response = await client.PostAsync(uriBuilder.Uri,
-					                                  null,
-					                                  cancellationTokenSource.Token);
+					managerName = await response.Content.ReadAsStringAsync();
 
-					if (response.IsSuccessStatusCode)
-					{
-						managerName = await response.Content.ReadAsStringAsync();
+					LogHelper.LogDebugWithLineNumber("Succeeded calling Post Async ( " + uri + " ) ",
+					                                 Logger);
+				}
+			}
 
-						LogHelper.LogDebugWithLineNumber("Succeeded calling Post Async ( " + uri + " ) ",
-						                                 Logger);
-					}
-				}
-				catch (Exception exp)
-				{
-					LogHelper.LogErrorWithLineNumber(exp.Message,
-					                                 Logger,
-					                                 exp);
-				}
+			catch (Exception exp)
+			{
+				LogHelper.LogErrorWithLineNumber(exp.Message,
+				                                 Logger,
+				                                 exp);
 			}
 
 			Assert.IsNotNull(response,
@@ -183,8 +342,6 @@ namespace Manager.Integration.Test
 
 			Assert.IsNotNull(managerName,
 			                 "Manager must have a friendly name.");
-
-			cancellationTokenSource.Cancel();
 
 			LogHelper.LogDebugWithLineNumber("Finished test.",
 			                                 Logger);
@@ -231,38 +388,36 @@ namespace Manager.Integration.Test
 
 			string nodeName = null;
 
-			using (var client = new HttpClient())
+			IHttpSender httpSender = new HttpSender();
+
+			var uriBuilder =
+				new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
+
+			uriBuilder.Path += "appdomain/nodes";
+
+			var uri = uriBuilder.Uri;
+
+			LogHelper.LogDebugWithLineNumber("Start calling Post Async ( " + uri + " ) ",
+			                                 Logger);
+
+			try
 			{
-				var uriBuilder =
-					new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
+				response = await httpSender.PostAsync(uriBuilder.Uri,
+				                                      null);
 
-				uriBuilder.Path += "appdomain/nodes";
-
-				var uri = uriBuilder.Uri;
-
-				LogHelper.LogDebugWithLineNumber("Start calling Post Async ( " + uri + " ) ",
-				                                 Logger);
-
-				try
+				if (response.IsSuccessStatusCode)
 				{
-					response = await client.PostAsync(uriBuilder.Uri,
-					                                  null,
-					                                  cancellationTokenSource.Token);
+					nodeName = await response.Content.ReadAsStringAsync();
 
-					if (response.IsSuccessStatusCode)
-					{
-						nodeName = await response.Content.ReadAsStringAsync();
-
-						LogHelper.LogDebugWithLineNumber("Succeeded calling Post Async ( " + uri + " ) ",
-						                                 Logger);
-					}
+					LogHelper.LogDebugWithLineNumber("Succeeded calling Post Async ( " + uri + " ) ",
+					                                 Logger);
 				}
-				catch (Exception exp)
-				{
-					LogHelper.LogErrorWithLineNumber(exp.Message,
-					                                 Logger,
-					                                 exp);
-				}
+			}
+			catch (Exception exp)
+			{
+				LogHelper.LogErrorWithLineNumber(exp.Message,
+				                                 Logger,
+				                                 exp);
 			}
 
 			Assert.IsNotNull(response,
@@ -318,67 +473,59 @@ namespace Manager.Integration.Test
 			//---------------------------------------------
 			HttpResponseMessage response = null;
 
-			var cancellationTokenSource = new CancellationTokenSource();
+			IHttpSender httpSender = new HttpSender();
 
-			using (var client = new HttpClient())
+			var uriBuilder =
+				new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
+
+			uriBuilder.Path += "appdomain/managers";
+
+			var uri = uriBuilder.Uri;
+
+			LogHelper.LogDebugWithLineNumber("Start calling Get Async ( " + uri + " ) ",
+			                                 Logger);
+
+			try
 			{
-				client.DefaultRequestHeaders.Accept.Clear();
-				client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+				response = await httpSender.GetAsync(uriBuilder.Uri);
 
-				var uriBuilder =
-					new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
-
-				uriBuilder.Path += "appdomain/managers";
-
-				var uri = uriBuilder.Uri;
-
-				LogHelper.LogDebugWithLineNumber("Start calling Get Async ( " + uri + " ) ",
-				                                 Logger);
-
-				try
+				if (response.IsSuccessStatusCode)
 				{
-					response = await client.GetAsync(uriBuilder.Uri,
-					                                 cancellationTokenSource.Token);
+					LogHelper.LogDebugWithLineNumber("Succeeded calling Get Async ( " + uri + " ) ",
+					                                 Logger);
 
-					if (response.IsSuccessStatusCode)
+					var content = await response.Content.ReadAsStringAsync();
+
+					var list =
+						JsonConvert.DeserializeObject<List<string>>(content);
+
+					if (list.Any())
 					{
-						LogHelper.LogDebugWithLineNumber("Succeeded calling Get Async ( " + uri + " ) ",
-						                                 Logger);
-
-						var content = await response.Content.ReadAsStringAsync();
-
-						var list =
-							JsonConvert.DeserializeObject<List<string>>(content);
-
-						if (list.Any())
+						foreach (var l in list)
 						{
-							foreach (var l in list)
-							{
-								LogHelper.LogDebugWithLineNumber(l,
-								                                 Logger);
-							}
+							LogHelper.LogDebugWithLineNumber(l,
+							                                 Logger);
 						}
-
-						Assert.IsTrue(list.Any(),
-						              "Should return a list of managers.");
 					}
-				}
 
-				catch (Exception exp)
-				{
-					LogHelper.LogErrorWithLineNumber(exp.Message,
-					                                 Logger,
-					                                 exp);
+					Assert.IsTrue(list.Any(),
+					              "Should return a list of managers.");
 				}
 			}
+
+			catch (Exception exp)
+			{
+				LogHelper.LogErrorWithLineNumber(exp.Message,
+				                                 Logger,
+				                                 exp);
+			}
+
 
 			Assert.IsNotNull(response,
 			                 "Response can not be null.");
 
 			Assert.IsTrue(response.IsSuccessStatusCode,
 			              "Response code should be success.");
-
-			cancellationTokenSource.Cancel();
 
 			task.Dispose();
 
@@ -425,56 +572,51 @@ namespace Manager.Integration.Test
 
 			var cancellationTokenSource = new CancellationTokenSource();
 
-			using (var client = new HttpClient())
+			IHttpSender httpSender = new HttpSender();
+
+			var uriBuilder =
+				new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
+
+			uriBuilder.Path += "appdomain/nodes";
+
+			var uri = uriBuilder.Uri;
+
+			LogHelper.LogDebugWithLineNumber("Start calling Get Async ( " + uri + " ) ",
+			                                 Logger);
+
+			try
 			{
-				client.DefaultRequestHeaders.Accept.Clear();
-				client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+				response = await httpSender.GetAsync(uriBuilder.Uri);
 
-				var uriBuilder =
-					new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
-
-				uriBuilder.Path += "appdomain/nodes";
-
-				var uri = uriBuilder.Uri;
-
-				LogHelper.LogDebugWithLineNumber("Start calling Get Async ( " + uri + " ) ",
-				                                 Logger);
-
-				try
+				if (response.IsSuccessStatusCode)
 				{
-					response = await client.GetAsync(uriBuilder.Uri,
-					                                 cancellationTokenSource.Token);
+					LogHelper.LogDebugWithLineNumber("Succeeded calling Get Async ( " + uri + " ) ",
+					                                 Logger);
 
-					if (response.IsSuccessStatusCode)
+					var content = await response.Content.ReadAsStringAsync();
+
+					var list =
+						JsonConvert.DeserializeObject<List<string>>(content);
+
+					if (list.Any())
 					{
-						LogHelper.LogDebugWithLineNumber("Succeeded calling Get Async ( " + uri + " ) ",
-						                                 Logger);
-
-						var content = await response.Content.ReadAsStringAsync();
-
-						var list =
-							JsonConvert.DeserializeObject<List<string>>(content);
-
-						if (list.Any())
+						foreach (var l in list)
 						{
-							foreach (var l in list)
-							{
-								LogHelper.LogDebugWithLineNumber(l,
-								                                 Logger);
-							}
+							LogHelper.LogDebugWithLineNumber(l,
+							                                 Logger);
 						}
-
-						Assert.IsTrue(list.Any(),
-						              "Should return a list of appdomain keys.");
 					}
-				}
 
-				catch (Exception exp)
-				{
-					LogHelper.LogErrorWithLineNumber(exp.Message,
-					                                 Logger,
-					                                 exp);
+					Assert.IsTrue(list.Any(),
+					              "Should return a list of appdomain keys.");
 				}
+			}
+
+			catch (Exception exp)
+			{
+				LogHelper.LogErrorWithLineNumber(exp.Message,
+				                                 Logger,
+				                                 exp);
 			}
 
 			Assert.IsNotNull(response,
@@ -486,168 +628,6 @@ namespace Manager.Integration.Test
 			cancellationTokenSource.Cancel();
 
 			task.Dispose();
-
-			LogHelper.LogDebugWithLineNumber("Finished test.",
-			                                 Logger);
-		}
-
-		[Test]
-		public async void ShouldBeAbleToShutDownManager1()
-		{
-			LogHelper.LogDebugWithLineNumber("Start test.",
-											 Logger);
-
-			//---------------------------------------------
-			// Notify when all 2 nodes are up and running. 
-			//---------------------------------------------
-			LogHelper.LogDebugWithLineNumber("Waiting for all 2 nodes to start up.",
-											 Logger);
-
-			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
-
-			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
-
-			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(2,
-																  sqlNotiferCancellationTokenSource,
-																  IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
-			task.Start();
-
-			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(30));
-
-			sqlNotifier.Dispose();
-
-			LogHelper.LogDebugWithLineNumber("All 2 nodes has started.",
-											 Logger);
-
-			//---------------------------------------------
-			// Start actual test.
-			//---------------------------------------------
-			var cancellationTokenSource = new CancellationTokenSource();
-
-			HttpResponseMessage response = null;
-
-			using (var client = new HttpClient())
-			{
-				var uriBuilder =
-					new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
-
-				uriBuilder.Path += "appdomain/managers/" + "Manager1.config";
-
-				var uri = uriBuilder.Uri;
-
-				LogHelper.LogDebugWithLineNumber("Start calling Delete Async ( " + uri + " ) ",
-												 Logger);
-
-				try
-				{
-					response = await client.DeleteAsync(uriBuilder.Uri,
-														cancellationTokenSource.Token);
-
-					if (response.IsSuccessStatusCode)
-					{
-						LogHelper.LogDebugWithLineNumber("Succeeded calling Delete Async ( " + uri + " ) ",
-														 Logger);
-					}
-				}
-				catch (Exception exp)
-				{
-					LogHelper.LogErrorWithLineNumber(exp.Message,
-													 Logger,
-													 exp);
-				}
-			}
-
-			Assert.IsNotNull(response,
-							 "Response can not be null.");
-
-			Assert.IsTrue(response.IsSuccessStatusCode,
-						  "Response code should be success.");
-
-
-			cancellationTokenSource.Cancel();
-
-			LogHelper.LogDebugWithLineNumber("Finished test.",
-											 Logger);
-		}
-
-		/// <summary>
-		///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
-		///     netsh http add urlacl url=http://+:9100/ user=everyone listen=yes
-		/// </summary>
-		[Test]
-		public async void ShouldBeAbleToShutDownNode1()
-		{
-			LogHelper.LogDebugWithLineNumber("Start test.",
-			                                 Logger);
-
-			//---------------------------------------------
-			// Notify when all 2 nodes are up and running. 
-			//---------------------------------------------
-			LogHelper.LogDebugWithLineNumber("Waiting for all 2 nodes to start up.",
-			                                 Logger);
-
-			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
-
-			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
-
-			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(2,
-			                                                      sqlNotiferCancellationTokenSource,
-			                                                      IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
-			task.Start();
-
-			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(30));
-
-			sqlNotifier.Dispose();
-
-			LogHelper.LogDebugWithLineNumber("All 2 nodes has started.",
-			                                 Logger);
-
-			//---------------------------------------------
-			// Start actual test.
-			//---------------------------------------------
-			var cancellationTokenSource = new CancellationTokenSource();
-
-			HttpResponseMessage response = null;
-
-			using (var client = new HttpClient())
-			{
-				var uriBuilder =
-					new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
-
-				uriBuilder.Path += "appdomain/nodes/" + "Node1.config";
-
-				var uri = uriBuilder.Uri;
-
-				LogHelper.LogDebugWithLineNumber("Start calling Delete Async ( " + uri + " ) ",
-				                                 Logger);
-
-				try
-				{
-					response = await client.DeleteAsync(uriBuilder.Uri,
-					                                    cancellationTokenSource.Token);
-
-					if (response.IsSuccessStatusCode)
-					{
-						LogHelper.LogDebugWithLineNumber("Succeeded calling Delete Async ( " + uri + " ) ",
-						                                 Logger);
-					}
-				}
-				catch (Exception exp)
-				{
-					LogHelper.LogErrorWithLineNumber(exp.Message,
-					                                 Logger,
-					                                 exp);
-				}
-			}
-
-			Assert.IsNotNull(response,
-			                 "Response can not be null.");
-
-			Assert.IsTrue(response.IsSuccessStatusCode,
-			              "Response code should be success.");
-
-
-			cancellationTokenSource.Cancel();
 
 			LogHelper.LogDebugWithLineNumber("Finished test.",
 			                                 Logger);
