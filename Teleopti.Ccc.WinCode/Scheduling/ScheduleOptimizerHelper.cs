@@ -56,15 +56,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_bitArrayConverter = _container.Resolve<IScheduleMatrixLockableBitArrayConverterEx>();
 		}
 
-		private void optimizeIntraday(IEnumerable<IScheduleMatrixOriginalStateContainer> matrixContainerList,
-			IEnumerable<IScheduleMatrixOriginalStateContainer> workShiftContainerList, IOptimizationPreferences optimizerPreferences,
-			DateOnlyPeriod selectedPeriod,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+		private void optimizeIntraday(IEnumerable<IScheduleMatrixOriginalStateContainer> matrixContainerList, IOptimizationPreferences optimizerPreferences,
+							DateOnlyPeriod selectedPeriod, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var creator = _container.Resolve<IntradayOptimizer2Creator>();
-			var optimizers = creator.Create(matrixContainerList,
-				workShiftContainerList, optimizerPreferences,
-				dayOffOptimizationPreferenceProvider);
+			var optimizers = creator.Create(matrixContainerList, optimizerPreferences, dayOffOptimizationPreferenceProvider);
 			var service = _container.Resolve<IIntradayOptimizerContainer>();
 
 			using (_container.Resolve<IntradayOptimizationContext>().Create(selectedPeriod))
@@ -354,7 +350,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 							runWorkShiftOptimization(
 								optimizerPreferences,
 								matrixOriginalStateContainerListForWorkShiftOptimization,
-								workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization,
+								createMatrixContainerList(matrixListForWorkShiftAndIntradayOptimization),
 								selectedPeriod,
 								_backgroundWorker,
 								dayOffOptimizationPreferenceProvider);
@@ -377,7 +373,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 							runIntradayOptimization(
 								optimizerPreferences,
 								matrixOriginalStateContainerListForIntradayOptimization,
-								workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization,
 								backgroundWorker,
 								selectedPeriod,
 								dayOffOptimizationPreferenceProvider);
@@ -533,7 +528,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private void runIntradayOptimization(
 			IOptimizationPreferences optimizerPreferences,
 			IList<IScheduleMatrixOriginalStateContainer> matrixContainerList,
-			IList<IScheduleMatrixOriginalStateContainer> workShiftContainerList,
 			ISchedulingProgress backgroundWorker,
 			DateOnlyPeriod selectedPeriod,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
@@ -551,7 +545,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 				_optimizerHelperHelper.LockDaysForIntradayOptimization(matrixList, selectedPeriod);
 
-				optimizeIntraday(matrixContainerList, workShiftContainerList, optimizerPreferences, selectedPeriod,
+				optimizeIntraday(matrixContainerList, optimizerPreferences, selectedPeriod,
 					dayOffOptimizationPreferenceProvider);
 			}
 		}

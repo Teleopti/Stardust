@@ -61,8 +61,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		/// </summary>
 		/// <returns></returns>
 		public IEnumerable<IIntradayOptimizer2> Create(IEnumerable<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainers,
-			IEnumerable<IScheduleMatrixOriginalStateContainer> workShiftContainers, IOptimizationPreferences optimizerPreferences,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+			IOptimizationPreferences optimizerPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			ISchedulePartModifyAndRollbackService rollbackService =
 				new SchedulePartModifyAndRollbackService(
@@ -72,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			IList<IIntradayOptimizer2> result = new List<IIntradayOptimizer2>();
 			var scheduleMatrixContainerList = scheduleMatrixContainers.ToList();
-			var workShiftContainerList = workShiftContainers.ToList();
+			var workShiftContainerList = scheduleMatrixContainerList.ToList();
 
 			for (int index = 0; index < scheduleMatrixContainerList.Count; index++)
 			{
