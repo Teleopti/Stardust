@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    /// Creates the list of optimizers.
 	    /// </summary>
 	    /// <returns></returns>
-	    IList<IIntradayOptimizer2> Create(IEnumerable<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainers,
+	    IEnumerable<IIntradayOptimizer2> Create(IEnumerable<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainers,
 		    IEnumerable<IScheduleMatrixOriginalStateContainer> workShiftContainers, IOptimizationPreferences optimizerPreferences,
 		    IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
     }
