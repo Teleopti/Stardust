@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -11,15 +10,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeScheduleStorage : IScheduleStorage
 	{
-		public void InitRangeValues(int targetScheduledDaysOff, int scheduledDaysOff, TimeSpan targetTimeHolder, TimeSpan contractTimeHolder)
-		{
-			_scheduleDaysOff = scheduledDaysOff;
-			_contractTimeHolder = contractTimeHolder;
-		}
-		
 		private readonly IList<IPersistableScheduleData> _data = new List<IPersistableScheduleData>();
-		private int _scheduleDaysOff;
-		private TimeSpan _contractTimeHolder;
 
 		public DateTimePeriod ThePeriodThatWasUsedForFindingSchedules { get; private set; }
 
@@ -33,29 +24,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_data.Remove (entity);
 		}
 
-		public IPersistableScheduleData Get(Guid id)
-		{
-			return _data.SingleOrDefault(scheduleData => scheduleData.Id == id);
-		}
-
 		public IList<IPersistableScheduleData> LoadAll()
 		{
 			return _data;
-		}
-
-		public IPersistableScheduleData Load(Guid id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public long CountAllEntities()
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddRange(IEnumerable<IPersistableScheduleData> entityCollection)
-		{
-			entityCollection.ForEach(Add);
 		}
 
 		public void SetUnitOfWork(IUnitOfWork unitOfWork)
@@ -119,7 +90,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			var dateTimePeriod = period.VisiblePeriod;
 			var schedules = new ScheduleDictionaryForTest(scenario, dateTimePeriod);
 			var range = new FakeScheduleRange(schedules, new ScheduleParameters(scenario, visiblePersons.FirstOrDefault(), dateTimePeriod));
-			var updatedRange = range.UpdateCalcValues(_scheduleDaysOff, _contractTimeHolder);
+			var updatedRange = range.UpdateCalcValues(0, new TimeSpan());
 			schedules.AddTestItem(visiblePersons.FirstOrDefault(), updatedRange);
 			return schedules;
 		}
@@ -128,7 +99,5 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			throw new NotImplementedException();
 		}
-		
-
 	}
 }
