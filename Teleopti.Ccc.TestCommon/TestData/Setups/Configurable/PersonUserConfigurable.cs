@@ -26,18 +26,21 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		{
 			var repository = new PersonRepository(currentUnitOfWork);
 			Person = PersonFactory.CreatePerson();
-			Person.Name = ParseName(Name);
+			SetName(Person, Name);
 			repository.Add(Person);
 		}
 
-		public static Name ParseName(string name)
+		public static void SetName(IPerson person, string name)
 		{
 			if (string.IsNullOrEmpty(name))
-				return new Name();
-			if (!name.Contains(" "))
-				return new Name("", name);
-			var splitted = name.Split(' ');
-			return new Name(splitted[0], splitted[1]);
+				return;
+			if (name.Contains(" "))
+			{
+				var splitted = name.Split(' ');
+				person.Name = new Name(splitted[0], splitted[1]);
+				return;
+			}
+			person.Name = new Name(name, "");
 		}
 	}
 
@@ -74,7 +77,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				return;
 			}
 
-			user.Name = PersonConfigurable.ParseName(Name);
+			PersonConfigurable.SetName(user, Name);
 
 			if (TerminalDate.HasValue)
 				user.TerminatePerson(new DateOnly(TerminalDate.Value), new PersonAccountUpdaterDummy());
