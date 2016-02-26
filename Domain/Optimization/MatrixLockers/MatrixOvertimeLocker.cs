@@ -14,9 +14,9 @@ namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
 
     public class MatrixOvertimeLocker : IMatrixOvertimeLocker
     {
-        private readonly IList<IScheduleMatrixPro> _matrixList;
+        private readonly IEnumerable<IScheduleMatrixPro> _matrixList;
 
-        public MatrixOvertimeLocker(IList<IScheduleMatrixPro> matrixList)
+        public MatrixOvertimeLocker(IEnumerable<IScheduleMatrixPro> matrixList)
         {
             _matrixList = matrixList;
         }

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_restrictionExtractor = restrictionExtractor;
 		}
 
-		public void LockDaysForDayOffOptimization(IList<IScheduleMatrixPro> matrixList, IOptimizationPreferences optimizationPreferences, DateOnlyPeriod selectedPeriod)
+		public void LockDaysForDayOffOptimization(IEnumerable<IScheduleMatrixPro> matrixList, IOptimizationPreferences optimizationPreferences, DateOnlyPeriod selectedPeriod)
 		{
 			var schedulingOptionsCreator = new SchedulingOptionsCreator();
 			var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			matrixKeepActivityLocker.Execute();
 		}
 
-		public void LockDaysForIntradayOptimization(IList<IScheduleMatrixPro> matrixList, DateOnlyPeriod selectedPeriod)
+		public void LockDaysForIntradayOptimization(IEnumerable<IScheduleMatrixPro> matrixList, DateOnlyPeriod selectedPeriod)
 		{
 			IMatrixOvertimeLocker matrixOvertimeLocker = new MatrixOvertimeLocker(matrixList);
 			matrixOvertimeLocker.Execute();

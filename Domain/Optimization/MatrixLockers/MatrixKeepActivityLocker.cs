@@ -9,10 +9,10 @@ namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
 	}
 	public class MatrixKeepActivityLocker
 	{
-		private readonly IList<IScheduleMatrixPro> _matrixList;
+		private readonly IEnumerable<IScheduleMatrixPro> _matrixList;
 		private readonly IList<IActivity> _keepActivities;
 
-		public MatrixKeepActivityLocker(IList<IScheduleMatrixPro> matrixList, IList<IActivity> keepActivities)
+		public MatrixKeepActivityLocker(IEnumerable<IScheduleMatrixPro> matrixList, IList<IActivity> keepActivities)
 		{
 			_matrixList = matrixList;
 			_keepActivities = keepActivities;

@@ -14,9 +14,9 @@ namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
 
     public class MatrixPersonalShiftLocker : IMatrixPersonalShiftLocker
     {
-        private readonly IList<IScheduleMatrixPro> _scheduleMatrixList;
+        private readonly IEnumerable<IScheduleMatrixPro> _scheduleMatrixList;
 
-        public MatrixPersonalShiftLocker(IList<IScheduleMatrixPro> scheduleMatrixList)
+        public MatrixPersonalShiftLocker(IEnumerable<IScheduleMatrixPro> scheduleMatrixList)
         {
             _scheduleMatrixList = scheduleMatrixList;
         }

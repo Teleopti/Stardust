@@ -5,10 +5,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class MatrixUnselectedDaysLocker : IMatrixUnselectedDaysLocker
 	{
-		private readonly IList<IScheduleMatrixPro> _matrixList;
+		private readonly IEnumerable<IScheduleMatrixPro> _matrixList;
 		private readonly DateOnlyPeriod _selectedPeriod;
 
-		public MatrixUnselectedDaysLocker(IList<IScheduleMatrixPro> matrixList, DateOnlyPeriod selectedPeriod)
+		public MatrixUnselectedDaysLocker(IEnumerable<IScheduleMatrixPro> matrixList, DateOnlyPeriod selectedPeriod)
 		{
 			_matrixList = matrixList;
 			_selectedPeriod = selectedPeriod;

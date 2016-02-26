@@ -5,12 +5,12 @@ namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
 {
 	public interface IMatrixShiftsNotAvailibleLocker
 	{
-		void Execute(IList<IScheduleMatrixPro> scheduleMatrixList);
+		void Execute(IEnumerable<IScheduleMatrixPro> scheduleMatrixList);
 	}
 
 	public class MatrixShiftsNotAvailibleLocker : IMatrixShiftsNotAvailibleLocker
 	{
-		public void Execute(IList<IScheduleMatrixPro> scheduleMatrixList)
+		public void Execute(IEnumerable<IScheduleMatrixPro> scheduleMatrixList)
 		{
 			foreach (var matrix in scheduleMatrixList)
 			{

@@ -13,10 +13,10 @@ namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
 
     public class MatrixMeetingDayLocker : IMatrixMeetingDayLocker
     {
-        private readonly IList<IScheduleMatrixPro> _scheduleMatrixList;
+        private readonly IEnumerable<IScheduleMatrixPro> _scheduleMatrixList;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "scheduleMatrixList")]
-        public MatrixMeetingDayLocker(IList<IScheduleMatrixPro> scheduleMatrixList)
+        public MatrixMeetingDayLocker(IEnumerable<IScheduleMatrixPro> scheduleMatrixList)
         {
             _scheduleMatrixList = scheduleMatrixList;
         }
