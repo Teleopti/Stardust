@@ -230,54 +230,64 @@ namespace Stardust.Manager
 				{
 					connection.Open();
 
+					int ordinalPosForHeartBeat = 0;
+					int ordinalPosForUrl = 0;
+
+					List<object[]> listOfObjectArray = new List<object[]>();
+
 					using (var commandSelectAll = new SqlCommand(selectCommand,
 					                                             connection))
-					{
-						using (var readAllWorkerNodes = commandSelectAll.ExecuteReader())
+					{				
+						using (var readAllWorkerNodes =  commandSelectAll.ExecuteReader())
 						{
 							if (readAllWorkerNodes.HasRows)
 							{
+								ordinalPosForHeartBeat = readAllWorkerNodes.GetOrdinal("Heartbeat");
+								ordinalPosForUrl = readAllWorkerNodes.GetOrdinal("Url");
+
 								while (readAllWorkerNodes.Read())
 								{
-									var heartBeatDateTime =
-										(DateTime) readAllWorkerNodes["Heartbeat"];
+									object[] temp = new object[] { };
 
-									var dateDiff =
-										(currentDateTime - heartBeatDateTime).TotalSeconds;
+									readAllWorkerNodes.GetValues(temp);
 
-									if (dateDiff > timeSpan.TotalSeconds)
-									{
-										var url = readAllWorkerNodes["Url"].ToString();
-
-										var alive = "false";
-
-										using (var connection2 = new SqlConnection(_connectionString))
-										{
-											connection2.Open();
-
-											using (var commandUpdate = new SqlCommand(updateCommandText,
-																					  connection2))
-											{
-												commandUpdate.Parameters.Add("@Alive",
-																			 SqlDbType.NVarChar).Value = alive;
-
-												commandUpdate.Parameters.Add("@Url",
-																			 SqlDbType.NVarChar).Value = url;
-
-												commandUpdate.ExecuteNonQuery();
-											}
-
-											connection2.Close();
-										}
-
-										LogHelper.LogErrorWithLineNumber(Logger,
-										                                 "Node: " + url + " has not sent any heartbeats in " + dateDiff + " seconds!");
-										deadNodes.Add(url);
-									}
+									listOfObjectArray.Add(temp);
 								}
 							}
+
 							readAllWorkerNodes.Close();
 						}						
+					}
+
+
+					if (listOfObjectArray.Any())
+					{
+						using (var commandUpdate = new SqlCommand(updateCommandText, connection))
+						{
+							commandUpdate.Parameters.Add("@Alive", SqlDbType.NVarChar);
+							commandUpdate.Parameters.Add("@Url", SqlDbType.NVarChar);
+
+							foreach (var objectse in listOfObjectArray)
+							{
+								var heartBeatDateTime = 
+									(DateTime)objectse[ordinalPosForHeartBeat];
+
+								var url = objectse[ordinalPosForUrl];
+
+								var dateDiff =
+									(currentDateTime - heartBeatDateTime).TotalSeconds;
+
+								if (dateDiff > timeSpan.TotalSeconds)
+								{
+									var alive = "false";
+
+									commandUpdate.Parameters["@Alive"].Value = alive;
+									commandUpdate.Parameters["@Url"].Value = url;
+
+									commandUpdate.ExecuteNonQuery();
+								}
+							}
+						}
 					}
 
 					connection.Close();

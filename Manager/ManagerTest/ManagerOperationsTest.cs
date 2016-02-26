@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http.Results;
 using ManagerTest.Database;
@@ -17,7 +16,7 @@ namespace ManagerTest
 {
 	[ManagerOperationTests]
 	[TestFixture]
-	public class ManagerOperationsTest : DatabaseTest
+	public class ManagerOperationsTest 
 	{
 		public ManagerController Target;
 		public IJobRepository JobRepository;
@@ -32,6 +31,13 @@ namespace ManagerTest
 			HttpSender.BusyNodesUrl.Add(url);
 		}
 
+		[SetUp]
+		public void TextFixtureSetUp()
+		{
+			var databaseHelper = new DatabaseHelper();
+
+			databaseHelper.Create();
+		}
 
 		[Test]
 		public void ResetJobsOnFalseClaimOnHeartBeatIfItsFree()
@@ -158,7 +164,7 @@ namespace ManagerTest
 				.Count.Should()
 				.Be.EqualTo(1);
 		}
-		
+
 
 		[Test]
 		public void ShouldGetUniqueJobIdWhilePersistingJob()

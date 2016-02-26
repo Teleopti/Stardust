@@ -78,6 +78,8 @@ This is were the action starts
 	-- Set recovery model
 	ALTER DATABASE $(DBNAME) SET RECOVERY FULL
 
+	ALTER DATABASE $(DBNAME) SET MULTI_USER
+	
 	--All other database settings are based on the "model" database in local instance
 	--see: sp_configure
 
