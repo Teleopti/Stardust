@@ -49,6 +49,6 @@
 		})
 		.when('/jobdetails/:jobId', {
 			templateUrl: 'StardustDashboard/jobdetails.html',
-			controller: 'detailsController'
+			controller: 'jobDetailsController'
 		});
 });

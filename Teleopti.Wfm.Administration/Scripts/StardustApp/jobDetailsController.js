@@ -3,9 +3,9 @@
 
 	angular
 		 .module('adminApp')
-		 .controller('detailsController', detailsController);
+		 .controller('jobDetailsController', jobDetailsController);
 
-	function detailsController($http, $routeParams) {
+	function jobDetailsController($http, $routeParams) {
 		/* jshint validthis:true */
 		var vm = this;
 		vm.JobId = $routeParams.jobId;

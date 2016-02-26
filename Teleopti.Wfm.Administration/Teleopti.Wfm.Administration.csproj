@@ -151,7 +151,7 @@
     <Content Include="Scripts\App\tokenHeaderService.js" />
     <Content Include="StardustDashboard\jobdetails.html" />
     <Content Include="StardustDashboard\listJob.html" />
-    <Content Include="Scripts\StardustApp\detailsController.js" />
+    <Content Include="Scripts\StardustApp\jobDetailsController.js" />
     <Content Include="Scripts\StardustApp\listJobController.js" />
     <Content Include="StardustDashboard\style.css" />
     <Content Include="userdetails.html" />
