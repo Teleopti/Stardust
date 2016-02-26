@@ -5,17 +5,17 @@ using log4net;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
-using Stardust.Manager.Timers;
+using System.Timers;
 
 namespace Stardust.Manager
 {
-	public class JobManager : IDisposable
+	public class JobManager
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (JobManager));
 		private readonly IHttpSender _httpSender;
 		private readonly IJobRepository _jobRepository;
 		private readonly IWorkerNodeRepository _workerNodeRepository;
-		private CheckHeartbeatsTimer _checkHeartbeatsTimer; 
+		private Timer _checkHeartbeatsTimer = new Timer(); 
 
 		public JobManager(IJobRepository jobRepository,
 		                  IWorkerNodeRepository workerNodeRepository,
@@ -24,7 +24,10 @@ namespace Stardust.Manager
 			_jobRepository = jobRepository;
 			_workerNodeRepository = workerNodeRepository;
 			_httpSender = httpSender;
-			_checkHeartbeatsTimer = new CheckHeartbeatsTimer(this);
+
+			_checkHeartbeatsTimer.Elapsed += OnTimedEvent;
+			_checkHeartbeatsTimer.Interval = 2000;
+			_checkHeartbeatsTimer.Start();
 		}
 
 		public void CheckNodesAreAlive(TimeSpan timeSpan)
@@ -47,6 +50,13 @@ namespace Stardust.Manager
 					}
 				}
 			}
+		}
+
+		private void OnTimedEvent(object sender,
+								ElapsedEventArgs e)
+		{
+			CheckNodesAreAlive(TimeSpan.FromSeconds(10));
+			LogHelper.LogDebugWithLineNumber(Logger, " Check Heartbeat");
 		}
 
 		public IList<WorkerNode> Nodes()
@@ -176,16 +186,5 @@ namespace Stardust.Manager
 			return _jobRepository.JobHistoryDetails(jobId);
 		}
 
-		public void Dispose()
-		{
-			LogHelper.LogDebugWithLineNumber(Logger, "Start Disposing");
-			if (_checkHeartbeatsTimer != null)
-			{
-				_checkHeartbeatsTimer.Stop();
-				_checkHeartbeatsTimer.Dispose();
-			}
-			LogHelper.LogDebugWithLineNumber(Logger, "Stop Disposing");
-
-		}
 	}
 }

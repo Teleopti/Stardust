@@ -7,7 +7,6 @@ using log4net;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
-using Stardust.Manager.Timers;
 
 namespace Stardust.Manager
 {
