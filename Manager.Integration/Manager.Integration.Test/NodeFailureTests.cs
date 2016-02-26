@@ -180,9 +180,9 @@ namespace Manager.Integration.Test
 			var responseNodes = await httpSender.GetAsync(uri);
 
 			responseNodes.EnsureSuccessStatusCode();
-			var ser = responseNodes.Content.ReadAsStringAsync();
+			var ser = await responseNodes.Content.ReadAsStringAsync();
 
-			var workerNodes = JsonConvert.DeserializeObject<List<WorkerNode>>(ser.Result);
+			var workerNodes = JsonConvert.DeserializeObject<List<WorkerNode>>(ser);
 
 			var node = workerNodes.FirstOrDefault();
 
