@@ -91,9 +91,6 @@ namespace Manager.Integration.Test.Helpers
 
 				IHttpSender httpSender = new HttpSender();
 
-
-				var sez = JsonConvert.SerializeObject(jobRequestModel);
-
 				var uri = ManagerUriBuilder.GetStartJobUri();
 
 				try
@@ -102,10 +99,7 @@ namespace Manager.Integration.Test.Helpers
 						"Start calling post async. Uri ( " + uri + " ). Job name : ( " + jobRequestModel.Name + " )",
 						Logger);
 
-					var response = await httpSender.PostAsync(uri,
-					                                          new StringContent(sez,
-					                                                            Encoding.UTF8,
-					                                                            MediaTypeConstants.ApplicationJson));
+					var response = await httpSender.PostAsync(uri, jobRequestModel);
 
 					CreateNewJobToManagerSucceeded = response.IsSuccessStatusCode;
 

@@ -16,16 +16,16 @@ namespace Stardust.Node.Timers
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (PingToManagerTimer));
 
 		public PingToManagerTimer(INodeConfiguration nodeConfiguration,
-		                          Uri callbackUri,
+		                          Uri callbackToManagerUri,
 		                          double defaultInterval = 10000) : base(defaultInterval)
 		{
 			nodeConfiguration.ThrowArgumentNullException();
-			callbackUri.ThrowArgumentNullExceptionWhenNull();
+			callbackToManagerUri.ThrowArgumentNullExceptionWhenNull();
 
 			CancellationTokenSource = new CancellationTokenSource();
 
 			NodeConfiguration = nodeConfiguration;
-			CallbackUri = callbackUri;
+			CallbackToManagerUri = callbackToManagerUri;
 
 			WhoAmI = NodeConfiguration.CreateWhoIAm(Environment.MachineName);
 
@@ -38,7 +38,7 @@ namespace Stardust.Node.Timers
 
 		public INodeConfiguration NodeConfiguration { get; private set; }
 
-		public Uri CallbackUri { get; private set; }
+		public Uri CallbackToManagerUri { get; private set; }
 
 		private CancellationTokenSource CancellationTokenSource { get; set; }
 
@@ -58,11 +58,12 @@ namespace Stardust.Node.Timers
 		}
 
 
-		private async Task<HttpResponseMessage> SendPing(Uri nodeAddress,
+		private async Task<HttpResponseMessage> SendPing(Uri nodeAddress,				
+													     Uri callbackToManagerUri,
 		                                                 CancellationToken cancellationToken)
 		{
 			var httpResponseMessage =
-				await nodeAddress.PostAsync(CallbackUri,
+				await nodeAddress.PostAsync(callbackToManagerUri,
 				                            cancellationToken);
 
 			return httpResponseMessage;
@@ -74,6 +75,7 @@ namespace Stardust.Node.Timers
 			try
 			{
 				await SendPing(NodeConfiguration.BaseAddress,
+							   CallbackToManagerUri,
 				               CancellationTokenSource.Token);
 			}
 

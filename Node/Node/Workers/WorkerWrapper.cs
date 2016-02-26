@@ -380,8 +380,6 @@ namespace Stardust.Node.Workers
 				ProgressDetail = message
 			};
 
-			var json = JsonConvert.SerializeObject(progressModel);
-
 			try
 			{
 				var uriBuilder =
@@ -389,7 +387,7 @@ namespace Stardust.Node.Workers
 
 				uriBuilder.Path += ManagerRouteConstants.JobProgress;
 
-				_httpSender.PostAsync(uriBuilder.Uri, json);
+				_httpSender.PostAsync(uriBuilder.Uri, progressModel);
 			}
 
 			catch (Exception exception)

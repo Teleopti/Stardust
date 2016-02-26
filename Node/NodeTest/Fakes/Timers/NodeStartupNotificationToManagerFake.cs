@@ -16,10 +16,10 @@ namespace NodeTest.Fakes.Timers
 		public ManualResetEventSlim Wait = new ManualResetEventSlim();
 
 		public NodeStartupNotificationToManagerFake(INodeConfiguration nodeConfiguration,
-		                                            Uri callbackTemplateUri,
+		                                            Uri callbackToManagerTemplateUri,
 		                                            double interval = 1000,
 		                                            bool autoReset = false) : base(nodeConfiguration,
-		                                                                           callbackTemplateUri,
+		                                                                           callbackToManagerTemplateUri,
 		                                                                           interval,
 		                                                                           autoReset)
 		{
@@ -27,6 +27,7 @@ namespace NodeTest.Fakes.Timers
 
 
 		public override Task<HttpResponseMessage> TrySendNodeStartUpToManager(Uri nodeAddress,
+																			  Uri callbackToManagerUri,
 		                                                                      CancellationToken cancellationToken)
 		{
 			Wait.Set();
@@ -34,7 +35,7 @@ namespace NodeTest.Fakes.Timers
 			var response = new HttpResponseMessage(HttpStatusCode.OK);
 
 			var request = new HttpRequestMessage(HttpMethod.Post,
-			                                     CallbackTemplateUri);
+			                                     CallbackToManagerTemplateUri);
 
 			response.RequestMessage = request;
 

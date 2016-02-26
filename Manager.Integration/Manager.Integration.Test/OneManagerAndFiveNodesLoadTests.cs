@@ -107,6 +107,106 @@ namespace Manager.Integration.Test
 			}
 		}
 
+		[Test, Ignore]
+		public void ShouldBeAbleToExecuteThisFast()
+		{
+			LogHelper.LogDebugWithLineNumber("Start.",
+											 Logger);
+
+			var createNewJobRequests = JobHelper.GenerateFastJobParamsRequests(50);
+
+			var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
+																			StatusConstants.SuccessStatus,
+																			StatusConstants.DeletedStatus,
+																			StatusConstants.FailedStatus,
+																			StatusConstants.CanceledStatus);
+
+			//---------------------------------------------
+			// Create timeout time.
+			//---------------------------------------------
+			var timeout =
+				JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count);
+
+			//---------------------------------------------
+			// Create jobs.
+			//---------------------------------------------
+			var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
+
+			foreach (var jobRequestModel in createNewJobRequests)
+			{
+				var jobManagerTaskCreator =
+					new JobManagerTaskCreator(checkJobHistoryStatusTimer);
+
+				jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
+
+				jobManagerTaskCreators.Add(jobManagerTaskCreator);
+			}
+
+			//---------------------------------------------
+			// Notify when all 5 nodes are up. 
+			//---------------------------------------------
+			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
+
+			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
+
+			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(5,
+																  sqlNotiferCancellationTokenSource,
+																  IntegerValidators.Value1IsEqualToValue2Validator);
+			task.Start();
+
+			LogHelper.LogDebugWithLineNumber("Waiting for all 5 nodes to start up.",
+											 Logger);
+
+			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
+
+			sqlNotifier.Dispose();
+
+			LogHelper.LogDebugWithLineNumber("All 5 nodes have started.",
+											 Logger);
+
+			//---------------------------------------------
+			// Execute all jobs. 
+			//---------------------------------------------
+			var startJobTaskHelper = new StartJobTaskHelper();
+
+			var taskHelper = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
+																		 CancellationTokenSource,
+																		 TimeSpan.FromMilliseconds(200));
+
+			//---------------------------------------------
+			// Wait for all jobs to finish.
+			//---------------------------------------------
+			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+
+			//---------------------------------------------
+			// Assert.
+			//---------------------------------------------
+			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count);
+			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
+
+			//---------------------------------------------
+			// Cancel tasks.
+			//---------------------------------------------
+			CancellationTokenSource.Cancel();
+
+			//---------------------------------------------
+			// Dispose.
+			//---------------------------------------------
+			foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
+			{
+				jobManagerTaskCreator.Dispose();
+			}
+
+			taskHelper.Dispose();
+
+			//---------------------------------------------
+			// Log.
+			//---------------------------------------------
+			LogHelper.LogDebugWithLineNumber("Finished.",
+											 Logger);
+
+		}
+
 		/// <summary>
 		///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
 		///     netsh http add urlacl url=http://+:9050/ user=everyone listen=yes

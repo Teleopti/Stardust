@@ -489,7 +489,9 @@ namespace Manager.Integration.Test
 
 			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
-			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count);
+			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count,
+						"Number of requests must be equal.");
+
 			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
 
 			CancellationTokenSource.Cancel();

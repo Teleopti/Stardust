@@ -17,17 +17,17 @@ namespace Stardust.Node.Timers
 			LogManager.GetLogger(typeof (TrySendNodeStartUpNotificationToManagerTimer));
 
 		public TrySendNodeStartUpNotificationToManagerTimer(INodeConfiguration nodeConfiguration,
-		                                                    Uri callbackTemplateUri,
+		                                                    Uri callbackToManagerTemplateUri,
 		                                                    double interval = 3000,
 		                                                    bool autoReset = true) : base(interval)
 		{
 			nodeConfiguration.ThrowArgumentNullException();
-			callbackTemplateUri.ThrowArgumentNullExceptionWhenNull();
+			callbackToManagerTemplateUri.ThrowArgumentNullExceptionWhenNull();
 
 			CancellationTokenSource = new CancellationTokenSource();
 
 			NodeConfiguration = nodeConfiguration;
-			CallbackTemplateUri = callbackTemplateUri;
+			CallbackToManagerTemplateUri = callbackToManagerTemplateUri;
 
 			WhoAmI = NodeConfiguration.CreateWhoIAm(Environment.MachineName);
 
@@ -40,7 +40,7 @@ namespace Stardust.Node.Timers
 
 		public INodeConfiguration NodeConfiguration { get; private set; }
 
-		public Uri CallbackTemplateUri { get; private set; }
+		public Uri CallbackToManagerTemplateUri { get; private set; }
 
 		private CancellationTokenSource CancellationTokenSource { get; set; }
 
@@ -62,10 +62,11 @@ namespace Stardust.Node.Timers
 		public event EventHandler TrySendNodeStartUpNotificationSucceded;
 
 		public virtual async Task<HttpResponseMessage> TrySendNodeStartUpToManager(Uri nodeAddress,
+																				   Uri callbackToManagerUri,
 		                                                                           CancellationToken cancellationToken)
 		{
 			var httpResponseMessage =
-				await nodeAddress.PostAsync(nodeAddress,
+				await nodeAddress.PostAsync(callbackToManagerUri,
 				                            cancellationToken);
 
 			return httpResponseMessage;
@@ -86,9 +87,10 @@ namespace Stardust.Node.Timers
 			try
 			{
 				LogHelper.LogDebugWithLineNumber(Logger,
-				                                 "Trying to send init to manager. Manager Uri : ( " + CallbackTemplateUri + " )");
+				                                 "Trying to send init to manager. Manager Uri : ( " + CallbackToManagerTemplateUri + " )");
 				var httpResponseMessage =
-					await TrySendNodeStartUpToManager(CallbackTemplateUri,
+					await TrySendNodeStartUpToManager(NodeConfiguration.BaseAddress,
+													  CallbackToManagerTemplateUri,
 					                                  CancellationTokenSource.Token);
 
 				if (httpResponseMessage.IsSuccessStatusCode)

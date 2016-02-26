@@ -238,7 +238,7 @@ namespace Stardust.Manager
 					using (var commandSelectAll = new SqlCommand(selectCommand,
 					                                             connection))
 					{				
-						using (var readAllWorkerNodes =  commandSelectAll.ExecuteReader())
+						using (SqlDataReader readAllWorkerNodes =  commandSelectAll.ExecuteReader())
 						{
 							if (readAllWorkerNodes.HasRows)
 							{
@@ -247,9 +247,9 @@ namespace Stardust.Manager
 
 								while (readAllWorkerNodes.Read())
 								{
-									object[] temp = new object[] { };
+									var temp = new object[readAllWorkerNodes.FieldCount];
 
-									readAllWorkerNodes.GetValues(temp);
+									int instances = readAllWorkerNodes.GetValues(temp);
 
 									listOfObjectArray.Add(temp);
 								}
