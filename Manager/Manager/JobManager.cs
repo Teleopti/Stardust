@@ -15,18 +15,22 @@ namespace Stardust.Manager
 		private readonly IHttpSender _httpSender;
 		private readonly IJobRepository _jobRepository;
 		private readonly IWorkerNodeRepository _workerNodeRepository;
-		private Timer _checkHeartbeatsTimer = new Timer(); 
+		private readonly Timer _checkHeartbeatsTimer = new Timer();
+		private readonly ManagerConfiguration _managerConfiguration;
 
 		public JobManager(IJobRepository jobRepository,
 		                  IWorkerNodeRepository workerNodeRepository,
-		                  IHttpSender httpSender)
+		                  IHttpSender httpSender,
+						  ManagerConfiguration managerConfiguration)
 		{
 			_jobRepository = jobRepository;
 			_workerNodeRepository = workerNodeRepository;
 			_httpSender = httpSender;
+			_managerConfiguration = managerConfiguration;
 
 			_checkHeartbeatsTimer.Elapsed += OnTimedEvent;
-			_checkHeartbeatsTimer.Interval = 2000;
+			// ReSharper disable once PossibleLossOfFraction
+			_checkHeartbeatsTimer.Interval = managerConfiguration.AllowedNodeDownTimeSeconds/2;
 			_checkHeartbeatsTimer.Start();
 		}
 
@@ -55,7 +59,7 @@ namespace Stardust.Manager
 		private void OnTimedEvent(object sender,
 								ElapsedEventArgs e)
 		{
-			CheckNodesAreAlive(TimeSpan.FromSeconds(10));
+			CheckNodesAreAlive(TimeSpan.FromSeconds(_managerConfiguration.AllowedNodeDownTimeSeconds));
 			LogHelper.LogDebugWithLineNumber(Logger, " Check Heartbeat");
 		}
 

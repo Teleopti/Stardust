@@ -160,8 +160,7 @@ namespace Stardust.Manager
 					{
 						while (reader.Read())
 						{
-							var a = getValue<string>(reader.GetValue(reader.GetOrdinal("AssignedNode")));
-
+							
 							var jobDefinition = new JobDefinition
 							{
 								Id = (Guid) reader.GetValue(reader.GetOrdinal("Id")),
