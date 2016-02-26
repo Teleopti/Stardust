@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var decisionMaker = new IntradayDecisionMaker(_bitArrayConverter);
 			var scheduleService = _container.Resolve<IScheduleService>();
 
-			IIntradayOptimizer2Creator creator = new IntradayOptimizer2Creator(
+			var creator = new IntradayOptimizer2Creator(
 				decisionMaker,
 				scheduleService,
 				_container.Resolve<ISkillStaffPeriodToSkillIntervalDataMapper>(),

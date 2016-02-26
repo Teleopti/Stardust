@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AbsencePreferenceFullDayLayerCreator>().As<IAbsencePreferenceFullDayLayerCreator>().SingleInstance();
 			builder.RegisterType<DayOffScheduler>().As<IDayOffScheduler>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleDayAvailableForDayOffSpecification>().As<IScheduleDayAvailableForDayOffSpecification>().SingleInstance();
-			builder.RegisterType<IntradayOptimizer2Creator>().As<IIntradayOptimizer2Creator>().InstancePerLifetimeScope();
+			builder.RegisterType<IntradayOptimizer2Creator>().InstancePerLifetimeScope();
 
 			builder.RegisterType<DayOffsInPeriodCalculator>().As<IDayOffsInPeriodCalculator>().InstancePerLifetimeScope();
 			builder.RegisterType<EffectiveRestrictionCreator>().As<IEffectiveRestrictionCreator>().SingleInstance();

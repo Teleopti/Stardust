@@ -13,7 +13,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class IntradayOptimizer2Creator : IIntradayOptimizer2Creator
+	public class IntradayOptimizer2Creator
 	{
 		private readonly IIntradayDecisionMaker _decisionMaker;
 		private readonly IScheduleService _scheduleService;

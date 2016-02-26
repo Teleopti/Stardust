@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IScheduleDictionaryPersister _persister;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
-		private readonly IIntradayOptimizer2Creator _intradayOptimizer2Creator;
+		private readonly IntradayOptimizer2Creator _intradayOptimizer2Creator;
 		private readonly IIntradayOptimizerContainer _intradayOptimizerContainer;
 		private readonly IntradayOptimizationContext _intradayOptimizationContext;
 		private readonly OptimizationResult _optimizationResult;
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 									IScheduleDictionaryPersister persister,
 									IOptimizerHelperHelper optimizerHelperHelper,
 									WeeklyRestSolverExecuter weeklyRestSolverExecuter,
-									IIntradayOptimizer2Creator intradayOptimizer2Creator,
+									IntradayOptimizer2Creator intradayOptimizer2Creator,
 									IIntradayOptimizerContainer intradayOptimizerContainer,
 									IntradayOptimizationContext intradayOptimizationContext,
 									OptimizationResult optimizationResult
