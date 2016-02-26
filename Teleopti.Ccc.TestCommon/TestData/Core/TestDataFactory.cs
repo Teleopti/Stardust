@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Core
@@ -35,7 +34,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 
 		public PersonDataFactory Person(string name)
 		{
-			return AddPerson(name, new Name("Person", name));
+			return AddPerson(name);
 		}
 
 		public IEnumerable<PersonDataFactory> AllPersons()
@@ -43,25 +42,26 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 			return _persons.Values;
 		}
 
-		protected void RemoveLastPerson()
+		public void RemoveLastPerson()
 		{
 			_persons.Remove(_persons.Keys.Last());
 		}
 
-		protected PersonDataFactory AddPerson(string referenceName, Name actualName)
+		protected PersonDataFactory AddPerson(string name)
 		{
-			referenceName = trimName(referenceName);
+			name = trimName(name);
 
 			PersonDataFactory foundPerson;
-			if (!_persons.TryGetValue(referenceName, out foundPerson))
+			if (!_persons.TryGetValue(name, out foundPerson))
 			{
+				var person = new PersonConfigurable {Name = name};
+				DataFactory.Apply(person);
 				foundPerson = new PersonDataFactory(
-					actualName,
-					new[] {new UserConfigurable {Name = referenceName}},
+					person.Person,
 					_unitOfWorkAction,
 					_tenantUnitOfWorkAction
 					);
-				_persons.Add(referenceName, foundPerson);
+				_persons.Add(name, foundPerson);
 			}
 			return foundPerson;
 		}

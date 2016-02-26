@@ -3,6 +3,7 @@ using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
@@ -27,7 +28,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse
 		[Given(@"I am an agent named first name '(.*)' last name '(.*)'")]
 		public void GivenIAmAnAgentNamedFirstNameLastName(string firstName, string lastName)
 		{
-			DataMaker.Data().ApplyPerson(new Agent_ThingThatReallyAppliesSetupsInConstructor(), new Name(firstName, lastName));
+			// this cant be right, but im not changing the behavior
+			DataMaker.Data().RemoveLastPerson();
+			DataMaker.Data().Person(firstName + " " + lastName)
+				.Apply(new PersonUserConfigurable
+			{
+				UserName = "temp",
+				Password = DefaultPassword.ThePassword
+			});
+			//DataMaker.Data().ApplyPerson(new Agent_ThingThatReallyAppliesSetupsInConstructor(), firstName + " " + lastName);
+
 			DataMaker.Data().Apply(new SchedulePeriod());
 			DataMaker.Data().Apply(new PersonPeriod(DefaultTeam.Get()));
 			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
@@ -567,7 +577,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse
 			};
 			DataMaker.Data().Apply(role);
 			DataMaker.Me().Apply(new RoleForUser { Name = "Agent" });
-			DataMaker.Data().Apply(new UserConfigurable {TerminalDate = date});
+			DataMaker.Data().Apply(new PersonUserConfigurable {TerminalDate = date});
 			DataMaker.Data().Apply(new SchedulePeriod());
 			DataMaker.Data().Apply(new PersonPeriod(DefaultTeam.Get()));
 			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });

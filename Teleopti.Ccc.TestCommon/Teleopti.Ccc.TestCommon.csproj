@@ -305,6 +305,7 @@
     <Compile Include="TestData\Setups\Specific\IranianCulture.cs" />
     <Compile Include="TestData\Setups\Specific\IstanbulTimeZone.cs" />
     <Compile Include="TestData\SystemSetup.cs" />
+    <Compile Include="TestData\TenantUnitOfWorkState.cs" />
     <Compile Include="TestData\TestDataSetup.cs" />
     <Compile Include="ThreadCulture.cs" />
     <Compile Include="DummyInfrastructureInfoPopulator.cs" />
@@ -508,7 +509,7 @@
     <Compile Include="TestData\Setups\Specific\SwedeSpeakingEnglishCulture.cs" />
     <Compile Include="TestData\Setups\Specific\SwedishCulture.cs" />
     <Compile Include="TestData\Setups\Specific\USCulture.cs" />
-    <Compile Include="TestData\Setups\Configurable\UserConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\PersonUserConfigurable.cs" />
     <Compile Include="TestData\Setups\Specific\UtcTimeZone.cs" />
     <Compile Include="Web\FakeHttpContext.cs" />
     <Compile Include="Web\FakeHttpRequest.cs" />

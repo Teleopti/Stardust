@@ -16,13 +16,13 @@ namespace Teleopti.Ccc.TestCommon.TestData
 
 		public static void Setup()
 		{
-			DataSourceHelper.CreateDatabases(UserConfigurable.DefaultTenantName);
+			DataSourceHelper.CreateDatabases(PersonUserConfigurable.DefaultTenantName);
 
 			TestSiteConfigurationSetup.StartApplicationAsync();
 
 			SystemSetup.Setup();
 
-			datasource = DataSourceHelper.CreateDataSource(SystemSetup.PersistCallbacks, UserConfigurable.DefaultTenantName);
+			datasource = DataSourceHelper.CreateDataSource(SystemSetup.PersistCallbacks, PersonUserConfigurable.DefaultTenantName);
 
 			StateHolderProxyHelper.SetupFakeState(
 				datasource,

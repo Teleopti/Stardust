@@ -230,7 +230,6 @@
     <Compile Include="Data\Setups\Configurable\PersonEmptyDayConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\TeamGamificationSettingConfigurable.cs" />
     <Compile Include="Data\Setups\DoNotUse\Agent_ThingThatReallyAppliesSetupsInConstructor.cs" />
-    <Compile Include="Data\TenantUnitOfWorkState.cs" />
     <Compile Include="MultiTenancy\MultiTenancyStepDefinition.cs" />
     <Compile Include="MultiTenancy\Tenants.feature.cs">
       <AutoGen>True</AutoGen>

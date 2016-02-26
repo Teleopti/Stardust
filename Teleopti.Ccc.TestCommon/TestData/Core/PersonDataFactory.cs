@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -19,20 +16,13 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 		private readonly IList<IUserSetup> _userSetups = new List<IUserSetup>();
 		private readonly IList<IUserDataSetup> _userDataSetups = new List<IUserDataSetup>();
 
-		public PersonDataFactory(Name name, IEnumerable<IUserSetup> setups, Action<Action<ICurrentUnitOfWork>> unitOfWorkAction, Action<Action<ICurrentTenantSession>> tenantUnitOfWorkAction)
+		public PersonDataFactory(IPerson person, Action<Action<ICurrentUnitOfWork>> unitOfWorkAction, Action<Action<ICurrentTenantSession>> tenantUnitOfWorkAction)
 		{
+			Person = person;
 			_unitOfWorkAction = unitOfWorkAction;
 			_tenantUnitOfWorkAction = tenantUnitOfWorkAction;
-
-			unitOfWorkAction(uow =>
-				{
-					Person = PersonFactory.CreatePerson(name);
-					Person.Name = name;
-					new PersonRepository(uow).Add(Person);
-				});
 			Apply(new Setups.Specific.SwedishCulture());
 			Apply(new UtcTimeZone());
-			setups.ForEach(Apply);
 		}
 
 		public void Apply(IUserSetup setup)

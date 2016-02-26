@@ -9,13 +9,39 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {
-	public class UserConfigurable : IUserSetup, ITenantUserSetup
+	public class PersonConfigurable : IDataSetup
+	{
+		public string Name { get; set; }
+
+		public IPerson Person { get; set; }
+
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
+		{
+			var repository = new PersonRepository(currentUnitOfWork);
+			Person = PersonFactory.CreatePerson();
+			Person.Name = ParseName("");
+			repository.Add(Person);
+		}
+
+		public static Name ParseName(string name)
+		{
+			if (string.IsNullOrEmpty(name))
+				return new Name();
+			if (!name.Contains(" "))
+				return new Name("", name);
+			var splitted = name.Split(' ');
+			return new Name(splitted[0], splitted[1]);
+		}
+	}
+
+	public class PersonUserConfigurable : IUserSetup, ITenantUserSetup
 	{
 		public const string DefaultTenantName = "TestData";
 
@@ -33,7 +59,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public bool Delete { get; set; }
 
-		public UserConfigurable()
+		public PersonUserConfigurable()
 		{
 			WindowsAuthentication = false;
 			Delete = false;
@@ -48,16 +74,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				return;
 			}
 
-			if (!string.IsNullOrEmpty(Name))
-			{
-				if (Name.Contains(" "))
-				{
-					var splitted = Name.Split(' ');
-					user.Name = new Name(splitted[0], splitted[1]);
-				}
-				else
-					user.Name = new Name("", Name);
-			}
+			user.Name = PersonConfigurable.ParseName(Name);
 
 			if (TerminalDate.HasValue)
 				user.TerminatePerson(new DateOnly(TerminalDate.Value), new PersonAccountUpdaterDummy());

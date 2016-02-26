@@ -2,7 +2,7 @@ using System;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data
+namespace Teleopti.Ccc.TestCommon.TestData
 {
 	public static class TenantUnitOfWorkState
 	{
@@ -10,8 +10,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static TenantUnitOfWorkManager tenantUnitOfWorkManager()
 		{
-			return _tenantUnitOfWorkManager ?? 
-			       (_tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString));
+			return _tenantUnitOfWorkManager ??
+				   (_tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString));
 		}
 
 		public static void TenantUnitOfWorkAction(Action<ICurrentTenantSession> action)

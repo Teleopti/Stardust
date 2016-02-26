@@ -45,21 +45,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"'?(I|.*)'? (am a|is a) user with")]
 		public void GivenIAmAUserWith(string userName, string amAIsA, Table table)
 		{
-			var user = table.CreateInstance<UserConfigurable>();
+			var user = table.CreateInstance<PersonUserConfigurable>();
 			DataMaker.Person(userName).Apply(user);
 		}
 
 		[When(@"'(.*)' is updated with")]
 		public void WhenIsUpdatedWith(string userName, Table table)
 		{
-			var user = table.CreateInstance<UserConfigurable>();
+			var user = table.CreateInstance<PersonUserConfigurable>();
 			DataMaker.Person(userName).Apply(user);
 		}
 
 		[When(@"'(.*)' is deleted")]
 		public void WhenIsDeleted(string userName)
 		{
-			var user = new UserConfigurable {Delete = true};
+			var user = new PersonUserConfigurable {Delete = true};
 			DataMaker.Person(userName).Apply(user);
 		}
 
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"I have user credential with")]
 		public void GivenIHaveUserCredentialWith(Table table)
 		{
-			var user = table.CreateInstance<UserConfigurable>();
+			var user = table.CreateInstance<PersonUserConfigurable>();
 			DataMaker.Data().Apply(user);
 			DataMaker.Data().ApplyDelayed();
 		}
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"I am a user signed in with")]
 		public void GivenIAmAUserSignedInWith(Table table)
 		{
-			var user = table.CreateInstance<UserConfigurable>();
+			var user = table.CreateInstance<PersonUserConfigurable>();
 			TestControllerMethods.LogonForSpecificUser(user.UserName, user.Password); 
 		}
 		

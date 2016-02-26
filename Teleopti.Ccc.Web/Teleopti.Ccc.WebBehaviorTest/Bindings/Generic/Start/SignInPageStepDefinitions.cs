@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		public void WhenITryToSignInWith(Table table)
 		{
 			Navigation.GotoGlobalSignInPage();
-			var user = table.CreateInstance<UserConfigurable>();
+			var user = table.CreateInstance<PersonUserConfigurable>();
 			var userName = user.UserName;
 			var password = user.Password;
 			SignInApplication(userName, password);
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		[When(@"I try to signin with")]
 		public void WhenITryToSigninWith(Table table)
 		{
-			var user = table.CreateInstance<UserConfigurable>();
+			var user = table.CreateInstance<PersonUserConfigurable>();
 			var userName = user.UserName;
 			var password = user.Password;
 			SignInApplication(userName, password);

@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void LogonForSpecificUser(string userName, string password)
 		{
 			DataMaker.Data().Apply(
-				new UserConfigurable
+				new PersonUserConfigurable
 					{
 						UserName = userName, 
 						Password = password

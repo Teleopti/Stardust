@@ -78,7 +78,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			//person.TerminatePerson(new DateOnly(testDate.AddDays(0)), new PersonAccountUpdaterDummy());
 
 			var personFactory = Data.Person(personName);
-			personFactory.Apply(new UserConfigurable
+			personFactory.Apply(new PersonUserConfigurable
 			{
 				TerminalDate = testDate.Date
 			});
@@ -147,7 +147,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			//person.TerminatePerson(new DateOnly(testDate.AddDays(0)), new PersonAccountUpdaterDummy());
 
 			var personFactory = Data.Person(personName);
-			personFactory.Apply(new UserConfigurable
+			personFactory.Apply(new PersonUserConfigurable
 			{
 				TerminalDate = testDate.Date
 			});

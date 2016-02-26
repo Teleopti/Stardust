@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public ScenarioDataFactory() : base(ScenarioUnitOfWorkState.UnitOfWorkAction, TenantUnitOfWorkState.TenantUnitOfWorkAction)
 		{
-			AddPerson("I", new Name("The", "One")).Apply(new UserConfigurable
+			AddPerson("I").Apply(new PersonUserConfigurable
 			{
 				UserName = "1",
 				Password = DefaultPassword.ThePassword
@@ -39,16 +40,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public void Apply(IUserDataSetup setup)
 		{
 			Me().Apply(setup);
-		}
-
-		public void ApplyPerson(IUserSetup setup, Name name)
-		{
-			RemoveLastPerson();
-			AddPerson(name.ToString(), name).Apply(new UserConfigurable
-			{
-				UserName = "temp",
-				Password = DefaultPassword.ThePassword
-			});
 		}
 
 		public void ApplyLater(IDelayedSetup delayedSetup)
