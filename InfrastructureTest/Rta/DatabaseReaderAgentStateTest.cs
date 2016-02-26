@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		}
 		private static void setBusinessUnitInDbToNull()
 		{
-			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
+			using (var connection = new SqlConnection(InfraTestConfigReader.AnalyticsConnectionString))
 			{
 				connection.Open();
 				using (var command = new SqlCommand("UPDATE Rta.ActualAgentState SET BusinessUnitId=NULL", connection))
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var sql = string.Format(@"					
 						insert into rta.ActualAgentState (PersonId,  PlatformTypeId, ReceivedTime, BatchId, OriginalDataSourceId, BusinessUnitId)
 						values('{0}', '{1}', '{2}', '{2}', '2', null)", personId, Guid.NewGuid(), "2015-04-21 8:00");
-			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
+			using (var connection = new SqlConnection(InfraTestConfigReader.AnalyticsConnectionString))
 			{
 				connection.Open();
 				using (var command = new SqlCommand(sql, connection))

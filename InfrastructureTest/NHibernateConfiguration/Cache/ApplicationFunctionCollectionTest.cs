@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 		public void Setup1()
 		{
 			var dsFactory = new DataSourcesFactory(new EnversConfiguration(), new NoPersistCallbacks(), DataSourceConfigurationSetter.ForTestWithCache(), new CurrentHttpContext(), null);
-			dataSource = dsFactory.Create(SetupFixtureForAssembly.Sql2005conf(ConnectionStringHelper.ConnectionStringUsedInTests, null), null);
+			dataSource = dsFactory.Create(SetupFixtureForAssembly.Sql2005conf(InfraTestConfigReader.ConnectionString, null), null);
 			applicationFunction = new ApplicationFunction();
 			applicationRole = new ApplicationRole { Name = "hejhej" };
 			applicationRole.AddApplicationFunction(applicationFunction);

@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			var tags = new SettingsFileManager().ReadFile();
 
 			// behavior test
-			tags.SetVariantsOf("ToggleMode", InfraTestConfigReader.TOGGLE_MODE);
 			tags.SetVariantsOf("MachineKey", CryptoCreator.MachineKeyCreator.StaticMachineKeyForBehaviorTest());
 			tags.SetVariantsOf("TimeLoggerConfiguration", "<logger name='Teleopti.LogTime'><level value='DEBUG'/></logger>");
 			tags.SetVariantsOf("BehaviorTestServer", "true");

@@ -46,7 +46,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 											Guid.NewGuid(),TestState.BusinessUnit.Id.GetValueOrDefault(),datasource));
 			analyticsDataFactory.Persist();
 
-			var raptorRep = new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix,"");
+			var raptorRep = new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString,"");
 			//so we have a NULL absence
 			raptorRep.FillAbsenceDataMart(TestState.BusinessUnit);
 			raptorRep.FillIntradayFactRequestMart(TestState.BusinessUnit);

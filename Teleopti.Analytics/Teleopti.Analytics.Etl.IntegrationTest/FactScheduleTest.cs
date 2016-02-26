@@ -83,7 +83,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				new FakeContainerHolder(), false
 				)
 			{
-				Helper = new JobHelperForTest(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null),
+				Helper = new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, ""), null),
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 
@@ -150,7 +150,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				new FakeContainerHolder(), false
 				)
 			{
-				Helper = new JobHelperForTest(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null),
+				Helper = new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, ""), null),
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 
@@ -218,7 +218,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				new FakeContainerHolder(), false
 				)
 			{
-				Helper = new JobHelperForTest(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null),
+				Helper = new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, ""), null),
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 
@@ -354,7 +354,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Assert.That(jobListResult[0].HasError, Is.False);
 
 			//save the current datasource
-			var gen = new GeneralFunctions(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, new BaseConfigurationRepository());
+			var gen = new GeneralFunctions(InfraTestConfigReader.AnalyticsConnectionString, new BaseConfigurationRepository());
 			gen.SaveDataSource(jobParameters.DataSource, SqlCommands.TimezoneIdGet(timeZoneId));
 			SqlCommands.EtlJobIntradaySettingsReset(testDate.AddDays(-3));
 

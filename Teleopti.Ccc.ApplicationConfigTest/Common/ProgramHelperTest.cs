@@ -54,10 +54,10 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Common
         private void logonForTest()
         {
             string[] strings = new string[5];
-			strings[0] = "-DS" + InfraTestConfigReader.SQL_SERVER_NAME;
-	        strings[1] = "-EE";
-            strings[2] = "-DD" + InfraTestConfigReader.DB_CCC7;
-            strings[3] = "-BUTestBU";
+			strings[0] = "-DS" + InfraTestConfigReader.SqlServerName;
+			strings[1] = "-EE";
+			strings[2] = "-DD" + InfraTestConfigReader.DatabaseName;
+			strings[3] = "-BUTestBU";
             strings[4] = "-CUkn-IN";
             _commandLineArgument = new CommandLineArgument(strings);
 

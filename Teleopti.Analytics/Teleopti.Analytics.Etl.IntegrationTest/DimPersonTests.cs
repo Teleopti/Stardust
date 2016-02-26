@@ -47,7 +47,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
             const string timeZoneId = "W. Europe Standard Time";
             var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
 
-            var raptorRepository = new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, "");
+            var raptorRepository = new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, "");
             var jobParameters = new JobParameters(
                 dateList, 1, "UTC", 15, "", "False",
                 CultureInfo.CurrentCulture,
@@ -133,7 +133,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
             const string timeZoneId = "W. Europe Standard Time";
             var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
 
-            var raptorRepository = new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, "");
+            var raptorRepository = new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, "");
             var fakeContainerHolder = new FakeContainerHolder();
             fakeContainerHolder.EnableToggle(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162);
 
