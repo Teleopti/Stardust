@@ -85,7 +85,8 @@
 
 		ResourcePlanner_SkillGroupDeleteAfterCalculation_37048,
 		ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049,
-        ETL_SpeedUpPersonPeriodIntraday_37162
+        ETL_SpeedUpPersonPeriodIntraday_37162,
+        WfmGlobalLayout_personalOptions_37114
         // ReSharper restore InconsistentNaming
     }
 }

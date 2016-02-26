@@ -14154,4 +14154,12 @@ Help us improve your experience by sending an error report</value>
     <value>Select teams</value>
     <comment>Select teams</comment>
   </data>
+  <data name="Personalize" xml:space="preserve">
+    <value>Personalize</value>
+    <comment>Header for personalize options</comment>
+  </data>
+  <data name="ToggleLowLightFilter" xml:space="preserve">
+    <value>Toggle low light filter</value>
+    <comment>label for low turning light filter on or off </comment>
+  </data>
 </root>

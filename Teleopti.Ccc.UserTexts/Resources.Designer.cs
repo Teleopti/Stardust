@@ -19887,6 +19887,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Personalize.
+        /// </summary>
+        public static string Personalize {
+            get {
+                return ResourceManager.GetString("Personalize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Personalize MyTime.
         /// </summary>
         public static string PersonalizeYourAgentPortal {
@@ -29057,6 +29066,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ToggleLogOutState {
             get {
                 return ResourceManager.GetString("ToggleLogOutState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle low light filter.
+        /// </summary>
+        public static string ToggleLowLightFilter {
+            get {
+                return ResourceManager.GetString("ToggleLowLightFilter", resourceCulture);
             }
         }
         
