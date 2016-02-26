@@ -70,8 +70,8 @@
 			
 			scope.$watch(function () {				
 				var target = {
-					startDate: scope.requestsOverview.period.startDate,
-					endDate: scope.requestsOverview.period.endDate,			
+					startDate: scope.requestsOverview.period? scope.requestsOverview.period.startDate : null,
+					endDate: scope.requestsOverview.period? scope.requestsOverview.period.endDate : null,			
 					agentSearchTerm: scope.requestsOverview.agentSearchTerm ? scope.requestsOverview.agentSearchTerm : ""
 				}				
 				return target;

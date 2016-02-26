@@ -8,7 +8,7 @@
 <div class="wfm-requests material-depth-1" ng-if="requests.isRequestsEnabled">
 	<div class="operation-container">
 		<people-search-input class="request-filter inline-block" search-options="requests.agentSearchOptions" search-callback="requests.onAgentSearchTermChanged"></people-search-input>
-		<date-range-picker start-date="requests.period.startDate" end-date="requests.period.endDate" template-type="dropdown"></date-range-picker>		
+		<date-range-picker ng-model="requests.period" template-type="requests.dateRangeTemplateType"></date-range-picker>		
 	</div>
 	<requests-commands-pane ng-if="requests.isRequestsCommandsEnabled"
 							before-command="requests.onBeforeCommand()"

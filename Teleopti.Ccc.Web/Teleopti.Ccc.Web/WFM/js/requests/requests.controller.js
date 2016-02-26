@@ -23,7 +23,7 @@
 			vm.forceRequestsReloadWithSelection = forceRequestsReloadWithSelection;
 			getSelectedRequestsInfoText();
 			vm.showSelectedRequestsInfo = showSelectedRequestsInfo;
-			
+			vm.dateRangeTemplateType = 'popup';			
 
 			vm.period = { startDate: new Date(), endDate: new Date() };
 			vm.paging = {

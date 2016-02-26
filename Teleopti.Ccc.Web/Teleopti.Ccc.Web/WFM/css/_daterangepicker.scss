@@ -59,6 +59,7 @@
 .error-msg-container {
   display: none;
   margin-top: 5px;
+  z-index: 2000;
 }
 
 .error-msg-container.error-msg-popup-container {
