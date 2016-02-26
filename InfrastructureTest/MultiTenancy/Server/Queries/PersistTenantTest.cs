@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		[SetUp]
 		public void Setup()
 		{
-			tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(ConnectionStringHelper.ConnectionStringUsedInTests);
+			tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString);
 			tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted();
 			target = new PersistTenant(tenantUnitOfWorkManager);
 		}

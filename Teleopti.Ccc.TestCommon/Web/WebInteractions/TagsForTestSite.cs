@@ -3,44 +3,38 @@ using Teleopti.Support.Library.Config;
 
 namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 {
-	public class TagsForTestSite : Tags
+	public class TagsForTestSite
 	{
-		public TagsForTestSite()
+		public Tags Make()
 		{
+			var tags = new SettingsFileManager().ReadFile();
+
 			// behavior test
-			AddTag("ToggleMode", InfraTestConfigReader.TOGGLE_MODE);
-			AddTag("MachineKey", CryptoCreator.MachineKeyCreator.StaticMachineKeyForBehaviorTest());
-			AddTag("TimeLoggerConfiguration", "<logger name='Teleopti.LogTime'><level value='DEBUG'/></logger>");
-			AddTag("BehaviorTestServer", "true");
-			AddTag("HangfireDashboard", "true");
-			AddTag("HangfireDashboardStatistics", "true");
-			AddTag("HangfireDashboardCounters", "true");
-			AddTag("HangfireDashboardDisplayNames", "true");
-			AddTag("HangfireJobExpirationSeconds", TimeSpan.FromDays(1).TotalSeconds.ToString());
+			tags.Set("MachineKey", CryptoCreator.MachineKeyCreator.StaticMachineKeyForBehaviorTest());
+			tags.Set("TimeLoggerConfiguration", "<logger name='Teleopti.LogTime'><level value='DEBUG'/></logger>");
+			tags.Set("BehaviorTestServer", "true");
+			tags.Set("HangfireDashboard", "true");
+			tags.Set("HangfireDashboardStatistics", "true");
+			tags.Set("HangfireDashboardCounters", "true");
+			tags.Set("HangfireDashboardDisplayNames", "true");
+			tags.Set("HangfireJobExpirationSeconds", TimeSpan.FromDays(1).TotalSeconds.ToString());
 
 			// iisexpress
-			AddTag("Port", TestSiteConfigurationSetup.Port.ToString());
-			AddTag("PortAuthenticationBridge", TestSiteConfigurationSetup.PortAuthenticationBridge.ToString());
-			AddTag("PortWindowsIdentityProvider", TestSiteConfigurationSetup.PortWindowsIdentityProvider.ToString());
-			AddTag("SitePath", Paths.WebPath());
-			AddTag("SitePathAuthenticationBridge", Paths.WebAuthenticationBridgePath());
-			AddTag("SitePathWindowsIdentityProvider", Paths.WebWindowsIdentityProviderPath());
+			tags.Set("Port", TestSiteConfigurationSetup.Port.ToString());
+			tags.Set("PortAuthenticationBridge", TestSiteConfigurationSetup.PortAuthenticationBridge.ToString());
+			tags.Set("PortWindowsIdentityProvider", TestSiteConfigurationSetup.PortWindowsIdentityProvider.ToString());
+			tags.Set("SitePath", Paths.WebPath());
+			tags.Set("SitePathAuthenticationBridge", Paths.WebAuthenticationBridgePath());
+			tags.Set("SitePathWindowsIdentityProvider", Paths.WebWindowsIdentityProviderPath());
 
 			// settings.txt
-			AddTag("SQL_AUTH_STRING", InfraTestConfigReader.SQL_AUTH_STRING);
-			AddTag("DB_ANALYTICS", InfraTestConfigReader.DB_ANALYTICS);
-			AddTag("SQL_SERVER_NAME", InfraTestConfigReader.SQL_SERVER_NAME);
-			AddTag("WEB_BROKER_BACKPLANE", InfraTestConfigReader.WEB_BROKER_BACKPLANE);
-			AddTag("DB_CCC7", InfraTestConfigReader.DB_CCC7);
-			AddTag("URL", TestSiteConfigurationSetup.URL.ToString());
-			AddTag("UrlAuthenticationBridge", TestSiteConfigurationSetup.UrlAuthenticationBridge.ToString());
-			AddTag("WEB_BROKER_FOR_WEB", TestSiteConfigurationSetup.URL.ToString());
-			AddTag("DEFAULT_IDENTITY_PROVIDER", "Teleopti");
-			AddTag("WEB_DEPLOY", bool.FalseString.ToLowerInvariant());
-			AddTag("USE_PERSISTENT_CRYPTOKEYS", bool.FalseString.ToLowerInvariant());
-			AddTag("WindowsClaimProvider", TestSiteConfigurationSetup.WindowsClaimProvider);
-			AddTag("TeleoptiClaimProvider", TestSiteConfigurationSetup.TeleoptiClaimProvider);
-			AddTag("MATRIX_WEB_SITE_URL", "http://localhost:52510");
+			tags.Set("URL", TestSiteConfigurationSetup.URL.ToString());
+			tags.Set("UrlAuthenticationBridge", TestSiteConfigurationSetup.UrlAuthenticationBridge.ToString());
+			tags.Set("WEB_BROKER_FOR_WEB", TestSiteConfigurationSetup.URL.ToString());
+			tags.Set("WindowsClaimProvider", TestSiteConfigurationSetup.WindowsClaimProvider);
+			tags.Set("TeleoptiClaimProvider", TestSiteConfigurationSetup.TeleoptiClaimProvider);
+
+			return tags;
 		}
 	}
 }

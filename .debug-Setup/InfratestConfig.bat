@@ -39,7 +39,7 @@ ECHO. >> "%AppliedSettings%"
 ECHO $(DB_CCC7)^|%CCC7DB%>>"%AppliedSettings%"
 ECHO $(DB_ANALYTICS)^|%AnalyticsDB%>>"%AppliedSettings%"
 ECHO $(AS_DATABASE)^|%AnalyticsDB%>>"%AppliedSettings%"
-ECHO $(TOGGLE_MODE)^|%ToggleMode%>>"%AppliedSettings%"
+ECHO $(ToggleMode)^|%ToggleMode%>>"%AppliedSettings%"
 
 ::Run supportTool to replace all config
 "%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -MOTEST

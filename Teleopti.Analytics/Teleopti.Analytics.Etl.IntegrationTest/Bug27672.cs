@@ -65,7 +65,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				)
 				{
 					Helper =
-						new JobHelperForTest(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null)
+						new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, ""), null)
 				};
 
 			//transfer site, team contract etc from app to analytics
@@ -85,7 +85,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				)
 						{
 							Helper = new JobHelperForTest(
-								new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null
+								new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, ""), null
 								)
 						};
 
@@ -130,7 +130,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				)
 						{
 							Helper =
-				new JobHelperForTest(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null)
+				new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, ""), null)
 						};
 
 			//transfer site, team contract etc from app to analytics
@@ -150,7 +150,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				)
 						{
 							Helper =
-								new JobHelperForTest(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null)
+								new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, ""), null)
 						};
 
 			StepRunner.RunNightly(jobParameters);

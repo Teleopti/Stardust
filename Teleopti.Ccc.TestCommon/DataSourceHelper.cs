@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.TestCommon
 					var databaseHelper = ccc7();
 					databaseHelper.ConfigureSystem().PersistAuditSetting();
 				},
-				"Failed to persist audit setting in database {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
+				"Failed to persist audit setting in database {0}!", InfraTestConfigReader.ConnectionString
 				);
 		}
 
@@ -186,12 +186,12 @@ namespace Teleopti.Ccc.TestCommon
 
 		private static DatabaseHelper ccc7()
 		{
-			return new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
+			return new DatabaseHelper(InfraTestConfigReader.ConnectionString, DatabaseType.TeleoptiCCC7);
 		}
 
 		private static DatabaseHelper analytics()
 		{
-			return new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics);
+			return new DatabaseHelper(InfraTestConfigReader.AnalyticsConnectionString, DatabaseType.TeleoptiAnalytics);
 		}
 
 		private static IDataSource makeDataSource(ICurrentPersistCallbacks persistCallbacks, string name)
@@ -200,10 +200,10 @@ namespace Teleopti.Ccc.TestCommon
 				() =>
 				{
 					var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), persistCallbacks, DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), null);
-					var dataSourceSettings = CreateDataSourceSettings(ConnectionStringHelper.ConnectionStringUsedInTests, null, name);
-					return dataSourceFactory.Create(dataSourceSettings, ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
+					var dataSourceSettings = CreateDataSourceSettings(InfraTestConfigReader.ConnectionString, null, name);
+					return dataSourceFactory.Create(dataSourceSettings, InfraTestConfigReader.AnalyticsConnectionString);
 				},
-				"Failed to create datasource {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
+				"Failed to create datasource {0}!", InfraTestConfigReader.ConnectionString
 				);
 		}
 
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.TestCommon
 			//would be better if dbmanager was called, but don't have the time right now....
 			exceptionToConsole(
 				() => ccc7().ConfigureSystem().MergePersonAssignments(),
-				"Failed to create unique index on personassignment in database {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
+				"Failed to create unique index on personassignment in database {0}!", InfraTestConfigReader.ConnectionString
 				);
 		}
 	}

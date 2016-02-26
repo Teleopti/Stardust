@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 		public static void Setup(string pathToIISExpress)
 		{
 			_portsConfiguration = RandomPortsAndUrls();
-			WriteWebConfigs();
+			writeWebConfigs();
 			StartIISExpress(pathToIISExpress);
 		}
 
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			new FileConfigurator().Configure(
 				"iisexpress.config",
 				runningConfig,
-				new TagsForTestSite()
+				new TagsForTestSite().Make()
 				);
 
 			var parameters = new Parameters
@@ -114,43 +114,25 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			{
 				_portsConfiguration.Dispose();
 			}
-			WriteWebConfigs();
+			writeWebConfigs();
 		}
 
-		private static void WriteWebConfigs()
+		private static void writeWebConfigs()
 		{
-			WriteWebConfig(new ConfigOptions
-			{
-				SourceFileName = "web.root.web.config", 
-				TargetFolder = Paths.WebPath()
-			});
-			WriteWebConfig(new ConfigOptions
-			{
-				SourceFileName = "web.AuthenticationBridge.web.config",
-				TargetFolder = Paths.WebAuthenticationBridgePath()
-			});
-			WriteWebConfig(new ConfigOptions
-			{
-				SourceFileName = "web.WindowsIdentityProvider.web.config",
-				TargetFolder = Paths.WebWindowsIdentityProviderPath()
-			});
+			writeWebConfig("web.root.web.config", Paths.WebPath());
+			writeWebConfig("web.AuthenticationBridge.web.config", Paths.WebAuthenticationBridgePath());
+			writeWebConfig("web.WindowsIdentityProvider.web.config", Paths.WebWindowsIdentityProviderPath());
 		}
-
-		private class ConfigOptions
+		
+		private static void writeWebConfig(string sourceFileName, string targetFolder)
 		{
-			public string SourceFileName { get; set; }
-			public string TargetFolder { get; set; }
-		}
-
-		private static void WriteWebConfig(ConfigOptions o)
-		{
-			var sourceFile = Path.Combine(Paths.FindProjectPath(@"BuildArtifacts\"), o.SourceFileName);
-			var targetFile = Path.Combine(o.TargetFolder, "web.config");
+			var sourceFile = Path.Combine(Paths.FindProjectPath(@"BuildArtifacts\"), sourceFileName);
+			var targetFile = Path.Combine(targetFolder, "web.config");
 
 			new FileConfigurator().Configure(
 				sourceFile,
 				targetFile,
-				new TagsForTestSite()
+				new TagsForTestSite().Make()
 				);
 		}
 

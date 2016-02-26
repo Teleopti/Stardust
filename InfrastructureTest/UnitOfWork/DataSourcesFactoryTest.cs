@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void TestCreateWithDictionaryWithMatrix()
 		{
-			IDataSource res = target.Create(nHibSettings(), ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
+			IDataSource res = target.Create(nHibSettings(), InfraTestConfigReader.AnalyticsConnectionString);
 			Assert.AreEqual(DataSourceConfigurationSetter.NoDataSourceName, res.Application.Name);
 			Assert.AreEqual(DataSourcesFactory.AnalyticsDataSourceName, res.Analytics.Name);
 			Assert.IsInstanceOf<NHibernateUnitOfWorkFactory>(res.Application);
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void ShouldAddApplicationNameToConnectionString()
 		{
-			var res = target.Create(nHibSettings(), ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
+			var res = target.Create(nHibSettings(), InfraTestConfigReader.AnalyticsConnectionString);
 			using (var appSession = ((NHibernateUnitOfWorkFactory)res.Application).SessionFactory.OpenSession())
 			{
 				appSession.Connection.ConnectionString.Should().Contain("unit tests");
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			IDictionary<string, string> ret = new Dictionary<string, string>();
 			ret.Add("connection.provider", "NHibernate.Connection.DriverConnectionProvider");
 			ret.Add("connection.driver_class", "NHibernate.Driver.SqlClientDriver");
-			ret.Add("connection.connection_string", ConnectionStringHelper.ConnectionStringUsedInTests);
+			ret.Add("connection.connection_string", InfraTestConfigReader.ConnectionString);
 			ret.Add("show_sql", "false");
 			ret.Add("dialect", "NHibernate.Dialect.MsSql2008Dialect");
 
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 								<property name=""connection.provider"">NHibernate.Connection.DriverConnectionProvider</property>
 								<property name=""connection.driver_class"">NHibernate.Driver.SqlClientDriver</property>
 								<property name=""connection.connection_string"">",
-			ConnectionStringHelper.ConnectionStringUsedInTests,
+			InfraTestConfigReader.ConnectionString,
 				 @"</property>
 								<property name=""show_sql"">false</property> 
 								<property name=""dialect"">NHibernate.Dialect.MsSql2008Dialect</property>
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 								<property name=""connection.provider"">NHibernate.Connection.DriverConnectionProvider</property>
 								<property name=""connection.driver_class"">NHibernate.Driver.SqlClientDriver</property>
 								<property name=""connection.connection_string"">",
-			ConnectionStringHelper.NonValidConnectionStringUsedInTests,
+			InfraTestConfigReader.InvalidConnectionString,
 				 @"</property>
 								<property name=""show_sql"">false</property> 
 								<property name=""dialect"">NHibernate.Dialect.MsSql2008Dialect</property>
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 							 </session-factory >
 						  </hibernate-configuration>
 						  <matrix name=""matrixName""><connectionString>",
-			ConnectionStringHelper.ConnectionStringUsedInTestsMatrix,
+			InfraTestConfigReader.AnalyticsConnectionString,
 					  @"</connectionString></matrix>
 						  ", authenticationSettings, @"
 						</datasource>
