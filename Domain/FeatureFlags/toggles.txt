@@ -95,3 +95,5 @@ ResourcePlanner_SkillGroupDeleteAfterCalculation_37048 = RC
 ETL_SpeedUpPersonPeriodIntraday_37162 = false
 Scheduler_IntradayOptimization_36617 = RC
 WfmGlobalLayout_personalOptions_37114 = DEV
+
+ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049 = RC
