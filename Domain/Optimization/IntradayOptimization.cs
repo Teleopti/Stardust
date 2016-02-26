@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 		private readonly WebSchedulingSetup _webSchedulingSetup;
-		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IScheduleDictionaryPersister _persister;
@@ -31,7 +30,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 									Func<ISchedulerStateHolder> schedulerStateHolder,
 									DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
 									WebSchedulingSetup webSchedulingSetup,
-									IMatrixListFactory matrixListFactory,
 									IPlanningPeriodRepository planningPeriodRepository,
 									Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 									IScheduleDictionaryPersister persister,
@@ -46,7 +44,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_schedulerStateHolder = schedulerStateHolder;
 			_dayOffOptimizationPreferenceProviderUsingFiltersFactory = dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 			_webSchedulingSetup = webSchedulingSetup;
-			_matrixListFactory = matrixListFactory;
 			_planningPeriodRepository = planningPeriodRepository;
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 			_persister = persister;
@@ -74,8 +71,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var period = planningPeriod.Range;
 			var webScheduleState = _webSchedulingSetup.Setup(period);
 
-			var matrixes = _matrixListFactory.CreateMatrixListForSelection(webScheduleState.AllSchedules);
-			var optimizers = _intradayOptimizer2Creator.Create(period, matrixes, optimizationPreferences, dayOffOptimizationPreference);
+			var optimizers = _intradayOptimizer2Creator.Create(period, webScheduleState.AllSchedules, optimizationPreferences, dayOffOptimizationPreference);
 
 			using (_intradayOptimizationContext.Create(period))
 			{

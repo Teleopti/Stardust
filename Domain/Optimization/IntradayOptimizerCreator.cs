@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
+		private readonly IMatrixListFactory _matrixListFactory;
 
 		public IntradayOptimizer2Creator(
 			IIntradayDecisionMaker decisionMaker,
@@ -44,7 +45,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			IScheduleDayEquator scheduleDayEquator,
-			IOptimizerHelperHelper optimizerHelperHelper)
+			IOptimizerHelperHelper optimizerHelperHelper, 
+			IMatrixListFactory matrixListFactory)
 		{
 			_decisionMaker = decisionMaker;
 			_scheduleService = scheduleService;
@@ -60,10 +62,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_scheduleDayEquator = scheduleDayEquator;
 			_optimizerHelperHelper = optimizerHelperHelper;
+			_matrixListFactory = matrixListFactory;
 		}
 
-		public IEnumerable<IIntradayOptimizer2> Create(DateOnlyPeriod period, IEnumerable<IScheduleMatrixPro> scheduleMatrixes, IOptimizationPreferences optimizerPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+		public IEnumerable<IIntradayOptimizer2> Create(DateOnlyPeriod period, IEnumerable<IScheduleDay> scheduleDays, IOptimizationPreferences optimizerPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
+			var scheduleMatrixes = _matrixListFactory.CreateMatrixListForSelection(scheduleDays.ToList()); //ta bort enumerable
 			var scheduleMatrixContainerList = scheduleMatrixes.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator)).ToList();
 			var matrixes = scheduleMatrixContainerList.Select(container => container.ScheduleMatrix);
 			_optimizerHelperHelper.LockDaysForIntradayOptimization(matrixes, period);
