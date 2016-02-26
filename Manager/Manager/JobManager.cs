@@ -29,8 +29,7 @@ namespace Stardust.Manager
 			_managerConfiguration = managerConfiguration;
 
 			_checkHeartbeatsTimer.Elapsed += OnTimedEvent;
-			// ReSharper disable once PossibleLossOfFraction
-			_checkHeartbeatsTimer.Interval = managerConfiguration.AllowedNodeDownTimeSeconds/2;
+			_checkHeartbeatsTimer.Interval = managerConfiguration.AllowedNodeDownTimeSeconds*500; //NodeDowntime in milliseconds divided by 2
 			_checkHeartbeatsTimer.Start();
 		}
 
