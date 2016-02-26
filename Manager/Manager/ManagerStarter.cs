@@ -18,7 +18,7 @@ namespace Stardust.Manager
 
 			builder.RegisterType<HttpSender>()
 				.As<IHttpSender>();
-
+			 
 			builder.Register(
 				c => new JobRepository(managerConfiguration.ConnectionString))
 				.As<IJobRepository>();
