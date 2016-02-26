@@ -17,20 +17,20 @@ Background:
 	| Name                   | Resource Planner |
 	| Access to wfm requests | true             |
 	| Access to everyone     | true             |
-	And 'Ashley' has a person period with 
+	And 'Ashley Andeen' has a person period with 
 	| Field      | Value        |
 	| Start date | 2015-06-18   |
 	| Team      | Red Team   |
-	And 'John' has a person period with 
+	And 'John Smith' has a person period with 
 	| Field      | Value      |
 	| Start date | 2015-06-18 |
 	| Team      | Green Team |
-	And 'Ashley' has an existing text request with
+	And 'Ashley Andeen' has an existing text request with
 	| Field     | Value            |
 	| StartTime | 2015-10-03 10:00 |
 	| End Time  | 2015-10-03 14:00 |
 	| Update Time  | 2015-09-03 14:00 |
-	And 'John' has an existing absence request with
+	And 'John Smith' has an existing absence request with
 	| Field       | Value            |
 	| StartTime   | 2015-10-03 10:00 |
 	| End Time    | 2015-10-03 14:00 |
@@ -39,14 +39,14 @@ Background:
 Scenario: Display requests	
 	When I view wfm requests
 	And I select to load requests from '2015-10-01' to '2015-10-04'
-	Then I should see a request from 'Ashley' in the list
-	And I should see a request from 'John' in the list
+	Then I should see a request from 'Ashley Andeen' in the list
+	And I should see a request from 'John Smith' in the list
 
 Scenario: Sort requests	
 	When I view wfm requests
 	And I select to load requests from '2015-10-01' to '2015-10-04'
 	And I sort the request list by descending agent name
-	Then I should see the request from 'John' before the request from 'Ashley' in the list
+	Then I should see the request from 'John Smith' before the request from 'Ashley Andeen' in the list
 
 @ignore
 Scenario: Not fetch requests when choosing incorrect date range
@@ -57,12 +57,12 @@ Scenario: Not fetch requests when choosing incorrect date range
 @ignore
 @OnlyRunIfEnabled('Wfm_Requests_People_Search_36294')
 Scenario: Find requests by agent team	
-	Given 'Ashley' has an existing text request with
+	Given 'Ashley Andeen' has an existing text request with
 	| Field     | Value            |
 	| StartTime | 2015-10-03 10:00 |
 	| End Time  | 2015-10-03 14:00 |
 	| Update Time  | 2015-09-03 14:00 |
-	And 'John' has an existing absence request with
+	And 'John Smith' has an existing absence request with
 	| Field       | Value            |
 	| StartTime   | 2015-10-03 10:00 |
 	| End Time    | 2015-10-03 14:00 |
@@ -72,28 +72,28 @@ Scenario: Find requests by agent team
 	And I search with
 	| Field        | Value |
 	| organization | Red   |
-	Then I should see a request from 'Ashley' in the list
+	Then I should see a request from 'Ashley Andeen' in the list
 	
 
 @ignore
 @OnlyRunIfEnabled('Wfm_Requests_People_Search_36294')
 Scenario: Find requests by team that agent belongs to at the request period start date
-	Given 'Ashley' has person period with
+	Given 'Ashley Andeen' has person period with
 	| Field     | Value      |
 	| StartDate | 2015-10-01 |
 	| Team      | Red Team   |
-	And 'Ashley' has person period with
+	And 'Ashley Andeen' has person period with
 	| Field     | Value      |
 	| StartDate | 2015-10-07 |
 	| Team      | Green Team |
-	And 'Ashley' creates an absence request on '2015-10-02'
+	And 'Ashley Andeen' creates an absence request on '2015-10-02'
 	| Field     | Value            |
 	| StartTime | 2015-10-08 00:00 |
 	| EndTime   | 2015-10-10 00:00 |
 	When I view wfm requests
 	And I select to load requests from '2015-10-01' to '2015-10-10'
 	And I pick the team 'Green Team'
-	Then I should see the request from 'Ashley' in the list
+	Then I should see the request from 'Ashley Andeen' in the list
 	And I should see the team to be 'Green Team'
 
 @ignore
@@ -150,7 +150,7 @@ Scenario: Find requests for multiple agent search criterias
 	When I view wfm requests
 	And I select to load requests from '2015-10-01' to '2015-10-10'
 	And I pick the team 'Green Team' 
-	And I search agent name 'Ashley'
+	And I search agent name 'Ashley Andeen'
 	Then I should only see the request from 'Ashley B' in the list
 
 
@@ -158,7 +158,7 @@ Scenario: Find requests for multiple agent search criterias
 @OnlyRunIfEnabled('Wfm_Requests_Performance_36295')
 Scenario: Can use paging
 	Given the page size is set to '1'
-	And there are '10' requests from 'Ashley' on '2015-10-05'
+	And there are '10' requests from 'Ashley Andeen' on '2015-10-05'
 	When I view wfm requests
 	And I select to load requests from '2015-10-01' to '2015-10-10'
 	Then I should see '1' request in the list
@@ -167,7 +167,7 @@ Scenario: Can use paging
 @ignore
 @OnlyRunIfEnabled('Wfm_Requests_Performance_36295')
 Scenario: Can change page size
-	Given there are '30' requests from 'Ashley' on '2015-10-05'
+	Given there are '30' requests from 'Ashley Andeen' on '2015-10-05'
 	When I view wfm requests
 	And I can see the page size to be '20' by default
 	And I select to load requests from '2015-10-01' to '2015-10-10'
@@ -180,11 +180,11 @@ Scenario: Can change page size
 @OnlyRunIfEnabled('Wfm_Requests_Performance_36295')
 Scenario: Can view different page
 	Given the page size is set to '1'
-	And 'Ashley' has an existing text request with
+	And 'Ashley Andeen' has an existing text request with
 	| Field     | Value            |
 	| StartTime | 2015-10-02 10:00 |
 	| End Time  | 2015-10-03 14:00 |
-	And 'John' has an existing absence request with
+	And 'John Smith' has an existing absence request with
 	| Field     | Value            |
 	| StartTime | 2015-10-03 10:00 |
 	| End Time  | 2015-10-03 14:00 |
@@ -192,13 +192,13 @@ Scenario: Can view different page
 	And I select to load requests from '2015-10-01' to '2015-10-10' order by ascending period start time
 	And I see the request from 'Asheley' in the list	
 	And I select to view the last page
-	Then I see the request from 'John' in the list	
+	Then I see the request from 'John Smith' in the list	
 
 
 
 @OnlyRunIfEnabled('Wfm_Requests_ApproveDeny_36297')
 Scenario: Can approve requests
-	Given 'Ashley' has an existing text request with
+	Given 'Ashley Andeen' has an existing text request with
 	| Field       | Value            |
 	| StartTime   | 2016-01-03 10:00 |
 	| End Time    | 2016-01-03 14:00 |
@@ -207,12 +207,12 @@ Scenario: Can approve requests
 	When I view wfm requests
 	And I select to load requests from '2016-01-01' to '2016-01-07'
 	And I approve all requests that I see
-	Then I should see request from 'Ashley' approved
+	Then I should see request from 'Ashley Andeen' approved
 
 @ignore
 @OnlyRunIfEnabled('Wfm_Requests_ApproveDeny_36297')
 Scenario: Can deny requests
-	Given 'Ashley' has an existing text request with
+	Given 'Ashley Andeen' has an existing text request with
 	| Field       | Value            |
 	| StartTime   | 2015-10-03 10:00 |
 	| End Time    | 2015-10-03 14:00 |
@@ -220,20 +220,20 @@ Scenario: Can deny requests
 	| Status      | Pending          |
 	When I view wfm requests
 	And I select to load requests from '2015-10-01' to '2015-10-10'
-	And I deny requests from 'Ashley'
-	Then I should see the request from 'Ashley' with status 'Denied'
+	And I deny requests from 'Ashley Andeen'
+	Then I should see the request from 'Ashley Andeen' with status 'Denied'
 
 
 @ignore
 @OnlyRunIfEnabled('Wfm_Requests_ApproveReject_36297')
 Scenario: Can approve multiple requests
-	Given 'Ashley' has an existing text request with
+	Given 'Ashley Andeen' has an existing text request with
 	| Field       | Value            |
 	| StartTime   | 2015-10-03 10:00 |
 	| End Time    | 2015-10-03 14:00 |
 	| Update Time | 2015-09-05 1:00  |
 	| Status      | Pending          |
-	And 'John' has an existing absence request with
+	And 'John Smith' has an existing absence request with
 	| Field       | Value            |
 	| StartTime   | 2015-10-03 10:00 |
 	| End Time    | 2015-10-03 14:00 |
@@ -241,14 +241,14 @@ Scenario: Can approve multiple requests
 	| Status      | Pending          |
 	When I view wfm requests
 	And I select to load requests from '2015-10-01' to '2015-10-10'
-	And I approve requests from 'Ashley' and 'John' at the same time
-	Then I should see the request from 'Ashley' with status 'Approved'
-	And I should see the request from 'John' with status 'Approved'
+	And I approve requests from 'Ashley Andeen' and 'John Smith' at the same time
+	Then I should see the request from 'Ashley Andeen' with status 'Approved'
+	And I should see the request from 'John Smith' with status 'Approved'
 
 @ignore
 @OnlyRunIfEnabled('Wfm_Requests_ApproveReject_36297')
 Scenario: Cannot approve or deny non-pending request
-	Given 'Ashley' has an existing text request with
+	Given 'Ashley Andeen' has an existing text request with
 	| Field       | Value            |
 	| StartTime   | 2015-10-03 10:00 |
 	| End Time    | 2015-10-03 14:00 |
@@ -256,13 +256,13 @@ Scenario: Cannot approve or deny non-pending request
 	| Status      | Approved         |
 	When I view wfm requests
 	And I select to load requests from '2015-10-01' to '2015-10-10'
-	And I deny requests from 'Ashley'
-	Then I should see the request from 'Ashley' with status 'Approved'
+	And I deny requests from 'Ashley Andeen'
+	Then I should see the request from 'Ashley Andeen' with status 'Approved'
 
 @ignore
 @OnlyRunIfEnabled('Wfm_Requests_ApproveReject_36297')
 Scenario: Cannot approve or deny obsolete request
-	Given 'Ashley' has an existing text request with
+	Given 'Ashley Andeen' has an existing text request with
 	| Field       | Value            |
 	| StartTime   | 2015-10-03 10:00 |
 	| End Time    | 2015-10-03 14:00 |
@@ -271,13 +271,13 @@ Scenario: Cannot approve or deny obsolete request
 	And today is '2015-12-01'
 	When I view wfm requests
 	And I select to load requests from '2015-10-01' to '2015-10-10'
-	And I deny requests from 'Ashley'
-	Then I should see the request from 'Ashley' with status 'Pending'
+	And I deny requests from 'Ashley Andeen'
+	Then I should see the request from 'Ashley Andeen' with status 'Pending'
 
 @ignore
 @OnlyRunIfEnabled('Wfm_Requests_ApproveReject_36297')
 Scenario: Refresh the request list with status filter after approving or denying request
-	Given 'Ashley' has an existing text request with
+	Given 'Ashley Andeen' has an existing text request with
 	| Field       | Value            |
 	| StartTime   | 2015-10-03 10:00 |
 	| End Time    | 2015-10-03 14:00 |
@@ -286,25 +286,25 @@ Scenario: Refresh the request list with status filter after approving or denying
 	When I view wfm requests	
 	And I select to load requests from '2015-10-01' to '2015-10-10'
 	And I choose to view 'Pending' requests
-	And I approve requests from 'Ashley'
-	Then I should not see the request from 'Ashley'
+	And I approve requests from 'Ashley Andeen'
+	Then I should not see the request from 'Ashley Andeen'
 
 
 
 
 @ignore
 Scenario: View request details
-	Given 'Ashley' has an existing text request with
+	Given 'Ashley Andeen' has an existing text request with
 	| Field     | Value            |
 	| StartTime | 2015-10-03 10:00 |
 	| End Time  | 2015-10-03 14:00 |
 	| Update Time  | 2015-11-03 14:00 |
-	And 'John' has an existing absence request with
+	And 'John Smith' has an existing absence request with
 	| Field     | Value            |
 	| StartTime | 2015-10-03 10:00 |
 	| End Time  | 2015-10-03 14:00 |
 	| Update Time  | 2015-11-01 14:00 |
 	And I view wfm requests
-	When I expand the request from 'Ashley'
-	Then I should see detailed text request from 'Ashley'
+	When I expand the request from 'Ashley Andeen'
+	Then I should see detailed text request from 'Ashley Andeen'
 
