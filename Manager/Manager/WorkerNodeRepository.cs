@@ -285,10 +285,11 @@ namespace Stardust.Manager
 																	SqlDbType.NVarChar).Value = url;
 
 										commandUpdate.ExecuteNonQuery();
+										connection2.Close();
 									}
 									LogHelper.LogErrorWithLineNumber(Logger,"Node: " + url + " has not sent any heartbeats in " + dateDiff + " seconds!");
 									deadNodes.Add(url);
-									connection2.Close();
+									
 								}
 							}
 						}
