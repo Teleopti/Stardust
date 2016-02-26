@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
@@ -19,11 +18,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 		private readonly WebSchedulingSetup _webSchedulingSetup;
 		private readonly IMatrixListFactory _matrixListFactory;
-		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IScheduleDictionaryPersister _persister;
-		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
 		private readonly IntradayOptimizer2Creator _intradayOptimizer2Creator;
 		private readonly IIntradayOptimizerContainer _intradayOptimizerContainer;
@@ -35,11 +32,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 									DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
 									WebSchedulingSetup webSchedulingSetup,
 									IMatrixListFactory matrixListFactory,
-									IScheduleDayEquator scheduleDayEquator,
 									IPlanningPeriodRepository planningPeriodRepository,
 									Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 									IScheduleDictionaryPersister persister,
-									IOptimizerHelperHelper optimizerHelperHelper,
 									WeeklyRestSolverExecuter weeklyRestSolverExecuter,
 									IntradayOptimizer2Creator intradayOptimizer2Creator,
 									IIntradayOptimizerContainer intradayOptimizerContainer,
@@ -52,11 +47,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_dayOffOptimizationPreferenceProviderUsingFiltersFactory = dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 			_webSchedulingSetup = webSchedulingSetup;
 			_matrixListFactory = matrixListFactory;
-			_scheduleDayEquator = scheduleDayEquator;
 			_planningPeriodRepository = planningPeriodRepository;
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 			_persister = persister;
-			_optimizerHelperHelper = optimizerHelperHelper;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
 			_intradayOptimizer2Creator = intradayOptimizer2Creator;
 			_intradayOptimizerContainer = intradayOptimizerContainer;
@@ -81,10 +74,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var period = planningPeriod.Range;
 			var webScheduleState = _webSchedulingSetup.Setup(period);
 
-			var matrixListForIntraDayOptimizationOriginal = _matrixListFactory.CreateMatrixListForSelection(webScheduleState.AllSchedules);
-			var matrixOriginalStateContainerListForIntradayOptimizationOriginal = matrixListForIntraDayOptimizationOriginal.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator));
-			var optimizers = _intradayOptimizer2Creator.Create(matrixOriginalStateContainerListForIntradayOptimizationOriginal, optimizationPreferences, dayOffOptimizationPreference);
-			_optimizerHelperHelper.LockDaysForIntradayOptimization(matrixListForIntraDayOptimizationOriginal, period);
+			var matrixes = _matrixListFactory.CreateMatrixListForSelection(webScheduleState.AllSchedules);
+			var optimizers = _intradayOptimizer2Creator.Create(period, matrixes, optimizationPreferences, dayOffOptimizationPreference);
 
 			using (_intradayOptimizationContext.Create(period))
 			{

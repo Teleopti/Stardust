@@ -27,6 +27,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IIntradayOptimizeOneDayCallback _intradayOptimizeOneDayCallback;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
+		private readonly IScheduleDayEquator _scheduleDayEquator;
+		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 
 		public IntradayOptimizer2Creator(
 			IIntradayDecisionMaker decisionMaker,
@@ -40,7 +42,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
 			IIntradayOptimizeOneDayCallback intradayOptimizeOneDayCallback,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
-			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback)
+			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
+			IScheduleDayEquator scheduleDayEquator,
+			IOptimizerHelperHelper optimizerHelperHelper)
 		{
 			_decisionMaker = decisionMaker;
 			_scheduleService = scheduleService;
@@ -54,23 +58,22 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_intradayOptimizeOneDayCallback = intradayOptimizeOneDayCallback;
 			_schedulerStateHolder = schedulerStateHolder;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
+			_scheduleDayEquator = scheduleDayEquator;
+			_optimizerHelperHelper = optimizerHelperHelper;
 		}
 
-		/// <summary>
-		/// Creates the list of optimizers.
-		/// </summary>
-		/// <returns></returns>
-		public IEnumerable<IIntradayOptimizer2> Create(IEnumerable<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainers,
-			IOptimizationPreferences optimizerPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+		public IEnumerable<IIntradayOptimizer2> Create(DateOnlyPeriod period, IEnumerable<IScheduleMatrixPro> scheduleMatrixes, IOptimizationPreferences optimizerPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-			ISchedulePartModifyAndRollbackService rollbackService =
-				new SchedulePartModifyAndRollbackService(
+			var scheduleMatrixContainerList = scheduleMatrixes.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator)).ToList();
+			var matrixes = scheduleMatrixContainerList.Select(container => container.ScheduleMatrix).ToList();  //TODO: why list is needed?
+			_optimizerHelperHelper.LockDaysForIntradayOptimization(matrixes, period);
+
+			var rollbackService = new SchedulePartModifyAndRollbackService(
 					_schedulerStateHolder().SchedulingResultState,
 					_scheduleDayChangeCallback(),
 					new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
 
 			IList<IIntradayOptimizer2> result = new List<IIntradayOptimizer2>();
-			var scheduleMatrixContainerList = scheduleMatrixContainers.ToList();
 			var workShiftContainerList = scheduleMatrixContainerList.ToList();
 
 			for (int index = 0; index < scheduleMatrixContainerList.Count; index++)
