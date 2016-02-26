@@ -1125,7 +1125,6 @@
     <Compile Include="Scheduling\BackToLegalShift\BackToLegalShiftService.cs" />
     <Compile Include="Scheduling\BackToLegalShift\BackToLegalShiftWorker.cs" />
     <Compile Include="Scheduling\BackToLegalShift\LegalShiftDecider.cs" />
-    <Compile Include="Scheduling\DoNothingScheduleDayChangeCallBack.cs" />
     <Compile Include="Scheduling\IMatrixUnselectedDaysLocker.cs" />
     <Compile Include="Scheduling\INextPlanningPeriodProvider.cs" />
     <Compile Include="Scheduling\Legacy\Commands\AgentRestrictionsNoWorkShiftfFinder.cs" />

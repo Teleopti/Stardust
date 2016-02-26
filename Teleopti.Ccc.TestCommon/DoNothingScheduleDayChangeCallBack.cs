@@ -1,6 +1,6 @@
 ﻿using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Scheduling
+namespace Teleopti.Ccc.TestCommon
 {
 	public class DoNothingScheduleDayChangeCallBack : IScheduleDayChangeCallback
 	{

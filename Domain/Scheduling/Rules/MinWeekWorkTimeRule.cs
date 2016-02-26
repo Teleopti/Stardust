@@ -5,8 +5,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
-	public interface IMinWeekWorkTimeRule : INewBusinessRule { }
+	public interface IMinWeekWorkTimeRule : INewBusinessRule
+	{
+	}
+
 	public class MinWeekWorkTimeRule : IMinWeekWorkTimeRule
     {
         private bool _haltModify = true;

@@ -270,6 +270,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker>().As<IDayOffDecisionMaker>().InstancePerLifetimeScope();
 			builder.RegisterType<SchedulingOptionsCreator>().As<ISchedulingOptionsCreator>().SingleInstance();
 			builder.RegisterType<LockableBitArrayChangesTracker>().As<ILockableBitArrayChangesTracker>().InstancePerLifetimeScope();
+			builder.RegisterType<ScheduleMatrixOriginalStateContainerCreator>().InstancePerLifetimeScope();
 
 			builder.RegisterType<DaysOffLegalStateValidatorsFactory>().As<IDaysOffLegalStateValidatorsFactory>().InstancePerLifetimeScope();
 			//IDaysOffLegalStateValidatorsFactory

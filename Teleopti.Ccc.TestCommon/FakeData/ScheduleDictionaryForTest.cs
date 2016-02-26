@@ -11,10 +11,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	public class ScheduleDictionaryForTest : ScheduleDictionary, IReadOnlyScheduleDictionary
 	{
 		public ScheduleDictionaryForTest(IScenario scenario, DateTime date)
-			: this(scenario, new DateTimePeriod(cloneToUtc(date.Date), cloneToUtc(date.Date.AddHours(24)))) { }
+			: this(scenario, new DateTimePeriod(DateTime.SpecifyKind(date.Date,DateTimeKind.Utc), DateTime.SpecifyKind(date.Date.AddHours(24),DateTimeKind.Utc))) { }
 
 		public ScheduleDictionaryForTest(IScenario scenario, DateTime startDate, DateTime endDate)
-			: this(scenario, new DateTimePeriod(cloneToUtc(startDate.Date), cloneToUtc(endDate.Date.AddHours(24)))) { }
+			: this(scenario, new DateTimePeriod(DateTime.SpecifyKind(startDate.Date,DateTimeKind.Utc), DateTime.SpecifyKind(endDate.Date.AddHours(24),DateTimeKind.Utc))) { }
 
 		public ScheduleDictionaryForTest(IScenario scenario, IScheduleDateTimePeriod period, IDictionary<IPerson, IScheduleRange> dictionary)
 			: base(scenario, period, dictionary) { }
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public static IScheduleDictionary WithPersonAssignment(IScenario scenario, DateTime date, IPersonAssignment personAssignment)
 		{
-			return WithPersonAssignment(scenario, new DateTimePeriod(cloneToUtc(date.Date), cloneToUtc(date.Date.AddHours(24))), personAssignment);
+			return WithPersonAssignment(scenario, new DateTimePeriod(DateTime.SpecifyKind(date.Date,DateTimeKind.Utc), DateTime.SpecifyKind(date.Date.AddHours(24),DateTimeKind.Utc)), personAssignment);
 		}
 
 		public static IScheduleDictionary WithPersonAssignment(IScenario scenario, DateTimePeriod period, IPersonAssignment personAssignment)
@@ -124,12 +124,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			BaseDictionary.Add(person, range);
 		}
-
-		private static DateTime cloneToUtc(DateTime dateTime)
-		{
-			return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second, DateTimeKind.Utc);
-		}
-
+		
 		public void MakeEditable()
 		{
 			//throw new NotImplementedException();

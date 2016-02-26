@@ -412,6 +412,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_schedulerState = _container.Resolve<ISchedulerStateHolder>();
 			_groupPagesProvider = _container.Resolve<ISchedulerGroupPagesProvider>();
 			_requiredScheduleHelper = _container.Resolve<IRequiredScheduleHelper>();
+			_scheduleOptimizerHelper = _container.Resolve<ScheduleOptimizerHelper>();
 			_restrictionExtractor = _container.Resolve<IRestrictionExtractor>();
 			_optimizationHelperExtended = _container.Resolve<IResourceOptimizationHelperExtended>();
 			_skillDayLoadHelper = _container.Resolve<ISkillDayLoadHelper>();
@@ -3627,7 +3628,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				initMessageBroker(period.LoadedPeriod());
 			}
 
-			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container, optimizerHelper, _requiredScheduleHelper);
+			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container, optimizerHelper, _requiredScheduleHelper, _container.Resolve<IMatrixListFactory>());
 
 			if (!_schedulerState.SchedulingResultState.SkipResourceCalculation && !_teamLeaderMode)
 			{

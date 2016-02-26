@@ -149,6 +149,7 @@
     <Compile Include="BitArrayHelper.cs" />
     <Compile Include="CatalanCulture.cs" />
     <Compile Include="ConnectionStringHelper.cs" />
+    <Compile Include="DoNothingScheduleDayChangeCallBack.cs" />
     <Compile Include="EncryptPassword.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Execute.cs" />
@@ -162,6 +163,7 @@
     <Compile Include="FakeData\FakeCampaignRepository.cs" />
     <Compile Include="FakeData\FakeCommonAgentNameProvider.cs" />
     <Compile Include="FakeData\FakeCurrentUnitOfWorkFactory.cs" />
+    <Compile Include="FakeData\FakeGroupScheduleGroupPageDataProvider.cs" />
     <Compile Include="FakeData\FakeLogManagerWrapper.cs" />
     <Compile Include="FakeData\FakePersonContractProvider.cs" />
     <Compile Include="FakeData\FakeScheduleDayForPerson.cs" />
