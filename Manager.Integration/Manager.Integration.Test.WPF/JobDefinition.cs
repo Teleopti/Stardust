@@ -20,7 +20,6 @@ namespace Manager.Integration.Test.WPF
         public string Type { get; set; }
         public string UserName { get; set; }
         public string AssignedNode { get; set; }
-        public string JobProgress { get; set; }
         public string Status { get; set; }
     }
 }

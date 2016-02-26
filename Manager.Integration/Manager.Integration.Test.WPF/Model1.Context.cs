@@ -28,7 +28,7 @@ namespace Manager.Integration.Test.WPF
         public virtual DbSet<JobDefinition> JobDefinitions { get; set; }
         public virtual DbSet<JobHistory> JobHistories { get; set; }
         public virtual DbSet<JobHistoryDetail> JobHistoryDetails { get; set; }
-        public virtual DbSet<WorkerNode> WorkerNodes { get; set; }
         public virtual DbSet<Logging> Loggings { get; set; }
+        public virtual DbSet<WorkerNode> WorkerNodes { get; set; }
     }
 }

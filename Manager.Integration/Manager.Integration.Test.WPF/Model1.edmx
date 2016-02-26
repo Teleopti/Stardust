@@ -15,7 +15,6 @@
           <Property Name="Type" Type="nvarchar(max)" />
           <Property Name="UserName" Type="nvarchar" MaxLength="500" Nullable="false" />
           <Property Name="AssignedNode" Type="nvarchar(max)" />
-          <Property Name="JobProgress" Type="nvarchar(max)" />
           <Property Name="Status" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="JobHistory">
@@ -42,16 +41,9 @@
           <Property Name="Created" Type="datetime" Nullable="false" />
           <Property Name="Detail" Type="nvarchar(max)" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'ManagerDb.Stardust.Logging' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Logging">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="Date" />
-            <PropertyRef Name="Thread" />
-            <PropertyRef Name="Level" />
-            <PropertyRef Name="Logger" />
-            <PropertyRef Name="Message" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Date" Type="datetime" Nullable="false" />
@@ -74,18 +66,8 @@ warning 6002: The table/view 'ManagerDb.Stardust.Logging' does not have a primar
           <EntitySet Name="JobDefinitions" EntityType="Self.JobDefinitions" Schema="Stardust" store:Type="Tables" />
           <EntitySet Name="JobHistory" EntityType="Self.JobHistory" Schema="Stardust" store:Type="Tables" />
           <EntitySet Name="JobHistoryDetail" EntityType="Self.JobHistoryDetail" Schema="Stardust" store:Type="Tables" />
+          <EntitySet Name="Logging" EntityType="Self.Logging" Schema="Stardust" store:Type="Tables" />
           <EntitySet Name="WorkerNodes" EntityType="Self.WorkerNodes" Schema="Stardust" store:Type="Tables" />
-          <EntitySet Name="Logging" EntityType="Self.Logging" store:Type="Tables" store:Schema="Stardust">
-            <DefiningQuery>SELECT 
-    [Logging].[Id] AS [Id], 
-    [Logging].[Date] AS [Date], 
-    [Logging].[Thread] AS [Thread], 
-    [Logging].[Level] AS [Level], 
-    [Logging].[Logger] AS [Logger], 
-    [Logging].[Message] AS [Message], 
-    [Logging].[Exception] AS [Exception]
-    FROM [Stardust].[Logging] AS [Logging]</DefiningQuery>
-          </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -95,8 +77,8 @@ warning 6002: The table/view 'ManagerDb.Stardust.Logging' does not have a primar
           <EntitySet Name="JobDefinitions" EntityType="ManagerDbModel.JobDefinition" />
           <EntitySet Name="JobHistories" EntityType="ManagerDbModel.JobHistory" />
           <EntitySet Name="JobHistoryDetails" EntityType="ManagerDbModel.JobHistoryDetail" />
-          <EntitySet Name="WorkerNodes" EntityType="ManagerDbModel.WorkerNode" />
           <EntitySet Name="Loggings" EntityType="ManagerDbModel.Logging" />
+          <EntitySet Name="WorkerNodes" EntityType="ManagerDbModel.WorkerNode" />
         </EntityContainer>
         <EntityType Name="JobDefinition">
           <Key>
@@ -108,7 +90,6 @@ warning 6002: The table/view 'ManagerDb.Stardust.Logging' does not have a primar
           <Property Name="Type" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UserName" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="AssignedNode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="JobProgress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="JobHistory">
@@ -135,23 +116,9 @@ warning 6002: The table/view 'ManagerDb.Stardust.Logging' does not have a primar
           <Property Name="Created" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Detail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="WorkerNode">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Guid" Nullable="false" />
-          <Property Name="Url" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
-          <Property Name="Heartbeat" Type="DateTime" Precision="3" />
-          <Property Name="Alive" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="Logging">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="Date" />
-            <PropertyRef Name="Thread" />
-            <PropertyRef Name="Level" />
-            <PropertyRef Name="Logger" />
-            <PropertyRef Name="Message" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
@@ -160,6 +127,15 @@ warning 6002: The table/view 'ManagerDb.Stardust.Logging' does not have a primar
           <Property Name="Logger" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Message" Type="String" Nullable="false" MaxLength="4000" FixedLength="false" Unicode="false" />
           <Property Name="Exception" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="WorkerNode">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Url" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
+          <Property Name="Heartbeat" Type="DateTime" Precision="3" />
+          <Property Name="Alive" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -171,7 +147,6 @@ warning 6002: The table/view 'ManagerDb.Stardust.Logging' does not have a primar
             <EntityTypeMapping TypeName="ManagerDbModel.JobDefinition">
               <MappingFragment StoreEntitySet="JobDefinitions">
                 <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="JobProgress" ColumnName="JobProgress" />
                 <ScalarProperty Name="AssignedNode" ColumnName="AssignedNode" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
@@ -207,16 +182,6 @@ warning 6002: The table/view 'ManagerDb.Stardust.Logging' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="WorkerNodes">
-            <EntityTypeMapping TypeName="ManagerDbModel.WorkerNode">
-              <MappingFragment StoreEntitySet="WorkerNodes">
-                <ScalarProperty Name="Alive" ColumnName="Alive" />
-                <ScalarProperty Name="Heartbeat" ColumnName="Heartbeat" />
-                <ScalarProperty Name="Url" ColumnName="Url" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Loggings">
             <EntityTypeMapping TypeName="ManagerDbModel.Logging">
               <MappingFragment StoreEntitySet="Logging">
@@ -226,6 +191,16 @@ warning 6002: The table/view 'ManagerDb.Stardust.Logging' does not have a primar
                 <ScalarProperty Name="Level" ColumnName="Level" />
                 <ScalarProperty Name="Thread" ColumnName="Thread" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WorkerNodes">
+            <EntityTypeMapping TypeName="ManagerDbModel.WorkerNode">
+              <MappingFragment StoreEntitySet="WorkerNodes">
+                <ScalarProperty Name="Alive" ColumnName="Alive" />
+                <ScalarProperty Name="Heartbeat" ColumnName="Heartbeat" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
