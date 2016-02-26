@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators
 
         private void logOn(string businessUnitName, string user, string password)
         {
-            var message = new HttpRequestMessage(HttpMethod.Get, string.Format("Test/Logon?businessUnitName={0}&userName={1}&password={2}", businessUnitName, user, password));
+			var message = new HttpRequestMessage(HttpMethod.Get, string.Format("Test/Logon?businessUnitName={0}&userName={1}&password={2}&isPersistent=true", businessUnitName, user, password));
             var response = HttpClient.SendAsync(message).GetAwaiter().GetResult();
 
             if (!response.IsSuccessStatusCode) throw new Exception("Unable to log on");

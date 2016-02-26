@@ -81,6 +81,9 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 						case "2":
 							simulateTrafficCase2(trafficSimulator, myTimeData);
 							break;
+						case "3":
+							simulateTrafficCase3(trafficSimulator, myTimeData);
+							break;
 						default:
 							simulateTrafficCase1(trafficSimulator, myTimeData);
 							break;
@@ -91,7 +94,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 			else if (args.Any() && args[0] == "-p")
 			{
 				myTimeData.User = new Guid(args[1]);
-				simulate(myTimeData, 1, 100);
+				simulate(myTimeData, 1, 10);
 			}
 			else if (args.Any() && args[0] == "-s")
 			{
@@ -121,7 +124,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 			else
 			{
 				// start listen simulator
-				simulate(myTimeData, 1, 100);//200 + 5 + 2;
+				simulate(myTimeData, 1, 1000);//200 + 5 + 2;
 			}
 		}
 
@@ -137,6 +140,16 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 			// for mytime screen, if one person is subscribed, expected number of notifications should 3 * 2
 			trafficSimulator.Start(data.BaseUrl, data.BusinessUnitName, null, null);
 			trafficSimulator.AddFullDayAbsenceForThePersonByNextNDays(data, 3);
+		}
+
+		private static void simulateTrafficCase3<T>(TrafficSimulatorBase<T> trafficSimulator, T data) where T : SimulationDataBase
+		{
+			trafficSimulator.Start(data.BaseUrl, data.BusinessUnitName, null, null);
+			while (true)
+			{
+				trafficSimulator.AddFullDayAbsenceForAllPeopleWithPartTimePercentage100ByNextNDays(data, 1);
+				Thread.Sleep(TimeSpan.FromMinutes(8));
+			}
 		}
 
 		private static void simulate<T>(T data, int clients, int screens) where T : SimulationDataBase
@@ -200,13 +213,20 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 			});
 			Console.WriteLine("Done subscribing, took {0}", s.Elapsed);
 			stats.Stopwatch.Start();
-			while (stats.Stopwatch.IsRunning && stats.Stopwatch.Elapsed < TimeSpan.FromSeconds(600))
+			while (stats.Stopwatch.IsRunning)
 			{
 				Thread.Sleep(TimeSpan.FromSeconds(5));
 				Console.WriteLine("Current received messages: {0}, elapsed {1}", stats.NumberOfCallbacks, stats.Stopwatch.Elapsed);
 				Console.WriteLine("SimulateMyTimeScreen.AllTasks {0} completed,{1} not completed, {2} faulted, {3} canceled", SimulateMyTimeScreen.AllTasks.Count(x => x.IsCompleted),
 					SimulateMyTimeScreen.AllTasks.Count(x => !x.IsCompleted), SimulateMyTimeScreen.AllTasks.Count(x => x.IsFaulted), SimulateMyTimeScreen.AllTasks.Count(x => x.IsCanceled));
 			}
+
+			//Task.WaitAll(SimulateMyTimeScreen.AllTasks.ToArray());
+			//foreach (Task<HttpResponseMessage> task in SimulateMyTimeScreen.AllTasks)
+			//{
+			//	Console.WriteLine(task.GetAwaiter().GetResult().StatusCode);
+			//	//Console.WriteLine(task.GetAwaiter().GetResult().Content.ReadAsStringAsync().GetAwaiter().GetResult());
+			//}
 
 			Console.WriteLine();
 			Console.WriteLine("Receiving messages took {0}", stats.Stopwatch.Elapsed);

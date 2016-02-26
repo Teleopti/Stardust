@@ -48,12 +48,12 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
 			BaseUrl = url.Url;
 			cookieContainer = new CookieContainer();
 			httpClientHandler = new HttpClientHandler { CookieContainer = cookieContainer };
-			HttpClient = new HttpClient(httpClientHandler) { BaseAddress = new Uri(BaseUrl) };
+			HttpClient = new HttpClient(httpClientHandler) { BaseAddress = new Uri(BaseUrl), Timeout = TimeSpan.FromSeconds(600)};
 		}
 
 		public void LogOn(string businessUnitName, string user, string password)
 		{
-			var message = new HttpRequestMessage(HttpMethod.Get, string.Format("Test/Logon?businessUnitName={0}&userName={1}&password={2}", businessUnitName, user, password));
+			var message = new HttpRequestMessage(HttpMethod.Get, string.Format("Test/Logon?businessUnitName={0}&userName={1}&password={2}&isPersistent=true", businessUnitName, user, password));
 			var response = HttpClient.SendAsync(message).GetAwaiter().GetResult();
 
 			if (!response.IsSuccessStatusCode) throw new Exception("Unable to log on");

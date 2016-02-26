@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
 {
     public class SimulateMyTimeScreen : SimulateBase<MyTimeData>
     {
-		public static IList<Task<HttpResponseMessage>> AllTasks = new List<Task<HttpResponseMessage>>();
+		public static ICollection<Task<HttpResponseMessage>> AllTasks = new SynchronizedCollection<Task<HttpResponseMessage>>();
 
         public SimulateMyTimeScreen(IMessageBrokerUrl url, ICurrentDataSource dataSource, ICurrentBusinessUnit businessUnit, ICurrentScenario scenario, IJsonSerializer serializer, IMessageBrokerComposite messageBroker) : base(url, dataSource, businessUnit, scenario, serializer, messageBroker)
         {
@@ -72,6 +72,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
 		{
 			Console.WriteLine("FetchData for date {0}", DateTime.Today);
 			var message = new HttpRequestMessage(HttpMethod.Get, string.Format("MyTime/Schedule/FetchData?date=&_={0}", Guid.NewGuid()));
+			
 			var response = HttpClient.SendAsync(message);
 			return response;
 		}
