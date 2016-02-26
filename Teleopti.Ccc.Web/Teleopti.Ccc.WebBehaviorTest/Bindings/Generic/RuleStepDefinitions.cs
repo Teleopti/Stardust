@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"there is an alarm with")]
 		public void GivenThereIsARuleWith(Table table)
 		{
-			DataMaker.Data().Apply(table.CreateInstance<RtaRuleConfigurable>());
+			DataMaker.Data().Apply(table.CreateInstance<RtaMapConfigurable>());
 		}
 	}
 }

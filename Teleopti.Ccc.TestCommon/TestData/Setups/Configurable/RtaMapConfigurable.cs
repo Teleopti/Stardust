@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {
-	public class RtaRuleConfigurable : IDataSetup
+	public class RtaMapConfigurable : IDataSetup
 	{
 		public string Activity { get; set; }
 		public string PhoneState { get; set; }
@@ -22,11 +22,40 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string IsAlarm { get; set; }
 		public string AlarmThreshold { get; set; }
 
+
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			var alarmColor = string.IsNullOrEmpty(AlarmColor) ? Color.Red : Color.FromName(AlarmColor);
 			var displayColor = string.IsNullOrEmpty(DisplayColor) ? alarmColor : Color.FromName(DisplayColor);
-			var rule = new RtaRule(new Description(Name), displayColor, TimeSpan.Zero, StaffingEffect) {AlarmColor = alarmColor};
+
+			var ruleRepository = new RtaRuleRepository(currentUnitOfWork);
+
+			IRtaRule rule = null;
+			if (Name != null)
+			{
+				rule = ruleRepository.LoadAll().FirstOrDefault(x => x.Description.Name == Name);
+				if (rule == null)
+				{
+					rule = new RtaRule(new Description(Name), displayColor, TimeSpan.Zero, StaffingEffect)
+					{
+						AlarmColor = alarmColor
+					};
+					if (!string.IsNullOrWhiteSpace(Adherence))
+					{
+						Adherence adherence;
+						if (Enum.TryParse(Adherence, true, out adherence))
+							rule.Adherence = adherence;
+					}
+
+					if (!string.IsNullOrWhiteSpace(IsAlarm))
+						rule.IsAlarm = bool.Parse(IsAlarm);
+
+					if (!string.IsNullOrWhiteSpace(AlarmThreshold))
+						rule.ThresholdTime = TimeSpan.Parse(AlarmThreshold);
+					ruleRepository.Add(rule);
+				}
+			}
+
 			var activityRepository = new ActivityRepository(currentUnitOfWork);
 
 			IRtaStateGroup stateGroup = null;
@@ -59,24 +88,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				rtaMap.SetBusinessUnit(businessUnit);
 			}
 
-			if (!string.IsNullOrWhiteSpace(Adherence))
-			{
-				Adherence adherence;
-				if(Enum.TryParse(Adherence, true, out adherence))
-				rule.Adherence = adherence;
-			}
-
-			if (!string.IsNullOrWhiteSpace(IsAlarm))
-				rule.IsAlarm = bool.Parse(IsAlarm);
-
-			if (!string.IsNullOrWhiteSpace(AlarmThreshold))
-				rule.ThresholdTime = TimeSpan.Parse(AlarmThreshold);
-			
-			var ruleRepository = new RtaRuleRepository(currentUnitOfWork);
-			ruleRepository.Add(rule);
-
-			var alarmRepository = new RtaMapRepository(currentUnitOfWork);
-			alarmRepository.Add(rtaMap);
+			var rtaMapRepository = new RtaMapRepository(currentUnitOfWork);
+			rtaMapRepository.Add(rtaMap);
 		}
 	}
 }
