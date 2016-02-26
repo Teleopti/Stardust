@@ -5,7 +5,7 @@ using log4net;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
-using Stardust.Manager.Timers;
+using System.Timers;
 
 namespace Stardust.Manager
 {
@@ -15,7 +15,7 @@ namespace Stardust.Manager
 		private readonly IHttpSender _httpSender;
 		private readonly IJobRepository _jobRepository;
 		private readonly IWorkerNodeRepository _workerNodeRepository;
-		private CheckHeartbeatsTimer _checkHeartbeatsTimer;
+		private Timer _checkHeartbeatsTimer = new Timer(); 
 
 		public JobManager(IJobRepository jobRepository,
 		                  IWorkerNodeRepository workerNodeRepository,
@@ -24,7 +24,10 @@ namespace Stardust.Manager
 			_jobRepository = jobRepository;
 			_workerNodeRepository = workerNodeRepository;
 			_httpSender = httpSender;
-			_checkHeartbeatsTimer = new CheckHeartbeatsTimer(this);
+
+			_checkHeartbeatsTimer.Elapsed += OnTimedEvent;
+			_checkHeartbeatsTimer.Interval = 2000;
+			_checkHeartbeatsTimer.Start();
 		}
 
 		public void CheckNodesAreAlive(TimeSpan timeSpan)
@@ -41,11 +44,19 @@ namespace Stardust.Manager
 					{
 						if (job.AssignedNode == node)
 						{
+							LogHelper.LogErrorWithLineNumber(Logger, "Job ( id , name ) is deleted due to the node executing it died. ( " + job.Id + " , " + job.Name + " )");
 							SetEndResultOnJobAndRemoveIt(job.Id, "fatal");
 						}
 					}
 				}
 			}
+		}
+
+		private void OnTimedEvent(object sender,
+								ElapsedEventArgs e)
+		{
+			CheckNodesAreAlive(TimeSpan.FromSeconds(10));
+			LogHelper.LogDebugWithLineNumber(Logger, " Check Heartbeat");
 		}
 
 		public IList<WorkerNode> Nodes()
@@ -174,5 +185,6 @@ namespace Stardust.Manager
 		{
 			return _jobRepository.JobHistoryDetails(jobId);
 		}
+
 	}
 }

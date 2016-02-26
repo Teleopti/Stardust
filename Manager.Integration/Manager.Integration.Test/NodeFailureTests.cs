@@ -131,44 +131,44 @@ namespace Manager.Integration.Test
 			//---------------------------------------------
 			// Kill the node.
 			//---------------------------------------------
-			var cancellationTokenSource = new CancellationTokenSource();
+		var cancellationTokenSource = new CancellationTokenSource();
 
 			IHttpSender httpSender = new HttpSender();
 
-			var uriBuilder =
-				new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
+				var uriBuilder =
+					new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
 
-			uriBuilder.Path += "appdomain/nodes/" + "Node1.config";
+				uriBuilder.Path += "appdomain/nodes/" + "Node1.config";
 
 			var uri = uriBuilder.Uri;
 
-			LogHelper.LogDebugWithLineNumber("Start calling Delete Async ( " + uri + " ) ",
-			                                 Logger);
+				LogHelper.LogDebugWithLineNumber("Start calling Delete Async ( " + uri + " ) ",
+				                                 Logger);
 
-			try
-			{
-				var response = await httpSender.DeleteAsync(uriBuilder.Uri,
-				                                            cancellationTokenSource.Token);
-
-				if (response.IsSuccessStatusCode)
+				try
 				{
-					LogHelper.LogDebugWithLineNumber("Succeeded calling Delete Async ( " + uri + " ) ",
-					                                 Logger);
+				var response = await httpSender.DeleteAsync(uriBuilder.Uri,
+					                                    cancellationTokenSource.Token);
+
+					if (response.IsSuccessStatusCode)
+					{
+						LogHelper.LogDebugWithLineNumber("Succeeded calling Delete Async ( " + uri + " ) ",
+						                                 Logger);
+					}
 				}
-			}
-			catch (Exception exp)
-			{
-				LogHelper.LogErrorWithLineNumber(exp.Message,
-				                                 Logger,
-				                                 exp);
-			}
+				catch (Exception exp)
+				{
+					LogHelper.LogErrorWithLineNumber(exp.Message,
+					                                 Logger,
+					                                 exp);
+				}
 
 			cancellationTokenSource.Cancel();
 
 			//---------------------------------------------
 			// Wait for timeout, node must be considered dead.
 			//---------------------------------------------
-			WaitForNodeTimeout();
+			WaitForNodeTimeout();  
 
 			//---------------------------------------------
 			// Check if node is dead.
@@ -179,15 +179,22 @@ namespace Manager.Integration.Test
 			
 			var responseNodes = await httpSender.GetAsync(uri);
 
-			responseNodes.EnsureSuccessStatusCode();
-			var ser = responseNodes.Content.ReadAsStringAsync();
-
+				responseNodes.EnsureSuccessStatusCode();
+				var ser = responseNodes.Content.ReadAsStringAsync();
+				
 			var workerNodes = JsonConvert.DeserializeObject<List<WorkerNode>>(ser.Result);
 
 			var node = workerNodes.FirstOrDefault();
 
 			Assert.NotNull(node);
-			Assert.IsTrue(node.Alive == "false");
+				Assert.IsTrue(node.Alive == "false");  
+			}
+		}
+
+		private void WaitForNodeTimeout()
+		{
+			//MUST BE CHANGED TO FIT CONFIGURATION
+			Thread.Sleep(TimeSpan.FromSeconds(20));
 		}
 	}
 }

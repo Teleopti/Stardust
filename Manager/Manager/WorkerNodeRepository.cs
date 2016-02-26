@@ -7,7 +7,6 @@ using log4net;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
-using Stardust.Manager.Timers;
 
 namespace Stardust.Manager
 {
@@ -287,12 +286,15 @@ namespace Stardust.Manager
 
 										commandUpdate.ExecuteNonQuery();
 									}
+									LogHelper.LogErrorWithLineNumber(Logger,"Node: " + url + " has not sent any heartbeats in " + dateDiff + " seconds!");
 									deadNodes.Add(url);
+									
 								}
 							}
 						}
 						readAllWorkerNodes.Close();
 					}
+					connection.Close();
 				}
 		    }
 
@@ -333,8 +335,14 @@ namespace Stardust.Manager
 
 					command.Parameters.Add("@Url",
 											SqlDbType.NVarChar).Value = nodeUri.ToString();
-
-					command.ExecuteNonQuery();
+					try
+					{
+						command.ExecuteNonQuery();
+					}
+					catch (Exception exp)
+					{
+						LogHelper.LogErrorWithLineNumber(Logger, "Could not update heartbeat", exp);
+					}
 				}
 
 				connection.Close();

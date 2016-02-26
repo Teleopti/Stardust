@@ -14,11 +14,11 @@ namespace Stardust.Manager
 			builder.RegisterType<NodeManager>()
 				.As<INodeManager>();
 
-			builder.RegisterType<JobManager>();
+			builder.RegisterType<JobManager>().SingleInstance();
 
 			builder.RegisterType<HttpSender>()
 				.As<IHttpSender>();
-
+			 
 			builder.Register(
 				c => new JobRepository(managerConfiguration.ConnectionString))
 				.As<IJobRepository>();
