@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public interface IMatrixListFactory
 	{
 		IList<IScheduleMatrixPro> CreateMatrixListAllForLoadedPeriod(DateOnlyPeriod selectedPeriod);
-		IList<IScheduleMatrixPro> CreateMatrixListForSelection(IList<IScheduleDay> scheduleDays);
-		IList<IScheduleMatrixPro> CreateMatrixListForSelectionPerPerson(IList<IScheduleDay> scheduleDays);
+		IList<IScheduleMatrixPro> CreateMatrixListForSelection(IEnumerable<IScheduleDay> scheduleDays);
+		IList<IScheduleMatrixPro> CreateMatrixListForSelectionPerPerson(IEnumerable<IScheduleDay> scheduleDays);
 	}
 }

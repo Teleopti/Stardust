@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			return matrixes;
 		}
 
-		public IList<IScheduleMatrixPro> CreateMatrixListForSelection(IList<IScheduleDay> scheduleDays)
+		public IList<IScheduleMatrixPro> CreateMatrixListForSelection(IEnumerable<IScheduleDay> scheduleDays)
 		{
 			var matrixes = new List<IScheduleMatrixPro>();
 			var selectedPeriod = _periodExtractor.ExtractPeriod(scheduleDays);
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			return matrixes;
 		}
 
-		public IList<IScheduleMatrixPro> CreateMatrixListForSelectionPerPerson(IList<IScheduleDay> scheduleDays)
+		public IList<IScheduleMatrixPro> CreateMatrixListForSelectionPerPerson(IEnumerable<IScheduleDay> scheduleDays)
 		{
 			var matrixes = new List<IScheduleMatrixPro>();
 			var selectedPersons = _personExtractor.ExtractPersons(scheduleDays);
