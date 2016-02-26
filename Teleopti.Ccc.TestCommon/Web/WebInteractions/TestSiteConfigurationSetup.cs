@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			new FileConfigurator().Configure(
 				"iisexpress.config",
 				runningConfig,
-				new TagsForTestSite().Make()
+				new TagsForTestSite()
 				);
 
 			var parameters = new Parameters
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			new FileConfigurator().Configure(
 				sourceFile,
 				targetFile,
-				new TagsForTestSite().Make()
+				new TagsForTestSite()
 				);
 		}
 

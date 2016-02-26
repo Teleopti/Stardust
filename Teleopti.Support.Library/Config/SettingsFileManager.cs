@@ -1,34 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace Teleopti.Support.Library.Config
 {
 	public interface ISettingsFileManager
 	{
-		Tags ReadFile();
-		void SaveFile(IList<SearchReplace> searchReplaces);
+		Tags GetTags();
+		void SaveTagAndValues(IList<SearchReplace> searchReplaces);
 	}
 
 	public class SettingsFileManager : ISettingsFileManager
 	{
-		private readonly string settingsFileName = "settings.txt";
 
-		public Tags ReadFile()
+		private readonly TextToTags _textToTags;
+
+		public SettingsFileManager(TextToTags textToTags)
 		{
-			var tags = new TextToTags()
-				.ParseText(
-					File.ReadAllText(findSettingsFileByBlackMagic(settingsFileName))
-				);
+			_textToTags = textToTags;
+		}
+
+		public Tags GetTags()
+		{
+			var tags = _textToTags.ParseText(File.ReadAllText(findSettingsFileByBlackMagic()));
 			// this cant be good, but I wont change the behavior
 			tags.FixSomeValuesAfterReading();
 			return tags;
 		}
 
-		public void SaveFile(IList<SearchReplace> searchReplaces)
+		public void SaveTagAndValues(IList<SearchReplace> searchReplaces)
 		{
-			var path = findSettingsFileByBlackMagic(settingsFileName);
+			var path = findSettingsFileByBlackMagic();
 			var text = "";
 			foreach (var searchReplace in searchReplaces)
 			{
@@ -37,29 +39,22 @@ namespace Teleopti.Support.Library.Config
 			File.WriteAllText(path, text);
 		}
 
-		private static string findSettingsFileByBlackMagic(string fileName)
+		private static string findSettingsFileByBlackMagic()
 		{
-			var paths = new[]
+			var directoryInfo = Directory.GetParent(Directory.GetCurrentDirectory()).Parent;
+			string path = "";
+			if (directoryInfo != null)
 			{
-				@".\",
-				@"..\",
-				@"..\..\",
-				@"..\..\..\",
-				@"..\..\..\..\",
-				@".\Teleopti.Support.Tool\bin\Debug\",
-				@"..\Teleopti.Support.Tool\bin\Debug\",
-				@"..\..\Teleopti.Support.Tool\bin\Debug\",
-				@"..\..\..\Teleopti.Support.Tool\bin\Debug\",
-				@"..\..\..\..\Teleopti.Support.Tool\bin\Debug\",
-				@".\Teleopti.Support.Tool\bin\Release\",
-				@"..\Teleopti.Support.Tool\bin\Release\",
-				@"..\..\Teleopti.Support.Tool\bin\Release\",
-				@"..\..\..\Teleopti.Support.Tool\bin\Release\",
-				@"..\..\..\..\Teleopti.Support.Tool\bin\Release\",
-			};
-			return paths
-				.Select(x => Path.Combine(x, fileName))
-				.First(File.Exists);
+				var dir = directoryInfo.FullName;
+				//debug environment
+				path = Path.Combine(dir, @"..\Teleopti.Support.Code\settings.txt");
+				//Release (and tests)
+				if (!File.Exists(path))
+					path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"settings.txt");
+			}
+			if (path == "")
+				path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"settings.txt");
+			return path;
 		}
 	}
 }
