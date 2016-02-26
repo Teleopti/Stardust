@@ -1,123 +1,124 @@
-<div class="con-flex nav-inline">
-	<span class="brand" ui-sref="main">Teleopti WFM</span>
+<div class="con-row nav-row">
+	<div class="con-flex nav-inline">
+		<span class="brand" ui-sref="main">Teleopti WFM</span>
 
-	<div class="navbar-left">
-		<span ng-controller="BusinessUnitsCtrl">
-			<span ng-if="show">
-				<span class="ui-select">
-					<i class="bu-caret mdi mdi-menu-down"></i>
-					<select name="business-unit-select" id="business-unit-select" class="bu-change" ng-change="changeBusinessUnit(data.selectedBu)" ng-options="bu.Name for bu in data.businessUnits" ng-model="data.selectedBu" ></select>
-					<md-tooltip>{{'BusinessUnit' |translate}}</md-tooltip>
+		<div class="navbar-left">
+			<span ng-controller="BusinessUnitsCtrl">
+				<span ng-if="show">
+					<span class="ui-select">
+						<i class="bu-caret mdi mdi-menu-down"></i>
+						<select name="business-unit-select" id="business-unit-select" class="bu-change" ng-change="changeBusinessUnit(data.selectedBu)" ng-options="bu.Name for bu in data.businessUnits" ng-model="data.selectedBu" ></select>
+						<md-tooltip>{{'BusinessUnit' |translate}}</md-tooltip>
+					</span>
 				</span>
 			</span>
-		</span>
-	</div>
-</div>
-
-<div class="con-flex split-1-2 animate-show" ng-controller="SearchCtrl" ng-show="searchmode">
-	<input type="text" id="searchbar" class="navbar-search" placeholder="{{'SearchThreeDots' | translate}}" ng-model="keyword" ng-change="searchKeyword()"/>
-	<div class="search-results material-depth-2">
-		<ul class="wfm-list">
-			<div ng-repeat="gp in searchResultGroups">
-				<li class="wfm-search-li">
-					<button ng-if="gp == 'Permission' " class="wfm-fab mini result-icon"><i class="mdi mdi-account-check"></i></button>
-					<button ng-if="gp == 'Planning Period' " class="wfm-fab mini info result-icon"><i class="mdi mdi-calendar"></i></button>
-					{{gp}}
-				</li>
-				<li class="animate-repeat" ng-repeat="item in searchResult | filter:{ SearchGroup: gp }">
-					<div ng-click="clickedItem(item);ResetSearch();searchmode=false;">
-						{{item.Name}}
-					</div>
-				</li>
-				<li class="animate-repeat" ng-if="searchResult.length == 0"></li>
-			</div>
-		</ul>
-	</div>
-</div>
-<div class="con-flex"></div>
-
-<div class="nav-tools">
-	<a href="#" ng-click="searchmode=!searchmode">
-		<div class="panel-menu">
-			<div tabindex=0 class="context-menu card-context">
-				<i class="mdi mdi-magnify"></i>
-			</div>
 		</div>
-		<md-tooltip>{{'SearchThreeDots'|translate}}</md-tooltip>
-	</a>
+	</div>
 
-	<a>
-		<div class=" panel-menu">
-			<div tabindex=0 class="context-menu card-context">
-				<span tabindex=0 class="nav-context-menu">
-					<i class="mdi mdi-bell"></i>
+	<div class="con-flex split-1-2 animate-show" ng-controller="SearchCtrl" ng-show="searchmode">
+		<input type="text" id="searchbar" class="navbar-search" placeholder="{{'SearchThreeDots' | translate}}" ng-model="keyword" ng-change="searchKeyword()"/>
+		<div class="search-results material-depth-2">
+			<ul class="wfm-list">
+				<div ng-repeat="gp in searchResultGroups">
+					<li class="wfm-search-li">
+						<button ng-if="gp == 'Permission' " class="wfm-fab mini result-icon"><i class="mdi mdi-account-check"></i></button>
+						<button ng-if="gp == 'Planning Period' " class="wfm-fab mini info result-icon"><i class="mdi mdi-calendar"></i></button>
+						{{gp}}
+					</li>
+					<li class="animate-repeat" ng-repeat="item in searchResult | filter:{ SearchGroup: gp }">
+						<div ng-click="clickedItem(item);ResetSearch();searchmode=false;">
+							{{item.Name}}
+						</div>
+					</li>
+					<li class="animate-repeat" ng-if="searchResult.length == 0"></li>
+				</div>
+			</ul>
+		</div>
+	</div>
+	<div class="con-flex"></div>
 
-					<div class="nav-context-menu-left">
-						<div class="arrow-up"></div>
-						<div class="context-content" >
-							<div class="notification-list">
-								<h4>{{'Notifications'|translate}}
-								</h4>
-								<div ng-controller="NotificationsCtrl">
-									<ul class="notification-list wfm-simple-list">
-										<li ng-repeat="alarm in notificationResult" ng-if="alarm.length > 0">
-											<i class="mdi mdi-alert-circle"></i>
-											<b>{{alarm.JobCategory}}</b>
-											<span class="pull-right">{{alarm.Timestamp | date:'HH:mm'}}</span>
-											<div class="subtext">{{alarm.Status}}</div>
-										</li>
-									</ul>
+	<div class="nav-tools">
+		<a href="#" ng-click="searchmode=!searchmode">
+			<div class="panel-menu">
+				<div tabindex=0 class="context-menu card-context">
+					<i class="mdi mdi-magnify"></i>
+				</div>
+			</div>
+			<md-tooltip>{{'SearchThreeDots'|translate}}</md-tooltip>
+		</a>
+
+		<a>
+			<div class=" panel-menu">
+				<div tabindex=0 class="context-menu card-context">
+					<span tabindex=0 class="nav-context-menu">
+						<i class="mdi mdi-bell"></i>
+
+						<div class="nav-context-menu-left">
+							<div class="arrow-up"></div>
+							<div class="context-content" >
+								<div class="notification-list">
+									<h4>{{'Notifications'|translate}}
+									</h4>
+									<div ng-controller="NotificationsCtrl">
+										<ul class="notification-list wfm-simple-list">
+											<li ng-repeat="alarm in notificationResult" ng-if="alarm.length > 0">
+												<i class="mdi mdi-alert-circle"></i>
+												<b>{{alarm.JobCategory}}</b>
+												<span class="pull-right">{{alarm.Timestamp | date:'HH:mm'}}</span>
+												<div class="subtext">{{alarm.Status}}</div>
+											</li>
+										</ul>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				</span>
+					</span>
+				</div>
 			</div>
-		</div>
-	</a>
+		</a>
 
-	<a ng-show="personalizeToggle" ng-controller="personalizeController">
-		<span ng-show="showOverlay" class="animate-show warm-overlay"></span>
-		<div class=" panel-menu">
-			<div tabindex=0 class="context-menu card-context">
-				<span tabindex=0 class="nav-context-menu" id="personalizeMenu">
-					<i class="mdi mdi-settings"></i>
-					<div class="nav-context-menu-left">
-						<div class="arrow-up"></div>
-						<div class="context-content">
-							<div class="notification-list">
-								<h4>{{'Personalize'|translate}}</h4>
-								<div class="wfm-switch" ng-click="toggleOverlayFocus()">
-									<input ng-model="showOverlay" tabindex="-1" type="checkbox" id="switch1" />
-									<label for="switch1">
-										<span class="wfm-switch-label">{{'ToggleLowLightFilter'|translate}}</span>
-										<span class="wfm-switch-toggle"></span>
-									</label>
-								</div>
+		<a ng-show="personalizeToggle" ng-controller="personalizeController">
+	<span ng-show="showOverlay" class="animate-show warm-overlay"></span>
+	<div class=" panel-menu">
+		<div tabindex=0 class="context-menu card-context">
+			<span tabindex=0 class="nav-context-menu" id="personalizeMenu">
+				<i class="mdi mdi-settings"></i>
+				<div class="nav-context-menu-left">
+					<div class="arrow-up"></div>
+					<div class="context-content">
+						<div class="notification-list">
+							<h4>{{'Personalize'|translate}}</h4>
+							<div class="wfm-switch" ng-click="toggleOverlayFocus()">
+								<input ng-model="showOverlay" tabindex="-1" type="checkbox" id="switch1" />
+								<label for="switch1">
+									<span class="wfm-switch-label">{{'ToggleLowLightFilter'|translate}}</span>
+									<span class="wfm-switch-toggle"></span>
+								</label>
 							</div>
 						</div>
 					</div>
-				</span>
-			</div>
+				</div>
+			</span>
 		</div>
-	</a>
+	</div>
+</a>
 
-	<a href="{{help.currentHelp.helpUrl}}" target="_blank"  ng-controller="HelpController">
-		<div class=" panel-menu">
-			<div tabindex=0 class="context-menu card-context">
-				<i class="mdi mdi-help-circle"></i>
+		<a href="{{help.currentHelp.helpUrl}}" target="_blank"  ng-controller="HelpController">
+			<div class=" panel-menu">
+				<div tabindex=0 class="context-menu card-context">
+					<i class="mdi mdi-help-circle"></i>
+				</div>
 			</div>
-		</div>
-		<md-tooltip>{{'HelpLabel'|translate}}</md-tooltip>
-	</a>
+			<md-tooltip>{{'HelpLabel'|translate}}</md-tooltip>
+		</a>
 
-	<a href="../Authentication/SignOut">
-		<div class=" panel-menu">
-			<div tabindex=0 class="context-menu card-context">
-				<i class="mdi mdi-logout"></i>
+		<a href="../Authentication/SignOut">
+			<div class=" panel-menu">
+				<div tabindex=0 class="context-menu card-context">
+					<i class="mdi mdi-logout"></i>
+				</div>
 			</div>
-		</div>
-		<md-tooltip>{{'LogOut'|translate}}</md-tooltip>
-	</a>
-</div>
+			<md-tooltip>{{'LogOut'|translate}}</md-tooltip>
+		</a>
+	</div>
 </div>
