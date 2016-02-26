@@ -50,6 +50,7 @@
     <Compile Include="ActualAgentStateUpdateTest.cs" />
     <Compile Include="BackgroundWorkTest.cs" />
     <Compile Include="NUnitSetup.cs" />
+    <Compile Include="PersonSetup.cs" />
     <Compile Include="StateSendTest.cs" />
   </ItemGroup>
   <ItemGroup>

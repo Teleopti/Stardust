@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		{
 			var repository = new PersonRepository(currentUnitOfWork);
 			Person = PersonFactory.CreatePerson();
-			Person.Name = ParseName("");
+			Person.Name = ParseName(Name);
 			repository.Add(Person);
 		}
 

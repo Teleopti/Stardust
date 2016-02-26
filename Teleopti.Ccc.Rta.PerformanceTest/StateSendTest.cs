@@ -1,16 +1,13 @@
 using System;
+using System.Linq;
 using System.Threading;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Rta.PerformanceTest
 {
@@ -21,51 +18,54 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 		[Test]
 		public void MeasurePerformance()
 		{
+			var numberOfSites = 2;
+			var numberOfTeams = numberOfSites * 10;
+			var numberOfAgents = numberOfTeams * 10;
+
 			var factory = new TestDataFactory(GlobalUnitOfWorkState.UnitOfWorkAction, TenantUnitOfWorkState.TenantUnitOfWorkAction);
 
 			factory.Apply(new ContractConfigurable {Name = "contract" });
 			factory.Apply(new PartTimePercentageConfigurable {Name = "partTimePercentage"});
 			factory.Apply(new ContractScheduleConfigurable{ Name = "contractSchedule" });
-			factory.Apply(new SiteConfigurable {Name = "site", BusinessUnit = DefaultBusinessUnit.BusinessUnitFromFakeState.Name});
-			factory.Apply(new TeamConfigurable {Name = "team", Site = "site"});
-			
-			
-			factory
-				.Person("roger")
-				.Apply(new PersonPeriodConfigurable
-				{
-					StartDate = DateTime.Now.Date,
-					ExternalLogon = "roger",
-					ExternalLogonDataSourceId = 6,
 
-					Contract = "contract",
-					PartTimePercentage = "partTimePercentage",
-					ContractSchedule = "contractSchedule",
-					Team = "team"
+			Enumerable.Range(0, numberOfSites)
+				.ForEach(site =>
+				{
+					factory.Apply(new SiteConfigurable
+					{
+						Name = "site" + site,
+						BusinessUnit = DefaultBusinessUnit.BusinessUnitFromFakeState.Name
+					});
 				});
 
-			Thread.Sleep(TimeSpan.FromMinutes(new Random().Next(1, 2)));
+			Enumerable.Range(0, numberOfTeams)
+				.ForEach(team =>
+				{
+					factory.Apply(new TeamConfigurable
+					{
+						Name = "team" + team,
+						Site = "site" + (team / 10)
+					});
+				});
+
+			Enumerable.Range(0, numberOfAgents)
+				.ForEach(roger =>
+				{
+					factory
+						.Person("roger" + roger) // == sant!
+						.Apply(new PersonPeriodConfigurable
+						{
+							StartDate = DateTime.Now.Date,
+							ExternalLogon = "roger" + roger,
+							ExternalLogonDataSourceId = 6,
+
+							Contract = "contract",
+							PartTimePercentage = "partTimePercentage",
+							ContractSchedule = "contractSchedule",
+							Team = "team" + (roger / 10)
+						});
+				});
+
 		}
-	}
-
-	public class PersonSetup : IDataSetup
-	{
-		public string Name { get; set; }
-
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
-		{
-			var personRepository = new PersonRepository(currentUnitOfWork);
-			var person = new Person {Name = new Name(Name, "")};
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
-
-			var personPeriod = new PersonPeriodConfigurable
-			{
-				ExternalLogon = Name
-			};
-			personPeriod.Apply(currentUnitOfWork.Current(), person, CultureInfoFactory.CreateEnglishCulture());
-
-			personRepository.Add(person);	
-		}
-
 	}
 }
