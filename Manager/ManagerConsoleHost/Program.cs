@@ -61,7 +61,8 @@ namespace ManagerConsoleHost
 			{
 				ConnectionString =
 					ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString,
-				Route = ConfigurationManager.AppSettings["route"]
+				Route = ConfigurationManager.AppSettings["route"],
+				AllowedNodeDownTimeSeconds = int.Parse(ConfigurationManager.AppSettings["AllowedNodeDownTimeSeconds"])
 			};
 
 			var baseAddress = new Uri(ConfigurationManager.AppSettings["baseAddress"]);
