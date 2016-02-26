@@ -7,19 +7,23 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	{
 		private readonly HangfireEventPublisher _hangfirePublisher;
 		private readonly ServiceBusAsSyncEventPublisher _serviceBusPublisher;
+		private readonly StardustEventPublisher _stardustEventPublisher;
 
 		public MultiEventPublisherServiceBusAsSync(
 			HangfireEventPublisher hangfirePublisher, 
-			ServiceBusAsSyncEventPublisher serviceBusPublisher)
+			ServiceBusAsSyncEventPublisher serviceBusPublisher,
+			StardustEventPublisher stardustEventPublisher)
 		{
 			_hangfirePublisher = hangfirePublisher;
 			_serviceBusPublisher = serviceBusPublisher;
+			_stardustEventPublisher = stardustEventPublisher;
 		}
 
 		public void Publish(params IEvent[] events)
 		{
 			_hangfirePublisher.Publish(events);
 			_serviceBusPublisher.Publish(events);
+			_stardustEventPublisher.Publish(events);
 		}
 	}
 }
