@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 
 		public void Apply(IAnalyticsDataSetup analyticsDataSetup)
 		{
-			using (var connection = new SqlConnection(InfraTestConfigReader.AnalyticsConnectionString))
+			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
 			{
 				var culture = Thread.CurrentThread.CurrentCulture;
 				connection.Open();
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 
 		public void Persist(CultureInfo culture)
 		{
-			using (var connection = new SqlConnection(InfraTestConfigReader.AnalyticsConnectionString))
+			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
 			{
 				connection.Open();
 				_analyticsSetups.ForEach(s => s.Apply(connection, culture, CultureInfo.GetCultureInfo("sv-SE")));

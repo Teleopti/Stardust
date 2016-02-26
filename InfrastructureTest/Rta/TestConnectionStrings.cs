@@ -7,12 +7,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	{
 		public string Application()
 		{
-			return InfraTestConfigReader.ConnectionString;
+			return ConnectionStringHelper.ConnectionStringUsedInTests;
 		}
 
 		public string Analytics()
 		{
-			return InfraTestConfigReader.AnalyticsConnectionString;
+			return ConnectionStringHelper.ConnectionStringUsedInTestsMatrix;
 		}
 	}
 }

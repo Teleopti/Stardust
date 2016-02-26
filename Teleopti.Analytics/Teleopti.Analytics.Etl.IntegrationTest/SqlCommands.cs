@@ -11,7 +11,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 	{
 		public static int CountIntervalsPerLocalDate(IPerson person, DateTime datelocal)
 		{
-			using (var sqlConnection = connectAndOpen(InfraTestConfigReader.AnalyticsConnectionString))
+			using (var sqlConnection = connectAndOpen(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
 			{
 				string sql = "select count(1) from mart.fact_schedule_deviation f " +
 				                           "inner join mart.dim_person p on f.person_id = p.person_id " +
@@ -33,7 +33,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 		public static int DataSourceIdGet(string datasourceName)
 		{
-			using (var sqlConnection = connectAndOpen(InfraTestConfigReader.AnalyticsConnectionString))
+			using (var sqlConnection = connectAndOpen(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
 			{
 				string sql = "select datasource_id from mart.sys_datasource where datasource_name=@datasourceName";
 				using (var sqlCommand = new SqlCommand(sql, sqlConnection))
@@ -46,7 +46,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 		public static int TimezoneIdGet(string timezoneName)
 		{
-			using (var sqlConnection = connectAndOpen(InfraTestConfigReader.AnalyticsConnectionString))
+			using (var sqlConnection = connectAndOpen(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
 			{
 				string sql = "select time_zone_id from mart.dim_time_zone where time_zone_code=@timezoneName";
 				using (var sqlCommand = new SqlCommand(sql, sqlConnection))
@@ -58,7 +58,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		}
 		public static void EtlJobIntradaySettingsReset(DateTime targetDate)
 		{
-			using (var sqlConnection = connectAndOpen(InfraTestConfigReader.AnalyticsConnectionString))
+			using (var sqlConnection = connectAndOpen(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
 			{
 				string sql = "update mart.etl_job_intraday_settings set target_date=@target_date";
 				using (var sqlCommand = new SqlCommand(sql, sqlConnection))
@@ -71,7 +71,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 		public static int RowsInFactSchedule(DateTime? startTime = null)
 		{
-			using (var sqlConnection = connectAndOpen(InfraTestConfigReader.AnalyticsConnectionString))
+			using (var sqlConnection = connectAndOpen(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
 			{
 				string sql = "select count(1) from mart.fact_schedule";
 				if (startTime.HasValue)
@@ -87,7 +87,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 		public static int EtlErrors()
 		{
-			using (var sqlConnection = connectAndOpen(InfraTestConfigReader.AnalyticsConnectionString))
+			using (var sqlConnection = connectAndOpen(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
 			{
 				string sql = "select count(1) from mart.etl_jobstep_error";
 				using (var sqlCommand = new SqlCommand(sql, sqlConnection))
@@ -99,7 +99,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 		public static int MaxIntervalLogObjectDetail(int detailId, int dataSourceId)
 		{
-			using (var sqlConnection = connectAndOpen(InfraTestConfigReader.AnalyticsConnectionString))
+			using (var sqlConnection = connectAndOpen(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
 			{
 				string sql = "select int_value from dbo.log_object_detail od inner join mart.sys_datasource ds on od.log_object_id=ds.log_object_id " +
 								"where ds.datasource_id=@dataSourceId and detail_id=@detailId";
@@ -114,7 +114,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 		public static bool IntradayDetailSynced(int detailId, int dataSourceId)
 		{
-			using (var sqlConnection = connectAndOpen(InfraTestConfigReader.AnalyticsConnectionString))
+			using (var sqlConnection = connectAndOpen(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
 			{
 				string sql = "select count(1) from dbo.log_object_detail od inner join mart.sys_datasource ds on od.log_object_id=ds.log_object_id " +
 								"inner join mart.etl_job_intraday_settings s on s.detail_id=od.detail_id and s.datasource_id=ds.datasource_id " +
@@ -134,7 +134,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 		public static int SumFactScheduleDeviation(IPerson person, DateTime datelocal, string columnName)
 		{
-			using (var sqlConnection = connectAndOpen(InfraTestConfigReader.AnalyticsConnectionString))
+			using (var sqlConnection = connectAndOpen(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
 			{
 				string sql = string.Format("select sum(f.{0}) from mart.fact_schedule_deviation f " +
 				                           "inner join mart.dim_person p on f.person_id = p.person_id " +
@@ -157,7 +157,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 		public static DataTable ReportDataAgentScheduleAdherence(DateTime date_from, DateTime date_to, int adherence_id, IPerson person, string timeZoneId)
 		{
-			using (var sqlConnection = connectAndOpen(InfraTestConfigReader.AnalyticsConnectionString))
+			using (var sqlConnection = connectAndOpen(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
 			{
 				const string reportResourceKey = "ResReportAdherencePerDay";
 				var dtResult = new DataSet();
@@ -180,7 +180,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 		public static DataTable ReportDataScheduledTimePerAgent(DateTime date_from, DateTime date_to, int adherence_id, IPerson person, string timeZoneId, string activity)
 		{
-			using (var sqlConnection = connectAndOpen(InfraTestConfigReader.AnalyticsConnectionString))
+			using (var sqlConnection = connectAndOpen(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
 			{
 				var dtResult = new DataSet();
 				const string reportResourceKey = "ResReportScheduledTimePerAgent";

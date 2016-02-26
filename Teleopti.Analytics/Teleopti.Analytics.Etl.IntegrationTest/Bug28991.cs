@@ -64,7 +64,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				)
 				{
 					Helper =
-						new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, ""), null)
+						new JobHelperForTest(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null)
 				};
 
 			//run nightly
@@ -91,7 +91,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				)
 			{
 				Helper =
-					new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, ""), null)
+					new JobHelperForTest(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null)
 			};
 
 			StepRunner.RunNightly(jobParameters);
@@ -133,7 +133,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				)
 			{
 				Helper =
-					new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, ""), null)
+					new JobHelperForTest(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null)
 			};
 
 			//run nightly
@@ -160,7 +160,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				)
 			{
 				Helper =
-					new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, ""), null)
+					new JobHelperForTest(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null)
 			};
 
 			StepRunner.RunNightly(jobParameters);

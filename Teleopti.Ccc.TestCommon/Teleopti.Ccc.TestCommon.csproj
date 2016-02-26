@@ -148,7 +148,7 @@
     <Compile Include="BaseLineData.cs" />
     <Compile Include="BitArrayHelper.cs" />
     <Compile Include="CatalanCulture.cs" />
-    <Compile Include="InfraTestConfigReader.cs" />
+    <Compile Include="ConnectionStringHelper.cs" />
     <Compile Include="EncryptPassword.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Execute.cs" />
@@ -330,6 +330,7 @@
     <Compile Include="FakeRepositories\FakePersonAssignmentReadScheduleStorage.cs" />
     <Compile Include="FakeRepositories\FakeScenarioRepository.cs" />
     <Compile Include="FakeTime.cs" />
+    <Compile Include="InfraTestConfigReader.cs" />
     <Compile Include="CrossThreadTestRunner.cs" />
     <Compile Include="DataSourceHelper.cs" />
     <Compile Include="ExceptionTest.cs" />

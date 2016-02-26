@@ -26,8 +26,8 @@ namespace Teleopti.Support.Tool.Controls
 
 		private void SettingsForm_Load(object sender, EventArgs e)
 		{
-			_settings = new SettingsFileManager()
-				.ReadFile()
+			_settings = new SettingsFileManager(new TextToTags())
+				.GetTags()
 				.ForDisplay()
 				.ToList();
 			dataGridView1.DataSource = _settings;
@@ -36,7 +36,7 @@ namespace Teleopti.Support.Tool.Controls
 
 		private void buttonSave_Click(object sender, EventArgs e)
 		{
-			new SettingsFileManager().SaveFile(_settings);
+			new SettingsFileManager(new TextToTags()).SaveTagAndValues(_settings);
 		}
 
 		private void buttonRefreshThem_Click(object sender, EventArgs e)
@@ -52,8 +52,8 @@ namespace Teleopti.Support.Tool.Controls
 
 		private void runRefresher(string mode)
 		{
-			var fileMan = new SettingsFileManager();
-			fileMan.SaveFile(_settings);
+			var fileMan = new SettingsFileManager(new TextToTags());
+			fileMan.SaveTagAndValues(_settings);
 
 			var refreshRunner = new RefreshConfigsRunner(fileMan, new RefreshConfigFile(new FileConfigurator(), new MachineKeyChecker()));
 			refreshRunner.Execute(new ModeFile(mode));

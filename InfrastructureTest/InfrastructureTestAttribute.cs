@@ -30,9 +30,9 @@ namespace Teleopti.Ccc.InfrastructureTest
 		protected override FakeConfigReader Config()
 		{
 			var config = base.Config();
-			config.FakeConnectionString("RtaApplication", InfraTestConfigReader.ConnectionString);
-			config.FakeConnectionString("MessageBroker", InfraTestConfigReader.AnalyticsConnectionString);
-			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ConnectionString);
+			config.FakeConnectionString("RtaApplication", ConnectionStringHelper.ConnectionStringUsedInTests);
+			config.FakeConnectionString("MessageBroker", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
+			config.FakeConnectionString("Tenancy", ConnectionStringHelper.ConnectionStringUsedInTests);
 			return config;
 		}
 
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			// Tenant stuff
 			system.AddModule(new TenantServerModule(configuration));
 			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
-			system.AddService(TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString));
+			system.AddService(TenantUnitOfWorkManager.Create(ConnectionStringHelper.ConnectionStringUsedInTests));
 
 			// Hangfire bus maybe? ;)
 			system.UseTestDouble<FakeHangfireEventClient>().For<IHangfireEventClient>();
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 		{
 			base.BeforeTest();
 
-			DataSourceForTenant.MakeSureDataSourceCreated("App", InfraTestConfigReader.ConnectionString, null, null);
+			DataSourceForTenant.MakeSureDataSourceCreated("App", ConnectionStringHelper.ConnectionStringUsedInTests, null, null);
 
 			MessageSender.AllNotifications.Clear();
 

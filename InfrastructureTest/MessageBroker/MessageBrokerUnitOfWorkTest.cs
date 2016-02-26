@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 			system.UseTestDouble(new MutableFakeCurrentHttpContext()).For<ICurrentHttpContext>();
 
 			var config = new FakeConfigReader();
-			config.FakeConnectionString("MessageBroker", InfraTestConfigReader.AnalyticsConnectionString);
+			config.FakeConnectionString("MessageBroker", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
 			system.UseTestDouble(config).For<IConfigReader>();
 		}
 
@@ -324,7 +324,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 		private readonly string _connectionString;
 
 		public TestTable(string name)
-			: this(name, InfraTestConfigReader.AnalyticsConnectionString)
+			: this(name, ConnectionStringHelper.ConnectionStringUsedInTestsMatrix)
 		{
 		}
 
@@ -337,7 +337,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 
 		public static IEnumerable<int> Values(string tableName)
 		{
-			return Values(tableName, InfraTestConfigReader.AnalyticsConnectionString);
+			return Values(tableName, ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
 		}
 
 		public static IEnumerable<int> Values(string tableName, string connectionString)

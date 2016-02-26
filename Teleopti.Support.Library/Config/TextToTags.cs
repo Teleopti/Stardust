@@ -20,7 +20,7 @@ namespace Teleopti.Support.Library.Config
 			        ReplaceWith = values[1]
 		        });
 	        fromFile.ForEach(
-		        x => searchReplaces.Set(x.SearchFor, x.ReplaceWith)
+		        x => searchReplaces.AddSearchReplace(x.SearchFor, x.ReplaceWith)
 		        );
 			return searchReplaces;
         }
