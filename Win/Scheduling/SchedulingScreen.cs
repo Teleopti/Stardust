@@ -2163,6 +2163,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			setThreadCulture();
 			if (!_schedulerState.SchedulingResultState.Skills.Any()) return;
+			if (!_schedulerState.DaysToRecalculate.Any()) return;
 
 			IDisposable disposableContext = null;
 			if (!ResourceCalculationContext.InContext)
