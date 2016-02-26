@@ -57,17 +57,11 @@ namespace Teleopti.Ccc.Web.Broker
 			switch (settings.SignalRBackplaneType)
 			{
 				case SignalRBackplaneType.SqlServer:
-					settings.SqlServerBackplaneConnectionString =
-						ConfigurationManager.ConnectionStrings["MessageBroker"].ConnectionString;
-					break;
 				case SignalRBackplaneType.AzureServiceBus:
-					settings.AzureServiceBusBackplaneConnectionString =
-						ConfigurationManager.ConnectionStrings["AzureServiceBusBackplane"].ConnectionString;
+				case SignalRBackplaneType.Redis:
+					settings.SignalRBackplaneConnectionString =
+						ConfigurationManager.ConnectionStrings["SignalRBackplane"].ConnectionString;
 					break;
-                case SignalRBackplaneType.Redis:
-                    settings.RedisBackplaneConnectionString =
-                        ConfigurationManager.ConnectionStrings["RedisBackplane"].ConnectionString;
-			        break;
 			}
             return settings;
 		}
@@ -91,9 +85,7 @@ namespace Teleopti.Ccc.Web.Broker
 		public bool ThrottleMessages { get; set; }
 		public int MessagesPerSecond { get; set; }
 		public bool EnablePerformanceCounters { get; set; }
-	    public string SqlServerBackplaneConnectionString { get; set; }
-		public string AzureServiceBusBackplaneConnectionString { get; set; }
-        public string RedisBackplaneConnectionString { get; set; }
+		public string SignalRBackplaneConnectionString { get; set; }
     }
 
 	public enum SignalRBackplaneType

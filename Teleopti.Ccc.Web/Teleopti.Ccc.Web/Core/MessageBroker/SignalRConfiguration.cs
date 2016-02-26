@@ -26,13 +26,13 @@ namespace Teleopti.Ccc.Web.Broker
 			switch (settingsFromParser.SignalRBackplaneType)
 			{
 				case SignalRBackplaneType.SqlServer:
-					GlobalHost.DependencyResolver.UseSqlServer(settingsFromParser.SqlServerBackplaneConnectionString);
+					GlobalHost.DependencyResolver.UseSqlServer(settingsFromParser.SignalRBackplaneConnectionString);
 					break;
 				case SignalRBackplaneType.AzureServiceBus:
-					GlobalHost.DependencyResolver.UseServiceBus(settingsFromParser.AzureServiceBusBackplaneConnectionString, "Teleopti WFM");
+					GlobalHost.DependencyResolver.UseServiceBus(settingsFromParser.SignalRBackplaneConnectionString, "Teleopti WFM");
 					break;
                 case SignalRBackplaneType.Redis:
-			        GlobalHost.DependencyResolver.UseRedis(new RedisScaleoutConfiguration(settingsFromParser.RedisBackplaneConnectionString, "Teleopti WFM"));
+					GlobalHost.DependencyResolver.UseRedis(new RedisScaleoutConfiguration(settingsFromParser.SignalRBackplaneConnectionString, "Teleopti WFM"));
 			        break;
 				default:
 					if (settingsFromParser.ScaleOutBackplaneUrl != null)
