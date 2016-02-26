@@ -15,7 +15,6 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -57,28 +56,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_bitArrayConverter = _container.Resolve<IScheduleMatrixLockableBitArrayConverterEx>();
 		}
 
-		private void optimizeIntraday(IList<IScheduleMatrixOriginalStateContainer> matrixContainerList,
-			IList<IScheduleMatrixOriginalStateContainer> workShiftContainerList, IOptimizationPreferences optimizerPreferences,
+		private void optimizeIntraday(IEnumerable<IScheduleMatrixOriginalStateContainer> matrixContainerList,
+			IEnumerable<IScheduleMatrixOriginalStateContainer> workShiftContainerList, IOptimizationPreferences optimizerPreferences,
 			DateOnlyPeriod selectedPeriod,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-			var decisionMaker = new IntradayDecisionMaker(_bitArrayConverter);
-			var scheduleService = _container.Resolve<IScheduleService>();
-
-			var creator = new IntradayOptimizer2Creator(
-				decisionMaker,
-				scheduleService,
-				_container.Resolve<ISkillStaffPeriodToSkillIntervalDataMapper>(),
-				_container.Resolve<ISkillIntervalDataDivider>(),
-				_container.Resolve<ISkillIntervalDataAggregator>(),
-				_container.Resolve<IEffectiveRestrictionCreator>(),
-				_container.Resolve<IMinWeekWorkTimeRule>(),
-				_container.Resolve<IResourceOptimizationHelper>(),
-				_container.Resolve<IDeleteAndResourceCalculateService>(),
-				_container.Resolve<IIntradayOptimizeOneDayCallback>(),
-				_container.Resolve<Func<ISchedulerStateHolder>>(),
-				_container.Resolve<Func<IScheduleDayChangeCallback>>());
-
+			var creator = _container.Resolve<IntradayOptimizer2Creator>();
 			var optimizers = creator.Create(matrixContainerList,
 				workShiftContainerList, optimizerPreferences,
 				dayOffOptimizationPreferenceProvider);
