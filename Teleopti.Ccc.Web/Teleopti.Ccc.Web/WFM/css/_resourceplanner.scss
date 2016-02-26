@@ -181,6 +181,10 @@ background-color: #cacaca;
 .grid-scroll-wrap{
 	width:100%;
 	overflow:auto;
+	min-height: 370px;
+}
+.result-container{
+	width: 100%;
 }
 
 .overview{
