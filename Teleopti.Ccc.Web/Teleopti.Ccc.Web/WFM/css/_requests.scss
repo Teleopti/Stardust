@@ -1,6 +1,6 @@
 ﻿.wfm-requests {
 	background-color: white;
-	position:relative;
+	position: relative;
 
 	.advanced-search-container tr td:nth-child(2) div {
 		margin-right: 0 !important;
@@ -8,7 +8,8 @@
 
 	.time-zone-switch {
 		position: absolute;
-		bottom: -3em;
+		top: 10px;
+		left: 35em;
 		display: inline-block;
 		z-index: 100;
 	}
@@ -30,15 +31,17 @@
 	requests-commands-pane {
 		position: absolute;
 		right: 1em;
-		top: 0em;
+		top: 0;
 	}
 
-	.m-r-5{
-		margin-right:5px;
+	.m-r-5 {
+		margin-right: 5px;
 	}
-	.m-l-5{
-		margin-left:5px;
+
+	.m-l-5 {
+		margin-left: 5px;
 	}
+
 	.request-filter {
 		.input-prepend {
 			width: 300px;
@@ -52,19 +55,8 @@
 			position: relative;
 		}
 
-		.picker-template-dropdown input {
-			width: 180px;
-		}
-
-		.picker-template-dropdown {
-			.picker-wrapper {
-				top: 20px;
-				margin-left: -108px;
-			}
-		}
-
-		.dropdown-menu {
-			top: 18px!important;
+		input {
+			width: 100px !important;
 		}
 	}
 
@@ -87,15 +79,17 @@
 	}
 
 	.paging {
-		position:relative;
+		position: relative;
 		bottom: -1em;
+
 		.total-requests-count {
 			margin-right: 20px;
-			margin-top: 10px;
+			margin-top: 5px;
 		}
 
-		.page-size-selector{
-			width: 60px; 
+		.page-size-selector {
+			width: 60px;
+			margin-top: 5px;
 		}
 
 		.pagination {
