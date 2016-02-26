@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling
@@ -73,8 +74,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test]
 		public void ShouldCalculateThisDateAndNextIfLimitIs1AndPeriodOverMidnight()
 		{
-			DateOnlyPeriod dop = new DateOnlyPeriod(new DateOnly(), new DateOnly().AddDays(1));
-			var dp = dop.ToDateTimePeriod((TimeZoneInfo.Utc));
+			var dop = new DateOnlyPeriod(new DateOnly(), new DateOnly().AddDays(1));
+			var tz = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+			var dp = dop.ToDateTimePeriod(tz);
 			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true);
 			using (_mocks.Record())
 			{
@@ -91,8 +93,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test]
 		public void ShouldCalculateThisDateIfLimitIs1AndPeriodNotOverMidnight()
 		{
-			DateOnlyPeriod dop = new DateOnlyPeriod(new DateOnly(), new DateOnly());
-			var dp = dop.ToDateTimePeriod((TimeZoneInfo.Utc));
+			var tz = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+			var dop = new DateOnlyPeriod(new DateOnly(), new DateOnly());
+			var dp = dop.ToDateTimePeriod((tz));
 			dp = dp.ChangeEndTime(TimeSpan.FromSeconds(-1));
 			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true);
 			using (_mocks.Record())

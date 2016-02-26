@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				if (dateTimePeriod.HasValue)
 				{
 					DateTimePeriod period = dateTimePeriod.Value;
-					if (period.StartDateTime.Date != period.EndDateTime.Date)
+					if (isNightShift(period))
 						_resourceOptimizationHelper.ResourceCalculateDate(scheduleDateOnly.AddDays(1), _considerShortBreaks, doIntraIntervalCalculation);
 				}
 				return true;
@@ -64,6 +65,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public void Resume()
 		{
 			_paused = false;
+		}
+
+		private bool isNightShift(DateTimePeriod period)
+		{
+			var tz = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+			var viewerStartDate = new DateOnly(period.StartDateTimeLocal(tz));
+			var viewerEndDate = new DateOnly(period.EndDateTimeLocal(tz).AddMinutes(-1));
+
+			return viewerStartDate != viewerEndDate;
 		}
 	}
 }
