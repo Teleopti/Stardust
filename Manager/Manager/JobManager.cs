@@ -9,13 +9,13 @@ using Stardust.Manager.Timers;
 
 namespace Stardust.Manager
 {
-	public class JobManager
+	public class JobManager : IDisposable
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (JobManager));
 		private readonly IHttpSender _httpSender;
 		private readonly IJobRepository _jobRepository;
 		private readonly IWorkerNodeRepository _workerNodeRepository;
-		private CheckHeartbeatsTimer _checkHeartbeatsTimer;
+		private CheckHeartbeatsTimer _checkHeartbeatsTimer; 
 
 		public JobManager(IJobRepository jobRepository,
 		                  IWorkerNodeRepository workerNodeRepository,
@@ -41,6 +41,7 @@ namespace Stardust.Manager
 					{
 						if (job.AssignedNode == node)
 						{
+							LogHelper.LogErrorWithLineNumber(Logger, "Job ( id , name ) is deleted due to the node executing it died. ( " + job.Id + " , " + job.Name + " )");
 							SetEndResultOnJobAndRemoveIt(job.Id, "fatal");
 						}
 					}
@@ -173,6 +174,18 @@ namespace Stardust.Manager
 		public IList<JobHistoryDetail> JobHistoryDetails(Guid jobId)
 		{
 			return _jobRepository.JobHistoryDetails(jobId);
+		}
+
+		public void Dispose()
+		{
+			LogHelper.LogDebugWithLineNumber(Logger, "Start Disposing");
+			if (_checkHeartbeatsTimer != null)
+			{
+				_checkHeartbeatsTimer.Stop();
+				_checkHeartbeatsTimer.Dispose();
+			}
+			LogHelper.LogDebugWithLineNumber(Logger, "Stop Disposing");
+
 		}
 	}
 }
