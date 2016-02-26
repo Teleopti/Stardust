@@ -28,12 +28,19 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 
 					CreateRequestHeaders(client);
 
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Start Post Async: " + url);
+
 					var response =
 						await client.PostAsync(url,
 						                       new StringContent(sez,
 						                                         Encoding.Unicode,
 						                                         "application/json"))
 							.ConfigureAwait(false);
+
+
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Finihed Post Async: " + url);
 
 					LogHelper.LogDebugWithLineNumber(Logger,
 					                                 "Finished.");
@@ -66,6 +73,9 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 
 					CreateRequestHeaders(client);
 
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Start Post Async: " + url);
+
 					var response =
 						await client.PostAsync(url,
 						                       new StringContent(sez,
@@ -73,6 +83,9 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 						                                         "application/json"),
 						                       cancellationToken)
 							.ConfigureAwait(false);
+
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Finished Post Async: " + url);
 
 					LogHelper.LogDebugWithLineNumber(Logger,
 					                                 "Finished.");
@@ -101,8 +114,15 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 				{
 					CreateRequestHeaders(client);
 
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Start Delete Async: " + url);
+
 					var response =
 						await client.DeleteAsync(url).ConfigureAwait(false);
+
+
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Finished Delete Async: " + url);
 
 					LogHelper.LogDebugWithLineNumber(Logger,
 					                                 "Finished.");
@@ -133,8 +153,16 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 				{
 					CreateRequestHeaders(client);
 
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Start Delete Async: " + url);
+
 					var response =
-						await client.DeleteAsync(url, cancellationToken).ConfigureAwait(false);
+						await client.DeleteAsync(url,
+						                         cancellationToken).ConfigureAwait(false);
+
+
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Finished Delete Async: " + url);
 
 					LogHelper.LogDebugWithLineNumber(Logger,
 					                                 "Finished.");
@@ -155,15 +183,28 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 
 		public async Task<HttpResponseMessage> GetAsync(Uri url)
 		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Start.");
+
 			try
 			{
 				using (var client = new HttpClient())
 				{
 					CreateRequestHeaders(client);
 
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Start Get Async: " + url);
+
 					var response = await client.GetAsync(url,
 					                                     HttpCompletionOption.ResponseHeadersRead)
 						.ConfigureAwait(false);
+
+
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Finished Get Async: " + url);
+
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Finished.");
 
 					return response;
 				}
@@ -181,16 +222,29 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 
 		public async Task<HttpResponseMessage> GetAsync(Uri url, CancellationToken cancellationToken)
 		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Start.");
+
 			try
 			{
 				using (var client = new HttpClient())
 				{
 					CreateRequestHeaders(client);
 
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Start Get Async: " + url);
+
 					var response = await client.GetAsync(url,
 					                                     HttpCompletionOption.ResponseHeadersRead,
 					                                     cancellationToken)
 						.ConfigureAwait(false);
+
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Finished Get Async: " + url);
+
+
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Finished.");
 
 					return response;
 				}
@@ -208,16 +262,29 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 
 		public async Task<bool> TryGetAsync(Uri url)
 		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Start.");
+
 			try
 			{
 				using (var client = new HttpClient())
 				{
 					CreateRequestHeaders(client);
 
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Start Try Get Async: " + url);
+
 					var response =
 						await client.GetAsync(url,
 						                      HttpCompletionOption.ResponseHeadersRead)
 							.ConfigureAwait(false);
+
+
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Finished Try Get Async: " + url);
+
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Finished.");
 
 					return response.IsSuccessStatusCode;
 				}
@@ -246,17 +313,29 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 
 		public async Task<bool> TryGetAsync(Uri url, CancellationToken cancellationToken)
 		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+			                                 "Start.");
+
 			try
 			{
 				using (var client = new HttpClient())
 				{
 					CreateRequestHeaders(client);
 
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Start Try Get Async: " + url);
+
 					var response =
 						await client.GetAsync(url,
 						                      HttpCompletionOption.ResponseHeadersRead,
 						                      cancellationToken)
 							.ConfigureAwait(false);
+
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Finished Try Get Async: " + url);
+
+					LogHelper.LogDebugWithLineNumber(Logger,
+					                                 "Finished.");
 
 					return response.IsSuccessStatusCode;
 				}
