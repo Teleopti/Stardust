@@ -34,6 +34,7 @@ BEGIN
 		INNER JOIN #skills s ON ds.skill_code = s.id
 		
 	SELECT 
+		MAX(fq.offered_calls) AS ForecastedCalls,
 		SUM(fq.offered_calls) AS OfferedCalls,
 		MAX(i.interval_end) AS LatestStatsTime
 	FROM

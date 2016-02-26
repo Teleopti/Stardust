@@ -1,6 +1,5 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Intraday;
@@ -37,10 +36,11 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			existingSkillArea.SetId(skillAreaId);
 
 			SkillAreaRepository.Has(existingSkillArea);
-			IntradayMonitorDataLoader.Has(25, new DateTime(today.Year, today.Month, today.Day, 8, 0, 0));
+			IntradayMonitorDataLoader.Has(10, 25, new DateTime(today.Year, today.Month, today.Day, 8, 0, 0));
 
 			var result = Target.Load(skillAreaId);
 
+			result.ForecastedCalls.Should().Be.EqualTo(10);
 			result.OfferedCalls.Should().Be.EqualTo(25);
 			result.LatestStatsTime.Should().Be.EqualTo(new DateTime(today.Year, today.Month, today.Day, 8, 0, 0));
 		}

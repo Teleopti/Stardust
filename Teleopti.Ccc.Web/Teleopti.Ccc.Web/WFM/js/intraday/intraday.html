@@ -84,6 +84,7 @@
 		<div class="panel con-flex material-depth-1">
 			<div class="sub-header">
 				<h2 class="intraday-monitor-item">{{ selectedSkillArea.Name }}</h2>
+				<h2>{{ latestStatsTime }}</h2>
 				<div class="head-actions panel-menu">
 					<div tabindex=0 class="context-menu card-context">
 						<i class="skill-area-options mdi mdi-dots-vertical"></i>
@@ -111,13 +112,13 @@
 			</div>
 			<div class="con-row" ng-show="HasMonitorData">
 				<div class="con-flex">
-					Forecasted calls:
+					Forecasted calls: {{forecastedCalls}}
 				</div>
 				<div class="con-flex">
 					Actual calls: {{offeredCalls}}
 				</div>
 				<div class="con-flex">
-					Area total: {{latestStatsTime}}
+					Difference: {{difference}}
 				</div>
 			</div>
 		</div>

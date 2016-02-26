@@ -12,17 +12,20 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			return new MonitorDataViewModel
 			{
+				ForecastedCalls = ForecastedCalls,
 				OfferedCalls = OfferedCalls,
 				LatestStatsTime = LatestStatsTime
 			};
 		}
 
-		public void Has(int offeredCalls, DateTime latestStatsTime)
+		public void Has(int forecastedCalls, int offeredCalls, DateTime latestStatsTime)
 		{
+			ForecastedCalls = forecastedCalls;
 			OfferedCalls = offeredCalls;
 			LatestStatsTime = latestStatsTime;
 		}
 
+		public int ForecastedCalls { get; set; }
 		public int OfferedCalls { get; set; }
 		public DateTime LatestStatsTime { get; set; }
 	}

@@ -119,11 +119,14 @@
 							id: $scope.selectedItem.Id
 						})
 						.$promise.then(function (result) {
+							$scope.forecastedCalls = result.ForecastedCalls;
 							$scope.offeredCalls = result.OfferedCalls;
-							$scope.latestStatsTime = result.LatestStatsTime;
+							$scope.latestStatsTime = $filter('date')(result.LatestStatsTime, 'shortTime');
 							$scope.HasMonitorData = true;
 						});
 				};
+
+				$scope.difference = '20%';
 
 				function clearSkillSelection() {
 					if (!autocompleteSkill) return;
