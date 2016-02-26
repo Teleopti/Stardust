@@ -133,10 +133,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShiftFromMasterActivityService>()
 				.As<IShiftFromMasterActivityService>()
 				.InstancePerLifetimeScope();
-			builder.RegisterType<RuleSetDeletedActivityChecker>().As<IRuleSetDeletedActivityChecker>().InstancePerLifetimeScope();
+			builder.RegisterType<RuleSetDeletedActivityChecker>().As<IRuleSetDeletedActivityChecker>().SingleInstance();
 			builder.RegisterType<RuleSetDeletedShiftCategoryChecker>()
 				.As<IRuleSetDeletedShiftCategoryChecker>()
-				.InstancePerLifetimeScope();
+				.SingleInstance();
 			builder.RegisterType<WorkShiftCalculatorsManager>().As<IWorkShiftCalculatorsManager>().InstancePerLifetimeScope();
 			builder.RegisterType<FairnessAndMaxSeatCalculatorsManager28317>().As<IFairnessAndMaxSeatCalculatorsManager>()
 				.InstancePerLifetimeScope();
