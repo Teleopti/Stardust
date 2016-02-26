@@ -22,7 +22,8 @@
 
 .dataHeader{
 	margin-top:15px;
-	border: none!important;
+	border-top: none!important;
+    background-color: $gray012;
 }
 
 .role-list-height{
@@ -31,6 +32,10 @@
 
 .permissions-radio {
 	display: inline;
+}
+
+.permissions-teams {
+    margin-left: 35px;
 }
 
 .text-truncation {
