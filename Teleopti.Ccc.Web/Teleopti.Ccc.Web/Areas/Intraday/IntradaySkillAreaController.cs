@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
@@ -17,13 +16,15 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		private readonly FetchSkillArea _fetchSkillArea;
 		private readonly DeleteSkillArea _deleteSkillArea;
 		private readonly IPrincipalAuthorization _principalAuthorization;
+		private readonly MonitorSkillAreaProvider _monitorSkillAreaProvider;
 
-		public IntradaySkillAreaController(CreateSkillArea createSkillArea, FetchSkillArea fetchSkillArea, DeleteSkillArea deleteSkillArea, IPrincipalAuthorization principalAuthorization)
+		public IntradaySkillAreaController(CreateSkillArea createSkillArea, FetchSkillArea fetchSkillArea, DeleteSkillArea deleteSkillArea, IPrincipalAuthorization principalAuthorization, MonitorSkillAreaProvider monitorSkillAreaProvider)
 		{
 			_createSkillArea = createSkillArea;
 			_fetchSkillArea = fetchSkillArea;
 			_deleteSkillArea = deleteSkillArea;
 			_principalAuthorization = principalAuthorization;
+			_monitorSkillAreaProvider = monitorSkillAreaProvider;
 		}
 
 		[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebModifySkillArea)]
@@ -52,10 +53,10 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			return Ok();
 		}
 
-		[UnitOfWork, HttpGet, Route("api/intraday/monitordata/{id}")]
-		public virtual IHttpActionResult MonitorData(Guid Id)
+		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillarea/{id}")]
+		public virtual IHttpActionResult MonitorSkillArea(Guid Id)
 		{
-			return Ok();
+			return Ok(_monitorSkillAreaProvider.Load(Id));
 		}
 	}
 

@@ -16,6 +16,8 @@
 					autocompleteSkillArea = angular.element(autocompleteSkillAreaDOM).scope();
 				};
 
+				$scope.format = intradayService.formatDateTime;
+
 				$scope.$on('$stateChangeSuccess', function(evt, to, params, from) {
 					if (params.newSkillArea == true) {
 						reloadSkillAreas();
@@ -50,8 +52,6 @@
 
 				reloadSkillAreas();
 				
-				$scope.format = intradayService.formatDateTime;
-
 				$scope.configMode = function () {
 					$state.go('intraday.config', { isNewSkillArea: false });
 				};
@@ -119,7 +119,9 @@
 							id: $scope.selectedItem.Id
 						})
 						.$promise.then(function (result) {
-							$scope.HasMonitorData = false;
+							$scope.offeredCalls = result.OfferedCalls;
+							$scope.latestStatsTime = result.LatestStatsTime;
+							$scope.HasMonitorData = true;
 						});
 				};
 

@@ -165,6 +165,7 @@
     <Compile Include="FakeData\FakeCurrentUnitOfWorkFactory.cs" />
     <Compile Include="FakeData\FakeGroupScheduleGroupPageDataProvider.cs" />
     <Compile Include="FakeData\FakeLogManagerWrapper.cs" />
+    <Compile Include="FakeData\FakeIntradayMonitorDataLoader.cs" />
     <Compile Include="FakeData\FakePersonContractProvider.cs" />
     <Compile Include="FakeData\FakeScheduleDayForPerson.cs" />
     <Compile Include="FakeData\FakeScheduleDictionary.cs" />

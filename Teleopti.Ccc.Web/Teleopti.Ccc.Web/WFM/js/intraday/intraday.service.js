@@ -4,7 +4,11 @@
 		.service('intradayService', [
 			'$resource', function ($resource) {
 				this.skillList = $resource('../api/intraday/skillstatus', {}, {
-					query: { method: 'GET', params: {}, isArray: true }
+					query: {
+						method: 'GET',
+						params: {},
+						isArray: true
+					}
 				});
 
 				this.getSkills = $resource('../api/intraday/skills', {}, {
@@ -39,7 +43,7 @@
 					}
 				});
 
-				this.getMonitorData = $resource('../api/intraday/monitordata/:id', { id: '@id' }, {
+				this.getMonitorData = $resource('../api/intraday/monitorskillarea/:id', { id: '@id' }, {
 					query: {
 						method: 'GET',
 						params: {},

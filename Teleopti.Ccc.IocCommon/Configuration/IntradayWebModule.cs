@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -14,6 +15,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CreateSkillArea>().SingleInstance();
 			builder.RegisterType<DeleteSkillArea>().SingleInstance();
 			builder.RegisterType<LoadSkillInIntradays>().As<ILoadAllSkillInIntradays>().SingleInstance();
+			builder.RegisterType<IntradayMonitorDataLoader>().As<IIntradayMonitorDataLoader>().SingleInstance();
+			builder.RegisterType<MonitorSkillAreaProvider>().SingleInstance();
 		}
 	}
 }
