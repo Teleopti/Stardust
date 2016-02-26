@@ -1,62 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics.Transformer;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
+using System;
 using Teleopti.Interfaces.Infrastructure.Analytics;
-using IAnalyticsPersonPeriodRepository = Teleopti.Ccc.Domain.Repositories.IAnalyticsPersonPeriodRepository;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
+namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
-	[UseOnToggle(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162)]
-	public class PersonPeriodAnalyticsUpdater :
-		IHandleEvent<PersonCollectionChangedEvent>,
-		IRunOnServiceBus
-	{
-		private readonly IPersonRepository _personRepository;
-		private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
-		 
-
-		public PersonPeriodAnalyticsUpdater(IPersonRepository personRepository, IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository)
-		{
-			_personRepository = personRepository;
-			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
-		}
-
-		public void Handle(PersonCollectionChangedEvent @event)
-		{
-			// Check if new person
-			IAnalyticsPersonPeriod t = new AnalyticsPersonPeriod();
-
-			foreach (var personCodeGuid in @event.PersonIdCollection.Distinct())
-			{
-				Console.WriteLine(personCodeGuid.ToString());
-				var person = _personRepository.FindPeople(new Guid[] { personCodeGuid }).First();
-				Console.WriteLine(person.Name + " " + person.Email);
-
-				var test = _analyticsPersonPeriodRepository.GetPersonPeriods(personCodeGuid);
-
-				Console.WriteLine("Person periods: " + person.PersonPeriodCollection.Count());
-
-				PersonPeriodTransformer transformer = new PersonPeriodTransformer(_personRepository, _analyticsPersonPeriodRepository);
-				if (test.IsEmpty() && person.PersonPeriodCollection.Any())
-				{
-					foreach (var personPeriod in person.PersonPeriodCollection)
-					{
-						var analyticsPersonPeriod = transformer.Transform(person, personPeriod);
-						_analyticsPersonPeriodRepository.AddPersonPeriod(analyticsPersonPeriod);
-					}
-				}
-			}
-		}
-
-		
-	}
-
 	public class AnalyticsPersonPeriod : IAnalyticsPersonPeriod
 	{
 		public int PersonId { get; set; }

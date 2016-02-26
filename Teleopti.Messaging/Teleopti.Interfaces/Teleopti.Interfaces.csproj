@@ -676,6 +676,8 @@
     <Compile Include="Infrastructure\Analytics\IAnalyticsPersonPeriod.cs" />
     <Compile Include="Infrastructure\Analytics\IAnalyticsPersonBusinessUnit.cs" />
     <Compile Include="Infrastructure\Analytics\IAnalyticsShiftLength.cs" />
+    <Compile Include="Infrastructure\Analytics\IAnalyticsDate.cs" />
+    <Compile Include="Infrastructure\Analytics\IAnalyticsSkill.cs" />
     <Compile Include="Infrastructure\Analytics\IFactScheduleRow.cs" />
     <Compile Include="Infrastructure\DomainObjectNotInFilterException.cs" />
     <Compile Include="Infrastructure\EncryptionConstants.cs" />

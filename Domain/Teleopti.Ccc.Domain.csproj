@@ -241,6 +241,10 @@
     <Compile Include="ApplicationLayer\Events\PersonAssociationChangedEvent.cs" />
     <Compile Include="ApplicationLayer\ITimestamped.cs" />
     <Compile Include="ApplicationLayer\ITrackingMessageSender.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\Transformer\IntervalBase.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\Transformer\PersonPeriodFilter.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\Transformer\PersonPeriodMapper.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\Transformer\PersonPeriodTransformer.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\PersonFinderReadOnlyUpdater.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\PersonPeriodAnalyticsUpdater.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateGroupingReadModelConsumer.cs" />
@@ -2637,7 +2641,6 @@
     <EmbeddedResource Include="Scheduling\Assignment\ShiftLayer.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
