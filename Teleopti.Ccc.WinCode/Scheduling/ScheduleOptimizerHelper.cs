@@ -312,7 +312,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IList<IPerson> selectedPersons =
 				_container.Resolve<IPersonListExtractorFromScheduleParts>().ExtractPersons(selectedDays);
 
-			IList<IScheduleMatrixPro> matrixListForIntradayOptimization = _matrixListFactory.CreateMatrixListForSelection(selectedDays);
+			var matrixListForIntradayOptimization = _matrixListFactory.CreateMatrixListForSelection(selectedDays);
 
 			_optimizerHelper.SetConsiderShortBreaks(selectedPersons, selectedPeriod, optimizerPreferences.Rescheduling,
 				_container);
@@ -333,9 +333,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					}
 
 					IList<IScheduleMatrixPro> matrixListForWorkShiftAndIntradayOptimization = _matrixListFactory.CreateMatrixListForSelection(selectedDays);
-					IList<IScheduleMatrixOriginalStateContainer>
-						workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization =
-							createMatrixContainerList(matrixListForWorkShiftAndIntradayOptimization);
 
 					if (optimizerPreferences.General.OptimizationStepTimeBetweenDays)
 					{
