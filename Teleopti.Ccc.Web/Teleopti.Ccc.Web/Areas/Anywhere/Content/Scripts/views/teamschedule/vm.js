@@ -33,6 +33,7 @@ define([
 		this.permissionMoveActivity = ko.observable();
 
 		this.Loading = ko.observable(false);
+		
 		this.PreSelectedPersonId = ko.observable(false);
 		this.PreSelectedStartMinute = ko.observable(NaN);
 		this.BusinessUnitId = ko.observable();
@@ -69,6 +70,10 @@ define([
 		});
 
 		this.GroupPages = ko.observableArray();
+
+		this.HasGroupPages = ko.computed(function () {
+			return self.GroupPages().length > 0;
+		});
 
 		this.DisplayDescriptions = ko.observable(true);
 		this.ToggleDisplayDescriptions = function () {

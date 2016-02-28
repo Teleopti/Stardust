@@ -40,7 +40,7 @@ define([
 	var loadGroupPages = function (buid, date, callback) {
 		ajax.ajax({
 			url: 'api/GroupPage/AvailableGroupPages?date=' + date,
-			headers: { 'X-Business-Unit-Filter': buid},
+			headers: { 'X-Business-Unit-Filter': buid },
 			success: callback
 		});
 	}
@@ -91,12 +91,14 @@ define([
 
 			viewModel.SetViewOptions(options);
 
+
 			var groupPagesDeferred = $.Deferred();
+
 			loadGroupPages(
 				viewModel.BusinessUnitId(),
 				helpers.Date.ToServer(viewModel.Date()),
 				function (data) {
-					
+
 					var currentGroupId = function () {
 						if (options.id)
 							return options.id;
@@ -114,33 +116,44 @@ define([
 					groupPagesDeferred.resolve();
 				});
 
+
 			var groupScheduleDeferred = $.Deferred();
 			groupPagesDeferred.done(function () {
 				var receivedSchedules = [];
-				groupschedulesubscriptions.subscribeGroupSchedule(
-					viewModel.BusinessUnitId(),
-					viewModel.GroupId(),
-					helpers.Date.ToServer(viewModel.Date()),
-					function (personIdToCheck) {
-						var found = false;
-						ko.utils.arrayForEach(viewModel.Persons(), function(p) {
-							if (p.Id == personIdToCheck) {
-								found = true;
-								return;
+
+				if (viewModel.GroupId() != null) {
+
+					groupschedulesubscriptions.subscribeGroupSchedule(
+						viewModel.BusinessUnitId(),
+						viewModel.GroupId(),
+						helpers.Date.ToServer(viewModel.Date()),
+						function (personIdToCheck) {
+							var found = false;
+							ko.utils.arrayForEach(viewModel.Persons(), function (p) {
+								if (p.Id == personIdToCheck) {
+									found = true;
+									return;
+								}
+							});
+							return found;
+						},
+						function (data) {
+							receivedSchedules.push.apply(receivedSchedules, data.Schedules);
+							if (receivedSchedules.length === data.TotalCount) {
+								viewModel.UpdateSchedules({ BaseDate: data.BaseDate, Schedules: receivedSchedules });
+								groupScheduleDeferred.resolve();
+								receivedSchedules = [];
 							}
-						});
-						return found;
-					},
-					function (data) {
-						receivedSchedules.push.apply(receivedSchedules, data.Schedules);
-						if (receivedSchedules.length === data.TotalCount) {
-							viewModel.UpdateSchedules({ BaseDate: data.BaseDate, Schedules: receivedSchedules });
-							groupScheduleDeferred.resolve();
-							receivedSchedules = [];
 						}
-					}
-				);
+					);
+				} else {
+					//viewModel.UpdateSchedules({ BaseDate: data.BaseDate, Schedules: receivedSchedules });
+					groupScheduleDeferred.resolve();
+					
+				}
+
 			});
+
 
 			permissions.get().done(function (data) {
 				viewModel.permissionAddFullDayAbsence(data.IsAddFullDayAbsenceAvailable);
@@ -150,12 +163,14 @@ define([
 				viewModel.permissionMoveActivity(data.IsMoveActivityAvailable);
 			});
 
+
 			return $.when(groupPagesDeferred, groupScheduleDeferred)
-					.done(function () {
-						viewModel.Loading(false);
-						resize.notify();
-					});
-			
+				.done(function () {
+					viewModel.Loading(false);
+					resize.notify();
+				});
+
+
 		},
 
 		dispose: function (options) {

@@ -31,171 +31,181 @@
 			</div>
 		</div>
     </div>
-
-    <div class="row">
+	
+	<div class="row">
         <div class="col-md-12">
             <!-- ko if: Loading -->
             <div><span data-bind="text: Resources.LoadingThreeDots"></span></div>
-            <!-- /ko -->
-            <!-- ko ifnot: Loading -->
-            <div class="relative">
-                <!-- ko with: TimeLine -->
-                <div class="time-line absolute" data-bind="attr: { 'data-start-time': StartTime, 'data-end-time': EndTime }, if: $parent.SortedPersons().length > 0">
-                    <div class="relative">
-                        <div data-bind="foreach: Times">
-                            <div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
-                            <div class="label label-info absolute" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /ko -->
+			<!-- /ko -->
+			
+			<!-- ko ifnot: Loading-->
 
-                <table class="table table-hover">
-                    <thead>
-                        <tr class="person">
-                            <th class="person-name person-name-column"></th>
-                            <th class="schedule schedule-column"></th>
-                            <th class="contract-time contract-time-title"><span data-bind="text: Resources.ContractTime"></span></th>
-                        </tr>
-                    </thead>
-                    <tbody data-bind="foreach: SortedPersons">
-                        <tr class="person" data-bind="attr: { 'data-person-id': Id }, css: { 'selected-person': IsPersonOrShiftSelected }, click: $root.SelectPerson">
-                            <td class="person-name person-name-column">
-                                <div class="person-name nowrap" data-bind="text: Name"></div>
-                            </td>
-                            <td class="schedule schedule-column">
-                                <div class="relative time-line-for">
-                                    <!-- ko foreach: Shifts -->
-                                    <div class="shift" data-bind="
-    template: {
-        name: 'layerTemplate',
-        foreach: Layers
-    }
-									">
-                                    </div>
-                                    <!-- /ko -->
+				<!-- ko ifnot: HasGroupPages -->
+				<div class="alert alert-warning">
+					<span data-bind="text: Resources.NoHierarchiesExist"></span>
+				</div>
+				<!-- /ko -->
+			
+				<!-- ko if: HasGroupPages  -->
+				<div class="relative">
+					<!-- ko with: TimeLine -->
+					<div class="time-line absolute" data-bind="attr: { 'data-start-time': StartTime, 'data-end-time': EndTime }, if: $parent.SortedPersons().length > 0">
+						<div class="relative">
+							<div data-bind="foreach: Times">
+								<div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
+								<div class="label label-info absolute" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
+							</div>
+						</div>
+					</div>
+					<!-- /ko -->
 
-	                                <!-- ko foreach: DayOffs -->
-									<!-- ko if: OverlapsTimeLine && $parent.Shifts().length > 0 -->
-									<div class="dayoff absolute"
-										 data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px', backgroundColor: $parent.Shifts()[0].Layers()[0].Color}">
-										<!-- ko if: $root.DisplayDescriptions -->
-										<!-- ko if: HasOverlapingLayers($parent)-->
-										<span class="label label-default layer-description floatleft" data-bind="text: DayOffName"></span>
-										<span class="label label-default layer-description floatright" data-bind="text: DayOffName"></span>
+					<table class="table table-hover">
+						<thead>
+							<tr class="person">
+								<th class="person-name person-name-column"></th>
+								<th class="schedule schedule-column"></th>
+								<th class="contract-time contract-time-title"><span data-bind="text: Resources.ContractTime"></span></th>
+							</tr>
+						</thead>
+						<tbody data-bind="foreach: SortedPersons">
+							<tr class="person" data-bind="attr: { 'data-person-id': Id }, css: { 'selected-person': IsPersonOrShiftSelected }, click: $root.SelectPerson">
+								<td class="person-name person-name-column">
+									<div class="person-name nowrap" data-bind="text: Name"></div>
+								</td>
+								<td class="schedule schedule-column">
+									<div class="relative time-line-for">
+										<!-- ko foreach: Shifts -->
+										<div class="shift" data-bind="
+		template: {
+			name: 'layerTemplate',
+			foreach: Layers
+		}
+										">
+										</div>
 										<!-- /ko -->
-										<!-- ko ifnot: HasOverlapingLayers($parent)-->
-										<span class="label label-default layer-description" data-bind="text: DayOffName"></span>
+
+										<!-- ko foreach: DayOffs -->
+										<!-- ko if: OverlapsTimeLine && $parent.Shifts().length > 0 -->
+										<div class="dayoff absolute"
+											 data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px', backgroundColor: $parent.Shifts()[0].Layers()[0].Color}">
+											<!-- ko if: $root.DisplayDescriptions -->
+											<!-- ko if: HasOverlapingLayers($parent)-->
+											<span class="label label-default layer-description floatleft" data-bind="text: DayOffName"></span>
+											<span class="label label-default layer-description floatright" data-bind="text: DayOffName"></span>
+											<!-- /ko -->
+											<!-- ko ifnot: HasOverlapingLayers($parent)-->
+											<span class="label label-default layer-description" data-bind="text: DayOffName"></span>
+											<!-- /ko -->
+											<!-- /ko -->
+										</div>
+										<!-- /ko -->
+										<!-- ko if: OverlapsTimeLine && $parent.Shifts().length <= 0 -->
+										<div
+											class="dayoff absolute"
+											data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px'}">
+											<!-- ko if: $root.DisplayDescriptions -->
+											<!-- ko if: HasOverlapingLayers($parent)-->
+											<span class="label label-default layer-description floatleft" data-bind="text: DayOffName"></span>
+											<span class="label label-default layer-description floatright" data-bind="text: DayOffName"></span>
+											<!-- /ko -->
+											<!-- ko ifnot: HasOverlapingLayers($parent)-->
+											<span class="label label-default layer-description" data-bind="text: DayOffName"></span>
+											<!-- /ko -->
+											<!-- /ko -->
+										</div>
 										<!-- /ko -->
 										<!-- /ko -->
 									</div>
-									<!-- /ko -->
-                                    <!-- ko if: OverlapsTimeLine && $parent.Shifts().length <= 0 -->
-                                    <div
-                                        class="dayoff absolute"
-                                        data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px'}">
-                                        <!-- ko if: $root.DisplayDescriptions -->
-                                        <!-- ko if: HasOverlapingLayers($parent)-->
-                                        <span class="label label-default layer-description floatleft" data-bind="text: DayOffName"></span>
-                                        <span class="label label-default layer-description floatright" data-bind="text: DayOffName"></span>
-                                        <!-- /ko -->
-                                        <!-- ko ifnot: HasOverlapingLayers($parent)-->
-                                        <span class="label label-default layer-description" data-bind="text: DayOffName"></span>
-                                        <!-- /ko -->
-                                        <!-- /ko -->
-                                    </div>
-                                    <!-- /ko -->
-                                    <!-- /ko -->
-                                </div>
-                            </td>
-                            <td class="contract-time contract-time-column" data-bind="text: ContractTime"></td>
-                        </tr>
+								</td>
+								<td class="contract-time contract-time-column" data-bind="text: ContractTime"></td>
+							</tr>
 
-                        <!-- ko foreach: Shifts -->
-                        <!-- ko foreach: Layers -->
-                        <!-- ko if: Selected -->
-                        <tr class="shift-menu">
-                            <td class="person-name-column"></td>
-                            <td class="schedule-column" colspan="2">
-                                <div class="activity-details" data-bind="style: { 'margin-left': StartPixels() + 'px' }">
-                                    <p>
-                                        <span class="label label-default" data-bind="style: { 'background-color': Color, 'color': TextColor }, text: Description + ' ' + StartTime() + ' - ' + EndTime()"></span>
-                                    </p>
-                                </div>
+							<!-- ko foreach: Shifts -->
+							<!-- ko foreach: Layers -->
+							<!-- ko if: Selected -->
+							<tr class="shift-menu">
+								<td class="person-name-column"></td>
+								<td class="schedule-column" colspan="2">
+									<div class="activity-details" data-bind="style: { 'margin-left': StartPixels() + 'px' }">
+										<p>
+											<span class="label label-default" data-bind="style: { 'background-color': Color, 'color': TextColor }, text: Description + ' ' + StartTime() + ' - ' + EndTime()"></span>
+										</p>
+									</div>
 								
-								<!-- ko if: $root.DisplayDescriptions -->
-	                            <div class="shift-details" data-bind="style: { 'margin-left': $parent.ShiftStartPixels() + 'px' }">
-		                            <!-- ko foreach: $parent.DistinctLayers -->
-		                            <span class="label label-default" data-bind="style: { 'background-color': Color, 'color': TextColor }, text: Description"></span>
-		                            <!-- /ko -->
-	                            </div>
-								<!-- /ko -->
-								<!-- ko ifnot: $root.Resources.MyTeam_MakeTeamScheduleConsistent_31897 -->
-                                <div class="shift-menu" data-bind="style: { 'margin-left': $parent.ShiftStartPixels() + 'px' }">
-                                    <!-- ko with: $parent.ShiftMenu -->
-                                    <div class="btn-group">
-										<!-- ko if: $root.permissionAddFullDayAbsence -->
-										<a class="btn btn-sm add-full-day-absence" data-bind="attr: { href: $data.urlForAddFullDayAbsence()}"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.FullDayAbsence"></span></a>
-	                                    <!-- /ko-->
-										<!-- ko if: $root.permissionAddIntradayAbsence -->
-										<a class="btn btn-sm add-intraday-absence" data-bind="attr: { href: $data.urlForAddIntradayAbsence()}"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.IntradayAbsence"></span></a>
-										<!-- /ko-->
-										<!-- ko if: $root.permissionAddActivity -->
-										<a  class="btn btn-sm add-activity" data-bind="attr: { href: $data.urlForAddActivity()}"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.Activity"></span></a>
-										<!-- /ko-->
-										<!-- ko if: $root.permissionRemoveAbsence -->
-										<a class="btn btn-sm remove-absence" data-bind="attr: { href: $data.urlForRemoveAbsence()}"><i class="glyphicon glyphicon-minus"></i><span data-bind="    text: $root.Resources.Absence"></span></a>
-										<!-- /ko-->
-										<!-- ko if: $root.HasPermissionForMovingActivity -->
-										<a class="btn btn-sm move-activity "data-bind="attr: { href: $data.urlForMoveActivity($parent)}"><i class="glyphicon glyphicon-hand-up"></i><span data-bind="    text: $root.Resources.MoveActivity"></span></a>
-										<!-- /ko-->
-                                    </div>
-                                    <!-- /ko -->
-                                </div>
-								<!-- /ko -->
-                            </td>
-                        </tr>
-                        <!-- /ko -->
-                        <!-- /ko -->
-                        <!-- /ko -->
+									<!-- ko if: $root.DisplayDescriptions -->
+									<div class="shift-details" data-bind="style: { 'margin-left': $parent.ShiftStartPixels() + 'px' }">
+										<!-- ko foreach: $parent.DistinctLayers -->
+										<span class="label label-default" data-bind="style: { 'background-color': Color, 'color': TextColor }, text: Description"></span>
+										<!-- /ko -->
+									</div>
+									<!-- /ko -->
+									<!-- ko ifnot: $root.Resources.MyTeam_MakeTeamScheduleConsistent_31897 -->
+									<div class="shift-menu" data-bind="style: { 'margin-left': $parent.ShiftStartPixels() + 'px' }">
+										<!-- ko with: $parent.ShiftMenu -->
+										<div class="btn-group">
+											<!-- ko if: $root.permissionAddFullDayAbsence -->
+											<a class="btn btn-sm add-full-day-absence" data-bind="attr: { href: $data.urlForAddFullDayAbsence()}"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.FullDayAbsence"></span></a>
+											<!-- /ko-->
+											<!-- ko if: $root.permissionAddIntradayAbsence -->
+											<a class="btn btn-sm add-intraday-absence" data-bind="attr: { href: $data.urlForAddIntradayAbsence()}"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.IntradayAbsence"></span></a>
+											<!-- /ko-->
+											<!-- ko if: $root.permissionAddActivity -->
+											<a  class="btn btn-sm add-activity" data-bind="attr: { href: $data.urlForAddActivity()}"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.Activity"></span></a>
+											<!-- /ko-->
+											<!-- ko if: $root.permissionRemoveAbsence -->
+											<a class="btn btn-sm remove-absence" data-bind="attr: { href: $data.urlForRemoveAbsence()}"><i class="glyphicon glyphicon-minus"></i><span data-bind="    text: $root.Resources.Absence"></span></a>
+											<!-- /ko-->
+											<!-- ko if: $root.HasPermissionForMovingActivity -->
+											<a class="btn btn-sm move-activity "data-bind="attr: { href: $data.urlForMoveActivity($parent)}"><i class="glyphicon glyphicon-hand-up"></i><span data-bind="    text: $root.Resources.MoveActivity"></span></a>
+											<!-- /ko-->
+										</div>
+										<!-- /ko -->
+									</div>
+									<!-- /ko -->
+								</td>
+							</tr>
+							<!-- /ko -->
+							<!-- /ko -->
+							<!-- /ko -->
 
-                        <!-- ko if: Selected -->
-                        <tr class="person-menu">
-							<td class="person-name-column-menu" data-bind="text: Name"></td>
-                            <td class="schedule-column" colspan="2">
-                                <div class="schedule-menu">
-                                    <!-- ko with: Menu -->
-	                                <div class="btn-group">
-										<!-- ko if: $root.permissionAddFullDayAbsence -->
-										<a class="btn btn-sm add-full-day-absence" data-bind="attr: { href: $data.urlForAddFullDayAbsence()}"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.FullDayAbsence"></span></a>
-		                                <!-- /ko -->
-										<!-- ko if: $root.permissionAddIntradayAbsence -->
-										<a class="btn btn-sm add-intraday-absence" data-bind="attr: { href: $data.urlForAddIntradayAbsence()}"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.IntradayAbsence"></span></a>
-										<!-- /ko-->
-										<!-- ko if: $root.permissionAddActivity -->
-										<a class="btn btn-sm add-activity" data-bind="attr: { href: $data.urlForAddActivity()}"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.Activity"></span></a>
-		                                <!-- /ko -->
-										<!-- ko if: $root.permissionRemoveAbsence -->
-										<a class="btn btn-sm remove-absence" data-bind="attr: { href: $data.urlForRemoveAbsence()}"><i class="glyphicon glyphicon-minus"></i><span data-bind="    text: $root.Resources.Absence"></span></a>
-		                                <!-- /ko-->
-										<!-- ko if: $root.Resources.MyTeam_MakeTeamScheduleConsistent_31897 -->
-		                                <!-- ko if: $root.HasPermissionForMovingActivity -->
-										<!-- ko if: $parent.IsMoveActivityVisible -->
-										<a class="btn btn-sm move-activity " data-bind="attr: { href: $data.urlForMoveActivity($parent)}"><i class="glyphicon glyphicon-hand-up"></i><span data-bind="    text: $root.Resources.MoveActivity"></span></a>
-										<!-- /ko-->
-										<!-- /ko-->
-										<!-- /ko-->
-	                                </div>
-                                    <!-- /ko -->
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- /ko -->
+							<!-- ko if: Selected -->
+							<tr class="person-menu">
+								<td class="person-name-column-menu" data-bind="text: Name"></td>
+								<td class="schedule-column" colspan="2">
+									<div class="schedule-menu">
+										<!-- ko with: Menu -->
+										<div class="btn-group">
+											<!-- ko if: $root.permissionAddFullDayAbsence -->
+											<a class="btn btn-sm add-full-day-absence" data-bind="attr: { href: $data.urlForAddFullDayAbsence()}"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.FullDayAbsence"></span></a>
+											<!-- /ko -->
+											<!-- ko if: $root.permissionAddIntradayAbsence -->
+											<a class="btn btn-sm add-intraday-absence" data-bind="attr: { href: $data.urlForAddIntradayAbsence()}"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.IntradayAbsence"></span></a>
+											<!-- /ko-->
+											<!-- ko if: $root.permissionAddActivity -->
+											<a class="btn btn-sm add-activity" data-bind="attr: { href: $data.urlForAddActivity()}"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.Activity"></span></a>
+											<!-- /ko -->
+											<!-- ko if: $root.permissionRemoveAbsence -->
+											<a class="btn btn-sm remove-absence" data-bind="attr: { href: $data.urlForRemoveAbsence()}"><i class="glyphicon glyphicon-minus"></i><span data-bind="    text: $root.Resources.Absence"></span></a>
+											<!-- /ko-->
+											<!-- ko if: $root.Resources.MyTeam_MakeTeamScheduleConsistent_31897 -->
+											<!-- ko if: $root.HasPermissionForMovingActivity -->
+											<!-- ko if: $parent.IsMoveActivityVisible -->
+											<a class="btn btn-sm move-activity " data-bind="attr: { href: $data.urlForMoveActivity($parent)}"><i class="glyphicon glyphicon-hand-up"></i><span data-bind="    text: $root.Resources.MoveActivity"></span></a>
+											<!-- /ko-->
+											<!-- /ko-->
+											<!-- /ko-->
+										</div>
+										<!-- /ko -->
+									</div>
+								</td>
+							</tr>
+							<!-- /ko -->
 
-                    </tbody>
-                </table>
-            </div>
-            <!-- /ko -->
+						</tbody>
+					</table>
+				</div>
+				<!-- /ko -->
+			<!-- /ko -->
         </div>
     </div>
 </div>

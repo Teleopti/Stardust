@@ -158,6 +158,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				UserTexts.Resources.BackToWorkTextPrompt,
 				UserTexts.Resources.Schedules,
 				UserTexts.Resources.NoAbsenceToRemoveInCurrentShift,
+				UserTexts.Resources.NoHierarchiesExist,
 
 				DateAndTimeFormatExtensions.FixedDateFormat,
 				DateAndTimeFormatExtensions.FixedDateTimeFormat,

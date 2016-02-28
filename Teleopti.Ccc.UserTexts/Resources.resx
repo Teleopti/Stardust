@@ -14162,4 +14162,8 @@ Help us improve your experience by sending an error report</value>
     <value>Toggle low light filter</value>
     <comment>label for low turning light filter on or off </comment>
   </data>
+  <data name="NoHierarchiesExist" xml:space="preserve">
+    <value>No Hierarchies can be found for the current Business Unit</value>
+    <comment>Used to display a warning message in Anywhere when no Hierarchies can be found for the current Business Unit</comment>
+  </data>
 </root>
