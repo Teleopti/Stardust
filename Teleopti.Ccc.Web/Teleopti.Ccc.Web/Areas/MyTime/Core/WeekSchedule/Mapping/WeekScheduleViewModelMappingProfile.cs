@@ -5,10 +5,8 @@ using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
@@ -25,7 +23,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly Func<IHeaderViewModelFactory> _headerViewModelFactory;
 		private readonly Func<IScheduleColorProvider> _scheduleColorProvider;
 		private readonly Func<ILoggedOnUser> _loggedOnUser;
-		private readonly IToggleManager _toggleManager;
 		private readonly Func<INow> _now;
 		private readonly Func<IUserCulture> _culture;
 
@@ -35,8 +32,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			Func<IHeaderViewModelFactory> headerViewModelFactory,
 			Func<IScheduleColorProvider> scheduleColorProvider,
 			Func<ILoggedOnUser> loggedOnUser, Func<INow> now,
-			IToggleManager toggleManager,
-			Func<IUserTimeZone> userTimeZone,
 			Func<IUserCulture> culture)
 		{
 			_mapper = mapper;
@@ -46,7 +41,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			_scheduleColorProvider = scheduleColorProvider;
 			_loggedOnUser = loggedOnUser;
 			_now = now;
-			_toggleManager = toggleManager;
 			_culture = culture;
 		}
 		
