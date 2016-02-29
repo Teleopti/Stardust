@@ -273,8 +273,7 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 					                                 "Start Try Get Async: " + url);
 
 					var response =
-						await client.GetAsync(url,
-						                      HttpCompletionOption.ResponseHeadersRead)
+						await client.GetAsync(url)
 							.ConfigureAwait(false);
 
 
@@ -325,7 +324,6 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 
 					var response =
 						await client.GetAsync(url,
-						                      HttpCompletionOption.ResponseHeadersRead,
 						                      cancellationToken)
 							.ConfigureAwait(false);
 
