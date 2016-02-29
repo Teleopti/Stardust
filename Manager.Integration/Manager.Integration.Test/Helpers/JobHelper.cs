@@ -106,7 +106,7 @@ namespace Manager.Integration.Test.Helpers
 
 				for (var i = 1; i <= numberOfJobRequests; i++)
 				{
-					var fastJobParams = new FastJobParams();
+					var fastJobParams = new FastJobParams("Name " + i);
 
 					var fastJobParamsJson = JsonConvert.SerializeObject(fastJobParams);
 
