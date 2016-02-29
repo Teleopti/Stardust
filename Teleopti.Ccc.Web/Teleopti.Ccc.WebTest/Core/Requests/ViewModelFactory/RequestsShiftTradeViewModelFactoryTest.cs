@@ -520,6 +520,85 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		}
 
 		[Test]
+		public void ShouldSortEmptyScheduleWithEmptyAssLast()
+		{
+			var scenario = CurrentScenario.Current();
+			var personWithMainShift1 = PersonFactory.CreatePersonWithGuid("person1", "published");
+			var personWithMainShift2 = PersonFactory.CreatePersonWithGuid("person2", "published");
+			var personWithOvertimeShift = PersonFactory.CreatePersonWithGuid("person", "overtime");
+			var personWithAbsenceOnContractDayOff = PersonFactory.CreatePersonWithGuid("_", "_");
+			var personWithDayoff = PersonFactory.CreatePersonWithGuid("person3", "dayoff");
+			var personWithEmptySchedule = PersonFactory.CreatePersonWithGuid("person4", "empty");
+			var person2WithEmptySchedule = PersonFactory.CreatePersonWithGuid("person5", "anotherEmpty");
+
+			var team = TeamFactory.CreateTeamWithId("team");
+			TeamRepository.Add(team);
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 1, 16), team);
+			personWithAbsenceOnContractDayOff.AddPersonPeriod(personPeriod);
+			personWithMainShift1.AddPersonPeriod(personPeriod);
+			personWithMainShift2.AddPersonPeriod(personPeriod);
+			personWithDayoff.AddPersonPeriod(personPeriod);
+			personWithEmptySchedule.AddPersonPeriod(personPeriod);
+			person2WithEmptySchedule.AddPersonPeriod(personPeriod);
+			personWithOvertimeShift.AddPersonPeriod(personPeriod);
+
+			PersonRepository.Add(personWithAbsenceOnContractDayOff);
+			PersonRepository.Add(personWithMainShift1);
+			PersonRepository.Add(personWithMainShift2);
+			PersonRepository.Add(personWithDayoff);
+			PersonRepository.Add(personWithEmptySchedule);
+			PersonRepository.Add(person2WithEmptySchedule);
+			PersonRepository.Add(personWithOvertimeShift);
+
+			var personWithEmptyAss = PersonAssignmentFactory.CreatePersonAssignment(personWithEmptySchedule, scenario, new DateOnly(2016, 1, 16));
+			ScheduleStorage.Add(personWithEmptyAss);
+
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, personWithMainShift1,
+				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc), DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)),
+				ShiftCategoryFactory.CreateShiftCategory("mainShift"));
+			ScheduleStorage.Add(personAss);
+
+			var person2Ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, personWithMainShift2,
+				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 7, 0, 0), DateTimeKind.Utc), DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)),
+				ShiftCategoryFactory.CreateShiftCategory("mainShift"));
+			ScheduleStorage.Add(person2Ass);
+
+			var personOvertimeAss =
+				PersonAssignmentFactory.CreateAssignmentWithOvertimeShift(ActivityFactory.CreateActivity("overtime"),
+					personWithOvertimeShift,
+					new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 6, 0, 0), DateTimeKind.Utc),
+						DateTime.SpecifyKind(new DateTime(2016, 1, 16, 7, 0, 0), DateTimeKind.Utc)), scenario);
+			ScheduleStorage.Add(personOvertimeAss);
+
+			var abs = AbsenceFactory.CreateAbsence("abs");
+			var p3Abs = PersonAbsenceFactory.CreatePersonAbsence(personWithAbsenceOnContractDayOff, scenario,
+				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 0, 0, 0), DateTimeKind.Utc),
+					DateTime.SpecifyKind(new DateTime(2016, 1, 16, 23, 0, 0), DateTimeKind.Utc)), abs);
+			ScheduleStorage.Add(p3Abs);
+
+			var personWithDayoffAss = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, personWithDayoff,
+				new DateOnly(2016, 1, 16), new DayOffTemplate());
+			ScheduleStorage.Add(personWithDayoffAss);
+
+
+			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			{
+				Paging = new Paging { Skip = 0, Take = 20 },
+				ShiftTradeDate = new DateOnly(2016, 1, 16),
+				TeamIdList = new[] { team.Id.GetValueOrDefault() }
+			});
+		
+			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(6);
+			var possibleSchedules = result.PossibleTradeSchedules.ToList();
+			possibleSchedules[0].Name.Should().Be.EqualTo("person@overtime");
+			possibleSchedules[1].Name.Should().Be.EqualTo("person2@published");
+			possibleSchedules[2].Name.Should().Be.EqualTo("person1@published");
+			possibleSchedules[3].Name.Should().Be.EqualTo("person3@dayoff");
+			possibleSchedules[4].Name.Should().Be.EqualTo("person5@anotherEmpty");
+			possibleSchedules[5].Name.Should().Be.EqualTo("person4@empty");
+		}
+
+		[Test]
 		public void ShouldViewOvertimeIndicatorOnlyForMySchedule()
 		{
 			var scenario = CurrentScenario.Current();

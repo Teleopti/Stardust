@@ -17,13 +17,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			var isFullDayAbsence = significantPart == SchedulePartView.FullDayAbsence ||
 								   ((significantPart == SchedulePartView.ContractDayOff || significantPart == SchedulePartView.DayOff) &&
 									schedule.ProjectionService().CreateProjection().HasLayers);
+			var isDayOff = schedule.HasDayOff() || significantPart == SchedulePartView.ContractDayOff;
 
-			if ((!isSchedulePublished && !hasPermissionForUnpublishedSchedule) || (schedule.PersonAssignment() == null && !isFullDayAbsence))
+			if ((!isSchedulePublished && !hasPermissionForUnpublishedSchedule) || (!isDayOff && !schedule.ProjectionService().CreateProjection().HasLayers))
 			{
 				return 20000;
 			}
 
-			if (schedule.HasDayOff() || significantPart == SchedulePartView.ContractDayOff)
+			if (isDayOff)
 			{
 				return dayOffBase;
 			}
