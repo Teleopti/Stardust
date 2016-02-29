@@ -3,7 +3,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -37,8 +36,8 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 				var principalAuthorization = PrincipalAuthorization.Instance();
 				var availableDetails = details.Where(
-					p => days.Any(date => principalAuthorization.IsPermitted((string) DefinedRaptorApplicationFunctionPaths.ViewSchedules,
-						(DateOnly) date, (IAuthorizeOrganisationDetail) p)));
+					p => days.Any(date => principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules,
+						date, p)));
 
 				var people = _personRepository.FindPeople(availableDetails.Select(d => d.PersonId));
 				return _personAssembler.DomainEntitiesToDtos(people).ToList();

@@ -52,7 +52,8 @@ namespace Teleopti.Ccc.InfrastructureTest
 			loggedOnPerson = PersonFactory.CreatePerson("logged on person");
 
 			ApplicationData = new ApplicationData(appSettings, null);
-			
+
+			BusinessUnitFactory.BusinessUnitUsedInTest.SetId(null);
 			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, DataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
 
 			StateHolderProxyHelper.ClearAndSetStateHolder(new FakeState{ApplicationScopeData = ApplicationData});
