@@ -8,8 +8,6 @@ using log4net;
 using log4net.Config;
 using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
-using Manager.Integration.Test.Properties;
-using Manager.Integration.Test.Scripts;
 using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Timers;
 using NUnit.Framework;
@@ -59,8 +57,8 @@ namespace Manager.Integration.Test
 			AppDomainTask = new AppDomainTask(_buildMode);
 
 			Task = AppDomainTask.StartTask(numberOfManagers: 1,
-										   numberOfNodes: 0,
-										   cancellationTokenSource: CancellationTokenSource);
+			                               numberOfNodes: 0,
+			                               cancellationTokenSource: CancellationTokenSource);
 
 			JobHelper.GiveNodesTimeToInitialize(60);
 

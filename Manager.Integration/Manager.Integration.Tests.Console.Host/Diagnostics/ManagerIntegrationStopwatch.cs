@@ -1,10 +1,10 @@
 ﻿using System.Diagnostics;
 
-namespace Stardust.Node.Diagnostics
+namespace Manager.IntegrationTest.Console.Host.Diagnostics
 {
-	internal class TaskToExecuteStopWatch : Stopwatch
+	public class ManagerIntegrationStopwatch : Stopwatch
 	{
-		public TaskToExecuteStopWatch(bool startDirectly = true)
+		public ManagerIntegrationStopwatch(bool startDirectly = true)
 		{
 			if (startDirectly)
 			{

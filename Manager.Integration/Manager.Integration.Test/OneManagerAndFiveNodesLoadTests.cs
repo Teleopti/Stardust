@@ -13,6 +13,7 @@ using Manager.Integration.Test.Notifications;
 using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Timers;
 using Manager.Integration.Test.Validators;
+using Manager.IntegrationTest.Console.Host.Diagnostics;
 using NUnit.Framework;
 
 namespace Manager.Integration.Test
@@ -107,7 +108,7 @@ namespace Manager.Integration.Test
 			}
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldBeAbleToExecuteThisFast()
 		{
 			LogHelper.LogDebugWithLineNumber("Start.",
@@ -166,8 +167,10 @@ namespace Manager.Integration.Test
 
 			//---------------------------------------------
 			// Execute all jobs. 
-			//---------------------------------------------
+			//---------------------------------------------			
 			var startJobTaskHelper = new StartJobTaskHelper();
+
+			ManagerIntegrationStopwatch managerIntegrationStopwatch = new ManagerIntegrationStopwatch();
 
 			var taskHelper = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
 																		 CancellationTokenSource,
@@ -177,6 +180,9 @@ namespace Manager.Integration.Test
 			// Wait for all jobs to finish.
 			//---------------------------------------------
 			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+
+			var timeTotal=
+				managerIntegrationStopwatch.GetTotalElapsedTimeInMilliseconds();
 
 			//---------------------------------------------
 			// Assert.

@@ -7,6 +7,7 @@ using System.Web.Http.Results;
 using log4net;
 using Newtonsoft.Json;
 using Stardust.Node.Constants;
+using Stardust.Node.Diagnostics;
 using Stardust.Node.Extensions;
 using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
@@ -144,9 +145,13 @@ namespace Stardust.Node.Workers
 
 			//----------------------------------------------------
 			// Define task.
-			//----------------------------------------------------
+			//----------------------------------------------------			
+			var taskToExecuteStopWatch = new TaskToExecuteStopWatch(false);
+
 			Task = new Task(() =>
 			{
+				taskToExecuteStopWatch.Start();
+
 				PingToManagerTimer.Interval = NodeConfiguration.PingToManagerRunningDelay;
 
 				LogHelper.LogDebugWithLineNumber(Logger,
@@ -161,6 +166,14 @@ namespace Stardust.Node.Workers
 
 			Task.ContinueWith(t =>
 			{
+				LogHelper.LogDebugWithLineNumber(Logger,
+												 string.Format("Job ( id, name, type ) : ( {0}, {1}, {2} ) took ( seconds, minutes ) : ( {3}, {4} )",
+																CurrentMessageToProcess.Id,
+																CurrentMessageToProcess.Name,
+																CurrentMessageToProcess.Type,
+																taskToExecuteStopWatch.GetTotalElapsedTimeInSeconds(), 
+																taskToExecuteStopWatch.GetTotalElapsedTimeInMinutes()));
+
 				PingToManagerTimer.Interval = NodeConfiguration.PingToManagerIdleDelay;
 
 				LogHelper.LogDebugWithLineNumber(Logger,
