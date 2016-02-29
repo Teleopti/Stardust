@@ -75,7 +75,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				workloadRepository, _scheduleRepository, _schedulingResultStateHolder, peopleAndSkillLoaderDecider, skillDayLoadHelper);
 		}
 
-
 		[Test]
 		public void VerifyAbsenceRequestCanBeSetToPending()
 		{
