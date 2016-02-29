@@ -30,8 +30,8 @@ namespace Manager.Integration.Test
 		private bool _clearDatabase = true;
 		private string _buildMode = "Debug";
 
-		[TestFixtureTearDown]
-		public void TestFixtureTearDown()
+		[TearDown]
+		public void TearDown()
 		{
 			LogHelper.LogDebugWithLineNumber("Start TestFixtureTearDown",
 			                                 Logger);
@@ -45,8 +45,8 @@ namespace Manager.Integration.Test
 			                                 Logger);
 		}
 
-		[TestFixtureSetUp]
-		public void TestFixtureSetUp()
+		[SetUp]
+		public void SetUp()
 		{
 #if (DEBUG)
 			// Do nothing.
@@ -103,7 +103,7 @@ namespace Manager.Integration.Test
 
 		private CancellationTokenSource CancellationTokenSource { get; set; }
 
-		[Test]
+		[Test, Ignore]
 		public async void ShouldBeAbleToShutDownManager1()
 		{
 			LogHelper.LogDebugWithLineNumber("Start test.",
@@ -128,7 +128,7 @@ namespace Manager.Integration.Test
 
 			sqlNotifier.Dispose();
 
-			LogHelper.LogDebugWithLineNumber("All 2 nodes has started.",
+			LogHelper.LogInfoWithLineNumber("All 2 nodes has started.",
 			                                 Logger);
 
 			//---------------------------------------------
@@ -144,7 +144,7 @@ namespace Manager.Integration.Test
 			var uriBuilder =
 				new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
 
-			uriBuilder.Path += "appdomain/managers/" + "Manager1.config";
+			uriBuilder.Path += "appdomain/managers/Manager1.config";
 
 			var uri = uriBuilder.Uri;
 
@@ -265,7 +265,7 @@ namespace Manager.Integration.Test
 		}
 
 
-		[Test]
+		[Test, Ignore]
 		public async void ShouldBeAbleToStartNewManager()
 		{
 			LogHelper.LogDebugWithLineNumber("Start test.",
@@ -290,7 +290,7 @@ namespace Manager.Integration.Test
 
 			sqlNotifier.Dispose();
 
-			LogHelper.LogDebugWithLineNumber("All 2 nodes has started.",
+			LogHelper.LogInfoWithLineNumber("All 2 nodes has started.",
 			                                 Logger);
 
 
@@ -440,7 +440,7 @@ namespace Manager.Integration.Test
 		///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
 		///     netsh http add urlacl url=http://+:9100/ user=everyone listen=yes
 		/// </summary>
-		[Test]
+		[Test, Ignore]
 		public async void ShouldReturnAllManagers()
 		{
 			LogHelper.LogDebugWithLineNumber("Start test.",
