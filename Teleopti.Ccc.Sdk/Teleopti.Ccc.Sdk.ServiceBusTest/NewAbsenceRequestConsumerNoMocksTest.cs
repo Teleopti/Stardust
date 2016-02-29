@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
@@ -497,7 +498,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				_personAccountUpdaterDummy, toggleManager);
 
 			var absenceProcessor = new AbsenceRequestProcessor (absenceRequestStatusUpdater, _scheduleProjectionReadModel, _schedulingResultStateHolder);
-			var absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor (_personRequestRepository, absenceRequestStatusUpdater, _schedulingResultStateHolder, _scheduleProjectionReadModel);
+			var absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor (absenceRequestStatusUpdater, _schedulingResultStateHolder, _scheduleProjectionReadModel, new AbsenceRequestWaitlistProvider (_personRequestRepository));
 			
 			var newAbsenceRequestConsumer = new NewAbsenceRequestConsumer(
 				_unitOfWorkFactory, _currentScenario,_personRequestRepository, absenceRequestWaitlistProcessor,absenceProcessor);

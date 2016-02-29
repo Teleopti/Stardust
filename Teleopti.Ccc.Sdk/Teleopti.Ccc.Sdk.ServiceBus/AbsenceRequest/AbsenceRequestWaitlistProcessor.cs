@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -13,43 +11,23 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
 	{
 		private readonly static ILog logger = LogManager.GetLogger(typeof(AbsenceRequestWaitlistProcessor));
 
-		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IAbsenceRequestUpdater _absenceRequestUpdater;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IUpdateScheduleProjectionReadModel _updateScheduleProjectionReadModel;
+		private readonly IAbsenceRequestWaitlistProvider _absenceRequestWaitlistProvider;
 
-		public AbsenceRequestWaitlistProcessor(IPersonRequestRepository personRequestRepository, IAbsenceRequestUpdater absenceRequestUpdater, ISchedulingResultStateHolder schedulingResultStateHolder, IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel)
+		public AbsenceRequestWaitlistProcessor(IAbsenceRequestUpdater absenceRequestUpdater, ISchedulingResultStateHolder schedulingResultStateHolder, IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel, IAbsenceRequestWaitlistProvider absenceRequestWaitlistProvider)
 		{
-			_personRequestRepository = personRequestRepository;
 			_absenceRequestUpdater = absenceRequestUpdater;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_updateScheduleProjectionReadModel = updateScheduleProjectionReadModel;
+			_absenceRequestWaitlistProvider = absenceRequestWaitlistProvider;
 		}
 
 		public void ProcessAbsenceRequestWaitlist(IUnitOfWork unitOfWork, DateTimePeriod period, IWorkflowControlSet workflowControlSet)
 		{
-			var waitlistedRequestsForPeriod = getWaitlistedRequests(period, workflowControlSet);
+			var waitlistedRequestsForPeriod = _absenceRequestWaitlistProvider.GetWaitlistedRequests (period, workflowControlSet);
 			processRequests(unitOfWork, waitlistedRequestsForPeriod);
-		}
-
-		private IEnumerable<IPersonRequest> getWaitlistedRequests(DateTimePeriod period, IWorkflowControlSet workflowControlSet)
-		{
-			var requestTypes = new[] { RequestType.AbsenceRequest };
-			var requestFilter = new RequestFilter() { Period = period, RequestTypes = requestTypes };
-
-			var waitlistedRequests = from request in _personRequestRepository.FindAllRequests(requestFilter)
-									 where requestShouldBeProcessed(request, workflowControlSet)
-									 orderby request.CreatedOn ascending
-									 select request;
-
-			return waitlistedRequests;
-		}
-
-		private static bool requestShouldBeProcessed(IPersonRequest request, IWorkflowControlSet workflowControlSet)
-		{
-			return !request.IsApproved
-					&& request.Person.WorkflowControlSet == workflowControlSet
-					&& !request.WasManuallyDenied;
 		}
 
 		private void processRequests(IUnitOfWork unitOfWork, IEnumerable<IPersonRequest> waitlistedRequests)

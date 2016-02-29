@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -96,7 +97,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 
 			var absenceProcessor = new AbsenceRequestProcessor(absenceRequestStatusUpdater, _updateScheduleProjectionReadModel, _schedulingResultStateHolder);
-			var absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor(_personRequestRepository, absenceRequestStatusUpdater, _schedulingResultStateHolder, _updateScheduleProjectionReadModel);
+			var absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor(absenceRequestStatusUpdater, _schedulingResultStateHolder, _updateScheduleProjectionReadModel, new AbsenceRequestWaitlistProvider (_personRequestRepository));
 
 			_target = new NewAbsenceRequestConsumer( 
 				_unitOfWorkFactory, _scenarioRepository, _personRequestRepository, absenceRequestWaitlistProcessor, absenceProcessor);

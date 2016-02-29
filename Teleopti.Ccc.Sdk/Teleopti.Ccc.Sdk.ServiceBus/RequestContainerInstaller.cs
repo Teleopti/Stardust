@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest;
@@ -16,6 +17,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<BudgetGroupAllowanceSpecification>().As<IBudgetGroupAllowanceSpecification>();
 			builder.RegisterType<AlreadyAbsentSpecification>().As<IAlreadyAbsentSpecification>();
 			builder.RegisterType<AbsenceRequestUpdater>().As<IAbsenceRequestUpdater>();
+			builder.RegisterType<AbsenceRequestWaitlistProvider>().As<IAbsenceRequestWaitlistProvider>();
 			builder.RegisterType<AbsenceRequestWaitlistProcessor>().As<IAbsenceRequestWaitlistProcessor>();
 			builder.RegisterType<AbsenceRequestProcessor>().As<IAbsenceRequestProcessor>();
 		}

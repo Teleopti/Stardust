@@ -141,6 +141,7 @@
     <Compile Include="Domain\IAbsenceRequestProcessor.cs" />
     <Compile Include="Domain\IAbsenceRequestUpdater.cs" />
     <Compile Include="Domain\IAbsenceRequestWaitlistProcessor.cs" />
+    <Compile Include="Domain\IAbsenceRequestWaitlistProvider.cs" />
     <Compile Include="Domain\IAgentBadgeInfo.cs" />
     <Compile Include="Domain\IAgentBadgeTransaction.cs" />
     <Compile Include="Domain\IAgentBadgeTransactionRepository.cs" />
