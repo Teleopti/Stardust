@@ -148,8 +148,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			var newAbsenceRequestConsumer = createNewAbsenceRequestConsumer(false, false);
 			newAbsenceRequestConsumer.Consume(new NewAbsenceRequestCreated() { PersonRequestId = newRequest.Id.Value });
 
-			var accounts = _personAbsenceAccountRepository.Find (person);
-			
 			Assert.IsTrue (newRequest.IsDenied);
 			Assert.AreEqual(25, accountDay.Remaining.TotalDays);
 		}
