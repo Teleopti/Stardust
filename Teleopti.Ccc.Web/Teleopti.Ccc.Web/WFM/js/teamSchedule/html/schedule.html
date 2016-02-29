@@ -64,7 +64,7 @@
 
 	<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="report-absence">
 		<add-absence ng-if="vm.isOpen()" default-date-time="vm.earliestStartTime" permissions="vm.permissions"
-						 agent-id-list="vm.getSelectedPersonIdList()" actions-after-absence-apply="vm.afterActionCallback(result,successMessageTemplate,failMessageTemplate)"></add-absence>
+						 agent-id-list="vm.getSelectedPersonIdList()" actions-after-absence-apply="vm.afterActionCallback(result,personIds,successMessageTemplate,failMessageTemplate)"></add-absence>
 	</md-sidenav>
 
 	<div class="modal-box" ng-if="vm.showErrorDetails">
