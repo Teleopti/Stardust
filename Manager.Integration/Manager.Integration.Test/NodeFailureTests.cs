@@ -125,7 +125,7 @@ namespace Manager.Integration.Test
 
 			sqlNotifier.Dispose();
 
-			LogHelper.LogDebugWithLineNumber("All 1 nodes has started.",
+			LogHelper.LogInfoWithLineNumber("All 1 nodes has started.",
 			                                 Logger);
 
 

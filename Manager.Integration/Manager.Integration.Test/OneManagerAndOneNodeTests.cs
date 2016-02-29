@@ -144,7 +144,7 @@ namespace Manager.Integration.Test
 
 			sqlNotifier.Dispose();
 
-			LogHelper.LogDebugWithLineNumber("Node have started.",
+			LogHelper.LogInfoWithLineNumber("Node have started.",
 			                                 Logger);
 
 			//--------------------------------------------
@@ -252,7 +252,7 @@ namespace Manager.Integration.Test
 
 			sqlNotifier.Dispose();
 
-			LogHelper.LogDebugWithLineNumber("Node have started.",
+			LogHelper.LogInfoWithLineNumber("Node have started.",
 			                                 Logger);
 
 			//--------------------------------------------
@@ -375,7 +375,7 @@ namespace Manager.Integration.Test
 
 			sqlNotifier.Dispose();
 
-			LogHelper.LogDebugWithLineNumber("Node have started.",
+			LogHelper.LogInfoWithLineNumber("Node have started.",
 			                                 Logger);
 
 			//--------------------------------------------
@@ -458,7 +458,7 @@ namespace Manager.Integration.Test
 
 			sqlNotifier.Dispose();
 
-			LogHelper.LogDebugWithLineNumber("Node have started.",
+			LogHelper.LogInfoWithLineNumber("Node have started.",
 			                                 Logger);
 
 			//--------------------------------------------
