@@ -21,7 +21,7 @@ using LogHelper = Manager.Integration.Test.Helpers.LogHelper;
 
 namespace Manager.Integration.Test
 {
-	[TestFixture]
+	[TestFixture, Ignore]
 	public class IntegrationControllerTests
 	{
 		private static readonly ILog Logger =
