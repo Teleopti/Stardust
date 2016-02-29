@@ -13,7 +13,6 @@ namespace ManagerTest
 		{
 			FakeManagerConfiguration fakeManagerConfiguration = new FakeManagerConfiguration();
 			builder.RegisterInstance(fakeManagerConfiguration).As<IManagerConfiguration>();
-		//	builder.RegisterType<FakeManagerConfiguration>().As<IManagerConfiguration>();
 
 			builder.RegisterType<NodeManager>().As<INodeManager>().SingleInstance().AsSelf();
 			builder.RegisterType<FakeHttpSender>().As<IHttpSender>().SingleInstance().AsSelf();
