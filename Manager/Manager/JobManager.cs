@@ -92,7 +92,7 @@ namespace Stardust.Manager
 			return upNodes;
 		}
 
-		public void RegisterHeartbeat(Uri nodeUri)
+		public void RegisterHeartbeat(string nodeUri)
 		{
 			LogHelper.LogDebugWithLineNumber(Logger,
 											 "Start RegisterHeartbeat.");

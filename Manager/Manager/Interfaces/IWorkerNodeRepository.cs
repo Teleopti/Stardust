@@ -15,7 +15,7 @@ namespace Stardust.Manager.Interfaces
 		List<WorkerNode> LoadAllFreeNodes();
 
 		WorkerNode LoadWorkerNode(Uri nodeUri);
-		void RegisterHeartbeat(Uri nodeUri);
+		void RegisterHeartbeat(string nodeUri);
 
 		List<string> CheckNodesAreAlive(TimeSpan timeSpan);
 	}

@@ -62,7 +62,7 @@ namespace ManagerTest
 			JobRepository.Add(job);
 			JobRepository.CheckAndAssignNextJob(new List<WorkerNode> {new WorkerNode {Url = _nodeUri1}},
 			                                    HttpSender);
-			Target.Heartbeat(_nodeUri1);
+			Target.Heartbeat(_nodeUri1.ToString());
 			HttpSender.CalledNodes.First()
 				.Key.Should()
 				.Contain(_nodeUri1.ToString());
@@ -97,8 +97,8 @@ namespace ManagerTest
 		[Test]
 		public void ShouldBeAbleToCancelJobOnNode()
 		{
-			Target.Heartbeat(_nodeUri1);
-			Target.Heartbeat(_nodeUri2);
+			Target.Heartbeat(_nodeUri1.ToString());
+			Target.Heartbeat(_nodeUri2.ToString());
 
 			var jobId = Guid.NewGuid();
 			JobRepository.Add(new JobDefinition {Id = jobId, Serialized = "", Name = "", Type = "", UserName = "ManagerTests"});
@@ -265,7 +265,7 @@ namespace ManagerTest
 			};
 			thisNodeIsBusy(_nodeUri1.ToString());
 
-			Target.Heartbeat(_nodeUri1);
+			Target.Heartbeat(_nodeUri1.ToString());
 
 			Target.DoThisJob(job);
 
