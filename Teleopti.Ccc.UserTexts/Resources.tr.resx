@@ -4237,7 +4237,7 @@
     <value>Lisans dosyası "{0}" ulaşılamaz durumda. Hata detayları {1}</value>
   </data>
   <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
-    <value>Lisansınızın süresi dolmuştur, lğtfen yenisini yükleyiniz. </value>
+    <value>Lisansınızın süresi dolmuştur, Lütfen yeni lisans yükleyin. </value>
   </data>
   <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
     <value>Lisansınız geçersiz, muhtemelen yasadışı olarak değiştirilmiş. Lütfen yenisini yükleyin.</value>
@@ -4312,7 +4312,7 @@
     <value>Tamamını geri çek</value>
   </data>
   <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
-    <value>{0} aktif müşteri temsilciniz var ancak sadece {1} adeti lisanslanmış durumda. Lütfen tüm müşteri temsilcilerinizi kapsayacak sayıda lisana tedarik ediniz. </value>
+    <value>{0} aktif müşteri temsilciniz var fakat lisansınız gereği en fazla {1} müşteri temsilcisine anyı anda lisans kullandırabilirsiniz. Yeterli aktif müşteri temsilcisi sayısını kaldırabilecek bir lisans tedarik etmeniz gerek.</value>
   </data>
   <data name="TimeTypeDays" xml:space="preserve">
     <value>Günler</value>
@@ -5668,7 +5668,7 @@
     <value>Silme işlemini onayla</value>
   </data>
   <data name="ExpandAllNodes" xml:space="preserve">
-    <value>Tüm nodları genşlet</value>
+    <value>Tüm nodları genişlet</value>
   </data>
   <data name="PersonFromGroupingDeletionQuestion" xml:space="preserve">
     <value>'{0}' gruptan çıkartmak istediğinize emin misiniz?</value>
@@ -6544,7 +6544,7 @@
     <value>Kayıt olmuş kullanıcı:</value>
   </data>
   <data name="MyProfile" xml:space="preserve">
-    <value>Profilim</value>
+    <value>Profil sayfam</value>
   </data>
   <data name="WrongNumberOfDayOffsInSchedulePeriod" xml:space="preserve">
     <value>Vardiya planı periyodu içinde hedef tatil günü sayısı {0} ve şu anda {1} gün var. Vardiya planı yapılamıyor.</value>
@@ -6835,7 +6835,7 @@
     <value>Genel</value>
   </data>
   <data name="MeetingErrorMessageA" xml:space="preserve">
-    <value>Lütfen silin</value>
+    <value>Lütfen</value>
   </data>
   <data name="DateExclusion" xml:space="preserve">
     <value>Hariç tutulan tarih</value>
@@ -8168,5 +8168,1063 @@
   </data>
   <data name="SchedulingOptionMessageBox" xml:space="preserve">
     <value>Vardiyalama Seçenekleri</value>
+  </data>
+  <data name="CallsSlashDay" xml:space="preserve">
+    <value>Günlük çağrı sayısı</value>
+  </data>
+  <data name="NewSkill" xml:space="preserve">
+    <value>Yeni yetenek</value>
+  </data>
+  <data name="Accuracy" xml:space="preserve">
+    <value>Doğruluk oranı</value>
+  </data>
+  <data name="SkillDayIsInvalidOneParameter" xml:space="preserve">
+    <value>Hata: {0} Lütfen maksimum müşteri temsilcisi sayısının sıfırdan ve minimum müşteri temsilcisi sayısından büyük olduğunda ya da alt yetenek dağılımı toplamının %100'e ulaştığından emin olun.</value>
+  </data>
+  <data name="SkillDayTemplateIsInvalidOneParameter" xml:space="preserve">
+    <value>Veri doğrulama aşamasında meydana gelen bir hatadan dolayı şablonlar kaydedilemiyor. Lütfen maksimum müşteri temsilcisi sayısının sıfırdan ya da minimum müşteri temsilcisi sayısından büyük olduğundan emin olun. Hata detayı: {0}</value>
+  </data>
+  <data name="ForecastMethodIDColon" xml:space="preserve">
+    <value>Tahminleme metodu kodu</value>
+  </data>
+  <data name="BestForecastMethod" xml:space="preserve">
+    <value>En uygun metod</value>
+  </data>
+  <data name="StaffingLevels" xml:space="preserve">
+    <value>Kadrolama seviyeleri</value>
+  </data>
+  <data name="TheProvidedStringCouldNotBeFormattedToAValidTime" xml:space="preserve">
+    <value>Gimiş olduğunuz değer geçerli bir zaman değeri olarak biçimlendirilemedi.</value>
+  </data>
+  <data name="OperationCanNotProceedWithTheExternalMatrixSystem" xml:space="preserve">
+    <value>İşlem {0} yüzünden dışsal Matris sistemi ile devam edemedi ve başarısız oldu. Yükleme işlemi dışsal sistem olmadan devam edecek.</value>
+  </data>
+  <data name="WarningNoHistorícalData" xml:space="preserve">
+    <value>Uyarı: Uygun tarihi veri yok</value>
+  </data>
+  <data name="ApplyProductActivationKey" xml:space="preserve">
+    <value>Lütfen lisans dosyasını yükleyin.</value>
+  </data>
+  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
+    <value>Lisans dosyası uygulama talimatları (aşama aşama):
+* Yeni lisans satın alınız (daha fazla bilgi için linke tıklayın: www.teleoptı.com)
+* Lisans dosyası teslim alınız (örn: e-posta ya da Teleopti Service Desk ya da aracı kuruluş aracılığıyla ana Teleopti sunucusunda)
+* Lisans dosyasını herhangi bir diske kaydetmeniz gerekiyorsa lütfen kaydedin.
+* Teleopti WFM programı üzerinde halen çalışmaktaysanız lütfen lisans dosyasını uygulamadan önce yaptığınız değişiklikleri kaydettiğinizden emin olun.
+* "Gözat" tuşuna tıklayarak lisans dosyasının bulunduğu dizine gözatın.
+* Lisans dosyasını uygulayın.
+* Lisans dosyasını uyguladıktan sonra uygulama otomatik olarak kapanacaktır.
+* Seçenekler menüsünde güncellenmiş lisans kotanızı görebilmeniz için MyTime'ı (Zaman Planım) yeniden başlatın.
+* Uygulamayı yeniden başlatın.</value>
+  </data>
+  <data name="DatabaseProblem" xml:space="preserve">
+    <value>Lisans dosyasını veritabanlarına kaydederken bir hata oluştu.
+Hata detayları:
+{0}</value>
+  </data>
+  <data name="EnterValidFile" xml:space="preserve">
+    <value>Lütfen geçerli bir dosya ismi veya dizini girin.</value>
+  </data>
+  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
+    <value>Lisans başarıyla uygulandı.
+Tebrikler!
+Uygulama az sonra kapanacak.
+
+Önemli:
+Bütün Teleopti modüllerinin, ağ bazlı Teleopti uygulamalarının ve yeni lisansınız ile erişim kazanmış olduğunuz yeni modüllerin düzgün çalışabilmesi için sistem yöneticinizden ana sunucudan Başlat komutu ile ulaşabileceği "Restart Teleopti WFM (Teleopti WFM'i yeniden başlat)" isimli .bat dosyasını çalıştırmasını rica edin.</value>
+  </data>
+  <data name="ProductActivationKey" xml:space="preserve">
+    <value>İmzalamış olduğunuz lisans anlaşmasına göre sistem "{0}" aktif kullanıcı göz önünde bulundurularak tanımlanmış. Lisansınız {1} tarihinde kadar geçerlidir.
+
+Lisansınız maksimum {2} aktif müşteri temsilcisini kapsamaktadır.
+
+Lisansın geçerli olduğu ürün: "{3}".
+Lisansın kapsadığı modüller:
+{4}</value>
+  </data>
+  <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
+    <value>{0} aktif müşteri temsilciniz var fakat lisansınız gereği en fazla {1} müşteri temsilcisine anyı anda lisans kullandırabilirsiniz. Lütfen en kısa zamanda lisansınızı yenileyin.</value>
+  </data>
+  <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
+    <value>{0} aktif müşteri temsilciniz var fakat lisansınız gereği en fazla {1} müşteri temsilcisine anyı anda lisans kullandırabilirsiniz. Devam etmeden önce lütfen lisansınızı yenileyin.</value>
+  </data>
+  <data name="StudentAvailability" xml:space="preserve">
+    <value>Yarı zamanlı çalışanlar için uygunluk</value>
+  </data>
+  <data name="CreateStudentAvailability" xml:space="preserve">
+    <value>Yarı zamanlı çalışanlar için uygunluk</value>
+  </data>
+  <data name="ResReportScheduledAndActualAgents" xml:space="preserve">
+    <value>Vardiyalanan ve vardiyaya uygun olarak gerçekten çalışan müşteri temsilci sayısı</value>
+  </data>
+  <data name="CreateSkill" xml:space="preserve">
+    <value>Yetenek yarat</value>
+  </data>
+  <data name="AddStudentAvailability" xml:space="preserve">
+    <value>Yarı zamanlı çalışanlar için uygunluk ekle</value>
+  </data>
+  <data name="MyTimeAppConfigFileError" xml:space="preserve">
+    <value>MyTime (Zaman Planım) app.config dosyası doğru tanımlanmamış.</value>
+  </data>
+  <data name="SomethingWentWrongPleaseCloseTheFileIfItIsOpen" xml:space="preserve">
+    <value>Bir hata oluşltu. Dosya halen açık ise lütfen kapayın.</value>
+  </data>
+  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
+    <value>Lisans dosyası hatası</value>
+  </data>
+  <data name="AddCampaignIntro" xml:space="preserve">
+    <value>Tahmin edilen artış ya da azalış için bir % değeri tanımlayın</value>
+  </data>
+  <data name="HoursPerWeekIsInvalid" xml:space="preserve">
+    <value>Hafta başına düşen saat sayısı geçerli değil. Tahminen hafta başına düşen saat sayısının maksimum değeri, yine aynı parametrenin minimum değerinden daha küçük girilmiş.</value>
+  </data>
+  <data name="ExpandRoot" xml:space="preserve">
+    <value>Temeli genişlet</value>
+  </data>
+  <data name="CollapseAllNodes" xml:space="preserve">
+    <value>Tüm nodları göster</value>
+  </data>
+  <data name="UnhandledExceptionMessage" xml:space="preserve">
+    <value>Teleopti WFM bir sorunla karşılaştı ve bu sebepten dolayı uygulamanın kapanması gerekiyor. Bundan dolayı özür diliyoruz. Yapmakta olduğunuz değişiklikler kaybolmuş olabilir.
+
+Bu sorunun çözülebilmesi için hata raporunun Teleopti'nin eline ulaşması kritik önem taşıyor. Bu sebepten dolayı lütfen aşağıdaki "Hata raporu gönder" düğmesine tıklayın. Bu komut varsayılan e-posta programınızı çalıştıracaktır. E-posta programınızda çıkacak olan yeni e-postaya:
+
+1. Hatırlayabildiğiniz kadarıyla aşama aşama nasıl bu sorunu yaşama noktasına geldiğiniz
+2. Hata aldığınız anda programda tam olarak ne ile uğraşmakta olduğunuz
+3. Hatayı almış olduğunuz anda Teleopti uygulamasının (hata mesajı ile) ekran görüntüsü (screenshot)
+
+bilgilerini ekleyerek, e-postanın metin kısmına almış olduğunuz hata mesajını ekleyerek e-postayı yollayın.
+
+Teşekkürler,
+Teleopti Ar-Ge</value>
+  </data>
+  <data name="CopyErrorMessageToClipboard" xml:space="preserve">
+    <value>Hata mesajını clipboard'a kopyala</value>
+  </data>
+  <data name="IncludeScreenShot" xml:space="preserve">
+    <value>Ekran görüntüsünü dahil et</value>
+  </data>
+  <data name="SendEmailReport" xml:space="preserve">
+    <value>Hata raporunu e-posta olarak yolla</value>
+  </data>
+  <data name="UnhandledExceptionEmailBody" xml:space="preserve">
+    <value>Hatanın çözümünü bulabilmemiz için lütfen bize aşağıda belirtilmekte olan alanlar ile ilgili biraz bilgi sağlayın:
+
+1. Hatayı, aşama aşama nasıl yeniden oluşturabiliriz?
+
+2. Hata oluştuğu anda hangi bilgiler üzerinde çalışmaktaydınız?
+
+3. Hata ekranının (arka planda Teleopti WFM uygulaması ile) ekran görüntüsü
+
+Teşekkürler,
+Teleopti Ar-Ge</value>
+  </data>
+  <data name="AFileContainingTheErrorMessageCouldNotBeCreated" xml:space="preserve">
+    <value>Hata mesajını içeren dosya oluşturulamadı. Lütfen hata mesajını clipboard'a kopyalayıp e-postanın metin kısmına yapıştırın.</value>
+  </data>
+  <data name="AuthorizingFunctionsThreeDots" xml:space="preserve">
+    <value>Yetkilendirme yapılıyor...</value>
+  </data>
+  <data name="ExportFromAndToScenario" xml:space="preserve">
+    <value>{0} --&gt; {1}</value>
+  </data>
+  <data name="ExportValidationLine" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="ShowQuickAccessToolbarAboveRibbon" xml:space="preserve">
+    <value>Çabuk erişim alet kutusunu şeridin üstünde göster</value>
+  </data>
+  <data name="ShowQuickAccessToolbarBelowRibbon" xml:space="preserve">
+    <value>Çabuk erişim alet kutusunu şeridin altında göster</value>
+  </data>
+  <data name="ExportNoOfAgentInfo" xml:space="preserve">
+    <value>{0} müşteri temsilcisi için seçilen alan</value>
+  </data>
+  <data name="CustomizeQuickAccessToolbar" xml:space="preserve">
+    <value>Çabuk erişim alet kutusunu özelleştir</value>
+  </data>
+  <data name="InfoTextConflict" xml:space="preserve">
+    <value>Bu kayıtlar başka bir kullanıcı tarafından değiştirilmiş. Devam etmeden önce bir seçim yapmanız gerekiyor. Diğer kullanıcının yaptığı değişiklikleri kabul etmek için OK tuşuna basın (bu durumda kendi yaptığınız değişiklikler kaybolacak). Kendi değişikliklerinizi başka kullanıcının değişikliklerinin üzerine saydırmak için Overwrite tuşuna basın.</value>
+  </data>
+  <data name="TheFileCouldNotBeOpenedPleaseCheckIfPdfFilesAreAssociatedWithAProgram" xml:space="preserve">
+    <value>Dosya açılamadı. Lütfen PDF dosyasının başka bir uygulamada kullanım halinde olmadığından emin olun.</value>
+  </data>
+  <data name="TheAttachedFileContainsScheduleForDateParameters" xml:space="preserve">
+    <value>{0} ile {1} arasındaki vardiya planınızı ekteki PDF dosyasında bulabilirsiniz</value>
+  </data>
+  <data name="CheckMessageBrokerWarning" xml:space="preserve">
+    <value>Message broker bağlantısı koptu</value>
+  </data>
+  <data name="CheckSystemOk" xml:space="preserve">
+    <value>Teleopti WFM - sistem çalışıyor</value>
+  </data>
+  <data name="CheckSystemWarning" xml:space="preserve">
+    <value>Teleopti WFM - sistem uyarısı</value>
+  </data>
+  <data name="BlockFinderTypeBetweenDayOff" xml:space="preserve">
+    <value>Tatil günleri arası</value>
+  </data>
+  <data name="LayerOwnerHasNoLayers" xml:space="preserve">
+    <value>[{0}] katmanları bulunamadı</value>
+  </data>
+  <data name="Overstaff" xml:space="preserve">
+    <value>Fazla çalışan</value>
+  </data>
+  <data name="WorkflowControlSetToolTip" xml:space="preserve">
+    <value>Kişisel hesapları hesaba kat: {0}
+Vardiyalamayı hesaba kat: {1}
+Otomatik onay: {2}
+Dönem: {3}</value>
+  </data>
+  <data name="CheckPermissionsForCastle" xml:space="preserve">
+    <value>Yerel yetkiler yetersiz. Kaşelemenin kapanması gerekiyor. Lütfen sistem yöneticinize danışın.</value>
+  </data>
+  <data name="FromDaysMustBeLessThanToDays" xml:space="preserve">
+    <value>Başlama tarihi bitiş tarihinden küçük olmalı</value>
+  </data>
+  <data name="ChangePasswordValidationError" xml:space="preserve">
+    <value>Şifre değiştirilemedi.
+Lütfen mevcut şifrenizin doğru olduğundan ve yeni şifrenizi onaylamış olduğunuzdan emin olun.
+Bu hatayı sıklıkla almaktaysanız şifrenizi güvenlik kuralları ışığında (karakter sayısı, uzunluk vs.) gözden geçirin.</value>
+  </data>
+  <data name="PasswordPolicyWarning" xml:space="preserve">
+    <value>Yeni şifreniz kurallara uygun değil.</value>
+  </data>
+  <data name="SchedulingProgress" xml:space="preserve">
+    <value>Vardiyalanıyor: {1} günün arasından {0} gün vardiyalandı...</value>
+  </data>
+  <data name="StudentHours" xml:space="preserve">
+    <value>Yarı zamanlı çalışma saatleri</value>
+  </data>
+  <data name="InUTC" xml:space="preserve">
+    <value>UTC'ye göre</value>
+  </data>
+  <data name="MeetingErrorMessageB" xml:space="preserve">
+    <value>toplantıdan silin. Yeterli yetkiniz yok.</value>
+  </data>
+  <data name="PreferenceViewCalculationInfo" xml:space="preserve">
+    <value>{0} (Normal) {1} (Mevsimsellik) {2} (Hesaba giren) {3} (Ekstra) {4} (Hesaptan çıkan) = {5}</value>
+  </data>
+  <data name="SwapRaw" xml:space="preserve">
+    <value>Sadece yerini değiştir</value>
+  </data>
+  <data name="ServerUnavailable" xml:space="preserve">
+    <value>Sunucu geçici olarak erişim dışı. Lütfen sonradan tekrar deneyin.</value>
+  </data>
+  <data name="Invalid" xml:space="preserve">
+    <value>Geçersiz</value>
+  </data>
+  <data name="NoShiftsAvailableForThisStudentAvailabilityDot" xml:space="preserve">
+    <value>Bu uygunluk için geçerli vardiya tipleri bulunamadı.</value>
+  </data>
+  <data name="StudentAvailabilityPeriod" xml:space="preserve">
+    <value>Uygunluk dönemi</value>
+  </data>
+  <data name="OpenStudentAvailability" xml:space="preserve">
+    <value>Yarı zamanlı çalışma uygunluğu aç</value>
+  </data>
+  <data name="BusinessRuleErrorAssignmentLength" xml:space="preserve">
+    <value>Bir işin tamamlanması en fazla {0} saat sürebilir. Mevcut işin uzunluğu ise {1} saat.</value>
+  </data>
+  <data name="DatabaseConnectionLostFormClose" xml:space="preserve">
+    <value>Veritabanı ile olan bağlantı koptu. Veri istikrarını korumak için form kapanacak. Kaybedecek olduğunuz değişiklikler olabilir.</value>
+  </data>
+  <data name="LockStudentAvailability" xml:space="preserve">
+    <value>Yarı zamanlı çalışan uygunluğunu kilitle</value>
+  </data>
+  <data name="InterruptedShutDown" xml:space="preserve">
+    <value>{0} uygulamanın kapanmasını engellemekte. Uygulamayı kesinlikle kapatmak istiyor musunuz?</value>
+  </data>
+  <data name="NoPersonPeriodFoundForUser" xml:space="preserve">
+    <value>Bu kullanıcı için kişi dönemi bulunamadı</value>
+  </data>
+  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
+    <value>Mevcut lisans yalnızca {0} yeri kapsıyor. Yeterli sayıda yeri kapsayacak yeni bir lisans edinmeniz gerek.</value>
+  </data>
+  <data name="SeatProductActivationKey" xml:space="preserve">
+    <value>Lisans anlaşmanıza göre mevcut sistem "{0}" yeri kapsayacak şekilde tanımlı. Lisansınız {1} tarihine kadar geçerli.
+
+Lisansınız en fazla {2} yeri kapsayabilir.
+
+Ürün kapsamı "{3}".
+Aktif modüller:
+{4}</value>
+  </data>
+  <data name="MyTeam" xml:space="preserve">
+    <value>MyTeam</value>
+  </data>
+  <data name="CurrentPlanningPeriodMessage" xml:space="preserve">
+    <value>Mevcut vardiyalama süresinin başlama tarihi</value>
+  </data>
+  <data name="TeleoptiCCCColonModuleColonFromToDateScenarioColon" xml:space="preserve">
+    <value>{0} - Teleopti WFM: {1} - {2} Senaryo: {3}</value>
+  </data>
+  <data name="ExtDot" xml:space="preserve">
+    <value>Dış.</value>
+  </data>
+  <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
+    <value>Lisansınızın kotasında bulunan {0} yer sınırını aştınız. Lütfen lisansınızı en kısa sürede yenilemeye çalışın.</value>
+  </data>
+  <data name="YouHaveTooManySeats" xml:space="preserve">
+    <value>Lisansınızın maksimum kotası olan {0} yerden daha fazla yer kullanıyorsunuz. Yazılımı kullanmaya devam edebilmeniz için lisansınızı yenilemeniz gerekiyor.</value>
+  </data>
+  <data name="SignCustomerWeb" xml:space="preserve">
+    <value>Müşteri alanına giriş yap</value>
+  </data>
+  <data name="TheExportWillStartInBackgroundMessage" xml:space="preserve">
+    <value>Sihirbaz sonlandıktan sonra aktarma işlemi arka planda ayrı bir iş olarak başlatılacak.</value>
+  </data>
+  <data name="TotalCallsCaret" xml:space="preserve">
+    <value>Toplam çağrı &lt;</value>
+  </data>
+  <data name="CallsCaret" xml:space="preserve">
+    <value>Çağrılar &lt;</value>
+  </data>
+  <data name="TalkTimeCaret" xml:space="preserve">
+    <value>Konuşma süresi &lt;</value>
+  </data>
+  <data name="AcwCaret" xml:space="preserve">
+    <value>Çağrı sonrası iş &lt;</value>
+  </data>
+  <data name="ForecastValueOverride" xml:space="preserve">
+    <value>Çiğnenen tahminlenmiş değer</value>
+  </data>
+  <data name="CampaignAdded" xml:space="preserve">
+    <value>Kampanya eklendi</value>
+  </data>
+  <data name="CouldNotApply" xml:space="preserve">
+    <value>Uygulama başarısız. Lütfen yukarıdaki mesaja göz atın.</value>
+  </data>
+  <data name="Outliers" xml:space="preserve">
+    <value>Aykırı değerler</value>
+  </data>
+  <data name="QueueStatWoOutliers" xml:space="preserve">
+    <value>Aykırı değerler göz önüne alınmadan kuyruk istatistikleri</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>İstatistikler</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Duyurular</value>
+  </data>
+  <data name="Disable" xml:space="preserve">
+    <value>Etkisiz bırak</value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>Etkinleştir</value>
+  </data>
+  <data name="AuditingTurnOnLong" xml:space="preserve">
+    <value>Denetlemeyi başlatmak istiyor musunuz? Bu işlem birkaç dakikanızı alabilir.</value>
+  </data>
+  <data name="ForecastOverrideMsg" xml:space="preserve">
+    <value>Tahminli değerleri çiğne</value>
+  </data>
+  <data name="With campaign" xml:space="preserve">
+    <value>Kampanyalı değerler</value>
+  </data>
+  <data name="SuccessTip" xml:space="preserve">
+    <value>Tahminleme başarıyla sonuçlandı.</value>
+  </data>
+  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
+    <value>Lisansınız kapsamında bulunan ({1}) müşteri temsilcisinden ({0}) daha fazla müşteri temsilcisi kullanmaktasınız. {2} gün içerisinde lisansınızı yenilemek zorundasınız.</value>
+  </data>
+  <data name="RunningForecast" xml:space="preserve">
+    <value>Tahminleme işlemi devam ediyor.</value>
+  </data>
+  <data name="ForecastWorkloadIntro" xml:space="preserve">
+    <value>Mevcut tahmininizdeki çağrı istatistiklerinin üzerinde oynama yapmak için taboldaki günlük değerlerde seçim yapın. </value>
+  </data>
+  <data name="ClearForecastChart" xml:space="preserve">
+    <value>Çağrı tablosunu seçimini temizle</value>
+  </data>
+  <data name="SelectAtleastOneSchedulingOption" xml:space="preserve">
+    <value>Takım vardiyalaması alanında "Vardiya türü", "vardiya başlangıcı" ya da "vardiya bitişi" kategorilerinden en az birini seçin.</value>
+  </data>
+  <data name="ManageSmsSettings" xml:space="preserve">
+    <value>SMS ayarlarını güncelle</value>
+  </data>
+  <data name="SetWhichColumnToGetSmsPhoneNumberFromColon" xml:space="preserve">
+    <value>SMS'in gönderileceği telefon numaraları hangi sütundan alınsın?</value>
+  </data>
+  <data name="SmsSettings" xml:space="preserve">
+    <value>SMS ayarları</value>
+  </data>
+  <data name="GraphLOC" xml:space="preserve">
+    <value>Grafik (loc)</value>
+  </data>
+  <data name="IntervalLOC" xml:space="preserve">
+    <value>Aralık (loc)</value>
+  </data>
+  <data name="TableLOC" xml:space="preserve">
+    <value>Tablo (loc)</value>
+  </data>
+  <data name="TypeLOC" xml:space="preserve">
+    <value>Tür (loc)</value>
+  </data>
+  <data name="FromContract" xml:space="preserve">
+    <value>Kontrattan</value>
+  </data>
+  <data name="FromSchedulePeriod" xml:space="preserve">
+    <value>Vardiya periyodundan</value>
+  </data>
+  <data name="FullDayAbsence" xml:space="preserve">
+    <value>Tam gün devamsızlık</value>
+  </data>
+  <data name="InsufficientPermissionForWeb" xml:space="preserve">
+    <value>Web portalına erişim izniniz yok.</value>
+  </data>
+  <data name="NotWorking" xml:space="preserve">
+    <value>Çalışmıyor.</value>
+  </data>
+  <data name="MobileReports" xml:space="preserve">
+    <value>Mobil raporlar</value>
+  </data>
+  <data name="SchedulePeriodTypeDay" xml:space="preserve">
+    <value>Gün</value>
+  </data>
+  <data name="SchedulePeriodTypeMonth" xml:space="preserve">
+    <value>Ay</value>
+  </data>
+  <data name="SchedulePeriodTypeWeek" xml:space="preserve">
+    <value>Hafta</value>
+  </data>
+  <data name="PleaseChooseAReportType" xml:space="preserve">
+    <value>Lütfen bir rapor seçin.</value>
+  </data>
+  <data name="SameDaysOff" xml:space="preserve">
+    <value>Aynı izin günleri</value>
+  </data>
+  <data name="ResReportAdherencePerAgent" xml:space="preserve">
+    <value>Müşteri temsilcisi başına vadiya uyumu</value>
+  </data>
+  <data name="ResReportAdherencePerDay" xml:space="preserve">
+    <value>Gün başına vardiya uyumu</value>
+  </data>
+  <data name="PleaseChooseSkillSet" xml:space="preserve">
+    <value>Yetenek kümesi seçin.</value>
+  </data>
+  <data name="ScheduleOnlyPreferenceMustHave" xml:space="preserve">
+    <value>Sadece vazgeçilmez tercihleri vardiyala</value>
+  </data>
+  <data name="AllowMeetings" xml:space="preserve">
+    <value>Toplantı konulmasına izin ver</value>
+  </data>
+  <data name="ShiftCategories" xml:space="preserve">
+    <value>Vardiya türleri</value>
+  </data>
+  <data name="AfterCheckingAgainstActivities" xml:space="preserve">
+    <value>Etkinliklerin elenmesinden sonra</value>
+  </data>
+  <data name="AddExtendedPreference" xml:space="preserve">
+    <value>Genişletilmiş tercih ekle</value>
+  </data>
+  <data name="Others" xml:space="preserve">
+    <value>Diğerleri</value>
+  </data>
+  <data name="MyTime" xml:space="preserve">
+    <value>Teleopti WFM MyTime</value>
+  </data>
+  <data name="AgentScheduleMessengerPermission" xml:space="preserve">
+    <value>Vardiya Kılavuzu</value>
+  </data>
+  <data name="ExtendedPreferencesWeb" xml:space="preserve">
+    <value>Genişletilmiş tercihler</value>
+  </data>
+  <data name="DistributionBetweenSubskillsMustbeEqualToOneHundredPercent" xml:space="preserve">
+    <value>Alt yeteneklerin dağılım toplamı %100 etmeli.</value>
+  </data>
+  <data name="MaximumAgentOccupancyMustBeLargerThanOrEqualToMinimumAgentOccupancy" xml:space="preserve">
+    <value>Maksimum müşteri temsilcisi hat meşguliyet süresi minimum müşteri temsilcisi hat meşguliyet süresinden daha büyük olmak zorunda.</value>
+  </data>
+  <data name="MaximumAgentsMustBeLargerOrEqualToMinimumAgents" xml:space="preserve">
+    <value>Maksimum müşteri temsilcisi sayısı minimum müşteri temsilcisi sayısına eşit ya da bu sayıdan daha büyük olmalı.</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
+    <value>Ektinlik başına düşen vardiyalanmış müşteri temsilcisi sayısı</value>
+  </data>
+  <data name="NotReadyTime" xml:space="preserve">
+    <value>Hazır değil</value>
+  </data>
+  <data name="ResTotals" xml:space="preserve">
+    <value>Toplam</value>
+  </data>
+  <data name="NoMessagesFound" xml:space="preserve">
+    <value>Mesaj bulunamadı</value>
+  </data>
+  <data name="FairnessOptimizationOn" xml:space="preserve">
+    <value>Adalet optimizasyonu etkin</value>
+  </data>
+  <data name="FairnessOptimizationRollingBack" xml:space="preserve">
+    <value>- optimizasyon başarısız, geri alınıyor.</value>
+  </data>
+  <data name="FairnessOptimizationValueAfter" xml:space="preserve">
+    <value>- sonraki değer =</value>
+  </data>
+  <data name="FairnessOptimizationValueBefore" xml:space="preserve">
+    <value>- önceki değer =</value>
+  </data>
+  <data name="Sender" xml:space="preserve">
+    <value>Gönderen</value>
+  </data>
+  <data name="Sent" xml:space="preserve">
+    <value>Gönderildi</value>
+  </data>
+  <data name="SelectedFileDestinationDoesNotExist" xml:space="preserve">
+    <value>Seçili dizin bulunamadı. Lütfen geçerli bir dosya dizini girin.</value>
+  </data>
+  <data name="CouldNotExportForecastToFile" xml:space="preserve">
+    <value>Dosyaların aktarımı başarısızlıkla sonuçlandı. Lütfen farklı bir dizin deneyin.</value>
+  </data>
+  <data name="SelectedFileDestinationIsTooLong" xml:space="preserve">
+    <value>Seçili dizin çok uzun. Lütfen geçerli bir dizin girin.</value>
+  </data>
+  <data name="SameActivity" xml:space="preserve">
+    <value>Aynı etkinli</value>
+  </data>
+  <data name="AfterCheckingAgainstKeepActivity" xml:space="preserve">
+    <value>Elde tutulmak istenen etkinlikler elendikten sonra</value>
+  </data>
+  <data name="WindowsLogonWithBrackets" xml:space="preserve">
+    <value>(Pencereler)</value>
+  </data>
+  <data name="UseAverageShiftLengths" xml:space="preserve">
+    <value>Ortalama vardiya süreleri kullan</value>
+  </data>
+  <data name="LogOnFailedAccountIsLocked" xml:space="preserve">
+    <value>Giriş başarısızlıkla sonuçlandı. Hesap kilitlendi.</value>
+  </data>
+  <data name="LogOnFailedPasswordExpired" xml:space="preserve">
+    <value>Giriş başarısızlıkla sonuçlandı. Şifre artık geçerli değil.</value>
+  </data>
+  <data name="Skip" xml:space="preserve">
+    <value>Atla</value>
+  </data>
+  <data name="InvalidUserNameOrPassword" xml:space="preserve">
+    <value>Geçersiz kullanıcı adı veya şifre</value>
+  </data>
+  <data name="WarningWithExclamatory" xml:space="preserve">
+    <value>Uyarı!</value>
+  </data>
+  <data name="Reforecast" xml:space="preserve">
+    <value>Yeniden tahminle</value>
+  </data>
+  <data name="PeopleCap" xml:space="preserve">
+    <value>Personel</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Kaldır</value>
+  </data>
+  <data name="SelectWorkload" xml:space="preserve">
+    <value>İş yükleri</value>
+  </data>
+  <data name="MySchedule" xml:space="preserve">
+    <value>Vardiyam</value>
+  </data>
+  <data name="HeadCount" xml:space="preserve">
+    <value>Çalışan sayısı</value>
+  </data>
+  <data name="NotEnoughAllowance" xml:space="preserve">
+    <value>Bu gün için yeterli hakediş yok:</value>
+  </data>
+  <data name="AddFullDayAbsence" xml:space="preserve">
+    <value>Tam günlük devamsızlık ekle</value>
+  </data>
+  <data name="InvalidEndDate" xml:space="preserve">
+    <value>Geçersiz bitiş tarihi</value>
+  </data>
+  <data name="ResolutionMin" xml:space="preserve">
+    <value>Karar (dakika)</value>
+  </data>
+  <data name="SingleAgentTeam" xml:space="preserve">
+    <value>Tek müşteri temsilcili takım</value>
+  </data>
+  <data name="SameShift" xml:space="preserve">
+    <value>Aynı vardiya</value>
+  </data>
+  <data name="SelectAtleastOneOptimizationOptionForBlock" xml:space="preserve">
+    <value>Blok vardiyalama alanındaki "aynı varidya türü", "aynı başlangıç saati" ve "aynı vardiya" seçeneklerinden en az birini seçin.</value>
+  </data>
+  <data name="HourShort" xml:space="preserve">
+    <value>sa</value>
+  </data>
+  <data name="ConfirmRemoval" xml:space="preserve">
+    <value>Kaldırmayı onayla</value>
+  </data>
+  <data name="NotAllowedMoveOfAssignmentToOtherDate" xml:space="preserve">
+    <value>Vardiyayı başka bir güne taşıma izni yok. Lütfen yeni vardiya yaratın.</value>
+  </data>
+  <data name="ChanceOfGettingAbsenceRequestGranted" xml:space="preserve">
+    <value>Devamsızlık isteğinin kabul edilme olasılığı:</value>
+  </data>
+  <data name="AddPreferenceThreeDots" xml:space="preserve">
+    <value>Tercih ekle</value>
+  </data>
+  <data name="AddStudentAvailabilityThreeDots" xml:space="preserve">
+    <value>Saatlik uygunluk ekle</value>
+  </data>
+  <data name="Fair" xml:space="preserve">
+    <value>Fena değil</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>İyi</value>
+  </data>
+  <data name="Poor" xml:space="preserve">
+    <value>Zayıf</value>
+  </data>
+  <data name="CollectingData" xml:space="preserve">
+    <value>Veri toplanıyor</value>
+  </data>
+  <data name="Improved" xml:space="preserve">
+    <value>Daha iyi</value>
+  </data>
+  <data name="RecipientAnsweredToEarlierMessage" xml:space="preserve">
+    <value>Alıcı bir önceki gönderinizi yaınıtladı. Yanıtını görmek için pencereyi yenileyin. Mesajınız gönderilmeyecek.</value>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>Müşteri temsilcisi uygunluğu</value>
+  </data>
+  <data name="TeamBlockNotInLegalState" xml:space="preserve">
+    <value>Takımın blok vardiya dönemi geçersiz. Lütfen tekrar gözden geçirin.</value>
+  </data>
+  <data name="DataHasBeenDeleted" xml:space="preserve">
+    <value>Değişiklikleriniz kaydedilirken hata oluştu. Büyük olasılıkla sistemde aynı anda çalışmakta olan başka bir kullanıcı sizin yapmış olduğunuz değişiklikllerden bir kısmını sildi. Veri devamlılığının sağlanması için bu formu kapatmak zorundayım. Değişiklikleriniz kaybolabilir.</value>
+  </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>Vardiya Başlangıcı</value>
+  </data>
+  <data name="NoAgentsAvailableForShiftTrade" xml:space="preserve">
+    <value>Bu değiş-tokuş için uygun personel bulunamadı</value>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>Vardiya başlangıç tarihi</value>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>Vardiya bitiş tarihi</value>
+  </data>
+  <data name="Little" xml:space="preserve">
+    <value>Az</value>
+  </data>
+  <data name="Medium" xml:space="preserve">
+    <value>Orta</value>
+  </data>
+  <data name="Much" xml:space="preserve">
+    <value>Çok</value>
+  </data>
+  <data name="QuickForecast" xml:space="preserve">
+    <value>Çabuk tahmin</value>
+  </data>
+  <data name="SeasonalityDataRange" xml:space="preserve">
+    <value>Mevsimsellik ve trend tarih aralığı</value>
+  </data>
+  <data name="SmoothingStyleColon" xml:space="preserve">
+    <value>Düzleştirme derecesi</value>
+  </data>
+  <data name="TemplatesHistoricalDataRange" xml:space="preserve">
+    <value>Gün şablonları için tarihi veri seçin</value>
+  </data>
+  <data name="ShowInfoMessages" xml:space="preserve">
+    <value>Bilgi mesajı göster</value>
+  </data>
+  <data name="Errors" xml:space="preserve">
+    <value>Hatalar</value>
+  </data>
+  <data name="TheQuickForecatWillStartInBackgroundMessage" xml:space="preserve">
+    <value>Çabuk tahminleme sihirbazı az sonra arka planda çalışmaya başlayacak. İşlemin tamamlanıp tamamlanmadığını İş Durumu penceresinden denetleyebilirsiniz.</value>
+  </data>
+  <data name="CannotDisplayScheduleWhenShiftTradeStatusIsNew" xml:space="preserve">
+    <value>Vardiya, vardiya değiş-tokuş statüsü ancak beklemedeyken ya da onay beklerken gösterilebilir.</value>
+  </data>
+  <data name="NewTemplateName" xml:space="preserve">
+    <value>Yeni kalıp ismi</value>
+  </data>
+  <data name="EmptyTemplateName" xml:space="preserve">
+    <value>Tercih edilen kalıp ismi</value>
+  </data>
+  <data name="Name50CharactersLimit" xml:space="preserve">
+    <value>Geçersiz dizin. İsim boş ya da maksimum 50 karakterden uzun olmamalı.</value>
+  </data>
+  <data name="InsufficientStaffingDays" xml:space="preserve">
+    <value>Yetersiz personel</value>
+  </data>
+  <data name="InsufficientStaffingHours" xml:space="preserve">
+    <value>{0} aralığında yetersiz vardiyalama</value>
+  </data>
+  <data name="NoBudgetDefineForSomeRequestedDays" xml:space="preserve">
+    <value>{0} bütçeleme dönemi bir ya da daha fazla tarihte yeterli hakedişe sahip değil.</value>
+  </data>
+  <data name="NoBudgetForThisPeriod" xml:space="preserve">
+    <value>{0} dönemi için geçerli bir bütçe yapılmamış.</value>
+  </data>
+  <data name="NoBudgetGroupForPerson" xml:space="preserve">
+    <value>{0} kişisi için geçerli bir bütçeleme grubu atanmamış.</value>
+  </data>
+  <data name="NotEnoughBudgetAllowanceForTheDay" xml:space="preserve">
+    <value>{0} günü için yeterli bütçeleme hakedişi yok.</value>
+  </data>
+  <data name="RequestDenyReasonClosedPeriodBeforeSendRequest" xml:space="preserve">
+    <value>İsteğiniz onaylanmadı. Bu tarih aralığında istek gönderimi yapılamıyor.</value>
+  </data>
+  <data name="RequestDenyReasonPeriodOpenAfterSendRequest" xml:space="preserve">
+    <value>İsteğiniz onaylanmadı. Bu tarihte istek dönderimi yapılamıyor. İstek gönderimi için bir sonraki geçerli tarih: {0}</value>
+  </data>
+  <data name="SeriousUnderStaffingHours" xml:space="preserve">
+    <value>{0} aralığında ciddi bir kaynak eksikliği var.</value>
+  </data>
+  <data name="CurrentNumberOfShifts" xml:space="preserve">
+    <value>Mevcut vardiya sayısı</value>
+  </data>
+  <data name="GeneratingShifts" xml:space="preserve">
+    <value>Vardiyalar yaratılıyor</value>
+  </data>
+  <data name="ShiftGenerationStop" xml:space="preserve">
+    <value>Sistemin maksimum vardiya sayı limitini aştınız. Lütfen vardiya desenlerinizi biraz daha aza indirgeyip tekrar deneyin.</value>
+  </data>
+  <data name="ShiftGenerationWarning" xml:space="preserve">
+    <value>Uyarı! Mevcut vardiya kuralları ile istediğiniz vardiyaları yaratmak çok zaman alacak. Bu kadar fazla sayıda vardiya uzun vadede vardiyalama ve optimizasyon performansınızı olumsuz yönde etkileyebilir.</value>
+  </data>
+  <data name="TooComplexRuleset" xml:space="preserve">
+    <value>vardiya kural seti fazla karmaşık</value>
+  </data>
+  <data name="ViewAllGroupPages" xml:space="preserve">
+    <value>Tüm sınıflandırma kategorilerini göster</value>
+  </data>
+  <data name="GenerateForecastFor" xml:space="preserve">
+    <value>Tahmin yarat</value>
+  </data>
+  <data name="ForecastDo" xml:space="preserve">
+    <value>Tahmin</value>
+  </data>
+  <data name="SelectedAbsences" xml:space="preserve">
+    <value>Devamsızlık seç</value>
+  </data>
+  <data name="ProcessingDotDotDot" xml:space="preserve">
+    <value>İşlem sürüyor...</value>
+  </data>
+  <data name="MessagesParenthesis" xml:space="preserve">
+    <value>Mesajlar ({0})</value>
+  </data>
+  <data name="BudgetGroupHeadCount" xml:space="preserve">
+    <value>Bütçe grubundaki bordrolu çalışan sayısı</value>
+  </data>
+  <data name="SelectAtleastOneBlockOption" xml:space="preserve">
+    <value>Blok vardiyalama alanında yer alan "vardiya kategorisi", "başlangıç", veya "aynı vardiya" sçeneklerinden en az birini seçin.</value>
+  </data>
+  <data name="ValidateUnsupportedRestrictions" xml:space="preserve">
+    <value>Blok veya takım vardiyalaması yapılırken vardiya kategorisi sınırlamaları hesap hesap dışında tutulacaktır.</value>
+  </data>
+  <data name="RequestDenyReasonNoPeriod" xml:space="preserve">
+    <value>Devamsızlık isteğiniz reddedildi. İsteği yollamış olduğunuz dönem, devamsızlık isteği gönderimi için kapalı. İsteğinizi lütfen {0} dönemi içerisinde gerçekleşecek şekilde tekrar yollayın.</value>
+  </data>
+  <data name="MaxParallelTasks" xml:space="preserve">
+    <value>Maksimum paralel görev sayısı</value>
+  </data>
+  <data name="ViewActiveAgents" xml:space="preserve">
+    <value>Aktif müşteri temsilcilerini göster</value>
+  </data>
+  <data name="SkillTypeChat" xml:space="preserve">
+    <value>Sohbet</value>
+  </data>
+  <data name="AbandonedChats" xml:space="preserve">
+    <value>Terkedilen sohbetler</value>
+  </data>
+  <data name="AnsweredChats" xml:space="preserve">
+    <value>Cevaplanan sohbetler</value>
+  </data>
+  <data name="AverageChats" xml:space="preserve">
+    <value>Ortalama sohbetler</value>
+  </data>
+  <data name="RequestStatusDtoAutodenied" xml:space="preserve">
+    <value>Reddedildi</value>
+  </data>
+  <data name="LocalTime" xml:space="preserve">
+    <value>Yerel saat</value>
+  </data>
+  <data name="AddOvertimeAvailabilityThreeDots" xml:space="preserve">
+    <value>Fazla mesai uygunluğu ekle</value>
+  </data>
+  <data name="CalculatedChats" xml:space="preserve">
+    <value>Hesaplanan sohbetler</value>
+  </data>
+  <data name="CampaignChatsPercentSign" xml:space="preserve">
+    <value>Kampanya (%)</value>
+  </data>
+  <data name="OvertimeAvailability" xml:space="preserve">
+    <value>Fazla mesai uygunluğu</value>
+  </data>
+  <data name="PreviousSavedOvertimeAvailabilityColon" xml:space="preserve">
+    <value>Önceden kaydedilmiş fazla mesai uygunluğu:</value>
+  </data>
+  <data name="Chat" xml:space="preserve">
+    <value>Sohbet</value>
+  </data>
+  <data name="DeviationChatsColon" xml:space="preserve">
+    <value>Sapma (sohbet):</value>
+  </data>
+  <data name="ForecastedChats" xml:space="preserve">
+    <value>Tahminlenen sohbetler</value>
+  </data>
+  <data name="IndexChats" xml:space="preserve">
+    <value>İndeks (sohbet)</value>
+  </data>
+  <data name="OfferedChats" xml:space="preserve">
+    <value>Gelen sohbet</value>
+  </data>
+  <data name="OriginalOfferedChats" xml:space="preserve">
+    <value>Esas gelen sohbet</value>
+  </data>
+  <data name="TotalChats" xml:space="preserve">
+    <value>Toplam sohbet</value>
+  </data>
+  <data name="ValidatedChats" xml:space="preserve">
+    <value>Doğrulanmış sohbet</value>
+  </data>
+  <data name="CampaignChatTimePercentSign" xml:space="preserve">
+    <value>Sohbet</value>
+  </data>
+  <data name="Chats" xml:space="preserve">
+    <value>Sohbetler</value>
+  </data>
+  <data name="TotalChatTime" xml:space="preserve">
+    <value>Toplam sohbet süresi</value>
+  </data>
+  <data name="FilterOvertimeAvailability" xml:space="preserve">
+    <value>Fazla mesai uygunluğu filtrele</value>
+  </data>
+  <data name="AssignmentOptions" xml:space="preserve">
+    <value>İş atama seçenekleri</value>
+  </data>
+  <data name="OvertimeDuration" xml:space="preserve">
+    <value>Fazla mesai süresi</value>
+  </data>
+  <data name="ScheduleOvertime" xml:space="preserve">
+    <value>Fazla mesai vardiyala</value>
+  </data>
+  <data name="ScheduleOvertimeOptions" xml:space="preserve">
+    <value>Fazla mesai vardiyalama seçenekleri</value>
+  </data>
+  <data name="SkillActivity" xml:space="preserve">
+    <value>Yetenek etkinliği</value>
+  </data>
+  <data name="TagChangesWithWithColon" xml:space="preserve">
+    <value>Değişiklikleri etiketle</value>
+  </data>
+  <data name="TypeOfOvertime" xml:space="preserve">
+    <value>Fazla mesai türü</value>
+  </data>
+  <data name="AllowBreakContractMaxWorkTimePerWeek" xml:space="preserve">
+    <value>Sözleşmelerdeki maksimum iş süresini çiğne</value>
+  </data>
+  <data name="AllowBreakContractNightlyRest" xml:space="preserve">
+    <value>Sözleşmelerdeki gecelik dinlenme süresini çiğne</value>
+  </data>
+  <data name="AllowBreakContractWeeklyRest" xml:space="preserve">
+    <value>Sözleşmelerdeki haftalık dinlenme süresini çiğne</value>
+  </data>
+  <data name="ExtendTheEndOfExistingShiftsColon" xml:space="preserve">
+    <value>Mevcut vardiyalardaki bitiş süresini uzatabil</value>
+  </data>
+  <data name="OvertimeDurationColon" xml:space="preserve">
+    <value>Fazla mesai süresi:</value>
+  </data>
+  <data name="SkillActivityColon" xml:space="preserve">
+    <value>Yetenek etkinliği:</value>
+  </data>
+  <data name="TypeOfOvertimeColon" xml:space="preserve">
+    <value>Fazla mesai türü:</value>
+  </data>
+  <data name="RepViewerCurrentPage" xml:space="preserve">
+    <value>Mevcut sayfa</value>
+  </data>
+  <data name="RepViewerExport" xml:space="preserve">
+    <value>Aktar</value>
+  </data>
+  <data name="RepViewerFind" xml:space="preserve">
+    <value>Bul</value>
+  </data>
+  <data name="RepViewerFindNext" xml:space="preserve">
+    <value>Bir sonrakini bul</value>
+  </data>
+  <data name="RepViewerFindText" xml:space="preserve">
+    <value>Raporda metin bul</value>
+  </data>
+  <data name="RepViewerFirstPage" xml:space="preserve">
+    <value>İlk sayfa</value>
+  </data>
+  <data name="RepViewerLastPage" xml:space="preserve">
+    <value>Son sayfa</value>
+  </data>
+  <data name="RepViewerNext" xml:space="preserve">
+    <value>Sonraki</value>
+  </data>
+  <data name="RepViewerNextPage" xml:space="preserve">
+    <value>Sonraki sayfa</value>
+  </data>
+  <data name="RepViewerNoMoreMatches" xml:space="preserve">
+    <value>Eşleşen değer bulunamadı</value>
+  </data>
+  <data name="RepViewerPageSetup" xml:space="preserve">
+    <value>Sayfa düzeni</value>
+  </data>
+  <data name="RepViewerPageWidth" xml:space="preserve">
+    <value>Sayfa genişliği</value>
+  </data>
+  <data name="RepViewerPreviousPage" xml:space="preserve">
+    <value>Önceki sayfa</value>
+  </data>
+  <data name="RepViewerPrinLayout" xml:space="preserve">
+    <value>Yazdırma düzeni</value>
+  </data>
+  <data name="RepViewerPrint" xml:space="preserve">
+    <value>Yazdır</value>
+  </data>
+  <data name="RepViewerRefresh" xml:space="preserve">
+    <value>Güncelle</value>
+  </data>
+  <data name="RepViewerStop" xml:space="preserve">
+    <value>İşlemi durdur</value>
+  </data>
+  <data name="RepViewerTextNotFound" xml:space="preserve">
+    <value>Metin bulunamadı</value>
+  </data>
+  <data name="RepViewerTotalPages" xml:space="preserve">
+    <value>Toplam sayfa</value>
+  </data>
+  <data name="RepViewerWholePage" xml:space="preserve">
+    <value>Tüm sayfa</value>
+  </data>
+  <data name="RepViewerZoom" xml:space="preserve">
+    <value>Yakınlaştır</value>
+  </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>Veriabanına bağlanma çabası zaman aşımına uğradı. Lütfen arama kriterlerinizi sadeleştirip tekrar deneyin.</value>
+  </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>Karşılandı</value>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>Karşılanma (%)</value>
+  </data>
+  <data name="ResMustHaves" xml:space="preserve">
+    <value>Zorunlu</value>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>Karşılanmadı</value>
+  </data>
+  <data name="ShiftCategoryHeader" xml:space="preserve">
+    <value>Vardiya türü</value>
+  </data>
+  <data name="SwitchToViewPointOfSelectedAgent" xml:space="preserve">
+    <value>Seçili müşteri temsilcisinin bakış açısı</value>
+  </data>
+  <data name="ShareCalendar" xml:space="preserve">
+    <value>Takvim paylaş</value>
+  </data>
+  <data name="ShareMyCalendar" xml:space="preserve">
+    <value>Takvimimi paylaş</value>
+  </data>
+  <data name="Revoke" xml:space="preserve">
+    <value>Geri al</value>
+  </data>
+  <data name="ShareMyCalendarHint" xml:space="preserve">
+    <value>Takviminize başka bir uygulamadan abone olmak için aşağıdaki URL'yi kullanın. Detaylı bilgi için:</value>
+  </data>
+  <data name="SendAgain" xml:space="preserve">
+    <value>Tekrar gönder</value>
+  </data>
+  <data name="OvertimeAvailabilityWeb" xml:space="preserve">
+    <value>Fazla mesai uygunluğu</value>
+  </data>
+  <data name="PaidTimeHeader" xml:space="preserve">
+    <value>Maaşlı süre</value>
+  </data>
+  <data name="PartTimePercentageHeader" xml:space="preserve">
+    <value>Yarı zamanlılık yüzdesi</value>
+  </data>
+  <data name="RuleSetBagLower" xml:space="preserve">
+    <value>Vardiya kutusu</value>
+  </data>
+  <data name="TrackerTypeHeader" xml:space="preserve">
+    <value>Takip</value>
+  </data>
+  <data name="WorkflowControlSetHeader" xml:space="preserve">
+    <value>İş akışı kontrolü</value>
+  </data>
+  <data name="WorkTimeHeader" xml:space="preserve">
+    <value>İş süresi</value>
+  </data>
+  <data name="FilterHourlyAvailability" xml:space="preserve">
+    <value>Saatlik uygunluk filtrelemesi</value>
+  </data>
+  <data name="HourlyAvailability" xml:space="preserve">
+    <value>Saatlik uygunluk</value>
+  </data>
+  <data name="InfoPanel" xml:space="preserve">
+    <value>Bilgi</value>
+  </data>
+  <data name="SubjectTooLong" xml:space="preserve">
+    <value>Konu kısmı çok uzun</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Ortalama</value>
+  </data>
+  <data name="Distribution" xml:space="preserve">
+    <value>Dağıtım</value>
+  </data>
+  <data name="ShiftAsOvertime" xml:space="preserve">
+    <value>Fazla mesai vardiyası</value>
+  </data>
+  <data name="PerDate" xml:space="preserve">
+    <value>Tarih</value>
+  </data>
+  <data name="ShiftCategoryDistribution" xml:space="preserve">
+    <value>Vardiya türü dağıtımı</value>
+  </data>
+  <data name="PerAgent" xml:space="preserve">
+    <value>Müşteri temsilcisi</value>
+  </data>
+  <data name="PerShiftCategory" xml:space="preserve">
+    <value>Vardiya türü</value>
+  </data>
+  <data name="AnalysisInfo" xml:space="preserve">
+    <value>Analiz bilgisi</value>
+  </data>
+  <data name="Here" xml:space="preserve">
+    <value>burası</value>
+  </data>
+  <data name="LengthOfActivity" xml:space="preserve">
+    <value>Seçili etkinliğin toplam süresi</value>
+  </data>
+  <data name="PleaseChooseSDK" xml:space="preserve">
+    <value>Lütfen SDK seçimi yapın</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Dur</value>
+  </data>
+  <data name="KeepTag" xml:space="preserve">
+    <value>&lt;tut&gt;</value>
+  </data>
+  <data name="ModifyAvailabilities" xml:space="preserve">
+    <value>Uygunluk ayarla</value>
+  </data>
+  <data name="UseDayOfMonthSeasonality" xml:space="preserve">
+    <value>Takvim günü mevsimselliği</value>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>Müşteri temsilcisi yetenekleri</value>
+  </data>
+  <data name="BudgetGroupMissing" xml:space="preserve">
+    <value>Bütçe grubu bulunamadı.</value>
+  </data>
+  <data name="TryingToResolveUnscheduledDaysDotDotDot" xml:space="preserve">
+    <value>Vardiyalanamayan günleri çözmeye çalışıyorum...</value>
+  </data>
+  <data name="ShiftTradeDifferentDateDenyReason" xml:space="preserve">
+    <value>Vardiyalar farklı tarihlere ait olduğundan dolayı vardiya değiş tokuşu reddedildi.</value>
+  </data>
+  <data name="AddIntradayAbsence" xml:space="preserve">
+    <value>Güniçi devamsızlık ekle</value>
+  </data>
+  <data name="IntradayAbsence" xml:space="preserve">
+    <value>Güniçi devamsızlık</value>
   </data>
 </root>

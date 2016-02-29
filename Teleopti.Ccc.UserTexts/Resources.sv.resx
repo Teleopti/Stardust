@@ -13078,4 +13078,22 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
   <data name="Waitlisted" xml:space="preserve">
     <value>På väntelistan</value>
   </data>
+  <data name="AddEmptyPeriod" xml:space="preserve">
+    <value>Lägg till tom period</value>
+  </data>
+  <data name="DeletePeriod" xml:space="preserve">
+    <value>Ta bort period</value>
+  </data>
+  <data name="AgentDetails" xml:space="preserve">
+    <value>Agentdetaljer</value>
+  </data>
+  <data name="InAlarm" xml:space="preserve">
+    <value>Larm</value>
+  </data>
+  <data name="SelectSites" xml:space="preserve">
+    <value>Välj enheter</value>
+  </data>
+  <data name="SelectTeams" xml:space="preserve">
+    <value>Välj team</value>
+  </data>
 </root>
