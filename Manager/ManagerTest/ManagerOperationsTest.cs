@@ -24,6 +24,7 @@ namespace ManagerTest
 		public INodeManager NodeManager;
 		public IManagerConfiguration ManagerConfiguration;
 		public FakeHttpSender HttpSender;
+		private DatabaseHelper databaseHelper;
 		private readonly Uri _nodeUri1 = new Uri("http://localhost:9050/");
 		private readonly Uri _nodeUri2 = new Uri("http://localhost:9051/");
 
@@ -32,12 +33,17 @@ namespace ManagerTest
 			HttpSender.BusyNodesUrl.Add(url);
 		}
 
-		[SetUp]
+		[TestFixtureSetUp]
 		public void TextFixtureSetUp()
 		{
-			var databaseHelper = new DatabaseHelper();
-
+			databaseHelper = new DatabaseHelper();
 			databaseHelper.Create();
+		}
+
+		[SetUp]
+		public void Setup()
+		{
+			databaseHelper.TryClearDatabase();
 		}
 
 		[Test]
