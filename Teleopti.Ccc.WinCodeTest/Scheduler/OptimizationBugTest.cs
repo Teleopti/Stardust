@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public IRequiredScheduleHelper RequiredScheduleHelper;
 		public IResourceOptimizationHelperExtended ResourceCalculator;
 
-		[Test, Ignore("Ignored to make build green, there is an open bug for this.")]
+		[Test]
 		public void ShouldNotCrashWhenDoingRollback()
 		{
 			BusinessUnitFactory.CreateNewBusinessUnitUsedInTest();
