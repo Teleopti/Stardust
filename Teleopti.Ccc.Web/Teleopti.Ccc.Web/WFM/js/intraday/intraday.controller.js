@@ -2,11 +2,13 @@
 	'use strict';
 	angular.module('wfm.intraday')
 		.controller('IntradayCtrl', [
-			'$scope', '$state', 'intradayService', '$stateParams', '$filter', 'growl',
-			function($scope, $state, intradayService, $stateParams, $filter, growl) {
+			'$scope', '$state', 'intradayService', '$stateParams', '$filter', 'growl', '$timeout',
+			function ($scope, $state, intradayService, $stateParams, $filter, growl, $timeout) {
 
 				var autocompleteSkill;
 				var autocompleteSkillArea;
+				var timeoutPromise;
+				var pollingTimeout = 5000;
 
 				var getAutoCompleteControls = function() {
 					var autocompleteSkillDOM = document.querySelector('.autocomplete-skill');
@@ -106,12 +108,19 @@
 				$scope.skillSelected = function (item) {
 					$scope.selectedItem = item;
 					clearSkillAreaSelection();
+					pollSkillMonitorData();
+				};
+
+				
+				var pollSkillMonitorData = function () {
+					cancelTimeout();
 
 					intradayService.getSkillMonitorData.query(
 						{
 							id: $scope.selectedItem.Id
 						})
 						.$promise.then(function (result) {
+							timeoutPromise = $timeout(pollSkillMonitorData, pollingTimeout);
 							if (moment(result.LatestStatsTime).isSame(moment('0001-01-01'))) {
 								$scope.HasMonitorData = false;
 								return;
@@ -121,6 +130,9 @@
 							$scope.latestStatsTime = $filter('date')(result.LatestStatsTime, 'shortTime');
 							$scope.difference = result.ForecastedActualCallsDiff;
 							$scope.HasMonitorData = true;
+						},
+						function(error) {
+							timeoutPromise = $timeout(pollSkillMonitorData, pollingTimeout);
 						});
 				};
 
@@ -133,24 +145,31 @@
 				$scope.skillAreaSelected = function(item) {
 					$scope.selectedItem = item;
 					clearSkillSelection();
+					pollSkillAreaMonitorData();
+				};
 
+				var pollSkillAreaMonitorData = function () {
+					cancelTimeout();
 					intradayService.getSkillAreaMonitorData.query(
 						{
 							id: $scope.selectedItem.Id
 						})
 						.$promise.then(function (result) {
-						if (moment(result.LatestStatsTime).isSame(moment('0001-01-01'))) {
-							$scope.HasMonitorData = false;
-							return;
-						}
-						$scope.forecastedCalls = result.ForecastedCalls;
-						$scope.offeredCalls = result.OfferedCalls;
-						$scope.latestStatsTime = $filter('date')(result.LatestStatsTime, 'shortTime');
-						$scope.difference = result.ForecastedActualCallsDiff;
-						$scope.HasMonitorData = true;
-					});
-				};
-
+							timeoutPromise = $timeout(pollSkillAreaMonitorData, pollingTimeout);
+							if (moment(result.LatestStatsTime).isSame(moment('0001-01-01'))) {
+								$scope.HasMonitorData = false;
+								return;
+							}
+							$scope.forecastedCalls = result.ForecastedCalls;
+							$scope.offeredCalls = result.OfferedCalls;
+							$scope.latestStatsTime = $filter('date')(result.LatestStatsTime, 'shortTime');
+							$scope.difference = result.ForecastedActualCallsDiff;
+							$scope.HasMonitorData = true;
+						},
+						function(error) {
+							timeoutPromise = $timeout(pollSkillAreaMonitorData, pollingTimeout);
+						});
+				}
 
 				function clearSkillSelection() {
 					if (!autocompleteSkill) return;
@@ -164,6 +183,25 @@
 					
 					autocompleteSkillArea.selectedSkillArea = null;
 					autocompleteSkillArea.searchSkillAreaText = '';
+				};
+
+				$scope.$on("$destroy", function (event) {
+	               cancelTimeout();
+            });
+
+				$scope.$on('$locationChangeStart', function () {
+					cancelTimeout();
+				});
+
+				$scope.$on('$stateChangeSuccess', function (evt, to, params, from) {
+					if (params.newSkillArea == true) {
+						reloadSkillAreas();
+					}
+				});
+
+				var cancelTimeout = function () {
+					if (timeoutPromise)
+						$timeout.cancel(timeoutPromise);
 				};
 			}
 		]);
