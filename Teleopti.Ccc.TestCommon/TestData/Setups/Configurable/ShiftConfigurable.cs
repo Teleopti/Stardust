@@ -68,7 +68,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			return this;
 		}
 
-
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
 			IShiftCategory shiftCategory = null;

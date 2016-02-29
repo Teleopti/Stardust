@@ -1,17 +1,12 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -48,25 +43,19 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 		[Test]
 		public void MeasurePerformance()
 		{
+			var watch1 = Stopwatch.StartNew();
 			var time = new MutableNow();
 			time.Is("2016-02-25 08:00".Utc());
 
 			var businessUnit = DefaultBusinessUnit.BusinessUnitFromFakeState.Name;
-			var numberOfSites = 2;
-			var numberOfTeams = numberOfSites * 10;
-			var numberOfAgents = numberOfTeams * 10;
-
-			numberOfSites = 1;
-			numberOfTeams = numberOfSites * 1;
-			numberOfAgents = numberOfTeams * 10;
+			var numberOfAgents = 5000;
 
 			Http.Get("/Test/SetCurrentTime?ticks=" + time.UtcDateTime().Ticks);
 
-			var factory = new TestDataFactory(GlobalUnitOfWorkState.UnitOfWorkAction, TenantUnitOfWorkState.TenantUnitOfWorkAction);
-			var analyticsDataFactory = new AnalyticsDataFactory();
-
 			var datasource = new Datasources(DataSourceId, " ", -1, " ", -1, " ", " ", 1, false, SourceId, false);
-			analyticsDataFactory.Apply(datasource);
+			new AnalyticsDataFactory().Apply(datasource);
+
+			var factory = new TestDataFactory(GlobalUnitOfWorkState.UnitOfWorkAction, TenantUnitOfWorkState.TenantUnitOfWorkAction);
 
 			factory.Apply(new ScenarioConfigurable { Name = "Default", BusinessUnit = businessUnit });
 			factory.Apply(new ActivityConfigurable { Name = "Phone" });
@@ -88,7 +77,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			
 			factory.Apply(new RtaMapConfigurable { PhoneState = "LoggedOff", Adherence = "In", Name = "InAdherence" });
 			
-			Enumerable.Range(0, numberOfSites)
+			Enumerable.Range(0, numberOfAgents / 100)
 				.ForEach(site =>
 				{
 					factory.Apply(new SiteConfigurable
@@ -98,7 +87,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 					});
 				});
 
-			Enumerable.Range(0, numberOfTeams)
+			Enumerable.Range(0, numberOfAgents / 10)
 				.ForEach(team =>
 				{
 					factory.Apply(new TeamConfigurable
@@ -111,64 +100,96 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			Enumerable.Range(0, numberOfAgents)
 				.ForEach(roger =>
 				{
-					var personDataFactory = factory.Person("roger" + roger); // == sant!
-					personDataFactory
-						.Apply(new PersonPeriodConfigurable
-						{
-							StartDate = "2000-01-01 00:00".Utc(),
-							ExternalLogon = "roger" + roger,
-							ExternalLogonDataSourceId = 9,
+					var name = "roger" + roger;
+					factory.Person(name).Apply(new PersonPeriodConfigurable
+					{
+						StartDate = "2000-01-01 00:00".Utc(),
+						ExternalLogon = name,
+						ExternalLogonDataSourceId = 9,
 
-							Contract = "contract",
-							PartTimePercentage = "partTimePercentage",
-							ContractSchedule = "contractSchedule",
-							Team = "team" + (roger/10)
-						});
+						Contract = "contract",
+						PartTimePercentage = "partTimePercentage",
+						ContractSchedule = "contractSchedule",
+						Team = "team" + (roger/10)
+					});
 
-					personDataFactory
-						.Apply(new ShiftConfigurable
-						{
-							Scenario = "Default"
-						}
-							.AddActivity("Phone", "2016-02-25 08:00".Utc(), "2016-02-25 17:00".Utc())
-							.AddActivity("Break", "2016-02-25 10:00".Utc(), "2016-02-25 10:15".Utc())
-							.AddActivity("Lunch", "2016-02-25 11:30".Utc(), "2016-02-25 12:00".Utc())
-							.AddActivity("Break", "2016-02-25 15:00".Utc(), "2016-02-25 15:15".Utc())
+					factory.Person(name).Apply(new ShiftConfigurable
+					{
+						Scenario = "Default"
+					}
+						.AddActivity("Phone", "2016-02-25 08:00".Utc(), "2016-02-25 17:00".Utc())
+						.AddActivity("Break", "2016-02-25 10:00".Utc(), "2016-02-25 10:15".Utc())
+						.AddActivity("Lunch", "2016-02-25 11:30".Utc(), "2016-02-25 12:00".Utc())
+						.AddActivity("Break", "2016-02-25 15:00".Utc(), "2016-02-25 15:15".Utc())
 						);
-					personDataFactory
-						.Apply(new ShiftConfigurable
-						{
-							Scenario = "Default"
-						}
-							.AddActivity("Phone", "2016-02-26 08:00".Utc(), "2016-02-26 17:00".Utc())
-							.AddActivity("Break", "2016-02-26 10:00".Utc(), "2016-02-26 10:15".Utc())
-							.AddActivity("Lunch", "2016-02-26 11:30".Utc(), "2016-02-26 12:00".Utc())
-							.AddActivity("Break", "2016-02-26 15:00".Utc(), "2016-02-26 15:15".Utc())
+
+					factory.Person(name).Apply(new ShiftConfigurable
+					{
+						Scenario = "Default"
+					}
+						.AddActivity("Phone", "2016-02-26 08:00".Utc(), "2016-02-26 17:00".Utc())
+						.AddActivity("Break", "2016-02-26 10:00".Utc(), "2016-02-26 10:15".Utc())
+						.AddActivity("Lunch", "2016-02-26 11:30".Utc(), "2016-02-26 12:00".Utc())
+						.AddActivity("Break", "2016-02-26 15:00".Utc(), "2016-02-26 15:15".Utc())
 						);
-					personDataFactory
-						.Apply(new ShiftConfigurable
-						{
-							Scenario = "Default"
-						}
-							.AddActivity("Phone", "2016-02-27 08:00".Utc(), "2016-02-27 17:00".Utc())
-							.AddActivity("Break", "2016-02-27 10:00".Utc(), "2016-02-27 10:15".Utc())
-							.AddActivity("Lunch", "2016-02-27 11:30".Utc(), "2016-02-27 12:00".Utc())
-							.AddActivity("Break", "2016-02-27 15:00".Utc(), "2016-02-27 15:15".Utc())
+
+					factory.Person(name).Apply(new ShiftConfigurable
+					{
+						Scenario = "Default"
+					}
+						.AddActivity("Phone", "2016-02-27 08:00".Utc(), "2016-02-27 17:00".Utc())
+						.AddActivity("Break", "2016-02-27 10:00".Utc(), "2016-02-27 10:15".Utc())
+						.AddActivity("Lunch", "2016-02-27 11:30".Utc(), "2016-02-27 12:00".Utc())
+						.AddActivity("Break", "2016-02-27 15:00".Utc(), "2016-02-27 15:15".Utc())
 						);
 				});
 
-			Http.PostJson(
-				"Rta/State/Change",
-				new ExternalUserStateWebModel
-				{
-					AuthenticationKey = "!#¤atAbgT%",
-					UserCode = "roger0",
-					StateCode = "Ready",
-					IsLoggedOn = true,
-					PlatformTypeId = Guid.Empty.ToString(),
-					SourceId = SourceId,
-					IsSnapshot = false
-				});
+			var changes = new[]
+			{
+				new TimeStateInfo {Time = "2016-02-26 08:01", StateCode = "Ready"},
+				new TimeStateInfo {Time = "2016-02-26 09:00", StateCode = "LoggedOff"},
+				new TimeStateInfo {Time = "2016-02-26 09:05", StateCode = "Ready"},
+				new TimeStateInfo {Time = "2016-02-26 10:00", StateCode = "LoggedOff"},
+				new TimeStateInfo {Time = "2016-02-26 10:15", StateCode = "Ready"},
+				new TimeStateInfo {Time = "2016-02-26 11:35", StateCode = "LoggedOff"},
+				new TimeStateInfo {Time = "2016-02-26 11:55", StateCode = "Ready"},
+				new TimeStateInfo {Time = "2016-02-26 14:55", StateCode = "LoggedOff"},
+				new TimeStateInfo {Time = "2016-02-26 15:15", StateCode = "Ready"},
+				new TimeStateInfo {Time = "2016-02-26 17:05", StateCode = "LoggedOff"},
+			};
+			Console.WriteLine(watch1.Elapsed);
+			Console.WriteLine("******************************");
+
+
+			var watch = Stopwatch.StartNew();
+			changes.ForEach(i =>
+			{
+				time.Is(i.Time.Utc());
+				Http.Get("/Test/SetCurrentTime?ticks=" + time.UtcDateTime().Ticks);
+				Enumerable.Range(0, numberOfAgents)
+					.ForEach(roger =>
+					{
+						Http.PostJson(
+							"Rta/State/Change",
+							new ExternalUserStateWebModel
+							{
+								AuthenticationKey = LegacyAuthenticationKey.TheKey,
+								UserCode = "roger" + roger,
+								StateCode = i.StateCode,
+								IsLoggedOn = true,
+								PlatformTypeId = Guid.Empty.ToString(),
+								SourceId = SourceId,
+								IsSnapshot = false
+							});
+					});
+			});
+			Console.WriteLine(watch.Elapsed);
+		}
+
+		public class TimeStateInfo
+		{
+			public string Time { get; set; }
+			public string StateCode { get; set; }
 		}
 	}
 }
