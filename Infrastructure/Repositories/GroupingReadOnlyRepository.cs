@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				+ "WHERE businessunitid=:businessUnitId AND pageid=:pageId "
 				+ "AND :startDate <= isnull(EndDate, '2059-12-31') "
 				+ "AND :endDate >= StartDate "
-				+ "AND (LeavingDate >= :endDate OR LeavingDate IS NULL) "
+				+ "AND (LeavingDate >= :startDate OR LeavingDate IS NULL) "
 				+ "ORDER BY groupname";
 			return _currentUnitOfWork.Session().CreateSQLQuery(sql)
 					.SetGuid("businessUnitId", getBusinessUnitId())
