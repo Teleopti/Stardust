@@ -47,16 +47,18 @@
 
 		vm.applyAbsence = function () {
 			var trackId = guidgenerator.newGuid();
+			var personIds = vm.agentIdList();
 			var afterAppliedAbsence = function(result) {
 				vm.actionsAfterAbsenceApply({
 					result: { TrackId: trackId, Errors: result },
+					personIds: personIds,
 					successMessageTemplate: 'AddAbsenceSuccessedResult',
 					failMessageTemplate: 'AddAbsenceTotalResult'
 				});
 			}
 			if (vm.isFullDayAbsence) {
 				personAbsenceSvc.applyFullDayAbsence.post({
-					PersonIds: vm.agentIdList(),
+					PersonIds: personIds,
 					AbsenceId: vm.selectedAbsenceId,
 					StartDate: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD"),
 					EndDate: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD"),
@@ -64,7 +66,7 @@
 				}).$promise.then(function(result) { afterAppliedAbsence(result) });
 			} else {
 				personAbsenceSvc.applyIntradayAbsence.post({
-					PersonIds: vm.agentIdList(),
+					PersonIds: personIds,
 					AbsenceId: vm.selectedAbsenceId,
 					StartTime: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD HH:mm"),
 					EndTime: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD HH:mm"),

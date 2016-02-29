@@ -55,7 +55,7 @@ angular.module("wfm.teamSchedule").service("TeamSchedule", [
 		});
 
 		service.updateAgentsPerPageSetting = $resource("../api/TeamSchedule/UpdateAgentsPerPage", {
-			agents: "@agents",
+			agents: "@agents"
 		}, {
 			post: {
 				method: "POST",

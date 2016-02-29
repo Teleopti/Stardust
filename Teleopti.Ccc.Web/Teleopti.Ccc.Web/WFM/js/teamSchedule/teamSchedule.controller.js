@@ -3,11 +3,11 @@
 (function () {
 	angular.module('wfm.teamSchedule')
 		.controller('TeamScheduleCtrl', ['$scope', '$q', '$locale', '$translate', 'TeamSchedule', 'GroupScheduleFactory',
-			'teamScheduleNotificationService', 'PersonSelection', 'ScheduleManagement', 'SwapShifts', 'Toggle', 'SignalR', '$mdComponentRegistry',
+			'teamScheduleNotificationService', 'PersonSelection', 'ScheduleManagement', 'SwapShifts', 'PersonAbsence', 'Toggle', 'SignalR', '$mdComponentRegistry',
 			'$mdSidenav', '$mdUtil', 'guidgenerator', 'ShortCuts', 'keyCodes', TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $locale, $translate, teamScheduleSvc, groupScheduleFactory,
-		notificationService, personSelectionSvc, scheduleMgmtSvc, swapShiftsSvc, toggleSvc, signalRSvc, $mdComponentRegistry, $mdSidenav, $mdUtil,
+		notificationService, personSelectionSvc, scheduleMgmtSvc, swapShiftsSvc, personAbsenceSvc, toggleSvc, signalRSvc, $mdComponentRegistry, $mdSidenav, $mdUtil,
 		guidgenerator, shortCuts, keyCodes) {
 		var vm = this;
 
@@ -144,11 +144,11 @@
 		};
 
 		function toggleAddAbsencePanel() {
-			if (personSelectionSvc.isAnyAgentSelected() && vm.canActiveAddAbsence()) {
-				vm.setEarliestStartOfSelectedSchedule();
-				vm.toggleMenuState();
-				vm.setCurrentCommand("addAbsence")();
-			}
+			if (!personSelectionSvc.isAnyAgentSelected() || !vm.canActiveAddAbsence()) return;
+
+			vm.setEarliestStartOfSelectedSchedule();
+			vm.toggleMenuState();
+			vm.setCurrentCommand("addAbsence")();
 		};
 
 		function swapShifts() {
@@ -158,7 +158,28 @@
 			var personIdFrom = selectedPersonIds[0];
 			var personIdTo = selectedPersonIds[1];
 			swapShiftsSvc.PromiseForSwapShifts(personIdFrom, personIdTo, vm.scheduleDateMoment(), function(result) {
-				vm.afterActionCallback(result, "FinishedSwapShifts", "FailedToSwapShifts");
+				vm.afterActionCallback(result, personSelectionSvc.getSelectedPersonIdList(), "FinishedSwapShifts", "FailedToSwapShifts");
+			});
+		}
+
+		function canRemoveAbsence() {
+			return vm.toggleForRemoveAbsenceEnabled && vm.selectedPersonAbsences.length > 0;
+		}
+
+		function removeAbsence() {
+			if (!canRemoveAbsence()) return;
+
+			var personWithSelectedAbsences = [];
+			var selectedAbsences = [];
+			for (var i = 0; i < vm.selectedPersonAbsences.length; i++) {
+				var personAndAbsencePair = vm.selectedPersonAbsences[i];
+				personWithSelectedAbsences.push(personAndAbsencePair.PersonId);
+				for (var j = 0; j < personAndAbsencePair.SelectedPersonAbsences.length; j++) {
+					selectedAbsences.push(personAndAbsencePair.SelectedPersonAbsences[j]);
+				};
+			}
+			personAbsenceSvc.PromiseForRemovePersonAbsence(selectedAbsences, function (result) {
+				vm.afterActionCallback(result, personWithSelectedAbsences, "FinishedRemoveAbsence", "FailedToRemoveAbsence");
 			});
 		}
 
@@ -168,16 +189,24 @@
 				shortcut: "Alt+A",
 				panelName: 'report-absence',
 				action: toggleAddAbsencePanel,
-				enabled: function () { return personSelectionSvc.isAnyAgentSelected(); },
-				active: function () { return vm.canActiveAddAbsence(); }
+				enabled: function() { return personSelectionSvc.isAnyAgentSelected(); },
+				active: function() { return vm.canActiveAddAbsence(); }
 			},
 			{
 				label: "SwapShifts",
 				shortcut: "Alt+S",
 				panelName: "", // No panel needed,
 				action: swapShifts,
-				enabled: function () { return personSelectionSvc.canSwapShifts() },
-				active: function () { return vm.canActiveSwapShifts(); }
+				enabled: function() { return personSelectionSvc.canSwapShifts() },
+				active: function() { return vm.canActiveSwapShifts(); }
+			},
+			{
+				label: "RemoveAbsence",
+				shortcut: "Alt+R",
+				panelName: "", // No panel needed,
+				action: removeAbsence,
+				enabled: canRemoveAbsence,
+				active: function() { return vm.toggleForRemoveAbsenceEnabled; }
 			}
 		];
 
@@ -287,11 +316,11 @@
 			}
 		}
 
-		vm.afterActionCallback = function (result, successMessageTemplate, failMessageTemplate) {
+		vm.afterActionCallback = function (result, personIds, successMessageTemplate, failMessageTemplate) {
 			vm.lastCommandTrackId = result.TrackId;
 			handleActionResult(result.Errors, successMessageTemplate, failMessageTemplate);
 
-			vm.updateSchedules(personSelectionSvc.getSelectedPersonIdList());
+			vm.updateSchedules(personIds);
 			personSelectionSvc.resetPersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 
 			vm.setCurrentCommand("");

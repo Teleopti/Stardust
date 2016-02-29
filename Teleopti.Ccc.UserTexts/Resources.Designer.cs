@@ -9950,6 +9950,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to remove selected person absence..
+        /// </summary>
+        public static string FailedToRemoveAbsence {
+            get {
+                return ResourceManager.GetString("FailedToRemoveAbsence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to swap shifts..
         /// </summary>
         public static string FailedToSwapShifts {
@@ -10469,6 +10478,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string FinishAmpersand {
             get {
                 return ResourceManager.GetString("FinishAmpersand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove person absence finished successfully..
+        /// </summary>
+        public static string FinishedRemoveAbsence {
+            get {
+                return ResourceManager.GetString("FinishedRemoveAbsence", resourceCulture);
             }
         }
         

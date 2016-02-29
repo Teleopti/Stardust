@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-describe('TeamSchedule ScheduleTable ControllerTest', function() {
+describe('[TeamSchedule ScheduleTable ControllerTest]', function() {
 	var controller;
 
 	beforeEach(function() {
@@ -88,35 +88,41 @@ describe('TeamSchedule ScheduleTable ControllerTest', function() {
 			}
 		}
 		var allProjections = [personAbsence1, personAbsence2, personAbsence3];
-		var schedules = [
-			{
-				"PersonId": "1234",
-				"Date": "2016-02-19",
-				"Shifts": [
-					{
-						"Projections": allProjections
-					}
-				]
-			}
-		];
+		var schedule = {
+			"PersonId": "1234",
+			"Date": "2016-02-19",
+			"Shifts": [
+				{
+					"Projections": allProjections
+				}
+			]
+		};
 
-		controller.scheduleVm = { Schedules: schedules };
+		controller.scheduleVm = { Schedules: [schedule] };
 		controller.selectedPersonAbsences = [];
 
-		controller.ToggleProjectionSelection(personAbsence2, allProjections);
+		controller.ToggleProjectionSelection(personAbsence2, schedule);
+		expect(controller.selectedPersonAbsences.length).toEqual(1);
+		expect(controller.selectedPersonAbsences[0].PersonId).toEqual(schedule.PersonId);
+		expect(controller.selectedPersonAbsences[0].SelectedPersonAbsences.length).toEqual(1);
 		expect(personAbsence1.Selected).toEqual(false);
 		expect(personAbsence2.Selected).toEqual(true);
 		expect(personAbsence3.Selected).toEqual(false);
 
-		controller.ToggleProjectionSelection(personAbsence1, allProjections);
+		controller.ToggleProjectionSelection(personAbsence1, schedule);
+		expect(controller.selectedPersonAbsences[0].SelectedPersonAbsences.length).toEqual(2);
 		expect(personAbsence1.Selected).toEqual(true);
 		expect(personAbsence2.Selected).toEqual(true);
 		expect(personAbsence3.Selected).toEqual(true);
 
-		controller.ToggleProjectionSelection(personAbsence3, allProjections);
+		controller.ToggleProjectionSelection(personAbsence3, schedule);
+		expect(controller.selectedPersonAbsences[0].SelectedPersonAbsences.length).toEqual(1);
 		expect(personAbsence1.Selected).toEqual(false);
 		expect(personAbsence2.Selected).toEqual(true);
 		expect(personAbsence3.Selected).toEqual(false);
+
+		controller.ToggleProjectionSelection(personAbsence2, schedule);
+		expect(controller.selectedPersonAbsences.length).toEqual(0);
 	}));
 
 	it("can display person selection status correctly", inject(function () {
