@@ -248,9 +248,9 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
-  Variable Value1=SIGNALR_BACKPLANE_CONNECTION_STRING
+  Variable Value1=SIGNALR_BACKPLANE
   Variable Name2=_PROP_VAR_
-  Variable Value2=SIGNALR_BACKPLANE_CONNECTION_STRING_TMP
+  Variable Value2=SIGNALR_BACKPLANE_TMP
   Variable Name3=HELPFILE
   Variable Value3=C:\Program Files (x86)\Symantec\Wise\Help\WiseScriptPackageEditor.chm
 end
@@ -387,7 +387,7 @@ item: Remark
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(SIGNALR_BACKPLANE_CONNECTION_STRING)|%SIGNALR_BACKPLANE_CONNECTION_STRING_TMP%
+  New Text=$(SIGNALR_BACKPLANE)|%SIGNALR_BACKPLANE_TMP%
   Line Number=0
 end
 item: Insert Line into Text File
