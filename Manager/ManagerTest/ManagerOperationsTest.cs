@@ -27,7 +27,7 @@ namespace ManagerTest
 		private readonly Uri _nodeUri1 = new Uri("http://localhost:9050/");
 		private readonly Uri _nodeUri2 = new Uri("http://localhost:9051/");
 
-		private void thisNodeIsBusy(string url)
+		private void ThisNodeIsBusy(string url)
 		{
 			HttpSender.BusyNodesUrl.Add(url);
 		}
@@ -208,7 +208,7 @@ namespace ManagerTest
 			JobRepository.Add(job);
 			JobRepository.CheckAndAssignNextJob(new List<WorkerNode> {new WorkerNode {Url = _nodeUri1}},
 			                                    HttpSender);
-			thisNodeIsBusy(_nodeUri1.ToString());
+			ThisNodeIsBusy(_nodeUri1.ToString());
 			Target.CancelThisJob(jobId);
 			JobRepository.LoadAll()
 				.Count.Should()
@@ -257,7 +257,7 @@ namespace ManagerTest
 				Type = "bra",
 				UserName = "ManagerTests"
 			};
-			thisNodeIsBusy(_nodeUri1.ToString());
+			ThisNodeIsBusy(_nodeUri1.ToString());
 
 			Target.Heartbeat(_nodeUri1);
 

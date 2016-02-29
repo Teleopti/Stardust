@@ -31,7 +31,7 @@ namespace ManagerTest.Database
 			parameters = parameters ?? new Dictionary<string, object>();
 
 			var result = 0;
-			handleWithRetry(sql, s =>
+			HandleWithRetry(sql, s =>
 			{
 				var regex = new Regex("^GO", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 				var allScripts = regex.Split(sql);
@@ -69,7 +69,7 @@ namespace ManagerTest.Database
 
 		public void ExecuteTransactionlessNonQuery(string sql, int timeout = 30)
 		{
-			handleWithRetry(sql, s =>
+			HandleWithRetry(sql, s =>
 			{
 				using (var connection = _openConnection())
 				{
@@ -92,7 +92,7 @@ namespace ManagerTest.Database
 			var allScripts = regex.Split(sql);
 			var statements = allScripts.Where(x => !string.IsNullOrWhiteSpace(x));
 
-			handleWithRetry(sql, s =>
+			HandleWithRetry(sql, s =>
 			{
 				using (var connection = _openConnection())
 				{
@@ -125,7 +125,7 @@ namespace ManagerTest.Database
 			}, 0);
 		}
 
-		private void handleWithRetry(string sql, Action<string> action, int attempt)
+		private void HandleWithRetry(string sql, Action<string> action, int attempt)
 		{
 			try
 			{
@@ -136,7 +136,7 @@ namespace ManagerTest.Database
 				if (attempt < 6 && _errorChecker.IsTransient(exception))
 				{
 					Thread.Sleep(5);
-					handleWithRetry(sql, action, ++attempt);
+					HandleWithRetry(sql, action, ++attempt);
 				}
 
 				var message = exception.Message;
