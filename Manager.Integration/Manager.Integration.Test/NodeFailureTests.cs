@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
@@ -177,12 +178,13 @@ namespace Manager.Integration.Test
 
 			uri = managerUriBuilder.GetNodesUri();
 
-			var responseNodes = await httpSender.GetAsync(uri);
+			HttpResponseMessage responseNodes = await httpSender.GetAsync(uri);
 
 			responseNodes.EnsureSuccessStatusCode();
+
 			var ser = await responseNodes.Content.ReadAsStringAsync();
 
-			var workerNodes = JsonConvert.DeserializeObject<List<WorkerNode>>(ser);
+			var workerNodes = JsonConvert.DeserializeObject<IList<WorkerNode>>(ser);
 
 			var node = workerNodes.FirstOrDefault();
 

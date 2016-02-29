@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -175,7 +176,8 @@ namespace Stardust.Manager
 		[HttpGet, Route(ManagerRouteConstants.Nodes)]
 		public IHttpActionResult Nodes()
 		{
-			return Ok(_jobManager.Nodes());
+			IList<WorkerNode> workernodes = _jobManager.Nodes();
+			return Ok(workernodes);
 		}
 
 	}
