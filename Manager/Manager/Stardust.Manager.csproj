@@ -117,6 +117,7 @@
     <Compile Include="Interfaces\INodeManager.cs" />
     <Compile Include="Interfaces\IWorkerNodeRepository.cs" />
     <Compile Include="ManagerStarter.cs" />
+    <Compile Include="Interfaces\IManagerConfiguration.cs" />
     <Compile Include="Models\JobDefinition.cs" />
     <Compile Include="Models\JobHistory.cs" />
     <Compile Include="JobManager.cs" />

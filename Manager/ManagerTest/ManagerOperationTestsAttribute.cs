@@ -1,3 +1,4 @@
+using System;
 using System.Configuration;
 using Autofac;
 using ManagerTest.Fakes;
@@ -10,6 +11,7 @@ namespace ManagerTest
 	{
 		protected override void SetUp(ContainerBuilder builder)
 		{
+			builder.RegisterType<FakeManagerConfiguration>().As<IManagerConfiguration>();
 			builder.RegisterType<NodeManager>().As<INodeManager>().SingleInstance().AsSelf();
 			builder.RegisterType<FakeHttpSender>().As<IHttpSender>().SingleInstance().AsSelf();
 			builder.Register(
@@ -22,5 +24,6 @@ namespace ManagerTest
 			builder.RegisterType<ManagerController>();
 			builder.RegisterType<JobManager>();
 		}
+		
 	}
 }

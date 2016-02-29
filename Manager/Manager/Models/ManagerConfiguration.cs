@@ -1,6 +1,8 @@
-﻿namespace Stardust.Manager.Models
+﻿using Stardust.Manager.Interfaces;
+
+namespace Stardust.Manager.Models
 {
-	public class ManagerConfiguration
+	public class ManagerConfiguration : IManagerConfiguration
 	{
 		public string ConnectionString { get; set; }
 

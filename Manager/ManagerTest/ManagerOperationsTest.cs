@@ -22,6 +22,7 @@ namespace ManagerTest
 		public IJobRepository JobRepository;
 		public IWorkerNodeRepository NodeRepository;
 		public INodeManager NodeManager;
+		public IManagerConfiguration _ManagerConfiguration;
 		public FakeHttpSender HttpSender;
 		private readonly Uri _nodeUri1 = new Uri("http://localhost:9050/");
 		private readonly Uri _nodeUri2 = new Uri("http://localhost:9051/");
@@ -34,6 +35,8 @@ namespace ManagerTest
 		[SetUp]
 		public void TextFixtureSetUp()
 		{
+			_ManagerConfiguration = new FakeManagerConfiguration();
+
 			var databaseHelper = new DatabaseHelper();
 
 			databaseHelper.Create();

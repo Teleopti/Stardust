@@ -15,22 +15,29 @@ namespace Stardust.Manager
 		private readonly IHttpSender _httpSender;
 		private readonly IJobRepository _jobRepository;
 		private readonly IWorkerNodeRepository _workerNodeRepository;
+		private readonly IManagerConfiguration _managerConfiguration;
 		private readonly Timer _checkHeartbeatsTimer = new Timer();
-		private readonly ManagerConfiguration _managerConfiguration;
 
 		public JobManager(IJobRepository jobRepository,
 		                  IWorkerNodeRepository workerNodeRepository,
 		                  IHttpSender httpSender,
-						  ManagerConfiguration managerConfiguration)
+						  IManagerConfiguration managerConfiguration)
 		{
+			if (managerConfiguration.AllowedNodeDownTimeSeconds <= 0)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger, "AllowedNodeDownTimeSeconds is not greater than zero!");
+				throw new ArgumentOutOfRangeException();
+			}
+		
 			_jobRepository = jobRepository;
 			_workerNodeRepository = workerNodeRepository;
 			_httpSender = httpSender;
 			_managerConfiguration = managerConfiguration;
 
 			_checkHeartbeatsTimer.Elapsed += OnTimedEvent;
-			_checkHeartbeatsTimer.Interval = managerConfiguration.AllowedNodeDownTimeSeconds*500; //NodeDowntime in milliseconds divided by 2
+			_checkHeartbeatsTimer.Interval = _managerConfiguration.AllowedNodeDownTimeSeconds * 500; //NodeDowntime in milliseconds divided by 2
 			_checkHeartbeatsTimer.Start();
+			
 		}
 
 		public void CheckNodesAreAlive(TimeSpan timeSpan)
