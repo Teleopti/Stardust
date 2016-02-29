@@ -84,8 +84,8 @@ namespace NodeConsoleHost
 			                                       new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
 			                                       Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
 			                                       ConfigurationManager.AppSettings["NodeName"],
-												   Convert.ToDouble(ConfigurationManager.AppSettings["PingToManagerIdleDelay"]),
-												   Convert.ToDouble(ConfigurationManager.AppSettings["PingToManagerRunningDelay"]));
+												   Convert.ToDouble(ConfigurationManager.AppSettings["PingToManagerIdleDelaySeconds"]),
+												   Convert.ToDouble(ConfigurationManager.AppSettings["PingToManagerRunningDelaySeconds"]));
 
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new WorkerModule());

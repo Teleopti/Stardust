@@ -147,11 +147,11 @@ namespace Stardust.Node.Workers
 			//----------------------------------------------------
 			Task = new Task(() =>
 			{
-				PingToManagerTimer.Interval = NodeConfiguration.PingToManagerRunningDelay;
+				PingToManagerTimer.Interval = NodeConfiguration.PingToManagerRunningDelay*1000; //milliseconds
 
 				LogHelper.LogDebugWithLineNumber(Logger,
 				                                 "Ping to manager interval is now set to go every " +
-				                                 PingToManagerTimer.Interval/1000 + " seconds during job execution.");
+				                                 PingToManagerTimer.Interval + " seconds during job execution.");
 
 				Handler.Invoke(deSer,
 				               CancellationTokenSource,
@@ -161,14 +161,14 @@ namespace Stardust.Node.Workers
 
 			Task.ContinueWith(t =>
 			{
-				PingToManagerTimer.Interval = NodeConfiguration.PingToManagerIdleDelay;
+				PingToManagerTimer.Interval = NodeConfiguration.PingToManagerIdleDelay*1000; //milliseconds
 
 				LogHelper.LogDebugWithLineNumber(Logger,
 				                                 "Ping to manager interval is now set to go every " +
-				                                 PingToManagerTimer.Interval/1000 + " seconds when node is idle.");
+				                                 PingToManagerTimer.Interval + " seconds when node is idle.");
 
 
-				string logInfo = null;
+				string logInfo;
 
 				switch (t.Status)
 				{
