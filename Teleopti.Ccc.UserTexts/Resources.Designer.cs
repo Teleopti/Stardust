@@ -29079,6 +29079,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Toggle all.
+        /// </summary>
+        public static string ToggleAll {
+            get {
+                return ResourceManager.GetString("ToggleAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Toggle date selection.
         /// </summary>
         public static string ToggleDateSelection {

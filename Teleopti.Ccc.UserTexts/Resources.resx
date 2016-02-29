@@ -14174,4 +14174,8 @@ Help us improve your experience by sending an error report</value>
     <value>No Hierarchies can be found for the current Business Unit</value>
     <comment>Used to display a warning message in Anywhere when no Hierarchies can be found for the current Business Unit</comment>
   </data>
+  <data name="ToggleAll" xml:space="preserve">
+    <value>Toggle all</value>
+    <comment>Toggle all tooltip text of toggle button in working-hours-picker outbound</comment>
+  </data>
 </root>
