@@ -6,7 +6,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	//ROBTODO: why does this exist if all of the methods are not implemented?
 	public class FakeBudgetDayRepository : IBudgetDayRepository
 	{
 		public void Add(IBudgetDay entity)
