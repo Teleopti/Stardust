@@ -95,62 +95,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			var request = simpleRequestStatusTest(new DenyAbsenceRequest());
 			Assert.IsTrue(request.IsAutoDenied);
 		}
-
-		[Test, Ignore("Test ignored as AbsenceRequestUpdater is using trackAccounts(), making it difficult to test")]
-		public void PersonalAccountShouldBeUpdatedWhenGrantingRequest()
-		{
-			var startDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
-			var endDateTime = new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc);
-			var requestDateTimePeriod = new DateTimePeriod(startDateTime, endDateTime);
-
-			var accountDay = new AccountDay(new DateOnly(2015, 12, 1))
-			{
-				BalanceIn = TimeSpan.FromDays(5),
-				Accrued = TimeSpan.FromDays(20),
-				Extra = TimeSpan.FromDays(0)
-			};
-			
-			var absence = AbsenceFactory.CreateAbsence("Holiday");
-
-			var workflowControlSet = createWorkFlowControlSet(new DateTime(2016, 01, 01), new DateTime(2016, 12, 31), absence, new GrantAbsenceRequest(), true);
-			var person = createAndSetupPerson(startDateTime, endDateTime, workflowControlSet);
-
-			createPersonAbsenceAccount(person, absence, accountDay);
-
-			var newRequest = createAbsenceRequest(person, absence, requestDateTimePeriod);
-			var newAbsenceRequestConsumer = createNewAbsenceRequestConsumer(true, false);
-			newAbsenceRequestConsumer.Consume(new NewAbsenceRequestCreated { PersonRequestId = newRequest.Id.Value });
-
-			Assert.AreEqual(24, accountDay.Remaining.TotalDays);
-		}
-
-		[Test, Ignore("Test ignored as AbsenceRequestUpdater is using trackAccounts(), making it difficult to test")]
-		public void PersonalAccountShouldNotBeUpdatedWhenDenyingRequest()
-		{
-			var startDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
-			var endDateTime = new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc);
-			var requestDateTimePeriod = new DateTimePeriod(startDateTime, endDateTime);
-
-			var accountDay = new AccountDay(new DateOnly(2015, 12, 1))
-			{
-				BalanceIn = TimeSpan.FromDays(5),
-				Accrued = TimeSpan.FromDays(20),
-				Extra = TimeSpan.FromDays(0)
-			};
-
-			var absence = AbsenceFactory.CreateAbsence("Holiday");
-			var workflowControlSet = createWorkFlowControlSet(new DateTime(2016, 01, 01), new DateTime(2016, 12, 31), absence, new DenyAbsenceRequest(), false);
-			var person = createAndSetupPerson(startDateTime, endDateTime, workflowControlSet);
-
-			createPersonAbsenceAccount(person, absence, accountDay);
-
-			var newRequest = createAbsenceRequest(person, absence, requestDateTimePeriod);
-			var newAbsenceRequestConsumer = createNewAbsenceRequestConsumer(false, false);
-			newAbsenceRequestConsumer.Consume(new NewAbsenceRequestCreated() { PersonRequestId = newRequest.Id.Value });
-
-			Assert.IsTrue (newRequest.IsDenied);
-			Assert.AreEqual(25, accountDay.Remaining.TotalDays);
-		}
 		
 		[Test]
 		public void ShouldUpdateExistingPersonalAccountDataWhenConsumingAbsenceRequest()
