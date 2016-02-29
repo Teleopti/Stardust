@@ -22,44 +22,69 @@ namespace Teleopti.Support.Library.Config
 
 	public class Tags
 	{
+		
 		private readonly IList<SearchReplace> _searchReplaces = new List<SearchReplace>();
 
-		public void Set(string tag, string replaceWith)
+		public void Set(string searchFor, string replaceWith)
 		{
-			// maybe just strip leading and trailing...
-			tag = tag.Replace("$(", "").Replace(")", "");
+			set(searchFor, replaceWith);
+		}
 
-			simple(tag, replaceWith);
-			xmlComment(tag, replaceWith);
-			xmlAppSetting(tag, replaceWith);
+		public void SetByName(string name, string replaceWith)
+		{
+			set(string.Format("$({0})", name), replaceWith);
 		}
 		
-		private void simple(string tag, string replaceWith)
-		{
-			var searchFor = string.Format("$({0})", tag);
-			add(searchFor, replaceWith);
-		}
-
-		private void xmlComment(string tag, string replaceWith)
-		{
-			var searchFor = string.Format("<!--$({0})-->", tag);
-			add(searchFor, replaceWith);
-		}
-
-		private void xmlAppSetting(string tag, string replaceWith)
-		{
-			var searchFor = string.Format("<!--$({0}AppSetting)-->", tag);
-			replaceWith = string.Format(@"<add key=""{0}"" value=""{1}"" />", tag, replaceWith);
-			add(searchFor, replaceWith);
-		}
-
-		private void add(string searchFor, string replaceWith)
+		private void set(string searchFor, string replaceWith)
 		{
 			var existing = _searchReplaces.FirstOrDefault(x => x.SearchFor == searchFor);
 			if (existing != null)
 				existing.ReplaceWith = replaceWith;
 			else
 				_searchReplaces.Add(new SearchReplace(searchFor, replaceWith));
+		}
+
+		public IEnumerable<SearchReplace> ForDisplay()
+		{
+			return _searchReplaces;
+		}
+
+		public IEnumerable<SearchReplace> ForReplacing()
+		{
+			foreach (var searchReplace in _searchReplaces)
+			{
+				var replaceWith = searchReplace.ReplaceWith;
+				// this cant be good, but I wont change the behavior
+				// (c150de6ca27c) #31623 Support tool crashes during installation if the impersonation password includes a special character
+				if (searchReplace.SearchFor == "$(PM_ANONYMOUS_PWD)")
+					yield return new SearchReplace(searchReplace.SearchFor, xmlEscape(replaceWith));
+				else
+					yield return searchReplace;
+				var name = searchReplace.SearchFor.Replace("$(", "").Replace(")", "");
+				yield return xmlComment(name, searchReplace.ReplaceWith);
+				yield return xmlAppSetting(name, searchReplace.ReplaceWith);
+			}
+		}
+
+		private SearchReplace xmlComment(string name, string replaceWith)
+		{
+			var searchFor = string.Format("<!--$({0})-->", name);
+			return new SearchReplace(searchFor, replaceWith);
+		}
+
+		private SearchReplace xmlAppSetting(string name, string replaceWith)
+		{
+			var searchFor = string.Format("<!--$({0}AppSetting)-->", name);
+			replaceWith = string.Format(@"<add key=""{0}"" value=""{1}"" />", name, replaceWith);
+			return new SearchReplace(searchFor, replaceWith);
+		}
+
+		private static string xmlEscape(string replaceWith)
+		{
+			var doc = new XmlDocument();
+			var node = doc.CreateElement("root");
+			node.InnerText = replaceWith;
+			return node.InnerXml;
 		}
 
 		public void FixSomeValuesAfterReading()
@@ -82,36 +107,5 @@ namespace Teleopti.Support.Library.Config
 				stardust.ReplaceWith = stardust.ReplaceWith.TrimEnd('/');
 		}
 
-		public IEnumerable<SearchReplace> ForDisplay()
-		{
-			return _searchReplaces;
-		}
-
-		public IEnumerable<SearchReplace> ForReplacing()
-		{
-			// this cant be good, but I wont change the behavior
-			// (c150de6ca27c) #31623 Support tool crashes during installation if the impersonation password includes a special character
-
-			foreach (var searchReplace in _searchReplaces)
-			{
-				var replaceWith = searchReplace.ReplaceWith;
-				if (searchReplace.SearchFor == "$(PM_ANONYMOUS_PWD)")
-				{
-					yield return new SearchReplace(searchReplace.SearchFor, xmlEscape(replaceWith));
-				}
-				else
-				{
-					yield return searchReplace;
-				}
-			}
-		}
-
-		private static string xmlEscape(string unescaped)
-		{
-			var doc = new XmlDocument();
-			var node = doc.CreateElement("root");
-			node.InnerText = unescaped;
-			return node.InnerXml;
-		}
 	}
 }
