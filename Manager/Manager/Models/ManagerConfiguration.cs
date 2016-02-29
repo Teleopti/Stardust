@@ -9,5 +9,11 @@ namespace Stardust.Manager.Models
 		public string Route { get; set; }
 
 		public int AllowedNodeDownTimeSeconds { get; set; }
+
+		public ManagerConfiguration(int allowedNodeDownTimeSeconds = 600) //10 minutes
+		{
+			AllowedNodeDownTimeSeconds = allowedNodeDownTimeSeconds;
+		}
+	
 	}
 }
