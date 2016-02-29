@@ -16,30 +16,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 		public FakeAdherencePercentageReadModelPersister Persister;
 		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
 		public MutableNow Now;
-		public FakeMessageSender MessageSender;
 		public FakeEventPublisher EventPublisher;
 		public ICurrentEventPublisher CurrentEventPublisher;
 		public RtaTestAttribute Context;
-
-		[Test]
-		public void ShouldNotSendAnyMessages()
-		{
-			var personId = Guid.NewGuid();
-			Database.WithUser("user", personId);
-			Now.Is("2015-01-15 08:00");
-			Rta.SaveState(new ExternalUserStateForTest
-			{
-				UserCode = "user",
-				StateCode = "state"
-			});
-			MessageSender.AllNotifications.Clear();
-
-			Context.SimulateRestart();
-			Rta.Touch(Database.TenantName());
-
-			MessageSender.AllNotifications.Should().Have.Count.EqualTo(0);
-		}
-
+		
 		[Test]
 		public void ShouldPublishEventsAfterInitialize()
 		{
