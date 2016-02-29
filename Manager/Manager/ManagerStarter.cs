@@ -14,7 +14,7 @@ namespace Stardust.Manager
 			builder.RegisterType<NodeManager>()
 				.As<INodeManager>();
 
-			builder.RegisterType<JobManager>().SingleInstance();
+			builder.RegisterType<JobManager>();
 
 			builder.RegisterType<HttpSender>()
 				.As<IHttpSender>();
