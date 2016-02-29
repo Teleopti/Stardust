@@ -71,6 +71,10 @@
       <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
+      <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
+      <Name>Teleopti.Ccc.IocCommon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
       <Project>{68a028b6-864c-4969-8830-9c3c6bd56a98}</Project>
       <Name>Teleopti.Ccc.TestCommon</Name>
