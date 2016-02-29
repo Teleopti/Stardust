@@ -154,10 +154,18 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		}
 
 		[HttpPost, UnitOfWork, Route("api/TeamSchedule/RemoveAbsence")]
-		public virtual IHttpActionResult RemoveAbsence(RemovePersonAbsenceCommand command)
+		public virtual IHttpActionResult RemoveAbsence(RemovePersonAbsenceForm command)
 		{
 			setTrackedCommandInfo(command.TrackedCommandInfo);
-			_removePersonAbsenceCommandHandler.Handle(command);
+			foreach (var personAbsenceId in command.PersonAbsenceIds)
+			{
+				var cmd = new RemovePersonAbsenceCommand
+				{
+					PersonAbsenceId = personAbsenceId,
+					TrackedCommandInfo = command.TrackedCommandInfo
+				};
+				_removePersonAbsenceCommandHandler.Handle(cmd);
+			}
 			return Ok();
 		}
 
