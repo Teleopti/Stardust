@@ -38,6 +38,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test, Ignore("Ignored to make build green, there is an open bug for this.")]
 		public void ShouldNotCrashWhenDoingRollback()
 		{
+			BusinessUnitFactory.CreateNewBusinessUnitUsedInTest();
+
 			var date = new DateOnly(2014, 3, 31);
 			var scenario = new Scenario("Default").WithId();
 			var shiftCategory = new ShiftCategory("DY").WithId();

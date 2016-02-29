@@ -7,24 +7,19 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
     public static class BusinessUnitFactory
     {
-        private static IBusinessUnit _businessUnitUsedInTest;
+        private static Lazy<IBusinessUnit> _businessUnitUsedInTest = new Lazy<IBusinessUnit>(()=>CreateSimpleBusinessUnit("Business unit used in test").WithId());
 
 	    public static void CreateNewBusinessUnitUsedInTest()
 	    {
-		    _businessUnitUsedInTest = null;
+		    _businessUnitUsedInTest = new Lazy<IBusinessUnit>(() => CreateSimpleBusinessUnit("Business unit used in test").WithId());
 	    }
 
         public static IBusinessUnit BusinessUnitUsedInTest
         {
             get
             {
-	            if (_businessUnitUsedInTest != null) return _businessUnitUsedInTest;
-
-	            _businessUnitUsedInTest = CreateSimpleBusinessUnit("Business unit used in test");
-	            _businessUnitUsedInTest.SetId(Guid.NewGuid());
-	            return _businessUnitUsedInTest;
+	            return _businessUnitUsedInTest.Value;
             }
-	        set { _businessUnitUsedInTest = value; }
         }
 
         public static BusinessUnit CreateSimpleBusinessUnit(string name)
