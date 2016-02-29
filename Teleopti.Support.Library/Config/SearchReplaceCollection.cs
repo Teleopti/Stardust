@@ -20,7 +20,7 @@ namespace Teleopti.Support.Library.Config
 		public string ReplaceWith { get; set; }
 	}
 
-	public class Tags
+	public class SearchReplaceCollection
 	{
 		
 		private readonly IList<SearchReplace> _searchReplaces = new List<SearchReplace>();

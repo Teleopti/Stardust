@@ -518,7 +518,6 @@
     <Compile Include="Web\FakeHttpResponse.cs" />
     <Compile Include="Web\FakeHttpSessionState.cs" />
     <Compile Include="Web\MutableFakeCurrentHttpContext.cs" />
-    <Compile Include="Web\WebInteractions\TagsForTestSite.cs" />
     <Compile Include="Web\WebInteractions\BrowserDriver\BrowserInteractionsAngularExtensions.cs" />
     <Compile Include="Web\WebInteractions\BrowserDriver\BrowserInteractionsControlExtensions.cs" />
     <Compile Include="Web\WebInteractions\BrowserDriver\BrowserInteractionsJQueryExtensions.cs" />

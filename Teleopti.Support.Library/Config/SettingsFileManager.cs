@@ -5,36 +5,44 @@ using System.Linq;
 
 namespace Teleopti.Support.Library.Config
 {
-	public interface ISettingsFileManager
-	{
-		Tags ReadFile();
-		void SaveFile(IList<SearchReplace> searchReplaces);
-	}
-
-	public class SettingsFileManager : ISettingsFileManager
+	public class SettingsFileManager
 	{
 		private readonly string settingsFileName = "settings.txt";
 
-		public Tags ReadFile()
+		public SearchReplaceCollection ReadFile()
 		{
-			var tags = new TextToTags()
+			var collection = new Parser()
 				.ParseText(
 					File.ReadAllText(findSettingsFileByBlackMagic(settingsFileName))
 				);
 			// this cant be good, but I wont change the behavior
-			tags.FixSomeValuesAfterReading();
-			return tags;
+			collection.FixSomeValuesAfterReading();
+			return collection;
 		}
 
-		public void SaveFile(IList<SearchReplace> searchReplaces)
+		public void SaveFile(IEnumerable<SearchReplace> collection)
 		{
 			var path = findSettingsFileByBlackMagic(settingsFileName);
 			var text = "";
-			foreach (var searchReplace in searchReplaces)
+			foreach (var searchReplace in collection)
 			{
 				text = text + searchReplace.SearchFor + "|" + searchReplace.ReplaceWith + Environment.NewLine;
 			}
 			File.WriteAllText(path, text);
+		}
+
+		public void UpdateFileByName(string name, string replaceWith)
+		{
+			var collection = ReadFile();
+			collection.SetByName(name, replaceWith);
+			SaveFile(collection.ForDisplay());
+		}
+
+		public void UpdateFile(string searchFor, string replaceWith)
+		{
+			var collection = ReadFile();
+			collection.Set(searchFor, replaceWith);
+			SaveFile(collection.ForDisplay());
 		}
 
 		private static string findSettingsFileByBlackMagic(string fileName)
@@ -61,5 +69,6 @@ namespace Teleopti.Support.Library.Config
 				.Select(x => Path.Combine(x, fileName))
 				.First(File.Exists);
 		}
+
 	}
 }

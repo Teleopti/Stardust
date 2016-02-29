@@ -52,10 +52,9 @@ namespace Teleopti.Support.Tool.Controls
 
 		private void runRefresher(string mode)
 		{
-			var fileMan = new SettingsFileManager();
-			fileMan.SaveFile(_settings);
+			new SettingsFileManager().SaveFile(_settings);
 
-			var refreshRunner = new RefreshConfigsRunner(fileMan, new RefreshConfigFile(new FileConfigurator(), new MachineKeyChecker()));
+			var refreshRunner = new RefreshConfigsRunner(new RefreshConfigFile(new FileConfigurator(), new MachineKeyChecker()));
 			refreshRunner.Execute(new ModeFile(mode));
 
 			if (mode.Equals("DEPLOY"))

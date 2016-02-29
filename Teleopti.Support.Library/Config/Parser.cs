@@ -4,11 +4,11 @@ using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 
 namespace Teleopti.Support.Library.Config
 {
-    public class TextToTags
+    public class Parser
     {
-        public Tags ParseText(string text)
+        public SearchReplaceCollection ParseText(string text)
         {
-			var searchReplaces = new Tags();
+			var searchReplaces = new SearchReplaceCollection();
 	        var fromFile = (
 		        from setting in text.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)
 		        select setting.Split(new[] {'|'}, 2)

@@ -44,10 +44,17 @@ namespace Teleopti.Support.Tool.Tool
 		private void ReadArguments()
 		{
 			var restoreCommand = new SsoConfigurationRestoreHandler(new CustomSection(), new SsoFilePathReader());
+
 			Command = new CompositeCommand(
-					new RefreshConfigsRunner(new SettingsFileManager(),
-					new RefreshConfigFile(new FileConfigurator(), new MachineKeyChecker())), restoreCommand,
-					new MoveCustomReportsCommand());
+				new RefreshConfigsRunner(
+					new RefreshConfigFile(
+						new FileConfigurator(),
+						new MachineKeyChecker()
+						)
+					),
+				restoreCommand,
+				new MoveCustomReportsCommand()
+				);
 
 			foreach (string s in _argumentCollection)
 			{

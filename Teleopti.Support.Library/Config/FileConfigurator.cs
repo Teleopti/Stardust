@@ -5,10 +5,10 @@ namespace Teleopti.Support.Library.Config
 {
 	public class FileConfigurator
 	{
-		public void Configure(string sourceFile, string targetFile, Tags tags)
+		public void Configure(string sourceFile, string targetFile, SearchReplaceCollection searchReplaceCollection)
 		{
 			var contents = File.ReadAllText(sourceFile);
-			tags.ForReplacing()
+			searchReplaceCollection.ForReplacing()
 				.ForEach(sr =>
 				{
 					contents = contents.Replace(sr.SearchFor, sr.ReplaceWith);

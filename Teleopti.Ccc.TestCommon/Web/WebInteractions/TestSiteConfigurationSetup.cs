@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			new FileConfigurator().Configure(
 				"iisexpress.config",
 				runningConfig,
-				new TagsForTestSite().Make()
+				searchReplaces()
 				);
 
 			var parameters = new Parameters
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			new FileConfigurator().Configure(
 				sourceFile,
 				targetFile,
-				new TagsForTestSite().Make()
+				searchReplaces()
 				);
 		}
 
@@ -147,6 +147,39 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			File.WriteAllText(file, "can't touch this");
 			File.Delete(file);
 		}
+
+		private static SearchReplaceCollection searchReplaces()
+		{
+			var tags = new SettingsFileManager();
+
+			// behavior test
+			tags.UpdateFileByName("MachineKey", CryptoCreator.MachineKeyCreator.StaticMachineKeyForBehaviorTest());
+			tags.UpdateFileByName("TimeLoggerConfiguration", "<logger name='Teleopti.LogTime'><level value='DEBUG'/></logger>");
+			tags.UpdateFileByName("BehaviorTestServer", "true");
+			tags.UpdateFileByName("HangfireDashboard", "true");
+			tags.UpdateFileByName("HangfireDashboardStatistics", "true");
+			tags.UpdateFileByName("HangfireDashboardCounters", "true");
+			tags.UpdateFileByName("HangfireDashboardDisplayNames", "true");
+			tags.UpdateFileByName("HangfireJobExpirationSeconds", TimeSpan.FromDays(1).TotalSeconds.ToString());
+
+			// iisexpress
+			tags.UpdateFileByName("Port", TestSiteConfigurationSetup.Port.ToString());
+			tags.UpdateFileByName("PortAuthenticationBridge", TestSiteConfigurationSetup.PortAuthenticationBridge.ToString());
+			tags.UpdateFileByName("PortWindowsIdentityProvider", TestSiteConfigurationSetup.PortWindowsIdentityProvider.ToString());
+			tags.UpdateFileByName("SitePath", Paths.WebPath());
+			tags.UpdateFileByName("SitePathAuthenticationBridge", Paths.WebAuthenticationBridgePath());
+			tags.UpdateFileByName("SitePathWindowsIdentityProvider", Paths.WebWindowsIdentityProviderPath());
+
+			// settings.txt
+			tags.UpdateFileByName("URL", TestSiteConfigurationSetup.URL.ToString());
+			tags.UpdateFileByName("UrlAuthenticationBridge", TestSiteConfigurationSetup.UrlAuthenticationBridge.ToString());
+			tags.UpdateFileByName("WEB_BROKER_FOR_WEB", TestSiteConfigurationSetup.URL.ToString());
+			tags.UpdateFileByName("WindowsClaimProvider", TestSiteConfigurationSetup.WindowsClaimProvider);
+			tags.UpdateFileByName("TeleoptiClaimProvider", TestSiteConfigurationSetup.TeleoptiClaimProvider);
+
+			return tags.ReadFile();
+		}
+
 	}
 
 }

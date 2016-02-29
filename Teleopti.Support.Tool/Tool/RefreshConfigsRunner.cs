@@ -10,18 +10,16 @@ namespace Teleopti.Support.Tool.Tool
 	public class RefreshConfigsRunner : ISupportCommand
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(RefreshConfigsRunner));
-        private readonly ISettingsFileManager _manager;
         private readonly IRefreshConfigFile _refreshConfigFile;
 
-        public RefreshConfigsRunner(ISettingsFileManager manager, IRefreshConfigFile refreshConfigFile)
+        public RefreshConfigsRunner(IRefreshConfigFile refreshConfigFile)
         {
-            _manager = manager;
             _refreshConfigFile = refreshConfigFile;
         }
 
         public void Execute(ModeFile mode)
         {
-	        var searchReplaces = _manager.ReadFile();
+	        var searchReplaces = new SettingsFileManager().ReadFile();
             
             try
             {
