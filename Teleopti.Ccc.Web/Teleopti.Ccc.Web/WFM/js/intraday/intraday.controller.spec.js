@@ -7,6 +7,7 @@ describe('IntradayCtrl', function () {
 	var skillAreas = [];
 	var skills = [];
 	var skillAreaInfo;
+	var monitorData;
 
 	beforeEach(module('wfm.intraday'));
 
@@ -33,6 +34,13 @@ describe('IntradayCtrl', function () {
 			HasPermissionToModifySkillArea: true,
 			SkillAreas: skillAreas
 		};
+
+		monitorData = {
+			ForecastedCalls: 100,
+			OfferedCalls: 50,
+			LatestStatsTime: '1901-01-01 13:00',
+			ForecastedActualCallsDiff: 50
+		};
 	});
 	
 	beforeEach(inject(function (_$httpBackend_, _$controller_, _$rootScope_) {
@@ -54,7 +62,14 @@ describe('IntradayCtrl', function () {
 			.respond(200, {});
 
 		$httpBackend.whenGET("../api/intraday/monitorskillarea/fa9b5393-ef48-40d1-b7cc-09e797589f81")
-			.respond(200, {});
+			.respond(function() {
+			return [200, monitorData];
+		});
+
+		$httpBackend.whenGET("../api/intraday/monitorskill/5f15b334-22d1-4bc1-8e41-72359805d30f")
+			.respond(function() {
+			return [200, monitorData];
+		});
 	}));
 
 	var createController = function() {
@@ -97,12 +112,27 @@ describe('IntradayCtrl', function () {
 		skillAreaInfo.SkillAreas = [];
 		createController();
 
+		scope.skillSelected(scope.skills[0]);
+		$httpBackend.flush();
+
 		expect(scope.selectedItem).toEqual(scope.skills[0]);
+		expect(scope.forecastedCalls).toEqual(monitorData.ForecastedCalls);
+		expect(scope.offeredCalls).toEqual(monitorData.OfferedCalls);
+		expect(scope.latestStatsTime).toEqual(monitorData.LatestStatsTime);
+		expect(scope.difference).toEqual(monitorData.ForecastedActualCallsDiff);
 	});
 
 	it('should monitor first skill area if there are any', function () {
 		createController();
+
+		scope.skillAreaSelected(scope.skillAreas[0]);
+		$httpBackend.flush();
+
 		expect(scope.selectedItem).toEqual(scope.skillAreas[0]);
+		expect(scope.forecastedCalls).toEqual(monitorData.ForecastedCalls);
+		expect(scope.offeredCalls).toEqual(monitorData.OfferedCalls);
+		expect(scope.latestStatsTime).toEqual(monitorData.LatestStatsTime);
+		expect(scope.difference).toEqual(monitorData.ForecastedActualCallsDiff);
 	});
 
 	it('should have permission to modify skill area', function() {
@@ -114,6 +144,7 @@ describe('IntradayCtrl', function () {
 	it('should show friendly message if no data for skill area', function () {
 		createController();
 		scope.skillAreaSelected(scope.skillAreas[0]);
+		monitorData.LatestStatsTime = '0000-01-01';
 		$httpBackend.flush();
 
 		expect(scope.HasMonitorData).toEqual(false);

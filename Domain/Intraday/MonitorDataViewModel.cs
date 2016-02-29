@@ -4,8 +4,9 @@ namespace Teleopti.Ccc.Domain.Intraday
 {
 	public class MonitorDataViewModel
 	{
-		public int ForecastedCalls { get; set; }
-		public int OfferedCalls { get; set; }
+		public double ForecastedCalls { get; set; }
+		public double OfferedCalls { get; set; }
 		public DateTime LatestStatsTime { get; set; }
+		public double ForecastedActualCallsDiff { get; set; }
 	}
 }

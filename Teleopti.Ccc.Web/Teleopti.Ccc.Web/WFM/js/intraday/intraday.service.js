@@ -43,7 +43,15 @@
 					}
 				});
 
-				this.getMonitorData = $resource('../api/intraday/monitorskillarea/:id', { id: '@id' }, {
+				this.getSkillAreaMonitorData = $resource('../api/intraday/monitorskillarea/:id', { id: '@id' }, {
+					query: {
+						method: 'GET',
+						params: {},
+						isArray: false
+					}
+				});
+
+				this.getSkillMonitorData = $resource('../api/intraday/monitorskill/:id', { id: '@id' }, {
 					query: {
 						method: 'GET',
 						params: {},

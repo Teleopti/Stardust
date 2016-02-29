@@ -14,19 +14,23 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			{
 				ForecastedCalls = ForecastedCalls,
 				OfferedCalls = OfferedCalls,
-				LatestStatsTime = LatestStatsTime
+				LatestStatsTime = LatestStatsTime,
+				ForecastedActualCallsDiff = ForecastedActualCallsDiff
 			};
 		}
 
-		public void Has(int forecastedCalls, int offeredCalls, DateTime latestStatsTime)
+		public void Has(double forecastedCalls, double offeredCalls, DateTime latestStatsTime, double forecastedActualCallsDiff)
 		{
 			ForecastedCalls = forecastedCalls;
 			OfferedCalls = offeredCalls;
 			LatestStatsTime = latestStatsTime;
+			ForecastedActualCallsDiff = forecastedActualCallsDiff;
+
 		}
 
-		public int ForecastedCalls { get; set; }
-		public int OfferedCalls { get; set; }
+		public double ForecastedCalls { get; set; }
+		public double OfferedCalls { get; set; }
 		public DateTime LatestStatsTime { get; set; }
+		public double ForecastedActualCallsDiff { get; set; }
 	}
 }

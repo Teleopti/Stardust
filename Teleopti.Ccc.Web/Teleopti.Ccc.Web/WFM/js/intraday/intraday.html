@@ -61,19 +61,20 @@
 		<div class="panel con-flex material-depth-1">
 			<div class="sub-header">
 				<h2 class="intraday-monitor-item">{{ selectedSkill.Name }}</h2>
+				<h2>{{ latestStatsTime }}</h2>
 			</div>
 			<div class="con-row text-warning" ng-show="!HasMonitorData">
 				<span>No data is available for this skill.</span>
 			</div>
 			<div class="con-row" ng-show="HasMonitorData">
 				<div class="con-flex">
-					Forecasted calls:
+					Forecasted calls:{{forecastedCalls}}
 				</div>
 				<div class="con-flex">
-					Actual calls:
+					Actual calls:{{offeredCalls}}
 				</div>
 				<div class="con-flex">
-					Area total:
+					Area total:{{difference}}
 				</div>
 			</div>
 		</div>

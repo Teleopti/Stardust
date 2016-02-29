@@ -99,9 +99,25 @@
 
 				$scope.selectedSkillChange = function(item) {
 					if (this.selectedSkill) {
-						$scope.selectedItem = item;
-						clearSkillAreaSelection();
+						$scope.skillSelected(item);
 					}
+				};
+
+				$scope.skillSelected = function (item) {
+					$scope.selectedItem = item;
+					clearSkillAreaSelection();
+
+					intradayService.getSkillMonitorData.query(
+						{
+							id: $scope.selectedItem.Id
+						})
+						.$promise.then(function (result) {
+							$scope.forecastedCalls = result.ForecastedCalls;
+							$scope.offeredCalls = result.OfferedCalls;
+							$scope.latestStatsTime = $filter('date')(result.LatestStatsTime, 'shortTime');
+							$scope.difference = result.ForecastedActualCallsDiff;
+							$scope.HasMonitorData = true;
+						});
 				};
 
 				$scope.selectedSkillAreaChange = function(item) {
@@ -114,19 +130,23 @@
 					$scope.selectedItem = item;
 					clearSkillSelection();
 
-					intradayService.getMonitorData.query(
+					intradayService.getSkillAreaMonitorData.query(
 						{
 							id: $scope.selectedItem.Id
 						})
 						.$promise.then(function (result) {
-							$scope.forecastedCalls = result.ForecastedCalls;
-							$scope.offeredCalls = result.OfferedCalls;
-							$scope.latestStatsTime = $filter('date')(result.LatestStatsTime, 'shortTime');
-							$scope.HasMonitorData = true;
-						});
+						if (moment(result.LatestStatsTime).isSame(moment('0001-01-01'))) {
+							$scope.HasMonitorData = false;
+							return;
+						}
+						$scope.forecastedCalls = result.ForecastedCalls;
+						$scope.offeredCalls = result.OfferedCalls;
+						$scope.latestStatsTime = $filter('date')(result.LatestStatsTime, 'shortTime');
+						$scope.difference = result.ForecastedActualCallsDiff;
+						$scope.HasMonitorData = true;
+					});
 				};
 
-				$scope.difference = '20%';
 
 				function clearSkillSelection() {
 					if (!autocompleteSkill) return;
