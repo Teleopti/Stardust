@@ -7,14 +7,16 @@ namespace Stardust.Manager
 {
 	public class ManagerStarter
 	{
-		public void Start(ManagerConfiguration managerConfiguration, IComponentContext componentContext)
+		public void Start(IManagerConfiguration managerConfiguration, IComponentContext componentContext)
 		{
 			var builder = new ContainerBuilder();
+
+			builder.RegisterInstance(managerConfiguration).As<IManagerConfiguration>();
 
 			builder.RegisterType<NodeManager>()
 				.As<INodeManager>();
 
-			builder.RegisterType<JobManager>().SingleInstance();
+			builder.RegisterType<JobManager>();
 
 			builder.RegisterType<HttpSender>()
 				.As<IHttpSender>();
@@ -29,7 +31,7 @@ namespace Stardust.Manager
 
 			builder.RegisterApiControllers(typeof (ManagerController).Assembly);
 
-			builder.RegisterInstance(managerConfiguration);
+			
 
 			builder.Update(componentContext.ComponentRegistry);
 		}

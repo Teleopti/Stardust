@@ -1,5 +1,6 @@
 ﻿using System.Configuration;
 using Autofac;
+using ManagerTest.Fakes;
 using NUnit.Framework;
 using SharpTestsEx;
 using Stardust.Manager;
@@ -14,6 +15,9 @@ namespace ManagerTest
 		public void SetUp()
 		{
 			_containerBuilder = new ContainerBuilder();
+
+			FakeManagerConfiguration fakeManagerConfiguration = new FakeManagerConfiguration();
+			_containerBuilder.RegisterInstance(fakeManagerConfiguration).As<IManagerConfiguration>();
 
 			_containerBuilder.RegisterType<NodeManager>().As<INodeManager>();
 			_containerBuilder.RegisterType<JobManager>();

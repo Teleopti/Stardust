@@ -122,11 +122,6 @@ namespace ManagerConsoleHost
 			LogHelper.LogDebugWithLineNumber(Logger,
 			                                 WhoAmI + " : CurrentDomain_DomainUnload called.");
 
-			if (ManagerStarter != null)
-			{
-				// ManagerStarter.Stop();
-			}
-
 			QuitEvent.Set();
 		}
 

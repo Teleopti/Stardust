@@ -10,6 +10,8 @@ namespace ManagerTest
 	{
 		protected override void SetUp(ContainerBuilder builder)
 		{
+			FakeManagerConfiguration fakeManagerConfiguration = new FakeManagerConfiguration();
+			builder.RegisterInstance(fakeManagerConfiguration).As<IManagerConfiguration>();
 			builder.RegisterType<JobManager>();
 			builder.RegisterType<NodeManager>();
 			builder.Register(
