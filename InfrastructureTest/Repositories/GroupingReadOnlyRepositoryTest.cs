@@ -110,6 +110,34 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
+		public void ShouldIncludePersonThatLeftTheBusinessMidPeriod()
+		{
+			var personToTest = PersonFactory.CreatePerson("dummyAgent1");
+
+			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
+			PersistAndRemoveFromUnitOfWork(team.Site);
+			PersistAndRemoveFromUnitOfWork(team);
+
+			var personContract = PersonContractFactory.CreatePersonContract();
+			var personPeriod = new PersonPeriod(new DateOnly(2000, 1, 1),
+												personContract,
+												team);
+			personToTest.AddPersonPeriod(personPeriod);
+
+			PersistAndRemoveFromUnitOfWork(personContract.Contract);
+			PersistAndRemoveFromUnitOfWork(personContract.ContractSchedule);
+			PersistAndRemoveFromUnitOfWork(personContract.PartTimePercentage);
+
+			personToTest.TerminatePerson(new DateOnly(2001, 1, 3), new PersonAccountUpdaterDummy());
+			PersistAndRemoveFromUnitOfWork(personToTest);
+
+			_target.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
+
+			var items = _target.DetailsForGroup(team.Id.GetValueOrDefault(), new DateOnlyPeriod(2001, 1, 1, 2001, 1, 5));
+			items.Count().Should().Be.EqualTo(1);
+		}
+
+		[Test]
         public void ShouldCallUpdateReadModelWithoutCrash()
         {
             _target.UpdateGroupingReadModel(new Guid[] { Guid.NewGuid() });
