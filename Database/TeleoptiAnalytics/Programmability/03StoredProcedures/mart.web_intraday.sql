@@ -36,7 +36,7 @@ BEGIN
 		FROM mart.bridge_queue_workload qw
 		INNER JOIN mart.dim_skill ds ON qw.skill_id = ds.skill_id
 		INNER JOIN #skills s ON ds.skill_code = s.id
-		
+
 	INSERT INTO #result(offered_calls, latest_stats_time)
 		SELECT 
 			SUM(ISNULL(fq.offered_calls, 0)), 
@@ -50,6 +50,7 @@ BEGIN
 		WHERE
 			bz.time_zone_id = @time_zone_id AND d.date_date = @today
 
+		
 	INSERT INTO #result(forecasted_calls)
 		SELECT 
 			SUM(ISNULL(fw.forecasted_calls, 0)) AS ForecastedCalls
@@ -67,6 +68,7 @@ BEGIN
 			 
 	SELECT 
 		SUM(ISNULL(forecasted_calls,0)) AS ForecastedCalls,
+		SUM(ISNULL(offered_calls,0)) AS OfferedCalls,
 		MAX(latest_stats_time) AS LatestStatsTime,
 		CASE SUM(ISNULL(forecasted_calls,0))
 			WHEN 0

@@ -112,6 +112,10 @@
 							id: $scope.selectedItem.Id
 						})
 						.$promise.then(function (result) {
+							if (moment(result.LatestStatsTime).isSame(moment('0001-01-01'))) {
+								$scope.HasMonitorData = false;
+								return;
+							}
 							$scope.forecastedCalls = result.ForecastedCalls;
 							$scope.offeredCalls = result.OfferedCalls;
 							$scope.latestStatsTime = $filter('date')(result.LatestStatsTime, 'shortTime');
