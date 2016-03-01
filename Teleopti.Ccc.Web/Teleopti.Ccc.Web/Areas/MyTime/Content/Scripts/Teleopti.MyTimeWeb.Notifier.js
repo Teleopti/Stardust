@@ -71,18 +71,19 @@
 				};
 				var notification = new Notification(header, options);
 				webNotifications.push({ notification: notification, text: notifyText });
-				setTimeout(function() {
-					for (var i = 0; i < webNotifications.length; i++) {
-						if (webNotifications[i].notification == notification) {
-							notification.close.bind(notification);
-							webNotifications.splice(i, 1);
-						}
-					}
-					notification.close.bind(notification);
-				}, timeout);
+				
+				setTimeout(closeNotification(notification), timeout);
 			}
 		}
+	}
 
+	function closeNotification(notification) {
+		for (var i = 0; i < webNotifications.length; i++) {
+			if (webNotifications[i].notification == notification) {
+				webNotifications.splice(i, 1);
+			}
+		}
+		return notification.close.bind(notification);
 	}
 
 	function _messageClosed() {
