@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
@@ -15,14 +16,15 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 	 public class ScheduleViewModelFactoryTest
 	 {
 		[Test]
-		public void ShoudCreateWeekViewModelByTwoStepMapping()
+		public void ShoudCreateWeekViewModelByCallingProviderAndMapping()
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
-			var target = new ScheduleViewModelFactory(mapper);
+			var scheduleDomainDataProvider = MockRepository.GenerateMock<IScheduleDomainDataProvider>();
+			var target = new ScheduleViewModelFactory(mapper, scheduleDomainDataProvider);
 			var domainData = new WeekScheduleDomainData();
 			var viewModel = new WeekScheduleViewModel();
 
-			mapper.Stub(x => x.Map<DateOnly, WeekScheduleDomainData>(DateOnly.Today)).Return(domainData);
+			scheduleDomainDataProvider.Stub(x => x.GetWeekScheduleDomainData(DateOnly.Today)).Return(domainData);
 			mapper.Stub(x => x.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData)).Return(viewModel);
 
 			var result = target.CreateWeekViewModel(DateOnly.Today);
@@ -34,7 +36,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
         public void ShoudCreateMonthViewModelByTwoStepMapping()
         {
             var mapper = MockRepository.GenerateMock<IMappingEngine>();
-            var target = new ScheduleViewModelFactory(mapper);
+			var scheduleDomainDataProvider = MockRepository.GenerateMock<IScheduleDomainDataProvider>();
+			var target = new ScheduleViewModelFactory(mapper, scheduleDomainDataProvider);
             var domainData = new MonthScheduleDomainData();
             var viewModel = new MonthScheduleViewModel();
 

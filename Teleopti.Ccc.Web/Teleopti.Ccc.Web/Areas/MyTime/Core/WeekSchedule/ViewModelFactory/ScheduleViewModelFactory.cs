@@ -10,13 +10,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 	public class ScheduleViewModelFactory : IScheduleViewModelFactory
 	{
 	    private readonly IMappingEngine _mapper;
+		private readonly IScheduleDomainDataProvider _scheduleDomainDataProvider;
 
-	    public ScheduleViewModelFactory(IMappingEngine mapper)
-	    {
-	        _mapper = mapper;
-	    }
 
-	    public MonthScheduleViewModel CreateMonthViewModel(DateOnly dateOnly)
+		public ScheduleViewModelFactory(IMappingEngine mapper, IScheduleDomainDataProvider scheduleDomainDataProvider)
+		{
+			_mapper = mapper;
+			_scheduleDomainDataProvider = scheduleDomainDataProvider;
+		}
+
+		public MonthScheduleViewModel CreateMonthViewModel(DateOnly dateOnly)
 	    {
             var domainData = _mapper.Map<DateOnly, MonthScheduleDomainData>(dateOnly);
             return _mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(domainData);
@@ -24,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 	    public WeekScheduleViewModel CreateWeekViewModel(DateOnly dateOnly)
 	    {
-	    	var domainData = _mapper.Map<DateOnly, WeekScheduleDomainData>(dateOnly);
+		    var domainData = _scheduleDomainDataProvider.GetWeekScheduleDomainData(dateOnly);
 			return _mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
 		}
 	}

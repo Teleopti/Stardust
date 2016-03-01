@@ -330,7 +330,7 @@
     </Reference>
     <Reference Include="StackExchange.Redis.StrongName, Version=1.0.316.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46, processorArchitecture=MSIL">
       <HintPath>..\..\packages\StackExchange.Redis.StrongName.1.0.322\lib\net45\StackExchange.Redis.StrongName.dll</HintPath>
-     </Reference>
+    </Reference>
     <Reference Include="Stardust.Manager, Version=1.0.0.357, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Stardust.Manager.1.0.0.357\lib\net451\Stardust.Manager.dll</HintPath>
       <Private>True</Private>
@@ -524,6 +524,7 @@
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradePersonScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\IRequestsShiftTradeScheduleViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\RequestsShiftTradeScheduleViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\ScheduleDomainDataProvider.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\PerformanceToolApiController.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\LocalHostAccessAttribute.cs" />
     <Compile Include="Areas\Requests\Core\FormData\AllRequestsFormData.cs" />
@@ -1201,7 +1202,6 @@
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\RequestsViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\WeekScheduleDayDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\WeekScheduleDomainData.cs" />
-    <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\WeekScheduleDomainDataMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDayFormMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDayViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDomainData.cs" />
