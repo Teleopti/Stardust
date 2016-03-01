@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Http;
+using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
@@ -10,12 +11,12 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	public class OptimizationController : ApiController
 	{
 		private readonly ScheduleOptimization _scheduleOptimization;
-		private readonly IntradayOptimization _intradayOptimization;
+		private readonly IntradayOptimizationCommandHandler _intradayOptimizationCommandHandler;
 
-		public OptimizationController(ScheduleOptimization scheduleOptimization, IntradayOptimization intradayOptimization)
+		public OptimizationController(ScheduleOptimization scheduleOptimization, IntradayOptimizationCommandHandler intradayOptimizationCommandHandler)
 		{
 			_scheduleOptimization = scheduleOptimization;
-			_intradayOptimization = intradayOptimization;
+			_intradayOptimizationCommandHandler = intradayOptimizationCommandHandler;
 		}
 
 		[HttpPost, Route("api/ResourcePlanner/optimize/FixedStaff/{id}")]
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[HttpPost, Route("api/ResourcePlanner/optimize/intraday/{id}")]
 		public virtual IHttpActionResult OptimizeIntraday(Guid id)
 		{
-			return Ok(_intradayOptimization.Optimize(id));
+			return Ok(_intradayOptimizationCommandHandler.Execute(id));
 		}
 	}
 }

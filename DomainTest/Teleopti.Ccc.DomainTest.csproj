@@ -231,6 +231,7 @@
     <Compile Include="Optimization\ScheduleOptimizationTests\DayOffOptimizationLockDaysTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\FullSchedulingTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\IntradayOptimizationCallbackTest.cs" />
+    <Compile Include="Optimization\ScheduleOptimizationTests\IntradayOptimizationIncludeEventTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\IntradayOptimizationStopWhenLargeGroupTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\IntradayOptimizationTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\TrackIntradayOptimizationCallback.cs" />

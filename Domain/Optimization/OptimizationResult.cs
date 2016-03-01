@@ -17,8 +17,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[LogTime]
 		public virtual OptimizationResultModel Create(DateOnlyPeriod period)
 		{
+			var resultStateHolder = _schedulerStateHolder().SchedulingResultState;
 			var result = new OptimizationResultModel();
-			result.Map(_schedulerStateHolder().SchedulingResultState.SkillDays, period);
+			if (resultStateHolder.SkillDays != null)
+			{
+				result.Map(resultStateHolder.SkillDays, period);
+			}
 			return result;
 		}
 	}

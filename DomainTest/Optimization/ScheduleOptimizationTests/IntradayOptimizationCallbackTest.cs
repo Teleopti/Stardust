@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization;
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var callbackTracker = new TrackIntradayOptimizationCallback();
 			using (CallbackContext.Create(callbackTracker))
 			{
-				Target.Optimize(planningPeriod.Id.Value);
+				Target.Handle(new OptimizationWasOrdered {PlanningPeriodId = planningPeriod.Id.Value});
 			}
 			callbackTracker.SuccessfulOptimizations().Should().Be.EqualTo(10);
 		}
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var callbackTracker = new TrackIntradayOptimizationCallback();
 			using (CallbackContext.Create(callbackTracker))
 			{
-				Target.Optimize(planningPeriod.Id.Value);
+				Target.Handle(new OptimizationWasOrdered { PlanningPeriodId = planningPeriod.Id.Value });
 			}
 			callbackTracker.UnSuccessfulOptimizations().Should().Be.GreaterThanOrEqualTo(10);
 		}
