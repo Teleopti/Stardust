@@ -1088,7 +1088,6 @@
     <Compile Include="Scheduling\Rules\WorkTimeStartEndExtractorTest.cs" />
     <Compile Include="Scheduling\SchedulePeriodTargetDayOffCalculatorTest.cs" />
     <Compile Include="Scheduling\SchedulePeriodTargetTimeCalculatorTest.cs" />
-    <Compile Include="Scheduling\SchedulerSkillDayHelperTest.cs" />
     <Compile Include="Scheduling\ScheduleTagging\AgentDayScheduleTagTest.cs" />
     <Compile Include="Scheduling\ScheduleTagging\KeepOriginalScheduleTagTest.cs" />
     <Compile Include="Scheduling\ScheduleTagging\NullScheduleTagTest.cs" />
@@ -1098,7 +1097,6 @@
     <Compile Include="Scheduling\SeatLimitations\CreatePersonalSkillsFromMaxSeatSitesTest.cs" />
     <Compile Include="Scheduling\SeatLimitations\CreateSkillsFromMaxSeatSitesTest.cs" />
     <Compile Include="Scheduling\SeatLimitations\MaxSeatSitesExtractorTest.cs" />
-    <Compile Include="Scheduling\SeatLimitations\MaxSeatSkillCreatorTest.cs" />
     <Compile Include="Scheduling\SeatLimitations\OccupiedSeatCalculatorTest.cs" />
     <Compile Include="Scheduling\SeatLimitations\SeatLimitationWorkShiftCalculator2Test.cs" />
     <Compile Include="Scheduling\SeatLimitations\SkillVisualLayerCollectionDictionaryCreatorTest.cs" />

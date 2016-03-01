@@ -1,31 +1,32 @@
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 {
-	[TestFixture]
+	[DomainTest]
 	public class CreateSkillsFromMaxSeatSitesTest
 	{
+		public ICreateSkillsFromMaxSeatSites Target;
+
 		[Test]
 		public void ShouldCreateSkillForSiteWithMaxSeat()
 		{
-            var schedulingResultStateHolder = new FakeSchedulingResultStateHolder();
-            var target = new CreateSkillsFromMaxSeatSites(schedulingResultStateHolder);
 			var site1 = SiteFactory.CreateSimpleSite("site1");
 			site1.MaxSeats = 20;
 			var site2 = SiteFactory.CreateSimpleSite("site2");
 
 			IList<ISite> sites = new List<ISite> {site1, site2};
 
-			target.CreateSkillList(sites);
-			var skills = schedulingResultStateHolder.Skills;
+			var skills = Target.CreateSkillList(sites).ToList();
 			
-			Assert.AreEqual(1, skills.Length);
+			Assert.AreEqual(1, skills.Count());
             Assert.AreEqual(skills[0], site1.MaxSeatSkill);
             Assert.AreEqual(15, skills[0].DefaultResolution);
             Assert.AreEqual(site1.Description.Name, skills[0].Name);

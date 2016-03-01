@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.IslandScheduling;
@@ -281,6 +282,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			registerTeamBlockDayOffOptimizerService(builder);
 			registerTeamBlockIntradayOptimizerService(builder);
 			registerTeamBlockSchedulingService(builder);
+			registerMaxSeatSkillCreator(builder);
 
 			builder.RegisterType<AgentRestrictionsNoWorkShiftfFinder>().As<IAgentRestrictionsNoWorkShiftfFinder>().InstancePerLifetimeScope();
 			registerFairnessOptimizationService(builder);
@@ -511,6 +513,17 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<MaxSeatBoostingFactorCalculator>().InstancePerLifetimeScope();
 			builder.RegisterType<PullTargetValueFromSkillIntervalData>().InstancePerLifetimeScope();
 			builder.RegisterType<ExtractIntervalsViolatingMaxSeat>().As<IExtractIntervalsViolatingMaxSeat>();
+		}
+
+		private static void registerMaxSeatSkillCreator(ContainerBuilder builder)
+		{
+			builder.RegisterType<WorkloadDayHelper>().As<IWorkloadDayHelper>().SingleInstance();
+			builder.RegisterType<SchedulerSkillDayHelper>().As<ISchedulerSkillDayHelper>().SingleInstance();
+			builder.RegisterType<MaxSeatSitesExtractor>().As<IMaxSeatSitesExtractor>().SingleInstance();
+			builder.RegisterType<CreateSkillsFromMaxSeatSites>().As<ICreateSkillsFromMaxSeatSites>().SingleInstance();
+			builder.RegisterType<SchedulerSkillDayHelper>().As<ISchedulerSkillDayHelper>().SingleInstance();
+			builder.RegisterType<CreatePersonalSkillsFromMaxSeatSites>().As<ICreatePersonalSkillsFromMaxSeatSites>().SingleInstance();
+			builder.RegisterType<MaxSeatSkillCreator>().As<MaxSeatSkillCreator>().SingleInstance();
 		}
 
 		[SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]

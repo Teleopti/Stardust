@@ -5,23 +5,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 {
     public interface IMaxSeatSitesExtractor
     {
-        HashSet<ISite> MaxSeatSites(DateOnlyPeriod requestedPeriod);
+		HashSet<ISite> MaxSeatSites(DateOnlyPeriod requestedPeriod, IEnumerable<IPerson> personsInOrganization);
     }
 
     public class MaxSeatSitesExtractor : IMaxSeatSitesExtractor
     {
-        private readonly IEnumerable<IPerson> _allPermittedPersons;
-        
-        public MaxSeatSitesExtractor(IEnumerable<IPerson> allPermittedPersons)
-        {
-            _allPermittedPersons = allPermittedPersons;
-        }
-
-        public HashSet<ISite> MaxSeatSites(DateOnlyPeriod requestedPeriod)
+		public HashSet<ISite> MaxSeatSites(DateOnlyPeriod requestedPeriod, IEnumerable<IPerson> personsInOrganization)
         {
             var sitesWithMaxSeats = new HashSet<ISite>();
-            
-            foreach (var person in _allPermittedPersons)
+
+			foreach (var person in personsInOrganization)
             {
                 for (DateOnly currentDate = requestedPeriod.StartDate; currentDate <= requestedPeriod.EndDate; currentDate = currentDate.AddDays(1))
                 {

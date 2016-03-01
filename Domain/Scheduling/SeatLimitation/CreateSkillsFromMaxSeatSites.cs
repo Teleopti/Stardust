@@ -9,20 +9,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 {
 	public interface ICreateSkillsFromMaxSeatSites
 	{
-		void CreateSkillList(IEnumerable<ISite> sites);
+		IEnumerable<ISkill> CreateSkillList(IEnumerable<ISite> sites);
 	}
 
 	public class CreateSkillsFromMaxSeatSites : ICreateSkillsFromMaxSeatSites
 	{
-	    private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
-
-	    public CreateSkillsFromMaxSeatSites(ISchedulingResultStateHolder schedulingResultStateHolder)
-        {
-            _schedulingResultStateHolder = schedulingResultStateHolder;
-        }
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public void CreateSkillList(IEnumerable<ISite> sites)
+        public IEnumerable<ISkill> CreateSkillList(IEnumerable<ISite> sites)
 		{
 			IList<ISkill> newSkills = new List<ISkill>();
 			foreach (var site in sites)
@@ -61,8 +53,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				newSkill.SetTemplateAt(6, new SkillDayTemplate("fake", templateSkillDataPeriods));
 				newSkills.Add(newSkill);
 				site.MaxSeatSkill = newSkill;
-                _schedulingResultStateHolder.AddSkills(newSkill);
 			}
-	    }
+	        return newSkills;
+		}
 	}
 }

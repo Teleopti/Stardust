@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
@@ -8,29 +9,35 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
         private readonly IMaxSeatSitesExtractor _maxSeatSitesExtractor;
         private readonly ICreateSkillsFromMaxSeatSites _createSkillsFromMaxSeatSites;
         private readonly ICreatePersonalSkillsFromMaxSeatSites _createPersonalSkillsFromMaxSeatSites;
-        private readonly ISchedulerSkillDayHelper _schedulerSkillDayHelper;
-        private readonly IEnumerable<IPerson> _personsInOrganization;
+	    private readonly ISchedulerSkillDayHelper _schedulerSkillDayHelper;
 
-
-        public MaxSeatSkillCreator(IMaxSeatSitesExtractor maxSeatSitesExtractor, ICreateSkillsFromMaxSeatSites createSkillsFromMaxSeatSites,
-            ICreatePersonalSkillsFromMaxSeatSites createPersonalSkillsFromMaxSeatSites, ISchedulerSkillDayHelper schedulerSkillDayHelper, IEnumerable<IPerson> personsInOrganization)
+	    public MaxSeatSkillCreator(IMaxSeatSitesExtractor maxSeatSitesExtractor, ICreateSkillsFromMaxSeatSites createSkillsFromMaxSeatSites,
+			ICreatePersonalSkillsFromMaxSeatSites createPersonalSkillsFromMaxSeatSites, ISchedulerSkillDayHelper schedulerSkillDayHelper)
         {
             _maxSeatSitesExtractor = maxSeatSitesExtractor;
             _createSkillsFromMaxSeatSites = createSkillsFromMaxSeatSites;
             _createPersonalSkillsFromMaxSeatSites = createPersonalSkillsFromMaxSeatSites;
-            _schedulerSkillDayHelper = schedulerSkillDayHelper;
-            _personsInOrganization = personsInOrganization;
+	        _schedulerSkillDayHelper = schedulerSkillDayHelper;
         }
 
-        public void CreateMaxSeatSkills(DateOnlyPeriod requestedPeriod)
+		public MaxSeatCretorResult CreateMaxSeatSkills(DateOnlyPeriod requestedPeriod, IScenario scenario, IList<IPerson> personsInOrganization)
         {
-            var sitesWithMaxSeats = _maxSeatSitesExtractor.MaxSeatSites(requestedPeriod);
+			var sitesWithMaxSeats = _maxSeatSitesExtractor.MaxSeatSites(requestedPeriod, personsInOrganization);
 
-            _createSkillsFromMaxSeatSites.CreateSkillList(sitesWithMaxSeats);
-            _createPersonalSkillsFromMaxSeatSites.Process(requestedPeriod, _personsInOrganization);
+            var maxSeatSkills = _createSkillsFromMaxSeatSites.CreateSkillList(sitesWithMaxSeats).ToList();
+            _createPersonalSkillsFromMaxSeatSites.Process(requestedPeriod, personsInOrganization);
 
 			var extendedPeriod = new DateOnlyPeriod(requestedPeriod.StartDate.AddDays(-8), requestedPeriod.EndDate.AddDays(8));
-			_schedulerSkillDayHelper.AddSkillDaysToStateHolder(extendedPeriod, ForecastSource.MaxSeatSkill, 0);
+			var maxSeatSkillDays = _schedulerSkillDayHelper.AddMaxSeatSkillDaysToStateHolder(extendedPeriod, maxSeatSkills, scenario);
+
+			return new MaxSeatCretorResult { SkillDaysToAddToStateholder = maxSeatSkillDays, SkillsToAddToStateholder = maxSeatSkills };
         }
+
+	    public class MaxSeatCretorResult
+	    {
+			public IEnumerable<ISkill> SkillsToAddToStateholder { get; set; }
+			public IDictionary<ISkill, IList<ISkillDay>> SkillDaysToAddToStateholder { get; set; }
+
+	    }
     }
 }

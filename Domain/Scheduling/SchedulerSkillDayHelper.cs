@@ -1,61 +1,70 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
     public interface ISchedulerSkillDayHelper
     {
-		void AddSkillDaysToStateHolder(DateOnlyPeriod datePeriod, ForecastSource forecastSource, int demand);
+		IDictionary<ISkill, IList<ISkillDay>> AddMaxSeatSkillDaysToStateHolder(DateOnlyPeriod datePeriod, IEnumerable<ISkill> maxSeatSkills, IScenario scenario);
     }
 
     public class SchedulerSkillDayHelper : ISchedulerSkillDayHelper
     {
-        private readonly ISchedulerStateHolder _schedulerStateHolder;
-        private readonly ISkillDayRepository _skillDayRepository;
+	    private readonly IWorkloadDayHelper _workLoadDayHelper;
 
-        public SchedulerSkillDayHelper(ISchedulerStateHolder schedulerStateHolder, ISkillDayRepository skillDayRepository)
-        {
-            _schedulerStateHolder = schedulerStateHolder;
-            _skillDayRepository = skillDayRepository;
-        }
+	    public SchedulerSkillDayHelper(IWorkloadDayHelper workLoadDayHelper)
+	    {
+		    _workLoadDayHelper = workLoadDayHelper;
+	    }
 
-        public void AddSkillDaysToStateHolder(DateOnlyPeriod datePeriod, ForecastSource forecastSource, int demand)
-        {
-            var theSkillDays = _schedulerStateHolder.SchedulingResultState.SkillDays;
-            // TODO remove first
-            foreach (var skill in _schedulerStateHolder.SchedulingResultState.Skills)
-            {
-                if (skill.SkillType.ForecastSource == forecastSource)
-                {
-                    ICollection<ISkillDay> skillDays =
-                    _skillDayRepository.GetAllSkillDays(datePeriod, new List<ISkillDay>(), skill,
-                                                       _schedulerStateHolder.RequestedScenario, _ => {});
-                    foreach (ISkillDay skillDay in skillDays)
-                    {
-                        var sDay = skillDay as IMaxSeatSkillDay;
-                        if (sDay != null)
-                            sDay.OpenAllSkillStaffPeriods();
-                        foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
-                        {
-                            var payload = skillStaffPeriod.Payload;
-							if (forecastSource == ForecastSource.NonBlendSkill)
-							{
-								payload.NoneBlendDemand = demand;
-								
-								payload.ServiceAgreementData = new ServiceAgreement(new ServiceLevel(new Percent(1), 1), new Percent(0),
-								                                                    new Percent(1));
-								skillStaffPeriod.CalculateStaff();
-							}
-                        }
-                    }
-                    theSkillDays.Add(skill, new List<ISkillDay>(skillDays));
-                }
-            }
+	    public IDictionary<ISkill, IList<ISkillDay>> AddMaxSeatSkillDaysToStateHolder(DateOnlyPeriod datePeriod, IEnumerable<ISkill> maxSeatSkills, IScenario scenario)
+		{
+			var theSkillDays = new Dictionary<ISkill, IList<ISkillDay>>();
+			foreach (var skill in maxSeatSkills)
+			{
+					ICollection<ISkillDay> skillDays =
+					getAllSkillDays(datePeriod, skill, scenario);
+					foreach (ISkillDay skillDay in skillDays)
+					{
+						var sDay = skillDay as IMaxSeatSkillDay;
+						if (sDay != null)
+							sDay.OpenAllSkillStaffPeriods();
+					}
+					theSkillDays.Add(skill, new List<ISkillDay>(skillDays));			
+			}
+			
+			return theSkillDays;
+		}
 
-            _schedulerStateHolder.SchedulingResultState.SkillDays = theSkillDays;
-        }
+		private ICollection<ISkillDay> getAllSkillDays(DateOnlyPeriod period, ISkill skill, IScenario scenario)
+		{
+			ICollection<ISkillDay> skillDays = new Collection<ISkillDay>();
+			var uniqueDays = period.DayCollection();
+			var datesToProcess = uniqueDays.Except(skillDays.Select(s => s.CurrentDate)).ToArray();
+
+			if (datesToProcess.Any())
+			{
+				IList<ISkillDay> skillDaysToRepository = new List<ISkillDay>();
+				foreach (var uniqueDate in datesToProcess)
+				{
+					ISkillDay skillDay = new SkillDay();
+					skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new List<ISkillDay> { skillDay }, new DateOnlyPeriod());
+					ISkillDayTemplate skillDayTemplate = skill.GetTemplateAt((int)uniqueDate.DayOfWeek);
+
+					skillDay.CreateFromTemplate(uniqueDate, skill, scenario, skillDayTemplate);
+
+					skillDays.Add(skillDay);
+					skillDaysToRepository.Add(skillDay);
+				}
+			}
+
+			_workLoadDayHelper.CreateLongtermWorkloadDays(skill, skillDays);
+
+			var ret = skillDays.OrderBy(wd => wd.CurrentDate).ToList();
+			return ret;
+		}
     }
 }

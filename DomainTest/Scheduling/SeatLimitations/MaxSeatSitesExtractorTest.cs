@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
@@ -23,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
         {
             _mocks = new MockRepository();
             _peopleList = new List<IPerson>();
-            _target = new MaxSeatSitesExtractor(_peopleList);
+            _target = new MaxSeatSitesExtractor();
             _dateOnly = new DateOnly(2011, 1, 19);
             _dateOnlyPeriod = new DateOnlyPeriod(2011, 1, 19, 2011, 1, 19);
         }
@@ -43,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
             _mocks.ReplayAll();
 
             _peopleList.Add(person);
-            var result = _target.MaxSeatSites(_dateOnlyPeriod);
+			var result = _target.MaxSeatSites(_dateOnlyPeriod, _peopleList);
             Assert.That(result.Count, Is.EqualTo(1));
             _mocks.VerifyAll();
         }
@@ -57,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
             _mocks.ReplayAll();
 
             _peopleList.Add(person);
-            var result = _target.MaxSeatSites(_dateOnlyPeriod);
+			var result = _target.MaxSeatSites(_dateOnlyPeriod, _peopleList);
             Assert.That(result.Count, Is.EqualTo(0));
             _mocks.VerifyAll();
         }
@@ -77,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
             _mocks.ReplayAll();
 
             _peopleList.Add(person);
-            var result = _target.MaxSeatSites(_dateOnlyPeriod);
+			var result = _target.MaxSeatSites(_dateOnlyPeriod, _peopleList);
             Assert.That(result.Count, Is.EqualTo(0));
             _mocks.VerifyAll();
         }

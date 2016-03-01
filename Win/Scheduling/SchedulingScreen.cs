@@ -3669,14 +3669,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void createMaxSeatSkills()
 		{
-			var maxSeatSitesExtractor = new MaxSeatSitesExtractor(SchedulerState.AllPermittedPersons);
-			var createSkillsFromMaxSeatSites = new CreateSkillsFromMaxSeatSites(SchedulerState.SchedulingResultState);
-			var schedulerSkillDayHelper = new SchedulerSkillDayHelper(SchedulerState, _skillDayRepository);
-			var createPersonalSkillsFromMaxSeatSites = new CreatePersonalSkillsFromMaxSeatSites();
-			var maxSeatSkillCreator = new MaxSeatSkillCreator(maxSeatSitesExtractor, createSkillsFromMaxSeatSites,
-				createPersonalSkillsFromMaxSeatSites, schedulerSkillDayHelper,
-				SchedulerState.SchedulingResultState.PersonsInOrganization);
-			maxSeatSkillCreator.CreateMaxSeatSkills(SchedulerState.RequestedPeriod.DateOnlyPeriod);
+			var maxSeatSkillCreator = _container.Resolve<MaxSeatSkillCreator>();
+			var result = maxSeatSkillCreator.CreateMaxSeatSkills(SchedulerState.RequestedPeriod.DateOnlyPeriod, SchedulerState.RequestedScenario,
+				SchedulerState.SchedulingResultState.PersonsInOrganization.ToList());
+			foreach (var skill in result.SkillsToAddToStateholder)
+			{
+				SchedulerState.SchedulingResultState.AddSkills(skill);
+			}
+			foreach (var skillDayKeyValue in result.SkillDaysToAddToStateholder)
+			{
+				SchedulerState.SchedulingResultState.SkillDays.Add(skillDayKeyValue);
+			}
 		}
 
 		private IBusinessRuleResponse validatePersonAccounts(IPerson person)
