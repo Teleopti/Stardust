@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -75,12 +76,19 @@ namespace Stardust.Node.Extensions
 					                                      cancellationToken);
 					return response;
 				}
-
+	
 				catch (Exception exp)
 				{
-					LogHelper.LogErrorWithLineNumber(Logger,
-					                                 exp.Message,
-					                                 exp);
+					if (exp.InnerException.GetType() == typeof (WebException))
+					{
+						LogHelper.LogWarningWithLineNumber(Logger, exp.InnerException.Message + " " + apiEndpoint);
+					}
+					else
+					{
+						LogHelper.LogErrorWithLineNumber(Logger,
+													 exp.Message,
+													 exp);
+					}
 				}
 			}
 
