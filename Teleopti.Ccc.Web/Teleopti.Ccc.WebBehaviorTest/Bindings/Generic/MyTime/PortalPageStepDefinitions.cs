@@ -12,6 +12,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertExists(".body-weekview-inner");
 		}
 
+		[Then(@"I should see CiscoWidget")]
+		public void ThenIShouldSeeCiscoWidget()
+		{
+			Browser.Interactions.AssertExists(".cisco-widget");
+		}
+
 		[Then(@"I should see licensed to information")]
 		public void ThenIShouldSeeLicensedToInformation()
 		{

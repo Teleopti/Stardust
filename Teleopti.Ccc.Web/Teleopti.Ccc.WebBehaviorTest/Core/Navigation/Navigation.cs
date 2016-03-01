@@ -101,6 +101,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			GoToPage("MyTime");
 		}
 
+		public static void GotoCiscoWidget()
+		{
+			GoToPage("MyTime/CiscoWidget");
+		}
+
 		public static void GotoGlobalSignInPage()
 		{
 			GoToPage("Authentication");

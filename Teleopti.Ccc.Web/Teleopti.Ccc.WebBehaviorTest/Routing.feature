@@ -41,6 +41,13 @@ Scenario: Browse to root and sign in to MyTime
 	And I sign in
 	Then I should see MyTime
 
+Scenario: Browse to descendent of MyTime, CiscoWidget in this case
+    Given I have the role 'Access to mytime only'
+	Given I am not signed in
+	When I navigate to CiscoWidget
+	And I sign in
+	Then I should see CiscoWidget
+
 Scenario: Browse to root and sign in to Anywhere
 	Given I have the role 'Access to anywhere only'
 	When I navigate to the site's root

@@ -534,6 +534,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoMyTime();
 		}
 
+		[When(@"I navigate to CiscoWidget")]
+		public void WhenINavigateToCiscoWidget()
+		{
+			DataMaker.Data().ApplyDelayed();
+			Navigation.GotoCiscoWidget();
+		}
+
 		[Given(@"I navigate to Anywhere")]
 		[When(@"I navigate to Anywhere")]
 		public void WhenINavigateToAnywhere()

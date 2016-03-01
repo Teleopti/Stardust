@@ -7,10 +7,19 @@
 	<meta charset="UTF-8">
 	<script type="text/javascript">
 
-		var globalApplicationAreas = ['MyTime', 'Anywhere', 'Messages', 'Reporting', 'WFM', 'HealthCheck'];
-		var areaToGoInTheUrl = globalApplicationAreas.filter(isAnyAreaInTheUrl)[0];
-		tryToSaveReturnHash(areaToGoInTheUrl);
+		var globalApplicationAreas = ['MyTime', 'Anywhere', 'Messages', 'Reporting', 'WFM', 'HealthCheck','MyTime/CiscoWidget'];//any descendent area is not here? please add if missing.
+
+		tryToSaveReturnHash(findTheDeepestArea());
 		redirect();
+
+		function findTheDeepestArea() {
+			var theDeepestArea = globalApplicationAreas.filter(isAnyAreaInTheUrl);
+			if (theDeepestArea.length > 1) {
+				theDeepestArea.sort();
+				theDeepestArea = theDeepestArea[theDeepestArea.length - 1];
+			}
+			return theDeepestArea;
+		}
 
 		function tryToSaveReturnHash(areaToGo) {
 			
@@ -31,7 +40,17 @@
 		}
 
 		function isAnyAreaInTheUrl(area) {
-			return window.location.href.toUpperCase().indexOf(area.toUpperCase()) !== -1;
+			if (area.indexOf('/') > 0) {
+				var arr = area.split("/");
+				var j = 0;
+				for (var i = 0; i < arr.length; i++) {
+					if (window.location.href.toUpperCase().indexOf(arr[i].toUpperCase()) > -1) j++;
+				}
+				return j == arr.length ? true : false;
+			} else {
+				return window.location.href.toUpperCase().indexOf(area.toUpperCase()) !== -1;
+			}
+
 		}
 
 		function deleteCookie(name) {
