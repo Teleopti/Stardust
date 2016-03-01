@@ -20,13 +20,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 	        _schedulerSkillDayHelper = schedulerSkillDayHelper;
         }
 
-		public MaxSeatCretorResult CreateMaxSeatSkills(DateOnlyPeriod requestedPeriod, IScenario scenario, IList<IPerson> personsInOrganization)
+		public MaxSeatCretorResult CreateMaxSeatSkills(DateOnlyPeriod requestedPeriod, IScenario scenario, IList<IPerson> personsInOrganization, int intervalLength)
         {
 			var sitesWithMaxSeats = _maxSeatSitesExtractor.MaxSeatSites(requestedPeriod, personsInOrganization);
-
-            var maxSeatSkills = _createSkillsFromMaxSeatSites.CreateSkillList(sitesWithMaxSeats).ToList();
+			var maxSeatSkills = _createSkillsFromMaxSeatSites.CreateSkillList(sitesWithMaxSeats, intervalLength).ToList();
             _createPersonalSkillsFromMaxSeatSites.Process(requestedPeriod, personsInOrganization);
-
 			var extendedPeriod = new DateOnlyPeriod(requestedPeriod.StartDate.AddDays(-8), requestedPeriod.EndDate.AddDays(8));
 			var maxSeatSkillDays = _schedulerSkillDayHelper.AddMaxSeatSkillDaysToStateHolder(extendedPeriod, maxSeatSkills, scenario);
 

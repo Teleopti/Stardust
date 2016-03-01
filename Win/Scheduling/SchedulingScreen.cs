@@ -3670,16 +3670,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void createMaxSeatSkills()
 		{
 			var maxSeatSkillCreator = _container.Resolve<MaxSeatSkillCreator>();
+			var minIntervalLength = SchedulerState.SchedulingResultState.Skills.Min(s => s.DefaultResolution);
 			var result = maxSeatSkillCreator.CreateMaxSeatSkills(SchedulerState.RequestedPeriod.DateOnlyPeriod, SchedulerState.RequestedScenario,
-				SchedulerState.SchedulingResultState.PersonsInOrganization.ToList());
-			foreach (var skill in result.SkillsToAddToStateholder)
-			{
-				SchedulerState.SchedulingResultState.AddSkills(skill);
-			}
-			foreach (var skillDayKeyValue in result.SkillDaysToAddToStateholder)
-			{
-				SchedulerState.SchedulingResultState.SkillDays.Add(skillDayKeyValue);
-			}
+				SchedulerState.SchedulingResultState.PersonsInOrganization.ToList(), minIntervalLength);
+			result.SkillsToAddToStateholder.ForEach(s => SchedulerState.SchedulingResultState.AddSkills(s));
+			result.SkillDaysToAddToStateholder.ForEach(kvp => SchedulerState.SchedulingResultState.SkillDays.Add(kvp));		
 		}
 
 		private IBusinessRuleResponse validatePersonAccounts(IPerson person)

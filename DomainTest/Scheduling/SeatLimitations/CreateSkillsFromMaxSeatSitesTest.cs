@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -16,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 		public ICreateSkillsFromMaxSeatSites Target;
 
 		[Test]
-		public void ShouldCreateSkillForSiteWithMaxSeat()
+		public void ShouldCreateSkillForSiteWithMaxSeatAnd15MinuteInterval()
 		{
 			var site1 = SiteFactory.CreateSimpleSite("site1");
 			site1.MaxSeats = 20;
@@ -24,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 
 			IList<ISite> sites = new List<ISite> {site1, site2};
 
-			var skills = Target.CreateSkillList(sites).ToList();
+			var skills = Target.CreateSkillList(sites, 15).ToList();
 			
 			Assert.AreEqual(1, skills.Count());
             Assert.AreEqual(skills[0], site1.MaxSeatSkill);
@@ -34,6 +33,25 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
             Assert.AreEqual(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone.Id, skills[0].TimeZone.Id);
             Assert.AreEqual(96, skills[0].GetTemplateAt(0).TemplateSkillDataPeriodCollection.Count);
             Assert.AreEqual(20, skills[0].GetTemplateAt(0).TemplateSkillDataPeriodCollection[0].MaxSeats);
+		}
+
+		[Test]
+		public void ShouldCreateSkillForSiteWithMaxSeatAnd30MinuteInterval()
+		{
+			var site1 = SiteFactory.CreateSimpleSite("site1");
+			site1.MaxSeats = 20;
+			IList<ISite> sites = new List<ISite> { site1 };
+
+			var skills = Target.CreateSkillList(sites, 30).ToList();
+
+			Assert.AreEqual(1, skills.Count());
+			Assert.AreEqual(skills[0], site1.MaxSeatSkill);
+			Assert.AreEqual(30, skills[0].DefaultResolution);
+			Assert.AreEqual(site1.Description.Name, skills[0].Name);
+			Assert.AreEqual(ForecastSource.MaxSeatSkill, skills[0].SkillType.ForecastSource);
+			Assert.AreEqual(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone.Id, skills[0].TimeZone.Id);
+			Assert.AreEqual(48, skills[0].GetTemplateAt(0).TemplateSkillDataPeriodCollection.Count);
+			Assert.AreEqual(20, skills[0].GetTemplateAt(0).TemplateSkillDataPeriodCollection[0].MaxSeats);
 		}
 	}
 }

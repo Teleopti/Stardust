@@ -9,12 +9,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 {
 	public interface ICreateSkillsFromMaxSeatSites
 	{
-		IEnumerable<ISkill> CreateSkillList(IEnumerable<ISite> sites);
+		IEnumerable<ISkill> CreateSkillList(IEnumerable<ISite> sites, int intervalLength);
 	}
 
 	public class CreateSkillsFromMaxSeatSites : ICreateSkillsFromMaxSeatSites
 	{
-        public IEnumerable<ISkill> CreateSkillList(IEnumerable<ISite> sites)
+        public IEnumerable<ISkill> CreateSkillList(IEnumerable<ISite> sites, int intervalLength)
 		{
 			IList<ISkill> newSkills = new List<ISkill>();
 			foreach (var site in sites)
@@ -22,21 +22,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				if (!site.MaxSeats.HasValue)
 					continue;
 
-				ISkill newSkill = new Skill(site.Description.Name, "", Color.DeepPink, 15,
+				ISkill newSkill = new Skill(site.Description.Name, "", Color.DeepPink, intervalLength,
 				                            new SkillTypePhone(new Description(), ForecastSource.MaxSeatSkill));
-                // so we can use it to save if pinned in the scheduling screen
+
                 newSkill.SetId(site.Id);
-				//IWorkload workLoad = new Workload(newSkill);
-				//newSkill.AddWorkload(workLoad);
 
 				IList<ITemplateSkillDataPeriod> templateSkillDataPeriods = new List<ITemplateSkillDataPeriod>();
                 var baseDate = SkillDayTemplate.BaseDate.Date;
 			    var timeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 			    newSkill.TimeZone = timeZone;
-                for (int i = 0; i < 96; i++)
+				var numberOfIntervals = 24*60/intervalLength;
+				for (int i = 0; i < numberOfIntervals; i++)
                 {
-                    DateTimePeriod period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(baseDate.AddMinutes(15 * i),
-                                                                         baseDate.AddMinutes(15 * (i + 1)), timeZone);
+					DateTimePeriod period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(baseDate.AddMinutes(intervalLength * i),
+																		 baseDate.AddMinutes(intervalLength * (i + 1)), timeZone);
 
 					ITemplateSkillDataPeriod templateSkillDataPeriod = new TemplateSkillDataPeriod(new ServiceAgreement(),
 				                                                                               new SkillPersonData(0, 0), period);
