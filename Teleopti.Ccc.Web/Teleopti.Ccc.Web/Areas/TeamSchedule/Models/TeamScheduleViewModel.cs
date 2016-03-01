@@ -50,6 +50,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 
 	public class RemovePersonAbsenceForm
 	{
+		public DateTime ScheduleDate { get; set; }
+		public IEnumerable<Guid> PersonIds { get; set; }
 		public IEnumerable<Guid> PersonAbsenceIds { get; set; }
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 	}

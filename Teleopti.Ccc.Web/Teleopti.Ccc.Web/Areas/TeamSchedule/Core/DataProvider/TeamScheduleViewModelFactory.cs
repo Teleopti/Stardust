@@ -62,24 +62,27 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			};
 		}
 
-		public GroupScheduleViewModel CreateViewModelForPeople(Guid[] personIds, DateOnly scheduleDate)
+		public GroupScheduleViewModel CreateViewModelForPeople(IEnumerable<Guid> personIds, DateOnly scheduleDate)
 		{
 			var people = _personRepository.FindPeople(personIds);
-			var peopleCanSeeConfidentialAbsencesFor = people.Where(person => _permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential, scheduleDate, person))
-															.Select(person => person.Id.Value);
+			var peopleCanSeeConfidentialAbsencesFor = people.Where(
+				person => _permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential,
+					scheduleDate, person))
+				.Select(person => person.Id.Value);
 
-			var list = constructGroupScheduleShiftViewModels(scheduleDate, people, peopleCanSeeConfidentialAbsencesFor, people.Count(), 1);
+			var list = constructGroupScheduleShiftViewModels(scheduleDate, people, peopleCanSeeConfidentialAbsencesFor,
+				people.Count, 1);
 
 			return new GroupScheduleViewModel
 			{
 				Schedules = list,
-				Total = people.Count()
+				Total = people.Count
 			};
 		}
 
 
-		private IEnumerable<GroupScheduleShiftViewModel> constructGroupScheduleShiftViewModels(DateOnly dateInUserTimeZone, IEnumerable<IPerson> people,
-			IEnumerable<Guid> peopleCanSeeConfidentialAbsencesFor, int pageSize, int currentPageIndex)
+		private IEnumerable<GroupScheduleShiftViewModel> constructGroupScheduleShiftViewModels(DateOnly dateInUserTimeZone,
+			IEnumerable<IPerson> people, IEnumerable<Guid> peopleCanSeeConfidentialAbsencesFor, int pageSize, int currentPageIndex)
 		{
 			var userTimeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var scheduleDays = _scheduleProvider.GetScheduleForPersons(dateInUserTimeZone, people).ToList();

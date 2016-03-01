@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
@@ -94,8 +96,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		[UnitOfWork, HttpGet, Route("api/TeamSchedule/GetSchedules")]
 		public virtual GroupScheduleViewModel GetSchedulesForPeople([FromUri] Guid[] personIds, DateTime date)
 		{
-			var scheduleDateOnly = new DateOnly(date);
-			return _teamScheduleViewModelFactory.CreateViewModelForPeople(personIds, scheduleDateOnly);
+			return getSchedulesForPeople(personIds, date);
 		}
 
 		[HttpPost, UnitOfWork, AddFullDayAbsencePermission, Route("api/TeamSchedule/AddFullDayAbsence")]
@@ -157,14 +158,26 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		public virtual IHttpActionResult RemoveAbsence(RemovePersonAbsenceForm command)
 		{
 			setTrackedCommandInfo(command.TrackedCommandInfo);
-			foreach (var personAbsenceId in command.PersonAbsenceIds)
+
+			var personAbsenceIdsForRemove = new HashSet<Guid>(command.PersonAbsenceIds);
+
+			// Get all person absence id for selected person
+			var schedules = getSchedulesForPeople(command.PersonIds.ToArray(), command.ScheduleDate);
+			foreach (var schedule in schedules.Schedules)
 			{
-				var cmd = new RemovePersonAbsenceCommand
+				foreach (var projection in schedule.Projection.Where(projection => projection.ParentPersonAbsence != null))
+				{
+					personAbsenceIdsForRemove.Add(projection.ParentPersonAbsence.Value);
+				}
+			}
+
+			foreach (var personAbsenceId in personAbsenceIdsForRemove)
+			{
+				_removePersonAbsenceCommandHandler.Handle(new RemovePersonAbsenceCommand
 				{
 					PersonAbsenceId = personAbsenceId,
 					TrackedCommandInfo = command.TrackedCommandInfo
-				};
-				_removePersonAbsenceCommandHandler.Handle(cmd);
+				});
 			}
 			return Ok();
 		}
@@ -205,6 +218,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			{
 				commandInfo.OperatedPersonId = userId.Value;
 			}
+		}
+
+		private GroupScheduleViewModel getSchedulesForPeople(IEnumerable<Guid> personIds, DateTime date)
+		{
+			var scheduleDateOnly = new DateOnly(date);
+			return _teamScheduleViewModelFactory.CreateViewModelForPeople(personIds, scheduleDateOnly);
 		}
 	}
 }

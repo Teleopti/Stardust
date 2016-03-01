@@ -5,16 +5,19 @@ using System.Web.Http.Results;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Interfaces.Domain;
 
@@ -249,7 +252,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 				MockRepository.GenerateMock<ISettingsPersisterAndProvider<AgentsPerPageSetting>>();
 			agentsPerPageSettingersisterAndProvider.Stub(x => x.GetByOwner(loggonUser.CurrentUser()))
 				.Return(new AgentsPerPageSetting() {AgentsPerPage = expectedAgents});
-			var target = new TeamScheduleController(null, loggonUser, null, null, agentsPerPageSettingersisterAndProvider, null, null);
+			var target = new TeamScheduleController(null, loggonUser, null, null, agentsPerPageSettingersisterAndProvider, null,
+				null);
 
 			var result = target.GetAgentsPerPageSetting();
 
@@ -273,6 +277,60 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			target.SwapShifts(command);
 
 			swapShiftHandler.AssertWasCalled(x => x.SwapShifts(Arg<SwapMainShiftForTwoPersonsCommand>.Matches(a => a == command)));
+		}
+
+		[Test]
+		public void ShouldRemoveAbsences()
+		{
+			var scheduleDate = DateTime.Now.Date;
+			var personId = Guid.NewGuid();
+			var personAbsenceId = Guid.NewGuid();
+			var personAbsenceIdStandalone = Guid.NewGuid();
+
+			var pricipalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			pricipalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
+				.Return(true);
+
+			var removePersonAbsenceCommandHandler = MockRepository.GenerateMock<IHandleCommand<RemovePersonAbsenceCommand>>();
+			removePersonAbsenceCommandHandler.Stub(x => x.Handle(null)).IgnoreArguments();
+
+			var teamScheduleViewModelFactory = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
+			var schedule = new GroupScheduleViewModel
+			{
+				Schedules =
+					new List<GroupScheduleShiftViewModel>
+					{
+						new GroupScheduleShiftViewModel
+						{
+							Projection = new List<GroupScheduleProjectionViewModel>
+							{
+								new GroupScheduleProjectionViewModel
+								{
+									ParentPersonAbsence = personAbsenceId
+								}
+							}
+						}
+					}
+			};
+			teamScheduleViewModelFactory.Stub(
+				x => x.CreateViewModelForPeople(new List<Guid> {personId}, new DateOnly(scheduleDate)))
+				.Return(schedule);
+
+			var target = new TeamScheduleController(teamScheduleViewModelFactory, null, pricipalAuthorization, null, null, null,
+				removePersonAbsenceCommandHandler);
+
+			var form = new RemovePersonAbsenceForm
+			{
+				ScheduleDate = scheduleDate,
+				PersonIds = new List<Guid> {personId},
+				PersonAbsenceIds = new List<Guid> {personAbsenceIdStandalone}
+			};
+			target.RemoveAbsence(form);
+
+			removePersonAbsenceCommandHandler.AssertWasCalled(
+				x => x.Handle(Arg<RemovePersonAbsenceCommand>.Matches(s => s.PersonAbsenceId == personAbsenceIdStandalone)));
+			removePersonAbsenceCommandHandler.AssertWasCalled(
+				x => x.Handle(Arg<RemovePersonAbsenceCommand>.Matches(s => s.PersonAbsenceId == personAbsenceId)));
 		}
 	}
 }

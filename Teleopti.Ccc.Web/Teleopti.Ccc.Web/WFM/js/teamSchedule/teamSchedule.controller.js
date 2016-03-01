@@ -169,6 +169,8 @@
 		function removeAbsence() {
 			if (!canRemoveAbsence()) return;
 
+			var selectedPersonIdList = personSelectionSvc.getSelectedPersonIdList();
+
 			var personWithSelectedAbsences = [];
 			var selectedAbsences = [];
 			for (var i = 0; i < vm.selectedPersonAbsences.length; i++) {
@@ -178,9 +180,12 @@
 					selectedAbsences.push(personAndAbsencePair.SelectedPersonAbsences[j]);
 				};
 			}
-			personAbsenceSvc.PromiseForRemovePersonAbsence(selectedAbsences, function (result) {
-				vm.afterActionCallback(result, personWithSelectedAbsences, "FinishedRemoveAbsence", "FailedToRemoveAbsence");
-			});
+
+			var allPersonWithAbsenceRemoved = selectedPersonIdList.concat(personWithSelectedAbsences);
+			personAbsenceSvc.PromiseForRemovePersonAbsence(vm.scheduleDateMoment(), selectedPersonIdList, selectedAbsences,
+				function(result) {
+					vm.afterActionCallback(result, allPersonWithAbsenceRemoved, "FinishedRemoveAbsence", "FailedToRemoveAbsence");
+				});
 		}
 
 		vm.commands = [
