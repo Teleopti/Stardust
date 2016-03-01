@@ -189,7 +189,8 @@
 		}
 
 		function canRemoveAbsence() {
-			return vm.toggleForRemoveAbsenceEnabled && vm.selectedPersonAbsences.length > 0;
+			return vm.toggleForRemoveAbsenceEnabled
+				&& (personSelectionSvc.isAnyAgentSelected() || vm.selectedPersonAbsences.length > 0);
 		}
 
 		function removeAbsence() {
