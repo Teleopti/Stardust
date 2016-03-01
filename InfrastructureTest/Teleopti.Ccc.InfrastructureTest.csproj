@@ -187,6 +187,7 @@
     <Compile Include="ApplicationLayer\Events\HangfireEventPublishingTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireRecurringEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\Events\MultiEventPublishingTest.cs" />
+    <Compile Include="ApplicationLayer\Events\RunInProcessEventPublisherTest.cs" />
     <Compile Include="Authentication\CryptoKeyInfoRepositoryTest.cs" />
     <Compile Include="Authentication\LoadUserUnauthorizedTest.cs" />
     <Compile Include="Authentication\NonceInfoRepositoryTest.cs" />

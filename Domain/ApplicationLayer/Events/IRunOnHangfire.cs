@@ -11,4 +11,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	public interface IRunOnStardust
 	{
 	}
+
+	public interface IRunInProcess
+	{
+	}
 }
