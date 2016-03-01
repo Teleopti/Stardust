@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
@@ -15,7 +14,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 {
-	public class ScheduleDomainDataProvider : IScheduleDomainDataProvider
+	public class WeekScheduleDomainDataProvider : IWeekScheduleDomainDataProvider
 	{
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly IProjectionProvider _projectionProvider;
@@ -28,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 		private readonly IToggleManager _toggleManager;
 		private readonly IUserCulture _culture;
 
-		public ScheduleDomainDataProvider(IScheduleProvider scheduleProvider, IProjectionProvider projectionProvider,
+		public WeekScheduleDomainDataProvider(IScheduleProvider scheduleProvider, IProjectionProvider projectionProvider,
 			IPersonRequestProvider personRequestProvider,
 			ISeatOccupancyProvider seatBookingProvider,
 			IUserTimeZone userTimeZone, IPermissionProvider permissionProvider, INow now,
@@ -46,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			_culture = culture;
 		}
 
-		public WeekScheduleDomainData GetWeekScheduleDomainData(DateOnly date)
+		public WeekScheduleDomainData Get(DateOnly date)
 		{
 			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(date, _culture.GetCulture().DateTimeFormat.FirstDayOfWeek);
 			var week = new DateOnlyPeriod(firstDayOfWeek, firstDayOfWeek.AddDays(6));
@@ -234,19 +233,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 				ShiftExchangePermission = shiftExchangePermission,
 				ShiftTradeBulletinBoardPermission = shiftTradeBulletinBoardPermission,
 				PersonAccountPermission = personalAccountPermission,
-				IsCurrentWeek = isCurrentWeek,
+				IsCurrentWeek = isCurrentWeek
 			};
 		}
-
-		public MonthScheduleDomainData GetMonthScheduleDomainData(DateOnly date)
-		{
-			throw new System.NotImplementedException();
-		}
-	}
-
-	public interface IScheduleDomainDataProvider
-	{
-		WeekScheduleDomainData GetWeekScheduleDomainData(DateOnly date);
-		MonthScheduleDomainData GetMonthScheduleDomainData(DateOnly date);
 	}
 }

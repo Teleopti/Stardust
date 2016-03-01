@@ -19,12 +19,13 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 		public void ShoudCreateWeekViewModelByCallingProviderAndMapping()
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
-			var scheduleDomainDataProvider = MockRepository.GenerateMock<IScheduleDomainDataProvider>();
-			var target = new ScheduleViewModelFactory(mapper, scheduleDomainDataProvider);
+			var weekScheduleDomainDataProvider = MockRepository.GenerateMock<IWeekScheduleDomainDataProvider>();
+			var monthScheduleDomainDataProvider = MockRepository.GenerateMock<IMonthScheduleDomainDataProvider>();
+			var target = new ScheduleViewModelFactory(mapper, weekScheduleDomainDataProvider, monthScheduleDomainDataProvider);
 			var domainData = new WeekScheduleDomainData();
 			var viewModel = new WeekScheduleViewModel();
 
-			scheduleDomainDataProvider.Stub(x => x.GetWeekScheduleDomainData(DateOnly.Today)).Return(domainData);
+			weekScheduleDomainDataProvider.Stub(x => x.Get(DateOnly.Today)).Return(domainData);
 			mapper.Stub(x => x.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData)).Return(viewModel);
 
 			var result = target.CreateWeekViewModel(DateOnly.Today);
@@ -36,13 +37,14 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
         public void ShoudCreateMonthViewModelByTwoStepMapping()
         {
             var mapper = MockRepository.GenerateMock<IMappingEngine>();
-			var scheduleDomainDataProvider = MockRepository.GenerateMock<IScheduleDomainDataProvider>();
-			var target = new ScheduleViewModelFactory(mapper, scheduleDomainDataProvider);
-            var domainData = new MonthScheduleDomainData();
+			var weekScheduleDomainDataProvider = MockRepository.GenerateMock<IWeekScheduleDomainDataProvider>();
+			var monthScheduleDomainDataProvider = MockRepository.GenerateMock<IMonthScheduleDomainDataProvider>();
+			var target = new ScheduleViewModelFactory(mapper, weekScheduleDomainDataProvider, monthScheduleDomainDataProvider);
+			var domainData = new MonthScheduleDomainData();
             var viewModel = new MonthScheduleViewModel();
 
-            mapper.Stub(x => x.Map<DateOnly, MonthScheduleDomainData>(DateOnly.Today)).Return(domainData);
-            mapper.Stub(x => x.Map<MonthScheduleDomainData, MonthScheduleViewModel>(domainData)).Return(viewModel);
+			monthScheduleDomainDataProvider.Stub(x => x.Get(DateOnly.Today)).Return(domainData);
+			mapper.Stub(x => x.Map<MonthScheduleDomainData, MonthScheduleViewModel>(domainData)).Return(viewModel);
 
             var result = target.CreateMonthViewModel(DateOnly.Today);
 

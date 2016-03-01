@@ -10,24 +10,25 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 	public class ScheduleViewModelFactory : IScheduleViewModelFactory
 	{
 	    private readonly IMappingEngine _mapper;
-		private readonly IScheduleDomainDataProvider _scheduleDomainDataProvider;
+		private readonly IWeekScheduleDomainDataProvider _weekScheduleDomainDataProvider;
+		private readonly IMonthScheduleDomainDataProvider _monthScheduleDomainDataProvider;
 
-
-		public ScheduleViewModelFactory(IMappingEngine mapper, IScheduleDomainDataProvider scheduleDomainDataProvider)
+		public ScheduleViewModelFactory(IMappingEngine mapper, IWeekScheduleDomainDataProvider weekScheduleDomainDataProvider, IMonthScheduleDomainDataProvider monthScheduleDomainDataProvider)
 		{
 			_mapper = mapper;
-			_scheduleDomainDataProvider = scheduleDomainDataProvider;
+			_weekScheduleDomainDataProvider = weekScheduleDomainDataProvider;
+			_monthScheduleDomainDataProvider = monthScheduleDomainDataProvider;
 		}
 
 		public MonthScheduleViewModel CreateMonthViewModel(DateOnly dateOnly)
 	    {
-            var domainData = _mapper.Map<DateOnly, MonthScheduleDomainData>(dateOnly);
-            return _mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(domainData);
+			var domainData = _monthScheduleDomainDataProvider.Get(dateOnly);
+			return _mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(domainData);
         }
 
 	    public WeekScheduleViewModel CreateWeekViewModel(DateOnly dateOnly)
 	    {
-		    var domainData = _scheduleDomainDataProvider.GetWeekScheduleDomainData(dateOnly);
+		    var domainData = _weekScheduleDomainDataProvider.Get(dateOnly);
 			return _mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
 		}
 	}

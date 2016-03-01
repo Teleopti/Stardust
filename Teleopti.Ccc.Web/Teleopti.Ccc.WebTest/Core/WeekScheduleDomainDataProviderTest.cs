@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		private INow now;
 		private IAbsenceRequestProbabilityProvider probabilityProvider;
 		private ISeatOccupancyProvider seatBookingProvider;
-		private IScheduleDomainDataProvider target;
+		private IWeekScheduleDomainDataProvider target;
 
 		[SetUp]
 		public void Setup()
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			probabilityProvider = MockRepository.GenerateMock<IAbsenceRequestProbabilityProvider>();
 			seatBookingProvider = MockRepository.GenerateMock<ISeatOccupancyProvider>();
 
-			target = new ScheduleDomainDataProvider(scheduleProvider,
+			target = new WeekScheduleDomainDataProvider(scheduleProvider,
 					projectionProvider,
 					personRequestProvider,
 					seatBookingProvider,
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
-			var result = target.GetWeekScheduleDomainData(date);
+			var result = target.Get(date);
 			result.Date.Should().Be(date);
 		}
 
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
-			var result = target.GetWeekScheduleDomainData(date);
+			var result = target.Get(date);
 			result.Days.Should().Have.Count.EqualTo(7);
 		}
 
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
-			var result = target.GetWeekScheduleDomainData(date);
+			var result = target.Get(date);
 
 			result.Days.Select(x => x.Date)
 				.Should().Have.SameSequenceAs(datesInWeek);
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
-			var result = target.GetWeekScheduleDomainData(date);
+			var result = target.Get(date);
 
 			result.Days.Single(d => d.Date == date).ScheduleDay.Should().Be.SameInstanceAs(scheduleDay);
 		}
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
-			var result = target.GetWeekScheduleDomainData(date);
+			var result = target.Get(date);
 
 			result.Days.Single(d => d.Date == date).Projection.Should().Be.SameInstanceAs(projection);
 		}
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay, scheduleYesterday });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projectionYesterday);
 
-			var result = target.GetWeekScheduleDomainData(date);
+			var result = target.Get(date);
 
 			result.Days.Single(d => d.Date == date).ProjectionYesterday.Should().Not.Be.Null();
 			result.Days.Single(d => d.Date == date).ProjectionYesterday.Should().Be.SameInstanceAs(projectionYesterday);
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
-			var result = target.GetWeekScheduleDomainData(date);
+			var result = target.Get(date);
 
 			result.Days.Single(d => d.Date == date).OvertimeAvailability.Should().Be.SameInstanceAs(overtimeAvailability);
 		}
@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay, scheduleYesterday });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projectionYesterday);
 
-			var result = target.GetWeekScheduleDomainData(date);
+			var result = target.Get(date);
 
 			result.Days.Single(d => d.Date == date).OvertimeAvailabilityYesterday.Should().Not.Be.Null();
 			result.Days.Single(d => d.Date == date).OvertimeAvailabilityYesterday.Should().Be.SameInstanceAs(overtimeAvailabilityYesterday);
@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			personRequestProvider.Stub(x => x.RetrieveRequestsForLoggedOnUser(week)).Return(new[] { personRequest });
 
-			var result = target.GetWeekScheduleDomainData(date);
+			var result = target.Get(date);
 
 			result.Days.Single(d => d.Date == date).PersonRequests.Single().Should().Be.SameInstanceAs(personRequest);
 		}
@@ -261,7 +261,7 @@ namespace Teleopti.Ccc.WebTest.Core
 				.Stub(x => x.GetAbsenceRequestProbabilityForPeriod(week))
 				.Return(new List<IAbsenceRequestProbability> { probDay1, probDay2, probDay3, probDay4, probDay5, probDay6, probDay7 });
 
-			var result = target.GetWeekScheduleDomainData(date);
+			var result = target.Get(date);
 			result.Days.Single(d => d.Date == lastDayOfWeek).ProbabilityClass.Should().Be.EqualTo(probDay7.CssClass);
 		}
 
@@ -295,7 +295,7 @@ namespace Teleopti.Ccc.WebTest.Core
 				.Stub(x => x.GetAbsenceRequestProbabilityForPeriod(week))
 				.Return(new List<IAbsenceRequestProbability> { probDay1, probDay2, probDay3, probDay4, probDay5, probDay6, probDay7 });
 
-			var result = target.GetWeekScheduleDomainData(date);
+			var result = target.Get(date);
 
 			result.Days.Single(d => d.Date == lastDayOfWeek).ProbabilityText.Should().Be.EqualTo(probDay7.Text);
 		}
@@ -330,7 +330,7 @@ namespace Teleopti.Ccc.WebTest.Core
 				.Stub(x => x.GetAbsenceRequestProbabilityForPeriod(week))
 				.Return(new List<IAbsenceRequestProbability> { probDay1, probDay2, probDay3, probDay4, probDay5, probDay6, probDay7 });
 
-			var result = target.GetWeekScheduleDomainData(date);
+			var result = target.Get(date);
 
 			result.Days.Single(d => d.Date == lastDayOfWeek).Availability.Should().Be.EqualTo(probDay7.Availability);
 		}
@@ -359,7 +359,7 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			personRequestProvider.Stub(x => x.RetrieveRequestsForLoggedOnUser(week)).Return(new[] { personRequest });
 
-			var result = target.GetWeekScheduleDomainData(date);
+			var result = target.Get(date);
 
 			result.Days.Single(d => d.Date == date).PersonRequests.Single().Should().Be.SameInstanceAs(personRequest);
 		}
@@ -374,7 +374,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
-			var result = target.GetWeekScheduleDomainData(date);
+			var result = target.Get(date);
 
 			result.ColorSource.ScheduleDays.Single().Should().Be(scheduleDay);
 			result.ColorSource.Projections.Single().Should().Be.SameInstanceAs(projection);
@@ -395,7 +395,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
-			var result = target.GetWeekScheduleDomainData(date);
+			var result = target.Get(date);
 
 			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(7);
 			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(45);
@@ -419,7 +419,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
-			var result = target.GetWeekScheduleDomainData(date);
+			var result = target.Get(date);
 
 			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(0);
 			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(00);
@@ -447,7 +447,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
-			var result = target.GetWeekScheduleDomainData(firstDayOfWeek);
+			var result = target.Get(firstDayOfWeek);
 
 			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(0);
 			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(00);
@@ -476,7 +476,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
-			var result = target.GetWeekScheduleDomainData(lastDayOfWeek);
+			var result = target.Get(lastDayOfWeek);
 
 			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(19);
 			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(45);
@@ -502,7 +502,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
-			var result = target.GetWeekScheduleDomainData(date);
+			var result = target.Get(date);
 
 			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(0);
 			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(45);
@@ -528,7 +528,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
-			var result = target.GetWeekScheduleDomainData(date);
+			var result = target.Get(date);
 
 			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(0);
 			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(0);
@@ -558,7 +558,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
-			var result = target.GetWeekScheduleDomainData(firstDayOfWeek);
+			var result = target.Get(firstDayOfWeek);
 
 			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(0);
 			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(00);
@@ -589,7 +589,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
-			var result = target.GetWeekScheduleDomainData(lastDayOfWeek);
+			var result = target.Get(lastDayOfWeek);
 
 			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(19);
 			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(45);
@@ -618,7 +618,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(true);
 
-			var result = target.GetWeekScheduleDomainData(firstDayOfWeek);
+			var result = target.Get(firstDayOfWeek);
 
 			result.AsmPermission.Should().Be.True();
 		}
@@ -643,7 +643,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb)).Return(true);
 
-			var result = target.GetWeekScheduleDomainData(firstDayOfWeek);
+			var result = target.Get(firstDayOfWeek);
 
 			result.AbsenceRequestPermission.Should().Be.True();
 		}
@@ -668,7 +668,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 			now.Stub(x => x.UtcDateTime()).Return(date);
 
-			var result = target.GetWeekScheduleDomainData(firstDayOfWeek);
+			var result = target.Get(firstDayOfWeek);
 
 			result.IsCurrentWeek.Should().Be.True();
 		}

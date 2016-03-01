@@ -419,7 +419,7 @@
     <Compile Include="Core\Requests\Mapping\ShiftTradeTimeLineHoursViewModelMapperTest.cs" />
     <Compile Include="Core\IoC\MyTimeWebTestAttribute.cs" />
     <Compile Include="Core\WeekSchedule\Mapping\ScheduleViewModelFactoryTest.cs" />
-    <Compile Include="Core\WeekSchedule\Mapping\WeekScheduleDomainDataMappingTest.cs" />
+    <Compile Include="Core\WeekScheduleDomainDataProviderTest.cs" />
     <Compile Include="Core\WeekSchedule\Mapping\WeekScheduleViewModelMappingTest.cs" />
     <Compile Include="FakeSchedulePersonProvider.cs" />
     <Compile Include="Areas\Anywhere\GroupScheduleViewModelFactoryTest.cs" />

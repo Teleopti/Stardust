@@ -513,6 +513,9 @@
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AllowanceDay.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAbsenceTimeProviderCache.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAllowanceDay.cs" />
+    <Compile Include="Areas\MyTime\Core\IMonthScheduleDomainDataProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\IWeekScheduleDomainDataProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\MonthScheduleDomainDataProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Portal\DataProvider\AreaWithPermissionPathProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Portal\DataProvider\IAreaWithPermissionPathProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceNightRestChecker.cs" />
@@ -524,7 +527,7 @@
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradePersonScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\IRequestsShiftTradeScheduleViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\RequestsShiftTradeScheduleViewModelFactory.cs" />
-    <Compile Include="Areas\MyTime\Core\ScheduleDomainDataProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekScheduleDomainDataProvider.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\PerformanceToolApiController.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\LocalHostAccessAttribute.cs" />
     <Compile Include="Areas\Requests\Core\FormData\AllRequestsFormData.cs" />
@@ -753,7 +756,6 @@
     <Compile Include="Areas\MyTime\Core\BadgeLeaderBoardReport\ViewModelFactory\IBadgeLeaderBoardReportViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\EnumerationExtensions.cs" />
     <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleDomainData.cs" />
-    <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleDomainDataMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\MyReport\Mapping\DailyMetricsMapper.cs" />
     <Compile Include="Areas\MyTime\Core\MyReport\Mapping\DetailedAdherenceMapper.cs" />

@@ -210,6 +210,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<ExtractBudgetGroupPeriods>().As<IExtractBudgetGroupPeriods>();
 			builder.RegisterType<OvertimeAvailabilityPersister>().As<IOvertimeAvailabilityPersister>();
 			builder.RegisterType<AbsenceReportPersister>().As<IAbsenceReportPersister>();
+			builder.RegisterType<WeekScheduleDomainDataProvider>().As<IWeekScheduleDomainDataProvider>().SingleInstance();
+			builder.RegisterType<MonthScheduleDomainDataProvider>().As<IMonthScheduleDomainDataProvider>().SingleInstance();
 		}
 
 		private static void registerTeamScheduleTypes(ContainerBuilder builder)

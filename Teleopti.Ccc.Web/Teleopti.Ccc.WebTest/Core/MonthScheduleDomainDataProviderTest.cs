@@ -1,36 +1,35 @@
-using AutoMapper;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
+namespace Teleopti.Ccc.WebTest.Core
 {
     [TestFixture]
-    public class MonthScheduleDomainDataMappingTest
+    public class MonthScheduleDomainDataProviderTest
     {
         private IScheduleProvider scheduleProvider;
+	    private IMonthScheduleDomainDataProvider target;
 
         [SetUp]
         public void Setup()
         {
             scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
-            Mapper.Reset();
-            Mapper.Initialize(c => c.AddProfile(new MonthScheduleDomainDataMappingProfile(scheduleProvider)));
+			target = new MonthScheduleDomainDataProvider(scheduleProvider);
         }
-
-        [Test]
-        public void ShouldConfigureCorrectly() { Mapper.AssertConfigurationIsValid(); }
-
 
         [Test]
         public void ShouldMapDate()
         {
             var today = DateOnly.Today;
+	        scheduleProvider
+		        .Stub(sp => sp.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything))
+		        .Return(new List<IScheduleDay>());
 
-            var result = Mapper.Map<DateOnly, MonthScheduleDomainData>(today);
+			var result = target.Get(today);
 
             result.CurrentDate.Should().Be.EqualTo(today);
         }
@@ -41,8 +40,11 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
         public void ShouldMapDays()
         {
             var date = new DateOnly(2014,1,11);
-            
-            Mapper.Map<DateOnly, MonthScheduleDomainData>(date);
+			scheduleProvider
+				.Stub(sp => sp.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything))
+				.Return(new List<IScheduleDay>());
+
+			target.Get(date);
 
             scheduleProvider.AssertWasCalled(x => x.GetScheduleForPeriod(new DateOnlyPeriod(2013,12,30,2014,2,2)));
         }
