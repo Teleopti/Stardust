@@ -161,7 +161,7 @@ define([
 
 				var trackId = guidgenerator.newGuid();
 				var requestData = JSON.stringify({
-					StartTime: self.StartDateTime,
+					StartTime: self.StartDateTimeMoment.format('YYYY-MM-DD' + ' ' + resources.TimeFormatForMoment),
 					EndTime: self.EndTimeForAbsenceModify().format('YYYY-MM-DD' + ' ' + resources.TimeFormatForMoment),
 					PersonAbsenceId: data.Id,
 					PersonId: data.PersonId,
