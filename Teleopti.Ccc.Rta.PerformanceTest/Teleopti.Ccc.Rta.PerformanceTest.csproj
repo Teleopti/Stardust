@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
       <Private>True</Private>
@@ -49,9 +53,13 @@
     </Compile>
     <Compile Include="ActualAgentStateUpdateTest.cs" />
     <Compile Include="BackgroundWorkTest.cs" />
+    <Compile Include="Database.cs" />
+    <Compile Include="RtaPerformanceTestAttribute.cs" />
     <Compile Include="NUnitSetup.cs" />
-    <Compile Include="PersonSetup.cs" />
+    <Compile Include="TestConfiguration.cs" />
     <Compile Include="StateSendTest.cs" />
+    <Compile Include="RtaStates.cs" />
+    <Compile Include="TimeStateInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
@@ -66,6 +74,10 @@
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
       <Project>{ADD1BCDC-CFBB-4632-8FB5-4FF3BD04F666}</Project>
       <Name>Teleopti.Ccc.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InfrastructureTest\Teleopti.Ccc.InfrastructureTest.csproj">
+      <Project>{9BF4E24B-6110-4B87-841D-48580164BBF9}</Project>
+      <Name>Teleopti.Ccc.InfrastructureTest</Name>
     </ProjectReference>
     <ProjectReference Include="..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
       <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
