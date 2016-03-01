@@ -57,14 +57,16 @@
 
 	<div class="con-footer" ng-if="vm.paginationOptions.totalPages > 0">
 		<select class="page-size-selector" ng-if="vm.toggleForSelectAgentsPerPageEnabled"
-				  ng-model="vm.paginationOptions.pageSize" ng-options="option for option in vm.agentsPerPageSelection" ng-change="vm.selectorChanged()"></select>
+				ng-model="vm.paginationOptions.pageSize" ng-options="option for option in vm.agentsPerPageSelection"
+				ng-change="vm.selectorChanged()"></select>
 		<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
 	</div>
 
 
 	<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="report-absence">
 		<add-absence ng-if="vm.isOpen()" default-date-time="vm.earliestStartTime" permissions="vm.permissions"
-						 agent-id-list="vm.getSelectedPersonIdList()" actions-after-absence-apply="vm.afterActionCallback(result,personIds,successMessageTemplate,failMessageTemplate)"></add-absence>
+					 actions-after-absence-apply="vm.afterActionCallback(result,personIds,successMessageTemplate,failMessageTemplate)"
+					 agent-id-list="vm.getSelectedPersonIdList()"></add-absence>
 	</md-sidenav>
 
 	<div class="modal-box" ng-if="vm.showErrorDetails">
