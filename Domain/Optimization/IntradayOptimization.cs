@@ -56,7 +56,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_persister.Persist(_schedulerStateHolder().Schedules);
 		}
 
-		[UnitOfWork]
 		[LogTime]
 		protected virtual void SetupAndOptimize(DateOnlyPeriod period)
 		{

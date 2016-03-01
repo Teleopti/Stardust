@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Infrastructure;
@@ -18,7 +19,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			_planningPeriodRepository = planningPeriodRepository;
 		}
 
-		public OptimizationResultModel Execute(Guid planningPeriodId)
+		[UnitOfWork]
+		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
 		{
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
