@@ -3043,8 +3043,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var skillGroupsCreatorResult = creator.GroupOnDate(_scheduleView.SelectedDateLocal(), _schedulerState.AllPermittedPersons);
 			var skillGroupIslandsAnalyzer = new SkillGroupIslandsAnalyzer();
 			var islandList = skillGroupIslandsAnalyzer.FindIslands(skillGroupsCreatorResult);
-			var factory = new TaskFactory<IScheduleDictionary>();
-			var tasks = new System.Threading.Tasks.Task<IScheduleDictionary>[islandList.Count];
+			var factory = new TaskFactory();
+			var tasks = new System.Threading.Tasks.Task[islandList.Count];
 			var selectedSchedules = _scheduleView.SelectedSchedules();
 			for (int i = 0; i < islandList.Count; i++)
 			{
@@ -3052,26 +3052,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 				int i1 = i;
 				tasks[i1] = factory.StartNew(
 					y =>
-						islandLifeTimeScope.ScheduleAsIsland(skillGroupsCreatorResult, islandList[i1], _optimizerOriginalPreferences,
+					{
+						var res = islandLifeTimeScope.ScheduleAsIsland(skillGroupsCreatorResult, islandList[i1], _optimizerOriginalPreferences,
 							selectedSchedules,
-							_optimizationPreferences, _schedulerState), TaskCreationOptions.LongRunning);
+							_optimizationPreferences, _schedulerState);
+						new IslandScheduleConsolidater().Consolidate(_schedulerState.Schedules, res);
+					}, TaskCreationOptions.LongRunning);
 			}
 			await System.Threading.Tasks.Task.WhenAll(tasks);
-			var consolidateTasks = new System.Threading.Tasks.Task[islandList.Count];
-			for (int index = 0; index < tasks.Length; index++)
-			{
-				var index1 = index;
-				var task = tasks[index1];
-				consolidateTasks[index1] = System.Threading.Tasks.Task.Factory.StartNew(
-					() => new IslandScheduleConsolidater().Consolidate(_schedulerState.Schedules, task.Result), TaskCreationOptions.LongRunning);
-
-			}
-			await System.Threading.Tasks.Task.WhenAll(consolidateTasks);
 
 			for (int index = 0; index < tasks.Length; index++)
 			{
 				tasks[index].Dispose();
-				consolidateTasks[index].Dispose();
 			}
 
 			//Next line will start work on another background thread.
