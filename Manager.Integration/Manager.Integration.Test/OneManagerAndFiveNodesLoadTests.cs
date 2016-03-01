@@ -182,7 +182,10 @@ namespace Manager.Integration.Test
 			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
 			var timeTotal=
-				managerIntegrationStopwatch.GetTotalElapsedTimeInMilliseconds();
+				managerIntegrationStopwatch.GetTotalElapsedTimeInSeconds();
+
+			LogHelper.LogDebugWithLineNumber("Job took : " + timeTotal + " seconds.",
+											 Logger);
 
 			//---------------------------------------------
 			// Assert.

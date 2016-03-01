@@ -43,7 +43,7 @@ namespace NodeTest.JobHandlers
 
 			var maxNumberOfJobSteps = 10;
 
-			string progressMessage = null;
+			string progressMessage;
 
 			while (jobSteps <= maxNumberOfJobSteps)
 			{
