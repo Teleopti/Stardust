@@ -2513,7 +2513,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_requestView = new RequestView(_handlePersonRequestView1, _schedulerState, _undoRedo,
 						SchedulerState.SchedulingResultState.AllPersonAccounts, _eventAggregator);
 				}
-				toolStripComboBoxExFilterDays.SelectedIndex = toolStripComboBoxExFilterDays.Items.Count - 1;
+				
 				_requestView.PropertyChanged += _requestView_PropertyChanged;
 				_requestView.SelectionChanged += _requestView_SelectionChanged;
 			}
@@ -5405,9 +5405,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_backgroundWorkerOptimization.ProgressChanged -= _backgroundWorkerOptimization_ProgressChanged;
 			}
 
-			if (toolStripComboBoxExFilterDays != null)
-				toolStripComboBoxExFilterDays.SelectedIndexChanged -= toolStripComboBoxExFilterDays_SelectedIndexChanged;
-
 			if (toolStripComboBoxAutoTag != null)
 				toolStripComboBoxAutoTag.SelectedIndexChanged -= toolStripComboBoxAutoTagSelectedIndexChanged;
 
@@ -6089,12 +6086,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		public void SizeOfMessageBrokerQueue(int count)
 		{
 			toolStripButtonRefreshLarge.Enabled = count != 0;
-		}
-
-		private void toolStripComboBoxExFilterDays_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			TimeSpan span = TimeSpan.FromDays(Convert.ToDouble(toolStripComboBoxExFilterDays.Text, CultureInfo.CurrentCulture));
-			_requestView.FilterDays(span);
 		}
 
 		private void refreshData()

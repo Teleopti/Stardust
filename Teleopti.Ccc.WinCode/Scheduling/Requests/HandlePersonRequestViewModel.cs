@@ -141,12 +141,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
          filterItems();
 		}
 
-		public void FilterOutOlderThan(TimeSpan timeSpan)
-		{
-			_filterTimeSpan = timeSpan;
-			filterItems();  
-		}
-
 		/// <summary>
 		/// Filters out all the other viewmodels
 		/// </summary>

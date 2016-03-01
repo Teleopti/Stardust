@@ -164,11 +164,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 	    #endregion
 
-        public void FilterDays(TimeSpan timeSpan)
-        {
-            _model.FilterOutOlderThan(timeSpan);
-        }
-
 		public void ShowRequestAllowanceView(IWin32Window owner)
 		{
 			var defaultRequest = SelectedAdapters().Count > 0

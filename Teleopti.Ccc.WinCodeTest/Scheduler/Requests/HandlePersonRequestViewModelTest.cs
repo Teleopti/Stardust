@@ -253,46 +253,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 
         }
 
-
-
-        [Test]
-        public void VerifyFilterOutItemsByTimeSpan()
-        {
-            //Create 3 models and set UpdatedOn:
-            DateTime now = DateTime.UtcNow;
-            TimeSpan oneWeek = TimeSpan.FromDays(7);
-            TimeSpan thirtyDays = TimeSpan.FromDays(30);
-
-            IPersonRequest pr1 = CreateRequestObject(_person, _period);
-            IPersonRequest pr2 = CreateRequestObject(_person, _period);
-            IPersonRequest pr3 = CreateRequestObject(_person, _period);
-
-            ReflectionHelper.SetUpdatedOn(pr1, now);
-            ReflectionHelper.SetUpdatedOn(pr2, now.Subtract(oneWeek));
-            ReflectionHelper.SetUpdatedOn(pr3, now.Subtract(thirtyDays));
-
-            PersonRequestViewModel model1 = new PersonRequestViewModel(pr1, _shiftTradeRequestStatusChecker, null, _eventAggregator, _TimeZoneInfo);
-            PersonRequestViewModel model2 = new PersonRequestViewModel(pr2, _shiftTradeRequestStatusChecker, null, _eventAggregator, _TimeZoneInfo);
-            PersonRequestViewModel model3 = new PersonRequestViewModel(pr3, _shiftTradeRequestStatusChecker, null, _eventAggregator, _TimeZoneInfo);
-
-
-            _target.AddPersonRequestViewModel(model1);
-            _target.AddPersonRequestViewModel(model2);
-            _target.AddPersonRequestViewModel(model3);
-
-            Assert.AreEqual(_target.PersonRequestViewModels.Count, 3, "No filter, all models should be visible");
-
-            _target.FilterOutOlderThan(TimeSpan.FromDays(10));
-            Assert.IsNotNull(_target.PersonRequestViewModels.Filter, "Make sure it sets the filter");
-            Assert.AreEqual(_target.PersonRequestViewModels.Count, 2);
-            Assert.IsTrue(_target.PersonRequestViewModels.Contains(model1), "Should only contain model1 and model2");
-
-            _target.FilterOutOlderThan(TimeSpan.FromDays(2));
-            Assert.AreEqual(_target.PersonRequestViewModels.Count, 1);
-            Assert.IsTrue(_target.PersonRequestViewModels.Contains(model1), "Should only contain model1");
-
-        }
-
         [Test]
         public void VerifyShowOnly()
         {
