@@ -98,15 +98,8 @@ namespace Stardust.Manager
 		}
 
 		[HttpPost, Route(ManagerRouteConstants.Heartbeat)]
-		public void Heartbeat([FromBody] string nodeUri)
+		public void Heartbeat([FromBody] Uri nodeUri)
 		{
-			if (string.IsNullOrEmpty(nodeUri))
-			{
-				LogHelper.LogWarningWithLineNumber(Logger,
-				                                   WhoAmI + ": Received invalid url in heartbeat from Node. Node Uri : ( " + nodeUri + " )");
-			}
-			else
-			{
 				Task.Factory.StartNew(() =>
 				{
 					_jobManager.RegisterHeartbeat(nodeUri);
@@ -115,7 +108,6 @@ namespace Stardust.Manager
 				LogHelper.LogInfoWithLineNumber(Logger,
 				                                WhoAmI + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
 			}
-		}
 
 		[HttpPost, Route(ManagerRouteConstants.JobDone)]
 		public IHttpActionResult JobDone(Guid jobId)
@@ -125,8 +117,8 @@ namespace Stardust.Manager
 
 			Task.Factory.StartNew(() =>
 			{
-				_jobManager.SetEndResultOnJobAndRemoveIt(jobId,
-														"Success");
+			_jobManager.SetEndResultOnJobAndRemoveIt(jobId,
+			                                         "Success");
 
 				_jobManager.StartCheckAndAssignNextJobTask();
 			});
@@ -142,8 +134,8 @@ namespace Stardust.Manager
 
 			Task.Factory.StartNew(() =>
 			{
-				_jobManager.SetEndResultOnJobAndRemoveIt(jobId,
-														 "Failed");
+			_jobManager.SetEndResultOnJobAndRemoveIt(jobId,
+			                                         "Failed");
 
 				_jobManager.StartCheckAndAssignNextJobTask();
 			});
@@ -159,8 +151,8 @@ namespace Stardust.Manager
 
 			Task.Factory.StartNew(() =>
 			{
-				_jobManager.SetEndResultOnJobAndRemoveIt(jobId,
-														 "Canceled");
+			_jobManager.SetEndResultOnJobAndRemoveIt(jobId,
+			                                         "Canceled");
 
 				_jobManager.StartCheckAndAssignNextJobTask();
 			});
@@ -171,6 +163,15 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.JobProgress)]
 		public IHttpActionResult JobProgress([FromBody] JobProgressModel model)
 		{
+			if (model == null)
+			{
+				return BadRequest();
+			}
+				
+			if (model.JobId == Guid.Empty || string.IsNullOrEmpty(model.ProgressDetail))
+			{
+				return BadRequest();
+			}
 			_jobManager.ReportProgress(model);
 
 			return Ok();
@@ -183,8 +184,8 @@ namespace Stardust.Manager
 		{
 			Task.Factory.StartNew(() =>
 			{
-				_nodeManager.FreeJobIfAssingedToNode(nodeUri);
-				_nodeManager.AddIfNeeded(nodeUri);
+			_nodeManager.FreeJobIfAssingedToNode(nodeUri);
+			_nodeManager.AddIfNeeded(nodeUri);
 			});
 
 			LogHelper.LogInfoWithLineNumber(Logger,
