@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		private IPeriodViewModelFactory periodViewModelFactory;
 		private IHeaderViewModelFactory headerViewModelFactory;
 		private IScheduleColorProvider scheduleColorProvider;
-		private IPermissionProvider permissionProvider;
 		private ILoggedOnUser loggedOnUser;
 
 		[SetUp]
@@ -46,24 +45,25 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			periodViewModelFactory = MockRepository.GenerateMock<IPeriodViewModelFactory>();
 			headerViewModelFactory = MockRepository.GenerateMock<IHeaderViewModelFactory>();
 			scheduleColorProvider = MockRepository.GenerateMock<IScheduleColorProvider>();
-			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-
+			var userCulture = new FakeUserCulture(CultureInfo.GetCultureInfo("sv-SE"));
 			Mapper.Reset();
 			Mapper.Initialize(c =>
-			                  	{
-			                  		c.AddProfile(new WeekScheduleViewModelMappingProfile(
-			                  		             	() => Mapper.Engine,
-			                  		             	() => periodSelectionViewModelFactory,
-			                  		             	() => periodViewModelFactory,
-			                  		             	() => headerViewModelFactory,
-			                  		             	() => scheduleColorProvider,
-			                  		             	() => permissionProvider,
-													() => loggedOnUser
- 			                  		             	));
-			                  		c.AddProfile(new CommonViewModelMappingProfile());
-									c.AddProfile(new OvertimeAvailabilityViewModelMappingProfile());
-			                  	});
+			{
+				c.AddProfile(new WeekScheduleViewModelMappingProfile(
+					() => Mapper.Engine,
+					() => periodSelectionViewModelFactory,
+					() => periodViewModelFactory,
+					() => headerViewModelFactory,
+					() => scheduleColorProvider,
+					() => loggedOnUser,
+					() => new Now(),
+					() => userCulture
+					));
+
+				c.AddProfile(new CommonViewModelMappingProfile());
+				c.AddProfile(new OvertimeAvailabilityViewModelMappingProfile(userCulture));
+			});
 		}
 
 		[Test]
@@ -219,8 +219,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 
-			result.OvertimeAvailabililty.StartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(overtimeAvailability.StartTime.Value, CultureInfo.CurrentCulture));
-			result.OvertimeAvailabililty.EndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(overtimeAvailability.EndTime.Value, CultureInfo.CurrentCulture));
+			result.OvertimeAvailabililty.StartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(overtimeAvailability.StartTime.Value, CultureInfo.GetCultureInfo("sv-SE")));
+			result.OvertimeAvailabililty.EndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(overtimeAvailability.EndTime.Value, CultureInfo.GetCultureInfo("sv-SE")));
 			result.OvertimeAvailabililty.EndTimeNextDay.Should().Be.EqualTo(true);
 			result.OvertimeAvailabililty.HasOvertimeAvailability.Should().Be.EqualTo(true);
 		}
@@ -340,8 +340,10 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		{
 			var stubs = new StubFactory();
 			var absenceToDisplay = stubs.PersonAbsenceStub();
-			var lowPriorityAbsence = stubs.PersonAbsenceStub();
-			var scheduleDay = stubs.ScheduleDayStub(DateTime.Now.Date, SchedulePartView.FullDayAbsence, new[] {absenceToDisplay, lowPriorityAbsence});
+			absenceToDisplay.Layer.Payload.Priority = 1;
+			var highPriority = stubs.PersonAbsenceStub();
+			highPriority.Layer.Payload.Priority= 2;
+			var scheduleDay = stubs.ScheduleDayStub(DateTime.Now.Date, SchedulePartView.FullDayAbsence, new[] {absenceToDisplay, highPriority});
 			var projection = stubs.ProjectionStub();
 			var domainData = new WeekScheduleDayDomainData
 			                 	{Date = DateOnly.Today, ScheduleDay = scheduleDay, Projection = projection};
@@ -358,6 +360,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		{
 			var domainData = new WeekScheduleDomainData
 			                 	{
+									Date = DateOnly.Today,
 			                 		Days = new WeekScheduleDayDomainData[] {}
 			                 	};
 			var colors = new[] {Color.Red, Color.Blue};
@@ -388,10 +391,10 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		[Test]
 		public void ShouldMapTextRequestPermission()
 		{
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests)).
-				Return(true);
 			var domainData = new WeekScheduleDomainData
 			                 	{
+									Date = DateOnly.Today,
+									TextRequestPermission = true,
 			                 		Days = new WeekScheduleDayDomainData[] {}
 			                 	};
 
@@ -406,6 +409,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			loggedOnUser.Stub(x => x.CurrentUser().PermissionInformation.Culture()).Return(CultureInfo.GetCultureInfo("sv-SE"));
 			var domainData = new WeekScheduleDomainData()
 			{
+				Date = DateOnly.Today,
 				MinMaxTime = new TimePeriod(8, 30, 17, 30)
 			};
 
@@ -425,6 +429,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			loggedOnUser.Stub(x => x.CurrentUser().PermissionInformation.Culture()).Return(CultureInfo.GetCultureInfo("sv-SE"));
 			var domainData = new WeekScheduleDomainData()
 			{
+				Date = DateOnly.Today,
 				MinMaxTime = new TimePeriod(8, 30, 17, 30)
 			};
 
@@ -437,6 +442,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		{
 			var domainData = new WeekScheduleDomainData()
 			{
+				Date = DateOnly.Today,
 				AsmPermission = true
 			};
 
@@ -447,10 +453,10 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		[Test]
 		public void ShouldMapAbsenceRequestPermission()
 		{
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb)).
-				Return(true);
 			var domainData = new WeekScheduleDomainData
 			{
+				AbsenceRequestPermission = true,
+				Date = DateOnly.Today,
 				Days = new WeekScheduleDayDomainData[] { }
 			};
 
@@ -462,10 +468,10 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		[Test]
 		public void ShouldMapOvertimeAvailabilityPermission()
 		{
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.OvertimeAvailabilityWeb)).
-				Return(true);
 			var domainData = new WeekScheduleDomainData
 			{
+				Date = DateOnly.Today,
+				OvertimeAvailabilityPermission = true,
 				Days = new WeekScheduleDayDomainData[] { }
 			};
 
@@ -479,6 +485,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		{
 			var domainData = new WeekScheduleDomainData()
 			{
+				Date = DateOnly.Today,
 				IsCurrentWeek = true
 			};
 
@@ -493,7 +500,10 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
-			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(new WeekScheduleDomainData());
+			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(new WeekScheduleDomainData
+			{
+				Date = DateOnly.Today
+			});
 
 			var expectedFormat = person.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
 			result.DatePickerFormat.Should().Be.EqualTo(expectedFormat);

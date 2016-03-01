@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						return publicNote != null ? publicNote.GetScheduleNote(new NoFormatting()) : string.Empty;
 					}))
 				;
-			
+
 			CreateMap<WeekScheduleDayDomainData, PeriodViewModel>()
 				.ForMember(d => d.Title, c => c.Ignore())
 				.ForMember(d => d.Summary, c => c.Ignore())
@@ -201,6 +201,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ForMember(d => d.StartPositionPercentage, c => c.Ignore())
 				.ForMember(d => d.EndPositionPercentage, c => c.Ignore())
 				.ForMember(d => d.Color, c => c.Ignore())
+				.ForMember(d => d.IsOvertime, c => c.Ignore())
 				;
 
 			CreateMap<WeekScheduleDayDomainData, PersonDayOffPeriodViewModel>()
@@ -212,6 +213,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ForMember(d => d.StartPositionPercentage, c => c.Ignore())
 				.ForMember(d => d.EndPositionPercentage, c => c.Ignore())
 				.ForMember(d => d.Color, c => c.Ignore())
+				.ForMember(d => d.IsOvertime, c => c.Ignore())
 				;
 
 			CreateMap<WeekScheduleDayDomainData, PersonAssignmentPeriodViewModel>()
@@ -230,6 +232,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						var color = isNullShiftCategoryInfo ? null : string.Format("rgb({0},{1},{2})", personAssignment.ShiftCategory.DisplayColor.R, personAssignment.ShiftCategory.DisplayColor.G, personAssignment.ShiftCategory.DisplayColor.B);
 						return color;
 					}))
+				.ForMember(d => d.IsOvertime, c => c.Ignore())
 				;
 			CreateMap<WeekScheduleDayDomainData, FullDayAbsencePeriodViewModel>()
 				.ForMember(d => d.Title, c => c.MapFrom(s => s.ScheduleDay.PersonAbsenceCollection().OrderBy(a => a.Layer.Payload.Priority).ThenByDescending(a => s.ScheduleDay.PersonAbsenceCollection().IndexOf(a)).First().Layer.Payload.Description.Name))
@@ -248,6 +251,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 					var color = string.Format("rgb({0},{1},{2})", orgColor.R, orgColor.G, orgColor.B);
 					return color;
 				}))
+				.ForMember(d => d.IsOvertime, c => c.Ignore())
 				;
 
 			CreateMap<IAbsence, AbsenceTypeViewModel>()
