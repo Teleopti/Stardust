@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
-		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public IntradayOptimization Target;
 		public IntradayOptimizationCallbackContext CallbackContext;
 
@@ -36,7 +35,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var scenario = ScenarioRepository.Has("some name");
 			var dateOnly = new DateOnly(2015, 10, 12);
-			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
 			for (var i = 0; i < numberOfAgents; i++)
 			{
 				var agent = PersonRepository.Has(new Contract("_"), new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1), skill);
@@ -47,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var callbackTracker = new TrackIntradayOptimizationCallback();
 			using (CallbackContext.Create(callbackTracker))
 			{
-				Target.Handle(new OptimizationWasOrdered {PlanningPeriodId = planningPeriod.Id.Value});
+				Target.Handle(new OptimizationWasOrdered { Period = new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)) });
 			}
 			callbackTracker.SuccessfulOptimizations().Should().Be.EqualTo(10);
 		}
@@ -60,7 +58,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var scenario = ScenarioRepository.Has("some name");
 			var dateOnly = new DateOnly(2015, 10, 12);
-			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
 			for (var i = 0; i < numberOfAgents; i++)
 			{
 				var agent = PersonRepository.Has(new Contract("_"), new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1), skill);
@@ -70,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var callbackTracker = new TrackIntradayOptimizationCallback();
 			using (CallbackContext.Create(callbackTracker))
 			{
-				Target.Handle(new OptimizationWasOrdered { PlanningPeriodId = planningPeriod.Id.Value });
+				Target.Handle(new OptimizationWasOrdered { Period = new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)) });
 			}
 			callbackTracker.UnSuccessfulOptimizations().Should().Be.GreaterThanOrEqualTo(10);
 		}

@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 		private readonly WebSchedulingSetup _webSchedulingSetup;
-		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IScheduleDictionaryPersister _persister;
 		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
@@ -31,7 +30,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 									Func<ISchedulerStateHolder> schedulerStateHolder,
 									DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
 									WebSchedulingSetup webSchedulingSetup,
-									IPlanningPeriodRepository planningPeriodRepository,
 									Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 									IScheduleDictionaryPersister persister,
 									WeeklyRestSolverExecuter weeklyRestSolverExecuter,
@@ -43,7 +41,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_schedulerStateHolder = schedulerStateHolder;
 			_dayOffOptimizationPreferenceProviderUsingFiltersFactory = dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 			_webSchedulingSetup = webSchedulingSetup;
-			_planningPeriodRepository = planningPeriodRepository;
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 			_persister = persister;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
@@ -55,22 +52,19 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public void Handle(OptimizationWasOrdered @event)
 		{
-			SetupAndOptimize(@event.PlanningPeriodId);
+			SetupAndOptimize(@event.Period);
 			_persister.Persist(_schedulerStateHolder().Schedules);
 		}
 
 		[UnitOfWork]
 		[LogTime]
-		protected virtual void SetupAndOptimize(Guid planningPeriodId)
+		protected virtual void SetupAndOptimize(DateOnlyPeriod period)
 		{
 			var optimizationPreferences = _optimizationPreferencesFactory.Create();
 			var dayOffOptimizationPreference = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
-			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
-			var period = planningPeriod.Range;
 			var webScheduleState = _webSchedulingSetup.Setup(period);
 
-			var optimizers = _intradayOptimizer2Creator.Create(period, webScheduleState.AllSchedules, optimizationPreferences,
-				dayOffOptimizationPreference);
+			var optimizers = _intradayOptimizer2Creator.Create(period, webScheduleState.AllSchedules, optimizationPreferences, dayOffOptimizationPreference);
 
 			using (_intradayOptimizationContext.Create(period))
 			{

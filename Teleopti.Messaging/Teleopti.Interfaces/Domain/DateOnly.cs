@@ -363,6 +363,11 @@ namespace Teleopti.Interfaces.Domain
 			return new DateOnly(_internalDateTime.AddDays(days));
 		}
 
+		public DateOnly AddWeeks(int weeks)
+		{
+			return AddDays(7*weeks - 1);
+		}
+
 		/// <summary>
 		/// Returns the fully qualified type name of this instance.
 		/// </summary>

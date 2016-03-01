@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		{
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
-			_eventPublisher.Publish(new OptimizationWasOrdered {PlanningPeriodId = planningPeriodId});
+			_eventPublisher.Publish(new OptimizationWasOrdered {Period = period});
 			return _optimizationResult.Create(period);
 		}
 	}

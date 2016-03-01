@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 {
 	public class OptimizationWasOrdered : IEvent
 	{
-		public Guid PlanningPeriodId { get; set; }
+		public DateOnlyPeriod Period { get; set; }
 	}
 }

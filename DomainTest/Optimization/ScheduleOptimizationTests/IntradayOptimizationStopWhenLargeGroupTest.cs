@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public TrackOptimizeDaysForAgents TrackOptimizeDaysForAgents;
 		public IntradayOptmizerLimiter IntradayOptmizerLimiter;
 		public FakeSkillRepository SkillRepository;
-		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonRepository PersonRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
@@ -43,7 +42,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var scenario = ScenarioRepository.Has("some name");
 			var dateOnly = new DateOnly(2015, 10, 12);
-			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
 			for (var i = 0; i < numberOfAgents; i++)
 			{
 				var agent = PersonRepository.Has(new Contract("_"), new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1), skill);
@@ -51,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			}
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddDays(6)), TimeSpan.FromMinutes(60)));
 
-			Target.Handle(new OptimizationWasOrdered { PlanningPeriodId = planningPeriod.Id.Value });
+			Target.Handle(new OptimizationWasOrdered { Period = new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)) });
 
 			TrackOptimizeDaysForAgents.NumberOfOptimizationsFor(dateOnly)
 				.Should().Be.LessThanOrEqualTo(1); //"should" be 0 but impl detail makes it easier to accept 1 as well
@@ -66,7 +64,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var scenario = ScenarioRepository.Has("some name");
 			var dateOnly = new DateOnly(2015, 10, 12);
-			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
 			for (var i = 0; i < numberOfAgents; i++)
 			{
 				var agent = PersonRepository.Has(new Contract("_"), new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1), skill);
@@ -74,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			}
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddDays(6)), TimeSpan.FromMinutes(60)));
 
-			Target.Handle(new OptimizationWasOrdered { PlanningPeriodId = planningPeriod.Id.Value });
+			Target.Handle(new OptimizationWasOrdered { Period = new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)) });
 
 			TrackOptimizeDaysForAgents.NumberOfOptimizationsFor(dateOnly)
 				.Should().Be.EqualTo(numberOfAgents);
@@ -89,7 +86,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var scenario = ScenarioRepository.Has("some name");
 			var dateOnly = new DateOnly(2015, 10, 12);
-			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
 			SkillDayRepository.Has(new[] { skill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60)) });
 			for (var i = 0; i < numberOfAgents; i++)
 			{
@@ -97,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				PersonAssignmentRepository.Has(agent, scenario, phoneActivity, new ShiftCategory("_"), dateOnly, new TimePeriod(8, 0, 17, 0));
 			}
 
-			Target.Handle(new OptimizationWasOrdered { PlanningPeriodId = planningPeriod.Id.Value });
+			Target.Handle(new OptimizationWasOrdered { Period = new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)) });
 
 			TrackOptimizeDaysForAgents.NumberOfOptimizationsFor(dateOnly)
 				.Should().Be.EqualTo(5);
@@ -111,14 +107,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var scenario = ScenarioRepository.Has("some name");
 			var dateOnly = new DateOnly(2015, 10, 12);
-			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
 			var agent1 = PersonRepository.Has(new Contract("_"), new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1), skill);
 			var agent2 = PersonRepository.Has(new Contract("_"), new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1), skill);
 			PersonAssignmentRepository.Has(agent1, scenario, phoneActivity, new ShiftCategory("_"), dateOnly, new TimePeriod(8, 0, 17, 0));
 			PersonAssignmentRepository.Has(agent2, scenario, phoneActivity, new ShiftCategory("_"), dateOnly, new TimePeriod(8, 0, 17, 0));
 			SkillDayRepository.Has(new[] { skill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60)) });
 
-			Target.Handle(new OptimizationWasOrdered { PlanningPeriodId = planningPeriod.Id.Value });
+			Target.Handle(new OptimizationWasOrdered { Period = new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)) });
 
 			TrackOptimizeDaysForAgents.NumberOfOptimizationsFor(dateOnly)
 				.Should().Be.EqualTo(2);
@@ -136,12 +131,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var scenario = ScenarioRepository.Has("some name");
 			var dateOnly = new DateOnly(2015, 10, 12);
-			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
 			var agent = PersonRepository.Has(new Contract("_"), new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1), skill);
 			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, new ShiftCategory("_"), new DateOnlyPeriod(dateOnly, dateOnly.AddDays(7)), new TimePeriod(8, 0, 16, 0));
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddDays(6)), TimeSpan.FromMinutes(60)));
 
-			Target.Handle(new OptimizationWasOrdered { PlanningPeriodId = planningPeriod.Id.Value });
+			Target.Handle(new OptimizationWasOrdered { Period = new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)) });
 
 			TrackOptimizeDaysForAgents.NumberOfOptimizations()
 				.Should().Be.EqualTo(1);
@@ -156,7 +150,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var scenario = ScenarioRepository.Has("some name");
 			var dateOnly = new DateOnly(2015, 10, 12);
-			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
 			SkillDayRepository.Has(new[] { skill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60)) });
 			for (var i = 0; i < numberOfAgents; i++)
 			{
@@ -166,7 +159,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				PersonAssignmentRepository.Has(agent, scenario, phoneActivity, new ShiftCategory("_"), dateOnly.AddDays(1), new TimePeriod(8, 0, 17, 0));
 			}
 
-			Target.Handle(new OptimizationWasOrdered { PlanningPeriodId = planningPeriod.Id.Value });
+			Target.Handle(new OptimizationWasOrdered { Period = new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)) });
 
 			TrackOptimizeDaysForAgents.NumberOfOptimizationsFor(dateOnly).Should().Be.EqualTo(5);
 			TrackOptimizeDaysForAgents.NumberOfOptimizationsFor(dateOnly.AddDays(1)).Should().Be.EqualTo(5);
@@ -183,7 +176,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var skill2 = SkillRepository.Has("skill", phoneActivity);
 			var scenario = ScenarioRepository.Has("some name");
 			var dateOnly = new DateOnly(2015, 10, 12);
-			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
 			SkillDayRepository.Has(new[] { skill1.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60)) });
 			SkillDayRepository.Has(new[] { skill2.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60)) });
 			for (var i = 0; i < numberOfAgentsInSkillGroup1; i++)
@@ -197,7 +189,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				PersonAssignmentRepository.Has(agent, scenario, phoneActivity, new ShiftCategory("_"), dateOnly, new TimePeriod(8, 0, 17, 0));
 			}
 
-			Target.Handle(new OptimizationWasOrdered { PlanningPeriodId = planningPeriod.Id.Value });
+			Target.Handle(new OptimizationWasOrdered { Period = new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)) });
 
 			TrackOptimizeDaysForAgents.NumberOfOptimizationsFor(dateOnly).Should().Be.EqualTo(9);
 		}
@@ -212,7 +204,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var scenario = ScenarioRepository.Has("some name");
 			var dateOnly = new DateOnly(2015, 10, 12);
-			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
 			SkillDayRepository.Has(new[] { skill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60)) });
 			var agents = new List<IPerson>();
 			for (var i = 0; i < numberOfAgents; i++)
@@ -229,7 +220,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				{
 					PersonAssignmentRepository.Has(agents[i], scenario, phoneActivity, new ShiftCategory("_"), dateOnly, new TimePeriod(8, 0, 17, 0));
 				}
-				Target.Handle(new OptimizationWasOrdered { PlanningPeriodId = planningPeriod.Id.Value });
+				Target.Handle(new OptimizationWasOrdered { Period = new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)) });
 				optimizedAgentsInAnyOfLoops.Add(TrackOptimizeDaysForAgents.OptimizedAgentsOn(dateOnly).Single());
 				if (optimizedAgentsInAnyOfLoops.Count == 2)
 					return;
