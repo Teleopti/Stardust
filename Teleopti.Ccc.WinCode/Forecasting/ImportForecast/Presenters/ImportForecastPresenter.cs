@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Configuration;
-using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Views;
@@ -25,14 +22,14 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly IMessagePopulatingServiceBusSender _messageSender;
-		private readonly IPostHttpRequest _postHttpRequest;
+		private readonly StardustSender _stardustSender;
 		private readonly IToggleManager _toggleManager;
 
 		public ImportForecastPresenter(IImportForecastView view, ImportForecastModel model,
 			ISaveImportForecastFileCommand saveImportForecastFileCommand,
 			IValidateImportForecastFileCommand validateImportForecastFileCommand, IUnitOfWorkFactory unitOfWorkFactory,
 			IJobResultRepository jobResultRepository, IMessagePopulatingServiceBusSender messageSender,
-			IPostHttpRequest postHttpRequest, IToggleManager toggleManager)
+			StardustSender stardustSender, IToggleManager toggleManager)
 		{
 			_view = view;
 			_model = model;
@@ -41,7 +38,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_jobResultRepository = jobResultRepository;
 			_messageSender = messageSender;
-			_postHttpRequest = postHttpRequest;
+			_stardustSender = stardustSender;
 			_toggleManager = toggleManager;
 		}
 
@@ -101,17 +98,8 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
 				};
 				if (_toggleManager.IsEnabled(Toggles.Wfm_ForecastFileImportOnStardust_37047))
 				{
-					var ser = JsonConvert.SerializeObject(message);
-					var jobModel = new JobRequestModel
-					{
-						Name = "Import forecast from file",
-						Serialized = ser,
-						Type = typeof(ImportForecastsFileToSkill).ToString(),
-						//maybe remove the username?? not needed or have something more unique to identify "MY" jobs when viewing on page
-						UserName = person.Name.FirstName
-					};
-					var mess = JsonConvert.SerializeObject(jobModel);
-					_postHttpRequest.Send<Guid>(ConfigurationManager.AppSettings["ManagerLocation"] + "job", mess);
+					_stardustSender.Send(message, "Import forecast from file", person.Id.GetValueOrDefault().ToString(),
+												typeof (ImportForecastsFileToSkill).ToString());
 				}
 				else
 					_messageSender.Send(message, true);

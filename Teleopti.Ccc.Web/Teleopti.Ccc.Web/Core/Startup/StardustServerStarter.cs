@@ -23,7 +23,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			{
 				ConnectionString =
 						 ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString,
-				Route = ConfigurationManager.AppSettings["RouteName"]
+				Route = ConfigurationManager.AppSettings["RouteName"],
+				AllowedNodeDownTimeSeconds = int.Parse(ConfigurationManager.AppSettings["AllowedNodeDownTimeSeconds"])
 			};
 			
 			app.UseStardustManager(managerConfiguration, _scope);
