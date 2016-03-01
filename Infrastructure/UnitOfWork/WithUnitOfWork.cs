@@ -1,5 +1,4 @@
 using System;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
@@ -22,12 +21,20 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			}
 		}
 
-		public void Do(Action<IUnitOfWork> action)
+		public void Do(Action<ICurrentUnitOfWork> action)
 		{
 			using (var uow = _factory.Current().CreateAndOpenUnitOfWork())
 			{
-				action.Invoke(uow);
+				action.Invoke(new ThisUnitOfWork(uow));
 				uow.PersistAll();
+			}
+		}
+
+		public T Get<T>(Func<ICurrentUnitOfWork, T> func)
+		{
+			using (var uow = _factory.Current().CreateAndOpenUnitOfWork())
+			{
+				return func(new ThisUnitOfWork(uow));
 			}
 		}
 

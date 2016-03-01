@@ -9,11 +9,19 @@ using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Environment = NHibernate.Cfg.Environment;
 
 namespace Teleopti.Ccc.TestCommon
 {
 	public static class DataSourceHelper
 	{
+		public const string TestTenantName = "TestData";
+
+		public static IDataSource CreateDatabasesAndDataSource(ICurrentPersistCallbacks persistCallbacks)
+		{
+			return CreateDatabasesAndDataSource(persistCallbacks, TestTenantName);
+		}
+
 		public static IDataSource CreateDatabasesAndDataSource(ICurrentPersistCallbacks persistCallbacks, string name)
 		{
 			setupCcc7(name);
@@ -21,10 +29,20 @@ namespace Teleopti.Ccc.TestCommon
 			return makeDataSource(persistCallbacks, name);
 		}
 
+		public static void CreateDatabases()
+		{
+			CreateDatabases(TestTenantName);
+		}
+
 		public static void CreateDatabases(string name)
 		{
 			setupCcc7(name);
 			setupAnalytics();
+		}
+
+		public static IDataSource CreateDataSource(ICurrentPersistCallbacks persistCallbacks)
+		{
+			return makeDataSource(persistCallbacks, TestTenantName);
 		}
 
 		public static IDataSource CreateDataSource(ICurrentPersistCallbacks persistCallbacks, string name)
@@ -77,13 +95,13 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			var dictionary = new Dictionary<string, string>();
 			if (sessionFactoryName != null)
-				dictionary[NHibernate.Cfg.Environment.SessionFactoryName] = sessionFactoryName;
-			dictionary[NHibernate.Cfg.Environment.Dialect] = typeof(MsSql2008Dialect).AssemblyQualifiedName;
-			dictionary[NHibernate.Cfg.Environment.ConnectionString] = connectionString;
-			dictionary[NHibernate.Cfg.Environment.SqlExceptionConverter] = typeof(SqlServerExceptionConverter).AssemblyQualifiedName;
-			dictionary[NHibernate.Cfg.Environment.CurrentSessionContextClass] = "call";
+				dictionary[Environment.SessionFactoryName] = sessionFactoryName;
+			dictionary[Environment.Dialect] = typeof(MsSql2008Dialect).AssemblyQualifiedName;
+			dictionary[Environment.ConnectionString] = connectionString;
+			dictionary[Environment.SqlExceptionConverter] = typeof(SqlServerExceptionConverter).AssemblyQualifiedName;
+			dictionary[Environment.CurrentSessionContextClass] = "call";
 			if (timeout.HasValue)
-				dictionary[NHibernate.Cfg.Environment.CommandTimeout] = timeout.Value.ToString(CultureInfo.CurrentCulture);
+				dictionary[Environment.CommandTimeout] = timeout.Value.ToString(CultureInfo.CurrentCulture);
 			return dictionary;
 		}
 
@@ -106,7 +124,7 @@ namespace Teleopti.Ccc.TestCommon
 		private static void update_default_tenant_because_connstrings_arent_set_due_to_securityexe_isnt_run_from_infra_test_projs(string name)
 		{
 			var databaseHelper = ccc7();
-			databaseHelper.ConfigureSystem().SetTenantConnectionInfo(name ?? string.Empty, databaseHelper.ConnectionString, analytics().ConnectionString);
+			databaseHelper.ConfigureSystem().SetTenantConnectionInfo(name ?? String.Empty, databaseHelper.ConnectionString, analytics().ConnectionString);
 		}
 
 		private static void setupAnalytics()
