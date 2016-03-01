@@ -7,7 +7,7 @@ GO
 -- Create date: 2016-02-24
 -- Description:	Load queue statistics for web intraday
 -- =============================================
--- EXEC [mart].[web_intraday] 'FLE Standard Time', '2016-02-29', 'C5FFFC8F-BCD6-47F7-9352-9F0800E39578'
+-- EXEC [mart].[web_intraday] 'FLE Standard Time', '2016-03-01', 'C5FFFC8F-BCD6-47F7-9352-9F0800E39578'
 CREATE PROCEDURE [mart].[web_intraday]
 @time_zone_code nvarchar(100),
 @today smalldatetime,

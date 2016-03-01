@@ -36,10 +36,10 @@ describe('IntradayCtrl', function () {
 		};
 
 		monitorData = {
-			ForecastedCalls: 100,
-			OfferedCalls: 50,
+			ForecastedCalls: '100.0',
+			OfferedCalls: '50.0',
 			LatestStatsTime: '1901-01-01 13:00',
-			ForecastedActualCallsDiff: 50
+			ForecastedActualCallsDiff: '50.0'
 		};
 	});
 	
@@ -144,7 +144,7 @@ describe('IntradayCtrl', function () {
 	it('should show friendly message if no data for skill area', function () {
 		createController();
 		scope.skillAreaSelected(scope.skillAreas[0]);
-		monitorData.LatestStatsTime = '0000-01-01';
+		monitorData.LatestStatsTime = '0001-01-01';
 		$httpBackend.flush();
 
 		expect(scope.HasMonitorData).toEqual(false);

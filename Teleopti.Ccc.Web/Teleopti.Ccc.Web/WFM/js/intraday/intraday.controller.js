@@ -125,10 +125,10 @@
 								$scope.HasMonitorData = false;
 								return;
 							}
-							$scope.forecastedCalls = result.ForecastedCalls;
-							$scope.offeredCalls = result.OfferedCalls;
+							$scope.forecastedCalls = $filter('number')(result.ForecastedCalls, 1);
+							$scope.offeredCalls = $filter('number')(result.OfferedCalls, 1);
 							$scope.latestStatsTime = $filter('date')(result.LatestStatsTime, 'shortTime');
-							$scope.difference = result.ForecastedActualCallsDiff;
+							$scope.difference = $filter('number')(result.ForecastedActualCallsDiff, 1);
 							$scope.HasMonitorData = true;
 						},
 						function(error) {
@@ -160,10 +160,10 @@
 								$scope.HasMonitorData = false;
 								return;
 							}
-							$scope.forecastedCalls = result.ForecastedCalls;
-							$scope.offeredCalls = result.OfferedCalls;
+							$scope.forecastedCalls = $filter('number')(result.ForecastedCalls, 1);
+							$scope.offeredCalls = $filter('number')(result.OfferedCalls, 1);
 							$scope.latestStatsTime = $filter('date')(result.LatestStatsTime, 'shortTime');
-							$scope.difference = result.ForecastedActualCallsDiff;
+							$scope.difference = $filter('number')(result.ForecastedActualCallsDiff, 1);
 							$scope.HasMonitorData = true;
 						},
 						function(error) {

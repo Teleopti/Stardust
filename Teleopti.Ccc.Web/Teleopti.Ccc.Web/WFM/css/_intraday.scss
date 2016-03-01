@@ -3,20 +3,24 @@
 }
 
 md-autocomplete{
- color: $gray087;
-  background:transparent;
- height: 30px;
- border-bottom: 1px solid $gray-300;
+	color: $gray087;
+	background:transparent;
+	height: 30px;
+	border-bottom: 1px solid $gray-300;
 
- input:not(.md-input){
-  padding: 0;
- }
+	input:not(.md-input){
+	padding: 0;
+	}
 
- button:after{
-  display: none;
- }
+	button:after{
+	display: none;
+	}
 
- .md-whiteframe-1dp, .md-whiteframe-z1{
-  box-shadow: none;
- }
+	.md-whiteframe-1dp, .md-whiteframe-z1{
+	box-shadow: none;
+	}
+}
+
+.last-time{
+	margin-left: 15px;
 }
