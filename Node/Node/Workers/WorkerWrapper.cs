@@ -145,7 +145,7 @@ namespace Stardust.Node.Workers
 
 			//----------------------------------------------------
 			// Define task.
-			//----------------------------------------------------			
+			//----------------------------------------------------
 			var taskToExecuteStopWatch = new TaskToExecuteStopWatch(false);
 
 			Task = new Task(() =>
@@ -156,7 +156,7 @@ namespace Stardust.Node.Workers
 
 				LogHelper.LogDebugWithLineNumber(Logger,
 				                                 "Ping to manager interval is now set to go every " +
-				                                 PingToManagerTimer.Interval/1000 + " seconds during job execution.");
+				                                 PingToManagerTimer.Interval + " seconds during job execution.");
 
 				Handler.Invoke(deSer,
 				               CancellationTokenSource,
@@ -178,10 +178,10 @@ namespace Stardust.Node.Workers
 
 				LogHelper.LogDebugWithLineNumber(Logger,
 				                                 "Ping to manager interval is now set to go every " +
-				                                 PingToManagerTimer.Interval/1000 + " seconds when node is idle.");
+				                                 PingToManagerTimer.Interval + " seconds when node is idle.");
 
 
-				string logInfo = null;
+				string logInfo;
 
 				switch (t.Status)
 				{

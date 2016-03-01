@@ -29,7 +29,7 @@ namespace ManagerTest.Fakes
 			throw new NotImplementedException();
 		}
 
-		public void RegisterHeartbeat(Uri nodeUri)
+		public void RegisterHeartbeat(string nodeUri)
 		{
 			throw new NotImplementedException();
 		}

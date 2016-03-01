@@ -36,8 +36,8 @@ namespace Manager.IntegrationTest.Console.Host
 		[HttpPost, Route("appdomain/nodes")]
 		public IHttpActionResult StartNewNode()
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Called API controller.");
+			LogHelper.LogInfoWithLineNumber(Logger,
+											 "StartNewNode.");
 
 			string friendlyname;
 
@@ -49,8 +49,8 @@ namespace Manager.IntegrationTest.Console.Host
 		[HttpDelete, Route("appdomain/managers/{id}")]
 		public IHttpActionResult DeleteManager(string id)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-											 "Called API controller.");
+			LogHelper.LogInfoWithLineNumber(Logger,
+											 "DeleteManager");
 
 			if (string.IsNullOrEmpty(id))
 			{
@@ -59,7 +59,7 @@ namespace Manager.IntegrationTest.Console.Host
 				return BadRequest(id);
 			}
 
-			LogHelper.LogInfoWithLineNumber(Logger,
+			LogHelper.LogDebugWithLineNumber(Logger,
 											"Try shut down Manager with id : " + id);
 
 			var success = Program.ShutDownManager(id);
@@ -81,8 +81,8 @@ namespace Manager.IntegrationTest.Console.Host
 		[HttpDelete, Route("appdomain/nodes/{id}")]
 		public IHttpActionResult DeleteNode(string id)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Called API controller.");
+			LogHelper.LogInfoWithLineNumber(Logger,
+			                                 "Delete Node");
 
 			if (string.IsNullOrEmpty(id))
 			{
@@ -91,7 +91,7 @@ namespace Manager.IntegrationTest.Console.Host
 				return BadRequest(id);
 			}
 
-			LogHelper.LogInfoWithLineNumber(Logger,
+			LogHelper.LogDebugWithLineNumber(Logger,
 			                                "Try shut down Node with id : " + id);
 
 			var success = Program.ShutDownNode(id);
@@ -114,7 +114,7 @@ namespace Manager.IntegrationTest.Console.Host
 		public IHttpActionResult GetAllManagers()
 		{
 			LogHelper.LogDebugWithLineNumber(Logger,
-											 "Called API controller.");
+											 "GetAllManagers");
 
 			var appDomainsList = Program.GetAllmanagers();
 
@@ -125,7 +125,7 @@ namespace Manager.IntegrationTest.Console.Host
 		public IHttpActionResult GetAllNodes()
 		{
 			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Called API controller.");
+											 "GetAllNodes");
 
 			var appDomainsList = Program.GetAllNodes();
 

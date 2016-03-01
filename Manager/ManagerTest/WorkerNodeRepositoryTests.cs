@@ -32,7 +32,7 @@ namespace ManagerTest
 
 			Thread.Sleep(TimeSpan.FromSeconds(1)); // to create a difference between heartbeats
 
-			WorkerNodeRepository.RegisterHeartbeat(_nodeUri1);
+			WorkerNodeRepository.RegisterHeartbeat(_nodeUri1.ToString());
 
 			Thread.Sleep(TimeSpan.FromSeconds(1));  // to let the task that writes heartbeat finish
 

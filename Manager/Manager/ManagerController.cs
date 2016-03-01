@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -96,16 +97,24 @@ namespace Stardust.Manager
 		}
 
 		[HttpPost, Route(ManagerRouteConstants.Heartbeat)]
-		public void Heartbeat([FromBody] Uri nodeUri)
+		public void Heartbeat([FromBody] string nodeUri)
 		{
-			Task.Factory.StartNew(() =>
+			if (string.IsNullOrEmpty(nodeUri))
 			{
-				_jobManager.RegisterHeartbeat(nodeUri);
-				_jobManager.CheckAndAssignNextJob();
-			});
-			
-			LogHelper.LogInfoWithLineNumber(Logger,
-			                                WhoAmI + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
+				LogHelper.LogWarningWithLineNumber(Logger,
+				                                   WhoAmI + ": Received invalid url in heartbeat from Node. Node Uri : ( " + nodeUri + " )");
+			}
+			else
+			{
+				Task.Factory.StartNew(() =>
+				{
+					_jobManager.RegisterHeartbeat(nodeUri);
+					_jobManager.CheckAndAssignNextJob();
+				});
+
+				LogHelper.LogInfoWithLineNumber(Logger,
+				                                WhoAmI + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
+			}
 		}
 
 		[HttpPost, Route(ManagerRouteConstants.JobDone)]
@@ -175,7 +184,8 @@ namespace Stardust.Manager
 		[HttpGet, Route(ManagerRouteConstants.Nodes)]
 		public IHttpActionResult Nodes()
 		{
-			return Ok(_jobManager.Nodes());
+			IList<WorkerNode> workernodes = _jobManager.Nodes();
+			return Ok(workernodes);
 		}
 
 	}

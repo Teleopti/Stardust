@@ -307,11 +307,10 @@ namespace Stardust.Manager
 			return deadNodes;
 		}
 
-		public void RegisterHeartbeat(Uri nodeUri)
+		public void RegisterHeartbeat(string nodeUri)
 		{
 			// Validate argument.
-			if (nodeUri == null ||
-			    string.IsNullOrEmpty(nodeUri.ToString()))
+			if (string.IsNullOrEmpty(nodeUri))
 			{
 				return;
 			}

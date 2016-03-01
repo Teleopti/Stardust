@@ -162,7 +162,7 @@ namespace Manager.Integration.Test
 
 			sqlNotifier.Dispose();
 
-			LogHelper.LogDebugWithLineNumber("All 5 nodes have started.",
+			LogHelper.LogInfoWithLineNumber("All 5 nodes have started.",
 											 Logger);
 
 			//---------------------------------------------
@@ -274,7 +274,7 @@ namespace Manager.Integration.Test
 
 			sqlNotifier.Dispose();
 
-			LogHelper.LogDebugWithLineNumber("All 5 nodes have started.",
+			LogHelper.LogInfoWithLineNumber("All 5 nodes have started.",
 			                                 Logger);
 
 			//---------------------------------------------

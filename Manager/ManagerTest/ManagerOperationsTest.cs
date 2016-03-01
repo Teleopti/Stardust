@@ -24,6 +24,7 @@ namespace ManagerTest
 		public INodeManager NodeManager;
 		public IManagerConfiguration ManagerConfiguration;
 		public FakeHttpSender HttpSender;
+		private DatabaseHelper databaseHelper;
 		private readonly Uri _nodeUri1 = new Uri("http://localhost:9050/");
 		private readonly Uri _nodeUri2 = new Uri("http://localhost:9051/");
 
@@ -32,12 +33,17 @@ namespace ManagerTest
 			HttpSender.BusyNodesUrl.Add(url);
 		}
 
-		[SetUp]
+		[TestFixtureSetUp]
 		public void TextFixtureSetUp()
 		{
-			var databaseHelper = new DatabaseHelper();
-
+			databaseHelper = new DatabaseHelper();
 			databaseHelper.Create();
+		}
+
+		[SetUp]
+		public void Setup()
+		{
+			databaseHelper.TryClearDatabase();
 		}
 
 		[Test]
@@ -56,7 +62,7 @@ namespace ManagerTest
 			JobRepository.Add(job);
 			JobRepository.CheckAndAssignNextJob(new List<WorkerNode> {new WorkerNode {Url = _nodeUri1}},
 			                                    HttpSender);
-			Target.Heartbeat(_nodeUri1);
+			Target.Heartbeat(_nodeUri1.ToString());
 			HttpSender.CalledNodes.First()
 				.Key.Should()
 				.Contain(_nodeUri1.ToString());
@@ -91,8 +97,8 @@ namespace ManagerTest
 		[Test]
 		public void ShouldBeAbleToCancelJobOnNode()
 		{
-			Target.Heartbeat(_nodeUri1);
-			Target.Heartbeat(_nodeUri2);
+			Target.Heartbeat(_nodeUri1.ToString());
+			Target.Heartbeat(_nodeUri2.ToString());
 
 			var jobId = Guid.NewGuid();
 			JobRepository.Add(new JobDefinition {Id = jobId, Serialized = "", Name = "", Type = "", UserName = "ManagerTests"});
@@ -259,7 +265,7 @@ namespace ManagerTest
 			};
 			ThisNodeIsBusy(_nodeUri1.ToString());
 
-			Target.Heartbeat(_nodeUri1);
+			Target.Heartbeat(_nodeUri1.ToString());
 
 			Target.DoThisJob(job);
 
