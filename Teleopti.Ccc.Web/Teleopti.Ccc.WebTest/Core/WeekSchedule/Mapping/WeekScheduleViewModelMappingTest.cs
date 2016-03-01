@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -11,15 +10,12 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
@@ -319,13 +315,23 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		public void ShouldMapSummaryForMainShift()
 		{
 			var stubs = new StubFactory();
-			var personAssignment =
-				stubs.PersonAssignmentStub(new DateTimePeriod(new DateTime(2011, 5, 18, 6, 0, 0, DateTimeKind.Utc),
-				                                              new DateTime(2011, 5, 18, 15, 0, 0, DateTimeKind.Utc)));
+			var dateTimePeriod = new DateTimePeriod(new DateTime(2011, 5, 18, 6, 0, 0, DateTimeKind.Utc),
+				new DateTime(2011, 5, 18, 15, 0, 0, DateTimeKind.Utc));	
+			var personAssignment = stubs.PersonAssignmentStub(dateTimePeriod);
+			personAssignment.Stub(x => x.ShiftLayers).Return(new List<IShiftLayer>());
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
-			var projection = stubs.ProjectionStub();
+			var projection = stubs.ProjectionStub(dateTimePeriod);
+			loggedOnUser.Stub(s => s.CurrentUser()).Return(new Person());
+
+			periodViewModelFactory = new PeriodViewModelFactory(Mapper.Engine, new FakeUserTimeZone(TimeZoneInfo.Utc));
+			
 			var domainData = new WeekScheduleDayDomainData
-			                 	{Date = DateOnly.Today, ScheduleDay = scheduleDay, Projection = projection};
+			{
+				Date = new DateOnly(2011, 05, 18),
+				ScheduleDay = scheduleDay,
+				Projection = projection,
+				MinMaxTime = new TimePeriod(TimeSpan.FromMinutes(15), TimeSpan.FromHours(8))
+			};
 
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 
@@ -369,11 +375,11 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
 
 			result.Styles.Select(s => s.Name)
-				.Should().Have.SameValuesAs(new[] { Color.Blue.ToStyleClass(), Color.Red.ToStyleClass() });
+				.Should().Have.SameValuesAs(Color.Blue.ToStyleClass(), Color.Red.ToStyleClass());
 			result.Styles.Select(s => s.ColorHex)
-				.Should().Have.SameValuesAs(new[] { Color.Blue.ToHtml(), Color.Red.ToHtml() });
+				.Should().Have.SameValuesAs(Color.Blue.ToHtml(), Color.Red.ToHtml());
 			result.Styles.Select(s => s.RgbColor)
-				.Should().Have.SameValuesAs(new[] {Color.Blue.ToCSV(), Color.Red.ToCSV()});
+				.Should().Have.SameValuesAs(Color.Blue.ToCSV(), Color.Red.ToCSV());
 		}
 
 		[Test]

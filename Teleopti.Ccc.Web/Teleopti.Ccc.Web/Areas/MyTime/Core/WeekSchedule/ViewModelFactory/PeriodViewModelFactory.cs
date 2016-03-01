@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Globalization;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Interfaces.Domain;
