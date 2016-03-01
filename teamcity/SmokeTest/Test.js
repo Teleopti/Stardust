@@ -21,8 +21,8 @@ var closeAndThrow = function(msg){
 
 client.init();
 var webUrl = process.env.UrlToTest + '/Web';
-log('navigate to url ' + webUrl);
-client.url(webUrl)
+log('navigate to url ' + webUrl + '/Anywhere');
+client.url(webUrl + '/Anywhere')
 	.waitForExist('#Username-input', 60000, false, function(err, res, response) {
 		if (err || !res) {
 			closeAndThrow('failed to navigate to sign in page. ' + err);
@@ -36,14 +36,14 @@ client.setValue('#Username-input', 'demo')
 		if (err || !res) {
 			log('failed to sign in first time.');
 			//second try
-			client.url(webUrl)
+			client.url(webUrl + '/Anywhere')
 				.waitForExist('.user-name', 120000, false, function(err, res, response) {
 					if (err || !res) {
 						log('failed to sign in first time after refresh.');
 						
 						log('try to sign in second time:');
-						log('navigate to url ' + webUrl);
-						client.url(webUrl)
+						log('navigate to url ' + webUrl + '/Anywhere');
+						client.url(webUrl + '/Anywhere')
 							.waitForExist('#Username-input', 60000, false, function(err, res, response) {
 								if (err || !res) {
 									closeAndThrow('failed to navigate to sign in page. ' + err);
