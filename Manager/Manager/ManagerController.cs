@@ -148,6 +148,15 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.JobProgress)]
 		public IHttpActionResult JobProgress([FromBody] JobProgressModel model)
 		{
+			if (model == null)
+			{
+				return BadRequest();
+			}
+				
+			if (model.JobId == Guid.Empty || string.IsNullOrEmpty(model.ProgressDetail))
+			{
+				return BadRequest();
+			}
 			_jobManager.ReportProgress(model);
 
 			return Ok();
