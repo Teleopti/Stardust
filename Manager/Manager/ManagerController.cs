@@ -102,7 +102,7 @@ namespace Stardust.Manager
 		{
 				Task.Factory.StartNew(() =>
 				{
-					_jobManager.RegisterHeartbeat(nodeUri);
+					_jobManager.RegisterHeartbeat(nodeUri.ToString());
 				});
 
 				LogHelper.LogInfoWithLineNumber(Logger,
