@@ -138,7 +138,6 @@ And after the creation I goto the campaign list page
 And I set the starting month for viewing period to '2016-01-01'
 Then I should see 'NewCampaign' in campaign list
 
-@ignore
 Scenario: Delete a campaign
 When I view campaign 'Campaign4'
 And I confirm to delete the campaign
@@ -146,7 +145,6 @@ And after that I am redirected to the campaign list page
 And I set the starting month for viewing period to '2015-09-01'
 Then I should not see 'Campaign4' in campaign list 
 
-@ignore
 Scenario: Edit a campaign
 Given there is an activity named 'NewCampaign'
 And there is a skill named 'NewCampaign' with activity 'NewCampaign'

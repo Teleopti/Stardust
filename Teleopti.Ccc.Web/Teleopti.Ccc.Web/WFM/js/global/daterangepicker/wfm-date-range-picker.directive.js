@@ -11,20 +11,21 @@
 				'templateType': '=?',
 				'testStopUi': '@?'
 			},
-			controller: ['$element', dateRangePickerCtrl],
+			controller: ['$element', '$animate', dateRangePickerCtrl],
 			require: ['ngModel', 'dateRangePicker'],
 			link: postlink
 		};
 
-		function dateRangePickerCtrl($element) {
+		function dateRangePickerCtrl($element, $animate) {
 			var ctrl = this;
 			$element.addClass('wfm-date-range-picker-wrap');
+			$animate.enabled($element, false);
 		}
 
 		function postlink(scope, elem, attrs, ctrls) {
 			var ngModelCtrl = ctrls[0],
                 dateRangeCtrl = ctrls[1];
-
+			
 			scope.dummyMinDate = new Date('1970-01-01');
 			scope.displayPopup = function () {
 				return scope.templateType === 'popup';
