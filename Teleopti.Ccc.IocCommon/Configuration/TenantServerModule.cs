@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<ICurrentTenantSession>()
 				.SingleInstance();
 			builder.RegisterType<TenantUnitOfWorkAspect>().As<ITenantUnitOfWorkAspect>().SingleInstance();
+			builder.RegisterType<WithTenantUnitOfWork>().SingleInstance();
 			builder.RegisterType<PersistLogonAttempt>().As<IPersistLogonAttempt>().SingleInstance();
 			builder.RegisterType<PersistPersonInfo>().As<IPersistPersonInfo>().SingleInstance();
 			builder.RegisterType<DeletePersonInfo>().As<IDeletePersonInfo>().SingleInstance();

@@ -323,6 +323,7 @@
     <Compile Include="MultiTenancy\Server\FindTenantByNameWithEnsuredTransaction.cs" />
     <Compile Include="MultiTenancy\Server\FindTenantByNameWithEnsuredTransactionFake.cs" />
     <Compile Include="MultiTenancy\Server\IFindTenantByNameWithEnsuredTransaction.cs" />
+    <Compile Include="MultiTenancy\Server\NHibernate\WithTenantUnitOfWork.cs" />
     <Compile Include="MultiTenancy\Server\Queries\ApplicationUserQueryFake.cs" />
     <Compile Include="MultiTenancy\Server\CheckPasswordStrength.cs" />
     <Compile Include="MultiTenancy\Server\CheckPasswordStrengthFake.cs" />
