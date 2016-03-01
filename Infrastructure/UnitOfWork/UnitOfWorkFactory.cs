@@ -22,12 +22,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public static ICurrentUnitOfWorkFactory CurrentUnitOfWorkFactory()
 		{
-			return new CurrentUnitOfWorkFactory(CurrentDataSource.Make());
+			return UnitOfWork.CurrentUnitOfWorkFactory.Make();
 		}
 
 		public static ICurrentUnitOfWork CurrentUnitOfWork()
 		{
-			return new CurrentUnitOfWork(CurrentUnitOfWorkFactory());
+			return UnitOfWork.CurrentUnitOfWork.Make();
 		}
 	}
 }
