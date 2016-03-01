@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Autofac.Integration.WebApi;
 using Stardust.Manager.Interfaces;
-using Stardust.Manager.Models;
 
 namespace Stardust.Manager
 {
@@ -13,25 +12,19 @@ namespace Stardust.Manager
 
 			builder.RegisterInstance(managerConfiguration).As<IManagerConfiguration>();
 
-			builder.RegisterType<NodeManager>()
-				.As<INodeManager>();
+			builder.RegisterType<NodeManager>().As<INodeManager>();
 
-			builder.RegisterType<JobManager>();
+			builder.RegisterType<JobManager>().SingleInstance();
 
-			builder.RegisterType<HttpSender>()
-				.As<IHttpSender>();
+			builder.RegisterType<HttpSender>().As<IHttpSender>();
 			 
-			builder.Register(
-				c => new JobRepository(managerConfiguration.ConnectionString))
-				.As<IJobRepository>();
+			builder.Register(c => new JobRepository(managerConfiguration.ConnectionString))
+							.As<IJobRepository>();
 
-			builder.Register(
-				c => new WorkerNodeRepository(managerConfiguration.ConnectionString))
-				.As<IWorkerNodeRepository>();
+			builder.Register(c => new WorkerNodeRepository(managerConfiguration.ConnectionString))
+							.As<IWorkerNodeRepository>();
 
-			builder.RegisterApiControllers(typeof (ManagerController).Assembly);
-
-			
+			builder.RegisterApiControllers(typeof (ManagerController).Assembly);		
 
 			builder.Update(componentContext.ComponentRegistry);
 		}

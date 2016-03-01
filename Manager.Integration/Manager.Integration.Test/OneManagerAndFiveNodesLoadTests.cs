@@ -263,19 +263,19 @@ namespace Manager.Integration.Test
 			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
 			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(5,
-			                                                      sqlNotiferCancellationTokenSource,
-			                                                      IntegerValidators.Value1IsEqualToValue2Validator);
+																  sqlNotiferCancellationTokenSource,
+																  IntegerValidators.Value1IsEqualToValue2Validator);
 			task.Start();
 
 			LogHelper.LogDebugWithLineNumber("Waiting for all 5 nodes to start up.",
-			                                 Logger);
+											 Logger);
 
 			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
 
 			sqlNotifier.Dispose();
 
 			LogHelper.LogInfoWithLineNumber("All 5 nodes have started.",
-			                                 Logger);
+											 Logger);
 
 			//---------------------------------------------
 			// Execute all jobs. 

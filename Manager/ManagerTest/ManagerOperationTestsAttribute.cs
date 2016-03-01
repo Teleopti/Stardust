@@ -24,7 +24,8 @@ namespace ManagerTest
 				c => new WorkerNodeRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString))
 				.As<IWorkerNodeRepository>();
 			builder.RegisterType<ManagerController>();
-			builder.RegisterType<JobManager>();
+
+			builder.RegisterType<JobManager>().SingleInstance();
 		}
 		
 	}

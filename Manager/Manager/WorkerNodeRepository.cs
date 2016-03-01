@@ -81,77 +81,83 @@ namespace Stardust.Manager
 			return listToReturn;
 		}
 
+		private readonly object _lockLoadAllFreeNodes=new object();
+
 		public List<WorkerNode> LoadAllFreeNodes()
 		{
-			LogHelper.LogDebugWithLineNumber(Logger, "Start LoadAllFreeNodes.");
-
-			const string selectCommand =
-				@"SELECT * FROM [Stardust].WorkerNodes WHERE Url NOT IN (SELECT ISNULL(AssignedNode,'') FROM [Stardust].JobDefinitions)";
-
-			var listToReturn = new List<WorkerNode>();
-
-			try
+			lock (_lockLoadAllFreeNodes)
 			{
-				using (var connection = new SqlConnection(_connectionString))
+				LogHelper.LogDebugWithLineNumber(Logger, "Start LoadAllFreeNodes.");
+
+				const string selectCommand =
+					@"SELECT * FROM [Stardust].WorkerNodes WHERE Url NOT IN (SELECT ISNULL(AssignedNode,'') FROM [Stardust].JobDefinitions)";
+
+				var listToReturn = new List<WorkerNode>();
+
+				try
 				{
-					var command = new SqlCommand
+					using (var connection = new SqlConnection(_connectionString))
 					{
-						Connection = connection,
-						CommandText = selectCommand,
-						CommandType = CommandType.Text
-					};
-					connection.Open();
-
-					var reader = command.ExecuteReader();
-
-					if (reader.HasRows)
-					{
-						while (reader.Read())
+						var command = new SqlCommand
 						{
-							var jobDefinition = new WorkerNode
+							Connection = connection,
+							CommandText = selectCommand,
+							CommandType = CommandType.Text
+						};
+						connection.Open();
+
+						var reader = command.ExecuteReader();
+
+						if (reader.HasRows)
+						{
+							while (reader.Read())
 							{
-								Id = (Guid) reader.GetValue(reader.GetOrdinal("Id")),
-								Url = new Uri((string) reader.GetValue(reader.GetOrdinal("Url"))),
-								Alive = (string) reader.GetValue(reader.GetOrdinal("Alive")),
-								Heartbeat = (DateTime) reader.GetValue(reader.GetOrdinal("Heartbeat"))
-							};
-							listToReturn.Add(jobDefinition);
+								var jobDefinition = new WorkerNode
+								{
+									Id = (Guid)reader.GetValue(reader.GetOrdinal("Id")),
+									Url = new Uri((string)reader.GetValue(reader.GetOrdinal("Url"))),
+									Alive = (string)reader.GetValue(reader.GetOrdinal("Alive")),
+									Heartbeat = (DateTime)reader.GetValue(reader.GetOrdinal("Heartbeat"))
+								};
+								listToReturn.Add(jobDefinition);
+							}
 						}
+
+						reader.Close();
+						connection.Close();
 					}
-
-					reader.Close();
-					connection.Close();
 				}
+
+				catch (TimeoutException exception)
+				{
+					LogHelper.LogErrorWithLineNumber(Logger,
+													 "Can not get WorkerNodes, maybe there is a lock in Stardust.JobDefinitions table",
+													 exception);
+				}
+
+				catch (Exception exception)
+				{
+					LogHelper.LogErrorWithLineNumber(Logger,
+													 "Can not get WorkerNodes",
+													 exception);
+				}
+
+
+				if (listToReturn.Any())
+				{
+					LogHelper.LogDebugWithLineNumber(Logger, "Found ( " + listToReturn.Count + " ) availabe nodes.");
+				}
+				else
+				{
+					LogHelper.LogDebugWithLineNumber(Logger, "No nodes found.");
+				}
+
+
+				LogHelper.LogDebugWithLineNumber(Logger, "Finished LoadAllFreeNodes.");
+
+				return listToReturn;
+
 			}
-
-			catch (TimeoutException exception)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger,
-				                                 "Can not get WorkerNodes, maybe there is a lock in Stardust.JobDefinitions table",
-				                                 exception);
-			}
-
-			catch (Exception exception)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger,
-				                                 "Can not get WorkerNodes",
-				                                 exception);
-			}
-
-
-			if (listToReturn.Any())
-			{
-				LogHelper.LogDebugWithLineNumber(Logger, "Found ( " + listToReturn.Count + " ) availabe nodes.");
-			}
-			else
-			{
-				LogHelper.LogDebugWithLineNumber(Logger, "No nodes found.");
-			}
-
-
-			LogHelper.LogDebugWithLineNumber(Logger, "Finished LoadAllFreeNodes.");
-
-			return listToReturn;
 		}
 
 		public void Add(WorkerNode job)

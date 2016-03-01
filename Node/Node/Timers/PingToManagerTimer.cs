@@ -75,7 +75,7 @@ namespace Stardust.Node.Timers
 			try
 			{
 				await SendPing(NodeConfiguration.BaseAddress,
-							   CallbackToManagerUri,
+				               CallbackToManagerUri,
 				               CancellationTokenSource.Token);
 			}
 

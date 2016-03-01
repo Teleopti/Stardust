@@ -1,60 +1,141 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Timers;
 using log4net;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
-using System.Timers;
+using Timer = System.Timers.Timer;
 
 namespace Stardust.Manager
 {
-	public class JobManager
+	public class JobManager : IDisposable
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (JobManager));
+
+		private readonly Timer _checkAndAssignNextJob = new Timer();
+
+		private readonly object _checkAndAssignNextJobLock = new object();
+
+		private readonly Timer _checkHeartbeatsTimer = new Timer();
+
 		private readonly IHttpSender _httpSender;
 		private readonly IJobRepository _jobRepository;
-		private readonly IWorkerNodeRepository _workerNodeRepository;
 		private readonly IManagerConfiguration _managerConfiguration;
-		private readonly Timer _checkHeartbeatsTimer = new Timer();
+		private readonly IWorkerNodeRepository _workerNodeRepository;
 
 		public JobManager(IJobRepository jobRepository,
 		                  IWorkerNodeRepository workerNodeRepository,
 		                  IHttpSender httpSender,
-						  IManagerConfiguration managerConfiguration)
+		                  IManagerConfiguration managerConfiguration)
 		{
 			if (managerConfiguration.AllowedNodeDownTimeSeconds <= 0)
 			{
 				LogHelper.LogErrorWithLineNumber(Logger, "AllowedNodeDownTimeSeconds is not greater than zero!");
+
 				throw new ArgumentOutOfRangeException();
 			}
-		
+
 			_jobRepository = jobRepository;
 			_workerNodeRepository = workerNodeRepository;
 			_httpSender = httpSender;
 			_managerConfiguration = managerConfiguration;
 
-			_checkHeartbeatsTimer.Elapsed += OnTimedEvent;
-			_checkHeartbeatsTimer.Interval = _managerConfiguration.AllowedNodeDownTimeSeconds * 500; //NodeDowntime in milliseconds divided by 2
-			_checkHeartbeatsTimer.Start();
-			
+			CreateCheckAndAssignNextJobTask();
+
+			_checkAndAssignNextJob.Elapsed += _checkAndAssignNextJob_Elapsed;
+			_checkAndAssignNextJob.Interval = 5000;
+			_checkAndAssignNextJob.Start();
+
+			//_checkHeartbeatsTimer.Elapsed += OnTimedEvent;
+			//_checkHeartbeatsTimer.Interval = _managerConfiguration.AllowedNodeDownTimeSeconds*500;
+			//_checkHeartbeatsTimer.Start();
+		}
+
+		public void Dispose()
+		{
+			LogHelper.LogDebugWithLineNumber(Logger, "Start disposing.");
+
+			_checkAndAssignNextJob.Stop();
+			_checkAndAssignNextJob.Dispose();
+
+			_checkHeartbeatsTimer.Stop();
+			_checkHeartbeatsTimer.Dispose();
+
+			LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
+		}
+
+		private void _checkAndAssignNextJob_Elapsed(object sender, ElapsedEventArgs e)
+		{
+			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
+
+			_checkAndAssignNextJob.Stop();
+
+			try
+			{
+				StartCheckAndAssignNextJobTask();
+
+				LogHelper.LogDebugWithLineNumber(Logger,
+				                                 "CheckAndAssignNextJob on thread id : " + Thread.CurrentThread.ManagedThreadId);
+			}
+			finally
+			{
+				_checkAndAssignNextJob.Start();
+
+				LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
+			}
+		}
+
+		private readonly object _lockCreateCheckAndAssignNextJobTask = new object();
+
+		private Task CheckAndAssignNextJobTask { get; set; }
+
+		private void CreateCheckAndAssignNextJobTask()
+		{
+			lock (_lockCreateCheckAndAssignNextJobTask)
+			{
+				CheckAndAssignNextJobTask = new Task(CheckAndAssignNextJob);
+
+				CheckAndAssignNextJobTask.Start();
+			}
+		}
+
+		public void StartCheckAndAssignNextJobTask()
+		{
+			if (CheckAndAssignNextJobTask == null)
+			{
+				return;
+			}
+
+			if (CheckAndAssignNextJobTask.Status == TaskStatus.Canceled ||
+			    CheckAndAssignNextJobTask.Status ==TaskStatus.Faulted ||
+			    CheckAndAssignNextJobTask.Status == TaskStatus.RanToCompletion)
+			{
+				CreateCheckAndAssignNextJobTask();
+			}				
 		}
 
 		public void CheckNodesAreAlive(TimeSpan timeSpan)
 		{
-			List<string> deadNodes = _workerNodeRepository.CheckNodesAreAlive(timeSpan);
+			var deadNodes = _workerNodeRepository.CheckNodesAreAlive(timeSpan);
 
-			List<JobDefinition> jobs = _jobRepository.LoadAll();
+			var jobs = _jobRepository.LoadAll();
 
 			if (deadNodes != null)
 			{
-				foreach (string node in deadNodes)
+				foreach (var node in deadNodes)
 				{
-					foreach (JobDefinition job in jobs)
+					foreach (var job in jobs)
 					{
 						if (job.AssignedNode == node)
 						{
-							LogHelper.LogErrorWithLineNumber(Logger, "Job ( id , name ) is deleted due to the node executing it died. ( " + job.Id + " , " + job.Name + " )");
+							LogHelper.LogErrorWithLineNumber(Logger,
+							                                 "Job ( id , name ) is deleted due to the node executing it died. ( " + job.Id +
+							                                 " , " + job.Name + " )");
+
 							SetEndResultOnJobAndRemoveIt(job.Id, "fatal");
 						}
 					}
@@ -63,10 +144,25 @@ namespace Stardust.Manager
 		}
 
 		private void OnTimedEvent(object sender,
-								ElapsedEventArgs e)
+		                          ElapsedEventArgs e)
 		{
-			CheckNodesAreAlive(TimeSpan.FromSeconds(_managerConfiguration.AllowedNodeDownTimeSeconds));
-			LogHelper.LogDebugWithLineNumber(Logger, " Check Heartbeat");
+			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
+
+			_checkHeartbeatsTimer.Stop();
+
+			try
+			{
+				CheckNodesAreAlive(TimeSpan.FromSeconds(_managerConfiguration.AllowedNodeDownTimeSeconds));
+
+				LogHelper.LogDebugWithLineNumber(Logger,
+				                                 "Check Heartbeat on thread id : " + Thread.CurrentThread.ManagedThreadId);
+			}
+			finally
+			{
+				_checkHeartbeatsTimer.Start();
+
+				LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
+			}
 		}
 
 		public IList<WorkerNode> Nodes()
@@ -78,7 +174,9 @@ namespace Stardust.Manager
 		public IList<WorkerNode> UpNodes()
 		{
 			var upNodes = new List<WorkerNode>();
+
 			var availableNodes = _workerNodeRepository.LoadAllFreeNodes();
+
 			foreach (var availableNode in availableNodes)
 			{
 				var nodeUriBuilder = new NodeUriBuilderHelper(availableNode.Url);
@@ -89,19 +187,21 @@ namespace Stardust.Manager
 					upNodes.Add(availableNode);
 				}
 			}
+
 			return upNodes;
 		}
 
 		public void RegisterHeartbeat(string nodeUri)
 		{
 			LogHelper.LogDebugWithLineNumber(Logger,
-											 "Start RegisterHeartbeat.");
+			                                 "Start RegisterHeartbeat.");
 
 			_workerNodeRepository.RegisterHeartbeat(nodeUri);
 
 			LogHelper.LogDebugWithLineNumber(Logger,
-												 "Finished RegisterHeartbeat.");
+			                                 "Finished RegisterHeartbeat.");
 		}
+
 
 		public void CheckAndAssignNextJob()
 		{
@@ -120,24 +220,31 @@ namespace Stardust.Manager
 					                                 "Found ( " + availableNodes.Count + " ) available nodes");
 				}
 
-				foreach (var availableNode in availableNodes)
+				if (availableNodes != null)
 				{
-					var nodeUriBuilder = new NodeUriBuilderHelper(availableNode.Url);
-
-					var postUri = nodeUriBuilder.GetIsAliveTemplateUri();
-
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Test available node is alive : Url ( " + postUri + " )");
-
-
-					var success = _httpSender.TryGetAsync(postUri);
-
-					if (success.Result)
+					foreach (var availableNode in availableNodes)
 					{
-						LogHelper.LogDebugWithLineNumber(Logger,
-						                                 "Node Url ( " + postUri + " ) is available and alive.");
+						var nodeUriBuilder = new NodeUriBuilderHelper(availableNode.Url);
 
-						upNodes.Add(availableNode);
+						var postUri = nodeUriBuilder.GetIsAliveTemplateUri();
+
+						LogHelper.LogDebugWithLineNumber(Logger,
+						                                 "Test available node is alive : Url ( " + postUri + " )");
+
+						var success = _httpSender.TryGetAsync(postUri);
+
+						if (success.Result)
+						{
+							LogHelper.LogDebugWithLineNumber(Logger,
+							                                 "Node Url ( " + postUri + " ) is available and alive.");
+
+							upNodes.Add(availableNode);
+						}
+						else
+						{
+							LogHelper.LogWarningWithLineNumber(Logger,
+							                                   "Node Url ( " + postUri + " ) could not be pinged.");
+						}
 					}
 				}
 
@@ -151,6 +258,7 @@ namespace Stardust.Manager
 			catch (Exception exp)
 			{
 				LogHelper.LogErrorWithLineNumber(Logger, exp.Message, exp);
+
 				throw;
 			}
 		}
@@ -195,6 +303,5 @@ namespace Stardust.Manager
 		{
 			return _jobRepository.JobHistoryDetails(jobId);
 		}
-
 	}
 }

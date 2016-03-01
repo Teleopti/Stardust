@@ -9,15 +9,19 @@ namespace Stardust.Manager
 {
 	public static class AppBuilderExtension
 	{
-		public static void UseStardustManager(this IAppBuilder appBuilder, ManagerConfiguration managerConfiguration,
+		public static void UseStardustManager(this IAppBuilder appBuilder, 
+											  ManagerConfiguration managerConfiguration,
 		                                      ILifetimeScope lifetimeScope)
 		{
 			appBuilder.Map(
 				managerConfiguration.Route,
 				inner =>
 				{
-					var config = new HttpConfiguration();
-					config.DependencyResolver = new AutofacWebApiDependencyResolver(lifetimeScope);
+					var config = new HttpConfiguration
+					{
+						DependencyResolver = new AutofacWebApiDependencyResolver(lifetimeScope)
+					};
+
 					config.MapHttpAttributeRoutes();
 
 					config.Services.Add(typeof (IExceptionLogger),

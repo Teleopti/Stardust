@@ -12,15 +12,18 @@ namespace ManagerTest
 		{
 			FakeManagerConfiguration fakeManagerConfiguration = new FakeManagerConfiguration();
 			builder.RegisterInstance(fakeManagerConfiguration).As<IManagerConfiguration>();
-			builder.RegisterType<JobManager>();
-			builder.RegisterType<NodeManager>();
-			builder.Register(
-				c => new JobRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString))
-				.As<IJobRepository>();
 
-			builder.Register(
-				c => new WorkerNodeRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString))
-				.As<IWorkerNodeRepository>();
+			// This MUST be singleton.
+			builder.RegisterType<JobManager>().SingleInstance();
+
+			builder.RegisterType<NodeManager>();
+
+			builder.Register(c => new JobRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString))
+							.As<IJobRepository>();
+
+			builder.Register(c => new WorkerNodeRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString))
+							.As<IWorkerNodeRepository>();
+
 			builder.RegisterType<FakeHttpSender>().As<IHttpSender>().SingleInstance();
 		}
 	}

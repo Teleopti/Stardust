@@ -20,7 +20,7 @@ namespace ManagerTest
 			_containerBuilder.RegisterInstance(fakeManagerConfiguration).As<IManagerConfiguration>();
 
 			_containerBuilder.RegisterType<NodeManager>().As<INodeManager>();
-			_containerBuilder.RegisterType<JobManager>();
+			_containerBuilder.RegisterType<JobManager>().SingleInstance();
 			_containerBuilder.RegisterType<HttpSender>().As<IHttpSender>();
 			_containerBuilder.RegisterType<ManagerController>();
 
