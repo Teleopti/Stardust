@@ -125,6 +125,7 @@
     <Compile Include="IntegrationController.cs" />
     <Compile Include="Interfaces\IAppDomain.cs" />
     <Compile Include="Interfaces\IHttpSender.cs" />
+    <Compile Include="LoadBalancer\LoadBalancerStartup.cs" />
     <Compile Include="Models\Configuration.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -133,6 +134,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="LoadBalancer\RedirectHandler.cs" />
+    <Compile Include="LoadBalancer\RoundRobin.cs" />
     <Compile Include="Tasks\AppDomainManagerTask.cs" />
     <Compile Include="Tasks\AppDomainNodeTask.cs" />
   </ItemGroup>
