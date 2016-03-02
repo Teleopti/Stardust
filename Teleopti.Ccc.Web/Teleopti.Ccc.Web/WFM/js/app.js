@@ -11,7 +11,8 @@ var externalModules = angular.module('externalModules', ['ui.router',
 	'ui.grid.autoResize',
 	'ui.grid.exporter',
 	'ui.grid.selection',
-	'ngStorage'
+	'ngStorage',
+	'dialogs.main'
 ]);
 
 var wfm = angular.module('wfm', [

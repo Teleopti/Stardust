@@ -38,7 +38,7 @@
 					<div class="shift" ng-repeat="shift in personSchedule.Shifts">
 						<div class="layer absolute floatleft" ng-repeat="projection in shift.Projections"
 							 ng-style="{left: projection.StartPosition + '%', width: projection.Length + '%', backgroundColor: projection.Color}"
-							 ng-class="{overtime:projection.IsOvertime, selected:projection.Selected}"
+							 ng-class="{overtime:projection.IsOvertime, selected:projection.Selected, personAbsence:projection.ParentPersonAbsence !== null}"
 							 ng-click="vm.ToggleProjectionSelection(projection, personSchedule)">
 							<md-tooltip>{{projection.Description}}</md-tooltip>
 						</div>

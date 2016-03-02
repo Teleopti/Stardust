@@ -2,13 +2,29 @@
 
 (function () {
 	angular.module('wfm.teamSchedule')
-		.controller('TeamScheduleCtrl', ['$scope', '$q', '$locale', '$translate', 'TeamSchedule', 'GroupScheduleFactory',
-			'teamScheduleNotificationService', 'PersonSelection', 'ScheduleManagement', 'SwapShifts', 'PersonAbsence', 'Toggle', 'SignalR', '$mdComponentRegistry',
-			'$mdSidenav', '$mdUtil', 'guidgenerator', 'ShortCuts', 'keyCodes', TeamScheduleController]);
+		.controller('TeamScheduleCtrl', [
+			'$scope', '$q', '$locale', '$translate', '$templateCache', 'TeamSchedule', 'GroupScheduleFactory',
+			'teamScheduleNotificationService', 'PersonSelection', 'ScheduleManagement', 'SwapShifts', 'PersonAbsence',
+			'Toggle', 'SignalR', '$mdComponentRegistry', '$mdSidenav', '$mdUtil', 'guidgenerator', 'ShortCuts', 'keyCodes',
+			'dialogs', TeamScheduleController
+		]);
 
-	function TeamScheduleController($scope, $q, $locale, $translate, teamScheduleSvc, groupScheduleFactory,
-		notificationService, personSelectionSvc, scheduleMgmtSvc, swapShiftsSvc, personAbsenceSvc, toggleSvc, signalRSvc, $mdComponentRegistry, $mdSidenav, $mdUtil,
-		guidgenerator, shortCuts, keyCodes) {
+	function TeamScheduleController($scope, $q, $locale, $translate, $templateCache, teamScheduleSvc, groupScheduleFactory,
+		notificationService, personSelectionSvc, scheduleMgmtSvc, swapShiftsSvc, personAbsenceSvc, toggleSvc, signalRSvc,
+		$mdComponentRegistry, $mdSidenav, $mdUtil, guidgenerator, shortCuts, keyCodes, dialogSvc) {
+
+		// TODO: Temporary solution to fix the problem that translate not works for dialog service.
+		$templateCache.put('/dialogs/confirm.html',
+			'<div class="modal-header dialog-header-confirm">'
+			+ '<button type="button" class="close" ng-click="no()">&times;</button>'
+			+ '<h4 class="modal-title"><span class="mdi mdi-checkbox-marked-outline"></span> {{header}}</h4>'
+			+ '</div>'
+			+ '<div class="modal-body" ng-bind-html="msg"></div>'
+			+ '<div class="modal-footer">'
+			+ '<button type="button" class="btn btn-default" ng-click="yes()">' + $translate.instant("Yes") + '</button>'
+			+ '<button type="button" class="btn btn-primary" ng-click="no()">' + $translate.instant("No") + '</button>'
+			+ '</div>');
+
 		var vm = this;
 
 		vm.isLoading = false;
@@ -194,8 +210,6 @@
 		}
 
 		function removeAbsence() {
-			if (!canRemoveAbsence()) return;
-
 			var selectedPersonIdList = personSelectionSvc.getSelectedPersonIdList();
 
 			var personWithSelectedAbsences = [];
@@ -214,6 +228,18 @@
 					vm.afterActionCallback(result, allPersonWithAbsenceRemoved, "FinishedRemoveAbsence", "FailedToRemoveAbsence");
 				}
 			);
+		}
+
+		function confirmRemoveAbsence() {
+			if (!canRemoveAbsence()) return;
+
+			var message = $translate.instant("AreYouSureToRemoveSelectedAbsence");
+			dialogSvc.confirm($translate.instant("Warning"), message, { animation: true })
+				.result.then(function(btn) {
+					removeAbsence();
+				}, function(btn) {
+					return;
+				});
 		}
 
 		vm.commands = [
@@ -237,7 +263,7 @@
 				label: "RemoveAbsence",
 				shortcut: "Alt+R",
 				panelName: "", // No panel needed,
-				action: removeAbsence,
+				action: confirmRemoveAbsence,
 				enabled: canRemoveAbsence,
 				active: function() { return vm.toggleForRemoveAbsenceEnabled; }
 			}

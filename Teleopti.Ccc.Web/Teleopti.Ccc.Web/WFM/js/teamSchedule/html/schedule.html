@@ -25,13 +25,13 @@
 			</div>
 		</div>
 		<div class="con-flex">
-			<div tabindex=0 class="context-menu card-context pull-right" ng-if="vm.isMenuVisible()">
+			<div id="scheduleContextMenuButton" tabindex=0 class="context-menu card-context pull-right" ng-if="vm.isMenuVisible()">
 				<i class="mdi mdi-dots-vertical"></i>
 				<span class="context-menu-left" style="z-index: 1000; text-transform: none;">
 					<ul class="wfm-list">
 						<li class="item" ng-if="cmd.active()" ng-repeat="cmd in vm.commands" ng-disabled="!(cmd.enabled())"
 							ng-click="cmd.action()">
-							<div>
+							<div ng-attr-id="menuItem{{cmd.label}}">
 								<span class="pull-left">{{cmd.label|translate}}</span>
 								<span class="pull-right">{{cmd.shortcut}}</span>
 							</div>

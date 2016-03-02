@@ -959,6 +959,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AddActivity.feature</DependentUpon>
     </Compile>
+    <Compile Include="Wfm\TeamSchedule\RemovePlannedAbsence.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RemovePlannedAbsence.feature</DependentUpon>
+    </Compile>
     <Compile Include="Wfm\TeamSchedule\SeeWholeTeamSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -970,6 +975,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SwapShiftsForTwoAgents.feature</DependentUpon>
     </Compile>
+    <Compile Include="Wfm\TeamSchedule\TeamScheduleStepDefinitions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\packages\phantomjs.exe.1.8.1\tools\phantomjs\phantomjs.exe">
@@ -1392,6 +1398,10 @@
     <None Include="Wfm\TeamSchedule\AddActivity.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AddActivity.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\TeamSchedule\RemovePlannedAbsence.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RemovePlannedAbsence.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\TeamSchedule\SeeWholeTeamSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
