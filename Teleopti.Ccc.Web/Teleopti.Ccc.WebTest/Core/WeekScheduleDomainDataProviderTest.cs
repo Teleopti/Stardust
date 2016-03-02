@@ -145,7 +145,6 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapProjectionIncludingTheDayBeforeCurrentWeek()
 		{
-			Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("sv-SE");
 			var date = new DateOnly(2012, 08, 27);
 			var yesterdayDate = new DateOnly(2012, 08, 26);
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date.Date, CultureInfo.CurrentCulture));
@@ -183,7 +182,6 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapOvertimeAvailabilityForYesterday()
 		{
-			Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("sv-SE");
 			var date = new DateOnly(2012, 08, 27);
 			var yesterdayDate = new DateOnly(2012, 08, 26);
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date.Date, CultureInfo.CurrentCulture));

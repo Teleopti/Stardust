@@ -72,35 +72,57 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			});
 			var minMaxTime = getMinMaxTime(scheduleDaysAndProjections, week, firstDayOfWeek);
 
-			var days = (from day in firstDayOfWeek.DateRange(7)
-						let scheduleDay = scheduleDaysAndProjections.ContainsKey(day) ? scheduleDaysAndProjections[day].ScheduleDay : null
-						let scheduleYesterday = scheduleDaysAndProjections.ContainsKey(day.AddDays(-1)) ? scheduleDaysAndProjections[day.AddDays(-1)].ScheduleDay : null
-						let projection = scheduleDay == null ? null : scheduleDaysAndProjections[day].Projection
-						let projectionYesterday = scheduleYesterday == null ? null : scheduleDaysAndProjections[day.AddDays(-1)].Projection
-						let overtimeAvailability = scheduleDay == null || scheduleDay.OvertimeAvailablityCollection() == null ? null : scheduleDay.OvertimeAvailablityCollection().FirstOrDefault()
-						let overtimeAvailabilityYesterday = scheduleYesterday == null || scheduleYesterday.OvertimeAvailablityCollection() == null ? null : scheduleYesterday.OvertimeAvailablityCollection().FirstOrDefault()
-						let personRequestsForDay = personRequests == null ? null : (from i in personRequests where TimeZoneInfo.ConvertTimeFromUtc(i.Request.Period.StartDateTime, _userTimeZone.TimeZone()).Date == day.Date select i).ToArray()
-						let availabilityForDay = requestProbability != null && requestProbability.First(a => a.Date == day).Availability
-						let probabilityClass = requestProbability == null ? "" : requestProbability.First(a => a.Date == day).CssClass
-						let probabilityText = requestProbability == null ? "" : requestProbability.First(a => a.Date == day).Text
-						let seatBookingInformation = seatBookings == null ? null : seatBookings.Where(seatBooking => seatBooking.BelongsToDate == day).ToArray()
+			var list = new List<WeekScheduleDayDomainData>();
+			foreach (var day in firstDayOfWeek.DateRange(7))
+			{
+				var weekScheduleDayDomainData = new WeekScheduleDayDomainData
+				{
+					Date = day,
+					MinMaxTime = minMaxTime,
+					ProbabilityClass = "",
+					ProbabilityText = "",
+				};
 
-						select new WeekScheduleDayDomainData
-						{
-							Date = day,
-							PersonRequests = personRequestsForDay,
-							Projection = projection,
-							ProjectionYesterday = projectionYesterday,
-							OvertimeAvailability = overtimeAvailability,
-							OvertimeAvailabilityYesterday = overtimeAvailabilityYesterday,
-							ScheduleDay = scheduleDay,
-							MinMaxTime = minMaxTime,
-							Availability = availabilityForDay,
-							ProbabilityClass = probabilityClass,
-							ProbabilityText = probabilityText,
-							SeatBookingInformation = seatBookingInformation
-						}
-					   ).ToArray();
+				if (scheduleDaysAndProjections.ContainsKey(day))
+				{
+					var theDay = scheduleDaysAndProjections[day];
+					var scheduleDay = theDay.ScheduleDay;
+					weekScheduleDayDomainData.ScheduleDay = scheduleDay;
+					weekScheduleDayDomainData.Projection = theDay.Projection;
+					weekScheduleDayDomainData.OvertimeAvailability = scheduleDay.OvertimeAvailablityCollection() == null ? null : scheduleDay.OvertimeAvailablityCollection().FirstOrDefault();
+				}
+
+				if (scheduleDaysAndProjections.ContainsKey(day.AddDays(-1)))
+				{
+					var yesterday = scheduleDaysAndProjections[day.AddDays(-1)];
+					var scheduleYesterday = yesterday.ScheduleDay;
+					weekScheduleDayDomainData.ProjectionYesterday = yesterday.Projection;
+					weekScheduleDayDomainData.OvertimeAvailabilityYesterday = scheduleYesterday.OvertimeAvailablityCollection() == null ? null : scheduleYesterday.OvertimeAvailablityCollection().FirstOrDefault();
+				}
+
+				if (personRequests != null)
+				{
+					weekScheduleDayDomainData.PersonRequests = (from i in personRequests
+						where TimeZoneInfo.ConvertTimeFromUtc(i.Request.Period.StartDateTime, _userTimeZone.TimeZone()).Date == day.Date
+						select i).ToArray();
+				}
+
+				if (requestProbability != null)
+				{
+					var absenceRequestProbability = requestProbability.First(a => a.Date == day);
+					weekScheduleDayDomainData.Availability = absenceRequestProbability.Availability;
+					weekScheduleDayDomainData.ProbabilityClass = absenceRequestProbability.CssClass;
+					weekScheduleDayDomainData.ProbabilityText = absenceRequestProbability.Text;
+				}
+
+				if (seatBookings != null)
+				{
+					weekScheduleDayDomainData.SeatBookingInformation = seatBookings.Where(seatBooking => seatBooking.BelongsToDate == day).ToArray();
+				}
+				
+				list.Add(weekScheduleDayDomainData);
+			}
+			var days = list.ToArray();
 
 			var colorSource = new ScheduleColorSource
 			{
@@ -108,22 +130,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 				Projections = (from d in days where d.Projection != null select d.Projection).ToArray()
 			};
 
-			var asmPermission =
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger);
-			var textRequestPermission =
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests);
-			var overtimeAvailabilityPermission =
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.OvertimeAvailabilityWeb);
-			var absenceRequestPermission =
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb);
-			var absenceReportPermission =
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceReport);
-			var shiftTradeBulletinBoardPermission =
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard);
-			var shiftExchangePermission =
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard);
-			var personalAccountPermission =
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount);
+			var asmPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger);
+			var textRequestPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests);
+			var overtimeAvailabilityPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.OvertimeAvailabilityWeb);
+			var absenceRequestPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb);
+			var absenceReportPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceReport);
+			var shiftTradeBulletinBoardPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard);
+			var shiftExchangePermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard);
+			var personalAccountPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount);
 
 			var isCurrentWeek = week.Contains(_now.LocalDateOnly());
 
