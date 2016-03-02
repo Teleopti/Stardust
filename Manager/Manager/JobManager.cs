@@ -16,8 +16,8 @@ namespace Stardust.Manager
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (JobManager));
 
-		private readonly Timer _checkAndAssignNextJob = new Timer();
-		private readonly Timer _checkHeartbeatsTimer = new Timer();
+	//	private readonly Timer _checkAndAssignNextJob = new Timer();
+	//	private readonly Timer _checkHeartbeatsTimer = new Timer();
 
 		private readonly IHttpSender _httpSender;
 		private readonly IJobRepository _jobRepository;
@@ -43,48 +43,48 @@ namespace Stardust.Manager
 
 			CreateCheckAndAssignNextJobTask();
 
-			_checkAndAssignNextJob.Elapsed += _checkAndAssignNextJob_Elapsed;
-			_checkAndAssignNextJob.Interval = 10000;
-			_checkAndAssignNextJob.Start();
+			//_checkAndAssignNextJob.Elapsed += _checkAndAssignNextJob_Elapsed;
+			//_checkAndAssignNextJob.Interval = 10000;
+			//_checkAndAssignNextJob.Start();
 
-			_checkHeartbeatsTimer.Elapsed += OnTimedEvent;
-			_checkHeartbeatsTimer.Interval = _managerConfiguration.AllowedNodeDownTimeSeconds*500;
-			_checkHeartbeatsTimer.Start();
+			//_checkHeartbeatsTimer.Elapsed += OnTimedEvent;
+			//_checkHeartbeatsTimer.Interval = _managerConfiguration.AllowedNodeDownTimeSeconds*500;
+			//_checkHeartbeatsTimer.Start();
 		}
 
 		public void Dispose()
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start disposing.");
 
-			_checkAndAssignNextJob.Stop();
-			_checkAndAssignNextJob.Dispose();
+			//_checkAndAssignNextJob.Stop();
+			//_checkAndAssignNextJob.Dispose();
 
-			_checkHeartbeatsTimer.Stop();
-			_checkHeartbeatsTimer.Dispose();
+			//_checkHeartbeatsTimer.Stop();
+			//_checkHeartbeatsTimer.Dispose();
 
 			LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
 		}
 
-		private void _checkAndAssignNextJob_Elapsed(object sender, ElapsedEventArgs e)
-		{
-			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
+		//private void _checkAndAssignNextJob_Elapsed(object sender, ElapsedEventArgs e)
+		//{
+		//	LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
-			_checkAndAssignNextJob.Stop();
+		//	_checkAndAssignNextJob.Stop();
 
-			try
-			{
-				StartCheckAndAssignNextJobTask();
+		//	try
+		//	{
+		//		StartCheckAndAssignNextJobTask();
 
-				LogHelper.LogDebugWithLineNumber(Logger,
-				                                 "CheckAndAssignNextJob on thread id : " + Thread.CurrentThread.ManagedThreadId);
-			}
-			finally
-			{
-				_checkAndAssignNextJob.Start();
+		//		LogHelper.LogDebugWithLineNumber(Logger,
+		//		                                 "CheckAndAssignNextJob on thread id : " + Thread.CurrentThread.ManagedThreadId);
+		//	}
+		//	finally
+		//	{
+		//		_checkAndAssignNextJob.Start();
 
-				LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
-			}
-		}
+		//		LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
+		//	}
+		//}
 
 		private readonly object _lockCreateCheckAndAssignNextJobTask = new object();
 
@@ -140,27 +140,27 @@ namespace Stardust.Manager
 			}
 		}
 
-		private void OnTimedEvent(object sender,
-		                          ElapsedEventArgs e)
-		{
-			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
+		//private void OnTimedEvent(object sender,
+		//                          ElapsedEventArgs e)
+		//{
+		//	LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
-			_checkHeartbeatsTimer.Stop();
+		//	_checkHeartbeatsTimer.Stop();
 
-			try
-			{
-				CheckNodesAreAlive(TimeSpan.FromSeconds(_managerConfiguration.AllowedNodeDownTimeSeconds));
+		//	try
+		//	{
+		//		CheckNodesAreAlive(TimeSpan.FromSeconds(_managerConfiguration.AllowedNodeDownTimeSeconds));
 
-				LogHelper.LogDebugWithLineNumber(Logger,
-				                                 "Check Heartbeat on thread id : " + Thread.CurrentThread.ManagedThreadId);
-			}
-			finally
-			{
-				_checkHeartbeatsTimer.Start();
+		//		LogHelper.LogDebugWithLineNumber(Logger,
+		//		                                 "Check Heartbeat on thread id : " + Thread.CurrentThread.ManagedThreadId);
+		//	}
+		//	finally
+		//	{
+		//		_checkHeartbeatsTimer.Start();
 
-				LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
-			}
-		}
+		//		LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
+		//	}
+		//}
 
 		public IList<WorkerNode> Nodes()
 		{
