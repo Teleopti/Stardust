@@ -138,7 +138,7 @@ namespace Stardust.Manager
 					}
 				}
 			}
-		}
+		} 
 
 		//private void OnTimedEvent(object sender,
 		//                          ElapsedEventArgs e)
