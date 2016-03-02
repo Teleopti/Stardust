@@ -38,7 +38,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		public GroupScheduleViewModel CreateViewModel(IDictionary<PersonFinderField, string> criteriaDictionary, DateOnly dateInUserTimeZone, int pageSize, int currentPageIndex, bool isOnlyAbsences)
 		{
 			IPerson[] people;
-			if (isOnlyAbsences) people = _searchProvider.SearchPermittedPeopleWithAbsence(criteriaDictionary, dateInUserTimeZone, DefinedRaptorApplicationFunctionPaths.ViewSchedules).ToArray();
+			if (isOnlyAbsences)
+			{
+				people = _searchProvider.SearchPermittedPeopleWithAbsence(criteriaDictionary, dateInUserTimeZone, DefinedRaptorApplicationFunctionPaths.ViewSchedules).ToArray();
+				people = filterAbsenceOutOfSchedule(dateInUserTimeZone, people);
+			}
 			else people = _searchProvider.SearchPermittedPeople(criteriaDictionary, dateInUserTimeZone, DefinedRaptorApplicationFunctionPaths.ViewSchedules).ToArray();
 
 			if (people.Count() > 500)
@@ -80,6 +84,28 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			};
 		}
 
+		private IPerson[] filterAbsenceOutOfSchedule(DateOnly dateInUserTimeZone, IPerson[] people)
+		{
+			var scheduleDays = _scheduleProvider.GetScheduleForPersons(dateInUserTimeZone, people).ToList();
+			var ret = new List<IPerson>();
+			foreach (var scheduleDay in scheduleDays)
+			{
+				var personAssignment = scheduleDay.PersonAssignment();
+				if (personAssignment != null)
+				{
+					var schedulePeriod = personAssignment.Period;
+					var personAbsences = scheduleDay.PersonAbsenceCollection();
+					var isAbsenceOutOfSchedule = true;
+					foreach (var personAbsence in personAbsences)
+					{
+						if (personAbsence.Period.Contains(schedulePeriod) || schedulePeriod.Contains(personAbsence.Period)) isAbsenceOutOfSchedule = false;
+					}
+					if (isAbsenceOutOfSchedule) continue;
+					ret.Add(scheduleDay.Person);
+				}
+			}
+			return ret.ToArray();
+		}
 
 		private IEnumerable<GroupScheduleShiftViewModel> constructGroupScheduleShiftViewModels(DateOnly dateInUserTimeZone,
 			IEnumerable<IPerson> people, IEnumerable<Guid> peopleCanSeeConfidentialAbsencesFor, int pageSize, int currentPageIndex)
