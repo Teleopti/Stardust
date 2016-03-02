@@ -1,20 +1,29 @@
 ﻿using System;
+using System.Configuration;
 using System.Threading;
+using Autofac;
 using ManagerTest.Database;
 using NUnit.Framework;
+using Stardust.Manager;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
 
 namespace ManagerTest
 {
-	[TestFixture, JobTests]
+	[TestFixture]
 	class WorkerNodeRepositoryTests : DatabaseTest
 	{
-		public IWorkerNodeRepository WorkerNodeRepository { get; set; }
+		public WorkerNodeRepository WorkerNodeRepository { get; set; }
 
 		private readonly Uri _nodeUri1 = new Uri("http://localhost:9050/");
 
-		 
+		[TestFixtureSetUp]
+		public void TestFixtureSetUp()
+		{
+			WorkerNodeRepository = new WorkerNodeRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString);
+		}
+		
+
 		[Test]
 		public void HeartbeatTimestampShouldBeChangedOnHeartbeat()
 		{
