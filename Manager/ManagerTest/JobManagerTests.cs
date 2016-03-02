@@ -234,5 +234,25 @@ namespace ManagerTest
 			JobManager.GetJobHistoryList().Should().Not.Be.Empty();
 			JobManager.JobHistoryDetails(jobId).Should().Not.Be.Empty();
 		}
+
+		[Test]
+		public void ShouldAddANodeOnInit()
+		{
+			NodeManager.AddIfNeeded(_nodeUri1);
+			WorkerNodeRepository.LoadAll()
+				.First()
+				.Url.Should()
+				.Be.EqualTo(_nodeUri1.ToString());
+		}
+
+		[Test]
+		public void ShouldNotAddSameNodeTwiceInInit()
+		{
+			NodeManager.AddIfNeeded(_nodeUri1);
+			NodeManager.AddIfNeeded(_nodeUri1);
+			WorkerNodeRepository.LoadAll()
+				.Count.Should()
+				.Be.EqualTo(1);
+		}
 	}
 }
