@@ -6,48 +6,16 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {
-	public class PersonConfigurable : IDataSetup
-	{
-		public string Name { get; set; }
-
-		public IPerson Person { get; set; }
-
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
-		{
-			var repository = new PersonRepository(currentUnitOfWork);
-			Person = PersonFactory.CreatePerson();
-			SetName(Person, Name);
-			repository.Add(Person);
-		}
-
-		public static void SetName(IPerson person, string name)
-		{
-			if (string.IsNullOrEmpty(name))
-				return;
-			if (name.Contains(" "))
-			{
-				var splitted = name.Split(' ');
-				person.Name = new Name(splitted[0], splitted[1]);
-				return;
-			}
-			person.Name = new Name(name, "");
-		}
-	}
-
 	public class PersonUserConfigurable : IUserSetup, ITenantUserSetup
 	{
-		public const string DefaultTenantName = "TestData";
-
 		public string Name { get; set; }
 
 		public DateTime? TerminalDate { get; set; }
@@ -57,8 +25,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string Role { get; set; }
 
 		public bool WindowsAuthentication { get; set; }
-
-		public string Tenant { get; set; }
 
 		public bool Delete { get; set; }
 
@@ -97,7 +63,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(ICurrentTenantSession tenantSession, IPerson user, ILogonName logonName)
 		{
-			if (!WindowsAuthentication && !changedApplicationLogonCredentials() && Tenant==null) return;
+			if (!WindowsAuthentication && !changedApplicationLogonCredentials()) return;
 
 			var personInfo = tenantSession.CurrentSession().Get<PersonInfo>(user.Id.Value);
 
@@ -107,10 +73,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				tenantSession.CurrentSession().Save(personInfo);
 			}
 
-			if (Tenant != null)
-			{
-				personInfo.ChangeTenant_OnlyUseInTest(new FindTenantByName(tenantSession).Find(Tenant));
-			}
 			if (WindowsAuthentication)
 			{
 				personInfo.SetIdentity(IdentityHelper.Merge(Environment.UserDomainName, Environment.UserName));
@@ -132,7 +94,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		private static Tenant defaultTenant(ICurrentTenantSession tenantSession)
 		{
-			return new LoadAllTenants(tenantSession).Tenants().Single(t => t.Name.Equals(DefaultTenantName));
+			return new LoadAllTenants(tenantSession).Tenants().Single(t => t.Name.Equals(DataSourceHelper.TestTenantName));
 		}
 	}
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -12,15 +11,15 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 {
 	public class PersonDataFactory : ILogonName
 	{
-		private readonly Guid _personId;
+		private readonly IPerson _person;
 		private readonly Action<Action<ICurrentUnitOfWork>> _unitOfWorkAction;
 		private readonly Action<Action<ICurrentTenantSession>> _tenantUnitOfWorkAction;
 		private readonly IList<IUserSetup> _userSetups = new List<IUserSetup>();
 		private readonly IList<IUserDataSetup> _userDataSetups = new List<IUserDataSetup>();
 
-		public PersonDataFactory(Guid personId, Action<Action<ICurrentUnitOfWork>> unitOfWorkAction, Action<Action<ICurrentTenantSession>> tenantUnitOfWorkAction)
+		public PersonDataFactory(IPerson person, Action<Action<ICurrentUnitOfWork>> unitOfWorkAction, Action<Action<ICurrentTenantSession>> tenantUnitOfWorkAction)
 		{
-			_personId = personId;
+			_person = person;
 			_unitOfWorkAction = unitOfWorkAction;
 			_tenantUnitOfWorkAction = tenantUnitOfWorkAction;
 			Apply(new Setups.Specific.SwedishCulture());
@@ -32,12 +31,14 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 			//TODO: ändra 
 			_unitOfWorkAction(uow =>
 			{
-				var person = new PersonRepository(uow).Load(_personId);
-				setup.Apply(uow.Current(), person, person.PermissionInformation.Culture());
+				setup.Apply(uow.Current(), _person, _person.PermissionInformation.Culture());
 			});
 			var setupTenant = setup as ITenantUserSetup;
 			if (setupTenant != null)
-				_tenantUnitOfWorkAction(ses => setupTenant.Apply(ses, Person, this));
+				_tenantUnitOfWorkAction(ses =>
+				{
+					setupTenant.Apply(ses, Person, this);
+				});
 			_userSetups.Add(setup);
 		}
 
@@ -45,8 +46,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 		{
 			_unitOfWorkAction(uow =>
 			{
-				var person = new PersonRepository(uow).Load(_personId);
-				setup.Apply(uow, person, person.PermissionInformation.Culture());
+				setup.Apply(uow, _person, _person.PermissionInformation.Culture());
 			});
 			_userDataSetups.Add(setup);
 		}
@@ -58,20 +58,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 		{
 			LogOnName = logonName;
 		}
-
-		public IPerson Person
-		{
-			get
-			{
-				IPerson person = null;
-				_unitOfWorkAction.Invoke(uow =>
-				{
-					person = new PersonRepository(uow).Load(_personId);
-				});
-				return person;
-			}
-		}
-
+		public IPerson Person { get { return _person; } }
 		public CultureInfo Culture { get { return Person.PermissionInformation.Culture(); } }
 	}
 }

@@ -9,17 +9,15 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 	{
 		public static IBusinessUnit BusinessUnitFromFakeState = new BusinessUnit("BusinessUnit");
 
-		public IBusinessUnit BusinessUnit { get { return BusinessUnitFromFakeState; } }
-
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			var businessUnitRepository = new BusinessUnitRepository(currentUnitOfWork);
-			businessUnitRepository.Add(BusinessUnit);
+			businessUnitRepository.Add(BusinessUnitFromFakeState);
 		}
 
 		public int HashValue()
 		{
-			return BusinessUnit.Name.GetHashCode();
+			return BusinessUnitFromFakeState.Name.GetHashCode();
 		}
 	}
 }

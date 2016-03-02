@@ -1,13 +1,11 @@
 ﻿using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -22,7 +20,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[SetUp]
 		public void Setup()
 		{
-			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(new NoPersistCallbacks(), PersonUserConfigurable.DefaultTenantName);
+			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(new NoPersistCallbacks());
 
 			var personThatCreatesTestData = PersonFactory.CreatePerson("UserThatCreatesTestData", "password");
 

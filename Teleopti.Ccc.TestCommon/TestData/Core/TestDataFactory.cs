@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 				var person = new PersonConfigurable {Name = name};
 				DataFactory.Apply(person);
 				foundPerson = new PersonDataFactory(
-					person.Person.Id.Value,
+					person.Person,
 					_unitOfWorkAction,
 					_tenantUnitOfWorkAction
 					);
