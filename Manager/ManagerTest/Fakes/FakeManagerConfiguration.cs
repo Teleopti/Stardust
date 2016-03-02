@@ -13,9 +13,12 @@ namespace ManagerTest.Fakes
 		public string ConnectionString { get; set; }
 		public string Route { get; set; }
 
-		public FakeManagerConfiguration(int allowedNodeDownTimeSeconds = 15)
+		public int CheckNewJobIntervalSeconds { get; set; }
+
+		public FakeManagerConfiguration(int allowedNodeDownTimeSeconds = 600, int checkNewJobIntervalSeconds = 10) //10 minutes
 		{
 			AllowedNodeDownTimeSeconds = allowedNodeDownTimeSeconds;
+			CheckNewJobIntervalSeconds = checkNewJobIntervalSeconds;
 		}
 	}
 }

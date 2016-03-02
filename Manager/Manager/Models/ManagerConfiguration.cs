@@ -10,9 +10,12 @@ namespace Stardust.Manager.Models
 
 		public int AllowedNodeDownTimeSeconds { get; set; }
 
-		public ManagerConfiguration(int allowedNodeDownTimeSeconds = 600) //10 minutes
+		public int CheckNewJobIntervalSeconds { get; set; }
+
+		public ManagerConfiguration(int allowedNodeDownTimeSeconds = 600, int checkNewJobIntervalSeconds = 10) //10 minutes
 		{
 			AllowedNodeDownTimeSeconds = allowedNodeDownTimeSeconds;
+			CheckNewJobIntervalSeconds = checkNewJobIntervalSeconds;
 		}
 	
 	}

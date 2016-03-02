@@ -42,11 +42,11 @@ namespace Stardust.Manager
 			_managerConfiguration = managerConfiguration;
 
 			_checkAndAssignNextJob.Elapsed += _checkAndAssignNextJob_Elapsed;
-			_checkAndAssignNextJob.Interval = 3000;
+			_checkAndAssignNextJob.Interval = _managerConfiguration.CheckNewJobIntervalSeconds * 1000;
 			_checkAndAssignNextJob.Start();
 
 			_checkHeartbeatsTimer.Elapsed += CheckHeartbeatsOnTimedEvent;
-			_checkHeartbeatsTimer.Interval = _managerConfiguration.AllowedNodeDownTimeSeconds*200;
+			_checkHeartbeatsTimer.Interval = _managerConfiguration.AllowedNodeDownTimeSeconds * 200;
 			_checkHeartbeatsTimer.Start();
 		}
 
