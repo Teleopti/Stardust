@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 
 		public static void StartApplicationAsync()
 		{
-			Http.GetAsync("");
+			new Http().GetAsync("");
 		}
 
 		public static void RecycleApplication()

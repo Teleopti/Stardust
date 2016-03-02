@@ -4,7 +4,7 @@ using Teleopti.Ccc.InfrastructureTest;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 
 namespace Teleopti.Ccc.Rta.PerformanceTest
 {
@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			base.Setup(system, configuration);
 
 			system.AddService<TestConfiguration>();
+			system.AddService<Http>();
 			system.AddService<Database>();
 			system.AddService<RtaStates>();
 			system.AddService<StatesArePersisted>();

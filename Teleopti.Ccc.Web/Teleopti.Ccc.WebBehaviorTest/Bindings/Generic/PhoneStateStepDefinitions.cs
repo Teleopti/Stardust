@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"'(.*)' sets (?:his|her) phone state to '(.*)'")]
 		public void WhenSetsHisPhoneStateToOnDatasource(string personName, string stateCode)
 		{
-			Http.PostJson(
+			new Http().PostJson(
 				"Rta/State/Change",
 				new ExternalUserStateWebModel
 				{

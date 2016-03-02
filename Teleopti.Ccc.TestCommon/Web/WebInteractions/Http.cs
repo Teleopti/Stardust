@@ -7,9 +7,9 @@ using Newtonsoft.Json;
 
 namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 {
-	public static class Http
+	public class Http
 	{
-		public static void PostJson(string url, object data)
+		public void PostJson(string url, object data)
 		{
 			var uri = new Uri(TestSiteConfigurationSetup.URL, url);
 
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			}
 		}
 
-		public static void Get(string url)
+		public void Get(string url)
 		{
 			var uri = new Uri(TestSiteConfigurationSetup.URL, url);
 
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			}
 		}
 
-		public static T GetJson<T>(string url)
+		public T GetJson<T>(string url)
 		{
 			var uri = new Uri(TestSiteConfigurationSetup.URL, url);
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			}
 		}
 
-		public static void GetAsync(string url)
+		public void GetAsync(string url)
 		{
 			var uri = new Uri(TestSiteConfigurationSetup.URL, url);
 
@@ -88,4 +88,5 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			}
 		}
 	}
+	
 }

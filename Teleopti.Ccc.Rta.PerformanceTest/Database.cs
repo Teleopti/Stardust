@@ -15,15 +15,18 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 	public class Database
 	{
 		private readonly MutableNow _now;
-		
 		private readonly TestConfiguration _testConfiguration;
+		private readonly Http _http;
 
 		public Database(
 			MutableNow now,
-			TestConfiguration testConfiguration)
+			TestConfiguration testConfiguration,
+			Http http
+			)
 		{
 			_now = now;
 			_testConfiguration = testConfiguration;
+			_http = http;
 		}
 
 		[LogTime]
@@ -31,7 +34,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 		{
 			_now.Is("2016-02-25 08:00".Utc());
 
-			Http.Get("/Test/SetCurrentTime?ticks=" + _now.UtcDateTime().Ticks);
+			_http.Get("/Test/SetCurrentTime?ticks=" + _now.UtcDateTime().Ticks);
 
 			var data = new TestDataFactory(GlobalUnitOfWorkState.UnitOfWorkAction, TenantUnitOfWorkState.TenantUnitOfWorkAction);
 

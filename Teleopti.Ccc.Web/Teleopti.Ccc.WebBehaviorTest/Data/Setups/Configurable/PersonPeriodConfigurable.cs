@@ -1,7 +1,4 @@
 using System.Globalization;
-using System.Linq;
-using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
 using Teleopti.Interfaces.Domain;

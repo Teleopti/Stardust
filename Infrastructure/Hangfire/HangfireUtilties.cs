@@ -3,7 +3,6 @@ using System.Threading;
 using Hangfire;
 using Hangfire.States;
 using Hangfire.Storage;
-using Teleopti.Ccc.Domain.Common.TimeLogger;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {

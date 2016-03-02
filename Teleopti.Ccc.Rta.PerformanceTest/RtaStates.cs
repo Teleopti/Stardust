@@ -14,11 +14,16 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 	{
 		private readonly MutableNow _now;
 		private readonly TestConfiguration _stateHolder;
+		private readonly Http _http;
 
-		public RtaStates(MutableNow now, TestConfiguration stateHolder)
+		public RtaStates(
+			MutableNow now, 
+			TestConfiguration stateHolder,
+			Http http)
 		{
 			_now = now;
 			_stateHolder = stateHolder;
+			_http = http;
 		}
 
 		[LogTime]
@@ -41,11 +46,11 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			changes.ForEach(i =>
 			{
 				_now.Is(i.Time.Utc());
-				Http.Get("/Test/SetCurrentTime?ticks=" + _now.UtcDateTime().Ticks);
+				_http.Get("/Test/SetCurrentTime?ticks=" + _now.UtcDateTime().Ticks);
 				Enumerable.Range(0, _stateHolder.NumberOfAgents)
 					.ForEach(roger =>
 					{
-						Http.PostJson(
+						_http.PostJson(
 							"Rta/State/Change",
 							new ExternalUserStateWebModel
 							{

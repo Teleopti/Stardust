@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			if (Browser.Interactions.TryCheckIfUrlContains("/Test/"))
 				Navigation.Navigation.GoToPage(url);
 			else
-				Http.Get(url);
+				new Http().Get(url);
 		}
 
 		public static void BeforeScenario()
