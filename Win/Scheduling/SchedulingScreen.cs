@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using Autofac;
+using EO.Internal;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.DayOffPlanning;
@@ -3670,7 +3671,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void createMaxSeatSkills()
 		{
 			var maxSeatSkillCreator = _container.Resolve<MaxSeatSkillCreator>();
-			var minIntervalLength = SchedulerState.SchedulingResultState.Skills.Min(s => s.DefaultResolution);
+			var skills = SchedulerState.SchedulingResultState.Skills;
+			var minIntervalLength = 15;
+
+			foreach (var skill in skills)
+			{
+				if (skill.DefaultResolution < minIntervalLength)
+					minIntervalLength = skill.DefaultResolution;
+			}
+
 			var result = maxSeatSkillCreator.CreateMaxSeatSkills(SchedulerState.RequestedPeriod.DateOnlyPeriod, SchedulerState.RequestedScenario,
 				SchedulerState.SchedulingResultState.PersonsInOrganization.ToList(), minIntervalLength);
 			result.SkillsToAddToStateholder.ForEach(s => SchedulerState.SchedulingResultState.AddSkills(s));
