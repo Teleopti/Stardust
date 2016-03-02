@@ -154,6 +154,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 
 			IPersonPeriod period = GetPersonPeriod();
+			if (period == null)
+				return 0;
 			int workDays = 0;
 			DateOnly tempDate = periodStart;
 

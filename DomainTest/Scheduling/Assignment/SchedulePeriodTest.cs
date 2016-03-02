@@ -99,6 +99,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _personAccountUpdater = _mocks.StrictMock<IPersonAccountUpdater>();
         }
 
+		[Test]
+		public void ShouldReturnZeroWorkTimePerDayWhenPeriodTimeOverrideAndSchedulePeriodStartsBeforePersonPeriod()
+		{
+			var person = PersonFactory.CreatePerson();
+			person.PermissionInformation.SetCulture(new CultureInfo("en-US"));
+			person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"))); //GMT-3
+			person.AddPersonPeriod(new PersonPeriod(new DateOnly(2016, 1, 1), _personContract, TeamFactory.CreateSimpleTeam()));
+			var periodMonth = new SchedulePeriod(new DateOnly(2015, 3, 1), SchedulePeriodType.Month, 1)
+			{
+				PeriodTime = TimeSpan.Zero
+			};
+			person.AddSchedulePeriod(periodMonth);
+
+			Assert.AreEqual(TimeSpan.Zero, periodMonth.AverageWorkTimePerDay);
+		}
+
         [Test]
         public void CanCreateAndReadProperties()
         {
