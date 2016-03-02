@@ -52,7 +52,6 @@ namespace ManagerTest
 			JobManager.CancelThisJob(jobId);
 			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(2);
 			job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
-			// how will we handle status?
 			job.Status.Should().Be.EqualTo("Canceling");
 		}
 

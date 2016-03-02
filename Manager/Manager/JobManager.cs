@@ -41,7 +41,7 @@ namespace Stardust.Manager
 			_httpSender = httpSender;
 			_managerConfiguration = managerConfiguration;
 
-			CreateCheckAndAssignNextJobTask();
+		//	CreateCheckAndAssignNextJobTask();
 
 			//_checkAndAssignNextJob.Elapsed += _checkAndAssignNextJob_Elapsed;
 			//_checkAndAssignNextJob.Interval = 10000;
@@ -54,7 +54,7 @@ namespace Stardust.Manager
 
 		public void Dispose()
 		{
-			LogHelper.LogDebugWithLineNumber(Logger, "Start disposing.");
+		//	LogHelper.LogDebugWithLineNumber(Logger, "Start disposing.");
 
 			//_checkAndAssignNextJob.Stop();
 			//_checkAndAssignNextJob.Dispose();
@@ -62,7 +62,7 @@ namespace Stardust.Manager
 			//_checkHeartbeatsTimer.Stop();
 			//_checkHeartbeatsTimer.Dispose();
 
-			LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
+		//	LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
 		}
 
 		//private void _checkAndAssignNextJob_Elapsed(object sender, ElapsedEventArgs e)
@@ -86,34 +86,34 @@ namespace Stardust.Manager
 		//	}
 		//}
 
-		private readonly object _lockCreateCheckAndAssignNextJobTask = new object();
+		//private readonly object _lockCreateCheckAndAssignNextJobTask = new object();
 
-		private Task CheckAndAssignNextJobTask { get; set; }
+		//private Task CheckAndAssignNextJobTask { get; set; }
 
-		private void CreateCheckAndAssignNextJobTask()
-		{
-			lock (_lockCreateCheckAndAssignNextJobTask)
-			{
-				CheckAndAssignNextJobTask = new Task(CheckAndAssignNextJob);
+		//private void CreateCheckAndAssignNextJobTask()
+		//{
+		//	lock (_lockCreateCheckAndAssignNextJobTask)
+		//	{
+		//		CheckAndAssignNextJobTask = new Task(CheckAndAssignNextJob);
 
-				CheckAndAssignNextJobTask.Start();
-			}
-		}
+		//		CheckAndAssignNextJobTask.Start();
+		//	}
+		//}
 
-		public void StartCheckAndAssignNextJobTask()
-		{
-			if (CheckAndAssignNextJobTask == null)
-			{
-				return;
-			}
+		//public void StartCheckAndAssignNextJobTask()
+		//{
+		//	if (CheckAndAssignNextJobTask == null)
+		//	{
+		//		return;
+		//	}
 
-			if (CheckAndAssignNextJobTask.Status == TaskStatus.Canceled ||
-			    CheckAndAssignNextJobTask.Status ==TaskStatus.Faulted ||
-			    CheckAndAssignNextJobTask.Status == TaskStatus.RanToCompletion)
-			{
-				CreateCheckAndAssignNextJobTask();
-			}				
-		}
+		//	if (CheckAndAssignNextJobTask.Status == TaskStatus.Canceled ||
+		//	    CheckAndAssignNextJobTask.Status ==TaskStatus.Faulted ||
+		//	    CheckAndAssignNextJobTask.Status == TaskStatus.RanToCompletion)
+		//	{
+		//		CreateCheckAndAssignNextJobTask();
+		//	}				
+		//}
 
 		public void CheckNodesAreAlive(TimeSpan timeSpan)
 		{

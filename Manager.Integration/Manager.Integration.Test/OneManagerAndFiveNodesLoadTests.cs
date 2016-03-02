@@ -108,7 +108,7 @@ namespace Manager.Integration.Test
 			}
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldBeAbleToExecuteThisFast()
 		{
 			LogHelper.LogDebugWithLineNumber("Start.",
