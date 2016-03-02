@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
-using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.Domain.Collection;
 
@@ -37,10 +36,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 			}
 		}
 
-		private IEnumerable<T> QueryData<T>() { return from s in _analyticsSetups where typeof(T).IsAssignableFrom(s.GetType()) select (T)s; }
-
 		public IEnumerable<IAnalyticsDataSetup> Setups { get { return _analyticsSetups; } } 
-		public T Data<T>() { return QueryData<T>().SingleOrDefault(); }
 
 	}
 }

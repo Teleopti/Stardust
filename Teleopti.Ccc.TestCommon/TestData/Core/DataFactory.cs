@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Core
@@ -22,10 +21,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 		}
 
 		public IEnumerable<IDataSetup> Applied { get { return _applied; } }
-
-		private IEnumerable<T> QueryData<T>() { return from s in _applied where typeof(T).IsAssignableFrom(s.GetType()) select (T)s; }
-
-		public T Data<T>() { return QueryData<T>().SingleOrDefault(); }
 
 	}
 }

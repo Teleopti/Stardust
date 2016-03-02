@@ -13,10 +13,5 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		{
 			TestState.TestDataFactory.Apply(setup);
 		}
-
-		public static T FindSavedData<T>()
-		{
-			return TestState.TestDataFactory.Data().Data<T>();
-		}
 	}
 }
