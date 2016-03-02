@@ -94,7 +94,7 @@ namespace Manager.Integration.Test
 		private void WaitForNodeTimeout()
 		{
 			//MUST BE CHANGED TO FIT CONFIGURATION
-			Thread.Sleep(TimeSpan.FromSeconds(40));
+			Thread.Sleep(TimeSpan.FromSeconds(65));
 		}
 
 		[Test]
@@ -110,15 +110,15 @@ namespace Manager.Integration.Test
 
 
 			LogHelper.LogDebugWithLineNumber("Waiting for all 1 nodes to start up.",
-			                                 Logger);
+											 Logger);
 
 			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 
 			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
 			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(1,
-			                                                      sqlNotiferCancellationTokenSource,
-			                                                      IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
+																  sqlNotiferCancellationTokenSource,
+																  IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
 			task.Start();
 
 			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(30));
@@ -126,7 +126,7 @@ namespace Manager.Integration.Test
 			sqlNotifier.Dispose();
 
 			LogHelper.LogInfoWithLineNumber("All 1 nodes has started.",
-			                                 Logger);
+											 Logger);
 
 
 			//---------------------------------------------

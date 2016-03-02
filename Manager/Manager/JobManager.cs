@@ -46,7 +46,7 @@ namespace Stardust.Manager
 			_checkAndAssignNextJob.Start();
 
 			_checkHeartbeatsTimer.Elapsed += CheckHeartbeatsOnTimedEvent;
-			_checkHeartbeatsTimer.Interval = _managerConfiguration.AllowedNodeDownTimeSeconds*500;
+			_checkHeartbeatsTimer.Interval = _managerConfiguration.AllowedNodeDownTimeSeconds*200;
 			_checkHeartbeatsTimer.Start();
 		}
 
