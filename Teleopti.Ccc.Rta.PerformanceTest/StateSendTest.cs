@@ -1,5 +1,3 @@
-using System;
-using System.Diagnostics;
 using NUnit.Framework;
 
 namespace Teleopti.Ccc.Rta.PerformanceTest
@@ -15,12 +13,9 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 		[Test]
 		public void MeasurePerformance()
 		{
-			var watch = Stopwatch.StartNew();
 			Database.Setup();
-			Console.WriteLine(watch.Elapsed);
 
 			RtaStates.Send();
-			Console.WriteLine(watch.Elapsed);
 		}
 	}
 }

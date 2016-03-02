@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using log4net.Config;
+using NUnit.Framework;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 
@@ -10,6 +11,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 		[SetUp]
 		public void Setup()
 		{
+			XmlConfigurator.Configure();
 			TestSiteConfigurationSetup.Setup(TestSiteConfigurationSetup.PathToIISExpress64);
 			TestDataSetup.Setup();
 		}

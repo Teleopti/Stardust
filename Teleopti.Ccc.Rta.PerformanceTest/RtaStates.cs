@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 
@@ -20,7 +21,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			_stateHolder = stateHolder;
 		}
 
-		public void Send()
+		[LogTime]
+		public virtual void Send()
 		{
 			var changes = new[]
 			{

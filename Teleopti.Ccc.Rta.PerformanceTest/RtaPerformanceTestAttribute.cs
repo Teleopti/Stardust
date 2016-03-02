@@ -30,6 +30,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			system.AddService<TestConfiguration>();
 			system.AddService<Database>();
 			system.AddService<RtaStates>();
+			system.AddService<StatesArePersisted>();
+			system.AddService<HangFireUtilitiesWrapperForLogTime>();
 		}
 	}
 }

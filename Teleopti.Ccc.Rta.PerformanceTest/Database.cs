@@ -1,6 +1,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
@@ -25,7 +26,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			_testConfiguration = testConfiguration;
 		}
 
-		public void Setup()
+		[LogTime]
+		public virtual void Setup()
 		{
 			_now.Is("2016-02-25 08:00".Utc());
 

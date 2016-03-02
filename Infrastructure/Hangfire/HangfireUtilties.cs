@@ -3,6 +3,7 @@ using System.Threading;
 using Hangfire;
 using Hangfire.States;
 using Hangfire.Storage;
+using Teleopti.Ccc.Domain.Common.TimeLogger;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 				.ScheduledJobs(0, 100)
 				.ForEach(j => _backgroundJobs.Delete(j.Key));
 		}
-
+		
 		public void WaitForQueue()
 		{
 			while (true)
