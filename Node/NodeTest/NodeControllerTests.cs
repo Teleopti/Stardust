@@ -60,10 +60,10 @@ namespace NodeTest
 			var nodeName = ConfigurationManager.AppSettings["NodeName"];
 
 			var pingToManagerIdleDelay =
-				Convert.ToDouble(ConfigurationManager.AppSettings["PingToManagerIdleDelay"]);
+				Convert.ToDouble(ConfigurationManager.AppSettings["PingToManagerIdleDelaySeconds"]);
 
 			var pingToManagerRunningDelay =
-				Convert.ToDouble(ConfigurationManager.AppSettings["PingToManagerRunningDelay"]);
+				Convert.ToDouble(ConfigurationManager.AppSettings["PingToManagerRunningDelaySeconds"]);
 
 			_nodeConfigurationFake = new NodeConfigurationFake(baseAddress,
 			                                                   managerLocation,
@@ -83,6 +83,7 @@ namespace NodeTest
 		[TestFixtureTearDown]
 		public void TestFixtureTearDown()
 		{
+			_sendJobDoneTimer.Wait.Wait(TimeSpan.FromSeconds(5)); // let job finish
 			LogHelper.LogDebugWithLineNumber(Logger, "Start TestFixtureTearDown");
 		}
 
@@ -144,8 +145,6 @@ namespace NodeTest
 
 			_nodeController.StartJob(_jobToDo);
 			var actionResult = _nodeController.TryCancelJob(wrongJobToDo.Id);
-
-			_sendJobDoneTimer.Wait.Wait(TimeSpan.FromMinutes(1));
 			Assert.IsInstanceOf(typeof (NotFoundResult),
 			                    actionResult);
 		}
@@ -167,8 +166,6 @@ namespace NodeTest
 			_nodeController.StartJob(_jobToDo);
 
 			var actionResult = _nodeController.TryCancelJob(_jobToDo.Id);
-
-			_sendJobCanceledTimer.Wait.Wait(TimeSpan.FromMinutes(1));
 
 			Assert.IsInstanceOf(typeof (OkResult),
 			                    actionResult);
@@ -237,7 +234,6 @@ namespace NodeTest
 
 			var actionResult = _nodeController.StartJob(jobToDo2);
 
-			_sendJobDoneTimer.Wait.Wait(TimeSpan.FromMinutes(1));
 			Assert.IsInstanceOf(typeof (ConflictResult),
 			                    actionResult);
 		}
@@ -257,7 +253,6 @@ namespace NodeTest
 			_nodeController = new NodeController(_workerWrapper) {Request = new HttpRequestMessage()};
 
 			var actionResult = _nodeController.StartJob(_jobToDo);
-			_sendJobDoneTimer.Wait.Wait(TimeSpan.FromMinutes(1));
 			Assert.IsInstanceOf(typeof (OkResult),
 			                    actionResult);
 		}
