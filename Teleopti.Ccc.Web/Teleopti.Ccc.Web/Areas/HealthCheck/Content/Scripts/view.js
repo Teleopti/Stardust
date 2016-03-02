@@ -58,7 +58,7 @@ define([
 				}
 			});
 		}
-		setTimeout(checkStardustJobStatus, 2000);
+		setTimeout(checkStardustJobStatus, 5000);
 	}
 
 	function checkStardustJobStatus() {
@@ -70,7 +70,7 @@ define([
 
 			vm.TimesChecked++;
 
-			setTimeout(checkStatus, 2000);
+			setTimeout(checkStatus, 5000);
 		
 	}
 	
