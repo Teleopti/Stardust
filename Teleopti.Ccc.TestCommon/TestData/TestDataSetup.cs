@@ -2,7 +2,6 @@
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Interfaces.Domain;
@@ -30,14 +29,11 @@ namespace Teleopti.Ccc.TestCommon.TestData
 				DefaultBusinessUnit.BusinessUnitFromFakeState,
 				new ThreadPrincipalContext()
 				);
+			GlobalUnitOfWorkState.CurrentUnitOfWorkFactory = UnitOfWorkFactory.CurrentUnitOfWorkFactory();
 			GlobalPrincipalState.Principal = Thread.CurrentPrincipal as TeleoptiPrincipal;
 
 			var defaultData = new DefaultData();
-			new WithUnitOfWork(CurrentUnitOfWorkFactory.Make()).Do(() =>
-			{
-				var dataFactory = new DataFactory(CurrentUnitOfWork.Make());
-				defaultData.ForEach(dataSetup => dataFactory.Apply(dataSetup));
-			});
+			defaultData.ForEach(dataSetup => GlobalDataMaker.Data().Apply(dataSetup));
 
 			_dataHash = defaultData.HashValue;
 			DataSourceHelper.BackupCcc7Database(_dataHash);
