@@ -6,6 +6,7 @@ SET CCC7DB=%~1
 SET AnalyticsDB=%~2
 SET ToggleMode=%~3
 set configuration=%4
+set sqlAuthString=%5
 set MSBUILD="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
 
 if "%configuration%"=="" (
@@ -18,6 +19,10 @@ SET CCC7DB=Infratest_CCC7
 
 if "%AnalyticsDB%" == "" (
 SET AnalyticsDB=Infratest_Analytics
+)
+
+if %sqlAuthString% == "" (
+SET sqlAuthString=Data Source=.;Integrated Security=SSPI
 )
 
 if "%ToggleMode%" == "" (
@@ -40,6 +45,7 @@ ECHO $(DB_CCC7)^|%CCC7DB%>>"%AppliedSettings%"
 ECHO $(DB_ANALYTICS)^|%AnalyticsDB%>>"%AppliedSettings%"
 ECHO $(AS_DATABASE)^|%AnalyticsDB%>>"%AppliedSettings%"
 ECHO $(ToggleMode)^|%ToggleMode%>>"%AppliedSettings%"
+ECHO $(SQL_AUTH_STRING)^|%sqlAuthString%>>"%AppliedSettings%"
 
 ::Run supportTool to replace all config
 "%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -MOTEST

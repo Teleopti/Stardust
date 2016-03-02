@@ -1,14 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<appSettings>
-		<add key="SitePath" value="..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web"/>
-		<add key="WEB_BROKER_BACKPLANE" value="" />
-		<add key="TOGGLE_MODE" value="ALL" />
-		
-		<!-- These needs to be set dynamically on build machine -->
-		<add key="DB_ANALYTICS" value="YourAnalyticsDb" />
-		<add key="DB_CCC7" value="YourAppDb" />
-		<add key="SQL_AUTH_STRING" value="Data Source=.;Integrated Security=SSPI" />
+		<!-- 
+		First configure web.config to point to the db you want to run your tests against
+		(either manually or using infratestconfig.bat), then change values below to match your db.
+		-->
+	
 		<add key="UserName" value="logonName"/>
 		<add key="Password" value="logonPassword"/>
 		<add key="BusinessUnitName" value="TheBusinessUnit name"/>
