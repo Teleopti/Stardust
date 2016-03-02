@@ -5,11 +5,15 @@ using System.Linq;
 using System.Net;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
+using System.Web.Http.Results;
 using Microsoft.VisualBasic.Devices;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
@@ -23,12 +27,18 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		private readonly IMessagePopulatingServiceBusSender _populatingPublisher;
 		private readonly IEtlJobStatusRepository _etlJobStatusRepository;
 		private readonly IEtlLogObjectRepository _etlLogObjectRepository;
+		private readonly StardustSender _stardustSender;
+		private readonly IToggleManager _toggleManager;
 
-		public HealthCheckApiController(IMessagePopulatingServiceBusSender populatingPublisher, IEtlJobStatusRepository etlJobStatusRepository, IEtlLogObjectRepository etlLogObjectRepository)
+		public HealthCheckApiController(IMessagePopulatingServiceBusSender populatingPublisher,
+												  IEtlJobStatusRepository etlJobStatusRepository, IEtlLogObjectRepository etlLogObjectRepository,
+												  StardustSender stardustSender, IToggleManager toggleManager)
 		{
 			_populatingPublisher = populatingPublisher;
 			_etlJobStatusRepository = etlJobStatusRepository;
 			_etlLogObjectRepository = etlLogObjectRepository;
+			_stardustSender = stardustSender;
+			_toggleManager = toggleManager;
 		}
 
 		[HttpGet, UnitOfWork, Route("api/HealthCheck/CheckBus")]
@@ -121,6 +131,16 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 							})
 						}
 					}});
+		}
+
+		[HttpGet, UnitOfWork, Route("HealthCheck/CheckStardust")]
+		public virtual IHttpActionResult CheckStardust()
+		{
+			var id = Guid.Empty;
+			if(_toggleManager.IsEnabled(Toggles.Wfm_Use_Stardust))
+				id = _stardustSender.Send(new StardustHealthCheckEvent(), "Stardust healthcheck", "HealthCheck",
+													typeof (StardustHealthCheckEvent).ToString());
+			return Ok(id);
 		}
 	}
 }

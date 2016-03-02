@@ -199,6 +199,7 @@
     <Compile Include="ApplicationLayer\Events\DayUnscheduledEvent.cs" />
     <Compile Include="ApplicationLayer\Events\EventAdherence.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduleOnNode.cs" />
+    <Compile Include="ApplicationLayer\Events\StardustHealthCheckEvent.cs" />
     <Compile Include="ApplicationLayer\Events\TenantHearbeatEvent.cs" />
     <Compile Include="ApplicationLayer\Events\IRunOnHangfire.cs" />
     <Compile Include="ApplicationLayer\Events\ITrackInfo.cs" />

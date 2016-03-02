@@ -2,21 +2,17 @@
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models;
-using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Views;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters;
+using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Views;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
 {
@@ -33,7 +29,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
 		private IJobResultRepository _jobResultRep;
 		private IMessagePopulatingServiceBusSender _messageSender;
 		private IToggleManager _toggleMan;
-		private IPostHttpRequest _httpPost;
+		private IStardustSender _stardustSender;
 
 		[SetUp]
 		public void Setup()
@@ -47,9 +43,9 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
 			_jobResultRep = MockRepository.GenerateMock<IJobResultRepository>();
 			_messageSender = MockRepository.GenerateMock<IMessagePopulatingServiceBusSender>();
 			_toggleMan = MockRepository.GenerateMock<IToggleManager>();
-			_httpPost = MockRepository.GenerateMock<IPostHttpRequest>();
+			_stardustSender = MockRepository.GenerateMock<IStardustSender>();
 			_target = new ImportForecastPresenter(_view, _model, _saveImportForecastFileCommand,
-				_validateImportForecastFileCommand, _uowFactory, _jobResultRep, _messageSender,_httpPost, _toggleMan);
+				_validateImportForecastFileCommand, _uowFactory, _jobResultRep, _messageSender, _stardustSender, _toggleMan);
 		}
 
 		[Test]
@@ -134,7 +130,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
 		}
 
 		[Test]
-		public void ShouldSendToJobMangerIfToggleOn()
+		public void ShouldSendToJobManagerIfToggleOn()
 		{
 			string fileName = "C:\\Test.csv";
 			Guid jobId = Guid.NewGuid();
@@ -150,7 +146,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
 			uow.Stub(x => x.PersistAll());
 
 			_toggleMan.Stub(x => x.IsEnabled(Toggles.Wfm_Use_Stardust)).Return(true);
-			_httpPost.Stub(x => x.Send<Guid>("", "")).IgnoreArguments().Return(Guid.NewGuid());
+			_stardustSender.Stub(x => x.Send(null, "","", "")).IgnoreArguments().Return(Guid.NewGuid());
 			_messageSender.AssertWasNotCalled((x => x.Send(null, true)));
 
 			_view.Stub(x => x.ShowStatusDialog(jobId));

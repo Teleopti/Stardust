@@ -58,11 +58,17 @@
 							<p class="list-group-item-text" data-bind="text: 'Procedure name: ' + proc_name"></p>
 						</li>
 					</ul>
+					<h3>Stardust Status</h3>
+					<li class="list-group-item configured-url" data-bind="css: { 'list-group-item-success': StardustSuccess() == true }">
+						<span data-bind="visible: StardustSuccess()">Success</span>
+						<i class="pull-right glyphicon glyphicon-ok" data-bind="visible: StardustSuccess()"></i>
+					</li>
+
 					<h3>ETL history</h3>
 					<ul class="list-group etl-history" data-bind="foreach: etlJobHistory">
 						<li class="list-group-item" data-bind="css: { 'list-group-item-danger': exception_msg }">
 							<h4 class="list-group-item-heading" data-bind="text: new Date(job_start_time).toISOString()"></h4>
-							<h4 class="list-group-item-heading" data-bind="text: schedule_name + ' > ' + job_name + ' > ' + jobstep_name + ' [BU: ' + business_unit_name + ']'"></h4>
+							<h4 class="list-group-item-heading" data-bind="text: schedule_name + ' > ' + job_name + ' > ' + jobstep_name + ' BU: ' + business_unit_name"></h4>
 							<p class="list-group-item-text" data-bind="text: 'Affected rows: ' + jobstep_affected_rows + ', Duration: ' + jobstep_duration_s"></p>
 							<!-- ko if: exception_msg -->
 							<p class="list-group-item-text"><b data-bind="text: exception_msg"></b></p>

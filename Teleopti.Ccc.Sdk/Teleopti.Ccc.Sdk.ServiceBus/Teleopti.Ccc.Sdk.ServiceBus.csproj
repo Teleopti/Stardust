@@ -243,6 +243,7 @@
     <Compile Include="NodeHandlers\RunSchedulingHandler.cs" />
     <Compile Include="NodeHandlers\ImportForecastFromFileHandler.cs" />
     <Compile Include="NodeHandlers\NodeHandlersModule.cs" />
+    <Compile Include="NodeHandlers\StardustHealthCheckHandler.cs" />
     <Compile Include="PayrollBusBootStrapper.cs" />
     <Compile Include="Payroll\InitializePayrollFormatsToDb.cs" />
     <Compile Include="Rta\FactQueueUpdatedConsumer.cs" />

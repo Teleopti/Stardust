@@ -10,7 +10,12 @@ using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public class StardustSender
+	public interface IStardustSender
+	{
+		Guid Send(EventWithInfrastructureContext @event, string jobName, string userName, string type);
+	}
+
+	public class StardustSender : IStardustSender
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(StardustSender));
 		private readonly IPostHttpRequest _postHttpRequest;

@@ -17,6 +17,10 @@ define([
 		self.busResults = ko.observable();
 		self.logObjects = ko.observable();
 		self.checkBusEnabled = ko.observable(true);
+		self.checkBusEnabled = ko.observable(true);
+		self.StardustJobId = ko.observable('');
+		self.StardustSuccess = ko.observable(false);
+		self.TimesChecked = 0;
 
 		var subscribe = function (options) {
 			var deferred = $.Deferred();

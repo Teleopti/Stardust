@@ -22,14 +22,14 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly IMessagePopulatingServiceBusSender _messageSender;
-		private readonly StardustSender _stardustSender;
+		private readonly IStardustSender _stardustSender;
 		private readonly IToggleManager _toggleManager;
 
 		public ImportForecastPresenter(IImportForecastView view, ImportForecastModel model,
 			ISaveImportForecastFileCommand saveImportForecastFileCommand,
 			IValidateImportForecastFileCommand validateImportForecastFileCommand, IUnitOfWorkFactory unitOfWorkFactory,
 			IJobResultRepository jobResultRepository, IMessagePopulatingServiceBusSender messageSender,
-			StardustSender stardustSender, IToggleManager toggleManager)
+			IStardustSender stardustSender, IToggleManager toggleManager)
 		{
 			_view = view;
 			_model = model;
