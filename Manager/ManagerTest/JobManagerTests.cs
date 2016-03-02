@@ -183,7 +183,6 @@ namespace ManagerTest
 
 			NodeManager.FreeJobIfAssingedToNode(_nodeUri1);
 			job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
-			// how will we handle status?
 			job.AssignedNode.Should().Be.Null();
 		}
 
