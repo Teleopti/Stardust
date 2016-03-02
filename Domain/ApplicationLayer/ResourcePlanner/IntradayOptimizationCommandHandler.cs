@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			var period = planningPeriod.Range;
 
 			var setupResult = _webSchedulingSetup.Setup(period);
-			_eventPublisher.Publish(new OptimizationWasOrdered { Period = period, Agents = setupResult.PeopleSelection.AllPeople.Select(x => x.Id.Value) });
+			_eventPublisher.Publish(new OptimizationWasOrdered { Period = period, AgentIds = setupResult.PeopleSelection.AllPeople.Select(x => x.Id.Value) });
 			return _optimizationResult.Create(period);
 		}
 	}

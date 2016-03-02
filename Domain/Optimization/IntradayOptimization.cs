@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var optimizationPreferences = _optimizationPreferencesFactory.Create();
 			var dayOffOptimizationPreference = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 
-			var agents = _schedulerStateHolder().AllPermittedPersons.Where(x => @event.Agents.Contains(x.Id.Value)).ToList();
+			var agents = _schedulerStateHolder().AllPermittedPersons.Where(x => @event.AgentIds.Contains(x.Id.Value)).ToList();
 
 			var schedules = new List<IScheduleDay>();
 			foreach (var date in @event.Period.DayCollection())
@@ -64,8 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
 				_intradayOptimizerContainer.Execute(optimizers);
-				_weeklyRestSolverExecuter.Resolve(optimizationPreferences, @event.Period, schedules,
-					agents, dayOffOptimizationPreference);
+				_weeklyRestSolverExecuter.Resolve(optimizationPreferences, @event.Period, schedules, agents, dayOffOptimizationPreference);
 			}
 		}
 	}
