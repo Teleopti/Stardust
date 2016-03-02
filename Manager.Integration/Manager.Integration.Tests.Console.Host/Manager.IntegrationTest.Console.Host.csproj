@@ -120,6 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\ManagerRouteConstants.cs" />
+    <Compile Include="Diagnostics\ManagerIntegrationStopwatch.cs" />
     <Compile Include="Helpers\HttpSender.cs" />
     <Compile Include="Helpers\LogHelper.cs" />
     <Compile Include="IntegrationController.cs" />

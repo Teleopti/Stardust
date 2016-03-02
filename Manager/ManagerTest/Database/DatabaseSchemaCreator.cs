@@ -31,7 +31,7 @@ namespace ManagerTest.Database
 				// What to catch and throw here?! 
 
 				var sql = File.ReadAllText(scriptFile.file.FullName);
-				sql = replaceScriptTags(sql, databaseName);
+				sql = ReplaceScriptTags(sql, databaseName);
 				_executeSql.ExecuteNonQuery(sql, 10800);
 				//try
 				//	{
@@ -45,7 +45,7 @@ namespace ManagerTest.Database
 		}
 
 		//should be handled smartly
-		private string replaceScriptTags(string script, string name)
+		private string ReplaceScriptTags(string script, string name)
 		{
 			script = script.Replace("$(DBNAME)", name);
 			return script;

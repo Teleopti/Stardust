@@ -183,6 +183,7 @@ namespace Stardust.Manager
 
 				return listToReturn;
 			}
+
 			catch (Exception exp)
 			{
 				LogHelper.LogErrorWithLineNumber(Logger, exp.Message, exp);

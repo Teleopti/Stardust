@@ -26,7 +26,7 @@ namespace ManagerTest.Database
 			try
 			{
 				var script = File.ReadAllText(scriptFilePath + "CreateDB.sql");
-				script = replaceScriptTags(script, databaseName);
+				script = ReplaceScriptTags(script, databaseName);
 				_executeMaster.ExecuteTransactionlessNonQuery(script, 10800);
 			}
 			catch
@@ -34,7 +34,7 @@ namespace ManagerTest.Database
 			}
 		}
 
-		private string replaceScriptTags(string script, string name)
+		private string ReplaceScriptTags(string script, string name)
 		{
 			script = script.Replace("$(DBNAME)", name);
 			return script;

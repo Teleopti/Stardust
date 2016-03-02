@@ -29,7 +29,7 @@ namespace Stardust.Manager
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var response =
+                    HttpResponseMessage response =
                         await client.PostAsync(url,
                                                new StringContent(sez,
                                                                  Encoding.Unicode,
@@ -121,12 +121,10 @@ namespace Stardust.Manager
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var response =
-                        await client.GetAsync(url,
-                                              HttpCompletionOption.ResponseHeadersRead)
-                            .ConfigureAwait(false);
-                    
-                    return response.IsSuccessStatusCode;
+                    HttpResponseMessage response =
+                        await client.GetAsync(url).ConfigureAwait(false);
+
+	                return response.IsSuccessStatusCode;
                 }
             }
 
@@ -145,6 +143,7 @@ namespace Stardust.Manager
 
                 throw;
             }
+
             LogHelper.LogDebugWithLineNumber(Logger,
                                                     "Return false");
             return false;

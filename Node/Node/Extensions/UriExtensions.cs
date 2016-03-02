@@ -9,6 +9,8 @@ using log4net;
 using Newtonsoft.Json;
 using Stardust.Node.Constants;
 using Stardust.Node.Helpers;
+using Stardust.Node.Interfaces;
+using Stardust.Node.Workers;
 
 namespace Stardust.Node.Extensions
 {
@@ -56,55 +58,12 @@ namespace Stardust.Node.Extensions
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
-			//----------------------------------------------
-			// Call API.
-			//----------------------------------------------
-			using (var client = new HttpClient())
-			{
-				client.DefineDefaultRequestHeaders();
+			IHttpSender httpSender = new HttpSender();
 
-				var sez = JsonConvert.SerializeObject(uri);
-
-				var str = new StringContent(sez,
-				                            Encoding.Unicode,
-				                            MediaTypeConstants.ApplicationJson);
-
-				try
-				{
-					var response = await client.PostAsync(apiEndpoint,
-					                                      str,
+			return await httpSender.PostAsync(apiEndpoint, 
+										      uri, 
 					                                      cancellationToken);
-					return response;
-				}
-	
-				catch (Exception exp)
-				{
-					if (exp.InnerException.GetType() == typeof (WebException))
-					{
-						LogHelper.LogWarningWithLineNumber(Logger, exp.InnerException.Message + " " + apiEndpoint);
-					}
-					else
-					{
-						LogHelper.LogErrorWithLineNumber(Logger,
-													 exp.Message,
-													 exp);
-					}
-				}
-			}
 
-			LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
-
-			return null;
-		}
-
-		private static void DefineDefaultRequestHeaders(this HttpClient client)
-		{
-			// Validate.
-			client.ThrowArgumentExceptionWhenNull();
-
-			// Create request headers.
-			client.DefaultRequestHeaders.Accept.Clear();
-			client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeConstants.ApplicationJson));
 		}
 	}
 }

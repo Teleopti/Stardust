@@ -87,10 +87,11 @@ namespace Stardust.Node.Timers
 			try
 			{
 				LogHelper.LogDebugWithLineNumber(Logger,
-				                                 "Trying to send init to manager. Manager Uri : ( " + CallbackToManagerTemplateUri + " )");
+				                                 "Trying to send init to manager. Manager Uri : ( " + CallbackToManagerTemplateUri +
+				                                 " )");
 				var httpResponseMessage =
 					await TrySendNodeStartUpToManager(NodeConfiguration.BaseAddress,
-													  CallbackToManagerTemplateUri,
+					                                  CallbackToManagerTemplateUri,
 					                                  CancellationTokenSource.Token);
 
 				if (httpResponseMessage.IsSuccessStatusCode)
@@ -110,7 +111,7 @@ namespace Stardust.Node.Timers
 			catch
 			{
 				LogHelper.LogWarningWithLineNumber(Logger,
-				                                 WhoAmI + ": Node start up notification to manager failed.");
+				                                   WhoAmI + ": Node start up notification to manager failed.");
 			}
 		}
 	}

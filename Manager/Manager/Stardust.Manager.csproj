@@ -108,6 +108,7 @@
     <Compile Include="AppBuilderExtension.cs" />
     <Compile Include="Constants\ManagerRouteConstans.cs" />
     <Compile Include="Constants\NodeRouteConstants.cs" />
+    <Compile Include="Diagnostics\ManagerStopWatch.cs" />
     <Compile Include="GlobalExceptionLogger.cs" />
     <Compile Include="Helpers\LogHelper.cs" />
     <Compile Include="Helpers\NodeUriBuilderHelper.cs" />

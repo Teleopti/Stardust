@@ -10,11 +10,10 @@ using log4net.Config;
 using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Notifications;
-using Manager.Integration.Test.Properties;
-using Manager.Integration.Test.Scripts;
 using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Timers;
 using Manager.Integration.Test.Validators;
+using Manager.IntegrationTest.Console.Host.Diagnostics;
 using NUnit.Framework;
 
 namespace Manager.Integration.Test
@@ -483,14 +482,23 @@ namespace Manager.Integration.Test
 
 			var startJobTaskHelper = new StartJobTaskHelper();
 
+			var managerIntegrationStopwatch = new ManagerIntegrationStopwatch();
+
 			var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
 			                                                          CancellationTokenSource,
 			                                                          timeout);
 
+
 			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
+			var elapsedTime =
+				managerIntegrationStopwatch.GetTotalElapsedTimeInSeconds();
+
+			LogHelper.LogDebugWithLineNumber("Job took : " + elapsedTime + " seconds.",
+			                                 Logger);
+
 			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count,
-						"Number of requests must be equal.");
+			              "Number of requests must be equal.");
 
 			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
 

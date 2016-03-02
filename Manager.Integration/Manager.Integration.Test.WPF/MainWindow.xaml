@@ -123,7 +123,7 @@
                                     <DataTrigger Binding="{Binding Level}"
                                                  Value="FATAL">
                                         <Setter Property="Background"
-                                                Value="DarkRed" />
+                                                Value="Red" />
                                         <Setter Property="Foreground"
                                                 Value="White" />
                                     </DataTrigger>
@@ -281,6 +281,14 @@
                                                 Value="Black" />
                                     </DataTrigger>
 
+                                    <DataTrigger Binding="{Binding Result}"
+                                                 Value="Failed">
+                                        <Setter Property="Background"
+                                                Value="Red" />
+                                        <Setter Property="Foreground"
+                                                Value="White" />
+                                    </DataTrigger>
+
                                 </Style.Triggers>
                             </Style>
                         </DataGrid.RowStyle>
@@ -303,20 +311,20 @@
                                                 ClipboardContentBinding="{Binding Name}"
                                                 Header="Job name" />
 
-                            <DataGridTextColumn Binding="{Binding Created, StringFormat=yyyy-mm-dd hh:mm:ss}"
-                                                ClipboardContentBinding="{Binding Created, StringFormat=yyyy-mm-dd hh:mm:ss}"
+                            <DataGridTextColumn Binding="{Binding Created, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                ClipboardContentBinding="{Binding Created, StringFormat=yyyy-MM-dd HH:mm:ss}"
                                                 Header="Created" />
 
                             <DataGridTextColumn Binding="{Binding Result}"
                                                 ClipboardContentBinding="{Binding Result}"
                                                 Header="Result" />
 
-                            <DataGridTextColumn Binding="{Binding Started, StringFormat=yyyy-mm-dd hh:mm:ss}"
-                                                ClipboardContentBinding="{Binding Started, StringFormat=yyyy-mm-dd hh:mm:ss}"
+                            <DataGridTextColumn Binding="{Binding Started, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                ClipboardContentBinding="{Binding Started, StringFormat=yyyy-MM-dd HH:mm:ss}"
                                                 Header="Started" />
 
-                            <DataGridTextColumn Binding="{Binding Ended, StringFormat=yyyy-mm-dd hh:mm:ss}"
-                                                ClipboardContentBinding="{Binding Ended, StringFormat=yyyy-mm-dd hh:mm:ss}"
+                            <DataGridTextColumn Binding="{Binding Ended, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                ClipboardContentBinding="{Binding Ended, StringFormat=yyyy-MM-dd HH:mm:ss}"
                                                 Header="Ended" />
 
                             <DataGridTextColumn Binding="{Binding Type}"
@@ -351,6 +359,14 @@
                                                 Value="Black" />
                                     </DataTrigger>
 
+                                    <DataTrigger Binding="{Binding Result}"
+                                                 Value="Failed">
+                                        <Setter Property="Background"
+                                                Value="Red" />
+                                        <Setter Property="Foreground"
+                                                Value="White" />
+                                    </DataTrigger>
+
                                 </Style.Triggers>
                             </Style>
                         </DataGrid.RowStyle>
@@ -373,20 +389,20 @@
                                                 ClipboardContentBinding="{Binding Name}"
                                                 Header="Job name" />
 
-                            <DataGridTextColumn Binding="{Binding Created, StringFormat=yyyy-mm-dd hh:mm:ss}"
-                                                ClipboardContentBinding="{Binding Created, StringFormat=yyyy-mm-dd hh:mm:ss}"
+                            <DataGridTextColumn Binding="{Binding Created, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                ClipboardContentBinding="{Binding Created, StringFormat=yyyy-MM-dd HH:mm:ss}"
                                                 Header="Created" />
 
                             <DataGridTextColumn Binding="{Binding Result}"
                                                 ClipboardContentBinding="{Binding Result}"
                                                 Header="Result" />
 
-                            <DataGridTextColumn Binding="{Binding Started, StringFormat=yyyy-mm-dd hh:mm:ss}"
-                                                ClipboardContentBinding="{Binding Started, StringFormat=yyyy-mm-dd hh:mm:ss}"
+                            <DataGridTextColumn Binding="{Binding Started, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                ClipboardContentBinding="{Binding Started, StringFormat=yyyy-MM-dd HH:mm:ss}"
                                                 Header="Started" />
 
-                            <DataGridTextColumn Binding="{Binding Ended, StringFormat=yyyy-mm-dd hh:mm:ss}"
-                                                ClipboardContentBinding="{Binding Ended, StringFormat=yyyy-mm-dd hh:mm:ss}"
+                            <DataGridTextColumn Binding="{Binding Ended, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                ClipboardContentBinding="{Binding Ended, StringFormat=yyyy-MM-dd HH:mm:ss}"
                                                 Header="Ended" />
 
                             <DataGridTextColumn Binding="{Binding Type}"
@@ -452,8 +468,8 @@
                                 </DataGridTextColumn.Binding>
                             </DataGridTextColumn>
 
-                            <DataGridTextColumn Binding="{Binding Created, StringFormat=yyyy-mm-dd hh:mm:ss}"
-                                                ClipboardContentBinding="{Binding Created, StringFormat=yyyy-mm-dd hh:mm:ss}"
+                            <DataGridTextColumn Binding="{Binding Created, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                ClipboardContentBinding="{Binding Created, StringFormat=yyyy-MM-dd HH:mm:ss}"
                                                 Header="Created" />
 
                             <DataGridTextColumn Binding="{Binding JobId}"

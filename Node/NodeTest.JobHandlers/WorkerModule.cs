@@ -10,6 +10,11 @@ namespace NodeTest.JobHandlers
 			builder.RegisterType<TestJobCode>();
 			builder.RegisterType<TestJobParams>();
 			builder.RegisterType<TestJobWorker>().As<IHandle<TestJobParams>>();
+
+			builder.RegisterType<FastJobParams>();
+			builder.RegisterType<FastJobCode>();
+			builder.RegisterType<FastJobWorker>().As<IHandle<FastJobParams>>();
+
 			builder.RegisterType<LongRunningJobWorker>().As<IHandle<LongRunningJobParams>>();
 			builder.RegisterType<FailingJobWorker>().As<IHandle<FailingJobParams>>();
 

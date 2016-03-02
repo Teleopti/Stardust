@@ -25,7 +25,7 @@ namespace ManagerTest.Database
 			_createScriptPath = ConfigurationManager.AppSettings["CreateScriptPath"];
 			_schemaScriptsPath = ConfigurationManager.AppSettings["ReleaseScriptPath"];
 			_masterDatabaseName = "master";
-			var executeMaster = new ExecuteSql(() => openConnection(true));
+			var executeMaster = new ExecuteSql(() => OpenConnection(true));
 
 			_databaseSchemaCreator = new DatabaseSchemaCreator(new SchemaVersionInformation(), executeMaster);
 			_databaseCreator = new DatabaseCreator(executeMaster);
@@ -37,7 +37,7 @@ namespace ManagerTest.Database
 			_databaseSchemaCreator.ApplyReleases(_schemaScriptsPath, _databaseName);
 		}
 
-		private SqlConnection openConnection(bool masterDb = false)
+		private SqlConnection OpenConnection(bool masterDb = false)
 		{
 			var connectionStringBuilder = new SqlConnectionStringBuilder(_connectionString);
 			if (masterDb)
