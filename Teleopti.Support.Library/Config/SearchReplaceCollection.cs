@@ -54,21 +54,24 @@ namespace Teleopti.Support.Library.Config
 			foreach (var searchReplace in _searchReplaces)
 			{
 				var replaceWith = searchReplace.ReplaceWith;
+
+				// replace appsetting and xml comment before "normal" tags
+				var name = searchReplace.SearchFor.Replace("$(", "").Replace(")", "");
+				yield return xmlAppSetting(name, searchReplace.ReplaceWith);
+				yield return xmlComment(name, searchReplace.ReplaceWith);
+
 				// this cant be good, but I wont change the behavior
 				// (c150de6ca27c) #31623 Support tool crashes during installation if the impersonation password includes a special character
 				if (searchReplace.SearchFor == "$(PM_ANONYMOUS_PWD)")
 					yield return new SearchReplace(searchReplace.SearchFor, xmlEscape(replaceWith));
 				else
 					yield return searchReplace;
-				var name = searchReplace.SearchFor.Replace("$(", "").Replace(")", "");
-				yield return xmlComment(name, searchReplace.ReplaceWith);
-				yield return xmlAppSetting(name, searchReplace.ReplaceWith);
 			}
 		}
 
 		private SearchReplace xmlComment(string name, string replaceWith)
 		{
-			var searchFor = string.Format("<!--$({0}XmlComment)-->", name);
+			var searchFor = string.Format("<!--$({0})-->", name);
 			return new SearchReplace(searchFor, replaceWith);
 		}
 
