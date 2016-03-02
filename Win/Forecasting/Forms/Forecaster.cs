@@ -1490,6 +1490,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 			}
 
+			if (backgroundWorkerSave.IsBusy)
+			{
+				e.Cancel = true;
+				return;
+			}
+
 			base.OnFormClosing(e);
 			if (checkToClose())
 			{
