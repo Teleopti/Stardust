@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http.Results;
 using ManagerTest.Database;
@@ -67,17 +68,6 @@ namespace ManagerTest
 				.Key.Should()
 				.Contain(_nodeUri1.ToString());
 		}
-
-		[Test]
-		public void ShouldAddANodeOnInit()
-		{
-			Target.NodeInitialized(_nodeUri1);
-			NodeRepository.LoadAll()
-				.First()
-				.Url.Should()
-				.Be.EqualTo(_nodeUri1.ToString());
-		}
-
 
 		[Test]
 		public void ShouldBeAbleToAcknowledgeWhenJobIsReceived()
@@ -197,16 +187,6 @@ namespace ManagerTest
 		}
 
 		[Test]
-		public void ShouldNotAddSameNodeTwiceInInit()
-		{
-			Target.NodeInitialized(_nodeUri1);
-			Target.NodeInitialized(_nodeUri1);
-			NodeRepository.LoadAll()
-				.Count.Should()
-				.Be.EqualTo(1);
-		}
-
-		[Test]
 		public void ShouldNotRemoveARunningJobFromRepo()
 		{
 			var jobId = Guid.NewGuid();
@@ -228,26 +208,6 @@ namespace ManagerTest
 			var job = new JobDefinition {Name = "", Serialized = "", Type = "", UserName = "ManagerTests", Id = jobId};
 			JobRepository.Add(job);
 			Target.CancelThisJob(jobId);
-			JobRepository.LoadAll()
-				.Count.Should()
-				.Be.EqualTo(0);
-		}
-
-		[Test]
-		public void ShouldRemoveTheJobWhenItsFinished()
-		{
-			var jobId = Guid.NewGuid();
-			var job = new JobDefinition
-			{
-				Id = jobId,
-				AssignedNode = _nodeUri1.ToString(),
-				Name = "job",
-				Serialized = "",
-				Type = "",
-				UserName = "ShouldRemoveTheJobWhenItsFinished"
-			};
-			JobRepository.Add(job);
-			Target.JobDone(job.Id);
 			JobRepository.LoadAll()
 				.Count.Should()
 				.Be.EqualTo(0);

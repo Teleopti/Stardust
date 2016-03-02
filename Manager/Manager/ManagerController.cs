@@ -109,7 +109,6 @@ namespace Stardust.Manager
 				Task.Factory.StartNew(() =>
 				{
 					_jobManager.RegisterHeartbeat(nodeUri.ToString());
-				//	_jobManager.CheckAndAssignNextJob();
 				});
 
 				LogHelper.LogInfoWithLineNumber(Logger,
@@ -198,6 +197,7 @@ namespace Stardust.Manager
 			{
 			_nodeManager.FreeJobIfAssingedToNode(nodeUri);
 			_nodeManager.AddIfNeeded(nodeUri);
+			_jobManager.StartCheckAndAssignNextJobTask();
 			});
 
 			LogHelper.LogInfoWithLineNumber(Logger,

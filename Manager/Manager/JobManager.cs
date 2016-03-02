@@ -17,9 +17,6 @@ namespace Stardust.Manager
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (JobManager));
 
 		private readonly Timer _checkAndAssignNextJob = new Timer();
-
-		private readonly object _checkAndAssignNextJobLock = new object();
-
 		private readonly Timer _checkHeartbeatsTimer = new Timer();
 
 		private readonly IHttpSender _httpSender;
@@ -47,12 +44,12 @@ namespace Stardust.Manager
 			CreateCheckAndAssignNextJobTask();
 
 			_checkAndAssignNextJob.Elapsed += _checkAndAssignNextJob_Elapsed;
-			_checkAndAssignNextJob.Interval = 5000;
+			_checkAndAssignNextJob.Interval = 10000;
 			_checkAndAssignNextJob.Start();
 
-			//_checkHeartbeatsTimer.Elapsed += OnTimedEvent;
-			//_checkHeartbeatsTimer.Interval = _managerConfiguration.AllowedNodeDownTimeSeconds*500;
-			//_checkHeartbeatsTimer.Start();
+			_checkHeartbeatsTimer.Elapsed += OnTimedEvent;
+			_checkHeartbeatsTimer.Interval = _managerConfiguration.AllowedNodeDownTimeSeconds*500;
+			_checkHeartbeatsTimer.Start();
 		}
 
 		public void Dispose()
