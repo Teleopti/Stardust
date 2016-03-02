@@ -16,7 +16,7 @@ namespace Stardust.Manager
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (JobManager));
 
-	//	private readonly Timer _checkAndAssignNextJob = new Timer();
+		private readonly Timer _checkAndAssignNextJob = new Timer();
 	//	private readonly Timer _checkHeartbeatsTimer = new Timer();
 
 		private readonly IHttpSender _httpSender;
@@ -43,9 +43,9 @@ namespace Stardust.Manager
 
 		//	CreateCheckAndAssignNextJobTask();
 
-			//_checkAndAssignNextJob.Elapsed += _checkAndAssignNextJob_Elapsed;
-			//_checkAndAssignNextJob.Interval = 10000;
-			//_checkAndAssignNextJob.Start();
+			_checkAndAssignNextJob.Elapsed += _checkAndAssignNextJob_Elapsed;
+			_checkAndAssignNextJob.Interval = 2000;
+			_checkAndAssignNextJob.Start();
 
 			//_checkHeartbeatsTimer.Elapsed += OnTimedEvent;
 			//_checkHeartbeatsTimer.Interval = _managerConfiguration.AllowedNodeDownTimeSeconds*500;
@@ -65,26 +65,26 @@ namespace Stardust.Manager
 		//	LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
 		}
 
-		//private void _checkAndAssignNextJob_Elapsed(object sender, ElapsedEventArgs e)
-		//{
-		//	LogHelper.LogDebugWithLineNumber(Logger, "Start.");
+		private void _checkAndAssignNextJob_Elapsed(object sender, ElapsedEventArgs e)
+		{
+			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
 		//	_checkAndAssignNextJob.Stop();
 
-		//	try
-		//	{
-		//		StartCheckAndAssignNextJobTask();
+			//try
+			//{
+				CheckAndAssignNextJob();
 
-		//		LogHelper.LogDebugWithLineNumber(Logger,
-		//		                                 "CheckAndAssignNextJob on thread id : " + Thread.CurrentThread.ManagedThreadId);
+				LogHelper.LogDebugWithLineNumber(Logger,
+												 "CheckAndAssignNextJob on thread id : " + Thread.CurrentThread.ManagedThreadId);
 		//	}
 		//	finally
 		//	{
-		//		_checkAndAssignNextJob.Start();
+		////		_checkAndAssignNextJob.Start();
 
 		//		LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
 		//	}
-		//}
+		}
 
 		//private readonly object _lockCreateCheckAndAssignNextJobTask = new object();
 

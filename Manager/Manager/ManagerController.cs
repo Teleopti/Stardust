@@ -64,10 +64,10 @@ namespace Stardust.Manager
 			LogHelper.LogInfoWithLineNumber(Logger,
 			                                msg);
 			
-			Task.Factory.StartNew(() =>
-			{
-				_jobManager.CheckAndAssignNextJob();
-			});
+			//Task.Factory.StartNew(() =>
+			//{
+			//	_jobManager.CheckAndAssignNextJob();
+			//});
 
 			return Ok(jobReceived.Id);
 		}
