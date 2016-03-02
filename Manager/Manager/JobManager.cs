@@ -56,8 +56,8 @@ namespace Stardust.Manager
 		{
 		//	LogHelper.LogDebugWithLineNumber(Logger, "Start disposing.");
 
-			//_checkAndAssignNextJob.Stop();
-			//_checkAndAssignNextJob.Dispose();
+			_checkAndAssignNextJob.Stop();
+			_checkAndAssignNextJob.Dispose();
 
 			//_checkHeartbeatsTimer.Stop();
 			//_checkHeartbeatsTimer.Dispose();

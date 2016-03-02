@@ -31,6 +31,12 @@ namespace ManagerTest
 			get { return (FakeHttpSender) HttpSender; }
 		}
 
+		[TearDown]
+		public void TearDown()
+		{
+			JobManager.Dispose();
+		}
+
 		[Test]
 		public void ShouldBeAbleToCancelJobIfStarted()
 		{
