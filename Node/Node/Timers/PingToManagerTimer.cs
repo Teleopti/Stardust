@@ -16,8 +16,7 @@ namespace Stardust.Node.Timers
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (PingToManagerTimer));
 
 		public PingToManagerTimer(INodeConfiguration nodeConfiguration,
-		                          Uri callbackToManagerUri,
-		                          double defaultInterval = 10000) : base(defaultInterval)
+		                          Uri callbackToManagerUri) : base(nodeConfiguration.PingToManagerIdleDelaySeconds*1000)
 		{
 			nodeConfiguration.ThrowArgumentNullException();
 			callbackToManagerUri.ThrowArgumentNullExceptionWhenNull();

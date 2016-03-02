@@ -39,12 +39,12 @@ namespace NodeTest.Fakes.InvokeHandlers
 			HandlerAssembly = handlerAssembly;
 			NodeName = nodeName;
 
-			PingToManagerIdleDelay = pingToManagerIdleDelay;
-			PingToManagerRunningDelay = pingToManagerRunningDelay;
+			PingToManagerIdleDelaySeconds = PingToManagerIdleDelaySeconds;
+			PingToManagerRunningDelaySeconds = PingToManagerRunningDelaySeconds;
 		}
 
-		public double PingToManagerIdleDelay { get; set; }
-		public double PingToManagerRunningDelay { get; set; }
+		public double PingToManagerIdleDelaySeconds { get; set; }
+		public double PingToManagerRunningDelaySeconds { get; set; }
 		public Uri BaseAddress { get; private set; }
 		public Assembly HandlerAssembly { get; private set; }
 		public Uri ManagerLocation { get; private set; }

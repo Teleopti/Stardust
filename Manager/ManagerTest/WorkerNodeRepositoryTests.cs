@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Configuration;
 using System.Threading;
-using Autofac;
 using ManagerTest.Database;
 using NUnit.Framework;
 using Stardust.Manager;
-using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
 
 namespace ManagerTest

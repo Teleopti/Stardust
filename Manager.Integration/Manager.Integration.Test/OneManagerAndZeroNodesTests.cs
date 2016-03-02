@@ -60,8 +60,6 @@ namespace Manager.Integration.Test
 			                               numberOfNodes: 0,
 			                               cancellationTokenSource: CancellationTokenSource);
 
-			JobHelper.GiveNodesTimeToInitialize(60);
-
 			LogHelper.LogDebugWithLineNumber("Finshed TestFixtureSetUp",
 			                                 Logger);
 		}
@@ -118,7 +116,7 @@ namespace Manager.Integration.Test
 
 
 			var timeout =
-				JobHelper.GenerateTimeoutTimeInSeconds(createNewJobRequests.Count);
+				JobHelper.GenerateTimeoutTimeInSeconds(createNewJobRequests.Count, 10);
 
 			var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 
@@ -140,7 +138,7 @@ namespace Manager.Integration.Test
 			var startJobTaskHelper = new StartJobTaskHelper();
 
 			var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
-			                                                          CancellationTokenSource,
+																	  CancellationTokenSource,
 			                                                          timeout);
 
 			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);

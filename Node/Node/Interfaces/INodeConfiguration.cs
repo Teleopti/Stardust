@@ -5,9 +5,9 @@ namespace Stardust.Node.Interfaces
 {
 	public interface INodeConfiguration
 	{
-		double PingToManagerIdleDelay { get; set; }
+		double PingToManagerIdleDelaySeconds { get; set; }
 
-		double PingToManagerRunningDelay { get; set; }
+		double PingToManagerRunningDelaySeconds { get; set; }
 
 		Uri BaseAddress { get; }
 		Assembly HandlerAssembly { get; }

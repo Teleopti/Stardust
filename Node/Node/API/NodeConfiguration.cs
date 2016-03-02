@@ -38,12 +38,12 @@ namespace Stardust.Node.API
 			HandlerAssembly = handlerAssembly;
 			NodeName = nodeName;
 
-			PingToManagerIdleDelay = pingToManagerIdleDelaySeconds;
-			PingToManagerRunningDelay = pingToManagerRunningDelaySeconds;
+			PingToManagerIdleDelaySeconds = pingToManagerIdleDelaySeconds;
+			PingToManagerRunningDelaySeconds = pingToManagerRunningDelaySeconds;
 		}
 
-		public double PingToManagerIdleDelay { get; set; }
-		public double PingToManagerRunningDelay { get; set; }
+		public double PingToManagerIdleDelaySeconds { get; set; }
+		public double PingToManagerRunningDelaySeconds { get; set; }
 		public Uri BaseAddress { get; private set; }
 		public Uri ManagerLocation { get; private set; }
 		public string NodeName { get; private set; }

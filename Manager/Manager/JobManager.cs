@@ -17,7 +17,7 @@ namespace Stardust.Manager
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (JobManager));
 
 		private readonly Timer _checkAndAssignNextJob = new Timer();
-	//	private readonly Timer _checkHeartbeatsTimer = new Timer();
+		private readonly Timer _checkHeartbeatsTimer = new Timer();
 
 		private readonly IHttpSender _httpSender;
 		private readonly IJobRepository _jobRepository;
@@ -41,79 +41,40 @@ namespace Stardust.Manager
 			_httpSender = httpSender;
 			_managerConfiguration = managerConfiguration;
 
-		//	CreateCheckAndAssignNextJobTask();
-
 			_checkAndAssignNextJob.Elapsed += _checkAndAssignNextJob_Elapsed;
-			_checkAndAssignNextJob.Interval = 2000;
+			_checkAndAssignNextJob.Interval = 3000;
 			_checkAndAssignNextJob.Start();
 
-			//_checkHeartbeatsTimer.Elapsed += OnTimedEvent;
-			//_checkHeartbeatsTimer.Interval = _managerConfiguration.AllowedNodeDownTimeSeconds*500;
-			//_checkHeartbeatsTimer.Start();
+			_checkHeartbeatsTimer.Elapsed += CheckHeartbeatsOnTimedEvent;
+			_checkHeartbeatsTimer.Interval = _managerConfiguration.AllowedNodeDownTimeSeconds*500;
+			_checkHeartbeatsTimer.Start();
 		}
 
 		public void Dispose()
 		{
-		//	LogHelper.LogDebugWithLineNumber(Logger, "Start disposing.");
+			LogHelper.LogDebugWithLineNumber(Logger, "Start disposing.");
 
 			_checkAndAssignNextJob.Stop();
 			_checkAndAssignNextJob.Dispose();
 
-			//_checkHeartbeatsTimer.Stop();
-			//_checkHeartbeatsTimer.Dispose();
+			_checkHeartbeatsTimer.Stop();
+			_checkHeartbeatsTimer.Dispose();
 
-		//	LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
+			LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
 		}
 
 		private void _checkAndAssignNextJob_Elapsed(object sender, ElapsedEventArgs e)
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
-		//	_checkAndAssignNextJob.Stop();
-
-			//try
-			//{
 				CheckAndAssignNextJob();
 
 				LogHelper.LogDebugWithLineNumber(Logger,
 												 "CheckAndAssignNextJob on thread id : " + Thread.CurrentThread.ManagedThreadId);
-		//	}
-		//	finally
-		//	{
-		////		_checkAndAssignNextJob.Start();
 
-		//		LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
-		//	}
 		}
 
-		//private readonly object _lockCreateCheckAndAssignNextJobTask = new object();
-
-		//private Task CheckAndAssignNextJobTask { get; set; }
-
-		//private void CreateCheckAndAssignNextJobTask()
-		//{
-		//	lock (_lockCreateCheckAndAssignNextJobTask)
-		//	{
-		//		CheckAndAssignNextJobTask = new Task(CheckAndAssignNextJob);
-
-		//		CheckAndAssignNextJobTask.Start();
-		//	}
-		//}
-
-		//public void StartCheckAndAssignNextJobTask()
-		//{
-		//	if (CheckAndAssignNextJobTask == null)
-		//	{
-		//		return;
-		//	}
-
-		//	if (CheckAndAssignNextJobTask.Status == TaskStatus.Canceled ||
-		//	    CheckAndAssignNextJobTask.Status ==TaskStatus.Faulted ||
-		//	    CheckAndAssignNextJobTask.Status == TaskStatus.RanToCompletion)
-		//	{
-		//		CreateCheckAndAssignNextJobTask();
-		//	}				
-		//}
+		
 
 		public void CheckNodesAreAlive(TimeSpan timeSpan)
 		{
@@ -138,29 +99,16 @@ namespace Stardust.Manager
 					}
 				}
 			}
-		} 
+		}
 
-		//private void OnTimedEvent(object sender,
-		//                          ElapsedEventArgs e)
-		//{
-		//	LogHelper.LogDebugWithLineNumber(Logger, "Start.");
+		private void CheckHeartbeatsOnTimedEvent(object sender,
+								  ElapsedEventArgs e)
+		{
+				CheckNodesAreAlive(TimeSpan.FromSeconds(_managerConfiguration.AllowedNodeDownTimeSeconds));
 
-		//	_checkHeartbeatsTimer.Stop();
-
-		//	try
-		//	{
-		//		CheckNodesAreAlive(TimeSpan.FromSeconds(_managerConfiguration.AllowedNodeDownTimeSeconds));
-
-		//		LogHelper.LogDebugWithLineNumber(Logger,
-		//		                                 "Check Heartbeat on thread id : " + Thread.CurrentThread.ManagedThreadId);
-		//	}
-		//	finally
-		//	{
-		//		_checkHeartbeatsTimer.Start();
-
-		//		LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
-		//	}
-		//}
+				LogHelper.LogDebugWithLineNumber(Logger,
+												 "Check Heartbeat on thread id : " + Thread.CurrentThread.ManagedThreadId);
+		}
 
 		public IList<WorkerNode> Nodes()
 		{

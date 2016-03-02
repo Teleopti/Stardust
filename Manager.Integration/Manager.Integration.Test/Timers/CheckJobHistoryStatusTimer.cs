@@ -228,7 +228,7 @@ namespace Manager.Integration.Test.Timers
 						}
 					}
 
-					Thread.Sleep(TimeSpan.FromSeconds(10));
+					Thread.Sleep(TimeSpan.FromSeconds(1));
 				}
 			}, cancellationTokenSource.Token);
 		}

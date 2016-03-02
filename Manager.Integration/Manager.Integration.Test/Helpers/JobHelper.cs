@@ -26,7 +26,7 @@ namespace Manager.Integration.Test.Helpers
 		}
 
 		public static TimeSpan GenerateTimeoutTimeInSeconds(int numberOfRequest,
-		                                                    int latencyPerRequestInSeconds = 60)
+		                                                    int latencyPerRequestInSeconds = 1)
 		{
 			if (numberOfRequest <= 0)
 			{
