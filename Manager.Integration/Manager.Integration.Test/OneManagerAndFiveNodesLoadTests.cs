@@ -256,28 +256,6 @@ namespace Manager.Integration.Test
 			}
 
 			//---------------------------------------------
-			// Notify when all 5 nodes are up. 
-			//---------------------------------------------
-			//var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
-
-			//var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
-
-			//var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(5,
-			//													  sqlNotiferCancellationTokenSource,
-			//													  IntegerValidators.Value1IsEqualToValue2Validator);
-			//task.Start();
-
-			//LogHelper.LogDebugWithLineNumber("Waiting for all 5 nodes to start up.",
-			//								 Logger);
-
-			//sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
-
-			//sqlNotifier.Dispose();
-
-			//LogHelper.LogInfoWithLineNumber("All 5 nodes have started.",
-			//								 Logger);
-
-			//---------------------------------------------
 			// Execute all jobs. 
 			//---------------------------------------------
 			var startJobTaskHelper = new StartJobTaskHelper();

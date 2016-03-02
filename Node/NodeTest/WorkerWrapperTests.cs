@@ -93,6 +93,7 @@ namespace NodeTest
 		[TestFixtureTearDown]
 		public void TestFixtureTearDown()
 		{
+			Thread.Sleep(TimeSpan.FromSeconds(5));
 			LogHelper.LogDebugWithLineNumber(Logger,
 			                                 "Start TestFixtureTearDown.");
 		}
@@ -128,8 +129,6 @@ namespace NodeTest
 			var actionResult = _workerWrapper.StartJob(_jobDefinition,
 			                                           httpRequestMessage);
 
-			_sendJobFaultedTimer.Wait.Wait(TimeSpan.FromMinutes(1));
-
 			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
 				              .Result.StatusCode == HttpStatusCode.OK);
 		}
@@ -153,8 +152,6 @@ namespace NodeTest
 
 			var actionResult = _workerWrapper.StartJob(_jobDefinition,
 			                                           httpRequestMessage);
-
-			_sendJobDoneTimer.Wait.Wait(TimeSpan.FromMinutes(1));
 
 			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
 				              .Result.StatusCode == HttpStatusCode.OK);
@@ -186,8 +183,6 @@ namespace NodeTest
 			// Try cancel job.
 			//-------------------------------------------
 			_workerWrapper.CancelJob(_jobDefinition.Id);
-
-			_sendJobCanceledTimer.Wait.Wait(TimeSpan.FromMinutes(1));
 
 			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
 				              .Result.StatusCode == HttpStatusCode.OK);
@@ -227,8 +222,6 @@ namespace NodeTest
 			// Try cancel job.
 			//-------------------------------------------
 			_workerWrapper.CancelJob(_jobDefinition.Id);
-
-			_sendJobCanceledTimer.Wait.Wait(TimeSpan.FromMinutes(1));
 
 			Assert.IsTrue(_workerWrapper.IsCancellationRequested);
 		}

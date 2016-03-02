@@ -438,28 +438,7 @@ namespace Manager.Integration.Test
 				JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
 				                                       2);
 
-			//--------------------------------------------
-			// Notify when node is up.
-			//--------------------------------------------
-			//LogHelper.LogDebugWithLineNumber("Waiting for node to start.",
-			//                                 Logger);
-
-			//var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
-
-			//var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
-
-			//var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(1,
-			//                                                      sqlNotiferCancellationTokenSource,
-			//                                                      IntegerValidators.Value1IsEqualToValue2Validator);
-			//task.Start();
-
-			//sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
-
-			//sqlNotifier.Dispose();
-
-			//LogHelper.LogInfoWithLineNumber("Node have started.",
-			//                                 Logger);
-
+		
 			//--------------------------------------------
 			// Start actual test.
 			//--------------------------------------------
