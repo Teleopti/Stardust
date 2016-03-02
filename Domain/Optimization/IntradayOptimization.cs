@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -52,25 +54,34 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public void Handle(OptimizationWasOrdered @event)
 		{
-			SetupAndOptimize(@event.Period);
+			SetupAndOptimize(@event);
 			_persister.Persist(_schedulerStateHolder().Schedules);
 		}
 
 		[LogTime]
-		protected virtual void SetupAndOptimize(DateOnlyPeriod period)
+		protected virtual void SetupAndOptimize(OptimizationWasOrdered @event)
 		{
 			var optimizationPreferences = _optimizationPreferencesFactory.Create();
 			var dayOffOptimizationPreference = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
-			var webScheduleState = _webSchedulingSetup.Setup(period);
 
-			var optimizers = _intradayOptimizer2Creator.Create(period, webScheduleState.AllSchedules, optimizationPreferences, dayOffOptimizationPreference);
+			var agents = _schedulerStateHolder().AllPermittedPersons.Where(x => @event.Agents.Contains(x.Id.Value)).ToList();
 
-			using (_intradayOptimizationContext.Create(period))
+			var schedules = new List<IScheduleDay>();
+			foreach (var date in @event.Period.DayCollection())
+			{
+				schedules.AddRange(_schedulerStateHolder().Schedules.SchedulesForDay(date));
+			}
+			//fel just nu ovan - inte alla snubbar
+			
+
+			var optimizers = _intradayOptimizer2Creator.Create(@event.Period, schedules, optimizationPreferences, dayOffOptimizationPreference);
+
+			using (_intradayOptimizationContext.Create(@event.Period))
 			{
 				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
 				_intradayOptimizerContainer.Execute(optimizers);
-				_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, webScheduleState.AllSchedules,
-					webScheduleState.PeopleSelection.AllPeople, dayOffOptimizationPreference);
+				_weeklyRestSolverExecuter.Resolve(optimizationPreferences, @event.Period, schedules,
+					agents, dayOffOptimizationPreference);
 			}
 		}
 	}
