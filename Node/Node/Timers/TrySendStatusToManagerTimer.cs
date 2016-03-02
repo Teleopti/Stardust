@@ -18,7 +18,7 @@ namespace Stardust.Node.Timers
 
 		public TrySendStatusToManagerTimer(INodeConfiguration nodeConfiguration,
 		                                   Uri callbackTemplateUri,
-		                                   double interval = 10000) : base(interval)
+		                                   double interval = 2000) : base(interval)
 		{
 			// Validate arguments.
 			nodeConfiguration.ThrowArgumentNullException();

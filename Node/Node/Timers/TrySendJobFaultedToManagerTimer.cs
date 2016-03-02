@@ -10,7 +10,7 @@ namespace Stardust.Node.Timers
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (TrySendJobFaultedToManagerTimer));
 
 		public TrySendJobFaultedToManagerTimer(INodeConfiguration nodeConfiguration,
-		                                       double interval = 10000) : base(nodeConfiguration,
+		                                       double interval = 2000) : base(nodeConfiguration,
 		                                                                       nodeConfiguration
 			                                                                       .GetManagerJobHasFaileTemplatedUri(),
 		                                                                       interval)
