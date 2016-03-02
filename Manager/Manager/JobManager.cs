@@ -122,22 +122,25 @@ namespace Stardust.Manager
 
 				foreach (var availableNode in availableNodes)
 				{
-					var nodeUriBuilder = new NodeUriBuilderHelper(availableNode.Url);
-
-					var postUri = nodeUriBuilder.GetIsAliveTemplateUri();
-
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Test available node is alive : Url ( " + postUri + " )");
-
-
-					var success = _httpSender.TryGetAsync(postUri);
-
-					if (success.Result)
+					if (availableNode.Alive == "true")  // Move to SQL?
 					{
-						LogHelper.LogDebugWithLineNumber(Logger,
-						                                 "Node Url ( " + postUri + " ) is available and alive.");
+						var nodeUriBuilder = new NodeUriBuilderHelper(availableNode.Url);
 
-						upNodes.Add(availableNode);
+						var postUri = nodeUriBuilder.GetIsAliveTemplateUri();
+
+						LogHelper.LogDebugWithLineNumber(Logger,
+														 "Test available node is alive : Url ( " + postUri + " )");
+
+
+						var success = _httpSender.TryGetAsync(postUri);
+
+						if (success.Result)
+						{
+							LogHelper.LogDebugWithLineNumber(Logger,
+															 "Node Url ( " + postUri + " ) is available and alive.");
+
+							upNodes.Add(availableNode);
+						}
 					}
 				}
 

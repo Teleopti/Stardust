@@ -97,16 +97,23 @@ namespace Stardust.Manager
 		}
 
 		[HttpPost, Route(ManagerRouteConstants.Heartbeat)]
-		public void Heartbeat([FromBody] Uri nodeUri)
+		public IHttpActionResult Heartbeat([FromBody] Uri nodeUri)
 		{
-			Task.Factory.StartNew(() =>
+			if (nodeUri != null)
 			{
-				_jobManager.RegisterHeartbeat(nodeUri.ToString());
-				_jobManager.CheckAndAssignNextJob();
-			});
+				Task.Factory.StartNew(() =>
+				{
+					_jobManager.RegisterHeartbeat(nodeUri.ToString());
+					_jobManager.CheckAndAssignNextJob();
+				});
 
-			LogHelper.LogInfoWithLineNumber(Logger,
-			                                WhoAmI + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
+				LogHelper.LogInfoWithLineNumber(Logger,
+												WhoAmI + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
+				return Ok();
+			}
+				LogHelper.LogWarningWithLineNumber(Logger,
+												WhoAmI + ": Received heartbeat from Node with invalid uri.");
+				return BadRequest();
 		}
 
 		[HttpPost, Route(ManagerRouteConstants.JobDone)]
