@@ -21,7 +21,7 @@ Start-Sleep -Seconds 15
 
 } while ($Job_status.building -eq "True")
 
-#Check if deploy was success
+#Check if deploy was successful
 $Check_webstatus = invoke-webrequest "http://$ServerURL/job/$ServerName-AutoDeploy/lastBuild/api/json"
 $Job_status = ConvertFrom-Json $Check_webstatus
 
