@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -20,9 +17,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly OptimizationPreferencesFactory _optimizationPreferencesFactory;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
-		private readonly WebSchedulingSetup _webSchedulingSetup;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
-		private readonly IScheduleDictionaryPersister _persister;
 		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
 		private readonly IntradayOptimizer2Creator _intradayOptimizer2Creator;
 		private readonly IIntradayOptimizerContainer _intradayOptimizerContainer;
@@ -31,9 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public IntradayOptimization(OptimizationPreferencesFactory optimizationPreferencesFactory,
 									Func<ISchedulerStateHolder> schedulerStateHolder,
 									DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
-									WebSchedulingSetup webSchedulingSetup,
 									Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
-									IScheduleDictionaryPersister persister,
 									WeeklyRestSolverExecuter weeklyRestSolverExecuter,
 									IntradayOptimizer2Creator intradayOptimizer2Creator,
 									IIntradayOptimizerContainer intradayOptimizerContainer,
@@ -42,24 +35,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_optimizationPreferencesFactory = optimizationPreferencesFactory;
 			_schedulerStateHolder = schedulerStateHolder;
 			_dayOffOptimizationPreferenceProviderUsingFiltersFactory = dayOffOptimizationPreferenceProviderUsingFiltersFactory;
-			_webSchedulingSetup = webSchedulingSetup;
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
-			_persister = persister;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
 			_intradayOptimizer2Creator = intradayOptimizer2Creator;
 			_intradayOptimizerContainer = intradayOptimizerContainer;
 			_intradayOptimizationContext = intradayOptimizationContext;
 		}
 
-
-		public void Handle(OptimizationWasOrdered @event)
-		{
-			SetupAndOptimize(@event);
-			_persister.Persist(_schedulerStateHolder().Schedules);
-		}
-
 		[LogTime]
-		protected virtual void SetupAndOptimize(OptimizationWasOrdered @event)
+		public virtual void Handle(OptimizationWasOrdered @event)
 		{
 			var optimizationPreferences = _optimizationPreferencesFactory.Create();
 			var dayOffOptimizationPreference = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
@@ -72,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				schedules.AddRange(_schedulerStateHolder().Schedules.SchedulesForDay(date));
 			}
 			//fel just nu ovan - inte alla snubbar
-			
+
 
 			var optimizers = _intradayOptimizer2Creator.Create(@event.Period, schedules, optimizationPreferences, dayOffOptimizationPreference);
 
