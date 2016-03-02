@@ -16,7 +16,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 {
 	[Toggle(Toggles.ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049)]
-	[DomainTest]
+	[DomainTest(false)]
 	public class IntradayOptimizationCallbackTest
 	{
 		public FakeSkillRepository SkillRepository;

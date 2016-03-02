@@ -37,6 +37,13 @@ namespace Teleopti.Ccc.TestCommon.IoC
 {
 	public class DomainTestAttribute : IoCTestAttribute
 	{
+		private readonly bool _useFakeEventPublisher;
+		//solve this some other way soon - just to fix red build quickly
+		public DomainTestAttribute(bool useFakeEventPublisher=true)
+		{
+			_useFakeEventPublisher = useFakeEventPublisher;
+		}
+
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			//TODO: move this to common
@@ -56,7 +63,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			// Outbound stuff
 			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
-			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			if (_useFakeEventPublisher)
+			{
+				system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			}
 			system.UseTestDouble<FakeRecurringEventPublisher>().For<IRecurringEventPublisher>();
 			//
 
