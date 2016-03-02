@@ -68,7 +68,7 @@ namespace Teleopti.Support.Library.Config
 
 		private SearchReplace xmlComment(string name, string replaceWith)
 		{
-			var searchFor = string.Format("<!--$({0})-->", name);
+			var searchFor = string.Format("<!--$({0}XmlComment)-->", name);
 			return new SearchReplace(searchFor, replaceWith);
 		}
 
