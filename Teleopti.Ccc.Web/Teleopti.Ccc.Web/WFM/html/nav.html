@@ -88,13 +88,15 @@
 					<div class="context-content">
 						<div class="notification-list">
 							<h4>{{'Personalize'|translate}}</h4>
-							<div class="wfm-switch" ng-click="toggleOverlayFocus()">
-								<input ng-model="showOverlay" tabindex="-1" type="checkbox" id="switch1" />
-								<label for="switch1">
-									<span class="wfm-switch-label">{{'ToggleLowLightFilter'|translate}}</span>
-									<span class="wfm-switch-toggle"></span>
-								</label>
-							</div>
+							<form>
+								<div class="wfm-checkbox" ng-click="toggleOverlayFocus()">
+									<input ng-model="showOverlay" tabindex="-1" type="checkbox" id="overlayId" />
+									<label for="overlayId">
+										<span class="wfm-checkbox-toggle"></span>
+										<span class="wfm-checkbox-label">{{'ToggleLowLightFilter'|translate}}</span>
+									</label>
+								</div>
+							</form>
 						</div>
 					</div>
 				</div>
