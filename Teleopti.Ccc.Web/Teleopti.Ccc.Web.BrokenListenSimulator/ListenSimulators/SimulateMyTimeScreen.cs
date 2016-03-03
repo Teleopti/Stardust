@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
 	    public Task<HttpResponseMessage> FetchSchedule()
 		{
 			Console.WriteLine("FetchData for date {0}", DateTime.Today);
-			var message = new HttpRequestMessage(HttpMethod.Get, string.Format("MyTime/Schedule/FetchData?date=&_={0}", Guid.NewGuid()));
+			var message = new HttpRequestMessage(HttpMethod.Get, string.Format("api/Schedule/FetchData?date=&_={0}", Guid.NewGuid()));
 			
 			var response = HttpClient.SendAsync(message);
 			return response;

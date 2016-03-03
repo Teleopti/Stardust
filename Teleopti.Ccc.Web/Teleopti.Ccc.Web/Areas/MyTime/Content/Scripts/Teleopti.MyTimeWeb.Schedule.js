@@ -41,7 +41,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	function _fetchData() {
 		ajax.Ajax({
-			url: 'Schedule/FetchData',
+			url: '../api/Schedule/FetchData',
 			dataType: "json",
 			type: 'GET',
 			data: {
@@ -781,7 +781,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		},
 		LoadAndBindData: function () {
 			ajax.Ajax({
-				url: 'Schedule/FetchData',
+				url: '../api/Schedule/FetchData',
 				dataType: "json",
 				type: 'GET',
 				data: {
