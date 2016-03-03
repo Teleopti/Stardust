@@ -33,8 +33,8 @@
 							if (isNaN(subnode.RelativeDifference)) {
 								subnode.ColorId = 3;
 							}
-							var parseDif = (subnode.RelativeDifference * 100).toFixed(1)
-							return subnode.parseDif = parseDif;
+							var tempParseDif = (subnode.RelativeDifference * 100).toFixed(1)
+							return subnode.parseDif = tempParseDif;
 						})
 					})
 				};
