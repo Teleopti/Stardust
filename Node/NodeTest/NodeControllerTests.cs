@@ -62,9 +62,6 @@ namespace NodeTest
 			var pingToManagerSeconds =
 				Convert.ToDouble(ConfigurationManager.AppSettings["PingToManagerSeconds"]);
 
-			var pingToManagerRunningDelay =
-				Convert.ToDouble(ConfigurationManager.AppSettings["PingToManagerRunningDelaySeconds"]);
-
 			_nodeConfigurationFake = new NodeConfigurationFake(baseAddress,
 			                                                   managerLocation,
 			                                                   handlerAssembly,

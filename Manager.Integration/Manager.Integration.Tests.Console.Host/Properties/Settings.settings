@@ -50,5 +50,11 @@
     <Setting Name="ManagerEndpointPortNumberStart" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">9000</Value>
     </Setting>
+    <Setting Name="AllowedDowntimeSeconds" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="PingToManagerSeconds" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">3</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

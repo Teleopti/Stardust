@@ -67,22 +67,19 @@
                                     </MultiBinding>
                                 </DataGridTextColumn.Binding>
                             </DataGridTextColumn>
-
-                            <DataGridTextColumn Binding="{Binding Alive}"
-                                                ClipboardContentBinding="{Binding Alive}"
-                                                Header="Alive" />
-
-                            <DataGridTextColumn Binding="{Binding Url}"
-                                                ClipboardContentBinding="{Binding Url}"
-                                                Header="Url" />
-
-                            <DataGridTextColumn Binding="{Binding Heartbeat, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                ClipboardContentBinding="{Binding Heartbeat, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                Header="Heartbeat" />
-
+                            
                             <DataGridTextColumn Binding="{Binding Id}"
                                                 ClipboardContentBinding="{Binding Id}"
                                                 Header="Id" />
+                            <DataGridTextColumn Binding="{Binding Url}"
+                                                ClipboardContentBinding="{Binding Url}"
+                                                Header="Url" />
+                            <DataGridTextColumn Binding="{Binding Heartbeat, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                ClipboardContentBinding="{Binding Heartbeat, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                Header="Heartbeat" />
+                            <DataGridTextColumn Binding="{Binding Alive}"
+                                                ClipboardContentBinding="{Binding Alive}"
+                                                Header="Alive" />
 
 
 

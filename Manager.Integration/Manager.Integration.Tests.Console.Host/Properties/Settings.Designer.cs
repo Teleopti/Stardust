@@ -167,5 +167,23 @@ namespace Manager.IntegrationTest.Console.Host.Properties {
                 return ((int)(this["ManagerEndpointPortNumberStart"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int AllowedDowntimeSeconds {
+            get {
+                return ((int)(this["AllowedDowntimeSeconds"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public int PingToManagerSeconds {
+            get {
+                return ((int)(this["PingToManagerSeconds"]));
+            }
+        }
     }
 }

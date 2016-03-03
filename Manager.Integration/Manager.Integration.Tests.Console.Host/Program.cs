@@ -192,6 +192,7 @@ namespace Manager.IntegrationTest.Console.Host
 			for (var i = 0; i < NumberOfManagersToStart; i++)
 			{
 				var portNumber = Settings.Default.ManagerEndpointPortNumberStart + i;
+				var allowedDowntimeSeconds = Settings.Default.AllowedDowntimeSeconds;
 
 				Uri uri;
 
@@ -199,6 +200,7 @@ namespace Manager.IntegrationTest.Console.Host
 					CopyManagerConfigurationFile(ManagerConfigurationFile,
 					                             i + 1,
 					                             portNumber,
+												 allowedDowntimeSeconds,
 					                             out uri);
 
 				CopiedManagerConfigurationFiles.Add(uri,
@@ -343,6 +345,7 @@ namespace Manager.IntegrationTest.Console.Host
 			var endPointUri =
 				new Uri(Settings.Default.NodeEndpointUriTemplate.Replace("PORTNUMBER",
 				                                                         portNumber.ToString()));
+			var pingToManagerSeconds = Settings.Default.PingToManagerSeconds;
 
 			var copiedConfigurationFile =
 				CreateNodeConfigurationFile(NodeConfigurationFile,
@@ -350,6 +353,7 @@ namespace Manager.IntegrationTest.Console.Host
 				                            nodeName,
 											copiedManagerConfigurationFile,
 				                            endPointUri,
+											pingToManagerSeconds,
 				                            Settings.Default.HandlerAssembly);
 
 			NodeconfigurationFiles.Add(nodeName,
@@ -408,7 +412,8 @@ namespace Manager.IntegrationTest.Console.Host
 		                                                   string nodeName,
 		                                                   FileInfo copiedManagerConfigurationFile,
 		                                                   Uri nodeEndPoint,
-		                                                   string handlerAssembly)
+														   int pingToManagerSeconds,
+														   string handlerAssembly)
 		{
 			//-------------------------------------------------------
 			// Open Manager configuration file.
@@ -462,6 +467,7 @@ namespace Manager.IntegrationTest.Console.Host
 			nodeConfig.AppSettings.Settings["BaseAddress"].Value = nodeEndPoint.ToString();
 			nodeConfig.AppSettings.Settings["ManagerLocation"].Value = managerUriBuilder.Uri.ToString();
 			nodeConfig.AppSettings.Settings["HandlerAssembly"].Value = handlerAssembly;
+			nodeConfig.AppSettings.Settings["PingToManagerSeconds"].Value = pingToManagerSeconds.ToString();
 
 			nodeConfig.Save();
 
@@ -471,6 +477,7 @@ namespace Manager.IntegrationTest.Console.Host
 		public static FileInfo CopyManagerConfigurationFile(FileInfo managerConfigFile,
 		                                                    int i,
 		                                                    int portNumber,
+															int allowedDowntimeSeconds,
 		                                                    out Uri uri)
 		{
 			var newConfigFileName = "Manager" + i + ".config";
@@ -494,6 +501,7 @@ namespace Manager.IntegrationTest.Console.Host
 			uri = uriBuilder.Uri;
 
 			config.AppSettings.Settings["BaseAddress"].Value = uri.ToString();
+			config.AppSettings.Settings["AllowedNodeDownTimeSeconds"].Value = allowedDowntimeSeconds.ToString();
 			config.Save();
 
 			return copyManagerConfigurationFile;
@@ -648,6 +656,7 @@ namespace Manager.IntegrationTest.Console.Host
 
 			var portNumber =
 				Settings.Default.ManagerEndpointPortNumberStart + (NumberOfManagersToStart - 1);
+			var allowedDowntimeSeconds = Settings.Default.AllowedDowntimeSeconds;
 
 			Uri uri;
 
@@ -655,6 +664,7 @@ namespace Manager.IntegrationTest.Console.Host
 				CopyManagerConfigurationFile(ManagerConfigurationFile,
 				                             NumberOfManagersToStart + 1,
 				                             portNumber,
+											 allowedDowntimeSeconds,
 				                             out uri);
 
 			CopiedManagerConfigurationFiles.Add(uri,
