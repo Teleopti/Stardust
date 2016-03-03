@@ -5,8 +5,8 @@ SET ROOTDIR=%ROOTDIR:~0,-14%
 SET CCC7DB=%~1
 SET AnalyticsDB=%~2
 SET ToggleMode=%~3
-set configuration=%4
-set sqlAuthString=%5
+set configuration=%~4
+set sqlAuthString=%~5
 set MSBUILD="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
 
 if "%configuration%"=="" (
