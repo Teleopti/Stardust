@@ -397,7 +397,7 @@
 			this.tabControlAdvMain.ItemSize = new System.Drawing.Size(79, 24);
 			this.tabControlAdvMain.LevelTextAndImage = true;
 			this.tabControlAdvMain.Location = new System.Drawing.Point(9, 9);
-			this.tabControlAdvMain.Margin = new System.Windows.Forms.Padding(9, 9, 9, 9);
+			this.tabControlAdvMain.Margin = new System.Windows.Forms.Padding(9);
 			this.tabControlAdvMain.Name = "tabControlAdvMain";
 			this.tabControlAdvMain.PersistTabState = true;
 			this.tabControlAdvMain.ShowToolTips = true;
@@ -447,7 +447,7 @@
 			this.tableLayoutPanelFindTabTop.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelFindTabTop.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanelFindTabTop.Name = "tableLayoutPanelFindTabTop";
-			this.tableLayoutPanelFindTabTop.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
+			this.tableLayoutPanelFindTabTop.Padding = new System.Windows.Forms.Padding(6);
 			this.tableLayoutPanelFindTabTop.RowCount = 2;
 			this.tableLayoutPanelFindTabTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanelFindTabTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -526,7 +526,7 @@
 			this.panelFindOptions.Dock = System.Windows.Forms.DockStyle.Left;
 			this.panelFindOptions.Location = new System.Drawing.Point(3, 3);
 			this.panelFindOptions.Name = "panelFindOptions";
-			this.panelFindOptions.Size = new System.Drawing.Size(380, 116);
+			this.panelFindOptions.Size = new System.Drawing.Size(505, 116);
 			this.panelFindOptions.TabIndex = 5;
 			// 
 			// checkBoxAdvFindSearchInPersistance
@@ -540,13 +540,14 @@
 			this.checkBoxAdvFindSearchInPersistance.TabIndex = 24;
 			this.checkBoxAdvFindSearchInPersistance.Text = "xxSearchAll";
 			this.checkBoxAdvFindSearchInPersistance.ThemesEnabled = true;
+			this.checkBoxAdvFindSearchInPersistance.Visible = false;
 			this.checkBoxAdvFindSearchInPersistance.CheckStateChanged += new System.EventHandler(this.checkBoxAdvFindSearchInPersistanceCheckStateChanged);
 			// 
 			// checkBoxAdvFindSearchUp
 			// 
 			this.checkBoxAdvFindSearchUp.BeforeTouchSize = new System.Drawing.Size(164, 24);
 			this.checkBoxAdvFindSearchUp.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.checkBoxAdvFindSearchUp.Location = new System.Drawing.Point(208, 76);
+			this.checkBoxAdvFindSearchUp.Location = new System.Drawing.Point(361, 45);
 			this.checkBoxAdvFindSearchUp.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvFindSearchUp.Name = "checkBoxAdvFindSearchUp";
 			this.checkBoxAdvFindSearchUp.Size = new System.Drawing.Size(164, 24);
@@ -558,7 +559,7 @@
 			// 
 			this.checkBoxAdvFindMatchWholeCell.BeforeTouchSize = new System.Drawing.Size(164, 24);
 			this.checkBoxAdvFindMatchWholeCell.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.checkBoxAdvFindMatchWholeCell.Location = new System.Drawing.Point(208, 45);
+			this.checkBoxAdvFindMatchWholeCell.Location = new System.Drawing.Point(185, 46);
 			this.checkBoxAdvFindMatchWholeCell.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvFindMatchWholeCell.Name = "checkBoxAdvFindMatchWholeCell";
 			this.checkBoxAdvFindMatchWholeCell.Size = new System.Drawing.Size(164, 24);
@@ -726,10 +727,10 @@
 			// 
 			// comboBoxAdvReplaceSearchWithin
 			// 
-			this.comboBoxAdvReplaceSearchWithin.BeforeTouchSize = new System.Drawing.Size(140, 21);
+			this.comboBoxAdvReplaceSearchWithin.BeforeTouchSize = new System.Drawing.Size(140, 23);
 			this.comboBoxAdvReplaceSearchWithin.Location = new System.Drawing.Point(59, 14);
 			this.comboBoxAdvReplaceSearchWithin.Name = "comboBoxAdvReplaceSearchWithin";
-			this.comboBoxAdvReplaceSearchWithin.Size = new System.Drawing.Size(140, 21);
+			this.comboBoxAdvReplaceSearchWithin.Size = new System.Drawing.Size(140, 23);
 			this.comboBoxAdvReplaceSearchWithin.TabIndex = 16;
 			// 
 			// autoLabel19
@@ -753,7 +754,7 @@
 			this.tableLayoutPanel15.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel15.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel15.Name = "tableLayoutPanel15";
-			this.tableLayoutPanel15.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
+			this.tableLayoutPanel15.Padding = new System.Windows.Forms.Padding(6);
 			this.tableLayoutPanel15.RowCount = 2;
 			this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -762,20 +763,20 @@
 			// 
 			// comboDropDownReplaceReplaceText
 			// 
-			this.comboDropDownReplaceReplaceText.BeforeTouchSize = new System.Drawing.Size(505, 21);
+			this.comboDropDownReplaceReplaceText.BeforeTouchSize = new System.Drawing.Size(505, 23);
 			this.comboDropDownReplaceReplaceText.Dock = System.Windows.Forms.DockStyle.Top;
 			this.comboDropDownReplaceReplaceText.Location = new System.Drawing.Point(126, 43);
 			this.comboDropDownReplaceReplaceText.Name = "comboDropDownReplaceReplaceText";
-			this.comboDropDownReplaceReplaceText.Size = new System.Drawing.Size(505, 21);
+			this.comboDropDownReplaceReplaceText.Size = new System.Drawing.Size(505, 23);
 			this.comboDropDownReplaceReplaceText.TabIndex = 14;
 			// 
 			// comboDropDownReplaceSearchText
 			// 
-			this.comboDropDownReplaceSearchText.BeforeTouchSize = new System.Drawing.Size(505, 21);
+			this.comboDropDownReplaceSearchText.BeforeTouchSize = new System.Drawing.Size(505, 23);
 			this.comboDropDownReplaceSearchText.Dock = System.Windows.Forms.DockStyle.Top;
 			this.comboDropDownReplaceSearchText.Location = new System.Drawing.Point(126, 9);
 			this.comboDropDownReplaceSearchText.Name = "comboDropDownReplaceSearchText";
-			this.comboDropDownReplaceSearchText.Size = new System.Drawing.Size(505, 21);
+			this.comboDropDownReplaceSearchText.Size = new System.Drawing.Size(505, 23);
 			this.comboDropDownReplaceSearchText.TabIndex = 13;
 			// 
 			// autoLabel17
@@ -801,7 +802,7 @@
 			this.gridListControlSearchResults.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
 			this.gridListControlSearchResults.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;
 			this.gridListControlSearchResults.Location = new System.Drawing.Point(9, 333);
-			this.gridListControlSearchResults.Margin = new System.Windows.Forms.Padding(9, 9, 9, 9);
+			this.gridListControlSearchResults.Margin = new System.Windows.Forms.Padding(9);
 			this.gridListControlSearchResults.Name = "gridListControlSearchResults";
 			this.gridListControlSearchResults.Office2007ScrollBars = true;
 			this.gridListControlSearchResults.RowCount = 0;
