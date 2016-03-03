@@ -47,19 +47,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			{
 				states.ForEach(s =>
 				{
-					var context = new RtaProcessContext(
+					var context = new StateContext(
 						new ExternalUserStateInputModel
 						{
 							StateCode = s.StateCode,
 							PlatformTypeId = s.PlatformTypeId.ToString()
 						},
-						new PersonOrganizationData
-						{
-							BusinessUnitId = s.BusinessUnitId,
-							PersonId = s.PersonId,
-							SiteId = s.SiteId.GetValueOrDefault(),
-							TeamId = s.TeamId.GetValueOrDefault()
-						},
+						s.PersonId,
+						s.BusinessUnitId,
+						s.TeamId.GetValueOrDefault(),
+						s.SiteId.GetValueOrDefault(),
 						_now,
 						null,
 						new EmptyPreviousStateInfoLoader()

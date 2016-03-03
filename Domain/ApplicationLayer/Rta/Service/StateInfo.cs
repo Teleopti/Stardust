@@ -1,5 +1,4 @@
 using System;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -9,7 +8,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IAppliedAlarm _appliedAlarm;
 
 		public StateInfo(
-			RtaProcessContext context,
+			StateContext context,
 			IStateMapper stateMapper,
 			IDatabaseLoader databaseLoader,
 			IAppliedAdherence appliedAdherence,
@@ -17,9 +16,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			_appliedAlarm = appliedAlarm;
 			Input = context.Input;
-			Person = context.Person;
+			Person = context;
 			CurrentTime = context.CurrentTime;
-			Stored = context.PreviousStateInfoLoader.Load(context.Person.PersonId);
+			Stored = context.PreviousStateInfoLoader.Load(context.PersonId);
 			Schedule = new ScheduleInfo(databaseLoader, Person.PersonId, CurrentTime, Stored);
 			State = new StateRuleInfo(stateCode, platformTypeId, Input, Person, Stored, Schedule, stateMapper);
 			Adherence = new AdherenceInfo(Input, Person, Stored, State, Schedule, appliedAdherence, stateMapper);
@@ -61,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		public ExternalUserStateInputModel Input { get; set; }
-		public PersonOrganizationData Person { get; private set; }
+		public StateContext Person { get; private set; }
 	    public StateRuleInfo State { get; private set; }
 		public StoredStateInfo Stored { get; private set; }
 		public ScheduleInfo Schedule { get; private set; }

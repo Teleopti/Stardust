@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using Teleopti.Ccc.Domain.Aop;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -38,11 +39,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_appliedAlarm = appliedAlarm;
 		}
 
-		public void Process(
-			RtaProcessContext context
-			)
+		[InfoLog]
+		public virtual void Process(StateContext context)
 		{
-			lock (personLocks.GetOrAdd(context.Person.PersonId, g => new object()))
+			lock (personLocks.GetOrAdd(context.PersonId, g => new object()))
 			{
 				var eventCollector = new EventCollector(_eventPublisher);
 

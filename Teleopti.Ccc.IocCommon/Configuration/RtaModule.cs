@@ -26,13 +26,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RtaInitializor>().SingleInstance();
 			builder.RegisterType<TenantsInitializedInRta>().SingleInstance();
 			builder.RegisterType<CacheInvalidator>().As<ICacheInvalidator>().SingleInstance();
-			builder.RegisterType<RtaProcessor>().SingleInstance();
+			builder.RegisterType<RtaProcessor>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateReadModelUpdater>().As<IAgentStateReadModelUpdater>().SingleInstance();
 			
 			if (_config.Toggle(Toggles.RTA_DeletedPersons_36041))
-				builder.RegisterType<LoadFromDatabase>().As<IPersonLoader>().SingleInstance();
+				builder.RegisterType<LoadPersonFromDatabase>().As<IStateContextLoader>().SingleInstance();
 			else
-				builder.RegisterType<LoadByResolve>().As<IPersonLoader>().SingleInstance();
+				builder.RegisterType<LoadFromCache>().As<IStateContextLoader>().SingleInstance();
 
 			builder.RegisterType<StateStreamSynchronizer>().SingleInstance();
 

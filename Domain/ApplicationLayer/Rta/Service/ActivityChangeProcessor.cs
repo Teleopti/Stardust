@@ -8,27 +8,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class ActivityChangeProcessor
 	{
 		private readonly INow _now;
-		private readonly IPersonLoader _personLoader;
+		private readonly IStateContextLoader _stateContextLoader;
 		private readonly IDatabaseLoader _databaseLoader;
 		private readonly RtaProcessor _processor;
-		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
-		private readonly IPreviousStateInfoLoader _previousStateInfoLoader;
 
 		public ActivityChangeProcessor(
 			INow now,
-			IPersonLoader personLoader,
+			IStateContextLoader stateContextLoader,
 			IDatabaseLoader databaseLoader, 
-			RtaProcessor processor,
-			IAgentStateReadModelUpdater agentStateReadModelUpdater,
-			IPreviousStateInfoLoader previousStateInfoLoader
+			RtaProcessor processor
 			)
 		{
 			_now = now;
-			_personLoader = personLoader;
+			_stateContextLoader = stateContextLoader;
 			_databaseLoader = databaseLoader;
 			_processor = processor;
-			_agentStateReadModelUpdater = agentStateReadModelUpdater;
-			_previousStateInfoLoader = previousStateInfoLoader;
 		}
 
 		// tenant in key? customer installs have unique person ids...?
@@ -38,7 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			var now = _now.UtcDateTime();
 
-			var persons = _personLoader.LoadAllPersonsData();
+			var persons = _stateContextLoader.LoadAll();
 
 			persons.ForEach(person =>
 			{
@@ -73,7 +67,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 				if (!doProcess) return;
 
-				process(null, person);
+				_processor.Process(person);
+
 				_currentPeriodInfo[person.PersonId] = current;
 			});
 
@@ -84,18 +79,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			public DateTime StartTime { get; set; }
 			public DateTime EndTime { get; set; }
 			public Guid ActivityId { get; set; }
-		}
-
-		private void process(ExternalUserStateInputModel input, PersonOrganizationData person)
-		{
-			_processor.Process(
-				new RtaProcessContext(
-					input,
-					person,
-					_now,
-					_agentStateReadModelUpdater,
-					_previousStateInfoLoader
-					));
 		}
 
 	}

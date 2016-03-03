@@ -217,8 +217,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 							TeamId = reader.GetGuid(reader.GetOrdinal("TeamId")),
 							SiteId = reader.GetGuid(reader.GetOrdinal("SiteId")),
 							BusinessUnitId = reader.GetGuid(reader.GetOrdinal("BusinessUnitId")),
-							TimeZone = timeZoneValue,
-							EndDate = endDateValue
 						};
 					}
 				}

@@ -4,12 +4,6 @@ using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public class ResolvedPerson
-	{
-		public Guid PersonId { get; set; }
-		public Guid BusinessUnitId { get; set; }
-	}
-
 	public interface IDatabaseReader
 	{
 		ConcurrentDictionary<string, int> Datasources();
@@ -22,4 +16,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		IEnumerable<PersonOrganizationData> LoadAllPersonOrganizationData();
 	}
 
+	public class ResolvedPerson
+	{
+		public Guid PersonId { get; set; }
+		public Guid BusinessUnitId { get; set; }
+	}
+
+	public class PersonOrganizationData
+	{
+		public Guid PersonId { get; set; }
+		public Guid BusinessUnitId { get; set; }
+		public Guid TeamId { get; set; }
+		public Guid SiteId { get; set; }
+	}
 }

@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class AdherenceInfo
 	{
 		private readonly ExternalUserStateInputModel _input;
-		private readonly PersonOrganizationData _person;
+		private readonly StateContext _person;
 		private readonly StoredStateInfo _stored;
 		private readonly StateRuleInfo _stateRuleInfo;
 		private readonly ScheduleInfo _scheduleInfo;
@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public AdherenceInfo(
 			ExternalUserStateInputModel input, 
-			PersonOrganizationData person,
+			StateContext person,
 			StoredStateInfo stored,
 			StateRuleInfo stateRuleInfo,
 			ScheduleInfo scheduleInfo, 
