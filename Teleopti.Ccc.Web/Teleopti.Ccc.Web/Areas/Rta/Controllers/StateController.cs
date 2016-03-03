@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
@@ -19,19 +20,42 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			DateTime batchId;
 			DateTime.TryParse(input.BatchId, out batchId);
 
-			_rta.SaveState(
-				new ExternalUserStateInputModel
-				{
-					AuthenticationKey = input.AuthenticationKey,
-					PlatformTypeId = input.PlatformTypeId,
-					SourceId = input.SourceId,
-					UserCode = input.UserCode,
-					StateCode = input.StateCode,
-					StateDescription = input.StateDescription,
-					IsLoggedOn = input.IsLoggedOn,
-					BatchId = batchId,
-					IsSnapshot = input.IsSnapshot,
-				});
+			try
+			{
+				_rta.SaveState(
+					new ExternalUserStateInputModel
+					{
+						AuthenticationKey = input.AuthenticationKey,
+						PlatformTypeId = input.PlatformTypeId,
+						SourceId = input.SourceId,
+						UserCode = input.UserCode,
+						StateCode = input.StateCode,
+						StateDescription = input.StateDescription,
+						IsLoggedOn = input.IsLoggedOn,
+						BatchId = batchId,
+						IsSnapshot = input.IsSnapshot,
+					});
+			}
+			catch (InvalidAuthenticationKeyException e)
+			{
+				return BadRequest(e.Message);
+			}
+			catch (LegacyAuthenticationKeyException e)
+			{
+				return BadRequest(e.Message);
+			}
+			catch (InvalidSourceException e)
+			{
+				return BadRequest(e.Message);
+			}
+			catch (InvalidPlatformException e)
+			{
+				return BadRequest(e.Message);
+			}
+			catch (InvalidUserCodeException e)
+			{
+				return BadRequest(e.Message);
+			}
 
 			return Ok();
 		}
