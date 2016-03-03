@@ -89,8 +89,6 @@ define([
 		menu.CurrentGroupId(routeInfo.id);
 		menu.CurrentDate(routeInfo.date);
 		menu.ActiveView(routeInfo.view);
-		if (trackingPersonId)
-			trackNotification(trackingPersonId);
 	}
 	
 	function _setupRoutes() {
