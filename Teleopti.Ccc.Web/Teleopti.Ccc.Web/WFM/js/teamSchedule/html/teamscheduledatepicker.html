@@ -4,7 +4,7 @@
 		<i class="mdi mdi-chevron-double-left"></i>
 	</button>
 
-	<input type="text" class="pointer" ng-class="{'datepicker-mini':vm.isMiniMode}" ng-model="vm.selectedDate" ng-change="vm.afterDateChange(vm.selectedDate)"
+	<input type="text" style="width: 120px" class="pointer" ng-class="{'datepicker-mini':vm.isMiniMode}" ng-model="vm.selectedDate" ng-change="vm.afterDateChange(vm.selectedDate)"
 		   uib-datepicker-popup="{{vm.shortDateFormat}}" is-open="vm.isCalendarOpened" show-button-bar="false" ng-required="true" />
 
 	<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.toggleCalendar()">
