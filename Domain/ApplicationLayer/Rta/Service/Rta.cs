@@ -10,8 +10,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class Rta
 	{
-		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
-		private readonly IPreviousStateInfoLoader _previousStateInfoLoader;
 		public static string LogOutStateCode = "LOGGED-OFF";
 
 		private readonly ICacheInvalidator _cacheInvalidator;
@@ -20,34 +18,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly RtaInitializor _initializor;
 		private readonly ActivityChangeProcessor _activityChangeProcessor;
 		private readonly IStateContextLoader _stateContextLoader;
-		private readonly INow _now;
-		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
-		private readonly IStateMapper _stateMapper;
 
 		public Rta(
-			IAgentStateReadModelReader agentStateReadModelReader,
-			IPreviousStateInfoLoader previousStateInfoLoader,
 			ICacheInvalidator cacheInvalidator,
-			IStateMapper stateMapper,
-			INow now,
-			IAgentStateReadModelUpdater agentStateReadModelUpdater,
 			RtaProcessor processor,
 			TenantLoader tenantLoader,
 			RtaInitializor initializor,
 			ActivityChangeProcessor activityChangeProcessor,
 			IStateContextLoader stateContextLoader)
 		{
-			_agentStateReadModelReader = agentStateReadModelReader;
-			_previousStateInfoLoader = previousStateInfoLoader;
-			_stateMapper = stateMapper;
 			_cacheInvalidator = cacheInvalidator;
 			_processor = processor;
 			_tenantLoader = tenantLoader;
 			_initializor = initializor;
 			_activityChangeProcessor = activityChangeProcessor;
 			_stateContextLoader = stateContextLoader;
-			_now = now;
-			_agentStateReadModelUpdater = agentStateReadModelUpdater;
 		}
 
 		[InfoLog]
@@ -121,15 +106,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			if (string.IsNullOrEmpty(input.PlatformTypeId))
 				throw new InvalidPlatformException("Platform id is required");
 		}
-
-		private IEnumerable<StateContext> validateUserCode(ExternalUserStateInputModel input)
-		{
-			var persons = _stateContextLoader.LoadFor(input);
-			if (!persons.Any())
-				throw new InvalidUserCodeException(string.Format("No person found for SourceId {0} and UserCode {1}", input.SourceId, input.UserCode));
-			return persons;
-		}
-
+		
 		[InfoLog]
 		protected virtual void ProcessInput(ExternalUserStateInputModel input)
 		{
@@ -140,10 +117,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				CloseSnapshot(input);
 			else
 			{
-				var persons = validateUserCode(input);
-				//GLHF
-				foreach (var person in persons)
+				var found = false;
+				_stateContextLoader.For(input, person =>
+				{
+					found = true;
 					_processor.Process(person);
+				});
+				if (!found)
+					throw new InvalidUserCodeException(string.Format("No person found for SourceId {0} and UserCode {1}", input.SourceId, input.UserCode));
 			}
 		}
 
@@ -170,31 +151,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			input.StateCode = "CCC Logged out";
 			input.PlatformTypeId = Guid.Empty.ToString();
-			var missingAgents = _agentStateReadModelReader.GetMissingAgentStatesFromBatch(input.BatchId, input.SourceId);
-			var agentsNotAlreadyLoggedOut = from a in missingAgents
-				let state = _stateMapper.StateFor(
-					a.BusinessUnitId,
-					a.PlatformTypeId,
-					a.StateCode,
-					null)
-				where !state.IsLogOutState
-				select a;
 
-			foreach (var agent in agentsNotAlreadyLoggedOut)
+			_stateContextLoader.ForNotInBatchOf(input, agent =>
 			{
-				_processor.Process(
-					new StateContext(
-						input,
-						agent.PersonId,
-						agent.BusinessUnitId,
-						agent.TeamId.GetValueOrDefault(),
-						agent.SiteId.GetValueOrDefault(),
-						_now,
-						_agentStateReadModelUpdater,
-						_previousStateInfoLoader
-						)
-					);
-			}
+				_processor.Process(agent);
+			});
 		}
 
 		[InfoLog]

@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			StateContext person,
 			StoredStateInfo stored,
 			ScheduleInfo schedule,
-			IStateMapper stateMapper
+			StateMapper stateMapper
 			)
 		{
 			_stateMapping = stateMapper.StateFor(person.BusinessUnitId, platformTypeId, stateCode, input.StateDescription);

@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly StateRuleInfo _stateRuleInfo;
 		private readonly ScheduleInfo _scheduleInfo;
 		private readonly IAppliedAdherence _appliedAdherence;
-		private readonly IStateMapper _stateMapper;
+		private readonly StateMapper _stateMapper;
 
 		public AdherenceInfo(
 			ExternalUserStateInputModel input, 
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			StateRuleInfo stateRuleInfo,
 			ScheduleInfo scheduleInfo, 
 			IAppliedAdherence appliedAdherence,
-			IStateMapper stateMapper)
+			StateMapper stateMapper)
 		{
 			_input = input;
 			_person = person;

@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public class StateMapper : IStateMapper
+	public class StateMapper
 	{
 		private readonly ICacheInvalidator _cacheInvalidator;
 		private readonly IAlarmMappingLoader _alarmMappingLoader;

@@ -268,7 +268,6 @@
     <Compile Include="ApplicationLayer\TestHandlers.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ActivityChangeProcessor.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\BatchTooBigException.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\EmptyPreviousStateInfoLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\EventCollector.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\InvalidAuthenticationKeyException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IStateContextLoader.cs" />
@@ -311,7 +310,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\IAppliedAdherence.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ICacheInvalidator.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IStateCodeAdder.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\IStateMapper.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IInitializeble.cs" />
     <Compile Include="Aop\IReadModelTransactionSyncronization.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\INotificationCreator.cs" />

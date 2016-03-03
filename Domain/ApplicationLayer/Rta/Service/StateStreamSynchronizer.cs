@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IEventPublisherScope _eventPublisherScope;
 		private readonly IEnumerable<IInitializeble> _initializebles;
 		private readonly ResolveEventHandlers _resolver;
+		private readonly IStateContextLoader _stateContextLoader;
 
 		public StateStreamSynchronizer(
 			INow now,
@@ -20,7 +21,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IAgentStateReadModelReader agentStateReadModelReader,
 			IEventPublisherScope eventPublisherScope,
 			IEnumerable<IInitializeble> initializebles,
-			ResolveEventHandlers resolver
+			ResolveEventHandlers resolver,
+			IStateContextLoader stateContextLoader
 			)
 		{
 			_now = now;
@@ -29,6 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_eventPublisherScope = eventPublisherScope;
 			_initializebles = initializebles;
 			_resolver = resolver;
+			_stateContextLoader = stateContextLoader;
 		}
 		
 		public virtual void Initialize()
@@ -42,25 +45,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		private void processStatesTo(object handler, IEnumerable<AgentStateReadModel> states)
-		{	
+		{
 			using (_eventPublisherScope.OnThisThreadPublishTo(new SyncPublishTo(_resolver, handler)))
 			{
-				states.ForEach(s =>
+				_stateContextLoader.For(states, context =>
 				{
-					var context = new StateContext(
-						new ExternalUserStateInputModel
-						{
-							StateCode = s.StateCode,
-							PlatformTypeId = s.PlatformTypeId.ToString()
-						},
-						s.PersonId,
-						s.BusinessUnitId,
-						s.TeamId.GetValueOrDefault(),
-						s.SiteId.GetValueOrDefault(),
-						_now,
-						null,
-						new EmptyPreviousStateInfoLoader()
-						);
 					_processor.Process(context);
 				});
 			}

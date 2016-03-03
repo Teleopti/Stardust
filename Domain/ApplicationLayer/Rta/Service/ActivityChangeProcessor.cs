@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public ActivityChangeProcessor(
 			INow now,
 			IStateContextLoader stateContextLoader,
-			IDatabaseLoader databaseLoader, 
+			IDatabaseLoader databaseLoader,
 			RtaProcessor processor
 			)
 		{
@@ -32,9 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			var now = _now.UtcDateTime();
 
-			var persons = _stateContextLoader.LoadAll();
-
-			persons.ForEach(person =>
+			_stateContextLoader.ForAll(person =>
 			{
 				var schedule = _databaseLoader.GetCurrentSchedule(person.PersonId);
 
@@ -66,7 +64,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					previous.ActivityId != current.ActivityId;
 
 				if (!doProcess) return;
-
 				_processor.Process(person);
 
 				_currentPeriodInfo[person.PersonId] = current;

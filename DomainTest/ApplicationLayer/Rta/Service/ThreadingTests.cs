@@ -7,10 +7,8 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
-using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
@@ -25,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public IAgentStateReadModelReader AgentStateReadModelReader;
 
 		[Test]
-		public async void ShouldNotSendDuplicateEvents()
+		public void ShouldNotSendDuplicateEvents()
 		{
 			Database
 				.WithDefaultStateGroup()
@@ -62,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 					})));
 			});
 
-			await Task.WhenAll(tasks.ToArray());
+			Task.WaitAll(tasks.ToArray());
 
 			AgentStateReadModelReader.GetActualAgentStates().Should().Have.Count.EqualTo(100);
 			Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Should().Have.Count.EqualTo(100);
