@@ -1,38 +1,40 @@
 ﻿.team-schedule {
+	background-color: white;
 
-	background-color:white;
-
-	input{
-		background-color:transparent;
+	input {
+		background-color: transparent;
 	}
 
-	.relative{
+	.relative {
 		position: relative;
 	}
-
+	
 	.people-search-container{
-		width:410px;
 		display: inline-block;
+		margin: 10px;
+		#simple-people-search{
+			width: 316px;
+		}
 	}
 
-	.datepicker-container{
+	.team-schedule-datepicker{
 		display: inline-block;
 		vertical-align:top;
 		white-space: nowrap;
 	}
 
-	team-schedule-datepicker input{
+	team-schedule-datepicker input {
 		text-align: center;
 	}
 
-	team-schedule-datepicker input.datepicker-mini{
-		width:90px;
+	team-schedule-datepicker input.datepicker-mini {
+		width: 90px;
 	}
 
-	.page-size-selector{
-		width: 60px; 
-		margin-top: 10px; 
-		margin-right: 20px;	
+	.page-size-selector {
+		width: 60px;
+		margin-top: 10px;
+		margin-right: 20px;
 		margin-bottom: 10px;
 	}
 
@@ -62,7 +64,7 @@
 			text-align: center;
 		}
 
-		.layer.selected{
+		.layer.selected {
 			border: 2px dashed grey;
 		}
 
@@ -142,8 +144,8 @@
 		}
 	}
 
-	.big-table-wrapper{
-		position: relative; 
+	.big-table-wrapper {
+		position: relative;
 		overflow: hidden;
 	}
 
