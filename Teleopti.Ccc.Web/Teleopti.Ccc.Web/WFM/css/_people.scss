@@ -224,6 +224,9 @@
 			}
 		}
 	}
+	.advanced-search-container {
+		top: 0;
+	}
 }
 
 
@@ -246,7 +249,7 @@
 	position: absolute;
 	background-color: $white;
 	z-index: 15;
-	top: 0;
+	top: -11px;
 	left: 18px;
 
 	input {
