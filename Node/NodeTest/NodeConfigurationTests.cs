@@ -14,8 +14,7 @@ namespace NodeTest
 			                                              null,
 			                                              null,
 			                                              null,
-			                                              pingToManagerIdleDelaySeconds: 10,
-			                                              pingToManagerRunningDelaySeconds: 30);
+			                                              pingToManagerSeconds: 10);
 		}
 	}
 }

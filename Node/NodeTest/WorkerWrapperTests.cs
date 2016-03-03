@@ -69,11 +69,8 @@ namespace NodeTest
 			var handlerAssembly = Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]);
 			var nodeName = ConfigurationManager.AppSettings["NodeName"];
 
-			var pingToManagerIdleDelay =
-				Convert.ToDouble(ConfigurationManager.AppSettings["PingToManagerIdleDelay"]);
-
-			var pingToManagerRunningDelay =
-				Convert.ToDouble(ConfigurationManager.AppSettings["PingToManagerRunningDelay"]);
+			var pingToManagerSeconds =
+				Convert.ToDouble(ConfigurationManager.AppSettings["PingToManagerSeconds"]);
 
 			CallBackUriTemplateFake = managerLocation;
 
@@ -81,8 +78,7 @@ namespace NodeTest
 			                                                   managerLocation,
 			                                                   handlerAssembly,
 			                                                   nodeName,
-															   pingToManagerIdleDelay,
-															   pingToManagerRunningDelay);
+															   pingToManagerSeconds);
 
 #if DEBUG
 			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;

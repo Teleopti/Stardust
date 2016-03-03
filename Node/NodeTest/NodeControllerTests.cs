@@ -59,8 +59,8 @@ namespace NodeTest
 
 			var nodeName = ConfigurationManager.AppSettings["NodeName"];
 
-			var pingToManagerIdleDelay =
-				Convert.ToDouble(ConfigurationManager.AppSettings["PingToManagerIdleDelaySeconds"]);
+			var pingToManagerSeconds =
+				Convert.ToDouble(ConfigurationManager.AppSettings["PingToManagerSeconds"]);
 
 			var pingToManagerRunningDelay =
 				Convert.ToDouble(ConfigurationManager.AppSettings["PingToManagerRunningDelaySeconds"]);
@@ -69,8 +69,7 @@ namespace NodeTest
 			                                                   managerLocation,
 			                                                   handlerAssembly,
 			                                                   nodeName, 
-															   pingToManagerIdleDelay,
-															   pingToManagerRunningDelay);
+															   pingToManagerSeconds);
 
 
 			_callBackTemplateUriFake = managerLocation;

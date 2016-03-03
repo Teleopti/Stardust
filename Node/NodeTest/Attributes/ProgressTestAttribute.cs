@@ -31,8 +31,7 @@ namespace NodeTest.Attributes
 			                                              managerLocation,
 			                                              handlerAssembly,
 			                                              nodeName,
-														  pingToManagerIdleDelaySeconds:10,
-														  pingToManagerRunningDelaySeconds:30);
+														  10);
 
 			builder.RegisterAssemblyTypes(nodeConfiguration.HandlerAssembly)
 				.Where(IsHandler)

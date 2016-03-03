@@ -10,8 +10,7 @@ namespace NodeTest.Fakes.InvokeHandlers
 		                             Uri managerLocation,
 		                             Assembly handlerAssembly,
 		                             string nodeName,
-		                             double pingToManagerIdleDelaySeconds,
-		                             double pingToManagerRunningDelaySeconds)
+		                             double pingToManagerSeconds)
 
 		{
 			if (baseAddress == null)
@@ -39,12 +38,10 @@ namespace NodeTest.Fakes.InvokeHandlers
 			HandlerAssembly = handlerAssembly;
 			NodeName = nodeName;
 
-			PingToManagerIdleDelaySeconds = pingToManagerIdleDelaySeconds;
-			PingToManagerRunningDelaySeconds = pingToManagerRunningDelaySeconds;
+			PingToManagerSeconds = pingToManagerSeconds;
 		}
 
-		public double PingToManagerIdleDelaySeconds { get; set; }
-		public double PingToManagerRunningDelaySeconds { get; set; }
+		public double PingToManagerSeconds { get; set; }
 		public Uri BaseAddress { get; private set; }
 		public Assembly HandlerAssembly { get; private set; }
 		public Uri ManagerLocation { get; private set; }

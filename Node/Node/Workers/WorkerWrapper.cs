@@ -152,12 +152,6 @@ namespace Stardust.Node.Workers
 			{
 				taskToExecuteStopWatch.Start();
 
-				PingToManagerTimer.Interval = NodeConfiguration.PingToManagerRunningDelaySeconds*1000;
-
-				LogHelper.LogDebugWithLineNumber(Logger,
-				                                 "Ping to manager interval is now set to go every " +
-				                                 PingToManagerTimer.Interval + " seconds during job execution.");
-
 				Handler.Invoke(deSer,
 				               CancellationTokenSource,
 				               ProgressCallback);
@@ -173,13 +167,6 @@ namespace Stardust.Node.Workers
 																CurrentMessageToProcess.Type,
 																taskToExecuteStopWatch.GetTotalElapsedTimeInSeconds(), 
 																taskToExecuteStopWatch.GetTotalElapsedTimeInMinutes()));
-
-				PingToManagerTimer.Interval = NodeConfiguration.PingToManagerIdleDelaySeconds*1000;
-
-				LogHelper.LogDebugWithLineNumber(Logger,
-				                                 "Ping to manager interval is now set to go every " +
-				                                 PingToManagerTimer.Interval + " seconds when node is idle.");
-
 
 				string logInfo;
 
