@@ -30,6 +30,9 @@
 				this.parseRelDif = function(period) {
 					period.forEach(function(node) {
 						node.SkillDetails.forEach(function(subnode) {
+							if (isNaN(subnode.RelativeDifference)) {
+								subnode.ColorId = 3;
+							}
 							var parseDif = (subnode.RelativeDifference * 100).toFixed(1)
 							return subnode.parseDif = parseDif;
 						})
