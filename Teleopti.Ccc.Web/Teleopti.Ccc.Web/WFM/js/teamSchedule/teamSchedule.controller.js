@@ -225,6 +225,7 @@
 			var allPersonWithAbsenceRemoved = selectedPersonIdList.concat(personWithSelectedAbsences);
 			personAbsenceSvc.PromiseForRemovePersonAbsence(vm.scheduleDateMoment(), selectedPersonIdList, selectedAbsences,
 				function(result) {
+					vm.selectedPersonAbsences = [];
 					vm.afterActionCallback(result, allPersonWithAbsenceRemoved, "FinishedRemoveAbsence", "FailedToRemoveAbsence");
 				}
 			);
