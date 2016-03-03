@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.Click("#menuItemRemoveAbsence");
 		}
 
-		[Then(@"I should see a confirm message for absence deletion")]
+		[Then(@"I should see a confirm message for absence deletion"),SetUICulture("en-US")]
 		public void ThenIShouldSeeDialogToConfirmAbsenceDeletion()
 		{
 			Browser.Interactions.AssertAnyContains(".modal-dialog", Resources.AreYouSureToRemoveSelectedAbsence);
