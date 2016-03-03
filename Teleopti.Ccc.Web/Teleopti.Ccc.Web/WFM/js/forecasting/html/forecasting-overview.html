@@ -36,7 +36,7 @@
 		<card-header ng-click="getForecastResult(workload)">
 			<div>
 				<span><b>{{workload.Name}}</b></span>
-				<md-progress-circular class="workload-spinner mini-spinner" md-mode="indeterminate" ng-if="workload.ShowProgress"></md-progress-circular>
+				<md-progress-circular class="workload-spinner" md-mode="indeterminate" ng-if="workload.ShowProgress"></md-progress-circular>
 				<span class="workload-indicator" ng-if="workload.IsSuccess"><md-tooltip>{{'SuccessTip' | translate}}</md-tooltip><i class="mdi mdi-check"></i></span>
 				<span class="workload-indicator" ng-if="workload.IsFailed"><md-tooltip>{{workload.Message}}</md-tooltip><i class="mdi mdi-close"></i></span>
 				<span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
