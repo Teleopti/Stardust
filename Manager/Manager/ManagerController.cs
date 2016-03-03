@@ -63,11 +63,11 @@ namespace Stardust.Manager
 
 			LogHelper.LogInfoWithLineNumber(Logger,
 			                                msg);
-			
-			//Task.Factory.StartNew(() =>
-			//{
-			//	_jobManager.CheckAndAssignNextJob();
-			//});
+
+			Task.Factory.StartNew(() =>
+			{
+				_jobManager.CheckAndAssignNextJob();
+			});
 
 			return Ok(jobReceived.Id);
 		}
@@ -136,8 +136,7 @@ namespace Stardust.Manager
 			{
 			_jobManager.SetEndResultOnJobAndRemoveIt(jobId,
 			                                         "Success");
-
-		//		_jobManager.StartCheckAndAssignNextJobTask();
+				
 		_jobManager.CheckAndAssignNextJob();
 			});
 
@@ -154,8 +153,7 @@ namespace Stardust.Manager
 			{
 			_jobManager.SetEndResultOnJobAndRemoveIt(jobId,
 			                                         "Failed");
-
-			//	_jobManager.StartCheckAndAssignNextJobTask();
+				
 			_jobManager.CheckAndAssignNextJob();
 			});
 
@@ -172,8 +170,7 @@ namespace Stardust.Manager
 			{
 			_jobManager.SetEndResultOnJobAndRemoveIt(jobId,
 			                                         "Canceled");
-
-			//	_jobManager.StartCheckAndAssignNextJobTask();
+				
 			_jobManager.CheckAndAssignNextJob();
 			});
 
@@ -206,7 +203,6 @@ namespace Stardust.Manager
 			{
 			_nodeManager.FreeJobIfAssingedToNode(nodeUri);
 			_nodeManager.AddIfNeeded(nodeUri);
-		//	_jobManager.StartCheckAndAssignNextJobTask();
 		_jobManager.CheckAndAssignNextJob();
 			});
 

@@ -70,6 +70,8 @@ namespace Manager.Integration.Test
 			                               numberOfNodes: 5,
 			                               cancellationTokenSource: CancellationTokenSource);
 
+			Thread.Sleep(TimeSpan.FromSeconds(2));
+
 			LogHelper.LogDebugWithLineNumber("Finished TestFixtureSetUp",
 			                                 Logger);
 		}
