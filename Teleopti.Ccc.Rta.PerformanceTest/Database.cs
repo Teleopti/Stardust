@@ -1,4 +1,5 @@
 using System.Linq;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Rta.PerformanceTest
 {
@@ -17,26 +19,34 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 		private readonly MutableNow _now;
 		private readonly TestConfiguration _testConfiguration;
 		private readonly Http _http;
+		private readonly ICurrentUnitOfWork _unitOfWork;
 
 		public Database(
 			MutableNow now,
 			TestConfiguration testConfiguration,
-			Http http
+			Http http,
+			ICurrentUnitOfWork unitOfWork
 			)
 		{
 			_now = now;
 			_testConfiguration = testConfiguration;
 			_http = http;
+			_unitOfWork = unitOfWork;
 		}
 
 		[LogTime]
+		[UnitOfWork]
 		public virtual void Setup()
 		{
 			_now.Is("2016-02-25 08:00".Utc());
 
 			_http.Get("/Test/SetCurrentTime?ticks=" + _now.UtcDateTime().Ticks);
 
-			var data = new TestDataFactory(GlobalUnitOfWorkState.UnitOfWorkAction, TenantUnitOfWorkState.TenantUnitOfWorkAction);
+			var data = new TestDataFactory(action =>
+			{
+				action.Invoke(_unitOfWork);
+				_unitOfWork.Current().PersistAll();
+			}, TenantUnitOfWorkState.TenantUnitOfWorkAction);
 
 			var datasource = new Datasources(_testConfiguration.DataSourceId, " ", -1, " ", -1, " ", " ", 1, false, _testConfiguration.SourceId, false);
 			new AnalyticsDataFactory().Apply(datasource);
@@ -53,51 +63,15 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			data.Apply(new ContractScheduleConfigurable { Name = "contractSchedule" });
 
 			data.Apply(new RtaMapConfigurable { Activity = "Phone", PhoneState = "Ready", Adherence = "In", Name = "InAdherence" });
-			data.Apply(new RtaMapConfigurable
-			{
-				Activity = "Phone",
-				PhoneState = "LoggedOff",
-				Adherence = "Out",
-				Name = "OutOfAdherence"
-			});
+			data.Apply(new RtaMapConfigurable { Activity = "Phone", PhoneState = "LoggedOff", Adherence = "Out", Name = "OutOfAdherence" });
 
-			data.Apply(new RtaMapConfigurable
-			{
-				Activity = "Break",
-				PhoneState = "LoggedOff",
-				Adherence = "In",
-				Name = "InAdherence"
-			});
-			data.Apply(new RtaMapConfigurable
-			{
-				Activity = "Break",
-				PhoneState = "Ready",
-				Adherence = "Out",
-				Name = "OutOfAdherence"
-			});
+			data.Apply(new RtaMapConfigurable { Activity = "Break", PhoneState = "LoggedOff", Adherence = "In", Name = "InAdherence" });
+			data.Apply(new RtaMapConfigurable { Activity = "Break", PhoneState = "Ready", Adherence = "Out", Name = "OutOfAdherence" });
 
-			data.Apply(new RtaMapConfigurable
-			{
-				Activity = "Lunch",
-				PhoneState = "LoggedOff",
-				Adherence = "In",
-				Name = "InAdherence"
-			});
-			data.Apply(new RtaMapConfigurable
-			{
-				Activity = "Lunch",
-				PhoneState = "Ready",
-				Adherence = "Out",
-				Name = "OutOfAdherence"
-			});
+			data.Apply(new RtaMapConfigurable { Activity = "Lunch", PhoneState = "LoggedOff", Adherence = "In", Name = "InAdherence" });
+			data.Apply(new RtaMapConfigurable { Activity = "Lunch", PhoneState = "Ready", Adherence = "Out", Name = "OutOfAdherence" });
 
-			data.Apply(new RtaMapConfigurable
-			{
-				Activity = null,
-				PhoneState = "LoggedOff",
-				Adherence = "In",
-				Name = "InAdherence"
-			});
+			data.Apply(new RtaMapConfigurable { Activity = null, PhoneState = "LoggedOff", Adherence = "In", Name = "InAdherence" });
 
 			Enumerable.Range(0, _testConfiguration.NumberOfAgents / 100)
 				.ForEach(site =>
