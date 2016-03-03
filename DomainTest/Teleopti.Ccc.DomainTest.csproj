@@ -240,6 +240,7 @@
     <Compile Include="Scheduling\Assignment\ResourceCalculateAfterDeleteDeciderTest.cs" />
     <Compile Include="Scheduling\Assignment\VirtualSkillGroupsKeepStateTest.cs" />
     <Compile Include="Scheduling\PeriodExctractorFromSchedulePartsTest.cs" />
+    <Compile Include="Scheduling\SeatLimitations\MaxSeatSkillCreatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\DayOff\MissingDayOffBestSpotDeciderTest.cs" />
     <Compile Include="SeatPlanning\CommonSeatAllocatorTests.cs" />
     <Compile Include="SeatPlanning\SeatMapPersisterTests.cs" />
