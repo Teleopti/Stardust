@@ -1,14 +1,18 @@
 ﻿.people-module {
-	.people-panel{
-		padding-top:10px;
+	.people-panel {
+		padding-top: 10px;
 	}
 
-	.people-panel>con-row{
-		position:relative;	
+	.people-panel > con-row {
+		position: relative;
 	}
 
 	.people-search {
 		padding: 10px 0;
+
+		#simple-people-search {
+			width: 220px;
+		}
 	}
 
 	.pagination-item {
@@ -223,27 +227,27 @@
 }
 
 
-.people-search{
-	position:relative;
+.people-search {
+	position: relative;
 }
 
-.simple-people-search{
-	display:inline-block;
-	height:30px;
+.simple-people-search {
+	display: inline-block;
+	height: 30px;
 }
 
-.people-search>.dropdown{
-	position:absolute;
-	top:30px;
-	left:0;
+.people-search > .dropdown {
+	position: absolute;
+	top: 30px;
+	left: 0;
 }
 
 .advanced-search-container {
 	position: absolute;
 	background-color: $white;
 	z-index: 15;
-	top:0;
-	left:18px;
+	top: 0;
+	left: 18px;
 
 	input {
 		position: relative;
