@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.Click("#menuItemRemoveAbsence");
 		}
 
-		[Then(@"I should see a confirm message for absence deletion"),SetUICulture("en-US")]
+		[Then(@"I should see a confirm message for absence deletion"),SetCulture("en-US")]
 		public void ThenIShouldSeeDialogToConfirmAbsenceDeletion()
 		{
 			Browser.Interactions.AssertAnyContains(".modal-dialog", Resources.AreYouSureToRemoveSelectedAbsence);
