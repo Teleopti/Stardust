@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 {
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[Then(@"I should see a confirm message for absence deletion")]
 		public void ThenIShouldSeeDialogToConfirmAbsenceDeletion()
 		{
-			Browser.Interactions.AssertAnyContains(".modal-dialog", "Are you sure to delete all selected absences?");
+			Browser.Interactions.AssertAnyContains(".modal-dialog", Resources.AreYouSureToRemoveSelectedAbsence);
 		}
 
 		[When(@"I answered '(.*)' to confirm message")]
