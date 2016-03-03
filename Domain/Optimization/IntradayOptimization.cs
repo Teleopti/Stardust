@@ -47,16 +47,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var optimizationPreferences = _optimizationPreferencesFactory.Create();
 			var dayOffOptimizationPreference = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
-
 			var agents = _schedulerStateHolder().AllPermittedPersons.Where(x => @event.AgentIds.Contains(x.Id.Value)).ToList();
-
 			var schedules = new List<IScheduleDay>();
-			foreach (var date in @event.Period.DayCollection())
-			{
-				schedules.AddRange(_schedulerStateHolder().Schedules.SchedulesForDay(date));
-			}
-			//fel just nu ovan - inte alla snubbar
 
+			foreach (var person in agents)
+			{
+				schedules.AddRange(_schedulerStateHolder().Schedules[person].ScheduledDayCollection(@event.Period));
+			}
 
 			var optimizers = _intradayOptimizer2Creator.Create(@event.Period, schedules, optimizationPreferences, dayOffOptimizationPreference);
 
