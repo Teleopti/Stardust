@@ -21,7 +21,7 @@ if "%AnalyticsDB%" == "" (
 SET AnalyticsDB=Infratest_Analytics
 )
 
-if [%sqlAuthString%] == [] (
+if "%sqlAuthString%" == "" (
 SET sqlAuthString=Data Source=.;Integrated Security=SSPI
 )
 
