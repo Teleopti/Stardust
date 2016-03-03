@@ -2,26 +2,18 @@
 	<!--Refactor me -->
 
 	<div ng-claok class="ng-cloak" ng-if="areas.length < 1 && areasLoaded" >
-		<div ng-cloak class="modal-box">
-
-		<div class="modalbg">
-			<div class="dialog">
-				<div class="modal-header">
-					Unauthorized
-				</div>
-				<div class="modal-inner-content">
-					You don't have access to these pages.<br/>
-	If you are already registered, make sure you logged in with the right credentials.
-				</div>
-				<div class="modal-footer">
-					<aside>
-						<a class="wfm-btn wfm-btn-invis-primary" href="javascript:history.back()">Go back</a>
-					</aside>
-				</div>
-			</div>
-		</div>
-
-</div>
+        <modal-dialog show='unauthModal' ng-cloak ng-click="dismissUnauthModal()">
+            <h1 class="modal-title">Unauthorized</h1>
+            <div class="modal-inner-content">
+                You don't have access to these pages.<br />
+                If you are already registered, make sure you logged in with the right credentials.
+            </div>
+            <div class="modal-actions">
+                <aside>
+                    <button class="wfm-btn wfm-btn-invis-primary">Go back</button>
+                </aside>
+            </div>
+        </modal-dialog>
 	</div>
 	<div ng-repeat="accordionTitle in areas">
 		<a ui-sref={{accordionTitle.InternalName}} ui-sref-opts="{reload: true}" ui-sref-active="nav-item-active">
