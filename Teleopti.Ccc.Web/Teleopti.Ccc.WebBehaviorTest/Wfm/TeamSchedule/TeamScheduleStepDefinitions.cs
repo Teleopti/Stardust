@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Threading;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
@@ -56,6 +58,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[Then(@"I should see a confirm message for absence deletion"),SetCulture("en-US")]
 		public void ThenIShouldSeeDialogToConfirmAbsenceDeletion()
 		{
+			Thread.CurrentThread.CurrentUICulture = CultureInfo.CurrentCulture;
 			Browser.Interactions.AssertAnyContains(".modal-dialog", Resources.AreYouSureToRemoveSelectedAbsence);
 		}
 
