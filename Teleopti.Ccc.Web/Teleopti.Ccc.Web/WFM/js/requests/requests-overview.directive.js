@@ -12,29 +12,30 @@
 	function requestsOverviewController($scope,requestsDataService) {
 		var vm = this;
 
-		vm.requests = [];	
+		vm.requests = [];
 		vm.period = {
-			startDate: (vm.period && vm.period.startDate) ? vm.period.startDate : new Date(),
-			endDate: (vm.period && vm.period.endDate) ? vm.period.endDate : new Date()
+			startDate: moment().startOf('week')._d,
+			endDate: moment().endOf('week')._d
 		};
+
 		vm.agentSearchTerm = "";
-		vm.period.endDate = vm.period.endDate ? vm.period.endDate : new Date();
+		vm.period.endDate = moment().endOf('week')._d;
 
 		vm.reload = reload;
 		vm.sortingOrders = [];
 
-	
+
 		function reload(requestsFilter, sortingOrders, paging, done) {
 			vm.loaded = false;
-			
+
 			if (vm.togglePaginationEnabled) {
 				requestsDataService.getAllRequestsPromise(requestsFilter, sortingOrders, paging).then(function (requests) {
 					vm.requests = requests.data.Requests;
-					if (vm.totalRequestsCount !== requests.data.TotalCount) {						
-						vm.totalRequestsCount = requests.data.TotalCount;						
+					if (vm.totalRequestsCount !== requests.data.TotalCount) {
+						vm.totalRequestsCount = requests.data.TotalCount;
 						if (typeof vm.onTotalRequestsCountChanges == 'function')
 							vm.onTotalRequestsCountChanges({ totalRequestsCount: vm.totalRequestsCount });
-					}					
+					}
 					vm.loaded = true;
 					if (done != null) done();
 				});
@@ -45,7 +46,7 @@
 					vm.loaded = true;
 				});
 				if (done != null ) done();
-			}			
+			}
 		}
 	}
 
@@ -67,13 +68,13 @@
 		};
 
 		function postlink(scope, elem, attrs, ctrl) {
-			
-			scope.$watch(function () {				
+
+			scope.$watch(function () {
 				var target = {
 					startDate: scope.requestsOverview.period? scope.requestsOverview.period.startDate : null,
-					endDate: scope.requestsOverview.period? scope.requestsOverview.period.endDate : null,			
+					endDate: scope.requestsOverview.period? scope.requestsOverview.period.endDate : null,
 					agentSearchTerm: scope.requestsOverview.agentSearchTerm ? scope.requestsOverview.agentSearchTerm : ""
-				}				
+				}
 				return target;
 			}, function (newValue) {
 				if (newValue.endDate === null || newValue.startDate === null) return;
