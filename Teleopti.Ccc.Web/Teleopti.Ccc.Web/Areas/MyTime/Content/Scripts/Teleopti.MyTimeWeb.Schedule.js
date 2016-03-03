@@ -656,9 +656,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	var TimelineViewModel = function (timeline, timelineCulture) {
 		var self = this;
 		self.positionPercentage = ko.observable(timeline.PositionPercentage);
-
-		self.minutes = ko.observable(timeline.Time.TotalMinutes);
-		var timeFromMinutes = moment().startOf('day').add('minutes', self.minutes());
+		var hourMinuteSecond = timeline.Time.split(":");
+		self.minutes = hourMinuteSecond[0] * 60 + parseInt(hourMinuteSecond[1]);
+		var timeFromMinutes = moment().startOf('day').add('minutes', self.minutes);
 
 		self.timeText = timeline.TimeLineDisplay;
 
@@ -715,7 +715,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		if (element) {
 			var timeLineViewModel = ko.dataFor(element);
 			if (timeLineViewModel) {
-				return timeLineViewModel.minutes();
+				return timeLineViewModel.minutes;
 			}
 		}
 		return null;
