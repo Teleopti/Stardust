@@ -12950,7 +12950,7 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
     <value>Aktuell användares tidszon</value>
   </data>
   <data name="RequestSubmitterTimeZone" xml:space="preserve">
-    <value>Tidszon för den som skickat förfrågan:</value>
+    <value>Förfrågans tidszon:</value>
   </data>
   <data name="FilterRoles" xml:space="preserve">
     <value>Filtrera roller</value>
@@ -13095,5 +13095,23 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
   </data>
   <data name="SelectTeams" xml:space="preserve">
     <value>Välj team</value>
+  </data>
+  <data name="AreYouSureToRemoveSelectedAbsence" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort all markerad frånvaro?</value>
+  </data>
+  <data name="FailedToRemoveAbsence" xml:space="preserve">
+    <value>Misslyckades med att ta bort markerad frånvaro.</value>
+  </data>
+  <data name="FinishedRemoveAbsence" xml:space="preserve">
+    <value>Frånvaro borttagen. </value>
+  </data>
+  <data name="ToggleLowLightFilter" xml:space="preserve">
+    <value>Slå på/av svagare ljus</value>
+  </data>
+  <data name="NoHierarchiesExist" xml:space="preserve">
+    <value>Kan inte hitta någon organisationsstruktur för vald affärsenhet. </value>
+  </data>
+  <data name="ToggleAll" xml:space="preserve">
+    <value>Bocka i/ur alla</value>
   </data>
 </root>
