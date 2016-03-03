@@ -313,7 +313,7 @@ namespace Stardust.Manager
 			return deadNodes;
 		}
 
-		public void RegisterHeartbeat(string nodeUri)
+		public void RegisterHeartbeat(string nodeUri, bool updateStatus)
 		{
 			// Validate argument.
 			if (string.IsNullOrEmpty(nodeUri))
@@ -323,12 +323,20 @@ namespace Stardust.Manager
 
 			LogHelper.LogDebugWithLineNumber(Logger,
 			                                 "Start register heartbeat for url : " + nodeUri);
-
+			
 			// Update row.
-			var updateCommandText = @"UPDATE Stardust.WorkerNodes 
+				var updateCommandText = @"UPDATE Stardust.WorkerNodes 
 										SET Heartbeat = @Heartbeat,
 											Alive = @Alive
 										WHERE Url = @Url";
+
+			
+			if(!updateStatus)
+			{
+				updateCommandText = @"UPDATE Stardust.WorkerNodes 
+										SET Heartbeat = @Heartbeat
+										WHERE Url = @Url";
+			}
 
 			using (var connection = new SqlConnection(_connectionString))
 			{
@@ -340,11 +348,13 @@ namespace Stardust.Manager
 					command.Parameters.Add("@Heartbeat",
 					                       SqlDbType.DateTime).Value = DateTime.Now;
 
-					command.Parameters.Add("@Alive",
-					                       SqlDbType.NVarChar).Value = "true";
-
+					
+						command.Parameters.Add("@Alive",
+										  SqlDbType.NVarChar).Value = "true";
+					
+					
 					command.Parameters.Add("@Url",
-					                       SqlDbType.NVarChar).Value = nodeUri.ToString();
+					                       SqlDbType.NVarChar).Value = nodeUri;
 					try
 					{
 						command.ExecuteNonQuery();

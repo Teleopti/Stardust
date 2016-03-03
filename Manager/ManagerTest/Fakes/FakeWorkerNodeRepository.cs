@@ -29,12 +29,12 @@ namespace ManagerTest.Fakes
 			throw new NotImplementedException();
 		}
 
-		public void RegisterHeartbeat(string nodeUri)
+		public WorkerNode LoadWorkerNode(Uri nodeUri)
 		{
 			throw new NotImplementedException();
 		}
 
-		public WorkerNode LoadWorkerNode(Uri nodeUri)
+		public void RegisterHeartbeat(string nodeUri, bool updateStatus)
 		{
 			throw new NotImplementedException();
 		}

@@ -48,6 +48,15 @@ namespace Stardust.Manager
 			_checkHeartbeatsTimer.Elapsed += CheckHeartbeatsOnTimedEvent;
 			_checkHeartbeatsTimer.Interval = _managerConfiguration.AllowedNodeDownTimeSeconds * 200;
 			_checkHeartbeatsTimer.Start();
+
+			List<WorkerNode> workerNodes = _workerNodeRepository.LoadAll();
+			if (workerNodes.Any())
+			{
+				foreach (WorkerNode workerNode in workerNodes)
+				{
+					_workerNodeRepository.RegisterHeartbeat(workerNode.Url.ToString(), false);
+				}
+			}
 		}
 
 		public void Dispose()
@@ -141,7 +150,7 @@ namespace Stardust.Manager
 			LogHelper.LogDebugWithLineNumber(Logger,
 			                                 "Start RegisterHeartbeat.");
 
-			_workerNodeRepository.RegisterHeartbeat(nodeUri);
+			_workerNodeRepository.RegisterHeartbeat(nodeUri, true);
 
 			LogHelper.LogDebugWithLineNumber(Logger,
 			                                 "Finished RegisterHeartbeat.");
