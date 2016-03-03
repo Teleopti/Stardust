@@ -60,7 +60,6 @@
 								background-color: $gray-300 !important;
 				}
 }
-
 /////////End of Sites & teams///////////////
 ///////////rta-agents///////////////////////
 .agent-grid-height {
@@ -82,13 +81,14 @@
 .agent-menu > a {
 				margin-right: 5%;
 }
-
+.agent-table-wrapper {
+				width: 100%;
+}
 ///////////End of rta-agents////////////////
 ///////////rta-agent-details///////////////
 .rta-agent-details-total {
 				text-align: right;
 }
-
 ///////////End of rta-agent-details///////////
 ///////////////Media/////////////////////////
 @media only screen and (max-width: 840px),
@@ -98,5 +98,4 @@ only screen and (max-device-width: 840px) {
 								width: 98%!important;
 				}
 }
-
 ///////////////End of Media/////////////////////////
