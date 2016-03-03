@@ -8,8 +8,8 @@
 
 	.time-zone-switch {
 		position: absolute;
-		top: 10px;
-		left: 35em;
+		top: 0.8em;
+		left: 47em;
 		display: inline-block;
 		z-index: 100;
 	}
@@ -45,6 +45,10 @@
 	.request-filter {
 		.input-prepend {
 			width: 300px;
+		}
+
+		#simple-people-search {
+			width: 316px;
 		}
 	}
 
