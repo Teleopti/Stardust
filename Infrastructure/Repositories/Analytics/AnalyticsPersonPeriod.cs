@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
 		public string EmploymentNumber { get; set; }
-		public int EmploymentTypeCode { get; set; }
+		public int? EmploymentTypeCode { get; set; }
 		public string EmploymentTypeName { get; set; }
 		public Guid ContractCode { get; set; }
 		public string ContractName { get; set; }
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public int BusinessUnitId { get; set; }
 		public Guid BusinessUnitCode { get; set; }
 		public string BusinessUnitName { get; set; }
-		public int SkillsetId { get; set; }
+		public int? SkillsetId { get; set; }
 		public string Email { get; set; }
 		public string Note { get; set; }
 		public DateTime EmploymentStartDate { get; set; }

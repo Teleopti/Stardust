@@ -71,7 +71,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					.SetGuid("code", personCode)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsPersonPeriod)))
 					.SetReadOnly(true)
-					//.SetTimeout(120)
 					.List<IAnalyticsPersonPeriod>();
 			}
 		}
@@ -101,7 +100,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
-		public int SkillSetId(IList<IAnalyticsSkill> skills)
+		public int? SkillSetId(IList<IAnalyticsSkill> skills)
 		{
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
@@ -140,23 +139,36 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
-		public int TimeZone(string timeZoneCode)
+		public int? TimeZone(string timeZoneCode)
 		{
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(
 					"select TOP 1 time_zone_id from mart.dim_time_zone WITH (NOLOCK) WHERE time_zone_code=:TimeZoneCode")
 					.SetString("TimeZoneCode", timeZoneCode)
-					.UniqueResult<short>();
+					.UniqueResult<short?>();
 			}
 		}
 
-		public IAnalyticsDate ValidToMaxDate()
+		public IAnalyticsDate MaxDate()
 		{
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(
-					"select max(date_id) DateId, max(date_date) DateDate FROM mart.dim_date WHERE date_id>0")
+					"select max(date_id) DateId, max(date_date) DateDate FROM mart.dim_date WITH (NOLOCK) WHERE date_id>0")
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsDate)))
+					.SetReadOnly(true)
+					.UniqueResult<IAnalyticsDate>();
+			}
+		}
+
+
+		public IAnalyticsDate MinDate()
+		{
+			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				return uow.Session().CreateSQLQuery(
+					"select min(date_id) DateId, min(date_date) DateDate FROM mart.dim_date WITH (NOLOCK) WHERE date_id>0")
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsDate)))
 					.SetReadOnly(true)
 					.UniqueResult<IAnalyticsDate>();
@@ -168,7 +180,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(
-					"select date_id DateId, date_date DateDate FROM mart.dim_date WHERE date_date=:dateDate")
+					"select date_id DateId, date_date DateDate FROM mart.dim_date WITH (NOLOCK) WHERE date_date=:dateDate")
 					.SetDateTime("dateDate", date.Date)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsDate)))
 					.SetReadOnly(true)
@@ -188,6 +200,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		//	}
 		//}
 
+		
 
 
 		public void AddPersonPeriod(IAnalyticsPersonPeriod personPeriod)
@@ -256,7 +269,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			.SetString("FirstName", personPeriod.FirstName)
 			.SetString("LastName", personPeriod.LastName)
 			.SetString("EmploymentNumber", personPeriod.EmploymentNumber)
-			.SetInt32("EmploymentTypeCode", personPeriod.EmploymentTypeCode)
+			.SetInt32("EmploymentTypeCode", personPeriod.EmploymentTypeCode.GetValueOrDefault())
 			.SetString("EmploymentTypeName", personPeriod.EmploymentTypeName)
 			.SetGuid("ContractCode", personPeriod.ContractCode)
 			.SetString("ContractName", personPeriod.ContractName)
@@ -271,7 +284,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			.SetInt32("BusinessUnitId", personPeriod.BusinessUnitId)
 			.SetGuid("BusinessUnitCode", personPeriod.BusinessUnitCode)
 			.SetString("BusinessUnitName", personPeriod.BusinessUnitName)
-			.SetInt32("SkillsetId", personPeriod.SkillsetId)
+			.SetInt32("SkillsetId", personPeriod.SkillsetId.GetValueOrDefault())
 			.SetString("Email", personPeriod.Email)
 			.SetString("Note", personPeriod.Note)
 			.SetDateTime("EmploymentStartDate", personPeriod.EmploymentStartDate)
@@ -297,10 +310,37 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
+		
+
 		private IUnitOfWorkFactory statisticUnitOfWorkFactory()
 		{
 			var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
 			return identity.DataSource.Analytics;
+		}
+
+		public int IntervalsPerDay()
+		{
+			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				return uow.Session().CreateSQLQuery(
+					"select count(*) from mart.dim_interval WITH (NOLOCK)")
+					.UniqueResult<int>();
+			}
+		}
+
+		public int MaxIntervalId()
+		{
+			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				return uow.Session().CreateSQLQuery(
+					"select max(interval_id) from mart.dim_interval WITH (NOLOCK)")
+					.UniqueResult<int>();
+			}
+		}
+
+		public void UpdatePersonPeriod(IAnalyticsPersonPeriod personPeriod)
+		{
+			throw new NotImplementedException();
 		}
 	}
 

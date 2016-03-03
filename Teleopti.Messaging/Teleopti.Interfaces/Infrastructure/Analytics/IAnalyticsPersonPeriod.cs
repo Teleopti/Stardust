@@ -17,7 +17,7 @@ namespace Teleopti.Interfaces.Infrastructure.Analytics
 		string FirstName { get; set; }
 		string LastName { get; set; }
 		string EmploymentNumber { get; set; }
-		int EmploymentTypeCode { get; set; }
+		int? EmploymentTypeCode { get; set; }
 		string EmploymentTypeName { get; set; }
 		Guid ContractCode { get; set; }
 		string ContractName { get; set; }
@@ -32,7 +32,7 @@ namespace Teleopti.Interfaces.Infrastructure.Analytics
 		int BusinessUnitId { get; set; }
 		Guid BusinessUnitCode { get; set; }
 		string BusinessUnitName { get; set; }
-		int SkillsetId { get; set; }
+		int? SkillsetId { get; set; }
 		string Email { get; set; }
 		string Note { get; set; }
 		DateTime EmploymentStartDate { get; set; }

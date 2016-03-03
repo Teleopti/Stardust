@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure.Analytics;
 
@@ -13,12 +14,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 	public class PersonPeriodTransformer
 	{
 		private IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
-		private IPersonRepository _personRepository;
-		private static DateTime Eternity = new DateTime(2059, 12, 30);
+		//private IPersonRepository _personRepository;
+		private static DateTime Eternity = new DateTime(2059, 12, 31);
 
 		public PersonPeriodTransformer(IPersonRepository personRepository, IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository)
 		{
-			this._personRepository = personRepository;
+
+			//this._personRepository = personRepository; // Not needed here anymore?
 			this._analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
 		}
 
@@ -33,22 +35,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 					personPeriod.PersonSkillCollection.Select(a => a.Skill.Id.GetValueOrDefault()).ToList(),
 					businessUnitId);
 
-			var timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
-			var timeZoneId = MapTimeZoneId(person.PermissionInformation.DefaultTimeZone().Id);
-
-			var validFromDate = ValidFromDate(personPeriod, timeZoneInfo);
-			var validToDate = ValidToDate(personPeriod, timeZoneInfo);
-
-			var maxDate = MapMaxDate();
-			var validFromDateId = MapDateId(validFromDate);
-			var validToDateId = MapDateId(validToDate);
-			int validToDateIdMaxDate = GetValidToDateIdMaxDate(validToDate, maxDate, validToDateId);
-
-			var validFromDateLocal = personPeriod.Period.StartDate.Date;
-			var validToDateLocal = personPeriod.Period.EndDate.Date;
-
-			var validFromDateIdLocal = MapDateId(validFromDateLocal);
-			var validToDateIdLocal = MapDateId(validToDateLocal);
+			var windowsDomain = "";
+			var windowsUsername = "";
 
 			var analyticsPersonPeriod = new AnalyticsPersonPeriod()
 			{
@@ -58,8 +46,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 				FirstName = person.Name.FirstName,
 				LastName = person.Name.LastName,
 				EmploymentNumber = person.EmploymentNumber,
-				EmploymentTypeCode = -1, // TODO 
-				EmploymentTypeName = "Not Defined?", // TODO
+				EmploymentTypeCode = null,
+				EmploymentTypeName = personPeriod.PersonContract.Contract.EmploymentType.ToString(),
 				ContractCode = personPeriod.PersonContract.Contract.Id.GetValueOrDefault(),
 				ContractName = personPeriod.PersonContract.Contract.Description.Name,
 				ParttimeCode = personPeriod.PersonContract.PartTimePercentage.Id.GetValueOrDefault(),
@@ -78,94 +66,168 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 				Note = person.Note,
 				EmploymentStartDate = personPeriod.Period.StartDate.Date,
 				EmploymentEndDate = personPeriod.Period.EndDate.Date,
-				TimeZoneId = timeZoneId,
+
 				IsAgent = person.IsAgent(DateOnly.Today),
 				IsUser = false,
 				DatasourceId = 1,
-				InsertDate = DateTime.Now, // TODO updateringen borde sköta detta
-				UpdateDate = DateTime.Now, // TODO updateringen borde sköta detta
+				//InsertDate = DateTime.Now, // TODO uppdateringen borde sköta detta
+				//UpdateDate = DateTime.Now, // TODO uppdateringen borde sköta detta
 				DatasourceUpdateDate = person.UpdatedOn.GetValueOrDefault(),
 				ToBeDeleted = false,
-				WindowsDomain = "",     // TODO
-				WindowsUsername = "",   // TODO
-
-				ValidFromDate = validFromDate, // UTC tid
-				ValidToDate = validToDate,     // UTC tid
-				ValidFromDateId = validFromDateId,   // UTC tid id
-				ValidToDateId = validToDateId,     // UTC tid id
-				ValidFromIntervalId = -1,   // TODO UTC interval
-				ValidToIntervalId = -1,     // TODO UTC interval 
-
-				ValidToDateIdMaxDate = validToDateIdMaxDate,  // Samma som ValidToDateId om inte eternity då ska vara sista dagen i dim_date
-				ValidToIntervalIdMaxDate = -1, // Samma som ValidToIntervalId om inte eterntity då ska det vara sista interval i dim_interval
-
-				ValidFromDateIdLocal = validFromDateIdLocal,
-				ValidToDateIdLocal = validToDateIdLocal,
-				ValidFromDateLocal = validFromDateLocal,
-				ValidToDateLocal = validToDateLocal
+				WindowsDomain = windowsDomain,
+				WindowsUsername = windowsUsername,
 			};
+
+			analyticsPersonPeriod = FixDatesAndInterval(
+				analyticsPersonPeriod,
+				_analyticsPersonPeriodRepository,
+				personPeriod.Period.StartDate.Date,
+				personPeriod.Period.EndDate.Date,
+				person.PermissionInformation.DefaultTimeZone());
 
 			return analyticsPersonPeriod;
 		}
 
-		private static int GetValidToDateIdMaxDate(DateTime validToDate, IAnalyticsDate maxDate, int validToDateId)
+		public AnalyticsPersonPeriod FixDatesAndInterval(AnalyticsPersonPeriod analyticsPersonPeriod, IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository,
+			DateTime personPeriodStartDate, DateTime personPeriodEndDate, TimeZoneInfo timeZoneInfo)
 		{
-			// Samma som ValidToDateId om inte eternity då ska vara sista dagen i dim_date
-			return validToDate.Equals(Eternity)
-				? maxDate.DateId
-				: validToDateId;
+			var timeZoneId = MapTimeZoneId(timeZoneInfo.Id);
+			if (!timeZoneId.HasValue)
+			{
+				throw new Exception("TimeZone does not exists yet in Analytics database. ");
+			}
+
+			var maxDate = MapMaxDate();
+
+			var validFromDate = ValidFromDate(personPeriodStartDate, timeZoneInfo);
+			var validToDate = ValidToDate(personPeriodEndDate, timeZoneInfo, maxDate.DateDate);
+
+			var validFromDateId = MapDateId(validFromDate);
+			var validToDateId = MapDateId(validToDate);
+			int validToDateIdMaxDate = GetValidToDateIdMaxDate(validToDate, maxDate, validToDateId);
+
+			var validFromDateLocal = personPeriodStartDate;
+			var validToDateLocal = personPeriodEndDate;
+
+			var validFromDateIdLocal = MapDateId(validFromDateLocal);
+			var validToDateIdLocal = MapDateId(validToDateLocal);
+
+			int intervalsPerDay = _analyticsPersonPeriodRepository.IntervalsPerDay();
+			var validFromIntervalId = ValidFromIntervalId(validFromDate, intervalsPerDay);
+			var validToIntervalId = ValidToIntervalId(validToDate, intervalsPerDay);
+
+			int validToIntervalIdMaxDate = getValidToIntervalIdMaxDate(validToIntervalId, validToDateId);
+
+			analyticsPersonPeriod.TimeZoneId = timeZoneId.GetValueOrDefault();
+
+			analyticsPersonPeriod.ValidFromDate = validFromDate;        // UTC tid
+			analyticsPersonPeriod.ValidToDate = validToDate;            // UTC tid
+			analyticsPersonPeriod.ValidFromDateId = validFromDateId;    // UTC tid id
+			analyticsPersonPeriod.ValidToDateId = validToDateId;        // UTC tid id
+			analyticsPersonPeriod.ValidFromIntervalId = validFromIntervalId;    // UTC interval
+			analyticsPersonPeriod.ValidToIntervalId = validToIntervalId;        // UTC interval 
+
+			analyticsPersonPeriod.ValidToDateIdMaxDate = validToDateIdMaxDate;
+			analyticsPersonPeriod.ValidToIntervalIdMaxDate = validToIntervalIdMaxDate;
+
+			analyticsPersonPeriod.ValidFromDateIdLocal = validFromDateIdLocal;
+			analyticsPersonPeriod.ValidToDateIdLocal = validToDateIdLocal;
+			analyticsPersonPeriod.ValidFromDateLocal = validFromDateLocal;
+			analyticsPersonPeriod.ValidToDateLocal = validToDateLocal;
+
+			return analyticsPersonPeriod;
 		}
 
-		private static DateTime ValidToDate(IPersonPeriod personPeriod, TimeZoneInfo timeZoneInfo)
+		public static int ValidToIntervalId(DateTime validToDate, int intervalsPerDay)
 		{
-			DateTime validToDate = personPeriod.EndDate().Date.Equals(Eternity)
+			return new IntervalBase(getPeriodIntervalEndDate(validToDate, intervalsPerDay), intervalsPerDay).Id;
+		}
+
+		public static int ValidFromIntervalId(DateTime validFromDate, int intervalsPerDay)
+		{
+			return new IntervalBase(validFromDate, intervalsPerDay).Id;
+		}
+
+		private int getValidToIntervalIdMaxDate(int validToIntervalId, int validToDateId)
+		{
+			// Samma som ValidToIntervalId om inte validToDateId är eterntity då ska det vara sista interval i dim_interval
+			if (validToDateId != -2)
+				return validToIntervalId;
+			return _analyticsPersonPeriodRepository.MaxIntervalId();
+		}
+
+		private static DateTime getPeriodIntervalEndDate(DateTime endDate, int intervalsPerDay)
+		{
+			if (endDate.Equals(Eternity))
+			{
+				return endDate;
+			}
+
+			int minutesPerInterval = 1440 / intervalsPerDay;
+			return endDate.AddMinutes(-minutesPerInterval);
+		}
+
+		public static int GetValidToDateIdMaxDate(DateTime validToDate, IAnalyticsDate maxDate, int validToDateId)
+		{
+			// Samma som ValidToDateId om inte eternity då ska vara näst sista dagen i dim_date
+			return validToDate.Equals(Eternity)
+				? maxDate.DateId - 1
+				: validToDateId;
+		}
+		
+		public static DateTime ValidToDate(DateTime personPeriodEndDate, TimeZoneInfo timeZoneInfo, DateTime maxDate)
+		{
+			var validToDate = personPeriodEndDate.Equals(Eternity) || personPeriodEndDate > maxDate
 				? Eternity
-				: timeZoneInfo.SafeConvertTimeToUtc(personPeriod.EndDate().Date.AddDays(1));
+				: timeZoneInfo.SafeConvertTimeToUtc(personPeriodEndDate.AddDays(1)); 
+			// Add one days because there is no end time in app database but it is in analytics and we do not want gap between person periods end and start date.
 			return validToDate;
 		}
 
-		private static DateTime ValidFromDate(IPersonPeriod personPeriod, TimeZoneInfo timeZoneInfo)
+		public static DateTime ValidFromDate(DateTime personPeriodStartDate, TimeZoneInfo timeZoneInfo)
 		{
-			var validFromDate = timeZoneInfo.SafeConvertTimeToUtc(personPeriod.StartDate.Date);
+			var validFromDate = timeZoneInfo.SafeConvertTimeToUtc(personPeriodStartDate);
 			if (validFromDate >= Eternity)
 				validFromDate = Eternity;
 			return validFromDate;
 		}
 
-		private int MapDateId(DateTime date)
+		public int MapDateId(DateTime date)
 		{
-			return _analyticsPersonPeriodRepository.Date(date).DateId;
+			var analyticsDate = _analyticsPersonPeriodRepository.Date(date);
+			if (analyticsDate != null)
+				return analyticsDate.DateId;
+			return -1;
 		}
 
-		private IAnalyticsDate MapMaxDate()
+		public IAnalyticsDate MapMaxDate()
 		{
-			return _analyticsPersonPeriodRepository.ValidToMaxDate();
+			return _analyticsPersonPeriodRepository.MaxDate();
 		}
 
-		private int MapTimeZoneId(string timeZoneCode)
+		public int? MapTimeZoneId(string timeZoneCode)
 		{
 			return _analyticsPersonPeriodRepository.TimeZone(timeZoneCode);
 		}
 
-		private int MapTeamId(Guid teamCode, int siteId, string teamName, int businessUnitId)
+		public int MapTeamId(Guid teamCode, int siteId, string teamName, int businessUnitId)
 		{
 			return _analyticsPersonPeriodRepository.TeamId(teamCode, siteId, teamName, businessUnitId);
 		}
 
-		private int MapBusinessId(Guid businessUnitCode)
+		public int MapBusinessId(Guid businessUnitCode)
 		{
 			return _analyticsPersonPeriodRepository.BusinessUnitId(businessUnitCode);
 		}
 
-		private int MapSiteId(int businessUnitId, Guid siteCode, string siteName)
+		public int MapSiteId(int businessUnitId, Guid siteCode, string siteName)
 		{
 			return _analyticsPersonPeriodRepository.SiteId(siteCode, siteName, businessUnitId);
 		}
 
-		private int MapSkillsetId(List<Guid> skillCodes, int businessUnitId)
+		public int? MapSkillsetId(List<Guid> skillCodes, int businessUnitId)
 		{
 			// TODO logic for new skills and new combination which should produce a new skillset.
-
 			if (skillCodes.IsEmpty())
 				return -1;
 
@@ -173,5 +235,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 				.Where(a => skillCodes.Contains(a.SkillCode)).ToList();
 			return _analyticsPersonPeriodRepository.SkillSetId(listOfSkillIds);
 		}
-	}
+	} 
 }

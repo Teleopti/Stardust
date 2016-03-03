@@ -15,13 +15,17 @@ namespace Teleopti.Ccc.Domain.Repositories
 
 		IList<IAnalyticsPersonPeriod> GetPersonPeriods(Guid personCode);
 		void AddPersonPeriod(IAnalyticsPersonPeriod personPeriod);
+		void UpdatePersonPeriod(IAnalyticsPersonPeriod personPeriod);
 		int TeamId(Guid teamCode, int siteId, string teamName, int businessUnitId);
 
-		int SkillSetId(IList<IAnalyticsSkill> skills);
+		int? SkillSetId(IList<IAnalyticsSkill> skills);
 		IList<IAnalyticsSkill> Skills(int businessUnitId);
-		int TimeZone(string timeZoneCode);
-		IAnalyticsDate ValidToMaxDate();
+		int? TimeZone(string timeZoneCode);
+		IAnalyticsDate MaxDate();
+		IAnalyticsDate MinDate();
 		IAnalyticsDate Date(DateTime date);
+		int IntervalsPerDay();
+		int MaxIntervalId();
 
 	}
 }

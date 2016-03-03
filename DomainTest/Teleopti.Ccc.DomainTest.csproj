@@ -192,6 +192,9 @@
     <Compile Include="ApplicationLayer\PersonAssociationChanged\TerminalDateChangedTest.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChanged\TerminatedTest.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodDateTransformerTests.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodMapTests.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodMapTests.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\TerminatedPersonTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteAdherence\SiteChangesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteAdherence\PersonTerminatedTest.cs" />
@@ -1524,6 +1527,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>

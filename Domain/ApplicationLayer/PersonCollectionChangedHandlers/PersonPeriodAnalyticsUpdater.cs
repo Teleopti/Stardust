@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analy
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure.Analytics;
 using IAnalyticsPersonPeriodRepository = Teleopti.Ccc.Domain.Repositories.IAnalyticsPersonPeriodRepository;
@@ -19,7 +20,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 	{
 		private readonly IPersonRepository _personRepository;
 		private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
-		 
 
 		public PersonPeriodAnalyticsUpdater(IPersonRepository personRepository, IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository)
 		{
@@ -42,11 +42,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 				Console.WriteLine("Person periods: " + person.PersonPeriodCollection.Count());
 
+				PersonPeriodFilter filter = new PersonPeriodFilter(_analyticsPersonPeriodRepository.MinDate().DateDate,
+					_analyticsPersonPeriodRepository.MaxDate().DateDate);
+
 				PersonPeriodTransformer transformer = new PersonPeriodTransformer(_personRepository, _analyticsPersonPeriodRepository);
+
+
+
 				if (test.IsEmpty() && person.PersonPeriodCollection.Any())
 				{
-					foreach (var personPeriod in person.PersonPeriodCollection)
+					foreach (var personPeriod in filter.GetFiltered(person.PersonPeriodCollection))
 					{
+
 						var analyticsPersonPeriod = transformer.Transform(person, personPeriod);
 						_analyticsPersonPeriodRepository.AddPersonPeriod(analyticsPersonPeriod);
 					}
@@ -72,7 +79,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
 		public string EmploymentNumber { get; set; }
-		public int EmploymentTypeCode { get; set; }
+		public int? EmploymentTypeCode { get; set; }
 		public string EmploymentTypeName { get; set; }
 		public Guid ContractCode { get; set; }
 		public string ContractName { get; set; }
@@ -87,7 +94,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		public int BusinessUnitId { get; set; }
 		public Guid BusinessUnitCode { get; set; }
 		public string BusinessUnitName { get; set; }
-		public int SkillsetId { get; set; }
+		public int? SkillsetId { get; set; }
 		public string Email { get; set; }
 		public string Note { get; set; }
 		public DateTime EmploymentStartDate { get; set; }

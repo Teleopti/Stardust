@@ -189,6 +189,7 @@
     <Compile Include="FakeRecurringEventPublisher.cs" />
     <Compile Include="FakeRepositories\FakeAbsenceRepository.cs" />
     <Compile Include="FakeRepositories\FakeAgentDayScheduleTagRepository.cs" />
+    <Compile Include="FakeRepositories\FakeAnalyticsPersonPeriodRepository.cs" />
     <Compile Include="FakeRepositories\FakeApplicationRoleRepository.cs" />
     <Compile Include="FakeRepositories\FakeBudgetDayRepository.cs" />
     <Compile Include="FakeRepositories\FakeBusinessUnitRepository.cs" />
