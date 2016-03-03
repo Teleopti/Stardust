@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<StardustSender>().SingleInstance();
+			builder.RegisterType<StardustSender>().As<IStardustSender>().SingleInstance();
 		}
 	}
 }
