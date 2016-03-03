@@ -253,4 +253,10 @@
 		position: relative;
 		margin: 5px;
 	}
+	// CSS hack for IE10 and IE11 since IE11 partial support flex
+	@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+		.con-row {
+			min-width: 300px;
+		}
+	}
 }
