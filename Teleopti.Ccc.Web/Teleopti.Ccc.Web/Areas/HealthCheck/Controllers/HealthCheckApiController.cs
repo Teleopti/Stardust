@@ -27,12 +27,12 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		private readonly IMessagePopulatingServiceBusSender _populatingPublisher;
 		private readonly IEtlJobStatusRepository _etlJobStatusRepository;
 		private readonly IEtlLogObjectRepository _etlLogObjectRepository;
-		private readonly StardustSender _stardustSender;
+		private readonly IStardustSender _stardustSender;
 		private readonly IToggleManager _toggleManager;
 
 		public HealthCheckApiController(IMessagePopulatingServiceBusSender populatingPublisher,
 												  IEtlJobStatusRepository etlJobStatusRepository, IEtlLogObjectRepository etlLogObjectRepository,
-												  StardustSender stardustSender, IToggleManager toggleManager)
+												  IStardustSender stardustSender, IToggleManager toggleManager)
 		{
 			_populatingPublisher = populatingPublisher;
 			_etlJobStatusRepository = etlJobStatusRepository;

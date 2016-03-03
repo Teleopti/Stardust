@@ -59,7 +59,7 @@
 						</li>
 					</ul>
 					<h3>Stardust Status</h3>
-					<li class="list-group-item configured-url" data-bind="css: { 'list-group-item-success': StardustSuccess() == true }">
+					<li class="list-group-item stardust" data-bind="css: { 'list-group-item-success': StardustSuccess() == true }">
 						<span data-bind="visible: StardustSuccess()">Success</span>
 						<i class="pull-right glyphicon glyphicon-ok" data-bind="visible: StardustSuccess()"></i>
 					</li>
