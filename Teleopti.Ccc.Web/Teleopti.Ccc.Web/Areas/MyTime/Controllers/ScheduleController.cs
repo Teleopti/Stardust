@@ -2,10 +2,12 @@
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
@@ -17,13 +19,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)]
 	public class ScheduleController : Controller
 	{
+		private readonly IScheduleViewModelFactory _scheduleViewModelFactory;
 		private readonly IRequestsViewModelFactory _requestsViewModelFactory;
+		private readonly INow _now;
 		private readonly IOvertimeAvailabilityPersister _overtimeAvailabilityPersister;
 		private readonly IAbsenceReportPersister _absenceReportPersister;
 
-		public ScheduleController(IRequestsViewModelFactory requestsViewModelFactory, IOvertimeAvailabilityPersister overtimeAvailabilityPersister, IAbsenceReportPersister absenceReportPersister)
+		public ScheduleController(IScheduleViewModelFactory scheduleViewModelFactory, IRequestsViewModelFactory requestsViewModelFactory, INow now, IOvertimeAvailabilityPersister overtimeAvailabilityPersister, IAbsenceReportPersister absenceReportPersister)
 		{
+			_scheduleViewModelFactory = scheduleViewModelFactory;
 			_requestsViewModelFactory = requestsViewModelFactory;
+			_now = now;
 			_overtimeAvailabilityPersister = overtimeAvailabilityPersister;
 			_absenceReportPersister = absenceReportPersister;
 		}
@@ -46,6 +52,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
         public virtual ActionResult Month()
         {
             return View("MonthPartial");
+        }
+
+		[UnitOfWork]
+		public virtual JsonResult FetchData(DateOnly? date)
+		{
+			var showForDate = date ?? _now.LocalDateOnly();
+			var model = _scheduleViewModelFactory.CreateWeekViewModel(showForDate);
+			return Json(model, JsonRequestBehavior.AllowGet);
+		}
+
+        [UnitOfWork]
+        public virtual JsonResult FetchMonthData(DateOnly? date)
+        {
+            var showForDate = date ?? _now.LocalDateOnly();
+            var model = _scheduleViewModelFactory.CreateMonthViewModel(showForDate);
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
 
 		public ActionResult Index()

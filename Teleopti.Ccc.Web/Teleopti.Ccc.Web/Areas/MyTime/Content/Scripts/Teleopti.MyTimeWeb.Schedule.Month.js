@@ -23,7 +23,7 @@ Teleopti.MyTimeWeb.Schedule.Month = (function ($) {
 
 	function _fetchMonthData() {
 	    ajax.Ajax({
-	        url: '../api/Schedule/FetchMonthData',
+	        url: 'Schedule/FetchMonthData',
 	        dataType: "json",
 	        type: 'GET',
 	        data: {
