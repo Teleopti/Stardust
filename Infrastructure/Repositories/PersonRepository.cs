@@ -223,7 +223,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				criterias.Add(DetachedCriteria.For<Person>()
 					.SetFetchMode("PermissionInformation", FetchMode.Join)
 					.SetFetchMode("PermissionInformation.personInApplicationRole", FetchMode.Join));
-				//.CreateAlias("PermissionInformation.personInApplicationRole", "ApplicationRoleCollection", JoinType.InnerJoin));
 
 				var list = criterias.List();
 
@@ -441,8 +440,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return DetachedCriteria.For<Person>("per").SetFetchMode("WorkflowControlSet", FetchMode.Join);
 		}
-
-
+		
 		private static DetachedCriteria personSchedule(DateOnlyPeriod period)
 		{
 			return DetachedCriteria.For<Person>("per")
@@ -450,7 +448,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							 Restrictions.IsNull("TerminalDate"),
 					 Restrictions.Ge("TerminalDate", period.StartDate)
 							 ))
-				//.Add(Subqueries.Exists(findPeriodMatch(period)))
 				 .SetFetchMode("PersonSchedulePeriodCollection", FetchMode.Join)
 				 .SetFetchMode("PersonSchedulePeriodCollection.shiftCategoryLimitation", FetchMode.Join);
 		}
@@ -468,9 +465,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 								 .SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
 								 .SetFetchMode("PersonPeriodCollection.Team.Site", FetchMode.Join)
 								 .SetFetchMode("PersonPeriodCollection.Team.Site.BusinessUnit", FetchMode.Join);
-			// don't order here because it will order in tempdb and take too much resources
-			//.AddOrder(Order.Asc("Name.LastName"))
-			//.AddOrder(Order.Asc("Name.FirstName"));
 		}
 
 		private static IEnumerable<DetachedCriteria> personPeriodContract(DateOnlyPeriod period)
@@ -539,18 +533,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private static DetachedCriteria findPeriodMatch(DateOnlyPeriod period)
 		{
-			DetachedCriteria detachedCriteria = DetachedCriteria.For(typeof(PersonPeriod), "first")
-				 .CreateAlias("Team", "team", JoinType.InnerJoin)
-				 .CreateAlias("team.Site", "site", JoinType.InnerJoin)
-				 .SetProjection(Projections.Id())
-				 .Add(Restrictions.Le("StartDate", period.EndDate))
-				 .Add(Restrictions.EqProperty("first.Parent", "per.Id"))
-				 .Add(Restrictions.Eq("site.BusinessUnit", ServiceLocatorForEntity.CurrentBusinessUnit.Current()))
-				 .Add(Subqueries.NotExists(DetachedCriteria.For<PersonPeriod>()
-														  .SetProjection(Projections.Id())
-														  .Add(Restrictions.EqProperty("Parent", "first.Parent"))
-														  .Add(Restrictions.GtProperty("StartDate", "first.StartDate"))
-														  .Add(Restrictions.Le("StartDate", period.StartDate))));
+			DetachedCriteria detachedCriteria = DetachedCriteria.For(typeof (PersonPeriod))
+				.CreateAlias("Team", "team", JoinType.InnerJoin)
+				.CreateAlias("team.Site", "site", JoinType.InnerJoin)
+				.SetProjection(Projections.Id())
+				.Add(Restrictions.Le("StartDate", period.EndDate))
+				.Add(Restrictions.Ge("internalEndDate", period.StartDate))
+                .Add(Restrictions.EqProperty("Parent", "per.Id"))
+				.Add(Restrictions.Eq("site.BusinessUnit", ServiceLocatorForEntity.CurrentBusinessUnit.Current()));
+
 			return detachedCriteria;
 		}
 
@@ -573,17 +564,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private static DetachedCriteria findActivePeriod(ITeam team, DateOnlyPeriod dateOnlyPeriod)
 		{
-			return DetachedCriteria.For(typeof(PersonPeriod), "first")
+			return DetachedCriteria.For(typeof (PersonPeriod))
 				.SetProjection(Projections.Id())
 				.Add(Restrictions.Le("StartDate", dateOnlyPeriod.EndDate))
-				.Add(Restrictions.EqProperty("first.Parent", "per.Id"))
-				.Add(Restrictions.Eq("Team", team))
-				.Add(Subqueries.NotExists(DetachedCriteria.For<PersonPeriod>()
-											  .SetProjection(Projections.Id())
-											  .Add(Restrictions.EqProperty("Parent", "first.Parent"))
-											  .Add(Restrictions.Le("StartDate", dateOnlyPeriod.EndDate))
-											  .Add(Restrictions.GtProperty("StartDate", "first.StartDate"))
-											  .Add(Restrictions.Le("StartDate", dateOnlyPeriod.StartDate))));
+				.Add(Restrictions.Ge("internalEndDate", dateOnlyPeriod.StartDate))
+				.Add(Restrictions.EqProperty("Parent", "per.Id"))
+				.Add(Restrictions.Eq("Team", team));
 		}
 
 		public IPerson LoadAggregate(Guid id) { return Load(id); }
