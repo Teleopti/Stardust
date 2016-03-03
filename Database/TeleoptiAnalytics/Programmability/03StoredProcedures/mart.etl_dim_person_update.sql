@@ -43,7 +43,6 @@ CREATE PROCEDURE [mart].[etl_dim_person_update]
 	,@is_agent bit 
 	,@is_user bit 
 	,@datasource_id smallint 
-	,@insert_date smalldatetime 
 	,@update_date smalldatetime 
 	,@datasource_update_date smalldatetime 
 	,@to_be_deleted bit 
@@ -93,7 +92,6 @@ BEGIN
       ,[is_agent] = @is_agent
       ,[is_user] = @is_user
       ,[datasource_id] = @datasource_id
-      ,[insert_date] = @insert_date
       ,[update_date] = @update_date
       ,[datasource_update_date] = @datasource_update_date
       ,[to_be_deleted] = @to_be_deleted
