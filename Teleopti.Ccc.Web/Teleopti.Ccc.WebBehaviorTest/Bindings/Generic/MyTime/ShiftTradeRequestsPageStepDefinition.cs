@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldSeeAgentNameAsAnonym()
 		{
 			Browser.Interactions.AssertExists(".shift-trade-agent-name");
-			Browser.Interactions.AssertAnyContains(".shift-trade-agent-name", "Anonym");
+			Browser.Interactions.AssertAnyContains("#Request-shift-trade-bulletin-board .shift-trade-agent-name", "Anonym");
 		}
 
 		[Then(@"I should see '(.*)' first in the list")]
