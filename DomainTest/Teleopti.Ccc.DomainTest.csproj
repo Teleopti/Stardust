@@ -194,7 +194,6 @@
     <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodDateTransformerTests.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodMapTests.cs" />
-    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodMapTests.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\TerminatedPersonTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteAdherence\SiteChangesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteAdherence\PersonTerminatedTest.cs" />
