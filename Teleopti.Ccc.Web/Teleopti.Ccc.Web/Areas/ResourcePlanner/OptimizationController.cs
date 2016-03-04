@@ -11,12 +11,12 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	public class OptimizationController : ApiController
 	{
 		private readonly ScheduleOptimization _scheduleOptimization;
-		private readonly IntradayOptimizationCommandHandler _intradayOptimizationCommandHandler;
+		private readonly IntradayOptimizationFromWeb _intradayOptimizationFromWeb;
 
-		public OptimizationController(ScheduleOptimization scheduleOptimization, IntradayOptimizationCommandHandler intradayOptimizationCommandHandler)
+		public OptimizationController(ScheduleOptimization scheduleOptimization, IntradayOptimizationFromWeb intradayOptimizationFromWeb)
 		{
 			_scheduleOptimization = scheduleOptimization;
-			_intradayOptimizationCommandHandler = intradayOptimizationCommandHandler;
+			_intradayOptimizationFromWeb = intradayOptimizationFromWeb;
 		}
 
 		[HttpPost, Route("api/ResourcePlanner/optimize/FixedStaff/{id}")]
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[HttpPost, Route("api/ResourcePlanner/optimize/intraday/{id}")]
 		public virtual IHttpActionResult OptimizeIntraday(Guid id)
 		{
-			return Ok(_intradayOptimizationCommandHandler.Execute(id, null));
+			return Ok(_intradayOptimizationFromWeb.Execute(id));
 		}
 	}
 }

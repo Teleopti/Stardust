@@ -253,6 +253,7 @@
     <Compile Include="ApplicationLayer\RecurringIdAttribute.cs" />
     <Compile Include="ApplicationLayer\ResolveEventHandlers.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationFromWeb.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\OptimizationWasOrdered.cs" />
     <Compile Include="Common\ServiceLocatorForEntity.cs" />
     <Compile Include="Intraday\MonitorDataViewModel.cs" />
