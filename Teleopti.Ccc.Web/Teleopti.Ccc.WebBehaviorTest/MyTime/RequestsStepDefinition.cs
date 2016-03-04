@@ -3,11 +3,13 @@ using System.Globalization;
 using System.Threading;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
@@ -260,5 +262,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.Click(".request-data-message");
 			Browser.Interactions.AssertAnyContains(".request-text", message);
 		}
+
+
+		[Given(@"I have an open workflow control set with absence request waitlisting enabled")]
+		public void GivenIHaveAnOpenWorkflowControlSetWithAbsenceRequestWaitlistingEnabled()
+		{
+			DataMaker.Data().Apply(new AbsenceConfigurable { Name = "Vacation" });
+			DataMaker.Data()
+				.Apply(new WorkflowControlSetConfigurable
+				{
+					Name = "Open",
+					AvailableAbsence = "Vacation",
+					AbsenceRequestWaitlistEnabled = true
+				});
+			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Open" });
+		}
+
+		[Then(@"I should see the waitlist position is (.*)")]
+		public void ThenIShouldSeeTheWaitlistPositionIs(int position)
+		{
+			Browser.Interactions.AssertFirstContains("#waitlistPosition", position.ToString());
+		}
+
+
 	}
 }

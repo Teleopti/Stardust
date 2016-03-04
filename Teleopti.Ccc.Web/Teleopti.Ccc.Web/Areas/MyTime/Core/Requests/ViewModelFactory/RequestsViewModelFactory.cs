@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IShiftTradeScheduleViewModelMapper _shiftTradeScheduleViewModelMapper;
 		private readonly IPersonRequestRepository _personRequestRepository;
-
+		
 		public RequestsViewModelFactory(
 			IPersonRequestProvider personRequestProvider,
 			IMappingEngine mapper,
@@ -40,7 +40,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			INow now,
 			ILoggedOnUser loggedOnUser, 
 			IShiftTradeScheduleViewModelMapper shiftTradeScheduleViewModelMapper,
-			IAbsenceAccountProvider personAccountProvider, IPersonRequestRepository personRequestRepository)
+			IAbsenceAccountProvider personAccountProvider, 
+			IPersonRequestRepository personRequestRepository)
 		{
 			_personRequestProvider = personRequestProvider;
 			_mapper = mapper;

@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		{
 			var timeZone = Person.PermissionInformation.DefaultTimeZone();
 			var culture = Person.PermissionInformation.Culture();
-			var hasBeenWaitlisted = absenceRequestIsWaitlisted();
+			var hasBeenWaitlisted = IsWaitlisted();
 
 			var absenceRequestMsgForOneDay = hasBeenWaitlisted ? "AbsenceRequestForOneDayHasBeenWaitlisted" : "AbsenceRequestForOneDayHasBeenDeniedDot";
 			var absenceRequestMsg = hasBeenWaitlisted ? "AbsenceRequestHasBeenWaitlisted" : "AbsenceRequestHasBeenDeniedDot";
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			}
 		}
 
-	    private bool absenceRequestIsWaitlisted()
+	    public virtual bool IsWaitlisted()
 	    {
 			var personRequest = (PersonRequest)Parent;
 		    return Person.WorkflowControlSet != null && Person.WorkflowControlSet.WaitlistingIsEnabled (this) && !personRequest.WasManuallyDenied;
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
     		return Period.StartDateTimeLocal(timeZone).Date == Period.EndDateTimeLocal(timeZone).Date;
     	}
 
-    	public override void Accept(IPerson acceptingPerson, IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum, IPersonRequestCheckAuthorization authorization)
+		public override void Accept(IPerson acceptingPerson, IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum, IPersonRequestCheckAuthorization authorization)
         {
             throw new NotImplementedException();
         }

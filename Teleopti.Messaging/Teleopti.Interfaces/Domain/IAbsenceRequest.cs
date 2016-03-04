@@ -18,5 +18,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2008-06-05
         /// </remarks>
         IAbsence Absence { get; }
+
+	    bool IsWaitlisted();
     }
 }

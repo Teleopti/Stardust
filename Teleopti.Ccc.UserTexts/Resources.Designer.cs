@@ -30960,6 +30960,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Waitlist position:.
+        /// </summary>
+        public static string WaitlistPosition {
+            get {
+                return ResourceManager.GetString("WaitlistPosition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Walk Aways.
         /// </summary>
         public static string WalkAways {

@@ -526,6 +526,7 @@
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ShiftTradePersonScheduleProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\DateTimeMappingUtils.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradePersonScheduleViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\AbsenceRequestDetailViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\IRequestsShiftTradeScheduleViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\RequestsShiftTradeScheduleViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\WeekScheduleDomainDataProvider.cs" />
@@ -1288,6 +1289,7 @@
     <Content Include="Areas\MyTime\Content\Css\CiscoWidget.css" />
     <Content Include="Areas\MyTime\Content\Images\logo.png" />
     <Content Include="Areas\MyTime\Content\Images\seat.svg" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.AbsenceRequestDetailViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewNew.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.0.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.0.min.js" />

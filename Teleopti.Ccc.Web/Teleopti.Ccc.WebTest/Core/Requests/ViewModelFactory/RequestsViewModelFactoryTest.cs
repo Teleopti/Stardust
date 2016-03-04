@@ -264,6 +264,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			target.CreateShiftTradeMyTeamSimpleViewModel(shiftTradeDate).Should().Be.EqualTo(myTeamId.ToString());
 		}
 
+		
+
 		[Test]
 		public void ShouldRetrieveEmptyStringWhenNotBelongingToATeam()
 		{
@@ -366,5 +368,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			Assert.That(result.First().To.MinutesSinceTimeLineStart, Is.EqualTo(180));
 
 		}
+
 	}
 }

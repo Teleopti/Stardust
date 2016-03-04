@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using AutoMapper;
-using MbCache.Core;
+using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
@@ -8,14 +8,11 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.Web.Areas.Mart.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFactory;
@@ -145,6 +142,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<ShiftTradePersonScheduleViewModelMapper>()
 				.As<IShiftTradePersonScheduleViewModelMapper>()
 				.SingleInstance();
+			builder.RegisterType<AbsenceRequestWaitlistProvider>().As<IAbsenceRequestWaitlistProvider>();
+			builder.RegisterType<AbsenceRequestDetailViewModelFactory>().As<IAbsenceRequestDetailViewModelFactory>();		
 		}
 
 		private void registerAutoMapperTypes(ContainerBuilder builder)
@@ -276,6 +275,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PersonNameProvider>().As<IPersonNameProvider>().SingleInstance();
 			builder.RegisterType<TimeFilterHelper>().As<ITimeFilterHelper>().SingleInstance();
 			builder.RegisterType<PersonForScheduleFinder>().As<IPersonForScheduleFinder>();
+			
 		}
 	}
 }

@@ -7,6 +7,7 @@
 /// <reference path="Teleopti.MyTimeWeb.Request.List.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.RequestViewModel.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel.js"/>
+/// <reference path="Teleopti.MyTimeWeb.Request.AbsenceRequestDetailViewModel.js"/>
 
 Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
@@ -41,6 +42,10 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
         	shiftTradeRequestDetailViewModel.setMiscSetting(id);
 	        self.requestViewModel(shiftTradeRequestDetailViewModel);
         };
+
+        self.addAbsenceRequestDetail = function (requestViewModel) {
+        	Teleopti.MyTimeWeb.Request.AbsenceRequestDetailViewModel(requestViewModel, ajax);
+        }
 
         self.createShiftExchangeOfferViewModel = function (data) {
         	var shiftExchangeOfferDetailViewModel = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModelFactory(ajax, _addItemAtTop).Update(data);
@@ -137,6 +142,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	}
 
 	function _setRequest(data) {
+		
 		if (data.TypeEnum == 2) {
 		    parentViewModel.createShiftTradeRequestViewModel(data.Id);
 		    parentViewModel.requestViewModel().Initialize(data);
@@ -149,8 +155,15 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			var model = parentViewModel.createRequestViewModel();
 			model.IsUpdate(true);
 			model.DateFormat(_datePickerFormat());
+
 			parentViewModel.requestViewModel(model);
 			parentViewModel.requestViewModel().Initialize(data);
+
+			if (data.TypeEnum == 1) {
+				parentViewModel.addAbsenceRequestDetail(model);
+			}
+
+
 		}
 	}
 

@@ -61,6 +61,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 	self.Subject = ko.observable();
 	self.Message = ko.observable();
 	self.EntityId = ko.observable();
+	self.WaitlistPosition = ko.observable();
 	self.DenyReason = ko.observable();
 	self.IsEditable = ko.observable(true);
 	self.IsNewInProgress = ko.observable(false);
@@ -87,6 +88,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 		self.DenyReason(data.DenyReason);
 		self.IsFullDay(data.IsFullDay);
 		self.TypeEnum(data.TypeEnum);
+		self.WaitlistPosition(data.WaitlistPosition);
 	};
 
 	self.checkMessageLength = function (data, event) {

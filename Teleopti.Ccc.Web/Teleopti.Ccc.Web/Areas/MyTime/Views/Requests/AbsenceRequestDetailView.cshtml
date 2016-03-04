@@ -8,6 +8,11 @@
 <!-- ko if: IsEditable -->
 <textarea class="form-control request-edit-message" placeholder="@Resources.Message" data-bind="value: Message" />
 <!-- /ko -->
+<!-- ko if: WaitlistPosition() > 0 -->
+<div>
+	<label>@Resources.WaitlistPosition</label>&nbsp;<span id="waitlistPosition" data-bind="text:WaitlistPosition"></span>
+</div>
+<!-- /ko -->
 <div class="form-group">
 	<label style="padding-top: 10px;">
 		@Resources.AbsenceType

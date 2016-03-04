@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
 		private IPerson _loggedOnPerson;
 		private IPersonNameProvider _personNameProvider;
+		private IAbsenceRequestWaitlistProvider _absenceRequestWaitlistProvider;
 		private TimeZoneInfo _timeZone;
 
 		[SetUp]
@@ -40,6 +41,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			_linkProvider = MockRepository.GenerateMock<ILinkProvider>();
 			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+
+			_absenceRequestWaitlistProvider = MockRepository.GenerateMock<IAbsenceRequestWaitlistProvider>();
+
 			_loggedOnPerson = PersonFactory.CreatePerson("LoggedOn", "Agent");
 			_loggedOnUser.Expect(l => l.CurrentUser()).Return(_loggedOnPerson).Repeat.Any();
 			_shiftTradeRequestStatusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();

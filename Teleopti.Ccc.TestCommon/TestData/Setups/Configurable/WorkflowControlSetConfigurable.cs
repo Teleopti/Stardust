@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string AutoGrant { get; set; }
 		public string BusinessUnit { get; set; }
 		public bool AnonymousTrading { get; set; }
+		public bool AbsenceRequestWaitlistEnabled { get; set; }
 
 		public WorkflowControlSetConfigurable()
 		{
@@ -78,6 +79,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			{
 				var absence = new AbsenceRepository(currentUnitOfWork).LoadAll().Single(c => c.Description.Name == AvailableAbsence);
 				workflowControlSet.AddAllowedPreferenceAbsence(absence);
+				workflowControlSet.AbsenceRequestWaitlistEnabled = AbsenceRequestWaitlistEnabled;
 
 				var absenceRequestOpenPeriodStart = String.IsNullOrEmpty(AbsenceRequestOpenPeriodStart)
 														? new DateOnly(1900, 1, 1)

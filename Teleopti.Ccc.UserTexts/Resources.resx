@@ -14182,4 +14182,8 @@ Help us improve your experience by sending an error report</value>
     <value>Toggle all</value>
     <comment>Toggle all tooltip text of toggle button in working-hours-picker outbound</comment>
   </data>
+  <data name="WaitlistPosition" xml:space="preserve">
+    <value>Waitlist position:</value>
+    <comment>Used in mytime within the request detail to display the waitlist position if a request has been waitlisted</comment>
+  </data>
 </root>

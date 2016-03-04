@@ -138,6 +138,8 @@
     <Compile Include="Domain\FairnessType.cs" />
     <Compile Include="Domain\ForecastActualDifferNotification.cs" />
     <Compile Include="Domain\HourSlot.cs" />
+    <Compile Include="Domain\IAbsenceRequestDetailViewModel.cs" />
+    <Compile Include="Domain\IAbsenceRequestDetailViewModelFactory.cs" />
     <Compile Include="Domain\IAbsenceRequestProcessor.cs" />
     <Compile Include="Domain\IAbsenceRequestUpdater.cs" />
     <Compile Include="Domain\IAbsenceRequestWaitlistProcessor.cs" />

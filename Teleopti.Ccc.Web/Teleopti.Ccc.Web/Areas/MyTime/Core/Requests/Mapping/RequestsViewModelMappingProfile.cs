@@ -139,6 +139,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					}
 					return result;
 				}))
+
 				.ForMember(d => d.ExchangeOffer, o => o.ResolveUsing((s =>
 				{
 					if (s.Request.RequestType == RequestType.ShiftExchangeOffer)

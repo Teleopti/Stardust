@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	[RequestPermission]
 	public class RequestsController : Controller
 	{
+		public IAbsenceRequestDetailViewModelFactory AbsenceRequestDetailViewModelFactory { get; set; }
 		private readonly IRequestsViewModelFactory _requestsViewModelFactory;
 		private readonly ITextRequestPersister _textRequestPersister;
 		private readonly IAbsenceRequestPersister _absenceRequestPersister;
@@ -41,8 +43,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 								IPermissionProvider permissionProvider,
 								ITimeFilterHelper timeFilterHelper,
 								IToggleManager toggleManager, 
-								IRequestsShiftTradeScheduleViewModelFactory shiftTradeScheduleViewModelFactory)
+								IRequestsShiftTradeScheduleViewModelFactory shiftTradeScheduleViewModelFactory,
+								IAbsenceRequestDetailViewModelFactory absenceRequestDetailViewModelFactory)
 		{
+			AbsenceRequestDetailViewModelFactory = absenceRequestDetailViewModelFactory;
 			_requestsViewModelFactory = requestsViewModelFactory;
 			_textRequestPersister = textRequestPersister;
 			_absenceRequestPersister = absenceRequestPersister;
@@ -224,5 +228,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		{
 			return Json(_requestsViewModelFactory.CreateShiftTradePeriodViewModel(id).MiscSetting, JsonRequestBehavior.AllowGet);
 		}
+
+		[UnitOfWork]
+		[HttpGet]
+		public virtual JsonResult AbsenceRequestDetail(Guid id)
+		{
+			return Json(AbsenceRequestDetailViewModelFactory.CreateAbsenceRequestDetailViewModel (id), JsonRequestBehavior.AllowGet);
+		}
+
 	}
 }
