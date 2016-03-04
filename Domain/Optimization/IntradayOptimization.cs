@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IIntradayOptimizerContainer _intradayOptimizerContainer;
 		private readonly IntradayOptimizationContext _intradayOptimizationContext;
 		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
+		private readonly IScheduleDictionaryPersister _persister;
 
 		public IntradayOptimization(OptimizationPreferencesFactory optimizationPreferencesFactory,
 									Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -33,7 +35,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 									IntradayOptimizer2Creator intradayOptimizer2Creator,
 									IIntradayOptimizerContainer intradayOptimizerContainer,
 									IntradayOptimizationContext intradayOptimizationContext,
-									IFillSchedulerStateHolder fillSchedulerStateHolder)
+									IFillSchedulerStateHolder fillSchedulerStateHolder,
+									IScheduleDictionaryPersister persister)
 		{
 			_optimizationPreferencesFactory = optimizationPreferencesFactory;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -44,6 +47,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_intradayOptimizerContainer = intradayOptimizerContainer;
 			_intradayOptimizationContext = intradayOptimizationContext;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
+			_persister = persister;
 		}
 
 		[LogTime]
@@ -56,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var agents = schedulerStateHolder.AllPermittedPersons;
 			if (@event.AgentIds != null)
 			{
-				agents = agents.Where(x => @event.AgentIds.Contains(x.Id.Value)).ToList();				
+				agents = agents.Where(x => @event.AgentIds.Contains(x.Id.Value)).ToList();
 			}
 			var schedules = new List<IScheduleDay>();
 			foreach (var person in agents)
@@ -72,6 +76,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_intradayOptimizerContainer.Execute(optimizers);
 				_weeklyRestSolverExecuter.Resolve(optimizationPreferences, @event.Period, schedules, agents, dayOffOptimizationPreference);
 			}
+			_persister.Persist(schedulerStateHolder.Schedules);
 		}
 	}
 }
