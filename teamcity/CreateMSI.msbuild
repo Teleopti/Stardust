@@ -25,23 +25,27 @@
 		<Exec Command="subst K: /D" ContinueOnError="WarnAndContinue" />
 	</Target>
 	
+	<!--
 	<Target Name="SetVersionOnWsis">
 		<Exec Command='cscript "$(SourceDir)\Wise\setProductVersion.vbs" "%(WsiToEXE.FullPath)" $(CCCVersion)' />
 	</Target>
+	/>-->
 	
 	<Target Name="CompileWseFiles" DependsOnTargets="MountK"> 
 		<Exec Command='"$(WseCompiler)" /c "%(WseFiles.FullPath)"' />
 	</Target>
 	
+	<!--
 	<Target Name="CompileWsiToEXE" DependsOnTargets="MountK;SetVersionOnWsis">
 		<Exec Command='"$(WsiCompiler)" /c "%(WsiToEXE.FullPath)"' />
 	</Target>
+	/>-->
 	
 	<Target Name="CompileWsiToMSI" DependsOnTargets="MountK;SetVersionOnWsis">
 		<Exec Command='"$(WsiCompiler)" /c "%(WsiToMSI.FullPath)"' />
 	</Target>
 	
-	<Target Name="BuildMSI" DependsOnTargets="CompileWseFiles;CompileWsiToEXE;CompileWsiToMSI;" AfterTargets="UnmountK">
+	<Target Name="BuildMSI" DependsOnTargets="CompileWseFiles;CompileWsiToMSI;" AfterTargets="UnmountK">
 		<!--<CallTargets="MalwareScan;CallJenkinsForDeployment" />-->
 	</Target>
 </Project>
