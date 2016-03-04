@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		{
 			while (true)
 			{
-				if (_agentStateReader.GetActualAgentStates().All(x => x.ReceivedTime == "2016-02-26 17:05".Utc()))
+				if (_agentStateReader.GetActualAgentStates().All(x => x.ReceivedTime == "2016-02-26 17:11".Utc()))
 					break;
 				Thread.Sleep(20);
 			}
