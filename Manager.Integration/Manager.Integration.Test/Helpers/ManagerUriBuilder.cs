@@ -6,23 +6,16 @@ namespace Manager.Integration.Test.Helpers
 {
 	public class ManagerUriBuilder
 	{
-		private readonly Uri _managerLocationUri;
 		private readonly UriBuilder _uriBuilder;
 
 		private readonly UriBuilder _uriTemplateBuilder;
 
 		public ManagerUriBuilder()
 		{
-			_managerLocationUri = new Uri(Settings.Default.ManagerLocationUri);
+			var managerLocationUri = new Uri(Settings.Default.ManagerLocationUri);
 
-			_uriBuilder = new UriBuilder(_managerLocationUri);
-
-			_uriTemplateBuilder = new UriBuilder(_managerLocationUri);
-		}
-
-		public Uri GetLocationUri()
-		{
-			return _uriBuilder.Uri;
+			_uriBuilder = new UriBuilder(managerLocationUri);
+			_uriTemplateBuilder = new UriBuilder(managerLocationUri);
 		}
 
 		public Uri GetStartJobUri()
