@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public StateInfo(
 			StateContext context,
 			StateMapper stateMapper,
-			IDatabaseLoader databaseLoader,
 			IAppliedAdherence appliedAdherence,
 			IAppliedAlarm appliedAlarm)
 		{
@@ -19,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Person = context;
 			CurrentTime = context.CurrentTime;
 			Stored = context.Stored();
-			Schedule = new ScheduleInfo(databaseLoader, Person.PersonId, CurrentTime, Stored);
+			Schedule = new ScheduleInfo(context, CurrentTime, Stored);
 			State = new StateRuleInfo(stateCode, platformTypeId, Input, Person, Stored, Schedule, stateMapper);
 			Adherence = new AdherenceInfo(Input, Person, Stored, State, Schedule, appliedAdherence, stateMapper);
 		}

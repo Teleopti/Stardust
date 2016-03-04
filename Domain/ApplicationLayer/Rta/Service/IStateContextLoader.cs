@@ -12,9 +12,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public interface IStateContextLoader
 	{
 		void For(ExternalUserStateInputModel input, Action<StateContext> action);
-		void For(IEnumerable<AgentStateReadModel> states, Action<StateContext> action);
 		void ForAll(Action<StateContext> action);
 		void ForNotInBatchOf(ExternalUserStateInputModel input, Action<StateContext> action);
+		void ForStates(IEnumerable<AgentStateReadModel> states, Action<StateContext> action);
 	}
 
 	public class PersonLocker
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class LoadFromCache : IStateContextLoader
 	{
 		private readonly DataSourceResolver _dataSourceResolver;
-		private readonly IDatabaseLoader _databaseLoader;
+		protected readonly IDatabaseLoader _databaseLoader;
 		protected readonly INow _now;
 		protected readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
 		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
@@ -87,49 +87,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			foreach (var p in resolvedPersons)
 			{
-				PersonOrganizationData person;
-				if (!personOrganizationData.TryGetValue(p.PersonId, out person))
+				PersonOrganizationData x;
+				if (!personOrganizationData.TryGetValue(p.PersonId, out x))
 					continue;
-				person.BusinessUnitId = p.BusinessUnitId;
-				_locker.LockFor(person.PersonId, () =>
+				x.BusinessUnitId = p.BusinessUnitId;
+				_locker.LockFor(x.PersonId, () =>
 				{
 					action.Invoke(new StateContext(
 						input,
-						person.PersonId,
-						person.BusinessUnitId,
-						person.TeamId,
-						person.SiteId,
-						() => _previousStateInfoLoader.Load(person.PersonId),
+						x.PersonId,
+						x.BusinessUnitId,
+						x.TeamId,
+						x.SiteId,
+						() => _previousStateInfoLoader.Load(x.PersonId),
+						() => _databaseLoader.GetCurrentSchedule(x.PersonId),
 						_now,
 						_agentStateReadModelUpdater
 						));
 				});
 			}
 
-		}
-
-		public virtual void For(IEnumerable<AgentStateReadModel> states, Action<StateContext> action)
-		{
-			states.ForEach(s =>
-			{
-				_locker.LockFor(s.PersonId, () =>
-				{
-					action.Invoke(new StateContext(
-						new ExternalUserStateInputModel
-						{
-							StateCode = s.StateCode,
-							PlatformTypeId = s.PlatformTypeId.ToString()
-						},
-						s.PersonId,
-						s.BusinessUnitId,
-						s.TeamId.GetValueOrDefault(),
-						s.SiteId.GetValueOrDefault(),
-						null,
-						_now,
-						null
-						));
-				});
-			});
 		}
 
 		public virtual void ForAll(Action<StateContext> action)
@@ -144,19 +121,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			foreach (var p in persons)
 			{
-				PersonOrganizationData person;
-				if (!personOrganizationData.TryGetValue(p.PersonId, out person))
+				PersonOrganizationData x;
+				if (!personOrganizationData.TryGetValue(p.PersonId, out x))
 					continue;
-				person.BusinessUnitId = p.BusinessUnitId;
-				_locker.LockFor(person.PersonId, () =>
+				x.BusinessUnitId = p.BusinessUnitId;
+				_locker.LockFor(x.PersonId, () =>
 				{
 					action.Invoke(new StateContext(
 						null,
-						person.PersonId,
-						person.BusinessUnitId,
-						person.TeamId,
-						person.SiteId,
-						() => _previousStateInfoLoader.Load(person.PersonId),
+						x.PersonId,
+						x.BusinessUnitId,
+						x.TeamId,
+						x.SiteId,
+						() => _previousStateInfoLoader.Load(x.PersonId),
+						() => _databaseLoader.GetCurrentSchedule(x.PersonId),
 						_now,
 						_agentStateReadModelUpdater
 						));
@@ -176,17 +154,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				where !state.IsLogOutState
 				select a;
 
-			agentsNotAlreadyLoggedOut.ForEach(agent =>
+			agentsNotAlreadyLoggedOut.ForEach(x =>
 			{
-				_locker.LockFor(agent.PersonId, () =>
+				_locker.LockFor(x.PersonId, () =>
 				{
 					action.Invoke(new StateContext(
 						input,
-						agent.PersonId,
-						agent.BusinessUnitId,
-						agent.TeamId.GetValueOrDefault(),
-						agent.SiteId.GetValueOrDefault(),
-						() => _previousStateInfoLoader.Load(agent.PersonId),
+						x.PersonId,
+						x.BusinessUnitId,
+						x.TeamId.GetValueOrDefault(),
+						x.SiteId.GetValueOrDefault(),
+						() => _previousStateInfoLoader.Load(x.PersonId),
+						() => _databaseLoader.GetCurrentSchedule(x.PersonId),
 						_now,
 						_agentStateReadModelUpdater
 						));
@@ -194,7 +173,36 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			});
 
 		}
+
+		public virtual void ForStates(IEnumerable<AgentStateReadModel> states, Action<StateContext> action)
+		{
+			states.ForEach(x =>
+			{
+				_locker.LockFor(x.PersonId, () =>
+				{
+					action.Invoke(new StateContext(
+						new ExternalUserStateInputModel
+						{
+							StateCode = x.StateCode,
+							PlatformTypeId = x.PlatformTypeId.ToString()
+						},
+						x.PersonId,
+						x.BusinessUnitId,
+						x.TeamId.GetValueOrDefault(),
+						x.SiteId.GetValueOrDefault(),
+						null,
+						() => _databaseLoader.GetCurrentSchedule(x.PersonId),
+						_now,
+						null
+						));
+				});
+			});
+		}
+
 	}
+
+
+
 
 	public class LoadPersonFromDatabase : LoadFromCache
 	{
@@ -236,6 +244,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							x.TeamId,
 							x.SiteId,
 							() => _previousStateInfoLoader.Load(x.PersonId),
+							() => _databaseLoader.GetCurrentSchedule(x.PersonId),
 							_now,
 							_agentStateReadModelUpdater
 							));
@@ -257,6 +266,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							x.TeamId,
 							x.SiteId,
 							() => _previousStateInfoLoader.Load(x.PersonId),
+							() => _databaseLoader.GetCurrentSchedule(x.PersonId),
 							_now,
 							_agentStateReadModelUpdater
 							));

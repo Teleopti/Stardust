@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly DateTime _currentTime;
 		private readonly StoredStateInfo _stored;
-		private readonly Lazy<IEnumerable<ScheduleLayer>> _scheduleLayers;
 		private readonly Lazy<ScheduleLayer> _currentActivity;
 		private readonly Lazy<ScheduleLayer> _nextActivityInShift;
 		private readonly Lazy<ScheduleLayer> _previousActivity;
@@ -18,22 +17,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly Lazy<DateTime> _shiftStartTimeForPreviousActivity;
 		private readonly Lazy<DateTime> _shiftEndTimeForPreviousActivity;
 		private readonly Lazy<DateOnly?> _belongsToDate;
+		private readonly IEnumerable<ScheduleLayer> _scheduleLayers;
 
 		public ScheduleInfo(
-			IDatabaseLoader databaseLoader, 
-			Guid personId, 
+			StateContext context, 
 			DateTime currentTime,
 			StoredStateInfo stored
 			)
 		{
 			_currentTime = currentTime;
 			_stored = stored;
-			_scheduleLayers = new Lazy<IEnumerable<ScheduleLayer>>(() => databaseLoader.GetCurrentSchedule(personId));
+			_scheduleLayers = context.ScheduleLayers();
 			_currentActivity = new Lazy<ScheduleLayer>(() => activityForTime(currentTime));
 			_nextActivityInShift = new Lazy<ScheduleLayer>(nextAdjecentActivityToCurrent);
 			_currentShiftStartTime = new Lazy<DateTime>(() => startTimeOfShift(_currentActivity.Value));
 			_currentShiftEndTime = new Lazy<DateTime>(() => endTimeOfShift(_currentActivity.Value));
-			_previousActivity = new Lazy<ScheduleLayer>(() => (from l in _scheduleLayers.Value where l.EndDateTime <= currentTime select l).LastOrDefault());
+			_previousActivity = new Lazy<ScheduleLayer>(() => (from l in _scheduleLayers where l.EndDateTime <= currentTime select l).LastOrDefault());
 			_shiftStartTimeForPreviousActivity = new Lazy<DateTime>(() => startTimeOfShift(_previousActivity.Value));
 			_shiftEndTimeForPreviousActivity = new Lazy<DateTime>(() => endTimeOfShift(_previousActivity.Value));
 			_belongsToDate = new Lazy<DateOnly?>(() =>
@@ -126,19 +125,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private IEnumerable<ScheduleLayer> activitiesThisShift(ScheduleLayer activity)
 		{
-			return from l in _scheduleLayers.Value
+			return from l in _scheduleLayers
 				where l.BelongsToDate == activity.BelongsToDate
 				select l;
 		}
 
 		private ScheduleLayer activityForTime(DateTime time)
 		{
-			return ActivityForTime(_scheduleLayers.Value, time);
+			return ActivityForTime(_scheduleLayers, time);
 		}
 
 		private ScheduleLayer nextAdjecentActivityToCurrent()
 		{
-			var nextActivity = (from l in _scheduleLayers.Value where l.StartDateTime > _currentTime select l).FirstOrDefault();
+			var nextActivity = (from l in _scheduleLayers where l.StartDateTime > _currentTime select l).FirstOrDefault();
 			if (nextActivity == null)
 				return null;
 			if (_currentActivity.Value == null)
@@ -151,7 +150,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private ScheduleLayer activityNear(DateTime time)
 		{
 			return (
-				from l in _scheduleLayers.Value
+				from l in _scheduleLayers
 				let ended = l.EndDateTime >= _currentTime.AddHours(-1) && l.StartDateTime < time
 				let starting = l.StartDateTime <= _currentTime.AddHours(1) && l.EndDateTime > time
 				where ended || starting

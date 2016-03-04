@@ -6,7 +6,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class RtaProcessor
 	{
-		private readonly IDatabaseLoader _databaseLoader;
 		private readonly StateMapper _stateMapper;
 		private readonly IShiftEventPublisher _shiftEventPublisher;
 		private readonly IActivityEventPublisher _activityEventPublisher;
@@ -17,7 +16,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IAppliedAlarm _appliedAlarm;
 
 		public RtaProcessor(
-			IDatabaseLoader databaseLoader,
 			StateMapper stateMapper,
 			IShiftEventPublisher shiftEventPublisher,
 			IActivityEventPublisher activityEventPublisher,
@@ -27,7 +25,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			ICurrentEventPublisher eventPublisher,
 			IAppliedAlarm appliedAlarm)
 		{
-			_databaseLoader = databaseLoader;
 			_stateMapper = stateMapper;
 			_shiftEventPublisher = shiftEventPublisher;
 			_activityEventPublisher = activityEventPublisher;
@@ -46,9 +43,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var info = new StateInfo(
 				context,
 				_stateMapper,
-				_databaseLoader,
 				_appliedAdherence,
-				_appliedAlarm);
+				_appliedAlarm
+				);
 
 			context.AgentStateReadModelUpdater.Update(info);
 

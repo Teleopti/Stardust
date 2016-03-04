@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			using (_eventPublisherScope.OnThisThreadPublishTo(new SyncPublishTo(_resolver, handler)))
 			{
-				_stateContextLoader.For(states, context =>
+				_stateContextLoader.ForStates(states, context =>
 				{
 					_processor.Process(context);
 				});
