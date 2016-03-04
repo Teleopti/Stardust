@@ -184,8 +184,8 @@ wfm.config([
 		$httpProvider.interceptors.push('httpInterceptor');
 	}
 ]).run([
-	'$rootScope', '$state', '$translate', 'HelpService', '$timeout', 'CurrentUserInfo', 'Toggle', '$q', 'RtaState', 'WfmShortcuts',
-	function($rootScope, $state, $translate, HelpService, $timeout, currentUserInfo, toggleService, $q, RtaState, WfmShortcuts) {
+	'$rootScope', '$state', '$translate', 'HelpService', '$timeout', 'CurrentUserInfo', 'Toggle', '$q', 'RtaState', 'WfmShortcuts', 'growlMessages',
+	function($rootScope, $state, $translate, HelpService, $timeout, currentUserInfo, toggleService, $q, RtaState, WfmShortcuts, growlMessages) {
 		$rootScope.isAuthenticated = false;
 
 		(function broadcastEventOnToggle() {
@@ -209,7 +209,9 @@ wfm.config([
 		};
 
 		$rootScope.$on('$stateChangeStart', function(event, next, toParams) {
-			if (!currentUserInfo.isConnected()) {
+			 growlMessages.destroyAllMessages();
+
+				if (!currentUserInfo.isConnected()) {
 				event.preventDefault();
 				refreshContext(event, next, toParams);
 				return;

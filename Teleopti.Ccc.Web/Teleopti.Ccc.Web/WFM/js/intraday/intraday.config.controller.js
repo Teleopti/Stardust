@@ -37,8 +37,10 @@
 							Skills: selectedSkillIds
 						}
 					).$promise.then(function (result) {
-					    notifySkillAreaCreation();
+
 						$state.go('intraday', { isNewSkillArea: true });
+						notifySkillAreaCreation();
+
 					});
 				};
 
