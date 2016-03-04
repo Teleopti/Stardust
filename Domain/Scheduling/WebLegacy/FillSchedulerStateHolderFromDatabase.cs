@@ -14,7 +14,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
-	public class WebSchedulingSetup
+	public class FillSchedulerStateHolderFromDatabase : IFillSchedulerStateHolder
 	{
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
@@ -24,11 +24,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		private readonly IPeopleAndSkillLoaderDecider _decider;
 		private readonly ICurrentTeleoptiPrincipal _principal;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
-		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IFixedStaffLoader _fixedStaffLoader;
 
-		public WebSchedulingSetup(IScenarioRepository scenarioRepository, 
+		public FillSchedulerStateHolderFromDatabase(IScenarioRepository scenarioRepository, 
 					ISkillDayLoadHelper skillDayLoadHelper, 
 					ISkillRepository skillRepository, 
 					IScheduleStorage scheduleStorage, 
@@ -36,7 +35,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 					IPeopleAndSkillLoaderDecider decider, 
 					ICurrentTeleoptiPrincipal principal, 
 					ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
-					Func<ISchedulerStateHolder> schedulerStateHolder,
 					IRepositoryFactory repositoryFactory,
 					IFixedStaffLoader fixedStaffLoader)
 		{
@@ -48,14 +46,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			_decider = decider;
 			_principal = principal;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
-			_schedulerStateHolder = schedulerStateHolder;
 			_repositoryFactory = repositoryFactory;
 			_fixedStaffLoader = fixedStaffLoader;
 		}
 
-		public WebSchedulingSetupResult Setup(DateOnlyPeriod period)
+		public WebSchedulingSetupResult Fill(ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod period)
 		{
-			var schedulerStateHolder = _schedulerStateHolder();
 			schedulerStateHolder.LoadCommonState(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(), _repositoryFactory);
 			var people = _fixedStaffLoader.Load(period);
 			var scenario = _scenarioRepository.LoadDefaultScenario();

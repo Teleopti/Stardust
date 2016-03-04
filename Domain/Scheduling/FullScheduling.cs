@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class FullScheduling
 	{
-		private readonly WebSchedulingSetup _webSchedulingSetup;
+		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly Func<IScheduleCommand> _scheduleCommand;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly Func<IRequiredScheduleHelper> _requiredScheduleHelper;
@@ -30,13 +30,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly ISchedulingProgress _schedulingProgress;
 
-		public FullScheduling(WebSchedulingSetup webSchedulingSetup,
+		public FullScheduling(IFillSchedulerStateHolder fillSchedulerStateHolder,
 			Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder,
 			Func<IRequiredScheduleHelper> requiredScheduleHelper, Func<IGroupPagePerDateHolder> groupPagePerDateHolder,
 			IScheduleDictionaryPersister persister, ViolatedSchedulePeriodBusinessRule violatedSchedulePeriodBusinessRule,
 			DayOffBusinessRuleValidation dayOffBusinessRuleValidation, ICurrentUnitOfWork currentUnitOfWork, ISchedulingProgress schedulingProgress)
 		{
-			_webSchedulingSetup = webSchedulingSetup;
+			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_scheduleCommand = scheduleCommand;
 			_schedulerStateHolder = schedulerStateHolder;
 			_requiredScheduleHelper = requiredScheduleHelper;
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		[UnitOfWork]
 		protected virtual PeopleSelection SetupAndSchedule(DateOnlyPeriod period)
 		{
-			var webScheduleState = _webSchedulingSetup.Setup(period);
+			var webScheduleState = _fillSchedulerStateHolder.Fill(_schedulerStateHolder(), period);
 
 			if (webScheduleState.AllSchedules.Any())
 			{

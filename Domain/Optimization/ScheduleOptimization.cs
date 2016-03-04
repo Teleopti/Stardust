@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class ScheduleOptimization
 	{
-		private readonly WebSchedulingSetup _webSchedulingSetup;
+		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly ClassicDaysOffOptimizationCommand _classicDaysOffOptimizationCommand;
 		private readonly IScheduleDictionaryPersister _persister;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly OptimizationResult _optimizationResult;
 
-		public ScheduleOptimization(WebSchedulingSetup webSchedulingSetup, Func<ISchedulerStateHolder> schedulerStateHolder,
+		public ScheduleOptimization(IFillSchedulerStateHolder fillSchedulerStateHolder, Func<ISchedulerStateHolder> schedulerStateHolder,
 			ClassicDaysOffOptimizationCommand classicDaysOffOptimizationCommand,
 			IScheduleDictionaryPersister persister, IPlanningPeriodRepository planningPeriodRepository,
 			WeeklyRestSolverExecuter weeklyRestSolverExecuter, OptimizationPreferencesFactory optimizationPreferencesFactory,
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IOptimizerHelperHelper optimizerHelperHelper, ResourceCalculationContextFactory resourceCalculationContextFactory,
 			OptimizationResult optimizationResult)
 		{
-			_webSchedulingSetup = webSchedulingSetup;
+			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_schedulerStateHolder = schedulerStateHolder;
 			_classicDaysOffOptimizationCommand = classicDaysOffOptimizationCommand;
 			_persister = persister;
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
-			var webScheduleState = _webSchedulingSetup.Setup(period);
+			var webScheduleState = _fillSchedulerStateHolder.Fill(_schedulerStateHolder(), period);
 
 			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(webScheduleState.AllSchedules);
 			var matrixOriginalStateContainerListForDayOffOptimization =

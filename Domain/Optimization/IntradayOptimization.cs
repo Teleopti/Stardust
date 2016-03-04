@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IntradayOptimizer2Creator _intradayOptimizer2Creator;
 		private readonly IIntradayOptimizerContainer _intradayOptimizerContainer;
 		private readonly IntradayOptimizationContext _intradayOptimizationContext;
-		private readonly WebSchedulingSetup _webSchedulingSetup;
+		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
 
 		public IntradayOptimization(OptimizationPreferencesFactory optimizationPreferencesFactory,
 									Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 									IntradayOptimizer2Creator intradayOptimizer2Creator,
 									IIntradayOptimizerContainer intradayOptimizerContainer,
 									IntradayOptimizationContext intradayOptimizationContext,
-									WebSchedulingSetup webSchedulingSetup)
+									IFillSchedulerStateHolder fillSchedulerStateHolder)
 		{
 			_optimizationPreferencesFactory = optimizationPreferencesFactory;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -43,16 +43,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_intradayOptimizer2Creator = intradayOptimizer2Creator;
 			_intradayOptimizerContainer = intradayOptimizerContainer;
 			_intradayOptimizationContext = intradayOptimizationContext;
-			_webSchedulingSetup = webSchedulingSetup;
+			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 		}
 
 		[LogTime]
 		public virtual void Handle(OptimizationWasOrdered @event)
 		{
-			_webSchedulingSetup.Setup(@event.Period);
+			var schedulerStateHolder = _schedulerStateHolder();
+			_fillSchedulerStateHolder.Fill(schedulerStateHolder, @event.Period);
 			var optimizationPreferences = _optimizationPreferencesFactory.Create();
 			var dayOffOptimizationPreference = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
-			var agents = _schedulerStateHolder().AllPermittedPersons;
+			var agents = schedulerStateHolder.AllPermittedPersons;
 			if (@event.AgentIds != null)
 			{
 				agents = agents.Where(x => @event.AgentIds.Contains(x.Id.Value)).ToList();				
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var schedules = new List<IScheduleDay>();
 			foreach (var person in agents)
 			{
-				schedules.AddRange(_schedulerStateHolder().Schedules[person].ScheduledDayCollection(@event.Period));
+				schedules.AddRange(schedulerStateHolder.Schedules[person].ScheduledDayCollection(@event.Period));
 			}
 
 			var optimizers = _intradayOptimizer2Creator.Create(@event.Period, schedules, optimizationPreferences, dayOffOptimizationPreference);
