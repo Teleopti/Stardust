@@ -12,7 +12,9 @@ namespace Stardust.Manager
 {
 	public class ManagerController : ApiController
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (ManagerController));
+		private static readonly ILog Logger = 
+			LogManager.GetLogger(typeof (ManagerController));
+
 		private readonly JobManager _jobManager;
 
 		private readonly INodeManager _nodeManager;
@@ -20,10 +22,12 @@ namespace Stardust.Manager
 		public ManagerController(INodeManager nodeManager,
 		                         JobManager jobManager)
 		{
-			WhoAmI = "[MANAGER, " + Environment.MachineName.ToUpper() + "]";
+
+			WhoAmI = 
+				"[MANAGER, " + Environment.MachineName.ToUpper() + "]";
 
 			_nodeManager = nodeManager;
-			_jobManager = jobManager;
+			_jobManager = jobManager;			
 		}
 
 		public string WhoAmI { get; private set; }
@@ -31,6 +35,12 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.Job)]
 		public IHttpActionResult DoThisJob([FromBody] JobRequestModel job)
 		{
+			var baseUrl =
+				Request.RequestUri.GetLeftPart(UriPartial.Authority);
+
+			WhoAmI =
+				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
+
 			if (job == null)
 			{
 				return new BadRequestResult(Request);
@@ -71,6 +81,12 @@ namespace Stardust.Manager
 		[HttpDelete, Route(ManagerRouteConstants.CancelJob)]
 		public IHttpActionResult CancelThisJob(Guid jobId)
 		{
+			var baseUrl =
+				Request.RequestUri.GetLeftPart(UriPartial.Authority);
+
+			WhoAmI =
+				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
+
 			LogHelper.LogInfoWithLineNumber(Logger,
 			                                WhoAmI + ": Received job cancel from client ( jobId ) : ( " + jobId + " )");
 
@@ -82,6 +98,12 @@ namespace Stardust.Manager
 		[HttpGet, Route(ManagerRouteConstants.GetJobHistoryList)]
 		public IHttpActionResult JobHistoryList()
 		{
+			var baseUrl =
+				Request.RequestUri.GetLeftPart(UriPartial.Authority);
+
+			WhoAmI =
+				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
+
 			var jobHistory = _jobManager.GetJobHistoryList();
 
 			return Ok(jobHistory);
@@ -90,6 +112,12 @@ namespace Stardust.Manager
 		[HttpGet, Route(ManagerRouteConstants.GetJobHistory)]
 		public IHttpActionResult JobHistory(Guid jobId)
 		{
+			var baseUrl =
+				Request.RequestUri.GetLeftPart(UriPartial.Authority);
+
+			WhoAmI =
+				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
+
 			var jobHistory = _jobManager.GetJobHistory(jobId);
 
 			return Ok(jobHistory);
@@ -98,6 +126,12 @@ namespace Stardust.Manager
 		[HttpGet, Route(ManagerRouteConstants.JobDetail)]
 		public IHttpActionResult JobHistoryDetails(Guid jobId)
 		{
+			var baseUrl =
+				Request.RequestUri.GetLeftPart(UriPartial.Authority);
+
+			WhoAmI =
+				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
+
 			var jobHistoryDetail = _jobManager.JobHistoryDetails(jobId);
 
 			return Ok(jobHistoryDetail);
@@ -106,6 +140,12 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.Heartbeat)]
 		public IHttpActionResult Heartbeat([FromBody] Uri nodeUri)
 		{
+			var baseUrl =
+				Request.RequestUri.GetLeftPart(UriPartial.Authority);
+
+			WhoAmI =
+				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
+
 			if (nodeUri != null)
 			{
 				Task.Factory.StartNew(() => { _jobManager.RegisterHeartbeat(nodeUri.ToString()); });
@@ -114,6 +154,7 @@ namespace Stardust.Manager
 				                                WhoAmI + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
 				return Ok();
 			}
+
 			LogHelper.LogWarningWithLineNumber(Logger,
 			                                   WhoAmI + ": Received heartbeat from Node with invalid uri.");
 			return BadRequest();
@@ -122,6 +163,12 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.JobDone)]
 		public IHttpActionResult JobDone(Guid jobId)
 		{
+			var baseUrl =
+				Request.RequestUri.GetLeftPart(UriPartial.Authority);
+
+			WhoAmI =
+				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
+
 			LogHelper.LogInfoWithLineNumber(Logger,
 			                                WhoAmI + ": Received job done from a Node ( jobId ) : ( " + jobId + " )");
 
@@ -139,6 +186,12 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.JobFailed)]
 		public IHttpActionResult JobFailed(Guid jobId)
 		{
+			var baseUrl =
+				Request.RequestUri.GetLeftPart(UriPartial.Authority);
+
+			WhoAmI =
+				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
+
 			LogHelper.LogErrorWithLineNumber(Logger,
 			                                 WhoAmI + ": Received job failed from a Node ( jobId ) : ( " + jobId + " )");
 
@@ -156,6 +209,12 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.JobHasBeenCanceled)]
 		public IHttpActionResult JobCanceled(Guid jobId)
 		{
+			var baseUrl =
+				Request.RequestUri.GetLeftPart(UriPartial.Authority);
+
+			WhoAmI =
+				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
+
 			LogHelper.LogInfoWithLineNumber(Logger,
 			                                WhoAmI + ": Received cancel from a Node ( jobId ) : ( " + jobId + " )");
 
@@ -173,6 +232,12 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.JobProgress)]
 		public IHttpActionResult JobProgress([FromBody] JobProgressModel model)
 		{
+			var baseUrl =
+				Request.RequestUri.GetLeftPart(UriPartial.Authority);
+
+			WhoAmI =
+				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
+
 			if (model == null)
 			{
 				return BadRequest();
@@ -192,6 +257,12 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.NodeHasBeenInitialized)]
 		public IHttpActionResult NodeInitialized([FromBody] Uri nodeUri)
 		{
+			var baseUrl =
+				Request.RequestUri.GetLeftPart(UriPartial.Authority);
+
+			WhoAmI =
+				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
+
 			Task.Factory.StartNew(() =>
 			{
 				_nodeManager.FreeJobIfAssingedToNode(nodeUri);
@@ -208,12 +279,24 @@ namespace Stardust.Manager
 		[HttpGet, Route(ManagerRouteConstants.Ping)]
 		public IHttpActionResult Ping()
 		{
+			var baseUrl =
+				Request.RequestUri.GetLeftPart(UriPartial.Authority);
+
+			WhoAmI =
+				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
+
 			return Ok();
 		}
 
 		[HttpGet, Route(ManagerRouteConstants.Nodes)]
 		public IHttpActionResult Nodes()
 		{
+			var baseUrl =
+				Request.RequestUri.GetLeftPart(UriPartial.Authority);
+
+			WhoAmI =
+				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
+
 			var workernodes = _jobManager.Nodes();
 
 			return Ok(workernodes);

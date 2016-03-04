@@ -7,7 +7,7 @@ namespace NodeTest.JobHandlers
 	{
 		private void sleep()
 		{
-			Thread.Sleep(TimeSpan.FromMilliseconds(500));
+			Thread.Sleep(TimeSpan.FromSeconds(10));
 		}
 
 		public void DoTheThing(TestJobParams message,

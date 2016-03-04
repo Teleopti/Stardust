@@ -235,6 +235,25 @@ namespace Manager.Integration.Test
 				jobManagerTaskCreators.Add(jobManagerTaskCreator);
 			}
 
+			LogHelper.LogDebugWithLineNumber("Waiting for all 5 nodes to start up.",
+											 Logger);
+
+			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
+
+			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
+
+			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(5,
+																  sqlNotiferCancellationTokenSource,
+																  IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
+			task.Start();
+
+			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(30));
+
+			sqlNotifier.Dispose();
+
+			LogHelper.LogInfoWithLineNumber("All 5 nodes has started.",
+											 Logger);
+
 			//---------------------------------------------
 			// Execute all jobs. 
 			//---------------------------------------------

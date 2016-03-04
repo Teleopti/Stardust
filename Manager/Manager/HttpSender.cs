@@ -14,7 +14,13 @@ namespace Stardust.Manager
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (HttpSender));
 
-        public async Task<HttpResponseMessage> PostAsync(Uri url,
+        /// <summary>
+		/// 
+		/// </summary>
+		/// <param name="url"></param>
+		/// <param name="data"></param>
+		/// <returns></returns>
+		public async Task<HttpResponseMessage> PostAsync(Uri url,
                                                          object data)
         {
             LogHelper.LogDebugWithLineNumber(Logger,
@@ -36,6 +42,8 @@ namespace Stardust.Manager
                                                                  "application/json"))
                             .ConfigureAwait(false);
 
+	                response.EnsureSuccessStatusCode();
+
                     LogHelper.LogDebugWithLineNumber(Logger,
                                                     "Finished.");
 
@@ -53,7 +61,7 @@ namespace Stardust.Manager
             }
         }
 
-        public async Task<HttpResponseMessage> DeleteAsync(Uri url)
+		public async Task<HttpResponseMessage> DeleteAsync(Uri url)
         {
             LogHelper.LogDebugWithLineNumber(Logger,
                                             "Start.");
@@ -68,7 +76,9 @@ namespace Stardust.Manager
                     var response = await client.DeleteAsync(url)
                             .ConfigureAwait(false);
 
-                    LogHelper.LogDebugWithLineNumber(Logger,
+					response.EnsureSuccessStatusCode();
+
+					LogHelper.LogDebugWithLineNumber(Logger,
                                                     "Finished.");
 
                     return response;
@@ -97,7 +107,9 @@ namespace Stardust.Manager
                     var response = await client.GetAsync(url,
 											  HttpCompletionOption.ResponseHeadersRead)
                             .ConfigureAwait(false);
-                    
+
+	                response.EnsureSuccessStatusCode();
+
                     return response;
                 }
             }

@@ -40,6 +40,8 @@ namespace Stardust.Node.Workers
 							.ConfigureAwait(false);
 
 
+					response.EnsureSuccessStatusCode();
+
 					LogHelper.LogDebugWithLineNumber(Logger,
 					                                 "Finihed Post Async: " + url);
 
@@ -85,6 +87,8 @@ namespace Stardust.Node.Workers
 						                       cancellationToken)
 							.ConfigureAwait(false);
 
+					response.EnsureSuccessStatusCode();
+
 					LogHelper.LogDebugWithLineNumber(Logger,
 					                                 "Finished Post Async: " + url);
 
@@ -121,6 +125,8 @@ namespace Stardust.Node.Workers
 					var response =
 						await client.DeleteAsync(url).ConfigureAwait(false);
 
+
+					response.EnsureSuccessStatusCode();
 
 					LogHelper.LogDebugWithLineNumber(Logger,
 					                                 "Finished Delete Async: " + url);
@@ -162,6 +168,8 @@ namespace Stardust.Node.Workers
 						                         cancellationToken).ConfigureAwait(false);
 
 
+					response.EnsureSuccessStatusCode();
+
 					LogHelper.LogDebugWithLineNumber(Logger,
 					                                 "Finished Delete Async: " + url);
 
@@ -201,6 +209,8 @@ namespace Stardust.Node.Workers
 						.ConfigureAwait(false);
 
 
+					response.EnsureSuccessStatusCode();
+
 					LogHelper.LogDebugWithLineNumber(Logger,
 					                                 "Finished Get Async: " + url);
 
@@ -239,6 +249,8 @@ namespace Stardust.Node.Workers
 					                                     HttpCompletionOption.ResponseHeadersRead,
 					                                     cancellationToken)
 						.ConfigureAwait(false);
+
+					response.EnsureSuccessStatusCode();
 
 					LogHelper.LogDebugWithLineNumber(Logger,
 					                                 "Finished Get Async: " + url);

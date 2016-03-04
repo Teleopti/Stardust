@@ -157,7 +157,7 @@ namespace Stardust.Manager
 		}
 
 
-		public void CheckAndAssignNextJob()
+		public async void CheckAndAssignNextJob()
 		{
 			LogHelper.LogDebugWithLineNumber(Logger,
 			                                 "Start CheckAndAssignNextJob.");
@@ -178,7 +178,7 @@ namespace Stardust.Manager
 				{
 					foreach (var availableNode in availableNodes)
 					{
-						if (availableNode.Alive == "true") // Move to SQL?
+						if (availableNode.Alive == "true") 
 						{
 							var nodeUriBuilder = new NodeUriBuilderHelper(availableNode.Url);
 
@@ -187,9 +187,9 @@ namespace Stardust.Manager
 							LogHelper.LogDebugWithLineNumber(Logger,
 							                                 "Test available node is alive : Url ( " + postUri + " )");
 
-							var success = _httpSender.TryGetAsync(postUri);
+							bool success = await _httpSender.TryGetAsync(postUri);
 
-							if (success.Result)
+							if (success)
 							{
 								LogHelper.LogDebugWithLineNumber(Logger,
 								                                 "Node Url ( " + postUri + " ) is available and alive.");
@@ -198,7 +198,7 @@ namespace Stardust.Manager
 							}
 							else
 							{
-								LogHelper.LogWarningWithLineNumber(Logger,
+								LogHelper.LogErrorWithLineNumber(Logger,
 								                                   "Node Url ( " + postUri + " ) could not be pinged.");
 							}
 						}

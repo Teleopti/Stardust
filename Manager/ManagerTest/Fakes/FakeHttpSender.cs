@@ -46,6 +46,11 @@ namespace ManagerTest.Fakes
 
 			return Responses[0];
 		}
+
+		public Task<HttpResponseMessage> TryPostAsync(Uri url, object data)
+		{
+			throw new NotImplementedException();
+		}
 #pragma warning disable 1998
 		public async Task<HttpResponseMessage> DeleteAsync(Uri url)
 #pragma warning restore 1998

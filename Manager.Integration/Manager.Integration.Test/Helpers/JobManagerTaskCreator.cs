@@ -101,8 +101,8 @@ namespace Manager.Integration.Test.Helpers
 				while (!CreateNewJobToManagerSucceeded)
 				{
 					LogHelper.LogDebugWithLineNumber(
-					"Start calling post async. Uri ( " + uri + " ). Job name : ( " + jobRequestModel.Name + " )",
-					Logger);
+						"Start calling post async. Uri ( " + uri + " ). Job name : ( " + jobRequestModel.Name + " )",
+						Logger);
 					try
 					{
 						response = await httpSender.PostAsync(uri, jobRequestModel);
@@ -112,9 +112,9 @@ namespace Manager.Integration.Test.Helpers
 					{
 						CreateNewJobToManagerSucceeded = false;
 						LogHelper.LogWarningWithLineNumber(
-					"HttpRequestException when calling post async, will soon try again. Uri ( " + uri + " ). Job name : ( " +
-					jobRequestModel.Name + " ).",
-					Logger);
+							"HttpRequestException when calling post async, will soon try again. Uri ( " + uri + " ). Job name : ( " +
+							jobRequestModel.Name + " ).",
+							Logger);
 						Thread.Sleep(TimeSpan.FromSeconds(1));
 					}
 				}

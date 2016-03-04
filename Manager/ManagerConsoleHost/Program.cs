@@ -48,9 +48,17 @@ namespace ManagerConsoleHost
 			SetConsoleCtrlHandler(ConsoleCtrlCheck,
 			                      true);
 
+			string managerName = ConfigurationManager.AppSettings["ManagerName"];
+			Uri baseAddress = new Uri(ConfigurationManager.AppSettings["baseAddress"]);
+
+			var managerAddress = baseAddress.Scheme + "://+:" +
+								 baseAddress.Port + "/";
+
 			AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
 
-			WhoAmI = "[MANAGER CONSOLE HOST, " + Environment.MachineName.ToUpper() + "]";
+			
+			WhoAmI = 
+				"[MANAGER CONSOLE HOST ( " + managerName + ", " + managerAddress +  " )," + Environment.MachineName.ToUpper() + "]";
 
 			LogHelper.LogInfoWithLineNumber(Logger,
 			                                WhoAmI + " : started.");
@@ -66,10 +74,6 @@ namespace ManagerConsoleHost
 				CheckNewJobIntervalSeconds = int.Parse(ConfigurationManager.AppSettings["CheckNewJobIntervalSeconds"])
 			};
 
-			var baseAddress = new Uri(ConfigurationManager.AppSettings["baseAddress"]);
-
-			var managerAddress = baseAddress.Scheme + "://+:" +
-			                     baseAddress.Port + "/";
 
 			var container = new ContainerBuilder().Build();
 			var config = new HttpConfiguration();
