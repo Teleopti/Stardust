@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	{
 		ITestDoubleFor UseTestDouble<TTestDouble>() where TTestDouble : class;
 		ITestDoubleFor UseTestDouble<TTestDouble>(TTestDouble instance) where TTestDouble : class;
+		ITestDoubleFor UseTestDoubleForType(Type type);
 
 		void AddService<TService>();
 		void AddService<TService>(TService instance) where TService : class;
@@ -73,6 +74,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public virtual ITestDoubleFor UseTestDouble<TTestDouble>(TTestDouble instance) where TTestDouble : class
 		{
 			return new TestDoubleFor<TTestDouble>(_builder, _testDoubles, instance);
+		}
+
+		public virtual ITestDoubleFor UseTestDoubleForType(Type type)
+		{
+			return new TestDoubleFor<object>(_builder, _testDoubles, type);
 		}
 
 		public void AddService<TService>()
@@ -156,6 +162,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	{
 		private readonly ContainerBuilder _builder;
 		private readonly TestDoubles _testDoubles;
+		private readonly Type _type;
 		private readonly object _instance;
 
 		public TestDoubleFor(ContainerBuilder builder, TestDoubles testDoubles, object instance)
@@ -163,6 +170,13 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			_builder = builder;
 			_testDoubles = testDoubles;
 			_instance = instance;
+		}
+
+		public TestDoubleFor(ContainerBuilder builder, TestDoubles testDoubles, Type type)
+		{
+			_builder = builder;
+			_testDoubles = testDoubles;
+			_type = type;
 		}
 
 		public void For<T>()
@@ -194,29 +208,58 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			if (_instance == null)
 			{
-				var registration = _testDoubles.Register(b =>
+				if (_type != null)
 				{
-					b.RegisterType<TTestDouble>()
+					var registration = _testDoubles.Register(b =>
+					{
+						b.RegisterType(_type)
+							.SingleInstance()
+							.AsSelf()
+							.As(asTypes);
+					});
+					_builder
+						.RegisterType(_type)
 						.SingleInstance()
 						.AsSelf()
-						.As(asTypes);
-				});
-				_builder
-					.RegisterType<TTestDouble>()
-					.SingleInstance()
-					.AsSelf()
-					.As(asTypes)
-					.ExternallyOwned()
-					.OnActivated(c =>
-					{
-						registration.Action = b =>
+						.As(asTypes)
+						.ExternallyOwned()
+						.OnActivated(c =>
 						{
-							b.RegisterInstance(c.Instance)
-								.SingleInstance()
-								.AsSelf()
-								.As(asTypes);
-						};
+							registration.Action = b =>
+							{
+								b.RegisterInstance(c.Instance)
+									.SingleInstance()
+									.AsSelf()
+									.As(asTypes);
+							};
+						});
+				}
+				else
+				{
+					var registration = _testDoubles.Register(b =>
+					{
+						b.RegisterType<TTestDouble>()
+							.SingleInstance()
+							.AsSelf()
+							.As(asTypes);
 					});
+					_builder
+						.RegisterType<TTestDouble>()
+						.SingleInstance()
+						.AsSelf()
+						.As(asTypes)
+						.ExternallyOwned()
+						.OnActivated(c =>
+						{
+							registration.Action = b =>
+							{
+								b.RegisterInstance(c.Instance)
+									.SingleInstance()
+									.AsSelf()
+									.As(asTypes);
+							};
+						});
+				}
 			}
 			else
 			{
@@ -236,7 +279,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 					;
 			}
 		}
-
 	}
 
 }

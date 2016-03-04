@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -19,7 +20,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 {
 	[Toggle(Toggles.ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049)]
-	[DomainTest(false)]
+	[DomainTest]
+	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	public class IntradayOptimizationStopWhenLargeGroupTest : ISetup
 	{
 		public IntradayOptimizationCommandHandler Target;

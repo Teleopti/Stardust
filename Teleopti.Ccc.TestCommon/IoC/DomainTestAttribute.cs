@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -7,9 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DistributedLock;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Logon;
-using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Ccc.Domain.MultiTenancy;
@@ -37,13 +36,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 {
 	public class DomainTestAttribute : IoCTestAttribute
 	{
-		private readonly bool _useFakeEventPublisher;
-		//solve this some other way soon - just to fix red build quickly
-		public DomainTestAttribute(bool useFakeEventPublisher=true)
-		{
-			_useFakeEventPublisher = useFakeEventPublisher;
-		}
-
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			//TODO: move this to common
@@ -61,13 +53,17 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeDataSourcesFactory>().For<IDataSourcesFactory>();
 			//
 
-			// Outbound stuff
+			// Event stuff
 			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
-			if (_useFakeEventPublisher)
+			var eventPublisherAttribute = FixtureType.GetCustomAttribute<UseEventPublisherAttribute>();
+			if (eventPublisherAttribute == null)
 			{
 				system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 			}
-			system.UseTestDouble<FakeRecurringEventPublisher>().For<IRecurringEventPublisher>();
+			else
+			{
+				system.UseTestDoubleForType(eventPublisherAttribute.EventPublisher).For<IEventPublisher>();
+			}
 			//
 
 			// Database aspects

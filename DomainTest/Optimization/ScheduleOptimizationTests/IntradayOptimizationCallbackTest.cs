@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -18,7 +19,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 {
 	[Toggle(Toggles.ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049)]
-	[DomainTest(false)]
+	[DomainTest]
+	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	public class IntradayOptimizationCallbackTest
 	{
 		public FakeSkillRepository SkillRepository;
