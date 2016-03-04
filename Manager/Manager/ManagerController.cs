@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -64,10 +63,7 @@ namespace Stardust.Manager
 			LogHelper.LogInfoWithLineNumber(Logger,
 			                                msg);
 
-			Task.Factory.StartNew(() =>
-			{
-				_jobManager.CheckAndAssignNextJob();
-			});
+			Task.Factory.StartNew(() => { _jobManager.CheckAndAssignNextJob(); });
 
 			return Ok(jobReceived.Id);
 		}
@@ -112,17 +108,14 @@ namespace Stardust.Manager
 		{
 			if (nodeUri != null)
 			{
-				Task.Factory.StartNew(() =>
-				{
-					_jobManager.RegisterHeartbeat(nodeUri.ToString());
-				});
+				Task.Factory.StartNew(() => { _jobManager.RegisterHeartbeat(nodeUri.ToString()); });
 
 				LogHelper.LogInfoWithLineNumber(Logger,
-												WhoAmI + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
+				                                WhoAmI + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
 				return Ok();
 			}
 			LogHelper.LogWarningWithLineNumber(Logger,
-											WhoAmI + ": Received heartbeat from Node with invalid uri.");
+			                                   WhoAmI + ": Received heartbeat from Node with invalid uri.");
 			return BadRequest();
 		}
 
@@ -134,10 +127,10 @@ namespace Stardust.Manager
 
 			Task.Factory.StartNew(() =>
 			{
-			_jobManager.SetEndResultOnJobAndRemoveIt(jobId,
-			                                         "Success");
-				
-		_jobManager.CheckAndAssignNextJob();
+				_jobManager.SetEndResultOnJobAndRemoveIt(jobId,
+				                                         "Success");
+
+				_jobManager.CheckAndAssignNextJob();
 			});
 
 			return Ok();
@@ -151,10 +144,10 @@ namespace Stardust.Manager
 
 			Task.Factory.StartNew(() =>
 			{
-			_jobManager.SetEndResultOnJobAndRemoveIt(jobId,
-			                                         "Failed");
-				
-			_jobManager.CheckAndAssignNextJob();
+				_jobManager.SetEndResultOnJobAndRemoveIt(jobId,
+				                                         "Failed");
+
+				_jobManager.CheckAndAssignNextJob();
 			});
 
 			return Ok();
@@ -168,10 +161,10 @@ namespace Stardust.Manager
 
 			Task.Factory.StartNew(() =>
 			{
-			_jobManager.SetEndResultOnJobAndRemoveIt(jobId,
-			                                         "Canceled");
-				
-			_jobManager.CheckAndAssignNextJob();
+				_jobManager.SetEndResultOnJobAndRemoveIt(jobId,
+				                                         "Canceled");
+
+				_jobManager.CheckAndAssignNextJob();
 			});
 
 			return Ok();
@@ -184,7 +177,7 @@ namespace Stardust.Manager
 			{
 				return BadRequest();
 			}
-				
+
 			if (model.JobId == Guid.Empty || string.IsNullOrEmpty(model.ProgressDetail))
 			{
 				return BadRequest();
@@ -201,9 +194,9 @@ namespace Stardust.Manager
 		{
 			Task.Factory.StartNew(() =>
 			{
-			_nodeManager.FreeJobIfAssingedToNode(nodeUri);
-			_nodeManager.AddIfNeeded(nodeUri);
-		_jobManager.CheckAndAssignNextJob();
+				_nodeManager.FreeJobIfAssingedToNode(nodeUri);
+				_nodeManager.AddIfNeeded(nodeUri);
+				_jobManager.CheckAndAssignNextJob();
 			});
 
 			LogHelper.LogInfoWithLineNumber(Logger,
@@ -221,10 +214,9 @@ namespace Stardust.Manager
 		[HttpGet, Route(ManagerRouteConstants.Nodes)]
 		public IHttpActionResult Nodes()
 		{
-			IList<WorkerNode> workernodes = _jobManager.Nodes();
+			var workernodes = _jobManager.Nodes();
 
 			return Ok(workernodes);
 		}
-
 	}
 }
