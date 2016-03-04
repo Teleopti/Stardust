@@ -27,21 +27,6 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 				});
 		}
 
-		[Test]
-		public void HandlersShouldBeAdded()
-		{
-			var config = new HttpConfiguration();
-			var target = new RegisterGlobalApiFiltersTask(new FakeApiConfig(config), null);
-
-			target.Execute(null);
-
-			config.MessageHandlers.Select(item => item.GetType())
-				.Should().Have.SameValuesAs(new[]
-				{
-					typeof(CancelledTaskBugWorkaroundMessageHandler)
-				});
-		}
-
 	    [Test]
 	    public void LoggerShouldBeAddedAsAService()
 	    {
