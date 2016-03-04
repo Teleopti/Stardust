@@ -2,11 +2,13 @@
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
@@ -22,9 +24,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Given(@"I have a denied absence request")]
 		public void GivenIHaveADeniedAbsenceRequest()
 		{
-			DataMaker.Data().Apply(new ExistingDeniedAbsenceRequest());
+			DataMaker.Data().Apply(new ExistingDeniedAbsenceRequest(null, false));
 		}
-
+		
 		[When(@"I change the absence request values with")]
 		public void WhenIChangeTheAbsenceRequestValuesWith(Table table)
 		{
@@ -88,6 +90,34 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void GivenIHaveADeniedAbsenceRequestBeacuseOfMissingWorkflowControlSet()
 		{
 			DataMaker.Data().Apply(new ExistingDeniedAbsenceRequest("RequestDenyReasonNoWorkflow"));
+		}
+
+		[Given(@"I have an auto denied absence request")]
+		public void GivenIHaveAnAutoDeniedAbsenceRequest()
+		{
+			var absence = DataMaker.Me().Person.WorkflowControlSet.AbsenceRequestOpenPeriods[0].Absence;
+			DataMaker.Data().Apply(new ExistingDeniedAbsenceRequest(absence, true));
+		}
+		
+		[Given(@"I have an open workflow control set with absence request waitlisting enabled")]
+		public void GivenIHaveAnOpenWorkflowControlSetWithAbsenceRequestWaitlistingEnabled()
+		{
+			DataMaker.Data().Apply(new AbsenceConfigurable { Name = "Vacation" });
+			DataMaker.Data()
+				.Apply(new WorkflowControlSetConfigurable
+				{
+					Name = "Open",
+					AvailableAbsence = "Vacation",
+					AbsenceRequestWaitlistEnabled = true,
+					AutoGrant="yes"
+				});
+			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Open" });
+		}
+
+		[Then(@"I should see the waitlist position is (.*)")]
+		public void ThenIShouldSeeTheWaitlistPositionIs(int position)
+		{
+			Browser.Interactions.AssertFirstContains("#waitlistPosition", position.ToString());
 		}
 	}
 }

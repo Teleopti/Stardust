@@ -279,12 +279,10 @@ Scenario: View absence request details
 	Then I should see the detail form for the existing request in the list
 	And I should see the values of the absence request
 
-@ignore
-@OnlyRunIfEnabled('Wfm_Requests_Waitlist_36232')
 Scenario: View absence request waitlist
 	Given I am an agent
 	And I have an open workflow control set with absence request waitlisting enabled
-	And I have an existing absence request
+	And I have an auto denied absence request
 	And I am viewing requests
 	When I click on the existing request in the list
 	Then I should see the detail form for the existing request in the list

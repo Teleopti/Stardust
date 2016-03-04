@@ -63,12 +63,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 
 	public class ExistingDeniedAbsenceRequest : IUserDataSetup
 	{
+		private readonly IAbsence _absence;
+		private readonly bool _isAutoDenied;
 		private readonly string _denyReason;
 		public PersonRequest PersonRequest;
 		public AbsenceRequest AbsenceRequest;
 
-		public ExistingDeniedAbsenceRequest()
+		public ExistingDeniedAbsenceRequest(IAbsence absence, bool isAutoDenied)
 		{
+			_absence = absence;
+			_isAutoDenied = isAutoDenied;
 		}
 
 		public ExistingDeniedAbsenceRequest(string denyReason)
@@ -79,15 +83,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
 			var today = DateTime.UtcNow.Date;
-
-			var absenceRepository = new AbsenceRepository(currentUnitOfWork);
-			var absence = AbsenceFactory.CreateAbsence(RandomName.Make(), RandomName.Make(), Color.FromArgb(210, 150, 150));
-			absenceRepository.Add(absence);
+			IAbsence absence;
+			if (_absence != null)
+			{
+				absence = _absence;
+			}
+			else
+			{
+				var absenceRepository = new AbsenceRepository(currentUnitOfWork);
+				absence = AbsenceFactory.CreateAbsence(RandomName.Make(), RandomName.Make(), Color.FromArgb(210, 150, 150));
+				absenceRepository.Add(absence);
+			}
 
 			AbsenceRequest = new AbsenceRequest(absence, new DateTimePeriod(today, today.AddHours(5)));
 			PersonRequest = new PersonRequest(user, AbsenceRequest) { Subject = "I need some vacation" };
 			PersonRequest.TrySetMessage("This is just a short text that doesn't say anything, except explaining that it doesn't say anything");
-			PersonRequest.Pending();
+			if (!_isAutoDenied)
+			{
+				PersonRequest.Pending();
+			}
 			PersonRequest.Deny(null, _denyReason, new PersonRequestAuthorizationCheckerForTest());
 
 			var requestRepository = new PersonRequestRepository(currentUnitOfWork);
