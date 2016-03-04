@@ -5,12 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Autofac;
 using Autofac.Integration.WebApi;
 using log4net;
 using log4net.Config;
 using Manager.IntegrationTest.Console.Host.Helpers;
+using Manager.IntegrationTest.Console.Host.LoadBalancer;
 using Manager.IntegrationTest.Console.Host.Properties;
 using Manager.IntegrationTest.Console.Host.Tasks;
 using Microsoft.Owin.Hosting;
@@ -103,6 +105,24 @@ namespace Manager.IntegrationTest.Console.Host
 				QuitEvent.WaitOne();
 			}
 		}
+
+		private static void StartLoadBalancerProxy(IEnumerable<Uri> managerUriList)
+		{
+			var configuration = new Configuration(Settings.Default.ManagerLocationUri);
+
+			var address =
+				configuration.BaseAddress.Scheme + "://+:9000/";
+			RoundRobin.Set(managerUriList.ToList());
+
+			using (WebApp.Start<LoadBalancerStartup>(address))
+			{
+				LogHelper.LogInfoWithLineNumber(Logger,
+												"Started listening on port : ( " + address + " )");
+
+				QuitEvent.WaitOne();
+			}
+		}
+
 
 		private static int NumberOfManagersToStart { get; set; }
 
@@ -303,7 +323,7 @@ namespace Manager.IntegrationTest.Console.Host
 				appDomainNodeTask.StartTask(new CancellationTokenSource());
 
 				LogHelper.LogDebugWithLineNumber(Logger,
-				                                 "Finished : AppDomainNodeTask.StartTask");
+			                                 "Finished : AppDomainNodeTask.StartTask");
 
 				AppDomainNodeTasks.Add(appDomainNodeTask);
 
@@ -311,6 +331,7 @@ namespace Manager.IntegrationTest.Console.Host
 				Thread.Sleep(TimeSpan.FromSeconds(5));
 			}
 
+			Task.Factory.StartNew(() => StartLoadBalancerProxy(CopiedManagerConfigurationFiles.Keys));
 			StartSelfHosting();
 		}
 
