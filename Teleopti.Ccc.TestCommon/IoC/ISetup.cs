@@ -6,34 +6,9 @@ using Teleopti.Ccc.IocCommon;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
-	public interface ISetupConfiguration
-	{
-		void SetupConfiguration(IocArgs args);
-	}
-
 	public interface ISetup
 	{
 		void Setup(ISystem system, IIocConfiguration configuration);
-	};
-
-	public interface ISystem
-	{
-		ITestDoubleFor UseTestDouble<TTestDouble>() where TTestDouble : class;
-		ITestDoubleFor UseTestDouble<TTestDouble>(TTestDouble instance) where TTestDouble : class;
-		ITestDoubleFor UseTestDoubleForType(Type type);
-
-		void AddService<TService>();
-		void AddService<TService>(TService instance) where TService : class;
-
-		void AddModule(Module module);
-	}
-
-	public interface ITestDoubleFor
-	{
-		void For<T>();
-		void For<T1, T2>();
-		void For<T1, T2, T3>();
-		void For<T1, T2, T3, T4>();
 	}
 
 	public class IgnoringTestDoubles : SystemImpl
