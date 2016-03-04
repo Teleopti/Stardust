@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 		public void CanReturnWaitlistInCorrectOrder()
 		{
 			var absenceRequestOne = createAutoDeniedAbsenceRequest(createAndSetupPerson(_workflowControlSet), _absence, new DateTimePeriod(new DateTime(2016, 3, 1, 15, 0, 0, DateTimeKind.Utc), new DateTime(2016, 3, 1, 19, 00, 00, DateTimeKind.Utc)));
-			var absenceRequestTwo = createAutoDeniedAbsenceRequest(createAndSetupPerson(_workflowControlSet), _absence, new DateTimePeriod(new DateTime(2016, 3, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2016, 3, 1, 16, 00, 00, DateTimeKind.Utc)));
+			var absenceRequestTwo = createNewAbsenceRequest(createAndSetupPerson(_workflowControlSet), _absence, new DateTimePeriod(new DateTime(2016, 3, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2016, 3, 1, 16, 00, 00, DateTimeKind.Utc)));
 			var absenceRequestThree = createAutoDeniedAbsenceRequest(createAndSetupPerson(_workflowControlSet), _absence, new DateTimePeriod(new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 3, 1, 18, 00, 00, DateTimeKind.Utc)));
 
 			var property = typeof(PersonRequest).GetProperty("CreatedOn");
@@ -47,12 +47,13 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 			//absenceTwo intersects absenceOne and absenceThree
 			var waitlist = _absenceRequestWaitlistProvider.GetWaitlistedRequests(absenceRequestTwo.Period, _workflowControlSet).ToArray();
 
+			Assert.AreEqual (3, waitlist.Count());
+
 			Assert.IsTrue(waitlist[0].Request == absenceRequestThree);
 			Assert.IsTrue(waitlist[1].Request == absenceRequestOne);
 			Assert.IsTrue(waitlist[2].Request == absenceRequestTwo);
 		}
-
-
+		
 		[Test]
 		public void ShouldOnlyReturnWaitlistedAbsenceRequestsThatOverlap()
 		{
@@ -115,19 +116,31 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 
 		private IAbsenceRequest createAutoDeniedAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod requestDateTimePeriod)
 		{
-			var absenceRequest = new AbsenceRequest (absence, requestDateTimePeriod);
-			var personRequest = new PersonRequest(person, absenceRequest );
+			return createAbsenceRequest (person, absence, requestDateTimePeriod, true);
+		}
+
+		private IAbsenceRequest createNewAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod requestDateTimePeriod)
+		{
+			return createAbsenceRequest(person, absence, requestDateTimePeriod, false);
+		}
+
+		private IAbsenceRequest createAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod requestDateTimePeriod, bool isAutoDenied)
+		{
+			var absenceRequest = new AbsenceRequest(absence, requestDateTimePeriod);
+			var personRequest = new PersonRequest(person, absenceRequest);
 
 			personRequest.SetId(Guid.NewGuid());
 
-			personRequest.Deny(null, "Work Hard!", new PersonRequestAuthorizationCheckerForTest());
+			if (isAutoDenied)
+			{
 
+				personRequest.Deny (null, "Work Hard!", new PersonRequestAuthorizationCheckerForTest());
+			}
+			
 			_personRequestRepository.Add(personRequest);
 
 			return absenceRequest;
 		}
-
-		
 
 	}
 }
