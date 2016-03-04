@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 		{
 			var period = new DateOnlyPeriod(2015, 10, 12, 2016,1,1);
 
-			Target.Execute(period, new [] {new Person().WithId()});
+			Target.Execute(new IntradayOptimizationCommand {Period = period, Agents = new[] {new Person().WithId()}});
 
 			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Single()
 				.Period.Should().Be.EqualTo(period);
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 		{
 			var agents = new [] {new Person().WithId()};
 
-			Target.Execute(new DateOnlyPeriod(), agents);
+			Target.Execute(new IntradayOptimizationCommand { Period = new DateOnlyPeriod(), Agents = agents });
 
 			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Single().AgentIds.Single()
 				.Should().Be.EqualTo(agents.Single().Id.Value);
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			var period2 = new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team());
 			period2.AddPersonSkill(new PersonSkill(new Skill("_", "_", Color.Empty, 1, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)), new Percent(1)));
 
-			Target.Execute(new DateOnlyPeriod(), new[] {agent1, agent2});
+			Target.Execute(new IntradayOptimizationCommand {Period = new DateOnlyPeriod(), Agents = new[] {agent1, agent2}});
 
 			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count()
 				.Should().Be.EqualTo(2);

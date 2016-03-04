@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			var period = planningPeriod.Range;
 			_fillSchedulerStateHolder.Fill(_schedulerStateHolder(), period); //see if this can be made smarter - not ladda hela världen
 			var agents = _schedulerStateHolder().AllPermittedPersons;
-			_intradayOptimizationCommandHandler.Execute(period, agents);
+			_intradayOptimizationCommandHandler.Execute(new IntradayOptimizationCommand {Period = period, Agents = agents});
 			return _optimizationResult.Create(period);
 		}
 	}
