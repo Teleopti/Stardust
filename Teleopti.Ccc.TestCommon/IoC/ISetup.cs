@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		void For<T1, T2>();
 		void For<T1, T2, T3>();
 		void For<T1, T2, T3, T4>();
-		void For<T1, T2, T3, T4, T5, T6, T7>();
 	}
 
 	public class IgnoringTestDoubles : SystemImpl
@@ -123,10 +122,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public void For<T1, T2, T3, T4>()
 		{
 		}
-
-		public void For<T1, T2, T3, T4, T5, T6, T7>()
-		{
-		}
 	}
 
 	public class TestDoubles
@@ -197,11 +192,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public void For<T1, T2, T3, T4>()
 		{
 			register(typeof(T1), typeof(T2), typeof(T3), typeof(T4));
-		}
-
-		public void For<T1, T2, T3, T4, T5, T6, T7>()
-		{
-			register(typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), typeof(T6), typeof(T7));
 		}
 
 		private void register(params Type[] asTypes)
