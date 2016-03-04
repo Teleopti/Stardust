@@ -81,7 +81,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 	    public virtual bool IsWaitlisted()
 	    {
 			var personRequest = (PersonRequest)Parent;
-		    return Person.WorkflowControlSet != null && Person.WorkflowControlSet.WaitlistingIsEnabled (this) && !personRequest.WasManuallyDenied;
+		    return 
+				Person.WorkflowControlSet != null && 
+				Person.WorkflowControlSet.WaitlistingIsEnabled (this) && 
+				personRequest.IsAutoDenied;
 	    }
 
 	    private bool isRequestForOneLocalDay(TimeZoneInfo timeZone)
