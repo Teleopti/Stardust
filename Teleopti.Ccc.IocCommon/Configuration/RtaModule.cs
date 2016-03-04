@@ -29,7 +29,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RtaProcessor>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateReadModelUpdater>().As<IAgentStateReadModelUpdater>().SingleInstance();
 			
-			if (_config.Toggle(Toggles.RTA_DeletedPersons_36041))
+			if (_config.Toggle(Toggles.RTA_ScaleOut_36979))
+				builder.RegisterType<LoadAllFromDatabase>().As<IStateContextLoader>().SingleInstance();
+			else if (_config.Toggle(Toggles.RTA_DeletedPersons_36041))
 				builder.RegisterType<LoadPersonFromDatabase>().As<IStateContextLoader>().SingleInstance();
 			else
 				builder.RegisterType<LoadFromCache>().As<IStateContextLoader>().SingleInstance();

@@ -64,6 +64,7 @@ WfmPeople_ImportUsers_33665 = true
 RTA_DeletedPersons_36041 = true
 RTA_TerminatedPersons_36042 = RC
 RTA_TeamChanges_36043 = RC
+RTA_ScaleOut_36979 = false
 Wfm_RTA_34621 = true
 Wfm_RTA_ProperAlarm_34975 = true
 Wfm_RTA_ProperReleaseToggle_36750 = RC

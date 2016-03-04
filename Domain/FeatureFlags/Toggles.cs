@@ -22,6 +22,7 @@
 		RTA_DeletedPersons_36041,
 		RTA_TerminatedPersons_36042,
 		RTA_TeamChanges_36043,
+		RTA_ScaleOut_36979,
 
 		MessageBroker_SchedulingScreenMailbox_32733,
 

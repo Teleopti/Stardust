@@ -299,4 +299,173 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 	}
 
+
+
+
+
+
+
+	public class LoadAllFromDatabase : IStateContextLoader
+	{
+		private readonly DataSourceResolver _dataSourceResolver;
+		protected readonly IDatabaseLoader _databaseLoader;
+		protected readonly INow _now;
+		protected readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
+		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
+		private readonly StateMapper _stateMapper;
+		protected readonly IPreviousStateInfoLoader _previousStateInfoLoader;
+		protected readonly IStateMappingLoader _stateMappingLoader;
+		protected readonly IRuleMappingLoader _ruleMappingLoader;
+		private readonly IDatabaseReader _databaseReader;
+		protected readonly PersonLocker _locker = new PersonLocker();
+
+		public LoadAllFromDatabase(
+			IDatabaseLoader databaseLoader,
+			INow now,
+			IAgentStateReadModelUpdater agentStateReadModelUpdater,
+			IAgentStateReadModelReader agentStateReadModelReader,
+			StateMapper stateMapper,
+			IPreviousStateInfoLoader previousStateInfoLoader,
+			IStateMappingLoader stateMappingLoader,
+			IRuleMappingLoader ruleMappingLoader,
+			IDatabaseReader databaseReader
+			)
+		{
+			_dataSourceResolver = new DataSourceResolver(databaseLoader);
+			_databaseLoader = databaseLoader;
+			_now = now;
+			_agentStateReadModelUpdater = agentStateReadModelUpdater;
+			_agentStateReadModelReader = agentStateReadModelReader;
+			_stateMapper = stateMapper;
+			_previousStateInfoLoader = previousStateInfoLoader;
+			_stateMappingLoader = stateMappingLoader;
+			_ruleMappingLoader = ruleMappingLoader;
+			_databaseReader = databaseReader;
+		}
+
+		protected int validateSourceId(ExternalUserStateInputModel input)
+		{
+			if (string.IsNullOrEmpty(input.SourceId))
+				throw new InvalidSourceException("Source id is required");
+			int dataSourceId;
+			if (!_dataSourceResolver.TryResolveId(input.SourceId, out dataSourceId))
+				throw new InvalidSourceException(string.Format("Source id not found {0}", input.SourceId));
+			return dataSourceId;
+		}
+
+		public virtual void For(ExternalUserStateInputModel input, Action<StateContext> action)
+		{
+			var dataSourceId = validateSourceId(input);
+			var userCode = input.UserCode;
+
+			_databaseReader.LoadPersonOrganizationData(dataSourceId, userCode)
+				.ForEach(x =>
+				{
+					_locker.LockFor(x.PersonId, () =>
+					{
+						action.Invoke(new StateContext(
+							input,
+							x.PersonId,
+							x.BusinessUnitId,
+							x.TeamId,
+							x.SiteId,
+							() => _previousStateInfoLoader.Load(x.PersonId),
+							() => _databaseReader.GetCurrentSchedule(x.PersonId),
+							() => _stateMappingLoader.Load(),
+							() => _ruleMappingLoader.Load(),
+							_now,
+							_agentStateReadModelUpdater
+							));
+					});
+				});
+		}
+
+		public virtual void ForAll(Action<StateContext> action)
+		{
+			_databaseReader.LoadAllPersonOrganizationData()
+				.ForEach(x =>
+				{
+					_locker.LockFor(x.PersonId, () =>
+					{
+						action.Invoke(new StateContext(
+							null,
+							x.PersonId,
+							x.BusinessUnitId,
+							x.TeamId,
+							x.SiteId,
+							() => _previousStateInfoLoader.Load(x.PersonId),
+							() => _databaseReader.GetCurrentSchedule(x.PersonId),
+							() => _stateMappingLoader.Load(),
+							() => _ruleMappingLoader.Load(),
+							_now,
+							_agentStateReadModelUpdater
+							));
+					});
+				});
+		}
+
+		public virtual void ForNotInBatchOf(ExternalUserStateInputModel input, Action<StateContext> action)
+		{
+			var missingAgents = _agentStateReadModelReader.GetMissingAgentStatesFromBatch(input.BatchId, input.SourceId);
+			var agentsNotAlreadyLoggedOut = from a in missingAgents
+											let state = _stateMapper.StateFor(
+												_stateMappingLoader.Load(),
+												a.BusinessUnitId,
+												a.PlatformTypeId,
+												a.StateCode,
+												null)
+											where !state.IsLogOutState
+											select a;
+
+			agentsNotAlreadyLoggedOut.ForEach(x =>
+			{
+				_locker.LockFor(x.PersonId, () =>
+				{
+					action.Invoke(new StateContext(
+						input,
+						x.PersonId,
+						x.BusinessUnitId,
+						x.TeamId.GetValueOrDefault(),
+						x.SiteId.GetValueOrDefault(),
+						() => _previousStateInfoLoader.Load(x.PersonId),
+						() => _databaseReader.GetCurrentSchedule(x.PersonId),
+						() => _stateMappingLoader.Load(),
+						() => _ruleMappingLoader.Load(),
+						_now,
+						_agentStateReadModelUpdater
+						));
+				});
+			});
+
+		}
+
+		public virtual void ForStates(IEnumerable<AgentStateReadModel> states, Action<StateContext> action)
+		{
+			states.ForEach(x =>
+			{
+				_locker.LockFor(x.PersonId, () =>
+				{
+					action.Invoke(new StateContext(
+						new ExternalUserStateInputModel
+						{
+							StateCode = x.StateCode,
+							PlatformTypeId = x.PlatformTypeId.ToString()
+						},
+						x.PersonId,
+						x.BusinessUnitId,
+						x.TeamId.GetValueOrDefault(),
+						x.SiteId.GetValueOrDefault(),
+						null,
+						() => _databaseReader.GetCurrentSchedule(x.PersonId),
+						() => _stateMappingLoader.Load(),
+						() => _ruleMappingLoader.Load(),
+						_now,
+						null
+						));
+				});
+			});
+		}
+
+	}
+
 }

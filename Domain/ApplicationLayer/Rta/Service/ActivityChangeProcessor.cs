@@ -9,19 +9,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly INow _now;
 		private readonly IStateContextLoader _stateContextLoader;
-		private readonly IDatabaseLoader _databaseLoader;
 		private readonly RtaProcessor _processor;
 
 		public ActivityChangeProcessor(
 			INow now,
 			IStateContextLoader stateContextLoader,
-			IDatabaseLoader databaseLoader,
 			RtaProcessor processor
 			)
 		{
 			_now = now;
 			_stateContextLoader = stateContextLoader;
-			_databaseLoader = databaseLoader;
 			_processor = processor;
 		}
 
@@ -34,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			_stateContextLoader.ForAll(person =>
 			{
-				var schedule = _databaseLoader.GetCurrentSchedule(person.PersonId);
+				var schedule = person.ScheduleLayers();
 
 				var current = new currentPeriod();
 				var currentActivity = ScheduleInfo.ActivityForTime(schedule, now);
