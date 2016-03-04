@@ -174,7 +174,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var nodeConfig = new NodeConfiguration(new Uri(ConfigurationManager.AppSettings["NodeBaseAddress"]),
 					 new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
 					 assembly, 
-					 ConfigurationManager.AppSettings["NodeName"],10000, 30000);
+					 ConfigurationManager.AppSettings["NodeName"],
+					 int.Parse(ConfigurationManager.AppSettings["PingToManagerSeconds"]));
 
 			var iocArgs = new IocArgs(new ConfigReader());
 			var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));

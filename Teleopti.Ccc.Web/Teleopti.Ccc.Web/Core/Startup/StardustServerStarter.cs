@@ -24,7 +24,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				ConnectionString =
 						 ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString,
 				Route = ConfigurationManager.AppSettings["RouteName"],
-				AllowedNodeDownTimeSeconds = int.Parse(ConfigurationManager.AppSettings["AllowedNodeDownTimeSeconds"])
+				AllowedNodeDownTimeSeconds = int.Parse(ConfigurationManager.AppSettings["AllowedNodeDownTimeSeconds"]),
+				CheckNewJobIntervalSeconds = int.Parse(ConfigurationManager.AppSettings["CheckNewJobIntervalSeconds"])
 			};
 			
 			app.UseStardustManager(managerConfiguration, _scope);
