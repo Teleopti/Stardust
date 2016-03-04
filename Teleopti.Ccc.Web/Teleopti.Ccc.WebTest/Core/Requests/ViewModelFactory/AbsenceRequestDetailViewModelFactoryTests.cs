@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Interfaces.Domain;
@@ -62,6 +63,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			{
 				Request = absenceRequest
 			};
+
+			personRequest.Deny (null,"work harder", new PersonRequestAuthorizationCheckerForTest());
 
 			absenceRequest.SetId(Guid.NewGuid());
 			absenceRequest.Parent.SetId(Guid.NewGuid());
