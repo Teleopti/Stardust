@@ -11,23 +11,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		void Setup(ISystem system, IIocConfiguration configuration);
 	}
 
-	public class IgnoringTestDoubles : SystemImpl
-	{
-		public IgnoringTestDoubles(ContainerBuilder builder, TestDoubles testDoubles) : base(builder, testDoubles)
-		{
-		}
-
-		public override ITestDoubleFor UseTestDouble<TTestDouble>()
-		{
-			return new IgnoreTestDouble();
-		}
-
-		public override ITestDoubleFor UseTestDouble<TTestDouble>(TTestDouble instance)
-		{
-			return new IgnoreTestDouble();
-		}
-
-	}
 
 	public class SystemImpl : ISystem
 	{
@@ -77,25 +60,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public void AddModule(Module module)
 		{
 			_builder.RegisterModule(module);
-		}
-	}
-
-	public class IgnoreTestDouble : ITestDoubleFor
-	{
-		public void For<T>()
-		{
-		}
-
-		public void For<T1, T2>()
-		{
-		}
-
-		public void For<T1, T2, T3>()
-		{
-		}
-
-		public void For<T1, T2, T3, T4>()
-		{
 		}
 	}
 

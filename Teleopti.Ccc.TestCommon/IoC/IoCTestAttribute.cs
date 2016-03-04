@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		private void rebuildContainer()
 		{
 			var builder = new ContainerBuilder();
-			setupBuilder(new IgnoringTestDoubles(builder, null));
+			setupBuilder(new ignoringTestDoubles(builder, null));
 			_testDoubles.RegisterFromPreviousContainer(builder);
 			_container = builder.Build();
 		}
@@ -193,5 +193,40 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			injectMembers();
 		}
 
+		private class ignoringTestDoubles : SystemImpl
+		{
+			public ignoringTestDoubles(ContainerBuilder builder, TestDoubles testDoubles) : base(builder, testDoubles)
+			{
+			}
+
+			public override ITestDoubleFor UseTestDouble<TTestDouble>()
+			{
+				return new ignoreTestDouble();
+			}
+
+			public override ITestDoubleFor UseTestDouble<TTestDouble>(TTestDouble instance)
+			{
+				return new ignoreTestDouble();
+			}
+		}
+
+		private class ignoreTestDouble : ITestDoubleFor
+		{
+			public void For<T>()
+			{
+			}
+
+			public void For<T1, T2>()
+			{
+			}
+
+			public void For<T1, T2, T3>()
+			{
+			}
+
+			public void For<T1, T2, T3, T4>()
+			{
+			}
+		}
 	}
 }

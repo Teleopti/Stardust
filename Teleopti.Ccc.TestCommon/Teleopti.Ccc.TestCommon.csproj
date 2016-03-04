@@ -234,6 +234,9 @@
     <Compile Include="FakeRepositories\FakeDatabase.cs" />
     <Compile Include="IoC\AllTogglesOffAttribute.cs" />
     <Compile Include="IoC\AllTogglesOnAttribute.cs" />
+    <Compile Include="IoC\ISetupConfiguration.cs" />
+    <Compile Include="IoC\ISystem.cs" />
+    <Compile Include="IoC\ITestDoubleFor.cs" />
     <Compile Include="IoC\UseEventPublisherAttribute.cs" />
     <Compile Include="MessageBrokerCompositeDummy.cs" />
     <Compile Include="ObjectCopyExtension.cs" />
