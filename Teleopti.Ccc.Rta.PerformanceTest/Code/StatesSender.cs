@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
@@ -15,6 +16,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		private readonly MutableNow _now;
 		private readonly TestConfiguration _stateHolder;
 		private readonly Http _http;
+		private TimeStateInfo[] changes;
 
 		public StatesSender(
 			MutableNow now, 
@@ -26,10 +28,11 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			_http = http;
 		}
 
+			
 		[LogTime]
 		public virtual void Send()
 		{
-			var changes = new[]
+			changes = new[]
 			{
 				new TimeStateInfo {Time = "2016-02-26 07:00", StateCode = "LoggedOff"},
 				new TimeStateInfo {Time = "2016-02-26 07:05", StateCode = "Ready"},
@@ -99,6 +102,11 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 							});
 					});
 			});
+		}
+
+		public IEnumerable<TimeStateInfo> SentSates()
+		{
+			return changes;
 		}
 	}
 }
