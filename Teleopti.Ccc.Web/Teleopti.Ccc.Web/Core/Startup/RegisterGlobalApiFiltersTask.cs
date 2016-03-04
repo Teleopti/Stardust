@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using System.Web.Http.ExceptionHandling;
 using Newtonsoft.Json;
@@ -55,8 +54,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				c.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new DefaultContractResolver();
 				c.Formatters.JsonFormatter.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Unspecified;
 				c.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new DateOnlyConverter());
-
-				c.MessageHandlers.Add(new CancelledTaskBugWorkaroundMessageHandler());
 			});
 			
 			return Task.FromResult(false);

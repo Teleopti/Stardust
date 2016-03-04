@@ -1045,7 +1045,6 @@
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceTypesProvider.cs" />
     <Compile Include="Areas\MyTime\Core\TimeSpanModelBinder.cs" />
     <Compile Include="Areas\SSO\Models\ApplicationAuthenticationModel.cs" />
-    <Compile Include="Core\Startup\CancelledTaskBugWorkaroundMessageHandler.cs" />
     <Compile Include="Core\Startup\DateOnlyConverter.cs" />
     <Compile Include="Core\Startup\ExceptionHandlerPipelineModule.cs" />
     <Compile Include="Core\Startup\FindAreaRegistrations.cs" />
