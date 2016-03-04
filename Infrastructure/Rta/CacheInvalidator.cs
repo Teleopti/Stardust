@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public void InvalidateState()
 		{
-			_cacheFactory.Invalidate<AlarmMappingLoader>();
+			_cacheFactory.Invalidate<RuleMappingLoader>();
 			_cacheFactory.Invalidate<StateMappingLoader>();
 		}
 

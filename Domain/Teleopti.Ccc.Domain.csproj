@@ -294,7 +294,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\StoredStateInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\RuleMapping.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\AlarmMappingLoader.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\RuleMappingLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\BelongsToDateDecorator.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModelBuilders\AdherenceDetailsViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\CheckForActivityChangeInputModel.cs" />
@@ -306,7 +306,7 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IAdherenceDetailsReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAdherenceEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAgentStateReadModelUpdater.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\IAlarmMappingLoader.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\IRuleMappingLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAppliedAdherence.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ICacheInvalidator.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IStateCodeAdder.cs" />

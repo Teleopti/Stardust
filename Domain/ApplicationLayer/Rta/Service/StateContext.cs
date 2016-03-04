@@ -9,6 +9,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly Func<StoredStateInfo> _stored;
 		private readonly Func<IEnumerable<ScheduleLayer>> _schedule;
+		private readonly Func<IEnumerable<StateMapping>> _stateMappings;
+		private readonly Func<IEnumerable<RuleMapping>> _ruleMappings;
 
 		public StateContext(
 			ExternalUserStateInputModel input, 
@@ -18,12 +20,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Guid siteId,
 			Func<StoredStateInfo> stored,
 			Func<IEnumerable<ScheduleLayer>> schedule,
+			Func<IEnumerable<StateMapping>> stateMappings,
+			Func<IEnumerable<RuleMapping>> ruleMappings,
 			INow now,
 			IAgentStateReadModelUpdater agentStateReadModelUpdater
 			)
 		{
 			_stored = stored;
 			_schedule = schedule;
+			_stateMappings = stateMappings;
+			_ruleMappings = ruleMappings;
 			Input = input ?? new ExternalUserStateInputModel();
 			CurrentTime = now.UtcDateTime();
 			PersonId = personId;
@@ -44,6 +50,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public StoredStateInfo Stored() { return _stored == null ? null : _stored.Invoke(); }
 		public IEnumerable<ScheduleLayer> ScheduleLayers() { return _schedule.Invoke(); }
+		public IEnumerable<StateMapping> StateMappings() { return _stateMappings.Invoke(); }
+		public IEnumerable<RuleMapping> RuleMappings() { return _ruleMappings.Invoke(); }
 
 		public IAgentStateReadModelUpdater AgentStateReadModelUpdater { get; private set; }
 		

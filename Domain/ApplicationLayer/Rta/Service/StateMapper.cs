@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -6,34 +7,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class StateMapper
 	{
 		private readonly ICacheInvalidator _cacheInvalidator;
-		private readonly IAlarmMappingLoader _alarmMappingLoader;
-		private readonly IStateMappingLoader _stateMappingLoader;
 		private readonly IStateCodeAdder _stateCodeAdder;
 
 		public StateMapper(
 			ICacheInvalidator cacheInvalidator,
-			IAlarmMappingLoader alarmMappingLoader,
-			IStateMappingLoader stateMappingLoader,
 			IStateCodeAdder stateCodeAdder)
 		{
 			_cacheInvalidator = cacheInvalidator;
-			_alarmMappingLoader = alarmMappingLoader;
-			_stateMappingLoader = stateMappingLoader;
 			_stateCodeAdder = stateCodeAdder;
 		}
 
-		public RuleMapping RuleFor(Guid businessUnitId, Guid platformTypeId, string stateCode, Guid? activityId)
+		public RuleMapping RuleFor(IEnumerable<RuleMapping> mappings, Guid businessUnitId, Guid platformTypeId, string stateCode, Guid? activityId)
 		{
-			var match = queryRule(businessUnitId, platformTypeId, stateCode, activityId);
+			var match = queryRule(mappings, businessUnitId, platformTypeId, stateCode, activityId);
 			if (activityId != null && match == null)
-				match = queryRule(businessUnitId, platformTypeId, stateCode, null);
+				match = queryRule(mappings, businessUnitId, platformTypeId, stateCode, null);
 			return match;
 		}
 
-		private RuleMapping queryRule(Guid businessUnitId, Guid platformTypeId, string stateCode, Guid? activityId)
+		private RuleMapping queryRule(IEnumerable<RuleMapping> mappings, Guid businessUnitId, Guid platformTypeId, string stateCode, Guid? activityId)
 		{
-			return (from m in _alarmMappingLoader.Load()
-				where
+			return (from m in mappings
+					where
 					m.BusinessUnitId == businessUnitId &&
 					m.PlatformTypeId == platformTypeId &&
 					m.StateCode == stateCode &&
@@ -42,15 +37,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				.SingleOrDefault();
 		}
 
-		public StateMapping StateFor(Guid businessUnitId, Guid platformTypeId, string stateCode, string stateDescription)
+		public StateMapping StateFor(IEnumerable<StateMapping> mappings, Guid businessUnitId, Guid platformTypeId, string stateCode, string stateDescription)
 		{
 			if (stateCode == null)
 				return noMatchState(businessUnitId, platformTypeId, null);
-			var match = queryState(businessUnitId, platformTypeId, stateCode);
+			var match = queryState(mappings, businessUnitId, platformTypeId, stateCode);
 			if (match != null) return match;
 			_stateCodeAdder.AddUnknownStateCode(businessUnitId, platformTypeId, stateCode, stateDescription);
 			_cacheInvalidator.InvalidateState();
-			match = queryState(businessUnitId, platformTypeId, stateCode);
+			match = queryState(mappings, businessUnitId, platformTypeId, stateCode);
 			return match ?? noMatchState(businessUnitId, platformTypeId, stateCode);
 		}
 
@@ -64,10 +59,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			};
 		}
 
-		private StateMapping queryState(Guid businessUnitId, Guid platformTypeId, string stateCode)
+		private StateMapping queryState(IEnumerable<StateMapping> mappings, Guid businessUnitId, Guid platformTypeId, string stateCode)
 		{
-			return (from m in _stateMappingLoader.Load()
-				where
+			return (from m in mappings
+					where
 					m.BusinessUnitId == businessUnitId &&
 					m.PlatformTypeId == platformTypeId &&
 					m.StateCode == stateCode

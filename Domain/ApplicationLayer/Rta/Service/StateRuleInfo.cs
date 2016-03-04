@@ -13,14 +13,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			string stateCode,
 			Guid platformTypeId,
 			ExternalUserStateInputModel input,
-			StateContext person,
+			StateContext context,
 			StoredStateInfo stored,
 			ScheduleInfo schedule,
 			StateMapper stateMapper
 			)
 		{
-			_stateMapping = stateMapper.StateFor(person.BusinessUnitId, platformTypeId, stateCode, input.StateDescription);
-			_ruleMapping = stateMapper.RuleFor(person.BusinessUnitId, platformTypeId, stateCode, schedule.CurrentActivityId()) ?? new RuleMapping();
+			_stateMapping = stateMapper.StateFor(context.StateMappings(), context.BusinessUnitId, platformTypeId, stateCode, input.StateDescription);
+			_ruleMapping = stateMapper.RuleFor(context.RuleMappings(), context.BusinessUnitId, platformTypeId, stateCode, schedule.CurrentActivityId()) ?? new RuleMapping();
 			_stored = stored;
 		}
 

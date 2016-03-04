@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class AdherenceInfo
 	{
 		private readonly ExternalUserStateInputModel _input;
-		private readonly StateContext _person;
+		private readonly StateContext _context;
 		private readonly StoredStateInfo _stored;
 		private readonly StateRuleInfo _stateRuleInfo;
 		private readonly ScheduleInfo _scheduleInfo;
@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public AdherenceInfo(
 			ExternalUserStateInputModel input, 
-			StateContext person,
+			StateContext context,
 			StoredStateInfo stored,
 			StateRuleInfo stateRuleInfo,
 			ScheduleInfo scheduleInfo, 
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			StateMapper stateMapper)
 		{
 			_input = input;
-			_person = person;
+			_context = context;
 			_stored = stored;
 			_stateRuleInfo = stateRuleInfo;
 			_scheduleInfo = scheduleInfo;
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private EventAdherence adherenceFor(string stateCode, Guid platformTypeId, Guid? activityId)
 		{
-			var rule = _stateMapper.RuleFor(_person.BusinessUnitId, platformTypeId, stateCode, activityId);
+			var rule = _stateMapper.RuleFor(_context.RuleMappings(), _context.BusinessUnitId, platformTypeId, stateCode, activityId);
 			if (rule == null)
 				return _appliedAdherence.ForEvent(null, null);
 			return _appliedAdherence.ForEvent(rule.Adherence, rule.StaffingEffect);

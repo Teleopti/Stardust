@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<ConnectionStrings>().As<IConnectionStrings>();
 			
-			_config.Cache().This<AlarmMappingLoader>((c, b) => b
+			_config.Cache().This<RuleMappingLoader>((c, b) => b
 				.CacheMethod(x => x.Load())
 				.CacheKey(c.Resolve<CachePerDataSource>())
 				);
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.CacheMethod(x => x.Load())
 				.CacheKey(c.Resolve<CachePerDataSource>())
 				);
-			builder.CacheByClassProxy<AlarmMappingLoader>().As<IAlarmMappingLoader>().ApplyAspects().SingleInstance();
+			builder.CacheByClassProxy<RuleMappingLoader>().As<IRuleMappingLoader>().ApplyAspects().SingleInstance();
 			builder.CacheByClassProxy<StateMappingLoader>().As<IStateMappingLoader>().ApplyAspects().SingleInstance();
 
 			builder.RegisterType<StateCodeAdder>().As<IStateCodeAdder>().SingleInstance().ApplyAspects();

@@ -8,12 +8,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public class AlarmMappingLoader : IAlarmMappingLoader
+	public class RuleMappingLoader : IRuleMappingLoader
 	{
 		private readonly IRtaMapRepository _rtaMapRepository;
 		private readonly IAppliedAdherence _appliedAdherence;
 
-		public AlarmMappingLoader(
+		public RuleMappingLoader(
 			IRtaMapRepository rtaMapRepository,
 			IAppliedAdherence appliedAdherence
 			)
