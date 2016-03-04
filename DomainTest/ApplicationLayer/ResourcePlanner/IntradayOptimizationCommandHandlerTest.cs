@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.TestCommon;
@@ -23,11 +25,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			var dateOnly = new DateOnly(2015, 10, 12);
 			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.Execute(planningPeriod.Id.Value, null);
 
 			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Single()
 				.Period.Should().Be.EqualTo(planningPeriod.Range);
 		}
-		
+
+		[Test]
+		public void ShouldSetAgentIds()
+		{
+			var listOfAgentIds = new List<Guid>();
+
+			Target.Execute(Guid.NewGuid(), listOfAgentIds);
+
+			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Single()
+				.AgentIds.Should().Be.SameInstanceAs(listOfAgentIds);
+		}
 	}
 }

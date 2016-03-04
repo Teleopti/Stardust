@@ -31,8 +31,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public IntradayOptimizationCommandHandler Target;
 		public IntradayOptimizationCallbackContext CallbackContext;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public IntradayOptimization TargetOptimization;
-		public WebSchedulingSetup WebSchedulingSetup;
 
 		[Test]
 		public void ShouldDoSuccesfulCallbacks()
@@ -53,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var callbackTracker = new TrackIntradayOptimizationCallback();
 			using (CallbackContext.Create(callbackTracker))
 			{
-				Target.Execute(planningPeriod.Id.Value);
+				Target.Execute(planningPeriod.Id.Value, null);
 			}
 			callbackTracker.SuccessfulOptimizations().Should().Be.EqualTo(10);
 		}
@@ -76,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var callbackTracker = new TrackIntradayOptimizationCallback();
 			using (CallbackContext.Create(callbackTracker))
 			{
-				Target.Execute(planningPeriod.Id.Value);
+				Target.Execute(planningPeriod.Id.Value, null);
 			}
 			callbackTracker.UnSuccessfulOptimizations().Should().Be.GreaterThanOrEqualTo(10);
 		}
@@ -84,31 +82,29 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		[Test]
 		public void ShouldOnlyDoSuccesfulCallbackOnAgentsInEvent()
 		{
-			var selectedAgents = new List<Guid>();
+			var selectedAgentIds = new List<Guid>();
 			const int numberOfAgents = 10;
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var scenario = ScenarioRepository.Has("some name");
 			var dateOnly = new DateOnly(2015, 10, 12);
-			var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly.AddDays(6));
+			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
 			
 			for (var i = 0; i < numberOfAgents; i++)
 			{
 				var agent = PersonRepository.Has(new Contract("_"), new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1), skill);
 				PersonAssignmentRepository.Has(agent, scenario, phoneActivity, new ShiftCategory("_"), dateOnly, new TimePeriod(8, 0, 17, 0));
-				selectedAgents.Add(agent.Id.Value);
+				selectedAgentIds.Add(agent.Id.Value);
 			}
 
-			selectedAgents.RemoveAt(0);
-			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyPeriod, TimeSpan.FromMinutes(60)));
-			WebSchedulingSetup.Setup(dateOnlyPeriod);
+			selectedAgentIds.RemoveAt(0);
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, planningPeriod.Range, TimeSpan.FromMinutes(60)));
 
 			var callbackTracker = new TrackIntradayOptimizationCallback();
-			var @event = new OptimizationWasOrdered{Period = dateOnlyPeriod, AgentIds = selectedAgents};
 
 			using (CallbackContext.Create(callbackTracker))
 			{
-				TargetOptimization.Handle(@event);
+				Target.Execute(planningPeriod.Id.Value, selectedAgentIds);
 			}
 
 			callbackTracker.SuccessfulOptimizations().Should().Be.EqualTo(9);
