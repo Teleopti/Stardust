@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		private IContainer _container;
 		private TestDoubles _testDoubles;
 		private object _fixture;
-		protected Type FixtureType { get; private set; }
+		private Type _fixtureType;
 		private MethodInfo _method;
 
 		protected virtual FakeToggleManager Toggles()
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		protected IEnumerable<T> QueryAllAttributes<T>()
 		{
-			var fromFixture = FixtureType.GetCustomAttributes(typeof (T), false).Cast<T>();
+			var fromFixture = _fixtureType.GetCustomAttributes(typeof (T), false).Cast<T>();
 			var fromTest = _method.GetCustomAttributes(typeof (T), false).Cast<T>();
 			var fromAttribute = GetType().GetCustomAttributes(typeof (T), false).Cast<T>();
 			return fromFixture
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		private void fixture(TestDetails testDetails)
 		{
 			_fixture = testDetails.Fixture;
-			FixtureType = _fixture.GetType();
+			_fixtureType = _fixture.GetType();
 		}
 
 		private void method(TestDetails testDetails)
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		private void injectMembers()
 		{
 			injectMembers(GetType(), this);
-			injectMembers(FixtureType, _fixture);
+			injectMembers(_fixtureType, _fixture);
 		}
 
 		private void injectMembers(IReflect type, object instance)

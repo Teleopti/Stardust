@@ -55,16 +55,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			// Event stuff
 			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
-			var eventPublisherAttribute = FixtureType.GetCustomAttribute<UseEventPublisherAttribute>();
+			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			QueryAllAttributes<UseEventPublisherAttribute>()
+				.ForEach(a => system.UseTestDoubleForType(a.EventPublisher).For<IEventPublisher>());
 			system.UseTestDouble<FakeRecurringEventPublisher>().For<IRecurringEventPublisher>();
-			if (eventPublisherAttribute == null)
-			{
-				system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
-			}
-			else
-			{
-				system.UseTestDoubleForType(eventPublisherAttribute.EventPublisher).For<IEventPublisher>();
-			}
 			//
 
 			// Database aspects
