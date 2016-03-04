@@ -36,5 +36,5 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_cacheFactory.Invalidate(_databaseLoader, x => x.GetCurrentSchedule(personId), true);
 		}
 	}
-
+	
 }

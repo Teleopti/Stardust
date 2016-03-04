@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[AllBusinessUnitsUnitOfWork]
-		public virtual IEnumerable<StateMapping> Load()
+		public virtual IEnumerable<StateMapping> Cached()
 		{
 			var groups = _stateGroupRepository.LoadAll();
 			return (

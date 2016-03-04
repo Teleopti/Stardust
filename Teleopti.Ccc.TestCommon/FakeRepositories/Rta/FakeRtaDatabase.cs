@@ -333,6 +333,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return this;
 		}
 
+		public IFakeDataBuilder ClearRuleMap()
+		{
+			RtaMapRepository.Clear();
+			return this;
+		}
+
 		public IFakeDataBuilder WithAlarm(TimeSpan threshold)
 		{
 			_rtaRule.IsAlarm = true;

@@ -28,7 +28,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CacheInvalidator>().As<ICacheInvalidator>().SingleInstance();
 			builder.RegisterType<RtaProcessor>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateReadModelUpdater>().As<IAgentStateReadModelUpdater>().SingleInstance();
-			
+			builder.RegisterType<StateMapper>().SingleInstance();
+			builder.RegisterType<StateCodeAdder>().As<IStateCodeAdder>().SingleInstance().ApplyAspects();
+			builder.RegisterType<StateStreamSynchronizer>().SingleInstance();
+			builder.RegisterType<ConnectionStrings>().As<IConnectionStrings>();
+
 			if (_config.Toggle(Toggles.RTA_ScaleOut_36979))
 				builder.RegisterType<LoadAllFromDatabase>().As<IStateContextLoader>().SingleInstance();
 			else if (_config.Toggle(Toggles.RTA_DeletedPersons_36041))
@@ -36,24 +40,17 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			else
 				builder.RegisterType<LoadFromCache>().As<IStateContextLoader>().SingleInstance();
 
-			builder.RegisterType<StateStreamSynchronizer>().SingleInstance();
-
-			builder.RegisterType<StateMapper>().SingleInstance();
-
-			builder.RegisterType<ConnectionStrings>().As<IConnectionStrings>();
-			
 			_config.Cache().This<RuleMappingLoader>((c, b) => b
-				.CacheMethod(x => x.Load())
-				.CacheKey(c.Resolve<CachePerDataSource>())
-				);
-			_config.Cache().This<StateMappingLoader>((c, b) => b
-				.CacheMethod(x => x.Load())
+				.CacheMethod(x => x.Cached())
 				.CacheKey(c.Resolve<CachePerDataSource>())
 				);
 			builder.CacheByClassProxy<RuleMappingLoader>().As<IRuleMappingLoader>().ApplyAspects().SingleInstance();
-			builder.CacheByClassProxy<StateMappingLoader>().As<IStateMappingLoader>().ApplyAspects().SingleInstance();
 
-			builder.RegisterType<StateCodeAdder>().As<IStateCodeAdder>().SingleInstance().ApplyAspects();
+			_config.Cache().This<StateMappingLoader>((c, b) => b
+				.CacheMethod(x => x.Cached())
+				.CacheKey(c.Resolve<CachePerDataSource>())
+				);
+			builder.CacheByClassProxy<StateMappingLoader>().As<IStateMappingLoader>().ApplyAspects().SingleInstance();
 
 			_config.Cache().This<IDatabaseLoader>((c, b) => b
 				.CacheMethod(x => x.GetCurrentSchedule(Guid.NewGuid()))
@@ -85,7 +82,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AdherenceEventPublisher>().SingleInstance().As<IAdherenceEventPublisher>();
 			builder.RegisterType<StateEventPublisher>().SingleInstance().As<IStateEventPublisher>();
 			builder.RegisterType<ActivityEventPublisher>().SingleInstance().As<IActivityEventPublisher>();
-			
+
 			if (_config.Toggle(Toggles.RTA_CalculatePercentageInAgentTimezone_31236))
 			{
 				builder.RegisterType<BelongsToDateDecorator>().As<IRtaEventDecorator>().SingleInstance();

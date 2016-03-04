@@ -1,17 +1,21 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
 	[TestFixture]
 	[RtaTest]
 	[Toggle(Toggles.RTA_ScaleOut_36979)]
+	[Toggle(Toggles.RTA_NeutralAdherence_30930)]
 	public class ScaleOutTest
 	{
 		public FakeRtaDatabase Database;
@@ -20,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public FakeEventPublisher EventPublisher;
 		
 		[Test]
-		public void ShouldUpdateNextSchedule()
+		public void ShouldNotCacheSchedules()
 		{
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
@@ -44,6 +48,38 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Database.PersistedReadModel.ScheduledNext.Should().Be("break");
 		}
-		
+
+		[Test]
+		public void ShouldNotCacheRules()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, phone, "2016-03-04 8:00", "2016-03-04 10:15")
+				.WithRule("phone", phone, 0, Adherence.In)
+				.WithRule("admin", phone, 0, Adherence.Out)
+				;
+			Now.Is("2016-03-04 9:00");
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+
+			Database
+				.ClearRuleMap()
+				.WithRule("phone", phone, 0, Adherence.In)
+				.WithRule("admin", phone, 0, Adherence.Neutral);
+			EventPublisher.Clear();
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "admin"
+			});
+
+			EventPublisher.PublishedEvents.OfType<PersonNeutralAdherenceEvent>().Should().Not.Be.Empty();
+		}
+
 	}
 }

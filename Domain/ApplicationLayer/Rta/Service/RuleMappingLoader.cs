@@ -23,7 +23,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[AllBusinessUnitsUnitOfWork]
+		public virtual IEnumerable<RuleMapping> Cached()
+		{
+			return inner();
+		}
+
+		[AllBusinessUnitsUnitOfWork]
 		public virtual IEnumerable<RuleMapping> Load()
+		{
+			return inner();
+		}
+
+		private IEnumerable<RuleMapping> inner()
 		{
 			var mappings = _rtaMapRepository.LoadAll();
 			return (
@@ -44,20 +55,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					PlatformTypeId = platformTypeId,
 					StateCode = statecode,
 					ActivityId = activityId,
-
 					RuleId = ruleId,
 					RuleName = rule.Description.Name,
 					Adherence = _appliedAdherence.ForRule(m.RtaRule),
-					StaffingEffect = (int)rule.StaffingEffect,
+					StaffingEffect = (int) rule.StaffingEffect,
 					DisplayColor = rule.DisplayColor.ToArgb(),
-
 					IsAlarm = rule.IsAlarm,
 					ThresholdTime = rule.ThresholdTime.Ticks,
 					AlarmColor = rule.AlarmColor.ToArgb(),
 				}
 				).ToArray();
 		}
-		
+
 		private static Guid tryGetBusinessUnitId(IRtaMap m)
 		{
 			if (m.StateGroup != null) return m.StateGroup.BusinessUnit.Id.Value;

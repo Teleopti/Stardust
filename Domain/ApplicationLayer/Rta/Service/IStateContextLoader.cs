@@ -107,8 +107,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						x.SiteId,
 						() => _previousStateInfoLoader.Load(x.PersonId),
 						() => _databaseLoader.GetCurrentSchedule(x.PersonId),
-						() => _stateMappingLoader.Load(),
-						() => _ruleMappingLoader.Load(),
+						() => _stateMappingLoader.Cached(),
+						() => _ruleMappingLoader.Cached(),
 						_now,
 						_agentStateReadModelUpdater
 						));
@@ -143,8 +143,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						x.SiteId,
 						() => _previousStateInfoLoader.Load(x.PersonId),
 						() => _databaseLoader.GetCurrentSchedule(x.PersonId),
-						() => _stateMappingLoader.Load(),
-						() => _ruleMappingLoader.Load(),
+						() => _stateMappingLoader.Cached(),
+						() => _ruleMappingLoader.Cached(),
 						_now,
 						_agentStateReadModelUpdater
 						));
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var missingAgents = _agentStateReadModelReader.GetMissingAgentStatesFromBatch(input.BatchId, input.SourceId);
 			var agentsNotAlreadyLoggedOut = from a in missingAgents
 				let state = _stateMapper.StateFor(
-					_stateMappingLoader.Load(),
+					_stateMappingLoader.Cached(),
 					a.BusinessUnitId,
 					a.PlatformTypeId,
 					a.StateCode,
@@ -177,8 +177,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						x.SiteId.GetValueOrDefault(),
 						() => _previousStateInfoLoader.Load(x.PersonId),
 						() => _databaseLoader.GetCurrentSchedule(x.PersonId),
-						() => _stateMappingLoader.Load(),
-						() => _ruleMappingLoader.Load(),
+						() => _stateMappingLoader.Cached(),
+						() => _ruleMappingLoader.Cached(),
 						_now,
 						_agentStateReadModelUpdater
 						));
@@ -205,8 +205,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						x.SiteId.GetValueOrDefault(),
 						null,
 						() => _databaseLoader.GetCurrentSchedule(x.PersonId),
-						() => _stateMappingLoader.Load(),
-						() => _ruleMappingLoader.Load(),
+						() => _stateMappingLoader.Cached(),
+						() => _ruleMappingLoader.Cached(),
 						_now,
 						null
 						));
@@ -265,8 +265,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							x.SiteId,
 							() => _previousStateInfoLoader.Load(x.PersonId),
 							() => _databaseLoader.GetCurrentSchedule(x.PersonId),
-							() => _stateMappingLoader.Load(),
-							() => _ruleMappingLoader.Load(),
+							() => _stateMappingLoader.Cached(),
+							() => _ruleMappingLoader.Cached(),
 							_now,
 							_agentStateReadModelUpdater
 							));
@@ -289,8 +289,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							x.SiteId,
 							() => _previousStateInfoLoader.Load(x.PersonId),
 							() => _databaseLoader.GetCurrentSchedule(x.PersonId),
-							() => _stateMappingLoader.Load(),
-							() => _ruleMappingLoader.Load(),
+							() => _stateMappingLoader.Cached(),
+							() => _ruleMappingLoader.Cached(),
 							_now,
 							_agentStateReadModelUpdater
 							));
@@ -371,7 +371,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							x.SiteId,
 							() => _previousStateInfoLoader.Load(x.PersonId),
 							() => _databaseReader.GetCurrentSchedule(x.PersonId),
-							() => _stateMappingLoader.Load(),
+							() => _stateMappingLoader.Cached(),
 							() => _ruleMappingLoader.Load(),
 							_now,
 							_agentStateReadModelUpdater
@@ -395,7 +395,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							x.SiteId,
 							() => _previousStateInfoLoader.Load(x.PersonId),
 							() => _databaseReader.GetCurrentSchedule(x.PersonId),
-							() => _stateMappingLoader.Load(),
+							() => _stateMappingLoader.Cached(),
 							() => _ruleMappingLoader.Load(),
 							_now,
 							_agentStateReadModelUpdater
@@ -409,7 +409,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var missingAgents = _agentStateReadModelReader.GetMissingAgentStatesFromBatch(input.BatchId, input.SourceId);
 			var agentsNotAlreadyLoggedOut = from a in missingAgents
 											let state = _stateMapper.StateFor(
-												_stateMappingLoader.Load(),
+												_stateMappingLoader.Cached(),
 												a.BusinessUnitId,
 												a.PlatformTypeId,
 												a.StateCode,
@@ -429,7 +429,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						x.SiteId.GetValueOrDefault(),
 						() => _previousStateInfoLoader.Load(x.PersonId),
 						() => _databaseReader.GetCurrentSchedule(x.PersonId),
-						() => _stateMappingLoader.Load(),
+						() => _stateMappingLoader.Cached(),
 						() => _ruleMappingLoader.Load(),
 						_now,
 						_agentStateReadModelUpdater
@@ -457,7 +457,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						x.SiteId.GetValueOrDefault(),
 						null,
 						() => _databaseReader.GetCurrentSchedule(x.PersonId),
-						() => _stateMappingLoader.Load(),
+						() => _stateMappingLoader.Cached(),
 						() => _ruleMappingLoader.Load(),
 						_now,
 						null
