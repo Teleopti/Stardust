@@ -205,7 +205,7 @@ Try
 
     $colon = ":"
     $SQLUserPwd = "-L$SQLUser$colon$SQLPwd"
-    $CONNSTRINGBASE="Data Source=$SQLServer;User Id=$SQLUser;Password=$SQLPwd"
+    $CONNSTRINGBASE="-CS`"Data Source=$SQLServer;User Id=$SQLUser;Password=$SQLPwd`""
 
     log-info "SQLUserPwd " $SQLUserPwd
 
