@@ -306,3 +306,13 @@ left:25%;
 md-slider.md-min .md-thumb:after{
 	background-color: $white!important;
 }
+/*remove after styleguide bump*/
+.layout-container .sidenav i {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.side-nav-icon {
+    margin-right: 10px!important;
+    margin-left: 10px!important;
+}
