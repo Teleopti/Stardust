@@ -12,16 +12,16 @@ using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Rta.PerformanceTest
+namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 {
-	public class Database
+	public class DataCreator
 	{
 		private readonly MutableNow _now;
 		private readonly TestConfiguration _testConfiguration;
 		private readonly Http _http;
 		private readonly ICurrentUnitOfWork _unitOfWork;
 
-		public Database(
+		public DataCreator(
 			MutableNow now,
 			TestConfiguration testConfiguration,
 			Http http,
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 
 		[LogTime]
 		[UnitOfWork]
-		public virtual void Setup()
+		public virtual void Create()
 		{
 			_now.Is("2016-02-25 08:00".Utc());
 

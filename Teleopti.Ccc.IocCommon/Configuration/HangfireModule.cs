@@ -1,6 +1,7 @@
 using Autofac;
 using Hangfire;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<HangfireClientStarter>().As<IHangfireClientStarter>().SingleInstance();
 
-			builder.RegisterType<HangfireUtilties>().SingleInstance();
+			builder.RegisterType<HangfireUtilties>().SingleInstance().ApplyAspects();
 		}
 	}
 }

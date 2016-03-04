@@ -1,4 +1,6 @@
 ﻿using NUnit.Framework;
+using Teleopti.Ccc.Infrastructure.Hangfire;
+using Teleopti.Ccc.Rta.PerformanceTest.Code;
 
 namespace Teleopti.Ccc.Rta.PerformanceTest
 {
@@ -7,16 +9,16 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 	[RtaPerformanceTest]
 	public class BackgroundWorkTest
 	{
-		public Database Database;
-		public RtaStates RtaStates;
-		public HangFireUtilitiesWrapperForLogTime Hangfire;
+		public DataCreator Data;
+		public StatesSender States;
+		public HangfireUtilties Hangfire;
 
 		[Test]
 		public void MeasurePerformance()
 		{
-			Database.Setup();
+			Data.Create();
 
-			RtaStates.Send();
+			States.Send();
 
 			Hangfire.WaitForQueue();
 		}

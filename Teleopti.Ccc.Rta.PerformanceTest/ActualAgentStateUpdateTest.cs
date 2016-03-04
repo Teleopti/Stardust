@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Teleopti.Ccc.Rta.PerformanceTest.Code;
 
 namespace Teleopti.Ccc.Rta.PerformanceTest
 {
@@ -7,16 +8,16 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 	[RtaPerformanceTest]
 	public class ActualAgentStateUpdateTest
 	{
-		public Database Database;
-		public RtaStates RtaStates;
+		public DataCreator Data;
+		public StatesSender States;
 		public StatesArePersisted StatesArePersisted;
 
 		[Test]
 		public void MeasurePerformance()
 		{
-			Database.Setup();
+			Data.Create();
 
-			RtaStates.Send();
+			States.Send();
 
 			StatesArePersisted.WaitForAll();
 		}		

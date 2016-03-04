@@ -6,7 +6,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 
-namespace Teleopti.Ccc.Rta.PerformanceTest
+namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 {
 	public class RtaPerformanceTestAttribute : InfrastructureTestAttribute
 	{
@@ -29,10 +29,9 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 
 			system.AddService<TestConfiguration>();
 			system.AddService<Http>();
-			system.AddService<Database>();
-			system.AddService<RtaStates>();
+			system.AddService<DataCreator>();
+			system.AddService<StatesSender>();
 			system.AddService<StatesArePersisted>();
-			system.AddService<HangFireUtilitiesWrapperForLogTime>();
 		}
 	}
 }

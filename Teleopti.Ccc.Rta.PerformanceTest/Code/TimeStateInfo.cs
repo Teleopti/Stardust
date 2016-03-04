@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Rta.PerformanceTest
+namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 {
 	public class TimeStateInfo
 	{

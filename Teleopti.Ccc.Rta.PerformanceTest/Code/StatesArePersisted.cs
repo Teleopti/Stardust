@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Helper;
 
-namespace Teleopti.Ccc.Rta.PerformanceTest
+namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 {
 	public class StatesArePersisted
 	{

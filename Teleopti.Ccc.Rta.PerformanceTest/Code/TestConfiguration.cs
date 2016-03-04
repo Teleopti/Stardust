@@ -1,8 +1,8 @@
-namespace Teleopti.Ccc.Rta.PerformanceTest
+namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 {
 	public class TestConfiguration
 	{
-		public int NumberOfAgents = 10000;
+		public int NumberOfAgents = 1000;
 
 		// this is the switch id
 		// and is sent with the state

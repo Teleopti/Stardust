@@ -59,15 +59,14 @@
     </Compile>
     <Compile Include="ActualAgentStateUpdateTest.cs" />
     <Compile Include="BackgroundWorkTest.cs" />
-    <Compile Include="Database.cs" />
-    <Compile Include="HangFireUtilitiesWrapperForLogTime.cs" />
-    <Compile Include="RtaPerformanceTestAttribute.cs" />
+    <Compile Include="Code\DataCreator.cs" />
+    <Compile Include="Code\RtaPerformanceTestAttribute.cs" />
     <Compile Include="NUnitSetup.cs" />
-    <Compile Include="StatesArePersisted.cs" />
-    <Compile Include="TestConfiguration.cs" />
+    <Compile Include="Code\StatesArePersisted.cs" />
+    <Compile Include="Code\TestConfiguration.cs" />
     <Compile Include="StateSendTest.cs" />
-    <Compile Include="RtaStates.cs" />
-    <Compile Include="TimeStateInfo.cs" />
+    <Compile Include="Code\StatesSender.cs" />
+    <Compile Include="Code\TimeStateInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
