@@ -7,7 +7,8 @@ namespace Manager.IntegrationTest.Console.Host.LoadBalancer
 	public static class RoundRobin
 	{
 		private static List<Uri> _hosts;
-		private static int currentIndex;
+
+		private static int _currentIndex;
 
 		public static void Set(List<Uri> hosts)
 		{
@@ -16,8 +17,10 @@ namespace Manager.IntegrationTest.Console.Host.LoadBalancer
 
 		public static Uri Next()
 		{
-			Interlocked.Increment(ref currentIndex);
-			var host = _hosts[currentIndex % _hosts.Count];
+			Interlocked.Increment(ref _currentIndex);
+
+			var host = _hosts[_currentIndex%_hosts.Count];
+
 			return host;
 		}
 	}

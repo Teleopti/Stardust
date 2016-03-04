@@ -112,6 +112,7 @@ namespace Manager.IntegrationTest.Console.Host
 
 			var address =
 				configuration.BaseAddress.Scheme + "://+:9000/";
+
 			RoundRobin.Set(managerUriList.ToList());
 
 			using (WebApp.Start<LoadBalancerStartup>(address))
@@ -332,6 +333,7 @@ namespace Manager.IntegrationTest.Console.Host
 			}
 
 			Task.Factory.StartNew(() => StartLoadBalancerProxy(CopiedManagerConfigurationFiles.Keys));
+
 			StartSelfHosting();
 		}
 
