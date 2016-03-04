@@ -237,6 +237,7 @@
     <Compile Include="IoC\ISetupConfiguration.cs" />
     <Compile Include="IoC\ISystem.cs" />
     <Compile Include="IoC\ITestDoubleFor.cs" />
+    <Compile Include="IoC\TestDoubles.cs" />
     <Compile Include="IoC\UseEventPublisherAttribute.cs" />
     <Compile Include="MessageBrokerCompositeDummy.cs" />
     <Compile Include="ObjectCopyExtension.cs" />
