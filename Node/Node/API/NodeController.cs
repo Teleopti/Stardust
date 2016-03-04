@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
 using log4net;
@@ -53,20 +54,26 @@ namespace Stardust.Node.API
 				return CreateConflictStatusCode();
 			}
 
-			var response = _workerWrapper.StartJob(jobToDo,
-			                                       Request);
-			if (response.GetType() != typeof (OkResult))
+			var response = _workerWrapper.ValidateStartJob(jobToDo,
+															Request);
+			if (response.GetType() != typeof(OkResult))
 			{
 				return response;
 			}
 
-			var startJobMessage = string.Format("{0} : Starting job ( jobId, jobName ) : ( {1}, {2} )",
-			                                    _workerWrapper.WhoamI,
-			                                    jobToDo.Id,
-			                                    jobToDo.Name);
+			Task.Factory.StartNew(() =>
+			{
+				response = _workerWrapper.StartJob(jobToDo,
+				                                   Request);
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 startJobMessage);
+				var startJobMessage = string.Format("{0} : Starting job ( jobId, jobName ) : ( {1}, {2} )",
+				                                    _workerWrapper.WhoamI,
+				                                    jobToDo.Id,
+				                                    jobToDo.Name);
+
+				LogHelper.LogDebugWithLineNumber(Logger,
+				                                 startJobMessage);
+			});
 
 			return Ok();
 		}
