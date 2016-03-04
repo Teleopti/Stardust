@@ -34,29 +34,43 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 			foreach (var personCodeGuid in @event.PersonIdCollection.Distinct())
 			{
-				Console.WriteLine(personCodeGuid.ToString());
 				var person = _personRepository.FindPeople(new Guid[] { personCodeGuid }).First();
-				Console.WriteLine(person.Name + " " + person.Email);
+				var personPeriodsInAnalytics = _analyticsPersonPeriodRepository.GetPersonPeriods(personCodeGuid);
 
-				var test = _analyticsPersonPeriodRepository.GetPersonPeriods(personCodeGuid);
-
-				Console.WriteLine("Person periods: " + person.PersonPeriodCollection.Count());
-
-				PersonPeriodFilter filter = new PersonPeriodFilter(_analyticsPersonPeriodRepository.MinDate().DateDate,
+				PersonPeriodFilter filter = new PersonPeriodFilter(
+					_analyticsPersonPeriodRepository.MinDate().DateDate,
 					_analyticsPersonPeriodRepository.MaxDate().DateDate);
 
-				PersonPeriodTransformer transformer = new PersonPeriodTransformer(_personRepository, _analyticsPersonPeriodRepository);
+				PersonPeriodTransformer transformer = 
+					new PersonPeriodTransformer(_personRepository, _analyticsPersonPeriodRepository);
 
-
-
-				if (test.IsEmpty() && person.PersonPeriodCollection.Any())
+				// Check if person period already exists in database
+				foreach (var personPeriod in filter.GetFiltered(person.PersonPeriodCollection))
 				{
-					foreach (var personPeriod in filter.GetFiltered(person.PersonPeriodCollection))
-					{
+					var existingPeriod = personPeriodsInAnalytics.FirstOrDefault(a => a.PersonPeriodCode.Equals(personPeriod.Id.Value));
 
-						var analyticsPersonPeriod = transformer.Transform(person, personPeriod);
-						_analyticsPersonPeriodRepository.AddPersonPeriod(analyticsPersonPeriod);
+					if (existingPeriod != null)
+					{
+						Console.WriteLine("Update person period for {0}", person.Name.ToString());
+
+						// Update
+						var updatedAnalyticsPersonPeriod = transformer.Transform(person, personPeriod);
+
+						// Keep windows domain and username.
+						updatedAnalyticsPersonPeriod.WindowsUsername = existingPeriod.WindowsUsername;
+						updatedAnalyticsPersonPeriod.WindowsDomain = existingPeriod.WindowsDomain;
+
+						_analyticsPersonPeriodRepository.UpdatePersonPeriod(updatedAnalyticsPersonPeriod);
 					}
+					else
+					{
+						Console.WriteLine("Insert new person period for {0}", person.Name.ToString());
+
+						// Insert
+						var newAnalyticsPersonPeriod = transformer.Transform(person, personPeriod);
+						_analyticsPersonPeriodRepository.AddPersonPeriod(newAnalyticsPersonPeriod);
+					}
+					
 				}
 			}
 		}

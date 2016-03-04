@@ -64,8 +64,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 				SkillsetId = skillsetId,
 				Email = person.Email,
 				Note = person.Note,
-				EmploymentStartDate = personPeriod.Period.StartDate.Date,
-				EmploymentEndDate = personPeriod.Period.EndDate.Date,
 
 				IsAgent = person.IsAgent(DateOnly.Today),
 				IsUser = false,
@@ -107,10 +105,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 			int validToDateIdMaxDate = GetValidToDateIdMaxDate(validToDate, maxDate, validToDateId);
 
 			var validFromDateLocal = personPeriodStartDate;
-			var validToDateLocal = personPeriodEndDate;
+			var validToDateLocal = ValidToDateLocal(personPeriodEndDate, maxDate);
 
 			var validFromDateIdLocal = MapDateId(validFromDateLocal);
-			var validToDateIdLocal = MapDateId(validToDateLocal);
+			var validToDateIdLocal = ValidToDateIdLocal(MapDateId(validToDateLocal), maxDate);
 
 			int intervalsPerDay = _analyticsPersonPeriodRepository.IntervalsPerDay();
 			var validFromIntervalId = ValidFromIntervalId(validFromDate, intervalsPerDay);
@@ -127,6 +125,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 			analyticsPersonPeriod.ValidFromIntervalId = validFromIntervalId;    // UTC interval
 			analyticsPersonPeriod.ValidToIntervalId = validToIntervalId;        // UTC interval 
 
+			analyticsPersonPeriod.EmploymentStartDate = validFromDate;	// UTC tid
+			analyticsPersonPeriod.EmploymentEndDate = validToDate;		// UTC tid
+
 			analyticsPersonPeriod.ValidToDateIdMaxDate = validToDateIdMaxDate;
 			analyticsPersonPeriod.ValidToIntervalIdMaxDate = validToIntervalIdMaxDate;
 
@@ -136,6 +137,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 			analyticsPersonPeriod.ValidToDateLocal = validToDateLocal;
 
 			return analyticsPersonPeriod;
+		}
+
+		public static DateTime ValidToDateLocal(DateTime personPeriodEndDate, IAnalyticsDate maxDate)
+		{
+			if (personPeriodEndDate.Equals(Eternity))
+				return maxDate.DateDate;
+			return personPeriodEndDate;
+		}
+
+		public static int ValidToDateIdLocal(int dateId, IAnalyticsDate maxDate)
+		{
+			if (dateId == -2)
+				return maxDate.DateId;
+			return dateId;
 		}
 
 		public static int ValidToIntervalId(DateTime validToDate, int intervalsPerDay)
