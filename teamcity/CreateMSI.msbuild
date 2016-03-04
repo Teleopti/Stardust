@@ -41,7 +41,7 @@
 	</Target>
 	/>-->
 	
-	<Target Name="CompileWsiToMSI" DependsOnTargets="MountK;SetVersionOnWsis">
+	<Target Name="CompileWsiToMSI" DependsOnTargets="MountK">
 		<Exec Command='"$(WsiCompiler)" /c "%(WsiToMSI.FullPath)"' />
 	</Target>
 	
