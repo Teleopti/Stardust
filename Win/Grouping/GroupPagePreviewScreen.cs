@@ -517,6 +517,10 @@ namespace Teleopti.Ccc.Win.Grouping
 							if (selectedNodesCollection[i] == sourceNode)
 								node = selectedNodesCollection[i];
 						}
+						var nodesWithTagObject = treeViewAdvPreviewTree.FindNodesWithTagObject(node.TagObject);
+						if (!nodesWithTagObject.Any())
+							return;
+
 						nodeInDestinationTree = treeViewAdvPreviewTree.FindNodesWithTagObject(node.TagObject).First();
 					}
 					handlePersonMove(nodeInDestinationTree, destinationNode);
