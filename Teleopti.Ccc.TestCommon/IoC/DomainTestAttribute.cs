@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			throw new NotImplementedException();
 		}
 
-		public IUnitOfWork UnitOfWork { get; }
+		public IUnitOfWork UnitOfWork { get; set; }
 		public IList<ActiveAgent> GetActiveAgents()
 		{
 			throw new NotImplementedException();
