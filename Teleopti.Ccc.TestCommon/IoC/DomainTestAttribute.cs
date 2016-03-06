@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using Teleopti.Ccc.Domain.Aop;
@@ -16,7 +18,9 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -132,6 +136,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeSkillAreaRepository>().For<ISkillAreaRepository>();
 			system.UseTestDouble<FakeIntradayMonitorDataLoader>().For<IIntradayMonitorDataLoader>();
 
+			// license stuff, have to fake the ILicenseVerifierFactory too!
+			system.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository>();
+			system.UseTestDouble<FakeLicenseVerifierFactory>().For<ILicenseVerifierFactory>();
+
 			fakePrincipal(system);
 		}
 
@@ -156,5 +164,66 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble(principal).For<ICurrentTeleoptiPrincipal, ICurrentPrincipalContext>();
 		}
 
+	}
+
+	public class FakeLicenseVerifierFactory : ILicenseVerifierFactory
+	{
+		private readonly ILicenseRepository _licenseRepository;
+
+		public FakeLicenseVerifierFactory(ILicenseRepository licenseRepository)
+		{
+			_licenseRepository = licenseRepository;
+		}
+
+		public ILicenseVerifier Create(
+			ILicenseFeedback licenseFeedback,
+			IUnitOfWorkFactory unitOfWorkFactory)
+		{
+			return new LicenseVerifier(
+				licenseFeedback,
+				unitOfWorkFactory,
+				_licenseRepository
+				);
+		}
+	}
+
+	public class FakeLicenseRepository : ILicenseRepository
+	{
+		public void Add(ILicense root)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Remove(ILicense root)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ILicense Get(Guid id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<ILicense> LoadAll()
+		{
+			var license = new License { XmlString = System.IO.File.ReadAllText("license.xml") };
+			return new ILicense[] {license}.ToList();
+		}
+
+		public ILicense Load(Guid id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddRange(IEnumerable<ILicense> entityCollection)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IUnitOfWork UnitOfWork { get; set; }
+		public IList<ActiveAgent> GetActiveAgents()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
