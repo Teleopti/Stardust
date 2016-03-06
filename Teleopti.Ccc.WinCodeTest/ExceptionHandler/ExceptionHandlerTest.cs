@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,6 @@ using System.Windows.Forms;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -223,6 +223,31 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
 
 			expectedString.Should().Contain(exceptionInfo);
 		    expectedString.Should().Contain(ExceptionMessageBuilder.ToggleFeaturesUnknown);
+	    }
+
+	    [Test]
+	    public void ShouldReturnInnerExceptionChain()
+	    {
+			var allToggleFeatures = new ActiveTogglesThatThrowsWhenTryingToReadFeatures();
+			var exception = new InvalidCastException("outer", new Exception("inner1", new Exception("inner2")));
+		    string expectedString = string.Empty;
+		    try
+		    {
+			    throw exception;
+		    }
+		    catch (Exception)
+		    {
+			    var exceptionMessageBuilder = new ExceptionMessageBuilder(exception, allToggleFeatures);
+			    var model = new ExceptionHandlerModel(exception, "", _mapi, _fileWriter, exceptionMessageBuilder);
+			    expectedString = model.CompleteStackAndAssemblyText();
+		    }
+		    finally
+		    {
+				expectedString.Should().Contain("outer");
+				expectedString.Should().Contain("inner1");
+				expectedString.Should().Contain("inner2");
+		    }
+
 	    }
 
 		public class ActiveTogglesStub : ITogglesActive
