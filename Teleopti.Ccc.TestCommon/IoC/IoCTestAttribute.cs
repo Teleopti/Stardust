@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeTime>().For<ITime>();
 
 			//don't check license for every test
-			//system.UseTestDouble<SetNoLicenseActivator>().For<ISetLicenseActivator>();
+			system.UseTestDouble<SetNoLicenseActivator>().For<ISetLicenseActivator>();
 
 			system.UseTestDouble(configReader).For<IConfigReader>();
 			// we really shouldnt inject this, but if we do, maybe its better its correct...
