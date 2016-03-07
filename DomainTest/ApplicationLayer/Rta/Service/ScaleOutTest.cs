@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon;
@@ -21,8 +24,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public FakeRtaDatabase Database;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 		public MutableNow Now;
-		public FakeEventPublisher EventPublisher;
-		
+		public FakeEventPublisher Publisher;
+		public IAgentStateReadModelReader Reader;
+
 		[Test]
 		public void ShouldNotCacheSchedules()
 		{
@@ -66,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				UserCode = "usercode",
 				StateCode = "phone"
 			});
-			EventPublisher.Clear();
+			Publisher.Clear();
 
 			Database
 				.ClearRuleMap()
@@ -78,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "admin"
 			});
 
-			EventPublisher.PublishedEvents.OfType<PersonNeutralAdherenceEvent>().Should().Not.Be.Empty();
+			Publisher.PublishedEvents.OfType<PersonNeutralAdherenceEvent>().Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -96,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				UserCode = "usercode",
 				StateCode = "phone"
 			});
-			EventPublisher.Clear();
+			Publisher.Clear();
 
 			Database
 				.ClearStateGroups()
@@ -107,8 +111,51 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "phone"
 			});
 
-			EventPublisher.PublishedEvents.OfType<PersonStateChangedEvent>().Should().Not.Be.Empty();
+			Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Should().Not.Be.Empty();
 		}
 
+		[Test, Ignore]
+		public void ShouldNotSendDuplicateEvents()
+		{
+			Database
+				.WithDefaultStateGroup()
+				.WithStateCode("AUX1");
+			var tasks = new List<Task>();
+			100.Times(i =>
+			{
+				var personId = Guid.NewGuid();
+				Database
+					.WithUser(i.ToString(), personId)
+					.WithSchedule(personId, Guid.NewGuid(), "2015-05-19 08:00", "2015-05-19 09:00");
+			});
+			Now.Is("2015-05-19 08:00");
+
+			100.Times(i =>
+			{
+				tasks.Add(Task.Factory.StartNew(() =>
+					Target.SaveState(new ExternalUserStateForTest
+					{
+						UserCode = i.ToString(),
+						StateCode = "AUX1"
+					})));
+				tasks.Add(Task.Factory.StartNew(() =>
+					Target.SaveState(new ExternalUserStateForTest
+					{
+						UserCode = i.ToString(),
+						StateCode = "AUX1"
+					})));
+				tasks.Add(Task.Factory.StartNew(() =>
+					Target.SaveState(new ExternalUserStateForTest
+					{
+						UserCode = i.ToString(),
+						StateCode = "AUX1"
+					})));
+			});
+
+			Task.WaitAll(tasks.ToArray());
+
+			Reader.GetActualAgentStates().Should().Have.Count.EqualTo(100);
+			Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Should().Have.Count.EqualTo(100);
+		}
 	}
 }

@@ -317,7 +317,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		protected readonly IStateMappingLoader _stateMappingLoader;
 		protected readonly IRuleMappingLoader _ruleMappingLoader;
 		private readonly IDatabaseReader _databaseReader;
-		protected readonly PersonLocker _locker = new PersonLocker();
 
 		public LoadAllFromDatabase(
 			IDatabaseLoader databaseLoader,
@@ -361,22 +360,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_databaseReader.LoadPersonOrganizationData(dataSourceId, userCode)
 				.ForEach(x =>
 				{
-					_locker.LockFor(x.PersonId, () =>
-					{
-						action.Invoke(new StateContext(
-							input,
-							x.PersonId,
-							x.BusinessUnitId,
-							x.TeamId,
-							x.SiteId,
-							() => _previousStateInfoLoader.Load(x.PersonId),
-							() => _databaseReader.GetCurrentSchedule(x.PersonId),
-							() => _stateMappingLoader.Load(),
-							() => _ruleMappingLoader.Load(),
-							_now,
-							_agentStateReadModelUpdater
-							));
-					});
+					action.Invoke(new StateContext(
+						input,
+						x.PersonId,
+						x.BusinessUnitId,
+						x.TeamId,
+						x.SiteId,
+						() => _previousStateInfoLoader.Load(x.PersonId),
+						() => _databaseReader.GetCurrentSchedule(x.PersonId),
+						() => _stateMappingLoader.Load(),
+						() => _ruleMappingLoader.Load(),
+						_now,
+						_agentStateReadModelUpdater
+						));
 				});
 		}
 
@@ -385,22 +381,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_databaseReader.LoadAllPersonOrganizationData()
 				.ForEach(x =>
 				{
-					_locker.LockFor(x.PersonId, () =>
-					{
-						action.Invoke(new StateContext(
-							null,
-							x.PersonId,
-							x.BusinessUnitId,
-							x.TeamId,
-							x.SiteId,
-							() => _previousStateInfoLoader.Load(x.PersonId),
-							() => _databaseReader.GetCurrentSchedule(x.PersonId),
-							() => _stateMappingLoader.Load(),
-							() => _ruleMappingLoader.Load(),
-							_now,
-							_agentStateReadModelUpdater
-							));
-					});
+					action.Invoke(new StateContext(
+						null,
+						x.PersonId,
+						x.BusinessUnitId,
+						x.TeamId,
+						x.SiteId,
+						() => _previousStateInfoLoader.Load(x.PersonId),
+						() => _databaseReader.GetCurrentSchedule(x.PersonId),
+						() => _stateMappingLoader.Load(),
+						() => _ruleMappingLoader.Load(),
+						_now,
+						_agentStateReadModelUpdater
+						));
 				});
 		}
 
@@ -419,22 +412,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			agentsNotAlreadyLoggedOut.ForEach(x =>
 			{
-				_locker.LockFor(x.PersonId, () =>
-				{
-					action.Invoke(new StateContext(
-						input,
-						x.PersonId,
-						x.BusinessUnitId,
-						x.TeamId.GetValueOrDefault(),
-						x.SiteId.GetValueOrDefault(),
-						() => _previousStateInfoLoader.Load(x.PersonId),
-						() => _databaseReader.GetCurrentSchedule(x.PersonId),
-						() => _stateMappingLoader.Load(),
-						() => _ruleMappingLoader.Load(),
-						_now,
-						_agentStateReadModelUpdater
-						));
-				});
+				action.Invoke(new StateContext(
+					input,
+					x.PersonId,
+					x.BusinessUnitId,
+					x.TeamId.GetValueOrDefault(),
+					x.SiteId.GetValueOrDefault(),
+					() => _previousStateInfoLoader.Load(x.PersonId),
+					() => _databaseReader.GetCurrentSchedule(x.PersonId),
+					() => _stateMappingLoader.Load(),
+					() => _ruleMappingLoader.Load(),
+					_now,
+					_agentStateReadModelUpdater
+					));
 			});
 
 		}
@@ -443,26 +433,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			states.ForEach(x =>
 			{
-				_locker.LockFor(x.PersonId, () =>
-				{
-					action.Invoke(new StateContext(
-						new ExternalUserStateInputModel
-						{
-							StateCode = x.StateCode,
-							PlatformTypeId = x.PlatformTypeId.ToString()
-						},
-						x.PersonId,
-						x.BusinessUnitId,
-						x.TeamId.GetValueOrDefault(),
-						x.SiteId.GetValueOrDefault(),
-						null,
-						() => _databaseReader.GetCurrentSchedule(x.PersonId),
-						() => _stateMappingLoader.Load(),
-						() => _ruleMappingLoader.Load(),
-						_now,
-						null
-						));
-				});
+				action.Invoke(new StateContext(
+					new ExternalUserStateInputModel
+					{
+						StateCode = x.StateCode,
+						PlatformTypeId = x.PlatformTypeId.ToString()
+					},
+					x.PersonId,
+					x.BusinessUnitId,
+					x.TeamId.GetValueOrDefault(),
+					x.SiteId.GetValueOrDefault(),
+					null,
+					() => _databaseReader.GetCurrentSchedule(x.PersonId),
+					() => _stateMappingLoader.Load(),
+					() => _ruleMappingLoader.Load(),
+					_now,
+					null
+					));
 			});
 		}
 
