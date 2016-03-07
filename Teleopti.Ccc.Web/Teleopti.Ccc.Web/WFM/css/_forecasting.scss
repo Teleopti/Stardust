@@ -95,17 +95,17 @@
  opacity: 0;
 }
 
-.c3-tooltip-name-vcombo > td.value,
-.c3-tooltip-name-voverride > td.value,
-.c3-tooltip-name-vcampaign > td.value{
+.c3-tooltip-name--vcombo > td.value,
+.c3-tooltip-name--voverride > td.value,
+.c3-tooltip-name--vcampaign > td.value{
 	color:transparent!important;
 	background:$gray-300;
 	border-left:0 solid transparent;
 }
 
-.c3-tooltip-name-vcombo > td.name,
-.c3-tooltip-name-voverride > td.name,
-.c3-tooltip-name-vcampaign > td.name{
+.c3-tooltip-name--vcombo > td.name,
+.c3-tooltip-name--voverride > td.name,
+.c3-tooltip-name--vcampaign > td.name{
 	background:$gray-300 ;
 }
 
