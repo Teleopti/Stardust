@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -13,7 +15,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 	{
 		public static void Transform(IEnumerable<IPerson> personCollection, int intervalsPerDay, DateOnly insertDate,
 			DataTable personTable, DataTable acdLogOnTable, ICommonNameDescriptionSetting commonNameDescriptionSetting,
-			IEnumerable<LogonInfo> logonInfos)
+			IEnumerable<LogonInfo> logonInfos, IToggleManager toggleManager)
 		{
 			InParameter.NotNull("personCollection", personCollection);
 
@@ -23,8 +25,12 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 
 				foreach (IPersonPeriod personPeriod in person.PersonPeriodCollection)
 				{
-					createPersonDataRow(person, personTable, timeZoneInfo, personPeriod, intervalsPerDay, insertDate,
-						commonNameDescriptionSetting, logonInfos);
+					if (toggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162))
+					{
+						createPersonDataRow(person, personTable, timeZoneInfo, personPeriod, intervalsPerDay, insertDate,
+							commonNameDescriptionSetting, logonInfos);
+					}
+
 					externalLogOnPerson(person, acdLogOnTable, timeZoneInfo, personPeriod);
 				}
 			}

@@ -19,11 +19,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new DimQualityQuestLoadJobStep(jobParameters));          // BU independent
 			Add(new RaptorQueueSynchronizationStep(jobParameters));
 			Add(new RaptorAgentLogOnSynchronizationStep(jobParameters));
-		    if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162))
-            {
-		        Add(new StagePersonJobStep(jobParameters));
-		    }
-		    Add(new StageAgentSkillJobStep(jobParameters));
+
+			Add(new StagePersonJobStep(jobParameters));
+
+			Add(new StageAgentSkillJobStep(jobParameters));
 			Add(new StageStateGroupJobStep(jobParameters));
 			Add(new StageActivityJobStep(jobParameters));
 			Add(new StageAbsenceJobStep(jobParameters));
@@ -51,26 +50,26 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new DimBusinessUnitJobStep(jobParameters));
 			Add(new DimScorecardJobStep(jobParameters));
 			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162))
-		    {
-		        Add(new DimSiteJobStep(jobParameters));
-		        Add(new DimTeamJobStep(jobParameters));
-		    }
-		    Add(new DimSkillJobStep(jobParameters));
+			{
+				Add(new DimSiteJobStep(jobParameters));
+				Add(new DimTeamJobStep(jobParameters));
+			}
+			Add(new DimSkillJobStep(jobParameters));
 			Add(new DimSkillSetJobStep(jobParameters));
 			Add(new DimStateGroupJobStep(jobParameters));
-            if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162))
-		    {
-		        Add(new DimPersonJobStep(jobParameters));
-		    }
-		    Add(new DimActivityJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162))
+			{
+				Add(new DimPersonJobStep(jobParameters));
+			}
+			Add(new DimActivityJobStep(jobParameters));
 			Add(new DimAbsenceJobStep(jobParameters));
 			Add(new DimScenarioJobStep(jobParameters));
 			Add(new DimShiftCategoryJobStep(jobParameters));
-		    if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpETL_30791))
-		    {
-		        Add(new DimShiftLengthJobStep(jobParameters));
-		    }
-		    Add(new DimWorkloadJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpETL_30791))
+			{
+				Add(new DimShiftLengthJobStep(jobParameters));
+			}
+			Add(new DimWorkloadJobStep(jobParameters));
 			Add(new DimKpiJobStep(jobParameters));
 			Add(new DimOvertimeJobStep(jobParameters));
 			Add(new ScorecardKpiJobStep(jobParameters));
@@ -115,7 +114,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new FactRequestJobStep(jobParameters, true));
 			Add(new FactRequestedDaysJobStep(jobParameters, true));
 			Add(new FactAgentSkillJobStep(jobParameters));
-			
+
 		}
 	}
 

@@ -26,13 +26,17 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 			// Get common agent name description setting
 			ICommonNameDescriptionSetting commonNameDescriptionSetting = _jobParameters.Helper.Repository.CommonAgentNameDescriptionSetting;
 
+			
+
 			//Transform data from Raptor to Matrix format
-			PersonTransformer.Transform(rootList, _jobParameters.IntervalsPerDay,
-																 DateOnly.Today,
-																 BulkInsertDataTable1,
-																 BulkInsertDataTable2,
-																 commonNameDescriptionSetting,
-																 logonInfos.ToList());
+			PersonTransformer.Transform(rootList, 
+											_jobParameters.IntervalsPerDay,
+											DateOnly.Today,
+											BulkInsertDataTable1,
+											BulkInsertDataTable2,
+											commonNameDescriptionSetting,
+											logonInfos.ToList(),
+											_jobParameters.ToggleManager);
 
 			int affectedPersonRows = _jobParameters.Helper.Repository.PersistPerson(BulkInsertDataTable1);
 			int affectedAcdLoginRows = _jobParameters.Helper.Repository.PersistAcdLogOnPerson(BulkInsertDataTable2);
