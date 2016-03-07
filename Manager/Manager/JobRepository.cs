@@ -289,14 +289,7 @@ namespace Stardust.Manager
 			{
 				LogHelper.LogDebugWithLineNumber(Logger,
 				                                 "Found ( " + availableNodes.Count + " ) availabe nodes.");
-
-				foreach (var availableNode in availableNodes)
-				{
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Available node : ( id, Url ) : ( " + availableNode.Id + ", " + availableNode.Url +
-					                                 " )");
-				}
-
+				
 				using (var connection = new SqlConnection(_connectionString))
 				{
 					connection.Open();
@@ -353,6 +346,10 @@ namespace Stardust.Manager
 
 								foreach (var node in availableNodes)
 								{
+										LogHelper.LogDebugWithLineNumber(Logger,
+																		 "Available node : ( id, Url ) : ( " + node.Id + ", " + node.Url +
+																		 " )");
+									
 									try
 									{
 										var builderHelper =
