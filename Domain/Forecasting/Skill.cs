@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -34,10 +33,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private Percent _overstaffingFactor = new Percent(.5);
 	    private int _maxParallelTasks;
 
-	    /// <summary>
-        /// For NHibernate
-        /// </summary>
-        protected Skill()
+        public Skill()
         {
         }
 
