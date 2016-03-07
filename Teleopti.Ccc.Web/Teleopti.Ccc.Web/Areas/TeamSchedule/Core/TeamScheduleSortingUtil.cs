@@ -34,6 +34,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				var mininumAbsenceStartTime = schedule.PersonAssignment() != null
 					? schedule.PersonAssignment().Period.StartDateTime
 					: schedule.PersonAbsenceCollection().Select(personAbsence => personAbsence.Period.StartDateTime).Min();
+				mininumAbsenceStartTime = mininumAbsenceStartTime.Date == schedule.DateOnlyAsPeriod.DateOnly.Date
+					? mininumAbsenceStartTime
+					: schedule.DateOnlyAsPeriod.DateOnly.Date;
 
 				return fullAbsenceBase + (int)mininumAbsenceStartTime.Subtract(schedule.DateOnlyAsPeriod.DateOnly.Date).TotalMinutes;
 			}
