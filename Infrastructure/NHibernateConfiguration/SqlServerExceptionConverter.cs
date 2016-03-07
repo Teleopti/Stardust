@@ -17,11 +17,13 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 				switch (sqle.Number)
 				{
 					case 2627:
-						return new ConstraintViolationException(adoExceptionContextInfo.Message, sqle, adoExceptionContextInfo.Sql);
 					case 2601:
 						return new ConstraintViolationException(adoExceptionContextInfo.Message, sqle, adoExceptionContextInfo.Sql);
-          case 547:
+					case 547:
 						return new ForeignKeyException(adoExceptionContextInfo.Message, sqle, adoExceptionContextInfo.Sql);
+					case 10053:
+					case 10054:
+						return new DatabaseConnectionLostException(adoExceptionContextInfo.Message, sqle, adoExceptionContextInfo.Sql);
 					default:
 						return new DataSourceException(adoExceptionContextInfo.Message, sqle);
 				}

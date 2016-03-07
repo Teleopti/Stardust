@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using Autofac;
-using EO.Internal;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.DayOffPlanning;
@@ -98,7 +97,6 @@ using Teleopti.Ccc.WpfControls.Controls.Notes;
 using Teleopti.Ccc.WpfControls.Controls.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Task = Teleopti.Ccc.Domain.Forecasting.Task;
 
 #endregion
 
@@ -174,7 +172,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly IRestrictionExtractor _restrictionExtractor;
 		private readonly IResourceOptimizationHelperExtended _optimizationHelperExtended;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
-		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly IPeopleAndSkillLoaderDecider _peopleAndSkillLoaderDecider;
 		private readonly ICollection<IPerson> _personsToValidate = new HashSet<IPerson>();
 		private readonly ICollection<IPerson> _restrictionPersonsToReload = new HashSet<IPerson>();
@@ -417,7 +414,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_restrictionExtractor = _container.Resolve<IRestrictionExtractor>();
 			_optimizationHelperExtended = _container.Resolve<IResourceOptimizationHelperExtended>();
 			_skillDayLoadHelper = _container.Resolve<ISkillDayLoadHelper>();
-			_skillDayRepository = _container.Resolve<ISkillDayRepository>();
 			_peopleAndSkillLoaderDecider = _container.Resolve<IPeopleAndSkillLoaderDecider>();
 
 			_schedulerState.SetRequestedScenario(loadScenario);
@@ -2599,16 +2595,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (e.Error != null)
 			{
-				var dataSourceException = e.Error as CouldNotCreateTransactionException;
+				Infrastructure.Foundation.DataSourceException dataSourceException = e.Error as CouldNotCreateTransactionException;
+				dataSourceException = dataSourceException ?? e.Error as DatabaseConnectionLostException;
 				if (dataSourceException == null)
 					return false;
 
-				using (
-					var view = new SimpleExceptionHandlerView(dataSourceException, Resources.OpenTeleoptiCCC,
-						Resources.ServerUnavailable))
-				{
-					view.ShowDialog();
-				}
+				displayServerUnavailableDialog(dataSourceException);
 
 				_forceClose = true;
 				Close();
@@ -2995,7 +2987,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_optimizerOriginalPreferences.SchedulingOptions.WorkShiftLengthHintOption =
 					WorkShiftLengthHintOption.AverageWorkTime;
 				IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
-				try
+				attemptActionWithTransientErrorHandling(() =>
 				{
 					if (backToLegalShift)
 					{
@@ -3023,16 +3015,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 						}
 					}
-				}
-				catch (CouldNotCreateTransactionException dataSourceException)
-				{
-					using (
-						var view = new SimpleExceptionHandlerView(dataSourceException, Resources.OpenTeleoptiCCC,
-							Resources.ServerUnavailable))
-					{
-						view.ShowDialog();
-					}
-				}
+				});
 			}
 		}
 
@@ -4061,12 +4044,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 				}
 
 			}
+			catch (DatabaseConnectionLostException ex)
+			{
+				displayServerUnavailableDialog(ex);
+			}
 			catch (CouldNotCreateTransactionException ex)
 			{
-				using (var view = new SimpleExceptionHandlerView(ex, Resources.OpenTeleoptiCCC, Resources.ServerUnavailable))
-				{
-					view.ShowDialog();
-				}
+				displayServerUnavailableDialog(ex);
 			}
 			catch (OptimisticLockException ex)
 			{
@@ -5816,6 +5800,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 				settings.Show();
 				settings.BringToFront();
 			}
+			catch (DatabaseConnectionLostException ex)
+			{
+				DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
+			}
 			catch (CouldNotCreateTransactionException ex)
 			{
 				DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
@@ -6080,7 +6068,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void refreshData()
 		{
-			try
+			attemptActionWithTransientErrorHandling(() =>
 			{
 				refreshEntitiesUsingMessageBroker();
 				_schedulerState.Schedules.ForEach(p => p.Value.ForceRecalculationOfTargetTimeContractTimeAndDaysOff());
@@ -6088,17 +6076,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				updateShiftEditor();
 				var selectedSchedules = _scheduleView.SelectedSchedules();
 				updateSelectionInfo(selectedSchedules);
-			}
-			catch (CouldNotCreateTransactionException dataSourceException)
-			{
-				//rk - dont like this but cannot easily find "the spot" to catch these exception in current design
-				using (
-					var view = new SimpleExceptionHandlerView(dataSourceException, Resources.OpenTeleoptiCCC,
-						Resources.ServerUnavailable))
-				{
-					view.ShowDialog();
-				}
-			}
+			});
 		}
 
 		private void SchedulingScreen_KeyDown(object sender, KeyEventArgs e)
@@ -6781,7 +6759,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_scheduleView == null) return;
 			if (_scheduleView.AllSelectedDates().Count == 0) return;
 
-			try
+			attemptActionWithTransientErrorHandling(() =>
 			{
 				var definitionSets =
 					MultiplicatorDefinitionSet.Where(set => set.MultiplicatorType == MultiplicatorType.Overtime).ToList();
@@ -6810,18 +6788,35 @@ namespace Teleopti.Ccc.Win.Scheduling
 					if (options.ShowDialog(this) != DialogResult.OK) return;
 					options.Refresh();
 					startBackgroundScheduleWork(_backgroundWorkerOvertimeScheduling,
-						new SchedulingAndOptimizeArgument(selectedSchedules) { OvertimePreferences = options.Preferences },
+						new SchedulingAndOptimizeArgument(selectedSchedules) {OvertimePreferences = options.Preferences},
 						true);
 				}
+			});
+		}
+
+		private void displayServerUnavailableDialog(Exception exception)
+		{
+			using (
+					var view = new SimpleExceptionHandlerView(exception, Resources.OpenTeleoptiCCC,
+						Resources.ServerUnavailable))
+			{
+				view.ShowDialog();
+			}
+		}
+
+		private void attemptActionWithTransientErrorHandling(System.Action action)
+		{
+			try
+			{
+				action();
+			}
+			catch (DatabaseConnectionLostException dataSourceException)
+			{
+				displayServerUnavailableDialog(dataSourceException);
 			}
 			catch (CouldNotCreateTransactionException dataSourceException)
 			{
-				using (
-					var view = new SimpleExceptionHandlerView(dataSourceException, Resources.OpenTeleoptiCCC,
-						Resources.ServerUnavailable))
-				{
-					view.ShowDialog();
-				}
+				displayServerUnavailableDialog(dataSourceException);
 			}
 		}
 

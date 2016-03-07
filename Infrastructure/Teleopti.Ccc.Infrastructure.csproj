@@ -265,6 +265,7 @@
     <Compile Include="Foundation\TeleoptiPrincipalCacheableFactory.cs" />
     <Compile Include="Foundation\ThreadPrincipalContext.cs" />
     <Compile Include="Foundation\TokenIdentityProvider.cs" />
+    <Compile Include="Foundation\DatabaseConnectionLostException.cs" />
     <Compile Include="Foundation\WebRequestPrincipalContext.cs" />
     <Compile Include="Hangfire\ActivityChangesChecker.cs" />
     <Compile Include="Hangfire\HangfireClientStarter.cs" />
