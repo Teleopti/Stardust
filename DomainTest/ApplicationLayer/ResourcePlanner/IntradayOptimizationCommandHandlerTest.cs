@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -13,9 +14,10 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 {
 	[DomainTest]
+	[Toggle(Toggles.ResourcePlanner_IntradayIslands_36939)]
 	public class IntradayOptimizationCommandHandlerTest
 	{
-		public IntradayOptimizationCommandHandler Target;
+		public IIntradayOptimizationCommandHandler Target;
 		public FakeEventPublisher EventPublisher;
 
 		[Test]
@@ -40,15 +42,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 				.Should().Be.EqualTo(agents.Single().Id.Value);
 		}
 
-		[Test, Ignore("Not yet working")]
+		[Test, Ignore("not yet fixed")]
 		public void ShouldCreateTwoEventsIfTwoAgentsWithDifferentSkills()
 		{
 			var agent1 = new Person().WithId();
-			var period1 = new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team());
-			period1.AddPersonSkill(new PersonSkill(new Skill("_", "_", Color.Empty, 1, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)), new Percent(1)));
+			agent1.AddSkill(new PersonSkill(new Skill("_", "_", Color.Empty, 1, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)), new Percent(1)), new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()));
 			var agent2 = new Person().WithId();
-			var period2 = new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team());
-			period2.AddPersonSkill(new PersonSkill(new Skill("_", "_", Color.Empty, 1, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)), new Percent(1)));
+			agent2.AddSkill(new PersonSkill(new Skill("_", "_", Color.Empty, 1, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)), new Percent(1)), new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()));
 
 			Target.Execute(new IntradayOptimizationCommand {Period = new DateOnlyPeriod(), Agents = new[] {agent1, agent2}});
 

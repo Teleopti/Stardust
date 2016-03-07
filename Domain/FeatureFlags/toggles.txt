@@ -99,3 +99,4 @@ Scheduler_IntradayOptimization_36617 = RC
 WfmGlobalLayout_personalOptions_37114 = DEV
 
 ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049 = RC
+ResourcePlanner_IntradayIslands_36939 = false

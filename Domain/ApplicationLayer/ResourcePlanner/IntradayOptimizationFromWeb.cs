@@ -10,12 +10,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 {
 	public class IntradayOptimizationFromWeb
 	{
-		private readonly IntradayOptimizationCommandHandler _intradayOptimizationCommandHandler;
+		private readonly IIntradayOptimizationCommandHandler _intradayOptimizationCommandHandler;
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
 
-		public IntradayOptimizationFromWeb(IntradayOptimizationCommandHandler intradayOptimizationCommandHandler, 
+		public IntradayOptimizationFromWeb(IIntradayOptimizationCommandHandler intradayOptimizationCommandHandler, 
 			IPlanningPeriodRepository planningPeriodRepository,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IFillSchedulerStateHolder fillSchedulerStateHolder)

@@ -353,7 +353,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradayOptimizeOnDayCallBackDoNothing>().As<IIntradayOptimizeOneDayCallback>().SingleInstance();
 			builder.RegisterType<IntradayOptimizationCallbackContext>().SingleInstance();
 			builder.RegisterType<ResourceCalculationContextFactory>().InstancePerLifetimeScope();
-			builder.RegisterType<IntradayOptimizationCommandHandler>().SingleInstance().ApplyAspects();
+			if (_configuration.Toggle(Toggles.ResourcePlanner_IntradayIslands_36939))
+			{
+				builder.RegisterType<IntradayOptimizationCommandHandler>().As<IIntradayOptimizationCommandHandler>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<IntradayOptimizationOneThreadCommandHandler>().As<IIntradayOptimizationCommandHandler>().SingleInstance();
+			}
 			builder.RegisterType<IntradayOptimizationFromWeb>().InstancePerLifetimeScope().ApplyAspects();
 		}
 
