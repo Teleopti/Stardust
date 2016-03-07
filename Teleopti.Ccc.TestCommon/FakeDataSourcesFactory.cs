@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return new DataSource(
 				new FakeUnitOfWorkFactory(),
-				new FakeUnitOfWorkFactory {ConnectionString = statisticConnectionString},
+				new FakeAnalyticsUnitOfWorkFactory { ConnectionString = statisticConnectionString},
 				null
 				);
 		}
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return new DataSource(
 				new FakeUnitOfWorkFactory {ConnectionString = applicationConnectionString, Name = tenantName},
-				new FakeUnitOfWorkFactory {ConnectionString = statisticConnectionString},
+				new FakeAnalyticsUnitOfWorkFactory { ConnectionString = statisticConnectionString},
 				null
 				);
 		}
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return new DataSource(
 				new FakeUnitOfWorkFactory {ConnectionString = applicationConnectionString, Name = tenantName},
-				new FakeUnitOfWorkFactory {ConnectionString = statisticConnectionString},
+				new FakeAnalyticsUnitOfWorkFactory { ConnectionString = statisticConnectionString},
 				null
 				);
 		}

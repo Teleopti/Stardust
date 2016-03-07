@@ -2,6 +2,6 @@
 {
 	public interface ICurrentAnalyticsUnitOfWorkFactory
 	{
-		IUnitOfWorkFactory Current();
+		IAnalyticsUnitOfWorkFactory Current();
 	}
 }

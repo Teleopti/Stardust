@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	public sealed class FakeDataSource : IDataSource
 	{
 		public IUnitOfWorkFactory Application { get; set; }
-		public IUnitOfWorkFactory Analytics { get; set; }
+		public IAnalyticsUnitOfWorkFactory Analytics { get; set; }
 		public IReadModelUnitOfWorkFactory ReadModel { get; private set; }
 		public string DataSourceName { get; set; }
 
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			DataSourceName = name;
 		}
 
-		public void ResetStatistic()
+		public void RemoveAnalytics()
 		{
 			throw new NotImplementedException();
 		}

@@ -1,54 +1,28 @@
 using NHibernate;
-using NHibernate.Engine;
-using NHibernate.Stat;
-using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Analytics
 {
-	public class AnalyticsUnitOfWorkFactory : IUnitOfWorkFactory
+	public class AnalyticsUnitOfWorkFactory : IAnalyticsUnitOfWorkFactory
 	{
 		private readonly ISessionFactory _factory;
+		private readonly StaticSessionContextBinder _sessionContextBinder;
 
 		protected internal AnalyticsUnitOfWorkFactory(
 			ISessionFactory sessionFactory,
 			string connectionString)
 		{
 			ConnectionString = connectionString;
-			SessionContextBinder = new StaticSessionContextBinder();
+			_sessionContextBinder = new StaticSessionContextBinder();
 			_factory = sessionFactory;
 		}
-
-		protected ISessionContextBinder SessionContextBinder { get; set; }
-
-		public string Name
-		{
-			get { return ((ISessionFactoryImplementor)_factory).Settings.SessionFactoryName; }
-		}
-
-		public ISessionFactory SessionFactory
-		{
-			get { return _factory; }
-		}
-
-		public long? NumberOfLiveUnitOfWorks
-		{
-			get
-			{
-				IStatistics statistics = _factory.Statistics;
-				if (statistics.IsStatisticsEnabled)
-					return statistics.SessionOpenCount - statistics.SessionCloseCount;
-				return null;
-			}
-		}
-
+		
 		public IStatelessUnitOfWork CreateAndOpenStatelessUnitOfWork()
 		{
-			var nhibSession = _factory.OpenStatelessSession();
-			return new NHibernateStatelessUnitOfWork(nhibSession);
+			var session = _factory.OpenStatelessSession();
+			return new NHibernateStatelessUnitOfWork(session);
 		}
 
 		public IUnitOfWork CurrentUnitOfWork()
@@ -56,41 +30,24 @@ namespace Teleopti.Ccc.Infrastructure.Analytics
 			var session = _factory.GetCurrentSession();
 			return makeUnitOfWork(
 				session,
-				SessionContextBinder.IsolationLevel(session)
+				_sessionContextBinder.IsolationLevel(session)
 				);
 		}
-
-		public IAuditSetter AuditSetting
-		{
-			get { return null; }
-		}
-
+		
 		public string ConnectionString { get; private set; }
-
-		public IUnitOfWork CreateAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel = TransactionIsolationLevel.Default)
+		
+		public IUnitOfWork CreateAndOpenUnitOfWork()
 		{
-			return createAndOpenUnitOfWork(isolationLevel);
+			var session = createNhibSession(TransactionIsolationLevel.Default);
+			return makeUnitOfWork(session, TransactionIsolationLevel.Default);
 		}
 
-		public IUnitOfWork CreateAndOpenUnitOfWork(IInitiatorIdentifier initiator)
+		private ISession createNhibSession(TransactionIsolationLevel isolationLevel)
 		{
-			return createAndOpenUnitOfWork(TransactionIsolationLevel.Default);
-		}
-
-		public IUnitOfWork CreateAndOpenUnitOfWork(IMessageBrokerComposite messageBroker)
-		{
-			return createAndOpenUnitOfWork(TransactionIsolationLevel.Default);
-		}
-
-		public IUnitOfWork CreateAndOpenUnitOfWork(IQueryFilter businessUnitFilter)
-		{
-			return createAndOpenUnitOfWork(TransactionIsolationLevel.Default);
-		}
-
-		private IUnitOfWork createAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel)
-		{
-			var session = createNhibSession(isolationLevel);
-			return makeUnitOfWork(session, isolationLevel);
+			var session = _factory.OpenSession(new AggregateRootInterceptor());
+			session.FlushMode = FlushMode.Never;
+			_sessionContextBinder.Bind(session, isolationLevel);
+			return session;
 		}
 
 		private IUnitOfWork makeUnitOfWork(ISession session, TransactionIsolationLevel isolationLevel)
@@ -100,21 +57,13 @@ namespace Teleopti.Ccc.Infrastructure.Analytics
 				null,
 				null,
 				null,
-				SessionContextBinder.Unbind,
-				SessionContextBinder.BindInitiator,
+				_sessionContextBinder.Unbind,
+				_sessionContextBinder.BindInitiator,
 				isolationLevel,
 				null
 				);
 		}
 
-		private ISession createNhibSession(TransactionIsolationLevel isolationLevel)
-		{
-			var session = _factory.OpenSession(new AggregateRootInterceptor());
-			session.FlushMode = FlushMode.Never;
-			SessionContextBinder.Bind(session, isolationLevel);
-			return session;
-		}
-		
 		public void Dispose()
 		{
 			_factory.Dispose();

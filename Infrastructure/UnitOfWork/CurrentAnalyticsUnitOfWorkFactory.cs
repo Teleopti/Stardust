@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_currentDataSource = currentDataSource;
 		}
 
-		public IUnitOfWorkFactory Current()
+		public IAnalyticsUnitOfWorkFactory Current()
 		{
 			var current = _currentDataSource.Current();
 			return current == null ? null : current.Analytics;

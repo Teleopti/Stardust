@@ -445,18 +445,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			toolStripStatusLabelRoger65.Text = message;
 			toolStripStatusLabelRoger65.ForeColor = Color.Red;
 		}
-
-		private void toolStripStatusLabelSpring_Click(object sender, EventArgs e)
-		{
-#if(DEBUG)
-			string outPut = string.Concat(UnitOfWorkFactory.Current.NumberOfLiveUnitOfWorks.ToString(), " Raptor UOW:s");
-			IUnitOfWorkFactory matrix = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).DataSource.Analytics;
-			if(matrix!=null)
-				outPut +=string.Concat(", ", matrix.NumberOfLiveUnitOfWorks, " Matrix UOW:s");
-			Roger65(outPut);
-#endif
-		}
-
+		
 		private void GridWorkspace_WorkspaceGridSizeChanged(object sender, EventArgs e)
 		{
 			gridWorkspace.RemoveAllSmartPart();

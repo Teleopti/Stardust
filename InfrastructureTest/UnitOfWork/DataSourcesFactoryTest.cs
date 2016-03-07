@@ -5,6 +5,7 @@ using NHibernate.Transaction;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Infrastructure.Analytics;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -45,9 +46,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			{
 				appSession.Connection.ConnectionString.Should().Contain("unit tests");
 			}
-			using (var appSession = ((NHibernateUnitOfWorkFactory)res.Analytics).SessionFactory.OpenSession())
+			using (var uow = res.Analytics.CreateAndOpenUnitOfWork())
 			{
-				appSession.Connection.ConnectionString.Should().Contain("unit tests");
+				uow.FetchSession().Connection.ConnectionString.Should().Contain("unit tests");
 			}
 		}
 

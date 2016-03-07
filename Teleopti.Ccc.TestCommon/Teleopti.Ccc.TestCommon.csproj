@@ -148,6 +148,7 @@
     <Compile Include="BaseLineData.cs" />
     <Compile Include="BitArrayHelper.cs" />
     <Compile Include="CatalanCulture.cs" />
+    <Compile Include="FakeData\FakeAnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="InfraTestConfigReader.cs" />
     <Compile Include="DoNothingScheduleDayChangeCallBack.cs" />
     <Compile Include="EncryptPassword.cs" />

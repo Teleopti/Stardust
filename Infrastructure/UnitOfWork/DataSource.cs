@@ -5,18 +5,16 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public sealed class DataSource : IDataSource
 	{
-		public DataSource(IUnitOfWorkFactory application, IUnitOfWorkFactory statistic, IReadModelUnitOfWorkFactory readModel)
+		public DataSource(IUnitOfWorkFactory application, IAnalyticsUnitOfWorkFactory analytics, IReadModelUnitOfWorkFactory readModel)
 		{
 			InParameter.NotNull("application", application);
 			Application = application;
-			Analytics = statistic;
+			Analytics = analytics;
 			ReadModel = readModel;
 		}
 
-		public IUnitOfWorkFactory Analytics { get; private set; }
-
 		public IUnitOfWorkFactory Application { get; private set; }
-
+		public IAnalyticsUnitOfWorkFactory Analytics { get; private set; }
 		public IReadModelUnitOfWorkFactory ReadModel { get; private set; }
 
 		public string DataSourceName
@@ -24,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			get { return Application.Name; }
 		}
 
-		public void ResetStatistic()
+		public void RemoveAnalytics()
 		{
 			Analytics = null;
 		}

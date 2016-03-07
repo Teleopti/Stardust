@@ -540,7 +540,6 @@
     <Compile Include="Repositories\SkillTypeRepositoryTest.cs" />
     <Compile Include="Repositories\WorkShiftRuleSetRepositoryTest.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
-    <Compile Include="UnitOfWork\DataSourcesTest.cs" />
     <Compile Include="UnitOfWork\NHibernateStatelessUnitOfWorkTest.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryFake.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryTest.cs" />

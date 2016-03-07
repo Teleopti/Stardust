@@ -105,10 +105,10 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 			target.Has(ds1);
 			target.Has(ds2);
 
-			target.DoOnAllTenants_AvoidUsingThis(tenant => tenant.ResetStatistic());
+			target.DoOnAllTenants_AvoidUsingThis(tenant => tenant.RemoveAnalytics());
 
-			ds1.AssertWasCalled(x => x.ResetStatistic());
-			ds2.AssertWasCalled(x => x.ResetStatistic());
+			ds1.AssertWasCalled(x => x.RemoveAnalytics());
+			ds2.AssertWasCalled(x => x.RemoveAnalytics());
 		}
 
 		[Test]

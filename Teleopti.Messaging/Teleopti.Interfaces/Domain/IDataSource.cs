@@ -6,9 +6,9 @@ namespace Teleopti.Interfaces.Domain
     public interface IDataSource : IDisposable
     {
 		IUnitOfWorkFactory Application { get; }
-		IUnitOfWorkFactory Analytics { get; }
+		IAnalyticsUnitOfWorkFactory Analytics { get; }
 		IReadModelUnitOfWorkFactory ReadModel { get; }
     	string DataSourceName { get; }
-        void ResetStatistic();
+        void RemoveAnalytics();
     }
 }
