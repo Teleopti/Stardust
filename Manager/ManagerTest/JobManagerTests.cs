@@ -22,6 +22,7 @@ namespace ManagerTest
 		public IHttpSender HttpSender;
 		public IJobRepository JobRepository;
 		public IWorkerNodeRepository WorkerNodeRepository;
+
 		private readonly Uri _nodeUri1 = new Uri("http://localhost:9050/");
 		private readonly Uri _nodeUri2 = new Uri("http://localhost:9051/");
 		private readonly Uri _nodeUri3 = new Uri("http://localhost:9052/");

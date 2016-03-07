@@ -19,5 +19,9 @@ namespace Stardust.Node.Interfaces
 
 		IHttpActionResult StartJob(JobToDo jobToDo,
 		                           HttpRequestMessage requestMessage);
+
+		IHttpActionResult ValidateStartJob(JobToDo jobToDo,
+											HttpRequestMessage requestMessage);
+
 	}
 }

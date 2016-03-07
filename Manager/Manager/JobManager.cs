@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using log4net;
+using Stardust.Manager.Diagnostics;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
@@ -157,10 +158,15 @@ namespace Stardust.Manager
 		}
 
 
-		public async void CheckAndAssignNextJob()
+		public void CheckAndAssignNextJob()
 		{
 			LogHelper.LogDebugWithLineNumber(Logger,
 			                                 "Start CheckAndAssignNextJob.");
+
+
+			LogHelper.LogDebugWithLineNumber(Logger, "CheckAndAssignNextJob: Start ManagerStopWatch.");
+
+			ManagerStopWatch managerStopWatch = new ManagerStopWatch();
 
 			try
 			{
@@ -178,7 +184,7 @@ namespace Stardust.Manager
 				{
 					foreach (var availableNode in availableNodes)
 					{
-						if (availableNode.Alive == "true") 
+						if (availableNode.Alive == "true")
 						{
 							//var nodeUriBuilder = new NodeUriBuilderHelper(availableNode.Url);
 
@@ -194,7 +200,8 @@ namespace Stardust.Manager
 							//	LogHelper.LogDebugWithLineNumber(Logger,
 							//	                                 "Node Url ( " + postUri + " ) is available and alive.");
 
-								upNodes.Add(availableNode);
+							upNodes.Add(availableNode);
+
 							//}
 							//else
 							//{
@@ -214,9 +221,20 @@ namespace Stardust.Manager
 
 			catch (Exception exp)
 			{
-				LogHelper.LogErrorWithLineNumber(Logger, exp.Message, exp);
+				LogHelper.LogErrorWithLineNumber(Logger,
+				                                 exp.Message,
+				                                 exp);
 
 				throw;
+			}
+
+			finally
+			{
+				var total =
+					managerStopWatch.GetTotalElapsedTimeInMilliseconds();
+
+				LogHelper.LogDebugWithLineNumber(Logger,
+				                                 "CheckAndAssignNextJob: Stop ManagerStopWatch. Took " + total + " milliseconds.");
 			}
 		}
 

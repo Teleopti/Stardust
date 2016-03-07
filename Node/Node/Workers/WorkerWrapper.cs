@@ -89,10 +89,9 @@ namespace Stardust.Node.Workers
 			}
 		}
 
-		public IHttpActionResult StartJob(JobToDo jobToDo,
-		                                  HttpRequestMessage requestMessage)
+		public IHttpActionResult ValidateStartJob(JobToDo jobToDo,
+		                                          HttpRequestMessage requestMessage)
 		{
-			Type typ;
 			lock (_startJobLock)
 			{
 				if (jobToDo == null || jobToDo.Id == Guid.Empty)
@@ -101,7 +100,7 @@ namespace Stardust.Node.Workers
 				}
 
 				if (CurrentMessageToProcess != null &&
-				    CurrentMessageToProcess.Id != jobToDo.Id)
+					CurrentMessageToProcess.Id != jobToDo.Id)
 				{
 					return new ConflictResult(requestMessage);
 				}
@@ -110,21 +109,31 @@ namespace Stardust.Node.Workers
 					return new BadRequestResult(requestMessage);
 				}
 
-				typ = NodeConfiguration.HandlerAssembly.GetType(jobToDo.Type);
+				Type typ = NodeConfiguration.HandlerAssembly.GetType(jobToDo.Type);
 
 				if (typ == null)
 				{
 					LogHelper.LogWarningWithLineNumber(Logger,
-					                                   string.Format(
-						                                   WhoamI +
-						                                   ": The job type [{0}] could not be resolved. The job cannot be started.",
-						                                   jobToDo.Type));
+													   string.Format(
+														   WhoamI +
+														   ": The job type [{0}] could not be resolved. The job cannot be started.",
+														   jobToDo.Type));
 
 					return new BadRequestResult(requestMessage);
 				}
 
 				CurrentMessageToProcess = jobToDo;
+
+				return new OkResult(requestMessage);
 			}
+			
+		}
+
+		public IHttpActionResult StartJob(JobToDo jobToDo,
+		                                  HttpRequestMessage requestMessage)
+		{
+
+			Type typ = NodeConfiguration.HandlerAssembly.GetType(jobToDo.Type);
 
 			CancellationTokenSource = new CancellationTokenSource();
 			object deSer;
@@ -319,6 +328,7 @@ namespace Stardust.Node.Workers
 
 			PingToManagerTimer.Start();
 		}
+
 
 		public void ResetCurrentMessage()
 		{
