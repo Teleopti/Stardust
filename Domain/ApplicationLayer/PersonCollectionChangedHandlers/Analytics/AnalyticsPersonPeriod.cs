@@ -1,9 +1,8 @@
 using System;
-using Teleopti.Interfaces.Infrastructure.Analytics;
 
-namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
+namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
 {
-	public class AnalyticsPersonPeriod : IAnalyticsPersonPeriod
+	public class AnalyticsPersonPeriod
 	{
 		public int PersonId { get; set; }
 		public Guid PersonCode { get; set; }

@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure.Analytics;
 
@@ -13,32 +10,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 {
 	public class PersonPeriodTransformer
 	{
-		private IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
-		//private IPersonRepository _personRepository;
-		private static DateTime Eternity = new DateTime(2059, 12, 31);
+		private static readonly DateTime Eternity = new DateTime(2059, 12, 31);
+		private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
 
-		public PersonPeriodTransformer(IPersonRepository personRepository, IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository)
+		public PersonPeriodTransformer(IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository)
 		{
-
-			//this._personRepository = personRepository; // Not needed here anymore?
-			this._analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
+			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
 		}
 
 		public AnalyticsPersonPeriod Transform(IPerson person, IPersonPeriod personPeriod)
 		{
-			var businessUnitId = MapBusinessId(person.PersonPeriodCollection.First().Team.BusinessUnitExplicit.Id.GetValueOrDefault());
+			var businessUnitId =
+				MapBusinessId(person.PersonPeriodCollection.First().Team.BusinessUnitExplicit.Id.GetValueOrDefault());
 			var siteId = MapSiteId(businessUnitId, personPeriod.Team.Site.Id.GetValueOrDefault(),
-						personPeriod.Team.Site.Description.Name);
+				personPeriod.Team.Site.Description.Name);
 			var teamId = MapTeamId(personPeriod.Team.Id.GetValueOrDefault(), siteId,
 				personPeriod.Team.Description.Name, businessUnitId);
 			var skillsetId = MapSkillsetId(
-					personPeriod.PersonSkillCollection.Select(a => a.Skill.Id.GetValueOrDefault()).ToList(),
-					businessUnitId);
+				personPeriod.PersonSkillCollection.Select(a => a.Skill.Id.GetValueOrDefault()).ToList(),
+				businessUnitId);
 
 			var windowsDomain = "";
 			var windowsUsername = "";
 
-			var analyticsPersonPeriod = new AnalyticsPersonPeriod()
+			var analyticsPersonPeriod = new AnalyticsPersonPeriod
 			{
 				PersonCode = person.Id.GetValueOrDefault(),
 				PersonPeriodCode = personPeriod.Id.GetValueOrDefault(),
@@ -64,14 +59,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 				SkillsetId = skillsetId,
 				Email = person.Email,
 				Note = person.Note,
-
 				IsAgent = person.IsAgent(DateOnly.Today),
 				IsUser = false,
 				DatasourceId = 1,
 				DatasourceUpdateDate = person.UpdatedOn.GetValueOrDefault(),
 				ToBeDeleted = false,
 				WindowsDomain = windowsDomain,
-				WindowsUsername = windowsUsername,
+				WindowsUsername = windowsUsername
 			};
 
 			analyticsPersonPeriod = FixDatesAndInterval(
@@ -84,7 +78,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 			return analyticsPersonPeriod;
 		}
 
-		public AnalyticsPersonPeriod FixDatesAndInterval(AnalyticsPersonPeriod analyticsPersonPeriod, IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository,
+		public AnalyticsPersonPeriod FixDatesAndInterval(AnalyticsPersonPeriod analyticsPersonPeriod,
+			IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository,
 			DateTime personPeriodStartDate, DateTime personPeriodEndDate, TimeZoneInfo timeZoneInfo)
 		{
 			var timeZoneId = MapTimeZoneId(timeZoneInfo.Id);
@@ -96,7 +91,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 
 			var validFromDateId = MapDateId(validFromDate);
 			var validToDateId = MapDateId(validToDate);
-			int validToDateIdMaxDate = GetValidToDateIdMaxDate(validToDate, maxDate, validToDateId);
+			var validToDateIdMaxDate = GetValidToDateIdMaxDate(validToDate, maxDate, validToDateId);
 
 			var validFromDateLocal = personPeriodStartDate;
 			var validToDateLocal = ValidToDateLocal(personPeriodEndDate, maxDate);
@@ -104,23 +99,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 			var validFromDateIdLocal = MapDateId(validFromDateLocal);
 			var validToDateIdLocal = ValidToDateIdLocal(MapDateId(validToDateLocal), maxDate);
 
-			int intervalsPerDay = _analyticsPersonPeriodRepository.IntervalsPerDay();
+			var intervalsPerDay = _analyticsPersonPeriodRepository.IntervalsPerDay();
 			var validFromIntervalId = ValidFromIntervalId(validFromDate, intervalsPerDay);
 			var validToIntervalId = ValidToIntervalId(validToDate, intervalsPerDay);
 
-			int validToIntervalIdMaxDate = getValidToIntervalIdMaxDate(validToIntervalId, validToDateId);
+			var validToIntervalIdMaxDate = getValidToIntervalIdMaxDate(validToIntervalId, validToDateId);
 
 			analyticsPersonPeriod.TimeZoneId = timeZoneId;
 
-			analyticsPersonPeriod.ValidFromDate = validFromDate;        // UTC tid
-			analyticsPersonPeriod.ValidToDate = validToDate;            // UTC tid
-			analyticsPersonPeriod.ValidFromDateId = validFromDateId;    // UTC tid id
-			analyticsPersonPeriod.ValidToDateId = validToDateId;        // UTC tid id
-			analyticsPersonPeriod.ValidFromIntervalId = validFromIntervalId;    // UTC interval
-			analyticsPersonPeriod.ValidToIntervalId = validToIntervalId;        // UTC interval 
+			analyticsPersonPeriod.ValidFromDate = validFromDate; // UTC tid
+			analyticsPersonPeriod.ValidToDate = validToDate; // UTC tid
+			analyticsPersonPeriod.ValidFromDateId = validFromDateId; // UTC tid id
+			analyticsPersonPeriod.ValidToDateId = validToDateId; // UTC tid id
+			analyticsPersonPeriod.ValidFromIntervalId = validFromIntervalId; // UTC interval
+			analyticsPersonPeriod.ValidToIntervalId = validToIntervalId; // UTC interval 
 
-			analyticsPersonPeriod.EmploymentStartDate = validFromDate;  // UTC tid
-			analyticsPersonPeriod.EmploymentEndDate = validToDate;      // UTC tid
+			analyticsPersonPeriod.EmploymentStartDate = validFromDate; // UTC tid
+			analyticsPersonPeriod.EmploymentEndDate = validToDate; // UTC tid
 
 			analyticsPersonPeriod.ValidToDateIdMaxDate = validToDateIdMaxDate;
 			analyticsPersonPeriod.ValidToIntervalIdMaxDate = validToIntervalIdMaxDate;
@@ -172,7 +167,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 				return endDate;
 			}
 
-			int minutesPerInterval = 1440 / intervalsPerDay;
+			var minutesPerInterval = 1440 / intervalsPerDay;
 			return endDate.AddMinutes(-minutesPerInterval);
 		}
 

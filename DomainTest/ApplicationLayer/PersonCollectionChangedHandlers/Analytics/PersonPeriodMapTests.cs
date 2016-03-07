@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics.Transformer;
-using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
 {
@@ -15,18 +11,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 	{
 		private PersonPeriodTransformer personPeriodTransformer;
 		private FakeAnalyticsPersonPeriodRepository fakeAnalyticsPersonPeriodRepository;
-		private FakePersonRepository fakePersonRepository;
 
 		[SetUp]
 		public void SetupTests()
 		{
-			fakePersonRepository = new FakePersonRepository();
 			fakeAnalyticsPersonPeriodRepository = new FakeAnalyticsPersonPeriodRepository(
 				new DateTime(2015, 01, 01),
 				new DateTime(2017, 12, 31));
 
 
-			List<IAnalyticsSkill> fakeSkills = new List<IAnalyticsSkill>
+			List<AnalyticsSkill> fakeSkills = new List<AnalyticsSkill>
 			{
 				new AnalyticsSkill
 				{
@@ -57,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			fakeAnalyticsPersonPeriodRepository.SetSkillSets(fakeSkillSets);
 
 
-			personPeriodTransformer = new PersonPeriodTransformer(fakePersonRepository, fakeAnalyticsPersonPeriodRepository);
+			personPeriodTransformer = new PersonPeriodTransformer(fakeAnalyticsPersonPeriodRepository);
 		}
 
 

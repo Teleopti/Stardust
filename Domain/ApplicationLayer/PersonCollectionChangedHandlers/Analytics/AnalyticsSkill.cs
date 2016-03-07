@@ -1,9 +1,8 @@
 using System;
-using Teleopti.Interfaces.Infrastructure.Analytics;
 
-namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
+namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
 {
-	public class AnalyticsSkill : IAnalyticsSkill
+	public class AnalyticsSkill
 	{
 		public int SkillId { get; set; }
 		public Guid SkillCode { get; set; }

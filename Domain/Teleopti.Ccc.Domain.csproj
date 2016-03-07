@@ -243,6 +243,8 @@
     <Compile Include="ApplicationLayer\Events\PersonAssociationChangedEvent.cs" />
     <Compile Include="ApplicationLayer\ITimestamped.cs" />
     <Compile Include="ApplicationLayer\ITrackingMessageSender.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsPersonPeriod.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsSkill.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\Transformer\IntervalBase.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\Transformer\PersonPeriodFilter.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\Transformer\PersonPeriodTransformer.cs" />
@@ -746,7 +748,7 @@
     <Compile Include="Outbound\OutboundAssignedStaffProvider.cs" />
     <Compile Include="Outbound\SkillTypeProvider.cs" />
     <Compile Include="Repositories\IAgentBadgeRepository.cs" />
-    <Compile Include="Repositories\IAnalyticsPersonPeriod.cs" />
+    <Compile Include="Repositories\IAnalyticsPersonPeriodRepository.cs" />
     <Compile Include="Repositories\IIntradayMonitorDataLoader.cs" />
     <Compile Include="Repositories\IIntradayStatistics.cs" />
     <Compile Include="Repositories\ISeatPlanRepository.cs" />

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Infrastructure;
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
-		public IList<IAnalyticsPersonPeriod> GetPersonPeriods(Guid personCode)
+		public IList<AnalyticsPersonPeriod> GetPersonPeriods(Guid personCode)
 		{
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
@@ -72,7 +73,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					.SetGuid("code", personCode)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsPersonPeriod)))
 					.SetReadOnly(true)
-					.List<IAnalyticsPersonPeriod>();
+					.List<AnalyticsPersonPeriod>();
 			}
 		}
 
@@ -101,7 +102,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
-		public int? SkillSetId(IList<IAnalyticsSkill> skills)
+		public int? SkillSetId(IList<AnalyticsSkill> skills)
 		{
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
@@ -115,7 +116,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
-		public IList<IAnalyticsSkill> Skills(int businessUnitId)
+		public IList<AnalyticsSkill> Skills(int businessUnitId)
 		{
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
@@ -136,7 +137,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
                     from mart.dim_skill WITH (NOLOCK)")
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsSkill)))
 					.SetReadOnly(true)
-					.List<IAnalyticsSkill>();
+					.List<AnalyticsSkill>();
 			}
 		}
 
@@ -163,7 +164,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
-
 		public IAnalyticsDate MinDate()
 		{
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
@@ -189,22 +189,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
-		//public int ValidToIntervalIdMaxDateId()
-		//{
-		//	using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
-		//	{
-		//		return uow.Session().CreateSQLQuery(
-		//			"select ISNULL(max(interval_id),-1) ValidToIntervalIdMaxDateId FROM mart.dim_interval")
-		//			.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsValidToIntervalIdMaxDateId)))
-		//			.SetReadOnly(true)
-		//			.UniqueResult<IAnalyticsValidToIntervalIdMaxDateId>();
-		//	}
-		//}
-
-
-
-
-		public void AddPersonPeriod(IAnalyticsPersonPeriod personPeriod)
+		public void AddPersonPeriod(AnalyticsPersonPeriod personPeriod)
 		{
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
@@ -327,8 +312,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
-
-
 		private IAnalyticsUnitOfWorkFactory statisticUnitOfWorkFactory()
 		{
 			var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
@@ -355,7 +338,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
-		public void DeletePersonPeriod(IAnalyticsPersonPeriod analyticsPersonPeriod)
+		public void DeletePersonPeriod(AnalyticsPersonPeriod analyticsPersonPeriod)
 		{
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
@@ -366,7 +349,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
-		public void UpdatePersonPeriod(IAnalyticsPersonPeriod personPeriod)
+		public void UpdatePersonPeriod(AnalyticsPersonPeriod personPeriod)
 		{
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Interfaces.Infrastructure.Analytics;
@@ -15,15 +14,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public readonly DateTime SetupEndDate;
 		readonly List<AnalyticsDate> fakeDates = new List<AnalyticsDate>();
 		private List<KeyValuePair<int, string>> fakeSkillSets;
-		private List<IAnalyticsSkill> fakeSkills;
-		private List<IAnalyticsPersonPeriod> fakePersonPeriods;
+		private List<AnalyticsSkill> fakeSkills;
+		private readonly List<AnalyticsPersonPeriod> fakePersonPeriods;
 
 		public FakeAnalyticsPersonPeriodRepository(DateTime setupStartDate, DateTime setupEndDate)
 		{
-			this.SetupStartDate = setupStartDate;
-			this.SetupEndDate = setupEndDate;
+			SetupStartDate = setupStartDate;
+			SetupEndDate = setupEndDate;
 
-			fakePersonPeriods = new List<IAnalyticsPersonPeriod>();
+			fakePersonPeriods = new List<AnalyticsPersonPeriod>();
 
 			initDates();
 		}
@@ -52,12 +51,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 
-		public void AddPersonPeriod(IAnalyticsPersonPeriod personPeriod)
+		public void AddPersonPeriod(AnalyticsPersonPeriod personPeriod)
 		{
 			fakePersonPeriods.Add(personPeriod);
 		}
 
-		public void UpdatePersonPeriod(IAnalyticsPersonPeriod personPeriod)
+		public void UpdatePersonPeriod(AnalyticsPersonPeriod personPeriod)
 		{
 			fakePersonPeriods.RemoveAll(a => a.PersonPeriodCode.Equals(personPeriod.PersonPeriodCode));
 			fakePersonPeriods.Add(personPeriod);
@@ -83,12 +82,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return 95;
 		}
 
-		public void DeletePersonPeriod(IAnalyticsPersonPeriod analyticsPersonPeriod)
+		public void DeletePersonPeriod(AnalyticsPersonPeriod analyticsPersonPeriod)
 		{
 			throw new NotImplementedException();
 		}
 
-		public IList<IAnalyticsPersonPeriod> GetPersonPeriods(Guid personCode)
+		public IList<AnalyticsPersonPeriod> GetPersonPeriods(Guid personCode)
 		{
 			return fakePersonPeriods.Where(a => a.PersonCode.Equals(personCode)).ToArray();
 		}
@@ -98,12 +97,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return 123;
 		}
 
-		public IList<IAnalyticsSkill> Skills(int businessUnitId)
+		public IList<AnalyticsSkill> Skills(int businessUnitId)
 		{
 			return fakeSkills;
 		}
 
-		public int? SkillSetId(IList<IAnalyticsSkill> skills)
+		public int? SkillSetId(IList<AnalyticsSkill> skills)
 		{
 			var skillSet = fakeSkillSets.FirstOrDefault(a => a.Value == string.Join(",", skills.Select(b => b.SkillId)));
 			if (!skillSet.Equals(default(KeyValuePair<int, string>)))
@@ -131,7 +130,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return fakeDates.First(a => a.DateId >= 0);
 		}
 
-		public void SetSkills(List<IAnalyticsSkill> analyticsSkills)
+		public void SetSkills(List<AnalyticsSkill> analyticsSkills)
 		{
 			fakeSkills = analyticsSkills;
 		}
