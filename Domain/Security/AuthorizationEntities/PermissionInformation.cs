@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 	{
 		private IList<IApplicationRole> personInApplicationRole = new List<IApplicationRole>();
 		private string defaultTimeZone;
-		private TimeZoneInfo _defaultTimeZoneCache;
+		private Lazy<TimeZoneInfo> _defaultTimeZoneCache;
 		private int? culture;
 		private int? uiCulture;
 		private IPerson _belongsTo;
@@ -26,6 +26,9 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 
 		protected PermissionInformation()
 		{
+			_defaultTimeZoneCache = new Lazy<TimeZoneInfo>(() => string.IsNullOrEmpty(defaultTimeZone)
+				? TimeZoneInfo.Local
+				: TimeZoneInfo.FindSystemTimeZoneById(defaultTimeZone));
 		}
 
 		public IList<IApplicationRole> ApplicationRoleCollection
@@ -94,19 +97,13 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 		public void SetDefaultTimeZone(TimeZoneInfo value)
 		{
 			InParameter.NotNull("DefaultTimeZone", value);
-			_defaultTimeZoneCache = value;
+			_defaultTimeZoneCache = new Lazy<TimeZoneInfo>(()=>value);
 			defaultTimeZone = value.Id;
 		}
 
 		public TimeZoneInfo DefaultTimeZone()
 		{
-			if (_defaultTimeZoneCache == null || _defaultTimeZoneCache.Id != defaultTimeZone)
-			{
-				_defaultTimeZoneCache = string.IsNullOrEmpty(defaultTimeZone)
-													 ? TimeZoneInfo.Local
-													 : TimeZoneInfo.FindSystemTimeZoneById(defaultTimeZone);
-			}
-			return _defaultTimeZoneCache;
+			return _defaultTimeZoneCache.Value;
 		}
 
 		public void SetCulture(CultureInfo value)
