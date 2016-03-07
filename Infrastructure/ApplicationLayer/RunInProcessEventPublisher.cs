@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.ApplicationLayer;
+﻿using System.Threading.Tasks;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
@@ -14,15 +15,21 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public void Publish(params IEvent[] events)
 		{
-			foreach (var @event in events)
+			var task = new Task(() =>
 			{
-				var handlers = _resolver.ResolveInProcessForEvent(@event);
-				foreach (var handler in handlers)
+				foreach (var @event in events)
 				{
-					var method = _resolver.HandleMethodFor(handler.GetType(), @event);
-					method.Invoke(handler, new[] { @event });
+					var handlers = _resolver.ResolveInProcessForEvent(@event);
+					foreach (var handler in handlers)
+					{
+						var method = _resolver.HandleMethodFor(handler.GetType(), @event);
+						method.Invoke(handler, new[] { @event });
+					}
 				}
-			}
+			});
+			task.Start();
+			//Task.Factory.StartNew(() => task);
+			Task.WaitAll(task);
 		}
 	}
 }
