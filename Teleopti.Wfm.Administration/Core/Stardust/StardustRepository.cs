@@ -9,7 +9,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 {
 	public class StardustRepository
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(StardustRepository));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (StardustRepository));
 
 		private readonly string _connectionString;
 
@@ -21,8 +21,8 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 		private string getValue<T>(object value)
 		{
 			return value == DBNull.Value
-				 ? null
-				 : (string)value;
+				? null
+				: (string) value;
 		}
 
 		public JobHistory History(Guid jobId)
@@ -43,9 +43,9 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 					};
 
 					command.Parameters.Add("@JobId",
-															SqlDbType.UniqueIdentifier,
-															16,
-															"JobId");
+										   SqlDbType.UniqueIdentifier,
+										   16,
+										   "JobId");
 
 					command.Parameters[0].Value = jobId;
 
@@ -67,7 +67,6 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 
 					return null;
 				}
-
 			}
 			catch (Exception exp)
 			{
@@ -136,18 +135,17 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			{
 				var jobHist = new JobHistory
 				{
-					Id = (Guid)reader.GetValue(reader.GetOrdinal("JobId")),
-					Name = (string)reader.GetValue(reader.GetOrdinal("Name")),
-					CreatedBy = (string)reader.GetValue(reader.GetOrdinal("CreatedBy")),
+					Id = (Guid) reader.GetValue(reader.GetOrdinal("JobId")),
+					Name = (string) reader.GetValue(reader.GetOrdinal("Name")),
+					CreatedBy = (string) reader.GetValue(reader.GetOrdinal("CreatedBy")),
 					SentTo = getValue<string>(reader.GetValue(reader.GetOrdinal("SentTo"))),
 					Result = getValue<string>(reader.GetValue(reader.GetOrdinal("Result"))),
-					Created = (DateTime)(reader.GetValue(reader.GetOrdinal("Created"))),
+					Created = (DateTime) (reader.GetValue(reader.GetOrdinal("Created"))),
 					Started = getDateTime(reader.GetValue(reader.GetOrdinal("Started"))),
 					Ended = getDateTime(reader.GetValue(reader.GetOrdinal("Ended")))
 				};
 
 				return jobHist;
-
 			}
 			catch (Exception exp)
 			{
@@ -157,12 +155,11 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			LogHelper.LogInfoWithLineNumber(Logger, "Finished.");
 
 			return null;
-
 		}
 
 		private static string SelectHistoryCommand(bool addParameter)
 		{
-			string selectCommand = @"SELECT 
+			var selectCommand = @"SELECT 
                                              JobId    
                                             ,Name
                                             ,CreatedBy
@@ -173,7 +170,10 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 															Result
                                         FROM [Stardust].JobHistory";
 
-			if (addParameter) selectCommand += " WHERE JobId = @JobId";
+			if (addParameter)
+			{
+				selectCommand += " WHERE JobId = @JobId";
+			}
 
 			return selectCommand;
 		}
@@ -208,8 +208,8 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 							{
 								var detail = new JobHistoryDetail
 								{
-									Created = (DateTime)(reader.GetValue(reader.GetOrdinal("Created"))),
-									Detail = (string)(reader.GetValue(reader.GetOrdinal("Detail"))),
+									Created = (DateTime) (reader.GetValue(reader.GetOrdinal("Created"))),
+									Detail = (string) (reader.GetValue(reader.GetOrdinal("Detail"))),
 								};
 								returnList.Add(detail);
 							}
@@ -239,7 +239,97 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 				return null;
 			}
 
-			return (DateTime)databaseValue;
+			return (DateTime) databaseValue;
+		}
+
+		public WorkerNode WorkerNode(Guid Id)
+		{
+			const string selectCommand = @"SELECT w.Id, Url, Heartbeat, Alive, CASE 
+							WHEN AssignedNode IS NULL 
+							THEN CONVERT(bit,0) ELSE CONVERT(bit,1) END AS Running  
+							FROM [Stardust].WorkerNodes w 
+							LEFT JOIN [Stardust].jobDefinitions j ON w.Url=j.AssignedNode
+							WHERE w.Id = @Id";
+
+			WorkerNode node = null;
+			using (var connection = new SqlConnection(_connectionString))
+			{
+				var command = new SqlCommand
+				{
+					Connection = connection,
+					CommandText = selectCommand,
+					CommandType = CommandType.Text
+				};
+				command.Parameters.Add("@Id", SqlDbType.UniqueIdentifier, 16, "Id");
+				command.Parameters[0].Value = Id;
+				connection.Open();
+
+				var reader = command.ExecuteReader();
+
+				if (reader.HasRows)
+				{
+					while (reader.Read())
+					{
+						node = new WorkerNode
+						{
+							Id = (Guid)reader.GetValue(reader.GetOrdinal("Id")),
+							Url = new Uri((string)reader.GetValue(reader.GetOrdinal("Url"))),
+							Alive = (string)reader.GetValue(reader.GetOrdinal("Alive")),
+							Heartbeat = (DateTime)reader.GetValue(reader.GetOrdinal("Heartbeat")),
+							Running = (bool)reader.GetValue(reader.GetOrdinal("Running"))
+						};
+					}
+				}
+
+				reader.Close();
+				connection.Close();
+			}
+			return node;
+		}
+
+		public List<WorkerNode> WorkerNodes()
+		{
+			const string selectCommand = @"SELECT w.Id, Url, Heartbeat, Alive, CASE 
+							WHEN AssignedNode IS NULL 
+							THEN CONVERT(bit,0) ELSE CONVERT(bit,1) END AS Running  
+							FROM [Stardust].WorkerNodes w 
+							LEFT JOIN [Stardust].jobDefinitions j ON w.Url=j.AssignedNode";
+
+			var listToReturn = new List<WorkerNode>();
+
+			using (var connection = new SqlConnection(_connectionString))
+			{
+				var command = new SqlCommand
+				{
+					Connection = connection,
+					CommandText = selectCommand,
+					CommandType = CommandType.Text
+				};
+				connection.Open();
+
+				var reader = command.ExecuteReader();
+
+				if (reader.HasRows)
+				{
+					while (reader.Read())
+					{
+						var node = new WorkerNode
+						{
+							Id = (Guid) reader.GetValue(reader.GetOrdinal("Id")),
+							Url = new Uri((string) reader.GetValue(reader.GetOrdinal("Url"))),
+							Alive = (string) reader.GetValue(reader.GetOrdinal("Alive")),
+							Heartbeat = (DateTime) reader.GetValue(reader.GetOrdinal("Heartbeat")),
+							Running = (bool) reader.GetValue(reader.GetOrdinal("Running"))
+						};
+
+						listToReturn.Add(node);
+					}
+				}
+
+				reader.Close();
+				connection.Close();
+			}
+			return listToReturn;
 		}
 	}
 }

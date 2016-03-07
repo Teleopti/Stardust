@@ -149,10 +149,12 @@
     <Content Include="Scripts\App\changePasswordController.js" />
     <Content Include="Scripts\App\addSuperUserController.js" />
     <Content Include="Scripts\App\tokenHeaderService.js" />
+    <Content Include="Scripts\StardustApp\nodeDetailsController.js" />
+    <Content Include="StardustDashboard\nodedetails.html" />
     <Content Include="StardustDashboard\jobdetails.html" />
-    <Content Include="StardustDashboard\listJob.html" />
+    <Content Include="StardustDashboard\stardust.html" />
     <Content Include="Scripts\StardustApp\jobDetailsController.js" />
-    <Content Include="Scripts\StardustApp\listJobController.js" />
+    <Content Include="Scripts\StardustApp\stardustController.js" />
     <Content Include="StardustDashboard\style.css" />
     <Content Include="userdetails.html" />
     <Content Include="details.html" />
@@ -232,6 +234,7 @@
     <Compile Include="Models\ConflictModel.cs" />
     <Compile Include="Models\Stardust\JobHistory.cs" />
     <Compile Include="Models\Stardust\JobHistoryDetail.cs" />
+    <Compile Include="Models\Stardust\WorkerNode.cs" />
     <Compile Include="Models\UpdateTenantModel.cs" />
     <Compile Include="Models\VersionResultModel.cs" />
     <Compile Include="Core\AdminTenantAuthentication.cs" />

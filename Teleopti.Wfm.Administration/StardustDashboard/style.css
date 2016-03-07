@@ -19,3 +19,10 @@ td {
 	border-bottom-color: black;
 	border-bottom-style: solid
 }
+.greenNode {
+    color: green;
+}
+.redNode {
+    background-color: red;
+    color: whitesmoke;
+}

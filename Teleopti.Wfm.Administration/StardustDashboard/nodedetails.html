@@ -1,0 +1,28 @@
+﻿<div ng-controller="nodeDetailsController as vm" style="margin-left: 50px;margin-right: 50px">
+	<div class="row">
+		<div class="col-md-12">
+			<a style="float: left; padding-top: 25px; padding-right: 50px" href="#StardustDashboard"><img alt="back" title="Back to Stardust Manager" src="Content/images/left_round.png" /></a>
+			<h2>Node details</h2>
+			<div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Url</th>
+                            <th>Latest Heartbeat</th>
+                            <th>Running</th>
+                            <th>Alive</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-class="{'greenNode': vm.Node.Alive === 'true', 'redNode':vm.Node.Alive === 'false'}">
+                        <td>{{vm.Node.Url}}</td>
+                        <td>{{vm.Node.Heartbeat}}</td>
+                        <td>{{vm.Node.Running}}</td>
+                        <td>{{vm.Node.Alive}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+			</div>
+		</div>
+	</div>
+</div>

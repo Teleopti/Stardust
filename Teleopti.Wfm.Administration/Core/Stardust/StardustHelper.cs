@@ -27,5 +27,15 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 		{
 			return _stardustRepository.JobHistoryDetails(jobId);
 		}
+
+		public List<WorkerNode> WorkerNodes()
+		{
+			return _stardustRepository.WorkerNodes();
+		}
+
+		public WorkerNode WorkerNode(Guid Id)
+		{
+			return _stardustRepository.WorkerNode(Id);
+		}
 	}
 }
