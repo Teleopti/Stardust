@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				lengthFactor,
 				useMaximumPersons,
 				useMaximumPersons,
-				TimeHelper.FitToDefaultResolution);
+				TimeHelper.FitToDefaultResolutionRoundDown);
 		}
 	}
 
