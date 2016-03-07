@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(
-					"select max(date_id) DateId, max(date_date) DateDate FROM mart.dim_date WITH (NOLOCK) WHERE date_id>0")
+					"select max(date_id) DateId, max(date_date) DateDate FROM mart.dim_date WITH (NOLOCK) WHERE date_id>=0")
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsDate)))
 					.SetReadOnly(true)
 					.UniqueResult<IAnalyticsDate>();
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(
-					"select min(date_id) DateId, min(date_date) DateDate FROM mart.dim_date WITH (NOLOCK) WHERE date_id>0")
+					"select min(date_id) DateId, min(date_date) DateDate FROM mart.dim_date WITH (NOLOCK) WHERE date_id>=0")
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsDate)))
 					.SetReadOnly(true)
 					.UniqueResult<IAnalyticsDate>();
