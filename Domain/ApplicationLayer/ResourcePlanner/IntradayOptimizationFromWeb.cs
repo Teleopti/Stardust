@@ -14,26 +14,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
-		private readonly OptimizationResult _optimizationResult;
 
 		public IntradayOptimizationFromWeb(IntradayOptimizationCommandHandler intradayOptimizationCommandHandler, 
 			IPlanningPeriodRepository planningPeriodRepository,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
-			IFillSchedulerStateHolder fillSchedulerStateHolder,
-			OptimizationResult optimizationResult)
+			IFillSchedulerStateHolder fillSchedulerStateHolder)
 		{
 			_intradayOptimizationCommandHandler = intradayOptimizationCommandHandler;
 			_planningPeriodRepository = planningPeriodRepository;
 			_schedulerStateHolder = schedulerStateHolder;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
-			_optimizationResult = optimizationResult;
 		}
 
-		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
+		public virtual void Execute(Guid planningPeriodId)
 		{
 			var period = FillSchedulerStateHolder(planningPeriodId);
 			_intradayOptimizationCommandHandler.Execute(new IntradayOptimizationCommand {Period = period, Agents = _schedulerStateHolder().AllPermittedPersons });
-			return _optimizationResult.Create(period);
 		}
 
 		[UnitOfWork]
