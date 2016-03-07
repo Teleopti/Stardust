@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
@@ -53,30 +54,36 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[LogTime]
 		public virtual void Handle(OptimizationWasOrdered @event)
 		{
+			DoOptimization(@event.Period, @event.AgentIds);
+			_persister.Persist(_schedulerStateHolder().Schedules);
+		}
+
+		[UnitOfWork]
+		protected virtual void DoOptimization(DateOnlyPeriod period, IEnumerable<Guid> agentIds)
+		{
 			var schedulerStateHolder = _schedulerStateHolder();
-			_fillSchedulerStateHolder.Fill(schedulerStateHolder, @event.Period);
+			_fillSchedulerStateHolder.Fill(schedulerStateHolder, period);
 			var optimizationPreferences = _optimizationPreferencesFactory.Create();
 			var dayOffOptimizationPreference = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 			var agents = schedulerStateHolder.AllPermittedPersons;
-			if (@event.AgentIds != null)
+			if (agentIds != null)
 			{
-				agents = agents.Where(x => @event.AgentIds.Contains(x.Id.Value)).ToList();
+				agents = agents.Where(x => agentIds.Contains(x.Id.Value)).ToList();
 			}
 			var schedules = new List<IScheduleDay>();
 			foreach (var person in agents)
 			{
-				schedules.AddRange(schedulerStateHolder.Schedules[person].ScheduledDayCollection(@event.Period));
+				schedules.AddRange(schedulerStateHolder.Schedules[person].ScheduledDayCollection(period));
 			}
 
-			var optimizers = _intradayOptimizer2Creator.Create(@event.Period, schedules, optimizationPreferences, dayOffOptimizationPreference);
+			var optimizers = _intradayOptimizer2Creator.Create(period, schedules, optimizationPreferences, dayOffOptimizationPreference);
 
-			using (_intradayOptimizationContext.Create(@event.Period))
+			using (_intradayOptimizationContext.Create(period))
 			{
 				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
 				_intradayOptimizerContainer.Execute(optimizers);
-				_weeklyRestSolverExecuter.Resolve(optimizationPreferences, @event.Period, schedules, agents, dayOffOptimizationPreference);
+				_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, schedules, agents, dayOffOptimizationPreference);
 			}
-			_persister.Persist(schedulerStateHolder.Schedules);
 		}
 	}
 }

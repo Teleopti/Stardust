@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
@@ -28,15 +29,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			_optimizationResult = optimizationResult;
 		}
 
-		[UnitOfWork]
 		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
+		{
+			var period = FillSchedulerStateHolder(planningPeriodId);
+			_intradayOptimizationCommandHandler.Execute(new IntradayOptimizationCommand {Period = period, Agents = _schedulerStateHolder().AllPermittedPersons });
+			return _optimizationResult.Create(period);
+		}
+
+		[UnitOfWork]
+		protected virtual DateOnlyPeriod FillSchedulerStateHolder(Guid planningPeriodId)
 		{
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
 			_fillSchedulerStateHolder.Fill(_schedulerStateHolder(), period); //see if this can be made smarter - not ladda hela världen
-			var agents = _schedulerStateHolder().AllPermittedPersons;
-			_intradayOptimizationCommandHandler.Execute(new IntradayOptimizationCommand {Period = period, Agents = agents});
-			return _optimizationResult.Create(period);
+			return period;
 		}
 	}
 }
