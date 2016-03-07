@@ -244,6 +244,31 @@ md-progress-circular .md-inner .md-half-circle {
 
 /*temp fixes*/
 
+#leftsidenav > div > section{
+	margin-top: -2px;
+}
+
+.ui-grid-menu .ui-grid-menu-inner ul li{
+	border:none;
+}
+.ui-grid-menu-button .ui-grid-menu .ui-grid-menu-mid{
+	overflow-x:auto;
+}
+
+.ui-grid-menu .ui-grid-menu-inner .ui-grid-menu-close-button{
+	display: none;
+}
+
+.ui-grid-menu .ui-grid-menu-inner ul li button:hover,
+.ui-grid-menu .ui-grid-menu-inner ul li button:focus,
+.ui-grid-menu .ui-grid-menu-inner ul li button.ui-grid-menu-item-active{
+	box-shadow: none!important;
+}
+
+md-autocomplete button md-icon {
+  transform: translate3d(-50%,-50%,0) scale(0.7);
+}
+
 .click-modal .dialog {
 left:25%;
 }
