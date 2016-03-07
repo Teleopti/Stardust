@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using NHibernate;
 using NHibernate.Engine;
@@ -84,7 +83,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public string ConnectionString { get; private set; }
 
-		public virtual IUnitOfWork CreateAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel = TransactionIsolationLevel.Default)
+		public IUnitOfWork CreateAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel = TransactionIsolationLevel.Default)
 		{
 			return createAndOpenUnitOfWork(_messageBroker(), isolationLevel, null, QueryFilter.BusinessUnit);
 		}

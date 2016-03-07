@@ -32,8 +32,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.SingleInstance();
 			builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
 
-			builder.RegisterType<CurrentAnalyticsUnitOfWorkFactory>().As<ICurrentAnalyticsUnitOfWorkFactory>().SingleInstance();
-
 			builder.RegisterType<CurrentDataSource>().As<ICurrentDataSource>().SingleInstance();
 			builder.RegisterType<DataSourceState>().SingleInstance();
 			builder.RegisterType<DataSourceScope>().As<IDataSourceScope>().SingleInstance();

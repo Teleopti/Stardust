@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.TestCommon
 			throw new NotImplementedException();
 		}
 
-		public IList<AgentStateReadModel> Load(IEnumerable<Guid> personGuids)
+		public IList<AgentStateReadModel> Load(IEnumerable<Guid> personIds)
 		{
 			throw new NotImplementedException();
 		}

@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule(new ToggleNetModule(_configuration.Args()));
 			builder.RegisterModule(new MessageBrokerModule(_configuration));
 			builder.RegisterModule<RepositoryModule>();
+			builder.RegisterModule(new AnalyticsUnitOfWorkModule(_configuration));
 			builder.RegisterModule(new UnitOfWorkModule(_configuration));
 			builder.RegisterModule(new AuthenticationModule());
 			builder.RegisterModule<ForecasterModule>();

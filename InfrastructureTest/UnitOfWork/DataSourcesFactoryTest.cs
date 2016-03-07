@@ -36,17 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			Assert.IsNull(res.Analytics);
 			Assert.IsInstanceOf<NHibernateUnitOfWorkFactory>(res.Application);
 		}
-
-		[Test]
-		public void TestCreateWithDictionaryWithMatrix()
-		{
-			IDataSource res = target.Create(nHibSettings(), InfraTestConfigReader.AnalyticsConnectionString);
-			Assert.AreEqual(DataSourceConfigurationSetter.NoDataSourceName, res.Application.Name);
-			Assert.AreEqual(DataSourcesFactory.AnalyticsDataSourceName, res.Analytics.Name);
-			Assert.IsInstanceOf<NHibernateUnitOfWorkFactory>(res.Application);
-			Assert.IsInstanceOf<NHibernateUnitOfWorkMatrixFactory>(res.Analytics);
-		}
-
+		
 		[Test]
 		public void ShouldAddApplicationNameToConnectionString()
 		{

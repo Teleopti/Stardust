@@ -6,6 +6,7 @@ using NHibernate.Dialect;
 using Teleopti.Ccc.Domain.Common.Logging;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
+using Teleopti.Ccc.Infrastructure.Analytics;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -65,7 +66,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			if (applicationNhibConfiguration == null)
 				applicationNhibConfiguration = new Dictionary<string, string>();
-			NHibernateUnitOfWorkMatrixFactory statFactory;
 			var appConfig = createApplicationConfiguration(applicationNhibConfiguration);
 			var applicationConnectionString = appConfig.Properties[Environment.ConnectionString];
 			var sessionFactory = buildSessionFactory(appConfig);
@@ -76,14 +76,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				_persistCallbacks, 
 				_messageBroker);
 
+			AnalyticsUnitOfWorkFactory statFactory = null;
 			if (!string.IsNullOrEmpty(statisticConnectionString))
 			{
 				var statConfiguration = createStatisticConfiguration(statisticConnectionString);
-				statFactory = new NHibernateUnitOfWorkMatrixFactory(buildSessionFactory(statConfiguration), statConfiguration.Properties[Environment.ConnectionString]);
-			}
-			else
-			{
-				statFactory = null;
+				statFactory = new AnalyticsUnitOfWorkFactory(
+					buildSessionFactory(statConfiguration),
+					statConfiguration.Properties[Environment.ConnectionString]
+					);
 			}
 
 			var readModel = new ReadModelUnitOfWorkFactory(_httpContext, applicationConnectionString);
@@ -112,22 +112,24 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private Configuration createStatisticConfiguration(string connectionString)
 		{
+			// 2013-10-03
 			//REMOVE ME LATER!!!!!!!!!!!!!!!!/((
 			Log4NetConfiguration.SetConnectionString(connectionString);
 			////////////////////////////////////
+			// 2014-10-24
 			// ^^ how much later are we talking?
-			using (PerformanceOutput.ForOperation("Configuring statistic db"))
-			{
-				var statCfg = new Configuration()
-						 .SetProperty(Environment.ConnectionString, connectionString)
-						 .SetProperty(Environment.ConnectionProvider, "NHibernate.Connection.DriverConnectionProvider")
-						 .SetProperty(Environment.ConnectionDriver, "NHibernate.Driver.SqlClientDriver")
-						 .SetProperty(Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName)
-						 .SetProperty(Environment.SessionFactoryName, AnalyticsDataSourceName)
-						 .SetProperty(Environment.SqlExceptionConverter, typeof(SqlServerExceptionConverter).AssemblyQualifiedName);
+			// 2016-03-07
+			// Maybe for David's bday?
+			var statCfg = new Configuration()
+				.SetProperty(Environment.ConnectionString, connectionString)
+				.SetProperty(Environment.ConnectionProvider, "NHibernate.Connection.DriverConnectionProvider")
+				.SetProperty(Environment.ConnectionDriver, "NHibernate.Driver.SqlClientDriver")
+				.SetProperty(Environment.Dialect, typeof (MsSql2008Dialect).AssemblyQualifiedName)
+				.SetProperty(Environment.SessionFactoryName, AnalyticsDataSourceName)
+				.SetProperty(Environment.SqlExceptionConverter, typeof (SqlServerExceptionConverter).AssemblyQualifiedName)
+				.SetProperty(Environment.CurrentSessionContextClass, typeof (TeleoptiSessionContext).AssemblyQualifiedName);
 				_dataSourceConfigurationSetter.AddApplicationNameToConnectionString(statCfg);
-				return statCfg;
-			}
+			return statCfg;
 		}
 
 		private void setDefaultValuesOnApplicationConf(Configuration cfg)

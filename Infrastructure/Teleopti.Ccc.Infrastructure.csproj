@@ -408,6 +408,11 @@
     <Compile Include="Repositories\PersonInRoleQuerier.cs" />
     <Compile Include="Repositories\LoadSkillInIntradays.cs" />
     <Compile Include="Repositories\SkillAreaRepository.cs" />
+    <Compile Include="Analytics\AnalyticsUnitOfWorkAspect.cs" />
+    <Compile Include="Analytics\AnalyticsUnitOfWorkAttribute.cs" />
+    <Compile Include="Analytics\CurrentAnalyticsUnitOfWork.cs" />
+    <Compile Include="Analytics\IAnalyticsUnitOfWorkAspect.cs" />
+    <Compile Include="Analytics\ICurrentAnalyticsUnitOfWork.cs" />
     <Compile Include="SeatManagement\PersonScheduleWithSeatBooking.cs" />
     <Compile Include="Repositories\PlanningPeriodRepository.cs" />
     <Compile Include="Repositories\PlanningPeriodSuggestions.cs" />
@@ -553,6 +558,7 @@
     <Compile Include="Rta\INumberOfAgentsInSiteReader.cs" />
     <Compile Include="Rta\NumberOfAgentsInSiteReader.cs" />
     <Compile Include="Rta\NumberOfAgentsInTeamReader.cs" />
+    <Compile Include="Analytics\AnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\CurrentAnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\DisableBusinessUnitFilter.cs" />
     <Compile Include="UnitOfWork\KeepScheduleEvents.cs" />
@@ -701,7 +707,6 @@
     <Compile Include="UnitOfWork\NHibernateStatelessUnitOfWork.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWork.cs" />
-    <Compile Include="UnitOfWork\NHibernateUnitOfWorkMatrixFactory.cs" />
     <Compile Include="UnitOfWork\PersonCollectionChangedEventPublisher.cs" />
     <Compile Include="UnitOfWork\PersonPeriodChangedBusMessagePublisher.cs" />
     <Compile Include="UnitOfWork\QueryFilter.cs" />

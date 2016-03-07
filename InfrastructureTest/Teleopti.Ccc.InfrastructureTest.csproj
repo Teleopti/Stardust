@@ -544,7 +544,6 @@
     <Compile Include="UnitOfWork\NHibernateStatelessUnitOfWorkTest.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryFake.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryTest.cs" />
-    <Compile Include="UnitOfWork\NHibernateUnitOfWorkMatrixFactoryTest.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkTest.cs">
       <SubType>Code</SubType>
     </Compile>

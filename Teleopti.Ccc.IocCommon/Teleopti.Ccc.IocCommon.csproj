@@ -185,6 +185,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Configuration\AnalyticsUnitOfWorkModule.cs" />
     <Compile Include="Configuration\AspectsModule.cs" />
     <Compile Include="Configuration\BackToLegalShiftModule.cs" />
     <Compile Include="Configuration\EqualNumberOfCategoryFairnessModule.cs" />
