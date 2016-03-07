@@ -81,7 +81,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 		self.TimeFrom(Teleopti.MyTimeWeb.Common.FormatTime(data.DateTimeFrom));
 		self.TimeTo(Teleopti.MyTimeWeb.Common.FormatTime(data.DateTimeTo));
 
-		self.DateTo(moment(new Date(data.DateToYear, data.DateToMonth - 1, data.DateToDayOfMonth)));
+		self.DateTo(moment(new Date(data.DateToYear, data.DateToMonth - 1, data.DateToDayOfMonth))); 
 		
 		self.EntityId(data.Id);
 		self.AbsenceId(data.PayloadId);
@@ -89,6 +89,23 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 		self.IsFullDay(data.IsFullDay);
 		self.TypeEnum(data.TypeEnum);
 		self.WaitlistPosition(data.WaitlistPosition);
+
+		self.onLoadComplete();
+		
+	};
+
+	self.onLoadComplete = function() {
+
+		self.AbsenceId.subscribe(function() {
+			loadAbsenceAccount(false);
+		});
+
+		self.DateTo.subscribe(function() {
+			loadAbsenceAccount(false);
+		});
+
+		loadAbsenceAccount(true);
+
 	};
 
 	self.checkMessageLength = function (data, event) {
@@ -120,13 +137,13 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 		}
 	};
 	
-	function loadAbsenceAccount() {
+	function loadAbsenceAccount(forceAccountUpdate) {
 		if (!self.PersonalAccountPermission || self.AbsenceId() == undefined || self.AbsenceId() == null )
 			return;
 		var absenceChanged = self.AbsenceId() != self.PreviousAbsenceId();
 		var dateToChanged = !self.DateTo().isSame(self.PreviousDateTo().format("YYYY-MM-DD HH:mm:ss"));
 		var isOutOfPeriodRange = self.DateTo().isBefore(self.AbsenceAccountPeriodStart()) || self.DateTo().isAfter(self.AbsenceAccountPeriodEnd());
-		if (absenceChanged || (dateToChanged && isOutOfPeriodRange)) {
+		if (forceAccountUpdate || absenceChanged || (dateToChanged && isOutOfPeriodRange)) {
 			ajax.Ajax({
 				url: "Requests/FetchAbsenceAccount",
 				dataType: "json",
@@ -165,14 +182,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 		return self.PersonalAccountPermission() && self.AbsenceAccountExists() && self.IsEditable();
 	});
 	
-	self.AbsenceId.subscribe(function () {
-		loadAbsenceAccount();
-	});
-
-	self.DateTo.subscribe(function () {
-		loadAbsenceAccount();
-	});
-
+	
 	self.Template = ko.computed(function () {
 		return self.IsUpdate() ? self.Templates[self.TypeEnum()] : "add-new-request-detail-template";
     });
@@ -210,10 +220,13 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
         self.IsNewInProgress(true);
 		self.TypeEnum(1);
 		self.IsFullDay(true);
+
+	    self.onLoadComplete();
     };
 
     self.CancelAddingNewRequest = function() {
 
         self.IsNewInProgress(false);
     };
+	
 };
