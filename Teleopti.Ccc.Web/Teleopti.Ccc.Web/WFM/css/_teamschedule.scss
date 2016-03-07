@@ -154,4 +154,14 @@
 		margin-left: 0;
 		margin-right: 0;
 	}
+
+	.wfm-switch{
+		padding-top: 8px;
+		float: right;
+		right: 6rem;
+		.wfm-switch-toggle{
+		    top: 8px;
+			left: 12rem;
+		}
+	}
 }
