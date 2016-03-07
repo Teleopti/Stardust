@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.TestCommon
 				       s.BatchId == null)
 				select s).ToArray();
 		}
-
+		
 		public AgentStateReadModel GetCurrentActualAgentState(Guid personId)
 		{
 			return _data.Values.SingleOrDefault(x => x.PersonId == personId);

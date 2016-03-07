@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			};
 			Persister.PersistActualAgentReadModel(state);
 
-			Persister.GetMissingAgentStatesFromBatch("2015-03-06 15:20".Utc(), "6")
+			Persister.GetAgentsNotInSnapshot("2015-03-06 15:20".Utc(), "6")
 				.Single(x => x.PersonId == personId).Should().Not.Be.Null();
 		}
 
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			};
 			Persister.PersistActualAgentReadModel(agentStateReadModel);
 
-			var result = Persister.GetMissingAgentStatesFromBatch("2015-03-06 15:20".Utc(), "6")
+			var result = Persister.GetAgentsNotInSnapshot("2015-03-06 15:20".Utc(), "6")
 				.Single(x => x.PersonId == personId);
 
 			result.BusinessUnitId.Should().Be(agentStateReadModel.BusinessUnitId);
@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 					command.ExecuteNonQuery();
 			}
 			
-			Assert.DoesNotThrow(() => Persister.GetMissingAgentStatesFromBatch("2015-04-21 8:15".Utc(), "2"));
+			Assert.DoesNotThrow(() => Persister.GetAgentsNotInSnapshot("2015-04-21 8:15".Utc(), "2"));
 		}
 	}
 }

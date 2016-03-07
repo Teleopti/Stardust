@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
     public interface IAgentStateReadModelPersister
     {
         void PersistActualAgentReadModel(AgentStateReadModel model);
-		IEnumerable<AgentStateReadModel> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId);
+		IEnumerable<AgentStateReadModel> GetAgentsNotInSnapshot(DateTime batchId, string dataSourceId);
 		AgentStateReadModel GetCurrentActualAgentState(Guid personId);
 		IEnumerable<AgentStateReadModel> GetActualAgentStates();
 		void Delete(Guid personId);

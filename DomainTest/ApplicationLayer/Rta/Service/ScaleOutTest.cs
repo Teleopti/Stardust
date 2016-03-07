@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 		public MutableNow Now;
 		public FakeEventPublisher Publisher;
-		public IAgentStateReadModelReader Reader;
+		public IAgentStateReadModelPersister Persister;
 
 		[Test]
 		public void ShouldNotCacheSchedules()
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Task.WaitAll(tasks.ToArray());
 
-			Reader.GetActualAgentStates().Should().Have.Count.EqualTo(100);
+			Persister.GetActualAgentStates().Should().Have.Count.EqualTo(100);
 			Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Should().Have.Count.EqualTo(100);
 		}
 	}

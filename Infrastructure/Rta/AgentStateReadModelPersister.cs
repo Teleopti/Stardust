@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		[InfoLog]
 		[AnalyticsUnitOfWork]
-		public virtual IEnumerable<AgentStateReadModel> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
+		public virtual IEnumerable<AgentStateReadModel> GetAgentsNotInSnapshot(DateTime batchId, string dataSourceId)
 		{
 			var sql = AgentStateReadModelReader.SelectActualAgentState() +
 					  @"WHERE 
