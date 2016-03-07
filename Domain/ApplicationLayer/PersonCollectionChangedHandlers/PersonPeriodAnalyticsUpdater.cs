@@ -35,10 +35,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 			foreach (var personCodeGuid in @event.PersonIdCollection.Distinct())
 			{
+				// Check if deleted person => all person periods in analytics should be deleted
+				if (!persons.Any(a => a.Id.Equals(personCodeGuid)))
+				{
+					var personPeriodsInAnalyticsToBeDeleted = _analyticsPersonPeriodRepository.GetPersonPeriods(personCodeGuid);
+					foreach (var analyticsPersonPeriodToBeDeleted in personPeriodsInAnalyticsToBeDeleted)
+					{
+						_analyticsPersonPeriodRepository.DeletePersonPeriod(analyticsPersonPeriodToBeDeleted);
+					}
+					continue;
+				}
+
 				var person = persons.First(a => a.Id.Equals(personCodeGuid));
 				if (person == null)
 				{
-					return;
+					continue;
 				}
 
 				var personPeriodsInAnalytics = _analyticsPersonPeriodRepository.GetPersonPeriods(personCodeGuid);
@@ -55,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 						// Update
 						var updatedAnalyticsPersonPeriod = transformer.Transform(person, personPeriod);
 
-						// Keep windows domain and username.
+						// Keep windows domain and username until external login information is availble from service bus
 						updatedAnalyticsPersonPeriod.WindowsUsername = existingPeriod.WindowsUsername;
 						updatedAnalyticsPersonPeriod.WindowsDomain = existingPeriod.WindowsDomain;
 
