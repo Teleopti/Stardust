@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
 
@@ -15,21 +16,20 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public void Publish(params IEvent[] events)
 		{
-			var task = new Task(() =>
+			var tasks = new List<Task>();
+			foreach (var @event in events)
 			{
-				foreach (var @event in events)
+				var handlers = _resolver.ResolveInProcessForEvent(@event);
+				foreach (var handler in handlers)
 				{
-					var handlers = _resolver.ResolveInProcessForEvent(@event);
-					foreach (var handler in handlers)
+					var method = _resolver.HandleMethodFor(handler.GetType(), @event);
+					tasks.Add(Task.Factory.StartNew(() =>
 					{
-						var method = _resolver.HandleMethodFor(handler.GetType(), @event);
 						method.Invoke(handler, new[] { @event });
-					}
+					}));
 				}
-			});
-			task.Start();
-			//Task.Factory.StartNew(() => task);
-			Task.WaitAll(task);
+			}
+			Task.WaitAll(tasks.ToArray());
 		}
 	}
 }
