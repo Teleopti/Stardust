@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Analytics;
@@ -36,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			foreach (var personList in personIds.Batch(400))
 			{
 				ret.AddRange(_unitOfWork.Current().Session()
-					.CreateSQLQuery(selectActualAgentState() + "WITH (NOLOCK) WHERE PersonId IN(:persons)")
+					.CreateSQLQuery(SelectActualAgentState() + "WITH (NOLOCK) WHERE PersonId IN(:persons)")
 					.SetParameterList("persons", personList)
 					.SetResultTransformer(Transformers.AliasToBean(typeof (AgentStateReadModel)))
 					.SetReadOnly(true)
@@ -49,7 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		public virtual IList<AgentStateReadModel> LoadForTeam(Guid teamId)
 		{
 			return _unitOfWork.Current().Session()
-				.CreateSQLQuery(selectActualAgentState() + "WITH (NOLOCK) WHERE TeamId = :teamId")
+				.CreateSQLQuery(SelectActualAgentState() + "WITH (NOLOCK) WHERE TeamId = :teamId")
 				.SetParameter("teamId", teamId)
 				.SetResultTransformer(Transformers.AliasToBean(typeof (AgentStateReadModel)))
 				.SetReadOnly(true)
@@ -59,7 +58,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		[AnalyticsUnitOfWork]
 		public virtual IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds, bool? inAlarmOnly, bool? alarmTimeDesc)
 		{
-			var query = selectActualAgentState() + @"WITH (NOLOCK) WHERE SiteId IN (:siteIds)";
+			var query = SelectActualAgentState() + @"WITH (NOLOCK) WHERE SiteId IN (:siteIds)";
 			if (inAlarmOnly.HasValue)
 				query += " AND IsRuleAlarm = " + Convert.ToInt32(inAlarmOnly.Value);
 			if(alarmTimeDesc.HasValue)
@@ -79,7 +78,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		[AnalyticsUnitOfWork]
 		public virtual IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds, bool? inAlarmOnly, bool? alarmTimeDesc)
 		{
-			var query = selectActualAgentState() + @"WITH (NOLOCK) WHERE TeamId IN (:teamIds)";
+			var query = SelectActualAgentState() + @"WITH (NOLOCK) WHERE TeamId IN (:teamIds)";
 			if (inAlarmOnly.HasValue)
 				query += " AND IsRuleAlarm = " + Convert.ToInt32(inAlarmOnly.Value);
 			if (alarmTimeDesc.HasValue)
@@ -88,57 +87,15 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				else
 					query += " ORDER BY AlarmStartTime DESC";
 
-			return _unitOfWork.Current().Session().CreateSQLQuery(query)
+			return _unitOfWork.Current().Session()
+				.CreateSQLQuery(query)
 				.SetParameterList("teamIds", teamIds)
 				.SetResultTransformer(Transformers.AliasToBean(typeof (AgentStateReadModel)))
 				.SetReadOnly(true)
 				.List<AgentStateReadModel>();
 		}
-
-		[AnalyticsUnitOfWork]
-		public virtual IEnumerable<AgentStateReadModel> GetActualAgentStates()
-		{
-			var sql = selectActualAgentState();
-			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-				.SetResultTransformer(Transformers.AliasToBean(typeof (AgentStateReadModel)))
-				.SetReadOnly(true)
-				.List<AgentStateReadModel>();
-		}
-
-		[InfoLog]
-		[AnalyticsUnitOfWork]
-		public virtual AgentStateReadModel GetCurrentActualAgentState(Guid personId)
-		{
-			var sql = selectActualAgentState() + "WHERE PersonId = :PersonId";
-			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-				.SetParameter("PersonId", personId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof (AgentStateReadModel)))
-				.SetReadOnly(true)
-				.List<AgentStateReadModel>()
-				.FirstOrDefault();
-		}
-
-		[InfoLog]
-		[AnalyticsUnitOfWork]
-		public virtual IEnumerable<AgentStateReadModel> GetAgentsNotInSnapshot(DateTime batchId, string dataSourceId)
-		{
-			var sql = selectActualAgentState() +
-					  @"WHERE 
-						OriginalDataSourceId = :OriginalDataSourceId
-						AND (
-							BatchId < :BatchId
-							OR 
-							BatchId IS NULL
-							)";
-			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-				.SetParameter("BatchId", batchId)
-				.SetParameter("OriginalDataSourceId", dataSourceId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof (AgentStateReadModel)))
-				.SetReadOnly(true)
-				.List<AgentStateReadModel>();
-		}
 		
-		private static string selectActualAgentState()
+		public static string SelectActualAgentState()
 		{
 			return @"SELECT 
 						PersonId,

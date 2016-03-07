@@ -4,16 +4,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class PreviousStateInfoLoader : IPreviousStateInfoLoader
 	{
-		private readonly IAgentStateReadModelReader _reader;
+		private readonly IAgentStateReadModelPersister _persister;
 
-		public PreviousStateInfoLoader(IAgentStateReadModelReader reader)
+		public PreviousStateInfoLoader(IAgentStateReadModelPersister persister)
 		{
-			_reader = reader;
+			_persister = persister;
 		}
 
 		public StoredStateInfo Load(Guid personId)
 		{
-			var loaded = _reader.GetCurrentActualAgentState(personId);
+			var loaded = _persister.GetCurrentActualAgentState(personId);
 			return loaded == null ? null : new StoredStateInfo(personId, loaded);
 		}
 	}

@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		protected readonly IDatabaseLoader _databaseLoader;
 		protected readonly INow _now;
 		protected readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
-		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
+		private readonly IAgentStateReadModelPersister _agentStateReadModelPersister;
 		private readonly StateMapper _stateMapper;
 		protected readonly IPreviousStateInfoLoader _previousStateInfoLoader;
 		protected readonly IStateMappingLoader _stateMappingLoader;
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IDatabaseLoader databaseLoader,
 			INow now,
 			IAgentStateReadModelUpdater agentStateReadModelUpdater,
-			IAgentStateReadModelReader agentStateReadModelReader,
+			IAgentStateReadModelPersister agentStateReadModelPersister,
 			StateMapper stateMapper,
 			IPreviousStateInfoLoader previousStateInfoLoader,
 			IStateMappingLoader stateMappingLoader,
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_databaseLoader = databaseLoader;
 			_now = now;
 			_agentStateReadModelUpdater = agentStateReadModelUpdater;
-			_agentStateReadModelReader = agentStateReadModelReader;
+			_agentStateReadModelPersister = agentStateReadModelPersister;
 			_stateMapper = stateMapper;
 			_previousStateInfoLoader = previousStateInfoLoader;
 			_stateMappingLoader = stateMappingLoader;
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public virtual void ForClosingSnapshot(ExternalUserStateInputModel input, Action<StateContext> action)
 		{
-			var missingAgents = _agentStateReadModelReader.GetAgentsNotInSnapshot(input.BatchId, input.SourceId);
+			var missingAgents = _agentStateReadModelPersister.GetMissingAgentStatesFromBatch(input.BatchId, input.SourceId);
 			var agentsNotAlreadyLoggedOut = from a in missingAgents
 				let state = _stateMapper.StateFor(
 					_stateMappingLoader.Cached(),
@@ -226,9 +226,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public LoadPersonFromDatabase(
 			IDatabaseLoader databaseLoader, 
 			INow now,
-			IAgentStateReadModelUpdater agentStateReadModelUpdater, 
-			IAgentStateReadModelReader 
-			agentStateReadModelReader,
+			IAgentStateReadModelUpdater agentStateReadModelUpdater,
+			IAgentStateReadModelPersister agentStateReadModelPersister,
 			StateMapper stateMapper, 
 			IPreviousStateInfoLoader previousStateInfoLoader, 
 			IStateMappingLoader stateMappingLoader,
@@ -238,7 +237,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				databaseLoader, 
 				now, 
 				agentStateReadModelUpdater, 
-				agentStateReadModelReader, 
+				agentStateReadModelPersister, 
 				stateMapper, 
 				previousStateInfoLoader,
 				stateMappingLoader, 
@@ -311,7 +310,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		protected readonly IDatabaseLoader _databaseLoader;
 		protected readonly INow _now;
 		protected readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
-		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
+		private readonly IAgentStateReadModelPersister _agentStateReadModelPersister;
 		private readonly StateMapper _stateMapper;
 		protected readonly IPreviousStateInfoLoader _previousStateInfoLoader;
 		protected readonly IStateMappingLoader _stateMappingLoader;
@@ -322,7 +321,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IDatabaseLoader databaseLoader,
 			INow now,
 			IAgentStateReadModelUpdater agentStateReadModelUpdater,
-			IAgentStateReadModelReader agentStateReadModelReader,
+			IAgentStateReadModelPersister agentStateReadModelPersister,
 			StateMapper stateMapper,
 			IPreviousStateInfoLoader previousStateInfoLoader,
 			IStateMappingLoader stateMappingLoader,
@@ -334,7 +333,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_databaseLoader = databaseLoader;
 			_now = now;
 			_agentStateReadModelUpdater = agentStateReadModelUpdater;
-			_agentStateReadModelReader = agentStateReadModelReader;
+			_agentStateReadModelPersister = agentStateReadModelPersister;
 			_stateMapper = stateMapper;
 			_previousStateInfoLoader = previousStateInfoLoader;
 			_stateMappingLoader = stateMappingLoader;
@@ -399,7 +398,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public virtual void ForClosingSnapshot(ExternalUserStateInputModel input, Action<StateContext> action)
 		{
-			var missingAgents = _agentStateReadModelReader.GetAgentsNotInSnapshot(input.BatchId, input.SourceId);
+			var missingAgents = _agentStateReadModelPersister.GetMissingAgentStatesFromBatch(input.BatchId, input.SourceId);
 			var agentsNotAlreadyLoggedOut = from a in missingAgents
 											let state = _stateMapper.StateFor(
 												_stateMappingLoader.Cached(),

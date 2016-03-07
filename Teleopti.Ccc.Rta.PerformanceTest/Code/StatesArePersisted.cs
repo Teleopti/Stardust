@@ -8,14 +8,14 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 {
 	public class StatesArePersisted
 	{
-		private readonly IAgentStateReadModelReader _agentStateReader;
+		private readonly IAgentStateReadModelPersister _persister;
 		private readonly StatesSender _sender;
 
 		public StatesArePersisted(
-			IAgentStateReadModelReader agentStateReader,
+			IAgentStateReadModelPersister persister,
 			StatesSender sender)
 		{
-			_agentStateReader = agentStateReader;
+			_persister = persister;
 			_sender = sender;
 		}
 
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			var timeWhenLastStateWasSent = _sender.SentSates().Max(x => x.Time);
 			while (true)
 			{
-				if (_agentStateReader.GetActualAgentStates().All(x => x.ReceivedTime == timeWhenLastStateWasSent.Utc()))
+				if (_persister.GetActualAgentStates().All(x => x.ReceivedTime == timeWhenLastStateWasSent.Utc()))
 					break;
 				Thread.Sleep(20);
 			}

@@ -16,17 +16,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	public class DatabaseReaderAgentStateTest
 	{
 		public IAgentStateReadModelReader Reader;
-		public IAgentStateReadModelPersister Writer;
+		public IAgentStateReadModelPersister Persister;
 		public MutableNow Now;
 
 		[Test]
 		public void ShouldGetCurrentActualAgentState()
 		{
 			var state = new AgentStateReadModelForTest { PersonId = Guid.NewGuid() };
-			Writer.PersistActualAgentReadModel(state);
-			var target = Reader;
+			Persister.PersistActualAgentReadModel(state);
 
-			var result = target.GetCurrentActualAgentState(state.PersonId);
+			var result = Persister.GetCurrentActualAgentState(state.PersonId);
 
 			result.Should().Not.Be.Null();
 		}
@@ -34,9 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldGetNullCurrentActualAgentStateIfNotFound()
 		{
-			var target = Reader;
-
-			var result = target.GetCurrentActualAgentState(Guid.NewGuid());
+			var result = Persister.GetCurrentActualAgentState(Guid.NewGuid());
 
 			result.Should().Be.Null();
 		}
@@ -44,14 +41,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldGetCurrentActualAgentStates()
 		{
-			var writer = Writer;
+			var writer = Persister;
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
 			writer.PersistActualAgentReadModel(new AgentStateReadModelForTest { PersonId = personId1 });
 			writer.PersistActualAgentReadModel(new AgentStateReadModelForTest { PersonId = personId2 });
-			var target = Reader;
 
-			var result = target.GetActualAgentStates();
+			var result = Persister.GetActualAgentStates();
 
 			result.Where(x => x.PersonId == personId1).Should().Have.Count.EqualTo(1);
 			result.Where(x => x.PersonId == personId2).Should().Have.Count.EqualTo(1);
@@ -60,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldGetCurrentActualAgentStatesWithAllData()
 		{
-			var writer = Writer;
+			var writer = Persister;
 			var state = new AgentStateReadModelForTest
 			{
 				PersonId = Guid.NewGuid(),
@@ -86,9 +82,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				StateStartTime = "2014-11-11 10:37".Utc(),
 			};
 			writer.PersistActualAgentReadModel(state);
-			var target = Reader;
 
-			var result = target.GetActualAgentStates().Single();
+			var result = Persister.GetActualAgentStates().Single();
 
 			result.PersonId.Should().Be(state.PersonId);
 			result.RuleId.Should().Be(state.RuleId);
@@ -116,12 +111,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldReadActualAgentStateWithoutBusinessUnit()
 		{
-			var writer = Writer;
+			var writer = Persister;
 			writer.PersistActualAgentReadModel(new AgentStateReadModelForTest());
 			setBusinessUnitInDbToNull();
-			var reader = Reader;
 
-			reader.GetActualAgentStates().Single()
+			Persister.GetActualAgentStates().Single()
 				.BusinessUnitId
 				.Should().Be(Guid.Empty);
 		}
@@ -145,9 +139,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				ReceivedTime = "2015-03-06 15:19".Utc(),
 				OriginalDataSourceId = "6"
 			};
-			Writer.PersistActualAgentReadModel(state);
+			Persister.PersistActualAgentReadModel(state);
 
-			Reader.GetAgentsNotInSnapshot("2015-03-06 15:20".Utc(), "6")
+			Persister.GetMissingAgentStatesFromBatch("2015-03-06 15:20".Utc(), "6")
 				.Single(x => x.PersonId == personId).Should().Not.Be.Null();
 		}
 
@@ -172,9 +166,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				ReceivedTime = "2015-03-06 15:19".Utc(),
 				OriginalDataSourceId = "6"
 			};
-			Writer.PersistActualAgentReadModel(agentStateReadModel);
+			Persister.PersistActualAgentReadModel(agentStateReadModel);
 
-			var result = Reader.GetAgentsNotInSnapshot("2015-03-06 15:20".Utc(), "6")
+			var result = Persister.GetMissingAgentStatesFromBatch("2015-03-06 15:20".Utc(), "6")
 				.Single(x => x.PersonId == personId);
 
 			result.BusinessUnitId.Should().Be(agentStateReadModel.BusinessUnitId);
@@ -204,7 +198,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 					command.ExecuteNonQuery();
 			}
 			
-			Assert.DoesNotThrow(() => Reader.GetAgentsNotInSnapshot("2015-04-21 8:15".Utc(), "2"));
+			Assert.DoesNotThrow(() => Persister.GetMissingAgentStatesFromBatch("2015-04-21 8:15".Utc(), "2"));
 		}
 	}
 }

@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Infrastructure.Analytics;
@@ -77,6 +80,52 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.SetParameter("AlarmColor", model.AlarmColor)
 				.ExecuteUpdate();
 		}
+
+
+
+		[AnalyticsUnitOfWork]
+		public virtual IEnumerable<AgentStateReadModel> GetActualAgentStates()
+		{
+			var sql = AgentStateReadModelReader.SelectActualAgentState();
+			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateReadModel)))
+				.SetReadOnly(true)
+				.List<AgentStateReadModel>();
+		}
+
+		[InfoLog]
+		[AnalyticsUnitOfWork]
+		public virtual AgentStateReadModel GetCurrentActualAgentState(Guid personId)
+		{
+			var sql = AgentStateReadModelReader.SelectActualAgentState() + "WHERE PersonId = :PersonId";
+			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
+				.SetParameter("PersonId", personId)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateReadModel)))
+				.SetReadOnly(true)
+				.List<AgentStateReadModel>()
+				.FirstOrDefault();
+		}
+
+		[InfoLog]
+		[AnalyticsUnitOfWork]
+		public virtual IEnumerable<AgentStateReadModel> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
+		{
+			var sql = AgentStateReadModelReader.SelectActualAgentState() +
+					  @"WHERE 
+						OriginalDataSourceId = :OriginalDataSourceId
+						AND (
+							BatchId < :BatchId
+							OR 
+							BatchId IS NULL
+							)";
+			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
+				.SetParameter("BatchId", batchId)
+				.SetParameter("OriginalDataSourceId", dataSourceId)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateReadModel)))
+				.SetReadOnly(true)
+				.List<AgentStateReadModel>();
+		}
+		
 
 		[AnalyticsUnitOfWork]
 		public virtual void Delete(Guid personId)

@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 	public class AgentStateReadModelPersisterTest
 	{
 		public IAgentStateReadModelPersister Target;
-		public IAgentStateReadModelReader Reader;
 
 		[Test]
 		public void ShouldPersistModel()
@@ -22,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.PersistActualAgentReadModel(state);
 
-			var result = Reader.GetCurrentActualAgentState(state.PersonId);
+			var result = Target.GetCurrentActualAgentState(state.PersonId);
 			result.Should().Not.Be.Null();
 		}
 
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.PersistActualAgentReadModel(state);
 
-			Reader.GetCurrentActualAgentState(state.PersonId)
+			Target.GetCurrentActualAgentState(state.PersonId)
 				.BusinessUnitId.Should().Be(businessUnitId);
 		}
 
@@ -46,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.PersistActualAgentReadModel(state);
 
-			Reader.GetCurrentActualAgentState(state.PersonId)
+			Target.GetCurrentActualAgentState(state.PersonId)
 				.TeamId.Should().Be(teamId);
 		}
 
@@ -58,7 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.PersistActualAgentReadModel(state);
 
-			Reader.GetCurrentActualAgentState(state.PersonId)
+			Target.GetCurrentActualAgentState(state.PersonId)
 				.SiteId.Should().Be(siteId);
 		}
 
@@ -98,8 +97,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				RuleColor = null,
 			});
 
-			var result = Reader.GetCurrentActualAgentState(personId);
-			result.Should().Not.Be.Null();
+			Target.GetCurrentActualAgentState(personId)
+				.Should().Not.Be.Null();
 		}
 
 
@@ -110,7 +109,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.PersistActualAgentReadModel(state);
 
-			Reader.GetCurrentActualAgentState(state.PersonId)
+			Target.GetCurrentActualAgentState(state.PersonId)
 				.AlarmStartTime.Should().Be("2015-12-11 08:00".Utc());
 		}
 
@@ -121,7 +120,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.PersistActualAgentReadModel(state);
 
-			Reader.GetCurrentActualAgentState(state.PersonId)
+			Target.GetCurrentActualAgentState(state.PersonId)
 				.IsAlarm.Should().Be(true);
 		}
 
@@ -132,7 +131,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.PersistActualAgentReadModel(state);
 
-			Reader.GetCurrentActualAgentState(state.PersonId)
+			Target.GetCurrentActualAgentState(state.PersonId)
 				.AlarmColor.Should().Be(Color.Red.ToArgb());
 		}
 
@@ -145,7 +144,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Delete(personId);
 
-			Reader.GetCurrentActualAgentState(personId).Should()
+			Target.GetCurrentActualAgentState(personId).Should()
 				.Be.Null();
 		}
 	}
