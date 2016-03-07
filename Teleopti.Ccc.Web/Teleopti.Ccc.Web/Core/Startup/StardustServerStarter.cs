@@ -8,29 +8,25 @@ namespace Teleopti.Ccc.Web.Core.Startup
 {
 	public class StardustServerStarter
 	{
-		private readonly IComponentContext  _componentContext;
 		private readonly ILifetimeScope _scope;
 
-		public StardustServerStarter(IComponentContext componentContext, ILifetimeScope scope)
+		public StardustServerStarter(ILifetimeScope scope)
 		{
-			_componentContext = componentContext;
 			_scope = scope;
 		}
 
 		public void Start(IAppBuilder app)
 		{
+			var scope = _scope.BeginLifetimeScope();
 			var managerConfiguration = new ManagerConfiguration
 			{
-				ConnectionString =
-						 ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString,
+				ConnectionString = ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString,
 				Route = ConfigurationManager.AppSettings["RouteName"],
 				AllowedNodeDownTimeSeconds = int.Parse(ConfigurationManager.AppSettings["AllowedNodeDownTimeSeconds"]),
 				CheckNewJobIntervalSeconds = int.Parse(ConfigurationManager.AppSettings["CheckNewJobIntervalSeconds"])
 			};
-			
-			app.UseStardustManager(managerConfiguration, _scope);
-
-			new ManagerStarter().Start(managerConfiguration, _componentContext);
+			app.UseStardustManager(managerConfiguration, scope);
+			new ManagerStarter().Start(managerConfiguration, scope);
 		}
 	}
 }
