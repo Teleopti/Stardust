@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
@@ -19,13 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		private IAnalyticsPersonPeriodRepository _personPeriodRepository;
 		private IPersonRepository _personRepository;
 
-		readonly Guid testPerson1Id = Guid.Parse("00000000-0000-0000-0000-000000000001");
-		readonly Guid testPerson2Id = Guid.Parse("00000000-0000-0000-0000-000000000002");
-		readonly Guid testPerson3Id = Guid.Parse("00000000-0000-0000-0000-000000000003");
-
-		readonly Guid testPersonPeriod1Id = Guid.Parse("00000000-0000-0000-0000-000000000001");
-		readonly Guid testPersonPeriod2Id = Guid.Parse("00000000-0000-0000-0000-000000000002");
-		readonly Guid testPersonPeriod3Id = Guid.Parse("00000000-0000-0000-0000-000000000003");
+		private Guid testPerson1Id;
 
 		[SetUp]
 		public void Setup()
@@ -43,32 +38,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				Name = new Name("Test1", "Testsson"),
 				Email = "test1@test.se",
 				EmploymentNumber = "E321"
-			};
-			p1.SetId(testPerson1Id);
+			}.WithId();
 			var p2 = new Person
 			{
 				Name = new Name("Test2", "Testsson"),
 				Email = "test2@test.se",
 				EmploymentNumber = "E321"
-			};
-			p2.SetId(testPerson2Id);
+			}.WithId();
 			var p3 = new Person
 			{
 				Name = new Name("Test3", "Testsson"),
 				Email = "test3@test.se",
 				EmploymentNumber = "E321"
-			};
-			p3.SetId(testPerson3Id);
+			}.WithId();
 
+			testPerson1Id = p1.Id.Value;
 
 			_personRepository.Add(p1);
 			_personRepository.Add(p2);
 			_personRepository.Add(p3);
 
-
 			_target = new PersonPeriodAnalyticsUpdater(_personRepository, _personPeriodRepository);
-
-
 		}
 
 		[Test]
@@ -185,7 +175,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count());
 		}
 
-
 		[Test]
 		public void NewPersonPeriodOnDayAfterEndAnalyticsDate_HandlePersonPeriodChanged_NoNewPersonPeriodAddedInAnalytics()
 		{
@@ -202,7 +191,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			// Then
 			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count());
 		}
-
 
 		[Test]
 		public void NewPersonPeriodOnDayBeforeStartAnalyticsDate_HandlePersonPeriodChanged_NoNewPersonPeriodAddedInAnalytics()
