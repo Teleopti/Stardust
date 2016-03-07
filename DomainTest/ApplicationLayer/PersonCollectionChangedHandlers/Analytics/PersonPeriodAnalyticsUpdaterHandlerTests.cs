@@ -117,6 +117,110 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			Assert.AreEqual(2, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count());
 		}
 
+		[Test]
+		public void NewPersonPeriodWithLaterStart_HandlePersonPeriodChanged_NoNewPersonPeriodAddedInAnalytics()
+		{
+			// Given when adding person period
+			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
+			person.AddPersonPeriod(newTestPersonPeriod(new DateTime(2020, 1, 1)));
+
+			// When handling event
+			_target.Handle(new PersonCollectionChangedEvent()
+			{
+				PersonIdCollection = { testPerson1Id }
+			});
+
+			// Then
+			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count());
+		}
+
+		[Test]
+		public void NewPersonPeriodWithStartBeforeAnalyticsDates_HandlePersonPeriodChanged_NoNewPersonPeriodAddedInAnalytics()
+		{
+			// Given when adding person period
+			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
+			person.AddPersonPeriod(newTestPersonPeriod(new DateTime(2001, 1, 1)));
+
+			// When handling event
+			_target.Handle(new PersonCollectionChangedEvent()
+			{
+				PersonIdCollection = { testPerson1Id }
+			});
+
+			// Then
+			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count());
+		}
+
+		[Test]
+		public void NewPersonPeriodOnStartAnalyticsDate_HandlePersonPeriodChanged_NewPersonPeriodAddedInAnalytics()
+		{
+			// Given when adding person period
+			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
+			person.AddPersonPeriod(newTestPersonPeriod(new DateTime(2015, 1, 1)));
+
+			// When handling event
+			_target.Handle(new PersonCollectionChangedEvent()
+			{
+				PersonIdCollection = { testPerson1Id }
+			});
+
+			// Then
+			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count());
+		}
+
+		[Test]
+		public void NewPersonPeriodOnEndAnalyticsDate_HandlePersonPeriodChanged_NewPersonPeriodAddedInAnalytics()
+		{
+			// Given when adding person period
+			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
+			person.AddPersonPeriod(newTestPersonPeriod(new DateTime(2017, 12, 31)));
+
+			// When handling event
+			_target.Handle(new PersonCollectionChangedEvent()
+			{
+				PersonIdCollection = { testPerson1Id }
+			});
+
+			// Then
+			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count());
+		}
+
+
+		[Test]
+		public void NewPersonPeriodOnDayAfterEndAnalyticsDate_HandlePersonPeriodChanged_NoNewPersonPeriodAddedInAnalytics()
+		{
+			// Given when adding person period
+			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
+			person.AddPersonPeriod(newTestPersonPeriod((new DateTime(2017, 12, 31)).AddDays(1)));
+
+			// When handling event
+			_target.Handle(new PersonCollectionChangedEvent()
+			{
+				PersonIdCollection = { testPerson1Id }
+			});
+
+			// Then
+			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count());
+		}
+
+
+		[Test]
+		public void NewPersonPeriodOnDayBeforeStartAnalyticsDate_HandlePersonPeriodChanged_NoNewPersonPeriodAddedInAnalytics()
+		{
+			// Given when adding person period
+			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
+			person.AddPersonPeriod(newTestPersonPeriod((new DateTime(2015, 1, 1)).AddDays(-1)));
+
+			// When handling event
+			_target.Handle(new PersonCollectionChangedEvent()
+			{
+				PersonIdCollection = { testPerson1Id }
+			});
+
+			// Then
+			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count());
+		}
+
 		private static PersonPeriod newTestPersonPeriod(DateTime startDate, Guid? id = null)
 		{
 			var personPeriod = new PersonPeriod(new DateOnly(startDate),
