@@ -29,8 +29,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 		public void Handle(PersonCollectionChangedEvent @event)
 		{
-			// Check if new person
-			IAnalyticsPersonPeriod t = new AnalyticsPersonPeriod();
+			var personPeriodFilter = new PersonPeriodFilter(
+						_analyticsPersonPeriodRepository.MinDate().DateDate,
+						_analyticsPersonPeriodRepository.MaxDate().DateDate);
 
 			foreach (var personCodeGuid in @event.PersonIdCollection.Distinct())
 			{
@@ -42,16 +43,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 				var personPeriodsInAnalytics = _analyticsPersonPeriodRepository.GetPersonPeriods(personCodeGuid);
 
-				PersonPeriodFilter filter = new PersonPeriodFilter(
-					_analyticsPersonPeriodRepository.MinDate().DateDate,
-					_analyticsPersonPeriodRepository.MaxDate().DateDate);
-
-				PersonPeriodTransformer transformer = 
+				PersonPeriodTransformer transformer =
 					new PersonPeriodTransformer(_personRepository, _analyticsPersonPeriodRepository);
 
-				// Check if person period already exists in database
-				foreach (var personPeriod in filter.GetFiltered(person.PersonPeriodCollection))
+
+				foreach (var personPeriod in personPeriodFilter.GetFiltered(person.PersonPeriodCollection))
 				{
+					// Check if person period already exists in database
 					var existingPeriod = personPeriodsInAnalytics.FirstOrDefault(a => a.PersonPeriodCode.Equals(personPeriod.Id.Value));
 
 					if (existingPeriod != null)
@@ -75,7 +73,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 						var newAnalyticsPersonPeriod = transformer.Transform(person, personPeriod);
 						_analyticsPersonPeriodRepository.AddPersonPeriod(newAnalyticsPersonPeriod);
 					}
-					
 				}
 
 				// Check deleted person periods
@@ -88,8 +85,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				}
 			}
 		}
-
-		
 	}
 
 	public class AnalyticsPersonPeriod : IAnalyticsPersonPeriod
@@ -127,7 +122,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		public string Note { get; set; }
 		public DateTime EmploymentStartDate { get; set; }
 		public DateTime EmploymentEndDate { get; set; }
-		public int TimeZoneId { get; set; }
+		public int? TimeZoneId { get; set; }
 		public bool IsAgent { get; set; }
 		public bool IsUser { get; set; }
 		public int DatasourceId { get; set; }

@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public string Note { get; set; }
 		public DateTime EmploymentStartDate { get; set; }
 		public DateTime EmploymentEndDate { get; set; }
-		public int TimeZoneId { get; set; }
+		public int? TimeZoneId { get; set; }
 		public bool IsAgent { get; set; }
 		public bool IsUser { get; set; }
 		public int DatasourceId { get; set; }

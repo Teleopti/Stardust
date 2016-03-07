@@ -290,7 +290,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			.SetString("Note", personPeriod.Note)
 			.SetDateTime("EmploymentStartDate", personPeriod.EmploymentStartDate)
 			.SetDateTime("EmploymentEndDate", personPeriod.EmploymentEndDate)
-			.SetInt32("TimeZoneId", personPeriod.TimeZoneId)
 			.SetBoolean("IsAgent", personPeriod.IsAgent)
 			.SetBoolean("IsUser", personPeriod.IsUser)
 			.SetInt32("DatasourceId", personPeriod.DatasourceId)
@@ -314,6 +313,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				else
 				{
 					query.SetParameter("EmploymentTypeCode", null, NHibernateUtil.Int32);
+				}
+
+				if (personPeriod.TimeZoneId.HasValue)
+				{
+					query.SetInt32("TimeZoneId", personPeriod.TimeZoneId.Value);
+				}
+				else
+				{
+					query.SetParameter("TimeZoneId", null, NHibernateUtil.Int32);
 				}
 				query.ExecuteUpdate();
 			}
@@ -442,7 +450,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					.SetString("Note", personPeriod.Note)
 					.SetDateTime("EmploymentStartDate", personPeriod.EmploymentStartDate)
 					.SetDateTime("EmploymentEndDate", personPeriod.EmploymentEndDate)
-					.SetInt32("TimeZoneId", personPeriod.TimeZoneId)
+					
 					.SetBoolean("IsAgent", personPeriod.IsAgent)
 					.SetBoolean("IsUser", personPeriod.IsUser)
 					.SetInt32("DatasourceId", personPeriod.DatasourceId)
@@ -465,6 +473,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				else
 				{
 					query.SetParameter("EmploymentTypeCode", null, NHibernateUtil.Int32);
+				}
+				if (personPeriod.TimeZoneId.HasValue)
+				{
+					query.SetInt32("TimeZoneId", personPeriod.TimeZoneId.Value);
+				}
+				else
+				{
+					query.SetParameter("TimeZoneId", null, NHibernateUtil.Int32);
 				}
 
 				query.ExecuteUpdate();

@@ -37,7 +37,7 @@ namespace Teleopti.Interfaces.Infrastructure.Analytics
 		string Note { get; set; }
 		DateTime EmploymentStartDate { get; set; }
 		DateTime EmploymentEndDate { get; set; }
-		int TimeZoneId { get; set; }
+		int? TimeZoneId { get; set; }
 		bool IsAgent { get; set; }
 		bool IsUser { get; set; }
 		int DatasourceId { get; set; }
