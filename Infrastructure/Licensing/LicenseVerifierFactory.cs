@@ -1,4 +1,3 @@
-using System;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -27,28 +26,21 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 			return new LicenseVerifier(
 				licenseFeedback,
 				unitOfWorkFactory,
-				_licenseRepository.MakeRepository()
+				_licenseRepository.MakeRepository(unitOfWorkFactory)
 				);
 		}
 	}
 
 	public interface ILicenseRepositoryForLicenseVerifier
 	{
-		ILicenseRepository MakeRepository();
+		ILicenseRepository MakeRepository(IUnitOfWorkFactory unitOfWorkFactory);
 	}
 
 	public class LicenseRepositoryForLicenseVerifier : ILicenseRepositoryForLicenseVerifier
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-
-		public LicenseRepositoryForLicenseVerifier(IUnitOfWorkFactory unitOfWorkFactory)
+		public ILicenseRepository MakeRepository(IUnitOfWorkFactory unitOfWorkFactory)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
-		}
-
-		public ILicenseRepository MakeRepository()
-		{
-			return new LicenseRepository(new FromFactory(() => _unitOfWorkFactory));
+			return new LicenseRepository(new FromFactory(() => unitOfWorkFactory));
 		}
 	}
 
