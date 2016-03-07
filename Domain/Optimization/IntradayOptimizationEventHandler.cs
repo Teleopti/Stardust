@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class IntradayOptimization : IHandleEvent<OptimizationWasOrdered>, IRunInProcess
+	public class IntradayOptimizationEventHandler : IHandleEvent<OptimizationWasOrdered>, IRunInProcess
 	{
 		private readonly OptimizationPreferencesFactory _optimizationPreferencesFactory;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly IScheduleDictionaryPersister _persister;
 
-		public IntradayOptimization(OptimizationPreferencesFactory optimizationPreferencesFactory,
+		public IntradayOptimizationEventHandler(OptimizationPreferencesFactory optimizationPreferencesFactory,
 									Func<ISchedulerStateHolder> schedulerStateHolder,
 									DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
 									Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
