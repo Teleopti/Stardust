@@ -291,6 +291,7 @@ namespace Stardust.Manager
 									commandUpdate.Parameters["@Url"].Value = url;
 
 									commandUpdate.ExecuteNonQuery();
+									deadNodes.Add(url.ToString());
 								}
 							}
 						}
