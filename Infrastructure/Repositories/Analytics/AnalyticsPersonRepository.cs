@@ -347,6 +347,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
+		public void DeletePersonPeriod(IAnalyticsPersonPeriod analyticsPersonPeriod)
+		{
+			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				var query = uow.Session().CreateSQLQuery(
+					@"exec mart.[etl_dim_person_set_to_be_deleted] @person_period_code=:PersonPeriodCode")
+					.SetGuid("PersonPeriodCode", analyticsPersonPeriod.PersonPeriodCode);
+				query.ExecuteUpdate();
+			}
+		}
+
 		public void UpdatePersonPeriod(IAnalyticsPersonPeriod personPeriod)
 		{
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())

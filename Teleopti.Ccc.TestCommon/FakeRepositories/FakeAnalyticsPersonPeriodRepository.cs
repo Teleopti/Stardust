@@ -83,6 +83,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return 95;
 		}
 
+		public void DeletePersonPeriod(IAnalyticsPersonPeriod analyticsPersonPeriod)
+		{
+			throw new NotImplementedException();
+		}
+
 		public IList<IAnalyticsPersonPeriod> GetPersonPeriods(Guid personCode)
 		{
 			return fakePersonPeriods.Where(a => a.PersonCode.Equals(personCode)).ToArray();

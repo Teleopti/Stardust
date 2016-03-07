@@ -77,6 +77,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					}
 					
 				}
+
+				// Check deleted person periods
+				foreach (var analyticsPersonPeriod in personPeriodsInAnalytics)
+				{
+					if (!person.PersonPeriodCollection.Any(a => a.Id.Equals(analyticsPersonPeriod.PersonPeriodCode)))
+					{
+						_analyticsPersonPeriodRepository.DeletePersonPeriod(analyticsPersonPeriod);
+					}
+				}
 			}
 		}
 

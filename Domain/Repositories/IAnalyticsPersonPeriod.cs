@@ -26,6 +26,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IAnalyticsDate Date(DateTime date);
 		int IntervalsPerDay();
 		int MaxIntervalId();
-
+		void DeletePersonPeriod(IAnalyticsPersonPeriod analyticsPersonPeriod);
 	}
 }
