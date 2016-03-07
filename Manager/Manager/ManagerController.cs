@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -22,25 +23,13 @@ namespace Stardust.Manager
 		public ManagerController(INodeManager nodeManager,
 		                         JobManager jobManager)
 		{
-
-			WhoAmI = 
-				"[MANAGER, " + Environment.MachineName.ToUpper() + "]";
-
 			_nodeManager = nodeManager;
 			_jobManager = jobManager;			
 		}
 
-		public string WhoAmI { get; private set; }
-
 		[HttpPost, Route(ManagerRouteConstants.Job)]
 		public IHttpActionResult DoThisJob([FromBody] JobRequestModel job)
 		{
-			var baseUrl =
-				Request.RequestUri.GetLeftPart(UriPartial.Authority);
-
-			WhoAmI =
-				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
-
 			if (job == null)
 			{
 				return new BadRequestResult(Request);
@@ -62,11 +51,10 @@ namespace Stardust.Manager
 				UserName = job.UserName,
 				Id = Guid.NewGuid()
 			};
-
 			_jobManager.Add(jobReceived);
 
 			var msg = string.Format("{0} : New job received from client ( jobId, jobName ) : ( {1}, {2} )",
-			                        WhoAmI,
+			                        WhoAmI(Request),
 			                        jobReceived.Id,
 			                        jobReceived.Name);
 
@@ -81,14 +69,8 @@ namespace Stardust.Manager
 		[HttpDelete, Route(ManagerRouteConstants.CancelJob)]
 		public IHttpActionResult CancelThisJob(Guid jobId)
 		{
-			var baseUrl =
-				Request.RequestUri.GetLeftPart(UriPartial.Authority);
-
-			WhoAmI =
-				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
-
 			LogHelper.LogInfoWithLineNumber(Logger,
-			                                WhoAmI + ": Received job cancel from client ( jobId ) : ( " + jobId + " )");
+											WhoAmI(Request) + ": Received job cancel from client ( jobId ) : ( " + jobId + " )");
 
 			_jobManager.CancelThisJob(jobId);
 
@@ -98,12 +80,6 @@ namespace Stardust.Manager
 		[HttpGet, Route(ManagerRouteConstants.GetJobHistoryList)]
 		public IHttpActionResult JobHistoryList()
 		{
-			var baseUrl =
-				Request.RequestUri.GetLeftPart(UriPartial.Authority);
-
-			WhoAmI =
-				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
-
 			var jobHistory = _jobManager.GetJobHistoryList();
 
 			return Ok(jobHistory);
@@ -112,12 +88,6 @@ namespace Stardust.Manager
 		[HttpGet, Route(ManagerRouteConstants.GetJobHistory)]
 		public IHttpActionResult JobHistory(Guid jobId)
 		{
-			var baseUrl =
-				Request.RequestUri.GetLeftPart(UriPartial.Authority);
-
-			WhoAmI =
-				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
-
 			var jobHistory = _jobManager.GetJobHistory(jobId);
 
 			return Ok(jobHistory);
@@ -126,12 +96,6 @@ namespace Stardust.Manager
 		[HttpGet, Route(ManagerRouteConstants.JobDetail)]
 		public IHttpActionResult JobHistoryDetails(Guid jobId)
 		{
-			var baseUrl =
-				Request.RequestUri.GetLeftPart(UriPartial.Authority);
-
-			WhoAmI =
-				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
-
 			var jobHistoryDetail = _jobManager.JobHistoryDetails(jobId);
 
 			return Ok(jobHistoryDetail);
@@ -140,37 +104,25 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.Heartbeat)]
 		public IHttpActionResult Heartbeat([FromBody] Uri nodeUri)
 		{
-			var baseUrl =
-				Request.RequestUri.GetLeftPart(UriPartial.Authority);
-
-			WhoAmI =
-				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
-
 			if (nodeUri != null)
 			{
 				Task.Factory.StartNew(() => { _jobManager.RegisterHeartbeat(nodeUri.ToString()); });
 
 				LogHelper.LogInfoWithLineNumber(Logger,
-				                                WhoAmI + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
+												WhoAmI(Request) + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
 				return Ok();
 			}
 
 			LogHelper.LogWarningWithLineNumber(Logger,
-			                                   WhoAmI + ": Received heartbeat from Node with invalid uri.");
+											   WhoAmI(Request) + ": Received heartbeat from Node with invalid uri.");
 			return BadRequest();
 		}
 
 		[HttpPost, Route(ManagerRouteConstants.JobDone)]
 		public IHttpActionResult JobDone(Guid jobId)
 		{
-			var baseUrl =
-				Request.RequestUri.GetLeftPart(UriPartial.Authority);
-
-			WhoAmI =
-				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
-
 			LogHelper.LogInfoWithLineNumber(Logger,
-			                                WhoAmI + ": Received job done from a Node ( jobId ) : ( " + jobId + " )");
+											WhoAmI(Request) + ": Received job done from a Node ( jobId ) : ( " + jobId + " )");
 
 			Task.Factory.StartNew(() =>
 			{
@@ -186,14 +138,10 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.JobFailed)]
 		public IHttpActionResult JobFailed(Guid jobId)
 		{
-			var baseUrl =
-				Request.RequestUri.GetLeftPart(UriPartial.Authority);
-
-			WhoAmI =
-				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
+			
 
 			LogHelper.LogErrorWithLineNumber(Logger,
-			                                 WhoAmI + ": Received job failed from a Node ( jobId ) : ( " + jobId + " )");
+											 WhoAmI(Request) + ": Received job failed from a Node ( jobId ) : ( " + jobId + " )");
 
 			Task.Factory.StartNew(() =>
 			{
@@ -209,14 +157,9 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.JobHasBeenCanceled)]
 		public IHttpActionResult JobCanceled(Guid jobId)
 		{
-			var baseUrl =
-				Request.RequestUri.GetLeftPart(UriPartial.Authority);
-
-			WhoAmI =
-				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
 
 			LogHelper.LogInfoWithLineNumber(Logger,
-			                                WhoAmI + ": Received cancel from a Node ( jobId ) : ( " + jobId + " )");
+											WhoAmI(Request) + ": Received cancel from a Node ( jobId ) : ( " + jobId + " )");
 
 			Task.Factory.StartNew(() =>
 			{
@@ -232,11 +175,6 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.JobProgress)]
 		public IHttpActionResult JobProgress([FromBody] JobProgressModel model)
 		{
-			var baseUrl =
-				Request.RequestUri.GetLeftPart(UriPartial.Authority);
-
-			WhoAmI =
-				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
 
 			if (model == null)
 			{
@@ -257,11 +195,6 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.NodeHasBeenInitialized)]
 		public IHttpActionResult NodeInitialized([FromBody] Uri nodeUri)
 		{
-			var baseUrl =
-				Request.RequestUri.GetLeftPart(UriPartial.Authority);
-
-			WhoAmI =
-				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
 
 			Task.Factory.StartNew(() =>
 			{
@@ -271,7 +204,7 @@ namespace Stardust.Manager
 			});
 
 			LogHelper.LogInfoWithLineNumber(Logger,
-			                                WhoAmI + ": Received init from Node. Node Uri : ( " + nodeUri + " )");
+											WhoAmI(Request) + ": Received init from Node. Node Uri : ( " + nodeUri + " )");
 
 			return Ok();
 		}
@@ -279,11 +212,6 @@ namespace Stardust.Manager
 		[HttpGet, Route(ManagerRouteConstants.Ping)]
 		public IHttpActionResult Ping()
 		{
-			var baseUrl =
-				Request.RequestUri.GetLeftPart(UriPartial.Authority);
-
-			WhoAmI =
-				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
 
 			return Ok();
 		}
@@ -291,15 +219,23 @@ namespace Stardust.Manager
 		[HttpGet, Route(ManagerRouteConstants.Nodes)]
 		public IHttpActionResult Nodes()
 		{
-			var baseUrl =
-				Request.RequestUri.GetLeftPart(UriPartial.Authority);
-
-			WhoAmI =
-				"[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
+			
 
 			var workernodes = _jobManager.Nodes();
 
 			return Ok(workernodes);
+		}
+
+		private string WhoAmI(HttpRequestMessage Request)
+		{
+			if (Request != null)
+			{
+				var baseUrl =
+				Request.RequestUri.GetLeftPart(UriPartial.Authority);
+				
+				return "[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
+			}
+			return "[MANAGER, " + Environment.MachineName.ToUpper() + "]";
 		}
 	}
 }
