@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class StateStreamSynchronizer
 	{
-		private readonly INow _now;
 		private readonly RtaProcessor _processor;
 		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
 		private readonly IEventPublisherScope _eventPublisherScope;
@@ -16,7 +15,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IStateContextLoader _stateContextLoader;
 
 		public StateStreamSynchronizer(
-			INow now,
 			RtaProcessor processor,
 			IAgentStateReadModelReader agentStateReadModelReader,
 			IEventPublisherScope eventPublisherScope,
@@ -25,7 +23,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IStateContextLoader stateContextLoader
 			)
 		{
-			_now = now;
 			_processor = processor;
 			_agentStateReadModelReader = agentStateReadModelReader;
 			_eventPublisherScope = eventPublisherScope;
@@ -48,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			using (_eventPublisherScope.OnThisThreadPublishTo(new SyncPublishTo(_resolver, handler)))
 			{
-				_stateContextLoader.ForStates(states, context =>
+				_stateContextLoader.ForSynchronize(states, context =>
 				{
 					_processor.Process(context);
 				});

@@ -13,8 +13,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		void For(ExternalUserStateInputModel input, Action<StateContext> action);
 		void ForAll(Action<StateContext> action);
-		void ForNotInBatchOf(ExternalUserStateInputModel input, Action<StateContext> action);
-		void ForStates(IEnumerable<AgentStateReadModel> states, Action<StateContext> action);
+		void ForClosingSnapshot(ExternalUserStateInputModel input, Action<StateContext> action);
+		void ForSynchronize(IEnumerable<AgentStateReadModel> states, Action<StateContext> action);
 	}
 
 	public class PersonLocker
@@ -152,9 +152,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			}
 		}
 
-		public virtual void ForNotInBatchOf(ExternalUserStateInputModel input, Action<StateContext> action)
+		public virtual void ForClosingSnapshot(ExternalUserStateInputModel input, Action<StateContext> action)
 		{
-			var missingAgents = _agentStateReadModelReader.GetMissingAgentStatesFromBatch(input.BatchId, input.SourceId);
+			var missingAgents = _agentStateReadModelReader.GetAgentsNotInSnapshot(input.BatchId, input.SourceId);
 			var agentsNotAlreadyLoggedOut = from a in missingAgents
 				let state = _stateMapper.StateFor(
 					_stateMappingLoader.Cached(),
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		}
 
-		public virtual void ForStates(IEnumerable<AgentStateReadModel> states, Action<StateContext> action)
+		public virtual void ForSynchronize(IEnumerable<AgentStateReadModel> states, Action<StateContext> action)
 		{
 			states.ForEach(x =>
 			{
@@ -404,9 +404,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				});
 		}
 
-		public virtual void ForNotInBatchOf(ExternalUserStateInputModel input, Action<StateContext> action)
+		public virtual void ForClosingSnapshot(ExternalUserStateInputModel input, Action<StateContext> action)
 		{
-			var missingAgents = _agentStateReadModelReader.GetMissingAgentStatesFromBatch(input.BatchId, input.SourceId);
+			var missingAgents = _agentStateReadModelReader.GetAgentsNotInSnapshot(input.BatchId, input.SourceId);
 			var agentsNotAlreadyLoggedOut = from a in missingAgents
 											let state = _stateMapper.StateFor(
 												_stateMappingLoader.Cached(),
@@ -439,7 +439,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		}
 
-		public virtual void ForStates(IEnumerable<AgentStateReadModel> states, Action<StateContext> action)
+		public virtual void ForSynchronize(IEnumerable<AgentStateReadModel> states, Action<StateContext> action)
 		{
 			states.ForEach(x =>
 			{

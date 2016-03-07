@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			input.StateCode = "CCC Logged out";
 			input.PlatformTypeId = Guid.Empty.ToString();
 
-			_stateContextLoader.ForNotInBatchOf(input, agent =>
+			_stateContextLoader.ForClosingSnapshot(input, agent =>
 			{
 				_processor.Process(agent);
 			});
