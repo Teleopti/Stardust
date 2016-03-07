@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
@@ -8,14 +9,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class StateMappingLoader : IStateMappingLoader
 	{
 		private readonly IRtaStateGroupRepository _stateGroupRepository;
+		private Guid x = Guid.NewGuid();
 
 		public StateMappingLoader(IRtaStateGroupRepository stateGroupRepository)
 		{
 			_stateGroupRepository = stateGroupRepository;
 		}
 
-		[AllBusinessUnitsUnitOfWork]
 		public virtual IEnumerable<StateMapping> Cached()
+		{
+			return Load();
+		}
+
+		[AllBusinessUnitsUnitOfWork]
+		public virtual IEnumerable<StateMapping> Load()
 		{
 			var groups = _stateGroupRepository.LoadAll();
 			return (

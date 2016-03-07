@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		IFakeDataBuilder WithRule(Guid? ruleId, string stateCode, Guid? platformTypeId, Guid? activityId, int staffingEffect, string name, bool isLoggedOutState, Adherence? adherence);
 		IFakeDataBuilder WithAlarm(TimeSpan threshold);
 		IFakeDataBuilder WithDefaultStateGroup();
+		IFakeDataBuilder WithStateGroup(string statecode, string stateGroupName);
 		IFakeDataBuilder WithStateCode(string statecode);
 		IFakeDataBuilder WithStateCode(string statecode, string platformTypeId);
 		IFakeDataBuilder WithExistingState(Guid personId, string stateCode, int staffingEffect);
@@ -356,6 +357,22 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				defaultStateGroup.SetBusinessUnit(_businessUnit);
 				RtaStateGroupRepository.Add(defaultStateGroup);
 			}
+			return this;
+		}
+
+		public IFakeDataBuilder WithStateGroup(string statecode, string stateGroupName)
+		{
+			var stateGroup = new RtaStateGroup(stateGroupName, false, false);
+			stateGroup.SetId(Guid.NewGuid());
+			stateGroup.SetBusinessUnit(_businessUnit);
+			stateGroup.AddState(statecode, statecode, Guid.Empty);
+			RtaStateGroupRepository.Add(stateGroup);
+			return this;
+		}
+
+		public IFakeDataBuilder ClearStateGroups()
+		{
+			RtaStateGroupRepository.Clear();
 			return this;
 		}
 

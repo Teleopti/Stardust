@@ -54,5 +54,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			throw new NotImplementedException();
 		}
+
+		public void Clear()
+		{
+			_data.Clear();
+		}
 	}
 }

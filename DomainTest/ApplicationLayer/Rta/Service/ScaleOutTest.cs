@@ -66,12 +66,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				UserCode = "usercode",
 				StateCode = "phone"
 			});
+			EventPublisher.Clear();
 
 			Database
 				.ClearRuleMap()
 				.WithRule("phone", phone, 0, Adherence.In)
 				.WithRule("admin", phone, 0, Adherence.Neutral);
-			EventPublisher.Clear();
 			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
@@ -79,6 +79,35 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 
 			EventPublisher.PublishedEvents.OfType<PersonNeutralAdherenceEvent>().Should().Not.Be.Empty();
+		}
+
+		[Test]
+		[Toggle(Toggles.RTA_AdherenceDetails_34267)]
+		public void ShouldNotCacheStateGroups()
+		{
+			var personId = Guid.NewGuid();
+			Database
+				.WithUser("usercode", personId)
+				.WithStateGroup("phone", "Ready")
+				;
+			Now.Is("2016-03-04 9:00");
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+			EventPublisher.Clear();
+
+			Database
+				.ClearStateGroups()
+				.WithStateGroup("phone", "InCall");
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+
+			EventPublisher.PublishedEvents.OfType<PersonStateChangedEvent>().Should().Not.Be.Empty();
 		}
 
 	}

@@ -22,19 +22,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_appliedAdherence = appliedAdherence;
 		}
 
-		[AllBusinessUnitsUnitOfWork]
 		public virtual IEnumerable<RuleMapping> Cached()
 		{
-			return inner();
+			return Load();
 		}
 
 		[AllBusinessUnitsUnitOfWork]
 		public virtual IEnumerable<RuleMapping> Load()
-		{
-			return inner();
-		}
-
-		private IEnumerable<RuleMapping> inner()
 		{
 			var mappings = _rtaMapRepository.LoadAll();
 			return (

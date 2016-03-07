@@ -5,5 +5,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public interface IStateMappingLoader
 	{
 		IEnumerable<StateMapping> Cached();
+		IEnumerable<StateMapping> Load();
 	}
 }
