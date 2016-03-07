@@ -11,13 +11,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	    IList<AgentStateReadModel> LoadForTeam(Guid teamId);
 		IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds, bool? inAlarmOnly, bool? alarmTimeDesc);
 		IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds, bool? inAlarmOnly, bool? alarmTimeDesc);
-<<<<<<< local
-		IEnumerable<AgentStateReadModel> GetAgentsNotInSnapshot(DateTime batchId, string dataSourceId);
-=======
 
 		IEnumerable<AgentStateReadModel> GetAgentsNotInSnapshot(DateTime batchId, string dataSourceId);
-
->>>>>>> other
 		AgentStateReadModel GetCurrentActualAgentState(Guid personId);
 		IEnumerable<AgentStateReadModel> GetActualAgentStates();
     }
