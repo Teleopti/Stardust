@@ -104,7 +104,7 @@ namespace Stardust.Manager
 							                                 "Job ( id , name ) is deleted due to the node executing it died. ( " + job.Id +
 							                                 " , " + job.Name + " )");
 
-							SetEndResultOnJobAndRemoveIt(job.Id, "fatal");
+							SetEndResultOnJobAndRemoveIt(job.Id, "Fatal Node Failure");
 						}
 					}
 				}

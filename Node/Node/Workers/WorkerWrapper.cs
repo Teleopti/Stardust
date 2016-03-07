@@ -132,15 +132,15 @@ namespace Stardust.Node.Workers
 		public IHttpActionResult StartJob(JobToDo jobToDo,
 		                                  HttpRequestMessage requestMessage)
 		{
-
-			Type typ = NodeConfiguration.HandlerAssembly.GetType(jobToDo.Type);
-
 			CancellationTokenSource = new CancellationTokenSource();
 			object deSer;
 			try
 			{
+				Type typ = NodeConfiguration.HandlerAssembly.GetType(jobToDo.Type);
 				deSer = JsonConvert.DeserializeObject(jobToDo.Serialized,
 				                                      typ);
+				CurrentMessageToProcess = jobToDo;
+
 			}
 			catch (Exception)
 			{
