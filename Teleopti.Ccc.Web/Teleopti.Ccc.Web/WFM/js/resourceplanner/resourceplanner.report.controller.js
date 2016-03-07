@@ -14,6 +14,7 @@
 				$scope.isDataAvailable = scheduleResult.length > 0;
 				$scope.dayNodes = scheduleResult;
 				$scope.optimizeRunning = false;
+				$scope.optimizationHasBeenRun = false;
 
 				toggleService.togglesLoaded.then(function() {
 					toggledOptimization = toggleService.Scheduler_IntradayOptimization_36617;
@@ -41,8 +42,10 @@
 							id: $stateParams.id
 						}).$promise.then(function(result) {
 							$scope.optimizeRunning = false;
-							$scope.dayNodes = result.SkillResultList;
-							notifyOptimization();
+							$scope.optimizationHasBeenRun = true;
+							//Untill further notice the intraOptimize results will be disabled
+							//$scope.dayNodes = result.SkillResultList;
+							notifyOptimizationDone();
 						}, function(reason) {
 							$scope.optimizeRunning = false;
 						});
@@ -54,7 +57,7 @@
 					PlanningPeriodSvrc.keepAlive();
 				}, tenMinutes);
 
-				var notifyOptimization = function(status) {
+				var notifyOptimizationDone = function() {
 					growl.success("<i class='mdi mdi-thumb-up'></i>" + $translate.instant('Done'), {
 						ttl: 0,
 						disableCountDown: true
