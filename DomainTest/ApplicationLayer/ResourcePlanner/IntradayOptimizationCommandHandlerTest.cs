@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -24,9 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 		public void ShouldSetPeriod()
 		{
 			var agent = new Person().WithId();
-			var personPeriod = new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team());
-			personPeriod.AddPersonSkill(new PersonSkill(new Skill().WithId(), new Percent(1)));
-			agent.AddPersonPeriod(personPeriod);
+			agent.AddPeriodWithSkill(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()), new Skill().WithId());
 			var period = new DateOnlyPeriod(2015, 10, 12, 2016,1,1);
 
 			Target.Execute(new IntradayOptimizationCommand {Period = period, Agents = new[] {agent}});
@@ -39,9 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 		public void ShouldSetAgentIds()
 		{
 			var agent = new Person().WithId();
-			var period = new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team());
-			period.AddPersonSkill(new PersonSkill(new Skill().WithId(), new Percent(1)));
-			agent.AddPersonPeriod(period);
+			agent.AddPeriodWithSkill(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()), new Skill().WithId());
 
 			Target.Execute(new IntradayOptimizationCommand { Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10), Agents = new [] { agent }});
 
@@ -55,13 +50,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			var skill1 = new Skill().WithId();
 			var skill2 = new Skill().WithId();
 			var agent1 = new Person().WithId();
-			var period1 = new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team());
-			period1.AddPersonSkill(new PersonSkill(skill1, new Percent(1)));
-			agent1.AddPersonPeriod(period1);
+			agent1.AddPeriodWithSkill(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()), skill1);
 			var agent2 = new Person().WithId();
-			var period2 = new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team());
-			period2.AddPersonSkill(new PersonSkill(skill2, new Percent(1)));
-			agent2.AddPersonPeriod(period2);
+			agent2.AddPeriodWithSkill(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()), skill2);
+		
 
 			Target.Execute(new IntradayOptimizationCommand
 			{

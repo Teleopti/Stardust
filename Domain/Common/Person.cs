@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
@@ -814,5 +815,12 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			return base.GetHashCode() ^ 431;
 		}
-    }
+
+		//Added mainly for easier testing. Not yet part of IPerson
+		public virtual void AddPeriodWithSkill(PersonPeriod period, ISkill skill)
+		{
+			period.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+			AddPersonPeriod(period);
+		}
+	}
 }

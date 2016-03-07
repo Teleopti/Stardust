@@ -19,10 +19,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			var skillDic = new Dictionary<string, ICollection<IPerson>>();
 			foreach (var agent in command.Agents)
 			{
+				ICollection<IPerson> agentsIsland;
 				var skillString = string.Join("$", agent.Period(command.Period.StartDate).PersonSkillCollection.Select(x => x.Skill.Id.Value));
-				if(!skillDic.ContainsKey(skillString))
-					skillDic[skillString] = new List<IPerson>();
-				skillDic[skillString].Add(agent);
+				if (skillDic.TryGetValue(skillString, out agentsIsland))
+				{
+					agentsIsland.Add(agent);
+				}
+				else
+				{
+					skillDic[skillString] = new List<IPerson> {agent};
+				}
 			}
 
 			foreach (var skillKeyValue in skillDic)
