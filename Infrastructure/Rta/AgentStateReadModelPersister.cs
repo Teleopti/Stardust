@@ -1,82 +1,92 @@
 ﻿using System;
-using System.Data;
-using System.Data.SqlClient;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Infrastructure.Util;
+using Teleopti.Ccc.Infrastructure.Analytics;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class AgentStateReadModelPersister : IAgentStateReadModelPersister
 	{
-		private readonly CloudSafeSqlExecute executor = new CloudSafeSqlExecute();
-		private readonly Func<SqlConnection> _connection;
+		private readonly ICurrentAnalyticsUnitOfWork _unitOfWork;
 
-		public AgentStateReadModelPersister(IConnectionStrings connectionStrings)
+		public AgentStateReadModelPersister(ICurrentAnalyticsUnitOfWork unitOfWork)
 		{
-			_connection = () =>
-			{
-				var conn = new SqlConnection(connectionStrings.Analytics());
-				conn.Open();
-				return conn;
-			};
+			_unitOfWork = unitOfWork;
 		}
 
 		[InfoLog]
+		[AnalyticsUnitOfWork]
 		public virtual void PersistActualAgentReadModel(AgentStateReadModel model)
 		{
-			executor.Run(_connection, connection =>
-			{
-				var command = connection.CreateCommand();
-				command.CommandType = CommandType.StoredProcedure;
-				command.CommandText = "[RTA].[rta_addorupdate_actualagentstate]";
-
-				command.Parameters.Add("@PersonId", SqlDbType.UniqueIdentifier).Value = model.PersonId;
-				command.Parameters.Add("@BatchId", SqlDbType.DateTime).Value = model.BatchId ?? (object)DBNull.Value;
-				command.Parameters.Add("@BusinessUnitId", SqlDbType.UniqueIdentifier).Value = model.BusinessUnitId;
-				command.Parameters.Add("@SiteId", SqlDbType.UniqueIdentifier).Value = model.SiteId ?? (object)DBNull.Value;
-				command.Parameters.Add("@TeamId", SqlDbType.UniqueIdentifier).Value = model.TeamId ?? (object)DBNull.Value;
-				command.Parameters.Add("@OriginalDataSourceId", SqlDbType.NVarChar).Value = model.OriginalDataSourceId ?? (object)DBNull.Value;
-				command.Parameters.Add("@PlatformTypeId", SqlDbType.UniqueIdentifier).Value = model.PlatformTypeId;
-				command.Parameters.Add("@ReceivedTime", SqlDbType.DateTime).Value = model.ReceivedTime;
-
-				command.Parameters.Add("@Scheduled", SqlDbType.NVarChar).Value = model.Scheduled;
-				command.Parameters.Add("@ScheduledId", SqlDbType.UniqueIdentifier).Value = model.ScheduledId;
-				command.Parameters.Add("@ScheduledNext", SqlDbType.NVarChar).Value = model.ScheduledNext;
-				command.Parameters.Add("@ScheduledNextId", SqlDbType.UniqueIdentifier).Value = model.ScheduledNextId;
-				command.Parameters.Add("@NextStart", SqlDbType.DateTime).Value = model.NextStart;
-
-				command.Parameters.Add("@StateCode", SqlDbType.NVarChar).Value = model.StateCode;
-				command.Parameters.Add("@State", SqlDbType.NVarChar).Value = model.StateName;
-				command.Parameters.Add("@StateId", SqlDbType.UniqueIdentifier).Value = model.StateId;
-				command.Parameters.Add("@StateStartTime", SqlDbType.DateTime).Value = model.StateStartTime;
-
-				command.Parameters.Add("@AlarmId", SqlDbType.UniqueIdentifier).Value = model.RuleId;
-				command.Parameters.Add("@AlarmName", SqlDbType.NVarChar).Value = model.RuleName;
-				command.Parameters.Add("@RuleStartTime", SqlDbType.DateTime).Value = model.RuleStartTime;
-				command.Parameters.Add("@Color", SqlDbType.Int).Value = model.RuleColor;
-				command.Parameters.Add("@StaffingEffect", SqlDbType.Float).Value = model.StaffingEffect;
-				command.Parameters.Add("@Adherence", SqlDbType.Int).Value = model.Adherence ?? (object)DBNull.Value;
-
-				command.Parameters.Add("@IsRuleAlarm", SqlDbType.Bit).Value = model.IsAlarm;
-				command.Parameters.Add("@AlarmStartTime", SqlDbType.DateTime).Value = model.AlarmStartTime;
-				command.Parameters.Add("@AlarmColor", SqlDbType.Int).Value = model.AlarmColor;
-
-				command.ExecuteNonQuery();
-			});
+			_unitOfWork.Current().Session()
+				.CreateSQLQuery(
+					@"EXEC [RTA].[rta_addorupdate_actualagentstate]
+					@PersonId = :PersonId,
+					@BatchId = :BatchId,
+					@BusinessUnitId = :BusinessUnitId,
+					@SiteId = :SiteId,
+					@TeamId = :TeamId,
+					@OriginalDataSourceId = :OriginalDataSourceId,
+					@PlatformTypeId = :PlatformTypeId,
+					@ReceivedTime = :ReceivedTime,
+					@Scheduled = :Scheduled,
+					@ScheduledId = :ScheduledId,
+					@ScheduledNext = :ScheduledNext,
+					@ScheduledNextId = :ScheduledNextId,
+					@NextStart = :NextStart,
+					@StateCode = :StateCode,
+					@State = :State,
+					@StateId = :StateId,
+					@StateStartTime = :StateStartTime,
+					@AlarmId = :AlarmId,
+					@AlarmName = :AlarmName,
+					@RuleStartTime = :RuleStartTime,
+					@Color = :Color,
+					@StaffingEffect = :StaffingEffect,
+					@Adherence = :Adherence,
+					@IsRuleAlarm = :IsRuleAlarm,
+					@AlarmStartTime = :AlarmStartTime,
+					@AlarmColor = :AlarmColor")
+				.SetParameter("PersonId", model.PersonId)
+				.SetParameter("BatchId", model.BatchId)
+				.SetParameter("BusinessUnitId", model.BusinessUnitId)
+				.SetParameter("SiteId", model.SiteId)
+				.SetParameter("TeamId", model.TeamId)
+				.SetParameter("OriginalDataSourceId", model.OriginalDataSourceId)
+				.SetParameter("PlatformTypeId", model.PlatformTypeId)
+				.SetParameter("ReceivedTime", model.ReceivedTime)
+				.SetParameter("Scheduled", model.Scheduled)
+				.SetParameter("ScheduledId", model.ScheduledId)
+				.SetParameter("ScheduledNext", model.ScheduledNext)
+				.SetParameter("ScheduledNextId", model.ScheduledNextId)
+				.SetParameter("NextStart", model.NextStart)
+				.SetParameter("StateCode", model.StateCode)
+				.SetParameter("State", model.StateName)
+				.SetParameter("StateId", model.StateId)
+				.SetParameter("StateStartTime", model.StateStartTime)
+				.SetParameter("AlarmId", model.RuleId)
+				.SetParameter("AlarmName", model.RuleName)
+				.SetParameter("RuleStartTime", model.RuleStartTime)
+				.SetParameter("Color", model.RuleColor)
+				.SetParameter("StaffingEffect", model.StaffingEffect)
+				.SetParameter("Adherence", model.Adherence)
+				.SetParameter("IsRuleAlarm", model.IsAlarm)
+				.SetParameter("AlarmStartTime", model.AlarmStartTime)
+				.SetParameter("AlarmColor", model.AlarmColor)
+				.ExecuteUpdate();
 		}
 
-		public void Delete(Guid personId)
+		[AnalyticsUnitOfWork]
+		public virtual void Delete(Guid personId)
 		{
-			executor.Run(_connection, connection =>
-			{
-				var command = connection.CreateCommand();
-				command.CommandType = CommandType.Text;
-				command.CommandText = "DELETE RTA.ActualAgentState WHERE PersonId = @PersonId";
-				command.Parameters.Add("@PersonId", SqlDbType.UniqueIdentifier).Value = personId;
-				command.ExecuteNonQuery();
-			});
+			_unitOfWork.Current().Session()
+				.CreateSQLQuery(
+					@"DELETE RTA.ActualAgentState WHERE PersonId = :PersonId")
+				.SetParameter("PersonId", personId)
+				.ExecuteUpdate()
+				;
 		}
 	}
 }

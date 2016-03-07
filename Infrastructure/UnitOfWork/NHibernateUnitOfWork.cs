@@ -275,9 +275,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				Interceptor.Iteration = InterceptorIteration.Normal;
 				Session.Flush();
 				Interceptor.Iteration = InterceptorIteration.UpdateRoots;
-				_sendPushMessageWhenRootAlteredService.SendPushMessages(Interceptor.ModifiedRoots,
-					new PushMessagePersister(new PushMessageRepository(this), new PushMessageDialogueRepository(this),
-						new CreatePushMessageDialoguesService()));
+				if (_sendPushMessageWhenRootAlteredService != null)
+					_sendPushMessageWhenRootAlteredService.SendPushMessages(Interceptor.ModifiedRoots,
+						new PushMessagePersister(new PushMessageRepository(this), new PushMessageDialogueRepository(this),
+							new CreatePushMessageDialoguesService()));
 				Session.Flush();
 			}
 			catch (StaleStateException ex)

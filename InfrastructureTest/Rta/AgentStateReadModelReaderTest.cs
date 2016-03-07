@@ -16,14 +16,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	[MultiDatabaseTest]
 	public class AgentStateReadModelReaderTest : DatabaseTest
     {
-        public IAgentStateReadModelReader target;
+        public IAgentStateReadModelReader Target;
+        public IAgentStateReadModelPersister Persister;
 
 		[Test]
 		public void VerifyLoadActualAgentState()
 		{
 			var person = PersonFactory.CreatePerson("Ashlee", "Andeen");
 			person.SetId(Guid.NewGuid());
-			var result = target.Load(new List<IPerson> {person});
+			var result = Target.Load(new List<IPerson> {person});
 			Assert.IsNotNull(result);
 		}
 		
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	    {
 			var person = PersonFactory.CreatePerson("Ashlee", "Andeen");
 			person.SetId(Guid.NewGuid());
-			var result = target.Load(new List<Guid> { person.Id.GetValueOrDefault() });
+			var result = Target.Load(new List<Guid> { person.Id.GetValueOrDefault() });
 			Assert.IsNotNull(result);
 	    }
 
@@ -46,9 +47,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				TeamId = teamId, 
 				PersonId = personId
 			};
-			new AgentStateReadModelPersister(new TestConnectionStrings())
+			Persister
 				.PersistActualAgentReadModel(state);
-			var result = target.LoadForTeam(teamId);
+			var result = Target.LoadForTeam(teamId);
 
 			result.Single().PersonId.Should().Be(personId);
 		}
@@ -63,12 +64,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var state1 = new AgentStateReadModelForTest { TeamId =teamId, PersonId = personId1};
 			var state2 = new AgentStateReadModelForTest { TeamId =teamId, PersonId = personId2};
 			var state3 = new AgentStateReadModelForTest { TeamId =Guid.Empty, PersonId = personId3};
-			var dbWritter = new AgentStateReadModelPersister(new TestConnectionStrings());
-            dbWritter.PersistActualAgentReadModel(state1);
-			dbWritter.PersistActualAgentReadModel(state2);
-			dbWritter.PersistActualAgentReadModel(state3);
+            Persister.PersistActualAgentReadModel(state1);
+			Persister.PersistActualAgentReadModel(state2);
+			Persister.PersistActualAgentReadModel(state3);
 
-			var result = target.LoadForTeam(teamId);
+			var result = Target.LoadForTeam(teamId);
 
 			result.Count.Should().Be(2);
 		}
@@ -84,12 +84,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var state1 = new AgentStateReadModelForTest { SiteId = siteId1, PersonId = personId1 };
 			var state2 = new AgentStateReadModelForTest { SiteId = siteId2, PersonId = personId2};
 			var state3 = new AgentStateReadModelForTest { SiteId = Guid.Empty, PersonId = personId3};
-			var dbWriter = new AgentStateReadModelPersister(new TestConnectionStrings());
-            dbWriter.PersistActualAgentReadModel(state1);
-			dbWriter.PersistActualAgentReadModel(state2);
-			dbWriter.PersistActualAgentReadModel(state3);
+            Persister.PersistActualAgentReadModel(state1);
+			Persister.PersistActualAgentReadModel(state2);
+			Persister.PersistActualAgentReadModel(state3);
 
-			var result = target.LoadForSites(new[] {siteId1, siteId2}, null, null);
+			var result = Target.LoadForSites(new[] {siteId1, siteId2}, null, null);
 
 			result.Count().Should().Be(2);
 		}
@@ -105,12 +104,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var state1 = new AgentStateReadModelForTest { TeamId = teamId1, PersonId = personId1 };
 			var state2 = new AgentStateReadModelForTest { TeamId = teamId2, PersonId = personId2};
 			var state3 = new AgentStateReadModelForTest { TeamId = Guid.Empty, PersonId = personId3};
-			var dbWriter = new AgentStateReadModelPersister(new TestConnectionStrings());
-            dbWriter.PersistActualAgentReadModel(state1);
-			dbWriter.PersistActualAgentReadModel(state2);
-			dbWriter.PersistActualAgentReadModel(state3);
+            Persister.PersistActualAgentReadModel(state1);
+			Persister.PersistActualAgentReadModel(state2);
+			Persister.PersistActualAgentReadModel(state3);
 
-			var result = target.LoadForTeams(new[] {teamId1, teamId2}, null, null);
+			var result = Target.LoadForTeams(new[] {teamId1, teamId2}, null, null);
 
 			result.Count().Should().Be(2);
 		}
@@ -126,11 +124,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				PersonId = personId,
 				Adherence = (int) Adherence.Out
 			};
-			new AgentStateReadModelPersister(new TestConnectionStrings())
-				.PersistActualAgentReadModel(state);
+			Persister
+				 .PersistActualAgentReadModel(state);
 
-			target.Load(new[] {personId}).Single().Adherence.Should().Be(Adherence.Out);
-			target.LoadForTeam(teamId).Single().Adherence.Should().Be(Adherence.Out);
+			Target.Load(new[] {personId}).Single().Adherence.Should().Be(Adherence.Out);
+			Target.LoadForTeam(teamId).Single().Adherence.Should().Be(Adherence.Out);
 		}
 		
 		[Test]
@@ -151,11 +149,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				PersonId = personId2,
 				IsAlarm = false
 			};
-			var persister = new AgentStateReadModelPersister(new TestConnectionStrings());
-			persister.PersistActualAgentReadModel(state1);
-			persister.PersistActualAgentReadModel(state2);
+			Persister.PersistActualAgentReadModel(state1);
+			Persister.PersistActualAgentReadModel(state2);
 
-			var result = target.LoadForTeams(new[] {teamId}, true, null);
+			var result = Target.LoadForTeams(new[] {teamId}, true, null);
 
 			result.Single().PersonId.Should().Be(personId1);
 		}
@@ -178,11 +175,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				PersonId = personId2,
 				AlarmStartTime = "2015-12-16 8:00".Utc()
 			};
-			var persister = new AgentStateReadModelPersister(new TestConnectionStrings());
-			persister.PersistActualAgentReadModel(state1);
-			persister.PersistActualAgentReadModel(state2);
+			Persister.PersistActualAgentReadModel(state1);
+			Persister.PersistActualAgentReadModel(state2);
 
-			var result = target.LoadForSites(new[] { siteId }, null, true);
+			var result = Target.LoadForSites(new[] { siteId }, null, true);
 
 			result.First().PersonId.Should().Be(personId2);
 			result.Last().PersonId.Should().Be(personId1);
@@ -206,11 +202,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				PersonId = personId2,
 				AlarmStartTime = "2015-12-16 8:00".Utc()
 			};
-			var persister = new AgentStateReadModelPersister(new TestConnectionStrings());
-			persister.PersistActualAgentReadModel(state1);
-			persister.PersistActualAgentReadModel(state2);
+			Persister.PersistActualAgentReadModel(state1);
+			Persister.PersistActualAgentReadModel(state2);
 
-			var result = target.LoadForSites(new[] { siteId }, null, false);
+			var result = Target.LoadForSites(new[] { siteId }, null, false);
 
 			result.First().PersonId.Should().Be(personId1);
 			result.Last().PersonId.Should().Be(personId2);
@@ -233,11 +228,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				PersonId = personId2,
 				AlarmStartTime = "2015-12-16 8:00".Utc()
 			};
-			var persister = new AgentStateReadModelPersister(new TestConnectionStrings());
-			persister.PersistActualAgentReadModel(state1);
-			persister.PersistActualAgentReadModel(state2);
+			Persister.PersistActualAgentReadModel(state1);
+			Persister.PersistActualAgentReadModel(state2);
 
-			var result = target.LoadForTeams(new[] { teamId }, null, true);
+			var result = Target.LoadForTeams(new[] { teamId }, null, true);
 
 			result.First().PersonId.Should().Be(personId2);
 			result.Last().PersonId.Should().Be(personId1);
@@ -261,11 +255,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				PersonId = personId2,
 				AlarmStartTime = "2015-12-16 8:00".Utc()
 			};
-			var persister = new AgentStateReadModelPersister(new TestConnectionStrings());
-			persister.PersistActualAgentReadModel(state1);
-			persister.PersistActualAgentReadModel(state2);
+			Persister.PersistActualAgentReadModel(state1);
+			Persister.PersistActualAgentReadModel(state2);
 
-			var result = target.LoadForTeams(new[] { teamId }, null, false);
+			var result = Target.LoadForTeams(new[] { teamId }, null, false);
 
 			result.First().PersonId.Should().Be(personId1);
 			result.Last().PersonId.Should().Be(personId2);
