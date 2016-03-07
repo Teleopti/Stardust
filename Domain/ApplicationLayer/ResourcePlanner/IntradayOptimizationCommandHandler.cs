@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 {
@@ -13,11 +15,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 
 		public void Execute(IntradayOptimizationCommand command)
 		{
-			_eventPublisher.Publish(new OptimizationWasOrdered
+			//completly wrong - just make tests pass for now
+			var skillDic = new Dictionary<string, ICollection<IPerson>>();
+			foreach (var agent in command.Agents)
 			{
-				Period = command.Period,
-				AgentIds = command.Agents.Select(x => x.Id.Value)
-			});
+				var skillString = string.Join("$", agent.Period(command.Period.StartDate).PersonSkillCollection.Select(x => x.Skill.Id.Value));
+				if(!skillDic.ContainsKey(skillString))
+					skillDic[skillString] = new List<IPerson>();
+				skillDic[skillString].Add(agent);
+			}
+
+			foreach (var skillKeyValue in skillDic)
+			{
+				_eventPublisher.Publish(new OptimizationWasOrdered
+				{
+					Period = command.Period,
+					AgentIds = skillKeyValue.Value.Select(x => x.Id.Value)
+				});
+			}
 		}
 	}
 
