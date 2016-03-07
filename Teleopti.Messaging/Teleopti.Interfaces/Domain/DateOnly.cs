@@ -414,5 +414,11 @@ namespace Teleopti.Interfaces.Domain
 		{
 			return new DateOnly(_internalDateTime.Add(timeSpan));
 		}
+
+		public DateTimePeriod ToDateTimePeriod(TimeZoneInfo timeZoneInfo)
+		{
+			return new DateTimePeriod(timeZoneInfo.SafeConvertTimeToUtc(Date),
+									  timeZoneInfo.SafeConvertTimeToUtc(Date.AddDays(1).Date));
+		}
 	}
 }

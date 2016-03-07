@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Common
         {
             if(!_period.HasValue)
             {
-                _period = new DateOnlyPeriod(_dateOnly, _dateOnly).ToDateTimePeriod(_sourceTimeZone);                
+				_period = new DateOnly(_dateOnly.Date).ToDateTimePeriod(_sourceTimeZone);                
             }
             return _period.Value;
         }

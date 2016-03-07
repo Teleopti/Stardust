@@ -1,9 +1,6 @@
 using System;
-using System.Reflection;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -11,7 +8,6 @@ namespace Teleopti.Ccc.DomainTest.Common
 {
     public class DateOnlyAsDateTimePeriodTest
     {
-
         [Test]
         public void VerifyPeriod()
         {
@@ -30,8 +26,6 @@ namespace Teleopti.Ccc.DomainTest.Common
             var date = new DateOnly(2000, 1, 1);
             var target = new DateOnlyAsDateTimePeriod(date, zone);
             var realResult = target.Period();
-            //hack
-            //zone.GetType().GetField("_timeZoneInfo", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(zone, null);
             var wouldCrashWithoutCacheResult = target.Period();
             
             Assert.AreEqual(realResult, wouldCrashWithoutCacheResult);
@@ -47,5 +41,15 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.AreEqual(targetResult.StartDateTime,new DateTime(2013,02,15,2,0,0) );
             Assert.AreEqual(targetResult.EndDateTime ,new DateTime(2013,02,18,3,0,0) );
         }
+
+	    [Test]
+	    public void ShouldReturnSameDateTimePeriodAsDateOnlyPeriodWould()
+	    {
+            var sourceZone = TimeZoneInfo.FindSystemTimeZoneById("US Mountain Standard Time");
+            var date = new DateOnly(2016, 3, 3);
+            var target = new DateOnlyAsDateTimePeriod(date, sourceZone);
+		    var compare = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(date, date), sourceZone);
+			Assert.AreEqual(compare.Period(), target.Period());
+        }	    
     }
 }
