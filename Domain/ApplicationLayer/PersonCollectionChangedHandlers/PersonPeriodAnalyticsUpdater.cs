@@ -34,7 +34,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 			foreach (var personCodeGuid in @event.PersonIdCollection.Distinct())
 			{
-				var person = _personRepository.FindPeople(new Guid[] { personCodeGuid }).First();
+				var person = _personRepository.FindPeople(new Guid[] { personCodeGuid }).FirstOrDefault();
+				if (person == null)
+				{
+					return;
+				}
+
 				var personPeriodsInAnalytics = _analyticsPersonPeriodRepository.GetPersonPeriods(personCodeGuid);
 
 				PersonPeriodFilter filter = new PersonPeriodFilter(

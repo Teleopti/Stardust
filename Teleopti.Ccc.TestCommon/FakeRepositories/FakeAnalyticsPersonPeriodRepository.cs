@@ -16,11 +16,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		readonly List<AnalyticsDate> fakeDates = new List<AnalyticsDate>();
 		private List<KeyValuePair<int, string>> fakeSkillSets;
 		private List<IAnalyticsSkill> fakeSkills;
+		private List<IAnalyticsPersonPeriod> fakePersonPeriods;
 
 		public FakeAnalyticsPersonPeriodRepository(DateTime setupStartDate, DateTime setupEndDate)
 		{
 			this.SetupStartDate = setupStartDate;
 			this.SetupEndDate = setupEndDate;
+
+			fakePersonPeriods = new List<IAnalyticsPersonPeriod>();
 
 			initDates();
 		}
@@ -51,17 +54,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void AddPersonPeriod(IAnalyticsPersonPeriod personPeriod)
 		{
-			throw new NotImplementedException();
+			fakePersonPeriods.Add(personPeriod);
 		}
 
 		public void UpdatePersonPeriod(IAnalyticsPersonPeriod personPeriod)
 		{
-			throw new NotImplementedException();
+			fakePersonPeriods.RemoveAll(a => a.PersonPeriodCode.Equals(personPeriod.PersonPeriodCode));
+			fakePersonPeriods.Add(personPeriod);
 		}
 
 		public int BusinessUnitId(Guid businessUnitCode)
 		{
-			throw new NotImplementedException();
+			return 1;
 		}
 
 		public IAnalyticsDate Date(DateTime date)
@@ -71,17 +75,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public int IntervalsPerDay()
 		{
-			throw new NotImplementedException();
+			return 96;
 		}
 
 		public int MaxIntervalId()
 		{
-			throw new NotImplementedException();
+			return 95;
 		}
 
 		public IList<IAnalyticsPersonPeriod> GetPersonPeriods(Guid personCode)
 		{
-			throw new NotImplementedException();
+			return fakePersonPeriods.Where(a => a.PersonCode.Equals(personCode)).ToArray();
 		}
 
 		public int SiteId(Guid siteCode, string siteName, int businessUnitId)
@@ -119,7 +123,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IAnalyticsDate MinDate()
 		{
-			return fakeDates.First();
+			return fakeDates.First(a => a.DateId >= 0);
 		}
 
 		public void SetSkills(List<IAnalyticsSkill> analyticsSkills)

@@ -192,6 +192,7 @@
     <Compile Include="ApplicationLayer\PersonAssociationChanged\PersonTeamChangedTest.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChanged\TerminalDateChangedTest.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChanged\TerminatedTest.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodAnalyticsUpdaterHandlerTests.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodDateTransformerTests.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodMapTests.cs" />
