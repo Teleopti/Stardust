@@ -8,6 +8,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 	public interface ITeamScheduleViewModelFactory
 	{
 		GroupScheduleViewModel CreateViewModel(IDictionary<PersonFinderField, string> criteriaDictionary, DateOnly dateInUserTimeZone, int pageSize, int currentPageIndex, bool isOnlyAbsences);
-		GroupScheduleViewModel CreateViewModelForPeople(IEnumerable<Guid> personIds, DateOnly scheduleDate);
+		GroupScheduleViewModel CreateViewModelForPeople(Guid[] personIds, DateOnly scheduleDate);
 	}
 }

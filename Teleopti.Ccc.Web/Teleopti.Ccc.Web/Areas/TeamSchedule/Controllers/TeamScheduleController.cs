@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			}
 		}
 
-		private GroupScheduleViewModel getSchedulesForPeople(IEnumerable<Guid> personIds, DateTime date)
+		private GroupScheduleViewModel getSchedulesForPeople(Guid[] personIds, DateTime date)
 		{
 			var scheduleDateOnly = new DateOnly(date);
 			return _teamScheduleViewModelFactory.CreateViewModelForPeople(personIds, scheduleDateOnly);

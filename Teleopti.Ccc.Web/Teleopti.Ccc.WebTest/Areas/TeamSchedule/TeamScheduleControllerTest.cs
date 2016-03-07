@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var form = new FullDayAbsenceForm {PersonIds = new List<Guid>(), TrackedCommandInfo = new TrackedCommandInfo()};
 			target.AddFullDayAbsence(form);
 
-			form.TrackedCommandInfo.OperatedPersonId.Should().Be.EqualTo(expectedPerson.Id.Value);
+			form.TrackedCommandInfo.OperatedPersonId.Should().Be.EqualTo(expectedPerson.Id.GetValueOrDefault());
 		}
 
 		[Test]
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var person2 = Guid.NewGuid();
 			var form = new FullDayAbsenceForm
 			{
-				PersonIds = new List<Guid>() {person1, person2}
+				PersonIds = new List<Guid> {person1, person2}
 			};
 			target.AddFullDayAbsence(form);
 
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			};
 			target.AddIntradayAbsence(form);
 
-			form.TrackedCommandInfo.OperatedPersonId.Should().Be.EqualTo(expectedPerson.Id.Value);
+			form.TrackedCommandInfo.OperatedPersonId.Should().Be.EqualTo(expectedPerson.Id.GetValueOrDefault());
 		}
 
 		[Test]
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			{
 				StartTime = DateTime.MinValue,
 				EndTime = DateTime.MaxValue,
-				PersonIds = new List<Guid>() {person1, person2}
+				PersonIds = new List<Guid> {person1, person2}
 			};
 			target.AddIntradayAbsence(form);
 
@@ -292,8 +292,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 				.Return(true);
 
 			var removePersonAbsenceCommandHandler = MockRepository.GenerateMock<IHandleCommand<RemovePersonAbsenceCommand>>();
-			removePersonAbsenceCommandHandler.Stub(x => x.Handle(null)).IgnoreArguments();
-
+			
 			var teamScheduleViewModelFactory = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
 			var schedule = new GroupScheduleViewModel
 			{
@@ -313,7 +312,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 					}
 			};
 			teamScheduleViewModelFactory.Stub(
-				x => x.CreateViewModelForPeople(new List<Guid> {personId}, new DateOnly(scheduleDate)))
+				x => x.CreateViewModelForPeople(new[] {personId}, new DateOnly(scheduleDate)))
 				.Return(schedule);
 
 			var target = new TeamScheduleController(teamScheduleViewModelFactory, null, pricipalAuthorization, null, null, null,
