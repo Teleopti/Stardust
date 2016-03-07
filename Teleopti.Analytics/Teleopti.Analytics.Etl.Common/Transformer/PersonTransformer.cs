@@ -25,7 +25,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 
 				foreach (IPersonPeriod personPeriod in person.PersonPeriodCollection)
 				{
-					if (toggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162))
+					if (!toggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162))
 					{
 						createPersonDataRow(person, personTable, timeZoneInfo, personPeriod, intervalsPerDay, insertDate,
 							commonNameDescriptionSetting, logonInfos);

@@ -11,6 +11,8 @@ using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -26,6 +28,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		private DataTable _acdTable;
 		private int _intervalsPerDay;
 		private ICommonNameDescriptionSetting _commonNameDescriptionSetting;
+		private IToggleManager _toggleManager;
 
 		[SetUp]
 		public void Setup()
@@ -41,10 +44,11 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			_table.Locale = Thread.CurrentThread.CurrentCulture;
 			_acdTable = new DataTable();
 			_acdTable.Locale = Thread.CurrentThread.CurrentCulture;
+			_toggleManager = new FakeToggleManager();
 			PersonInfrastructure.AddColumnsToDataTable(_table);
 			AcdLogOnPersonInfrastructure.AddColumnsToDataTable(_acdTable);
 			PersonTransformer.Transform(_personCollection, _intervalsPerDay, new DateOnly(2000, 1, 1), _table, _acdTable,
-				_commonNameDescriptionSetting, new List<LogonInfo>());
+				_commonNameDescriptionSetting, new List<LogonInfo>(), _toggleManager);
 		}
 
 		[Test]
@@ -105,7 +109,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			_table.Rows.Clear();
 			_acdTable.Rows.Clear();
 			PersonTransformer.Transform(_personCollection, _intervalsPerDay, new DateOnly(2000, 1, 1), _table, _acdTable,
-				_commonNameDescriptionSetting, new List<LogonInfo>());
+				_commonNameDescriptionSetting, new List<LogonInfo>(), _toggleManager);
 
 			Assert.AreEqual(DBNull.Value, _table.Rows[0]["scorecard_code"]);
 		}
@@ -127,7 +131,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			_table.Rows.Clear();
 			_acdTable.Rows.Clear();
 			PersonTransformer.Transform(_personCollection, _intervalsPerDay, new DateOnly(2000, 1, 1), _table, _acdTable,
-				_commonNameDescriptionSetting, new List<LogonInfo>());
+				_commonNameDescriptionSetting, new List<LogonInfo>(), _toggleManager);
 
 			Assert.AreEqual(DBNull.Value, _table.Rows[0]["scorecard_code"]);
 		}
@@ -253,7 +257,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			_table = new DataTable {Locale = Thread.CurrentThread.CurrentCulture};
 			PersonInfrastructure.AddColumnsToDataTable(_table);
 			
-			PersonTransformer.Transform(new List<IPerson>{person}, _intervalsPerDay, new DateOnly(2000, 1, 1), _table, _acdTable, _commonNameDescriptionSetting, logonInfos);
+			PersonTransformer.Transform(new List<IPerson>{person}, _intervalsPerDay, new DateOnly(2000, 1, 1), _table, _acdTable, _commonNameDescriptionSetting, logonInfos, _toggleManager);
 			
 			((string) _table.Rows[0]["windows_domain"]).Should().Be.EqualTo("DOMAIN");
 			((string)_table.Rows[0]["windows_username"]).Should().Be.EqualTo("THENAME");
@@ -271,7 +275,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			  PersonInfrastructure.AddColumnsToDataTable(table);
 			  AcdLogOnPersonInfrastructure.AddColumnsToDataTable(acdTable);
 			  PersonTransformer.Transform(personCollection, _intervalsPerDay, new DateOnly(2000, 1, 1), table, acdTable,
-				_commonNameDescriptionSetting,new List<LogonInfo>());
+				_commonNameDescriptionSetting,new List<LogonInfo>(), _toggleManager);
 			  var validFromDate = timeZoneInfo.SafeConvertTimeToUtc(new DateTime(2059, 12, 30));
 			  Assert.AreEqual(validFromDate, table.Rows[0]["valid_from_date"]);
 			  Assert.AreEqual(validFromDate, table.Rows[0]["employment_start_date"]);
