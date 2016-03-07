@@ -376,7 +376,6 @@
     <Compile Include="Licensing\LicenseStatusRepositoriesTest.cs" />
     <Compile Include="Licensing\LicenseStatusUpdaterTest.cs" />
     <Compile Include="Licensing\LicenseStatusXmlTest.cs" />
-    <Compile Include="Licensing\LicenseVerifierFactoryTest.cs" />
     <Compile Include="Licensing\LicenseVerifierTest.cs" />
     <Compile Include="NHibernateConfiguration\AuditSetterTest.cs" />
     <Compile Include="NHibernateConfiguration\Cache\ApplicationFunctionCollectionTest.cs" />

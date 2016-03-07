@@ -234,6 +234,7 @@
     <Compile Include="FakeRepositories\FakeDatabase.cs" />
     <Compile Include="IoC\AllTogglesOffAttribute.cs" />
     <Compile Include="IoC\AllTogglesOnAttribute.cs" />
+    <Compile Include="FakeRepositories\FakeLicenseRepository.cs" />
     <Compile Include="IoC\ISetupConfiguration.cs" />
     <Compile Include="IoC\ISystem.cs" />
     <Compile Include="IoC\ITestDoubleFor.cs" />
