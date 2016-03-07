@@ -68,8 +68,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 				IsAgent = person.IsAgent(DateOnly.Today),
 				IsUser = false,
 				DatasourceId = 1,
-				//InsertDate = DateTime.Now, // TODO uppdateringen borde sköta detta
-				//UpdateDate = DateTime.Now, // TODO uppdateringen borde sköta detta
 				DatasourceUpdateDate = person.UpdatedOn.GetValueOrDefault(),
 				ToBeDeleted = false,
 				WindowsDomain = windowsDomain,
@@ -90,10 +88,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 			DateTime personPeriodStartDate, DateTime personPeriodEndDate, TimeZoneInfo timeZoneInfo)
 		{
 			var timeZoneId = MapTimeZoneId(timeZoneInfo.Id);
-			if (!timeZoneId.HasValue)
-			{
-				throw new Exception("TimeZone does not exists yet in Analytics database. ");
-			}
 
 			var maxDate = MapMaxDate();
 
@@ -116,7 +110,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 
 			int validToIntervalIdMaxDate = getValidToIntervalIdMaxDate(validToIntervalId, validToDateId);
 
-			analyticsPersonPeriod.TimeZoneId = timeZoneId.GetValueOrDefault();
+			analyticsPersonPeriod.TimeZoneId = timeZoneId;
 
 			analyticsPersonPeriod.ValidFromDate = validFromDate;        // UTC tid
 			analyticsPersonPeriod.ValidToDate = validToDate;            // UTC tid
@@ -125,8 +119,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 			analyticsPersonPeriod.ValidFromIntervalId = validFromIntervalId;    // UTC interval
 			analyticsPersonPeriod.ValidToIntervalId = validToIntervalId;        // UTC interval 
 
-			analyticsPersonPeriod.EmploymentStartDate = validFromDate;	// UTC tid
-			analyticsPersonPeriod.EmploymentEndDate = validToDate;		// UTC tid
+			analyticsPersonPeriod.EmploymentStartDate = validFromDate;  // UTC tid
+			analyticsPersonPeriod.EmploymentEndDate = validToDate;      // UTC tid
 
 			analyticsPersonPeriod.ValidToDateIdMaxDate = validToDateIdMaxDate;
 			analyticsPersonPeriod.ValidToIntervalIdMaxDate = validToIntervalIdMaxDate;
@@ -189,12 +183,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 				? maxDate.DateId - 1
 				: validToDateId;
 		}
-		
+
 		public static DateTime ValidToDate(DateTime personPeriodEndDate, TimeZoneInfo timeZoneInfo, DateTime maxDate)
 		{
 			var validToDate = personPeriodEndDate.Equals(Eternity) || personPeriodEndDate > maxDate
 				? Eternity
-				: timeZoneInfo.SafeConvertTimeToUtc(personPeriodEndDate.AddDays(1)); 
+				: timeZoneInfo.SafeConvertTimeToUtc(personPeriodEndDate.AddDays(1));
 			// Add one days because there is no end time in app database but it is in analytics and we do not want gap between person periods end and start date.
 			return validToDate;
 		}
@@ -250,5 +244,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 				.Where(a => skillCodes.Contains(a.SkillCode)).ToList();
 			return _analyticsPersonPeriodRepository.SkillSetId(listOfSkillIds);
 		}
-	} 
+	}
 }
