@@ -49,7 +49,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				testDataFactory.Apply(new BusinessUnitFromFakeState(TestState.BusinessUnit));
 			}
 
-			DataSourceHelper.BackupCcc7Database(123);
+			DataSourceHelper.BackupApplicationDatabase(123);
 		}
 
 		private static void DisposeUnitOfWork()
@@ -79,7 +79,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 						tenantAction(tenantUnitOfWorkManager);
 						tenantUnitOfWorkManager.CommitAndDisposeCurrent();
 					});
-			DataSourceHelper.RestoreCcc7Database(123);
+			DataSourceHelper.RestoreApplicationDatabase(123);
       DataSourceHelper.ClearAnalyticsData();
 			OpenUnitOfWork();
 		}

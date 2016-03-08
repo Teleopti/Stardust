@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.TestCommon.TestData
 			defaultData.ForEach(dataSetup => GlobalDataMaker.Data().Apply(dataSetup));
 
 			_dataHash = defaultData.HashValue;
-			DataSourceHelper.BackupCcc7Database(_dataHash);
+			DataSourceHelper.BackupApplicationDatabase(_dataHash);
 
 			SystemSetup.Start();
 		}
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.TestCommon.TestData
 
 		public static void RestoreCcc7Data()
 		{
-			DataSourceHelper.RestoreCcc7Database(_dataHash);
+			DataSourceHelper.RestoreApplicationDatabase(_dataHash);
 		}
 	}
 }

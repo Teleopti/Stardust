@@ -62,13 +62,13 @@ namespace Teleopti.Ccc.InfrastructureTest
 			persistBusinessUnit();
 			deleteAllAggregates();
 
-			DataSourceHelper.BackupCcc7Database(123);
+			DataSourceHelper.BackupApplicationDatabase(123);
 			DataSourceHelper.BackupAnalyticsDatabase(123);
 		}
 
 		public static void RestoreCcc7Database()
 		{
-			DataSourceHelper.RestoreCcc7Database(123);
+			DataSourceHelper.RestoreApplicationDatabase(123);
 		}
 
 		public static void RestoreAnalyticsDatabase()

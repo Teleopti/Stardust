@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static void CreateDatabases(string name)
 		{
-			createOrRestoreCcc7(name);
+			createOrRestoreApplication(name);
 			createOrRestoreAnalytics();
 		}
 
@@ -51,25 +51,25 @@ namespace Teleopti.Ccc.TestCommon
 
 
 
-		public static void BackupCcc7Database(int dataHash)
+		public static void BackupApplicationDatabase(int dataHash)
 		{
-			backupByFileCopy(ccc7(), dataHash);
+			backupByFileCopy(application(), dataHash);
 		}
 
-		public static void RestoreCcc7Database(int dataHash)
+		public static void RestoreApplicationDatabase(int dataHash)
 		{
-			restoreByFileCopy(ccc7(), dataHash);
+			restoreByFileCopy(application(), dataHash);
 		}
 
-		public static void BackupCcc7DatabaseBySql(string path, int dataHash)
+		public static void BackupApplicationDatabaseBySql(string path, int dataHash)
 		{
-			var database = ccc7();
+			var database = application();
 			database.BackupBySql().Backup(path, database.BackupName(dataHash));
 		}
 
-		public static bool TryRestoreCcc7DatabaseBySql(string path, int dataHash)
+		public static bool TryRestoreApplicationDatabaseBySql(string path, int dataHash)
 		{
-			var database = ccc7();
+			var database = application();
 			return database.BackupBySql().TryRestore(path, database.BackupName(dataHash));
 		}
 
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.TestCommon
 
 
 
-		private static DatabaseHelper ccc7()
+		private static DatabaseHelper application()
 		{
 			return new DatabaseHelper(InfraTestConfigReader.ConnectionString, DatabaseType.TeleoptiCCC7);
 		}
@@ -114,9 +114,9 @@ namespace Teleopti.Ccc.TestCommon
 			return new DatabaseHelper(InfraTestConfigReader.AnalyticsConnectionString, DatabaseType.TeleoptiAnalytics);
 		}
 
-		private static void createOrRestoreCcc7(string name)
+		private static void createOrRestoreApplication(string name)
 		{
-			var database = ccc7();
+			var database = application();
 			if (tryRestoreByFileCopy(database, 0))
 			{
 				database.ConfigureSystem().SetTenantConnectionInfo(name, database.ConnectionString, analytics().ConnectionString);
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.TestCommon
 			
 			//would be better if dbmanager was called, but don't have the time right now....
 			// eh, that thing that is called IS the db manager!
-			ccc7().ConfigureSystem().MergePersonAssignments();
+			application().ConfigureSystem().MergePersonAssignments();
 			database.ConfigureSystem().PersistAuditSetting();
 			database.ConfigureSystem().SetTenantConnectionInfo(name, database.ConnectionString, analytics().ConnectionString);
 
