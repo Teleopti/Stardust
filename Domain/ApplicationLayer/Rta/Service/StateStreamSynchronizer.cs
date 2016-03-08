@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class StateStreamSynchronizer
 	{
 		private readonly RtaProcessor _processor;
-		private readonly IAgentStateReadModelPersister _agentStateReadModelPersister;
 		private readonly IEventPublisherScope _eventPublisherScope;
 		private readonly IEnumerable<IInitializeble> _initializebles;
 		private readonly ResolveEventHandlers _resolver;
@@ -16,7 +15,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public StateStreamSynchronizer(
 			RtaProcessor processor,
-			IAgentStateReadModelPersister agentStateReadModelPersister,
 			IEventPublisherScope eventPublisherScope,
 			IEnumerable<IInitializeble> initializebles,
 			ResolveEventHandlers resolver,
@@ -24,7 +22,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			)
 		{
 			_processor = processor;
-			_agentStateReadModelPersister = agentStateReadModelPersister;
 			_eventPublisherScope = eventPublisherScope;
 			_initializebles = initializebles;
 			_resolver = resolver;
@@ -33,19 +30,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		
 		public virtual void Initialize()
 		{
-			var states = _agentStateReadModelPersister.GetActualAgentStates();
 			_initializebles.ForEach(s =>
 			{
 				if (!s.Initialized())
-					processStatesTo(s, states);
+					processStatesTo(s);
 			});
 		}
 
-		private void processStatesTo(object handler, IEnumerable<AgentStateReadModel> states)
+		private void processStatesTo(object handler)
 		{
 			using (_eventPublisherScope.OnThisThreadPublishTo(new SyncPublishTo(_resolver, handler)))
 			{
-				_stateContextLoader.ForSynchronize(states, context =>
+				_stateContextLoader.ForSynchronize(context =>
 				{
 					_processor.Process(context);
 				});

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		void For(ExternalUserStateInputModel input, Action<StateContext> action);
 		void ForAll(Action<StateContext> action);
 		void ForClosingSnapshot(ExternalUserStateInputModel input, Action<StateContext> action);
-		void ForSynchronize(IEnumerable<AgentStateReadModel> states, Action<StateContext> action);
+		void ForSynchronize(Action<StateContext> action);
 	}
 
 	public class PersonLocker
@@ -187,31 +187,32 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		}
 
-		public virtual void ForSynchronize(IEnumerable<AgentStateReadModel> states, Action<StateContext> action)
+		public virtual void ForSynchronize(Action<StateContext> action)
 		{
-			states.ForEach(x =>
-			{
-				_locker.LockFor(x.PersonId, () =>
+			_agentStateReadModelPersister.GetActualAgentStates()
+				.ForEach(x =>
 				{
-					action.Invoke(new StateContext(
-						new ExternalUserStateInputModel
-						{
-							StateCode = x.StateCode,
-							PlatformTypeId = x.PlatformTypeId.ToString()
-						},
-						x.PersonId,
-						x.BusinessUnitId,
-						x.TeamId.GetValueOrDefault(),
-						x.SiteId.GetValueOrDefault(),
-						null,
-						() => _databaseLoader.GetCurrentSchedule(x.PersonId),
-						() => _stateMappingLoader.Cached(),
-						() => _ruleMappingLoader.Cached(),
-						_now,
-						null
-						));
+					_locker.LockFor(x.PersonId, () =>
+					{
+						action.Invoke(new StateContext(
+							new ExternalUserStateInputModel
+							{
+								StateCode = x.StateCode,
+								PlatformTypeId = x.PlatformTypeId.ToString()
+							},
+							x.PersonId,
+							x.BusinessUnitId,
+							x.TeamId.GetValueOrDefault(),
+							x.SiteId.GetValueOrDefault(),
+							null,
+							() => _databaseLoader.GetCurrentSchedule(x.PersonId),
+							() => _stateMappingLoader.Cached(),
+							() => _ruleMappingLoader.Cached(),
+							_now,
+							null
+							));
+					});
 				});
-			});
 		}
 
 	}
@@ -428,28 +429,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		}
 
-		public virtual void ForSynchronize(IEnumerable<AgentStateReadModel> states, Action<StateContext> action)
+		public virtual void ForSynchronize(Action<StateContext> action)
 		{
-			states.ForEach(x =>
-			{
-				action.Invoke(new StateContext(
-					new ExternalUserStateInputModel
-					{
-						StateCode = x.StateCode,
-						PlatformTypeId = x.PlatformTypeId.ToString()
-					},
-					x.PersonId,
-					x.BusinessUnitId,
-					x.TeamId.GetValueOrDefault(),
-					x.SiteId.GetValueOrDefault(),
-					null,
-					() => _databaseReader.GetCurrentSchedule(x.PersonId),
-					() => _stateMappingLoader.Load(),
-					() => _ruleMappingLoader.Load(),
-					_now,
-					null
-					));
-			});
+			_agentStateReadModelPersister.GetActualAgentStates()
+				.ForEach(x =>
+				{
+					action.Invoke(new StateContext(
+						new ExternalUserStateInputModel
+						{
+							StateCode = x.StateCode,
+							PlatformTypeId = x.PlatformTypeId.ToString()
+						},
+						x.PersonId,
+						x.BusinessUnitId,
+						x.TeamId.GetValueOrDefault(),
+						x.SiteId.GetValueOrDefault(),
+						null,
+						() => _databaseReader.GetCurrentSchedule(x.PersonId),
+						() => _stateMappingLoader.Load(),
+						() => _ruleMappingLoader.Load(),
+						_now,
+						null
+						));
+				});
 		}
 
 	}
