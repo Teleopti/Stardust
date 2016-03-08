@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+
 namespace Teleopti.Ccc.DBManager.Library
 {
 	public class BackupBySql
@@ -13,17 +16,32 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public void Backup(string path, string name)
 		{
-			var file = System.IO.Path.Combine(path, name) + ".bak";
-			_usingMaster.ExecuteNonQuery(string.Format(@"BACKUP DATABASE {0} TO DISK = '{1}' WITH FORMAT", _databaseName, file));
+			var fileName = name + ".bak";
+			var target = Path.Combine(path, fileName);
+			var localTarget = Path.Combine(sqlBackupPath(), fileName);
+			_usingMaster.Execute(string.Format(@"BACKUP DATABASE {0} TO DISK = '{1}' WITH FORMAT", _databaseName, localTarget));
+			File.Copy(localTarget, target);
+			File.Delete(localTarget);
 		}
 
 		public bool TryRestore(string path, string name)
 		{
-			var file = System.IO.Path.Combine(path, name) + ".bak";
-			if (!System.IO.File.Exists(file))
+			var fileName = name + ".bak";
+			var source = Path.Combine(path, fileName);
+			if (!File.Exists(source))
 				return false;
-			_usingMaster.ExecuteNonQuery(string.Format(@"RESTORE DATABASE {0} FROM DISK = '{1}'", _databaseName, file));
+			var localSource = Path.Combine(sqlBackupPath(), fileName);
+			File.Copy(source, localSource, true);
+			_usingMaster.Execute(string.Format(@"RESTORE DATABASE {0} FROM DISK = '{1}'", _databaseName, localSource));
+			File.Delete(localSource);
 			return true;
+		}
+
+		private string sqlBackupPath()
+		{
+			return Microsoft.Win32.Registry.LocalMachine
+				.OpenSubKey(@"SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL12.MSSQLSERVER\MSSQLServer")
+				.GetValue("BackupDirectory") as string;
 		}
 	}
 }

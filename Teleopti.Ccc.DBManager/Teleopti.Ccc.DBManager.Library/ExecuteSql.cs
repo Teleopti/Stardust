@@ -29,6 +29,17 @@ namespace Teleopti.Ccc.DBManager.Library
 			}
 		}
 
+		public void Execute(string sql)
+		{
+			using (var connection = _openConnection())
+			using (var command = connection.CreateCommand())
+			{
+				command.CommandType = CommandType.Text;
+				command.CommandText = sql;
+				command.ExecuteNonQuery();
+			}
+		}
+
 		public int ExecuteScalar(string sql, int timeout = 30, IDictionary<string, object> parameters = null)
 		{
 			parameters = parameters ?? new Dictionary<string, object>();

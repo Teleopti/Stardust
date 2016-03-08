@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using log4net.Repository.Hierarchy;
 using Newtonsoft.Json;
 using NHibernate.Dialect;
 using Teleopti.Ccc.DBManager.Library;
@@ -106,12 +107,18 @@ namespace Teleopti.Ccc.TestCommon
 
 		private static DatabaseHelper application()
 		{
-			return new DatabaseHelper(InfraTestConfigReader.ConnectionString, DatabaseType.TeleoptiCCC7);
+			return new DatabaseHelper(
+				InfraTestConfigReader.ConnectionString,
+				DatabaseType.TeleoptiCCC7
+				) {Logger = new ConsoleLogger()};
 		}
 
 		private static DatabaseHelper analytics()
 		{
-			return new DatabaseHelper(InfraTestConfigReader.AnalyticsConnectionString, DatabaseType.TeleoptiAnalytics);
+			return new DatabaseHelper(
+				InfraTestConfigReader.AnalyticsConnectionString,
+				DatabaseType.TeleoptiAnalytics
+				) {Logger = new ConsoleLogger()};
 		}
 
 		private static void createOrRestoreApplication(string name)
@@ -205,5 +212,6 @@ namespace Teleopti.Ccc.TestCommon
 			return dictionary;
 		}
 		
+
 	}
 }

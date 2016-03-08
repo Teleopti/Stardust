@@ -65,6 +65,7 @@
     <Compile Include="NUnitSetup.cs" />
     <Compile Include="Code\StatesArePersisted.cs" />
     <Compile Include="Code\TestConfiguration.cs" />
+    <Compile Include="PrepareDatabase.cs" />
     <Compile Include="StateSendTest.cs" />
     <Compile Include="Code\StatesSender.cs" />
     <Compile Include="Code\TimeStateInfo.cs" />

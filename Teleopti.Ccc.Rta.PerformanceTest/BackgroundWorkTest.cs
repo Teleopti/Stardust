@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 		public void MeasurePerformance()
 		{
 			States.Send();
-
 			Hangfire.WaitForQueue();
 		}
     }

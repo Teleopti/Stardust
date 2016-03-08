@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
@@ -73,7 +74,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 
 			data.Apply(new RtaMapConfigurable { Activity = null, PhoneState = "LoggedOff", Adherence = "In", Name = "InAdherence" });
 
-			Enumerable.Range(0, _testConfiguration.NumberOfAgents / 100)
+			Enumerable.Range(0, (_testConfiguration.NumberOfAgents / 100) + 1)
 				.ForEach(site =>
 				{
 					data.Apply(new SiteConfigurable
@@ -83,7 +84,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 					});
 				});
 
-			Enumerable.Range(0, _testConfiguration.NumberOfAgents / 10)
+			Enumerable.Range(0, (_testConfiguration.NumberOfAgents / 10) + 1)
 				.ForEach(team =>
 				{
 					data.Apply(new TeamConfigurable
@@ -97,6 +98,9 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 				.ForEach(roger =>
 				{
 					var name = "roger" + roger;
+
+					Console.WriteLine("creating " + name);
+
 					data.Person(name).Apply(new PersonPeriodConfigurable
 					{
 						StartDate = "2000-01-01 00:00".Utc(),

@@ -43,6 +43,14 @@ namespace Teleopti.Ccc.TestCommon
 				return ConfigurationManager.AppSettings["InfraTest.DatabaseName"];
 			}
 		}
-		
+
+		public static string DatabackBackupLocation
+		{
+			get
+			{
+				return ConfigurationManager.AppSettings["InfraTest.DatabackBackupLocation"];
+			}
+		}
+
 	}
 }
