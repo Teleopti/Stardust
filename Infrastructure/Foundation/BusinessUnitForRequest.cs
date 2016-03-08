@@ -20,11 +20,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			_currentUnitOfWork = currentUnitOfWork;
 		}
 
-		public bool IsHttpRequest()
-		{
-			return true;
-		}
-
 		public IBusinessUnit TryGetBusinessUnit()
 		{
 			var buid = UnitOfWorkAspect.BusinessUnitIdForRequest(_currentHttpContext);
