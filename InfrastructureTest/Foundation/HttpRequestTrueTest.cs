@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			businessUnitRepository.Stub(x => x.Load(bu.Id.Value)).Return(bu);
 
 			var target = new HttpRequestTrue(httpContext, businessUnitRepository, new DummyCurrentUnitOfWork());
-			var businessUnit = target.BusinessUnitForRequest();
+			var businessUnit = target.TryGetBusinessUnit();
 
 			businessUnit.Should().Be.EqualTo(bu);
 		}
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			currentUow.Expect(x => x.Current()).Return(null);
 
 			var target = new HttpRequestTrue(httpContext, null, currentUow);
-			var businessUnit = target.BusinessUnitForRequest();
+			var businessUnit = target.TryGetBusinessUnit();
 
 			businessUnit.Should().Be.Null();
 		}

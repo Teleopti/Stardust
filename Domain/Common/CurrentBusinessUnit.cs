@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public IBusinessUnit Current()
 		{
-			var businessUnit = _businessUnitForRequest.BusinessUnitForRequest();
+			var businessUnit = _businessUnitForRequest.TryGetBusinessUnit();
 			if (businessUnit == null)
 			{
 				var identity = _identity.Current();

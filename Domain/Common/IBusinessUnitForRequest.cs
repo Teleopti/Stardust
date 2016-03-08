@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Domain.Common
 {
 	public interface IBusinessUnitForRequest
 	{
-		IBusinessUnit BusinessUnitForRequest();
+		IBusinessUnit TryGetBusinessUnit();
 	}
 }

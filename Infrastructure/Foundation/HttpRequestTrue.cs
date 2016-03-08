@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			return true;
 		}
 
-		public IBusinessUnit BusinessUnitForRequest()
+		public IBusinessUnit TryGetBusinessUnit()
 		{
 			var buid = UnitOfWorkAspect.BusinessUnitIdForRequest(_currentHttpContext);
 			if (buid.HasValue)

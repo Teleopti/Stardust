@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Common
 			return false;
 		}
 
-		public IBusinessUnit BusinessUnitForRequest()
+		public IBusinessUnit TryGetBusinessUnit()
 		{
 			return null;
 		}
