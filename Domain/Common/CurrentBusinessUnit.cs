@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Common
 		public static ICurrentBusinessUnit Make()
 		{
 			var identity = new CurrentIdentity(new CurrentTeleoptiPrincipal());
-			return new CurrentBusinessUnit(identity, new HttpRequestFalse());
+			return new CurrentBusinessUnit(identity, new NoBusinessUnitForRequest());
 		}
 
 		public CurrentBusinessUnit(ICurrentIdentity identity, IBusinessUnitForRequest businessUnitForRequest)

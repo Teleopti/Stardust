@@ -469,7 +469,7 @@
     <Compile Include="Common\AgentBadgeWithRank.cs" />
     <Compile Include="Common\AgentBadgeWithRankTransaction.cs" />
     <Compile Include="Common\CommonAgentNameProvider.cs" />
-    <Compile Include="Common\HttpRequestFalse.cs" />
+    <Compile Include="Common\NoBusinessUnitForRequest.cs" />
     <Compile Include="Common\IDataSourceScope.cs" />
     <Compile Include="Common\IBusinessUnitForRequest.cs" />
     <Compile Include="ApplicationLayer\Events\PersonPeriodChangedEvent.cs" />
