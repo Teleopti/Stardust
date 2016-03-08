@@ -188,6 +188,7 @@
     <Compile Include="Configuration\AnalyticsUnitOfWorkModule.cs" />
     <Compile Include="Configuration\AspectsModule.cs" />
     <Compile Include="Configuration\BackToLegalShiftModule.cs" />
+    <Compile Include="Configuration\DataSourceModule.cs" />
     <Compile Include="Configuration\EqualNumberOfCategoryFairnessModule.cs" />
     <Compile Include="Configuration\ForecasterModule.cs" />
     <Compile Include="Configuration\HangfireModule.cs" />

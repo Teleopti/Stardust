@@ -5,9 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces;
@@ -31,11 +29,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<ICurrentUnitOfWork>()
 				.SingleInstance();
 			builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
-
-			builder.RegisterType<CurrentDataSource>().As<ICurrentDataSource>().SingleInstance();
-			builder.RegisterType<DataSourceState>().SingleInstance();
-			builder.RegisterType<DataSourceScope>().As<IDataSourceScope>().SingleInstance();
-			builder.Register(c => c.Resolve<ICurrentDataSource>().Current()).As<IDataSource>().ExternallyOwned();
 
 			builder.RegisterType<WithUnitOfWork>().SingleInstance();
 
@@ -75,19 +68,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.OnRelease(e => ServiceLocatorForEntity.SetInstanceFromContainer(null as ICurrentBusinessUnit));
 			builder.RegisterType<HttpRequestFalse>().As<IIsHttpRequest>().SingleInstance();
 
-			// placed here because at the moment uow is the "owner" of the *current* initiator identifier
 			builder.RegisterType<CurrentInitiatorIdentifier>().As<ICurrentInitiatorIdentifier>();
-			builder.RegisterType<LicenseActivatorProvider>().As<ILicenseActivatorProvider>().SingleInstance();
-			builder.RegisterType<CheckLicenseExists>().As<ICheckLicenseExists>().SingleInstance();
 			builder.RegisterType<BusinessUnitFilterOverrider>().As<IBusinessUnitFilterOverrider>().SingleInstance();
 			builder.RegisterType<DisableBusinessUnitFilter>().As<IDisableBusinessUnitFilter>().SingleInstance();
 
 			// these keep scope state and cant be single instance
 			builder.RegisterType<UnitOfWorkAspect>().As<IUnitOfWorkAspect>().InstancePerDependency();
 			builder.RegisterType<ReadOnlyUnitOfWorkAspect>().As<IReadOnlyUnitOfWorkAspect>().InstancePerDependency();
-			builder.RegisterType<AllBusinessUnitsUnitOfWorkAspect>()
-				.As<IAllBusinessUnitsUnitOfWorkAspect>()
-				.InstancePerDependency();
+			builder.RegisterType<AllBusinessUnitsUnitOfWorkAspect>().As<IAllBusinessUnitsUnitOfWorkAspect>().InstancePerDependency();
 		}
 	}
 }
