@@ -99,7 +99,7 @@ namespace Manager.Integration.Test
 		}
 
 		[Test]
-		public async void ShouldRemoveNodeWhenDead()
+		public async void ShouldConsiderNodeAsDeadWhenInactiveAndSetJobResulToFatal()
 		{
 			LogHelper.LogDebugWithLineNumber("Start test.",
 			                                 Logger);
@@ -131,25 +131,45 @@ namespace Manager.Integration.Test
 
 
 			//---------------------------------------------
+			// Send a Job.
+			//---------------------------------------------
+			IHttpSender httpSender = new HttpSender();
+
+			var managerUriBuilder = new ManagerUriBuilder();
+
+			var uri = managerUriBuilder.GetStartJobUri();
+
+			var createNewJobRequests =
+				JobHelper.GenerateTestJobParamsRequests(1);
+			
+			HttpResponseMessage response = await httpSender.PostAsync(uri, createNewJobRequests.FirstOrDefault());
+
+			response.EnsureSuccessStatusCode();
+			var ser = await response.Content.ReadAsStringAsync();
+
+			var jobId = JsonConvert.DeserializeObject<Guid>(ser);
+
+			//Quick Fix. Should wait for job to be started instead (check DB)
+			Thread.Sleep(TimeSpan.FromSeconds(15));
+
+			//---------------------------------------------
 			// Kill the node.
 			//---------------------------------------------
 			var cancellationTokenSource = new CancellationTokenSource();
-
-			IHttpSender httpSender = new HttpSender();
 
 			var uriBuilder =
 				new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
 
 			uriBuilder.Path += "appdomain/nodes/" + "Node1.config";
 
-			var uri = uriBuilder.Uri;
+			uri = uriBuilder.Uri;
 
 			LogHelper.LogDebugWithLineNumber("Start calling Delete Async ( " + uri + " ) ",
 			                                 Logger);
 
 			try
 			{
-				var response = await httpSender.DeleteAsync(uriBuilder.Uri,
+				response = await httpSender.DeleteAsync(uriBuilder.Uri,
 				                                            cancellationTokenSource.Token);
 
 				if (response.IsSuccessStatusCode)
@@ -175,15 +195,14 @@ namespace Manager.Integration.Test
 			//---------------------------------------------
 			// Check if node is dead.
 			//---------------------------------------------
-			var managerUriBuilder = new ManagerUriBuilder();
 
 			uri = managerUriBuilder.GetNodesUri();
 
-			HttpResponseMessage responseNodes = await httpSender.GetAsync(uri);
+			response = await httpSender.GetAsync(uri);
 
-			responseNodes.EnsureSuccessStatusCode();
+			response.EnsureSuccessStatusCode();
 
-			var ser = await responseNodes.Content.ReadAsStringAsync();
+			ser = await response.Content.ReadAsStringAsync();
 
 			var workerNodes = JsonConvert.DeserializeObject<IList<WorkerNode>>(ser);
 
@@ -191,6 +210,19 @@ namespace Manager.Integration.Test
 
 			Assert.NotNull(node);
 			Assert.IsTrue(node.Alive == "false");
+
+			uri = managerUriBuilder.GetJobHistoryUri(jobId);
+
+			response = await httpSender.GetAsync(uri);
+
+			response.EnsureSuccessStatusCode();
+
+			ser = await response.Content.ReadAsStringAsync();
+
+			var jobHistory = JsonConvert.DeserializeObject<JobHistory>(ser);
+
+			Assert.NotNull(jobHistory);
+			Assert.IsTrue(jobHistory.Result == "Fatal Node Failure");
 		}
 	}
 }
