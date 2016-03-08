@@ -20,10 +20,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			_projectionChangedEventBuilder
 				.Build<ProjectionChangedEvent>(
 					new ScheduleChangedEvent
-						{
-							ScenarioId = scheduleRange.Scenario.Id.GetValueOrDefault(),
-							PersonId = scheduleRange.Person.Id.GetValueOrDefault()
-						},
+					{
+						ScenarioId = scheduleRange.Scenario.Id.GetValueOrDefault(),
+						PersonId = scheduleRange.Person.Id.GetValueOrDefault()
+					},
 					scheduleRange,
 					dateOnlyPeriod)
 				.ForEach(updateReadModel)
