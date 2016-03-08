@@ -19,7 +19,7 @@ BEGIN
 	DECLARE @site_id int
 
     SELECT @site_id = site_id 
-	FROM mart.dim_site
+	FROM mart.dim_site WITH (NOLOCK)
 	WHERE site_code = @site_code
 
 	IF @site_id IS NULL

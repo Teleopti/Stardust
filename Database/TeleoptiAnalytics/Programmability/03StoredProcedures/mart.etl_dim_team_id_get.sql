@@ -20,12 +20,13 @@ BEGIN
 	DECLARE @scorecard_id int
 
     SELECT @team_id = team_id 
-	FROM mart.dim_team
+	FROM mart.dim_team WITH (NOLOCK)
 	WHERE team_code = @team_code
 
 	IF @team_id IS NULL
 	BEGIN
-		select @scorecard_id  = isnull(scorecard_id,-1) from mart.dim_scorecard where business_unit_id=@business_unit_id
+		SELECT @scorecard_id  = isnull(scorecard_id,-1) FROM mart.dim_scorecard WITH (NOLOCK) WHERE business_unit_id=@business_unit_id
+		
 		INSERT INTO mart.dim_team(team_code,team_name,scorecard_id,site_id,business_unit_id,datasource_id)
 		VALUES (@team_code,@team_name,@scorecard_id,@site_id,@business_unit_id, 1)
 
