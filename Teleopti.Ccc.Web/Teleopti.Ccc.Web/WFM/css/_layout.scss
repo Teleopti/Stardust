@@ -298,3 +298,11 @@ left:25%;
     margin-right: 10px;
 	}
 }
+
+.c3-selected-circle {
+    fill: $white;
+}
+
+md-slider.md-min .md-thumb:after{
+	background-color: $white!important;
+}
