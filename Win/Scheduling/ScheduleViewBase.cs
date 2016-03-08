@@ -244,15 +244,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 			const int overviewHeaderRow = 1;
 			const int overviewCellRow = 2;
 
-			var gridStyleInfo = _grid[overviewHeaderRow, (int)columnType];
-			var headerSize = gridStyleInfo.CellModel.CalculatePreferredCellSize(graphics, overviewHeaderRow, (int)columnType, gridStyleInfo, GridQueryBounds.Width);
+			try
+			{
+				var gridStyleInfo = _grid[overviewHeaderRow, (int)columnType];
+				var headerSize = gridStyleInfo.CellModel.CalculatePreferredCellSize(graphics, overviewHeaderRow, (int)columnType, gridStyleInfo, GridQueryBounds.Width);
 
-			gridStyleInfo = _grid[overviewCellRow, (int)columnType];
-			gridStyleInfo.CellType = celltype;
-			var cellSize = ((ICustomPreferredCellSize)gridStyleInfo.CellModel).CustomPreferredCellSize(graphics, overviewCellRow, (int)columnType, gridStyleInfo, GridQueryBounds.Width);
+				gridStyleInfo = _grid[overviewCellRow, (int)columnType];
+				gridStyleInfo.CellType = celltype;
+				var cellSize = ((ICustomPreferredCellSize)gridStyleInfo.CellModel).CustomPreferredCellSize(graphics, overviewCellRow, (int)columnType, gridStyleInfo, GridQueryBounds.Width);
 
-			var largestSize = headerSize.Width > cellSize.Width ? headerSize : cellSize;
-			_grid.Model.ColWidths[(int)columnType] = largestSize.Width + margin;
+				var largestSize = headerSize.Width > cellSize.Width ? headerSize : cellSize;
+				_grid.Model.ColWidths[(int)columnType] = largestSize.Width + margin;
+			}
+			catch (ArgumentException)
+			{
+				_grid.Model.ColWidths[(int)columnType] = 55;	
+			}	
 	    }
 
 	    /// <summary>
