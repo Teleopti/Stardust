@@ -1,17 +1,17 @@
 ﻿<div ng-controller="nodeDetailsController as vm" style="margin-left: 50px;margin-right: 50px">
-    <div class="row">
-        <div class="col-md-12">
-            <a style="float: left; padding-top: 25px; padding-right: 50px" href="#StardustDashboard"><img alt="back" title="Back to Stardust Manager" src="Content/images/left_round.png"/></a>
-            <h2>Node details</h2>
-            <div>
+	<div class="row">
+		<div class="col-md-12">
+			<a style="float: left; padding-top: 25px; padding-right: 50px" href="#StardustDashboard"><img alt="back" title="Back to Stardust Manager" src="Content/images/left_round.png" /></a>
+			<h2>Node details</h2>
+			<div>
                 <table>
                     <thead>
-                    <tr>
-                        <th>Url</th>
-                        <th>Latest Heartbeat</th>
-                        <th>Running</th>
-                        <th>Alive</th>
-                    </tr>
+                        <tr>
+                            <th>Url</th>
+                            <th>Latest Heartbeat</th>
+                            <th>Running</th>
+                            <th>Alive</th>
+                        </tr>
                     </thead>
                     <tbody>
                     <tr ng-class="{'greenNode': vm.Node.Alive === 'true', 'redNode':vm.Node.Alive === 'false'}">
@@ -22,39 +22,7 @@
                     </tr>
                     </tbody>
                 </table>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12">
-            <h3>Latest Jobs</h3>
-            <div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Created By</th>
-                            <th>Created</th>
-                            <th>Started</th>
-                            <th>Ended</th>
-                            <th>Sent To</th>
-                            <th>Result</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="job in vm.Jobs">
-                            <td><a href="#jobdetails\{{job.Id}}">{{job.Name}}</a></td>
-                            <td>{{job.CreatedBy}}</td>
-                            <td>{{job.Created}}</td>
-                            <td>{{job.Started}}</td>
-                            <td>{{job.Ended}}</td>
-                            <td>{{job.SentTo}}</td>
-                            <td>{{job.Result}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+			</div>
+		</div>
+	</div>
 </div>
