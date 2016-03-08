@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Common
 	public class CurrentBusinessUnit : ICurrentBusinessUnit
 	{
 		private readonly ICurrentIdentity _identity;
-		private readonly IIsHttpRequest _isHttpRequest;
+		private readonly IBusinessUnitForRequest _businessUnitForRequest;
 
 		public static ICurrentBusinessUnit Make()
 		{
@@ -14,18 +14,18 @@ namespace Teleopti.Ccc.Domain.Common
 			return new CurrentBusinessUnit(identity, new HttpRequestFalse());
 		}
 
-		public CurrentBusinessUnit(ICurrentIdentity identity, IIsHttpRequest isHttpRequest)
+		public CurrentBusinessUnit(ICurrentIdentity identity, IBusinessUnitForRequest businessUnitForRequest)
 		{
 			_identity = identity;
-			_isHttpRequest = isHttpRequest;
+			_businessUnitForRequest = businessUnitForRequest;
 		}
 
 		public IBusinessUnit Current()
 		{
 			IBusinessUnit businessUnit = null;
-			if (_isHttpRequest.IsHttpRequest())
+			if (_businessUnitForRequest.IsHttpRequest())
 			{
-				businessUnit = _isHttpRequest.BusinessUnitForRequest();
+				businessUnit = _businessUnitForRequest.BusinessUnitForRequest();
 			}
 			if (businessUnit == null)
 			{

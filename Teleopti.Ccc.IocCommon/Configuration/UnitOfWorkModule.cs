@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CurrentBusinessUnit>().As<ICurrentBusinessUnit>().SingleInstance()
 				.OnActivated(e => ServiceLocatorForEntity.SetInstanceFromContainer(e.Instance))
 				.OnRelease(e => ServiceLocatorForEntity.SetInstanceFromContainer(null as ICurrentBusinessUnit));
-			builder.RegisterType<HttpRequestFalse>().As<IIsHttpRequest>().SingleInstance();
+			builder.RegisterType<HttpRequestFalse>().As<IBusinessUnitForRequest>().SingleInstance();
 
 			builder.RegisterType<CurrentInitiatorIdentifier>().As<ICurrentInitiatorIdentifier>();
 			builder.RegisterType<BusinessUnitFilterOverrider>().As<IBusinessUnitFilterOverrider>().SingleInstance();

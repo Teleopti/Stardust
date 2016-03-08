@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var businessUnitRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
 			businessUnitRepository.Stub(x => x.Load(businessUnit.Id.Value)).Return(businessUnit);
 
-			var isHttpRequest = MockRepository.GenerateMock<IIsHttpRequest>();
+			var isHttpRequest = MockRepository.GenerateMock<IBusinessUnitForRequest>();
 			isHttpRequest.Stub(x => x.IsHttpRequest()).Return(true);
 			isHttpRequest.Stub(x => x.BusinessUnitForRequest()).Return(businessUnit);
 			var target = new CurrentBusinessUnit(new CurrentIdentity(currentTeleoptiPrincipal), isHttpRequest);

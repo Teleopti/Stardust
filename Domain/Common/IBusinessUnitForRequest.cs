@@ -2,7 +2,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-	public interface IIsHttpRequest
+	public interface IBusinessUnitForRequest
 	{
 		bool IsHttpRequest();
 		IBusinessUnit BusinessUnitForRequest();

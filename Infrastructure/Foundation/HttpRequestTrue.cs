@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
-	public class HttpRequestTrue : IIsHttpRequest
+	public class HttpRequestTrue : IBusinessUnitForRequest
 	{
 		private readonly ICurrentHttpContext _currentHttpContext;
 		private readonly IBusinessUnitRepository _businessUnitRepository;

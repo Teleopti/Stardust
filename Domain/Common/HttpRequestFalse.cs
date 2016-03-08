@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-	public class HttpRequestFalse : IIsHttpRequest
+	public class HttpRequestFalse : IBusinessUnitForRequest
 	{
 		public bool IsHttpRequest()
 		{

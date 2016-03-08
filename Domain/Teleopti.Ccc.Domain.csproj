@@ -471,7 +471,7 @@
     <Compile Include="Common\CommonAgentNameProvider.cs" />
     <Compile Include="Common\HttpRequestFalse.cs" />
     <Compile Include="Common\IDataSourceScope.cs" />
-    <Compile Include="Common\IIsHttpRequest.cs" />
+    <Compile Include="Common\IBusinessUnitForRequest.cs" />
     <Compile Include="ApplicationLayer\Events\PersonPeriodChangedEvent.cs" />
     <Compile Include="Common\TimeLogger\LogTimeAspect.cs" />
     <Compile Include="Common\TimeLogger\LogTimeAttribute.cs" />
