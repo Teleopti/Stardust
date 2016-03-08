@@ -1,12 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
+using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics.Transformer;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure.Analytics;
-using IAnalyticsPersonPeriodRepository = Teleopti.Ccc.Domain.Repositories.IAnalyticsPersonPeriodRepository;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
@@ -16,10 +13,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		IHandleEvent<PersonDeletedEvent>,
 		IRunOnServiceBus
 	{
-		private readonly IPersonRepository _personRepository;
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (PersonPeriodAnalyticsUpdater));
 		private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
+		private readonly IPersonRepository _personRepository;
 
-		public PersonPeriodAnalyticsUpdater(IPersonRepository personRepository, IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository)
+		public PersonPeriodAnalyticsUpdater(IPersonRepository personRepository,
+			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository)
 		{
 			_personRepository = personRepository;
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
@@ -28,8 +27,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		public void Handle(PersonCollectionChangedEvent @event)
 		{
 			var personPeriodFilter = new PersonPeriodFilter(
-						_analyticsPersonPeriodRepository.MinDate().DateDate,
-						_analyticsPersonPeriodRepository.MaxDate().DateDate);
+				_analyticsPersonPeriodRepository.MinDate().DateDate,
+				_analyticsPersonPeriodRepository.MaxDate().DateDate);
 
 			var persons = _personRepository.FindPeople(@event.PersonIdCollection.Distinct());
 
@@ -58,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 					if (existingPeriod != null)
 					{
-						Console.WriteLine("Update person period for {0}", person.Name.ToString());
+						Logger.DebugFormat("Update person period for {0}", person.Name);
 
 						// Update
 						var updatedAnalyticsPersonPeriod = transformer.Transform(person, personPeriod);
@@ -71,7 +70,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					}
 					else
 					{
-						Console.WriteLine("Insert new person period for {0}", person.Name.ToString());
+						Logger.DebugFormat("Insert new person period for {0}", person.Name);
 
 						// Insert
 						var newAnalyticsPersonPeriod = transformer.Transform(person, personPeriod);
@@ -92,7 +91,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 		public void Handle(PersonDeletedEvent @event)
 		{
-			Console.WriteLine("Removing all person periods with person code {0}", @event.PersonId);
+			Logger.DebugFormat("Removing all person periods with person code {0}", @event.PersonId);
 			var personPeriodsInAnalyticsToBeDeleted = _analyticsPersonPeriodRepository.GetPersonPeriods(@event.PersonId);
 			foreach (var analyticsPersonPeriodToBeDeleted in personPeriodsInAnalyticsToBeDeleted)
 			{
@@ -101,4 +100,3 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		}
 	}
 }
-
