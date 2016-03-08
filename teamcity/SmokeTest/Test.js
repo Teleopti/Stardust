@@ -83,7 +83,13 @@ client.url(webUrl + '/HealthCheck')
 					}
 				});
 		}
-	});
+	})
+.waitForExist(".stardust", 60000, false, function(err, res, response) {
+		if (err || !res) {
+			closeAndThrow('Stardust is not up and running. Please visit ' + webUrl + '/HealthCheck , and have a look. ' + err);
+		}
+		log('Stardust is up and running');
+	});	
 log('check service bus and broker');
 client.click('#Start-Check');
 // have no idea why first time of checking is not working, have to refresh and check it again
