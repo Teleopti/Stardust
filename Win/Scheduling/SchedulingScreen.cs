@@ -3036,7 +3036,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				tasks[i1] = factory.StartNew(
 					y =>
 					{
-						var res = islandLifeTimeScope.ScheduleAsIsland(skillGroupsCreatorResult, islandList[i1], _optimizerOriginalPreferences,
+						var res = islandLifeTimeScope.ScheduleAsIsland(islandList[i1], _optimizerOriginalPreferences,
 							selectedSchedules,
 							_optimizationPreferences, _schedulerState);
 						new IslandScheduleConsolidater().Consolidate(_schedulerState.Schedules, res);

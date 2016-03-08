@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.IslandScheduling
 			_groupPagePerDateHolder = groupPagePerDateHolder;
 		}
 
-		public IScheduleDictionary RunIsland(VirtualSkillGroupsCreatorResult skillGroups, SkillGroupIslandsAnalyzer.Island island, IOptimizerOriginalPreferences optimizerOriginalPreferences,
+		public IScheduleDictionary RunIsland(SkillGroupIslandsAnalyzer.Island island, IOptimizerOriginalPreferences optimizerOriginalPreferences,
 			IList<IScheduleDay> selectedScheduleDays, IOptimizationPreferences optimizationPreferences, ISchedulerStateHolder schedulingScreenStateHolder)
 		{
 			var dayOffOptimizePreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences());
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.IslandScheduling
 			var requiredScheduleHelper = _requiredScheduleHelper();
 			var groupPagePerDateHolder = _groupPagePerDateHolder();
 
-			var personsInIsland = island.PersonsInIsland(skillGroups);
+			var personsInIsland = island.PersonsInIsland();
 			var x = new IslandSchedulerStateProvider(schedulingScreenStateHolder, personsInIsland, island.SkillGuidStrings);
 			schedulerStateHolder = x.Load(schedulerStateHolder);
 			var islandSelectedScheduleDays = new List<IScheduleDay>();

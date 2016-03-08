@@ -155,12 +155,12 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 			var result = _target.FindIslands(skillGroups);
 
 			result.Count.Should().Be.EqualTo(2);
-			result[0].PersonsInIsland(skillGroups).Count.Should().Be.EqualTo(1);
-			result[0].PersonsInIsland(skillGroups).Should().Contain(p2);
+			result[0].PersonsInIsland().Count.Should().Be.EqualTo(1);
+			result[0].PersonsInIsland().Should().Contain(p2);
 
-			result[1].PersonsInIsland(skillGroups).Count.Should().Be.EqualTo(2);
-			result[1].PersonsInIsland(skillGroups).Should().Contain(p1);
-			result[1].PersonsInIsland(skillGroups).Should().Contain(p3);
+			result[1].PersonsInIsland().Count.Should().Be.EqualTo(2);
+			result[1].PersonsInIsland().Should().Contain(p1);
+			result[1].PersonsInIsland().Should().Contain(p3);
 		}
 	}
 }

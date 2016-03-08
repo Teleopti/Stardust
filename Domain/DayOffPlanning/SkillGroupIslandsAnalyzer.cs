@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
@@ -8,36 +7,35 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 {
 	public class SkillGroupIslandsAnalyzer
 	{
-		private readonly IList<Island> _islands = new List<Island>();
-
 		public IList<Island> FindIslands(VirtualSkillGroupsCreatorResult skillGroups)
 		{
+			var islands = new List<Island>();
 			var keys = skillGroups.GetKeys();
 			foreach (var key in keys)
 			{
 				var splittedSkillKeys = key.Split("|".ToCharArray());
-				_islands.Add(new Island(splittedSkillKeys, new List<string>{key}));
+				islands.Add(new Island(splittedSkillKeys, new List<string>{key}, skillGroups));
 			}
 
-			var islandPair = checkIfJoinIslands();
+			var islandPair = checkIfJoinIslands(islands);
 			while (islandPair != null)
 			{
-				var joined = joinIslands(islandPair.Item1, islandPair.Item2);
-				_islands.Remove(islandPair.Item1);
-				_islands.Remove(islandPair.Item2);
-				_islands.Add(joined);
+				var joined = joinIslands(islandPair.Item1, islandPair.Item2, skillGroups);
+				islands.Remove(islandPair.Item1);
+				islands.Remove(islandPair.Item2);
+				islands.Add(joined);
 
-				islandPair = checkIfJoinIslands();
+				islandPair = checkIfJoinIslands(islands);
 			}
 
-			return _islands;
+			return islands;
 		}
 
-		private Tuple<Island, Island> checkIfJoinIslands()
+		private static Tuple<Island, Island> checkIfJoinIslands(IEnumerable<Island> islands)
 		{
-			foreach (var island in _islands)
+			foreach (var island in islands)
 			{
-				foreach (var island1 in _islands)
+				foreach (var island1 in islands)
 				{
 					if (island.Equals(island1))
 						continue;
@@ -55,7 +53,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 			return null;
 		}
 
-		private static Island joinIslands(Island island1, Island island2)
+		private static Island joinIslands(Island island1, Island island2, VirtualSkillGroupsCreatorResult skillGroupsCreatorResult)
 		{
 			var combinedGuidStrings = new List<string>(island1.SkillGuidStrings);
 			combinedGuidStrings.AddRange(island2.SkillGuidStrings);
@@ -63,18 +61,20 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 			var combinedGroupKeys = new List<string>(island1.GroupKeys);
 			combinedGroupKeys.AddRange(island2.GroupKeys);
 
-			return new Island(combinedGuidStrings, combinedGroupKeys);
+			return new Island(combinedGuidStrings, combinedGroupKeys, skillGroupsCreatorResult);
 		}
 
 		public class Island
 		{
 			private readonly HashSet<string> _skillGuidStrings;
 			private readonly IList<string> _groupKeys;
+			private readonly VirtualSkillGroupsCreatorResult _skillGroupsCreatorResult;
 
-			public Island(IEnumerable<string> skillGuidStrings, IList<string> groupKeys)
+			public Island(IEnumerable<string> skillGuidStrings, IList<string> groupKeys, VirtualSkillGroupsCreatorResult skillGroupsCreatorResult)
 			{
 				_skillGuidStrings = new HashSet<string>(skillGuidStrings);
 				_groupKeys = groupKeys;
+				_skillGroupsCreatorResult = skillGroupsCreatorResult;
 			}
 
 			public IList<string> SkillGuidStrings
@@ -87,12 +87,12 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 				get { return _groupKeys; }
 			}
 
-			public IList<IPerson> PersonsInIsland(VirtualSkillGroupsCreatorResult skillGroupsCreatorResult)
+			public IList<IPerson> PersonsInIsland()
 			{
 				var result = new List<IPerson>();
 				foreach (var groupKey in _groupKeys)
 				{
-					result.AddRange(skillGroupsCreatorResult.GetPersonsForSkillGroupKey(groupKey));
+					result.AddRange(_skillGroupsCreatorResult.GetPersonsForSkillGroupKey(groupKey));
 				}
 
 				return result;

@@ -20,11 +20,11 @@ namespace Teleopti.Ccc.Win.Scheduling.IslandScheduling
 			_componentContext = componentContext.Resolve<ILifetimeScope>().BeginLifetimeScope();
 		}
 
-		public IScheduleDictionary ScheduleAsIsland(VirtualSkillGroupsCreatorResult skillGroups, SkillGroupIslandsAnalyzer.Island island, IOptimizerOriginalPreferences optimizerOriginalPreferences,
+		public IScheduleDictionary ScheduleAsIsland(SkillGroupIslandsAnalyzer.Island island, IOptimizerOriginalPreferences optimizerOriginalPreferences,
 			IList<IScheduleDay> selectedScheduleDays, IOptimizationPreferences optimizationPreferences, ISchedulerStateHolder schedulingScreenStateHolder)
 		{
 			var islandScheduler = _componentContext.Resolve<IslandScheduler>();
-			var result = islandScheduler.RunIsland(skillGroups, island, optimizerOriginalPreferences, selectedScheduleDays,
+			var result = islandScheduler.RunIsland(island, optimizerOriginalPreferences, selectedScheduleDays,
 				optimizationPreferences, schedulingScreenStateHolder);
 
 			return result;
