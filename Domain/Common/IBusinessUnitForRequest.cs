@@ -4,7 +4,6 @@ namespace Teleopti.Ccc.Domain.Common
 {
 	public interface IBusinessUnitForRequest
 	{
-		bool IsHttpRequest();
 		IBusinessUnit BusinessUnitForRequest();
 	}
 }

@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public IBusinessUnit BusinessUnitForRequest()
 		{
-			throw new NotImplementedException();
+			return null;
 		}
 	}
 }
