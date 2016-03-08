@@ -153,12 +153,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return StatisticRepositoryFactory.Create();
 		}
-
-		public IAgentStateReadModelReader CreateRtaRepository()
-		{
-			return new AgentStateReadModelReader(CurrentAnalyticsUnitOfWork.Make());
-		}
-
+		
 		/// <summary>
 		/// Creates the business unit repository.
 		/// </summary>

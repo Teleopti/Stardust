@@ -8,6 +8,8 @@ using System.Windows.Forms;
 using log4net;
 using Microsoft.Practices.Composite.Events;
 using Newtonsoft.Json;
+using Teleopti.Ccc.Domain;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -57,7 +59,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 		private readonly Queue<MessageForRetryCommand> _messageForRetryQueue = new Queue<MessageForRetryCommand>();
 		private readonly IPoller _poller;
 		private readonly IPersonAccountPersister _personAccountPersister;
-
+		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
 
 		public IntradayPresenter(IIntradayView view,
 			ISchedulingResultLoader schedulingResultLoader,
@@ -74,7 +76,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			OnEventMeetingMessageCommand onEventMeetingMessageCommand,
 			LoadStatisticsAndActualHeadsCommand loadStatisticsAndActualHeadsCommand,
 			IPoller poller,
-			IPersonAccountPersister personAccountPersister)
+			IPersonAccountPersister personAccountPersister,
+			IAgentStateReadModelReader agentStateReadModelReader)
 		{
 			_eventAggregator = eventAggregator;
 			_scheduleDictionarySaver = scheduleDictionarySaver;
@@ -99,6 +102,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			_intradayDate = HistoryOnly ? SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod.StartDate : DateOnly.Today;
 			_poller = poller;
 			_personAccountPersister = personAccountPersister;
+			_agentStateReadModelReader = agentStateReadModelReader;
 		}
 
 		public bool EarlyWarningEnabled
@@ -305,15 +309,15 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			Exception exception = null;
 			try
 			{
-				var statisticRepository = _repositoryFactory.CreateRtaRepository();
 				using (PerformanceOutput.ForOperation("Read and collect agent states"))
 				{
-					statisticRepository.Load(_rtaStateHolder.FilteredPersons)
+					_agentStateReadModelReader.Load(_rtaStateHolder.FilteredPersons)
 						.ForEach(a => _rtaStateHolder.SetActualAgentState(a));
 				}
 			}
 			catch (Exception e)
 			{
+				PreserveStack.For(e);
 				exception = e;
 			}
 			if (ExternalAgentStateReceived != null)

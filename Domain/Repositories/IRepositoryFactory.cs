@@ -85,8 +85,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// <returns></returns>
 		IStatisticRepository CreateStatisticRepository();
 
-		IAgentStateReadModelReader CreateRtaRepository();
-
 		/// <summary>
 		/// Creates the business unit repository.
 		/// </summary>
