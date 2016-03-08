@@ -36,6 +36,17 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return new FakeUnitOfWork();
 		}
 
+		private bool _hasCurrentUnitOfWork;
+		public bool HasCurrentUnitOfWork()
+		{
+			return _hasCurrentUnitOfWork;
+		}
+
+		public void SetHasCurrentUnitOfWork()
+		{
+			_hasCurrentUnitOfWork = true;
+		}
+
 		public void Dispose()
 		{
 		}

@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.InfrastructureTest.Foundation
 {
 	[TestFixture]
-	public class HttpRequestTrueTest
+	public class BusinessUnitForRequestTest
 	{
 		[Test]
 		public void GetBusinessUnitForRequest()
@@ -23,8 +23,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 
 			var businessUnitRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
 			businessUnitRepository.Stub(x => x.Load(bu.Id.Value)).Return(bu);
-
-			var target = new BusinessUnitForRequest(httpContext, businessUnitRepository, new DummyCurrentUnitOfWork());
+			var uowFactory = new FakeUnitOfWorkFactory();
+			uowFactory.SetHasCurrentUnitOfWork();
+			var currentUowFactory = MockRepository.GenerateStub<ICurrentUnitOfWorkFactory>();
+			currentUowFactory.Expect(x => x.Current()).Return(uowFactory);
+			var target = new BusinessUnitForRequest(httpContext, businessUnitRepository, currentUowFactory);
 			var businessUnit = target.TryGetBusinessUnit();
 
 			businessUnit.Should().Be.EqualTo(bu);
@@ -38,10 +41,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			var httpContext = new MutableFakeCurrentHttpContext();
 			var headers = new NameValueCollection { { "X-Business-Unit-Filter", bu.Id.Value.ToString() } };
 			httpContext.SetContext(new FakeHttpContext(null, null, null, null, null, null, null, headers));
-			var currentUow = MockRepository.GenerateStub<ICurrentUnitOfWork>();
-			currentUow.Expect(x => x.Current()).Return(null);
+			var uowFactory = new FakeUnitOfWorkFactory();
+			var currentUowFactory = MockRepository.GenerateStub<ICurrentUnitOfWorkFactory>();
+			currentUowFactory.Expect(x => x.Current()).Return(uowFactory);
 
-			var target = new BusinessUnitForRequest(httpContext, null, currentUow);
+			var target = new BusinessUnitForRequest(httpContext, null, currentUowFactory);
 			var businessUnit = target.TryGetBusinessUnit();
 
 			businessUnit.Should().Be.Null();

@@ -196,7 +196,7 @@
     <Compile Include="DatabaseTestAttribute.cs" />
     <Compile Include="DistributedLock\DistributedLockTest.cs" />
     <Compile Include="Foundation\CouldNotCreateTransactionExceptionTest.cs" />
-    <Compile Include="Foundation\HttpRequestTrueTest.cs" />
+    <Compile Include="Foundation\BusinessUnitForRequestTest.cs" />
     <Compile Include="Licensing\SetLicenseActivatorTest.cs" />
     <Compile Include="MessageBroker\ConcurrencyRunner.cs" />
     <Compile Include="MessageBroker\ExceptionExtensions.cs" />
@@ -257,6 +257,7 @@
     <Compile Include="Rta\Persisters\SiteOutOfAdherenceReadModelPersisterConcurrencyTest.cs" />
     <Compile Include="Rta\Persisters\TeamOutOfAdherenceReadModelPersisterConcurrencyTest.cs" />
     <Compile Include="Rta\PublishRtaEventsToHangfireTest.cs" />
+    <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryHasCurrentUnitOfWorkTest.cs" />
     <Compile Include="UnitOfWork\PersistCallbacks\FatClientOptimizationEventPublishingTest.cs" />
     <Compile Include="UnitOfWork\PersistCallbacks\PersonAbsenceEventPublishingTest.cs" />
     <Compile Include="UnitOfWork\PersistCallbacks\ScheduleChangedMessageDictionaryPersisterTest.cs" />

@@ -33,7 +33,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                 throw new NotImplementedException();
             }
 
-        	public IAuditSetter AuditSetting
+	        public bool HasCurrentUnitOfWork()
+	        {
+		        throw new NotImplementedException();
+	        }
+
+	        public IAuditSetter AuditSetting
         	{
         		get { return null; }
         	}

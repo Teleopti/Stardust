@@ -25,6 +25,6 @@ namespace Teleopti.Interfaces.Infrastructure
 		IStatelessUnitOfWork CreateAndOpenStatelessUnitOfWork();
 
 		IUnitOfWork CurrentUnitOfWork();
-
+		bool HasCurrentUnitOfWork();
 	}
 }

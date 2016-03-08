@@ -11,13 +11,15 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 	{
 		private readonly ICurrentHttpContext _currentHttpContext;
 		private readonly IBusinessUnitRepository _businessUnitRepository;
-		private readonly ICurrentUnitOfWork _currentUnitOfWork;
+		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
-		public BusinessUnitForRequest(ICurrentHttpContext currentHttpContext, IBusinessUnitRepository businessUnitRepository, ICurrentUnitOfWork currentUnitOfWork)
+		public BusinessUnitForRequest(ICurrentHttpContext currentHttpContext, 
+														IBusinessUnitRepository businessUnitRepository, 
+														ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
 		{
 			_currentHttpContext = currentHttpContext;
 			_businessUnitRepository = businessUnitRepository;
-			_currentUnitOfWork = currentUnitOfWork;
+			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 		}
 
 		public IBusinessUnit TryGetBusinessUnit()
@@ -25,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			var buid = UnitOfWorkAspect.BusinessUnitIdForRequest(_currentHttpContext);
 			if (buid.HasValue)
 			{
-				return _currentUnitOfWork.Current()!=null ? 
+				return _currentUnitOfWorkFactory.Current().HasCurrentUnitOfWork() ? 
 					_businessUnitRepository.Load(buid.Value) : 
 					null;
 			}
