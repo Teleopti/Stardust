@@ -78,6 +78,65 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			return null;
 		}
 
+		public IList<JobHistory> HistoryList(Guid nodeId)
+		{
+			LogHelper.LogInfoWithLineNumber(Logger, "Start.");
+
+			try
+			{
+				var selectCommand = @"
+	   SELECT * FROM [Stardust].JobHistory
+	   WHERE SentTo IN 
+		(SELECT Url FROM [Stardust].WorkerNodes WHERE Id = @NodeId)";
+
+				var returnList = new List<JobHistory>();
+
+				using (var connection = new SqlConnection(_connectionString))
+				{
+					var command = new SqlCommand
+					{
+						Connection = connection,
+						CommandText = selectCommand,
+						CommandType = CommandType.Text
+					};
+
+					command.Parameters.Add("@NodeId",
+											   SqlDbType.UniqueIdentifier,
+											   16,
+											   "NodeId");
+
+					command.Parameters[0].Value = nodeId;
+
+					connection.Open();
+
+					using (var reader = command.ExecuteReader())
+					{
+						if (reader.HasRows)
+						{
+							while (reader.Read())
+							{
+								var jobHist = NewJobHistoryModel(reader);
+								returnList.Add(jobHist);
+							}
+						}
+
+						reader.Close();
+						connection.Close();
+					}
+
+					return returnList;
+				}
+			}
+			catch (Exception exp)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger, exp.Message, exp);
+			}
+
+			LogHelper.LogInfoWithLineNumber(Logger, "Finished.");
+
+			return null;
+		}
+
 		public IList<JobHistory> HistoryList()
 		{
 			LogHelper.LogInfoWithLineNumber(Logger, "Start.");
@@ -157,7 +216,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			return null;
 		}
 
-		private static string SelectHistoryCommand(bool addParameter)
+		private static string SelectHistoryCommand(bool byJobId)
 		{
 			var selectCommand = @"SELECT 
                                              JobId    
@@ -170,11 +229,12 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 															Result
                                         FROM [Stardust].JobHistory";
 
-			if (addParameter)
+		
+			if (byJobId)
 			{
 				selectCommand += " WHERE JobId = @JobId";
 			}
-
+			
 			return selectCommand;
 		}
 

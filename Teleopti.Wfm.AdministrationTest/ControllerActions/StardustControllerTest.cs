@@ -34,6 +34,12 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		}
 
 		[Test]
+		public void JobHistoryListByNodeShouldNotCrash()
+		{
+			Target.JobHistoryList(Guid.NewGuid());
+		}
+
+		[Test]
 		public void JobHistoryShouldNotCrash()
 		{
 			Target.JobHistory(Guid.NewGuid());

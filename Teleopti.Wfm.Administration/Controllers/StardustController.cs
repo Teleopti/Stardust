@@ -23,6 +23,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Ok(_stardustHelper.GetJobHistoryList());
 		}
 
+		[HttpGet, Route("Stardust/NodeJobHistoryList/{nodeId}")]
+		public IHttpActionResult JobHistoryList(Guid nodeId)
+		{
+			return Ok(_stardustHelper.GetJobHistoryList(nodeId));
+		}
+
 		[HttpGet, Route("Stardust/JobHistory/{jobId}")]
 		public IHttpActionResult JobHistory(Guid jobId)
 		{
@@ -48,5 +54,6 @@ namespace Teleopti.Wfm.Administration.Controllers
 		{
 			return Ok(_stardustHelper.WorkerNode(Id));
 		}
+
 	}
 }
