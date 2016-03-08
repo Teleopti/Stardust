@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			_upgradeLog = upgradeLog;
 		}
 
-		public void ExecuteCustom(Action<SqlConnection> action)
+		public void Execute(Action<SqlConnection> action)
 		{
 			using (var connection = _openConnection())
 			{

@@ -6,24 +6,24 @@ using System.Linq;
 
 namespace Teleopti.Ccc.DBManager.Library
 {
-	public class BackupHelper
+	public class BackupByFileCopy
 	{
-		private readonly ExecuteSql _executeSql;
-		private readonly ExecuteSql _masterExecuteSql;
+		private readonly ExecuteSql _usingDatabase;
+		private readonly ExecuteSql _usingMaster;
 
-		public BackupHelper(ExecuteSql executeSql, ExecuteSql masterExecuteSql, string databaseName)
+		public BackupByFileCopy(ExecuteSql usingDatabase, ExecuteSql usingMaster, string databaseName)
 		{
 			DatabaseName = databaseName;
-			_executeSql = executeSql;
-			_masterExecuteSql = masterExecuteSql;
+			_usingDatabase = usingDatabase;
+			_usingMaster = usingMaster;
 		}
 
 		public string DatabaseName { get; private set; }
 		
-		public Backup BackupByFileCopy(string name)
+		public Backup Backup(string name)
 		{
 			var backup = new Backup();
-			_executeSql.ExecuteCustom(conn =>
+			_usingDatabase.Execute(conn =>
 			{
 				using (var command = conn.CreateCommand())
 				{
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			return backup;
 		}
 
-		public bool TryRestoreByFileCopy(Backup backup)
+		public bool TryRestore(Backup backup)
 		{
 			using (offlineScope())
 			{
@@ -64,22 +64,11 @@ namespace Teleopti.Ccc.DBManager.Library
 			}
 		}
 
-		public class Backup
-		{
-			public IEnumerable<BackupFile> Files { get; set; }
-		}
-
-		public class BackupFile
-		{
-			public string Source { get; set; }
-			public string Backup { get; set; }
-		}
-
 		private IDisposable offlineScope()
 		{
 			SqlConnection.ClearAllPools();
 
-			var state = new DatabaseTasks(_masterExecuteSql);
+			var state = new DatabaseTasks(_usingMaster);
 			state.SetOffline(DatabaseName);
 			return new GenericDisposable(()=>state.SetOnline(DatabaseName));
 		}
@@ -87,7 +76,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		private string executeShellCommandOnServer(string command)
 		{
 			var result = string.Empty;
-			_masterExecuteSql.ExecuteCustom(conn =>
+			_usingMaster.Execute(conn =>
 			{
 				using (var cmd = conn.CreateCommand())
 				{
@@ -123,4 +112,16 @@ namespace Teleopti.Ccc.DBManager.Library
 			return result;
 		}
 	}
+
+	public class Backup
+	{
+		public IEnumerable<BackupFile> Files { get; set; }
+	}
+
+	public class BackupFile
+	{
+		public string Source { get; set; }
+		public string Backup { get; set; }
+	}
+
 }

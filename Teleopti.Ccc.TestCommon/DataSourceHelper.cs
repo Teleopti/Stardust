@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.TestCommon
 			setupAnalytics();
 			return makeDataSource(persistCallbacks, name);
 		}
-
+		
 		public static void CreateDatabases()
 		{
 			CreateDatabases(TestTenantName);
@@ -52,26 +52,22 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static void RestoreCcc7Database(int dataHash)
 		{
-			var databaseHelper = ccc7();
-			restoreDatabase(databaseHelper, databaseHelper.BackupHelper(), dataHash);
+			restoreDatabase(ccc7(), dataHash);
 		}
 
 		public static void BackupCcc7Database(int dataHash)
 		{
-			var databaseHelper = ccc7();
-			backupDatabase(databaseHelper, databaseHelper.BackupHelper(), dataHash);
+			backupDatabase(ccc7(), dataHash);
 		}
 
 		public static void BackupAnalyticsDatabase(int dataHash)
 		{
-			var databaseHelper = analytics();
-			backupDatabase(databaseHelper, databaseHelper.BackupHelper(), dataHash);
+			backupDatabase(analytics(), dataHash);
 		}
 
 		public static void RestoreAnalyticsDatabase(int dataHash)
 		{
-			var databaseHelper = analytics();
-			restoreDatabase(databaseHelper, databaseHelper.BackupHelper(), dataHash);
+			restoreDatabase(analytics(), dataHash);
 		}
 
 		public static void ClearAnalyticsData()
@@ -108,8 +104,7 @@ namespace Teleopti.Ccc.TestCommon
 		private static void setupCcc7(string name)
 		{
 			var databaseHelper = ccc7();
-			var backupHelper = databaseHelper.BackupHelper();
-			if (tryRestoreDatabase(databaseHelper, backupHelper, 0))
+			if (tryRestoreDatabase(databaseHelper, 0))
 			{
 				update_default_tenant_because_connstrings_arent_set_due_to_securityexe_isnt_run_from_infra_test_projs(name);
 				return;
@@ -118,7 +113,7 @@ namespace Teleopti.Ccc.TestCommon
 			createUniqueIndexOnPersonAssignmentBecauseDbManagerIsntRunFromTests();
 			PersistAuditSetting();
 			update_default_tenant_because_connstrings_arent_set_due_to_securityexe_isnt_run_from_infra_test_projs(name);
-			backupDatabase(databaseHelper, backupHelper, 0);
+			backupDatabase(databaseHelper, 0);
 		}
 
 		private static void update_default_tenant_because_connstrings_arent_set_due_to_securityexe_isnt_run_from_infra_test_projs(string name)
@@ -130,11 +125,10 @@ namespace Teleopti.Ccc.TestCommon
 		private static void setupAnalytics()
 		{
 			var databaseHelper = analytics();
-			var backupHelper = databaseHelper.BackupHelper();
-			if (tryRestoreDatabase(databaseHelper, backupHelper, 0))
+			if (tryRestoreDatabase(databaseHelper, 0))
 				return;
 			createDatabase(databaseHelper);
-			backupDatabase(databaseHelper, backupHelper, 0);
+			backupDatabase(databaseHelper, 0);
 		}
 
 		private static void createDatabase(DatabaseHelper database)
@@ -149,20 +143,20 @@ namespace Teleopti.Ccc.TestCommon
 				);
 		}
 
-		private static void backupDatabase(DatabaseHelper database, BackupHelper backupHelper, int dataHash)
+		private static void backupDatabase(DatabaseHelper database, int dataHash)
 		{
 			exceptionToConsole(
 				() =>
 				{
 					var name = backupName(database.DatabaseType, database.DatabaseVersion(), database.OtherScriptFilesHash(), database.DatabaseName, dataHash);
-					var backup = backupHelper.BackupByFileCopy(name);
+					var backup = database.BackupByFileCopy().Backup(name);
 					File.WriteAllText(name, JsonConvert.SerializeObject(backup, Formatting.Indented));
 				},
 				"Failed to backup database {0}!", database.ConnectionString
 				);
 		}
 
-		private static bool tryRestoreDatabase(DatabaseHelper database, BackupHelper backupHelper, int dataHash)
+		private static bool tryRestoreDatabase(DatabaseHelper database, int dataHash)
 		{
 			return exceptionToConsole(
 				() =>
@@ -175,21 +169,21 @@ namespace Teleopti.Ccc.TestCommon
 					if (!File.Exists(name))
 						return false;
 
-					var backup = JsonConvert.DeserializeObject<BackupHelper.Backup>(File.ReadAllText(name));
-					return backupHelper.TryRestoreByFileCopy(backup);
+					var backup = JsonConvert.DeserializeObject<Backup>(File.ReadAllText(name));
+					return database.BackupByFileCopy().TryRestore(backup);
 				},
 				"Failed to restore database {0}!", database.ConnectionString
 				);
 		}
 
-		private static void restoreDatabase(DatabaseHelper database, BackupHelper backupHelper, int dataHash)
+		private static void restoreDatabase(DatabaseHelper database, int dataHash)
 		{
 			exceptionToConsole(
 				() =>
 				{
 					var name = backupName(database.DatabaseType, database.SchemaVersion(), database.OtherScriptFilesHash(), database.DatabaseName, dataHash);
-					var backup = JsonConvert.DeserializeObject<BackupHelper.Backup>(File.ReadAllText(name));
-					var result = backupHelper.TryRestoreByFileCopy(backup);
+					var backup = JsonConvert.DeserializeObject<Backup>(File.ReadAllText(name));
+					var result = database.BackupByFileCopy().TryRestore(backup);
 					if (!result)
 						throw new Exception("Restore failed!");
 				},
@@ -256,6 +250,7 @@ namespace Teleopti.Ccc.TestCommon
 		private static void createUniqueIndexOnPersonAssignmentBecauseDbManagerIsntRunFromTests()
 		{
 			//would be better if dbmanager was called, but don't have the time right now....
+			// eh, that thing that is called IS the db manager!
 			exceptionToConsole(
 				() => ccc7().ConfigureSystem().MergePersonAssignments(),
 				"Failed to create unique index on personassignment in database {0}!", InfraTestConfigReader.ConnectionString

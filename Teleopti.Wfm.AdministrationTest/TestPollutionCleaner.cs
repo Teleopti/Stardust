@@ -53,7 +53,7 @@ namespace Teleopti.Wfm.AdministrationTest
 
 			if (_databaseHelperWrapper.LoginExists(connStringBuilder.ConnectionString, appUser, sqlVersion))
 			{
-				executor.ExecuteCustom(conn => dropLogin(appUser, conn));
+				executor.Execute(conn => dropLogin(appUser, conn));
 			}
 
 			var databaseTasks = new DatabaseTasks(executor);
@@ -78,7 +78,7 @@ namespace Teleopti.Wfm.AdministrationTest
 
 			if (_databaseHelperWrapper.LoginExists(connStringBuilder.ConnectionString, appUser, sqlVersion))
 			{
-				executor.ExecuteCustom(conn => dropLogin(appUser, conn));
+				executor.Execute(conn => dropLogin(appUser, conn));
 			}
 		}
 

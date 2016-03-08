@@ -8,8 +8,8 @@ namespace Teleopti.Ccc.DBManager.Library
 	{
 		public const string MasterDatabaseName = "master";
 		
-		private readonly ExecuteSql _executeMaster;
-		private readonly ExecuteSql _execute;
+		private readonly ExecuteSql _usingMaster;
+		private readonly ExecuteSql _usingDatabase;
 
 		public DatabaseHelper(string connectionString, DatabaseType databaseType)
 		{
@@ -18,8 +18,8 @@ namespace Teleopti.Ccc.DBManager.Library
 			DatabaseType = databaseType;
 			Logger = new NullLog();
 
-			_executeMaster = new ExecuteSql(() => openConnection(true), Logger);
-			_execute = new ExecuteSql(() => openConnection(), Logger);
+			_usingMaster = new ExecuteSql(() => openConnection(true), Logger);
+			_usingDatabase = new ExecuteSql(() => openConnection(), Logger);
 		}
 
 		public IUpgradeLog Logger { set; get; }
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public SqlVersion Version()
 		{
-			return new ServerVersionHelper(_executeMaster).Version();
+			return new ServerVersionHelper(_usingMaster).Version();
 		}
 
 		public void CreateByDbManager()
@@ -39,10 +39,10 @@ namespace Teleopti.Ccc.DBManager.Library
 			dropIfExists();
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
 
-			var creator = new DatabaseCreator(databaseFolder, _executeMaster);
+			var creator = new DatabaseCreator(databaseFolder, _usingMaster);
 			creator.CreateDatabase(DatabaseType, DatabaseName);
 
-			var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, _execute);
+			var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, _usingDatabase);
 			databaseVersionInformation.CreateTable();
 		}
 
@@ -50,13 +50,13 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
 
-			var creator = new DatabaseCreator(databaseFolder, _executeMaster);
+			var creator = new DatabaseCreator(databaseFolder, _usingMaster);
 			creator.CreateAzureDatabase(DatabaseType, DatabaseName);
 
-			var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, _execute);
+			var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, _usingDatabase);
 			databaseVersionInformation.CreateTable();
 
-			var azureStart = new AzureStartDDL(databaseFolder, _execute);
+			var azureStart = new AzureStartDDL(databaseFolder, _usingDatabase);
 			azureStart.Apply(DatabaseType);
 		}
 
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		public LoginHelper LoginTasks()
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
-			var loginHandler = new LoginHelper(Logger, _executeMaster, _execute, databaseFolder);
+			var loginHandler = new LoginHelper(Logger, _usingMaster, _usingDatabase, databaseFolder);
 			loginHandler.EnablePolicyCheck();
 			return loginHandler;
 		}
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		public void AddPermissions(string login, SqlVersion sqlVersion)
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
-			var permissionsHandler = new PermissionsHelper(Logger, databaseFolder, _execute);
+			var permissionsHandler = new PermissionsHelper(Logger, databaseFolder, _usingDatabase);
 			permissionsHandler.CreatePermissions(login,sqlVersion);
 		}
 
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				var dbName = Guid.NewGuid().ToString();
 				try
 				{
-					var tasks = new DatabaseTasks(_executeMaster);
+					var tasks = new DatabaseTasks(_usingMaster);
 					tasks.Create(dbName);
 					tasks.Drop(dbName);
 					return true;
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				}
 			}
 
-			return Convert.ToBoolean(_execute.ExecuteScalar("SELECT IS_SRVROLEMEMBER( 'dbcreator')"));
+			return Convert.ToBoolean(_usingDatabase.ExecuteScalar("SELECT IS_SRVROLEMEMBER( 'dbcreator')"));
 		}
 
 		public bool HasCreateViewAndLoginPermission(SqlVersion sqlVersion)
@@ -124,8 +124,8 @@ namespace Teleopti.Ccc.DBManager.Library
 				var dropSql = string.Format("DROP {1} [{0}]", login, definition);
 				try
 				{
-					_execute.ExecuteTransactionlessNonQuery(createSql);
-					_execute.ExecuteTransactionlessNonQuery(dropSql);
+					_usingDatabase.ExecuteTransactionlessNonQuery(createSql);
+					_usingDatabase.ExecuteTransactionlessNonQuery(dropSql);
 					return true;
 				}
 				catch (Exception)
@@ -133,19 +133,19 @@ namespace Teleopti.Ccc.DBManager.Library
 					return false;
 				}
 			}
-			return Convert.ToBoolean(_execute.ExecuteScalar("SELECT IS_SRVROLEMEMBER( 'securityadmin')"));
+			return Convert.ToBoolean(_usingDatabase.ExecuteScalar("SELECT IS_SRVROLEMEMBER( 'securityadmin')"));
 		}
 
 		public void CreateSchemaByDbManager()
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
 
-			var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, _execute);
+			var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, _usingDatabase);
 			var schemaVersionInformation = new SchemaVersionInformation(databaseFolder);
 			var schemaCreator = new DatabaseSchemaCreator(
 				databaseVersionInformation,
 				schemaVersionInformation,
-				_execute,
+				_usingDatabase,
 				databaseFolder,
 				Logger);
 			schemaCreator.Create(DatabaseType, Version());
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		public int DatabaseVersion()
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
-			var versionInfo = new DatabaseVersionInformation(databaseFolder, _execute);
+			var versionInfo = new DatabaseVersionInformation(databaseFolder, _usingDatabase);
 			return versionInfo.GetDatabaseVersion();
 		}
 
@@ -174,11 +174,11 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		private void dropIfExists()
 		{
-			var tasks = new DatabaseTasks(_executeMaster);
+			var tasks = new DatabaseTasks(_usingMaster);
 			if (!tasks.Exists(DatabaseName)) return;
 
 			tasks.SetOnline(DatabaseName); // if dropping a database that is offline, the file on disk will remain!
-			_executeMaster.ExecuteTransactionlessNonQuery(
+			_usingMaster.ExecuteTransactionlessNonQuery(
 				string.Format("ALTER DATABASE [{0}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;", DatabaseName));
 			tasks.Drop(DatabaseName);
 		}
@@ -197,17 +197,17 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public AppRelatedDatabaseTasks ConfigureSystem()
 		{
-			return new AppRelatedDatabaseTasks(_execute);
+			return new AppRelatedDatabaseTasks(_usingDatabase);
 		}
 
-		public BackupHelper BackupHelper()
+		public BackupByFileCopy BackupByFileCopy()
 		{
-			return new BackupHelper(_execute,_executeMaster,DatabaseName);
+			return new BackupByFileCopy(_usingDatabase, _usingMaster, DatabaseName);
 		}
 
 		public DatabaseTasks Tasks()
 		{
-			return new DatabaseTasks(_executeMaster);
+			return new DatabaseTasks(_usingMaster);
 		}
 	}
 }

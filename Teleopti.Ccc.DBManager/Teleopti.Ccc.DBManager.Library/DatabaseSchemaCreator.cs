@@ -33,9 +33,9 @@ namespace Teleopti.Ccc.DBManager.Library
 			applyProgrammability(databaseType);
 			if (databaseType == DatabaseType.TeleoptiAnalytics)
 			{
-				_executeSql.ExecuteCustom(c => new HangfireSchemaCreator().ApplyHangfire(c));
+				_executeSql.Execute(c => new HangfireSchemaCreator().ApplyHangfire(c));
 				if(!sqlVersion.IsAzure)
-					_executeSql.ExecuteCustom(c => new SignalRSqlBackplaneSchemaCreator().ApplySignalRSqlBackplane(c));
+					_executeSql.Execute(c => new SignalRSqlBackplaneSchemaCreator().ApplySignalRSqlBackplane(c));
 			}
 			addInstallLogRow();
 		}

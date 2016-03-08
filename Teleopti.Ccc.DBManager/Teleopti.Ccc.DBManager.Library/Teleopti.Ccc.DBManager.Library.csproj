@@ -86,7 +86,7 @@
     </Compile>
     <Compile Include="AppRelatedDatabaseTasks.cs" />
     <Compile Include="AzureStartDDL.cs" />
-    <Compile Include="BackupHelper.cs" />
+    <Compile Include="BackupByFileCopy.cs" />
     <Compile Include="CommandLineArgument.cs" />
     <Compile Include="ConsoleLogger.cs" />
     <Compile Include="DatabaseCreator.cs" />

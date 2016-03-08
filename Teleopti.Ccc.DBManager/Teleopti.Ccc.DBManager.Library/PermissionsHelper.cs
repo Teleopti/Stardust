@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		private bool sqlVersionGreaterThen(Version checkVersion)
 		{
 			var serverVersion = new Version();
-			_executeSql.ExecuteCustom(sqlConnection => { serverVersion = Version.Parse(sqlConnection.ServerVersion); });
+			_executeSql.Execute(sqlConnection => { serverVersion = Version.Parse(sqlConnection.ServerVersion); });
 
 			return serverVersion >= checkVersion;
 		}
