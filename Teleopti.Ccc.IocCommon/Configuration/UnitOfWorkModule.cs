@@ -1,14 +1,10 @@
 using Autofac;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -32,34 +28,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<WithUnitOfWork>().SingleInstance();
 
-			#region All implementation of IPersistCallback
-			var businessUnit = CurrentBusinessUnit.Make();
-
-			/**************************************/
-			/*         Order dependant            */
-			builder.RegisterType<EventsMessageSender>().As<IPersistCallback>();
-			if (_configuration.Args().OptimizeScheduleChangedEvents_DontUseFromWeb)
-				builder.RegisterType<ScheduleChangedEventPublisher>().As<IPersistCallback>();
-			/*           End                      */
-			/**************************************/
-
-			builder.RegisterType<ScheduleChangedEventFromMeetingPublisher>().As<IPersistCallback>();
-			builder.RegisterType<GroupPageChangedBusMessageSender>().As<IPersistCallback>();
-			builder.Register(
-				c => new PersonCollectionChangedEventPublisherForTeamOrSite(c.Resolve<IEventPopulatingPublisher>(), businessUnit))
-				.As<IPersistCallback>();
-			builder.Register(c => new PersonCollectionChangedEventPublisher(c.Resolve<IEventPopulatingPublisher>(), businessUnit))
-				.As<IPersistCallback>();
-			builder.RegisterType<PersonPeriodChangedBusMessagePublisher>().As<IPersistCallback>();
-
-			if (_configuration.Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
-			{
-				builder.Register(c => new ScheduleChangedMessageSender(c.Resolve<IMessageSender>(), CurrentDataSource.Make(),
-					businessUnit, c.Resolve<IJsonSerializer>(), c.Resolve<ICurrentInitiatorIdentifier>())).As<IPersistCallback>();
-			}
-
-			builder.RegisterType<CurrentPersistCallbacks>().As<ICurrentPersistCallbacks>().As<IMessageSendersScope>();
-			#endregion
+			persistCallbacks(builder);
 
 			builder.RegisterType<CurrentBusinessUnit>().As<ICurrentBusinessUnit>().SingleInstance()
 				.OnActivated(e => ServiceLocatorForEntity.SetInstanceFromContainer(e.Instance))
@@ -74,6 +43,28 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<UnitOfWorkAspect>().As<IUnitOfWorkAspect>().InstancePerDependency();
 			builder.RegisterType<ReadOnlyUnitOfWorkAspect>().As<IReadOnlyUnitOfWorkAspect>().InstancePerDependency();
 			builder.RegisterType<AllBusinessUnitsUnitOfWorkAspect>().As<IAllBusinessUnitsUnitOfWorkAspect>().InstancePerDependency();
+		}
+
+		private void persistCallbacks(ContainerBuilder builder)
+		{
+			builder.RegisterType<CurrentPersistCallbacks>().As<ICurrentPersistCallbacks>().As<IMessageSendersScope>();
+
+			/**************************************/
+			/*         Order dependant            */
+			builder.RegisterType<EventsMessageSender>().As<IPersistCallback>();
+			if (_configuration.Args().OptimizeScheduleChangedEvents_DontUseFromWeb)
+				builder.RegisterType<ScheduleChangedEventPublisher>().As<IPersistCallback>();
+			/*           End                      */
+			/**************************************/
+
+			builder.RegisterType<ScheduleChangedEventFromMeetingPublisher>().As<IPersistCallback>();
+			builder.RegisterType<GroupPageChangedBusMessageSender>().As<IPersistCallback>();
+			builder.RegisterType<PersonCollectionChangedEventPublisherForTeamOrSite>().As<IPersistCallback>();
+			builder.RegisterType<PersonCollectionChangedEventPublisher>().As<IPersistCallback>();
+			builder.RegisterType<PersonPeriodChangedBusMessagePublisher>().As<IPersistCallback>();
+			if (_configuration.Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
+				builder.RegisterType<ScheduleChangedMessageSender>().As<IPersistCallback>();
+
 		}
 	}
 }
