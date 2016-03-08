@@ -29,6 +29,11 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public string DbManagerFolderPath { get; set; }
 
+		public string BackupName(int dataHash)
+		{
+			return DatabaseType + "." + DatabaseName + "." + DatabaseVersion() + "." + OtherScriptFilesHash() + "." + dataHash + ".backup";
+		}
+
 		public SqlVersion Version()
 		{
 			return new ServerVersionHelper(_usingMaster).Version();
@@ -203,6 +208,11 @@ namespace Teleopti.Ccc.DBManager.Library
 		public BackupByFileCopy BackupByFileCopy()
 		{
 			return new BackupByFileCopy(_usingDatabase, _usingMaster, DatabaseName);
+		}
+
+		public BackupBySql BackupBySql()
+		{
+			return new BackupBySql(_usingMaster, DatabaseName);
 		}
 
 		public DatabaseTasks Tasks()
