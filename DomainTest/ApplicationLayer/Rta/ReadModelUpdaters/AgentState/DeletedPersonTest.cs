@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 		public void ShouldRemoveReadModelWhenPersonIsDeleted()
 		{
 			var personId = Guid.NewGuid();
-			Persister.PersistActualAgentReadModel(new AgentStateReadModel {PersonId = personId});
+			Persister.Persist(new AgentStateReadModel {PersonId = personId});
 
 			Target.Handle(new PersonDeletedEvent {PersonId = personId});
 

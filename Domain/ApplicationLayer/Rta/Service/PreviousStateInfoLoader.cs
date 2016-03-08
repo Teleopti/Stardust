@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public StoredStateInfo Load(Guid personId)
 		{
-			var loaded = _persister.GetCurrentActualAgentState(personId);
+			var loaded = _persister.Get(personId);
 			return loaded == null ? null : new StoredStateInfo(personId, loaded);
 		}
 	}

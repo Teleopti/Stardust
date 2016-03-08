@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 {
 	[TestFixture]
-	[MultiDatabaseTest]
+	[AnalyticsUnitOfWorkTest]
 	public class AgentStateReadModelPersisterTest
 	{
 		public IAgentStateReadModelPersister Target;
@@ -19,9 +19,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var state = new AgentStateReadModelForTest();
 
-			Target.PersistActualAgentReadModel(state);
+			Target.Persist(state);
 
-			var result = Target.GetCurrentActualAgentState(state.PersonId);
+			var result = Target.Get(state.PersonId);
 			result.Should().Not.Be.Null();
 		}
 
@@ -31,9 +31,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var businessUnitId = Guid.NewGuid();
 			var state = new AgentStateReadModelForTest {BusinessUnitId = businessUnitId};
 
-			Target.PersistActualAgentReadModel(state);
+			Target.Persist(state);
 
-			Target.GetCurrentActualAgentState(state.PersonId)
+			Target.Get(state.PersonId)
 				.BusinessUnitId.Should().Be(businessUnitId);
 		}
 
@@ -43,9 +43,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var teamId = Guid.NewGuid();
 			var state = new AgentStateReadModelForTest {TeamId = teamId};
 
-			Target.PersistActualAgentReadModel(state);
+			Target.Persist(state);
 
-			Target.GetCurrentActualAgentState(state.PersonId)
+			Target.Get(state.PersonId)
 				.TeamId.Should().Be(teamId);
 		}
 
@@ -55,9 +55,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var siteId = Guid.NewGuid();
 			var state = new AgentStateReadModelForTest {SiteId = siteId};
 
-			Target.PersistActualAgentReadModel(state);
+			Target.Persist(state);
 
-			Target.GetCurrentActualAgentState(state.PersonId)
+			Target.Get(state.PersonId)
 				.SiteId.Should().Be(siteId);
 		}
 
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var personId = Guid.NewGuid();
 
-			Target.PersistActualAgentReadModel(new AgentStateReadModel
+			Target.Persist(new AgentStateReadModel
 			{
 				PersonId = personId,
 				BusinessUnitId = Guid.NewGuid(),
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				RuleColor = null,
 			});
 
-			Target.GetCurrentActualAgentState(personId)
+			Target.Get(personId)
 				.Should().Not.Be.Null();
 		}
 
@@ -107,9 +107,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var state = new AgentStateReadModelForTest { AlarmStartTime = "2015-12-11 08:00".Utc()};
 
-			Target.PersistActualAgentReadModel(state);
+			Target.Persist(state);
 
-			Target.GetCurrentActualAgentState(state.PersonId)
+			Target.Get(state.PersonId)
 				.AlarmStartTime.Should().Be("2015-12-11 08:00".Utc());
 		}
 
@@ -118,9 +118,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var state = new AgentStateReadModelForTest {IsAlarm = true};
 
-			Target.PersistActualAgentReadModel(state);
+			Target.Persist(state);
 
-			Target.GetCurrentActualAgentState(state.PersonId)
+			Target.Get(state.PersonId)
 				.IsAlarm.Should().Be(true);
 		}
 
@@ -129,9 +129,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var state = new AgentStateReadModelForTest {AlarmColor = Color.Red.ToArgb()};
 
-			Target.PersistActualAgentReadModel(state);
+			Target.Persist(state);
 
-			Target.GetCurrentActualAgentState(state.PersonId)
+			Target.Get(state.PersonId)
 				.AlarmColor.Should().Be(Color.Red.ToArgb());
 		}
 
@@ -140,11 +140,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var personId = Guid.NewGuid();
 			var model = new AgentStateReadModelForTest { PersonId = personId };
-			Target.PersistActualAgentReadModel(model);
+			Target.Persist(model);
 
 			Target.Delete(personId);
 
-			Target.GetCurrentActualAgentState(personId).Should()
+			Target.Get(personId).Should()
 				.Be.Null();
 		}
 	}

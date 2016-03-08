@@ -179,6 +179,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AnalyticsDatabaseTestAttribute.cs" />
+    <Compile Include="AnalyticsUnitOfWorkTestAttribute.cs" />
     <Compile Include="Aop\Bug32045.cs" />
     <Compile Include="Aop\OrderedAspectsTest.cs" />
     <Compile Include="Aop\ValidationTest.cs" />
@@ -299,7 +300,7 @@
     <Compile Include="Rta\Persisters\TeamOutOfAdherenceReadModelPersisterTest.cs" />
     <Compile Include="Repositories\TeamGamificationSettingRepositoryTest.cs" />
     <Compile Include="Rta\AgentStateReadModelForTest.cs" />
-    <Compile Include="Rta\DatabaseReaderAgentStateTest.cs" />
+    <Compile Include="Rta\Persisters\AgentStateReadModelPersisterGetTest.cs" />
     <Compile Include="Rta\Persisters\AgentStateReadModelPersisterTest.cs" />
     <Compile Include="Rta\TestConnectionStrings.cs" />
     <Compile Include="InfrastructureTestAttribute.cs" />

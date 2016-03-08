@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.TestCommon
 					select m).ToArray();
 		}
 		
-		public IEnumerable<AgentStateReadModel> GetAgentsNotInSnapshot(DateTime batchId, string dataSourceId)
+		public IEnumerable<AgentStateReadModel> GetNotInSnapshot(DateTime batchId, string dataSourceId)
 		{
 			return (from s in _data.Values
 				where s.OriginalDataSourceId == dataSourceId &&
@@ -71,12 +71,12 @@ namespace Teleopti.Ccc.TestCommon
 				select s).ToArray();
 		}
 		
-		public AgentStateReadModel GetCurrentActualAgentState(Guid personId)
+		public AgentStateReadModel Get(Guid personId)
 		{
 			return _data.Values.SingleOrDefault(x => x.PersonId == personId);
 		}
 
-		public IEnumerable<AgentStateReadModel> GetActualAgentStates()
+		public IEnumerable<AgentStateReadModel> GetAll()
 		{
 			return _data.Values.ToArray();
 		}
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.TestCommon
 
 
 
-		public void PersistActualAgentReadModel(AgentStateReadModel model)
+		public void Persist(AgentStateReadModel model)
 		{
 			AgentStateReadModel removed;
 			_data.TryRemove(model.PersonId, out removed);

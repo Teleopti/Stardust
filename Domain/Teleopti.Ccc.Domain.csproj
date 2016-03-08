@@ -151,8 +151,10 @@
     <Compile Include="AgentInfo\Requests\ShiftExchangeOffer.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecification.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeStatusExtensions.cs" />
+    <Compile Include="Aop\AnalyticsUnitOfWorkAttribute.cs" />
     <Compile Include="Aop\Core\AspectAttribute.cs" />
     <Compile Include="Aop\Core\IInvocationInfo.cs" />
+    <Compile Include="Aop\IAnalyticsUnitOfWorkAspect.cs" />
     <Compile Include="Aop\ILogAspect.cs" />
     <Compile Include="Aop\ILogManagerWrapper.cs" />
     <Compile Include="Aop\IMessageBrokerUnitOfWorkAspect.cs" />
@@ -165,6 +167,7 @@
     <Compile Include="Aop\ReadOnlyUnitOfWorkAttribute.cs" />
     <Compile Include="Aop\UnitOfWorkAttribute.cs" />
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
+    <Compile Include="Aop\WithAnalyticsUnitOfWork.cs" />
     <Compile Include="ApplicationLayer\AllTenantRecurringEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Commands\AbsenceCommandConverter.cs" />
     <Compile Include="ApplicationLayer\Commands\AbsenceCreatorInfo.cs" />

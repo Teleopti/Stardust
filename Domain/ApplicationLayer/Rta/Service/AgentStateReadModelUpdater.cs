@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+﻿using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -17,12 +18,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[UseOnToggle(Toggles.RTA_DeletedPersons_36041)]
+		[AnalyticsUnitOfWork]
 		public virtual void Handle(PersonDeletedEvent @event)
 		{
 			_agentStateReadModelPersister.Delete(@event.PersonId);
 		}
 
 		[UseOnToggle(Toggles.RTA_TerminatedPersons_36042)]
+		[AnalyticsUnitOfWork]
 		public virtual void Handle(PersonAssociationChangedEvent @event)
 		{
 			if (@event.TeamId.HasValue)
@@ -30,9 +33,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_agentStateReadModelPersister.Delete(@event.PersonId);
 		}
 
+
+
+
 		public void Update(StateInfo info)
 		{
-			_agentStateReadModelPersister.PersistActualAgentReadModel(info.MakeAgentStateReadModel());
+			_agentStateReadModelPersister.Persist(info.MakeAgentStateReadModel());
 		}
 	}
 }

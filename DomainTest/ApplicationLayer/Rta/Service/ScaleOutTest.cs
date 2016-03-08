@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Task.WaitAll(tasks.ToArray());
 
-			Persister.GetActualAgentStates().Should().Have.Count.EqualTo(100);
+			Persister.GetAll().Should().Have.Count.EqualTo(100);
 			Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Should().Have.Count.EqualTo(100);
 		}
 	}

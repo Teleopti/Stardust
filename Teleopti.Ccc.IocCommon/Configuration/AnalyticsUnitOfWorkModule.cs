@@ -1,6 +1,7 @@
 using Autofac;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Infrastructure.Analytics;
-using Teleopti.Ccc.Infrastructure.Rta;
+using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -19,7 +20,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<CurrentAnalyticsUnitOfWork>().As<ICurrentAnalyticsUnitOfWork>().SingleInstance();
 			builder.RegisterType<CurrentAnalyticsUnitOfWorkFactory>().As<ICurrentAnalyticsUnitOfWorkFactory>().SingleInstance();
-			builder.RegisterType<AnalyticsUnitOfWorkAspect>().As<IAnalyticsUnitOfWorkAspect>().InstancePerDependency();
+			builder.RegisterType<AnalyticsUnitOfWorkAspect>().As<IAnalyticsUnitOfWorkAspect>().SingleInstance();
+			builder.RegisterType<WithAnalyticsUnitOfWork>().SingleInstance().ApplyAspects();
 		}
 	}
 }

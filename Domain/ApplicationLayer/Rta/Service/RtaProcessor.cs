@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using Teleopti.Ccc.Domain.Aop;
+﻿using Teleopti.Ccc.Domain.Aop;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -47,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				_appliedAlarm
 				);
 
-			context.AgentStateReadModelUpdater.Update(info);
+			context.UpdateAgentStateReadModel(info);
 
 			using (_eventPublisherScope.OnThisThreadPublishTo(eventCollector))
 			{

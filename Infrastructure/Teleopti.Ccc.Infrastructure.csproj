@@ -407,9 +407,7 @@
     <Compile Include="Repositories\LoadSkillInIntradays.cs" />
     <Compile Include="Repositories\SkillAreaRepository.cs" />
     <Compile Include="Analytics\AnalyticsUnitOfWorkAspect.cs" />
-    <Compile Include="Analytics\AnalyticsUnitOfWorkAttribute.cs" />
     <Compile Include="Analytics\CurrentAnalyticsUnitOfWork.cs" />
-    <Compile Include="Analytics\IAnalyticsUnitOfWorkAspect.cs" />
     <Compile Include="Analytics\ICurrentAnalyticsUnitOfWork.cs" />
     <Compile Include="SeatManagement\PersonScheduleWithSeatBooking.cs" />
     <Compile Include="Repositories\PlanningPeriodRepository.cs" />

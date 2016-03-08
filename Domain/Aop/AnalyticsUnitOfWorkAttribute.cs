@@ -1,6 +1,6 @@
 using Teleopti.Ccc.Domain.Aop.Core;
 
-namespace Teleopti.Ccc.Infrastructure.Analytics
+namespace Teleopti.Ccc.Domain.Aop
 {
 	public class AnalyticsUnitOfWorkAttribute : AspectAttribute
 	{

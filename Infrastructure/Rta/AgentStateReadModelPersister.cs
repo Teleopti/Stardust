@@ -20,8 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		}
 
 		[InfoLog]
-		[AnalyticsUnitOfWork]
-		public virtual void PersistActualAgentReadModel(AgentStateReadModel model)
+		public virtual void Persist(AgentStateReadModel model)
 		{
 			_unitOfWork.Current().Session()
 				.CreateSQLQuery(
@@ -81,10 +80,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.ExecuteUpdate();
 		}
 
-
-
-		[AnalyticsUnitOfWork]
-		public virtual IEnumerable<AgentStateReadModel> GetActualAgentStates()
+		public virtual IEnumerable<AgentStateReadModel> GetAll()
 		{
 			var sql = AgentStateReadModelReader.SelectActualAgentState();
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
@@ -94,8 +90,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		}
 
 		[InfoLog]
-		[AnalyticsUnitOfWork]
-		public virtual AgentStateReadModel GetCurrentActualAgentState(Guid personId)
+		public virtual AgentStateReadModel Get(Guid personId)
 		{
 			var sql = AgentStateReadModelReader.SelectActualAgentState() + "WHERE PersonId = :PersonId";
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
@@ -107,8 +102,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		}
 
 		[InfoLog]
-		[AnalyticsUnitOfWork]
-		public virtual IEnumerable<AgentStateReadModel> GetAgentsNotInSnapshot(DateTime batchId, string dataSourceId)
+		public virtual IEnumerable<AgentStateReadModel> GetNotInSnapshot(DateTime batchId, string dataSourceId)
 		{
 			var sql = AgentStateReadModelReader.SelectActualAgentState() +
 					  @"WHERE 
@@ -125,9 +119,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.SetReadOnly(true)
 				.List<AgentStateReadModel>();
 		}
-		
 
-		[AnalyticsUnitOfWork]
 		public virtual void Delete(Guid personId)
 		{
 			_unitOfWork.Current().Session()

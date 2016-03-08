@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.InfrastructureTest.Helper;
+using Teleopti.Ccc.Infrastructure.Analytics;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -13,10 +14,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
 	[MultiDatabaseTest]
-	public class AgentStateReadModelReaderTest : DatabaseTest
-    {
-        public IAgentStateReadModelReader Target;
-        public IAgentStateReadModelPersister Persister;
+	public class AgentStateReadModelReaderTest
+	{
+		public IAgentStateReadModelReader Target;
+		public IAgentStateReadModelPersister Persister;
+		public WithAnalyticsUnitOfWork WithAnalytics;
 
 		[Test]
 		public void VerifyLoadActualAgentState()
@@ -26,28 +28,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var result = Target.Load(new List<IPerson> {person});
 			Assert.IsNotNull(result);
 		}
-		
-	    [Test]
-	    public void ShouldLoadLastAgentState()
-	    {
+
+		[Test]
+		public void ShouldLoadLastAgentState()
+		{
 			var person = PersonFactory.CreatePerson("Ashlee", "Andeen");
 			person.SetId(Guid.NewGuid());
-			var result = Target.Load(new List<Guid> { person.Id.GetValueOrDefault() });
+			var result = Target.Load(new List<Guid> {person.Id.GetValueOrDefault()});
 			Assert.IsNotNull(result);
-	    }
+		}
 
 		[Test]
 		public void ShouldLoadAgentStateByTeamId()
 		{
 			var teamId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			var state = new AgentStateReadModelForTest
+			WithAnalytics.Do(() =>
 			{
-				TeamId = teamId, 
-				PersonId = personId
-			};
-			Persister
-				.PersistActualAgentReadModel(state);
+				Persister.Persist(new AgentStateReadModelForTest
+				{
+					TeamId = teamId,
+					PersonId = personId
+				});
+			});
 			var result = Target.LoadForTeam(teamId);
 
 			result.Single().PersonId.Should().Be(personId);
@@ -57,15 +60,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public void ShouldLoadAgentStatesByTeamId()
 		{
 			var teamId = Guid.NewGuid();
-			var personId1 = Guid.NewGuid();
-			var personId2 = Guid.NewGuid();
-			var personId3 = Guid.NewGuid();
-			var state1 = new AgentStateReadModelForTest { TeamId =teamId, PersonId = personId1};
-			var state2 = new AgentStateReadModelForTest { TeamId =teamId, PersonId = personId2};
-			var state3 = new AgentStateReadModelForTest { TeamId =Guid.Empty, PersonId = personId3};
-            Persister.PersistActualAgentReadModel(state1);
-			Persister.PersistActualAgentReadModel(state2);
-			Persister.PersistActualAgentReadModel(state3);
+			WithAnalytics.Do(() =>
+			{
+				Persister.Persist(new AgentStateReadModelForTest {TeamId = teamId, PersonId = Guid.NewGuid()});
+				Persister.Persist(new AgentStateReadModelForTest {TeamId = teamId, PersonId = Guid.NewGuid()});
+				Persister.Persist(new AgentStateReadModelForTest {TeamId = Guid.Empty, PersonId = Guid.NewGuid()});
+			});
 
 			var result = Target.LoadForTeam(teamId);
 
@@ -75,17 +75,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldLoadAgentStatesBySiteIds()
 		{
-			var siteId1= Guid.NewGuid();
+			var siteId1 = Guid.NewGuid();
 			var siteId2 = Guid.NewGuid();
-			var personId1 = Guid.NewGuid();
-			var personId2 = Guid.NewGuid();
-			var personId3 = Guid.NewGuid();
-			var state1 = new AgentStateReadModelForTest { SiteId = siteId1, PersonId = personId1 };
-			var state2 = new AgentStateReadModelForTest { SiteId = siteId2, PersonId = personId2};
-			var state3 = new AgentStateReadModelForTest { SiteId = Guid.Empty, PersonId = personId3};
-            Persister.PersistActualAgentReadModel(state1);
-			Persister.PersistActualAgentReadModel(state2);
-			Persister.PersistActualAgentReadModel(state3);
+			WithAnalytics.Do(() =>
+			{
+				Persister.Persist(new AgentStateReadModelForTest {SiteId = siteId1, PersonId = Guid.NewGuid()});
+				Persister.Persist(new AgentStateReadModelForTest {SiteId = siteId2, PersonId = Guid.NewGuid()});
+				Persister.Persist(new AgentStateReadModelForTest {SiteId = Guid.Empty, PersonId = Guid.NewGuid()});
+			});
 
 			var result = Target.LoadForSites(new[] {siteId1, siteId2}, null, null);
 
@@ -95,17 +92,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldLoadAgentStatesByTeamIds()
 		{
-			var teamId1= Guid.NewGuid();
+			var teamId1 = Guid.NewGuid();
 			var teamId2 = Guid.NewGuid();
-			var personId1 = Guid.NewGuid();
-			var personId2 = Guid.NewGuid();
-			var personId3 = Guid.NewGuid();
-			var state1 = new AgentStateReadModelForTest { TeamId = teamId1, PersonId = personId1 };
-			var state2 = new AgentStateReadModelForTest { TeamId = teamId2, PersonId = personId2};
-			var state3 = new AgentStateReadModelForTest { TeamId = Guid.Empty, PersonId = personId3};
-            Persister.PersistActualAgentReadModel(state1);
-			Persister.PersistActualAgentReadModel(state2);
-			Persister.PersistActualAgentReadModel(state3);
+			WithAnalytics.Do(() =>
+			{
+				Persister.Persist(new AgentStateReadModelForTest {TeamId = teamId1, PersonId = Guid.NewGuid()});
+				Persister.Persist(new AgentStateReadModelForTest {TeamId = teamId2, PersonId = Guid.NewGuid()});
+				Persister.Persist(new AgentStateReadModelForTest {TeamId = Guid.Empty, PersonId = Guid.NewGuid()});
+			});
 
 			var result = Target.LoadForTeams(new[] {teamId1, teamId2}, null, null);
 
@@ -117,67 +111,69 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		{
 			var teamId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			var state = new AgentStateReadModelForTest
+			WithAnalytics.Do(() =>
 			{
-				TeamId = teamId,
-				PersonId = personId,
-				Adherence = (int) Adherence.Out
-			};
-			Persister
-				 .PersistActualAgentReadModel(state);
+				Persister.Persist(new AgentStateReadModelForTest
+				{
+					TeamId = teamId,
+					PersonId = personId,
+					Adherence = (int) Adherence.Out
+				});
+			});
 
 			Target.Load(new[] {personId}).Single().Adherence.Should().Be(Adherence.Out);
 			Target.LoadForTeam(teamId).Single().Adherence.Should().Be(Adherence.Out);
 		}
-		
+
 		[Test]
 		public void ShouldLoadStatesInAlarmOnly()
 		{
 			var teamId = Guid.NewGuid();
 			var personId1 = Guid.NewGuid();
-			var personId2 = Guid.NewGuid();
-			var state1 = new AgentStateReadModelForTest
+			WithAnalytics.Do(() =>
 			{
-				TeamId = teamId,
-				PersonId = personId1,
-				IsAlarm = true
-			};
-			var state2 = new AgentStateReadModelForTest
-			{
-				TeamId = teamId,
-				PersonId = personId2,
-				IsAlarm = false
-			};
-			Persister.PersistActualAgentReadModel(state1);
-			Persister.PersistActualAgentReadModel(state2);
+				Persister.Persist(new AgentStateReadModelForTest
+				{
+					TeamId = teamId,
+					PersonId = personId1,
+					IsAlarm = true
+				});
+				Persister.Persist(new AgentStateReadModelForTest
+				{
+					TeamId = teamId,
+					PersonId = Guid.NewGuid(),
+					IsAlarm = false
+				});
+			});
 
 			var result = Target.LoadForTeams(new[] {teamId}, true, null);
 
 			result.Single().PersonId.Should().Be(personId1);
 		}
-		
+
 		[Test]
 		public void ShouldLoadStatesOrderByLongestAlarmTimeFirst()
 		{
 			var siteId = Guid.NewGuid();
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
-			var state1 = new AgentStateReadModelForTest
+			WithAnalytics.Do(() =>
 			{
-				SiteId = siteId,
-				PersonId = personId1,
-				AlarmStartTime = "2015-12-16 8:30".Utc()
-			};
-			var state2 = new AgentStateReadModelForTest
-			{
-				SiteId = siteId,
-				PersonId = personId2,
-				AlarmStartTime = "2015-12-16 8:00".Utc()
-			};
-			Persister.PersistActualAgentReadModel(state1);
-			Persister.PersistActualAgentReadModel(state2);
+				Persister.Persist(new AgentStateReadModelForTest
+				{
+					SiteId = siteId,
+					PersonId = personId1,
+					AlarmStartTime = "2015-12-16 8:30".Utc()
+				});
+				Persister.Persist(new AgentStateReadModelForTest
+				{
+					SiteId = siteId,
+					PersonId = personId2,
+					AlarmStartTime = "2015-12-16 8:00".Utc()
+				});
+			});
 
-			var result = Target.LoadForSites(new[] { siteId }, null, true);
+			var result = Target.LoadForSites(new[] {siteId}, null, true);
 
 			result.First().PersonId.Should().Be(personId2);
 			result.Last().PersonId.Should().Be(personId1);
@@ -189,48 +185,51 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var siteId = Guid.NewGuid();
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
-			var state1 = new AgentStateReadModelForTest
+			WithAnalytics.Do(() =>
 			{
-				SiteId = siteId,
-				PersonId = personId1,
-				AlarmStartTime = "2015-12-16 8:30".Utc()
-			};
-			var state2 = new AgentStateReadModelForTest
-			{
-				SiteId = siteId,
-				PersonId = personId2,
-				AlarmStartTime = "2015-12-16 8:00".Utc()
-			};
-			Persister.PersistActualAgentReadModel(state1);
-			Persister.PersistActualAgentReadModel(state2);
+				Persister.Persist(new AgentStateReadModelForTest
+				{
+					SiteId = siteId,
+					PersonId = personId1,
+					AlarmStartTime = "2015-12-16 8:30".Utc()
+				});
+				Persister.Persist(new AgentStateReadModelForTest
+				{
+					SiteId = siteId,
+					PersonId = personId2,
+					AlarmStartTime = "2015-12-16 8:00".Utc()
+				});
+			});
 
-			var result = Target.LoadForSites(new[] { siteId }, null, false);
+			var result = Target.LoadForSites(new[] {siteId}, null, false);
 
 			result.First().PersonId.Should().Be(personId1);
 			result.Last().PersonId.Should().Be(personId2);
 		}
+
 		[Test]
 		public void ShouldLoadTeamStatesOrderByLongestAlarmTimeFirst()
 		{
 			var teamId = Guid.NewGuid();
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
-			var state1 = new AgentStateReadModelForTest
+			WithAnalytics.Do(() =>
 			{
-				TeamId = teamId,
-				PersonId = personId1,
-				AlarmStartTime = "2015-12-16 8:30".Utc()
-			};
-			var state2 = new AgentStateReadModelForTest
-			{
-				TeamId = teamId,
-				PersonId = personId2,
-				AlarmStartTime = "2015-12-16 8:00".Utc()
-			};
-			Persister.PersistActualAgentReadModel(state1);
-			Persister.PersistActualAgentReadModel(state2);
+				Persister.Persist(new AgentStateReadModelForTest
+				{
+					TeamId = teamId,
+					PersonId = personId1,
+					AlarmStartTime = "2015-12-16 8:30".Utc()
+				});
+				Persister.Persist(new AgentStateReadModelForTest
+				{
+					TeamId = teamId,
+					PersonId = personId2,
+					AlarmStartTime = "2015-12-16 8:00".Utc()
+				});
+			});
 
-			var result = Target.LoadForTeams(new[] { teamId }, null, true);
+			var result = Target.LoadForTeams(new[] {teamId}, null, true);
 
 			result.First().PersonId.Should().Be(personId2);
 			result.Last().PersonId.Should().Be(personId1);
@@ -242,22 +241,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var teamId = Guid.NewGuid();
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
-			var state1 = new AgentStateReadModelForTest
+			WithAnalytics.Do(() =>
 			{
-				TeamId = teamId,
-				PersonId = personId1,
-				AlarmStartTime = "2015-12-16 8:30".Utc()
-			};
-			var state2 = new AgentStateReadModelForTest
-			{
-				TeamId = teamId,
-				PersonId = personId2,
-				AlarmStartTime = "2015-12-16 8:00".Utc()
-			};
-			Persister.PersistActualAgentReadModel(state1);
-			Persister.PersistActualAgentReadModel(state2);
+				Persister.Persist(new AgentStateReadModelForTest
+				{
+					TeamId = teamId,
+					PersonId = personId1,
+					AlarmStartTime = "2015-12-16 8:30".Utc()
+				});
+				Persister.Persist(new AgentStateReadModelForTest
+				{
+					TeamId = teamId,
+					PersonId = personId2,
+					AlarmStartTime = "2015-12-16 8:00".Utc()
+				});
+			});
 
-			var result = Target.LoadForTeams(new[] { teamId }, null, false);
+			var result = Target.LoadForTeams(new[] {teamId}, null, false);
 
 			result.First().PersonId.Should().Be(personId1);
 			result.Last().PersonId.Should().Be(personId2);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Analytics;

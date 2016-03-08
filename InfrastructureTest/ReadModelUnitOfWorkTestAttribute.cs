@@ -17,5 +17,4 @@ namespace Teleopti.Ccc.InfrastructureTest
 			SetupFixtureForAssembly.RestoreCcc7Database();
 		}
 	}
-
 }

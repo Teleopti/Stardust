@@ -6,26 +6,28 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Infrastructure.Analytics;
+using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.InfrastructureTest.Rta
+namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 {
 	[TestFixture]
-	[MultiDatabaseTest]
-	public class DatabaseReaderAgentStateTest
+	[AnalyticsUnitOfWorkTest]
+	public class AgentStateReadModelPersisterGetTest
 	{
-		public IAgentStateReadModelReader Reader;
 		public IAgentStateReadModelPersister Persister;
+		public ICurrentAnalyticsUnitOfWork UnitOfWork;
 		public MutableNow Now;
 
 		[Test]
 		public void ShouldGetCurrentActualAgentState()
 		{
 			var state = new AgentStateReadModelForTest { PersonId = Guid.NewGuid() };
-			Persister.PersistActualAgentReadModel(state);
+			Persister.Persist(state);
 
-			var result = Persister.GetCurrentActualAgentState(state.PersonId);
+			var result = Persister.Get(state.PersonId);
 
 			result.Should().Not.Be.Null();
 		}
@@ -33,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldGetNullCurrentActualAgentStateIfNotFound()
 		{
-			var result = Persister.GetCurrentActualAgentState(Guid.NewGuid());
+			var result = Persister.Get(Guid.NewGuid());
 
 			result.Should().Be.Null();
 		}
@@ -44,10 +46,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var writer = Persister;
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
-			writer.PersistActualAgentReadModel(new AgentStateReadModelForTest { PersonId = personId1 });
-			writer.PersistActualAgentReadModel(new AgentStateReadModelForTest { PersonId = personId2 });
+			writer.Persist(new AgentStateReadModelForTest { PersonId = personId1 });
+			writer.Persist(new AgentStateReadModelForTest { PersonId = personId2 });
 
-			var result = Persister.GetActualAgentStates();
+			var result = Persister.GetAll();
 
 			result.Where(x => x.PersonId == personId1).Should().Have.Count.EqualTo(1);
 			result.Where(x => x.PersonId == personId2).Should().Have.Count.EqualTo(1);
@@ -81,9 +83,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				StateId = Guid.NewGuid(),
 				StateStartTime = "2014-11-11 10:37".Utc(),
 			};
-			writer.PersistActualAgentReadModel(state);
+			writer.Persist(state);
 
-			var result = Persister.GetActualAgentStates().Single();
+			var result = Persister.GetAll().Single();
 
 			result.PersonId.Should().Be(state.PersonId);
 			result.RuleId.Should().Be(state.RuleId);
@@ -111,22 +113,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldReadActualAgentStateWithoutBusinessUnit()
 		{
-			var writer = Persister;
-			writer.PersistActualAgentReadModel(new AgentStateReadModelForTest());
-			setBusinessUnitInDbToNull();
+			Persister.Persist(new AgentStateReadModelForTest {BusinessUnitId = Guid.NewGuid()});
+			UnitOfWork.Current()
+				.FetchSession()
+				.CreateSQLQuery("UPDATE Rta.ActualAgentState SET BusinessUnitId=NULL")
+				.ExecuteUpdate();
 
-			Persister.GetActualAgentStates().Single()
+			Persister.GetAll().Single()
 				.BusinessUnitId
 				.Should().Be(Guid.Empty);
-		}
-		private static void setBusinessUnitInDbToNull()
-		{
-			using (var connection = new SqlConnection(InfraTestConfigReader.AnalyticsConnectionString))
-			{
-				connection.Open();
-				using (var command = new SqlCommand("UPDATE Rta.ActualAgentState SET BusinessUnitId=NULL", connection))
-					command.ExecuteNonQuery();
-			}
 		}
 
 		[Test]
@@ -139,9 +134,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				ReceivedTime = "2015-03-06 15:19".Utc(),
 				OriginalDataSourceId = "6"
 			};
-			Persister.PersistActualAgentReadModel(state);
+			Persister.Persist(state);
 
-			Persister.GetAgentsNotInSnapshot("2015-03-06 15:20".Utc(), "6")
+			Persister.GetNotInSnapshot("2015-03-06 15:20".Utc(), "6")
 				.Single(x => x.PersonId == personId).Should().Not.Be.Null();
 		}
 
@@ -166,9 +161,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				ReceivedTime = "2015-03-06 15:19".Utc(),
 				OriginalDataSourceId = "6"
 			};
-			Persister.PersistActualAgentReadModel(agentStateReadModel);
+			Persister.Persist(agentStateReadModel);
 
-			var result = Persister.GetAgentsNotInSnapshot("2015-03-06 15:20".Utc(), "6")
+			var result = Persister.GetNotInSnapshot("2015-03-06 15:20".Utc(), "6")
 				.Single(x => x.PersonId == personId);
 
 			result.BusinessUnitId.Should().Be(agentStateReadModel.BusinessUnitId);
@@ -198,7 +193,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 					command.ExecuteNonQuery();
 			}
 			
-			Assert.DoesNotThrow(() => Persister.GetAgentsNotInSnapshot("2015-04-21 8:15".Utc(), "2"));
+			Assert.DoesNotThrow(() => Persister.GetNotInSnapshot("2015-04-21 8:15".Utc(), "2"));
 		}
 	}
 }

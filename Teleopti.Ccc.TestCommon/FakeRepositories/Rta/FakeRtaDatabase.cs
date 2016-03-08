@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public StoredStateInfo StoredStateFor(Guid personId)
 		{
-			return new StoredStateInfo(personId, AgentStateReadModels.GetCurrentActualAgentState(personId));
+			return new StoredStateInfo(personId, AgentStateReadModels.Get(personId));
 		}
 
 		public IRtaState AddedStateCode

@@ -6,10 +6,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
     public interface IAgentStateReadModelPersister
     {
-        void PersistActualAgentReadModel(AgentStateReadModel model);
-		IEnumerable<AgentStateReadModel> GetAgentsNotInSnapshot(DateTime batchId, string dataSourceId);
-		AgentStateReadModel GetCurrentActualAgentState(Guid personId);
-		IEnumerable<AgentStateReadModel> GetActualAgentStates();
+        void Persist(AgentStateReadModel model);
+		AgentStateReadModel Get(Guid personId);
+		IEnumerable<AgentStateReadModel> GetAll();
+		IEnumerable<AgentStateReadModel> GetNotInSnapshot(DateTime batchId, string dataSourceId);
 		void Delete(Guid personId);
-    }
+	}
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -11,32 +10,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly Func<IEnumerable<ScheduleLayer>> _schedule;
 		private readonly Func<IEnumerable<StateMapping>> _stateMappings;
 		private readonly Func<IEnumerable<RuleMapping>> _ruleMappings;
+		private readonly Action<StateInfo> _agentStateReadModelUpdater;
 
-		public StateContext(
-			ExternalUserStateInputModel input, 
-			Guid personId,
-			Guid businessUnitId,
-			Guid teamId,
-			Guid siteId,
-			Func<StoredStateInfo> stored,
-			Func<IEnumerable<ScheduleLayer>> schedule,
-			Func<IEnumerable<StateMapping>> stateMappings,
-			Func<IEnumerable<RuleMapping>> ruleMappings,
-			INow now,
-			IAgentStateReadModelUpdater agentStateReadModelUpdater
-			)
+		public StateContext(ExternalUserStateInputModel input, Guid personId, Guid businessUnitId, Guid teamId, Guid siteId, Func<StoredStateInfo> stored, Func<IEnumerable<ScheduleLayer>> schedule, Func<IEnumerable<StateMapping>> stateMappings, Func<IEnumerable<RuleMapping>> ruleMappings, Action<StateInfo> agentStateReadModelUpdater, INow now)
 		{
 			_stored = stored;
 			_schedule = schedule;
 			_stateMappings = stateMappings;
 			_ruleMappings = ruleMappings;
+			_agentStateReadModelUpdater = agentStateReadModelUpdater ?? (a => { });
 			Input = input ?? new ExternalUserStateInputModel();
 			CurrentTime = now.UtcDateTime();
 			PersonId = personId;
 			BusinessUnitId = businessUnitId;
 			TeamId = teamId;
 			SiteId = siteId;
-			AgentStateReadModelUpdater = agentStateReadModelUpdater ?? new DontUpdateAgentStateReadModel();
 		}
 
 		public ExternalUserStateInputModel Input { get; private set; }
@@ -53,7 +41,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public IEnumerable<StateMapping> StateMappings() { return _stateMappings.Invoke(); }
 		public IEnumerable<RuleMapping> RuleMappings() { return _ruleMappings.Invoke(); }
 
-		public IAgentStateReadModelUpdater AgentStateReadModelUpdater { get; private set; }
+		public void UpdateAgentStateReadModel(StateInfo info)
+		{
+			_agentStateReadModelUpdater.Invoke(info);
+		}
 		
 		// for logging
 		public override string ToString()
