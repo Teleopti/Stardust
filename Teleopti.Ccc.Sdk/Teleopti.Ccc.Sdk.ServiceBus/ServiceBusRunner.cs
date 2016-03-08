@@ -104,6 +104,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private void hostServiceStop()
 		{
 			_requestAdditionalTime(60000);
+
+			if (NodeStarter != null)
+			{
+				NodeStarter.Stop();
+				NodeStarter = null;
+			}
 			DisposeBusHosts();
 		}
 
@@ -188,7 +194,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var messageBroker = container.Resolve<IMessageBrokerComposite>();
 			new InitializeMessageBroker(messageBroker).Start(ConfigurationManager.AppSettings.ToDictionary());
 
-			new NodeStarter().Start(nodeConfig, container);
+			NodeStarter = new NodeStarter();
+			NodeStarter.Start(nodeConfig, container);
 		}
+
+		public NodeStarter NodeStarter { get; set; }
 	}
 }
