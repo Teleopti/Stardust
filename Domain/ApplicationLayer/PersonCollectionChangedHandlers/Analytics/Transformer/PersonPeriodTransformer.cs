@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 				personPeriod.Team.Description.Name, businessUnitId);
 			var skillsetId = MapSkillsetId(
 				personPeriod.PersonSkillCollection.Select(a => a.Skill.Id.GetValueOrDefault()).ToList(),
-				businessUnitId);
+				businessUnitId) ?? -1;
+			
 
 			var windowsDomain = "";
 			var windowsUsername = "";

@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
                       from mart.dim_skillset WITH (NOLOCK) 
                       where skillset_code=:skillsetCode")
 					.SetString("skillsetCode", skillSetCode)
-					.UniqueResult<int>();
+					.UniqueResult<int?>();
 			}
 		}
 
