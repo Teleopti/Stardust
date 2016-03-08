@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics.Transformer;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure.Analytics;
 using IAnalyticsPersonPeriodRepository = Teleopti.Ccc.Domain.Repositories.IAnalyticsPersonPeriodRepository;
 
@@ -12,6 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 	[UseOnToggle(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162)]
 	public class PersonPeriodAnalyticsUpdater :
 		IHandleEvent<PersonCollectionChangedEvent>,
+		IHandleEvent<PersonDeletedEvent>,
 		IRunOnServiceBus
 	{
 		private readonly IPersonRepository _personRepository;
@@ -35,14 +37,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 			foreach (var personCodeGuid in @event.PersonIdCollection.Distinct())
 			{
-				// Check if deleted person => all person periods in analytics should be deleted
+				// Check if person does exists => if not it is deleted and handled by other handle-method
 				if (!persons.Any(a => a.Id.Equals(personCodeGuid)))
 				{
-					var personPeriodsInAnalyticsToBeDeleted = _analyticsPersonPeriodRepository.GetPersonPeriods(personCodeGuid);
-					foreach (var analyticsPersonPeriodToBeDeleted in personPeriodsInAnalyticsToBeDeleted)
-					{
-						_analyticsPersonPeriodRepository.DeletePersonPeriod(analyticsPersonPeriodToBeDeleted);
-					}
 					continue;
 				}
 
@@ -92,5 +89,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				}
 			}
 		}
+
+		public void Handle(PersonDeletedEvent @event)
+		{
+			Console.WriteLine("Removing all person periods with person code {0}", @event.PersonId);
+			var personPeriodsInAnalyticsToBeDeleted = _analyticsPersonPeriodRepository.GetPersonPeriods(@event.PersonId);
+			foreach (var analyticsPersonPeriodToBeDeleted in personPeriodsInAnalyticsToBeDeleted)
+			{
+				_analyticsPersonPeriodRepository.DeletePersonPeriod(analyticsPersonPeriodToBeDeleted);
+			}
+		}
 	}
 }
+
