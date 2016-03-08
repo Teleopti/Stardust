@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 	[RtaPerformanceTest]
 	public class StateSendTest
 	{
-		public DataCreator Data;
 		public StatesSender States;
 
 		[Test]

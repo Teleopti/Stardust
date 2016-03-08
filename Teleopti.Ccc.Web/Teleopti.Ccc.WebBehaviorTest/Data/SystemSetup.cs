@@ -9,7 +9,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.TestCommon.TestData
+namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 	public static class SystemSetup
 	{
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.TestCommon.TestData
 			var builder = new ContainerBuilder();
 			var args = new IocArgs(new ConfigReader())
 			{
-				BehaviorTestClient = true,
+				AllEventPublishingsAsSync = true,
 				FeatureToggle = TestSiteConfigurationSetup.URL.ToString()
 			};
 			builder.RegisterModule(new CommonModule(new IocConfiguration(args, CommonModule.ToggleManagerForIoc(args))));

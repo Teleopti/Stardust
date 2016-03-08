@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 	[RtaPerformanceTest]
 	public class BackgroundWorkTest
 	{
-		public DataCreator Data;
 		public StatesSender States;
 		public HangfireUtilties Hangfire;
 

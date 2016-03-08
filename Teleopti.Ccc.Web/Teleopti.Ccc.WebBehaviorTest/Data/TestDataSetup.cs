@@ -1,12 +1,15 @@
 ﻿using System.Threading;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.TestCommon.TestData
+namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 	public static class TestDataSetup
 	{
@@ -36,7 +39,7 @@ namespace Teleopti.Ccc.TestCommon.TestData
 			defaultData.ForEach(dataSetup => GlobalDataMaker.Data().Apply(dataSetup));
 
 			_dataHash = defaultData.HashValue;
-			DataSourceHelper.BackupApplicationDatabase(_dataHash);
+			DataSourceHelper.BackupCcc7Database(_dataHash);
 
 			SystemSetup.Start();
 		}
@@ -48,7 +51,7 @@ namespace Teleopti.Ccc.TestCommon.TestData
 
 		public static void RestoreCcc7Data()
 		{
-			DataSourceHelper.RestoreApplicationDatabase(_dataHash);
+			DataSourceHelper.RestoreCcc7Database(_dataHash);
 		}
 	}
 }

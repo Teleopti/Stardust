@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.IocCommon
 		public Type ImplementationTypeForCurrentUnitOfWork { get; set; }
 
 		public bool BehaviorTestServer { get; set; }
-		public bool BehaviorTestClient { get; set; }
+		public bool AllEventPublishingsAsSync { get; set; }
 
 		public IocArgs(IConfigReader configReader)
 		{
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.IocCommon
 			ThrottleMessages = configReader.ReadValue("ThrottleMessages", true);
 			MessagesPerSecond = configReader.ReadValue("MessagesPerSecond", 80);
 			BehaviorTestServer = configReader.ReadValue("BehaviorTestServer", false);
-			BehaviorTestClient = configReader.ReadValue("BehaviorTestClient", false);
+			AllEventPublishingsAsSync = configReader.ReadValue("AllEventPublishingsAsSync", false);
 			DataSourceConfigurationSetter = Infrastructure.NHibernateConfiguration.DataSourceConfigurationSetter.ForDesktop();
 			ImplementationTypeForCurrentUnitOfWork = typeof(CurrentUnitOfWork);
 		}

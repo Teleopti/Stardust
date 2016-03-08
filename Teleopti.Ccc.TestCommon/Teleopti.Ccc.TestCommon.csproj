@@ -319,9 +319,7 @@
     <Compile Include="TestData\Setups\Configurable\WorkloadConfigurable.cs" />
     <Compile Include="TestData\Setups\Specific\IranianCulture.cs" />
     <Compile Include="TestData\Setups\Specific\IstanbulTimeZone.cs" />
-    <Compile Include="TestData\SystemSetup.cs" />
     <Compile Include="TestData\TenantUnitOfWorkState.cs" />
-    <Compile Include="TestData\TestDataSetup.cs" />
     <Compile Include="ThreadCulture.cs" />
     <Compile Include="DummyInfrastructureInfoPopulator.cs" />
     <Compile Include="EntityExtensions.cs" />

@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<IgnoreDelayedMessages>().As<IDelayedMessageSender>().SingleInstance();
 			}
 
-			if (_configuration.Args().BehaviorTestClient)
+			if (_configuration.Args().AllEventPublishingsAsSync)
 			{
 				builder.Register(c => c.Resolve<SyncAllEventPublisher>()).As<IEventPublisher>().SingleInstance();
 				builder.RegisterType<IgnoreDelayedMessages>().As<IDelayedMessageSender>().SingleInstance();

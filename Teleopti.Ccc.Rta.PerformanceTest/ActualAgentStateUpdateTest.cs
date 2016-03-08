@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 	[RtaPerformanceTest]
 	public class ActualAgentStateUpdateTest
 	{
-		public DataCreator Data;
 		public StatesSender States;
 		public StatesArePersisted StatesArePersisted;
 
