@@ -297,6 +297,16 @@ Try
 		Add-Content "$fullPathsettingsFile" "`$(TeleoptiClaimProvider)|<add identifier=`"urn:Teleopti`" displayName=`"Teleopti`" url=`"https://$DataSourceName.teleopticloud.com/Web/sso/`" protocolHandler=`"RelativeOpenIdHandler`" />"
 	}
 	
+	$useCryptoKeySetting = @( Get-Content "$fullPathsettingsFile" | Where-Object { $_.Contains("USE_PERSISTENT_CRYPTOKEYS") } ).Count -eq 0
+	if ($useCryptoKeySetting) {
+		Add-Content "$fullPathsettingsFile" "`$(USE_PERSISTENT_CRYPTOKEYS)|false"
+	}
+	
+	$signalRBackplaneTypeSetting = @( Get-Content "$fullPathsettingsFile" | Where-Object { $_.Contains("SIGNALR_BACKPLANE_TYPE") } ).Count -eq 0
+	if ($signalRBackplaneTypeSetting) {
+		Add-Content "$fullPathsettingsFile" "`$(SIGNALR_BACKPLANE_TYPE)|"
+	}
+	
 	#Set static config for all other params
     Add-Content "$fullPathsettingsFile" "`$(SDK_CRED_PROT)|None"
     Add-Content "$fullPathsettingsFile" "`$(MATRIX_WEB_SITE_URL)|https://$DataSourceName.teleopticloud.com/Analytics"
@@ -312,8 +322,6 @@ Try
     Add-Content "$fullPathsettingsFile" "`$(SDK_SSL_MEX_BINDING)|mexHttpsBinding"
     Add-Content "$fullPathsettingsFile" "`$(RTA_SERVICE)|https://$DataSourceName.teleopticloud.com/RTA/TeleoptiRtaService.svc"
     Add-Content "$fullPathsettingsFile" "`$(CONFIGURATION_FILES_PATH)|$DatasourcesPath"
-    Add-Content "$fullPathsettingsFile" "`$(USE_PERSISTENT_CRYPTOKEYS)|false"
-    Add-Content "$fullPathsettingsFile" "`$(SIGNALR_BACKPLANE_TYPE)|"
     Add-Content "$fullPathsettingsFile" "`$(RTA_STATE_CODE)|ACW,ADMIN,EMAIL,IDLE,InCall,LOGGED ON,OFF,Ready,WEB"
     Add-Content "$fullPathsettingsFile" "`$(RTA_QUEUE_ID)|2001,2002,0063,2000,0019,0068,0085,0202,0238,2003"
     Add-Content "$fullPathsettingsFile" "`$(WEB_BROKER_FOR_WEB)|https://$DataSourceName.teleopticloud.com/Web"
