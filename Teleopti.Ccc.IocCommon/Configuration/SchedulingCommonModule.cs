@@ -118,6 +118,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradayOptimizationContext>().InstancePerLifetimeScope();
 
 			builder.RegisterType<VirtualSkillGroupsCreator>().SingleInstance();
+			builder.RegisterType<SkillGroupIslandsAnalyzer>().SingleInstance();
+			builder.RegisterType<CreateIslands>().SingleInstance();
 
 			builder.RegisterType<SeatLimitationWorkShiftCalculator2>()
 				.As<ISeatLimitationWorkShiftCalculator2>()

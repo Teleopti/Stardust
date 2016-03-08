@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			agent1.AddPeriodWithSkill(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()), skill1);
 			var agent2 = new Person().WithId();
 			agent2.AddPeriodWithSkill(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()), skill2);
-		
 
 			Target.Execute(new IntradayOptimizationCommand
 			{
@@ -63,6 +62,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 
 			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count()
 				.Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldCreateOneEventIfTwoAgentsWithAtLeastOneSkillTheSame()
+		{
+			var skill1 = new Skill().WithId();
+			var skill2 = new Skill().WithId();
+			var skill3 = new Skill().WithId();
+			var agent1 = new Person().WithId();
+			agent1.AddPeriodWithSkills(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()), 
+				new[] { skill1, skill2});
+			var agent2 = new Person().WithId();
+			agent2.AddPeriodWithSkills(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()), 
+				new[] { skill2, skill3 });
+
+
+			Target.Execute(new IntradayOptimizationCommand
+			{
+				Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10),
+				Agents = new[] { agent1, agent2 }
+			});
+
+			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count()
+				.Should().Be.EqualTo(1);
 		}
 	}
 }

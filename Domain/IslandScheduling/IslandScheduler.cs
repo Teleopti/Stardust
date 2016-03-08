@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.IslandScheduling
 			_groupPagePerDateHolder = groupPagePerDateHolder;
 		}
 
-		public IScheduleDictionary RunIsland(SkillGroupIslandsAnalyzer.Island island, IOptimizerOriginalPreferences optimizerOriginalPreferences,
+		public IScheduleDictionary RunIsland(Island island, IOptimizerOriginalPreferences optimizerOriginalPreferences,
 			IList<IScheduleDay> selectedScheduleDays, IOptimizationPreferences optimizationPreferences, ISchedulerStateHolder schedulingScreenStateHolder)
 		{
 			var dayOffOptimizePreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences());

@@ -262,6 +262,7 @@
     <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationFromWeb.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\OptimizationWasOrdered.cs" />
     <Compile Include="Common\ServiceLocatorForEntity.cs" />
+    <Compile Include="DayOffPlanning\CreateIslands.cs" />
     <Compile Include="Intraday\MonitorDataViewModel.cs" />
     <Compile Include="Intraday\MonitorSkillAreaProvider.cs" />
     <Compile Include="Logon\Aspects\TenantScopeAspect.cs" />

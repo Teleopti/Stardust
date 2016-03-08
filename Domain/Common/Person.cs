@@ -822,5 +822,15 @@ namespace Teleopti.Ccc.Domain.Common
 			period.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
 			AddPersonPeriod(period);
 		}
+
+		//Added mainly for easier testing. Not yet part of IPerson
+		public virtual void AddPeriodWithSkills(PersonPeriod period, IEnumerable<ISkill> skills)
+		{
+			foreach (var skill in skills)
+			{
+				period.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+			}
+			AddPersonPeriod(period);
+		}
 	}
 }

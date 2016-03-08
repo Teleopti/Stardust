@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 			foreach (var key in keys)
 			{
 				var splittedSkillKeys = key.Split("|".ToCharArray());
-				islands.Add(new Island(splittedSkillKeys, new List<string>{key}, skillGroups));
+				islands.Add(new Island(splittedSkillKeys, new List<string> {key}, skillGroups));
 			}
 
 			var islandPair = checkIfJoinIslands(islands);
@@ -53,7 +53,8 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 			return null;
 		}
 
-		private static Island joinIslands(Island island1, Island island2, VirtualSkillGroupsCreatorResult skillGroupsCreatorResult)
+		private static Island joinIslands(Island island1, Island island2,
+			VirtualSkillGroupsCreatorResult skillGroupsCreatorResult)
 		{
 			var combinedGuidStrings = new List<string>(island1.SkillGuidStrings);
 			combinedGuidStrings.AddRange(island2.SkillGuidStrings);
@@ -63,8 +64,9 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 
 			return new Island(combinedGuidStrings, combinedGroupKeys, skillGroupsCreatorResult);
 		}
+	}
 
-		public class Island
+	public class Island
 		{
 			private readonly HashSet<string> _skillGuidStrings;
 			private readonly IList<string> _groupKeys;
@@ -99,4 +101,3 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 			}
 		}
 	}
-}
