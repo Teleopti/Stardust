@@ -101,46 +101,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					.UniqueResult<int>();
 			}
 		}
-
-		public int? SkillSetId(IList<AnalyticsSkill> skills)
-		{
-			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
-			{
-				var skillSetCode = string.Join(",", skills.Select(a => a.SkillId).OrderBy(a => a));
-				return uow.Session().CreateSQLQuery(
-					@"select skillset_id
-                      from mart.dim_skillset WITH (NOLOCK) 
-                      where skillset_code=:skillsetCode")
-					.SetString("skillsetCode", skillSetCode)
-					.UniqueResult<int?>();
-			}
-		}
-
-		public IList<AnalyticsSkill> Skills(int businessUnitId)
-		{
-			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
-			{
-				return uow.Session().CreateSQLQuery(
-					@"select 
-	                    skill_id SkillId, 
-	                    skill_code SkillCode,
-	                    skill_name SkillName,
-	                    time_zone_id TimeZoneId,
-	                    forecast_method_code ForecastMethodCode,
-	                    forecast_method_name ForecastMethodName,
-	                    business_unit_id BusinessUnitId,
-	                    datasource_id DatasourceId,
-	                    insert_date InsertDate,
-	                    update_date UpdateDate,
-	                    datasource_update_date DatasourceUpdateDate,
-	                    is_deleted IsDeleted
-                    from mart.dim_skill WITH (NOLOCK)")
-					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsSkill)))
-					.SetReadOnly(true)
-					.List<AnalyticsSkill>();
-			}
-		}
-
 		public int? TimeZone(string timeZoneCode)
 		{
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())

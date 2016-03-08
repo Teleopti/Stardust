@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 	{
 		private PersonPeriodAnalyticsUpdater _target;
 		private IAnalyticsPersonPeriodRepository _personPeriodRepository;
+		private IAnalyticsSkillRepository _analyticsSkillRepository;
 		private IPersonRepository _personRepository;
 
 		private Guid testPerson1Id;
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				new DateTime(2015, 01, 01),
 				new DateTime(2017, 12, 31));
 
+			_analyticsSkillRepository = new FakeAnalyticsSkillRepository();
 
 			_personRepository = new FakePersonRepository();
 
@@ -58,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_personRepository.Add(p2);
 			_personRepository.Add(p3);
 
-			_target = new PersonPeriodAnalyticsUpdater(_personRepository, _personPeriodRepository);
+			_target = new PersonPeriodAnalyticsUpdater(_personRepository, _personPeriodRepository, _analyticsSkillRepository);
 		}
 
 		[Test]

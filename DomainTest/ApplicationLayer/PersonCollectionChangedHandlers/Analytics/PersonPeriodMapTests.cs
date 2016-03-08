@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 	{
 		private PersonPeriodTransformer personPeriodTransformer;
 		private FakeAnalyticsPersonPeriodRepository fakeAnalyticsPersonPeriodRepository;
+		private FakeAnalyticsSkillRepository fakeAnalyticsSkillRepository;
 
 		[SetUp]
 		public void SetupTests()
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			fakeAnalyticsPersonPeriodRepository = new FakeAnalyticsPersonPeriodRepository(
 				new DateTime(2015, 01, 01),
 				new DateTime(2017, 12, 31));
-
+			fakeAnalyticsSkillRepository = new FakeAnalyticsSkillRepository();
 
 			List<AnalyticsSkill> fakeSkills = new List<AnalyticsSkill>
 			{
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 					SkillCode = Guid.Parse("00000000-0000-0000-0000-000000000003")
 				}
 			};
-			fakeAnalyticsPersonPeriodRepository.SetSkills(fakeSkills);
+			fakeAnalyticsSkillRepository.SetSkills(fakeSkills);
 
 
 			List<KeyValuePair<int, string>> fakeSkillSets = new List<KeyValuePair<int, string>>
@@ -48,10 +49,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				new KeyValuePair<int, string>(3, "1")
 			};
 
-			fakeAnalyticsPersonPeriodRepository.SetSkillSets(fakeSkillSets);
+			fakeAnalyticsSkillRepository.SetSkillSets(fakeSkillSets);
 
 
-			personPeriodTransformer = new PersonPeriodTransformer(fakeAnalyticsPersonPeriodRepository);
+			personPeriodTransformer = new PersonPeriodTransformer(fakeAnalyticsPersonPeriodRepository, fakeAnalyticsSkillRepository);
 		}
 
 

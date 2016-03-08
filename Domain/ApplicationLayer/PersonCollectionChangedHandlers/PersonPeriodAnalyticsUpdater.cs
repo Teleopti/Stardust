@@ -15,13 +15,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (PersonPeriodAnalyticsUpdater));
 		private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
+		private readonly IAnalyticsSkillRepository _analyticsSkillRepository;
 		private readonly IPersonRepository _personRepository;
 
 		public PersonPeriodAnalyticsUpdater(IPersonRepository personRepository,
-			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository)
+			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
+			IAnalyticsSkillRepository analyticsSkillRepository)
 		{
 			_personRepository = personRepository;
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
+			_analyticsSkillRepository = analyticsSkillRepository;
 		}
 
 		public void Handle(PersonCollectionChangedEvent @event)
@@ -32,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 			var persons = _personRepository.FindPeople(@event.PersonIdCollection.Distinct());
 
-			var transformer = new PersonPeriodTransformer(_analyticsPersonPeriodRepository);
+			var transformer = new PersonPeriodTransformer(_analyticsPersonPeriodRepository, _analyticsSkillRepository);
 
 			foreach (var personCodeGuid in @event.PersonIdCollection.Distinct())
 			{

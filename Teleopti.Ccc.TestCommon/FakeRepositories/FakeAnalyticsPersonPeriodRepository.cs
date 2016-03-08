@@ -13,8 +13,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public readonly DateTime SetupStartDate;
 		public readonly DateTime SetupEndDate;
 		readonly List<AnalyticsDate> fakeDates = new List<AnalyticsDate>();
-		private List<KeyValuePair<int, string>> fakeSkillSets;
-		private List<AnalyticsSkill> fakeSkills;
 		private readonly List<AnalyticsPersonPeriod> fakePersonPeriods;
 
 		public FakeAnalyticsPersonPeriodRepository(DateTime setupStartDate, DateTime setupEndDate)
@@ -97,19 +95,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return 123;
 		}
 
-		public IList<AnalyticsSkill> Skills(int businessUnitId)
-		{
-			return fakeSkills;
-		}
-
-		public int? SkillSetId(IList<AnalyticsSkill> skills)
-		{
-			var skillSet = fakeSkillSets.FirstOrDefault(a => a.Value == string.Join(",", skills.Select(b => b.SkillId)));
-			if (!skillSet.Equals(default(KeyValuePair<int, string>)))
-				return skillSet.Key;
-			return null;
-		}
-
 		public int TeamId(Guid teamCode, int siteId, string teamName, int businessUnitId)
 		{
 			return 456;
@@ -130,14 +115,5 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return fakeDates.First(a => a.DateId >= 0);
 		}
 
-		public void SetSkills(List<AnalyticsSkill> analyticsSkills)
-		{
-			fakeSkills = analyticsSkills;
-		}
-
-		public void SetSkillSets(List<KeyValuePair<int, string>> list)
-		{
-			fakeSkillSets = list;
-		}
 	}
 }

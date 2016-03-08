@@ -752,6 +752,7 @@
     <Compile Include="Outbound\OutboundAssignedStaffProvider.cs" />
     <Compile Include="Outbound\SkillTypeProvider.cs" />
     <Compile Include="Repositories\IAgentBadgeRepository.cs" />
+    <Compile Include="Repositories\IAnalyticsSkillRepository.cs" />
     <Compile Include="Repositories\IAnalyticsPersonPeriodRepository.cs" />
     <Compile Include="Repositories\IIntradayMonitorDataLoader.cs" />
     <Compile Include="Repositories\IIntradayStatistics.cs" />

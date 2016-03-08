@@ -12,10 +12,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 	{
 		private static readonly DateTime Eternity = new DateTime(2059, 12, 31);
 		private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
+		private readonly IAnalyticsSkillRepository _analyticsSkillRepository;
 
-		public PersonPeriodTransformer(IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository)
+		public PersonPeriodTransformer(IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository, IAnalyticsSkillRepository analyticsSkillRepository)
 		{
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
+			_analyticsSkillRepository = analyticsSkillRepository;
 		}
 
 		public AnalyticsPersonPeriod Transform(IPerson person, IPersonPeriod personPeriod)
@@ -236,9 +238,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 			if (skillCodes.IsEmpty())
 				return -1;
 
-			var listOfSkillIds = _analyticsPersonPeriodRepository.Skills(businessUnitId)
+			var listOfSkillIds = _analyticsSkillRepository.Skills(businessUnitId)
 				.Where(a => skillCodes.Contains(a.SkillCode)).ToList();
-			return _analyticsPersonPeriodRepository.SkillSetId(listOfSkillIds);
+			return _analyticsSkillRepository.SkillSetId(listOfSkillIds);
 		}
 	}
 }

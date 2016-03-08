@@ -14,9 +14,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void AddPersonPeriod(AnalyticsPersonPeriod personPeriod);
 		void UpdatePersonPeriod(AnalyticsPersonPeriod personPeriod);
 		int TeamId(Guid teamCode, int siteId, string teamName, int businessUnitId);
-
-		int? SkillSetId(IList<AnalyticsSkill> skills);
-		IList<AnalyticsSkill> Skills(int businessUnitId);
+		
 		int? TimeZone(string timeZoneCode);
 		IAnalyticsDate MaxDate();
 		IAnalyticsDate MinDate();
