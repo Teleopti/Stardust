@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			var businessUnitRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
 			businessUnitRepository.Stub(x => x.Load(bu.Id.Value)).Return(bu);
 
-			var target = new HttpRequestTrue(httpContext, businessUnitRepository, new DummyCurrentUnitOfWork());
+			var target = new BusinessUnitForRequest(httpContext, businessUnitRepository, new DummyCurrentUnitOfWork());
 			var businessUnit = target.TryGetBusinessUnit();
 
 			businessUnit.Should().Be.EqualTo(bu);
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			var currentUow = MockRepository.GenerateStub<ICurrentUnitOfWork>();
 			currentUow.Expect(x => x.Current()).Return(null);
 
-			var target = new HttpRequestTrue(httpContext, null, currentUow);
+			var target = new BusinessUnitForRequest(httpContext, null, currentUow);
 			var businessUnit = target.TryGetBusinessUnit();
 
 			businessUnit.Should().Be.Null();

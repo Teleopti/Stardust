@@ -7,13 +7,13 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
-	public class HttpRequestTrue : IBusinessUnitForRequest
+	public class BusinessUnitForRequest : IBusinessUnitForRequest
 	{
 		private readonly ICurrentHttpContext _currentHttpContext;
 		private readonly IBusinessUnitRepository _businessUnitRepository;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
-		public HttpRequestTrue(ICurrentHttpContext currentHttpContext, IBusinessUnitRepository businessUnitRepository, ICurrentUnitOfWork currentUnitOfWork)
+		public BusinessUnitForRequest(ICurrentHttpContext currentHttpContext, IBusinessUnitRepository businessUnitRepository, ICurrentUnitOfWork currentUnitOfWork)
 		{
 			_currentHttpContext = currentHttpContext;
 			_businessUnitRepository = businessUnitRepository;
