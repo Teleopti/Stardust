@@ -34,8 +34,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			#region All implementation of IPersistCallback
 			var businessUnit = CurrentBusinessUnit.Make();
-			//needed here?
-			builder.RegisterType<StardustEventPublisher>().SingleInstance();
 
 			/**************************************/
 			/*         Order dependant            */
