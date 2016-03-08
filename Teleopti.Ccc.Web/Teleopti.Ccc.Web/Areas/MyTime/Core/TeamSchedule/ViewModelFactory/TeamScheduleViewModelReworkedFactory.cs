@@ -155,17 +155,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 				var personScheduleDays = (from p in people
 					let personSchedule = (from s in scheduleDays where s.Person == p select s).SingleOrDefault()
 					select new Tuple<IPerson, IScheduleDay>(p, personSchedule)).ToArray();
-				var sortedScheduleDays = personScheduleDays.OrderBy(personScheduleDay =>
-				{
-					var person = personScheduleDay.Item1;
-					var schedule = personScheduleDay.Item2;
-					var isPublished = _permissionProvider.IsPersonSchedulePublished(data.ScheduleDate,
-						person, ScheduleVisibleReasons.Any);
-					var sortValue = TeamScheduleSortingUtil.GetSortedValue(schedule, canSeeUnpublishedSchedules, isPublished, false);
-					return sortValue;
-				}).ThenBy(personScheduleDay => personScheduleDay.Item1.Name.LastName);
+				Array.Sort(personScheduleDays, new TeamScheduleComparer(canSeeUnpublishedSchedules, _permissionProvider, false) { ScheduleVisibleReason = ScheduleVisibleReasons.Any });
 
-				var requestedScheduleDays = sortedScheduleDays.Skip(data.Paging.Skip).Take(data.Paging.Take);
+				var requestedScheduleDays = personScheduleDays.Skip(data.Paging.Skip).Take(data.Paging.Take);
 				foreach (var personScheduleDay in requestedScheduleDays)
 				{
 					var person = personScheduleDay.Item1;

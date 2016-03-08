@@ -875,7 +875,7 @@
     <Compile Include="Areas\TeamSchedule\Core\AbsenceHandler\IAbsencePersister.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\AgentsPerPageSettingPersisterAndProvider.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\ITeamScheduleViewModelFactory.cs" />
-    <Compile Include="Areas\TeamSchedule\Core\TeamScheduleSortingUtil.cs" />
+    <Compile Include="Areas\TeamSchedule\Core\TeamScheduleComparer.cs" />
     <Compile Include="Areas\TeamSchedule\IPermissionChecker.cs" />
     <Compile Include="Areas\TeamSchedule\Models\TeamScheduleViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\TeamScheduleController.cs" />

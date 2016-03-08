@@ -54,11 +54,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 
 				var possiblePersonSchedules = possibleTradedPersonList.Select(
 					p => new Tuple<IPerson, IScheduleDay>(p, possibleTradeSchedules.SingleOrDefault(s => s.Person.Id == p.Id)))
-					.Where(ps => !_projectionProvider.IsFullDayAbsence(ps.Item2) && !_projectionProvider.IsOvertimeOnDayOff(ps.Item2));
+					.Where(ps => !_projectionProvider.IsFullDayAbsence(ps.Item2) && !_projectionProvider.IsOvertimeOnDayOff(ps.Item2)).ToArray();
+				Array.Sort(possiblePersonSchedules,new TeamScheduleComparer(false,_permissionProvider));
 
 				var allSortedPossibleSchedules = possiblePersonSchedules
-					.OrderBy(pair => TeamScheduleSortingUtil.GetSortedValue(pair.Item2, false, true))
-					.ThenBy(pair => pair.Item1.Name.LastName)
 					.Select(pair =>
 					{
 						var person = pair.Item1;

@@ -129,27 +129,34 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 			var canSeeUnpublishedSchedules =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
-
 			var lookupSchedule = scheduleDays.ToLookup(s => s.Person);
-			var allPeopleIncluded = people.Select(p => new {Key = p, Schedule = lookupSchedule[p]});
-			var sortedPersonScheduleDays = allPeopleIncluded.OrderBy(
-				personScheduleDay =>
+			var personScheduleDaysToSort = people.Select(p =>
+			{
+				var schedule = lookupSchedule[p].SingleOrDefault(s => s.DateOnlyAsPeriod.DateOnly == dateInUserTimeZone);
+				return new Tuple<IPerson, IScheduleDay>(p,schedule);
+			}).ToArray();
+
+			Array.Sort(personScheduleDaysToSort, new TeamScheduleComparer(canSeeUnpublishedSchedules,_permissionProvider));
+
+			var requestedPersonScheduleDayPairs = pageSize > 0 ? personScheduleDaysToSort.Skip(pageSize * (currentPageIndex - 1)).Take(pageSize) : personScheduleDaysToSort;
+			var requestedPersonScheduleDays = requestedPersonScheduleDayPairs.Select(pair =>
+			{
+				var person = pair.Item1;
+				var schedules = new List<IScheduleDay>();
+				if (pair.Item2 != null)
 				{
-					var person = personScheduleDay.Key;
-					var schedule = personScheduleDay.Schedule.SingleOrDefault(s => s.DateOnlyAsPeriod.DateOnly == dateInUserTimeZone);
-					var isPublished = schedule != null && isSchedulePublished(schedule.DateOnlyAsPeriod.DateOnly, person);
-					var sortValue = TeamScheduleSortingUtil.GetSortedValue(schedule, canSeeUnpublishedSchedules, isPublished);
-					return sortValue;
-				}).ThenBy(personScheduleDay => personScheduleDay.Key.Name.LastName) ;
-			
-			var requestedPersonScheduleDays = pageSize > 0 ? sortedPersonScheduleDays.Skip(pageSize * (currentPageIndex - 1)).Take(pageSize) : sortedPersonScheduleDays;
+					schedules.Add(pair.Item2);
+				}
+				schedules.AddRange(lookupSchedule[person].Where(s => s.DateOnlyAsPeriod.DateOnly != dateInUserTimeZone));
+				return new {Person = person, Schedules = schedules};
+			});
 
 			var list = new List<GroupScheduleShiftViewModel>();
 			var nameDescriptionSetting = _commonAgentNameProvider.CommonAgentNameSettings;
 			foreach (var personScheduleDay in requestedPersonScheduleDays)
 			{
-				var person = personScheduleDay.Key;
-				var schedules = personScheduleDay.Schedule.ToArray();
+				var person = personScheduleDay.Person;
+				var schedules = personScheduleDay.Schedules.ToArray();
 				var canViewConfidential = peopleCanSeeConfidentialAbsencesFor.Contains(person.Id.GetValueOrDefault());
 				if (!schedules.Any())
 				{
