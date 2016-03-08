@@ -15,6 +15,21 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return fakeSkills;
 		}
 
+		public int AddSkillSet(AnalyticsSkillSet analyticsSkillSet)
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public int AddSkillSet(List<AnalyticsSkill> listOfSkills)
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public IList<AnalyticsSkillSet> SkillSets()
+		{
+			throw new System.NotImplementedException();
+		}
+
 		public int? SkillSetId(IList<AnalyticsSkill> skills)
 		{
 			var skillSet = fakeSkillSets.FirstOrDefault(a => a.Value == string.Join(",", skills.Select(b => b.SkillId)));

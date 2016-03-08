@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 				personPeriod.Team.Description.Name, businessUnitId);
 			var skillsetId = MapSkillsetId(
 				personPeriod.PersonSkillCollection.Select(a => a.Skill.Id.GetValueOrDefault()).ToList(),
-				businessUnitId) ?? -1;
-			
+				businessUnitId);
+
 
 			var windowsDomain = "";
 			var windowsUsername = "";
@@ -232,15 +232,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 			return _analyticsPersonPeriodRepository.SiteId(siteCode, siteName, businessUnitId);
 		}
 
-		public int? MapSkillsetId(List<Guid> skillCodes, int businessUnitId)
+
+		// Map skills to skillset. If not exists it will create it.
+		public int MapSkillsetId(List<Guid> skillCodes, int businessUnitId)
 		{
-			// TODO logic for new skills and new combination which should produce a new skillset.
 			if (skillCodes.IsEmpty())
 				return -1;
 
-			var listOfSkillIds = _analyticsSkillRepository.Skills(businessUnitId)
-				.Where(a => skillCodes.Contains(a.SkillCode)).ToList();
-			return _analyticsSkillRepository.SkillSetId(listOfSkillIds);
+			var listOfSkills = _analyticsSkillRepository.Skills(businessUnitId).Where(a => skillCodes.Contains(a.SkillCode)).ToList();
+			var skillSetId = _analyticsSkillRepository.SkillSetId(listOfSkills);
+
+			if (!skillSetId.HasValue)
+				_analyticsSkillRepository.AddSkillSet(listOfSkills);
+
+			skillSetId = _analyticsSkillRepository.SkillSetId(listOfSkills);
+
+			return skillSetId ?? -1;
 		}
 	}
 }
