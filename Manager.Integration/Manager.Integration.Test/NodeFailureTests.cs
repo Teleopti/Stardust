@@ -122,7 +122,7 @@ namespace Manager.Integration.Test
 																  IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
 			task.Start();
 
-			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(30));
+			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(2));
 
 			sqlNotifier.Dispose();
 
@@ -150,7 +150,7 @@ namespace Manager.Integration.Test
 			var jobId = JsonConvert.DeserializeObject<Guid>(ser);
 
 			//Quick Fix. Should wait for job to be started instead (check DB)
-			Thread.Sleep(TimeSpan.FromSeconds(15));
+			Thread.Sleep(TimeSpan.FromSeconds(5));
 
 			//---------------------------------------------
 			// Kill the node.

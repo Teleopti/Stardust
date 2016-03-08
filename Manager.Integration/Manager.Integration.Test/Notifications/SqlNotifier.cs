@@ -68,7 +68,7 @@ namespace Manager.Integration.Test.Notifications
                         sqlConnection.Close();
                     }
 
-                    Thread.Sleep(TimeSpan.FromSeconds(5));
+                    Thread.Sleep(TimeSpan.FromSeconds(1));
                 }
 
                 if (cancellationTokenSource.IsCancellationRequested)
