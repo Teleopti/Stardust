@@ -14110,10 +14110,6 @@ Help us improve your experience by sending an error report</value>
     <value>Show right panel</value>
     <comment>Show right panel tooltip text</comment>
   </data>
-  <data name="OnlySupportSeatRolesSetting" xml:space="preserve">
-    <value>Only supports seat roles setting</value>
-    <comment>Seat roles setting warning text in seatmap</comment>
-  </data>
   <data name="ShowOnlyAbsence" xml:space="preserve">
     <value>Show only absences</value>
     <comment>use in WFM TeamSchedule, the switch description</comment>
