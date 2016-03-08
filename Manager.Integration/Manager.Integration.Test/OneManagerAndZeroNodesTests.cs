@@ -60,6 +60,8 @@ namespace Manager.Integration.Test
 			                               numberOfNodes: 0,
 			                               cancellationTokenSource: CancellationTokenSource);
 
+			Thread.Sleep(TimeSpan.FromSeconds(2));
+
 			LogHelper.LogDebugWithLineNumber("Finshed TestFixtureSetUp",
 			                                 Logger);
 		}
@@ -109,7 +111,7 @@ namespace Manager.Integration.Test
 			                                 Logger);
 
 			var createNewJobRequests =
-				JobHelper.GenerateTestJobParamsRequests(1);
+				JobHelper.GenerateFastJobParamsRequests(1);
 
 			LogHelper.LogDebugWithLineNumber("( " + createNewJobRequests.Count + " ) jobs will be created.",
 			                                 Logger);

@@ -22,10 +22,10 @@ namespace NodeTest.JobHandlers
 			var jobProgress = new FastJobProgress
 			{
 				Text = WhoAmI + ": Start job that only sends back a progress.",
-				ConsoleColor = ConsoleColor.Green
 			};
 
 			progress(jobProgress.Text);
+			Thread.Sleep(TimeSpan.FromMilliseconds(100));
 		}
 	}
 }

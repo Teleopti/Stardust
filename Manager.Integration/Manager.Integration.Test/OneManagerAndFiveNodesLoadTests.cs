@@ -110,8 +110,8 @@ namespace Manager.Integration.Test
 			}
 		}
 
-		[Test, Ignore]
-		public void ShouldBeAbleToExecuteThisFast()
+		[Test]
+		public void ShouldBeAbleToExecuteManyFastSuccessJobRequestTest()
 		{
 			LogHelper.LogDebugWithLineNumber("Start.",
 											 Logger);
@@ -144,28 +144,23 @@ namespace Manager.Integration.Test
 
 				jobManagerTaskCreators.Add(jobManagerTaskCreator);
 			}
-			
+
 			//---------------------------------------------
 			// Execute all jobs. 
 			//---------------------------------------------			
+			//---------------------------------------------
+			// Execute all jobs. 
+			//---------------------------------------------
 			var startJobTaskHelper = new StartJobTaskHelper();
-
-			ManagerIntegrationStopwatch managerIntegrationStopwatch = new ManagerIntegrationStopwatch();
 
 			var taskHelper = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
 																		 CancellationTokenSource,
-																		 TimeSpan.FromMilliseconds(200));
+																		 TimeSpan.FromMilliseconds(50));
 
 			//---------------------------------------------
 			// Wait for all jobs to finish.
 			//---------------------------------------------
 			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
-
-			var timeTotal=
-				managerIntegrationStopwatch.GetTotalElapsedTimeInSeconds();
-
-			LogHelper.LogDebugWithLineNumber("Job took : " + timeTotal + " seconds.",
-											 Logger);
 
 			//---------------------------------------------
 			// Assert.
@@ -200,7 +195,7 @@ namespace Manager.Integration.Test
 		///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
 		///     netsh http add urlacl url=http://+:9050/ user=everyone listen=yes
 		/// </summary>
-		[Test]
+		[Test, Ignore]
 		public void ShouldBeAbleToCreateManySuccessJobRequestTest()
 		{
 			LogHelper.LogDebugWithLineNumber("Start.",

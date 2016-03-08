@@ -64,6 +64,8 @@ namespace Manager.Integration.Test
 			                               numberOfNodes: 1,
 			                               cancellationTokenSource: CancellationTokenSource);
 
+			Thread.Sleep(TimeSpan.FromSeconds(2));
+
 			LogHelper.LogDebugWithLineNumber("Finished TestFixtureSetUp",
 			                                 Logger);
 		}
@@ -230,30 +232,7 @@ namespace Manager.Integration.Test
 
 			var timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
 			                                                     2);
-
-
-			//--------------------------------------------
-			// Notify when node is up.
-			//--------------------------------------------
-			//LogHelper.LogDebugWithLineNumber("Waiting for node to start.",
-			//                                 Logger);
-
-			//var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
-
-			//var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
-
-			//var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(1,
-			//                                                      sqlNotiferCancellationTokenSource,
-			//                                                      IntegerValidators.Value1IsEqualToValue2Validator);
-			//task.Start();
-
-			//sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
-
-			//sqlNotifier.Dispose();
-
-			//LogHelper.LogInfoWithLineNumber("Node have started.",
-			//                                 Logger);
-
+			
 			//--------------------------------------------
 			// Start actual test.
 			//--------------------------------------------
@@ -356,28 +335,6 @@ namespace Manager.Integration.Test
 				                                       2);
 
 			//--------------------------------------------
-			// Notify when node is up.
-			//--------------------------------------------
-			//LogHelper.LogDebugWithLineNumber("Waiting for node to start.",
-			//                                 Logger);
-
-			//var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
-
-			//var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
-
-			//var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(1,
-			//                                                      sqlNotiferCancellationTokenSource,
-			//                                                      IntegerValidators.Value1IsEqualToValue2Validator);
-			//task.Start();
-
-			//sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
-
-			//sqlNotifier.Dispose();
-
-			//LogHelper.LogInfoWithLineNumber("Node have started.",
-			//                                 Logger);
-
-			//--------------------------------------------
 			// Start actual test.
 			//--------------------------------------------
 			var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
@@ -423,13 +380,13 @@ namespace Manager.Integration.Test
 		///     netsh http add urlacl url=http://+:9050/ user=everyone listen=yes
 		/// </summary>
 		[Test]
-		public void ShouldBeAbleToCreateManySuccessJobRequestTest()
+		public void ShouldBeAbleToCreateASuccessJobRequestTest()
 		{
 			LogHelper.LogDebugWithLineNumber("Start.",
 			                                 Logger);
 
 			var createNewJobRequests =
-				JobHelper.GenerateTestJobParamsRequests(1);
+				JobHelper.GenerateFastJobParamsRequests(1);
 
 			LogHelper.LogDebugWithLineNumber("( " + createNewJobRequests.Count + " ) jobs will be created.",
 			                                 Logger);
