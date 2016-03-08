@@ -249,15 +249,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.IsNotNull(target);
         }
 
-        /// <summary>
-        /// Protected constructor works.
-        /// </summary>
-        [Test]
-        public void ProtectedConstructorWorks()
-        {
-            Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(target.GetType()));
-        }
-
+      
         [Test]
         public void VerifyTimeZoneCacheWorksWhenReadFromDatabase()
         {
