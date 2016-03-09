@@ -30,53 +30,67 @@ INSERT INTO #ids SELECT * FROM SplitStringString(@ids)
 
 UPDATE [ReadModel].[FindPerson]
 SET SearchValue = Name
-FROM [ReadModel].[FindPerson] INNER JOIN PartTimePercentage  
-ON PartTimePercentage.Id = SearchValueId 
+FROM [ReadModel].[FindPerson] 
+INNER JOIN PartTimePercentage ON PartTimePercentage.Id = SearchValueId 
 INNER JOIN #ids on #ids.id = SearchValueId
 
 UPDATE [ReadModel].[FindPerson]
 SET SearchValue = Name
-FROM [ReadModel].[FindPerson] INNER JOIN RuleSetBag  
-ON RuleSetBag.Id = SearchValueId 
+FROM [ReadModel].[FindPerson] 
+INNER JOIN RuleSetBag ON RuleSetBag.Id = SearchValueId 
 INNER JOIN #ids on #ids.id = SearchValueId
 
 UPDATE [ReadModel].[FindPerson]
 SET SearchValue = Name
-FROM [ReadModel].[FindPerson] INNER JOIN Contract  
-ON Contract.Id = SearchValueId 
+FROM [ReadModel].[FindPerson] 
+INNER JOIN Contract ON Contract.Id = SearchValueId 
 INNER JOIN #ids on #ids.id = SearchValueId
 
 UPDATE [ReadModel].[FindPerson]
 SET SearchValue = Name
-FROM [ReadModel].[FindPerson] INNER JOIN ContractSchedule
-ON ContractSchedule.Id = SearchValueId 
+FROM [ReadModel].[FindPerson] 
+INNER JOIN ContractSchedule ON ContractSchedule.Id = SearchValueId 
 INNER JOIN #ids on #ids.id = SearchValueId
 
 UPDATE [ReadModel].[FindPerson]
 SET SearchValue = Name
-FROM [ReadModel].[FindPerson] INNER JOIN BudgetGroup  
-ON BudgetGroup.Id = SearchValueId 
+FROM [ReadModel].[FindPerson] 
+INNER JOIN BudgetGroup ON BudgetGroup.Id = SearchValueId 
 INNER JOIN #ids on #ids.id = SearchValueId
 
 UPDATE [ReadModel].[FindPerson]
 SET SearchValue = Name
-FROM [ReadModel].[FindPerson] INNER JOIN Skill  
-ON Skill.Id = SearchValueId 
+FROM [ReadModel].[FindPerson] 
+INNER JOIN Skill ON Skill.Id = SearchValueId 
 INNER JOIN #ids on #ids.id = SearchValueId
+
 
 UPDATE [ReadModel].[FindPerson]
 SET SearchValue =  t.Name + ' ' + s.Name 
-FROM [ReadModel].[FindPerson] INNER JOIN PersonPeriod pp ON pp.Id = SearchValueId
+FROM [ReadModel].[FindPerson] 
+INNER JOIN PersonPeriod pp ON pp.Id = SearchValueId
 INNER JOIN Team t ON pp.Team = t.Id
+INNER JOIN #ids ids ON t.Id = ids.id
 INNER JOIN Site s ON s.Id = t.Site
 WHERE t.IsDeleted = 0 AND s.IsDeleted = 0
+
+
+UPDATE [ReadModel].[FindPerson]
+SET SearchValue =  t.Name + ' ' + s.Name 
+FROM [ReadModel].[FindPerson] 
+INNER JOIN PersonPeriod pp ON pp.Id = SearchValueId
+INNER JOIN Team t ON pp.Team = t.Id
+INNER JOIN Site s ON s.Id = t.Site
+INNER JOIN #ids ids ON s.Id = ids.id
+WHERE t.IsDeleted = 0 AND s.IsDeleted = 0
+
 
 UPDATE [ReadModel].[FindPerson]
 SET SearchValue = CASE SUBSTRING( ar.DescriptionText ,1 , 2 )
 WHEN  'xx'    THEN ar.Name
  ELSE ar.DescriptionText
  END
-FROM [ReadModel].[FindPerson] INNER JOIN 
-ApplicationRole ar ON ar.Id = SearchValueId 
+FROM [ReadModel].[FindPerson] 
+INNER JOIN ApplicationRole ar ON ar.Id = SearchValueId 
 INNER JOIN #ids on #ids.id = SearchValueId
 WHERE ar.IsDeleted = 0

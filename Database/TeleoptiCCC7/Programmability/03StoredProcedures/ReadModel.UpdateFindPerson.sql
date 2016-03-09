@@ -49,81 +49,86 @@ END
 
 INSERT [ReadModel].[FindPerson]
 SELECT Id,FirstName, LastName, EmploymentNumber, Note, TerminalDate, FirstName, 'FirstName', NULL, NULL, NULL,NULL
-FROM Person WITH (NOLOCK) WHERE IsDeleted = 0
-AND Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType = 'FirstName')
+FROM Person WITH (NOLOCK) 
+INNER JOIN #ids ids ON Person.Id = ids.person
+WHERE IsDeleted = 0
 
 INSERT [ReadModel].[FindPerson]
 SELECT Id,FirstName, LastName, EmploymentNumber, Note, TerminalDate, LastName, 'LastName', NULL, NULL, NULL,NULL  
-FROM Person WITH (NOLOCK) WHERE IsDeleted = 0
-AND Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType = 'LastName')
+FROM Person WITH (NOLOCK) 
+INNER JOIN #ids ids ON Person.Id = ids.person
+WHERE IsDeleted = 0
 
 INSERT [ReadModel].[FindPerson]
 SELECT Id,FirstName, LastName, EmploymentNumber, Note, TerminalDate, Note, 'Note', NULL, NULL, NULL,NULL 
-FROM Person WITH (NOLOCK) WHERE IsDeleted = 0
-AND Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType = 'Note')
+FROM Person WITH (NOLOCK) 
+INNER JOIN #ids ids ON Person.Id = ids.person
+WHERE IsDeleted = 0
 
 INSERT [ReadModel].[FindPerson]
 SELECT Id,FirstName, LastName, EmploymentNumber, Note, TerminalDate, EmploymentNumber, 'EmploymentNumber', NULL, NULL, NULL,NULL  
-FROM Person WITH (NOLOCK) WHERE IsDeleted = 0
-AND Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType = 'EmploymentNumber')
+FROM Person WITH (NOLOCK) 
+INNER JOIN #ids ids ON Person.Id = ids.person
+WHERE IsDeleted = 0
+
 
 INSERT [ReadModel].[FindPerson]
 SELECT DISTINCT p.Id,FirstName, LastName, EmploymentNumber, p.Note, TerminalDate, ptp.Name, 'PartTimePercentage', NULL, NULL, NULL, ptp.Id
 FROM Person p WITH (NOLOCK)
+INNER JOIN #ids ids ON p.Id = ids.person
 INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
 INNER JOIN PartTimePercentage ptp ON pp.PartTimePercentage = ptp.Id
 WHERE p.IsDeleted = 0 AND ptp.IsDeleted = 0
-AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType = 'PartTimePercentage')
 
 INSERT [ReadModel].[FindPerson]
 SELECT DISTINCT p.Id,FirstName, LastName, EmploymentNumber, p.Note, TerminalDate, rsb.Name, 'ShiftBag', NULL, NULL, NULL, rsb.Id
 FROM Person p WITH (NOLOCK)
+INNER JOIN #ids ids ON p.Id = ids.person
 INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
 INNER JOIN RuleSetBag rsb ON pp.RuleSetBag = rsb.Id
 WHERE p.IsDeleted = 0 AND rsb.IsDeleted = 0
-AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType = 'ShiftBag')
 
 INSERT [ReadModel].[FindPerson]
 SELECT DISTINCT p.Id,FirstName, LastName, EmploymentNumber, p.Note, TerminalDate, c.Name, 'Contract', NULL, NULL, NULL, c.Id 
 FROM Person p WITH (NOLOCK)
+INNER JOIN #ids ids ON p.Id = ids.person
 INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
 INNER JOIN Contract c ON pp.Contract = c.Id
 WHERE p.IsDeleted = 0 AND c.IsDeleted = 0
-AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType = 'Contract')
 
 INSERT [ReadModel].[FindPerson]
 SELECT DISTINCT p.Id,FirstName, LastName, EmploymentNumber, p.Note, TerminalDate, cs.Name, 'ContractSchedule', NULL, NULL, NULL, cs.Id  
 FROM Person p WITH (NOLOCK)
+INNER JOIN #ids ids ON p.Id = ids.person
 INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
 INNER JOIN ContractSchedule cs ON pp.ContractSchedule = cs.Id
 WHERE p.IsDeleted = 0 AND cs.IsDeleted = 0 
-AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType = 'ContractSchedule')
 
 INSERT [ReadModel].[FindPerson]
 SELECT DISTINCT p.Id,FirstName, LastName, EmploymentNumber, p.Note, TerminalDate, bg.Name, 'BudgetGroup', NULL, NULL, NULL, bg.Id
 FROM Person p WITH (NOLOCK)
+INNER JOIN #ids ids ON p.Id = ids.person
 INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
 INNER JOIN BudgetGroup bg ON pp.BudgetGroup = bg.Id
 WHERE p.IsDeleted = 0 AND bg.IsDeleted = 0 
-AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType = 'BudgetGroup')
 
 INSERT [ReadModel].[FindPerson]
 SELECT DISTINCT p.Id,FirstName, LastName, EmploymentNumber, p.Note, TerminalDate, t.Name + ' ' + s.Name, 'Organization', NULL, NULL, NULL, pp.Id  
 FROM Person p WITH (NOLOCK)
+INNER JOIN #ids ids ON p.Id = ids.person
 INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
 INNER JOIN Team t ON pp.Team = t.Id
 INNER JOIN Site s ON s.Id = t.Site
 WHERE p.IsDeleted = 0 AND t.IsDeleted = 0 AND s.IsDeleted = 0
-AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType = 'Organization')
 
 INSERT [ReadModel].[FindPerson]
 SELECT DISTINCT p.Id,FirstName, LastName, EmploymentNumber, p.Note, TerminalDate, s.Name, 'Skill', NULL, NULL, NULL, s.Id  
 FROM Person p WITH (NOLOCK)
+INNER JOIN #ids ids ON p.Id = ids.person
 INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
 INNER JOIN PersonSkill ps ON pp.Id = ps.Parent
 INNER JOIN Skill s ON ps.Skill = s.Id
 WHERE p.IsDeleted = 0 AND Active = 1 AND  s.IsDeleted = 0
-AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType = 'Skill')
 
 INSERT [ReadModel].[FindPerson]
 SELECT DISTINCT p.Id,FirstName, LastName, EmploymentNumber, p.Note, TerminalDate, 
@@ -133,6 +138,7 @@ WHEN  'xx'    THEN ar.Name
  END
 ,'Role', NULL, NULL, NULL, ar.Id  
 FROM Person p WITH (NOLOCK)
+INNER JOIN #ids ids ON p.Id = ids.person
 INNER JOIN PersonInApplicationRole pa ON pa.Person = p.Id
 INNER JOIN ApplicationRole ar ON ar.Id = pa.ApplicationRole
 WHERE p.IsDeleted = 0 AND ar.IsDeleted = 0
@@ -145,13 +151,14 @@ SELECT Parent,Team
 FROM [PersonPeriod] pp WITH (NOLOCK)
 WHERE pp.StartDate < @date AND pp.EndDate >= @date
 
-UPDATE [ReadModel].[FindPerson] SET [TeamId] = t.Id,
-	[SiteId] = s.Id,[BusinessUnitId] = s.BusinessUnit 
+UPDATE [ReadModel].[FindPerson] 
+SET [TeamId] = t.Id,
+	[SiteId] = s.Id,
+	[BusinessUnitId] = s.BusinessUnit 
 FROM [ReadModel].[FindPerson] p
-LEFT JOIN #CurrentPeriod pp ON p.PersonId = pp.Parent AND pp.Parent in (SELECT * FROM #ids)
+LEFT JOIN #CurrentPeriod pp ON p.PersonId = pp.Parent AND pp.Parent in (SELECT person FROM #ids)
 INNER JOIN Team t ON pp.Team = t.Id
-INNER JOIN Site s ON s.Id = t.Site
--- the 
+INNER JOIN Site s ON s.Id = t.Site 
 WHERE t.IsDeleted = 0 AND s.IsDeleted = 0
 
 /*last if terminal*/
@@ -161,8 +168,10 @@ SELECT Parent,Team,EndDate FROM
 SELECT Parent, Team, EndDate, ROW_NUMBER () OVER (PARTITION BY Parent ORDER BY Parent,enddate DESC) row FROM PersonPeriod WITH (NOLOCK)
 ) AS LastPersonPeriod WHERE row=1
 
-UPDATE [ReadModel].[FindPerson] SET [TeamId] = t.Id,
-	[SiteId] = s.Id,[BusinessUnitId] = s.BusinessUnit 
+UPDATE [ReadModel].[FindPerson]
+SET [TeamId] = t.Id,
+	[SiteId] = s.Id,
+	[BusinessUnitId] = s.BusinessUnit 
 FROM [ReadModel].[FindPerson] p
 LEFT JOIN #last pp ON p.PersonId = pp.Parent
 INNER JOIN Team t ON pp.Team = t.Id
@@ -176,5 +185,5 @@ GO
 --Finally, when DBManager applies this SP also execute the SP
 --=================
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[UpdateFindPerson]') AND type in (N'P', N'PC')) 
-EXEC [ReadModel].[UpdateFindPerson] '00000000-0000-0000-0000-000000000000'
+	EXEC [ReadModel].[UpdateFindPerson] '00000000-0000-0000-0000-000000000000'
 GO
