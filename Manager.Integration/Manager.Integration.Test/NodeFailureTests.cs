@@ -94,8 +94,8 @@ namespace Manager.Integration.Test
 		private void WaitForNodeTimeout()
 		{
 			//MUST BE CHANGED TO FIT CONFIGURATION
-			Thread.Sleep(TimeSpan.FromSeconds(7)); 
-			// = (heartbeat * 2) + 1
+			Thread.Sleep(TimeSpan.FromSeconds(60));
+			// = (alloweddowntime * 2)
 		}
 
 		[Test]
