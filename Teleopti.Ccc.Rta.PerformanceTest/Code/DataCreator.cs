@@ -98,9 +98,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 				.ForEach(roger =>
 				{
 					var name = "roger" + roger;
-
-					Console.WriteLine("creating " + name);
-
 					data.Person(name).Apply(new PersonPeriodConfigurable
 					{
 						StartDate = "2000-01-01 00:00".Utc(),

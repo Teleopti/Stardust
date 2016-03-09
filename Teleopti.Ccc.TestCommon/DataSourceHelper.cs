@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.TestCommon
 			return new DatabaseHelper(
 				InfraTestConfigReader.ConnectionString,
 				DatabaseType.TeleoptiCCC7
-				) {Logger = new ConsoleLogger()};
+				);
 		}
 
 		private static DatabaseHelper analytics()
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.TestCommon
 			return new DatabaseHelper(
 				InfraTestConfigReader.AnalyticsConnectionString,
 				DatabaseType.TeleoptiAnalytics
-				) {Logger = new ConsoleLogger()};
+				);
 		}
 
 		private static void createOrRestoreApplication(string name)
