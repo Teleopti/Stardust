@@ -9,7 +9,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 {
 	public class StardustRepository
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (StardustRepository));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(StardustRepository));
 
 		private readonly string _connectionString;
 
@@ -22,7 +22,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 		{
 			return value == DBNull.Value
 				? null
-				: (string) value;
+				: (string)value;
 		}
 
 		public JobHistory History(Guid jobId)
@@ -66,6 +66,65 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 					}
 
 					return null;
+				}
+			}
+			catch (Exception exp)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger, exp.Message, exp);
+			}
+
+			LogHelper.LogInfoWithLineNumber(Logger, "Finished.");
+
+			return null;
+		}
+
+		public IList<JobHistory> HistoryList(Guid nodeId)
+		{
+			LogHelper.LogInfoWithLineNumber(Logger, "Start.");
+
+			try
+			{
+				var selectCommand = @"
+	   SELECT * FROM [Stardust].JobHistory
+	   WHERE SentTo IN 
+		(SELECT Url FROM [Stardust].WorkerNodes WHERE Id = @NodeId)";
+
+				var returnList = new List<JobHistory>();
+
+				using (var connection = new SqlConnection(_connectionString))
+				{
+					var command = new SqlCommand
+					{
+						Connection = connection,
+						CommandText = selectCommand,
+						CommandType = CommandType.Text
+					};
+
+					command.Parameters.Add("@NodeId",
+											   SqlDbType.UniqueIdentifier,
+											   16,
+											   "NodeId");
+
+					command.Parameters[0].Value = nodeId;
+
+					connection.Open();
+
+					using (var reader = command.ExecuteReader())
+					{
+						if (reader.HasRows)
+						{
+							while (reader.Read())
+							{
+								var jobHist = NewJobHistoryModel(reader);
+								returnList.Add(jobHist);
+							}
+						}
+
+						reader.Close();
+						connection.Close();
+					}
+
+					return returnList;
 				}
 			}
 			catch (Exception exp)
@@ -135,12 +194,12 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			{
 				var jobHist = new JobHistory
 				{
-					Id = (Guid) reader.GetValue(reader.GetOrdinal("JobId")),
-					Name = (string) reader.GetValue(reader.GetOrdinal("Name")),
-					CreatedBy = (string) reader.GetValue(reader.GetOrdinal("CreatedBy")),
+					Id = (Guid)reader.GetValue(reader.GetOrdinal("JobId")),
+					Name = (string)reader.GetValue(reader.GetOrdinal("Name")),
+					CreatedBy = (string)reader.GetValue(reader.GetOrdinal("CreatedBy")),
 					SentTo = getValue<string>(reader.GetValue(reader.GetOrdinal("SentTo"))),
 					Result = getValue<string>(reader.GetValue(reader.GetOrdinal("Result"))),
-					Created = (DateTime) (reader.GetValue(reader.GetOrdinal("Created"))),
+					Created = (DateTime)(reader.GetValue(reader.GetOrdinal("Created"))),
 					Started = getDateTime(reader.GetValue(reader.GetOrdinal("Started"))),
 					Ended = getDateTime(reader.GetValue(reader.GetOrdinal("Ended")))
 				};
@@ -157,7 +216,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			return null;
 		}
 
-		private static string SelectHistoryCommand(bool addParameter)
+		private static string SelectHistoryCommand(bool byJobId)
 		{
 			var selectCommand = @"SELECT 
                                              JobId    
@@ -170,7 +229,8 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 															Result
                                         FROM [Stardust].JobHistory";
 
-			if (addParameter)
+
+			if (byJobId)
 			{
 				selectCommand += " WHERE JobId = @JobId";
 			}
@@ -208,8 +268,8 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 							{
 								var detail = new JobHistoryDetail
 								{
-									Created = (DateTime) (reader.GetValue(reader.GetOrdinal("Created"))),
-									Detail = (string) (reader.GetValue(reader.GetOrdinal("Detail"))),
+									Created = (DateTime)(reader.GetValue(reader.GetOrdinal("Created"))),
+									Detail = (string)(reader.GetValue(reader.GetOrdinal("Detail"))),
 								};
 								returnList.Add(detail);
 							}
@@ -239,7 +299,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 				return null;
 			}
 
-			return (DateTime) databaseValue;
+			return (DateTime)databaseValue;
 		}
 
 		public WorkerNode WorkerNode(Guid Id)
@@ -315,11 +375,11 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 					{
 						var node = new WorkerNode
 						{
-							Id = (Guid) reader.GetValue(reader.GetOrdinal("Id")),
-							Url = new Uri((string) reader.GetValue(reader.GetOrdinal("Url"))),
-							Alive = (string) reader.GetValue(reader.GetOrdinal("Alive")),
-							Heartbeat = (DateTime) reader.GetValue(reader.GetOrdinal("Heartbeat")),
-							Running = (bool) reader.GetValue(reader.GetOrdinal("Running"))
+							Id = (Guid)reader.GetValue(reader.GetOrdinal("Id")),
+							Url = new Uri((string)reader.GetValue(reader.GetOrdinal("Url"))),
+							Alive = (string)reader.GetValue(reader.GetOrdinal("Alive")),
+							Heartbeat = (DateTime)reader.GetValue(reader.GetOrdinal("Heartbeat")),
+							Running = (bool)reader.GetValue(reader.GetOrdinal("Running"))
 						};
 
 						listToReturn.Add(node);
