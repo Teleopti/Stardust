@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void RestoreCcc7Data()
 		{
-			DataSourceHelper.RestoreAnalyticsDatabase(_dataHash);
+			DataSourceHelper.RestoreApplicationDatabase(_dataHash);
 		}
 	}
 }
