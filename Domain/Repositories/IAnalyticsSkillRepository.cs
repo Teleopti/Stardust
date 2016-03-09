@@ -11,6 +11,5 @@ namespace Teleopti.Ccc.Domain.Repositories
 		int? SkillSetId(IList<AnalyticsSkill> skills);
 		IList<AnalyticsSkill> Skills(int businessUnitId);
 		int AddSkillSet(AnalyticsSkillSet analyticsSkillSet);
-		int AddSkillSet(List<AnalyticsSkill> listOfSkills);
 	}
 }

@@ -42,11 +42,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			fakeAnalyticsSkillRepository.SetSkills(fakeSkills);
 
 
-			List<KeyValuePair<int, string>> fakeSkillSets = new List<KeyValuePair<int, string>>
+			var fakeSkillSets = new List<AnalyticsSkillSet>
 			{
-				new KeyValuePair<int, string>(1, "1,2,3"),
-				new KeyValuePair<int, string>(2, "1,2"),
-				new KeyValuePair<int, string>(3, "1")
+				new AnalyticsSkillSet { SkillsetId = 1, SkillsetCode = "1,2,3"},
+				new AnalyticsSkillSet { SkillsetId = 2, SkillsetCode = "1,2"},
+				new AnalyticsSkillSet { SkillsetId = 3, SkillsetCode = "1"}
 			};
 
 			fakeAnalyticsSkillRepository.SetSkillSets(fakeSkillSets);
@@ -120,8 +120,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		public void TwoSkills_MapSkillSet_NoSkillSet()
 		{
 			var skills = new List<Guid> { Guid.Parse("00000000-0000-0000-0000-000000000002") };
-			var skillSet = personPeriodTransformer.MapSkillsetId(skills, 0);
-			Assert.AreEqual(null, skillSet);
+			var newSkillSetId = personPeriodTransformer.MapSkillsetId(skills, 0);
+			Assert.AreEqual(4, newSkillSetId);
 		}
 	}
 }

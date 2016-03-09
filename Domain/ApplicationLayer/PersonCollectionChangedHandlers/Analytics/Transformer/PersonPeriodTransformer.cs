@@ -232,6 +232,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 			return _analyticsPersonPeriodRepository.SiteId(siteCode, siteName, businessUnitId);
 		}
 
+		public static AnalyticsSkillSet NewSkillSetFromSkills(List<AnalyticsSkill> skills)
+		{
+			var skillSetCode = string.Join(",", skills.OrderBy(a => a.SkillId).Select(a => a.SkillId));
+			var skillSetName = string.Join(",", skills.OrderBy(a => a.SkillId).Select(a => a.SkillName));
+
+			var newSkillSet = new AnalyticsSkillSet
+			{
+				SkillsetCode = skillSetCode,
+				SkillsetName = skillSetName,
+				BusinessUnitId = skills.First().BusinessUnitId,
+				DatasourceId = skills.First().DatasourceId,
+				DatasourceUpdateDate = skills.Max(a => a.DatasourceUpdateDate)
+			};
+			return newSkillSet;
+		}
+
 
 		// Map skills to skillset. If not exists it will create it.
 		public int MapSkillsetId(List<Guid> skillCodes, int businessUnitId)
@@ -243,7 +259,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 			var skillSetId = _analyticsSkillRepository.SkillSetId(listOfSkills);
 
 			if (!skillSetId.HasValue)
-				_analyticsSkillRepository.AddSkillSet(listOfSkills);
+				_analyticsSkillRepository.AddSkillSet(NewSkillSetFromSkills(listOfSkills));
 
 			skillSetId = _analyticsSkillRepository.SkillSetId(listOfSkills);
 

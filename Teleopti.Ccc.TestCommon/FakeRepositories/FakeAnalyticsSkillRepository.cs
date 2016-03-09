@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics;
+using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics.Transformer;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
@@ -8,7 +9,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakeAnalyticsSkillRepository : IAnalyticsSkillRepository
 	{
 		private List<AnalyticsSkill> fakeSkills;
-		private List<KeyValuePair<int, string>> fakeSkillSets;
+		private List<AnalyticsSkillSet> fakeSkillSets;
+
+		public FakeAnalyticsSkillRepository()
+		{
+			fakeSkillSets = new List<AnalyticsSkillSet>();
+		}
 
 		public IList<AnalyticsSkill> Skills(int businessUnitId)
 		{
@@ -17,12 +23,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public int AddSkillSet(AnalyticsSkillSet analyticsSkillSet)
 		{
-			throw new System.NotImplementedException();
+			if (analyticsSkillSet.SkillsetId == 0)
+			{
+				analyticsSkillSet.SkillsetId = fakeSkillSets.Max(a => a.SkillsetId) + 1;
+			}
+			fakeSkillSets.Add(analyticsSkillSet);
+			return analyticsSkillSet.SkillsetId;
 		}
 
 		public int AddSkillSet(List<AnalyticsSkill> listOfSkills)
 		{
-			throw new System.NotImplementedException();
+			var newSkillSet = PersonPeriodTransformer.NewSkillSetFromSkills(listOfSkills);
+			fakeSkillSets.Add(newSkillSet);
+			return newSkillSet.SkillsetId;
 		}
 
 		public IList<AnalyticsSkillSet> SkillSets()
@@ -32,10 +45,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public int? SkillSetId(IList<AnalyticsSkill> skills)
 		{
-			var skillSet = fakeSkillSets.FirstOrDefault(a => a.Value == string.Join(",", skills.Select(b => b.SkillId)));
-			if (!skillSet.Equals(default(KeyValuePair<int, string>)))
-				return skillSet.Key;
-			return null;
+			var skillSet = fakeSkillSets.FirstOrDefault(a => a.SkillsetCode == string.Join(",", skills.Select(b => b.SkillId)));
+			return skillSet == null ? null : (int?) skillSet.SkillsetId;
 		}
 
 		public void SetSkills(List<AnalyticsSkill> analyticsSkills)
@@ -43,7 +54,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			fakeSkills = analyticsSkills;
 		}
 
-		public void SetSkillSets(List<KeyValuePair<int, string>> list)
+		public void SetSkillSets(List<AnalyticsSkillSet> list)
 		{
 			fakeSkillSets = list;
 		}
