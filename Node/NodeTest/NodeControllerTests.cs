@@ -79,7 +79,7 @@ namespace NodeTest
 		[TestFixtureTearDown]
 		public void TestFixtureTearDown()
 		{
-			_sendJobDoneTimer.Wait.Wait(TimeSpan.FromSeconds(5)); // let job finish
+			_sendJobDoneTimer.Wait.Wait(TimeSpan.FromSeconds(6)); // let job finish
 			LogHelper.LogDebugWithLineNumber(Logger, "Start TestFixtureTearDown");
 		}
 

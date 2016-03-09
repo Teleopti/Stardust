@@ -10,8 +10,8 @@ namespace NodeTest.Fakes.InvokeHandlers
 		                   CancellationTokenSource cancellationTokenSource,
 		                   Action<string> progressCallback)
 		{
-			progressCallback("Shortrunning: waiting 5 seconds");
-			Thread.Sleep(TimeSpan.FromSeconds(5));
+			progressCallback("Shortrunning: waiting 3 seconds");
+			Thread.Sleep(TimeSpan.FromSeconds(3));
 		}
 	}
 }
