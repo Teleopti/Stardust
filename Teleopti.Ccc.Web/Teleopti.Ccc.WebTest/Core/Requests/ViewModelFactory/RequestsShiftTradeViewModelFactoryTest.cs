@@ -77,15 +77,15 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldRetrieveMyScheduleFromRawScheduleDataWhenNotPublished()
+		public void ShouldRetrieveMyScheduleFromRawScheduleDataWhenNotPublishedAndNoPermission()
 		{
 			PermissionProvider.Enable();
 
 			PermissionProvider.PublishToDate(new DateOnly(2016, 1, 12));
 
 			var scenario = CurrentScenario.Current();
-			var me = PersonFactory.CreatePerson("meUnpublish");
-			var team = TeamFactory.CreateSimpleTeam("team");
+			var me = PersonFactory.CreatePersonWithGuid("me","Unpublish");
+			var team = TeamFactory.CreateTeamWithId("team");
 			TeamRepository.Add(team);
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 1, 13), team);
 			me.AddPersonPeriod(personPeriod);
@@ -106,9 +106,80 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			result.MySchedule.ScheduleLayers.Should().Be.Null();
 		}
+		
+		[Test]
+		public void ShouldSeeMyUnpublisedScheduleWhenIHaveViewUnpublishedSchedulePermission()
+		{
+			PermissionProvider.Enable();
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
+			PermissionProvider.PublishToDate(new DateOnly(2016, 1, 12));
+
+			var scenario = CurrentScenario.Current();
+			var me = PersonFactory.CreatePersonWithGuid("me","Unpublish");
+			var team = TeamFactory.CreateTeamWithId("team");
+			TeamRepository.Add(team);
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 1, 13), team);
+			me.AddPersonPeriod(personPeriod);
+			PersonRepository.Add(me);
+			
+			LoggedOnUser.SetFakeLoggedOnUser(me);
+
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, me,
+				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13,8,0,0), DateTimeKind.Utc), 
+					DateTime.SpecifyKind(new DateTime(2016, 1, 13,10,0,0), DateTimeKind.Utc)),
+				ShiftCategoryFactory.CreateShiftCategory("mainShift"));
+			ScheduleStorage.Add(personAss);
+
+			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			{
+				Paging = new Paging { Skip = 0, Take = 20},
+				ShiftTradeDate = new DateOnly(2016, 1, 13),
+				TeamIdList = new []{team.Id.GetValueOrDefault()}
+			});
+
+			result.MySchedule.ScheduleLayers.Should().Not.Be.Null();
+			result.MySchedule.ScheduleLayers.Count().Should().Be(1);
+		}
+		
+		[Test]
+		public void ShouldSeeAgentUnpublisedScheduleWhenLoggedOnUserHasViewUnpublishedSchedulePermission()
+		{
+			PermissionProvider.Enable();
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
+			PermissionProvider.PublishToDate(new DateOnly(2016, 1, 12));
+
+			var scenario = CurrentScenario.Current();
+			var agent = PersonFactory.CreatePersonWithGuid("agent","Unpublish");
+			var me = PersonFactory.CreatePersonWithGuid("me","me");
+			var team = TeamFactory.CreateTeamWithId("team");
+			TeamRepository.Add(team);
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 1, 13), team);
+			agent.AddPersonPeriod(personPeriod);
+			me.AddPersonPeriod(personPeriod);
+			PersonRepository.Add(agent);
+			PersonRepository.Add(me);
+			
+			LoggedOnUser.SetFakeLoggedOnUser(me);
+
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, agent,
+				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13,8,0,0), DateTimeKind.Utc), 
+					DateTime.SpecifyKind(new DateTime(2016, 1, 13,10,0,0), DateTimeKind.Utc)),
+				ShiftCategoryFactory.CreateShiftCategory("mainShift"));
+			ScheduleStorage.Add(personAss);
+
+			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			{
+				Paging = new Paging { Skip = 0, Take = 20},
+				ShiftTradeDate = new DateOnly(2016, 1, 13),
+				TeamIdList = new []{team.Id.GetValueOrDefault()}
+			});
+			result.PossibleTradeSchedules.Count().Should().Be(1);
+			result.PossibleTradeSchedules.First().ScheduleLayers.Should().Not.Be.Null();
+			result.PossibleTradeSchedules.First().ScheduleLayers.Count().Should().Be(1);
+		}
 
 		[Test]
-		public void ShouldNeverViewUnpublishedSchedule()
+		public void ShouldNotViewUnpublishedScheduleWhenHasNoViewUnpublishedSchedulePermission()
 		{
 			PermissionProvider.Enable();
 

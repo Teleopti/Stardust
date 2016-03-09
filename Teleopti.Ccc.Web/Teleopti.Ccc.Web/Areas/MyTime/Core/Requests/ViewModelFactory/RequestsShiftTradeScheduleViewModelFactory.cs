@@ -55,16 +55,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 				var possiblePersonSchedules = possibleTradedPersonList.Select(
 					p => new Tuple<IPerson, IScheduleDay>(p, possibleTradeSchedules.SingleOrDefault(s => s.Person.Id == p.Id)))
 					.Where(ps => !_projectionProvider.IsFullDayAbsence(ps.Item2) && !_projectionProvider.IsOvertimeOnDayOff(ps.Item2)).ToArray();
-				Array.Sort(possiblePersonSchedules,new TeamScheduleComparer(false,_permissionProvider));
+
+				var canViewUnpublished =
+					_permissionProvider.HasApplicationFunctionPermission(
+						DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
+
+				Array.Sort(possiblePersonSchedules, new TeamScheduleComparer(canViewUnpublished, _permissionProvider));
 
 				var allSortedPossibleSchedules = possiblePersonSchedules
 					.Select(pair =>
 					{
 						var person = pair.Item1;
-						var schedule = pair.Item2;
-						return
-							new ShiftTradeAddPersonScheduleViewModel(_projectionProvider.MakeScheduleReadModel(person, schedule,
-								_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential)));
+						var scheduleDay = pair.Item2;
+						var canViewConfidential =
+							_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential);
+						
+						return new ShiftTradeAddPersonScheduleViewModel(_projectionProvider.MakeScheduleReadModel(person, scheduleDay, canViewConfidential));
 					}).ToList();
 				ret.PageCount = (int)Math.Ceiling((double)allSortedPossibleSchedules.Count() / inputData.Paging.Take);
 				ret.PossibleTradeSchedules = allSortedPossibleSchedules.Skip(inputData.Paging.Skip).Take(inputData.Paging.Take);

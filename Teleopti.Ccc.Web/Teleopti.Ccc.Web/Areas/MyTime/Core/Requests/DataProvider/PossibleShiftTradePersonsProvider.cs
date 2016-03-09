@@ -43,22 +43,26 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 			personForShiftTradeList = personForShiftTradeList.Where(
 				personGuid => personGuid.PersonId != me.Id &&
-				_permissionProvider.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules,
-				                                                    shiftTradeArguments.ShiftTradeDate, personGuid)).ToList();
+				(_permissionProvider.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules,shiftTradeArguments.ShiftTradeDate, personGuid) ||
+				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))).ToList();
 
 			var personGuidList = personForShiftTradeList.Select(item => item.PersonId).ToList();
 
 			var personList = _personRepository.FindPeople(personGuidList);
 
-			return new DatePersons
+
+			var temp =  new DatePersons
 				{
 					Date = shiftTradeArguments.ShiftTradeDate,
 					Persons =
 						personList.Where(
 							person =>
 							_shiftTradeValidator.Validate(new ShiftTradeAvailableCheckItem(shiftTradeArguments.ShiftTradeDate, me, person))
-												.Value && _permissionProvider.IsPersonSchedulePublished(shiftTradeArguments.ShiftTradeDate, person))
+												.Value && (_permissionProvider.IsPersonSchedulePublished(shiftTradeArguments.ShiftTradeDate, person) ||
+												_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)))
 				};
+
+			return temp;
 		}
 	}
 }
