@@ -1,8 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Web;
 using System.Web.Http;
 using Autofac;
 using Autofac.Integration.WebApi;
+using log4net.Config;
 using Teleopti.Wfm.Administration.Core;
 
 namespace Teleopti.Wfm.Administration
@@ -23,6 +25,9 @@ namespace Teleopti.Wfm.Administration
 			// Set the dependency resolver to be Autofac.
 			var container = builder.Build();
 			config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+
+			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 		}
 	}
 }
