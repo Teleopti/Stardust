@@ -69,9 +69,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			{
 				return new TeamScheduleViewModelReworked();
 			}
+			var isSchedulePublished = _permissionProvider.IsPersonSchedulePublished(data.ScheduleDate, _logonUser.CurrentUser(),
+				ScheduleVisibleReasons.Any);
+			var canSeeUnpublished =
+				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
 
-			var myScheduleDay = _permissionProvider.IsPersonSchedulePublished(data.ScheduleDate, _logonUser.CurrentUser(),
-				ScheduleVisibleReasons.Any)
+			var myScheduleDay = isSchedulePublished || canSeeUnpublished
 				? _scheduleProvider.GetScheduleForPersons(data.ScheduleDate, new[] {_logonUser.CurrentUser()}).SingleOrDefault()
 				: null;
 		
@@ -162,7 +165,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 				{
 					var person = personScheduleDay.Item1;
 					var scheduleDay = _permissionProvider.IsPersonSchedulePublished(data.ScheduleDate,
-						person, ScheduleVisibleReasons.Any)
+						person, ScheduleVisibleReasons.Any) || canSeeUnpublishedSchedules
 						? personScheduleDay.Item2
 						: null;
 					var scheduleReadModel = _projectionProvider.MakeScheduleReadModel(person, scheduleDay, isPermittedToViewConfidential);

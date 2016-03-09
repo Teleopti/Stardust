@@ -10,6 +10,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -45,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public ITeamRepository TeamRepository;
 		public IPersonScheduleDayReadModelFinder PersonScheduleDayReadModelFinder;
 		public IPersonAssignmentRepository PersonAssignmentRepository;
-		public IPermissionProvider PermissionProvider;
+		public FakePermissionProvider PermissionProvider;
 		public FakeScheduleProvider ScheduleProvider;
 		public FakeLoggedOnUser LoggedOnUser;
 
@@ -268,7 +270,50 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			result.AgentSchedules.Count().Should().Be.EqualTo(2);
 			result.TimeLine.Count().Should().Be.EqualTo(12);
 		}
+
+		[Test]
+		public void ShouldSeeMyUnpublishedScheduleWhenIHaveViewUnpublishedSchedulePermission()
+		{
+			SetUp();
+			var personMe = PersonRepository.LoadAll().First(p => p.Name.FirstName == "Unpublish_person");
+			PermissionProvider.PermitApplicationFunction(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules, true);
 		
+			LoggedOnUser.SetFakeLoggedOnUser(personMe);
+
+			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			{
+				ScheduleDate = new DateOnly(2015, 5, 21),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				Paging = new Paging { Take = 20, Skip = 0 },
+				SearchNameText = ""
+			});
+
+			result.MySchedule.ScheduleLayers.Should().Not.Be.Null();
+			result.MySchedule.ScheduleLayers.Count().Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldSeeAgentsUnpublishedScheduleWhenLoggedOnUserHasViewUnpublishedSchedulePermission()
+		{
+			SetUp();
+			var personMe = PersonRepository.LoadAll().First(p => p.Name.LastName == "1");
+			PermissionProvider.PermitApplicationFunction(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules, true);
+
+			LoggedOnUser.SetFakeLoggedOnUser(personMe);
+
+			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			{
+				ScheduleDate = new DateOnly(2015, 5, 21),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				Paging = new Paging { Take = 20, Skip = 0 },
+				SearchNameText = ""
+			});
+
+			result.AgentSchedules.Count().Should().Be(2);
+			result.AgentSchedules.First().ScheduleLayers.Should().Not.Be.Null();
+			result.AgentSchedules.First().ScheduleLayers.Count().Should().Be(1);
+		}
+
 		[Test]
 		public void ShouldReturnCorrectAgentSchedulesWithDateNoReadModel()
 		{
