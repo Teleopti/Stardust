@@ -63,6 +63,7 @@ namespace Manager.Integration.Test.Tasks
 					foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
 					{
 						jobManagerTaskCreator.StartAndWaitCreateNewJobToManagerTask(timeOut);
+						Thread.Sleep(TimeSpan.FromMilliseconds(200)); //five jobs each second
 					}
 
 					var notSuccededTasks =
