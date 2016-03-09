@@ -69,23 +69,29 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				nodeThread.Start();
 			}
 
-			_requestBus = new ConfigFileDefaultHost("RequestQueue.config", new BusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
-			_requestBus.Start();
+			var useRhino = true;
 
-			_generalBus = new ConfigFileDefaultHost("GeneralQueue.config", new GeneralBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
-			_generalBus.Start();
+			bool.TryParse(ConfigurationManager.AppSettings["UseRhino"], out useRhino);
 
-			_denormalizeBus = new ConfigFileDefaultHost("DenormalizeQueue.config", new DenormalizeBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
-			_denormalizeBus.Start();
+			if (useRhino)
+			{
+				_requestBus = new ConfigFileDefaultHost("RequestQueue.config", new BusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
+				_requestBus.Start();
 
-			_rtaBus = new ConfigFileDefaultHost("RtaQueue.config", new RtaBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
-			_rtaBus.Start();
+				_generalBus = new ConfigFileDefaultHost("GeneralQueue.config", new GeneralBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
+				_generalBus.Start();
 
-			new PayrollDllCopy(new SearchPath()).CopyPayrollDll();
+				_denormalizeBus = new ConfigFileDefaultHost("DenormalizeQueue.config", new DenormalizeBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
+				_denormalizeBus.Start();
 
-			_payrollBus = new ConfigFileDefaultHost("PayrollQueue.config", new PayrollBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
-			_payrollBus.Start();
+				_rtaBus = new ConfigFileDefaultHost("RtaQueue.config", new RtaBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
+				_rtaBus.Start();
 
+				new PayrollDllCopy(new SearchPath()).CopyPayrollDll();
+
+				_payrollBus = new ConfigFileDefaultHost("PayrollQueue.config", new PayrollBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
+				_payrollBus.Start();
+			}
 			AppDomain.MonitoringIsEnabled = true;
 		}
 
