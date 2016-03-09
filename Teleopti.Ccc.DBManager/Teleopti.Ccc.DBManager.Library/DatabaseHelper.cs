@@ -134,8 +134,8 @@ namespace Teleopti.Ccc.DBManager.Library
 				var dropSql = string.Format("DROP {1} [{0}]", login, definition);
 				try
 				{
-					_usingDatabase.ExecuteTransactionlessNonQuery(createSql);
-					_usingDatabase.ExecuteTransactionlessNonQuery(dropSql);
+					_usingDatabase.ExecuteTransactionlessNonQuery(createSql, 300);
+					_usingDatabase.ExecuteTransactionlessNonQuery(dropSql, 300);
 					return true;
 				}
 				catch (Exception)
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 			tasks.SetOnline(DatabaseName); // if dropping a database that is offline, the file on disk will remain!
 			_usingMaster.ExecuteTransactionlessNonQuery(
-				string.Format("ALTER DATABASE [{0}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;", DatabaseName));
+				string.Format("ALTER DATABASE [{0}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;", DatabaseName), 300);
 			tasks.Drop(DatabaseName);
 		}
 
