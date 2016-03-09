@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void AddBridgeSkillsetSkill(AnalyticsBridgeSkillsetSkill analyticsBridgeSkillsetSkill)
 		{
-			throw new System.NotImplementedException();
+			return;
 		}
 
 		public int AddSkillSet(List<AnalyticsSkill> listOfSkills)
