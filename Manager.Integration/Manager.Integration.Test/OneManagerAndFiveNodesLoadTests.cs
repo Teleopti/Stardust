@@ -25,8 +25,8 @@ namespace Manager.Integration.Test
 		private AppDomainTask AppDomainTask { get; set; }
 		private CancellationTokenSource CancellationTokenSource { get; set; }
 
-		private const bool _clearDatabase = true;
-		private const string _buildMode = "Debug";
+		private bool _clearDatabase = true;
+		private string _buildMode = "Debug";
 
 		private static readonly ILog Logger =
 			LogManager.GetLogger(typeof(OneManagerAndFiveNodesLoadTests));

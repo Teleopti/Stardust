@@ -27,8 +27,8 @@ namespace Manager.Integration.Test
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeFailureTests));
 
-		private const bool _clearDatabase = true;
-		private const string _buildMode = "Debug";
+		private bool _clearDatabase = true;
+		private string _buildMode = "Debug";
 		private string ManagerDbConnectionString { get; set; }
 		private Task Task { get; set; }
 		private AppDomainTask AppDomainTask { get; set; }
