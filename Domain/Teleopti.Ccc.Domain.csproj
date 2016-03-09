@@ -742,6 +742,7 @@
     <Compile Include="Optimization\IDayOffRulesRepository.cs" />
     <Compile Include="Optimization\AgentsToSkillGroups.cs" />
     <Compile Include="Optimization\OptimizationResult.cs" />
+    <Compile Include="Optimization\OptimizeIntradayDesktop.cs" />
     <Compile Include="Optimization\PersistIntradayOptimizationResult.cs" />
     <Compile Include="Optimization\ScheduleOptimization.cs" />
     <Compile Include="Optimization\SchedulePeriodListShiftCategoryBackToLegalStateService.cs" />

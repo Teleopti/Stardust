@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly OptimizerHelperHelper _optimizerHelper;
 		private readonly IRequiredScheduleHelper _requiredScheduleHelper;
 		private readonly IMatrixListFactory _matrixListFactory;
+		private readonly IOptimizeIntradayDesktop _optimizeIntradayDesktop;
 		private readonly IExtendReduceTimeHelper _extendReduceTimeHelper;
 		private readonly IExtendReduceDaysOffHelper _extendReduceDaysOffHelper;
 		private readonly Func<ISchedulingResultStateHolder> _stateHolder;
@@ -45,6 +46,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_optimizerHelper = optimizerHelper;
 			_requiredScheduleHelper = requiredScheduleHelper;
 			_matrixListFactory = matrixListFactory;
+			_optimizeIntradayDesktop = _container.Resolve<IOptimizeIntradayDesktop>();
 			_allResults = () => _container.Resolve<IWorkShiftFinderResultHolder>();
 			_extendReduceTimeHelper = new ExtendReduceTimeHelper(_container);
 			_extendReduceDaysOffHelper = new ExtendReduceDaysOffHelper(_container, optimizerHelper, _allResults);
@@ -57,46 +59,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		}
 
 		private void optimizeIntraday(IEnumerable<IScheduleDay> scheduleDays, IOptimizationPreferences optimizerPreferences,
-							DateOnlyPeriod selectedPeriod, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+									DateOnlyPeriod selectedPeriod, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-			var optimizers = _container.Resolve<IntradayOptimizer2Creator>()
-				.Create(selectedPeriod, scheduleDays, optimizerPreferences, dayOffOptimizationPreferenceProvider);
-
-			using (_container.Resolve<IntradayOptimizationContext>().Create(selectedPeriod))
-			{
-				using (_container.Resolve<IntradayOptimizationCallbackContext>().Create(new intradayOptimizationCallback(_backgroundWorker)))
-				{
-					_container.Resolve<IIntradayOptimizerContainer>()
-						.Execute(optimizers);
-				}
-			}
-		}
-
-		private class intradayOptimizationCallback : IIntradayOptimizationCallback
-		{
-			private readonly ISchedulingProgress _backgroundWorker;
-			private int _counter;
-			private readonly string output = Resources.OptimizingIntraday + Resources.Colon + "({0}){1} {2} {3}";
-
-			public intradayOptimizationCallback(ISchedulingProgress backgroundWorker)
-			{
-				_backgroundWorker = backgroundWorker;
-			}
-
-			public void Optimizing(IntradayOptimizationCallbackInfo callbackInfo)
-			{
-				var e = new ResourceOptimizerProgressEventArgs(0, 0,
-					string.Format(output, callbackInfo.NumberOfOptimizers, _counter++,
-						callbackInfo.Agent.Name.ToString(NameOrderOption.FirstNameLastName),
-						callbackInfo.WasSuccessful ? Resources.wasSuccessful : Resources.wasNotSuccessful));
-
-				_backgroundWorker.ReportProgress(1, e);
-			}
-
-			public bool IsCancelled()
-			{
-				return _backgroundWorker.CancellationPending;
-			}
+			_optimizeIntradayDesktop.Optimize(scheduleDays, optimizerPreferences, selectedPeriod, dayOffOptimizationPreferenceProvider, _backgroundWorker);
 		}
 
 		private void optimizeWorkShifts(
@@ -531,6 +496,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					return;
 
 				if (_progressEvent != null && _progressEvent.Cancel) return;
+
 
 				optimizeIntraday(scheduleDays, optimizerPreferences, selectedPeriod, dayOffOptimizationPreferenceProvider);
 			}
