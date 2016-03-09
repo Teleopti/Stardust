@@ -186,6 +186,8 @@
     <Compile Include="ApplicationLayer\Commands\IAbsenceCommandConverter.cs" />
     <Compile Include="ApplicationLayer\Commands\IPersonAbsenceCreator.cs" />
     <Compile Include="ApplicationLayer\Commands\PersonAbsenceCreator.cs" />
+    <Compile Include="ApplicationLayer\Commands\RemovePartPersonAbsenceCommand.cs" />
+    <Compile Include="ApplicationLayer\Commands\RemovePartPersonAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\SaveSeatMapCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddSeatMapCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\AddSeatPlanCommand.cs" />

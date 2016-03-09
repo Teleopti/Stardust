@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
@@ -282,7 +283,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		[Test]
 		public void ShouldRemoveAbsences()
 		{
-			var scheduleDate = DateTime.Now.Date;
+			var scheduleDate = new DateTime(DateTime.Now.Date.Ticks, DateTimeKind.Unspecified);
 			var personId = Guid.NewGuid();
 			var personAbsenceId = Guid.NewGuid();
 			var personAbsenceIdStandalone = Guid.NewGuid();
@@ -291,7 +292,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			pricipalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
 				.Return(true);
 
-			var removePersonAbsenceCommandHandler = MockRepository.GenerateMock<IHandleCommand<RemovePersonAbsenceCommand>>();
+			var removePartPersonAbsenceCommandHandler = MockRepository.GenerateMock<IHandleCommand<RemovePartPersonAbsenceCommand>>();
 			
 			var teamScheduleViewModelFactory = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
 			var schedule = new GroupScheduleViewModel
@@ -315,8 +316,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 				x => x.CreateViewModelForPeople(new[] {personId}, new DateOnly(scheduleDate)))
 				.Return(schedule);
 
-			var target = new TeamScheduleController(teamScheduleViewModelFactory, null, pricipalAuthorization, null, null, null,
-				removePersonAbsenceCommandHandler);
+
+			var expectedPerson = PersonFactory.CreatePerson();
+			expectedPerson.SetId(Guid.NewGuid());
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(expectedPerson);
+
+			var target = new TeamScheduleController(teamScheduleViewModelFactory, loggedOnUser, pricipalAuthorization, null, null, null,
+				removePartPersonAbsenceCommandHandler);
 
 			var form = new RemovePersonAbsenceForm
 			{
@@ -326,10 +333,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			};
 			target.RemoveAbsence(form);
 
-			removePersonAbsenceCommandHandler.AssertWasCalled(
-				x => x.Handle(Arg<RemovePersonAbsenceCommand>.Matches(s => s.PersonAbsenceId == personAbsenceIdStandalone)));
-			removePersonAbsenceCommandHandler.AssertWasCalled(
-				x => x.Handle(Arg<RemovePersonAbsenceCommand>.Matches(s => s.PersonAbsenceId == personAbsenceId)));
+			removePartPersonAbsenceCommandHandler.AssertWasCalled(
+				x => x.Handle(Arg<RemovePartPersonAbsenceCommand>.Matches(s => s.PersonAbsenceId == personAbsenceIdStandalone)));
+			removePartPersonAbsenceCommandHandler.AssertWasCalled(
+				x => x.Handle(Arg<RemovePartPersonAbsenceCommand>.Matches(s => s.PersonAbsenceId == personAbsenceId)));
 		}
 	}
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
@@ -31,13 +30,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly IAbsencePersister _absencePersister;
 		private readonly ISettingsPersisterAndProvider<AgentsPerPageSetting> _agentsPerPagePersisterAndProvider;
 		private readonly ISwapMainShiftForTwoPersonsCommandHandler _swapMainShiftForTwoPersonsHandler;
-		private readonly IHandleCommand<RemovePersonAbsenceCommand> _removePersonAbsenceCommandHandler;
+		private readonly IHandleCommand<RemovePartPersonAbsenceCommand> _removePartPersonAbsenceCommandHandler;
 
 		public TeamScheduleController(ITeamScheduleViewModelFactory teamScheduleViewModelFactory, ILoggedOnUser loggonUser,
 			IPrincipalAuthorization principalAuthorization, IAbsencePersister absencePersister,
 			ISettingsPersisterAndProvider<AgentsPerPageSetting> agentsPerPagePersisterAndProvider,
 			ISwapMainShiftForTwoPersonsCommandHandler swapMainShiftForTwoPersonsHandler,
-			IHandleCommand<RemovePersonAbsenceCommand> removePersonAbsenceCommandHandler)
+			IHandleCommand<RemovePartPersonAbsenceCommand> removePartPersonAbsenceCommandHandler)
 		{
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
 			_loggonUser = loggonUser;
@@ -45,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			_absencePersister = absencePersister;
 			_agentsPerPagePersisterAndProvider = agentsPerPagePersisterAndProvider;
 			_swapMainShiftForTwoPersonsHandler = swapMainShiftForTwoPersonsHandler;
-			_removePersonAbsenceCommandHandler = removePersonAbsenceCommandHandler;
+			_removePartPersonAbsenceCommandHandler = removePartPersonAbsenceCommandHandler;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamSchedule/GetPermissions")]
@@ -171,11 +170,15 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 				}
 			}
 
+			var scheduleDateInUtc = TimeZoneInfo.ConvertTimeToUtc(command.ScheduleDate,
+				_loggonUser.CurrentUser().PermissionInformation.DefaultTimeZone());
+			var periodToRemove = new DateTimePeriod(scheduleDateInUtc, scheduleDateInUtc.AddDays(1));
 			foreach (var personAbsenceId in personAbsenceIdsForRemove)
 			{
-				_removePersonAbsenceCommandHandler.Handle(new RemovePersonAbsenceCommand
+				_removePartPersonAbsenceCommandHandler.Handle(new RemovePartPersonAbsenceCommand
 				{
 					PersonAbsenceId = personAbsenceId,
+					PeriodToRemove = periodToRemove,
 					TrackedCommandInfo = command.TrackedCommandInfo
 				});
 			}
