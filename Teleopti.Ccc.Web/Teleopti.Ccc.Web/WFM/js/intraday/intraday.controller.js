@@ -2,8 +2,8 @@
 	'use strict';
 	angular.module('wfm.intraday')
 		.controller('IntradayCtrl', [
-			'$scope', '$state', 'intradayService', '$stateParams', '$filter', 'growl', '$timeout',
-			function ($scope, $state, intradayService, $stateParams, $filter, growl, $timeout) {
+			'$scope', '$state', 'intradayService', '$filter', 'growl', '$timeout',
+			function ($scope, $state, intradayService, $filter, growl, $timeout) {
 
 				var autocompleteSkill;
 				var autocompleteSkillArea;
@@ -20,22 +20,26 @@
 
 				$scope.format = intradayService.formatDateTime;
 
-				$scope.$on('$stateChangeSuccess', function(evt, to, params, from) {
-					if (params.newSkillArea == true) {
-						reloadSkillAreas();
+
+				$scope.$on('$stateChangeSuccess', function (evt, to, params, from) {
+					if (params.isNewSkillArea == true) {
+						reloadSkillAreas(params.isNewSkillArea);
 					}
 				});
 
-				$scope.newSkillArea = $stateParams.newSkillArea;
-
-				var reloadSkillAreas = function() {
+				var reloadSkillAreas = function(isNew) {
 					intradayService.getSkillAreas.query()
 						.$promise.then(function (result) {
 							getAutoCompleteControls();
 							$scope.skillAreas = $filter('orderBy')(result.SkillAreas, 'Name');
+							if (isNew) $scope.latest = $filter('orderBy')(result.SkillAreas, 'created_at', true);
 							$scope.HasPermissionToModifySkillArea = result.HasPermissionToModifySkillArea;
 							if ($scope.skillAreas.length > 0) {
-								$scope.selectedItem = $scope.skillAreas[0];
+								if (isNew) {
+									$scope.selectedItem = $scope.latest[0];
+								} else {
+									$scope.selectedItem = $scope.skillAreas[0];
+								}
 								if (autocompleteSkillArea)
 									autocompleteSkillArea.selectedSkillArea = $scope.selectedItem;
 							}
@@ -51,7 +55,6 @@
 								});
 						});
 				};
-
 				reloadSkillAreas();
 				
 				$scope.configMode = function () {
@@ -191,12 +194,6 @@
 
 				$scope.$on('$locationChangeStart', function () {
 					cancelTimeout();
-				});
-
-				$scope.$on('$stateChangeSuccess', function (evt, to, params, from) {
-					if (params.newSkillArea == true) {
-						reloadSkillAreas();
-					}
 				});
 
 				var cancelTimeout = function () {
