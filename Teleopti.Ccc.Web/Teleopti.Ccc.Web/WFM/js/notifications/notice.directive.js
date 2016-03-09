@@ -1,12 +1,20 @@
-(function(){
 'use strict';
+(function() {
+var wfmNotice = angular.module('wfm.notice');
+wfmNotice.controller('wfmNoticeCtrl', wfmNoticeCtrl);
+wfmNoticeCtrl.$inject = [];
+ function wfmNoticeCtrl () {
+  var vm = this;
 
-angular
- .module('wfm.notice')
- .directive('noticeDirective', function() {
+ }
+
+ wfmNotice.directive('wfmNotice', wfmNoticeDirective);
+ function wfmNoticeDirective () {
   return {
-   restrict: 'A',
-   template: '<div class="notice"></div>'
-  }
- });
+   controller: 'wfmNoticeCtrl',
+   controllerAs: 'vm',
+   template: "<div growl></div>"
+ }
+
+ }
 })();
