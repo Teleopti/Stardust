@@ -255,7 +255,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 			if (skillCodes.IsEmpty())
 				return -1;
 
-			var listOfSkills = _analyticsSkillRepository.Skills(businessUnitId).Where(a => skillCodes.Contains(a.SkillCode)).ToList();
+			var allAnalyticsSkills = _analyticsSkillRepository.Skills(businessUnitId);
+
+			if (allAnalyticsSkills.Count(a => skillCodes.Contains(a.SkillCode)) < skillCodes.Count)
+			{
+				// Skill exists in app but not yet in analytics
+				return -1;
+			}
+
+			var listOfSkills = allAnalyticsSkills.Where(a => skillCodes.Contains(a.SkillCode)).ToList();
 			var skillSetId = _analyticsSkillRepository.SkillSetId(listOfSkills);
 
 			if (!skillSetId.HasValue)

@@ -123,5 +123,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var newSkillSetId = personPeriodTransformer.MapSkillsetId(skills, 0);
 			Assert.AreEqual(4, newSkillSetId);
 		}
+
+		[Test]
+		public void OneNewSkillNotYetInAnalytics_MapSkillSet_NotDefinedSkillset()
+		{
+			var skills = new List<Guid> { Guid.NewGuid() };
+			var newSkillSetId = personPeriodTransformer.MapSkillsetId(skills, 0);
+			Assert.AreEqual(-1, newSkillSetId);
+		}
 	}
 }
