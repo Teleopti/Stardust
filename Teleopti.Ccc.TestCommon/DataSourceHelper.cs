@@ -64,13 +64,13 @@ namespace Teleopti.Ccc.TestCommon
 		public static void BackupApplicationDatabaseBySql(string path, int dataHash)
 		{
 			var database = application();
-			database.BackupBySql().Backup(path, database.BackupName(dataHash));
+			database.BackupBySql().Backup(path, database.BackupNameForBackup(dataHash));
 		}
 
 		public static bool TryRestoreApplicationDatabaseBySql(string path, int dataHash)
 		{
 			var database = application();
-			return database.BackupBySql().TryRestore(path, database.BackupName(dataHash));
+			return database.BackupBySql().TryRestore(path, database.BackupNameForRestore(dataHash));
 		}
 
 
@@ -93,13 +93,13 @@ namespace Teleopti.Ccc.TestCommon
 		public static void BackupAnalyticsDatabaseBySql(string path, int dataHash)
 		{
 			var database = analytics();
-			database.BackupBySql().Backup(path, database.BackupName(dataHash));
+			database.BackupBySql().Backup(path, database.BackupNameForBackup(dataHash));
 		}
 
 		public static bool TryRestoreAnalyticsDatabaseBySql(string path, int dataHash)
 		{
 			var database = analytics();
-			return database.BackupBySql().TryRestore(path, database.BackupName(dataHash));
+			return database.BackupBySql().TryRestore(path, database.BackupNameForRestore(dataHash));
 		}
 
 
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		private static void backupByFileCopy(DatabaseHelper database, int dataHash)
 		{
-			var name = database.BackupName(dataHash);
+			var name = database.BackupNameForBackup(dataHash);
 			var backup = database.BackupByFileCopy().Backup(name);
 			File.WriteAllText(name, JsonConvert.SerializeObject(backup, Formatting.Indented));
 		}
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.TestCommon
 			if (!database.Tasks().Exists(database.DatabaseName))
 				return false;
 
-			var name = database.BackupName(dataHash);
+			var name = database.BackupNameForRestore(dataHash);
 			if (!File.Exists(name))
 				return false;
 
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		private static void restoreByFileCopy(DatabaseHelper database, int dataHash)
 		{
-			var backup = JsonConvert.DeserializeObject<Backup>(File.ReadAllText(database.BackupName(dataHash)));
+			var backup = JsonConvert.DeserializeObject<Backup>(File.ReadAllText(database.BackupNameForRestore(dataHash)));
 			var result = database.BackupByFileCopy().TryRestore(backup);
 			if (!result)
 				throw new Exception("Restore failed!");

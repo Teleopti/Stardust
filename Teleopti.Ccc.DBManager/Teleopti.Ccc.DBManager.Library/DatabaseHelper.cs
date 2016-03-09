@@ -29,9 +29,14 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public string DbManagerFolderPath { get; set; }
 
-		public string BackupName(int dataHash)
+		public string BackupNameForBackup(int dataHash)
 		{
 			return DatabaseType + "." + DatabaseName + "." + DatabaseVersion() + "." + OtherScriptFilesHash() + "." + dataHash + ".backup";
+		}
+
+		public string BackupNameForRestore(int dataHash)
+		{
+			return DatabaseType + "." + DatabaseName + "." + SchemaVersion() + "." + OtherScriptFilesHash() + "." + dataHash + ".backup";
 		}
 
 		public SqlVersion Version()
