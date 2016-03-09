@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
@@ -26,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IIntradayOptimizerContainer _intradayOptimizerContainer;
 		private readonly IntradayOptimizationContext _intradayOptimizationContext;
 		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
-		private readonly IScheduleDictionaryPersister _persister;
+		private readonly ISynchronizeIntradayOptimizationResult _synchronizeIntradayOptimizationResult;
 
 		public IntradayOptimizationEventHandler(OptimizationPreferencesFactory optimizationPreferencesFactory,
 									Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 									IIntradayOptimizerContainer intradayOptimizerContainer,
 									IntradayOptimizationContext intradayOptimizationContext,
 									IFillSchedulerStateHolder fillSchedulerStateHolder,
-									IScheduleDictionaryPersister persister)
+									ISynchronizeIntradayOptimizationResult synchronizeIntradayOptimizationResult)
 		{
 			_optimizationPreferencesFactory = optimizationPreferencesFactory;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -48,14 +47,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_intradayOptimizerContainer = intradayOptimizerContainer;
 			_intradayOptimizationContext = intradayOptimizationContext;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
-			_persister = persister;
+			_synchronizeIntradayOptimizationResult = synchronizeIntradayOptimizationResult;
 		}
 
 		[LogTime]
 		public virtual void Handle(OptimizationWasOrdered @event)
 		{
 			DoOptimization(@event.Period, @event.AgentIds);
-			_persister.Persist(_schedulerStateHolder().Schedules);
+			_synchronizeIntradayOptimizationResult.Execute(_schedulerStateHolder().Schedules);
 		}
 
 		[UnitOfWork]

@@ -736,11 +736,13 @@
     <Compile Include="Optimization\IntradayOptimizerCreator.cs" />
     <Compile Include="Optimization\IntradayOptmizerLimiter.cs" />
     <Compile Include="Optimization\IIntradayOptimizationCallback.cs" />
+    <Compile Include="Optimization\ISynchronizeIntradayOptimizationResult.cs" />
     <Compile Include="Optimization\OptimizationPreferencesFactory.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimizationAndSingleAgentTeam.cs" />
     <Compile Include="Optimization\IDayOffRulesRepository.cs" />
     <Compile Include="Optimization\AgentsToSkillGroups.cs" />
     <Compile Include="Optimization\OptimizationResult.cs" />
+    <Compile Include="Optimization\PersistIntradayOptimizationResult.cs" />
     <Compile Include="Optimization\ScheduleOptimization.cs" />
     <Compile Include="Optimization\SchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffsInPeriodValidator.cs" />
