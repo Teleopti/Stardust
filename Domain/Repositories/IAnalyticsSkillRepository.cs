@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics;
-using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
@@ -11,5 +9,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		int? SkillSetId(IList<AnalyticsSkill> skills);
 		IList<AnalyticsSkill> Skills(int businessUnitId);
 		int AddSkillSet(AnalyticsSkillSet analyticsSkillSet);
+		void AddBridgeSkillsetSkill(AnalyticsBridgeSkillsetSkill analyticsBridgeSkillsetSkill);
 	}
 }

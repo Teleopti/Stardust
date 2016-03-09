@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		}
 
 		[Test]
-		public void TwoSkills_MapSkillSet_NoSkillSet()
+		public void TwoSkills_MapSkillSet_NewSkillSet()
 		{
 			var skills = new List<Guid> { Guid.Parse("00000000-0000-0000-0000-000000000002") };
 			var newSkillSetId = personPeriodTransformer.MapSkillsetId(skills, 0);

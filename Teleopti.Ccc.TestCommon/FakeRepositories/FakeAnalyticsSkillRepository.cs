@@ -31,6 +31,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return analyticsSkillSet.SkillsetId;
 		}
 
+		public void AddBridgeSkillsetSkill(AnalyticsBridgeSkillsetSkill analyticsBridgeSkillsetSkill)
+		{
+			throw new System.NotImplementedException();
+		}
+
 		public int AddSkillSet(List<AnalyticsSkill> listOfSkills)
 		{
 			var newSkillSet = PersonPeriodTransformer.NewSkillSetFromSkills(listOfSkills);

@@ -97,6 +97,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
+		public void AddBridgeSkillsetSkill(AnalyticsBridgeSkillsetSkill analyticsBridgeSkillsetSkill)
+		{
+			throw new NotImplementedException();
+		}
+
 		public int AddSkillSet(List<AnalyticsSkill> skills)
 		{
 			var skillSetCode = string.Join(",", skills.OrderBy(a => a.SkillId).Select(a => a.SkillId));
