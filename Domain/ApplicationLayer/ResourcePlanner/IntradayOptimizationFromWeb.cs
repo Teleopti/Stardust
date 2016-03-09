@@ -29,7 +29,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		public virtual void Execute(Guid planningPeriodId)
 		{
 			var period = FillSchedulerStateHolder(planningPeriodId);
-			_intradayOptimizationCommandHandler.Execute(new IntradayOptimizationCommand {Period = period, Agents = _schedulerStateHolder().AllPermittedPersons });
+			_intradayOptimizationCommandHandler.Execute(new IntradayOptimizationCommand
+			{
+				Period = period,
+				Agents = _schedulerStateHolder().AllPermittedPersons,
+				RunResolveWeeklyRestRule = true
+			});
 		}
 
 		[UnitOfWork]

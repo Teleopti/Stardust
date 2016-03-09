@@ -46,8 +46,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			_eventPublisher.Publish(new OptimizationWasOrdered
 			{
 				Period = command.Period,
-				AgentIds = command.Agents.Select(x => x.Id.Value)
-			});
+				AgentIds = command.Agents.Select(x => x.Id.Value),
+				RunResolveWeeklyRestRule = command.RunResolveWeeklyRestRule
+	});
 		}
 	}
 }

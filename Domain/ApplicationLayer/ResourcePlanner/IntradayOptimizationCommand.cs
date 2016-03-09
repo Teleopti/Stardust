@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 	{
 		public DateOnlyPeriod Period { get; set; }
 		public IEnumerable<IPerson> Agents { get; set; }
+		public bool RunResolveWeeklyRestRule { get; set; }
 	}
 }

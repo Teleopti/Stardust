@@ -50,12 +50,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[LogTime]
 		public virtual void Handle(OptimizationWasOrdered @event)
 		{
-			DoOptimization(@event.Period, @event.AgentIds);
+			DoOptimization(@event.Period, @event.AgentIds, @event.RunResolveWeeklyRestRule);
 			_synchronizeIntradayOptimizationResult.Execute(_schedulerStateHolder().Schedules);
 		}
 
 		[UnitOfWork]
-		protected virtual void DoOptimization(DateOnlyPeriod period, IEnumerable<Guid> agentIds)
+		protected virtual void DoOptimization(DateOnlyPeriod period, IEnumerable<Guid> agentIds, bool runResolveWeeklyRestRule)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, period);
@@ -78,7 +78,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
 				_intradayOptimizerContainer.Execute(optimizers);
-				_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, schedules, agents, dayOffPreferencesProvider);
+
+				if (runResolveWeeklyRestRule)
+				{
+					_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, schedules, agents, dayOffPreferencesProvider);
+				}
 			}
 		}
 	}
