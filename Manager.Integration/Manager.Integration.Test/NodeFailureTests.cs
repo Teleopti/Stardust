@@ -25,34 +25,30 @@ namespace Manager.Integration.Test
 	[TestFixture]
 	class NodeFailureTests
 	{
-		private static readonly ILog Logger =
-			LogManager.GetLogger(typeof (NodeFailureTests));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeFailureTests));
 
-		private bool _clearDatabase = true;
-		private string _buildMode = "Debug";
-
-
+		private const bool _clearDatabase = true;
+		private const string _buildMode = "Debug";
 		private string ManagerDbConnectionString { get; set; }
-
 		private Task Task { get; set; }
-
 		private AppDomainTask AppDomainTask { get; set; }
-
 		private CancellationTokenSource CancellationTokenSource { get; set; }
 
 		[TestFixtureTearDown]
 		public void TestFixtureTearDown()
 		{
-			LogHelper.LogDebugWithLineNumber("Start TestFixtureTearDown",
-			                                 Logger);
-
+			
+			logMessage("Start TestFixtureTearDown");
 			if (AppDomainTask != null)
 			{
 				AppDomainTask.Dispose();
 			}
+			logMessage("Finished TestFixtureTearDown");
+		}
 
-			LogHelper.LogDebugWithLineNumber("Finished TestFixtureTearDown",
-			                                 Logger);
+		private void logMessage(string message)
+		{
+			LogHelper.LogDebugWithLineNumber(message, Logger);
 		}
 
 		[TestFixtureSetUp]
@@ -61,18 +57,13 @@ namespace Manager.Integration.Test
 #if (DEBUG)
 			// Do nothing.
 #else
-            _clearDatabase = true;
+	         _clearDatabase = true;
             _buildMode = "Release";
 #endif
-
-			ManagerDbConnectionString =
-				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString;
-
+			ManagerDbConnectionString = ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString;
 			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
 			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
-
-			LogHelper.LogDebugWithLineNumber("Start TestFixtureSetUp",
-			                                 Logger);
+			logMessage("Start TestFixtureSetUp");
 
 			if (_clearDatabase)
 			{
@@ -80,15 +71,12 @@ namespace Manager.Integration.Test
 			}
 
 			CancellationTokenSource = new CancellationTokenSource();
-
 			AppDomainTask = new AppDomainTask(_buildMode);
-
 			Task = AppDomainTask.StartTask(numberOfManagers: 1,
 			                               numberOfNodes: 1,
 			                               cancellationTokenSource: CancellationTokenSource);
 
-			LogHelper.LogDebugWithLineNumber("Finshed TestFixtureSetUp",
-			                                 Logger);
+			logMessage("Finshed TestFixtureSetUp");
 		}
 
 		private void WaitForNodeTimeout()
@@ -101,20 +89,13 @@ namespace Manager.Integration.Test
 		[Test]
 		public async void ShouldConsiderNodeAsDeadWhenInactiveAndSetJobResulToFatal()
 		{
-			LogHelper.LogDebugWithLineNumber("Start test.",
-			                                 Logger);
-
-
+			logMessage("Start test.");
 			//---------------------------------------------
 			// Notify when all 1 nodes are up and running. 
 			//---------------------------------------------
-
-
-			LogHelper.LogDebugWithLineNumber("Waiting for all 1 nodes to start up.",
-											 Logger);
+			logMessage("Waiting for all 1 nodes to start up.");
 
 			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
-
 			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
 			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(1,
@@ -123,12 +104,9 @@ namespace Manager.Integration.Test
 			task.Start();
 
 			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(2));
-
 			sqlNotifier.Dispose();
 
-			LogHelper.LogInfoWithLineNumber("All 1 nodes has started.",
-											 Logger);
-
+			logMessage("All 1 nodes has started.");
 
 			//---------------------------------------------
 			// Send a Job.
@@ -136,12 +114,10 @@ namespace Manager.Integration.Test
 			IHttpSender httpSender = new HttpSender();
 
 			var managerUriBuilder = new ManagerUriBuilder();
-
 			var uri = managerUriBuilder.GetStartJobUri();
 
 			var createNewJobRequests =
 				JobHelper.GenerateTestJobParamsRequests(1);
-			
 			HttpResponseMessage response = await httpSender.PostAsync(uri, createNewJobRequests.FirstOrDefault());
 
 			response.EnsureSuccessStatusCode();
@@ -151,7 +127,6 @@ namespace Manager.Integration.Test
 
 			//Quick Fix. Should wait for job to be started instead (check DB)
 			Thread.Sleep(TimeSpan.FromSeconds(5));
-
 			//---------------------------------------------
 			// Kill the node.
 			//---------------------------------------------
@@ -159,23 +134,18 @@ namespace Manager.Integration.Test
 
 			var uriBuilder =
 				new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
-
 			uriBuilder.Path += "appdomain/nodes/" + "Node1.config";
-
 			uri = uriBuilder.Uri;
 
-			LogHelper.LogDebugWithLineNumber("Start calling Delete Async ( " + uri + " ) ",
-			                                 Logger);
+			logMessage("Start calling Delete Async ( " + uri + " ) ");
 
 			try
 			{
 				response = await httpSender.DeleteAsync(uriBuilder.Uri,
 				                                            cancellationTokenSource.Token);
-
 				if (response.IsSuccessStatusCode)
 				{
-					LogHelper.LogDebugWithLineNumber("Succeeded calling Delete Async ( " + uri + " ) ",
-					                                 Logger);
+					logMessage("Succeeded calling Delete Async ( " + uri + " ) ");
 				}
 			}
 			catch (Exception exp)
@@ -191,7 +161,6 @@ namespace Manager.Integration.Test
 			// Wait for timeout, node must be considered dead.
 			//---------------------------------------------
 			WaitForNodeTimeout();
-
 			//---------------------------------------------
 			// Check if node is dead.
 			//---------------------------------------------
@@ -199,26 +168,21 @@ namespace Manager.Integration.Test
 			uri = managerUriBuilder.GetNodesUri();
 
 			response = await httpSender.GetAsync(uri);
-
 			response.EnsureSuccessStatusCode();
 
 			ser = await response.Content.ReadAsStringAsync();
 
 			var workerNodes = JsonConvert.DeserializeObject<IList<WorkerNode>>(ser);
-
 			var node = workerNodes.FirstOrDefault();
 
 			Assert.NotNull(node);
 			Assert.IsTrue(node.Alive == "false");
 
 			uri = managerUriBuilder.GetJobHistoryUri(jobId);
-
 			response = await httpSender.GetAsync(uri);
-
 			response.EnsureSuccessStatusCode();
 
 			ser = await response.Content.ReadAsStringAsync();
-
 			var jobHistory = JsonConvert.DeserializeObject<JobHistory>(ser);
 
 			Assert.NotNull(jobHistory);

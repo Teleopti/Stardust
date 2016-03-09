@@ -13,7 +13,6 @@ using Manager.Integration.Test.Notifications;
 using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Timers;
 using Manager.Integration.Test.Validators;
-using Manager.IntegrationTest.Console.Host.Diagnostics;
 using NUnit.Framework;
 
 namespace Manager.Integration.Test
@@ -21,47 +20,45 @@ namespace Manager.Integration.Test
 	[TestFixture]
 	public class OneManagerAndFiveNodesLoadTests
 	{
-		[TearDown]
-		public void TearDown()
-		{
-		}
+		private string ManagerDbConnectionString { get; set; }
+		private Task Task { get; set; }
+		private AppDomainTask AppDomainTask { get; set; }
+		private CancellationTokenSource CancellationTokenSource { get; set; }
+
+		private const bool _clearDatabase = true;
+		private const string _buildMode = "Debug";
 
 		private static readonly ILog Logger =
-			LogManager.GetLogger(typeof (OneManagerAndFiveNodesLoadTests));
+			LogManager.GetLogger(typeof(OneManagerAndFiveNodesLoadTests));
 
-		private string ManagerDbConnectionString { get; set; }
-
-		private bool _clearDatabase = true;
-
-		private string _buildMode = "Debug";
+		private void logMessage(string message)
+		{
+			LogHelper.LogDebugWithLineNumber(message, Logger);
+		}
 
 		[TestFixtureSetUp]
 		public void TestFixtureSetUp()
 		{
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-
+			
 			ManagerDbConnectionString =
 				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString;
 
 			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
 			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
-			LogHelper.LogDebugWithLineNumber("Start TestFixtureSetUp",
-			                                 Logger);
-
-
+			logMessage("Start TestFixtureSetUp");
+			
 #if (DEBUG)
 			// Do nothing.
 #else
             _clearDatabase = true;
             _buildMode = "Release";
 #endif
-
 			if (_clearDatabase)
 			{
 				DatabaseHelper.TryClearDatabase(ManagerDbConnectionString);
 			}
-
 			CancellationTokenSource = new CancellationTokenSource();
 
 			AppDomainTask = new AppDomainTask(_buildMode);
@@ -69,39 +66,24 @@ namespace Manager.Integration.Test
 			Task = AppDomainTask.StartTask(numberOfManagers: 1,
 			                               numberOfNodes: 5,
 			                               cancellationTokenSource: CancellationTokenSource);
-
 			Thread.Sleep(TimeSpan.FromSeconds(2));
-
-			LogHelper.LogDebugWithLineNumber("Finished TestFixtureSetUp",
-			                                 Logger);
+			logMessage("Finished TestFixtureSetUp");
 		}
 
 		[TestFixtureTearDown]
 		public void TestFixtureTearDown()
 		{
-			LogHelper.LogDebugWithLineNumber("Start TestFixtureTearDown",
-			                                 Logger);
-
+			logMessage("Start TestFixtureTearDown");
 			if (AppDomainTask != null)
 			{
 				AppDomainTask.Dispose();
 			}
-
-			LogHelper.LogDebugWithLineNumber("Finished TestFixtureTearDown",
-			                                 Logger);
+			logMessage("Finished TestFixtureTearDown");
 		}
 
-		private Task Task { get; set; }
-
-		private AppDomainTask AppDomainTask { get; set; }
-
-		private CancellationTokenSource CancellationTokenSource { get; set; }
-
-		private void CurrentDomain_UnhandledException(object sender,
-		                                              UnhandledExceptionEventArgs e)
+		private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
 			var exp = e.ExceptionObject as Exception;
-
 			if (exp != null)
 			{
 				LogHelper.LogFatalWithLineNumber(exp.Message,
@@ -113,11 +95,9 @@ namespace Manager.Integration.Test
 		[Test]
 		public void ShouldBeAbleToExecuteManyFastSuccessJobRequestTest()
 		{
-			LogHelper.LogDebugWithLineNumber("Start.",
-											 Logger);
+			logMessage("Start.");
 
 			var createNewJobRequests = JobHelper.GenerateFastJobParamsRequests(50);
-
 			var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
 																			StatusConstants.SuccessStatus,
 																			StatusConstants.DeletedStatus,
@@ -134,25 +114,17 @@ namespace Manager.Integration.Test
 			// Create jobs.
 			//---------------------------------------------
 			var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
-
 			foreach (var jobRequestModel in createNewJobRequests)
 			{
-				var jobManagerTaskCreator =
-					new JobManagerTaskCreator(checkJobHistoryStatusTimer);
-
+				var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
 				jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
-
 				jobManagerTaskCreators.Add(jobManagerTaskCreator);
 			}
 
 			//---------------------------------------------
 			// Execute all jobs. 
-			//---------------------------------------------			
-			//---------------------------------------------
-			// Execute all jobs. 
 			//---------------------------------------------
 			var startJobTaskHelper = new StartJobTaskHelper();
-
 			var taskHelper = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
 																		 CancellationTokenSource,
 																		 TimeSpan.FromMilliseconds(50));
@@ -162,9 +134,6 @@ namespace Manager.Integration.Test
 			//---------------------------------------------
 			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
-			//---------------------------------------------
-			// Assert.
-			//---------------------------------------------
 			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count);
 			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
 
@@ -186,9 +155,7 @@ namespace Manager.Integration.Test
 			//---------------------------------------------
 			// Log.
 			//---------------------------------------------
-			LogHelper.LogDebugWithLineNumber("Finished.",
-											 Logger);
-
+			logMessage("Finished.");
 		}
 
 		/// <summary>
@@ -202,7 +169,6 @@ namespace Manager.Integration.Test
 			                                 Logger);
 
 			var createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(50);
-
 			var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
 			                                                                StatusConstants.SuccessStatus,
 			                                                                StatusConstants.DeletedStatus,
@@ -219,22 +185,17 @@ namespace Manager.Integration.Test
 			// Create jobs.
 			//---------------------------------------------
 			var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
-
 			foreach (var jobRequestModel in createNewJobRequests)
 			{
 				var jobManagerTaskCreator =
 					new JobManagerTaskCreator(checkJobHistoryStatusTimer);
-
 				jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
-
 				jobManagerTaskCreators.Add(jobManagerTaskCreator);
 			}
 
-			LogHelper.LogDebugWithLineNumber("Waiting for all nodes to start up.",
-											 Logger);
+			logMessage("Waiting for all nodes to start up.");
 
 			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
-
 			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
 			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(7,
@@ -243,11 +204,9 @@ namespace Manager.Integration.Test
 			task.Start();
 
 			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(30));
-
 			sqlNotifier.Dispose();
 
-			LogHelper.LogInfoWithLineNumber("All nodes has started.",
-											 Logger);
+			logMessage("All nodes has started.");
 
 			//---------------------------------------------
 			// Execute all jobs. 
@@ -263,9 +222,6 @@ namespace Manager.Integration.Test
 			//---------------------------------------------
 			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
-			//---------------------------------------------
-			// Assert.
-			//---------------------------------------------
 			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count);
 			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
 
@@ -283,12 +239,7 @@ namespace Manager.Integration.Test
 			}
 
 			taskHelper.Dispose();
-
-			//---------------------------------------------
-			// Log.
-			//---------------------------------------------
-			LogHelper.LogDebugWithLineNumber("Finished.",
-			                                 Logger);
+			logMessage("Finished.");
 		}
 	}
 }
