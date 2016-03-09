@@ -318,6 +318,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ScheduleOptimization>().InstancePerLifetimeScope().ApplyAspects(); //should be singleinstance but not yet possible
 			builder.RegisterType<FullScheduling>().InstancePerLifetimeScope().ApplyAspects(); //should be singleinstance but not yet possible
 			builder.RegisterType<IntradayOptimizationEventHandler>().InstancePerLifetimeScope().ApplyAspects(); //should be singleinstance but not yet possible
+			builder.RegisterType<IntradayOptimization>().InstancePerLifetimeScope();
 			builder.RegisterType<OptimizationResult>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<IntradayDecisionMaker>().As<IIntradayDecisionMaker>().SingleInstance();
 			builder.RegisterType<FillSchedulerStateHolderFromDatabase>().As<IFillSchedulerStateHolder>().SingleInstance();
