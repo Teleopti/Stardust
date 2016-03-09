@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 	                    update_date UpdateDate,
 	                    datasource_update_date DatasourceUpdateDate,
                     from mart.dim_skillset WITH (NOLOCK)")
-					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsSkillSet)))
+					.SetResultTransformer(Transformers.AliasToBean(typeof (AnalyticsSkillSet)))
 					.SetReadOnly(true)
 					.List<AnalyticsSkillSet>();
 			}
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 	                    datasource_update_date DatasourceUpdateDate,
 	                    is_deleted IsDeleted
                     from mart.dim_skill WITH (NOLOCK)")
-					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsSkill)))
+					.SetResultTransformer(Transformers.AliasToBean(typeof (AnalyticsSkill)))
 					.SetReadOnly(true)
 					.List<AnalyticsSkill>();
 			}
@@ -99,14 +99,35 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public void AddBridgeSkillsetSkill(AnalyticsBridgeSkillsetSkill analyticsBridgeSkillsetSkill)
 		{
-			throw new NotImplementedException();
+			using (var uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				var insertAndUpdateDateTime = DateTime.Now;
+				var query = uow.Session().CreateSQLQuery(
+					@"exec mart.[etl_bridge_skillset_skill_insert]
+                     @skillset_id=:SkillsetId
+                    ,@skill_id=:SkillId
+                    ,@business_unit_id=:BusinessUnitId
+                    ,@datasource_id=:DatasourceId
+                    ,@insert_date=:InsertDate
+                    ,@update_date=:UpdateDate
+                    ,@datasource_update_date=:DatasourceUpdateDate")
+					.SetInt32("SkillsetId", analyticsBridgeSkillsetSkill.SkillsetId)
+					.SetInt32("SkillId", analyticsBridgeSkillsetSkill.SkillId)
+					.SetInt32("BusinessUnitId", analyticsBridgeSkillsetSkill.BusinessUnitId)
+					.SetInt32("DatasourceId", analyticsBridgeSkillsetSkill.DatasourceId)
+					.SetDateTime("InsertDate", insertAndUpdateDateTime)
+					.SetDateTime("UpdateDate", insertAndUpdateDateTime)
+					.SetDateTime("DatasourceUpdateDate", analyticsBridgeSkillsetSkill.DatasourceUpdateDate);
+
+				query.ExecuteUpdate();
+			}
 		}
 
 		public int AddSkillSet(List<AnalyticsSkill> skills)
 		{
 			var skillSetCode = string.Join(",", skills.OrderBy(a => a.SkillId).Select(a => a.SkillId));
 			var skillSetName = string.Join(",", skills.OrderBy(a => a.SkillId).Select(a => a.SkillName));
-			
+
 			var newSkillSet = new AnalyticsSkillSet
 			{
 				SkillsetCode = skillSetCode,
@@ -121,7 +142,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		private IAnalyticsUnitOfWorkFactory statisticUnitOfWorkFactory()
 		{
-			var identity = (ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity;
+			var identity = (ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity;
 			return identity.DataSource.Analytics;
 		}
 	}

@@ -266,12 +266,38 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 			var listOfSkills = allAnalyticsSkills.Where(a => skillCodes.Contains(a.SkillCode)).ToList();
 			var skillSetId = _analyticsSkillRepository.SkillSetId(listOfSkills);
 
-			if (!skillSetId.HasValue)
-				_analyticsSkillRepository.AddSkillSet(NewSkillSetFromSkills(listOfSkills));
+			if (skillSetId.HasValue)
+				return skillSetId.Value;
 
-			skillSetId = _analyticsSkillRepository.SkillSetId(listOfSkills);
+			// Create new skill set (combination of skills)
+			var newSkillSet = NewSkillSetFromSkills(listOfSkills);
+			_analyticsSkillRepository.AddSkillSet(newSkillSet);
+			var newSkillSetId = _analyticsSkillRepository.SkillSetId(listOfSkills);
 
-			return skillSetId ?? -1;
+			if (!newSkillSetId.HasValue) // If something got wrong anyways
+				return -1;
+
+			var newBridgeSkillSetSkills = NewBridgeSkillSetSkillsFromSkills(listOfSkills, newSkillSetId.Value);
+			foreach (var bridgeSkillSetSkill in newBridgeSkillSetSkills)
+			{
+				_analyticsSkillRepository.AddBridgeSkillsetSkill(bridgeSkillSetSkill);
+			}
+			return newSkillSetId.Value;
+		}
+
+		private IEnumerable<AnalyticsBridgeSkillsetSkill> NewBridgeSkillSetSkillsFromSkills(List<AnalyticsSkill> listOfSkills, int newSkillSetId)
+		{
+			foreach (var skill in listOfSkills)
+			{
+				yield return new AnalyticsBridgeSkillsetSkill
+				{
+					SkillsetId = newSkillSetId,
+					SkillId = skill.SkillId,
+					BusinessUnitId = skill.BusinessUnitId,
+					DatasourceId = skill.DatasourceId,
+					DatasourceUpdateDate = skill.DatasourceUpdateDate
+				};
+			}
 		}
 	}
 }
