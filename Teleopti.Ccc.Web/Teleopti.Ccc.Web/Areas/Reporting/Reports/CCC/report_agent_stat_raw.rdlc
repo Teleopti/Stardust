@@ -1708,6 +1708,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -2174,7 +2175,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -3497,7 +3497,7 @@
 End function
 
 Public Function ShortDateString(d as System.DateTime)as string
-	return d.ToString("d",System.Globalization.CultureInfo.CurrentUICulture)
+	return d.ToString("d",System.Globalization.CultureInfo.CurrentCulture)
 End function</Code>
   <Language>=Parameters!culture.Value</Language>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
