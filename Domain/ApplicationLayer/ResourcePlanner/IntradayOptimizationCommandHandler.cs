@@ -21,7 +21,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				_eventPublisher.Publish(new OptimizationWasOrdered
 				{
 					Period = command.Period,
-					AgentIds = island.PersonsInIsland().Select(x => x.Id.Value)
+					AgentIds = island.PersonsInIsland().Select(x => x.Id.Value),
+					RunResolveWeeklyRestRule = command.RunResolveWeeklyRestRule
 				});
 			}
 		}
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				Period = command.Period,
 				AgentIds = command.Agents.Select(x => x.Id.Value),
 				RunResolveWeeklyRestRule = command.RunResolveWeeklyRestRule
-	});
+			});
 		}
 	}
 }

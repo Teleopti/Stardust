@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 {
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_SkillGroupDeleteAfterCalculation_37048)]
+	[Toggle(Toggles.ResourcePlanner_IntradayIslands_36939)]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	public class IntradayOptimizationTest
 	{
