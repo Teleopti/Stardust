@@ -334,6 +334,7 @@ Try
     Add-Content "$fullPathsettingsFile" "`$(LOCAL_WIKI)|http://wiki.teleopti.com/TeleoptiCCC/Special:MyLanguage/"
     Add-Content "$fullPathsettingsFile" "`$(ETLPM_BINDING_NAME)|Etl_Pm_Https_Binding"	
 	Add-Content "$fullPathsettingsFile" "`$(URL)|https://$DataSourceName.teleopticloud.com/Web/"
+    Add-Content "$fullPathsettingsFile" "`$(STARDUST)|https://$DataSourceName.teleopticloud.com/Web"
     Add-Content "$fullPathsettingsFile" "`$(UrlAuthenticationBridge)|https://$DataSourceName.teleopticloud.com/AuthenticationBridge/"
     Add-Content "$fullPathsettingsFile" "`$(WEB_DEPLOY)|true"
 	Add-Content "$fullPathsettingsFile" "`$(DNS_ALIAS)|https://$DataSourceName.teleopticloud.com/"

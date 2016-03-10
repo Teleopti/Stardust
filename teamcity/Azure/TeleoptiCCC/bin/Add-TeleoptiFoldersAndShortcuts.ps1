@@ -268,6 +268,13 @@ else
 
 Try
 {
+    #add permissions to listen on port for Stardust Node
+    $global:value = (netsh http show urlacl url=https://+:14100/)
+
+    if(!($global:value  -like '*https://+:14100/*'))
+    {
+        $global:value = (netsh http add urlacl url=https://+:14100/ user=Everyone listen=yes) 
+    }
     [Reflection.Assembly]::LoadWithPartialName("Microsoft.WindowsAzure.ServiceRuntime")
 
     #Get local path
