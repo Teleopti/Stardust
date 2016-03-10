@@ -233,6 +233,7 @@ namespace NodeTest
 
 			Assert.IsInstanceOf(typeof (ConflictResult),
 			                    actionResult);
+			_sendJobDoneTimer.Wait.Wait(TimeSpan.FromSeconds(3)); // let job finish
 		}
 
 		[Test]
@@ -252,6 +253,7 @@ namespace NodeTest
 			var actionResult = _nodeController.StartJob(_jobToDo);
 			Assert.IsInstanceOf(typeof (OkResult),
 			                    actionResult);
+			_sendJobDoneTimer.Wait.Wait(TimeSpan.FromSeconds(3)); // let job finish
 		}
 	}
 }
