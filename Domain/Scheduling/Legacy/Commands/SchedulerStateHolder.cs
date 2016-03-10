@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private bool _considerShortBreaks = true;
 	    private bool _filterOnOvertimeAvailability;
 		private bool _filterOnHourlyAvailability;
-		private readonly HashSet<TimeZoneInfo> _detectedTimeZoneInfos = new HashSet<TimeZoneInfo>();
 
 		public SchedulerStateHolder(IScenario loadScenario, IDateOnlyPeriodAsDateTimePeriod loadPeriod, IEnumerable<IPerson> allPermittedPersons, IDisableDeletedFilter disableDeleteFilter, ISchedulingResultStateHolder schedulingResultStateHolder, ITimeZoneGuard timeZoneGuard)
 		{
