@@ -447,16 +447,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		}
 
 		[Test]
-		public void ShouldReturnFilterStatusOnOvertimeAvailability()
-		{
-			target.FilterPersonsOvertimeAvailability(new List<IPerson>());
-			Assert.IsTrue(target.OvertimeAvailabilityFilter());
-
-			target.ResetFilteredPersonsOvertimeAvailability();
-			Assert.IsFalse(target.OvertimeAvailabilityFilter());
-		}
-
-		[Test]
 		public void ShouldReturnCombinedFilterOnFilteredPersonDictionary()
 		{
 			target.FilterPersons(new List<IPerson>{_person1});

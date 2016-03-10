@@ -460,11 +460,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			return _filteredAgents.Count != _allPermittedPersons.Count;
 		}
 
-		public bool OvertimeAvailabilityFilter()
-		{
-			return _filterOnOvertimeAvailability;
-		}
-
 		public void SetCommonStateHolder(ICommonStateHolder commonStateHolder)
 		{
 			_commonStateHolder = commonStateHolder;

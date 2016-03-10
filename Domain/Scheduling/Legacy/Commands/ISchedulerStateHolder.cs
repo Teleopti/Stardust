@@ -180,7 +180,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         IPersonRequest RequestDeleteFromBroker(Guid personRequestId);
 
 	    bool AgentFilter();
-
-	    bool OvertimeAvailabilityFilter();
     }
 }
