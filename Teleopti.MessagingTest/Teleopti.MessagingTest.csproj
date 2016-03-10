@@ -39,7 +39,6 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="FakeUrl.cs" />
-    <Compile Include="FakeHttpServer.cs" />
     <Compile Include="Http\HttpSenderTest.cs" />
     <Compile Include="Http\Mailbox\EmptyConnectionStringTest.cs" />
     <Compile Include="Http\Mailbox\ITestType.cs" />

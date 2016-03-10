@@ -1,4 +1,6 @@
 using System.Configuration;
+using System.Net;
+using System.Net.Http;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -61,6 +63,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 
 			builder.RegisterType<HttpClientM>().SingleInstance();
+			builder.Register(c => new HttpClient(
+				new HttpClientHandler
+				{
+					Credentials = CredentialCache.DefaultNetworkCredentials
+				})).SingleInstance().ExternallyOwned();
 			builder.RegisterType<HttpSender>().As<IMessageSender>().SingleInstance();
 			builder.RegisterType<HttpServer>().As<IHttpServer>().SingleInstance();
 

@@ -149,6 +149,7 @@
     <Compile Include="BitArrayHelper.cs" />
     <Compile Include="CatalanCulture.cs" />
     <Compile Include="FakeData\FakeAnalyticsUnitOfWorkFactory.cs" />
+    <Compile Include="FakeHttpServer.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsSkillRepository.cs" />
     <Compile Include="FakeRepositories\FakeApplicationFunctionRepository.cs" />
     <Compile Include="FakeRepositories\FakeAvailableDataRepository.cs" />
@@ -276,6 +277,7 @@
     <Compile Include="IoC\SettingAttribute.cs" />
     <Compile Include="IoC\ToggleOffAttribute.cs" />
     <Compile Include="LinqPerumationExtension.cs" />
+    <Compile Include="RequestInfo.cs" />
     <Compile Include="SkillExtensions.cs" />
     <Compile Include="TestData\Analytics\DimDayOff.cs" />
     <Compile Include="IoC\ToggleAttribute.cs" />

@@ -1,9 +1,4 @@
-using System;
-using System.Net;
-using System.Net.Http;
-using System.Text;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
-using Teleopti.Interfaces;
 
 namespace Teleopti.Messaging.Client.Http
 {
@@ -13,39 +8,29 @@ namespace Teleopti.Messaging.Client.Http
 	{
 		private readonly IHttpServer _server;
 		private readonly IMessageBrokerUrl _url;
-		private readonly IJsonSerializer _serializer;
-		private readonly HttpClient _httpClient;
 
-		public HttpClientM(IHttpServer server, IMessageBrokerUrl url, IJsonSerializer serializer)
+		public HttpClientM(IHttpServer server, IMessageBrokerUrl url)
 		{
 			_server = server;
 			_url = url;
-			_serializer = serializer ?? new ToStringSerializer();
-			_httpClient = new HttpClient(
-				new HttpClientHandler
-				{
-					Credentials = CredentialCache.DefaultNetworkCredentials
-				});
 		}
 
 		public void Post(string call, object thing)
 		{
-			var content = _serializer.SerializeObject(thing);
 			var u = url(call);
-			_server.Post(_httpClient, u, new StringContent(content, Encoding.UTF8, "application/json"));
+			_server.Post(u, thing);
 		}
 
 		public void PostOrThrow(string call, object thing)
 		{
-			var content = _serializer.SerializeObject(thing);
 			var u = url(call);
-			_server.PostOrThrow(_httpClient, u, new StringContent(content, Encoding.UTF8, "application/json"));
+			_server.PostOrThrow(u, thing);
 		}
 
 		public string GetOrThrow(string call)
 		{
 			var u = url(call);
-			return _server.GetOrThrow(_httpClient, u);
+			return _server.GetOrThrow(u);
 		}
 
 		private string url(string call)

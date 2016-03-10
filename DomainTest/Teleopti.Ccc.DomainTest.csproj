@@ -213,6 +213,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\StartTime\ProperAlarmStartTimeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StartTime\StateStartTimeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StartTime\RuleStartTimeTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PublishScheduleChangesTest.cs" />
     <Compile Include="Common\TimeLogger\LogTimeTest.cs" />
     <Compile Include="Common\TimeLogger\LogTimeTester.cs" />
     <Compile Include="DayOffPlanning\SkillGroupIslandsAnalyzerTest.cs" />

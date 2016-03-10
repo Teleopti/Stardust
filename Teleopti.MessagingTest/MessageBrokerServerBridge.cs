@@ -7,6 +7,7 @@ using System.Web;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Messaging.Client.Http;
 
 namespace Teleopti.MessagingTest
@@ -28,21 +29,21 @@ namespace Teleopti.MessagingTest
 			_server.NotifyClients(message);
 		}
 
-		public void Post(HttpClient client, string uri, HttpContent httpContent)
+		public void Post(string uri, object thing)
 		{
-			Requests.Add(new RequestInfo { Client = client, Uri = uri, HttpContent = httpContent });
+			Requests.Add(new RequestInfo { Uri = uri, Thing = thing });
 		}
 
-		public void PostOrThrow(HttpClient client, string uri, HttpContent httpContent)
+		public void PostOrThrow(string uri, object thing)
 		{
-			Requests.Add(new RequestInfo { Client = client, Uri = uri, HttpContent = httpContent });
+			Requests.Add(new RequestInfo { Uri = uri, Thing = thing });
 			if (_exception != null)
 				throw _exception;
 		}
 
-		public string GetOrThrow(HttpClient client, string uri)
+		public string GetOrThrow(string uri)
 		{
-			Requests.Add(new RequestInfo { Client = client, Uri = uri });
+			Requests.Add(new RequestInfo { Uri = uri });
 
 			if (_downFriendly)
 				return "<html><body>A 'friendly' response</body></html>";
@@ -88,7 +89,5 @@ namespace Teleopti.MessagingTest
 		{
 			_exception = type;
 		}
-
-
 	}
 }

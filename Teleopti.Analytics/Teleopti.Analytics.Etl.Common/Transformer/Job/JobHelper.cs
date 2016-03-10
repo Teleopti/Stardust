@@ -36,7 +36,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 
 			var url = new MutableUrl();
 			url.Configure(ConfigurationManager.AppSettings["MessageBroker"]);
-			_messageSender = new HttpSender(new HttpClientM(new HttpServer(), url, new NewtonsoftJsonSerializer()));
+			_messageSender = new HttpSender(new HttpClientM(new HttpServer(new NewtonsoftJsonSerializer()), url));
 
 			var application = new InitializeApplication(null);
 			application.Start(new State(), null, ConfigurationManager.AppSettings.ToDictionary());
