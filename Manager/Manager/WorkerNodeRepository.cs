@@ -269,6 +269,7 @@ namespace Stardust.Manager
 						using (var commandUpdate = new SqlCommand(updateCommandText, connection))
 						{
 							commandUpdate.Parameters.Add("@Alive", SqlDbType.NVarChar);
+							commandUpdate.Parameters.Add("@Url", SqlDbType.NVarChar);
 
 							foreach (var objectse in listOfObjectArray)
 							{
@@ -287,6 +288,7 @@ namespace Stardust.Manager
 									var alive = "false";
 
 									commandUpdate.Parameters["@Alive"].Value = alive;
+									commandUpdate.Parameters["@Url"].Value = url;
 
 									commandUpdate.ExecuteNonQuery();
 									deadNodes.Add(url.ToString());
