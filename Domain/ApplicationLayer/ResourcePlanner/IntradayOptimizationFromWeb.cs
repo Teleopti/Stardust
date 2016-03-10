@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -12,38 +14,46 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 	{
 		private readonly IIntradayOptimizationCommandHandler _intradayOptimizationCommandHandler;
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
-		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
+		private readonly IFixedStaffLoader _fixedStaffLoader;
 		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
 
 		public IntradayOptimizationFromWeb(IIntradayOptimizationCommandHandler intradayOptimizationCommandHandler, 
 			IPlanningPeriodRepository planningPeriodRepository,
-			Func<ISchedulerStateHolder> schedulerStateHolder,
+			IFixedStaffLoader fixedStaffLoader,
 			IFillSchedulerStateHolder fillSchedulerStateHolder)
 		{
 			_intradayOptimizationCommandHandler = intradayOptimizationCommandHandler;
 			_planningPeriodRepository = planningPeriodRepository;
-			_schedulerStateHolder = schedulerStateHolder;
+			_fixedStaffLoader = fixedStaffLoader;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 		}
 
 		public virtual void Execute(Guid planningPeriodId)
 		{
-			var period = FillSchedulerStateHolder(planningPeriodId);
+			var loadedData = LoadNecessaryData(planningPeriodId);
 			_intradayOptimizationCommandHandler.Execute(new IntradayOptimizationCommand
 			{
-				Period = period,
-				Agents = _schedulerStateHolder().AllPermittedPersons,
+				Period = loadedData.Period,
+				Agents = loadedData.Agents,
 				RunResolveWeeklyRestRule = true
 			});
 		}
 
 		[UnitOfWork]
-		protected virtual DateOnlyPeriod FillSchedulerStateHolder(Guid planningPeriodId)
+		protected virtual WebIntradayCommandData LoadNecessaryData(Guid planningPeriodId)
 		{
-			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
-			var period = planningPeriod.Range;
-			_fillSchedulerStateHolder.Fill(_schedulerStateHolder(), period); //see if this can be made smarter - not ladda hela världen
-			return period;
+			var period = _planningPeriodRepository.Load(planningPeriodId).Range;
+			return new WebIntradayCommandData
+			{
+				Period = period,
+				Agents = _fixedStaffLoader.Load(period).AllPeople
+			};
+		}
+
+		protected class WebIntradayCommandData
+		{
+			public DateOnlyPeriod Period { get; set; }
+			public IEnumerable<IPerson> Agents { get; set; }
 		}
 	}
 }

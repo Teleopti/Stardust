@@ -20,6 +20,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 {
 	[Toggle(Toggles.ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049)]
+	[Toggle(Toggles.ResourcePlanner_IntradayIslands_36939)]
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	public class IntradayOptimizationStopWhenLargeGroupTest : ISetup
