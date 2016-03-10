@@ -71,6 +71,7 @@ Scenario: Timeline for agent in the same time zone
 	| End time   | 17:00 |
 	And I should not see the agent's timeline
 
+@ignore
 Scenario: Add activity default times for agent in other time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
