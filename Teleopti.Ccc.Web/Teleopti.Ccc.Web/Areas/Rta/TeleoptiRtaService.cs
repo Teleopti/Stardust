@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 		{
 			return handleRtaExceptions(() =>
 			{
+				StackifyLib.Metrics.Count("RTA", "SaveState");
 				_rta.SaveState(new ExternalUserStateInputModel
 				{
 					AuthenticationKey = authenticationKey,
@@ -56,20 +57,22 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 		{
 			return handleRtaExceptions(() =>
 			{
-				var states = from s in externalUserStateBatch
-					select new ExternalUserStateInputModel
-					{
-						AuthenticationKey = authenticationKey,
-						UserCode = s.UserCode,
-						StateCode = s.StateCode,
-						StateDescription = s.StateDescription,
-						IsLoggedOn = s.IsLoggedOn,
-						PlatformTypeId = platformTypeId,
-						SourceId = sourceId,
-						BatchId = s.BatchId,
-						IsSnapshot = s.IsSnapshot
-					};
-				_rta.SaveStateBatch(states.ToArray());
+				var states =
+					(from s in externalUserStateBatch
+						select new ExternalUserStateInputModel
+						{
+							AuthenticationKey = authenticationKey,
+							UserCode = s.UserCode,
+							StateCode = s.StateCode,
+							StateDescription = s.StateDescription,
+							IsLoggedOn = s.IsLoggedOn,
+							PlatformTypeId = platformTypeId,
+							SourceId = sourceId,
+							BatchId = s.BatchId,
+							IsSnapshot = s.IsSnapshot
+						}).ToArray();
+				StackifyLib.Metrics.Count("RTA", "SaveState", states.Count());
+				_rta.SaveStateBatch(states);
 			});
 		}
 

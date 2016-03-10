@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 
 			try
 			{
+				StackifyLib.Metrics.Count("RTA", "SaveState");
 				_rta.SaveState(
 					new ExternalUserStateInputModel
 					{
