@@ -138,7 +138,7 @@ namespace NodeTest
 				Name = "Another name",
 				Type = "NodeTest.JobHandlers.TestJobParams"
 			};
-
+			_jobToDo.Id = new Guid();
 			_nodeController.StartJob(_jobToDo);
 			var actionResult = _nodeController.TryCancelJob(wrongJobToDo.Id);
 			Assert.IsInstanceOf(typeof (NotFoundResult),
@@ -158,7 +158,7 @@ namespace NodeTest
 			                                   new PostHttpRequestFake());
 
 			_nodeController = new NodeController(_workerWrapper) {Request = new HttpRequestMessage()};
-
+			_jobToDo.Id = new Guid();
 			_nodeController.StartJob(_jobToDo);
 
 			var actionResult = _nodeController.TryCancelJob(_jobToDo.Id);
