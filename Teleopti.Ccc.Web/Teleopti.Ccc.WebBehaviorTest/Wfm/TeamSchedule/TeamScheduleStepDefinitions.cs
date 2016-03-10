@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 				{"vm.scheduleDate", string.Format("new Date('{0}')", scheduleDate.AddDays(-1).ToShortDateString())}
 			};
 			Browser.Interactions.SetScopeValues(".datepicker-container", propertyValues);
-			Browser.Interactions.Click(".datepicker-container button>i.mdi-chevron-double-right");
+			Browser.Interactions.ClickUsingJQuery(".datepicker-container button:has('i.mdi-chevron-double-right')");
 		}
 
 		[Then(@"I should see schedule with absence for '(.*)' displayed")]
