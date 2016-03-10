@@ -42,8 +42,6 @@ namespace Stardust.Manager
                                                                  "application/json"))
                             .ConfigureAwait(false);
 
-	                response.EnsureSuccessStatusCode();
-
                     LogHelper.LogDebugWithLineNumber(Logger,
                                                     "Finished.");
 
@@ -76,8 +74,6 @@ namespace Stardust.Manager
                     var response = await client.DeleteAsync(url)
                             .ConfigureAwait(false);
 
-					response.EnsureSuccessStatusCode();
-
 					LogHelper.LogDebugWithLineNumber(Logger,
                                                     "Finished.");
 
@@ -107,8 +103,6 @@ namespace Stardust.Manager
                     var response = await client.GetAsync(url,
 											  HttpCompletionOption.ResponseHeadersRead)
                             .ConfigureAwait(false);
-
-	                response.EnsureSuccessStatusCode();
 
                     return response;
                 }
