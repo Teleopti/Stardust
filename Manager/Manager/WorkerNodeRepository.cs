@@ -226,8 +226,6 @@ namespace Stardust.Manager
 
 			LogHelper.LogDebugWithLineNumber(Logger, "Start");
 
-			var currentDateTime = DateTime.Now;
-
 			var deadNodes = new List<string>();
 
 			try
@@ -271,7 +269,6 @@ namespace Stardust.Manager
 						using (var commandUpdate = new SqlCommand(updateCommandText, connection))
 						{
 							commandUpdate.Parameters.Add("@Alive", SqlDbType.NVarChar);
-							commandUpdate.Parameters.Add("@Url", SqlDbType.NVarChar);
 
 							foreach (var objectse in listOfObjectArray)
 							{
@@ -279,6 +276,8 @@ namespace Stardust.Manager
 									(DateTime)objectse[ordinalPosForHeartBeat];
 
 								var url = objectse[ordinalPosForUrl];
+
+								var currentDateTime = DateTime.Now;
 
 								var dateDiff =
 									(currentDateTime - heartBeatDateTime).TotalSeconds;
@@ -288,7 +287,6 @@ namespace Stardust.Manager
 									var alive = "false";
 
 									commandUpdate.Parameters["@Alive"].Value = alive;
-									commandUpdate.Parameters["@Url"].Value = url;
 
 									commandUpdate.ExecuteNonQuery();
 									deadNodes.Add(url.ToString());
