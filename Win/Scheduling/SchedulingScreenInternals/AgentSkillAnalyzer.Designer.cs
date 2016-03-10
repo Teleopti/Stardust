@@ -87,6 +87,7 @@
 			this.toolStripButtonRemoveNotLoadedSkills = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonSuggestAction = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod = new System.Windows.Forms.ToolStripButton();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.tabPage2.SuspendLayout();
@@ -602,10 +603,11 @@
 			this.toolStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonRemoveNotLoadedSkills,
             this.toolStripButton1,
-            this.toolStripButtonSuggestAction});
+            this.toolStripButtonSuggestAction,
+            this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod});
 			this.toolStripMain.Location = new System.Drawing.Point(3, 0);
 			this.toolStripMain.Name = "toolStripMain";
-			this.toolStripMain.Size = new System.Drawing.Size(411, 25);
+			this.toolStripMain.Size = new System.Drawing.Size(686, 25);
 			this.toolStripMain.TabIndex = 0;
 			// 
 			// toolStripButtonRemoveNotLoadedSkills
@@ -637,6 +639,16 @@
 			this.toolStripButtonSuggestAction.Size = new System.Drawing.Size(118, 22);
 			this.toolStripButtonSuggestAction.Text = "Preview suggestions";
 			this.toolStripButtonSuggestAction.Click += new System.EventHandler(this.toolStripButtonSuggestAction_Click);
+			// 
+			// toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod
+			// 
+			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod.Image")));
+			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod.Name = "toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod";
+			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod.Size = new System.Drawing.Size(275, 22);
+			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod.Text = "Find agents with skillgroup changes during period";
+			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod.Click += new System.EventHandler(this.toolStripButtonFindAgentsThatHaveChangedSkillGroupDuringPeriodClick);
 			// 
 			// AgentSkillAnalyzer
 			// 
@@ -726,5 +738,6 @@
 		private System.Windows.Forms.ToolStripButton toolStripButtonRemoveNotLoadedSkills;
 		private System.Windows.Forms.ToolStripButton toolStripButton1;
 		private System.Windows.Forms.ToolStripButton toolStripButtonSuggestAction;
+		private System.Windows.Forms.ToolStripButton toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod;
 	}
 }

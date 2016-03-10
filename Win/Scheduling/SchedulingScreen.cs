@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using Autofac;
+using EO.Internal;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.DayOffPlanning;
@@ -97,6 +98,7 @@ using Teleopti.Ccc.WpfControls.Controls.Notes;
 using Teleopti.Ccc.WpfControls.Controls.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Task = Teleopti.Ccc.Domain.Forecasting.Task;
 
 #endregion
 
@@ -173,6 +175,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly IRestrictionExtractor _restrictionExtractor;
 		private readonly IResourceOptimizationHelperExtended _optimizationHelperExtended;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
+		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly IPeopleAndSkillLoaderDecider _peopleAndSkillLoaderDecider;
 		private readonly ICollection<IPerson> _personsToValidate = new HashSet<IPerson>();
 		private readonly ICollection<IPerson> _restrictionPersonsToReload = new HashSet<IPerson>();
@@ -415,6 +418,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_restrictionExtractor = _container.Resolve<IRestrictionExtractor>();
 			_optimizationHelperExtended = _container.Resolve<IResourceOptimizationHelperExtended>();
 			_skillDayLoadHelper = _container.Resolve<ISkillDayLoadHelper>();
+			_skillDayRepository = _container.Resolve<ISkillDayRepository>();
 			_peopleAndSkillLoaderDecider = _container.Resolve<IPeopleAndSkillLoaderDecider>();
 
 			_schedulerState.SetRequestedScenario(loadScenario);
@@ -2500,7 +2504,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			toolStripStatusLabelScheduleTag.Visible = true;
 			toolStripStatusLabelNumberOfAgents.Text = LanguageResourceHelper.Translate("XXAgentsColon") + " " +
-													  _schedulerState.FilteredPersonDictionary.Count;
+													  _schedulerState.FilteredPersonDictionary.Count + " " + 
+													  LanguageResourceHelper.Translate("XXLoadedColon") +
+													  " " + _schedulerState.SchedulingResultState.PersonsInOrganization.Count;
 			toolStripStatusLabelNumberOfAgents.Visible = true;
 
 
@@ -2596,12 +2602,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (e.Error != null)
 			{
-				Infrastructure.Foundation.DataSourceException dataSourceException = e.Error as CouldNotCreateTransactionException;
-				dataSourceException = dataSourceException ?? e.Error as DatabaseConnectionLostException;
+				var dataSourceException = e.Error as CouldNotCreateTransactionException;
 				if (dataSourceException == null)
 					return false;
 
-				displayServerUnavailableDialog(dataSourceException);
+				using (
+					var view = new SimpleExceptionHandlerView(dataSourceException, Resources.OpenTeleoptiCCC,
+						Resources.ServerUnavailable))
+				{
+					view.ShowDialog();
+				}
 
 				_forceClose = true;
 				Close();
@@ -2988,7 +2998,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_optimizerOriginalPreferences.SchedulingOptions.WorkShiftLengthHintOption =
 					WorkShiftLengthHintOption.AverageWorkTime;
 				IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
-				attemptActionWithTransientErrorHandling(() =>
+				try
 				{
 					if (backToLegalShift)
 					{
@@ -3016,7 +3026,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 						}
 					}
-				});
+				}
+				catch (CouldNotCreateTransactionException dataSourceException)
+				{
+					using (
+						var view = new SimpleExceptionHandlerView(dataSourceException, Resources.OpenTeleoptiCCC,
+							Resources.ServerUnavailable))
+					{
+						view.ShowDialog();
+					}
+				}
 			}
 		}
 
@@ -4045,13 +4064,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 				}
 
 			}
-			catch (DatabaseConnectionLostException ex)
-			{
-				displayServerUnavailableDialog(ex);
-			}
 			catch (CouldNotCreateTransactionException ex)
 			{
-				displayServerUnavailableDialog(ex);
+				using (var view = new SimpleExceptionHandlerView(ex, Resources.OpenTeleoptiCCC, Resources.ServerUnavailable))
+				{
+					view.ShowDialog();
+				}
 			}
 			catch (OptimisticLockException ex)
 			{
@@ -5801,10 +5819,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 				settings.Show();
 				settings.BringToFront();
 			}
-			catch (DatabaseConnectionLostException ex)
-			{
-				DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
-			}
 			catch (CouldNotCreateTransactionException ex)
 			{
 				DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
@@ -6069,7 +6083,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void refreshData()
 		{
-			attemptActionWithTransientErrorHandling(() =>
+			try
 			{
 				refreshEntitiesUsingMessageBroker();
 				_schedulerState.Schedules.ForEach(p => p.Value.ForceRecalculationOfTargetTimeContractTimeAndDaysOff());
@@ -6077,7 +6091,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 				updateShiftEditor();
 				var selectedSchedules = _scheduleView.SelectedSchedules();
 				updateSelectionInfo(selectedSchedules);
-			});
+			}
+			catch (CouldNotCreateTransactionException dataSourceException)
+			{
+				//rk - dont like this but cannot easily find "the spot" to catch these exception in current design
+				using (
+					var view = new SimpleExceptionHandlerView(dataSourceException, Resources.OpenTeleoptiCCC,
+						Resources.ServerUnavailable))
+				{
+					view.ShowDialog();
+				}
+			}
 		}
 
 		private void SchedulingScreen_KeyDown(object sender, KeyEventArgs e)
@@ -6760,7 +6784,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_scheduleView == null) return;
 			if (_scheduleView.AllSelectedDates().Count == 0) return;
 
-			attemptActionWithTransientErrorHandling(() =>
+			try
 			{
 				var definitionSets =
 					MultiplicatorDefinitionSet.Where(set => set.MultiplicatorType == MultiplicatorType.Overtime).ToList();
@@ -6789,35 +6813,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 					if (options.ShowDialog(this) != DialogResult.OK) return;
 					options.Refresh();
 					startBackgroundScheduleWork(_backgroundWorkerOvertimeScheduling,
-						new SchedulingAndOptimizeArgument(selectedSchedules) {OvertimePreferences = options.Preferences},
+						new SchedulingAndOptimizeArgument(selectedSchedules) { OvertimePreferences = options.Preferences },
 						true);
 				}
-			});
-		}
-
-		private void displayServerUnavailableDialog(Exception exception)
-		{
-			using (
-					var view = new SimpleExceptionHandlerView(exception, Resources.OpenTeleoptiCCC,
-						Resources.ServerUnavailable))
-			{
-				view.ShowDialog();
-			}
-		}
-
-		private void attemptActionWithTransientErrorHandling(System.Action action)
-		{
-			try
-			{
-				action();
-			}
-			catch (DatabaseConnectionLostException dataSourceException)
-			{
-				displayServerUnavailableDialog(dataSourceException);
 			}
 			catch (CouldNotCreateTransactionException dataSourceException)
 			{
-				displayServerUnavailableDialog(dataSourceException);
+				using (
+					var view = new SimpleExceptionHandlerView(dataSourceException, Resources.OpenTeleoptiCCC,
+						Resources.ServerUnavailable))
+				{
+					view.ShowDialog();
+				}
 			}
 		}
 

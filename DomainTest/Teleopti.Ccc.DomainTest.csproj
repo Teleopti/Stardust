@@ -175,6 +175,7 @@
     </Compile>
     <Compile Include="AbsenceWaitlisting\AbsenceRequestWaitlistProviderTest.cs" />
     <Compile Include="AgentInfo\ExtractBudgetGroupPeriodsTest.cs" />
+    <Compile Include="AgentInfo\PersonsThatChangedPersonSkillsDuringPeriodFinderTest.cs" />
     <Compile Include="AgentInfo\Requests\InvalidRequestStateTransitionExceptionTest.cs" />
     <Compile Include="AgentInfo\Requests\PersonRequestCheckAuthorizationTest.cs" />
     <Compile Include="AgentInfo\Requests\FullDayAbsenceRequestPeriodUtilTest.cs" />

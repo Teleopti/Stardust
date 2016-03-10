@@ -14182,4 +14182,8 @@ Help us improve your experience by sending an error report</value>
     <value>Waitlist position:</value>
     <comment>Used in mytime within the request detail to display the waitlist position if a request has been waitlisted</comment>
   </data>
+  <data name="LoadedColon" xml:space="preserve">
+    <value>Loaded:</value>
+    <comment>Loaded:</comment>
+  </data>
 </root>

@@ -141,6 +141,7 @@
     <Compile Include="AgentInfo\FixedStaffLoader.cs" />
     <Compile Include="AgentInfo\IFixedStaffLoader.cs" />
     <Compile Include="AgentInfo\PeopleSelection.cs" />
+    <Compile Include="AgentInfo\PersonsThatChangedPersonSkillsDuringPeriodFinder.cs" />
     <Compile Include="AgentInfo\Requests\EmptyShiftTradeRequestChecker.cs" />
     <Compile Include="AgentInfo\Requests\FullDayAbsenceRequestPeriodUtil.cs" />
     <Compile Include="AgentInfo\Requests\IBatchShiftTradeRequestStatusChecker.cs" />

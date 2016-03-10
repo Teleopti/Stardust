@@ -5,6 +5,8 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using EO.Internal;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -20,6 +22,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 		private DateOnly _date;
 		private readonly IList<ISkill> _loadedSkillList;
 		private readonly IDictionary<ISkill, IList<ISkillDay>> _skillDays;
+		private readonly DateOnlyPeriod _datePeriod;
 		private VirtualSkillGroupsCreatorResult _skillGroupsCreatorResult;
 		private IList<Island> _islandList;
 		private IDictionary<ISkill,TimeSpan> _skillDayForecastForSkills = new Dictionary<ISkill, TimeSpan>();
@@ -41,6 +44,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			_personList = personList;
 			_loadedSkillList = skillList.Where(s=> s.SkillType.ForecastSource != ForecastSource.MaxSeatSkill).ToList();
 			_skillDays = skillDays;
+			_datePeriod = datePeriod;
 			_date = datePeriod.StartDate;
 			_dtpDate.MinDate = datePeriod.StartDate.Date;
 			_dtpDate.MaxDate = datePeriod.EndDate.Date;
@@ -506,6 +510,21 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 				}
 			}
 			LoadData();
+		}
+
+		private void toolStripButtonFindAgentsThatHaveChangedSkillGroupDuringPeriodClick(object sender, EventArgs e)
+		{
+			var results = new PersonsThatChangedPersonSkillsDuringPeriodFinder().Find(_datePeriod, _personList);
+			makeReport(results);
+		}
+
+		private void makeReport(IList<PersonsThatChangedPersonSkillsDuringPeriodFinder.PersonsThatChangedPersonSkillsDuringPeriodFinderResult> results)
+		{
+			using (var x = new PersonsThatChangedPersonSkillsDuringPeriodFinderView(results))
+			{
+				x.ShowDialog(this);
+			}
+
 		}
 	}
 }

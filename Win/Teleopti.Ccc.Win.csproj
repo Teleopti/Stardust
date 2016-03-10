@@ -824,6 +824,12 @@
     <Compile Include="Scheduling\SchedulingScreenInternals\AgentSkillAnalyzer.Designer.cs">
       <DependentUpon>AgentSkillAnalyzer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Scheduling\SchedulingScreenInternals\PersonsThatChangedPersonSkillsDuringPeriodFinderView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\SchedulingScreenInternals\PersonsThatChangedPersonSkillsDuringPeriodFinderView.Designer.cs">
+      <DependentUpon>PersonsThatChangedPersonSkillsDuringPeriodFinderView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scheduling\SchedulingScreenInternals\SkillGroupReducerSuggestions.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3089,6 +3095,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\SchedulingScreenInternals\AgentSkillAnalyzer.resx">
       <DependentUpon>AgentSkillAnalyzer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\SchedulingScreenInternals\PersonsThatChangedPersonSkillsDuringPeriodFinderView.resx">
+      <DependentUpon>PersonsThatChangedPersonSkillsDuringPeriodFinderView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\SchedulingScreenInternals\SkillGroupReducerSuggestions.resx">
       <DependentUpon>SkillGroupReducerSuggestions.cs</DependentUpon>
