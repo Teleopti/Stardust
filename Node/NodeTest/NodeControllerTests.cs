@@ -79,7 +79,6 @@ namespace NodeTest
 		[TestFixtureTearDown]
 		public void TestFixtureTearDown()
 		{
-			_sendJobDoneTimer.Wait.Wait(TimeSpan.FromSeconds(6)); // let job finish
 			LogHelper.LogDebugWithLineNumber(Logger, "Start TestFixtureTearDown");
 		}
 
@@ -138,11 +137,12 @@ namespace NodeTest
 				Name = "Another name",
 				Type = "NodeTest.JobHandlers.TestJobParams"
 			};
-			_jobToDo.Id = new Guid();
 			_nodeController.StartJob(_jobToDo);
 			var actionResult = _nodeController.TryCancelJob(wrongJobToDo.Id);
+
 			Assert.IsInstanceOf(typeof (NotFoundResult),
 			                    actionResult);
+			_sendJobDoneTimer.Wait.Wait(TimeSpan.FromSeconds(3)); // let job finish
 		}
 
 		[Test]
@@ -158,13 +158,14 @@ namespace NodeTest
 			                                   new PostHttpRequestFake());
 
 			_nodeController = new NodeController(_workerWrapper) {Request = new HttpRequestMessage()};
-			_jobToDo.Id = new Guid();
+		
 			_nodeController.StartJob(_jobToDo);
 
 			var actionResult = _nodeController.TryCancelJob(_jobToDo.Id);
 
 			Assert.IsInstanceOf(typeof (OkResult),
 			                    actionResult);
+			_sendJobDoneTimer.Wait.Wait(TimeSpan.FromSeconds(3)); // let job finish
 		}
 
 		[Test]
