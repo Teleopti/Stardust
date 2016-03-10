@@ -32,14 +32,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			if (Logger.IsDebugEnabled)
 				Logger.Debug("Persisting model PersonScheduleDayReadModel");
 
-			if (!initialLoad)
-				clearPeriodForPerson(period, personId);
-
 			if (readModels != null)
 			{
 				if (Logger.IsDebugEnabled)
 					Logger.Debug("Saving model PersonScheduleDayReadModel");
-				readModels.ForEach(saveReadModel);
+				readModels.ForEach(readModel => saveReadModel(readModel, initialLoad));
 			}
 
 			if (!initialLoad)
@@ -53,33 +50,27 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				});
 		}
 
-		private void clearPeriodForPerson(DateOnlyPeriod period, Guid personId)
-		{
-			_currentUnitOfWork.Session().CreateSQLQuery(
-				"DELETE FROM ReadModel.PersonScheduleDay WHERE PersonId=:person AND BelongsToDate BETWEEN :StartDate AND :EndDate")
-			                  .SetGuid("person", personId)
-							  .SetDateOnly("StartDate", period.StartDate)
-							  .SetDateOnly("EndDate", period.EndDate)
-			                  .ExecuteUpdate();
-		}
-
-		private void saveReadModel(PersonScheduleDayReadModel model)
+		private void saveReadModel(PersonScheduleDayReadModel model, bool initialLoad)
 		{
 			if (Logger.IsDebugEnabled)
-				Logger.DebugFormat("Saving model PersonScheduleDayReadModel on date {0} for person {1}, Start {2}, End {3}", model.BelongsToDate, model.PersonId, model.Start, model.End);
+				Logger.DebugFormat(
+					"Trying to save model PersonScheduleDayReadModel on date {0} for person {1}, Start {2}, End {3}, LoadedScheduleTime {4}",
+					model.BelongsToDate, model.PersonId, model.Start, model.End, model.ScheduleLoadTimestamp);
 
 			_currentUnitOfWork.Session().CreateSQLQuery(
-				"INSERT INTO ReadModel.PersonScheduleDay (PersonId,TeamId,SiteId,BusinessUnitId,Start,[End],BelongsToDate,IsDayOff,Model) VALUES (:PersonId,:TeamId,:SiteId,:BusinessUnitId,:Start,:End,:BelongsToDate,:IsDayOff,:Model)")
-			                  .SetGuid("PersonId", model.PersonId)
-			                  .SetGuid("TeamId", model.TeamId)
-			                  .SetGuid("SiteId", model.SiteId)
-			                  .SetGuid("BusinessUnitId", model.BusinessUnitId)
-			                  .SetParameter("Start", model.Start)
-			                  .SetParameter("End", model.End)
-							  .SetDateOnly("BelongsToDate", model.BelongsToDate)
-									.SetParameter("IsDayOff", model.IsDayOff)
-			                  .SetParameter("Model", model.Model, NHibernateUtil.Custom(typeof(CompressedString)))
-			                  .ExecuteUpdate();
+				"EXEC ReadModel.UpdatePersonScheduleDay @PersonId=:PersonId,@TeamId=:TeamId,@SiteId=:SiteId,@BusinessUnitId=:BusinessUnitId,@Start=:Start,@End=:End,@BelongsToDate=:BelongsToDate,@IsDayOff=:IsDayOff,@Model=:Model,@ScheduleLoadedTime=:ScheduleLoadedTime,@IsInitialLoad=:IsInitialLoad")
+				.SetGuid("PersonId", model.PersonId)
+				.SetGuid("TeamId", model.TeamId)
+				.SetGuid("SiteId", model.SiteId)
+				.SetGuid("BusinessUnitId", model.BusinessUnitId)
+				.SetParameter("Start", model.Start)
+				.SetParameter("End", model.End)
+				.SetDateOnly("BelongsToDate", model.BelongsToDate)
+				.SetParameter("IsDayOff", model.IsDayOff)
+				.SetParameter("Model", model.Model, NHibernateUtil.Custom(typeof (CompressedString)))
+				.SetDateTime("ScheduleLoadedTime", model.ScheduleLoadTimestamp)
+				.SetBoolean("IsInitialLoad", initialLoad)
+				.ExecuteUpdate();
 		}
 
 		public bool IsInitialized()
