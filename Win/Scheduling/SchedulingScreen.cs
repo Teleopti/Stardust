@@ -105,6 +105,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	
 	public partial class SchedulingScreen : BaseRibbonForm
 	{
+		private readonly HashSet<TimeZoneInfo> _detectedTimeZoneInfos = new HashSet<TimeZoneInfo>();
 		private readonly ILifetimeScope _container;
 		private static readonly ILog Log = LogManager.GetLogger(typeof (SchedulingScreen));
 		private ISchedulerStateHolder _schedulerState;
@@ -3625,7 +3626,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			foreach (IPerson permittedPerson in SchedulerState.AllPermittedPersons)
 			{
 				validatePersonAccounts(permittedPerson);
-				_schedulerState.DetectedTimeZoneInfos.Add(permittedPerson.PermissionInformation.DefaultTimeZone());
+				_detectedTimeZoneInfos.Add(permittedPerson.PermissionInformation.DefaultTimeZone());
 			}
 
 			SchedulerState.SchedulingResultState.Schedules.ModifiedPersonAccounts.Clear();
@@ -5973,7 +5974,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripMenuItemLoggedOnUserTimeZone.Tag = _schedulerState.TimeZoneInfo;
 			wpfShiftEditor1.SetTimeZone(_schedulerState.TimeZoneInfo);
 
-			foreach (TimeZoneInfo info in _schedulerState.DetectedTimeZoneInfos)
+			foreach (TimeZoneInfo info in _detectedTimeZoneInfos)
 			{
 				if (!info.Equals(_schedulerState.TimeZoneInfo))
 				{

@@ -450,11 +450,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			get { return _defaultSegment.SegmentLength; }
 		}
 
-		public HashSet<TimeZoneInfo> DetectedTimeZoneInfos
-		{
-			get { return _detectedTimeZoneInfos; }
-		}
-
 		public bool AgentFilter()
 		{
 			return _filteredAgents.Count != _allPermittedPersons.Count;
