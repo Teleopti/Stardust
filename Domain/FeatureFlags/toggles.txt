@@ -94,7 +94,7 @@ Scheduler_AgentSkillAnalyzer_12345 = DEV
 Wfm_Use_Stardust = RC
 Wfm_ForecastFileImportOnStardust_37047 = RC
 ResourcePlanner_SkillGroupDeleteAfterCalculation_37048 = RC
-ETL_SpeedUpPersonPeriodIntraday_37162 = false
+ETL_SpeedUpPersonPeriodIntraday_37162 = RC
 Scheduler_IntradayOptimization_36617 = RC
 WfmGlobalLayout_personalOptions_37114 = DEV
 
