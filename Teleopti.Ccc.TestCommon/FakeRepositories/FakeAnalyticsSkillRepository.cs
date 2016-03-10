@@ -10,10 +10,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	{
 		private List<AnalyticsSkill> fakeSkills;
 		private List<AnalyticsSkillSet> fakeSkillSets;
+		public List<AnalyticsBridgeSkillsetSkill> fakeBridgeSkillsetSkills; 
 
 		public FakeAnalyticsSkillRepository()
 		{
 			fakeSkillSets = new List<AnalyticsSkillSet>();
+			fakeBridgeSkillsetSkills = new List<AnalyticsBridgeSkillsetSkill>();
 		}
 
 		public IList<AnalyticsSkill> Skills(int businessUnitId)
@@ -33,7 +35,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void AddBridgeSkillsetSkill(AnalyticsBridgeSkillsetSkill analyticsBridgeSkillsetSkill)
 		{
-			return;
+			fakeBridgeSkillsetSkills.Add(analyticsBridgeSkillsetSkill);
 		}
 
 		public int AddSkillSet(List<AnalyticsSkill> listOfSkills)
@@ -45,7 +47,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<AnalyticsSkillSet> SkillSets()
 		{
-			throw new System.NotImplementedException();
+			return fakeSkillSets;
 		}
 
 		public int? SkillSetId(IList<AnalyticsSkill> skills)

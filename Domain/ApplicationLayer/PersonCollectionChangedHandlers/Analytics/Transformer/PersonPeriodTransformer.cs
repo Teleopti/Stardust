@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 			return newSkillSetId.Value;
 		}
 
-		private IEnumerable<AnalyticsBridgeSkillsetSkill> NewBridgeSkillSetSkillsFromSkills(List<AnalyticsSkill> listOfSkills, int newSkillSetId)
+		public static IEnumerable<AnalyticsBridgeSkillsetSkill> NewBridgeSkillSetSkillsFromSkills(List<AnalyticsSkill> listOfSkills, int newSkillSetId)
 		{
 			foreach (var skill in listOfSkills)
 			{

@@ -123,23 +123,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
-		public int AddSkillSet(List<AnalyticsSkill> skills)
-		{
-			var skillSetCode = string.Join(",", skills.OrderBy(a => a.SkillId).Select(a => a.SkillId));
-			var skillSetName = string.Join(",", skills.OrderBy(a => a.SkillId).Select(a => a.SkillName));
-
-			var newSkillSet = new AnalyticsSkillSet
-			{
-				SkillsetCode = skillSetCode,
-				SkillsetName = skillSetName,
-				BusinessUnitId = skills.First().BusinessUnitId,
-				DatasourceId = skills.First().DatasourceId,
-				DatasourceUpdateDate = skills.Max(a => a.DatasourceUpdateDate)
-			};
-
-			return AddSkillSet(newSkillSet);
-		}
-
 		private IAnalyticsUnitOfWorkFactory statisticUnitOfWorkFactory()
 		{
 			var identity = (ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity;
