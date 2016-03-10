@@ -19,6 +19,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		{
 			InParameter.NotNull("personCollection", personCollection);
 			var togglesEtlSpeedUpPersonPeriodIntraday37162 = toggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162);
+			var togglesEtlSpeedUpPersonPeriodIntradayAcdLogin37439 = toggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntradayAcdLogin_37439);
 
 			foreach (IPerson person in personCollection)
 			{
@@ -32,7 +33,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 							commonNameDescriptionSetting, logonInfos);
 					}
 
-					externalLogOnPerson(person, acdLogOnTable, timeZoneInfo, personPeriod);
+					if (!togglesEtlSpeedUpPersonPeriodIntradayAcdLogin37439)
+					{
+						externalLogOnPerson(person, acdLogOnTable, timeZoneInfo, personPeriod);
+					}
 				}
 			}
 		}

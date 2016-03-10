@@ -80,7 +80,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 		    {
 		        Add(new BridgeSkillSetSkillJobStep(jobParameters));
 		    }
-		    Add(new BridgeAcdLogOnPersonJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntradayAcdLogin_37439))
+			{
+				Add(new BridgeAcdLogOnPersonJobStep(jobParameters));
+			}
+
 			Add(new BridgeQueueWorkloadJobStep(jobParameters));
 			Add(new DimGroupPageJobStep(jobParameters));
 			Add(new BridgeGroupPagePersonJobStep(jobParameters));
