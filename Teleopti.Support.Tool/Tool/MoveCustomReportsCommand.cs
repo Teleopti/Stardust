@@ -6,11 +6,9 @@ namespace Teleopti.Support.Tool.Tool
 	public class MoveCustomReportsCommand :ISupportCommand
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(MoveCustomReportsCommand));
+
 		public void Execute(ModeFile modeFile)
-		{
-			if(!modeFile.Type.Equals("DEPLOY"))
-				return;
-			
+		{			
 			const string oldDir = "..\\TeleoptiCCC\\Analytics\\Reports\\Custom\\";
 
 			if (Directory.Exists(oldDir))
