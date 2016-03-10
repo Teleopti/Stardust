@@ -178,6 +178,7 @@
     <Compile Include="CommandHandler\AddOvertimeCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\AddPersonalActivityCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\AddPersonCommandHandlerTest.cs" />
+    <Compile Include="CommandHandler\AddScheduleChangesListenerCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\ApproveRequestCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\BusinessRulesForPersonalAccountUpdateTest.cs" />
     <Compile Include="CommandHandler\CancelAbsenceCommandHandlerTest.cs" />
@@ -189,6 +190,7 @@
     <Compile Include="CommandHandler\EndPersonEmploymentCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\GrantPersonRoleCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\RevokePersonRoleCommandHandlerTest.cs" />
+    <Compile Include="CommandHandler\RevokeScheduleChangesListenerCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\ScheduleSaveHandlerTest.cs" />
     <Compile Include="CommandHandler\SetPersonOptionalValuesForPersonCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\SendPushMessageToPersonCommandHandlerTest.cs" />

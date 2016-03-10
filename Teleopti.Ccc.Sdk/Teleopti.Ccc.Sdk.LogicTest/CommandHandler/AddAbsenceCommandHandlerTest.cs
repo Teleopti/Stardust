@@ -8,6 +8,7 @@ using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -64,12 +65,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_scheduleTagAssembler = _mock.DynamicMock<IScheduleTagAssembler>();
 			_scheduleSaveHandler = _mock.DynamicMock<IScheduleSaveHandler>();
 
-            _person = PersonFactory.CreatePerson();
-            _person.SetId(Guid.NewGuid());
-
-            _absence = AbsenceFactory.CreateAbsence("Sick");
-            _absence.SetId(Guid.NewGuid());
-
+	        _person = PersonFactory.CreatePerson().WithId();
+            _absence = AbsenceFactory.CreateAbsence("Sick").WithId();
             _scenario = ScenarioFactory.CreateScenarioAggregate();
             
             _period = _dateOnlyPeriod.ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone());

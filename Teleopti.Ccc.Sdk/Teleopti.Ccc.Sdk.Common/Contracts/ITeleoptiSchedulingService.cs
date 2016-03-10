@@ -450,5 +450,13 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		/// <param name="queryDto">The query.</param>
 		[OperationContract]
 		ICollection<ScheduleTagDto> GetScheduleTagByQuery(QueryDto queryDto);
-    }
+
+		/// <summary>
+		/// Queries the system after saved settings for the schedule change subscriptions.
+		/// </summary>
+		/// <param name="queryDto">The query.</param>
+		/// <returns>A collection with one item with the saved subscriptions containing the different listeners.</returns>
+		[OperationContract, FaultContract(typeof(FaultException))]
+		ICollection<ScheduleChangesSubscriptionsDto> GetScheduleChangeSubscriptionsByQuery(QueryDto queryDto);
+	}
 }

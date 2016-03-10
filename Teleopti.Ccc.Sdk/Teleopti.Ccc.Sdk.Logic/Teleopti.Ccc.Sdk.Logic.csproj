@@ -178,6 +178,7 @@
     <Compile Include="CommandHandler\AddOvertimeCommandHandler.cs" />
     <Compile Include="CommandHandler\AddPersonalActivityCommandHandler.cs" />
     <Compile Include="CommandHandler\AddPersonCommandHandler.cs" />
+    <Compile Include="CommandHandler\AddScheduleChangesListenerCommandHandler.cs" />
     <Compile Include="CommandHandler\ApproveRequestCommandHandler.cs" />
     <Compile Include="CommandHandler\CancelAbsenceCommandHandler.cs" />
     <Compile Include="CommandHandler\CancelOvertimeCommandHandler.cs" />
@@ -199,6 +200,7 @@
     <Compile Include="CommandHandler\NewMainShiftCommandHandler.cs" />
     <Compile Include="CommandHandler\RecalculateForecastOnSkillCommandHandler.cs" />
     <Compile Include="CommandHandler\RevokePersonRoleCommandHandler.cs" />
+    <Compile Include="CommandHandler\RevokeScheduleChangesListenerCommandHandler.cs" />
     <Compile Include="CommandHandler\SaveAgentPortalSettingsCommandHandler.cs" />
     <Compile Include="CommandHandler\SavePersonAbsenceRequestCommandHandler.cs" />
     <Compile Include="CommandHandler\ScheduleSaveHandler.cs" />
