@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakeGlobalSettingDataRepository : IGlobalSettingDataRepository
+	public class FakePersonalSettingDataRepository : IPersonalSettingDataRepository
 	{
 		private readonly IDictionary<string, object> storage = new Dictionary<string, object>();
 
@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			object value;
 			if (storage.TryGetValue(key, out value))
-				return (T) value ?? defaultValue;
+				return (T)value ?? defaultValue;
 
 			return defaultValue;
 		}
@@ -27,6 +27,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			storage[entityName] = value;
 			return value.BelongsTo;
+		}
+
+		public T FindValueByKeyAndOwnerPerson<T>(string key, IPerson ownerPerson, T defaultValue) where T : class, ISettingValue
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }

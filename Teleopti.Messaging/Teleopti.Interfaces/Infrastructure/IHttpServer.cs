@@ -1,6 +1,4 @@
-using System.Net.Http;
-
-namespace Teleopti.Messaging.Client.Http
+namespace Teleopti.Interfaces.Infrastructure
 {
 	public interface IHttpServer
 	{

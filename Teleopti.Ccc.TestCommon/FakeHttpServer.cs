@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Messaging.Client.Http;
 
 namespace Teleopti.Ccc.TestCommon

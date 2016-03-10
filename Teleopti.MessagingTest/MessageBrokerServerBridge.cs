@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Messaging.Client.Http;
 
 namespace Teleopti.MessagingTest

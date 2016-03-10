@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using Teleopti.Interfaces;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Messaging.Client.Http
 {

@@ -257,6 +257,7 @@
     <Compile Include="QueryHandler\GetPersonByUserNameQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetPersonPeriodsByPersonIdQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetPersonRolesQueryHandlerTest.cs" />
+    <Compile Include="QueryHandler\GetScheduleChangesSubscriptionSettingsQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetSchedulesByGroupPageGroupQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetSchedulesBySiteQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetSchedulesForAllPeopleQueryHandlerTest.cs" />

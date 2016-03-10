@@ -224,6 +224,7 @@
     <Compile Include="DataTransferObject\QueryDtos\GetPersonByUserNameQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetPersonPeriodsByPersonIdQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetPersonRolesQueryDto.cs" />
+    <Compile Include="DataTransferObject\QueryDtos\GetScheduleChangesSubscriptionSettingsQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetSchedulesByGroupPageGroupQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetSchedulesBySiteQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetAllScenariosQueryDto.cs" />
@@ -251,6 +252,8 @@
     <Compile Include="DataTransferObject\QueryDtos\KnownTypesHelper.cs" />
     <Compile Include="DataTransferObject\QueryDtos\QueryDto.cs" />
     <Compile Include="DataTransferObject\RoleDto.cs" />
+    <Compile Include="DataTransferObject\ScheduleChangesListenerDto.cs" />
+    <Compile Include="DataTransferObject\ScheduleChangesSubscriptionsDto.cs" />
     <Compile Include="DataTransferObject\ScheduleLoadOptionDto.cs" />
     <Compile Include="DataTransferObject\ScheduleTagDto.cs" />
     <Compile Include="DataTransferObject\StudentAvailabilityDayDto.cs" />

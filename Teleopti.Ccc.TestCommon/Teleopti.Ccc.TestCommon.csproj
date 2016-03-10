@@ -154,6 +154,7 @@
     <Compile Include="FakeRepositories\FakeApplicationFunctionRepository.cs" />
     <Compile Include="FakeRepositories\FakeAvailableDataRepository.cs" />
     <Compile Include="FakeRepositories\FakeSkillDayRepositorySimulateNewUnitOfWork.cs" />
+    <Compile Include="FakeRepositories\FakePersonalSettingDataRepository.cs" />
     <Compile Include="InfraTestConfigReader.cs" />
     <Compile Include="DoNothingScheduleDayChangeCallBack.cs" />
     <Compile Include="EncryptPassword.cs" />

@@ -229,6 +229,7 @@
     <Compile Include="QueryHandler\GetPersonByUserNameQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPersonPeriodsByPersonIdQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPersonRolesQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetScheduleChangesSubscriptionSettingsQueryHandler.cs" />
     <Compile Include="QueryHandler\GetSchedulesByGroupPageGroupQueryHandler.cs" />
     <Compile Include="QueryHandler\GetSchedulesBySiteQueryHandler.cs" />
     <Compile Include="QueryHandler\GetSchedulesForAllPeopleQueryHandler.cs" />
