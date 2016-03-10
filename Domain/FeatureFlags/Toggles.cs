@@ -86,10 +86,11 @@
 
 		ResourcePlanner_SkillGroupDeleteAfterCalculation_37048,
 		ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049,
-        ETL_SpeedUpPersonPeriodIntraday_37162,
-        WfmGlobalLayout_personalOptions_37114,
+		ETL_SpeedUpPersonPeriodIntraday_37162,
+		ETL_SpeedUpPersonPeriodIntradayAcdLogin_37439,
+		WfmGlobalLayout_personalOptions_37114,
 
-				ResourcePlanner_IntradayIslands_36939
-        // ReSharper restore InconsistentNaming
-    }
+		ResourcePlanner_IntradayIslands_36939
+		// ReSharper restore InconsistentNaming
+	}
 }
