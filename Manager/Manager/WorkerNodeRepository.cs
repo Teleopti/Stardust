@@ -314,8 +314,6 @@ namespace Stardust.Manager
 
 			LogHelper.LogDebugWithLineNumber(Logger, "Start");
 
-			var currentDateTime = DateTime.Now;
-
 			var deadNodes = new List<string>();
 
 			try
@@ -367,6 +365,8 @@ namespace Stardust.Manager
 									(DateTime)objectse[ordinalPosForHeartBeat];
 
 								var url = objectse[ordinalPosForUrl];
+
+								var currentDateTime = DateTime.Now;
 
 								var dateDiff =
 									(currentDateTime - heartBeatDateTime).TotalSeconds;

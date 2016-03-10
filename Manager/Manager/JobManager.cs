@@ -92,7 +92,7 @@ namespace Stardust.Manager
 
 			var jobs = _jobRepository.LoadAll();
 
-			if (deadNodes != null)
+			if (deadNodes != null && jobs != null)
 			{
 				foreach (var node in deadNodes)
 				{

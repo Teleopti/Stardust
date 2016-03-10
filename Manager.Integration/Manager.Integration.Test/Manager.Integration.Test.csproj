@@ -89,6 +89,7 @@
     <Compile Include="IntegrationControllerTests.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Scripts\ScriptExecuteHelper.cs" />
+    <Compile Include="SixManagersSixNodesLoadTests.cs" />
     <Compile Include="Tasks\AppDomainTask.cs" />
     <Compile Include="Tasks\StartJobTaskHelper.cs" />
     <Compile Include="FastJobParams.cs" />

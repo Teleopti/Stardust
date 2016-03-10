@@ -92,7 +92,7 @@ namespace Manager.Integration.Test
 			}
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldBeAbleToExecuteManyFastSuccessJobRequestTest()
 		{
 			logMessage("Start.");
@@ -151,10 +151,7 @@ namespace Manager.Integration.Test
 			}
 
 			taskHelper.Dispose();
-
-			//---------------------------------------------
-			// Log.
-			//---------------------------------------------
+			
 			logMessage("Finished.");
 		}
 
@@ -162,7 +159,7 @@ namespace Manager.Integration.Test
 		///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
 		///     netsh http add urlacl url=http://+:9050/ user=everyone listen=yes
 		/// </summary>
-		[Test, Ignore]
+		[Test]
 		public void ShouldBeAbleToCreateManySuccessJobRequestTest()
 		{
 			LogHelper.LogDebugWithLineNumber("Start.",
@@ -198,7 +195,7 @@ namespace Manager.Integration.Test
 			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
-			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(7,
+			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(5,
 																  sqlNotiferCancellationTokenSource,
 																  IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
 			task.Start();
