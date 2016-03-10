@@ -212,11 +212,14 @@ namespace Manager.Integration.Test.Timers
 
 								try
 								{
-									var jobHistory =
+										var jobHistory =
 										JsonConvert.DeserializeObject<JobHistory>(jobSerialized);
 
-									AddOrUpdateGuidStatus(guid,
-									                      jobHistory.Result);
+									if (jobHistory != null)
+									{
+										AddOrUpdateGuidStatus(guid,
+										                      jobHistory.Result);
+									}
 								}
 								catch (Exception exp)
 								{
@@ -228,7 +231,7 @@ namespace Manager.Integration.Test.Timers
 						}
 					}
 
-					Thread.Sleep(TimeSpan.FromSeconds(1));
+					Thread.Sleep(TimeSpan.FromSeconds(2));
 				}
 			}, cancellationTokenSource.Token);
 		}
