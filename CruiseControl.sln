@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.debug-Setup\FixMyConfigFlow.bat = .debug-Setup\FixMyConfigFlow.bat
 		GlobalAssemblyInfo.cs = GlobalAssemblyInfo.cs
 		.debug-Setup\InfratestConfig.bat = .debug-Setup\InfratestConfig.bat
+		BuildArtifacts\SDKWeb.config = BuildArtifacts\SDKWeb.config
 		BuildArtifacts\ServiceBusHost.config = BuildArtifacts\ServiceBusHost.config
 		BuildArtifacts\ServiceBuslog4net.config = BuildArtifacts\ServiceBuslog4net.config
 		.debug-Setup\config\settings.txt = .debug-Setup\config\settings.txt
