@@ -8,6 +8,12 @@
 	<link rel="stylesheet" href="dist/modules.css">
 	<link rel="stylesheet" href="dist/style.min.css">
 
+	<script type="text/javascript">
+	  !function(a,b,c,d,e,f,g){a.RaygunObject=e,a[e]=a[e]||function(){
+	  (a[e].o=a[e].o||[]).push(arguments)},f=b.createElement(c),g=b.getElementsByTagName(c)[0],
+	  f.async=1,f.src=d,g.parentNode.insertBefore(f,g)}(window,document,"script","//cdn.raygun.io/raygun4js/raygun.min.js","rg4js");
+	</script>
+
 </head>
 <body ng-show="isAuthenticated" ng-cloak>
 <div id="nav" ng-include="'html/nav.html'" class="material-depth-1 navbar navbar-default navbar-static-top " role="navigation"></div>
@@ -78,6 +84,12 @@
 	<script src="dist/modules.js"></script>
 	<script src="dist/templates.js"></script>
 	<script src="dist/main.min.js"></script>
+
+	<script type="text/javascript">
+  rg4js('apiKey', 'mo7RYTWLjnp6mFI2YGHiTA==');
+  rg4js('enablePulse', true);
+  rg4js('enableCrashReporting', false);
+</script>
 </body>
 
 </html>
