@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http.Results;
+using log4net.Config;
 using ManagerTest.Database;
 using ManagerTest.Fakes;
 using NUnit.Framework;
@@ -39,6 +41,11 @@ namespace ManagerTest
 		{
 			databaseHelper = new DatabaseHelper();
 			databaseHelper.Create();
+#if DEBUG
+			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
+#endif
+		
 		}
 
 		[SetUp]

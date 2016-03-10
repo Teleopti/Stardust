@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using log4net;
+using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
@@ -15,8 +16,11 @@ namespace Stardust.Manager
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (WorkerNodeRepository));
 
 		private readonly string _connectionString;
+		private const int _delaysMiliseconds = 100;
+		private const int _maxRetry = 5;
 		private DataSet _jdDataSet;
 		private DataTable _jdDataTable;
+		private readonly object _lockLoadAllFreeNodes = new object();
 
 		public WorkerNodeRepository(string connectionString)
 		{
@@ -25,7 +29,36 @@ namespace Stardust.Manager
 			InitDs();
 		}
 
+		private RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy> makeRetryPolicy()
+		{
+			var fromMilliseconds = TimeSpan.FromMilliseconds(_delaysMiliseconds);
+			var policy = new RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy>(_maxRetry, fromMilliseconds);
+			policy.Retrying += (sender, args) =>
+			{
+				// Log details of the retry.
+				var msg = String.Format("Retry - Count:{0}, Delay:{1}, Exception:{2}", args.CurrentRetryCount, args.Delay, args.LastException);
+				LogHelper.LogErrorWithLineNumber(Logger, msg);
+			};
+			return policy;
+		}
+
 		public List<WorkerNode> LoadAll()
+		{
+			var listToReturn = new List<WorkerNode>();
+			var policy = makeRetryPolicy();
+			try
+			{
+				listToReturn = policy.ExecuteAction(() => tryLoadAll());
+			}
+			catch (Exception ex)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to add job in database");
+			}
+
+			return listToReturn;
+		}
+
+		public List<WorkerNode> tryLoadAll()
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start LoadAll.");
 
@@ -51,10 +84,10 @@ namespace Stardust.Manager
 					{
 						var jobDefinition = new WorkerNode
 						{
-							Id = (Guid) reader.GetValue(reader.GetOrdinal("Id")),
-							Url = new Uri((string) reader.GetValue(reader.GetOrdinal("Url"))),
-							Alive = (string) reader.GetValue(reader.GetOrdinal("Alive")),
-							Heartbeat = (DateTime) reader.GetValue(reader.GetOrdinal("Heartbeat"))
+							Id = (Guid)reader.GetValue(reader.GetOrdinal("Id")),
+							Url = new Uri((string)reader.GetValue(reader.GetOrdinal("Url"))),
+							Alive = (string)reader.GetValue(reader.GetOrdinal("Alive")),
+							Heartbeat = (DateTime)reader.GetValue(reader.GetOrdinal("Heartbeat"))
 						};
 
 						listToReturn.Add(jobDefinition);
@@ -68,12 +101,12 @@ namespace Stardust.Manager
 			if (listToReturn.Any())
 			{
 				LogHelper.LogDebugWithLineNumber(Logger,
-				                                 "Found ( " + listToReturn.Count + " ) availabe nodes.");
+															"Found ( " + listToReturn.Count + " ) availabe nodes.");
 			}
 			else
 			{
 				LogHelper.LogDebugWithLineNumber(Logger,
-				                                 "No nodes found.");
+															"No nodes found.");
 			}
 
 			LogHelper.LogDebugWithLineNumber(Logger, "Finished LoadAll.");
@@ -81,9 +114,23 @@ namespace Stardust.Manager
 			return listToReturn;
 		}
 
-		private readonly object _lockLoadAllFreeNodes=new object();
-
 		public List<WorkerNode> LoadAllFreeNodes()
+		{
+			var listToReturn = new List<WorkerNode>();
+			var policy = makeRetryPolicy();
+			try
+			{
+				listToReturn = policy.ExecuteAction(() => tryLoadAllFreeNodes());
+			}
+			catch (Exception ex)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to add job in database");
+			}
+
+			return listToReturn;
+		}
+
+		public List<WorkerNode> tryLoadAllFreeNodes()
 		{
 			lock (_lockLoadAllFreeNodes)
 			{
@@ -162,6 +209,19 @@ namespace Stardust.Manager
 
 		public void Add(WorkerNode job)
 		{
+			var policy = makeRetryPolicy();
+			try
+			{
+				policy.ExecuteAction(() => tryAdd(job));
+			}
+			catch (Exception ex)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to add job in database");
+			}
+		}
+
+		public void tryAdd(WorkerNode job)
+		{
 			var dr = _jdDataTable.NewRow();
 			dr["Id"] = job.Id;
 			dr["Url"] = job.Url.ToString();
@@ -190,6 +250,19 @@ namespace Stardust.Manager
 
 		public void DeleteNode(Guid nodeId)
 		{
+			var policy = makeRetryPolicy();
+			try
+			{
+				policy.ExecuteAction(() => tryDeleteNode(nodeId));
+			}
+			catch (Exception ex)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to add job in database");
+			}
+		}
+
+		public void tryDeleteNode(Guid nodeId)
+		{
 			using (var connection = new SqlConnection(_connectionString))
 			{
 				connection.Open();
@@ -216,6 +289,21 @@ namespace Stardust.Manager
 		}
 
 		public List<string> CheckNodesAreAlive(TimeSpan timeSpan)
+		{
+			var deadNodes = new List<string>();
+			var policy = makeRetryPolicy();
+			try
+			{
+				deadNodes = policy.ExecuteAction(() => tryCheckNodesAreAlive(timeSpan));
+			}
+			catch (Exception ex)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to add job in database");
+			}
+			return deadNodes;
+		}
+
+		public List<string> tryCheckNodesAreAlive(TimeSpan timeSpan)
 		{
 			var selectCommand = @"SELECT Id, Url, Heartbeat, Alive 
 									 FROM Stardust.WorkerNodes";
@@ -315,6 +403,19 @@ namespace Stardust.Manager
 		}
 
 		public void RegisterHeartbeat(string nodeUri, bool updateStatus)
+		{
+			var policy = makeRetryPolicy();
+			try
+			{
+				policy.ExecuteAction(() => tryRegisterHeartbeat(nodeUri, updateStatus));
+			}
+			catch (Exception ex)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to add job in database");
+			}
+		}
+
+		public void tryRegisterHeartbeat(string nodeUri, bool updateStatus)
 		{
 			// Validate argument.
 			if (string.IsNullOrEmpty(nodeUri))

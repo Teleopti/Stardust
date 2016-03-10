@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using log4net.Config;
 using ManagerTest.Database;
 using ManagerTest.Fakes;
 using NUnit.Framework;
@@ -30,6 +32,17 @@ namespace ManagerTest
 		private FakeHttpSender FakeHttpSender
 		{
 			get { return (FakeHttpSender) HttpSender; }
+		}
+
+		[TestFixtureSetUp]
+		public void TextFixtureSetUp()
+		{
+			
+#if DEBUG
+			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
+#endif
+
 		}
 
 		[TearDown]
