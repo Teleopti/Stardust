@@ -39,9 +39,13 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		private string sqlBackupPath()
 		{
-			return Microsoft.Win32.Registry.LocalMachine
-				.OpenSubKey(@"SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL12.MSSQLSERVER\MSSQLServer")
-				.GetValue("BackupDirectory") as string;
+			var localMachine = Microsoft.Win32.Registry.LocalMachine;
+			var key = localMachine.OpenSubKey(@"SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQLServer");
+			if (key == null)
+				key = localMachine.OpenSubKey(@"SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL12.MSSQLSERVER\MSSQLServer");
+			if (key == null)
+				key = localMachine.OpenSubKey(@"SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL12.SQL2014\MSSQLServer");
+			return key.GetValue("BackupDirectory") as string;
 		}
 	}
 }
