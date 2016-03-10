@@ -156,7 +156,7 @@ namespace Manager.Integration.Test
 				logMessage("Finished.");
 			}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldBeAbleToCreateManySuccessJobRequestTest()
 		{
 			LogHelper.LogDebugWithLineNumber("Start.",

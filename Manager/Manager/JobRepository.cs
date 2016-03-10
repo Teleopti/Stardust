@@ -299,7 +299,7 @@ namespace Stardust.Manager
 						using (
 							var da =
 								new SqlDataAdapter(
-									"SELECT TOP 1 * From [Stardust].JobDefinitions  WITH (TABLOCKX) WHERE AssignedNode IS NULL OR AssignedNode = ''",
+									"SELECT TOP 1 * From [Stardust].JobDefinitions WITH (TABLOCKX) WHERE AssignedNode IS NULL OR AssignedNode = ''",
 									connection)
 
 								{
@@ -448,12 +448,6 @@ namespace Stardust.Manager
 						connection.Close();
 					}
 				}
-			}
-
-
-			catch (TimeoutException exp)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, exp.Message, exp);
 			}
 
 			catch (SqlException exp)
