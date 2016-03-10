@@ -103,12 +103,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			get { return _filteredAgents; }
 		}
 
-		//returns filter on OvertimeAvaialbility
-		public IDictionary<Guid, IPerson> FilteredPersonOvertimeAvailabilityDictionary
-		{
-			get { return _filteredPersonsOvertimeAvailability; }
-		}
-
 		private IDictionary<Guid, IPerson> combinedFilters()
 		{
 			var filter = _filteredAgents;

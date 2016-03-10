@@ -86,17 +86,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         /// </remarks>
         IDictionary<Guid, IPerson> FilteredPersonDictionary { get; }
 
-		/// <summary>
-		/// Gets the filtered agents
-		/// </summary>
-		IDictionary<Guid, IPerson> FilteredAgentsDictionary { get; }
+	    /// <summary>
+	    /// Gets the filtered agents
+	    /// </summary>
+	    IDictionary<Guid, IPerson> FilteredAgentsDictionary { get; }
 
-		/// <summary>
-		/// Gets the filtered overtime availabilities
-		/// </summary>
-		IDictionary<Guid, IPerson> FilteredPersonOvertimeAvailabilityDictionary { get; }
-
-        /// <summary>
+	    /// <summary>
         /// Gets the time zone info.
         /// </summary>
         /// <value>The time zone info.</value>
