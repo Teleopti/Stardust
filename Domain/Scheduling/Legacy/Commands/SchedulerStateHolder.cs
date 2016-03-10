@@ -465,11 +465,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			return _filterOnOvertimeAvailability;
 		}
 
-		public bool HourlyAvailabilityFilter()
-		{
-			return _filterOnHourlyAvailability;
-		}
-
 		public void SetCommonStateHolder(ICommonStateHolder commonStateHolder)
 		{
 			_commonStateHolder = commonStateHolder;

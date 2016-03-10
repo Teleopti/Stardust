@@ -457,16 +457,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		}
 
 		[Test]
-		public void ShouldReturnFilterStatusOnHourlyAvailability()
-		{
-			target.FilterPersonsHourlyAvailability(new List<IPerson>());
-			Assert.IsTrue(target.HourlyAvailabilityFilter());
-
-			target.ResetFilteredPersonsHourlyAvailability();
-			Assert.IsFalse(target.HourlyAvailabilityFilter());
-		}
-
-		[Test]
 		public void ShouldReturnCombinedFilterOnFilteredPersonDictionary()
 		{
 			target.FilterPersons(new List<IPerson>{_person1});
