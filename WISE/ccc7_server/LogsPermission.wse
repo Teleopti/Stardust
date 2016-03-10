@@ -28,10 +28,10 @@ item: Global
   Variable Default1=HIDE
   Variable Flags1=00001000
   Variable Name2=_SYS_
-  Variable Default2=C:\Windows\system32
+  Variable Default2=C:\WINDOWS\system32
   Variable Flags2=00001000
   Variable Name3=_WIN_
-  Variable Default3=C:\Windows
+  Variable Default3=C:\WINDOWS
   Variable Flags3=00001000
   Variable Name4=_WISE_
   Variable Default4=C:\Program Files (x86)\Altiris\Wise\WiseScript Package Editor
@@ -92,6 +92,15 @@ item: Custom Script Item
   Variable Name3=HELPFILE
   Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=DNS_ALIAS
+  Variable Name2=_PROP_VAR_
+  Variable Value2=SIX
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
 item: Check if File/Dir Exists
   Pathname=%LOG4NET%
   Flags=00000100
@@ -105,7 +114,7 @@ item: Custom Script Item
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%LOG4NET%SetPermissions.bat" "%ONE%" "%TWO%" "%THREE%" "%FOUR%" "%FIVE%""
+  Command Line=/C ""%LOG4NET%SetPermissions.bat" "%ONE%" "%TWO%" "%THREE%" "%FOUR%" "%FIVE%" "%SIX%""
   Flags=00000110
 end
 item: Else Statement
