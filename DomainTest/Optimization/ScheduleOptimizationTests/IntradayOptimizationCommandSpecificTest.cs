@@ -20,11 +20,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 {
-	//usecase tests going to command handler (like desktop client)
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_SkillGroupDeleteAfterCalculation_37048)]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
-	public class IntradayOptimizationDesktopTest : ISetup
+	public class IntradayOptimizationCommandSpecificTest : ISetup
 	{
 		public FakeSkillRepository SkillRepository;
 		public FakePersonRepository PersonRepository;
