@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		IFakeDataBuilder WithStateGroup(string statecode, string stateGroupName);
 		IFakeDataBuilder WithStateCode(string statecode);
 		IFakeDataBuilder WithStateCode(string statecode, string platformTypeId);
-		IFakeDataBuilder WithExistingState(Guid personId, string stateCode, int staffingEffect);
+		IFakeDataBuilder WithExistingState(Guid personId, string stateCode);
 	}
 
 	public class FakeRtaDatabase : IDatabaseReader, IFakeDataBuilder
@@ -398,28 +398,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				BusinessUnitId = _businessUnitId,
 				PlatformTypeId = new Guid(_platformTypeId),
 				StateCode = stateCode,
+				StaffingEffect = 0
 			});
 			return this;
 		}
-
-		public IFakeDataBuilder WithExistingState(Guid personId, string stateCode, int staffingEffect)
-		{
-			AgentStateReadModels.Has(new AgentStateReadModel
-			{
-				PersonId = personId,
-				BusinessUnitId = _businessUnitId,
-				PlatformTypeId = new Guid(_platformTypeId),
-				StateCode = stateCode,
-				StaffingEffect = staffingEffect
-			});
-			return this;
-		}
-
-
-
-
-
-
 
 		public IList<ScheduleLayer> GetCurrentSchedule(Guid personId)
 		{
@@ -560,14 +542,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public static IFakeDataBuilder WithRule(this IFakeDataBuilder fakeDataBuilder, Guid ruleId, string stateCode, Guid? activityId)
 		{
 			return fakeDataBuilder.WithRule(ruleId, stateCode, null, activityId, 0, null, false, null);
-		}
-
-
-
-
-		public static IFakeDataBuilder WithExistingState(this IFakeDataBuilder fakeDataBuilder, Guid personId, string stateCode)
-		{
-			return fakeDataBuilder.WithExistingState(personId, stateCode, 0);
 		}
 	}
 
