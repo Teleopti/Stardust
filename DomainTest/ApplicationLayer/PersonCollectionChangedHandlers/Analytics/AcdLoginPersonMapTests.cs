@@ -7,7 +7,6 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
 {
-	[Ignore]
 	public class AcdLoginPersonMapTests
 	{
 		private FakeAnalyticsPersonPeriodRepository fakeAnalyticsPersonPeriodRepository;
@@ -46,26 +45,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		[Test]
 		public void DeleteAcdLoginForPerson_LastRowOnAcdLogin_OneNotDefinedRowForAcdLogin()
 		{
-			_acdLoginPersonTransformer.DeleteAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 2, PersonId = 1});
+			_acdLoginPersonTransformer.DeleteAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 2, PersonId = 1 });
 
 			var bridgeRowsForAcdLogin = fakeAnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForAcdLoginPersons(2);
 			Assert.AreEqual(1, bridgeRowsForAcdLogin.Count);
 			Assert.AreEqual(2, bridgeRowsForAcdLogin.First().AcdLoginId);
 			Assert.AreEqual(-1, bridgeRowsForAcdLogin.First().PersonId);
+			Assert.AreEqual(new DateTime(2059, 12, 31), bridgeRowsForAcdLogin.First().DatasourceUpdateDate);
 		}
 
 		[Test]
 		public void DeleteAcdLoginForPerson_NotLastRowOnAcdLogin_NoNotDefinedRowForAcdLogin()
 		{
-			_acdLoginPersonTransformer.DeleteAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 1, PersonId = 1});
+			_acdLoginPersonTransformer.DeleteAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 1, PersonId = 1 });
 			var bridgeRowsForAcdLogin = fakeAnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForAcdLoginPersons(1);
-			Assert.AreEqual(0, bridgeRowsForAcdLogin.Select(a => a.PersonId == -1));
+			Assert.AreEqual(0, bridgeRowsForAcdLogin.Count(a => a.PersonId == -1));
 		}
 
 		[Test]
-		public void NewAcdLoginForPerson_FirstRowForAcdLogin_OneNotDefinedRowForAcdLogin()
+		public void NewAcdLoginForPerson_FirstRowForAcdLogin_OneRowForAcdLogin()
 		{
-			_acdLoginPersonTransformer.AddAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 3, PersonId = 1});
+			_acdLoginPersonTransformer.AddAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 3, PersonId = 1 });
 			var bridgeRowsForAcdLogin = fakeAnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForAcdLoginPersons(3);
 			Assert.AreEqual(1, bridgeRowsForAcdLogin.Count);
 			Assert.AreEqual(3, bridgeRowsForAcdLogin.First().AcdLoginId);
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_acdLoginPersonTransformer.AddAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 2, PersonId = 3 });
 			var bridgeRowsForAcdLogin = fakeAnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForAcdLoginPersons(2);
 			Assert.AreEqual(2, bridgeRowsForAcdLogin.Count);
-			Assert.AreEqual(0, bridgeRowsForAcdLogin.Select(a => a.PersonId == -1));
+			Assert.AreEqual(0, bridgeRowsForAcdLogin.Count(a => a.PersonId == -1));
 		}
 
 		[Test]
@@ -94,16 +94,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		public void NewAcdLoginForPerson_NewRow_AnotherRowForPerson()
 		{
 			var numberOfRowsBefore = fakeAnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForPerson(1).Count;
-			_acdLoginPersonTransformer.AddAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 4, PersonId = 1});
+			_acdLoginPersonTransformer.AddAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 4, PersonId = 1 });
 			var bridgeRowsForAcdLogin = fakeAnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForPerson(1);
-			Assert.AreEqual(numberOfRowsBefore+1, bridgeRowsForAcdLogin.Count);
+			Assert.AreEqual(numberOfRowsBefore + 1, bridgeRowsForAcdLogin.Count);
 		}
 
 		[Test]
 		public void DeleteAcdLoginForPerson_DeleteRow_OneLessBridgeRowForPerson()
 		{
 			var numberOfRowsBefore = fakeAnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForPerson(1).Count;
-			_acdLoginPersonTransformer.DeleteAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 4, PersonId = 1 });
+			_acdLoginPersonTransformer.DeleteAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 2, PersonId = 1 });
 			var bridgeRowsForAcdLogin = fakeAnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForPerson(1);
 			Assert.AreEqual(numberOfRowsBefore - 1, bridgeRowsForAcdLogin.Count);
 		}
