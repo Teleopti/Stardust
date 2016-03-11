@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -38,9 +39,6 @@ namespace Stardust.Node.Workers
 						                                         Encoding.Unicode,
 						                                         "application/json"))
 							.ConfigureAwait(false);
-
-
-					response.EnsureSuccessStatusCode();
 
 					LogHelper.LogDebugWithLineNumber(Logger,
 					                                 "Finihed Post Async: " + url);
@@ -87,8 +85,6 @@ namespace Stardust.Node.Workers
 						                       cancellationToken)
 							.ConfigureAwait(false);
 
-					response.EnsureSuccessStatusCode();
-
 					LogHelper.LogDebugWithLineNumber(Logger,
 					                                 "Finished Post Async: " + url);
 
@@ -97,6 +93,11 @@ namespace Stardust.Node.Workers
 
 					return response;
 				}
+			}
+			catch (HttpRequestException)
+			{
+				//don't log these annoying "errors" when only the node is up
+				throw;
 			}
 
 			catch (Exception exp)
@@ -124,9 +125,6 @@ namespace Stardust.Node.Workers
 
 					var response =
 						await client.DeleteAsync(url).ConfigureAwait(false);
-
-
-					response.EnsureSuccessStatusCode();
 
 					LogHelper.LogDebugWithLineNumber(Logger,
 					                                 "Finished Delete Async: " + url);
@@ -167,9 +165,6 @@ namespace Stardust.Node.Workers
 						await client.DeleteAsync(url,
 						                         cancellationToken).ConfigureAwait(false);
 
-
-					response.EnsureSuccessStatusCode();
-
 					LogHelper.LogDebugWithLineNumber(Logger,
 					                                 "Finished Delete Async: " + url);
 
@@ -207,9 +202,6 @@ namespace Stardust.Node.Workers
 					var response = await client.GetAsync(url,
 					                                     HttpCompletionOption.ResponseHeadersRead)
 						.ConfigureAwait(false);
-
-
-					response.EnsureSuccessStatusCode();
 
 					LogHelper.LogDebugWithLineNumber(Logger,
 					                                 "Finished Get Async: " + url);
@@ -249,8 +241,6 @@ namespace Stardust.Node.Workers
 					                                     HttpCompletionOption.ResponseHeadersRead,
 					                                     cancellationToken)
 						.ConfigureAwait(false);
-
-					response.EnsureSuccessStatusCode();
 
 					LogHelper.LogDebugWithLineNumber(Logger,
 					                                 "Finished Get Async: " + url);
