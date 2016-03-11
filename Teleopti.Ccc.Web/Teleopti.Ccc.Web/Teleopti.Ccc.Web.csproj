@@ -707,6 +707,7 @@
     <Compile Include="Areas\Start\Controllers\ApiLogonInputModel.cs" />
     <Compile Include="Areas\Start\Controllers\ConfigController.cs" />
     <Compile Include="Areas\Start\Controllers\ReturnController.cs" />
+    <Compile Include="Areas\Start\Controllers\WebApplicationAreaResolver.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\AuthenticatorResult.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\ILogLogonAttempt.cs" />
     <Compile Include="Areas\Start\Core\Config\ISharedSettingsFactory.cs" />

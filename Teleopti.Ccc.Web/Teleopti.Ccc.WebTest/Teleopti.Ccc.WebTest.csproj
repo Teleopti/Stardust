@@ -367,6 +367,7 @@
     <Compile Include="Areas\MultiTenancy\PersonInfoDeleteTest.cs" />
     <Compile Include="Areas\MultiTenancy\PersonInfoPersistTest.cs" />
     <Compile Include="Areas\MultiTenancy\TenantTestAttribute.cs" />
+    <Compile Include="Areas\Start\Core\WebApplicationAreaResolverTest.cs" />
     <Compile Include="Areas\TeamSchedule\Core\AbsenceHandler\AbsencePersisterTest.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\AgentsPerPagePersisterAndProviderTest.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\TeamScheduleProjectionProviderTests.cs" />

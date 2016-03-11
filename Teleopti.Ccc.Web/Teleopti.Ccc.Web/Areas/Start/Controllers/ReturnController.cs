@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.IdentityModel.Protocols.WSFederation;
@@ -11,28 +12,52 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 	{
 		public ViewResult Hash()
 		{
-			return View(new ReturnModel { UseRelative = ConfigurationManager.AppSettings.ReadValue("UseRelativeConfiguration") });
+			return View(
+				new ReturnModel
+				{
+					UseRelative = ConfigurationManager.AppSettings.ReadValue("UseRelativeConfiguration"),
+					ApplicationArea = WebApplicationAreaResolver.GetWebApplicationArea(Request, Url.Content("~/"))
+				});
 		}
-
+		
 		[ValidateInput(false)]
 		public ActionResult HandleReturn()
 		{
-			WSFederationMessage wsFederationMessage = WSFederationMessage.CreateFromNameValueCollection(WSFederationMessage.GetBaseUrl(ControllerContext.HttpContext.Request.Url), ControllerContext.HttpContext.Request.Form);
-			if (wsFederationMessage.Context != null)
+			var returnUrl = getWSFederationMessageReturnUrl();
+			if (!String.IsNullOrEmpty(returnUrl))
 			{
-				var wctx = HttpUtility.ParseQueryString(wsFederationMessage.Context);
-				string returnUrl = wctx["ru"];
-				if (!returnUrl.EndsWith("/"))
-					returnUrl += "/";
-
 				return new RedirectResult(returnUrl);
 			}
 			return new EmptyResult();
 		}
+
+		private string getWSFederationMessageReturnUrl()
+		{
+			var wsFederationMessage = WSFederationMessage.CreateFromNameValueCollection(WSFederationMessage.GetBaseUrl(ControllerContext.HttpContext.Request.Url), ControllerContext.HttpContext.Request.Form);
+			if (wsFederationMessage == null || wsFederationMessage.Context == null) return null;
+
+			return getReturnUrlQueryParameterFromUrl(wsFederationMessage.Context);
+			
+			}
+
+		private string getReturnUrlQueryParameterFromUrl(string context)
+		{
+			var queryNameValueCollection = HttpUtility.ParseQueryString(context);
+
+			var returnUrl = queryNameValueCollection["ru"];
+			if (!String.IsNullOrEmpty (returnUrl))
+			{
+				if (!returnUrl.EndsWith ("/"))
+					returnUrl += "/";
+			}
+			return returnUrl;
+		}
+		
 	}
 
 	public class ReturnModel
 	{
 		public bool UseRelative { get; set; }
+		public string ApplicationArea { get; set; }
 	}
 }
