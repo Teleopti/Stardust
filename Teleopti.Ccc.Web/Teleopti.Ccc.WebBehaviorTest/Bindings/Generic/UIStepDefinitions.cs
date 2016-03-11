@@ -1,5 +1,6 @@
 using System.Globalization;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I click( the)? ([a-z-]*|[a-z]* [a-z]*) '(.*)'")]
 		public void WhenIClickClassWithText(string the, CssClass cssClass, string text)
 		{
-			Browser.Interactions.ClickContaining("." + cssClass.Name, text);
+			Browser.Interactions.ClickUsingJQuery("." + cssClass.Name + ":contains(" + text + ")");
 		}
 
 		// I should see the message 'an error message'
