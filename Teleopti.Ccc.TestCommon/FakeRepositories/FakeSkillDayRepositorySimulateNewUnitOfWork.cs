@@ -1,27 +1,24 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Util;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakeSkillDayRepository : ISkillDayRepository
+	public class FakeSkillDayRepositorySimulateNewUnitOfWork : ISkillDayRepository
 	{
-		private readonly List<ISkillDay> _skillDays = new List<ISkillDay>();
-		private IEnumerable<SkillTaskDetailsModel> _skillTaskDetailsModels = new List<SkillTaskDetailsModel>();
+		private readonly List<Func<ISkillDay>> _skillDays = new List<Func<ISkillDay>>();
+
+		public void Has(IList<Func<ISkillDay>> skillDays)
+		{
+			_skillDays.AddRange(skillDays);
+		}
 
 		public void Add(ISkillDay root)
 		{
-			_skillDays.Add(root);
-		}
-
-		public IList<ISkillDay> Has(IList<ISkillDay> skillDays)
-		{
-			_skillDays.AddRange(skillDays);
-			return skillDays;
+			throw new NotImplementedException();
 		}
 
 		public void Remove(ISkillDay root)
@@ -44,17 +41,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public long CountAllEntities()
-		{
-			throw new NotImplementedException();
-		}
-
 		public void AddRange(IEnumerable<ISkillDay> entityCollection)
 		{
 			throw new NotImplementedException();
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }
+
 		public ICollection<ISkillDay> FindRange(DateOnlyPeriod period, ISkill skill, IScenario scenario)
 		{
 			throw new NotImplementedException();
@@ -84,21 +77,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public ICollection<ISkillDay> FindReadOnlyRange(DateOnlyPeriod period, IList<ISkill> skills, IScenario scenario)
 		{
 			return _skillDays
-				.Where(skillDayInDb => 
-						skillDayInDb.Scenario.Equals(scenario) && 
-						period.Contains(skillDayInDb.CurrentDate) && 
-						skills.Contains(skillDayInDb.Skill))
+				.Select(skillDayFunc => skillDayFunc())
+				.Where(skillDay => skillDay.Scenario.Equals(scenario) && 
+													 period.Contains(skillDay.CurrentDate) && 
+													 skills.Contains(skillDay.Skill))
 				.ToList();
 		}
 
 		public IEnumerable<SkillTaskDetailsModel> GetSkillsTasksDetails(DateTimePeriod period, IList<ISkill> skills, IScenario scenario)
 		{
-			return _skillTaskDetailsModels.Where(x=>x.Minimum >= period.StartDateTime && x.Minimum <=period.EndDateTime );
-		}
-
-		public void AddFakeTemplateTaskModels(IEnumerable<SkillTaskDetailsModel> skillTaskDetailsModels)
-		{
-			_skillTaskDetailsModels = skillTaskDetailsModels;
+			throw new NotImplementedException();
 		}
 	}
 }

@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.TestCommon
 			return skillDay;
 		}
 
-
 		public static ISkillDay CreateSkillDayWithDemand(this ISkill skill, IScenario scenario, DateOnly dateOnly, TimeSpan demand)
 		{
 			var skillDataPeriods = new List<ISkillDataPeriod>();
@@ -57,11 +56,22 @@ namespace Teleopti.Ccc.TestCommon
 			return skillDay;
 		}
 
-
 		public static IList<ISkillDay> CreateSkillDayWithDemand(this ISkill skill, IScenario scenario, DateOnlyPeriod period, TimeSpan demand)
 		{
 			return period.DayCollection()
 				.Select(dateOnly => CreateSkillDayWithDemand(skill, scenario, dateOnly, demand))
+				.ToList();
+		}
+
+		public static Func<ISkillDay> CreateSkillDayWithDemandFactory(this ISkill skill, IScenario scenario, DateOnly date, TimeSpan demand)
+		{
+			return () => CreateSkillDayWithDemand(skill, scenario, date, demand);
+		}
+
+		public static IList<Func<ISkillDay>> CreateSkillDayWithDemandFactory(this ISkill skill, IScenario scenario, DateOnlyPeriod period, TimeSpan demand)
+		{
+			return period.DayCollection()
+				.Select(day => CreateSkillDayWithDemandFactory(skill, scenario, day, demand))
 				.ToList();
 		}
 

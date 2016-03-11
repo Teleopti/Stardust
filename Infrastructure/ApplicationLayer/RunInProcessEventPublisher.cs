@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
@@ -8,10 +9,12 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	public class RunInProcessEventPublisher : IEventPublisher
 	{
 		private readonly ResolveEventHandlers _resolver;
+		private readonly IResolve _resolve;
 
-		public RunInProcessEventPublisher(ResolveEventHandlers resolver)
+		public RunInProcessEventPublisher(ResolveEventHandlers resolver, IResolve resolve)
 		{
 			_resolver = resolver;
+			_resolve = resolve;
 		}
 
 		public void Publish(params IEvent[] events)
@@ -19,15 +22,16 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var tasks = new List<Task>();
 			foreach (var @event in events)
 			{
-				var handlers = _resolver.ResolveInProcessForEvent(@event);
-				foreach (var handler in handlers)
+				tasks.Add(Task.Factory.StartNew(() =>
 				{
-					var method = _resolver.HandleMethodFor(handler.GetType(), @event);
-					tasks.Add(Task.Factory.StartNew(() =>
+					using (var scope = _resolve.NewScope())
 					{
-						method.Invoke(handler, new[] { @event });
-					}));
-				}
+						//fix soon - hard coded for now
+						var handler = scope.Resolve(typeof (IntradayOptimizationEventHandler));
+						var method = _resolver.HandleMethodFor(handler.GetType(), @event);
+						method.Invoke(handler, new[] {@event});
+					}
+				}));
 			}
 			Task.WaitAll(tasks.ToArray());
 		}

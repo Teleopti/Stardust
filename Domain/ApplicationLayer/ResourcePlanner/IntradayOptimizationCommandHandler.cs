@@ -16,15 +16,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 
 		public void Execute(IntradayOptimizationCommand command)
 		{
-			foreach (var island in _createIslands.Create(command.Period, command.Agents))
+			_eventPublisher.Publish(_createIslands.Create(command.Period, command.Agents).Select(island => new OptimizationWasOrdered
 			{
-				_eventPublisher.Publish(new OptimizationWasOrdered
-				{
-					Period = command.Period,
-					AgentIds = island.PersonsInIsland().Select(x => x.Id.Value),
-					RunResolveWeeklyRestRule = command.RunResolveWeeklyRestRule
-				});
-			}
+				Period = command.Period,
+				AgentIds = island.PersonsInIsland().Select(x => x.Id.Value),
+				RunResolveWeeklyRestRule = command.RunResolveWeeklyRestRule
+			}).ToArray());
 		}
 	}
 

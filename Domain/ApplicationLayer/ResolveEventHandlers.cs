@@ -17,35 +17,35 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_resolver = resolver;
 		}
 
-		private IEnumerable<object> resolveHandlersForEvent(IEvent @event)
+		private IEnumerable<object> resolveHandlersForEvent(IEvent @event, IResolve resolver)
 		{
 			var handlerType = typeof(IHandleEvent<>).MakeGenericType(@event.GetType());
 			var enumerableHandlerType = typeof(IEnumerable<>).MakeGenericType(handlerType);
-			return (_resolver.Resolve(enumerableHandlerType) as IEnumerable).Cast<object>();
+			return (resolver.Resolve(enumerableHandlerType) as IEnumerable).Cast<object>();
 		}
 
 		public IEnumerable<object> ResolveHangfireHandlersForEvent(IEvent @event)
 		{
-			return resolveHandlersForEvent(@event)
+			return resolveHandlersForEvent(@event, _resolver)
 				.OfType<IRunOnHangfire>();
 		}
 
 		public IEnumerable<object> ResolveServiceBusHandlersForEvent(IEvent @event)
 		{
-			return resolveHandlersForEvent(@event)
+			return resolveHandlersForEvent(@event, _resolver)
 				.OfType<IRunOnServiceBus>();
 		}
 
 		public IEnumerable<object> ResolveStardustHandlersForEvent(IEvent @event)
 		{
-			return resolveHandlersForEvent(@event)
+			return resolveHandlersForEvent(@event, _resolver)
 				.OfType<IRunOnStardust>();
 		}
 		
-		public IEnumerable<object> ResolveInProcessForEvent(IEvent @event)
+		public IEnumerable<object> ResolveInProcessForEvent(IEvent @event, IResolve scope)
 		{
-			return resolveHandlersForEvent(@event)
-				.OfType<IRunInProcess>();
+				return resolveHandlersForEvent(@event, scope)
+					.OfType<IRunInProcess>();
 		}
 
 		public MethodInfo HandleMethodFor(Type handler, IEvent @event)

@@ -240,6 +240,7 @@
     <Compile Include="Optimization\ScheduleOptimizationTests\IntradayOptimizationCallbackTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\IntradayOptimizationCommandSpecificTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\IntradayOptimizationDesktopTest.cs" />
+    <Compile Include="Optimization\ScheduleOptimizationTests\IntradayOptimizationIslandTests.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\IntradayOptimizationStopWhenLargeGroupTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\IntradayOptimizationTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\TrackIntradayOptimizationCallback.cs" />
