@@ -207,16 +207,19 @@ namespace Stardust.Manager
 			}
 		}
 
-		public void Add(WorkerNode job)
+		public void Add(WorkerNode node)
 		{
 			var policy = makeRetryPolicy();
 			try
 			{
-				policy.ExecuteAction(() => tryAdd(job));
+				policy.ExecuteAction(() => tryAdd(node));
 			}
 			catch (Exception ex)
 			{
-				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to add job in database");
+				if (ex.Message.Contains("UQ_WorkerNodes_Url"))
+					return;
+
+				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to add node in database");
 			}
 		}
 
