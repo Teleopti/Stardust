@@ -41,7 +41,7 @@
 									if ($scope.skillAreas.length === 0) {
 										$scope.selectedItem = $scope.skills[0];
 										if (autocompleteSkill) {
-											autocompleteSkill.selectedSkill = $scope.skills[0];
+											autocompleteSkill.selectedSkill = $scope.selectedItem;
 										}
 									}
 									if ($scope.skillAreas.length > 0) {
