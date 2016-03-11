@@ -66,7 +66,7 @@ INNER JOIN #ids on #ids.id = SearchValueId
 
 
 UPDATE [ReadModel].[FindPerson]
-SET SearchValue =  t.Name + ' ' + s.Name 
+SET SearchValue =  s.Name + ' ' + t.Name 
 FROM [ReadModel].[FindPerson] 
 INNER JOIN PersonPeriod pp ON pp.Id = SearchValueId
 INNER JOIN Team t ON pp.Team = t.Id
@@ -76,7 +76,7 @@ WHERE t.IsDeleted = 0 AND s.IsDeleted = 0
 
 
 UPDATE [ReadModel].[FindPerson]
-SET SearchValue =  t.Name + ' ' + s.Name 
+SET SearchValue =  s.Name + ' ' + t.Name 
 FROM [ReadModel].[FindPerson] 
 INNER JOIN PersonPeriod pp ON pp.Id = SearchValueId
 INNER JOIN Team t ON pp.Team = t.Id

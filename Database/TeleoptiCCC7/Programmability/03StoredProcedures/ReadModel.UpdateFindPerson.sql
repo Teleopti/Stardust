@@ -113,7 +113,7 @@ INNER JOIN BudgetGroup bg ON pp.BudgetGroup = bg.Id
 WHERE p.IsDeleted = 0 AND bg.IsDeleted = 0 
 
 INSERT [ReadModel].[FindPerson]
-SELECT DISTINCT p.Id,FirstName, LastName, EmploymentNumber, p.Note, TerminalDate, t.Name + ' ' + s.Name, 'Organization', NULL, NULL, NULL, pp.Id  
+SELECT DISTINCT p.Id,FirstName, LastName, EmploymentNumber, p.Note, TerminalDate, s.Name + ' ' + t.Name, 'Organization', NULL, NULL, NULL, pp.Id  
 FROM Person p WITH (NOLOCK)
 INNER JOIN #ids ids ON p.Id = ids.person
 INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
