@@ -118,6 +118,5 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				return -500;
 			}
 		}
-
 	}
 }

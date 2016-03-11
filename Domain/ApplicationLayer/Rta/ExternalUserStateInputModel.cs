@@ -36,5 +36,4 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return input.PlatformTypeId != null ? Guid.Parse(input.PlatformTypeId) : Guid.Empty;
 		}
 	}
-
 }
