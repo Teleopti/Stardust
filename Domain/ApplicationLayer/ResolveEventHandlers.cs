@@ -17,34 +17,34 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_resolver = resolver;
 		}
 
-		private IEnumerable<object> resolveHandlersForEvent(IEvent @event, IResolve resolver)
+		private IEnumerable<object> resolveHandlersForEvent(IEvent @event)
 		{
 			var handlerType = typeof(IHandleEvent<>).MakeGenericType(@event.GetType());
 			var enumerableHandlerType = typeof(IEnumerable<>).MakeGenericType(handlerType);
-			return (resolver.Resolve(enumerableHandlerType) as IEnumerable).Cast<object>();
+			return (_resolver.Resolve(enumerableHandlerType) as IEnumerable).Cast<object>();
 		}
 
 		public IEnumerable<object> ResolveHangfireHandlersForEvent(IEvent @event)
 		{
-			return resolveHandlersForEvent(@event, _resolver)
+			return resolveHandlersForEvent(@event)
 				.OfType<IRunOnHangfire>();
 		}
 
 		public IEnumerable<object> ResolveServiceBusHandlersForEvent(IEvent @event)
 		{
-			return resolveHandlersForEvent(@event, _resolver)
+			return resolveHandlersForEvent(@event)
 				.OfType<IRunOnServiceBus>();
 		}
 
 		public IEnumerable<object> ResolveStardustHandlersForEvent(IEvent @event)
 		{
-			return resolveHandlersForEvent(@event, _resolver)
+			return resolveHandlersForEvent(@event)
 				.OfType<IRunOnStardust>();
 		}
 		
-		public IEnumerable<object> ResolveInProcessForEvent(IEvent @event, IResolve scope)
+		public IEnumerable<object> ResolveInProcessForEvent(IEvent @event)
 		{
-				return resolveHandlersForEvent(@event, scope)
+				return resolveHandlersForEvent(@event)
 					.OfType<IRunInProcess>();
 		}
 

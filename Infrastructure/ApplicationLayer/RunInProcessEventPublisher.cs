@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Optimization;
@@ -22,6 +23,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var tasks = new List<Task>();
 			foreach (var @event in events)
 			{
+				//fix soon - hard coded for now
+				if (!_resolver.ResolveInProcessForEvent(@event).Any())
+					return;
 				tasks.Add(Task.Factory.StartNew(() =>
 				{
 					using (var scope = _resolve.NewScope())
