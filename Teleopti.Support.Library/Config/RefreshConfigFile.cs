@@ -13,10 +13,10 @@ namespace Teleopti.Support.Library.Config
 		private readonly FileConfigurator _fileConfigurator;
 		private readonly IMachineKeyChecker _machineKeyChecker;
 
-		public RefreshConfigFile(FileConfigurator fileConfigurator, IMachineKeyChecker machineKeyChecker)
+		public RefreshConfigFile()
 		{
-			_fileConfigurator = fileConfigurator;
-			_machineKeyChecker = machineKeyChecker;
+			_fileConfigurator = new FileConfigurator();
+			_machineKeyChecker = new MachineKeyChecker();
 		}
 
 		public void ReplaceFile(string destinationAndSource, SearchReplaceCollection searchReplaceCollection)
