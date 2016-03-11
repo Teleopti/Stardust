@@ -49,8 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 				day.vtacw = workloadDay.TotalAverageAfterTaskTime.TotalSeconds;
 
 				if (Math.Abs(workloadDay.CampaignTasks.Value) > 0
-					&& !workloadDay.OverrideTasks.HasValue 
-					&& (workloadDay.OverrideAverageTaskTime.HasValue || workloadDay.OverrideAverageAfterTaskTime.HasValue))
+					&& (workloadDay.OverrideTasks.HasValue  || workloadDay.OverrideAverageTaskTime.HasValue || workloadDay.OverrideAverageAfterTaskTime.HasValue))
 				{
 					day.vcombo = 1;
 				}

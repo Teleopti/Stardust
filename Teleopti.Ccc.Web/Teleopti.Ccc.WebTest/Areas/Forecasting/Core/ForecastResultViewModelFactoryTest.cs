@@ -143,6 +143,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			(Math.Round((double)firstDay.vcombo, 2)).Should().Be.EqualTo(1d);
 		}
 
+		[Test]
+		public void ShouldCreateViewModelWhenHaveBothCampaignCallsAndOverrideCalls()
+		{
+			stubForecastDataForOneDay(new Task(8.1d, TimeSpan.FromSeconds(100), TimeSpan.FromSeconds(200)), new Percent(150), 20.1d, null, null);
+
+			var target = new ForecastResultViewModelFactory(_workloadRepository, _skillDayRepository, _futureData);
+			var result = target.Create(_workload.Id.Value, _futurePeriod, _scenario);
+
+			dynamic firstDay = result.Days.First();
+			(Math.Round((double)firstDay.vcombo, 2)).Should().Be.EqualTo(1d);
+		}
+
 		[Test, ExpectedException(typeof(RuntimeBinderException))]
 		public void ShouldNotHaveVoverrideInViewModelWhenHaveBothCampaignCallsAndOverrideAcw()
 		{
