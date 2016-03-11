@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			var target = Path.Combine(path, fileName);
 			var localTarget = Path.Combine(sqlBackupPath(), fileName);
 			_usingMaster.Execute(string.Format(@"BACKUP DATABASE {0} TO DISK = '{1}' WITH FORMAT", _databaseName, localTarget));
-			File.Copy(localTarget, target);
+			File.Copy(localTarget, target, true);
 			File.Delete(localTarget);
 		}
 
