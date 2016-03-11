@@ -82,7 +82,7 @@ namespace Manager.Integration.Test
 		private void WaitForNodeTimeout()
 		{
 			//MUST BE CHANGED TO FIT CONFIGURATION
-			Thread.Sleep(TimeSpan.FromSeconds(60));
+			Thread.Sleep(TimeSpan.FromSeconds(120));
 			// = (alloweddowntime * 2)
 		}
 
