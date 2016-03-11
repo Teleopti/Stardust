@@ -1,11 +1,11 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Infrastructure.Analytics;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Rta.PerformanceTest.Code
@@ -15,31 +15,36 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		private readonly IAgentStateReadModelPersister _persister;
 		private readonly StatesSender _sender;
 		private readonly WithAnalyticsUnitOfWork _unitOfWork;
+		private readonly IDataSourceScope _dataSource;
 
 		public StatesArePersisted(
 			IAgentStateReadModelPersister persister,
 			StatesSender sender,
-			WithAnalyticsUnitOfWork unitOfWork)
+			WithAnalyticsUnitOfWork unitOfWork,
+			IDataSourceScope dataSource)
 		{
 			_persister = persister;
 			_sender = sender;
 			_unitOfWork = unitOfWork;
+			_dataSource = dataSource;
 		}
 
 		[LogTime]
 		public virtual void WaitForAll()
 		{
 			var timeWhenLastStateWasSent = _sender.SentSates().Max(x => x.Time);
-			while (true)
+			using (_dataSource.OnThisThreadUse(DataSourceHelper.TestTenantName))
 			{
-				var states = Enumerable.Empty<AgentStateReadModel>();
 				_unitOfWork.Do(() =>
 				{
-					states = _persister.GetAll();
+					while (true)
+					{
+						var states = _persister.GetAll();
+						if (states.All(x => x.ReceivedTime == timeWhenLastStateWasSent.Utc()))
+							break;
+						Thread.Sleep(20);
+					}
 				});
-				if (states.All(x => x.ReceivedTime == timeWhenLastStateWasSent.Utc()))
-					break;
-				Thread.Sleep(20);
 			}
 		}
 	}

@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			var config = base.Config();
 			config.FakeConnectionString("MessageBroker", InfraTestConfigReader.AnalyticsConnectionString);
 			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ConnectionString);
+			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
 			return config;
 		}
 

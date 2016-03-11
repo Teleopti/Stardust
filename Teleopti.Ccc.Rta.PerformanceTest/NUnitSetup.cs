@@ -35,13 +35,17 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			var dataHash = defaultData.HashValue ^ TestConfiguration.HashValue;
 			var path = Path.Combine(InfraTestConfigReader.DatabackBackupLocation, "Rta");
 
-			if (DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
-				DataSourceHelper.TryRestoreAnalyticsDatabaseBySql(path, dataHash))
-			{
-				TestSiteConfigurationSetup.StartApplicationSync();
-				return;
-			}
+			var haveDatabase =
+				DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
+				DataSourceHelper.TryRestoreAnalyticsDatabaseBySql(path, dataHash);
+			if (!haveDatabase)
+				createDatabase(defaultData, path, dataHash);
 
+			TestSiteConfigurationSetup.StartApplicationSync();
+		}
+
+		private static void createDatabase(DefaultData defaultData, string path, int dataHash)
+		{
 			DataSourceHelper.CreateDatabases();
 
 			var builder = new ContainerBuilder();
@@ -56,32 +60,29 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			builder.RegisterType<Http>().SingleInstance();
 			builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();
 			builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
-
 			var container = builder.Build();
 
-			var datasource = DataSourceHelper.CreateDataSource(container.Resolve<ICurrentPersistCallbacks>());
-
 			StateHolderProxyHelper.SetupFakeState(
-				datasource,
+				DataSourceHelper.CreateDataSource(container.Resolve<ICurrentPersistCallbacks>()),
 				DefaultPersonThatCreatesDbData.PersonThatCreatesDbData,
 				DefaultBusinessUnit.BusinessUnitFromFakeState,
 				new ThreadPrincipalContext()
 				);
+
 			GlobalUnitOfWorkState.CurrentUnitOfWorkFactory = UnitOfWorkFactory.CurrentUnitOfWorkFactory();
 
 			defaultData.ForEach(dataSetup => GlobalDataMaker.Data().Apply(dataSetup));
 
 			container.Resolve<DataCreator>().Create();
 
-			Debug.WriteLine("backing up");
 			DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);
 			DataSourceHelper.BackupAnalyticsDatabaseBySql(path, dataHash);
 
-			TestSiteConfigurationSetup.StartApplicationSync();
+			StateHolderProxyHelper.Logout(new ThreadPrincipalContext());
 		}
 
 		[TearDown]
-		public void CleanUp()
+		public void Teardown()
 		{
 			TestSiteConfigurationSetup.TearDown();
 		}
