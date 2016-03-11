@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
-	public class AnalyticsPersonRepository : IAnalyticsPersonPeriodRepository
+	public class  AnalyticsPersonRepository : IAnalyticsPersonPeriodRepository
 	{
 		public int BusinessUnitId(Guid businessUnitCode)
 		{
@@ -307,6 +307,26 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					.SetGuid("PersonPeriodCode", analyticsPersonPeriod.PersonPeriodCode);
 				query.ExecuteUpdate();
 			}
+		}
+
+		public IList<AnalyticsBridgeAcdLoginPerson> GetBridgeAcdLoginPersonsForPerson(int personId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<AnalyticsBridgeAcdLoginPerson> GetBridgeAcdLoginPersonsForAcdLoginPersons(int acdLoginId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddBridgeAcdLoginPerson(AnalyticsBridgeAcdLoginPerson bridgeAcdLoginPerson)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void DeleteBridgeAcdLoginPerson(int acdLoginId, int personId)
+		{
+			throw new NotImplementedException();
 		}
 
 		public void UpdatePersonPeriod(AnalyticsPersonPeriod personPeriod)

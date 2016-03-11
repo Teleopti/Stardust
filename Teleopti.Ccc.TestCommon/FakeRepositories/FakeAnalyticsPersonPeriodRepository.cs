@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public readonly DateTime SetupEndDate;
 		readonly List<AnalyticsDate> fakeDates = new List<AnalyticsDate>();
 		private readonly List<AnalyticsPersonPeriod> fakePersonPeriods;
+		private readonly List<AnalyticsBridgeAcdLoginPerson> fakeAcdLoginPersons; 
 
 		public FakeAnalyticsPersonPeriodRepository(DateTime setupStartDate, DateTime setupEndDate)
 		{
@@ -21,6 +22,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			SetupEndDate = setupEndDate;
 
 			fakePersonPeriods = new List<AnalyticsPersonPeriod>();
+			fakeAcdLoginPersons = new List<AnalyticsBridgeAcdLoginPerson>();
 
 			initDates();
 		}
@@ -83,6 +85,26 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public void DeletePersonPeriod(AnalyticsPersonPeriod analyticsPersonPeriod)
 		{
 			throw new NotImplementedException();
+		}
+
+		public IList<AnalyticsBridgeAcdLoginPerson> GetBridgeAcdLoginPersonsForPerson(int personId)
+		{
+			return fakeAcdLoginPersons.Where(a => a.PersonId == personId).ToList();
+		}
+
+		public IList<AnalyticsBridgeAcdLoginPerson> GetBridgeAcdLoginPersonsForAcdLoginPersons(int acdLoginId)
+		{
+			return fakeAcdLoginPersons.Where(a => a.AcdLoginId == acdLoginId).ToList();
+		}
+
+		public void AddBridgeAcdLoginPerson(AnalyticsBridgeAcdLoginPerson bridgeAcdLoginPerson)
+		{
+			fakeAcdLoginPersons.Add(bridgeAcdLoginPerson);
+		}
+
+		public void DeleteBridgeAcdLoginPerson(int acdLoginId, int personId)
+		{
+			fakeAcdLoginPersons.RemoveAll(a => a.AcdLoginId == acdLoginId && a.PersonId == personId);
 		}
 
 		public IList<AnalyticsPersonPeriod> GetPersonPeriods(Guid personCode)

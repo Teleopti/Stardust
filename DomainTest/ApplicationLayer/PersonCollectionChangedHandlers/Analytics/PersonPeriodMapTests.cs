@@ -65,23 +65,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				skillSet3
 			};
 
-			foreach (
-				var newBridgeSkillSetSkillsFromSkill in
-					PersonPeriodTransformer.NewBridgeSkillSetSkillsFromSkills(skills1, skillSet1.SkillsetId))
+			foreach (var newBridges in PersonPeriodTransformer.NewBridgeSkillSetSkillsFromSkills(skills1, skillSet1.SkillsetId))
 			{
-				fakeAnalyticsSkillRepository.AddBridgeSkillsetSkill(newBridgeSkillSetSkillsFromSkill);
+				fakeAnalyticsSkillRepository.AddBridgeSkillsetSkill(newBridges);
 			}
-			foreach (
-				var newBridgeSkillSetSkillsFromSkill in
-					PersonPeriodTransformer.NewBridgeSkillSetSkillsFromSkills(skills2, skillSet2.SkillsetId))
+			foreach (var newBridges in PersonPeriodTransformer.NewBridgeSkillSetSkillsFromSkills(skills2, skillSet2.SkillsetId))
 			{
-				fakeAnalyticsSkillRepository.AddBridgeSkillsetSkill(newBridgeSkillSetSkillsFromSkill);
+				fakeAnalyticsSkillRepository.AddBridgeSkillsetSkill(newBridges);
 			}
-			foreach (
-				var newBridgeSkillSetSkillsFromSkill in
-					PersonPeriodTransformer.NewBridgeSkillSetSkillsFromSkills(skills3, skillSet3.SkillsetId))
+			foreach (var newBridges in PersonPeriodTransformer.NewBridgeSkillSetSkillsFromSkills(skills3, skillSet3.SkillsetId))
 			{
-				fakeAnalyticsSkillRepository.AddBridgeSkillsetSkill(newBridgeSkillSetSkillsFromSkill);
+				fakeAnalyticsSkillRepository.AddBridgeSkillsetSkill(newBridges);
 			}
 
 

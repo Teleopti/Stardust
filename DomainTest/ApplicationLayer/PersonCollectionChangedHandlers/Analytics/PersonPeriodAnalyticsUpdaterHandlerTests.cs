@@ -224,5 +224,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			personPeriod.SetId(id ?? Guid.NewGuid());
 			return personPeriod;
 		}
+
+		
 	}
 }

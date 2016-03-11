@@ -22,5 +22,10 @@ namespace Teleopti.Ccc.Domain.Repositories
 		int IntervalsPerDay();
 		int MaxIntervalId();
 		void DeletePersonPeriod(AnalyticsPersonPeriod analyticsPersonPeriod);
+
+		IList<AnalyticsBridgeAcdLoginPerson> GetBridgeAcdLoginPersonsForPerson(int personId);
+		IList<AnalyticsBridgeAcdLoginPerson> GetBridgeAcdLoginPersonsForAcdLoginPersons(int acdLoginId);
+		void AddBridgeAcdLoginPerson(AnalyticsBridgeAcdLoginPerson bridgeAcdLoginPerson);
+		void DeleteBridgeAcdLoginPerson(int acdLoginId, int personId);
 	}
 }

@@ -247,10 +247,12 @@
     <Compile Include="ApplicationLayer\Events\PersonAssociationChangedEvent.cs" />
     <Compile Include="ApplicationLayer\ITimestamped.cs" />
     <Compile Include="ApplicationLayer\ITrackingMessageSender.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsBridgeAcdLoginPerson.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsBridgeSkillsetSkill.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsPersonPeriod.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsSkillSet.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsSkill.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\Transformer\AcdLoginPersonTransformer.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\Transformer\IntervalBase.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\Transformer\PersonPeriodFilter.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\Transformer\PersonPeriodTransformer.cs" />
