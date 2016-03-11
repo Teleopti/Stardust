@@ -20,7 +20,9 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -235,7 +237,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				builder.Register(context => context.Resolve<ICurrentUnitOfWorkFactory>().Current()).ExternallyOwned().As<IUnitOfWorkFactory>();
 				builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
 				//////
-				
+
+				builder.RegisterType<FillSchedulerStateHolder>().As<IFillSchedulerStateHolder>().AsSelf().SingleInstance();
+				builder.RegisterType<SynchronizeSchedulerStateHolderDesktop>().As<ISynchronizeIntradayOptimizationResult>().SingleInstance();
+
 				builder.Register(c => new WebConfigReader(() =>
 				{
 					var webSettings = new WebSettings
@@ -247,6 +252,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					};
 					return webSettings;
 				})).As<IConfigReader>().SingleInstance();
+
 				return builder.Build();
 			}
 		}

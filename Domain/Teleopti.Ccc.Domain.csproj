@@ -749,6 +749,7 @@
     <Compile Include="Optimization\PersistIntradayOptimizationResult.cs" />
     <Compile Include="Optimization\ScheduleOptimization.cs" />
     <Compile Include="Optimization\SchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
+    <Compile Include="Optimization\SynchronizeSchedulerStateHolderDesktop.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffsInPeriodValidator.cs" />
     <Compile Include="Optimization\OptimizationResultModel.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\WeeklyRestSolverExecuter.cs" />

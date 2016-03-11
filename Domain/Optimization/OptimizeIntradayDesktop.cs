@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.UserTexts;
@@ -10,7 +12,24 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		void Optimize(IEnumerable<IScheduleDay> scheduleDays, IOptimizationPreferences optimizerPreferences,
 			DateOnlyPeriod selectedPeriod, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
-			ISchedulingProgress backgroundWorker);
+			ISchedulingProgress backgroundWorker);	
+	}
+
+	public class OptimizeIntradayIslandsDesktop : IOptimizeIntradayDesktop
+	{
+		private readonly IIntradayOptimizationCommandHandler _intradayOptimizationCommandHandler;
+
+		public OptimizeIntradayIslandsDesktop(IIntradayOptimizationCommandHandler intradayOptimizationCommandHandler)
+		{
+			_intradayOptimizationCommandHandler = intradayOptimizationCommandHandler;
+		}
+
+		public void Optimize(IEnumerable<IScheduleDay> scheduleDays, IOptimizationPreferences optimizerPreferences, DateOnlyPeriod selectedPeriod,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, ISchedulingProgress backgroundWorker)
+		{
+			var selectedAgents = scheduleDays.Select(x => x.Person).Distinct();
+			_intradayOptimizationCommandHandler.Execute(new IntradayOptimizationCommand() { Agents = selectedAgents, Period = selectedPeriod });				
+		}	
 	}
 
 	public class OptimizeIntradayDesktop : IOptimizeIntradayDesktop

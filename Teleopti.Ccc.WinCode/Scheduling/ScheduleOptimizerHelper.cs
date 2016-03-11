@@ -15,6 +15,8 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -60,8 +62,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		private void optimizeIntraday(IEnumerable<IScheduleDay> scheduleDays, IOptimizationPreferences optimizerPreferences,
 									DateOnlyPeriod selectedPeriod, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
-		{
-			_optimizeIntradayDesktop.Optimize(scheduleDays, optimizerPreferences, selectedPeriod, dayOffOptimizationPreferenceProvider, _backgroundWorker);
+		{	
+			var filler = _container.Resolve<FillSchedulerStateHolder>();
+			using(filler.Add(_schedulerStateHolder()))
+			{
+				_optimizeIntradayDesktop.Optimize(scheduleDays, optimizerPreferences, selectedPeriod, dayOffOptimizationPreferenceProvider, _backgroundWorker);
+			}	
 		}
 
 		private void optimizeWorkShifts(
