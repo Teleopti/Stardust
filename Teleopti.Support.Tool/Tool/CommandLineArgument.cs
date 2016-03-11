@@ -54,9 +54,12 @@ namespace Teleopti.Support.Tool.Tool
 
 			Command = modeCommonCommand;
 
-			_args.ForEach(argument =>
+			_args
+				.Select(a => a.ToUpper())
+				.ForEach(argument =>
 			{
-				if (new[] { "-?", "?", "-h", "-H", "-HELP", "HELP" }.Contains(argument))
+
+				if (new[] { "-?", "?", "-H", "-HELP", "HELP" }.Contains(argument))
 					Command = helpCommand;
 
 
