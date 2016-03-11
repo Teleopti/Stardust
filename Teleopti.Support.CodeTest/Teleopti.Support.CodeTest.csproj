@@ -64,6 +64,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Tool\CommandLineArgumentTest.cs" />
     <Compile Include="Tool\MachineKeyCheckerTests.cs" />
   </ItemGroup>
   <ItemGroup>

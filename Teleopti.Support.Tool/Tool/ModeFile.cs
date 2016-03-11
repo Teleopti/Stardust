@@ -5,16 +5,25 @@ namespace Teleopti.Support.Tool.Tool
 {
 	public class ModeFile
 	{
-		private readonly string _file;
 
-		public ModeFile(string file)
+		public string Type { get; private set; }
+
+		public ModeFile(string type)
 		{
-			_file = file;
+			Type = type;
 		}
 
 		public string[] FileContents()
 		{
-			return File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"ConfigFiles\" + _file));
+			var file = "ConfigFiles.txt";
+			if (Type.Equals("DEPLOY",StringComparison.InvariantCultureIgnoreCase))
+				file = "DeployConfigFiles.txt";
+			if (Type.Equals("TEST",StringComparison.InvariantCultureIgnoreCase))
+				file = "BuildServerConfigFiles.txt";
+			if (Type.Equals("AZURE",StringComparison.InvariantCultureIgnoreCase))
+				file = "AzureConfigFiles.txt";
+
+			return File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"ConfigFiles\" + file));
 		}
 	}
 }

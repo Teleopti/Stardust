@@ -32,7 +32,7 @@ IF ERRORLEVEL 2 SET ToggleMode=RC
 IF ERRORLEVEL 3 SET ToggleMode=R
 )
 
-SET SourceSettings=%ROOTDIR%\.debug-setup\config\settings.txt
+SET SourceSettings=%ROOTDIR%\.debug-setup\config\settingsInfraTest.txt
 SET AppliedSettings=%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\settings.txt
 
 ::Build Teleopti.Support.Tool.exe if source files are available (they aren't in pipeline)
@@ -40,13 +40,14 @@ if exist "%ROOTDIR%\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" %MSBUILD
 
 ::get a fresh Settings.txt
 COPY "%SourceSettings%" "%AppliedSettings%"
+ECHO. >> "%AppliedSettings%"
+ECHO $(DB_CCC7)^|%CCC7DB%>>"%AppliedSettings%"
+ECHO $(DB_ANALYTICS)^|%AnalyticsDB%>>"%AppliedSettings%"
+ECHO $(AS_DATABASE)^|%AnalyticsDB%>>"%AppliedSettings%"
+ECHO $(ToggleMode)^|%ToggleMode%>>"%AppliedSettings%"
+ECHO $(SQL_AUTH_STRING)^|%sqlAuthString%>>"%AppliedSettings%"
 
 ::Run supportTool to replace all config
-"%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -SET $(DB_CCC7) %CCC7DB%
-"%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -SET $(DB_ANALYTICS) %AnalyticsDB%
-"%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -SET $(AS_DATABASE) %AnalyticsDB%
-"%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -SET $(ToggleMode) %ToggleMode%
-"%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -SET $(SQL_AUTH_STRING) %sqlAuthString%
 "%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -MOTEST
 
 ENDLOCAL

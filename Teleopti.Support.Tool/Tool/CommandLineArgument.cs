@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Teleopti.Ccc.TestCommon.Web.WebInteractions;
+﻿using System;
+using System.Globalization;
 using Teleopti.Support.Library.Config;
 
 namespace Teleopti.Support.Tool.Tool
@@ -13,90 +12,86 @@ namespace Teleopti.Support.Tool.Tool
 
 	public class CommandLineArgument : ICommandLineArgument
 	{
-		private readonly IEnumerable<string> _args;
+		private readonly string[] _argumentCollection;
+		private readonly Func<string, ISupportCommand> _helpCommand;
 
-		public CommandLineArgument(IEnumerable<string> args)
+		public CommandLineArgument(string[] argumentCollection, Func<string, ISupportCommand> helpCommand)
 		{
-			_args = args;
-			readArguments();
+			_argumentCollection = argumentCollection;
+			_helpCommand = helpCommand;
+			ReadArguments();
 		}
 
 		public ISupportCommand Command { get; private set; }
 
 		public ModeFile Mode { get; private set; }
 
-		private string _helpText = @"Command line arguments:
+		public string Help
+		{
+			get
+			{
+				return @"Command line arguments:
 
 		-? or ? or -HELP or HELP, Shows this help
-		-MO[MODE] is where to put the config files values: Develop or Deploy (Develop is default)
-			-BC Backup config settings for SSO, combine with -MO ( before patching if there is custom settings)
-			-RC Restore the config settings for SSO from the backup, combine with -MO (use after patching if there is custom settings)
-		-TC[ALL|RC|CUSTOMER] Set ToggleMode to ALL, RC or CUSTOMER.
-		-SET [searchFor] [replaceWith] Set a setting value
+		-MO  (Mode )is where to put the config files values: Develop or Deploy (Develop is default)
+		-BC Backup config settings for SSO, combine with -MO ( before patching if there is custom settings)
+		-RC Restore the config settings for SSO from the backup, combine with -MO (use after patching if there is custom settings)
+		  -TC Set ToggleMode to ALL, RC or CUSTOMER.
 				Example: Teleopti.Support.Tool.exe -TC""ALL""";
+			}
+		}
 
-		private void readArguments()
+		private void ReadArguments()
 		{
-			var helpCommand = new HelpWindow(_helpText);
 			var restoreCommand = new SsoConfigurationRestoreHandler(new CustomSection(), new SsoFilePathReader());
-			var backupCommand = new SsoConfigurationBackupHandler(new CustomSection(), new SsoFilePathReader());
 
-			var modeCommonCommand = new CompositeCommand(
-				new RefreshConfigsRunner(new RefreshConfigFile()),
+			Command = new CompositeCommand(
+				new RefreshConfigsRunner(
+					new RefreshConfigFile(
+						new FileConfigurator(),
+						new MachineKeyChecker()
+						)
+					),
 				restoreCommand,
 				new MoveCustomReportsCommand()
 				);
 
-			var modeDeployCommand = new CompositeCommand(
-				new RefreshConfigsRunner(new RefreshConfigFile()),
-				restoreCommand
-				);
-
-			Command = modeCommonCommand;
-
-			_args.ForEach(argument =>
+			foreach (string s in _argumentCollection)
 			{
-				if (new[] { "-?", "?", "-h", "-H", "-HELP", "HELP" }.Contains(argument))
-					Command = helpCommand;
-
-
-
-				if (argument.StartsWith("-MO"))
+				switch (s)
 				{
-					Mode = new ModeFile("ConfigFiles.txt");
-					Command = modeCommonCommand;
-				}
-				if (argument.StartsWith("-MODEPLOY"))
-				{
-					Mode = new ModeFile("DeployConfigFiles.txt");
-					Command = modeDeployCommand;
-				}
-				if (argument.StartsWith("-MOAZURE"))
-					Mode = new ModeFile("AzureConfigFiles.txt");
-				if (argument.StartsWith("-MOTEST"))
-					Mode = new ModeFile("BuildServerConfigFiles.txt");
-
-
-
-				if (argument.StartsWith("-BC"))
-					Command = backupCommand;
-				if (argument.StartsWith("-RC"))
-					Command = restoreCommand;
-
-
-
-				if (argument.StartsWith("-TC"))
-				{
-					Mode = null;
-					Command = new SetToggleModeCommand(argument.Remove(0, 3));
+					case "-?":
+					case "?":
+					case "-HELP":
+					case "HELP":
+						Command = _helpCommand.Invoke(Help);
+						continue;
 				}
 
+				string switchType = s.Substring(0, 3).ToUpper(CultureInfo.CurrentCulture);
+				string switchValue = s.Remove(0, 3);
 
-
-				if (argument.Equals("-SET"))
-					Command = new SetSettingCommand(_args.ElementAt(1), _args.ElementAt(2));
-			});
-
+				switch (switchType)
+				{
+					case "-MO": // Mode.
+						Mode = new ModeFile(switchValue);
+						break;
+					case "-BC":
+						Command = new SsoConfigurationBackupHandler(new CustomSection(), new SsoFilePathReader());
+						break;
+					case "-RC":
+						Command = restoreCommand;
+						break;
+					case "-TC":
+						Mode = null;
+						if (string.IsNullOrEmpty(switchValue))
+						{
+							switchValue = "CUSTOMER";
+						}
+						Command = new SetToggleModeCommand(switchValue);
+						break;
+				}
+			}
 		}
 
 	}

@@ -24,7 +24,7 @@ namespace Teleopti.Support.Tool
 			}
 			else
 			{
-				var commandLineArgument = new CommandLineArgument(args);
+				var commandLineArgument = new CommandLineArgument(args, x => new HelpWindow(x));
 				commandLineArgument.Command.Execute(commandLineArgument.Mode);
 			}
 		}

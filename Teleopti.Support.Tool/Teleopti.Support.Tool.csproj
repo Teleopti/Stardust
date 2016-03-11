@@ -248,7 +248,6 @@
     <Compile Include="Tool\ModeFile.cs" />
     <Compile Include="Tool\MoveCustomReportsCommand.cs" />
     <Compile Include="Tool\RefreshConfigsRunner.cs" />
-    <Compile Include="Tool\SetSettingCommand.cs" />
     <Compile Include="Tool\SetToggleModeCommand.cs" />
     <Compile Include="Tool\SsoConfigurationBackupHandler.cs" />
     <Compile Include="Tool\SsoConfigurationRestoreHandler.cs" />
