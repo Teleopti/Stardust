@@ -311,22 +311,86 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public IList<AnalyticsBridgeAcdLoginPerson> GetBridgeAcdLoginPersonsForPerson(int personId)
 		{
-			throw new NotImplementedException();
+			using (var uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				return uow.Session().CreateSQLQuery(
+					@"SELECT [acd_login_id] AcdLoginId
+							,[person_id] PersonId
+							,[team_id] TeamId
+							,[business_unit_id] BusinessUnitId
+							,[datasource_id] DatasourceId
+							,[insert_date] InsertDate
+							,[update_date] UpdateDate
+							,[datasource_update_date] DatasourceUpdateDate
+						 from mart.[bridge_acd_login_person] WITH (NOLOCK) WHERE person_id =:PersonId ")
+					.SetInt32("PersonId", personId)
+					.SetResultTransformer(Transformers.AliasToBean(typeof (AnalyticsBridgeAcdLoginPerson)))
+					.SetReadOnly(true)
+					.List<AnalyticsBridgeAcdLoginPerson>();
+			}
 		}
 
 		public IList<AnalyticsBridgeAcdLoginPerson> GetBridgeAcdLoginPersonsForAcdLoginPersons(int acdLoginId)
 		{
-			throw new NotImplementedException();
+			using (var uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				return uow.Session().CreateSQLQuery(
+					@"SELECT [acd_login_id] AcdLoginId
+							,[person_id] PersonId
+							,[team_id] TeamId
+							,[business_unit_id] BusinessUnitId
+							,[datasource_id] DatasourceId
+							,[insert_date] InsertDate
+							,[update_date] UpdateDate
+							,[datasource_update_date] DatasourceUpdateDate
+						 from mart.[bridge_acd_login_person] WITH (NOLOCK) WHERE acd_login_id=:AcdLoginId")
+					.SetInt32("AcdLoginId", acdLoginId)
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsBridgeAcdLoginPerson)))
+					.SetReadOnly(true)
+					.List<AnalyticsBridgeAcdLoginPerson>();
+			}
 		}
 
 		public void AddBridgeAcdLoginPerson(AnalyticsBridgeAcdLoginPerson bridgeAcdLoginPerson)
 		{
-			throw new NotImplementedException();
+			using (var uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				var insertAndUpdateDateTime = DateTime.Now;
+				var query = uow.Session().CreateSQLQuery(
+					@"exec mart.[etl_bridge_acd_login_person_insert]
+                     @acd_login_id=:AcdLoginId
+                    ,@person_id=:PersonId
+					,@team_id=:TeamId
+                    ,@business_unit_id=:BusinessUnitId
+                    ,@datasource_id=:DatasourceId
+                    ,@insert_date=:InsertDate
+                    ,@update_date=:UpdateDate
+                    ,@datasource_update_date=:DatasourceUpdateDate")
+					.SetInt32("AcdLoginId", bridgeAcdLoginPerson.AcdLoginId)
+					.SetInt32("PersonId", bridgeAcdLoginPerson.PersonId)
+					.SetInt32("TeamId", bridgeAcdLoginPerson.TeamId)
+					.SetInt32("BusinessUnitId", bridgeAcdLoginPerson.BusinessUnitId)
+					.SetInt32("DatasourceId", bridgeAcdLoginPerson.DatasourceId)
+					.SetDateTime("InsertDate", insertAndUpdateDateTime)
+					.SetDateTime("UpdateDate", insertAndUpdateDateTime)
+					.SetDateTime("DatasourceUpdateDate", bridgeAcdLoginPerson.DatasourceUpdateDate);
+
+				query.ExecuteUpdate();
+			}
 		}
 
 		public void DeleteBridgeAcdLoginPerson(int acdLoginId, int personId)
 		{
-			throw new NotImplementedException();
+			using (var uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				var query = uow.Session().CreateSQLQuery(
+					@"exec mart.[etl_bridge_acd_login_person_insert]
+                     @acd_login_id=:AcdLoginId
+                    ,@person_id=:PersonId")
+					.SetInt32("AcdLoginId", acdLoginId)
+					.SetInt32("PersonId", personId);
+				query.ExecuteUpdate();
+			}
 		}
 
 		public void UpdatePersonPeriod(AnalyticsPersonPeriod personPeriod)
