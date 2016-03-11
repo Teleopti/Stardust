@@ -258,7 +258,7 @@ define([
 		signalrhubs
 			.start()
 			.fail(function() {
-				errorview("SignalR failed to start");
+				errorview.display("SignalR failed to start");
 			});
 	}
 
