@@ -184,8 +184,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			{
 				Application = new FakeUnitOfWorkFactory
 				{
-					Name = name,
-					ConnectionString = _config.ConnectionString("RtaApplication")
+					Name = name
 				}
 			};
 			_dataSourceForTenant.Has(dataSource);
