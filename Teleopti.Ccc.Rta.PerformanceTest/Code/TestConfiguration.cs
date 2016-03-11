@@ -3,9 +3,9 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 	public class TestConfiguration
 	{
 		// change this whenever anything created by DataCreator changes
-		public static int HashValue = 4563268;
+		public static int HashValue = 89243;
 
-		public int NumberOfAgents = 500;
+		public int NumberOfAgents = 2000;
 
 		// this is the switch id
 		// and is sent with the state
