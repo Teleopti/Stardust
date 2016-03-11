@@ -1,9 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics.Transformer;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
@@ -14,6 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		IRunOnServiceBus
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (PersonPeriodAnalyticsUpdater));
+		private AcdLoginPersonTransformer _analyticsAcdLoginPerson;
 		private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
 		private readonly IAnalyticsSkillRepository _analyticsSkillRepository;
 		private readonly IPersonRepository _personRepository;
@@ -25,6 +30,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			_personRepository = personRepository;
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
 			_analyticsSkillRepository = analyticsSkillRepository;
+
+			_analyticsAcdLoginPerson = new AcdLoginPersonTransformer(_analyticsPersonPeriodRepository);
 		}
 
 		public void Handle(PersonCollectionChangedEvent @event)
@@ -79,6 +86,35 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 						var newAnalyticsPersonPeriod = transformer.Transform(person, personPeriod);
 						_analyticsPersonPeriodRepository.AddPersonPeriod(newAnalyticsPersonPeriod);
 					}
+
+					// Update/Add/Delete from Bridge Acd Login Person table
+					var existingPersonPeriod = personPeriodsInAnalytics.FirstOrDefault(a => a.PersonPeriodCode.Equals(personPeriod.Id.Value));
+					var bridgeListForPersonPeriod = _analyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForPerson(existingPersonPeriod.PersonId);
+					foreach (var externalLogOn in personPeriod.ExternalLogOnCollection)
+					{
+						if (!bridgeListForPersonPeriod.Any(a => a.AcdLoginId == externalLogOn.AcdLogOnMartId))
+						{
+							// Insert new acd login bridge
+							_analyticsAcdLoginPerson.AddAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson
+							{
+								AcdLoginId = externalLogOn.AcdLogOnMartId,
+								PersonId = existingPersonPeriod.PersonId,
+								TeamId = existingPersonPeriod.TeamId,
+								BusinessUnitId = existingPersonPeriod.BusinessUnitId,
+								DatasourceId = existingPersonPeriod.DatasourceId,
+								DatasourceUpdateDate = existingPersonPeriod.DatasourceUpdateDate
+							});
+						}
+					}
+
+					// Delete acd login bridge
+					foreach (var bridgeAcdLoginPerson in bridgeListForPersonPeriod)
+					{
+						if (!personPeriod.ExternalLogOnCollection.Any(a => a.AcdLogOnMartId == bridgeAcdLoginPerson.AcdLoginId))
+						{
+							_analyticsAcdLoginPerson.DeleteAcdLoginPerson(bridgeAcdLoginPerson);
+						}
+					}
 				}
 
 				// Check deleted person periods
@@ -87,6 +123,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					if (!person.PersonPeriodCollection.Any(a => a.Id.Equals(analyticsPersonPeriod.PersonPeriodCode)))
 					{
 						_analyticsPersonPeriodRepository.DeletePersonPeriod(analyticsPersonPeriod);
+
+						// Delete bridge acd login for that person period
+						foreach (var bridgeAcdLoginPerson in _analyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForPerson(analyticsPersonPeriod.PersonId))
+						{
+							_analyticsPersonPeriodRepository.DeleteBridgeAcdLoginPerson(bridgeAcdLoginPerson.AcdLoginId,
+																						bridgeAcdLoginPerson.PersonId);
+						}
 					}
 				}
 			}
@@ -96,9 +139,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		{
 			Logger.DebugFormat("Removing all person periods with person code {0}", @event.PersonId);
 			var personPeriodsInAnalyticsToBeDeleted = _analyticsPersonPeriodRepository.GetPersonPeriods(@event.PersonId);
+
 			foreach (var analyticsPersonPeriodToBeDeleted in personPeriodsInAnalyticsToBeDeleted)
 			{
 				_analyticsPersonPeriodRepository.DeletePersonPeriod(analyticsPersonPeriodToBeDeleted);
+				foreach (var bridgeAcdLoginPerson in _analyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForPerson(analyticsPersonPeriodToBeDeleted.PersonId))
+				{
+					_analyticsAcdLoginPerson.DeleteAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson
+					{
+						AcdLoginId = bridgeAcdLoginPerson.AcdLoginId,
+						PersonId = bridgeAcdLoginPerson.PersonId
+					});
+				}
 			}
 		}
 	}
