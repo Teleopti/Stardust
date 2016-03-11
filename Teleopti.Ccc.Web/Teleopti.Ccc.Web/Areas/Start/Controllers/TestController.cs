@@ -129,7 +129,16 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				}
 			});
 		}
-		
+
+		public ViewResult Start()
+		{
+			return View("Message", new TestMessageViewModel
+			{
+				Title = "Start application",
+				Message = "Application started"
+			});
+		}
+
 		public ViewResult ClearConnections()
 		{
 			clearAllConnectionPools();

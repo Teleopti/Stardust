@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using Autofac;
 using log4net.Config;
 using NUnit.Framework;
@@ -36,11 +37,12 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 
 			if (DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
 				DataSourceHelper.TryRestoreAnalyticsDatabaseBySql(path, dataHash))
+			{
+				TestSiteConfigurationSetup.StartApplicationSync();
 				return;
+			}
 
 			DataSourceHelper.CreateDatabases();
-
-			TestSiteConfigurationSetup.StartApplicationAsync();
 
 			var builder = new ContainerBuilder();
 			var args = new IocArgs(new ConfigReader())
@@ -71,8 +73,11 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 
 			container.Resolve<DataCreator>().Create();
 
+			Debug.WriteLine("backing up");
 			DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);
 			DataSourceHelper.BackupAnalyticsDatabaseBySql(path, dataHash);
+
+			TestSiteConfigurationSetup.StartApplicationSync();
 		}
 
 		[TearDown]
