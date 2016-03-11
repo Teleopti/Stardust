@@ -21,3 +21,4 @@ if($url -like '*https://*')
     $global:value = (netsh http add urlacl url=https://+:14100/ user=Everyone listen=yes)
 }
 
+

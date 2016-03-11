@@ -5,6 +5,7 @@ SET /A SPLevel=%~2
 SET IISVersion=%~3
 SET WinSvcLogin=%~4
 SET WinEtlLogin=%~5
+SET url=%~6
 
 ::Use first IIS digit only
 SET /A IISVersion=%IISVersion:~0,1%
@@ -100,7 +101,8 @@ ECHO Permission on TeleoptiCCC folder OK: "%BatchPath%\..\TeleoptiCCC%"
 ping 127.0.0.1 -n 2 >NUL
 )
 
-ECHO Adding permissions to listen to ports for Stardust Manger and Node
-netsh http add urlacl url=http://+:14100/ user=Everyone listen=yes
+ECHO Adding permissions to listen to ports for Stardust Node
+::netsh http add urlacl url=http://+:14100/ user=Everyone listen=yes
+powershell -ExecutionPolicy Bypass -File "%TargetFolder%\SetUrlAcl.ps1" "%url%" 
 
 GOTO :EOF
