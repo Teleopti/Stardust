@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				return false;
 			var localSource = Path.Combine(sqlBackupPath(), fileName);
 			File.Copy(source, localSource, true);
-			_usingMaster.Execute(string.Format(@"RESTORE DATABASE {0} FROM DISK = '{1}'", _databaseName, localSource));
+			_usingMaster.Execute(string.Format(@"RESTORE DATABASE {0} FROM DISK = '{1}' WITH REPLACE", _databaseName, localSource));
 			File.Delete(localSource);
 			return true;
 		}
