@@ -8367,9 +8367,6 @@ Teleopti Ar-Ge</value>
   <data name="LayerOwnerHasNoLayers" xml:space="preserve">
     <value>[{0}] katmanları bulunamadı</value>
   </data>
-  <data name="Overstaff" xml:space="preserve">
-    <value>Fazla çalışan</value>
-  </data>
   <data name="WorkflowControlSetToolTip" xml:space="preserve">
     <value>Kişisel hesapları hesaba kat: {0}
 Vardiyalamayı hesaba kat: {1}

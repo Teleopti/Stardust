@@ -11367,9 +11367,6 @@ Teleopti R&amp;D</value>
   <data name="OutboundCampaigns" xml:space="preserve">
     <value>外呼活动</value>
   </data>
-  <data name="DISMISS" xml:space="preserve">
-    <value>删除</value>
-  </data>
   <data name="BadgeWithRank_YouGotANewSilverBadgeForAHT" xml:space="preserve">
     <value>亲，您获得了一枚银色徽章！您在{1:yyyy-MM-dd}的平均处理时长低于{0}。继续加油哦～</value>
   </data>
