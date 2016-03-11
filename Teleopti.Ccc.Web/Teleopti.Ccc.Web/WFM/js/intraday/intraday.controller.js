@@ -34,23 +34,26 @@
 							$scope.skillAreas = $filter('orderBy')(result.SkillAreas, 'Name');
 							if (isNew) $scope.latest = $filter('orderBy')(result.SkillAreas, 'created_at', true);
 							$scope.HasPermissionToModifySkillArea = result.HasPermissionToModifySkillArea;
-							if ($scope.skillAreas.length > 0) {
-								if (isNew) {
-									$scope.selectedItem = $scope.latest[0];
-								} else {
-									$scope.selectedItem = $scope.skillAreas[0];
-								}
-								if (autocompleteSkillArea)
-									autocompleteSkillArea.selectedSkillArea = $scope.selectedItem;
-							}
-								
+
 							intradayService.getSkills.query().
 								$promise.then(function (result) {
 									$scope.skills = result;
-									if (!$scope.selectedItem) {
+									if ($scope.skillAreas.length === 0) {
 										$scope.selectedItem = $scope.skills[0];
-										if (autocompleteSkill)
-											autocompleteSkill.selectedSkill = $scope.selectedItem;
+										if (autocompleteSkill) {
+											autocompleteSkill.selectedSkill = $scope.skills[0];
+										}
+									}
+									if ($scope.skillAreas.length > 0) {
+										if (isNew) {
+											$scope.selectedItem = $scope.latest[0];
+											if (autocompleteSkillArea)
+												autocompleteSkillArea.selectedSkillArea = $scope.selectedItem;
+										} else {
+											$scope.selectedItem = $scope.skillAreas[0];
+											if (autocompleteSkillArea)
+												autocompleteSkillArea.selectedSkillArea = $scope.selectedItem;
+										}
 									}
 								});
 						});
