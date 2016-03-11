@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Web.Http;
-using Mindscape.Raygun4Net.WebApi;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
@@ -47,23 +46,14 @@ namespace Teleopti.Ccc.Web.Areas.PerformanceTool.Controllers
 		{
 			var zero = 0;
 			var number = 1;
-			try
-			{
-				return number / zero;
-			}
-			catch (Exception e)
-			{
-				new RaygunWebApiClient().SendInBackground(e);
-				throw;
-			}
+
+			return number / zero;
 		}
 
 		[Route("api/PerformanceTool/Dangerous/ThrowException"), HttpGet]
 		public void ThrowException()
 		{
-			var exception = new Exception("Testing");
-			new RaygunWebApiClient().SendInBackground(exception);
-			throw exception;
+			throw new Exception("Testing");
 		}
 
 		[UnitOfWork, HttpPost, Route("api/PerformanceTool/Dangerous/Create5000Agents")]
