@@ -124,6 +124,7 @@ namespace Stardust.Node.Timers
 				}
 				else
 				{
+					Start();
 					var msg =
 						string.Format("{0} : Send status to manager failed for job ( jobId, jobName ) : ( {1}, {2} ). Reason : {3}",
 						              WhoAmI,
@@ -138,21 +139,17 @@ namespace Stardust.Node.Timers
 
 			catch (Exception exp)
 			{
+				Start();
 				var msg =
-					string.Format("{0} : Send status to manager failed for job ( jobId, jobName ) : ( {1}, {2} ). Reason : {3}",
+					string.Format("{0} : Send status to manager failed for job ( jobId, jobName ) : ( {1}, {2} )",
 					              WhoAmI,
 					              JobToDo.Id,
-					              JobToDo.Name,
-					              exp.Message);
+					              JobToDo.Name);
 
 				LogHelper.LogErrorWithLineNumber(Logger,
-				                                 msg);
+				                                 msg,exp);
 			}
 
-			finally
-			{
-				Stop();
-			}
 		}
 	}
 }

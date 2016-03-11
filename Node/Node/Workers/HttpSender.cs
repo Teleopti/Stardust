@@ -86,10 +86,7 @@ namespace Stardust.Node.Workers
 							.ConfigureAwait(false);
 
 					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Finished Post Async: " + url);
-
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Finished.");
+					                                 "Finished Post Async: " + url + "\n" + "Finished");
 
 					return response;
 				}
