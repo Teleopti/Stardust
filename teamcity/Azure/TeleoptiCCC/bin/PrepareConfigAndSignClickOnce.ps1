@@ -204,6 +204,63 @@ function CopyReportsFromBlobStorage{
 	Remove-Item $fullPathCustomReports\* -exclude *.rdlc
 }
 
+function AddIfNotExists{
+	Param(
+		[string]$fullPathsettingsFile,
+		[string]$variableName,
+		[string]$content
+		)
+	$notFound = @( Get-Content "$fullPathsettingsFile" | Where-Object { $_.Contains("$variableName") } ).Count -eq 0
+	if ($notFound) {
+		Add-Content "$fullPathsettingsFile" "$content"
+	}
+}
+
+
+function SetDefaultSettings{
+	Param(
+		[string]$fullPathsettingsFile,
+		[string]$DataSourceName
+		)
+	Add-Content "$fullPathsettingsFile" ""
+	
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(DEFAULT_IDENTITY_PROVIDER)" -content "`$(DEFAULT_IDENTITY_PROVIDER)|Teleopti"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(WindowsClaimProvider)" -content "`$(WindowsClaimProvider)|"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(TeleoptiClaimProvider)" -content "`$(TeleoptiClaimProvider)|<add identifier=`"urn:Teleopti`" displayName=`"Teleopti`" url=`"https://$DataSourceName.teleopticloud.com/Web/sso/`" protocolHandler=`"RelativeOpenIdHandler`" />"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(USE_PERSISTENT_CRYPTOKEYS)" -content "`$(USE_PERSISTENT_CRYPTOKEYS)|false"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(SIGNALR_BACKPLANE_TYPE)" -content "`$(SIGNALR_BACKPLANE_TYPE)|"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(SDK_CRED_PROT)" -content "`$(SDK_CRED_PROT)|None"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(MATRIX_WEB_SITE_URL)" -content "`$(MATRIX_WEB_SITE_URL)|https://$DataSourceName.teleopticloud.com/Analytics"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(SDK_SSL_SECURITY_MODE)" -content "`$(SDK_SSL_SECURITY_MODE)|Transport"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(AGENT_SERVICE)" -content "`$(AGENT_SERVICE)|https://$DataSourceName.teleopticloud.com/SDK/TeleoptiCCCSdkService.svc"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(PM_INSTALL)" -content "`$(PM_INSTALL)|False"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(PM_AUTH_MODE)" -content "`$(PM_AUTH_MODE)|Windows"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(PM_ANONYMOUS_DOMAINUSER)" -content "`$(PM_ANONYMOUS_DOMAINUSER)|"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(PM_ANONYMOUS_PWD)" -content "`$(PM_ANONYMOUS_PWD)|"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(IIS_AUTH)" -content "`$(IIS_AUTH)|Forms"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(HTTPGETENABLED)" -content "`$(HTTPGETENABLED)|false"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(HTTPSGETENABLED)" -content "`$(HTTPSGETENABLED)|true"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(SDK_SSL_MEX_BINDING)" -content "`$(SDK_SSL_MEX_BINDING)|mexHttpsBinding"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(RTA_SERVICE)" -content "`$(RTA_SERVICE)|https://$DataSourceName.teleopticloud.com/RTA/TeleoptiRtaService.svc"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(CONFIGURATION_FILES_PATH)" -content "`$(CONFIGURATION_FILES_PATH)|$DatasourcesPath"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(RTA_STATE_CODE)" -content "`$(RTA_STATE_CODE)|ACW,ADMIN,EMAIL,IDLE,InCall,LOGGED ON,OFF,Ready,WEB"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(RTA_QUEUE_ID)" -content "`$(RTA_QUEUE_ID)|2001,2002,0063,2000,0019,0068,0085,0202,0238,2003"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(WEB_BROKER_FOR_WEB)" -content "`$(WEB_BROKER_FOR_WEB)|https://$DataSourceName.teleopticloud.com/Web"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(WEB_BROKER_BACKPLANE)" -content "`$(WEB_BROKER_BACKPLANE)|"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(WEB_BROKER)" -content "`$(WEB_BROKER)|https://$DataSourceName.teleopticloud.com/Web/"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(PM_ASMX)" -content "`$(PM_ASMX)|NotImplemented"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(PM_SERVICE)" -content "`$(PM_SERVICE|NotImplemented"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(AS_DATABASE)" -content "`$(AS_DATABASE)|NotImplemented"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(AS_SERVER_NAME)" -content "`$(AS_SERVER_NAME)|NotImplemented"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(LOCAL_WIKI)" -content "`$(LOCAL_WIKI)|http://wiki.teleopti.com/TeleoptiCCC/Special:MyLanguage/"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(ETLPM_BINDING_NAME)" -content "`$(ETLPM_BINDING_NAME)|Etl_Pm_Https_Binding"	
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(URL)" -content "`$(URL)|https://$DataSourceName.teleopticloud.com/Web/"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(STARDUST)" -content "`$(STARDUST)|https://$DataSourceName.teleopticloud.com/Web"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(UrlAuthenticationBridge)" -content "`$(UrlAuthenticationBridge)|https://$DataSourceName.teleopticloud.com/AuthenticationBridge/"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(WEB_DEPLOY)" -content "`$(WEB_DEPLOY)|true"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(DNS_ALIAS)" -content "`$(DNS_ALIAS)|https://$DataSourceName.teleopticloud.com/"
+}
+
 ##===========
 ## Main
 ##===========
@@ -257,7 +314,7 @@ Try
 	if (Test-Path "$fullPathsettingsFile") {
 		Remove-Item "$fullPathsettingsFile"
 	}
-
+	
 	$DatasourcesPath="$directory\..\Services\ETL\Service"
 	
     #Get customer specific config from BlobStorage
@@ -286,58 +343,8 @@ Try
 		CopyFileFromBlobStorage -destinationFolder "$directory\..\..\sitesroot\5\bin\FeatureFlags" -filename "$togglesFile"
 		Remove-Item "$tempTogglesFile"
 	}
-
-
-    Add-Content "$fullPathsettingsFile" ""
 	
-	$notFoundAuthenticationSettings = @( Get-Content "$fullPathsettingsFile" | Where-Object { $_.Contains("DEFAULT_IDENTITY_PROVIDER") } ).Count -eq 0
-	if ($notFoundAuthenticationSettings) {
-		Add-Content "$fullPathsettingsFile" "`$(DEFAULT_IDENTITY_PROVIDER)|Teleopti"
-		Add-Content "$fullPathsettingsFile" "`$(WindowsClaimProvider)|"
-		Add-Content "$fullPathsettingsFile" "`$(TeleoptiClaimProvider)|<add identifier=`"urn:Teleopti`" displayName=`"Teleopti`" url=`"https://$DataSourceName.teleopticloud.com/Web/sso/`" protocolHandler=`"RelativeOpenIdHandler`" />"
-	}
-	
-	$useCryptoKeySetting = @( Get-Content "$fullPathsettingsFile" | Where-Object { $_.Contains("USE_PERSISTENT_CRYPTOKEYS") } ).Count -eq 0
-	if ($useCryptoKeySetting) {
-		Add-Content "$fullPathsettingsFile" "`$(USE_PERSISTENT_CRYPTOKEYS)|false"
-	}
-	
-	$signalRBackplaneTypeSetting = @( Get-Content "$fullPathsettingsFile" | Where-Object { $_.Contains("SIGNALR_BACKPLANE_TYPE") } ).Count -eq 0
-	if ($signalRBackplaneTypeSetting) {
-		Add-Content "$fullPathsettingsFile" "`$(SIGNALR_BACKPLANE_TYPE)|"
-	}
-	
-	#Set static config for all other params
-    Add-Content "$fullPathsettingsFile" "`$(SDK_CRED_PROT)|None"
-    Add-Content "$fullPathsettingsFile" "`$(MATRIX_WEB_SITE_URL)|https://$DataSourceName.teleopticloud.com/Analytics"
-    Add-Content "$fullPathsettingsFile" "`$(SDK_SSL_SECURITY_MODE)|Transport"
-    Add-Content "$fullPathsettingsFile" "`$(AGENT_SERVICE)|https://$DataSourceName.teleopticloud.com/SDK/TeleoptiCCCSdkService.svc"
-    Add-Content "$fullPathsettingsFile" "`$(PM_INSTALL)|False"
-    Add-Content "$fullPathsettingsFile" "`$(PM_AUTH_MODE)|Windows"
-    Add-Content "$fullPathsettingsFile" "`$(PM_ANONYMOUS_DOMAINUSER)|"
-    Add-Content "$fullPathsettingsFile" "`$(PM_ANONYMOUS_PWD)|"
-    Add-Content "$fullPathsettingsFile" "`$(IIS_AUTH)|Forms"
-    Add-Content "$fullPathsettingsFile" "`$(HTTPGETENABLED)|false"
-    Add-Content "$fullPathsettingsFile" "`$(HTTPSGETENABLED)|true"
-    Add-Content "$fullPathsettingsFile" "`$(SDK_SSL_MEX_BINDING)|mexHttpsBinding"
-    Add-Content "$fullPathsettingsFile" "`$(RTA_SERVICE)|https://$DataSourceName.teleopticloud.com/RTA/TeleoptiRtaService.svc"
-    Add-Content "$fullPathsettingsFile" "`$(CONFIGURATION_FILES_PATH)|$DatasourcesPath"
-    Add-Content "$fullPathsettingsFile" "`$(RTA_STATE_CODE)|ACW,ADMIN,EMAIL,IDLE,InCall,LOGGED ON,OFF,Ready,WEB"
-    Add-Content "$fullPathsettingsFile" "`$(RTA_QUEUE_ID)|2001,2002,0063,2000,0019,0068,0085,0202,0238,2003"
-    Add-Content "$fullPathsettingsFile" "`$(WEB_BROKER_FOR_WEB)|https://$DataSourceName.teleopticloud.com/Web"
-    Add-Content "$fullPathsettingsFile" "`$(WEB_BROKER_BACKPLANE)|"
-	Add-Content "$fullPathsettingsFile" "`$(WEB_BROKER)|https://$DataSourceName.teleopticloud.com/Web/"
-    Add-Content "$fullPathsettingsFile" "`$(PM_ASMX)|NotImplemented"
-    Add-Content "$fullPathsettingsFile" "`$(PM_SERVICE|NotImplemented"
-    Add-Content "$fullPathsettingsFile" "`$(AS_DATABASE)|NotImplemented"
-    Add-Content "$fullPathsettingsFile" "`$(AS_SERVER_NAME)|NotImplemented"
-    Add-Content "$fullPathsettingsFile" "`$(LOCAL_WIKI)|http://wiki.teleopti.com/TeleoptiCCC/Special:MyLanguage/"
-    Add-Content "$fullPathsettingsFile" "`$(ETLPM_BINDING_NAME)|Etl_Pm_Https_Binding"	
-	Add-Content "$fullPathsettingsFile" "`$(URL)|https://$DataSourceName.teleopticloud.com/Web/"
-    Add-Content "$fullPathsettingsFile" "`$(STARDUST)|https://$DataSourceName.teleopticloud.com/Web"
-    Add-Content "$fullPathsettingsFile" "`$(UrlAuthenticationBridge)|https://$DataSourceName.teleopticloud.com/AuthenticationBridge/"
-    Add-Content "$fullPathsettingsFile" "`$(WEB_DEPLOY)|true"
-	Add-Content "$fullPathsettingsFile" "`$(DNS_ALIAS)|https://$DataSourceName.teleopticloud.com/"
+	SetDefaultSettings -fullPathsettingsFile "$fullPathsettingsFile" -DataSourceName "$DataSourceName"
 
     $SupportTool = $SupportToolFolder + "\Teleopti.Support.Tool.exe"
     Set-Location $SupportToolFolder
