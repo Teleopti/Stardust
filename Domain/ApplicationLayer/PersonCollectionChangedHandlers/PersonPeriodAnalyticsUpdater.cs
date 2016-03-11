@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					}
 
 					// Update/Add/Delete from Bridge Acd Login Person table
-					var existingPersonPeriod = personPeriodsInAnalytics.FirstOrDefault(a => a.PersonPeriodCode.Equals(personPeriod.Id.Value));
+					var existingPersonPeriod = _analyticsPersonPeriodRepository.GetPersonPeriods(personCodeGuid).FirstOrDefault(a => a.PersonPeriodCode.Equals(personPeriod.Id.Value));
 					var bridgeListForPersonPeriod = _analyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForPerson(existingPersonPeriod.PersonId);
 					foreach (var externalLogOn in personPeriod.ExternalLogOnCollection)
 					{
