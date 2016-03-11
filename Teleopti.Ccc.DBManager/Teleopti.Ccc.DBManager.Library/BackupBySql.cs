@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Linq;
+using Microsoft.Win32;
 
 namespace Teleopti.Ccc.DBManager.Library
 {
@@ -39,13 +41,29 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		private string sqlBackupPath()
 		{
-			var localMachine = Microsoft.Win32.Registry.LocalMachine;
-			var key = localMachine.OpenSubKey(@"SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQLServer");
-			if (key == null)
-				key = localMachine.OpenSubKey(@"SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL12.MSSQLSERVER\MSSQLServer");
-			if (key == null)
-				key = localMachine.OpenSubKey(@"SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL12.SQL2014\MSSQLServer");
-			return key.GetValue("BackupDirectory") as string;
+			// A 32-bit application on a 64-bit OS will be looking at the HKLM\Software\Wow6432Node node by default. 
+			//
+			// BUILDAGENT03: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQLServer
+			// BUILDAGENT03: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL12.SQL2014\MSSQLServer
+			// TELEOPTI710: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL12.MSSQLSERVER\MSSQLServer
+			//
+			var locations = new[]
+			{
+				@"SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQLServer",
+				@"SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL12.MSSQLSERVER\MSSQLServer",
+				@"SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL12.SQL2014\MSSQLServer"
+			};
+			var roots = new[]
+			{
+				RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64),
+				RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32)
+			};
+			var paths = from r in roots
+				from l in locations
+				let key = r.OpenSubKey(l)
+				where key != null
+				select key.GetValue("BackupDirectory") as string;
+			return paths.FirstOrDefault();
 		}
 	}
 }

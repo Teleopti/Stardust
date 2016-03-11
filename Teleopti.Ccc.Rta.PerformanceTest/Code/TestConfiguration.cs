@@ -3,7 +3,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 	public class TestConfiguration
 	{
 		// change this whenever anything created by DataCreator changes
-		public static int HashValue = 926234;
+		public static int HashValue = 92538;
 
 		public int NumberOfAgents = 2000;
 
