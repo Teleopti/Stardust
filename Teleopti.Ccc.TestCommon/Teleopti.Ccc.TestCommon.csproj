@@ -297,7 +297,7 @@
     <Compile Include="TestData\GlobalPrincipalState.cs" />
     <Compile Include="TestData\Setups\Configurable\PersonConfigurable.cs" />
     <Compile Include="TestData\Setups\Default\DefaultBusinessUnit.cs" />
-    <Compile Include="TestData\Setups\Default\DefaultData.cs" />
+    <Compile Include="TestData\Setups\Default\DefaultDataCreator.cs" />
     <Compile Include="TestData\Setups\Default\DefaultLicense.cs" />
     <Compile Include="TestData\Setups\Default\DefaultMatrixApplicationFunctions.cs" />
     <Compile Include="TestData\Setups\Default\DefaultPassword.cs" />

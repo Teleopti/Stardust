@@ -6,6 +6,7 @@ using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static ICurrentPersistCallbacks PersistCallbacks;
 		public static ICurrentUnitOfWorkFactory UnitOfWorkFactory;
 		public static ICurrentUnitOfWork UnitOfWork;
+		public static DefaultDataCreator DefaultDataCreator;
 		public static HangfireUtilties Hangfire;
 		public static MutableNow Now;
 
@@ -32,6 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				FeatureToggle = TestSiteConfigurationSetup.URL.ToString()
 			};
 			builder.RegisterModule(new CommonModule(new IocConfiguration(args, CommonModule.ToggleManagerForIoc(args))));
+			builder.RegisterType<DefaultDataCreator>().SingleInstance();
 
 			_container = builder.Build();
 
@@ -40,6 +43,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			PersistCallbacks = _container.Resolve<ICurrentPersistCallbacks>();
 			UnitOfWorkFactory = _container.Resolve<ICurrentUnitOfWorkFactory>();
 			UnitOfWork = _container.Resolve<ICurrentUnitOfWork>();
+			DefaultDataCreator = _container.Resolve<DefaultDataCreator>();
 		}
 
 		public static void Start()

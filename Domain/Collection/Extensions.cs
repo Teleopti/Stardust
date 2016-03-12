@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 using System.Collections;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Teleopti.Ccc.Domain.Collection
 {

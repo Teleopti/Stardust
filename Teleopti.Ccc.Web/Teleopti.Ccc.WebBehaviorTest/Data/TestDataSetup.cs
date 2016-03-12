@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 	public static class TestDataSetup
 	{
 		private static IDataSource datasource;
-		private static int _dataHash;
 
 		public static void Setup()
 		{
@@ -34,19 +33,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				);
 			GlobalPrincipalState.Principal = Thread.CurrentPrincipal as TeleoptiPrincipal;
 
-			var defaultData = new DefaultData();
-			var dataFactory = new DataFactory(action =>
-			{
-				using (SystemSetup.UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
-				{
-					action.Invoke(SystemSetup.UnitOfWork);
-					SystemSetup.UnitOfWork.Current().PersistAll();
-				}
-			});
-			defaultData.ForEach(dataFactory.Apply);
+			SystemSetup.DefaultDataCreator.Create();
 
-			_dataHash = defaultData.HashValue;
-			DataSourceHelper.BackupApplicationDatabase(_dataHash);
+			DataSourceHelper.BackupApplicationDatabase(SystemSetup.DefaultDataCreator.HashValue);
 
 			SystemSetup.Start();
 		}
@@ -58,7 +47,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void RestoreCcc7Data()
 		{
-			DataSourceHelper.RestoreApplicationDatabase(_dataHash);
+			DataSourceHelper.RestoreApplicationDatabase(SystemSetup.DefaultDataCreator.HashValue);
 		}
 	}
 }
