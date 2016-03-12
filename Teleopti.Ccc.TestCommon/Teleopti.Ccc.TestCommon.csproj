@@ -301,7 +301,7 @@
     <Compile Include="TestData\Setups\Default\DefaultLicense.cs" />
     <Compile Include="TestData\Setups\Default\DefaultMatrixApplicationFunctions.cs" />
     <Compile Include="TestData\Setups\Default\DefaultPassword.cs" />
-    <Compile Include="TestData\Setups\Default\DefaultPersonThatCreatesDbData.cs" />
+    <Compile Include="TestData\Setups\Default\DefaultPersonThatCreatesData.cs" />
     <Compile Include="TestData\Setups\Default\DefaultRaptorApplicationFunctions.cs" />
     <Compile Include="TestData\Setups\Default\DefaultScenario.cs" />
     <Compile Include="TestData\Setups\Default\IHashableDataSetup.cs" />

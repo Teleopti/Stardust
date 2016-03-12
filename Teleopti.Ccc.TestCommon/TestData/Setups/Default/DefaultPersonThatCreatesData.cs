@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 {
-	public class DefaultPersonThatCreatesDbData : IHashableDataSetup
+	public class DefaultPersonThatCreatesData : IHashableDataSetup
 	{
 		public static IPerson PersonThatCreatesDbData =
 			PersonFactory.CreatePerson("UserThatCreatesTestData");

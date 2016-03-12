@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 	{
 		public SiteConfigurable()
 		{
-			BusinessUnit = DefaultBusinessUnit.BusinessUnitFromFakeState.Name;
+			BusinessUnit = DefaultBusinessUnit.BusinessUnit.Name;
 		}
 	}
 }

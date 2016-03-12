@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		{
 			if (Site == null)
 			{
-				var site = new SiteConfigurable { BusinessUnit = DefaultBusinessUnit.BusinessUnitFromFakeState.Name };
+				var site = new SiteConfigurable { BusinessUnit = DefaultBusinessUnit.BusinessUnit.Name };
 				DataMaker.Data().Apply(site);
 				Site = site.Name;
 			}

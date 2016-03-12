@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse
 		{
 			public TheSite()
 			{
-				BusinessUnit = DefaultBusinessUnit.BusinessUnitFromFakeState.Name;
+				BusinessUnit = DefaultBusinessUnit.BusinessUnit.Name;
 				Name = "The site";
 			}
 		}

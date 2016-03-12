@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 
 		private readonly IEnumerable<IHashableDataSetup> setups = new IHashableDataSetup[]
 		{
-			new DefaultPersonThatCreatesDbData(),
+			new DefaultPersonThatCreatesData(),
 			new DefaultLicense(),
 			new DefaultBusinessUnit(),
 			new DefaultScenario(),
@@ -33,9 +33,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 			get
 			{
 				if (!_hashValue.HasValue)
-				{
 					_hashValue = setups.Aggregate(37, (current, setup) => current ^ setup.HashValue());
-				}
 				return _hashValue.Value;
 			}
 		}

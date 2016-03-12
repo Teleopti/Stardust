@@ -334,7 +334,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 										let team = t.Team
 										where team.Description.Name.Equals(teamName)
 										select team.Id.GetValueOrDefault()).First();
-			Navigation.GotoAnywherePersonScheduleMoveActivityForm(DefaultBusinessUnit.BusinessUnitFromFakeState.Id.GetValueOrDefault(), personId, teamId, date, startTime);
+			Navigation.GotoAnywherePersonScheduleMoveActivityForm(DefaultBusinessUnit.BusinessUnit.Id.GetValueOrDefault(), personId, teamId, date, startTime);
 		}
 
 		[When(@"I move the activity")]

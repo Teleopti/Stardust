@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			public TheOtherSite()
 			{
-				BusinessUnit = DefaultBusinessUnit.BusinessUnitFromFakeState.Name;
+				BusinessUnit = DefaultBusinessUnit.BusinessUnit.Name;
 				Name = "The other site";
 			}
 		}

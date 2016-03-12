@@ -69,8 +69,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 
 			StateHolderProxyHelper.SetupFakeState(
 				DataSourceHelper.CreateDataSource(persistCallbacks),
-				DefaultPersonThatCreatesDbData.PersonThatCreatesDbData,
-				DefaultBusinessUnit.BusinessUnitFromFakeState,
+				DefaultPersonThatCreatesData.PersonThatCreatesDbData,
+				DefaultBusinessUnit.BusinessUnit,
 				new ThreadPrincipalContext()
 				);
 

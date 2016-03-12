@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			// False is the edge case!
 			Name = RandomName.Make("A role");
 			Description = RandomName.Make("A role");
-			BusinessUnit = DefaultBusinessUnit.BusinessUnitFromFakeState.Description.Name;
+			BusinessUnit = DefaultBusinessUnit.BusinessUnit.Description.Name;
 			AccessToEverything = false;
 			ViewUnpublishedSchedules = false;
 			ViewConfidential = false;

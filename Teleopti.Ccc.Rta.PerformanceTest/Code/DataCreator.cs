@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			var datasource = new Datasources(_testConfiguration.DataSourceId, " ", -1, " ", -1, " ", " ", 1, false, _testConfiguration.SourceId, false);
 			new AnalyticsDataFactory().Apply(datasource);
 
-			var businessUnit = DefaultBusinessUnit.BusinessUnitFromFakeState;
+			var businessUnit = DefaultBusinessUnit.BusinessUnit;
 
 			data.Apply(new ScenarioConfigurable { Name = "Default", BusinessUnit = businessUnit.Name });
 			data.Apply(new ActivityConfigurable { Name = "Phone" });

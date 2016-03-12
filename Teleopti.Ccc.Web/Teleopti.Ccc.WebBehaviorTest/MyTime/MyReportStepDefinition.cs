@@ -44,8 +44,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			const int scenarioId = 12;
 
 			var agent = new Person(DataMaker.Me().Person, datasource, personId, new DateTime(2010, 1, 1),
-						 new DateTime(2059, 12, 31), 0, -2, 0, DefaultBusinessUnit.BusinessUnitFromFakeState.Id.Value, false, timeZones.CetTimeZoneId);
-			var scenario = Scenario.DefaultScenarioFor(scenarioId, DefaultBusinessUnit.BusinessUnitFromFakeState.Id.Value);
+						 new DateTime(2059, 12, 31), 0, -2, 0, DefaultBusinessUnit.BusinessUnit.Id.Value, false, timeZones.CetTimeZoneId);
+			var scenario = Scenario.DefaultScenarioFor(scenarioId, DefaultBusinessUnit.BusinessUnit.Id.Value);
 
 			//common analytics data
 			DataMaker.Data().Analytics().Setup(new EternityAndNotDefinedDate());
@@ -83,8 +83,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			const int scenarioId = 12;
 
 			var agent = new Person(DataMaker.Me().Person, datasource, personId, new DateTime(2010, 1, 1),
-						 new DateTime(2059, 12, 31), 0, -2, 0, DefaultBusinessUnit.BusinessUnitFromFakeState.Id.Value, false, timeZones.CetTimeZoneId);
-			var scenario = Scenario.DefaultScenarioFor(scenarioId, DefaultBusinessUnit.BusinessUnitFromFakeState.Id.Value);
+						 new DateTime(2059, 12, 31), 0, -2, 0, DefaultBusinessUnit.BusinessUnit.Id.Value, false, timeZones.CetTimeZoneId);
+			var scenario = Scenario.DefaultScenarioFor(scenarioId, DefaultBusinessUnit.BusinessUnit.Id.Value);
 
 			//common analytics data
 			DataMaker.Data().Analytics().Setup(new EternityAndNotDefinedDate());

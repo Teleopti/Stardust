@@ -7,17 +7,17 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 {
 	public class DefaultBusinessUnit : IHashableDataSetup
 	{
-		public static IBusinessUnit BusinessUnitFromFakeState = new BusinessUnit("BusinessUnit");
+		public static IBusinessUnit BusinessUnit = new BusinessUnit("BusinessUnit");
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			var businessUnitRepository = new BusinessUnitRepository(currentUnitOfWork);
-			businessUnitRepository.Add(BusinessUnitFromFakeState);
+			businessUnitRepository.Add(BusinessUnit);
 		}
 
 		public int HashValue()
 		{
-			return BusinessUnitFromFakeState.Name.GetHashCode();
+			return BusinessUnit.Name.GetHashCode();
 		}
 	}
 }

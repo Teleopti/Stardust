@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
-			Navigation.GotoAnywhereTeamSchedule(date, DefaultBusinessUnit.BusinessUnitFromFakeState.Id.GetValueOrDefault());
+			Navigation.GotoAnywhereTeamSchedule(date, DefaultBusinessUnit.BusinessUnit.Id.GetValueOrDefault());
 		}
 
 		[When(@"I view schedules for '(.*)' on '(.*)'")]
@@ -417,7 +417,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			TestControllerMethods.Logon();
 			var personId = DataMaker.Person(name).Person.Id.Value;
-			Navigation.GotoAnywhereRealTimeManageAdherenceOverview(DefaultBusinessUnit.BusinessUnitFromFakeState.Id.GetValueOrDefault(), personId);
+			Navigation.GotoAnywhereRealTimeManageAdherenceOverview(DefaultBusinessUnit.BusinessUnit.Id.GetValueOrDefault(), personId);
 		}
 
 		[When(@"I view agent details view for agent '(.*)'")]
