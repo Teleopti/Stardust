@@ -5,6 +5,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
+using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Interfaces.Domain;
@@ -36,7 +37,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			GlobalPrincipalState.Principal = Thread.CurrentPrincipal as TeleoptiPrincipal;
 
 			var defaultData = new DefaultData();
-			defaultData.ForEach(dataSetup => GlobalDataMaker.Data().Apply(dataSetup));
+			var dataFactory = new DataFactory(action =>
+			{
+				using (SystemSetup.UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+				{
+					action.Invoke(SystemSetup.UnitOfWork);
+					SystemSetup.UnitOfWork.Current().PersistAll();
+				}
+			});
+			defaultData.ForEach(dataFactory.Apply);
 
 			_dataHash = defaultData.HashValue;
 			DataSourceHelper.BackupApplicationDatabase(_dataHash);

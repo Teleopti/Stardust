@@ -1,6 +1,5 @@
 using System;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
@@ -15,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			{
 				if (_unitOfWork == null)
 				{
-					_unitOfWork = GlobalUnitOfWorkState.CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
+					_unitOfWork = SystemSetup.UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
 					_unitOfWork.DisableFilter(QueryFilter.BusinessUnit);
 				}
 				return _unitOfWork;
