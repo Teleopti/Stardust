@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 		[Test]
 		public void Prepare()
 		{
+
 		}
 	}
 }
