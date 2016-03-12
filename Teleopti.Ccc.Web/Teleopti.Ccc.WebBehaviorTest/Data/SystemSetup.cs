@@ -8,6 +8,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
@@ -17,6 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static IToggleManager Toggles;
 		public static ICurrentPersistCallbacks PersistCallbacks;
+		public static ICurrentUnitOfWorkFactory UnitOfWorkFactory;
 		public static HangfireUtilties Hangfire;
 		public static MutableNow Now;
 
@@ -35,6 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Toggles = _container.Resolve<IToggleManager>();
 			Now = _container.Resolve<INow>() as MutableNow;
 			PersistCallbacks = _container.Resolve<ICurrentPersistCallbacks>();
+			UnitOfWorkFactory = _container.Resolve<ICurrentUnitOfWorkFactory>();
 		}
 
 		public static void Start()

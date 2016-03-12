@@ -29,9 +29,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 
 		public void Apply(IPerson user, ICurrentUnitOfWork iDontUse)
 		{
-			using (var uow = GlobalUnitOfWorkState.CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			using (var uow = SystemSetup.UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-
 				var dateTimefrom = DateFrom ?? DateTime.UtcNow.Date;
 				var dateTimeTo = DateTo ?? dateTimefrom.AddDays(1);
 				var sender = String.IsNullOrEmpty(From) ? user : getOrCreatePerson(From, uow);
