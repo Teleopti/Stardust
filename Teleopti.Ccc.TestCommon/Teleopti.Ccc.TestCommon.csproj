@@ -296,7 +296,6 @@
     <Compile Include="TestData\Core\ITenantUserSetup.cs" />
     <Compile Include="TestData\GlobalDataMaker.cs" />
     <Compile Include="TestData\GlobalPrincipalState.cs" />
-    <Compile Include="TestData\GlobalUnitOfWorkState.cs" />
     <Compile Include="TestData\Setups\Configurable\PersonConfigurable.cs" />
     <Compile Include="TestData\Setups\Default\DefaultBusinessUnit.cs" />
     <Compile Include="TestData\Setups\Default\DefaultData.cs" />

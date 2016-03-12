@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using Autofac;
 using log4net.Config;
 using NUnit.Framework;
@@ -13,10 +12,11 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Rta.PerformanceTest.Code;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.TestData;
+using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Messaging.Client;
 
 namespace Teleopti.Ccc.Rta.PerformanceTest
@@ -62,16 +62,26 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
 			var container = builder.Build();
 
+			var persistCallbacks = container.Resolve<ICurrentPersistCallbacks>();
+			var currentUnitOfWorkFactory = container.Resolve<ICurrentUnitOfWorkFactory>();
+			var currentUnitOfWork = container.Resolve<ICurrentUnitOfWork>();
+
 			StateHolderProxyHelper.SetupFakeState(
-				DataSourceHelper.CreateDataSource(container.Resolve<ICurrentPersistCallbacks>()),
+				DataSourceHelper.CreateDataSource(persistCallbacks),
 				DefaultPersonThatCreatesDbData.PersonThatCreatesDbData,
 				DefaultBusinessUnit.BusinessUnitFromFakeState,
 				new ThreadPrincipalContext()
 				);
 
-			GlobalUnitOfWorkState.CurrentUnitOfWorkFactory = UnitOfWorkFactory.CurrentUnitOfWorkFactory();
-
-			defaultData.ForEach(dataSetup => GlobalDataMaker.Data().Apply(dataSetup));
+			var dataFactory = new DataFactory(action =>
+			{
+				using (currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+				{
+					action.Invoke(currentUnitOfWork);
+					currentUnitOfWork.Current().PersistAll();
+				}
+			});
+			defaultData.ForEach(dataFactory.Apply);
 
 			container.Resolve<DataCreator>().Create();
 
