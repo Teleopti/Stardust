@@ -1,28 +1,40 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
-using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 {
 	[Binding]
 	public class ForecasterSteps
 	{
+		// I wont change this now.. but this is wrong. dont do it like this.
+		// there is already a current unit of work for the duration of the scenario. use that!
+		private static void unitOfWorkAction(Action<ICurrentUnitOfWork> action)
+		{
+			using (var unitOfWork = SystemSetup.UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				action.Invoke(new ThisUnitOfWork(unitOfWork));
+				unitOfWork.PersistAll();
+			}
+		}
+
 		[Then(@"there is a SkillDay for '(.*)'")]
 		public void ThenThereIsASkillDayFor(string date)
 		{
 			var theDate = new DateOnly(DateTime.Parse(date));
-			GlobalUnitOfWorkState.UnitOfWorkAction(uow =>
+			unitOfWorkAction(uow =>
 				new SkillDayRepository(uow).LoadAll().Any(x => x.CurrentDate == theDate).Should().Be.True());
 		}
 
@@ -37,7 +49,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[Given(@"there is no forecast data")]
 		public void GivenThereIsNoForecastData()
 		{
-			GlobalUnitOfWorkState.UnitOfWorkAction(uow =>
+			unitOfWorkAction(uow =>
 				new SkillDayRepository(uow).LoadAll().Any().Should().Be.False());
 		}
 		
@@ -134,7 +146,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		{
 			var choosenPeriod = new DateOnlyPeriod((DateOnly) ScenarioContext.Current["startdate"],
 				((DateOnly) ScenarioContext.Current["enddate"]).AddDays(-1));
-			GlobalUnitOfWorkState.UnitOfWorkAction(uow =>
+			unitOfWorkAction(uow =>
 			{
 				var workloadId = new WorkloadRepository(uow).LoadAll().SingleOrDefault(x => x.Name == workload).Id;
 				var allSkillDays = new SkillDayRepository(uow).LoadAll();
@@ -155,7 +167,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		{
 			var choosenPeriod = new DateOnlyPeriod((DateOnly)ScenarioContext.Current["startdate"],
 				((DateOnly)ScenarioContext.Current["enddate"]).AddDays(-1));
-			GlobalUnitOfWorkState.UnitOfWorkAction(uow =>
+			unitOfWorkAction(uow =>
 			{
 				var workloadId = new WorkloadRepository(uow).LoadAll().SingleOrDefault(x => x.Name == workload).Id;
 				var allSkillDays = new SkillDayRepository(uow).LoadAll();
@@ -189,7 +201,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		public void ThenThereAreSkillDaysForDefaultPeriod()
 		{
 			var choosenPeriod = new DateOnlyPeriod((DateOnly)ScenarioContext.Current["startdate"], ((DateOnly)ScenarioContext.Current["enddate"]).AddDays(-1));
-			GlobalUnitOfWorkState.UnitOfWorkAction(uow =>
+			unitOfWorkAction(uow =>
 			{
 				var allSkillDays = new SkillDayRepository(uow).LoadAll();
 

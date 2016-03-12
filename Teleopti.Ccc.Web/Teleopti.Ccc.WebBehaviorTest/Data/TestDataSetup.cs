@@ -2,7 +2,6 @@
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -33,7 +32,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				DefaultBusinessUnit.BusinessUnitFromFakeState,
 				new ThreadPrincipalContext()
 				);
-			GlobalUnitOfWorkState.CurrentUnitOfWorkFactory = UnitOfWorkFactory.CurrentUnitOfWorkFactory();
 			GlobalPrincipalState.Principal = Thread.CurrentPrincipal as TeleoptiPrincipal;
 
 			var defaultData = new DefaultData();
