@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 
 			var defaultData = new DefaultData();
 			var dataHash = defaultData.HashValue ^ TestConfiguration.HashValue;
-			var path = Path.Combine(InfraTestConfigReader.DatabackBackupLocation, "Rta");
+			var path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Rta");
 
 			var haveDatabase =
 				DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
