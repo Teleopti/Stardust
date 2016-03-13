@@ -73,12 +73,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				return passwordPolicyService ?? new ThrowingLoadPasswordPolicyService();
 			}).As<ILoadPasswordPolicyService>().SingleInstance();
 
-			builder.RegisterType<CurrentTeleoptiPrincipal>()
-				.As<ICurrentTeleoptiPrincipal>()
-				.SingleInstance();
-			builder.RegisterType<PrincipalAuthorization>()
-				.As<IPrincipalAuthorization>()
-				.SingleInstance();
+			builder.RegisterType<CurrentTeleoptiPrincipal>().As<ICurrentTeleoptiPrincipal>().SingleInstance();
+			builder.RegisterType<PrincipalAuthorization>().As<IPrincipalAuthorization>().SingleInstance();
 			builder.RegisterType<UserCulture>().As<IUserCulture>().SingleInstance();
 			builder.RegisterType<LoggedOnUser>().As<ILoggedOnUser>().SingleInstance();
 			builder.RegisterType<UserTimeZone>().As<IUserTimeZone>().SingleInstance();

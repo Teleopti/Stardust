@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using Teleopti.Ccc.Domain.Aop;
@@ -77,8 +78,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeMailboxRepository>().For<IMailboxRepository>();
 			//
 
-			// Permission stuff
-			system.UseTestDouble<PrincipalAuthorizationWithFullPermission>().For<IPrincipalAuthorization>();
+			// Permissions
+			if (QueryAllAttributes<RealPermissionsAttribute>().IsEmpty())
+				system.UseTestDouble<PrincipalAuthorizationWithFullPermission>().For<IPrincipalAuthorization>();
 			//
 
 			// Rta

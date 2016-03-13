@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Logon
 {
 	[DomainTest]
 	[LoggedOff]
+	[RealPermissions]
 	public class AsSystemAspectTest : ISetup
 	{
 		public FakeDatabase Database;
@@ -32,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.Logon
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddService<Service>();
-			system.AddService<PrincipalAuthorization>();
 		}
 
 		public class Service
