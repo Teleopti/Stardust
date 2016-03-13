@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 		{
 			XmlConfigurator.Configure();
 
-			TestSiteConfigurationSetup.Setup(TestSiteConfigurationSetup.PathToIISExpress64);
+			TestSiteConfigurationSetup.Setup();
 
 			var builder = new ContainerBuilder();
 			var args = new IocArgs(new ConfigReader())

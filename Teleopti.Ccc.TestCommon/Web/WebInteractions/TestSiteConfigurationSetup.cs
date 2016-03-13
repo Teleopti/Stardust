@@ -19,15 +19,11 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 		private static IISExpress _server;
 		private static IDisposable _portsConfiguration;
 
-		//always use 64bit version? Don't want to change old behavior currently though...
-		public const string PathToIISExpress32 = "c:\\program files (x86)\\IIS Express\\iisexpress.exe";
-		public const string PathToIISExpress64 = "c:\\program files\\IIS Express\\iisexpress.exe";
-
-		public static void Setup(string pathToIISExpress)
+		public static void Setup()
 		{
 			_portsConfiguration = RandomPortsAndUrls();
 			writeWebConfigs();
-			StartIISExpress(pathToIISExpress);
+			StartIISExpress();
 		}
 
 		private static IDisposable RandomPortsAndUrls()
@@ -57,7 +53,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			});
 		}
 
-		private static void StartIISExpress(string pathToIisExpress)
+		private static void StartIISExpress()
 		{
 			cleanOldLogs();
 			// maybe this SO thread contains alternatives:
@@ -75,7 +71,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 				Systray = false,
 				Config = string.Concat(runningConfig, " /apppool:\"Clr4IntegratedAppPool\"")
 			};
-			_server = new IISExpress(parameters, pathToIisExpress);
+			_server = new IISExpress(parameters, "c:\\program files\\IIS Express\\iisexpress.exe");
 		}
 
 		private static void cleanOldLogs()

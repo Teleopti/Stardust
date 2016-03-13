@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 		[SetUp]
 		public void Setup()
 		{
-			TestSiteConfigurationSetup.Setup(TestSiteConfigurationSetup.PathToIISExpress64);
+			TestSiteConfigurationSetup.Setup();
 		}
 
 		[TearDown]
