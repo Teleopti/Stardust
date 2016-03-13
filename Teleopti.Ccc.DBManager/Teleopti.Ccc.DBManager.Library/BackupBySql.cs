@@ -21,7 +21,10 @@ namespace Teleopti.Ccc.DBManager.Library
 			var fileName = name + ".bak";
 			var target = Path.Combine(path, fileName);
 			var localTarget = Path.Combine(sqlBackupPath(), fileName);
-			_usingMaster.Execute(string.Format(@"BACKUP DATABASE {0} TO DISK = '{1}' WITH FORMAT", _databaseName, localTarget));
+
+			var sql = string.Format(@"BACKUP DATABASE {0} TO DISK = '{1}' WITH FORMAT", _databaseName, localTarget);
+			_usingMaster.Execute(sql);
+
 			File.Copy(localTarget, target, true);
 			File.Delete(localTarget);
 		}
@@ -34,7 +37,14 @@ namespace Teleopti.Ccc.DBManager.Library
 				return false;
 			var localSource = Path.Combine(sqlBackupPath(), fileName);
 			File.Copy(source, localSource, true);
-			_usingMaster.Execute(string.Format(@"RESTORE DATABASE {0} FROM DISK = '{1}' WITH REPLACE", _databaseName, localSource));
+
+			var sql = string.Format(@"
+				ALTER DATABASE {0} SET SINGLE_USER WITH ROLLBACK AFTER 0
+				RESTORE DATABASE {0} FROM DISK = '{1}' WITH REPLACE
+				ALTER DATABASE {0} SET MULTI_USER
+				", _databaseName, localSource);
+			_usingMaster.Execute(sql);
+
 			File.Delete(localSource);
 			return true;
 		}
