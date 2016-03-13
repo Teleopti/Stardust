@@ -6,14 +6,14 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Logon
 {
 	public class AsSystem
 	{
 		private readonly ILogOnOff _logOnOff;
-		private readonly IPersonRepository _personRepository;
-		private readonly IBusinessUnitRepository _businessUnitRepository;
+		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly ClaimSetForApplicationRole _claimSetForApplicationRole;
 		private readonly IDataSourceForTenant _dataSourceForTenant;
 		private readonly ICurrentTeleoptiPrincipal _principal;
@@ -21,8 +21,7 @@ namespace Teleopti.Ccc.Domain.Logon
 
 		public AsSystem(
 			ILogOnOff logOnOff,
-			IPersonRepository personRepository,
-			IBusinessUnitRepository businessUnitRepository,
+			IRepositoryFactory repositoryFactory,
 			ClaimSetForApplicationRole claimSetForApplicationRole,
 			IDataSourceForTenant dataSourceForTenant,
 			ITime time,
@@ -30,8 +29,7 @@ namespace Teleopti.Ccc.Domain.Logon
 			)
 		{
 			_logOnOff = logOnOff;
-			_personRepository = personRepository;
-			_businessUnitRepository = businessUnitRepository;
+			_repositoryFactory = repositoryFactory;
 			_claimSetForApplicationRole = claimSetForApplicationRole;
 			_dataSourceForTenant = dataSourceForTenant;
 			_principal = principal;
@@ -41,24 +39,34 @@ namespace Teleopti.Ccc.Domain.Logon
 		public void Logon(string tenant, Guid businessUnitId)
 		{
 			var dataSource = _dataSourceForTenant.Tenant(tenant);
-			using (dataSource.Application.CreateAndOpenUnitOfWork())
+
+			IPerson systemUser;
+			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				var systemUser = _personRepository.LoadPersonAndPermissions(SystemUser.Id);
-				var businessUnit = _businessUnitRepository.Get(businessUnitId);
+				systemUser = _repositoryFactory.CreatePersonRepository(uow).LoadPersonAndPermissions(SystemUser.Id);
+			}
+
+			using (var unitOfWork = dataSource.Application.CreateAndOpenUnitOfWork())
+			{
+				var businessUnit = _repositoryFactory.CreateBusinessUnitRepository(unitOfWork).Get(businessUnitId);
+				unitOfWork.Remove(businessUnit); //To make sure that business unit doesn't belong to this uow any more
+				
 				_logOnOff.LogOn(dataSource, systemUser, businessUnit);
-				setCorrectPermissionsOnUser(systemUser, dataSource.DataSourceName);
+
+				setCorrectPermissionsOnUser(dataSource.Application);
 			}
 		}
 
-		private void setCorrectPermissionsOnUser(IPerson person, string dataSourceName)
+		private void setCorrectPermissionsOnUser(IUnitOfWorkFactory unitOfWorkFactory)
 		{
+			var person = _principal.Current().GetPerson(_repositoryFactory.CreatePersonRepository(unitOfWorkFactory.CurrentUnitOfWork()));
 			foreach (var applicationRole in person.PermissionInformation.ApplicationRoleCollection)
 			{
-				var cachedClaim = _claimCache.Get(dataSourceName, applicationRole.Id.GetValueOrDefault());
+				var cachedClaim = _claimCache.Get(unitOfWorkFactory.Name, applicationRole.Id.GetValueOrDefault());
 				if (cachedClaim == null)
 				{
-					cachedClaim = _claimSetForApplicationRole.Transform(applicationRole, dataSourceName);
-					_claimCache.Add(cachedClaim, dataSourceName, applicationRole.Id.GetValueOrDefault());
+					cachedClaim = _claimSetForApplicationRole.Transform(applicationRole, unitOfWorkFactory.Name);
+					_claimCache.Add(cachedClaim, unitOfWorkFactory.Name, applicationRole.Id.GetValueOrDefault());
 				}
 				_principal.Current().AddClaimSet(cachedClaim);
 			}
