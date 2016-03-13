@@ -6,6 +6,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -45,7 +46,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 						}
 					});
 				testDataFactory.Apply(new PersonThatCreatesTestData(personThatCreatesTestData));
-				testDataFactory.Apply(new LicenseFromFile());
+				testDataFactory.Apply(new DefaultLicense());
 				testDataFactory.Apply(new BusinessUnitFromFakeState(TestState.BusinessUnit));
 			}
 

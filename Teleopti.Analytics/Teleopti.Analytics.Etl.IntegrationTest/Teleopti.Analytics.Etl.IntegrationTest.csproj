@@ -132,9 +132,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="License.xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Include="..\..\LicenseFiles\Teleopti_RD.xml">
+      <Link>Teleopti_RD.xml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestData\dbo.Add_One_Interval.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -516,7 +516,6 @@
     <Compile Include="TestData\Setups\Specific\GermanCulture.cs" />
     <Compile Include="TestData\Setups\Specific\AustralianTimeZone.cs" />
     <Compile Include="TestData\Setups\Specific\HawaiiTimeZone.cs" />
-    <Compile Include="TestData\Setups\Specific\LicenseFromFile.cs" />
     <Compile Include="TestData\Setups\Configurable\PersonAbsenceConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\PersonPeriodConfigurable.cs" />
     <Compile Include="TestData\Setups\Specific\PersonThatCreatesTestData.cs" />

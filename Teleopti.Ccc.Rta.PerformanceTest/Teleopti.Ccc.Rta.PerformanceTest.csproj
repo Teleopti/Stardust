@@ -110,8 +110,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="license.xml">
-      <SubType>Designer</SubType>
+    <Content Include="..\LicenseFiles\Teleopti_RD.xml">
+      <Link>Teleopti_RD.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

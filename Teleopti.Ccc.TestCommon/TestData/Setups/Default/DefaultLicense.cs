@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 
 		private string licenseText
 		{
-			get { return _licenseText ?? (_licenseText = File.ReadAllText("License.xml")); }
+			get { return _licenseText ?? (_licenseText = File.ReadAllText("Teleopti_RD.xml")); }
 		}
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)

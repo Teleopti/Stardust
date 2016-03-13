@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeLicenseRepository()
 		{
-			_license = new Lazy<License>(() => new License { XmlString = System.IO.File.ReadAllText("license.xml") });
+			_license = new Lazy<License>(() => new License { XmlString = System.IO.File.ReadAllText("Teleopti_RD.xml") });
 		}
 
 		public ILicenseRepository MakeRepository(IUnitOfWorkFactory unitOfWorkFactory)
