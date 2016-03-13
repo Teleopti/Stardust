@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
         private readonly PersonCache _personCache = new PersonCache();
         private CustomUserNameSecurityToken _customUserNameSecurityToken;
         private IDataSource _dataSource;
-	    private readonly Guid CustomPersonId = SystemUser.Id_AvoidUsing_This;
+	    private readonly Guid CustomPersonId = SystemUser.Id;
 
         private bool tryGetPersonFromStore()
         {

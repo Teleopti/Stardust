@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Logon
 			IPerson systemUser;
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				systemUser = _repositoryFactory.CreatePersonRepository(uow).LoadPersonAndPermissions(SystemUser.Id_AvoidUsing_This);
+				systemUser = _repositoryFactory.CreatePersonRepository(uow).LoadPersonAndPermissions(SystemUser.Id);
 			}
 
 			using (var unitOfWork = dataSource.Application.CreateAndOpenUnitOfWork())

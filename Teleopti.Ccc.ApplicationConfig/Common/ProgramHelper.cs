@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 
 			var unitOfWorkFactory = dataSource.Application;
 			var logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(), new TeleoptiPrincipalFactory(), new TokenIdentityProvider(new CurrentHttpContext()));
-			var user = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(unitOfWorkFactory, SystemUser.Id_AvoidUsing_This);
+			var user = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(unitOfWorkFactory, SystemUser.Id);
 			
 			logOnOff.LogOn(dataSource, user, businessUnit);
 

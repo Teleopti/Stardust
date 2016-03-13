@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Logon
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddService<Service>();
-			//system.AddService<PrincipalAuthorization>();
+			system.AddService<PrincipalAuthorization>();
 		}
 
 		public class Service

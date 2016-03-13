@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 
 		public IPerson GetTheSystemUser()
 		{
-			var systemId = SystemUser.Id_AvoidUsing_This;
+			var systemId = SystemUser.Id;
 			
 			 ISession session = _sessionFactory.OpenSession();
 			 var person = session.CreateCriteria<IPerson>()

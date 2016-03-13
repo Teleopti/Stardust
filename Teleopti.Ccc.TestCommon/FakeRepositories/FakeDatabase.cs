@@ -147,19 +147,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private void createDefaultData()
 		{
 			// created by db scripts
-			var superRole = new ApplicationRole { Name = "_Super Role" };
+			var superRole = new ApplicationRole { Name = SystemUser.SuperRoleName };
 			superRole.SetId(SystemUser.SuperRoleId);
 			_applicationRoles.Add(superRole);
 
 			// created by app config app
 			// should should match the system user that is created
 			// not sure if it does...
-			WithPerson(SystemUser.Id_AvoidUsing_This, "System", null,
+			WithPerson(SystemUser.Id, SystemUser.Name, null,
 				TimeZoneInfo.Utc,
 				CultureInfoFactory.CreateEnglishCulture(),
 				CultureInfoFactory.CreateEnglishCulture());
-			//_person.PermissionInformation.AddApplicationRole(superRole);
-
+			_person.PermissionInformation.AddApplicationRole(superRole);
 		}
 
 		public FakeDatabase WithTenant(string tenant, string rtaKey)

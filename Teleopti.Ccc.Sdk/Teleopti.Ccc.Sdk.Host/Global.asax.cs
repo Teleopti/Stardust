@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 			public void FillDtosWithLogonInfo(IList<PersonDto> personDtos)
 			{
-				if (_currentPersonContainer.Current().Person.Id.Value == SystemUser.Id_AvoidUsing_This)
+				if (_currentPersonContainer.Current().Person.Id.Value == SystemUser.Id)
 					return;
 				_orgLoader.FillDtosWithLogonInfo(personDtos);
 			}

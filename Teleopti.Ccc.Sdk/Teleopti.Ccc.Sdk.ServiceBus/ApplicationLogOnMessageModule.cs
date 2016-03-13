@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 			AuthenticationMessageHeader.BusinessUnit = businessUnitId;
 			AuthenticationMessageHeader.DataSource = dataSourceName;
-			AuthenticationMessageHeader.UserName = SystemUser.Id_AvoidUsing_This.ToString(); //rk - is this really correct - why the guid as username?
+			AuthenticationMessageHeader.UserName = SystemUser.Id.ToString(); //rk - is this really correct - why the guid as username?
 			AuthenticationMessageHeader.Password = "custom";
 			AuthenticationMessageHeader.UseWindowsIdentity = false;
 		}
