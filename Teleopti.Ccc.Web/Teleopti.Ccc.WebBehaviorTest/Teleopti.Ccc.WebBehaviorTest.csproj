@@ -1574,7 +1574,6 @@
     <PreBuildEvent>if not exist "$(SolutionDir)packages\SpecFlow.1.9.0\tools\specflow.exe.config" copy "$(ProjectDir)specflow.exe.config" "$(SolutionDir)packages\SpecFlow.1.9.0\tools\specflow.exe.config"
 if not exist "$(ProjectDir)App.config" copy "$(ProjectDir)..\..\BuildArtifacts\Teleopti.Ccc.WebbehaviorTest.config" "$(ProjectDir)App.config"
 "$(SolutionDir)packages\SpecFlow.1.9.0\tools\specflow.exe" generateall "$(ProjectDir)Teleopti.Ccc.WebBehaviorTest.csproj"
-if not exist "$(ProjectDir)license.xml" copy "$(ProjectDir)..\..\LicenseFiles\Teleopti_RD.xml" "$(ProjectDir)license.xml"
 </PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
