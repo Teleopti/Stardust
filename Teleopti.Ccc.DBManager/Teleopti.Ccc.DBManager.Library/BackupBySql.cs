@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			File.Copy(source, localSource, true);
 
 			var sql = string.Format(@"
-				ALTER DATABASE {0} SET SINGLE_USER WITH ROLLBACK AFTER 0
+				ALTER DATABASE {0} SET SINGLE_USER WITH ROLLBACK IMMEDIATE
 				RESTORE DATABASE {0} FROM DISK = '{1}' WITH REPLACE
 				ALTER DATABASE {0} SET MULTI_USER
 				", _databaseName, localSource);
