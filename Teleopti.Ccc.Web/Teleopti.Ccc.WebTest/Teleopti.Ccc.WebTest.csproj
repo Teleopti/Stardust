@@ -302,8 +302,6 @@
     <Compile Include="Areas\People\UserValidatorTest.cs" />
     <Compile Include="Areas\Permissions\ApplicationFunctionsControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\LeaderboardSettingBasedBadgeProviderTest.cs" />
-    <Compile Include="Areas\Permissions\FakeApplicationFunctionRepository.cs" />
-    <Compile Include="Areas\Permissions\FakeAvailableDataRepository.cs" />
     <Compile Include="Areas\Permissions\OrganizationSelectionControllerTest.cs" />
     <Compile Include="Areas\Permissions\PermissionsTestAttribute.cs" />
     <Compile Include="Areas\Permissions\PersonToRoleAssociationTest.cs" />

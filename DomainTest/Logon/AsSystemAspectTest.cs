@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using NHibernate.Util;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -105,10 +106,10 @@ namespace Teleopti.Ccc.DomainTest.Logon
 			culture.Should().Be.EqualTo(CultureInfoFactory.CreateEnglishCulture());
 		}
 
-		[Test, Ignore("wip")]
+		[Test]
 		public void ShouldHaveAllPermissions()
 		{
-			var permissions = new List<bool>();
+			var permitted = Enumerable.Empty<string>();
 			var businessUnid = Guid.NewGuid();
 			Database
 				.WithTenant("tenant")
@@ -117,13 +118,13 @@ namespace Teleopti.Ccc.DomainTest.Logon
 			TheService.Do(new Input { LogOnDatasource = "tenant", LogOnBusinessUnitId = businessUnid },
 				() =>
 				{
-					ApplicationFunctions.ApplicationFunctionList.ForEach(f =>
-					{
-						permissions.Add(PrincipalAuthorization.IsPermitted(f.FunctionPath));
-					});
+					permitted = ApplicationFunctions.ApplicationFunctionList
+						.Select(f => f.FunctionPath)
+						.Where(f => PrincipalAuthorization.IsPermitted(f))
+						.ToArray();
 				});
 
-			permissions.Should().Have.SameValuesAs(new[] { true });
+			permitted.Should().Have.SameValuesAs(ApplicationFunctions.ApplicationFunctionList.Select(x => x.FunctionPath));
 		}
 
 		[Test, Ignore("todo")]

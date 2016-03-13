@@ -134,6 +134,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeSkillAreaRepository>().For<ISkillAreaRepository>();
 			system.UseTestDouble<FakeIntradayMonitorDataLoader>().For<IIntradayMonitorDataLoader>();
 			system.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository, ILicenseRepositoryForLicenseVerifier>();
+			system.UseTestDouble<FakeApplicationFunctionRepository>().For<IApplicationFunctionRepository>();
+			system.UseTestDouble<FakeAvailableDataRepository>().For<IAvailableDataRepository>();
 
 			fakePrincipal(system);
 		}

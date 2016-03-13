@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
@@ -111,6 +112,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly FakePartTimePercentageRepository _partTimePercentages;
 		private readonly FakeContractScheduleRepository _contractSchedules;
 		private readonly FakeApplicationRoleRepository _applicationRoles;
+		private readonly FakeApplicationFunctionRepository _applicationFunctions;
+		private readonly FakeAvailableDataRepository _availableDatas;
+		private readonly IDefinedRaptorApplicationFunctionFactory _allApplicationFunctions;
 
 		private BusinessUnit _businessUnit;
 		private Site _site;
@@ -129,7 +133,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FakeContractRepository contracts,
 			FakePartTimePercentageRepository partTimePercentages,
 			FakeContractScheduleRepository contractSchedules,
-			FakeApplicationRoleRepository applicationRoles
+			FakeApplicationRoleRepository applicationRoles,
+			FakeApplicationFunctionRepository applicationFunctions,
+			FakeAvailableDataRepository availableDatas,
+			IDefinedRaptorApplicationFunctionFactory allApplicationFunctions
 			)
 		{
 			_tenants = tenants;
@@ -141,15 +148,29 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_partTimePercentages = partTimePercentages;
 			_contractSchedules = contractSchedules;
 			_applicationRoles = applicationRoles;
+			_applicationFunctions = applicationFunctions;
+			_availableDatas = availableDatas;
+			_allApplicationFunctions = allApplicationFunctions;
 			createDefaultData();
 		}
 
 		private void createDefaultData()
 		{
-			// created by db scripts
-			var superRole = new ApplicationRole { Name = SystemUser.SuperRoleName };
-			superRole.SetId(SystemUser.SuperRoleId);
-			_applicationRoles.Add(superRole);
+			// all application functions
+			_allApplicationFunctions.ApplicationFunctionList.ForEach(_applicationFunctions.Add);
+
+			// super role
+			var role = new ApplicationRole { Name = SystemUser.SuperRoleName };
+			role.SetId(SystemUser.SuperRoleId);
+			role.AddApplicationFunction(_applicationFunctions.LoadAll().Single(x => x.FunctionPath == DefinedRaptorApplicationFunctionPaths.All));
+			var availableData = new AvailableData
+			{
+				ApplicationRole = role,
+				AvailableDataRange = AvailableDataRangeOption.Everyone
+			};
+			_availableDatas.Add(availableData);
+			role.AvailableData = availableData;
+			_applicationRoles.Add(role);
 
 			// created by app config app
 			// should should match the system user that is created
@@ -158,7 +179,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				TimeZoneInfo.Utc,
 				CultureInfoFactory.CreateEnglishCulture(),
 				CultureInfoFactory.CreateEnglishCulture());
-			_person.PermissionInformation.AddApplicationRole(superRole);
+			_person.PermissionInformation.AddApplicationRole(role);
 		}
 
 		public FakeDatabase WithTenant(string tenant, string rtaKey)

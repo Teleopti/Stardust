@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebTest.Areas.Permissions
+namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeAvailableDataRepository : IAvailableDataRepository
 	{

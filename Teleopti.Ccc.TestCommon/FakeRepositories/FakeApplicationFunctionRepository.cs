@@ -5,11 +5,12 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebTest.Areas.Permissions
+namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeApplicationFunctionRepository : IApplicationFunctionRepository
 	{
 		readonly IList<IApplicationFunction> _applicationFunctions = new List<IApplicationFunction>();
+
 		public void Add(IApplicationFunction entity)
 		{
 			_applicationFunctions.Add(entity);
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 
 		public IList<IApplicationFunction> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _applicationFunctions;
 		}
 
 		public IApplicationFunction Load(Guid id)
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 
 		public IEnumerable<IApplicationFunction> ExternalApplicationFunctions()
 		{
-			throw new NotImplementedException();
+			yield break;
 		}
 
 		public IList<IApplicationFunction> GetChildFunctions(Guid id)
