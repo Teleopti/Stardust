@@ -3,7 +3,6 @@ using System.Linq;
 using Castle.DynamicProxy;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
@@ -12,18 +11,15 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	{
 		private readonly IJsonEventDeserializer _deserializer;
 		private readonly ResolveEventHandlers _resolver;
-		private readonly IDistributedLockAcquirer _distributedLockAcquirer;
 		private readonly IDataSourceScope _dataSourceScope;
 
 		public HangfireEventProcessor(
 			IJsonEventDeserializer deserializer,
 			ResolveEventHandlers resolver,
-			IDistributedLockAcquirer distributedLockAcquirer,
 			IDataSourceScope dataSourceScope)
 		{
 			_deserializer = deserializer;
 			_resolver = resolver;
-			_distributedLockAcquirer = distributedLockAcquirer;
 			_dataSourceScope = dataSourceScope;
 		}
 
