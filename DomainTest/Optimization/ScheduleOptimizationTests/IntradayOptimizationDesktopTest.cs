@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -30,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public IOptimizeIntradayDesktop Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
-		[Test, Ignore("To be continued....")]
+		[Test]
 		public void ShouldSynchronizeScheduleStateHolder()
 		{
 			var scenario = new Scenario("_");
@@ -68,10 +67,58 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				.Should().Be.EqualTo(15);
 		}
 
+		[Test]
+		public void ShouldNotCrashIfALotOfThreads()
+		{
+			const int numberOfIslands = 10;
+			var scenario = new Scenario("_");
+			var phoneActivity = ActivityFactory.CreateActivity("_");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var dateOnly = new DateOnly(2010, 1, 1);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(8, 15, 8, 15, 15), new TimePeriodWithSegment(17, 15, 17, 15, 15), shiftCategory));
+			var contract = new Contract("_")
+			{
+				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36)),
+				PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9)
+			};
+			var schedulerStateHolderFrom = SchedulerStateHolderFrom();
+			schedulerStateHolderFrom.SchedulingResultState.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2020, 1, 1)));
+			schedulerStateHolderFrom.SchedulingResultState.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>();
+			var agents = new List<IPerson>();
+			var scheduleDays = new List<IScheduleDay>();
+			for (var i = 0; i < numberOfIslands; i++)
+			{
+				var skill = SkillFactory.CreateSkill("_").WithId();
+				skill.Activity = phoneActivity;
+				WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
+				var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
+				schedulerStateHolderFrom.SchedulingResultState.SkillDays[skill] = new List<ISkillDay> { skillDay };
+
+				var agent = new Person().WithId();
+				agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
+				agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
+				agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
+				agents.Add(agent);
+
+				var ass = new PersonAssignment(agent, scenario, dateOnly);
+				ass.AddActivity(phoneActivity, new TimePeriod(8, 0, 17, 0));
+				ass.SetShiftCategory(new ShiftCategory("_").WithId());
+				var scheduleDay = ExtractedSchedule.CreateScheduleDay(schedulerStateHolderFrom.SchedulingResultState.Schedules, agent, dateOnly);
+				scheduleDay.AddMainShift(ass);
+				schedulerStateHolderFrom.SchedulingResultState.Schedules.Modify(scheduleDay);
+				scheduleDays.Add(scheduleDay);
+			}
+			agents.ForEach(x => schedulerStateHolderFrom.AllPermittedPersons.Add(x));
+
+			Assert.DoesNotThrow(() =>
+			{
+				Target.Optimize(scheduleDays, new OptimizationPreferences(), new DateOnlyPeriod(dateOnly, dateOnly), new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new NoSchedulingProgress());
+			});
+		}
+
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FillSchedulerStateHolderFromRam>().For<IFillSchedulerStateHolder>();
-			system.UseTestDouble<SynchronizeSchedulerStateHolderDesktop>().For<ISynchronizeIntradayOptimizationResult>();
+			system.UseTestDouble<FillSchedulerStateHolderFromRam>().For<IFillSchedulerStateHolder, ISynchronizeIntradayOptimizationResult>();
 		}
 	}
 }

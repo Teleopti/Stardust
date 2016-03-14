@@ -50,8 +50,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			_fixedStaffLoader = fixedStaffLoader;
 		}
 
-		public WebSchedulingSetupResult Fill(ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod period)
+		public WebSchedulingSetupResult Fill(ISchedulerStateHolder schedulerStateHolder, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
 		{
+			//need to filter things like skilldays and agents here based on agentIds
 			schedulerStateHolder.LoadCommonState(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(), _repositoryFactory);
 			var people = _fixedStaffLoader.Load(period);
 			var scenario = _scenarioRepository.LoadDefaultScenario();

@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		[UnitOfWork]
 		protected virtual PeopleSelection SetupAndSchedule(DateOnlyPeriod period)
 		{
-			var webScheduleState = _fillSchedulerStateHolder.Fill(_schedulerStateHolder(), period);
+			var webScheduleState = _fillSchedulerStateHolder.Fill(_schedulerStateHolder(), null, period);
 
 			if (webScheduleState.AllSchedules.Any())
 			{

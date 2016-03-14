@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		protected virtual void DoOptimization(DateOnlyPeriod period, IEnumerable<Guid> agentIds, bool runResolveWeeklyRestRule)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
-			_fillSchedulerStateHolder.Fill(schedulerStateHolder, period);
+			_fillSchedulerStateHolder.Fill(schedulerStateHolder, agentIds, period);
 			var optimizationPreferences = _optimizationPreferencesFactory.Create();
 			var agents = schedulerStateHolder.AllPermittedPersons;
 			if (agentIds != null)
