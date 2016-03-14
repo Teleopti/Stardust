@@ -30,14 +30,26 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			return new testDoubleFor<object>(_builder, _testDoubles, type);
 		}
 
-		public void AddService<TService>()
+		public void AddService<TService>(bool instancePerLifeTimeScope = false)
 		{
-			_builder
-				.RegisterType<TService>()
-				.AsSelf()
-				.AsImplementedInterfaces()
-				.SingleInstance()
-				.ApplyAspects();
+			if (instancePerLifeTimeScope)
+			{
+				_builder
+					.RegisterType<TService>()
+					.AsSelf()
+					.AsImplementedInterfaces()
+					.InstancePerLifetimeScope()
+					.ApplyAspects();
+			}
+			else
+			{
+				_builder
+					.RegisterType<TService>()
+					.AsSelf()
+					.AsImplementedInterfaces()
+					.SingleInstance()
+					.ApplyAspects();
+			}
 		}
 
 		public void AddService<TService>(TService instance) where TService : class

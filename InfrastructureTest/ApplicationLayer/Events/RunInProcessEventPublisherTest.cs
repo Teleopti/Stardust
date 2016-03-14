@@ -13,20 +13,28 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 	public class RunInProcessEventPublisherTest : ISetup
 	{
 		public RunInProcessEventPublisher Target;
-		public TestEventHandler TestEventHandler;
 
-		[Test, Ignore("Fix this Monday")]
+		[Test]
 		public void ShouldRunEventHandlerImmediatly()
 		{
 			var @event = new TestEvent();
 			Target.Publish(@event);
 
-			TestEventHandler.WasCalled.Should().Be.SameInstanceAs(@event);
+			@event.Handler.WasCalled.Should().Be.SameInstanceAs(@event);
+		}
+
+		[Test]
+		public void ShouldCreateNewScope()
+		{
+			var event1 = new TestEvent();
+			var event2 = new TestEvent();
+			Target.Publish(event1, event2);
+			event1.Handler.Should().Not.Be.SameInstanceAs(event2.Handler);
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.AddService<TestEventHandler>();
+			system.AddService<TestEventHandler>(true);
 		}
 	}
 
@@ -37,10 +45,12 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		public void Handle(TestEvent @event)
 		{
 			WasCalled = @event;
+			@event.Handler = this;
 		}
 	}
 
 	public class TestEvent : IEvent
 	{
+		public TestEventHandler Handler { get; set; }
 	}
 }

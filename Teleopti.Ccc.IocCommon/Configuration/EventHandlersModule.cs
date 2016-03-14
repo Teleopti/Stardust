@@ -3,6 +3,7 @@ using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
@@ -12,6 +13,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonSc
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -79,9 +81,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 							isSynchronizable
 						select i;
 				})
-				.AsSelf() // for testing
+				.AsSelf() // needed for testing 
 				.SingleInstance()
 				.ApplyAspects()
+				.Except<IntradayOptimizationEventHandler>(ct =>
+				{
+					ct.As<IHandleEvent<OptimizationWasOrdered>>()
+						.AsSelf()
+						.InstancePerLifetimeScope()
+						.ApplyAspects();
+				})
 				;
 
 			builder.RegisterType<UnitOfWorkTransactionEventSyncronization>().As<IEventSyncronization>().SingleInstance();

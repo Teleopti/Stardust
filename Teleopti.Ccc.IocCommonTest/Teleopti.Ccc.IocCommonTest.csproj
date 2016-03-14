@@ -120,6 +120,7 @@
     <Compile Include="Configuration\DateAndTimeModuleTest.cs" />
     <Compile Include="Configuration\EncryptionTest.cs" />
     <Compile Include="Configuration\EventHandlersModuleAnalyticsTest.cs" />
+    <Compile Include="Configuration\EventHandlersModuleScopeTest.cs" />
     <Compile Include="Configuration\EventHandlersModuleTest.cs" />
     <Compile Include="Configuration\EventsPublisherModuleTest.cs" />
     <Compile Include="Configuration\ForecasterModuleTest.cs" />

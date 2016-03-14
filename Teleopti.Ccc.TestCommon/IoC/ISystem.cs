@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		ITestDoubleFor UseTestDouble<TTestDouble>(TTestDouble instance) where TTestDouble : class;
 		ITestDoubleFor UseTestDoubleForType(Type type);
 
-		void AddService<TService>();
+		void AddService<TService>(bool instancePerLifeTimeScope = false);
 		void AddService<TService>(TService instance) where TService : class;
 
 		void AddModule(Module module);
