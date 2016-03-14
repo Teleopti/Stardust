@@ -158,8 +158,8 @@
 	</Target>
 	
 	<Target Name="CreateDatabaseWithSQLAdmin">
-		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerString) -C -D$(MartDB) -OTeleoptiAnalytics -F%22$(DatabasePath)%22"/>
-		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerString) -C -D$(AppDB) -OTeleoptiCCC7 -F%22$(DatabasePath)%22"/>
+		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerString) -C -D$(MartDB) -OTeleoptiAnalytics -F%22$(DatabasePath)%22" IgnoreStandardErrorWarningFormat="true"/>
+		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerString) -C -D$(AppDB) -OTeleoptiCCC7 -F%22$(DatabasePath)%22" IgnoreStandardErrorWarningFormat="true"/>
 		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerString) -C -D$(AggDB) -OTeleoptiCCCAgg -F%22$(DatabasePath)%22" Condition="'$(SQLEdition)'!='$(SQLAzure)'"/>
 	</Target>
 
@@ -168,8 +168,8 @@
 	</Target>
 
 	<Target Name="PatchDatabaseWithDboOnly" Condition="'$(SQLEdition)'!='$(SQLAzure)'">
-		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerString) -D$(MartDB) -OTeleoptiAnalytics -F%22$(DatabasePath)%22" />
-		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerString) -D$(AppDB) -OTeleoptiCCC7 -F%22$(DatabasePath)%22" />
+		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerString) -D$(MartDB) -OTeleoptiAnalytics -F%22$(DatabasePath)%22"  IgnoreStandardErrorWarningFormat="true"/>
+		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerString) -D$(AppDB) -OTeleoptiCCC7 -F%22$(DatabasePath)%22"  IgnoreStandardErrorWarningFormat="true"/>
 		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerString) -D$(AggDB) -OTeleoptiCCCAgg -F%22$(DatabasePath)%22" Condition="'$(SQLEdition)'!='$(SQLAzure)'"/>
 	</Target>
 

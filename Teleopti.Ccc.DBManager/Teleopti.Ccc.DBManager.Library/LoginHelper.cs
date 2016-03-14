@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			}
 		}
 
-		public void CreateLogin(string user, string pwd, Boolean iswingroup, SqlVersion sqlVersion)
+		public void CreateLogin(string user, string pwd, bool iswingroup, SqlVersion sqlVersion)
 		{
 			//TODO: check if windows group and run win logon script instead of "SQL Logins - Create.sql"
 			string sql;
@@ -99,18 +99,14 @@ namespace Teleopti.Ccc.DBManager.Library
 						{
 							_executeSql.ExecuteTransactionlessNonQuery(string.Format("DROP USER [{0}]", user));
 						}
-						if (azureContainedDatabaseUserExist(user))
-							sql = string.Format("ALTER USER [{0}] WITH PASSWORD=N'{1}'", user, pwd);
-						else
-							sql = string.Format("CREATE USER [{0}] WITH PASSWORD=N'{1}'", user, pwd);
+						var operation = azureContainedDatabaseUserExist(user) ? "ALTER" : "CREATE";
+						sql = string.Format("{0} USER [{1}] WITH PASSWORD=N'{2}'", operation, user, pwd);
 						_executeSql.ExecuteNonQuery(sql);
 					}
 					else
 					{
-						if (azureLoginExist(user))
-							sql = string.Format("ALTER LOGIN [{0}] WITH PASSWORD=N'{1}'", user, pwd);
-						else
-							sql = string.Format("CREATE LOGIN [{0}] WITH PASSWORD=N'{1}'", user, pwd);
+						var operation = azureLoginExist(user) ? "ALTER" : "CREATE";
+						sql = string.Format("{0} LOGIN [{1}] WITH PASSWORD=N'{2}'", operation, user, pwd);
 						_masterExecuteSql.ExecuteTransactionlessNonQuery(sql);
 					}
 				}

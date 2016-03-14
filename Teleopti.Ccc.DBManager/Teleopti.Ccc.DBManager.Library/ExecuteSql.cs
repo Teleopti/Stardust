@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.DBManager.Library
 			_openConnection = openConnection;
 			_upgradeLog = upgradeLog;
 			var retryStrategy = new Incremental(5, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10));
-
 			_retryPolicy =
 			  new RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy>(retryStrategy);
 			_retryPolicy.Retrying += (sender, args) =>
@@ -114,8 +113,6 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public void ExecuteNonQuery(string sql, int timeout = 30, IDictionary<string, object> parameters = null)
 		{
-
-
 			handleWithRetry(sql, s =>
 			{
 				parameters = parameters ?? new Dictionary<string, object>();
@@ -170,8 +167,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				SqlException sqlException;
 				if ((sqlException = exception as SqlException) != null)
 				{
-					message = message + Environment.NewLine + "Error numbers: " +
-							  string.Join(", ", sqlException.Errors.OfType<SqlError>().Select(e => e.Number));
+					message = string.Format("{0}{1}Error numbers: {2}", message, Environment.NewLine, string.Join(", ", sqlException.Errors.OfType<SqlError>().Select(e => e.Number)));
 				}
 
 				_upgradeLog.Write(message, "ERROR");

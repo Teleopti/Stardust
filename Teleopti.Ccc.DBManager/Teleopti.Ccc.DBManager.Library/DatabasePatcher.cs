@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.DBManager.Library
 	public class DatabasePatcher
 	{
 		private IUpgradeLog _logger;
-		
+
 		public DatabasePatcher(IUpgradeLog upgradeLog)
 		{
 			_logger = upgradeLog;
@@ -60,10 +60,10 @@ namespace Teleopti.Ccc.DBManager.Library
 				{
 					try
 					{
-						using(connectAndOpen(commandLineArgument.ConnectionStringAppLogOn(sqlVersion.IsAzure ? commandLineArgument.DatabaseName : DatabaseHelper.MasterDatabaseName)))
+						using (connectAndOpen(commandLineArgument.ConnectionStringAppLogOn(sqlVersion.IsAzure ? commandLineArgument.DatabaseName : DatabaseHelper.MasterDatabaseName)))
 						{
 						}
-						
+
 						loginExist = true;
 					}
 					catch
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.DBManager.Library
 						loginHelper.CreateLogin(commandLineArgument.appUserName, commandLineArgument.appUserPwd, commandLineArgument.isWindowsGroupName, sqlVersion);
 					}
 
-					var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder,executeSql);
+					var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, executeSql);
 
 					//if we are not db_owner, bail out
 					if (!isDbOwner(executeSql))
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.DBManager.Library
 							//Shortcut to release 329, Azure specific script
 							if (sqlVersion.IsAzure && databaseVersionInformation.GetDatabaseVersion() == 0)
 							{
-								new AzureStartDDL(databaseFolder, executeSql).Apply((DatabaseType) Enum.Parse(typeof(DatabaseType),  commandLineArgument.TargetDatabaseTypeName));
+								new AzureStartDDL(databaseFolder, executeSql).Apply((DatabaseType)Enum.Parse(typeof(DatabaseType), commandLineArgument.TargetDatabaseTypeName));
 							}
 
 							var dbCreator = new DatabaseSchemaCreator(databaseVersionInformation,
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 				return 0;
 			}
-         catch (Exception e)
+			catch (Exception e)
 			{
 				_logger.Write(string.Format("An error occurred: {0}", e), "ERROR");
 				return -1;
@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			return sqlConnection;
 		}
 
-		 private bool compareStringLowerCase(string stringA, string stringB)
+		private static bool compareStringLowerCase(string stringA, string stringB)
 		{
 			return string.Compare(stringA, stringB, true, CultureInfo.CurrentCulture) == 0;
 		}
