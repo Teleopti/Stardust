@@ -51,17 +51,17 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 				if (Math.Abs(workloadDay.CampaignTasks.Value) > 0
 					&& (workloadDay.OverrideTasks.HasValue  || workloadDay.OverrideAverageTaskTime.HasValue || workloadDay.OverrideAverageAfterTaskTime.HasValue))
 				{
-					day.vcombo = -1;
+					day.vcombo = 1;
 				}
 				else if (workloadDay.OverrideTasks.HasValue
 							|| workloadDay.OverrideAverageTaskTime.HasValue
 							|| workloadDay.OverrideAverageAfterTaskTime.HasValue)
 				{
-					day.voverride = -1;
+					day.voverride = 1;
 				}
 				else if (Math.Abs(workloadDay.CampaignTasks.Value) > 0)
 				{
-					day.vcampaign = -1;
+					day.vcampaign = 1;
 				}
 
 				days.Add(day);
