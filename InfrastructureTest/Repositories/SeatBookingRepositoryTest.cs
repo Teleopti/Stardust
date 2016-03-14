@@ -465,6 +465,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Start = booking.StartDateTime,
 				End = booking.EndDateTime,
 				Model = "{shift: blablabla}",
+				ScheduleLoadTimestamp = DateTime.UtcNow
 			};
 
 			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)), model.PersonId,
