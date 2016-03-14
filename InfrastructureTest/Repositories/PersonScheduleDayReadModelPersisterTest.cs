@@ -18,11 +18,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		[Test]
 		public void ShouldIndicateIfInitializedOrNot()
-		{			
+		{
 			var target = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(), MockRepository.GenerateMock<IMessageBrokerComposite>(), null);
 			var personId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
-			var teamId = Guid.NewGuid();	
+			var teamId = Guid.NewGuid();
+			var dateOnly = new DateOnly(2012, 8, 29);
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -38,14 +39,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					Start = date.AddHours(10),
 					End = date.AddHours(18),
 					Model = "{shift: blablabla}",
-					ScheduleLoadTimestamp = DateTime.UtcNow
 				};
 
-				Assert.That(target.IsInitialized(), Is.False);
-
 				target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), personId, businessUnitId, new[] { model }, false);
-							
+
 				Assert.That(target.IsInitialized(), Is.True);
+
+				target.UpdateReadModels(new DateOnlyPeriod(dateOnly, dateOnly.AddDays(2)), personId, businessUnitId, null, false);
+
+				Assert.That(target.IsInitialized(), Is.False);
 			}
 		}
 
@@ -70,7 +72,6 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 					Start = new DateTime(2012, 8, 29, 10, 0, 0, DateTimeKind.Utc),
 					End = new DateTime(2012, 8, 29, 18, 0, 0, DateTimeKind.Utc),
 					Model = shift,
-					ScheduleLoadTimestamp = DateTime.UtcNow
 				};
 
 			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)), personId, model.BusinessUnitId, new[] { model }, false);
@@ -94,7 +95,6 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 					Start = new DateTime(2013, 4, 3, 10, 0, 0, DateTimeKind.Utc),
 					End = new DateTime(2013, 4, 3, 18, 0, 0, DateTimeKind.Utc),
 					Model = "",
-					ScheduleLoadTimestamp = DateTime.UtcNow
 				};
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -127,7 +127,6 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 					Start = new DateTime(2013, 4, 3, 10, 0, 0, DateTimeKind.Utc),
 					End = new DateTime(2013, 4, 3, 18, 0, 0, DateTimeKind.Utc),
 					Model = "",
-					ScheduleLoadTimestamp = DateTime.UtcNow
 				};
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -160,7 +159,6 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 					Start = new DateTime(2012, 8, 29, 10, 0, 0, DateTimeKind.Utc),
 					End = new DateTime(2012, 8, 29, 18, 0, 0, DateTimeKind.Utc),
 					Model = "{shift: blablabla}",
-					ScheduleLoadTimestamp = DateTime.UtcNow
 				};
 
 			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)), model.PersonId, model.BusinessUnitId, new[] { model }, false);
@@ -171,119 +169,5 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 				.Be.True();
 		}
 
-		[Test]
-		public void ShouldPersistNewReadModel()
-		{
-			var target = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(), MockRepository.GenerateMock<IMessageBrokerComposite>(), null);						
-			var date = new DateTime(2012, 8, 29);
-			var readModel = new PersonScheduleDayReadModel
-			{
-				Date = date,
-				TeamId = Guid.NewGuid(),
-				BusinessUnitId = Guid.NewGuid(),
-				PersonId = Guid.NewGuid(),
-				Start = date.AddHours(10),
-				End = date.AddHours(18),
-				Model = "{shift: blablabla}",
-				ScheduleLoadTimestamp = DateTime.UtcNow
-			};
-
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), readModel.PersonId, readModel.BusinessUnitId, new[] { readModel }, false);
-
-			new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make())
-				.ForPerson(new DateOnly(readModel.Date), readModel.PersonId)
-				.Should().Not.Be.Null();
-		}
-
-		[Test]
-		public void ShouldPersistNewerReadModel()
-		{
-			var uow = CurrentUnitOfWork.Make();
-			var target = new PersonScheduleDayReadModelPersister(uow, MockRepository.GenerateMock<IMessageBrokerComposite>(), null);						
-			var date = new DateTime(2012, 8, 29);
-			DateTime oldTimestamp = DateTime.UtcNow;
-			var personId = Guid.NewGuid();
-
-			var oldReadModel = new PersonScheduleDayReadModel
-			{
-				Date = date,
-				TeamId = Guid.NewGuid(),
-				BusinessUnitId = Guid.NewGuid(),
-				PersonId = personId,
-				Start = date.AddHours(10),
-				End = date.AddHours(18),
-				Model = "{shift: blablabla}",
-				ScheduleLoadTimestamp = oldTimestamp
-			};
-
-			var newerReadModel = new PersonScheduleDayReadModel
-			{
-				Date = date,
-				TeamId = Guid.NewGuid(),
-				BusinessUnitId = Guid.NewGuid(),
-				PersonId = personId,
-				Start = date.AddHours(10),
-				End = date.AddHours(18),
-				IsDayOff = true,
-				Model = "{shift: blablabla}",
-				ScheduleLoadTimestamp = oldTimestamp.AddHours(1)
-			};
-
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), oldReadModel.PersonId, oldReadModel.BusinessUnitId, new[] { oldReadModel }, false);
-			new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make())
-				.ForPerson(new DateOnly(oldReadModel.Date), oldReadModel.PersonId)
-				.IsDayOff.Should()
-				.Be.False();
-			
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), newerReadModel.PersonId, newerReadModel.BusinessUnitId, new[] { newerReadModel }, false);
-			new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make())
-				.ForPerson(new DateOnly(newerReadModel.Date), newerReadModel.PersonId)
-				.IsDayOff.Should()
-				.Be.True();
-		}
-
-		[Test]
-		public void ShouldNotPersistOlderReadModel()
-		{
-			var uow = CurrentUnitOfWork.Make();
-			var target = new PersonScheduleDayReadModelPersister(uow, MockRepository.GenerateMock<IMessageBrokerComposite>(), null);
-			var date = new DateTime(2012, 8, 29);
-			DateTime oldTimestamp = DateTime.UtcNow;
-			var personId = Guid.NewGuid();
-
-			var oldTimestampReadModel = new PersonScheduleDayReadModel
-			{
-				Date = date,
-				TeamId = Guid.NewGuid(),
-				BusinessUnitId = Guid.NewGuid(),
-				PersonId = personId,
-				Start = date.AddHours(10),
-				End = date.AddHours(18),
-				IsDayOff = false,
-				Model = "{shift: blablabla}",
-				ScheduleLoadTimestamp = oldTimestamp
-			};
-
-			var newTimestampReadModel = new PersonScheduleDayReadModel
-			{
-				Date = date,
-				TeamId = Guid.NewGuid(),
-				BusinessUnitId = Guid.NewGuid(),
-				PersonId = personId,
-				Start = date.AddHours(10),
-				End = date.AddHours(18),
-				IsDayOff = true,
-				Model = "{shift: blablabla}",
-				ScheduleLoadTimestamp = oldTimestamp.AddHours(1)
-			};
-
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), newTimestampReadModel.PersonId, newTimestampReadModel.BusinessUnitId, new[] { newTimestampReadModel }, false);
-
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), oldTimestampReadModel.PersonId, oldTimestampReadModel.BusinessUnitId, new[] { oldTimestampReadModel }, false);
-			new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make())
-				.ForPerson(new DateOnly(oldTimestampReadModel.Date), oldTimestampReadModel.PersonId)
-				.IsDayOff.Should()
-				.Be.True();
-		}
 	}
 }
