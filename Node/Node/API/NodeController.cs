@@ -4,6 +4,7 @@ using System.Web.Http;
 using System.Web.Http.Results;
 using log4net;
 using Stardust.Node.Constants;
+using Stardust.Node.Entities;
 using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 

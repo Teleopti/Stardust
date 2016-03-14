@@ -10,10 +10,11 @@ namespace Stardust.Node.Timers
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (TrySendJobCanceledToManagerTimer));
 
 		public TrySendJobCanceledToManagerTimer(INodeConfiguration nodeConfiguration,
-		                                        double interval = 2000) : base(nodeConfiguration,
-		                                                                        nodeConfiguration
-			                                                                        .GetManagerJobHasBeenCanceledTemplateUri(),
-		                                                                        interval)
+												TrySendJobProgressToManagerTimer sendJobProgressToManagerTimer,
+												double interval = 2000) : base(nodeConfiguration,
+		                                                                        nodeConfiguration.GetManagerJobHasBeenCanceledTemplateUri(),
+																				sendJobProgressToManagerTimer,
+																				interval)
 		{
 		}
 

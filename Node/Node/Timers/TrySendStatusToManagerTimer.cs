@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using log4net;
+using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
 using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
@@ -18,11 +19,13 @@ namespace Stardust.Node.Timers
 
 		public TrySendStatusToManagerTimer(INodeConfiguration nodeConfiguration,
 		                                   Uri callbackTemplateUri,
+										   TrySendJobProgressToManagerTimer sendJobProgressToManagerTimer,
 		                                   double interval = 2000) : base(interval)
 		{
 			// Validate arguments.
 			nodeConfiguration.ThrowArgumentNullException();
 			callbackTemplateUri.ThrowArgumentNullExceptionWhenNull();
+			sendJobProgressToManagerTimer.ThrowArgumentNullExceptionWhenNull();
 
 			// Assign values.
 			CancellationTokenSource = new CancellationTokenSource();
@@ -32,6 +35,8 @@ namespace Stardust.Node.Timers
 			WhoAmI = NodeConfiguration.CreateWhoIAm(Environment.MachineName);
 
 			CallbackTemplateUri = callbackTemplateUri;
+
+			SendJobProgressToManagerTimer = sendJobProgressToManagerTimer;
 
 			Elapsed += OnTimedEvent;
 
@@ -47,6 +52,7 @@ namespace Stardust.Node.Timers
 		public INodeConfiguration NodeConfiguration { get; private set; }
 
 		public Uri CallbackTemplateUri { get; set; }
+		public TrySendJobProgressToManagerTimer SendJobProgressToManagerTimer { get; set; }
 
 		public event EventHandler TrySendStatusSucceded;
 
@@ -99,6 +105,12 @@ namespace Stardust.Node.Timers
 				return;
 			}
 
+			// All job progresses must have been sent to manager. 
+			if (!SendJobProgressToManagerTimer.HasAllProgressesBeenSent(JobToDo.Id))
+			{
+				return;
+			}
+
 			Stop();
 
 			try
@@ -125,6 +137,7 @@ namespace Stardust.Node.Timers
 				else
 				{
 					Start();
+
 					var msg =
 						string.Format("{0} : Send status to manager failed for job ( jobId, jobName ) : ( {1}, {2} ). Reason : {3}",
 						              WhoAmI,
@@ -140,6 +153,7 @@ namespace Stardust.Node.Timers
 			catch (Exception exp)
 			{
 				Start();
+
 				var msg =
 					string.Format("{0} : Send status to manager failed for job ( jobId, jobName ) : ( {1}, {2} )",
 					              WhoAmI,
