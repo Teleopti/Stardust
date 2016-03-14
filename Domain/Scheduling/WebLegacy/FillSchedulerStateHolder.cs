@@ -8,18 +8,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 	{
 		private ISchedulerStateHolder _schedulerStateHolderFrom;
 
-		public FillSchedulerStateHolder()
-		{
-			FilledSchedulerStateHolder = null;
-		}
-
-		//TODO - remove me!
-		public ISchedulerStateHolder FilledSchedulerStateHolder
-		{
-			get { return _schedulerStateHolderFrom; }
-			private set { _schedulerStateHolderFrom = value; }
-		}
-
 		public WebSchedulingSetupResult Fill(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
 		{
 			foreach (var person in _schedulerStateHolderFrom.AllPermittedPersons)
@@ -28,8 +16,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			}
 
 			schedulerStateHolderTo.SchedulingResultState.Schedules = _schedulerStateHolderFrom.SchedulingResultState.Schedules;
-			FilledSchedulerStateHolder = schedulerStateHolderTo;
-
 			return null;
 		}
 

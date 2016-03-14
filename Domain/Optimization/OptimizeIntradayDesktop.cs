@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -10,6 +13,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IOptimizeIntradayDesktop
 	{
+		//TODO - remove unneeded params when toggle is gone
 		void Optimize(IEnumerable<IScheduleDay> scheduleDays, IOptimizationPreferences optimizerPreferences,
 			DateOnlyPeriod selectedPeriod, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			ISchedulingProgress backgroundWorker);	
@@ -18,21 +22,30 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class OptimizeIntradayIslandsDesktop : IOptimizeIntradayDesktop
 	{
 		private readonly IIntradayOptimizationCommandHandler _intradayOptimizationCommandHandler;
+		private readonly FillSchedulerStateHolder _fillSchedulerStateHolder;
+		private readonly Func<ISchedulerStateHolder> _currentSchedulerStateHolder;
 
-		public OptimizeIntradayIslandsDesktop(IIntradayOptimizationCommandHandler intradayOptimizationCommandHandler)
+		public OptimizeIntradayIslandsDesktop(IIntradayOptimizationCommandHandler intradayOptimizationCommandHandler, 
+																		FillSchedulerStateHolder fillSchedulerStateHolder,
+																		Func<ISchedulerStateHolder> currentSchedulerStateHolder)
 		{
 			_intradayOptimizationCommandHandler = intradayOptimizationCommandHandler;
+			_fillSchedulerStateHolder = fillSchedulerStateHolder;
+			_currentSchedulerStateHolder = currentSchedulerStateHolder;
 		}
 
 		public void Optimize(IEnumerable<IScheduleDay> scheduleDays, IOptimizationPreferences optimizerPreferences, DateOnlyPeriod selectedPeriod,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, ISchedulingProgress backgroundWorker)
 		{
 			var selectedAgents = scheduleDays.Select(x => x.Person).Distinct();
-			_intradayOptimizationCommandHandler.Execute(new IntradayOptimizationCommand()
+			using (_fillSchedulerStateHolder.Add(_currentSchedulerStateHolder()))
 			{
-				Agents = selectedAgents,
-				Period = selectedPeriod
-			});
+				_intradayOptimizationCommandHandler.Execute(new IntradayOptimizationCommand
+				{
+					Agents = selectedAgents,
+					Period = selectedPeriod
+				});
+			}
 		}	
 	}
 
