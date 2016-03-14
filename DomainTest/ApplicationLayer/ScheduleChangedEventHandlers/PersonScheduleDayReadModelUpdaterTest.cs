@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 {
@@ -117,6 +118,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 
 			var model = new NewtonsoftJsonSerializer().DeserializeObject<Model>(repository.Updated.Single().Model);
 			model.Shift.IsFullDayAbsence.Should().Be.True();
+		}
+
+
+		[Test]
+		public void ShouldUpdateIfPersonTerminated()
+		{
+			var repository = MockRepository.GenerateMock<IPersonScheduleDayReadModelPersister>();
+			var target = new PersonScheduleDayReadModelUpdater(null, repository, null);
+
+			var terminationDate = new DateTime(2000, 10, 31);
+			var personId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			target.Handle(new PersonTerminalDateChangedEvent
+			{
+				PersonId = personId,
+				LogOnBusinessUnitId = businessUnitId,
+				TerminationDate = terminationDate
+			});
+
+			repository.AssertWasCalled(
+				x =>
+					x.UpdateReadModels(new DateOnlyPeriod(new DateOnly(terminationDate).AddDays(1), DateOnly.MaxValue), personId, businessUnitId,
+						null, true));
 		}
 
 		[Test]
