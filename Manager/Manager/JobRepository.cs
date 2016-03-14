@@ -357,7 +357,7 @@ namespace Stardust.Manager
 						using (
 							var da =
 								new SqlDataAdapter(
-									"SELECT TOP 1 * From [Stardust].JobDefinitions WITH (TABLOCKX) WHERE AssignedNode IS NULL OR AssignedNode = ''",
+									"SELECT TOP 1 * FROM [Stardust].JobDefinitions WITH (TABLOCKX) WHERE AssignedNode IS NULL OR AssignedNode = ''",
 									connection)
 
 								{
