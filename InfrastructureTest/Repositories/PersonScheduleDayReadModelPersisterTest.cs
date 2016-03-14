@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	{
 
 		[Test]
-		[Ignore]
 		public void ShouldIndicateIfInitializedOrNot()
 		{			
 			var target = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(), MockRepository.GenerateMock<IMessageBrokerComposite>(), null);
