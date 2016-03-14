@@ -35,17 +35,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop
             Logger.Info("Start consuming PersonalWithExternalLogonOn message.");
 			
 			if (!message.PersonHaveExternalLogOn && !doesPersonHaveExternalLogOn(message.PersonId)) return;
-			
-			try
-			{
-                _teleoptiRtaService.CheckForActivityChange(message.PersonId, message.LogOnBusinessUnitId, DateTime.UtcNow);
-				Logger.InfoFormat("Message successfully send to TeleoptiRtaService BU: {0}, Person: {1}, TimeStamp: {2}.", message.LogOnBusinessUnitId, message.PersonId, DateTime.UtcNow);
-			}
-			catch (Exception exception)
-			{
-                Logger.Error("Exception occured when calling TeleoptiRtaService", exception);
-			}
 
+			var checkTask = _teleoptiRtaService.CheckForActivityChange(message.PersonId, message.LogOnBusinessUnitId,
+				DateTime.UtcNow);
+			checkTask.ContinueWith(t =>
+			{
+				if (t.IsFaulted)
+				{
+					Logger.Error("Exception occured when calling TeleoptiRtaService", t.Exception);
+				}
+				else
+				{
+					Logger.InfoFormat("Message successfully sent to TeleoptiRtaService BU: {0}, Person: {1}, TimeStamp: {2}.",
+						message.LogOnBusinessUnitId, message.PersonId, DateTime.UtcNow);
+				}
+			});
+			
 			DateTime? startTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
 			if (!startTime.HasValue)
 			{
@@ -71,17 +76,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop
             Logger.Info("Start consuming ScheduleProjectionReadOnlyChanged message.");
 
 			if (!doesPersonHaveExternalLogOn(message.PersonId)) return;
-			
-			try
-			{
-                _teleoptiRtaService.CheckForActivityChange(message.PersonId, message.LogOnBusinessUnitId, DateTime.UtcNow);
-				Logger.InfoFormat("Message successfully send to TeleoptiRtaService BU: {0}, Person: {1}, TimeStamp: {2}.", message.LogOnBusinessUnitId, message.PersonId, DateTime.UtcNow);
-			}
-			catch (Exception exception)
-			{
-                Logger.Error("Exception occured when calling TeleoptiRtaService", exception);
-			}
 
+			var checkTask = _teleoptiRtaService.CheckForActivityChange(message.PersonId, message.LogOnBusinessUnitId,
+				DateTime.UtcNow);
+			checkTask.ContinueWith(t =>
+			{
+				if (t.IsFaulted)
+				{
+					Logger.Error("Exception occured when calling TeleoptiRtaService", t.Exception);
+				}
+				else
+				{
+					Logger.InfoFormat("Message successfully send to TeleoptiRtaService BU: {0}, Person: {1}, TimeStamp: {2}.",
+						message.LogOnBusinessUnitId, message.PersonId, DateTime.UtcNow);
+				}
+			});
+		
 			DateTime? startTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
 			if (!startTime.HasValue || startTime < message.ActivityStartDateTime)
 			{

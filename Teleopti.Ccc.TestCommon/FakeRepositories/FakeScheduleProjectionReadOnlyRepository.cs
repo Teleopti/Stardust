@@ -10,6 +10,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 	public class FakeScheduleProjectionReadOnlyRepository : IScheduleProjectionReadOnlyRepository
 	{
+		private IDictionary<Guid, DateTime> store = new Dictionary<Guid, DateTime>();
+
+		public void SetNextActivityStartTime(IPerson person, DateTime time)
+		{
+			store.Add(person.Id.GetValueOrDefault(),time);
+		}
+
 		public IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period, IBudgetGroup budgetGroup, IScenario scenario)
 		{
 			throw new NotImplementedException();
@@ -37,7 +44,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public DateTime? GetNextActivityStartTime(DateTime dateTime, Guid personId)
 		{
-			throw new NotImplementedException();
+			DateTime foundStart;
+			if (store.TryGetValue(personId, out foundStart))
+				return foundStart;
+
+			return null;
 		}
 
 		public IEnumerable<ProjectionChangedEventLayer> ForPerson(DateOnly date, Guid personId, Guid scenarioId)

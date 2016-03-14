@@ -1,5 +1,5 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Rta.WebService;
@@ -18,10 +18,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 	        _dataSource = dataSource;
         }
 
-	    public void CheckForActivityChange(Guid personId, Guid businessUnitId, DateTime timestamp)
-        {
-            var channel = _channelCreator.CreateChannel<ITeleoptiRtaService>();
-            channel.GetUpdatedScheduleChange(personId, businessUnitId, timestamp, _dataSource.CurrentName());
-        }
+	    public Task CheckForActivityChange(Guid personId, Guid businessUnitId, DateTime timestamp)
+	    {
+		    return Task.Factory.StartNew(() =>
+		    {
+				var channel = _channelCreator.CreateChannel<ITeleoptiRtaService>();
+				channel.GetUpdatedScheduleChange(personId, businessUnitId, timestamp, _dataSource.CurrentName());
+		    });
+	    }
     }
 }

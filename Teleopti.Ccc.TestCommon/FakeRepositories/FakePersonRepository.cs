@@ -188,7 +188,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public bool DoesPersonHaveExternalLogOn(DateOnly dateTime, Guid personId)
 		{
-			throw new NotImplementedException();
+			return
+				_persons.Where(p => p.Id.GetValueOrDefault() == personId)
+					.Select(p => p.Period(dateTime))
+					.Any(pp => pp!=null && pp.ExternalLogOnCollection.Count > 0);
 		}
 
 		public ICollection<IPerson> FindAllWithRolesSortByName()
