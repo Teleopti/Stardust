@@ -326,7 +326,9 @@ namespace Manager.Integration.Test
 		public void ShouldBeAbleToCreateASuccessJobRequestTest()
 		{
 			logMessage("Start.");
-			var createNewJobRequests = JobHelper.GenerateFastJobParamsRequests(1);
+
+			var createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(1);
+
 			logMessage("( " + createNewJobRequests.Count + " ) jobs will be created.");
 
 			var timeout =

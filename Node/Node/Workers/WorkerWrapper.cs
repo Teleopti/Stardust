@@ -60,7 +60,9 @@ namespace Stardust.Node.Workers
 			TrySendJobDoneStatusToManagerTimer = trySendJobDoneStatusToManagerTimer;
 			TrySendJobCanceledStatusToManagerTimer = trySendJobCanceledStatusToManagerTimer;
 			TrySendJobFaultedStatusToManagerTimer = trySendJobFaultedStatusToManagerTimer;
+
 			TrySendJobProgressToManagerTimer = trySendJobProgressToManagerTimer;
+			TrySendJobProgressToManagerTimer.Start();
 
 			NodeStartUpNotificationToManagerTimer.Start();
 		}
@@ -384,8 +386,14 @@ namespace Stardust.Node.Workers
 			SetNodeStatusTimer(null,
 			                   null);
 
+			// Clear all job progresses for jobid.
+			if (CurrentMessageToProcess != null)
+			{
+				TrySendJobProgressToManagerTimer.ClearAllJobProgresses(CurrentMessageToProcess.Id);
+			}			
+
 			// Reset jobToDo, so it can start processing new work.
-			ResetCurrentMessage();
+			ResetCurrentMessage();			
 		}
 
 		private void SendJobProgressToManager(string message)

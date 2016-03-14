@@ -24,6 +24,9 @@ namespace Stardust.Node.Timers
 		                                        IHttpSender httpSender,
 		                                        double interval) : base(interval)
 		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+										     "Start.");
+
 			if (httpSender == null)
 			{
 				throw new ArgumentNullException("httpSender");
@@ -48,6 +51,9 @@ namespace Stardust.Node.Timers
 			UriBuilder.Path += ManagerRouteConstants.JobProgress;
 
 			Elapsed += OnTimedEvent;
+
+			LogHelper.LogDebugWithLineNumber(Logger,
+											 "Finished.");
 		}
 
 		private UriBuilder UriBuilder { get; set; }
@@ -66,6 +72,9 @@ namespace Stardust.Node.Timers
 
 		public void ClearAllJobProgresses(Guid jobId)
 		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+								 "Start.");
+
 			if (jobId == Guid.Empty)
 			{
 				throw new ArgumentNullException("jobId");
@@ -85,18 +94,32 @@ namespace Stardust.Node.Timers
 													out model);
 				}
 			}
+
+			LogHelper.LogDebugWithLineNumber(Logger,
+											 "Finished.");
+
 		}
 
 		public void ClearAllJobProgresses()
 		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+								 "Start.");
+
 			if (JobProgressModels != null)
 			{
 				JobProgressModels.Clear();
 			}
+
+			LogHelper.LogDebugWithLineNumber(Logger,
+											 "Finished.");
+
 		}
 
 		public bool HasAllProgressesBeenSent(Guid jobId)
 		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+											 "Start.");
+
 			if (JobProgressModels == null)
 			{
 				return true;
@@ -106,11 +129,17 @@ namespace Stardust.Node.Timers
 																model.ResponseMessage.IsSuccessStatusCode &&
 																model.JobId == jobId);
 
+			LogHelper.LogDebugWithLineNumber(Logger,
+											 "Finished.");
+
 			return allSent;
 		}
 
 		public bool HasAllProgressesBeenSent()
 		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+											 "Start.");
+
 			if (JobProgressModels == null)
 			{
 				return true;
@@ -119,13 +148,23 @@ namespace Stardust.Node.Timers
 			var allSent = JobProgressModels.Values.All(model => model.ResponseMessage != null &&
 			                                                    model.ResponseMessage.IsSuccessStatusCode);
 
+			LogHelper.LogDebugWithLineNumber(Logger,
+											 "Finished.");
+
 			return allSent;
 		}
 
 		protected virtual async void TrySendJobProgress()
 		{
 			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Start sending job progress to manager.");
+			                                 "Start.");
+
+			if (JobProgressModels == null || JobProgressModels.IsEmpty)
+			{
+				LogHelper.LogDebugWithLineNumber(Logger,
+												 "No job progresses to send (outer).");
+
+			}
 
 			if (JobProgressModels != null)
 			{
@@ -139,8 +178,14 @@ namespace Stardust.Node.Timers
 
 				if (sendJobProgressModels.Any())
 				{
+					LogHelper.LogDebugWithLineNumber(Logger, 
+													 sendJobProgressModels.Count +  " job progresses to send.");
+
 					foreach (var sendJobProgressModel in sendJobProgressModels)
 					{
+						LogHelper.LogDebugWithLineNumber(Logger,
+														 "Try send job progress ( jobId, progressDetail ) : ( " + sendJobProgressModel.JobId +  ", " + sendJobProgressModel.ProgressDetail + " )");
+
 						sendJobProgressModel.ResponseMessage =
 							await HttpSender.PostAsync(UriBuilder.Uri,
 							                           new
@@ -150,20 +195,45 @@ namespace Stardust.Node.Timers
 							                           });
 					}
 				}
+				else
+				{
+					LogHelper.LogDebugWithLineNumber(Logger,
+													"No job progresses to send (inner).");
+				}
 			}
 
 			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Finished send job progress to manager.");
+			                                 "Finished.");
 		}
 
 		private void OnTimedEvent(object sender, ElapsedEventArgs e)
 		{
-			TrySendJobProgress();
+			LogHelper.LogDebugWithLineNumber(Logger,
+											 "Start.");
+
+			Stop();
+
+			try
+			{
+				TrySendJobProgress();
+			}
+
+			finally
+			{
+				Start();
+
+				LogHelper.LogDebugWithLineNumber(Logger,
+												 "Finished.");
+
+			}
 		}
 
 		public void SendProgress(Guid jobid,
 		                         string progressMessage)
 		{
+			LogHelper.LogDebugWithLineNumber(Logger,
+											 "Start.");
+
 			var progressModel = new SendJobProgressModel
 			{
 				JobId = jobid,
@@ -173,6 +243,10 @@ namespace Stardust.Node.Timers
 			JobProgressModels.AddOrUpdate(DateTime.Now,
 			                              progressModel,
 			                              (time, model) => progressModel);
+
+			LogHelper.LogDebugWithLineNumber(Logger,
+											 "Finished.");
+
 		}
 
 		protected override void Dispose(bool disposing)

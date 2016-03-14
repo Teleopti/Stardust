@@ -222,6 +222,7 @@ namespace NodeTest
 
 
 			var actionResult = _nodeController.StartJob(null);
+
 			Assert.IsInstanceOf(typeof (BadRequestErrorMessageResult),
 			                    actionResult);
 		}
@@ -245,7 +246,12 @@ namespace NodeTest
 			                                   "i lingonskogen");
 			var ser = JsonConvert.SerializeObject(parameters);
 
-			var jobToDo2 = new JobToDo {Id = Guid.NewGuid(), Name = "Another name", Serialized = ser};
+			var jobToDo2 = new JobToDo
+			{
+				Id = Guid.NewGuid(),
+				Name = "Another name",
+				Serialized = ser
+			};
 
 			_nodeController.StartJob(_jobToDo);
 
@@ -253,6 +259,7 @@ namespace NodeTest
 
 			Assert.IsInstanceOf(typeof (ConflictResult),
 			                    actionResult);
+
 			_sendJobDoneTimer.Wait.Wait(TimeSpan.FromSeconds(3)); // let job finish
 		}
 
@@ -269,11 +276,16 @@ namespace NodeTest
 			                                   _trySendJobProgressToManagerTimerFake,
 			                                   new PostHttpRequestFake());
 
-			_nodeController = new NodeController(_workerWrapper) {Request = new HttpRequestMessage()};
+			_nodeController = new NodeController(_workerWrapper)
+			{
+				Request = new HttpRequestMessage()
+			};
 
 			var actionResult = _nodeController.StartJob(_jobToDo);
+
 			Assert.IsInstanceOf(typeof (OkResult),
 			                    actionResult);
+
 			_sendJobDoneTimer.Wait.Wait(TimeSpan.FromSeconds(3)); // let job finish
 		}
 	}
