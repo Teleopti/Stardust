@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 
 		public ScheduleBlockSameShiftCategoryValidator()
 		{
-			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(6).Add(TimeSpan.FromSeconds(15))));
+			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(3).Add(TimeSpan.FromSeconds(10))));
 		}
 
 		protected override SikuliValidationResult Validate(SchedulerTestData data)
