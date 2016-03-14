@@ -255,6 +255,7 @@
     <Compile Include="Foundation\CouldNotCreateTransactionException.cs" />
     <Compile Include="ApplicationLayer\IJsonEventDeserializer.cs" />
     <Compile Include="ApplicationLayer\IJsonEventSerializer.cs" />
+    <Compile Include="Foundation\CurrentProcess.cs" />
     <Compile Include="Foundation\SelectivePrincipalContext.cs" />
     <Compile Include="Foundation\BusinessUnitForRequest.cs" />
     <Compile Include="Foundation\InitializeMessageBroker.cs" />

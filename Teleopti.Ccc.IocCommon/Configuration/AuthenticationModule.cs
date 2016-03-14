@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WebRequestPrincipalContext>().SingleInstance();
 			builder.RegisterType<ThreadPrincipalContext>().SingleInstance();
 			builder.RegisterType<SelectivePrincipalContext>().As<ICurrentPrincipalContext>().SingleInstance();
+			builder.RegisterType<CurrentProcess>().SingleInstance();
 			builder.RegisterType<TokenIdentityProvider>().As<ITokenIdentityProvider>().SingleInstance();
 			builder.RegisterType<TeleoptiPrincipalFactory>().As<IPrincipalFactory>().SingleInstance();
 			builder.RegisterType<RoleToPrincipalCommand>().As<IRoleToPrincipalCommand>().InstancePerDependency();

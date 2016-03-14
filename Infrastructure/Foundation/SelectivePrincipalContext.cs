@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Web;
@@ -11,18 +10,21 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		private readonly WebRequestPrincipalContext _web;
 		private readonly WindowsAppDomainPrincipalContext _appDomain;
 		private readonly ThreadPrincipalContext _thread;
+		private readonly CurrentProcess _currentProcess;
 
 		public SelectivePrincipalContext(
 			ICurrentHttpContext httpContext,
 			WebRequestPrincipalContext web,
 			WindowsAppDomainPrincipalContext appDomain,
-			ThreadPrincipalContext thread
+			ThreadPrincipalContext thread,
+			CurrentProcess currentProcess
 			)
 		{
 			_httpContext = httpContext;
 			_web = web;
 			_appDomain = appDomain;
 			_thread = thread;
+			_currentProcess = currentProcess;
 		}
 
 		public void SetCurrentPrincipal(ITeleoptiPrincipal principal)
@@ -39,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		{
 			if (_httpContext.Current() != null)
 				return _web;
-			if (Process.GetCurrentProcess().ProcessName.Contains("Teleopti.Ccc"))
+			if (_currentProcess.Name().Contains("Teleopti.Ccc"))
 				return _appDomain;
 			return _thread;
 		}
