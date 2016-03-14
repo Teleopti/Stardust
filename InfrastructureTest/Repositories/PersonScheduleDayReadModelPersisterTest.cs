@@ -19,39 +19,35 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	[TestFixture, Category("LongRunning")]
 	public class PersonScheduleDayReadModelPersisterTest : DatabaseTest
 	{
-
 		[Test]
-		[Ignore]
 		public void ShouldIndicateIfInitializedOrNot()
-		{			
-			var target = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(), MockRepository.GenerateMock<IMessageBrokerComposite>(), null);
+		{
+			clearReadModel();
+			var target = new PersonScheduleDayReadModelPersister(CurrUnitOfWork,
+				MockRepository.GenerateMock<IMessageBrokerComposite>(), null);
 			var personId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
-			var teamId = Guid.NewGuid();	
-
-			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			var teamId = Guid.NewGuid();
+			
+			var date = new DateTime(2012, 8, 29);
+			var model = new PersonScheduleDayReadModel
 			{
-				Assert.That(target.IsInitialized(), Is.False);
+				Date = date,
+				TeamId = teamId,
+				BusinessUnitId = businessUnitId,
+				PersonId = personId,
+				Start = date.AddHours(10),
+				End = date.AddHours(18),
+				Model = "{shift: blablabla}",
+				ScheduleLoadTimestamp = DateTime.UtcNow
+			};
 
-				var date = new DateTime(2012, 8, 29);
-				var model = new PersonScheduleDayReadModel
-				{
-					Date = date,
-					TeamId = teamId,
-					BusinessUnitId = businessUnitId,
-					PersonId = personId,
-					Start = date.AddHours(10),
-					End = date.AddHours(18),
-					Model = "{shift: blablabla}",
-					ScheduleLoadTimestamp = DateTime.UtcNow
-				};
+			Assert.That(target.IsInitialized(), Is.False);
 
-				Assert.That(target.IsInitialized(), Is.False);
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), personId, businessUnitId,
+				new[] {model}, false);
 
-				target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), personId, businessUnitId, new[] { model }, false);
-							
-				Assert.That(target.IsInitialized(), Is.True);
-			}
+			Assert.That(target.IsInitialized(), Is.True);
 		}
 
 		[Test]
@@ -327,6 +323,11 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 			uow.Current().PersistAll();
 			messageBroker.GetSendInvokedCount().Should().Be.EqualTo(1);
 			CleanUpAfterTest();
+		}
+		private void clearReadModel()
+		{
+			Session.CreateSQLQuery("TRUNCATE TABLE ReadModel.PersonScheduleDay")
+				.ExecuteUpdate();
 		}
 	}
 
