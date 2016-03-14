@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -19,9 +20,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly ITeamScheduleProjectionProvider _projectionProvider;
 		private readonly IPossibleShiftTradePersonsProvider _possibleShiftTradePersonsProvider;
 		private readonly IPersonRequestRepository _personRequestRepository;
+		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 		
 
-		public ShiftTradePersonScheduleViewModelMapper(IPermissionProvider permissionProvider, ILoggedOnUser loggedOnUser, IShiftTradePersonScheduleProvider personScheduleProvider, ITeamScheduleProjectionProvider projectionProvider, IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider, IPersonRequestRepository personRequestRepository)
+		public ShiftTradePersonScheduleViewModelMapper(IPermissionProvider permissionProvider, ILoggedOnUser loggedOnUser, IShiftTradePersonScheduleProvider personScheduleProvider, ITeamScheduleProjectionProvider projectionProvider, IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider, IPersonRequestRepository personRequestRepository, ICommonAgentNameProvider commonAgentNameProvider)
 		{
 			_permissionProvider = permissionProvider;
 			_loggedOnUser = loggedOnUser;
@@ -29,6 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			_projectionProvider = projectionProvider;
 			_possibleShiftTradePersonsProvider = possibleShiftTradePersonsProvider;
 			_personRequestRepository = personRequestRepository;
+			_commonAgentNameProvider = commonAgentNameProvider;
 		}
 
 		public ShiftTradeAddPersonScheduleViewModel MakeMyScheduleViewModel(ShiftTradeScheduleViewModelData inputData)
@@ -37,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				_loggedOnUser.CurrentUser()) || _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)
 				? _personScheduleProvider.GetScheduleForPersons(inputData.ShiftTradeDate, new[] { _loggedOnUser.CurrentUser() }).SingleOrDefault()
 				: null;
-			var myScheduleViewModel = _projectionProvider.MakeScheduleReadModel(_loggedOnUser.CurrentUser(), myScheduleDay, true);
+			var myScheduleViewModel = _projectionProvider.MakeScheduleReadModel(_loggedOnUser.CurrentUser(), myScheduleDay, true, _commonAgentNameProvider.CommonAgentNameSettings);
 			return new ShiftTradeAddPersonScheduleViewModel(myScheduleViewModel);
 		}
 
@@ -58,7 +61,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					var scheduleDay =
 						_personScheduleProvider.GetScheduleForPersons(inputData.ShiftTradeDate, new[] {person}).SingleOrDefault();
 					var shiftExchangeOfferId = req.ShiftExchangeOfferId;
-					return _projectionProvider.IsFullDayAbsence(scheduleDay)||_projectionProvider.IsOvertimeOnDayOff(scheduleDay)? null:new ShiftTradeAddPersonScheduleViewModel(_projectionProvider.MakeScheduleReadModel(person, scheduleDay, true))
+					return _projectionProvider.IsFullDayAbsence(scheduleDay)||_projectionProvider.IsOvertimeOnDayOff(scheduleDay)
+						? null
+						: new ShiftTradeAddPersonScheduleViewModel(_projectionProvider.MakeScheduleReadModel(person, scheduleDay, true, _commonAgentNameProvider.CommonAgentNameSettings))
 						{
 							ShiftExchangeOfferId = new Guid(shiftExchangeOfferId)
 						};

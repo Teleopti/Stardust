@@ -57,6 +57,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			{
 				return StatusCode(HttpStatusCode.Forbidden);
 			}
+
+			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
+
 			var today = _date.LocalDateOnly();
 			var agents =
 				_personRepository.FindPeopleBelongTeam(team, new DateOnlyPeriod(today, today))
@@ -65,7 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 							new AgentViewModel
 							{
 								PersonId = x.Id.GetValueOrDefault(),
-                                Name = _commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(_personRepository.Get(x.Id.GetValueOrDefault())),
+								Name = commonAgentNameSettings.BuildCommonNameDescription(_personRepository.Get(x.Id.GetValueOrDefault())),
 								SiteId = team.Site.Id.ToString(),
 								SiteName = team.Site.Description.Name,
 								TeamId = team.Id.ToString(),

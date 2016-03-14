@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -27,11 +28,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 		private readonly ITeamScheduleProjectionProvider _projectionProvider;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ILoggedOnUser _logonUser;
+		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 
 		public TeamScheduleViewModelReworkedFactory(ITeamSchedulePersonsProvider teamSchedulePersonsProvider,
 			IAgentScheduleViewModelReworkedMapper agentScheduleViewModelReworkedMapper,
 			ITimeLineViewModelReworkedMapper timeLineViewModelReworkedMapper,
-			IPersonScheduleDayReadModelFinder scheduleDayReadModelFinder, IPersonRepository personRep, IScheduleProvider scheduleProvider, ITeamScheduleProjectionProvider projectionProvider, IPermissionProvider permissionProvider, ILoggedOnUser logonUser)
+			IPersonScheduleDayReadModelFinder scheduleDayReadModelFinder, IPersonRepository personRep, IScheduleProvider scheduleProvider, ITeamScheduleProjectionProvider projectionProvider, IPermissionProvider permissionProvider, ILoggedOnUser logonUser, ICommonAgentNameProvider commonAgentNameProvider)
 		{
 			_teamSchedulePersonsProvider = teamSchedulePersonsProvider;
 			_agentScheduleViewModelReworkedMapper = agentScheduleViewModelReworkedMapper;
@@ -42,6 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			_projectionProvider = projectionProvider;
 			_permissionProvider = permissionProvider;
 			_logonUser = logonUser;
+			_commonAgentNameProvider = commonAgentNameProvider;
 		}
 
 		public TeamScheduleViewModelReworked GetViewModel(TeamScheduleViewModelData data)
@@ -77,8 +80,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			var myScheduleDay = isSchedulePublished || canSeeUnpublished
 				? _scheduleProvider.GetScheduleForPersons(data.ScheduleDate, new[] {_logonUser.CurrentUser()}).SingleOrDefault()
 				: null;
-		
-			var myScheduleViewModel = _projectionProvider.MakeScheduleReadModel(_logonUser.CurrentUser(), myScheduleDay, true);
+
+			var myScheduleViewModel = _projectionProvider.MakeScheduleReadModel(_logonUser.CurrentUser(), myScheduleDay, true, _commonAgentNameProvider.CommonAgentNameSettings);
 
 			int pageCount;
 			List<AgentInTeamScheduleViewModel> agentSchedules;
@@ -168,7 +171,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 						person, ScheduleVisibleReasons.Any) || canSeeUnpublishedSchedules
 						? personScheduleDay.Item2
 						: null;
-					var scheduleReadModel = _projectionProvider.MakeScheduleReadModel(person, scheduleDay, isPermittedToViewConfidential);
+					var scheduleReadModel = _projectionProvider.MakeScheduleReadModel(person, scheduleDay, isPermittedToViewConfidential, _commonAgentNameProvider.CommonAgentNameSettings);
 					agentSchedules.Add(scheduleReadModel);
 				}
 			}
