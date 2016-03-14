@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Autofac;
+using log4net;
 using log4net.Config;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -51,6 +52,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			defaultDataCreator = container.Resolve<DefaultDataCreator>();
 			dataCreator = container.Resolve<DataCreator>();
 
+			LogManager.GetLogger(typeof(NUnitSetup)).Debug("defaultDataCreator.HashValue " + defaultDataCreator.HashValue);
+			LogManager.GetLogger(typeof(NUnitSetup)).Debug("TestConfiguration.HashValue " + TestConfiguration.HashValue);
 			var dataHash = defaultDataCreator.HashValue ^ TestConfiguration.HashValue;
 			var path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Rta");
 

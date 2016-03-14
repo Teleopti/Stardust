@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using log4net;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -9,6 +10,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 {
 	public class DefaultMatrixApplicationFunctions : IHashableDataSetup
 	{
+		private static readonly ILog log = LogManager.GetLogger(typeof(DefaultMatrixApplicationFunctions));
+
 		private readonly string[] names =
 		{
 			"ResReportAgentQueueMetrics",
@@ -46,7 +49,9 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 
 		public int HashValue()
 		{
-			return names.Aggregate(37, (current, name) => current ^ name.GetHashCode());
+			var hashValue = names.Aggregate(37, (current, name) => current ^ name.GetHashCode());
+			log.Debug("hashValue " + hashValue);
+			return hashValue;
 		}
 	}
 }
