@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			result.WorkloadId.Should().Be.EqualTo(_workload.Id.Value);
 
 			dynamic firstDay = result.Days.First();
-			(Math.Round((double) firstDay.vcampaign, 2)).Should().Be.EqualTo(1d);
+			(Math.Round((double) firstDay.vcampaign, 2)).Should().Be.EqualTo(-1d);
 		}
 
 		[Test]
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			result.WorkloadId.Should().Be.EqualTo(_workload.Id.Value);
 
 			dynamic firstDay = result.Days.First();
-			(Math.Round((double)firstDay.vcampaign, 2)).Should().Be.EqualTo(1);
+			(Math.Round((double)firstDay.vcampaign, 2)).Should().Be.EqualTo(-1);
 		}
 
 		[Test]
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			result.WorkloadId.Should().Be.EqualTo(_workload.Id.Value);
 
 			dynamic firstDay = result.Days.First();
-			(Math.Round((double)firstDay.voverride, 2)).Should().Be.EqualTo(1d);
+			(Math.Round((double)firstDay.voverride, 2)).Should().Be.EqualTo(-1d);
 		}
 
 		[Test]
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			result.WorkloadId.Should().Be.EqualTo(_workload.Id.Value);
 
 			dynamic firstDay = result.Days.First();
-			(Math.Round((double)firstDay.voverride, 2)).Should().Be.EqualTo(1d);
+			(Math.Round((double)firstDay.voverride, 2)).Should().Be.EqualTo(-1d);
 		}
 
 		[Test]
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			result.WorkloadId.Should().Be.EqualTo(_workload.Id.Value);
 
 			dynamic firstDay = result.Days.First();
-			(Math.Round((double)firstDay.voverride, 2)).Should().Be.EqualTo(1d);
+			(Math.Round((double)firstDay.voverride, 2)).Should().Be.EqualTo(-1d);
 		}
 
 		[Test, ExpectedException(typeof(RuntimeBinderException))]
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			result.WorkloadId.Should().Be.EqualTo(_workload.Id.Value);
 
 			dynamic firstDay = result.Days.First();
-			(Math.Round((double)firstDay.voverride, 2)).Should().Be.EqualTo(1d);
+			(Math.Round((double)firstDay.voverride, 2)).Should().Be.EqualTo(-1d);
 			(Math.Round((double)firstDay.vcampaign, 2)).Should().Be.EqualTo(75d);
 		}
 
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var result = target.Create(_workload.Id.Value, _futurePeriod, _scenario);
 
 			dynamic firstDay = result.Days.First();
-			(Math.Round((double)firstDay.vcombo, 2)).Should().Be.EqualTo(1d);
+			(Math.Round((double)firstDay.vcombo, 2)).Should().Be.EqualTo(-1d);
 		}
 
 		[Test]
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var result = target.Create(_workload.Id.Value, _futurePeriod, _scenario);
 
 			dynamic firstDay = result.Days.First();
-			(Math.Round((double)firstDay.vcombo, 2)).Should().Be.EqualTo(1d);
+			(Math.Round((double)firstDay.vcombo, 2)).Should().Be.EqualTo(-1d);
 		}
 
 		[Test, ExpectedException(typeof(RuntimeBinderException))]
