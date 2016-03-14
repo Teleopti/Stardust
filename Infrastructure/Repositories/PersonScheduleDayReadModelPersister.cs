@@ -39,7 +39,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				if (Logger.IsDebugEnabled)
 					Logger.Debug("Saving model PersonScheduleDayReadModel");
-				changed = readModels.Select(readModel => saveReadModel(readModel, initialLoad)).ToList().Any(count => count > 0);
+				readModels.ForEach(readModel =>
+				{
+					var count = saveReadModel(readModel, initialLoad);
+					if (count > 0)
+					{
+						changed = true;
+					}
+				});
 			}
 
 			if (changed)
