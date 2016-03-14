@@ -182,8 +182,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			if(assemblyName == null)
 				throw new Exception("Can not find the Assembly specified in AppSettings['HandlerAssembly']");
 
+			var baseaddress = ConfigurationManager.AppSettings["NodeBaseAddress"].Replace("https", "http");
+			
 			var assembly = Assembly.Load(assemblyName);
-			var nodeConfig = new NodeConfiguration(new Uri(ConfigurationManager.AppSettings["NodeBaseAddress"]),
+			var nodeConfig = new NodeConfiguration(new Uri(baseaddress),
 					 new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
 					 assembly, 
 					 ConfigurationManager.AppSettings["NodeName"],

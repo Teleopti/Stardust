@@ -92,15 +92,6 @@ item: Custom Script Item
   Variable Name3=HELPFILE
   Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
-item: Custom Script Item
-  Filename=Get Windows Installer Property.wse
-  Variable Name1=_PROPERTYNAME_
-  Variable Value1=DNS_ALIAS
-  Variable Name2=_PROP_VAR_
-  Variable Value2=SIX
-  Variable Name3=HELPFILE
-  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
-end
 item: Check if File/Dir Exists
   Pathname=%LOG4NET%
   Flags=00000100
@@ -114,7 +105,7 @@ item: Custom Script Item
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%LOG4NET%SetPermissions.bat" "%ONE%" "%TWO%" "%THREE%" "%FOUR%" "%FIVE%" "%SIX%""
+  Command Line=/C ""%LOG4NET%SetPermissions.bat" "%ONE%" "%TWO%" "%THREE%" "%FOUR%" "%FIVE%""
   Flags=00000110
 end
 item: Else Statement
