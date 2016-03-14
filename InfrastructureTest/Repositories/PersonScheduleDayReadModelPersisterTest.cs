@@ -81,6 +81,74 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 		}
 
 		[Test]
+		public void ShouldSendToMessageBrokerOnCommit()
+		{
+			var messageBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
+			var currentDataSource = MockRepository.GenerateMock<ICurrentDataSource>();
+			currentDataSource.Stub(x => x.CurrentName()).Return("datasource");
+
+			var target = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(), messageBroker, currentDataSource);
+
+			var model = new PersonScheduleDayReadModel
+				{
+					Date = new DateTime(2013, 4, 3),
+					TeamId = Guid.NewGuid(),
+					PersonId = Guid.NewGuid(),
+					BusinessUnitId = Guid.NewGuid(),
+					Start = new DateTime(2013, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+					End = new DateTime(2013, 4, 3, 18, 0, 0, DateTimeKind.Utc),
+					Model = "",
+					ScheduleLoadTimestamp = DateTime.UtcNow
+				};
+
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)), model.PersonId, model.BusinessUnitId, new[] { model }, false);
+
+				messageBroker.AssertWasNotCalled(x => x.Send("datasource", model.BusinessUnitId, model.BelongsToDate.Date, model.BelongsToDate.Date, Guid.Empty, model.PersonId, typeof(Person), Guid.Empty, typeof(IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
+
+				uow.PersistAll();
+			}
+
+			messageBroker.AssertWasCalled(x => x.Send("datasource", model.BusinessUnitId, model.BelongsToDate.Date, model.BelongsToDate.Date, Guid.Empty, model.PersonId, typeof(Person), Guid.Empty, typeof(IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
+		}
+
+		[Test]
+		public void ShouldNotSendToMessageBrokerOnCommitWhenNoficationDisabled()
+		{
+			var messageBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
+			var currentDataSource = MockRepository.GenerateMock<ICurrentDataSource>();
+			currentDataSource.Stub(x => x.CurrentName()).Return("datasource");
+
+			var target = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(), messageBroker, currentDataSource);
+
+			var model = new PersonScheduleDayReadModel
+				{
+					Date = new DateTime(2013, 4, 3),
+					TeamId = Guid.NewGuid(),
+					PersonId = Guid.NewGuid(),
+					BusinessUnitId = Guid.NewGuid(),
+					Start = new DateTime(2013, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+					End = new DateTime(2013, 4, 3, 18, 0, 0, DateTimeKind.Utc),
+					Model = "",
+					ScheduleLoadTimestamp = DateTime.UtcNow
+				};
+
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)), model.PersonId, model.BusinessUnitId, new[] { model }, true);
+
+				messageBroker.AssertWasNotCalled(x => x.Send("datasource", model.BusinessUnitId, model.BelongsToDate.Date, model.BelongsToDate.Date, Guid.Empty, model.PersonId, typeof(Person), Guid.Empty, typeof(IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
+
+				uow.PersistAll();
+			}
+
+			messageBroker.AssertWasNotCalled(x => x.Send("datasource", model.BusinessUnitId, model.BelongsToDate.Date, model.BelongsToDate.Date, Guid.Empty, model.PersonId, typeof(Person), Guid.Empty, typeof(IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
+		}
+
+
+
+		[Test]
 		public void ShouldPersistIsDayOff()
 		{
 			var uow = CurrentUnitOfWork.Make();
