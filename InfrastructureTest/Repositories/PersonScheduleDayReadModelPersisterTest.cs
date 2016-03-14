@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
+using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
@@ -284,6 +288,189 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 				.ForPerson(new DateOnly(oldTimestampReadModel.Date), oldTimestampReadModel.PersonId)
 				.IsDayOff.Should()
 				.Be.True();
+		}
+
+
+		[Test]
+		public void ShouldNotSendToMessageBrokerOnCommitWhenThereIsNoReadModelUpdate()
+		{
+			var uow = CurrUnitOfWork;
+
+			var messageBroker = new FakeMessageBrokerComposite();
+			messageBroker.ResetSendInvokedCount();
+			messageBroker.Enable();
+
+			var target = new PersonScheduleDayReadModelPersister(uow, messageBroker, new FakeCurrentDatasource("test"));
+			var date = new DateTime(2012, 8, 29);
+			DateTime oldTimestamp = DateTime.UtcNow;
+			var personId = Guid.NewGuid();
+
+			var oldTimestampReadModel = new PersonScheduleDayReadModel
+			{
+				Date = date,
+				TeamId = Guid.NewGuid(),
+				BusinessUnitId = Guid.NewGuid(),
+				PersonId = personId,
+				Start = date.AddHours(10),
+				End = date.AddHours(18),
+				IsDayOff = false,
+				Model = "{shift: blablabla}",
+				ScheduleLoadTimestamp = oldTimestamp
+			};
+
+			var newTimestampReadModel = new PersonScheduleDayReadModel
+			{
+				Date = date,
+				TeamId = Guid.NewGuid(),
+				BusinessUnitId = Guid.NewGuid(),
+				PersonId = personId,
+				Start = date.AddHours(10),
+				End = date.AddHours(18),
+				IsDayOff = true,
+				Model = "{shift: blablabla}",
+				ScheduleLoadTimestamp = oldTimestamp.AddHours(1)
+			};
+
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), newTimestampReadModel.PersonId, newTimestampReadModel.BusinessUnitId, new[] { newTimestampReadModel }, false);
+			uow.Current().PersistAll();
+
+			messageBroker.GetSendInvokedCount().Should().Be.EqualTo(1);
+			
+			messageBroker.ResetSendInvokedCount();
+
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), oldTimestampReadModel.PersonId, oldTimestampReadModel.BusinessUnitId, new[] { oldTimestampReadModel }, false);
+			uow.Current().PersistAll();
+			messageBroker.GetSendInvokedCount().Should().Be.EqualTo(0);
+			CleanUpAfterTest();
+		}
+
+		[Test]
+		public void ShouldSendToMessageBrokerOnCommitWhenThereIsReadModelUpdate()
+		{
+			var uow = CurrUnitOfWork;
+
+			var messageBroker = new FakeMessageBrokerComposite();
+			messageBroker.ResetSendInvokedCount();
+			messageBroker.Enable();
+
+			var target = new PersonScheduleDayReadModelPersister(uow, messageBroker, new FakeCurrentDatasource("test"));
+			var date = new DateTime(2012, 8, 29);
+			DateTime oldTimestamp = DateTime.UtcNow;
+			var personId = Guid.NewGuid();
+
+			var oldReadModel = new PersonScheduleDayReadModel
+			{
+				Date = date,
+				TeamId = Guid.NewGuid(),
+				BusinessUnitId = Guid.NewGuid(),
+				PersonId = personId,
+				Start = date.AddHours(10),
+				End = date.AddHours(18),
+				Model = "{shift: blablabla}",
+				ScheduleLoadTimestamp = oldTimestamp
+			};
+
+			var newerReadModel = new PersonScheduleDayReadModel
+			{
+				Date = date,
+				TeamId = Guid.NewGuid(),
+				BusinessUnitId = Guid.NewGuid(),
+				PersonId = personId,
+				Start = date.AddHours(10),
+				End = date.AddHours(18),
+				IsDayOff = true,
+				Model = "{shift: blablabla}",
+				ScheduleLoadTimestamp = oldTimestamp.AddHours(1)
+			};
+
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), oldReadModel.PersonId, oldReadModel.BusinessUnitId, new[] { oldReadModel }, false);
+			uow.Current().PersistAll();
+
+			messageBroker.GetSendInvokedCount().Should().Be.EqualTo(1);
+
+			messageBroker.ResetSendInvokedCount();
+
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), newerReadModel.PersonId, newerReadModel.BusinessUnitId, new[] { newerReadModel }, false);
+			uow.Current().PersistAll();
+			messageBroker.GetSendInvokedCount().Should().Be.EqualTo(1);
+			CleanUpAfterTest();
+		}
+	}
+
+	class FakeMessageBrokerComposite : IMessageBrokerComposite
+	{
+		private int _sendInvokedCount;
+		private bool _disabled;
+
+		public void Dispose()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void ResetSendInvokedCount()
+		{
+			_sendInvokedCount = 0;
+		}
+
+		public void Disable()
+		{
+			_disabled = true;
+		}
+
+		public void Enable()
+		{
+			_disabled = false;
+		}
+
+		public int GetSendInvokedCount()
+		{
+			return _sendInvokedCount;			
+		}
+
+		public void Send(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId,
+			Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType,
+			DomainUpdateType updateType, byte[] domainObject, Guid? trackId = null)
+		{
+			if (!_disabled) _sendInvokedCount++;
+		}
+
+		public void Send(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId,
+			Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
+		{
+			if (!_disabled) _sendInvokedCount++;
+		}
+
+		public void Send(string dataSource, Guid businessUnitId, IEventMessage[] eventMessages)
+		{
+			if (!_disabled) _sendInvokedCount++;
+		}
+
+		public void RegisterSubscription(Subscription subscription, EventHandler<EventMessageArgs> eventMessageHandler)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void UnregisterSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Send(Message message)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void SendMultiple(IEnumerable<Message> messages)
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool IsAlive { get; private set; }
+		public bool IsPollingAlive { get; private set; }
+		public string ServerUrl { get; set; }
+		public void StartBrokerService(bool useLongPolling = false)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }
