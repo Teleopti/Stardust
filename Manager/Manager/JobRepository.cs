@@ -16,8 +16,8 @@ namespace Stardust.Manager
 	public class JobRepository : IJobRepository
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (JobRepository));
-		private const int _delaysMiliseconds = 100;
-		private const int _maxRetry = 3;
+		private const int DelaysMiliseconds = 100;
+		private const int MaxRetry = 3;
 		private readonly string _connectionString;
 
 		public JobRepository(string connectionString)
@@ -25,10 +25,10 @@ namespace Stardust.Manager
 			_connectionString = connectionString;
 		}
 
-		private RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy> makeRetryPolicy()
+		private RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy> MakeRetryPolicy()
 		{
-			var fromMilliseconds = TimeSpan.FromMilliseconds(_delaysMiliseconds);
-			var policy = new RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy>(_maxRetry, fromMilliseconds);
+			var fromMilliseconds = TimeSpan.FromMilliseconds(DelaysMiliseconds);
+			var policy = new RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy>(MaxRetry, fromMilliseconds);
 			policy.Retrying += (sender, args) =>
 			{
 				// Log details of the retry.
@@ -38,7 +38,7 @@ namespace Stardust.Manager
 			return policy;
 		}
 
-		private void tryAdd(JobDefinition job)
+		private void TryAdd(JobDefinition job)
 		{
 			var jdDataSet = new DataSet();
 			var jdDataTable = new DataTable("[Stardust].[JobDefinitions]");
@@ -130,10 +130,10 @@ namespace Stardust.Manager
 
 		public void Add(JobDefinition job)
 		{
-			var policy = makeRetryPolicy();
+			var policy = MakeRetryPolicy();
 			try
 			{
-				policy.ExecuteAction(() => tryAdd(job));
+				policy.ExecuteAction(() => TryAdd(job));
 			}
 			catch (Exception ex)
 			{
@@ -144,10 +144,10 @@ namespace Stardust.Manager
 		public List<JobDefinition> LoadAll()
 		{
 			var result = new List<JobDefinition>();
-			var policy = makeRetryPolicy();
+			var policy = MakeRetryPolicy();
 			try
 			{
-				result =  policy.ExecuteAction(()=> tryLoadAll());
+				result =  policy.ExecuteAction(()=> TryLoadAll());
 			}
 			catch (Exception ex)
 			{
@@ -156,7 +156,7 @@ namespace Stardust.Manager
 			return result;
 		}
 
-		public List<JobDefinition> tryLoadAll()
+		public List<JobDefinition> TryLoadAll()
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
@@ -199,8 +199,8 @@ namespace Stardust.Manager
 								Serialized = (string) reader.GetValue(reader.GetOrdinal("Serialized")),
 								Type = (string) reader.GetValue(reader.GetOrdinal("Type")),
 								UserName = (string) reader.GetValue(reader.GetOrdinal("UserName")),
-								AssignedNode = getValue<string>(reader.GetValue(reader.GetOrdinal("AssignedNode"))),
-								Status = getValue<string>(reader.GetValue(reader.GetOrdinal("Status")))
+								AssignedNode = GetValue<string>(reader.GetValue(reader.GetOrdinal("AssignedNode"))),
+								Status = GetValue<string>(reader.GetValue(reader.GetOrdinal("Status")))
 							};
 
 							listToReturn.Add(jobDefinition);
@@ -227,10 +227,10 @@ namespace Stardust.Manager
 
 		public void DeleteJob(Guid jobId)
 		{
-			var policy = makeRetryPolicy();
+			var policy = MakeRetryPolicy();
 			try
 			{
-				policy.ExecuteAction(() => trydeleteJob(jobId));
+				policy.ExecuteAction(() => TrydeleteJob(jobId));
 			}
 			catch (Exception ex)
 			{
@@ -239,7 +239,7 @@ namespace Stardust.Manager
 			
 		}
 
-		public void trydeleteJob(Guid jobId)
+		public void TrydeleteJob(Guid jobId)
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
@@ -280,10 +280,10 @@ namespace Stardust.Manager
 
 		public void FreeJobIfNodeIsAssigned(string url)
 		{
-			var policy = makeRetryPolicy();
+			var policy = MakeRetryPolicy();
 			try
 			{
-				policy.ExecuteAction(() => tryFreeJobIfNodeIsAssigned(url));
+				policy.ExecuteAction(() => TryFreeJobIfNodeIsAssigned(url));
 			}
 			catch (Exception ex)
 			{
@@ -291,7 +291,7 @@ namespace Stardust.Manager
 			}
 		}
 
-		public void tryFreeJobIfNodeIsAssigned(string url)
+		public void TryFreeJobIfNodeIsAssigned(string url)
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
@@ -331,7 +331,7 @@ namespace Stardust.Manager
 		}
 
 		//verify THAT !!!!!!!!!!!
-		public async void tryCheckAndAssignNextJob(List<WorkerNode> availableNodes,
+		public async void TryCheckAndAssignNextJob(List<WorkerNode> availableNodes,
 		                                        IHttpSender httpSender)
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start CheckAndAssignNextJob.");
@@ -378,12 +378,12 @@ namespace Stardust.Manager
 								var job = new JobToDo
 								{
 									Id = (Guid) jobRow["Id"],
-									Name = getValue<string>(jobRow["Name"]),
-									Serialized = getValue<string>(jobRow["Serialized"])
+									Name = GetValue<string>(jobRow["Name"]),
+									Serialized = GetValue<string>(jobRow["Serialized"])
 										.Replace(@"\",
 										         @""),
-									Type = getValue<string>(jobRow["Type"]),
-									CreatedBy = getValue<string>(jobRow["UserName"])
+									Type = GetValue<string>(jobRow["Type"]),
+									CreatedBy = GetValue<string>(jobRow["UserName"])
 								};
 
 								da.UpdateCommand =
@@ -522,10 +522,10 @@ namespace Stardust.Manager
 		public void CheckAndAssignNextJob(List<WorkerNode> availableNodes,
 			IHttpSender httpSender)
 		{
-			var policy = makeRetryPolicy();
+			var policy = MakeRetryPolicy();
 			try
 			{
-				policy.ExecuteAction(() => tryCheckAndAssignNextJob(availableNodes, httpSender));
+				policy.ExecuteAction(() => TryCheckAndAssignNextJob(availableNodes, httpSender));
 			}
 			catch (Exception ex)
 			{
@@ -533,7 +533,7 @@ namespace Stardust.Manager
 			}
 		}
 
-		public async void tryCancelThisJob(Guid jobId,
+		public async void TryCancelThisJob(Guid jobId,
 		                                IHttpSender httpSender)
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
@@ -563,7 +563,7 @@ namespace Stardust.Manager
 						if (jobs.Rows.Count > 0)
 						{
 							var jobRow = jobs.Rows[0];
-							var node = getValue<string>(jobRow["AssignedNode"]);
+							var node = GetValue<string>(jobRow["AssignedNode"]);
 
 							if (string.IsNullOrEmpty(node))
 							{
@@ -652,10 +652,10 @@ namespace Stardust.Manager
 		public void CancelThisJob(Guid jobId,
 			IHttpSender httpSender)
 		{
-			var policy = makeRetryPolicy();
+			var policy = MakeRetryPolicy();
 			try
 			{
-				policy.ExecuteAction(() => tryCancelThisJob(jobId, httpSender));
+				policy.ExecuteAction(() => TryCancelThisJob(jobId, httpSender));
 			}
 			catch (Exception ex)
 			{
@@ -666,10 +666,10 @@ namespace Stardust.Manager
 		public void SetEndResultOnJob(Guid jobId,
 												string result)
 		{
-			var policy = makeRetryPolicy();
+			var policy = MakeRetryPolicy();
 			try
 			{
-				policy.ExecuteAction(() => trySetEndResultOnJob(jobId, result));
+				policy.ExecuteAction(() => TrySetEndResultOnJob(jobId, result));
 			}
 			catch (Exception ex)
 			{
@@ -677,7 +677,7 @@ namespace Stardust.Manager
 			}
 		}
 
-		public void trySetEndResultOnJob(Guid jobId,
+		public void TrySetEndResultOnJob(Guid jobId,
 		                              string result)
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
@@ -731,10 +731,10 @@ namespace Stardust.Manager
 		public void ReportProgress(Guid jobId,
 											string detail)
 		{
-			var policy = makeRetryPolicy();
+			var policy = MakeRetryPolicy();
 			try
 			{
-				policy.ExecuteAction(() => tryReportProgress(jobId, detail));
+				policy.ExecuteAction(() => TryReportProgress(jobId, detail));
 			}
 			catch (Exception ex)
 			{
@@ -742,7 +742,7 @@ namespace Stardust.Manager
 			}
 		}
 
-		public void tryReportProgress(Guid jobId,
+		public void TryReportProgress(Guid jobId,
 		                           string detail)
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
@@ -789,10 +789,10 @@ namespace Stardust.Manager
 		public JobHistory History(Guid jobId)
 		{
 			JobHistory jobHist = null;
-			var policy = makeRetryPolicy();
+			var policy = MakeRetryPolicy();
 			try
 			{
-				jobHist =	policy.ExecuteAction(() => tryHistory(jobId));
+				jobHist =	policy.ExecuteAction(() => TryHistory(jobId));
 			}
 			catch (Exception ex)
 			{
@@ -801,7 +801,7 @@ namespace Stardust.Manager
 			return jobHist;
 		}
 
-		public JobHistory tryHistory(Guid jobId)
+		public JobHistory TryHistory(Guid jobId)
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
@@ -857,10 +857,10 @@ namespace Stardust.Manager
 		public IList<JobHistory> HistoryList()
 		{
 			var returnList = new List<JobHistory>();
-			var policy = makeRetryPolicy();
+			var policy = MakeRetryPolicy();
 			try
 			{
-				returnList = policy.ExecuteAction(() => tryHistoryList()).ToList();
+				returnList = policy.ExecuteAction(() => TryHistoryList()).ToList();
 			}
 			catch (Exception ex)
 			{
@@ -869,7 +869,7 @@ namespace Stardust.Manager
 			return returnList;
 		}
 
-		public IList<JobHistory> tryHistoryList()
+		public IList<JobHistory> TryHistoryList()
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
@@ -921,10 +921,10 @@ namespace Stardust.Manager
 		public IList<JobHistoryDetail> JobHistoryDetails(Guid jobId)
 		{
 			var returnList = new List<JobHistoryDetail>();
-			var policy = makeRetryPolicy();
+			var policy = MakeRetryPolicy();
 			try
 			{
-				returnList = policy.ExecuteAction(() => tryJobHistoryDetails(jobId)).ToList();
+				returnList = policy.ExecuteAction(() => TryJobHistoryDetails(jobId)).ToList();
 			}
 			catch (Exception ex)
 			{
@@ -933,7 +933,7 @@ namespace Stardust.Manager
 			return returnList;
 		}
 
-		public IList<JobHistoryDetail> tryJobHistoryDetails(Guid jobId)
+		public IList<JobHistoryDetail> TryJobHistoryDetails(Guid jobId)
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
@@ -987,7 +987,7 @@ namespace Stardust.Manager
 			return null;
 		}
 
-		private string getValue<T>(object value)
+		private string GetValue<T>(object value)
 		{
 			return value == DBNull.Value
 				? null
@@ -1005,11 +1005,11 @@ namespace Stardust.Manager
 					Id = (Guid) reader.GetValue(reader.GetOrdinal("JobId")),
 					Name = (string) reader.GetValue(reader.GetOrdinal("Name")),
 					CreatedBy = (string) reader.GetValue(reader.GetOrdinal("CreatedBy")),
-					SentTo = getValue<string>(reader.GetValue(reader.GetOrdinal("SentTo"))),
-					Result = getValue<string>(reader.GetValue(reader.GetOrdinal("Result"))),
+					SentTo = GetValue<string>(reader.GetValue(reader.GetOrdinal("SentTo"))),
+					Result = GetValue<string>(reader.GetValue(reader.GetOrdinal("Result"))),
 					Created = (DateTime) reader.GetValue(reader.GetOrdinal("Created")),
-					Started = getDateTime(reader.GetValue(reader.GetOrdinal("Started"))),
-					Ended = getDateTime(reader.GetValue(reader.GetOrdinal("Ended")))
+					Started = GetDateTime(reader.GetValue(reader.GetOrdinal("Started"))),
+					Ended = GetDateTime(reader.GetValue(reader.GetOrdinal("Ended")))
 				};
 
 				return jobHist;
@@ -1042,7 +1042,7 @@ namespace Stardust.Manager
 			return selectCommand;
 		}
 
-		private DateTime? getDateTime(object databaseValue)
+		private DateTime? GetDateTime(object databaseValue)
 		{
 			if (databaseValue.Equals(DBNull.Value))
 			{
