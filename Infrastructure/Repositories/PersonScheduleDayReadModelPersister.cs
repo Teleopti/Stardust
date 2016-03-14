@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using log4net;
 using NHibernate;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
@@ -33,16 +32,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			if (Logger.IsDebugEnabled)
 				Logger.Debug("Persisting model PersonScheduleDayReadModel");
 
-			var changed = false;
-
 			if (readModels != null)
 			{
 				if (Logger.IsDebugEnabled)
 					Logger.Debug("Saving model PersonScheduleDayReadModel");
-				changed = readModels.Select(readModel => saveReadModel(readModel, initialLoad)).Any(count => count > 0);
+				readModels.ForEach(readModel => saveReadModel(readModel, initialLoad));
 			}
 
-			if (changed)
+			if (!initialLoad)
 				_currentUnitOfWork.Current().AfterSuccessfulTx(() =>
 				{
 					if (Logger.IsDebugEnabled)
@@ -53,14 +50,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				});
 		}
 
-		private int saveReadModel(PersonScheduleDayReadModel model, bool initialLoad)
+		private void saveReadModel(PersonScheduleDayReadModel model, bool initialLoad)
 		{
 			if (Logger.IsDebugEnabled)
 				Logger.DebugFormat(
 					"Trying to save model PersonScheduleDayReadModel on date {0} for person {1}, Start {2}, End {3}, LoadedScheduleTime {4}",
 					model.BelongsToDate, model.PersonId, model.Start, model.End, model.ScheduleLoadTimestamp);
 
-			var updatedCount = _currentUnitOfWork.Session().CreateSQLQuery(
+			_currentUnitOfWork.Session().CreateSQLQuery(
 				"EXEC ReadModel.UpdatePersonScheduleDay @PersonId=:PersonId,@TeamId=:TeamId,@SiteId=:SiteId,@BusinessUnitId=:BusinessUnitId,@Start=:Start,@End=:End,@BelongsToDate=:BelongsToDate,@IsDayOff=:IsDayOff,@Model=:Model,@ScheduleLoadedTime=:ScheduleLoadedTime,@IsInitialLoad=:IsInitialLoad")
 				.SetGuid("PersonId", model.PersonId)
 				.SetGuid("TeamId", model.TeamId)
@@ -72,8 +69,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetParameter("IsDayOff", model.IsDayOff)
 				.SetParameter("Model", model.Model, NHibernateUtil.Custom(typeof (CompressedString)))
 				.SetDateTime("ScheduleLoadedTime", model.ScheduleLoadTimestamp)
-				.SetBoolean("IsInitialLoad", initialLoad).List<int>().FirstOrDefault();
-			return updatedCount;
+				.SetBoolean("IsInitialLoad", initialLoad)
+				.ExecuteUpdate();
 		}
 
 		public bool IsInitialized()
