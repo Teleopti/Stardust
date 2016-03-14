@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 
 		public void ClickContaining(string selector, string text)
 		{
-			_browser.FindCss(selector, new Regex(Regex.Escape(text)), optionsVisibleOnly()).Click(options());
+			_browser.FindCss(selector, new Regex(Regex.Escape(text)), optionsVisibleOnly()).Click(optionsVisibleOnly());
 		}
 
 		public void Clear(string selector)
