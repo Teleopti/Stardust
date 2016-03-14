@@ -115,5 +115,53 @@
 	}
 
 
-	
+	var imagePrototype = fabric.Image.prototype;
+	imagePrototype._render = function(ctx, noTransform) {
+		var x, y, imageMargins = this._findMargins(), elementToDraw;
+
+		x = (noTransform ? this.left : -this.width / 2);
+		y = (noTransform ? this.top : -this.height / 2);
+
+		if (this.meetOrSlice === 'slice') {
+			ctx.beginPath();
+			ctx.rect(x, y, this.width, this.height);
+			ctx.clip();
+		}
+
+		if (this.isMoving === false && this.resizeFilters.length && this._needsResize()) {
+			this._lastScaleX = this.scaleX;
+			this._lastScaleY = this.scaleY;
+			elementToDraw = this.applyFilters(null, this.resizeFilters, this._filteredEl || this._originalElement, true);
+		} else {
+			elementToDraw = this._element;
+		}
+
+		var canvas = this.canvas;
+
+		// I Love IE....there can be a timing issue in IE between it loading the image and drawing it.
+		// catch when this occurs, and retry the render with a timeout.
+		try {
+
+			elementToDraw && ctx.drawImage(elementToDraw,
+				x + imageMargins.marginX,
+				y + imageMargins.marginY,
+				imageMargins.width,
+				imageMargins.height
+			);
+
+			this._renderStroke(ctx);
+
+		} catch (err) {
+			
+			setTimeout(function() {
+				imagePrototype._render(ctx, noTransform);
+				canvas.renderAll();
+			}, 0);
+		}
+
+	};
+
+
+
+
 }());
