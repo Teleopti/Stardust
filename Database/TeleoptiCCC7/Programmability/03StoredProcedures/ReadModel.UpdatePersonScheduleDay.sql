@@ -47,7 +47,7 @@ BEGIN
 	RETURN
 END
 
-IF (@existingScheduleLoadedTime < @ScheduleLoadedTime)
+IF (@existingScheduleLoadedTime <= @ScheduleLoadedTime)
 BEGIN
 	DELETE FROM ReadModel.PersonScheduleDay
 	WHERE PersonId = @PersonId
