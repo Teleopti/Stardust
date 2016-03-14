@@ -324,7 +324,6 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 			messageBroker.GetSendInvokedCount().Should().Be.EqualTo(1);
 			CleanUpAfterTest();
 		}
-
 		private void clearReadModel()
 		{
 			Session.CreateSQLQuery("TRUNCATE TABLE ReadModel.PersonScheduleDay")
