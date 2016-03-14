@@ -238,7 +238,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
 				//////
 
-				builder.RegisterType<FillSchedulerStateHolder>().As<IFillSchedulerStateHolder>().AsSelf().SingleInstance();
+				builder.RegisterType<FillSchedulerStateHolderFromRam>().As<IFillSchedulerStateHolder>().AsSelf().SingleInstance();
 				builder.RegisterType<SynchronizeSchedulerStateHolderDesktop>().As<ISynchronizeIntradayOptimizationResult>().SingleInstance();
 
 				builder.Register(c => new WebConfigReader(() =>

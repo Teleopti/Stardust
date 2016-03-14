@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
-	public class FillSchedulerStateHolder : IFillSchedulerStateHolder
+	public class FillSchedulerStateHolderFromRam : IFillSchedulerStateHolder
 	{
 		private ISchedulerStateHolder _schedulerStateHolderFrom;
 

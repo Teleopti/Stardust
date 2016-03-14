@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FillSchedulerStateHolder>().For<IFillSchedulerStateHolder>();
+			system.UseTestDouble<FillSchedulerStateHolderFromRam>().For<IFillSchedulerStateHolder>();
 			system.UseTestDouble<SynchronizeSchedulerStateHolderDesktop>().For<ISynchronizeIntradayOptimizationResult>();
 		}
 	}
