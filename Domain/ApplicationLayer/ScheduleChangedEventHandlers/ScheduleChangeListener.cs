@@ -3,6 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
+	[Serializable]
 	public class ScheduleChangeListener
 	{
 		public string Name { get; set; }
