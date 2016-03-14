@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		{
 			Browser.Interactions.WaitScopeCondition(".test-outbound-summary", "isRefreshingGantt", false,
 				() =>
-				{			
+				{	Thread.Sleep(300);		
 					Browser.Interactions.ClickVisibleOnly(".campaign-visualization-toggle");
 				});
 		}
@@ -68,6 +68,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		[When(@"I should see the backlog visualization of '(.*)'")]
 		public void ThenIShouldSeeTheBacklogVisualizationOf(string campaignName)
 		{
+			Thread.Sleep(300);
 			Browser.Interactions.AssertExists("campaign-chart");
 		}
 
@@ -273,6 +274,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 			Browser.Interactions.WaitScopeCondition("campaign-commands-pane", "validManualBacklog()", true,
 				() =>
 				{
+					Thread.Sleep(300);
 					Browser.Interactions.ClickVisibleOnly(".btn-save-backlog");
 				}, true);
 		}
