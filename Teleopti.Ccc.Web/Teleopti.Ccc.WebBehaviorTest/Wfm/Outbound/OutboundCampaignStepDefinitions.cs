@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		[Then(@"I should see '(.*)' in campaign list")]
 		public void ThenIShouldSeeInCampaignList(string campaignName)
 		{
+			Thread.Sleep(300);
 			Browser.Interactions.AssertAnyContains(".outbound-gantt-chart", campaignName);
 		}
 
