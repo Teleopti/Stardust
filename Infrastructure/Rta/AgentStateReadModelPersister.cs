@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		[InfoLog]
 		public virtual AgentStateReadModel Get(Guid personId)
 		{
-			var sql = AgentStateReadModelReader.SelectActualAgentState() + "WHERE PersonId = :PersonId";
+			var sql = AgentStateReadModelReader.SelectActualAgentState() + " WITH (UPDLOCK) WHERE PersonId = :PersonId";
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
 				.SetParameter("PersonId", personId)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateReadModel)))

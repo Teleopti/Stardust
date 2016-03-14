@@ -198,7 +198,7 @@
     <Compile Include="Foundation\CouldNotCreateTransactionExceptionTest.cs" />
     <Compile Include="Foundation\BusinessUnitForRequestTest.cs" />
     <Compile Include="Licensing\SetLicenseActivatorTest.cs" />
-    <Compile Include="MessageBroker\ConcurrencyRunner.cs" />
+    <Compile Include="ConcurrencyRunner.cs" />
     <Compile Include="MessageBroker\ExceptionExtensions.cs" />
     <Compile Include="MessageBroker\MailboxConcurrencyTest.cs" />
     <Compile Include="MessageBroker\MessageBrokerUnitOfWorkTest.cs" />
@@ -252,7 +252,8 @@
     <Compile Include="Rta\DatabaseReaderLoadAllPersonOrganizationDataTest.cs" />
     <Compile Include="Rta\DatabaseReaderLoadPersonOrganizationDataTest.cs" />
     <Compile Include="Rta\Persisters\AdherenceDetailsReadModelPersisterConcurrencyTest.cs" />
-    <Compile Include="Rta\Persisters\RetryingQueueSimulator.cs" />
+    <Compile Include="Rta\Persisters\AgentStateReadModelPersisterConcurrencyTest.cs" />
+    <Compile Include="RetryingQueueSimulator.cs" />
     <Compile Include="Rta\Persisters\AdherencePercentageReadModelPersisterConcurrencyTest.cs" />
     <Compile Include="Rta\Persisters\SiteOutOfAdherenceReadModelPersisterConcurrencyTest.cs" />
     <Compile Include="Rta\Persisters\TeamOutOfAdherenceReadModelPersisterConcurrencyTest.cs" />

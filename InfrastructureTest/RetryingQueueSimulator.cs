@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Threading;
 using Teleopti.Ccc.TestCommon;
 
-namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
+namespace Teleopti.Ccc.InfrastructureTest
 {
 	public class RetryingQueueSimulator
 	{

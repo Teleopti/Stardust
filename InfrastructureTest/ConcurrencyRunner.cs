@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Teleopti.Ccc.InfrastructureTest.MessageBroker;
 using Teleopti.Ccc.TestCommon;
 
-namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
+namespace Teleopti.Ccc.InfrastructureTest
 {
 	public class ConcurrencyRunner
 	{
