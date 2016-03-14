@@ -22,14 +22,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		private readonly IPersonRepository _personRepository;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IProjectionChangedEventBuilder _projectionChangedEventBuilder;
+		private readonly INow _now;
 
-		public ProjectionChangedEventPublisher(IEventPublisher publisher, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IScheduleStorage scheduleStorage, IProjectionChangedEventBuilder projectionChangedEventBuilder)
+		public ProjectionChangedEventPublisher(IEventPublisher publisher, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IScheduleStorage scheduleStorage, IProjectionChangedEventBuilder projectionChangedEventBuilder, INow now)
 		{
 			_publisher = publisher;
 			_scenarioRepository = scenarioRepository;
 			_personRepository = personRepository;
 			_scheduleStorage = scheduleStorage;
 			_projectionChangedEventBuilder = projectionChangedEventBuilder;
+			_now = now;
 		}
 
 		public void Handle(ScheduleChangedEvent @event)
@@ -56,8 +58,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			var data = getData(@event);
 			if (data == null) return;
+			var scheduleLoadTimestamp = _now.UtcDateTime();
 			_projectionChangedEventBuilder.Build<T>(@event, data.ScheduleRange, data.RealPeriod)
-										  .ForEach(e => _publisher.Publish(e));
+				.ForEach(e =>
+				{
+					e.ScheduleLoadTimestamp = scheduleLoadTimestamp;
+					_publisher.Publish(e);
+				});
 		}
 
 		private class range

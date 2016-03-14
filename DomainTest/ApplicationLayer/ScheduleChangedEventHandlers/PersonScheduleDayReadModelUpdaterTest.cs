@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 {
@@ -120,29 +119,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			model.Shift.IsFullDayAbsence.Should().Be.True();
 		}
 
-
-		[Test]
-		public void ShouldUpdateIfPersonTerminated()
-		{
-			var repository = MockRepository.GenerateMock<IPersonScheduleDayReadModelPersister>();
-			var target = new PersonScheduleDayReadModelUpdater(null, repository, null);
-
-			var terminationDate = new DateTime(2000, 10, 31);
-			var personId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
-			target.Handle(new PersonTerminalDateChangedEvent
-			{
-				PersonId = personId,
-				LogOnBusinessUnitId = businessUnitId,
-				TerminationDate = terminationDate
-			});
-
-			repository.AssertWasCalled(
-				x =>
-					x.UpdateReadModels(new DateOnlyPeriod(new DateOnly(terminationDate).AddDays(1), DateOnly.MaxValue), personId, businessUnitId,
-						null, true));
-		}
-
 		[Test]
 		public void ShouldSendTrackingMessage()
 		{
@@ -213,6 +189,34 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			});
 
 			repository.Updated.Single().IsDayOff.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldHaveScheduleLoadTimestampInReadModel()
+		{
+			var repository = new FakePersonScheduleDayReadModelPersister();
+			var personRepository = new FakePersonRepositoryLegacy();
+			var target = new PersonScheduleDayReadModelUpdater(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
+
+			var scheduleLoadTimestamp = DateTime.UtcNow;
+
+			target.Handle(new ProjectionChangedEvent
+			{
+				PersonId = personRepository.Single().Id.Value,
+				ScheduleDays = new[]
+				{
+					new ProjectionChangedEventScheduleDay
+					{
+						DayOff = new ProjectionChangedEventDayOff(),
+						Name = "Day off"
+					}
+				},
+				ScheduleLoadTimestamp = scheduleLoadTimestamp
+
+			});
+
+			var readModel = repository.Updated.Single();
+			readModel.ScheduleLoadTimestamp.Should().Be.EqualTo(scheduleLoadTimestamp);
 		}
 
 	}
