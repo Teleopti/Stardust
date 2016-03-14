@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				.Should().Be.EqualTo(15);
 		}
 
-		[Test]
+		[Test, Explicit]
 		public void ShouldNotCrashIfALotOfThreads()
 		{
 			const int numberOfIslands = 10;
