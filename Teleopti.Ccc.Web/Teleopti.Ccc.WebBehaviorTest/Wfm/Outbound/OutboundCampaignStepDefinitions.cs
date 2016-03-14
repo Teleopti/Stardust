@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		[Then(@"I should not see '(.*)' in campaign list")]
 		public void ThenIShouldNotSeeInCampaignList(string campaignName)
 		{
+			Thread.Sleep(300);
 			Browser.Interactions.AssertNoContains(".outbound-gantt-chart", ".outbound-gantt-chart", campaignName);
 		}
 
@@ -124,12 +125,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 			{
 				{"directRemoveCampaign", "true"}
 			});
+			Thread.Sleep(300);
 			Browser.Interactions.ClickVisibleOnly(".test-delete-campaign");				
 		}
 
 		[When(@"after that I am redirected to the campaign list page")]
 		public void WhenAfterThatIAmRedirectedToTheCampaignListPage()
 		{
+			Thread.Sleep(300);
 			Browser.Interactions.AssertExists(".outbound-gantt-chart");
 		}
 
