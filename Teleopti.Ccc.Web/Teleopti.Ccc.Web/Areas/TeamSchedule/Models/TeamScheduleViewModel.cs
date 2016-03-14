@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public DateTime ScheduleDate { get; set; }
 		public IEnumerable<Guid> PersonIds { get; set; }
 		public IEnumerable<Guid> PersonAbsenceIds { get; set; }
+		public bool RemoveEntireCrossDayAbsence { get; set; }
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 	}
 

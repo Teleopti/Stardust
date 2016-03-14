@@ -36,13 +36,14 @@ angular.module("wfm.teamSchedule").service("PersonAbsence", [
 			}
 		});
 
-		service.PromiseForRemovePersonAbsence = function(scheduleDate, personIds, personAbsenceIds, action) {
+		service.PromiseForRemovePersonAbsence = function (scheduleDate, personIds, personAbsenceIds, removeEntireCrossDayAbsence, action) {
 			var trackId = guidgenerator.newGuid();
 
 			var cmd = {
 				ScheduleDate: scheduleDate.format("YYYY-MM-DD"),
 				PersonIds: personIds,
 				PersonAbsenceIds: personAbsenceIds,
+				RemoveEntireCrossDayAbsence: removeEntireCrossDayAbsence,
 				TrackedCommandInfo: { TrackId: trackId }
 			}
 			service.removeAbsence.post(cmd).$promise.then(function (result) {

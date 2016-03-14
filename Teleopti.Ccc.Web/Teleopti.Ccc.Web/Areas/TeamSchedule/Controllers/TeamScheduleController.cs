@@ -30,12 +30,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly IAbsencePersister _absencePersister;
 		private readonly ISettingsPersisterAndProvider<AgentsPerPageSetting> _agentsPerPagePersisterAndProvider;
 		private readonly ISwapMainShiftForTwoPersonsCommandHandler _swapMainShiftForTwoPersonsHandler;
+		private readonly IHandleCommand<RemovePersonAbsenceCommand> _removePersonAbsenceCommandHandler;
 		private readonly IHandleCommand<RemovePartPersonAbsenceCommand> _removePartPersonAbsenceCommandHandler;
 
 		public TeamScheduleController(ITeamScheduleViewModelFactory teamScheduleViewModelFactory, ILoggedOnUser loggonUser,
 			IPrincipalAuthorization principalAuthorization, IAbsencePersister absencePersister,
 			ISettingsPersisterAndProvider<AgentsPerPageSetting> agentsPerPagePersisterAndProvider,
 			ISwapMainShiftForTwoPersonsCommandHandler swapMainShiftForTwoPersonsHandler,
+			IHandleCommand<RemovePersonAbsenceCommand> removePersonAbsenceCommandHandler,
 			IHandleCommand<RemovePartPersonAbsenceCommand> removePartPersonAbsenceCommandHandler)
 		{
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
@@ -44,6 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			_absencePersister = absencePersister;
 			_agentsPerPagePersisterAndProvider = agentsPerPagePersisterAndProvider;
 			_swapMainShiftForTwoPersonsHandler = swapMainShiftForTwoPersonsHandler;
+			_removePersonAbsenceCommandHandler = removePersonAbsenceCommandHandler;
 			_removePartPersonAbsenceCommandHandler = removePartPersonAbsenceCommandHandler;
 		}
 
@@ -170,17 +173,31 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 				}
 			}
 
-			var scheduleDateInUtc = TimeZoneInfo.ConvertTimeToUtc(command.ScheduleDate,
-				_loggonUser.CurrentUser().PermissionInformation.DefaultTimeZone());
-			var periodToRemove = new DateTimePeriod(scheduleDateInUtc, scheduleDateInUtc.AddDays(1));
-			foreach (var personAbsenceId in personAbsenceIdsForRemove)
+			if (command.RemoveEntireCrossDayAbsence)
 			{
-				_removePartPersonAbsenceCommandHandler.Handle(new RemovePartPersonAbsenceCommand
+				foreach (var personAbsenceId in personAbsenceIdsForRemove)
 				{
-					PersonAbsenceId = personAbsenceId,
-					PeriodToRemove = periodToRemove,
-					TrackedCommandInfo = command.TrackedCommandInfo
-				});
+					_removePersonAbsenceCommandHandler.Handle(new RemovePersonAbsenceCommand
+					{
+						PersonAbsenceId = personAbsenceId,
+						TrackedCommandInfo = command.TrackedCommandInfo
+					});
+				}
+			}
+			else
+			{
+				var scheduleDateInUtc = TimeZoneInfo.ConvertTimeToUtc(command.ScheduleDate,
+					_loggonUser.CurrentUser().PermissionInformation.DefaultTimeZone());
+				var periodToRemove = new DateTimePeriod(scheduleDateInUtc, scheduleDateInUtc.AddDays(1));
+				foreach (var personAbsenceId in personAbsenceIdsForRemove)
+				{
+					_removePartPersonAbsenceCommandHandler.Handle(new RemovePartPersonAbsenceCommand
+					{
+						PersonAbsenceId = personAbsenceId,
+						PeriodToRemove = periodToRemove,
+						TrackedCommandInfo = command.TrackedCommandInfo
+					});
+				}
 			}
 			return Ok();
 		}

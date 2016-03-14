@@ -2,6 +2,23 @@
 
 (function () {
 	angular.module('wfm.teamSchedule')
+		.controller('confirmRemoveAbsenceDialogController', function ($scope, $uibModalInstance, data) {
+			$scope.header = data.header;
+			$scope.message = data.message;
+			$scope.removeEntireCrossDayAbsence = data.removeEntireCrossDayAbsence;
+
+			$scope.toggleOpton = function () {
+				$scope.removeEntireCrossDayAbsence = !$scope.removeEntireCrossDayAbsence;
+			}
+
+			$scope.no = function () {
+				$uibModalInstance.dismiss($scope.removeEntireCrossDayAbsence);
+			};
+
+			$scope.yes = function() {
+				$uibModalInstance.close($scope.removeEntireCrossDayAbsence);
+			};
+		})
 		.controller('TeamScheduleCtrl', [
 			'$scope', '$q', '$locale', '$translate', '$templateCache', 'TeamSchedule', 'GroupScheduleFactory',
 			'teamScheduleNotificationService', 'PersonSelection', 'ScheduleManagement', 'SwapShifts', 'PersonAbsence',
@@ -13,17 +30,26 @@
 		notificationService, personSelectionSvc, scheduleMgmtSvc, swapShiftsSvc, personAbsenceSvc, toggleSvc, signalRSvc,
 		$mdComponentRegistry, $mdSidenav, $mdUtil, guidgenerator, shortCuts, keyCodes, dialogSvc) {
 
-		// TODO: Temporary solution to fix the problem that translate not works for dialog service.
-		$templateCache.put('/dialogs/confirm.html',
-			'<div class="modal-header dialog-header-confirm">'
-			+ '<button type="button" class="close" ng-click="no()">&times;</button>'
-			+ '<h4 class="modal-title"><span class="mdi mdi-checkbox-marked-outline"></span> {{header}}</h4>'
-			+ '</div>'
-			+ '<div class="modal-body" ng-bind-html="msg"></div>'
-			+ '<div class="modal-footer">'
-			+ '<button type="button" class="btn btn-default" ng-click="yes()">' + $translate.instant("Yes") + '</button>'
-			+ '<button type="button" class="btn btn-primary" ng-click="no()">' + $translate.instant("No") + '</button>'
-			+ '</div>');
+		$templateCache.put("/dialogs/removeAbsenceConfirm.html",
+			"<div class='modal-header dialog-header-confirm'>"
+			+ "    <button type='button' class='close' ng-click='no()'>&times;</button>"
+			+ "    <h4><span class='mdi mdi-checkbox-marked-outline'></span> <span class='modal-title'>{{header}}</span></h4>"
+			+ "</div>"
+			+ "<div class='modal-body'>"
+			+ "    <div>{{message}}</div>"
+			+ "    <br/>"
+			+ "    <div class='wfm-checkbox'>"
+			+ "        <input type='checkbox' id='checkRemoveEntireAbsence' ng-checked='removeEntireCrossDayAbsence' ng-click='toggleOpton()'/>"
+			+ "        <label for='checkRemoveEntireAbsence'>"
+			+ "            <span class='wfm-checkbox-toggle'></span>"
+			+ "            <span class='wfm-checkbox-label'>{{'RemoveEntireAbsenceForCrossDayPersonAbsence' | translate}}</span>"
+			+ "        </label>"
+			+ "    </div>"
+			+ "</div>"
+			+ "<div class='modal-footer'>"
+			+ "    <button type='button' class='btn btn-default' ng-click='yes()'>{{'Yes' | translate}}</button>"
+			+ "    <button type='button' class='btn btn-primary' ng-click='no()'>{{'No' | translate}}</button>"
+			+ "</div>");
 
 		var vm = this;
 
@@ -34,6 +60,7 @@
 		vm.onlyLoadScheduleWithAbsence = false;
 		vm.lastCommandTrackId = "";
 		vm.selectedPersonAbsences = [];
+		vm.removeEntireCrossDayAbsence = false;
 
 		vm.searchOptions = {
 			keyword: '',
@@ -224,7 +251,7 @@
 
 			var allPersonWithAbsenceRemoved = selectedPersonIdList.concat(personWithSelectedAbsences);
 			personAbsenceSvc.PromiseForRemovePersonAbsence(vm.scheduleDateMoment(), selectedPersonIdList, selectedAbsences,
-				function(result) {
+				vm.removeEntireCrossDayAbsence, function(result) {
 					vm.selectedPersonAbsences = [];
 					vm.afterActionCallback(result, allPersonWithAbsenceRemoved, "FinishedRemoveAbsence", "FailedToRemoveAbsence");
 				}
@@ -234,11 +261,19 @@
 		function confirmRemoveAbsence() {
 			if (!canRemoveAbsence()) return;
 
-			var message = $translate.instant("AreYouSureToRemoveSelectedAbsence");
-			dialogSvc.confirm($translate.instant("Warning"), message, { animation: true })
-				.result.then(function(btn) {
+			var message = replaceParameters($translate.instant("AreYouSureToRemoveSelectedAbsence"),
+				[personSelectionSvc.getSelectedPersonIdList().length, vm.selectedPersonAbsences.length]);
+			console.log("message:", message);
+			dialogSvc.create("/dialogs/removeAbsenceConfirm.html", "confirmRemoveAbsenceDialogController", {
+					header: $translate.instant("Warning"),
+					message: message,
+					removeEntireCrossDayAbsence: vm.removeEntireCrossDayAbsence
+				}, { animation: true })
+				.result.then(function (result) {
+					vm.removeEntireCrossDayAbsence = result;
 					removeAbsence();
-				}, function(btn) {
+				}, function (result) {
+					vm.removeEntireCrossDayAbsence = result;
 					return;
 				});
 		}
@@ -257,7 +292,7 @@
 				shortcut: "Alt+S",
 				panelName: "", // No panel needed,
 				action: swapShifts,
-				enabled: function() { return personSelectionSvc.canSwapShifts() },
+				enabled: function() { return personSelectionSvc.canSwapShifts(); },
 				active: function() { return vm.canActiveSwapShifts(); }
 			},
 			{

@@ -13959,7 +13959,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Tips after swap shifts in WFM team schedule</comment>
   </data>
   <data name="AreYouSureToRemoveSelectedAbsence" xml:space="preserve">
-    <value>Are you sure you want to delete all selected absences?</value>
+    <value>{0} person and {1} person absence selected. Are you sure to delete all absences?</value>
     <comment>Message to confirm person absence removing</comment>
   </data>
   <data name="FailedToRemoveAbsence" xml:space="preserve">
@@ -14185,5 +14185,9 @@ Help us improve your experience by sending an error report</value>
   <data name="LoadedColon" xml:space="preserve">
     <value>Loaded:</value>
     <comment>Loaded:</comment>
+  </data>
+  <data name="RemoveEntireAbsenceForCrossDayPersonAbsence" xml:space="preserve">
+    <value>Remove entire cross day person absence</value>
+    <comment>Message for user to confirm how to remove cross day absence in remove absence of team schedule</comment>
   </data>
 </root>
