@@ -10,6 +10,7 @@ using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Rta.PerformanceTest.Code;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
@@ -37,9 +38,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			var args = new IocArgs(new ConfigReader())
 			{
 				AllEventPublishingsAsSync = true,
-				FeatureToggle = TestSiteConfigurationSetup.URL.ToString()
 			};
-			builder.RegisterModule(new CommonModule(new IocConfiguration(args, CommonModule.ToggleManagerForIoc(args))));
+			builder.RegisterModule(new CommonModule(new IocConfiguration(args, new FakeToggleManager())));
 			builder.RegisterType<MutableNow>().AsSelf().As<INow>().SingleInstance();
 			builder.RegisterType<DefaultDataCreator>().SingleInstance();
 			builder.RegisterType<TestConfiguration>().SingleInstance();
