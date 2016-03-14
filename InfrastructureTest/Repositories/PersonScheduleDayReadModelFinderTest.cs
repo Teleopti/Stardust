@@ -261,7 +261,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				BusinessUnitId = businessUnitId,
 				PersonId = personId,
 				Model = "{shift: blablabla}",
-				ScheduleLoadTimestamp = DateTime.UtcNow
 			};
 			//Not empty schedule
 			if (shiftStartHour >= 0)
