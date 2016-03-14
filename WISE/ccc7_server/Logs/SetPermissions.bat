@@ -103,6 +103,7 @@ ping 127.0.0.1 -n 2 >NUL
 
 ECHO Adding permissions to listen to ports for Stardust Node
 ::netsh http add urlacl url=http://+:14100/ user=Everyone listen=yes
-powershell -ExecutionPolicy Bypass -File "%TargetFolder%\SetUrlAcl.ps1" "%url%" 
+::powershell -ExecutionPolicy Bypass -File "%TargetFolder%\SetUrlAcl.ps1" "%url%" 
+PowerShell.exe -NoProfile -Command "& {Start-Process PowerShell.exe -ArgumentList '-NoProfile -ExecutionPolicy Bypass -File """"%TargetFolder%\SetUrlAcl.ps1""""  """"%url%"""" -Verb RunAs'}"
 
 GOTO :EOF
