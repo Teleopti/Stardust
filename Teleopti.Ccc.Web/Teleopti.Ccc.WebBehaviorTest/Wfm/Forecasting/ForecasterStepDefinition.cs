@@ -374,6 +374,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		}
 
 		[When(@"I can see that there are override values for the first day")]
+		[Then(@"I can see that there are override values for the first day")]
 		public void WhenICanSeeThatThereAreOverrideValuesForTheFirstDay()
 		{
 			WhenForecastHasSucceeded();

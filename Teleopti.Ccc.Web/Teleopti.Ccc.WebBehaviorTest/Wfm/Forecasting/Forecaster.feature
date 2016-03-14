@@ -144,7 +144,26 @@ Scenario: Remove override values for one day
 	And I select the first day in the forecast chart
 	And I select to modify the forecast
 	And I clear override values
-	Then I should see that there are no override values for the first day 
+	Then I should see that there are no override values for the first day
+
+Scenario: Keep override values when reforecasting
+	Given I am viewing forecast page
+	And I select workload 'TheWorkload1'
+	And I use default forecast period and forecast for one workload
+	And Forecast has succeeded
+	When I select the first day in the forecast chart
+	And I select to modify the forecast
+	And I select to override forecasted values
+	And I enter '500' calls per day
+	And I enter '100' seconds talk time
+	And I enter '50' seconds after call work
+	And I apply the override calls
+	And forecast result has loaded
+	And I can see that there are override values for the first day 
+	Then I use default forecast period and forecast for one workload
+	And Forecast has succeeded
+	And forecast result has loaded
+	And I can see that there are override values for the first day
 	
 	@ignore
 Scenario: Remove override values for one day when campaign exists

@@ -461,9 +461,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			workloadDay.ChangeOpenHours(_openHours);
 			workloadDay.Tasks = 10000;
 			workloadDay.CampaignTasks = new Percent(20);
-			workloadDay.AverageTaskTime = new TimeSpan(0, 0, 100);
-			workloadDay.AverageAfterTaskTime = new TimeSpan(0, 0, 33);
+			workloadDay.AverageTaskTime = TimeSpan.FromSeconds(100);
+			workloadDay.AverageAfterTaskTime = TimeSpan.FromSeconds(33);
 		    workloadDay.SetOverrideTasks(101, null);
+		    workloadDay.OverrideAverageTaskTime = TimeSpan.FromSeconds(120);
+		    workloadDay.OverrideAverageAfterTaskTime = TimeSpan.FromSeconds(150);
 
 			Assert.AreEqual(_openHours[0], workloadDay.OpenHourList[0]);
 
@@ -480,6 +482,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			Assert.AreEqual(workloadDay.AverageTaskTime, workloadDay.SortedTaskPeriodList[3].AverageTaskTime);
 			Assert.AreEqual(workloadDay.AverageAfterTaskTime, workloadDay.SortedTaskPeriodList[3].AverageAfterTaskTime);
 			Assert.AreEqual((workloadDayTemplate.SortedTaskPeriodList[3].Tasks / sumOfTemplateTasks) * workloadDay.OverrideTasks, workloadDay.SortedTaskPeriodList[3].OverrideTasks);
+			Assert.AreEqual(workloadDay.OverrideAverageTaskTime, workloadDay.SortedTaskPeriodList[3].OverrideTask.OverrideAverageTaskTime);
+			Assert.AreEqual(workloadDay.OverrideAverageAfterTaskTime, workloadDay.SortedTaskPeriodList[3].OverrideTask.OverrideAverageAfterTaskTime);
 	    }
 
 	    [Test]
