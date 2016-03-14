@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 				{ "campaign.EndDate", string.Format("new Date('{0}')", instance.EndDate) },
 				{ "campaignSpanningPeriodForm.$pristine", "false" }
 			});
-
+			Thread.Sleep(300);
 			Browser.Interactions.Click(".test-campaign-edit-submit");
 		}
 
