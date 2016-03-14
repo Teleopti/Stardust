@@ -88,7 +88,7 @@ Wfm_Requests_Waitlist_36232 = RC
 MyTimeWeb_TeamScheduleNoReadModel_36210 = true
 
 WfmIntraday_MonitorActualvsForecasted_35176 = true
-MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211 = RC
+MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211 = true
 MyTimeWeb_ShiftTradeBoardNoReadModel_36662 = true
 Scheduler_AgentSkillAnalyzer_12345 = DEV
 Wfm_Use_Stardust = RC
