@@ -95,7 +95,7 @@ Wfm_Use_Stardust = RC
 Wfm_ForecastFileImportOnStardust_37047 = RC
 ResourcePlanner_SkillGroupDeleteAfterCalculation_37048 = true
 ETL_SpeedUpPersonPeriodIntraday_37162 = RC
-ETL_SpeedUpPersonPeriodIntradayAcdLogin_37439 = false
+ETL_SpeedUpPersonPeriodIntradayAcdLogin_37439 = RC
 Scheduler_IntradayOptimization_36617 = true
 WfmGlobalLayout_personalOptions_37114 = DEV
 
