@@ -29,8 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 						TeamId = scheduleDay.TeamId,
 						SiteId = scheduleDay.SiteId,
 						BusinessUnitId = schedule.LogOnBusinessUnitId,
-						Date = scheduleDay.Date,
-						ScheduleLoadTimestamp = schedule.ScheduleLoadTimestamp
+						Date = scheduleDay.Date
 					};
 
 				var layers = new List<SimpleLayer>();

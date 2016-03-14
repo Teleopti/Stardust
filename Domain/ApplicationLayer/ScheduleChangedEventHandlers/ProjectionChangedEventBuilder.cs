@@ -156,8 +156,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 						ScenarioId = message.ScenarioId,
 						PersonId = message.PersonId,
 						ScheduleDays = scheduleDays,
-						TrackId = message.TrackId,
-						
+						TrackId = message.TrackId
 					};
 			}
 		}

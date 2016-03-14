@@ -40,7 +40,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		public Guid TrackId { get; set; }
 
 		public int RetriesCount { get; set; }
-
-		public DateTime ScheduleLoadTimestamp { get; set; }
 	}
 }

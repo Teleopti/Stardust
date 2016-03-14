@@ -215,33 +215,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			repository.Updated.Single().IsDayOff.Should().Be.False();
 		}
 
-		[Test]
-		public void ShouldHaveScheduleLoadTimestampInReadModel()
-		{
-			var repository = new FakePersonScheduleDayReadModelPersister();
-			var personRepository = new FakePersonRepositoryLegacy();
-			var target = new PersonScheduleDayReadModelUpdater(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
-
-			var scheduleLoadTimestamp = DateTime.UtcNow;
-
-			target.Handle(new ProjectionChangedEvent
-			{
-				PersonId = personRepository.Single().Id.Value,
-				ScheduleDays = new[]
-				{
-					new ProjectionChangedEventScheduleDay
-					{
-						DayOff = new ProjectionChangedEventDayOff(),
-						Name = "Day off"
-					}
-				},
-				ScheduleLoadTimestamp = scheduleLoadTimestamp
-
-			});
-
-			var readModel = repository.Updated.Single();
-			readModel.ScheduleLoadTimestamp.Should().Be.EqualTo(scheduleLoadTimestamp);
-		}
-
 	}
 }
