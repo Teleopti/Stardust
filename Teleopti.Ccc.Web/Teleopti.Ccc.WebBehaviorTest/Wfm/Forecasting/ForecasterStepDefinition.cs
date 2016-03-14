@@ -386,7 +386,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 				"var vtacw= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtacw')[0]);" +
 				"var vacw= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vacw')[0]);" +
 				"var voverride= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('voverride')[0]);" +
-				"return (vtc!=vc && vttt!=vtt && vtacw!=vacw && voverride==1) + '  ' + vtc+'  '+ vc+'  '+ vttt+'  '+ vtt+'  '+ vtacw+'  '+ vacw+'  '+ voverride;"
+				"return (vtc!=vc && vttt!=vtt && vtacw!=vacw && voverride==-1) + '  ' + vtc+'  '+ vc+'  '+ vttt+'  '+ vtt+'  '+ vtacw+'  '+ vacw+'  '+ voverride;"
 				, "true");
 		}
 
