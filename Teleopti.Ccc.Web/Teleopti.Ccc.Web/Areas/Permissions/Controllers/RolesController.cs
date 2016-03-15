@@ -27,9 +27,10 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 	    private readonly ISiteRepository _siteRepository;
 	    private readonly ITeamRepository _teamRepository;
 	    private readonly PersonToRoleAssociation _personToRoleAssociation;
-	 
+		 private readonly ILoggedOnUser _loggedOnUser;
 
-        public RolesController(IApplicationRoleRepository roleRepository, IApplicationFunctionRepository applicationFunctionRepository, IAvailableDataRepository availableDataRepository, ICurrentBusinessUnit currentBusinessUnit, IBusinessUnitRepository businessUnitRepository, ISiteRepository siteRepository, ITeamRepository teamRepository, PersonToRoleAssociation personToRoleAssociation)
+
+		 public RolesController(IApplicationRoleRepository roleRepository, IApplicationFunctionRepository applicationFunctionRepository, IAvailableDataRepository availableDataRepository, ICurrentBusinessUnit currentBusinessUnit, IBusinessUnitRepository businessUnitRepository, ISiteRepository siteRepository, ITeamRepository teamRepository, PersonToRoleAssociation personToRoleAssociation, ILoggedOnUser loggedOnUser)
         {
             _roleRepository = roleRepository;
             _applicationFunctionRepository = applicationFunctionRepository;
@@ -39,6 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 	        _siteRepository = siteRepository;
 	        _teamRepository = teamRepository;
 	        _personToRoleAssociation = personToRoleAssociation;
+	        _loggedOnUser = loggedOnUser;
         }
 
         [UnitOfWork, Route("api/Permissions/Roles"), HttpPost]
@@ -74,8 +76,16 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
         [UnitOfWork, Route("api/Permissions/Roles"), HttpGet]
         public virtual ICollection<object> Get()
         {
+	        var myRoles = _loggedOnUser.CurrentUser().PermissionInformation.ApplicationRoleCollection;
             var roles = _roleRepository.LoadAllApplicationRolesSortedByName();
-            return roles.Select(r => new { r.Name, r.Id, r.BuiltIn, r.DescriptionText }).ToArray();
+            return roles.Select(r => new
+            {
+	            r.Name, 
+				r.Id, 
+				r.BuiltIn, 
+				r.DescriptionText,
+				IsMyRole = myRoles.Any(myRole => myRole.Id.Value == r.Id)
+            }).ToArray();
         }
 
         [UnitOfWork, Route("api/Permissions/Roles/{roleId}"), HttpGet]

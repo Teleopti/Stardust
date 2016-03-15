@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			system.UseTestDouble<FakeCurrentBusinessUnit>().For<ICurrentBusinessUnit>();
 			system.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
 			system.UseTestDouble<FakeApplicationFunctionsToggleFilter>().For<IApplicationFunctionsToggleFilter>();
+			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 
 		}
 	}

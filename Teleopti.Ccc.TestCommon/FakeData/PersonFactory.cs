@@ -218,6 +218,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             IList<IApplicationRole> roles = ApplicationRoleFactory.CreateApplicationRolesAndFunctionsStructure();
             foreach (IApplicationRole role in roles)
             {
+	            role.WithId();
                 person.PermissionInformation.AddApplicationRole(role);
             }
             return person;

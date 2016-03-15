@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Permissions.Controllers;
 using Teleopti.Interfaces.Domain;
@@ -27,6 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		public IBusinessUnitRepository BusinessUnitRepository;
 		public FakeApplicationRolePersonRepository ApplicationRolePersonRepository;
 		public IPersonRepository PersonRepository;
+		public FakeLoggedOnUser LoggedOnUser;
 		
 		[Test]
 		public void ShouldCreateNewRole()
@@ -55,6 +57,26 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			ApplicationRoleRepository.Add(adminRole);
 			var result = Target.Get();
 			result.Count.Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldSeeIfCurrentUserBelongsToRoles()
+		{
+			var person = PersonFactory.CreatePersonWithApplicationRolesAndFunctions();
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var myRole = person.PermissionInformation.ApplicationRoleCollection.First();
+			ApplicationRoleRepository.Add(myRole);
+			var adminRole = new ApplicationRole { Name = "SuperduperAdmin", BuiltIn = true };
+			adminRole.WithId();
+			ApplicationRoleRepository.Add(adminRole);
+
+			ICollection<object> result = Target.Get();
+
+			dynamic myReturnedRole = result.First(x => ((dynamic)x).Name == myRole.Name);
+			dynamic adminReturnedRole = result.First(x => ((dynamic)x).Name == adminRole.Name);
+			((bool)myReturnedRole.IsMyRole).Should().Be.EqualTo(true);
+			((bool)adminReturnedRole.IsMyRole).Should().Be.EqualTo(false);
 		}
 
 		[Test]
