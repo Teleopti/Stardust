@@ -96,7 +96,7 @@ task PostReq -depends CompileWse, CompileWsi, ProductVersion -description "Tasks
 
 task CHM-SDK-File -depends CompileWse, CompileWsi -description "Create chm sdk file" {
 
-	exec { $MSBuildPath "$SdkFile" /p:WorkingDirectory=$MountKDirectory /p:SdkHostPath=$SdkHostPath }
+	exec { msbuild "$SdkFile" /p:WorkingDirectory=$MountKDirectory /p:SdkHostPath=$SdkHostPath }
     #& $MSBuildPath "$MountKDirectory\teamcity\SdkDoc\docSdkx64.shfbproj"
 
 }
