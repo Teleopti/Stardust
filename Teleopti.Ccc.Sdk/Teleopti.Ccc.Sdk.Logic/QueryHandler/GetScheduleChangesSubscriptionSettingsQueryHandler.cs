@@ -29,7 +29,12 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			{
 				var setting = _globalSettingDataRepository.FindValueByKey(ScheduleChangeSubscriptions.Key,
 					new ScheduleChangeSubscriptions());
-				var scheduleChangesSubscriptionsDto = new ScheduleChangesSubscriptionsDto();
+				var scheduleChangesSubscriptionsDto = new ScheduleChangesSubscriptionsDto
+				{
+					Exponent = "AQAB",
+					Modulus =
+						"tcQWMgdpQeCd8+gzB3rYQAehHXF5mBGdyFMkJMEmcQmTlkpg22xLNz/kNYXZ7j2Cuhls+PBORzZkfBsNoL1vErT+N9Es4EEWOt6ntNe7wujqQqktUT/QOWEMJ8zJQM3bn7Oj9H5StBr7DWSRzgEjOc7knDcb4KCQL3ceXqmqwSonPfP1hp+bE8rZuxDISYiZVEkm417YzUHBk3ppV30Q9zvfL9IZX0q/ebCTRnLFockl7yOVucomvo8j4ssFPCAYgASoNvzWq+s5UTzYELl1I7F3hQnFwx0bIpQFmGbZ5BbNczc6rVYtCX5KDMsVaJSUcXBAnqGd20hq/ICkBR658w=="
+				};
 				Array.ForEach(setting.Subscriptions(),
 					s =>
 						scheduleChangesSubscriptionsDto.Listeners.Add(new ScheduleChangesListenerDto

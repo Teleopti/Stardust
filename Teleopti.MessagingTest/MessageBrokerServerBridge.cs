@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Messaging.Client.Http;
 
 namespace Teleopti.MessagingTest
 {
@@ -31,10 +30,11 @@ namespace Teleopti.MessagingTest
 			_server.NotifyClients(message);
 		}
 
-		public void Post(string uri, object thing, Func<string, NameValueCollection> customHeadersFunc = null)
+		public Task Post(string uri, object thing, Func<string, NameValueCollection> customHeadersFunc = null)
 		{
 			var headers = customHeadersFunc != null ? customHeadersFunc(thing.ToString()) : null;
 			Requests.Add(new RequestInfo { Uri = uri, Thing = thing, Headers = headers });
+			return Task.FromResult(false);
 		}
 
 		public void PostOrThrow(string uri, object thing, Func<string, NameValueCollection> customHeadersFunc = null)
@@ -43,6 +43,16 @@ namespace Teleopti.MessagingTest
 			Requests.Add(new RequestInfo { Uri = uri, Thing = thing, Headers = headers });
 			if (_exception != null)
 				throw _exception;
+		}
+
+		public Task PostOrThrowAsync(string uri, object thing, Func<string, NameValueCollection> customHeadersFunc = null)
+		{
+			var headers = customHeadersFunc != null ? customHeadersFunc(thing.ToString()) : null;
+			Requests.Add(new RequestInfo { Uri = uri, Thing = thing, Headers = headers });
+			if (_exception != null)
+				return Task.Factory.StartNew(() => { throw _exception; });
+
+			return Task.FromResult(false);
 		}
 
 		public string GetOrThrow(string uri)

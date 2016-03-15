@@ -39,6 +39,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		}
 
 		[Test]
+		public void ShouldIgnoreOtherScenariosThanDefault()
+		{
+			var newSchedule = new ProjectionChangedEvent
+			{
+				IsDefaultScenario = false,
+				PersonId = Guid.NewGuid(),
+				ScheduleDays =
+					new List<ProjectionChangedEventScheduleDay>
+					{
+						new ProjectionChangedEventScheduleDay {Date = new DateTime(2016, 3, 10)}
+					}
+			};
+			var server = new FakeHttpServer();
+			var settingsRepository = new FakeGlobalSettingDataRepository();
+			var subscriptions = new ScheduleChangeSubscriptions();
+			subscriptions.Add(new ScheduleChangeListener { Uri = new Uri("/", UriKind.Relative) });
+			settingsRepository.PersistSettingValue(ScheduleChangeSubscriptions.Key, subscriptions);
+			var handler = new ScheduleChangesPublisher(server, new ThisIsNow(new DateTime(2016, 3, 10, 5, 0, 0)), settingsRepository, new SignatureCreator());
+			handler.Handle(newSchedule);
+
+			server.Requests.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
 		public void ShouldUseUrlConfiguredForSubscriber()
 		{
 			var newSchedule = new ProjectionChangedEvent

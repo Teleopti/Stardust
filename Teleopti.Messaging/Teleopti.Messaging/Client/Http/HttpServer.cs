@@ -24,9 +24,9 @@ namespace Teleopti.Messaging.Client.Http
 			_serializer = serializer ?? new ToStringSerializer();
 		}
 
-		public void Post(string uri, object thing, Func<string, NameValueCollection> customHeadersFunc = null)
+		public Task Post(string uri, object thing, Func<string, NameValueCollection> customHeadersFunc = null)
 		{
-			innerPost(new Uri(uri), thing);
+			return innerPost(new Uri(uri), thing);
 		}
 
 		private Task<HttpResponseMessage> innerPost(Uri uri, object thing, Func<string,NameValueCollection> customHeadersFunc = null)
@@ -52,6 +52,12 @@ namespace Teleopti.Messaging.Client.Http
 		public void PostOrThrow(string uri, object thing, Func<string,NameValueCollection> customHeadersFunc = null)
 		{
 			innerPost(new Uri(uri), thing, customHeadersFunc).Result.EnsureSuccessStatusCode();
+		}
+
+		public async Task PostOrThrowAsync(string uri, object thing, Func<string,NameValueCollection> customHeadersFunc = null)
+		{
+			var request = await innerPost(new Uri(uri), thing, customHeadersFunc);
+			request.EnsureSuccessStatusCode();
 		}
 
 		public string GetOrThrow(string uri)
