@@ -23,16 +23,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		    _serviceBus = serviceBus;
 			_now = now;
 		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		
 		public void Handle(ProjectionChangedEvent @event)
+		{
+			handleProjectionChanged(@event);
+		}
+
+		private void handleProjectionChanged(ProjectionChangedEventBase @event)
 		{
 			if (!@event.IsDefaultScenario) return;
 			var closestLayerToNow = new ProjectionChangedEventLayer
-				{
-					StartDateTime = DateTime.MaxValue.Date,
-					EndDateTime = DateTime.MaxValue.Date
-				};
+			{
+				StartDateTime = DateTime.MaxValue.Date,
+				EndDateTime = DateTime.MaxValue.Date
+			};
 
 			foreach (var scheduleDay in @event.ScheduleDays)
 			{
@@ -47,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 				foreach (var layer in scheduleDay.Shift.Layers)
 				{
 					if (isLayerRightNow(layer) ||
-					    isCurrentLayerCloser(layer, closestLayerToNow))
+						isCurrentLayerCloser(layer, closestLayerToNow))
 						closestLayerToNow = layer;
 					_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, @event.ScenarioId, @event.PersonId, layer);
 				}
@@ -92,7 +96,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 
 		public void Handle(ProjectionChangedEventForScheduleProjection @event)
 		{
-			Handle(@event);
+			handleProjectionChanged(@event);
 		}
 	}
 }
