@@ -52,6 +52,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			Service.GetAll().Select(m => m.StateCode).Should().Have.SameValuesAs("3");
 		}
 
+		[Test]
+		public void ShouldNotUpdateInParalellWithNotInSnapshot()
+		{
+			var runner = new ConcurrencyRunner();
+			var persons = Enumerable.Range(0, 20).Select(i => Guid.NewGuid()).ToArray();
+			persons.ForEach(p => Service.AddOne(p, "2016-03-15 08:00".Utc(), "9"));
+
+			runner.InParallel(() => Service.AddOneToNotInSnapshot("2016-03-15 08:05".Utc(), "9"));
+			persons.ForEach(p => Service.AddOne(p));
+			runner.Wait();
+
+			Service.GetAll().Select(m => m.StateCode).Should().Have.SameValuesAs("3");
+		}
+
 		public class TheService
 		{
 			private readonly IAgentStateReadModelPersister _persister;
@@ -62,25 +76,45 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			}
 
 			[AnalyticsUnitOfWork]
+			public virtual void AddOneToNotInSnapshot(DateTime batchId, string datasourceId)
+			{
+				var all = _persister.GetNotInSnapshot(batchId, datasourceId);
+				Thread.Sleep(TimeSpan.FromMilliseconds(100 * all.Count()));
+				addOneTo(all);
+			}
+
+			[AnalyticsUnitOfWork]
 			public virtual void AddOneToAll()
 			{
 				var all = _persister.GetAll();
 				Thread.Sleep(TimeSpan.FromMilliseconds(100 * all.Count()));
+				addOneTo(all);
+			}
+
+			private void addOneTo(IEnumerable<AgentStateReadModel> all)
+			{
 				all.ForEach(m =>
 				{
 					m.StateCode = (int.Parse(m.StateCode) + 1).ToString();
 					_persister.Persist(m);
 				});
 			}
-			
-			[AnalyticsUnitOfWork]
+
 			public virtual void AddOne(Guid personId)
+			{
+				AddOne(personId, null, null);
+			}
+
+			[AnalyticsUnitOfWork]
+			public virtual void AddOne(Guid personId, DateTime? batchId, string datasourceId)
 			{
 				var model = _persister.Get(personId) ?? new AgentStateReadModel
 				{
 					PersonId = personId,
 					StateCode = "0",
-					ReceivedTime = "2016-03-15 00:00:00".Utc()
+					ReceivedTime = "2016-03-15 00:00:00".Utc(),
+					BatchId = batchId,
+					OriginalDataSourceId = datasourceId
 				};
 				Thread.Sleep(TimeSpan.FromMilliseconds(100));
 				model.StateCode = (int.Parse(model.StateCode) + 1).ToString();

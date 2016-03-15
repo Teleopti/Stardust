@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			foreach (var personList in personIds.Batch(400))
 			{
 				ret.AddRange(_unitOfWork.Current().Session()
-					.CreateSQLQuery(SelectActualAgentState() + "WITH (NOLOCK) WHERE PersonId IN(:persons)")
+					.CreateSQLQuery(SelectActualAgentState + "WITH (NOLOCK) WHERE PersonId IN(:persons)")
 					.SetParameterList("persons", personList)
 					.SetResultTransformer(Transformers.AliasToBean(typeof (AgentStateReadModel)))
 					.SetReadOnly(true)
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		public virtual IList<AgentStateReadModel> LoadForTeam(Guid teamId)
 		{
 			return _unitOfWork.Current().Session()
-				.CreateSQLQuery(SelectActualAgentState() + "WITH (NOLOCK) WHERE TeamId = :teamId")
+				.CreateSQLQuery(SelectActualAgentState + "WITH (NOLOCK) WHERE TeamId = :teamId")
 				.SetParameter("teamId", teamId)
 				.SetResultTransformer(Transformers.AliasToBean(typeof (AgentStateReadModel)))
 				.SetReadOnly(true)
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		[AnalyticsUnitOfWork]
 		public virtual IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds, bool? inAlarmOnly, bool? alarmTimeDesc)
 		{
-			var query = SelectActualAgentState() + @"WITH (NOLOCK) WHERE SiteId IN (:siteIds)";
+			var query = SelectActualAgentState + @"WITH (NOLOCK) WHERE SiteId IN (:siteIds)";
 			if (inAlarmOnly.HasValue)
 				query += " AND IsRuleAlarm = " + Convert.ToInt32(inAlarmOnly.Value);
 			if(alarmTimeDesc.HasValue)
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		[AnalyticsUnitOfWork]
 		public virtual IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds, bool? inAlarmOnly, bool? alarmTimeDesc)
 		{
-			var query = SelectActualAgentState() + @"WITH (NOLOCK) WHERE TeamId IN (:teamIds)";
+			var query = SelectActualAgentState + @"WITH (NOLOCK) WHERE TeamId IN (:teamIds)";
 			if (inAlarmOnly.HasValue)
 				query += " AND IsRuleAlarm = " + Convert.ToInt32(inAlarmOnly.Value);
 			if (alarmTimeDesc.HasValue)
@@ -96,42 +96,40 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.List<AgentStateReadModel>();
 		}
 		
-		public static string SelectActualAgentState()
-		{
-			return @"SELECT 
-						PersonId,
-						BatchId,
-						BusinessUnitId,
-						SiteId,
-						TeamId,
-						OriginalDataSourceId,
-						PlatformTypeId,
-						ReceivedTime,
+		public static string SelectActualAgentState = 
+@"SELECT 
+PersonId,
+BatchId,
+BusinessUnitId,
+SiteId,
+TeamId,
+OriginalDataSourceId,
+PlatformTypeId,
+ReceivedTime,
 
-						Scheduled,
-						ScheduledId,
-						ScheduledNext,
-						ScheduledNextId,
-						NextStart,
+Scheduled,
+ScheduledId,
+ScheduledNext,
+ScheduledNextId,
+NextStart,
 
-						StateCode,
-						State AS StateName,
-						StateId,
-						StateStartTime,
+StateCode,
+State AS StateName,
+StateId,
+StateStartTime,
 
-						AlarmId AS RuleId,
-						AlarmName AS RuleName,
-						Color AS RuleColor,
-						RuleStartTime,
-						StaffingEffect,
-						Adherence,
+AlarmId AS RuleId,
+AlarmName AS RuleName,
+Color AS RuleColor,
+RuleStartTime,
+StaffingEffect,
+Adherence,
 
-						IsRuleAlarm AS IsAlarm,
-						AlarmStartTime,
-						AlarmColor
+IsRuleAlarm AS IsAlarm,
+AlarmStartTime,
+AlarmColor
 
-					FROM RTA.ActualAgentState ";
-		}
+FROM RTA.ActualAgentState ";
 
 	}
 }
