@@ -16,7 +16,7 @@ Background:
 	And 'Pierre Baldi' has a person period with
 	| Field      | Value      |
 	| Team       | Team green |
-	| Start date | 2013-11-18 |
+	| Start date | 2013-01-18 |
 	And there is a shift category named 'Day'
 	And there is an activity with
 	| Field | Value |
