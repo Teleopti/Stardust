@@ -102,6 +102,6 @@ ping 127.0.0.1 -n 2 >NUL
 )
 
 ECHO Adding permissions to listen to ports for Stardust Node
-PowerShell.exe -NoProfile -Command "& {Start-Process PowerShell.exe -ArgumentList '-NoProfile -ExecutionPolicy Bypass -File ""%TargetFolder%\SetUrlAcl.ps1"" -Verb RunAs'}"
+PowerShell.exe -NoProfile -Command "& {Start-Process PowerShell.exe -ArgumentList '-NoProfile -ExecutionPolicy Bypass -File """"%TargetFolder%\SetUrlAcl.ps1"""" -Verb RunAs'}"
 
 GOTO :EOF
