@@ -134,12 +134,14 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 
 		public static void StartApplicationAsync()
 		{
-			new Http().GetAsync("Test/Start");
+			using (var h = new Http())
+				h.GetAsync("Test/Start");
 		}
 
 		public static void StartApplicationSync()
 		{
-			new Http().Get("Test/Start");
+			using (var h = new Http())
+				h.Get("Test/Start");
 		}
 
 		public static void RecycleApplication()

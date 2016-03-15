@@ -31,19 +31,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"'(.*)' sets (?:his|her) phone state to '(.*)'")]
 		public void WhenSetsHisPhoneStateToOnDatasource(string personName, string stateCode)
 		{
-			new Http().PostJson(
-				"Rta/State/Change",
-				new ExternalUserStateWebModel
-				{
-					AuthenticationKey = "!#¤atAbgT%",
-					UserCode = personName,
-					StateCode = stateCode,
-					IsLoggedOn = true,
-					PlatformTypeId = Guid.Empty.ToString(),
-					SourceId = SourceId,
-					BatchId = CurrentTime.Value().ToString("yyyy-MM-dd HH:mm:ss"),
-					IsSnapshot = false
-				});
+			using (var h = new Http())
+				h.PostJson(
+					"Rta/State/Change",
+					new ExternalUserStateWebModel
+					{
+						AuthenticationKey = "!#¤atAbgT%",
+						UserCode = personName,
+						StateCode = stateCode,
+						IsLoggedOn = true,
+						PlatformTypeId = Guid.Empty.ToString(),
+						SourceId = SourceId,
+						BatchId = CurrentTime.Value().ToString("yyyy-MM-dd HH:mm:ss"),
+						IsSnapshot = false
+					});
 		}
 		
 	}
