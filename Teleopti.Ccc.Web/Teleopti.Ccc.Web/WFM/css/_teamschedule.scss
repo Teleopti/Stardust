@@ -8,7 +8,26 @@
 	.relative {
 		position: relative;
 	}
-	
+
+	.teamschedule-header{
+		width:100%!important;
+		display:flex;
+		flex-direction:row;
+		flex-wrap:wrap;
+		justify-content:space-between;
+
+		.wfm-switch{
+			display:inline-block;
+			margin: 0 10px;
+			padding-top: 8px;
+			min-width:200px;
+			.wfm-switch-toggle{
+				top: 8px;
+				left: 12rem;
+			}
+		}
+	}	
+
 	.people-search-container{
 		display: inline-block;
 		margin: 10px;
@@ -153,15 +172,5 @@
 		padding: 5px;
 		margin-left: 0;
 		margin-right: 0;
-	}
-
-	.wfm-switch{
-		padding-top: 8px;
-		float: right;
-		right: 6rem;
-		.wfm-switch-toggle{
-		    top: 8px;
-			left: 12rem;
-		}
 	}
 }
