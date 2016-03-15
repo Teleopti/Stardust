@@ -22,6 +22,11 @@ properties {
       
 }
 
+Include .\teamcity.psm1
+TaskSetup {
+    TeamCity-ReportBuildProgress "Running task $($psake.context.Peek().currentTaskName)"
+}
+
 task default -depends init, PreReq, MountK, CompileWse, CompileWsi, ProductVersion, PostReq, UnMountK, CHM-SDK-File, MalewareScan
 
 task Init {
@@ -91,7 +96,8 @@ task PostReq -depends CompileWse, CompileWsi, ProductVersion -description "Tasks
 
 task CHM-SDK-File -depends CompileWse, CompileWsi -description "Create chm sdk file" {
 
-    & $MSBuildPath "$MountKDirectory\teamcity\SdkDoc\docSdkx64.shfbproj"
+	exec { $MSBuildPath "$SdkFile" /p:WorkingDirectory=$MountKDirectory /p:SdkHostPath=$SdkHostPath }
+    #& $MSBuildPath "$MountKDirectory\teamcity\SdkDoc\docSdkx64.shfbproj"
 
 }
 
