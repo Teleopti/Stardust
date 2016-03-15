@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 {
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_IntradayIslands_36939)]
+	[Toggle(Toggles.ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049)]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	public class IntradayOptimizationDesktopTest : ISetup
 	{
@@ -56,6 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var schedulerStateHolderFrom = SchedulerStateHolderFrom();
 			schedulerStateHolderFrom.SchedulingResultState.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000,1,1,2020,1,1)));
 			schedulerStateHolderFrom.AllPermittedPersons.Add(agent);
+			schedulerStateHolderFrom.SchedulingResultState.PersonsInOrganization.Add(agent);
 			var scheduleDay = ExtractedSchedule.CreateScheduleDay(schedulerStateHolderFrom.SchedulingResultState.Schedules, agent, dateOnly);
 			scheduleDay.AddMainShift(ass);
 			schedulerStateHolderFrom.SchedulingResultState.Schedules.Modify(scheduleDay);
