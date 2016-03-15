@@ -32,9 +32,12 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 
 		private RequestFilter toRequestFilter(AllRequestsFormData input)
 		{
+			var dateTimePeriod = new DateOnlyPeriod(input.StartDate, input.EndDate).ToDateTimePeriod(_userTimeZone.TimeZone());
+			var queryDateTimePeriod = dateTimePeriod.ChangeEndTime(TimeSpan.FromSeconds(-1));
+
 			var filter = new RequestFilter
 			{
-				Period = new DateOnlyPeriod(input.StartDate, input.EndDate).ToDateTimePeriod(_userTimeZone.TimeZone()),
+				Period = queryDateTimePeriod,
 				Paging = input.Paging,
 				RequestTypes = new List<RequestType> { RequestType.AbsenceRequest, RequestType.TextRequest },
 				SortingOrders = input.SortingOrders

@@ -1261,9 +1261,52 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			result.Count().Should().Be.EqualTo(5);
 		    count.Should().Be.EqualTo(20);
 
-
 	    }
 
+		[Test]
+		public void ShouldReturnRequestsOverlapOnEndDate()
+		{
+			var person1 = PersonFactory.CreatePerson("A");
+
+			PersistAndRemoveFromUnitOfWork(person1);
+
+			var textRequest1 = new PersonRequest(person1, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1))));
+
+			PersistAndRemoveFromUnitOfWork(textRequest1);
+
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow),
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.PeriodStartDesc }
+			};
+
+			var resultDesc = new PersonRequestRepository(UnitOfWork)
+				.FindAllRequests(filter).ToArray();
+
+			resultDesc.Should().Have.Count.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldReturnRequestsOverlapOnStartDate()
+		{
+			var person1 = PersonFactory.CreatePerson("A");
+
+			PersistAndRemoveFromUnitOfWork(person1);
+
+			var textRequest1 = new PersonRequest(person1, new TextRequest(new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow)));
+
+			PersistAndRemoveFromUnitOfWork(textRequest1);
+
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)),
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.PeriodStartDesc }
+			};
+
+			var resultDesc = new PersonRequestRepository(UnitOfWork)
+				.FindAllRequests(filter).ToArray();
+
+			resultDesc.Should().Have.Count.EqualTo(1);
+		}
 	}
-    
 }

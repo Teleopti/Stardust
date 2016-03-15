@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public IPersonRequestRepository PersonRequestRepository;
 		public IPermissionProvider PermissionProvider;
 		public IPeopleSearchProvider PeopleSearchProvider;
-		
+
 		[Test]
 		public void ShouldGetRequests()
 		{
@@ -40,7 +40,37 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 			var result = Target.Create(input);
 			result.Count().Should().Be.EqualTo(3);
-		}		
+		}	
+		
+		[Test]
+		public void ShouldGetRequestsForDay()
+		{
+			setUpRequests();
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2015, 10, 1),
+				EndDate = new DateOnly(2015, 10, 1)
+			};
+
+			var result = Target.Create(input);
+			result.Count().Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldGetRequestsForSecondDay()
+		{
+			setUpRequests();
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2015, 10, 2),
+				EndDate = new DateOnly(2015, 10, 2)
+			};
+
+			var result = Target.Create(input);
+			result.Count().Should().Be.EqualTo(2);
+		}
 
 		[Test]
 		public void ShouldOrderByNameCorrectly()

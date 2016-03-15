@@ -75,14 +75,64 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 		[Test]
 		public void ShouldReturnCorrectPositionInWaitlist()
 		{
-			createAutoDeniedAbsenceRequest(createAndSetupPerson(_workflowControlSet), _absence, new DateTimePeriod(new DateTime(2016, 3, 1, 15, 0, 0, DateTimeKind.Utc), new DateTime(2016, 3, 1, 19, 00, 00, DateTimeKind.Utc)));
-			var absenceRequestTwo = createAutoDeniedAbsenceRequest(createAndSetupPerson(_workflowControlSet), _absence, new DateTimePeriod(new DateTime(2016, 3, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2016, 3, 1, 16, 00, 00, DateTimeKind.Utc)));
-			createAutoDeniedAbsenceRequest(createAndSetupPerson(_workflowControlSet), _absence, new DateTimePeriod(new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 3, 1, 18, 00, 00, DateTimeKind.Utc)));
+			createAutoDeniedAbsenceRequest(createAndSetupPerson(_workflowControlSet), _absence, 
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 15, 0, 0, DateTimeKind.Utc), 
+					new DateTime(2016, 3, 1, 19, 00, 00, DateTimeKind.Utc)));
+			
+			var absenceRequestTwo = createAutoDeniedAbsenceRequest(createAndSetupPerson(_workflowControlSet), _absence, 
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 8, 0, 0, DateTimeKind.Utc), 
+					new DateTime(2016, 3, 1, 16, 00, 00, DateTimeKind.Utc)));
+
+			createAutoDeniedAbsenceRequest(createAndSetupPerson(_workflowControlSet), _absence, 
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc), 
+					new DateTime(2016, 3, 1, 18, 00, 00, DateTimeKind.Utc)));
 			
 			var position = new AbsenceRequestWaitlistProvider(_personRequestRepository).GetPositionInWaitlist(absenceRequestTwo);
 			
 			Assert.AreEqual (2, position);
 		}
+
+//		Alfred Kobsa asks for Time in Lieu 21st of March between 10am - 11pm = On waitlist posistion 1. OK 
+//Aniruddha Mitra asks for Time in Lieu 21st of March between 9am-10 AM = On waitlist position 1. OK
+//Keri Carpenter asks for Time in Lieu 21st of March between 9am-11am = On waitlist position 3. OK
+//Renato Pajarola asks for Time in Lieu 21st of March between 10am - 11 am = On waitlist position 4. NOT OK, Should be 3, not 4. 
+		[Test]
+		public void Bug37600_ShouldReturnCorrectPositionInWaitlist()
+		{
+			var absenceRequestOne=createAutoDeniedAbsenceRequest(createAndSetupPerson(_workflowControlSet), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 23, 00, 00, DateTimeKind.Utc)));
+
+			var absenceRequestTwo = createAutoDeniedAbsenceRequest(createAndSetupPerson(_workflowControlSet), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 9, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 10, 00, 00, DateTimeKind.Utc)));
+
+			var absenceRequestThree = createAutoDeniedAbsenceRequest(createAndSetupPerson(_workflowControlSet), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 9, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 11, 00, 00, DateTimeKind.Utc)));
+
+			var absenceRequestFour = createAutoDeniedAbsenceRequest(createAndSetupPerson(_workflowControlSet), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 11, 00, 00, DateTimeKind.Utc)));
+
+			var waitlistProvider = new AbsenceRequestWaitlistProvider (_personRequestRepository);
+
+			//var position = new AbsenceRequestWaitlistProvider(_personRequestRepository).GetPositionInWaitlist(absenceRequestTwo);
+
+			Assert.AreEqual(1, waitlistProvider.GetPositionInWaitlist(absenceRequestOne));
+			Assert.AreEqual(2, waitlistProvider.GetPositionInWaitlist(absenceRequestTwo));
+			Assert.AreEqual(3, waitlistProvider.GetPositionInWaitlist(absenceRequestThree));
+			Assert.AreEqual(4, waitlistProvider.GetPositionInWaitlist(absenceRequestFour));
+		}
+
+
 
 		private IPerson createAndSetupPerson(IWorkflowControlSet workflowControlSet)
 		{
