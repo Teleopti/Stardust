@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		}
 
 		[Test, Explicit]
-		public void ShouldNotCrashIfALotOfThreads()
+		public void ShouldNotCrashIfLotsOfIslands()
 		{
 			const int numberOfIslands = 10;
 			var scenario = new Scenario("_");
