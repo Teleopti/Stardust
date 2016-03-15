@@ -23,7 +23,10 @@ namespace Teleopti.Ccc.Web.Broker
 			if (settingsFromParser.ConnectionTimeout.HasValue)
 				GlobalHost.Configuration.ConnectionTimeout = settingsFromParser.ConnectionTimeout.Value;
 
-			var prefix = settingsFromParser.SignalRBackplanePrefix.Substring(0, Math.Min(30, settingsFromParser.SignalRBackplanePrefix.Length));
+			var prefix = settingsFromParser.SignalRBackplanePrefix == null
+				? ""
+				: settingsFromParser.SignalRBackplanePrefix.Substring(0,
+					Math.Min(30, settingsFromParser.SignalRBackplanePrefix.Length));
 			switch (settingsFromParser.SignalRBackplaneType)
 			{
 				case SignalRBackplaneType.SqlServer:
