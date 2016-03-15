@@ -302,6 +302,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		}
 
 		[Test]
+		public void ShouldNotDeleteMyRole()
+		{
+			var person = PersonFactory.CreatePersonWithApplicationRolesAndFunctions();
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var role = person.PermissionInformation.ApplicationRoleCollection.First();
+			ApplicationRoleRepository.Add(role);
+			Target.Delete(role.Id.Value);
+			ApplicationRoleRepository.LoadAll().Should().Not.Be.Empty();
+		}
+
+		[Test]
 		public void ShouldGetFunctionsAndAvailableDataForRole()
 		{
 			var agentRole = new ApplicationRole {Name = "Agent"};

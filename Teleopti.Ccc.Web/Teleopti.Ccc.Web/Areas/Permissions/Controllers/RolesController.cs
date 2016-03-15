@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
     {
         private const string GivenDescriptionIsInvalidErrorMessage = "The given description is invalid. It can contain at most 255 characters.";
         private const string CannotModifyBuiltInRoleErrorMessage = "Roles that are built in cannot be changed.";
+        private const string CannotModifyMyRoleErrorMessage = "You are not allowed to make changes to your own role.";
 
         private readonly IApplicationRoleRepository _roleRepository;
         private readonly IApplicationFunctionRepository _applicationFunctionRepository;
@@ -121,11 +122,16 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
         [UnitOfWork, Route("api/Permissions/Roles/{roleId}"), HttpDelete]
         public virtual IHttpActionResult Delete(Guid roleId)
         {
-			  var role = _roleRepository.Load(roleId);
-			  if (role.BuiltIn) return BadRequest(CannotModifyBuiltInRoleErrorMessage);
-			  _personToRoleAssociation.RemoveAssociation(role);
-			  _roleRepository.Remove(role);
-			  return Ok();
+			var role = _roleRepository.Load(roleId);
+			if (role.BuiltIn) return BadRequest(CannotModifyBuiltInRoleErrorMessage);
+
+			var myRoles = _loggedOnUser.CurrentUser().PermissionInformation.ApplicationRoleCollection;
+			var isMyRole = myRoles.Any(myRole => myRole.Id == role.Id);
+			if (isMyRole) return BadRequest(CannotModifyMyRoleErrorMessage);
+
+			_personToRoleAssociation.RemoveAssociation(role);
+			_roleRepository.Remove(role);
+			return Ok();
         }
 
         [UnitOfWork, Route("api/Permissions/Roles/{roleId}/Function/{functionId}"), HttpDelete]
