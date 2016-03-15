@@ -16,7 +16,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		{
 			_schedulerStateHolderFrom.SchedulingResultState.PersonsInOrganization.Where(x => agentIds.Contains(x.Id.Value))
 				.ForEach(x => schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization.Add(x));
+
 			_schedulerStateHolderFrom.AllPermittedPersons.Where(x => agentIds.Contains(x.Id.Value)).ForEach(x => schedulerStateHolderTo.AllPermittedPersons.Add(x));
+			schedulerStateHolderTo.SchedulingResultState.AllPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>();
 
 			var scheduleDictionary = new ScheduleDictionary(_schedulerStateHolderFrom.Schedules.Scenario, _schedulerStateHolderFrom.Schedules.Period);
 			moveSchedules(_schedulerStateHolderFrom.Schedules, scheduleDictionary, schedulerStateHolderTo.AllPermittedPersons, period);
