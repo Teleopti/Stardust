@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Given(@"I view Shift Trade Bulletin Board for date '(.*)'")]
 		public void WhenIViewShiftTradeBulletinBoardForDate(DateTime date)
 		{
-			gotoShfitTradeBulletinBoardToday();
+			gotoShiftTradeBulletinBoardToday();
 			var dateAsSwedishString = date.ToShortDateString(CultureInfo.GetCultureInfo("sv-SE"));
 			var script = string.Format("return Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeBulletinBoardDate('{0}');", dateAsSwedishString);
 			Browser.Interactions.AssertJavascriptResultContains(script, dateAsSwedishString);
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertExists(".ready-loading-flag.is-ready-loaded");
 		}		
 		
-		private static void gotoShfitTradeBulletinBoardToday()
+		private static void gotoShiftTradeBulletinBoardToday()
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
