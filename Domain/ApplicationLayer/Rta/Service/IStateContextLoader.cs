@@ -364,18 +364,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_databaseReader.LoadPersonOrganizationData(dataSourceId, userCode)
 				.ForEach(x =>
 				{
-					action.Invoke(new StateContext(
-						input,
-						x.PersonId,
-						x.BusinessUnitId,
-						x.TeamId,
-						x.SiteId,
-						() => _unitOfWork.Get(() => _previousStateInfoLoader.Load(x.PersonId)),
-						() => _databaseReader.GetCurrentSchedule(x.PersonId),
-						() => _stateMappingLoader.Load(),
-						() => _ruleMappingLoader.Load(),
-						s => _unitOfWork.Do(() => _agentStateReadModelUpdater.Update(s)),
-						_now));
+					_unitOfWork.Do(() =>
+					{
+						action.Invoke(new StateContext(
+							input,
+							x.PersonId,
+							x.BusinessUnitId,
+							x.TeamId,
+							x.SiteId,
+							() => _previousStateInfoLoader.Load(x.PersonId),
+							() => _databaseReader.GetCurrentSchedule(x.PersonId),
+							() => _stateMappingLoader.Load(),
+							() => _ruleMappingLoader.Load(),
+							s => _agentStateReadModelUpdater.Update(s),
+							_now));
+					});
 				});
 		}
 
@@ -384,21 +387,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_databaseReader.LoadAllPersonOrganizationData()
 				.ForEach(x =>
 				{
-					action.Invoke(new StateContext(
-						null,
-						x.PersonId,
-						x.BusinessUnitId,
-						x.TeamId,
-						x.SiteId,
-						() => _unitOfWork.Get(() => _previousStateInfoLoader.Load(x.PersonId)),
-						() => _databaseReader.GetCurrentSchedule(x.PersonId),
-						() => _stateMappingLoader.Load(),
-						() => _ruleMappingLoader.Load(),
-						s => _unitOfWork.Do(() => _agentStateReadModelUpdater.Update(s)),
-						_now));
+					_unitOfWork.Do(() =>
+					{
+						action.Invoke(new StateContext(
+							null,
+							x.PersonId,
+							x.BusinessUnitId,
+							x.TeamId,
+							x.SiteId,
+							() => _previousStateInfoLoader.Load(x.PersonId),
+							() => _databaseReader.GetCurrentSchedule(x.PersonId),
+							() => _stateMappingLoader.Load(),
+							() => _ruleMappingLoader.Load(),
+							s => _agentStateReadModelUpdater.Update(s),
+							_now));
+					});
 				});
 		}
 
+		[AnalyticsUnitOfWork]
 		public virtual void ForClosingSnapshot(ExternalUserStateInputModel input, Action<StateContext> action)
 		{
 			var missingAgents = _agentStateReadModelPersister.GetNotInSnapshot(input.BatchId, input.SourceId);
@@ -421,19 +428,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					x.BusinessUnitId,
 					x.TeamId.GetValueOrDefault(),
 					x.SiteId.GetValueOrDefault(),
-					() => _unitOfWork.Get(() => _previousStateInfoLoader.Load(x.PersonId)),
+					() => _previousStateInfoLoader.Load(x.PersonId),
 					() => _databaseReader.GetCurrentSchedule(x.PersonId),
 					() => _stateMappingLoader.Load(),
 					() => _ruleMappingLoader.Load(),
-					s => _unitOfWork.Do(() => _agentStateReadModelUpdater.Update(s)),
+					s => _agentStateReadModelUpdater.Update(s),
 					_now));
 			});
-
 		}
 
+		[AnalyticsUnitOfWork]
 		public virtual void ForSynchronize(Action<StateContext> action)
 		{
-			_unitOfWork.Get(() => _agentStateReadModelPersister.GetAll())
+			_agentStateReadModelPersister.GetAll()
 				.ForEach(x =>
 				{
 					action.Invoke(new StateContext(

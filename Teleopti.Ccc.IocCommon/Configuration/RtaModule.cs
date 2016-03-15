@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ConnectionStrings>().As<IConnectionStrings>();
 
 			if (_config.Toggle(Toggles.RTA_ScaleOut_36979))
-				builder.RegisterType<LoadAllFromDatabase>().As<IStateContextLoader>().SingleInstance();
+				builder.RegisterType<LoadAllFromDatabase>().As<IStateContextLoader>().SingleInstance().ApplyAspects();
 			else if (_config.Toggle(Toggles.RTA_DeletedPersons_36041))
 				builder.RegisterType<LoadPersonFromDatabase>().As<IStateContextLoader>().SingleInstance();
 			else
