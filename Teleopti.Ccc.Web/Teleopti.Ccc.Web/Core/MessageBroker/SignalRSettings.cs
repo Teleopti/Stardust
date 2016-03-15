@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.Broker
 			value = ConfigurationManager.AppSettings["SignalRBackplaneType"];
 			settings.SignalRBackplaneType = parseSignalRBackplaneType(value);
 
-			value = ConfigurationManager.AppSettings["SIGNALR_BACKPLANE_PREFIX"];
+			value = ConfigurationManager.AppSettings["SignalRBackplanePrefix"];
 			settings.SignalRBackplanePrefix = value;
 
 			switch (settings.SignalRBackplaneType)
