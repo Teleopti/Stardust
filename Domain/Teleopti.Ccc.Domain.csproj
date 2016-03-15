@@ -271,6 +271,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangesPublisher.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangeListener.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangeSubscriptions.cs" />
+    <Compile Include="Security\SignatureCreator.cs" />
     <Compile Include="Common\ServiceLocatorForEntity.cs" />
     <Compile Include="DayOffPlanning\CreateIslands.cs" />
     <Compile Include="Intraday\MonitorDataViewModel.cs" />

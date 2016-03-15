@@ -1,6 +1,9 @@
+using System;
+using System.Collections.Specialized;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -21,19 +24,34 @@ namespace Teleopti.Messaging.Client.Http
 			_serializer = serializer ?? new ToStringSerializer();
 		}
 
-		public void Post(string uri, object thing)
+		public void Post(string uri, object thing, Func<string, NameValueCollection> customHeadersFunc = null)
 		{
-			var content = _serializer.SerializeObject(thing);
-			_client.PostAsync(uri, new StringContent(content, Encoding.UTF8, "application/json"));
+			innerPost(new Uri(uri), thing);
 		}
 
-		public void PostOrThrow(string uri, object thing)
+		private Task<HttpResponseMessage> innerPost(Uri uri, object thing, Func<string,NameValueCollection> customHeadersFunc = null)
 		{
 			var content = _serializer.SerializeObject(thing);
-			_client
-				.PostAsync(uri, new StringContent(content, Encoding.UTF8, "application/json"))
-				.Result
-				.EnsureSuccessStatusCode();
+			var request = new HttpRequestMessage
+			{
+				Content = new StringContent(content, Encoding.UTF8, "application/json"),
+				Method = HttpMethod.Post,
+				RequestUri = uri
+			};
+			if (customHeadersFunc != null)
+			{
+				var headers = customHeadersFunc(content);
+				foreach (string header in headers.Keys)
+				{
+					request.Headers.Add(header,headers[header]);
+				}
+			}
+			return _client.SendAsync(request);
+		}
+
+		public void PostOrThrow(string uri, object thing, Func<string,NameValueCollection> customHeadersFunc = null)
+		{
+			innerPost(new Uri(uri), thing, customHeadersFunc).Result.EnsureSuccessStatusCode();
 		}
 
 		public string GetOrThrow(string uri)

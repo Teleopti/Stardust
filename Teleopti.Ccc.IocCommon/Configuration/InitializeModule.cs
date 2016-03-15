@@ -1,6 +1,5 @@
 using Autofac;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -25,7 +24,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SetLicenseActivator>().As<ISetLicenseActivator>().SingleInstance();
 			builder.RegisterType<LicenseVerifierFactory>().As<ILicenseVerifierFactory>().SingleInstance();
 			builder.RegisterType<LicenseRepositoryForLicenseVerifier>().As<ILicenseRepositoryForLicenseVerifier>().SingleInstance();
-			builder.RegisterType<OneWayEncryption>().As<IOneWayEncryption>().SingleInstance();
 			builder.RegisterType<EnversConfiguration>().As<IEnversConfiguration>().SingleInstance();
 			builder.RegisterType<ConfigReader>().As<IConfigReader>().SingleInstance();
 		}

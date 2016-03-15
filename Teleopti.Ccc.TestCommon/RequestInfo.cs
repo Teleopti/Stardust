@@ -1,4 +1,4 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Specialized;
 
 namespace Teleopti.Ccc.TestCommon
 {
@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.TestCommon
 	{
 		public string Uri;
 		public object Thing;
+		public NameValueCollection Headers;
 	}
 }

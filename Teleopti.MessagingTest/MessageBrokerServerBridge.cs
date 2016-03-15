@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -30,14 +31,16 @@ namespace Teleopti.MessagingTest
 			_server.NotifyClients(message);
 		}
 
-		public void Post(string uri, object thing)
+		public void Post(string uri, object thing, Func<string, NameValueCollection> customHeadersFunc = null)
 		{
-			Requests.Add(new RequestInfo { Uri = uri, Thing = thing });
+			var headers = customHeadersFunc != null ? customHeadersFunc(thing.ToString()) : null;
+			Requests.Add(new RequestInfo { Uri = uri, Thing = thing, Headers = headers });
 		}
 
-		public void PostOrThrow(string uri, object thing)
+		public void PostOrThrow(string uri, object thing, Func<string, NameValueCollection> customHeadersFunc = null)
 		{
-			Requests.Add(new RequestInfo { Uri = uri, Thing = thing });
+			var headers = customHeadersFunc != null ? customHeadersFunc(thing.ToString()) : null;
+			Requests.Add(new RequestInfo { Uri = uri, Thing = thing, Headers = headers });
 			if (_exception != null)
 				throw _exception;
 		}

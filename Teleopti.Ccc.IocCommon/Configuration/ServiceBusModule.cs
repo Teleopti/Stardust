@@ -1,4 +1,5 @@
 using Autofac;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
@@ -9,6 +10,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<MessagePopulatingServiceBusSender>().As<IMessagePopulatingServiceBusSender>().SingleInstance();
 			builder.RegisterType<NoServiceBusSender>().As<IServiceBusSender>().SingleInstance();
+			builder.RegisterType<SignatureCreator>().SingleInstance();
 		}
 	}
 }
