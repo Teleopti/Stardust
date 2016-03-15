@@ -54,6 +54,8 @@ namespace NodeTest.Timers
 			Assert.IsTrue(timer.TotalNumberOfJobProgresses() == 0,
 						  "Should have 0 job progresses after clearing.");
 
+			timer.Dispose();
+
 		}
 
 		[Test]
@@ -65,6 +67,8 @@ namespace NodeTest.Timers
 				                                     1000);
 
 			Assert.IsNotNull(timer);
+
+			timer.Dispose();
 		}
 
 		[Test]
@@ -84,6 +88,8 @@ namespace NodeTest.Timers
 
 			Assert.IsTrue(timer.TotalNumberOfJobProgresses() == 100,
 			              "100 job progresses are expected.");
+
+			timer.Dispose();
 		}
 
 		[Test]
@@ -105,6 +111,8 @@ namespace NodeTest.Timers
 
 			Assert.IsTrue(timer.TotalNumberOfJobProgresses(newGuid) == 2,
 			              "Two job progresses with same GUID are expected.");
+
+			timer.Dispose();
 		}
 
 		[Test, ExpectedException(typeof (ArgumentNullException))]
@@ -114,6 +122,8 @@ namespace NodeTest.Timers
 				new TrySendJobProgressToManagerTimer(_nodeConfiguration,
 				                                     null,
 				                                     1000);
+
+			timer.Dispose();
 		}
 
 
@@ -124,6 +134,8 @@ namespace NodeTest.Timers
 				new TrySendJobProgressToManagerTimer(null,
 				                                     null,
 				                                     1000);
+
+			timer.Dispose();
 		}
 	}
 }
