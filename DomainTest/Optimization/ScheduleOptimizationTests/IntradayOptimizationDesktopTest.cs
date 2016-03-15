@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				.Should().Be.EqualTo(15);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldBeAbleToUndo()
 		{
 			var undoRedoContainer = new UndoRedoContainer(int.MaxValue);
@@ -141,13 +141,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			schedulerStateHolderFrom.SchedulingResultState.PersonsInOrganization.Add(agent);
 			var scheduleDay = ExtractedSchedule.CreateScheduleDay(schedulerStateHolderFrom.SchedulingResultState.Schedules, agent, dateOnly);
 			scheduleDay.AddMainShift(ass);
+			schedulerStateHolderFrom.SchedulingResultState.Schedules.SetUndoRedoContainer(undoRedoContainer);
 			schedulerStateHolderFrom.SchedulingResultState.Schedules.Modify(scheduleDay);
 			schedulerStateHolderFrom.SchedulingResultState.SkillDays = new Dictionary<ISkill, IList<ISkillDay>> { { skill, new List<ISkillDay> { skillDay } } };
-			schedulerStateHolderFrom.SchedulingResultState.Schedules.SetUndoRedoContainer(undoRedoContainer);
 
+			undoRedoContainer.CreateBatch("for testing to have one batch to undo below. See if we can put this in optimization code later.");
 			Target.Optimize(new[] { scheduleDay }, new OptimizationPreferences(), new DateOnlyPeriod(dateOnly, dateOnly), new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new NoSchedulingProgress());
+			undoRedoContainer.CommitBatch();
 
-			undoRedoContainer.UndoAll();
+			undoRedoContainer.Undo();
 			
 			schedulerStateHolderFrom.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Minute
 				.Should().Be.EqualTo(0);

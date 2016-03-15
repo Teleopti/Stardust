@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface ISynchronizeIntradayOptimizationResult
 	{
-		void Execute(IScheduleDictionary modifiedScheduleDictionary);
+		void Execute(IScheduleDictionary modifiedScheduleDictionary, DateOnlyPeriod period);
 	}
 }

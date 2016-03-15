@@ -34,22 +34,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			return new GenericDisposable(() => _schedulerStateHolderFrom = null);
 		}
 
-		public void Execute(IScheduleDictionary modifiedScheduleDictionary)
+		public void Execute(IScheduleDictionary modifiedScheduleDictionary, DateOnlyPeriod period)
 		{
 			var agentsToMove = modifiedScheduleDictionary.Keys;
-			//don't remove old data here (in other periods)!
-			agentsToMove.ForEach(x => _schedulerStateHolderFrom.Schedules.Remove(x));
-			//get real period here instead
-			var hack = new DateOnlyPeriod(new DateOnly(modifiedScheduleDictionary.Period.VisiblePeriod.StartDateTime.AddDays(-1)), new DateOnly(modifiedScheduleDictionary.Period.VisiblePeriod.EndDateTime.AddDays(1)));
-
-			moveSchedules(modifiedScheduleDictionary, _schedulerStateHolderFrom.Schedules, agentsToMove, hack);
+			moveSchedules(modifiedScheduleDictionary, _schedulerStateHolderFrom.Schedules, agentsToMove, period);
 		}
 
 		private static void moveSchedules(IScheduleDictionary fromDic, IScheduleDictionary toDic, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
 			foreach (var agent in agents)
 			{
-				fromDic[agent].ScheduledDayCollection(period).ForEach(x => toDic.Modify(x));
+				var fromScheduleDays = fromDic[agent].ScheduledDayCollection(period);
+				foreach (var fromScheduleDay in fromScheduleDays)
+				{
+					var toScheduleDay = toDic[agent].ScheduledDay(fromScheduleDay.DateOnlyAsPeriod.DateOnly);
+					var toAssignment = toScheduleDay.PersonAssignment(true);
+					toAssignment.SetActivitiesAndShiftCategoryFrom(fromScheduleDay.PersonAssignment(true));
+					toDic.Modify(toScheduleDay);
+				}
 			}
 		}
 	}

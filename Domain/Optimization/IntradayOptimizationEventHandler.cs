@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public virtual void Handle(OptimizationWasOrdered @event)
 		{
 			DoOptimization(@event.Period, @event.AgentIds, @event.RunResolveWeeklyRestRule);
-			_synchronizeIntradayOptimizationResult.Execute(_schedulerStateHolder().Schedules);
+			_synchronizeIntradayOptimizationResult.Execute(_schedulerStateHolder().Schedules, @event.Period);
 		}
 
 		[UnitOfWork]

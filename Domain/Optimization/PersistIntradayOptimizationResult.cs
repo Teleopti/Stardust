@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_scheduleDictionaryPersister = scheduleDictionaryPersister;
 		}
 
-		public void Execute(IScheduleDictionary modifiedScheduleDictionary)
+		public void Execute(IScheduleDictionary modifiedScheduleDictionary, DateOnlyPeriod period)
 		{
 			_scheduleDictionaryPersister.Persist(modifiedScheduleDictionary);
 		}
