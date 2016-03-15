@@ -104,7 +104,8 @@
     <Compile Include="NodeControllerTests.cs" />
     <Compile Include="NodeUriBuilderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TrySendStatusToManagerTimerTests.cs" />
+    <Compile Include="Timers\TrySendJobProgressToManagerTimerTests.cs" />
+    <Compile Include="Timers\TrySendStatusToManagerTimerTests.cs" />
     <Compile Include="WorkerWrapperTests.cs" />
     <Compile Include="Attributes\WorkerWrapperTestsAttribute.cs" />
   </ItemGroup>

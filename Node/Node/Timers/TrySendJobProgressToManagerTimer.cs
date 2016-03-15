@@ -40,7 +40,7 @@ namespace Stardust.Node.Timers
 			CancellationTokenSource = new CancellationTokenSource();
 
 			JobProgressModels =
-				new ConcurrentDictionary<DateTime, ISendJobProgressModel>();
+				new ConcurrentDictionary<Guid, ISendJobProgressModel>();
 
 			WhoamI =
 				NodeConfiguration.CreateWhoIAm(Environment.MachineName);
@@ -66,7 +66,7 @@ namespace Stardust.Node.Timers
 
 		private IHttpSender HttpSender { get; set; }
 
-		private ConcurrentDictionary<DateTime, ISendJobProgressModel> JobProgressModels { get; set; }
+		private ConcurrentDictionary<Guid, ISendJobProgressModel> JobProgressModels { get; set; }
 
 		public CancellationTokenSource CancellationTokenSource { get; set; }
 
@@ -98,6 +98,21 @@ namespace Stardust.Node.Timers
 			LogHelper.LogDebugWithLineNumber(Logger,
 											 "Finished.");
 
+		}
+
+		public int TotalNumberOfJobProgresses(Guid jobId)
+		{
+			if (IsJobProgressesNullOrEmpty())
+			{
+				return 0;
+			}
+
+			return JobProgressModels.Count(pair => pair.Value.JobId == jobId);
+		}
+
+		private bool IsJobProgressesNullOrEmpty()
+		{
+			return JobProgressModels == null || JobProgressModels.Count == 0;
 		}
 
 		public void ClearAllJobProgresses()
@@ -242,7 +257,7 @@ namespace Stardust.Node.Timers
 				Created = DateTime.Now
 			};
 
-			JobProgressModels.AddOrUpdate(DateTime.Now,
+			JobProgressModels.AddOrUpdate(Guid.NewGuid(), 
 			                              progressModel,
 			                              (time, model) => progressModel);
 
@@ -264,6 +279,11 @@ namespace Stardust.Node.Timers
 			base.Dispose(disposing);
 
 			LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
+		}
+
+		public int TotalNumberOfJobProgresses()
+		{
+			return JobProgressModels.Count;
 		}
 	}
 }
