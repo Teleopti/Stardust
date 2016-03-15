@@ -54,20 +54,23 @@ namespace Teleopti.Ccc.Web.Broker
 			value = ConfigurationManager.AppSettings["SignalRBackplaneType"];
 			settings.SignalRBackplaneType = parseSignalRBackplaneType(value);
 
+			value = ConfigurationManager.AppSettings["SIGNALR_BACKPLANE_PREFIX"];
+			settings.SignalRBackplanePrefix = value;
+
 			switch (settings.SignalRBackplaneType)
 			{
 				case SignalRBackplaneType.SqlServer:
 				case SignalRBackplaneType.AzureServiceBus:
 				case SignalRBackplaneType.Redis:
-					settings.SignalRBackplaneConnectionString =
-						ConfigurationManager.ConnectionStrings["SignalRBackplane"].ConnectionString;
+					settings.SignalRBackplaneConnectionString = ConfigurationManager.ConnectionStrings["SignalRBackplane"].ConnectionString;
 					break;
 			}
             return settings;
 		}
 
 
-	    private static SignalRBackplaneType parseSignalRBackplaneType(string value)
+
+		private static SignalRBackplaneType parseSignalRBackplaneType(string value)
 		{
 			if (string.IsNullOrEmpty(value))
 				return SignalRBackplaneType.Nothing;
@@ -86,7 +89,8 @@ namespace Teleopti.Ccc.Web.Broker
 		public int MessagesPerSecond { get; set; }
 		public bool EnablePerformanceCounters { get; set; }
 		public string SignalRBackplaneConnectionString { get; set; }
-    }
+		public string SignalRBackplanePrefix { get; set; }
+	}
 
 	public enum SignalRBackplaneType
 	{

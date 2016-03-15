@@ -23,16 +23,17 @@ namespace Teleopti.Ccc.Web.Broker
 			if (settingsFromParser.ConnectionTimeout.HasValue)
 				GlobalHost.Configuration.ConnectionTimeout = settingsFromParser.ConnectionTimeout.Value;
 
+			var prefix = settingsFromParser.SignalRBackplanePrefix.Substring(0, Math.Min(30, settingsFromParser.SignalRBackplanePrefix.Length));
 			switch (settingsFromParser.SignalRBackplaneType)
 			{
 				case SignalRBackplaneType.SqlServer:
 					GlobalHost.DependencyResolver.UseSqlServer(settingsFromParser.SignalRBackplaneConnectionString);
 					break;
 				case SignalRBackplaneType.AzureServiceBus:
-					GlobalHost.DependencyResolver.UseServiceBus(settingsFromParser.SignalRBackplaneConnectionString, "TeleoptiWFM");
+					GlobalHost.DependencyResolver.UseServiceBus(settingsFromParser.SignalRBackplaneConnectionString, prefix);
 					break;
                 case SignalRBackplaneType.Redis:
-					GlobalHost.DependencyResolver.UseRedis(new RedisScaleoutConfiguration(settingsFromParser.SignalRBackplaneConnectionString, "TeleoptiWFM"));
+					GlobalHost.DependencyResolver.UseRedis(new RedisScaleoutConfiguration(settingsFromParser.SignalRBackplaneConnectionString, prefix));
 			        break;
 				default:
 					if (settingsFromParser.ScaleOutBackplaneUrl != null)
