@@ -20,7 +20,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new RaptorQueueSynchronizationStep(jobParameters));
 			Add(new RaptorAgentLogOnSynchronizationStep(jobParameters));
 
-			Add(new StagePersonJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntradayAcdLogin_37439))
+			{
+				Add(new StagePersonJobStep(jobParameters));
+			}
 
 			Add(new StageAgentSkillJobStep(jobParameters));
 			Add(new StageStateGroupJobStep(jobParameters));
