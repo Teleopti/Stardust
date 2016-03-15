@@ -21,13 +21,7 @@ namespace Teleopti.Messaging.Client.Http
 			var u = url(call);
 			_server.Post(u, thing);
 		}
-
-		public void PostOrThrow(string call, object thing)
-		{
-			var u = url(call);
-			_server.PostOrThrow(u, thing);
-		}
-
+		
 		public string GetOrThrow(string call)
 		{
 			var u = url(call);
