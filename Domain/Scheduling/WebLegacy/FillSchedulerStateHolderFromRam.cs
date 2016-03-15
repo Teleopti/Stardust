@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			return new GenericDisposable(() => _schedulerStateHolderFrom = null);
 		}
 
-		public void Execute(IScheduleDictionary modifiedScheduleDictionary, DateOnlyPeriod period)
+		public void Synchronize(IScheduleDictionary modifiedScheduleDictionary, DateOnlyPeriod period)
 		{
 			var agentsToMove = modifiedScheduleDictionary.Keys;
 			moveSchedules(modifiedScheduleDictionary, _schedulerStateHolderFrom.Schedules, agentsToMove, period);
