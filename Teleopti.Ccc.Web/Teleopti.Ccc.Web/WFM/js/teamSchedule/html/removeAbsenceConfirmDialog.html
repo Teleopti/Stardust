@@ -1,0 +1,19 @@
+﻿<div class='modal-header dialog-header-confirm'>
+	<button type='button' class='close' ng-click='no()'>&times;</button>
+	<h4><span class='mdi mdi-checkbox-marked-outline'></span> <span class='modal-title'>{{header}}</span></h4>
+</div>
+<div class='modal-body'>
+	<div>{{message}}</div>
+	<br />
+	<div class='wfm-checkbox'>
+		<input type='checkbox' id='checkRemoveEntireAbsence' ng-checked='removeEntireCrossDayAbsence' ng-click='toggleOpton()' />
+		<label for='checkRemoveEntireAbsence'>
+			<span class='wfm-checkbox-toggle'></span>
+			<span class='wfm-checkbox-label'>{{'RemoveEntireAbsenceForCrossDayPersonAbsence' | translate}}</span>
+		</label>
+	</div>
+</div>
+<div class='modal-footer'>
+	<button type='button' class='btn btn-default' ng-click='yes()'>{{'Yes' | translate}}</button>
+	<button type='button' class='btn btn-primary' ng-click='no()'>{{'No' | translate}}</button>
+</div>

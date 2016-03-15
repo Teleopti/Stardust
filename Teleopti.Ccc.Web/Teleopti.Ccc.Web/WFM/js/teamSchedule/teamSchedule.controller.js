@@ -1,56 +1,17 @@
 ﻿'use strict';
 
 (function () {
-	angular.module('wfm.teamSchedule')
-		.controller('confirmRemoveAbsenceDialogController', function ($scope, $uibModalInstance, data) {
-			$scope.header = data.header;
-			$scope.message = data.message;
-			$scope.removeEntireCrossDayAbsence = data.removeEntireCrossDayAbsence;
-
-			$scope.toggleOpton = function () {
-				$scope.removeEntireCrossDayAbsence = !$scope.removeEntireCrossDayAbsence;
-			}
-
-			$scope.no = function () {
-				$uibModalInstance.dismiss($scope.removeEntireCrossDayAbsence);
-			};
-
-			$scope.yes = function() {
-				$uibModalInstance.close($scope.removeEntireCrossDayAbsence);
-			};
-		})
-		.controller('TeamScheduleCtrl', [
-			'$scope', '$q', '$locale', '$translate', '$templateCache', 'TeamSchedule', 'GroupScheduleFactory',
+	angular.module('wfm.teamSchedule').controller('TeamScheduleCtrl', [
+			'$scope', '$q', '$locale', '$translate', 'TeamSchedule', 'GroupScheduleFactory',
 			'teamScheduleNotificationService', 'PersonSelection', 'ScheduleManagement', 'SwapShifts', 'PersonAbsence',
 			'Toggle', 'SignalR', '$mdComponentRegistry', '$mdSidenav', '$mdUtil', 'guidgenerator', 'ShortCuts', 'keyCodes',
 			'dialogs', TeamScheduleController
 		]);
 
-	function TeamScheduleController($scope, $q, $locale, $translate, $templateCache, teamScheduleSvc, groupScheduleFactory,
+	function TeamScheduleController($scope, $q, $locale, $translate, teamScheduleSvc, groupScheduleFactory,
 		notificationService, personSelectionSvc, scheduleMgmtSvc, swapShiftsSvc, personAbsenceSvc, toggleSvc, signalRSvc,
 		$mdComponentRegistry, $mdSidenav, $mdUtil, guidgenerator, shortCuts, keyCodes, dialogSvc) {
-
-		$templateCache.put("/dialogs/removeAbsenceConfirm.html",
-			"<div class='modal-header dialog-header-confirm'>"
-			+ "    <button type='button' class='close' ng-click='no()'>&times;</button>"
-			+ "    <h4><span class='mdi mdi-checkbox-marked-outline'></span> <span class='modal-title'>{{header}}</span></h4>"
-			+ "</div>"
-			+ "<div class='modal-body'>"
-			+ "    <div>{{message}}</div>"
-			+ "    <br/>"
-			+ "    <div class='wfm-checkbox'>"
-			+ "        <input type='checkbox' id='checkRemoveEntireAbsence' ng-checked='removeEntireCrossDayAbsence' ng-click='toggleOpton()'/>"
-			+ "        <label for='checkRemoveEntireAbsence'>"
-			+ "            <span class='wfm-checkbox-toggle'></span>"
-			+ "            <span class='wfm-checkbox-label'>{{'RemoveEntireAbsenceForCrossDayPersonAbsence' | translate}}</span>"
-			+ "        </label>"
-			+ "    </div>"
-			+ "</div>"
-			+ "<div class='modal-footer'>"
-			+ "    <button type='button' class='btn btn-default' ng-click='yes()'>{{'Yes' | translate}}</button>"
-			+ "    <button type='button' class='btn btn-primary' ng-click='no()'>{{'No' | translate}}</button>"
-			+ "</div>");
-
+		
 		var vm = this;
 
 		vm.isLoading = false;
@@ -263,9 +224,9 @@
 
 			var message = replaceParameters($translate.instant("AreYouSureToRemoveSelectedAbsence"),
 				[personSelectionSvc.getSelectedPersonIdList().length, vm.selectedPersonAbsences.length]);
-			console.log("message:", message);
-			dialogSvc.create("/dialogs/removeAbsenceConfirm.html", "confirmRemoveAbsenceDialogController", {
-					header: $translate.instant("Warning"),
+			dialogSvc.create("js/teamSchedule/html/removeAbsenceConfirmDialog.html", 'RemoveAbsenceConfirmDialogController',
+				{
+					header: $translate.instant("Warning"), 
 					message: message,
 					removeEntireCrossDayAbsence: vm.removeEntireCrossDayAbsence
 				}, { animation: true })

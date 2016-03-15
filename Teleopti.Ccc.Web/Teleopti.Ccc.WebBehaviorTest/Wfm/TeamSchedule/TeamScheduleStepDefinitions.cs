@@ -51,15 +51,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I try to delete selected absence")]
 		public void WhenITryToDeleteSelectedAbsence()
 		{
-			Browser.Interactions.Click("#scheduleContextMenuButton");
-			Browser.Interactions.Click("#menuItemRemoveAbsence");
+			Browser.Interactions.ClickUsingJQuery("#scheduleContextMenuButton");
+			Browser.Interactions.ClickUsingJQuery("#menuItemRemoveAbsence");
 		}
 
-		[Then(@"I should see a confirm message for absence deletion"),SetCulture("en-US")]
-		public void ThenIShouldSeeDialogToConfirmAbsenceDeletion()
+		[Then(
+			@"I should see a confirm message that (\d*) person selected and (\d*) person absence selected for absence deletion"),
+		 SetCulture("en-US")]
+		public void ThenIShouldSeeDialogToConfirmAbsenceDeletion(int personCount, int personAbsenceCount)
 		{
 			Thread.CurrentThread.CurrentUICulture = CultureInfo.CurrentCulture;
-			Browser.Interactions.AssertAnyContains(".modal-dialog", Resources.AreYouSureToRemoveSelectedAbsence);
+			Browser.Interactions.AssertAnyContains(".modal-dialog",
+				string.Format(Resources.AreYouSureToRemoveSelectedAbsence, personCount, personAbsenceCount));
 		}
 
 		[When(@"I answered '(.*)' to confirm message")]
