@@ -10,7 +10,7 @@ namespace Stardust.Node.Entities
 
 		public string ProgressDetail { get; set; }
 
-		public DateTime Created { get; set; }
+		public DateTime? Created { get; set; }
 
 		public HttpResponseMessage ResponseMessage { get; set; }
 	}

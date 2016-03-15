@@ -185,6 +185,7 @@ namespace Stardust.Manager
 			{
 				return BadRequest();
 			}
+
 			_jobManager.ReportProgress(model);
 
 			return Ok();

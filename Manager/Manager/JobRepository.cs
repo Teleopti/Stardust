@@ -2,27 +2,167 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using log4net;
+using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
-using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 
 namespace Stardust.Manager
 {
 	public class JobRepository : IJobRepository
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (JobRepository));
 		private const int DelaysMiliseconds = 100;
 		private const int MaxRetry = 3;
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (JobRepository));
 		private readonly string _connectionString;
 
 		public JobRepository(string connectionString)
 		{
 			_connectionString = connectionString;
+		}
+
+		public void Add(JobDefinition job)
+		{
+			var policy = MakeRetryPolicy();
+			try
+			{
+				policy.ExecuteAction(() => TryAdd(job));
+			}
+			catch (Exception ex)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to add job in database");
+			}
+		}
+
+		public List<JobDefinition> LoadAll()
+		{
+			var result = new List<JobDefinition>();
+			var policy = MakeRetryPolicy();
+			try
+			{
+				result = policy.ExecuteAction(() => TryLoadAll());
+			}
+			catch (Exception ex)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to load jobs from database");
+			}
+			return result;
+		}
+
+		public void DeleteJob(Guid jobId)
+		{
+			var policy = MakeRetryPolicy();
+			try
+			{
+				policy.ExecuteAction(() => TrydeleteJob(jobId));
+			}
+			catch (Exception ex)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to delete the job");
+			}
+		}
+
+		public void FreeJobIfNodeIsAssigned(string url)
+		{
+			var policy = MakeRetryPolicy();
+			try
+			{
+				policy.ExecuteAction(() => TryFreeJobIfNodeIsAssigned(url));
+			}
+			catch (Exception ex)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to perform operation");
+			}
+		}
+
+		public void CheckAndAssignNextJob(List<WorkerNode> availableNodes,
+		                                  IHttpSender httpSender)
+		{
+			var policy = MakeRetryPolicy();
+			try
+			{
+				policy.ExecuteAction(() => TryCheckAndAssignNextJob(availableNodes, httpSender));
+			}
+			catch (Exception ex)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to perform operation");
+			}
+		}
+
+		public void CancelThisJob(Guid jobId,
+		                          IHttpSender httpSender)
+		{
+			var policy = MakeRetryPolicy();
+			try
+			{
+				policy.ExecuteAction(() => TryCancelThisJob(jobId, httpSender));
+			}
+			catch (Exception ex)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to perform operation");
+			}
+		}
+
+		public void SetEndResultOnJob(Guid jobId,
+		                              string result)
+		{
+			var policy = MakeRetryPolicy();
+			try
+			{
+				policy.ExecuteAction(() => TrySetEndResultOnJob(jobId, result));
+			}
+			catch (Exception ex)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to perform operation");
+			}
+		}
+
+		public JobHistory History(Guid jobId)
+		{
+			JobHistory jobHist = null;
+			var policy = MakeRetryPolicy();
+			try
+			{
+				jobHist = policy.ExecuteAction(() => TryHistory(jobId));
+			}
+			catch (Exception ex)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to perform operation");
+			}
+			return jobHist;
+		}
+
+		public IList<JobHistory> HistoryList()
+		{
+			var returnList = new List<JobHistory>();
+			var policy = MakeRetryPolicy();
+			try
+			{
+				returnList = policy.ExecuteAction(() => TryHistoryList()).ToList();
+			}
+			catch (Exception ex)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to perform operation");
+			}
+			return returnList;
+		}
+
+		public IList<JobHistoryDetail> JobHistoryDetails(Guid jobId)
+		{
+			var returnList = new List<JobHistoryDetail>();
+			var policy = MakeRetryPolicy();
+			try
+			{
+				returnList = policy.ExecuteAction(() => TryJobHistoryDetails(jobId)).ToList();
+			}
+			catch (Exception ex)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to perform operation");
+			}
+			return returnList;
 		}
 
 		private RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy> MakeRetryPolicy()
@@ -32,7 +172,8 @@ namespace Stardust.Manager
 			policy.Retrying += (sender, args) =>
 			{
 				// Log details of the retry.
-				var msg = String.Format("Retry - Count:{0}, Delay:{1}, Exception:{2}", args.CurrentRetryCount, args.Delay, args.LastException);
+				var msg = String.Format("Retry - Count:{0}, Delay:{1}, Exception:{2}", args.CurrentRetryCount, args.Delay,
+				                        args.LastException);
 				LogHelper.LogErrorWithLineNumber(Logger, msg);
 			};
 			return policy;
@@ -43,19 +184,19 @@ namespace Stardust.Manager
 			var jdDataSet = new DataSet();
 			var jdDataTable = new DataTable("[Stardust].[JobDefinitions]");
 			jdDataTable.Columns.Add(new DataColumn("Id",
-																typeof(Guid)));
+			                                       typeof (Guid)));
 			jdDataTable.Columns.Add(new DataColumn("Name",
-																typeof(string)));
+			                                       typeof (string)));
 			jdDataTable.Columns.Add(new DataColumn("Serialized",
-																typeof(string)));
+			                                       typeof (string)));
 			jdDataTable.Columns.Add(new DataColumn("Type",
-																typeof(string)));
+			                                       typeof (string)));
 			jdDataTable.Columns.Add(new DataColumn("AssignedNode",
-																typeof(string)));
+			                                       typeof (string)));
 			jdDataTable.Columns.Add(new DataColumn("UserName",
-																typeof(string)));
+			                                       typeof (string)));
 			jdDataTable.Columns.Add(new DataColumn("Status",
-																typeof(string)));
+			                                       typeof (string)));
 			jdDataSet.Tables.Add(jdDataTable);
 			var dr = jdDataTable.NewRow();
 			dr["Id"] = job.Id;
@@ -72,12 +213,12 @@ namespace Stardust.Manager
 				connection.Open();
 
 				using (var da = new SqlDataAdapter("Select * From [Stardust].JobDefinitions",
-					connection))
+				                                   connection))
 				{
 					var builder = new SqlCommandBuilder(da);
 					builder.GetInsertCommand();
 					da.Update(jdDataSet,
-						"[Stardust].[JobDefinitions]");
+					          "[Stardust].[JobDefinitions]");
 
 					//add a row in history
 					da.InsertCommand =
@@ -86,35 +227,35 @@ namespace Stardust.Manager
 							connection);
 
 					da.InsertCommand.Parameters.Add("@Id",
-						SqlDbType.UniqueIdentifier,
-						16,
-						"JobId");
+					                                SqlDbType.UniqueIdentifier,
+					                                16,
+					                                "JobId");
 
 					da.InsertCommand.Parameters[0].Value = job.Id;
 
 					da.InsertCommand.Parameters.Add("@Name",
-						SqlDbType.NVarChar,
-						2000,
-						"Name");
+					                                SqlDbType.NVarChar,
+					                                2000,
+					                                "Name");
 					da.InsertCommand.Parameters[1].Value = job.Name;
 					da.InsertCommand.Parameters.Add("@By",
-						SqlDbType.NVarChar,
-						500,
-						"CreatedBy");
+					                                SqlDbType.NVarChar,
+					                                500,
+					                                "CreatedBy");
 
 					da.InsertCommand.Parameters[2].Value = job.UserName;
 
 					da.InsertCommand.Parameters.Add("@Serialized",
-						SqlDbType.NVarChar,
-						2000,
-						"Serialized");
+					                                SqlDbType.NVarChar,
+					                                2000,
+					                                "Serialized");
 
 					da.InsertCommand.Parameters[3].Value = job.Serialized;
 
 					da.InsertCommand.Parameters.Add("@Type",
-						SqlDbType.NVarChar,
-						2000,
-						"Type");
+					                                SqlDbType.NVarChar,
+					                                2000,
+					                                "Type");
 
 					da.InsertCommand.Parameters[4].Value = job.Type;
 
@@ -122,38 +263,11 @@ namespace Stardust.Manager
 				}
 
 				ReportProgress(job.Id,
-					"Added");
+				               "Added",
+							   DateTime.Now);
 
 				connection.Close();
 			}
-		}
-
-		public void Add(JobDefinition job)
-		{
-			var policy = MakeRetryPolicy();
-			try
-			{
-				policy.ExecuteAction(() => TryAdd(job));
-			}
-			catch (Exception ex)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger,ex.Message +  "Unable to add job in database");
-			}
-		}
-
-		public List<JobDefinition> LoadAll()
-		{
-			var result = new List<JobDefinition>();
-			var policy = MakeRetryPolicy();
-			try
-			{
-				result =  policy.ExecuteAction(()=> TryLoadAll());
-			}
-			catch (Exception ex)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to load jobs from database");
-			}
-			return result;
 		}
 
 		public List<JobDefinition> TryLoadAll()
@@ -191,7 +305,6 @@ namespace Stardust.Manager
 					{
 						while (reader.Read())
 						{
-							
 							var jobDefinition = new JobDefinition
 							{
 								Id = (Guid) reader.GetValue(reader.GetOrdinal("Id")),
@@ -223,20 +336,6 @@ namespace Stardust.Manager
 			LogHelper.LogDebugWithLineNumber(Logger, "Finshed.");
 
 			return null;
-		}
-
-		public void DeleteJob(Guid jobId)
-		{
-			var policy = MakeRetryPolicy();
-			try
-			{
-				policy.ExecuteAction(() => TrydeleteJob(jobId));
-			}
-			catch (Exception ex)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to delete the job");
-			}
-			
 		}
 
 		public void TrydeleteJob(Guid jobId)
@@ -276,19 +375,6 @@ namespace Stardust.Manager
 			}
 
 			LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
-		}
-
-		public void FreeJobIfNodeIsAssigned(string url)
-		{
-			var policy = MakeRetryPolicy();
-			try
-			{
-				policy.ExecuteAction(() => TryFreeJobIfNodeIsAssigned(url));
-			}
-			catch (Exception ex)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to perform operation");
-			}
 		}
 
 		public void TryFreeJobIfNodeIsAssigned(string url)
@@ -332,7 +418,7 @@ namespace Stardust.Manager
 
 		//verify THAT !!!!!!!!!!!
 		public async void TryCheckAndAssignNextJob(List<WorkerNode> availableNodes,
-		                                        IHttpSender httpSender)
+		                                           IHttpSender httpSender)
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start CheckAndAssignNextJob.");
 
@@ -347,7 +433,7 @@ namespace Stardust.Manager
 			{
 				LogHelper.LogDebugWithLineNumber(Logger,
 				                                 "Found ( " + availableNodes.Count + " ) availabe nodes.");
-				
+
 				using (var connection = new SqlConnection(_connectionString))
 				{
 					connection.Open();
@@ -404,10 +490,10 @@ namespace Stardust.Manager
 
 								foreach (var node in availableNodes)
 								{
-										LogHelper.LogDebugWithLineNumber(Logger,
-																		 "Available node : ( id, Url ) : ( " + node.Id + ", " + node.Url +
-																		 " )");
-									
+									LogHelper.LogDebugWithLineNumber(Logger,
+									                                 "Available node : ( id, Url ) : ( " + node.Id + ", " + node.Url +
+									                                 " )");
+
 									try
 									{
 										var builderHelper =
@@ -449,8 +535,11 @@ namespace Stardust.Manager
 
 											da.UpdateCommand.Transaction = tran;
 											da.UpdateCommand.ExecuteNonQuery();
+
 											ReportProgress(job.Id,
-											               "Started");
+											               "Started",
+														   DateTime.Now);
+
 											break;
 										}
 
@@ -519,22 +608,8 @@ namespace Stardust.Manager
 			}
 		}
 
-		public void CheckAndAssignNextJob(List<WorkerNode> availableNodes,
-			IHttpSender httpSender)
-		{
-			var policy = MakeRetryPolicy();
-			try
-			{
-				policy.ExecuteAction(() => TryCheckAndAssignNextJob(availableNodes, httpSender));
-			}
-			catch (Exception ex)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to perform operation");
-			}
-		}
-
 		public async void TryCancelThisJob(Guid jobId,
-		                                IHttpSender httpSender)
+		                                   IHttpSender httpSender)
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
@@ -624,7 +699,8 @@ namespace Stardust.Manager
 									da.UpdateCommand.ExecuteNonQuery();
 
 									ReportProgress(jobId,
-									               "Canceling");
+									               "Canceling",
+												   DateTime.Now);
 								}
 							}
 						}
@@ -649,36 +725,8 @@ namespace Stardust.Manager
 			LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
 		}
 
-		public void CancelThisJob(Guid jobId,
-			IHttpSender httpSender)
-		{
-			var policy = MakeRetryPolicy();
-			try
-			{
-				policy.ExecuteAction(() => TryCancelThisJob(jobId, httpSender));
-			}
-			catch (Exception ex)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to perform operation");
-			}
-		}
-
-		public void SetEndResultOnJob(Guid jobId,
-												string result)
-		{
-			var policy = MakeRetryPolicy();
-			try
-			{
-				policy.ExecuteAction(() => TrySetEndResultOnJob(jobId, result));
-			}
-			catch (Exception ex)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to perform operation");
-			}
-		}
-
 		public void TrySetEndResultOnJob(Guid jobId,
-		                              string result)
+		                                 string result)
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
@@ -700,23 +748,27 @@ namespace Stardust.Manager
 						                                16,
 						                                "JobId");
 						da.UpdateCommand.Parameters[0].Value = jobId;
+
 						da.UpdateCommand.Parameters.Add("@Ended",
 						                                SqlDbType.DateTime,
 						                                16,
 						                                "Ended");
 						da.UpdateCommand.Parameters[1].Value = DateTime.UtcNow;
+
 						da.UpdateCommand.Parameters.Add("@Result",
 						                                SqlDbType.NVarChar,
 						                                2000,
 						                                "Result");
 						da.UpdateCommand.Parameters[2].Value = result;
+
 						da.UpdateCommand.ExecuteNonQuery();
 					}
 
 					connection.Close();
 
 					ReportProgress(jobId,
-					               result);
+					               result,
+								   DateTime.Now);
 				}
 			}
 
@@ -729,13 +781,16 @@ namespace Stardust.Manager
 		}
 
 		public void ReportProgress(Guid jobId,
-											string detail)
+		                           string detail,
+								   DateTime created)
 		{
 			var policy = MakeRetryPolicy();
+
 			try
 			{
-				policy.ExecuteAction(() => TryReportProgress(jobId, detail));
+				policy.ExecuteAction(() => TryReportProgress(jobId, detail, created));
 			}
+
 			catch (Exception ex)
 			{
 				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to perform operation");
@@ -743,7 +798,8 @@ namespace Stardust.Manager
 		}
 
 		public void TryReportProgress(Guid jobId,
-		                           string detail)
+		                              string detail,
+		                              DateTime created)
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
@@ -757,8 +813,9 @@ namespace Stardust.Manager
 					                                   connection)
 					{
 						InsertCommand =
-							new SqlCommand("INSERT INTO [Stardust].JobHistoryDetail (JobId, Detail) VALUES (@Id, @Detail)",
-							               connection)
+							new SqlCommand(
+								"INSERT INTO [Stardust].JobHistoryDetail (JobId, Detail, Created) VALUES (@Id, @Detail, @Created)",
+								connection)
 					})
 					{
 						da.InsertCommand.Parameters.Add("@Id",
@@ -766,11 +823,17 @@ namespace Stardust.Manager
 						                                16,
 						                                "JobId");
 						da.InsertCommand.Parameters[0].Value = jobId;
+
 						da.InsertCommand.Parameters.Add("@Detail",
 						                                SqlDbType.NVarChar,
 						                                2000,
 						                                "Detail");
 						da.InsertCommand.Parameters[1].Value = detail;
+
+						da.InsertCommand.Parameters.Add("@Created",
+						                                SqlDbType.DateTime);
+						da.InsertCommand.Parameters[2].Value = created;
+
 						da.InsertCommand.ExecuteNonQuery();
 					}
 
@@ -784,21 +847,6 @@ namespace Stardust.Manager
 			}
 
 			LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
-		}
-
-		public JobHistory History(Guid jobId)
-		{
-			JobHistory jobHist = null;
-			var policy = MakeRetryPolicy();
-			try
-			{
-				jobHist =	policy.ExecuteAction(() => TryHistory(jobId));
-			}
-			catch (Exception ex)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to perform operation");
-			}
-			return jobHist;
 		}
 
 		public JobHistory TryHistory(Guid jobId)
@@ -854,21 +902,6 @@ namespace Stardust.Manager
 			return null;
 		}
 
-		public IList<JobHistory> HistoryList()
-		{
-			var returnList = new List<JobHistory>();
-			var policy = MakeRetryPolicy();
-			try
-			{
-				returnList = policy.ExecuteAction(() => TryHistoryList()).ToList();
-			}
-			catch (Exception ex)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to perform operation");
-			}
-			return returnList;
-		}
-
 		public IList<JobHistory> TryHistoryList()
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
@@ -916,21 +949,6 @@ namespace Stardust.Manager
 			LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
 
 			return null;
-		}
-
-		public IList<JobHistoryDetail> JobHistoryDetails(Guid jobId)
-		{
-			var returnList = new List<JobHistoryDetail>();
-			var policy = MakeRetryPolicy();
-			try
-			{
-				returnList = policy.ExecuteAction(() => TryJobHistoryDetails(jobId)).ToList();
-			}
-			catch (Exception ex)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to perform operation");
-			}
-			return returnList;
 		}
 
 		public IList<JobHistoryDetail> TryJobHistoryDetails(Guid jobId)

@@ -50,7 +50,7 @@ namespace ManagerTest.Fakes
 			throw new NotImplementedException();
 		}
 
-		public void ReportProgress(Guid jobId, string detail)
+		public void ReportProgress(Guid jobId, string detail, DateTime created)
 		{
 			throw new NotImplementedException();
 		}

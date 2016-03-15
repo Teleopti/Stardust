@@ -261,7 +261,8 @@ namespace Stardust.Manager
 		public void ReportProgress(JobProgressModel model)
 		{
 			_jobRepository.ReportProgress(model.JobId,
-			                              model.ProgressDetail);
+			                              model.ProgressDetail,
+										  model.Created);
 		}
 
 		public JobHistory GetJobHistory(Guid jobId)

@@ -191,7 +191,8 @@ namespace Stardust.Node.Timers
 							                           new
 							                           {
 								                           sendJobProgressModel.JobId,
-								                           sendJobProgressModel.ProgressDetail
+								                           sendJobProgressModel.ProgressDetail,
+														   sendJobProgressModel.Created
 							                           });
 					}
 				}
@@ -237,7 +238,8 @@ namespace Stardust.Node.Timers
 			var progressModel = new SendJobProgressModel
 			{
 				JobId = jobid,
-				ProgressDetail = progressMessage
+				ProgressDetail = progressMessage,
+				Created = DateTime.Now
 			};
 
 			JobProgressModels.AddOrUpdate(DateTime.Now,

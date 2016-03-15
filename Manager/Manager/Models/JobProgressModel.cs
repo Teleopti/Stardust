@@ -6,5 +6,7 @@ namespace Stardust.Manager.Models
 	{
 		public Guid JobId { get; set; }
 		public string ProgressDetail { get; set; }
+
+		public DateTime Created { get; set; }
 	}
 }
