@@ -40,8 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IAgentStateReadModelPersister _agentStateReadModelPersister;
 		private readonly StateMapper _stateMapper;
 		protected readonly IPreviousStateInfoLoader _previousStateInfoLoader;
-		protected readonly IStateMappingLoader _stateMappingLoader;
-		protected readonly IRuleMappingLoader _ruleMappingLoader;
+		protected readonly IMappingLoader MappingLoader;
 		protected readonly WithAnalyticsUnitOfWork _unitOfWork;
 		protected readonly PersonLocker _locker = new PersonLocker();
 
@@ -52,8 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IAgentStateReadModelPersister agentStateReadModelPersister,
 			StateMapper stateMapper,
 			IPreviousStateInfoLoader previousStateInfoLoader,
-			IStateMappingLoader stateMappingLoader,
-			IRuleMappingLoader ruleMappingLoader,
+			IMappingLoader mappingLoader,
 			WithAnalyticsUnitOfWork unitOfWork
 			)
 		{
@@ -64,8 +62,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_agentStateReadModelPersister = agentStateReadModelPersister;
 			_stateMapper = stateMapper;
 			_previousStateInfoLoader = previousStateInfoLoader;
-			_stateMappingLoader = stateMappingLoader;
-			_ruleMappingLoader = ruleMappingLoader;
+			MappingLoader = mappingLoader;
 			_unitOfWork = unitOfWork;
 		}
 
@@ -111,8 +108,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						x.SiteId,
 						() => _unitOfWork.Get(() => _previousStateInfoLoader.Load(x.PersonId)),
 						() => _databaseLoader.GetCurrentSchedule(x.PersonId),
-						() => _stateMappingLoader.Cached(),
-						() => _ruleMappingLoader.Cached(),
+						() => MappingLoader.Cached(),
 						s => _unitOfWork.Do(() => _agentStateReadModelUpdater.Update(s)), 
 						_now));
 				});
@@ -146,8 +142,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						x.SiteId,
 						() => _unitOfWork.Get(() => _previousStateInfoLoader.Load(x.PersonId)),
 						() => _databaseLoader.GetCurrentSchedule(x.PersonId),
-						() => _stateMappingLoader.Cached(),
-						() => _ruleMappingLoader.Cached(),
+						() => MappingLoader.Cached(),
 						s => _unitOfWork.Do(() => _agentStateReadModelUpdater.Update(s)),
 						_now));
 				});
@@ -160,7 +155,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var agentsNotAlreadyLoggedOut =
 				from a in missingAgents
 				let state = _stateMapper.StateFor(
-					_stateMappingLoader.Cached(),
+					MappingLoader.Cached(),
 					a.BusinessUnitId,
 					a.PlatformTypeId,
 					a.StateCode,
@@ -180,8 +175,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						x.SiteId.GetValueOrDefault(),
 						() => _unitOfWork.Get(() => _previousStateInfoLoader.Load(x.PersonId)),
 						() => _databaseLoader.GetCurrentSchedule(x.PersonId),
-						() => _stateMappingLoader.Cached(),
-						() => _ruleMappingLoader.Cached(),
+						() => MappingLoader.Cached(),
 						s => _unitOfWork.Do(() => _agentStateReadModelUpdater.Update(s)),
 						_now));
 				});
@@ -208,8 +202,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							x.SiteId.GetValueOrDefault(),
 							null,
 							() => _databaseLoader.GetCurrentSchedule(x.PersonId),
-							() => _stateMappingLoader.Cached(),
-							() => _ruleMappingLoader.Cached(),
+							() => MappingLoader.Cached(),
 							null,
 							_now));
 					});
@@ -232,8 +225,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IAgentStateReadModelPersister agentStateReadModelPersister,
 			StateMapper stateMapper, 
 			IPreviousStateInfoLoader previousStateInfoLoader, 
-			IStateMappingLoader stateMappingLoader,
-			IRuleMappingLoader ruleMappingLoader, 
+			IMappingLoader mappingLoader, 
 			IDatabaseReader databaseReader,
 			WithAnalyticsUnitOfWork unitOfWork)
 			: base(
@@ -243,8 +235,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				agentStateReadModelPersister, 
 				stateMapper, 
 				previousStateInfoLoader,
-				stateMappingLoader, 
-				ruleMappingLoader,
+				mappingLoader,
 				unitOfWork)
 		{
 			_databaseReader = databaseReader;
@@ -268,8 +259,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							x.SiteId,
 							() => _unitOfWork.Get(() => _previousStateInfoLoader.Load(x.PersonId)),
 							() => _databaseLoader.GetCurrentSchedule(x.PersonId),
-							() => _stateMappingLoader.Cached(),
-							() => _ruleMappingLoader.Cached(),
+							() => MappingLoader.Cached(),
 							s => _unitOfWork.Do(() => _agentStateReadModelUpdater.Update(s)),
 							_now));
 					});
@@ -291,8 +281,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							x.SiteId,
 							() => _unitOfWork.Get(() => _previousStateInfoLoader.Load(x.PersonId)),
 							() => _databaseLoader.GetCurrentSchedule(x.PersonId),
-							() => _stateMappingLoader.Cached(),
-							() => _ruleMappingLoader.Cached(),
+							() => MappingLoader.Cached(),
 							s => _unitOfWork.Do(() => _agentStateReadModelUpdater.Update(s)),
 							_now));
 					});
@@ -315,8 +304,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IAgentStateReadModelPersister _agentStateReadModelPersister;
 		private readonly StateMapper _stateMapper;
 		protected readonly IPreviousStateInfoLoader _previousStateInfoLoader;
-		protected readonly IStateMappingLoader _stateMappingLoader;
-		protected readonly IRuleMappingLoader _ruleMappingLoader;
+		protected readonly IMappingLoader MappingLoader;
 		private readonly IDatabaseReader _databaseReader;
 		private readonly WithAnalyticsUnitOfWork _unitOfWork;
 
@@ -327,8 +315,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IAgentStateReadModelPersister agentStateReadModelPersister,
 			StateMapper stateMapper,
 			IPreviousStateInfoLoader previousStateInfoLoader,
-			IStateMappingLoader stateMappingLoader,
-			IRuleMappingLoader ruleMappingLoader,
+			IMappingLoader mappingLoader,
 			IDatabaseReader databaseReader,
 			WithAnalyticsUnitOfWork unitOfWork
 			)
@@ -340,8 +327,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_agentStateReadModelPersister = agentStateReadModelPersister;
 			_stateMapper = stateMapper;
 			_previousStateInfoLoader = previousStateInfoLoader;
-			_stateMappingLoader = stateMappingLoader;
-			_ruleMappingLoader = ruleMappingLoader;
+			MappingLoader = mappingLoader;
 			_databaseReader = databaseReader;
 			_unitOfWork = unitOfWork;
 		}
@@ -374,8 +360,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							x.SiteId,
 							() => _previousStateInfoLoader.Load(x.PersonId),
 							() => _databaseReader.GetCurrentSchedule(x.PersonId),
-							() => _stateMappingLoader.Load(),
-							() => _ruleMappingLoader.Load(),
+							() => MappingLoader.Load(),
 							s => _agentStateReadModelUpdater.Update(s),
 							_now));
 					});
@@ -397,8 +382,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							x.SiteId,
 							() => _previousStateInfoLoader.Load(x.PersonId),
 							() => _databaseReader.GetCurrentSchedule(x.PersonId),
-							() => _stateMappingLoader.Load(),
-							() => _ruleMappingLoader.Load(),
+							() => MappingLoader.Load(),
 							s => _agentStateReadModelUpdater.Update(s),
 							_now));
 					});
@@ -412,7 +396,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var agentsNotAlreadyLoggedOut =
 				from a in missingAgents
 				let state = _stateMapper.StateFor(
-					_stateMappingLoader.Cached(),
+					MappingLoader.Cached(),
 					a.BusinessUnitId,
 					a.PlatformTypeId,
 					a.StateCode,
@@ -430,8 +414,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					x.SiteId.GetValueOrDefault(),
 					() => _previousStateInfoLoader.Load(x.PersonId),
 					() => _databaseReader.GetCurrentSchedule(x.PersonId),
-					() => _stateMappingLoader.Load(),
-					() => _ruleMappingLoader.Load(),
+					() => MappingLoader.Load(),
 					s => _agentStateReadModelUpdater.Update(s),
 					_now));
 			});
@@ -455,8 +438,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						x.SiteId.GetValueOrDefault(),
 						null,
 						() => _databaseReader.GetCurrentSchedule(x.PersonId),
-						() => _stateMappingLoader.Load(),
-						() => _ruleMappingLoader.Load(),
+						() => MappingLoader.Load(),
 						null,
 						_now));
 				});

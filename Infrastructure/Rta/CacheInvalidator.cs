@@ -27,8 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public void InvalidateState()
 		{
-			_cacheFactory.Invalidate<RuleMappingLoader>();
-			_cacheFactory.Invalidate<StateMappingLoader>();
+			_cacheFactory.Invalidate<MappingLoader>();
 		}
 
 		public void InvalidateSchedules(Guid personId)

@@ -40,17 +40,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			else
 				builder.RegisterType<LoadFromCache>().As<IStateContextLoader>().SingleInstance();
 
-			_config.Cache().This<RuleMappingLoader>((c, b) => b
+			_config.Cache().This<MappingLoader>((c, b) => b
 				.CacheMethod(x => x.Cached())
 				.CacheKey(c.Resolve<CachePerDataSource>())
 				);
-			builder.CacheByClassProxy<RuleMappingLoader>().As<IRuleMappingLoader>().ApplyAspects().SingleInstance();
-
-			_config.Cache().This<StateMappingLoader>((c, b) => b
-				.CacheMethod(x => x.Cached())
-				.CacheKey(c.Resolve<CachePerDataSource>())
-				);
-			builder.CacheByClassProxy<StateMappingLoader>().As<IStateMappingLoader>().ApplyAspects().SingleInstance();
+			builder.CacheByClassProxy<MappingLoader>().As<IMappingLoader>().ApplyAspects().SingleInstance();
 
 			_config.Cache().This<IDatabaseLoader>((c, b) => b
 				.CacheMethod(x => x.GetCurrentSchedule(Guid.NewGuid()))

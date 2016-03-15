@@ -312,8 +312,8 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentageReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StoredStateInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateReadModelUpdater.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\RuleMapping.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\RuleMappingLoader.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\Mapping.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\MappingLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\BelongsToDateDecorator.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModelBuilders\AdherenceDetailsViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\CheckForActivityChangeInputModel.cs" />
@@ -325,7 +325,7 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IAdherenceDetailsReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAdherenceEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAgentStateReadModelUpdater.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\IRuleMappingLoader.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\IMappingLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAppliedAdherence.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ICacheInvalidator.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IStateCodeAdder.cs" />
@@ -339,7 +339,6 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\ISiteOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IStateEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IRecreatable.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\IStateMappingLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\ITeamOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\NotificationCreator.cs" />
     <Compile Include="ApplicationLayer\Rta\Performance\PersonGenerator.cs" />
@@ -371,8 +370,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\StateInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\PulseLoop\PersonActivityChangePulseLoop.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StateMapper.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\StateMapping.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\StateMappingLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StateStreamSynchronizer.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamOutOfAdherenceReadModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamOutOfAdherenceReadModelUpdater.cs" />

@@ -5,8 +5,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class StateRuleInfo
 	{
-		private readonly StateMapping _stateMapping;
-		private readonly RuleMapping _ruleMapping;
+		private readonly MappedRule _mappedRule;
+		private readonly MappedState _mappedState;
 		private readonly StoredStateInfo _stored;
 
 		public StateRuleInfo(
@@ -19,75 +19,75 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			StateMapper stateMapper
 			)
 		{
-			_stateMapping = stateMapper.StateFor(context.StateMappings(), context.BusinessUnitId, platformTypeId, stateCode, input.StateDescription);
-			_ruleMapping = stateMapper.RuleFor(context.RuleMappings(), context.BusinessUnitId, platformTypeId, stateCode, schedule.CurrentActivityId()) ?? new RuleMapping();
+			_mappedState = stateMapper.StateFor(context.Mappings(), context.BusinessUnitId, platformTypeId, stateCode, input.StateDescription);
+			_mappedRule = stateMapper.RuleFor(context.Mappings(), context.BusinessUnitId, platformTypeId, stateCode, schedule.CurrentActivityId()) ?? new MappedRule();
 			_stored = stored;
 		}
 
 		public bool StateGroupChanged()
 		{
-			return _stateMapping.StateGroupId != _stored.StateGroupId();
+			return _mappedState.StateGroupId != _stored.StateGroupId();
 		}
 
 		public Guid? StateGroupId()
 		{
-			return _stateMapping.StateGroupId;
+			return _mappedState.StateGroupId;
 		}
 
 		public string StateGroupName()
 		{
-			return _stateMapping.StateGroupName;
+			return _mappedState.StateGroupName;
 		}
 
 
 
 		public bool HasRuleChanged()
 		{
-			return _ruleMapping.RuleId != _stored.RuleId();
+			return _mappedRule.RuleId != _stored.RuleId();
 		}
 
 
 
 		public Guid? RuleId()
 		{
-			return _ruleMapping.RuleId;
+			return _mappedRule.RuleId;
 		}
 
 		public string RuleName()
 		{
-			return _ruleMapping.RuleName;
+			return _mappedRule.RuleName;
 		}
 
 		public int? RuleDisplayColor()
 		{
-			return _ruleMapping.DisplayColor;
+			return _mappedRule.DisplayColor;
 		}
 
 		public double? StaffingEffect()
 		{
-			return _ruleMapping.StaffingEffect;
+			return _mappedRule.StaffingEffect;
 		}
 
 		public Adherence? Adherence()
 		{
-			return _ruleMapping.Adherence;
+			return _mappedRule.Adherence;
 		}
 
 
 
 		public bool IsAlarm()
 		{
-			return _ruleMapping.IsAlarm;
+			return _mappedRule.IsAlarm;
 		}
 
 		public long AlarmThresholdTime()
 		{
-			return _ruleMapping.ThresholdTime;
+			return _mappedRule.ThresholdTime;
 		}
 
 		public int? AlarmColor()
 		{
-			return _ruleMapping.AlarmColor;
+			return _mappedRule.AlarmColor;
 		}
 
 
