@@ -23,6 +23,7 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
     </Certificates>
     <Endpoints>
   		<InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="fakedress.teleopticloud.com" />
+		<InternalEndpoint name="StardustNode" protocol="any" port="14100" />
     </Endpoints>
     <Imports>
 		<Import moduleName="Diagnostics" />
