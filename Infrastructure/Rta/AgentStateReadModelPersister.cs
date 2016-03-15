@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public virtual IEnumerable<AgentStateReadModel> GetAll()
 		{
-			var sql = AgentStateReadModelReader.SelectActualAgentState();
+			var sql = AgentStateReadModelReader.SelectActualAgentState() + "WITH (TABLOCK UPDLOCK)";
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateReadModel)))
 				.SetReadOnly(true)
