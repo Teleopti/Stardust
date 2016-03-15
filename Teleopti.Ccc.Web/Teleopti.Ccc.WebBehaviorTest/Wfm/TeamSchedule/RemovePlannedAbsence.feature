@@ -55,7 +55,7 @@ Scenario: Could delete absences for agent
 	Then I should see schedule with absence for 'John Smith' displayed
 	When I selected the person absence for 'John Smith'
 	And I try to delete selected absence
-	Then I should see a confirm message for absence deletion
+	Then I should see a confirm message that 0 person selected and 1 person absence selected for absence deletion
 	When I answered 'Yes' to confirm message
 	Then I should see schedule with no absence for 'John Smith' displayed
 
