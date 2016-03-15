@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IRtaMap> LoadAllCompleteGraph()
 		{
-			throw new NotImplementedException();
+			return _data;
 		}
 
 		public void Clear()

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[AllBusinessUnitsUnitOfWork]
 		public virtual IEnumerable<RuleMapping> Load()
 		{
-			var mappings = _rtaMapRepository.LoadAll();
+			var mappings = _rtaMapRepository.LoadAllCompleteGraph();
 			return (
 				from m in mappings
 				let businessUnitId = tryGetBusinessUnitId(m)

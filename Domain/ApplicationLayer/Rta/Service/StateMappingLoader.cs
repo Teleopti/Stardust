@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[AllBusinessUnitsUnitOfWork]
 		public virtual IEnumerable<StateMapping> Load()
 		{
-			var groups = _stateGroupRepository.LoadAll();
+			var groups = _stateGroupRepository.LoadAllCompleteGraph();
 			return (
 				from g in groups
 				from s in g.StateCollection
