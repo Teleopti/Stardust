@@ -20,7 +20,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new RaptorQueueSynchronizationStep(jobParameters));
 			Add(new RaptorAgentLogOnSynchronizationStep(jobParameters));
 
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntradayAcdLogin_37439))
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439))
 			{
 				Add(new StagePersonJobStep(jobParameters));
 			}
@@ -52,18 +52,18 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			// DIM AND BRIDGE TABLES AND QUEUE/AGENT SYNC
 			Add(new DimBusinessUnitJobStep(jobParameters));
 			Add(new DimScorecardJobStep(jobParameters));
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162))
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439))
 			{
 				Add(new DimSiteJobStep(jobParameters));
 				Add(new DimTeamJobStep(jobParameters));
 			}
 			Add(new DimSkillJobStep(jobParameters));
-		    if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162))
+		    if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439))
 		    {
 		        Add(new DimSkillSetJobStep(jobParameters));
 		    }
 		    Add(new DimStateGroupJobStep(jobParameters));
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162))
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439))
 			{
 				Add(new DimPersonJobStep(jobParameters));
 			}
@@ -79,12 +79,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new DimKpiJobStep(jobParameters));
 			Add(new DimOvertimeJobStep(jobParameters));
 			Add(new ScorecardKpiJobStep(jobParameters));
-		    if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162))
+		    if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439))
 		    {
 		        Add(new BridgeSkillSetSkillJobStep(jobParameters));
-		    }
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntradayAcdLogin_37439))
-			{
 				Add(new BridgeAcdLogOnPersonJobStep(jobParameters));
 			}
 

@@ -86,8 +86,7 @@
 
 		ResourcePlanner_SkillGroupDeleteAfterCalculation_37048,
 		ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049,
-		ETL_SpeedUpPersonPeriodIntraday_37162,
-		ETL_SpeedUpPersonPeriodIntradayAcdLogin_37439,
+		ETL_SpeedUpPersonPeriodIntraday_37162_37439,
 		WfmGlobalLayout_personalOptions_37114,
 
 		ResourcePlanner_IntradayIslands_36939
