@@ -36,7 +36,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 				return toAdd;
 				
 			toAdd.HaveRestriction = effectiveRestriction.IsRestriction;
-
+			if(toAdd.IsDayOff && !toAdd.IsScheduled)
+				return null;
 			return toAdd;
 		}
 	}

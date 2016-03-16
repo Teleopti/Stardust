@@ -13,8 +13,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 
 	public class ScheduleDayData : IScheduleDayData
 	{
+		private bool _isDayOff;
 		public DateOnly DateOnly { get; private set; }
-		public bool IsDayOff { get; set; }
+
+		public bool IsDayOff
+		{
+			get { return _isDayOff; }
+			set
+			{
+				_isDayOff = value;
+				if (value)
+					IsScheduled = true;
+			}
+		}
+
 		public bool IsContractDayOff { get; set; }
 		public bool IsScheduled { get; set; }
 		public bool HaveRestriction { get; set; }

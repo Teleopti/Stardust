@@ -38,5 +38,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			Assert.IsTrue(_target.IsScheduled);
 			Assert.IsTrue(_target.HaveRestriction);
 		}
+
+		[Test]
+		public void SettingIsDayOffToTrueShouldSetIsScheduledToTrue()
+		{
+			_target.IsDayOff = true;
+
+			Assert.IsTrue(_target.IsDayOff);
+			Assert.IsTrue(_target.IsScheduled);
+		}
+
+		[Test]
+		public void SettingIsDayOffToFalseShouldSetIsScheduledToFalse()
+		{
+			_target.IsScheduled = true;
+			_target.IsDayOff = false;
+
+			Assert.IsFalse(_target.IsDayOff);
+			Assert.IsTrue(_target.IsScheduled);
+		}
 	}
 }

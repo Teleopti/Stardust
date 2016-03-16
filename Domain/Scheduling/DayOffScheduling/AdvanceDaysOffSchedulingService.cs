@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -13,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
     {
         event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 		void Execute(IList<IScheduleMatrixPro> allMatrixList, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions,
-			IGroupPersonBuilderWrapper groupPersonBuilderForOptimization);
+			IGroupPersonBuilderWrapper groupPersonBuilderForOptimization, DateOnlyPeriod selectedPeriod);
     }
 
     public class AdvanceDaysOffSchedulingService : IAdvanceDaysOffSchedulingService
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
         }
 
 		public void Execute(IList<IScheduleMatrixPro> allMatrixList, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions,
-			IGroupPersonBuilderWrapper groupPersonBuilderForOptimization)
+			IGroupPersonBuilderWrapper groupPersonBuilderForOptimization, DateOnlyPeriod selectedPeriod)
 		{
 			var cancelMe = false;
 			EventHandler<SchedulingServiceBaseEventArgs> dayScheduled = (sender, e) =>
@@ -62,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			var selectedMatrixes = new List<IScheduleMatrixPro>();
 			foreach (var scheduleMatrixPro in allMatrixList)
 			{
-				if(selectedPersons.Contains(scheduleMatrixPro.Person))
+				if(selectedPersons.Contains(scheduleMatrixPro.Person) && scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.Intersection(selectedPeriod).HasValue)
 					selectedMatrixes.Add(scheduleMatrixPro);
 			}
 

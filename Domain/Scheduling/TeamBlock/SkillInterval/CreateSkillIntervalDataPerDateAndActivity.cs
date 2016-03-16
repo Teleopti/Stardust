@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 					foreach (var keyValuePair in dayIntervalDataPerActivity)
 					{
 						if (keyValuePair.Value.Count == 0) continue;
-						var splitedInterval = _intervalDataDivider.SplitSkillIntervalData(keyValuePair.Value.ToList(), 15);
+						var splitedInterval = _intervalDataDivider.SplitSkillIntervalData(keyValuePair.Value.ToList(), maxSeatSkills.First().DefaultResolution);
 						keyValuePair.Value.Clear();
 						foreach (var eachSplitedInterval in splitedInterval)
 						{

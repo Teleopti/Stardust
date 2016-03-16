@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
             using (_mock.Playback())
             {
                 _target.DayScheduled += targetDayScheduled;
-				_target.Execute(_matrixList, _selectedPersons, _rollbackService, _schedulingOptions, _groupPersonBuilderWrapper);
+				_target.Execute(_matrixList, _selectedPersons, _rollbackService, _schedulingOptions, _groupPersonBuilderWrapper, new DateOnlyPeriod());
                 _target.DayScheduled -= targetDayScheduled;
             }
         }
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
             }
             using (_mock.Playback())
             {
-				_target.Execute(_matrixList, _selectedPersons, _rollbackService, _schedulingOptions, _groupPersonBuilderWrapper);
+				_target.Execute(_matrixList, _selectedPersons, _rollbackService, _schedulingOptions, _groupPersonBuilderWrapper, new DateOnlyPeriod());
             }
         }
 

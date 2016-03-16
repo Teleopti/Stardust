@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_advanceDaysOffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
 			_advanceDaysOffSchedulingService.Execute(allVisibleMatrixes, selectedPersons,
 				schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions,
-				_groupPersonBuilderWrapper);
+				_groupPersonBuilderWrapper, selectedPeriod.GetValueOrDefault());
 			_advanceDaysOffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
 
 			var advanceSchedulingService = createSchedulingService(schedulingOptions, _groupPersonBuilderWrapper);
