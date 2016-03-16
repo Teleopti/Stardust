@@ -48,7 +48,6 @@ namespace Manager.IntegrationTest.Console.Host.Log4Net.Appenders
 
 						connection.Close();
 					}
-
 				}
 			}
 
