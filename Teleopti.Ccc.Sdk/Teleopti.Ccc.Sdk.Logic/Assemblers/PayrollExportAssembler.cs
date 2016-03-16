@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             IPayrollExport payrollExport = null;
             if (HasNoExportPersonCollectionSet(dto))
             {
-                payrollExport = _payrollExportRepository.Get(dto.Id.GetValueOrDefault(Guid.Empty));
+                payrollExport = _payrollExportRepository.Get(dto.Id.GetValueOrDefault());
             }
             if (HasExportPersonCollectionSet(dto))
             {
