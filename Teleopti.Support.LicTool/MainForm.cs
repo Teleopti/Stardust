@@ -104,6 +104,7 @@ namespace Teleopti.Support.LicTool
 			comboBoxAgentsOrSeats.SelectedIndex = 0;
 			numericUpDownCountRatio.Value = 1.5M;
 			numMaxActiveAgentsGrace.Value = 0;
+			comboBoxMajor.SelectedItem = "8";
 
 			chkBase.Checked = false;
 			chkLifestyle.Checked = false;
@@ -129,6 +130,7 @@ namespace Teleopti.Support.LicTool
 			numExpirationGracePeriodDays.Value = 5;
 			numMaxActiveAgents.Value = 100;
 			numMaxActiveAgentsGrace.Value = 10;
+			comboBoxMajor.SelectedItem = "8";
 
 			chkBase.Checked = true;
 			chkLifestyle.Checked = true;
@@ -206,6 +208,9 @@ namespace Teleopti.Support.LicTool
 						numExpirationGracePeriodDays.Value = xlic.ExpirationGracePeriod.Days;
 						ExpirationGracePeriodHours.Value = xlic.ExpirationGracePeriod.Hours;
 
+						//waiting for major version
+						//comboBoxMajor.SelectedItem = xlic.MajorVersion;
+
 						HashSet<string> options = xlic.SchemaOptions;
 
 						//Standard
@@ -255,6 +260,11 @@ namespace Teleopti.Support.LicTool
 
 		private void ProductActivationKeyFileSaveAndClose()
 		{
+			if (string.IsNullOrEmpty(comboBoxMajor.SelectedItem.ToString()))
+			{
+				MessageBox.Show(this, "You must set a Major Version!", "Major Version missing");
+				return;
+			} 
 			IFormatProvider invariant = CultureInfo.InvariantCulture;
 			var xdoc = new XmlDocument();
 			XmlDeclaration xmlDeclaration = xdoc.CreateXmlDeclaration("1.0", "utf-8", null);
@@ -266,6 +276,7 @@ namespace Teleopti.Support.LicTool
 			rootNode.AppendChild(xdoc.CreateElement("ExpirationGracePeriod")).AppendChild(xdoc.CreateTextNode("P" + numExpirationGracePeriodDays.Value.ToString(invariant) + "D"));
 			rootNode.AppendChild(xdoc.CreateElement("MaxActiveAgents")).AppendChild(xdoc.CreateTextNode(numMaxActiveAgents.Value.ToString(invariant)));
 			rootNode.AppendChild(xdoc.CreateElement("MaxActiveAgentsGrace")).AppendChild(xdoc.CreateTextNode(numMaxActiveAgentsGrace.Value.ToString(invariant)));
+			rootNode.AppendChild(xdoc.CreateElement("MajorVersion")).AppendChild(xdoc.CreateTextNode(comboBoxMajor.SelectedItem.ToString()));
 
 			//Standard Product Activation Key
 			if (!chkFreemium.Checked)
@@ -467,6 +478,11 @@ namespace Teleopti.Support.LicTool
 			grpBoxModules.Visible = !chkFreemium.Checked;
 
 			EnterFreemiumSettings();
+		}
+
+		private void MainForm_Load(object sender, EventArgs e)
+		{
+			Initialize_form();
 		}
 	}
 }

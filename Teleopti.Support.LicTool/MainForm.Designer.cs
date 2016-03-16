@@ -52,6 +52,8 @@
 			this.chkPerformanceManager = new System.Windows.Forms.CheckBox();
 			this.chkPayrollIntegration = new System.Windows.Forms.CheckBox();
 			this.grpBoxModules = new System.Windows.Forms.GroupBox();
+			this.chkVNextPilot = new System.Windows.Forms.CheckBox();
+			this.chkSeatPlanner = new System.Windows.Forms.CheckBox();
 			this.chkOutbound = new System.Windows.Forms.CheckBox();
 			this.chkMyTeam = new System.Windows.Forms.CheckBox();
 			this.chkCalendarLink = new System.Windows.Forms.CheckBox();
@@ -82,8 +84,8 @@
 			this.labelRatio = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.chkFreemium = new System.Windows.Forms.CheckBox();
-			this.chkVNextPilot = new System.Windows.Forms.CheckBox();
-			this.chkSeatPlanner = new System.Windows.Forms.CheckBox();
+			this.label11 = new System.Windows.Forms.Label();
+			this.comboBoxMajor = new System.Windows.Forms.ComboBox();
 			((System.ComponentModel.ISupportInitialize)(this.numMaxActiveAgents)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numMaxActiveAgentsGrace)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numExpirationGracePeriodDays)).BeginInit();
@@ -116,7 +118,7 @@
             0,
             0,
             0});
-			this.numMaxActiveAgents.Location = new System.Drawing.Point(119, 259);
+			this.numMaxActiveAgents.Location = new System.Drawing.Point(119, 244);
 			this.numMaxActiveAgents.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -133,7 +135,7 @@
             0,
             0,
             0});
-			this.numMaxActiveAgentsGrace.Location = new System.Drawing.Point(119, 294);
+			this.numMaxActiveAgentsGrace.Location = new System.Drawing.Point(119, 272);
 			this.numMaxActiveAgentsGrace.Name = "numMaxActiveAgentsGrace";
 			this.numMaxActiveAgentsGrace.Size = new System.Drawing.Size(51, 20);
 			this.numMaxActiveAgentsGrace.TabIndex = 13;
@@ -159,7 +161,7 @@
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(15, 268);
+			this.label3.Location = new System.Drawing.Point(15, 251);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(62, 13);
 			this.label3.TabIndex = 8;
@@ -168,7 +170,7 @@
 			// label4
 			// 
 			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(16, 301);
+			this.label4.Location = new System.Drawing.Point(16, 279);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(92, 13);
 			this.label4.TabIndex = 9;
@@ -177,7 +179,7 @@
 			// label5
 			// 
 			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(15, 226);
+			this.label5.Location = new System.Drawing.Point(16, 222);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(83, 13);
 			this.label5.TabIndex = 10;
@@ -190,7 +192,7 @@
             0,
             0,
             0});
-			this.numExpirationGracePeriodDays.Location = new System.Drawing.Point(118, 219);
+			this.numExpirationGracePeriodDays.Location = new System.Drawing.Point(119, 215);
 			this.numExpirationGracePeriodDays.Maximum = new decimal(new int[] {
             365,
             0,
@@ -203,7 +205,7 @@
 			// label6
 			// 
 			this.label6.AutoSize = true;
-			this.label6.Location = new System.Drawing.Point(175, 226);
+			this.label6.Location = new System.Drawing.Point(175, 220);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(29, 13);
 			this.label6.TabIndex = 12;
@@ -332,6 +334,7 @@
 			// 
 			// grpBoxModules
 			// 
+			this.grpBoxModules.Controls.Add(this.chkVNextPilot);
 			this.grpBoxModules.Controls.Add(this.chkSeatPlanner);
 			this.grpBoxModules.Controls.Add(this.chkOutbound);
 			this.grpBoxModules.Controls.Add(this.chkMyTeam);
@@ -347,12 +350,32 @@
 			this.grpBoxModules.Controls.Add(this.chkShiftTrader);
 			this.grpBoxModules.Controls.Add(this.chkLifestyle);
 			this.grpBoxModules.Controls.Add(this.chkBase);
-			this.grpBoxModules.Location = new System.Drawing.Point(70, 338);
+			this.grpBoxModules.Location = new System.Drawing.Point(45, 338);
 			this.grpBoxModules.Name = "grpBoxModules";
 			this.grpBoxModules.Size = new System.Drawing.Size(211, 379);
 			this.grpBoxModules.TabIndex = 14;
 			this.grpBoxModules.TabStop = false;
 			this.grpBoxModules.Text = "Teleopti WFM options";
+			// 
+			// chkVNextPilot
+			// 
+			this.chkVNextPilot.AutoSize = true;
+			this.chkVNextPilot.Location = new System.Drawing.Point(6, 308);
+			this.chkVNextPilot.Name = "chkVNextPilot";
+			this.chkVNextPilot.Size = new System.Drawing.Size(78, 17);
+			this.chkVNextPilot.TabIndex = 43;
+			this.chkVNextPilot.Text = "VNext Pilot";
+			this.chkVNextPilot.UseVisualStyleBackColor = true;
+			// 
+			// chkSeatPlanner
+			// 
+			this.chkSeatPlanner.AutoSize = true;
+			this.chkSeatPlanner.Location = new System.Drawing.Point(6, 354);
+			this.chkSeatPlanner.Name = "chkSeatPlanner";
+			this.chkSeatPlanner.Size = new System.Drawing.Size(87, 17);
+			this.chkSeatPlanner.TabIndex = 42;
+			this.chkSeatPlanner.Text = "Seat Planner";
+			this.chkSeatPlanner.UseVisualStyleBackColor = true;
 			// 
 			// chkOutbound
 			// 
@@ -452,7 +475,7 @@
 			// label7
 			// 
 			this.label7.AutoSize = true;
-			this.label7.Location = new System.Drawing.Point(176, 301);
+			this.label7.Location = new System.Drawing.Point(176, 279);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(43, 13);
 			this.label7.TabIndex = 31;
@@ -460,7 +483,7 @@
 			// 
 			// ExpirationGracePeriodHours
 			// 
-			this.ExpirationGracePeriodHours.Location = new System.Drawing.Point(210, 219);
+			this.ExpirationGracePeriodHours.Location = new System.Drawing.Point(210, 215);
 			this.ExpirationGracePeriodHours.Maximum = new decimal(new int[] {
             23,
             0,
@@ -473,7 +496,7 @@
 			// label8
 			// 
 			this.label8.AutoSize = true;
-			this.label8.Location = new System.Drawing.Point(258, 226);
+			this.label8.Location = new System.Drawing.Point(258, 220);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(33, 13);
 			this.label8.TabIndex = 33;
@@ -583,7 +606,7 @@
 			this.comboBoxAgentsOrSeats.Items.AddRange(new object[] {
             "Agents",
             "Seats"});
-			this.comboBoxAgentsOrSeats.Location = new System.Drawing.Point(291, 260);
+			this.comboBoxAgentsOrSeats.Location = new System.Drawing.Point(291, 238);
 			this.comboBoxAgentsOrSeats.Name = "comboBoxAgentsOrSeats";
 			this.comboBoxAgentsOrSeats.Size = new System.Drawing.Size(121, 21);
 			this.comboBoxAgentsOrSeats.TabIndex = 11;
@@ -592,7 +615,7 @@
 			// label10
 			// 
 			this.label10.AutoSize = true;
-			this.label10.Location = new System.Drawing.Point(188, 267);
+			this.label10.Location = new System.Drawing.Point(188, 245);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(97, 13);
 			this.label10.TabIndex = 38;
@@ -606,7 +629,7 @@
             0,
             0,
             65536});
-			this.numericUpDownCountRatio.Location = new System.Drawing.Point(462, 260);
+			this.numericUpDownCountRatio.Location = new System.Drawing.Point(462, 238);
 			this.numericUpDownCountRatio.Maximum = new decimal(new int[] {
             499,
             0,
@@ -629,7 +652,7 @@
 			// labelRatio
 			// 
 			this.labelRatio.AutoSize = true;
-			this.labelRatio.Location = new System.Drawing.Point(424, 267);
+			this.labelRatio.Location = new System.Drawing.Point(424, 245);
 			this.labelRatio.Name = "labelRatio";
 			this.labelRatio.Size = new System.Drawing.Size(32, 13);
 			this.labelRatio.TabIndex = 40;
@@ -656,32 +679,34 @@
 			this.chkFreemium.UseVisualStyleBackColor = true;
 			this.chkFreemium.CheckedChanged += new System.EventHandler(this.chkFreemium_CheckedChanged);
 			// 
-			// chkVNextPilot
+			// label11
 			// 
-			this.chkVNextPilot.AutoSize = true;
-			this.chkVNextPilot.Location = new System.Drawing.Point(76, 646);
-			this.chkVNextPilot.Name = "chkVNextPilot";
-			this.chkVNextPilot.Size = new System.Drawing.Size(78, 17);
-			this.chkVNextPilot.TabIndex = 20;
-			this.chkVNextPilot.Text = "VNext Pilot";
-			this.chkVNextPilot.UseVisualStyleBackColor = true;
+			this.label11.AutoSize = true;
+			this.label11.Location = new System.Drawing.Point(16, 310);
+			this.label11.Name = "label11";
+			this.label11.Size = new System.Drawing.Size(71, 13);
+			this.label11.TabIndex = 41;
+			this.label11.Text = "Major Version";
 			// 
-			// chkSeatPlanner
+			// comboBoxMajor
 			// 
-			this.chkSeatPlanner.AutoSize = true;
-			this.chkSeatPlanner.Location = new System.Drawing.Point(6, 354);
-			this.chkSeatPlanner.Name = "chkSeatPlanner";
-			this.chkSeatPlanner.Size = new System.Drawing.Size(87, 17);
-			this.chkSeatPlanner.TabIndex = 42;
-			this.chkSeatPlanner.Text = "Seat Planner";
-			this.chkSeatPlanner.UseVisualStyleBackColor = true;
+			this.comboBoxMajor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxMajor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.comboBoxMajor.FormattingEnabled = true;
+			this.comboBoxMajor.Items.AddRange(new object[] {
+            "8"});
+			this.comboBoxMajor.Location = new System.Drawing.Point(119, 302);
+			this.comboBoxMajor.Name = "comboBoxMajor";
+			this.comboBoxMajor.Size = new System.Drawing.Size(116, 21);
+			this.comboBoxMajor.TabIndex = 42;
 			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(639, 729);
-			this.Controls.Add(this.chkVNextPilot);
+			this.Controls.Add(this.comboBoxMajor);
+			this.Controls.Add(this.label11);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.labelRatio);
 			this.Controls.Add(this.numericUpDownCountRatio);
@@ -713,6 +738,7 @@
 			this.MainMenuStrip = this.menuTopmenu;
 			this.Name = "MainForm";
 			this.Text = "WFM Product Activation Key Tool";
+			this.Load += new System.EventHandler(this.MainForm_Load);
 			((System.ComponentModel.ISupportInitialize)(this.numMaxActiveAgents)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numMaxActiveAgentsGrace)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numExpirationGracePeriodDays)).EndInit();
@@ -785,9 +811,11 @@
 		private System.Windows.Forms.CheckBox chkCalendarLink;
 		private System.Windows.Forms.CheckBox chkNotify;
 		private System.Windows.Forms.CheckBox chkMyTeam;
-		private System.Windows.Forms.CheckBox chkVNextPilot;
 		private System.Windows.Forms.CheckBox chkOutbound;
 		private System.Windows.Forms.CheckBox chkSeatPlanner;
+		private System.Windows.Forms.CheckBox chkVNextPilot;
+		private System.Windows.Forms.Label label11;
+		private System.Windows.Forms.ComboBox comboBoxMajor;
 	}
 }
 
