@@ -2,6 +2,17 @@
 	max-width: 500px;
 }
 
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+	.hide-on-ie{
+		display: none!important;
+	}
+}
+
+.last-time{
+	margin-left: 15px;
+}
+
+//move to styleguide when we are out of beta
 md-autocomplete{
 	color: $gray087;
 	background:transparent;
@@ -19,8 +30,4 @@ md-autocomplete{
 	.md-whiteframe-1dp, .md-whiteframe-z1{
 	box-shadow: none;
 	}
-}
-
-.last-time{
-	margin-left: 15px;
 }
