@@ -3,7 +3,7 @@
 }
 
 #seatplan{
-	background:$white;	
+	background:$white;
 	height:95%;
 	position:relative;
 }
@@ -14,7 +14,7 @@
 	height: 240px;
 	width: 290px;
 	clear: both;
-	background:#ffffff;
+	background:$white;
 	overflow:hidden;
 }
 
@@ -77,9 +77,9 @@
 @media print {
 	.seatplan-header{
 		height:0;
-		display:none;	
+		display:none;
 	}
-	
+
 	#seatplan{
 		height:100%;
 	}
@@ -150,7 +150,7 @@
 	.panel .con-flex{
 		min-height:350px;
 	}
-		
+
 	.alert-error{
 		margin: 15px 5px 5px 5px;
 		width: 601px;
@@ -192,7 +192,7 @@
 	table{
 		width:100%;
 	}
-		
+
 	table tr th{
 		word-break:break-word;
 	}

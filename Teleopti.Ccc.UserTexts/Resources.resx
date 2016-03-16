@@ -14190,4 +14190,8 @@ Help us improve your experience by sending an error report</value>
     <value>Remove entire cross day person absence</value>
     <comment>Message for user to confirm how to remove cross day absence in remove absence of team schedule</comment>
   </data>
+  <data name="ToggleDarkTheme" xml:space="preserve">
+    <value>Toggle dark theme</value>
+    <comment>label for button used to toggle dark/light theme</comment>
+  </data>
 </root>
