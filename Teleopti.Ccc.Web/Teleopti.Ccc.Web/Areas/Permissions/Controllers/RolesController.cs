@@ -111,7 +111,12 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
         public virtual IHttpActionResult AddFunctions(Guid roleId, [FromBody]FunctionsForRoleInput model)
         {
             var role = _roleRepository.Get(roleId);
-            if (role.BuiltIn) return BadRequest(CannotModifyBuiltInRoleErrorMessage);
+			if (role.BuiltIn) return BadRequest(CannotModifyBuiltInRoleErrorMessage);
+
+			var myRoles = _loggedOnUser.CurrentUser().PermissionInformation.ApplicationRoleCollection;
+			var isMyRole = myRoles.Any(myRole => myRole.Id == role.Id);
+			if (isMyRole) return BadRequest(CannotModifyMyRoleErrorMessage);
+
             foreach (var function in model.Functions)
             {
                 role.AddApplicationFunction(_applicationFunctionRepository.Load(function));
@@ -138,7 +143,12 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
         public virtual IHttpActionResult RemoveFunction(Guid roleId, Guid functionId)
         {
             var role = _roleRepository.Get(roleId);
-            if (role.BuiltIn) return BadRequest(CannotModifyBuiltInRoleErrorMessage);
+			if (role.BuiltIn) return BadRequest(CannotModifyBuiltInRoleErrorMessage);
+
+			var myRoles = _loggedOnUser.CurrentUser().PermissionInformation.ApplicationRoleCollection;
+			var isMyRole = myRoles.Any(myRole => myRole.Id == role.Id);
+			if (isMyRole) return BadRequest(CannotModifyMyRoleErrorMessage);
+
             var children = _applicationFunctionRepository.GetChildFunctions(functionId);
             foreach (var child in children)
                 if (child.Id.HasValue) removeChildren(child.Id.Value, role);

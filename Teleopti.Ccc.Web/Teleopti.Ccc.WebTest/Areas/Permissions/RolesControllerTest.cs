@@ -206,6 +206,25 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		}
 
 		[Test]
+		public void ShouldNotAddNewFunctionsToMyRole()
+		{
+			var person = PersonFactory.CreatePersonWithApplicationRolesAndFunctions();
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			var role = person.PermissionInformation.ApplicationRoleCollection.First();
+
+			while (role.ApplicationFunctionCollection.Any())
+				role.RemoveApplicationFunction(role.ApplicationFunctionCollection.First());
+
+			var functionOneId = Guid.NewGuid();
+			var functionOne = new ApplicationFunction("FunctionOne");
+			ApplicationFunctionRepository.Add(functionOne);
+			ApplicationRoleRepository.Add(role);
+			Target.AddFunctions(role.Id.Value, new FunctionsForRoleInput {Functions = new Collection<Guid> {functionOneId}});
+
+			role.ApplicationFunctionCollection.Should().Be.Empty();
+		}
+
+		[Test]
 		public void ShouldRemoveFunctionsFromRole()
 		{
 			var functionOneId = Guid.NewGuid();
@@ -239,6 +258,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			Target.RemoveFunction(roleId, functionOneId);
 
 			agentRole.ApplicationFunctionCollection.Should().Contain(functionOne);
+		}
+
+		[Test]
+		public void ShouldNotRemoveFunctionsFromMyRole()
+		{
+			var person = PersonFactory.CreatePersonWithApplicationRolesAndFunctions();
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			var role = person.PermissionInformation.ApplicationRoleCollection.First();
+
+			var functionOne = role.ApplicationFunctionCollection.First();
+			ApplicationFunctionRepository.Add(functionOne);
+			ApplicationRoleRepository.Add(role);
+			Target.RemoveFunction(role.Id.Value, functionOne.Id.Value);
+
+			role.ApplicationFunctionCollection.Should().Contain(functionOne);
 		}
 
 		[Test]
