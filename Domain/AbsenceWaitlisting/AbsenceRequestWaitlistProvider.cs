@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
@@ -21,8 +22,8 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 			if (absenceRequest.IsWaitlisted())
 			{
 				var personRequest = absenceRequest.Parent as PersonRequest;
-
-				var waitlistedRequests = GetWaitlistedRequests(absenceRequest.Period, absenceRequest.Person.WorkflowControlSet).ToList();
+				var queryAbsenceRequestsPeriod = absenceRequest.Period.ChangeEndTime (TimeSpan.FromSeconds (-1));
+				var waitlistedRequests = GetWaitlistedRequests(queryAbsenceRequestsPeriod, absenceRequest.Person.WorkflowControlSet).ToList();
 				var index = waitlistedRequests.FindIndex(perRequest => perRequest.Id == personRequest.Id);
 				if (index > -1)
 				{
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 		public IEnumerable<IPersonRequest> GetWaitlistedRequests(DateTimePeriod period, IWorkflowControlSet workflowControlSet)
 		{
 			var requestTypes = new[] { RequestType.AbsenceRequest };
-			var requestFilter = new RequestFilter() { Period = period, RequestTypes = requestTypes };
+			var requestFilter = new RequestFilter() { Period = period, RequestTypes = requestTypes, ExcludeRequestsOnFilterPeriodEdge = true };
 
 			var waitlistedRequests = from request in _personRequestRepository.FindAllRequests(requestFilter)
 									 where requestShouldBeProcessed(request, workflowControlSet)

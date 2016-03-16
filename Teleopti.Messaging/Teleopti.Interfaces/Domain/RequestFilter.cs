@@ -25,6 +25,7 @@ namespace Teleopti.Interfaces.Domain
 		public IEnumerable<RequestType> RequestTypes;
 		public IList<RequestsSortingOrder> SortingOrders;
 		public IPaging Paging;
+		public bool ExcludeRequestsOnFilterPeriodEdge;
 	}
 
 

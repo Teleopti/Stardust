@@ -1266,22 +1266,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldReturnRequestsOverlapOnEndDate()
 		{
-			var person1 = PersonFactory.CreatePerson("A");
-
-			PersistAndRemoveFromUnitOfWork(person1);
-
-			var textRequest1 = new PersonRequest(person1, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1))));
-
-			PersistAndRemoveFromUnitOfWork(textRequest1);
-
 			var filter = new RequestFilter
 			{
 				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow),
 				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.PeriodStartDesc }
 			};
 
-			var resultDesc = new PersonRequestRepository(UnitOfWork)
-				.FindAllRequests(filter).ToArray();
+			var resultDesc = setupOverlapTest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)), filter);
 
 			resultDesc.Should().Have.Count.EqualTo(1);
 		}
@@ -1289,24 +1280,59 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldReturnRequestsOverlapOnStartDate()
 		{
-			var person1 = PersonFactory.CreatePerson("A");
-
-			PersistAndRemoveFromUnitOfWork(person1);
-
-			var textRequest1 = new PersonRequest(person1, new TextRequest(new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow)));
-
-			PersistAndRemoveFromUnitOfWork(textRequest1);
-
 			var filter = new RequestFilter
 			{
 				Period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)),
 				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.PeriodStartDesc }
 			};
 
-			var resultDesc = new PersonRequestRepository(UnitOfWork)
-				.FindAllRequests(filter).ToArray();
+			var resultDesc = setupOverlapTest (new DateTimePeriod (DateTime.UtcNow.AddDays (-1), DateTime.UtcNow), filter);
 
 			resultDesc.Should().Have.Count.EqualTo(1);
 		}
+
+		[Test]
+		public void ShouldNotReturnRequestsOverlapOnEndDate()
+		{
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow),
+				ExcludeRequestsOnFilterPeriodEdge = true,
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.PeriodStartDesc }
+			};
+
+			var resultDesc = setupOverlapTest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)), filter);
+
+			resultDesc.Should().Have.Count.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldNotReturnRequestsOverlapOnStartDate()
+		{
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)),
+				ExcludeRequestsOnFilterPeriodEdge = true,
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.PeriodStartDesc }
+			};
+
+			var resultDesc = setupOverlapTest(new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow), filter);
+
+			resultDesc.Should().Have.Count.EqualTo(0);
+		}
+
+	    private IEnumerable<IPersonRequest> setupOverlapTest(DateTimePeriod existingRequestPeriod,RequestFilter filter)
+	    {
+			var person1 = PersonFactory.CreatePerson("A");
+
+			PersistAndRemoveFromUnitOfWork(person1);
+
+			var textRequest1 = new PersonRequest(person1, new TextRequest(existingRequestPeriod));
+
+			PersistAndRemoveFromUnitOfWork(textRequest1);
+
+			return new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
+			
+	    } 
 	}
 }

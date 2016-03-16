@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Collection;
 using NHibernate;
 using System.Linq;
-using Remotion.Linq.Parsing.Structure.IntermediateModel;
 using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -141,7 +140,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			criteria.CreateCriteria("requests", "req", JoinType.InnerJoin);
 
 
-			filterRequestByPeriod(criteria, filter.Period);
+			filterRequestByPeriod(criteria, filter);
 			filterRequestByPersons(criteria, filter.Persons);
 			filterRequestByRequestType(criteria, filter.RequestTypes);
 
@@ -162,12 +161,26 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return criteria.List<IPersonRequest>();
 		}
 
-		private void filterRequestByPeriod(ICriteria criteria, DateTimePeriod period)
+		private static void filterRequestByPeriod(ICriteria criteria, RequestFilter filter)
 		{
+			var period = filter.Period;
+
 			var requestForPeriod = DetachedCriteria.For<Request>()
-				.SetProjection (Projections.Property ("Parent"))
-				.Add (Restrictions.Ge ("Period.period.Maximum", period.StartDateTime))
-				.Add (Restrictions.Le ("Period.period.Minimum", period.EndDateTime));
+				.SetProjection (Projections.Property ("Parent"));
+
+			if (filter.ExcludeRequestsOnFilterPeriodEdge)
+			{
+				requestForPeriod
+					.Add(Restrictions.Gt("Period.period.Maximum", period.StartDateTime))
+					.Add(Restrictions.Lt("Period.period.Minimum", period.EndDateTime));
+			}
+			else
+			{
+				requestForPeriod
+					.Add (Restrictions.Ge ("Period.period.Maximum", period.StartDateTime))
+					.Add (Restrictions.Le ("Period.period.Minimum", period.EndDateTime));
+			}
+				
 
 			criteria.Add(Subqueries.PropertyIn("Id", requestForPeriod));
 		}
