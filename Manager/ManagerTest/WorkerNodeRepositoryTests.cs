@@ -18,7 +18,7 @@ namespace ManagerTest
 		[TestFixtureSetUp]
 		public void TestFixtureSetUp()
 		{
-			WorkerNodeRepository = new WorkerNodeRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString);
+			WorkerNodeRepository = new WorkerNodeRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, new RetryPolicyProvider());
 		}
 		
 
