@@ -44,82 +44,6 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 		}
 
 
-
-		public JobHistory History(Guid jobId)
-		{
-			LogHelper.LogInfoWithLineNumber(Logger, "Start.");
-
-			try
-			{
-				var jobHistory = readHistoryWithRetries(jobId);
-				return jobHistory;
-			}
-			catch (Exception exp)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, exp.Message, exp);
-			}
-
-			LogHelper.LogInfoWithLineNumber(Logger, "Finished.");
-
-			return null;
-		}
-
-		private JobHistory readHistoryWithRetries(Guid jobId)
-		{
-			var policy = makeRetryPolicy();
-			try
-			{
-				JobHistory jobHistory = null;
-				policy.ExecuteAction(() => jobHistory = readHistory(jobId));
-				return jobHistory;
-			}
-			catch (Exception ex)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, "Got exception when Reading Job History", ex);
-			}
-			return null;
-		}
-
-		private JobHistory readHistory(Guid jobId)
-		{
-			var selectCommand = selectHistoryCommand(true);
-
-			using (var connection = new SqlConnection(_connectionString))
-			{
-				var command = new SqlCommand
-				{
-					Connection = connection,
-					CommandText = selectCommand,
-					CommandType = CommandType.Text
-				};
-
-				command.Parameters.Add("@JobId",
-									   SqlDbType.UniqueIdentifier,
-									   16,
-									   "JobId");
-
-				command.Parameters[0].Value = jobId;
-
-				connection.Open();
-
-				using (var reader = command.ExecuteReader())
-				{
-					if (reader.HasRows)
-					{
-						reader.Read();
-						var jobHist = newJobHistoryModel(reader);
-
-						return jobHist;
-					}
-
-					reader.Close();
-					connection.Close();
-				}
-				return null;
-			}
-		}
-
-
 		public IList<JobHistory> HistoryList(Guid nodeId)
 		{
 			LogHelper.LogInfoWithLineNumber(Logger, "Start.");
@@ -238,7 +162,15 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 
 		private IList<JobHistory> readHistoryList()
 		{
-			var selectCommand = selectHistoryCommand(false);
+			var selectCommand = @"SELECT	JobId
+											, Name
+											, CreatedBy
+											, Created
+											, Started
+											, Ended
+											, SentTo
+											, Result
+										FROM[Stardust].JobHistory ORDER BY Created desc";
 
 			var returnList = new List<JobHistory>();
 
@@ -302,27 +234,6 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			return null;
 		}
 
-		private static string selectHistoryCommand(bool byJobId)
-		{
-			var selectCommand = @"SELECT 
-                                             JobId    
-                                            ,Name
-                                            ,CreatedBy
-                                            ,Created
-                                            ,Started
-                                            ,Ended
-                                            ,SentTo,
-															Result
-                                        FROM [Stardust].JobHistory";
-
-
-			if (byJobId)
-			{
-				selectCommand += " WHERE JobId = @JobId";
-			}
-
-			return selectCommand;
-		}
 
 		public IList<JobHistoryDetail> JobHistoryDetails(Guid jobId)
 		{

@@ -13,11 +13,6 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			_stardustRepository = stardustRepository;
 		}
 
-		public JobHistory GetJobHistory(Guid jobId)
-		{
-			return _stardustRepository.History(jobId);
-		}
-
 		public IList<JobHistory> GetJobHistoryList(Guid nodeId)
 		{
 			return _stardustRepository.HistoryList(nodeId);
