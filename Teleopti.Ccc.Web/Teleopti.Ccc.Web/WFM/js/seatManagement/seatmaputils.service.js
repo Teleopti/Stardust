@@ -519,14 +519,10 @@
 				// translate the group-relative coordinates to canvas relative ones
 				group._restoreObjectsState();
 				canvas.remove(group);
-
-				canvas.discardActiveObject();
-
+			
 				for (var i = 0; i < items.length; i++) {
 					canvas.add(items[i]);
 				}
-
-				canvas.renderAll();
 
 			};
 
@@ -542,13 +538,13 @@
 			function ungroupObjectsSoTheyCanBeIndividuallySelected(canvas) {
 
 				// grouped objects will be ungrouped so they can be selected in the seat map booking view
-				// keep an eye on https://github.com/kangax/fabric.js/issues/485 as if/when this is implemented we
+				// keep an eye on https://github.com/kangax/fabric.js/issues/485 and https://github.com/kangax/fabric.js/pull/2729 as if/when this is implemented we
 				// can better handle click events on grouped objects.
 
 				getAllGroups(canvas).forEach(function (group) {
 					deepUnGroup(canvas, group);
 				});
-
+				
 				setSelectionMode(canvas, true);
 			};
 
