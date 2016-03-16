@@ -13,7 +13,7 @@ namespace NodeTest.Timers
 	public class TrySendJobProgressToManagerTimerTests
 	{
 		private NodeConfiguration _nodeConfiguration;
-		private PostHttpRequestFake _httpSenderFake;
+		private FakeHttpSender _httpSenderFake;
 
 		[TestFixtureSetUp]
 		public void TestFixtureSetup()
@@ -33,7 +33,7 @@ namespace NodeTest.Timers
 			                                           pingToManagerSeconds: 10);
 
 
-			_httpSenderFake = new PostHttpRequestFake();
+			_httpSenderFake = new FakeHttpSender();
 		}
 
 		[Test]
@@ -49,7 +49,7 @@ namespace NodeTest.Timers
 
 			timer.Start();
 
-			Thread.Sleep(TimeSpan.FromMinutes(5));	
+			Thread.Sleep(TimeSpan.FromSeconds(10));	
 
 			timer.Dispose();
 		}

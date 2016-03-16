@@ -52,7 +52,7 @@ namespace NodeTest
 
 			_trySendJobProgressToManagerTimerFake =
 				new TrySendJobProgressToManagerTimerFake(_nodeConfigurationFake,
-														new PostHttpRequestFake(),
+														new FakeHttpSender(),
 														1000);
 
 			_pingToManagerFake = new PingToManagerFake();
@@ -130,7 +130,7 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobProgressToManagerTimerFake,
-											   new PostHttpRequestFake());
+											   new FakeHttpSender());
 
 			var httpRequestMessage = new HttpRequestMessage();
 			// Start job.
@@ -155,7 +155,7 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobProgressToManagerTimerFake,
-											   new PostHttpRequestFake());
+											   new FakeHttpSender());
 
 			var httpRequestMessage = new HttpRequestMessage();
 
@@ -180,7 +180,7 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobProgressToManagerTimerFake,
-			                                   new PostHttpRequestFake());
+			                                   new FakeHttpSender());
 
 			var httpRequestMessage = new HttpRequestMessage();
 
@@ -213,7 +213,7 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobProgressToManagerTimerFake,
-			                                   new PostHttpRequestFake());
+			                                   new FakeHttpSender());
 
 			var httpRequestMessage = new HttpRequestMessage();
 
@@ -270,7 +270,7 @@ namespace NodeTest
 			                                                 null,
 			                                                 null,
 															 null,
-			                                                 new PostHttpRequestFake());
+			                                                 new FakeHttpSender());
 		}
 
 		[Test]
@@ -288,7 +288,7 @@ namespace NodeTest
 			                                                 _sendJobCanceledTimer,
 			                                                 null,
 															 null,
-			                                                 new PostHttpRequestFake());
+			                                                 new FakeHttpSender());
 		}
 
 		[Test]
@@ -306,7 +306,7 @@ namespace NodeTest
 			                                                 null,
 			                                                 null,
 															 null,
-			                                                 new PostHttpRequestFake());
+			                                                 new FakeHttpSender());
 		}
 
 		[Test]
@@ -324,7 +324,7 @@ namespace NodeTest
 			                                                 null,
 			                                                 null,
 															 null,
-			                                                 new PostHttpRequestFake());
+			                                                 new FakeHttpSender());
 		}
 
 
@@ -343,7 +343,7 @@ namespace NodeTest
 			                                                 null,
 			                                                 null,
 															 null,
-			                                                 new PostHttpRequestFake());
+			                                                 new FakeHttpSender());
 		}
 
 		[Test]
@@ -353,7 +353,7 @@ namespace NodeTest
 			LogHelper.LogDebugWithLineNumber(Logger,
 			                                 "Starting test...");
 
-			var postHttpRequestFake = new PostHttpRequestFake();
+			var postHttpRequestFake = new FakeHttpSender();
 
 			IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
 			                                                 _nodeConfigurationFake,
@@ -382,7 +382,7 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobProgressToManagerTimerFake,
-											   new PostHttpRequestFake());
+											   new FakeHttpSender());
 
 			var actionResult = _workerWrapper.StartJob(new JobToDo(),
 			                                           new HttpRequestMessage());
@@ -406,7 +406,7 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobProgressToManagerTimerFake,
-											   new PostHttpRequestFake());
+											   new FakeHttpSender());
 
 			var actionResult = _workerWrapper.StartJob(new JobToDo(),
 			                                           new HttpRequestMessage());
@@ -430,7 +430,7 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobProgressToManagerTimerFake,
-			                                   new PostHttpRequestFake());
+			                                   new FakeHttpSender());
 
 			var actionResult = _workerWrapper.StartJob(null,
 			                                           new HttpRequestMessage());

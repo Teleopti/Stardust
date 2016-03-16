@@ -75,7 +75,7 @@
     <Compile Include="Fakes\InvokeHandlers\NodeConfigurationFake.cs" />
     <Compile Include="Fakes\InvokeHandlers\ShortRunningInvokeHandlerFake.cs" />
     <Compile Include="Fakes\InvokeHandlers\ThrowExceptionInvokeHandlerFake.cs" />
-    <Compile Include="Fakes\PostHttpRequestFake.cs" />
+    <Compile Include="Fakes\FakeHttpSender.cs" />
     <Compile Include="Fakes\Timers\NodeStartupNotificationToManagerFake.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -44,7 +44,7 @@ namespace NodeTest
 
 			_trySendJobProgressToManagerTimerFake =
 				new TrySendJobProgressToManagerTimerFake(_nodeConfigurationFake,
-														 new PostHttpRequestFake(),
+														 new FakeHttpSender(),
 														 1000);
 
 			_sendJobDoneTimer = new SendJobDoneTimerFake(_nodeConfigurationFake,
@@ -119,7 +119,7 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobProgressToManagerTimerFake,
-											   new PostHttpRequestFake());
+											   new FakeHttpSender());
 
 			_nodeController = new NodeController(_workerWrapper)
 			{
@@ -143,7 +143,7 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobProgressToManagerTimerFake,
-											   new PostHttpRequestFake());
+											   new FakeHttpSender());
 
 			_nodeController = new NodeController(_workerWrapper) {Request = new HttpRequestMessage()};
 
@@ -172,7 +172,7 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobProgressToManagerTimerFake,
-											   new PostHttpRequestFake());
+											   new FakeHttpSender());
 
 			_nodeController = new NodeController(_workerWrapper) {Request = new HttpRequestMessage()};
 
@@ -196,7 +196,7 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobProgressToManagerTimerFake,
-											   new PostHttpRequestFake());
+											   new FakeHttpSender());
 
 			_nodeController = new NodeController(_workerWrapper) {Request = new HttpRequestMessage()};
 
@@ -216,7 +216,7 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobProgressToManagerTimerFake,
-											   new PostHttpRequestFake());
+											   new FakeHttpSender());
 
 			_nodeController = new NodeController(_workerWrapper) {Request = new HttpRequestMessage()};
 
@@ -238,7 +238,7 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobProgressToManagerTimerFake,
-											   new PostHttpRequestFake());
+											   new FakeHttpSender());
 
 			_nodeController = new NodeController(_workerWrapper) {Request = new HttpRequestMessage()};
 
@@ -274,7 +274,7 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 			                                   _trySendJobProgressToManagerTimerFake,
-			                                   new PostHttpRequestFake());
+			                                   new FakeHttpSender());
 
 			_nodeController = new NodeController(_workerWrapper)
 			{

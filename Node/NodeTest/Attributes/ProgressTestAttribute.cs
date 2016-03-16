@@ -51,13 +51,13 @@ namespace NodeTest.Attributes
 
 			builder.RegisterType<NodeController>();
 
-			builder.RegisterType<PostHttpRequestFake>()
+			builder.RegisterType<FakeHttpSender>()
 				.SingleInstance();
 
 			builder.RegisterInstance(nodeConfiguration);
 
 			var trySendJobProgressToManagerTimerFake = new TrySendJobProgressToManagerTimerFake(nodeConfiguration,
-																								new PostHttpRequestFake(),
+																								new FakeHttpSender(),
 																								1000);
 
 			builder.RegisterInstance(trySendJobProgressToManagerTimerFake);
@@ -87,7 +87,7 @@ namespace NodeTest.Attributes
 			                                                        c.Resolve<SendJobCanceledTimerFake>(),
 			                                                        c.Resolve<SendJobFaultedTimerFake>(),
 																	c.Resolve<TrySendJobProgressToManagerTimerFake>(),
-																	c.Resolve<PostHttpRequestFake>()))
+																	c.Resolve<FakeHttpSender>()))
 				.SingleInstance();
 		}
 
