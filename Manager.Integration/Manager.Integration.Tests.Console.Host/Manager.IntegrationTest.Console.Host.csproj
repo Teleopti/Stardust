@@ -127,6 +127,7 @@
     <Compile Include="Interfaces\IAppDomain.cs" />
     <Compile Include="Interfaces\IHttpSender.cs" />
     <Compile Include="LoadBalancer\LoadBalancerStartup.cs" />
+    <Compile Include="Log4Net\Appenders\AdoNetCreateTableIfNotExistsAppender.cs" />
     <Compile Include="Models\Configuration.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
