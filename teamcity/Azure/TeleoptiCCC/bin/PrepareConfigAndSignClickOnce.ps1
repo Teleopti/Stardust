@@ -222,6 +222,7 @@ function SetDefaultSettings{
 		[string]$fullPathsettingsFile,
 		[string]$DataSourceName
 		)
+    $computer = gc env:computername
 	Add-Content "$fullPathsettingsFile" ""
 	
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(DEFAULT_IDENTITY_PROVIDER)" -content "`$(DEFAULT_IDENTITY_PROVIDER)|Teleopti"
@@ -256,7 +257,7 @@ function SetDefaultSettings{
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(LOCAL_WIKI)" -content "`$(LOCAL_WIKI)|http://wiki.teleopti.com/TeleoptiCCC/Special:MyLanguage/"
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(ETLPM_BINDING_NAME)" -content "`$(ETLPM_BINDING_NAME)|Etl_Pm_Https_Binding"	
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(URL)" -content "`$(URL)|https://$DataSourceName.teleopticloud.com/Web/"
-	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(STARDUST)" -content "`$(STARDUST)|https://$DataSourceName.teleopticloud.com/Web"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(STARDUST)" -content "`$(STARDUST)|https://$computer"
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(UrlAuthenticationBridge)" -content "`$(UrlAuthenticationBridge)|https://$DataSourceName.teleopticloud.com/AuthenticationBridge/"
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(WEB_DEPLOY)" -content "`$(WEB_DEPLOY)|true"
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(DNS_ALIAS)" -content "`$(DNS_ALIAS)|https://$DataSourceName.teleopticloud.com/"
