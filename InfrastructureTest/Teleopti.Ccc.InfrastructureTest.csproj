@@ -523,7 +523,7 @@
     <Compile Include="UnitOfWork\ConnectionStringTest.cs" />
     <Compile Include="UnitOfWork\DifferentPersistAllTest.cs" />
     <Compile Include="UnitOfWork\DisableFilterScopeTest.cs" />
-    <Compile Include="UnitOfWork\DoNotReuseTransactionLevelTest.cs" />
+    <Compile Include="UnitOfWork\DoNotReuseTransactionLevelTest.cs" /> 
     <Compile Include="UnitOfWork\EventsPackageMessageTest.cs" />
     <Compile Include="UnitOfWork\PersistCallbacks\ImplementationDetails\GroupPageChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\HandlingOfUowTest.cs" />
