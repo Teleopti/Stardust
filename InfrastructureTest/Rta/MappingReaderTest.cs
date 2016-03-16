@@ -3,12 +3,11 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Rta;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public IRtaStateGroupRepository Groups;
 		public IRtaRuleRepository Rules;
 		public IActivityRepository Activities;
-		public MappingReader Target;
+		public IMappingReader Target;
 		public WithUnitOfWork WithUnitOfWork;
 
 		[Test]
