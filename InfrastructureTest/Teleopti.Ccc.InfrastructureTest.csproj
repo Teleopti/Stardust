@@ -251,6 +251,7 @@
     <Compile Include="Repositories\SkillAreaRepositoryTest.cs" />
     <Compile Include="Rta\DatabaseReaderLoadAllPersonOrganizationDataTest.cs" />
     <Compile Include="Rta\DatabaseReaderLoadPersonOrganizationDataTest.cs" />
+    <Compile Include="Rta\MappingReaderTest.cs" />
     <Compile Include="Rta\Persisters\AdherenceDetailsReadModelPersisterConcurrencyTest.cs" />
     <Compile Include="Rta\Persisters\AgentStateReadModelPersisterConcurrencyTest.cs" />
     <Compile Include="RetryingQueueSimulator.cs" />

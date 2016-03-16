@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public Guid RuleId { get; set; }
 		public string RuleName { get; set; }
 		public Adherence? Adherence { get; set; }
-		public int? StaffingEffect { get; set; }
+		public double? StaffingEffect { get; set; }
 		public int DisplayColor { get; set; }
 
 		public bool IsAlarm { get; set; }
