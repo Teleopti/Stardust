@@ -6,16 +6,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class StateContext
 	{
-		private readonly Func<StoredStateInfo> _stored;
-		private readonly Func<IEnumerable<ScheduleLayer>> _schedule;
-		private readonly Func<IEnumerable<Mapping>> _mappings;
+		private readonly Lazy<StoredStateInfo> _stored;
+		private readonly Lazy<IEnumerable<ScheduleLayer>> _schedule;
+		private readonly Lazy<IEnumerable<Mapping>> _mappings;
 		private readonly Action<StateInfo> _agentStateReadModelUpdater;
 
 		public StateContext(ExternalUserStateInputModel input, Guid personId, Guid businessUnitId, Guid teamId, Guid siteId, Func<StoredStateInfo> stored, Func<IEnumerable<ScheduleLayer>> schedule, Func<IEnumerable<Mapping>> mappings, Action<StateInfo> agentStateReadModelUpdater, INow now)
 		{
-			_stored = stored;
-			_schedule = schedule;
-			_mappings = mappings;
+			_stored = new Lazy<StoredStateInfo>(() => stored == null ? null : stored.Invoke());
+			_schedule = new Lazy<IEnumerable<ScheduleLayer>>(schedule);
+			_mappings = new Lazy<IEnumerable<Mapping>>(mappings);
 			_agentStateReadModelUpdater = agentStateReadModelUpdater ?? (a => { });
 			Input = input ?? new ExternalUserStateInputModel();
 			CurrentTime = now.UtcDateTime();
@@ -34,9 +34,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public Guid TeamId { get; private set; }
 		public Guid SiteId { get; private set; }
 
-		public StoredStateInfo Stored() { return _stored == null ? null : _stored.Invoke(); }
-		public IEnumerable<ScheduleLayer> ScheduleLayers() { return _schedule.Invoke(); }
-		public IEnumerable<Mapping> Mappings() { return _mappings.Invoke(); }
+		public StoredStateInfo Stored() { return _stored.Value; }
+		public IEnumerable<ScheduleLayer> ScheduleLayers() { return _schedule.Value; }
+		public IEnumerable<Mapping> Mappings() { return _mappings.Value; }
 
 		public void UpdateAgentStateReadModel(StateInfo info)
 		{
