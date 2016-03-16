@@ -22,8 +22,8 @@ namespace Manager.Integration.Test.RecoveryTests
 		private static readonly ILog Logger =
 			LogManager.GetLogger(typeof (OneManagerAndOneNodeRecoveryTests));
 
-		private readonly bool _clearDatabase = true;
-		private readonly string _buildMode = "Debug";
+		private bool _clearDatabase = true;
+		private string _buildMode = "Debug";
 
 		private string ManagerDbConnectionString { get; set; }
 		private Task Task { get; set; }
