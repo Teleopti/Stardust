@@ -43,47 +43,71 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			return policy;
 		}
 
-
-		public IList<JobHistory> HistoryList(Guid nodeId)
-		{
-			LogHelper.LogInfoWithLineNumber(Logger, "Start.");
-
-			try
-			{
-				IList<JobHistory> historyList = readHistoryListWithRetries(nodeId);
-				return historyList;
-			}
-			catch (Exception exp)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, exp.Message, exp);
-			}
-
-			LogHelper.LogInfoWithLineNumber(Logger, "Finished.");
-
-			return null;
-		}
-
-		private IList<JobHistory> readHistoryListWithRetries(Guid nodeId)
+		private void runner(Action funcToRun, string faliureMessage)
 		{
 			var policy = makeRetryPolicy();
-			IList<JobHistory> jobHistory = null;
 			try
 			{
-				policy.ExecuteAction(() => jobHistory = readHistoryList(nodeId));
+				policy.ExecuteAction(funcToRun);
 			}
 			catch (Exception ex)
 			{
-				LogHelper.LogErrorWithLineNumber(Logger, "Got exception when Reading Job History List for a node", ex);
+				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + faliureMessage);
 			}
-			return jobHistory;
 		}
+
+		public IList<JobHistory> HistoryList(Guid nodeId)
+		{
+			IList<JobHistory> historyList = null;
+
+			runner(() => historyList = readHistoryList(nodeId), "Unable to read History List for a specific node. nodeId: " + nodeId);
+
+			return historyList;
+		}
+
+		public IList<JobHistory> HistoryList()
+		{
+			IList<JobHistory> historyList = null;
+
+			runner(() => historyList = readHistoryList(), "Unable to read History List");
+
+			return historyList;
+		}
+
+		public IList<JobHistoryDetail> JobHistoryDetails(Guid jobId)
+		{
+			IList<JobHistoryDetail> jobHistoryDetails = null;
+
+			runner(() => jobHistoryDetails = readJobHistryDetails(jobId), "Unable to read History Details for jobId " + jobId);
+			
+			return jobHistoryDetails;
+		}
+
+		public WorkerNode WorkerNode(Guid nodeId)
+		{
+			WorkerNode workerNode = null;
+
+			runner(() => workerNode = readWorkerNode(nodeId), "Unable to read WorkerNode for nodeId " + nodeId);
+
+			return workerNode;
+		}
+
+		public List<WorkerNode> WorkerNodes()
+		{
+			List<WorkerNode> workerNodes = null;
+
+			runner(() => workerNodes = readWorkerNodes(), "Unable to read WorkerNodes");
+
+			return workerNodes;
+		}
+
 
 		private IList<JobHistory> readHistoryList(Guid nodeId)
 		{
 			var selectCommand = @"
 	   SELECT * FROM [Stardust].JobHistory
 	   WHERE SentTo IN 
-		(SELECT Url FROM [Stardust].WorkerNodes WHERE Id = @NodeId)";
+		(SELECT Url FROM [Stardust].WorkerNodes WHERE Id = @NodeId) ORDER by Created desc";
 
 			var returnList = new List<JobHistory>();
 
@@ -123,43 +147,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 				return returnList;
 			}
 		} 
-
-
-
-		public IList<JobHistory> HistoryList()
-		{
-			LogHelper.LogInfoWithLineNumber(Logger, "Start.");
-
-			try
-			{
-				var historyList = readHistoryListWithRetries();
-				return historyList;
-			}
-			catch (Exception exp)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, exp.Message, exp);
-			}
-
-			LogHelper.LogInfoWithLineNumber(Logger, "Finished.");
-
-			return null;
-		}
-
-		private IList<JobHistory> readHistoryListWithRetries()
-		{
-			var policy = makeRetryPolicy();
-			IList<JobHistory> jobHistory = null;
-			try
-			{
-				policy.ExecuteAction(() => jobHistory = readHistoryList());
-			}
-			catch (Exception ex)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, "Got exception when Reading Job History List", ex);
-			}
-			return jobHistory;
-		}
-
+		
 		private IList<JobHistory> readHistoryList()
 		{
 			var selectCommand = @"SELECT	JobId
@@ -202,72 +190,6 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 
 				return returnList;
 			}
-		} 
-
-		private JobHistory newJobHistoryModel(SqlDataReader reader)
-		{
-			LogHelper.LogInfoWithLineNumber(Logger, "Start.");
-
-			try
-			{
-				var jobHist = new JobHistory
-				{
-					Id = (Guid)reader.GetValue(reader.GetOrdinal("JobId")),
-					Name = (string)reader.GetValue(reader.GetOrdinal("Name")),
-					CreatedBy = (string)reader.GetValue(reader.GetOrdinal("CreatedBy")),
-					SentTo = getValue<string>(reader.GetValue(reader.GetOrdinal("SentTo"))),
-					Result = getValue<string>(reader.GetValue(reader.GetOrdinal("Result"))),
-					Created = (DateTime)(reader.GetValue(reader.GetOrdinal("Created"))),
-					Started = getDateTime(reader.GetValue(reader.GetOrdinal("Started"))),
-					Ended = getDateTime(reader.GetValue(reader.GetOrdinal("Ended")))
-				};
-
-				return jobHist;
-			}
-			catch (Exception exp)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, exp.Message, exp);
-			}
-
-			LogHelper.LogInfoWithLineNumber(Logger, "Finished.");
-
-			return null;
-		}
-
-
-		public IList<JobHistoryDetail> JobHistoryDetails(Guid jobId)
-		{
-			LogHelper.LogInfoWithLineNumber(Logger, "Start.");
-
-			try
-			{
-				IList<JobHistoryDetail> jobHistoryDetail = readJobHistoryDetailsWithRetries(jobId);
-				return jobHistoryDetail;
-			}
-
-			catch (Exception exp)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, exp.Message, exp);
-			}
-
-			LogHelper.LogInfoWithLineNumber(Logger, "Finished.");
-
-			return null;
-		}
-
-		private IList<JobHistoryDetail> readJobHistoryDetailsWithRetries(Guid jobId)
-		{
-			var policy = makeRetryPolicy();
-			IList<JobHistoryDetail> jobHistory = null;
-			try
-			{
-				policy.ExecuteAction(() => jobHistory = readJobHistryDetails(jobId));
-			}
-			catch (Exception ex)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, "Got exception when Reading Job History List for a node", ex);
-			}
-			return jobHistory;
 		}
 
 		private IList<JobHistoryDetail> readJobHistryDetails(Guid jobId)
@@ -308,53 +230,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 
 				return returnList;
 			}
-		} 
-
-		private DateTime? getDateTime(object databaseValue)
-		{
-			if (databaseValue.Equals(DBNull.Value))
-			{
-				return null;
-			}
-
-			return (DateTime)databaseValue;
 		}
-
-		public WorkerNode WorkerNode(Guid nodeId)
-		{
-			LogHelper.LogInfoWithLineNumber(Logger, "Start.");
-
-			try
-			{
-				var node = readWorkerNodeWithRetries(nodeId);
-				return node;
-			}
-
-			catch (Exception exp)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, exp.Message, exp);
-			}
-
-			LogHelper.LogInfoWithLineNumber(Logger, "Finished.");
-
-			return null;
-		}
-
-		private WorkerNode readWorkerNodeWithRetries(Guid nodeId)
-		{
-			var policy = makeRetryPolicy();
-			WorkerNode workerNode = null;
-			try
-			{
-				policy.ExecuteAction(() => workerNode = readWorkerNode(nodeId));
-			}
-			catch (Exception ex)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, "Got exception when Reading Job History List for a node", ex);
-			}
-			return workerNode;
-		}
-
 
 		private WorkerNode readWorkerNode(Guid nodeId)
 		{
@@ -401,42 +277,6 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			return node;
 		}
 
-
-		public List<WorkerNode> WorkerNodes()
-		{
-			LogHelper.LogInfoWithLineNumber(Logger, "Start.");
-
-			try
-			{
-				var nodes = readWorkerNodesWithRetries();
-				return nodes;
-			}
-
-			catch (Exception exp)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, exp.Message, exp);
-			}
-
-			LogHelper.LogInfoWithLineNumber(Logger, "Finished.");
-
-			return null;
-		}
-
-		private List<WorkerNode> readWorkerNodesWithRetries()
-		{
-			var policy = makeRetryPolicy();
-			List<WorkerNode> workerNodes = null;
-			try
-			{
-				policy.ExecuteAction(() => workerNodes = readWorkerNodes());
-			}
-			catch (Exception ex)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, "Got exception when Reading Job History List for a node", ex);
-			}
-			return workerNodes;
-		}
-
 		private List<WorkerNode> readWorkerNodes()
 		{
 			const string selectCommand = @"SELECT w.Id, Url, Heartbeat, Alive, CASE 
@@ -481,6 +321,48 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			}
 			return listToReturn;
 		}
+
+		private JobHistory newJobHistoryModel(SqlDataReader reader)
+		{
+			LogHelper.LogInfoWithLineNumber(Logger, "Start.");
+
+			try
+			{
+				var jobHist = new JobHistory
+				{
+					Id = (Guid)reader.GetValue(reader.GetOrdinal("JobId")),
+					Name = (string)reader.GetValue(reader.GetOrdinal("Name")),
+					CreatedBy = (string)reader.GetValue(reader.GetOrdinal("CreatedBy")),
+					SentTo = getValue<string>(reader.GetValue(reader.GetOrdinal("SentTo"))),
+					Result = getValue<string>(reader.GetValue(reader.GetOrdinal("Result"))),
+					Created = (DateTime)(reader.GetValue(reader.GetOrdinal("Created"))),
+					Started = getDateTime(reader.GetValue(reader.GetOrdinal("Started"))),
+					Ended = getDateTime(reader.GetValue(reader.GetOrdinal("Ended")))
+				};
+
+				return jobHist;
+			}
+			catch (Exception exp)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger, exp.Message, exp);
+			}
+
+			LogHelper.LogInfoWithLineNumber(Logger, "Finished.");
+
+			return null;
+		}
+		
+
+		private DateTime? getDateTime(object databaseValue)
+		{
+			if (databaseValue.Equals(DBNull.Value))
+			{
+				return null;
+			}
+
+			return (DateTime)databaseValue;
+		}
+		
 	}
 } 
 	
