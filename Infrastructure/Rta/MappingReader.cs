@@ -19,37 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		public IEnumerable<Mapping> Read()
 		{
 			return _unitOfWork.Session()
-				.CreateSQLQuery(@"
-					SELECT
-						ISNULL(RtaMap.BusinessUnit, RtaStateGroup.BusinessUnit) AS BusinessUnitId,
-
-						RtaState.StateCode AS StateCode,
-						RtaState.PlatformTypeId AS PlatformTypeId,
-						RtaStateGroup.Id AS StateGroupId,
-						RtaStateGroup.Name AS StateGroupName,
-						RtaStateGroup.IsLogOutState AS IsLogOutState,
-
-						RtaMap.Activity AS ActivityId,
-
-						RtaRule.Id AS RuleId,
-						RtaRule.Name AS RuleName,
-						RtaRule.Adherence AS AdherenceInt,
-						RtaRule.StaffingEffect AS StaffingEffect,
-						RtaRule.DisplayColor AS DisplayColor,
-
-						RtaRule.IsAlarm AS IsAlarm,
-						RtaRule.AlarmColor AS AlarmColor,
-						RtaRule.ThresholdTime AS ThresholdTime
-
-					FROM 
-						RtaMap
-					FULL JOIN RtaStateGroup ON
-						RtaStateGroup.Id = RtaMap.StateGroup
-					FULL JOIN RtaState ON
-						RtaState.Parent = RtaStateGroup.Id
-					LEFT JOIN RtaRule ON
-						RtaRule.Id = RtaMap.RtaRule
-					")
+				.CreateSQLQuery(@"EXEC [dbo].[LoadAllRtaMappings]")
 				.SetResultTransformer(Transformers.AliasToBean(typeof (readMapping)))
 				.List<readMapping>();
 		}
