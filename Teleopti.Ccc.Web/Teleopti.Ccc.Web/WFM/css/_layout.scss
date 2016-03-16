@@ -1,5 +1,5 @@
 html, body{
-	background:#f3f3f3!important;
+	color:$gray087
 }
 
 /*override bootstrap*/
@@ -30,7 +30,7 @@ input::-ms-clear {
 	display: none;
 }
 
-/*Buissiness unit change*/
+/*Business unit change*/
 .bu-change{
 	width:auto!important;
 	background:transparent;
@@ -201,7 +201,7 @@ input::-ms-clear {
   left: 10px;
   background: transparent;
   box-shadow: none;
-  color:white;
+  color:$white;
   font-size:250%;
 }
 

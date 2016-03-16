@@ -1,11 +1,12 @@
-﻿// To use sass, create a partial "_file.scss" file in css folder
+// To use sass, create a partial "_file.scss" file in css folder
 // include your .scss files in syle.scss like so:
 // @import 'file';
 // Then run grunt
 
-$green-400: #9CCC65;
 
-@import 'classicvariables';
+$green-400: #9CCC65; //<--wat? JD
+
+@import 'darkvariables';
 @import 'daterangepicker';
 @import 'layout';
 @import 'print';

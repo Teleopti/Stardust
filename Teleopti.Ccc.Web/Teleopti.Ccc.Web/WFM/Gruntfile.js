@@ -3,7 +3,7 @@
 	grunt.initConfig({
 		watch: {
 			dev: {
-				files: ['css/*.scss','js/**/*.html','html/**/*.html','js/**/*.js'],
+				files: ['css/*.scss','node_modules/teleopti-styleguide/css/*.css','js/**/*.html','html/**/*.html','js/**/*.js'],
 				tasks: ['devBuild'],
 				options: {
 					spawn: false,
@@ -74,7 +74,8 @@
 			},
 			dist: {
 				files: {
-					'css/style.css': ['css/style.scss']
+					'css/style.css': ['css/style.scss'],
+					'css/darkstyle.css':['css/darkstyle.scss']
 				}
 			}
 		},
@@ -87,6 +88,7 @@
 			target: {
 				files: {
 					'dist/style.min.css': ['css/style.css'],
+					'dist/darkstyle.min.css': ['css/darkstyle.css'],
 					'dist/angular-gant.min.css': ['node_modules/angular-gantt/assets/angular-gantt.css',
 						'node_modules/angular-gantt/assets/angular-gantt-plugins.css',
 						'node_modules/angular-gantt/assets/angular-gantt-table-plugin.css',
@@ -156,6 +158,19 @@
 					'node_modules/teleopti-styleguide/css/main.min.css'
 				],
 				dest: 'dist/modules.css'
+			},
+			distDarkCss: {
+				src: [
+					'node_modules/bootstrap/dist/css/bootstrap.min.css',
+					'node_modules/angular-resizable/angular-resizable.min.css',
+					'node_modules/angular-ui-tree/dist/angular-ui-tree.min.css',
+					'node_modules/angular-ui-grid/ui-grid.min.css',
+					'node_modules/angular-material/angular-material.min.css',
+					'vendor/c3/c3.min.css',
+					'dist/angular-gant.min.css',
+					'node_modules/teleopti-styleguide/css/main_dark.min.css'
+				],
+				dest: 'dist/modules_dark.css'
 			},
 		},
 
@@ -227,9 +242,9 @@
 	grunt.registerTask('default', ['devBuild','test','watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('test', ['ngtemplates', 'karma:unit']);
 	grunt.registerTask('devTest', ['ngtemplates','karma:dev']);
-	grunt.registerTask('devBuild', ['ngtemplates', 'sass', 'cssmin', 'concat:distJs', 'concat:distCss', 'uglify:dev', 'generateIndex']);
+	grunt.registerTask('devBuild', ['ngtemplates', 'sass', 'cssmin', 'concat:distJs', 'concat:distCss','concat:distDarkCss', 'uglify:dev', 'generateIndex']);
 	grunt.registerTask('test:continuous', ['ngtemplates', 'karma:continuous']);
-	grunt.registerTask('dist', ['ngtemplates', 'sass', 'cssmin', 'concat:distJs', 'concat:distCss', 'uglify:dist', 'generateIndex']); // this task should only be used by the build. It's kind of packaging for production.
+	grunt.registerTask('dist', ['ngtemplates', 'sass', 'cssmin', 'concat:distJs', 'concat:distCss','concat:distDarkCss', 'uglify:dist', 'generateIndex']); // this task should only be used by the build. It's kind of packaging for production.
 	grunt.registerTask('nova', ['devBuild','iisexpress:authBridge','iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('build', ['msbuild:build']); // build the solution
 	grunt.registerTask('generateIndex', ['processhtml', 'cacheBust']);

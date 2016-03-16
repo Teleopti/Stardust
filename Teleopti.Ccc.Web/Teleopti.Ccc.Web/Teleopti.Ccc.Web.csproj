@@ -2237,6 +2237,7 @@
     </Content>
     <None Include="Properties\PublishProfiles\Local iis.pubxml" />
     <Content Include="WFM\css\style.scss" />
+	<Content Include="WFM\css\darkstyle.scss" />
     <Content Include="WFM\vendor\MaterialDesignIcons\fonts\materialdesignicons-webfont.eot" />
     <Content Include="WFM\vendor\MaterialDesignIcons\fonts\materialdesignicons-webfont.ttf" />
     <Content Include="WFM\vendor\MaterialDesignIcons\fonts\materialdesignicons-webfont.woff" />
