@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -52,7 +51,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 	public class FakeRtaDatabase : IDatabaseReader, IFakeDataBuilder
 	{
-		private readonly IConfigReader _config;
 		private readonly INow _now;
 		public readonly FakeAgentStateReadModelStorage AgentStateReadModels;
 		public readonly FakeRtaStateGroupRepository RtaStateGroupRepository;
@@ -90,7 +88,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		}
 
 		public FakeRtaDatabase(
-			IConfigReader config,
 			INow now,
 			FakeAgentStateReadModelStorage agentStateReadModels,
 			FakeRtaStateGroupRepository rtaStateGroupRepository,
@@ -103,7 +100,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			FakeDataSourceForTenant dataSourceForTenant
 			)
 		{
-			_config = config;
 			_now = now;
 			AgentStateReadModels = agentStateReadModels;
 			RtaStateGroupRepository = rtaStateGroupRepository;
