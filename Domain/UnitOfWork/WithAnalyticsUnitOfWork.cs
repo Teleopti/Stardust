@@ -1,6 +1,7 @@
 using System;
+using Teleopti.Ccc.Domain.Aop;
 
-namespace Teleopti.Ccc.Domain.Aop
+namespace Teleopti.Ccc.Domain.UnitOfWork
 {
 	public class WithAnalyticsUnitOfWork
 	{

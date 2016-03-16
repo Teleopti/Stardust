@@ -17,6 +17,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.WinCodeTest.Common
 {

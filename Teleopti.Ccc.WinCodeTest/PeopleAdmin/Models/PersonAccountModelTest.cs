@@ -13,6 +13,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models

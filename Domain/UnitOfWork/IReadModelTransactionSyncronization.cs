@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Domain.Aop
+namespace Teleopti.Ccc.Domain.UnitOfWork
 {
 	public interface IReadModelTransactionSyncronization
 	{

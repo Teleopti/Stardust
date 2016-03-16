@@ -14,6 +14,7 @@ using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Win.Common;
 using System.Globalization;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.Win.Reporting
 {

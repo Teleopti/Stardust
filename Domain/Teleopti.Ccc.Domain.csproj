@@ -168,7 +168,8 @@
     <Compile Include="Aop\ReadOnlyUnitOfWorkAttribute.cs" />
     <Compile Include="Aop\UnitOfWorkAttribute.cs" />
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
-    <Compile Include="Aop\WithAnalyticsUnitOfWork.cs" />
+    <Compile Include="UnitOfWork\ThisUnitOfWork.cs" />
+    <Compile Include="UnitOfWork\WithAnalyticsUnitOfWork.cs" />
     <Compile Include="ApplicationLayer\AllTenantRecurringEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Commands\AbsenceCommandConverter.cs" />
     <Compile Include="ApplicationLayer\Commands\AbsenceCreatorInfo.cs" />
@@ -331,7 +332,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\ICacheInvalidator.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IStateCodeAdder.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IInitializeble.cs" />
-    <Compile Include="Aop\IReadModelTransactionSyncronization.cs" />
+    <Compile Include="UnitOfWork\IReadModelTransactionSyncronization.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\INotificationCreator.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IRtaDecoratingEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IRtaEventDecorator.cs" />
@@ -2141,6 +2142,7 @@
     <Compile Include="UndoRedo\UndoRedoContainer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="UnitOfWork\WithUnitOfWork.cs" />
     <Compile Include="UseNotOnToggle.cs" />
     <Compile Include="UseOnToggle.cs" />
     <Compile Include="WebReport\ReportDataForecastVersusActualWorkload.cs" />

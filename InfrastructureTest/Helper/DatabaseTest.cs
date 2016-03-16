@@ -2,6 +2,7 @@
 using NHibernate;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Interfaces.Domain;

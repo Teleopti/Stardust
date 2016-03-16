@@ -580,7 +580,6 @@
     <Compile Include="UnitOfWork\StaticSessionContextBinder.cs" />
     <Compile Include="UnitOfWork\PersonCollectionChangedEventPublisherForTeamOrSite.cs" />
     <Compile Include="UnitOfWork\ReadOnlyUnitOfWorkAspect.cs" />
-    <Compile Include="UnitOfWork\WithUnitOfWork.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAspect.cs" />
     <Compile Include="UnitOfWork\AllBusinessUnitsUnitOfWorkAspect.cs" />
     <Compile Include="Util\CloudSafeSqlExecute.cs" />
@@ -690,7 +689,6 @@
     <Compile Include="SystemCheck\AgentDayConverter\PersonAssignmentDateSetter.cs" />
     <Compile Include="SystemCheck\CheckMessageBroker.cs" />
     <Compile Include="UnitOfWork\CurrentUnitOfWork.cs" />
-    <Compile Include="UnitOfWork\ThisUnitOfWork.cs" />
     <Compile Include="UnitOfWork\EventsPackageMessage.cs" />
     <Compile Include="UnitOfWork\EventsMessageSender.cs" />
     <Compile Include="UnitOfWork\GroupPageChangedBusMessageSender.cs" />
