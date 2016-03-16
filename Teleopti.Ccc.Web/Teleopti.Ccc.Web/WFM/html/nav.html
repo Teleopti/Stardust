@@ -89,11 +89,18 @@
 						<div class="notification-list">
 							<h4>{{'Personalize'|translate}}</h4>
 							<form>
-								<div class="wfm-checkbox" ng-click="toggleOverlayFocus()">
+								<div class="wfm-checkbox" ng-click="toggleOverlay()">
 									<input ng-model="showOverlay" tabindex="-1" type="checkbox" id="overlayId" />
 									<label for="overlayId">
 										<span class="wfm-checkbox-toggle"></span>
 										<span class="wfm-checkbox-label">{{'ToggleLowLightFilter'|translate}}</span>
+									</label>
+								</div>
+								<div class="wfm-checkbox" ng-click="toggleDarkTheme()">
+									<input ng-model="darkTheme" tabindex="-1" type="checkbox" id="darkId" />
+									<label for="darkId">
+										<span class="wfm-checkbox-toggle"></span>
+										<span class="wfm-checkbox-label">toggle dark theme</span>
 									</label>
 								</div>
 							</form>
