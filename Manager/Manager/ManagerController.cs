@@ -150,7 +150,7 @@ namespace Stardust.Manager
 							jobFailedModel.AggregateException.InnerExceptions)
 				{
 					string errorMessage =
-						string.Format("( Message, Source, StackTrace ): ( {0}, {1}, {2} )",
+						string.Format("Failed: ( Message, Source, StackTrace ): ( {0}, {1}, {2} )",
 						exp.InnerException.Message,
 						exp.InnerException.Source,
 						exp.InnerException.StackTrace);
