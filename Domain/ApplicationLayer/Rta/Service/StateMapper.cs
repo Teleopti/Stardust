@@ -67,37 +67,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				})
 				.SingleOrDefault();
 		}
-
-		//public Guid RuleId { get; set; }
-		//public string RuleName { get; set; }
-		//public Adherence? Adherence { get; set; }
-		//public int? StaffingEffect { get; set; }
-		//public int DisplayColor { get; set; }
-
-		//public bool IsAlarm { get; set; }
-		//public long ThresholdTime { get; set; }
-		//public int AlarmColor { get; set; }
-
+		
 		public MappedState StateFor(IEnumerable<Mapping> mappings, Guid businessUnitId, Guid platformTypeId, string stateCode, string stateDescription)
 		{
 			if (stateCode == null)
-				return noMatchState(businessUnitId, platformTypeId, null);
+				return new MappedState();
 			var match = queryState(mappings, businessUnitId, platformTypeId, stateCode);
 			if (match != null) return match;
 			_stateCodeAdder.AddUnknownStateCode(businessUnitId, platformTypeId, stateCode, stateDescription);
 			_cacheInvalidator.InvalidateState();
 			match = queryState(mappings, businessUnitId, platformTypeId, stateCode);
-			return match ?? noMatchState(businessUnitId, platformTypeId, stateCode);
-		}
-
-		private static MappedState noMatchState(Guid businessUnitId, Guid platformTypeId, string stateCode)
-		{
-			return new MappedState
-			{
-				//BusinessUnitId = businessUnitId,
-				//PlatformTypeId = platformTypeId,
-				//StateCode = stateCode
-			};
+			return match ?? new MappedState();
 		}
 
 		private MappedState queryState(IEnumerable<Mapping> mappings, Guid businessUnitId, Guid platformTypeId, string stateCode)
