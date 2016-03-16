@@ -18,10 +18,10 @@ namespace Stardust.Manager
 
 			builder.RegisterType<HttpSender>().As<IHttpSender>();
 			 
-			builder.Register(c => new JobRepository(managerConfiguration.ConnectionString))
+			builder.Register(c => new JobRepository(managerConfiguration.ConnectionString, new RetryPolicyProvider()))
 							.As<IJobRepository>();
 
-			builder.Register(c => new WorkerNodeRepository(managerConfiguration.ConnectionString))
+			builder.Register(c => new WorkerNodeRepository(managerConfiguration.ConnectionString,new RetryPolicyProvider()))
 							.As<IWorkerNodeRepository>();
 
 			builder.RegisterApiControllers(typeof (ManagerController).Assembly);		

@@ -16,36 +16,36 @@ namespace Stardust.Manager
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (WorkerNodeRepository));
 
 		private readonly string _connectionString;
-		private const int _delaysMiliseconds = 100;
-		private const int _maxRetry = 5;
 		private DataSet _jdDataSet;
 		private DataTable _jdDataTable;
 		private readonly object _lockLoadAllFreeNodes = new object();
+		private readonly RetryPolicyProvider _retryPolicyProvider;
 
-		public WorkerNodeRepository(string connectionString)
+		public WorkerNodeRepository(string connectionString, RetryPolicyProvider retryPolicyProvider)
 		{
 			_connectionString = connectionString;
+			_retryPolicyProvider = retryPolicyProvider;
 
 			InitDs();
 		}
 
-		private RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy> makeRetryPolicy()
+		private void runner(Action funcToRun, string faliureMessage)
 		{
-			var fromMilliseconds = TimeSpan.FromMilliseconds(_delaysMiliseconds);
-			var policy = new RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy>(_maxRetry, fromMilliseconds);
-			policy.Retrying += (sender, args) =>
+			var policy = _retryPolicyProvider.GetPolicy(Logger);
+			try
 			{
-				// Log details of the retry.
-				var msg = String.Format("Retry - Count:{0}, Delay:{1}, Exception:{2}", args.CurrentRetryCount, args.Delay, args.LastException);
-				LogHelper.LogErrorWithLineNumber(Logger, msg);
-			};
-			return policy;
+				policy.ExecuteAction(funcToRun);
+			}
+			catch (Exception ex)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + faliureMessage);
+			}
 		}
 
 		public List<WorkerNode> LoadAll()
 		{
 			var listToReturn = new List<WorkerNode>();
-			var policy = makeRetryPolicy();
+			var policy = _retryPolicyProvider.GetPolicy(Logger);
 			try
 			{
 				listToReturn = policy.ExecuteAction(() => tryLoadAll());
@@ -117,7 +117,7 @@ namespace Stardust.Manager
 		public List<WorkerNode> LoadAllFreeNodes()
 		{
 			var listToReturn = new List<WorkerNode>();
-			var policy = makeRetryPolicy();
+			var policy = _retryPolicyProvider.GetPolicy(Logger);
 			try
 			{
 				listToReturn = policy.ExecuteAction(() => tryLoadAllFreeNodes());
@@ -209,7 +209,7 @@ namespace Stardust.Manager
 
 		public void Add(WorkerNode node)
 		{
-			var policy = makeRetryPolicy();
+			var policy = _retryPolicyProvider.GetPolicy(Logger);
 			try
 			{
 				policy.ExecuteAction(() => tryAdd(node));
@@ -253,15 +253,16 @@ namespace Stardust.Manager
 
 		public void DeleteNode(Guid nodeId)
 		{
-			var policy = makeRetryPolicy();
-			try
-			{
-				policy.ExecuteAction(() => tryDeleteNode(nodeId));
-			}
-			catch (Exception ex)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to add job in database");
-			}
+			runner(() => tryDeleteNode(nodeId), "Unable to delete a node");
+			//var policy = makeRetryPolicy();
+			//try
+			//{
+			//	policy.ExecuteAction(() => tryDeleteNode(nodeId));
+			//}
+			//catch (Exception ex)
+			//{
+			//	LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to add job in database");
+			//}
 		}
 
 		public void tryDeleteNode(Guid nodeId)
@@ -294,7 +295,7 @@ namespace Stardust.Manager
 		public List<string> CheckNodesAreAlive(TimeSpan timeSpan)
 		{
 			var deadNodes = new List<string>();
-			var policy = makeRetryPolicy();
+			var policy = _retryPolicyProvider.GetPolicy(Logger);
 			try
 			{
 				deadNodes = policy.ExecuteAction(() => tryCheckNodesAreAlive(timeSpan));
@@ -407,15 +408,16 @@ namespace Stardust.Manager
 
 		public void RegisterHeartbeat(string nodeUri, bool updateStatus)
 		{
-			var policy = makeRetryPolicy();
-			try
-			{
-				policy.ExecuteAction(() => tryRegisterHeartbeat(nodeUri, updateStatus));
-			}
-			catch (Exception ex)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to add job in database");
-			}
+			runner(() => tryRegisterHeartbeat(nodeUri, updateStatus), "Unable register heartbeat");
+			//var policy = makeRetryPolicy();
+			//try
+			//{
+			//	policy.ExecuteAction(() => tryRegisterHeartbeat(nodeUri, updateStatus));
+			//}
+			//catch (Exception ex)
+			//{
+			//	LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to add job in database");
+			//}
 		}
 
 		public void tryRegisterHeartbeat(string nodeUri, bool updateStatus)

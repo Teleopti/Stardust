@@ -25,11 +25,11 @@ namespace ManagerTest
 			_containerBuilder.RegisterType<ManagerController>();
 
 			_containerBuilder.Register(
-				c => new JobRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString))
+				c => new JobRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, new RetryPolicyProvider()))
 				.As<IJobRepository>();
 
 			_containerBuilder.Register(
-				c => new WorkerNodeRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString))
+				c => new WorkerNodeRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, new RetryPolicyProvider()))
 				.As<IWorkerNodeRepository>();
 		}
 
