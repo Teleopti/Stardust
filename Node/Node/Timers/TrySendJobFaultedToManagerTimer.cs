@@ -28,6 +28,8 @@ namespace Stardust.Node.Timers
 
 		public AggregateException AggregateExceptionToSend { get; set; }
 
+		public DateTime? ErrorOccured { get; set; }
+
 		protected override Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo,
 		                                                           CancellationToken cancellationToken)
 		{
@@ -38,7 +40,8 @@ namespace Stardust.Node.Timers
 				var payload = new JobFailedModel
 				{
 					JobId = jobToDo.Id,
-					AggregateException = AggregateExceptionToSend
+					AggregateException = AggregateExceptionToSend,
+					Created = ErrorOccured
 				};
 
 				var response =

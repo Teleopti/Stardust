@@ -167,6 +167,7 @@ namespace Stardust.Node.Workers
 			if (faultedTimer != null)
 			{
 				faultedTimer.AggregateExceptionToSend = null;
+				faultedTimer.ErrorOccured = null;
 			}
 
 			//----------------------------------------------------
@@ -231,25 +232,25 @@ namespace Stardust.Node.Workers
 
 
 					case TaskStatus.Faulted:
-						logInfo =
-							string.Format("{0} : The task faulted for job ( jobId, jobName ) : ( {1}, {2} )",
-							              WhoamI,
-							              CurrentMessageToProcess.Id,
-							              CurrentMessageToProcess.Name);
-
-						if (t.Exception != null)
-						{
-							foreach (var e in t.Exception.InnerExceptions)
-							{
-								LogHelper.LogErrorWithLineNumber(Logger,
-								                                 logInfo, e);
-							}
-						}
-
 						if (faultedTimer != null)
 						{
 							faultedTimer.AggregateExceptionToSend = t.Exception;
-						}							
+							faultedTimer.ErrorOccured=DateTime.Now;
+						}
+
+						if (t.Exception != null)
+						{
+							foreach (var exp in t.Exception.InnerExceptions)
+							{
+								string errorMessage =
+									string.Format("( Message, Source, StackTrace ): ( {0}, {1}, {2} )",
+									exp.InnerException.Message,
+									exp.InnerException.Source,
+									exp.InnerException.StackTrace);
+
+								LogHelper.LogErrorWithLineNumber(Logger, errorMessage, exp);
+							}
+						}
 
 						SetNodeStatusTimer(TrySendJobFaultedStatusToManagerTimer,
 						                   CurrentMessageToProcess);

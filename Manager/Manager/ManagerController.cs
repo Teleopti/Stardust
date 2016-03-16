@@ -149,11 +149,17 @@ namespace Stardust.Manager
 				foreach (var exp in 
 							jobFailedModel.AggregateException.InnerExceptions)
 				{
+					string errorMessage =
+						string.Format("( Message, Source, StackTrace ): ( {0}, {1}, {2} )",
+						exp.InnerException.Message,
+						exp.InnerException.Source,
+						exp.InnerException.StackTrace);
+
 					JobProgressModel progress = new JobProgressModel
 					{
 						JobId = jobFailedModel.JobId,
 						Created = DateTime.Now,
-						ProgressDetail = exp.InnerException.Message
+						ProgressDetail = errorMessage
 					};
 
 					_jobManager.ReportProgress(progress);

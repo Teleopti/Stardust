@@ -7,5 +7,7 @@ namespace Stardust.Node.Entities
 		public Guid JobId { get; set; }
 
 		public AggregateException AggregateException { get; set; }
+
+		public DateTime? Created { get; set; }
 	}
 }
