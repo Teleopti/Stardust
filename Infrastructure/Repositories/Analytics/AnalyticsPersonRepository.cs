@@ -384,7 +384,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			using (var uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				var query = uow.Session().CreateSQLQuery(
-					@"exec mart.[etl_bridge_acd_login_person_insert]
+					@"exec mart.[etl_bridge_acd_login_person_delete]
                      @acd_login_id=:AcdLoginId
                     ,@person_id=:PersonId")
 					.SetInt32("AcdLoginId", acdLoginId)
