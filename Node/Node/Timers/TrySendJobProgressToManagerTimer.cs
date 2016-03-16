@@ -213,13 +213,13 @@ namespace Stardust.Node.Timers
 												   });
 
 						}
-						catch (Exception exp)
+						catch (Exception)
 						{
 							var msg =
 								string.Format("Send job progresses to manager failed for job ( jobId ) : ( {0} )",
 								              sendJobProgressModel.JobId);
 
-							LogHelper.LogErrorWithLineNumber(Logger,msg,exp);
+							LogHelper.LogErrorWithLineNumber(Logger,msg);
 						}
 					}
 				}

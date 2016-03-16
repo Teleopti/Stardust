@@ -1,22 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using log4net.Config;
-using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Tasks;
-using Manager.Integration.Test.Timers;
-using Manager.IntegrationTest.Console.Host.Diagnostics;
 using NUnit.Framework;
 
 namespace Manager.Integration.Test.RecoveryTests
 {
-	[TestFixture]
+	[TestFixture, Ignore]
 	public class OneManagerAndOneNodeRecoveryTests
 	{
 		private static readonly ILog Logger =
@@ -92,66 +87,6 @@ namespace Manager.Integration.Test.RecoveryTests
 			}
 
 			logMessage("Finished TestFixtureTearDown");
-		}
-
-		/// <summary>
-		///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
-		///     netsh http add urlacl url=http://+:9050/ user=everyone listen=yes
-		/// </summary>
-		[Test]
-		public void ShouldBeAbleToCreateASuccessJobRequestTest()
-		{
-			logMessage("Start.");
-
-			var createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(1);
-
-			logMessage("( " + createNewJobRequests.Count + " ) jobs will be created.");
-
-			var timeout =
-				JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
-				                                       2);
-			//--------------------------------------------
-			// Start actual test.
-			//--------------------------------------------
-			var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
-			var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
-			                                                                StatusConstants.SuccessStatus,
-			                                                                StatusConstants.DeletedStatus,
-			                                                                StatusConstants.FailedStatus,
-			                                                                StatusConstants.CanceledStatus);
-			foreach (var jobRequestModel in createNewJobRequests)
-			{
-				var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
-				jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
-				jobManagerTaskCreators.Add(jobManagerTaskCreator);
-			}
-
-			var startJobTaskHelper = new StartJobTaskHelper();
-			var managerIntegrationStopwatch = new ManagerIntegrationStopwatch();
-
-			var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
-			                                                          CancellationTokenSource,
-			                                                          timeout);
-
-			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
-			var elapsedTime =
-				managerIntegrationStopwatch.GetTotalElapsedTimeInSeconds();
-
-			logMessage("Job took : " + elapsedTime + " seconds.");
-
-			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count,
-			              "Number of requests must be equal.");
-
-			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
-
-			CancellationTokenSource.Cancel();
-			taskHlp.Dispose();
-
-			foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
-			{
-				jobManagerTaskCreator.Dispose();
-			}
-			logMessage("Finished.");
 		}
 	}
 }
