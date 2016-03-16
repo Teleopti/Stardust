@@ -24,7 +24,7 @@ properties {
 }
 
 Set-ExecutionPolicy bypass -force
-Import-module "$SourceDir\Wise\teamcity.psm1" -Force
+Import-module .\teamcity.psm1 -Force
 
 TaskSetup {
     TeamCity-ReportBuildProgress "Running task $($psake.context.Peek().PreReq)"
