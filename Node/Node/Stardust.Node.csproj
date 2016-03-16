@@ -97,6 +97,7 @@
     <Compile Include="Constants\MediaTypeConstants.cs" />
     <Compile Include="Constants\NodeRouteConstants.cs" />
     <Compile Include="Diagnostics\TaskToExecuteStopWatch.cs" />
+    <Compile Include="Entities\JobFailedModel.cs" />
     <Compile Include="Extensions\HttpClientExtensions.cs" />
     <Compile Include="Extensions\InvokeHandlerExtensions.cs" />
     <Compile Include="Extensions\JobToDoExtensions.cs" />

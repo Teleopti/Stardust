@@ -146,14 +146,27 @@ namespace Stardust.Node.Workers
 				                                      typ);
 				CurrentMessageToProcess = jobToDo;
 			}
+
 			catch (Exception)
 			{
 				CurrentMessageToProcess = null;
 				return new BadRequestResult(requestMessage);
 			}
+
 			if (deSer == null)
 			{
 				return new BadRequestResult(requestMessage);
+			}
+
+			//-----------------------------------------------------
+			// Clear faulted timer.
+			//-----------------------------------------------------
+			var faultedTimer =
+				TrySendJobFaultedStatusToManagerTimer as TrySendJobFaultedToManagerTimer;
+
+			if (faultedTimer != null)
+			{
+				faultedTimer.AggregateExceptionToSend = null;
 			}
 
 			//----------------------------------------------------
@@ -232,6 +245,11 @@ namespace Stardust.Node.Workers
 								                                 logInfo, e);
 							}
 						}
+
+						if (faultedTimer != null)
+						{
+							faultedTimer.AggregateExceptionToSend = t.Exception;
+						}							
 
 						SetNodeStatusTimer(TrySendJobFaultedStatusToManagerTimer,
 						                   CurrentMessageToProcess);

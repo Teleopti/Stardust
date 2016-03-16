@@ -12,7 +12,7 @@
 
 		public const string JobDone = "status/done/" + JobIdOptionalParameter;
 
-		public const string JobFailed = "status/fail/" + JobIdOptionalParameter;
+		public const string JobFailed = "status/fail";
 
 		public const string JobProgress = "status/progress";
 	}
