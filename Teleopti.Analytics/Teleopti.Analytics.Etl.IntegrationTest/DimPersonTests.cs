@@ -135,7 +135,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
             var raptorRepository = new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, "");
             var fakeContainerHolder = new FakeContainerHolder();
-            fakeContainerHolder.EnableToggle(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162);
+            fakeContainerHolder.EnableToggle(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
 
             var jobParameters = new JobParameters(
                 dateList, 1, "UTC", 15, "", "False",

@@ -1,17 +1,14 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics.Transformer;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
-	[UseOnToggle(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162)]
+	[UseOnToggle(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439)]
 	public class PersonPeriodAnalyticsUpdater :
 		IHandleEvent<PersonCollectionChangedEvent>,
 		IHandleEvent<PersonDeletedEvent>,
