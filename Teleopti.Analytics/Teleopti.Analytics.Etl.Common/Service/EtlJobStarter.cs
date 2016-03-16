@@ -158,7 +158,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 		private static void logConflictingEtlRun(IJob jobToRun, IEtlRunningInformation etlRunningInformation)
 		{
-			log.WarnFormat(CultureInfo.InvariantCulture,
+			log.InfoFormat(CultureInfo.InvariantCulture,
 				"Scheduled job '{0}' could not start due to another job is running at the moment. (ServerName: {1}; JobName: {2}; StartTime: {3}; IsStartByService: {4})",
 				jobToRun.Name,
 				etlRunningInformation.ComputerName,
