@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using log4net;
+using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
@@ -14,8 +14,11 @@ namespace Stardust.Manager
 {
 	public class JobRepository : IJobRepository
 	{
+		private const int DelaysMiliseconds = 100;
+		private const int MaxRetry = 3;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (JobRepository));
 		private readonly RetryPolicyProvider _retryPolicyProvider;
+
 		private readonly string _connectionString;
 
 		public JobRepository(string connectionString, RetryPolicyProvider retryPolicyProvider)
@@ -37,24 +40,29 @@ namespace Stardust.Manager
 			}
 		}
 
+		public void Add(JobDefinition job)
+		{
+			runner(() => tryAdd(job), "Unable to add job in database");
+		}
+
 		private void tryAdd(JobDefinition job)
 		{
 			var jdDataSet = new DataSet();
 			var jdDataTable = new DataTable("[Stardust].[JobDefinitions]");
 			jdDataTable.Columns.Add(new DataColumn("Id",
-																typeof(Guid)));
+			                                       typeof (Guid)));
 			jdDataTable.Columns.Add(new DataColumn("Name",
-																typeof(string)));
+			                                       typeof (string)));
 			jdDataTable.Columns.Add(new DataColumn("Serialized",
-																typeof(string)));
+			                                       typeof (string)));
 			jdDataTable.Columns.Add(new DataColumn("Type",
-																typeof(string)));
+			                                       typeof (string)));
 			jdDataTable.Columns.Add(new DataColumn("AssignedNode",
-																typeof(string)));
+			                                       typeof (string)));
 			jdDataTable.Columns.Add(new DataColumn("UserName",
-																typeof(string)));
+			                                       typeof (string)));
 			jdDataTable.Columns.Add(new DataColumn("Status",
-																typeof(string)));
+			                                       typeof (string)));
 			jdDataSet.Tables.Add(jdDataTable);
 			var dr = jdDataTable.NewRow();
 			dr["Id"] = job.Id;
@@ -71,12 +79,12 @@ namespace Stardust.Manager
 				connection.Open();
 
 				using (var da = new SqlDataAdapter("Select * From [Stardust].JobDefinitions",
-					connection))
+				                                   connection))
 				{
 					var builder = new SqlCommandBuilder(da);
 					builder.GetInsertCommand();
 					da.Update(jdDataSet,
-						"[Stardust].[JobDefinitions]");
+					          "[Stardust].[JobDefinitions]");
 
 					//add a row in history
 					da.InsertCommand =
@@ -85,35 +93,35 @@ namespace Stardust.Manager
 							connection);
 
 					da.InsertCommand.Parameters.Add("@Id",
-						SqlDbType.UniqueIdentifier,
-						16,
-						"JobId");
+					                                SqlDbType.UniqueIdentifier,
+					                                16,
+					                                "JobId");
 
 					da.InsertCommand.Parameters[0].Value = job.Id;
 
 					da.InsertCommand.Parameters.Add("@Name",
-						SqlDbType.NVarChar,
-						2000,
-						"Name");
+					                                SqlDbType.NVarChar,
+					                                2000,
+					                                "Name");
 					da.InsertCommand.Parameters[1].Value = job.Name;
 					da.InsertCommand.Parameters.Add("@By",
-						SqlDbType.NVarChar,
-						500,
-						"CreatedBy");
+					                                SqlDbType.NVarChar,
+					                                500,
+					                                "CreatedBy");
 
 					da.InsertCommand.Parameters[2].Value = job.UserName;
 
 					da.InsertCommand.Parameters.Add("@Serialized",
-						SqlDbType.NVarChar,
-						2000,
-						"Serialized");
+					                                SqlDbType.NVarChar,
+					                                2000,
+					                                "Serialized");
 
 					da.InsertCommand.Parameters[3].Value = job.Serialized;
 
 					da.InsertCommand.Parameters.Add("@Type",
-						SqlDbType.NVarChar,
-						2000,
-						"Type");
+					                                SqlDbType.NVarChar,
+					                                2000,
+					                                "Type");
 
 					da.InsertCommand.Parameters[4].Value = job.Type;
 
@@ -121,16 +129,14 @@ namespace Stardust.Manager
 				}
 
 				ReportProgress(job.Id,
-					"Added");
+				               "Added",
+							   DateTime.Now);
 
 				connection.Close();
 			}
 		}
 		
-		public void Add(JobDefinition job)
-		{
-			runner(() => tryAdd(job), "Unable to add job in database");
-		}
+		
 
 		public List<JobDefinition> LoadAll()
 		{
@@ -147,7 +153,7 @@ namespace Stardust.Manager
 			return result;
 		}
 
-		public List<JobDefinition> tryLoadAll()
+		private List<JobDefinition> tryLoadAll()
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
@@ -182,7 +188,6 @@ namespace Stardust.Manager
 					{
 						while (reader.Read())
 						{
-							
 							var jobDefinition = new JobDefinition
 							{
 								Id = (Guid) reader.GetValue(reader.GetOrdinal("Id")),
@@ -190,8 +195,8 @@ namespace Stardust.Manager
 								Serialized = (string) reader.GetValue(reader.GetOrdinal("Serialized")),
 								Type = (string) reader.GetValue(reader.GetOrdinal("Type")),
 								UserName = (string) reader.GetValue(reader.GetOrdinal("UserName")),
-								AssignedNode = getValue<string>(reader.GetValue(reader.GetOrdinal("AssignedNode"))),
-								Status = getValue<string>(reader.GetValue(reader.GetOrdinal("Status")))
+								AssignedNode = GetValue<string>(reader.GetValue(reader.GetOrdinal("AssignedNode"))),
+								Status = GetValue<string>(reader.GetValue(reader.GetOrdinal("Status")))
 							};
 
 							listToReturn.Add(jobDefinition);
@@ -221,7 +226,7 @@ namespace Stardust.Manager
 			runner(() => trydeleteJob(jobId), "Unable to delete the job");
 		}
 
-		public void trydeleteJob(Guid jobId)
+		private void trydeleteJob(Guid jobId)
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
@@ -260,12 +265,13 @@ namespace Stardust.Manager
 			LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
 		}
 
+
 		public void FreeJobIfNodeIsAssigned(string url)
 		{
 			runner(() => tryFreeJobIfNodeIsAssigned(url), "Unable to perform operation");
 		}
 
-		public void tryFreeJobIfNodeIsAssigned(string url)
+		private void tryFreeJobIfNodeIsAssigned(string url)
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
@@ -304,8 +310,9 @@ namespace Stardust.Manager
 			LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
 		}
 
-		public async void tryCheckAndAssignNextJob(List<WorkerNode> availableNodes,
+		private async void tryCheckAndAssignNextJob(List<WorkerNode> availableNodes,
 		                                        IHttpSender httpSender)
+
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start CheckAndAssignNextJob.");
 
@@ -320,7 +327,7 @@ namespace Stardust.Manager
 			{
 				LogHelper.LogDebugWithLineNumber(Logger,
 				                                 "Found ( " + availableNodes.Count + " ) availabe nodes.");
-				
+
 				using (var connection = new SqlConnection(_connectionString))
 				{
 					connection.Open();
@@ -330,7 +337,7 @@ namespace Stardust.Manager
 						using (
 							var da =
 								new SqlDataAdapter(
-									"SELECT TOP 1 * From [Stardust].JobDefinitions WITH (TABLOCKX) WHERE AssignedNode IS NULL OR AssignedNode = ''",
+									"SELECT TOP 1 * FROM [Stardust].JobDefinitions WITH (TABLOCKX) WHERE AssignedNode IS NULL OR AssignedNode = ''",
 									connection)
 
 								{
@@ -351,12 +358,12 @@ namespace Stardust.Manager
 								var job = new JobToDo
 								{
 									Id = (Guid) jobRow["Id"],
-									Name = getValue<string>(jobRow["Name"]),
-									Serialized = getValue<string>(jobRow["Serialized"])
+									Name = GetValue<string>(jobRow["Name"]),
+									Serialized = GetValue<string>(jobRow["Serialized"])
 										.Replace(@"\",
 										         @""),
-									Type = getValue<string>(jobRow["Type"]),
-									CreatedBy = getValue<string>(jobRow["UserName"])
+									Type = GetValue<string>(jobRow["Type"]),
+									CreatedBy = GetValue<string>(jobRow["UserName"])
 								};
 
 								da.UpdateCommand =
@@ -377,10 +384,10 @@ namespace Stardust.Manager
 
 								foreach (var node in availableNodes)
 								{
-										LogHelper.LogDebugWithLineNumber(Logger,
-																		 "Available node : ( id, Url ) : ( " + node.Id + ", " + node.Url +
-																		 " )");
-									
+									LogHelper.LogDebugWithLineNumber(Logger,
+									                                 "Available node : ( id, Url ) : ( " + node.Id + ", " + node.Url +
+									                                 " )");
+
 									try
 									{
 										var builderHelper =
@@ -422,8 +429,11 @@ namespace Stardust.Manager
 
 											da.UpdateCommand.Transaction = tran;
 											da.UpdateCommand.ExecuteNonQuery();
+
 											ReportProgress(job.Id,
-											               "Started");
+											               "Started",
+														   DateTime.Now);
+
 											break;
 										}
 
@@ -492,14 +502,16 @@ namespace Stardust.Manager
 			}
 		}
 
+
 		public void CheckAndAssignNextJob(List<WorkerNode> availableNodes,
 			IHttpSender httpSender)
 		{
 			runner(() => tryCheckAndAssignNextJob(availableNodes, httpSender), "Unable to perform operation");
 		}
 
-		public async void tryCancelThisJob(Guid jobId,
+		private async void tryCancelThisJob(Guid jobId,
 		                                IHttpSender httpSender)
+
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
@@ -528,7 +540,7 @@ namespace Stardust.Manager
 						if (jobs.Rows.Count > 0)
 						{
 							var jobRow = jobs.Rows[0];
-							var node = getValue<string>(jobRow["AssignedNode"]);
+							var node = GetValue<string>(jobRow["AssignedNode"]);
 
 							if (string.IsNullOrEmpty(node))
 							{
@@ -589,7 +601,8 @@ namespace Stardust.Manager
 									da.UpdateCommand.ExecuteNonQuery();
 
 									ReportProgress(jobId,
-									               "Canceling");
+									               "Canceling",
+												   DateTime.Now);
 								}
 							}
 						}
@@ -626,7 +639,7 @@ namespace Stardust.Manager
 			runner(() => trySetEndResultOnJob(jobId, result), "Unable to set end result on the job");
 		}
 
-		public void trySetEndResultOnJob(Guid jobId,
+		private void trySetEndResultOnJob(Guid jobId,
 		                              string result)
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
@@ -649,23 +662,27 @@ namespace Stardust.Manager
 						                                16,
 						                                "JobId");
 						da.UpdateCommand.Parameters[0].Value = jobId;
+
 						da.UpdateCommand.Parameters.Add("@Ended",
 						                                SqlDbType.DateTime,
 						                                16,
 						                                "Ended");
 						da.UpdateCommand.Parameters[1].Value = DateTime.UtcNow;
+
 						da.UpdateCommand.Parameters.Add("@Result",
 						                                SqlDbType.NVarChar,
 						                                2000,
 						                                "Result");
 						da.UpdateCommand.Parameters[2].Value = result;
+
 						da.UpdateCommand.ExecuteNonQuery();
 					}
 
 					connection.Close();
 
 					ReportProgress(jobId,
-					               result);
+					               result,
+								   DateTime.Now);
 				}
 			}
 
@@ -678,13 +695,17 @@ namespace Stardust.Manager
 		}
 
 		public void ReportProgress(Guid jobId,
-											string detail)
+		                           string detail,
+								   DateTime created)
 		{
-			runner(() => tryReportProgress(jobId, detail), "Unable to report progress on job");
+
+			runner(() => tryReportProgress(jobId, detail,created), "Unable to report progress on job");
+
 		}
 
-		public void tryReportProgress(Guid jobId,
-		                           string detail)
+		private void tryReportProgress(Guid jobId,
+		                              string detail,
+		                              DateTime created)
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
@@ -698,8 +719,9 @@ namespace Stardust.Manager
 					                                   connection)
 					{
 						InsertCommand =
-							new SqlCommand("INSERT INTO [Stardust].JobHistoryDetail (JobId, Detail) VALUES (@Id, @Detail)",
-							               connection)
+							new SqlCommand(
+								"INSERT INTO [Stardust].JobHistoryDetail (JobId, Detail, Created) VALUES (@Id, @Detail, @Created)",
+								connection)
 					})
 					{
 						da.InsertCommand.Parameters.Add("@Id",
@@ -707,11 +729,17 @@ namespace Stardust.Manager
 						                                16,
 						                                "JobId");
 						da.InsertCommand.Parameters[0].Value = jobId;
+
 						da.InsertCommand.Parameters.Add("@Detail",
 						                                SqlDbType.NVarChar,
 						                                2000,
 						                                "Detail");
 						da.InsertCommand.Parameters[1].Value = detail;
+
+						da.InsertCommand.Parameters.Add("@Created",
+						                                SqlDbType.DateTime);
+						da.InsertCommand.Parameters[2].Value = created;
+
 						da.InsertCommand.ExecuteNonQuery();
 					}
 
@@ -726,6 +754,7 @@ namespace Stardust.Manager
 
 			LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
 		}
+
 
 		public JobHistory History(Guid jobId)
 		{
@@ -743,7 +772,8 @@ namespace Stardust.Manager
 			return jobHist;
 		}
 
-		public JobHistory tryHistory(Guid jobId)
+		private JobHistory tryHistory(Guid jobId)
+
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
@@ -811,7 +841,8 @@ namespace Stardust.Manager
 			return returnList;
 		}
 
-		public IList<JobHistory> tryHistoryList()
+		private IList<JobHistory> tryHistoryList()
+
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
@@ -860,6 +891,7 @@ namespace Stardust.Manager
 			return null;
 		}
 
+
 		public IList<JobHistoryDetail> JobHistoryDetails(Guid jobId)
 		{
 			var returnList = new List<JobHistoryDetail>();
@@ -875,7 +907,7 @@ namespace Stardust.Manager
 			return returnList;
 		}
 
-		public IList<JobHistoryDetail> tryJobHistoryDetails(Guid jobId)
+		private IList<JobHistoryDetail> tryJobHistoryDetails(Guid jobId)
 		{
 			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
 
@@ -929,7 +961,7 @@ namespace Stardust.Manager
 			return null;
 		}
 
-		private string getValue<T>(object value)
+		private string GetValue<T>(object value)
 		{
 			return value == DBNull.Value
 				? null
@@ -947,11 +979,11 @@ namespace Stardust.Manager
 					Id = (Guid) reader.GetValue(reader.GetOrdinal("JobId")),
 					Name = (string) reader.GetValue(reader.GetOrdinal("Name")),
 					CreatedBy = (string) reader.GetValue(reader.GetOrdinal("CreatedBy")),
-					SentTo = getValue<string>(reader.GetValue(reader.GetOrdinal("SentTo"))),
-					Result = getValue<string>(reader.GetValue(reader.GetOrdinal("Result"))),
+					SentTo = GetValue<string>(reader.GetValue(reader.GetOrdinal("SentTo"))),
+					Result = GetValue<string>(reader.GetValue(reader.GetOrdinal("Result"))),
 					Created = (DateTime) reader.GetValue(reader.GetOrdinal("Created")),
-					Started = getDateTime(reader.GetValue(reader.GetOrdinal("Started"))),
-					Ended = getDateTime(reader.GetValue(reader.GetOrdinal("Ended")))
+					Started = GetDateTime(reader.GetValue(reader.GetOrdinal("Started"))),
+					Ended = GetDateTime(reader.GetValue(reader.GetOrdinal("Ended")))
 				};
 
 				return jobHist;
@@ -984,7 +1016,7 @@ namespace Stardust.Manager
 			return selectCommand;
 		}
 
-		private DateTime? getDateTime(object databaseValue)
+		private DateTime? GetDateTime(object databaseValue)
 		{
 			if (databaseValue.Equals(DBNull.Value))
 			{

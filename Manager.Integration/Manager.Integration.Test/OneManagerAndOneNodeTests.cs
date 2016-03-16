@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
+using log4net.Appender;
 using log4net.Config;
 using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
@@ -48,7 +49,7 @@ namespace Manager.Integration.Test
 			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
 			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 			logMessage("Start TestFixtureSetUp");
-			
+
 #if (DEBUG)
 			// Do nothing.
 #else
@@ -70,7 +71,7 @@ namespace Manager.Integration.Test
 			Thread.Sleep(TimeSpan.FromSeconds(2));
 			logMessage("Finished TestFixtureSetUp");
 		}
-		
+
 		private void CurrentDomain_UnhandledException(object sender,
 		                                              UnhandledExceptionEventArgs e)
 		{
@@ -87,12 +88,15 @@ namespace Manager.Integration.Test
 		public void TestFixtureTearDown()
 		{
 			logMessage("Start TestFixtureTearDown");
+
 			if (AppDomainTask != null)
+			{
 				AppDomainTask.Dispose();
+			}
+
 			logMessage("Finished TestFixtureTearDown");
 		}
 
-		
 
 		[Test]
 		public void CancelWrongJobsTest()
@@ -114,8 +118,8 @@ namespace Manager.Integration.Test
 			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
 			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(1,
-																  sqlNotiferCancellationTokenSource,
-																  IntegerValidators.Value1IsEqualToValue2Validator);
+			                                                      sqlNotiferCancellationTokenSource,
+			                                                      IntegerValidators.Value1IsEqualToValue2Validator);
 			task.Start();
 
 			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
@@ -233,7 +237,7 @@ namespace Manager.Integration.Test
 					var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
 					jobManagerTaskCreator.CreateDeleteJobToManagerTask(args.Guid);
 					jobManagerTaskCreator.StartAndWaitDeleteJobToManagerTask(timeout);
-					
+
 					nodeStartedNotifier.Dispose();
 					jobManagerTaskCreator.Dispose();
 				},
@@ -326,7 +330,9 @@ namespace Manager.Integration.Test
 		public void ShouldBeAbleToCreateASuccessJobRequestTest()
 		{
 			logMessage("Start.");
-			var createNewJobRequests = JobHelper.GenerateFastJobParamsRequests(1);
+
+			var createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(1);
+
 			logMessage("( " + createNewJobRequests.Count + " ) jobs will be created.");
 
 			var timeout =
@@ -354,7 +360,7 @@ namespace Manager.Integration.Test
 			var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
 			                                                          CancellationTokenSource,
 			                                                          timeout);
-			
+
 			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 			var elapsedTime =
 				managerIntegrationStopwatch.GetTotalElapsedTimeInSeconds();

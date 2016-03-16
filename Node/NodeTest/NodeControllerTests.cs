@@ -13,6 +13,7 @@ using NodeTest.Fakes.Timers;
 using NodeTest.JobHandlers;
 using NUnit.Framework;
 using Stardust.Node.API;
+using Stardust.Node.Entities;
 using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Workers;
@@ -40,12 +41,24 @@ namespace NodeTest
 			_nodeStartupNotification = new NodeStartupNotificationToManagerFake(_nodeConfigurationFake,
 			                                                                    _callBackTemplateUriFake);
 			_pingToManagerFake = new PingToManagerFake();
+
+			_trySendJobProgressToManagerTimerFake =
+				new TrySendJobProgressToManagerTimerFake(_nodeConfigurationFake,
+														 new PostHttpRequestFake(),
+														 1000);
+
 			_sendJobDoneTimer = new SendJobDoneTimerFake(_nodeConfigurationFake,
-			                                             _callBackTemplateUriFake);
+			                                             _callBackTemplateUriFake,
+														 _trySendJobProgressToManagerTimerFake);
+
 			_sendJobCanceledTimer = new SendJobCanceledTimerFake(_nodeConfigurationFake,
-			                                                     _callBackTemplateUriFake);
+			                                                     _callBackTemplateUriFake,
+																 _trySendJobProgressToManagerTimerFake);
+
 			_sendJobFaultedTimer = new SendJobFaultedTimerFake(_nodeConfigurationFake,
-			                                                   _callBackTemplateUriFake);
+			                                                   _callBackTemplateUriFake,
+															   _trySendJobProgressToManagerTimerFake);
+
 		}
 
 		[TestFixtureSetUp]
@@ -65,8 +78,8 @@ namespace NodeTest
 			_nodeConfigurationFake = new NodeConfigurationFake(baseAddress,
 			                                                   managerLocation,
 			                                                   handlerAssembly,
-			                                                   nodeName, 
-															   pingToManagerSeconds);
+			                                                   nodeName,
+			                                                   pingToManagerSeconds);
 
 
 			_callBackTemplateUriFake = managerLocation;
@@ -93,6 +106,7 @@ namespace NodeTest
 		private SendJobDoneTimerFake _sendJobDoneTimer;
 		private SendJobCanceledTimerFake _sendJobCanceledTimer;
 		private SendJobFaultedTimerFake _sendJobFaultedTimer;
+		private TrySendJobProgressToManagerTimerFake _trySendJobProgressToManagerTimerFake;
 
 		[Test]
 		public void CancelJobShouldReturnNotFoundWhenCancellingJobWhenIdle()
@@ -104,7 +118,8 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-			                                   new PostHttpRequestFake());
+											   _trySendJobProgressToManagerTimerFake,
+											   new PostHttpRequestFake());
 
 			_nodeController = new NodeController(_workerWrapper)
 			{
@@ -127,7 +142,8 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-			                                   new PostHttpRequestFake());
+											   _trySendJobProgressToManagerTimerFake,
+											   new PostHttpRequestFake());
 
 			_nodeController = new NodeController(_workerWrapper) {Request = new HttpRequestMessage()};
 
@@ -155,10 +171,11 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-			                                   new PostHttpRequestFake());
+											   _trySendJobProgressToManagerTimerFake,
+											   new PostHttpRequestFake());
 
 			_nodeController = new NodeController(_workerWrapper) {Request = new HttpRequestMessage()};
-		
+
 			_nodeController.StartJob(_jobToDo);
 
 			var actionResult = _nodeController.TryCancelJob(_jobToDo.Id);
@@ -178,7 +195,8 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-			                                   new PostHttpRequestFake());
+											   _trySendJobProgressToManagerTimerFake,
+											   new PostHttpRequestFake());
 
 			_nodeController = new NodeController(_workerWrapper) {Request = new HttpRequestMessage()};
 
@@ -197,12 +215,14 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-			                                   new PostHttpRequestFake());
+											   _trySendJobProgressToManagerTimerFake,
+											   new PostHttpRequestFake());
 
 			_nodeController = new NodeController(_workerWrapper) {Request = new HttpRequestMessage()};
 
 
 			var actionResult = _nodeController.StartJob(null);
+
 			Assert.IsInstanceOf(typeof (BadRequestErrorMessageResult),
 			                    actionResult);
 		}
@@ -217,7 +237,8 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-			                                   new PostHttpRequestFake());
+											   _trySendJobProgressToManagerTimerFake,
+											   new PostHttpRequestFake());
 
 			_nodeController = new NodeController(_workerWrapper) {Request = new HttpRequestMessage()};
 
@@ -225,7 +246,12 @@ namespace NodeTest
 			                                   "i lingonskogen");
 			var ser = JsonConvert.SerializeObject(parameters);
 
-			var jobToDo2 = new JobToDo {Id = Guid.NewGuid(), Name = "Another name", Serialized = ser};
+			var jobToDo2 = new JobToDo
+			{
+				Id = Guid.NewGuid(),
+				Name = "Another name",
+				Serialized = ser
+			};
 
 			_nodeController.StartJob(_jobToDo);
 
@@ -233,6 +259,7 @@ namespace NodeTest
 
 			Assert.IsInstanceOf(typeof (ConflictResult),
 			                    actionResult);
+
 			_sendJobDoneTimer.Wait.Wait(TimeSpan.FromSeconds(3)); // let job finish
 		}
 
@@ -246,13 +273,19 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
+			                                   _trySendJobProgressToManagerTimerFake,
 			                                   new PostHttpRequestFake());
 
-			_nodeController = new NodeController(_workerWrapper) {Request = new HttpRequestMessage()};
+			_nodeController = new NodeController(_workerWrapper)
+			{
+				Request = new HttpRequestMessage()
+			};
 
 			var actionResult = _nodeController.StartJob(_jobToDo);
+
 			Assert.IsInstanceOf(typeof (OkResult),
 			                    actionResult);
+
 			_sendJobDoneTimer.Wait.Wait(TimeSpan.FromSeconds(3)); // let job finish
 		}
 	}

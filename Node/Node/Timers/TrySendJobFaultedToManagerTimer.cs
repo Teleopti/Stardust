@@ -1,7 +1,13 @@
-﻿using log4net;
+﻿using System;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using log4net;
+using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
 using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
+using Stardust.Node.Workers;
 
 namespace Stardust.Node.Timers
 {
@@ -10,11 +16,48 @@ namespace Stardust.Node.Timers
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (TrySendJobFaultedToManagerTimer));
 
 		public TrySendJobFaultedToManagerTimer(INodeConfiguration nodeConfiguration,
+		                                       TrySendJobProgressToManagerTimer sendJobProgressToManagerTimer,
 		                                       double interval = 2000) : base(nodeConfiguration,
-		                                                                       nodeConfiguration
-			                                                                       .GetManagerJobHasFaileTemplatedUri(),
-		                                                                       interval)
+		                                                                      nodeConfiguration
+			                                                                      .GetManagerJobHasFaileTemplatedUri(),
+		                                                                      sendJobProgressToManagerTimer,
+		                                                                      interval)
 		{
+		}
+
+
+		public AggregateException AggregateExceptionToSend { get; set; }
+
+		public DateTime? ErrorOccured { get; set; }
+
+		protected override Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo,
+		                                                           CancellationToken cancellationToken)
+		{
+			try
+			{
+				var httpSender = new HttpSender();
+
+				var payload = new JobFailedModel
+				{
+					JobId = jobToDo.Id,
+					AggregateException = AggregateExceptionToSend,
+					Created = ErrorOccured
+				};
+
+				var response =
+					httpSender.PostAsync(CallbackTemplateUri,
+					                     payload,
+					                     cancellationToken);
+				return response;
+			}
+
+			catch (Exception exp)
+			{
+				LogHelper.LogErrorWithLineNumber(Logger,
+				                                 "Error in TrySendStatus.",
+				                                 exp);
+				throw;
+			}
 		}
 
 		protected override void Dispose(bool disposing)

@@ -186,28 +186,7 @@ namespace Stardust.Manager
 					{
 						if (availableNode.Alive == "true")
 						{
-							//var nodeUriBuilder = new NodeUriBuilderHelper(availableNode.Url);
-
-							//var postUri = nodeUriBuilder.GetIsAliveTemplateUri();
-
-							//LogHelper.LogDebugWithLineNumber(Logger,
-							//                                 "Test available node is alive : Url ( " + postUri + " )");
-
-							//bool success = await _httpSender.TryGetAsync(postUri);
-
-							//if (success)
-							//{
-							//	LogHelper.LogDebugWithLineNumber(Logger,
-							//	                                 "Node Url ( " + postUri + " ) is available and alive.");
-
 							upNodes.Add(availableNode);
-
-							//}
-							//else
-							//{
-							//	LogHelper.LogErrorWithLineNumber(Logger,
-							//	                                   "Node Url ( " + postUri + " ) could not be pinged.");
-							//}
 						}
 					}
 
@@ -261,7 +240,8 @@ namespace Stardust.Manager
 		public void ReportProgress(JobProgressModel model)
 		{
 			_jobRepository.ReportProgress(model.JobId,
-			                              model.ProgressDetail);
+			                              model.ProgressDetail,
+										  model.Created);
 		}
 
 		public JobHistory GetJobHistory(Guid jobId)

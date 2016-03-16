@@ -128,6 +128,7 @@
     <Compile Include="ManagerStarter.cs" />
     <Compile Include="Interfaces\IManagerConfiguration.cs" />
     <Compile Include="Models\JobDefinition.cs" />
+    <Compile Include="Models\JobFailedModel.cs" />
     <Compile Include="Models\JobHistory.cs" />
     <Compile Include="JobManager.cs" />
     <Compile Include="Models\JobHistoryDetail.cs" />

@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Stardust.Node.Entities;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
 
@@ -16,9 +17,11 @@ namespace NodeTest.Fakes.Timers
 
 		public SendJobFaultedTimerFake(INodeConfiguration nodeConfiguration,
 		                               Uri callbackTemplateUri,
-		                               double interval = 1000) : base(nodeConfiguration,
+									   TrySendJobProgressToManagerTimer sendJobProgressToManagerTimer,
+									   double interval = 1000) : base(nodeConfiguration,
 		                                                              callbackTemplateUri,
-		                                                              interval)
+																	  sendJobProgressToManagerTimer,
+																	  interval)
 		{
 		}
 

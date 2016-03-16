@@ -50,23 +50,23 @@ namespace Stardust.Node
 
 				                    builder.RegisterInstance(nodeConfiguration);
 
+				                    var trySendJobProgressToManagerTimer = new TrySendJobProgressToManagerTimer(nodeConfiguration,
+				                                                                                                new HttpSender(), 
+				                                                                                                5000);
+				                    builder.RegisterInstance(trySendJobProgressToManagerTimer).SingleInstance();
+
 				                    // Register IWorkerWrapper.
 				                    builder.Register<IWorkerWrapper>(c => new WorkerWrapper(c.Resolve<InvokeHandler>(),
 				                                                                            nodeConfiguration,
 				                                                                            new TrySendNodeStartUpNotificationToManagerTimer
 					                                                                            (nodeConfiguration,
-					                                                                             nodeConfiguration
-						                                                                             .GetManagerNodeHasBeenInitializedUri()),
-				                                                                            new PingToManagerTimer(
-					                                                                            nodeConfiguration,
-					                                                                            nodeConfiguration
-						                                                                            .GetManagerNodeHeartbeatUri()),
-				                                                                            new TrySendJobDoneStatusToManagerTimer(
-					                                                                            nodeConfiguration),
-				                                                                            new TrySendJobCanceledToManagerTimer(
-					                                                                            nodeConfiguration),
-				                                                                            new TrySendJobFaultedToManagerTimer(
-					                                                                            nodeConfiguration),
+																								nodeConfiguration.GetManagerNodeHasBeenInitializedUri()),
+				                                                                            new PingToManagerTimer(nodeConfiguration,
+																													nodeConfiguration.GetManagerNodeHeartbeatUri()),
+				                                                                            new TrySendJobDoneStatusToManagerTimer(nodeConfiguration, trySendJobProgressToManagerTimer),
+				                                                                            new TrySendJobCanceledToManagerTimer(nodeConfiguration, trySendJobProgressToManagerTimer),
+				                                                                            new TrySendJobFaultedToManagerTimer(nodeConfiguration, trySendJobProgressToManagerTimer),
+																							trySendJobProgressToManagerTimer, 
 				                                                                            new HttpSender()))
 					                    .SingleInstance();
 

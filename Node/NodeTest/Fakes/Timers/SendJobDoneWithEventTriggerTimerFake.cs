@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
+using Stardust.Node.Entities;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
 
@@ -16,8 +17,10 @@ namespace NodeTest.Fakes.Timers
 		public ManualResetEventSlim Wait = new ManualResetEventSlim();
 
 		public SendJobDoneWithEventTriggerTimerFake(INodeConfiguration nodeConfiguration,
-		                                            Uri callbackTemplateUri) : base(nodeConfiguration,
-		                                                                            callbackTemplateUri)
+		                                            Uri callbackTemplateUri,
+													TrySendJobProgressToManagerTimer sendJobProgressToManagerTimer) : base(nodeConfiguration,
+																															callbackTemplateUri, 
+																															sendJobProgressToManagerTimer)
 		{
 		}
 

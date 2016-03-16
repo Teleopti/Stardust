@@ -10,7 +10,7 @@ using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
 
-namespace NodeTest
+namespace NodeTest.Timers
 {
 	[TestFixture]
 	public class TrySendStatusToManagerTimerTests
@@ -55,7 +55,8 @@ namespace NodeTest
 		public void ShouldThrowExceptionWhenCallBackTemplateUriArgumentIsNull()
 		{
 			var trySendJobDoneStatusToManagerTimer = new TrySendStatusToManagerTimer(_nodeConfiguration,
-			                                                                         null);
+			                                                                         null,
+																					 null);
 		}
 
 		[Test]
@@ -63,7 +64,18 @@ namespace NodeTest
 		public void ShouldThrowExceptionWhenNodeConfigurationArgumentIsNull()
 		{
 			var trySendJobDoneStatusToManagerTimer = new TrySendStatusToManagerTimer(null,
-			                                                                         _fakeUrl);
+			                                                                         _fakeUrl,
+																					 null);
 		}
+
+		[Test]
+		[ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionWhenSendJobProgressToManagerTimerArgumentIsNull()
+		{
+			var trySendJobDoneStatusToManagerTimer = new TrySendStatusToManagerTimer(_nodeConfiguration,
+																					 _fakeUrl,
+																					 null);
+		}
+
 	}
 }

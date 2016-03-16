@@ -15,7 +15,7 @@ namespace Stardust.Manager.Interfaces
 
 		void SetEndResultOnJob(Guid jobId, string result);
 
-		void ReportProgress(Guid jobId, string detail);
+		void ReportProgress(Guid jobId, string detail, DateTime created);
 		JobHistory History(Guid jobId);
 		IList<JobHistory> HistoryList();
 		IList<JobHistoryDetail> JobHistoryDetails(Guid jobId);

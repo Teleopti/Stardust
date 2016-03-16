@@ -56,17 +56,27 @@ namespace NodeTest.Attributes
 
 			builder.RegisterInstance(nodeConfiguration);
 
+			var trySendJobProgressToManagerTimerFake = new TrySendJobProgressToManagerTimerFake(nodeConfiguration,
+																								new PostHttpRequestFake(),
+																								1000);
+
+			builder.RegisterInstance(trySendJobProgressToManagerTimerFake);
+
 			builder.RegisterInstance(new SendJobDoneTimerFake(nodeConfiguration,
-			                                                  CallBackUriTemplateFake));
+			                                                  CallBackUriTemplateFake,
+															  trySendJobProgressToManagerTimerFake));
 
 			builder.RegisterInstance(new SendJobCanceledTimerFake(nodeConfiguration,
-			                                                      CallBackUriTemplateFake));
+			                                                      CallBackUriTemplateFake,
+																  trySendJobProgressToManagerTimerFake));
 
 			builder.RegisterInstance(new SendJobFaultedTimerFake(nodeConfiguration,
-			                                                     CallBackUriTemplateFake));
+			                                                     CallBackUriTemplateFake,
+																 trySendJobProgressToManagerTimerFake));
 
 			builder.RegisterInstance(new NodeStartupNotificationToManagerFake(nodeConfiguration,
 			                                                                  CallBackUriTemplateFake));
+
 
 			// Register IWorkerWrapper.
 			builder.Register<IWorkerWrapper>(c => new WorkerWrapper(c.Resolve<InvokeHandler>(),
@@ -76,7 +86,8 @@ namespace NodeTest.Attributes
 			                                                        c.Resolve<SendJobDoneTimerFake>(),
 			                                                        c.Resolve<SendJobCanceledTimerFake>(),
 			                                                        c.Resolve<SendJobFaultedTimerFake>(),
-			                                                        c.Resolve<PostHttpRequestFake>()))
+																	c.Resolve<TrySendJobProgressToManagerTimerFake>(),
+																	c.Resolve<PostHttpRequestFake>()))
 				.SingleInstance();
 		}
 

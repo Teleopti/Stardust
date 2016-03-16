@@ -94,6 +94,9 @@
     <Compile Include="Fakes\Timers\SendJobDoneTimerFake.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Fakes\Timers\TrySendJobProgressToManagerTimerFake.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="JobHandlersTests.cs" />
     <Compile Include="ManagerUriBuilderTests.cs" />
     <Compile Include="NodeConfigurationTests.cs" />
@@ -101,7 +104,8 @@
     <Compile Include="NodeControllerTests.cs" />
     <Compile Include="NodeUriBuilderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TrySendStatusToManagerTimerTests.cs" />
+    <Compile Include="Timers\TrySendJobProgressToManagerTimerTests.cs" />
+    <Compile Include="Timers\TrySendStatusToManagerTimerTests.cs" />
     <Compile Include="WorkerWrapperTests.cs" />
     <Compile Include="Attributes\WorkerWrapperTestsAttribute.cs" />
   </ItemGroup>

@@ -6,8 +6,8 @@ using System.Web.Http;
 using System.Web.Http.Results;
 using log4net;
 using Newtonsoft.Json;
-using Stardust.Node.Constants;
 using Stardust.Node.Diagnostics;
+using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
 using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
@@ -31,6 +31,7 @@ namespace Stardust.Node.Workers
 		                     TrySendStatusToManagerTimer trySendJobDoneStatusToManagerTimer,
 		                     TrySendStatusToManagerTimer trySendJobCanceledStatusToManagerTimer,
 		                     TrySendStatusToManagerTimer trySendJobFaultedStatusToManagerTimer,
+		                     TrySendJobProgressToManagerTimer trySendJobProgressToManagerTimer,
 		                     IHttpSender httpSender)
 		{
 			_httpSender = httpSender;
@@ -43,6 +44,7 @@ namespace Stardust.Node.Workers
 			trySendJobDoneStatusToManagerTimer.ThrowArgumentNullExceptionWhenNull();
 			trySendJobCanceledStatusToManagerTimer.ThrowArgumentNullExceptionWhenNull();
 			trySendJobFaultedStatusToManagerTimer.ThrowArgumentNullExceptionWhenNull();
+			trySendJobProgressToManagerTimer.ThrowArgumentNullExceptionWhenNull();
 
 			Handler = invokeHandler;
 			NodeConfiguration = nodeConfiguration;
@@ -59,6 +61,9 @@ namespace Stardust.Node.Workers
 			TrySendJobCanceledStatusToManagerTimer = trySendJobCanceledStatusToManagerTimer;
 			TrySendJobFaultedStatusToManagerTimer = trySendJobFaultedStatusToManagerTimer;
 
+			TrySendJobProgressToManagerTimer = trySendJobProgressToManagerTimer;
+			TrySendJobProgressToManagerTimer.Start();
+
 			NodeStartUpNotificationToManagerTimer.Start();
 		}
 
@@ -67,6 +72,7 @@ namespace Stardust.Node.Workers
 		private TrySendStatusToManagerTimer TrySendJobDoneStatusToManagerTimer { get; set; }
 		private TrySendStatusToManagerTimer TrySendJobCanceledStatusToManagerTimer { get; set; }
 		private TrySendStatusToManagerTimer TrySendJobFaultedStatusToManagerTimer { get; set; }
+		private TrySendJobProgressToManagerTimer TrySendJobProgressToManagerTimer { get; set; }
 
 		private TrySendStatusToManagerTimer TrySendStatusToManagerTimer { get; set; }
 		private INodeConfiguration NodeConfiguration { get; set; }
@@ -100,7 +106,7 @@ namespace Stardust.Node.Workers
 				}
 
 				if (CurrentMessageToProcess != null &&
-					CurrentMessageToProcess.Id != jobToDo.Id)
+				    CurrentMessageToProcess.Id != jobToDo.Id)
 				{
 					return new ConflictResult(requestMessage);
 				}
@@ -109,15 +115,15 @@ namespace Stardust.Node.Workers
 					return new BadRequestResult(requestMessage);
 				}
 
-				Type typ = NodeConfiguration.HandlerAssembly.GetType(jobToDo.Type);
+				var typ = NodeConfiguration.HandlerAssembly.GetType(jobToDo.Type);
 
 				if (typ == null)
 				{
 					LogHelper.LogWarningWithLineNumber(Logger,
-													   string.Format(
-														   WhoamI +
-														   ": The job type [{0}] could not be resolved. The job cannot be started.",
-														   jobToDo.Type));
+					                                   string.Format(
+						                                   WhoamI +
+						                                   ": The job type [{0}] could not be resolved. The job cannot be started.",
+						                                   jobToDo.Type));
 
 					return new BadRequestResult(requestMessage);
 				}
@@ -126,7 +132,6 @@ namespace Stardust.Node.Workers
 
 				return new OkResult(requestMessage);
 			}
-			
 		}
 
 		public IHttpActionResult StartJob(JobToDo jobToDo,
@@ -136,20 +141,33 @@ namespace Stardust.Node.Workers
 			object deSer;
 			try
 			{
-				Type typ = NodeConfiguration.HandlerAssembly.GetType(jobToDo.Type);
+				var typ = NodeConfiguration.HandlerAssembly.GetType(jobToDo.Type);
 				deSer = JsonConvert.DeserializeObject(jobToDo.Serialized,
 				                                      typ);
 				CurrentMessageToProcess = jobToDo;
-
 			}
+
 			catch (Exception)
 			{
 				CurrentMessageToProcess = null;
 				return new BadRequestResult(requestMessage);
 			}
+
 			if (deSer == null)
 			{
 				return new BadRequestResult(requestMessage);
+			}
+
+			//-----------------------------------------------------
+			// Clear faulted timer.
+			//-----------------------------------------------------
+			var faultedTimer =
+				TrySendJobFaultedStatusToManagerTimer as TrySendJobFaultedToManagerTimer;
+
+			if (faultedTimer != null)
+			{
+				faultedTimer.AggregateExceptionToSend = null;
+				faultedTimer.ErrorOccured = null;
 			}
 
 			//----------------------------------------------------
@@ -163,19 +181,20 @@ namespace Stardust.Node.Workers
 
 				Handler.Invoke(deSer,
 				               CancellationTokenSource,
-				               ProgressCallback);
+				               SendJobProgressToManager);
 			},
 			                CancellationTokenSource.Token);
 
 			Task.ContinueWith(t =>
 			{
 				LogHelper.LogDebugWithLineNumber(Logger,
-												 string.Format("Job ( id, name, type ) : ( {0}, {1}, {2} ) took ( seconds, minutes ) : ( {3}, {4} )",
-																CurrentMessageToProcess.Id,
-																CurrentMessageToProcess.Name,
-																CurrentMessageToProcess.Type,
-																taskToExecuteStopWatch.GetTotalElapsedTimeInSeconds(), 
-																taskToExecuteStopWatch.GetTotalElapsedTimeInMinutes()));
+				                                 string.Format(
+					                                 "Job ( id, name, type ) : ( {0}, {1}, {2} ) took ( seconds, minutes ) : ( {3}, {4} )",
+					                                 CurrentMessageToProcess.Id,
+					                                 CurrentMessageToProcess.Name,
+					                                 CurrentMessageToProcess.Type,
+					                                 taskToExecuteStopWatch.GetTotalElapsedTimeInSeconds(),
+					                                 taskToExecuteStopWatch.GetTotalElapsedTimeInMinutes()));
 
 				string logInfo;
 
@@ -213,18 +232,23 @@ namespace Stardust.Node.Workers
 
 
 					case TaskStatus.Faulted:
-						logInfo =
-							string.Format("{0} : The task faulted for job ( jobId, jobName ) : ( {1}, {2} )",
-							              WhoamI,
-							              CurrentMessageToProcess.Id,
-							              CurrentMessageToProcess.Name);
+						if (faultedTimer != null)
+						{
+							faultedTimer.AggregateExceptionToSend = t.Exception;
+							faultedTimer.ErrorOccured=DateTime.Now;
+						}
 
 						if (t.Exception != null)
 						{
-							foreach (var e in t.Exception.InnerExceptions)
+							foreach (var exp in t.Exception.InnerExceptions)
 							{
-								LogHelper.LogErrorWithLineNumber(Logger,
-								                                 logInfo, e);
+								string errorMessage =
+									string.Format("( Message, Source, StackTrace ): ( {0}, {1}, {2} )",
+									exp.InnerException.Message,
+									exp.InnerException.Source,
+									exp.InnerException.StackTrace);
+
+								LogHelper.LogErrorWithLineNumber(Logger, errorMessage, exp);
 							}
 						}
 
@@ -313,10 +337,16 @@ namespace Stardust.Node.Workers
 				TrySendJobFaultedStatusToManagerTimer.Dispose();
 			}
 
+			if (TrySendJobProgressToManagerTimer != null)
+			{
+				TrySendJobProgressToManagerTimer.Dispose();
+			}
+
 			if (NodeStartUpNotificationToManagerTimer != null)
 			{
 				NodeStartUpNotificationToManagerTimer.Dispose();
 			}
+
 
 			LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
 		}
@@ -375,36 +405,23 @@ namespace Stardust.Node.Workers
 			SetNodeStatusTimer(null,
 			                   null);
 
+			// Clear all job progresses for jobid.
+			if (CurrentMessageToProcess != null)
+			{
+				TrySendJobProgressToManagerTimer.ClearAllJobProgresses(CurrentMessageToProcess.Id);
+			}			
+
 			// Reset jobToDo, so it can start processing new work.
-			ResetCurrentMessage();
+			ResetCurrentMessage();			
 		}
 
-		private void ProgressCallback(string message)
+		private void SendJobProgressToManager(string message)
 		{
-			LogHelper.LogInfoWithLineNumber(Logger,
-			                                WhoamI + " : " + message);
-
-			var progressModel = new JobProgressModel
+			if (CurrentMessageToProcess != null)
 			{
-				JobId = CurrentMessageToProcess.Id,
-				ProgressDetail = message
-			};
+				TrySendJobProgressToManagerTimer.SendProgress(CurrentMessageToProcess.Id,
+															  message);
 
-			try
-			{
-				var uriBuilder =
-					new UriBuilder(NodeConfiguration.ManagerLocation);
-
-				uriBuilder.Path += ManagerRouteConstants.JobProgress;
-
-				_httpSender.PostAsync(uriBuilder.Uri, progressModel);
-			}
-
-			catch (Exception exception)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger,
-				                                 WhoamI + " : Exception occured.",
-				                                 exception);
 			}
 		}
 	}

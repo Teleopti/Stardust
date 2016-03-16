@@ -1,8 +1,9 @@
 ﻿using System;
+using Stardust.Node.Interfaces;
 
-namespace Stardust.Node.Interfaces
+namespace Stardust.Node.Entities
 {
-	public class JobToDo
+	public class JobToDo : IJobToDo
 	{
 		public Guid Id { get; set; }
 		public string Name { get; set; }

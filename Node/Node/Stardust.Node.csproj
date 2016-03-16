@@ -97,6 +97,7 @@
     <Compile Include="Constants\MediaTypeConstants.cs" />
     <Compile Include="Constants\NodeRouteConstants.cs" />
     <Compile Include="Diagnostics\TaskToExecuteStopWatch.cs" />
+    <Compile Include="Entities\JobFailedModel.cs" />
     <Compile Include="Extensions\HttpClientExtensions.cs" />
     <Compile Include="Extensions\InvokeHandlerExtensions.cs" />
     <Compile Include="Extensions\JobToDoExtensions.cs" />
@@ -115,16 +116,20 @@
     <Compile Include="Interfaces\IHttpSender.cs" />
     <Compile Include="Interfaces\IInvokeHandler.cs" />
     <Compile Include="Interfaces\IJobProgress.cs" />
+    <Compile Include="Interfaces\IJobToDo.cs" />
     <Compile Include="Interfaces\INodeConfiguration.cs" />
     <Compile Include="Interfaces\INodeStarter.cs" />
     <Compile Include="Interfaces\IWorkerWrapper.cs" />
-    <Compile Include="Interfaces\JobToDo.cs" />
+    <Compile Include="Entities\JobToDo.cs" />
     <Compile Include="NodeStarter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Timers\TrySendJobProgressToManagerTimer.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Timers\TrySendNodeStartUpNotificationToManagerTimer.cs">
       <SubType>Component</SubType>
@@ -145,8 +150,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Workers\HttpSender.cs" />
+    <Compile Include="Interfaces\ISendJobProgressModel.cs" />
     <Compile Include="Workers\InvokeHandler.cs" />
-    <Compile Include="Workers\JobProgressModel.cs" />
+    <Compile Include="Entities\SendJobProgressModel.cs" />
     <Compile Include="Workers\WorkerWrapper.cs" />
   </ItemGroup>
   <ItemGroup>

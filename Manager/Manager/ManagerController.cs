@@ -106,7 +106,10 @@ namespace Stardust.Manager
 		{
 			if (nodeUri != null)
 			{
-				Task.Factory.StartNew(() => { _jobManager.RegisterHeartbeat(nodeUri.ToString()); });
+				Task.Factory.StartNew(() =>
+				{
+					_jobManager.RegisterHeartbeat(nodeUri.ToString());
+				});
 
 				LogHelper.LogInfoWithLineNumber(Logger,
 												WhoAmI(Request) + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
@@ -136,16 +139,33 @@ namespace Stardust.Manager
 		}
 
 		[HttpPost, Route(ManagerRouteConstants.JobFailed)]
-		public IHttpActionResult JobFailed(Guid jobId)
-		{
-			
-
+		public IHttpActionResult JobFailed([FromBody] JobFailedModel jobFailedModel)
+		{			
 			LogHelper.LogErrorWithLineNumber(Logger,
-											 WhoAmI(Request) + ": Received job failed from a Node ( jobId ) : ( " + jobId + " )");
+											 WhoAmI(Request) + ": Received job failed from a Node ( jobId ) : ( " + jobFailedModel.JobId + " )");
 
 			Task.Factory.StartNew(() =>
 			{
-				_jobManager.SetEndResultOnJobAndRemoveIt(jobId,
+				foreach (var exp in 
+							jobFailedModel.AggregateException.InnerExceptions)
+				{
+					string errorMessage =
+						string.Format("Failed: ( Message, Source, StackTrace ): ( {0}, {1}, {2} )",
+						exp.InnerException.Message,
+						exp.InnerException.Source,
+						exp.InnerException.StackTrace);
+
+					JobProgressModel progress = new JobProgressModel
+					{
+						JobId = jobFailedModel.JobId,
+						Created = DateTime.Now,
+						ProgressDetail = errorMessage
+					};
+
+					_jobManager.ReportProgress(progress);
+				}				
+
+				_jobManager.SetEndResultOnJobAndRemoveIt(jobFailedModel.JobId,
 				                                         "Failed");
 
 				_jobManager.CheckAndAssignNextJob();
@@ -185,7 +205,11 @@ namespace Stardust.Manager
 			{
 				return BadRequest();
 			}
-			_jobManager.ReportProgress(model);
+
+			Task.Factory.StartNew(() =>
+			{
+				_jobManager.ReportProgress(model);
+			});			
 
 			return Ok();
 		}
