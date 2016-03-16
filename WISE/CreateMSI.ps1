@@ -23,7 +23,8 @@ properties {
     $SdkFile = "$MountKDirectory\Teamcity\SdkDoc\docSdkx64.shfbproj" 
 }
 
-Include .\teamcity.psm1
+Set-ExecutionPolicy bypass -force
+Import-module "$SourceDir\Wise\teamcity.psm1" -Force
 
 TaskSetup {
     TeamCity-ReportBuildProgress "Running task $($psake.context.Peek().currentTaskName)"
