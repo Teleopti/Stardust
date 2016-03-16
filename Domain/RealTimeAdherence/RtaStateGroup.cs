@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
@@ -17,18 +16,21 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 
         protected RtaStateGroup()
         {
-
         }
 
-        public RtaStateGroup(string name, bool isDefaultStateGroup, bool isAvailable)
-            : this()
+        public RtaStateGroup(string name, bool isDefaultStateGroup, bool isAvailable) : this()
         {
             _name = name;
             _defaultStateGroup = isDefaultStateGroup;
             _available = isAvailable;
         }
 
-	    public virtual void SetBusinessUnit(IBusinessUnit businessUnit)
+		public RtaStateGroup(string name) : this()
+		{
+			_name = name;
+		}
+
+		public virtual void SetBusinessUnit(IBusinessUnit businessUnit)
 	    {
 		    BusinessUnit = businessUnit;
 	    }
@@ -63,11 +65,18 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             set { _isLogOutState = value; }
         }
 
-        public virtual IRtaState AddState(string stateName, string stateCode, Guid platformTypeId)
+		public virtual IRtaStateGroup AddState(string stateCode, Guid platformTypeId)
+		{
+			IRtaState state = new RtaState(stateCode, platformTypeId);
+			AddStateInternal(state);
+			return this;
+		}
+
+		public virtual IRtaStateGroup AddState(string stateName, string stateCode, Guid platformTypeId)
         {
             IRtaState state = new RtaState(stateName, stateCode, platformTypeId);
             AddStateInternal(state);
-            return state;
+            return this;
         }
 
         protected internal virtual void AddStateInternal(IRtaState state)

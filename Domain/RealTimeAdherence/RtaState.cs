@@ -4,8 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence
 {
-    public class RtaState : AggregateEntity,
-                            IRtaState
+    public class RtaState : AggregateEntity, IRtaState
     {
         private string _stateCode;
         private string _name;
@@ -13,8 +12,16 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 
         protected RtaState() { }
 
-        internal RtaState(string name, string stateCode, Guid platformTypeId)
-            : this()
+		protected internal RtaState(string stateCode, Guid platformTypeId)
+			: this()
+		{
+			_name = stateCode;
+			_stateCode = stateCode;
+			_platformTypeId = platformTypeId;
+		}
+
+		protected internal RtaState(string name, string stateCode, Guid platformTypeId) 
+			: this()
         {
             _name = name;
             _stateCode = stateCode;

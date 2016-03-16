@@ -86,7 +86,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		[Toggle(Toggles.RTA_AdherenceDetails_34267)]
 		public void ShouldNotCacheStateGroups()
 		{
 			var personId = Guid.NewGuid();
@@ -103,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Publisher.Clear();
 
 			Database
-				.ClearStateGroups()
+				.ClearStates()
 				.WithStateGroup("phone", "InCall");
 			Target.SaveState(new ExternalUserStateForTest
 			{
@@ -113,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Should().Not.Be.Empty();
 		}
-
+		
 		[Test, Ignore("Not applicable, unless we fake sql locking")]
 		public void ShouldNotSendDuplicateEvents()
 		{

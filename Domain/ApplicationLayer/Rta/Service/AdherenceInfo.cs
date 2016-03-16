@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Lazy<IEnumerable<Mapping>> mappings,
 			Guid businessUnitId,
 			StateRuleInfo stateRuleInfo,
-			ScheduleInfo scheduleInfo, 
+			ScheduleInfo scheduleInfo,
 			IAppliedAdherence appliedAdherence,
 			StateMapper stateMapper)
 		{

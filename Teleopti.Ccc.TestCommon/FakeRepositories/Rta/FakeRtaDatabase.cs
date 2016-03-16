@@ -328,10 +328,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 			return this;
 		}
-
+		
 		public IFakeDataBuilder ClearRuleMap()
 		{
 			RtaMapRepository.Clear();
+			return this;
+		}
+
+		public IFakeDataBuilder ClearStates()
+		{
+			RtaStateGroupRepository.Clear();
 			return this;
 		}
 
@@ -362,12 +368,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			stateGroup.SetBusinessUnit(_businessUnit);
 			stateGroup.AddState(statecode, statecode, Guid.Empty);
 			RtaStateGroupRepository.Add(stateGroup);
-			return this;
-		}
-
-		public IFakeDataBuilder ClearStateGroups()
-		{
-			RtaStateGroupRepository.Clear();
 			return this;
 		}
 
@@ -448,6 +448,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				.Select(m => JsonConvert.DeserializeObject<PersonOrganizationData>(JsonConvert.SerializeObject(m.Data)))
 				.ToArray();
 		}
+
 	}
 
 	public static class FakeDatabaseBuilderExtensions

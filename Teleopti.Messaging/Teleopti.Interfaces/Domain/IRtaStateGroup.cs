@@ -67,17 +67,18 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         bool IsLogOutState { get; set; }
 
-        /// <summary>
-        /// Creates new state and that belongs to this state group.
-        /// </summary>
-        /// <param name="stateName">Name of the state.</param>
-        /// <param name="stateCode">The state code from a specific ACD platform.</param>
-        /// <param name="platformTypeId">A static Guid that shows which platform the state comes from.</param>
-        /// <remarks>
-        /// Created by: Jonas N
-        /// Created date: 2008-10-03
-        /// </remarks>
-        IRtaState AddState(string stateName, string stateCode, Guid platformTypeId);
+		/// <summary>
+		/// Creates new state and that belongs to this state group.
+		/// </summary>
+		/// <param name="stateName">Name of the state.</param>
+		/// <param name="stateCode">The state code from a specific ACD platform.</param>
+		/// <param name="platformTypeId">A static Guid that shows which platform the state comes from.</param>
+		/// <remarks>
+		/// Created by: Jonas N
+		/// Created date: 2008-10-03
+		/// </remarks>
+		IRtaStateGroup AddState(string stateName, string stateCode, Guid platformTypeId);
+        IRtaStateGroup AddState(string stateCode, Guid platformTypeId);
 
         /// <summary>
         /// Moves the state to supplied target.

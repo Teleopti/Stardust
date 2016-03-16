@@ -64,9 +64,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return _currentActivity.Value;
 		}
 
+		public Guid? CurrentActivityId()
+		{
+			return _currentActivity.Value == null ? (Guid?)null : _currentActivity.Value.PayloadId;
+		}
+
+		public string CurrentActivityName()
+		{
+			return _currentActivity.Value == null ? null : _currentActivity.Value.Name;
+		}
+
 		public ScheduleLayer PreviousActivity()
 		{
 			return _previousActivity.Value;
+		}
+
+		public Guid? PreviousActivityId()
+		{
+			return _previousActivity.Value == null ? (Guid?)null : _previousActivity.Value.PayloadId;
 		}
 
 		public ScheduleLayer NextActivity()
@@ -77,16 +92,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public ScheduleLayer NextActivityInShift()
 		{
 			return _nextActivityInShift.Value;
-		}
-
-		public Guid? CurrentActivityId()
-		{
-			return _currentActivity.Value == null ? (Guid?)null : _currentActivity.Value.PayloadId;
-		}
-
-		public string CurrentActivityName()
-		{
-			return _currentActivity.Value == null ? null : _currentActivity.Value.Name;
 		}
 
 		public Guid? NextActivityId()

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
@@ -115,7 +116,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						x.SiteId,
 						() => _unitOfWork.Get(() => _previousStateInfoLoader.Load(x.PersonId)),
 						() => _databaseLoader.GetCurrentSchedule(x.PersonId),
-						() => MappingLoader.Load(),
+						s => MappingLoader.Load(),
 						s => _unitOfWork.Do(() => _agentStateReadModelUpdater.Update(s)),
 						_now,
 						_stateMapper,
@@ -153,7 +154,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						x.SiteId,
 						() => _unitOfWork.Get(() => _previousStateInfoLoader.Load(x.PersonId)),
 						() => _databaseLoader.GetCurrentSchedule(x.PersonId),
-						() => MappingLoader.Load(),
+						s => MappingLoader.Load(),
 						s => _unitOfWork.Do(() => _agentStateReadModelUpdater.Update(s)),
 						_now,
 						_stateMapper,
@@ -190,7 +191,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						x.SiteId.GetValueOrDefault(),
 						() => _unitOfWork.Get(() => _previousStateInfoLoader.Load(x.PersonId)),
 						() => _databaseLoader.GetCurrentSchedule(x.PersonId),
-						() => MappingLoader.Load(),
+						s => MappingLoader.Load(),
 						s => _unitOfWork.Do(() => _agentStateReadModelUpdater.Update(s)),
 						_now,
 						_stateMapper,
@@ -221,7 +222,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							x.SiteId.GetValueOrDefault(),
 							null,
 							() => _databaseLoader.GetCurrentSchedule(x.PersonId),
-							() => MappingLoader.Load(),
+							s => MappingLoader.Load(),
 							null,
 							_now,
 							_stateMapper,
@@ -286,7 +287,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							x.SiteId,
 							() => _unitOfWork.Get(() => _previousStateInfoLoader.Load(x.PersonId)),
 							() => _databaseLoader.GetCurrentSchedule(x.PersonId),
-							() => MappingLoader.Load(),
+							s => MappingLoader.Load(),
 							s => _unitOfWork.Do(() => _agentStateReadModelUpdater.Update(s)),
 							_now,
 							_stateMapper,
@@ -312,7 +313,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							x.SiteId,
 							() => _unitOfWork.Get(() => _previousStateInfoLoader.Load(x.PersonId)),
 							() => _databaseLoader.GetCurrentSchedule(x.PersonId),
-							() => MappingLoader.Load(),
+							s => MappingLoader.Load(),
 							s => _unitOfWork.Do(() => _agentStateReadModelUpdater.Update(s)),
 							_now,
 							_stateMapper,
@@ -394,8 +395,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var dataSourceId = validateSourceId(input);
 			var userCode = input.UserCode;
 
-			var mappings = _withUnitOfWork.Get(() => _mappingReader.Read());
-
 			_databaseReader.LoadPersonOrganizationData(dataSourceId, userCode)
 				.ForEach(x =>
 				{
@@ -409,7 +408,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							x.SiteId,
 							() => _previousStateInfoLoader.Load(x.PersonId),
 							() => _databaseReader.GetCurrentSchedule(x.PersonId),
-							() => mappings,
+							s =>
+							{
+								var stateCodes =
+									new[] {s.Stored.StateCode(), s.Input.StateCode}
+										.Distinct()
+										.ToArray();
+								var activities =
+									new[] {s.Schedule.CurrentActivityId(), s.Schedule.PreviousActivityId(), s.Schedule.NextActivityId()}
+										.Distinct()
+										.ToArray();
+								return _withUnitOfWork.Get(() => _mappingReader.ReadFor(stateCodes, activities));
+							},
 							s => _agentStateReadModelUpdater.Update(s),
 							_now,
 							_stateMapper,
@@ -437,7 +447,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							x.SiteId,
 							() => _previousStateInfoLoader.Load(x.PersonId),
 							() => _databaseReader.GetCurrentSchedule(x.PersonId),
-							() => mappings,
+							s => mappings,
 							s => _agentStateReadModelUpdater.Update(s),
 							_now,
 							_stateMapper,
@@ -475,7 +485,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					x.SiteId.GetValueOrDefault(),
 					() => _previousStateInfoLoader.Load(x.PersonId),
 					() => _databaseReader.GetCurrentSchedule(x.PersonId),
-					() => mappings,
+					s => mappings,
 					s => _agentStateReadModelUpdater.Update(s),
 					_now,
 					_stateMapper,
@@ -505,7 +515,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						x.SiteId.GetValueOrDefault(),
 						null,
 						() => _databaseReader.GetCurrentSchedule(x.PersonId),
-						() => mappings,
+						s => mappings,
 						null,
 						_now,
 						_stateMapper,
