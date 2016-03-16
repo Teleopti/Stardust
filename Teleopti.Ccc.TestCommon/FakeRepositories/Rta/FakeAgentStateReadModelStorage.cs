@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.TestCommon
+namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
 	public class FakeAgentStateReadModelStorage : IAgentStateReadModelReader, IAgentStateReadModelPersister
 	{

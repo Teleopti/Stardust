@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<LoadFromCache>().As<IStateContextLoader>().SingleInstance();
 
 			_config.Cache().This<MappingLoader>((c, b) => b
-				.CacheMethod(x => x.Cached())
+				.CacheMethod(x => x.Load())
 				.CacheKey(c.Resolve<CachePerDataSource>())
 				);
 			builder.CacheByClassProxy<MappingLoader>().As<IMappingLoader>().ApplyAspects().SingleInstance();
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				);
 			builder.CacheByInterfaceProxy<DatabaseLoader, IDatabaseLoader>().SingleInstance();
 			builder.RegisterType<DatabaseReader>().As<IDatabaseReader>().SingleInstance();
-			builder.RegisterType<MappingReader>().SingleInstance();
+			builder.RegisterType<MappingReader>().As<IMappingReader>().SingleInstance();
 
 			_config.Cache().This<TenantLoader>(b => b
 				.CacheMethod(x => x.TenantNameByKey(null))

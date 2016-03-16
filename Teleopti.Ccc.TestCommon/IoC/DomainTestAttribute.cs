@@ -85,6 +85,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			// Rta
 			system.UseTestDouble<FakeRtaDatabase>().For<IDatabaseReader>();
+			system.UseTestDouble<FakeMappingReader>().For<IMappingReader>();
 			system.UseTestDouble<FakeAgentStateReadModelStorage>().For<IAgentStateReadModelReader, IAgentStateReadModelPersister>();
 			system.UseTestDouble<FakeTeamOutOfAdherenceReadModelPersister>().For<ITeamOutOfAdherenceReadModelPersister>();
 			system.UseTestDouble<FakeSiteOutOfAdherenceReadModelPersister>().For<ISiteOutOfAdherenceReadModelPersister>();

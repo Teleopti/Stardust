@@ -23,11 +23,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_stateGroupRepository = stateGroupRepository;
 		}
 
-		public virtual IEnumerable<Mapping> Cached()
-		{
-			return Load();
-		}
-
 		[AllBusinessUnitsUnitOfWork]
 		public virtual IEnumerable<Mapping> Load()
 		{
@@ -36,9 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			var allMappings = from m in mappings
 				let businessUnitId = tryGetBusinessUnitId(m)
-
 				let activityId = m.Activity == null ? (Guid?) null : m.Activity.Id.Value
-
 				let @group = m.StateGroup == null
 					? new
 					{
@@ -67,9 +60,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 								PlatformTypeId = s.PlatformTypeId
 							}).ToArray()
 					}
-
 				from c in @group.StateCodes
-
 				let rule = m.RtaRule == null
 					? new
 					{
@@ -91,13 +82,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						ThresholdTime = m.RtaRule.ThresholdTime.Ticks,
 						AlarmColor = m.RtaRule.AlarmColor.ToArgb(),
 					}
-
 				select new Mapping
 				{
 					BusinessUnitId = businessUnitId,
 					PlatformTypeId = c.PlatformTypeId,
 					StateCode = c.StateCode,
-
 					ActivityId = activityId,
 					RuleId = rule.RuleId,
 					RuleName = rule.RuleName,
@@ -107,7 +96,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					IsAlarm = rule.IsAlarm,
 					ThresholdTime = rule.ThresholdTime,
 					AlarmColor = rule.AlarmColor,
-
 					StateGroupId = @group.GroupId,
 					StateGroupName = @group.GroupName,
 					IsLogOutState = @group.IsLogOutState
@@ -123,7 +111,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					BusinessUnitId = g.BusinessUnit.Id.Value,
 					PlatformTypeId = c.PlatformTypeId,
 					StateCode = c.StateCode,
-
 					StateGroupId = g.Id.Value,
 					StateGroupName = g.Name,
 					IsLogOutState = g.IsLogOutState
@@ -133,7 +120,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				.Concat(groupsWithoutMapping)
 				.ToArray();
 		}
-
+		
 		private static Guid tryGetBusinessUnitId(IRtaMap m)
 		{
 			if (m.StateGroup != null) return m.StateGroup.BusinessUnit.Id.Value;

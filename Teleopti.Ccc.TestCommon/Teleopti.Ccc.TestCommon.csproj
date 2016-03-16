@@ -161,7 +161,7 @@
     <Compile Include="Exceptions.cs" />
     <Compile Include="Execute.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="FakeAgentStateReadModelStorage.cs" />
+    <Compile Include="FakeRepositories\Rta\FakeAgentStateReadModelStorage.cs" />
     <Compile Include="FakeAllBusinessUnitsUnitOfWorkAspect.cs" />
     <Compile Include="FakeCurrentBusinessUnit.cs" />
     <Compile Include="FakeCurrentPersistCallbacks.cs" />
@@ -243,6 +243,7 @@
     <Compile Include="IoC\AllTogglesOnAttribute.cs" />
     <Compile Include="FakeRepositories\FakeLicenseRepository.cs" />
     <Compile Include="FakeData\FakeCurrentAnalyticsUnitOfWorkFactory.cs" />
+    <Compile Include="FakeRepositories\Rta\FakeMappingReader.cs" />
     <Compile Include="IoC\ISetupConfiguration.cs" />
     <Compile Include="IoC\ISystem.cs" />
     <Compile Include="IoC\ITestDoubleFor.cs" />
@@ -254,10 +255,10 @@
     <Compile Include="ObjectCopyExtension.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAdherenceDetailsReadModelPersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAdherencePercentageReadModelPersister.cs" />
-    <Compile Include="FakeRepositories\FakeRtaRuleRepository.cs" />
+    <Compile Include="FakeRepositories\Rta\FakeRtaRuleRepository.cs" />
     <Compile Include="FakeRepositories\Rta\FakeRtaDatabase.cs" />
-    <Compile Include="FakeRepositories\FakeRtaStateGroupRepository.cs" />
-    <Compile Include="FakeRepositories\FakeRtaMapRepository.cs" />
+    <Compile Include="FakeRepositories\Rta\FakeRtaStateGroupRepository.cs" />
+    <Compile Include="FakeRepositories\Rta\FakeRtaMapRepository.cs" />
     <Compile Include="FakeRepositories\Tenant\FakeTenants.cs" />
     <Compile Include="FakeScheduleDifferenceSaver.cs" />
     <Compile Include="FakeScheduleRange.cs" />
@@ -265,8 +266,8 @@
     <Compile Include="FakeShiftTradeLightValidator.cs" />
     <Compile Include="FakeSignalR.cs" />
     <Compile Include="FakeSignalRClient.cs" />
-    <Compile Include="FakeSiteOutOfAdherenceReadModelPersister.cs" />
-    <Compile Include="FakeTeamOutOfAdherenceReadModelPersister.cs" />
+    <Compile Include="FakeRepositories\Rta\FakeSiteOutOfAdherenceReadModelPersister.cs" />
+    <Compile Include="FakeRepositories\Rta\FakeTeamOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="FakeTimeZoneGuard.cs" />
     <Compile Include="FakeUserCulture.cs" />
     <Compile Include="FakeUserTimeZone.cs" />

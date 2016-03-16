@@ -13,6 +13,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
 using SharpTestsEx;
+using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 {

@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
-	public class MappingReader
+	public class MappingReader : IMappingReader
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 

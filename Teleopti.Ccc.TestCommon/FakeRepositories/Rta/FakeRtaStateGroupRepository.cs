@@ -4,33 +4,33 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.TestCommon.FakeRepositories
+namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
-	public class FakeRtaMapRepository : IRtaMapRepository
+	public class FakeRtaStateGroupRepository : IRtaStateGroupRepository
 	{
-		private readonly IList<IRtaMap> _data = new List<IRtaMap>();
-
-		public void Add(IRtaMap entity)
+		private readonly IList<IRtaStateGroup> _data = new List<IRtaStateGroup>();
+		
+		public void Add(IRtaStateGroup entity)
 		{
 			_data.Add(entity);
 		}
 
-		public void Remove(IRtaMap entity)
+		public void Remove(IRtaStateGroup entity)
 		{
 			throw new NotImplementedException();
 		}
 
-		public IRtaMap Get(Guid id)
+		public IRtaStateGroup Get(Guid id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public IList<IRtaMap> LoadAll()
+		public IList<IRtaStateGroup> LoadAll()
 		{
 			return _data;
 		}
 
-		public IRtaMap Load(Guid id)
+		public IRtaStateGroup Load(Guid id)
 		{
 			throw new NotImplementedException();
 		}
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public void AddRange(IEnumerable<IRtaMap> entityCollection)
+		public void AddRange(IEnumerable<IRtaStateGroup> entityCollection)
 		{
 			throw new NotImplementedException();
 		}
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			get { throw new NotImplementedException(); }
 		}
 
-		public IList<IRtaMap> LoadAllCompleteGraph()
+		public IList<IRtaStateGroup> LoadAllCompleteGraph()
 		{
 			return _data;
 		}

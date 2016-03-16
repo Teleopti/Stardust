@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 
-namespace Teleopti.Ccc.TestCommon
+namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
 	public class FakeTeamOutOfAdherenceReadModelPersister : ITeamOutOfAdherenceReadModelPersister, ITeamOutOfAdherenceReadModelReader
 	{
