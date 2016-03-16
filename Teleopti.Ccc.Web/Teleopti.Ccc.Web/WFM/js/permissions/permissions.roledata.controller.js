@@ -5,14 +5,22 @@
 		'$scope', '$filter', 'RoleDataService', 'Roles',
 			function ($scope, $filter, RoleDataService, Roles) {
 				$scope.organization = { DynamicOptions: [] };
-				$scope.dynamicOptionSelected = { data: 0, isBuiltIn: false };
+				$scope.dynamicOptionSelected = { data: 0, isBuiltIn: false, isMyRole:false };
 
-				
+
 				$scope.$watch(function () { return Roles.selectedRole; },
 					function (newSelectedRole) {
 						if (!newSelectedRole.Id) return;
 						RoleDataService.refreshpermissions(newSelectedRole.Id);
 						$scope.dynamicOptionSelected.isBuiltIn = Roles.selectedRole.BuiltIn;
+					}
+				);
+
+				$scope.$watch(function () { return Roles.selectedRole; },
+					function (newSelectedRole) {
+						if (!newSelectedRole.Id) return;
+						RoleDataService.refreshpermissions(newSelectedRole.Id);
+						$scope.dynamicOptionSelected.isMyRole = Roles.selectedRole.IsMyRole;
 					}
 				);
 
@@ -27,10 +35,10 @@
 				$scope.$watch(function () { return RoleDataService.dynamicOptionSelected; },
 					function (option) {
 						$scope.dynamicOptionSelected.data = option;
-					
+
 					}
 				);
-				
+
 				var uiTree = {};
 				uiTree.deselectParent = function (node) {
 				    if (!node.$parentNodeScope) return;
@@ -72,7 +80,7 @@
 				    	child.selected = state;
 				    	children.push({ type: child.Type, id: child.Id });
 
-				        if (child.ChildNodes.length > 0){			            
+				        if (child.ChildNodes.length > 0){
 				           children = children.concat(uiTree.toggleChildSelection(child.ChildNodes, state));
 				        }
 
@@ -91,7 +99,7 @@
 						}
 					}
 				};
-				
+
 				$scope.toggleOrganizationSelection = function (node) {
 					if (Roles.selectedRole.BuiltIn) return;
 					var dataNode = node.$modelValue;
@@ -117,8 +125,8 @@
 
 				$scope.changeOption = function (option) {
 					RoleDataService.assignAuthorizationLevel($scope.selectedRole, option);
-				}; 
-				 
+				};
+
 				RoleDataService.refreshOrganizationSelection();
 			}
 	]);

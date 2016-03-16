@@ -51,11 +51,16 @@
 												{{'Edit' | translate}}
 											</md-tooltip>
 										</i>
+										<span ng-class="{'my-role-lock': role.IsMyRole}">
 										<i ng-click="removeRole(role)" class="mdi mdi-delete">
-											<md-tooltip>
-												{{'Delete' | translate}}
-											</md-tooltip>
 										</i>
+										<md-tooltip ng-hide="role.IsMyRole">
+											{{'Delete' | translate}}
+										</md-tooltip>
+										<md-tooltip ng-show="role.IsMyRole">
+											{{'NotAllowed' | translate}}
+										</md-tooltip>
+									</span>
 									</span>
 								</div>
 							</li>

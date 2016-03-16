@@ -63,6 +63,26 @@
 	pointer-events:none;
 }
 
+.my-role-lock{
+	cursor: not-allowed;
+	i{
+		@extend .option-locked;
+	}
+}
+
+.tree-handle-wrapper{
+	width:100%;
+}
+
+.functionLock{
+	cursor: not-allowed;
+
+	.ui-tree-handle{
+		pointer-events:none;
+		color:$gray054;
+	}
+}
+
 .permission-filter-label{
 	margin:0!important;
 }

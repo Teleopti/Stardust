@@ -21,7 +21,7 @@
 					if (!newSelectedRole.Id) return;
 					$scope.selectedRole = newSelectedRole;
 					if ($scope.selectedRole.BuiltIn) {
-						message = growl.warning("<i class='mdi mdi-alert' ></i><span translate>ChangesAreDisabled</span>", {
+						message = growl.warning("<i class='mdi mdi-alert' ></i><span>{{'ChangesAreDisabled'|translate}}</span>", {
 							ttl: 5000,
 							disableCountDown: true
 						});
@@ -129,6 +129,14 @@
 			var decreaseParentNumberOfSelectedNodes = function (node) {
 				if (node.$parentNodeScope) node.$parentNodeScope.$modelValue.nmbSelectedChildren++;
 			}
+
+			$scope.disablePermissionForMe = function (node) {
+				if ( $scope.selectedRole.IsMyRole)
+				{
+					return true;
+				}
+			}
+
 		}
 	]);
 
