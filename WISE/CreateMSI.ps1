@@ -27,7 +27,7 @@ Set-ExecutionPolicy bypass -force
 Import-module "$SourceDir\Wise\teamcity.psm1" -Force
 
 TaskSetup {
-    TeamCity-ReportBuildProgress "Running task $($psake.context.Peek().currentTaskName)"
+    TeamCity-ReportBuildProgress "Running task $($psake.context.Peek().PreReq)"
 }
 
 task default -depends init, PreReq, MountK, CompileWse, CompileWsi, ProductVersion, PostReq, UnMountK, CHM-SDK-File, MalewareScan
@@ -51,6 +51,8 @@ task MountK -description "Mount working directory to K:" {
 
 task PreReq -depends init -description "Move/Copy preparation of files" {
 
+	TeamCity-ReportBuildProgress "Running task $($psake.context.Peek().currentTaskName)"
+	
     MoveWiseFiles
     CopyDependencies
     CopyWiseArtifacts
@@ -104,7 +106,7 @@ task CHM-SDK-File -depends CompileWse, CompileWsi -description "Create chm sdk f
     $env:Path = $env:Path + ";C:\Program Files (x86)\MSBuild\12.0\bin\amd64"
     
     #Compile docSdkx64.shfbproj
-    exec { msbuild $SdkFile /p:WorkingDirectory=$MountKDirectory /p:SdkHostPath=$SdkHostPath /p:OutputPath=$OutputPath }
+    exec { msbuild $SdkFile /p:WorkingDirectory=$env:MountKDirectory /p:SdkHostPath=$SdkHostPath /p:OutputPath=$OutputPath }
 
 }
 
