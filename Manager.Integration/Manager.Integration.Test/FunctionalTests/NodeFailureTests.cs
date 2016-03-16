@@ -20,7 +20,7 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using LogHelper = Manager.Integration.Test.Helpers.LogHelper;
 
-namespace Manager.Integration.Test
+namespace Manager.Integration.Test.FunctionalTests
 {
 	[TestFixture]
 	class NodeFailureTests

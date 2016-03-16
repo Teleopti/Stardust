@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
-using log4net.Appender;
 using log4net.Config;
 using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
@@ -17,7 +16,7 @@ using Manager.Integration.Test.Validators;
 using Manager.IntegrationTest.Console.Host.Diagnostics;
 using NUnit.Framework;
 
-namespace Manager.Integration.Test
+namespace Manager.Integration.Test.FunctionalTests
 {
 	[TestFixture]
 	public class OneManagerAndOneNodeTests

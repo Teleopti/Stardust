@@ -15,10 +15,10 @@ using Manager.Integration.Test.Timers;
 using Manager.Integration.Test.Validators;
 using NUnit.Framework;
 
-namespace Manager.Integration.Test
+namespace Manager.Integration.Test.LoadTests
 {
 	[TestFixture]
-	public class OneManagerAndFiveNodesLoadTests
+	class SixManagersSixNodesLoadTests
 	{
 		private string ManagerDbConnectionString { get; set; }
 		private Task Task { get; set; }
@@ -29,7 +29,7 @@ namespace Manager.Integration.Test
 		private string _buildMode = "Debug";
 
 		private static readonly ILog Logger =
-			LogManager.GetLogger(typeof(OneManagerAndFiveNodesLoadTests));
+			LogManager.GetLogger(typeof (OneManagerAndFiveNodesLoadTests));
 
 		private void logMessage(string message)
 		{
@@ -40,7 +40,7 @@ namespace Manager.Integration.Test
 		public void TestFixtureSetUp()
 		{
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-			
+
 			ManagerDbConnectionString =
 				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString;
 
@@ -48,7 +48,7 @@ namespace Manager.Integration.Test
 			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
 			logMessage("Start TestFixtureSetUp");
-			
+
 #if (DEBUG)
 			// Do nothing.
 #else
@@ -63,8 +63,8 @@ namespace Manager.Integration.Test
 
 			AppDomainTask = new AppDomainTask(_buildMode);
 
-			Task = AppDomainTask.StartTask(numberOfManagers: 1,
-			                               numberOfNodes: 5,
+			Task = AppDomainTask.StartTask(numberOfManagers: 6,
+			                               numberOfNodes: 6,
 			                               cancellationTokenSource: CancellationTokenSource);
 			Thread.Sleep(TimeSpan.FromSeconds(2));
 			logMessage("Finished TestFixtureSetUp");
@@ -92,10 +92,6 @@ namespace Manager.Integration.Test
 			}
 		}
 
-		/// <summary>
-		///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
-		///     netsh http add urlacl url=http://+:9050/ user=everyone listen=yes
-		/// </summary>
 		[Test]
 		public void ShouldBeAbleToCreateManySuccessJobRequestTest()
 		{
@@ -132,9 +128,9 @@ namespace Manager.Integration.Test
 			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
-			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(5,
-																  sqlNotiferCancellationTokenSource,
-																  IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
+			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(6,
+			                                                      sqlNotiferCancellationTokenSource,
+			                                                      IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
 			task.Start();
 
 			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(30));
