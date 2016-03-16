@@ -457,7 +457,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		}
 
 		[Test]
-		public void ShouldRemoveFunctionWitChildAndAllParents()
+		public void ShouldRemoveFunctionWithChildAndAllParents()
 		{
 			var roleId = Guid.NewGuid();
 			var iamNoParentId = Guid.NewGuid();
@@ -486,6 +486,24 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 				new FunctionsForRoleInput() {Functions = new Guid[] {iamNoParentId, parentOfEverythingId}});
 
 			agentRole.ApplicationFunctionCollection.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldNotRemoveAllFunctionsIfMyRole()
+		{
+			var person = PersonFactory.CreatePersonWithApplicationRolesAndFunctions();
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var myRole = person.PermissionInformation.ApplicationRoleCollection.First();
+			ApplicationRoleRepository.Add(myRole);
+			var theFunction = person.PermissionInformation.ApplicationRoleCollection.First().ApplicationFunctionCollection.First();
+			ApplicationFunctionRepository.Add(theFunction);
+
+			
+			Target.RemoveFunction(myRole.Id.Value, theFunction.Id.Value,
+				new FunctionsForRoleInput() { Functions = new Guid[0] });
+
+			myRole.ApplicationFunctionCollection.Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]

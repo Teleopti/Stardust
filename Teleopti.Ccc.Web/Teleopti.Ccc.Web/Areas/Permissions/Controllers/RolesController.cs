@@ -162,6 +162,11 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 		  {
 			  var role = _roleRepository.Get(roleId);
 			  if (role.BuiltIn) return BadRequest(CannotModifyBuiltInRoleErrorMessage);
+
+			  var myRoles = _loggedOnUser.CurrentUser().PermissionInformation.ApplicationRoleCollection;
+			  var isMyRole = myRoles.Any(myRole => myRole.Id == role.Id);
+			  if (isMyRole) return BadRequest(CannotModifyMyRoleErrorMessage);
+
 			  var children = _applicationFunctionRepository.GetChildFunctions(functionId);
 			  foreach (var child in children)
 				  if (child.Id.HasValue) removeChildren(child.Id.Value, role);
