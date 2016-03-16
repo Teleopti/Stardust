@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
 		[Test]
-		public void ShouldSynchronizeScheduleStateHolder()
+		public void ShouldWorkWhenScenarioIsNotDefault()
 		{
 			var scenario = new Scenario("_");
 			var phoneActivity = ActivityFactory.CreateActivity("_");
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			ass.AddActivity(phoneActivity, new TimePeriod(8, 0, 17, 0));
 			ass.SetShiftCategory(new ShiftCategory("_").WithId());
 			var schedulerStateHolderFrom = SchedulerStateHolderFrom();
-			schedulerStateHolderFrom.SchedulingResultState.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000,1,1,2020,1,1)));
+			schedulerStateHolderFrom.SchedulingResultState.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2009, 12, 31, 2010, 1, 2)));
 			schedulerStateHolderFrom.AllPermittedPersons.Add(agent);
 			schedulerStateHolderFrom.SchedulingResultState.PersonsInOrganization.Add(agent);
 			var scheduleDay = ExtractedSchedule.CreateScheduleDay(schedulerStateHolderFrom.SchedulingResultState.Schedules, agent, dateOnly);
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		}
 
 		[Test]
-		public void ShouldSynchronizeScheduleStateHolderInDefaultScenario()
+		public void ShouldWorkWhenScenarioIsDefault()
 		{
 			var scenario = new Scenario("_") {DefaultScenario = true};
 			var phoneActivity = ActivityFactory.CreateActivity("_");
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			ass.AddActivity(phoneActivity, new TimePeriod(8, 0, 17, 0));
 			ass.SetShiftCategory(new ShiftCategory("_").WithId());
 			var schedulerStateHolderFrom = SchedulerStateHolderFrom();
-			schedulerStateHolderFrom.SchedulingResultState.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2020, 1, 1)));
+			schedulerStateHolderFrom.SchedulingResultState.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2009, 12, 31, 2010, 1, 2)));
 			schedulerStateHolderFrom.AllPermittedPersons.Add(agent);
 			schedulerStateHolderFrom.SchedulingResultState.PersonsInOrganization.Add(agent);
 			var scheduleDay = ExtractedSchedule.CreateScheduleDay(schedulerStateHolderFrom.SchedulingResultState.Schedules, agent, dateOnly);
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			ass.AddActivity(phoneActivity, new TimePeriod(8, 0, 17, 0));
 			ass.SetShiftCategory(new ShiftCategory("_").WithId());
 			var schedulerStateHolderFrom = SchedulerStateHolderFrom();
-			schedulerStateHolderFrom.SchedulingResultState.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2010, 1, 1, 2010, 1, 2)));
+			schedulerStateHolderFrom.SchedulingResultState.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2009, 12, 31, 2010, 1, 2)));
 			schedulerStateHolderFrom.AllPermittedPersons.Add(agent);
 			schedulerStateHolderFrom.SchedulingResultState.PersonsInOrganization.Add(agent);
 			var scheduleDay = ExtractedSchedule.CreateScheduleDay(schedulerStateHolderFrom.SchedulingResultState.Schedules, agent, dateOnly);
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9)
 			};
 			var schedulerStateHolderFrom = SchedulerStateHolderFrom();
-			schedulerStateHolderFrom.SchedulingResultState.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2020, 1, 1)));
+			schedulerStateHolderFrom.SchedulingResultState.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2009, 12, 31, 2010, 1, 2)));
 			schedulerStateHolderFrom.SchedulingResultState.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>();
 			var agents = new List<IPerson>();
 			var scheduleDays = new List<IScheduleDay>();

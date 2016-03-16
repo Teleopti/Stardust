@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 				{
 					var toScheduleDay = toDic[agent].ScheduledDay(fromScheduleDay.DateOnlyAsPeriod.DateOnly);
 					var toAssignment = toScheduleDay.PersonAssignment(true);
-					toAssignment.SetActivitiesAndShiftCategoryFrom(fromScheduleDay.PersonAssignment(true));
+					toAssignment.FillWithDataFrom(fromScheduleDay.PersonAssignment(true));
 					toDic.Modify(toScheduleDay);
 				}
 			}
