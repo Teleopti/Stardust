@@ -1,7 +1,7 @@
 ﻿Framework "4.0"
 
 properties {
-	$MSBuildPath = "C:\Program Files (x86)\MSBuild\12.0\bin\amd64\MSBuild.exe"
+	#$MSBuildPath = "C:\Program Files (x86)\MSBuild\12.0\bin\amd64\MSBuild.exe"
     $base_dir = resolve-path .\
     #$source_dir = "$base_dir\src"
     
@@ -17,12 +17,14 @@ properties {
     
     $ClamWinTool = "$env:ClamWinTool"
     $ClamWinDb = "$env:ClamWinDb"
-    $OutputPath = "$MountKDirectory\SdkDocOutput"
+    
+	$OutputPath = "$MountKDirectory\SdkDocOutput"
     $SdkHostPath = "$SourceDir\SDK\bin"
-      
+    $SdkFile = "$MountKDirectory\Teamcity\SdkDoc\docSdkx64.shfbproj" 
 }
 
 Include .\teamcity.psm1
+
 TaskSetup {
     TeamCity-ReportBuildProgress "Running task $($psake.context.Peek().currentTaskName)"
 }
@@ -84,7 +86,8 @@ task CompileWsi -depends Init, PreReq, MountK -description "Complie all WSI file
 }
 
 task ProductVersion -depends CompileWse, CompileWsi -description "Sets the current version number in MSI" {
-    Set-ProductVersion "$SourceDir\Wise\ccc7_client\ccc7_client.msi" "$ProductVersion"
+    
+	Set-ProductVersion "$SourceDir\Wise\ccc7_client\ccc7_client.msi" "$ProductVersion"
     Set-ProductVersion "$SourceDir\Wise\ccc7_server\ccc7_server.msi" "$ProductVersion"
 }
 
@@ -96,8 +99,11 @@ task PostReq -depends CompileWse, CompileWsi, ProductVersion -description "Tasks
 
 task CHM-SDK-File -depends CompileWse, CompileWsi -description "Create chm sdk file" {
 
-	exec { msbuild "$SdkFile" /p:WorkingDirectory=$MountKDirectory /p:SdkHostPath=$SdkHostPath }
-    #& $MSBuildPath "$MountKDirectory\teamcity\SdkDoc\docSdkx64.shfbproj"
+    #Add Msbuild to env path temporary
+    $env:Path = $env:Path + ";C:\Program Files (x86)\MSBuild\12.0\bin\amd64"
+    
+    #Compile docSdkx64.shfbproj
+    exec { msbuild $SdkFile /p:WorkingDirectory=$MountKDirectory /p:SdkHostPath=$SdkHostPath /p:OutputPath=$OutputPath }
 
 }
 
