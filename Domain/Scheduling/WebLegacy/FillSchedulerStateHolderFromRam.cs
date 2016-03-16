@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			schedulerStateHolderTo.SchedulingResultState.AllPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>();
 
 			var scheduleDictionary = new ScheduleDictionary(_schedulerStateHolderFrom.Schedules.Scenario, _schedulerStateHolderFrom.Schedules.Period);
-			moveSchedules(_schedulerStateHolderFrom.Schedules, scheduleDictionary, schedulerStateHolderTo.AllPermittedPersons, period);
+			moveSchedules(_schedulerStateHolderFrom.Schedules, scheduleDictionary, schedulerStateHolderTo.AllPermittedPersons, _schedulerStateHolderFrom.Schedules.Period.LoadedPeriod().ToDateOnlyPeriod(_schedulerStateHolderFrom.TimeZoneInfo));
 			schedulerStateHolderTo.SchedulingResultState.Schedules = scheduleDictionary;
 			schedulerStateHolderTo.SchedulingResultState.SkillDays = _schedulerStateHolderFrom.SchedulingResultState.SkillDays;
 
