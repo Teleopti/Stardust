@@ -88,7 +88,7 @@
     <Compile Include="JobHistory.cs" />
     <Compile Include="FunctionalTests\IntegrationControllerTests.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="RecoveryTests\OneManagerAndOneNodeTests.cs" />
+    <Compile Include="RecoveryTests\OneManagerAndOneNodeRecoveryTests.cs" />
     <Compile Include="Scripts\ScriptExecuteHelper.cs" />
     <Compile Include="LoadTests\SixManagersSixNodesLoadTests.cs" />
     <Compile Include="Tasks\AppDomainTask.cs" />

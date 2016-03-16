@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Reflection;
+using System.Threading;
 using NodeTest.Fakes;
 using NUnit.Framework;
 using Stardust.Node.API;
@@ -33,6 +34,24 @@ namespace NodeTest.Timers
 
 
 			_httpSenderFake = new PostHttpRequestFake();
+		}
+
+		[Test]
+		public void ShouldNotCrashWhenTimerStarts()
+		{
+			var timer =
+				new TrySendJobProgressToManagerTimer(_nodeConfiguration,
+													 _httpSenderFake,
+													 1000);
+
+			timer.SendProgress(Guid.NewGuid(), "Progress message");
+			timer.SendProgress(Guid.NewGuid(), "Progress message");
+
+			timer.Start();
+
+			Thread.Sleep(TimeSpan.FromMinutes(5));	
+
+			timer.Dispose();
 		}
 
 		[Test]

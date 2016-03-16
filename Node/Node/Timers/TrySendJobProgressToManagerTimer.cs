@@ -201,14 +201,26 @@ namespace Stardust.Node.Timers
 						LogHelper.LogDebugWithLineNumber(Logger,
 														 "Try send job progress ( jobId, progressDetail ) : ( " + sendJobProgressModel.JobId +  ", " + sendJobProgressModel.ProgressDetail + " )");
 
-						sendJobProgressModel.ResponseMessage =
-							await HttpSender.PostAsync(UriBuilder.Uri,
-							                           new
-							                           {
-								                           sendJobProgressModel.JobId,
-								                           sendJobProgressModel.ProgressDetail,
-														   sendJobProgressModel.Created
-							                           });
+						try
+						{
+							sendJobProgressModel.ResponseMessage =
+									await HttpSender.PostAsync(UriBuilder.Uri,
+												   new
+												   {
+													   sendJobProgressModel.JobId,
+													   sendJobProgressModel.ProgressDetail,
+													   sendJobProgressModel.Created
+												   });
+
+						}
+						catch (Exception exp)
+						{
+							var msg =
+								string.Format("Send job progresses to manager failed for job ( jobId ) : ( {0} )",
+								              sendJobProgressModel.JobId);
+
+							LogHelper.LogErrorWithLineNumber(Logger,msg,exp);
+						}
 					}
 				}
 				else

@@ -17,10 +17,10 @@ using NUnit.Framework;
 namespace Manager.Integration.Test.RecoveryTests
 {
 	[TestFixture]
-	public class OneManagerAndOneNodeTests
+	public class OneManagerAndOneNodeRecoveryTests
 	{
 		private static readonly ILog Logger =
-			LogManager.GetLogger(typeof (OneManagerAndOneNodeTests));
+			LogManager.GetLogger(typeof (OneManagerAndOneNodeRecoveryTests));
 
 		private readonly bool _clearDatabase = true;
 		private readonly string _buildMode = "Debug";
