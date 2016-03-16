@@ -23,7 +23,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			IPersonFinderReadOnlyRepository searchRepository,
 			IPersonRepository personRepository,
 			IPermissionProvider permissionProvider,
-			IOptionalColumnRepository optionalColumnRepository, IPersonAbsenceRepository personAbsenceRepository, ILoggedOnUser loggedOnUser)
+			IOptionalColumnRepository optionalColumnRepository, IPersonAbsenceRepository personAbsenceRepository,
+			ILoggedOnUser loggedOnUser)
 		{
 			_searchRepository = searchRepository;
 			_personRepository = personRepository;
@@ -33,14 +34,83 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			_loggedOnUser = loggedOnUser;
 		}
 
-		public PeopleSummaryModel SearchPermittedPeople(IDictionary<PersonFinderField, string> criteriaDictionary,
+		public PeopleSummaryModel SearchPermittedPeopleSummary(IDictionary<PersonFinderField, string> criteriaDictionary,
 			int pageSize, int currentPageIndex, DateOnly currentDate, IDictionary<string, bool> sortedColumns, string function)
 		{
-			var optionalColumnCollection = _optionalColumnRepository.GetOptionalColumns<Person>();
+			var personIdList = getPermittedPersonIdList(criteriaDictionary,pageSize, currentPageIndex, currentDate,
+				sortedColumns, function);
 
-			var personIdList = GetPermittedPersonIdList(criteriaDictionary,
-				pageSize, currentPageIndex, currentDate, sortedColumns, function);
-			var peopleList = _personRepository.FindPeople(personIdList).ToList();
+			return searchPermittedPeopleSummary(personIdList, pageSize);
+		}
+
+		public IEnumerable<IPerson> SearchPermittedPeople(IDictionary<PersonFinderField, string> criteriaDictionary,
+			DateOnly dateInUserTimeZone, string function)
+		{
+			var searchCriteria = CreatePersonFinderSearchCriteria(criteriaDictionary, 9999, 1, dateInUserTimeZone,
+				null);
+			var personIdList = GetPermittedPersonIdList(searchCriteria, dateInUserTimeZone, function);
+			return _personRepository.FindPeople(personIdList).ToList();
+		}
+
+		public IEnumerable<IPerson> SearchPermittedPeople(PersonFinderSearchCriteria searchCriteria,
+			DateOnly dateInUserTimeZone, string function)
+		{
+			var personIdList = GetPermittedPersonIdList(searchCriteria, dateInUserTimeZone, function);
+			return _personRepository.FindPeople(personIdList).ToList();
+		}
+
+		public IEnumerable<IPerson> SearchPermittedPeopleWithAbsence(IEnumerable<IPerson> permittedPeople,
+			DateOnly dateInUserTimeZone)
+		{
+			var startDateTime = dateInUserTimeZone.Date;
+			startDateTime = TimeZoneHelper.ConvertToUtc(startDateTime,
+				_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
+
+			var endDateTime = dateInUserTimeZone.Date.AddDays(1).AddSeconds(-1);
+			endDateTime = TimeZoneHelper.ConvertToUtc(endDateTime,
+				_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
+
+			var personAbsences =
+				_personAbsenceRepository.Find(permittedPeople, new DateTimePeriod(startDateTime, endDateTime)).ToList();
+
+			return personAbsences.Select(personAbsence => personAbsence.Person).ToList();
+		}
+
+		public IEnumerable<Guid> GetPermittedPersonIdList(PersonFinderSearchCriteria searchCriteria, DateOnly currentDate,
+			string function)
+		{
+			var permittedPersonList =
+				searchCriteria.DisplayRows.Where(
+					r => r.RowNumber > 0 && _permissionProvider.HasOrganisationDetailPermission(function, currentDate, r));
+			return permittedPersonList.Select(x => x.PersonId);
+		}
+
+		public PersonFinderSearchCriteria CreatePersonFinderSearchCriteria(IDictionary<PersonFinderField, string> criteriaDictionary,
+			int pageSize, int currentPageIndex, DateOnly currentDate, IDictionary<string, bool> sortedColumns)
+		{
+			var search = new PersonFinderSearchCriteria(criteriaDictionary, pageSize, currentDate, sortedColumns)
+			{
+				CurrentPage = currentPageIndex
+			};
+			_searchRepository.Find(search);
+			return search;
+		}
+
+		private IEnumerable<Guid> getPermittedPersonIdList(IDictionary<PersonFinderField, string> criteriaDictionary,
+			int pageSize, int currentPageIndex, DateOnly currentDate, IDictionary<string, bool> sortedColumns, string function)
+		{
+			var search = CreatePersonFinderSearchCriteria(criteriaDictionary, pageSize, currentPageIndex, currentDate, sortedColumns);
+
+			var permittedPersonList =
+				search.DisplayRows.Where(
+					r => r.RowNumber > 0 && _permissionProvider.HasOrganisationDetailPermission(function, currentDate, r));
+			return permittedPersonList.Select(x => x.PersonId);
+		}
+
+		private PeopleSummaryModel searchPermittedPeopleSummary(IEnumerable<Guid> personIds, int pageSize)
+		{
+			var optionalColumnCollection = _optionalColumnRepository.GetOptionalColumns<Person>();
+			var peopleList = _personRepository.FindPeople(personIds).ToList();
 			var totalPages = peopleList.Count == 0 ? 0 : peopleList.Count / pageSize + 1;
 
 			return new PeopleSummaryModel
@@ -50,44 +120,5 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 				OptionalColumns = optionalColumnCollection
 			};
 		}
-
-		public IEnumerable<IPerson> SearchPermittedPeople(IDictionary<PersonFinderField, string> criteriaDictionary, DateOnly dateInUserTimeZone, string function)
-		{
-			var personIdList = GetPermittedPersonIdList(criteriaDictionary, 9999, 1,dateInUserTimeZone, null, function);
-			return _personRepository.FindPeople(personIdList).ToList();
-		}
-
-		public IEnumerable<IPerson> SearchPermittedPeopleWithAbsence(IDictionary<PersonFinderField, string> criteriaDictionary, DateOnly dateInUserTimeZone, string function)
-		{
-			var permittedPeople = SearchPermittedPeople(criteriaDictionary, dateInUserTimeZone, function);
-
-			var startDateTime = new DateTime(dateInUserTimeZone.Year, dateInUserTimeZone.Month, dateInUserTimeZone.Day);
-			startDateTime = TimeZoneHelper.ConvertToUtc(startDateTime, _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
-			var endDateTime = new DateTime(dateInUserTimeZone.Year, dateInUserTimeZone.Month, dateInUserTimeZone.Day, 23, 59, 59);
-			endDateTime = TimeZoneHelper.ConvertToUtc(endDateTime, _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
-			var personAbsences = _personAbsenceRepository.Find(permittedPeople, new DateTimePeriod(startDateTime, endDateTime)).ToList();
-
-			return personAbsences.Select(personAbsence => personAbsence.Person).ToList();
-		}
-
-		public IEnumerable<Guid> GetPermittedPersonIdList(IDictionary<PersonFinderField, string> criteriaDictionary,
-			int pageSize, int currentPageIndex, DateOnly currentDate, IDictionary<string, bool> sortedColumns, string function)
-		{
-			var search = new PersonFinderSearchCriteria(criteriaDictionary, pageSize, currentDate,
-				sortedColumns)
-			{
-				CurrentPage = currentPageIndex
-			};
-			_searchRepository.Find(search);
-
-			var permittedPersonList =
-				search.DisplayRows.Where(
-					r =>
-						r.RowNumber > 0 &&
-						_permissionProvider.HasOrganisationDetailPermission(
-						function,
-							currentDate, r));
-			return permittedPersonList.Select(x => x.PersonId);
-		} 
 	}
 }

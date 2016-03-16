@@ -23,8 +23,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IPeopleSearchProvider _searchProvider;
 		private readonly IPersonRepository _personRepository;
 
-		public TeamScheduleViewModelFactory(IPermissionProvider permissionProvider, IScheduleProvider scheduleProvider,
-			ITeamScheduleProjectionProvider projectionProvider, ILoggedOnUser loggedOnUser, ICommonAgentNameProvider commonAgentNameProvider, IPeopleSearchProvider searchProvider, IPersonRepository personRepository)
+		public TeamScheduleViewModelFactory(IPermissionProvider permissionProvider, IScheduleProvider scheduleProvider, 
+			ITeamScheduleProjectionProvider projectionProvider, ILoggedOnUser loggedOnUser,
+			ICommonAgentNameProvider commonAgentNameProvider, IPeopleSearchProvider searchProvider,
+			IPersonRepository personRepository)
 		{
 			_permissionProvider = permissionProvider;
 			_scheduleProvider = scheduleProvider;
@@ -35,19 +37,18 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			_personRepository = personRepository;
 		}
 
-		public GroupScheduleViewModel CreateViewModel(IDictionary<PersonFinderField, string> criteriaDictionary, DateOnly dateInUserTimeZone, int pageSize, int currentPageIndex, bool isOnlyAbsences)
+		public GroupScheduleViewModel CreateViewModel(IDictionary<PersonFinderField, string> criteriaDictionary,
+			DateOnly dateInUserTimeZone, int pageSize, int currentPageIndex, bool isOnlyAbsences)
 		{
-			IPerson[] people;
+			var searchCriteria = _searchProvider.CreatePersonFinderSearchCriteria(criteriaDictionary, 9999, 1, dateInUserTimeZone,
+				null);
+			var people = _searchProvider.SearchPermittedPeople(searchCriteria, dateInUserTimeZone,
+				DefinedRaptorApplicationFunctionPaths.ViewSchedules).ToArray();
+
 			if (isOnlyAbsences)
 			{
-				people =
-					_searchProvider.SearchPermittedPeopleWithAbsence(criteriaDictionary, dateInUserTimeZone,
-						DefinedRaptorApplicationFunctionPaths.ViewSchedules).ToArray();
+				people = _searchProvider.SearchPermittedPeopleWithAbsence(people, dateInUserTimeZone).ToArray();
 				people = filterAbsenceOutOfSchedule(dateInUserTimeZone, people);
-			}
-			else
-			{
-				people = _searchProvider.SearchPermittedPeople(criteriaDictionary, dateInUserTimeZone, DefinedRaptorApplicationFunctionPaths.ViewSchedules).ToArray();
 			}
 
 			if (people.Length > 500)
@@ -56,13 +57,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				{
 					Schedules = new List<GroupScheduleShiftViewModel>(),
 					Total = people.Length,
-				}; 
+				};
 			}
-			
-			var peopleCanSeeConfidentialAbsencesFor =
-				_searchProvider.GetPermittedPersonIdList(criteriaDictionary,9999,1,dateInUserTimeZone,null,DefinedRaptorApplicationFunctionPaths.ViewConfidential).ToArray();
 
-			var list = constructGroupScheduleShiftViewModels(dateInUserTimeZone, people, peopleCanSeeConfidentialAbsencesFor, pageSize, currentPageIndex);
+			var peopleCanSeeConfidentialAbsencesFor = _searchProvider.GetPermittedPersonIdList(searchCriteria, dateInUserTimeZone,
+					DefinedRaptorApplicationFunctionPaths.ViewConfidential).ToArray();
+
+			var list = constructGroupScheduleShiftViewModels(dateInUserTimeZone, people, peopleCanSeeConfidentialAbsencesFor,
+				pageSize, currentPageIndex);
 
 			return new GroupScheduleViewModel
 			{

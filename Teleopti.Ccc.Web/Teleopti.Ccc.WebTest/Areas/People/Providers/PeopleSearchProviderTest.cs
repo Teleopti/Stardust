@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 					PersonFinderField.All, "Ashley"
 				}
 			};
-			var result = target.SearchPermittedPeople(searchCriteria, 10, 1, DateOnly.Today, new Dictionary<string, bool>(),DefinedRaptorApplicationFunctionPaths.WebPeople);
+			var result = target.SearchPermittedPeopleSummary(searchCriteria, 10, 1, DateOnly.Today, new Dictionary<string, bool>(),DefinedRaptorApplicationFunctionPaths.WebPeople);
 
 			var peopleList = result.People;
 			var optionalColumns = result.OptionalColumns;
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 					PersonFinderField.All, "Ashley"
 				}
 			};
-			var result = target.SearchPermittedPeople(searchCriteria, 10, 1, DateOnly.Today, new Dictionary<string, bool>(), DefinedRaptorApplicationFunctionPaths.WebPeople);
+			var result = target.SearchPermittedPeopleSummary(searchCriteria, 10, 1, DateOnly.Today, new Dictionary<string, bool>(), DefinedRaptorApplicationFunctionPaths.WebPeople);
 			var peopleList = result.People;
 			peopleList.Count().Should().Be.EqualTo(0);
 		}
@@ -152,7 +152,9 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 				}
 			};
 
-			var result = target.SearchPermittedPeopleWithAbsence(searchCriteria, DateOnly.MaxValue, DefinedRaptorApplicationFunctionPaths.WebPeople);
+			var permittedPeople = target.SearchPermittedPeople(searchCriteria, DateOnly.MaxValue,
+				DefinedRaptorApplicationFunctionPaths.WebPeople);
+			var result = target.SearchPermittedPeopleWithAbsence(permittedPeople, DateOnly.MaxValue);
 			result.Count().Should().Be.EqualTo(1);
 		}
 

@@ -3,10 +3,10 @@ using Rhino.Mocks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
@@ -47,11 +47,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 
 			person.AddOptionalColumnValue(optionalColumnValue, optionalColumn);
 
-			target = new PeopleSearchController(new FakePeopleSearchProvider(new []{person}, new []{optionalColumn}), loggonUser);
+			target = new PeopleSearchController(new FakePeopleSearchProvider(new[] {person}, new[] {optionalColumn}), loggonUser);
 
-			var result = ((dynamic)target).GetResult("Ashley", 10, 1, "");
+			var result = ((dynamic) target).GetResult("Ashley", 10, 1, "");
 
-			var optionalColumns = (IEnumerable<string>)result.Content.OptionalColumns;
+			var optionalColumns = (IEnumerable<string>) result.Content.OptionalColumns;
 			Assert.AreEqual(1, optionalColumns.Count());
 			Assert.AreEqual("Cell Phone", optionalColumns.First());
 
@@ -59,13 +59,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			var first = peopleList.First();
 			Assert.AreEqual("TestSite/TestTeam", first.Team);
 			Assert.AreEqual("Ashley", first.FirstName);
-			Assert.AreEqual("Andeen",first.LastName);
-			Assert.AreEqual("1011",first.EmploymentNumber);
+			Assert.AreEqual("Andeen", first.LastName);
+			Assert.AreEqual("1011", first.EmploymentNumber);
 			Assert.AreEqual(personId, first.PersonId);
-			Assert.AreEqual("ashley.andeen@abc.com",first.Email);
+			Assert.AreEqual("ashley.andeen@abc.com", first.Email);
 			Assert.AreEqual(leavingDate.ToShortDateString(), first.LeavingDate);
 
-			var optionalColumnValues = (IEnumerable<KeyValuePair<string, string>>)first.OptionalColumnValues;
+			var optionalColumnValues = (IEnumerable<KeyValuePair<string, string>>) first.OptionalColumnValues;
 			var columnValue = optionalColumnValues.First();
 			Assert.AreEqual("Cell Phone", columnValue.Key);
 			Assert.AreEqual("123456", columnValue.Value);
@@ -77,11 +77,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			var firstPerson = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
 			var secondPerson = PersonFactory.CreatePersonWithGuid("Abc", "Bac");
 
-			target = new PeopleSearchController(new FakePeopleSearchProvider(new[] { firstPerson, secondPerson }, new List<IOptionalColumn>()), loggonUser);
+			target =
+				new PeopleSearchController(
+					new FakePeopleSearchProvider(new[] {firstPerson, secondPerson}, new List<IOptionalColumn>()), loggonUser);
 
 			var result = ((dynamic) target).GetResult("a", 10, 1, "");
 
-			var peopleList = (IEnumerable<dynamic>)result.Content.People;
+			var peopleList = (IEnumerable<dynamic>) result.Content.People;
 			Assert.AreEqual(firstPerson.Name.FirstName, peopleList.First().FirstName);
 			Assert.AreEqual(secondPerson.Name.FirstName, peopleList.Last().FirstName);
 		}
@@ -98,10 +100,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			currentUser.AddPersonPeriod(new PersonPeriod(DateOnly.Today.AddDays(-1),
 				PersonContractFactory.CreatePersonContract(), team));
 
-			target = new PeopleSearchController(new FakePeopleSearchProvider(new[] { person, currentUser }, new List<IOptionalColumn>()), loggonUser);
+			target =
+				new PeopleSearchController(new FakePeopleSearchProvider(new[] {person, currentUser}, new List<IOptionalColumn>()),
+					loggonUser);
 
-			var result = ((dynamic)target).GetResult("", 10, 1, "");
-			var peopleList = (IEnumerable<dynamic>)result.Content.People;
+			var result = ((dynamic) target).GetResult("", 10, 1, "");
+			var peopleList = (IEnumerable<dynamic>) result.Content.People;
 
 			Assert.AreEqual(2, peopleList.Count());
 			Assert.AreEqual(person.Name.FirstName, peopleList.First().FirstName);
@@ -118,26 +122,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			var thirdPerson = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
 			thirdPerson.EmploymentNumber = "2";
 
-			target = new PeopleSearchController(new FakePeopleSearchProvider(new[] { firstPerson, secondPerson, thirdPerson }, new List<IOptionalColumn>()), loggonUser);
+			target =
+				new PeopleSearchController(
+					new FakePeopleSearchProvider(new[] {firstPerson, secondPerson, thirdPerson}, new List<IOptionalColumn>()),
+					loggonUser);
 
-			var result = ((dynamic)target).GetResult("a", 10, 1, "lastname:true;firstname:true;employmentnumber:true");
+			var result = ((dynamic) target).GetResult("a", 10, 1, "lastname:true;firstname:true;employmentnumber:true");
 
-			var peopleList = (IEnumerable<dynamic>)result.Content.People;
+			var peopleList = (IEnumerable<dynamic>) result.Content.People;
 			var pe = peopleList.ToList();
 			Assert.AreEqual(pe[0].EmploymentNumber, "1");
 			Assert.AreEqual(pe[1].EmploymentNumber, "2");
 			Assert.AreEqual(pe[2].EmploymentNumber, "3");
 		}
-
 	}
 
 	public class FakePeopleSearchProvider : IPeopleSearchProvider
 	{
 		private readonly PeopleSummaryModel _model;
-		private IList<IPerson> _permittedPeople;
-		private IList<IPerson> _peopleWithConfidentialAbsencePermission; 
+		private readonly IList<IPerson> _permittedPeople;
+		private readonly IList<IPerson> _peopleWithConfidentialAbsencePermission;
 
-		public FakePeopleSearchProvider(IEnumerable<IPerson> peopleList, IEnumerable<IOptionalColumn> optionalColumns  )
+		public FakePeopleSearchProvider(IEnumerable<IPerson> peopleList, IEnumerable<IOptionalColumn> optionalColumns)
 		{
 			_permittedPeople = new List<IPerson>();
 			_peopleWithConfidentialAbsencePermission = new List<IPerson>();
@@ -148,36 +154,48 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			};
 		}
 
-		public PeopleSummaryModel SearchPermittedPeople(IDictionary<PersonFinderField, string> criteriaDictionary, int pageSize, int currentPageIndex,
+		public PeopleSummaryModel SearchPermittedPeopleSummary(IDictionary<PersonFinderField, string> criteriaDictionary,
+			int pageSize, int currentPageIndex,
 			DateOnly currentDate, IDictionary<string, bool> sortedColumns, string function)
 		{
 			return _model;
 		}
 
-		public IEnumerable<IPerson> SearchPermittedPeople(IDictionary<PersonFinderField, string> criteriaDictionary, DateOnly dateInUserTimeZone, string function)
+		public IEnumerable<IPerson> SearchPermittedPeople(IDictionary<PersonFinderField, string> criteriaDictionary,
+			DateOnly dateInUserTimeZone, string function)
 		{
-			if (function == DefinedRaptorApplicationFunctionPaths.ViewConfidential)
-			{
-				return _peopleWithConfidentialAbsencePermission;
-			}
-
-			return _permittedPeople;
+			return function == DefinedRaptorApplicationFunctionPaths.ViewConfidential
+				? _peopleWithConfidentialAbsencePermission
+				: _permittedPeople;
 		}
 
-		public IEnumerable<IPerson> SearchPermittedPeopleWithAbsence(IDictionary<PersonFinderField, string> criteriaDictionary, DateOnly dateInUserTimeZone,
+		public IEnumerable<IPerson> SearchPermittedPeople(PersonFinderSearchCriteria searchCriteria,
+			DateOnly dateInUserTimeZone, string function)
+		{
+			return function == DefinedRaptorApplicationFunctionPaths.ViewConfidential
+				? _peopleWithConfidentialAbsencePermission
+				: _permittedPeople;
+		}
+
+		public IEnumerable<Guid> GetPermittedPersonIdList(PersonFinderSearchCriteria searchCriteria, DateOnly currentDate,
 			string function)
+		{
+			return function == DefinedRaptorApplicationFunctionPaths.ViewConfidential
+				? _peopleWithConfidentialAbsencePermission.Select(p=>p.Id.GetValueOrDefault())
+				: _permittedPeople.Select(p => p.Id.GetValueOrDefault());
+		}
+
+		public IEnumerable<IPerson> SearchPermittedPeopleWithAbsence(IEnumerable<IPerson> permittedPeople,
+			DateOnly dateInUserTimeZone)
 		{
 			throw new NotImplementedException();
 		}
 
-		public IEnumerable<Guid> GetPermittedPersonIdList(IDictionary<PersonFinderField, string> criteriaDictionary, int pageSize, int currentPageIndex,
-			DateOnly currentDate, IDictionary<string, bool> sortedColumns, string function)
+		public PersonFinderSearchCriteria CreatePersonFinderSearchCriteria(
+			IDictionary<PersonFinderField, string> criteriaDictionary, int pageSize,
+			int currentPageIndex, DateOnly currentDate, IDictionary<string, bool> sortedColumns)
 		{
-			if (function == DefinedRaptorApplicationFunctionPaths.ViewConfidential)
-			{
-				return _peopleWithConfidentialAbsencePermission.Select(p => p.Id.GetValueOrDefault());
-			}
-			return _permittedPeople.Select(p => p.Id.GetValueOrDefault());
+			return new PersonFinderSearchCriteria(criteriaDictionary, pageSize, currentDate, sortedColumns);
 		}
 
 		public void Add(IPerson person)
