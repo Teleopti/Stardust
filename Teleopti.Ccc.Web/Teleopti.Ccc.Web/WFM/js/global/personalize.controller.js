@@ -7,7 +7,8 @@
 
       $scope.showOverlay = false;
 	  $scope.darkTheme = false;
-
+	  $scope.isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+	  console.log($scope.isFirefox);
       toggleService.togglesLoaded.then(function() {
         $scope.personalizeToggle = toggleService.WfmGlobalLayout_personalOptions_37114;
       });
