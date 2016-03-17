@@ -50,9 +50,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			_fixedStaffLoader = fixedStaffLoader;
 		}
 
-		protected override IEnumerable<IPerson> FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
+		protected override IScenario FetchScenario()
 		{
-			var scenario = _scenarioRepository.LoadDefaultScenario();
+			return _scenarioRepository.LoadDefaultScenario();
+		}
+
+		protected override IEnumerable<IPerson> FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
+		{
 			var timeZone = _principal.Current().Regional.TimeZone;
 			var dateTimePeriod = period.ToDateTimePeriod(timeZone);
 			var people = _fixedStaffLoader.Load(period);
@@ -64,12 +68,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			return people.AllPeople;
 		}
 
-		protected override void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		protected override void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
-			//TODO: see if we can reuse from fillagents
-			var scenario = _scenarioRepository.LoadDefaultScenario();
-			//
-
 			var allSkills = _skillRepository.FindAllWithSkillDays(period).ToArray();
 			var forecast = _skillDayLoadHelper.LoadSchedulerSkillDays(period, allSkills, scenario);
 			schedulerStateHolderTo.SchedulingResultState.SkillDays = forecast;
@@ -83,11 +83,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			deciderResult.FilterSkills(allSkills, schedulerStateHolderTo.SchedulingResultState.RemoveSkill, s => schedulerStateHolderTo.SchedulingResultState.AddSkills(s));
 		}
 
-		protected override void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		protected override void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
-			//TODO: see if we can reuse from fillagents
-			var scenario = _scenarioRepository.LoadDefaultScenario();
-			//
 			var timeZone = _principal.Current().Regional.TimeZone;
 			var dateTimePeriod = period.ToDateTimePeriod(timeZone);
 			schedulerStateHolderTo.SetRequestedScenario(scenario);
