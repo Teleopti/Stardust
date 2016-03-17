@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class OptimizationPreferencesProvider : IOptimizationPreferencesProvider
+	public class OptimizationPreferencesDefaultValueProvider : IOptimizationPreferencesProvider
 	{
 		private IOptimizationPreferences _setFromTests;
 

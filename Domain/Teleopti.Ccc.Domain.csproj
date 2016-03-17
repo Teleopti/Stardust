@@ -749,7 +749,7 @@
     <Compile Include="Optimization\IntradayOptmizerLimiter.cs" />
     <Compile Include="Optimization\IIntradayOptimizationCallback.cs" />
     <Compile Include="Optimization\ISynchronizeIntradayOptimizationResult.cs" />
-    <Compile Include="Optimization\OptimizationPreferencesProvider.cs" />
+    <Compile Include="Optimization\OptimizationPreferencesDefaultValueProvider.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimizationAndSingleAgentTeam.cs" />
     <Compile Include="Optimization\IDayOffRulesRepository.cs" />
     <Compile Include="Optimization\AgentsToSkillGroups.cs" />

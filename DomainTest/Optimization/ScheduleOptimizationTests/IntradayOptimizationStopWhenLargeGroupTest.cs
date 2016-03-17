@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public FakePersonRepository PersonRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepositorySimulateNewUnitOfWork SkillDayRepository;
-		public OptimizationPreferencesProvider OptimizationPreferencesProvider;
+		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
 		[Test]
@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		{
 			system.UseTestDouble<TrackOptimizeDaysForAgents>().For<IIntradayOptimizeOneDayCallback>();
 			system.UseTestDouble<FakeSkillDayRepositorySimulateNewUnitOfWork>().For<ISkillDayRepository>();
-			system.UseTestDouble<OptimizationPreferencesProvider>().For<IOptimizationPreferencesProvider>();
+			system.UseTestDouble<OptimizationPreferencesDefaultValueProvider>().For<IOptimizationPreferencesProvider>();
 		}
 	}
 }
