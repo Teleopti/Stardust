@@ -13,6 +13,7 @@ using Manager.Integration.Test.Notifications;
 using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Timers;
 using Manager.Integration.Test.Validators;
+using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 using NUnit.Framework;
 
 namespace Manager.Integration.Test.LoadTests
@@ -31,9 +32,9 @@ namespace Manager.Integration.Test.LoadTests
 		private static readonly ILog Logger =
 			LogManager.GetLogger(typeof(OneManagerAndFiveNodesLoadTests));
 
-		private void logMessage(string message)
+		private void LogMessage(string message)
 		{
-			LogHelper.LogDebugWithLineNumber(message, Logger);
+			this.Log().DebugWithLineNumber(message);
 		}
 
 		[TestFixtureSetUp]
@@ -47,7 +48,7 @@ namespace Manager.Integration.Test.LoadTests
 			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
 			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
-			logMessage("Start TestFixtureSetUp");
+			LogMessage("Start TestFixtureSetUp");
 			
 #if (DEBUG)
 			// Do nothing.
@@ -67,27 +68,27 @@ namespace Manager.Integration.Test.LoadTests
 			                               numberOfNodes: 5,
 			                               cancellationTokenSource: CancellationTokenSource);
 			Thread.Sleep(TimeSpan.FromSeconds(2));
-			logMessage("Finished TestFixtureSetUp");
+			LogMessage("Finished TestFixtureSetUp");
 		}
 
 		[TestFixtureTearDown]
 		public void TestFixtureTearDown()
 		{
-			logMessage("Start TestFixtureTearDown");
+			LogMessage("Start TestFixtureTearDown");
 			if (AppDomainTask != null)
 			{
 				AppDomainTask.Dispose();
 			}
-			logMessage("Finished TestFixtureTearDown");
+			LogMessage("Finished TestFixtureTearDown");
 		}
 
 		private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
 			var exp = e.ExceptionObject as Exception;
+
 			if (exp != null)
 			{
-				LogHelper.LogFatalWithLineNumber(exp.Message,
-				                                 Logger,
+				this.Log().FatalWithLineNumber(exp.Message,
 				                                 exp);
 			}
 		}
@@ -99,8 +100,7 @@ namespace Manager.Integration.Test.LoadTests
 		[Test]
 		public void ShouldBeAbleToCreateManySuccessJobRequestTest()
 		{
-			LogHelper.LogDebugWithLineNumber("Start.",
-			                                 Logger);
+			this.Log().DebugWithLineNumber("Start.");
 
 			var createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(50);
 			var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
@@ -127,7 +127,7 @@ namespace Manager.Integration.Test.LoadTests
 				jobManagerTaskCreators.Add(jobManagerTaskCreator);
 			}
 
-			logMessage("Waiting for all nodes to start up.");
+			LogMessage("Waiting for all nodes to start up.");
 
 			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
@@ -140,7 +140,7 @@ namespace Manager.Integration.Test.LoadTests
 			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(30));
 			sqlNotifier.Dispose();
 
-			logMessage("All nodes has started.");
+			LogMessage("All nodes has started.");
 
 			//---------------------------------------------
 			// Execute all jobs. 
@@ -173,7 +173,7 @@ namespace Manager.Integration.Test.LoadTests
 			}
 
 			taskHelper.Dispose();
-			logMessage("Finished.");
+			LogMessage("Finished.");
 		}
 	}
 }

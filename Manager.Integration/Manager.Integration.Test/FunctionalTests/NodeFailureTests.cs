@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using log4net.Config;
+using log4net.Repository.Hierarchy;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Models;
 using Manager.Integration.Test.Notifications;
@@ -16,17 +17,15 @@ using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Validators;
 using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.Interfaces;
+using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using LogHelper = Manager.Integration.Test.Helpers.LogHelper;
 
 namespace Manager.Integration.Test.FunctionalTests
 {
 	[TestFixture]
 	class NodeFailureTests
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeFailureTests));
-
 		private bool _clearDatabase = true;
 		private string _buildMode = "Debug";
 		private string ManagerDbConnectionString { get; set; }
@@ -38,17 +37,17 @@ namespace Manager.Integration.Test.FunctionalTests
 		public void TestFixtureTearDown()
 		{
 			
-			logMessage("Start TestFixtureTearDown");
+			LogMessage("Start TestFixtureTearDown");
 			if (AppDomainTask != null)
 			{
 				AppDomainTask.Dispose();
 			}
-			logMessage("Finished TestFixtureTearDown");
+			LogMessage("Finished TestFixtureTearDown");
 		}
 
-		private void logMessage(string message)
+		private void LogMessage(string message)
 		{
-			LogHelper.LogDebugWithLineNumber(message, Logger);
+			this.Log().DebugWithLineNumber(message);
 		}
 
 		[TestFixtureSetUp]
@@ -63,7 +62,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			ManagerDbConnectionString = ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString;
 			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
 			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
-			logMessage("Start TestFixtureSetUp");
+			LogMessage("Start TestFixtureSetUp");
 
 			if (_clearDatabase)
 			{
@@ -76,7 +75,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			                               numberOfNodes: 1,
 			                               cancellationTokenSource: CancellationTokenSource);
 
-			logMessage("Finshed TestFixtureSetUp");
+			LogMessage("Finshed TestFixtureSetUp");
 		}
 
 		private void WaitForNodeTimeout()
@@ -89,11 +88,11 @@ namespace Manager.Integration.Test.FunctionalTests
 		[Test]
 		public async void ShouldConsiderNodeAsDeadWhenInactiveAndSetJobResulToFatal()
 		{
-			logMessage("Start test.");
+			LogMessage("Start test.");
 			//---------------------------------------------
 			// Notify when all 1 nodes are up and running. 
 			//---------------------------------------------
-			logMessage("Waiting for all 1 nodes to start up.");
+			LogMessage("Waiting for all 1 nodes to start up.");
 
 			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
@@ -106,7 +105,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(2));
 			sqlNotifier.Dispose();
 
-			logMessage("All 1 nodes has started.");
+			LogMessage("All 1 nodes has started.");
 
 			//---------------------------------------------
 			// Send a Job.
@@ -137,7 +136,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			uriBuilder.Path += "appdomain/nodes/" + "Node1.config";
 			uri = uriBuilder.Uri;
 
-			logMessage("Start calling Delete Async ( " + uri + " ) ");
+			LogMessage("Start calling Delete Async ( " + uri + " ) ");
 
 			try
 			{
@@ -145,13 +144,12 @@ namespace Manager.Integration.Test.FunctionalTests
 				                                            cancellationTokenSource.Token);
 				if (response.IsSuccessStatusCode)
 				{
-					logMessage("Succeeded calling Delete Async ( " + uri + " ) ");
+					LogMessage("Succeeded calling Delete Async ( " + uri + " ) ");
 				}
 			}
 			catch (Exception exp)
 			{
-				LogHelper.LogErrorWithLineNumber(exp.Message,
-				                                 Logger,
+				this.Log().ErrorWithLineNumber(exp.Message,
 				                                 exp);
 			}
 

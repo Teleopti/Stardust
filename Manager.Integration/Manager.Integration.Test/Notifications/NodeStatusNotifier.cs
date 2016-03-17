@@ -3,14 +3,14 @@ using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
+using log4net.Repository.Hierarchy;
 using Manager.Integration.Test.Helpers;
+using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 
 namespace Manager.Integration.Test.Notifications
 {
 	public class NodeStatusNotifier : IDisposable
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeStatusNotifier));
-
 		public NodeStatusNotifier(string connectionString)
 		{
 			ConnectionString = connectionString;
@@ -28,8 +28,7 @@ namespace Manager.Integration.Test.Notifications
 
 		public void Dispose()
 		{
-			LogHelper.LogDebugWithLineNumber("Start disposing.",
-			                                 Logger);
+			this.Log().DebugWithLineNumber("Start disposing.");
 
 			if (CancellationTokenSource != null &&
 			    !CancellationTokenSource.IsCancellationRequested)
@@ -48,8 +47,7 @@ namespace Manager.Integration.Test.Notifications
 				JobDefinitionStatusNotifierTask.Dispose();
 			}
 
-			LogHelper.LogDebugWithLineNumber("Finished disposing.",
-			                                 Logger);
+			this.Log().DebugWithLineNumber("Finished disposing.");
 		}
 
 		public void StartJobDefinitionStatusNotifier(Guid guid,

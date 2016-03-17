@@ -2,7 +2,7 @@
 using System.Data.SqlClient;
 using System.IO;
 using log4net;
-using Manager.Integration.Test.Helpers;
+using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 
 namespace Manager.Integration.Test.Scripts
 {
@@ -38,8 +38,7 @@ namespace Manager.Integration.Test.Scripts
 
 					catch (Exception exp)
 					{
-						LogHelper.LogErrorWithLineNumber(exp.Message,
-						                                 Logger,
+						Logger.ErrorWithLineNumber(exp.Message,
 						                                 exp);
 					}
 				}

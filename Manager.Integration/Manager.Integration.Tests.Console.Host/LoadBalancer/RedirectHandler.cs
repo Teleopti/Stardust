@@ -3,21 +3,16 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
-using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 
 namespace Manager.IntegrationTest.Console.Host.LoadBalancer
 {
 	public class RedirectHandler : DelegatingHandler
 	{
-		private static readonly ILog Logger =
-			LogManager.GetLogger(typeof (RedirectHandler));
-
 		protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
 		                                                             CancellationToken cancellationToken)
 		{
-			Logger.LogDebugWithLineNumber("Start Send Async.");
+			this.Log().DebugWithLineNumber("Start Send Async.");
 
 			try
 			{

@@ -6,10 +6,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using log4net.Config;
+using log4net.Repository.Hierarchy;
 using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Timers;
+using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 using NUnit.Framework;
 
 namespace Manager.Integration.Test.FunctionalTests
@@ -21,9 +23,6 @@ namespace Manager.Integration.Test.FunctionalTests
 		public void TearDown()
 		{
 		}
-
-		private static readonly ILog Logger =
-			LogManager.GetLogger(typeof (OneManagerAndZeroNodesTests));
 
 		private bool _clearDatabase = true;
 		private string _buildMode = "Debug";
@@ -62,8 +61,7 @@ namespace Manager.Integration.Test.FunctionalTests
 
 			Thread.Sleep(TimeSpan.FromSeconds(2));
 
-			LogHelper.LogDebugWithLineNumber("Finshed TestFixtureSetUp",
-			                                 Logger);
+			this.Log().DebugWithLineNumber("Finshed TestFixtureSetUp");
 		}
 
 		private string ManagerDbConnectionString { get; set; }
@@ -82,8 +80,7 @@ namespace Manager.Integration.Test.FunctionalTests
 
 			if (exp != null)
 			{
-				LogHelper.LogFatalWithLineNumber(exp.Message,
-				                                 Logger,
+				this.Log().FatalWithLineNumber(exp.Message,
 				                                 exp);
 			}
 		}
@@ -92,29 +89,25 @@ namespace Manager.Integration.Test.FunctionalTests
 		[TestFixtureTearDown]
 		public void TestFixtureTearDown()
 		{
-			LogHelper.LogDebugWithLineNumber("Start TestFixtureTearDown",
-			                                 Logger);
+			this.Log().DebugWithLineNumber("Start TestFixtureTearDown");
 
 			if (AppDomainTask != null)
 			{
 				AppDomainTask.Dispose();
 			}
 
-			LogHelper.LogDebugWithLineNumber("Finished TestFixtureTearDown",
-			                                 Logger);
+			this.Log().DebugWithLineNumber("Finished TestFixtureTearDown");
 		}
 
 		[Test]
 		public void JobsShouldJustBeQueuedIfNoNodesTest()
 		{
-			LogHelper.LogDebugWithLineNumber("Start.",
-			                                 Logger);
+			this.Log().DebugWithLineNumber("Start.");
 
 			var createNewJobRequests =
 				JobHelper.GenerateFastJobParamsRequests(1);
 
-			LogHelper.LogDebugWithLineNumber("( " + createNewJobRequests.Count + " ) jobs will be created.",
-			                                 Logger);
+			this.Log().DebugWithLineNumber("( " + createNewJobRequests.Count + " ) jobs will be created.");
 
 
 			var timeout =
@@ -154,8 +147,7 @@ namespace Manager.Integration.Test.FunctionalTests
 				jobManagerTaskCreator.Dispose();
 			}
 
-			LogHelper.LogDebugWithLineNumber("Finished.",
-			                                 Logger);
+			this.Log().DebugWithLineNumber("Finished.");
 		}
 	}
 }

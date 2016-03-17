@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using log4net;
 using Manager.Integration.Test.Properties;
+using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 
 namespace Manager.Integration.Test.Helpers
 {
@@ -25,8 +26,7 @@ namespace Manager.Integration.Test.Helpers
 
 		public static void ShutDownAllManagerIntegrationConsoleHostProcesses()
 		{
-			LogHelper.LogDebugWithLineNumber("Started.",
-			                                 Logger);
+			Logger.DebugWithLineNumber("Started.");
 
 			var consoleHostname = new FileInfo(Settings.Default.ManagerIntegrationConsoleHostAssemblyName);
 
@@ -35,8 +35,7 @@ namespace Manager.Integration.Test.Helpers
 
 			ShutDownAllProcesses(fileNameWithNoExtension);
 
-			LogHelper.LogDebugWithLineNumber("Finished.",
-			                                 Logger);
+			Logger.DebugWithLineNumber("Finished.");
 		}
 
 		public static void ShowAllManagerIntegrationConsoleHostProcesses()
@@ -135,8 +134,7 @@ namespace Manager.Integration.Test.Helpers
 
 		public static void ShutDownAllProcesses(string processName)
 		{
-			LogHelper.LogDebugWithLineNumber("Started.",
-			                                 Logger);
+			Logger.DebugWithLineNumber("Started.");
 
 			var processes = Process.GetProcessesByName(processName);
 
@@ -148,26 +146,23 @@ namespace Manager.Integration.Test.Helpers
 					var fileName = process.StartInfo.FileName;
 					var userName = process.StartInfo.UserName;
 
-					LogHelper.LogDebugWithLineNumber(
+					Logger.DebugWithLineNumber(
 						string.Format("Started : Process name : {0}, Process path : {1}, Process started by : {2}",
 						              name,
 						              fileName,
-						              userName),
-						Logger);
+						              userName));
 
 					CloseProcess(process);
 
-					LogHelper.LogDebugWithLineNumber(
+					Logger.DebugWithLineNumber(
 						string.Format("Finished : Process name : {0}, Process path : {1}, Process started by : {2}",
 						              name,
 						              fileName,
-						              userName),
-						Logger);
+						              userName));
 				}
 			}
 
-			LogHelper.LogDebugWithLineNumber("Finished.",
-			                                 Logger);
+			Logger.DebugWithLineNumber("Finished.");
 		}
 
 
@@ -179,11 +174,10 @@ namespace Manager.Integration.Test.Helpers
 			{
 				foreach (var process in processes)
 				{
-					LogHelper.LogDebugWithLineNumber(string.Format("Process name : {0}, Process path : {1}, Process started by : {2}",
+					Logger.DebugWithLineNumber(string.Format("Process name : {0}, Process path : {1}, Process started by : {2}",
 					                                               process.ProcessName,
 					                                               process.StartInfo.FileName,
-					                                               process.StartInfo.UserName),
-					                                 Logger);
+					                                               process.StartInfo.UserName));
 				}
 			}
 		}

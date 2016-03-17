@@ -4,23 +4,21 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
+using log4net.Repository.Hierarchy;
 using Manager.Integration.Test.Helpers;
+using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 
 namespace Manager.Integration.Test.Tasks
 {
 	public class StartJobTaskHelper
 	{
-		private static readonly ILog Logger =
-			LogManager.GetLogger(typeof (StartJobTaskHelper));
-
 		public Task ExecuteDeleteJobTasks(IEnumerable<JobManagerTaskCreator> jobManagerTaskCreators,
 		                                  CancellationTokenSource cancellationTokenSource,
 		                                  TimeSpan timeOut)
 		{
 			return Task.Factory.StartNew(() =>
 			{
-				LogHelper.LogDebugWithLineNumber("Start.",
-				                                 Logger);
+				this.Log().DebugWithLineNumber("Start.");
 
 				if (jobManagerTaskCreators != null && jobManagerTaskCreators.Any())
 				{
@@ -44,8 +42,7 @@ namespace Manager.Integration.Test.Tasks
 					}
 				}
 
-				LogHelper.LogDebugWithLineNumber("Finished.",
-				                                 Logger);
+				this.Log().DebugWithLineNumber("Finished.");
 			});
 		}
 
@@ -55,8 +52,7 @@ namespace Manager.Integration.Test.Tasks
 		{
 			return Task.Factory.StartNew(() =>
 			{
-				LogHelper.LogDebugWithLineNumber("Start.",
-				                                 Logger);
+				this.Log().DebugWithLineNumber("Start.");
 
 				if (jobManagerTaskCreators != null && jobManagerTaskCreators.Any())
 				{
@@ -81,8 +77,7 @@ namespace Manager.Integration.Test.Tasks
 					}
 				}
 
-				LogHelper.LogDebugWithLineNumber("Finished.",
-				                                 Logger);
+				this.Log().DebugWithLineNumber("Finished.");
 			});
 		}
 	}

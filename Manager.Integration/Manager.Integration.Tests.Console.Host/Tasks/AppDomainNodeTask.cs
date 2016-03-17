@@ -12,9 +12,6 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 	public class AppDomainNodeTask : IAppDomain, 
 									 IDisposable
 	{
-		private static readonly ILog Logger =
-			LogManager.GetLogger(typeof (AppDomainNodeTask));
-
 		public AppDomainNodeTask(string buildMode,
 		                         DirectoryInfo directoryNodeAssemblyLocationFullPath,
 		                         FileInfo nodeconfigurationFile,
@@ -53,7 +50,7 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 
 		public void Dispose()
 		{
-			Logger.LogDebugWithLineNumber("Start disposing.");
+			this.Log().DebugWithLineNumber("Start disposing.");
 
 			if (CancellationTokenSource != null &&
 			    !CancellationTokenSource.IsCancellationRequested)
@@ -78,7 +75,7 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 				Task.Dispose();
 			}
 
-			Logger.LogDebugWithLineNumber("Finshed disposing.");
+			this.Log().DebugWithLineNumber("Finshed disposing.");
 		}
 
 		public Task StartTask(CancellationTokenSource cancellationTokenSource)
@@ -117,7 +114,7 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 					var assemblyToExecute = new FileInfo(Path.Combine(nodeAppDomainSetup.ApplicationBase,
 					                                                  nodeAppDomainSetup.ApplicationName));
 
-					Logger.LogDebugWithLineNumber("Node (appdomain) will start with friendly name : " + MyAppDomain.FriendlyName);
+					this.Log().DebugWithLineNumber("Node (appdomain) will start with friendly name : " + MyAppDomain.FriendlyName);
 
 
 					MyAppDomain.ExecuteAssembly(assemblyToExecute.FullName);

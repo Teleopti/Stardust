@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using Manager.Integration.Test.Properties;
+using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 
 namespace Manager.Integration.Test.Helpers
 {
@@ -56,9 +57,8 @@ namespace Manager.Integration.Test.Helpers
 					new FileInfo(Path.Combine(managerAppDomainSetup.ApplicationBase,
 					                          managerAppDomainSetup.ApplicationName));
 
-				LogHelper.LogDebugWithLineNumber(
-					"Try start ManagerIntegrationConsoleHost (appdomain) with friendly name " + appDomain.FriendlyName,
-					Logger);
+				Logger.DebugWithLineNumber(
+					"Try start ManagerIntegrationConsoleHost (appdomain) with friendly name " + appDomain.FriendlyName);
 
 				appDomain.ExecuteAssembly(assemblyToExecute.FullName,
 				                          managerAppDomainSetup.AppDomainInitializerArguments);

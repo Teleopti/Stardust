@@ -5,8 +5,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using log4net.Config;
+using log4net.Repository.Hierarchy;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Tasks;
+using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 using NUnit.Framework;
 
 namespace Manager.Integration.Test.RecoveryTests
@@ -14,9 +16,6 @@ namespace Manager.Integration.Test.RecoveryTests
 	[TestFixture, Ignore]
 	public class OneManagerAndOneNodeRecoveryTests
 	{
-		private static readonly ILog Logger =
-			LogManager.GetLogger(typeof (OneManagerAndOneNodeRecoveryTests));
-
 		private bool _clearDatabase = true;
 		private string _buildMode = "Debug";
 
@@ -25,9 +24,9 @@ namespace Manager.Integration.Test.RecoveryTests
 		private AppDomainTask AppDomainTask { get; set; }
 		private CancellationTokenSource CancellationTokenSource { get; set; }
 
-		private void logMessage(string message)
+		private void LogMessage(string message)
 		{
-			LogHelper.LogDebugWithLineNumber(message, Logger);
+			this.Log().DebugWithLineNumber(message);
 		}
 
 		[TestFixtureSetUp]
@@ -40,7 +39,7 @@ namespace Manager.Integration.Test.RecoveryTests
 
 			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
 			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
-			logMessage("Start TestFixtureSetUp");
+			LogMessage("Start TestFixtureSetUp");
 
 #if (DEBUG)
 			// Do nothing.
@@ -61,7 +60,7 @@ namespace Manager.Integration.Test.RecoveryTests
 			                               cancellationTokenSource: CancellationTokenSource);
 
 			Thread.Sleep(TimeSpan.FromSeconds(2));
-			logMessage("Finished TestFixtureSetUp");
+			LogMessage("Finished TestFixtureSetUp");
 		}
 
 		private void CurrentDomain_UnhandledException(object sender,
@@ -70,8 +69,7 @@ namespace Manager.Integration.Test.RecoveryTests
 			var exp = e.ExceptionObject as Exception;
 			if (exp != null)
 			{
-				LogHelper.LogFatalWithLineNumber(exp.Message,
-				                                 Logger,
+				this.Log().FatalWithLineNumber(exp.Message,
 				                                 exp);
 			}
 		}
@@ -79,14 +77,14 @@ namespace Manager.Integration.Test.RecoveryTests
 		[TestFixtureTearDown]
 		public void TestFixtureTearDown()
 		{
-			logMessage("Start TestFixtureTearDown");
+			LogMessage("Start TestFixtureTearDown");
 
 			if (AppDomainTask != null)
 			{
 				AppDomainTask.Dispose();
 			}
 
-			logMessage("Finished TestFixtureTearDown");
+			LogMessage("Finished TestFixtureTearDown");
 		}
 	}
 }

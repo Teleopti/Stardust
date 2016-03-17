@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using log4net;
 using Manager.Integration.Test.EventArgs;
 using Manager.Integration.Test.Helpers;
+using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 using Newtonsoft.Json;
 
 namespace Manager.Integration.Test.Timers
@@ -223,8 +224,7 @@ namespace Manager.Integration.Test.Timers
 								}
 								catch (Exception exp)
 								{
-									LogHelper.LogErrorWithLineNumber(exp.Message,
-									                                 Logger,
+									this.Log().ErrorWithLineNumber(exp.Message,
 									                                 exp);
 								}
 							}

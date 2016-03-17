@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using log4net;
-using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 
 namespace Manager.IntegrationTest.Console.Host.LoadBalancer
@@ -12,7 +11,7 @@ namespace Manager.IntegrationTest.Console.Host.LoadBalancer
 	public static class RoundRobin
 	{
 		private static readonly ILog Logger =
-			LogManager.GetLogger(typeof(RoundRobin));
+			LogManager.GetLogger(typeof (RoundRobin));
 
 		private static List<Uri> _hosts;
 
@@ -20,7 +19,7 @@ namespace Manager.IntegrationTest.Console.Host.LoadBalancer
 
 		public static void Set(List<Uri> hosts)
 		{
-			Logger.LogDebugWithLineNumber("Start.");
+			Logger.DebugWithLineNumber("Start.");
 
 			_hosts = hosts;
 
@@ -28,24 +27,24 @@ namespace Manager.IntegrationTest.Console.Host.LoadBalancer
 			{
 				foreach (var host in hosts)
 				{
-					Logger.LogDebugWithLineNumber("Load balancer will register manager url : ( " + host  + " )");
+					Logger.DebugWithLineNumber("Load balancer will register manager url : ( " + host + " )");
 				}
 			}
 
-			Logger.LogDebugWithLineNumber("Finished.");
+			Logger.DebugWithLineNumber("Finished.");
 		}
 
 		public static Uri Next(HttpRequestMessage request)
 		{
-			Logger.LogDebugWithLineNumber("Start.");
+			Logger.DebugWithLineNumber("Start.");
 
 			Interlocked.Increment(ref _currentIndex);
 
-			var host = _hosts[_currentIndex % _hosts.Count];
+			var host = _hosts[_currentIndex%_hosts.Count];
 
-			Logger.LogDebugWithLineNumber("Load balancer will use manager url : ( " + host + " ) for request : ( " + request.RequestUri + " )" );
+			Logger.DebugWithLineNumber("Load balancer will use manager url : ( " + host + " ) for request : ( " + request.RequestUri + " )");
 
-			Logger.LogDebugWithLineNumber("Finsihed.");
+			Logger.DebugWithLineNumber("Finsihed.");
 
 			return host;
 		}

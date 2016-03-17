@@ -2,19 +2,14 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
-using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.Interfaces;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 
 namespace Manager.IntegrationTest.Console.Host.Tasks
 {
-	public class AppDomainManagerTask : IAppDomain, 
-										IDisposable
+	public class AppDomainManagerTask : IAppDomain,
+		IDisposable
 	{
-		private static readonly ILog Logger =
-			LogManager.GetLogger(typeof (AppDomainManagerTask));
-
 		public AppDomainManagerTask(string buildmode,
 		                            DirectoryInfo directoryManagerAssemblyLocationFullPath,
 		                            FileInfo configurationFileInfo,
@@ -27,9 +22,9 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 		}
 
 		public string Buildmode { get; set; }
-		private DirectoryInfo DirectoryManagerAssemblyLocationFullPath { get; set; }
+		private DirectoryInfo DirectoryManagerAssemblyLocationFullPath { get; }
 
-		private FileInfo ConfigurationFileInfo { get; set; }
+		private FileInfo ConfigurationFileInfo { get; }
 		public string ManagerAssemblyName { get; set; }
 
 		public AppDomain MyAppDomain { get; private set; }
@@ -50,7 +45,7 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 
 		public void Dispose()
 		{
-			Logger.LogDebugWithLineNumber("Start disposing.");
+			this.Log().DebugWithLineNumber("Start disposing.");
 
 			if (CancellationTokenSource != null &&
 			    !CancellationTokenSource.IsCancellationRequested)
@@ -74,7 +69,7 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 				Task.Dispose();
 			}
 
-			Logger.LogDebugWithLineNumber("Finished disposing.");
+			this.Log().DebugWithLineNumber("Finished disposing.");
 		}
 
 		public Task StartTask(CancellationTokenSource cancellationTokenSource)
@@ -112,7 +107,7 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 					var assemblyFile = new FileInfo(Path.Combine(managerAppDomainSetup.ApplicationBase,
 					                                             managerAppDomainSetup.ApplicationName));
 
-					Logger.LogDebugWithLineNumber("Manager (appdomain) will start with friendly name : " + MyAppDomain.FriendlyName);
+					this.Log().DebugWithLineNumber("Manager (appdomain) will start with friendly name : " + MyAppDomain.FriendlyName);
 
 					MyAppDomain.ExecuteAssembly(assemblyFile.FullName);
 				}, cancellationTokenSource.Token);

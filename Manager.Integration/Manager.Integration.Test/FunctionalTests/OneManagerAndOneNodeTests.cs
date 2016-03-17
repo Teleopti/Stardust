@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
 using log4net.Config;
 using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
@@ -14,6 +13,7 @@ using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Timers;
 using Manager.Integration.Test.Validators;
 using Manager.IntegrationTest.Console.Host.Diagnostics;
+using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 using NUnit.Framework;
 
 namespace Manager.Integration.Test.FunctionalTests
@@ -21,20 +21,17 @@ namespace Manager.Integration.Test.FunctionalTests
 	[TestFixture]
 	public class OneManagerAndOneNodeTests
 	{
-		private static readonly ILog Logger =
-			LogManager.GetLogger(typeof (OneManagerAndOneNodeTests));
-
-		private bool _clearDatabase = true;
-		private string _buildMode = "Debug";
+		private readonly bool _clearDatabase = true;
+		private readonly string _buildMode = "Debug";
 
 		private string ManagerDbConnectionString { get; set; }
 		private Task Task { get; set; }
 		private AppDomainTask AppDomainTask { get; set; }
 		private CancellationTokenSource CancellationTokenSource { get; set; }
 
-		private void logMessage(string message)
+		private void LogMessage(string message)
 		{
-			LogHelper.LogDebugWithLineNumber(message, Logger);
+			this.Log().DebugWithLineNumber(message);
 		}
 
 		[TestFixtureSetUp]
@@ -47,7 +44,7 @@ namespace Manager.Integration.Test.FunctionalTests
 
 			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
 			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
-			logMessage("Start TestFixtureSetUp");
+			LogMessage("Start TestFixtureSetUp");
 
 #if (DEBUG)
 			// Do nothing.
@@ -68,7 +65,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			                               cancellationTokenSource: CancellationTokenSource);
 
 			Thread.Sleep(TimeSpan.FromSeconds(2));
-			logMessage("Finished TestFixtureSetUp");
+			LogMessage("Finished TestFixtureSetUp");
 		}
 
 		private void CurrentDomain_UnhandledException(object sender,
@@ -77,33 +74,32 @@ namespace Manager.Integration.Test.FunctionalTests
 			var exp = e.ExceptionObject as Exception;
 			if (exp != null)
 			{
-				LogHelper.LogFatalWithLineNumber(exp.Message,
-				                                 Logger,
-				                                 exp);
+				this.Log().FatalWithLineNumber(exp.Message,
+				                               exp);
 			}
 		}
 
 		[TestFixtureTearDown]
 		public void TestFixtureTearDown()
 		{
-			logMessage("Start TestFixtureTearDown");
+			LogMessage("Start TestFixtureTearDown");
 
 			if (AppDomainTask != null)
 			{
 				AppDomainTask.Dispose();
 			}
 
-			logMessage("Finished TestFixtureTearDown");
+			LogMessage("Finished TestFixtureTearDown");
 		}
 
 
 		[Test]
 		public void CancelWrongJobsTest()
 		{
-			logMessage("Start.");
+			LogMessage("Start.");
 
 			var createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(1);
-			logMessage("( " + createNewJobRequests.Count + " ) jobs will be created.");
+			LogMessage("( " + createNewJobRequests.Count + " ) jobs will be created.");
 
 			var timeout =
 				JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
@@ -111,7 +107,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			//--------------------------------------------
 			// Notify when node is up.
 			//--------------------------------------------
-			logMessage("Waiting for node to start.");
+			LogMessage("Waiting for node to start.");
 
 			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
@@ -124,7 +120,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
 			sqlNotifier.Dispose();
 
-			logMessage("Node have started.");
+			LogMessage("Node have started.");
 
 			//--------------------------------------------
 			// Start actual test.
@@ -186,13 +182,13 @@ namespace Manager.Integration.Test.FunctionalTests
 				jobManagerTaskCreator.Dispose();
 			}
 
-			logMessage("Finished.");
+			LogMessage("Finished.");
 		}
 
 		[Test]
 		public void CreateSeveralRequestShouldReturnBothCancelAndDeleteStatusesTest()
 		{
-			logMessage("Start.");
+			LogMessage("Start.");
 
 			var createNewJobRequests =
 				JobHelper.GenerateLongRunningParamsRequests(1);
@@ -271,14 +267,14 @@ namespace Manager.Integration.Test.FunctionalTests
 				jobManagerTaskCreator.Dispose();
 			}
 
-			logMessage("Finished.");
+			LogMessage("Finished.");
 		}
 
 
 		[Test]
 		public void JobShouldHaveStatusFailedIfFailedTest()
 		{
-			logMessage("Start.");
+			LogMessage("Start.");
 
 			var createNewJobRequests = JobHelper.GenerateFailingJobParamsRequests(1);
 
@@ -318,7 +314,7 @@ namespace Manager.Integration.Test.FunctionalTests
 				jobManagerTaskCreator.Dispose();
 			}
 
-			logMessage("Finished.");
+			LogMessage("Finished.");
 		}
 
 		/// <summary>
@@ -328,11 +324,11 @@ namespace Manager.Integration.Test.FunctionalTests
 		[Test]
 		public void ShouldBeAbleToCreateASuccessJobRequestTest()
 		{
-			logMessage("Start.");
+			LogMessage("Start.");
 
 			var createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(1);
 
-			logMessage("( " + createNewJobRequests.Count + " ) jobs will be created.");
+			LogMessage("( " + createNewJobRequests.Count + " ) jobs will be created.");
 
 			var timeout =
 				JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
@@ -364,7 +360,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			var elapsedTime =
 				managerIntegrationStopwatch.GetTotalElapsedTimeInSeconds();
 
-			logMessage("Job took : " + elapsedTime + " seconds.");
+			LogMessage("Job took : " + elapsedTime + " seconds.");
 
 			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count,
 			              "Number of requests must be equal.");
@@ -378,7 +374,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			{
 				jobManagerTaskCreator.Dispose();
 			}
-			logMessage("Finished.");
+			LogMessage("Finished.");
 		}
 	}
 }
