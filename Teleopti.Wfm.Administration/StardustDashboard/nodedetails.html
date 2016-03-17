@@ -16,7 +16,7 @@
                     <tbody>
                         <tr ng-class="{'greenNode': vm.Node.Alive === 'true', 'redNode':vm.Node.Alive === 'false'}">
                             <td>{{vm.Node.Url}}</td>
-                            <td>{{vm.Node.Heartbeat}}</td>
+                            <td>{{vm.Node.Heartbeat | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
                             <td>{{vm.Node.Running}}</td>
                             <td>{{vm.Node.Alive}}</td>
                         </tr>
@@ -46,9 +46,9 @@
                         <tr ng-repeat="job in vm.Jobs">
                             <td><a href="#jobdetails\{{job.Id}}">{{job.Name}}</a></td>
                             <td>{{job.CreatedBy}}</td>
-                            <td>{{job.Created}}</td>
-                            <td>{{job.Started}}</td>
-                            <td>{{job.Ended}}</td>
+                            <td>{{job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+                            <td>{{job.Started | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+                            <td>{{job.Ended | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
                             <td>{{job.SentTo}}</td>
                             <td>{{job.Result}}</td>
                         </tr>

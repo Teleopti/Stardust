@@ -13,7 +13,7 @@
 					</thead>
 					<tbody>
 						<tr ng-repeat="detail in vm.JobDetails">
-							<td>{{detail.Created}}</td>
+							<td>{{detail.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 							<td>{{detail.Detail}}</td>
 						</tr>
 					</tbody>
