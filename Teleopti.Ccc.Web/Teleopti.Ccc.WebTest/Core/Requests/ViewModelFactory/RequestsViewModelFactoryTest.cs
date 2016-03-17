@@ -13,6 +13,8 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
@@ -30,17 +32,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		[Test]
 		public void ShouldRetrieveDatePickerFormatForPersonForViewModel()
 		{
-			var absenceTypesProvider = MockRepository.GenerateMock<IAbsenceTypesProvider>();
-			absenceTypesProvider.Stub(x => x.GetRequestableAbsences()).Return(new List<IAbsence>());
-			absenceTypesProvider.Stub(x => x.GetReportableAbsences()).Return(new List<IAbsence>());
-
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			IPerson person = new Person();
 			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			var loggedOnUser = new FakeLoggedOnUser(person);
 
-			var target = new RequestsViewModelFactory(null, null, absenceTypesProvider,
-			                                          MockRepository.GenerateMock<IPermissionProvider>(), null, null, null, null,
+			var target = new RequestsViewModelFactory(null, null, new AbsenceTypesProvider(new FakeAbsenceRepository(), loggedOnUser), 
+			                                          new FakePermissionProvider(), null, null, null, null,
 			                                          loggedOnUser, null, null, null);
 
 			var result = target.CreatePageViewModel();
@@ -51,21 +48,18 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		[Test]
 		public void ShouldRetrieveAbsenceTypesforViewModel()
 		{
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			IPerson person = new Person();
 			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			var loggedOnUser = new FakeLoggedOnUser(person);
+			
+			var absence = new Absence { Description = new Description("Vacation") ,Requestable = true}.WithId();
+			
+			var absenceRepository = new FakeAbsenceRepository();
+			absenceRepository.Add(absence);
 
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			var absence = new Absence { Description = new Description("Vacation") };
-			absence.SetId(Guid.NewGuid());
-			var absences = new List<IAbsence> { absence };
-
-			var absenceTypesProvider = MockRepository.GenerateMock<IAbsenceTypesProvider>();
-			absenceTypesProvider.Stub(x => x.GetRequestableAbsences()).Return(absences);
-			absenceTypesProvider.Stub(x => x.GetReportableAbsences()).Return(new List<IAbsence>());
-
-			var target = new RequestsViewModelFactory(null, null, absenceTypesProvider, permissionProvider, null, null, null,
+			var absenceTypesProvider = new AbsenceTypesProvider(absenceRepository, loggedOnUser);
+			
+			var target = new RequestsViewModelFactory(null, null, absenceTypesProvider, new FakePermissionProvider(), null, null, null,
 			                                          null, loggedOnUser, null, null, null);
 
 			var result = target.CreatePageViewModel();
@@ -75,32 +69,43 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			result.Should().Not.Be.Null();
 		}
+		
+		[Test]
+		public void ShouldReturnEmptyAbsenceAccountModelWhenNoMatchingRequestableAbsenceFound()
+		{
+			IPerson person = new Person();
+			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
+			var loggedOnUser = new FakeLoggedOnUser(person);
+
+			var absence = new Absence { Description = new Description("Vacation"), Requestable = true }.WithId();
+
+			var absenceRepository = new FakeAbsenceRepository();
+			absenceRepository.Add(absence);
+
+			var absenceTypesProvider = new AbsenceTypesProvider(absenceRepository, loggedOnUser);
+
+			var target = new RequestsViewModelFactory(null, null, absenceTypesProvider, new FakePermissionProvider(), null, null, null,
+													  null, loggedOnUser, null, null, null);
+
+			var result = target.GetAbsenceAccountViewModel(Guid.NewGuid(), new DateOnly(2013, 1, 1));
+			result.Should().Be.Null();
+		}
 
 		[Test]
 		public void ShouldRetrieveReportableAbsenceTypesforViewModel()
 		{
-			var absence = new Absence { Description = new Description("Vacation") };
-			absence.SetId(Guid.NewGuid());
-			var absences = new List<IAbsence> { absence };
-
-			var wfcs = MockRepository.GenerateMock<IWorkflowControlSet>();
-			wfcs.Stub(x => x.AllowedAbsencesForReport).Return(absences);
-
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			var person = new Person
-			{
-				WorkflowControlSet = wfcs
-			};
-			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			var absenceTypesProvider = MockRepository.GenerateMock<IAbsenceTypesProvider>();
-			absenceTypesProvider.Stub(x => x.GetRequestableAbsences()).Return(new List<IAbsence>());
-			absenceTypesProvider.Stub(x => x.GetReportableAbsences()).Return(absences);
+			var absence = new Absence { Description = new Description("Vacation") }.WithId();
 			
-			var target = new RequestsViewModelFactory(null, null, absenceTypesProvider, permissionProvider, null, null, null,
-													  null, loggedOnUser, null, null, null);
+			var wfcs = new WorkflowControlSet();
+			wfcs.AddAllowedAbsenceForReport(absence);
+			
+			var person = new Person { WorkflowControlSet = wfcs };
+			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
+			var loggedOnUser = new FakeLoggedOnUser(person);
+
+			var target = new RequestsViewModelFactory(null, null,
+				new AbsenceTypesProvider(new FakeAbsenceRepository(), loggedOnUser), new FakePermissionProvider(), null, null, null,
+				null, loggedOnUser, null, null, null);
 
 			var result = target.CreatePageViewModel();
 
@@ -115,10 +120,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		[Test]
 		public void ShouldRetrieveTextRequestPermissionForViewModel()
 		{
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			IPerson person = new Person();
 			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			var loggedOnUser = new FakeLoggedOnUser(person);
 
 			var absenceTypesProvider = MockRepository.GenerateMock<IAbsenceTypesProvider>();
 			absenceTypesProvider.Stub(x => x.GetRequestableAbsences()).Return(new List<IAbsence>());
@@ -138,21 +142,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		[Test]
 		public void ShouldRetrieveAbsenceRequestPermissionForViewModel()
 		{
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			IPerson person = new Person();
 			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			var loggedOnUser = new FakeLoggedOnUser(person);
+			
+			var permissionProvider = new FakePermissionProvider();
 
-
-			var absenceTypesProvider = MockRepository.GenerateMock<IAbsenceTypesProvider>();
-			absenceTypesProvider.Stub(x => x.GetRequestableAbsences()).Return(new List<IAbsence>());
-			absenceTypesProvider.Stub(x => x.GetReportableAbsences()).Return(new List<IAbsence>());
-
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb)).
-				Return(true);
-
-			var target = new RequestsViewModelFactory(null, null, absenceTypesProvider, permissionProvider, null, null, null,
+			var target = new RequestsViewModelFactory(null, null, new AbsenceTypesProvider(new FakeAbsenceRepository(), loggedOnUser), permissionProvider, null, null, null,
 			                                          null, loggedOnUser, null, null, null);
 			var result = target.CreatePageViewModel();
 

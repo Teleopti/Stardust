@@ -115,7 +115,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 
 		public AbsenceAccountViewModel GetAbsenceAccountViewModel(Guid absenceId, DateOnly date)
 		{
-			var absence = _absenceTypesProvider.GetRequestableAbsences().First(x => x.Id == absenceId);
+			var absence = _absenceTypesProvider.GetRequestableAbsences().FirstOrDefault(x => x.Id == absenceId);
+			if (absence==null) return null;
+
 			var absenceAccount = _personAccountProvider.GetPersonAccount(absence, date);
 			return _mapper.Map<IAccount, AbsenceAccountViewModel>(absenceAccount);
 		}
