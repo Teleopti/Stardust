@@ -13,7 +13,7 @@
 				}
 
 				$scope.no = function() {
-					$uibModalInstance.dismiss($scope.removeEntireCrossDayAbsence);
+					$uibModalInstance.dismiss();
 				};
 
 				$scope.yes = function() {

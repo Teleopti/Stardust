@@ -21,7 +21,6 @@
 		vm.onlyLoadScheduleWithAbsence = false;
 		vm.lastCommandTrackId = "";
 		vm.selectedPersonAbsences = [];
-		vm.removeEntireCrossDayAbsence = false;
 
 		vm.searchOptions = {
 			keyword: '',
@@ -197,7 +196,7 @@
 				&& (personSelectionSvc.isAnyAgentSelected() || vm.selectedPersonAbsences.length > 0);
 		}
 
-		function removeAbsence() {
+		function removeAbsence(removeEntireCrossDayAbsence) {
 			var selectedPersonIdList = personSelectionSvc.getSelectedPersonIdList();
 
 			var personWithSelectedAbsences = [];
@@ -212,7 +211,7 @@
 
 			var allPersonWithAbsenceRemoved = selectedPersonIdList.concat(personWithSelectedAbsences);
 			personAbsenceSvc.PromiseForRemovePersonAbsence(vm.scheduleDateMoment(), selectedPersonIdList, selectedAbsences,
-				vm.removeEntireCrossDayAbsence, function(result) {
+				removeEntireCrossDayAbsence, function(result) {
 					vm.selectedPersonAbsences = [];
 					vm.afterActionCallback(result, allPersonWithAbsenceRemoved, "FinishedRemoveAbsence", "FailedToRemoveAbsence");
 				}
@@ -228,13 +227,11 @@
 				{
 					header: $translate.instant("Warning"), 
 					message: message,
-					removeEntireCrossDayAbsence: vm.removeEntireCrossDayAbsence
+					removeEntireCrossDayAbsence: false
 				}, { animation: true })
 				.result.then(function (result) {
-					vm.removeEntireCrossDayAbsence = result;
-					removeAbsence();
-				}, function (result) {
-					vm.removeEntireCrossDayAbsence = result;
+					removeAbsence(result);
+				}, function () {
 					return;
 				});
 		}
