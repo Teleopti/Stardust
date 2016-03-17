@@ -1,14 +1,18 @@
 ##===========
 ## Functions
 ##===========
-
-function ServiceCheckAndStart{
+function ServiceExist{
     param($ServiceName)
-    $arrService = Get-Service -Name $ServiceName
-    if ($arrService.Status -ne "Running"){
-        Start-Service $ServiceName
-     }
+    if (Get-Service $ServiceName -ErrorAction SilentlyContinue)
+    {
+        return $true
+    }
+    else
+    {
+        return $false
+    }
 }
+
 function Test-Administrator
 {
 	[CmdletBinding()]
@@ -71,35 +75,48 @@ function TeleoptiWindowsServices-Start {
 
 	fnServiceStart -ServiceName $ServiceBus
 	fnServiceStart -ServiceName $EtlService
-    & sc.exe failure $ServiceBus reset= 0 actions= restart/60000/restart/60000/restart/60000
+
+    if (ServiceExist($ServiceBus)) {
+        & sc.exe failure $ServiceBus reset= 0 actions= restart/60000/restart/60000/restart/60000
+    }
 }
 
 function fnServiceStart{
      param($ServiceName)
-     $arrService = Get-Service -Name $ServiceName
-     if ($arrService.Status -ne "Running"){
-         Start-Service $ServiceName
-         Write-Host "Starting " $ServiceName " service" 
-         " ---------------------- " 
-         " Service is now started"
+    if (ServiceExist($ServiceName)) {
+         $arrService = Get-Service -Name $ServiceName
+         if ($arrService.Status -ne "Running"){
+             Start-Service $ServiceName
+             Write-Host "Starting " $ServiceName " service" 
+             " ---------------------- " 
+             " Service is now started"
+             }
+         if ($arrService.Status -eq "running"){ 
+            Write-Host "$ServiceName service is already started"
          }
-     if ($arrService.Status -eq "running"){ 
-        Write-Host "$ServiceName service is already started"
-     }
+    }
+    else {
+        Write-Host "Service" $ServiceName " is not installed on this host." 
+    }
  }
  
 function fnServiceStop{
      param($ServiceName)
-     $arrService = Get-Service -Name $ServiceName
-     if ($arrService.Status -ne "Stopped"){
-         Stop-Service $ServiceName
-         Write-Host "Stopping " $ServiceName " service" 
-         " ---------------------- " 
-         " Service is now stopped"
+    if (ServiceExist($ServiceName)) {
+         $arrService = Get-Service -Name $ServiceName
+         if ($arrService.Status -ne "Stopped"){
+             Stop-Service $ServiceName
+             Write-Host "Stopping " $ServiceName " service" 
+             " ---------------------- " 
+             " Service is now stopped"
+             }
+         if ($arrService.Status -eq "Stopped"){ 
+            Write-Host "$ServiceName service is already stopped"
          }
-     if ($arrService.Status -eq "Stopped"){ 
-        Write-Host "$ServiceName service is already stopped"
-     }
+    }
+    else {
+        Write-Host "Service" $ServiceName " is not installed on this host." 
+    }
  }
   
 function IIS-Restart {
