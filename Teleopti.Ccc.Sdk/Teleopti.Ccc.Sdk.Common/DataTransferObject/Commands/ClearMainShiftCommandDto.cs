@@ -6,6 +6,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
     /// <summary>
     /// This command clears the mainshift from a schedule. To specify the schedule, you can declare it by a person's <see cref="PersonId"/> and the <see cref="Date"/> of schedule.
     /// </summary>
+    /// <remarks>To remove overtime layers you need to execute the separate command <see cref="CancelOvertimeCommandDto"/>, and to remove personal activity layers execute the <see cref="CancelPersonalActivityCommandDto"/> command.</remarks>
     [DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2011/10/")]
     public class ClearMainShiftCommandDto : CommandDto
     {

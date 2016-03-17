@@ -30,8 +30,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     		_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
     		_scheduleSaveHandler = scheduleSaveHandler;
         }
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		
 		public void Handle(ClearMainShiftCommandDto command)
         {
             using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
@@ -46,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var scheduleRange = scheduleDictionary[person];
 				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
                 var scheduleDay = scheduleRange.ScheduledDay(startDate);
-                scheduleDay.DeleteMainShift(scheduleDay);
+                scheduleDay.DeleteMainShiftSpecial(scheduleDay);
 				
 				var scheduleTagEntity = _scheduleTagAssembler.DtoToDomainEntity(new ScheduleTagDto { Id = command.ScheduleTagId });
 

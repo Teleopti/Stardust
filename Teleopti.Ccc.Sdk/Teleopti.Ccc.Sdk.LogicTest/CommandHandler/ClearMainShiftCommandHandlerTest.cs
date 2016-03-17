@@ -1,137 +1,152 @@
 ﻿using System;
 using NUnit.Framework;
-using Rhino.Mocks;
-using Rhino.Mocks.Constraints;
-using Teleopti.Ccc.Domain.Repositories;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
     [TestFixture]
     public class ClearMainShiftCommandHandlerTest
     {
-        private IScheduleStorage _scheduleStorage;
-        private IPersonRepository _personRepository;
-        private IScenarioRepository _scenarioRepository;
-        private IUnitOfWorkFactory _unitOfWorkFactory;
-        private ClearMainShiftCommandHandler _target ;
         private static DateTime _startDate = new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 		private readonly DateOnlyDto _dateOnlydto = new DateOnlyDto { DateTime = _startDate.Date };
-        private IPerson _person;
-        private IScenario _scenario;
-        private ClearMainShiftCommandDto _clearMainShiftDto;
         private readonly DateTimePeriod _period = new DateTimePeriod(_startDate, _startDate.AddDays(1));
-        private SchedulePartFactoryForDomain _scheduleRange;
-    	private IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
-        private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
-	    private IScheduleTagAssembler _scheduleTagAssembler;
-		 private IScheduleSaveHandler _scheduleSaveHandler;
-
-	    [SetUp]
-        public void Setup()
-        {
-            _scheduleStorage = MockRepository.GenerateMock<IScheduleStorage>();
-			_personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			_scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
-			_unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			_businessRulesForPersonalAccountUpdate = MockRepository.GenerateMock<IBusinessRulesForPersonalAccountUpdate>();
-			_currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
-			_scheduleTagAssembler = MockRepository.GenerateMock<IScheduleTagAssembler>();
-			_scheduleSaveHandler = MockRepository.GenerateMock<IScheduleSaveHandler>();
-
-			_target = new ClearMainShiftCommandHandler(_scheduleTagAssembler, _scheduleStorage, _personRepository, _scenarioRepository, _currentUnitOfWorkFactory, _businessRulesForPersonalAccountUpdate, _scheduleSaveHandler);
-
-            _person = PersonFactory.CreatePerson("test");
-            _person.SetId(Guid.NewGuid());
-
-            _scenario = ScenarioFactory.CreateScenarioAggregate();
-            _scenario.SetId(Guid.NewGuid());
-
-            _clearMainShiftDto = new ClearMainShiftCommandDto { Date = _dateOnlydto, PersonId = _person.Id.GetValueOrDefault() };
-            _scheduleRange = new SchedulePartFactoryForDomain(_person, _scenario, _period, SkillFactory.CreateSkill("Test Skill"));
-        }
-
+        
 	    [Test]
 	    public void ClearMainShiftFromTheDictionarySuccessfully()
 	    {
-		    var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
-		    var schedulePart = _scheduleRange.CreatePart();
-		    var scheduleRangeMock = MockRepository.GenerateMock<IScheduleRange>();
-		    var dictionary = MockRepository.GenerateMock<IScheduleDictionary>();
-		    var rules = MockRepository.GenerateMock<INewBusinessRuleCollection>();
+			var scenario = ScenarioFactory.CreateScenarioAggregate("Default", true).WithId();
+			var scheduleStorage = new FakeScheduleStorage();
+			var personRepository = new FakePersonRepository();
+			var scenarioRepository = new FakeScenarioRepository(scenario);
+			var accountRepository = new FakePersonAbsenceAccountRepository();
+			var scheduleTagRepository = new FakeScheduleTagRepository();
+			
+			var person = PersonFactory.CreatePerson("test").WithId();
+			personRepository.Add(person);
 
-		    _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-		    _currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
-		    _personRepository.Stub(x => x.Load(_clearMainShiftDto.PersonId)).Return(_person);
-			_scheduleStorage.Stub(x => x.FindSchedulesForPersonOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario))
-		                       .IgnoreArguments()
-		                       .Return(dictionary);
-		    dictionary.Stub(x => x[_person]).Return(scheduleRangeMock);
-		    scheduleRangeMock.Stub(x => x.ScheduledDay(new DateOnly(_startDate))).Return(schedulePart);
-		    _businessRulesForPersonalAccountUpdate.Stub(x => x.FromScheduleRange(scheduleRangeMock)).Return(rules);
+			scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, _period));
 
-		    _target.Handle(_clearMainShiftDto);
+		    var target = new ClearMainShiftCommandHandler(new ScheduleTagAssembler(scheduleTagRepository), scheduleStorage,
+			    personRepository, scenarioRepository, new FakeCurrentUnitOfWorkFactory(),
+			    new BusinessRulesForPersonalAccountUpdate(accountRepository, new FakeSchedulingResultStateHolder()),
+			    new ScheduleSaveHandler(new SaveSchedulePartService(new FakeScheduleDifferenceSaver(scheduleStorage),
+				    accountRepository)));
+			target.Handle(new ClearMainShiftCommandDto { Date = _dateOnlydto, PersonId = person.Id.GetValueOrDefault() });
 
-			 _scheduleSaveHandler.AssertWasCalled(x => x.ProcessSave(schedulePart, rules, null));
+		    scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false,false),
+			    new DateOnlyPeriod(2012, 1, 1, 2012, 1, 1), scenario)[person].ScheduledDay(new DateOnly(2012, 1, 1))
+			    .PersonAssignment()
+			    .MainActivities()
+			    .Should()
+			    .Be.Empty();
 	    }
 
-	    [Test]
+		[Test]
+		public void ClearMainShiftShouldNotTouchOvertime()
+		{
+			var scenario = ScenarioFactory.CreateScenarioAggregate("Default", true).WithId();
+			var scheduleStorage = new FakeScheduleStorage();
+			var personRepository = new FakePersonRepository();
+			var scenarioRepository = new FakeScenarioRepository(scenario);
+			var accountRepository = new FakePersonAbsenceAccountRepository();
+			var scheduleTagRepository = new FakeScheduleTagRepository();
+
+			var person = PersonFactory.CreatePerson("test").WithId();
+			personRepository.Add(person);
+
+			scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShiftAndOvertimeShift(scenario, person, _period));
+
+			var target = new ClearMainShiftCommandHandler(new ScheduleTagAssembler(scheduleTagRepository), scheduleStorage,
+				personRepository, scenarioRepository, new FakeCurrentUnitOfWorkFactory(),
+				new BusinessRulesForPersonalAccountUpdate(accountRepository, new FakeSchedulingResultStateHolder()),
+				new ScheduleSaveHandler(new SaveSchedulePartService(new FakeScheduleDifferenceSaver(scheduleStorage),
+					accountRepository)));
+			target.Handle(new ClearMainShiftCommandDto { Date = _dateOnlydto, PersonId = person.Id.GetValueOrDefault() });
+
+			var scheduledDay = scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
+				new DateOnlyPeriod(2012, 1, 1, 2012, 1, 1), scenario)[person].ScheduledDay(new DateOnly(2012, 1, 1));
+
+			scheduledDay
+				.PersonAssignment()
+				.MainActivities()
+				.Should()
+				.Be.Empty();
+			scheduledDay
+				.PersonAssignment()
+				.OvertimeActivities()
+				.Should().Not.Be.Empty();
+		}
+		[Test]
 	    public void ClearMainShiftFromTheDictionaryForGivenScenarioSuccessfully()
 	    {
-		    var scenarioId = Guid.NewGuid();
-			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
-		    var schedulePart = _scheduleRange.CreatePart();
-		    var scheduleRangeMock = MockRepository.GenerateMock<IScheduleRange>();
-			var dictionary = MockRepository.GenerateMock<IScheduleDictionary>();
-			var rules = MockRepository.GenerateMock<INewBusinessRuleCollection>();
+			var newScenario = ScenarioFactory.CreateScenarioWithId("High", false);
+			var scheduleStorage = new FakeScheduleStorage();
+			var personRepository = new FakePersonRepository();
+			var scenarioRepository = new FakeScenarioRepository(newScenario);
+			var accountRepository = new FakePersonAbsenceAccountRepository();
+			var scheduleTagRepository = new FakeScheduleTagRepository();
 
-		    _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-		    _currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
-		    _personRepository.Stub(x => x.Load(_clearMainShiftDto.PersonId)).Return(_person);
-			_scheduleStorage.Stub(x => x.FindSchedulesForPersonOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario)).IgnoreArguments().Return(dictionary);
-		    dictionary.Stub(x => x[_person]).Return(scheduleRangeMock);
-		    scheduleRangeMock.Stub(x => x.ScheduledDay(new DateOnly(_startDate))).Return(schedulePart);
-		    _businessRulesForPersonalAccountUpdate.Stub(x => x.FromScheduleRange(scheduleRangeMock)).Return(rules);
-		    
-		    _clearMainShiftDto.ScenarioId = scenarioId;
-		    _target.Handle(_clearMainShiftDto);
+			var person = PersonFactory.CreatePerson("test").WithId();
+			personRepository.Add(person);
 
-		    _scenarioRepository.AssertWasCalled(x => x.Get(scenarioId));
-			 _scheduleSaveHandler.AssertWasCalled(x => x.ProcessSave(schedulePart, rules, null));
-	    }
+			scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(newScenario, person, _period));
+
+			var target = new ClearMainShiftCommandHandler(new ScheduleTagAssembler(scheduleTagRepository), scheduleStorage,
+				personRepository, scenarioRepository, new FakeCurrentUnitOfWorkFactory(),
+				new BusinessRulesForPersonalAccountUpdate(accountRepository, new FakeSchedulingResultStateHolder()),
+				new ScheduleSaveHandler(new SaveSchedulePartService(new FakeScheduleDifferenceSaver(scheduleStorage),
+					accountRepository)));
+			target.Handle(new ClearMainShiftCommandDto { Date = _dateOnlydto, PersonId = person.Id.GetValueOrDefault(), ScenarioId = newScenario.Id.GetValueOrDefault() });
+			
+			scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
+				new DateOnlyPeriod(2012, 1, 1, 2012, 1, 1), newScenario)[person].ScheduledDay(new DateOnly(2012, 1, 1))
+				.PersonAssignment()
+				.MainActivities()
+				.Should()
+				.Be.Empty();
+		}
 
 		[Test]
 		public void ClearMainShiftWithScheduleTag()
 		{
-			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
-			var schedulePart = _scheduleRange.CreatePart();
-			var scheduleRangeMock = MockRepository.GenerateMock<IScheduleRange>();
-			var dictionary = MockRepository.GenerateMock<IScheduleDictionary>();
-			var rules = MockRepository.GenerateMock<INewBusinessRuleCollection>();
-			var tag = MockRepository.GenerateMock<IScheduleTag>();
-			var tagId = Guid.NewGuid();
+			var scenario = ScenarioFactory.CreateScenarioAggregate("Default", true).WithId();
+			var scheduleStorage = new FakeScheduleStorage();
+			var personRepository = new FakePersonRepository();
+			var scenarioRepository = new FakeScenarioRepository(scenario);
+			var accountRepository = new FakePersonAbsenceAccountRepository();
+			var scheduleTagRepository = new FakeScheduleTagRepository();
 
-			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			_currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
-			_personRepository.Stub(x => x.Load(_clearMainShiftDto.PersonId)).Return(_person);
-			_scheduleStorage.Stub(x => x.FindSchedulesForPersonOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario)).IgnoreArguments().Return(dictionary);
-			dictionary.Stub(x => x[_person]).Return(scheduleRangeMock);
-			scheduleRangeMock.Stub(x => x.ScheduledDay(new DateOnly(_startDate))).Return(schedulePart);
-			_businessRulesForPersonalAccountUpdate.Stub(x => x.FromScheduleRange(scheduleRangeMock)).Return(rules);
-			_scheduleTagAssembler.Stub(x => x.DtoToDomainEntity(null))
-			                     .Constraints(new PredicateConstraint<ScheduleTagDto>(t => t.Id == tagId))
-			                     .Return(tag);
+			var scheduleTag = new ScheduleTag { Description = "Manual" }.WithId();
+			scheduleTagRepository.Add(scheduleTag);
 
-			_clearMainShiftDto.ScheduleTagId = tagId;
-			_target.Handle(_clearMainShiftDto);
+			var person = PersonFactory.CreatePerson("test").WithId();
+			personRepository.Add(person);
 
-			_scheduleSaveHandler.AssertWasCalled(x => x.ProcessSave(schedulePart, rules, tag));
+			scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, _period));
+
+			var target = new ClearMainShiftCommandHandler(new ScheduleTagAssembler(scheduleTagRepository), scheduleStorage,
+				personRepository, scenarioRepository, new FakeCurrentUnitOfWorkFactory(),
+				new BusinessRulesForPersonalAccountUpdate(accountRepository, new FakeSchedulingResultStateHolder()),
+				new ScheduleSaveHandler(new SaveSchedulePartService(new FakeScheduleDifferenceSaver(scheduleStorage),
+					accountRepository)));
+			target.Handle(new ClearMainShiftCommandDto { Date = _dateOnlydto, PersonId = person.Id.GetValueOrDefault(), ScheduleTagId = scheduleTag.Id.GetValueOrDefault() });
+			
+			scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
+				new DateOnlyPeriod(2012, 1, 1, 2012, 1, 1), scenario)[person].ScheduledDay(new DateOnly(2012, 1, 1))
+				.ScheduleTag()
+				.Should()
+				.Be.EqualTo(scheduleTag);
 		}
     }
 }

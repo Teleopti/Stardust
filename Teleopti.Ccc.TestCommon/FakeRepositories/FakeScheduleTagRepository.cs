@@ -9,11 +9,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeScheduleTagRepository : IScheduleTagRepository
 	{
-		private IList<IScheduleTag> _scheduleTags = new List<IScheduleTag>();
+		private readonly IList<IScheduleTag> _scheduleTags = new List<IScheduleTag>();
 
 		public void Add(IScheduleTag root)
 		{
-			throw new NotImplementedException();
+			_scheduleTags.Add(root);
 		}
 
 		public void Remove(IScheduleTag root)
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IScheduleTag Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _scheduleTags.FirstOrDefault(s => s.Id == id);
 		}
 
 		public IList<IScheduleTag> LoadAll()
