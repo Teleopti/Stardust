@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public FakePersonRepository PersonRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepositorySimulateNewUnitOfWork SkillDayRepository;
-		public OptimizationPreferencesFactory OptimizationPreferencesFactory;
+		public OptimizationPreferencesProvider OptimizationPreferencesProvider;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
 		[Test]
@@ -131,10 +131,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		[Test]
 		public void ShouldSkipOptimizationForRestOfPeriodIfExecuterThinkThatsAGoodIdea()
 		{
-			var prefUsedInThisTest = OptimizationPreferencesFactory.Create();
+			var prefUsedInThisTest = OptimizationPreferencesProvider.Fetch();
 			prefUsedInThisTest.Shifts.KeepShifts = true;
 			prefUsedInThisTest.Shifts.KeepShiftsValue = int.MaxValue;
-			OptimizationPreferencesFactory.SetFromTestsOnly(prefUsedInThisTest);
+			OptimizationPreferencesProvider.SetFromTestsOnly(prefUsedInThisTest);
 			IntradayOptmizerLimiter.SetFromTest(new Percent(1), 0);
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
 			var skill = SkillRepository.Has("skill", phoneActivity);

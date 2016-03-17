@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IScheduleDictionaryPersister _persister;
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
-		private readonly OptimizationPreferencesFactory _optimizationPreferencesFactory;
+		private readonly OptimizationPreferencesProvider _optimizationPreferencesProvider;
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public ScheduleOptimization(IFillSchedulerStateHolder fillSchedulerStateHolder, Func<ISchedulerStateHolder> schedulerStateHolder,
 			ClassicDaysOffOptimizationCommand classicDaysOffOptimizationCommand,
 			IScheduleDictionaryPersister persister, IPlanningPeriodRepository planningPeriodRepository,
-			WeeklyRestSolverExecuter weeklyRestSolverExecuter, OptimizationPreferencesFactory optimizationPreferencesFactory,
+			WeeklyRestSolverExecuter weeklyRestSolverExecuter, OptimizationPreferencesProvider optimizationPreferencesProvider,
 			IMatrixListFactory matrixListFactory, IScheduleDayEquator scheduleDayEquator,
 			DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
 			IOptimizerHelperHelper optimizerHelperHelper, ResourceCalculationContextFactory resourceCalculationContextFactory,
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_persister = persister;
 			_planningPeriodRepository = planningPeriodRepository;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
-			_optimizationPreferencesFactory = optimizationPreferencesFactory;
+			_optimizationPreferencesProvider = optimizationPreferencesProvider;
 			_matrixListFactory = matrixListFactory;
 			_scheduleDayEquator = scheduleDayEquator;
 			_dayOffOptimizationPreferenceProviderUsingFiltersFactory = dayOffOptimizationPreferenceProviderUsingFiltersFactory;
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		protected virtual DateOnlyPeriod SetupAndOptimize(Guid planningPeriodId)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
-			var optimizationPreferences = _optimizationPreferencesFactory.Create();
+			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
 			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;

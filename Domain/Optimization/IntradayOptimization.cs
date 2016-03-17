@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IIntradayOptimizerContainer _intradayOptimizerContainer;
 		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
-		private readonly OptimizationPreferencesFactory _optimizationPreferencesFactory;
+		private readonly OptimizationPreferencesProvider _optimizationPreferencesProvider;
 
 		public IntradayOptimization(Func<ISchedulerStateHolder> schedulerStateHolder,
 			IntradayOptimizer2Creator intradayOptimizer2Creator,
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 			IIntradayOptimizerContainer intradayOptimizerContainer,
 			WeeklyRestSolverExecuter weeklyRestSolverExecuter,
-			OptimizationPreferencesFactory optimizationPreferencesFactory)
+			OptimizationPreferencesProvider optimizationPreferencesProvider)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_intradayOptimizer2Creator = intradayOptimizer2Creator;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 			_intradayOptimizerContainer = intradayOptimizerContainer;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
-			_optimizationPreferencesFactory = optimizationPreferencesFactory;
+			_optimizationPreferencesProvider = optimizationPreferencesProvider;
 		}
 
 		public void Execute(DateOnlyPeriod period, 
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			var schedules = schedulerStateHolder.Schedules.SchedulesForPeriod(period, agents);
-			var optimizationPreferences = _optimizationPreferencesFactory.Create();
+			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
 			var dayOffPreferencesProvider = new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()); //doesn't seem to be used with "real" values when doing intraday optimization
 			var optimizers = _intradayOptimizer2Creator.Create(period, schedules, optimizationPreferences, dayOffPreferencesProvider);
 

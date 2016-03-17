@@ -322,7 +322,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradayDecisionMaker>().As<IIntradayDecisionMaker>().SingleInstance();
 			//builder.RegisterType<FillSchedulerStateHolderFromDatabase>().As<IFillSchedulerStateHolder>().SingleInstance();
 			builder.RegisterType<FixedStaffLoader>().As<IFixedStaffLoader>().SingleInstance();
-			builder.RegisterType<OptimizationPreferencesFactory>().SingleInstance();
+			builder.RegisterType<OptimizationPreferencesProvider>().SingleInstance();
 			builder.RegisterType<FetchDayOffRulesModel>().As<IFetchDayOffRulesModel>().SingleInstance();
 			builder.RegisterType<DayOffRulesMapper>().SingleInstance();
 			builder.RegisterType<FilterMapper>().SingleInstance();

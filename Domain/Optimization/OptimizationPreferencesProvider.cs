@@ -2,11 +2,11 @@
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class OptimizationPreferencesFactory
+	public class OptimizationPreferencesProvider
 	{
 		private OptimizationPreferences _setFromTests;
 
-		public OptimizationPreferences Create()
+		public OptimizationPreferences Fetch()
 		{
 			return _setFromTests ?? new OptimizationPreferences
 			{
