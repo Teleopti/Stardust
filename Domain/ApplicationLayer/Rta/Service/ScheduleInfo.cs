@@ -8,31 +8,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class ScheduleInfo
 	{
 		private readonly DateTime _currentTime;
-		private readonly StoredStateInfo _stored;
+		private readonly Lazy<IEnumerable<ScheduleLayer>> _schedule;
+		private readonly Lazy<StoredStateInfo> _stored;
 		private readonly Lazy<ScheduleLayer> _currentActivity;
 		private readonly Lazy<ScheduleLayer> _nextActivityInShift;
 		private readonly Lazy<ScheduleLayer> _previousActivity;
+		private readonly Lazy<ScheduleLayer> _nextActivity;
 		private readonly Lazy<DateTime> _currentShiftStartTime;
 		private readonly Lazy<DateTime> _currentShiftEndTime;
 		private readonly Lazy<DateTime> _shiftStartTimeForPreviousActivity;
 		private readonly Lazy<DateTime> _shiftEndTimeForPreviousActivity;
 		private readonly Lazy<DateOnly?> _belongsToDate;
-		private readonly IEnumerable<ScheduleLayer> _scheduleLayers;
 
 		public ScheduleInfo(
-			StateContext context, 
-			DateTime currentTime,
-			StoredStateInfo stored
+			Lazy<IEnumerable<ScheduleLayer>> schedule,
+			Lazy<StoredStateInfo> stored,
+			DateTime currentTime
 			)
 		{
 			_currentTime = currentTime;
 			_stored = stored;
-			_scheduleLayers = context.ScheduleLayers();
+			_schedule = schedule;
 			_currentActivity = new Lazy<ScheduleLayer>(() => activityForTime(currentTime));
 			_nextActivityInShift = new Lazy<ScheduleLayer>(nextAdjecentActivityToCurrent);
 			_currentShiftStartTime = new Lazy<DateTime>(() => startTimeOfShift(_currentActivity.Value));
 			_currentShiftEndTime = new Lazy<DateTime>(() => endTimeOfShift(_currentActivity.Value));
-			_previousActivity = new Lazy<ScheduleLayer>(() => (from l in _scheduleLayers where l.EndDateTime <= currentTime select l).LastOrDefault());
+			_previousActivity = new Lazy<ScheduleLayer>(() => (from l in _schedule.Value where l.EndDateTime <= currentTime select l).LastOrDefault());
+			_nextActivity = new Lazy<ScheduleLayer>(() => (from l in _schedule.Value where l.StartDateTime <= currentTime select l).FirstOrDefault());
 			_shiftStartTimeForPreviousActivity = new Lazy<DateTime>(() => startTimeOfShift(_previousActivity.Value));
 			_shiftEndTimeForPreviousActivity = new Lazy<DateTime>(() => endTimeOfShift(_previousActivity.Value));
 			_belongsToDate = new Lazy<DateOnly?>(() =>
@@ -46,13 +48,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public bool ShiftStarted()
 		{
-			return _stored.ActivityId() == null &&
+			return _stored.Value.ActivityId() == null &&
 				   CurrentActivity() != null;
 		}
 
 		public bool ShiftEnded()
 		{
-			return _stored.ActivityId() != null &&
+			return _stored.Value.ActivityId() != null &&
 				   CurrentActivity() == null &&
 				   PreviousActivity() != null;
 		}
@@ -65,6 +67,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public ScheduleLayer PreviousActivity()
 		{
 			return _previousActivity.Value;
+		}
+
+		public ScheduleLayer NextActivity()
+		{
+			return _nextActivity.Value;
 		}
 
 		public ScheduleLayer NextActivityInShift()
@@ -125,19 +132,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private IEnumerable<ScheduleLayer> activitiesThisShift(ScheduleLayer activity)
 		{
-			return from l in _scheduleLayers
+			return from l in _schedule.Value
 				where l.BelongsToDate == activity.BelongsToDate
 				select l;
 		}
 
 		private ScheduleLayer activityForTime(DateTime time)
 		{
-			return ActivityForTime(_scheduleLayers, time);
+			return ActivityForTime(_schedule.Value, time);
 		}
 
 		private ScheduleLayer nextAdjecentActivityToCurrent()
 		{
-			var nextActivity = (from l in _scheduleLayers where l.StartDateTime > _currentTime select l).FirstOrDefault();
+			var nextActivity = (from l in _schedule.Value where l.StartDateTime > _currentTime select l).FirstOrDefault();
 			if (nextActivity == null)
 				return null;
 			if (_currentActivity.Value == null)
@@ -150,7 +157,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private ScheduleLayer activityNear(DateTime time)
 		{
 			return (
-				from l in _scheduleLayers
+				from l in _schedule.Value
 				let ended = l.EndDateTime >= _currentTime.AddHours(-1) && l.StartDateTime < time
 				let starting = l.StartDateTime <= _currentTime.AddHours(1) && l.EndDateTime > time
 				where ended || starting

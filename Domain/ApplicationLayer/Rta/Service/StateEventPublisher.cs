@@ -1,4 +1,3 @@
-using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -20,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			_eventPublisher.Publish(info, new PersonStateChangedEvent
 			{
-				PersonId = info.Person.PersonId,
+				PersonId = info.PersonId,
 				Timestamp = info.CurrentTime,
 				AdherenceWithPreviousActivity = info.Adherence.AdherenceForNewStateAndPreviousActivity(),
 				Adherence = info.Adherence.AdherenceForNewStateAndCurrentActivity()

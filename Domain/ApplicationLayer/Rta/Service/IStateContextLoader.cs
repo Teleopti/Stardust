@@ -13,10 +13,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public interface IStateContextLoader
 	{
-		void For(ExternalUserStateInputModel input, Action<StateContext> action);
-		void ForAll(Action<StateContext> action);
-		void ForClosingSnapshot(ExternalUserStateInputModel input, Action<StateContext> action);
-		void ForSynchronize(Action<StateContext> action);
+		void For(ExternalUserStateInputModel input, Action<StateInfo> action);
+		void ForAll(Action<StateInfo> action);
+		void ForClosingSnapshot(ExternalUserStateInputModel input, Action<StateInfo> action);
+		void ForSynchronize(Action<StateInfo> action);
 	}
 
 	public class PersonLocker
@@ -39,10 +39,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		protected readonly INow _now;
 		protected readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
 		private readonly IAgentStateReadModelPersister _agentStateReadModelPersister;
-		private readonly StateMapper _stateMapper;
+		protected readonly StateMapper _stateMapper;
 		protected readonly IPreviousStateInfoLoader _previousStateInfoLoader;
 		protected readonly IMappingLoader MappingLoader;
 		protected readonly WithAnalyticsUnitOfWork _unitOfWork;
+		protected readonly IAppliedAdherence _appliedAdherence;
+		protected readonly IAppliedAlarm _appliedAlarm;
 		protected readonly PersonLocker _locker = new PersonLocker();
 
 		public LoadFromCache(
@@ -53,7 +55,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			StateMapper stateMapper,
 			IPreviousStateInfoLoader previousStateInfoLoader,
 			IMappingLoader mappingLoader,
-			WithAnalyticsUnitOfWork unitOfWork
+			WithAnalyticsUnitOfWork unitOfWork,
+			IAppliedAdherence appliedAdherence,
+			IAppliedAlarm appliedAlarm
 			)
 		{
 			_dataSourceResolver = new DataSourceResolver(databaseLoader);
@@ -65,6 +69,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_previousStateInfoLoader = previousStateInfoLoader;
 			MappingLoader = mappingLoader;
 			_unitOfWork = unitOfWork;
+			_appliedAdherence = appliedAdherence;
+			_appliedAlarm = appliedAlarm;
 		}
 
 		protected int validateSourceId(ExternalUserStateInputModel input)
@@ -77,7 +83,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return dataSourceId;
 		}
 
-		public virtual void For(ExternalUserStateInputModel input, Action<StateContext> action)
+		public virtual void For(ExternalUserStateInputModel input, Action<StateInfo> action)
 		{
 			var dataSourceId = validateSourceId(input);
 			var userCode = input.UserCode;
@@ -101,7 +107,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				x.BusinessUnitId = p.BusinessUnitId;
 				_locker.LockFor(x.PersonId, () =>
 				{
-					action.Invoke(new StateContext(
+					action.Invoke(new StateInfo(
 						input,
 						x.PersonId,
 						x.BusinessUnitId,
@@ -110,14 +116,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						() => _unitOfWork.Get(() => _previousStateInfoLoader.Load(x.PersonId)),
 						() => _databaseLoader.GetCurrentSchedule(x.PersonId),
 						() => MappingLoader.Load(),
-						s => _unitOfWork.Do(() => _agentStateReadModelUpdater.Update(s)), 
-						_now));
+						s => _unitOfWork.Do(() => _agentStateReadModelUpdater.Update(s)),
+						_now,
+						_stateMapper,
+						_appliedAdherence,
+						_appliedAlarm
+						));
 				});
 			}
 
 		}
 
-		public virtual void ForAll(Action<StateContext> action)
+		public virtual void ForAll(Action<StateInfo> action)
 		{
 			var personOrganizationData = _databaseLoader.PersonOrganizationData();
 			var externalLogons = _databaseLoader.ExternalLogOns();
@@ -135,7 +145,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				x.BusinessUnitId = p.BusinessUnitId;
 				_locker.LockFor(x.PersonId, () =>
 				{
-					action.Invoke(new StateContext(
+					action.Invoke(new StateInfo(
 						null,
 						x.PersonId,
 						x.BusinessUnitId,
@@ -145,12 +155,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						() => _databaseLoader.GetCurrentSchedule(x.PersonId),
 						() => MappingLoader.Load(),
 						s => _unitOfWork.Do(() => _agentStateReadModelUpdater.Update(s)),
-						_now));
+						_now,
+						_stateMapper,
+						_appliedAdherence,
+						_appliedAlarm
+						));
 				});
 			}
 		}
 
-		public virtual void ForClosingSnapshot(ExternalUserStateInputModel input, Action<StateContext> action)
+		public virtual void ForClosingSnapshot(ExternalUserStateInputModel input, Action<StateInfo> action)
 		{
 			var missingAgents = _agentStateReadModelPersister.GetNotInSnapshot(input.BatchId, input.SourceId);
 			var agentsNotAlreadyLoggedOut =
@@ -168,7 +182,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			{
 				_locker.LockFor(x.PersonId, () =>
 				{
-					action.Invoke(new StateContext(
+					action.Invoke(new StateInfo(
 						input,
 						x.PersonId,
 						x.BusinessUnitId,
@@ -178,20 +192,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						() => _databaseLoader.GetCurrentSchedule(x.PersonId),
 						() => MappingLoader.Load(),
 						s => _unitOfWork.Do(() => _agentStateReadModelUpdater.Update(s)),
-						_now));
+						_now,
+						_stateMapper,
+						_appliedAdherence,
+						_appliedAlarm
+						));
 				});
 			});
 
 		}
 
-		public virtual void ForSynchronize(Action<StateContext> action)
+		public virtual void ForSynchronize(Action<StateInfo> action)
 		{
 			_unitOfWork.Get(() => _agentStateReadModelPersister.GetAll())
 				.ForEach(x =>
 				{
 					_locker.LockFor(x.PersonId, () =>
 					{
-						action.Invoke(new StateContext(
+						action.Invoke(new StateInfo(
 							new ExternalUserStateInputModel
 							{
 								StateCode = x.StateCode,
@@ -205,7 +223,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							() => _databaseLoader.GetCurrentSchedule(x.PersonId),
 							() => MappingLoader.Load(),
 							null,
-							_now));
+							_now,
+							_stateMapper,
+							_appliedAdherence,
+							_appliedAlarm
+							));
 					});
 				});
 		}
@@ -228,7 +250,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IPreviousStateInfoLoader previousStateInfoLoader, 
 			IMappingLoader mappingLoader, 
 			IDatabaseReader databaseReader,
-			WithAnalyticsUnitOfWork unitOfWork)
+			WithAnalyticsUnitOfWork unitOfWork,
+			IAppliedAdherence appliedAdherence,
+			IAppliedAlarm appliedAlarm)
 			: base(
 				databaseLoader, 
 				now, 
@@ -237,12 +261,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				stateMapper, 
 				previousStateInfoLoader,
 				mappingLoader,
-				unitOfWork)
+				unitOfWork,
+				appliedAdherence,
+				appliedAlarm)
 		{
 			_databaseReader = databaseReader;
 		}
 
-		public override void For(ExternalUserStateInputModel input, Action<StateContext> action)
+		public override void For(ExternalUserStateInputModel input, Action<StateInfo> action)
 		{
 			var dataSourceId = validateSourceId(input);
 			var userCode = input.UserCode;
@@ -252,7 +278,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				{
 					_locker.LockFor(x.PersonId, () =>
 					{
-						action.Invoke(new StateContext(
+						action.Invoke(new StateInfo(
 							input,
 							x.PersonId,
 							x.BusinessUnitId,
@@ -262,19 +288,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							() => _databaseLoader.GetCurrentSchedule(x.PersonId),
 							() => MappingLoader.Load(),
 							s => _unitOfWork.Do(() => _agentStateReadModelUpdater.Update(s)),
-							_now));
+							_now,
+							_stateMapper,
+							_appliedAdherence,
+							_appliedAlarm
+							));
 					});
 				});
 		}
 		
-		public override void ForAll(Action<StateContext> action)
+		public override void ForAll(Action<StateInfo> action)
 		{
 			_databaseReader.LoadAllPersonOrganizationData()
 				.ForEach(x =>
 				{
 					_locker.LockFor(x.PersonId, () =>
 					{
-						action.Invoke(new StateContext(
+						action.Invoke(new StateInfo(
 							null,
 							x.PersonId,
 							x.BusinessUnitId,
@@ -284,7 +314,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							() => _databaseLoader.GetCurrentSchedule(x.PersonId),
 							() => MappingLoader.Load(),
 							s => _unitOfWork.Do(() => _agentStateReadModelUpdater.Update(s)),
-							_now));
+							_now,
+							_stateMapper,
+							_appliedAdherence,
+							_appliedAlarm
+							));
 					});
 				});
 		}
@@ -310,6 +344,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IDatabaseReader _databaseReader;
 		private readonly WithAnalyticsUnitOfWork _withAnalytics;
 		private readonly WithUnitOfWork _withUnitOfWork;
+		private readonly IAppliedAdherence _appliedAdherence;
+		private readonly IAppliedAlarm _appliedAlarm;
 
 		public LoadAllFromDatabase(
 			IDatabaseLoader databaseLoader,
@@ -322,7 +358,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IMappingReader mappingReader,
 			IDatabaseReader databaseReader,
 			WithAnalyticsUnitOfWork withAnalytics,
-			WithUnitOfWork withUnitOfWork
+			WithUnitOfWork withUnitOfWork,
+			IAppliedAdherence appliedAdherence,
+			IAppliedAlarm appliedAlarm
 			)
 		{
 			_dataSourceResolver = new DataSourceResolver(databaseLoader);
@@ -337,6 +375,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_databaseReader = databaseReader;
 			_withAnalytics = withAnalytics;
 			_withUnitOfWork = withUnitOfWork;
+			_appliedAdherence = appliedAdherence;
+			_appliedAlarm = appliedAlarm;
 		}
 
 		protected int validateSourceId(ExternalUserStateInputModel input)
@@ -349,7 +389,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return dataSourceId;
 		}
 
-		public virtual void For(ExternalUserStateInputModel input, Action<StateContext> action)
+		public virtual void For(ExternalUserStateInputModel input, Action<StateInfo> action)
 		{
 			var dataSourceId = validateSourceId(input);
 			var userCode = input.UserCode;
@@ -361,7 +401,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				{
 					_withAnalytics.Do(() =>
 					{
-						action.Invoke(new StateContext(
+						action.Invoke(new StateInfo(
 							input,
 							x.PersonId,
 							x.BusinessUnitId,
@@ -371,12 +411,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							() => _databaseReader.GetCurrentSchedule(x.PersonId),
 							() => mappings,
 							s => _agentStateReadModelUpdater.Update(s),
-							_now));
+							_now,
+							_stateMapper,
+							_appliedAdherence,
+							_appliedAlarm
+							));
 					});
 				});
 		}
 
-		public virtual void ForAll(Action<StateContext> action)
+		public virtual void ForAll(Action<StateInfo> action)
 		{
 			var mappings = _withUnitOfWork.Get(() => _mappingReader.Read());
 
@@ -385,7 +429,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				{
 					_withAnalytics.Do(() =>
 					{
-						action.Invoke(new StateContext(
+						action.Invoke(new StateInfo(
 							null,
 							x.PersonId,
 							x.BusinessUnitId,
@@ -395,13 +439,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							() => _databaseReader.GetCurrentSchedule(x.PersonId),
 							() => mappings,
 							s => _agentStateReadModelUpdater.Update(s),
-							_now));
+							_now,
+							_stateMapper,
+							_appliedAdherence,
+							_appliedAlarm
+							));
 					});
 				});
 		}
 
 		[AnalyticsUnitOfWork]
-		public virtual void ForClosingSnapshot(ExternalUserStateInputModel input, Action<StateContext> action)
+		public virtual void ForClosingSnapshot(ExternalUserStateInputModel input, Action<StateInfo> action)
 		{
 			var missingAgents = _agentStateReadModelPersister.GetNotInSnapshot(input.BatchId, input.SourceId);
 			var agentsNotAlreadyLoggedOut =
@@ -419,7 +467,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			agentsNotAlreadyLoggedOut.ForEach(x =>
 			{
-				action.Invoke(new StateContext(
+				action.Invoke(new StateInfo(
 					input,
 					x.PersonId,
 					x.BusinessUnitId,
@@ -429,19 +477,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					() => _databaseReader.GetCurrentSchedule(x.PersonId),
 					() => mappings,
 					s => _agentStateReadModelUpdater.Update(s),
-					_now));
+					_now,
+					_stateMapper,
+					_appliedAdherence,
+					_appliedAlarm
+					));
 			});
 		}
 
 		[AnalyticsUnitOfWork]
-		public virtual void ForSynchronize(Action<StateContext> action)
+		public virtual void ForSynchronize(Action<StateInfo> action)
 		{
 			var mappings = _withUnitOfWork.Get(() => _mappingReader.Read());
 
 			_agentStateReadModelPersister.GetAll()
 				.ForEach(x =>
 				{
-					action.Invoke(new StateContext(
+					action.Invoke(new StateInfo(
 						new ExternalUserStateInputModel
 						{
 							StateCode = x.StateCode,
@@ -455,7 +507,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						() => _databaseReader.GetCurrentSchedule(x.PersonId),
 						() => mappings,
 						null,
-						_now));
+						_now,
+						_stateMapper,
+						_appliedAdherence,
+						_appliedAlarm
+						));
 				});
 		}
 

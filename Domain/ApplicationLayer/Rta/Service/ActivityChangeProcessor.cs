@@ -27,14 +27,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public void CheckForActivityChanges()
 		{
-			var now = _now.UtcDateTime();
-
 			_stateContextLoader.ForAll(person =>
 			{
-				var schedule = person.ScheduleLayers();
-
 				var current = new currentPeriod();
-				var currentActivity = ScheduleInfo.ActivityForTime(schedule, now);
+				var currentActivity = person.Schedule.CurrentActivity();
 				if (currentActivity != null)
 				{
 					current.StartTime = currentActivity.StartDateTime;
@@ -43,10 +39,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				}
 				else
 				{
-					var previousActivity = ScheduleInfo.PreviousActivity(schedule, now);
+					var previousActivity = person.Schedule.PreviousActivity();
 					if (previousActivity != null)
 						current.StartTime = previousActivity.EndDateTime;
-					var nextActivity = ScheduleInfo.NextActivity(schedule, now);
+					var nextActivity = person.Schedule.NextActivity();
 					if (nextActivity != null)
 						current.EndTime = nextActivity.StartDateTime;
 				}

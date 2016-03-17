@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				return;
 			_eventPublisher.Publish(info, new PersonShiftStartEvent
 			{
-				PersonId = info.Person.PersonId,
+				PersonId = info.PersonId,
 				ShiftStartTime = info.Schedule.CurrentShiftStartTime,
 				ShiftEndTime = info.Schedule.CurrentShiftEndTime
 			});
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				return;
 			_eventPublisher.Publish(info, new PersonShiftEndEvent
 			{
-				PersonId = info.Person.PersonId,
+				PersonId = info.PersonId,
 				ShiftStartTime = info.Schedule.ShiftStartTimeForPreviousActivity,
 				ShiftEndTime = info.Schedule.ShiftEndTimeForPreviousActivity
 			});

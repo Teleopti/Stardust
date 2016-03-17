@@ -354,7 +354,6 @@
     <Compile Include="ApplicationLayer\Rta\Resolvers\DataSourceResolver.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\Rta.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\RtaDecoratingEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\StateContext.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\RtaProcessor.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ScheduleInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ShiftEventPublisher.cs" />

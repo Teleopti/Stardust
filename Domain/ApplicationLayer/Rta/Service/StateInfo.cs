@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -6,21 +7,65 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class StateInfo
 	{
 		private readonly IAppliedAlarm _appliedAlarm;
+		private readonly Lazy<StoredStateInfo> _stored;
+		private readonly Action<StateInfo> _agentStateReadModelUpdater;
 
 		public StateInfo(
-			StateContext context,
+			ExternalUserStateInputModel input, 
+			Guid personId, 
+			Guid businessUnitId, 
+			Guid teamId, 
+			Guid siteId, 
+			Func<StoredStateInfo> stored, 
+			Func<IEnumerable<ScheduleLayer>> schedule, 
+			Func<IEnumerable<Mapping>> mappings, 
+			Action<StateInfo> agentStateReadModelUpdater, 
+			INow now,
 			StateMapper stateMapper,
 			IAppliedAdherence appliedAdherence,
 			IAppliedAlarm appliedAlarm)
 		{
+			_stored = new Lazy<StoredStateInfo>(() => stored == null ? null : stored.Invoke());
+			var scheduleLazy = new Lazy<IEnumerable<ScheduleLayer>>(schedule);
+			var mappingsLazy = new Lazy<IEnumerable<Mapping>>(mappings);
+			_agentStateReadModelUpdater = agentStateReadModelUpdater ?? (a => { });
+			Input = input ?? new ExternalUserStateInputModel();
+			CurrentTime = now.UtcDateTime();
+			PersonId = personId;
+			BusinessUnitId = businessUnitId;
+			TeamId = teamId;
+			SiteId = siteId;
+
 			_appliedAlarm = appliedAlarm;
-			Input = context.Input;
-			Person = context;
-			CurrentTime = context.CurrentTime;
-			Stored = context.Stored();
-			Schedule = new ScheduleInfo(context, CurrentTime, Stored);
-			State = new StateRuleInfo(stateCode, platformTypeId, Input, Person, Stored, Schedule, stateMapper);
-			Adherence = new AdherenceInfo(Input, Person, Stored, State, Schedule, appliedAdherence, stateMapper);
+
+			Schedule = new ScheduleInfo(scheduleLazy, _stored, CurrentTime);
+			State = new StateRuleInfo(mappingsLazy, _stored, stateCode, platformTypeId, businessUnitId, Input, Schedule, stateMapper);
+			Adherence = new AdherenceInfo(Input, _stored, mappingsLazy, businessUnitId, State, Schedule, appliedAdherence, stateMapper);
+		}
+
+		public Guid PersonId { get; private set; }
+		public Guid BusinessUnitId { get; private set; }
+		public Guid TeamId { get; private set; }
+		public Guid SiteId { get; private set; }
+
+		public ExternalUserStateInputModel Input { get; set; }
+		public StoredStateInfo Stored { get { return _stored.Value; } }
+		public StateRuleInfo State { get; private set; }
+		public ScheduleInfo Schedule { get; private set; }
+		public AdherenceInfo Adherence { get; private set; }
+		public DateTime CurrentTime { get; private set; }
+
+		public void UpdateAgentStateReadModel()
+		{
+			_agentStateReadModelUpdater.Invoke(this);
+		}
+
+		// for logging
+		public override string ToString()
+		{
+			return string.Format(
+				"PersonId: {0}, BusinessUnitId: {1}, TeamId: {2}, SiteId: {3}",
+				PersonId, BusinessUnitId, TeamId, SiteId);
 		}
 
 		private DateTime? batchId
@@ -58,14 +103,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		    get { return _appliedAlarm.StartTime(State, Stored, CurrentTime); }
 		}
 
-		public ExternalUserStateInputModel Input { get; set; }
-		public StateContext Person { get; private set; }
-	    public StateRuleInfo State { get; private set; }
-		public StoredStateInfo Stored { get; private set; }
-		public ScheduleInfo Schedule { get; private set; }
-		public AdherenceInfo Adherence { get; private set; }
-		public DateTime CurrentTime { get; private set; }
-
 		public AgentStateReadModel MakeAgentStateReadModel()
 		{
 			return new AgentStateReadModel
@@ -75,10 +112,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				OriginalDataSourceId = Input.SourceId ?? Stored.SourceId(),
 				PlatformTypeId = platformTypeId,
 				ReceivedTime = CurrentTime,
-				PersonId = Person.PersonId,
-				BusinessUnitId = Person.BusinessUnitId,
-				SiteId = Person.SiteId,
-				TeamId = Person.TeamId,
+				PersonId = PersonId,
+				BusinessUnitId = BusinessUnitId,
+				SiteId = SiteId,
+				TeamId = TeamId,
 
 				Scheduled = Schedule.CurrentActivityName(),
 				ScheduledId = Schedule.CurrentActivityId(),

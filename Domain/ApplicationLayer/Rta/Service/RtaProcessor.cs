@@ -34,18 +34,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[InfoLog]
-		public virtual void Process(StateContext context)
+		public virtual void Process(StateInfo info)
 		{
 			var eventCollector = new EventCollector(_eventPublisher);
-
-			var info = new StateInfo(
-				context,
-				_stateMapper,
-				_appliedAdherence,
-				_appliedAlarm
-				);
-
-			context.UpdateAgentStateReadModel(info);
+			
+			info.UpdateAgentStateReadModel();
 
 			using (_eventPublisherScope.OnThisThreadPublishTo(eventCollector))
 			{
