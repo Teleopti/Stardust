@@ -2737,7 +2737,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} person and {1} person absence selected. Are you sure to delete all absences?.
+        ///   Looks up a localized string similar to Do you want to remove {0} absences from {1} agents?.
         /// </summary>
         public static string AreYouSureToRemoveSelectedAbsence {
             get {

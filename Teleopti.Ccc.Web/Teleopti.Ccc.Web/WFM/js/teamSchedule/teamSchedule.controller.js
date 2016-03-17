@@ -222,7 +222,7 @@
 			if (!canRemoveAbsence()) return;
 
 			var message = replaceParameters($translate.instant("AreYouSureToRemoveSelectedAbsence"),
-				[personSelectionSvc.getSelectedPersonIdList().length, vm.selectedPersonAbsences.length]);
+				[vm.selectedPersonAbsences.length, personSelectionSvc.getSelectedPersonIdList().length]);
 			dialogSvc.create("js/teamSchedule/html/removeAbsenceConfirmDialog.html", 'RemoveAbsenceConfirmDialogController',
 				{
 					header: $translate.instant("Warning"), 
