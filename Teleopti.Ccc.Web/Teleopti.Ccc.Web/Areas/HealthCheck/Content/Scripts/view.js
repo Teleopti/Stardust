@@ -66,7 +66,7 @@ define([
 			return;
 		}
 
-		if (vm.TimesChecked > 10) { return; }
+		if (vm.TimesChecked > 25) { return; }
 
 			vm.TimesChecked++;
 

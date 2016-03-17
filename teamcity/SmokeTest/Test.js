@@ -84,7 +84,7 @@ client.url(webUrl + '/HealthCheck')
 				});
 		}
 	})
-.waitForExist(".stardust", 60000, false, function(err, res, response) {
+.waitForExist(".stardust", 180000, false, function(err, res, response) {
 		if (err || !res) {
 			closeAndThrow('Stardust is not up and running. Please visit ' + webUrl + '/HealthCheck , and have a look. ' + err);
 		}
