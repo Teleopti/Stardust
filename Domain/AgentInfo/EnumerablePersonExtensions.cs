@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		{
 			return agentIds == null ? 
 				agents : 
-				agents.Where(x => agentIds.Contains(x.Id.Value)).ToArray();
+				agents.Where(x => agentIds.Contains(x.Id.Value));
 		}
 	}
 }
