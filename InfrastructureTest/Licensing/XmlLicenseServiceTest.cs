@@ -17,268 +17,269 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Licensing
 {
-    [TestFixture]
-    [Category("LongRunning")]
-    public class XmlLicenseServiceTest : IDisposable
-    {
-        private ILicenseService _licenseService;
-        private MockRepository _mocks;
-        private const string folder = "Licensing\\";
-        private const string unsignedLicenseFileName = folder + "TeleoptiCCCUnsignedLicense.xml";
+	[TestFixture]
+	[Category("LongRunning")]
+	public class XmlLicenseServiceTest : IDisposable
+	{
+		private ILicenseService _licenseService;
+		private MockRepository _mocks;
+		private const string folder = "Licensing\\";
+		private const string unsignedLicenseFileName = folder + "TeleoptiCCCUnsignedLicense.xml";
 		private const string unsignedSeatLicenseFileName = folder + "TeleoptiCCCUnsignedSeatLicense.xml";
-        [SetUp]
-        public void Setup()
-        {
-            _mocks = new MockRepository();
-        }
+		private const string unsignedNoMajorLicenseFileName = folder + "TeleoptiCCCNoMajorUnsignedLicense.xml";
+		[SetUp]
+		public void Setup()
+		{
+			_mocks = new MockRepository();
+		}
 
-        [Test]
-        [ExpectedException(typeof (SignatureValidationException))]
-        public void VerifyConstructor()
-        {
+		[Test]
+		[ExpectedException(typeof(SignatureValidationException))]
+		public void VerifyConstructor()
+		{
 			XmlDocument doc = new XmlDocument();
 			doc.Load(unsignedLicenseFileName);
 
-            int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
-            Assert.AreEqual((int) ExitCode.Success, exitCode);
+			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
+			Assert.AreEqual((int)ExitCode.Success, exitCode);
 
-            ILicense license = new License {XmlString = doc.OuterXml};
+			ILicense license = new License { XmlString = doc.OuterXml };
 
-        	var unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
-            var licenseRepository = _mocks.StrictMock<ILicenseRepository>();
-            var unitOfWork = _mocks.DynamicMock<IUnitOfWork>();
+			var unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
+			var licenseRepository = _mocks.StrictMock<ILicenseRepository>();
+			var unitOfWork = _mocks.DynamicMock<IUnitOfWork>();
 
-            using (_mocks.Record())
-            {
-                Expect.Call(licenseRepository.LoadAll()).Return(new List<ILicense> {license}).Repeat.Once();
-                Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            }
-            using(_mocks.Playback())
-            {
-            	const int numberOfActiveAgents = 43289;
+			using (_mocks.Record())
+			{
+				Expect.Call(licenseRepository.LoadAll()).Return(new List<ILicense> { license }).Repeat.Once();
+				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			}
+			using (_mocks.Playback())
+			{
+				const int numberOfActiveAgents = 43289;
 
-							_licenseService = new XmlLicenseServiceFactory().Make(licenseRepository, numberOfActiveAgents);
-            }
-        }
+				_licenseService = new XmlLicenseServiceFactory().Make(licenseRepository, numberOfActiveAgents);
+			}
+		}
 
-        [Test, ExpectedException(typeof(LicenseMissingException))]
-        public void ShouldCreateInstanceWithUnitOfWorkFactory()
-        {
-            var unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
-            var unitOfWork = _mocks.DynamicMock<IUnitOfWork>();
-            var licenseRepository = _mocks.StrictMock<ILicenseRepository>();
-            var personRepository = _mocks.StrictMock<IPersonRepository>();
+		[Test, ExpectedException(typeof(LicenseMissingException))]
+		public void ShouldCreateInstanceWithUnitOfWorkFactory()
+		{
+			var unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
+			var unitOfWork = _mocks.DynamicMock<IUnitOfWork>();
+			var licenseRepository = _mocks.StrictMock<ILicenseRepository>();
+			var personRepository = _mocks.StrictMock<IPersonRepository>();
 
-            using (_mocks.Record())
-            {
-                Expect.Call(personRepository.NumberOfActiveAgents()).Return(10);
-                Expect.Call(licenseRepository.LoadAll()).Return(new List<ILicense>());
-                Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            }
-            using (_mocks.Playback())
-            {
-							_licenseService = new XmlLicenseServiceFactory().Make(unitOfWorkFactory, licenseRepository, personRepository);
-            }
-        }
+			using (_mocks.Record())
+			{
+				Expect.Call(personRepository.NumberOfActiveAgents()).Return(10);
+				Expect.Call(licenseRepository.LoadAll()).Return(new List<ILicense>());
+				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			}
+			using (_mocks.Playback())
+			{
+				_licenseService = new XmlLicenseServiceFactory().Make(unitOfWorkFactory, licenseRepository, personRepository);
+			}
+		}
 
-        [Test, ExpectedException(typeof (LicenseMissingException))]
-        [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults")]
-        public void VerifyExceptionInConstructor()
-        {
-            var licenseRepository = _mocks.StrictMock<ILicenseRepository>();
-            
-            using(_mocks.Record())
-            {
-                Expect.Call(licenseRepository.LoadAll()).Return(new List<ILicense>());
-            }
-            using(_mocks.Playback())
-            {
-							_licenseService = new XmlLicenseServiceFactory().Make(licenseRepository, 4329);
-            }
-        }
+		[Test, ExpectedException(typeof(LicenseMissingException))]
+		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults")]
+		public void VerifyExceptionInConstructor()
+		{
+			var licenseRepository = _mocks.StrictMock<ILicenseRepository>();
 
-        [Test]
-        public void VerifyCreationOfValidLicense()
-        {
+			using (_mocks.Record())
+			{
+				Expect.Call(licenseRepository.LoadAll()).Return(new List<ILicense>());
+			}
+			using (_mocks.Playback())
+			{
+				_licenseService = new XmlLicenseServiceFactory().Make(licenseRepository, 4329);
+			}
+		}
+
+		[Test]
+		public void VerifyCreationOfValidLicense()
+		{
 			XmlDocument doc = new XmlDocument();
 			doc.Load(unsignedLicenseFileName);
 			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
 
-            Assert.AreEqual((int) ExitCode.Success, exitCode);
+			Assert.AreEqual((int)ExitCode.Success, exitCode);
 
 			using (var reader = new XmlNodeReader(doc))
 			{
 				_licenseService = new XmlLicenseService(XDocument.Load(reader), XmlLicenseTestSetupFixture.PublicKeyXmlString, 10);
-        	}
-            
-            Assert.AreEqual("This license is stolen!", _licenseService.CustomerName);
-            Assert.AreEqual(new DateTime(2018, 02, 02, 12, 0, 0), _licenseService.ExpirationDate);
-            Assert.AreEqual(new TimeSpan(30, 0, 0, 0), _licenseService.ExpirationGracePeriod);
-            Assert.AreEqual(10000, _licenseService.MaxActiveAgents);
-            Assert.AreEqual(new Percent(0.1).Value, _licenseService.MaxActiveAgentsGrace);
+			}
 
-            Assert.IsTrue(_licenseService.TeleoptiCccBaseEnabled);
-            Assert.IsTrue(_licenseService.TeleoptiCccAgentSelfServiceEnabled);
-            Assert.IsTrue(_licenseService.TeleoptiCccShiftTradesEnabled);
-            Assert.IsTrue(_licenseService.TeleoptiCccAgentScheduleMessengerEnabled);
-            Assert.IsTrue(_licenseService.TeleoptiCccHolidayPlannerEnabled);
-            Assert.IsTrue(_licenseService.TeleoptiCccRealTimeAdherenceEnabled);
-            Assert.IsTrue(_licenseService.TeleoptiCccPerformanceManagerEnabled);
-            Assert.IsTrue(_licenseService.TeleoptiCccPayrollIntegrationEnabled);
-            Assert.IsTrue(_licenseService.TeleoptiCccMyTimeWebEnabled);
+			Assert.AreEqual("This license is stolen!", _licenseService.CustomerName);
+			Assert.AreEqual(new DateTime(2018, 02, 02, 12, 0, 0), _licenseService.ExpirationDate);
+			Assert.AreEqual(new TimeSpan(30, 0, 0, 0), _licenseService.ExpirationGracePeriod);
+			Assert.AreEqual(10000, _licenseService.MaxActiveAgents);
+			Assert.AreEqual(new Percent(0.1).Value, _licenseService.MaxActiveAgentsGrace);
 
-            Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersBaseEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersForecastsEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersShiftsEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersPeopleEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersAgentPortalEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersOptionsEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersSchedulerEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersIntradayEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersPermissionsEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersReportsEnabled);
+			Assert.IsTrue(_licenseService.TeleoptiCccBaseEnabled);
+			Assert.IsTrue(_licenseService.TeleoptiCccAgentSelfServiceEnabled);
+			Assert.IsTrue(_licenseService.TeleoptiCccShiftTradesEnabled);
+			Assert.IsTrue(_licenseService.TeleoptiCccAgentScheduleMessengerEnabled);
+			Assert.IsTrue(_licenseService.TeleoptiCccHolidayPlannerEnabled);
+			Assert.IsTrue(_licenseService.TeleoptiCccRealTimeAdherenceEnabled);
+			Assert.IsTrue(_licenseService.TeleoptiCccPerformanceManagerEnabled);
+			Assert.IsTrue(_licenseService.TeleoptiCccPayrollIntegrationEnabled);
+			Assert.IsTrue(_licenseService.TeleoptiCccMyTimeWebEnabled);
 
-            Assert.IsFalse(_licenseService.TeleoptiCccFreemiumForecastsEnabled);
-        }
+			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersBaseEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersForecastsEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersShiftsEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersPeopleEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersAgentPortalEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersOptionsEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersSchedulerEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersIntradayEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersPermissionsEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersReportsEnabled);
 
-        /// <summary>
-        /// test pilot license. This test assumes that signing key is in standard container
-        /// </summary>
-        [Test]
-        public void VerifyCreationOfPilotCustomerLicense()
-        {
-            const string unsignedPilotCustomersLicenseFileName = folder + "TeleoptiCCCPilotCustomersUnsignedLicense.xml";
-            
+			Assert.IsFalse(_licenseService.TeleoptiCccFreemiumForecastsEnabled);
+		}
+
+		/// <summary>
+		/// test pilot license. This test assumes that signing key is in standard container
+		/// </summary>
+		[Test]
+		public void VerifyCreationOfPilotCustomerLicense()
+		{
+			const string unsignedPilotCustomersLicenseFileName = folder + "TeleoptiCCCPilotCustomersUnsignedLicense.xml";
+
 			XmlDocument doc = new XmlDocument();
 			doc.Load(unsignedPilotCustomersLicenseFileName);
 			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
-            Assert.AreEqual((int) ExitCode.Success, exitCode);
+			Assert.AreEqual((int)ExitCode.Success, exitCode);
 
-        	using (var reader = new XmlNodeReader(doc))
+			using (var reader = new XmlNodeReader(doc))
 			{
 				_licenseService = new XmlLicenseService(XDocument.Load(reader),
 														XmlLicenseTestSetupFixture.PublicKeyXmlString, 100);
-        	}
+			}
 
-            Assert.AreEqual("This pilot license is stolen!", _licenseService.CustomerName);
-            Assert.GreaterOrEqual(new TimeSpan(31, 0, 0, 0), _licenseService.ExpirationGracePeriod);
-            Assert.LessOrEqual(new TimeSpan(28, 0, 0, 0), _licenseService.ExpirationGracePeriod);
-            Assert.AreEqual(1000, _licenseService.MaxActiveAgents);
-            Assert.AreEqual(new Percent(1).Value, _licenseService.MaxActiveAgentsGrace);
+			Assert.AreEqual("This pilot license is stolen!", _licenseService.CustomerName);
+			Assert.GreaterOrEqual(new TimeSpan(31, 0, 0, 0), _licenseService.ExpirationGracePeriod);
+			Assert.LessOrEqual(new TimeSpan(28, 0, 0, 0), _licenseService.ExpirationGracePeriod);
+			Assert.AreEqual(1000, _licenseService.MaxActiveAgents);
+			Assert.AreEqual(new Percent(1).Value, _licenseService.MaxActiveAgentsGrace);
 
-            Assert.IsFalse(_licenseService.TeleoptiCccBaseEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccAgentSelfServiceEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccShiftTradesEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccAgentScheduleMessengerEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccHolidayPlannerEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccRealTimeAdherenceEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccPerformanceManagerEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccPayrollIntegrationEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccMyTimeWebEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccBaseEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccAgentSelfServiceEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccShiftTradesEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccAgentScheduleMessengerEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccHolidayPlannerEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccRealTimeAdherenceEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccPerformanceManagerEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccPayrollIntegrationEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccMyTimeWebEnabled);
 
-            Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersBaseEnabled);
-            Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersForecastsEnabled);
-            Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersShiftsEnabled);
-            Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersPeopleEnabled);
-            Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersAgentPortalEnabled);
-            Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersOptionsEnabled);
-            Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersSchedulerEnabled);
-            Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersIntradayEnabled);
-            Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersPermissionsEnabled);
-            Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersReportsEnabled);
+			Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersBaseEnabled);
+			Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersForecastsEnabled);
+			Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersShiftsEnabled);
+			Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersPeopleEnabled);
+			Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersAgentPortalEnabled);
+			Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersOptionsEnabled);
+			Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersSchedulerEnabled);
+			Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersIntradayEnabled);
+			Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersPermissionsEnabled);
+			Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersReportsEnabled);
 
-            Assert.IsFalse(_licenseService.TeleoptiCccFreemiumForecastsEnabled);
-        }
+			Assert.IsFalse(_licenseService.TeleoptiCccFreemiumForecastsEnabled);
+		}
 
-        /// <summary>
-        /// test freemium license. This test assumes that signing key is in standard container
-        /// </summary>
-        [Test]
-        public void VerifyCreationOfFreemiumLicense()
-        {
-            const string unsignedFreemiumLicenseFileName = folder + "TeleoptiCCCFreemiumUnsignedLicense.xml";
-            
+		/// <summary>
+		/// test freemium license. This test assumes that signing key is in standard container
+		/// </summary>
+		[Test]
+		public void VerifyCreationOfFreemiumLicense()
+		{
+			const string unsignedFreemiumLicenseFileName = folder + "TeleoptiCCCFreemiumUnsignedLicense.xml";
+
 			XmlDocument doc = new XmlDocument();
 			doc.Load(unsignedFreemiumLicenseFileName);
 
 			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
-            Assert.AreEqual((int) ExitCode.Success, exitCode);
+			Assert.AreEqual((int)ExitCode.Success, exitCode);
 
 			using (var reader = new XmlNodeReader(doc))
 			{
 				XDocument licenseXml = XDocument.Load(reader);
 				_licenseService = new XmlLicenseService(licenseXml, XmlLicenseTestSetupFixture.PublicKeyXmlString, 1);
-        	}
-            
-            Assert.AreEqual("This freemium license is stolen!", _licenseService.CustomerName);
-            Assert.AreEqual(new TimeSpan(0, 20, 0, 0, 0), _licenseService.ExpirationGracePeriod);
-            Assert.AreEqual(1, _licenseService.MaxActiveAgents);
-            Assert.AreEqual(new Percent(0.2).Value, _licenseService.MaxActiveAgentsGrace);
+			}
 
-            Assert.IsFalse(_licenseService.TeleoptiCccBaseEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccAgentSelfServiceEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccShiftTradesEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccAgentScheduleMessengerEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccHolidayPlannerEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccRealTimeAdherenceEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccPerformanceManagerEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccPayrollIntegrationEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccMyTimeWebEnabled);
+			Assert.AreEqual("This freemium license is stolen!", _licenseService.CustomerName);
+			Assert.AreEqual(new TimeSpan(0, 20, 0, 0, 0), _licenseService.ExpirationGracePeriod);
+			Assert.AreEqual(1, _licenseService.MaxActiveAgents);
+			Assert.AreEqual(new Percent(0.2).Value, _licenseService.MaxActiveAgentsGrace);
 
-            Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersBaseEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersForecastsEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersShiftsEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersPeopleEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersAgentPortalEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersOptionsEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersSchedulerEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersIntradayEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersPermissionsEnabled);
-            Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersReportsEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccBaseEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccAgentSelfServiceEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccShiftTradesEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccAgentScheduleMessengerEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccHolidayPlannerEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccRealTimeAdherenceEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccPerformanceManagerEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccPayrollIntegrationEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccMyTimeWebEnabled);
 
-            Assert.IsTrue(_licenseService.TeleoptiCccFreemiumForecastsEnabled);
-        }
+			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersBaseEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersForecastsEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersShiftsEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersPeopleEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersAgentPortalEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersOptionsEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersSchedulerEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersIntradayEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersPermissionsEnabled);
+			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersReportsEnabled);
 
-        [Test, ExpectedException(typeof (LicenseMissingException))]
-        [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults")]
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        public void VerifyLicenseFileMissingHandling()
-        {
-            new XmlLicenseService(null, XmlLicenseTestSetupFixture.PublicKeyXmlString, 432);
-        }
+			Assert.IsTrue(_licenseService.TeleoptiCccFreemiumForecastsEnabled);
+		}
+
+		[Test, ExpectedException(typeof(LicenseMissingException))]
+		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults")]
+		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+		public void VerifyLicenseFileMissingHandling()
+		{
+			new XmlLicenseService(null, XmlLicenseTestSetupFixture.PublicKeyXmlString, 432);
+		}
 
 
-        [Test, ExpectedException(typeof (LicenseExpiredException))]
-        [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults")]
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        public void VerifyLicenseExpired()
-        {
-            const string unsignedExpiredLicenseFileName = folder + "TeleoptiCCCExpiredUnsignedLicense.xml";
-            
+		[Test, ExpectedException(typeof(LicenseExpiredException))]
+		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults")]
+		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+		public void VerifyLicenseExpired()
+		{
+			const string unsignedExpiredLicenseFileName = folder + "TeleoptiCCCExpiredUnsignedLicense.xml";
+
 			XmlDocument doc = new XmlDocument();
 			doc.Load(unsignedExpiredLicenseFileName);
 
 			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
-            Assert.AreEqual((int) ExitCode.Success, exitCode);
+			Assert.AreEqual((int)ExitCode.Success, exitCode);
 
-            new XmlLicenseService(XDocument.Load(new XmlNodeReader(doc)), XmlLicenseTestSetupFixture.PublicKeyXmlString, 234);
-        }
+			new XmlLicenseService(XDocument.Load(new XmlNodeReader(doc)), XmlLicenseTestSetupFixture.PublicKeyXmlString, 234);
+		}
 
-        [Test]
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        public void VerifySave()
-        {
-            string licenseFileName = Path.GetTempFileName();
+		[Test]
+		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+		public void VerifySave()
+		{
+			string licenseFileName = Path.GetTempFileName();
 
-        	var doc = new XmlDocument();
+			var doc = new XmlDocument();
 			doc.Load(unsignedLicenseFileName);
 
 			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
-            Assert.AreEqual((int) ExitCode.Success, exitCode);
+			Assert.AreEqual((int)ExitCode.Success, exitCode);
 
-            var licenseRepository = _mocks.StrictMock<ILicenseRepository>();
-            var personRepository = _mocks.StrictMock<IPersonRepository>();
-            const int numberOfActiveAgents = 100;
+			var licenseRepository = _mocks.StrictMock<ILicenseRepository>();
+			var personRepository = _mocks.StrictMock<IPersonRepository>();
+			const int numberOfActiveAgents = 100;
 
 			using (var writer = new XmlTextWriter(licenseFileName, System.Text.Encoding.Unicode))
 			{
@@ -286,24 +287,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 				writer.Flush();
 			}
 
-        	using(_mocks.Record())
-            {
-                Expect.Call(personRepository.NumberOfActiveAgents()).Return(numberOfActiveAgents);
-                licenseRepository.Add(new License());
-                LastCall.IgnoreArguments();
-            }
-            using(_mocks.Playback())
-            {
-                ILicenseService licenseService =
-                    new XmlLicensePersister().SaveNewLicense(licenseFileName, licenseRepository,
-                                                     XmlLicenseTestSetupFixture.PublicKeyXmlString, personRepository);
-                Assert.AreEqual(10000, licenseService.MaxActiveAgents);
+			using (_mocks.Record())
+			{
+				Expect.Call(personRepository.NumberOfActiveAgents()).Return(numberOfActiveAgents);
+				licenseRepository.Add(new License());
+				LastCall.IgnoreArguments();
+			}
+			using (_mocks.Playback())
+			{
+				ILicenseService licenseService =
+					 new XmlLicensePersister().SaveNewLicense(licenseFileName, licenseRepository,
+																 XmlLicenseTestSetupFixture.PublicKeyXmlString, personRepository);
+				Assert.AreEqual(10000, licenseService.MaxActiveAgents);
 				File.Delete(licenseFileName);
-            }
-        }
+			}
+		}
 
-        [Test]
-        public void VerifySave2()
+		[Test]
+		public void VerifySave2()
 		{
 			string licenseFileName = Path.GetTempFileName();
 
@@ -319,34 +320,34 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 				writer.Flush();
 			}
 
-            var uow = _mocks.DynamicMock<IUnitOfWork>();
-            var licenseRepository = _mocks.StrictMock<ILicenseRepository>();
-            var personRepository = _mocks.StrictMock<IPersonRepository>();
-            var unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
+			var uow = _mocks.DynamicMock<IUnitOfWork>();
+			var licenseRepository = _mocks.StrictMock<ILicenseRepository>();
+			var personRepository = _mocks.StrictMock<IPersonRepository>();
+			var unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
 
-            const int numberOfActiveAgents = 100;
+			const int numberOfActiveAgents = 100;
 
-            using(_mocks.Record())
-            {
-                Expect.Call(unitOfWorkFactory.Name).Return("asdf");
-                Expect.Call(unitOfWorkFactory.CurrentUnitOfWork()).Return(uow);
-                Expect.Call(personRepository.NumberOfActiveAgents()).Return(numberOfActiveAgents);
-                Expect.Call(uow.PersistAll()).Return(null);
+			using (_mocks.Record())
+			{
+				Expect.Call(unitOfWorkFactory.Name).Return("asdf");
+				Expect.Call(unitOfWorkFactory.CurrentUnitOfWork()).Return(uow);
+				Expect.Call(personRepository.NumberOfActiveAgents()).Return(numberOfActiveAgents);
+				Expect.Call(uow.PersistAll()).Return(null);
 
-                licenseRepository.Add(new License());
-                LastCall.IgnoreArguments();
-            }
-            using(_mocks.Playback())
-            {
-                new XmlLicensePersister().SaveNewLicense(licenseFileName, unitOfWorkFactory, licenseRepository, XmlLicenseTestSetupFixture.PublicKeyXmlString, personRepository);
+				licenseRepository.Add(new License());
+				LastCall.IgnoreArguments();
+			}
+			using (_mocks.Playback())
+			{
+				new XmlLicensePersister().SaveNewLicense(licenseFileName, unitOfWorkFactory, licenseRepository, XmlLicenseTestSetupFixture.PublicKeyXmlString, personRepository);
 				File.Delete(licenseFileName);
-            }
-        }
+			}
+		}
 
-        [Test, ExpectedException(typeof(DataSourceException))]
-        public void VerifySaveThrowsExceptionWhenHibernateError()
-        {
-            string licenseFileName = Path.GetTempFileName();
+		[Test, ExpectedException(typeof(DataSourceException))]
+		public void VerifySaveThrowsExceptionWhenHibernateError()
+		{
+			string licenseFileName = Path.GetTempFileName();
 
 			var doc = new XmlDocument();
 			doc.Load(unsignedLicenseFileName);
@@ -360,34 +361,34 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 				writer.Flush();
 			}
 
-            var uow = _mocks.DynamicMock<IUnitOfWork>(); 
-            var licenseRepository = _mocks.StrictMock<ILicenseRepository>();
-            var personRepository = _mocks.StrictMock<IPersonRepository>();
-            var unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
-            
-            const int numberOfActiveAgents = 100;
+			var uow = _mocks.DynamicMock<IUnitOfWork>();
+			var licenseRepository = _mocks.StrictMock<ILicenseRepository>();
+			var personRepository = _mocks.StrictMock<IPersonRepository>();
+			var unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
 
-            using (_mocks.Record())
-            {
-                Expect.Call(unitOfWorkFactory.Name).Return("asdf");
-                Expect.Call(unitOfWorkFactory.CurrentUnitOfWork()).Return(uow);
-                Expect.Call(personRepository.NumberOfActiveAgents()).Return(numberOfActiveAgents);
-                Expect.Call(uow.PersistAll()).Throw(new HibernateException());
+			const int numberOfActiveAgents = 100;
 
-                licenseRepository.Add(new License());
-                LastCall.IgnoreArguments();
-            }
-            using(_mocks.Playback())
-            {
-                new XmlLicensePersister().SaveNewLicense(licenseFileName, unitOfWorkFactory, licenseRepository,
-                                                 XmlLicenseTestSetupFixture.PublicKeyXmlString, personRepository);
-            }
-        }
+			using (_mocks.Record())
+			{
+				Expect.Call(unitOfWorkFactory.Name).Return("asdf");
+				Expect.Call(unitOfWorkFactory.CurrentUnitOfWork()).Return(uow);
+				Expect.Call(personRepository.NumberOfActiveAgents()).Return(numberOfActiveAgents);
+				Expect.Call(uow.PersistAll()).Throw(new HibernateException());
 
-        [Test, ExpectedException(typeof (TooManyActiveAgentsException))]
-        public void VerifySaveFailsIfTooManyActiveAgents()
-        {
-            string licenseFileName = Path.GetTempFileName();
+				licenseRepository.Add(new License());
+				LastCall.IgnoreArguments();
+			}
+			using (_mocks.Playback())
+			{
+				new XmlLicensePersister().SaveNewLicense(licenseFileName, unitOfWorkFactory, licenseRepository,
+															XmlLicenseTestSetupFixture.PublicKeyXmlString, personRepository);
+			}
+		}
+
+		[Test, ExpectedException(typeof(TooManyActiveAgentsException))]
+		public void VerifySaveFailsIfTooManyActiveAgents()
+		{
+			string licenseFileName = Path.GetTempFileName();
 
 			var doc = new XmlDocument();
 			doc.Load(unsignedLicenseFileName);
@@ -401,21 +402,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 				writer.Flush();
 			}
 
-            var licenseRepository = _mocks.StrictMock<ILicenseRepository>();
-            var personRepository = _mocks.StrictMock<IPersonRepository>();
-            Expect.Call(personRepository.NumberOfActiveAgents()).Return(20000);
+			var licenseRepository = _mocks.StrictMock<ILicenseRepository>();
+			var personRepository = _mocks.StrictMock<IPersonRepository>();
+			Expect.Call(personRepository.NumberOfActiveAgents()).Return(20000);
 
-        	licenseRepository.Add(new License());
-            LastCall.IgnoreArguments();
+			licenseRepository.Add(new License());
+			LastCall.IgnoreArguments();
 
-            _mocks.ReplayAll();
-            new XmlLicensePersister().SaveNewLicense(licenseFileName, licenseRepository,
-                                             XmlLicenseTestSetupFixture.PublicKeyXmlString, personRepository);
-        }
+			_mocks.ReplayAll();
+			new XmlLicensePersister().SaveNewLicense(licenseFileName, licenseRepository,
+														XmlLicenseTestSetupFixture.PublicKeyXmlString, personRepository);
+		}
 
-        [Test]
-        public void VerifyActiveAgentsCheck()
-        {
+		[Test]
+		public void VerifyActiveAgentsCheck()
+		{
 			var doc = new XmlDocument();
 			doc.Load(unsignedLicenseFileName);
 
@@ -425,25 +426,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			using (var reader = new XmlNodeReader(doc))
 			{
 				_licenseService = new XmlLicenseService(XDocument.Load(reader), XmlLicenseTestSetupFixture.PublicKeyXmlString, 100);
-        	}
+			}
 
-            Assert.IsTrue(_licenseService.IsThisTooManyActiveAgents(11100));
-            Assert.IsTrue(_licenseService.IsThisAlmostTooManyActiveAgents(10100));
-        }
+			Assert.IsTrue(_licenseService.IsThisTooManyActiveAgents(11100));
+			Assert.IsTrue(_licenseService.IsThisAlmostTooManyActiveAgents(10100));
+		}
 
-        [Test, ExpectedException(typeof (TooManyActiveAgentsException))]
-        [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults")]
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        public void VerifyActiveAgentsException()
-        {
-            var doc = new XmlDocument();
+		[Test, ExpectedException(typeof(TooManyActiveAgentsException))]
+		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults")]
+		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+		public void VerifyActiveAgentsException()
+		{
+			var doc = new XmlDocument();
 			doc.Load(unsignedLicenseFileName);
 
 			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
 			Assert.AreEqual((int)ExitCode.Success, exitCode);
 
-            new XmlLicenseService(XDocument.Load(new XmlNodeReader(doc)), XmlLicenseTestSetupFixture.PublicKeyXmlString, 11100);
-        }
+			new XmlLicenseService(XDocument.Load(new XmlNodeReader(doc)), XmlLicenseTestSetupFixture.PublicKeyXmlString, 11100);
+		}
 
 		[Test]
 		public void ShouldRecalculateMaxAgentsIfSeatType()
@@ -466,30 +467,43 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 
 			Assert.That(_licenseService.LicenseType, Is.EqualTo(LicenseType.Seat));
 			Assert.That(_licenseService.MaxSeats, Is.EqualTo(1000));
-			Assert.That(_licenseService.Ratio,Is.EqualTo(new decimal(2)));
-			Assert.That(_licenseService.MaxActiveAgents,Is.EqualTo(2000));
+			Assert.That(_licenseService.Ratio, Is.EqualTo(new decimal(2)));
+			Assert.That(_licenseService.MaxActiveAgents, Is.EqualTo(2000));
 		}
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        /// <filterpriority>2</filterpriority>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                // free managed resources
-                if (_licenseService != null)
-                {
-                    _licenseService.Dispose();
-                    _licenseService = null;
-                }
-            }
-        }
-    }
+		[Test, ExpectedException(typeof(MajorVersionNotFoundException))]
+		public void ShouldThrowIfNoMajorVersion()
+		{
+			var doc = new XmlDocument();
+			doc.Load(unsignedNoMajorLicenseFileName);
+
+			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
+			Assert.AreEqual((int)ExitCode.Success, exitCode);
+
+			new XmlLicenseService(XDocument.Load(new XmlNodeReader(doc)), XmlLicenseTestSetupFixture.PublicKeyXmlString, 234);
+		}
+
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		/// <filterpriority>2</filterpriority>
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				// free managed resources
+				if (_licenseService != null)
+				{
+					_licenseService.Dispose();
+					_licenseService = null;
+				}
+			}
+		}
+	}
 }

@@ -5,6 +5,7 @@
   <ExpirationGracePeriod>PT20H</ExpirationGracePeriod>
   <MaxActiveAgents>1</MaxActiveAgents>
   <MaxActiveAgentsGrace>20</MaxActiveAgentsGrace>
+	<MajorVersion>8</MajorVersion>
   <TeleoptiCCCFreemium>
     <Forecasts>true</Forecasts>
   </TeleoptiCCCFreemium>

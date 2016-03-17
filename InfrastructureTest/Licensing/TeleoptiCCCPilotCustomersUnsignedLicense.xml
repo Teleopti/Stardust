@@ -5,6 +5,7 @@
   <ExpirationGracePeriod>P1M</ExpirationGracePeriod>
   <MaxActiveAgents>1000</MaxActiveAgents>
   <MaxActiveAgentsGrace>100</MaxActiveAgentsGrace>
+	<MajorVersion>8</MajorVersion>
   <TeleoptiCCCPilotCustomers>
     <Base>true</Base>
     <Forecasts>true</Forecasts>

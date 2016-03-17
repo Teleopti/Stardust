@@ -5,6 +5,7 @@
   <ExpirationGracePeriod>P30D</ExpirationGracePeriod>
   <MaxActiveAgents>10000</MaxActiveAgents>
   <MaxActiveAgentsGrace>10</MaxActiveAgentsGrace>
+	<MajorVersion>8</MajorVersion>
   <TeleoptiCCC>
     <Base>true</Base>
     <AgentSelfService>true</AgentSelfService>

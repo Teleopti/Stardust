@@ -5,10 +5,6 @@
   <ExpirationGracePeriod>P30D</ExpirationGracePeriod>
   <MaxActiveAgents>10000</MaxActiveAgents>
   <MaxActiveAgentsGrace>10</MaxActiveAgentsGrace>
-	<MajorVersion>8</MajorVersion>
-  <AgentsOrSeats>1</AgentsOrSeats>
-  <MaxSeats>1000</MaxSeats>
-  <SeatRatio>2.0</SeatRatio>
   <TeleoptiCCC>
     <Base>true</Base>
     <AgentSelfService>true</AgentSelfService>
@@ -21,5 +17,4 @@
     <MyTimeWeb>true</MyTimeWeb>
 	  <Developer>true</Developer>
   </TeleoptiCCC>
-  <Agreement>Teleopti.Ccc.Infrastructure.Licensing.Agreements.TeleoptiLic_Sw_Sw_Sh.txt</Agreement>
 </License>

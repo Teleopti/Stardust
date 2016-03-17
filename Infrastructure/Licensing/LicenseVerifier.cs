@@ -13,14 +13,14 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 	{
 		private readonly ILicenseFeedback _licenseFeedback;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-	    private readonly ILicenseRepository _licenseRepository;
+		private readonly ILicenseRepository _licenseRepository;
 
 		public LicenseVerifier(ILicenseFeedback licenseFeedback, IUnitOfWorkFactory unitOfWorkFactory, ILicenseRepository licenseRepository)
 		{
-			
+
 			_licenseFeedback = licenseFeedback;
 			_unitOfWorkFactory = unitOfWorkFactory;
-		    _licenseRepository = licenseRepository;
+			_licenseRepository = licenseRepository;
 		}
 
 		public ILicenseService LoadAndVerifyLicense()
@@ -32,16 +32,16 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 				{
 					using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 					{
-						
+
 						licenseService = XmlLicenseService();
-					} 
-					
+					}
+
 					if (licenseService.ExpirationDate.Subtract(licenseService.ExpirationGracePeriod) < DateTime.Now)
 					{
 						string warningMessage =
 							String.Format(CultureInfo.CurrentCulture, Resources.YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime,
 										  licenseService.ExpirationDate);
-                        _licenseFeedback.Warning(warningMessage, Resources.LogOn);
+						_licenseFeedback.Warning(warningMessage, Resources.LogOn);
 					}
 				}
 				catch (LicenseMissingException)
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 				}
 				catch (TooManyActiveAgentsException e)
 				{
-                    // shouldn't happen now
+					// shouldn't happen now
 					string explanation = getTooManyAgentsExplanation(e);
 					_licenseFeedback.Error(explanation);
 					licenseService = null;
@@ -76,6 +76,11 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 					_licenseFeedback.Error(Resources.ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne);
 					licenseService = null;
 				}
+				catch (MajorVersionNotFoundException)
+				{
+					_licenseFeedback.Error(_unitOfWorkFactory.Name + "\r\n" + Resources.ProductActivationKeyHasExpiredPleaseApplyANewOne);
+					licenseService = null;
+				}
 				return licenseService;
 			}
 		}
@@ -83,7 +88,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 		private string getTooManyAgentsExplanation(TooManyActiveAgentsException e)
 		{
 			var datasourceName = _unitOfWorkFactory.Name;
-			if(e.LicenseType == LicenseType.Agent)
+			if (e.LicenseType == LicenseType.Agent)
 				return datasourceName + "\r\n" + String.Format(CultureInfo.CurrentCulture, Resources.YouHaveTooManyActiveAgents,
 								 e.NumberOfAttemptedActiveAgents, e.NumberOfLicensed);
 			return datasourceName + "\r\n" + String.Format(CultureInfo.CurrentCulture, Resources.YouHaveTooManySeats,
@@ -92,7 +97,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 
 		protected virtual ILicenseService XmlLicenseService()
 		{
-            //dont' check the use of agent here now
+			//dont' check the use of agent here now
 			return new XmlLicenseServiceFactory().Make(_licenseRepository, 0);
 		}
 	}
