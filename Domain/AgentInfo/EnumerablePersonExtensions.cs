@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
@@ -15,6 +16,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 							pp =>
 								pp.PersonContract != null && pp.PersonContract.Contract != null &&
 								pp.PersonContract.Contract.EmploymentType != EmploymentType.HourlyStaff));
+		}
+
+		public static IEnumerable<IPerson> Filter(this IEnumerable<IPerson> agents, IEnumerable<Guid> agentIds)
+		{
+			return agentIds == null ? 
+				agents : 
+				agents.Where(x => agentIds.Contains(x.Id.Value)).ToArray();
 		}
 	}
 }

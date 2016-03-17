@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
@@ -13,12 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		{
 			PreFill(schedulerStateHolder);
 			var agents = FillAgents(schedulerStateHolder, agentIds, period);
-			var filteredAgents = agents;
-			if (agentIds != null)
-			{
-				filteredAgents = agents.Where(x => agentIds.Contains(x.Id.Value)).ToArray();
-			}
-
+			var filteredAgents = agents.Filter(agentIds);
 			FillSkillDays(schedulerStateHolder, filteredAgents, period);
 			removeUnwantedSkillDays(schedulerStateHolder, filteredAgents, period);
 			FillSchedules(schedulerStateHolder, filteredAgents, period);

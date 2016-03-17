@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -42,11 +43,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, agentIds, period);
-			var agents = schedulerStateHolder.AllPermittedPersons;
-			if (agentIds != null)
-			{
-				agents = agents.Where(x => agentIds.Contains(x.Id.Value)).ToList();
-			}
+			var agents = schedulerStateHolder.AllPermittedPersons.Filter(agentIds).ToList();
 			_intradayOptimization.Execute(period, agents, runResolveWeeklyRestRule);
 		}
 	}
