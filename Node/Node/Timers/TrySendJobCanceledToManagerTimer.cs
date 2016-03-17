@@ -11,7 +11,7 @@ namespace Stardust.Node.Timers
 
 		public TrySendJobCanceledToManagerTimer(INodeConfiguration nodeConfiguration,
 												TrySendJobProgressToManagerTimer sendJobProgressToManagerTimer,
-												double interval = 2000) : base(nodeConfiguration,
+												double interval = 500) : base(nodeConfiguration,
 		                                                                        nodeConfiguration.GetManagerJobHasBeenCanceledTemplateUri(),
 																				sendJobProgressToManagerTimer,
 																				interval)

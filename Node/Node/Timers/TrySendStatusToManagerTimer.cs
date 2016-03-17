@@ -20,7 +20,7 @@ namespace Stardust.Node.Timers
 		public TrySendStatusToManagerTimer(INodeConfiguration nodeConfiguration,
 		                                   Uri callbackTemplateUri,
 										   TrySendJobProgressToManagerTimer sendJobProgressToManagerTimer,
-		                                   double interval = 2000) : base(interval)
+		                                   double interval = 500) : base(interval)
 		{
 			// Validate arguments.
 			nodeConfiguration.ThrowArgumentNullException();
