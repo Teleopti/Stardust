@@ -31,14 +31,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 				filteredAgent.ActiveSkillsFor(period).ForEach(x => agentSkills.Add(x));
 			}
 
-			foreach (var skill in schedulerStateHolder.SchedulingResultState.SkillDays.Keys.ToList())
+			foreach (var skill in schedulerStateHolder.SchedulingResultState.SkillDays.Keys.ToList().Where(skill => !agentSkills.Contains(skill)))
 			{
-				if (!agentSkills.Contains(skill))
-				{
-					schedulerStateHolder.SchedulingResultState.SkillDays.Remove(skill);
-				}
+				schedulerStateHolder.SchedulingResultState.SkillDays.Remove(skill);
 			}
-
 		}
 
 		private static void removeUnwantedScheduleRanges(IScheduleDictionary schedules, IEnumerable<IPerson> filteredAgents)

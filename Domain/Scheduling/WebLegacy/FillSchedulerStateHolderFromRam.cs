@@ -70,17 +70,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 					var toAssignment = toScheduleDay.PersonAssignment(true);
 					toAssignment.FillWithDataFrom(fromScheduleDay.PersonAssignment(true));
 
-					var fromAbsences = fromScheduleDay.PersistableScheduleDataCollection().OfType<IPersonAbsence>();
-					foreach (var personAbsence in fromAbsences)
-					{
-						toScheduleDay.Add(personAbsence);
-					}
-
-					var fromMeetings = fromScheduleDay.PersonMeetingCollection();
-					foreach (var personMeeting in fromMeetings)
-					{
-						((ScheduleRange)toDic[agent]).Add(personMeeting);
-					}
+					fromScheduleDay.PersistableScheduleDataCollection().OfType<IPersonAbsence>().ForEach(x => toScheduleDay.Add(x));
+					fromScheduleDay.PersonMeetingCollection().ForEach(x => ((ScheduleRange)toDic[agent]).Add(x));
 
 					toDic.Modify(toScheduleDay);
 				}
