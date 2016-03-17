@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			PreFill(schedulerStateHolder);
 			var scenario = FetchScenario();
 			var agents = FillAgents(schedulerStateHolder, scenario, agentIds, period);
-			var filteredAgents = agents.Filter(agentIds);
+			var filteredAgents = agents.Filter(agentIds).ToList();
 			FillSkillDays(schedulerStateHolder, scenario, filteredAgents, period);
 			removeUnwantedSkillDays(schedulerStateHolder, filteredAgents, period);
 			FillSchedules(schedulerStateHolder, scenario, filteredAgents, period);
