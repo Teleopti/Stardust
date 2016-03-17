@@ -6,6 +6,7 @@ using log4net;
 using log4net.Config;
 using NodeTest.JobHandlers;
 using NUnit.Framework;
+using Stardust.Node.Extensions;
 using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Workers;
@@ -36,7 +37,7 @@ namespace NodeTest
 		[TestFixtureTearDown]
 		public void TestFixtureTearDown()
 		{
-			LogHelper.LogDebugWithLineNumber(Logger, "Closing JobHandlersTests...");
+			Logger.LogDebugWithLineNumber("Closing JobHandlersTests...");
 		}
 
 		private IContainer Container { get; set; }
@@ -44,7 +45,7 @@ namespace NodeTest
 
 		private void ProgressCallback(string message)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger, message);
+			Logger.LogDebugWithLineNumber(message);
 		}
 
 		[Test]

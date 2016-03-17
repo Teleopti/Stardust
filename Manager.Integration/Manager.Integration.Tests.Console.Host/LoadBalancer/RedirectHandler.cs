@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using Manager.IntegrationTest.Console.Host.Helpers;
+using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 
 namespace Manager.IntegrationTest.Console.Host.LoadBalancer
 {
@@ -16,8 +17,7 @@ namespace Manager.IntegrationTest.Console.Host.LoadBalancer
 		protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
 		                                                             CancellationToken cancellationToken)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger, 
-										     "Start Send Async.");
+			Logger.LogDebugWithLineNumber("Start Send Async.");
 
 			try
 			{

@@ -14,6 +14,7 @@ using NodeTest.JobHandlers;
 using NUnit.Framework;
 using Stardust.Node.API;
 using Stardust.Node.Entities;
+using Stardust.Node.Extensions;
 using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Workers;
@@ -92,7 +93,7 @@ namespace NodeTest
 		[TestFixtureTearDown]
 		public void TestFixtureTearDown()
 		{
-			LogHelper.LogDebugWithLineNumber(Logger, "Start TestFixtureTearDown");
+			Logger.LogDebugWithLineNumber("Start TestFixtureTearDown");
 		}
 
 		private NodeConfigurationFake _nodeConfigurationFake;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using log4net;
+using Stardust.Node.Extensions;
 using Stardust.Node.Helpers;
 
 namespace NodeTest.JobHandlers
@@ -11,8 +12,7 @@ namespace NodeTest.JobHandlers
 
 		public FailingJobCode()
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "'Failing Job Code' class constructor called.");
+			Logger.LogDebugWithLineNumber("'Failing Job Code' class constructor called.");
 
 			WhoAmI = "[NODETEST.JOBHANDLERS.FailingJobCode, " + Environment.MachineName.ToUpper() + "]";
 		}
@@ -23,8 +23,7 @@ namespace NodeTest.JobHandlers
 		                       CancellationTokenSource cancellationTokenSource,
 		                       Action<string> progress)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "'Failing Job Code' Do The Thing method called.");
+			Logger.LogDebugWithLineNumber("'Failing Job Code' Do The Thing method called.");
 
 			var jobProgress = new TestJobProgress
 			{

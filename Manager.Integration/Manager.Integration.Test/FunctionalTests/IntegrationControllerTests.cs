@@ -17,7 +17,7 @@
 //using Manager.IntegrationTest.Console.Host.Interfaces;
 //using Newtonsoft.Json;
 //using NUnit.Framework;
-//using LogHelper = Manager.Integration.Test.Helpers.LogHelper;
+//using LoggerExtensions = Manager.Integration.Test.Helpers.LoggerExtensions;
 
 //namespace Manager.Integration.Test
 //{
@@ -33,7 +33,7 @@
 //		[TearDown]
 //		public void TearDown()
 //		{
-//			LogHelper.LogDebugWithLineNumber("Start TestFixtureTearDown",
+//			LoggerExtensions.LogDebugWithLineNumber("Start TestFixtureTearDown",
 //			                                 Logger);
 
 //			if (AppDomainTask != null)
@@ -41,7 +41,7 @@
 //				AppDomainTask.Dispose();
 //			}
 
-//			LogHelper.LogDebugWithLineNumber("Finished TestFixtureTearDown",
+//			LoggerExtensions.LogDebugWithLineNumber("Finished TestFixtureTearDown",
 //			                                 Logger);
 //		}
 
@@ -62,7 +62,7 @@
 //			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
 //			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
-//			LogHelper.LogDebugWithLineNumber("Start TestFixtureSetUp",
+//			LoggerExtensions.LogDebugWithLineNumber("Start TestFixtureSetUp",
 //			                                 Logger);
 
 //			if (_clearDatabase)
@@ -78,7 +78,7 @@
 //			                               numberOfNodes: 2,
 //			                               cancellationTokenSource: CancellationTokenSource);
 
-//			LogHelper.LogDebugWithLineNumber("Finshed TestFixtureSetUp",
+//			LoggerExtensions.LogDebugWithLineNumber("Finshed TestFixtureSetUp",
 //			                                 Logger);
 //		}
 
@@ -89,7 +89,7 @@
 
 //			if (exception != null)
 //			{
-//				LogHelper.LogFatalWithLineNumber(exception.Message,
+//				LoggerExtensions.LogFatalWithLineNumber(exception.Message,
 //				                                 Logger,
 //				                                 exception);
 //			}
@@ -106,13 +106,13 @@
 //		[Test, Ignore]
 //		public async void ShouldBeAbleToShutDownManager1()
 //		{
-//			LogHelper.LogDebugWithLineNumber("Start test.",
+//			LoggerExtensions.LogDebugWithLineNumber("Start test.",
 //			                                 Logger);
 
 //			//---------------------------------------------
 //			// Notify when all 2 nodes are up and running. 
 //			//---------------------------------------------
-//			LogHelper.LogDebugWithLineNumber("Waiting for all 2 nodes to start up.",
+//			LoggerExtensions.LogDebugWithLineNumber("Waiting for all 2 nodes to start up.",
 //			                                 Logger);
 
 //			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
@@ -128,7 +128,7 @@
 
 //			sqlNotifier.Dispose();
 
-//			LogHelper.LogInfoWithLineNumber("All 2 nodes has started.",
+//			LoggerExtensions.LogInfoWithLineNumber("All 2 nodes has started.",
 //			                                 Logger);
 
 //			//---------------------------------------------
@@ -148,7 +148,7 @@
 
 //			var uri = uriBuilder.Uri;
 
-//			LogHelper.LogDebugWithLineNumber("Start calling Delete Async ( " + uri + " ) ",
+//			LoggerExtensions.LogDebugWithLineNumber("Start calling Delete Async ( " + uri + " ) ",
 //			                                 Logger);
 
 //			try
@@ -158,13 +158,13 @@
 
 //				if (response.IsSuccessStatusCode)
 //				{
-//					LogHelper.LogDebugWithLineNumber("Succeeded calling Delete Async ( " + uri + " ) ",
+//					LoggerExtensions.LogDebugWithLineNumber("Succeeded calling Delete Async ( " + uri + " ) ",
 //					                                 Logger);
 //				}
 //			}
 //			catch (Exception exp)
 //			{
-//				LogHelper.LogErrorWithLineNumber(exp.Message,
+//				LoggerExtensions.LogErrorWithLineNumber(exp.Message,
 //				                                 Logger,
 //				                                 exp);
 //			}
@@ -178,7 +178,7 @@
 
 //			cancellationTokenSource.Cancel();
 
-//			LogHelper.LogDebugWithLineNumber("Finished test.",
+//			LoggerExtensions.LogDebugWithLineNumber("Finished test.",
 //			                                 Logger);
 //		}
 
@@ -189,13 +189,13 @@
 //		[Test]
 //		public async void ShouldBeAbleToShutDownNode1()
 //		{
-//			LogHelper.LogDebugWithLineNumber("Start test.",
+//			LoggerExtensions.LogDebugWithLineNumber("Start test.",
 //			                                 Logger);
 
 //			//---------------------------------------------
 //			// Notify when all 2 nodes are up and running. 
 //			//---------------------------------------------
-//			LogHelper.LogDebugWithLineNumber("Waiting for all 2 nodes to start up.",
+//			LoggerExtensions.LogDebugWithLineNumber("Waiting for all 2 nodes to start up.",
 //			                                 Logger);
 
 //			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
@@ -211,7 +211,7 @@
 
 //			sqlNotifier.Dispose();
 
-//			LogHelper.LogDebugWithLineNumber("All 2 nodes has started.",
+//			LoggerExtensions.LogDebugWithLineNumber("All 2 nodes has started.",
 //			                                 Logger);
 
 //			//---------------------------------------------
@@ -230,7 +230,7 @@
 
 //			var uri = uriBuilder.Uri;
 
-//			LogHelper.LogDebugWithLineNumber("Start calling Delete Async ( " + uri + " ) ",
+//			LoggerExtensions.LogDebugWithLineNumber("Start calling Delete Async ( " + uri + " ) ",
 //			                                 Logger);
 
 //			try
@@ -240,13 +240,13 @@
 
 //				if (response.IsSuccessStatusCode)
 //				{
-//					LogHelper.LogDebugWithLineNumber("Succeeded calling Delete Async ( " + uri + " ) ",
+//					LoggerExtensions.LogDebugWithLineNumber("Succeeded calling Delete Async ( " + uri + " ) ",
 //					                                 Logger);
 //				}
 //			}
 //			catch (Exception exp)
 //			{
-//				LogHelper.LogErrorWithLineNumber(exp.Message,
+//				LoggerExtensions.LogErrorWithLineNumber(exp.Message,
 //				                                 Logger,
 //				                                 exp);
 //			}
@@ -260,7 +260,7 @@
 
 //			cancellationTokenSource.Cancel();
 
-//			LogHelper.LogDebugWithLineNumber("Finished test.",
+//			LoggerExtensions.LogDebugWithLineNumber("Finished test.",
 //			                                 Logger);
 //		}
 
@@ -268,13 +268,13 @@
 //		[Test, Ignore]
 //		public async void ShouldBeAbleToStartNewManager()
 //		{
-//			LogHelper.LogDebugWithLineNumber("Start test.",
+//			LoggerExtensions.LogDebugWithLineNumber("Start test.",
 //			                                 Logger);
 
 //			//---------------------------------------------
 //			// Notify when all 2 nodes are up and running. 
 //			//---------------------------------------------
-//			LogHelper.LogDebugWithLineNumber("Waiting for all 2 nodes to start up.",
+//			LoggerExtensions.LogDebugWithLineNumber("Waiting for all 2 nodes to start up.",
 //			                                 Logger);
 
 //			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
@@ -290,7 +290,7 @@
 
 //			sqlNotifier.Dispose();
 
-//			LogHelper.LogInfoWithLineNumber("All 2 nodes has started.",
+//			LoggerExtensions.LogInfoWithLineNumber("All 2 nodes has started.",
 //			                                 Logger);
 
 
@@ -310,7 +310,7 @@
 
 //			var uri = uriBuilder.Uri;
 
-//			LogHelper.LogDebugWithLineNumber("Start calling Post Async ( " + uri + " ) ",
+//			LoggerExtensions.LogDebugWithLineNumber("Start calling Post Async ( " + uri + " ) ",
 //			                                 Logger);
 
 //			try
@@ -322,14 +322,14 @@
 //				{
 //					managerName = await response.Content.ReadAsStringAsync();
 
-//					LogHelper.LogDebugWithLineNumber("Succeeded calling Post Async ( " + uri + " ) ",
+//					LoggerExtensions.LogDebugWithLineNumber("Succeeded calling Post Async ( " + uri + " ) ",
 //					                                 Logger);
 //				}
 //			}
 
 //			catch (Exception exp)
 //			{
-//				LogHelper.LogErrorWithLineNumber(exp.Message,
+//				LoggerExtensions.LogErrorWithLineNumber(exp.Message,
 //				                                 Logger,
 //				                                 exp);
 //			}
@@ -343,7 +343,7 @@
 //			Assert.IsNotNull(managerName,
 //			                 "Manager must have a friendly name.");
 
-//			LogHelper.LogDebugWithLineNumber("Finished test.",
+//			LoggerExtensions.LogDebugWithLineNumber("Finished test.",
 //			                                 Logger);
 //		}
 
@@ -354,13 +354,13 @@
 //		[Test]
 //		public async void ShouldBeAbleToStartNewNode()
 //		{
-//			LogHelper.LogDebugWithLineNumber("Start test.",
+//			LoggerExtensions.LogDebugWithLineNumber("Start test.",
 //			                                 Logger);
 
 //			//---------------------------------------------
 //			// Notify when all 2 nodes are up and running. 
 //			//---------------------------------------------
-//			LogHelper.LogDebugWithLineNumber("Waiting for all 2 nodes to start up.",
+//			LoggerExtensions.LogDebugWithLineNumber("Waiting for all 2 nodes to start up.",
 //			                                 Logger);
 
 //			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
@@ -376,7 +376,7 @@
 
 //			sqlNotifier.Dispose();
 
-//			LogHelper.LogDebugWithLineNumber("All 2 nodes has started.",
+//			LoggerExtensions.LogDebugWithLineNumber("All 2 nodes has started.",
 //			                                 Logger);
 
 //			//---------------------------------------------
@@ -397,7 +397,7 @@
 
 //			var uri = uriBuilder.Uri;
 
-//			LogHelper.LogDebugWithLineNumber("Start calling Post Async ( " + uri + " ) ",
+//			LoggerExtensions.LogDebugWithLineNumber("Start calling Post Async ( " + uri + " ) ",
 //			                                 Logger);
 
 //			try
@@ -409,13 +409,13 @@
 //				{
 //					nodeName = await response.Content.ReadAsStringAsync();
 
-//					LogHelper.LogDebugWithLineNumber("Succeeded calling Post Async ( " + uri + " ) ",
+//					LoggerExtensions.LogDebugWithLineNumber("Succeeded calling Post Async ( " + uri + " ) ",
 //					                                 Logger);
 //				}
 //			}
 //			catch (Exception exp)
 //			{
-//				LogHelper.LogErrorWithLineNumber(exp.Message,
+//				LoggerExtensions.LogErrorWithLineNumber(exp.Message,
 //				                                 Logger,
 //				                                 exp);
 //			}
@@ -431,7 +431,7 @@
 
 //			cancellationTokenSource.Cancel();
 
-//			LogHelper.LogDebugWithLineNumber("Finished test.",
+//			LoggerExtensions.LogDebugWithLineNumber("Finished test.",
 //			                                 Logger);
 //		}
 
@@ -443,13 +443,13 @@
 //		[Test, Ignore]
 //		public async void ShouldReturnAllManagers()
 //		{
-//			LogHelper.LogDebugWithLineNumber("Start test.",
+//			LoggerExtensions.LogDebugWithLineNumber("Start test.",
 //			                                 Logger);
 
 //			//---------------------------------------------
 //			// Notify when 2 nodes are up. 
 //			//---------------------------------------------
-//			LogHelper.LogDebugWithLineNumber("Waiting for 2 nodes to start up.",
+//			LoggerExtensions.LogDebugWithLineNumber("Waiting for 2 nodes to start up.",
 //			                                 Logger);
 
 //			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
@@ -465,7 +465,7 @@
 
 //			sqlNotifier.Dispose();
 
-//			LogHelper.LogDebugWithLineNumber("All 2 nodes has started.",
+//			LoggerExtensions.LogDebugWithLineNumber("All 2 nodes has started.",
 //			                                 Logger);
 
 //			//---------------------------------------------
@@ -482,7 +482,7 @@
 
 //			var uri = uriBuilder.Uri;
 
-//			LogHelper.LogDebugWithLineNumber("Start calling Get Async ( " + uri + " ) ",
+//			LoggerExtensions.LogDebugWithLineNumber("Start calling Get Async ( " + uri + " ) ",
 //			                                 Logger);
 
 //			try
@@ -491,7 +491,7 @@
 
 //				if (response.IsSuccessStatusCode)
 //				{
-//					LogHelper.LogDebugWithLineNumber("Succeeded calling Get Async ( " + uri + " ) ",
+//					LoggerExtensions.LogDebugWithLineNumber("Succeeded calling Get Async ( " + uri + " ) ",
 //					                                 Logger);
 
 //					var content = await response.Content.ReadAsStringAsync();
@@ -503,7 +503,7 @@
 //					{
 //						foreach (var l in list)
 //						{
-//							LogHelper.LogDebugWithLineNumber(l,
+//							LoggerExtensions.LogDebugWithLineNumber(l,
 //							                                 Logger);
 //						}
 //					}
@@ -515,7 +515,7 @@
 
 //			catch (Exception exp)
 //			{
-//				LogHelper.LogErrorWithLineNumber(exp.Message,
+//				LoggerExtensions.LogErrorWithLineNumber(exp.Message,
 //				                                 Logger,
 //				                                 exp);
 //			}
@@ -529,7 +529,7 @@
 
 //			task.Dispose();
 
-//			LogHelper.LogDebugWithLineNumber("Finished test.",
+//			LoggerExtensions.LogDebugWithLineNumber("Finished test.",
 //			                                 Logger);
 //		}
 
@@ -540,13 +540,13 @@
 //		[Test]
 //		public async void ShouldReturnAllNodes()
 //		{
-//			LogHelper.LogDebugWithLineNumber("Start test.",
+//			LoggerExtensions.LogDebugWithLineNumber("Start test.",
 //			                                 Logger);
 
 //			//---------------------------------------------
 //			// Notify when 2 nodes are up. 
 //			//---------------------------------------------
-//			LogHelper.LogDebugWithLineNumber("Waiting for 2 nodes to start up.",
+//			LoggerExtensions.LogDebugWithLineNumber("Waiting for 2 nodes to start up.",
 //			                                 Logger);
 
 //			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
@@ -562,7 +562,7 @@
 
 //			sqlNotifier.Dispose();
 
-//			LogHelper.LogDebugWithLineNumber("All 2 nodes has started.",
+//			LoggerExtensions.LogDebugWithLineNumber("All 2 nodes has started.",
 //			                                 Logger);
 
 //			//---------------------------------------------
@@ -581,7 +581,7 @@
 
 //			var uri = uriBuilder.Uri;
 
-//			LogHelper.LogDebugWithLineNumber("Start calling Get Async ( " + uri + " ) ",
+//			LoggerExtensions.LogDebugWithLineNumber("Start calling Get Async ( " + uri + " ) ",
 //			                                 Logger);
 
 //			try
@@ -590,7 +590,7 @@
 
 //				if (response.IsSuccessStatusCode)
 //				{
-//					LogHelper.LogDebugWithLineNumber("Succeeded calling Get Async ( " + uri + " ) ",
+//					LoggerExtensions.LogDebugWithLineNumber("Succeeded calling Get Async ( " + uri + " ) ",
 //					                                 Logger);
 
 //					var content = await response.Content.ReadAsStringAsync();
@@ -602,7 +602,7 @@
 //					{
 //						foreach (var l in list)
 //						{
-//							LogHelper.LogDebugWithLineNumber(l,
+//							LoggerExtensions.LogDebugWithLineNumber(l,
 //							                                 Logger);
 //						}
 //					}
@@ -614,7 +614,7 @@
 
 //			catch (Exception exp)
 //			{
-//				LogHelper.LogErrorWithLineNumber(exp.Message,
+//				LoggerExtensions.LogErrorWithLineNumber(exp.Message,
 //				                                 Logger,
 //				                                 exp);
 //			}
@@ -629,7 +629,7 @@
 
 //			task.Dispose();
 
-//			LogHelper.LogDebugWithLineNumber("Finished test.",
+//			LoggerExtensions.LogDebugWithLineNumber("Finished test.",
 //			                                 Logger);
 //		}
 //	}

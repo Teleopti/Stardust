@@ -8,6 +8,7 @@ using log4net.Config;
 using NodeTest.Fakes;
 using NUnit.Framework;
 using Stardust.Node.API;
+using Stardust.Node.Extensions;
 using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
@@ -47,7 +48,7 @@ namespace NodeTest.Timers
 		[TestFixtureTearDown]
 		public void TestFixtureTearDown()
 		{
-			LogHelper.LogDebugWithLineNumber(Logger, "Closing TrySendStatusToManagerTimerTests...");
+			Logger.LogDebugWithLineNumber("Closing TrySendStatusToManagerTimerTests...");
 		}
 
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (TrySendStatusToManagerTimerTests));

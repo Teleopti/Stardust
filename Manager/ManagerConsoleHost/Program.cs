@@ -10,6 +10,7 @@ using log4net.Config;
 using Microsoft.Owin.Hosting;
 using Owin;
 using Stardust.Manager;
+using Stardust.Manager.Extensions;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Models;
 
@@ -60,8 +61,7 @@ namespace ManagerConsoleHost
 			WhoAmI = 
 				"[MANAGER CONSOLE HOST ( " + managerName + ", " + managerAddress +  " )," + Environment.MachineName.ToUpper() + "]";
 
-			LogHelper.LogInfoWithLineNumber(Logger,
-			                                WhoAmI + " : started.");
+			Logger.LogInfoWithLineNumber(WhoAmI + " : started.");
 
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
@@ -90,8 +90,7 @@ namespace ManagerConsoleHost
 				                    appBuilder.UseWebApi(config);
 			                    }))
 			{
-				LogHelper.LogInfoWithLineNumber(Logger,
-				                                WhoAmI + ": Started listening on port : ( " + baseAddress + " )");
+				Logger.LogInfoWithLineNumber(WhoAmI + ": Started listening on port : ( " + baseAddress + " )");
 
 				ManagerStarter = new ManagerStarter();
 				ManagerStarter.Start(managerConfiguration,
@@ -110,8 +109,7 @@ namespace ManagerConsoleHost
 			if (ctrlType == CtrlTypes.CtrlCloseEvent ||
 			    ctrlType == CtrlTypes.CtrlShutdownEvent)
 			{
-				LogHelper.LogDebugWithLineNumber(Logger,
-				                                 WhoAmI + " : ConsoleCtrlCheck called.");
+				Logger.LogDebugWithLineNumber(WhoAmI + " : ConsoleCtrlCheck called.");
 
 				QuitEvent.Set();
 
@@ -124,8 +122,7 @@ namespace ManagerConsoleHost
 		private static void CurrentDomain_DomainUnload(object sender,
 		                                               EventArgs e)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 WhoAmI + " : CurrentDomain_DomainUnload called.");
+			Logger.LogDebugWithLineNumber(WhoAmI + " : CurrentDomain_DomainUnload called.");
 
 			QuitEvent.Set();
 		}
@@ -137,8 +134,7 @@ namespace ManagerConsoleHost
 
 			if (exp != null)
 			{
-				LogHelper.LogFatalWithLineNumber(Logger,
-				                                 exp.Message,
+				Logger.LogFatalWithLineNumber(exp.Message,
 				                                 exp);
 			}
 		}

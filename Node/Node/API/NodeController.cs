@@ -5,6 +5,7 @@ using System.Web.Http.Results;
 using log4net;
 using Stardust.Node.Constants;
 using Stardust.Node.Entities;
+using Stardust.Node.Extensions;
 using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 
@@ -26,7 +27,7 @@ namespace Stardust.Node.API
 		{
 			if (jobToDo == null)
 			{
-				LogHelper.LogInfoWithLineNumber(Logger, _workerWrapper.WhoamI + "Received Start Job Request. jobId is null");
+				Logger.LogInfoWithLineNumber(_workerWrapper.WhoamI + "Received Start Job Request. jobId is null");
 				return BadRequest("jobToDo is null");
 			}
 
@@ -37,8 +38,7 @@ namespace Stardust.Node.API
 						jobToDo.Id,
 						jobToDo.Name);
 
-			LogHelper.LogInfoWithLineNumber(Logger,
-											   msg);
+			Logger.LogInfoWithLineNumber(msg);
 
 			if (_workerWrapper.IsTaskExecuting)
 			{
@@ -49,8 +49,7 @@ namespace Stardust.Node.API
 						jobToDo.Id,
 						jobToDo.Name);
 
-				LogHelper.LogWarningWithLineNumber(Logger,
-												   msgExecuting);
+				Logger.LogWarningWithLineNumber(msgExecuting);
 
 				return CreateConflictStatusCode();
 			}
@@ -72,8 +71,7 @@ namespace Stardust.Node.API
 				                                    jobToDo.Id,
 				                                    jobToDo.Name);
 
-				LogHelper.LogDebugWithLineNumber(Logger,
-				                                 startJobMessage);
+				Logger.LogDebugWithLineNumber(startJobMessage);
 			});
 
 			return Ok();
@@ -82,15 +80,14 @@ namespace Stardust.Node.API
 		[HttpDelete, AllowAnonymous, Route(NodeRouteConstants.CancelJob)]
 		public IHttpActionResult TryCancelJob(Guid jobId)
 		{
-			LogHelper.LogInfoWithLineNumber(Logger, _workerWrapper.WhoamI + " : Received TryCancel request. jobId: " + jobId);
+			Logger.LogInfoWithLineNumber(_workerWrapper.WhoamI + " : Received TryCancel request. jobId: " + jobId);
 
 			if (jobId == Guid.Empty)
 			{
 				return BadRequest("jobId is empty");
 			}
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 _workerWrapper.WhoamI + ": Try cancel job ( jobId ) : ( " + jobId + " )");
+			Logger.LogDebugWithLineNumber(_workerWrapper.WhoamI + ": Try cancel job ( jobId ) : ( " + jobId + " )");
 
 			var currentJob = _workerWrapper.GetCurrentMessageToProcess();
 
@@ -111,8 +108,7 @@ namespace Stardust.Node.API
 				return Ok();
 			}
 
-			LogHelper.LogWarningWithLineNumber(Logger,
-			                                   _workerWrapper.WhoamI +
+			Logger.LogWarningWithLineNumber(_workerWrapper.WhoamI +
 			                                   ": Could not cancel job since job not found on this node. Manager sent job ( jobId ) : ( " +
 			                                   jobId + " )");
 			return NotFound();

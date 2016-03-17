@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using log4net;
 using Stardust.Manager.Diagnostics;
+using Stardust.Manager.Extensions;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
@@ -32,7 +33,7 @@ namespace Stardust.Manager
 		{
 			if (managerConfiguration.AllowedNodeDownTimeSeconds <= 0)
 			{
-				LogHelper.LogErrorWithLineNumber(Logger, "AllowedNodeDownTimeSeconds is not greater than zero!");
+				Logger.LogErrorWithLineNumber("AllowedNodeDownTimeSeconds is not greater than zero!");
 
 				throw new ArgumentOutOfRangeException();
 			}
@@ -62,7 +63,7 @@ namespace Stardust.Manager
 
 		public void Dispose()
 		{
-			LogHelper.LogDebugWithLineNumber(Logger, "Start disposing.");
+			Logger.LogDebugWithLineNumber("Start disposing.");
 
 			_checkAndAssignNextJob.Stop();
 			_checkAndAssignNextJob.Dispose();
@@ -70,17 +71,16 @@ namespace Stardust.Manager
 			_checkHeartbeatsTimer.Stop();
 			_checkHeartbeatsTimer.Dispose();
 
-			LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
+			Logger.LogDebugWithLineNumber("Finished disposing.");
 		}
 
 		private void _checkAndAssignNextJob_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
+			Logger.LogDebugWithLineNumber("Start.");
 
 				CheckAndAssignNextJob();
 
-				LogHelper.LogDebugWithLineNumber(Logger,
-												 "CheckAndAssignNextJob on thread id : " + Thread.CurrentThread.ManagedThreadId);
+				Logger.LogDebugWithLineNumber("CheckAndAssignNextJob on thread id : " + Thread.CurrentThread.ManagedThreadId);
 
 		}
 
@@ -100,8 +100,7 @@ namespace Stardust.Manager
 					{
 						if (job.AssignedNode == node)
 						{
-							LogHelper.LogErrorWithLineNumber(Logger,
-							                                 "Job ( id , name ) is deleted due to the node executing it died. ( " + job.Id +
+							Logger.LogErrorWithLineNumber("Job ( id , name ) is deleted due to the node executing it died. ( " + job.Id +
 							                                 " , " + job.Name + " )");
 
 							SetEndResultOnJobAndRemoveIt(job.Id, "Fatal Node Failure");
@@ -116,8 +115,7 @@ namespace Stardust.Manager
 		{
 				CheckNodesAreAlive(TimeSpan.FromSeconds(_managerConfiguration.AllowedNodeDownTimeSeconds));
 
-				LogHelper.LogDebugWithLineNumber(Logger,
-												 "Check Heartbeat on thread id : " + Thread.CurrentThread.ManagedThreadId);
+				Logger.LogDebugWithLineNumber("Check Heartbeat on thread id : " + Thread.CurrentThread.ManagedThreadId);
 		}
 
 		public IList<WorkerNode> Nodes()
@@ -148,23 +146,20 @@ namespace Stardust.Manager
 
 		public void RegisterHeartbeat(string nodeUri)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Start RegisterHeartbeat.");
+			Logger.LogDebugWithLineNumber("Start RegisterHeartbeat.");
 
 			_workerNodeRepository.RegisterHeartbeat(nodeUri, true);
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Finished RegisterHeartbeat.");
+			Logger.LogDebugWithLineNumber("Finished RegisterHeartbeat.");
 		}
 
 
 		public void CheckAndAssignNextJob()
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Start CheckAndAssignNextJob.");
+			Logger.LogDebugWithLineNumber("Start CheckAndAssignNextJob.");
 
 
-			LogHelper.LogDebugWithLineNumber(Logger, "CheckAndAssignNextJob: Start ManagerStopWatch.");
+			Logger.LogDebugWithLineNumber("CheckAndAssignNextJob: Start ManagerStopWatch.");
 
 			ManagerStopWatch managerStopWatch = new ManagerStopWatch();
 
@@ -176,8 +171,7 @@ namespace Stardust.Manager
 
 				if (availableNodes != null && availableNodes.Any())
 				{
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Found ( " + availableNodes.Count + " ) available nodes");
+					Logger.LogDebugWithLineNumber("Found ( " + availableNodes.Count + " ) available nodes");
 				}
 
 				if (availableNodes != null)
@@ -193,15 +187,13 @@ namespace Stardust.Manager
 					_jobRepository.CheckAndAssignNextJob(upNodes,
 					                                     _httpSender);
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Finished CheckAndAssignNextJob.");
+					Logger.LogDebugWithLineNumber("Finished CheckAndAssignNextJob.");
 				}
 			}
 
 			catch (Exception exp)
 			{
-				LogHelper.LogErrorWithLineNumber(Logger,
-				                                 exp.Message,
+				Logger.LogErrorWithLineNumber(exp.Message,
 				                                 exp);
 
 				throw;
@@ -212,8 +204,7 @@ namespace Stardust.Manager
 				var total =
 					managerStopWatch.GetTotalElapsedTimeInMilliseconds();
 
-				LogHelper.LogDebugWithLineNumber(Logger,
-				                                 "CheckAndAssignNextJob: Stop ManagerStopWatch. Took " + total + " milliseconds.");
+				Logger.LogDebugWithLineNumber("CheckAndAssignNextJob: Stop ManagerStopWatch. Took " + total + " milliseconds.");
 			}
 		}
 

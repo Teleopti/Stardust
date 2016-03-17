@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Timers;
 using log4net;
+using Stardust.Node.Extensions;
 using Stardust.Node.Helpers;
 using Timer = System.Timers.Timer;
 
@@ -23,8 +24,7 @@ namespace NodeTest.Fakes.Timers
 		private void OnTimedEvent(object sender,
 		                          ElapsedEventArgs e)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Try ping to manager fake.");
+			Logger.LogDebugWithLineNumber("Try ping to manager fake.");
 
 			Wait.Set();
 		}

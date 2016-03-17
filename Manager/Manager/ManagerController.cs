@@ -5,6 +5,7 @@ using System.Web.Http;
 using System.Web.Http.Results;
 using log4net;
 using Stardust.Manager.Constants;
+using Stardust.Manager.Extensions;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
@@ -58,8 +59,7 @@ namespace Stardust.Manager
 			                        jobReceived.Id,
 			                        jobReceived.Name);
 
-			LogHelper.LogInfoWithLineNumber(Logger,
-			                                msg);
+			Logger.LogInfoWithLineNumber(msg);
 
 			Task.Factory.StartNew(() => { _jobManager.CheckAndAssignNextJob(); });
 
@@ -69,8 +69,7 @@ namespace Stardust.Manager
 		[HttpDelete, Route(ManagerRouteConstants.CancelJob)]
 		public IHttpActionResult CancelThisJob(Guid jobId)
 		{
-			LogHelper.LogInfoWithLineNumber(Logger,
-											WhoAmI(Request) + ": Received job cancel from client ( jobId ) : ( " + jobId + " )");
+			Logger.LogInfoWithLineNumber(WhoAmI(Request) + ": Received job cancel from client ( jobId ) : ( " + jobId + " )");
 
 			_jobManager.CancelThisJob(jobId);
 
@@ -111,21 +110,18 @@ namespace Stardust.Manager
 					_jobManager.RegisterHeartbeat(nodeUri.ToString());
 				});
 
-				LogHelper.LogInfoWithLineNumber(Logger,
-												WhoAmI(Request) + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
+				Logger.LogInfoWithLineNumber(WhoAmI(Request) + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
 				return Ok();
 			}
 
-			LogHelper.LogWarningWithLineNumber(Logger,
-											   WhoAmI(Request) + ": Received heartbeat from Node with invalid uri.");
+			Logger.LogWarningWithLineNumber(WhoAmI(Request) + ": Received heartbeat from Node with invalid uri.");
 			return BadRequest();
 		}
 
 		[HttpPost, Route(ManagerRouteConstants.JobDone)]
 		public IHttpActionResult JobDone(Guid jobId)
 		{
-			LogHelper.LogInfoWithLineNumber(Logger,
-											WhoAmI(Request) + ": Received job done from a Node ( jobId ) : ( " + jobId + " )");
+			Logger.LogInfoWithLineNumber(WhoAmI(Request) + ": Received job done from a Node ( jobId ) : ( " + jobId + " )");
 
 			Task.Factory.StartNew(() =>
 			{
@@ -141,8 +137,7 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.JobFailed)]
 		public IHttpActionResult JobFailed([FromBody] JobFailedModel jobFailedModel)
 		{			
-			LogHelper.LogErrorWithLineNumber(Logger,
-											 WhoAmI(Request) + ": Received job failed from a Node ( jobId ) : ( " + jobFailedModel.JobId + " )");
+			Logger.LogErrorWithLineNumber(WhoAmI(Request) + ": Received job failed from a Node ( jobId ) : ( " + jobFailedModel.JobId + " )");
 
 			Task.Factory.StartNew(() =>
 			{
@@ -178,8 +173,7 @@ namespace Stardust.Manager
 		public IHttpActionResult JobCanceled(Guid jobId)
 		{
 
-			LogHelper.LogInfoWithLineNumber(Logger,
-											WhoAmI(Request) + ": Received cancel from a Node ( jobId ) : ( " + jobId + " )");
+			Logger.LogInfoWithLineNumber(WhoAmI(Request) + ": Received cancel from a Node ( jobId ) : ( " + jobId + " )");
 
 			Task.Factory.StartNew(() =>
 			{
@@ -227,8 +221,7 @@ namespace Stardust.Manager
 				_jobManager.CheckAndAssignNextJob();
 			});
 
-			LogHelper.LogInfoWithLineNumber(Logger,
-											WhoAmI(Request) + ": Received init from Node. Node Uri : ( " + nodeUri + " )");
+			Logger.LogInfoWithLineNumber(WhoAmI(Request) + ": Received init from Node. Node Uri : ( " + nodeUri + " )");
 
 			return Ok();
 		}

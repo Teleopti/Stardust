@@ -1,5 +1,6 @@
 ﻿using System.Web.Http.ExceptionHandling;
 using log4net;
+using Stardust.Node.Extensions;
 using Stardust.Node.Helpers;
 
 namespace Stardust.Node
@@ -10,8 +11,7 @@ namespace Stardust.Node
 
 		public override void Log(ExceptionLoggerContext context)
 		{
-			LogHelper.LogErrorWithLineNumber(Logger,
-			                                 "[Message] \n" + context.Exception.Message + " \n\n [Stacktrace]\n " +
+			Logger.LogErrorWithLineNumber("[Message] \n" + context.Exception.Message + " \n\n [Stacktrace]\n " +
 			                                 context.Exception.StackTrace);
 		}
 	}

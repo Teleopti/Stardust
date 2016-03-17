@@ -20,11 +20,11 @@ namespace Stardust.Node.Timers
 
 		protected override void Dispose(bool disposing)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger, "Start disposing.");
+			Logger.LogDebugWithLineNumber("Start disposing.");
 
 			base.Dispose(disposing);
 
-			LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
+			Logger.LogDebugWithLineNumber("Finished disposing.");
 		}
 	}
 }

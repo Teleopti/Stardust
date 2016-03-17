@@ -3,11 +3,11 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using log4net;
 
-namespace Stardust.Node.Helpers
+namespace Stardust.Node.Extensions
 {
-	public static class LogHelper
+	public static class LoggerExtensions
 	{
-		private static void ValidateArgument(ILog logger)
+		private static void ValidateArgument(this ILog logger)
 		{
 			if (logger == null)
 			{
@@ -15,17 +15,17 @@ namespace Stardust.Node.Helpers
 			}
 		}
 
-		public static void LogErrorWithLineNumber(ILog logger,
+		public static void LogErrorWithLineNumber(this ILog logger,
 		                                          string info,
 		                                          Exception exception = null,
 		                                          [CallerFilePath] string file = "",
 		                                          [CallerMemberName] string member = "",
 		                                          [CallerLineNumber] int line = 0)
 		{
-			ValidateArgument(logger);
-
 			if (logger.IsErrorEnabled)
 			{
+				ValidateArgument(logger);
+
 				logger.Error(string.Format("{0}_{1}({2}): {3}",
 				                           Path.GetFileName(file),
 				                           member,
@@ -35,17 +35,17 @@ namespace Stardust.Node.Helpers
 			}
 		}
 
-		public static void LogFatalWithLineNumber(ILog logger,
+		public static void LogFatalWithLineNumber(this ILog logger,
 		                                          string info,
 		                                          Exception exception = null,
 		                                          [CallerFilePath] string file = "",
 		                                          [CallerMemberName] string member = "",
 		                                          [CallerLineNumber] int line = 0)
 		{
-			ValidateArgument(logger);
-
 			if (logger.IsFatalEnabled)
 			{
+				ValidateArgument(logger);
+
 				logger.Fatal(string.Format("{0}_{1}({2}): {3}",
 				                           Path.GetFileName(file),
 				                           member,
@@ -55,16 +55,16 @@ namespace Stardust.Node.Helpers
 			}
 		}
 
-		public static void LogWarningWithLineNumber(ILog logger,
+		public static void LogWarningWithLineNumber(this ILog logger,
 		                                            string info,
 		                                            [CallerFilePath] string file = "",
 		                                            [CallerMemberName] string member = "",
 		                                            [CallerLineNumber] int line = 0)
 		{
-			ValidateArgument(logger);
-
 			if (logger.IsWarnEnabled)
 			{
+				ValidateArgument(logger);
+
 				logger.Warn(string.Format("{0}_{1}({2}): {3}",
 				                          Path.GetFileName(file),
 				                          member,
@@ -73,16 +73,16 @@ namespace Stardust.Node.Helpers
 			}
 		}
 
-		public static void LogDebugWithLineNumber(ILog logger,
+		public static void LogDebugWithLineNumber(this ILog logger,
 		                                          string info,
 		                                          [CallerFilePath] string file = "",
 		                                          [CallerMemberName] string member = "",
 		                                          [CallerLineNumber] int line = 0)
 		{
-			ValidateArgument(logger);
-
 			if (logger.IsDebugEnabled)
 			{
+				ValidateArgument(logger);
+
 				logger.Debug(string.Format("{0}_{1}({2}): {3}",
 				                           Path.GetFileName(file),
 				                           member,
@@ -91,16 +91,16 @@ namespace Stardust.Node.Helpers
 			}
 		}
 
-		public static void LogInfoWithLineNumber(ILog logger,
+		public static void LogInfoWithLineNumber(this ILog logger,
 		                                         string info,
 		                                         [CallerFilePath] string file = "",
 		                                         [CallerMemberName] string member = "",
 		                                         [CallerLineNumber] int line = 0)
 		{
-			ValidateArgument(logger);
-
 			if (logger.IsInfoEnabled)
 			{
+				ValidateArgument(logger);
+
 				logger.Info(string.Format("{0}_{1}({2}): {3}",
 				                          Path.GetFileName(file),
 				                          member,

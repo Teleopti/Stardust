@@ -1,6 +1,7 @@
 using System;
 using log4net;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
+using Stardust.Manager.Extensions;
 using Stardust.Manager.Helpers;
 
 namespace Stardust.Manager
@@ -18,7 +19,7 @@ namespace Stardust.Manager
 			{
 				// Log details of the retry.
 				var msg = String.Format("Retry - Count:{0}, Delay:{1}, Exception:{2}", args.CurrentRetryCount, args.Delay, args.LastException);
-				LogHelper.LogErrorWithLineNumber(logger, msg);
+				logger.LogErrorWithLineNumber(msg);
 			};
 			return policy;
 		}

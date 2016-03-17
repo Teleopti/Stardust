@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using Newtonsoft.Json;
+using Stardust.Node.Extensions;
 using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 
@@ -19,8 +20,7 @@ namespace Stardust.Node.Workers
 		public async Task<HttpResponseMessage> PostAsync(Uri url,
 		                                                 object data)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Start.");
+			Logger.LogDebugWithLineNumber("Start.");
 
 			try
 			{
@@ -30,8 +30,7 @@ namespace Stardust.Node.Workers
 
 					CreateRequestHeaders(client);
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Start Post Async: " + url);
+					Logger.LogDebugWithLineNumber("Start Post Async: " + url);
 
 					var response =
 						await client.PostAsync(url,
@@ -40,11 +39,9 @@ namespace Stardust.Node.Workers
 						                                         "application/json"))
 							.ConfigureAwait(false);
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Finihed Post Async: " + url);
+					Logger.LogDebugWithLineNumber("Finihed Post Async: " + url);
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Finished.");
+					Logger.LogDebugWithLineNumber("Finished.");
 
 					return response;
 				}
@@ -52,8 +49,7 @@ namespace Stardust.Node.Workers
 
 			catch (Exception exp)
 			{
-				LogHelper.LogErrorWithLineNumber(Logger,
-				                                 exp.Message,
+				Logger.LogErrorWithLineNumber(exp.Message,
 				                                 exp);
 				throw;
 			}
@@ -63,8 +59,7 @@ namespace Stardust.Node.Workers
 		                                                 object data,
 		                                                 CancellationToken cancellationToken)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Start.");
+			Logger.LogDebugWithLineNumber("Start.");
 
 			try
 			{
@@ -74,8 +69,7 @@ namespace Stardust.Node.Workers
 
 					CreateRequestHeaders(client);
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Start Post Async: " + url);
+					Logger.LogDebugWithLineNumber("Start Post Async: " + url);
 
 					var response =
 						await client.PostAsync(url,
@@ -85,8 +79,7 @@ namespace Stardust.Node.Workers
 						                       cancellationToken)
 							.ConfigureAwait(false);
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Finished Post Async: " + url + "\n" + "Finished");
+					Logger.LogDebugWithLineNumber("Finished Post Async: " + url + "\n" + "Finished");
 
 					return response;
 				}
@@ -99,8 +92,7 @@ namespace Stardust.Node.Workers
 
 			catch (Exception exp)
 			{
-				LogHelper.LogErrorWithLineNumber(Logger,
-				                                 exp.Message,
+				Logger.LogErrorWithLineNumber(exp.Message,
 				                                 exp);
 				throw;
 			}
@@ -108,8 +100,7 @@ namespace Stardust.Node.Workers
 
 		public async Task<HttpResponseMessage> DeleteAsync(Uri url)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Start.");
+			Logger.LogDebugWithLineNumber("Start.");
 
 			try
 			{
@@ -117,17 +108,14 @@ namespace Stardust.Node.Workers
 				{
 					CreateRequestHeaders(client);
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Start Delete Async: " + url);
+					Logger.LogDebugWithLineNumber("Start Delete Async: " + url);
 
 					var response =
 						await client.DeleteAsync(url).ConfigureAwait(false);
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Finished Delete Async: " + url);
+					Logger.LogDebugWithLineNumber("Finished Delete Async: " + url);
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Finished.");
+					Logger.LogDebugWithLineNumber("Finished.");
 
 					return response;
 				}
@@ -135,8 +123,7 @@ namespace Stardust.Node.Workers
 
 			catch (Exception exp)
 			{
-				LogHelper.LogErrorWithLineNumber(Logger,
-				                                 exp.Message,
+				Logger.LogErrorWithLineNumber(exp.Message,
 				                                 exp);
 
 				throw;
@@ -146,8 +133,7 @@ namespace Stardust.Node.Workers
 		public async Task<HttpResponseMessage> DeleteAsync(Uri url,
 		                                                   CancellationToken cancellationToken)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Start.");
+			Logger.LogDebugWithLineNumber("Start.");
 
 			try
 			{
@@ -155,18 +141,15 @@ namespace Stardust.Node.Workers
 				{
 					CreateRequestHeaders(client);
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Start Delete Async: " + url);
+					Logger.LogDebugWithLineNumber("Start Delete Async: " + url);
 
 					var response =
 						await client.DeleteAsync(url,
 						                         cancellationToken).ConfigureAwait(false);
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Finished Delete Async: " + url);
+					Logger.LogDebugWithLineNumber("Finished Delete Async: " + url);
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Finished.");
+					Logger.LogDebugWithLineNumber("Finished.");
 
 					return response;
 				}
@@ -174,8 +157,7 @@ namespace Stardust.Node.Workers
 
 			catch (Exception exp)
 			{
-				LogHelper.LogErrorWithLineNumber(Logger,
-				                                 exp.Message,
+				Logger.LogErrorWithLineNumber(exp.Message,
 				                                 exp);
 
 				throw;
@@ -184,8 +166,7 @@ namespace Stardust.Node.Workers
 
 		public async Task<HttpResponseMessage> GetAsync(Uri url)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Start.");
+			Logger.LogDebugWithLineNumber("Start.");
 
 			try
 			{
@@ -193,18 +174,15 @@ namespace Stardust.Node.Workers
 				{
 					CreateRequestHeaders(client);
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Start Get Async: " + url);
+					Logger.LogDebugWithLineNumber("Start Get Async: " + url);
 
 					var response = await client.GetAsync(url,
 					                                     HttpCompletionOption.ResponseHeadersRead)
 						.ConfigureAwait(false);
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Finished Get Async: " + url);
+					Logger.LogDebugWithLineNumber("Finished Get Async: " + url);
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Finished.");
+					Logger.LogDebugWithLineNumber("Finished.");
 
 					return response;
 				}
@@ -212,8 +190,7 @@ namespace Stardust.Node.Workers
 
 			catch (Exception exp)
 			{
-				LogHelper.LogErrorWithLineNumber(Logger,
-				                                 exp.Message,
+				Logger.LogErrorWithLineNumber(exp.Message,
 				                                 exp);
 
 				throw;
@@ -222,8 +199,7 @@ namespace Stardust.Node.Workers
 
 		public async Task<HttpResponseMessage> GetAsync(Uri url, CancellationToken cancellationToken)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Start.");
+			Logger.LogDebugWithLineNumber("Start.");
 
 			try
 			{
@@ -231,20 +207,17 @@ namespace Stardust.Node.Workers
 				{
 					CreateRequestHeaders(client);
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Start Get Async: " + url);
+					Logger.LogDebugWithLineNumber("Start Get Async: " + url);
 
 					var response = await client.GetAsync(url,
 					                                     HttpCompletionOption.ResponseHeadersRead,
 					                                     cancellationToken)
 						.ConfigureAwait(false);
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Finished Get Async: " + url);
+					Logger.LogDebugWithLineNumber("Finished Get Async: " + url);
 
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Finished.");
+					Logger.LogDebugWithLineNumber("Finished.");
 
 					return response;
 				}
@@ -252,8 +225,7 @@ namespace Stardust.Node.Workers
 
 			catch (Exception exp)
 			{
-				LogHelper.LogErrorWithLineNumber(Logger,
-				                                 exp.Message,
+				Logger.LogErrorWithLineNumber(exp.Message,
 				                                 exp);
 
 				throw;
@@ -262,8 +234,7 @@ namespace Stardust.Node.Workers
 
 		public async Task<bool> TryGetAsync(Uri url)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Start.");
+			Logger.LogDebugWithLineNumber("Start.");
 
 			try
 			{
@@ -271,8 +242,7 @@ namespace Stardust.Node.Workers
 				{
 					CreateRequestHeaders(client);
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Start Try Get Async: " + url);
+					Logger.LogDebugWithLineNumber("Start Try Get Async: " + url);
 
 					var response =
 						await client.GetAsync(url,
@@ -280,11 +250,9 @@ namespace Stardust.Node.Workers
 							.ConfigureAwait(false);
 
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Finished Try Get Async: " + url);
+					Logger.LogDebugWithLineNumber("Finished Try Get Async: " + url);
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Finished.");
+					Logger.LogDebugWithLineNumber("Finished.");
 
 					return response.IsSuccessStatusCode;
 				}
@@ -292,29 +260,25 @@ namespace Stardust.Node.Workers
 
 			catch (HttpRequestException exp)
 			{
-				LogHelper.LogErrorWithLineNumber(Logger,
-				                                 exp.Message,
+				Logger.LogErrorWithLineNumber(exp.Message,
 				                                 exp);
 			}
 
 			catch (Exception exp)
 			{
-				LogHelper.LogErrorWithLineNumber(Logger,
-				                                 exp.Message,
+				Logger.LogErrorWithLineNumber(exp.Message,
 				                                 exp);
 
 				throw;
 			}
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Return false");
+			Logger.LogDebugWithLineNumber("Return false");
 			return false;
 		}
 
 		public async Task<bool> TryGetAsync(Uri url, CancellationToken cancellationToken)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Start.");
+			Logger.LogDebugWithLineNumber("Start.");
 
 			try
 			{
@@ -322,8 +286,7 @@ namespace Stardust.Node.Workers
 				{
 					CreateRequestHeaders(client);
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Start Try Get Async: " + url);
+					Logger.LogDebugWithLineNumber("Start Try Get Async: " + url);
 
 					var response =
 						await client.GetAsync(url,
@@ -331,11 +294,9 @@ namespace Stardust.Node.Workers
 						                      cancellationToken)
 							.ConfigureAwait(false);
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Finished Try Get Async: " + url);
+					Logger.LogDebugWithLineNumber("Finished Try Get Async: " + url);
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Finished.");
+					Logger.LogDebugWithLineNumber("Finished.");
 
 					return response.IsSuccessStatusCode;
 				}
@@ -343,22 +304,19 @@ namespace Stardust.Node.Workers
 
 			catch (HttpRequestException exp)
 			{
-				LogHelper.LogErrorWithLineNumber(Logger,
-				                                 exp.Message,
+				Logger.LogErrorWithLineNumber(exp.Message,
 				                                 exp);
 			}
 
 			catch (Exception exp)
 			{
-				LogHelper.LogErrorWithLineNumber(Logger,
-				                                 exp.Message,
+				Logger.LogErrorWithLineNumber(exp.Message,
 				                                 exp);
 
 				throw;
 			}
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Return false");
+			Logger.LogDebugWithLineNumber("Return false");
 			return false;
 		}
 

@@ -24,8 +24,7 @@ namespace Stardust.Node.Timers
 		                                        IHttpSender httpSender,
 		                                        double interval) : base(interval)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-										     "Start.");
+			Logger.LogDebugWithLineNumber("Start.");
 
 			if (httpSender == null)
 			{
@@ -52,8 +51,7 @@ namespace Stardust.Node.Timers
 
 			Elapsed += OnTimedEvent;
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-											 "Finished.");
+			Logger.LogDebugWithLineNumber("Finished.");
 		}
 
 		private UriBuilder UriBuilder { get; set; }
@@ -72,8 +70,7 @@ namespace Stardust.Node.Timers
 
 		public void ClearAllJobProgresses(Guid jobId)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-								 "Start.");
+			Logger.LogDebugWithLineNumber("Start.");
 
 			if (jobId == Guid.Empty)
 			{
@@ -95,8 +92,7 @@ namespace Stardust.Node.Timers
 				}
 			}
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-											 "Finished.");
+			Logger.LogDebugWithLineNumber("Finished.");
 
 		}
 
@@ -117,23 +113,20 @@ namespace Stardust.Node.Timers
 
 		public void ClearAllJobProgresses()
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-								 "Start.");
+			Logger.LogDebugWithLineNumber("Start.");
 
 			if (JobProgressModels != null)
 			{
 				JobProgressModels.Clear();
 			}
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-											 "Finished.");
+			Logger.LogDebugWithLineNumber("Finished.");
 
 		}
 
 		public bool HasAllProgressesBeenSent(Guid jobId)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-											 "Start.");
+			Logger.LogDebugWithLineNumber("Start.");
 
 			if (JobProgressModels == null)
 			{
@@ -144,16 +137,14 @@ namespace Stardust.Node.Timers
 																model.ResponseMessage.IsSuccessStatusCode &&
 																model.JobId == jobId);
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-											 "Finished.");
+			Logger.LogDebugWithLineNumber("Finished.");
 
 			return allSent;
 		}
 
 		public bool HasAllProgressesBeenSent()
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-											 "Start.");
+			Logger.LogDebugWithLineNumber("Start.");
 
 			if (JobProgressModels == null)
 			{
@@ -163,21 +154,18 @@ namespace Stardust.Node.Timers
 			var allSent = JobProgressModels.Values.All(model => model.ResponseMessage != null &&
 			                                                    model.ResponseMessage.IsSuccessStatusCode);
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-											 "Finished.");
+			Logger.LogDebugWithLineNumber("Finished.");
 
 			return allSent;
 		}
 
 		protected virtual async void TrySendJobProgress()
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Start.");
+			Logger.LogDebugWithLineNumber("Start.");
 
 			if (JobProgressModels == null || JobProgressModels.IsEmpty)
 			{
-				LogHelper.LogDebugWithLineNumber(Logger,
-												 "No job progresses to send (outer).");
+				Logger.LogDebugWithLineNumber("No job progresses to send (outer).");
 
 			}
 
@@ -193,13 +181,11 @@ namespace Stardust.Node.Timers
 
 				if (sendJobProgressModels.Any())
 				{
-					LogHelper.LogDebugWithLineNumber(Logger, 
-													 sendJobProgressModels.Count +  " job progresses to send.");
+					Logger.LogDebugWithLineNumber(sendJobProgressModels.Count +  " job progresses to send.");
 
 					foreach (var sendJobProgressModel in sendJobProgressModels)
 					{
-						LogHelper.LogDebugWithLineNumber(Logger,
-														 "Try send job progress ( jobId, progressDetail ) : ( " + sendJobProgressModel.JobId +  ", " + sendJobProgressModel.ProgressDetail + " )");
+						Logger.LogDebugWithLineNumber("Try send job progress ( jobId, progressDetail ) : ( " + sendJobProgressModel.JobId +  ", " + sendJobProgressModel.ProgressDetail + " )");
 
 						try
 						{
@@ -219,25 +205,22 @@ namespace Stardust.Node.Timers
 								string.Format("Send job progresses to manager failed for job ( jobId ) : ( {0} )",
 								              sendJobProgressModel.JobId);
 
-							LogHelper.LogErrorWithLineNumber(Logger,msg);
+							Logger.LogErrorWithLineNumber(msg);
 						}
 					}
 				}
 				else
 				{
-					LogHelper.LogDebugWithLineNumber(Logger,
-													"No job progresses to send (inner).");
+					Logger.LogDebugWithLineNumber("No job progresses to send (inner).");
 				}
 			}
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Finished.");
+			Logger.LogDebugWithLineNumber("Finished.");
 		}
 
 		private void OnTimedEvent(object sender, ElapsedEventArgs e)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-											 "Start.");
+			Logger.LogDebugWithLineNumber("Start.");
 
 			Stop();
 
@@ -250,8 +233,7 @@ namespace Stardust.Node.Timers
 			{
 				Start();
 
-				LogHelper.LogDebugWithLineNumber(Logger,
-												 "Finished.");
+				Logger.LogDebugWithLineNumber("Finished.");
 
 			}
 		}
@@ -259,8 +241,7 @@ namespace Stardust.Node.Timers
 		public void SendProgress(Guid jobid,
 		                         string progressMessage)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-											 "Start.");
+			Logger.LogDebugWithLineNumber("Start.");
 
 			var progressModel = new SendJobProgressModel
 			{
@@ -273,14 +254,13 @@ namespace Stardust.Node.Timers
 			                              progressModel,
 			                              (time, model) => progressModel);
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-											 "Finished.");
+			Logger.LogDebugWithLineNumber("Finished.");
 
 		}
 
 		protected override void Dispose(bool disposing)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger, "Start disposing.");
+			Logger.LogDebugWithLineNumber("Start disposing.");
 
 			if (CancellationTokenSource != null &&
 			    !CancellationTokenSource.IsCancellationRequested)
@@ -290,7 +270,7 @@ namespace Stardust.Node.Timers
 
 			base.Dispose(disposing);
 
-			LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
+			Logger.LogDebugWithLineNumber("Finished disposing.");
 		}
 
 		public int TotalNumberOfJobProgresses()

@@ -14,6 +14,7 @@ using log4net;
 using log4net.Config;
 using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.LoadBalancer;
+using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 using Manager.IntegrationTest.Console.Host.Properties;
 using Manager.IntegrationTest.Console.Host.Tasks;
 using Microsoft.Owin.Hosting;
@@ -100,8 +101,7 @@ namespace Manager.IntegrationTest.Console.Host
 				                    appBuilder.UseWebApi(config);
 			                    }))
 			{
-				LogHelper.LogInfoWithLineNumber(Logger,
-				                                "Started listening on port : ( " + address + " )");
+				Logger.LogInfoWithLineNumber("Started listening on port : ( " + address + " )");
 
 				QuitEvent.WaitOne();
 			}
@@ -109,7 +109,7 @@ namespace Manager.IntegrationTest.Console.Host
 
 		private static void StartLoadBalancerProxy(IEnumerable<Uri> managerUriList)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger, "Start.");
+			Logger.LogDebugWithLineNumber("Start.");
 
 			var configuration = new Configuration(Settings.Default.ManagerLocationUri);
 
@@ -120,8 +120,7 @@ namespace Manager.IntegrationTest.Console.Host
 
 			using (WebApp.Start<LoadBalancerStartup>(address))
 			{
-				LogHelper.LogInfoWithLineNumber(Logger,
-				                                "Load balancer started listening on port : ( " + address + " )");
+				Logger.LogInfoWithLineNumber("Load balancer started listening on port : ( " + address + " )");
 
 				QuitEvent.WaitOne();
 			}
@@ -139,8 +138,7 @@ namespace Manager.IntegrationTest.Console.Host
 			CurrentDomainConfigurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
 			XmlConfigurator.ConfigureAndWatch(new FileInfo(CurrentDomainConfigurationFile));
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Start.");
+			Logger.LogDebugWithLineNumber("Start.");
 
 			SetConsoleCtrlHandler(ConsoleCtrlCheck,
 			                      true);
@@ -153,8 +151,7 @@ namespace Manager.IntegrationTest.Console.Host
 
 			if (args.Any())
 			{
-				LogHelper.LogDebugWithLineNumber(Logger,
-				                                 "Has command arguments.");
+				Logger.LogDebugWithLineNumber("Has command arguments.");
 
 				foreach (var s in args)
 				{
@@ -176,19 +173,15 @@ namespace Manager.IntegrationTest.Console.Host
 				}
 			}
 
-			LogHelper.LogInfoWithLineNumber(Logger,
-			                                NumberOfManagersToStart + " number of managers will be started.");
+			Logger.LogInfoWithLineNumber(NumberOfManagersToStart + " number of managers will be started.");
 
-			LogHelper.LogInfoWithLineNumber(Logger,
-			                                NumberOfNodesToStart + " number of nodes will be started.");
+			Logger.LogInfoWithLineNumber(NumberOfNodesToStart + " number of nodes will be started.");
 
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "AppDomain.CurrentDomain.DomainUnload");
+			Logger.LogDebugWithLineNumber("AppDomain.CurrentDomain.DomainUnload");
 			AppDomain.CurrentDomain.DomainUnload += CurrentDomainOnDomainUnload;
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "AppDomain.CurrentDomain.UnhandledException");
+			Logger.LogDebugWithLineNumber("AppDomain.CurrentDomain.UnhandledException");
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
 			DirectoryManagerAssemblyLocationFullPath =
@@ -199,8 +192,7 @@ namespace Manager.IntegrationTest.Console.Host
 				new DirectoryInfo(Path.Combine(Settings.Default.ManagerConfigurationFileFullPath,
 				                               _buildMode));
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "DirectoryManagerConfigurationFileFullPath : " +
+			Logger.LogDebugWithLineNumber("DirectoryManagerConfigurationFileFullPath : " +
 			                                 DirectoryManagerConfigurationFileFullPath.FullName);
 
 
@@ -208,8 +200,7 @@ namespace Manager.IntegrationTest.Console.Host
 				new FileInfo(Path.Combine(DirectoryManagerConfigurationFileFullPath.FullName,
 				                          Settings.Default.ManagerConfigurationFileName));
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "ManagerConfigurationFile : " + ManagerConfigurationFile.FullName);
+			Logger.LogDebugWithLineNumber("ManagerConfigurationFile : " + ManagerConfigurationFile.FullName);
 
 			CopiedManagerConfigurationFiles = new Dictionary<Uri, FileInfo>();
 
@@ -231,24 +222,21 @@ namespace Manager.IntegrationTest.Console.Host
 				                                    copiedManagerConfigurationFile);
 			}
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Created " + CopiedManagerConfigurationFiles.Count + " manager configuration files.");
+			Logger.LogDebugWithLineNumber("Created " + CopiedManagerConfigurationFiles.Count + " manager configuration files.");
 
 
 			DirectoryNodeConfigurationFileFullPath =
 				new DirectoryInfo(Path.Combine(Settings.Default.NodeConfigurationFileFullPath,
 				                               _buildMode));
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "DirectoryNodeConfigurationFileFullPath : " +
+			Logger.LogDebugWithLineNumber("DirectoryNodeConfigurationFileFullPath : " +
 			                                 DirectoryNodeConfigurationFileFullPath.FullName);
 
 			NodeConfigurationFile =
 				new FileInfo(Path.Combine(DirectoryNodeConfigurationFileFullPath.FullName,
 				                          Settings.Default.NodeConfigurationFileName));
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "NodeConfigurationFile : " + NodeConfigurationFile.FullName);
+			Logger.LogDebugWithLineNumber("NodeConfigurationFile : " + NodeConfigurationFile.FullName);
 
 			NodeconfigurationFiles = new Dictionary<string, FileInfo>();
 
@@ -259,13 +247,11 @@ namespace Manager.IntegrationTest.Console.Host
 			{
 				for (var i = 1; i <= NumberOfNodesToStart; i++)
 				{
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Start creating node configuration file for node id : " + i);
+					Logger.LogDebugWithLineNumber("Start creating node configuration file for node id : " + i);
 
 					var nodeConfig = CreateNodeConfigurationFile(i);
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Finished creating node configuration file for node : ( id, config file ) : ( " +
+					Logger.LogDebugWithLineNumber("Finished creating node configuration file for node : ( id, config file ) : ( " +
 					                                 i + ", " + nodeConfig.FullName + " )");
 				}
 			}
@@ -273,8 +259,7 @@ namespace Manager.IntegrationTest.Console.Host
 			//-------------------------------------------------------
 			// App domain manager tasks.
 			//-------------------------------------------------------
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "AppDomainManagerTasks");
+			Logger.LogDebugWithLineNumber("AppDomainManagerTasks");
 
 			AppDomainManagerTasks = new ConcurrentDictionary<string, AppDomainManagerTask>();
 			 
@@ -286,8 +271,7 @@ namespace Manager.IntegrationTest.Console.Host
 					                         copiedManagerConfigurationFile,
 					                         Settings.Default.ManagerAssemblyName);
 
-				LogHelper.LogDebugWithLineNumber(Logger,
-				                                 "Start: AppDomainManagerTask.StartTask");
+				Logger.LogDebugWithLineNumber("Start: AppDomainManagerTask.StartTask");
 
 				appDomainManagerTask.StartTask(new CancellationTokenSource());
 
@@ -296,8 +280,7 @@ namespace Manager.IntegrationTest.Console.Host
 												  (s, task) => appDomainManagerTask);
 			});
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Finished: AppDomainManagerTask.StartTask");
+			Logger.LogDebugWithLineNumber("Finished: AppDomainManagerTask.StartTask");
 
 			//-------------------------------------------------------
 			//-------------------------------------------------------
@@ -305,16 +288,14 @@ namespace Manager.IntegrationTest.Console.Host
 				new DirectoryInfo(Path.Combine(Settings.Default.NodeAssemblyLocationFullPath,
 				                               _buildMode));
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "DirectoryNodeAssemblyLocationFullPath : " +
+			Logger.LogDebugWithLineNumber("DirectoryNodeAssemblyLocationFullPath : " +
 			                                 DirectoryNodeAssemblyLocationFullPath.FullName);
 
 			AppDomainNodeTasks = new ConcurrentDictionary<string, AppDomainNodeTask>();
 
 			Parallel.ForEach(NodeconfigurationFiles, pair =>
 			{
-				LogHelper.LogDebugWithLineNumber(Logger,
-				                                 "AppDomainNodeTask");
+				Logger.LogDebugWithLineNumber("AppDomainNodeTask");
 
 				var appDomainNodeTask =
 					new AppDomainNodeTask(_buildMode,
@@ -322,13 +303,11 @@ namespace Manager.IntegrationTest.Console.Host
 					                      pair.Value,
 					                      Settings.Default.NodeAssemblyName);
 
-				LogHelper.LogDebugWithLineNumber(Logger,
-				                                 "Start : AppDomainNodeTask.StartTask");
+				Logger.LogDebugWithLineNumber("Start : AppDomainNodeTask.StartTask");
 
 				appDomainNodeTask.StartTask(new CancellationTokenSource());
 
-				LogHelper.LogDebugWithLineNumber(Logger,
-				                                 "Finished : AppDomainNodeTask.StartTask");
+				Logger.LogDebugWithLineNumber("Finished : AppDomainNodeTask.StartTask");
 
 				AppDomainNodeTasks.AddOrUpdate(pair.Value.Name,
 											  appDomainNodeTask,
@@ -393,8 +372,7 @@ namespace Manager.IntegrationTest.Console.Host
 
 			if (exp != null)
 			{
-				LogHelper.LogFatalWithLineNumber(Logger,
-				                                 exp.Message,
+				Logger.LogFatalWithLineNumber(exp.Message,
 				                                 exp);
 			}
 		}
@@ -402,8 +380,7 @@ namespace Manager.IntegrationTest.Console.Host
 		private static void CurrentDomainOnDomainUnload(object sender,
 		                                                EventArgs eventArgs)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Start CurrentDomainOnDomainUnload.");
+			Logger.LogDebugWithLineNumber("Start CurrentDomainOnDomainUnload.");
 
 			//-------------------------------------------
 			// Shut down nodes.
@@ -423,8 +400,7 @@ namespace Manager.IntegrationTest.Console.Host
 
 			QuitEvent.Set();
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Finished CurrentDomainOnDomainUnload.");
+			Logger.LogDebugWithLineNumber("Finished CurrentDomainOnDomainUnload.");
 		}
 
 
@@ -502,8 +478,7 @@ namespace Manager.IntegrationTest.Console.Host
 		{
 			var ret = false;
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Started.");
+			Logger.LogDebugWithLineNumber("Started.");
 
 			if (AppDomainManagerTasks != null && AppDomainManagerTasks.Any())
 			{
@@ -514,20 +489,17 @@ namespace Manager.IntegrationTest.Console.Host
 
 				if (ret)
 				{
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Start disposing manager (appdomain) with friendly name :" + friendlyName);
+					Logger.LogDebugWithLineNumber("Start disposing manager (appdomain) with friendly name :" + friendlyName);
 
 					managerToDispose.Dispose();
 
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Finished to dispose manager (appdomain) with friendly name :" + friendlyName);
+					Logger.LogDebugWithLineNumber("Finished to dispose manager (appdomain) with friendly name :" + friendlyName);
 
 				}
 			}
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Finished.");
+			Logger.LogDebugWithLineNumber("Finished.");
 
 			return ret;
 		}
@@ -536,8 +508,7 @@ namespace Manager.IntegrationTest.Console.Host
 		{
 			var ret = false;
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Started.");
+			Logger.LogDebugWithLineNumber("Started.");
 
 			if (AppDomainNodeTasks != null && AppDomainNodeTasks.Any())
 			{
@@ -547,20 +518,17 @@ namespace Manager.IntegrationTest.Console.Host
 
 				if (nodeToDispose != null)
 				{
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Start to dispose appdomain with friendly name :" + friendlyName);
+					Logger.LogDebugWithLineNumber("Start to dispose appdomain with friendly name :" + friendlyName);
 
 					nodeToDispose.Dispose();
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Finished to dispose appdomain with friendly name :" + friendlyName);
+					Logger.LogDebugWithLineNumber("Finished to dispose appdomain with friendly name :" + friendlyName);
 
 					ret = true;
 				}
 			}
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Finished.");
+			Logger.LogDebugWithLineNumber("Finished.");
 
 			return ret;
 		}
@@ -573,15 +541,13 @@ namespace Manager.IntegrationTest.Console.Host
 
 			if (NumberOfNodesToStart > 0)
 			{
-				LogHelper.LogDebugWithLineNumber(Logger,
-				                                 "Start creating node configuration file for node id : " + NumberOfNodesToStart);
+				Logger.LogDebugWithLineNumber("Start creating node configuration file for node id : " + NumberOfNodesToStart);
 
 				var nodeConfig = CreateNodeConfigurationFile(NumberOfNodesToStart);
 
 				friendlyName = nodeConfig.Name;
 
-				LogHelper.LogDebugWithLineNumber(Logger,
-				                                 "AppDomainNodeTask");
+				Logger.LogDebugWithLineNumber("AppDomainNodeTask");
 
 				var appDomainNodeTask =
 					new AppDomainNodeTask(_buildMode,
@@ -589,20 +555,17 @@ namespace Manager.IntegrationTest.Console.Host
 					                      nodeConfig,
 					                      Settings.Default.NodeAssemblyName);
 
-				LogHelper.LogDebugWithLineNumber(Logger,
-				                                 "Start : AppDomainNodeTask.StartTask");
+				Logger.LogDebugWithLineNumber("Start : AppDomainNodeTask.StartTask");
 
 				appDomainNodeTask.StartTask(new CancellationTokenSource());
 
-				LogHelper.LogDebugWithLineNumber(Logger,
-				                                 "Finished : AppDomainNodeTask.StartTask");
+				Logger.LogDebugWithLineNumber("Finished : AppDomainNodeTask.StartTask");
 
 				AppDomainNodeTasks.AddOrUpdate(appDomainNodeTask.GetAppDomainUniqueId(), 
 											   appDomainNodeTask,
 											   (s, task) => appDomainNodeTask);
 
-				LogHelper.LogDebugWithLineNumber(Logger,
-				                                 "Finished creating node configuration file for node : ( id, config file ) : ( " +
+				Logger.LogDebugWithLineNumber("Finished creating node configuration file for node : ( id, config file ) : ( " +
 				                                 NumberOfNodesToStart + ", " + nodeConfig.FullName + " )");
 			}
 		}
@@ -647,13 +610,11 @@ namespace Manager.IntegrationTest.Console.Host
 											 appDomainManagerTask,
 											 (s, task) => appDomainManagerTask);
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Start: AppDomainManagerTask.StartTask");
+			Logger.LogDebugWithLineNumber("Start: AppDomainManagerTask.StartTask");
 
 			appDomainManagerTask.StartTask(new CancellationTokenSource());
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Finished: AppDomainManagerTask.StartTask");
+			Logger.LogDebugWithLineNumber("Finished: AppDomainManagerTask.StartTask");
 
 			friendlyname = appDomainManagerTask.GetAppDomainUniqueId();
 		}

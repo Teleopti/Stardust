@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using log4net;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
+using Stardust.Manager.Extensions;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
@@ -38,7 +39,7 @@ namespace Stardust.Manager
 			}
 			catch (Exception ex)
 			{
-				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + faliureMessage);
+				Logger.LogErrorWithLineNumber(ex.Message + faliureMessage);
 			}
 		}
 
@@ -52,7 +53,7 @@ namespace Stardust.Manager
 			}
 			catch (Exception ex)
 			{
-				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to add job in database");
+				Logger.LogErrorWithLineNumber(ex.Message + "Unable to add job in database");
 			}
 
 			return listToReturn;
@@ -60,7 +61,7 @@ namespace Stardust.Manager
 
 		public List<WorkerNode> tryLoadAll()
 		{
-			LogHelper.LogDebugWithLineNumber(Logger, "Start LoadAll.");
+			Logger.LogDebugWithLineNumber("Start LoadAll.");
 
 			const string selectCommand = @"SELECT * FROM [Stardust].WorkerNodes";
 
@@ -100,16 +101,14 @@ namespace Stardust.Manager
 
 			if (listToReturn.Any())
 			{
-				LogHelper.LogDebugWithLineNumber(Logger,
-															"Found ( " + listToReturn.Count + " ) availabe nodes.");
+				Logger.LogDebugWithLineNumber("Found ( " + listToReturn.Count + " ) availabe nodes.");
 			}
 			else
 			{
-				LogHelper.LogDebugWithLineNumber(Logger,
-															"No nodes found.");
+				Logger.LogDebugWithLineNumber("No nodes found.");
 			}
 
-			LogHelper.LogDebugWithLineNumber(Logger, "Finished LoadAll.");
+			Logger.LogDebugWithLineNumber("Finished LoadAll.");
 
 			return listToReturn;
 		}
@@ -124,7 +123,7 @@ namespace Stardust.Manager
 			}
 			catch (Exception ex)
 			{
-				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to add job in database");
+				Logger.LogErrorWithLineNumber(ex.Message + "Unable to add job in database");
 			}
 
 			return listToReturn;
@@ -134,7 +133,7 @@ namespace Stardust.Manager
 		{
 			lock (_lockLoadAllFreeNodes)
 			{
-				LogHelper.LogDebugWithLineNumber(Logger, "Start LoadAllFreeNodes.");
+				Logger.LogDebugWithLineNumber("Start LoadAllFreeNodes.");
 
 				const string selectCommand =
 					@"SELECT * FROM [Stardust].WorkerNodes WHERE Url NOT IN (SELECT ISNULL(AssignedNode,'') FROM [Stardust].JobDefinitions)";
@@ -177,30 +176,28 @@ namespace Stardust.Manager
 
 				catch (TimeoutException exception)
 				{
-					LogHelper.LogErrorWithLineNumber(Logger,
-													 "Can not get WorkerNodes, maybe there is a lock in Stardust.JobDefinitions table",
+					Logger.LogErrorWithLineNumber("Can not get WorkerNodes, maybe there is a lock in Stardust.JobDefinitions table",
 													 exception);
 				}
 
 				catch (Exception exception)
 				{
-					LogHelper.LogErrorWithLineNumber(Logger,
-													 "Can not get WorkerNodes",
+					Logger.LogErrorWithLineNumber("Can not get WorkerNodes",
 													 exception);
 				}
 
 
 				if (listToReturn.Any())
 				{
-					LogHelper.LogDebugWithLineNumber(Logger, "Found ( " + listToReturn.Count + " ) availabe nodes.");
+					Logger.LogDebugWithLineNumber("Found ( " + listToReturn.Count + " ) availabe nodes.");
 				}
 				else
 				{
-					LogHelper.LogDebugWithLineNumber(Logger, "No nodes found.");
+					Logger.LogDebugWithLineNumber("No nodes found.");
 				}
 
 
-				LogHelper.LogDebugWithLineNumber(Logger, "Finished LoadAllFreeNodes.");
+				Logger.LogDebugWithLineNumber("Finished LoadAllFreeNodes.");
 
 				return listToReturn;
 
@@ -219,7 +216,7 @@ namespace Stardust.Manager
 				if (ex.Message.Contains("UQ_WorkerNodes_Url"))
 					return;
 
-				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to add node in database");
+				Logger.LogErrorWithLineNumber(ex.Message + "Unable to add node in database");
 			}
 		}
 
@@ -261,7 +258,7 @@ namespace Stardust.Manager
 			//}
 			//catch (Exception ex)
 			//{
-			//	LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to add job in database");
+			//	LoggerExtensions.LogErrorWithLineNumber(Logger, ex.Message + "Unable to add job in database");
 			//}
 		}
 
@@ -302,7 +299,7 @@ namespace Stardust.Manager
 			}
 			catch (Exception ex)
 			{
-				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to add job in database");
+				Logger.LogErrorWithLineNumber(ex.Message + "Unable to add job in database");
 			}
 			return deadNodes;
 		}
@@ -316,7 +313,7 @@ namespace Stardust.Manager
 											SET Alive = @Alive
 										WHERE Url = @Url";
 
-			LogHelper.LogDebugWithLineNumber(Logger, "Start");
+			Logger.LogDebugWithLineNumber("Start");
 
 			var deadNodes = new List<string>();
 
@@ -395,13 +392,12 @@ namespace Stardust.Manager
 
 			catch (Exception exp)
 			{
-				LogHelper.LogErrorWithLineNumber(Logger,
-				                                 exp.Message,
+				Logger.LogErrorWithLineNumber(exp.Message,
 				                                 exp);
 				throw;
 			}
 
-			LogHelper.LogDebugWithLineNumber(Logger, "Finished");
+			Logger.LogDebugWithLineNumber("Finished");
 
 			return deadNodes;
 		}
@@ -416,7 +412,7 @@ namespace Stardust.Manager
 			//}
 			//catch (Exception ex)
 			//{
-			//	LogHelper.LogErrorWithLineNumber(Logger, ex.Message + "Unable to add job in database");
+			//	LoggerExtensions.LogErrorWithLineNumber(Logger, ex.Message + "Unable to add job in database");
 			//}
 		}
 
@@ -428,8 +424,7 @@ namespace Stardust.Manager
 				return;
 			}
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Start register heartbeat for url : " + nodeUri);
+			Logger.LogDebugWithLineNumber("Start register heartbeat for url : " + nodeUri);
 			
 			// Update row.
 				var updateCommandText = @"UPDATE Stardust.WorkerNodes 
@@ -468,7 +463,7 @@ namespace Stardust.Manager
 					}
 					catch (Exception exp)
 					{
-						LogHelper.LogErrorWithLineNumber(Logger, "Could not update heartbeat", exp);
+						Logger.LogErrorWithLineNumber("Could not update heartbeat", exp);
 					}
 				}
 
@@ -491,7 +486,7 @@ namespace Stardust.Manager
 
 		private void InitDs()
 		{
-			LogHelper.LogDebugWithLineNumber(Logger, "Start InitDs.");
+			Logger.LogDebugWithLineNumber("Start InitDs.");
 
 			_jdDataSet = new DataSet();
 
@@ -511,7 +506,7 @@ namespace Stardust.Manager
 
 			_jdDataSet.Tables.Add(_jdDataTable);
 
-			LogHelper.LogDebugWithLineNumber(Logger, "Finished InitDs.");
+			Logger.LogDebugWithLineNumber("Finished InitDs.");
 		}
 	}
 }

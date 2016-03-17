@@ -118,7 +118,7 @@
     <Compile Include="Constants\NodeRouteConstants.cs" />
     <Compile Include="Diagnostics\ManagerStopWatch.cs" />
     <Compile Include="GlobalExceptionLogger.cs" />
-    <Compile Include="Helpers\LogHelper.cs" />
+    <Compile Include="Extensions\LoggerExtensions.cs" />
     <Compile Include="Helpers\NodeUriBuilderHelper.cs" />
     <Compile Include="HttpSender.cs" />
     <Compile Include="Interfaces\IHttpSender.cs" />

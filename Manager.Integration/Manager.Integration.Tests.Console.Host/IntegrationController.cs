@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web.Http;
 using log4net;
-using Manager.IntegrationTest.Console.Host.Helpers;
+using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 
 namespace Manager.IntegrationTest.Console.Host
 {
@@ -14,8 +14,7 @@ namespace Manager.IntegrationTest.Console.Host
 		{
 			WhoAmI = "[INTEGRATION CONTROLLER, " + Environment.MachineName.ToUpper() + "]";
 
-			LogHelper.LogInfoWithLineNumber(Logger,
-			                                WhoAmI);
+			Logger.LogInfoWithLineNumber(WhoAmI);
 		}
 
 		public string WhoAmI { get; set; }
@@ -23,8 +22,7 @@ namespace Manager.IntegrationTest.Console.Host
 		[HttpPost, Route("appdomain/managers")]
 		public IHttpActionResult StartNewManager()
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-											 "Called API controller.");
+			Logger.LogDebugWithLineNumber("Called API controller.");
 
 			string friendlyname;
 
@@ -36,8 +34,7 @@ namespace Manager.IntegrationTest.Console.Host
 		[HttpPost, Route("appdomain/nodes")]
 		public IHttpActionResult StartNewNode()
 		{
-			LogHelper.LogInfoWithLineNumber(Logger,
-											 "StartNewNode.");
+			Logger.LogInfoWithLineNumber("StartNewNode.");
 
 			string friendlyname;
 
@@ -49,31 +46,26 @@ namespace Manager.IntegrationTest.Console.Host
 		[HttpDelete, Route("appdomain/managers/{id}")]
 		public IHttpActionResult DeleteManager(string id)
 		{
-			LogHelper.LogInfoWithLineNumber(Logger,
-											 "DeleteManager");
+			Logger.LogInfoWithLineNumber("DeleteManager");
 
 			if (string.IsNullOrEmpty(id))
 			{
-				LogHelper.LogWarningWithLineNumber(Logger,
-												   "Bad request, id : " + id);
+				Logger.LogWarningWithLineNumber("Bad request, id : " + id);
 				return BadRequest(id);
 			}
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-											"Try shut down Manager with id : " + id);
+			Logger.LogDebugWithLineNumber("Try shut down Manager with id : " + id);
 
 			var success = Program.ShutDownManager(id);
 
 			if (success)
 			{
-				LogHelper.LogInfoWithLineNumber(Logger,
-												"Manager has been shut down, with id : " + id);
+				Logger.LogInfoWithLineNumber("Manager has been shut down, with id : " + id);
 
 				return Ok(id);
 			}
 
-			LogHelper.LogWarningWithLineNumber(Logger,
-											   "Id not found, id : " + id);
+			Logger.LogWarningWithLineNumber("Id not found, id : " + id);
 
 			return NotFound();
 		}
@@ -81,31 +73,26 @@ namespace Manager.IntegrationTest.Console.Host
 		[HttpDelete, Route("appdomain/nodes/{id}")]
 		public IHttpActionResult DeleteNode(string id)
 		{
-			LogHelper.LogInfoWithLineNumber(Logger,
-			                                 "Delete Node");
+			Logger.LogInfoWithLineNumber("Delete Node");
 
 			if (string.IsNullOrEmpty(id))
 			{
-				LogHelper.LogWarningWithLineNumber(Logger,
-				                                   "Bad request, id : " + id);
+				Logger.LogWarningWithLineNumber("Bad request, id : " + id);
 				return BadRequest(id);
 			}
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                "Try shut down Node with id : " + id);
+			Logger.LogDebugWithLineNumber("Try shut down Node with id : " + id);
 
 			var success = Program.ShutDownNode(id);
 
 			if (success)
 			{
-				LogHelper.LogInfoWithLineNumber(Logger,
-				                                "Node has been shut down, with id : " + id);
+				Logger.LogInfoWithLineNumber("Node has been shut down, with id : " + id);
 
 				return Ok(id);
 			}
 
-			LogHelper.LogWarningWithLineNumber(Logger,
-			                                   "Id not found, id : " + id);
+			Logger.LogWarningWithLineNumber("Id not found, id : " + id);
 
 			return NotFound();
 		}
@@ -113,8 +100,7 @@ namespace Manager.IntegrationTest.Console.Host
 		[HttpGet, Route("appdomain/managers")]
 		public IHttpActionResult GetAllManagers()
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-											 "GetAllManagers");
+			Logger.LogDebugWithLineNumber("GetAllManagers");
 
 			var appDomainsList = Program.GetAllmanagers();
 
@@ -124,8 +110,7 @@ namespace Manager.IntegrationTest.Console.Host
 		[HttpGet, Route("appdomain/nodes")]
 		public IHttpActionResult GetAllNodes()
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-											 "GetAllNodes");
+			Logger.LogDebugWithLineNumber("GetAllNodes");
 
 			var appDomainsList = Program.GetAllNodes();
 

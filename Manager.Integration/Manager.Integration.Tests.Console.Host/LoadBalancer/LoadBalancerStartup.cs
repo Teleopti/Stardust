@@ -1,6 +1,7 @@
 using System.Web.Http;
 using log4net;
 using Manager.IntegrationTest.Console.Host.Helpers;
+using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 using Owin;
 
 namespace Manager.IntegrationTest.Console.Host.LoadBalancer
@@ -12,7 +13,7 @@ namespace Manager.IntegrationTest.Console.Host.LoadBalancer
 
 		public void Configuration(IAppBuilder appBuilder)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,"Start.");
+			Logger.LogDebugWithLineNumber("Start.");
 
 			HttpConfiguration config = new HttpConfiguration();
 
@@ -21,7 +22,7 @@ namespace Manager.IntegrationTest.Console.Host.LoadBalancer
 
 			appBuilder.UseWebApi(config);
 
-			LogHelper.LogDebugWithLineNumber(Logger, "Finished.");
+			Logger.LogDebugWithLineNumber("Finished.");
 		}
 	}
 }

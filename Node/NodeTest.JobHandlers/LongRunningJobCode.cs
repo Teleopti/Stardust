@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using log4net;
+using Stardust.Node.Extensions;
 using Stardust.Node.Helpers;
 
 namespace NodeTest.JobHandlers
@@ -20,8 +21,7 @@ namespace NodeTest.JobHandlers
 		                       CancellationTokenSource cancellationTokenSource,
 		                       Action<string> progress)
 		{
-			LogHelper.LogInfoWithLineNumber(Logger,
-			                                "Starting Long Running Job");
+			Logger.LogInfoWithLineNumber("Starting Long Running Job");
 
 			TestJobProgress jobProgress;
 
@@ -58,8 +58,7 @@ namespace NodeTest.JobHandlers
 				};
 				progress(jobProgress.Text);
 
-				LogHelper.LogInfoWithLineNumber(Logger,
-				                                progressMessage);
+				Logger.LogInfoWithLineNumber(progressMessage);
 
 
 				// Is Cancellation Requested.
@@ -76,8 +75,7 @@ namespace NodeTest.JobHandlers
 
 					progress(jobProgress.Text);
 
-					LogHelper.LogInfoWithLineNumber(Logger,
-					                                progressMessage);
+					Logger.LogInfoWithLineNumber(progressMessage);
 
 					cancellationTokenSource.Token.ThrowIfCancellationRequested();
 				}
@@ -95,8 +93,7 @@ namespace NodeTest.JobHandlers
 
 			progress(jobProgress.Text);
 
-			LogHelper.LogInfoWithLineNumber(Logger,
-			                                progressMessage);
+			Logger.LogInfoWithLineNumber(progressMessage);
 		}
 	}
 }

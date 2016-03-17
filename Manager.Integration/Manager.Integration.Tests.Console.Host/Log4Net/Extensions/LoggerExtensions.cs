@@ -1,29 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using log4net;
 
-namespace Stardust.Manager.Helpers
+namespace Manager.IntegrationTest.Console.Host.Log4Net.Extensions
 {
-	public static class LogHelper
+	public static class LoggerExtensions
 	{
-		private static void ValidateArgument(ILog logger)
-		{
-			if (logger == null)
-			{
-				throw new ArgumentNullException("logger");
-			}
-		}
-
-		public static void LogErrorWithLineNumber(ILog logger,
+		public static void LogErrorWithLineNumber(this ILog logger,
 		                                          string info,
 		                                          Exception exception = null,
 		                                          [CallerFilePath] string file = "",
 		                                          [CallerMemberName] string member = "",
 		                                          [CallerLineNumber] int line = 0)
 		{
-			ValidateArgument(logger);
-
 			if (logger.IsErrorEnabled)
 			{
 				logger.Error(string.Format("{0}_{1}({2}): {3}",
@@ -35,15 +27,13 @@ namespace Stardust.Manager.Helpers
 			}
 		}
 
-		public static void LogFatalWithLineNumber(ILog logger,
+		public static void LogFatalWithLineNumber(this ILog logger,
 		                                          string info,
 		                                          Exception exception = null,
 		                                          [CallerFilePath] string file = "",
 		                                          [CallerMemberName] string member = "",
 		                                          [CallerLineNumber] int line = 0)
 		{
-			ValidateArgument(logger);
-
 			if (logger.IsFatalEnabled)
 			{
 				logger.Fatal(string.Format("{0}_{1}({2}): {3}",
@@ -55,14 +45,12 @@ namespace Stardust.Manager.Helpers
 			}
 		}
 
-		public static void LogWarningWithLineNumber(ILog logger,
+		public static void LogWarningWithLineNumber(this ILog logger,
 		                                            string info,
 		                                            [CallerFilePath] string file = "",
 		                                            [CallerMemberName] string member = "",
 		                                            [CallerLineNumber] int line = 0)
 		{
-			ValidateArgument(logger);
-
 			if (logger.IsWarnEnabled)
 			{
 				logger.Warn(string.Format("{0}_{1}({2}): {3}",
@@ -73,14 +61,12 @@ namespace Stardust.Manager.Helpers
 			}
 		}
 
-		public static void LogDebugWithLineNumber(ILog logger,
+		public static void LogDebugWithLineNumber(this ILog logger,
 		                                          string info,
 		                                          [CallerFilePath] string file = "",
 		                                          [CallerMemberName] string member = "",
 		                                          [CallerLineNumber] int line = 0)
 		{
-			ValidateArgument(logger);
-
 			if (logger.IsDebugEnabled)
 			{
 				logger.Debug(string.Format("{0}_{1}({2}): {3}",
@@ -91,14 +77,31 @@ namespace Stardust.Manager.Helpers
 			}
 		}
 
-		public static void LogInfoWithLineNumber(ILog logger,
+		public static void LogInfoWithLineNumber(this ILog logger,
+		                                         IEnumerable<string> info,
+		                                         [CallerFilePath] string file = "",
+		                                         [CallerMemberName] string member = "",
+		                                         [CallerLineNumber] int line = 0)
+		{
+			if (info.Any())
+			{
+				foreach (var s in info)
+				{
+					LogInfoWithLineNumber(logger,
+					                      s,
+					                      file,
+					                      member,
+					                      line);
+				}
+			}
+		}
+
+		public static void LogInfoWithLineNumber(this ILog logger,
 		                                         string info,
 		                                         [CallerFilePath] string file = "",
 		                                         [CallerMemberName] string member = "",
 		                                         [CallerLineNumber] int line = 0)
 		{
-			ValidateArgument(logger);
-
 			if (logger.IsInfoEnabled)
 			{
 				logger.Info(string.Format("{0}_{1}({2}): {3}",

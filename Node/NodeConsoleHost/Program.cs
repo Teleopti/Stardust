@@ -10,7 +10,7 @@ using log4net.Config;
 using NodeTest.JobHandlers;
 using Stardust.Node;
 using Stardust.Node.API;
-using Stardust.Node.Helpers;
+using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
 
 namespace NodeConsoleHost
@@ -70,29 +70,28 @@ namespace NodeConsoleHost
 			SetConsoleCtrlHandler(ConsoleCtrlCheck,
 			                      true);
 
-			string nodeName = ConfigurationManager.AppSettings["NodeName"];
-			Uri baseAddress = new Uri(ConfigurationManager.AppSettings["BaseAddress"]);
+			var nodeName = ConfigurationManager.AppSettings["NodeName"];
+			var baseAddress = new Uri(ConfigurationManager.AppSettings["BaseAddress"]);
 
 			WhoAmI = "[NODE CONSOLE HOST ( " + nodeName + ", " + baseAddress + " ), " + Environment.MachineName.ToUpper() + "]";
 
-			LogHelper.LogInfoWithLineNumber(Logger,
-			                                WhoAmI + " : started.");
+			Logger.LogInfoWithLineNumber(WhoAmI + " : started.");
 
 			AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
-			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;			
+			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
 			var nodeConfig = new NodeConfiguration(baseAddress,
 			                                       new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
 			                                       Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
-												   nodeName, 
-												   int.Parse(ConfigurationManager.AppSettings["PingToManagerSeconds"]));
+			                                       nodeName,
+			                                       int.Parse(ConfigurationManager.AppSettings["PingToManagerSeconds"]));
 
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new WorkerModule());
 			Container = builder.Build();
 
 			NodeStarter = new NodeStarter();
-			
+
 			NodeStarter.Start(nodeConfig,
 			                  Container);
 
@@ -102,8 +101,7 @@ namespace NodeConsoleHost
 		private static void CurrentDomain_DomainUnload(object sender,
 		                                               EventArgs e)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 WhoAmI + " : CurrentDomain_DomainUnload called.");
+			Logger.LogDebugWithLineNumber(WhoAmI + " : CurrentDomain_DomainUnload called.");
 
 			if (NodeStarter != null)
 			{
@@ -120,9 +118,8 @@ namespace NodeConsoleHost
 
 			if (exp != null)
 			{
-				LogHelper.LogFatalWithLineNumber(Logger,
-				                                 exp.Message,
-				                                 exp);
+				Logger.LogFatalWithLineNumber(exp.Message,
+				                              exp);
 			}
 		}
 	}

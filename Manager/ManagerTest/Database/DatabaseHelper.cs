@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Data.SqlClient;
 using log4net;
+using Stardust.Manager.Extensions;
 using Stardust.Manager.Helpers;
 
 
@@ -51,7 +52,7 @@ namespace ManagerTest.Database
 
 		public void TryClearDatabase()
 		{
-			LogHelper.LogDebugWithLineNumber(Logger, "Start truncating database tables.");
+			Logger.LogDebugWithLineNumber("Start truncating database tables.");
 
 			using (var connection = new SqlConnection(_connectionString))
 			{
@@ -63,11 +64,11 @@ namespace ManagerTest.Database
 				using (var command = new SqlCommand("truncate table Stardust.JobDefinitions",
 				                                    connection))
 				{
-					LogHelper.LogDebugWithLineNumber(Logger, "Start: " + command.CommandText);
+					Logger.LogDebugWithLineNumber("Start: " + command.CommandText);
 
 					command.ExecuteNonQuery();
 
-					LogHelper.LogDebugWithLineNumber(Logger, "Finished: " + command.CommandText);
+					Logger.LogDebugWithLineNumber("Finished: " + command.CommandText);
 				}
 
 				//-------------------------------------------------
@@ -76,11 +77,11 @@ namespace ManagerTest.Database
 				using (var command = new SqlCommand("truncate table Stardust.JobHistory",
 				                                    connection))
 				{
-					LogHelper.LogDebugWithLineNumber(Logger, "Start: " + command.CommandText);
+					Logger.LogDebugWithLineNumber("Start: " + command.CommandText);
 
 					command.ExecuteNonQuery();
 
-					LogHelper.LogDebugWithLineNumber(Logger, "Finished: " + command.CommandText);
+					Logger.LogDebugWithLineNumber("Finished: " + command.CommandText);
 				}
 
 				//-------------------------------------------------
@@ -89,11 +90,11 @@ namespace ManagerTest.Database
 				using (var command = new SqlCommand("truncate table Stardust.JobHistoryDetail",
 				                                    connection))
 				{
-					LogHelper.LogDebugWithLineNumber(Logger, "Start: " + command.CommandText);
+					Logger.LogDebugWithLineNumber("Start: " + command.CommandText);
 
 					command.ExecuteNonQuery();
 
-					LogHelper.LogDebugWithLineNumber(Logger, "Finished: " + command.CommandText);
+					Logger.LogDebugWithLineNumber("Finished: " + command.CommandText);
 				}
 
 				//-------------------------------------------------
@@ -102,16 +103,16 @@ namespace ManagerTest.Database
 				using (var command = new SqlCommand("truncate table Stardust.WorkerNodes",
 				                                    connection))
 				{
-					LogHelper.LogDebugWithLineNumber(Logger, "Start: " + command.CommandText);
+					Logger.LogDebugWithLineNumber("Start: " + command.CommandText);
 
 					command.ExecuteNonQuery();
 
-					LogHelper.LogDebugWithLineNumber(Logger, "Finished: " + command.CommandText);
+					Logger.LogDebugWithLineNumber("Finished: " + command.CommandText);
 				}
 
 				connection.Close();
 
-				LogHelper.LogDebugWithLineNumber(Logger, "Finished truncating database tables.");
+				Logger.LogDebugWithLineNumber("Finished truncating database tables.");
 			}
 		}
 	}

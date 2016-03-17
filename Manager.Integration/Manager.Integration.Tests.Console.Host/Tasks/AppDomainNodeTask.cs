@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using log4net;
 using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.Interfaces;
+using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 
 namespace Manager.IntegrationTest.Console.Host.Tasks
 {
@@ -52,8 +53,7 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 
 		public void Dispose()
 		{
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Start disposing.");
+			Logger.LogDebugWithLineNumber("Start disposing.");
 
 			if (CancellationTokenSource != null &&
 			    !CancellationTokenSource.IsCancellationRequested)
@@ -78,8 +78,7 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 				Task.Dispose();
 			}
 
-			LogHelper.LogDebugWithLineNumber(Logger,
-			                                 "Finshed disposing.");
+			Logger.LogDebugWithLineNumber("Finshed disposing.");
 		}
 
 		public Task StartTask(CancellationTokenSource cancellationTokenSource)
@@ -118,8 +117,7 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 					var assemblyToExecute = new FileInfo(Path.Combine(nodeAppDomainSetup.ApplicationBase,
 					                                                  nodeAppDomainSetup.ApplicationName));
 
-					LogHelper.LogDebugWithLineNumber(Logger,
-					                                 "Node (appdomain) will start with friendly name : " + MyAppDomain.FriendlyName);
+					Logger.LogDebugWithLineNumber("Node (appdomain) will start with friendly name : " + MyAppDomain.FriendlyName);
 
 
 					MyAppDomain.ExecuteAssembly(assemblyToExecute.FullName);

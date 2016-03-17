@@ -43,7 +43,7 @@ namespace Stardust.Node.Timers
 
 		protected override void Dispose(bool disposing)
 		{
-			LogHelper.LogDebugWithLineNumber(Logger, "Start disposing.");
+			Logger.LogDebugWithLineNumber("Start disposing.");
 
 			if (CancellationTokenSource != null &&
 			    !CancellationTokenSource.IsCancellationRequested)
@@ -53,7 +53,7 @@ namespace Stardust.Node.Timers
 
 			base.Dispose(disposing);
 
-			LogHelper.LogDebugWithLineNumber(Logger, "Finished disposing.");
+			Logger.LogDebugWithLineNumber("Finished disposing.");
 		}
 
 
@@ -80,8 +80,7 @@ namespace Stardust.Node.Timers
 
 			catch
 			{
-				LogHelper.LogInfoWithLineNumber(Logger,
-				                                WhoAmI + ": Heartbeat failed. Is the manager up and running?");
+				Logger.LogInfoWithLineNumber(WhoAmI + ": Heartbeat failed. Is the manager up and running?");
 			}
 		}
 	}

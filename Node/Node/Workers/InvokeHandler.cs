@@ -3,6 +3,7 @@ using System.Threading;
 using System.Web.Http.Results;
 using Autofac;
 using log4net;
+using Stardust.Node.Extensions;
 using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 
@@ -34,8 +35,7 @@ namespace Stardust.Node.Workers
 
 			if (handler == null)
 			{
-				LogHelper.LogErrorWithLineNumber(Logger,
-												   string.Format("The job type [{0}] could not be resolved. The job cannot be started.",
+				Logger.LogErrorWithLineNumber(string.Format("The job type [{0}] could not be resolved. The job cannot be started.",
 													   query.GetType()));
 
 				throw new Exception("The handler " + query.GetType() + " could not be resolved");
@@ -46,8 +46,7 @@ namespace Stardust.Node.Workers
 
 			if (method == null)
 			{
-				LogHelper.LogErrorWithLineNumber(Logger,
-												   string.Format("The method for handler [{0}] could not be found. ",
+				Logger.LogErrorWithLineNumber(string.Format("The method for handler [{0}] could not be found. ",
 													   handler.GetType()));
 
 				throw new Exception("The method 'Handle' for handler " + handler.GetType() + " could not be found");
