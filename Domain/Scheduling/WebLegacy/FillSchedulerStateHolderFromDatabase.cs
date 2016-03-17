@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			schedulerStateHolder.LoadSchedules(_scheduleStorage, new PersonsInOrganizationProvider(people.AllPeople),
 				new ScheduleDictionaryLoadOptions(true, false, false),
 				new ScheduleDateTimePeriod(dateTimePeriod, people.AllPeople, new SchedulerRangeToLoadCalculator(dateTimePeriod)));
-			return new WebSchedulingSetupResult(people, extractAllSchedules(schedulerStateHolder.SchedulingResultState, people, period));
+			return new WebSchedulingSetupResult(extractAllSchedules(schedulerStateHolder.SchedulingResultState, people, period));
 		}
 
 		private static IList<IScheduleDay> extractAllSchedules(ISchedulingResultStateHolder stateHolder, PeopleSelection people, DateOnlyPeriod period)

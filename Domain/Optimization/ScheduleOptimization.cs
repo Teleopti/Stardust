@@ -63,11 +63,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[LogTime]
 		protected virtual DateOnlyPeriod SetupAndOptimize(Guid planningPeriodId)
 		{
+			var schedulerStateHolder = _schedulerStateHolder();
 			var optimizationPreferences = _optimizationPreferencesFactory.Create();
 			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
-			var webScheduleState = _fillSchedulerStateHolder.Fill(_schedulerStateHolder(), null, period);
+			var webScheduleState = _fillSchedulerStateHolder.Fill(schedulerStateHolder, null, period);
 
 			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(webScheduleState.AllSchedules);
 			var matrixOriginalStateContainerListForDayOffOptimization =
@@ -79,11 +80,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			using (_resourceCalculationContextFactory.Create())
 			{
 				_classicDaysOffOptimizationCommand.Execute(matrixOriginalStateContainerListForDayOffOptimization, period,
-					optimizationPreferences, _schedulerStateHolder(),
+					optimizationPreferences, schedulerStateHolder,
 					new NoSchedulingProgress(), dayOffOptimizationPreferenceProvider);
 
 				_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, webScheduleState.AllSchedules,
-					webScheduleState.PeopleSelection.AllPeople, dayOffOptimizationPreferenceProvider);
+					schedulerStateHolder.SchedulingResultState.PersonsInOrganization.ToList(), dayOffOptimizationPreferenceProvider);
 			}
 
 			//should maybe happen _after_ all schedules are persisted?

@@ -50,24 +50,27 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period)
 		{
-			var people = SetupAndSchedule(period);
-			_persister.Persist(_schedulerStateHolder().Schedules);
-			return CreateResult(period, people);
+			var stateHolder = _schedulerStateHolder();
+			SetupAndSchedule(period);
+			_persister.Persist(stateHolder.Schedules);
+			return CreateResult(period);
 		}
 
 		[LogTime]
 		[UnitOfWork]
-		protected virtual SchedulingResultModel CreateResult(DateOnlyPeriod period, PeopleSelection people)
+		protected virtual SchedulingResultModel CreateResult(DateOnlyPeriod period)
 		{
+			var stateHolder = _schedulerStateHolder();
+			var fixedStaffPeople = stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period).ToList();
 			//some hack to get rid of lazy load ex
 			var uow = _currentUnitOfWork.Current();
-			uow.Reassociate(people.FixedStaffPeople);
-			_schedulerStateHolder().Schedules.ForEach(range => range.Value.Reassociate(uow));
+			uow.Reassociate(fixedStaffPeople);
+			stateHolder.Schedules.ForEach(range => range.Value.Reassociate(uow));
 			//
-			var scheduleOfSelectedPeople = _schedulerStateHolder().Schedules.Where(x => people.FixedStaffPeople.Contains(x.Key)).ToList();
+			var scheduleOfSelectedPeople = stateHolder.Schedules.Where(x => fixedStaffPeople.Contains(x.Key)).ToList();
 			var voilatedBusinessRules = new List<BusinessRulesValidationResult>();
 
-			var schedulePeriodNotInRange = _violatedSchedulePeriodBusinessRule.GetResult(people.FixedStaffPeople, period).ToList();
+			var schedulePeriodNotInRange = _violatedSchedulePeriodBusinessRule.GetResult(fixedStaffPeople, period).ToList();
 			var daysOffValidationResult = getDayOffBusinessRulesValidationResults(scheduleOfSelectedPeople, schedulePeriodNotInRange, period);
 			voilatedBusinessRules.AddRange(schedulePeriodNotInRange);
 			voilatedBusinessRules.AddRange(daysOffValidationResult);
@@ -80,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		[LogTime]
 		[UnitOfWork]
-		protected virtual PeopleSelection SetupAndSchedule(DateOnlyPeriod period)
+		protected virtual void SetupAndSchedule(DateOnlyPeriod period)
 		{
 			var webScheduleState = _fillSchedulerStateHolder.Fill(_schedulerStateHolder(), null, period);
 
@@ -100,8 +103,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					_requiredScheduleHelper(),
 					new OptimizationPreferences(), false, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 			}
-
-			return webScheduleState.PeopleSelection;
 		}
 
 		private static int successfulScheduledAgents(IEnumerable<KeyValuePair<IPerson, IScheduleRange>> schedules, DateOnlyPeriod periodToCheck)
