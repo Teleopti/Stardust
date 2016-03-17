@@ -8,17 +8,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class ActivityChangeProcessor
 	{
 		private readonly INow _now;
-		private readonly IStateContextLoader _stateContextLoader;
+		private readonly IContextLoader _contextLoader;
 		private readonly RtaProcessor _processor;
 
 		public ActivityChangeProcessor(
 			INow now,
-			IStateContextLoader stateContextLoader,
+			IContextLoader contextLoader,
 			RtaProcessor processor
 			)
 		{
 			_now = now;
-			_stateContextLoader = stateContextLoader;
+			_contextLoader = contextLoader;
 			_processor = processor;
 		}
 
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public void CheckForActivityChanges()
 		{
-			_stateContextLoader.ForAll(person =>
+			_contextLoader.ForAll(person =>
 			{
 				var current = new currentPeriod();
 				var currentActivity = person.Schedule.CurrentActivity();

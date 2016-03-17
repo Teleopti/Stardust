@@ -36,11 +36,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ConnectionStrings>().As<IConnectionStrings>();
 
 			if (_config.Toggle(Toggles.RTA_ScaleOut_36979))
-				builder.RegisterType<LoadAllFromDatabase>().As<IStateContextLoader>().SingleInstance().ApplyAspects();
+				builder.RegisterType<LoadAllFromDatabase>().As<IContextLoader>().SingleInstance().ApplyAspects();
 			else if (_config.Toggle(Toggles.RTA_DeletedPersons_36041))
-				builder.RegisterType<LoadPersonFromDatabase>().As<IStateContextLoader>().SingleInstance();
+				builder.RegisterType<LoadPersonFromDatabase>().As<IContextLoader>().SingleInstance();
 			else
-				builder.RegisterType<LoadFromCache>().As<IStateContextLoader>().SingleInstance();
+				builder.RegisterType<LoadFromCache>().As<IContextLoader>().SingleInstance();
 
 			_config.Cache().This<MappingLoader>((c, b) => b
 				.CacheMethod(x => x.Load())

@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public interface IStateContextLoader
+	public interface IContextLoader
 	{
 		void For(ExternalUserStateInputModel input, Action<Context> action);
 		void ForAll(Action<Context> action);
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 	}
 
-	public class LoadFromCache : IStateContextLoader
+	public class LoadFromCache : IContextLoader
 	{
 		private readonly DataSourceResolver _dataSourceResolver;
 		protected readonly IDatabaseLoader _databaseLoader;
@@ -330,7 +330,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 
 
-	public class LoadAllFromDatabase : IStateContextLoader
+	public class LoadAllFromDatabase : IContextLoader
 	{
 		private readonly DataSourceResolver _dataSourceResolver;
 		protected readonly IDatabaseLoader _databaseLoader;

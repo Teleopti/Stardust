@@ -11,21 +11,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IEventPublisherScope _eventPublisherScope;
 		private readonly IEnumerable<IInitializeble> _initializebles;
 		private readonly ResolveEventHandlers _resolver;
-		private readonly IStateContextLoader _stateContextLoader;
+		private readonly IContextLoader _contextLoader;
 
 		public StateStreamSynchronizer(
 			RtaProcessor processor,
 			IEventPublisherScope eventPublisherScope,
 			IEnumerable<IInitializeble> initializebles,
 			ResolveEventHandlers resolver,
-			IStateContextLoader stateContextLoader
+			IContextLoader contextLoader
 			)
 		{
 			_processor = processor;
 			_eventPublisherScope = eventPublisherScope;
 			_initializebles = initializebles;
 			_resolver = resolver;
-			_stateContextLoader = stateContextLoader;
+			_contextLoader = contextLoader;
 		}
 		
 		public virtual void Initialize()
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			using (_eventPublisherScope.OnThisThreadPublishTo(new SyncPublishTo(_resolver, handler)))
 			{
-				_stateContextLoader.ForSynchronize(context =>
+				_contextLoader.ForSynchronize(context =>
 				{
 					_processor.Process(context);
 				});

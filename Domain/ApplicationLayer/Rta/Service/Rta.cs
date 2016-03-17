@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly TenantLoader _tenantLoader;
 		private readonly RtaInitializor _initializor;
 		private readonly ActivityChangeProcessor _activityChangeProcessor;
-		private readonly IStateContextLoader _stateContextLoader;
+		private readonly IContextLoader _contextLoader;
 
 		public Rta(
 			ICacheInvalidator cacheInvalidator,
@@ -24,14 +24,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			TenantLoader tenantLoader,
 			RtaInitializor initializor,
 			ActivityChangeProcessor activityChangeProcessor,
-			IStateContextLoader stateContextLoader)
+			IContextLoader contextLoader)
 		{
 			_cacheInvalidator = cacheInvalidator;
 			_processor = processor;
 			_tenantLoader = tenantLoader;
 			_initializor = initializor;
 			_activityChangeProcessor = activityChangeProcessor;
-			_stateContextLoader = stateContextLoader;
+			_contextLoader = contextLoader;
 		}
 
 		[InfoLog]
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			else
 			{
 				var found = false;
-				_stateContextLoader.For(input, person =>
+				_contextLoader.For(input, person =>
 				{
 					found = true;
 					_processor.Process(person);
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			input.StateCode = "CCC Logged out";
 			input.PlatformTypeId = Guid.Empty.ToString();
 
-			_stateContextLoader.ForClosingSnapshot(input, agent =>
+			_contextLoader.ForClosingSnapshot(input, agent =>
 			{
 				_processor.Process(agent);
 			});
