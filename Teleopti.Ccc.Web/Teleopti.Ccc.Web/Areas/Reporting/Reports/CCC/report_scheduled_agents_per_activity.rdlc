@@ -892,10 +892,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(sum(Fields!scheduled_agents.Value),1)</Value>
+                              <Value>=sum(Fields!scheduled_agents.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontSize>8pt</FontSize>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -908,6 +909,9 @@
                       <rd:DefaultName>textbox13</rd:DefaultName>
                       <ZIndex>1</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -929,11 +933,12 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(sum(Fields!scheduled_agents.Value),1)</Value>
+                              <Value>=sum(Fields!scheduled_agents.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -946,12 +951,16 @@
                       <rd:DefaultName>textbox13</rd:DefaultName>
                       <ZIndex>1</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                   <DataElementOutput>Output</DataElementOutput>
                 </TablixCell>
