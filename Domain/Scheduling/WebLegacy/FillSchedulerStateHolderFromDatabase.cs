@@ -14,7 +14,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
-	public class FillSchedulerStateHolderFromDatabase : IFillSchedulerStateHolder
+	public class FillSchedulerStateHolderFromDatabase : FillSchedulerStateHolder
 	{
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
@@ -27,14 +27,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IFixedStaffLoader _fixedStaffLoader;
 
-		public FillSchedulerStateHolderFromDatabase(IScenarioRepository scenarioRepository, 
-					ISkillDayLoadHelper skillDayLoadHelper, 
-					ISkillRepository skillRepository, 
-					IScheduleStorage scheduleStorage, 
-					IPersonAbsenceAccountRepository personAbsenceAccountRepository, 
-					IPeopleAndSkillLoaderDecider decider, 
-					ICurrentTeleoptiPrincipal principal, 
-					ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
+		public FillSchedulerStateHolderFromDatabase(IScenarioRepository scenarioRepository,
+					ISkillDayLoadHelper skillDayLoadHelper,
+					ISkillRepository skillRepository,
+					IScheduleStorage scheduleStorage,
+					IPersonAbsenceAccountRepository personAbsenceAccountRepository,
+					IPeopleAndSkillLoaderDecider decider,
+					ICurrentTeleoptiPrincipal principal,
+					ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
 					IRepositoryFactory repositoryFactory,
 					IFixedStaffLoader fixedStaffLoader)
 		{
@@ -50,36 +50,62 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			_fixedStaffLoader = fixedStaffLoader;
 		}
 
-		public void Fill(ISchedulerStateHolder schedulerStateHolder, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
+		protected override IEnumerable<IPerson> FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
 		{
-			//need to filter things like skilldays and agents here based on agentIds
-			schedulerStateHolder.LoadCommonState(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(), _repositoryFactory);
-			var people = _fixedStaffLoader.Load(period);
 			var scenario = _scenarioRepository.LoadDefaultScenario();
 			var timeZone = _principal.Current().Regional.TimeZone;
-			
-			var allSkills = _skillRepository.FindAllWithSkillDays(period).ToArray();
 			var dateTimePeriod = period.ToDateTimePeriod(timeZone);
-
+			var people = _fixedStaffLoader.Load(period);
 			var deciderResult = _decider.Execute(scenario, dateTimePeriod, people.AllPeople);
 			deciderResult.FilterPeople(people.AllPeople);
+			schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization = people.AllPeople;
+			people.AllPeople.ForEach(schedulerStateHolderTo.AllPermittedPersons.Add);
+			schedulerStateHolderTo.ResetFilteredPersons();
+			return people.AllPeople;
+		}
 
+		protected override void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		{
+			//TODO: see if we can reuse from fillagents
+			var scenario = _scenarioRepository.LoadDefaultScenario();
+			//
+
+			var allSkills = _skillRepository.FindAllWithSkillDays(period).ToArray();
 			var forecast = _skillDayLoadHelper.LoadSchedulerSkillDays(period, allSkills, scenario);
+			schedulerStateHolderTo.SchedulingResultState.SkillDays = forecast;
+			schedulerStateHolderTo.SchedulingResultState.AddSkills(allSkills);
 
-			var stateHolder = schedulerStateHolder.SchedulingResultState;
-			stateHolder.PersonsInOrganization = people.AllPeople;
-			stateHolder.SkillDays = forecast;
-			stateHolder.AddSkills(allSkills);
-			deciderResult.FilterSkills(allSkills,stateHolder.RemoveSkill, s => stateHolder.AddSkills(s));
-			
-			schedulerStateHolder.SetRequestedScenario(scenario);
-			schedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(period, timeZone);
-			people.AllPeople.ForEach(schedulerStateHolder.AllPermittedPersons.Add);
-			stateHolder.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(people.AllPeople);
-			schedulerStateHolder.ResetFilteredPersons();
-			schedulerStateHolder.LoadSchedules(_scheduleStorage, new PersonsInOrganizationProvider(people.AllPeople),
+			//TODO: see if we can reuse from fillagents
+			var timeZone = _principal.Current().Regional.TimeZone;
+			var dateTimePeriod = period.ToDateTimePeriod(timeZone);
+			var deciderResult = _decider.Execute(scenario, dateTimePeriod, schedulerStateHolderTo.AllPermittedPersons);
+			//
+			deciderResult.FilterSkills(allSkills, schedulerStateHolderTo.SchedulingResultState.RemoveSkill, s => schedulerStateHolderTo.SchedulingResultState.AddSkills(s));
+		}
+
+		protected override void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		{
+			//TODO: see if we can reuse from fillagents
+			var scenario = _scenarioRepository.LoadDefaultScenario();
+			//
+			var timeZone = _principal.Current().Regional.TimeZone;
+			var dateTimePeriod = period.ToDateTimePeriod(timeZone);
+			schedulerStateHolderTo.SetRequestedScenario(scenario);
+			schedulerStateHolderTo.LoadSchedules(_scheduleStorage, new PersonsInOrganizationProvider(agents),
 				new ScheduleDictionaryLoadOptions(true, false, false),
-				new ScheduleDateTimePeriod(dateTimePeriod, people.AllPeople, new SchedulerRangeToLoadCalculator(dateTimePeriod)));
+				new ScheduleDateTimePeriod(dateTimePeriod, agents, new SchedulerRangeToLoadCalculator(dateTimePeriod)));
+		}
+
+		protected override void PreFill(ISchedulerStateHolder schedulerStateHolderTo)
+		{
+			schedulerStateHolderTo.LoadCommonState(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(), _repositoryFactory);
+		}
+
+		protected override void PostFill(ISchedulerStateHolder schedulerStateHolder, IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		{
+			var timeZone = _principal.Current().Regional.TimeZone;
+			schedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(period, timeZone);
+			schedulerStateHolder.SchedulingResultState.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(agents);
 		}
 	}
 }

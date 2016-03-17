@@ -169,6 +169,7 @@
     <Compile Include="Aop\ReadOnlyUnitOfWorkAttribute.cs" />
     <Compile Include="Aop\UnitOfWorkAttribute.cs" />
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
+    <Compile Include="Scheduling\WebLegacy\FillSchedulerStateHolder.cs" />
     <Compile Include="UnitOfWork\ThisUnitOfWork.cs" />
     <Compile Include="UnitOfWork\WithAnalyticsUnitOfWork.cs" />
     <Compile Include="ApplicationLayer\AllTenantRecurringEventPublisher.cs" />

@@ -9,34 +9,49 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
-	public class FillSchedulerStateHolderFromRam : IFillSchedulerStateHolder, ISynchronizeIntradayOptimizationResult
+	public class FillSchedulerStateHolderFromRam : FillSchedulerStateHolder, ISynchronizeIntradayOptimizationResult
 	{
 		private ISchedulerStateHolder _schedulerStateHolderFrom;
 
-		public void Fill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
+		protected override IEnumerable<IPerson> FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
 		{
 			_schedulerStateHolderFrom.SchedulingResultState.PersonsInOrganization.Where(x => agentIds.Contains(x.Id.Value))
-				.ForEach(x => schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization.Add(x));
-
+							.ForEach(x => schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization.Add(x));
 			_schedulerStateHolderFrom.AllPermittedPersons.Where(x => agentIds.Contains(x.Id.Value)).ForEach(x => schedulerStateHolderTo.AllPermittedPersons.Add(x));
-			schedulerStateHolderTo.SchedulingResultState.AllPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>();
+			return schedulerStateHolderTo.AllPermittedPersons;
+		}
 
-			var scheduleDictionary = new ScheduleDictionary(_schedulerStateHolderFrom.Schedules.Scenario, _schedulerStateHolderFrom.Schedules.Period);
-			moveSchedules(_schedulerStateHolderFrom.Schedules, scheduleDictionary, schedulerStateHolderTo.AllPermittedPersons, _schedulerStateHolderFrom.Schedules.Period.LoadedPeriod().ToDateOnlyPeriod(_schedulerStateHolderFrom.TimeZoneInfo));
-			schedulerStateHolderTo.SchedulingResultState.Schedules = scheduleDictionary;
+		protected override void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		{
 			schedulerStateHolderTo.SchedulingResultState.SkillDays = _schedulerStateHolderFrom.SchedulingResultState.SkillDays;
 		}
 
-		public IDisposable Add(ISchedulerStateHolder schedulerStateHolderFrom)
+		protected override void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
-			_schedulerStateHolderFrom = schedulerStateHolderFrom;
-			return new GenericDisposable(() => _schedulerStateHolderFrom = null);
+			var scheduleDictionary = new ScheduleDictionary(_schedulerStateHolderFrom.Schedules.Scenario, _schedulerStateHolderFrom.Schedules.Period);
+			moveSchedules(_schedulerStateHolderFrom.Schedules, scheduleDictionary, schedulerStateHolderTo.AllPermittedPersons, _schedulerStateHolderFrom.Schedules.Period.LoadedPeriod().ToDateOnlyPeriod(_schedulerStateHolderFrom.TimeZoneInfo));
+			schedulerStateHolderTo.SchedulingResultState.Schedules = scheduleDictionary;
+		}
+
+		protected override void PreFill(ISchedulerStateHolder schedulerStateHolderTo)
+		{
+			schedulerStateHolderTo.SchedulingResultState.AllPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>();
+		}
+
+		protected override void PostFill(ISchedulerStateHolder schedulerStateHolder, IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		{
 		}
 
 		public void Synchronize(IScheduleDictionary modifiedScheduleDictionary, DateOnlyPeriod period)
 		{
 			var agentsToMove = modifiedScheduleDictionary.Keys;
 			moveSchedules(modifiedScheduleDictionary, _schedulerStateHolderFrom.Schedules, agentsToMove, period);
+		}
+
+		public IDisposable Add(ISchedulerStateHolder schedulerStateHolderFrom)
+		{
+			_schedulerStateHolderFrom = schedulerStateHolderFrom;
+			return new GenericDisposable(() => _schedulerStateHolderFrom = null);
 		}
 
 		private static void moveSchedules(IScheduleDictionary fromDic, IScheduleDictionary toDic, IEnumerable<IPerson> agents, DateOnlyPeriod period)
