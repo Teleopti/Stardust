@@ -380,11 +380,14 @@
 		}
 
 		function registerShortCuts() {
-			shortCuts.registerKeySequence(65, [keyCodes.ALT], function () {
+			shortCuts.registerKeySequence([keyCodes.A], [keyCodes.ALT], function () {
 				toggleAddAbsencePanel(); // Alt+A for add absence
 			});
-			shortCuts.registerKeySequence(83, [keyCodes.ALT], function () {
+			shortCuts.registerKeySequence([keyCodes.S], [keyCodes.ALT], function () {
 				swapShifts(); // Alt+S for swap shifts
+			});
+			shortCuts.registerKeySequence([keyCodes.R], [keyCodes.ALT], function () {
+				confirmRemoveAbsence(); // Alt+R for remove absence
 			});
 		}
 
