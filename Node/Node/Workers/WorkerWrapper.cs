@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 using Stardust.Node.Diagnostics;
 using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
-using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
 using Timer = System.Timers.Timer;
@@ -119,10 +118,10 @@ namespace Stardust.Node.Workers
 
 				if (typ == null)
 				{
-					Logger.LogWarningWithLineNumber(string.Format(
-						                                   WhoamI +
-						                                   ": The job type [{0}] could not be resolved. The job cannot be started.",
-						                                   jobToDo.Type));
+					Logger.WarningWithLineNumber(string.Format(
+						WhoamI +
+						": The job type [{0}] could not be resolved. The job cannot be started.",
+						jobToDo.Type));
 
 					return new BadRequestResult(requestMessage);
 				}
@@ -186,13 +185,13 @@ namespace Stardust.Node.Workers
 
 			Task.ContinueWith(t =>
 			{
-				Logger.LogDebugWithLineNumber(string.Format(
-					                                 "Job ( id, name, type ) : ( {0}, {1}, {2} ) took ( seconds, minutes ) : ( {3}, {4} )",
-					                                 CurrentMessageToProcess.Id,
-					                                 CurrentMessageToProcess.Name,
-					                                 CurrentMessageToProcess.Type,
-					                                 taskToExecuteStopWatch.GetTotalElapsedTimeInSeconds(),
-					                                 taskToExecuteStopWatch.GetTotalElapsedTimeInMinutes()));
+				Logger.DebugWithLineNumber(string.Format(
+					"Job ( id, name, type ) : ( {0}, {1}, {2} ) took ( seconds, minutes ) : ( {3}, {4} )",
+					CurrentMessageToProcess.Id,
+					CurrentMessageToProcess.Name,
+					CurrentMessageToProcess.Type,
+					taskToExecuteStopWatch.GetTotalElapsedTimeInSeconds(),
+					taskToExecuteStopWatch.GetTotalElapsedTimeInMinutes()));
 
 				string logInfo;
 
@@ -205,7 +204,7 @@ namespace Stardust.Node.Workers
 							              CurrentMessageToProcess.Id,
 							              CurrentMessageToProcess.Name);
 
-						Logger.LogDebugWithLineNumber(logInfo);
+						Logger.DebugWithLineNumber(logInfo);
 
 						SetNodeStatusTimer(TrySendJobDoneStatusToManagerTimer,
 						                   CurrentMessageToProcess);
@@ -219,7 +218,7 @@ namespace Stardust.Node.Workers
 							              CurrentMessageToProcess.Id,
 							              CurrentMessageToProcess.Name);
 
-						Logger.LogDebugWithLineNumber(logInfo);
+						Logger.DebugWithLineNumber(logInfo);
 
 						SetNodeStatusTimer(TrySendJobCanceledStatusToManagerTimer,
 						                   CurrentMessageToProcess);
@@ -231,20 +230,20 @@ namespace Stardust.Node.Workers
 						if (faultedTimer != null)
 						{
 							faultedTimer.AggregateExceptionToSend = t.Exception;
-							faultedTimer.ErrorOccured=DateTime.Now;
+							faultedTimer.ErrorOccured = DateTime.Now;
 						}
 
 						if (t.Exception != null)
 						{
 							foreach (var exp in t.Exception.InnerExceptions)
 							{
-								string errorMessage =
+								var errorMessage =
 									string.Format("( Message, Source, StackTrace ): ( {0}, {1}, {2} )",
-									exp.InnerException.Message,
-									exp.InnerException.Source,
-									exp.InnerException.StackTrace);
+									              exp.InnerException.Message,
+									              exp.InnerException.Source,
+									              exp.InnerException.StackTrace);
 
-								Logger.LogErrorWithLineNumber(errorMessage, exp);
+								Logger.ErrorWithLineNumber(errorMessage, exp);
 							}
 						}
 
@@ -271,22 +270,22 @@ namespace Stardust.Node.Workers
 			    id != Guid.Empty &&
 			    CurrentMessageToProcess.Id == id)
 			{
-				Logger.LogDebugWithLineNumber(WhoamI +
-				                                 " : Cancel job method called. Will call cancel on canellation token source.");
+				Logger.DebugWithLineNumber(WhoamI +
+				                           " : Cancel job method called. Will call cancel on canellation token source.");
 
 				CancellationTokenSource.Cancel();
 
 				if (CancellationTokenSource.IsCancellationRequested)
 				{
-					Logger.LogDebugWithLineNumber(WhoamI +
-					                                 " : Cancel job method called. CancellationTokenSource.IsCancellationRequested is now true.");
+					Logger.DebugWithLineNumber(WhoamI +
+					                           " : Cancel job method called. CancellationTokenSource.IsCancellationRequested is now true.");
 				}
 			}
 			else
 			{
 				if (id != Guid.Empty)
 				{
-					Logger.LogWarningWithLineNumber(WhoamI + " : Can not cancel job with id : " + id);
+					Logger.WarningWithLineNumber(WhoamI + " : Can not cancel job with id : " + id);
 				}
 			}
 		}
@@ -302,7 +301,7 @@ namespace Stardust.Node.Workers
 
 		public void Dispose()
 		{
-			Logger.LogDebugWithLineNumber("Start disposing.");
+			Logger.DebugWithLineNumber("Start disposing.");
 
 			if (CancellationTokenSource != null &&
 			    !CancellationTokenSource.IsCancellationRequested)
@@ -341,7 +340,7 @@ namespace Stardust.Node.Workers
 			}
 
 
-			Logger.LogDebugWithLineNumber("Finished disposing.");
+			Logger.DebugWithLineNumber("Finished disposing.");
 		}
 
 		private void NodeStartUpNotificationToManagerTimer_TrySendNodeStartUpNotificationSucceded(object sender,
@@ -402,10 +401,10 @@ namespace Stardust.Node.Workers
 			if (CurrentMessageToProcess != null)
 			{
 				TrySendJobProgressToManagerTimer.ClearAllJobProgresses(CurrentMessageToProcess.Id);
-			}			
+			}
 
 			// Reset jobToDo, so it can start processing new work.
-			ResetCurrentMessage();			
+			ResetCurrentMessage();
 		}
 
 		private void SendJobProgressToManager(string message)
@@ -413,8 +412,7 @@ namespace Stardust.Node.Workers
 			if (CurrentMessageToProcess != null)
 			{
 				TrySendJobProgressToManagerTimer.SendProgress(CurrentMessageToProcess.Id,
-															  message);
-
+				                                              message);
 			}
 		}
 	}

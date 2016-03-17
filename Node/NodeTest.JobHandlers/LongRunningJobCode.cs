@@ -21,7 +21,7 @@ namespace NodeTest.JobHandlers
 		                       CancellationTokenSource cancellationTokenSource,
 		                       Action<string> progress)
 		{
-			Logger.LogInfoWithLineNumber("Starting Long Running Job");
+			Logger.InfoWithLineNumber("Starting Long Running Job");
 
 			TestJobProgress jobProgress;
 
@@ -58,7 +58,7 @@ namespace NodeTest.JobHandlers
 				};
 				progress(jobProgress.Text);
 
-				Logger.LogInfoWithLineNumber(progressMessage);
+				Logger.InfoWithLineNumber(progressMessage);
 
 
 				// Is Cancellation Requested.
@@ -75,7 +75,7 @@ namespace NodeTest.JobHandlers
 
 					progress(jobProgress.Text);
 
-					Logger.LogInfoWithLineNumber(progressMessage);
+					Logger.InfoWithLineNumber(progressMessage);
 
 					cancellationTokenSource.Token.ThrowIfCancellationRequested();
 				}
@@ -93,7 +93,7 @@ namespace NodeTest.JobHandlers
 
 			progress(jobProgress.Text);
 
-			Logger.LogInfoWithLineNumber(progressMessage);
+			Logger.InfoWithLineNumber(progressMessage);
 		}
 	}
 }

@@ -18,7 +18,7 @@ namespace NodeTest.JobHandlers
 		{
 			_fastJobCode = fastJobCode;
 
-			Logger.LogDebugWithLineNumber("'Fast Job Worker' class constructor called.");
+			Logger.DebugWithLineNumber("'Fast Job Worker' class constructor called.");
 		}
 
 		public CancellationTokenSource CancellationTokenSource { get; set; }
@@ -27,7 +27,7 @@ namespace NodeTest.JobHandlers
 		                   CancellationTokenSource cancellationTokenSource,
 		                   Action<string> sendProgress)
 		{
-			Logger.LogDebugWithLineNumber("'Fast Job Worker' handle method called.");
+			Logger.DebugWithLineNumber("'Fast Job Worker' handle method called.");
 
 			CancellationTokenSource = cancellationTokenSource;
 

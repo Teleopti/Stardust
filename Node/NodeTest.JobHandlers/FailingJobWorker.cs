@@ -14,7 +14,7 @@ namespace NodeTest.JobHandlers
 
 		public FailingJobWorker()
 		{
-			Logger.LogDebugWithLineNumber("'Failing Job Worker' class constructor called.");
+			Logger.DebugWithLineNumber("'Failing Job Worker' class constructor called.");
 		}
 
 		public CancellationTokenSource CancellationTokenSource { get; set; }
@@ -23,7 +23,7 @@ namespace NodeTest.JobHandlers
 		                   CancellationTokenSource cancellationTokenSource,
 		                   Action<string> sendProgress)
 		{
-			Logger.LogDebugWithLineNumber("'Failing Job Worker' handle method called.");
+			Logger.DebugWithLineNumber("'Failing Job Worker' handle method called.");
 
 			CancellationTokenSource = cancellationTokenSource;
 

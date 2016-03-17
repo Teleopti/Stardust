@@ -12,7 +12,7 @@ namespace NodeTest.JobHandlers
 
 		public FailingJobCode()
 		{
-			Logger.LogDebugWithLineNumber("'Failing Job Code' class constructor called.");
+			Logger.DebugWithLineNumber("'Failing Job Code' class constructor called.");
 
 			WhoAmI = "[NODETEST.JOBHANDLERS.FailingJobCode, " + Environment.MachineName.ToUpper() + "]";
 		}
@@ -23,7 +23,7 @@ namespace NodeTest.JobHandlers
 		                       CancellationTokenSource cancellationTokenSource,
 		                       Action<string> progress)
 		{
-			Logger.LogDebugWithLineNumber("'Failing Job Code' Do The Thing method called.");
+			Logger.DebugWithLineNumber("'Failing Job Code' Do The Thing method called.");
 
 			var jobProgress = new TestJobProgress
 			{

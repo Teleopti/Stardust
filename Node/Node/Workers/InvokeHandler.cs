@@ -35,7 +35,7 @@ namespace Stardust.Node.Workers
 
 			if (handler == null)
 			{
-				Logger.LogErrorWithLineNumber(string.Format("The job type [{0}] could not be resolved. The job cannot be started.",
+				Logger.ErrorWithLineNumber(string.Format("The job type [{0}] could not be resolved. The job cannot be started.",
 													   query.GetType()));
 
 				throw new Exception("The handler " + query.GetType() + " could not be resolved");
@@ -46,7 +46,7 @@ namespace Stardust.Node.Workers
 
 			if (method == null)
 			{
-				Logger.LogErrorWithLineNumber(string.Format("The method for handler [{0}] could not be found. ",
+				Logger.ErrorWithLineNumber(string.Format("The method for handler [{0}] could not be found. ",
 													   handler.GetType()));
 
 				throw new Exception("The method 'Handle' for handler " + handler.GetType() + " could not be found");

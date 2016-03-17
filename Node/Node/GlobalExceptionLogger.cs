@@ -11,7 +11,7 @@ namespace Stardust.Node
 
 		public override void Log(ExceptionLoggerContext context)
 		{
-			Logger.LogErrorWithLineNumber("[Message] \n" + context.Exception.Message + " \n\n [Stacktrace]\n " +
+			Logger.ErrorWithLineNumber("[Message] \n" + context.Exception.Message + " \n\n [Stacktrace]\n " +
 			                                 context.Exception.StackTrace);
 		}
 	}

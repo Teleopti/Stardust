@@ -46,7 +46,7 @@ namespace Stardust.Node.Timers
 
 		protected override void Dispose(bool disposing)
 		{
-			Logger.LogDebugWithLineNumber("Start disposing.");
+			Logger.DebugWithLineNumber("Start disposing.");
 
 			base.Dispose(disposing);
 
@@ -56,7 +56,7 @@ namespace Stardust.Node.Timers
 				CancellationTokenSource.Cancel();
 			}
 
-			Logger.LogDebugWithLineNumber("Finished disposing.");
+			Logger.DebugWithLineNumber("Finished disposing.");
 		}
 
 		public event EventHandler TrySendNodeStartUpNotificationSucceded;
@@ -86,7 +86,7 @@ namespace Stardust.Node.Timers
 		{
 			try
 			{
-				Logger.LogDebugWithLineNumber("Trying to send init to manager. Manager Uri : ( " + CallbackToManagerTemplateUri +
+				Logger.DebugWithLineNumber("Trying to send init to manager. Manager Uri : ( " + CallbackToManagerTemplateUri +
 				                                 " )");
 				var httpResponseMessage =
 					await TrySendNodeStartUpToManager(NodeConfiguration.BaseAddress,
@@ -95,19 +95,19 @@ namespace Stardust.Node.Timers
 
 				if (httpResponseMessage.IsSuccessStatusCode)
 				{
-					Logger.LogDebugWithLineNumber(WhoAmI + ": Node start up notification to manager succeded.");
+					Logger.DebugWithLineNumber(WhoAmI + ": Node start up notification to manager succeded.");
 
 					TrySendNodeStartUpNotificationSuccededInvoke();
 				}
 				else
 				{
-					Logger.LogInfoWithLineNumber(WhoAmI + ": Node start up notification to manager failed.");
+					Logger.InfoWithLineNumber(WhoAmI + ": Node start up notification to manager failed.");
 				}
 			}
 
 			catch
 			{
-				Logger.LogWarningWithLineNumber(WhoAmI + ": Node start up notification to manager failed.");
+				Logger.WarningWithLineNumber(WhoAmI + ": Node start up notification to manager failed.");
 			}
 		}
 	}

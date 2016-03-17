@@ -56,7 +56,7 @@ namespace Stardust.Node.Extensions
 		                                                        Uri apiEndpoint,
 		                                                        CancellationToken cancellationToken)
 		{
-			Logger.LogDebugWithLineNumber("Start.");
+			Logger.DebugWithLineNumber("Start.");
 
 			IHttpSender httpSender = new HttpSender();
 

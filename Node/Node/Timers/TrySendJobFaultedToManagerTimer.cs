@@ -53,7 +53,7 @@ namespace Stardust.Node.Timers
 
 			catch (Exception exp)
 			{
-				Logger.LogErrorWithLineNumber("Error in TrySendStatus.",
+				Logger.ErrorWithLineNumber("Error in TrySendStatus.",
 				                                 exp);
 				throw;
 			}
@@ -61,11 +61,11 @@ namespace Stardust.Node.Timers
 
 		protected override void Dispose(bool disposing)
 		{
-			Logger.LogDebugWithLineNumber("Start disposing.");
+			Logger.DebugWithLineNumber("Start disposing.");
 
 			base.Dispose(disposing);
 
-			Logger.LogDebugWithLineNumber("Finished disposing.");
+			Logger.DebugWithLineNumber("Finished disposing.");
 		}
 	}
 }

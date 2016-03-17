@@ -79,7 +79,7 @@ namespace Stardust.Node.Timers
 
 			catch (Exception exp)
 			{
-				Logger.LogErrorWithLineNumber("Error in TrySendStatus.",
+				Logger.ErrorWithLineNumber("Error in TrySendStatus.",
 				                                 exp);
 				throw;
 			}
@@ -127,7 +127,7 @@ namespace Stardust.Node.Timers
 					                        JobToDo.Name,
 					                        httpResponseMessage.RequestMessage.RequestUri);
 
-					Logger.LogDebugWithLineNumber(msg);
+					Logger.DebugWithLineNumber(msg);
 
 
 					InvokeTriggerTrySendStatusSucceded();
@@ -143,7 +143,7 @@ namespace Stardust.Node.Timers
 						              JobToDo.Name,
 						              httpResponseMessage.ReasonPhrase);
 
-					Logger.LogInfoWithLineNumber(msg);
+					Logger.InfoWithLineNumber(msg);
 				}
 			}
 
@@ -157,7 +157,7 @@ namespace Stardust.Node.Timers
 					              JobToDo.Id,
 					              JobToDo.Name);
 
-				Logger.LogErrorWithLineNumber(msg,exp);
+				Logger.ErrorWithLineNumber(msg,exp);
 			}
 
 		}

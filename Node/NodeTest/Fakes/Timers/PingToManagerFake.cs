@@ -24,7 +24,7 @@ namespace NodeTest.Fakes.Timers
 		private void OnTimedEvent(object sender,
 		                          ElapsedEventArgs e)
 		{
-			Logger.LogDebugWithLineNumber("Try ping to manager fake.");
+			Logger.DebugWithLineNumber("Try ping to manager fake.");
 
 			Wait.Set();
 		}

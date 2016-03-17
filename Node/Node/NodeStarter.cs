@@ -94,9 +94,9 @@ namespace Stardust.Node
 			{
 				WhoAmI = nodeConfiguration.CreateWhoIAm(Environment.MachineName);
 
-				Logger.LogInfoWithLineNumber(WhoAmI + ": Node started on machine.");
+				Logger.InfoWithLineNumber(WhoAmI + ": Node started on machine.");
 
-				Logger.LogInfoWithLineNumber(WhoAmI + ": Listening on port " + nodeConfiguration.BaseAddress);
+				Logger.InfoWithLineNumber(WhoAmI + ": Listening on port " + nodeConfiguration.BaseAddress);
 
 				QuitEvent.WaitOne();
 			}

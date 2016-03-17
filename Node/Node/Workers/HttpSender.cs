@@ -20,7 +20,7 @@ namespace Stardust.Node.Workers
 		public async Task<HttpResponseMessage> PostAsync(Uri url,
 		                                                 object data)
 		{
-			Logger.LogDebugWithLineNumber("Start.");
+			Logger.DebugWithLineNumber("Start.");
 
 			try
 			{
@@ -30,7 +30,7 @@ namespace Stardust.Node.Workers
 
 					CreateRequestHeaders(client);
 
-					Logger.LogDebugWithLineNumber("Start Post Async: " + url);
+					Logger.DebugWithLineNumber("Start Post Async: " + url);
 
 					var response =
 						await client.PostAsync(url,
@@ -39,9 +39,9 @@ namespace Stardust.Node.Workers
 						                                         "application/json"))
 							.ConfigureAwait(false);
 
-					Logger.LogDebugWithLineNumber("Finihed Post Async: " + url);
+					Logger.DebugWithLineNumber("Finihed Post Async: " + url);
 
-					Logger.LogDebugWithLineNumber("Finished.");
+					Logger.DebugWithLineNumber("Finished.");
 
 					return response;
 				}
@@ -49,7 +49,7 @@ namespace Stardust.Node.Workers
 
 			catch (Exception exp)
 			{
-				Logger.LogErrorWithLineNumber(exp.Message,
+				Logger.ErrorWithLineNumber(exp.Message,
 				                                 exp);
 				throw;
 			}
@@ -59,7 +59,7 @@ namespace Stardust.Node.Workers
 		                                                 object data,
 		                                                 CancellationToken cancellationToken)
 		{
-			Logger.LogDebugWithLineNumber("Start.");
+			Logger.DebugWithLineNumber("Start.");
 
 			try
 			{
@@ -69,7 +69,7 @@ namespace Stardust.Node.Workers
 
 					CreateRequestHeaders(client);
 
-					Logger.LogDebugWithLineNumber("Start Post Async: " + url);
+					Logger.DebugWithLineNumber("Start Post Async: " + url);
 
 					var response =
 						await client.PostAsync(url,
@@ -79,7 +79,7 @@ namespace Stardust.Node.Workers
 						                       cancellationToken)
 							.ConfigureAwait(false);
 
-					Logger.LogDebugWithLineNumber("Finished Post Async: " + url + "\n" + "Finished");
+					Logger.DebugWithLineNumber("Finished Post Async: " + url + "\n" + "Finished");
 
 					return response;
 				}
@@ -92,7 +92,7 @@ namespace Stardust.Node.Workers
 
 			catch (Exception exp)
 			{
-				Logger.LogErrorWithLineNumber(exp.Message,
+				Logger.ErrorWithLineNumber(exp.Message,
 				                                 exp);
 				throw;
 			}
@@ -100,7 +100,7 @@ namespace Stardust.Node.Workers
 
 		public async Task<HttpResponseMessage> DeleteAsync(Uri url)
 		{
-			Logger.LogDebugWithLineNumber("Start.");
+			Logger.DebugWithLineNumber("Start.");
 
 			try
 			{
@@ -108,14 +108,14 @@ namespace Stardust.Node.Workers
 				{
 					CreateRequestHeaders(client);
 
-					Logger.LogDebugWithLineNumber("Start Delete Async: " + url);
+					Logger.DebugWithLineNumber("Start Delete Async: " + url);
 
 					var response =
 						await client.DeleteAsync(url).ConfigureAwait(false);
 
-					Logger.LogDebugWithLineNumber("Finished Delete Async: " + url);
+					Logger.DebugWithLineNumber("Finished Delete Async: " + url);
 
-					Logger.LogDebugWithLineNumber("Finished.");
+					Logger.DebugWithLineNumber("Finished.");
 
 					return response;
 				}
@@ -123,7 +123,7 @@ namespace Stardust.Node.Workers
 
 			catch (Exception exp)
 			{
-				Logger.LogErrorWithLineNumber(exp.Message,
+				Logger.ErrorWithLineNumber(exp.Message,
 				                                 exp);
 
 				throw;
@@ -133,7 +133,7 @@ namespace Stardust.Node.Workers
 		public async Task<HttpResponseMessage> DeleteAsync(Uri url,
 		                                                   CancellationToken cancellationToken)
 		{
-			Logger.LogDebugWithLineNumber("Start.");
+			Logger.DebugWithLineNumber("Start.");
 
 			try
 			{
@@ -141,15 +141,15 @@ namespace Stardust.Node.Workers
 				{
 					CreateRequestHeaders(client);
 
-					Logger.LogDebugWithLineNumber("Start Delete Async: " + url);
+					Logger.DebugWithLineNumber("Start Delete Async: " + url);
 
 					var response =
 						await client.DeleteAsync(url,
 						                         cancellationToken).ConfigureAwait(false);
 
-					Logger.LogDebugWithLineNumber("Finished Delete Async: " + url);
+					Logger.DebugWithLineNumber("Finished Delete Async: " + url);
 
-					Logger.LogDebugWithLineNumber("Finished.");
+					Logger.DebugWithLineNumber("Finished.");
 
 					return response;
 				}
@@ -157,7 +157,7 @@ namespace Stardust.Node.Workers
 
 			catch (Exception exp)
 			{
-				Logger.LogErrorWithLineNumber(exp.Message,
+				Logger.ErrorWithLineNumber(exp.Message,
 				                                 exp);
 
 				throw;
@@ -166,7 +166,7 @@ namespace Stardust.Node.Workers
 
 		public async Task<HttpResponseMessage> GetAsync(Uri url)
 		{
-			Logger.LogDebugWithLineNumber("Start.");
+			Logger.DebugWithLineNumber("Start.");
 
 			try
 			{
@@ -174,15 +174,15 @@ namespace Stardust.Node.Workers
 				{
 					CreateRequestHeaders(client);
 
-					Logger.LogDebugWithLineNumber("Start Get Async: " + url);
+					Logger.DebugWithLineNumber("Start Get Async: " + url);
 
 					var response = await client.GetAsync(url,
 					                                     HttpCompletionOption.ResponseHeadersRead)
 						.ConfigureAwait(false);
 
-					Logger.LogDebugWithLineNumber("Finished Get Async: " + url);
+					Logger.DebugWithLineNumber("Finished Get Async: " + url);
 
-					Logger.LogDebugWithLineNumber("Finished.");
+					Logger.DebugWithLineNumber("Finished.");
 
 					return response;
 				}
@@ -190,7 +190,7 @@ namespace Stardust.Node.Workers
 
 			catch (Exception exp)
 			{
-				Logger.LogErrorWithLineNumber(exp.Message,
+				Logger.ErrorWithLineNumber(exp.Message,
 				                                 exp);
 
 				throw;
@@ -199,7 +199,7 @@ namespace Stardust.Node.Workers
 
 		public async Task<HttpResponseMessage> GetAsync(Uri url, CancellationToken cancellationToken)
 		{
-			Logger.LogDebugWithLineNumber("Start.");
+			Logger.DebugWithLineNumber("Start.");
 
 			try
 			{
@@ -207,17 +207,17 @@ namespace Stardust.Node.Workers
 				{
 					CreateRequestHeaders(client);
 
-					Logger.LogDebugWithLineNumber("Start Get Async: " + url);
+					Logger.DebugWithLineNumber("Start Get Async: " + url);
 
 					var response = await client.GetAsync(url,
 					                                     HttpCompletionOption.ResponseHeadersRead,
 					                                     cancellationToken)
 						.ConfigureAwait(false);
 
-					Logger.LogDebugWithLineNumber("Finished Get Async: " + url);
+					Logger.DebugWithLineNumber("Finished Get Async: " + url);
 
 
-					Logger.LogDebugWithLineNumber("Finished.");
+					Logger.DebugWithLineNumber("Finished.");
 
 					return response;
 				}
@@ -225,7 +225,7 @@ namespace Stardust.Node.Workers
 
 			catch (Exception exp)
 			{
-				Logger.LogErrorWithLineNumber(exp.Message,
+				Logger.ErrorWithLineNumber(exp.Message,
 				                                 exp);
 
 				throw;
@@ -234,7 +234,7 @@ namespace Stardust.Node.Workers
 
 		public async Task<bool> TryGetAsync(Uri url)
 		{
-			Logger.LogDebugWithLineNumber("Start.");
+			Logger.DebugWithLineNumber("Start.");
 
 			try
 			{
@@ -242,7 +242,7 @@ namespace Stardust.Node.Workers
 				{
 					CreateRequestHeaders(client);
 
-					Logger.LogDebugWithLineNumber("Start Try Get Async: " + url);
+					Logger.DebugWithLineNumber("Start Try Get Async: " + url);
 
 					var response =
 						await client.GetAsync(url,
@@ -250,9 +250,9 @@ namespace Stardust.Node.Workers
 							.ConfigureAwait(false);
 
 
-					Logger.LogDebugWithLineNumber("Finished Try Get Async: " + url);
+					Logger.DebugWithLineNumber("Finished Try Get Async: " + url);
 
-					Logger.LogDebugWithLineNumber("Finished.");
+					Logger.DebugWithLineNumber("Finished.");
 
 					return response.IsSuccessStatusCode;
 				}
@@ -260,25 +260,25 @@ namespace Stardust.Node.Workers
 
 			catch (HttpRequestException exp)
 			{
-				Logger.LogErrorWithLineNumber(exp.Message,
+				Logger.ErrorWithLineNumber(exp.Message,
 				                                 exp);
 			}
 
 			catch (Exception exp)
 			{
-				Logger.LogErrorWithLineNumber(exp.Message,
+				Logger.ErrorWithLineNumber(exp.Message,
 				                                 exp);
 
 				throw;
 			}
 
-			Logger.LogDebugWithLineNumber("Return false");
+			Logger.DebugWithLineNumber("Return false");
 			return false;
 		}
 
 		public async Task<bool> TryGetAsync(Uri url, CancellationToken cancellationToken)
 		{
-			Logger.LogDebugWithLineNumber("Start.");
+			Logger.DebugWithLineNumber("Start.");
 
 			try
 			{
@@ -286,7 +286,7 @@ namespace Stardust.Node.Workers
 				{
 					CreateRequestHeaders(client);
 
-					Logger.LogDebugWithLineNumber("Start Try Get Async: " + url);
+					Logger.DebugWithLineNumber("Start Try Get Async: " + url);
 
 					var response =
 						await client.GetAsync(url,
@@ -294,9 +294,9 @@ namespace Stardust.Node.Workers
 						                      cancellationToken)
 							.ConfigureAwait(false);
 
-					Logger.LogDebugWithLineNumber("Finished Try Get Async: " + url);
+					Logger.DebugWithLineNumber("Finished Try Get Async: " + url);
 
-					Logger.LogDebugWithLineNumber("Finished.");
+					Logger.DebugWithLineNumber("Finished.");
 
 					return response.IsSuccessStatusCode;
 				}
@@ -304,19 +304,19 @@ namespace Stardust.Node.Workers
 
 			catch (HttpRequestException exp)
 			{
-				Logger.LogErrorWithLineNumber(exp.Message,
+				Logger.ErrorWithLineNumber(exp.Message,
 				                                 exp);
 			}
 
 			catch (Exception exp)
 			{
-				Logger.LogErrorWithLineNumber(exp.Message,
+				Logger.ErrorWithLineNumber(exp.Message,
 				                                 exp);
 
 				throw;
 			}
 
-			Logger.LogDebugWithLineNumber("Return false");
+			Logger.DebugWithLineNumber("Return false");
 			return false;
 		}
 

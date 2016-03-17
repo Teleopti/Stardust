@@ -48,7 +48,7 @@ namespace NodeTest.Timers
 		[TestFixtureTearDown]
 		public void TestFixtureTearDown()
 		{
-			Logger.LogDebugWithLineNumber("Closing TrySendStatusToManagerTimerTests...");
+			Logger.DebugWithLineNumber("Closing TrySendStatusToManagerTimerTests...");
 		}
 
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (TrySendStatusToManagerTimerTests));

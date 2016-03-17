@@ -14,7 +14,7 @@ namespace NodeTest.JobHandlers
 
 		public LongRunningJobWorker()
 		{
-			Logger.LogDebugWithLineNumber("'Long running Job Worker' class constructor called.");
+			Logger.DebugWithLineNumber("'Long running Job Worker' class constructor called.");
 		}
 
 		public CancellationTokenSource CancellationTokenSource { get; set; }
@@ -23,7 +23,7 @@ namespace NodeTest.JobHandlers
 		                   CancellationTokenSource cancellationTokenSource,
 		                   Action<string> sendProgress)
 		{
-			Logger.LogDebugWithLineNumber("'Long running Job Worker' handle method called.");
+			Logger.DebugWithLineNumber("'Long running Job Worker' handle method called.");
 
 			CancellationTokenSource = cancellationTokenSource;
 

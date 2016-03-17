@@ -75,7 +75,7 @@ namespace NodeConsoleHost
 
 			WhoAmI = "[NODE CONSOLE HOST ( " + nodeName + ", " + baseAddress + " ), " + Environment.MachineName.ToUpper() + "]";
 
-			Logger.LogInfoWithLineNumber(WhoAmI + " : started.");
+			Logger.InfoWithLineNumber(WhoAmI + " : started.");
 
 			AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -101,7 +101,7 @@ namespace NodeConsoleHost
 		private static void CurrentDomain_DomainUnload(object sender,
 		                                               EventArgs e)
 		{
-			Logger.LogDebugWithLineNumber(WhoAmI + " : CurrentDomain_DomainUnload called.");
+			Logger.DebugWithLineNumber(WhoAmI + " : CurrentDomain_DomainUnload called.");
 
 			if (NodeStarter != null)
 			{
@@ -118,7 +118,7 @@ namespace NodeConsoleHost
 
 			if (exp != null)
 			{
-				Logger.LogFatalWithLineNumber(exp.Message,
+				Logger.FatalWithLineNumber(exp.Message,
 				                              exp);
 			}
 		}

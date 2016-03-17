@@ -7,6 +7,13 @@ namespace Stardust.Node.Extensions
 {
 	public static class LoggerExtensions
 	{
+		public static ILog Log<T>(this T thing)
+		{
+			var log = LogManager.GetLogger(typeof(T));
+
+			return log;
+		}
+
 		private static void ValidateArgument(this ILog logger)
 		{
 			if (logger == null)
@@ -15,7 +22,7 @@ namespace Stardust.Node.Extensions
 			}
 		}
 
-		public static void LogErrorWithLineNumber(this ILog logger,
+		public static void ErrorWithLineNumber(this ILog logger,
 		                                          string info,
 		                                          Exception exception = null,
 		                                          [CallerFilePath] string file = "",
@@ -35,7 +42,7 @@ namespace Stardust.Node.Extensions
 			}
 		}
 
-		public static void LogFatalWithLineNumber(this ILog logger,
+		public static void FatalWithLineNumber(this ILog logger,
 		                                          string info,
 		                                          Exception exception = null,
 		                                          [CallerFilePath] string file = "",
@@ -55,7 +62,7 @@ namespace Stardust.Node.Extensions
 			}
 		}
 
-		public static void LogWarningWithLineNumber(this ILog logger,
+		public static void WarningWithLineNumber(this ILog logger,
 		                                            string info,
 		                                            [CallerFilePath] string file = "",
 		                                            [CallerMemberName] string member = "",
@@ -73,7 +80,7 @@ namespace Stardust.Node.Extensions
 			}
 		}
 
-		public static void LogDebugWithLineNumber(this ILog logger,
+		public static void DebugWithLineNumber(this ILog logger,
 		                                          string info,
 		                                          [CallerFilePath] string file = "",
 		                                          [CallerMemberName] string member = "",
@@ -91,7 +98,7 @@ namespace Stardust.Node.Extensions
 			}
 		}
 
-		public static void LogInfoWithLineNumber(this ILog logger,
+		public static void InfoWithLineNumber(this ILog logger,
 		                                         string info,
 		                                         [CallerFilePath] string file = "",
 		                                         [CallerMemberName] string member = "",

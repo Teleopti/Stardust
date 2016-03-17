@@ -93,7 +93,7 @@ namespace NodeTest
 		[TestFixtureTearDown]
 		public void TestFixtureTearDown()
 		{
-			Logger.LogDebugWithLineNumber("Start TestFixtureTearDown");
+			Logger.DebugWithLineNumber("Start TestFixtureTearDown");
 		}
 
 		private NodeConfigurationFake _nodeConfigurationFake;

@@ -101,7 +101,7 @@ namespace NodeTest
 		public void TestFixtureTearDown()
 		{
 			Thread.Sleep(TimeSpan.FromSeconds(5));
-			Logger.LogDebugWithLineNumber("Start TestFixtureTearDown.");
+			Logger.DebugWithLineNumber("Start TestFixtureTearDown.");
 		}
 
 		private Uri CallBackUriTemplateFake { get; set; }
@@ -119,7 +119,7 @@ namespace NodeTest
 		[Test]
 		public void ShouldBeAbleToCatchExceptionsFromJob() //faulting job
 		{
-			Logger.LogDebugWithLineNumber("Starting test...");
+			Logger.DebugWithLineNumber("Starting test...");
 
 			_workerWrapper = new WorkerWrapper(new ThrowExceptionInvokeHandlerFake(),
 			                                   _nodeConfigurationFake,
@@ -143,7 +143,7 @@ namespace NodeTest
 		[Test]
 		public void ShouldBeAbleToStartJob()
 		{
-			Logger.LogDebugWithLineNumber("Starting test...");
+			Logger.DebugWithLineNumber("Starting test...");
 
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
 			                                   _nodeConfigurationFake,
@@ -167,7 +167,7 @@ namespace NodeTest
 		[Test]
 		public void ShouldBeAbleToTryCancelJob()
 		{
-			Logger.LogDebugWithLineNumber("Starting test...");
+			Logger.DebugWithLineNumber("Starting test...");
 
 			_workerWrapper = new WorkerWrapper(new LongRunningInvokeHandlerFake(),
 			                                   _nodeConfigurationFake,
@@ -199,7 +199,7 @@ namespace NodeTest
 		[Test]
 		public void ShouldNotThrowWhenCancellingAlreadyCancelledJob()
 		{
-			Logger.LogDebugWithLineNumber("Starting test...");
+			Logger.DebugWithLineNumber("Starting test...");
 
 			_workerWrapper = new WorkerWrapper(new LongRunningInvokeHandlerFake(),
 			                                   _nodeConfigurationFake,
@@ -237,7 +237,7 @@ namespace NodeTest
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void ShouldThrowArgumentNullExceptionWhenInvokeHandlerIsNull()
 		{
-			Logger.LogDebugWithLineNumber("Starting test...");
+			Logger.DebugWithLineNumber("Starting test...");
 
 			IWorkerWrapper workerWrapper = new WorkerWrapper(null,
 			                                                 null,
@@ -254,7 +254,7 @@ namespace NodeTest
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void ShouldThrowArgumentNullExceptionWhenJobCanceledTimerIsNull()
 		{
-			Logger.LogDebugWithLineNumber("Starting test...");
+			Logger.DebugWithLineNumber("Starting test...");
 
 			IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
 			                                                 _nodeConfigurationFake,
@@ -271,7 +271,7 @@ namespace NodeTest
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void ShouldThrowArgumentNullExceptionWhenJobFaultedTimerIsNull()
 		{
-			Logger.LogDebugWithLineNumber("Starting test...");
+			Logger.DebugWithLineNumber("Starting test...");
 
 			IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
 			                                                 _nodeConfigurationFake,
@@ -288,7 +288,7 @@ namespace NodeTest
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void ShouldThrowArgumentNullExceptionWhenJodDoneTimerIsNull()
 		{
-			Logger.LogDebugWithLineNumber("Starting test...");
+			Logger.DebugWithLineNumber("Starting test...");
 
 			IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
 			                                                 _nodeConfigurationFake,
@@ -305,7 +305,7 @@ namespace NodeTest
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void ShouldThrowArgumentNullExceptionWhenNodeConfigurationIsNull()
 		{
-			Logger.LogDebugWithLineNumber("Starting test...");
+			Logger.DebugWithLineNumber("Starting test...");
 
 			IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
 			                                                 null,
@@ -323,7 +323,7 @@ namespace NodeTest
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void ShouldThrowArgumentNullExceptionWhenNodeStartupNotificationToManaagerTimerIsNull()
 		{
-			Logger.LogDebugWithLineNumber("Starting test...");
+			Logger.DebugWithLineNumber("Starting test...");
 
 			IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
 			                                                 _nodeConfigurationFake,
@@ -340,7 +340,7 @@ namespace NodeTest
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void ShouldThrowArgumentNullExceptionWhenPingToManagerTimerIsNull()
 		{
-			Logger.LogDebugWithLineNumber("Starting test...");
+			Logger.DebugWithLineNumber("Starting test...");
 
 			var postHttpRequestFake = new FakeHttpSender();
 
@@ -360,7 +360,7 @@ namespace NodeTest
 		[Test]
 		public void StartJobShouldReturnBadRequestWhenMessageIdIsEmptyGuid()
 		{
-			Logger.LogDebugWithLineNumber("Starting test...");
+			Logger.DebugWithLineNumber("Starting test...");
 
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
 			                                   _nodeConfigurationFake,
@@ -383,7 +383,7 @@ namespace NodeTest
 		[Test]
 		public void StartJobShouldReturnBadRequestWhenMessageIsEmpty()
 		{
-			Logger.LogDebugWithLineNumber("Starting test...");
+			Logger.DebugWithLineNumber("Starting test...");
 
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
 			                                   _nodeConfigurationFake,
@@ -406,7 +406,7 @@ namespace NodeTest
 		[Test]
 		public void StartJobShouldReturnBadRequestWhenMessageIsNull()
 		{
-			Logger.LogDebugWithLineNumber("Starting test...");
+			Logger.DebugWithLineNumber("Starting test...");
 
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
 			                                   _nodeConfigurationFake,
