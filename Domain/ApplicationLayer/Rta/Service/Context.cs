@@ -25,7 +25,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IAppliedAdherence appliedAdherence,
 			IAppliedAlarm appliedAlarm)
 		{
-			_stored = new Lazy<StoredStateInfo>(() => stored == null ? null : stored.Invoke());
+			var dontDeferForNow = stored == null ? null : stored.Invoke();
+			_stored = new Lazy<StoredStateInfo>(() => dontDeferForNow);
 			var scheduleLazy = new Lazy<IEnumerable<ScheduleLayer>>(schedule);
 			var mappingsLazy = new Lazy<IEnumerable<Mapping>>(mappings);
 			_agentStateReadModelUpdater = agentStateReadModelUpdater ?? (a => { });
