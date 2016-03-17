@@ -13,6 +13,7 @@ using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
+using Teleopti.Ccc.Infrastructure.DistributedLock;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
@@ -82,19 +83,29 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 
 			if (runController.CanIRunAJob(out etlRunningInformation))
 			{
-				using (var etlJobLock = new EtlJobLock(connectionString))
+				try
 				{
-					runController.StartEtlJobRunLock(job.Name, false, etlJobLock);
-					IJobRunner jobRunner = new JobRunner();
-					IList<IJobResult> jobResults = jobRunner.Run(job, jobResultCollection, jobStepsNotToRun);
-					if (jobResults == null)
+					using (var etlJobLock = new EtlJobLock(connectionString, job.Name, false))
 					{
-						MessageBox.Show("Please apply a license from the main client before ETL job is run.", "Warning",
-											 MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, 0);
+						IJobRunner jobRunner = new JobRunner();
+						IList<IJobResult> jobResults = jobRunner.Run(job, jobResultCollection, jobStepsNotToRun);
+						if (jobResults == null)
+						{
+							MessageBox.Show("Please apply a license from the main client before ETL job is run.", "Warning",
+								MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, 0);
+						}
+						else
+						{
+							jobRunner.SaveResult(jobResults, repository, -1);
+						}
 					}
-					else
+				}
+				catch (DistributedLockException)
+				{
+					if (runController.CanIRunAJob(out etlRunningInformation))
 					{
-						jobRunner.SaveResult(jobResults, repository, -1);
+						// Actually there was not any job running.
+						throw;
 					}
 				}
 			}

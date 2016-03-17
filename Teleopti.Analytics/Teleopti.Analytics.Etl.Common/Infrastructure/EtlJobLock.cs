@@ -4,21 +4,23 @@ using System.Data.SqlClient;
 using System.Threading;
 using log4net;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
+using Teleopti.Ccc.Infrastructure.DistributedLock;
 using Teleopti.Ccc.Infrastructure.Util;
 
 namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
-	public class EtlJobLock: IEtlJobLock
+	public class EtlJobLock : IEtlJobLock
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (EtlJobLock));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(EtlJobLock));
 		private Timer timer;
 		private readonly Func<SqlConnection> _connection;
 		private readonly CloudSafeSqlExecute _executor = new CloudSafeSqlExecute();
 		const string insertStatement = "INSERT INTO mart.sys_etl_running_lock (computer_name,start_time,job_name,is_started_by_service,lock_until) VALUES (@computer_name,@start_time,@job_name,@is_started_by_service,DATEADD(mi,1,GETUTCDATE()))";
 		const string updateStatement = "UPDATE mart.sys_etl_running_lock SET lock_until=DATEADD(mi,1,GETUTCDATE())";
 		const string deleteStatement = "DELETE FROM mart.sys_etl_running_lock";
-		
-		public EtlJobLock(string connectionString)
+		private readonly SqlServerDistributedLock sqlServerDistributedLock;
+
+		public EtlJobLock(string connectionString, string jobName, bool isStartByService)
 		{
 			_connection = () =>
 			{
@@ -26,9 +28,13 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				conn.Open();
 				return conn;
 			};
+
+			// Aquire a distributed lock
+			sqlServerDistributedLock = new SqlServerDistributedLock("ETLJobLock", TimeSpan.Zero, _connection());
+			createLock(jobName, isStartByService);
 		}
 
-		public void CreateLock(string jobName, bool isStartByService)
+		private void createLock(string jobName, bool isStartByService)
 		{
 			_executor.Run(_connection, conn =>
 			{
@@ -50,7 +56,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				sqlTransaction.Commit();
 			});
 
-			timer = new Timer(lockForAnotherMinute,null,TimeSpan.FromSeconds(45),TimeSpan.FromMinutes(1));
+			timer = new Timer(lockForAnotherMinute, null, TimeSpan.FromSeconds(45), TimeSpan.FromMinutes(1));
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
@@ -74,24 +80,25 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			}
 			catch (Exception exception)
 			{
-				Logger.Error("Got an error when trying to extend the lock. Will try again in 10 seconds.",exception);
+				Logger.Error("Got an error when trying to extend the lock. Will try again in 10 seconds.", exception);
 				timer.Change(TimeSpan.FromSeconds(10), TimeSpan.FromMinutes(1));
 			}
 		}
 
 		public void Dispose()
 		{
-			Dispose(true);
+			dispose(true);
+			sqlServerDistributedLock.Dispose();
 			GC.SuppressFinalize(this);
 		}
 
-		private void Dispose(bool disposing)
+		private void dispose(bool disposing)
 		{
-				if (disposing)
-				{
-					ReleaseManagedResources();
-				}
-				ReleaseUnmanagedResources();
+			if (disposing)
+			{
+				ReleaseManagedResources();
+			}
+			ReleaseUnmanagedResources();
 		}
 
 		protected virtual void ReleaseUnmanagedResources()

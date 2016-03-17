@@ -46,18 +46,6 @@ namespace Teleopti.Analytics.Etl.CommonTest
 			_target.CanIRunAJob(out etlRunningInformation).Should().Be.True();
 			etlRunningInformation.Should().Be.Null();
 		}
-
-		[Test]
-		public void ShouldStartEtlLock()
-		{
-			_target = new RunController(null);
-			const string jobName = "Job name 1";
-			var etlJobLock = MockRepository.GenerateMock<IEtlJobLock>();
-			etlJobLock.Expect(x => x.CreateLock(jobName, true));
-			_target.StartEtlJobRunLock(jobName, true, etlJobLock);
-
-			etlJobLock.VerifyAllExpectations();
-		}
 	}
 
 }

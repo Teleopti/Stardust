@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.SqlClient;
 using System.Globalization;
-using System.Linq;
 using System.Threading;
 using log4net;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
@@ -12,6 +12,7 @@ using Teleopti.Analytics.Etl.Common.JobLog;
 using Teleopti.Analytics.Etl.Common.JobSchedule;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
+using Teleopti.Ccc.Infrastructure.DistributedLock;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
@@ -20,19 +21,19 @@ namespace Teleopti.Analytics.Etl.Common.Service
 	public class EtlJobStarter
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(EtlJobStarter));
+		private readonly IBaseConfigurationRepository _baseConfigurationRepository;
 
 		private readonly string _connectionString;
 		private readonly string _cube;
-		private readonly string _pmInstallation;
-		private readonly JobHelper _jobHelper;
 		private readonly JobExtractor _jobExtractor;
+		private readonly JobHelper _jobHelper;
+		private readonly string _pmInstallation;
 		private readonly Tenants _tenants;
-		private readonly IBaseConfigurationRepository _baseConfigurationRepository;
 		private DateTime _serviceStartTime;
 		private Action _stopService;
 
 		public EtlJobStarter(
-			JobHelper jobHelper, 
+			JobHelper jobHelper,
 			JobExtractor jobExtractor,
 			Tenants tenants,
 			IBaseConfigurationRepository baseConfigurationRepository)
@@ -91,7 +92,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 			var culture = CultureInfo.CurrentCulture;
 			if (configHandler.BaseConfiguration.CultureId.HasValue)
-				culture = PersianCultureHelper.FixPersianCulture(CultureInfo.GetCultureInfo(configHandler.BaseConfiguration.CultureId.Value));
+				culture = CultureInfo.GetCultureInfo(configHandler.BaseConfiguration.CultureId.Value).FixPersianCulture();
 			Thread.CurrentThread.CurrentCulture = culture;
 
 			log.Debug("Extracting job to run from schedule");
@@ -120,31 +121,46 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			IEtlRunningInformation etlRunningInformation;
 			if (runController.CanIRunAJob(out etlRunningInformation))
 			{
-				log.Debug("Trying to aquire lock");
-				using (var etlJobLock = new EtlJobLock(_connectionString))
+				try
 				{
-					log.InfoFormat(CultureInfo.InvariantCulture, "Scheduled job '{0}' ready to start.", jobToRun.Name);
-					runController.StartEtlJobRunLock(jobToRun.Name, true, etlJobLock);
-
-					foreach (var tenant in _tenants.EtlTenants())
+					log.Debug("Trying to aquire lock");
+					using (var etlJobLock = new EtlJobLock(_connectionString, jobToRun.Name, true))
 					{
-						jobToRun.StepList[0].JobParameters.SetTenantBaseConfigValues(tenant.EtlConfiguration);
+						log.InfoFormat(CultureInfo.InvariantCulture, "Scheduled job '{0}' ready to start.", jobToRun.Name);
 
-						var jobResultCollection = new List<IJobResult>();
-						_jobHelper.SelectDataSourceContainer(tenant.Name);
-
-						var jobRunner = new JobRunner();
-						var jobResults = jobRunner.Run(jobToRun, jobResultCollection, jobStepsNotToRun);
-						if (jobResults == null)
+						foreach (var tenant in _tenants.EtlTenants())
 						{
-							// No license applied - stop service
-							logInvalidLicense(tenant.Name);
-							//we can't stop service now beacuse one tenant don't have a License, just try next
-							//NeedToStopService(this, null);
-							//return false;
-							continue;
+							jobToRun.StepList[0].JobParameters.SetTenantBaseConfigValues(tenant.EtlConfiguration);
+
+							var jobResultCollection = new List<IJobResult>();
+							_jobHelper.SelectDataSourceContainer(tenant.Name);
+
+							var jobRunner = new JobRunner();
+							var jobResults = jobRunner.Run(jobToRun, jobResultCollection, jobStepsNotToRun);
+							if (jobResults == null)
+							{
+								// No license applied - stop service
+								logInvalidLicense(tenant.Name);
+								//we can't stop service now beacuse one tenant don't have a License, just try next
+								//NeedToStopService(this, null);
+								//return false;
+								continue;
+							}
+							jobRunner.SaveResult(jobResults, repository, scheduleId);
 						}
-						jobRunner.SaveResult(jobResults, repository, scheduleId);
+					}
+				}
+				catch (DistributedLockException)
+				{
+					IEtlRunningInformation runningEtlJob;
+					if (!runController.CanIRunAJob(out runningEtlJob))
+					{
+						logConflictingEtlRun(jobToRun, runningEtlJob);
+					}
+					else
+					{
+						// Actually there was not any job running.
+						throw;
 					}
 				}
 			}
@@ -169,7 +185,9 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 		private static void logInvalidLicense(string tenant)
 		{
-			log.WarnFormat("ETL Service could not run for tenant {0}. Please log on to that tenant and apply a license in the main client.", tenant);
+			log.WarnFormat(
+				"ETL Service could not run for tenant {0}. Please log on to that tenant and apply a license in the main client.",
+				tenant);
 		}
 
 		private static void logInvalidConfiguration(ConfigurationHandler configHandler)

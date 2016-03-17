@@ -15,10 +15,5 @@ namespace Teleopti.Analytics.Etl.Common
 		{
 			return !_repository.IsAnotherEtlRunningAJob(out etlRunningInformation);
 		}
-
-		public void StartEtlJobRunLock(string jobName, bool isStartByService, IEtlJobLock etlJobLock)
-		{
-			etlJobLock.CreateLock(jobName, isStartByService);
-		}
 	}
 }
