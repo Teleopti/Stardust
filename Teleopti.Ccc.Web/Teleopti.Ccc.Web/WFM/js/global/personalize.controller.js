@@ -8,7 +8,6 @@
       $scope.showOverlay = false;
 	  $scope.darkTheme = false;
 	  $scope.isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
-	  console.log($scope.isFirefox);
       toggleService.togglesLoaded.then(function() {
         $scope.personalizeToggle = toggleService.WfmGlobalLayout_personalOptions_37114;
       });
@@ -17,7 +16,6 @@
         document.getElementById("personalizeMenu").focus();
       }
 	  var themeToggleFromTo = function(to, from){
-		  console.log(to,from);
 			  document.getElementById(to+'Modules').removeAttribute('disabled');
 			  document.getElementById(to+'Style').removeAttribute('disabled');
 			  document.getElementById(from+'Modules').setAttribute('disabled', true);
