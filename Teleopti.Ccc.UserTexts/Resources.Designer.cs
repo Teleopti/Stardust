@@ -4863,6 +4863,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can not modify your own role.
+        /// </summary>
+        public static string CanNotModifyMyRole {
+            get {
+                return ResourceManager.GetString("CanNotModifyMyRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can not add overtime without multiplicator definition sets.
         /// </summary>
         public static string CanNotOvertimeWithoutMultiplicatorDefinitionSets {
@@ -29102,6 +29111,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ToggleAll {
             get {
                 return ResourceManager.GetString("ToggleAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle dark theme.
+        /// </summary>
+        public static string ToggleDarkTheme {
+            get {
+                return ResourceManager.GetString("ToggleDarkTheme", resourceCulture);
             }
         }
         

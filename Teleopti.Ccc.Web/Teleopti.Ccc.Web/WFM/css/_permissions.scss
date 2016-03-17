@@ -63,9 +63,13 @@
 	pointer-events:none;
 }
 
-.my-role-lock{
+.myRoleLock{
 	cursor: not-allowed;
 	i{
+		@extend .option-locked;
+	}
+
+	.wfm-switch{
 		@extend .option-locked;
 	}
 }

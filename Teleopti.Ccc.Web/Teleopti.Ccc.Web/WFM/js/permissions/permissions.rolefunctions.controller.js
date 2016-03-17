@@ -26,6 +26,14 @@
 							disableCountDown: true
 						});
 					}
+
+					else if ($scope.selectedRole.IsMyRole) {
+						message = growl.warning("<i class='mdi mdi-alert' ></i><span>{{'CanNotModifyMyRole'|translate}}</span>", {
+							ttl: 5000,
+							disableCountDown: true
+						});
+					}
+
 					else if (message) {
 						message.destroy();
 					}
