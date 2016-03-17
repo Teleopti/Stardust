@@ -268,6 +268,6 @@ And I set the starting month for viewing period to '2015-12-01'
 When I click at campaign name tag 'NewCampaign'
 And I should see the backlog visualization of 'NewCampaign'
 And I select all the dates from '2015-12-07' to '2015-12-08'
-And I set the manual backlog to '0'
+And I set the manual backlog to zero
 Then I should see the campaign is done after the end date
 And the campaign is overstaffed

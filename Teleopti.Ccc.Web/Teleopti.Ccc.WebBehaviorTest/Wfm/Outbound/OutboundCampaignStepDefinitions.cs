@@ -125,43 +125,40 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 			{
 				{"directRemoveCampaign", "true"}
 			});
-			Thread.Sleep(300);
-			Browser.Interactions.ClickVisibleOnly(".test-delete-campaign");				
+			Browser.Interactions.Click("form.ng-valid .test-delete-campaign");				
 		}
 
 		[When(@"after that I am redirected to the campaign list page")]
 		public void WhenAfterThatIAmRedirectedToTheCampaignListPage()
 		{
-			Thread.Sleep(300);
 			Browser.Interactions.AssertExists(".outbound-gantt-chart");
 		}
 
 		[When(@"I see the edit campaign form")]
 		public void WhenISeeTheEditCampaignForm()
 		{
-			Browser.Interactions.AssertExists(".test-campaign-edit");
+			Browser.Interactions.AssertExists(".test-campaign-edit form.ng-valid");
 		}
 
 		[When(@"I change the campaign period to")]
 		public void WhenIChangeTheCampaignPeriodTo(Table table)
 		{
+			Browser.Interactions.AssertScopeValue(".test-campaign-edit", "isCampaignLoaded()", true);
+
 			var instance = new OutboundCampaignConfigurable();
 			table.FillInstance(instance);
 
 			Browser.Interactions.SetScopeValues(".test-campaign-edit", new Dictionary<string, string>
 			{				
-				{ "campaign.SpanningPeriod", "{" + string.Format("startDate: new Date('{0}'), endDate: new Date('{1}')", instance.StartDate, instance.EndDate) + "}" },
-				{ "campaign.StartDate", string.Format("new Date('{0}')", instance.StartDate)},
-				{ "campaign.EndDate", string.Format("new Date('{0}')", instance.EndDate) },
-				{ "campaignSpanningPeriodForm.$pristine", "false" }
+				{ "campaign.SpanningPeriod", "{" + string.Format("startDate: new Date('{0}'), endDate: new Date('{1}')", instance.StartDate, instance.EndDate) + "}" }
 			});
-			Thread.Sleep(300);
-			Browser.Interactions.Click(".test-campaign-edit-submit");
+			Browser.Interactions.Click("form.ng-valid .test-campaign-edit-submit");
 		}
 
 		[When(@"after the update is done I goto the campaign list page")]
 		public void WhenAfterTheUpdateIsDoneIGotoTheCampaignListPage()
 		{
+			Browser.Interactions.AssertScopeValue(".test-campaign-edit", "isEditing", false);
 			Navigation.GoToOutbound();			
 		}
 
@@ -265,21 +262,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 			Browser.Interactions.AssertScopeValue("div[id^=Chart]", target, true);
 		}
 
-		[When(@"I set the manual backlog to '(.*)'")]
-		public void WhenISetTheManualBacklogTo(int backlogValue)
+		[When(@"I set the manual backlog to zero")]
+		public void WhenISetTheManualBacklogTo()
 		{
 			Browser.Interactions.SetScopeValues("campaign-commands-pane", new Dictionary<string, string>
 			{
 				{"manualBacklogSwitch", "true"},
-				{"manualBacklogInput" , backlogValue.ToString() } 
+				{"manualBacklogInput" , "0" } 
 			}, true);
 
-			Browser.Interactions.WaitScopeCondition("campaign-commands-pane", "validManualBacklog()", true,
-				() =>
-				{
-					Thread.Sleep(300);
-					Browser.Interactions.ClickVisibleOnly(".btn-save-backlog");
-				}, true);
+			Browser.Interactions.AssertScopeValue("campaign-commands-pane", "manualBacklogInput", "0", true);
+			Browser.Interactions.Click(".btn-save-backlog");			
 		}
 
 		[Then(@"the campaign is overstaffed")]

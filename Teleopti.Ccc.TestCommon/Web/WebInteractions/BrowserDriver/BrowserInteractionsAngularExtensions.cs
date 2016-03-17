@@ -45,15 +45,14 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 			if (typeof (T) == typeof (bool))
 			{
 				var query = scopeByQuerySelector(selector, useIsolateScope) +
-							string.Format(" return scope.$result{0} ?'True': 'False' ; ", readerName);
-				
+							string.Format(" return scope.$result{0} !== 'I_am_a_dummy_value' ? 'True': 'False' ; ", readerName);
 				interactions.AssertJavascriptResultContains(query, constraint.ToString());				
 			}		
 			else 
 			{
 				var query = scopeByQuerySelector(selector, useIsolateScope) +
 							string.Format(" return scope.$result{0}; ", readerName);
-			
+				
 				interactions.AssertJavascriptResultContains(query, constraint.ToString());				
 			}		
 		}
@@ -80,7 +79,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 			return scopeByQuerySelector(selector, useIsolateScope)
 				   + runnerByQuerySelector(selector)				
 				   + string.Format("var evaluator = function(){{ {0} }}; ", next)
-				   + string.Format("scope.$result{0} = 'i_am_a_dummy_value'; ", readerName)
+				   + string.Format("scope.$result{0} = 'I_am_a_dummy_value'; ", readerName)
 				   + string.Format("var setv = function(v) {{ scope.$result{0} = v; }}; ", readerName)
 				   + string.Format("runner(function() {{ scope.$result{0} = null; scope.$watch(evaluator, function(v) {{ setv(v); }}); }}, 200); ", readerName);			
 		}

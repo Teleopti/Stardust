@@ -9,11 +9,13 @@
 
 
     function editCtrl($scope, $state, $stateParams, $timeout, outboundService, outboundNotificationService, viewUtilityService) {
-
+	   
     	outboundService.checkPermission($scope).then(init);
 
         var originalCampaign;
         var muteDirtyWorkingHoursWatcher;
+
+	    $scope.initialized = false;
 
         $scope.init = init;
         $scope.editCampaign = editCampaign;
@@ -22,20 +24,20 @@
 	    $scope.backToList = backToList;
 	    $scope.showRemoveCampaignConfirmDialog = false;
 	    $scope.removeCampaign = removeCampaign;	  
-		$scope.cancelRemoveCampaign = cancelRemoveCampaign;
-		$scope.isCampaignLoaded = function () { return angular.isDefined($scope.campaign); };
-
-	    $scope.directRemoveCampaign = false;
-
-
+	    $scope.cancelRemoveCampaign = cancelRemoveCampaign;
+	    $scope.campaign = undefined;
+		$scope.isCampaignLoaded = function () { return angular.isDefined($scope.campaign); };		
+		$scope.directRemoveCampaign = false;
+		
 		function editCampaign() {
+			
 			$scope.isFormValidForPage = $scope.isFormValid();
 			checkIsWorkingHoursValid();
 		
 			if (!$scope.isFormValidForPage || !$scope.isWorkingHoursValidForPage) return;
 			$scope.isEditing = true;
             outboundService.editCampaign($scope.campaign, function (campaign) {
-                outboundNotificationService.notifyCampaignUpdateSuccess(angular.copy(campaign));
+            	outboundNotificationService.notifyCampaignUpdateSuccess(angular.copy(campaign));	         
                 init();
             }, function (error) {
                 outboundNotificationService.notifyCampaignUpdateFailure(error);
@@ -71,7 +73,7 @@
 		}
 
         function init() {
-        	
+	        
             var currentCampaignId = (angular.isDefined($stateParams.Id) && $stateParams.Id != "") ? $stateParams.Id : null;
             if (currentCampaignId == null) return;
             $scope.isEditing = false;
@@ -92,9 +94,13 @@
                     }
                 }, true);
 
+               
             }, function () {
                 outboundNotificationService.notifyCampaignLoadingFailure({ Message: currentCampaignId });
             });
+
+            
+            $scope.initialized = true;
         }
 
         function setPristineForms() {
