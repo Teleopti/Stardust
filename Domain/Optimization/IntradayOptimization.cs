@@ -15,13 +15,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IIntradayOptimizerContainer _intradayOptimizerContainer;
 		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
+		private readonly OptimizationPreferencesFactory _optimizationPreferencesFactory;
 
 		public IntradayOptimization(Func<ISchedulerStateHolder> schedulerStateHolder,
 			IntradayOptimizer2Creator intradayOptimizer2Creator,
 			IntradayOptimizationContext intradayOptimizationContext,
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 			IIntradayOptimizerContainer intradayOptimizerContainer,
-			WeeklyRestSolverExecuter weeklyRestSolverExecuter)
+			WeeklyRestSolverExecuter weeklyRestSolverExecuter,
+			OptimizationPreferencesFactory optimizationPreferencesFactory)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_intradayOptimizer2Creator = intradayOptimizer2Creator;
@@ -29,16 +31,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 			_intradayOptimizerContainer = intradayOptimizerContainer;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
+			_optimizationPreferencesFactory = optimizationPreferencesFactory;
 		}
 
 		public void Execute(DateOnlyPeriod period, 
 												IList<IPerson> agents,
-												OptimizationPreferences optimizationPreferences,
 												bool runResolveWeeklyRestRule)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			var schedules = schedulerStateHolder.Schedules.SchedulesForPeriod(period, agents);
-
+			var optimizationPreferences = _optimizationPreferencesFactory.Create();
 			var dayOffPreferencesProvider = new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()); //doesn't seem to be used with "real" values when doing intraday optimization
 			var optimizers = _intradayOptimizer2Creator.Create(period, schedules, optimizationPreferences, dayOffPreferencesProvider);
 
