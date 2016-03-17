@@ -27,7 +27,7 @@ Set-ExecutionPolicy bypass -force
 Import-module .\teamcity.psm1 -Force
 
 TaskSetup {
-    TeamCity-ReportBuildProgress "Running task $($psake.context.Peek().PreReq)"
+    TeamCity-ReportBuildProgress "Running task $($psake.context.Peek().currentTaskName)"
 }
 
 task default -depends init, PreReq, MountK, CompileWse, CompileWsi, ProductVersion, PostReq, UnMountK, CHM-SDK-File, MalewareScan
@@ -51,9 +51,7 @@ task MountK -description "Mount working directory to K:" {
 
 task PreReq -depends init -description "Move/Copy preparation of files" {
 
-	TeamCity-ReportBuildProgress "Running task $($psake.context.Peek().currentTaskName)"
-	
-    MoveWiseFiles
+	MoveWiseFiles
     CopyDependencies
     CopyWiseArtifacts
 }
@@ -175,8 +173,9 @@ function global:CopyDependencies {
     Copy-Item -Path "$DEPENDENCIESSRC\ccc7_server\ntrights.exe" -Destination "$SourceDir\Wise\ccc7_server\Logs\" -Force -ErrorAction Continue
     Copy-Item -Path "$DEPENDENCIESSRC\ccc7_server\ntrights.exe" -Destination "$SourceDir\Wise\ccc7_server\" -Force -ErrorAction Continue
     Copy-Item -Path "$DEPENDENCIESSRC\ccc7_server\sqlio.exe" -Destination "$SourceDir\SupportTools\SQLServerPerformance\SQLIO\" -Force -ErrorAction Continue
-
-    Copy-Item -Path "$DEPENDENCIESSRC\images\*.*" -Destination "$SourceDir\images\" -Force -ErrorAction Continue
+	
+	if (!(Test-Path -path $SourceDir\images)) {New-Item $SourceDir\images -Type Directory}
+    Copy-Item -Path "$DEPENDENCIESSRC\images\*" -Destination "$SourceDir\images\" -Force -ErrorAction Continue
 
 }
 
