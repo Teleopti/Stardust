@@ -69,14 +69,15 @@
 				return;
 			}
 
+			var currentDate = vm.scheduleDateMoment().format('YYYY-MM-DD');
 			var params = {
 				personIds: selectedPersonIdList,
-				date: vm.scheduleDateMoment().format('YYYY-MM-DD')
+				date: currentDate
 			};
 
-			teamScheduleSvc.getSchedules.query(params).$promise.then(function (result) {
+			teamScheduleSvc.getSchedules.query(params).$promise.then(function(result) {
 				scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment());
-				personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
+				personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules, currentDate);
 			});
 		}
 
@@ -134,12 +135,38 @@
 			}
 		}
 
+		function getTotalSelectedPersonAndAbsenceCount() {
+			var absenceCount = 0;
+			var personIds = [];
+
+			for (var i = 0; i < vm.selectedPersonAbsences.length; i++) {
+				var personAbsencePair = vm.selectedPersonAbsences[i];
+				personIds.push(personAbsencePair.personId);
+				absenceCount += personAbsencePair.SelectedPersonAbsences.length;
+			}
+
+			var selectedPersonInfo = personSelectionSvc.getSelectedPersonInfoList();
+			for (var j = 0; j < selectedPersonInfo.length; j++) {
+				var selectedPerson = selectedPersonInfo[j];
+				if (personIds.indexOf(selectedPerson.personId) === -1) {
+					personIds.push(selectedPerson.personId);
+					absenceCount += selectedPerson.personAbsenceCount;
+				}
+			}
+
+			return {
+				PersonCount: personIds.length,
+				AbsenceCount: absenceCount
+			};
+		}
+
 		function afterSchedulesLoaded(result) {
 			vm.paginationOptions.totalPages = result.Schedules.length > 0 ? Math.ceil(result.Total / vm.paginationOptions.pageSize) : 0;
 			vm.scheduleCount = scheduleMgmtSvc.groupScheduleVm.Schedules.length;
 			vm.total = result.Total;
 			vm.searchOptions.searchKeywordChanged = false;
 			vm.searchOptions.keyword = result.Keyword;
+			personSelectionSvc.setScheduleDate(vm.scheduleDateMoment().format('YYYY-MM-DD'));
 			personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 			setPersonAbsenceSelection();
 		};
@@ -192,10 +219,10 @@
 		}
 
 		function canRemoveAbsence() {
-			return vm.toggleForRemoveAbsenceEnabled
-				&& (personSelectionSvc.isAnyAgentSelected() || vm.selectedPersonAbsences.length > 0);
+			var selectedPersonAndAbsenceCount = getTotalSelectedPersonAndAbsenceCount();
+			return vm.toggleForRemoveAbsenceEnabled && selectedPersonAndAbsenceCount.AbsenceCount > 0;
 		}
-
+		
 		function removeAbsence(removeEntireCrossDayAbsence) {
 			var selectedPersonIdList = personSelectionSvc.getSelectedPersonIdList();
 
@@ -221,8 +248,10 @@
 		function confirmRemoveAbsence() {
 			if (!canRemoveAbsence()) return;
 
+			var selectedPersonAndAbsenceCount = getTotalSelectedPersonAndAbsenceCount();
+
 			var message = replaceParameters($translate.instant("AreYouSureToRemoveSelectedAbsence"),
-				[vm.selectedPersonAbsences.length, personSelectionSvc.getSelectedPersonIdList().length]);
+				[selectedPersonAndAbsenceCount.AbsenceCount, selectedPersonAndAbsenceCount.PersonCount]);
 			dialogSvc.create("js/teamSchedule/html/removeAbsenceConfirmDialog.html", 'RemoveAbsenceConfirmDialogController',
 				{
 					header: $translate.instant("Warning"), 

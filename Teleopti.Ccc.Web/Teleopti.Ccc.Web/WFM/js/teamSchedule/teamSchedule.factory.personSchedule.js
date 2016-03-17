@@ -8,6 +8,17 @@
 			Create: create
 		};
 
+		var getPersonAbsences = function() {
+			var personAbsences = [];
+			angular.forEach(this.Projections, function (projection) {
+				var pAbsenceId = projection.ParentPersonAbsence;
+				if (pAbsenceId != null && personAbsences.indexOf(pAbsenceId) === -1) {
+					personAbsences.push(pAbsenceId);
+				}
+			});
+			return personAbsences.length;
+		}
+
 		function create(schedule, timeLine) {
 			if (!schedule) schedule = {};
 
@@ -16,15 +27,21 @@
 			
 			var personSchedule = {
 				PersonId: schedule.PersonId,
-			
+
 				Name: schedule.Name,
 				Date: moment.tz(schedule.Date, currentUserInfo.DefaultTimeZone),
-				Shifts: projectionVms == undefined ? [] : [{Projections: projectionVms}],
+				Shifts: projectionVms == undefined ? [] : [
+					{
+						Date: schedule.Date,
+						Projections: projectionVms,
+						AbsenceCount: getPersonAbsences
+					}
+				],
 				IsFullDayAbsence: schedule.IsFullDayAbsence,
 				DayOffs: dayOffVm == undefined ? [] : [dayOffVm],
 				Merge: merge,
 				IsSelected: false,
-				AllowSwap: function () {
+				AllowSwap: function() {
 					return !this.IsFullDayAbsence;
 				}
 			}
@@ -116,7 +133,11 @@
 		function merge(otherSchedule, timeLine) {
 			var otherProjections = createProjections(otherSchedule.Projection, timeLine);
 			if (otherProjections != undefined) {
-				this.Shifts.push({ Projections: otherProjections });
+				this.Shifts.push({
+					Date: otherSchedule.Date,
+					Projections: otherProjections,
+					AbsenceCount: getPersonAbsences
+				});
 			}
 
 			var otherDayOffVm = createDayOffViewModel(otherSchedule.DayOff, timeLine);
