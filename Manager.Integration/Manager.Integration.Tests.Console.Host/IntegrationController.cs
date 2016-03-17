@@ -7,14 +7,11 @@ namespace Manager.IntegrationTest.Console.Host
 {
 	public class IntegrationController : ApiController
 	{
-		private static readonly ILog Logger =
-			LogManager.GetLogger(typeof (IntegrationController));
-
 		public IntegrationController()
 		{
 			WhoAmI = "[INTEGRATION CONTROLLER, " + Environment.MachineName.ToUpper() + "]";
 
-			Logger.InfoWithLineNumber(WhoAmI);
+			this.Log().InfoWithLineNumber(WhoAmI);
 		}
 
 		public string WhoAmI { get; set; }
@@ -22,7 +19,7 @@ namespace Manager.IntegrationTest.Console.Host
 		[HttpPost, Route("appdomain/managers")]
 		public IHttpActionResult StartNewManager()
 		{
-			Logger.DebugWithLineNumber("Called API controller.");
+			this.Log().DebugWithLineNumber("Called API controller.");
 
 			string friendlyname;
 
@@ -34,7 +31,7 @@ namespace Manager.IntegrationTest.Console.Host
 		[HttpPost, Route("appdomain/nodes")]
 		public IHttpActionResult StartNewNode()
 		{
-			Logger.InfoWithLineNumber("StartNewNode.");
+			this.Log().InfoWithLineNumber("StartNewNode.");
 
 			string friendlyname;
 
@@ -46,26 +43,26 @@ namespace Manager.IntegrationTest.Console.Host
 		[HttpDelete, Route("appdomain/managers/{id}")]
 		public IHttpActionResult DeleteManager(string id)
 		{
-			Logger.InfoWithLineNumber("DeleteManager");
+			this.Log().InfoWithLineNumber("DeleteManager");
 
 			if (string.IsNullOrEmpty(id))
 			{
-				Logger.WarningWithLineNumber("Bad request, id : " + id);
+				this.Log().WarningWithLineNumber("Bad request, id : " + id);
 				return BadRequest(id);
 			}
 
-			Logger.DebugWithLineNumber("Try shut down Manager with id : " + id);
+			this.Log().DebugWithLineNumber("Try shut down Manager with id : " + id);
 
 			var success = Program.ShutDownManager(id);
 
 			if (success)
 			{
-				Logger.InfoWithLineNumber("Manager has been shut down, with id : " + id);
+				this.Log().InfoWithLineNumber("Manager has been shut down, with id : " + id);
 
 				return Ok(id);
 			}
 
-			Logger.WarningWithLineNumber("Id not found, id : " + id);
+			this.Log().WarningWithLineNumber("Id not found, id : " + id);
 
 			return NotFound();
 		}
@@ -73,26 +70,26 @@ namespace Manager.IntegrationTest.Console.Host
 		[HttpDelete, Route("appdomain/nodes/{id}")]
 		public IHttpActionResult DeleteNode(string id)
 		{
-			Logger.InfoWithLineNumber("Delete Node");
+			this.Log().InfoWithLineNumber("Delete Node");
 
 			if (string.IsNullOrEmpty(id))
 			{
-				Logger.WarningWithLineNumber("Bad request, id : " + id);
+				this.Log().WarningWithLineNumber("Bad request, id : " + id);
 				return BadRequest(id);
 			}
 
-			Logger.DebugWithLineNumber("Try shut down Node with id : " + id);
+			this.Log().DebugWithLineNumber("Try shut down Node with id : " + id);
 
 			var success = Program.ShutDownNode(id);
 
 			if (success)
 			{
-				Logger.InfoWithLineNumber("Node has been shut down, with id : " + id);
+				this.Log().InfoWithLineNumber("Node has been shut down, with id : " + id);
 
 				return Ok(id);
 			}
 
-			Logger.WarningWithLineNumber("Id not found, id : " + id);
+			this.Log().WarningWithLineNumber("Id not found, id : " + id);
 
 			return NotFound();
 		}
@@ -100,7 +97,7 @@ namespace Manager.IntegrationTest.Console.Host
 		[HttpGet, Route("appdomain/managers")]
 		public IHttpActionResult GetAllManagers()
 		{
-			Logger.DebugWithLineNumber("GetAllManagers");
+			this.Log().DebugWithLineNumber("GetAllManagers");
 
 			var appDomainsList = Program.GetAllmanagers();
 
@@ -110,7 +107,7 @@ namespace Manager.IntegrationTest.Console.Host
 		[HttpGet, Route("appdomain/nodes")]
 		public IHttpActionResult GetAllNodes()
 		{
-			Logger.DebugWithLineNumber("GetAllNodes");
+			this.Log().DebugWithLineNumber("GetAllNodes");
 
 			var appDomainsList = Program.GetAllNodes();
 

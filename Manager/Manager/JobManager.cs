@@ -16,8 +16,6 @@ namespace Stardust.Manager
 {
 	public class JobManager : IDisposable
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (JobManager));
-
 		private readonly Timer _checkAndAssignNextJob = new Timer();
 		private readonly Timer _checkHeartbeatsTimer = new Timer();
 

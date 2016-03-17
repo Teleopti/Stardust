@@ -13,8 +13,6 @@ namespace Stardust.Manager
 {
     public class HttpSender : IHttpSender
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (HttpSender));
-
         /// <summary>
 		/// 
 		/// </summary>

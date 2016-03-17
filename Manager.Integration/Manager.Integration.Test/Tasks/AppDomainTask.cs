@@ -9,9 +9,6 @@ namespace Manager.Integration.Test.Tasks
 {
 	public class AppDomainTask : IDisposable
 	{
-		private static readonly ILog Logger =
-			LogManager.GetLogger(typeof (AppDomainTask));
-
 		public AppDomainTask(string buildmode)
 		{
 			Buildmode = buildmode;

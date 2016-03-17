@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
 using Manager.Integration.Test.EventArgs;
 using Manager.Integration.Test.Helpers;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
@@ -15,8 +14,6 @@ namespace Manager.Integration.Test.Timers
 {
 	public class CheckJobHistoryStatusTimer : IDisposable
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (CheckJobHistoryStatusTimer));
-
 		public EventHandler<GuidAddedEventArgs> GuidAddedEventHandler;
 
 		public EventHandler<GuidStatusChangedEventArgs> GuidStatusChangedEvent;

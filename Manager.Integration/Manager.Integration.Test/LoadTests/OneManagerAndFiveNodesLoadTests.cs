@@ -29,9 +29,6 @@ namespace Manager.Integration.Test.LoadTests
 		private bool _clearDatabase = true;
 		private string _buildMode = "Debug";
 
-		private static readonly ILog Logger =
-			LogManager.GetLogger(typeof(OneManagerAndFiveNodesLoadTests));
-
 		private void LogMessage(string message)
 		{
 			this.Log().DebugWithLineNumber(message);
