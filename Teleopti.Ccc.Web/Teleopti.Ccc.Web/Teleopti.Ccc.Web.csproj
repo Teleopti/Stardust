@@ -339,9 +339,8 @@
     <Reference Include="StackExchange.Redis.StrongName, Version=1.0.316.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46, processorArchitecture=MSIL">
       <HintPath>..\..\packages\StackExchange.Redis.StrongName.1.0.322\lib\net45\StackExchange.Redis.StrongName.dll</HintPath>
     </Reference>
-    <Reference Include="Stardust.Manager, Version=1.0.0.451, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Stardust.Manager.1.0.0.451\lib\net451\Stardust.Manager.dll</HintPath>
-      <Private>True</Private>
+	<Reference Include="Stardust.Manager, Version=1.0.0.413, Culture=neutral, processorArchitecture=MSIL">
+	  <HintPath>..\..\packages\Stardust.Manager.1.0.0.413\lib\net451\Stardust.Manager.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.IdentityModel" />
@@ -1317,6 +1316,7 @@
     <Content Include="WFM\js\global\exceptionhandler.js" />
     <Content Include="WFM\js\global\http.spec.js" />
     <Content Include="WFM\js\global\notification.controller.spec.js" />
+    <Content Include="WFM\js\global\numeric-value\numeric-value.directive.js" />
     <Content Include="WFM\js\global\personalize.controller.js" />
     <Content Include="WFM\js\global\shortcuts.service.js" />
     <Content Include="WFM\js\global\shortcuts.service.spec.js" />
@@ -1325,6 +1325,9 @@
     <Content Include="WFM\js\global\wfmrightpanel\wfmrightpanel.directive.js" />
     <Content Include="WFM\js\global\wfmrightpanel\wfmrightpanel.html" />
     <Content Include="WFM\js\intraday\intraday.config.controller.spec.js" />
+    <Content Include="WFM\js\notifications\notice.directive.js" />
+    <Content Include="WFM\js\notifications\notice.service.js" />
+    <Content Include="WFM\js\notifications\notice.service.spec.js" />
     <Content Include="WFM\js\people\people.searchInputDirective.controller.spec.js" />
     <Content Include="WFM\js\requests\html\requests-commands-pane.tpl.html" />
     <Content Include="WFM\js\requests\requests-commands-pane.directive.js" />
@@ -1413,6 +1416,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.guidgenerator.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.notification.js" />
     <Content Include="WFM\js\global\wfm.i18n.service.js" />
+    <Content Include="WFM\js\global\timerangepicker\wfm-time-range-picker.directive.js" />
     <Content Include="WFM\js\global\currentuserinfo.service.js" />
     <Content Include="WFM\js\intraday\intraday.controller.js" />
     <Content Include="WFM\js\intraday\intraday.config.controller.js" />

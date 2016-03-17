@@ -1,16 +1,19 @@
-(function(){
-'use strict';
- angular.module('wfm.notice')
- .service('NoticeService', ['$rootScope', function($rootScope){
-  var service = {};
+(function() {
+	'use strict';
+	angular.module('wfm.notice')
+		.service('NoticeService', function($rootScope) {
+			var service = {};
+			service.notice = {};
 
-  service.destroyOnStateChange = function (message) {
-   $rootScope.$on('$stateChangeSuccess', function(){
-    if (message !== undefined)
-     message.destroy();
-   });
-  };
+			service.addNotice = function(content, timeToLive, destroyOnStateChange) {
+				service.notice = {
+					content: content,
+					timeToLive: timeToLive,
+					destroyOnStateChange: destroyOnStateChange
+				};
+				return service.notice;
+			};
 
-  return service;
- }]);
+			return service;
+		});
 })();

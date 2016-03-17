@@ -2,7 +2,7 @@
 	'use strict';
 	angular.module('wfm.rta')
 		.controller('RtaCtrl', [
-			'$scope', '$filter', '$state', '$stateParams', '$interval', 'RtaService', 'RtaOrganizationService', 'RtaFormatService','growl',
+			'$scope', '$filter', '$state', '$stateParams', '$interval', 'RtaService', 'RtaOrganizationService', 'RtaFormatService', 'growl',
 			function($scope, $filter, $state, $stateParams, $interval, RtaService, RtaOrganizationService, RtaFormatService, growl) {
 
 				$scope.getAdherencePercent = RtaFormatService.numberToPercent;
