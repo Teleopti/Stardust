@@ -29,7 +29,7 @@
 		};
 
 		vm.dateFilterIsValid = function () {
-			return (vm.selectedPeriod.StartDate <= vm.selectedPeriod.EndDate);
+			return (vm.selectedPeriod && vm.selectedPeriod.StartDate <= vm.selectedPeriod.EndDate);
 		};
 
 		vm.toggleFilterVisibility = function () {
