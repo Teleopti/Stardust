@@ -31,14 +31,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			var agentSkills = new HashSet<ISkill>();
 			foreach (var filteredAgent in filteredAgents)
 			{
-				filteredAgent.SkillsFor(period).ForEach(x => agentSkills.Add(x));
+				filteredAgent.ActiveSkillsFor(period).ForEach(x => agentSkills.Add(x));
 			}
 
-			foreach (var source in schedulerStateHolder.SchedulingResultState.SkillDays.ToList())
+			foreach (var skill in schedulerStateHolder.SchedulingResultState.SkillDays.Keys.ToList())
 			{
-				if (!agentSkills.Contains(source.Key))
+				if (!agentSkills.Contains(skill))
 				{
-					schedulerStateHolder.SchedulingResultState.SkillDays.Remove(source.Key);
+					schedulerStateHolder.SchedulingResultState.SkillDays.Remove(skill);
 				}
 			}
 

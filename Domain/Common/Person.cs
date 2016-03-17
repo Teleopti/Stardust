@@ -769,16 +769,19 @@ namespace Teleopti.Ccc.Domain.Common
 								m.PersonPeriod.p.PersonContract.Contract.WorkTimeSource,
 								m.PersonPeriod.p.PersonContract.PartTimePercentage.Percentage,
 								isWorkDay(m.PersonPeriod.p.PersonContract.ContractSchedule, m.Day));
-					    }).ToArray();
-	    }
+							}).ToArray();
+		}
 
-	    public IEnumerable<ISkill> SkillsFor(DateOnlyPeriod period)
-	    {
+		public IEnumerable<ISkill> ActiveSkillsFor(DateOnlyPeriod period)
+		{
 			foreach (var personPeriod in PersonPeriods(period))
 			{
 				foreach (var personSkill in personPeriod.PersonSkillCollection)
 				{
-					yield return personSkill.Skill;
+					if (personSkill.Active)
+					{
+						yield return personSkill.Skill;
+					}
 				}
 			}
 		}
