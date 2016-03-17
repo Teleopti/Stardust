@@ -772,6 +772,17 @@ namespace Teleopti.Ccc.Domain.Common
 					    }).ToArray();
 	    }
 
+	    public IEnumerable<ISkill> SkillsFor(DateOnlyPeriod period)
+	    {
+			foreach (var personPeriod in PersonPeriods(period))
+			{
+				foreach (var personSkill in personPeriod.PersonSkillCollection)
+				{
+					yield return personSkill.Skill;
+				}
+			}
+		}
+
 	    private bool isWorkDay(IContractSchedule contractSchedule, DateOnly day)
 	    {
 			var schedulePeriodStartDate = SchedulePeriodStartDate(day);

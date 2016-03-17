@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
@@ -11,12 +13,43 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		{
 			PreFill(schedulerStateHolder);
 			var agents = FillAgents(schedulerStateHolder, agentIds, period);
-			//filtrera bort onödiga agenter här
-			FillSkillDays(schedulerStateHolder, agents, period);
-			//filtrera bort onödiga skilldays här
-			FillSchedules(schedulerStateHolder, agents, period);
-			//filtrera bort onödiga scheman här
-			PostFill(schedulerStateHolder, agents, period);
+			var filteredAgents = agents;
+			if (agentIds != null)
+			{
+				filteredAgents = agents.Where(x => agentIds.Contains(x.Id.Value)).ToArray();
+			}
+
+			FillSkillDays(schedulerStateHolder, filteredAgents, period);
+			removeUnwantedSkillDays(schedulerStateHolder, filteredAgents, period);
+			FillSchedules(schedulerStateHolder, filteredAgents, period);
+			removeUnwantedScheduleRanges(schedulerStateHolder.Schedules, filteredAgents);
+			PostFill(schedulerStateHolder, filteredAgents, period);
+		}
+
+		private static void removeUnwantedSkillDays(ISchedulerStateHolder schedulerStateHolder, IEnumerable<IPerson> filteredAgents, DateOnlyPeriod period)
+		{
+			var agentSkills = new HashSet<ISkill>();
+			foreach (var filteredAgent in filteredAgents)
+			{
+				filteredAgent.SkillsFor(period).ForEach(x => agentSkills.Add(x));
+			}
+
+			foreach (var source in schedulerStateHolder.SchedulingResultState.SkillDays.ToList())
+			{
+				if (!agentSkills.Contains(source.Key))
+				{
+					schedulerStateHolder.SchedulingResultState.SkillDays.Remove(source.Key);
+				}
+			}
+
+		}
+
+		private static void removeUnwantedScheduleRanges(IScheduleDictionary schedules, IEnumerable<IPerson> filteredAgents)
+		{
+			foreach (var person in schedules.Keys.Where(person => !filteredAgents.Contains(person)).ToList())
+			{
+				schedules.Remove(person);
+			}
 		}
 
 		protected abstract IEnumerable<IPerson> FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, DateOnlyPeriod period);

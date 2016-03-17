@@ -278,5 +278,6 @@ namespace Teleopti.Interfaces.Domain
 		 void RemoveExternalLogOn(IExternalLogOn externalLogOn, IPersonPeriod personPeriod);
 	    bool IsTerminated();
 	    PersonWorkDay[] AverageWorkTimes(DateOnlyPeriod period);
+	    IEnumerable<ISkill> SkillsFor(DateOnlyPeriod period);
     }
 }
