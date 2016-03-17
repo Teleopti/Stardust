@@ -106,8 +106,8 @@
 
 			$scope.toggleAllNode = function (state) {
 
-				if (!state.is) {
-
+				if (state.is) {
+					$scope.allToggleElement.is = !state.is;
 					RolesFunctionsService.unselectAllFunctions($scope.selectedRole);
 					growl.warning("<i class='mdi mdi-alert'></i> All functions are disabled.", {
 						ttl: 5000,
@@ -115,15 +115,13 @@
 					});
 					return;
 				}
+					$scope.allToggleElement.is = !state.is;
+					RolesFunctionsService.selectAllFunctions($scope.selectedRole);
 
-
-				RolesFunctionsService.selectAllFunctions($scope.selectedRole);
-				$scope.allToggleElement.is = state.is;
-
-				growl.info("<i class='mdi mdi-thumb-up'></i> All functions are enabled.", {
-					ttl: 5000,
-					disableCountDown: true
-				});
+					growl.info("<i class='mdi mdi-thumb-up'></i> All functions are enabled.", {
+						ttl: 5000,
+						disableCountDown: true
+					});
 			};
 
 		    $scope.isAllNode = function(node) {

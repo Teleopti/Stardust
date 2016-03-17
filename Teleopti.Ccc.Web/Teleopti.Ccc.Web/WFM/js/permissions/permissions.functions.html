@@ -39,9 +39,9 @@
 		</form>
 	</div>
 	<div class="con-flex">
-		<div ng-class="{myRoleLock: disablePermissionForMe()}">
-			<div class="wfm-switch panel-switch text-align-right">
-				<input type="checkbox" ng-model="allToggleElement.is" ng-disabled="selectedRole.BuiltIn" ng-class="{'disabled-checkbox': selectedRole.BuiltIn}" ng-click="toggleAllNode(allToggleElement)" id="switchAll" />
+		<div ng-class="{myRoleLock: disablePermissionForMe()}" ng-click="toggleDangerModal=true && !selectedRole.BuiltIn">
+			<div class="wfm-switch panel-switch text-align-right" style="pointer-events:none;">
+				<input type="checkbox" ng-model="allToggleElement.is" ng-disabled="selectedRole.BuiltIn" ng-class="{'disabled-checkbox': selectedRole.BuiltIn}" id="switchAll" />
 				<label for="switchAll">
 					<span class="wfm-switch-label" translate>AccessAllFunctions</span>
 					<span class="wfm-switch-toggle"></span>
@@ -51,6 +51,23 @@
 	</div>
 </div>
 
+<div ng-cloak class="modal-box">
+	<div ng-cloak ng-show="toggleDangerModal">
+		<div class="modalbg">
+			<div class="dialog-mini">
+				<div class="modal-inner-content">
+					This will change the state of all functions, are you sure you want to proceed?
+				</div>
+				<div class="modal-actions">
+					<aside>
+						<button ng-click="toggleDangerModal = false" class="wfm-btn wfm-btn-invis-default">no thanks</button>
+						<button ng-click="toggleDangerModal = false; toggleAllNode(allToggleElement)"  class="wfm-btn wfm-btn-invis-primary">yes please</button>
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
 <div class="con-row clear-scroll">
 		<div class="con-flex">
