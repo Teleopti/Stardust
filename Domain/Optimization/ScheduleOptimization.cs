@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
@@ -68,9 +69,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
-			var webScheduleState = _fillSchedulerStateHolder.Fill(schedulerStateHolder, null, period);
+			_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, period);
+			var schedules = schedulerStateHolder.Schedules.SchedulesForPeriod(period, schedulerStateHolder.AllPermittedPersons.FixedStaffPeople(period)).ToList();
 
-			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(webScheduleState.AllSchedules);
+			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(schedules);
 			var matrixOriginalStateContainerListForDayOffOptimization =
 				matrixListForDayOffOptimization.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator))
 					.Cast<IScheduleMatrixOriginalStateContainer>().ToList();
@@ -83,7 +85,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					optimizationPreferences, schedulerStateHolder,
 					new NoSchedulingProgress(), dayOffOptimizationPreferenceProvider);
 
-				_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, webScheduleState.AllSchedules,
+				_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, schedules,
 					schedulerStateHolder.SchedulingResultState.PersonsInOrganization.ToList(), dayOffOptimizationPreferenceProvider);
 			}
 

@@ -129,6 +129,8 @@ namespace Teleopti.Interfaces.Domain
 		/// </remarks>
 		IEnumerable<IScheduleDay> SchedulesForDay(DateOnly dateOnly);
 
+	    IEnumerable<IScheduleDay> SchedulesForPeriod(DateOnlyPeriod period, IEnumerable<IPerson> agents);
+
         /// <summary>
         /// Takes the snapshot for later use when checking what has been changed.
         /// Is not supposed to be called explicitly in normal cases.

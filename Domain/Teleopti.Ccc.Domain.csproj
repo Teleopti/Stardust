@@ -814,7 +814,6 @@
     <Compile Include="Scheduling\WebLegacy\FillSchedulerStateHolderFromRam.cs" />
     <Compile Include="Scheduling\WebLegacy\IFillSchedulerStateHolder.cs" />
     <Compile Include="Scheduling\WebLegacy\FillSchedulerStateHolderFromDatabase.cs" />
-    <Compile Include="Scheduling\WebLegacy\WebSchedulingSetupResult.cs" />
     <Compile Include="SeatPlanning\GroupSeatBookingRanker.cs" />
     <Compile Include="SeatPlanning\LocationSeatBookingScore.cs" />
     <Compile Include="SeatPlanning\LocationSeatBookingScoreComparer.cs" />

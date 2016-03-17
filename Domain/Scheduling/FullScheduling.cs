@@ -85,9 +85,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		[UnitOfWork]
 		protected virtual void SetupAndSchedule(DateOnlyPeriod period)
 		{
-			var webScheduleState = _fillSchedulerStateHolder.Fill(_schedulerStateHolder(), null, period);
+			_fillSchedulerStateHolder.Fill(_schedulerStateHolder(), null, period);
 
-			if (webScheduleState.AllSchedules.Any())
+			if (_schedulerStateHolder().Schedules.Any())
 			{
 				_scheduleCommand().Execute(new OptimizerOriginalPreferences(new SchedulingOptions
 				{
@@ -99,7 +99,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
 					GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
 					TagToUseOnScheduling = NullScheduleTag.Instance
-				}), _schedulingProgress, _schedulerStateHolder(), webScheduleState.AllSchedules, _groupPagePerDateHolder(),
+				}), _schedulingProgress,
+					_schedulerStateHolder(),
+					_schedulerStateHolder().Schedules.SchedulesForPeriod(period, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period)).ToList(), 
+					_groupPagePerDateHolder(),
 					_requiredScheduleHelper(),
 					new OptimizationPreferences(), false, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 			}

@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
 		}
 
-		public void Resolve(IOptimizationPreferences optimizationPreferences, DateOnlyPeriod period, IList<IScheduleDay> scheduleDays, IList<IPerson> people, 
+		public void Resolve(IOptimizationPreferences optimizationPreferences, DateOnlyPeriod period, IEnumerable<IScheduleDay> scheduleDays, IList<IPerson> people, 
 							IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);

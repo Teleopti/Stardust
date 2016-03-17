@@ -119,6 +119,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			throw new NotImplementedException();
 		}
 
+		public IEnumerable<IScheduleDay> SchedulesForPeriod(DateOnlyPeriod period, IEnumerable<IPerson> agents)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void TakeSnapshot()
 		{
 			throw new NotImplementedException();

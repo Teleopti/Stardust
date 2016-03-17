@@ -37,11 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 												bool runResolveWeeklyRestRule)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
-			var schedules = new List<IScheduleDay>();
-			foreach (var person in agents)
-			{
-				schedules.AddRange(schedulerStateHolder.Schedules[person].ScheduledDayCollection(period));
-			}
+			var schedules = schedulerStateHolder.Schedules.SchedulesForPeriod(period, agents);
 
 			var dayOffPreferencesProvider = new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()); //doesn't seem to be used with "real" values when doing intraday optimization
 			var optimizers = _intradayOptimizer2Creator.Create(period, schedules, optimizationPreferences, dayOffPreferencesProvider);

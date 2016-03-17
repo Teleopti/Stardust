@@ -386,7 +386,17 @@ namespace Teleopti.Ccc.Domain.Collection
             return new ReadOnlyCollection<IScheduleDay>(retList);
         }
 
-        /// <summary>
+	    public IEnumerable<IScheduleDay> SchedulesForPeriod(DateOnlyPeriod period, IEnumerable<IPerson> agents)
+	    {
+			var schedules = new List<IScheduleDay>();
+			foreach (var person in agents)
+			{
+				schedules.AddRange(this[person].ScheduledDayCollection(period));
+			}
+		    return schedules;
+	    }
+
+	    /// <summary>
         /// Takes the snapshot for later use when checking what has been changed.
         /// Is not supposed to be called explicitly in normal cases.
         /// </summary>

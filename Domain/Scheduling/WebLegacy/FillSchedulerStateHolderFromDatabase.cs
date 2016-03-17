@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			_fixedStaffLoader = fixedStaffLoader;
 		}
 
-		public WebSchedulingSetupResult Fill(ISchedulerStateHolder schedulerStateHolder, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
+		public void Fill(ISchedulerStateHolder schedulerStateHolder, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
 		{
 			//need to filter things like skilldays and agents here based on agentIds
 			schedulerStateHolder.LoadCommonState(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(), _repositoryFactory);
@@ -80,17 +80,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			schedulerStateHolder.LoadSchedules(_scheduleStorage, new PersonsInOrganizationProvider(people.AllPeople),
 				new ScheduleDictionaryLoadOptions(true, false, false),
 				new ScheduleDateTimePeriod(dateTimePeriod, people.AllPeople, new SchedulerRangeToLoadCalculator(dateTimePeriod)));
-			return new WebSchedulingSetupResult(extractAllSchedules(schedulerStateHolder.SchedulingResultState, people, period));
-		}
-
-		private static IList<IScheduleDay> extractAllSchedules(ISchedulingResultStateHolder stateHolder, PeopleSelection people, DateOnlyPeriod period)
-		{
-			var allSchedules = new List<IScheduleDay>();
-			foreach (var schedule in stateHolder.Schedules.Where(schedule => people.FixedStaffPeople.Contains(schedule.Key)))
-			{
-				allSchedules.AddRange(schedule.Value.ScheduledDayCollection(period));
-			}
-			return allSchedules;
 		}
 	}
 }
