@@ -22,9 +22,9 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 		}
 
 		public string Buildmode { get; set; }
-		private DirectoryInfo DirectoryManagerAssemblyLocationFullPath { get; }
+		private DirectoryInfo DirectoryManagerAssemblyLocationFullPath { get; set; }
 
-		private FileInfo ConfigurationFileInfo { get; }
+		private FileInfo ConfigurationFileInfo { get; set; }
 		public string ManagerAssemblyName { get; set; }
 
 		public AppDomain MyAppDomain { get; private set; }
