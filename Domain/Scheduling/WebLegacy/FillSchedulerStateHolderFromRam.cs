@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
@@ -48,6 +49,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 					var toScheduleDay = toDic[agent].ScheduledDay(fromScheduleDay.DateOnlyAsPeriod.DateOnly);
 					var toAssignment = toScheduleDay.PersonAssignment(true);
 					toAssignment.FillWithDataFrom(fromScheduleDay.PersonAssignment(true));
+
+					var fromAbsences = fromScheduleDay.PersistableScheduleDataCollection().OfType<IPersonAbsence>();
+					foreach (var personAbsence in fromAbsences)
+					{
+						toScheduleDay.Add(personAbsence);
+					}
+
+					var fromMeetings = fromScheduleDay.PersonMeetingCollection();
+					foreach (var personMeeting in fromMeetings)
+					{
+						((ScheduleRange)toDic[agent]).Add(personMeeting);
+					}
+
 					toDic.Modify(toScheduleDay);
 				}
 			}
