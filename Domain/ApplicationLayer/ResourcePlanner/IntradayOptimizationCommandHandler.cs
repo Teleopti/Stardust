@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
@@ -16,12 +18,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 
 		public void Execute(IntradayOptimizationCommand command)
 		{
-			_eventPublisher.Publish(_createIslands.Create(command.Period, command.Agents).Select(island => new OptimizationWasOrdered
+			_eventPublisher.Publish(Create(command).Select(island => new OptimizationWasOrdered
 			{
 				Period = command.Period,
 				AgentIds = island.PersonsInIsland().Select(x => x.Id.Value),
 				RunResolveWeeklyRestRule = command.RunResolveWeeklyRestRule
 			}).ToArray());
+		}
+
+		[UnitOfWork]
+		protected virtual IEnumerable<Island> Create(IntradayOptimizationCommand command)
+		{
+			return _createIslands.Create(command.Period, command.Agents);
 		}
 	}
 

@@ -2,9 +2,6 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -15,17 +12,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		private readonly IIntradayOptimizationCommandHandler _intradayOptimizationCommandHandler;
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly IFixedStaffLoader _fixedStaffLoader;
-		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
 
 		public IntradayOptimizationFromWeb(IIntradayOptimizationCommandHandler intradayOptimizationCommandHandler, 
 			IPlanningPeriodRepository planningPeriodRepository,
-			IFixedStaffLoader fixedStaffLoader,
-			IFillSchedulerStateHolder fillSchedulerStateHolder)
+			IFixedStaffLoader fixedStaffLoader)
 		{
 			_intradayOptimizationCommandHandler = intradayOptimizationCommandHandler;
 			_planningPeriodRepository = planningPeriodRepository;
 			_fixedStaffLoader = fixedStaffLoader;
-			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 		}
 
 		public virtual void Execute(Guid planningPeriodId)
