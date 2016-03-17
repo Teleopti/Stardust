@@ -194,7 +194,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 
 		private IList<JobHistoryDetail> readJobHistryDetails(Guid jobId)
 		{
-			var selectCommand = @"SELECT  Created, Detail  FROM [Stardust].JobHistoryDetail WHERE JobId = @JobId";
+			var selectCommand = @"SELECT  Created, Detail FROM [Stardust].JobHistoryDetail WHERE JobId = @JobId ORDER BY Created desc ";
 
 			var returnList = new List<JobHistoryDetail>();
 
