@@ -11,13 +11,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_eventPublisher = eventPublisher;
 		}
 
-		public void Publish(StateInfo info)
+		public void Publish(Context info)
 		{
 			publishShiftStartEvent(info);
 			publishShiftEndEvent(info);
 		}
 
-		private void publishShiftStartEvent(StateInfo info)
+		private void publishShiftStartEvent(Context info)
 		{
 			if (!info.Schedule.ShiftStarted())
 				return;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			});
 		}
 
-		private void publishShiftEndEvent(StateInfo info)
+		private void publishShiftEndEvent(Context info)
 		{
 			if (!info.Schedule.ShiftEnded())
 				return;

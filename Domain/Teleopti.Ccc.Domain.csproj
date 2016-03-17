@@ -370,7 +370,7 @@
     <Compile Include="ApplicationLayer\Rta\PulseLoop\NotifyRtaDecider.cs" />
     <Compile Include="ApplicationLayer\Rta\PulseLoop\PersonActivityChangePulseEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduleProjectionReadOnlyChanged.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\StateInfo.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\Context.cs" />
     <Compile Include="ApplicationLayer\Rta\PulseLoop\PersonActivityChangePulseLoop.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StateMapper.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StateStreamSynchronizer.cs" />

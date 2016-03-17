@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public interface IRtaDecoratingEventPublisher
 	{
-		void Publish(StateInfo info, IEvent @event);
+		void Publish(Context info, IEvent @event);
 	}
 }

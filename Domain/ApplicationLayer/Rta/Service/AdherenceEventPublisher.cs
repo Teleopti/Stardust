@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_eventPublisher = eventPublisher;
 		}
 
-		public void Publish(StateInfo info, DateTime time, EventAdherence toAdherence)
+		public void Publish(Context info, DateTime time, EventAdherence toAdherence)
 		{
 			if (toAdherence == EventAdherence.In)
 			{

@@ -4,13 +4,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public class StateInfo
+	public class Context
 	{
 		private readonly IAppliedAlarm _appliedAlarm;
 		private readonly Lazy<StoredStateInfo> _stored;
-		private readonly Action<StateInfo> _agentStateReadModelUpdater;
+		private readonly Action<Context> _agentStateReadModelUpdater;
 
-		public StateInfo(
+		public Context(
 			ExternalUserStateInputModel input, 
 			Guid personId, 
 			Guid businessUnitId, 
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Func<StoredStateInfo> stored, 
 			Func<IEnumerable<ScheduleLayer>> schedule, 
 			Func<IEnumerable<Mapping>> mappings, 
-			Action<StateInfo> agentStateReadModelUpdater, 
+			Action<Context> agentStateReadModelUpdater, 
 			INow now,
 			StateMapper stateMapper,
 			IAppliedAdherence appliedAdherence,

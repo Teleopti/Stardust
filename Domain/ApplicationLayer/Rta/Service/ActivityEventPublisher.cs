@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_adherenceEventPublisher = adherenceEventPublisher;
 		}
 
-		public void Publish(StateInfo info)
+		public void Publish(Context info)
 		{
 			var currentActivity = info.Schedule.CurrentActivity();
 

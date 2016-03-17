@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[InfoLog]
-		public virtual void Process(StateInfo info)
+		public virtual void Process(Context info)
 		{
 			var eventCollector = new EventCollector(_eventPublisher);
 			

@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class BelongsToDateDecorator : IRtaEventDecorator
 	{
-		public void Decorate(StateInfo info, IEvent @event)
+		public void Decorate(Context info, IEvent @event)
 		{
 			dynamic x = @event;
 			x.BelongsToDate = info.Schedule.BelongsToDate;

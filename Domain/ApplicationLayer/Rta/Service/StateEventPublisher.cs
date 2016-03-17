@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_adherenceEventPublisher = adherenceEventPublisher;
 		}
 
-		public void Publish(StateInfo info)
+		public void Publish(Context info)
 		{
 			if (!info.State.StateGroupChanged()) return;
 

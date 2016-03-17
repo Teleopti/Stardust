@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_decorators = decorators;
 		}
 
-		public void Publish(StateInfo info, IEvent @event)
+		public void Publish(Context info, IEvent @event)
 		{
 			_decorators.ForEach(d => d.Decorate(info, @event));
 			_publisher.Publish(@event);

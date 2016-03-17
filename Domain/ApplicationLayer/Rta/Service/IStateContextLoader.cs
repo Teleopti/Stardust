@@ -13,10 +13,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public interface IStateContextLoader
 	{
-		void For(ExternalUserStateInputModel input, Action<StateInfo> action);
-		void ForAll(Action<StateInfo> action);
-		void ForClosingSnapshot(ExternalUserStateInputModel input, Action<StateInfo> action);
-		void ForSynchronize(Action<StateInfo> action);
+		void For(ExternalUserStateInputModel input, Action<Context> action);
+		void ForAll(Action<Context> action);
+		void ForClosingSnapshot(ExternalUserStateInputModel input, Action<Context> action);
+		void ForSynchronize(Action<Context> action);
 	}
 
 	public class PersonLocker
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return dataSourceId;
 		}
 
-		public virtual void For(ExternalUserStateInputModel input, Action<StateInfo> action)
+		public virtual void For(ExternalUserStateInputModel input, Action<Context> action)
 		{
 			var dataSourceId = validateSourceId(input);
 			var userCode = input.UserCode;
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				x.BusinessUnitId = p.BusinessUnitId;
 				_locker.LockFor(x.PersonId, () =>
 				{
-					action.Invoke(new StateInfo(
+					action.Invoke(new Context(
 						input,
 						x.PersonId,
 						x.BusinessUnitId,
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		}
 
-		public virtual void ForAll(Action<StateInfo> action)
+		public virtual void ForAll(Action<Context> action)
 		{
 			var personOrganizationData = _databaseLoader.PersonOrganizationData();
 			var externalLogons = _databaseLoader.ExternalLogOns();
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				x.BusinessUnitId = p.BusinessUnitId;
 				_locker.LockFor(x.PersonId, () =>
 				{
-					action.Invoke(new StateInfo(
+					action.Invoke(new Context(
 						null,
 						x.PersonId,
 						x.BusinessUnitId,
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			}
 		}
 
-		public virtual void ForClosingSnapshot(ExternalUserStateInputModel input, Action<StateInfo> action)
+		public virtual void ForClosingSnapshot(ExternalUserStateInputModel input, Action<Context> action)
 		{
 			var missingAgents = _agentStateReadModelPersister.GetNotInSnapshot(input.BatchId, input.SourceId);
 			var agentsNotAlreadyLoggedOut =
@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			{
 				_locker.LockFor(x.PersonId, () =>
 				{
-					action.Invoke(new StateInfo(
+					action.Invoke(new Context(
 						input,
 						x.PersonId,
 						x.BusinessUnitId,
@@ -202,14 +202,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		}
 
-		public virtual void ForSynchronize(Action<StateInfo> action)
+		public virtual void ForSynchronize(Action<Context> action)
 		{
 			_unitOfWork.Get(() => _agentStateReadModelPersister.GetAll())
 				.ForEach(x =>
 				{
 					_locker.LockFor(x.PersonId, () =>
 					{
-						action.Invoke(new StateInfo(
+						action.Invoke(new Context(
 							new ExternalUserStateInputModel
 							{
 								StateCode = x.StateCode,
@@ -268,7 +268,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_databaseReader = databaseReader;
 		}
 
-		public override void For(ExternalUserStateInputModel input, Action<StateInfo> action)
+		public override void For(ExternalUserStateInputModel input, Action<Context> action)
 		{
 			var dataSourceId = validateSourceId(input);
 			var userCode = input.UserCode;
@@ -278,7 +278,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				{
 					_locker.LockFor(x.PersonId, () =>
 					{
-						action.Invoke(new StateInfo(
+						action.Invoke(new Context(
 							input,
 							x.PersonId,
 							x.BusinessUnitId,
@@ -297,14 +297,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				});
 		}
 		
-		public override void ForAll(Action<StateInfo> action)
+		public override void ForAll(Action<Context> action)
 		{
 			_databaseReader.LoadAllPersonOrganizationData()
 				.ForEach(x =>
 				{
 					_locker.LockFor(x.PersonId, () =>
 					{
-						action.Invoke(new StateInfo(
+						action.Invoke(new Context(
 							null,
 							x.PersonId,
 							x.BusinessUnitId,
@@ -389,7 +389,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return dataSourceId;
 		}
 
-		public virtual void For(ExternalUserStateInputModel input, Action<StateInfo> action)
+		public virtual void For(ExternalUserStateInputModel input, Action<Context> action)
 		{
 			var dataSourceId = validateSourceId(input);
 			var userCode = input.UserCode;
@@ -401,7 +401,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				{
 					_withAnalytics.Do(() =>
 					{
-						action.Invoke(new StateInfo(
+						action.Invoke(new Context(
 							input,
 							x.PersonId,
 							x.BusinessUnitId,
@@ -420,7 +420,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				});
 		}
 
-		public virtual void ForAll(Action<StateInfo> action)
+		public virtual void ForAll(Action<Context> action)
 		{
 			var mappings = _withUnitOfWork.Get(() => _mappingReader.Read());
 
@@ -429,7 +429,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				{
 					_withAnalytics.Do(() =>
 					{
-						action.Invoke(new StateInfo(
+						action.Invoke(new Context(
 							null,
 							x.PersonId,
 							x.BusinessUnitId,
@@ -449,7 +449,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[AnalyticsUnitOfWork]
-		public virtual void ForClosingSnapshot(ExternalUserStateInputModel input, Action<StateInfo> action)
+		public virtual void ForClosingSnapshot(ExternalUserStateInputModel input, Action<Context> action)
 		{
 			var missingAgents = _agentStateReadModelPersister.GetNotInSnapshot(input.BatchId, input.SourceId);
 			var agentsNotAlreadyLoggedOut =
@@ -467,7 +467,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			agentsNotAlreadyLoggedOut.ForEach(x =>
 			{
-				action.Invoke(new StateInfo(
+				action.Invoke(new Context(
 					input,
 					x.PersonId,
 					x.BusinessUnitId,
@@ -486,14 +486,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[AnalyticsUnitOfWork]
-		public virtual void ForSynchronize(Action<StateInfo> action)
+		public virtual void ForSynchronize(Action<Context> action)
 		{
 			var mappings = _withUnitOfWork.Get(() => _mappingReader.Read());
 
 			_agentStateReadModelPersister.GetAll()
 				.ForEach(x =>
 				{
-					action.Invoke(new StateInfo(
+					action.Invoke(new Context(
 						new ExternalUserStateInputModel
 						{
 							StateCode = x.StateCode,
