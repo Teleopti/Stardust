@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 	{
 		public IntradayOptimizationFromWeb Target;
 		public TrackOptimizeDaysForAgents TrackOptimizeDaysForAgents;
-		public IntradayOptmizerLimiter IntradayOptmizerLimiter;
+		public IntradayOptmizerLimiter IntradayOptimizerLimiter;
 		public FakeSkillRepository SkillRepository;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonRepository PersonRepository;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		[Test]
 		public void ShouldOptimizeNoneIf0PercentShouldBeOptimized()
 		{
-			IntradayOptmizerLimiter.SetFromTest(new Percent(0), 0);
+			IntradayOptimizerLimiter.SetFromTest(new Percent(0), 0);
 
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
 			const int numberOfAgents = 10;
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		[Test]
 		public void ShouldOptimizeAllIf100PercentShouldBeOptimized()
 		{
-			IntradayOptmizerLimiter.SetFromTest(new Percent(1), 0);
+			IntradayOptimizerLimiter.SetFromTest(new Percent(1), 0);
 			const int numberOfAgents = 10;
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
 			var skill = SkillRepository.Has("skill", phoneActivity);
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		[Test]
 		public void ShouldOptimizeHalfGroupIf50PercentShouldBeOptimized()
 		{
-			IntradayOptmizerLimiter.SetFromTest(new Percent(0.5), 0);
+			IntradayOptimizerLimiter.SetFromTest(new Percent(0.5), 0);
 			const int numberOfAgents = 10;
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
 			var skill = SkillRepository.Has("skill", phoneActivity);
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		[Test]
 		public void ShouldOptimizeAllIfGroupIsTooSmallNoMatterPercentSetting()
 		{
-			IntradayOptmizerLimiter.SetFromTest(new Percent(0.01), 3);
+			IntradayOptimizerLimiter.SetFromTest(new Percent(0.01), 3);
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var scenario = ScenarioRepository.Has("some name");
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			prefUsedInThisTest.Shifts.KeepShifts = true;
 			prefUsedInThisTest.Shifts.KeepShiftsValue = int.MaxValue;
 			OptimizationPreferencesProvider.SetFromTestsOnly(prefUsedInThisTest);
-			IntradayOptmizerLimiter.SetFromTest(new Percent(1), 0);
+			IntradayOptimizerLimiter.SetFromTest(new Percent(1), 0);
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var scenario = ScenarioRepository.Has("some name");
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		[Test]
 		public void ShouldOptimizeHalfGroupIf50PercentShouldBeOptimized_WhenAgentsHaveMultipleSchedulePeriods()
 		{
-			IntradayOptmizerLimiter.SetFromTest(new Percent(0.5), 0);
+			IntradayOptimizerLimiter.SetFromTest(new Percent(0.5), 0);
 			const int numberOfAgents = 10;
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
 			var skill = SkillRepository.Has("skill", phoneActivity);
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		[Test] //one test here verifying skill groups are used. more detailed tests in AgentsToSkillGroupsTest
 		public void ShouldHaveDifferentCountersForDifferentSkillGroups()
 		{
-			IntradayOptmizerLimiter.SetFromTest(new Percent(0.5), 5);
+			IntradayOptimizerLimiter.SetFromTest(new Percent(0.5), 5);
 			const int numberOfAgentsInSkillGroup1 = 10;
 			const int numberOfAgentsInSkillGroup2 = 4;
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		[Test]
 		public void ShouldPickAgentRandomly()
 		{
-			IntradayOptmizerLimiter.SetFromTest(new Percent(0.5), 0);
+			IntradayOptimizerLimiter.SetFromTest(new Percent(0.5), 0);
 			const int numberOfAgents = 2;
 			const int retriesBeforeGivingUp = 50;
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
