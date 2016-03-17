@@ -247,6 +247,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		{
 			system.UseTestDouble<TrackOptimizeDaysForAgents>().For<IIntradayOptimizeOneDayCallback>();
 			system.UseTestDouble<FakeSkillDayRepositorySimulateNewUnitOfWork>().For<ISkillDayRepository>();
+			system.UseTestDouble<OptimizationPreferencesProvider>().For<IOptimizationPreferencesProvider>();
 		}
 	}
 }

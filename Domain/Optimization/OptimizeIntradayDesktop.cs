@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, ISchedulingProgress backgroundWorker)
 		{
 			var selectedAgents = scheduleDays.Select(x => x.Person).Distinct();
-			using (_fillSchedulerStateHolder.Add(_currentSchedulerStateHolder()))
+			using (_fillSchedulerStateHolder.Add(_currentSchedulerStateHolder(), optimizerPreferences))
 			{
 				_intradayOptimizationCommandHandler.Execute(new IntradayOptimizationCommand
 				{

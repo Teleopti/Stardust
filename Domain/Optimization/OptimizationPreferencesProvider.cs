@@ -1,12 +1,13 @@
 ﻿using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class OptimizationPreferencesProvider
+	public class OptimizationPreferencesProvider : IOptimizationPreferencesProvider
 	{
-		private OptimizationPreferences _setFromTests;
+		private IOptimizationPreferences _setFromTests;
 
-		public OptimizationPreferences Fetch()
+		public IOptimizationPreferences Fetch()
 		{
 			return _setFromTests ?? new OptimizationPreferences
 			{
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			};
 		}
 
-		public void SetFromTestsOnly(OptimizationPreferences optimizationPreferences)
+		public void SetFromTestsOnly(IOptimizationPreferences optimizationPreferences)
 		{
 			_setFromTests = optimizationPreferences;
 		}

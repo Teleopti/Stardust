@@ -9,9 +9,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
-	public class FillSchedulerStateHolderFromRam : FillSchedulerStateHolder, ISynchronizeIntradayOptimizationResult
+	public class FillSchedulerStateHolderFromRam : FillSchedulerStateHolder, ISynchronizeIntradayOptimizationResult, IOptimizationPreferencesProvider
 	{
 		private ISchedulerStateHolder _schedulerStateHolderFrom;
+		private IOptimizationPreferences _optimizationPreferences;
 
 		protected override IScenario FetchScenario()
 		{
@@ -53,10 +54,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			moveSchedules(modifiedScheduleDictionary, _schedulerStateHolderFrom.Schedules, agentsToMove, period);
 		}
 
-		public IDisposable Add(ISchedulerStateHolder schedulerStateHolderFrom)
+		public IDisposable Add(ISchedulerStateHolder schedulerStateHolderFrom, IOptimizationPreferences optimizationPreferences)
 		{
 			_schedulerStateHolderFrom = schedulerStateHolderFrom;
-			return new GenericDisposable(() => _schedulerStateHolderFrom = null);
+			_optimizationPreferences = optimizationPreferences;
+			return new GenericDisposable(() =>
+			{
+				_schedulerStateHolderFrom = null;
+				_optimizationPreferences = null;
+			});
 		}
 
 		private static void moveSchedules(IScheduleDictionary fromDic, IScheduleDictionary toDic, IEnumerable<IPerson> agents, DateOnlyPeriod period)
@@ -76,6 +82,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 					toDic.Modify(toScheduleDay);
 				}
 			}
+		}
+
+		public IOptimizationPreferences Fetch()
+		{
+			return _optimizationPreferences;
 		}
 	}
 }
