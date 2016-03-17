@@ -10,20 +10,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
 	public abstract class FillSchedulerStateHolder : IFillSchedulerStateHolder
 	{
-		public void Fill(ISchedulerStateHolder schedulerStateHolder, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
+		public void Fill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
 		{
-			PreFill(schedulerStateHolder);
+			PreFill(schedulerStateHolderTo);
 			var scenario = FetchScenario();
-			var agents = FillAgents(schedulerStateHolder, scenario, agentIds, period);
+			var agents = FillAgents(schedulerStateHolderTo, scenario, agentIds, period);
 			var filteredAgents = agents.Filter(agentIds).ToList();
-			FillSkillDays(schedulerStateHolder, scenario, filteredAgents, period);
-			removeUnwantedSkillDays(schedulerStateHolder, filteredAgents, period);
-			FillSchedules(schedulerStateHolder, scenario, filteredAgents, period);
-			removeUnwantedScheduleRanges(schedulerStateHolder.Schedules, filteredAgents);
-			PostFill(schedulerStateHolder, filteredAgents, period);
+			FillSkillDays(schedulerStateHolderTo, scenario, filteredAgents, period);
+			removeUnwantedSkillDays(schedulerStateHolderTo, filteredAgents, period);
+			FillSchedules(schedulerStateHolderTo, scenario, filteredAgents, period);
+			removeUnwantedScheduleRanges(schedulerStateHolderTo.Schedules, filteredAgents);
+			PostFill(schedulerStateHolderTo, filteredAgents, period);
 		}
 
-		private static void removeUnwantedSkillDays(ISchedulerStateHolder schedulerStateHolder, IEnumerable<IPerson> filteredAgents, DateOnlyPeriod period)
+		private static void removeUnwantedSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<IPerson> filteredAgents, DateOnlyPeriod period)
 		{
 			var agentSkills = new HashSet<ISkill>();
 			foreach (var filteredAgent in filteredAgents)
@@ -31,9 +31,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 				filteredAgent.ActiveSkillsFor(period).ForEach(x => agentSkills.Add(x));
 			}
 
-			foreach (var skill in schedulerStateHolder.SchedulingResultState.SkillDays.Keys.ToList().Where(skill => !agentSkills.Contains(skill)))
+			foreach (var skill in schedulerStateHolderTo.SchedulingResultState.SkillDays.Keys.ToList().Where(skill => !agentSkills.Contains(skill)))
 			{
-				schedulerStateHolder.SchedulingResultState.SkillDays.Remove(skill);
+				schedulerStateHolderTo.SchedulingResultState.SkillDays.Remove(skill);
 			}
 		}
 

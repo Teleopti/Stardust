@@ -307,10 +307,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 
 
 
-		[Test, Explicit]
+		[Test]
 		public void ShouldNotCrashIfLotsOfIslands()
 		{
-			const int numberOfIslands = 10;
+			const int numberOfIslands = 20;
 			var scenario = new Scenario("_");
 			var phoneActivity = ActivityFactory.CreateActivity("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
