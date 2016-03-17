@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using log4net;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
