@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Timers;
-using log4net;
 using Stardust.Manager.Diagnostics;
 using Stardust.Manager.Extensions;
 using Stardust.Manager.Helpers;
@@ -31,7 +29,7 @@ namespace Stardust.Manager
 		{
 			if (managerConfiguration.AllowedNodeDownTimeSeconds <= 0)
 			{
-				Logger.LogErrorWithLineNumber("AllowedNodeDownTimeSeconds is not greater than zero!");
+				this.Log().ErrorWithLineNumber("AllowedNodeDownTimeSeconds is not greater than zero!");
 
 				throw new ArgumentOutOfRangeException();
 			}
@@ -42,17 +40,17 @@ namespace Stardust.Manager
 			_managerConfiguration = managerConfiguration;
 
 			_checkAndAssignNextJob.Elapsed += _checkAndAssignNextJob_Elapsed;
-			_checkAndAssignNextJob.Interval = _managerConfiguration.CheckNewJobIntervalSeconds * 1000;
+			_checkAndAssignNextJob.Interval = _managerConfiguration.CheckNewJobIntervalSeconds*1000;
 			_checkAndAssignNextJob.Start();
 
 			_checkHeartbeatsTimer.Elapsed += CheckHeartbeatsOnTimedEvent;
-			_checkHeartbeatsTimer.Interval = _managerConfiguration.AllowedNodeDownTimeSeconds * 200;
+			_checkHeartbeatsTimer.Interval = _managerConfiguration.AllowedNodeDownTimeSeconds*200;
 			_checkHeartbeatsTimer.Start();
 
-			List<WorkerNode> workerNodes = _workerNodeRepository.LoadAll();
+			var workerNodes = _workerNodeRepository.LoadAll();
 			if (workerNodes.Any())
 			{
-				foreach (WorkerNode workerNode in workerNodes)
+				foreach (var workerNode in workerNodes)
 				{
 					_workerNodeRepository.RegisterHeartbeat(workerNode.Url.ToString(), false);
 				}
@@ -61,7 +59,7 @@ namespace Stardust.Manager
 
 		public void Dispose()
 		{
-			Logger.LogDebugWithLineNumber("Start disposing.");
+			this.Log().DebugWithLineNumber("Start disposing.");
 
 			_checkAndAssignNextJob.Stop();
 			_checkAndAssignNextJob.Dispose();
@@ -69,20 +67,18 @@ namespace Stardust.Manager
 			_checkHeartbeatsTimer.Stop();
 			_checkHeartbeatsTimer.Dispose();
 
-			Logger.LogDebugWithLineNumber("Finished disposing.");
+			this.Log().DebugWithLineNumber("Finished disposing.");
 		}
 
 		private void _checkAndAssignNextJob_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			Logger.LogDebugWithLineNumber("Start.");
+			this.Log().DebugWithLineNumber("Start.");
 
-				CheckAndAssignNextJob();
+			CheckAndAssignNextJob();
 
-				Logger.LogDebugWithLineNumber("CheckAndAssignNextJob on thread id : " + Thread.CurrentThread.ManagedThreadId);
-
+			this.Log().DebugWithLineNumber("CheckAndAssignNextJob on thread id : " + Thread.CurrentThread.ManagedThreadId);
 		}
 
-		
 
 		public void CheckNodesAreAlive(TimeSpan timeSpan)
 		{
@@ -98,8 +94,8 @@ namespace Stardust.Manager
 					{
 						if (job.AssignedNode == node)
 						{
-							Logger.LogErrorWithLineNumber("Job ( id , name ) is deleted due to the node executing it died. ( " + job.Id +
-							                                 " , " + job.Name + " )");
+							this.Log().ErrorWithLineNumber("Job ( id , name ) is deleted due to the node executing it died. ( " + job.Id +
+							                              " , " + job.Name + " )");
 
 							SetEndResultOnJobAndRemoveIt(job.Id, "Fatal Node Failure");
 						}
@@ -109,11 +105,11 @@ namespace Stardust.Manager
 		}
 
 		private void CheckHeartbeatsOnTimedEvent(object sender,
-								  ElapsedEventArgs e)
+		                                         ElapsedEventArgs e)
 		{
-				CheckNodesAreAlive(TimeSpan.FromSeconds(_managerConfiguration.AllowedNodeDownTimeSeconds));
+			CheckNodesAreAlive(TimeSpan.FromSeconds(_managerConfiguration.AllowedNodeDownTimeSeconds));
 
-				Logger.LogDebugWithLineNumber("Check Heartbeat on thread id : " + Thread.CurrentThread.ManagedThreadId);
+			this.Log().DebugWithLineNumber("Check Heartbeat on thread id : " + Thread.CurrentThread.ManagedThreadId);
 		}
 
 		public IList<WorkerNode> Nodes()
@@ -144,22 +140,22 @@ namespace Stardust.Manager
 
 		public void RegisterHeartbeat(string nodeUri)
 		{
-			Logger.LogDebugWithLineNumber("Start RegisterHeartbeat.");
+			this.Log().DebugWithLineNumber("Start RegisterHeartbeat.");
 
 			_workerNodeRepository.RegisterHeartbeat(nodeUri, true);
 
-			Logger.LogDebugWithLineNumber("Finished RegisterHeartbeat.");
+			this.Log().DebugWithLineNumber("Finished RegisterHeartbeat.");
 		}
 
 
 		public void CheckAndAssignNextJob()
 		{
-			Logger.LogDebugWithLineNumber("Start CheckAndAssignNextJob.");
+			this.Log().DebugWithLineNumber("Start CheckAndAssignNextJob.");
 
 
-			Logger.LogDebugWithLineNumber("CheckAndAssignNextJob: Start ManagerStopWatch.");
+			this.Log().DebugWithLineNumber("CheckAndAssignNextJob: Start ManagerStopWatch.");
 
-			ManagerStopWatch managerStopWatch = new ManagerStopWatch();
+			var managerStopWatch = new ManagerStopWatch();
 
 			try
 			{
@@ -169,7 +165,7 @@ namespace Stardust.Manager
 
 				if (availableNodes != null && availableNodes.Any())
 				{
-					Logger.LogDebugWithLineNumber("Found ( " + availableNodes.Count + " ) available nodes");
+					this.Log().DebugWithLineNumber("Found ( " + availableNodes.Count + " ) available nodes");
 				}
 
 				if (availableNodes != null)
@@ -185,14 +181,14 @@ namespace Stardust.Manager
 					_jobRepository.CheckAndAssignNextJob(upNodes,
 					                                     _httpSender);
 
-					Logger.LogDebugWithLineNumber("Finished CheckAndAssignNextJob.");
+					this.Log().DebugWithLineNumber("Finished CheckAndAssignNextJob.");
 				}
 			}
 
 			catch (Exception exp)
 			{
-				Logger.LogErrorWithLineNumber(exp.Message,
-				                                 exp);
+				this.Log().ErrorWithLineNumber(exp.Message,
+				                              exp);
 
 				throw;
 			}
@@ -202,7 +198,7 @@ namespace Stardust.Manager
 				var total =
 					managerStopWatch.GetTotalElapsedTimeInMilliseconds();
 
-				Logger.LogDebugWithLineNumber("CheckAndAssignNextJob: Stop ManagerStopWatch. Took " + total + " milliseconds.");
+				this.Log().DebugWithLineNumber("CheckAndAssignNextJob: Stop ManagerStopWatch. Took " + total + " milliseconds.");
 			}
 		}
 
@@ -230,7 +226,7 @@ namespace Stardust.Manager
 		{
 			_jobRepository.ReportProgress(model.JobId,
 			                              model.ProgressDetail,
-										  model.Created);
+			                              model.Created);
 		}
 
 		public JobHistory GetJobHistory(Guid jobId)

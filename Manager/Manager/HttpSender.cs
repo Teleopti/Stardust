@@ -22,7 +22,7 @@ namespace Stardust.Manager
 		public async Task<HttpResponseMessage> PostAsync(Uri url,
                                                          object data)
         {
-            Logger.LogDebugWithLineNumber("Start.");
+            this.Log().DebugWithLineNumber("Start.");
 
             try
             {
@@ -40,7 +40,7 @@ namespace Stardust.Manager
                                                                  "application/json"))
                             .ConfigureAwait(false);
 
-                    Logger.LogDebugWithLineNumber("Finished.");
+                    this.Log().DebugWithLineNumber("Finished.");
 
                     return response;
                 }
@@ -48,7 +48,7 @@ namespace Stardust.Manager
 
             catch (Exception exp)
             {
-                Logger.LogErrorWithLineNumber(exp.Message,
+                this.Log().ErrorWithLineNumber(exp.Message,
                                                  exp);
 
                 throw;
@@ -57,7 +57,7 @@ namespace Stardust.Manager
 
 		public async Task<HttpResponseMessage> DeleteAsync(Uri url)
         {
-            Logger.LogDebugWithLineNumber("Start.");
+            this.Log().DebugWithLineNumber("Start.");
 
             try
             {
@@ -69,7 +69,7 @@ namespace Stardust.Manager
                     var response = await client.DeleteAsync(url)
                             .ConfigureAwait(false);
 
-					Logger.LogDebugWithLineNumber("Finished.");
+					this.Log().DebugWithLineNumber("Finished.");
 
                     return response;
                 }
@@ -77,7 +77,7 @@ namespace Stardust.Manager
 
             catch (Exception exp)
             {
-                Logger.LogErrorWithLineNumber(exp.Message,
+                this.Log().ErrorWithLineNumber(exp.Message,
                                                  exp);
 
                 throw;
@@ -103,7 +103,7 @@ namespace Stardust.Manager
 
             catch (Exception exp)
             {
-                Logger.LogErrorWithLineNumber(exp.Message,
+                this.Log().ErrorWithLineNumber(exp.Message,
                                                  exp);
 
                 throw;
@@ -128,19 +128,19 @@ namespace Stardust.Manager
 
             catch (HttpRequestException exp)
             {
-                Logger.LogErrorWithLineNumber(exp.Message,
+                this.Log().ErrorWithLineNumber(exp.Message,
 												   exp);
             }
 
             catch (Exception exp)
             {
-                Logger.LogErrorWithLineNumber(exp.Message,
+                this.Log().ErrorWithLineNumber(exp.Message,
                                                  exp);
 
                 throw;
             }
 
-            Logger.LogDebugWithLineNumber("Return false");
+            this.Log().DebugWithLineNumber("Return false");
             return false;
         }
     }

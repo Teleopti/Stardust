@@ -61,7 +61,7 @@ namespace ManagerConsoleHost
 			WhoAmI = 
 				"[MANAGER CONSOLE HOST ( " + managerName + ", " + managerAddress +  " )," + Environment.MachineName.ToUpper() + "]";
 
-			Logger.LogInfoWithLineNumber(WhoAmI + " : started.");
+			Logger.InfoWithLineNumber(WhoAmI + " : started.");
 
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
@@ -90,7 +90,7 @@ namespace ManagerConsoleHost
 				                    appBuilder.UseWebApi(config);
 			                    }))
 			{
-				Logger.LogInfoWithLineNumber(WhoAmI + ": Started listening on port : ( " + baseAddress + " )");
+				Logger.InfoWithLineNumber(WhoAmI + ": Started listening on port : ( " + baseAddress + " )");
 
 				ManagerStarter = new ManagerStarter();
 				ManagerStarter.Start(managerConfiguration,
@@ -109,7 +109,7 @@ namespace ManagerConsoleHost
 			if (ctrlType == CtrlTypes.CtrlCloseEvent ||
 			    ctrlType == CtrlTypes.CtrlShutdownEvent)
 			{
-				Logger.LogDebugWithLineNumber(WhoAmI + " : ConsoleCtrlCheck called.");
+				Logger.DebugWithLineNumber(WhoAmI + " : ConsoleCtrlCheck called.");
 
 				QuitEvent.Set();
 
@@ -122,7 +122,7 @@ namespace ManagerConsoleHost
 		private static void CurrentDomain_DomainUnload(object sender,
 		                                               EventArgs e)
 		{
-			Logger.LogDebugWithLineNumber(WhoAmI + " : CurrentDomain_DomainUnload called.");
+			Logger.DebugWithLineNumber(WhoAmI + " : CurrentDomain_DomainUnload called.");
 
 			QuitEvent.Set();
 		}
@@ -134,7 +134,7 @@ namespace ManagerConsoleHost
 
 			if (exp != null)
 			{
-				Logger.LogFatalWithLineNumber(exp.Message,
+				Logger.FatalWithLineNumber(exp.Message,
 				                                 exp);
 			}
 		}

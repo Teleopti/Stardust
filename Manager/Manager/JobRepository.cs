@@ -17,7 +17,6 @@ namespace Stardust.Manager
 	{
 		private const int DelaysMiliseconds = 100;
 		private const int MaxRetry = 3;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (JobRepository));
 		private readonly RetryPolicyProvider _retryPolicyProvider;
 
 		private readonly string _connectionString;
@@ -30,14 +29,14 @@ namespace Stardust.Manager
 
 		private void runner(Action funcToRun, string faliureMessage)
 		{
-			var policy = _retryPolicyProvider.GetPolicy(Logger);
+			var policy = _retryPolicyProvider.GetPolicy(this.Log());
 			try
 			{
 				policy.ExecuteAction(funcToRun);
 			}
 			catch (Exception ex)
 			{
-				Logger.LogErrorWithLineNumber(ex.Message + faliureMessage);
+				this.Log().ErrorWithLineNumber(ex.Message + faliureMessage);
 			}
 		}
 
@@ -142,21 +141,21 @@ namespace Stardust.Manager
 		public List<JobDefinition> LoadAll()
 		{
 			var result = new List<JobDefinition>();
-			var policy = _retryPolicyProvider.GetPolicy(Logger);
+			var policy = _retryPolicyProvider.GetPolicy(this.Log());
 			try
 			{
 				result = policy.ExecuteAction(() => tryLoadAll());
 			}
 			catch (Exception ex)
 			{
-				Logger.LogErrorWithLineNumber(ex.Message + "Unable to load jobs from database");
+				this.Log().ErrorWithLineNumber(ex.Message + "Unable to load jobs from database");
 			}
 			return result;
 		}
 
 		private List<JobDefinition> tryLoadAll()
 		{
-			Logger.LogDebugWithLineNumber("Start.");
+			this.Log().DebugWithLineNumber("Start.");
 
 			const string selectCommand = @"SELECT 
                                              Id    
@@ -214,10 +213,10 @@ namespace Stardust.Manager
 
 			catch (Exception exp)
 			{
-				Logger.LogErrorWithLineNumber(exp.Message, exp);
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
 			}
 
-			Logger.LogDebugWithLineNumber("Finshed.");
+			this.Log().DebugWithLineNumber("Finshed.");
 
 			return null;
 		}
@@ -229,7 +228,7 @@ namespace Stardust.Manager
 
 		private void trydeleteJob(Guid jobId)
 		{
-			Logger.LogDebugWithLineNumber("Start.");
+			this.Log().DebugWithLineNumber("Start.");
 
 			try
 			{
@@ -260,10 +259,10 @@ namespace Stardust.Manager
 			}
 			catch (Exception exp)
 			{
-				Logger.LogErrorWithLineNumber(exp.Message, exp);
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
 			}
 
-			Logger.LogDebugWithLineNumber("Finished.");
+			this.Log().DebugWithLineNumber("Finished.");
 		}
 
 
@@ -274,7 +273,7 @@ namespace Stardust.Manager
 
 		private void tryFreeJobIfNodeIsAssigned(string url)
 		{
-			Logger.LogDebugWithLineNumber("Start.");
+			this.Log().DebugWithLineNumber("Start.");
 
 			try
 			{
@@ -305,28 +304,28 @@ namespace Stardust.Manager
 			}
 			catch (Exception exp)
 			{
-				Logger.LogErrorWithLineNumber(exp.Message, exp);
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
 			}
 
-			Logger.LogDebugWithLineNumber("Finished.");
+			this.Log().DebugWithLineNumber("Finished.");
 		}
 
 		private async void tryCheckAndAssignNextJob(List<WorkerNode> availableNodes,
 		                                        IHttpSender httpSender)
 
 		{
-			Logger.LogDebugWithLineNumber("Start CheckAndAssignNextJob.");
+			this.Log().DebugWithLineNumber("Start CheckAndAssignNextJob.");
 
 			if (!availableNodes.Any())
 			{
-				Logger.LogDebugWithLineNumber("Could not find any availabe nodes. Procedure will return.");
+				this.Log().DebugWithLineNumber("Could not find any availabe nodes. Procedure will return.");
 
 				return;
 			}
 
 			try
 			{
-				Logger.LogDebugWithLineNumber("Found ( " + availableNodes.Count + " ) availabe nodes.");
+				this.Log().DebugWithLineNumber("Found ( " + availableNodes.Count + " ) availabe nodes.");
 
 				using (var connection = new SqlConnection(_connectionString))
 				{
@@ -384,7 +383,7 @@ namespace Stardust.Manager
 
 								foreach (var node in availableNodes)
 								{
-									Logger.LogDebugWithLineNumber("Available node : ( id, Url ) : ( " + node.Id + ", " + node.Url +
+									this.Log().DebugWithLineNumber("Available node : ( id, Url ) : ( " + node.Id + ", " + node.Url +
 									                                 " )");
 
 									try
@@ -394,7 +393,7 @@ namespace Stardust.Manager
 
 										var urijob = builderHelper.GetJobTemplateUri();
 
-										Logger.LogDebugWithLineNumber("Post async Uri : ( " + urijob + " )");
+										this.Log().DebugWithLineNumber("Post async Uri : ( " + urijob + " )");
 
 										var response = await httpSender.PostAsync(urijob,
 										                                          job);
@@ -476,7 +475,7 @@ namespace Stardust.Manager
 
 									catch (Exception exp)
 									{
-										Logger.LogErrorWithLineNumber(exp.Message, exp);
+										this.Log().ErrorWithLineNumber(exp.Message, exp);
 									}
 								}
 							}
@@ -491,12 +490,12 @@ namespace Stardust.Manager
 
 			catch (SqlException exp)
 			{
-				Logger.LogErrorWithLineNumber(exp.Message, exp);
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
 			}
 
 			catch (Exception exp)
 			{
-				Logger.LogErrorWithLineNumber(exp.Message, exp);
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
 			}
 		}
 
@@ -511,7 +510,7 @@ namespace Stardust.Manager
 		                                IHttpSender httpSender)
 
 		{
-			Logger.LogDebugWithLineNumber("Start.");
+			this.Log().DebugWithLineNumber("Start.");
 
 			try
 			{
@@ -579,7 +578,7 @@ namespace Stardust.Manager
 
 								var uriCancel = builderHelper.GetCancelJobUri(jobId);
 
-								Logger.LogDebugWithLineNumber("Send delete async : " + uriCancel);
+								this.Log().DebugWithLineNumber("Send delete async : " + uriCancel);
 
 								var response =
 									await httpSender.DeleteAsync(uriCancel);
@@ -605,7 +604,7 @@ namespace Stardust.Manager
 						}
 						else
 						{
-							Logger.LogWarningWithLineNumber("[MANAGER, " + Environment.MachineName +
+							this.Log().WarningWithLineNumber("[MANAGER, " + Environment.MachineName +
 							                                   "] : Could not find job defintion for id : " + jobId);
 						}
 					}
@@ -617,10 +616,10 @@ namespace Stardust.Manager
 			}
 			catch (Exception exp)
 			{
-				Logger.LogErrorWithLineNumber(exp.Message, exp);
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
 			}
 
-			Logger.LogDebugWithLineNumber("Finished.");
+			this.Log().DebugWithLineNumber("Finished.");
 		}
 
 		public void CancelThisJob(Guid jobId,
@@ -638,7 +637,7 @@ namespace Stardust.Manager
 		private void trySetEndResultOnJob(Guid jobId,
 		                              string result)
 		{
-			Logger.LogDebugWithLineNumber("Start.");
+			this.Log().DebugWithLineNumber("Start.");
 
 			try
 			{
@@ -684,10 +683,10 @@ namespace Stardust.Manager
 
 			catch (Exception exp)
 			{
-				Logger.LogErrorWithLineNumber(exp.Message, exp);
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
 			}
 
-			Logger.LogDebugWithLineNumber("Finished.");
+			this.Log().DebugWithLineNumber("Finished.");
 		}
 
 		public void ReportProgress(Guid jobId,
@@ -703,7 +702,7 @@ namespace Stardust.Manager
 		                              string detail,
 		                              DateTime created)
 		{
-			Logger.LogDebugWithLineNumber("Start.");
+			this.Log().DebugWithLineNumber("Start.");
 
 			try
 			{
@@ -745,10 +744,10 @@ namespace Stardust.Manager
 
 			catch (Exception exp)
 			{
-				Logger.LogErrorWithLineNumber(exp.Message, exp);
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
 			}
 
-			Logger.LogDebugWithLineNumber("Finished.");
+			this.Log().DebugWithLineNumber("Finished.");
 		}
 
 
@@ -756,14 +755,14 @@ namespace Stardust.Manager
 		{
 			JobHistory jobHist = null;
 			//return runner<JobHistory>(tryHistory(jobId), "Unable to load job history");
-			var policy = _retryPolicyProvider.GetPolicy(Logger);
+			var policy = _retryPolicyProvider.GetPolicy(this.Log());
 			try
 			{
 				jobHist = policy.ExecuteAction(() => tryHistory(jobId));
 			}
 			catch (Exception ex)
 			{
-				Logger.LogErrorWithLineNumber(ex.Message + "Unable to perform operation");
+				this.Log().ErrorWithLineNumber(ex.Message + "Unable to perform operation");
 			}
 			return jobHist;
 		}
@@ -771,7 +770,7 @@ namespace Stardust.Manager
 		private JobHistory tryHistory(Guid jobId)
 
 		{
-			Logger.LogDebugWithLineNumber("Start.");
+			this.Log().DebugWithLineNumber("Start.");
 
 			try
 			{
@@ -814,10 +813,10 @@ namespace Stardust.Manager
 			}
 			catch (Exception exp)
 			{
-				Logger.LogErrorWithLineNumber(exp.Message, exp);
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
 			}
 
-			Logger.LogDebugWithLineNumber("Finished.");
+			this.Log().DebugWithLineNumber("Finished.");
 
 			return null;
 		}
@@ -825,14 +824,14 @@ namespace Stardust.Manager
 		public IList<JobHistory> HistoryList()
 		{
 			var returnList = new List<JobHistory>();
-			var policy = _retryPolicyProvider.GetPolicy(Logger);
+			var policy = _retryPolicyProvider.GetPolicy(this.Log());
 			try
 			{
 				returnList = policy.ExecuteAction(() => tryHistoryList()).ToList();
 			}
 			catch (Exception ex)
 			{
-				Logger.LogErrorWithLineNumber(ex.Message + "Unable to perform operation");
+				this.Log().ErrorWithLineNumber(ex.Message + "Unable to perform operation");
 			}
 			return returnList;
 		}
@@ -840,7 +839,7 @@ namespace Stardust.Manager
 		private IList<JobHistory> tryHistoryList()
 
 		{
-			Logger.LogDebugWithLineNumber("Start.");
+			this.Log().DebugWithLineNumber("Start.");
 
 			try
 			{
@@ -879,10 +878,10 @@ namespace Stardust.Manager
 			}
 			catch (Exception exp)
 			{
-				Logger.LogErrorWithLineNumber(exp.Message, exp);
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
 			}
 
-			Logger.LogDebugWithLineNumber("Finished.");
+			this.Log().DebugWithLineNumber("Finished.");
 
 			return null;
 		}
@@ -891,21 +890,21 @@ namespace Stardust.Manager
 		public IList<JobHistoryDetail> JobHistoryDetails(Guid jobId)
 		{
 			var returnList = new List<JobHistoryDetail>();
-			var policy = _retryPolicyProvider.GetPolicy(Logger);
+			var policy = _retryPolicyProvider.GetPolicy(this.Log());
 			try
 			{
 				returnList = policy.ExecuteAction(() => tryJobHistoryDetails(jobId)).ToList();
 			}
 			catch (Exception ex)
 			{
-				Logger.LogErrorWithLineNumber(ex.Message + "Unable to perform operation");
+				this.Log().ErrorWithLineNumber(ex.Message + "Unable to perform operation");
 			}
 			return returnList;
 		}
 
 		private IList<JobHistoryDetail> tryJobHistoryDetails(Guid jobId)
 		{
-			Logger.LogDebugWithLineNumber("Start.");
+			this.Log().DebugWithLineNumber("Start.");
 
 			try
 			{
@@ -949,10 +948,10 @@ namespace Stardust.Manager
 
 			catch (Exception exp)
 			{
-				Logger.LogErrorWithLineNumber(exp.Message, exp);
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
 			}
 
-			Logger.LogDebugWithLineNumber("Finished.");
+			this.Log().DebugWithLineNumber("Finished.");
 
 			return null;
 		}
@@ -966,7 +965,7 @@ namespace Stardust.Manager
 
 		private JobHistory NewJobHistoryModel(SqlDataReader reader)
 		{
-			Logger.LogDebugWithLineNumber("Start.");
+			this.Log().DebugWithLineNumber("Start.");
 
 			try
 			{
@@ -986,10 +985,10 @@ namespace Stardust.Manager
 			}
 			catch (Exception exp)
 			{
-				Logger.LogErrorWithLineNumber(exp.Message, exp);
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
 			}
 
-			Logger.LogDebugWithLineNumber("Finished.");
+			this.Log().DebugWithLineNumber("Finished.");
 
 			return null;
 		}

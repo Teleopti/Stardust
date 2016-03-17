@@ -19,7 +19,7 @@ namespace Stardust.Manager
 			{
 				// Log details of the retry.
 				var msg = String.Format("Retry - Count:{0}, Delay:{1}, Exception:{2}", args.CurrentRetryCount, args.Delay, args.LastException);
-				logger.LogErrorWithLineNumber(msg);
+				logger.ErrorWithLineNumber(msg);
 			};
 			return policy;
 		}
