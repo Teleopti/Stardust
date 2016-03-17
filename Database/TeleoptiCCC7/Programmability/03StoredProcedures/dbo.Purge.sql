@@ -336,6 +336,10 @@ if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
 delete ReadModel.AdherenceDetails
 where BelongsToDate < dateadd(day,-1,getdate())
 
+delete ReadModel.PersonScheduleDay
+from ReadModel.PersonScheduleDay ps
+inner join #Deleted d on d.Id = ps.PersonId
+
 END
 
 GO
