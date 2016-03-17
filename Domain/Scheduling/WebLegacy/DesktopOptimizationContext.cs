@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
-	public class FillSchedulerStateHolderFromRam : FillSchedulerStateHolder, ISynchronizeIntradayOptimizationResult, IOptimizationPreferencesProvider
+	public class DesktopOptimizationContext : FillSchedulerStateHolder, ISynchronizeIntradayOptimizationResult, IOptimizationPreferencesProvider
 	{
 		private ISchedulerStateHolder _schedulerStateHolderFrom;
 		private IOptimizationPreferences _optimizationPreferences;

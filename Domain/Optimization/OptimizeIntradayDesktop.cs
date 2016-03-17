@@ -22,11 +22,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class OptimizeIntradayIslandsDesktop : IOptimizeIntradayDesktop
 	{
 		private readonly IIntradayOptimizationCommandHandler _intradayOptimizationCommandHandler;
-		private readonly FillSchedulerStateHolderFromRam _fillSchedulerStateHolder;
+		private readonly DesktopOptimizationContext _fillSchedulerStateHolder;
 		private readonly Func<ISchedulerStateHolder> _currentSchedulerStateHolder;
 
 		public OptimizeIntradayIslandsDesktop(IIntradayOptimizationCommandHandler intradayOptimizationCommandHandler, 
-																		FillSchedulerStateHolderFromRam fillSchedulerStateHolder,
+																		DesktopOptimizationContext fillSchedulerStateHolder,
 																		Func<ISchedulerStateHolder> currentSchedulerStateHolder)
 		{
 			_intradayOptimizationCommandHandler = intradayOptimizationCommandHandler;

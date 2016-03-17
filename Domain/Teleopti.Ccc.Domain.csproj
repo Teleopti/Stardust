@@ -812,7 +812,7 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ActivityRequiresSkillProjectionFilter.cs" />
     <Compile Include="Scheduling\SaveSchedulePart\BusinessRulesForPersonalAccountUpdate.cs" />
     <Compile Include="Scheduling\ViolatedSchedulePeriodBusinessRule.cs" />
-    <Compile Include="Scheduling\WebLegacy\FillSchedulerStateHolderFromRam.cs" />
+    <Compile Include="Scheduling\WebLegacy\DesktopOptimizationContext.cs" />
     <Compile Include="Scheduling\WebLegacy\IFillSchedulerStateHolder.cs" />
     <Compile Include="Scheduling\WebLegacy\FillSchedulerStateHolderFromDatabase.cs" />
     <Compile Include="SeatPlanning\GroupSeatBookingRanker.cs" />

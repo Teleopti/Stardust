@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FillSchedulerStateHolderFromRam>().For<IFillSchedulerStateHolder>();
+			system.UseTestDouble<DesktopOptimizationContext>().For<IFillSchedulerStateHolder>();
 		}
 	}
 }
