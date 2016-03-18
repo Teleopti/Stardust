@@ -2,10 +2,14 @@
 			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-			 mc:Ignorable="d" d:DesignHeight="94" d:DesignWidth="600">
-
-	<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="90">
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:converter="clr-namespace:Teleopti.Analytics.Etl.ConfigTool.Gui.Converter"
+			 mc:Ignorable="d" d:DesignHeight="94" d:DesignWidth="800">
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="90">
+        <StackPanel.Resources>
+            <converter:IsServiceRunningJobBooleanToStringConverter x:Key="BooleanToStringConverter"/>
+            <converter:VisibilityOnNullConverter x:Key="VisibilityConverter"/>
+        </StackPanel.Resources>
 		<GroupBox Name="groupBoxPeriod" Margin="5">
 			<GroupBox.Header>
 				<Label>Week Period</Label>
@@ -61,5 +65,34 @@
 				</Button>
 			</StackPanel>
 		</GroupBox>
-	</StackPanel>
+        <GroupBox Name="GroupBoxRunningStatus" Margin="5">
+            <GroupBox.Header>
+                <Label>Running Status</Label>
+            </GroupBox.Header>
+            <StackPanel Name="StackPanelRunningStatus" Margin="2" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <TextBlock Name="TextBlockNoRunningStatus" 
+                           Visibility="{Binding RunningStatus, Converter={StaticResource VisibilityConverter}}">
+                    No jobs running
+                </TextBlock>
+                <TextBlock Name="RubrikTextBlock">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="Job on {0} ({1})">
+                            <Binding Path="RunningStatus.ComputerName" />
+                            <Binding Path="RunningStatus.IsStartedByService" 
+                                     Converter="{StaticResource BooleanToStringConverter}" 
+                                     Mode="OneWay" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+                <TextBlock Name="Statustext" Margin="0,10,0,0">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} since {1}">
+                            <Binding Path="RunningStatus.JobName" />
+                            <Binding Path="RunningStatus.StartTime" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </StackPanel>
+        </GroupBox>
+    </StackPanel>
 </UserControl>

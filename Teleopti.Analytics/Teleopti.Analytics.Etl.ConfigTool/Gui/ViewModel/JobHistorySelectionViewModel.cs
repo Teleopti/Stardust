@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Interfaces.Domain;
@@ -17,8 +18,10 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 		private DateTime _endDate;
 		private BusinessUnitItem _selectedBusinessUnit;
 		private IList<BusinessUnitItem> _businessUnitCollection;
+	    private IEtlRunningInformation _runningInformation;
 		private bool _showOnlyErrors;
 		private readonly IBaseConfiguration _baseConfiguration;
+	    private Timer _timer;
 
 		public JobHistorySelectionViewModel(IBaseConfiguration baseConfiguration)
 		{
@@ -34,7 +37,14 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 			IsRefreshing = false;
 			SetFirstBusinessUnitAsSelected();
 			ShowOnlyErrors = true;
+
+            _timer = new Timer(tick, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(10));
 		}
+
+	    private void tick(object o)
+	    {
+	        UpdateRunningStatus();
+	    }
 
 		public void UpdateBusinessUnitCollection()
 		{
@@ -48,6 +58,14 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 			if(SelectedBusinessUnit == null)
 				SetFirstBusinessUnitAsSelected();
 		}
+        
+	    public void UpdateRunningStatus()
+	    {
+            var connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
+	        var runningStatus = new RunningStatusRepository(connectionString);
+	        RunningStatus = runningStatus.GetRunningJob();
+            RaisePropertyChanged("RunningStatus");
+	    }
 
 		private void SetFirstBusinessUnitAsSelected()
 		{
@@ -91,6 +109,16 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 				RaisePropertyChanged("EndDate");
 			}
 		}
+
+	    public IEtlRunningInformation RunningStatus
+	    {
+            get { return _runningInformation; }
+	        private set
+	        {
+	            _runningInformation = value;
+	            RaisePropertyChanged("RunningStatus");
+	        }
+	    }
 
 		public IList<BusinessUnitItem> BusinessUnitCollection
 		{
