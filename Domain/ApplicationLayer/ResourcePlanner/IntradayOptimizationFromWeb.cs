@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -11,15 +11,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 	{
 		private readonly IIntradayOptimizationCommandHandler _intradayOptimizationCommandHandler;
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
-		private readonly IFixedStaffLoader _fixedStaffLoader;
+		private readonly IPersonRepository _personRepository;
 
 		public IntradayOptimizationFromWeb(IIntradayOptimizationCommandHandler intradayOptimizationCommandHandler, 
 			IPlanningPeriodRepository planningPeriodRepository,
-			IFixedStaffLoader fixedStaffLoader)
+			IPersonRepository personRepository)
 		{
 			_intradayOptimizationCommandHandler = intradayOptimizationCommandHandler;
 			_planningPeriodRepository = planningPeriodRepository;
-			_fixedStaffLoader = fixedStaffLoader;
+			_personRepository = personRepository;
 		}
 
 		public virtual void Execute(Guid planningPeriodId)
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			return new WebIntradayCommandData
 			{
 				Period = period,
-				Agents = _fixedStaffLoader.Load(period).AllPeople
+				Agents = _personRepository.FindPeopleInOrganization(period, false)
 			};
 		}
 
