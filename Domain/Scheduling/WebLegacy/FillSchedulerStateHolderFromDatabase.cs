@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			return _scenarioRepository.LoadDefaultScenario();
 		}
 
-		protected override IEnumerable<IPerson> FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
+		protected override void FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
 		{
 			var timeZone = _principal.Current().Regional.TimeZone;
 			var dateTimePeriod = period.ToDateTimePeriod(timeZone);
@@ -65,7 +65,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization = people.AllPeople;
 			people.AllPeople.ForEach(schedulerStateHolderTo.AllPermittedPersons.Add);
 			schedulerStateHolderTo.ResetFilteredPersons();
-			return people.AllPeople;
 		}
 
 		protected override void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period)
