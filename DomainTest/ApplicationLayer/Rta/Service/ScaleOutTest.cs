@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Should().Not.Be.Empty();
 		}
 
-		[Test, Ignore]
+		[Test, Ignore("Not applicable, unless we fake sql locking")]
 		public void ShouldNotSendDuplicateEvents()
 		{
 			Database
