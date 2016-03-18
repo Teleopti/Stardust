@@ -132,9 +132,12 @@
 								return;
 							}
 							$scope.forecastedCalls = $filter('number')(result.ForecastedCalls, 1);
+							$scope.forecastedAverageHandleTime = $filter('number')(result.ForecastedAverageHandleTime, 1);
 							$scope.offeredCalls = $filter('number')(result.OfferedCalls, 1);
+							$scope.averageHandleTime = $filter('number')(result.AverageHandleTime, 1);
 							$scope.latestStatsTime = $filter('date')(result.LatestStatsTime, 'shortTime');
-							$scope.difference = $filter('number')(result.ForecastedActualCallsDiff, 1);
+							$scope.forecastActualCallsDifference = $filter('number')(result.ForecastedActualCallsDiff, 1);
+							$scope.forecastActualAverageHandleTimeDifference = $filter('number')(result.ForecastedActualHandleTimeDiff, 1);
 							$scope.HasMonitorData = true;
 						},
 						function(error) {
@@ -167,9 +170,12 @@
 								return;
 							}
 							$scope.forecastedCalls = $filter('number')(result.ForecastedCalls, 1);
+							$scope.forecastedAverageHandleTime = $filter('number')(result.ForecastedAverageHandleTime, 1);
 							$scope.offeredCalls = $filter('number')(result.OfferedCalls, 1);
+							$scope.averageHandleTime = $filter('number')(result.AverageHandleTime, 1);
 							$scope.latestStatsTime = $filter('date')(result.LatestStatsTime, 'shortTime');
-							$scope.difference = $filter('number')(result.ForecastedActualCallsDiff, 1);
+							$scope.forecastActualCallsDifference = $filter('number')(result.ForecastedActualCallsDiff, 1);
+							$scope.forecastActualAverageHandleTimeDifference = $filter('number')(result.ForecastedActualHandleTimeDiff, 1);
 							$scope.HasMonitorData = true;
 						},
 						function(error) {

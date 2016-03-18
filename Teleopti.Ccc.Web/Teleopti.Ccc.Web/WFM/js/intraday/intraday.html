@@ -80,7 +80,18 @@
 					Actual calls: <b>{{offeredCalls}}</b>
 				</div>
 				<div class="con-flex">
-					Difference: <b>{{difference}}%</b>
+					Difference: <b>{{forecastActualCallsDifference}}%</b>
+				</div>
+			</div>
+			<div class="con-row" ng-show="HasMonitorData">
+				<div class="con-flex">
+					Forecasted AHT: <b>{{forecastedAverageHandleTime}}</b>
+				</div>
+				<div class="con-flex">
+					Actual AHT: <b>{{averageHandleTime}}</b>
+				</div>
+				<div class="con-flex">
+					Difference: <b>{{forecastedActualHandleTimeDiff}}%</b>
 				</div>
 			</div>
 		</div>
@@ -131,7 +142,18 @@
 					Actual calls: <b>{{offeredCalls}}</b>
 				</div>
 				<div class="con-flex">
-					Difference: <b>{{difference}}%</b>
+					Difference: <b>{{forecastActualCallsDifference}}%</b>
+				</div>
+			</div>
+			<div class="con-row" ng-show="HasMonitorData">
+				<div class="con-flex">
+					Forecasted AHT: <b>{{forecastedAverageHandleTime}}</b>
+				</div>
+				<div class="con-flex">
+					Actual AHT: <b>{{averageHandleTime}}</b>
+				</div>
+				<div class="con-flex">
+					Difference: <b>{{forecastedActualHandleTimeDiff}}%</b>
 				</div>
 			</div>
 		</div>

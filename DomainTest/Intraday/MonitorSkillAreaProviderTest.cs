@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			existingSkillArea.SetId(skillAreaId);
 
 			SkillAreaRepository.Has(existingSkillArea);
-			IntradayMonitorDataLoader.Has(10, 25, new DateTime(today.Year, today.Month, today.Day, 8, 0, 0), 150);
+			IntradayMonitorDataLoader.Has(10, 60, 25, 30, new DateTime(today.Year, today.Month, today.Day, 8, 0, 0), 150, 50);
 
 			var result = Target.Load(skillAreaId);
 
@@ -44,6 +44,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			result.OfferedCalls.Should().Be.EqualTo(25);
 			result.LatestStatsTime.Should().Be.EqualTo(new DateTime(today.Year, today.Month, today.Day, 8, 0, 0));
 			result.ForecastedActualCallsDiff.Should().Be.EqualTo(150);
+			result.ForecastedAverageHandleTime.Should().Be.EqualTo(60);
+			result.AverageHandleTime.Should().Be.EqualTo(30);
+
 		}
 	}
 }

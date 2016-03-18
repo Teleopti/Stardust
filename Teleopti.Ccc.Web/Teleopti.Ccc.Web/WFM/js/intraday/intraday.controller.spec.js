@@ -37,9 +37,12 @@ describe('IntradayCtrl', function () {
 
 		monitorData = {
 			ForecastedCalls: '100.0',
+			ForecastedAverageHandleTime: '60.0',
 			OfferedCalls: '50.0',
+			AverageHandleTime: '30.0',
 			LatestStatsTime: '1901-01-01 13:00',
-			ForecastedActualCallsDiff: '50.0'
+			ForecastedActualCallsDiff: '50.0',
+			ForecastedActualHandleTimeDiff: '50.0'
 		};
 	});
 	
@@ -117,9 +120,12 @@ describe('IntradayCtrl', function () {
 
 		expect(scope.selectedItem).toEqual(scope.skills[0]);
 		expect(scope.forecastedCalls).toEqual(monitorData.ForecastedCalls);
+		expect(scope.forecastedAverageHandleTime).toEqual(monitorData.ForecastedAverageHandleTime);
 		expect(scope.offeredCalls).toEqual(monitorData.OfferedCalls);
+		expect(scope.averageHandleTime).toEqual(monitorData.AverageHandleTime);
 		expect(scope.latestStatsTime).toEqual(monitorData.LatestStatsTime);
-		expect(scope.difference).toEqual(monitorData.ForecastedActualCallsDiff);
+		expect(scope.forecastActualCallsDifference).toEqual(monitorData.ForecastedActualCallsDiff);
+		expect(scope.forecastActualAverageHandleTimeDifference).toEqual(monitorData.ForecastedActualHandleTimeDiff);
 	});
 
 	it('should monitor first skill area if there are any', function () {
@@ -130,9 +136,12 @@ describe('IntradayCtrl', function () {
 
 		expect(scope.selectedItem).toEqual(scope.skillAreas[0]);
 		expect(scope.forecastedCalls).toEqual(monitorData.ForecastedCalls);
+		expect(scope.forecastedAverageHandleTime).toEqual(monitorData.ForecastedAverageHandleTime);
 		expect(scope.offeredCalls).toEqual(monitorData.OfferedCalls);
+		expect(scope.averageHandleTime).toEqual(monitorData.AverageHandleTime);
 		expect(scope.latestStatsTime).toEqual(monitorData.LatestStatsTime);
-		expect(scope.difference).toEqual(monitorData.ForecastedActualCallsDiff);
+		expect(scope.forecastActualCallsDifference).toEqual(monitorData.ForecastedActualCallsDiff);
+		expect(scope.forecastActualAverageHandleTimeDifference).toEqual(monitorData.ForecastedActualHandleTimeDiff);
 	});
 
 	it('should have permission to modify skill area', function() {
