@@ -26,8 +26,6 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			_significantChangeChecker = MockRepository.GenerateMock<ISignificantChangeChecker>();
 			_notifier = MockRepository.GenerateMock<INotifier>();
 			_currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
-
-			_currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			_currentUnitOfWorkFactory.Stub(x => x.Current())
 				.Return(unitOfWorkFactory);

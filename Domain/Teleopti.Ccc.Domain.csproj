@@ -170,6 +170,8 @@
     <Compile Include="Aop\UnitOfWorkAttribute.cs" />
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
     <Compile Include="Optimization\IOptimizationPreferencesProvider.cs" />
+    <Compile Include="ApplicationLayer\Events\GroupPageCollectionChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\GroupingReadModelGroupPageUpdater.cs" />
     <Compile Include="Scheduling\WebLegacy\FillSchedulerStateHolder.cs" />
     <Compile Include="UnitOfWork\ThisUnitOfWork.cs" />
     <Compile Include="UnitOfWork\WithAnalyticsUnitOfWork.cs" />

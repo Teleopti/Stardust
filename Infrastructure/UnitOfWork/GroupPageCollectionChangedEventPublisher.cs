@@ -1,26 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class GroupPageChangedBusMessageSender : IPersistCallback
+	public class GroupPageCollectionChangedEventPublisher : IPersistCallback
 	{
-		private readonly IMessagePopulatingServiceBusSender _serviceBusSender;
+		private readonly IEventPopulatingPublisher _eventsPublisher;
 
 		private readonly IEnumerable<Type> _triggerInterfaces = new List<Type>
 		{
 			typeof (IGroupPage)
 		};
 
-		public GroupPageChangedBusMessageSender(IMessagePopulatingServiceBusSender serviceBusSender)
+		public GroupPageCollectionChangedEventPublisher(IEventPopulatingPublisher eventsPublisher)
 		{
-			_serviceBusSender = serviceBusSender;
+			_eventsPublisher = eventsPublisher;
 		}
 
 		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
@@ -37,9 +36,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			foreach (var groupPageList in groupPage.Batch(25))
 			{
 				var idsAsString = (from p in groupPageList select p.Id.GetValueOrDefault()).ToArray();
-				var message = new GroupPageChangedMessage();
+				var message = new GroupPageCollectionChangedEvent();
 				message.SetGroupPageIdCollection(idsAsString);
-				_serviceBusSender.Send(message, false);
+				_eventsPublisher.Publish(message);
 			}
 		}
 	}

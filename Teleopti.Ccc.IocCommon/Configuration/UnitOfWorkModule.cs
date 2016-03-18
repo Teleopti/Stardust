@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			/**************************************/
 
 			builder.RegisterType<ScheduleChangedEventFromMeetingPublisher>().As<IPersistCallback>();
-			builder.RegisterType<GroupPageChangedBusMessageSender>().As<IPersistCallback>();
+			builder.RegisterType<GroupPageCollectionChangedEventPublisher>().As<IPersistCallback>();
 			builder.RegisterType<PersonCollectionChangedEventPublisherForTeamOrSite>().As<IPersistCallback>();
 			builder.RegisterType<PersonCollectionChangedEventPublisher>().As<IPersistCallback>();
 			builder.RegisterType<PersonPeriodChangedBusMessagePublisher>().As<IPersistCallback>();

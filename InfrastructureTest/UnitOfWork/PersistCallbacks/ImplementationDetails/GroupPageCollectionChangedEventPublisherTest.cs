@@ -1,30 +1,29 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.ImplementationDetails
 {
 	[TestFixture]
-	public class GroupPageChangedMessageSenderTest
+	public class GroupPageCollectionChangedEventPublisherTest
 	{
 		private IPersistCallback _target;
 		private MockRepository _mocks;
-		private IMessagePopulatingServiceBusSender _serviceBusSender;
+		private IEventPopulatingPublisher _eventPopulatingPublisher;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_serviceBusSender = _mocks.DynamicMock<IMessagePopulatingServiceBusSender>();
+			_eventPopulatingPublisher = _mocks.DynamicMock<IEventPopulatingPublisher>();
 
-			_target = new GroupPageChangedBusMessageSender(_serviceBusSender);
+			_target = new GroupPageCollectionChangedEventPublisher(_eventPopulatingPublisher);
 		}
 
         [Test]
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.Implementa
         {
             var page = new GroupPage("Page");
             var ids = new Guid[] { };
-            var message = new GroupPageChangedMessage();
+            var message = new GroupPageCollectionChangedEvent();
             message.SetGroupPageIdCollection(ids);
 
             var roots = new IRootChangeInfo[1];
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.Implementa
 
             using (_mocks.Record())
             {
-                Expect.Call(() => _serviceBusSender.Send(message, false)).IgnoreArguments();
+                Expect.Call(() => _eventPopulatingPublisher.Publish(message)).IgnoreArguments();
             }
             using (_mocks.Playback())
             {
