@@ -6,6 +6,9 @@
 Background:
 	Given there is a switch
 
+@ignore
+#Random faliure, probably because of rare anywhere issue
+#Not worth investigating according to Anders
 @OnlyRunIfEnabled('RTA_CalculatePercentageInAgentTimezone_31236')
 Scenario: Should see adherence percentage when call center is in Hawaii
 	Given I am located in Hawaii

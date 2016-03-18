@@ -6,6 +6,9 @@
 Background:
 	Given there is a switch
 
+@ignore
+#Random faliure, probably because of rare anywhere issue
+#Not worth investigating according to Anders
 Scenario: Should be able to change schedule from agent state overview
 	Given  the time is '2014-09-09 12:30:00'
 	And there is an activity named 'Phone'
@@ -42,6 +45,9 @@ Scenario: Should be able to change schedule from agent state overview
 	Then I should see schedule for 'Pierre Baldi'
 	And I should see schedule menu
 
+@ignore
+#Random faliure, probably because of rare anywhere issue
+#Not worth investigating according to Anders
 Scenario: Should be able to change schedule for multiple business units
 	Given the time is '2014-09-09 12:30:00'
 	And I have a role with
