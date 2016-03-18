@@ -271,7 +271,7 @@
     <Compile Include="Forecast\StatisticLoader.cs" />
     <Compile Include="DateOnlyPeriodSerializer.cs" />
     <Compile Include="DenormalizeBusBootStrapper.cs" />
-    <Compile Include="Denormalizer\UpdateGroupingReadModelDataConsumer.cs" />
+    <Compile Include="Denormalizer\PublishPersonPeriodCollectionChangedFromLegacyPersonPeriodChangedMessage.cs" />
     <Compile Include="Denormalizer\PublishGroupPageCollectionChangedFromLegacyGroupPageChangedMessage.cs" />
     <Compile Include="Denormalizer\InitialLoadScheduleProjectionConsumer.cs" />
     <Compile Include="Denormalizer\ProcessDenormalizeQueueConsumer.cs" />

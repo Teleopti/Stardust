@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-    public class PersonPeriodChangedBusMessagePublisher :IPersistCallback
+    public class PersonPeriodCollectionChangedEventPublisher : IPersistCallback
     {
-		private readonly IMessagePopulatingServiceBusSender _serviceBusSender;
+		private readonly IEventPopulatingPublisher _eventsPublisher;
 
 	    private readonly IEnumerable<Type> _triggerInterfaces = new List<Type>
 		                                                        	{
@@ -25,12 +24,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		                                                        		typeof (IPerson)
 		                                                        	};
 
-		public PersonPeriodChangedBusMessagePublisher(IMessagePopulatingServiceBusSender serviceBusSender)
+		public PersonPeriodCollectionChangedEventPublisher(IEventPopulatingPublisher eventsPublisher)
 		{
-	        _serviceBusSender = serviceBusSender;
+			_eventsPublisher = eventsPublisher;
 		}
 
-		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
+	    public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
             var affectedInterfaces = from r in modifiedRoots
                                      from i in r.Root.GetType().GetInterfaces()
@@ -43,9 +42,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				{
 					var idsAsString = (from p in notpersonList select ((IAggregateRoot)p).Id.GetValueOrDefault()).ToArray();
                     
-                    var message = new PersonPeriodChangedMessage();
-					message.SetPersonIdCollection(idsAsString);
-                    _serviceBusSender.Send(message, false);
+                    var @event = new PersonPeriodCollectionChangedEvent();
+					@event.SetPersonIdCollection(idsAsString);
+					_eventsPublisher.Publish(@event);
 				}
             }
         }
