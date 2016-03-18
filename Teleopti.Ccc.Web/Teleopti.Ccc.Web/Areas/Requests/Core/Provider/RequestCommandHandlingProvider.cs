@@ -8,12 +8,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 {
-	public class ReqeustCommandHandlingProvider : IRequestCommandHandlingProvider
+	public class RequestCommandHandlingProvider : IRequestCommandHandlingProvider
 	{
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly ILoggedOnUser _loggedOnUser;
 
-		public ReqeustCommandHandlingProvider(ICommandDispatcher commandDispatcher, ILoggedOnUser loggedOnUser)
+		public RequestCommandHandlingProvider(ICommandDispatcher commandDispatcher, ILoggedOnUser loggedOnUser)
 		{
 			_commandDispatcher = commandDispatcher;
 			_loggedOnUser = loggedOnUser;
@@ -58,7 +58,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				var command = new DenyRequestCommand
 				{
 					TrackedCommandInfo = trackInfo,
-					PersonRequestId = personRequestId
+					PersonRequestId = personRequestId,
+					IsManualDeny = true
 				};
 
 				_commandDispatcher.Execute(command);

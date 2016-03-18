@@ -137,13 +137,14 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="authorization"></param>
         IList<IBusinessRuleResponse> Approve(IRequestApprovalService approvalService, IPersonRequestCheckAuthorization authorization, bool isAutoGrant = false);
 
-        /// <summary>
-        /// Denies this instance.
-        /// </summary>
-        /// <param name="denyPerson">The deny person.</param>
-        /// <param name="denyReasonTextResourceKey">The deny reason text resource key.</param>
-        /// <param name="authorization"></param>
-        void Deny(IPerson denyPerson, string denyReasonTextResourceKey, IPersonRequestCheckAuthorization authorization);
+	    /// <summary>
+	    /// Denies this instance.
+	    /// </summary>
+	    /// <param name="denyPerson">The deny person.</param>
+	    /// <param name="denyReasonTextResourceKey">The deny reason text resource key.</param>
+	    /// <param name="authorization"></param>
+	    /// <param name="isAutoDeny"></param>
+	    void Deny(IPerson denyPerson, string denyReasonTextResourceKey, IPersonRequestCheckAuthorization authorization, bool isAutoDeny = false);
 
         /// <summary>
         /// Answers the specified message.

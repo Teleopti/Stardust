@@ -1,5 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
@@ -18,17 +19,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public void Handle(DenyRequestCommand command)
 		{
 			var personRequest = _personRequestRepository.Get(command.PersonRequestId);
-			if (personRequest != null && denyRequest(personRequest))
+			if (personRequest != null && denyRequest(personRequest, !command.IsManualDeny))
 			{
 				command.AffectedRequestId = command.PersonRequestId;
 			}			
 		}
 
-		private bool denyRequest(IPersonRequest personRequest)
+		private bool denyRequest(IPersonRequest personRequest, bool isAutoDeny)
 		{
 			try
 			{
-				personRequest.Deny(null, "RequestDenyReasonSupervisor", _authorization);
+				personRequest.Deny(null, "RequestDenyReasonSupervisor", _authorization, isAutoDeny);
 				return true;
 			}
 			catch (InvalidRequestStateTransitionException)

@@ -8,5 +8,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 		public Guid PersonRequestId { get; set; }
 		public Guid? AffectedRequestId { get; set; }
+		public bool IsManualDeny { get; set; }
 	}
 }

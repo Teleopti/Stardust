@@ -165,17 +165,16 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			notifyPropertyChanged("IsApproved");
 		}
 
-		public virtual void Deny(IPerson denyPerson, string denyReasonTextResourceKey,
-								 IPersonRequestCheckAuthorization authorization)
+		public virtual void Deny(IPerson denyPerson, string denyReasonTextResourceKey, IPersonRequestCheckAuthorization authorization, bool isAutoDeny = false)
 		{
 			authorization.VerifyEditRequestPermission(this);
 
-			if (!IsDenied)
+			if (CanDeny (isAutoDeny))
 			{
 				RequestState.Deny();
 			}
-
-			IRequest request = getRequest();
+			
+			var request = getRequest();
 			if (request != null)
 			{
 				request.Deny(denyPerson);
@@ -183,6 +182,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 			_denyReason = denyReasonTextResourceKey ?? string.Empty;
 			notifyOnStatusChange();
+		}
+
+
+		public bool CanDeny(bool isAutoDeny)
+		{
+			return (!isAutoDeny && RequestState.IsAutoDenied) || (!IsDenied);
+
 		}
 
 		public virtual bool IsEditable
@@ -657,6 +663,17 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				}
 			}
 
+			protected internal override void Deny()
+			{
+				if (waitlistingIsEnabled())
+				{
+					PersonRequest.moveToDenied();
+				}
+				else
+				{
+					base.Deny();
+				}
+			}
 
 			protected internal override string StatusText
 			{
