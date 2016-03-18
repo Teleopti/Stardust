@@ -40,9 +40,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		private static void removeUnwantedSkillDays(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
 		{
 			var agentSkills = new HashSet<ISkill>();
-			foreach (var filteredAgent in schedulerStateHolderTo.AllPermittedPersons)
+			foreach (var skill in schedulerStateHolderTo.AllPermittedPersons.SelectMany(filteredAgent => filteredAgent.ActiveSkillsFor(period)))
 			{
-				filteredAgent.ActiveSkillsFor(period).ForEach(x => agentSkills.Add(x));
+				agentSkills.Add(skill);
 			}
 
 			foreach (var skill in schedulerStateHolderTo.SchedulingResultState.SkillDays.Keys.ToList().Where(skill => !agentSkills.Contains(skill)))
