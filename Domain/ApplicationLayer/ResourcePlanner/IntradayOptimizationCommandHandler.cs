@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Teleopti.Ccc.Domain.Aop;
+﻿using System.Linq;
 using Teleopti.Ccc.Domain.DayOffPlanning;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 {
@@ -10,33 +7,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 	{
 		private readonly IEventPublisher _eventPublisher;
 		private readonly CreateIslands _createIslands;
-		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
-		public IntradayOptimizationCommandHandler(IEventPublisher eventPublisher, CreateIslands createIslands, ICurrentUnitOfWork currentUnitOfWork)
+		public IntradayOptimizationCommandHandler(IEventPublisher eventPublisher, CreateIslands createIslands)
 		{
 			_eventPublisher = eventPublisher;
 			_createIslands = createIslands;
-			_currentUnitOfWork = currentUnitOfWork;
 		}
 
 		public void Execute(IntradayOptimizationCommand command)
 		{
-			_eventPublisher.Publish(Create(command).Select(island => new OptimizationWasOrdered
+			_eventPublisher.Publish(_createIslands.Create(command.Period, command.Agents).Select(island => new OptimizationWasOrdered
 			{
 				Period = command.Period,
 				AgentIds = island.PersonsInIsland().Select(x => x.Id.Value),
 				RunResolveWeeklyRestRule = command.RunResolveWeeklyRestRule
 			}).ToArray());
-		}
-
-		[UnitOfWork]
-		protected virtual IEnumerable<Island> Create(IntradayOptimizationCommand command)
-		{
-			//some hack to get rid of lazy load ex
-			var uow = _currentUnitOfWork.Current();
-			uow.Reassociate(command.Agents);
-			//
-			return _createIslands.Create(command.Period, command.Agents);
 		}
 	}
 
