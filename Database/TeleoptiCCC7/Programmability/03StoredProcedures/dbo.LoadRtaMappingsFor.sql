@@ -7,11 +7,11 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[LoadR
 GO
 
 CREATE PROCEDURE [dbo].[LoadRtaMappingsFor] 
-	@statecode1 nvarchar(25) NULL, 
-	@statecode2 nvarchar(25) NULL,
-	@activity1 uniqueidentifier NULL,
-	@activity2 uniqueidentifier NULL,
-	@activity3 uniqueidentifier NULL
+	@statecode1 nvarchar(25), 
+	@statecode2 nvarchar(25),
+	@activity1 uniqueidentifier,
+	@activity2 uniqueidentifier,
+	@activity3 uniqueidentifier
 AS
 
 SELECT * FROM v_RtaMapping m WHERE
