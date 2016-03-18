@@ -19,11 +19,13 @@ namespace Stardust.Node.Timers
 
 		public TrySendJobFaultedToManagerTimer(INodeConfiguration nodeConfiguration,
 		                                       TrySendJobProgressToManagerTimer sendJobProgressToManagerTimer,
+											   IHttpSender httpSender,
 		                                       double interval = 500) : base(nodeConfiguration,
 		                                                                      nodeConfiguration
 			                                                                      .GetManagerJobHasFaileTemplatedUri(),
 		                                                                      sendJobProgressToManagerTimer,
-		                                                                      interval)
+																			  httpSender,
+																			  interval)
 		{
 		}
 

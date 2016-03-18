@@ -22,12 +22,19 @@ namespace Stardust.Node.Timers
 		public TrySendStatusToManagerTimer(INodeConfiguration nodeConfiguration,
 		                                   Uri callbackTemplateUri,
 										   TrySendJobProgressToManagerTimer sendJobProgressToManagerTimer,
+										   IHttpSender httpSender,
 		                                   double interval = 500) : base(interval)
 		{
 			// Validate arguments.
 			nodeConfiguration.ThrowArgumentNullException();
 			callbackTemplateUri.ThrowArgumentNullExceptionWhenNull();
 			sendJobProgressToManagerTimer.ThrowArgumentNullExceptionWhenNull();
+
+			if (httpSender == null)
+			{
+				throw new ArgumentNullException("httpSender");
+			}
+
 
 			// Assign values.
 			CancellationTokenSource = new CancellationTokenSource();
@@ -39,6 +46,7 @@ namespace Stardust.Node.Timers
 			CallbackTemplateUri = callbackTemplateUri;
 
 			SendJobProgressToManagerTimer = sendJobProgressToManagerTimer;
+			HttpSender = httpSender;
 
 			Elapsed += OnTimedEvent;
 
@@ -55,6 +63,7 @@ namespace Stardust.Node.Timers
 
 		public Uri CallbackTemplateUri { get; set; }
 		public TrySendJobProgressToManagerTimer SendJobProgressToManagerTimer { get; set; }
+		public IHttpSender HttpSender { get; set; }
 
 		public event EventHandler TrySendStatusSucceded;
 

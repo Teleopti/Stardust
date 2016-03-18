@@ -11,9 +11,7 @@ using Microsoft.Owin.Hosting;
 using Owin;
 using Stardust.Node.API;
 using Stardust.Node.Extensions;
-using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Log4Net;
 using Stardust.Node.Log4Net.Extensions;
 using Stardust.Node.Log4Net.Interceptors;
 using Stardust.Node.Timers;
@@ -45,45 +43,74 @@ namespace Stardust.Node
 			                    {
 				                    var containerBuilder = new ContainerBuilder();
 
-									containerBuilder.RegisterType<Log4NetInterceptor>().Named<IInterceptor>("log-calls");
+				                    containerBuilder.RegisterType<Log4NetInterceptor>().Named<IInterceptor>("log-calls");
 
-									containerBuilder.RegisterType<HttpSender>().EnableClassInterceptors();
-									
-									var httpSenderInstance = new HttpSender();
-
-				                    containerBuilder.RegisterInstance(httpSenderInstance);
+				                    containerBuilder.RegisterType<HttpSender>().As<IHttpSender>();
 
 				                    containerBuilder.RegisterType<InvokeHandler>()
-					                    .SingleInstance();
-									
-
-									containerBuilder.RegisterType<NodeController>()
 					                    .SingleInstance().EnableClassInterceptors();
 
-				                    containerBuilder.RegisterApiControllers(typeof (NodeController).Assembly);
+				                    containerBuilder.RegisterType<NodeController>()
+					                    .SingleInstance();
+
+				                    containerBuilder.RegisterApiControllers(typeof (NodeController).Assembly)
+					                    .EnableClassInterceptors();
 
 				                    containerBuilder.RegisterInstance(nodeConfiguration);
 
-				                    var trySendJobProgressToManagerTimer = new TrySendJobProgressToManagerTimer(nodeConfiguration,
-				                                                                                                new HttpSender(), 
-				                                                                                                5000);
 
-				                    containerBuilder.RegisterInstance(trySendJobProgressToManagerTimer).SingleInstance();
+				                    containerBuilder.Register(context => new TrySendJobProgressToManagerTimer(nodeConfiguration,
+				                                                                                              context
+					                                                                                              .Resolve<IHttpSender>
+					                                                                                              (),
+				                                                                                              5000))
+					                    .SingleInstance();
 
 
-									// Register IWorkerWrapper.
-									containerBuilder.Register<IWorkerWrapper>(c => new WorkerWrapper(c.Resolve<InvokeHandler>(),
-				                                                                            nodeConfiguration,
-				                                                                            new TrySendNodeStartUpNotificationToManagerTimer
-					                                                                            (nodeConfiguration,
-																								nodeConfiguration.GetManagerNodeHasBeenInitializedUri()),
-				                                                                            new PingToManagerTimer(nodeConfiguration,
-																													nodeConfiguration.GetManagerNodeHeartbeatUri()),
-				                                                                            new TrySendJobDoneStatusToManagerTimer(nodeConfiguration, trySendJobProgressToManagerTimer),
-				                                                                            new TrySendJobCanceledToManagerTimer(nodeConfiguration, trySendJobProgressToManagerTimer),
-				                                                                            new TrySendJobFaultedToManagerTimer(nodeConfiguration, trySendJobProgressToManagerTimer),
-																							trySendJobProgressToManagerTimer,
-																							httpSenderInstance))
+				                    // Register IWorkerWrapper.
+				                    containerBuilder.Register<IWorkerWrapper>(c => new WorkerWrapper(c.Resolve<InvokeHandler>(),
+				                                                                                     nodeConfiguration,
+				                                                                                     new TrySendNodeStartUpNotificationToManagerTimer
+					                                                                                     (nodeConfiguration,
+					                                                                                      nodeConfiguration
+						                                                                                      .GetManagerNodeHasBeenInitializedUri
+						                                                                                      (),
+					                                                                                      c.Resolve<IHttpSender>()),
+				                                                                                     new PingToManagerTimer(
+					                                                                                     nodeConfiguration,
+					                                                                                     nodeConfiguration
+						                                                                                     .GetManagerNodeHeartbeatUri(),
+					                                                                                     c.Resolve<IHttpSender>()),
+				                                                                                     new TrySendJobDoneStatusToManagerTimer
+					                                                                                     (nodeConfiguration,
+					                                                                                      c
+						                                                                                      .Resolve
+						                                                                                      <
+						                                                                                      TrySendJobProgressToManagerTimer
+						                                                                                      >(),
+					                                                                                      c.Resolve<IHttpSender>()),
+				                                                                                     new TrySendJobCanceledToManagerTimer
+					                                                                                     (nodeConfiguration,
+					                                                                                      c
+						                                                                                      .Resolve
+						                                                                                      <
+						                                                                                      TrySendJobProgressToManagerTimer
+						                                                                                      >(),
+					                                                                                      c.Resolve<IHttpSender>()),
+				                                                                                     new TrySendJobFaultedToManagerTimer
+					                                                                                     (nodeConfiguration,
+					                                                                                      c
+						                                                                                      .Resolve
+						                                                                                      <
+						                                                                                      TrySendJobProgressToManagerTimer
+						                                                                                      >(),
+					                                                                                      c.Resolve<IHttpSender>()),
+				                                                                                     c
+					                                                                                     .Resolve
+					                                                                                     <
+					                                                                                     TrySendJobProgressToManagerTimer
+					                                                                                     >(),
+				                                                                                     c.Resolve<IHttpSender>()))
 					                    .SingleInstance();
 
 

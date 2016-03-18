@@ -13,9 +13,11 @@ namespace Stardust.Node.Timers
 
 		public TrySendJobDoneStatusToManagerTimer(INodeConfiguration nodeConfiguration,
 												  TrySendJobProgressToManagerTimer sendJobProgressToManagerTimer,
+												  IHttpSender httpSender,
 												  double interval = 500) : base(nodeConfiguration,
 		                                                                          nodeConfiguration.GetManagerJobDoneTemplateUri(),
 																				  sendJobProgressToManagerTimer,
+																				  httpSender,
 																				  interval)
 		{
 		}

@@ -61,6 +61,7 @@ namespace NodeTest.Timers
 		{
 			var trySendJobDoneStatusToManagerTimer = new TrySendStatusToManagerTimer(_nodeConfiguration,
 			                                                                         null,
+																					 null,
 																					 null);
 		}
 
@@ -70,6 +71,7 @@ namespace NodeTest.Timers
 		{
 			var trySendJobDoneStatusToManagerTimer = new TrySendStatusToManagerTimer(null,
 			                                                                         _fakeUrl,
+																					 null,
 																					 null);
 		}
 
@@ -79,6 +81,7 @@ namespace NodeTest.Timers
 		{
 			var trySendJobDoneStatusToManagerTimer = new TrySendStatusToManagerTimer(_nodeConfiguration,
 																					 _fakeUrl,
+																					 null,
 																					 null);
 		}
 	}

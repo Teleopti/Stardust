@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Log4Net;
 using Stardust.Node.Log4Net.Extensions;
 using Stardust.Node.Workers;
 
@@ -46,19 +45,6 @@ namespace Stardust.Node.Extensions
 		public static bool IsNotNull(this Uri uri)
 		{
 			return uri != null;
-		}
-
-		public static async Task<HttpResponseMessage> PostAsync(this Uri uri,
-		                                                        Uri apiEndpoint,
-		                                                        CancellationToken cancellationToken)
-		{
-			Logger.DebugWithLineNumber("Start.");
-
-			IHttpSender httpSender = new HttpSender();
-
-			return await httpSender.PostAsync(apiEndpoint,
-			                                  uri,
-			                                  cancellationToken);
 		}
 	}
 }

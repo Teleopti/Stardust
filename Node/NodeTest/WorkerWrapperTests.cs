@@ -51,7 +51,8 @@ namespace NodeTest
 				Type = "NodeTest.JobHandlers.TestJobParams"
 			};
 			_nodeStartupNotification = new NodeStartupNotificationToManagerFake(_nodeConfigurationFake,
-			                                                                    CallBackUriTemplateFake);
+			                                                                    CallBackUriTemplateFake,
+																				new FakeHttpSender());
 
 			_trySendJobProgressToManagerTimerFake =
 				new TrySendJobProgressToManagerTimerFake(_nodeConfigurationFake,
@@ -62,15 +63,18 @@ namespace NodeTest
 
 			_sendJobDoneTimer = new SendJobDoneTimerFake(_nodeConfigurationFake,
 			                                             CallBackUriTemplateFake,
-														 _trySendJobProgressToManagerTimerFake);
+														 _trySendJobProgressToManagerTimerFake,
+														 new FakeHttpSender());
 
 			_sendJobCanceledTimer = new SendJobCanceledTimerFake(_nodeConfigurationFake,
 			                                                     CallBackUriTemplateFake,
-																 _trySendJobProgressToManagerTimerFake);
+																 _trySendJobProgressToManagerTimerFake,
+																 new FakeHttpSender());
 
 			_sendJobFaultedTimer = new SendJobFaultedTimerFake(_nodeConfigurationFake,
 			                                                   CallBackUriTemplateFake,
-															   _trySendJobProgressToManagerTimerFake);
+															   _trySendJobProgressToManagerTimerFake,
+															   new FakeHttpSender());
 
 		}
 

@@ -18,9 +18,11 @@ namespace NodeTest.Fakes.Timers
 
 		public SendJobDoneWithEventTriggerTimerFake(INodeConfiguration nodeConfiguration,
 		                                            Uri callbackTemplateUri,
-													TrySendJobProgressToManagerTimer sendJobProgressToManagerTimer) : base(nodeConfiguration,
-																															callbackTemplateUri, 
-																															sendJobProgressToManagerTimer)
+		                                            TrySendJobProgressToManagerTimer sendJobProgressToManagerTimer,
+		                                            IHttpSender httpSender) : base(nodeConfiguration,
+		                                                                           callbackTemplateUri,
+		                                                                           sendJobProgressToManagerTimer,
+		                                                                           httpSender)
 		{
 		}
 

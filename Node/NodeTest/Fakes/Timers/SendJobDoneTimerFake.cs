@@ -21,9 +21,11 @@ namespace NodeTest.Fakes.Timers
 		public SendJobDoneTimerFake(INodeConfiguration nodeConfiguration,
 		                            Uri callbackTemplateUri,
 									TrySendJobProgressToManagerTimer sendJobProgressToManagerTimer,
+									IHttpSender httpSender,
 									double interval = 1000) : base(nodeConfiguration,
 		                                                           callbackTemplateUri,
 																   sendJobProgressToManagerTimer,
+																   httpSender,
 																   interval)
 		{
 		}

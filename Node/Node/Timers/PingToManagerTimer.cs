@@ -18,7 +18,8 @@ namespace Stardust.Node.Timers
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (PingToManagerTimer));
 
 		public PingToManagerTimer(INodeConfiguration nodeConfiguration,
-		                          Uri callbackToManagerUri) : base(nodeConfiguration.PingToManagerSeconds*1000)
+		                          Uri callbackToManagerUri,
+								  IHttpSender httpSender) : base(nodeConfiguration.PingToManagerSeconds*1000)
 		{
 			nodeConfiguration.ThrowArgumentNullException();
 			callbackToManagerUri.ThrowArgumentNullExceptionWhenNull();
@@ -27,6 +28,7 @@ namespace Stardust.Node.Timers
 
 			NodeConfiguration = nodeConfiguration;
 			CallbackToManagerUri = callbackToManagerUri;
+			HttpSender = httpSender;
 
 			WhoAmI = NodeConfiguration.CreateWhoIAm(Environment.MachineName);
 
@@ -40,6 +42,7 @@ namespace Stardust.Node.Timers
 		public INodeConfiguration NodeConfiguration { get; private set; }
 
 		public Uri CallbackToManagerUri { get; private set; }
+		public IHttpSender HttpSender { get; set; }
 
 		private CancellationTokenSource CancellationTokenSource { get; set; }
 
@@ -64,8 +67,9 @@ namespace Stardust.Node.Timers
 		                                                 CancellationToken cancellationToken)
 		{
 			var httpResponseMessage =
-				await nodeAddress.PostAsync(callbackToManagerUri,
-				                            cancellationToken);
+				await HttpSender.PostAsync(callbackToManagerUri, 
+										   nodeAddress, 
+										   cancellationToken);
 
 			return httpResponseMessage;
 		}

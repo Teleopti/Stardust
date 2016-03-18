@@ -64,18 +64,22 @@ namespace NodeTest.Attributes
 
 			builder.RegisterInstance(new SendJobDoneTimerFake(nodeConfiguration,
 			                                                  CallBackUriTemplateFake,
-															  trySendJobProgressToManagerTimerFake));
+															  trySendJobProgressToManagerTimerFake,
+															  new FakeHttpSender()));
 
 			builder.RegisterInstance(new SendJobCanceledTimerFake(nodeConfiguration,
 			                                                      CallBackUriTemplateFake,
-																  trySendJobProgressToManagerTimerFake));
+																  trySendJobProgressToManagerTimerFake,
+																  new FakeHttpSender()));
 
 			builder.RegisterInstance(new SendJobFaultedTimerFake(nodeConfiguration,
 			                                                     CallBackUriTemplateFake,
-																 trySendJobProgressToManagerTimerFake));
+																 trySendJobProgressToManagerTimerFake,
+																 new FakeHttpSender()));
 
-			builder.RegisterInstance(new NodeStartupNotificationToManagerFake(nodeConfiguration,
-			                                                                  CallBackUriTemplateFake));
+			builder.Register(context => new NodeStartupNotificationToManagerFake(nodeConfiguration,
+																			  CallBackUriTemplateFake,
+																			  new FakeHttpSender()));
 
 
 			// Register IWorkerWrapper.
