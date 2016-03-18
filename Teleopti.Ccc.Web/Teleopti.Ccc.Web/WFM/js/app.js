@@ -40,7 +40,7 @@ var wfm = angular.module('wfm', [
 	'wfm.teamSchedule',
 	'wfm.intraday',
 	'wfm.requests',
-	'wfm.personalize'
+	'wfm.themes'
 ]);
 
 wfm.config([

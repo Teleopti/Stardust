@@ -102,4 +102,11 @@ Teleopti.Ccc.Web/Teleopti.Ccc.Web/WFM/css/main.min.css
 Teleopti.Support.Tool/settings.txt
 Teleopti.Ccc.Web/Teleopti.Ccc.Web/WFM/index.html
 Teleopti.Ccc.Web/Teleopti.Ccc.Web/WFM/css/darkstyle.css
+Teleopti.Ccc.Web/Teleopti.Ccc.Web/WFM/css/style_classic.css
+Teleopti.Ccc.Web/Teleopti.Ccc.Web/WFM/css/style_dark.css
+<<<<<<< dest
 .debug-Setup/PatchAndUseMyCustomerDB.bat
+=======
+Teleopti.Ccc.Web/Teleopti.Ccc.Web/WFM/css/style_classic.css
+Teleopti.Ccc.Web/Teleopti.Ccc.Web/WFM/css/style_dark.css
+>>>>>>> source

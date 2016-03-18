@@ -77,40 +77,9 @@
 			</div>
 		</a>
 
-		<a ng-show="personalizeToggle" ng-controller="personalizeController">
-	<span ng-show="showOverlay" class="animate-show warm-overlay"></span>
-	<div class=" panel-menu">
-		<div tabindex=0 class="context-menu card-context">
-			<span tabindex=0 class="nav-context-menu" id="personalizeMenu">
-				<i class="mdi mdi-settings"></i>
-				<div class="nav-context-menu-left">
-					<div class="arrow-up"></div>
-					<div class="context-content">
-						<div class="notification-list">
-							<h4>{{'Personalize'|translate}}</h4>
-							<form>
-								<div class="wfm-checkbox" ng-click="toggleOverlay()">
-									<input ng-model="showOverlay" tabindex="-1" type="checkbox" id="overlayId" />
-									<label for="overlayId">
-										<span class="wfm-checkbox-toggle"></span>
-										<span class="wfm-checkbox-label">{{'ToggleLowLightFilter'|translate}}</span>
-									</label>
-								</div>
-								<div class="wfm-checkbox" ng-click="toggleDarkTheme()" ng-hide="isFirefox">
-									<input ng-model="darkTheme" tabindex="-1" type="checkbox" id="darkId"  />
-									<label for="darkId">
-										<span class="wfm-checkbox-toggle"></span>
-										<span class="wfm-checkbox-label">{{'ToggleDarkTheme'|translate}}</span>
-									</label>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-			</span>
-		</div>
-	</div>
-</a>
+	<a ng-show="personalizeToggle" ng-controller="themeController">
+		<div ng-include="'js/global/wfm-themes/themes-menu.html'"></div>
+	</a>
 
 		<a href="{{help.currentHelp.helpUrl}}" target="_blank"  ng-controller="HelpController">
 			<div class=" panel-menu">

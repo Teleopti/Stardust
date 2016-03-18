@@ -1317,7 +1317,7 @@
     <Content Include="WFM\js\global\http.spec.js" />
     <Content Include="WFM\js\global\notification.controller.spec.js" />
     <Content Include="WFM\js\global\numeric-value\numeric-value.directive.js" />
-    <Content Include="WFM\js\global\personalize.controller.js" />
+    <Content Include="WFM\js\global\wfm-themes\wfm.themes.controller.js" />
     <Content Include="WFM\js\global\shortcuts.service.js" />
     <Content Include="WFM\js\global\shortcuts.service.spec.js" />
     <Content Include="WFM\js\global\wfm.i18n.service.spec.js" />
@@ -1631,6 +1631,7 @@
     <Content Include="WFM\js\forecasting\forecasting.service.js" />
     <Content Include="WFM\js\global\areas.controller.js" />
     <Content Include="WFM\js\global\areas.service.js" />
+	<Content Include="WFM\js\global\wfm-themes\themes-menu.html" />
     <Content Include="WFM\js\notifications\notice.controller.js" />
     <Content Include="WFM\js\notifications\notifications.controller.js" />
     <Content Include="WFM\js\notifications\notifications.service.js" />

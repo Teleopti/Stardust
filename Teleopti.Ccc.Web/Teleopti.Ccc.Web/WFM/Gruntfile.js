@@ -3,7 +3,7 @@
 	grunt.initConfig({
 		watch: {
 			dev: {
-				files: ['css/*.scss','node_modules/teleopti-styleguide/css/*.css','js/**/*.html','html/**/*.html','js/**/*.js'],
+				files: ['css/*.scss','node_modules/teleopti-styleguide/css/*.css','index.tpl.html','js/**/*.html','html/**/*.html','js/**/*.js'],
 				tasks: ['devBuild'],
 				options: {
 					spawn: false,
@@ -74,8 +74,8 @@
 			},
 			dist: {
 				files: {
-					'css/style.css': ['css/style.scss'],
-					'css/darkstyle.css':['css/darkstyle.scss']
+						'css/style_classic.css': ['css/style.scss'],
+					'css/style_dark.css':['css/darkstyle.scss']
 				}
 			}
 		},
@@ -87,8 +87,10 @@
 			},
 			target: {
 				files: {
-					'dist/style.min.css': ['css/style.css'],
-					'dist/darkstyle.min.css': ['css/darkstyle.css'],
+					'dist/style_classic.min.css': ['css/style_classic.css'],
+					'dist/style_dark.min.css': ['css/style_dark.css'],
+					'dist/modules_classic.min.css':['dist/modules_classic.css'],
+					'dist/modules_dark.min.css':['dist/modules_dark.css'],
 					'dist/angular-gant.min.css': ['node_modules/angular-gantt/assets/angular-gantt.css',
 						'node_modules/angular-gantt/assets/angular-gantt-plugins.css',
 						'node_modules/angular-gantt/assets/angular-gantt-table-plugin.css',
@@ -157,7 +159,7 @@
 					'dist/angular-gant.min.css',
 					'node_modules/teleopti-styleguide/css/main.min.css'
 				],
-				dest: 'dist/modules.css'
+				dest: 'dist/modules_classic.css'
 			},
 			distDarkCss: {
 				src: [
