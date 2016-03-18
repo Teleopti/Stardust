@@ -39,14 +39,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                                .List<PayloadWorkTime>();
         }
 
-        public void ClearPeriodForPerson(DateOnlyPeriod period, Guid scenarioId, Guid personId)
+        public void ClearDayForPerson(DateOnly date, Guid scenarioId, Guid personId, DateTime scheduleLoadedTimeStamp)
         {
 			_currentUnitOfWork.Session().CreateSQLQuery(
-                "DELETE FROM ReadModel.ScheduleProjectionReadOnly WHERE BelongsToDate BETWEEN :StartDate AND :EndDate AND ScenarioId=:scenario AND PersonId=:person")
+				"exec ReadModel.DeleteScheduleProjectionReadOnly @PersonId=:person, @ScenarioId=:scenario, @BelongsToDate=:date, @ScheduleLoadedTime=:scheduleLoadedTime")
                                         .SetGuid("person", personId)
                                         .SetGuid("scenario", scenarioId)
-										.SetDateOnly("StartDate", period.StartDate)
-										.SetDateOnly("EndDate", period.EndDate)
+										.SetDateOnly("date", date)
+										.SetDateTime("scheduleLoadedTime", scheduleLoadedTimeStamp)
                                         .ExecuteUpdate();
         }
 

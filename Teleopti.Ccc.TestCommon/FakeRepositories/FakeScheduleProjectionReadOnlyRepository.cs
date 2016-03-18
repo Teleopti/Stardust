@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public void ClearPeriodForPerson(DateOnlyPeriod period, Guid scenarioId, Guid personId)
+		public void ClearDayForPerson(DateOnly date, Guid scenarioId, Guid personId, DateTime scheduleLoadedTimeStamp)
 		{
 			throw new NotImplementedException();
 		}

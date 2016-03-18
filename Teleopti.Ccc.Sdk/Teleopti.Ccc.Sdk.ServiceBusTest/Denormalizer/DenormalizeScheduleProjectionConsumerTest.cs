@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 						}
 				});
 
-			scheduleProjectionReadOnlyRepository.AssertWasCalled(x => x.ClearPeriodForPerson(new DateOnlyPeriod(today,today),Guid.Empty,person.Id.GetValueOrDefault()), o => o.IgnoreArguments());
+			scheduleProjectionReadOnlyRepository.AssertWasCalled(x => x.ClearDayForPerson(today,Guid.Empty,person.Id.GetValueOrDefault(),DateTime.UtcNow), o => o.IgnoreArguments());
 			serviceBus.AssertWasCalled(x => x.Publish(null), o=> o.IgnoreArguments());
 		}
 
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 					IsInitialLoad = true,
 				});
 
-		    scheduleProjectionReadOnlyRepository.AssertWasNotCalled(x => x.ClearPeriodForPerson(new DateOnlyPeriod(), Guid.Empty, person.Id.GetValueOrDefault()));
+		    scheduleProjectionReadOnlyRepository.AssertWasNotCalled(x => x.ClearDayForPerson(DateOnly.Today, Guid.Empty, person.Id.GetValueOrDefault(), DateTime.UtcNow));
             serviceBus.AssertWasNotCalled(x => x.Publish(null), o => o.IgnoreArguments());
 		}
 

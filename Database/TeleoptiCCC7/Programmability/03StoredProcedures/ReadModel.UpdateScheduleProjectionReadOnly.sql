@@ -40,7 +40,7 @@ AND BelongsToDate = @BelongsToDate
 
 IF (@existingScheduleLoadedTime IS NULL)
 BEGIN
-	INSERT INTO ReadModel.PersonScheduleProjectionLoadTime (PersonId,BelongsToDate,ScheduleLoadedTime) 
+    INSERT INTO ReadModel.PersonScheduleProjectionLoadTime (PersonId,BelongsToDate,ScheduleLoadedTime) 
 	VALUES (@PersonId,@BelongsToDate,@ScheduleLoadedTime)
 	SET @updateCount = 1 -- number of records changed
 END
@@ -62,7 +62,7 @@ BEGIN
 	AND ScenarioId = @ScenarioId 
 	AND PersonId = @PersonId
 
-	INSERT¡¡INTO ReadModel.ScheduleProjectionReadOnly (ScenarioId,PersonId,BelongsToDate,PayloadId,StartDateTime,EndDateTime,WorkTime,ContractTime,Name,ShortName,DisplayColor,PayrollCode,InsertedOn)
+	INSERT INTO ReadModel.ScheduleProjectionReadOnly (ScenarioId,PersonId,BelongsToDate,PayloadId,StartDateTime,EndDateTime,WorkTime,ContractTime,Name,ShortName,DisplayColor,PayrollCode,InsertedOn)
 	VALUES (@ScenarioId,@PersonId,@BelongsToDate,@PayloadId,@StartDateTime,@EndDateTime,@WorkTime,@ContractTime,@Name,@ShortName,@DisplayColor,@PayrollCode,@InsertedOn)
 END
 

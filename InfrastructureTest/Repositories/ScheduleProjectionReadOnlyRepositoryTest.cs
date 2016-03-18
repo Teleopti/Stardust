@@ -9,7 +9,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -17,7 +16,6 @@ using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -146,8 +144,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldClearDataForOneDay()
 		{
-			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
-			target.ClearPeriodForPerson(period, scenarioId, person.Id.GetValueOrDefault());
+			target.ClearDayForPerson(DateOnly.Today, scenarioId, person.Id.GetValueOrDefault(), DateTime.UtcNow);
 		}
 
 		[Test]

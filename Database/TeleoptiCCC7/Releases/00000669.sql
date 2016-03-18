@@ -7,7 +7,7 @@ CREATE TABLE [ReadModel].[PersonScheduleProjectionLoadTime](
 		[PersonId] [uniqueidentifier] NOT NULL,
 		[BelongsToDate] [smalldatetime] NOT NULL,
 		[ScheduleLoadedTime] [datetime] NOT NULL
-	 CONSTRAINT [PK_PersonScheduleDay] PRIMARY KEY CLUSTERED 
+	 CONSTRAINT [PK_PersonScheduleProjectionLoadTime] PRIMARY KEY CLUSTERED 
 	(
 		[PersonId] ASC,
 		[BelongsToDate] ASC

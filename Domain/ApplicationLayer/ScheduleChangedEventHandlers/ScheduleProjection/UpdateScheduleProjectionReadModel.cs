@@ -37,8 +37,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 				var date = new DateOnly(scheduleDay.Date);
 				if (!message.IsInitialLoad)
 				{
-					_scheduleProjectionReadOnlyRepository.ClearPeriodForPerson(
-						new DateOnlyPeriod(date, date), message.ScenarioId, message.PersonId);
+					_scheduleProjectionReadOnlyRepository.ClearDayForPerson(
+						date, message.ScenarioId, message.PersonId, message.ScheduleLoadTimestamp);
 				}
 
 				if (scheduleDay.Shift == null) continue;
