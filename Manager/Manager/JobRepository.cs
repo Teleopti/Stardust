@@ -726,9 +726,7 @@ namespace Stardust.Manager
 						da.InsertCommand.Parameters[0].Value = jobId;
 
 						da.InsertCommand.Parameters.Add("@Detail",
-						                                SqlDbType.NVarChar,
-						                                2000,
-						                                "Detail");
+						                                SqlDbType.NText);
 						da.InsertCommand.Parameters[1].Value = detail;
 
 						da.InsertCommand.Parameters.Add("@Created",

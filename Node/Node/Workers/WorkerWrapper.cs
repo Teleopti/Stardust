@@ -238,16 +238,8 @@ namespace Stardust.Node.Workers
 
 						if (t.Exception != null)
 						{
-							foreach (var exp in t.Exception.InnerExceptions)
-							{
-								var errorMessage =
-									string.Format("( Message, Source, StackTrace ): ( {0}, {1}, {2} )",
-									              exp.InnerException.Message,
-									              exp.InnerException.Source,
-									              exp.InnerException.StackTrace);
-
-								Logger.ErrorWithLineNumber(errorMessage, exp);
-							}
+							Logger.ErrorWithLineNumber("Failed",
+														t.Exception);
 						}
 
 						SetNodeStatusTimer(TrySendJobFaultedStatusToManagerTimer,
