@@ -60,8 +60,14 @@
 	<div class="skill-monitor con-row animate-show" ng-show="selectedSkill.Name">
 		<div class="panel con-flex material-depth-1">
 			<div class="sub-header">
-				<h2 class="intraday-monitor-item">{{ selectedSkill.Name }}</h2>
-				<h2>{{ latestStatsTime }}</h2>
+				<h2 class="intraday-monitor-item">
+					{{ selectedSkill.Name }}
+					<span class="last-time cursor-pointer">
+						<i class="mdi mdi-clock"></i>
+						{{ latestStatsTime }}
+						<md-tooltip>Last updated</md-tooltip>
+					</span>
+				</h2>
 			</div>
 			<div class="con-row text-warning" ng-show="!HasMonitorData">
 				<span>No data is available for this skill.</span>
