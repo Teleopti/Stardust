@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
@@ -8,7 +9,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
 	public abstract class FillSchedulerStateHolder : IFillSchedulerStateHolder
 	{
-		public void Fill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
+		[LogTime]
+		public virtual void Fill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
 		{
 			PreFill(schedulerStateHolderTo);
 			var scenario = FetchScenario();

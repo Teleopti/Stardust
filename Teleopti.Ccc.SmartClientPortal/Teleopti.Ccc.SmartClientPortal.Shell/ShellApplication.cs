@@ -25,6 +25,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -238,7 +239,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
 				//////
 
-				builder.RegisterType<DesktopOptimizationContext>().As<IFillSchedulerStateHolder>().As<ISynchronizeIntradayOptimizationResult>().As<IOptimizationPreferencesProvider>().AsSelf().SingleInstance();
+				builder.RegisterType<DesktopOptimizationContext>().As<IFillSchedulerStateHolder>().As<ISynchronizeIntradayOptimizationResult>().As<IOptimizationPreferencesProvider>().AsSelf().ApplyAspects().SingleInstance();
 
 				builder.Register(c => new WebConfigReader(() =>
 				{
