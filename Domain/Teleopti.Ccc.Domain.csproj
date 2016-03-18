@@ -170,6 +170,8 @@
     <Compile Include="Aop\UnitOfWorkAttribute.cs" />
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
     <Compile Include="ApplicationLayer\Events\TenantMinuteTickEvent.cs" />
+    <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\GroupPageAnalyticsUpdater.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsGroupPage.cs" />
     <Compile Include="Optimization\IOptimizationPreferencesProvider.cs" />
     <Compile Include="ApplicationLayer\Events\GroupPageCollectionChangedEvent.cs" />
     <Compile Include="DayOffPlanning\SkillGroupReducerForCascadingSkills.cs" />
@@ -177,6 +179,8 @@
     <Compile Include="ApplicationLayer\Events\PersonPeriodCollectionChangedEvent.cs" />
     <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\GroupingReadModelGroupPageUpdater.cs" />
     <Compile Include="ApplicationLayer\PersonPeriodCollectionChangedHandlers\GroupingReadModelDataUpdater.cs" />
+    <Compile Include="Repositories\IAnalyticsBridgeGroupPagePersonRepository.cs" />
+    <Compile Include="Repositories\IAnalyticsGroupPageRepository.cs" />
     <Compile Include="Scheduling\WebLegacy\FillSchedulerStateHolder.cs" />
     <Compile Include="UnitOfWork\ThisUnitOfWork.cs" />
     <Compile Include="UnitOfWork\WithAnalyticsUnitOfWork.cs" />

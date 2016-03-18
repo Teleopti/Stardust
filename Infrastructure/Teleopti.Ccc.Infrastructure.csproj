@@ -395,6 +395,8 @@
     <Compile Include="Persisters\Outbound\OutboundSkillPersister.cs" />
     <Compile Include="Persisters\Schedules\SchedulePersistResult.cs" />
     <Compile Include="Persisters\WorkflowControlSetPublishDatePersister.cs" />
+    <Compile Include="Repositories\Analytics\AnalyticsBridgeGroupPagePersonRepository.cs" />
+    <Compile Include="Repositories\Analytics\AnalyticsGroupPageRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsSkillRepository.cs" />
     <Compile Include="Repositories\Analytics\IntradayMonitorDataLoader.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsPersonRepository.cs" />

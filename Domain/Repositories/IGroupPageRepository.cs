@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
@@ -16,5 +17,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// </summary>
 		/// <returns></returns>
     	IList<IGroupPage> LoadAllGroupPageWhenPersonCollectionReAssociated();
+
+	    IList<IGroupPage> LoadGroupPagesByIds(IEnumerable<Guid> groupPageIds);
     }
 }

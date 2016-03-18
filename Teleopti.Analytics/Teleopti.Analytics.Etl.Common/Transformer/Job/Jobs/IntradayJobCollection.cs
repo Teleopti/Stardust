@@ -89,8 +89,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			}
 
 			Add(new BridgeQueueWorkloadJobStep(jobParameters));
-			Add(new DimGroupPageJobStep(jobParameters));
-			Add(new BridgeGroupPagePersonJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623))
+			{
+				Add(new DimGroupPageJobStep(jobParameters));
+				Add(new BridgeGroupPagePersonJobStep(jobParameters));
+			}
 
 			// FACT TABLES
 			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpETL_30791))

@@ -17,7 +17,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {
-    [TestFixture]
+	[TestFixture]
     public class DimPersonTests
     {
         [SetUp]

@@ -8,6 +8,16 @@ using Teleopti.Ccc.Domain.Repositories;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHandlers
 {
 	[TestFixture]
+	public class GroupPageAnalyticsUpdaterTests
+	{
+		[Test]
+		public void Test1()
+		{
+			new GroupPageAnalyticsUpdater(MockRepository.GenerateMock<IGroupPageRepository>())
+		}
+	}
+
+	[TestFixture]
 	public class GroupingReadModelGroupPageUpdaterTests
 	{
 		private GroupingReadModelGroupPageUpdater _target;
