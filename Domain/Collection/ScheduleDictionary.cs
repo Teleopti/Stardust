@@ -682,6 +682,8 @@ namespace Teleopti.Ccc.Domain.Collection
         {
         }
 
+		public DateTime ScheduleLoadedTime { get; set; }
+
         protected override IEnumerable<IBusinessRuleResponse> CheckIfCanModify(Dictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleParts, INewBusinessRuleCollection newBusinessRules)
         {
             if(!_editable)

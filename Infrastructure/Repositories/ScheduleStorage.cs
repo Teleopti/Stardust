@@ -195,6 +195,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						addPersonRotations(period, retDic, people);
 					}
 				}
+
+				retDic.ScheduleLoadedTime = UnitOfWork.Session().CreateSQLQuery("SELECT GETDATE()").UniqueResult<DateTime>();
 			}
 			retDic.TakeSnapshot();
 			return retDic;

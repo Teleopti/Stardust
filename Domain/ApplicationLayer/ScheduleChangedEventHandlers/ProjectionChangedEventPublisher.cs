@@ -58,11 +58,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			var data = getData(@event);
 			if (data == null) return;
-			var scheduleLoadTimestamp = _now.UtcDateTime();
 			_projectionChangedEventBuilder.Build<T>(@event, data.ScheduleRange, data.RealPeriod)
 				.ForEach(e =>
 				{
-					e.ScheduleLoadTimestamp = scheduleLoadTimestamp;
+					e.ScheduleLoadTimestamp = e.ScheduleLoadTimestamp;
 					_publisher.Publish(e);
 				});
 		}
