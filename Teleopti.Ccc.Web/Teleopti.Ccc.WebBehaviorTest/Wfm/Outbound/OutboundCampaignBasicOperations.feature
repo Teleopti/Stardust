@@ -266,7 +266,8 @@ And I have created a campaign with
 | Opening Hour End                  | 16:00       |
 And I am viewing outbounds page
 And I set the starting month for viewing period to '2015-12-01'
-When I click at campaign name tag 'NewCampaign'
+When I can see 'NewCampaign' in campaign list
+And I click at campaign name tag 'NewCampaign'
 And I should see the backlog visualization of 'NewCampaign'
 And I select all the dates from '2015-12-07' to '2015-12-08'
 And I set the manual backlog to zero
