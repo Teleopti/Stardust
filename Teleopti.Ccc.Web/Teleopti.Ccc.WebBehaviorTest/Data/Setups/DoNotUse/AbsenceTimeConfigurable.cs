@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 				PayloadId = absence.Id.GetValueOrDefault()
 			};
 
-			scheduleProjectionReadOnlyRepository.AddProjectedLayer(new DateOnly(Date), scenarioId, user.Id.GetValueOrDefault(), layer);
+			scheduleProjectionReadOnlyRepository.AddProjectedLayer(new DateOnly(Date), scenarioId, user.Id.GetValueOrDefault(), layer, DateTime.UtcNow);
 		}
 	}
 }
