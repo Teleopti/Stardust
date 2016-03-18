@@ -19,6 +19,15 @@ namespace Manager.Integration.Test.FunctionalTests
 	[TestFixture]
 	public class OneManagerAndZeroNodesTests
 	{
+#if (DEBUG)
+		private const bool ClearDatabase = true;
+		private const string BuildMode = "Debug";
+
+#else
+		private const bool ClearDatabase = true;
+		private const string BuildMode = "Release";
+#endif
+
 		[TearDown]
 		public void TearDown()
 		{
@@ -39,12 +48,6 @@ namespace Manager.Integration.Test.FunctionalTests
 			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
 			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
-#if (DEBUG)
-			// Do nothing.
-#else
-            _clearDatabase = true;
-            _buildMode = "Release";
-#endif
 
 			if (_clearDatabase)
 			{

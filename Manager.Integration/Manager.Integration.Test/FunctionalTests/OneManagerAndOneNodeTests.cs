@@ -21,8 +21,16 @@ namespace Manager.Integration.Test.FunctionalTests
 	[TestFixture]
 	public class OneManagerAndOneNodeTests
 	{
-		private readonly bool _clearDatabase = true;
-		private readonly string _buildMode = "Debug";
+
+#if (DEBUG)
+		private const bool ClearDatabase = true;
+		private const string BuildMode = "Debug";
+
+#else
+		private const bool ClearDatabase = true;
+		private const string BuildMode = "Release";
+#endif
+
 
 		private string ManagerDbConnectionString { get; set; }
 		private Task Task { get; set; }
@@ -46,20 +54,14 @@ namespace Manager.Integration.Test.FunctionalTests
 			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 			LogMessage("Start TestFixtureSetUp");
 
-#if (DEBUG)
-			// Do nothing.
-#else
-            _clearDatabase = true;
-            _buildMode = "Release";
-#endif
 
-			if (_clearDatabase)
+			if (ClearDatabase)
 			{
 				DatabaseHelper.TryClearDatabase(ManagerDbConnectionString);
 			}
 			CancellationTokenSource = new CancellationTokenSource();
 
-			AppDomainTask = new AppDomainTask(_buildMode);
+			AppDomainTask = new AppDomainTask(BuildMode);
 			Task = AppDomainTask.StartTask(numberOfManagers: 1,
 			                               numberOfNodes: 1,
 			                               cancellationTokenSource: CancellationTokenSource);

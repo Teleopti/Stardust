@@ -25,8 +25,14 @@ namespace Manager.Integration.Test.LoadTests
 		private AppDomainTask AppDomainTask { get; set; }
 		private CancellationTokenSource CancellationTokenSource { get; set; }
 
-		private bool _clearDatabase = true;
-		private string _buildMode = "Debug";
+#if (DEBUG)
+		private const bool ClearDatabase = true;
+		private const string BuildMode = "Debug";
+
+#else
+		private const bool ClearDatabase = true;
+		private const string BuildMode = "Release";
+#endif
 
 		private void LogMessage(string message)
 		{
@@ -46,19 +52,13 @@ namespace Manager.Integration.Test.LoadTests
 
 			LogMessage("Start TestFixtureSetUp");
 
-#if (DEBUG)
-			// Do nothing.
-#else
-            _clearDatabase = true;
-            _buildMode = "Release";
-#endif
-			if (_clearDatabase)
+			if (ClearDatabase)
 			{
 				DatabaseHelper.TryClearDatabase(ManagerDbConnectionString);
 			}
 			CancellationTokenSource = new CancellationTokenSource();
 
-			AppDomainTask = new AppDomainTask(_buildMode);
+			AppDomainTask = new AppDomainTask(BuildMode);
 
 			Task = AppDomainTask.StartTask(numberOfManagers: 6,
 			                               numberOfNodes: 6,
