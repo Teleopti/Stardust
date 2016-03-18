@@ -2,15 +2,19 @@
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
+using Autofac.Extras.DynamicProxy2;
 using log4net;
 using Stardust.Node.Constants;
 using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
 using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
+using Stardust.Node.Log4Net;
+using Stardust.Node.Log4Net.Extensions;
 
 namespace Stardust.Node.API
 {
+	[Intercept("log-calls")]
 	public class NodeController : ApiController
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeController));

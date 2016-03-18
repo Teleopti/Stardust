@@ -4,12 +4,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
+using Autofac.Extras.DynamicProxy2;
 using log4net;
 using Newtonsoft.Json;
 using Stardust.Node.Diagnostics;
 using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
+using Stardust.Node.Log4Net;
+using Stardust.Node.Log4Net.Extensions;
 using Stardust.Node.Timers;
 using Timer = System.Timers.Timer;
 

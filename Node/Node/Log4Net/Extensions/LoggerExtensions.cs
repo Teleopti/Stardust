@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using log4net;
 
-namespace Stardust.Node.Extensions
+namespace Stardust.Node.Log4Net.Extensions
 {
 	public static class LoggerExtensions
 	{

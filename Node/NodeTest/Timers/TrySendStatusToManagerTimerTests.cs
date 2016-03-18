@@ -11,6 +11,8 @@ using Stardust.Node.API;
 using Stardust.Node.Extensions;
 using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
+using Stardust.Node.Log4Net;
+using Stardust.Node.Log4Net.Extensions;
 using Stardust.Node.Timers;
 
 namespace NodeTest.Timers

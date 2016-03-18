@@ -1,18 +1,18 @@
 ﻿using System;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac.Extras.DynamicProxy2;
 using log4net;
 using Newtonsoft.Json;
-using Stardust.Node.Extensions;
-using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
+using Stardust.Node.Log4Net.Extensions;
 
 namespace Stardust.Node.Workers
 {
+	[Intercept("log-calls")]
 	public class HttpSender : IHttpSender
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (HttpSender));
@@ -50,7 +50,7 @@ namespace Stardust.Node.Workers
 			catch (Exception exp)
 			{
 				Logger.ErrorWithLineNumber(exp.Message,
-				                                 exp);
+				                           exp);
 				throw;
 			}
 		}
@@ -93,7 +93,7 @@ namespace Stardust.Node.Workers
 			catch (Exception exp)
 			{
 				Logger.ErrorWithLineNumber(exp.Message,
-				                                 exp);
+				                           exp);
 				throw;
 			}
 		}
@@ -124,7 +124,7 @@ namespace Stardust.Node.Workers
 			catch (Exception exp)
 			{
 				Logger.ErrorWithLineNumber(exp.Message,
-				                                 exp);
+				                           exp);
 
 				throw;
 			}
@@ -158,7 +158,7 @@ namespace Stardust.Node.Workers
 			catch (Exception exp)
 			{
 				Logger.ErrorWithLineNumber(exp.Message,
-				                                 exp);
+				                           exp);
 
 				throw;
 			}
@@ -191,7 +191,7 @@ namespace Stardust.Node.Workers
 			catch (Exception exp)
 			{
 				Logger.ErrorWithLineNumber(exp.Message,
-				                                 exp);
+				                           exp);
 
 				throw;
 			}
@@ -226,7 +226,7 @@ namespace Stardust.Node.Workers
 			catch (Exception exp)
 			{
 				Logger.ErrorWithLineNumber(exp.Message,
-				                                 exp);
+				                           exp);
 
 				throw;
 			}
@@ -261,13 +261,13 @@ namespace Stardust.Node.Workers
 			catch (HttpRequestException exp)
 			{
 				Logger.ErrorWithLineNumber(exp.Message,
-				                                 exp);
+				                           exp);
 			}
 
 			catch (Exception exp)
 			{
 				Logger.ErrorWithLineNumber(exp.Message,
-				                                 exp);
+				                           exp);
 
 				throw;
 			}
@@ -305,13 +305,13 @@ namespace Stardust.Node.Workers
 			catch (HttpRequestException exp)
 			{
 				Logger.ErrorWithLineNumber(exp.Message,
-				                                 exp);
+				                           exp);
 			}
 
 			catch (Exception exp)
 			{
 				Logger.ErrorWithLineNumber(exp.Message,
-				                                 exp);
+				                           exp);
 
 				throw;
 			}

@@ -3,7 +3,9 @@ using System.Threading;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
 using Autofac;
+using Autofac.Extras.DynamicProxy2;
 using Autofac.Integration.WebApi;
+using Castle.DynamicProxy;
 using log4net;
 using Microsoft.Owin.Hosting;
 using Owin;
@@ -11,6 +13,9 @@ using Stardust.Node.API;
 using Stardust.Node.Extensions;
 using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
+using Stardust.Node.Log4Net;
+using Stardust.Node.Log4Net.Extensions;
+using Stardust.Node.Log4Net.Interceptors;
 using Stardust.Node.Timers;
 using Stardust.Node.Workers;
 
@@ -38,25 +43,36 @@ namespace Stardust.Node
 			using (WebApp.Start(nodeAddress,
 			                    appBuilder =>
 			                    {
-				                    var builder = new ContainerBuilder();
+				                    var containerBuilder = new ContainerBuilder();
 
-				                    builder.RegisterType<InvokeHandler>()
+									containerBuilder.RegisterType<Log4NetInterceptor>().Named<IInterceptor>("log-calls");
+
+									containerBuilder.RegisterType<HttpSender>().EnableClassInterceptors();
+									
+									var httpSenderInstance = new HttpSender();
+
+				                    containerBuilder.RegisterInstance(httpSenderInstance);
+
+				                    containerBuilder.RegisterType<InvokeHandler>()
 					                    .SingleInstance();
+									
 
-				                    builder.RegisterType<NodeController>()
-					                    .SingleInstance();
+									containerBuilder.RegisterType<NodeController>()
+					                    .SingleInstance().EnableClassInterceptors();
 
-				                    builder.RegisterApiControllers(typeof (NodeController).Assembly);
+				                    containerBuilder.RegisterApiControllers(typeof (NodeController).Assembly);
 
-				                    builder.RegisterInstance(nodeConfiguration);
+				                    containerBuilder.RegisterInstance(nodeConfiguration);
 
 				                    var trySendJobProgressToManagerTimer = new TrySendJobProgressToManagerTimer(nodeConfiguration,
 				                                                                                                new HttpSender(), 
 				                                                                                                5000);
-				                    builder.RegisterInstance(trySendJobProgressToManagerTimer).SingleInstance();
 
-				                    // Register IWorkerWrapper.
-				                    builder.Register<IWorkerWrapper>(c => new WorkerWrapper(c.Resolve<InvokeHandler>(),
+				                    containerBuilder.RegisterInstance(trySendJobProgressToManagerTimer).SingleInstance();
+
+
+									// Register IWorkerWrapper.
+									containerBuilder.Register<IWorkerWrapper>(c => new WorkerWrapper(c.Resolve<InvokeHandler>(),
 				                                                                            nodeConfiguration,
 				                                                                            new TrySendNodeStartUpNotificationToManagerTimer
 					                                                                            (nodeConfiguration,
@@ -66,12 +82,12 @@ namespace Stardust.Node
 				                                                                            new TrySendJobDoneStatusToManagerTimer(nodeConfiguration, trySendJobProgressToManagerTimer),
 				                                                                            new TrySendJobCanceledToManagerTimer(nodeConfiguration, trySendJobProgressToManagerTimer),
 				                                                                            new TrySendJobFaultedToManagerTimer(nodeConfiguration, trySendJobProgressToManagerTimer),
-																							trySendJobProgressToManagerTimer, 
-				                                                                            new HttpSender()))
+																							trySendJobProgressToManagerTimer,
+																							httpSenderInstance))
 					                    .SingleInstance();
 
 
-				                    builder.Update(container);
+				                    containerBuilder.Update(container);
 
 				                    //to start it
 				                    container.Resolve<IWorkerWrapper>();

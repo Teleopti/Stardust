@@ -12,6 +12,8 @@ using Stardust.Node;
 using Stardust.Node.API;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
+using Stardust.Node.Log4Net;
+using Stardust.Node.Log4Net.Extensions;
 
 namespace NodeConsoleHost
 {

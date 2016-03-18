@@ -3,6 +3,8 @@ using System.Timers;
 using log4net;
 using Stardust.Node.Extensions;
 using Stardust.Node.Helpers;
+using Stardust.Node.Log4Net;
+using Stardust.Node.Log4Net.Extensions;
 using Timer = System.Timers.Timer;
 
 namespace NodeTest.Fakes.Timers

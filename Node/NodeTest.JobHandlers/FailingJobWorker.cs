@@ -4,6 +4,8 @@ using log4net;
 using Stardust.Node.Extensions;
 using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
+using Stardust.Node.Log4Net;
+using Stardust.Node.Log4Net.Extensions;
 
 namespace NodeTest.JobHandlers
 {

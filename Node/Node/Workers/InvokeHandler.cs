@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Threading;
-using System.Web.Http.Results;
 using Autofac;
+using Autofac.Extras.DynamicProxy2;
 using log4net;
-using Stardust.Node.Extensions;
-using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
+using Stardust.Node.Log4Net.Extensions;
 
 namespace Stardust.Node.Workers
 {
+	[Intercept("log-calls")]
 	public class InvokeHandler : IInvokeHandler
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (InvokeHandler));
@@ -29,14 +29,13 @@ namespace Stardust.Node.Workers
 		                   CancellationTokenSource cancellationTokenSource,
 		                   Action<string> progressCallback)
 		{
-
 			var handler =
 				ComponentContext.Resolve(typeof (IHandle<>).MakeGenericType(query.GetType()));
 
 			if (handler == null)
 			{
 				Logger.ErrorWithLineNumber(string.Format("The job type [{0}] could not be resolved. The job cannot be started.",
-													   query.GetType()));
+				                                         query.GetType()));
 
 				throw new Exception("The handler " + query.GetType() + " could not be resolved");
 			}
@@ -47,7 +46,7 @@ namespace Stardust.Node.Workers
 			if (method == null)
 			{
 				Logger.ErrorWithLineNumber(string.Format("The method for handler [{0}] could not be found. ",
-													   handler.GetType()));
+				                                         handler.GetType()));
 
 				throw new Exception("The method 'Handle' for handler " + handler.GetType() + " could not be found");
 			}

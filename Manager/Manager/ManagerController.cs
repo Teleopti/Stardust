@@ -138,24 +138,14 @@ namespace Stardust.Manager
 
 			Task.Factory.StartNew(() =>
 			{
-				foreach (var exp in 
-							jobFailedModel.AggregateException.InnerExceptions)
+				JobProgressModel progress = new JobProgressModel
 				{
-					string errorMessage =
-						string.Format("Failed: ( Message, Source, StackTrace ): ( {0}, {1}, {2} )",
-						exp.InnerException.Message,
-						exp.InnerException.Source,
-						exp.InnerException.StackTrace);
+					JobId = jobFailedModel.JobId,
+					Created = DateTime.Now,
+					ProgressDetail = jobFailedModel.AggregateException.ToString()
+				};
 
-					JobProgressModel progress = new JobProgressModel
-					{
-						JobId = jobFailedModel.JobId,
-						Created = DateTime.Now,
-						ProgressDetail = errorMessage
-					};
-
-					_jobManager.ReportProgress(progress);
-				}				
+				_jobManager.ReportProgress(progress);
 
 				_jobManager.SetEndResultOnJobAndRemoveIt(jobFailedModel.JobId,
 				                                         "Failed");

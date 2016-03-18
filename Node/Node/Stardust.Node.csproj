@@ -38,6 +38,10 @@
       <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Autofac.Extras.DynamicProxy2, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.Extras.DynamicProxy2.3.0.4\lib\net40\Autofac.Extras.DynamicProxy2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Autofac.Integration.Owin, Version=3.1.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.Owin.3.1.0\lib\net45\Autofac.Integration.Owin.dll</HintPath>
       <Private>True</Private>
@@ -48,6 +52,10 @@
     </Reference>
     <Reference Include="Autofac.Integration.WebApi.Owin, Version=3.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.WebApi2.Owin.3.3.0\lib\net45\Autofac.Integration.WebApi.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Castle.Core, Version=3.2.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core.3.2.2\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
@@ -108,7 +116,7 @@
     <Compile Include="Extensions\TimerExtensions.cs" />
     <Compile Include="Extensions\UriExtensions.cs" />
     <Compile Include="GlobalExceptionLogger.cs" />
-    <Compile Include="Extensions\LoggerExtensions.cs" />
+    <Compile Include="Log4Net\Extensions\LoggerExtensions.cs" />
     <Compile Include="Helpers\ManagerUriBuilderHelper.cs" />
     <Compile Include="Helpers\NodeConfigurationUriBuilderHelper.cs" />
     <Compile Include="Helpers\NodeUriBuilderHelper.cs" />
@@ -121,6 +129,7 @@
     <Compile Include="Interfaces\INodeStarter.cs" />
     <Compile Include="Interfaces\IWorkerWrapper.cs" />
     <Compile Include="Entities\JobToDo.cs" />
+    <Compile Include="Log4Net\Interceptors\Log4NetInterceptor.cs" />
     <Compile Include="NodeStarter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -156,6 +165,7 @@
     <Compile Include="Workers\WorkerWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Node.nuspec">
       <SubType>Designer</SubType>
     </None>
@@ -165,7 +175,9 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Log4Net\Modules\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
