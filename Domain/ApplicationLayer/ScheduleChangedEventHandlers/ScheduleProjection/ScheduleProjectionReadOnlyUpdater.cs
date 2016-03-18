@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 					if (isLayerRightNow(layer) ||
 						isCurrentLayerCloser(layer, closestLayerToNow))
 						closestLayerToNow = layer;
-					_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, @event.ScenarioId, @event.PersonId, layer);
+					_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, @event.ScenarioId, @event.PersonId, layer, @event.ScheduleLoadTimestamp);
 				}
 			}
 			handleEnqueueRtaMessage(@event, closestLayerToNow);

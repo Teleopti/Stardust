@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 								EndDateTime = period.EndDateTime,
 								PayloadId = activity.Id.GetValueOrDefault()
 			            	};
-			target.AddProjectedLayer(DateOnly.Today, scenarioId, person.Id.GetValueOrDefault(),layer);
+			target.AddProjectedLayer(DateOnly.Today, scenarioId, person.Id.GetValueOrDefault(),layer, DateTime.UtcNow);
 			
 			using (NHibernateUnitOfWork unitOfWork = (NHibernateUnitOfWork) UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				EndDateTime = period.EndDateTime,
 				PayloadId = absence.Id.GetValueOrDefault()
 			};
-			target.AddProjectedLayer(DateOnly.Today, scenarioId, person.Id.GetValueOrDefault(), layer);
+			target.AddProjectedLayer(DateOnly.Today, scenarioId, person.Id.GetValueOrDefault(), layer, DateTime.UtcNow);
 
 			using (NHibernateUnitOfWork unitOfWork = (NHibernateUnitOfWork)UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -144,7 +144,75 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldClearDataForOneDay()
 		{
-			target.ClearDayForPerson(DateOnly.Today, scenarioId, person.Id.GetValueOrDefault(), DateTime.UtcNow);
+			target.ClearDayForPerson(DateOnly.Today, scenarioId, person.Id.GetValueOrDefault(), DateTime.UtcNow)
+				.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldNotClearAnyRecordWithOutOfDateTimeStamp()
+		{
+			var period =
+							new DateOnlyPeriod(DateOnly.Today, DateOnly.Today).ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
+			var layer = new ProjectionChangedEventLayer
+			{
+				ContractTime = TimeSpan.FromHours(8),
+				WorkTime = TimeSpan.FromHours(8),
+				DisplayColor = Color.Bisque.ToArgb(),
+				Name = "holiday",
+				ShortName = "ho",
+				StartDateTime = period.StartDateTime,
+				EndDateTime = period.EndDateTime,
+				PayloadId = absence.Id.GetValueOrDefault()
+			};
+			var scheduleLoadedTimestamp = DateTime.UtcNow;
+			target.AddProjectedLayer(DateOnly.Today, scenarioId, person.Id.GetValueOrDefault(), layer, scheduleLoadedTimestamp);
+
+			target.ClearDayForPerson(DateOnly.Today, scenarioId, person.Id.GetValueOrDefault(), scheduleLoadedTimestamp.AddMinutes(-10))
+				.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldUpdateLayersForNewPersonSchedule()
+		{
+			var period =
+							new DateOnlyPeriod(DateOnly.Today, DateOnly.Today).ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
+			var layer = new ProjectionChangedEventLayer
+			{
+				ContractTime = TimeSpan.FromHours(8),
+				WorkTime = TimeSpan.FromHours(8),
+				DisplayColor = Color.Bisque.ToArgb(),
+				Name = "holiday",
+				ShortName = "ho",
+				StartDateTime = period.StartDateTime,
+				EndDateTime = period.EndDateTime,
+				PayloadId = absence.Id.GetValueOrDefault()
+			};
+			var scheduleLoadedTimestamp = DateTime.UtcNow;
+			target.AddProjectedLayer(DateOnly.Today, scenarioId, person.Id.GetValueOrDefault(), layer, scheduleLoadedTimestamp)
+				.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldNotUpdateLayersForPersonScheduleOutOfDate()
+		{
+			var period =
+							new DateOnlyPeriod(DateOnly.Today, DateOnly.Today).ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
+			var layer = new ProjectionChangedEventLayer
+			{
+				ContractTime = TimeSpan.FromHours(8),
+				WorkTime = TimeSpan.FromHours(8),
+				DisplayColor = Color.Bisque.ToArgb(),
+				Name = "holiday",
+				ShortName = "ho",
+				StartDateTime = period.StartDateTime,
+				EndDateTime = period.EndDateTime,
+				PayloadId = absence.Id.GetValueOrDefault()
+			};
+			var scheduleLoadedTimestamp = DateTime.UtcNow;
+			target.AddProjectedLayer(DateOnly.Today, scenarioId, person.Id.GetValueOrDefault(), layer, scheduleLoadedTimestamp)
+				.Should().Be.EqualTo(1);
+			target.AddProjectedLayer(DateOnly.Today, scenarioId, person.Id.GetValueOrDefault(), layer, scheduleLoadedTimestamp.AddHours(-1))
+				.Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -178,7 +246,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				EndDateTime = period.EndDateTime,
 				PayloadId = absence.Id.GetValueOrDefault()
 			};
-			target.AddProjectedLayer(DateOnly.Today, scenarioId, person.Id.GetValueOrDefault(), layer);
+			target.AddProjectedLayer(DateOnly.Today, scenarioId, person.Id.GetValueOrDefault(), layer, DateTime.UtcNow);
 
 			layer = new ProjectionChangedEventLayer
 			{
@@ -191,7 +259,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				EndDateTime = period.EndDateTime,
 				PayloadId = absence.Id.GetValueOrDefault()
 			};
-			target.AddProjectedLayer(DateOnly.Today, scenarioId, person.Id.GetValueOrDefault(), layer);
+			target.AddProjectedLayer(DateOnly.Today, scenarioId, person.Id.GetValueOrDefault(), layer, DateTime.UtcNow);
 
 			using (NHibernateUnitOfWork unitOfWork = (NHibernateUnitOfWork)UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -203,5 +271,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				}
 			}
 		}
+
 	}
 }

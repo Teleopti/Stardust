@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 					EndDateTime = "2014-11-07 10:00".Utc()
 				};
 				var repository = new ScheduleProjectionReadOnlyRepository(new ThisUnitOfWork(uow));
-				repository.AddProjectedLayer(new DateOnly("2014-11-07".Utc()), Guid.NewGuid(), personId, layer);
+				repository.AddProjectedLayer(new DateOnly("2014-11-07".Utc()), Guid.NewGuid(), personId, layer, DateTime.UtcNow);
 				uow.PersistAll();
 			}
 			

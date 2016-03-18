@@ -39,22 +39,24 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                                .List<PayloadWorkTime>();
         }
 
-        public void ClearDayForPerson(DateOnly date, Guid scenarioId, Guid personId, DateTime scheduleLoadedTimeStamp)
+        public int ClearDayForPerson(DateOnly date, Guid scenarioId, Guid personId, DateTime scheduleLoadedTimeStamp)
         {
-			_currentUnitOfWork.Session().CreateSQLQuery(
+			var count = _currentUnitOfWork.Session().CreateSQLQuery(
 				"exec ReadModel.DeleteScheduleProjectionReadOnly @PersonId=:person, @ScenarioId=:scenario, @BelongsToDate=:date, @ScheduleLoadedTime=:scheduleLoadedTime")
                                         .SetGuid("person", personId)
                                         .SetGuid("scenario", scenarioId)
 										.SetDateOnly("date", date)
 										.SetDateTime("scheduleLoadedTime", scheduleLoadedTimeStamp)
-                                        .ExecuteUpdate();
+										.UniqueResult<int>();
+
+	        return count;
         }
 
-        public void AddProjectedLayer(DateOnly belongsToDate, Guid scenarioId, Guid personId,
-                                      ProjectionChangedEventLayer layer)
+        public int AddProjectedLayer(DateOnly belongsToDate, Guid scenarioId, Guid personId,
+									  ProjectionChangedEventLayer layer, DateTime scheduleLoadedTimeStamp)
         {
-			_currentUnitOfWork.Session().CreateSQLQuery(
-                "INSERT INTO ReadModel.ScheduleProjectionReadOnly (ScenarioId,PersonId,BelongsToDate,PayloadId,StartDateTime,EndDateTime,WorkTime,ContractTime,Name,ShortName,DisplayColor,PayrollCode,InsertedOn) VALUES (:ScenarioId,:PersonId,:Date,:PayloadId,:StartDateTime,:EndDateTime,:WorkTime,:ContractTime,:Name,:ShortName,:DisplayColor,:PayrollCode,:InsertedOn)")
+			return _currentUnitOfWork.Session().CreateSQLQuery(
+				"exec ReadModel.UpdateScheduleProjectionReadOnly @PersonId=:PersonId, @ScenarioId=:ScenarioId, @BelongsToDate=:Date, @PayloadId=:PayloadId, @StartDateTime=:StartDateTime, @EndDateTime=:EndDateTime, @WorkTime=:WorkTime, @ContractTime=:ContractTime, @Name=:Name, @ShortName=:ShortName, @DisplayColor=:DisplayColor, @PayrollCode=:PayrollCode, @InsertedOn=:InsertedOn, @ScheduleLoadedTime=:ScheduleLoadedTime")
                                         .SetGuid("ScenarioId", scenarioId)
                                         .SetGuid("PersonId", personId)
                                         .SetGuid("PayloadId", layer.PayloadId)
@@ -68,7 +70,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                         .SetInt32("DisplayColor", layer.DisplayColor)
 										.SetDateOnly("Date", belongsToDate)
                                         .SetDateTime("InsertedOn", DateTime.UtcNow)
-                                        .ExecuteUpdate();
+										.SetDateTime("ScheduleLoadedTime", scheduleLoadedTimeStamp)
+                                        .UniqueResult<int>();
         }
 
         public bool IsInitialized()
