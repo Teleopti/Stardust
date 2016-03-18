@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			_schedulerStateHolderFrom.AllPermittedPersons.Where(x => agentIds.Contains(x.Id.Value)).ForEach(x => schedulerStateHolderTo.AllPermittedPersons.Add(x));
 		}
 
-		protected override void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		protected override void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<ISkill> skills, DateOnlyPeriod period)
 		{
 			schedulerStateHolderTo.SchedulingResultState.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>(_schedulerStateHolderFrom.SchedulingResultState.SkillDays);
 		}

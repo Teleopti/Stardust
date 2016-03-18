@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
@@ -15,11 +14,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			var scenario = FetchScenario();
 			FillAgents(schedulerStateHolderTo, scenario, agentIds, period);
 			removeUnwantedAgents(schedulerStateHolderTo, agentIds);
-			FillSkillDays(schedulerStateHolderTo, scenario, schedulerStateHolderTo.AllPermittedPersons, period);
-			removeUnwantedSkillDays(schedulerStateHolderTo, period);
+			var skills = skillsToUse(schedulerStateHolderTo.AllPermittedPersons, period);
+			FillSkillDays(schedulerStateHolderTo, scenario, skills, period);
+			removeUnwantedSkillDays(schedulerStateHolderTo, skills);
 			FillSchedules(schedulerStateHolderTo, scenario, schedulerStateHolderTo.AllPermittedPersons, period);
 			removeUnwantedScheduleRanges(schedulerStateHolderTo);
 			PostFill(schedulerStateHolderTo, schedulerStateHolderTo.AllPermittedPersons, period);
+		}
+
+		private static IEnumerable<ISkill> skillsToUse(IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		{
+			var agentSkills = new HashSet<ISkill>();
+			foreach (var skill in agents.SelectMany(filteredAgent => filteredAgent.ActiveSkillsFor(period)))
+			{
+				agentSkills.Add(skill);
+			}
+			return agentSkills;
 		}
 
 		private static void removeUnwantedAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds)
@@ -37,15 +47,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			}
 		}
 
-		private static void removeUnwantedSkillDays(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
+		private static void removeUnwantedSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<ISkill> skillsToKeep)
 		{
-			var agentSkills = new HashSet<ISkill>();
-			foreach (var skill in schedulerStateHolderTo.AllPermittedPersons.SelectMany(filteredAgent => filteredAgent.ActiveSkillsFor(period)))
-			{
-				agentSkills.Add(skill);
-			}
-
-			foreach (var skill in schedulerStateHolderTo.SchedulingResultState.SkillDays.Keys.ToList().Where(skill => !agentSkills.Contains(skill)))
+			var skillsToRemove = schedulerStateHolderTo.SchedulingResultState.Skills.Except(skillsToKeep);
+			foreach (var skill in skillsToRemove)
 			{
 				schedulerStateHolderTo.SchedulingResultState.SkillDays.Remove(skill);
 				schedulerStateHolderTo.SchedulingResultState.RemoveSkill(skill);
@@ -62,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		protected abstract IScenario FetchScenario();
 		protected abstract void FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<Guid> agentIds, DateOnlyPeriod period);
-		protected abstract void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period);
+		protected abstract void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<ISkill> skills, DateOnlyPeriod period);
 		protected abstract void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period);
 		protected abstract void PreFill(ISchedulerStateHolder schedulerStateHolderTo);
 		protected abstract void PostFill(ISchedulerStateHolder schedulerStateHolder, IEnumerable<IPerson> agents, DateOnlyPeriod period);

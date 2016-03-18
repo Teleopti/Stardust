@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 	{
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
-		private readonly ISkillRepository _skillRepository;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private readonly IPeopleAndSkillLoaderDecider _decider;
@@ -29,7 +28,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		public FillSchedulerStateHolderFromDatabase(IScenarioRepository scenarioRepository,
 					ISkillDayLoadHelper skillDayLoadHelper,
-					ISkillRepository skillRepository,
 					IScheduleStorage scheduleStorage,
 					IPersonAbsenceAccountRepository personAbsenceAccountRepository,
 					IPeopleAndSkillLoaderDecider decider,
@@ -40,7 +38,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		{
 			_scenarioRepository = scenarioRepository;
 			_skillDayLoadHelper = skillDayLoadHelper;
-			_skillRepository = skillRepository;
 			_scheduleStorage = scheduleStorage;
 			_personAbsenceAccountRepository = personAbsenceAccountRepository;
 			_decider = decider;
@@ -67,19 +64,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			schedulerStateHolderTo.ResetFilteredPersons();
 		}
 
-		protected override void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		protected override void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<ISkill> skills, DateOnlyPeriod period)
 		{
-			var allSkills = _skillRepository.FindAllWithSkillDays(period).ToArray();
-			var forecast = _skillDayLoadHelper.LoadSchedulerSkillDays(period, allSkills, scenario);
+			var forecast = _skillDayLoadHelper.LoadSchedulerSkillDays(period, skills, scenario);
 			schedulerStateHolderTo.SchedulingResultState.SkillDays = forecast;
-			schedulerStateHolderTo.SchedulingResultState.AddSkills(allSkills);
-
-			//TODO: see if we can reuse from fillagents
-			var timeZone = _principal.Current().Regional.TimeZone;
-			var dateTimePeriod = period.ToDateTimePeriod(timeZone);
-			var deciderResult = _decider.Execute(scenario, dateTimePeriod, schedulerStateHolderTo.AllPermittedPersons);
-			//
-			deciderResult.FilterSkills(allSkills, schedulerStateHolderTo.SchedulingResultState.RemoveSkill, s => schedulerStateHolderTo.SchedulingResultState.AddSkills(s));
+			schedulerStateHolderTo.SchedulingResultState.AddSkills(skills.ToArray());
 		}
 
 		protected override void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period)
