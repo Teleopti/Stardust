@@ -9,7 +9,7 @@ namespace Stardust.Node.Extensions
 	{
 		public static ILog Log<T>(this T thing)
 		{
-			var log = LogManager.GetLogger(typeof(T));
+			var log = LogManager.GetLogger(typeof (T));
 
 			return log;
 		}
@@ -23,11 +23,11 @@ namespace Stardust.Node.Extensions
 		}
 
 		public static void ErrorWithLineNumber(this ILog logger,
-		                                          string info,
-		                                          Exception exception = null,
-		                                          [CallerFilePath] string file = "",
-		                                          [CallerMemberName] string member = "",
-		                                          [CallerLineNumber] int line = 0)
+		                                       string info,
+		                                       Exception exception = null,
+		                                       [CallerFilePath] string file = "",
+		                                       [CallerMemberName] string member = "",
+		                                       [CallerLineNumber] int line = 0)
 		{
 			if (logger.IsErrorEnabled)
 			{
@@ -43,11 +43,11 @@ namespace Stardust.Node.Extensions
 		}
 
 		public static void FatalWithLineNumber(this ILog logger,
-		                                          string info,
-		                                          Exception exception = null,
-		                                          [CallerFilePath] string file = "",
-		                                          [CallerMemberName] string member = "",
-		                                          [CallerLineNumber] int line = 0)
+		                                       string info,
+		                                       Exception exception = null,
+		                                       [CallerFilePath] string file = "",
+		                                       [CallerMemberName] string member = "",
+		                                       [CallerLineNumber] int line = 0)
 		{
 			if (logger.IsFatalEnabled)
 			{
@@ -63,10 +63,10 @@ namespace Stardust.Node.Extensions
 		}
 
 		public static void WarningWithLineNumber(this ILog logger,
-		                                            string info,
-		                                            [CallerFilePath] string file = "",
-		                                            [CallerMemberName] string member = "",
-		                                            [CallerLineNumber] int line = 0)
+		                                         string info,
+		                                         [CallerFilePath] string file = "",
+		                                         [CallerMemberName] string member = "",
+		                                         [CallerLineNumber] int line = 0)
 		{
 			if (logger.IsWarnEnabled)
 			{
@@ -81,10 +81,10 @@ namespace Stardust.Node.Extensions
 		}
 
 		public static void DebugWithLineNumber(this ILog logger,
-		                                          string info,
-		                                          [CallerFilePath] string file = "",
-		                                          [CallerMemberName] string member = "",
-		                                          [CallerLineNumber] int line = 0)
+		                                       string info,
+		                                       [CallerFilePath] string file = "",
+		                                       [CallerMemberName] string member = "",
+		                                       [CallerLineNumber] int line = 0)
 		{
 			if (logger.IsDebugEnabled)
 			{
@@ -99,10 +99,10 @@ namespace Stardust.Node.Extensions
 		}
 
 		public static void InfoWithLineNumber(this ILog logger,
-		                                         string info,
-		                                         [CallerFilePath] string file = "",
-		                                         [CallerMemberName] string member = "",
-		                                         [CallerLineNumber] int line = 0)
+		                                      string info,
+		                                      [CallerFilePath] string file = "",
+		                                      [CallerMemberName] string member = "",
+		                                      [CallerLineNumber] int line = 0)
 		{
 			if (logger.IsInfoEnabled)
 			{

@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
-using Newtonsoft.Json;
-using Stardust.Node.Constants;
-using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Workers;
 
@@ -60,10 +54,9 @@ namespace Stardust.Node.Extensions
 
 			IHttpSender httpSender = new HttpSender();
 
-			return await httpSender.PostAsync(apiEndpoint, 
-										      uri, 
-					                                      cancellationToken);
-
+			return await httpSender.PostAsync(apiEndpoint,
+			                                  uri,
+			                                  cancellationToken);
 		}
 	}
 }

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Stardust.Node.Constants;
 using Stardust.Node.Entities;
-using Stardust.Node.Interfaces;
 
 namespace Stardust.Node.Extensions
 {
