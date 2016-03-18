@@ -56,7 +56,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				sqlTransaction.Commit();
 			});
 
-			timer = new Timer(lockForAnotherMinute, null, TimeSpan.FromSeconds(45), TimeSpan.FromMinutes(1));
+			timer = new Timer(lockForAnotherMinute, null, TimeSpan.FromSeconds(45), TimeSpan.FromSeconds(50));
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
