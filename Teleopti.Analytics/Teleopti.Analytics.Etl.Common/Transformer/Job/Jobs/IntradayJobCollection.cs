@@ -45,7 +45,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new StageScorecardJobStep(jobParameters));
 			Add(new StageScorecardKpiJobStep(jobParameters));
 			Add(new StageKpiTargetTeamJobStep(jobParameters));
-			Add(new StageGroupPagePersonJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623))
+			{
+				Add(new StageGroupPagePersonJobStep(jobParameters));
+			}
 			Add(new StageOvertimeJobStep(jobParameters));
 			Add(new IntradayStageRequestJobStep(jobParameters));
 
