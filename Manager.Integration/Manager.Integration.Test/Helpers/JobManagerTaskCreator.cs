@@ -23,7 +23,7 @@ namespace Manager.Integration.Test.Helpers
 
 		public ManagerUriBuilder ManagerUriBuilder { get; set; }
 
-		private CheckJobHistoryStatusTimer CheckJobHistoryStatusTimer { get; }
+		private CheckJobHistoryStatusTimer CheckJobHistoryStatusTimer { get; set; }
 
 		public bool CreateNewJobToManagerSucceeded { get; set; }
 
@@ -31,7 +31,7 @@ namespace Manager.Integration.Test.Helpers
 
 		private Task NewJobToManagerTask { get; set; }
 
-		private CancellationTokenSource CancellationTokenSource { get; }
+		private CancellationTokenSource CancellationTokenSource { get; set; }
 
 		private Task DeleteJobToManagerTask { get; set; }
 
