@@ -45,7 +45,8 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 			if (typeof (T) == typeof (bool))
 			{
 				var query = scopeByQuerySelector(selector, useIsolateScope) +
-							string.Format(" return scope.$result{0} !== 'I_am_a_dummy_value' ? 'True': 'False' ; ", readerName);
+							string.Format(" if (scope.$result{0} == 'I_am_a_dummy_value') return 'Unassigned'; " +
+										  " return scope.$result{1} ? 'True': 'False' ; ", readerName, readerName);
 				interactions.AssertJavascriptResultContains(query, constraint.ToString());				
 			}		
 			else 

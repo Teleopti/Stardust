@@ -58,11 +58,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		[When(@"I click at campaign name tag '(.*)'")]
 		public void WhenIClickAtCampaignNameTag(string campaignName)
 		{
-			Browser.Interactions.WaitScopeCondition(".test-outbound-summary", "isRefreshingGantt", false,
-				() =>
-				{	Thread.Sleep(300);		
-					Browser.Interactions.ClickVisibleOnly(".campaign-visualization-toggle");
-				});
+			Browser.Interactions.AssertScopeValue(".test-outbound-summary", "isRefreshingGantt", false);
+			Browser.Interactions.ClickVisibleOnly(".campaign-visualization-toggle");
 		}
 	
 		[Then(@"I should see the backlog visualization of '(.*)'")]
