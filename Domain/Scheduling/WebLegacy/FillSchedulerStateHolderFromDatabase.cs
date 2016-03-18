@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -20,31 +19,28 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
-		private readonly IPeopleAndSkillLoaderDecider _decider;
 		private readonly ICurrentTeleoptiPrincipal _principal;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly IRepositoryFactory _repositoryFactory;
-		private readonly IFixedStaffLoader _fixedStaffLoader;
+		private readonly IPersonRepository _personRepository;
 
 		public FillSchedulerStateHolderFromDatabase(IScenarioRepository scenarioRepository,
 					ISkillDayLoadHelper skillDayLoadHelper,
 					IScheduleStorage scheduleStorage,
 					IPersonAbsenceAccountRepository personAbsenceAccountRepository,
-					IPeopleAndSkillLoaderDecider decider,
 					ICurrentTeleoptiPrincipal principal,
 					ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
 					IRepositoryFactory repositoryFactory,
-					IFixedStaffLoader fixedStaffLoader)
+					IPersonRepository personRepository)
 		{
 			_scenarioRepository = scenarioRepository;
 			_skillDayLoadHelper = skillDayLoadHelper;
 			_scheduleStorage = scheduleStorage;
 			_personAbsenceAccountRepository = personAbsenceAccountRepository;
-			_decider = decider;
 			_principal = principal;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_repositoryFactory = repositoryFactory;
-			_fixedStaffLoader = fixedStaffLoader;
+			_personRepository = personRepository;
 		}
 
 		protected override IScenario FetchScenario()
@@ -54,14 +50,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		protected override void FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
 		{
-			var timeZone = _principal.Current().Regional.TimeZone;
-			var dateTimePeriod = period.ToDateTimePeriod(timeZone);
-			var people = _fixedStaffLoader.Load(period);
-			var deciderResult = _decider.Execute(scenario, dateTimePeriod, people.AllPeople);
-			deciderResult.FilterPeople(people.AllPeople);
-			schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization = people.AllPeople;
-			people.AllPeople.ForEach(schedulerStateHolderTo.AllPermittedPersons.Add);
-			schedulerStateHolderTo.ResetFilteredPersons();
+			var allPeople = _personRepository.FindPeopleInOrganization(period, true);
+			schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization = allPeople.ToList();
+			allPeople.ForEach(x => schedulerStateHolderTo.AllPermittedPersons.Add(x));
 		}
 
 		protected override void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<ISkill> skills, DateOnlyPeriod period)
