@@ -60,12 +60,6 @@ namespace Manager.Integration.Test.FunctionalTests
 		[TestFixtureSetUp]
 		public void TestFixtureSetUp()
 		{
-#if (DEBUG)
-			// Do nothing.
-#else
-	         _clearDatabase = true;
-            _buildMode = "Release";
-#endif
 			ManagerDbConnectionString = ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString;
 			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
 			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));

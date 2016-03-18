@@ -47,12 +47,6 @@ namespace Manager.Integration.Test.RecoveryTests
 			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 			LogMessage("Start TestFixtureSetUp");
 
-#if (DEBUG)
-			// Do nothing.
-#else
-            _clearDatabase = true;
-            _buildMode = "Release";
-#endif
 
 			if (ClearDatabase)
 			{
