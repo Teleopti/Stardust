@@ -4,9 +4,7 @@ using System.Configuration;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
 using log4net.Config;
-using log4net.Repository.Hierarchy;
 using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Tasks;
@@ -33,10 +31,6 @@ namespace Manager.Integration.Test.FunctionalTests
 		{
 		}
 
-		private bool _clearDatabase = true;
-		private string _buildMode = "Debug";
-
-
 		[TestFixtureSetUp]
 		public void TestFixtureSetUp()
 		{
@@ -49,14 +43,14 @@ namespace Manager.Integration.Test.FunctionalTests
 			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
 
-			if (_clearDatabase)
+			if (ClearDatabase)
 			{
 				DatabaseHelper.TryClearDatabase(ManagerDbConnectionString);
 			}
 
 			CancellationTokenSource = new CancellationTokenSource();
 
-			AppDomainTask = new AppDomainTask(_buildMode);
+			AppDomainTask = new AppDomainTask(BuildMode);
 
 			Task = AppDomainTask.StartTask(numberOfManagers: 1,
 			                               numberOfNodes: 0,
@@ -84,7 +78,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			if (exp != null)
 			{
 				this.Log().FatalWithLineNumber(exp.Message,
-				                                 exp);
+				                               exp);
 			}
 		}
 
@@ -136,7 +130,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			var startJobTaskHelper = new StartJobTaskHelper();
 
 			var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
-																	  CancellationTokenSource,
+			                                                          CancellationTokenSource,
 			                                                          timeout);
 
 			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
