@@ -27,10 +27,9 @@ namespace Performance.Test
 		[Test]
 		public async void StardustLoadPerformance()
 		{
-			var resp = await _httpSender.TryGetAsync(new Uri("http://localhost:9000/stardustdashboard/job"));
-			
-			Assert.IsTrue(resp); 
+			var resp =  await _httpSender.GetAsync(new Uri("http://localhost:9000/stardustdashboard/job"));
+			resp.EnsureSuccessStatusCode();
+			Assert.IsTrue(true);
 		}
-
 	}
 }
