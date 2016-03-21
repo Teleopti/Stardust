@@ -25,9 +25,9 @@ namespace PerformanceTests
 
 		[Test]
 		[Category("StardustLoadPerformance")]
-		public void StardustLoadPersomance()
+		public async void StardustLoadPersomance()
 		{
-			_httpSender.GetAsync(new Uri("http://localhost:9000/stardustdashboard/job"));
+			var resp = await _httpSender.TryGetAsync(new Uri("http://localhost:9000/stardustdashboard/job"));
 			
 			Assert.IsTrue(true);
 		}
