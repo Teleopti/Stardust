@@ -382,6 +382,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				_rep.Find(new[] {_dummyAgent}, new DateOnlyPeriod(1900, 1, 1, 2100, 1, 1), scenarioWrongBu).Should().Be.Empty();
 			}
 
+	    [Test]
+	    public void ShouldQueryScheduleLoadedTime()
+	    {
+		    var timestamp = _rep.GetScheduleLoadedTime();
+		    timestamp.Should().Not.Be.EqualTo(new DateTime());
+	    }
         protected override Repository<IPersonAssignment> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
             return new PersonAssignmentRepository(currentUnitOfWork);

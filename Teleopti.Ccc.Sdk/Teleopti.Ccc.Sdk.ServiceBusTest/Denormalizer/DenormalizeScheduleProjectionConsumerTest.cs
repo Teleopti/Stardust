@@ -40,7 +40,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			person.SetId(Guid.NewGuid());
 
 			var period = new DateTimePeriod(utcNow,utcNow);
-
+			scheduleProjectionReadOnlyRepository.Stub(
+				x => x.ClearDayForPerson(today, Guid.Empty, person.Id.GetValueOrDefault(), DateTime.UtcNow))
+				.IgnoreArguments()
+				.Return(1);
 			target.Handle(new ProjectionChangedEvent
 				{
 					IsDefaultScenario = true,
@@ -69,6 +72,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 				});
 
 			scheduleProjectionReadOnlyRepository.AssertWasCalled(x => x.ClearDayForPerson(today,Guid.Empty,person.Id.GetValueOrDefault(),DateTime.UtcNow), o => o.IgnoreArguments());
+			
 			serviceBus.AssertWasCalled(x => x.Publish(null), o=> o.IgnoreArguments());
 		}
 
@@ -146,10 +150,73 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 						},
 					Timestamp = utcNow
 				};
+			scheduleProjectionReadOnlyRepository.Stub(
+				x => x.ClearDayForPerson(today, Guid.Empty, personId, DateTime.UtcNow))
+				.IgnoreArguments()
+				.Return(1);
 
 			target.Handle(message);
 
 			serviceBus.AssertWasCalled(s => s.Publish(new ScheduleProjectionReadOnlyChanged
+				{
+					LogOnDatasource = message.LogOnDatasource,
+					LogOnBusinessUnitId = message.LogOnBusinessUnitId,
+					PersonId = message.PersonId,
+					ActivityStartDateTime = closestPeriod.StartDateTime,
+					ActivityEndDateTime = closestPeriod.EndDateTime,
+					Timestamp = utcNow
+				}), o => o.IgnoreArguments());
+		}
+
+		[Test]
+		public void ShouldNotSendOutOfDateScheduleDay()
+		{
+			target = new ScheduleProjectionReadOnlyUpdater(scheduleProjectionReadOnlyRepository, serviceBus, new Now());
+			var closestPeriod = new DateTimePeriod(utcNow.AddMinutes(-5), utcNow.AddMinutes(5));
+			var notClosestPeriod = new DateTimePeriod(utcNow.AddMinutes(5), utcNow.AddMinutes(10));
+
+			var message = new ProjectionChangedEvent
+				{
+					IsDefaultScenario = true,
+					LogOnDatasource = "DataSource",
+					LogOnBusinessUnitId = businessUnitId,
+					PersonId = personId,
+					ScheduleDays = new[]
+						{
+							new ProjectionChangedEventScheduleDay
+								{
+									ShortName = "ClosestLayer",
+									Date = today.Date,
+									Shift = new ProjectionChangedEventShift
+										{
+											Layers = new Collection<ProjectionChangedEventLayer>
+												{
+													new ProjectionChangedEventLayer
+														{
+															StartDateTime = closestPeriod.StartDateTime,
+															EndDateTime = closestPeriod.EndDateTime,
+														},
+													new ProjectionChangedEventLayer
+														{
+															StartDateTime = notClosestPeriod.StartDateTime,
+															EndDateTime = notClosestPeriod.EndDateTime,
+
+														}
+												}
+										}
+
+								}
+						},
+					Timestamp = utcNow
+				};
+			scheduleProjectionReadOnlyRepository.Stub(
+				x => x.ClearDayForPerson(today, Guid.Empty, personId, DateTime.UtcNow))
+				.IgnoreArguments()
+				.Return(0);
+
+			target.Handle(message);
+
+			serviceBus.AssertWasNotCalled(s => s.Publish(new ScheduleProjectionReadOnlyChanged
 				{
 					LogOnDatasource = message.LogOnDatasource,
 					LogOnBusinessUnitId = message.LogOnBusinessUnitId,
@@ -192,6 +259,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 						},
 					Timestamp = utcNow
 				};
+			scheduleProjectionReadOnlyRepository.Stub(
+				x => x.ClearDayForPerson(today, Guid.Empty, Guid.NewGuid(), DateTime.UtcNow))
+				.IgnoreArguments()
+				.Return(1);
 
 			target.Handle(message);
 
@@ -243,6 +314,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 						},
 					Timestamp = utcNow
 				};
+			scheduleProjectionReadOnlyRepository.Stub(
+				x => x.ClearDayForPerson(today, Guid.Empty, Guid.NewGuid(), DateTime.UtcNow))
+				.IgnoreArguments()
+				.Return(1);
 
 			target.Handle(message);
 
@@ -287,7 +362,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 						},
 					Timestamp = utcNow
 				};
-
+			scheduleProjectionReadOnlyRepository.Stub(
+				x => x.ClearDayForPerson(today, Guid.Empty, Guid.NewGuid(), DateTime.UtcNow))
+				.IgnoreArguments()
+				.Return(1);
 			scheduleProjectionReadOnlyRepository.Expect(s => s.GetNextActivityStartTime(utcNow, personId))
 			                                    .IgnoreArguments()
 			                                    .Return(null);

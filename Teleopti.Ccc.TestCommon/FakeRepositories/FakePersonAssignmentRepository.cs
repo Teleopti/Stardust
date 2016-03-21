@@ -81,6 +81,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
+		public DateTime GetScheduleLoadedTime()
+		{
+			return DateTime.UtcNow;
+		}
+
 		public IPersonAssignment GetSingle(DateOnly dateOnly)
 		{
 			return _personAssignments.Single(pa => pa.Date == dateOnly);

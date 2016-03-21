@@ -445,6 +445,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 .Return(_absences);
 						Expect.Call(_assRep.Find(visiblePeople, _searchPeriod, _scenario))
                 .Return(_assignments);
+	        Expect.Call(_assRep.GetScheduleLoadedTime()).Return(DateTime.UtcNow);
             Expect.Call(_meetingRepository.Find(visiblePeople, _searchPeriod, _scenario))
                 .Return(_meetings);
 						Expect.Call(_notesRepository.Find(_searchPeriod, visiblePeople, _scenario))

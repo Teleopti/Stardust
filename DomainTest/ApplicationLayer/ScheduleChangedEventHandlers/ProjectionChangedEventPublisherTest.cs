@@ -163,27 +163,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 
 			scheduleRepository.ThePeriodThatWasUsedForFindingSchedules.StartDateTime.Day.Should().Be.EqualTo(start.Day-1);
 		}
-
-		[Test]
-		public void ShouldPublishWithScheduleDataLoadTime()
-		{
-			var now = new MutableNow(DateTime.UtcNow);
-			var scenario = ScenarioFactory.CreateScenarioWithId("scenario", true);
-			var person = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(2013, 10, 02));
-			var publisher = new FakePublishEventsFromEventHandlers();
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person, new DateOnly(2013, 10, 02), new DayOffTemplate(new Description("Day off", "DO")));
-			var target = new ProjectionChangedEventPublisher(publisher, new FakeScenarioRepository(scenario), new FakePersonRepositoryLegacy(person), new FakePersonAssignmentReadScheduleStorage(personAssignment), new ProjectionChangedEventBuilder(), now);
-
-			target.Handle(new ScheduleChangedEvent
-			{
-				StartDateTime = new DateTime(2013, 10, 02, 0, 0, 0, DateTimeKind.Utc),
-				EndDateTime = new DateTime(2013, 10, 02, 0, 0, 0, DateTimeKind.Utc).AddHours(24).AddMinutes(-1),
-				PersonId = person.Id.Value,
-				ScenarioId = scenario.Id.Value
-			});
-
-			var projectionChangedEvent = publisher.Published<ProjectionChangedEvent>();
-			projectionChangedEvent.ScheduleLoadTimestamp.Should().Be.EqualTo(now.UtcDateTime());
-		}
 	}
 }

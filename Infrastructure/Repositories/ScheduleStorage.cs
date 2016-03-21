@@ -159,8 +159,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				addPersonAbsences(retDic,
 								  _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork)
 													.Find(people, longDateTimePeriod, scenario));
+				var personAssignmentRepository = _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork);
 				addPersonAssignments(retDic,
-									 _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork)
+									 personAssignmentRepository
 													   .Find(people, period, scenario));
 
 				addPersonMeetings(retDic,
@@ -196,7 +197,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					}
 				}
 
-				retDic.ScheduleLoadedTime = UnitOfWork.Session().CreateSQLQuery("SELECT GETDATE()").UniqueResult<DateTime>();
+				retDic.ScheduleLoadedTime = personAssignmentRepository.GetScheduleLoadedTime();
 			}
 			retDic.TakeSnapshot();
 			return retDic;

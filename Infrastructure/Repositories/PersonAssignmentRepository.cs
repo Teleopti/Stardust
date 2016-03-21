@@ -110,5 +110,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						       .Add(Restrictions.Eq("Date", id.Date))
 						       .UniqueResult<IPersonAssignment>();
 		}
+
+		public DateTime GetScheduleLoadedTime()
+		{
+			return Session.CreateSQLQuery("SELECT GETDATE()").UniqueResult<DateTime>();
+		}
 	}
 }
