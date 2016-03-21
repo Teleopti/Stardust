@@ -1,8 +1,4 @@
-﻿using System.IO;
-using System.Reflection;
-using Manager.Integration.Test.LoadTests;
-using NUnit.Core;
-using NUnit.Core.Filters;
+﻿using Manager.Integration.Test.LoadTests;
 
 namespace Manager.Integration.LoadTests
 {
@@ -19,30 +15,30 @@ namespace Manager.Integration.LoadTests
 		{
 			// Run Nunit test programmatically.
 
-			CoreExtensions.Host.InitializeService();
+			//CoreExtensions.Host.InitializeService();
 
-			var fileInfo =
-				new FileInfo(Assembly.GetExecutingAssembly().Location);
+			//var fileInfo =
+			//	new FileInfo(Assembly.GetExecutingAssembly().Location);
 
-			var testPackage =
-				new TestPackage(Path.Combine(fileInfo.Directory.FullName,
-				                             "Manager.Integration.Test.dll"));
+			//var testPackage =
+			//	new TestPackage(Path.Combine(fileInfo.Directory.FullName,
+			//	                             "Manager.Integration.Test.dll"));
 
-			var remoteTestRunner = new RemoteTestRunner();
+			//var remoteTestRunner = new RemoteTestRunner();
 
-			remoteTestRunner.Load(testPackage);
+			//remoteTestRunner.Load(testPackage);
 
-			var testName =
-				"Manager.Integration.Test.FunctionalTests.OneManagerAndOneNodeTests.ShouldBeAbleToCreateASuccessJobRequestTest";
+			//var testName =
+			//	"Manager.Integration.Test.FunctionalTests.OneManagerAndOneNodeTests.ShouldBeAbleToCreateASuccessJobRequestTest";
 
-			var simpleNameFilter =
-				new SimpleNameFilter(testName);
+			//var simpleNameFilter =
+			//	new SimpleNameFilter(testName);
 
-			var testResult =
-				remoteTestRunner.Run(new NullListener(),
-				                     simpleNameFilter,
-				                     false,
-				                     LoggingThreshold.Error);
+			//var testResult =
+			//	remoteTestRunner.Run(new NullListener(),
+			//	                     simpleNameFilter,
+			//	                     false,
+			//	                     LoggingThreshold.Error);
 		}
 
 		private static void RunTestVersion1()
