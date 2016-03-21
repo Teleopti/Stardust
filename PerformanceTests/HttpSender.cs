@@ -78,12 +78,12 @@ namespace PerformanceTests
 				}
 			}
 
-			catch (HttpRequestException exp)
+			catch
 			{
-				
+				// ignored
 			}
 
-		
+
 			return false;
 		}
 	}
