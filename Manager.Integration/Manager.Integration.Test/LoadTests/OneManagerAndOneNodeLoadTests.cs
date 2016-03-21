@@ -9,7 +9,7 @@ namespace Manager.Integration.Test.LoadTests
 		[Test]
 		public void YourTestGoesHere()
 		{
-			
+			Assert.IsTrue(true);
 		}
 	}
 }
