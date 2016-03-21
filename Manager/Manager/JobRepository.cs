@@ -4,6 +4,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Web.Http.Results;
 using log4net;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Stardust.Manager.Extensions;
@@ -310,7 +312,7 @@ namespace Stardust.Manager
 			this.Log().DebugWithLineNumber("Finished.");
 		}
 
-		private async void tryCheckAndAssignNextJob(List<WorkerNode> availableNodes,
+		private async void TryCheckAndAssignNextJob(List<WorkerNode> availableNodes,
 		                                        IHttpSender httpSender)
 
 		{
@@ -395,8 +397,8 @@ namespace Stardust.Manager
 
 										this.Log().DebugWithLineNumber("Post async Uri : ( " + urijob + " )");
 
-										var response = await httpSender.PostAsync(urijob,
-										                                          job);
+										HttpResponseMessage response = await httpSender.PostAsync(urijob,
+																								  job);
 
 										if (response.IsSuccessStatusCode)
 										{
@@ -448,28 +450,71 @@ namespace Stardust.Manager
 
 											da.DeleteCommand.Transaction = tran;
 											da.DeleteCommand.ExecuteNonQuery();
+
 											//update history
 											da.UpdateCommand =
-												new SqlCommand("UPDATE [Stardust].JobHistory SET Result = @Result, SentTo = @Node WHERE JobId = @Id",
+												new SqlCommand("UPDATE [Stardust].JobHistory " +
+												               "SET Result = @Result, SentTo = @Node WHERE JobId = @Id",
 												               connection);
 											da.UpdateCommand.Parameters.Add("@Id",
 											                                SqlDbType.UniqueIdentifier,
 											                                16,
 											                                "JobId");
 											da.UpdateCommand.Parameters[0].Value = job.Id;
+
 											da.UpdateCommand.Parameters.Add("@Result",
 											                                SqlDbType.NVarChar,
 											                                200,
 											                                "Result");
 											da.UpdateCommand.Parameters[1].Value = "Removed because of bad request";
+
 											da.UpdateCommand.Parameters.Add("@Node",
 											                                SqlDbType.NVarChar,
 											                                2000,
 											                                "SentTo");
 											da.UpdateCommand.Parameters[2].Value = node.Url.ToString();
 
+
 											da.UpdateCommand.Transaction = tran;
 											da.UpdateCommand.ExecuteNonQuery();
+
+
+											//insert into history detail.
+											if (response.Content != null)
+											{
+												var reason =
+													response.Content.ReadAsStringAsync().Result;
+
+												string insertcommand = @"INSERT INTO [Stardust].[JobHistoryDetail]
+																	([JobId]
+																	,[Created]
+																	,[Detail])
+																VALUES
+																	(@JobId
+																	,@Created
+																	,@Detail)";
+
+												da.InsertCommand = new SqlCommand(insertcommand, connection);
+
+												da.InsertCommand.Parameters.Add("@JobId",
+																				SqlDbType.UniqueIdentifier,
+																				16);
+												da.InsertCommand.Parameters[0].Value = job.Id;
+
+
+												da.InsertCommand.Parameters.Add("@Detail",
+																				SqlDbType.NText);
+												da.InsertCommand.Parameters[1].Value = reason;
+
+												da.InsertCommand.Parameters.Add("@Created",
+																				SqlDbType.DateTime,
+																				16);
+												da.InsertCommand.Parameters[2].Value = DateTime.Now;
+
+												da.InsertCommand.Transaction = tran;
+												da.InsertCommand.ExecuteNonQuery();
+											}
+
 										}
 									}
 
@@ -503,7 +548,7 @@ namespace Stardust.Manager
 		public void CheckAndAssignNextJob(List<WorkerNode> availableNodes,
 			IHttpSender httpSender)
 		{
-			runner(() => tryCheckAndAssignNextJob(availableNodes, httpSender), "Unable to perform operation");
+			runner(() => TryCheckAndAssignNextJob(availableNodes, httpSender), "Unable to perform operation");
 		}
 
 		private async void tryCancelThisJob(Guid jobId,

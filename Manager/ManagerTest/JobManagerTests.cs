@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web.Http.Results;
 using log4net.Config;
 using ManagerTest.Database;
 using ManagerTest.Fakes;
@@ -173,8 +174,19 @@ namespace ManagerTest
 				Serialized = "",
 				Type = ""
 			});
-			WorkerNodeRepository.Add(new WorkerNode {Id = Guid.NewGuid(), Url = _nodeUri1});
-			FakeHttpSender.Responses = new List<HttpResponseMessage> {new HttpResponseMessage(HttpStatusCode.BadRequest)};
+			
+			WorkerNodeRepository.Add(new WorkerNode
+			{
+				Id = Guid.NewGuid(), Url = _nodeUri1
+			});
+
+			FakeHttpSender.Responses = new List<HttpResponseMessage>
+			{
+				new HttpResponseMessage(HttpStatusCode.BadRequest)
+				{
+					Content = new StringContent("Fake content")
+				}
+			};
 
 			JobManager.CheckAndAssignNextJob();
 			var job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -112,6 +113,7 @@ namespace Stardust.Node.Workers
 				{
 					return new ConflictResult(requestMessage);
 				}
+
 				if (string.IsNullOrEmpty(jobToDo.Type))
 				{
 					return new BadRequestResult(requestMessage);

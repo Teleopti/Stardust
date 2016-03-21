@@ -6,10 +6,7 @@ using Autofac.Extras.DynamicProxy2;
 using log4net;
 using Stardust.Node.Constants;
 using Stardust.Node.Entities;
-using Stardust.Node.Extensions;
-using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Log4Net;
 using Stardust.Node.Log4Net.Extensions;
 
 namespace Stardust.Node.API
@@ -21,26 +18,48 @@ namespace Stardust.Node.API
 
 		private readonly IWorkerWrapper _workerWrapper;
 
-		public NodeController(IWorkerWrapper workerWrapper)
+		public NodeController(IWorkerWrapper workerWrapper,
+		                      INodeConfiguration nodeConfiguration)
 		{
 			_workerWrapper = workerWrapper;
+			NodeConfiguration = nodeConfiguration;
 		}
+
+		private INodeConfiguration NodeConfiguration { get; set; }
 
 		[HttpPost, AllowAnonymous, Route(NodeRouteConstants.Job)]
 		public IHttpActionResult StartJob(JobToDo jobToDo)
 		{
-			if (jobToDo == null)
+			if (jobToDo == null || jobToDo.Id == Guid.Empty)
 			{
-				Logger.InfoWithLineNumber(_workerWrapper.WhoamI + "Received Start Job Request. jobId is null");
-				return BadRequest("jobToDo is null");
+				Logger.InfoWithLineNumber(_workerWrapper.WhoamI + "Received Start Job Request. Invalid job to do.");
+
+				return BadRequest("Invalid job to do.");
+			}
+
+			if (string.IsNullOrEmpty(jobToDo.Type))
+			{
+				Logger.InfoWithLineNumber(_workerWrapper.WhoamI + "Received Start Job Request. Invalid job type.");
+
+				return BadRequest("Invalid job type.");
+			}
+
+			var typ = NodeConfiguration.HandlerAssembly.GetType(jobToDo.Type);
+
+			if (typ == null)
+			{
+				Logger.WarningWithLineNumber(string.Format(_workerWrapper.WhoamI +
+				                                           ": The job type [{0}] could not be resolved. The job cannot be started.",
+				                                           jobToDo.Type));
+
+				return BadRequest("Job type : " + jobToDo.Type + ", could not be resolved.");
 			}
 
 			var msg =
-					string.Format(
-						"{0} : Received Start Job Request. ( jobId, jobName ) : ( {1}, {2} )",
-						_workerWrapper.WhoamI,
-						jobToDo.Id,
-						jobToDo.Name);
+				string.Format("{0} : Received Start Job Request. ( jobId, jobName ) : ( {1}, {2} )",
+				              _workerWrapper.WhoamI,
+				              jobToDo.Id,
+				              jobToDo.Name);
 
 			Logger.InfoWithLineNumber(msg);
 
@@ -55,12 +74,13 @@ namespace Stardust.Node.API
 
 				Logger.WarningWithLineNumber(msgExecuting);
 
-				return CreateConflictStatusCode();
+				return new ConflictResult(Request);
 			}
 
 			var response = _workerWrapper.ValidateStartJob(jobToDo,
-															Request);
-			if (response.GetType() != typeof(OkResult))
+			                                               Request);
+
+			if (response.GetType() != typeof (OkResult))
 			{
 				return response;
 			}
@@ -113,8 +133,8 @@ namespace Stardust.Node.API
 			}
 
 			Logger.WarningWithLineNumber(_workerWrapper.WhoamI +
-			                                   ": Could not cancel job since job not found on this node. Manager sent job ( jobId ) : ( " +
-			                                   jobId + " )");
+			                             ": Could not cancel job since job not found on this node. Manager sent job ( jobId ) : ( " +
+			                             jobId + " )");
 			return NotFound();
 		}
 
@@ -122,11 +142,6 @@ namespace Stardust.Node.API
 		public IHttpActionResult IsAlive()
 		{
 			return Ok();
-		}
-
-		private IHttpActionResult CreateConflictStatusCode()
-		{
-			return Conflict();
 		}
 	}
 }

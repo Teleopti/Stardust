@@ -128,7 +128,7 @@ namespace NodeTest
 											   _trySendJobProgressToManagerTimerFake,
 											   new FakeHttpSender());
 
-			_nodeController = new NodeController(_workerWrapper)
+			_nodeController = new NodeController(_workerWrapper,_nodeConfigurationFake)
 			{
 				Request = new HttpRequestMessage()
 			};
@@ -152,7 +152,7 @@ namespace NodeTest
 											   _trySendJobProgressToManagerTimerFake,
 											   new FakeHttpSender());
 
-			_nodeController = new NodeController(_workerWrapper) {Request = new HttpRequestMessage()};
+			_nodeController = new NodeController(_workerWrapper,_nodeConfigurationFake) {Request = new HttpRequestMessage()};
 
 			var wrongJobToDo = new JobToDo
 			{
@@ -181,7 +181,10 @@ namespace NodeTest
 											   _trySendJobProgressToManagerTimerFake,
 											   new FakeHttpSender());
 
-			_nodeController = new NodeController(_workerWrapper) {Request = new HttpRequestMessage()};
+			_nodeController = new NodeController(_workerWrapper,_nodeConfigurationFake)
+			{
+				Request = new HttpRequestMessage()
+			};
 
 			_nodeController.StartJob(_jobToDo);
 
@@ -205,7 +208,10 @@ namespace NodeTest
 											   _trySendJobProgressToManagerTimerFake,
 											   new FakeHttpSender());
 
-			_nodeController = new NodeController(_workerWrapper) {Request = new HttpRequestMessage()};
+			_nodeController = new NodeController(_workerWrapper,_nodeConfigurationFake)
+			{
+				Request = new HttpRequestMessage()
+			};
 
 			var actionResult = _nodeController.TryCancelJob(Guid.Empty);
 			Assert.IsInstanceOf(typeof (BadRequestErrorMessageResult),
@@ -225,7 +231,10 @@ namespace NodeTest
 											   _trySendJobProgressToManagerTimerFake,
 											   new FakeHttpSender());
 
-			_nodeController = new NodeController(_workerWrapper) {Request = new HttpRequestMessage()};
+			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
+			{
+				Request = new HttpRequestMessage()
+			};
 
 
 			var actionResult = _nodeController.StartJob(null);
@@ -247,7 +256,10 @@ namespace NodeTest
 											   _trySendJobProgressToManagerTimerFake,
 											   new FakeHttpSender());
 
-			_nodeController = new NodeController(_workerWrapper) {Request = new HttpRequestMessage()};
+			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
+			{
+				Request = new HttpRequestMessage()
+			};
 
 			var parameters = new TestJobParams("hejhopp",
 			                                   "i lingonskogen");
@@ -283,7 +295,7 @@ namespace NodeTest
 			                                   _trySendJobProgressToManagerTimerFake,
 			                                   new FakeHttpSender());
 
-			_nodeController = new NodeController(_workerWrapper)
+			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
 			{
 				Request = new HttpRequestMessage()
 			};
