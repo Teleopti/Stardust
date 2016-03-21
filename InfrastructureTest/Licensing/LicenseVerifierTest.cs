@@ -179,19 +179,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 		}
 
 		[Test]
-		public void ShouldSayExpiredIfNoMajorVersion()
+		public void ShouldSayNeedNewPAKIfNoMajorVersion()
 		{
 			var unitOfWork = _mocks.DynamicMock<IUnitOfWork>();
 			using (_mocks.Record())
 			{
 				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(_unitOfWorkFactory.Name).Return("datasource name");
-				Expect.Call(() => _licenseFeedback.Error("datasource name\r\n" + Resources.ProductActivationKeyHasExpiredPleaseApplyANewOne));
+				Expect.Call(() => _licenseFeedback.Error("datasource name\r\n" + Resources.ProductActivationKeyMajorVersionWrong));
 			}
 			using (_mocks.Playback())
 			{
 				_target = new licenseVerifierForTest(() => { throw new MajorVersionNotFoundException(); }, _licenseFeedback,
-																																																					 _unitOfWorkFactory, _licenseRepository);
+																 _unitOfWorkFactory, _licenseRepository);
 				_target.LoadAndVerifyLicense().Should().Be.Null();
 			}
 		}

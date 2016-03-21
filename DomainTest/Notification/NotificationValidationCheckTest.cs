@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			_target = new NotificationValidationCheck(_significantChangeChecker, _notifier, _currentUnitOfWorkFactory);
 
 			DefinedLicenseDataFactory.SetLicenseActivator(_currentUnitOfWorkFactory.Current().Name, new LicenseActivator("", DateTime.Today.AddDays(100), 1000, 1000,
-																			  LicenseType.Agent, new Percent(.10), null, null));
+																			  LicenseType.Agent, new Percent(.10), null, null, "8"));
 		}
 
 		private void setValidLicense()

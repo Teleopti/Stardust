@@ -20862,21 +20862,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This system is licensed to &quot;{0}&quot; according to the terms and conditions of the license agreement and the product activation key will expire {1}.
-        ///
-        ///The product activation key covers a maximum of {2} active agents.
-        ///
-        ///The product activation key schema is &quot;{3}&quot;.
-        ///These options are activated:
-        ///{4}.
-        /// </summary>
-        public static string ProductActivationKey {
-            get {
-                return ResourceManager.GetString("ProductActivationKey", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Product activation key successfully applied.
         ///Congratulations! You are now a licensed user of this award winning workforce management solution.
         ///The application will now exit.
@@ -20905,6 +20890,32 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne {
             get {
                 return ResourceManager.GetString("ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A Teleopti WFM version 8 Product Activation Key is required to run the system, please contact Service Desk or your Account Manager to request a new PAK..
+        /// </summary>
+        public static string ProductActivationKeyMajorVersionWrong {
+            get {
+                return ResourceManager.GetString("ProductActivationKeyMajorVersionWrong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This system is licensed to &quot;{0}&quot; according to the terms and conditions of the license agreement and the product activation key will expire {1}.
+        ///
+        ///The product activation key covers a maximum of {2} active agents.
+        ///
+        ///Major version: {5}
+        ///
+        ///The product activation key schema is &quot;{3}&quot;.
+        ///These options are activated:
+        ///{4}.
+        /// </summary>
+        public static string ProductActivationKeyV8 {
+            get {
+                return ResourceManager.GetString("ProductActivationKeyV8", resourceCulture);
             }
         }
         
@@ -24554,13 +24565,15 @@ namespace Teleopti.Ccc.UserTexts {
         ///
         ///The product activation key covers a maximum of {2} seats.
         ///
+        ///Major version: {5}
+        ///
         ///The product activation key schema is &quot;{3}&quot;.
         ///These options are activated:
         ///{4}.
         /// </summary>
-        public static string SeatProductActivationKey {
+        public static string SeatProductActivationKeyV8 {
             get {
-                return ResourceManager.GetString("SeatProductActivationKey", resourceCulture);
+                return ResourceManager.GetString("SeatProductActivationKeyV8", resourceCulture);
             }
         }
         

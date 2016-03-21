@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 {
@@ -10,9 +9,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 
 	public delegate bool IsThisAlmostTooManyActiveAgents(int maxLicensedActiveAgents, int activeAgents);
 
-	/// <summary>
-	/// License activator class. Activates the license schema.
-	/// </summary>
 	public class LicenseActivator : ILicenseActivator
 	{
 
@@ -27,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 		}
 
 		public LicenseActivator(string customerName, DateTime expirationDate, int maxActiveAgents, int maxSeats, LicenseType licenseType, Percent maxActiveAgentsGrace,
-				IsThisAlmostTooManyActiveAgents isThisAlmostTooManyActiveAgents, IsThisTooManyActiveAgents isThisTooManyActiveAgents)
+				IsThisAlmostTooManyActiveAgents isThisAlmostTooManyActiveAgents, IsThisTooManyActiveAgents isThisTooManyActiveAgents, string majorVersion)
 		{
 			CustomerName = customerName;
 			ExpirationDate = expirationDate;
@@ -37,6 +33,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 			MaxActiveAgentsGrace = maxActiveAgentsGrace;
 			_isThisTooManyActiveAgents = isThisTooManyActiveAgents;
 			_isThisAlmostTooManyActiveAgents = isThisAlmostTooManyActiveAgents;
+			MajorVersion = majorVersion;
 		}
 
 
@@ -59,6 +56,8 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 		}
 
 		public string CustomerName { get; private set; }
+
+		public string MajorVersion { get; private set; }
 
 		public DateTime ExpirationDate { get; private set; }
 

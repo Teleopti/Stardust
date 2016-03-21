@@ -1,47 +1,26 @@
-﻿#region Imports
-
-using System;
+﻿using System;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
-
-#endregion
 
 namespace Teleopti.Ccc.Infrastructure.Licensing
 {
-    /// <summary>
-    /// Initializes the LicenseActivator using the appropriate licensing mechanism, so that 
-    /// License information is available to the rest of the system
-    /// </summary>
-    /// <remarks>
-    /// Created by: Klas
-    /// Created date: 2008-12-03
-    /// </remarks>
     public static class LicenseProvider
     {
-        /// <summary>
-        /// Initializes the license activator using the license service
-        /// </summary>
-        /// <param name="licenseService">The license service.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Klas
-        /// Created date: 2008-12-03
-		/// </remarks>
+
 		public static ILicenseActivator GetLicenseActivator(ILicenseService licenseService)
         {
             if (licenseService == null) throw new ArgumentNullException("licenseService");
 
-            ILicenseActivator licenseActivator = new LicenseActivator(licenseService.CustomerName,
-                                                                      licenseService.ExpirationDate,
-                                                                      licenseService.MaxActiveAgents,
-																	  licenseService.MaxSeats,
-																	  licenseService.LicenseType,
-																																			new Percent(licenseService.MaxActiveAgentsGrace), 
-																																			LicenseActivator.IsThisAlmostTooManyActiveAgents,
-																																			LicenseActivator.IsThisTooManyActiveAgents);
+			ILicenseActivator licenseActivator = new LicenseActivator(licenseService.CustomerName,
+																						 licenseService.ExpirationDate,
+																						 licenseService.MaxActiveAgents,
+																						 licenseService.MaxSeats,
+																						 licenseService.LicenseType,
+																						 new Percent(licenseService.MaxActiveAgentsGrace),
+																						 LicenseActivator.IsThisAlmostTooManyActiveAgents,
+																						 LicenseActivator.IsThisTooManyActiveAgents, "8"); // licenseService.MajorVersion);
 
             if (licenseService.TeleoptiCccPilotCustomersBaseEnabled)
                 licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersBase);

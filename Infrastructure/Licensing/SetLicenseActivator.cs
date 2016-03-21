@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 		{
 			//don't really know what this does - extracted from web startup
 			var licenseVerifier = _licenseVerifierFactory.Create(this, dataSource.Application);
-			var licenseService = licenseVerifier.LoadAndVerifyLicense();
+			var licenseService = licenseVerifier.LoadAndVerifyLicense(true);
 			if (licenseService != null)
 			{
 				LicenseProvider.ProvideLicenseActivator(dataSource.DataSourceName, licenseService);

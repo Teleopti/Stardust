@@ -5808,10 +5808,12 @@ Error details:
     <value>Someone changed the same data before you.</value>
     <comment>Error messag</comment>
   </data>
-  <data name="ProductActivationKey" xml:space="preserve">
+  <data name="ProductActivationKeyV8" xml:space="preserve">
     <value>This system is licensed to "{0}" according to the terms and conditions of the license agreement and the product activation key will expire {1}.
 
 The product activation key covers a maximum of {2} active agents.
+
+Major version: {5}
 
 The product activation key schema is "{3}".
 These options are activated:
@@ -9917,10 +9919,12 @@ Period</comment>
   <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
     <value>This product activation key only covers {0} seats. You must get a product activation key that covers enough seats.</value>
   </data>
-  <data name="SeatProductActivationKey" xml:space="preserve">
+  <data name="SeatProductActivationKeyV8" xml:space="preserve">
     <value>This system is licensed to "{0}" according to the terms and conditions of the license agreement and the product activation key will expire {1}.
 
 The product activation key covers a maximum of {2} seats.
+
+Major version: {5}
 
 The product activation key schema is "{3}".
 These options are activated:
@@ -14197,6 +14201,10 @@ Help us improve your experience by sending an error report</value>
   <data name="CanNotModifyMyRole" xml:space="preserve">
     <value>You can not modify your own role</value>
     <comment>Alert when atempting to modify own roles permissions</comment>
+  </data>
+  <data name="ProductActivationKeyMajorVersionWrong" xml:space="preserve">
+    <value>A Teleopti WFM version 8 Product Activation Key is required to run the system, please contact Service Desk or your Account Manager to request a new PAK.</value>
+    <comment>Message shown when starting system with old License without Major Version</comment>
   </data>
   <data name="Replan" xml:space="preserve">
     <value>Replan</value>

@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 {
 	public interface ILicenseVerifier
 	{
-		ILicenseService LoadAndVerifyLicense();
+		ILicenseService LoadAndVerifyLicense(bool ignoreNoMajorVersion = false);
 	}
 }

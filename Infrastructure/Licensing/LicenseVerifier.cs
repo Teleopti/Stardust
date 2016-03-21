@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 				}
 				catch (MajorVersionNotFoundException)
 				{
-					_licenseFeedback.Error(_unitOfWorkFactory.Name + "\r\n" + Resources.ProductActivationKeyHasExpiredPleaseApplyANewOne);
+					_licenseFeedback.Error(_unitOfWorkFactory.Name + "\r\n" + Resources.ProductActivationKeyMajorVersionWrong);
 					licenseService = null;
 				}
 				return licenseService;

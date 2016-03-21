@@ -53,13 +53,12 @@ namespace Teleopti.Ccc.Win.Main
             {
                 options.AppendLine(option);
             }
-        	var licenseResource = Resources.ProductActivationKey;
+        	var licenseResource = Resources.ProductActivationKeyV8;
         	var max = license.MaxActiveAgents;
 
 			if(license.LicenseType == LicenseType.Seat)
 			{
-				licenseResource = Resources.SeatProductActivationKey;
-				max = license.MaxSeats;
+				licenseResource = Resources.SeatProductActivationKeyV8;
 				labelActiveAgentsInUse.Text = "";
 				labelActiveAgentsOrSeats.Text = "";
 				buttonAdvViewActive.Visible = false;
@@ -71,7 +70,7 @@ namespace Teleopti.Ccc.Win.Main
                 license.ExpirationDate,
                 max,
                 license.EnabledLicenseSchemaName,
-                options);
+                options,license.MajorVersion);
 
             return licenseText;
         }
