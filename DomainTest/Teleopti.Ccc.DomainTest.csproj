@@ -219,6 +219,7 @@
     <Compile Include="Common\TimeLogger\LogTimeTest.cs" />
     <Compile Include="Common\TimeLogger\LogTimeTester.cs" />
     <Compile Include="DayOffPlanning\SkillGroupIslandsAnalyzerTest.cs" />
+    <Compile Include="DayOffPlanning\SkillGroupReducerForCascadingSkillsTest.cs" />
     <Compile Include="DayOffPlanning\SkillGroupReducerTest.cs" />
     <Compile Include="DayOffPlanning\VirtualSkillGroupsCreatorTest.cs" />
     <Compile Include="Forecasting\OverrideTaskTest.cs" />
@@ -1431,6 +1432,7 @@
     <Compile Include="Scheduling\Assignment\PersonAssignmentTest.cs" />
     <Compile Include="Security\RegExpSpecificationTest.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
+    <Compile Include="Shoveling\ShovelServicePocTest.cs" />
     <Compile Include="Specification\AllTest.cs" />
     <Compile Include="Specification\SpecificationTest.cs" />
     <Compile Include="SystemSetting\GlobalSetting\CommonNameDescriptionSettingTest.cs" />
