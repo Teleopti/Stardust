@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		{
 			var timeZone = Person.PermissionInformation.DefaultTimeZone();
 			var culture = Person.PermissionInformation.Culture();
-			var hasBeenWaitlisted = IsWaitlisted();
+			var hasBeenWaitlisted = ((PersonRequest)Parent).IsWaitlisted;
 
 			var absenceRequestMsgForOneDay = hasBeenWaitlisted ? "AbsenceRequestForOneDayHasBeenWaitlisted" : "AbsenceRequestForOneDayHasBeenDeniedDot";
 			var absenceRequestMsg = hasBeenWaitlisted ? "AbsenceRequestHasBeenWaitlisted" : "AbsenceRequestHasBeenDeniedDot";
@@ -78,16 +78,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			}
 		}
 
-	    public virtual bool IsWaitlisted()
-	    {
-			var personRequest = (PersonRequest)Parent;
-		    return 
-				Person.WorkflowControlSet != null && 
-				Person.WorkflowControlSet.WaitlistingIsEnabled (this) && 
-				personRequest.IsAutoDenied;
-	    }
-
-	    private bool isRequestForOneLocalDay(TimeZoneInfo timeZone)
+		private bool isRequestForOneLocalDay(TimeZoneInfo timeZone)
     	{
     		return Period.StartDateTimeLocal(timeZone).Date == Period.EndDateTimeLocal(timeZone).Date;
     	}

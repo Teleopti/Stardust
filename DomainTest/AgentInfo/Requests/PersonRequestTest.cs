@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		{
 			Assert.IsTrue(_target.IsNew);
 
-			_target.Deny(null, "DeniedDueToRain", _authorization);
+			_target.Deny(null, "DeniedDueToRain", _authorization, true);
 			Assert.IsTrue(_target.IsDenied);
 			Assert.IsTrue(_target.IsAutoDenied);
 

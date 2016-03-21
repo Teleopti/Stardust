@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			Assert.IsTrue(existingDeniedRequest.IsApproved);
 			Assert.IsNullOrEmpty (existingDeniedRequest.DenyReason);
 			//new request should be denied as is a request for the same day as the accepted absence request
-			Assert.IsTrue(newRequest.IsAutoDenied);
+			Assert.IsTrue(newRequest.IsWaitlisted);
 		}
 
 		[Test]
@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			newAbsenceRequestConsumer.Consume(new NewAbsenceRequestCreated() { PersonRequestId = newRequest.Id.Value });
 
 			Assert.IsTrue(newRequest.IsApproved);
-			Assert.IsTrue(existingDeniedRequest.IsAutoDenied);
+			Assert.IsTrue(existingDeniedRequest.IsWaitlisted);
 		}
 
 		[Test]
@@ -311,15 +311,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			var workflowControlSetTwo = createWorkFlowControlSet(new DateTime(2016, 01, 01), new DateTime(2016, 12, 31), absence, new GrantAbsenceRequest(), true);
 			var personTwo = createAndSetupPerson(startDateTime, endDateTime, workflowControlSetTwo);
 
-			var existingDeniedRequest = createAbsenceRequest(personOne, absence, requestDateTimePeriod);
-			existingDeniedRequest.Deny(null, "Work Hard!", new PersonRequestAuthorizationCheckerForTest());
+			var existingWaitlistedRequest = createAbsenceRequest(personOne, absence, requestDateTimePeriod);
+			existingWaitlistedRequest.Deny(null, "Work Hard!", new PersonRequestAuthorizationCheckerForTest());
 
 			var newRequest = createAbsenceRequest(personTwo, absence, requestDateTimePeriod);
 			var newAbsenceRequestConsumer = createNewAbsenceRequestConsumer(true, false);
 
 			newAbsenceRequestConsumer.Consume(new NewAbsenceRequestCreated() { PersonRequestId = newRequest.Id.Value });
 
-			Assert.IsTrue(existingDeniedRequest.IsDenied);
+			Assert.IsTrue(existingWaitlistedRequest.IsWaitlisted);
 			Assert.IsTrue(newRequest.IsApproved);
 		}
 
@@ -410,13 +410,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			return personRequest;
 		}
 
-		private PersonRequest simpleRequestStatusTest(IProcessAbsenceRequest processAbsenceRequest, bool forcePersonalAccountUpdate = false)
+		private PersonRequest simpleRequestStatusTest(IProcessAbsenceRequest processAbsenceRequest, bool forcePersonalAccountUpdate = false, bool enableWaitlisting = false)
 		{
 			var startDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
 			var endDateTime = new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc);
 
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
-			var workflowControlSet = createWorkFlowControlSet(new DateTime(2016, 01, 01), new DateTime(2016, 12, 31), absence, processAbsenceRequest, false);
+			var workflowControlSet = createWorkFlowControlSet(new DateTime(2016, 01, 01), new DateTime(2016, 12, 31), absence, processAbsenceRequest, enableWaitlisting);
 			var person = createAndSetupPerson(startDateTime, endDateTime, workflowControlSet);
 
 			var newAbsenceRequestConsumer = createNewAbsenceRequestConsumer(false, forcePersonalAccountUpdate);
@@ -443,6 +443,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		private static WorkflowControlSet createWorkFlowControlSet(DateTime startDate, DateTime endDate, IAbsence absence, IProcessAbsenceRequest processAbsenceRequest, bool waitlistingIsEnabled)
 		{
 			var workflowControlSet = new WorkflowControlSet { AbsenceRequestWaitlistEnabled = waitlistingIsEnabled };
+			workflowControlSet.SetId (Guid.NewGuid());
 
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
 

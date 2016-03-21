@@ -169,11 +169,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		{
 			authorization.VerifyEditRequestPermission(this);
 
-			if (CanDeny (isAutoDeny))
+			if (CanDeny(isAutoDeny))
 			{
 				RequestState.Deny();
 			}
-			
+
 			var request = getRequest();
 			if (request != null)
 			{
@@ -185,9 +185,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		}
 
 
-		public bool CanDeny(bool isAutoDeny)
+		public virtual bool CanDeny(bool isAutoDeny)
 		{
-			return (!isAutoDeny && RequestState.IsAutoDenied) || (!IsDenied);
+			return (!isAutoDeny && IsWaitlisted) || (!IsDenied);
 
 		}
 
@@ -407,9 +407,37 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private void moveToDenied(bool autoDenied = false)
 		{
 			if (autoDenied)
-				RequestState = new autoDeniedPersonRequest(this);
+			{
+				if (waitlistingIsEnabled())
+				{
+					RequestState = new waitListedPersonRequest(this);
+				}
+				else
+				{
+					RequestState = new autoDeniedPersonRequest(this);
+				}
+			}
 			else
+			{
 				RequestState = new deniedPersonRequest(this);
+			}
+		}
+
+
+		private bool waitlistingIsEnabled()
+		{
+			var absenceRequest = getRequest() as IAbsenceRequest;
+
+			if (absenceRequest != null)
+			{
+				var workflowControlSet = Person.WorkflowControlSet;
+				if (workflowControlSet != null && workflowControlSet.WaitlistingIsEnabled(absenceRequest))
+				{
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		private void movetoNew()
@@ -441,6 +469,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		{
 			get { return RequestState.IsAutoDenied; }
 		}
+
+		public virtual bool IsWaitlisted
+		{
+			get { return RequestState.IsWaitlisted; }
+		}
+
 
 		public virtual bool IsApproved
 		{
@@ -483,7 +517,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		{
 			protected readonly PersonRequest PersonRequest;
 			private readonly int _requestStatusId;
-
+			
 			protected personRequestState(PersonRequest personRequest, int requestStatusId)
 			{
 				PersonRequest = personRequest;
@@ -501,6 +535,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			}
 
 			protected internal virtual bool IsAutoDenied
+			{
+				get { return false; }
+			}
+
+			protected internal virtual bool IsWaitlisted
 			{
 				get { return false; }
 			}
@@ -570,6 +609,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 						return new newPersonRequest(personRequest);
 					case 4:
 						return new autoDeniedPersonRequest(personRequest);
+					case 5:
+						return new waitListedPersonRequest(personRequest);
 				}
 				throw new ArgumentOutOfRangeException("requestStatusId", "The request status id is invalid");
 			}
@@ -648,61 +689,60 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 			protected internal override bool IsAutoDenied
 			{
+				get
+				{
+					return true;
+				}
+			}
+			
+			protected internal override string StatusText
+			{
+				get
+				{
+					return Resources.Denied;
+				}
+			}
+		}
+
+		private class waitListedPersonRequest : personRequestState
+		{
+			public waitListedPersonRequest(PersonRequest personRequest)
+				: base(personRequest, 5)
+			{
+			}
+			protected internal override bool IsDenied
+			{
+				get
+				{
+					return true;
+				}
+			}
+			
+			protected internal override bool IsWaitlisted
+			{
 				get { return true; }
 			}
 
+
 			protected internal override void Approve(bool isAutoGrant)
 			{
-				if (waitlistingIsEnabled())
-				{
-					PersonRequest.moveToApproved(isAutoGrant);
-				}
-				else
-				{
-					base.Approve(isAutoGrant);
-				}
+				PersonRequest.moveToApproved(isAutoGrant);
 			}
 
 			protected internal override void Deny()
 			{
-				if (waitlistingIsEnabled())
-				{
-					PersonRequest.moveToDenied();
-				}
-				else
-				{
-					base.Deny();
-				}
+				PersonRequest.moveToDenied();
 			}
 
 			protected internal override string StatusText
 			{
 				get
 				{
-					return waitlistingIsEnabled() ? Resources.ResourceManager.GetString("Waitlisted") : Resources.Denied;
+					return Resources.Waitlisted;
 				}
-			}
-
-
-			private bool waitlistingIsEnabled()
-			{
-				var absenceRequest = PersonRequest.getRequest() as IAbsenceRequest;
-
-				if (absenceRequest != null)
-				{
-					var workflowControlSet = PersonRequest.Person.WorkflowControlSet;
-					if (workflowControlSet != null)
-					{
-						if (workflowControlSet.WaitlistingIsEnabled(absenceRequest))
-						{
-							return true;
-						}
-					}
-				}
-
-				return false;
 			}
 		}
+
 
 		private class pendingPersonRequest : personRequestState
 		{

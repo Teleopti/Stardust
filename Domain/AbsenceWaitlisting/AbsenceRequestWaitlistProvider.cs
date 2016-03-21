@@ -19,9 +19,10 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 
 		public int GetPositionInWaitlist (IAbsenceRequest absenceRequest)
 		{
-			if (absenceRequest.IsWaitlisted())
+			var personRequest = absenceRequest.Parent as PersonRequest;
+
+			if (personRequest != null && personRequest.IsWaitlisted)
 			{
-				var personRequest = absenceRequest.Parent as PersonRequest;
 				var queryAbsenceRequestsPeriod = absenceRequest.Period.ChangeEndTime (TimeSpan.FromSeconds (-1));
 				var waitlistedRequests = GetWaitlistedRequests(queryAbsenceRequestsPeriod, absenceRequest.Person.WorkflowControlSet).ToList();
 				var index = waitlistedRequests.FindIndex(perRequest => perRequest.Id == personRequest.Id);
@@ -49,9 +50,8 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 		
 		private static bool requestShouldBeProcessed(IPersonRequest request, IWorkflowControlSet workflowControlSet)
 		{
-			return !request.IsApproved
-					&& request.Person.WorkflowControlSet == workflowControlSet
-					&& !request.WasManuallyDenied;
+			return ( request.IsWaitlisted || request.IsNew ) && request.Person.WorkflowControlSet == workflowControlSet;
+
 		}
 	}
 }

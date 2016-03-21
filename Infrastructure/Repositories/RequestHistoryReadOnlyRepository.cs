@@ -60,6 +60,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 if (RequestStatus == 1 || RequestStatus == 4)
                     return UserTexts.Resources.Denied;
 
+	            if (RequestStatus == 5)
+		            return UserTexts.Resources.Waitlisted;
+
                 return UserTexts.Resources.Approved;
             }
         }

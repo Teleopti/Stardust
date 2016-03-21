@@ -19,6 +19,5 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         IAbsence Absence { get; }
 
-	    bool IsWaitlisted();
     }
 }

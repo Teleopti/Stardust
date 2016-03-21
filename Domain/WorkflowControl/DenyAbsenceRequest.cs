@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         {
             UndoAll(requiredForProcessingAbsenceRequest);
             var personRequest = (IPersonRequest)absenceRequest.Parent;
-            personRequest.Deny(processingPerson, DenyReason, requiredForProcessingAbsenceRequest.Authorization);
+            personRequest.Deny(processingPerson, DenyReason, requiredForProcessingAbsenceRequest.Authorization, true);
         }
 
         public override bool Equals(object obj)

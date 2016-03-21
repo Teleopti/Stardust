@@ -148,13 +148,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var person = PersonFactory.CreatePerson("tester");
 
 			person.WorkflowControlSet = createWorkFlowControlSet(new DateTime(2016, 2, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 4, 1, 23, 00, 00, DateTimeKind.Utc), absence);
-			var waitlistedPersonRequest = createAutoDeniedAbsenceRequest(person, absence,
+			var waitlistedPersonRequest = createWaitlistedAbsenceRequest(person, absence,
 				new DateTimePeriod(
 					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
 					new DateTime(2016, 3, 1, 23, 00, 00, DateTimeKind.Utc)));
 
 			Target.DenyRequests(new List<Guid> { waitlistedPersonRequest.Id.Value });
-			((AbsenceRequest)waitlistedPersonRequest.Request).IsWaitlisted().Should().Be.False();
+			waitlistedPersonRequest.IsWaitlisted.Should().Be.False();
 			waitlistedPersonRequest.IsDenied.Should().Be.True();
 		}
 
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 				new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
 				new DateTime(2016, 3, 1, 23, 00, 00, DateTimeKind.Utc));
 			
-			var waitlistedPersonRequest = createAutoDeniedAbsenceRequest(person, absence, dateTimePeriod);
+			var waitlistedPersonRequest = createWaitlistedAbsenceRequest(person, absence, dateTimePeriod);
 			
 			requestApprovalService.Stub(x => x.ApproveAbsence(absence, dateTimePeriod, person)).Return(new List<IBusinessRuleResponse>());
 			Target.ApproveRequests(new List<Guid> { waitlistedPersonRequest.Id.Value });
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			waitlistedPersonRequest.IsApproved.Should().Be.True();
 		}
 
-		private IPersonRequest createAutoDeniedAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod requestDateTimePeriod)
+		private IPersonRequest createWaitlistedAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod requestDateTimePeriod)
 		{
 			return createAbsenceRequest(person, absence, requestDateTimePeriod, true);
 		}
