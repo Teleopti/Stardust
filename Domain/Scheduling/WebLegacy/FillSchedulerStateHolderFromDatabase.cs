@@ -53,18 +53,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		protected override void FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
 		{
-			var allPeople = _personRepository.FindPeopleInOrganization(period, true);
+			var allPeople = _personRepository.FindPeopleInOrganizationLight(period);
 			schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization = allPeople.ToList();
 			allPeople.ForEach(x => schedulerStateHolderTo.AllPermittedPersons.Add(x));
 		}
 
 		protected override void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<ISkill> skills, DateOnlyPeriod period)
 		{
-			var allSkills = _skillRepository.FindAllWithSkillDays(period).ToArray();
-			var skillsToUse = allSkills.Where(skills.Contains).ToArray();
-			var forecast = _skillDayLoadHelper.LoadSchedulerSkillDays(period, skillsToUse, scenario);
+			var forecast = _skillDayLoadHelper.LoadSchedulerSkillDays(period, skills, scenario);
 			schedulerStateHolderTo.SchedulingResultState.SkillDays = forecast;
-			schedulerStateHolderTo.SchedulingResultState.AddSkills(skillsToUse.ToArray());
+			schedulerStateHolderTo.SchedulingResultState.AddSkills(skills.ToArray());
 		}
 
 		protected override void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period)
@@ -78,9 +76,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 				new ScheduleDateTimePeriod(dateTimePeriod, agents, new SchedulerRangeToLoadCalculator(dateTimePeriod)));
 		}
 
-		protected override void PreFill(ISchedulerStateHolder schedulerStateHolderTo)
+		protected override void PreFill(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
 		{
 			schedulerStateHolderTo.LoadCommonState(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(), _repositoryFactory);
+			_skillRepository.FindAllWithSkillDays(period); //hack to prevent working with skill proxies when doing calculation - remove later when we know what skills to use (=when passed in event)
 		}
 
 		protected override void PostFill(ISchedulerStateHolder schedulerStateHolder, IEnumerable<IPerson> agents, DateOnlyPeriod period)

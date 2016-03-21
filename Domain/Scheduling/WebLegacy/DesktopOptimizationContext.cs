@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			schedulerStateHolderTo.SchedulingResultState.Schedules = scheduleDictionary;
 		}
 
-		protected override void PreFill(ISchedulerStateHolder schedulerStateHolderTo)
+		protected override void PreFill(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
 		{
 			schedulerStateHolderTo.SchedulingResultState.AllPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>();
 		}

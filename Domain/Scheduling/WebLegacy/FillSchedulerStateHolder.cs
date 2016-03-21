@@ -12,7 +12,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		[LogTime]
 		public virtual void Fill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
 		{
-			PreFill(schedulerStateHolderTo);
+			//when skills are passed by event, we should start with loading skills here! (and remove prefill hack in db loader)
+
+			PreFill(schedulerStateHolderTo, period);
 			var scenario = FetchScenario();
 			FillAgents(schedulerStateHolderTo, scenario, agentIds, period);
 			removeUnwantedAgents(schedulerStateHolderTo, agentIds);
@@ -72,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		protected abstract void FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<Guid> agentIds, DateOnlyPeriod period);
 		protected abstract void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<ISkill> skills, DateOnlyPeriod period);
 		protected abstract void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period);
-		protected abstract void PreFill(ISchedulerStateHolder schedulerStateHolderTo);
+		protected abstract void PreFill(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period);
 		protected abstract void PostFill(ISchedulerStateHolder schedulerStateHolder, IEnumerable<IPerson> agents, DateOnlyPeriod period);
 	}
 }
