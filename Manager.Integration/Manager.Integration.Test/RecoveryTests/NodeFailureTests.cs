@@ -6,9 +6,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
 using log4net.Config;
-using log4net.Repository.Hierarchy;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Models;
 using Manager.Integration.Test.Notifications;
@@ -21,7 +19,7 @@ using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
-namespace Manager.Integration.Test.FunctionalTests
+namespace Manager.Integration.Test.RecoveryTests
 {
 	[TestFixture]
 	class NodeFailureTests
