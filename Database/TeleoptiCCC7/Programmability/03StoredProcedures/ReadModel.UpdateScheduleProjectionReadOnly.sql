@@ -57,11 +57,6 @@ END
 
 IF (@updateCount = 1)
 BEGIN
-	DELETE FROM ReadModel.ScheduleProjectionReadOnly 
-	WHERE BelongsToDate = @BelongsToDate 
-	AND ScenarioId = @ScenarioId 
-	AND PersonId = @PersonId
-
 	INSERT INTO ReadModel.ScheduleProjectionReadOnly (ScenarioId,PersonId,BelongsToDate,PayloadId,StartDateTime,EndDateTime,WorkTime,ContractTime,Name,ShortName,DisplayColor,PayrollCode,InsertedOn)
 	VALUES (@ScenarioId,@PersonId,@BelongsToDate,@PayloadId,@StartDateTime,@EndDateTime,@WorkTime,@ContractTime,@Name,@ShortName,@DisplayColor,@PayrollCode,@InsertedOn)
 END
