@@ -11,12 +11,12 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 		private Timer _timer;
 		private readonly EtlJobStarter _etlJobStarter;
-		private readonly TenantHearbeatEventPublisher _tenantHearbeatEventPublisher;
+		private readonly TenantTickEventPublisher _tenantTickEventPublisher;
 
-		public EtlService(EtlJobStarter etlJobStarter, TenantHearbeatEventPublisher tenantHearbeatEventPublisher)
+		public EtlService(EtlJobStarter etlJobStarter, TenantTickEventPublisher tenantTickEventPublisher)
 		{
 			_etlJobStarter = etlJobStarter;
-			_tenantHearbeatEventPublisher = tenantHearbeatEventPublisher;
+			_tenantTickEventPublisher = tenantTickEventPublisher;
 			_timer = new Timer(tick, null, TimeSpan.FromMilliseconds(-1), TimeSpan.FromMilliseconds(-1));
 		}
 
@@ -34,7 +34,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			
 			try
 			{
-				_tenantHearbeatEventPublisher.Tick();
+				_tenantTickEventPublisher.Tick();
 			}
 			catch (Exception ex)
 			{

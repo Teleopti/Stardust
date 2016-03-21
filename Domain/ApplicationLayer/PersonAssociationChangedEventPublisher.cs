@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	[UseOnToggle(Toggles.RTA_TerminatedPersons_36042)]
 	public class PersonAssociationChangedEventPublisher : 
-		IHandleEvent<TenantHearbeatEvent>,
+		IHandleEvent<TenantHourTickEvent>,
 		IHandleEvent<PersonTerminalDateChangedEvent>,
 		IHandleEvent<PersonTeamChangedEvent>,
 		IHandleEvent<PersonPeriodChangedEvent>,
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		[UnitOfWork]
 		[RecurringId("PersonAssociationChangedEventPublisher:::HourlyTickEvent")]
-		public virtual void Handle(TenantHearbeatEvent @event)
+		public virtual void Handle(TenantHourTickEvent @event)
 		{
 			_persons.LoadAll()
 				.ForEach(person =>

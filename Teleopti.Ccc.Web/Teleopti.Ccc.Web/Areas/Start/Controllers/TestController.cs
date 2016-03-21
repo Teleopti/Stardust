@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				_mutateNow.Is(new DateTime(ticks));
 
 			_activityChangesChecker.ExecuteForTest();
-			_allTenantRecurringEventPublisher.PublishHourly(new TenantHearbeatEvent());
+			_allTenantRecurringEventPublisher.PublishHourly(new TenantHourTickEvent());
 			_hangfire.TriggerAllRecurringJobs();
 
 			return View("Message", new TestMessageViewModel

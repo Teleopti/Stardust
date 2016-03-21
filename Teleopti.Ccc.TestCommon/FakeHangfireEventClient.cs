@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -7,7 +6,7 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeHangfireEventClient : IHangfireEventClient
 	{
-		private class jobInfo
+		public class JobInfo
 		{
 			public string Id;
 			public string DisplayName;
@@ -15,10 +14,12 @@ namespace Teleopti.Ccc.TestCommon
 			public string EventType;
 			public string Event;
 			public string HandlerType;
+			public bool Hourly;
+			public bool Minutely;
 		}
 
-		private readonly List<jobInfo> _enqueuedJobs = new List<jobInfo>();
-		private readonly List<jobInfo> _recurringJobs = new List<jobInfo>();
+		private readonly List<JobInfo> _enqueuedJobs = new List<JobInfo>();
+		private readonly List<JobInfo> _recurringJobs = new List<JobInfo>();
 
 		public IEnumerable<string> DisplayNames { get { return _enqueuedJobs.Select(x => x.DisplayName); } }
 		public IEnumerable<string> Tenants { get { return _enqueuedJobs.Select(x => x.Tenant); } }
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public void Enqueue(string displayName, string tenant, string eventType, string serializedEvent, string handlerType)
 		{
-			_enqueuedJobs.Add(new jobInfo
+			_enqueuedJobs.Add(new JobInfo
 			{
 				DisplayName = displayName,
 				Tenant = tenant,
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.TestCommon
 			});
 		}
 
+		public IEnumerable<JobInfo> Recurring { get { return _recurringJobs; } }
 		public IEnumerable<string> RecurringIds { get { return _recurringJobs.Select(x => x.Id); } }
 		public IEnumerable<string> RecurringDisplayNames { get { return _recurringJobs.Select(x => x.DisplayName); } }
 		public IEnumerable<string> RecurringTenants { get { return _recurringJobs.Select(x => x.Tenant); } }
@@ -57,10 +59,23 @@ namespace Teleopti.Ccc.TestCommon
 
 		public void AddOrUpdateHourly(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)
 		{
+			var job = recurring(displayName, id, tenant, eventType, serializedEvent, handlerType);
+			job.Hourly = true;
+		}
+
+		public void AddOrUpdateMinutely(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)
+		{
+			var job = recurring(displayName, id, tenant, eventType, serializedEvent, handlerType);
+			job.Minutely = true;
+		}
+
+		private JobInfo recurring(string displayName, string id, string tenant, string eventType, string serializedEvent,
+			string handlerType)
+		{
 			var job = _recurringJobs.SingleOrDefault(x => x.Id == id);
 			if (job == null)
 			{
-				job = new jobInfo();
+				job = new JobInfo();
 				_recurringJobs.Add(job);
 			}
 			job.DisplayName = displayName;
@@ -69,6 +84,7 @@ namespace Teleopti.Ccc.TestCommon
 			job.EventType = eventType;
 			job.Event = serializedEvent;
 			job.HandlerType = handlerType;
+			return job;
 		}
 
 		public IEnumerable<string> GetRecurringJobIds()

@@ -27,25 +27,35 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_publisher.StopPublishingAll();
 		}
 
+		public void RemovePublishingsOfRemovedTenants()
+		{
+			_publisher
+				.TenantsWithRecurringJobs()
+				.Except(_tenants.Tenants())
+				.ForEach(j =>
+				{
+					using (_dataSourceScope.OnThisThreadUse(new DummyDataSource(j)))
+						_publisher.StopPublishingForCurrentTenant();
+				});
+		}
+
 		public void PublishHourly(IEvent @event)
 		{
-			var tenants = _tenants.Tenants();
-
-			var removedTenants =
-				_publisher.TenantsWithRecurringJobs()
-					.Except(tenants);
-
-			removedTenants.ForEach(j =>
-			{
-				using (_dataSourceScope.OnThisThreadUse(new DummyDataSource(j)))
-					_publisher.StopPublishingForCurrentTenant();
-			});
-
-			tenants.ForEach(t =>
+			_tenants.Tenants().ForEach(t =>
 			{
 				using (_dataSourceScope.OnThisThreadUse(new DummyDataSource(t)))
 					_publisher.PublishHourly(@event);
 			});
 		}
+
+		public void PublishMinutely(IEvent @event)
+		{
+			_tenants.Tenants().ForEach(t =>
+			{
+				using (_dataSourceScope.OnThisThreadUse(new DummyDataSource(t)))
+					_publisher.PublishMinutely(@event);
+			});
+		}
+
 	}
 }

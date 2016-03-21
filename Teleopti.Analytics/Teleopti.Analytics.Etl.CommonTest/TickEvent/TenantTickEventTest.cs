@@ -1,8 +1,7 @@
-﻿using System.Linq;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Analytics.Etl.Common.TenantHeartbeat;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.TestCommon;
@@ -12,33 +11,13 @@ using Teleopti.Ccc.TestCommon.TestData;
 namespace Teleopti.Analytics.Etl.CommonTest.TickEvent
 {
 	[EtlTest]
-	public class TenantHeartbeatEventTest
+	public class TenantTickEventTest
 	{
-		public TenantHearbeatEventPublisher Target;
+		public TenantTickEventPublisher Target;
 		public FakeRecurringEventPublisher Publisher;
 		public FakeTenants Tenants;
 		public MutableNow Now;
 		
-		[Test]
-		public void ShouldPublish()
-		{
-			Tenants.Has(new Tenant("t"));
-
-			Target.Tick();
-
-			Publisher.HasPublishing.Should().Be.True();
-		}
-
-		[Test]
-		public void ShouldPublishEvent()
-		{
-			Tenants.Has(new Tenant("t"));
-
-			Target.Tick();
-
-			Publisher.Event.Should().Be.OfType<TenantHearbeatEvent>();
-		}
-
 		[Test]
 		public void ShouldPublishForTenant()
 		{
@@ -46,9 +25,9 @@ namespace Teleopti.Analytics.Etl.CommonTest.TickEvent
 
 			Target.Tick();
 
-			Publisher.Tenants.Single().Should().Be("tenant");
+			Publisher.Publishings.Select(x => x.Tenant).Should().Have.SameValuesAs("tenant");
 		}
-		
+
 		[Test]
 		public void ShouldPublishForAllTenants()
 		{
@@ -73,7 +52,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.TickEvent
 			Tenants.WasRemoved("tenant");
 			Target.Tick();
 
-			Publisher.Tenants.Should().Be.Empty();
+			Publisher.Publishings.Should().Be.Empty();
 		}
 
 		[Test]

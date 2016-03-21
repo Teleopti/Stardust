@@ -15,6 +15,11 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			throw new System.NotImplementedException();
 		}
 
+		public void AddOrUpdateMinutely(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void RemoveIfExists(string id)
 		{
 			throw new NotImplementedException();

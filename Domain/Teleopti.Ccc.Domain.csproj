@@ -169,6 +169,7 @@
     <Compile Include="Aop\ReadOnlyUnitOfWorkAttribute.cs" />
     <Compile Include="Aop\UnitOfWorkAttribute.cs" />
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
+    <Compile Include="ApplicationLayer\Events\TenantMinuteTickEvent.cs" />
     <Compile Include="Optimization\IOptimizationPreferencesProvider.cs" />
     <Compile Include="ApplicationLayer\Events\GroupPageCollectionChangedEvent.cs" />
     <Compile Include="DayOffPlanning\SkillGroupReducerForCascadingSkills.cs" />
@@ -216,7 +217,7 @@
     <Compile Include="ApplicationLayer\Events\EventAdherence.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduleOnNode.cs" />
     <Compile Include="ApplicationLayer\Events\StardustHealthCheckEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\TenantHearbeatEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\TenantHourTickEvent.cs" />
     <Compile Include="ApplicationLayer\Events\IRunOnHangfire.cs" />
     <Compile Include="ApplicationLayer\Events\ITrackInfo.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceModifiedEvent.cs" />

@@ -134,7 +134,7 @@
     </Compile>
     <Compile Include="Entity\BusinessUnitItem.cs" />
     <Compile Include="EtlAppModule.cs" />
-    <Compile Include="TenantHeartbeat\TenantHearbeatEventPublisher.cs" />
+    <Compile Include="TenantHeartbeat\TenantTickEventPublisher.cs" />
     <Compile Include="Infrastructure\BaseConfigurationRepository.cs" />
     <Compile Include="Tenants.cs" />
     <Compile Include="Service\EtlJobStarter.cs" />

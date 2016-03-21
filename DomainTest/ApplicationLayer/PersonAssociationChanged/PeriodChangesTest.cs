@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			Data.WithAgent("pierre")
 				.WithPeriod("2016-02-01");
 
-			Target.Handle(new TenantHearbeatEvent());
+			Target.Handle(new TenantHourTickEvent());
 
 			Publisher.PublishedEvents.Single().Should().Be.OfType<PersonAssociationChangedEvent>();
 		}
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			Data.WithAgent(personId, "pierre")
 				.WithPeriod("2016-02-01");
 
-			Target.Handle(new TenantHearbeatEvent());
+			Target.Handle(new TenantHourTickEvent());
 
 			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single().PersonId
 				.Should().Be(personId);
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			Data.WithAgent("pierre")
 				.WithPeriod("2016-02-01");
 
-			Target.Handle(new TenantHearbeatEvent());
+			Target.Handle(new TenantHourTickEvent());
 
 			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single().Timestamp
 				.Should().Be("2016-02-01 00:00".Utc());
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			Data.WithAgent("pierre")
 				.WithPeriod("2016-02-01", teamId);
 
-			Target.Handle(new TenantHearbeatEvent());
+			Target.Handle(new TenantHourTickEvent());
 
 			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single().TeamId
 				.Should().Be(teamId);
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			Data.WithAgent("pierre")
 				.WithPeriod("2016-02-01", Guid.NewGuid(), siteId);
 
-			Target.Handle(new TenantHearbeatEvent());
+			Target.Handle(new TenantHourTickEvent());
 
 			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single().SiteId
 				.Should().Be(siteId);
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			Data.WithAgent("pierre")
 				.WithPeriod("2016-02-01", Guid.NewGuid(), Guid.NewGuid(), businessUnitId);
 
-			Target.Handle(new TenantHearbeatEvent());
+			Target.Handle(new TenantHourTickEvent());
 
 			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single().BusinessUnitId
 				.Should().Be(businessUnitId);
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			Data.WithAgent("pierre", TimeZoneInfoFactory.IstanbulTimeZoneInfo())
 				.WithPeriod("2016-02-02");
 
-			Target.Handle(new TenantHearbeatEvent());
+			Target.Handle(new TenantHourTickEvent());
 			
 			Publisher.PublishedEvents.Single().Should().Be.OfType<PersonAssociationChangedEvent>();
 		}
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			Now.Is("2016-02-01 22:00");
 			Data.WithPerson("pierre");
 
-			Target.Handle(new TenantHearbeatEvent());
+			Target.Handle(new TenantHourTickEvent());
 
 			Publisher.PublishedEvents.Should().Be.Empty();
 		}

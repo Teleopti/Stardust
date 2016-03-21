@@ -39,11 +39,19 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		}
 
 		[Test]
-		public void ShouldAddOrUpdate()
+		public void ShouldAddOrUpdateHourly()
 		{
 			Target.PublishHourly(new HangfireTestEvent());
 
-			JobClient.HasRecurringJobs.Should().Be.True();
+			JobClient.Recurring.Single().Hourly.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldAddOrUpdateMinutely()
+		{
+			Target.PublishMinutely(new HangfireTestEvent());
+
+			JobClient.Recurring.Single().Minutely.Should().Be.True();
 		}
 
 		[Test]

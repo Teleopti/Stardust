@@ -51,6 +51,14 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			});
 		}
 
+		public void PublishMinutely(IEvent @event)
+		{
+			jobsFor(@event).ForEach(j =>
+			{
+				_client.AddOrUpdateMinutely(j.DisplayName, idForJob(j, @event), j.Tenant, j.EventTypeName, j.Event, j.HandlerTypeName);
+			});
+		}
+		
 		private string idForJob(jobInfo j, IEvent @event)
 		{
 			var maxLength = 100 - "recurring-job:".Length;
@@ -60,7 +68,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				.OfType<RecurringIdAttribute>()
 				.Single()
 				.Id;
-
 
 			var id = j.Tenant + ":::" + handlerId;
 			if (id.Length <= maxLength)

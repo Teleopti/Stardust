@@ -5,13 +5,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Common.TenantHeartbeat
 {
-	public class TenantHearbeatEventPublisher
+	public class TenantTickEventPublisher
 	{
 		private readonly AllTenantRecurringEventPublisher _publisher;
 		private readonly INow _now;
 		private DateTime? _nextPublish;
 
-		public TenantHearbeatEventPublisher(
+		public TenantTickEventPublisher(
 			AllTenantRecurringEventPublisher publisher,
 			INow now)
 		{
@@ -29,7 +29,10 @@ namespace Teleopti.Analytics.Etl.Common.TenantHeartbeat
 				return;
 			_nextPublish = _now.UtcDateTime().AddMinutes(10);
 
-			_publisher.PublishHourly(new TenantHearbeatEvent());
+			_publisher.RemovePublishingsOfRemovedTenants();
+
+			_publisher.PublishMinutely(new TenantMinuteTickEvent());
+			_publisher.PublishHourly(new TenantHourTickEvent());
 		}
 	}
 

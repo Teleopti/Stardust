@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Util;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
@@ -15,6 +16,8 @@ namespace Teleopti.Ccc.TestCommon
 			public string Tenant;
 			public IEvent Event;
 			public DateTime CreatedAt;
+			public bool Hourly;
+			public bool Minutely;
 		}
 
 		private readonly IList<PublishingInfo> _publishings = new List<PublishingInfo>();
@@ -42,16 +45,32 @@ namespace Teleopti.Ccc.TestCommon
 			{
 				Tenant = tenant,
 				Event = @event,
-				CreatedAt = _now.UtcDateTime()
+				CreatedAt = _now.UtcDateTime(),
+				Hourly = true
+			});
+		}
+
+		public void PublishMinutely(IEvent @event)
+		{
+			var tenant = _dataSource.Current().DataSourceName;
+			var job = _publishings.SingleOrDefault(x => x.Tenant == tenant && @event.GetType() == x.Event.GetType());
+			if (job != null)
+				return;
+			_publishings.Add(new PublishingInfo
+			{
+				Tenant = tenant,
+				Event = @event,
+				CreatedAt = _now.UtcDateTime(),
+				Minutely = true
 			});
 		}
 
 		public void StopPublishingForCurrentTenant()
 		{
 			var tenant = _dataSource.Current().DataSourceName;
-			var job = _publishings.SingleOrDefault(x => x.Tenant == tenant);
-			if (job != null)
-				_publishings.Remove(job);
+			_publishings.Where(x => x.Tenant == tenant)
+				.ToArray()
+				.ForEach(job => _publishings.Remove(job));
 		}
 
 		public void StopPublishingAll()

@@ -110,11 +110,13 @@
     <Compile Include="FakeData\RepositoryFactory.cs" />
     <Compile Include="JobRunnerTest.cs" />
     <Compile Include="TickEvent\RepublishRecurringTest.cs" />
-    <Compile Include="TickEvent\TenantHeartbeatEventTest.cs" />
+    <Compile Include="TickEvent\TenantHourTickEventTest.cs" />
     <Compile Include="EtlTestAttribute.cs" />
     <Compile Include="FakeBaseConfigurationRepository.cs" />
     <Compile Include="RunControllerTest.cs" />
     <Compile Include="Service\ResolveTest.cs" />
+    <Compile Include="TickEvent\TenantMinuteTickEventTest.cs" />
+    <Compile Include="TickEvent\TenantTickEventTest.cs" />
     <Compile Include="Transformer\AbsenceTransformerTest.cs" />
     <Compile Include="Transformer\ActivityTransformerTest.cs" />
     <Compile Include="Transformer\BusinessUnitTransformerTest.cs" />
