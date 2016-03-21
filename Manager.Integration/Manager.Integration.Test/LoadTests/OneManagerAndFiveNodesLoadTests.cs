@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
 using log4net.Config;
 using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
@@ -44,7 +43,7 @@ namespace Manager.Integration.Test.LoadTests
 		public void TestFixtureSetUp()
 		{
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-			
+
 			ManagerDbConnectionString =
 				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString;
 
@@ -52,7 +51,7 @@ namespace Manager.Integration.Test.LoadTests
 			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
 			LogMessage("Start TestFixtureSetUp");
-			
+
 			if (ClearDatabase)
 			{
 				DatabaseHelper.TryClearDatabase(ManagerDbConnectionString);
@@ -63,8 +62,8 @@ namespace Manager.Integration.Test.LoadTests
 
 			Task = AppDomainTask.StartTask(numberOfManagers: 1,
 			                               numberOfNodes: 5,
-										   useLoadBalancerIfJustOneManager:true,
-										   cancellationTokenSource: CancellationTokenSource);
+			                               useLoadBalancerIfJustOneManager: true,
+			                               cancellationTokenSource: CancellationTokenSource);
 			Thread.Sleep(TimeSpan.FromSeconds(2));
 			LogMessage("Finished TestFixtureSetUp");
 		}
@@ -87,7 +86,7 @@ namespace Manager.Integration.Test.LoadTests
 			if (exp != null)
 			{
 				this.Log().FatalWithLineNumber(exp.Message,
-				                                 exp);
+				                               exp);
 			}
 		}
 
@@ -131,8 +130,8 @@ namespace Manager.Integration.Test.LoadTests
 			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
 			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(5,
-																  sqlNotiferCancellationTokenSource,
-																  IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
+			                                                      sqlNotiferCancellationTokenSource,
+			                                                      IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
 			task.Start();
 
 			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(30));
