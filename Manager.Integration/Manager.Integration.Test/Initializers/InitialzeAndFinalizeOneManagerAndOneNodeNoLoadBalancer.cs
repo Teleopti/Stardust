@@ -1,8 +1,8 @@
 ﻿namespace Manager.Integration.Test.Initializers
 {
-	public class InitialzeAndFinalizeOneManagerAndOneNodeNoLadBalancer : InitializeAndFinalizeBase
+	public class InitialzeAndFinalizeOneManagerAndOneNodeNoLoadBalancer : InitializeAndFinalizeBase
 	{
-		public InitialzeAndFinalizeOneManagerAndOneNodeNoLadBalancer() : base(1, 1, false)
+		public InitialzeAndFinalizeOneManagerAndOneNodeNoLoadBalancer() : base(1, 1, false)
 		{
 		}
 

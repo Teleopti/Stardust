@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace Manager.Integration.Test.LoadTests
 {
 	[TestFixture]
-	public class OneManagerAndOneNodeLoadTests : InitialzeAndFinalizeOneManagerAndOneNodeNoLadBalancer
+	public class OneManagerAndOneNodeLoadTests : InitialzeAndFinalizeOneManagerAndOneNodeNoLoadBalancer
 	{
 		[Test]
 		public void YourTestGoesHere()
