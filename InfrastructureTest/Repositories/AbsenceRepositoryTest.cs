@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-    ///<summary>
+	///<summary>
     /// Tests AbsenceRepository
     ///</summary>
     [TestFixture]

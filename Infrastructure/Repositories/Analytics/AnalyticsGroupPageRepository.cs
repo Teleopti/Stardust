@@ -2,23 +2,23 @@ using System;
 using System.Collections.Generic;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
 	public class AnalyticsGroupPageRepository : IAnalyticsGroupPageRepository
 	{
-		private IAnalyticsUnitOfWorkFactory statisticUnitOfWorkFactory()
+		private readonly ICurrentDataSource _currentDataSource;
+
+		public AnalyticsGroupPageRepository(ICurrentDataSource currentDataSource)
 		{
-			var identity = (ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity;
-			return identity.DataSource.Analytics;
+			_currentDataSource = currentDataSource;
 		}
 
 		public IEnumerable<AnalyticsGroupPage> GetGroupPage(Guid groupPageCode)
 		{
-			using (var uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(
 					@"select 
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public void UpdateGroupPage(AnalyticsGroupPage analyticsGroupPage)
 		{
-			using (var uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 			{
 				var query = uow.Session().CreateSQLQuery(
 					@"exec mart.[etl_dim_group_page_update]
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public void AddGroupPage(AnalyticsGroupPage analyticsGroupPage)
 		{
-			using (var uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 			{
 				var query = uow.Session().CreateSQLQuery(
 					@"exec mart.[etl_dim_group_page_insert]
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public void DeleteGroupPages(IEnumerable<Guid> groupPageIds)
 		{
-			using (var uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 			{
 				var query = uow.Session().CreateSQLQuery(
 					@"exec mart.[etl_dim_group_page_delete]
