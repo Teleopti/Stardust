@@ -95,7 +95,7 @@
     <Compile Include="Interceptor\FunctionalTestInterceptor.cs" />
     <Compile Include="LoadTests\OneManagerAndOneNodeLoadTests.cs" />
     <Compile Include="Models\WorkerNode.cs" />
-    <Compile Include="FunctionalTests\NodeFailureTests.cs" />
+    <Compile Include="RecoveryTests\NodeFailureTests.cs" />
     <Compile Include="Notifications\NodeStatusNotifier.cs" />
     <Compile Include="Notifications\SqlNotifier.cs" />
     <Compile Include="LoadTests\OneManagerAndFiveNodesLoadTests.cs" />

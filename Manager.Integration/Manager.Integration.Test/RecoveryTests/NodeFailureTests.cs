@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
+using log4net;
+using log4net.Config;
+using log4net.Repository.Hierarchy;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Initializers;
 using Manager.Integration.Test.Models;
@@ -14,11 +18,11 @@ using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
-namespace Manager.Integration.Test.FunctionalTests
+namespace Manager.Integration.Test.RecoveryTests
 {
 	[TestFixture]
 	internal class NodeFailureTests : InitialzeAndFinalizeOneManagerAndOneNode
-	{
+			{
 		private void LogMessage(string message)
 		{
 			this.Log().DebugWithLineNumber(message);
@@ -42,8 +46,8 @@ namespace Manager.Integration.Test.FunctionalTests
 			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
 			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(1,
-			                                                      sqlNotiferCancellationTokenSource,
-			                                                      IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
+																  sqlNotiferCancellationTokenSource,
+																  IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
 			task.Start();
 
 			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(2));
@@ -85,7 +89,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			try
 			{
 				response = await httpSender.DeleteAsync(uriBuilder.Uri,
-				                                        cancellationTokenSource.Token);
+				                                            cancellationTokenSource.Token);
 				if (response.IsSuccessStatusCode)
 				{
 					LogMessage("Succeeded calling Delete Async ( " + uri + " ) ");
@@ -94,7 +98,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message,
-				                               exp);
+				                                 exp);
 			}
 
 			cancellationTokenSource.Cancel();
