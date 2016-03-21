@@ -564,7 +564,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public override void Remove(IPersonRequest entity)
 		{
-			if (entity.IsDenied)
+			if (entity.IsDenied && (!entity.IsWaitlisted))
 				throw new DataSourceException("Cannot delete person request " + entity + ". It has already been denied.");
 			if (entity.IsApproved)
 				throw new DataSourceException("Cannot delete person request " + entity + ". It has already been approved.");

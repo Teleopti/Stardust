@@ -174,6 +174,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					//1: Denied
 					//2: Approved
 					//3: New
+					//4: AutoDenied
+					//5: Waitlisted
+
 					var stateId = PersonRequest.GetUnderlyingStateId(s);
 					if (s.Request is ShiftExchangeOffer)
 					{
@@ -182,7 +185,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 						return isRealPending ? "GET, DELETE, PUT" : "GET, DELETE";
 					}
 
-					return new[] { 0, 3 }.Contains(stateId) ? "GET, DELETE, PUT" : "GET";
+					return new[] { 0, 3, 5 }.Contains(stateId) ? "GET, DELETE, PUT" : "GET";
 				}));
 		}
 
