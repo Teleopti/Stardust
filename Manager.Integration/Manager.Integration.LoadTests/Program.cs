@@ -15,8 +15,6 @@ namespace Manager.Integration.LoadTests
 
 			loadTests.YourTestGoesHere();
 
-			Thread.Sleep(TimeSpan.FromMinutes(10));
-
 			loadTests.TearDown();
 			loadTests.TestFixtureTearDown();
 		}
