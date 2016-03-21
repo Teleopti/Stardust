@@ -12,7 +12,7 @@ namespace Performance.Test
 		private HttpSender _httpSender;
 
 		[TestFixtureSetUp]
-		public void TextFixtureSetUp()
+		public void TextFixtureSetUp() 
 		{
 			_httpSender = new HttpSender();
 
