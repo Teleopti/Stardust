@@ -63,7 +63,8 @@ namespace Manager.Integration.Test.LoadTests
 
 			Task = AppDomainTask.StartTask(numberOfManagers: 1,
 			                               numberOfNodes: 5,
-			                               cancellationTokenSource: CancellationTokenSource);
+										   useLoadBalancerIfJustOneManager:true,
+										   cancellationTokenSource: CancellationTokenSource);
 			Thread.Sleep(TimeSpan.FromSeconds(2));
 			LogMessage("Finished TestFixtureSetUp");
 		}

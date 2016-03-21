@@ -40,8 +40,7 @@ namespace Stardust.Node.Workers
 				throw new Exception("The handler " + query.GetType() + " could not be resolved");
 			}
 
-			var method = handler.GetType()
-				.GetMethod("Handle");
+			var method = handler.GetType().GetMethod("Handle");
 
 			if (method == null)
 			{
@@ -51,10 +50,16 @@ namespace Stardust.Node.Workers
 				throw new Exception("The method 'Handle' for handler " + handler.GetType() + " could not be found");
 			}
 
-			try //this is to throw right exception and not cause faulted on cancellation
+			//this is to throw right exception and not cause faulted on cancellation
+			try
 			{
 				method.Invoke(handler,
-				              new[] {query, cancellationTokenSource, progressCallback});
+				              new[]
+				              {
+					              query,
+								  cancellationTokenSource,
+								  progressCallback
+				              });
 			}
 			catch (Exception ex)
 			{

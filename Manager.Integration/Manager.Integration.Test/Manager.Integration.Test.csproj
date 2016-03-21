@@ -81,6 +81,7 @@
     <Compile Include="Constants\MediaTypeConstants.cs" />
     <Compile Include="Constants\StatusConstants.cs" />
     <Compile Include="EventArgs\GuidAddedEventArgs.cs" />
+    <Compile Include="Initializers\InitializeAndFinalizeBase.cs" />
     <Compile Include="Helpers\AppDomainHelper.cs" />
     <Compile Include="Helpers\DatabaseHelper.cs" />
     <Compile Include="Helpers\JobHelper.cs" />
@@ -88,6 +89,11 @@
     <Compile Include="Helpers\ProcessHelper.cs" />
     <Compile Include="Helpers\SecurityHelper.cs" />
     <Compile Include="Helpers\ManagerUriBuilder.cs" />
+    <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndOneNodeNoLadBalancer.cs" />
+    <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndZeroNodes.cs" />
+    <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndOneNode.cs" />
+    <Compile Include="Interceptor\FunctionalTestInterceptor.cs" />
+    <Compile Include="LoadTests\OneManagerAndOneNodeLoadTests.cs" />
     <Compile Include="Models\WorkerNode.cs" />
     <Compile Include="FunctionalTests\NodeFailureTests.cs" />
     <Compile Include="Notifications\NodeStatusNotifier.cs" />

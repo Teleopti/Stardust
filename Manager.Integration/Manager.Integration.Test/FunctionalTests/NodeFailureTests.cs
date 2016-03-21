@@ -1,19 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Threading;
-using System.Threading.Tasks;
-using log4net;
-using log4net.Config;
-using log4net.Repository.Hierarchy;
 using Manager.Integration.Test.Helpers;
+using Manager.Integration.Test.Initializers;
 using Manager.Integration.Test.Models;
 using Manager.Integration.Test.Notifications;
 using Manager.Integration.Test.Properties;
-using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Validators;
 using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.Interfaces;
@@ -24,66 +17,16 @@ using NUnit.Framework;
 namespace Manager.Integration.Test.FunctionalTests
 {
 	[TestFixture]
-	class NodeFailureTests
+	internal class NodeFailureTests : InitialzeAndFinalizeOneManagerAndOneNode
 	{
-#if (DEBUG)
-		private const bool ClearDatabase = true;
-		private const string BuildMode = "Debug";
-
-#else
-		private const bool ClearDatabase = true;
-		private const string BuildMode = "Release";
-#endif
-
-		private string ManagerDbConnectionString { get; set; }
-		private Task Task { get; set; }
-		private AppDomainTask AppDomainTask { get; set; }
-		private CancellationTokenSource CancellationTokenSource { get; set; }
-
-		[TestFixtureTearDown]
-		public void TestFixtureTearDown()
-		{
-			
-			LogMessage("Start TestFixtureTearDown");
-			if (AppDomainTask != null)
-			{
-				AppDomainTask.Dispose();
-			}
-			LogMessage("Finished TestFixtureTearDown");
-		}
-
 		private void LogMessage(string message)
 		{
 			this.Log().DebugWithLineNumber(message);
 		}
 
-		[TestFixtureSetUp]
-		public void TestFixtureSetUp()
-		{
-			ManagerDbConnectionString = ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString;
-			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
-			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
-			LogMessage("Start TestFixtureSetUp");
-
-			if (ClearDatabase)
-			{
-				DatabaseHelper.TryClearDatabase(ManagerDbConnectionString);
-			}
-
-			CancellationTokenSource = new CancellationTokenSource();
-			AppDomainTask = new AppDomainTask(BuildMode);
-			Task = AppDomainTask.StartTask(numberOfManagers: 1,
-			                               numberOfNodes: 1,
-			                               cancellationTokenSource: CancellationTokenSource);
-
-			LogMessage("Finshed TestFixtureSetUp");
-		}
-
 		private void WaitForNodeTimeout()
 		{
-			//MUST BE CHANGED TO FIT CONFIGURATION
 			Thread.Sleep(TimeSpan.FromSeconds(120));
-			// = (alloweddowntime * 2)
 		}
 
 		[Test]
@@ -99,8 +42,8 @@ namespace Manager.Integration.Test.FunctionalTests
 			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
 			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(1,
-																  sqlNotiferCancellationTokenSource,
-																  IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
+			                                                      sqlNotiferCancellationTokenSource,
+			                                                      IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
 			task.Start();
 
 			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(2));
@@ -118,7 +61,7 @@ namespace Manager.Integration.Test.FunctionalTests
 
 			var createNewJobRequests =
 				JobHelper.GenerateTestJobParamsRequests(1);
-			HttpResponseMessage response = await httpSender.PostAsync(uri, createNewJobRequests.FirstOrDefault());
+			var response = await httpSender.PostAsync(uri, createNewJobRequests.FirstOrDefault());
 
 			response.EnsureSuccessStatusCode();
 			var ser = await response.Content.ReadAsStringAsync();
@@ -142,7 +85,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			try
 			{
 				response = await httpSender.DeleteAsync(uriBuilder.Uri,
-				                                            cancellationTokenSource.Token);
+				                                        cancellationTokenSource.Token);
 				if (response.IsSuccessStatusCode)
 				{
 					LogMessage("Succeeded calling Delete Async ( " + uri + " ) ");
@@ -151,7 +94,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message,
-				                                 exp);
+				                               exp);
 			}
 
 			cancellationTokenSource.Cancel();

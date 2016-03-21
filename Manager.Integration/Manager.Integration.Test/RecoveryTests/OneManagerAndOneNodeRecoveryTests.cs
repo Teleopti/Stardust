@@ -57,6 +57,7 @@ namespace Manager.Integration.Test.RecoveryTests
 			AppDomainTask = new AppDomainTask(BuildMode);
 			Task = AppDomainTask.StartTask(numberOfManagers: 1,
 			                               numberOfNodes: 1,
+										   useLoadBalancerIfJustOneManager:true,
 			                               cancellationTokenSource: CancellationTokenSource);
 
 			Thread.Sleep(TimeSpan.FromSeconds(2));

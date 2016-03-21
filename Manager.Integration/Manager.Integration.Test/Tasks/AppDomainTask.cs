@@ -49,6 +49,7 @@ namespace Manager.Integration.Test.Tasks
 
 		public Task StartTask(int numberOfManagers,
 		                      int numberOfNodes,
+							  bool useLoadBalancerIfJustOneManager,
 							  CancellationTokenSource cancellationTokenSource)
 		{
 			Task = Task.Factory.StartNew(() =>
@@ -69,11 +70,12 @@ namespace Manager.Integration.Test.Tasks
 
 				Task.Factory.StartNew(() =>
 				{
-					string[] commandArguments = new string[2];
+					string[] commandArguments = new string[3];
 
 					commandArguments[0] = "Managers=" + numberOfManagers;
 					commandArguments[1] = "Nodes=" + numberOfNodes;
-
+					commandArguments[2] = "UseLoadBalancerIfJustOneManager=" + useLoadBalancerIfJustOneManager;
+					
 					var assemblyLocationFullPath =
 						Path.Combine(Settings.Default.ManagerIntegrationConsoleHostLocation,
 						             Buildmode);

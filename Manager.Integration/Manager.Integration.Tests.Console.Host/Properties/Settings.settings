@@ -45,7 +45,7 @@
       <Value Profile="(Default)">http://localhost:9000/StardustDashboard/</Value>
     </Setting>
     <Setting Name="NumberOfManagersToStart" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">2</Value>
+      <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="ManagerEndpointPortNumberStart" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">9001</Value>
@@ -55,6 +55,9 @@
     </Setting>
     <Setting Name="PingToManagerSeconds" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">20</Value>
+    </Setting>
+    <Setting Name="UseLoadBalancerIfJustOneManager" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

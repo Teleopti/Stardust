@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-using log4net.Config;
+﻿using System.Collections.Generic;
 using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
+using Manager.Integration.Test.Initializers;
 using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Timers;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
@@ -15,87 +10,8 @@ using NUnit.Framework;
 namespace Manager.Integration.Test.FunctionalTests
 {
 	[TestFixture]
-	public class OneManagerAndZeroNodesTests
+	public class OneManagerAndZeroNodesTests : InitialzeAndFinalizeOneManagerAndZeroNodes
 	{
-#if (DEBUG)
-		private const bool ClearDatabase = true;
-		private const string BuildMode = "Debug";
-
-#else
-		private const bool ClearDatabase = true;
-		private const string BuildMode = "Release";
-#endif
-
-		[TearDown]
-		public void TearDown()
-		{
-		}
-
-		[TestFixtureSetUp]
-		public void TestFixtureSetUp()
-		{
-			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-
-			ManagerDbConnectionString =
-				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString;
-
-			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
-			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
-
-
-			if (ClearDatabase)
-			{
-				DatabaseHelper.TryClearDatabase(ManagerDbConnectionString);
-			}
-
-			CancellationTokenSource = new CancellationTokenSource();
-
-			AppDomainTask = new AppDomainTask(BuildMode);
-
-			Task = AppDomainTask.StartTask(numberOfManagers: 1,
-			                               numberOfNodes: 0,
-			                               cancellationTokenSource: CancellationTokenSource);
-
-			Thread.Sleep(TimeSpan.FromSeconds(2));
-
-			this.Log().DebugWithLineNumber("Finshed TestFixtureSetUp");
-		}
-
-		private string ManagerDbConnectionString { get; set; }
-
-		private Task Task { get; set; }
-
-		private AppDomainTask AppDomainTask { get; set; }
-
-
-		private CancellationTokenSource CancellationTokenSource { get; set; }
-
-		private void CurrentDomain_UnhandledException(object sender,
-		                                              UnhandledExceptionEventArgs e)
-		{
-			var exp = e.ExceptionObject as Exception;
-
-			if (exp != null)
-			{
-				this.Log().FatalWithLineNumber(exp.Message,
-				                               exp);
-			}
-		}
-
-
-		[TestFixtureTearDown]
-		public void TestFixtureTearDown()
-		{
-			this.Log().DebugWithLineNumber("Start TestFixtureTearDown");
-
-			if (AppDomainTask != null)
-			{
-				AppDomainTask.Dispose();
-			}
-
-			this.Log().DebugWithLineNumber("Finished TestFixtureTearDown");
-		}
-
 		[Test]
 		public void JobsShouldJustBeQueuedIfNoNodesTest()
 		{

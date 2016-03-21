@@ -3,10 +3,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
-using log4net;
 using Stardust.Manager.Constants;
 using Stardust.Manager.Extensions;
-using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
 
@@ -22,7 +20,7 @@ namespace Stardust.Manager
 		                         JobManager jobManager)
 		{
 			_nodeManager = nodeManager;
-			_jobManager = jobManager;			
+			_jobManager = jobManager;
 		}
 
 		[HttpPost, Route(ManagerRouteConstants.Job)]
@@ -102,10 +100,7 @@ namespace Stardust.Manager
 		{
 			if (nodeUri != null)
 			{
-				Task.Factory.StartNew(() =>
-				{
-					_jobManager.RegisterHeartbeat(nodeUri.ToString());
-				});
+				Task.Factory.StartNew(() => { _jobManager.RegisterHeartbeat(nodeUri.ToString()); });
 
 				this.Log().InfoWithLineNumber(WhoAmI(Request) + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
 				return Ok();
@@ -133,12 +128,13 @@ namespace Stardust.Manager
 
 		[HttpPost, Route(ManagerRouteConstants.JobFailed)]
 		public IHttpActionResult JobFailed([FromBody] JobFailedModel jobFailedModel)
-		{			
-			this.Log().ErrorWithLineNumber(WhoAmI(Request) + ": Received job failed from a Node ( jobId ) : ( " + jobFailedModel.JobId + " )");
+		{
+			this.Log().ErrorWithLineNumber(WhoAmI(Request) + ": Received job failed from a Node ( jobId ) : ( " +
+			                               jobFailedModel.JobId + " )");
 
 			Task.Factory.StartNew(() =>
 			{
-				JobProgressModel progress = new JobProgressModel
+				var progress = new JobProgressModel
 				{
 					JobId = jobFailedModel.JobId,
 					Created = DateTime.Now,
@@ -159,7 +155,6 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.JobHasBeenCanceled)]
 		public IHttpActionResult JobCanceled(Guid jobId)
 		{
-
 			this.Log().InfoWithLineNumber(WhoAmI(Request) + ": Received cancel from a Node ( jobId ) : ( " + jobId + " )");
 
 			Task.Factory.StartNew(() =>
@@ -176,7 +171,6 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.JobProgress)]
 		public IHttpActionResult JobProgress([FromBody] JobProgressModel model)
 		{
-
 			if (model == null)
 			{
 				return BadRequest();
@@ -187,10 +181,7 @@ namespace Stardust.Manager
 				return BadRequest();
 			}
 
-			Task.Factory.StartNew(() =>
-			{
-				_jobManager.ReportProgress(model);
-			});			
+			Task.Factory.StartNew(() => { _jobManager.ReportProgress(model); });
 
 			return Ok();
 		}
@@ -200,7 +191,6 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.NodeHasBeenInitialized)]
 		public IHttpActionResult NodeInitialized([FromBody] Uri nodeUri)
 		{
-
 			Task.Factory.StartNew(() =>
 			{
 				_nodeManager.FreeJobIfAssingedToNode(nodeUri);
@@ -216,27 +206,24 @@ namespace Stardust.Manager
 		[HttpGet, Route(ManagerRouteConstants.Ping)]
 		public IHttpActionResult Ping()
 		{
-
 			return Ok();
 		}
 
 		[HttpGet, Route(ManagerRouteConstants.Nodes)]
 		public IHttpActionResult Nodes()
 		{
-			
-
 			var workernodes = _jobManager.Nodes();
 
 			return Ok(workernodes);
 		}
 
-		private string WhoAmI(HttpRequestMessage Request)
+		private string WhoAmI(HttpRequestMessage request)
 		{
-			if (Request != null)
+			if (request != null)
 			{
 				var baseUrl =
-				Request.RequestUri.GetLeftPart(UriPartial.Authority);
-				
+					request.RequestUri.GetLeftPart(UriPartial.Authority);
+
 				return "[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
 			}
 			return "[MANAGER, " + Environment.MachineName.ToUpper() + "]";

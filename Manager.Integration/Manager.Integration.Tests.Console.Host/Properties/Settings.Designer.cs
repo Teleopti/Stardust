@@ -152,7 +152,7 @@ namespace Manager.IntegrationTest.Console.Host.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
         public int NumberOfManagersToStart {
             get {
                 return ((int)(this["NumberOfManagersToStart"]));
@@ -183,6 +183,15 @@ namespace Manager.IntegrationTest.Console.Host.Properties {
         public int PingToManagerSeconds {
             get {
                 return ((int)(this["PingToManagerSeconds"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseLoadBalancerIfJustOneManager {
+            get {
+                return ((bool)(this["UseLoadBalancerIfJustOneManager"]));
             }
         }
     }

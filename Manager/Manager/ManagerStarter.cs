@@ -10,21 +10,25 @@ namespace Stardust.Manager
 		{
 			var builder = new ContainerBuilder();
 
-			builder.RegisterInstance(managerConfiguration).As<IManagerConfiguration>();
+			builder.RegisterInstance(managerConfiguration)
+				.As<IManagerConfiguration>();
 
-			builder.RegisterType<NodeManager>().As<INodeManager>();
+			builder.RegisterType<NodeManager>()
+				.As<INodeManager>();
 
 			builder.RegisterType<JobManager>().SingleInstance();
 
 			builder.RegisterType<HttpSender>().As<IHttpSender>();
-			 
-			builder.Register(c => new JobRepository(managerConfiguration.ConnectionString, new RetryPolicyProvider()))
-							.As<IJobRepository>();
 
-			builder.Register(c => new WorkerNodeRepository(managerConfiguration.ConnectionString,new RetryPolicyProvider()))
-							.As<IWorkerNodeRepository>();
+			builder.Register(c => new JobRepository(managerConfiguration.ConnectionString,
+			                                        new RetryPolicyProvider()))
+				.As<IJobRepository>();
 
-			builder.RegisterApiControllers(typeof (ManagerController).Assembly);		
+			builder.Register(c => new WorkerNodeRepository(managerConfiguration.ConnectionString,
+			                                               new RetryPolicyProvider()))
+				.As<IWorkerNodeRepository>();
+
+			builder.RegisterApiControllers(typeof (ManagerController).Assembly);
 
 			builder.Update(componentContext.ComponentRegistry);
 		}

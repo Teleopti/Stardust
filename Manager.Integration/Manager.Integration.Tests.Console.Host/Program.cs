@@ -12,7 +12,6 @@ using Autofac;
 using Autofac.Integration.WebApi;
 using log4net;
 using log4net.Config;
-using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.LoadBalancer;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 using Manager.IntegrationTest.Console.Host.Properties;
@@ -28,6 +27,8 @@ namespace Manager.IntegrationTest.Console.Host
 		private const string ManagersCommandArgument = "Managers";
 
 		private const string NodesCommandArgument = "Nodes";
+
+		private const string UseLoadBalancerIfJustOneManagerArgument = "UseLoadBalancerIfJustOneManager";
 
 
 #if (DEBUG)
@@ -149,6 +150,11 @@ namespace Manager.IntegrationTest.Console.Host
 			NumberOfManagersToStart = Settings.Default.NumberOfManagersToStart;
 			NumberOfNodesToStart = Settings.Default.NumberOfNodesToStart;
 
+			//---------------------------------------------------------
+			// Use load balancer if only one mananager is used.
+			//---------------------------------------------------------
+			UseLoadBalancerIfJustOneManager = Settings.Default.UseLoadBalancerIfJustOneManager;
+
 			if (args.Any())
 			{
 				Logger.DebugWithLineNumber("Has command arguments.");
@@ -169,6 +175,13 @@ namespace Manager.IntegrationTest.Console.Host
 					                     StringComparison.InvariantCultureIgnoreCase))
 					{
 						NumberOfNodesToStart = Convert.ToInt32(values[1]);
+					}
+
+					// Use load balancer.
+					if (values[0].Equals(UseLoadBalancerIfJustOneManagerArgument,
+										 StringComparison.InvariantCultureIgnoreCase))
+					{
+						UseLoadBalancerIfJustOneManager = Convert.ToBoolean(values[1]);
 					}
 				}
 			}
@@ -193,7 +206,7 @@ namespace Manager.IntegrationTest.Console.Host
 				                               _buildMode));
 
 			Logger.DebugWithLineNumber("DirectoryManagerConfigurationFileFullPath : " +
-			                                 DirectoryManagerConfigurationFileFullPath.FullName);
+			                           DirectoryManagerConfigurationFileFullPath.FullName);
 
 
 			ManagerConfigurationFile =
@@ -204,22 +217,45 @@ namespace Manager.IntegrationTest.Console.Host
 
 			CopiedManagerConfigurationFiles = new Dictionary<Uri, FileInfo>();
 
-			for (var i = 0; i < NumberOfManagersToStart; i++)
+			var allowedDowntimeSeconds = Settings.Default.AllowedDowntimeSeconds;
+
+			if (NumberOfManagersToStart == 1 && !UseLoadBalancerIfJustOneManager)
 			{
-				var portNumber = Settings.Default.ManagerEndpointPortNumberStart + i;
-				var allowedDowntimeSeconds = Settings.Default.AllowedDowntimeSeconds;
+				var configuration = 
+					new Configuration(Settings.Default.ManagerLocationUri);
+
+				Uri address = configuration.BaseAddress;
 
 				Uri uri;
 
 				var copiedManagerConfigurationFile =
 					CopyManagerConfigurationFile(ManagerConfigurationFile,
-					                             i + 1,
-					                             portNumber,
-					                             allowedDowntimeSeconds,
-					                             out uri);
+												 1,
+												 address.ToString(),
+												 allowedDowntimeSeconds,
+												 out uri);
 
 				CopiedManagerConfigurationFiles.Add(uri,
-				                                    copiedManagerConfigurationFile);
+													copiedManagerConfigurationFile);
+			}
+			else
+			{
+				for (var i = 0; i < NumberOfManagersToStart; i++)
+				{
+					var portNumber = Settings.Default.ManagerEndpointPortNumberStart + i;
+
+					Uri uri;
+
+					var copiedManagerConfigurationFile =
+						CopyManagerConfigurationFile(ManagerConfigurationFile,
+													 i + 1,
+													 portNumber,
+													 allowedDowntimeSeconds,
+													 out uri);
+
+					CopiedManagerConfigurationFiles.Add(uri,
+														copiedManagerConfigurationFile);
+				}
 			}
 
 			Logger.DebugWithLineNumber("Created " + CopiedManagerConfigurationFiles.Count + " manager configuration files.");
@@ -230,7 +266,7 @@ namespace Manager.IntegrationTest.Console.Host
 				                               _buildMode));
 
 			Logger.DebugWithLineNumber("DirectoryNodeConfigurationFileFullPath : " +
-			                                 DirectoryNodeConfigurationFileFullPath.FullName);
+			                           DirectoryNodeConfigurationFileFullPath.FullName);
 
 			NodeConfigurationFile =
 				new FileInfo(Path.Combine(DirectoryNodeConfigurationFileFullPath.FullName,
@@ -252,7 +288,7 @@ namespace Manager.IntegrationTest.Console.Host
 					var nodeConfig = CreateNodeConfigurationFile(i);
 
 					Logger.DebugWithLineNumber("Finished creating node configuration file for node : ( id, config file ) : ( " +
-					                                 i + ", " + nodeConfig.FullName + " )");
+					                           i + ", " + nodeConfig.FullName + " )");
 				}
 			}
 
@@ -262,7 +298,7 @@ namespace Manager.IntegrationTest.Console.Host
 			Logger.DebugWithLineNumber("AppDomainManagerTasks");
 
 			AppDomainManagerTasks = new ConcurrentDictionary<string, AppDomainManagerTask>();
-			 
+
 			Parallel.ForEach(CopiedManagerConfigurationFiles.Values, copiedManagerConfigurationFile =>
 			{
 				var appDomainManagerTask =
@@ -275,9 +311,9 @@ namespace Manager.IntegrationTest.Console.Host
 
 				appDomainManagerTask.StartTask(new CancellationTokenSource());
 
-				AppDomainManagerTasks.AddOrUpdate(copiedManagerConfigurationFile.Name, 
-												  appDomainManagerTask,
-												  (s, task) => appDomainManagerTask);
+				AppDomainManagerTasks.AddOrUpdate(copiedManagerConfigurationFile.Name,
+				                                  appDomainManagerTask,
+				                                  (s, task) => appDomainManagerTask);
 			});
 
 			Logger.DebugWithLineNumber("Finished: AppDomainManagerTask.StartTask");
@@ -289,7 +325,7 @@ namespace Manager.IntegrationTest.Console.Host
 				                               _buildMode));
 
 			Logger.DebugWithLineNumber("DirectoryNodeAssemblyLocationFullPath : " +
-			                                 DirectoryNodeAssemblyLocationFullPath.FullName);
+			                           DirectoryNodeAssemblyLocationFullPath.FullName);
 
 			AppDomainNodeTasks = new ConcurrentDictionary<string, AppDomainNodeTask>();
 
@@ -310,18 +346,23 @@ namespace Manager.IntegrationTest.Console.Host
 				Logger.DebugWithLineNumber("Finished : AppDomainNodeTask.StartTask");
 
 				AppDomainNodeTasks.AddOrUpdate(pair.Value.Name,
-											  appDomainNodeTask,
-											  (s, task) => appDomainNodeTask);
+				                               appDomainNodeTask,
+				                               (s, task) => appDomainNodeTask);
 			});
 
-			Task.Factory.StartNew(() => StartLoadBalancerProxy(CopiedManagerConfigurationFiles.Keys));
+			if (NumberOfManagersToStart > 1 || UseLoadBalancerIfJustOneManager)
+			{
+				Task.Factory.StartNew(() => StartLoadBalancerProxy(CopiedManagerConfigurationFiles.Keys));
+			}			
 
 			StartSelfHosting();
 		}
 
-		private static ConcurrentDictionary<string,AppDomainNodeTask> AppDomainNodeTasks { get; set; }
+		public static bool UseLoadBalancerIfJustOneManager { get; set; }
 
-		public static ConcurrentDictionary<string,AppDomainManagerTask> AppDomainManagerTasks { get; set; }
+		private static ConcurrentDictionary<string, AppDomainNodeTask> AppDomainNodeTasks { get; set; }
+
+		public static ConcurrentDictionary<string, AppDomainManagerTask> AppDomainManagerTasks { get; set; }
 
 		public static DirectoryInfo DirectoryManagerAssemblyLocationFullPath { get; set; }
 
@@ -373,7 +414,7 @@ namespace Manager.IntegrationTest.Console.Host
 			if (exp != null)
 			{
 				Logger.FatalWithLineNumber(exp.Message,
-				                                 exp);
+				                           exp);
 			}
 		}
 
@@ -442,6 +483,35 @@ namespace Manager.IntegrationTest.Console.Host
 
 		public static FileInfo CopyManagerConfigurationFile(FileInfo managerConfigFile,
 		                                                    int i,
+															string baseAddress,
+		                                                    int allowedDowntimeSeconds,
+		                                                    out Uri uri)
+		{
+			var newConfigFileName = "Manager" + i + ".config";
+
+			var copyManagerConfigurationFile = managerConfigFile.CopyTo(newConfigFileName,
+																		true);
+
+			var configFileMap = new ExeConfigurationFileMap
+			{
+				ExeConfigFilename = copyManagerConfigurationFile.FullName
+			};
+
+			var config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap,
+																		 ConfigurationUserLevel.None);
+
+			config.AppSettings.Settings["ManagerName"].Value = "Manager" + i;
+			config.AppSettings.Settings["BaseAddress"].Value = baseAddress;
+			config.AppSettings.Settings["AllowedNodeDownTimeSeconds"].Value = allowedDowntimeSeconds.ToString();
+			config.Save();
+
+			uri = new Uri(baseAddress);
+
+			return copyManagerConfigurationFile;
+		}
+
+		public static FileInfo CopyManagerConfigurationFile(FileInfo managerConfigFile,
+		                                                    int i,
 		                                                    int portNumber,
 		                                                    int allowedDowntimeSeconds,
 		                                                    out Uri uri)
@@ -458,6 +528,7 @@ namespace Manager.IntegrationTest.Console.Host
 
 			var config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap,
 			                                                             ConfigurationUserLevel.None);
+
 			var uriBuilder =
 				new UriBuilder(config.AppSettings.Settings["BaseAddress"].Value)
 				{
@@ -495,7 +566,6 @@ namespace Manager.IntegrationTest.Console.Host
 
 
 					Logger.DebugWithLineNumber("Finished to dispose manager (appdomain) with friendly name :" + friendlyName);
-
 				}
 			}
 
@@ -561,12 +631,12 @@ namespace Manager.IntegrationTest.Console.Host
 
 				Logger.DebugWithLineNumber("Finished : AppDomainNodeTask.StartTask");
 
-				AppDomainNodeTasks.AddOrUpdate(appDomainNodeTask.GetAppDomainUniqueId(), 
-											   appDomainNodeTask,
-											   (s, task) => appDomainNodeTask);
+				AppDomainNodeTasks.AddOrUpdate(appDomainNodeTask.GetAppDomainUniqueId(),
+				                               appDomainNodeTask,
+				                               (s, task) => appDomainNodeTask);
 
 				Logger.DebugWithLineNumber("Finished creating node configuration file for node : ( id, config file ) : ( " +
-				                                 NumberOfNodesToStart + ", " + nodeConfig.FullName + " )");
+				                           NumberOfNodesToStart + ", " + nodeConfig.FullName + " )");
 			}
 		}
 
@@ -606,9 +676,9 @@ namespace Manager.IntegrationTest.Console.Host
 				                         copiedManagerConfigurationFile,
 				                         Settings.Default.ManagerAssemblyName);
 
-			AppDomainManagerTasks.AddOrUpdate(appDomainManagerTask.GetAppDomainUniqueId(), 
-											 appDomainManagerTask,
-											 (s, task) => appDomainManagerTask);
+			AppDomainManagerTasks.AddOrUpdate(appDomainManagerTask.GetAppDomainUniqueId(),
+			                                  appDomainManagerTask,
+			                                  (s, task) => appDomainManagerTask);
 
 			Logger.DebugWithLineNumber("Start: AppDomainManagerTask.StartTask");
 
