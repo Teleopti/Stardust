@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Autofac.Extras.DynamicProxy2;
 using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Initializers;
@@ -44,7 +43,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
-			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(base.NumberOfNodes,
+			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(NumberOfNodes,
 			                                                      sqlNotiferCancellationTokenSource,
 			                                                      IntegerValidators.Value1IsEqualToValue2Validator);
 			task.Start();
