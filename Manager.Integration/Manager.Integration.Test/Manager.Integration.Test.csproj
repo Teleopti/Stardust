@@ -89,7 +89,7 @@
     <Compile Include="Helpers\SecurityHelper.cs" />
     <Compile Include="Helpers\ManagerUriBuilder.cs" />
     <Compile Include="Models\WorkerNode.cs" />
-    <Compile Include="FunctionalTests\NodeFailureTests.cs" />
+    <Compile Include="RecoveryTests\NodeFailureTests.cs" />
     <Compile Include="Notifications\NodeStatusNotifier.cs" />
     <Compile Include="Notifications\SqlNotifier.cs" />
     <Compile Include="LoadTests\OneManagerAndFiveNodesLoadTests.cs" />
