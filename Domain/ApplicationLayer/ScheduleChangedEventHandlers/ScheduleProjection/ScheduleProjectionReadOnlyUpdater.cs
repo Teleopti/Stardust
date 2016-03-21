@@ -45,7 +45,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 				{
 					var count =_scheduleProjectionReadOnlyRepository.ClearDayForPerson(
 						date, @event.ScenarioId, @event.PersonId, @event.ScheduleLoadTimestamp);
-					isChanged = count > 0;
+					if (count > 0)
+						isChanged = true;
 				}
 
 				if (scheduleDay.Shift == null) continue;
@@ -54,7 +55,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 					if (isLayerRightNow(layer) ||
 						isCurrentLayerCloser(layer, closestLayerToNow))
 						closestLayerToNow = layer;
-					isChanged = _scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, @event.ScenarioId, @event.PersonId, layer, @event.ScheduleLoadTimestamp) > 0;
+					if(_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, @event.ScenarioId, @event.PersonId, layer, @event.ScheduleLoadTimestamp) > 0)
+						isChanged = true;
 				}
 			}
 			if (isChanged)
