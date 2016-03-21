@@ -34,7 +34,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		protected override void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
 			var scheduleDictionary = new ScheduleDictionary(scenario, _schedulerStateHolderFrom.Schedules.Period);
-			moveSchedules(_schedulerStateHolderFrom.Schedules, scheduleDictionary, schedulerStateHolderTo.AllPermittedPersons, _schedulerStateHolderFrom.Schedules.Period.LoadedPeriod().ToDateOnlyPeriod(_schedulerStateHolderFrom.TimeZoneInfo));
+			using (TurnoffPermissionScope.For(scheduleDictionary))
+			{
+				moveSchedules(_schedulerStateHolderFrom.Schedules, scheduleDictionary, schedulerStateHolderTo.AllPermittedPersons,
+					_schedulerStateHolderFrom.Schedules.Period.LoadedPeriod().ToDateOnlyPeriod(_schedulerStateHolderFrom.TimeZoneInfo));
+			}
 			schedulerStateHolderTo.SchedulingResultState.Schedules = scheduleDictionary;
 		}
 
@@ -71,7 +75,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 				var fromScheduleDays = fromDic[agent].ScheduledDayCollection(period);
 				foreach (var fromScheduleDay in fromScheduleDays)
 				{
-					var toScheduleDay = toDic[agent].ScheduledDay(fromScheduleDay.DateOnlyAsPeriod.DateOnly);
+					var toScheduleDay = toDic[agent].ScheduledDay(fromScheduleDay.DateOnlyAsPeriod.DateOnly);	
 					var toAssignment = toScheduleDay.PersonAssignment(true);
 					toAssignment.FillWithDataFrom(fromScheduleDay.PersonAssignment(true));
 

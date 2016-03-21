@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return true;
 		}
 
-		public IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person)
+		public virtual IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person)
 		{
 			return new[] { period };
 		}
