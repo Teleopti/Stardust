@@ -62,13 +62,19 @@ namespace Manager.Integration.Test.Initializers
 		protected IContainer Container { get; set; }
 
 		[SetUp]
-		protected abstract void SetUp();
+		public virtual void SetUp()
+		{
+			
+		}
 
 		[TearDown]
-		protected abstract void TearDown();
+		public virtual void TearDown()
+		{
+			
+		}
 
 		[TestFixtureSetUp]
-		protected virtual void TestFixtureSetUp()
+		public virtual void TestFixtureSetUp()
 		{
 			AppDomain = AppDomain.CurrentDomain;
 
@@ -96,7 +102,7 @@ namespace Manager.Integration.Test.Initializers
 		}
 
 		[TestFixtureTearDown]
-		protected virtual void TestFixtureTearDown()
+		public virtual void TestFixtureTearDown()
 		{
 			if (AppDomainTask != null)
 			{

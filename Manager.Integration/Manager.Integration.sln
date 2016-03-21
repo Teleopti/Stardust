@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.Integration.Test", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.Integration.Test.WPF", "Manager.Integration.Test.WPF\Manager.Integration.Test.WPF.csproj", "{43082828-3D79-483F-ABF8-9994B4B44FFF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.Integration.LoadTests", "Manager.Integration.LoadTests\Manager.Integration.LoadTests.csproj", "{B216F748-9898-41EE-B89E-B8460B72EB58}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{43082828-3D79-483F-ABF8-9994B4B44FFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43082828-3D79-483F-ABF8-9994B4B44FFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43082828-3D79-483F-ABF8-9994B4B44FFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B216F748-9898-41EE-B89E-B8460B72EB58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B216F748-9898-41EE-B89E-B8460B72EB58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B216F748-9898-41EE-B89E-B8460B72EB58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B216F748-9898-41EE-B89E-B8460B72EB58}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -89,6 +89,7 @@
     <Compile Include="Helpers\ProcessHelper.cs" />
     <Compile Include="Helpers\SecurityHelper.cs" />
     <Compile Include="Helpers\ManagerUriBuilder.cs" />
+    <Compile Include="Initializers\InitialzeAndFinalizeSixManagersAndSixNodes.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndOneNodeNoLoadBalancer.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndZeroNodes.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndOneNode.cs" />

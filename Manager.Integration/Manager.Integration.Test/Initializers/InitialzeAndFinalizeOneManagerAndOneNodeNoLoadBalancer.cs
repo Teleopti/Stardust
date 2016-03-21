@@ -6,15 +6,5 @@
 		{
 		}
 
-
-		protected override void SetUp()
-		{
-			// Do nothing.
-		}
-
-		protected override void TearDown()
-		{
-			// Do nothing.
-		}
 	}
 }

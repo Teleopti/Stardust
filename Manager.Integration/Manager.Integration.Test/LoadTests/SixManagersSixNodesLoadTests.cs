@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using log4net.Config;
 using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
+using Manager.Integration.Test.Initializers;
 using Manager.Integration.Test.Notifications;
 using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Timers;
@@ -18,75 +19,11 @@ using NUnit.Framework;
 namespace Manager.Integration.Test.LoadTests
 {
 	[TestFixture]
-	internal class SixManagersSixNodesLoadTests
+	internal class SixManagersSixNodesLoadTests : InitialzeAndFinalizeSixManagersAndSixNodes
 	{
-		private string ManagerDbConnectionString { get; set; }
-		private Task Task { get; set; }
-		private AppDomainTask AppDomainTask { get; set; }
-		private CancellationTokenSource CancellationTokenSource { get; set; }
-
-#if (DEBUG)
-		private const bool ClearDatabase = true;
-		private const string BuildMode = "Debug";
-
-#else
-		private const bool ClearDatabase = true;
-		private const string BuildMode = "Release";
-#endif
-
 		private void LogMessage(string message)
 		{
 			this.Log().DebugWithLineNumber(message);
-		}
-
-		[TestFixtureSetUp]
-		public void TestFixtureSetUp()
-		{
-			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-
-			ManagerDbConnectionString =
-				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString;
-
-			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
-			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
-
-			LogMessage("Start TestFixtureSetUp");
-
-			if (ClearDatabase)
-			{
-				DatabaseHelper.TryClearDatabase(ManagerDbConnectionString);
-			}
-			CancellationTokenSource = new CancellationTokenSource();
-
-			AppDomainTask = new AppDomainTask(BuildMode);
-
-			Task = AppDomainTask.StartTask(numberOfManagers: 6,
-			                               numberOfNodes: 6,
-										   useLoadBalancerIfJustOneManager:true,
-			                               cancellationTokenSource: CancellationTokenSource);
-			Thread.Sleep(TimeSpan.FromSeconds(2));
-			LogMessage("Finished TestFixtureSetUp");
-		}
-
-		[TestFixtureTearDown]
-		public void TestFixtureTearDown()
-		{
-			LogMessage("Start TestFixtureTearDown");
-			if (AppDomainTask != null)
-			{
-				AppDomainTask.Dispose();
-			}
-			LogMessage("Finished TestFixtureTearDown");
-		}
-
-		private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-		{
-			var exp = e.ExceptionObject as Exception;
-			if (exp != null)
-			{
-				this.Log().FatalWithLineNumber(exp.Message,
-				                               exp);
-			}
 		}
 
 		[Test]
