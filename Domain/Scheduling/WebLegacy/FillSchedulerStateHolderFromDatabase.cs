@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IPersonRepository _personRepository;
+		private readonly ISkillRepository _skillRepository;
 
 		public FillSchedulerStateHolderFromDatabase(IScenarioRepository scenarioRepository,
 					ISkillDayLoadHelper skillDayLoadHelper,
@@ -31,7 +32,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 					ICurrentTeleoptiPrincipal principal,
 					ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
 					IRepositoryFactory repositoryFactory,
-					IPersonRepository personRepository)
+					IPersonRepository personRepository,
+					ISkillRepository skillRepository)
 		{
 			_scenarioRepository = scenarioRepository;
 			_skillDayLoadHelper = skillDayLoadHelper;
@@ -41,6 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_repositoryFactory = repositoryFactory;
 			_personRepository = personRepository;
+			_skillRepository = skillRepository;
 		}
 
 		protected override IScenario FetchScenario()
@@ -57,9 +60,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		protected override void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<ISkill> skills, DateOnlyPeriod period)
 		{
-			var forecast = _skillDayLoadHelper.LoadSchedulerSkillDays(period, skills, scenario);
+			var allSkills = _skillRepository.FindAllWithSkillDays(period).ToArray();
+			var skillsToUse = allSkills.Where(skills.Contains).ToArray();
+			var forecast = _skillDayLoadHelper.LoadSchedulerSkillDays(period, skillsToUse, scenario);
 			schedulerStateHolderTo.SchedulingResultState.SkillDays = forecast;
-			schedulerStateHolderTo.SchedulingResultState.AddSkills(skills.ToArray());
+			schedulerStateHolderTo.SchedulingResultState.AddSkills(skillsToUse.ToArray());
 		}
 
 		protected override void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period)

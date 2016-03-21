@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		private static IEnumerable<ISkill> skillsToUse(IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
+			//this is wrong!
 			var agentSkills = new HashSet<ISkill>();
 			foreach (var skill in agents.SelectMany(filteredAgent => filteredAgent.ActiveSkillsFor(period)))
 			{
