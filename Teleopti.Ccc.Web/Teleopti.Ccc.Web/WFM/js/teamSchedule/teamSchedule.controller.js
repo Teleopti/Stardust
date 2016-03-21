@@ -288,7 +288,9 @@
 				panelName: "", // No panel needed,
 				action: confirmRemoveAbsence,
 				enabled: canRemoveAbsence,
-				active: function() { return vm.toggleForRemoveAbsenceEnabled; }
+				active: function() {
+					return vm.toggleForRemoveAbsenceEnabled && vm.permissions.IsRemoveAbsenceAvailable;
+				}
 			}
 		];
 
