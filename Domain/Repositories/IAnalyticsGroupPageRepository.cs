@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void AddGroupPage(AnalyticsGroupPage analyticsGroupPage);
 		void DeleteGroupPages(IEnumerable<Guid> groupPageIds);
 		IEnumerable<AnalyticsGroupPage> GetGroupPage(Guid groupPageCode);
+		AnalyticsGroupPage GetGroupPageByGroupCode(Guid groupCode);
 		void UpdateGroupPage(AnalyticsGroupPage analyticsGroupPage);
 	}
 }

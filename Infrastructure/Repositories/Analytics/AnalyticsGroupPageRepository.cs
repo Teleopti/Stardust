@@ -44,6 +44,34 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
+		public AnalyticsGroupPage GetGroupPageByGroupCode(Guid groupCode)
+		{
+			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
+			{
+				return uow.Session().CreateSQLQuery(
+					@"select 
+	                    [group_page_id] GroupPageId
+					  ,[group_page_code] GroupPageCode
+					  ,[group_page_name] GroupPageName
+					  ,[group_page_name_resource_key] GroupPageNameResourceKey
+					  ,[group_id] GroupId
+					  ,[group_code] GroupCode
+					  ,[group_name] GroupName
+					  ,[group_is_custom] GroupIsCustom
+					  ,[business_unit_id] BusinessUnitId
+					  ,[business_unit_code] BusinessUnitCode
+					  ,[business_unit_name] BusinessUnitName
+					  ,[datasource_id] DatasourceId
+					  ,[insert_date] InsertDate
+					  ,[datasource_update_date] DatasourceUpdateDate
+                    from mart.[dim_group_page] WITH (NOLOCK) where group_code=:GroupCode")
+					.SetGuid("GroupCode", groupCode)
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsGroupPage)))
+					.SetReadOnly(true)
+					.UniqueResult<AnalyticsGroupPage>();
+			}
+		}
+
 		public void UpdateGroupPage(AnalyticsGroupPage analyticsGroupPage)
 		{
 			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())

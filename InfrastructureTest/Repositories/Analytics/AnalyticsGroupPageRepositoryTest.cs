@@ -59,6 +59,32 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		}
 
 		[Test]
+		public void ShouldGetGroupPageByGroupCode()
+		{
+			var target = new AnalyticsGroupPageRepository(currentDataSource);
+			var groupPage = new AnalyticsGroupPage
+			{
+				GroupPageCode = Guid.NewGuid(),
+				GroupPageName = "GroupPageName1",
+				GroupPageNameResourceKey = "GroupPageNameResourceKey1",
+				GroupCode = Guid.NewGuid(),
+				GroupName = "GroupName1",
+				GroupIsCustom = true,
+				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+			};
+			target.AddGroupPage(groupPage);
+
+			var result = target.GetGroupPageByGroupCode(groupPage.GroupCode);
+			result.GroupPageCode.Should().Be.EqualTo(groupPage.GroupPageCode);
+			result.GroupPageName.Should().Be.EqualTo(groupPage.GroupPageName);
+			result.GroupPageNameResourceKey.Should().Be.EqualTo(groupPage.GroupPageNameResourceKey);
+			result.GroupCode.Should().Be.EqualTo(groupPage.GroupCode);
+			result.GroupName.Should().Be.EqualTo(groupPage.GroupName);
+			result.GroupIsCustom.Should().Be.EqualTo(groupPage.GroupIsCustom);
+			result.BusinessUnitCode.Should().Be.EqualTo(groupPage.BusinessUnitCode);
+		}
+
+		[Test]
 		public void ShouldUpdateGroupPage()
 		{
 			var target = new AnalyticsGroupPageRepository(currentDataSource);

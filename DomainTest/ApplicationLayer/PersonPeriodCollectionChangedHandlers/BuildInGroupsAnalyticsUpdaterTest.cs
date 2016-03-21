@@ -1,0 +1,238 @@
+﻿using System;
+using NUnit.Framework;
+using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics;
+using Teleopti.Ccc.Domain.ApplicationLayer.PersonPeriodCollectionChangedHandlers;
+using Teleopti.Ccc.Domain.Budgeting;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonPeriodCollectionChangedHandlers
+{
+	[TestFixture]
+	public class BuildInGroupsAnalyticsUpdaterTest
+	{
+		private BuildInGroupsAnalyticsUpdater _target;
+		private IAnalyticsGroupPageRepository _analyticsGroupPageRepository;
+		private ISkillRepository _skillRepository;
+		private IPartTimePercentageRepository _partTimePercentageRepository;
+		private IRuleSetBagRepository _ruleSetBagRepository;
+		private IContractRepository _contractRepository;
+		private IContractScheduleRepository _contractScheduleRepository;
+		private IBudgetGroupRepository _budgetGroupRepository;
+
+		[SetUp]
+		public void Setup()
+		{
+			_analyticsGroupPageRepository = MockRepository.GenerateMock<IAnalyticsGroupPageRepository>();
+			_skillRepository = MockRepository.GenerateMock<ISkillRepository>();
+			_partTimePercentageRepository = MockRepository.GenerateMock<IPartTimePercentageRepository>();
+			_ruleSetBagRepository = MockRepository.GenerateMock<IRuleSetBagRepository>();
+			_contractRepository = MockRepository.GenerateMock<IContractRepository>();
+			_contractScheduleRepository = MockRepository.GenerateMock<IContractScheduleRepository>();
+			_budgetGroupRepository = MockRepository.GenerateMock<IBudgetGroupRepository>();
+
+			_target = new BuildInGroupsAnalyticsUpdater(_analyticsGroupPageRepository, _skillRepository, _partTimePercentageRepository, _ruleSetBagRepository, _contractRepository, _contractScheduleRepository, _budgetGroupRepository);
+		}
+
+		[Test]
+		public void ShouldUpdatePartTimePercentage()
+		{
+			var @event = new PersonPeriodCollectionChangedEvent();
+			var entityId = Guid.NewGuid();
+			var updateGroupName = "UpdateGroupName";
+			@event.SetPersonIdCollection(new [] {entityId});
+
+			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId))
+				.Return(new AnalyticsGroupPage {GroupName = "GroupName", GroupCode = entityId});
+			_partTimePercentageRepository.Stub(r => r.Get(entityId)).Return(new PartTimePercentage(updateGroupName));
+			_ruleSetBagRepository.Stub(r => r.Get(entityId)).Return(null);
+			_contractRepository.Stub(r => r.Get(entityId)).Return(null);
+			_contractScheduleRepository.Stub(r => r.Get(entityId)).Return(null);
+			_budgetGroupRepository.Stub(r => r.Get(entityId)).Return(null);
+			_skillRepository.Stub(r => r.Get(entityId)).Return(null);
+
+			_target.Handle(@event);
+
+			_partTimePercentageRepository.AssertWasCalled(r => r.Get(entityId));
+			_analyticsGroupPageRepository.AssertWasCalled(r => r.UpdateGroupPage(Arg<AnalyticsGroupPage>.Matches(a => a.GroupName == updateGroupName)));
+		}
+
+		[Test]
+		public void ShouldUpdateRuleSetBag()
+		{
+			var @event = new PersonPeriodCollectionChangedEvent();
+			var entityId = Guid.NewGuid();
+			var updateGroupName = "UpdateGroupName";
+			@event.SetPersonIdCollection(new[] { entityId });
+
+			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId))
+				.Return(new AnalyticsGroupPage { GroupName = "GroupName", GroupCode = entityId });
+			_partTimePercentageRepository.Stub(r => r.Get(entityId)).Return(null);
+			_ruleSetBagRepository.Stub(r => r.Get(entityId)).Return(new RuleSetBag {Description = new Description(updateGroupName)});
+			_contractRepository.Stub(r => r.Get(entityId)).Return(null);
+			_contractScheduleRepository.Stub(r => r.Get(entityId)).Return(null);
+			_budgetGroupRepository.Stub(r => r.Get(entityId)).Return(null);
+			_skillRepository.Stub(r => r.Get(entityId)).Return(null);
+			_target.Handle(@event);
+
+			_partTimePercentageRepository.AssertWasCalled(r => r.Get(entityId));
+			_ruleSetBagRepository.AssertWasCalled(r => r.Get(entityId));
+			_analyticsGroupPageRepository.AssertWasCalled(r => r.UpdateGroupPage(Arg<AnalyticsGroupPage>.Matches(a => a.GroupName == updateGroupName)));
+		}
+
+		[Test]
+		public void ShouldUpdateContract()
+		{
+			var @event = new PersonPeriodCollectionChangedEvent();
+			var entityId = Guid.NewGuid();
+			var updateGroupName = "UpdateGroupName";
+			@event.SetPersonIdCollection(new[] { entityId });
+
+			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId))
+				.Return(new AnalyticsGroupPage { GroupName = "GroupName", GroupCode = entityId });
+			_partTimePercentageRepository.Stub(r => r.Get(entityId)).Return(null);
+			_ruleSetBagRepository.Stub(r => r.Get(entityId)).Return(null);
+			_contractRepository.Stub(r => r.Get(entityId)).Return(new Contract(updateGroupName));
+			_contractScheduleRepository.Stub(r => r.Get(entityId)).Return(null);
+			_budgetGroupRepository.Stub(r => r.Get(entityId)).Return(null);
+			_skillRepository.Stub(r => r.Get(entityId)).Return(null);
+
+			_target.Handle(@event);
+
+			_partTimePercentageRepository.AssertWasCalled(r => r.Get(entityId));
+			_ruleSetBagRepository.AssertWasCalled(r => r.Get(entityId));
+			_contractRepository.AssertWasCalled(r => r.Get(entityId));
+			_analyticsGroupPageRepository.AssertWasCalled(r => r.UpdateGroupPage(Arg<AnalyticsGroupPage>.Matches(a => a.GroupName == updateGroupName)));
+		}
+
+		[Test]
+		public void ShouldUpdateContractSchedule()
+		{
+			var @event = new PersonPeriodCollectionChangedEvent();
+			var entityId = Guid.NewGuid();
+			var updateGroupName = "UpdateGroupName";
+			@event.SetPersonIdCollection(new[] { entityId });
+
+			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId))
+				.Return(new AnalyticsGroupPage { GroupName = "GroupName", GroupCode = entityId });
+			_partTimePercentageRepository.Stub(r => r.Get(entityId)).Return(null);
+			_ruleSetBagRepository.Stub(r => r.Get(entityId)).Return(null);
+			_contractRepository.Stub(r => r.Get(entityId)).Return(null);
+			_contractScheduleRepository.Stub(r => r.Get(entityId)).Return(new ContractSchedule(updateGroupName));
+			_budgetGroupRepository.Stub(r => r.Get(entityId)).Return(null);
+			_skillRepository.Stub(r => r.Get(entityId)).Return(null);
+
+			_target.Handle(@event);
+
+			_partTimePercentageRepository.AssertWasCalled(r => r.Get(entityId));
+			_ruleSetBagRepository.AssertWasCalled(r => r.Get(entityId));
+			_contractRepository.AssertWasCalled(r => r.Get(entityId));
+			_contractScheduleRepository.AssertWasCalled(r => r.Get(entityId));
+			_analyticsGroupPageRepository.AssertWasCalled(r => r.UpdateGroupPage(Arg<AnalyticsGroupPage>.Matches(a => a.GroupName == updateGroupName)));
+		}
+
+		[Test]
+		public void ShouldUpdateBudgetGroup()
+		{
+			var @event = new PersonPeriodCollectionChangedEvent();
+			var entityId = Guid.NewGuid();
+			var updateGroupName = "UpdateGroupName";
+			@event.SetPersonIdCollection(new[] { entityId });
+
+			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId))
+				.Return(new AnalyticsGroupPage { GroupName = "GroupName", GroupCode = entityId });
+			_partTimePercentageRepository.Stub(r => r.Get(entityId)).Return(null);
+			_ruleSetBagRepository.Stub(r => r.Get(entityId)).Return(null);
+			_contractRepository.Stub(r => r.Get(entityId)).Return(null);
+			_contractScheduleRepository.Stub(r => r.Get(entityId)).Return(null);
+			_budgetGroupRepository.Stub(r => r.Get(entityId)).Return(new BudgetGroup {Name = updateGroupName});
+			_skillRepository.Stub(r => r.Get(entityId)).Return(null);
+
+			_target.Handle(@event);
+
+			_partTimePercentageRepository.AssertWasCalled(r => r.Get(entityId));
+			_ruleSetBagRepository.AssertWasCalled(r => r.Get(entityId));
+			_contractRepository.AssertWasCalled(r => r.Get(entityId));
+			_contractScheduleRepository.AssertWasCalled(r => r.Get(entityId));
+			_budgetGroupRepository.AssertWasCalled(r => r.Get(entityId));
+			_analyticsGroupPageRepository.AssertWasCalled(r => r.UpdateGroupPage(Arg<AnalyticsGroupPage>.Matches(a => a.GroupName == updateGroupName)));
+		}
+
+		[Test]
+		public void ShouldUpdateSkill()
+		{
+			var @event = new PersonPeriodCollectionChangedEvent();
+			var entityId = Guid.NewGuid();
+			var updateGroupName = "UpdateGroupName";
+			@event.SetPersonIdCollection(new[] { entityId });
+
+			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId))
+				.Return(new AnalyticsGroupPage { GroupName = "GroupName", GroupCode = entityId });
+			_partTimePercentageRepository.Stub(r => r.Get(entityId)).Return(null);
+			_ruleSetBagRepository.Stub(r => r.Get(entityId)).Return(null);
+			_contractRepository.Stub(r => r.Get(entityId)).Return(null);
+			_contractScheduleRepository.Stub(r => r.Get(entityId)).Return(null);
+			_budgetGroupRepository.Stub(r => r.Get(entityId)).Return(null);
+			_skillRepository.Stub(r => r.Get(entityId)).Return(new Skill {Name = updateGroupName});
+
+			_target.Handle(@event);
+
+			_partTimePercentageRepository.AssertWasCalled(r => r.Get(entityId));
+			_ruleSetBagRepository.AssertWasCalled(r => r.Get(entityId));
+			_contractRepository.AssertWasCalled(r => r.Get(entityId));
+			_contractScheduleRepository.AssertWasCalled(r => r.Get(entityId));
+			_budgetGroupRepository.AssertWasCalled(r => r.Get(entityId));
+			_skillRepository.AssertWasCalled(r => r.Get(entityId));
+			_analyticsGroupPageRepository.AssertWasCalled(r => r.UpdateGroupPage(Arg<AnalyticsGroupPage>.Matches(a => a.GroupName == updateGroupName)));
+		}
+
+		[Test]
+		public void ShouldNotUpdateIfNotExisting()
+		{
+			var @event = new PersonPeriodCollectionChangedEvent();
+			var entityId = Guid.NewGuid();
+			var updateGroupName = "UpdateGroupName";
+			@event.SetPersonIdCollection(new[] { entityId });
+
+			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId))
+				.Return(null);
+
+			_target.Handle(@event);
+
+			_analyticsGroupPageRepository.AssertWasNotCalled(r => r.UpdateGroupPage(Arg<AnalyticsGroupPage>.Matches(a => a.GroupName == updateGroupName)));
+		}
+
+		[Test]
+		public void ShouldNotUpdateIfNotSpecificType()
+		{
+			var @event = new PersonPeriodCollectionChangedEvent();
+			var entityId = Guid.NewGuid();
+			var updateGroupName = "UpdateGroupName";
+			@event.SetPersonIdCollection(new[] { entityId });
+
+			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId))
+				.Return(new AnalyticsGroupPage { GroupName = "GroupName", GroupCode = entityId });
+			_partTimePercentageRepository.Stub(r => r.Get(entityId)).Return(null);
+			_ruleSetBagRepository.Stub(r => r.Get(entityId)).Return(null);
+			_contractRepository.Stub(r => r.Get(entityId)).Return(null);
+			_contractScheduleRepository.Stub(r => r.Get(entityId)).Return(null);
+			_budgetGroupRepository.Stub(r => r.Get(entityId)).Return(null);
+			_skillRepository.Stub(r => r.Get(entityId)).Return(null);
+
+			_target.Handle(@event);
+
+			_partTimePercentageRepository.AssertWasCalled(r => r.Get(entityId));
+			_ruleSetBagRepository.AssertWasCalled(r => r.Get(entityId));
+			_contractRepository.AssertWasCalled(r => r.Get(entityId));
+			_contractScheduleRepository.AssertWasCalled(r => r.Get(entityId));
+			_budgetGroupRepository.AssertWasCalled(r => r.Get(entityId));
+			_skillRepository.AssertWasCalled(r => r.Get(entityId));
+			_analyticsGroupPageRepository.AssertWasNotCalled(r => r.UpdateGroupPage(Arg<AnalyticsGroupPage>.Matches(a => a.GroupName == updateGroupName)));
+		}
+	}
+}
