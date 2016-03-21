@@ -1,5 +1,4 @@
 ﻿using System.Data.SqlClient;
-using NUnit.Framework.Internal;
 using System.Configuration;
 
 namespace PerformanceTests.Database
