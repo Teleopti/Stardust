@@ -14198,4 +14198,8 @@ Help us improve your experience by sending an error report</value>
     <value>You can not modify your own role</value>
     <comment>Alert when atempting to modify own roles permissions</comment>
   </data>
+  <data name="Replan" xml:space="preserve">
+    <value>Replan</value>
+    <comment>Replan</comment>
+  </data>
 </root>

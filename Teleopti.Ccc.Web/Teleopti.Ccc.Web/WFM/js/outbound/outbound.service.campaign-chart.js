@@ -25,7 +25,7 @@
 		   'ManuallyPlanned',
 		   'ManualPlan',
 		   'ClosedDay',
-		   'Overstaff',
+		   'Overstaffing',
 		   'AddBacklog'
         ];
         var self = this;
@@ -161,7 +161,7 @@
                 unscheduledPlans: self.dictionary['Planned'], 
                 schedules: self.dictionary['Scheduled'],
                 progress: self.dictionary['Progress'],
-				overStaff: self.dictionary['Overstaff']
+				overStaff: self.dictionary['Overstaffing']
             };
         }
 
