@@ -61,6 +61,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_agentStateReadModelUpdater.Invoke(this);
 		}
 
+		public bool ThereIsAChange()
+		{
+			return !batchId.Equals(Stored.BatchId()) ||
+				   !Schedule.CurrentActivityId().Equals(Stored.ActivityId()) ||
+				   !Schedule.NextActivityId().Equals(Stored.NextActivityId()) ||
+				   !Schedule.NextActivityStartTime().Equals(Stored.NextActivityStartTime()) ||
+				   !State.StateGroupId().Equals(Stored.StateGroupId())
+				;
+		}
+
 		// for logging
 		public override string ToString()
 		{
@@ -141,16 +151,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			};
 		}
 		
-	    public bool Send
-		{
-			get
-			{
-				return !Schedule.CurrentActivityId().Equals(Stored.ActivityId()) ||
-					   !State.StateGroupId().Equals(Stored.StateGroupId()) ||
-					   !Schedule.NextActivityId().Equals(Stored.NextActivityId()) ||
-					   !Schedule.NextActivityStartTime().Equals(Stored.NextActivityStartTime())
-					;
-			}
-		}
 	}
 }

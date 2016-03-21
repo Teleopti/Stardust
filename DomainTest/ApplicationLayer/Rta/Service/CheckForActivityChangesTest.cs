@@ -182,33 +182,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Database.StoredState.NextActivityStartTime.Should().Be("2015-09-21 12:00".Utc());
 		}
-
-		[Test]
-		public void ShouldNoticeScheduleChangeInThePast()
-		{
-			var personId = Guid.NewGuid();
-			var phone = Guid.NewGuid();
-			var lunch = Guid.NewGuid();
-			Database
-				.WithUser("usercode", personId)
-				.WithSchedule(personId, phone, "2015-09-21 09:00", "2015-09-21 11:00")
-				.WithSchedule(personId, lunch, "2015-09-21 11:00", "2015-09-21 12:00")
-				;
-
-			Now.Is("2015-09-21 09:00");
-			Target.CheckForActivityChanges(Database.TenantName());
-			Now.Is("2015-09-21 09:05");
-			Database
-				.ClearSchedule(personId)
-				.WithSchedule(personId, phone, "2015-09-21 08:55", "2015-09-21 11:00")
-				.WithSchedule(personId, lunch, "2015-09-21 11:00", "2015-09-21 12:00")
-				;
-			Target.ReloadSchedulesOnNextCheckForActivityChanges(Database.TenantName(), personId);
-			Target.CheckForActivityChanges(Database.TenantName());
-
-			Database.StoredState.ReceivedTime.Should().Be("2015-09-21 09:05".Utc());
-		}
-
+		
 		[Test]
 		public void ShouldNoticeScheduleActivityChange()
 		{
