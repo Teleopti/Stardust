@@ -24,7 +24,6 @@ namespace Manager.Integration.LoadTests
 			var fileInfo =
 				new FileInfo(Assembly.GetExecutingAssembly().Location);
 
-
 			var testPackage =
 				new TestPackage(Path.Combine(fileInfo.Directory.FullName,
 				                             "Manager.Integration.Test.dll"));
@@ -33,7 +32,7 @@ namespace Manager.Integration.LoadTests
 
 			remoteTestRunner.Load(testPackage);
 
-			var testName = 
+			var testName =
 				"Manager.Integration.Test.FunctionalTests.OneManagerAndOneNodeTests.ShouldBeAbleToCreateASuccessJobRequestTest";
 
 			var simpleNameFilter =
