@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading;
-using Manager.Integration.Test.LoadTests;
+﻿using Manager.Integration.Test.LoadTests;
 
 namespace Manager.Integration.LoadTests
 {
@@ -11,7 +9,6 @@ namespace Manager.Integration.LoadTests
 			//------------------------------------
 			// Do NOT change order of execution.
 			//------------------------------------
-
 			var loadTests = new OneManagerAndOneNodeLoadTests();
 
 			// Set up test.
