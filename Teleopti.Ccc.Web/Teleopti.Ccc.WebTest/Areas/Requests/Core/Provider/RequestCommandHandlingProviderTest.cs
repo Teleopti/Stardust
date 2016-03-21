@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var personRequest = createNewAbsenceRequest(person, absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
 			personRequest.Pending();
-			
+
 			requestApprovalService.Stub(x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person)).Return(new List<IBusinessRuleResponse>());
 			var affectedIds = Target.ApproveRequests(new List<Guid> { personRequest.Id.Value });
 
@@ -88,9 +88,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 
 			var absence = AbsenceFactory.CreateAbsence("absence");
 
-			var personRequest1= createNewAbsenceRequest(person, absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
+			var personRequest1 = createNewAbsenceRequest(person, absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
 			var personRequest2 = createNewAbsenceRequest(person, absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
-			
+
 			personRequest1.Pending();
 			personRequest2.Pending();
 
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 
 			var personRequest = createNewAbsenceRequest(person, absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
 			personRequest.Pending();
-			
+
 			var affectedIds = Target.DenyRequests(new List<Guid> { personRequest.Id.Value });
 
 			affectedIds.ToList().Count.Should().Be.EqualTo(1);
@@ -140,11 +140,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 
 			affectedIds.ToList().Count.Should().Be.EqualTo(2);
 		}
-		
+
 		[Test]
 		public void ShouldManuallyDenyWaitlistRequest()
 		{
-
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var person = PersonFactory.CreatePerson("tester");
 
@@ -156,8 +155,31 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 
 			Target.DenyRequests(new List<Guid> { waitlistedPersonRequest.Id.Value });
 			((AbsenceRequest)waitlistedPersonRequest.Request).IsWaitlisted().Should().Be.False();
+			waitlistedPersonRequest.IsDenied.Should().Be.True();
 		}
 
+
+		[Test]
+		public void ShouldManuallyApproveWaitlistedRequests()
+		{
+			var absence = AbsenceFactory.CreateAbsence("absence");
+			var person = PersonFactory.CreatePerson("tester");
+			var scheduleDictionary = new FakeScheduleDictionary();
+
+			person.WorkflowControlSet = createWorkFlowControlSet(new DateTime(2016, 2, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 4, 1, 23, 00, 00, DateTimeKind.Utc), absence);
+			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(scheduleDictionary, Scenario.Current(), person);
+			
+			var dateTimePeriod = new DateTimePeriod(
+				new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+				new DateTime(2016, 3, 1, 23, 00, 00, DateTimeKind.Utc));
+			
+			var waitlistedPersonRequest = createAutoDeniedAbsenceRequest(person, absence, dateTimePeriod);
+			
+			requestApprovalService.Stub(x => x.ApproveAbsence(absence, dateTimePeriod, person)).Return(new List<IBusinessRuleResponse>());
+			Target.ApproveRequests(new List<Guid> { waitlistedPersonRequest.Id.Value });
+
+			waitlistedPersonRequest.IsApproved.Should().Be.True();
+		}
 
 		private IPersonRequest createAutoDeniedAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod requestDateTimePeriod)
 		{
