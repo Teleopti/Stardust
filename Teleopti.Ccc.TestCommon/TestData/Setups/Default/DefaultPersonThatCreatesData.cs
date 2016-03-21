@@ -1,5 +1,4 @@
 ﻿using System;
-using log4net;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -9,8 +8,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 {
 	public class DefaultPersonThatCreatesData : IHashableDataSetup
 	{
-		private static readonly ILog log = LogManager.GetLogger(typeof (DefaultPersonThatCreatesData));
-
 		public static IPerson PersonThatCreatesDbData = makePersonThatCreatesDbData();
 
 		private static IPerson makePersonThatCreatesDbData()
@@ -30,9 +27,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 
 		public int HashValue()
 		{
-			log.Debug("PersonThatCreatesDbData.Name.FirstName.GetHashCode() " + PersonThatCreatesDbData.Name.FirstName.GetHashCode());
-			log.Debug("PersonThatCreatesDbData.Name.LastName.GetHashCode() " + PersonThatCreatesDbData.Name.LastName.GetHashCode());
-			log.Debug("PersonThatCreatesDbData.PermissionInformation.Culture().DisplayName.GetHashCode() " + PersonThatCreatesDbData.PermissionInformation.Culture().DisplayName.GetHashCode());
 			return PersonThatCreatesDbData.Name.FirstName.GetHashCode() ^
 				   PersonThatCreatesDbData.Name.LastName.GetHashCode() ^
 				   PersonThatCreatesDbData.PermissionInformation.Culture().DisplayName.GetHashCode();

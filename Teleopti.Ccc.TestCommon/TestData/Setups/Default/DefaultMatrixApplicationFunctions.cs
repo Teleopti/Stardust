@@ -10,8 +10,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 {
 	public class DefaultMatrixApplicationFunctions : IHashableDataSetup
 	{
-		private static readonly ILog log = LogManager.GetLogger(typeof(DefaultMatrixApplicationFunctions));
-
 		private readonly string[] names =
 		{
 			"ResReportAgentQueueMetrics",
@@ -49,9 +47,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 
 		public int HashValue()
 		{
-			var hashValue = names.Aggregate(37, (current, name) => current ^ name.GetHashCode());
-			log.Debug("hashValue " + hashValue);
-			return hashValue;
+			return names.Aggregate(37, (current, name) => current ^ name.GetHashCode());
 		}
 	}
 }

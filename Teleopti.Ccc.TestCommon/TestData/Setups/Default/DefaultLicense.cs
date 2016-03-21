@@ -8,8 +8,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 {
 	public class DefaultLicense : IHashableDataSetup
 	{
-		private static readonly ILog log = LogManager.GetLogger(typeof(DefaultLicense));
-
 		private string _licenseText;
 
 		private string licenseText
@@ -26,7 +24,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 
 		public int HashValue()
 		{
-			log.Debug("licenseText.GetHashCode() " + licenseText.GetHashCode());
 			return licenseText.GetHashCode();
 		}
 	}
