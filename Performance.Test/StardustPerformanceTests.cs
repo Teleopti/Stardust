@@ -1,8 +1,9 @@
 ﻿using System;
 using NUnit.Framework;
+using PerformanceTests;
 using PerformanceTests.Database;
 
-namespace PerformanceTests
+namespace Performance.Test
 {
 	[TestFixture]
 	public class StardustPerformanceTests 
@@ -28,7 +29,7 @@ namespace PerformanceTests
 		{
 			var resp = await _httpSender.TryGetAsync(new Uri("http://localhost:9000/stardustdashboard/job"));
 			
-			Assert.IsTrue(resp);
+			Assert.IsTrue(resp); 
 		}
 
 	}
