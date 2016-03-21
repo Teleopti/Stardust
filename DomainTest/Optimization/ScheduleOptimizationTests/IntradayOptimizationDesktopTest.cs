@@ -544,8 +544,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			schedulerStateHolderFrom.SchedulingResultState.Schedules.Modify(scheduleDay);
 			schedulerStateHolderFrom.SchedulingResultState.SkillDays = new Dictionary<ISkill, IList<ISkillDay>> { { skill, new List<ISkillDay> { skillDay } } };
 
-			PrincipalAuthorization.SetInstance(new missingPermissionsOnAgentsOverlappingSchedulePeriod());
-			Assert.DoesNotThrow(() => Target.Optimize(new[] { scheduleDay }, new OptimizationPreferencesDefaultValueProvider().Fetch(), new DateOnlyPeriod(dateOnly, dateOnly), new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new NoSchedulingProgress()));
+
+			using (new CustomAuthorizationContext(new missingPermissionsOnAgentsOverlappingSchedulePeriod()))
+			{
+				Assert.DoesNotThrow(
+				() =>
+					Target.Optimize(new[] { scheduleDay }, new OptimizationPreferencesDefaultValueProvider().Fetch(),
+						new DateOnlyPeriod(dateOnly, dateOnly), new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()),
+						new NoSchedulingProgress()));
+			}
 		}
 		private class missingPermissionsOnAgentsOverlappingSchedulePeriod : PrincipalAuthorizationWithFullPermission
 		{
