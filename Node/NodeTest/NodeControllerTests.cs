@@ -23,7 +23,7 @@ using Stardust.Node.Workers;
 
 namespace NodeTest
 {
-	[TestFixture, Ignore]
+	[TestFixture]
 	public class NodeControllerTests
 	{
 		[SetUp]
