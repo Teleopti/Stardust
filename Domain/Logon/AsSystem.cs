@@ -40,14 +40,10 @@ namespace Teleopti.Ccc.Domain.Logon
 		{
 			var dataSource = _dataSourceForTenant.Tenant(tenant);
 
-			IPerson systemUser;
-			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
-			{
-				systemUser = _repositoryFactory.CreatePersonRepository(uow).LoadPersonAndPermissions(SystemUser.Id);
-			}
-
 			using (var unitOfWork = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
+				var systemUser = _repositoryFactory.CreatePersonRepository(unitOfWork).LoadPersonAndPermissions(SystemUser.Id);
+
 				var businessUnit = _repositoryFactory.CreateBusinessUnitRepository(unitOfWork).Get(businessUnitId);
 				unitOfWork.Remove(businessUnit); //To make sure that business unit doesn't belong to this uow any more
 				
