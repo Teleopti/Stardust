@@ -8,7 +8,7 @@ namespace Manager.Integration.LoadTests
 		{
 			//RunTestVersion1();
 
-			RunTestVersion2();
+			//RunTestVersion2();
 		}
 
 		private static void RunTestVersion2()
@@ -22,7 +22,7 @@ namespace Manager.Integration.LoadTests
 
 			//var testPackage =
 			//	new TestPackage(Path.Combine(fileInfo.Directory.FullName,
-			//	                             "Manager.Integration.Test.dll"));
+			//								 "Manager.Integration.Test.dll"));
 
 			//var remoteTestRunner = new RemoteTestRunner();
 
@@ -36,9 +36,9 @@ namespace Manager.Integration.LoadTests
 
 			//var testResult =
 			//	remoteTestRunner.Run(new NullListener(),
-			//	                     simpleNameFilter,
-			//	                     false,
-			//	                     LoggingThreshold.Error);
+			//						 simpleNameFilter,
+			//						 false,
+			//						 LoggingThreshold.Error);
 		}
 
 		private static void RunTestVersion1()
@@ -46,18 +46,18 @@ namespace Manager.Integration.LoadTests
 			//------------------------------------
 			// Do NOT change order of execution.
 			//------------------------------------
-			var loadTests = new OneManagerAndOneNodeLoadTests();
+			//var loadTests = new OneManagerAndOneNodeLoadTests();
 
-			// Set up test.
-			loadTests.TestFixtureSetUp();
-			loadTests.SetUp();
+			//// Set up test.
+			//loadTests.TestFixtureSetUp();
+			//loadTests.SetUp();
 
-			// Execute test.
-			loadTests.YourTestGoesHere();
+			//// Execute test.
+			//loadTests.YourTestGoesHere();
 
-			// Tear down test.
-			loadTests.TearDown();
-			loadTests.TestFixtureTearDown();
+			//// Tear down test.
+			//loadTests.TearDown();
+			//loadTests.TestFixtureTearDown();
 		}
 	}
 }
