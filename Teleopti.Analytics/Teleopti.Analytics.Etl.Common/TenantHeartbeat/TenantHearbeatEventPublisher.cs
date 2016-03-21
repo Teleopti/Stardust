@@ -21,6 +21,9 @@ namespace Teleopti.Analytics.Etl.Common.TenantHeartbeat
 
 		public void Tick()
 		{
+			if (_nextPublish == null)
+				_publisher.RemoveAllPublishings();
+
 			var nextPublish = _nextPublish ?? _now.UtcDateTime();
 			if (_now.UtcDateTime() < nextPublish)
 				return;

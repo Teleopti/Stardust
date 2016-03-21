@@ -22,6 +22,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_dataSourceScope = dataSourceScope;
 		}
 
+		public void RemoveAllPublishings()
+		{
+			_publisher.StopPublishingAll();
+		}
+
 		public void PublishHourly(IEvent @event)
 		{
 			var tenants = _tenants.Tenants();

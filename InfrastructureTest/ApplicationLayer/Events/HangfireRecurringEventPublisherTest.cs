@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -6,7 +5,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -37,6 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			system.AddService<TestMultiHandler1>();
 			system.AddService<TestMultiHandler2>();
 			system.AddService<TestLongNameHandlerVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongWithLongId>();
+			system.AddService<TestLongNameHandlerVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongWithLongId2>();
 		}
 
 		[Test]
@@ -150,17 +149,17 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		}
 
 		[Test]
-		public void ShouldPassIdNoLongerThanMaxLength()
+		public void ShouldAssignIdNoLongerThanMaxLength()
 		{
 			var maxLength = 100 - "recurring-job:".Length;
 
 			Target.PublishHourly(new LongNameHandlerTestEvent());
 
-			JobClient.RecurringIds.Single().Length.Should().Be.LessThanOrEqualTo(maxLength);
+			JobClient.RecurringIds.First().Length.Should().Be.LessThanOrEqualTo(maxLength);
 		}
 
 		[Test]
-		public void ShouldPassIdWithoutHandlerTypeName()
+		public void ShouldAssignIdWithoutHandlerTypeName()
 		{
 			Target.PublishHourly(new HangfireTestEvent());
 
@@ -168,13 +167,29 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		}
 
 		[Test]
-		public void ShouldPassIdWithHandlerRecurringId()
+		public void ShouldAssignIdWithoutEventTypeName()
+		{
+			Target.PublishHourly(new HangfireTestEvent());
+
+			JobClient.RecurringIds.Single().Should().Not.Contain(typeof(HangfireTestEvent).Name);
+		}
+
+		[Test]
+		public void ShouldAssignIdWithHandlerRecurringId()
 		{
 			Target.PublishHourly(new HangfireTestEvent());
 
 			JobClient.RecurringIds.Single().Should().Contain("numberone");
 		}
-		
+
+		[Test]
+		public void ShouldAssignIdWithLongNameNotColliding()
+		{
+			Target.PublishHourly(new LongNameHandlerTestEvent());
+
+			JobClient.RecurringIds.Should().Have.Count.EqualTo(2);
+		}
+
 		[Test]
 		public void ShouldStopPublishingCurrentTenant()
 		{
@@ -191,6 +206,16 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 				Target.StopPublishingForCurrentTenant();
 
 			Target.TenantsWithRecurringJobs().Single().Should().Be(dataSource2.DataSourceName);
+		}
+
+		[Test]
+		public void ShouldStopPublishingAll()
+		{
+			Target.PublishHourly(new HangfireTestEvent());
+
+			Target.StopPublishingAll();
+
+			JobClient.HasRecurringJobs.Should().Be.False();
 		}
 
 		public class UnknownTestEvent : IEvent
@@ -244,6 +269,16 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			IHandleEvent<LongNameHandlerTestEvent>
 		{
 			[RecurringId("TestLongNameHandlerVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongWithLongId.LongNameHandlerTestEvent")]
+			public void Handle(LongNameHandlerTestEvent @event)
+			{
+			}
+		}
+
+		public class TestLongNameHandlerVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongWithLongId2 :
+			IRunOnHangfire,
+			IHandleEvent<LongNameHandlerTestEvent>
+		{
+			[RecurringId("TestLongNameHandlerVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongWithLongId2.LongNameHandlerTestEvent")]
 			public void Handle(LongNameHandlerTestEvent @event)
 			{
 			}

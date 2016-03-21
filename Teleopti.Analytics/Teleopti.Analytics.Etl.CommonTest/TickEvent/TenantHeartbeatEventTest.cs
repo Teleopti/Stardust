@@ -26,7 +26,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.TickEvent
 
 			Target.Tick();
 
-			Publisher.PublishingAdded.Should().Be.True();
+			Publisher.HasPublishing.Should().Be.True();
 		}
 
 		[Test]
@@ -101,7 +101,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.TickEvent
 			Publisher.Clear();
 			Target.Tick();
 
-			Publisher.PublishingAdded.Should().Be.False();
+			Publisher.HasPublishing.Should().Be.False();
 		}
 
 		[Test]
@@ -115,7 +115,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.TickEvent
 			Publisher.Clear();
 			Target.Tick();
 
-			Publisher.PublishingAdded.Should().Be.True();
+			Publisher.HasPublishing.Should().Be.True();
 		}
 	}
 }

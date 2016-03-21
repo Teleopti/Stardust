@@ -4,7 +4,6 @@ using System.Linq;
 using Castle.DynamicProxy;
 using NHibernate.Util;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Interfaces.Domain;
@@ -62,12 +61,12 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				.Single()
 				.Id;
 
-			var hash = j.HandlerTypeName.GetHashCode().ToString();
 
-			var id = j.Tenant + ":::" + handlerId + "." + hash;
+			var id = j.Tenant + ":::" + handlerId;
 			if (id.Length <= maxLength)
 				return id;
 
+			var hash = handlerId.GetHashCode().ToString();
 			id = j.Tenant + ":::" + handlerId;
 			id = id.Substring(0, maxLength - hash.Length - 1) + "." + hash;
 
@@ -111,6 +110,13 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			}
 		}
 
+		public IEnumerable<string> TenantsWithRecurringJobs()
+		{
+			return _client.GetRecurringJobIds()
+				.Select(x => x.Substring(0, x.IndexOf(":::")))
+				.Distinct();
+		}
+
 		public void StopPublishingForCurrentTenant()
 		{
 			var tenant = _dataSource.CurrentName();
@@ -120,12 +126,11 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			jobsToRemove.ForEach(x => _client.RemoveIfExists(x));
 		}
 
-		public IEnumerable<string> TenantsWithRecurringJobs()
+		public void StopPublishingAll()
 		{
-			return _client.GetRecurringJobIds()
-				.Select(x => x.Substring(0, x.IndexOf(":::")))
-				.Distinct();
+			_client.GetRecurringJobIds().ForEach(x => _client.RemoveIfExists(x));
 		}
+
 	}
 
 }
