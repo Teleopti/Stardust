@@ -166,5 +166,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			throw new NotImplementedException();
 		}
+
+		public DateTime ScheduleLoadedTime { get; set; }
 	}
 }

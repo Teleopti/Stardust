@@ -662,6 +662,8 @@ namespace Teleopti.Ccc.Domain.Collection
         {
             get { return _dictionary; }
         }
+
+		public DateTime ScheduleLoadedTime { get; set; }
     }
 
 	public interface IReadOnlyScheduleDictionary : IScheduleDictionary
@@ -681,8 +683,6 @@ namespace Teleopti.Ccc.Domain.Collection
             : base(scenario, scheduleDateTimePeriod, differenceCollectionService)
         {
         }
-
-		public DateTime ScheduleLoadedTime { get; set; }
 
         protected override IEnumerable<IBusinessRuleResponse> CheckIfCanModify(Dictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleParts, INewBusinessRuleCollection newBusinessRules)
         {

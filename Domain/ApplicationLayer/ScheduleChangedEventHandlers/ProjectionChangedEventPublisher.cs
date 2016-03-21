@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			_projectionChangedEventBuilder.Build<T>(@event, data.ScheduleRange, data.RealPeriod)
 				.ForEach(e =>
 				{
-					e.ScheduleLoadTimestamp = e.ScheduleLoadTimestamp;
+					e.ScheduleLoadTimestamp = data.ScheduleLoadedTime;
 					_publisher.Publish(e);
 				});
 		}
@@ -70,6 +70,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			public IScheduleRange ScheduleRange;
 			public DateOnlyPeriod RealPeriod;
+			public DateTime ScheduleLoadedTime;
 		}
 
 		private range getData(ScheduleChangedEventBase @event)
@@ -114,7 +115,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			return new range
 				{
 					ScheduleRange = range,
-					RealPeriod = realPeriod
+					RealPeriod = realPeriod,
+					ScheduleLoadedTime = schedule.ScheduleLoadedTime
 				};
 		}
 

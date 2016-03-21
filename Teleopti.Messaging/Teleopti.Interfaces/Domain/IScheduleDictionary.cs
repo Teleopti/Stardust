@@ -227,5 +227,7 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         void DeleteMeetingFromBroker(Guid id);
 
+		DateTime ScheduleLoadedTime { get; set; }
+
     }
 }
