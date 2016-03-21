@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Configuration;
+using System.Diagnostics;
 using NUnit.Framework;
 using PerformanceTests;
 using PerformanceTests.Database;
@@ -21,7 +23,23 @@ namespace Performance.Test
 			_databaseHelper.Create();
 
 			//Run App
+			Process.Start(ConfigurationManager.AppSettings["ManagerExeLocation"]);
+		}
 
+		[TestFixtureTearDown]
+		public void TestFixtureTearDown()
+		{
+			Process[] managerProcesses = Process.GetProcessesByName("ManagerConsoleHost");
+			foreach (Process process in managerProcesses)
+			{
+				process.Kill();
+			}
+
+			Process[] NodeProcesses = Process.GetProcessesByName("NodeConsoleHost");
+			foreach (Process process in NodeProcesses)
+			{
+				process.Kill();
+			}
 		}
 
 		[Test]
