@@ -6,9 +6,7 @@ using System.Timers;
 using log4net;
 using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
-using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Log4Net;
 using Stardust.Node.Log4Net.Extensions;
 using Timer = System.Timers.Timer;
 
@@ -21,8 +19,8 @@ namespace Stardust.Node.Timers
 
 		public TrySendStatusToManagerTimer(INodeConfiguration nodeConfiguration,
 		                                   Uri callbackTemplateUri,
-										   TrySendJobProgressToManagerTimer sendJobProgressToManagerTimer,
-										   IHttpSender httpSender,
+		                                   TrySendJobProgressToManagerTimer sendJobProgressToManagerTimer,
+		                                   IHttpSender httpSender,
 		                                   double interval = 500) : base(interval)
 		{
 			// Validate arguments.
@@ -81,9 +79,11 @@ namespace Stardust.Node.Timers
 		{
 			try
 			{
-				var httpResponseMessage =
-					await jobToDo.PostAsync(CallbackTemplateUri,
-					                        cancellationToken);
+				var uri = jobToDo.CreateUri(CallbackTemplateUri.ToString());
+
+				var httpResponseMessage = await HttpSender.PostAsync(uri,
+				                                                     null,
+				                                                     cancellationToken);
 
 				return httpResponseMessage;
 			}
@@ -91,7 +91,7 @@ namespace Stardust.Node.Timers
 			catch (Exception exp)
 			{
 				Logger.ErrorWithLineNumber("Error in TrySendStatus.",
-				                                 exp);
+				                           exp);
 				throw;
 			}
 		}
@@ -168,9 +168,8 @@ namespace Stardust.Node.Timers
 					              JobToDo.Id,
 					              JobToDo.Name);
 
-				Logger.ErrorWithLineNumber(msg,exp);
+				Logger.ErrorWithLineNumber(msg, exp);
 			}
-
 		}
 	}
 }

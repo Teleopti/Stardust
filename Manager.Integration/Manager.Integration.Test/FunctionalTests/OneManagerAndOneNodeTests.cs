@@ -62,6 +62,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			CancellationTokenSource = new CancellationTokenSource();
 
 			AppDomainTask = new AppDomainTask(BuildMode);
+
 			Task = AppDomainTask.StartTask(numberOfManagers: 1,
 			                               numberOfNodes: 1,
 			                               cancellationTokenSource: CancellationTokenSource);
@@ -93,7 +94,6 @@ namespace Manager.Integration.Test.FunctionalTests
 
 			LogMessage("Finished TestFixtureTearDown");
 		}
-
 
 		[Test]
 		public void CancelWrongJobsTest()
@@ -376,6 +376,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			{
 				jobManagerTaskCreator.Dispose();
 			}
+
 			LogMessage("Finished.");
 		}
 	}
