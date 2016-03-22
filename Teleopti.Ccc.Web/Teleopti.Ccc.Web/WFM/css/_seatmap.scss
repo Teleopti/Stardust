@@ -93,8 +93,9 @@ input[type=text],input[type=password],input[type=number]{
 .location-breadcrumb{
 	background:$white;
 	position: absolute;
-	height:30px;
+	height:25px;
 	top:0;
+	right:0;
 	left:0;
 	padding-top:5px;
 	z-index:1;
