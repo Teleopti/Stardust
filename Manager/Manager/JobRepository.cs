@@ -93,23 +93,8 @@ namespace Stardust.Manager
 			}
 		}
 
+		
 		public List<JobDefinition> LoadAll()
-		{
-			var result = new List<JobDefinition>();
-			var policy = _retryPolicyProvider.GetPolicy();
-			applyLoggingOnRetries(policy);
-			try
-			{
-				result = policy.ExecuteAction(() => tryLoadAll());
-			}
-			catch (Exception ex)
-			{
-				this.Log().ErrorWithLineNumber(ex.Message + "Unable to load jobs from database");
-			}
-			return result;
-		}
-
-		private List<JobDefinition> tryLoadAll()
 		{
 			const string selectCommand = @"SELECT  Id    
                                             ,Name
@@ -124,14 +109,14 @@ namespace Stardust.Manager
 				var listToReturn = new List<JobDefinition>();
 				using (var connection = new SqlConnection(_connectionString))
 				{
-					connection.OpenWithRetry(_retryPolicyProvider.GetPolicy());
+					connection.OpenWithRetry(_retryPolicy);
 					var command = new SqlCommand
 					{
 						Connection = connection,
 						CommandText = selectCommand,
 						CommandType = CommandType.Text
 					};
-					var reader = command.ExecuteReader();
+					var reader = command.ExecuteReaderWithRetry(_retryPolicy);
 					if (reader.HasRows)
 					{
 						while (reader.Read())
@@ -146,7 +131,6 @@ namespace Stardust.Manager
 								AssignedNode = GetValue<string>(reader.GetValue(reader.GetOrdinal("AssignedNode"))),
 								Status = GetValue<string>(reader.GetValue(reader.GetOrdinal("Status")))
 							};
-
 							listToReturn.Add(jobDefinition);
 						}
 					}
@@ -161,37 +145,33 @@ namespace Stardust.Manager
 			}
 			return null;
 		}
-
+		
 		public void DeleteJob(Guid jobId)
 		{
-			runner(() => trydeleteJob(jobId), "Unable to delete the job");
-		}
-
-		private void trydeleteJob(Guid jobId)
-		{
-			try
+			using (var connection = new SqlConnection(_connectionString))
 			{
-				using (var connection = new SqlConnection(_connectionString))
-				{
-					connection.Open();
-					using (var da = new SqlDataAdapter("Select * From [Stardust].JobDefinitions", connection))
-					{
-						using (var command = new SqlCommand("DELETE FROM [Stardust].JobDefinitions WHERE Id = @ID",
-															connection))
-						{
-							var parameter = command.Parameters.Add("@ID", SqlDbType.UniqueIdentifier, 16, "Id");
-							parameter.Value = jobId;
+				SqlCommand deleteCommand = connection.CreateCommand();
+				deleteCommand.CommandText = "DELETE FROM[Stardust].JobDefinitions WHERE Id = @ID";
+				deleteCommand.Parameters.AddWithValue("@ID", jobId);
 
-							da.DeleteCommand = command;
-							da.DeleteCommand.ExecuteNonQuery();
-						}
+				try
+				{
+					connection.OpenWithRetry(_retryPolicy);
+
+					using (var tran = connection.BeginTransaction())
+					{
+						deleteCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+						tran.Commit();
 					}
+				}
+				catch (Exception exp)
+				{
+					this.Log().ErrorWithLineNumber(exp.Message, exp);
+				}
+				finally
+				{
 					connection.Close();
 				}
-			}
-			catch (Exception exp)
-			{
-				this.Log().ErrorWithLineNumber(exp.Message, exp);
 			}
 		}
 
