@@ -55,61 +55,30 @@ namespace Stardust.Manager
 
 		private void tryAdd(JobDefinition job)
 		{
-			var jdDataSet = new DataSet();
-			var jdDataTable = new DataTable("[Stardust].[JobDefinitions]");
-			jdDataTable.Columns.Add(new DataColumn("Id", typeof (Guid)));
-			jdDataTable.Columns.Add(new DataColumn("Name", typeof (string)));
-			jdDataTable.Columns.Add(new DataColumn("Serialized", typeof (string)));
-			jdDataTable.Columns.Add(new DataColumn("Type", typeof (string)));
-			jdDataTable.Columns.Add(new DataColumn("AssignedNode", typeof (string)));
-			jdDataTable.Columns.Add(new DataColumn("UserName", typeof (string)));
-			jdDataTable.Columns.Add(new DataColumn("Status", typeof (string)));
-
-			jdDataSet.Tables.Add(jdDataTable);
-			var dr = jdDataTable.NewRow();
-			
-			dr["Id"] = job.Id;
-			dr["Name"] = job.Name;
-			dr["Serialized"] = job.Serialized;
-			dr["Type"] = job.Type;
-			dr["UserName"] = job.UserName;
-			dr["AssignedNode"] = DBNull.Value;
-			dr["Status"] = DBNull.Value;
-			
-			jdDataTable.Rows.Add(dr);
 			using (var connection = new SqlConnection(_connectionString))
 			{
-				connection.Open();
-				using (var da = new SqlDataAdapter("Select * From [Stardust].JobDefinitions", connection))
+				SqlCommand command = connection.CreateCommand();
+				command.CommandText = "INSERT INTO [Stardust].JobHistory (JobId, Name, CreatedBy, Serialized, Type) VALUES(@Id, @Name, @By, @Serialized, @Type)";
+				command.Parameters.AddWithValue("@Id", job.Id);
+				command.Parameters.AddWithValue("@Name", job.Name);
+				command.Parameters.AddWithValue("@By", job.UserName);
+				command.Parameters.AddWithValue("@Serialized", job.Serialized);
+				command.Parameters.AddWithValue("@Type", job.Type);
+
+				try
 				{
-					var builder = new SqlCommandBuilder(da);
-					builder.GetInsertCommand();
-					da.Update(jdDataSet, "[Stardust].[JobDefinitions]");
-					
-					da.InsertCommand =
-						new SqlCommand(
-							"INSERT INTO [Stardust].JobHistory (JobId, Name, CreatedBy, Serialized, Type) VALUES(@Id, @Name, @By, @Serialized, @Type)",
-							connection);
-
-					da.InsertCommand.Parameters.Add("@Id", SqlDbType.UniqueIdentifier, 16, "JobId");
-					da.InsertCommand.Parameters[0].Value = job.Id;
-
-					da.InsertCommand.Parameters.Add("@Name", SqlDbType.NVarChar, 2000, "Name");
-					da.InsertCommand.Parameters[1].Value = job.Name;
-					
-					da.InsertCommand.Parameters.Add("@By", SqlDbType.NVarChar, 500, "CreatedBy");
-					da.InsertCommand.Parameters[2].Value = job.UserName;
-
-					da.InsertCommand.Parameters.Add("@Serialized", SqlDbType.NVarChar, 2000, "Serialized");
-					da.InsertCommand.Parameters[3].Value = job.Serialized;
-
-					da.InsertCommand.Parameters.Add("@Type", SqlDbType.NVarChar, 2000, "Type");
-					da.InsertCommand.Parameters[4].Value = job.Type;
-
-					da.InsertCommand.ExecuteNonQuery();
+					connection.Open();
+					command.ExecuteNonQuery();
+					ReportProgress(job.Id, "Added", DateTime.Now);
 				}
-				ReportProgress(job.Id, "Added", DateTime.Now);
-				connection.Close();
+				catch
+				{
+					//Catch something here?
+				}
+				finally
+				{
+					connection.Close();
+				}
 			}
 		}
 		
