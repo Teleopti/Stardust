@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using System.Collections.Generic;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
@@ -22,14 +17,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 			var textRequest = table.CreateInstance<TextRequestConfigurable>();
 			DataMaker.Person(userName).Apply(textRequest);
 		}
-
-
+		
 		[Given(@"'(.*)' has an existing absence request with")]
 		public void GivenHasAnExistingAbsenceRequestWith(string userName, Table table)
 		{
 			var absenceRequest = table.CreateInstance<AbsenceRequestConfigurable>();
 			DataMaker.Person(userName).Apply(absenceRequest);
 		}
+		
 
 		[When(@"I select to load requests from '(.*)' to '(.*)'")]
 		public void WhenISelectToLoadRequestsFromTo(string from, string to)
@@ -70,12 +65,39 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 			Browser.Interactions.ClickUsingJQuery("requests-commands-pane .approve-requests");
 		}
 
-		[Then(@"I should see request from '(.*)' approved")]
-		public void ThenIShouldSeeRequestFromApproved(string agentName)
+		[When(@"I deny all requests that I see")]
+		public void WhenIDenyAllRequestsThatISee()
+		{
+			Browser.Interactions.AssertScopeValue("requests-table-container", "requestsOverview.loaded", true);
+			Browser.Interactions.ClickUsingJQuery(".ui-grid-row .ui-grid-selection-row-header-buttons");
+			Browser.Interactions.ClickUsingJQuery("requests-commands-pane .deny-requests");
+		}
+
+
+		[Then(@"I should see request for '(.*)' approved")]
+		public void ThenIShouldSeeRequestForApproved(string agentName)
 		{
 			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".ui-grid-row:contains('{0}') .request-status:contains('{1}')", agentName, "Approved"));
 		}
 
+		[Then(@"I should see request for '(.*)' denied")]
+		public void ThenIShouldSeeRequestForDenied(string agentName)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".ui-grid-row:contains('{0}') .request-status:contains('{1}')", agentName, "Denied"));
+		}
+
+
+		[Then(@"I should see all requests approved")]
+		public void ThenIShouldSeeAllRequestsApproved()
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".request-status:contains('{0}')", "Approved"));
+		}
+
+		[Then(@"I should see all requests denied")]
+		public void ThenIShouldSeeAllRequestsDenied()
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".request-status:contains('{0}')", "Denied"));
+		}
 
 	}
 }

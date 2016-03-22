@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			{
 				PersonRequest.Pending();
 			}
-			PersonRequest.Deny(null, _denyReason, new PersonRequestAuthorizationCheckerForTest());
+			PersonRequest.Deny(null, _denyReason, new PersonRequestAuthorizationCheckerForTest(),_isAutoDenied);
 
 			var requestRepository = new PersonRequestRepository(currentUnitOfWork);
 

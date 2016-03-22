@@ -5,6 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -17,6 +18,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
+
+		public string Status { get; set; }
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
@@ -39,6 +42,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			var requestRepository = new PersonRequestRepository(currentUnitOfWork);
 
+			if (Status == "AutoDenied")
+			{
+				personRequest.Deny (null, null, new PersonRequestAuthorizationCheckerForTest(), true);
+			}
+			
 			requestRepository.Add(personRequest);
 		}
 	}

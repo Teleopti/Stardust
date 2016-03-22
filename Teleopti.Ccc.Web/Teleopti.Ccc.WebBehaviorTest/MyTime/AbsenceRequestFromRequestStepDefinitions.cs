@@ -114,6 +114,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Open" });
 		}
 
+
+		[Given(@"(.*) has an open workflow control set with absence request waitlisting enabled")]
+		public void HasAnOpenWorkflowControlSetWithAbsenceRequestWaitlistingEnabled(string userName)
+		{
+
+			DataMaker.Data().Apply(new AbsenceConfigurable { Name = "Vacation" });
+			DataMaker.Data()
+				.Apply(new WorkflowControlSetConfigurable
+				{
+					Name = "Open",
+					AvailableAbsence = "Vacation",
+					AbsenceRequestWaitlistEnabled = true,
+					AutoGrant = "yes"
+				});
+
+			DataMaker.Person (userName).Apply(new WorkflowControlSetForUser { Name = "Open" });
+		}
+
 		[Then(@"I should see the waitlist position is (.*)")]
 		public void ThenIShouldSeeTheWaitlistPositionIs(int position)
 		{

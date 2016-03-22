@@ -194,8 +194,6 @@ Scenario: Can view different page
 	And I select to view the last page
 	Then I see the request from 'John Smith' in the list	
 
-
-
 @OnlyRunIfEnabled('Wfm_Requests_ApproveDeny_36297')
 Scenario: Can approve requests
 	Given 'Ashley Andeen' has an existing text request with
@@ -208,6 +206,34 @@ Scenario: Can approve requests
 	And I select to load requests from '2016-01-01' to '2016-01-07'
 	And I approve all requests that I see
 	Then I should see request from 'Ashley Andeen' approved
+
+@OnlyRunIfEnabled('Wfm_Requests_ApproveDeny_36297')
+Scenario: Can approve waitlisted requests
+	Given 'John Smith' has an open workflow control set with absence request waitlisting enabled
+	And 'John Smith' has an existing absence request with
+	| Field     | Value            |
+	| StartTime | 2015-3-01 10:00 |
+	| End Time  | 2015-3-01 14:00 |
+	| Status    | AutoDenied       |
+	| Absence   | Vacation         |
+	When I view wfm requests
+	And I select to load requests from '2015-03-01' to '2015-03-02'
+	And I approve all requests that I see
+	Then I should see request for 'John Smith' approved
+
+@OnlyRunIfEnabled('Wfm_Requests_ApproveDeny_36297')
+Scenario: Can deny waitlisted requests
+	Given 'John Smith' has an open workflow control set with absence request waitlisting enabled
+	And 'John Smith' has an existing absence request with
+	| Field     | Value            |
+	| StartTime | 2015-3-01 10:00 |
+	| End Time  | 2015-3-01 14:00 |
+	| Status    | AutoDenied       |
+	| Absence   | Vacation         |
+	When I view wfm requests
+	And I select to load requests from '2015-03-01' to '2015-03-02'
+	And I deny all requests that I see
+	Then I should see request for 'John Smith' denied
 
 @ignore
 @OnlyRunIfEnabled('Wfm_Requests_ApproveDeny_36297')
@@ -288,10 +314,7 @@ Scenario: Refresh the request list with status filter after approving or denying
 	And I choose to view 'Pending' requests
 	And I approve requests from 'Ashley Andeen'
 	Then I should not see the request from 'Ashley Andeen'
-
-
-
-
+	
 @ignore
 Scenario: View request details
 	Given 'Ashley Andeen' has an existing text request with
