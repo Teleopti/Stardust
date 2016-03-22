@@ -22,6 +22,7 @@ BEGIN
 	,group_page_name_resource_key = @group_page_name_resource_key
 	,group_name=@group_name
 	,group_is_custom=@group_is_custom
+	,datasource_update_date=GETUTCDATE()
   where group_page_code = @group_page_code and group_code = @group_code 
 
 END
