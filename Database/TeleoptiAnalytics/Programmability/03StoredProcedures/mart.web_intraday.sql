@@ -7,7 +7,7 @@ GO
 -- Create date: 2016-02-24
 -- Description:	Load queue statistics for web intraday
 -- =============================================
--- EXEC [mart].[web_intraday] 'W. Europe Standard Time', '2016-03-18', 'F08D75B3-FDB4-484A-AE4C-9F0800E2F753'
+-- EXEC [mart].[web_intraday] 'W. Europe Standard Time', '2016-03-21', 'F08D75B3-FDB4-484A-AE4C-9F0800E2F753'
 CREATE PROCEDURE [mart].[web_intraday]
 @time_zone_code nvarchar(100),
 @today smalldatetime,
@@ -18,6 +18,9 @@ BEGIN
 	SET NOCOUNT ON;
             
 	DECLARE @time_zone_id as int
+	DECLARE @default_scenario_id int
+	
+	SELECT @default_scenario_id = scenario_id FROM mart.dim_scenario WHERE default_scenario = 1
 
 	CREATE TABLE #skills(id uniqueidentifier)
 	CREATE TABLE #queues(queue_id int)
@@ -66,16 +69,18 @@ BEGIN
 		INNER JOIN mart.dim_date d ON bz.local_date_id = d.date_id
 		INNER JOIN mart.dim_interval i ON bz.local_interval_id = i.interval_id
 	WHERE
-		d.date_date = @today 
+		fw.scenario_id = @default_scenario_id
+		AND bz.time_zone_id = @time_zone_id
+		AND d.date_date = @today
 		AND i.interval_end <= (SELECT latest_stats_time FROM #result) 
-                                      
-                                      
+		
+
 	SELECT 
 	SUM(ISNULL(forecasted_calls,0)) AS ForecastedCalls,
 	CASE SUM(ISNULL(forecasted_calls,0))
 		WHEN 0 THEN 0
 		ELSE 
-		SUM(ISNULL(forecasted_handle_time_s,0)) / SUM(ISNULL(forecasted_calls,0))
+			SUM(ISNULL(forecasted_handle_time_s,0)) / SUM(ISNULL(forecasted_calls,0))
 	END AS ForecastedAverageHandleTime,
 	SUM(ISNULL(offered_calls,0)) AS OfferedCalls,
 	CASE SUM(ISNULL(offered_calls,0))
@@ -87,12 +92,13 @@ BEGIN
 	CASE SUM(ISNULL(forecasted_calls,0))
 		WHEN 0 THEN -99
 		ELSE
-					ABS(SUM(ISNULL(offered_calls,0)) - SUM(ISNULL(forecasted_calls,0))) / SUM(ISNULL(forecasted_calls,0)) * 100
+			ABS(SUM(ISNULL(offered_calls,0)) - SUM(ISNULL(forecasted_calls,0))) / SUM(ISNULL(forecasted_calls,0)) * 100
 	END AS ForecastedActualCallsDiff,
 	CASE SUM(ISNULL(forecasted_handle_time_s,0))
 		WHEN 0 THEN -99
 		ELSE
-					ABS(SUM(ISNULL(handle_time_s,0)) - SUM(ISNULL(forecasted_handle_time_s,0))) / SUM(ISNULL(forecasted_handle_time_s,0)) * 100
+			ABS(SUM(ISNULL(handle_time_s,0)) / SUM(ISNULL(offered_calls,0)) - SUM(ISNULL(forecasted_handle_time_s,0)) / SUM(ISNULL(forecasted_calls,0))) * 100
+			/ (SUM(ISNULL(forecasted_handle_time_s,0)) / SUM(ISNULL(forecasted_calls,0)))
 	END AS ForecastedActualHandleTimeDiff
 	FROM #result
 END
