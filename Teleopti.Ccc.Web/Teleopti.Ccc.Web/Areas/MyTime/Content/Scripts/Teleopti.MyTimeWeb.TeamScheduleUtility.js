@@ -368,6 +368,9 @@ Teleopti.MyTimeWeb.TeamScheduleDrawerMixin = function () {
 					layer.pixelPerMinute(self.pixelPerMinute());
 				});
 			});
+			$.each(self.mySchedule().layers, function(index, layer) {
+				layer.pixelPerMinute(self.pixelPerMinute());
+			});
 		}
 
 		if (self.hours() != undefined) {
