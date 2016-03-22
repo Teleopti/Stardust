@@ -131,9 +131,8 @@ namespace Teleopti.Ccc.Win.Main
 				}
 				catch (MajorVersionNotFoundException e)
 				{
-					labelExplanation.Text = String.Format(CultureInfo.CurrentCulture,
-																			 Resources.ProductActivationKeyHasExpiredPleaseApplyANewOne,
-																			 licenseFileName, e.Message);
+					labelExplanation.Text = String.Format(CultureInfo.CurrentCulture, Resources.ProductActivationKeyMajorVersionWrong,
+																	  licenseFileName, e.Message);
 				}
 				catch (DataSourceException e)
 				{

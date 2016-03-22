@@ -1,10 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <License>
   <CustomerName>Teleopti_RD</CustomerName>
-  <ExpirationDate>2016-06-10T04:39:21</ExpirationDate>
+  <ExpirationDate>2018-06-07T16:39:21</ExpirationDate>
   <ExpirationGracePeriod>P15D</ExpirationGracePeriod>
   <MaxActiveAgents>15000</MaxActiveAgents>
   <MaxActiveAgentsGrace>5</MaxActiveAgentsGrace>
+  <MajorVersion>8</MajorVersion>
   <AgentsOrSeats>0</AgentsOrSeats>
   <MaxSeats>15000</MaxSeats>
   <SeatRatio>1.5</SeatRatio>
@@ -36,9 +37,9 @@
           <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
         </Transforms>
         <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <DigestValue>8ZZb0GuJByN4c8X2I2EujK6KtyI=</DigestValue>
+        <DigestValue>Z1q45CHufKl2WxZEzWD4vKmi6bk=</DigestValue>
       </Reference>
     </SignedInfo>
-    <SignatureValue>ctN2zI9rdYV+g7+8PhnQ247x23YEF+VB8aW/NEuEQ/EUQXD+muFvYaSi10MploB+BQLmcKwz6krceK3v+QAQ7wBaJqRheTrittkrlxBCU3rn01kumJ9zOrHtDZUzSWvjpoE80IrQBhPUwwv7WxMl8xGLCkmna0zuB72WI/H1sPc=</SignatureValue>
+    <SignatureValue>nmEvny+RepVlVCDssany5YEu1yKNj8xGy8Zzz+0FRKQZPRiK5B4dOAqSurHyGEBvnQ1l9MS7xZbxMygsTt2R1+TsGlazMNGkC9Qv0n6fpjkAeBw/GbsM7qFOdK1qGWjuZb8Qn6Osd80erOucscmLb196fiuBArCEaEXXbjHjo8I=</SignatureValue>
   </Signature>
 </License>

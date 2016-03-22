@@ -199,8 +199,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public TimeSpan ExpirationGracePeriod { get; private set; }
             public int MaxActiveAgents { get; private set; }
 						public double MaxActiveAgentsGrace { get; private set; }
+	        public double MajorVersion { get; private set; }
 
-            public bool IsThisTooManyActiveAgents(int activeAgents)
+	        public bool IsThisTooManyActiveAgents(int activeAgents)
             {
                 throw new NotImplementedException();
             }
@@ -302,6 +303,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			  public TimeSpan ExpirationGracePeriod { get; private set; }
 			  public int MaxActiveAgents { get; private set; }
 			  public double MaxActiveAgentsGrace { get; private set; }
+			  public double MajorVersion { get; private set; }
 			  public bool TeleoptiCccPilotCustomersBaseEnabled { get; private set; }
 			  public bool TeleoptiCccPilotCustomersForecastsEnabled { get; private set; }
 			  public bool TeleoptiCccPilotCustomersShiftsEnabled { get; private set; }
@@ -396,8 +398,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public TimeSpan ExpirationGracePeriod { get; private set; }
             public int MaxActiveAgents { get; private set; }
             public double MaxActiveAgentsGrace { get; private set; }
+	        public double MajorVersion { get; private set; }
 
-            public bool IsThisTooManyActiveAgents(int activeAgents)
+	        public bool IsThisTooManyActiveAgents(int activeAgents)
             {
                 throw new NotImplementedException();
             }
@@ -517,8 +520,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public TimeSpan ExpirationGracePeriod { get; private set; }
             public int MaxActiveAgents { get; private set; }
 						public double MaxActiveAgentsGrace { get; private set; }
+	        public double MajorVersion { get; private set; }
 
-            public bool IsThisTooManyActiveAgents(int activeAgents)
+	        public bool IsThisTooManyActiveAgents(int activeAgents)
             {
                 throw new NotImplementedException();
             }

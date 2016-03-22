@@ -186,7 +186,7 @@ namespace Teleopti.Support.LicTool
 							reader.Close();
 						}
 						XDocument xdoc = XDocument.Parse(xmlstr);
-						var xlic = new XmlLicense(xdoc, pubkey);
+						var xlic = new XmlLicense(xdoc, pubkey,true);
 
 						txtbxCustomerName.Text = xlic.CustomerName;
 						comboBoxAgreement.SelectedIndex = 0;
@@ -208,8 +208,7 @@ namespace Teleopti.Support.LicTool
 						numExpirationGracePeriodDays.Value = xlic.ExpirationGracePeriod.Days;
 						ExpirationGracePeriodHours.Value = xlic.ExpirationGracePeriod.Hours;
 
-						//waiting for major version
-						//comboBoxMajor.SelectedItem = xlic.MajorVersion;
+						comboBoxMajor.SelectedItem = xlic.MajorVersion;
 
 						HashSet<string> options = xlic.SchemaOptions;
 
