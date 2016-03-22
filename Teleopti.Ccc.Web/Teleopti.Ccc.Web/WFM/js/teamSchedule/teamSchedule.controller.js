@@ -297,7 +297,7 @@
 
 		vm.setEarliestStartOfSelectedSchedule = function () {
 			var selectedPersonIds = personSelectionSvc.getSelectedPersonIdList();
-			vm.earliestStartTime = scheduleMgmtSvc.getEarliestStartOfSelectedSchedule(selectedPersonIds);
+			vm.earliestStartTime = scheduleMgmtSvc.getEarliestStartOfSelectedSchedule(vm.scheduleDateMoment(), selectedPersonIds);
 		}
 
 		vm.menuState = 'open';

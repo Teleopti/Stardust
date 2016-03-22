@@ -53,7 +53,7 @@ angular.module("wfm.teamSchedule").service("ScheduleManagement", [
 			return scheduleStart;
 		}
 
-		svc.getEarliestStartOfSelectedSchedule = function (selectedPersonIds) {
+		svc.getEarliestStartOfSelectedSchedule = function(scheduleDateMoment, selectedPersonIds) {
 			var startUpdated = false;
 			var earlistStart = new Date("2099-12-31");
 			for (var i = 0; i < svc.groupScheduleVm.Schedules.length; i++) {
@@ -67,7 +67,7 @@ angular.module("wfm.teamSchedule").service("ScheduleManagement", [
 
 			if (!startUpdated) {
 				// Set to 08:00 for empty schedule or day off
-				earlistStart = moment(svc.scheduleDate).startOf('day').add(8, 'hour').toDate();
+				earlistStart = scheduleDateMoment.startOf('day').add(8, 'hour').toDate();
 			}
 
 			return earlistStart;
