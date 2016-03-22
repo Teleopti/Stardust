@@ -172,7 +172,7 @@ namespace Stardust.Manager
 				{
 					foreach (var availableNode in availableNodes)
 					{
-						if (availableNode.Alive == "true")
+						if (availableNode.Alive == true)
 						{
 							upNodes.Add(availableNode);
 						}

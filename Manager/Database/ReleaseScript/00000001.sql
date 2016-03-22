@@ -28,7 +28,7 @@ CREATE TABLE [Stardust].[WorkerNodes](
 	[Id] [uniqueidentifier] NOT NULL,
 	[Url] [nvarchar](450) NOT NULL,
 	[Heartbeat] DateTime NULL,
-	[Alive] [nvarchar](max) NULL
+	[Alive] Bit NULL
  CONSTRAINT [PK_WorkerNodes] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

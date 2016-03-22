@@ -30,7 +30,7 @@ namespace ManagerTest
 				Id = Guid.NewGuid(),
 				Url = _nodeUri1,
 				Heartbeat = DateTime.Now,
-				Alive = "true"
+				Alive = true
 			};
 			WorkerNodeRepository.Add(node);
 
