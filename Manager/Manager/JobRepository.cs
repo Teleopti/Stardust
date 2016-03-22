@@ -174,41 +174,33 @@ namespace Stardust.Manager
 				}
 			}
 		}
-
-
+		
 		public void FreeJobIfNodeIsAssigned(string url)
 		{
-			runner(() => tryFreeJobIfNodeIsAssigned(url), "Unable to perform operation");
-		}
-
-		private void tryFreeJobIfNodeIsAssigned(string url)
-		{
-			try
+			using (var connection = new SqlConnection(_connectionString))
 			{
-				using (var connection = new SqlConnection(_connectionString))
-				{
-					connection.Open();
-					using (var da = new SqlDataAdapter("Select * From [Stardust].JobDefinitions", connection))
-					{
-						using (var command =
-							new SqlCommand("Update [Stardust].JobDefinitions Set AssignedNode = null where AssignedNode = @assingedNode",
-										   connection))
-						{
-							var parameter = command.Parameters.Add("@assingedNode", SqlDbType.NVarChar, 2000, "AssignedNode");
-							parameter.Value = url;
+				SqlCommand deleteCommand = connection.CreateCommand();
+				deleteCommand.CommandText = "Update [Stardust].JobDefinitions Set AssignedNode = null where AssignedNode = @assingedNode";
+				deleteCommand.Parameters.AddWithValue("@assingedNode", url);
 
-							da.UpdateCommand = command;
-							da.UpdateCommand.ExecuteNonQuery();
-						}
+				try
+				{
+					connection.OpenWithRetry(_retryPolicy);
+					using (var tran = connection.BeginTransaction())
+					{
+						deleteCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+						tran.Commit();
 					}
+				}
+				catch (Exception exp)
+				{
+					this.Log().ErrorWithLineNumber(exp.Message, exp);
+				}
+				finally
+				{
 					connection.Close();
 				}
 			}
-			catch (Exception exp)
-			{
-				this.Log().ErrorWithLineNumber(exp.Message, exp);
-			}
-
 		}
 
 		private async void TryCheckAndAssignNextJob(List<WorkerNode> availableNodes,
