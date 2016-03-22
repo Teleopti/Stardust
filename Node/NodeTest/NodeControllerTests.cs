@@ -14,8 +14,6 @@ using NodeTest.JobHandlers;
 using NUnit.Framework;
 using Stardust.Node.API;
 using Stardust.Node.Entities;
-using Stardust.Node.Extensions;
-using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Log4Net;
 using Stardust.Node.Log4Net.Extensions;
@@ -23,7 +21,7 @@ using Stardust.Node.Workers;
 
 namespace NodeTest
 {
-	[TestFixture]
+	[TestFixture, Ignore]
 	public class NodeControllerTests
 	{
 		[SetUp]
