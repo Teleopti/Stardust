@@ -160,6 +160,7 @@ namespace Stardust.Manager
 
 					using (var tran = connection.BeginTransaction())
 					{
+						deleteCommand.Transaction = tran;
 						deleteCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 						tran.Commit();
 					}
