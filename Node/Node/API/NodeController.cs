@@ -4,6 +4,7 @@ using System.Web.Http;
 using System.Web.Http.Results;
 using Autofac.Extras.DynamicProxy2;
 using log4net;
+using Stardust.Node.ActionResults;
 using Stardust.Node.Constants;
 using Stardust.Node.Entities;
 using Stardust.Node.Interfaces;
@@ -30,37 +31,9 @@ namespace Stardust.Node.API
 		[HttpPost, AllowAnonymous, Route(NodeRouteConstants.Job)]
 		public IHttpActionResult StartJob(JobToDo jobToDo)
 		{
-			if (jobToDo == null)
-			{
-				Logger.InfoWithLineNumber(_workerWrapper.WhoamI + "Received Start Job Request. jobId is null");
-				return BadRequest("jobToDo is null");
-			}
-
-			var msg =
-					string.Format(
-						"{0} : Received Start Job Request. ( jobId, jobName ) : ( {1}, {2} )",
-						_workerWrapper.WhoamI,
-						jobToDo.Id,
-						jobToDo.Name);
-
-			Logger.InfoWithLineNumber(msg);
-
-			if (_workerWrapper.IsTaskExecuting)
-			{
-				var msgExecuting =
-					string.Format(
-						"{0} : New job request from manager rejected, node is working on another job ( jobId, jobName ) : ( {1}, {2} )",
-						_workerWrapper.WhoamI,
-						jobToDo.Id,
-						jobToDo.Name);
-
-				Logger.WarningWithLineNumber(msgExecuting);
-
-				return new ConflictResult(Request);
-			}
-
 			var response = _workerWrapper.ValidateStartJob(jobToDo,
 															Request);
+
 			if (response.GetType() != typeof(OkResult))
 			{
 				return response;
@@ -85,11 +58,13 @@ namespace Stardust.Node.API
 		[HttpDelete, AllowAnonymous, Route(NodeRouteConstants.CancelJob)]
 		public IHttpActionResult TryCancelJob(Guid jobId)
 		{
-			Logger.InfoWithLineNumber(_workerWrapper.WhoamI + " : Received TryCancel request. jobId: " + jobId);
+			Logger.InfoWithLineNumber(_workerWrapper.WhoamI + 
+									 " : Received TryCancel request. jobId: " + 
+									 jobId);
 
 			if (jobId == Guid.Empty)
 			{
-				return BadRequest("jobId is empty");
+				return new BadRequestWithReasonPhrase("Job Id is invalid.");
 			}
 
 			Logger.DebugWithLineNumber(_workerWrapper.WhoamI + ": Try cancel job ( jobId ) : ( " + jobId + " )");
@@ -98,12 +73,12 @@ namespace Stardust.Node.API
 
 			if (currentJob == null || currentJob.Id != jobId)
 			{
-				return NotFound();
+				return new NotFoundResultWithReasonPhrase("Job not found here.");
 			}
 
 			if (_workerWrapper.IsCancellationRequested)
 			{
-				return Conflict();
+				return new ConflictResultWithReasonPhrase("Cancellation is already requested.");
 			}
 
 			_workerWrapper.CancelJob(jobId);
