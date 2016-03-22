@@ -58,7 +58,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 				IsAddFullDayAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence),
 				IsAddIntradayAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence),
 				IsSwapShiftsAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SwapShifts),
-				IsRemoveAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RemoveAbsence)
+				IsRemoveAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RemoveAbsence),
+				IsModifyScheduleAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifySchedule)
 			};
 
 			return Json(permissions);

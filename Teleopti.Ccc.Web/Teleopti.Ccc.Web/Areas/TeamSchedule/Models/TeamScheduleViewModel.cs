@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public bool IsAddIntradayAbsenceAvailable { get; set; }
 		public bool IsSwapShiftsAvailable { get; set; }
 		public bool IsRemoveAbsenceAvailable { get; set; }
+		public bool IsModifyScheduleAvailable { get; set; }
 	}
 
 	public class PagingGroupScheduleShiftViewModel

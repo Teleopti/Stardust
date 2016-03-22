@@ -51,16 +51,26 @@
 			return vm.paginationOptions.totalPages > 1 && selectedPersonIdList.length < vm.total;
 		};
 
-		vm.canActiveAddAbsence = function() {
-			return vm.toggleForAbsenceReportingEnabled && (vm.permissions.IsAddFullDayAbsenceAvailable || vm.permissions.IsAddIntradayAbsenceAvailable);
+		vm.canActiveAddAbsence = function () {
+			return vm.toggleForAbsenceReportingEnabled
+				&& (vm.permissions.IsAddFullDayAbsenceAvailable || vm.permissions.IsAddIntradayAbsenceAvailable)
+				&& vm.permissions.IsModifyScheduleAvailable;
 		}
 
-		vm.canActiveSwapShifts = function() {
-			return vm.toggleForSwapShiftEnabled && vm.permissions.IsSwapShiftsAvailable;
+		vm.canActiveRemoveAbsence = function() {
+			return vm.toggleForRemoveAbsenceEnabled
+				&& vm.permissions.IsRemoveAbsenceAvailable
+				&& vm.permissions.IsModifyScheduleAvailable
+		}
+
+		vm.canActiveSwapShifts = function () {
+			return vm.toggleForSwapShiftEnabled
+				&& vm.permissions.IsSwapShiftsAvailable
+				&& vm.permissions.IsModifyScheduleAvailable;
 		}
 
 		vm.isMenuVisible = function () {
-			return vm.canActiveAddAbsence() || vm.canActiveSwapShifts();
+			return vm.canActiveAddAbsence() || vm.canActiveSwapShifts() || vm.canActiveRemoveAbsence();
 		};
 
 		function updateShiftStatusForSelectedPerson() {
@@ -268,32 +278,32 @@
 
 		vm.commands = [
 			{
-				label: "AddAbsence",
-				shortcut: "Alt+A",
-				panelName: 'report-absence',
-				action: toggleAddAbsencePanel,
-				enabled: function() { return personSelectionSvc.isAnyAgentSelected(); },
-				active: function() { return vm.canActiveAddAbsence(); }
+				label:"AddAbsence",
+				shortcut:"Alt+A",
+				panelName:'report-absence',
+				action:toggleAddAbsencePanel,
+				enabled:function () {return personSelectionSvc.isAnyAgentSelected();},
+				active:function () {return vm.canActiveAddAbsence();}
 			},
 			{
-				label: "SwapShifts",
-				shortcut: "Alt+S",
-				panelName: "", // No panel needed,
-				action: swapShifts,
-				enabled: function() { return personSelectionSvc.canSwapShifts(); },
-				active: function() { return vm.canActiveSwapShifts(); }
+				label:"SwapShifts",
+				shortcut:"Alt+S",
+				panelName:"", // No panel needed,
+				action:swapShifts,
+				enabled:function () {return personSelectionSvc.canSwapShifts();},
+				active:function () {return vm.canActiveSwapShifts();}
 			},
 			{
-				label: "RemoveAbsence",
-				shortcut: "Alt+R",
-				panelName: "", // No panel needed,
-				action: confirmRemoveAbsence,
-				enabled: canRemoveAbsence,
-				active: function() {
-					return vm.toggleForRemoveAbsenceEnabled && vm.permissions.IsRemoveAbsenceAvailable;
-				}
+				label:"RemoveAbsence",
+				shortcut:"Alt+R",
+				panelName:"", // No panel needed,
+				action:confirmRemoveAbsence,
+				enabled:canRemoveAbsence,
+				active:function () {return vm.canActiveRemoveAbsence();}
 			}
 		];
+
+		
 
 		vm.setEarliestStartOfSelectedSchedule = function () {
 			var selectedPersonIds = personSelectionSvc.getSelectedPersonIdList();
