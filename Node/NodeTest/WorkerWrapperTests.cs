@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using log4net;
 using log4net.Config;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ using NodeTest.Fakes.InvokeHandlers;
 using NodeTest.Fakes.Timers;
 using NodeTest.JobHandlers;
 using NUnit.Framework;
+using Stardust.Node.ActionResults;
 using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
 using Stardust.Node.Helpers;
@@ -378,8 +380,8 @@ namespace NodeTest
 											   _trySendJobProgressToManagerTimerFake,
 											   new FakeHttpSender());
 
-			var actionResult = _workerWrapper.StartJob(new JobToDo(),
-			                                           new HttpRequestMessage());
+			var actionResult = _workerWrapper.ValidateStartJob(new JobToDo(),
+																new HttpRequestMessage());
 
 			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
 				              .Result.StatusCode ==
@@ -401,7 +403,7 @@ namespace NodeTest
 											   _trySendJobProgressToManagerTimerFake,
 											   new FakeHttpSender());
 
-			var actionResult = _workerWrapper.StartJob(new JobToDo(),
+			var actionResult = _workerWrapper.ValidateStartJob(new JobToDo(),
 			                                           new HttpRequestMessage());
 
 			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
@@ -424,8 +426,8 @@ namespace NodeTest
 											   _trySendJobProgressToManagerTimerFake,
 			                                   new FakeHttpSender());
 
-			var actionResult = _workerWrapper.StartJob(null,
-			                                           new HttpRequestMessage());
+			var actionResult = _workerWrapper.ValidateStartJob(null,
+																new HttpRequestMessage());
 
 			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
 				              .Result.StatusCode == HttpStatusCode.BadRequest);

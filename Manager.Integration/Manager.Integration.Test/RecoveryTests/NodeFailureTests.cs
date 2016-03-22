@@ -118,7 +118,7 @@ namespace Manager.Integration.Test.RecoveryTests
 			var node = workerNodes.FirstOrDefault();
 
 			Assert.NotNull(node);
-			Assert.IsTrue(node.Alive == "false");
+			Assert.IsTrue(node.Alive == false);
 
 			uri = managerUriBuilder.GetJobHistoryUri(jobId);
 			response = await httpSender.GetAsync(uri);

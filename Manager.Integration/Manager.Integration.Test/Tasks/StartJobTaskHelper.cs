@@ -54,26 +54,34 @@ namespace Manager.Integration.Test.Tasks
 			{
 				this.Log().DebugWithLineNumber("Start.");
 
-				if (jobManagerTaskCreators != null && jobManagerTaskCreators.Any())
+				var managerTaskCreators = 
+					jobManagerTaskCreators as IList<JobManagerTaskCreator> ?? jobManagerTaskCreators.ToList();
+
+				if (jobManagerTaskCreators != null && managerTaskCreators.Any())
 				{
-					foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
+					foreach (var jobManagerTaskCreator in managerTaskCreators)
 					{
 						jobManagerTaskCreator.StartAndWaitCreateNewJobToManagerTask(timeOut);
-						Thread.Sleep(TimeSpan.FromMilliseconds(200)); //five jobs each second
+
+						// Five job/second.
+						Thread.Sleep(TimeSpan.FromMilliseconds(200)); 
 					}
 
 					var notSuccededTasks =
-						jobManagerTaskCreators.Where(manager => manager.CreateNewJobToManagerSucceeded == false);
+						managerTaskCreators.Where(manager => manager.CreateNewJobToManagerSucceeded == false);
 
-					while (notSuccededTasks.Any())
+					var succededTasks = 
+						notSuccededTasks as IList<JobManagerTaskCreator> ?? notSuccededTasks.ToList();
+
+					while (succededTasks.Any())
 					{
-						foreach (var notSuccededTask in notSuccededTasks)
+						foreach (var notSuccededTask in succededTasks)
 						{
 							notSuccededTask.StartAndWaitCreateNewJobToManagerTask(timeOut);
 						}
 
 						notSuccededTasks =
-							jobManagerTaskCreators.Where(manager => manager.CreateNewJobToManagerSucceeded == false);
+							managerTaskCreators.Where(manager => manager.CreateNewJobToManagerSucceeded == false);
 					}
 				}
 
