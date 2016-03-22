@@ -13,13 +13,14 @@
 		redirect();
 
 		function findTheDeepestArea() {
-			var theDeepestArea; 
+			var theDeepestArea = undefined; 
 			var areas = globalApplicationAreas.filter(isAnyAreaInTheUrl);
-			if (areas.length > 1) {
+			if (areas.length === 1)
+				theDeepestArea = areas[0];
+			else if(areas.length > 1) {
 				areas.sort();
 				theDeepestArea = areas[areas.length - 1];
-			} else
-				theDeepestArea = areas[0];
+			}
 			return theDeepestArea;
 		}
 
