@@ -37,12 +37,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public void Optimize(IEnumerable<IScheduleDay> scheduleDays, IOptimizationPreferences optimizerPreferences, DateOnlyPeriod selectedPeriod,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, ISchedulingProgress backgroundWorker)
 		{
-			var selectedAgents = scheduleDays.Select(x => x.Person).Distinct();
 			using (_fillSchedulerStateHolder.Add(_currentSchedulerStateHolder(), optimizerPreferences))
 			{
 				_intradayOptimizationCommandHandler.Execute(new IntradayOptimizationCommand
 				{
-					Agents = selectedAgents,
 					Period = selectedPeriod
 				});
 			}

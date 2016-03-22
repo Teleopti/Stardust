@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 
 		public void Execute(IntradayOptimizationCommand command)
 		{
-			_eventPublisher.Publish(_createIslands.Create(command.Period, command.Agents).Select(island => new OptimizationWasOrdered
+			_eventPublisher.Publish(_createIslands.Create(command.Period).Select(island => new OptimizationWasOrdered
 			{
 				Period = command.Period,
 				AgentIds = island.PersonsInIsland().Select(x => x.Id.Value),
@@ -33,10 +33,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 	public class IntradayOptimizationOneThreadCommandHandler : IIntradayOptimizationCommandHandler
 	{
 		private readonly IEventPublisher _eventPublisher;
+		private readonly IPeopleInOrganization _peopleInOrganization;
 
-		public IntradayOptimizationOneThreadCommandHandler(IEventPublisher eventPublisher)
+		public IntradayOptimizationOneThreadCommandHandler(IEventPublisher eventPublisher, IPeopleInOrganization peopleInOrganization)
 		{
 			_eventPublisher = eventPublisher;
+			_peopleInOrganization = peopleInOrganization;
 		}
 
 		public void Execute(IntradayOptimizationCommand command)
@@ -44,7 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			_eventPublisher.Publish(new OptimizationWasOrdered
 			{
 				Period = command.Period,
-				AgentIds = command.Agents.Select(x => x.Id.Value),
+				AgentIds = _peopleInOrganization.Agents(command.Period).Select(x => x.Id.Value),
 				RunResolveWeeklyRestRule = command.RunResolveWeeklyRestRule
 			});
 		}

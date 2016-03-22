@@ -7,17 +7,20 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 	{
 		private readonly VirtualSkillGroupsCreator _virtualSkillGroupsCreator;
 		private readonly SkillGroupIslandsAnalyzer _skillGroupIslandsAnalyzer;
+		private readonly IPeopleInOrganization _peopleInOrganization;
 
 		public CreateIslands(VirtualSkillGroupsCreator virtualSkillGroupsCreator,
-												SkillGroupIslandsAnalyzer skillGroupIslandsAnalyzer)
+												SkillGroupIslandsAnalyzer skillGroupIslandsAnalyzer,
+												IPeopleInOrganization peopleInOrganization)
 		{
 			_virtualSkillGroupsCreator = virtualSkillGroupsCreator;
 			_skillGroupIslandsAnalyzer = skillGroupIslandsAnalyzer;
+			_peopleInOrganization = peopleInOrganization;
 		}
 
-		public IEnumerable<Island> Create(DateOnlyPeriod period, IEnumerable<IPerson> agents)
+		public IEnumerable<Island> Create(DateOnlyPeriod period)
 		{
-			var skillGroupsCreatorResult = _virtualSkillGroupsCreator.GroupOnDate(period.StartDate, agents);
+			var skillGroupsCreatorResult = _virtualSkillGroupsCreator.GroupOnDate(period.StartDate, _peopleInOrganization.Agents(period));
 			return _skillGroupIslandsAnalyzer.FindIslands(skillGroupsCreatorResult);
 		}
 	}

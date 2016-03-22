@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -9,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
-	public class DesktopOptimizationContext : FillSchedulerStateHolder, ISynchronizeIntradayOptimizationResult, IOptimizationPreferencesProvider
+	public class DesktopOptimizationContext : FillSchedulerStateHolder, ISynchronizeIntradayOptimizationResult, IOptimizationPreferencesProvider, IPeopleInOrganization
 	{
 		private ISchedulerStateHolder _schedulerStateHolderFrom;
 		private IOptimizationPreferences _optimizationPreferences;
@@ -92,6 +93,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		public IOptimizationPreferences Fetch()
 		{
 			return _optimizationPreferences;
+		}
+
+		public IEnumerable<IPerson> Agents(DateOnlyPeriod period)
+		{
+			return _schedulerStateHolderFrom.SchedulingResultState.PersonsInOrganization;
 		}
 	}
 }
