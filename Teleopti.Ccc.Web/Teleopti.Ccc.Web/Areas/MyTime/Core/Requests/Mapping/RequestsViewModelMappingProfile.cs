@@ -165,28 +165,27 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 			CreateMap<IPersonRequest, Link>()
 				.ForMember(d => d.rel, o => o.UseValue("self"))
-				.ForMember(d => d.href, o => o.MapFrom(s => s.Id.HasValue
-					? _linkProvider.RequestDetailLink(s.Id.Value)
+				.ForMember(d => d.href, o => o.MapFrom(personRequest => personRequest.Id.HasValue
+					? _linkProvider.RequestDetailLink(personRequest.Id.Value)
 					: null))
-				.ForMember(d => d.Methods, o => o.ResolveUsing(s =>
-				{
-					//0: Pending
-					//1: Denied
-					//2: Approved
-					//3: New
-					//4: AutoDenied
-					//5: Waitlisted
+				.ForMember(d => d.Methods, o => o.ResolveUsing(getAvailableMethods));
+		}
 
-					var stateId = PersonRequest.GetUnderlyingStateId(s);
-					if (s.Request is ShiftExchangeOffer)
-					{
-						var offer = s.Request as IShiftExchangeOffer;
-						var isRealPending = (offer.Status == ShiftExchangeOfferStatus.Pending) && !offer.IsExpired();
-						return isRealPending ? "GET, DELETE, PUT" : "GET, DELETE";
-					}
+		private static object getAvailableMethods (IPersonRequest personRequest)
+		{
+			if (personRequest.Request is ShiftExchangeOffer)
+			{
+				var offer = personRequest.Request as IShiftExchangeOffer;
+				var isRealPending = (offer.Status == ShiftExchangeOfferStatus.Pending) && !offer.IsExpired();
+				return isRealPending ? "GET, DELETE, PUT" : "GET, DELETE";
+			}
 
-					return new[] { 0, 3, 5 }.Contains(stateId) ? "GET, DELETE, PUT" : "GET";
-				}));
+			if (personRequest.IsNew || personRequest.IsPending)
+			{
+				return "GET, DELETE, PUT";
+			}
+
+			return personRequest.IsWaitlisted ? "GET, DELETE" : "GET";
 		}
 
 		private string getStatusText(IPersonRequest s)

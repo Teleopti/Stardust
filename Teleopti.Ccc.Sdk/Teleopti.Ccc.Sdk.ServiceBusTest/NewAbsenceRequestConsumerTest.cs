@@ -558,51 +558,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_loaderWithoutResourceCalculation.AssertWasCalled(x => x.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person }));
 		}
 
-	/*	[Test]
-		public void ShouldTrackAbsenceTwoTimes()
-		{
-			var processAbsenceRequest = MockRepository.GenerateMock<IProcessAbsenceRequest>();
-			var absenceRequestValidator = MockRepository.GenerateMock<IAbsenceRequestValidator>();
-			var tracker = MockRepository.GenerateMock<ITracker>();
-			_absence.Tracker = tracker;
-
-			var personAbsenceAccount = new PersonAbsenceAccount(_person, _absence);
-			_personAccountCollection.Add(personAbsenceAccount);
-			personAbsenceAccount.Add(new AccountTime(_dateOnlyPeriod.StartDate));
-			
-			var validatorList = new List<IAbsenceRequestValidator> { absenceRequestValidator };
-
-			var absenceRequestOpenDatePeriod = MockRepository.GenerateMock<IAbsenceRequestOpenPeriod>();
-			var openAbsenceRequestPeriodExtractor = MockRepository.GenerateMock<IOpenAbsenceRequestPeriodExtractor>();
-			var openAbsenceRequestPeriodProjection = MockRepository.GenerateMock<IOpenAbsenceRequestPeriodProjection>();
-			var periodList = new List<IAbsenceRequestOpenPeriod> { absenceRequestOpenDatePeriod };
-
-			PrepareAbsenceRequest();
-			_requestApprovalService.Stub(x => x.ApproveAbsence(_absence, _period, _person)).Return(new List<IBusinessRuleResponse>());
-			_personAbsenceAccountProvider.Stub(x => x.Find(_person)).Return(_personAccountCollection);
-			_personAccountUpdater.Stub(x => x.UpdateForAbsence(_person, _absence, new DateOnly(_period.StartDateTime)))
-				.Return(true);
-
-			_workflowControlSet.Stub(x => x.GetMergedAbsenceRequestOpenPeriod(_absenceRequest)).Return(absenceRequestOpenDatePeriod);
-			_workflowControlSet.Stub(x => x.GetExtractorForAbsence(_absence)).Return(openAbsenceRequestPeriodExtractor);
-			openAbsenceRequestPeriodExtractor.Stub(x => x.Projection).Return(openAbsenceRequestPeriodProjection);
-			openAbsenceRequestPeriodProjection.Stub(x => x.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture())).IgnoreArguments().Return(periodList);
-			absenceRequestOpenDatePeriod.Stub(x => x.AbsenceRequestProcess).Return(processAbsenceRequest);
-			absenceRequestOpenDatePeriod.Stub(x => x.GetSelectedValidatorList()).Return(validatorList);
-
-			_factory.Stub(x => x.GetRequestApprovalService(null, _scenario)).IgnoreArguments().Return(_requestApprovalService);
-			_unitOfWork.Stub(x => x.Merge(personAbsenceAccount)).Return(null);
-			_personRequest.Stub(x => x.IsApproved).Return(true).Repeat.Twice();
-			_alreadyAbsentSpecification.Stub(x => x.IsSatisfiedBy(_absenceRequest)).Return(false);
-			ExpectLoadOfSchedules();
-			ExpectPersistOfDictionary();
-
-			_target.Consume(_message);
-			_updateScheduleProjectionReadModel.AssertWasCalled(x => x.Execute(_scheduleRange, _dateOnlyPeriod));
-			_unitOfWork.AssertWasCalled(x => x.PersistAll(), o => o.Repeat.Twice());
-			tracker.AssertWasCalled(x => x.Track(personAbsenceAccount.AccountCollection().First(), _absence, new List<IScheduleDay>()), o => o.Repeat.Twice().IgnoreArguments());
-		}*/
-
 		[Test]
 		public void VerifyAbsenceRequestGetsDeniedWhenNoWorkflowControlSet()
 		{
