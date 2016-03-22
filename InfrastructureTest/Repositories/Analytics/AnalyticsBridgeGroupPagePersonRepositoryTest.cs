@@ -8,6 +8,7 @@ using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Interfaces.Domain;
 using BusinessUnit = Teleopti.Ccc.TestCommon.TestData.Analytics.BusinessUnit;
 using Person = Teleopti.Ccc.TestCommon.TestData.Analytics.Person;
 
@@ -22,7 +23,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		AnalyticsGroupPage groupPage;
 		AnalyticsGroupPage groupPage2;
 		Guid personId;
+		Guid personPeriodId;
 		Guid personId2;
+		Guid personPeriodId2;
 
 		[SetUp]
 		public void SetUp()
@@ -33,17 +36,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var businessUnit = new BusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest, datasource);
 
 			analyticsDataFactory.Setup(businessUnit);
-			//var person = new TestDataFactory().Person("Ashley Andeen").Person;
-			var personWithGuid = PersonFactory.CreatePersonWithGuid("firstName","lastName");
-			var personWithGuid2 = PersonFactory.CreatePersonWithGuid("firstName2","lastName2");
-			personId = personWithGuid.Id.GetValueOrDefault();
-			personId2 = personWithGuid2.Id.GetValueOrDefault();
-			analyticsDataFactory.Setup(new Person(personWithGuid, datasource, 0, new DateTime(2010, 1, 1),
+			var person = PersonFactory.CreatePersonWithPersonPeriod(
+				PersonFactory.CreatePersonWithGuid("firstname1", "lastname1"), DateOnly.Today, new ISkill[] {},
+				new Contract("contract1"), new PartTimePercentage("parttimepercentage1"));
+			var person2 = PersonFactory.CreatePersonWithPersonPeriod(
+				PersonFactory.CreatePersonWithGuid("firstname2", "lastname2"), DateOnly.Today, new ISkill[] { },
+				new Contract("contract2"), new PartTimePercentage("parttimepercentage2"));
+			personId = person.Id.GetValueOrDefault();
+			personPeriodId = Guid.NewGuid();
+			person.PersonPeriodCollection.First().SetId(personPeriodId);
+			personId2 = person2.Id.GetValueOrDefault();
+			personPeriodId2 = Guid.NewGuid();
+			person2.PersonPeriodCollection.First().SetId(personPeriodId2);
+
+			analyticsDataFactory.Setup(new Person(person, datasource, 0, new DateTime(2010, 1, 1),
 				new DateTime(2059, 12, 31), 0, -2, 0, BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault(),
-				false, timeZones.UtcTimeZoneId));
-			analyticsDataFactory.Setup(new Person(personWithGuid2, datasource, 1, new DateTime(2010, 1, 1),
+				false, timeZones.UtcTimeZoneId, personPeriodId));
+			analyticsDataFactory.Setup(new Person(person2, datasource, 1, new DateTime(2010, 1, 1),
 				new DateTime(2059, 12, 31), 0, -2, 0, BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault(),
-				false, timeZones.UtcTimeZoneId));
+				false, timeZones.UtcTimeZoneId, personPeriodId2));
 
 			analyticsDataFactory.Persist();
 
@@ -57,7 +68,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupPageNameResourceKey = "GroupPageNameResourceKey1",
 				GroupCode = Guid.NewGuid(),
 				GroupName = "GroupName1",
-				GroupIsCustom = true,
+				GroupIsCustom = false,
 				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
 
@@ -68,7 +79,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupPageNameResourceKey = "GroupPageNameResourceKey2",
 				GroupCode = Guid.NewGuid(),
 				GroupName = "GroupName2",
-				GroupIsCustom = true,
+				GroupIsCustom = false,
 				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
 			analyticsGroupPageRepository.AddGroupPage(groupPage);
@@ -116,5 +127,62 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var result2 = target.GetBridgeGroupPagePerson(groupPage2.GroupCode).Single();
 			result2.Should().Be.EqualTo(personId2);
 		}
+
+		[Test]
+		public void ShouldBeAbleToGetBuildInGroupPagesForPersonPeriod()
+		{
+			var target = new AnalyticsBridgeGroupPagePersonRepository(currentDataSource);
+
+			target.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new [] { groupPage.GroupCode });
+			target.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId2, new [] { groupPage2.GroupCode });
+
+			var result = target.GetBuiltInGroupPagesForPersonPeriod(personPeriodId).Single();
+
+			result.Should().Be.EqualTo(groupPage.GroupCode);
+		}
+
+		[Test]
+		public void ShouldBeAbleToDeleteBridgeGroupPagePersonForPersonPeriod()
+		{
+			var target = new AnalyticsBridgeGroupPagePersonRepository(currentDataSource);
+
+			target.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new[] { groupPage.GroupCode, groupPage2.GroupCode });
+			target.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId2, new[] { groupPage2.GroupCode });
+
+			target.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new[] { groupPage.GroupCode });
+			var result = target.GetBuiltInGroupPagesForPersonPeriod(personPeriodId).Single();
+
+			result.Should().Be.EqualTo(groupPage2.GroupCode);
+		}
+
+		[Test]
+		public void ShouldBeAbleToDeleteBridgeGroupPagePersonRemovedWhenNoPeriodsLeft()
+		{
+			var target = new AnalyticsBridgeGroupPagePersonRepository(currentDataSource);
+
+			target.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new[] { groupPage.GroupCode, groupPage2.GroupCode });
+			target.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId2, new[] { groupPage2.GroupCode });
+
+			target.DeleteBridgeGroupPagePersonExcludingPersonPeriods(personId, new Guid[] { });
+			var result = target.GetBuiltInGroupPagesForPersonPeriod(personPeriodId);
+
+			result.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldBeNotDeleteExcludedPersonPeriods()
+		{
+			var target = new AnalyticsBridgeGroupPagePersonRepository(currentDataSource);
+
+			target.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new[] { groupPage.GroupCode, groupPage2.GroupCode });
+			target.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId2, new[] { groupPage2.GroupCode });
+
+			target.DeleteBridgeGroupPagePersonExcludingPersonPeriods(personId, new[] { personPeriodId });
+			var result = target.GetBuiltInGroupPagesForPersonPeriod(personPeriodId).ToList();
+
+			result.Should().Not.Be.Empty();
+			result.Should().Have.Count.EqualTo(2);
+		}
+
 	}
 }
