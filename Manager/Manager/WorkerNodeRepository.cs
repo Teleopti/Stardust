@@ -249,15 +249,6 @@ namespace Stardust.Manager
 		public void DeleteNode(Guid nodeId)
 		{
 			Runner(() => tryDeleteNode(nodeId), "Unable to delete a node");
-			//var policy = makeRetryPolicy();
-			//try
-			//{
-			//	policy.ExecuteAction(() => tryDeleteNode(nodeId));
-			//}
-			//catch (Exception ex)
-			//{
-			//	LoggerExtensions.ErrorWithLineNumber(Logger, ex.Message + "Unable to add job in database");
-			//}
 		}
 
 		public void tryDeleteNode(Guid nodeId)
@@ -403,15 +394,6 @@ namespace Stardust.Manager
 		public void RegisterHeartbeat(string nodeUri, bool updateStatus)
 		{
 			Runner(() => tryRegisterHeartbeat(nodeUri, updateStatus), "Unable register heartbeat");
-			//var policy = makeRetryPolicy();
-			//try
-			//{
-			//	policy.ExecuteAction(() => tryRegisterHeartbeat(nodeUri, updateStatus));
-			//}
-			//catch (Exception ex)
-			//{
-			//	LoggerExtensions.ErrorWithLineNumber(Logger, ex.Message + "Unable to add job in database");
-			//}
 		}
 
 		public void tryRegisterHeartbeat(string nodeUri, bool updateStatus)

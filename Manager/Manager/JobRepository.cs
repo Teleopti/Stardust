@@ -5,9 +5,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Web.Http.Results;
-using log4net;
-using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Stardust.Manager.Extensions;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
@@ -17,10 +14,7 @@ namespace Stardust.Manager
 {
 	public class JobRepository : IJobRepository
 	{
-		private const int DelaysMiliseconds = 100;
-		private const int MaxRetry = 3;
 		private readonly RetryPolicyProvider _retryPolicyProvider;
-
 		private readonly string _connectionString;
 
 		public JobRepository(string connectionString, RetryPolicyProvider retryPolicyProvider)
