@@ -89,7 +89,7 @@ Scenario: Should see adherence details with neutral adherence
 	| Name            | Unknown        |
 	| Adherence       | Neutral        |
 	| Staffing effect | -1             |
-	When the time is '2015-03-02 08:00:00'
+	When the time is '2015-03-02 08:00:01'
 	And 'Pierre Baldi' sets his phone state to 'Ready'
 	And the time is '2015-03-02 09:00:00'
 	And 'Pierre Baldi' sets his phone state to 'SomeCode'
