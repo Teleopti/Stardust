@@ -174,4 +174,45 @@
 		margin-left: 0;
 		margin-right: 0;
 	}
+	
+	md-sidenav{
+		min-width:340px;
+	}	
+
+	.absence-report{
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+
+		md-content{
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			height: 100%;
+		}
+
+		md-content>div{
+			display:flex;
+			flex-direction:column;
+			justify-content:flex-start;
+		}
+	
+		.absence-selector{
+			padding:0;
+		}
+
+		.con-row>.teamschedule-datepicker{
+			padding-right: 0; 
+			height: 48px;
+		}
+		
+		.con-row>.uib-timepicker{
+			padding-left: 0; 
+			margin-top: -4px;
+		}
+
+		
+	}
+	
 }
