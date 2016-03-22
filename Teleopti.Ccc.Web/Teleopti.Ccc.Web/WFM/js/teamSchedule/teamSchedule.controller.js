@@ -189,8 +189,9 @@
 		};
 
 		vm.selectAllForAllPages = function () {
-			vm.loadAllResults(function (result) {
-				personSelectionSvc.selectAllPerson(result.Schedules);
+			vm.loadAllResults(function(result) {
+				var groupSchedule = groupScheduleFactory.Create(result.Schedules, vm.scheduleDateMoment());
+				personSelectionSvc.selectAllPerson(groupSchedule.Schedules);
 			});
 		};
 
