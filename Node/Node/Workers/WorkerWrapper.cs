@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
-using Autofac.Extras.DynamicProxy2;
 using log4net;
 using Newtonsoft.Json;
+using Stardust.Node.ActionResults;
 using Stardust.Node.Diagnostics;
 using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Log4Net;
 using Stardust.Node.Log4Net.Extensions;
 using Stardust.Node.Timers;
 using Timer = System.Timers.Timer;
@@ -21,6 +19,20 @@ namespace Stardust.Node.Workers
 {
 	public class WorkerWrapper : IWorkerWrapper
 	{
+		private const string WorkerIsAlreadyWorking = "Node is already working on another job.";
+
+		private const string JobToDoIsNull = "Job to do can not be null.";
+
+		private const string JobToDoIdIsInvalid = "Job to do property=ID is invalid.";
+
+		private const string JobToDoNameIsInvalid = "Job to do property=NAME is invalid.";
+
+		private const string JobToDoTypeIsNullOrEmpty = "Job to do property=TYPE can not be null or empty string.";
+
+		private const string JobToDoTypeCanNotBeResolved = "Job to do property=TYPE {0}, can not be resolved by container.";
+
+		private const string JobToDoCanNotBeDeserialize = "Job to do property=SERIALIZED can not be deserialized.";
+
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (WorkerWrapper));
 
 		private readonly IHttpSender _httpSender;
@@ -103,23 +115,33 @@ namespace Stardust.Node.Workers
 		{
 			lock (_startJobLock)
 			{
-				if (jobToDo == null || jobToDo.Id == Guid.Empty)
+				if (CurrentMessageToProcess != null)
 				{
-					return new BadRequestResult(requestMessage);
+					return new ConflictResultWithReasonPhrase(WorkerIsAlreadyWorking);
 				}
 
-				if (CurrentMessageToProcess != null &&
-				    CurrentMessageToProcess.Id != jobToDo.Id)
+				if (jobToDo == null)
 				{
-					return new ConflictResult(requestMessage);
+					return new BadRequestWithReasonPhrase(JobToDoIsNull);
+				}
+
+				if (jobToDo.Id == Guid.Empty)
+				{
+					return new BadRequestWithReasonPhrase(JobToDoIdIsInvalid);
+				}
+
+				if (string.IsNullOrEmpty(jobToDo.Name))
+				{
+					return new BadRequestWithReasonPhrase(JobToDoNameIsInvalid);
 				}
 
 				if (string.IsNullOrEmpty(jobToDo.Type))
 				{
-					return new BadRequestResult(requestMessage);
+					return new BadRequestWithReasonPhrase(JobToDoTypeIsNullOrEmpty);
 				}
 
-				var typ = NodeConfiguration.HandlerAssembly.GetType(jobToDo.Type);
+				var typ = 
+					NodeConfiguration.HandlerAssembly.GetType(jobToDo.Type);
 
 				if (typ == null)
 				{
@@ -128,7 +150,18 @@ namespace Stardust.Node.Workers
 						": The job type [{0}] could not be resolved. The job cannot be started.",
 						jobToDo.Type));
 
-					return new BadRequestResult(requestMessage);
+					return new BadRequestWithReasonPhrase(string.Format(JobToDoTypeCanNotBeResolved, jobToDo.Type));
+				}
+
+				try
+				{
+					object deSer = JsonConvert.DeserializeObject(jobToDo.Serialized,
+																typ);
+
+				}
+				catch (Exception)
+				{
+					return new BadRequestWithReasonPhrase(JobToDoCanNotBeDeserialize);
 				}
 
 				CurrentMessageToProcess = jobToDo;
@@ -141,26 +174,12 @@ namespace Stardust.Node.Workers
 		                                  HttpRequestMessage requestMessage)
 		{
 			CancellationTokenSource = new CancellationTokenSource();
-			object deSer;
-			try
-			{
-				var typ = NodeConfiguration.HandlerAssembly.GetType(jobToDo.Type);
-				deSer = JsonConvert.DeserializeObject(jobToDo.Serialized,
-				                                      typ);
-				CurrentMessageToProcess = jobToDo;
-			}
 
-			catch (Exception)
-			{
-				CurrentMessageToProcess = null;
-				return new BadRequestResult(requestMessage);
-			}
+			CurrentMessageToProcess = jobToDo;
 
-			if (deSer == null)
-			{
-				return new BadRequestResult(requestMessage);
-			}
-
+			var typ = NodeConfiguration.HandlerAssembly.GetType(jobToDo.Type);
+			var deSer = JsonConvert.DeserializeObject(jobToDo.Serialized,
+			                                          typ);
 			//-----------------------------------------------------
 			// Clear faulted timer.
 			//-----------------------------------------------------
@@ -241,7 +260,7 @@ namespace Stardust.Node.Workers
 						if (t.Exception != null)
 						{
 							Logger.ErrorWithLineNumber("Failed",
-														t.Exception);
+							                           t.Exception);
 						}
 
 						SetNodeStatusTimer(TrySendJobFaultedStatusToManagerTimer,

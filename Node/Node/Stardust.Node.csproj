@@ -99,6 +99,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionResults\BadRequestWithReasonPhrase.cs" />
+    <Compile Include="ActionResults\ConflictResultWithReasonPhrase.cs" />
     <Compile Include="API\NodeConfiguration.cs" />
     <Compile Include="API\NodeController.cs" />
     <Compile Include="Constants\ManagerRouteConstants.cs" />

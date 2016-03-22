@@ -378,8 +378,8 @@ namespace NodeTest
 											   _trySendJobProgressToManagerTimerFake,
 											   new FakeHttpSender());
 
-			var actionResult = _workerWrapper.StartJob(new JobToDo(),
-			                                           new HttpRequestMessage());
+			var actionResult = _workerWrapper.ValidateStartJob(new JobToDo(),
+																new HttpRequestMessage());
 
 			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
 				              .Result.StatusCode ==
@@ -401,7 +401,7 @@ namespace NodeTest
 											   _trySendJobProgressToManagerTimerFake,
 											   new FakeHttpSender());
 
-			var actionResult = _workerWrapper.StartJob(new JobToDo(),
+			var actionResult = _workerWrapper.ValidateStartJob(new JobToDo(),
 			                                           new HttpRequestMessage());
 
 			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
@@ -424,8 +424,8 @@ namespace NodeTest
 											   _trySendJobProgressToManagerTimerFake,
 			                                   new FakeHttpSender());
 
-			var actionResult = _workerWrapper.StartJob(null,
-			                                           new HttpRequestMessage());
+			var actionResult = _workerWrapper.ValidateStartJob(null,
+																new HttpRequestMessage());
 
 			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
 				              .Result.StatusCode == HttpStatusCode.BadRequest);

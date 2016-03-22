@@ -125,6 +125,36 @@ namespace Manager.Integration.Test.Helpers
 			return requestModels;
 		}
 
+		public static List<JobRequestModel> GenerateInvalidTestJobParamsRequests(int numberOfJobRequests)
+		{
+			List<JobRequestModel> requestModels = null;
+
+			if (numberOfJobRequests > 0)
+			{
+				requestModels = new List<JobRequestModel>();
+
+				for (var i = 1; i <= numberOfJobRequests; i++)
+				{
+					var testJobParams = new TestJobParams("Dummy data " + i,
+														  "Name data " + i);
+
+					var testJobParamsJson = JsonConvert.SerializeObject(testJobParams);
+
+					var job = new JobRequestModel
+					{
+						Name = "Job Name " + i,
+						Serialized = testJobParamsJson,
+						Type = null,
+						UserName = SecurityHelper.GetLoggedInUser()
+					};
+
+					requestModels.Add(job);
+				}
+			}
+
+			return requestModels;
+		}
+
 		public static List<JobRequestModel> GenerateTestJobParamsRequests(int numberOfJobRequests)
 		{
 			List<JobRequestModel> requestModels = null;

@@ -80,8 +80,11 @@ namespace Manager.Integration.Test.Helpers
 
 		public void CreateNewJobToManagerTask(JobRequestModel jobRequestModel)
 		{
-			NewJobToManagerTask = new Task(() => { CreateNewJobToManager(jobRequestModel); },
-			                               CancellationTokenSource.Token);
+			NewJobToManagerTask = new Task(() =>
+			{
+				CreateNewJobToManager(jobRequestModel);
+			},
+			CancellationTokenSource.Token);
 		}
 
 		public async void CreateNewJobToManager(JobRequestModel jobRequestModel)
@@ -95,6 +98,7 @@ namespace Manager.Integration.Test.Helpers
 			try
 			{
 				HttpResponseMessage response = null;
+
 				while (!CreateNewJobToManagerSucceeded)
 				{
 					this.Log().DebugWithLineNumber(
@@ -102,8 +106,10 @@ namespace Manager.Integration.Test.Helpers
 					try
 					{
 						response = await httpSender.PostAsync(uri, jobRequestModel);
+
 						CreateNewJobToManagerSucceeded = response.IsSuccessStatusCode;
 					}
+
 					catch
 					{
 						CreateNewJobToManagerSucceeded = false;
@@ -111,22 +117,26 @@ namespace Manager.Integration.Test.Helpers
 						this.Log().WarningWithLineNumber(
 							"HttpRequestException when calling post async, will soon try again. Uri ( " + uri + " ). Job name : ( " +
 							jobRequestModel.Name + " ).");
+
 						Thread.Sleep(TimeSpan.FromSeconds(1));
 					}
 				}
 
 				if (CreateNewJobToManagerSucceeded)
 				{
-					var str = await response.Content.ReadAsStringAsync();
+					if (response != null)
+					{
+						var str = await response.Content.ReadAsStringAsync();
 
-					var jobId = JsonConvert.DeserializeObject<Guid>(str);
+						var jobId = JsonConvert.DeserializeObject<Guid>(str);
 
-					CheckJobHistoryStatusTimer.AddOrUpdateGuidStatus(jobId,
-					                                                 null);
+						CheckJobHistoryStatusTimer.AddOrUpdateGuidStatus(jobId,
+						                                                 null);
 
-					this.Log().DebugWithLineNumber(
-						"Finished calling post async. Uri : ( " + uri + " ). ( jobId, jobName ) : ( " + jobId + ", " +
-						jobRequestModel.Name + " )");
+						this.Log().DebugWithLineNumber(
+							"Finished calling post async. Uri : ( " + uri + " ). ( jobId, jobName ) : ( " + jobId + ", " +
+							jobRequestModel.Name + " )");
+					}
 				}
 			}
 			catch (Exception exp)

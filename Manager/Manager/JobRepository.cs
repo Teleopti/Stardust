@@ -480,11 +480,8 @@ namespace Stardust.Manager
 
 
 											//insert into history detail.
-											if (response.Content != null)
+											if (response.ReasonPhrase != null)
 											{
-												var reason =
-													response.Content.ReadAsStringAsync().Result;
-
 												string insertcommand = @"INSERT INTO [Stardust].[JobHistoryDetail]
 																	([JobId]
 																	,[Created]
@@ -504,7 +501,7 @@ namespace Stardust.Manager
 
 												da.InsertCommand.Parameters.Add("@Detail",
 																				SqlDbType.NText);
-												da.InsertCommand.Parameters[1].Value = reason;
+												da.InsertCommand.Parameters[1].Value = response.ReasonPhrase;
 
 												da.InsertCommand.Parameters.Add("@Created",
 																				SqlDbType.DateTime,

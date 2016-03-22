@@ -184,7 +184,7 @@ namespace ManagerTest
 			{
 				new HttpResponseMessage(HttpStatusCode.BadRequest)
 				{
-					Content = new StringContent("Fake content")
+					ReasonPhrase = "Reason comes here."
 				}
 			};
 

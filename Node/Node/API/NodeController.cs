@@ -30,36 +30,18 @@ namespace Stardust.Node.API
 		[HttpPost, AllowAnonymous, Route(NodeRouteConstants.Job)]
 		public IHttpActionResult StartJob(JobToDo jobToDo)
 		{
-			if (jobToDo == null || jobToDo.Id == Guid.Empty)
+			if (jobToDo == null)
 			{
-				Logger.InfoWithLineNumber(_workerWrapper.WhoamI + "Received Start Job Request. Invalid job to do.");
-
-				return BadRequest("Invalid job to do.");
-			}
-
-			if (string.IsNullOrEmpty(jobToDo.Type))
-			{
-				Logger.InfoWithLineNumber(_workerWrapper.WhoamI + "Received Start Job Request. Invalid job type.");
-
-				return BadRequest("Invalid job type.");
-			}
-
-			var typ = NodeConfiguration.HandlerAssembly.GetType(jobToDo.Type);
-
-			if (typ == null)
-			{
-				Logger.WarningWithLineNumber(string.Format(_workerWrapper.WhoamI +
-				                                           ": The job type [{0}] could not be resolved. The job cannot be started.",
-				                                           jobToDo.Type));
-
-				return BadRequest("Job type : " + jobToDo.Type + ", could not be resolved.");
+				Logger.InfoWithLineNumber(_workerWrapper.WhoamI + "Received Start Job Request. jobId is null");
+				return BadRequest("jobToDo is null");
 			}
 
 			var msg =
-				string.Format("{0} : Received Start Job Request. ( jobId, jobName ) : ( {1}, {2} )",
-				              _workerWrapper.WhoamI,
-				              jobToDo.Id,
-				              jobToDo.Name);
+					string.Format(
+						"{0} : Received Start Job Request. ( jobId, jobName ) : ( {1}, {2} )",
+						_workerWrapper.WhoamI,
+						jobToDo.Id,
+						jobToDo.Name);
 
 			Logger.InfoWithLineNumber(msg);
 
@@ -78,9 +60,8 @@ namespace Stardust.Node.API
 			}
 
 			var response = _workerWrapper.ValidateStartJob(jobToDo,
-			                                               Request);
-
-			if (response.GetType() != typeof (OkResult))
+															Request);
+			if (response.GetType() != typeof(OkResult))
 			{
 				return response;
 			}
@@ -88,12 +69,12 @@ namespace Stardust.Node.API
 			Task.Factory.StartNew(() =>
 			{
 				response = _workerWrapper.StartJob(jobToDo,
-				                                   Request);
+												   Request);
 
 				var startJobMessage = string.Format("{0} : Starting job ( jobId, jobName ) : ( {1}, {2} )",
-				                                    _workerWrapper.WhoamI,
-				                                    jobToDo.Id,
-				                                    jobToDo.Name);
+													_workerWrapper.WhoamI,
+													jobToDo.Id,
+													jobToDo.Name);
 
 				Logger.DebugWithLineNumber(startJobMessage);
 			});
