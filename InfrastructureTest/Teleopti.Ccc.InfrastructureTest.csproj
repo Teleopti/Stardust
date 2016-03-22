@@ -565,6 +565,7 @@
     <Compile Include="UnitOfWork\UnitOfWorkInitiatorIdentifierHandlingTest.cs" />
     <Compile Include="Util\CompressionExtensionsTest.cs" />
     <Compile Include="Util\MemoryCounterTest.cs" />
+    <Compile Include="Util\StringHelperTest.cs" />
     <Compile Include="WebReports\DailyMetricsForDay\AnsweredCallsTest.cs" />
     <Compile Include="WebReports\DailyMetricsForDay\AverageAfterCallWorkTest.cs" />
     <Compile Include="WebReports\DailyMetricsForDay\AverageTalkTimeTest.cs" />

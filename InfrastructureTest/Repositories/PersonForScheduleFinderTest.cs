@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -103,7 +104,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			per1 = PersonFactory.CreatePerson("roger", "kratz");
 			per2 = PersonFactory.CreatePerson("z", "balog");
-			per3 = PersonFactory.CreatePerson("a", "balog");
+			per3 = PersonFactory.CreatePerson("小红", "小白");
 
 			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(contract1), team));
 			per2.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(contract2), team));
@@ -129,14 +130,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			persistReadModel(per3.Id.GetValueOrDefault(), team.Id.GetValueOrDefault(), site.Id.GetValueOrDefault(), team.Id.GetValueOrDefault());
 
 			var result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> {team.Id.Value}, "roger");
+			result.ToArray().Length.Should().Be.EqualTo(1);            
+
+			result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "roger k");
 			result.ToArray().Length.Should().Be.EqualTo(1);
 
-			result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "rogerk");
-			result.ToArray().Length.Should().Be.EqualTo(1);
+			result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "kratz rog");
+			result.ToArray().Length.Should().Be.EqualTo(0);
 
-			result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "kratz");
-			result.ToArray().Length.Should().Be.EqualTo(1);
-		}
+            result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "白小红");
+            result.ToArray().Length.Should().Be.EqualTo(1);
+
+            result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "白 小红");
+            result.ToArray().Length.Should().Be.EqualTo(0);
+
+            result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "rogerk");
+            result.ToArray().Length.Should().Be.EqualTo(0);
+        }
 
 		[Test]
 		public void ShouldGetPersonForDayAndGroup()
@@ -189,7 +199,64 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			result.ToArray().Length.Should().Be.EqualTo(1);
 		}
 
-		private IPersonContract createPersonContract(IContract contract, IBusinessUnit otherBusinessUnit = null)
+
+
+        [Test]
+        public void ShouldSearchPersonWithCorrectNameFormat()
+        {
+            target = new PersonForScheduleFinder(CurrentUnitOfWork.Make());
+
+            site = SiteFactory.CreateSimpleSite("d");
+
+            PersistAndRemoveFromUnitOfWork(site);
+            team = TeamFactory.CreateSimpleTeam();
+            team.Site = site;
+            team.Description = new Description("sdf");
+            PersistAndRemoveFromUnitOfWork(team);
+
+            contract1 = new Contract("contract1");
+            contract2 = new Contract("contract2");
+
+            PersistAndRemoveFromUnitOfWork(contract1);
+            PersistAndRemoveFromUnitOfWork(contract2);
+
+            per1 = PersonFactory.CreatePerson("roger", "kratz");
+            per2 = PersonFactory.CreatePerson("z", "balog");
+            per3 = PersonFactory.CreatePerson("a", "balog");
+
+            per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(contract1), team));
+            per2.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(contract2), team));
+            per3.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(contract2), team));
+
+
+            IWorkflowControlSet workflowControlSet = new WorkflowControlSet("d");
+            workflowControlSet.SchedulePublishedToDate = new DateTime(2000, 1, 10);
+            workflowControlSet.PreferencePeriod = new DateOnlyPeriod(2000, 2, 10, 2000, 2, 11);
+            workflowControlSet.PreferenceInputPeriod = new DateOnlyPeriod(2000, 2, 10, 2000, 2, 11);
+
+            PersistAndRemoveFromUnitOfWork(workflowControlSet);
+
+            per1.WorkflowControlSet = workflowControlSet;
+            per2.WorkflowControlSet = workflowControlSet;
+            per3.WorkflowControlSet = workflowControlSet;
+
+            PersistAndRemoveFromUnitOfWork(per1);
+            PersistAndRemoveFromUnitOfWork(per2);
+            PersistAndRemoveFromUnitOfWork(per3);
+
+            var groupId = new Guid("B0E35119-4661-4A1B-8772-9B5E015B2564");
+
+            persistReadModel(per1.Id.GetValueOrDefault(), team.Id.GetValueOrDefault(), site.Id.GetValueOrDefault(), groupId);
+
+            var result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { groupId }, "roger k", NameFormatSetting.FirstNameThenLastName);
+            result.ToArray().Length.Should().Be.EqualTo(1);
+
+            result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { groupId }, "roger k", NameFormatSetting.LastNameThenFirstName);
+            result.ToArray().Length.Should().Be.EqualTo(0);
+        }
+
+
+        private IPersonContract createPersonContract(IContract contract, IBusinessUnit otherBusinessUnit = null)
 		{
 			var pContract = PersonContractFactory.CreatePersonContract(contract);
 			if (otherBusinessUnit != null)

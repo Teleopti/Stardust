@@ -9,17 +9,20 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.WebTest.Core.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 {
-	[TestFixture]
+    [TestFixture]
 	public class PossibleShiftTradePersonsProviderTest
 	{
 		private IPossibleShiftTradePersonsProvider target;
@@ -29,6 +32,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		private IPerson currentUser;
 		private IPersonForScheduleFinder personForScheduleFinder;
 		private ITeam myTeam;
+	    private ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettingsProvider;
 
 		[SetUp]
 		public void Setup()
@@ -44,8 +48,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggedOnUser.Expect(l => loggedOnUser.CurrentUser()).Return(currentUser);
+		    nameFormatSettingsProvider = new FakeNameFormatSettingProvider();
 
-			target = new PossibleShiftTradePersonsProvider(personRepository, shiftTradeValidator, loggedOnUser, permissionProvider, personForScheduleFinder);
+            target = new PossibleShiftTradePersonsProvider(personRepository, shiftTradeValidator, loggedOnUser, permissionProvider, personForScheduleFinder, nameFormatSettingsProvider);
 		}
 
 		[Test]
@@ -75,8 +80,38 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			result.Date.Should().Be.EqualTo(data.ShiftTradeDate);
 			result.Persons.Should().Be.Empty();
 		}
-		
-		[Test]
+
+        [Test]
+        public void ShouldReturnPossiblePersonToTradeShiftBySearchNameAndNameFormat()
+        {
+            var currentUserGuids = new PersonSelectorShiftTrade
+            {
+                PersonId = currentUser.Id.Value,
+                TeamId = myTeam.Id,
+                SiteId = Guid.NewGuid(),
+                BusinessUnitId = Guid.NewGuid()
+            };
+            var date = DateOnly.Today;
+            var data = new ShiftTradeScheduleViewModelData
+            {
+                ShiftTradeDate = date,
+                TeamIdList = new List<Guid> { myTeam.Id.GetValueOrDefault() }
+            };
+
+            (nameFormatSettingsProvider as FakeNameFormatSettingProvider).SetNameFormat(NameFormatSetting.LastNameThenFirstName);
+
+            personForScheduleFinder.Expect(rep => rep.GetPersonFor(data.ShiftTradeDate, data.TeamIdList, data.SearchNameText, NameFormatSetting.LastNameThenFirstName ))
+                                            .Return(new List<IAuthorizeOrganisationDetail> { currentUserGuids });
+
+            personRepository.Expect(rep => rep.FindPeople(new List<Guid>())).Return(new Collection<IPerson>());
+
+            var result = target.RetrievePersons(data);
+
+            result.Date.Should().Be.EqualTo(data.ShiftTradeDate);       
+        }
+
+
+        [Test]
 		public void ShouldReturnPossiblePersonsToTradeShiftWithForOneTeam()
 		{
 			var personInMyTeam = new Person();

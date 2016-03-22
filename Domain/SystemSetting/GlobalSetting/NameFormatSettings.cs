@@ -6,5 +6,16 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 	public class NameFormatSettings : SettingValue
 	{
 		public int NameFormatId { get; set; }
-	}
+
+	    public NameFormatSetting ToNameFormatSetting()
+	    {
+	        return (NameFormatSetting) NameFormatId;
+	    }
+    }
+
+    public enum NameFormatSetting
+    {
+        FirstNameThenLastName,
+        LastNameThenFirstName
+    }
 }

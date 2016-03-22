@@ -271,6 +271,7 @@
     <Compile Include="Areas\MyTime\Controllers\ScheduleApiControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProviderCacheTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactoryTest.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamSchedulePersonsProviderTest.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\PerformanceToolApiControllerTest.cs" />
     <Compile Include="Areas\Permissions\FakeApplicationFunctionsToggleFilter.cs" />
     <Compile Include="Areas\Permissions\FakeApplicationRolePersonRepository.cs" />
@@ -382,6 +383,7 @@
     <Compile Include="Core\Common\DataProvider\FakePreferenceProvider.cs" />
     <Compile Include="Core\Common\DataProvider\FakeScheduleProvider.cs" />
     <Compile Include="Core\Common\DataProvider\FakeScheduleResourceProvider.cs" />
+    <Compile Include="Core\Common\FakeNameFormatSettingProvider.cs" />
     <Compile Include="Core\Common\FakePersonNameProvider.cs" />
     <Compile Include="Core\IanaTimeZoneProviderTest.cs" />
     <Compile Include="Core\MonthScheduleDomainDataProviderTest.cs" />

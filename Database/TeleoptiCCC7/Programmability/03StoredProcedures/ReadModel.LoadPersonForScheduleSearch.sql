@@ -19,7 +19,9 @@ CREATE PROCEDURE [ReadModel].[LoadPersonForScheduleSearch]
 	@scheduleDate smalldatetime,
 	@groupIdList varchar(max),
 	@businessUnitId uniqueidentifier,
-	@name nvarchar(max)
+	@name nvarchar(max),
+	@noSpaceInName bit,
+	@firstNameFirst bit
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -50,9 +52,9 @@ BEGIN
 		AND (gr.LeavingDate >= @scheduleDate OR gr.LeavingDate IS NULL)
 		AND p.WorkflowControlSet IS NOT NULL
 		AND ((@namesearch is null or @namesearch = '')
-			OR ((p.LastName + p.FirstName) like @namesearch)
-			OR ((p.FirstName + p.LastName) like @namesearch)
-			OR ((p.LastName + ' ' + p.FirstName) like @namesearch)
-			OR ((p.FirstName + ' ' + p.LastName) like @namesearch))
+			OR (@noSpaceInName = 1 AND @firstNameFirst = 1 AND ((p.LastName + p.FirstName) like @namesearch))
+--			OR (@noSpaceInName = 1 AND @firstNameFirst = 0 AND ((p.FirstName + p.LastName) like @namesearch)) : Not needed in Chinese context
+			OR (@noSpaceInName = 0 AND @firstNameFirst = 0 AND ((p.LastName + ' ' + p.FirstName) like @namesearch))
+			OR (@noSpaceInName = 0 AND @firstNameFirst = 1 AND ((p.FirstName + ' ' + p.LastName) like @namesearch)))
 	OPTION	(FORCE ORDER)
 END

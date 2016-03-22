@@ -5,10 +5,12 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
 
@@ -21,25 +23,30 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IPersonForScheduleFinder _personForScheduleFinder;
+	    private readonly ISettingsPersisterAndProvider<NameFormatSettings> _nameFormatSettings;
 
-		public PossibleShiftTradePersonsProvider(IPersonRepository personRepository, 
+        public PossibleShiftTradePersonsProvider(IPersonRepository personRepository, 
 																					IShiftTradeLightValidator shiftTradeValidator, 
 																					ILoggedOnUser loggedOnUser,
 																					IPermissionProvider permissionProvider,
-																					IPersonForScheduleFinder personForScheduleFinder)
+																					IPersonForScheduleFinder personForScheduleFinder, 
+                                                                                    ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettings)
 		{
 			_personRepository = personRepository;
 			_shiftTradeValidator = shiftTradeValidator;
 			_loggedOnUser = loggedOnUser;
 			_permissionProvider = permissionProvider;
 			_personForScheduleFinder = personForScheduleFinder;
+            _nameFormatSettings = nameFormatSettings;
 		}
 
 		public DatePersons RetrievePersons(ShiftTradeScheduleViewModelData shiftTradeArguments)
 		{
 			var me = _loggedOnUser.CurrentUser();
+		    var nameFormatSetting = _nameFormatSettings.Get().ToNameFormatSetting();
 
-			var personForShiftTradeList = _personForScheduleFinder.GetPersonFor(shiftTradeArguments.ShiftTradeDate, shiftTradeArguments.TeamIdList,shiftTradeArguments.SearchNameText);
+			var personForShiftTradeList = _personForScheduleFinder.GetPersonFor(shiftTradeArguments.ShiftTradeDate, shiftTradeArguments.TeamIdList,shiftTradeArguments.SearchNameText,
+                nameFormatSetting);
 
 			personForShiftTradeList = personForShiftTradeList.Where(
 				personGuid => personGuid.PersonId != me.Id &&

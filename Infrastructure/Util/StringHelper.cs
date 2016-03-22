@@ -27,5 +27,11 @@ namespace Teleopti.Ccc.Infrastructure.Util
 
 			return uniqueResult ? new HashSet<string>(result) : result;
 		}
+
+	    public static bool StringContainsChinese(string input)
+	    {
+            var regex = new Regex(@"\p{IsCJKUnifiedIdeographs}");
+            return regex.IsMatch(input);
+	    }
 	}
 }

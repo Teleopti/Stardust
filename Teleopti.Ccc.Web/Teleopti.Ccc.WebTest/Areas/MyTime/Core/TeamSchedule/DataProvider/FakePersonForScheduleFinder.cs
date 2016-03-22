@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			_personNameProvider = personNameProvider;
 		}
 
-		public IList<IAuthorizeOrganisationDetail> GetPersonFor(DateOnly shiftTradeDate, IList<Guid> teamIdList, string name)
+		public IList<IAuthorizeOrganisationDetail> GetPersonFor(DateOnly shiftTradeDate, IList<Guid> teamIdList, string name, NameFormatSetting nameFormat = NameFormatSetting.FirstNameThenLastName)
 		{
 			var businessUnit = _businessUnitRepository.LoadAll().FirstOrDefault();
 			name = name ?? string.Empty;
