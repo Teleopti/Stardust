@@ -39,16 +39,11 @@ namespace Teleopti.Ccc.Domain.Logon
 		public void Logon(string tenant, Guid businessUnitId)
 		{
 			var dataSource = _dataSourceForTenant.Tenant(tenant);
-
 			using (var unitOfWork = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				var systemUser = _repositoryFactory.CreatePersonRepository(unitOfWork).LoadPersonAndPermissions(SystemUser.Id);
-
 				var businessUnit = _repositoryFactory.CreateBusinessUnitRepository(unitOfWork).Get(businessUnitId);
-				unitOfWork.Remove(businessUnit); //To make sure that business unit doesn't belong to this uow any more
-				
 				_logOnOff.LogOn(dataSource, systemUser, businessUnit);
-
 				setCorrectPermissionsOnUser(dataSource.Application);
 			}
 		}
