@@ -366,6 +366,10 @@ namespace Stardust.Manager
 										{
 											this.Log().InfoWithLineNumber(exp.Message);
 										}
+										else
+										{
+											this.Log().ErrorWithLineNumber(exp.Message, exp);
+										}
 									}
 									catch (Exception exp)
 									{
