@@ -243,7 +243,7 @@ namespace Stardust.Manager
 								var jobRow = jobs.Rows[0];
 								var job = new JobToDo
 								{
-									Id = (Guid)jobRow["Id"],
+									Id = (Guid) jobRow["Id"],
 									Name = GetValue<string>(jobRow["Name"]),
 									Serialized = GetValue<string>(jobRow["Serialized"]).Replace(@"\", @""),
 									Type = GetValue<string>(jobRow["Type"]),
@@ -360,9 +360,12 @@ namespace Stardust.Manager
 
 										}
 									}
-									catch (TimeoutException exp)
+									catch (SqlException exp)
 									{
-										this.Log().InfoWithLineNumber("Timeout: " + exp.Message);
+										if (exp.Number == -2) //Timeout
+										{
+											this.Log().InfoWithLineNumber("Timeout: " + exp.Message);
+										}
 									}
 									catch (Exception exp)
 									{
@@ -376,12 +379,12 @@ namespace Stardust.Manager
 					}
 				}
 			}
-			catch (TimeoutException exp)
-			{
-				this.Log().InfoWithLineNumber("Timeout: " + exp.Message);
-			}
 			catch (SqlException exp)
 			{
+				if (exp.Number == -2) //Timeout
+				{
+					this.Log().InfoWithLineNumber("Timeout: " + exp.Message);
+				}
 				this.Log().ErrorWithLineNumber(exp.Message, exp);
 			}
 
