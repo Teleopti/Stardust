@@ -191,6 +191,11 @@
 			});
 		};
 
+		vm.toggleShowAbsenceOnly = function () {
+			vm.paginationOptions.pageNumber = 1;
+			vm.loadSchedules();
+		}
+
 		vm.updateSchedules = function (personIdList) {
 			vm.isLoading = true;
 			scheduleMgmtSvc.updateScheduleForPeoples(personIdList, vm.scheduleDateMoment(), function () {

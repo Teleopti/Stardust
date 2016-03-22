@@ -15,7 +15,7 @@
 		</span>
 
 		<div class="wfm-switch" ng-if="vm.toggleForRemoveAbsenceEnabled">
-			<input type="checkbox" id="switchAbsence" ng-model="vm.onlyLoadScheduleWithAbsence" ng-change="vm.loadSchedules()" />
+			<input type="checkbox" id="switchAbsence" ng-model="vm.onlyLoadScheduleWithAbsence" ng-change="vm.toggleShowAbsenceOnly()" />
 			<label for="switchAbsence">
 				<span class="wfm-switch-label" translate>ShowOnlyAbsence</span>
 				<span class="wfm-switch-toggle"></span>
