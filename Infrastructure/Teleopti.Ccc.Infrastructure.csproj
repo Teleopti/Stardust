@@ -725,7 +725,6 @@
     <Compile Include="WebReports\DetailedAdherenceForDayResult.cs" />
     <Compile Include="WebReports\IDailyMetricsForDayQuery.cs" />
     <Compile Include="WebReports\IDetailedAdherenceForDayQuery.cs" />
-    <Compile Include="Web\HttpTransientErrorDetectionStrategy.cs" />
     <Compile Include="Web\CurrentHttpContext.cs" />
     <Compile Include="Web\ICurrentHttpContext.cs" />
     <Compile Include="MultiTenancy\Client\SharedSettingsQuerier.cs" />

@@ -27,9 +27,9 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			_currentTenantCredentials = currentTenantCredentials;
 		}
 
-		private RetryPolicy<HttpTransientErrorDetectionStrategy> makeRetryPolicy()
+		private RetryPolicy makeRetryPolicy()
 		{
-			var policy = new RetryPolicy<HttpTransientErrorDetectionStrategy>(new ExponentialBackoff(9, TimeSpan.FromMilliseconds(500),
+			var policy = new RetryPolicy<TenantDataManagerRetryStrategy>(new ExponentialBackoff(9, TimeSpan.FromMilliseconds(500),
 					TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(2)));
 
 			policy.Retrying += (sender, args) =>
@@ -73,6 +73,14 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			}
 
 			return ret;
+		}
+	}
+
+	public class TenantDataManagerRetryStrategy : ITransientErrorDetectionStrategy
+	{
+		public bool IsTransient(Exception ex)
+		{
+			return true;
 		}
 	}
 }
