@@ -90,7 +90,7 @@ namespace Stardust.Manager
 						{
 							Id = (Guid)reader.GetValue(reader.GetOrdinal("Id")),
 							Url = new Uri((string)reader.GetValue(reader.GetOrdinal("Url"))),
-							Alive = (string)reader.GetValue(reader.GetOrdinal("Alive")),
+							Alive = (bool)reader.GetValue(reader.GetOrdinal("Alive")),
 							Heartbeat = (DateTime)reader.GetValue(reader.GetOrdinal("Heartbeat"))
 						};
 						listToReturn.Add(jobDefinition);
@@ -149,7 +149,7 @@ namespace Stardust.Manager
 								{
 									Id = (Guid)reader.GetValue(reader.GetOrdinal("Id")),
 									Url = new Uri((string)reader.GetValue(reader.GetOrdinal("Url"))),
-									Alive = (string)reader.GetValue(reader.GetOrdinal("Alive")),
+									Alive = (bool)reader.GetValue(reader.GetOrdinal("Alive")),
 									Heartbeat = (DateTime)reader.GetValue(reader.GetOrdinal("Heartbeat"))
 								};
 								listToReturn.Add(jobDefinition);
@@ -305,8 +305,7 @@ namespace Stardust.Manager
 									(currentDateTime - heartBeatDateTime).TotalSeconds;
 								if (dateDiff > timeSpan.TotalSeconds)
 								{
-									var alive = "false";
-									commandUpdate.Parameters["@Alive"].Value = alive;
+									commandUpdate.Parameters["@Alive"].Value = false;
 									commandUpdate.Parameters["@Url"].Value = url;
 									commandUpdate.ExecuteNonQuery();
 									deadNodes.Add(url.ToString());
@@ -356,7 +355,7 @@ namespace Stardust.Manager
 				using (var command = new SqlCommand(updateCommandText,connection))
 				{
 					command.Parameters.Add("@Heartbeat", SqlDbType.DateTime).Value = DateTime.Now;
-					command.Parameters.Add("@Alive", SqlDbType.NVarChar).Value = "true";
+					command.Parameters.Add("@Alive", SqlDbType.Bit).Value = true;
 					command.Parameters.Add("@Url", SqlDbType.NVarChar).Value = nodeUri;
 					try
 					{
@@ -384,7 +383,7 @@ namespace Stardust.Manager
 			_jdDataTable.Columns.Add(new DataColumn("Id",typeof (Guid)));
 			_jdDataTable.Columns.Add(new DataColumn("Url",typeof (string)));
 			_jdDataTable.Columns.Add(new DataColumn("Heartbeat",typeof (DateTime)));
-			_jdDataTable.Columns.Add(new DataColumn("Alive",typeof (string)));
+			_jdDataTable.Columns.Add(new DataColumn("Alive",typeof (bool)));
 			_jdDataSet.Tables.Add(_jdDataTable);
 		}
 	}
