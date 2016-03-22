@@ -270,8 +270,13 @@ md-autocomplete button md-icon {
 }
 
 .click-modal .dialog {
-left:25%;
+	left:25%;
 }
+
+.sidenav.is-hidden{
+	flex-basis: 40px!important;
+}
+
 @media only screen and (max-width:769px){
 	.dialog {
 		left:5px!important;
@@ -286,7 +291,7 @@ left:25%;
 @media screen and (max-width: 960px) {
 	.sidenav{
 	    text-overflow: hidden;
-	    flex-basis: 50px!important;
+	    flex-basis: 40px!important;
 	}
 	#lefttoogle{
 		display: none;
