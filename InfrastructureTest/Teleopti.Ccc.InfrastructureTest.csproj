@@ -245,6 +245,7 @@
     <Compile Include="Persisters\Schedules\MessageSenderInvokationTest.cs" />
     <Compile Include="Persisters\Schedules\NoUnitOfWorkModifyNoConflictTest.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangeReassociateTest.cs" />
+    <Compile Include="Repositories\Analytics\AnalyticsPersonRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsBridgeGroupPagePersonRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsGroupPageRepositoryTest.cs" />
     <Compile Include="Repositories\DayOffRulesRepositoryTest.cs" />

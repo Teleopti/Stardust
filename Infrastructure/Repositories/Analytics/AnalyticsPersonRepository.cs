@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
-	public class  AnalyticsPersonRepository : IAnalyticsPersonPeriodRepository
+	public class AnalyticsPersonRepository : IAnalyticsPersonPeriodRepository
 	{
 		public int BusinessUnitId(Guid businessUnitCode)
 		{
@@ -230,7 +230,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			.SetInt32("BusinessUnitId", personPeriod.BusinessUnitId)
 			.SetGuid("BusinessUnitCode", personPeriod.BusinessUnitCode)
 			.SetString("BusinessUnitName", personPeriod.BusinessUnitName)
-			.SetInt32("SkillsetId", personPeriod.SkillsetId.GetValueOrDefault())
 			.SetString("Email", personPeriod.Email)
 			.SetString("Note", personPeriod.Note)
 			.SetDateTime("EmploymentStartDate", personPeriod.EmploymentStartDate)
@@ -250,6 +249,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			.SetInt32("ValidToDateIdLocal", personPeriod.ValidToDateIdLocal)
 			.SetDateTime("ValidFromDateLocal", personPeriod.ValidFromDateLocal)
 			.SetDateTime("ValidToDateLocal", personPeriod.ValidToDateLocal);
+
+				if (personPeriod.SkillsetId.HasValue)
+				{
+					query.SetInt32("SkillsetId", personPeriod.SkillsetId.Value);
+				}
+				else
+				{
+					query.SetParameter("SkillsetId", null, NHibernateUtil.Int32);
+				}
 
 				if (personPeriod.EmploymentTypeCode.HasValue)
 				{
@@ -324,7 +332,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 							,[datasource_update_date] DatasourceUpdateDate
 						 from mart.[bridge_acd_login_person] WITH (NOLOCK) WHERE person_id =:PersonId ")
 					.SetInt32("PersonId", personId)
-					.SetResultTransformer(Transformers.AliasToBean(typeof (AnalyticsBridgeAcdLoginPerson)))
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsBridgeAcdLoginPerson)))
 					.SetReadOnly(true)
 					.List<AnalyticsBridgeAcdLoginPerson>();
 			}
@@ -477,7 +485,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					.SetString("Note", personPeriod.Note)
 					.SetDateTime("EmploymentStartDate", personPeriod.EmploymentStartDate)
 					.SetDateTime("EmploymentEndDate", personPeriod.EmploymentEndDate)
-					
+
 					.SetBoolean("IsAgent", personPeriod.IsAgent)
 					.SetBoolean("IsUser", personPeriod.IsUser)
 					.SetInt32("DatasourceId", personPeriod.DatasourceId)
