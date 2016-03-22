@@ -37,12 +37,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 			if (isEmptySchedule(schedule1) && isEmptySchedule(schedule2))
 			{
-				return String.Compare(person1.Name.LastName, person2.Name.LastName);
+				return string.CompareOrdinal(person1.Name.LastName, person2.Name.LastName);
 			}
+
 			if (isEmptySchedule(schedule1) && !isEmptySchedule(schedule2))
 			{
 				return 1;
 			}
+
 			if (!isEmptySchedule(schedule1) && isEmptySchedule(schedule2))
 			{
 				return -1;
@@ -52,6 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			{
 				return _isFullAbsenceBeforeDayOff ? 1 : -1;
 			}
+
 			if ((isDayOff(schedule1)|| isFullDayAbsence(schedule1)) && !isDayOff(schedule2) && !isFullDayAbsence(schedule2))
 			{
 				return 1;
@@ -59,7 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 			if (isDayOff(schedule1) && isDayOff(schedule2))
 			{
-				return String.Compare(person1.Name.LastName, person2.Name.LastName);
+				return string.CompareOrdinal(person1.Name.LastName, person2.Name.LastName);
 			}
 
 			if (isFullDayAbsence(schedule1) && isDayOff(schedule2))
@@ -75,7 +78,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 					return 1;
 				if (offset1 < offset2)
 					return -1;
-				return String.Compare(person1.Name.LastName, person2.Name.LastName);
+				return string.CompareOrdinal(person1.Name.LastName, person2.Name.LastName);
 			}
 
 			if (!isDayOff(schedule1)&& !isFullDayAbsence(schedule1) && (isDayOff(schedule2)||isFullDayAbsence(schedule2)))
@@ -91,10 +94,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 					return 1;
 				if (offset1 < offset2)
 					return -1;
-				return String.Compare(person1.Name.LastName, person2.Name.LastName);
+				return string.CompareOrdinal(person1.Name.LastName, person2.Name.LastName);
 			}
 
-			return String.Compare(person1.Name.LastName, person2.Name.LastName);
+			return string.CompareOrdinal(person1.Name.LastName, person2.Name.LastName);
 		}
 
 		private int getMinActivityStartTimeOffset(IScheduleDay schedule)
