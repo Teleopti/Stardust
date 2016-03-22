@@ -385,7 +385,10 @@ namespace Stardust.Manager
 				{
 					this.Log().InfoWithLineNumber("Timeout: " + exp.Message);
 				}
-				this.Log().ErrorWithLineNumber(exp.Message, exp);
+				else
+				{
+					this.Log().ErrorWithLineNumber(exp.Message, exp);
+				}
 			}
 
 			catch (Exception exp)
