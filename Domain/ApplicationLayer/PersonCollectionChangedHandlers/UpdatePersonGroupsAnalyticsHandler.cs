@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					handleContractSchedule(personPeriod, groupIds);
 					handlePartTimePercentage(personPeriod, groupIds);
 					handleRuleSetBag(personPeriod, groupIds);
-					handleNotes(person, groupIds, @event.LogOnBusinessUnitId);
+					handleNotes(person.Note, groupIds, @event.LogOnBusinessUnitId);
 
 					var deletedGroupIds = updatePersonGroups(personPeriod.Id.GetValueOrDefault(), groupIds);
 
@@ -109,38 +109,36 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 		private static void handleRuleSetBag(IPersonPeriod personPeriod, ICollection<Guid> groupIds)
 		{
-			if (personPeriod.RuleSetBag != null)
-			{
-				var ruleSetBag = personPeriod.RuleSetBag.Id.GetValueOrDefault();
-				if (ruleSetBag != Guid.Empty && personPeriod.RuleSetBag.IsChoosable)
-					groupIds.Add(ruleSetBag);
-			}
+			if (personPeriod.RuleSetBag == null) return;
+
+			var ruleSetBag = personPeriod.RuleSetBag.Id.GetValueOrDefault();
+			if (ruleSetBag != Guid.Empty && personPeriod.RuleSetBag.IsChoosable)
+				groupIds.Add(ruleSetBag);
 		}
 
-		private void handleNotes(IPerson person, ICollection<Guid> groupIds, Guid businessUnitId)
+		private void handleNotes(string note, ICollection<Guid> groupIds, Guid businessUnitId)
 		{
+			if (string.IsNullOrWhiteSpace(note)) return;
+
 			// Find a group for Note, or create if there isn't one
-			if (!string.IsNullOrWhiteSpace(person.Note))
+			var groupName = formatNoteName(note);
+			var noteGroupPage = _analyticsGroupPageRepository.FindGroupPageByGroupName(groupName);
+			if (noteGroupPage == null)
 			{
-				var groupName = formatNoteName(person.Note);
-				var noteGroupPage = _analyticsGroupPageRepository.FindGroupPageByGroupName(groupName);
-				if (noteGroupPage == null)
+				var noteGroupCode = _analyticsGroupPageRepository.FindGroupPageCodeByResourceKey("Note");
+				noteGroupPage = new AnalyticsGroupPage
 				{
-					var noteGroupCode = _analyticsGroupPageRepository.FindGroupPageCodeByResourceKey("Note");
-					noteGroupPage = new AnalyticsGroupPage
-					{
-						GroupName = groupName,
-						GroupCode = person.Note.GenerateGuid(),
-						BusinessUnitCode = businessUnitId,
-						GroupIsCustom = false,
-						GroupPageCode = noteGroupCode != Guid.Empty ? noteGroupCode : Guid.NewGuid(),
-						GroupPageName = Resources.Note,
-						GroupPageNameResourceKey = "Note"
-					};
-					_analyticsGroupPageRepository.AddGroupPage(noteGroupPage);
-				}
-				groupIds.Add(noteGroupPage.GroupCode);
+					GroupName = groupName,
+					GroupCode = note.GenerateGuid(),
+					BusinessUnitCode = businessUnitId,
+					GroupIsCustom = false,
+					GroupPageCode = noteGroupCode != Guid.Empty ? noteGroupCode : Guid.NewGuid(),
+					GroupPageName = Resources.Note,
+					GroupPageNameResourceKey = "Note"
+				};
+				_analyticsGroupPageRepository.AddGroupPage(noteGroupPage);
 			}
+			groupIds.Add(noteGroupPage.GroupCode);
 		}
 
 		private static string formatNoteName(string note)
