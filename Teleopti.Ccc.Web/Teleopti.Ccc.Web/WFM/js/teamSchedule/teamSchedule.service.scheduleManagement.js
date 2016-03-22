@@ -67,7 +67,7 @@ angular.module("wfm.teamSchedule").service("ScheduleManagement", [
 
 			if (!startUpdated) {
 				// Set to 08:00 for empty schedule or day off
-				earlistStart = moment(vm.scheduleDate).startOf('day').add(8, 'hour').toDate();
+				earlistStart = moment(svc.scheduleDate).startOf('day').add(8, 'hour').toDate();
 			}
 
 			return earlistStart;
