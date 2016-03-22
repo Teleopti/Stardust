@@ -11,6 +11,9 @@
 			}
 		},
 		iisexpress: {
+			options:{
+			config:'../../../.vs/config/applicationhost.config'
+			},
 			 authBridge: {
 					 options: {
 							 site:'teleopti.ccc.web.authenticationBridge'
