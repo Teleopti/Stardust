@@ -16,12 +16,14 @@ namespace Stardust.Manager
 	public class JobRepository : IJobRepository
 	{
 		private readonly RetryPolicyProvider _retryPolicyProvider;
+		private readonly RetryPolicy _retryPolicy;
 		private readonly string _connectionString;
 
 		public JobRepository(string connectionString, RetryPolicyProvider retryPolicyProvider)
 		{
 			_connectionString = connectionString;
 			_retryPolicyProvider = retryPolicyProvider;
+			_retryPolicy = retryPolicyProvider.GetPolicy();
 		}
 
 		private void runner(Action funcToRun, string faliureMessage)
@@ -52,21 +54,30 @@ namespace Stardust.Manager
 		{
 			using (var connection = new SqlConnection(_connectionString))
 			{
-				SqlCommand command = connection.CreateCommand();
-				command.CommandText = "INSERT INTO [Stardust].JobHistory (JobId, Name, CreatedBy, Serialized, Type) VALUES(@Id, @Name, @By, @Serialized, @Type)";
-				command.Parameters.AddWithValue("@Id", job.Id);
-				command.Parameters.AddWithValue("@Name", job.Name);
-				command.Parameters.AddWithValue("@By", job.UserName);
-				command.Parameters.AddWithValue("@Serialized", job.Serialized);
-				command.Parameters.AddWithValue("@Type", job.Type);
+				SqlCommand jobHistoryCommand = connection.CreateCommand();
+				jobHistoryCommand.CommandText = "INSERT INTO [Stardust].JobHistory (JobId, Name, CreatedBy, Serialized, Type) VALUES(@Id, @Name, @By, @Serialized, @Type)";
+				jobHistoryCommand.Parameters.AddWithValue("@Id", job.Id);
+				jobHistoryCommand.Parameters.AddWithValue("@Name", job.Name);
+				jobHistoryCommand.Parameters.AddWithValue("@By", job.UserName);
+				jobHistoryCommand.Parameters.AddWithValue("@Serialized", job.Serialized);
+				jobHistoryCommand.Parameters.AddWithValue("@Type", job.Type);
 
+				SqlCommand jobDefinitionCommand = connection.CreateCommand();
+				jobDefinitionCommand.CommandText = "INSERT INTO [Stardust].JobDefinitions (Id, Name, Serialized, Type, userName) VALUES(@Id, @Name, @Serialized, @Type, @UserName)";
+				jobDefinitionCommand.Parameters.AddWithValue("@Id", job.Id);
+				jobDefinitionCommand.Parameters.AddWithValue("@Name", job.Name);
+				jobDefinitionCommand.Parameters.AddWithValue("@UserName", job.UserName);
+				jobDefinitionCommand.Parameters.AddWithValue("@Serialized", job.Serialized);
+				jobDefinitionCommand.Parameters.AddWithValue("@Type", job.Type);
 				try
 				{
-					connection.OpenWithRetry(_retryPolicyProvider.GetPolicy());
+					connection.OpenWithRetry(_retryPolicy);
 					using (var tran = connection.BeginTransaction())
 					{
-						command.Transaction = tran;
-						command.ExecuteNonQueryWithRetry(_retryPolicyProvider.GetPolicy());
+						jobDefinitionCommand.Transaction = tran;
+						jobHistoryCommand.Transaction = tran;
+						jobDefinitionCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+						jobHistoryCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 						tran.Commit();
 						ReportProgress(job.Id, "Added", DateTime.Now);
 					}
@@ -113,7 +124,7 @@ namespace Stardust.Manager
 				var listToReturn = new List<JobDefinition>();
 				using (var connection = new SqlConnection(_connectionString))
 				{
-					connection.Open();
+					connection.OpenWithRetry(_retryPolicyProvider.GetPolicy());
 					var command = new SqlCommand
 					{
 						Connection = connection,
