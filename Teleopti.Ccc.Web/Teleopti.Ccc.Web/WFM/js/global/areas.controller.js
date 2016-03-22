@@ -2,7 +2,7 @@
 
 var notification = angular.module('wfm.areas', ['restAreasService']);
 notification.controller('AreasCtrl', [
-	'$scope', 'AreasSvrc', 
+	'$scope', 'AreasSvrc',
 	function ($scope, AreasSvrc) {
 		$scope.areas = [];
 		$scope.filters = [];
@@ -18,10 +18,6 @@ notification.controller('AreasCtrl', [
 		};
 
 		$scope.unauthModal = true;
-
-		$scope.toggleModal = function () {
-		    $scope.unauthModal = !$scope.unauthModal;
-		};
 
 		$scope.dismissUnauthModal = function () {
 		    window.history.back();
