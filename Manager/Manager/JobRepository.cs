@@ -78,8 +78,8 @@ namespace Stardust.Manager
 						jobHistoryCommand.Transaction = tran;
 						jobDefinitionCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 						jobHistoryCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+						ReportProgress(job.Id, "Added", DateTime.Now); 
 						tran.Commit();
-						ReportProgress(job.Id, "Added", DateTime.Now);
 					}
 				}
 				catch (Exception exp)
@@ -204,12 +204,12 @@ namespace Stardust.Manager
 			}
 		}
 
-		//public void CheckAndAssignNextJob(List<WorkerNode> availableNodes, IHttpSender httpSender)
-		//{
-		//	runner(() => TryCheckAndAssignNextJob(availableNodes, httpSender), "Unable to perform operation");
-		//}
+		public void CheckAndAssignNextJob(List<WorkerNode> availableNodes, IHttpSender httpSender)
+		{
+			runner(() => tryCheckAndAssignNextJob(availableNodes, httpSender), "Unable to perform operation");
+		}
 
-		public async void CheckAndAssignNextJob(List<WorkerNode> availableNodes,
+		private async void tryCheckAndAssignNextJob(List<WorkerNode> availableNodes,
 												IHttpSender httpSender)
 		{
 			if (!availableNodes.Any()) return;
