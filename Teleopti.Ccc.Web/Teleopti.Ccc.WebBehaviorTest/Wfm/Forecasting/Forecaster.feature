@@ -112,6 +112,7 @@ Scenario: Override only forecasted calls for one day
 	And I apply the override calls
 	Then I should see that the total calls for the first day is '500'
 		
+	@ignore	
 Scenario: Override the forecasted values for one day
 	Given I am viewing forecast page
 	And I select workload 'TheWorkload1'
@@ -127,7 +128,7 @@ Scenario: Override the forecasted values for one day
 	Then I should see that the total calls for the first day is '500'
 	And I should see that the total talk time for the first day is '100'
 	And I should see that the total after call work for the first day is '50'
-		
+	
 Scenario: Remove override values for one day
 	Given I am viewing forecast page
 	And I select workload 'TheWorkload1'
