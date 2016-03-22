@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 	                    datasource_id DatasourceId,
 	                    insert_date InsertDate,
 	                    update_date UpdateDate,
-	                    datasource_update_date DatasourceUpdateDate,
+	                    datasource_update_date DatasourceUpdateDate
                     from mart.dim_skillset WITH (NOLOCK)")
 					.SetResultTransformer(Transformers.AliasToBean(typeof (AnalyticsSkillSet)))
 					.SetReadOnly(true)
