@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 using log4net;
-using Teleopti.Analytics.Etl.Common.TenantHeartbeat;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 
 namespace Teleopti.Analytics.Etl.Common.Service
 {
@@ -34,7 +34,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			
 			try
 			{
-				_tenantTickEventPublisher.Tick();
+				_tenantTickEventPublisher.EnsurePublishings();
 			}
 			catch (Exception ex)
 			{

@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
@@ -25,6 +26,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void SetCurrentTime(DateTime time)
 		{
 			navigateOrRequest("Test/SetCurrentTime?ticks=" + time.Ticks);
+		}
+
+		public static void TouchRta()
+		{
+			navigateOrRequest("Test/TouchRta?tenant=" + DataSourceHelper.TestTenantName);
 		}
 
 		public static void ClearConnections()

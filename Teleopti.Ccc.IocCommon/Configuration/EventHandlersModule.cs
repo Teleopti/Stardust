@@ -21,7 +21,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.Infrastructure.Rta.Persisters;
 using Teleopti.Ccc.IocCommon.Toggle;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Infrastructure.Analytics;
 using Module = Autofac.Module;
@@ -81,7 +80,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 							isSynchronizable
 						select i;
 				})
-				.AsSelf() // needed for testing 
+				.AsSelf()
 				.SingleInstance()
 				.ApplyAspects()
 				.Except<IntradayOptimizationEventHandler>(ct =>

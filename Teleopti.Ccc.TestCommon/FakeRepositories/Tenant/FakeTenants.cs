@@ -7,7 +7,12 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Tenant
 {
-	public class FakeTenants : IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants, IFindTenantByName
+	public class FakeTenants : 
+		IFindTenantNameByRtaKey, 
+		ICountTenants, 
+		ILoadAllTenants, 
+		IFindTenantByName,
+		IAllTenantNames
 	{
 		private readonly List<Infrastructure.MultiTenancy.Server.Tenant> _data = new List<Infrastructure.MultiTenancy.Server.Tenant>();
 
@@ -59,6 +64,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Tenant
 		Infrastructure.MultiTenancy.Server.Tenant IFindTenantByName.Find(string name)
 		{
 			return _data.Single(x => x.Name == name);
+		}
+
+		IEnumerable<string> IAllTenantNames.Tenants()
+		{
+			return _data.Select(x => x.Name).ToArray();
 		}
 	}
 }

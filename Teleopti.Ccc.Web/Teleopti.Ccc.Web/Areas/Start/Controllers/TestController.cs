@@ -4,13 +4,10 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
-using Hangfire;
 using Microsoft.IdentityModel.Claims;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -43,15 +40,15 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly IBusinessUnitProvider _businessUnitProvider;
 		private readonly ICurrentHttpContext _httpContext;
 		private readonly IFormsAuthentication _formsAuthentication;
-		private readonly IToggleManager _toggleManager;
 		private readonly IIdentityProviderProvider _identityProviderProvider;
 		private readonly ILoadPasswordPolicyService _loadPasswordPolicyService;
 		private readonly ISettings _settings;
 		private readonly IPhysicalApplicationPath _physicalApplicationPath;
 		private readonly IFindPersonInfo _findPersonInfo;
 		private readonly ActivityChangesChecker _activityChangesChecker;
-		private readonly AllTenantRecurringEventPublisher _allTenantRecurringEventPublisher;
 		private readonly HangfireUtilties _hangfire;
+		private readonly TenantTickEventPublisher _tenantTickEventPublisher;
+		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
 
 		public TestController(
 			IMutateNow mutateNow, 
@@ -63,15 +60,15 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			IBusinessUnitProvider businessUnitProvider, 
 			ICurrentHttpContext httpContext, 
 			IFormsAuthentication formsAuthentication, 
-			IToggleManager toggleManager, 
 			IIdentityProviderProvider identityProviderProvider, 
 			ILoadPasswordPolicyService loadPasswordPolicyService, 
 			ISettings settings, 
 			IPhysicalApplicationPath physicalApplicationPath, 
 			IFindPersonInfo findPersonInfo,
 			ActivityChangesChecker activityChangesChecker,
-			AllTenantRecurringEventPublisher allTenantRecurringEventPublisher,
-			HangfireUtilties hangfire)
+			HangfireUtilties hangfire,
+			TenantTickEventPublisher tenantTickEventPublisher,
+			Domain.ApplicationLayer.Rta.Service.Rta rta)
 		{
 			_mutateNow = mutateNow;
 			_now = now;
@@ -82,15 +79,15 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_businessUnitProvider = businessUnitProvider;
 			_httpContext = httpContext;
 			_formsAuthentication = formsAuthentication;
-			_toggleManager = toggleManager;
 			_identityProviderProvider = identityProviderProvider;
 			_loadPasswordPolicyService = loadPasswordPolicyService;
 			_settings = settings;
 			_physicalApplicationPath = physicalApplicationPath;
 			_findPersonInfo = findPersonInfo;
 			_activityChangesChecker = activityChangesChecker;
-			_allTenantRecurringEventPublisher = allTenantRecurringEventPublisher;
 			_hangfire = hangfire;
+			_tenantTickEventPublisher = tenantTickEventPublisher;
+			_rta = rta;
 		}
 
 		public ViewResult BeforeScenario(bool enableMyTimeMessageBroker, string defaultProvider = null, bool usePasswordPolicy = false)
@@ -221,7 +218,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				_mutateNow.Is(new DateTime(ticks));
 
 			_activityChangesChecker.ExecuteForTest();
-			_allTenantRecurringEventPublisher.PublishHourly(new TenantHourTickEvent());
 			_hangfire.TriggerAllRecurringJobs();
 
 			return View("Message", new TestMessageViewModel
@@ -230,7 +226,19 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				Message = "Time is set to " + _now.UtcDateTime() + " in UTC"
 			});
 		}
-		
+
+		public ViewResult TouchRta(string tenant)
+		{
+			_rta.Touch(tenant);
+			_tenantTickEventPublisher.EnsurePublishings();
+
+			return View("Message", new TestMessageViewModel
+			{
+				Title = "Start rta",
+				Message = "Rta started"
+			});
+		}
+
 		private static void clearAllConnectionPools()
 		{
 			SqlConnection.ClearAllPools();

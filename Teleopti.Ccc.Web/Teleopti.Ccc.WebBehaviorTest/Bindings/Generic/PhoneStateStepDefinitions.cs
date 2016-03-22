@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			// this maps the analytics data source id with the switch id
 			var datasource = new Datasources(DataSourceId, " ", -1, " ", -1, " ", " ", 1, false, SourceId, false);
 			DataMaker.Analytics().Apply(datasource);
+			TestControllerMethods.TouchRta();
 		}
 		
 		[When(@"'(.*)' sets (?:his|her) phone state to '(.*)'")]

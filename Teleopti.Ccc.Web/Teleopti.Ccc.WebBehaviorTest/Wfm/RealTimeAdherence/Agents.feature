@@ -115,13 +115,13 @@ Scenario: See state updates when call center is in Istanbul
 	Given I am located in Istanbul
 	And 'Pierre Baldi' is located in Istanbul
 	And Pierre Baldi has a shift with
-	| Field                    | Value            |
-	| Start time               | 2015-03-24 08:00 |
-	| End time                 | 2015-03-24 10:00 |
-	| Activity                 | Phone            |
-	| Next activity            | Lunch            |
-	| Next activity start time | 2015-03-24 10:00 |
-	| Next activity end time   | 2015-03-24 10:30 |
+		| Field                    | Value            |
+		| Start time               | 2015-03-24 08:00 |
+		| End time                 | 2015-03-24 10:00 |
+		| Activity                 | Phone            |
+		| Next activity            | Lunch            |
+		| Next activity start time | 2015-03-24 10:00 |
+		| Next activity end time   | 2015-03-24 10:30 |
 	When the utc time is '2015-03-24 06:00:00'
 	And I view real time adherence for all agents on team 'Red'
 	And 'Pierre Baldi' sets his phone state to 'Ready'
@@ -134,3 +134,17 @@ Scenario: See state updates when call center is in Istanbul
 		| Alarm                    | Adhering     |
 		| Alarm Time               | 0:15:00      |
 		| Alarm Color              | Green        |
+
+Scenario: See schedule updates
+	Given the time is '2016-03-21 12:05:00'
+	When I view real time adherence for all agents on team 'Red'
+	And Pierre Baldi gets a shift with
+		| Field      | Value            |
+		| Start time | 2016-03-21 12:00 |
+		| End time   | 2016-03-21 13:00 |
+		| Activity   | Phone            |
+	And the time is '2016-03-21 12:06:00'
+	Then I should see agent status
+		| Field    | Value        |
+		| Name     | Pierre Baldi |
+		| Activity | Phone        |

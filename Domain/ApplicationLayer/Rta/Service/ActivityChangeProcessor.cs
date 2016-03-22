@@ -1,6 +1,10 @@
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.FeatureFlags;
+
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public class ActivityChangeProcessor
+	[UseOnToggle(Toggles.RTA_ScaleOut_36979)]
+	public class ActivityChangeProcessor : IHandleEvent<TenantMinuteTickEvent>, IRunOnHangfire
 	{
 		private readonly IContextLoader _contextLoader;
 		private readonly RtaProcessor _processor;
@@ -12,6 +16,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			_contextLoader = contextLoader;
 			_processor = processor;
+		}
+
+		[RecurringId("ActivityChangeProcessor:::TenantMinuteTickEvent")]
+		public void Handle(TenantMinuteTickEvent @event)
+		{
+			CheckForActivityChanges();
 		}
 
 		public void CheckForActivityChanges()

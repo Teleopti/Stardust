@@ -171,6 +171,7 @@
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
     <Compile Include="ApplicationLayer\Events\TenantMinuteTickEvent.cs" />
     <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\GroupPageAnalyticsUpdater.cs" />
+    <Compile Include="ApplicationLayer\TenantTickEventPublisher.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsGroupPage.cs" />
     <Compile Include="ApplicationLayer\PersonPeriodCollectionChangedHandlers\BuildInGroupsAnalyticsUpdater.cs" />
     <Compile Include="Optimization\IOptimizationPreferencesProvider.cs" />

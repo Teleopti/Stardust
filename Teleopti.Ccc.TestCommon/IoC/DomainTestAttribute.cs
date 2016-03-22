@@ -50,7 +50,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.AddModule(new TenantServerModule(configuration));
 			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
 			system.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
-			system.UseTestDouble<FakeTenants>().For<IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants, IFindTenantByName>();
+			system.UseTestDouble<FakeTenants>()
+				.For<IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants, IFindTenantByName, IAllTenantNames>();
 			system.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
 			system.UseTestDouble<FakeDataSourcesFactory>().For<IDataSourcesFactory>();
 			//

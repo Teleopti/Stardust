@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Rta;
 
@@ -24,7 +22,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<Rta>().SingleInstance().ApplyAspects();
-			builder.RegisterType<ActivityChangeProcessor>().SingleInstance();
 			builder.RegisterType<RtaInitializor>().SingleInstance();
 			builder.RegisterType<TenantsInitializedInRta>().SingleInstance();
 			builder.RegisterType<CacheInvalidator>().As<ICacheInvalidator>().SingleInstance();
@@ -34,6 +31,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<StateCodeAdder>().As<IStateCodeAdder>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateStreamSynchronizer>().SingleInstance();
 			builder.RegisterType<ConnectionStrings>().As<IConnectionStrings>();
+
+			if (!_config.Toggle(Toggles.RTA_ScaleOut_36979))
+				builder.RegisterType<ActivityChangeProcessor>().SingleInstance();
 
 			if (_config.Toggle(Toggles.RTA_ScaleOut_36979))
 				builder.RegisterType<LoadAllFromDatabase>().As<IContextLoader>().SingleInstance().ApplyAspects();

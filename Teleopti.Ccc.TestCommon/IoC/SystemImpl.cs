@@ -107,6 +107,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				register(typeof(T1), typeof(T2), typeof(T3), typeof(T4));
 			}
 
+			public void For<T1, T2, T3, T4, T5>()
+			{
+				register(typeof (T1), typeof (T2), typeof (T3), typeof (T4), typeof (T5));
+			}
+
 			private void register(params Type[] asTypes)
 			{
 				if (_instance == null)

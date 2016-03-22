@@ -1,7 +1,7 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Analytics.Etl.Common.TenantHeartbeat;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -9,9 +9,9 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Analytics.Etl.CommonTest.TickEvent
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.TickEvent
 {
-	[EtlTest]
+	[DomainTest]
 	public class RepublishRecurringTest
 	{
 		public TenantTickEventPublisher Target;
@@ -25,11 +25,11 @@ namespace Teleopti.Analytics.Etl.CommonTest.TickEvent
 		{
 			Now.Is("2016-03-21 13:00");
 			Tenants.Has(new Tenant("t"));
-			Target.Tick();
+			Target.EnsurePublishings();
 
 			Now.Is("2016-03-21 13:10");
 			Context.SimulateRestart();
-			Target.Tick();
+			Target.EnsurePublishings();
 
 			Publisher.Publishings.Select(x => x.CreatedAt).Should().Have.SameValuesAs("2016-03-21 13:10".Utc());
 		}
@@ -39,14 +39,13 @@ namespace Teleopti.Analytics.Etl.CommonTest.TickEvent
 		{
 			Now.Is("2016-03-21 13:00");
 			Tenants.Has(new Tenant("t"));
-			Target.Tick();
+			Target.EnsurePublishings();
 
 			Now.Is("2016-03-21 13:10");
-			Target.Tick();
+			Target.EnsurePublishings();
 
 			Publisher.Publishings.Select(x => x.CreatedAt).Should().Have.SameValuesAs("2016-03-21 13:00".Utc());
 		}
-
 
 	}
 }

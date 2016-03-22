@@ -1,9 +1,8 @@
 using System;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Analytics.Etl.Common.TenantHeartbeat
+namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	public class TenantTickEventPublisher
 	{
@@ -19,7 +18,7 @@ namespace Teleopti.Analytics.Etl.Common.TenantHeartbeat
 			_now = now;
 		}
 
-		public void Tick()
+		public void EnsurePublishings()
 		{
 			if (_nextPublish == null)
 				_publisher.RemoveAllPublishings();

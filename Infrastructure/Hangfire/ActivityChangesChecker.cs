@@ -5,6 +5,8 @@ using System.Threading;
 using Hangfire.Server;
 using Hangfire.SqlServer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
@@ -31,29 +33,34 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 	{
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
 		private readonly TenantsInitializedInRta _tenants;
+		private readonly IToggleManager _toggleManager;
 		private TimeSpan _timeout = TimeSpan.FromMinutes(1);
 
 		public ActivityChangesChecker(
 			Domain.ApplicationLayer.Rta.Service.Rta rta, 
-			TenantsInitializedInRta tenants
+			TenantsInitializedInRta tenants,
+			IToggleManager toggleManager
 			)
 		{
 			_rta = rta;
 			_tenants = tenants;
+			_toggleManager = toggleManager;
 		}
 
 		public void Execute(CancellationToken cancellationToken)
 		{
 			if (_timeout.Equals(TimeSpan.MaxValue))
 				return;
-			_tenants.ForAllTenants(t => _rta.CheckForActivityChanges(t));
+			if (!_toggleManager.IsEnabled(Toggles.RTA_ScaleOut_36979))
+				_tenants.ForAllTenants(t => _rta.CheckForActivityChanges(t));
 			cancellationToken.WaitHandle.WaitOne(_timeout);
 		}
 
 		public void ExecuteForTest()
 		{
 			_timeout = TimeSpan.MaxValue;
-			_tenants.ForAllTenants(t => _rta.CheckForActivityChanges(t));
+			if (!_toggleManager.IsEnabled(Toggles.RTA_ScaleOut_36979))
+				_tenants.ForAllTenants(t => _rta.CheckForActivityChanges(t));
 		}
 	}
 }

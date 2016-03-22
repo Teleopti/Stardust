@@ -218,6 +218,10 @@
     <Compile Include="ApplicationLayer\Rta\Service\StartTime\StateStartTimeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StartTime\RuleStartTimeTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PublishScheduleChangesTest.cs" />
+    <Compile Include="ApplicationLayer\TickEvent\RepublishRecurringTest.cs" />
+    <Compile Include="ApplicationLayer\TickEvent\TenantHourTickEventTest.cs" />
+    <Compile Include="ApplicationLayer\TickEvent\TenantMinuteTickEventTest.cs" />
+    <Compile Include="ApplicationLayer\TickEvent\TenantTickEventTest.cs" />
     <Compile Include="Common\TimeLogger\LogTimeTest.cs" />
     <Compile Include="Common\TimeLogger\LogTimeTester.cs" />
     <Compile Include="DayOffPlanning\SkillGroupIslandsAnalyzerTest.cs" />

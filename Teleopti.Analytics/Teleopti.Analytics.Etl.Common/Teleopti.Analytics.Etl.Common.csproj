@@ -134,7 +134,6 @@
     </Compile>
     <Compile Include="Entity\BusinessUnitItem.cs" />
     <Compile Include="EtlAppModule.cs" />
-    <Compile Include="TenantHeartbeat\TenantTickEventPublisher.cs" />
     <Compile Include="Infrastructure\BaseConfigurationRepository.cs" />
     <Compile Include="Tenants.cs" />
     <Compile Include="Service\EtlJobStarter.cs" />
@@ -494,6 +493,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+    <Folder Include="TenantHeartbeat\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

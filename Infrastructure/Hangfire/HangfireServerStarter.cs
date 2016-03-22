@@ -7,6 +7,8 @@ using Hangfire.States;
 using Hangfire.Storage;
 using Owin;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
@@ -15,12 +17,18 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		private readonly ILifetimeScope _lifetimeScope;
 		private readonly IConfigReader _config;
 		private readonly ActivityChangesChecker _activityChangesChecker;
+		private readonly IToggleManager _toggleManager;
 
-		public HangfireServerStarter(ILifetimeScope lifetimeScope, IConfigReader config, ActivityChangesChecker activityChangesChecker)
+		public HangfireServerStarter(
+			ILifetimeScope lifetimeScope, 
+			IConfigReader config, 
+			ActivityChangesChecker activityChangesChecker,
+			IToggleManager toggleManager)
 		{
 			_lifetimeScope = lifetimeScope;
 			_config = config;
 			_activityChangesChecker = activityChangesChecker;
+			_toggleManager = toggleManager;
 		}
 
 		const int setThisToOneAndErikWillHuntYouDownAndKillYouSlowlyAndPainfully = 4;
@@ -57,17 +65,22 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			var countersAggregateInterval = _config.ReadValue("HangfireCountersAggregateIntervalSeconds", defaultCountersAggregateInterval);
 
 
-			GlobalConfiguration.Configuration.UseStorage(
-				new SqlStorageWithActivityChangesCheckerComponent(
-					_activityChangesChecker,
-					_config.ConnectionString("Hangfire"),
-					new SqlServerStorageOptions
-					{
-						PrepareSchemaIfNecessary = false,
-						QueuePollInterval = TimeSpan.FromSeconds(pollInterval),
-						JobExpirationCheckInterval = TimeSpan.FromSeconds(jobExpirationCheck),
-						CountersAggregateInterval = TimeSpan.FromSeconds(countersAggregateInterval)
-					}));
+			var sqlServerStorageOptions = new SqlServerStorageOptions
+			{
+				PrepareSchemaIfNecessary = false,
+				QueuePollInterval = TimeSpan.FromSeconds(pollInterval),
+				JobExpirationCheckInterval = TimeSpan.FromSeconds(jobExpirationCheck),
+				CountersAggregateInterval = TimeSpan.FromSeconds(countersAggregateInterval)
+			};
+
+			if (_toggleManager.IsEnabled(Toggles.RTA_ScaleOut_36979))
+				GlobalConfiguration.Configuration.UseSqlServerStorage(_config.ConnectionString("Hangfire"), sqlServerStorageOptions);
+			else
+				GlobalConfiguration.Configuration.UseStorage(
+					new SqlStorageWithActivityChangesCheckerComponent(
+						_activityChangesChecker,
+						_config.ConnectionString("Hangfire"),
+						sqlServerStorageOptions));
 			
 			GlobalConfiguration.Configuration.UseAutofacActivator(_lifetimeScope);
 
