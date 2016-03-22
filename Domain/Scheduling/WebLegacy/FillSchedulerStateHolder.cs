@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		private static void removeUnwantedAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds)
 		{
-			if (agentIds != null)
+			if (agentIds != null) //remove this when also scheduling is converted to "events"
 			{
 				foreach (var agent in schedulerStateHolderTo.AllPermittedPersons.ToList().Where(agent => !agentIds.Contains(agent.Id.Value)))
 				{
