@@ -364,7 +364,7 @@ namespace Stardust.Manager
 									{
 										if (exp.Number == -2) //Timeout
 										{
-											this.Log().InfoWithLineNumber("Timeout: " + exp.Message);
+											this.Log().InfoWithLineNumber(exp.Message);
 										}
 									}
 									catch (Exception exp)
@@ -383,7 +383,7 @@ namespace Stardust.Manager
 			{
 				if (exp.Number == -2) //Timeout
 				{
-					this.Log().InfoWithLineNumber("Timeout: " + exp.Message);
+					this.Log().InfoWithLineNumber(exp.Message);
 				}
 				else
 				{
