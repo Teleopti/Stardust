@@ -8,19 +8,19 @@ namespace Stardust.Node.ActionResults
 {
 	public class BadRequestWithReasonPhrase : IHttpActionResult
 	{
-		public string ReasonPhrase { get; private set; }
-
 		public BadRequestWithReasonPhrase(string reasonPhrase)
 		{
 			ReasonPhrase = reasonPhrase;
 		}
 
+		public string ReasonPhrase { get; private set; }
+
 		public Task<HttpResponseMessage> ExecuteAsync(CancellationToken cancellationToken)
 		{
-			return new Task<HttpResponseMessage>(() => new HttpResponseMessage(HttpStatusCode.BadRequest)
+			return Task.Factory.StartNew(() => new HttpResponseMessage(HttpStatusCode.BadRequest)
 			{
 				ReasonPhrase = ReasonPhrase
-			});
+			}, cancellationToken);
 		}
 	}
 }

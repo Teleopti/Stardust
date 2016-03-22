@@ -17,10 +17,10 @@ namespace Stardust.Node.ActionResults
 
 		public Task<HttpResponseMessage> ExecuteAsync(CancellationToken cancellationToken)
 		{
-			return new Task<HttpResponseMessage>(() => new HttpResponseMessage(HttpStatusCode.Conflict)
+			return Task.Factory.StartNew(() => new HttpResponseMessage(HttpStatusCode.Conflict)
 			{
 				ReasonPhrase = ReasonPhrase
-			});
+			}, cancellationToken);
 		}
 	}
 }
