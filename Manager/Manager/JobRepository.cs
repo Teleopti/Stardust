@@ -188,6 +188,7 @@ namespace Stardust.Manager
 					connection.OpenWithRetry(_retryPolicy);
 					using (var tran = connection.BeginTransaction())
 					{
+						deleteCommand.Transaction = tran;
 						deleteCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 						tran.Commit();
 					}
