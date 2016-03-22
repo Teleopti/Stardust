@@ -311,6 +311,14 @@ Scenario: Delete absence request
 	When I delete the existing request in the list
 	Then I should not see any requests in the list
 
+Scenario: Delete waitlisted absence request
+	Given I am an agent
+	And I have an open workflow control set with absence request waitlisting enabled
+	And I have an auto denied absence request
+	And I am viewing requests
+	When I delete the existing request in the list
+	Then I should not see any requests in the list
+
 Scenario: Can not edit approved absence requests
 	Given I am an agent
 	And I have an approved absence request
@@ -328,6 +336,18 @@ Scenario: Can not edit denied absence requests
 	Then I should see the detail form for the existing request in the list
 	And I should not be able to edit the values for the existing absence request
 	And I should not be able to submit possible changes for the existing request
+
+Scenario: Can not edit waitlisted absence requests
+	Given I am an agent
+	And I have an open workflow control set with absence request waitlisting enabled
+	And I have an auto denied absence request
+	And I am viewing requests
+	When I click on the existing request in the list
+	Then I should see the detail form for the existing request in the list
+	And I should not be able to edit the values for the existing absence request
+	And I should not be able to submit possible changes for the existing request
+
+
 
 Scenario: Can not delete approved absence request
 	Given I am an agent
