@@ -42,10 +42,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonPeriodCollectionChanged
 		[Test]
 		public void ShouldUpdatePartTimePercentage()
 		{
-			var @event = new PersonPeriodCollectionChangedEvent();
+			var @event = new SettingsForPersonPeriodChangedEvent();
 			var entityId = Guid.NewGuid();
 			var updateGroupName = "UpdateGroupName";
-			@event.SetPersonIdCollection(new [] {entityId});
+			@event.SetIdCollection(new [] {entityId});
 
 			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId))
 				.Return(new AnalyticsGroupPage {GroupName = "GroupName", GroupCode = entityId});
@@ -65,10 +65,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonPeriodCollectionChanged
 		[Test]
 		public void ShouldUpdateRuleSetBag()
 		{
-			var @event = new PersonPeriodCollectionChangedEvent();
+			var @event = new SettingsForPersonPeriodChangedEvent();
 			var entityId = Guid.NewGuid();
 			var updateGroupName = "UpdateGroupName";
-			@event.SetPersonIdCollection(new[] { entityId });
+			@event.SetIdCollection(new[] { entityId });
 
 			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId))
 				.Return(new AnalyticsGroupPage { GroupName = "GroupName", GroupCode = entityId });
@@ -88,10 +88,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonPeriodCollectionChanged
 		[Test]
 		public void ShouldUpdateContract()
 		{
-			var @event = new PersonPeriodCollectionChangedEvent();
+			var @event = new SettingsForPersonPeriodChangedEvent();
 			var entityId = Guid.NewGuid();
 			var updateGroupName = "UpdateGroupName";
-			@event.SetPersonIdCollection(new[] { entityId });
+			@event.SetIdCollection(new[] { entityId });
 
 			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId))
 				.Return(new AnalyticsGroupPage { GroupName = "GroupName", GroupCode = entityId });
@@ -113,10 +113,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonPeriodCollectionChanged
 		[Test]
 		public void ShouldUpdateContractSchedule()
 		{
-			var @event = new PersonPeriodCollectionChangedEvent();
+			var @event = new SettingsForPersonPeriodChangedEvent();
 			var entityId = Guid.NewGuid();
 			var updateGroupName = "UpdateGroupName";
-			@event.SetPersonIdCollection(new[] { entityId });
+			@event.SetIdCollection(new[] { entityId });
 
 			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId))
 				.Return(new AnalyticsGroupPage { GroupName = "GroupName", GroupCode = entityId });
@@ -139,10 +139,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonPeriodCollectionChanged
 		[Test]
 		public void ShouldUpdateBudgetGroup()
 		{
-			var @event = new PersonPeriodCollectionChangedEvent();
+			var @event = new SettingsForPersonPeriodChangedEvent();
 			var entityId = Guid.NewGuid();
 			var updateGroupName = "UpdateGroupName";
-			@event.SetPersonIdCollection(new[] { entityId });
+			@event.SetIdCollection(new[] { entityId });
 
 			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId))
 				.Return(new AnalyticsGroupPage { GroupName = "GroupName", GroupCode = entityId });
@@ -166,10 +166,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonPeriodCollectionChanged
 		[Test]
 		public void ShouldUpdateSkill()
 		{
-			var @event = new PersonPeriodCollectionChangedEvent();
+			var @event = new SettingsForPersonPeriodChangedEvent();
 			var entityId = Guid.NewGuid();
 			var updateGroupName = "UpdateGroupName";
-			@event.SetPersonIdCollection(new[] { entityId });
+			@event.SetIdCollection(new[] { entityId });
 
 			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId))
 				.Return(new AnalyticsGroupPage { GroupName = "GroupName", GroupCode = entityId });
@@ -194,10 +194,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonPeriodCollectionChanged
 		[Test]
 		public void ShouldNotUpdateIfNotExisting()
 		{
-			var @event = new PersonPeriodCollectionChangedEvent();
+			var @event = new SettingsForPersonPeriodChangedEvent();
 			var entityId = Guid.NewGuid();
 			var updateGroupName = "UpdateGroupName";
-			@event.SetPersonIdCollection(new[] { entityId });
+			@event.SetIdCollection(new[] { entityId });
 
 			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId))
 				.Return(null);
@@ -210,10 +210,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonPeriodCollectionChanged
 		[Test]
 		public void ShouldNotUpdateIfNotSpecificType()
 		{
-			var @event = new PersonPeriodCollectionChangedEvent();
+			var @event = new SettingsForPersonPeriodChangedEvent();
 			var entityId = Guid.NewGuid();
 			var updateGroupName = "UpdateGroupName";
-			@event.SetPersonIdCollection(new[] { entityId });
+			@event.SetIdCollection(new[] { entityId });
 
 			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId))
 				.Return(new AnalyticsGroupPage { GroupName = "GroupName", GroupCode = entityId });

@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<GroupPageCollectionChangedEventPublisher>().As<IPersistCallback>();
 			builder.RegisterType<PersonCollectionChangedEventPublisherForTeamOrSite>().As<IPersistCallback>();
 			builder.RegisterType<PersonCollectionChangedEventPublisher>().As<IPersistCallback>();
-			builder.RegisterType<PersonPeriodCollectionChangedEventPublisher>().As<IPersistCallback>();
+			builder.RegisterType<SettingsForPersonPeriodChangedEventPublisher>().As<IPersistCallback>();
 			if (_configuration.Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
 				builder.RegisterType<ScheduleChangedMessageSender>().As<IPersistCallback>();
 

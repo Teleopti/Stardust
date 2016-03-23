@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 				o =>
 					o.Constraints(
 						Rhino.Mocks.Constraints.Is.Matching(
-							new Predicate<IEvent[]>(t => t.Length == 1 && t[0] is PersonPeriodCollectionChangedEvent))));
+							new Predicate<IEvent[]>(t => t.Length == 1 && t[0] is SettingsForPersonPeriodChangedEvent))));
 
 			currentUnitOfWorkFactory.AssertWasCalled(x => x.Current());
 			unitOfWorkFactory.AssertWasCalled(x => x.CreateAndOpenUnitOfWork());

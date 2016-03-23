@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-    public class PersonPeriodCollectionChangedEventPublisher : IPersistCallback
+	public class SettingsForPersonPeriodChangedEventPublisher : IPersistCallback
     {
 		private readonly IEventPopulatingPublisher _eventsPublisher;
 
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		                                                        		typeof (IPerson)
 		                                                        	};
 
-		public PersonPeriodCollectionChangedEventPublisher(IEventPopulatingPublisher eventsPublisher)
+		public SettingsForPersonPeriodChangedEventPublisher(IEventPopulatingPublisher eventsPublisher)
 		{
 			_eventsPublisher = eventsPublisher;
 		}
@@ -40,11 +40,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				var notPerson = (from p in modifiedRoots where !(p.Root is IPerson) select p.Root).ToList();
 				foreach (var notpersonList in notPerson.Batch(25))
 				{
-					var idsAsString = (from p in notpersonList select ((IAggregateRoot)p).Id.GetValueOrDefault()).ToArray();
-                    
-                    var @event = new PersonPeriodCollectionChangedEvent();
-					@event.SetPersonIdCollection(idsAsString);
-					_eventsPublisher.Publish(@event);
+					var idsChanged = notpersonList.Select(p => ((IAggregateRoot) p).Id.GetValueOrDefault()).ToArray();
+                    var personPeriodCollectionChangedEvent = new SettingsForPersonPeriodChangedEvent();
+					personPeriodCollectionChangedEvent.SetIdCollection(idsChanged);
+					_eventsPublisher.Publish(personPeriodCollectionChangedEvent);
 				}
             }
         }

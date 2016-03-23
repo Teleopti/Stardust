@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonPeriodCollectionChanged
 			skillTest.SetId(tempGuid);
 
 			var ids = new[] { tempGuid };
-			var @event = new PersonPeriodCollectionChangedEvent();
-			@event.SetPersonIdCollection(ids);
+			var @event = new SettingsForPersonPeriodChangedEvent();
+			@event.SetIdCollection(ids);
 
 			using (_mocks.Record())
 			{

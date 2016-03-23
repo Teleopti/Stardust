@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.Repositories;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonPeriodCollectionChangedHandlers
 {
 	public class GroupingReadModelDataUpdater : 
-		IHandleEvent<PersonPeriodCollectionChangedEvent>, 
+		IHandleEvent<SettingsForPersonPeriodChangedEvent>, 
 		IRunOnServiceBus
 	{
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
@@ -14,9 +14,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonPeriodCollectionChangedHand
 			_groupingReadOnlyRepository = groupingReadOnlyRepository;
 		}
 
-		public void Handle(PersonPeriodCollectionChangedEvent @event)
+		public void Handle(SettingsForPersonPeriodChangedEvent @event)
 		{
-			_groupingReadOnlyRepository.UpdateGroupingReadModelData(@event.PersonIdCollection);
+			_groupingReadOnlyRepository.UpdateGroupingReadModelData(@event.IdCollection);
 		}
 	}
 }

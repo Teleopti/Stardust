@@ -22,12 +22,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		{
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				_eventPublisher.Publish(new PersonPeriodCollectionChangedEvent
+				_eventPublisher.Publish(new SettingsForPersonPeriodChangedEvent
 				{
 					LogOnBusinessUnitId = message.LogOnBusinessUnitId,
 					LogOnDatasource = message.LogOnDatasource,
 					InitiatorId = message.InitiatorId,
-					SerializedPersonPeriod = message.SerializedPersonPeriod,
+					SerializedIds = message.SerializedPersonPeriod,
 					Timestamp = message.Timestamp
 				});
 				uow.PersistAll();

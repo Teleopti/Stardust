@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonPeriodCollectionChangedHand
 {
 	[UseOnToggle(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623)]
 	public class BuildInGroupsAnalyticsUpdater :
-		IHandleEvent<PersonPeriodCollectionChangedEvent>,
+		IHandleEvent<SettingsForPersonPeriodChangedEvent>,
 		IRunOnServiceBus
 	{
 		private readonly IAnalyticsGroupPageRepository _analyticsGroupPageRepository;
@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonPeriodCollectionChangedHand
 			};
 		}
 
-		public void Handle(PersonPeriodCollectionChangedEvent @event)
+		public void Handle(SettingsForPersonPeriodChangedEvent @event)
 		{
-			foreach (var entityId in @event.PersonIdCollection)
+			foreach (var entityId in @event.IdCollection)
 			{
 				var groupPage = _analyticsGroupPageRepository.GetGroupPageByGroupCode(entityId);
 				if (groupPage != null)

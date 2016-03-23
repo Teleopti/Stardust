@@ -180,7 +180,7 @@
     <Compile Include="ApplicationLayer\Events\GroupPageCollectionChangedEvent.cs" />
     <Compile Include="DayOffPlanning\SkillGroupReducerForCascadingSkills.cs" />
     <Compile Include="Shoveling\ShovelServicePOC.cs" />
-    <Compile Include="ApplicationLayer\Events\PersonPeriodCollectionChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\SettingsForPersonPeriodChangedEvent.cs" />
     <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\GroupingReadModelGroupPageUpdater.cs" />
     <Compile Include="ApplicationLayer\PersonPeriodCollectionChangedHandlers\GroupingReadModelDataUpdater.cs" />
     <Compile Include="Repositories\IAnalyticsBridgeGroupPagePersonRepository.cs" />
