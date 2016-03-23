@@ -604,23 +604,6 @@ namespace Stardust.Manager
 
 		public IList<JobHistory> HistoryList()
 		{
-			var returnList = new List<JobHistory>();
-			var policy = _retryPolicyProvider.GetPolicy();
-			applyLoggingOnRetries(policy);
-			try
-			{
-				returnList = policy.ExecuteAction(() => tryHistoryList()).ToList();
-			}
-			catch (Exception ex)
-			{
-				this.Log().ErrorWithLineNumber(ex.Message + "Unable to perform operation");
-			}
-			return returnList;
-		}
-
-		private IList<JobHistory> tryHistoryList()
-
-		{
 			try
 			{
 				var selectCommand = SelectHistoryCommand(false);
@@ -634,8 +617,8 @@ namespace Stardust.Manager
 						CommandType = CommandType.Text
 					};
 
-					connection.Open();
-					using (var reader = command.ExecuteReader())
+					connection.OpenWithRetry(_retryPolicy);
+					using (var reader = command.ExecuteReaderWithRetry(_retryPolicy))
 					{
 						if (reader.HasRows)
 						{
@@ -645,11 +628,9 @@ namespace Stardust.Manager
 								returnList.Add(jobHist);
 							}
 						}
-
 						reader.Close();
 						connection.Close();
 					}
-
 					return returnList;
 				}
 			}
