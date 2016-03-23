@@ -183,11 +183,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				GroupName = groupName;
 			}
 
-			public Guid GroupCode { get; }
-			public Guid GroupPageCode { get; }
-			public string GroupPageName { get; }
-			public string GroupPageNameResourceKey { get; }
-			public string GroupName { get; }
+			public Guid GroupCode { get; private set; }
+			public Guid GroupPageCode { get; private set; }
+			public string GroupPageName { get; private set; }
+			public string GroupPageNameResourceKey { get; private set; }
+			public string GroupName { get; private set; }
 		}
 	}
 }
