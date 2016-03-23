@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -15,6 +16,7 @@ namespace Stardust.Node.API
 	[Intercept("log-calls")]
 	public class NodeController : ApiController
 	{
+		private const string JobIdIsInvalid = "Job Id is invalid.";
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeController));
 
 		private readonly IWorkerWrapper _workerWrapper;
@@ -31,41 +33,60 @@ namespace Stardust.Node.API
 		[HttpPost, AllowAnonymous, Route(NodeRouteConstants.Job)]
 		public IHttpActionResult StartJob(JobToDo jobToDo)
 		{
-			var response = _workerWrapper.ValidateStartJob(jobToDo,
-															Request);
+			var isValidRequest = _workerWrapper.ValidateStartJob(jobToDo,
+			                                                     Request);
 
-			if (response.GetType() != typeof(OkResult))
+			if (!(isValidRequest is OkResult))
 			{
-				return response;
+				return isValidRequest;
 			}
 
 			Task.Factory.StartNew(() =>
 			{
 				var startJobMessage = string.Format("{0} : Starting job ( jobId, jobName ) : ( {1}, {2} )",
-													_workerWrapper.WhoamI,
-													jobToDo.Id,
-													jobToDo.Name);
+				                                    _workerWrapper.WhoamI,
+				                                    jobToDo.Id,
+				                                    jobToDo.Name);
 
 				Logger.DebugWithLineNumber(startJobMessage);
 
-				response = _workerWrapper.StartJob(jobToDo,
-												   Request);
+				isValidRequest = _workerWrapper.StartJob(jobToDo,
+				                                         Request);
 			});
 
 			return Ok();
 		}
 
+		private IHttpActionResult ValidateJobId(Guid jobId, HttpRequestMessage requestMessage)
+		{
+			if (jobId == Guid.Empty)
+			{
+				return new BadRequestWithReasonPhrase(JobIdIsInvalid);
+			}
+
+			if (requestMessage == null)
+			{
+				requestMessage = new HttpRequestMessage();
+			}
+
+			return new OkResult(requestMessage);
+		}
+
 		[HttpDelete, AllowAnonymous, Route(NodeRouteConstants.CancelJob)]
 		public IHttpActionResult TryCancelJob(Guid jobId)
 		{
-			Logger.InfoWithLineNumber(_workerWrapper.WhoamI + 
-									 " : Received TryCancel request. jobId: " + 
-									 jobId);
+			// Validate request.
+			var isValidRequest = ValidateJobId(jobId, Request);
 
-			if (jobId == Guid.Empty)
+			if (!(isValidRequest is OkResult))
 			{
-				return new BadRequestWithReasonPhrase("Job Id is invalid.");
+				return isValidRequest;
 			}
+
+			// Start.
+			Logger.InfoWithLineNumber(_workerWrapper.WhoamI +
+			                          " : Received TryCancel request. jobId: " +
+			                          jobId);
 
 			Logger.DebugWithLineNumber(_workerWrapper.WhoamI + ": Try cancel job ( jobId ) : ( " + jobId + " )");
 

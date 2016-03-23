@@ -31,6 +31,7 @@ namespace NodeTest
 		{
 			var parameters = new TestJobParams("hejhopp",
 			                                   "i lingonskogen");
+
 			var ser = JsonConvert.SerializeObject(parameters);
 
 			_jobToDo = new JobToDo
@@ -153,16 +154,26 @@ namespace NodeTest
 			                                   _trySendJobProgressToManagerTimerFake,
 			                                   new FakeHttpSender());
 
-			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake) {Request = new HttpRequestMessage()};
+			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
+			{
+				Request = new HttpRequestMessage()
+			};
 
 			var wrongJobToDo = new JobToDo
 			{
 				Id = Guid.NewGuid(),
 				Name = "Another name",
-				Type = "NodeTest.JobHandlers.TestJobParams"
+				Type = "NodeTest.JobHandlers.TestJobParams",
+				Serialized = "Serialized data"
 			};
-			_nodeController.StartJob(_jobToDo);
-			var actionResult = _nodeController.TryCancelJob(wrongJobToDo.Id);
+
+			var actionResult = _nodeController.StartJob(_jobToDo);
+
+			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
+							  .Result.StatusCode ==
+						  HttpStatusCode.OK);
+
+			actionResult = _nodeController.TryCancelJob(wrongJobToDo.Id);
 
 			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
 							  .Result.StatusCode ==

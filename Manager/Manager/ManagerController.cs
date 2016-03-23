@@ -13,6 +13,19 @@ namespace Stardust.Manager
 {
 	public class ManagerController : ApiController
 	{
+		private const string JobToDoIsNull = "Job to do can not be null.";
+
+		private const string NodeUriIsInvalid = "Node Uri is invalid.";
+
+		private const string JobIdIsInvalid = "Job Id is invalid.";
+
+		private const string JobToDoNameIsInvalid = "Job to do property=NAME is invalid.";
+
+		private const string JobToDoUserNameIsInvalid = "Job to do property=USERNAME is invalid.";
+
+		private const string JobToDoSerializedIsInvalid = "Job to do property=SERIALIZED is invalid.";
+
+		private const string JobToDoTypeIsNullOrEmpty = "Job to do property=TYPE can not be null or empty string.";
 		private readonly JobManager _jobManager;
 
 		private readonly INodeManager _nodeManager;
@@ -24,24 +37,42 @@ namespace Stardust.Manager
 			_jobManager = jobManager;
 		}
 
-		const string JobToDoIsNull = "Job to do can not be null.";
-
-		const string NodeUriIsInvalid = "Node Uri is invalid.";
-
-		const string JobIdIsInvalid = "Job Id is invalid.";
-
-		const string JobToDoNameIsInvalid = "Job to do property=NAME is invalid.";
-
-		const string JobToDoUserNameIsInvalid = "Job to do property=USERNAME is invalid.";
-
-		const string JobToDoSerializedIsInvalid = "Job to do property=SERIALIZED is invalid.";
-
-		const string JobToDoTypeIsNullOrEmpty = "Job to do property=TYPE can not be null or empty string.";
-
-
-
 		[HttpPost, Route(ManagerRouteConstants.Job)]
 		public IHttpActionResult DoThisJob([FromBody] JobRequestModel job)
+		{
+			// Validate.
+			var isValidRequest = ValidateJobRequestModel(job, Request);
+
+			if (!(isValidRequest is OkResult))
+			{
+				return isValidRequest;
+			}
+
+			// Start.
+			var jobReceived = new JobDefinition
+			{
+				Name = job.Name,
+				Serialized = job.Serialized,
+				Type = job.Type,
+				UserName = job.UserName,
+				Id = Guid.NewGuid()
+			};
+			_jobManager.Add(jobReceived);
+
+			var msg = string.Format("{0} : New job received from client ( jobId, jobName ) : ( {1}, {2} )",
+			                        WhoAmI(Request),
+			                        jobReceived.Id,
+			                        jobReceived.Name);
+
+			this.Log().InfoWithLineNumber(msg);
+
+			Task.Factory.StartNew(() => { _jobManager.CheckAndAssignNextJob(); });
+
+			return Ok(jobReceived.Id);
+		}
+
+		private static IHttpActionResult ValidateJobRequestModel(JobRequestModel job,
+		                                                         HttpRequestMessage requestMessage)
 		{
 			if (job == null)
 			{
@@ -68,39 +99,41 @@ namespace Stardust.Manager
 				return new BadRequestWithReasonPhrase(JobToDoSerializedIsInvalid);
 			}
 
-			var jobReceived = new JobDefinition
+			if (requestMessage == null)
 			{
-				Name = job.Name,
-				Serialized = job.Serialized,
-				Type = job.Type,
-				UserName = job.UserName,
-				Id = Guid.NewGuid()
-			};
-			_jobManager.Add(jobReceived);
+				requestMessage = new HttpRequestMessage();
+			}
 
-			var msg = string.Format("{0} : New job received from client ( jobId, jobName ) : ( {1}, {2} )",
-			                        WhoAmI(Request),
-			                        jobReceived.Id,
-			                        jobReceived.Name);
-
-			this.Log().InfoWithLineNumber(msg);
-
-			Task.Factory.StartNew(() =>
-			{
-				_jobManager.CheckAndAssignNextJob();
-			});
-
-			return Ok(jobReceived.Id);
+			return new OkResult(requestMessage);
 		}
 
-		[HttpDelete, Route(ManagerRouteConstants.CancelJob)]
-		public IHttpActionResult CancelThisJob(Guid jobId)
+		private IHttpActionResult ValidateJobId(Guid jobId, HttpRequestMessage requestMessage)
 		{
 			if (jobId == Guid.Empty)
 			{
 				return new BadRequestWithReasonPhrase(JobIdIsInvalid);
 			}
 
+			if (requestMessage == null)
+			{
+				requestMessage = new HttpRequestMessage();
+			}
+
+			return new OkResult(requestMessage);
+		}
+
+		[HttpDelete, Route(ManagerRouteConstants.CancelJob)]
+		public IHttpActionResult CancelThisJob(Guid jobId)
+		{
+			// Validate.
+			var isValidRequest = ValidateJobId(jobId, Request);
+
+			if (!(isValidRequest is OkResult))
+			{
+				return isValidRequest;
+			}
+
+			// Start.
 			this.Log().InfoWithLineNumber(WhoAmI(Request) + ": Received job cancel from client ( jobId ) : ( " + jobId + " )");
 
 			_jobManager.CancelThisJob(jobId);
@@ -119,11 +152,15 @@ namespace Stardust.Manager
 		[HttpGet, Route(ManagerRouteConstants.GetJobHistory)]
 		public IHttpActionResult JobHistory(Guid jobId)
 		{
-			if (jobId == Guid.Empty)
+			// Validate.
+			var isValidRequest = ValidateJobId(jobId, Request);
+
+			if (!(isValidRequest is OkResult))
 			{
-				return new BadRequestWithReasonPhrase(JobIdIsInvalid);
+				return isValidRequest;
 			}
 
+			// Start.
 			var jobHistory = _jobManager.GetJobHistory(jobId);
 
 			return Ok(jobHistory);
@@ -132,42 +169,70 @@ namespace Stardust.Manager
 		[HttpGet, Route(ManagerRouteConstants.JobDetail)]
 		public IHttpActionResult JobHistoryDetails(Guid jobId)
 		{
-			if (jobId == Guid.Empty)
+			// Validate.
+			var isValidRequest = ValidateJobId(jobId, Request);
+
+			if (!(isValidRequest is OkResult))
 			{
-				return new BadRequestWithReasonPhrase(JobIdIsInvalid);
+				return isValidRequest;
 			}
 
+			// Start.
 			var jobHistoryDetail = _jobManager.JobHistoryDetails(jobId);
 
 			return Ok(jobHistoryDetail);
 		}
 
-		[HttpPost, Route(ManagerRouteConstants.Heartbeat)]
-		public IHttpActionResult Heartbeat([FromBody] Uri nodeUri)
+		private IHttpActionResult ValidateUri(Uri uri,
+		                                      HttpRequestMessage requestMessage)
 		{
-			if (nodeUri == null)
+			if (uri == null)
 			{
 				return new BadRequestWithReasonPhrase(NodeUriIsInvalid);
 			}
 
+			if (requestMessage == null)
+			{
+				requestMessage = new HttpRequestMessage();
+			}
+
+			return new OkResult(requestMessage);
+		}
+
+		[HttpPost, Route(ManagerRouteConstants.Heartbeat)]
+		public IHttpActionResult Heartbeat([FromBody] Uri nodeUri)
+		{
+			// Validate.
+			var isValidRequest = ValidateUri(nodeUri, Request);
+
+			if (!(isValidRequest is OkResult))
+			{
+				return isValidRequest;
+			}
+
+			// Start.
 			Task.Factory.StartNew(() =>
 			{
 				this.Log().InfoWithLineNumber(WhoAmI(Request) + ": Received heartbeat from Node. Node Uri : ( " + nodeUri + " )");
 
 				_jobManager.RegisterHeartbeat(nodeUri.ToString());
-			});			
+			});
 
-			return Ok();	
+			return Ok();
 		}
 
 		[HttpPost, Route(ManagerRouteConstants.JobDone)]
 		public IHttpActionResult JobDone(Guid jobId)
-		{			
-			if (jobId == Guid.Empty)
+		{
+			// Validate.
+			var isValidRequest = ValidateJobId(jobId, Request);
+
+			if (!(isValidRequest is OkResult))
 			{
-				return new BadRequestWithReasonPhrase(JobIdIsInvalid);
+				return isValidRequest;
 			}
-			
+
+			// Start.
 			Task.Factory.StartNew(() =>
 			{
 				this.Log().InfoWithLineNumber(WhoAmI(Request) + ": Received job done from a Node ( jobId ) : ( " + jobId + " )");
@@ -181,8 +246,8 @@ namespace Stardust.Manager
 			return Ok();
 		}
 
-		[HttpPost, Route(ManagerRouteConstants.JobFailed)]
-		public IHttpActionResult JobFailed([FromBody] JobFailedModel jobFailedModel)
+		private IHttpActionResult ValidateJobFailedModel(JobFailedModel jobFailedModel,
+		                                                 HttpRequestMessage requestMessage)
 		{
 			if (jobFailedModel == null)
 			{
@@ -194,10 +259,30 @@ namespace Stardust.Manager
 				return new BadRequestWithReasonPhrase("Invalid job id on job failed model.");
 			}
 
+			if (requestMessage == null)
+			{
+				requestMessage = new HttpRequestMessage();
+			}
+
+			return new OkResult(requestMessage);
+		}
+
+		[HttpPost, Route(ManagerRouteConstants.JobFailed)]
+		public IHttpActionResult JobFailed([FromBody] JobFailedModel jobFailedModel)
+		{
+			// Validate.
+			var isValidRequest = ValidateJobFailedModel(jobFailedModel, Request);
+
+			if (!(isValidRequest is OkResult))
+			{
+				return isValidRequest;
+			}
+
+			// Start.
 			Task.Factory.StartNew(() =>
 			{
 				this.Log().ErrorWithLineNumber(WhoAmI(Request) + ": Received job failed from a Node ( jobId ) : ( " +
-											   jobFailedModel.JobId + " )");
+				                               jobFailedModel.JobId + " )");
 
 				var progress = new JobProgressModel
 				{
@@ -220,11 +305,15 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.JobHasBeenCanceled)]
 		public IHttpActionResult JobCanceled(Guid jobId)
 		{
-			if (jobId == Guid.Empty)
-			{
-				return new BadRequestWithReasonPhrase(JobIdIsInvalid);
-			}			
+			// Validate.
+			var isValidRequest = ValidateJobId(jobId, Request);
 
+			if (!(isValidRequest is OkResult))
+			{
+				return isValidRequest;
+			}
+
+			// Start.
 			Task.Factory.StartNew(() =>
 			{
 				this.Log().InfoWithLineNumber(WhoAmI(Request) + ": Received cancel from a Node ( jobId ) : ( " + jobId + " )");
@@ -238,8 +327,8 @@ namespace Stardust.Manager
 			return Ok();
 		}
 
-		[HttpPost, Route(ManagerRouteConstants.JobProgress)]
-		public IHttpActionResult JobProgress([FromBody] JobProgressModel model)
+		private IHttpActionResult ValidateJobProgressModel(JobProgressModel model,
+		                                                   HttpRequestMessage requestMessage)
 		{
 			if (model == null)
 			{
@@ -256,24 +345,46 @@ namespace Stardust.Manager
 				return new BadRequestWithReasonPhrase("Job progress model PROGRESSDETAIL can not be null.");
 			}
 
-			Task.Factory.StartNew(() =>
+			if (requestMessage == null)
 			{
-				_jobManager.ReportProgress(model);
-			});
+				requestMessage = new HttpRequestMessage();
+			}
+
+			return new OkResult(requestMessage);
+		}
+
+		[HttpPost, Route(ManagerRouteConstants.JobProgress)]
+		public IHttpActionResult JobProgress([FromBody] JobProgressModel model)
+		{
+			// Validate.
+			var isValidRequest = ValidateJobProgressModel(model, Request);
+
+			if (!(isValidRequest is OkResult))
+			{
+				return isValidRequest;
+			}
+
+			// Start.
+			Task.Factory.StartNew(() => { _jobManager.ReportProgress(model); });
 
 			return Ok();
 		}
+
 
 		// to handle that scenario where the node comes up after a crash
 		//this end point should be called when the node comes up
 		[HttpPost, Route(ManagerRouteConstants.NodeHasBeenInitialized)]
 		public IHttpActionResult NodeInitialized([FromBody] Uri nodeUri)
 		{
-			if (nodeUri == null)
+			// Validate.
+			var isValidRequest = ValidateUri(nodeUri, Request);
+
+			if (!(isValidRequest is OkResult))
 			{
-				return new BadRequestWithReasonPhrase("Node Uri is invalid");
+				return isValidRequest;
 			}
 
+			// Start.
 			Task.Factory.StartNew(() =>
 			{
 				this.Log().InfoWithLineNumber(WhoAmI(Request) + ": Received init from Node. Node Uri : ( " + nodeUri + " )");
@@ -281,7 +392,7 @@ namespace Stardust.Manager
 				_nodeManager.FreeJobIfAssingedToNode(nodeUri);
 				_nodeManager.AddIfNeeded(nodeUri);
 				_jobManager.CheckAndAssignNextJob();
-			});			
+			});
 
 			return Ok();
 		}
@@ -311,7 +422,6 @@ namespace Stardust.Manager
 				request.RequestUri.GetLeftPart(UriPartial.Authority);
 
 			return "[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
-
 		}
 	}
 }

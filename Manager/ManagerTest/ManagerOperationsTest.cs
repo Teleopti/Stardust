@@ -66,9 +66,15 @@ namespace ManagerTest
 				Serialized = "Fake Serialized",
 				Type = "Fake Type"
 			};
+
 			JobRepository.Add(job);
-			JobRepository.CheckAndAssignNextJob(new List<WorkerNode> {new WorkerNode {Url = _nodeUri1}},
-			                                    HttpSender);
+
+			JobRepository.CheckAndAssignNextJob(new List<WorkerNode>
+			{
+				new WorkerNode {Url = _nodeUri1}
+			},
+			 HttpSender);
+
 			Target.Heartbeat(_nodeUri1);
 			HttpSender.CalledNodes.First()
 				.Key.Should()

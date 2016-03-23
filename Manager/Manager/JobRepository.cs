@@ -26,7 +26,7 @@ namespace Stardust.Manager
 			_retryPolicy = retryPolicyProvider.GetPolicy();
 		}
 
-		private void runner(Action funcToRun, string faliureMessage)
+		private void Runner(Action funcToRun, string faliureMessage)
 		{
 			var policy = _retryPolicyProvider.GetPolicy();
 			applyLoggingOnRetries(policy);
@@ -207,10 +207,10 @@ namespace Stardust.Manager
 
 		public void CheckAndAssignNextJob(List<WorkerNode> availableNodes, IHttpSender httpSender)
 		{
-			runner(() => tryCheckAndAssignNextJob(availableNodes, httpSender), "Unable to perform operation");
+			Runner(() => TryCheckAndAssignNextJob(availableNodes, httpSender), "Unable to perform operation");
 		}
 
-		private async void tryCheckAndAssignNextJob(List<WorkerNode> availableNodes,
+		private async void TryCheckAndAssignNextJob(List<WorkerNode> availableNodes,
 												IHttpSender httpSender)
 		{
 			if (!availableNodes.Any()) return;
@@ -299,6 +299,7 @@ namespace Stardust.Manager
 
 											break;
 										}
+
 										if (response.StatusCode.Equals(HttpStatusCode.BadRequest))
 										{
 											//remove the job if badrequest
@@ -568,7 +569,7 @@ namespace Stardust.Manager
 			applyLoggingOnRetries(policy);
 			try
 			{
-				jobHist = policy.ExecuteAction(() => tryHistory(jobId));
+				jobHist = policy.ExecuteAction(() => TryHistory(jobId));
 			}
 			catch (Exception ex)
 			{
@@ -577,7 +578,7 @@ namespace Stardust.Manager
 			return jobHist;
 		}
 
-		private JobHistory tryHistory(Guid jobId)
+		private JobHistory TryHistory(Guid jobId)
 
 		{
 			try
@@ -624,7 +625,7 @@ namespace Stardust.Manager
 			applyLoggingOnRetries(policy);
 			try
 			{
-				returnList = policy.ExecuteAction(() => tryHistoryList()).ToList();
+				returnList = policy.ExecuteAction(() => TryHistoryList()).ToList();
 			}
 			catch (Exception ex)
 			{
@@ -633,7 +634,7 @@ namespace Stardust.Manager
 			return returnList;
 		}
 
-		private IList<JobHistory> tryHistoryList()
+		private IList<JobHistory> TryHistoryList()
 
 		{
 			try
@@ -683,7 +684,7 @@ namespace Stardust.Manager
 			applyLoggingOnRetries(policy);
 			try
 			{
-				returnList = policy.ExecuteAction(() => tryJobHistoryDetails(jobId)).ToList();
+				returnList = policy.ExecuteAction(() => TryJobHistoryDetails(jobId)).ToList();
 			}
 			catch (Exception ex)
 			{
@@ -692,7 +693,7 @@ namespace Stardust.Manager
 			return returnList;
 		}
 
-		private IList<JobHistoryDetail> tryJobHistoryDetails(Guid jobId)
+		private IList<JobHistoryDetail> TryJobHistoryDetails(Guid jobId)
 		{
 			try
 			{
