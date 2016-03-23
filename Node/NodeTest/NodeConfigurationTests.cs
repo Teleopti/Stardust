@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Stardust.Node.API;
+using Stardust.Node.Workers;
 
 namespace NodeTest
 {

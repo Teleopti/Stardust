@@ -87,6 +87,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
@@ -146,7 +147,7 @@
     <Compile Include="Models\JobRequestModel.cs" />
     <Compile Include="Models\JobToDo.cs" />
     <Compile Include="ManagerController.cs" />
-    <Compile Include="Models\ManagerConfiguration.cs" />
+    <Compile Include="ManagerConfiguration.cs" />
     <Compile Include="NodeManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\WorkerNode.cs" />

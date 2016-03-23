@@ -14,6 +14,7 @@ using Stardust.Node.Interfaces;
 using Stardust.Node.Log4Net;
 using Stardust.Node.Log4Net.Extensions;
 using Stardust.Node.Timers;
+using Stardust.Node.Workers;
 
 namespace NodeTest.Timers
 {

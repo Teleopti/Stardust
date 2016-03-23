@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -41,7 +44,7 @@ namespace Stardust.Manager
 		public IHttpActionResult DoThisJob([FromBody] JobRequestModel job)
 		{
 			// Validate.
-			var isValidRequest = ValidateJobRequestModel(job, Request);
+			var isValidRequest = ValidateObject(job, Request);
 
 			if (!(isValidRequest is OkResult))
 			{
@@ -69,42 +72,6 @@ namespace Stardust.Manager
 			Task.Factory.StartNew(() => { _jobManager.CheckAndAssignNextJob(); });
 
 			return Ok(jobReceived.Id);
-		}
-
-		private static IHttpActionResult ValidateJobRequestModel(JobRequestModel job,
-		                                                         HttpRequestMessage requestMessage)
-		{
-			if (job == null)
-			{
-				return new BadRequestWithReasonPhrase(JobToDoIsNull);
-			}
-
-			if (string.IsNullOrEmpty(job.Name))
-			{
-				return new BadRequestWithReasonPhrase(JobToDoNameIsInvalid);
-			}
-
-			if (string.IsNullOrEmpty(job.Type))
-			{
-				return new BadRequestWithReasonPhrase(JobToDoTypeIsNullOrEmpty);
-			}
-
-			if (string.IsNullOrEmpty(job.UserName))
-			{
-				return new BadRequestWithReasonPhrase(JobToDoUserNameIsInvalid);
-			}
-
-			if (string.IsNullOrEmpty(job.Serialized))
-			{
-				return new BadRequestWithReasonPhrase(JobToDoSerializedIsInvalid);
-			}
-
-			if (requestMessage == null)
-			{
-				requestMessage = new HttpRequestMessage();
-			}
-
-			return new OkResult(requestMessage);
 		}
 
 		private IHttpActionResult ValidateJobId(Guid jobId, HttpRequestMessage requestMessage)
@@ -343,6 +310,31 @@ namespace Stardust.Manager
 			if (string.IsNullOrEmpty(model.ProgressDetail))
 			{
 				return new BadRequestWithReasonPhrase("Job progress model PROGRESSDETAIL can not be null.");
+			}
+
+			if (requestMessage == null)
+			{
+				requestMessage = new HttpRequestMessage();
+			}
+
+			return new OkResult(requestMessage);
+		}
+
+		private IHttpActionResult ValidateObject(IValidatableObject validatableObject,
+												 HttpRequestMessage requestMessage)
+		{
+			if (validatableObject != null)
+			{
+				var validationResults =
+					validatableObject.Validate(new ValidationContext(this));
+
+				var enumerable =
+					validationResults as IList<ValidationResult> ?? validationResults.ToList();
+
+				if (enumerable.Any())
+				{
+					return new BadRequestWithReasonPhrase(enumerable.First().ErrorMessage);
+				}
 			}
 
 			if (requestMessage == null)

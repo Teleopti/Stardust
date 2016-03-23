@@ -288,7 +288,8 @@ namespace NodeTest
 			{
 				Id = Guid.NewGuid(),
 				Name = "Another name",
-				Serialized = ser
+				Serialized = ser,
+				Type = "NodeTest.JobHandlers.TestJobParams"
 			};
 
 			_nodeController.StartJob(_jobToDo);

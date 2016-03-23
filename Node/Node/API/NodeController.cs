@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -33,6 +36,13 @@ namespace Stardust.Node.API
 		[HttpPost, AllowAnonymous, Route(NodeRouteConstants.Job)]
 		public IHttpActionResult StartJob(JobToDo jobToDo)
 		{
+			var isJobToDoValidObject = ValidateObject(jobToDo,Request);
+
+			if (!(isJobToDoValidObject is OkResult))
+			{
+				return isJobToDoValidObject;
+			}
+
 			var isValidRequest = _workerWrapper.ValidateStartJob(jobToDo,
 			                                                     Request);
 
@@ -55,6 +65,31 @@ namespace Stardust.Node.API
 			});
 
 			return Ok();
+		}
+
+		private IHttpActionResult ValidateObject(IValidatableObject validatableObject, 
+												 HttpRequestMessage requestMessage)
+		{
+			if (validatableObject != null)
+			{
+				var validationResults = 
+					validatableObject.Validate(new ValidationContext(this));
+
+				var enumerable = 
+					validationResults as IList<ValidationResult> ?? validationResults.ToList();
+
+				if (enumerable.Any())
+				{
+					return new BadRequestWithReasonPhrase(enumerable.First().ErrorMessage);
+				}				
+			}
+
+			if (requestMessage == null)
+			{
+				requestMessage = new HttpRequestMessage();
+			}
+
+			return new OkResult(requestMessage);
 		}
 
 		private IHttpActionResult ValidateJobId(Guid jobId, HttpRequestMessage requestMessage)

@@ -1,6 +1,6 @@
 ﻿using Stardust.Manager.Interfaces;
 
-namespace Stardust.Manager.Models
+namespace Stardust.Manager
 {
 	public class ManagerConfiguration : IManagerConfiguration
 	{

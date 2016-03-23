@@ -2,7 +2,7 @@
 using System.Reflection;
 using Stardust.Node.Interfaces;
 
-namespace Stardust.Node.API
+namespace Stardust.Node.Workers
 {
 	public class NodeConfiguration : INodeConfiguration
 	{
