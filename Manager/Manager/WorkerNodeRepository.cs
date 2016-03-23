@@ -214,7 +214,7 @@ namespace Stardust.Manager
 						{
 							using (var commandUpdate = new SqlCommand(updateCommandText, connection,trans))
 							{
-								commandUpdate.Parameters.Add("@Alive", SqlDbType.NVarChar);
+								commandUpdate.Parameters.Add("@Alive", SqlDbType.Bit);
 								commandUpdate.Parameters.Add("@Url", SqlDbType.NVarChar);
 
 								foreach (var objectse in listOfObjectArray)
