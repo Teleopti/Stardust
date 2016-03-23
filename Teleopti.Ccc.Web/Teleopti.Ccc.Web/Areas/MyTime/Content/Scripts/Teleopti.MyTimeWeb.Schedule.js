@@ -761,7 +761,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			readyForInteractionCallback();
 			completelyLoaded = completelyLoadedCallback;
 		},
-		SetupViewModel: function (userTexts, defaultDateTimes) {
+		SetupViewModel: function (userTexts, defaultDateTimes,callback) {
 
 			Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
 				
@@ -773,7 +773,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				};
 
 				vm = new WeekScheduleViewModel(userTexts, addRequestViewModel, _navigateToRequests, defaultDateTimes, data.WeekStart);
-
+				callback();
 				$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }');
 				ko.applyBindings(vm, $('#page')[0]);
 
