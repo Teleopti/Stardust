@@ -55,9 +55,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			_eventPublisher.Publish(new OptimizationWasOrdered
 			{
 				Period = command.Period,
-				AgentIds = _peopleInOrganization.Agents(command.Period).Select(x => x.Id.Value),
+				AgentIds = LoadPeopleInOrganization(command.Period).Select(x => x.Id.Value),
 				RunResolveWeeklyRestRule = command.RunResolveWeeklyRestRule
 			});
+		}
+
+		[UnitOfWork]
+		protected virtual IEnumerable<IPerson> LoadPeopleInOrganization(DateOnlyPeriod period)
+		{
+			return _peopleInOrganization.Agents(period);
 		}
 	}
 }

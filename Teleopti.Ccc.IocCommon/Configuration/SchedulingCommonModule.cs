@@ -362,7 +362,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 			else
 			{
-				builder.RegisterType<IntradayOptimizationOneThreadCommandHandler>().As<IIntradayOptimizationCommandHandler>().SingleInstance();
+				builder.RegisterType<IntradayOptimizationOneThreadCommandHandler>().As<IIntradayOptimizationCommandHandler>().SingleInstance().ApplyAspects();
 				builder.RegisterType<OptimizeIntradayDesktop>().As<IOptimizeIntradayDesktop>().InstancePerLifetimeScope();
 			}
 
