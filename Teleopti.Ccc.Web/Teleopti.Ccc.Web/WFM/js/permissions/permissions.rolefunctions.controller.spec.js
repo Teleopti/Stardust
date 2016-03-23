@@ -70,9 +70,10 @@ fdescribe('FunctionController', function() {
     	var node = {
     		$modelValue:
 			   { selected: true, ChildFunctions: [{ selected: true, ChildFunctions: [{ selected: true, ChildFunctions: [] }] }] }
-	    };
+    	};
+	    scope.tempActiveNode = node;
 
-    	scope.deselectFunctionNodes(node);
+    	scope.deselectFunctionNodes();
     	scope.$digest();
 
     	expect(node.$modelValue.ChildFunctions[0].selected).toBe(false);
