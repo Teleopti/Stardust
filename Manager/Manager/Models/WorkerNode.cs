@@ -8,7 +8,7 @@ namespace Stardust.Manager.Models
 		{
 			Id = Guid.NewGuid();
 
-			Heartbeat = DateTime.Now;
+			Heartbeat = DateTime.UtcNow;
 
 			Alive = true;
 		}

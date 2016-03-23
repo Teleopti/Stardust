@@ -3,10 +3,9 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using log4net;
+using System.Web;
 using Newtonsoft.Json;
 using Stardust.Manager.Extensions;
-using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 
 namespace Stardust.Manager
@@ -24,28 +23,27 @@ namespace Stardust.Manager
         {
             this.Log().DebugWithLineNumber("Start.");
 
-            try
-            {
-                using (var client = new HttpClient())
-                {
-					var sez = JsonConvert.SerializeObject(data);
+	        try
+	        {
+		        using (var client = new HttpClient())
+		        {
+			        var sez = JsonConvert.SerializeObject(data);
 
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+			        client.DefaultRequestHeaders.Accept.Clear();
+			        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    HttpResponseMessage response =
-                        await client.PostAsync(url,
-                                               new StringContent(sez,
-                                                                 Encoding.Unicode,
-                                                                 "application/json"))
-                            .ConfigureAwait(false);
+			        HttpResponseMessage response =
+				        await client.PostAsync(url,
+				                               new StringContent(sez,
+				                                                 Encoding.Unicode,
+				                                                 "application/json"))
+					        .ConfigureAwait(false);
 
-                    this.Log().DebugWithLineNumber("Finished.");
+			        this.Log().DebugWithLineNumber("Finished.");
 
-                    return response;
-                }
-            }
-
+			        return response;
+		        }
+	        }
             catch (Exception exp)
             {
                 this.Log().ErrorWithLineNumber(exp.Message,
@@ -74,12 +72,15 @@ namespace Stardust.Manager
                     return response;
                 }
             }
-
-            catch (Exception exp)
+			catch (HttpException exp)
+			{
+				this.Log().DebugWithLineNumber(exp.Message);
+				return null;
+			}
+			catch (Exception exp)
             {
                 this.Log().ErrorWithLineNumber(exp.Message,
                                                  exp);
-
                 throw;
             }
         }
