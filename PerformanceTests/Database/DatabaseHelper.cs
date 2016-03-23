@@ -1,7 +1,8 @@
-﻿using System.Data.SqlClient;
-using System.Configuration;
+﻿using System.Configuration;
+using System.Data.SqlClient;
+using PerformanceTests.Database;
 
-namespace PerformanceTests.Database
+namespace Performance.Test.Database
 {
 	public class DatabaseHelper
 	{

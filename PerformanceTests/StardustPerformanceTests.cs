@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Diagnostics;
 using NUnit.Framework;
+using Performance.Test.Database;
 using PerformanceTests;
 using PerformanceTests.Database;
 
