@@ -528,46 +528,35 @@ namespace Stardust.Manager
 				}
 			}
 		}
-
+		
 		public void ReportProgress(Guid jobId, string detail, DateTime created)
 		{
-			runner(() => tryReportProgress(jobId, detail, created), "Unable to report progress on job");
-		}
-
-		private void tryReportProgress(Guid jobId, string detail, DateTime created)
-		{
-			try
+			using (var connection = new SqlConnection(_connectionString))
 			{
-				using (var connection = new SqlConnection(_connectionString))
+				SqlCommand command = connection.CreateCommand();
+				command.CommandText = "INSERT INTO [Stardust].JobHistoryDetail (JobId, Detail, Created) VALUES (@Id, @Detail, @Created)";
+				command.Parameters.AddWithValue("@Id", jobId);
+				command.Parameters.AddWithValue("@Detail", detail);
+				command.Parameters.AddWithValue("@Created", created);
+
+				try
 				{
-					connection.Open();
-
-					using (var da = new SqlDataAdapter("SELECT * From [Stardust].JobHistoryDetail",
-													   connection)
+					connection.OpenWithRetry(_retryPolicy);
+					using (var tran = connection.BeginTransaction())
 					{
-						InsertCommand =
-							new SqlCommand(
-								"INSERT INTO [Stardust].JobHistoryDetail (JobId, Detail, Created) VALUES (@Id, @Detail, @Created)",
-								connection)
-					})
-					{
-						da.InsertCommand.Parameters.Add("@Id", SqlDbType.UniqueIdentifier, 16, "JobId");
-						da.InsertCommand.Parameters[0].Value = jobId;
-
-						da.InsertCommand.Parameters.Add("@Detail", SqlDbType.NText);
-						da.InsertCommand.Parameters[1].Value = detail;
-
-						da.InsertCommand.Parameters.Add("@Created", SqlDbType.DateTime);
-						da.InsertCommand.Parameters[2].Value = created;
-
-						da.InsertCommand.ExecuteNonQuery();
+						command.Transaction = tran;
+						command.ExecuteNonQueryWithRetry(_retryPolicy);
+						tran.Commit();
 					}
+				}
+				catch (Exception exp)
+				{
+					this.Log().ErrorWithLineNumber(exp.Message, exp);
+				}
+				finally
+				{
 					connection.Close();
 				}
-			}
-			catch (Exception exp)
-			{
-				this.Log().ErrorWithLineNumber(exp.Message, exp);
 			}
 		}
 
