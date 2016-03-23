@@ -205,7 +205,7 @@ Scenario: Can approve requests
 	When I view wfm requests
 	And I select to load requests from '2016-01-01' to '2016-01-07'
 	And I approve all requests that I see
-	Then I should see request from 'Ashley Andeen' approved
+	Then I should see request for 'Ashley Andeen' approved
 
 @OnlyRunIfEnabled('Wfm_Requests_ApproveDeny_36297')
 Scenario: Can approve waitlisted requests

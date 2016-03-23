@@ -12,6 +12,8 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 	self.IsFullDay = ko.observable(false);
 	self.IsUpdate = ko.observable(false);
 
+	self.IsLoadingPersonalAccount = ko.observable(true);
+
 	var urlDate = Teleopti.MyTimeWeb.Portal.ParseHash().dateHash;
 	self.DateFrom = ko.observable(urlDate ? moment(urlDate).startOf('day') : moment().startOf('day'));
 	self.DateTo = ko.observable(urlDate ? moment(urlDate).startOf('day') : moment().startOf('day'));
@@ -135,6 +137,8 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 			self.AbsenceUsed("0");
 			self.AbsenceRemaining("0");
 		}
+
+		self.IsLoadingPersonalAccount(false);
 	};
 	
 	function loadAbsenceAccount(forceAccountUpdate) {
@@ -144,6 +148,9 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 		var dateToChanged = !self.DateTo().isSame(self.PreviousDateTo().format("YYYY-MM-DD HH:mm:ss"));
 		var isOutOfPeriodRange = self.DateTo().isBefore(self.AbsenceAccountPeriodStart()) || self.DateTo().isAfter(self.AbsenceAccountPeriodEnd());
 		if (forceAccountUpdate || absenceChanged || (dateToChanged && isOutOfPeriodRange)) {
+
+			self.IsLoadingPersonalAccount(true);
+
 			ajax.Ajax({
 				url: "Requests/FetchAbsenceAccount",
 				dataType: "json",
@@ -160,6 +167,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 					self.readAbsenceAccount();
 				},
 				complete: function () {
+					self.IsLoadingPersonalAccount(false);
 				}
 			});
 		}

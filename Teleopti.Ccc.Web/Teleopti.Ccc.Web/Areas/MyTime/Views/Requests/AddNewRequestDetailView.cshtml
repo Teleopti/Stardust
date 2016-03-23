@@ -23,29 +23,36 @@
             </select>
 	    </div>
 		<!-- ko if: ShowAbsenceAccount -->
-	    <div id="absence-personal-account" class="col-md-4 col-sm-6 col-xs-6" style="padding-top: 3px; padding-left: 0">
-		    <label>
-			    @Resources.Remaining:
-		    </label>
-		    <!-- ko if: AbsenceTrackedAsDay() -->
-		    <span class="remainingTime" data-bind="text: AbsenceRemaining() + ' @Resources.Days'"></span>
-		    <!-- /ko -->
-		    <!-- ko if: AbsenceTrackedAsHour() -->
-		    <span class="remainingTime" data-bind="text: AbsenceRemaining()"></span>
-		    <!-- /ko -->
-		    <span> / </span>
-		    <label>
-			    @Resources.Used:
-		    </label>
-		    <!-- ko if: AbsenceTrackedAsDay() -->
-		    <span class="usedTime" data-bind="text: AbsenceUsed() + ' @Resources.Days'"></span>
-		    <!-- /ko -->
-		    <!-- ko if: AbsenceTrackedAsHour() -->
-		    <span class="usedTime" data-bind="text: AbsenceUsed()"></span>
-		    <!-- /ko -->
-	    </div>
-		<!-- /ko -->
-    </div>
+		
+			<!-- ko if: IsLoadingPersonalAccount() -->
+			<div id="absence-personal-account-loading" class="col-md-4 col-sm-6 col-xs-6" style="padding-top: 3px; padding-left: 0">
+				<label>@Resources.Loading ...</label></div>
+			<!-- /ko -->
+			<!-- ko if: !IsLoadingPersonalAccount() -->
+			<div id="absence-personal-account" class="col-md-4 col-sm-6 col-xs-6" style="padding-top: 3px; padding-left: 0">
+				<label>
+					@Resources.Remaining:
+				</label>
+				<!-- ko if: AbsenceTrackedAsDay() -->
+				<span class="remainingTime" data-bind="text: AbsenceRemaining() + ' @Resources.Days'"></span>
+				<!-- /ko -->
+				<!-- ko if: AbsenceTrackedAsHour() -->
+				<span class="remainingTime" data-bind="text: AbsenceRemaining()"></span>
+				<!-- /ko -->
+				<span> / </span>
+				<label>
+					@Resources.Used:
+				</label>
+				<!-- ko if: AbsenceTrackedAsDay() -->
+				<span class="usedTime" data-bind="text: AbsenceUsed() + ' @Resources.Days'"></span>
+				<!-- /ko -->
+				<!-- ko if: AbsenceTrackedAsHour() -->
+				<span class="usedTime" data-bind="text: AbsenceUsed()"></span>
+				<!-- /ko -->
+			</div>
+			<!-- /ko -->
+			<!-- /ko -->
+		</div>
 </div>
 <div class="row form-group">
     <div class="floatleft request-date">
