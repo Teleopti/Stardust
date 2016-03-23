@@ -117,7 +117,7 @@ namespace Manager.Integration.Test.FunctionalTests
 		}
 
 		[Test]
-		public void CreateSeveralRequestShouldReturnBothCancelAndDeleteStatusesTest()
+		public void CreateRequestShouldReturnCancelOrDeleteStatusesTest()
 		{
 			LogMessage("Start.");
 

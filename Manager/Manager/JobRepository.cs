@@ -16,12 +16,14 @@ namespace Stardust.Manager
 	public class JobRepository : IJobRepository
 	{
 		private readonly RetryPolicyProvider _retryPolicyProvider;
+		private readonly RetryPolicy _retryPolicy;
 		private readonly string _connectionString;
 
 		public JobRepository(string connectionString, RetryPolicyProvider retryPolicyProvider)
 		{
 			_connectionString = connectionString;
 			_retryPolicyProvider = retryPolicyProvider;
+			_retryPolicy = retryPolicyProvider.GetPolicy();
 		}
 
 		private void runner(Action funcToRun, string faliureMessage)
@@ -50,113 +52,49 @@ namespace Stardust.Manager
 
 		public void Add(JobDefinition job)
 		{
-			runner(() => tryAdd(job), "Unable to add job in database");
-		}
-
-		private void tryAdd(JobDefinition job)
-		{
-			var jdDataSet = new DataSet();
-			var jdDataTable = new DataTable("[Stardust].[JobDefinitions]");
-			jdDataTable.Columns.Add(new DataColumn("Id", typeof(Guid)));
-			jdDataTable.Columns.Add(new DataColumn("Name", typeof(string)));
-			jdDataTable.Columns.Add(new DataColumn("Serialized", typeof(string)));
-			jdDataTable.Columns.Add(new DataColumn("Type", typeof(string)));
-			jdDataTable.Columns.Add(new DataColumn("AssignedNode", typeof(string)));
-			jdDataTable.Columns.Add(new DataColumn("UserName", typeof(string)));
-			jdDataTable.Columns.Add(new DataColumn("Status", typeof(string)));
-
-			jdDataSet.Tables.Add(jdDataTable);
-			var dr = jdDataTable.NewRow();
-
-			dr["Id"] = job.Id;
-			dr["Name"] = job.Name;
-			dr["Serialized"] = job.Serialized;
-			dr["Type"] = job.Type;
-			dr["UserName"] = job.UserName;
-			dr["AssignedNode"] = DBNull.Value;
-			dr["Status"] = DBNull.Value;
-
-			jdDataTable.Rows.Add(dr);
 			using (var connection = new SqlConnection(_connectionString))
 			{
-				connection.Open();
-					using (var da = new SqlDataAdapter("Select * From [Stardust].JobDefinitions", connection))
+				SqlCommand jobHistoryCommand = connection.CreateCommand();
+				jobHistoryCommand.CommandText = "INSERT INTO [Stardust].JobHistory (JobId, Name, CreatedBy, Serialized, Type) VALUES(@Id, @Name, @By, @Serialized, @Type)";
+				jobHistoryCommand.Parameters.AddWithValue("@Id", job.Id);
+				jobHistoryCommand.Parameters.AddWithValue("@Name", job.Name);
+				jobHistoryCommand.Parameters.AddWithValue("@By", job.UserName);
+				jobHistoryCommand.Parameters.AddWithValue("@Serialized", job.Serialized);
+				jobHistoryCommand.Parameters.AddWithValue("@Type", job.Type);
+
+				SqlCommand jobDefinitionCommand = connection.CreateCommand();
+				jobDefinitionCommand.CommandText = "INSERT INTO [Stardust].JobDefinitions (Id, Name, Serialized, Type, userName) VALUES(@Id, @Name, @Serialized, @Type, @UserName)";
+				jobDefinitionCommand.Parameters.AddWithValue("@Id", job.Id);
+				jobDefinitionCommand.Parameters.AddWithValue("@Name", job.Name);
+				jobDefinitionCommand.Parameters.AddWithValue("@UserName", job.UserName);
+				jobDefinitionCommand.Parameters.AddWithValue("@Serialized", job.Serialized);
+				jobDefinitionCommand.Parameters.AddWithValue("@Type", job.Type);
+				try
 				{
-					var builder = new SqlCommandBuilder(da);
-					builder.GetInsertCommand();
-					da.Update(jdDataSet, "[Stardust].[JobDefinitions]");
-
-					da.InsertCommand =
-						new SqlCommand(
-							"INSERT INTO [Stardust].JobHistory (JobId, Name, CreatedBy, Serialized, Type) VALUES(@Id, @Name, @By, @Serialized, @Type)",
-							connection);
-
-					da.InsertCommand.Parameters.Add("@Id", SqlDbType.UniqueIdentifier, 16, "JobId");
-					da.InsertCommand.Parameters[0].Value = job.Id;
-
-					da.InsertCommand.Parameters.Add("@Name", SqlDbType.NVarChar, 2000, "Name");
-					da.InsertCommand.Parameters[1].Value = job.Name;
-
-					da.InsertCommand.Parameters.Add("@By", SqlDbType.NVarChar, 500, "CreatedBy");
-					da.InsertCommand.Parameters[2].Value = job.UserName;
-
-					da.InsertCommand.Parameters.Add("@Serialized", SqlDbType.NVarChar, 2000, "Serialized");
-					da.InsertCommand.Parameters[3].Value = job.Serialized;
-
-					da.InsertCommand.Parameters.Add("@Type", SqlDbType.NVarChar, 2000, "Type");
-					da.InsertCommand.Parameters[4].Value = job.Type;
-
-					da.InsertCommand.ExecuteNonQuery();
-					connection.Open();
-					ReportProgress(job.Id, "Added", DateTime.Now);
+					connection.OpenWithRetry(_retryPolicy);
+					using (var tran = connection.BeginTransaction())
+					{
+						jobDefinitionCommand.Transaction = tran;
+						jobHistoryCommand.Transaction = tran;
+						jobDefinitionCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+						jobHistoryCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+						ReportProgress(job.Id, "Added", DateTime.Now); 
+						tran.Commit();
+					}
 				}
-				ReportProgress(job.Id, "Added", DateTime.Now);
-				connection.Close();
-
-			//	using (var connection = new ReliableSqlConnection(_connectionString, null,))
-			//{
-				//SqlCommand command = connection.CreateCommand();
-				//command.CommandText = "INSERT INTO [Stardust].JobHistory (JobId, Name, CreatedBy, Serialized, Type) VALUES(@Id, @Name, @By, @Serialized, @Type)";
-				//command.Parameters.AddWithValue("@Id", job.Id);
-				//command.Parameters.AddWithValue("@Name", job.Name);
-				//command.Parameters.AddWithValue("@By", job.UserName);
-				//command.Parameters.AddWithValue("@Serialized", job.Serialized);
-				//command.Parameters.AddWithValue("@Type", job.Type);
-
-				//try
-				//{
-				//	connection.Open();
-				//	command.ExecuteNonQuery();
-				//	ReportProgress(job.Id, "Added", DateTime.Now);
-				//}
-				//catch
-				//{
-				//	//Catch something here?
-				//}
-				//finally
-				//{
-				//	connection.Close();
-				//}
+				catch (Exception exp)
+				{
+					this.Log().ErrorWithLineNumber(exp.Message, exp);
+				}
+				finally
+				{
+					connection.Close();
+				}
 			}
 		}
+
 		
 		public List<JobDefinition> LoadAll()
-		{
-			var result = new List<JobDefinition>();
-			var policy = _retryPolicyProvider.GetPolicy();
-			applyLoggingOnRetries(policy);
-			try
-			{
-				result = policy.ExecuteAction(() => tryLoadAll());
-			}
-			catch (Exception ex)
-			{
-				this.Log().ErrorWithLineNumber(ex.Message + "Unable to load jobs from database");
-			}
-			return result;
-		}
-
-		private List<JobDefinition> tryLoadAll()
 		{
 			const string selectCommand = @"SELECT  Id    
                                             ,Name
@@ -171,29 +109,28 @@ namespace Stardust.Manager
 				var listToReturn = new List<JobDefinition>();
 				using (var connection = new SqlConnection(_connectionString))
 				{
-					connection.Open();
+					connection.OpenWithRetry(_retryPolicy);
 					var command = new SqlCommand
 					{
 						Connection = connection,
 						CommandText = selectCommand,
 						CommandType = CommandType.Text
 					};
-					var reader = command.ExecuteReader();
+					var reader = command.ExecuteReaderWithRetry(_retryPolicy);
 					if (reader.HasRows)
 					{
 						while (reader.Read())
 						{
 							var jobDefinition = new JobDefinition
 							{
-								Id = (Guid) reader.GetValue(reader.GetOrdinal("Id")),
-								Name = (string) reader.GetValue(reader.GetOrdinal("Name")),
-								Serialized = (string) reader.GetValue(reader.GetOrdinal("Serialized")),
-								Type = (string) reader.GetValue(reader.GetOrdinal("Type")),
-								UserName = (string) reader.GetValue(reader.GetOrdinal("UserName")),
+								Id = (Guid)reader.GetValue(reader.GetOrdinal("Id")),
+								Name = (string)reader.GetValue(reader.GetOrdinal("Name")),
+								Serialized = (string)reader.GetValue(reader.GetOrdinal("Serialized")),
+								Type = (string)reader.GetValue(reader.GetOrdinal("Type")),
+								UserName = (string)reader.GetValue(reader.GetOrdinal("UserName")),
 								AssignedNode = GetValue<string>(reader.GetValue(reader.GetOrdinal("AssignedNode"))),
 								Status = GetValue<string>(reader.GetValue(reader.GetOrdinal("Status")))
 							};
-
 							listToReturn.Add(jobDefinition);
 						}
 					}
@@ -208,85 +145,81 @@ namespace Stardust.Manager
 			}
 			return null;
 		}
-
+		
 		public void DeleteJob(Guid jobId)
 		{
-			runner(() => trydeleteJob(jobId), "Unable to delete the job");
-		}
-
-		private void trydeleteJob(Guid jobId)
-		{
-			try
+			using (var connection = new SqlConnection(_connectionString))
 			{
-				using (var connection = new SqlConnection(_connectionString))
-				{
-					connection.Open();
-					using (var da = new SqlDataAdapter("Select * From [Stardust].JobDefinitions", connection))
-					{
-						using (var command = new SqlCommand("DELETE FROM [Stardust].JobDefinitions WHERE Id = @ID",
-						                                    connection))
-						{
-							var parameter = command.Parameters.Add("@ID", SqlDbType.UniqueIdentifier, 16, "Id");
-							parameter.Value = jobId;
+				SqlCommand deleteCommand = connection.CreateCommand();
+				deleteCommand.CommandText = "DELETE FROM[Stardust].JobDefinitions WHERE Id = @ID";
+				deleteCommand.Parameters.AddWithValue("@ID", jobId);
 
-							da.DeleteCommand = command;
-							da.DeleteCommand.ExecuteNonQuery();
-						}
+				try
+				{
+					connection.OpenWithRetry(_retryPolicy);
+
+					using (var tran = connection.BeginTransaction())
+					{
+						deleteCommand.Transaction = tran;
+						deleteCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+						tran.Commit();
 					}
+				}
+				catch (Exception exp)
+				{
+					this.Log().ErrorWithLineNumber(exp.Message, exp);
+				}
+				finally
+				{
 					connection.Close();
 				}
 			}
-			catch (Exception exp)
-			{
-				this.Log().ErrorWithLineNumber(exp.Message, exp);
-			}
 		}
-
-
+		
 		public void FreeJobIfNodeIsAssigned(string url)
 		{
-			runner(() => tryFreeJobIfNodeIsAssigned(url), "Unable to perform operation");
-		}
-
-		private void tryFreeJobIfNodeIsAssigned(string url)
-		{
-			try
+			using (var connection = new SqlConnection(_connectionString))
 			{
-				using (var connection = new SqlConnection(_connectionString))
-				{
-					connection.Open();
-					using (var da = new SqlDataAdapter("Select * From [Stardust].JobDefinitions",connection))
-					{
-						using (var command =
-							new SqlCommand("Update [Stardust].JobDefinitions Set AssignedNode = null where AssignedNode = @assingedNode",
-							               connection))
-						{
-							var parameter = command.Parameters.Add("@assingedNode", SqlDbType.NVarChar, 2000, "AssignedNode");
-							parameter.Value = url;
+				SqlCommand deleteCommand = connection.CreateCommand();
+				deleteCommand.CommandText = "Update [Stardust].JobDefinitions Set AssignedNode = null where AssignedNode = @assingedNode";
+				deleteCommand.Parameters.AddWithValue("@assingedNode", url);
 
-							da.UpdateCommand = command;
-							da.UpdateCommand.ExecuteNonQuery();
-						}
+				try
+				{
+					connection.OpenWithRetry(_retryPolicy);
+					using (var tran = connection.BeginTransaction())
+					{
+						deleteCommand.Transaction = tran;
+						deleteCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+						tran.Commit();
 					}
+				}
+				catch (Exception exp)
+				{
+					this.Log().ErrorWithLineNumber(exp.Message, exp);
+				}
+				finally
+				{
 					connection.Close();
 				}
 			}
-			catch (Exception exp)
-			{
-				this.Log().ErrorWithLineNumber(exp.Message, exp);
-			}
-
 		}
 
-		private async void TryCheckAndAssignNextJob(List<WorkerNode> availableNodes,
-		                                        IHttpSender httpSender)
+		public void CheckAndAssignNextJob(List<WorkerNode> availableNodes, IHttpSender httpSender)
+		{
+			runner(() => tryCheckAndAssignNextJob(availableNodes, httpSender), "Unable to perform operation");
+		}
+
+		private async void tryCheckAndAssignNextJob(List<WorkerNode> availableNodes,
+												IHttpSender httpSender)
 		{
 			if (!availableNodes.Any()) return;
+
 			try
 			{
 				using (var connection = new SqlConnection(_connectionString))
 				{
-					connection.Open();
+					connection.OpenWithRetry(_retryPolicy);
 					using (var tran = connection.BeginTransaction(IsolationLevel.Serializable))
 					{
 						using (
@@ -298,7 +231,7 @@ namespace Stardust.Manager
 									SelectCommand =
 									{
 										Transaction = tran,
-										CommandTimeout = 2
+										CommandTimeout = 10
 									}
 								})
 						{
@@ -312,7 +245,7 @@ namespace Stardust.Manager
 								{
 									Id = (Guid) jobRow["Id"],
 									Name = GetValue<string>(jobRow["Name"]),
-									Serialized = GetValue<string>(jobRow["Serialized"]).Replace(@"\",@""),
+									Serialized = GetValue<string>(jobRow["Serialized"]).Replace(@"\", @""),
 									Type = GetValue<string>(jobRow["Type"]),
 									CreatedBy = GetValue<string>(jobRow["UserName"])
 								};
@@ -322,10 +255,10 @@ namespace Stardust.Manager
 										"UPDATE [Stardust].JobDefinitions SET AssignedNode = @AssignedNode, Status = 'Started' WHERE Id = @Id",
 										connection);
 
-								var nodeParam = da.UpdateCommand.Parameters.Add("@AssignedNode",SqlDbType.NVarChar);
+								var nodeParam = da.UpdateCommand.Parameters.Add("@AssignedNode", SqlDbType.NVarChar);
 								nodeParam.SourceColumn = "AssignedNode";
 
-								var parameter = da.UpdateCommand.Parameters.Add("@Id",SqlDbType.UniqueIdentifier);
+								var parameter = da.UpdateCommand.Parameters.Add("@Id", SqlDbType.UniqueIdentifier);
 								parameter.SourceColumn = "Id";
 								parameter.Value = job.Id;
 
@@ -343,7 +276,7 @@ namespace Stardust.Manager
 										{
 											//save
 											nodeParam.Value = node.Url.ToString();
-											da.UpdateCommand.ExecuteNonQuery();
+											da.UpdateCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 
 											//update history
 											da.UpdateCommand =
@@ -360,7 +293,7 @@ namespace Stardust.Manager
 											da.UpdateCommand.Parameters[2].Value = node.Url.ToString();
 
 											da.UpdateCommand.Transaction = tran;
-											da.UpdateCommand.ExecuteNonQuery();
+											da.UpdateCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 
 											ReportProgress(job.Id, "Started", DateTime.Now);
 
@@ -371,30 +304,30 @@ namespace Stardust.Manager
 											//remove the job if badrequest
 											da.DeleteCommand = new SqlCommand("DELETE FROM [Stardust].JobDefinitions WHERE Id = @Id",
 											                                  connection);
-											var deleteParameter = da.DeleteCommand.Parameters.Add("@Id",SqlDbType.UniqueIdentifier);
+											var deleteParameter = da.DeleteCommand.Parameters.Add("@Id", SqlDbType.UniqueIdentifier);
 											deleteParameter.SourceColumn = "Id";
 											deleteParameter.Value = job.Id;
 
 											da.DeleteCommand.Transaction = tran;
-											da.DeleteCommand.ExecuteNonQuery();
+											da.DeleteCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 
 											//update history
 											da.UpdateCommand =
 												new SqlCommand("UPDATE [Stardust].JobHistory " +
 												               "SET Result = @Result, SentTo = @Node WHERE JobId = @Id",
 												               connection);
-											
+
 											da.UpdateCommand.Parameters.Add("@Id", SqlDbType.UniqueIdentifier, 16, "JobId");
 											da.UpdateCommand.Parameters[0].Value = job.Id;
 
-											da.UpdateCommand.Parameters.Add("@Result", SqlDbType.NVarChar, 200,"Result");
+											da.UpdateCommand.Parameters.Add("@Result", SqlDbType.NVarChar, 200, "Result");
 											da.UpdateCommand.Parameters[1].Value = "Removed because of bad request";
 
-											da.UpdateCommand.Parameters.Add("@Node",SqlDbType.NVarChar,2000,"SentTo");
+											da.UpdateCommand.Parameters.Add("@Node", SqlDbType.NVarChar, 2000, "SentTo");
 											da.UpdateCommand.Parameters[2].Value = node.Url.ToString();
 
 											da.UpdateCommand.Transaction = tran;
-											da.UpdateCommand.ExecuteNonQuery();
+											da.UpdateCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 
 											//insert into history detail.
 											if (response.ReasonPhrase != null)
@@ -410,24 +343,34 @@ namespace Stardust.Manager
 
 												da.InsertCommand = new SqlCommand(insertcommand, connection);
 
-												da.InsertCommand.Parameters.Add("@JobId",SqlDbType.UniqueIdentifier,16);
+												da.InsertCommand.Parameters.Add("@JobId", SqlDbType.UniqueIdentifier, 16);
 												da.InsertCommand.Parameters[0].Value = job.Id;
 
 
 												da.InsertCommand.Parameters.Add("@Detail",
-																				SqlDbType.NText);
+												                                SqlDbType.NText);
 												da.InsertCommand.Parameters[1].Value = response.ReasonPhrase;
 
-												da.InsertCommand.Parameters.Add("@Created",SqlDbType.DateTime,16);
+												da.InsertCommand.Parameters.Add("@Created", SqlDbType.DateTime, 16);
 												da.InsertCommand.Parameters[2].Value = DateTime.Now;
 
 												da.InsertCommand.Transaction = tran;
-												da.InsertCommand.ExecuteNonQuery();
+												da.InsertCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 											}
 
 										}
 									}
-
+									catch (SqlException exp)
+									{
+										if (exp.Number == -2) //Timeout
+										{
+											this.Log().InfoWithLineNumber(exp.Message);
+										}
+										else
+										{
+											this.Log().ErrorWithLineNumber(exp.Message, exp);
+										}
+									}
 									catch (Exception exp)
 									{
 										this.Log().ErrorWithLineNumber(exp.Message, exp);
@@ -440,10 +383,16 @@ namespace Stardust.Manager
 					}
 				}
 			}
-
 			catch (SqlException exp)
 			{
-				this.Log().ErrorWithLineNumber(exp.Message, exp);
+				if (exp.Number == -2) //Timeout
+				{
+					this.Log().InfoWithLineNumber(exp.Message);
+				}
+				else
+				{
+					this.Log().ErrorWithLineNumber(exp.Message, exp);
+				}
 			}
 
 			catch (Exception exp)
@@ -453,9 +402,9 @@ namespace Stardust.Manager
 		}
 
 
-		public void CheckAndAssignNextJob(List<WorkerNode> availableNodes,IHttpSender httpSender)
+		public void CancelThisJob(Guid jobId, IHttpSender httpSender)
 		{
-			runner(() => TryCheckAndAssignNextJob(availableNodes, httpSender), "Unable to perform operation");
+			runner(() => tryCancelThisJob(jobId, httpSender), "Unable to  cancel the job");
 		}
 
 		private async void tryCancelThisJob(Guid jobId, IHttpSender httpSender)
@@ -469,8 +418,8 @@ namespace Stardust.Manager
 
 					using (var da =
 						new SqlDataAdapter(string.Format("SELECT * From [Stardust].JobDefinitions  WITH (TABLOCKX) WHERE Id = '{0}'",
-						                                 jobId),
-						                   connection)
+														 jobId),
+										   connection)
 						{
 							SelectCommand =
 							{
@@ -488,10 +437,10 @@ namespace Stardust.Manager
 							if (string.IsNullOrEmpty(node))
 							{
 								da.DeleteCommand = new SqlCommand("DELETE FROM [Stardust].JobDefinitions WHERE Id = @Id",
-								                                  connection);
+																  connection);
 
 								var parameter = da.DeleteCommand.Parameters.Add("@Id",
-								                                                SqlDbType.UniqueIdentifier);
+																				SqlDbType.UniqueIdentifier);
 								parameter.SourceColumn = "Id";
 								parameter.Value = jobId;
 								da.DeleteCommand.Transaction = tran;
@@ -499,7 +448,7 @@ namespace Stardust.Manager
 
 								//update history
 								da.UpdateCommand = new SqlCommand("UPDATE [Stardust].JobHistory SET Result = @Result WHERE JobId = @Id",
-								                                  connection);
+																  connection);
 
 								da.UpdateCommand.Parameters.Add("@Id", SqlDbType.UniqueIdentifier, 16, "JobId");
 								da.UpdateCommand.Parameters[0].Value = jobId;
@@ -520,10 +469,10 @@ namespace Stardust.Manager
 								if (response != null && response.IsSuccessStatusCode)
 								{
 									da.UpdateCommand = new SqlCommand("UPDATE [Stardust].JobDefinitions SET Status = 'Canceling' WHERE Id = @Id",
-									                                  connection);
+																	  connection);
 
 									var parameter = da.UpdateCommand.Parameters.Add("@Id",
-									                                                SqlDbType.UniqueIdentifier);
+																					SqlDbType.UniqueIdentifier);
 									parameter.SourceColumn = "Id";
 									parameter.Value = jobId;
 
@@ -531,7 +480,7 @@ namespace Stardust.Manager
 									da.UpdateCommand.ExecuteNonQuery();
 
 									ReportProgress(jobId,
-									               "Canceling",
+												   "Canceling",
 												   DateTime.Now);
 								}
 							}
@@ -539,7 +488,7 @@ namespace Stardust.Manager
 						else
 						{
 							this.Log().WarningWithLineNumber("[MANAGER, " + Environment.MachineName +
-							                                   "] : Could not find job defintion for id : " + jobId);
+															   "] : Could not find job defintion for id : " + jobId);
 						}
 					}
 					tran.Commit();
@@ -551,11 +500,6 @@ namespace Stardust.Manager
 				this.Log().ErrorWithLineNumber(exp.Message, exp);
 			}
 
-		}
-
-		public void CancelThisJob(Guid jobId, IHttpSender httpSender)
-		{
-			runner(() => tryCancelThisJob(jobId, httpSender), "Unable to  cancel the job");
 		}
 
 		public void SetEndResultOnJob(Guid jobId, string result)
@@ -575,7 +519,7 @@ namespace Stardust.Manager
 					{
 						da.UpdateCommand =
 							new SqlCommand("UPDATE [Stardust].JobHistory SET Result = @Result, Ended = @Ended WHERE JobId = @Id",
-							               connection);
+										   connection);
 
 						da.UpdateCommand.Parameters.Add("@Id", SqlDbType.UniqueIdentifier, 16, "JobId");
 						da.UpdateCommand.Parameters[0].Value = jobId;
@@ -601,7 +545,7 @@ namespace Stardust.Manager
 
 		public void ReportProgress(Guid jobId, string detail, DateTime created)
 		{
-			runner(() => tryReportProgress(jobId, detail,created), "Unable to report progress on job");
+			runner(() => tryReportProgress(jobId, detail, created), "Unable to report progress on job");
 		}
 
 		private void tryReportProgress(Guid jobId, string detail, DateTime created)
@@ -613,7 +557,7 @@ namespace Stardust.Manager
 					connection.Open();
 
 					using (var da = new SqlDataAdapter("SELECT * From [Stardust].JobHistoryDetail",
-					                                   connection)
+													   connection)
 					{
 						InsertCommand =
 							new SqlCommand(
@@ -624,7 +568,7 @@ namespace Stardust.Manager
 						da.InsertCommand.Parameters.Add("@Id", SqlDbType.UniqueIdentifier, 16, "JobId");
 						da.InsertCommand.Parameters[0].Value = jobId;
 
-						da.InsertCommand.Parameters.Add("@Detail", SqlDbType.NText); 
+						da.InsertCommand.Parameters.Add("@Detail", SqlDbType.NText);
 						da.InsertCommand.Parameters[1].Value = detail;
 
 						da.InsertCommand.Parameters.Add("@Created", SqlDbType.DateTime);
@@ -789,7 +733,7 @@ namespace Stardust.Manager
 					};
 					command.Parameters.Add("@JobId", SqlDbType.UniqueIdentifier, 16, "JobId");
 					command.Parameters[0].Value = jobId;
-				
+
 					connection.Open();
 
 					using (var reader = command.ExecuteReader())
@@ -800,8 +744,8 @@ namespace Stardust.Manager
 							{
 								var detail = new JobHistoryDetail
 								{
-									Created = (DateTime) reader.GetValue(reader.GetOrdinal("Created")),
-									Detail = (string) reader.GetValue(reader.GetOrdinal("Detail"))
+									Created = (DateTime)reader.GetValue(reader.GetOrdinal("Created")),
+									Detail = (string)reader.GetValue(reader.GetOrdinal("Detail"))
 								};
 								returnList.Add(detail);
 							}
@@ -825,7 +769,7 @@ namespace Stardust.Manager
 		{
 			return value == DBNull.Value
 				? null
-				: (string) value;
+				: (string)value;
 		}
 
 		private JobHistory NewJobHistoryModel(SqlDataReader reader)
@@ -834,12 +778,12 @@ namespace Stardust.Manager
 			{
 				var jobHist = new JobHistory
 				{
-					Id = (Guid) reader.GetValue(reader.GetOrdinal("JobId")),
-					Name = (string) reader.GetValue(reader.GetOrdinal("Name")),
-					CreatedBy = (string) reader.GetValue(reader.GetOrdinal("CreatedBy")),
+					Id = (Guid)reader.GetValue(reader.GetOrdinal("JobId")),
+					Name = (string)reader.GetValue(reader.GetOrdinal("Name")),
+					CreatedBy = (string)reader.GetValue(reader.GetOrdinal("CreatedBy")),
 					SentTo = GetValue<string>(reader.GetValue(reader.GetOrdinal("SentTo"))),
 					Result = GetValue<string>(reader.GetValue(reader.GetOrdinal("Result"))),
-					Created = (DateTime) reader.GetValue(reader.GetOrdinal("Created")),
+					Created = (DateTime)reader.GetValue(reader.GetOrdinal("Created")),
 					Started = GetDateTime(reader.GetValue(reader.GetOrdinal("Started"))),
 					Ended = GetDateTime(reader.GetValue(reader.GetOrdinal("Ended")))
 				};
@@ -876,7 +820,7 @@ namespace Stardust.Manager
 			if (databaseValue.Equals(DBNull.Value))
 				return null;
 
-			return (DateTime) databaseValue;
+			return (DateTime)databaseValue;
 		}
 	}
 }
