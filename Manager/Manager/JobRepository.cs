@@ -402,18 +402,13 @@ namespace Stardust.Manager
 		}
 
 
-		public void CancelThisJob(Guid jobId, IHttpSender httpSender)
-		{
-			runner(() => tryCancelThisJob(jobId, httpSender), "Unable to  cancel the job");
-		}
-
-		private async void tryCancelThisJob(Guid jobId, IHttpSender httpSender)
+		public async void CancelThisJob(Guid jobId, IHttpSender httpSender)
 		{
 			try
 			{
 				using (var connection = new SqlConnection(_connectionString))
 				{
-					connection.Open();
+					connection.OpenWithRetry(_retryPolicy);
 					var tran = connection.BeginTransaction(IsolationLevel.Serializable);
 
 					using (var da =
@@ -444,7 +439,7 @@ namespace Stardust.Manager
 								parameter.SourceColumn = "Id";
 								parameter.Value = jobId;
 								da.DeleteCommand.Transaction = tran;
-								da.DeleteCommand.ExecuteNonQuery();
+								da.DeleteCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 
 								//update history
 								da.UpdateCommand = new SqlCommand("UPDATE [Stardust].JobHistory SET Result = @Result WHERE JobId = @Id",
@@ -457,7 +452,7 @@ namespace Stardust.Manager
 								da.UpdateCommand.Parameters[1].Value = "Deleted";
 
 								da.UpdateCommand.Transaction = tran;
-								da.UpdateCommand.ExecuteNonQuery();
+								da.UpdateCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 							}
 							else
 							{
@@ -477,7 +472,7 @@ namespace Stardust.Manager
 									parameter.Value = jobId;
 
 									da.UpdateCommand.Transaction = tran;
-									da.UpdateCommand.ExecuteNonQuery();
+									da.UpdateCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 
 									ReportProgress(jobId,
 												   "Canceling",
@@ -504,84 +499,64 @@ namespace Stardust.Manager
 
 		public void SetEndResultOnJob(Guid jobId, string result)
 		{
-			runner(() => trySetEndResultOnJob(jobId, result), "Unable to set end result on the job");
-		}
-
-		private void trySetEndResultOnJob(Guid jobId, string result)
-		{
-			try
+			using (var connection = new SqlConnection(_connectionString))
 			{
-				using (var connection = new SqlConnection(_connectionString))
+				SqlCommand command = connection.CreateCommand();
+				command.CommandText = "UPDATE [Stardust].JobHistory SET Result = @Result, Ended = @Ended WHERE JobId = @Id";
+				command.Parameters.AddWithValue("@Id", jobId);
+				command.Parameters.AddWithValue("@Result", result);
+				command.Parameters.AddWithValue("@Ended", DateTime.Now);
+
+				try
 				{
-					connection.Open();
-
-					using (var da = new SqlDataAdapter("SELECT * From [Stardust].JobHistory", connection))
+					connection.OpenWithRetry(_retryPolicy);
+					using (var tran = connection.BeginTransaction())
 					{
-						da.UpdateCommand =
-							new SqlCommand("UPDATE [Stardust].JobHistory SET Result = @Result, Ended = @Ended WHERE JobId = @Id",
-										   connection);
-
-						da.UpdateCommand.Parameters.Add("@Id", SqlDbType.UniqueIdentifier, 16, "JobId");
-						da.UpdateCommand.Parameters[0].Value = jobId;
-
-						da.UpdateCommand.Parameters.Add("@Ended", SqlDbType.DateTime, 16, "Ended");
-						da.UpdateCommand.Parameters[1].Value = DateTime.UtcNow;
-
-						da.UpdateCommand.Parameters.Add("@Result", SqlDbType.NVarChar, 2000, "Result");
-						da.UpdateCommand.Parameters[2].Value = result;
-
-						da.UpdateCommand.ExecuteNonQuery();
+						command.Transaction = tran;
+						command.ExecuteNonQueryWithRetry(_retryPolicy);
+						ReportProgress(jobId, result, DateTime.Now);
+						tran.Commit();
 					}
-
+				}
+				catch (Exception exp)
+				{
+					this.Log().ErrorWithLineNumber(exp.Message, exp);
+				}
+				finally
+				{
 					connection.Close();
-					ReportProgress(jobId, result, DateTime.Now);
 				}
 			}
-			catch (Exception exp)
-			{
-				this.Log().ErrorWithLineNumber(exp.Message, exp);
-			}
 		}
-
+		
 		public void ReportProgress(Guid jobId, string detail, DateTime created)
 		{
-			runner(() => tryReportProgress(jobId, detail, created), "Unable to report progress on job");
-		}
-
-		private void tryReportProgress(Guid jobId, string detail, DateTime created)
-		{
-			try
+			using (var connection = new SqlConnection(_connectionString))
 			{
-				using (var connection = new SqlConnection(_connectionString))
+				SqlCommand command = connection.CreateCommand();
+				command.CommandText = "INSERT INTO [Stardust].JobHistoryDetail (JobId, Detail, Created) VALUES (@Id, @Detail, @Created)";
+				command.Parameters.AddWithValue("@Id", jobId);
+				command.Parameters.AddWithValue("@Detail", detail);
+				command.Parameters.AddWithValue("@Created", created);
+
+				try
 				{
-					connection.Open();
-
-					using (var da = new SqlDataAdapter("SELECT * From [Stardust].JobHistoryDetail",
-													   connection)
+					connection.OpenWithRetry(_retryPolicy);
+					using (var tran = connection.BeginTransaction())
 					{
-						InsertCommand =
-							new SqlCommand(
-								"INSERT INTO [Stardust].JobHistoryDetail (JobId, Detail, Created) VALUES (@Id, @Detail, @Created)",
-								connection)
-					})
-					{
-						da.InsertCommand.Parameters.Add("@Id", SqlDbType.UniqueIdentifier, 16, "JobId");
-						da.InsertCommand.Parameters[0].Value = jobId;
-
-						da.InsertCommand.Parameters.Add("@Detail", SqlDbType.NText);
-						da.InsertCommand.Parameters[1].Value = detail;
-
-						da.InsertCommand.Parameters.Add("@Created", SqlDbType.DateTime);
-						da.InsertCommand.Parameters[2].Value = created;
-
-						da.InsertCommand.ExecuteNonQuery();
+						command.Transaction = tran;
+						command.ExecuteNonQueryWithRetry(_retryPolicy);
+						tran.Commit();
 					}
+				}
+				catch (Exception exp)
+				{
+					this.Log().ErrorWithLineNumber(exp.Message, exp);
+				}
+				finally
+				{
 					connection.Close();
 				}
-			}
-			catch (Exception exp)
-			{
-				this.Log().ErrorWithLineNumber(exp.Message, exp);
 			}
 		}
 
