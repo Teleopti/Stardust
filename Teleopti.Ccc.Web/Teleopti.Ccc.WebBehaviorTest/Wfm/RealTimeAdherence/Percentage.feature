@@ -34,9 +34,9 @@ Scenario: See adherence percentage from agent state overview
 	| Name            | Adhering |
 	| Alarm Color     | Green    |
 	| Staffing effect | 0        |
-	When the time is '2014-10-06 08:00:00'
+	When the time is '2014-10-06 08:00:01'
 	And 'Pierre Baldi' sets his phone state to 'Ready'
-	And the time is '2014-10-06 09:00:00'
+	And the time is '2014-10-06 09:00:01'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	And the time is '2014-10-06 12:00:00'
 	And I view real time adherence for all agents on team 'Red'
