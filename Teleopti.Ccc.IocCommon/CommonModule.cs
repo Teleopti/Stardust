@@ -18,15 +18,11 @@ namespace Teleopti.Ccc.IocCommon
 
 		public static CommonModule ForTest(IToggleManager toggleManager)
 		{
-			return new CommonModule(
-				new IocConfiguration(
-					new IocArgs(new ConfigReader())
-					{
-						DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest()
-					},
-					toggleManager
-					)
-				);
+			var iocArgs = new IocArgs(new ConfigReader())
+			{
+				DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest()
+			};
+			return new CommonModule(new IocConfiguration(iocArgs, toggleManager));
 		}
 
 		public CommonModule(IIocConfiguration configuration)
