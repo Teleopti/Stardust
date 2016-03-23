@@ -1,3 +1,4 @@
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
@@ -25,7 +26,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                                             DisplayColor = new ColorDto(entity.DisplayColor),
                                             SkillType = entity.SkillType.Description.Name,
                                             Activity = _activityAssembler.DomainEntityToDto(entity.Activity),
-                                            Id = entity.Id
+                                            Id = entity.Id,
+											WorkloadIdCollection = entity.WorkloadCollection.Select(w => w.Id.GetValueOrDefault()).ToArray()
                                         };
             return skillDto;
         }

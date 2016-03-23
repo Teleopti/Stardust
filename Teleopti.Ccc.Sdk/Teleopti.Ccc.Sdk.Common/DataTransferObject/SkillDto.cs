@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
@@ -49,5 +51,11 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         /// <value>The activity.</value>
         [DataMember]
         public ActivityDto Activity { get; set; }
+
+		/// <summary>
+		/// A collection of id's for workloads belonging to the Skill.
+		/// </summary>
+		[DataMember(IsRequired = false,Order = 1)]
+	    public ICollection<Guid> WorkloadIdCollection { get; set; }
     }
 }
