@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 		{
 			if (_treeloaded) return;
 			var appFunction =
-				ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
+				ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions,
 				                               DefinedRaptorApplicationFunctionPaths.OpenSchedulePage);
 			_personSelectorPresenter.ApplicationFunction = appFunction;
 			_personSelectorPresenter.ShowPersons = true;

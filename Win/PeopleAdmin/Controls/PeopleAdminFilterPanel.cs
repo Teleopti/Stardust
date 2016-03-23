@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
         private readonly PeopleWorksheet _parentControl;
         private readonly FilteredPeopleHolder _filteredPeopleHolder;
         private readonly IApplicationFunction _myApplicationFunction =
-            ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
+            ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions,
                    DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage);
 
         private readonly IPersonSelectorPresenter _personSelectorPresenter;

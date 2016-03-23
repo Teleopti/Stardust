@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Security
         [SetUp]
         public void Setup()
         {
-            _definedApplicationFunctions = CloneDefinedApplicationFunctions(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList);
+            _definedApplicationFunctions = CloneDefinedApplicationFunctions(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions);
             _databaseApplicationFunctions = CloneDefinedApplicationFunctions(_definedApplicationFunctions);
             _applicationRoles = ApplicationRoleFactory.CreateShippedRoles(out _adminRole, out _agentRole, out _unitRole, out _siteRole, out _teamRole);
 

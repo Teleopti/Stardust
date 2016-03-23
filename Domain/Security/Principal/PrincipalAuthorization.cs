@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IdentityModel.Claims;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Specification;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
@@ -21,8 +23,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		public static IPrincipalAuthorization Instance()
 		{
-			return _principalAuthorization ??
-			       (_principalAuthorization = new PrincipalAuthorization(new CurrentTeleoptiPrincipal()));
+			return _principalAuthorization ?? (_principalAuthorization = new PrincipalAuthorization(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext())));
 		}
 
 		public static void SetInstance(IPrincipalAuthorization principalAuthorization)
@@ -32,23 +33,20 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, IPerson person)
         {
-            return CheckPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, person));
+            return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, person));
         }
 
-		private bool CheckPermitted(string functionPath, Func<IAuthorizeAvailableData, bool> availableDataCheck)
+		private bool checkPermitted(string functionPath, Func<IAuthorizeAvailableData, bool> availableDataCheck)
 		{
 			var teleoptiPrincipal = _teleoptiPrincipal.Current();
 			if (teleoptiPrincipal == null) return false;
-			var claimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/",
-				functionPath);
-			var dataClaimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
-				"/AvailableData");
+			var claimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/", functionPath);
+			var dataClaimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/AvailableData");
 			foreach (var claimSet in teleoptiPrincipal.ClaimSets)
 			{
 				if (claimSet.FindClaims(claimType, Rights.PossessProperty).Any())
 				{
-					var availableData =
-						claimSet.FindClaims(dataClaimType, Rights.PossessProperty);
+					var availableData = claimSet.FindClaims(dataClaimType, Rights.PossessProperty);
 					foreach (var claim in availableData)
 					{
 						var authorizeAvailableData = claim.Resource as IAuthorizeAvailableData;
@@ -68,27 +66,27 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
 		{
 			var organisation = (IOrganisationMembershipWithId) _teleoptiPrincipal.Current().Organisation;
-			return CheckPermitted(functionPath, a => a.Check(organisation, dateOnly, authorizeOrganisationDetail));
+			return checkPermitted(functionPath, a => a.Check(organisation, dateOnly, authorizeOrganisationDetail));
 		}
 
         public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeam team)
         {
-            return CheckPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, team));
+            return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, team));
         }
 
         public bool IsPermitted(string functionPath, DateOnly dateOnly, ISite site)
         {
-            return CheckPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, site));
+            return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, site));
         }
 
         public bool IsPermitted(string functionPath, DateOnly dateOnly, IBusinessUnit businessUnit)
         {
-            return CheckPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, businessUnit));
+            return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, businessUnit));
         }
 
         public bool IsPermitted(string functionPath)
         {
-            return CheckPermitted(functionPath, a => true); //Ignoring available data!
+			return checkPermitted(functionPath, a => true); //Ignoring available data!
         }
 		
 		public IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person)

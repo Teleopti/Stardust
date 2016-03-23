@@ -1,4 +1,5 @@
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public static ICurrentBusinessUnit Make()
 		{
-			var identity = new CurrentIdentity(new CurrentTeleoptiPrincipal());
+			var identity = new CurrentIdentity(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()));
 			return new CurrentBusinessUnit(identity, new NoBusinessUnitForRequest());
 		}
 

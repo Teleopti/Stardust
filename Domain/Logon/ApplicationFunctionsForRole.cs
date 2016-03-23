@@ -52,8 +52,7 @@ namespace Teleopti.Ccc.Domain.Logon
 					if (((IDeleteTag)applicationFunction).IsDeleted) continue;
 					if (applicationFunction.ForeignSource == DefinedForeignSourceNames.SourceRaptor)
 					{
-						var function = ApplicationFunction.FindByPath(licensedFunctions,
-							applicationFunction.FunctionPath);
+						var function = ApplicationFunction.FindByPath(licensedFunctions, applicationFunction.FunctionPath);
 						if (function != null)
 						{
 							applicationFunction.IsPreliminary = function.IsPreliminary;

@@ -9,14 +9,14 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		private readonly ICurrentHttpContext _httpContext;
 		private readonly WebRequestPrincipalContext _web;
 		private readonly WindowsAppDomainPrincipalContext _appDomain;
-		private readonly ThreadPrincipalContext _thread;
+		private readonly IThreadPrincipalContext _thread;
 		private readonly CurrentProcess _currentProcess;
 
 		public SelectivePrincipalContext(
 			ICurrentHttpContext httpContext,
 			WebRequestPrincipalContext web,
 			WindowsAppDomainPrincipalContext appDomain,
-			ThreadPrincipalContext thread,
+			IThreadPrincipalContext thread,
 			CurrentProcess currentProcess
 			)
 		{
@@ -31,12 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		{
 			selectContext().SetCurrentPrincipal(principal);
 		}
-
-		public void ResetPrincipal()
-		{
-			selectContext().ResetPrincipal();
-		}
-
+		
 		private ICurrentPrincipalContext selectContext()
 		{
 			if (_httpContext.Current() != null)

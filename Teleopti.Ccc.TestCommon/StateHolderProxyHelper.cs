@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.TestCommon
     {
 		public static WindowsAppDomainPrincipalContext DefaultPrincipalContext { get; set; }
 
-		static StateHolderProxyHelper() { DefaultPrincipalContext = new WindowsAppDomainPrincipalContext(); }
+		static StateHolderProxyHelper() { DefaultPrincipalContext = new WindowsAppDomainPrincipalContext(new ThreadPrincipalContext(), new ThreadPrincipalContext()); }
 
 		public static void SetupFakeState(
 			IDataSource dataSource, 
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static void Logout(ICurrentPrincipalContext principalContext)
 		{
-			principalContext.ResetPrincipal();
+			principalContext.SetCurrentPrincipal(null);
 			PrincipalAuthorization.SetInstance(null);
 	    }
 
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.TestCommon
 
 	    public static void ClearAndSetStateHolder(MockRepository mocks, IPerson loggedOnPerson, IBusinessUnit businessUnit, IApplicationData appData, IDataSource logonDataSource, IState stateMock)
 	    {
-		    var principalContext = new WindowsAppDomainPrincipalContext();
+		    var principalContext = new WindowsAppDomainPrincipalContext(new ThreadPrincipalContext(), new ThreadPrincipalContext());
 		    var principal = new TeleoptiPrincipalFactory().MakePrincipal(loggedOnPerson, logonDataSource, businessUnit, null);
 		    principalContext.SetCurrentPrincipal(principal);
 
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.TestCommon
 			IBusinessUnit businessUnit
 			)
 		{
-			CreateSessionData(loggedOnPerson, dataSource, businessUnit, new WindowsAppDomainPrincipalContext());
+			CreateSessionData(loggedOnPerson, dataSource, businessUnit, new WindowsAppDomainPrincipalContext(new ThreadPrincipalContext(), new ThreadPrincipalContext()));
 		}
 
 		public static void CreateSessionData(

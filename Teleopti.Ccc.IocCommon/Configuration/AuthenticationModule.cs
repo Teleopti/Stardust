@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LogOnOff>().As<ILogOnOff>().SingleInstance();
 			builder.RegisterType<WindowsAppDomainPrincipalContext>().SingleInstance();
 			builder.RegisterType<WebRequestPrincipalContext>().SingleInstance();
-			builder.RegisterType<ThreadPrincipalContext>().SingleInstance();
+			builder.RegisterType<ThreadPrincipalContext>().As<IThreadPrincipalContext>().SingleInstance();
 			builder.RegisterType<SelectivePrincipalContext>().As<ICurrentPrincipalContext>().SingleInstance();
 			builder.RegisterType<CurrentProcess>().SingleInstance();
 			builder.RegisterType<TokenIdentityProvider>().As<ITokenIdentityProvider>().SingleInstance();

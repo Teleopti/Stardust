@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 			var repositoryFactory = new RepositoryFactory();
 
 			var unitOfWorkFactory = dataSource.Application;
-			var logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(), new TeleoptiPrincipalFactory(), new TokenIdentityProvider(new CurrentHttpContext()));
+			var logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()), new ThreadPrincipalContext()), new TeleoptiPrincipalFactory(), new TokenIdentityProvider(new CurrentHttpContext()));
 			var user = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(unitOfWorkFactory, SystemUser.Id);
 			
 			logOnOff.LogOn(dataSource, user, businessUnit);
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 	{
 		public IEnumerable<IApplicationFunction> LicensedFunctions(string tenantName)
 		{
-			return new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList;
+			return new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions;
 		}
 	}
 }

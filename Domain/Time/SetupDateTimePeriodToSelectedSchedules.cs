@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Time
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Time
             if (isOneScheduleDayWithMainShiftProjection(scheduleDays))
             {
                 ISetupDateTimePeriod setupDateTimePeriodToDefaultLocalHours =
-                    new SetupDateTimePeriodDefaultLocalHoursForActivities(scheduleDays[0], new CurrentTeleoptiPrincipal());
+                    new SetupDateTimePeriodDefaultLocalHoursForActivities(scheduleDays[0], new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()));
 
                 SetupDateTimePeriodToSelectedSchedule setupDateTimePeriodToSelectedSchedule =
                     new SetupDateTimePeriodToSelectedSchedule(scheduleDays[0], setupDateTimePeriodToDefaultLocalHours);

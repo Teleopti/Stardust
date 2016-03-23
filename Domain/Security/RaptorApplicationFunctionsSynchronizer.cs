@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.Domain.Security
         /// <returns></returns>
         protected virtual IList<IApplicationFunction> LoadDefinedRaptorApplicationFunctions()
         {
-            return new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList.ToList();
+            return new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions.ToList();
         }
 
         /// <summary>

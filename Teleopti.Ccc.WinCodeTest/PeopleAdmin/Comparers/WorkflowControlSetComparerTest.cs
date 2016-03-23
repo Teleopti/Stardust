@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Comparers;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 		public void Setup()
 		{
 			_target = new WorkflowControlSetComparer();
-			_principalAuthorization = new PrincipalAuthorization(new CurrentTeleoptiPrincipal());
+			_principalAuthorization = new PrincipalAuthorization(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()));
 		}
 
 		[Test]

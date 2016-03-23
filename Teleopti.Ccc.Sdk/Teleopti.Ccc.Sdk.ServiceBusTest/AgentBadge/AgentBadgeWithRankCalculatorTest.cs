@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_now = MockRepository.GenerateMock<INow>();
 
 			appFunctionFactory = MockRepository.GenerateMock<IDefinedRaptorApplicationFunctionFactory>();
-			appFunctionFactory.Stub(x => x.ApplicationFunctionList).Return(new List<IApplicationFunction>
+			appFunctionFactory.Stub(x => x.ApplicationFunctions).Return(new List<IApplicationFunction>
 			{
 				badgeFunction
 			});

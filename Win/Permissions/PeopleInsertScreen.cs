@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Win.Permissions
         private readonly IComponentContext _container;
 
         private readonly IApplicationFunction _myApplicationFunction =
-            ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
+            ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions,
                 DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage);
 
         private IPersonSelectorPresenter _personSelectorPresenter;

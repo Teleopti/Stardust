@@ -18,6 +18,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
@@ -146,7 +147,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		private void fakePrincipal(ISystem system)
 		{
-			var principal = new FakeCurrentTeleoptiPrincipal();
+			var context = new FakeThreadPrincipalContext();
 			var signedIn = QueryAllAttributes<LoggedOffAttribute>().IsEmpty();
 			if (signedIn)
 			{
@@ -160,9 +161,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 					person.PermissionInformation.SetUICulture(CultureInfoFactory.CreateEnglishCulture());
 					thePrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("Fake Login", null, null, null, null), person);
 				}
-				principal.Fake(thePrincipal);
+				context.SetCurrentPrincipal(thePrincipal);
 			}
-			system.UseTestDouble(principal).For<ICurrentTeleoptiPrincipal, ICurrentPrincipalContext>();
+			system.UseTestDouble(context).For<IThreadPrincipalContext>();
 		}
 
 	}

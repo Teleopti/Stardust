@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
         private CommandProvider _target;
         private IPersonSelectorView _view;
         private readonly IApplicationFunction _myApplicationFunction =
-            ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
+            ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions,
                                            DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage);
 
 

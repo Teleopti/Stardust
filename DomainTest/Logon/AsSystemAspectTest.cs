@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Logon;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -116,13 +120,13 @@ namespace Teleopti.Ccc.DomainTest.Logon
 			TheService.Do(new Input { LogOnDatasource = "tenant", LogOnBusinessUnitId = businessUnid },
 				() =>
 				{
-					permitted = ApplicationFunctions.ApplicationFunctionList
+					permitted = ApplicationFunctions.ApplicationFunctions
 						.Select(f => f.FunctionPath)
 						.Where(f => PrincipalAuthorization.IsPermitted(f))
 						.ToArray();
 				});
 
-			permitted.Should().Have.SameValuesAs(ApplicationFunctions.ApplicationFunctionList.Select(x => x.FunctionPath));
+			permitted.Should().Have.SameValuesAs(ApplicationFunctions.ApplicationFunctions.Select(x => x.FunctionPath));
 		}
 
 		[Test, Ignore("todo")]

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
+namespace Teleopti.Ccc.TestCommon
 {
 	public static class ExceptionExtensions
 	{

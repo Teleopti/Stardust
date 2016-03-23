@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         /// </remarks>
         public static IList<IApplicationFunction> CreateApplicationFunctionStructure()
         {
-            IApplicationFunction raptorRoot = ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenRaptorApplication);
+            IApplicationFunction raptorRoot = ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.OpenRaptorApplication);
             IApplicationFunction level1Item1 = CreateApplicationFunction("LEVEL1ITEM1", raptorRoot);
             IApplicationFunction level1Item2 = CreateApplicationFunction("LEVEL1ITEM2", raptorRoot);
             IApplicationFunction level2Item1 = CreateApplicationFunction("LEVEL2ITEM1", level1Item1);

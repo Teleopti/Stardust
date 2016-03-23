@@ -13,12 +13,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			var applicationFunctionRepository = new ApplicationFunctionRepository(currentUnitOfWork);
-			applicationFunctionRepository.AddRange(definedRaptorApplicationFunctionFactory.ApplicationFunctionList);
+			applicationFunctionRepository.AddRange(definedRaptorApplicationFunctionFactory.ApplicationFunctions);
 		}
 
 		public int HashValue()
 		{
-			return definedRaptorApplicationFunctionFactory.ApplicationFunctionList
+			return definedRaptorApplicationFunctionFactory.ApplicationFunctions
 				.Aggregate(123, (current, applicationFunction) => current ^ applicationFunction.FunctionCode.GetHashCode());
 		}
 	}

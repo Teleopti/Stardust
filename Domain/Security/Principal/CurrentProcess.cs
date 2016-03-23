@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics;
 
-namespace Teleopti.Ccc.Infrastructure.Foundation
+namespace Teleopti.Ccc.Domain.Security.Principal
 {
 	public class CurrentProcess
 	{

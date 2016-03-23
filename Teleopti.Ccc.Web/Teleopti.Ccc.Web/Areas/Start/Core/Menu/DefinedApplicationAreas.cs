@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Menu
 		private static string GetMenuText(string applicationFunctionPath)
 		{
 			var factory = new DefinedRaptorApplicationFunctionFactory();
-			var rawResourceKey = ApplicationFunction.FindByPath(factory.ApplicationFunctionList, applicationFunctionPath).FunctionDescription;
+			var rawResourceKey = ApplicationFunction.FindByPath(factory.ApplicationFunctions, applicationFunctionPath).FunctionDescription;
 
 			return Resources.ResourceManager.GetString(rawResourceKey.Replace("xx", string.Empty));
 		}

@@ -27,15 +27,16 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			_httpContextBase = MockRepository.GenerateStub<HttpContextBase>();
 		    _setThreadCulture = MockRepository.GenerateMock<ISetThreadCulture>();
 			_teleoptiPrincipal = new TeleoptiPrincipal(new GenericIdentity("MyName"), person);
-			
-	    	_requestContextInitializer = new RequestContextInitializer(
-	    		new TestSessionPrincipalFactory(_teleoptiPrincipal),
-	    		_setThreadCulture,
-	    		new WebRequestPrincipalContext(
-					new FakeCurrentHttpContext(_httpContextBase)
-	    			)
-	    		);
-		}
+
+		    _requestContextInitializer = new RequestContextInitializer(
+			    new TestSessionPrincipalFactory(_teleoptiPrincipal),
+				    _setThreadCulture,
+				    new WebRequestPrincipalContext(
+					    new FakeCurrentHttpContext(_httpContextBase),
+						    new ThreadPrincipalContext()
+					    )
+			    );
+	    }
 
 		[Test]
 		public void ShouldAttachPrincipalToCurrentContext()

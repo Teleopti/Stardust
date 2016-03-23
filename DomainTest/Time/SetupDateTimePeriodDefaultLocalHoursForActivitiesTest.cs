@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             }
             using (_mockRepository.Playback())
             {
-                _target = new SetupDateTimePeriodDefaultLocalHoursForActivities(_scheduleDay, new CurrentTeleoptiPrincipal());
+                _target = new SetupDateTimePeriodDefaultLocalHoursForActivities(_scheduleDay, new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()));
                 var expect = new DateTimePeriod(expectedStartTime, expectedEndTime);
                 Assert.AreEqual(expect, _target.Period);
             }
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             }
             using (_mockRepository.Playback())
             {
-                _target = new SetupDateTimePeriodDefaultLocalHoursForActivities(_scheduleDay, new CurrentTeleoptiPrincipal(), dateTimePeriod);
+                _target = new SetupDateTimePeriodDefaultLocalHoursForActivities(_scheduleDay, new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()), dateTimePeriod);
                 var expect = new DateTimePeriod(expectedStartTime, expectedEndTime);
                 Assert.AreEqual(expect, _target.Period);
             }

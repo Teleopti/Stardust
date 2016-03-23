@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages;
 
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public static IEventInfrastructureInfoPopulator Make()
 		{
-			var identity = new CurrentIdentity(new CurrentTeleoptiPrincipal());
+			var identity = new CurrentIdentity(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()));
 			return new EventInfrastructureInfoPopulator(
 				CurrentBusinessUnit.Make(),
 				new CurrentDataSource(identity, new DataSourceState()),

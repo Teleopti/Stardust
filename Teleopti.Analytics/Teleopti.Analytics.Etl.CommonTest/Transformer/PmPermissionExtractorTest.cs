@@ -26,7 +26,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
             _mocks = new MockRepository();
             _licensedFunctionsProvider = _mocks.StrictMock<ILicensedFunctionsProvider>();
             _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
-            _applicationFunctionList = new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList;
+            _applicationFunctionList = new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions;
             _target = new PmPermissionExtractor(_licensedFunctionsProvider);
         }
 

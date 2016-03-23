@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Win.Reporting
 
 			reportAgentSelector1.ComponentContext = _componentContext;
 			reportAgentSelector1.ReportApplicationFunction =
-				ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
+				ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions,
 											   DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport);
             reportAgentSelector1.OpenDialog += reportAgentSelector1BeforeDialog;
         }

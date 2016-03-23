@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Win.Intraday
         {
             get
             {
-                return ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
+                return ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions,
                 DefinedRaptorApplicationFunctionPaths.OpenIntradayPage);
             }
         }

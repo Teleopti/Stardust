@@ -143,7 +143,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			// we really shouldnt inject this, but if we do, maybe its better its correct...
 			system.UseTestDouble(toggleManager).For<IToggleManager>();
 
+			// Test helpers
 			system.AddService(this);
+			system.AddService<ConcurrencyRunner>();
 
 			Setup(system, configuration);
 			if (_fixture is ISetup)

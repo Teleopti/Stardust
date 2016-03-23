@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -122,7 +123,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				if (ValidateUserLoggedOn)
 				{
-					var identity = new CurrentIdentity(new CurrentTeleoptiPrincipal()).Current();
+					var identity = new CurrentIdentity(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext())).Current();
 					var loggedIn = identity != null && identity.IsAuthenticated;
 					if (!loggedIn)
 						throw new PermissionException("This repository is not available for non logged on users");

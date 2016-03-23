@@ -198,8 +198,6 @@
     <Compile Include="Foundation\CouldNotCreateTransactionExceptionTest.cs" />
     <Compile Include="Foundation\BusinessUnitForRequestTest.cs" />
     <Compile Include="Licensing\SetLicenseActivatorTest.cs" />
-    <Compile Include="ConcurrencyRunner.cs" />
-    <Compile Include="MessageBroker\ExceptionExtensions.cs" />
     <Compile Include="MessageBroker\MailboxConcurrencyTest.cs" />
     <Compile Include="MessageBroker\MessageBrokerUnitOfWorkTest.cs" />
     <Compile Include="MessageBroker\MailboxRepositoryTest.cs" />

@@ -4456,7 +4456,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						SchedulerState.FilteredPersonDictionary,
 						_container,
 						ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory()
-							.ApplicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenSchedulePage),
+							.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.OpenSchedulePage),
 						string.Empty,
 						permittedPersons, true);
 			}
@@ -6282,7 +6282,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				var reportDetail =
 					ReportHandler.CreateReportDetail(
-						ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
+						ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions,
 							DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport));
 				ReportHandler.ShowReport(reportDetail, _scheduleView, SchedulerState.RequestedScenario, CultureInfo.CurrentCulture);
 			}

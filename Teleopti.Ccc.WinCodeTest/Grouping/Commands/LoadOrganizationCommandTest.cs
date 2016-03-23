@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
         private LoadOrganizationCommand _target;
         private ICommonNameDescriptionSetting _commonNameSetting;
         private readonly IApplicationFunction _myApplicationFunction =
-            ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
+            ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions,
                                            DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage);
         private IUnitOfWork _unitOfWork;
 

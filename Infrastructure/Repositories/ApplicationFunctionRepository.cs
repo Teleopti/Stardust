@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			if (applicationFunction.ForeignSource == DefinedForeignSourceNames.SourceRaptor)
 			{
 				IApplicationFunction raptorCounterpart =
-					ApplicationFunction.FindByForeignId(_definedRaptorApplicationFunctionFactory.ApplicationFunctionList,
+					ApplicationFunction.FindByForeignId(_definedRaptorApplicationFunctionFactory.ApplicationFunctions,
 														DefinedForeignSourceNames.SourceRaptor,
 														applicationFunction.ForeignId);
 

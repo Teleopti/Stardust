@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 
 			using(mocks.Record())
 			{
-				Expect.Call(defRaptorAppFactory.ApplicationFunctionList).Return(new List<IApplicationFunction>());
+				Expect.Call(defRaptorAppFactory.ApplicationFunctions).Return(new List<IApplicationFunction>());
 			}
 			using(mocks.Playback())
 			{
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			var result = target.LicensedFunctions("for test");
 
 			var baseLicensedApplicationFunctions = 0;
-			var applicationFunctions = functionFactory.ApplicationFunctionList.ToList();
+			var applicationFunctions = functionFactory.ApplicationFunctions.ToList();
 
 			foreach (var enabledLicenseOption in LicenseSchema.GetActiveLicenseSchema("for test").EnabledLicenseOptions)
 			{

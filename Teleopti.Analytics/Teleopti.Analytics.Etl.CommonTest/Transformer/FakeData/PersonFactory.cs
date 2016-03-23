@@ -195,13 +195,13 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
             
             if (isViewPermission)
             {
-                applicationFunctions.Add(ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
+                applicationFunctions.Add(ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions,
                                                DefinedRaptorApplicationFunctionPaths.ViewPerformanceManagerReport));
             }
 
             if (isCreatePermission)
             {
-                applicationFunctions.Add(ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
+                applicationFunctions.Add(ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions,
                                                DefinedRaptorApplicationFunctionPaths.CreatePerformanceManagerReport));
             }
             

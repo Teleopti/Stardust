@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Security.LicenseOptions
 		{
 			var target = new TeleoptiCccCalendarLinkLicenseOption();
 
-			target.EnableApplicationFunctions(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList.ToList());
+			target.EnableApplicationFunctions(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions.ToList());
 
 			target.EnabledApplicationFunctions.FirstOrDefault(
 				f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.PayrollIntegration).Should().Be.Null();

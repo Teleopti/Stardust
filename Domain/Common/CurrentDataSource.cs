@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public static ICurrentDataSource Make()
 		{
-			return new CurrentDataSource(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new DataSourceState());
+			return new CurrentDataSource(new CurrentIdentity(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext())), new DataSourceState());
 		}
 
 		public CurrentDataSource(ICurrentIdentity currentIdentity, DataSourceState state)

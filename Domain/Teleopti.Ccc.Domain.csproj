@@ -182,6 +182,9 @@
     <Compile Include="Optimization\IOptimizationPreferencesProvider.cs" />
     <Compile Include="ApplicationLayer\Events\GroupPageCollectionChangedEvent.cs" />
     <Compile Include="DayOffPlanning\SkillGroupReducerForCascadingSkills.cs" />
+    <Compile Include="Security\Principal\CurrentProcess.cs" />
+    <Compile Include="Security\Principal\ThreadPrincipalContext.cs" />
+    <Compile Include="Security\Principal\WindowsAppDomainPrincipalContext.cs" />
     <Compile Include="Shoveling\ShovelServicePOC.cs" />
     <Compile Include="ApplicationLayer\Events\SettingsForPersonPeriodChangedEvent.cs" />
     <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\GroupingReadModelGroupPageUpdater.cs" />

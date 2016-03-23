@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
         private ICommonNameDescriptionSetting _commonNameSetting;
         private Guid _guid;
         private readonly IApplicationFunction _myApplicationFunction =
-            ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
+            ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions,
                                            DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage);
         private IUnitOfWork _unitOfWork;
 

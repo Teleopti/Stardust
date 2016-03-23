@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			if (!VerifySelectedSchedule(filteredScheduleParts)) return;
 
-			var fallbackDefaultHours = new SetupDateTimePeriodDefaultLocalHoursForActivities(filteredScheduleParts[0], new CurrentTeleoptiPrincipal());
+			var fallbackDefaultHours = new SetupDateTimePeriodDefaultLocalHoursForActivities(filteredScheduleParts[0], new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()));
 			var periodFromSchedules = new SetupDateTimePeriodToSelectedSchedule(filteredScheduleParts[0], fallbackDefaultHours);
             ISetupDateTimePeriod periodSetup = new SetupDateTimePeriodToDefaultPeriod(DefaultPeriod, periodFromSchedules);
 

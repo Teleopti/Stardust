@@ -153,11 +153,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_allApplicationFunctions = allApplicationFunctions;
 			createDefaultData();
 		}
-
+		
 		private void createDefaultData()
 		{
 			// all application functions
-			_allApplicationFunctions.ApplicationFunctionList.ForEach(_applicationFunctions.Add);
+			_allApplicationFunctions.ApplicationFunctions.ForEach(_applicationFunctions.Add);
 
 			// super role
 			var role = new ApplicationRole { Name = SystemUser.SuperRoleName };
@@ -281,6 +281,28 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
+		public FakeDatabase WithRole(params string[] functionPaths)
+		{
+			var role = new ApplicationRole { Name = "role" };
+			role.SetId(Guid.NewGuid());
+			functionPaths.ForEach(p =>
+			{
+				role.AddApplicationFunction(_applicationFunctions.LoadAll().Single(x => x.FunctionPath == p));
+			});
+			var availableData = new AvailableData
+			{
+				ApplicationRole = role,
+				AvailableDataRange = AvailableDataRangeOption.Everyone
+			};
+			_availableDatas.Add(availableData);
+			role.AvailableData = availableData;
+			_applicationRoles.Add(role);
+
+			_person.PermissionInformation.AddApplicationRole(role);
+
+			return this;
+		}
+		
 		private static void ensureExists<T>(IRepository<T> loadAggregates, Guid? id, Action createAction)
 			where T : IAggregateRoot
 		{

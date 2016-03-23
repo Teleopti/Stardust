@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Win.Grouping
 		private SelectedNodesCollection _cutSourceNode;
 
 		private readonly IApplicationFunction _myApplicationFunction =
-			ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
+			ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions,
 									DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage);
 
 		private readonly IGroupPageHelper _groupPageHelper;

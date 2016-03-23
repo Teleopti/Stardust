@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -40,7 +41,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 
 			var application = new InitializeApplication(null);
 			application.Start(new State(), null, ConfigurationManager.AppSettings.ToDictionary());
-			var logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(), new TeleoptiPrincipalFactory(), null);
+			var logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()), new ThreadPrincipalContext()), new TeleoptiPrincipalFactory(), null);
 			_logonService = new LogOnService(logOnOff, new AvailableBusinessUnitsProvider(new RepositoryFactory()));
 		}
 		

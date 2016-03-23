@@ -19,6 +19,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.PeopleAdmin.Views;
@@ -408,7 +409,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 		private void loadFilteredPeopleGridData(IPerson person,   LogonInfoModel logonInfoModel)
 		{
 			//create new person grid data.
-			var personGridData = new PersonGeneralModel(person, new PrincipalAuthorization(new CurrentTeleoptiPrincipal()),
+			var personGridData = new PersonGeneralModel(person, new PrincipalAuthorization(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext())),
 				new FilteredPeopleAccountUpdater(this, UnitOfWorkFactory.Current), logonInfoModel,
 				new PasswordPolicy(StateHolderReader.Instance.StateReader.ApplicationScopeData.LoadPasswordPolicyService));
 

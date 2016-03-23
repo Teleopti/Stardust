@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					select a;
 
 			var fallbackDefaultHours =
-				new SetupDateTimePeriodDefaultLocalHoursForAbsence(selectedSchedules[0], new CurrentTeleoptiPrincipal());
+				new SetupDateTimePeriodDefaultLocalHoursForAbsence(selectedSchedules[0], new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()));
 			var periodFromSchedules = new SetupDateTimePeriodToSchedulesIfTheyExist(selectedSchedules, fallbackDefaultHours);
 			ISetupDateTimePeriod periodSetup = new SetupDateTimePeriodToDefaultPeriod(DefaultPeriod, periodFromSchedules);
 

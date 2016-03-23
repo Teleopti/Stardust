@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 		{
 		}
 
-		public override void EnableApplicationFunctions(IList<IApplicationFunction> allApplicationFunctions)
+		public override void EnableApplicationFunctions(IEnumerable<IApplicationFunction> allApplicationFunctions)
 		{
 			EnabledApplicationFunctions.Clear();
 			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.Outbound));

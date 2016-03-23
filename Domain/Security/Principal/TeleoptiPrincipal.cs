@@ -2,14 +2,16 @@
 using System.IdentityModel.Claims;
 using System.Security.Principal;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
 	public class TeleoptiPrincipal : GenericPrincipal, IUnsafePerson, ITeleoptiPrincipal
 	{
-		private static readonly CurrentTeleoptiPrincipal CurrentTeleoptiPrincipal = new CurrentTeleoptiPrincipal();
-		public static ITeleoptiPrincipal CurrentPrincipal { get { return CurrentTeleoptiPrincipal.Current(); } }
+		private static readonly CurrentTeleoptiPrincipal currentTeleoptiPrincipal = new CurrentTeleoptiPrincipal(new ThreadPrincipalContext());
+
+		public static ITeleoptiPrincipal CurrentPrincipal { get { return currentTeleoptiPrincipal.Current(); } }
 
 
 
@@ -20,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		private IIdentity _identity;
 
 		public TeleoptiPrincipal(IIdentity identity, IPerson person) : base(identity, new string[] { })
-        {
+		{
             _person = person;
             InitializeFromPerson();
         }
@@ -50,6 +52,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		public IRegional Regional { get; private set; }
 		public IOrganisationMembership Organisation { get; private set; }
+
 		public IEnumerable<ClaimSet> ClaimSets { get { return _claimSets; } }
 
 		public void AddClaimSet(ClaimSet claimSet) { _claimSets.Add(claimSet); }

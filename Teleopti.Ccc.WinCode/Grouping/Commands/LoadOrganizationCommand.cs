@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
     {
         string Key { get; }
     }
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
+
     public interface ILoadOrganizationCommand : IExecutableCommand, ILoadGroupPageCommand
     {
     }
@@ -41,7 +41,6 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             _loadUsers = loadUsers;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public void Execute()
         {
             var loadUser = PrincipalAuthorization.Instance().EvaluateSpecification(new AllowedToSeeUsersNotInOrganizationSpecification(_applicationFunction.FunctionPath));

@@ -1,6 +1,5 @@
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
 {
@@ -22,7 +21,10 @@ namespace Teleopti.Ccc.TestCommon
 			_principal = principal;
 		}
 
-		public ITeleoptiPrincipal Current() { return _principal; }
+		public ITeleoptiPrincipal Current()
+		{
+			return _principal;
+		}
 		
 		public void SetCurrentPrincipal(ITeleoptiPrincipal principal)
 		{

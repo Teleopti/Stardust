@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCode.Payroll.PayrollExportPages
         public IApplicationFunction ApplicationFunction()
         {
             return Domain.Security.AuthorizationEntities.ApplicationFunction.FindByPath(
-                new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
+                new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions,
                 DefinedRaptorApplicationFunctionPaths.OpenRaptorApplication);
         }
     }

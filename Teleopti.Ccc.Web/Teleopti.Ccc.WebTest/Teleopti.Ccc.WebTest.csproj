@@ -505,7 +505,6 @@
     <Compile Include="Areas\MyTime\Controllers\TeamScheduleControllerTest.cs" />
     <Compile Include="Core\Common\DataProvider\PersonPeriodProviderTest.cs" />
     <Compile Include="Core\Common\DataProvider\SchedulePersonProviderTest.cs" />
-    <Compile Include="Core\RequestContext\CurrentIdentityTest.cs" />
     <Compile Include="FakeNoPermissionProvider.cs" />
     <Compile Include="FakePermissionProvider.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryPreferencesTest.cs" />

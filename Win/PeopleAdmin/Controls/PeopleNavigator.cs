@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 	public partial class PeopleNavigator : BaseUserControl, IPeopleNavigator
 	{
 		private readonly IApplicationFunction _myApplicationFunction =
-			 ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
+			 ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions,
 													  DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage);
 
 		private readonly PortalSettings _portalSettings;

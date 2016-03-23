@@ -21,12 +21,12 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             //
         }
 
-        /// <summary>
-        /// Sets all application functions.
-        /// </summary>
-        /// <param name="allApplicationFunctions"></param>
-        /// <value>The enabled application functions.</value>
-        public override void EnableApplicationFunctions(IList<IApplicationFunction> allApplicationFunctions)
+	    /// <summary>
+	    /// Sets all application functions.
+	    /// </summary>
+	    /// <param name="allApplicationFunctions"></param>
+	    /// <value>The enabled application functions.</value>
+	    public override void EnableApplicationFunctions(IEnumerable<IApplicationFunction> allApplicationFunctions)
         {
             EnabledApplicationFunctions.Clear();
             foreach (ApplicationFunction applicationFunction in allApplicationFunctions)

@@ -148,6 +148,8 @@
     <Compile Include="BaseLineData.cs" />
     <Compile Include="BitArrayHelper.cs" />
     <Compile Include="CatalanCulture.cs" />
+    <Compile Include="ConcurrencyRunner.cs" />
+    <Compile Include="ExceptionExtensions.cs" />
     <Compile Include="FakeData\FakeAnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="FakeHttpServer.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsSkillRepository.cs" />

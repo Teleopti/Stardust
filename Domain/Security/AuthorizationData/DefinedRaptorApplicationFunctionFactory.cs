@@ -8,14 +8,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 {
 	public interface IDefinedRaptorApplicationFunctionFactory
 	{
-		/// <summary>
-		/// Gets or sets the logged on user authorization service instance.
-		/// </summary>
-		/// <value>The instance.</value>
-		/// <remarks>
-		/// Do not use this method in tests. Singeltons are unreliable in tests. Use the CreateApplicationFunctionList() method instead.
-		/// </remarks>
-		IEnumerable<IApplicationFunction> ApplicationFunctionList { get; }
+		IEnumerable<IApplicationFunction> ApplicationFunctions { get; }
 	}
 
 	/// <summary>
@@ -32,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 		/// <remarks>
 		/// Do not use this method in tests. Singeltons are unreliable in tests. Use the CreateApplicationFunctionList() method instead.
 		/// </remarks>
-		public IEnumerable<IApplicationFunction> ApplicationFunctionList
+		public IEnumerable<IApplicationFunction> ApplicationFunctions
 		{
 			get
 			{

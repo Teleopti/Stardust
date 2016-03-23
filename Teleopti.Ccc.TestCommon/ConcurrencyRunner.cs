@@ -1,15 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Teleopti.Ccc.InfrastructureTest.MessageBroker;
-using Teleopti.Ccc.TestCommon;
+using System.Threading;
 
-namespace Teleopti.Ccc.InfrastructureTest
+namespace Teleopti.Ccc.TestCommon
 {
 	public class ConcurrencyRunner
 	{
-		private readonly List<Task> _tasks = new List<Task>();
+		private class task
+		{
+			public Thread Thread;
+			public Exception Exception;
+		}
+
+		private readonly List<task> _tasks = new List<task>();
 		private Action _lastSyncAction;
 		private Action _lastAsyncAction;
 
@@ -40,20 +44,38 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 		private void addTask(Action action)
 		{
-			var task = Task.Factory.StartNew(action.Invoke);
+			var task = new task();
+			task.Thread = new Thread(() =>
+			{
+				try
+				{
+					action();
+				}
+				catch (Exception e)
+				{
+					task.Exception = e;
+				}
+			});
+			task.Thread.Start();
 			_tasks.Add(task);
 		}
 
 		public void Wait()
 		{
-			Task.WaitAll(_tasks.ToArray());
+			_tasks.ForEach(t => t.Thread.Join());
+			var exceptions = _tasks
+				.Where(t => t.Exception != null)
+				.Select(t => t.Exception)
+				.ToArray();
+			if (exceptions.Any())
+				throw new AggregateException(exceptions);
 		}
 
 		public void WaitForException<T>() where T : Exception
 		{
 			try
 			{
-				Task.WaitAll(_tasks.ToArray());
+				Wait();
 			}
 			catch (Exception e)
 			{

@@ -1,5 +1,6 @@
 using System;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Authentication
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 
 		public static IUserTimeZone Make()
 		{
-			return new UserTimeZone(new CurrentTeleoptiPrincipal());
+			return new UserTimeZone(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()));
 		}
 
 		public TimeZoneInfo TimeZone()     

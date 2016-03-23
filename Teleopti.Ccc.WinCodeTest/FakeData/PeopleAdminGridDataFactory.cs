@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Interfaces.Domain;
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.WinCodeTest.FakeData
 					PersonContractFactory.CreatePersonContract(contractName, scheduleName, partTimePercentage),
 					team1);
 			person.AddPersonPeriod(personPeriod1);
-			var principalAuthorization = new PrincipalAuthorization(new CurrentTeleoptiPrincipal());
+			var principalAuthorization = new PrincipalAuthorization(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()));
 			return new PersonGeneralModel(person, principalAuthorization, new PersonAccountUpdaterDummy(),
 				new LogonInfoModel(), new PasswordPolicyFake());
 		}

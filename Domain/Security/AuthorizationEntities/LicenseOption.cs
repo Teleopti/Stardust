@@ -104,12 +104,12 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             get { return _enabledApplicationFunctions; }
         }
 
-        /// <summary>
-        /// Sets the enabled (licensed) application functions.
-        /// </summary>
-        /// <param name="allApplicationFunctions">All application functions.</param>
-        /// <value>The enabled application functions.</value>
-        public virtual void EnableApplicationFunctions(IList<IApplicationFunction> allApplicationFunctions)
+	    /// <summary>
+	    /// Sets the enabled (licensed) application functions.
+	    /// </summary>
+	    /// <param name="allApplicationFunctions">All application functions.</param>
+	    /// <value>The enabled application functions.</value>
+	    public virtual void EnableApplicationFunctions(IEnumerable<IApplicationFunction> allApplicationFunctions)
         {
             EnabledApplicationFunctions.Clear();
             foreach (IApplicationFunction applicationFunction in allApplicationFunctions)

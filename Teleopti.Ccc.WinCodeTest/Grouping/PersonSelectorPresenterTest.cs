@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
 		private IPersonSelectorReadOnlyRepository _repositoryFactory;
 		private ICommonNameDescriptionSetting _commonNameSetting;
 		private readonly IApplicationFunction _myApplicationFunction =
-			ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
+			ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions,
 										   DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage);
 
 		private EventAggregator _eventAggregator;

@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
@@ -131,7 +132,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
 			filteredPeopleHolder.MarkForInsert(newPerson);
 
-			var gridData = new PersonGeneralModel(newPerson, new PrincipalAuthorization(new CurrentTeleoptiPrincipal()),
+			var gridData = new PersonGeneralModel(newPerson, new PrincipalAuthorization(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext())),
 				new FilteredPeopleAccountUpdater(filteredPeopleHolder, UnitOfWorkFactory.Current), new LogonInfoModel(),
 				new PasswordPolicy(StateHolderReader.Instance.StateReader.ApplicationScopeData.LoadPasswordPolicyService))
 			{
@@ -188,7 +189,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 				filteredPeopleHolder.MarkForInsert(person);
 
 				var personGridData = new PersonGeneralModel(person,
-					new PrincipalAuthorization(new CurrentTeleoptiPrincipal()),
+					new PrincipalAuthorization(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext())),
 					new FilteredPeopleAccountUpdater(filteredPeopleHolder, UnitOfWorkFactory.Current), new LogonInfoModel(),
 					new PasswordPolicy(StateHolderReader.Instance.StateReader.ApplicationScopeData.LoadPasswordPolicyService))
 				{

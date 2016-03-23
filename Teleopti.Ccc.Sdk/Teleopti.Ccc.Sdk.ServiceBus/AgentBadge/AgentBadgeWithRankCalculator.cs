@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			}
 
 			var viewBadgeFunc =
-				_appFunctionFactory.ApplicationFunctionList.SingleOrDefault(
+				_appFunctionFactory.ApplicationFunctions.SingleOrDefault(
 					x => x.ForeignId == DefinedRaptorApplicationFunctionForeignIds.ViewBadge);
 			if (viewBadgeFunc == null)
 			{
