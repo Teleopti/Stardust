@@ -25,31 +25,8 @@ namespace Stardust.Manager
 			_retryPolicyProvider = retryPolicyProvider;
 			_retryPolicy = retryPolicyProvider.GetPolicy();
 		}
-
-		private void runner(Action funcToRun, string faliureMessage)
-		{
-			var policy = _retryPolicyProvider.GetPolicy();
-			applyLoggingOnRetries(policy);
-			try
-			{
-				policy.ExecuteAction(funcToRun);
-			}
-			catch (Exception ex)
-			{
-				this.Log().ErrorWithLineNumber(ex.Message + faliureMessage);
-			}
-		}
-
-		private void applyLoggingOnRetries(RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy> policy)
-		{
-			policy.Retrying += (sender, args) =>
-			{
-				var msg = String.Format("Retry - Count:{0}, Delay:{1}, Exception:{2}", args.CurrentRetryCount, args.Delay,
-					args.LastException);
-				this.Log().ErrorWithLineNumber(msg);
-			};
-		}
-
+		
+		
 		public void Add(JobDefinition job)
 		{
 			using (var connection = new SqlConnection(_connectionString))
