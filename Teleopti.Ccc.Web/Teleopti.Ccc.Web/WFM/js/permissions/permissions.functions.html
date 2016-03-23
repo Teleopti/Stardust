@@ -69,6 +69,24 @@
 	</div>
 </div>
 
+<div ng-cloak class="modal-box">
+	<div ng-cloak ng-show="multiDeselectModal">
+		<div class="modalbg">
+			<div class="dialog-mini">
+				<div class="modal-inner-content">
+					This will deselect this function and all functions below it for this role, are you sure you want to proceed?
+				</div>
+				<div class="modal-actions">
+					<aside>
+						<button ng-click="closemultiDeselectModal()" class="wfm-btn wfm-btn-invis-default">no thanks</button>
+						<button ng-click="deselectFunctionNodes()" class="wfm-btn wfm-btn-invis-primary">yes please</button>
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="con-row clear-scroll">
 		<div class="con-flex">
 			<div class="tree permissions-tree">

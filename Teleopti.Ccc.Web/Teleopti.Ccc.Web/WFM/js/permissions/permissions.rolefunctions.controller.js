@@ -14,6 +14,8 @@
 			$scope.toggleState = false;
 			$scope.allToggleElement = {is: false};
 			$scope.functionNodes = [];
+			$scope.multiDeselectModal = false;
+			$scope.tempActiveNode = {};
 
 			var message;
 			$scope.$watch(function () { return Roles.selectedRole; },
@@ -88,12 +90,18 @@
 				var functionNode = node.$modelValue;
 
 				if (functionNode.selected) {
-					RolesFunctionsService.unselectFunction(functionNode.FunctionId, $scope.selectedRole).then(function () {
-						functionNode.selected = false;
-						traverseNodes(functionNode.ChildFunctions);
-						increaseParentNumberOfSelectedNodes(node);
+					$scope.tempActiveNode = node;
+					if ($scope.tempActiveNode.childNodes().length > 0) {
+						$scope.multiDeselectModal = true;
+					} else {
+						RolesFunctionsService.unselectFunction(functionNode.FunctionId, $scope.selectedRole).then(function () {
+							functionNode.selected = false;
+							traverseNodes(functionNode.ChildFunctions);
+							increaseParentNumberOfSelectedNodes(functionNode);
 
-					});
+						});
+					}
+
 				} else {
 					functionNode.selected = true;
 					decreaseParentNumberOfSelectedNodes(node);
@@ -103,6 +111,23 @@
 					});
 				}
 			};
+
+			$scope.deselectFunctionNodes = function () {
+				var functionNode = $scope.tempActiveNode.$modelValue;
+				RolesFunctionsService.unselectFunction(functionNode.FunctionId, $scope.selectedRole).then(function () {
+					functionNode.selected = false;
+					traverseNodes(functionNode.ChildFunctions);
+					increaseParentNumberOfSelectedNodes(functionNode);
+
+				});
+
+				$scope.multiDeselectModal = false;
+			}
+
+
+			$scope.closemultiDeselectModal = function () {
+				$scope.multiDeselectModal = false;
+			}
 
 			$scope.toggleAllNode = function (state) {
 

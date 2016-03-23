@@ -1,5 +1,5 @@
 'use strict';
-describe('FunctionController', function() {
+fdescribe('FunctionController', function() {
 
     var $q,
         $rootScope,
@@ -61,6 +61,22 @@ describe('FunctionController', function() {
         scope.$digest();
 
         expect(node.$modelValue.selected).toBe(true);
+    }));
+
+
+    it('should deselect the parent and its children', inject(function ($controller) {
+    	var scope = $rootScope.$new();
+    	$controller('RoleFunctionsController', { $scope: scope, $filter: $filter, RolesFunctionsService: mockRoleFunctionService, Roles: mockRoles, growl: mockGrowl });
+    	var node = {
+    		$modelValue:
+			   { selected: true, ChildFunctions: [{ selected: true, ChildFunctions: [{ selected: true, ChildFunctions: [] }] }] }
+	    };
+
+    	scope.deselectFunctionNodes(node);
+    	scope.$digest();
+
+    	expect(node.$modelValue.ChildFunctions[0].selected).toBe(false);
+    	expect(node.$modelValue.ChildFunctions[0].ChildFunctions[0].selected).toBe(false);
     }));
 
 });
