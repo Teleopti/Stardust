@@ -4,7 +4,15 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	public class PersonCollectionChangedEvent : EventWithInfrastructureContext
+	public class PersonCollectionChangedEvent : PersonCollectionChangedEventBase
+	{
+	}
+
+	public class AnalyticsPersonCollectionChangedEvent : PersonCollectionChangedEventBase
+	{
+	}
+
+	public abstract class PersonCollectionChangedEventBase : EventWithInfrastructureContext
 	{
 		private string _serializedPeople;
 

@@ -15,18 +15,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		IRunOnServiceBus
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (PersonPeriodAnalyticsUpdater));
-		private AcdLoginPersonTransformer _analyticsAcdLoginPerson;
+		private readonly AcdLoginPersonTransformer _analyticsAcdLoginPerson;
 		private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
 		private readonly IAnalyticsSkillRepository _analyticsSkillRepository;
 		private readonly IPersonRepository _personRepository;
+		private readonly IEventPublisher _eventPublisher;
 
 		public PersonPeriodAnalyticsUpdater(IPersonRepository personRepository,
 			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
-			IAnalyticsSkillRepository analyticsSkillRepository)
+			IAnalyticsSkillRepository analyticsSkillRepository, IEventPublisher eventPublisher)
 		{
 			_personRepository = personRepository;
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
 			_analyticsSkillRepository = analyticsSkillRepository;
+			_eventPublisher = eventPublisher;
 
 			_analyticsAcdLoginPerson = new AcdLoginPersonTransformer(_analyticsPersonPeriodRepository);
 		}
@@ -89,7 +91,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					var bridgeListForPersonPeriod = _analyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForPerson(existingPersonPeriod.PersonId);
 					foreach (var externalLogOn in personPeriod.ExternalLogOnCollection)
 					{
-						if (!bridgeListForPersonPeriod.Any(a => a.AcdLoginId == externalLogOn.AcdLogOnMartId))
+						if (bridgeListForPersonPeriod.All(a => a.AcdLoginId != externalLogOn.AcdLogOnMartId))
 						{
 							// Insert new acd login bridge
 							_analyticsAcdLoginPerson.AddAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson
@@ -107,7 +109,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					// Delete acd login bridge
 					foreach (var bridgeAcdLoginPerson in bridgeListForPersonPeriod)
 					{
-						if (!personPeriod.ExternalLogOnCollection.Any(a => a.AcdLogOnMartId == bridgeAcdLoginPerson.AcdLoginId))
+						if (personPeriod.ExternalLogOnCollection.All(a => a.AcdLogOnMartId != bridgeAcdLoginPerson.AcdLoginId))
 						{
 							_analyticsAcdLoginPerson.DeleteAcdLoginPerson(bridgeAcdLoginPerson);
 						}
@@ -130,6 +132,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					}
 				}
 			}
+			_eventPublisher.Publish(new AnalyticsPersonCollectionChangedEvent
+			{
+				InitiatorId = @event.InitiatorId,
+				LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
+				LogOnDatasource = @event.LogOnDatasource,
+				SerializedPeople = @event.SerializedPeople,
+				Timestamp = @event.Timestamp
+			});
 		}
 
 		public void Handle(PersonDeletedEvent @event)

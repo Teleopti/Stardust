@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.Common;
@@ -20,6 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		private IAnalyticsPersonPeriodRepository _personPeriodRepository;
 		private IAnalyticsSkillRepository _analyticsSkillRepository;
 		private IPersonRepository _personRepository;
+		private IEventPublisher _eventPublisher;
 
 		private Guid testPerson1Id;
 
@@ -34,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_analyticsSkillRepository = new FakeAnalyticsSkillRepository();
 
 			_personRepository = new FakePersonRepository();
-
+			_eventPublisher = MockRepository.GenerateMock<IEventPublisher>();
 			var p1 = new Person
 			{
 				Name = new Name("Test1", "Testsson"),
@@ -60,19 +63,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_personRepository.Add(p2);
 			_personRepository.Add(p3);
 
-			_target = new PersonPeriodAnalyticsUpdater(_personRepository, _personPeriodRepository, _analyticsSkillRepository);
+			_target = new PersonPeriodAnalyticsUpdater(_personRepository, _personPeriodRepository, _analyticsSkillRepository, _eventPublisher);
 		}
 
 		[Test]
 		public void NoPersonPeriodOnPerson_HandlePersonPeriodChanged_NoPersonPeriodAddedInAnalytics()
 		{
 			// When handling event
-			_target.Handle(new PersonCollectionChangedEvent()
+			_target.Handle(new PersonCollectionChangedEvent
 			{
 				PersonIdCollection = { testPerson1Id }
 			});
 			
-			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count());
+			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything));
 		}
 
 		[Test]
@@ -82,13 +86,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_personRepository.FindPeople(new List<Guid> { testPerson1Id }).First().AddPersonPeriod(newTestPersonPeriod(new DateTime(2016, 1, 1)));
 
 			// When handling event
-			_target.Handle(new PersonCollectionChangedEvent()
+			_target.Handle(new PersonCollectionChangedEvent
 			{
 				PersonIdCollection = { testPerson1Id }
 			});
 
 			// Then there should be one person period for that person
-			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count());
+			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything));
 		}
 
 		[Test]
@@ -100,13 +105,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			person.AddPersonPeriod(newTestPersonPeriod(new DateTime(2016, 2, 1)));
 
 			// When handling event
-			_target.Handle(new PersonCollectionChangedEvent()
+			_target.Handle(new PersonCollectionChangedEvent
 			{
 				PersonIdCollection = { testPerson1Id }
 			});
 
 			// Then there should be one person period for that person
-			Assert.AreEqual(2, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count());
+			Assert.AreEqual(2, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything));
 		}
 
 		[Test]
@@ -117,13 +123,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			person.AddPersonPeriod(newTestPersonPeriod(new DateTime(2020, 1, 1)));
 
 			// When handling event
-			_target.Handle(new PersonCollectionChangedEvent()
+			_target.Handle(new PersonCollectionChangedEvent
 			{
 				PersonIdCollection = { testPerson1Id }
 			});
 
 			// Then
-			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count());
+			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything));
 		}
 
 		[Test]
@@ -134,13 +141,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			person.AddPersonPeriod(newTestPersonPeriod(new DateTime(2001, 1, 1)));
 
 			// When handling event
-			_target.Handle(new PersonCollectionChangedEvent()
+			_target.Handle(new PersonCollectionChangedEvent
 			{
 				PersonIdCollection = { testPerson1Id }
 			});
 
 			// Then
-			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count());
+			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything));
 		}
 
 		[Test]
@@ -151,13 +159,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			person.AddPersonPeriod(newTestPersonPeriod(new DateTime(2015, 1, 1)));
 
 			// When handling event
-			_target.Handle(new PersonCollectionChangedEvent()
+			_target.Handle(new PersonCollectionChangedEvent
 			{
 				PersonIdCollection = { testPerson1Id }
 			});
 
 			// Then
-			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count());
+			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything));
 		}
 
 		[Test]
@@ -168,13 +177,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			person.AddPersonPeriod(newTestPersonPeriod(new DateTime(2017, 12, 31)));
 
 			// When handling event
-			_target.Handle(new PersonCollectionChangedEvent()
+			_target.Handle(new PersonCollectionChangedEvent
 			{
 				PersonIdCollection = { testPerson1Id }
 			});
 
 			// Then
-			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count());
+			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything));
 		}
 
 		[Test]
@@ -185,13 +195,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			person.AddPersonPeriod(newTestPersonPeriod((new DateTime(2017, 12, 31)).AddDays(1)));
 
 			// When handling event
-			_target.Handle(new PersonCollectionChangedEvent()
+			_target.Handle(new PersonCollectionChangedEvent
 			{
 				PersonIdCollection = { testPerson1Id }
 			});
 
 			// Then
-			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count());
+			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything));
 		}
 
 		[Test]
@@ -202,13 +213,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			person.AddPersonPeriod(newTestPersonPeriod((new DateTime(2015, 1, 1)).AddDays(-1)));
 
 			// When handling event
-			_target.Handle(new PersonCollectionChangedEvent()
+			_target.Handle(new PersonCollectionChangedEvent
 			{
 				PersonIdCollection = { testPerson1Id }
 			});
 
 			// Then
-			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count());
+			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything));
 		}
 
 		private static PersonPeriod newTestPersonPeriod(DateTime startDate, Guid? id = null)
@@ -219,7 +231,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 					new ContractSchedule("ScheduleName")),
 				new Team
 				{
-					Site = new Site("SiteName"),
+					Site = new Site("SiteName")
 				});
 			personPeriod.SetId(id ?? Guid.NewGuid());
 			return personPeriod;

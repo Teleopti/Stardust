@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		public void ShouldDeleteEverythingForNonExistingPerson()
 		{
 			var personId = Guid.NewGuid();
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new []{ personId });
 
 			_personRepository.Stub(r => r.Get(personId)).Return(null);
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		{
 			var person = new Person();
 			person.SetId(Guid.NewGuid());
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 			
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today, new[] { skill });
 			person.SetId(Guid.NewGuid());
 			person.PersonPeriodCollection.First().SetId(personPeriodId);
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today, new[] { skill });
 			person.SetId(Guid.NewGuid());
 			person.PersonPeriodCollection.First().SetId(personPeriodId);
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today, new[] { skill });
 			person.SetId(Guid.NewGuid());
 			person.PersonPeriodCollection.First().SetId(personPeriodId);
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today, new[] { skill });
 			person.SetId(Guid.NewGuid());
 			person.PersonPeriodCollection.First().SetId(personPeriodId);
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			contract.SetId(Guid.NewGuid());
 			var personContract = PersonContractFactory.CreatePersonContract(contract);
 			person.PersonPeriodCollection.First().PersonContract = personContract;
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			contract.SetId(Guid.NewGuid());
 			var personContract = PersonContractFactory.CreatePersonContract(contract);
 			person.PersonPeriodCollection.First().PersonContract = personContract;
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -271,7 +271,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			contract.SetId(Guid.NewGuid());
 			var personContract = PersonContractFactory.CreatePersonContract(contract);
 			person.PersonPeriodCollection.First().PersonContract = personContract;
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -312,7 +312,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			contract.SetId(Guid.NewGuid());
 			var personContract = PersonContractFactory.CreatePersonContract(contract);
 			person.PersonPeriodCollection.First().PersonContract = personContract;
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -352,7 +352,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var personContract = PersonContractFactory.CreatePersonContract();
 			personContract.ContractSchedule = contractSchedule;
 			person.PersonPeriodCollection.First().PersonContract = personContract;
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -386,7 +386,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var personContract = PersonContractFactory.CreatePersonContract();
 			personContract.ContractSchedule = contractSchedule;
 			person.PersonPeriodCollection.First().PersonContract = personContract;
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -418,7 +418,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var personContract = PersonContractFactory.CreatePersonContract();
 			personContract.ContractSchedule = contractSchedule;
 			person.PersonPeriodCollection.First().PersonContract = personContract;
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -459,7 +459,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var personContract = PersonContractFactory.CreatePersonContract();
 			personContract.ContractSchedule = contractSchedule;
 			person.PersonPeriodCollection.First().PersonContract = personContract;
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -499,7 +499,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var personContract = PersonContractFactory.CreatePersonContract();
 			personContract.PartTimePercentage = partTimePercentage;
 			person.PersonPeriodCollection.First().PersonContract = personContract;
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -533,7 +533,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var personContract = PersonContractFactory.CreatePersonContract();
 			personContract.PartTimePercentage = partTimePercentage;
 			person.PersonPeriodCollection.First().PersonContract = personContract;
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -565,7 +565,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var personContract = PersonContractFactory.CreatePersonContract();
 			personContract.PartTimePercentage = partTimePercentage;
 			person.PersonPeriodCollection.First().PersonContract = personContract;
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -606,7 +606,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var personContract = PersonContractFactory.CreatePersonContract();
 			personContract.PartTimePercentage = partTimePercentage;
 			person.PersonPeriodCollection.First().PersonContract = personContract;
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -644,7 +644,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var ruleSetBag = new RuleSetBag();
 			ruleSetBag.SetId(Guid.NewGuid());
 			person.PersonPeriodCollection.First().RuleSetBag = ruleSetBag;
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -677,7 +677,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var ruleSetBag = new RuleSetBag();
 			ruleSetBag.SetId(Guid.NewGuid());
 			person.PersonPeriodCollection.First().RuleSetBag = ruleSetBag;
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -707,7 +707,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var ruleSetBag = new RuleSetBag();
 			ruleSetBag.SetId(Guid.NewGuid());
 			person.PersonPeriodCollection.First().RuleSetBag = ruleSetBag;
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -746,7 +746,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var ruleSetBag = new RuleSetBag();
 			ruleSetBag.SetId(Guid.NewGuid());
 			person.PersonPeriodCollection.First().RuleSetBag = ruleSetBag;
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -783,7 +783,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			person.PersonPeriodCollection.First().SetId(personPeriodId);
 			person.Note = "TestNote1";
 
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -816,7 +816,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			person.PersonPeriodCollection.First().SetId(personPeriodId);
 			person.Note = "TestNote1";
 
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -845,7 +845,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			person.PersonPeriodCollection.First().SetId(personPeriodId);
 			person.Note = "TestNote1";
 
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -885,7 +885,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			person.PersonPeriodCollection.First().SetId(personPeriodId);
 			person.Note = "TestNote1";
 
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -923,7 +923,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today);
 			person.SetId(Guid.NewGuid());
 			person.PersonPeriodCollection.First().SetId(personPeriodId);
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
@@ -957,7 +957,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today);
 			person.SetId(Guid.NewGuid());
 			person.PersonPeriodCollection.First().SetId(personPeriodId);
-			var @event = new PersonCollectionChangedEvent();
+			var @event = new AnalyticsPersonCollectionChangedEvent();
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
