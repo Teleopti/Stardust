@@ -561,23 +561,8 @@ namespace Stardust.Manager
 		}
 
 
-		public JobHistory History(Guid jobId)
-		{
-			JobHistory jobHist = null;
-			var policy = _retryPolicyProvider.GetPolicy();
-			applyLoggingOnRetries(policy);
-			try
-			{
-				jobHist = policy.ExecuteAction(() => tryHistory(jobId));
-			}
-			catch (Exception ex)
-			{
-				this.Log().ErrorWithLineNumber(ex.Message + "Unable to perform operation");
-			}
-			return jobHist;
-		}
 
-		private JobHistory tryHistory(Guid jobId)
+		public JobHistory History(Guid jobId)
 
 		{
 			try
@@ -595,8 +580,8 @@ namespace Stardust.Manager
 					command.Parameters.Add("@JobId", SqlDbType.UniqueIdentifier, 16, "JobId");
 					command.Parameters[0].Value = jobId;
 
-					connection.Open();
-					using (var reader = command.ExecuteReader())
+					connection.OpenWithRetry(_retryPolicy);
+					using (var reader = command.ExecuteReaderWithRetry(_retryPolicy))
 					{
 						if (reader.HasRows)
 						{
