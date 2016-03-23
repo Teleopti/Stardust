@@ -13,17 +13,16 @@
 		redirect();
 
 		function findTheDeepestArea() {
-			var theDeepestArea; 
-			var areas = globalApplicationAreas.filter(isAnyAreaInTheUrl);
-			if (areas.length > 1) {
-				areas.sort();
-				theDeepestArea = areas[areas.length - 1];
-			} else
-				theDeepestArea = areas[0];
+			var theDeepestArea = globalApplicationAreas.filter(isAnyAreaInTheUrl);
+			if (theDeepestArea.length > 1) {
+				theDeepestArea.sort();
+				theDeepestArea = theDeepestArea[theDeepestArea.length - 1];
+			}
 			return theDeepestArea;
 		}
 
 		function tryToSaveReturnHash(areaToGo) {
+			
 			if (areaToGo === 'WFM') { // wfm project is handled in app.js
 				return;
 			} else if (areaToGo !== undefined) {
