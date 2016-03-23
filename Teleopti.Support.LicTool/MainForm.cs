@@ -176,6 +176,7 @@ namespace Teleopti.Support.LicTool
 				var pubkey = GetPublicKey();
 				if (openFileDialog.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(pubkey))
 				{
+					Initialize_form();
 					try
 					{
 						var xmlstr = string.Empty;
