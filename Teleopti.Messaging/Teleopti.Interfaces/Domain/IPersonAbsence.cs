@@ -42,6 +42,7 @@ namespace Teleopti.Interfaces.Domain
         DateTime? LastChange { get; set; }
 
 	    void ReplaceLayer(IAbsence newAbsence, DateTimePeriod newPeriod);
+	    void RemovePersonAbsence (TrackedCommandInfo trackedCommandInfo);
     }
 
 }

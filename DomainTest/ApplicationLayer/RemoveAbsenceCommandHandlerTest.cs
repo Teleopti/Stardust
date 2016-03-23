@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		private SaveSchedulePartService _saveSchedulePartService;
 		private FakeScheduleStorage _scheduleStorage;
 		private BusinessRulesForPersonalAccountUpdate _businessRulesForAccountUpdate;
+		private PersonAbsenceRemover _personAbsenceRemover;
 
 		[SetUp]
 		public void Setup()
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_scheduleStorage = new FakeScheduleStorage();
 			var scheduleDifferenceSaver = new ScheduleDifferenceSaver(_scheduleStorage);
 			_saveSchedulePartService = new SaveSchedulePartService(scheduleDifferenceSaver, personAbsenceAccountRepository);
+			_personAbsenceRemover = new PersonAbsenceRemover (_scheduleStorage, _businessRulesForAccountUpdate, _saveSchedulePartService);
 		}
 
 		[Test]
@@ -48,8 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var personAbsenceRepository = new FakeWriteSideRepository<IPersonAbsence> {personAbsence};
 
-			var target = new RemovePersonAbsenceCommandHandler(personAbsenceRepository, _scheduleStorage,
-				_businessRulesForAccountUpdate, _saveSchedulePartService);
+			var target = new RemovePersonAbsenceCommandHandler(personAbsenceRepository, _personAbsenceRemover );
 
 			var command = new RemovePersonAbsenceCommand
 			{
@@ -69,8 +70,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			personAbsence.SetId(Guid.Empty);
 
 			var personAbsenceRepository = new FakeWriteSideRepository<IPersonAbsence>() { personAbsence };
-			
-			var target = new RemovePersonAbsenceCommandHandler(personAbsenceRepository, _scheduleStorage, _businessRulesForAccountUpdate, _saveSchedulePartService);
+
+			var target = new RemovePersonAbsenceCommandHandler(personAbsenceRepository, _personAbsenceRemover);
 
 			var operatedPersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();
