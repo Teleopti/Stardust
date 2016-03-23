@@ -6,8 +6,6 @@ using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
@@ -260,6 +258,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I enter '(.*)' calls per day")]
 		public void WhenIEnterCallsPerDay(string calls)
 		{
+			Browser.Interactions.AssertExists(".override-tasks-checkbox");
 			Browser.Interactions.Click(".override-tasks-checkbox");
 			Browser.Interactions.FillWith("#overrideTasksInputId", calls);
 			Browser.Interactions.AssertInputValue("#overrideTasksInputId", calls);
@@ -268,6 +267,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I enter '(.*)' seconds talk time")]
 		public void WhenIEnterSecondsTalkTime(string talkTime)
 		{
+			Browser.Interactions.AssertExists(".override-talktime-checkbox");
 			Browser.Interactions.Click(".override-talktime-checkbox");
 			Browser.Interactions.FillWith("#overrideTalkTimeInputId", talkTime);
 			Browser.Interactions.AssertInputValue("#overrideTalkTimeInputId", talkTime);
@@ -276,6 +276,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I enter '(.*)' seconds after call work")]
 		public void WhenIEnterSecondsAfterCallWork(string afterCallWork)
 		{
+			Browser.Interactions.AssertExists(".override-acw-checkbox");
 			Browser.Interactions.Click(".override-acw-checkbox");
 			Browser.Interactions.FillWith("#overrideAcwInputId", afterCallWork);
 			Browser.Interactions.AssertInputValue("#overrideAcwInputId", afterCallWork);
