@@ -402,18 +402,13 @@ namespace Stardust.Manager
 		}
 
 
-		public void CancelThisJob(Guid jobId, IHttpSender httpSender)
-		{
-			runner(() => tryCancelThisJob(jobId, httpSender), "Unable to  cancel the job");
-		}
-
-		private async void tryCancelThisJob(Guid jobId, IHttpSender httpSender)
+		public async void CancelThisJob(Guid jobId, IHttpSender httpSender)
 		{
 			try
 			{
 				using (var connection = new SqlConnection(_connectionString))
 				{
-					connection.Open();
+					connection.OpenWithRetry(_retryPolicy);
 					var tran = connection.BeginTransaction(IsolationLevel.Serializable);
 
 					using (var da =
@@ -444,7 +439,7 @@ namespace Stardust.Manager
 								parameter.SourceColumn = "Id";
 								parameter.Value = jobId;
 								da.DeleteCommand.Transaction = tran;
-								da.DeleteCommand.ExecuteNonQuery();
+								da.DeleteCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 
 								//update history
 								da.UpdateCommand = new SqlCommand("UPDATE [Stardust].JobHistory SET Result = @Result WHERE JobId = @Id",
@@ -457,7 +452,7 @@ namespace Stardust.Manager
 								da.UpdateCommand.Parameters[1].Value = "Deleted";
 
 								da.UpdateCommand.Transaction = tran;
-								da.UpdateCommand.ExecuteNonQuery();
+								da.UpdateCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 							}
 							else
 							{
@@ -477,7 +472,7 @@ namespace Stardust.Manager
 									parameter.Value = jobId;
 
 									da.UpdateCommand.Transaction = tran;
-									da.UpdateCommand.ExecuteNonQuery();
+									da.UpdateCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 
 									ReportProgress(jobId,
 												   "Canceling",
