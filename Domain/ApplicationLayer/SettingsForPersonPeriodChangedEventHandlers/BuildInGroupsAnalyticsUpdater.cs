@@ -19,17 +19,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEve
 		private readonly IRuleSetBagRepository _ruleSetBagRepository;
 		private readonly IContractRepository _contractRepository;
 		private readonly IContractScheduleRepository _contractScheduleRepository;
-		private readonly IBudgetGroupRepository _budgetGroupRepository;
 		private readonly List<Func<AnalyticsGroup, Guid, bool>> _checks;
 		
-		public BuildInGroupsAnalyticsUpdater(IAnalyticsGroupPageRepository analyticsGroupPageRepository, ISkillRepository skillRepository, IPartTimePercentageRepository partTimePercentageRepository, IRuleSetBagRepository ruleSetBagRepository, IContractRepository contractRepository, IContractScheduleRepository contractScheduleRepository, IBudgetGroupRepository budgetGroupRepository)
+		public BuildInGroupsAnalyticsUpdater(IAnalyticsGroupPageRepository analyticsGroupPageRepository, ISkillRepository skillRepository, IPartTimePercentageRepository partTimePercentageRepository, IRuleSetBagRepository ruleSetBagRepository, IContractRepository contractRepository, IContractScheduleRepository contractScheduleRepository)
 		{
 			_skillRepository = skillRepository;
 			_partTimePercentageRepository = partTimePercentageRepository;
 			_ruleSetBagRepository = ruleSetBagRepository;
 			_contractRepository = contractRepository;
 			_contractScheduleRepository = contractScheduleRepository;
-			_budgetGroupRepository = budgetGroupRepository;
 			_analyticsGroupPageRepository = analyticsGroupPageRepository;
 			_checks = new List<Func<AnalyticsGroup, Guid, bool>>
 			{
@@ -37,7 +35,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEve
 				(groupPage, entityId) => check(groupPage, () => _ruleSetBagRepository.Get(entityId), entity => entity.Description.Name),
 				(groupPage, entityId) => check(groupPage, () => _contractRepository.Get(entityId), entity => entity.Description.Name),
 				(groupPage, entityId) => check(groupPage, () => _contractScheduleRepository.Get(entityId), entity => entity.Description.Name),
-				(groupPage, entityId) => check(groupPage, () => _budgetGroupRepository.Get(entityId), entity => entity.Name),
 				(groupPage, entityId) => check(groupPage, () => _skillRepository.Get(entityId), entity => entity.Name)
 			};
 		}
