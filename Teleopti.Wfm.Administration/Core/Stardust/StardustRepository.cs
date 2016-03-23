@@ -101,7 +101,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			return returnList;
 		}
 
-		public IList<JobHistoryDetail> JobHistryDetails(Guid jobId)
+		public IList<JobHistoryDetail> JobHistoryDetails(Guid jobId)
 		{
 			var selectCommand = @"SELECT  Created, Detail FROM [Stardust].JobHistoryDetail 
 									WHERE JobId = @JobId ORDER BY Created desc ";
