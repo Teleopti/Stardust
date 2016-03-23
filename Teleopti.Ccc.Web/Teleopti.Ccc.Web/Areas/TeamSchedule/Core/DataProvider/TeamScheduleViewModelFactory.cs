@@ -97,18 +97,24 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var ret = new List<IPerson>();
 			foreach (var scheduleDay in scheduleDays)
 			{
+				var personAbsences = scheduleDay.PersonAbsenceCollection();
 				var personAssignment = scheduleDay.PersonAssignment();
-				if (personAssignment != null)
+				if (personAssignment == null)
+				{
+					if (personAbsences.Any())
+					{
+						ret.Add(scheduleDay.Person);
+					}
+				}
+				else
 				{
 					var schedulePeriod = personAssignment.Period;
-					var personAbsences = scheduleDay.PersonAbsenceCollection();
-					var isAbsenceOutOfSchedule = true;
-					foreach (var personAbsence in personAbsences)
+					var absenceInSchedulePeriod =
+						personAbsences.Any(a => a.Period.Contains(schedulePeriod) || schedulePeriod.Contains(a.Period));
+					if (absenceInSchedulePeriod)
 					{
-						if (personAbsence.Period.Contains(schedulePeriod) || schedulePeriod.Contains(personAbsence.Period)) isAbsenceOutOfSchedule = false;
+						ret.Add(scheduleDay.Person);
 					}
-					if (isAbsenceOutOfSchedule) continue;
-					ret.Add(scheduleDay.Person);
 				}
 			}
 			return ret.ToArray();
@@ -140,7 +146,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 			Array.Sort(personScheduleDaysToSort, new TeamScheduleComparer(canSeeUnpublishedSchedules,_permissionProvider));
 
-			var requestedPersonScheduleDayPairs = pageSize > 0 ? personScheduleDaysToSort.Skip(pageSize * (currentPageIndex - 1)).Take(pageSize) : personScheduleDaysToSort;
+			var requestedPersonScheduleDayPairs = pageSize > 0
+				? personScheduleDaysToSort.Skip(pageSize*(currentPageIndex - 1)).Take(pageSize)
+				: personScheduleDaysToSort;
 			var requestedPersonScheduleDays = requestedPersonScheduleDayPairs.Select(pair =>
 			{
 				var person = pair.Item1;
