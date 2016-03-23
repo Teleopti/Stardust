@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -15,7 +16,9 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.WebTest.Core.Common;
 using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -30,6 +33,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
 			system.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
+			system.UseTestDouble<FakeNameFormatSettingProvider>().For<ISettingsPersisterAndProvider<NameFormatSettings>>();
 		}
 	}
 

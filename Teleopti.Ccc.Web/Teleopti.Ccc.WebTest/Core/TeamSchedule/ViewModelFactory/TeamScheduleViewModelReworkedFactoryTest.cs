@@ -12,14 +12,17 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
+using Teleopti.Ccc.WebTest.Core.Common;
 using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
 using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
@@ -34,7 +37,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			system.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
 			system.UseTestDouble<FakeScheduleProvider>().For<IScheduleProvider>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-		}
+			system.UseTestDouble<FakeNameFormatSettingProvider>().For<ISettingsPersisterAndProvider<NameFormatSettings>>();
+        }
 	}
 
 	[TestFixture, MyTimeWebTeamScheduleViewModelFactoryTest]
