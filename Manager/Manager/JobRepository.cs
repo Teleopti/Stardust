@@ -204,13 +204,8 @@ namespace Stardust.Manager
 				}
 			}
 		}
-
-		public void CheckAndAssignNextJob(List<WorkerNode> availableNodes, IHttpSender httpSender)
-		{
-			runner(() => tryCheckAndAssignNextJob(availableNodes, httpSender), "Unable to perform operation");
-		}
-
-		private async void tryCheckAndAssignNextJob(List<WorkerNode> availableNodes,
+		
+		public async void CheckAndAssignNextJob(List<WorkerNode> availableNodes,
 												IHttpSender httpSender)
 		{
 			if (!availableNodes.Any()) return;
