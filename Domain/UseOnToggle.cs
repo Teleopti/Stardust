@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Domain
@@ -6,12 +7,12 @@ namespace Teleopti.Ccc.Domain
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false)]
 	public sealed class UseOnToggle : Attribute
 	{
-		public UseOnToggle(Toggles toggle)
+		public UseOnToggle(params Toggles[] toggles)
 		{
-			Toggle = toggle;
+			Toggles = toggles;
 		}
 
-		public Toggles Toggle { get; private set; }
+		public IEnumerable<Toggles> Toggles { get; private set; }
 	}
 
 }

@@ -20,8 +20,8 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 			attributes = type.GetCustomAttributes(typeof(UseOnToggle), false);
 			if (attributes.IsEmpty()) return true;
 
-			var toggle = ((UseOnToggle)attributes.First()).Toggle;
-			return iocConfiguration.Toggle(toggle);
+			var toggles = ((UseOnToggle)attributes.First()).Toggles;
+			return toggles.All(iocConfiguration.Toggle);
 		}
 
 		public static bool MethodEnabledByToggle(this MethodInfo method, IIocConfiguration iocConfiguration)
@@ -36,8 +36,8 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 			attributes = method.GetCustomAttributes(typeof(UseOnToggle), false);
 			if (attributes.IsEmpty()) return true;
 
-			var toggle = ((UseOnToggle)attributes.First()).Toggle;
-			return iocConfiguration.Toggle(toggle);
+			var toggles = ((UseOnToggle)attributes.First()).Toggles;
+			return toggles.All(iocConfiguration.Toggle);
 		}
 	}
 }

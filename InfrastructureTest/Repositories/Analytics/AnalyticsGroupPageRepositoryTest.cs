@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		public void ShouldGetGroupPage()
 		{
 			var target = new AnalyticsGroupPageRepository(currentDataSource);
-			var groupPage = new AnalyticsGroupPage
+			var groupPage = new AnalyticsGroup
 			{
 				GroupPageCode = Guid.NewGuid(),
 				GroupPageName = "GroupPageName1",
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		public void ShouldGetGroupPageByGroupCode()
 		{
 			var target = new AnalyticsGroupPageRepository(currentDataSource);
-			var groupPage = new AnalyticsGroupPage
+			var groupPage = new AnalyticsGroup
 			{
 				GroupPageCode = Guid.NewGuid(),
 				GroupPageName = "GroupPageName1",
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		public void ShouldUpdateGroupPage()
 		{
 			var target = new AnalyticsGroupPageRepository(currentDataSource);
-			var groupPage = new AnalyticsGroupPage
+			var groupPage = new AnalyticsGroup
 			{
 				GroupPageCode = Guid.NewGuid(),
 				GroupPageName = "GroupPageName1",
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		public void ShouldDeleteGroupPage()
 		{
 			var target = new AnalyticsGroupPageRepository(currentDataSource);
-			var groupPage = new AnalyticsGroupPage
+			var groupPage = new AnalyticsGroup
 			{
 				GroupPageCode = Guid.NewGuid(),
 				GroupPageName = "GroupPageName1",
@@ -135,122 +135,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		}
 
 		[Test]
-		public void ShouldBeAbleToFindGroupPageBasedOnGroupName()
-		{
-			var target = new AnalyticsGroupPageRepository(currentDataSource);
-			var groupPage = new AnalyticsGroupPage
-			{
-				GroupPageCode = Guid.NewGuid(),
-				GroupPageName = "GroupPageName1",
-				GroupPageNameResourceKey = "GroupPageNameResourceKey1",
-				GroupCode = Guid.NewGuid(),
-				GroupName = "GroupName1",
-				GroupIsCustom = true,
-				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
-			};
-			target.AddGroupPage(groupPage);
-			var groupPage2 = new AnalyticsGroupPage
-			{
-				GroupPageCode = Guid.NewGuid(),
-				GroupPageName = "GroupPageName2",
-				GroupPageNameResourceKey = "GroupPageNameResourceKey2",
-				GroupCode = Guid.NewGuid(),
-				GroupName = "GroupName2",
-				GroupIsCustom = true,
-				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
-			};
-			target.AddGroupPage(groupPage2);
-
-			var result = target.FindGroupPageByGroupName(groupPage2.GroupName);
-
-			result.GroupPageCode.Should().Be.EqualTo(groupPage2.GroupPageCode);
-			result.GroupPageName.Should().Be.EqualTo(groupPage2.GroupPageName);
-			result.GroupPageNameResourceKey.Should().Be.EqualTo(groupPage2.GroupPageNameResourceKey);
-			result.GroupCode.Should().Be.EqualTo(groupPage2.GroupCode);
-			result.GroupName.Should().Be.EqualTo(groupPage2.GroupName);
-			result.GroupIsCustom.Should().Be.EqualTo(groupPage2.GroupIsCustom);
-			result.BusinessUnitCode.Should().Be.EqualTo(groupPage2.BusinessUnitCode);
-		}
-
-		[Test]
-		public void ShouldReturnNullIfNotAbleToFindGroupPageBasedOnGroupName()
-		{
-			var target = new AnalyticsGroupPageRepository(currentDataSource);
-			var groupPage = new AnalyticsGroupPage
-			{
-				GroupPageCode = Guid.NewGuid(),
-				GroupPageName = "GroupPageName1",
-				GroupPageNameResourceKey = "GroupPageNameResourceKey1",
-				GroupCode = Guid.NewGuid(),
-				GroupName = "GroupName1",
-				GroupIsCustom = true,
-				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
-			};
-			target.AddGroupPage(groupPage);
-
-			var result = target.FindGroupPageByGroupName("NotExistingGroupName");
-
-			result.Should().Be.Null();
-		}
-
-		[Test]
-		public void ShouldBeAbleToFindGroupPageBasedOnResourceKey()
-		{
-			var target = new AnalyticsGroupPageRepository(currentDataSource);
-			var groupPage = new AnalyticsGroupPage
-			{
-				GroupPageCode = Guid.NewGuid(),
-				GroupPageName = "GroupPageName1",
-				GroupPageNameResourceKey = "GroupPageNameResourceKey1",
-				GroupCode = Guid.NewGuid(),
-				GroupName = "GroupName1",
-				GroupIsCustom = true,
-				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
-			};
-			target.AddGroupPage(groupPage);
-			var groupPage2 = new AnalyticsGroupPage
-			{
-				GroupPageCode = Guid.NewGuid(),
-				GroupPageName = "GroupPageName2",
-				GroupPageNameResourceKey = "GroupPageNameResourceKey2",
-				GroupCode = Guid.NewGuid(),
-				GroupName = "GroupName2",
-				GroupIsCustom = true,
-				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
-			};
-			target.AddGroupPage(groupPage2);
-
-			var result = target.FindGroupPageCodeByResourceKey(groupPage2.GroupPageNameResourceKey);
-
-			result.Should().Be.EqualTo(groupPage2.GroupPageCode);
-		}
-
-		[Test]
-		public void ShouldReturnEmptyGuidIfNotAbleToFindGroupPageBasedOnResourceKey()
-		{
-			var target = new AnalyticsGroupPageRepository(currentDataSource);
-			var groupPage = new AnalyticsGroupPage
-			{
-				GroupPageCode = Guid.NewGuid(),
-				GroupPageName = "GroupPageName1",
-				GroupPageNameResourceKey = "GroupPageNameResourceKey1",
-				GroupCode = Guid.NewGuid(),
-				GroupName = "GroupName1",
-				GroupIsCustom = true,
-				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
-			};
-			target.AddGroupPage(groupPage);
-
-			var result = target.FindGroupPageCodeByResourceKey("NotExistingResourceKey");
-
-			result.Should().Be.EqualTo(Guid.Empty);
-		}
-
-		[Test]
 		public void ShouldBeAbleToDeleteBasedOnGroupCode()
 		{
 			var target = new AnalyticsGroupPageRepository(currentDataSource);
-			var groupPage = new AnalyticsGroupPage
+			var groupPage = new AnalyticsGroup
 			{
 				GroupPageCode = Guid.NewGuid(),
 				GroupPageName = "GroupPageName1",
@@ -261,7 +149,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
 			target.AddGroupPage(groupPage);
-			var groupPage2 = new AnalyticsGroupPage
+			var groupPage2 = new AnalyticsGroup
 			{
 				GroupPageCode = Guid.NewGuid(),
 				GroupPageName = "GroupPageName2",
@@ -279,6 +167,41 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var result2 = target.GetGroupPageByGroupCode(groupPage2.GroupCode);
 			result.Should().Be.Null();
 			result2.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldBeAbleToGetListOfBuildInGroupPages()
+		{
+			var target = new AnalyticsGroupPageRepository(currentDataSource);
+			var groupPage = new AnalyticsGroup
+			{
+				GroupPageCode = Guid.NewGuid(),
+				GroupPageName = "GroupPageName1",
+				GroupPageNameResourceKey = "GroupPageNameResourceKey1",
+				GroupCode = Guid.NewGuid(),
+				GroupName = "GroupName1",
+				GroupIsCustom = true,
+				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+			};
+			target.AddGroupPage(groupPage);
+			var groupPage2 = new AnalyticsGroup
+			{
+				GroupPageCode = Guid.NewGuid(),
+				GroupPageName = "GroupPageName2",
+				GroupPageNameResourceKey = null,
+				GroupCode = Guid.NewGuid(),
+				GroupName = "GroupName2",
+				GroupIsCustom = true,
+				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+			};
+			target.AddGroupPage(groupPage2);
+
+			var result = target.GetBuildInGroupPageBase().FirstOrDefault();
+
+			result.Should().Not.Be.Null();
+			result.GroupPageName.Should().Be.EqualTo(groupPage.GroupPageName);
+			result.GroupPageCode.Should().Be.EqualTo(groupPage.GroupPageCode);
+			result.GroupPageNameResourceKey.Should().Be.EqualTo(groupPage.GroupPageNameResourceKey);
 		}
 	}
 }

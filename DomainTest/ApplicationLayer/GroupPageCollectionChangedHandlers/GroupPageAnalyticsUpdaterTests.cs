@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 			groupPage.AddRootPersonGroup(rootPersonGroup);
 			groupPageRepository.Stub(x => x.LoadGroupPagesByIds(groupPageIdCollection)).Return(new IGroupPage[] { groupPage });
 			var analyticsGroupPageRepository = MockRepository.GenerateMock<IAnalyticsGroupPageRepository>();
-			analyticsGroupPageRepository.Stub(x => x.GetGroupPage(groupPageId)).Return(new AnalyticsGroupPage[] {});
+			analyticsGroupPageRepository.Stub(x => x.GetGroupPage(groupPageId)).Return(new AnalyticsGroup[] {});
 			var analyticsBridgeGroupPagePersonRepository = MockRepository.GenerateMock<IAnalyticsBridgeGroupPagePersonRepository>();
 			analyticsBridgeGroupPagePersonRepository.Stub(x => x.GetBridgeGroupPagePerson(rootPersonGroup.Id.GetValueOrDefault())).Return(new Guid[] { });
 			var target = new GroupPageAnalyticsUpdater(groupPageRepository, analyticsGroupPageRepository, analyticsBridgeGroupPagePersonRepository);
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 			target.Handle(groupPageCollectionChangedEvent);
 
 			analyticsGroupPageRepository.AssertWasCalled(
-				c => c.AddGroupPage(Arg<AnalyticsGroupPage>.Matches(x => x.GroupPageCode == groupPageId &&
+				c => c.AddGroupPage(Arg<AnalyticsGroup>.Matches(x => x.GroupPageCode == groupPageId &&
 																		 x.GroupPageName == groupPage.Description.Name &&
 																		 x.GroupPageNameResourceKey == groupPage.DescriptionKey &&
 																		 x.GroupCode == rootPersonGroup.Id.GetValueOrDefault() &&
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 			var analyticsGroupPageRepository = MockRepository.GenerateMock<IAnalyticsGroupPageRepository>();
 			analyticsGroupPageRepository.Stub(x => x.GetGroupPage(groupPageId)).Return(new[]
 			{
-				new AnalyticsGroupPage
+				new AnalyticsGroup
 				{
 					GroupCode = rootPersonGroup.Id.GetValueOrDefault()
 				}
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 			target.Handle(groupPageCollectionChangedEvent);
 
 			analyticsGroupPageRepository.AssertWasCalled(
-				c => c.UpdateGroupPage(Arg<AnalyticsGroupPage>.Matches(x => x.GroupPageCode == groupPageId &&
+				c => c.UpdateGroupPage(Arg<AnalyticsGroup>.Matches(x => x.GroupPageCode == groupPageId &&
 																		 x.GroupPageName == groupPage.Description.Name &&
 																		 x.GroupPageNameResourceKey == groupPage.DescriptionKey &&
 																		 x.GroupCode == rootPersonGroup.Id.GetValueOrDefault() &&
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 			var analyticsGroupPageRepository = MockRepository.GenerateMock<IAnalyticsGroupPageRepository>();
 			analyticsGroupPageRepository.Stub(x => x.GetGroupPage(groupPageId)).Return(new[]
 			{
-				new AnalyticsGroupPage
+				new AnalyticsGroup
 				{
 					GroupCode = rootPersonGroup.Id.GetValueOrDefault()
 				}
@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 			var analyticsGroupPageRepository = MockRepository.GenerateMock<IAnalyticsGroupPageRepository>();
 			analyticsGroupPageRepository.Stub(x => x.GetGroupPage(groupPageId)).Return(new[]
 			{
-				new AnalyticsGroupPage
+				new AnalyticsGroup
 				{
 					GroupCode = rootPersonGroup.Id.GetValueOrDefault()
 				}

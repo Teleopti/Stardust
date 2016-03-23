@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			_currentDataSource = currentDataSource;
 		}
 
-		public IEnumerable<AnalyticsGroupPage> GetGroupPage(Guid groupPageCode)
+		public IEnumerable<AnalyticsGroup> GetGroupPage(Guid groupPageCode)
 		{
 			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 			{
@@ -38,13 +38,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					  ,[datasource_update_date] DatasourceUpdateDate
                     from mart.[dim_group_page] WITH (NOLOCK) where group_page_code=:GroupPageCode")
 					.SetGuid("GroupPageCode", groupPageCode)
-					.SetResultTransformer(Transformers.AliasToBean(typeof (AnalyticsGroupPage)))
+					.SetResultTransformer(Transformers.AliasToBean(typeof (AnalyticsGroup)))
 					.SetReadOnly(true)
-					.List<AnalyticsGroupPage>();
+					.List<AnalyticsGroup>();
 			}
 		}
 
-		public AnalyticsGroupPage GetGroupPageByGroupCode(Guid groupCode)
+		public AnalyticsGroup GetGroupPageByGroupCode(Guid groupCode)
 		{
 			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 			{
@@ -66,13 +66,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					  ,[datasource_update_date] DatasourceUpdateDate
                     from mart.[dim_group_page] WITH (NOLOCK) where group_code=:GroupCode")
 					.SetGuid("GroupCode", groupCode)
-					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsGroupPage)))
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsGroup)))
 					.SetReadOnly(true)
-					.UniqueResult<AnalyticsGroupPage>();
+					.UniqueResult<AnalyticsGroup>();
 			}
 		}
 
-		public void UpdateGroupPage(AnalyticsGroupPage analyticsGroupPage)
+		public void UpdateGroupPage(AnalyticsGroup analyticsGroup)
 		{
 			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 			{
@@ -84,54 +84,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
                     ,@group_code=:GroupCode
                     ,@group_name=:GroupName
                     ,@group_is_custom=:GroupIsCustom")
-					.SetGuid("GroupPageCode", analyticsGroupPage.GroupPageCode)
-					.SetString("GroupPageName", analyticsGroupPage.GroupPageName)
-					.SetString("GroupPageNameResourceKey", analyticsGroupPage.GroupPageNameResourceKey)
-					.SetGuid("GroupCode", analyticsGroupPage.GroupCode)
-					.SetString("GroupName", analyticsGroupPage.GroupName)
-					.SetBoolean("GroupIsCustom", analyticsGroupPage.GroupIsCustom);
+					.SetGuid("GroupPageCode", analyticsGroup.GroupPageCode)
+					.SetString("GroupPageName", analyticsGroup.GroupPageName)
+					.SetString("GroupPageNameResourceKey", analyticsGroup.GroupPageNameResourceKey)
+					.SetGuid("GroupCode", analyticsGroup.GroupCode)
+					.SetString("GroupName", analyticsGroup.GroupName)
+					.SetBoolean("GroupIsCustom", analyticsGroup.GroupIsCustom);
 				query.ExecuteUpdate();
-			}
-		}
-
-		public AnalyticsGroupPage FindGroupPageByGroupName(string groupName)
-		{
-			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
-			{
-				return uow.Session().CreateSQLQuery(
-					@"select 
-	                    [group_page_id] GroupPageId
-					  ,[group_page_code] GroupPageCode
-					  ,[group_page_name] GroupPageName
-					  ,[group_page_name_resource_key] GroupPageNameResourceKey
-					  ,[group_id] GroupId
-					  ,[group_code] GroupCode
-					  ,[group_name] GroupName
-					  ,[group_is_custom] GroupIsCustom
-					  ,[business_unit_id] BusinessUnitId
-					  ,[business_unit_code] BusinessUnitCode
-					  ,[business_unit_name] BusinessUnitName
-					  ,[datasource_id] DatasourceId
-					  ,[insert_date] InsertDate
-					  ,[datasource_update_date] DatasourceUpdateDate
-                    from mart.[dim_group_page] WITH (NOLOCK) where group_name=:GroupName")
-					.SetString("GroupName", groupName)
-					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsGroupPage)))
-					.SetReadOnly(true)
-					.UniqueResult<AnalyticsGroupPage>();
-			}
-		}
-
-		public Guid FindGroupPageCodeByResourceKey(string resourceKey)
-		{
-			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
-			{
-				return uow.Session().CreateSQLQuery(
-					@"select top 1
-					  [group_page_code] GroupPageCode
-                    from mart.[dim_group_page] WITH (NOLOCK) where group_page_name_resource_key=:ResourceKey")
-					.SetString("ResourceKey", resourceKey)
-					.UniqueResult<Guid>();
 			}
 		}
 
@@ -147,7 +106,25 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
-		public void AddGroupPage(AnalyticsGroupPage analyticsGroupPage)
+		public IEnumerable<AnalyticsGroupPage> GetBuildInGroupPageBase()
+		{
+			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
+			{
+				return uow.Session().CreateSQLQuery(
+					@"select distinct 
+						[group_page_id] GroupPageId
+						,[group_page_code] GroupPageCode
+						,[group_page_name_resource_key] GroupPageNameResourceKey
+						,[group_page_name] GroupPageName
+						from mart.[dim_group_page] WITH (NOLOCK)
+						where [group_page_name_resource_key] is not null")
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsGroupPage)))
+					.SetReadOnly(true)
+					.List<AnalyticsGroupPage>();
+			}
+		}
+
+		public void AddGroupPage(AnalyticsGroup analyticsGroup)
 		{
 			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 			{
@@ -160,13 +137,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
                     ,@group_name=:GroupName
                     ,@group_is_custom=:GroupIsCustom
 					,@business_unit_code=:BusinessUnitCode")
-					.SetGuid("GroupPageCode", analyticsGroupPage.GroupPageCode)
-					.SetString("GroupPageName", analyticsGroupPage.GroupPageName)
-					.SetString("GroupPageNameResourceKey", analyticsGroupPage.GroupPageNameResourceKey)
-					.SetGuid("GroupCode", analyticsGroupPage.GroupCode)
-					.SetString("GroupName", analyticsGroupPage.GroupName)
-					.SetBoolean("GroupIsCustom", analyticsGroupPage.GroupIsCustom)
-					.SetGuid("BusinessUnitCode", analyticsGroupPage.BusinessUnitCode);
+					.SetGuid("GroupPageCode", analyticsGroup.GroupPageCode)
+					.SetString("GroupPageName", analyticsGroup.GroupPageName)
+					.SetString("GroupPageNameResourceKey", analyticsGroup.GroupPageNameResourceKey)
+					.SetGuid("GroupCode", analyticsGroup.GroupCode)
+					.SetString("GroupName", analyticsGroup.GroupName)
+					.SetBoolean("GroupIsCustom", analyticsGroup.GroupIsCustom)
+					.SetGuid("BusinessUnitCode", analyticsGroup.BusinessUnitCode);
 				query.ExecuteUpdate();
 			}
 		}

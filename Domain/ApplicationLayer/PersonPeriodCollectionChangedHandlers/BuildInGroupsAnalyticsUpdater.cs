@@ -7,7 +7,8 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonPeriodCollectionChangedHandlers
 {
-	[UseOnToggle(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623)]
+	[UseOnToggle(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623,
+				 Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439)]
 	public class BuildInGroupsAnalyticsUpdater :
 		IHandleEvent<SettingsForPersonPeriodChangedEvent>,
 		IRunOnServiceBus
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonPeriodCollectionChangedHand
 		private readonly IContractRepository _contractRepository;
 		private readonly IContractScheduleRepository _contractScheduleRepository;
 		private readonly IBudgetGroupRepository _budgetGroupRepository;
-		private readonly List<Func<AnalyticsGroupPage, Guid, bool>> _checks;
+		private readonly List<Func<AnalyticsGroup, Guid, bool>> _checks;
 		
 		public BuildInGroupsAnalyticsUpdater(IAnalyticsGroupPageRepository analyticsGroupPageRepository, ISkillRepository skillRepository, IPartTimePercentageRepository partTimePercentageRepository, IRuleSetBagRepository ruleSetBagRepository, IContractRepository contractRepository, IContractScheduleRepository contractScheduleRepository, IBudgetGroupRepository budgetGroupRepository)
 		{
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonPeriodCollectionChangedHand
 			_contractScheduleRepository = contractScheduleRepository;
 			_budgetGroupRepository = budgetGroupRepository;
 			_analyticsGroupPageRepository = analyticsGroupPageRepository;
-			_checks = new List<Func<AnalyticsGroupPage, Guid, bool>>
+			_checks = new List<Func<AnalyticsGroup, Guid, bool>>
 			{
 				(groupPage, entityId) => check(groupPage, () => _partTimePercentageRepository.Get(entityId), entity => entity.Description.Name),
 				(groupPage, entityId) => check(groupPage, () => _ruleSetBagRepository.Get(entityId), entity => entity.Description.Name),
@@ -57,14 +58,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonPeriodCollectionChangedHand
 			}
 		}
 
-		private bool check<T>(AnalyticsGroupPage groupPage, Func<T> getter, Func<T, string> propertyAccessor)
+		private bool check<T>(AnalyticsGroup @group, Func<T> getter, Func<T, string> propertyAccessor)
 		{
 			var entity = getter();
 			if (entity == null) return false;
-			if (groupPage.GroupName != propertyAccessor(entity))
+			if (@group.GroupName != propertyAccessor(entity))
 			{
-				groupPage.GroupName = propertyAccessor(entity);
-				_analyticsGroupPageRepository.UpdateGroupPage(groupPage);
+				@group.GroupName = propertyAccessor(entity);
+				_analyticsGroupPageRepository.UpdateGroupPage(@group);
 			}
 			return true;
 		}

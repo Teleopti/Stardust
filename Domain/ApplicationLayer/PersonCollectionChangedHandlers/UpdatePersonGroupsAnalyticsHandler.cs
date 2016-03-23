@@ -12,7 +12,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
-	[UseOnToggle(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623)]
+	[UseOnToggle(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623, 
+				 Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439)]
 	public class UpdatePersonGroupsAnalyticsHandler :
 		IHandleEvent<PersonCollectionChangedEvent>,
 		IRunOnServiceBus
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			_analyticsBridgeGroupPagePersonRepository = analyticsBridgeGroupPagePersonRepository;
 			_analyticsGroupPageRepository = analyticsGroupPageRepository;
 		}
-
+		
 		public void Handle(PersonCollectionChangedEvent @event)
 		{
 			foreach (var personId in @event.PersonIdCollection)
@@ -35,16 +36,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				var person = _personRepository.Get(personId) ?? new Person();
 				foreach (var personPeriod in person.PersonPeriodCollection)
 				{
-					var groupIds = new List<Guid>();
+					var groupPages = _analyticsGroupPageRepository.GetBuildInGroupPageBase().ToList();
+					var groupIds = new List<analyticsGroupForPerson>();
 
-					handleSkills(personPeriod, groupIds);
-					handleContract(personPeriod, groupIds);
-					handleContractSchedule(personPeriod, groupIds);
-					handlePartTimePercentage(personPeriod, groupIds);
-					handleRuleSetBag(personPeriod, groupIds);
-					handleNotes(person.Note, groupIds, @event.LogOnBusinessUnitId);
+					handleSkills(personPeriod, groupIds, groupPages);
+					handleContract(personPeriod, groupIds, groupPages);
+					handleContractSchedule(personPeriod, groupIds, groupPages);
+					handlePartTimePercentage(personPeriod, groupIds, groupPages);
+					handleRuleSetBag(personPeriod, groupIds, groupPages);
+					handleNotes(person.Note, groupIds, groupPages);
 
-					var deletedGroupIds = updatePersonGroups(personPeriod.Id.GetValueOrDefault(), groupIds);
+					var deletedGroupIds = updatePersonGroups(personPeriod.Id.GetValueOrDefault(), groupIds, @event.LogOnBusinessUnitId);
 
 					clearEmptyGroups(deletedGroupIds);
 				}
@@ -54,15 +56,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		}
 
 		// Add/Remove groups for a person period
-		private IEnumerable<Guid> updatePersonGroups(Guid personPeriodId, ICollection<Guid> groupIds)
+		private IEnumerable<Guid> updatePersonGroups(Guid personPeriodId, ICollection<analyticsGroupForPerson> groups, Guid businessUnitId)
 		{
 			var currentGroups = _analyticsBridgeGroupPagePersonRepository.GetBuiltInGroupPagesForPersonPeriod(personPeriodId)
 					.ToList();
 
-			var toBeDeleted = currentGroups.Where(g => !groupIds.Contains(g)).ToList();
-			var toBeAdded = groupIds.Where(g => !currentGroups.Contains(g)).ToList();
+			var toBeDeleted = currentGroups.Where(g => groups.All(t => t.GroupCode != g)).ToList();
+			var toBeAdded = groups.Where(t => currentGroups.All(g => g != t.GroupCode)).ToList();
 			_analyticsBridgeGroupPagePersonRepository.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, toBeDeleted);
-			_analyticsBridgeGroupPagePersonRepository.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, toBeAdded);
+			foreach (var groupInfo in groups)
+			{
+				var @group = _analyticsGroupPageRepository.GetGroupPageByGroupCode(groupInfo.GroupCode);
+				if (@group != null) continue;
+				_analyticsGroupPageRepository.AddGroupPage(new AnalyticsGroup
+				{
+					GroupName = groupInfo.GroupName,
+					GroupCode = groupInfo.GroupCode,
+					BusinessUnitCode = businessUnitId,
+					GroupIsCustom = false,
+					GroupPageCode = groupInfo.GroupPageCode,
+					GroupPageName = groupInfo.GroupPageName,
+					GroupPageNameResourceKey = groupInfo.GroupPageNameResourceKey
+				});
+			}
+			_analyticsBridgeGroupPagePersonRepository.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, toBeAdded.Select(x => x.GroupCode).ToList());
 			return toBeDeleted;
 		}
 
@@ -79,70 +96,98 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			_analyticsGroupPageRepository.DeleteGroupPagesByGroupCodes(groupsToDelete);
 		}
 
-		private static void handleSkills(IPersonPeriod personPeriod, List<Guid> groupIds)
+		private static AnalyticsGroupPage getGroupPage(IEnumerable<AnalyticsGroupPage> groupPages, string resourceKey, string groupPageName)
 		{
-			var skills = personPeriod.PersonSkillCollection.Select(s => s.Skill.Id.GetValueOrDefault());
+			return groupPages.FirstOrDefault(x => x.GroupPageNameResourceKey == resourceKey) ??
+				   new AnalyticsGroupPage
+				   {
+					   GroupPageCode = Guid.NewGuid(),
+					   GroupPageNameResourceKey = resourceKey,
+					   GroupPageName = groupPageName
+				   };
+		}
+
+		private static void handleSkills(IPersonPeriod personPeriod, List<analyticsGroupForPerson> groupIds, IEnumerable<AnalyticsGroupPage> groupPages)
+		{
+			var skillGroupPage = getGroupPage(groupPages, "Skill", Resources.Skill);
+			var skills = personPeriod.PersonSkillCollection.Select(s => new analyticsGroupForPerson(s.Skill.Id.GetValueOrDefault(), s.Skill.Name, skillGroupPage));
 			groupIds.AddRange(skills);
 		}
 
-		private static void handleContract(IPersonPeriod personPeriod, ICollection<Guid> groupIds)
+		private static void handleContract(IPersonPeriod personPeriod, ICollection<analyticsGroupForPerson> groupIds, IEnumerable<AnalyticsGroupPage> groupPages)
 		{
+			
 			var contract = personPeriod.PersonContract.Contract.Id.GetValueOrDefault();
 			if (contract != Guid.Empty && personPeriod.PersonContract.Contract.IsChoosable)
-				groupIds.Add(contract);
+			{
+				var contractGroupPage = getGroupPage(groupPages, "Contracts", Resources.Contracts);
+				groupIds.Add(new analyticsGroupForPerson(contract, personPeriod.PersonContract.Contract.Description.Name, contractGroupPage));
+			}
+				
 		}
 
-		private static void handleContractSchedule(IPersonPeriod personPeriod, ICollection<Guid> groupIds)
+		private static void handleContractSchedule(IPersonPeriod personPeriod, ICollection<analyticsGroupForPerson> groupIds, IEnumerable<AnalyticsGroupPage> groupPages)
 		{
 			var contractSchedule = personPeriod.PersonContract.ContractSchedule.Id.GetValueOrDefault();
 			if (contractSchedule != Guid.Empty && personPeriod.PersonContract.ContractSchedule.IsChoosable)
-				groupIds.Add(contractSchedule);
+			{
+				var contractScheduleGroupPage = getGroupPage(groupPages, "ContractSchedule", Resources.ContractSchedule);
+				groupIds.Add(new analyticsGroupForPerson(contractSchedule, personPeriod.PersonContract.ContractSchedule.Description.Name, contractScheduleGroupPage));
+			}
 		}
 
-		private static void handlePartTimePercentage(IPersonPeriod personPeriod, ICollection<Guid> groupIds)
+		private static void handlePartTimePercentage(IPersonPeriod personPeriod, ICollection<analyticsGroupForPerson> groupIds, IEnumerable<AnalyticsGroupPage> groupPages)
 		{
 			var partTimePercentage = personPeriod.PersonContract.PartTimePercentage.Id.GetValueOrDefault();
 			if (partTimePercentage != Guid.Empty && personPeriod.PersonContract.PartTimePercentage.IsChoosable)
-				groupIds.Add(partTimePercentage);
+			{
+				var partTimePercentageGroupPage = getGroupPage(groupPages, "PartTimepercentages", Resources.PartTimepercentages);
+				groupIds.Add(new analyticsGroupForPerson(partTimePercentage, personPeriod.PersonContract.PartTimePercentage.Description.Name, partTimePercentageGroupPage));
+			}
 		}
 
-		private static void handleRuleSetBag(IPersonPeriod personPeriod, ICollection<Guid> groupIds)
+		private static void handleRuleSetBag(IPersonPeriod personPeriod, ICollection<analyticsGroupForPerson> groupIds, IEnumerable<AnalyticsGroupPage> groupPages)
 		{
 			if (personPeriod.RuleSetBag == null) return;
 
 			var ruleSetBag = personPeriod.RuleSetBag.Id.GetValueOrDefault();
 			if (ruleSetBag != Guid.Empty && personPeriod.RuleSetBag.IsChoosable)
-				groupIds.Add(ruleSetBag);
+			{
+				var ruleSetBagGroupPage = getGroupPage(groupPages, "RuleSetBag", Resources.RuleSetBag);
+				groupIds.Add(new analyticsGroupForPerson(ruleSetBag, personPeriod.RuleSetBag.Description.Name, ruleSetBagGroupPage));
+			}
 		}
 
-		private void handleNotes(string note, ICollection<Guid> groupIds, Guid businessUnitId)
+		private static void handleNotes(string note, ICollection<analyticsGroupForPerson> groupIds, IEnumerable<AnalyticsGroupPage> groupPages)
 		{
 			if (string.IsNullOrWhiteSpace(note)) return;
 
-			// Find a group for Note, or create if there isn't one
 			var groupName = formatNoteName(note);
-			var noteGroupPage = _analyticsGroupPageRepository.FindGroupPageByGroupName(groupName);
-			if (noteGroupPage == null)
-			{
-				var noteGroupCode = _analyticsGroupPageRepository.FindGroupPageCodeByResourceKey("Note");
-				noteGroupPage = new AnalyticsGroupPage
-				{
-					GroupName = groupName,
-					GroupCode = note.GenerateGuid(),
-					BusinessUnitCode = businessUnitId,
-					GroupIsCustom = false,
-					GroupPageCode = noteGroupCode != Guid.Empty ? noteGroupCode : Guid.NewGuid(),
-					GroupPageName = Resources.Note,
-					GroupPageNameResourceKey = "Note"
-				};
-				_analyticsGroupPageRepository.AddGroupPage(noteGroupPage);
-			}
-			groupIds.Add(noteGroupPage.GroupCode);
+			var noteGroupPage = getGroupPage(groupPages, "Note", Resources.Note);
+			groupIds.Add(new analyticsGroupForPerson(note.GenerateGuid(), groupName, noteGroupPage));
 		}
 
 		private static string formatNoteName(string note)
 		{
 			return note.Length > 50 ? string.Format("{0}..", note.Substring(0, 48)) : note;
+		}
+
+		private class analyticsGroupForPerson
+		{
+			public analyticsGroupForPerson(Guid groupCode, string groupName, AnalyticsGroupPage groupPage)
+			{
+				GroupCode = groupCode;
+				GroupPageNameResourceKey = groupPage.GroupPageNameResourceKey;
+				GroupPageName = groupPage.GroupPageName;
+				GroupPageCode = groupPage.GroupPageCode;
+				GroupName = groupName;
+			}
+
+			public Guid GroupCode { get; }
+			public Guid GroupPageCode { get; }
+			public string GroupPageName { get; }
+			public string GroupPageNameResourceKey { get; }
+			public string GroupName { get; }
 		}
 	}
 }

@@ -2,12 +2,8 @@ using System;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
 {
-	public class AnalyticsGroupPage
+	public class AnalyticsGroup : AnalyticsGroupPage
 	{
-		public int GroupPageId { get; set; }
-		public Guid GroupPageCode { get; set; }
-		public string GroupPageName { get; set; }
-		public string GroupPageNameResourceKey { get; set; }
 		public int GroupId { get; set; }
 		public Guid GroupCode { get; set; }
 		public string GroupName { get; set; }
@@ -18,5 +14,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 		public int DatasourceId { get; set; }
 		public DateTime InsertDate { get; set; }
 		public DateTime DatasourceUpdateDate { get; set; }
+	}
+
+	public class AnalyticsGroupPage
+	{
+		public int GroupPageId { get; set; }
+		public Guid GroupPageCode { get; set; }
+		public string GroupPageName { get; set; }
+		public string GroupPageNameResourceKey { get; set; }
 	}
 }

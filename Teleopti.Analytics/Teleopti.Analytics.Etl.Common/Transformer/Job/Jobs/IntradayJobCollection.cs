@@ -45,7 +45,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new StageScorecardJobStep(jobParameters));
 			Add(new StageScorecardKpiJobStep(jobParameters));
 			Add(new StageKpiTargetTeamJobStep(jobParameters));
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623))
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623) 
+				|| !jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439))
 			{
 				Add(new StageGroupPagePersonJobStep(jobParameters));
 			}
@@ -89,7 +90,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			}
 
 			Add(new BridgeQueueWorkloadJobStep(jobParameters));
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623))
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623)
+				|| !jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439))
 			{
 				Add(new DimGroupPageJobStep(jobParameters));
 				Add(new BridgeGroupPagePersonJobStep(jobParameters));

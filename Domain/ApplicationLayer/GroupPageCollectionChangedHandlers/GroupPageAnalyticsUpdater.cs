@@ -8,7 +8,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandlers
 {
-	[UseOnToggle(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623)]
+	[UseOnToggle(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623,
+				 Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439)]
 	public class GroupPageAnalyticsUpdater :
 		IHandleEvent<GroupPageCollectionChangedEvent>,
 		IRunOnServiceBus
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandler
 					var existingInAnalytics = _analyticsGroupPageRepository.GetGroupPage(groupPage.Id.GetValueOrDefault()).ToList();
 					foreach (var rootGroup in groupPage.RootGroupCollection)
 					{
-						var analyticsGroupPage = new AnalyticsGroupPage
+						var analyticsGroupPage = new AnalyticsGroup
 						{
 							GroupPageCode = groupPage.Id.GetValueOrDefault(),
 							GroupPageName = groupPage.Description.Name,

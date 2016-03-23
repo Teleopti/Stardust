@@ -6,13 +6,12 @@ namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface IAnalyticsGroupPageRepository
 	{
-		void AddGroupPage(AnalyticsGroupPage analyticsGroupPage);
+		void AddGroupPage(AnalyticsGroup analyticsGroup);
 		void DeleteGroupPages(IEnumerable<Guid> groupPageIds);
-		IEnumerable<AnalyticsGroupPage> GetGroupPage(Guid groupPageCode);
-		AnalyticsGroupPage GetGroupPageByGroupCode(Guid groupCode);
-		void UpdateGroupPage(AnalyticsGroupPage analyticsGroupPage);
-		AnalyticsGroupPage FindGroupPageByGroupName(string groupName);
-		Guid FindGroupPageCodeByResourceKey(string resourceKey);
+		IEnumerable<AnalyticsGroup> GetGroupPage(Guid groupPageCode);
+		AnalyticsGroup GetGroupPageByGroupCode(Guid groupCode);
+		void UpdateGroupPage(AnalyticsGroup analyticsGroup);
 		void DeleteGroupPagesByGroupCodes(IEnumerable<Guid> groupCodes);
+		IEnumerable<AnalyticsGroupPage> GetBuildInGroupPageBase();
 	}
 }
