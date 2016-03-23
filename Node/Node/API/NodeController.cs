@@ -41,15 +41,15 @@ namespace Stardust.Node.API
 
 			Task.Factory.StartNew(() =>
 			{
-				response = _workerWrapper.StartJob(jobToDo,
-												   Request);
-
 				var startJobMessage = string.Format("{0} : Starting job ( jobId, jobName ) : ( {1}, {2} )",
 													_workerWrapper.WhoamI,
 													jobToDo.Id,
 													jobToDo.Name);
 
 				Logger.DebugWithLineNumber(startJobMessage);
+
+				response = _workerWrapper.StartJob(jobToDo,
+												   Request);
 			});
 
 			return Ok();
