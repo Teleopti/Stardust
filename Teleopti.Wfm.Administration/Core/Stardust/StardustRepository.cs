@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -16,98 +15,21 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 		const int delayMs = 100;
 
 		private readonly string _connectionString;
+		private readonly RetryPolicy _retryPolicy;
 
 		public StardustRepository(string connectionString)
 		{
 			_connectionString = connectionString;
+			_retryPolicy = new RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy>(maxRetry, TimeSpan.FromMilliseconds(delayMs));
 		}
-
-		private string getValue<T>(object value)
-		{
-			return value == DBNull.Value
-				? null
-				: (string)value;
-		}
-
-
-		private RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy> makeRetryPolicy()
-		{
-			var fromMilliseconds = TimeSpan.FromMilliseconds(delayMs);
-			var policy = new RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy>(maxRetry, fromMilliseconds);
-			policy.Retrying += (sender, args) =>
-			{
-				// Log details of the retry.
-				var msg = String.Format("Retry - Count:{0}, Delay:{1}, Exception:{2}", args.CurrentRetryCount, args.Delay, args.LastException);
-				LogHelper.LogErrorWithLineNumber(Logger, msg);
-			};
-			return policy;
-		}
-
-		private void runner(Action funcToRun, string faliureMessage)
-		{
-			var policy = makeRetryPolicy();
-			try
-			{
-				policy.ExecuteAction(funcToRun);
-			}
-			catch (Exception ex)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, ex.Message + faliureMessage);
-			}
-		}
+		
 
 		public IList<JobHistory> HistoryList(Guid nodeId)
 		{
-			IList<JobHistory> historyList = null;
-
-			runner(() => historyList = readHistoryList(nodeId), "Unable to read History List for a specific node. nodeId: " + nodeId);
-
-			return historyList;
-		}
-
-		public IList<JobHistory> HistoryList()
-		{
-			IList<JobHistory> historyList = null;
-
-			runner(() => historyList = readHistoryList(), "Unable to read History List");
-
-			return historyList;
-		}
-
-		public IList<JobHistoryDetail> JobHistoryDetails(Guid jobId)
-		{
-			IList<JobHistoryDetail> jobHistoryDetails = null;
-
-			runner(() => jobHistoryDetails = readJobHistryDetails(jobId), "Unable to read History Details for jobId " + jobId);
-			
-			return jobHistoryDetails;
-		}
-
-		public WorkerNode WorkerNode(Guid nodeId)
-		{
-			WorkerNode workerNode = null;
-
-			runner(() => workerNode = readWorkerNode(nodeId), "Unable to read WorkerNode for nodeId " + nodeId);
-
-			return workerNode;
-		}
-
-		public List<WorkerNode> WorkerNodes()
-		{
-			List<WorkerNode> workerNodes = null;
-
-			runner(() => workerNodes = readWorkerNodes(), "Unable to read WorkerNodes");
-
-			return workerNodes;
-		}
-
-
-		private IList<JobHistory> readHistoryList(Guid nodeId)
-		{
-			var selectCommand = @"
-	   SELECT * FROM [Stardust].JobHistory
-	   WHERE SentTo IN 
-		(SELECT Url FROM [Stardust].WorkerNodes WHERE Id = @NodeId) ORDER by Created desc";
+			var selectCommand = @"SELECT * FROM [Stardust].JobHistory
+								WHERE SentTo IN 
+								(SELECT Url FROM [Stardust].WorkerNodes 
+									WHERE Id = @NodeId) ORDER by Created desc";
 
 			var returnList = new List<JobHistory>();
 
@@ -119,17 +41,10 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 					CommandText = selectCommand,
 					CommandType = CommandType.Text
 				};
+				command.Parameters.AddWithValue("@NodeId", nodeId);
 
-				command.Parameters.Add("@NodeId",
-										   SqlDbType.UniqueIdentifier,
-										   16,
-										   "NodeId");
-
-				command.Parameters[0].Value = nodeId;
-
-				connection.Open();
-
-				using (var reader = command.ExecuteReader())
+				connection.OpenWithRetry(_retryPolicy);
+				using (var reader = command.ExecuteReaderWithRetry(_retryPolicy))
 				{
 					if (reader.HasRows)
 					{
@@ -139,16 +54,14 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 							returnList.Add(jobHist);
 						}
 					}
-
 					reader.Close();
-					connection.Close();
 				}
-
-				return returnList;
+				connection.Close();
 			}
-		} 
-		
-		private IList<JobHistory> readHistoryList()
+			return returnList;
+		}
+
+		public IList<JobHistory> HistoryList()
 		{
 			var selectCommand = @"SELECT	JobId
 											, Name
@@ -170,10 +83,8 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 					CommandText = selectCommand,
 					CommandType = CommandType.Text
 				};
-
-				connection.Open();
-
-				using (var reader = command.ExecuteReader())
+				connection.OpenWithRetry(_retryPolicy);
+				using (var reader = command.ExecuteReaderWithRetry(_retryPolicy))
 				{
 					if (reader.HasRows)
 					{
@@ -183,18 +94,17 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 							returnList.Add(jobHist);
 						}
 					}
-
 					reader.Close();
-					connection.Close();
 				}
-
-				return returnList;
+				connection.Close();
 			}
+			return returnList;
 		}
 
-		private IList<JobHistoryDetail> readJobHistryDetails(Guid jobId)
+		public IList<JobHistoryDetail> JobHistryDetails(Guid jobId)
 		{
-			var selectCommand = @"SELECT  Created, Detail FROM [Stardust].JobHistoryDetail WHERE JobId = @JobId ORDER BY Created desc ";
+			var selectCommand = @"SELECT  Created, Detail FROM [Stardust].JobHistoryDetail 
+									WHERE JobId = @JobId ORDER BY Created desc ";
 
 			var returnList = new List<JobHistoryDetail>();
 
@@ -206,11 +116,10 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 					CommandText = selectCommand,
 					CommandType = CommandType.Text
 				};
-				command.Parameters.Add("@JobId", SqlDbType.UniqueIdentifier, 16, "JobId");
-				command.Parameters[0].Value = jobId;
-				connection.Open();
+				command.Parameters.AddWithValue("@JobId", jobId);
 
-				using (var reader = command.ExecuteReader())
+				connection.OpenWithRetry(_retryPolicy);
+				using (var reader = command.ExecuteReaderWithRetry(_retryPolicy))
 				{
 					if (reader.HasRows)
 					{
@@ -225,14 +134,13 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 						}
 					}
 					reader.Close();
-					connection.Close();
 				}
-
-				return returnList;
+				connection.Close();
 			}
+			return returnList;
 		}
 
-		private WorkerNode readWorkerNode(Guid nodeId)
+		public WorkerNode WorkerNode(Guid nodeId)
 		{
 			const string selectCommand = @"SELECT w.Id, Url, Heartbeat, Alive, CASE 
 							WHEN AssignedNode IS NULL 
@@ -250,12 +158,10 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 					CommandText = selectCommand,
 					CommandType = CommandType.Text
 				};
-				command.Parameters.Add("@Id", SqlDbType.UniqueIdentifier, 16, "Id");
-				command.Parameters[0].Value = nodeId;
-				connection.Open();
+				command.Parameters.AddWithValue("@Id", nodeId);
 
+				connection.OpenWithRetry(_retryPolicy);
 				var reader = command.ExecuteReader();
-
 				if (reader.HasRows)
 				{
 					while (reader.Read())
@@ -270,14 +176,13 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 						};
 					}
 				}
-
 				reader.Close();
 				connection.Close();
 			}
 			return node;
 		}
 
-		private List<WorkerNode> readWorkerNodes()
+		public List<WorkerNode> WorkerNodes()
 		{
 			const string selectCommand = @"SELECT w.Id, Url, Heartbeat, Alive, CASE 
 							WHEN AssignedNode IS NULL 
@@ -295,10 +200,9 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 					CommandText = selectCommand,
 					CommandType = CommandType.Text
 				};
-				connection.Open();
 
-				var reader = command.ExecuteReader();
-
+				connection.OpenWithRetry(_retryPolicy);
+				var reader = command.ExecuteReaderWithRetry(_retryPolicy);
 				if (reader.HasRows)
 				{
 					while (reader.Read())
@@ -324,8 +228,6 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 
 		private JobHistory newJobHistoryModel(SqlDataReader reader)
 		{
-			LogHelper.LogInfoWithLineNumber(Logger, "Start.");
-
 			try
 			{
 				var jobHist = new JobHistory
@@ -339,16 +241,12 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 					Started = getDateTime(reader.GetValue(reader.GetOrdinal("Started"))),
 					Ended = getDateTime(reader.GetValue(reader.GetOrdinal("Ended")))
 				};
-
 				return jobHist;
 			}
 			catch (Exception exp)
 			{
 				LogHelper.LogErrorWithLineNumber(Logger, exp.Message, exp);
 			}
-
-			LogHelper.LogInfoWithLineNumber(Logger, "Finished.");
-
 			return null;
 		}
 		
@@ -359,10 +257,15 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			{
 				return null;
 			}
-
 			return (DateTime)databaseValue;
 		}
-		
+		private string getValue<T>(object value)
+		{
+			return value == DBNull.Value
+				? null
+				: (string)value;
+		}
+
 	}
 } 
 	
