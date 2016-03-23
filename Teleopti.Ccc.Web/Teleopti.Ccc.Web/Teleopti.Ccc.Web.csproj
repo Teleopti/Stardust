@@ -339,8 +339,9 @@
     <Reference Include="StackExchange.Redis.StrongName, Version=1.0.316.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46, processorArchitecture=MSIL">
       <HintPath>..\..\packages\StackExchange.Redis.StrongName.1.0.322\lib\net45\StackExchange.Redis.StrongName.dll</HintPath>
     </Reference>
-    <Reference Include="Stardust.Manager">
-      <HintPath>..\..\packages\Stardust.Manager.1.0.0.469\lib\net451\Stardust.Manager.dll</HintPath>
+    <Reference Include="Stardust.Manager, Version=1.0.0.518, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Stardust.Manager.1.0.0.518\lib\net451\Stardust.Manager.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.IdentityModel" />
@@ -1631,7 +1632,7 @@
     <Content Include="WFM\js\forecasting\forecasting.service.js" />
     <Content Include="WFM\js\global\areas.controller.js" />
     <Content Include="WFM\js\global\areas.service.js" />
-	<Content Include="WFM\js\global\wfm-themes\themes-menu.html" />
+    <Content Include="WFM\js\global\wfm-themes\themes-menu.html" />
     <Content Include="WFM\js\notifications\notice.controller.js" />
     <Content Include="WFM\js\notifications\notifications.controller.js" />
     <Content Include="WFM\js\notifications\notifications.service.js" />
