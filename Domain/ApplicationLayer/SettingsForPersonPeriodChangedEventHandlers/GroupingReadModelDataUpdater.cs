@@ -1,7 +1,7 @@
 ﻿using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Repositories;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonPeriodCollectionChangedHandlers
+namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEventHandlers
 {
 	public class GroupingReadModelDataUpdater : 
 		IHandleEvent<SettingsForPersonPeriodChangedEvent>, 

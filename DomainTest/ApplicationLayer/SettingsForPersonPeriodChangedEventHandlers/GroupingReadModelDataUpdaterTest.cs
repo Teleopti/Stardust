@@ -2,11 +2,11 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.PersonPeriodCollectionChangedHandlers;
+using Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEventHandlers;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonPeriodCollectionChangedHandlers
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChangedEventHandlers
 {
 	[TestFixture]
 	public class GroupingReadModelDataUpdaterTest

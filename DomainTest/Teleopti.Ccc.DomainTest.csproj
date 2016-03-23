@@ -198,8 +198,8 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodAnalyticsUpdaterHandlerTests.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AcdLoginPersonMapTests.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdatePersonGroupsAnalyticsHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\PersonPeriodCollectionChangedHandlers\BuildInGroupsAnalyticsUpdaterTest.cs" />
-    <Compile Include="ApplicationLayer\PersonPeriodCollectionChangedHandlers\GroupingReadModelDataUpdaterTest.cs" />
+    <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\BuildInGroupsAnalyticsUpdaterTest.cs" />
+    <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\GroupingReadModelDataUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\RemovePartAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodDateTransformerTests.cs" />

@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analy
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonPeriodCollectionChangedHandlers
+namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEventHandlers
 {
 	[UseOnToggle(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623,
 				 Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439)]
