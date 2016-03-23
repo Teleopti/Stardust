@@ -60,7 +60,7 @@
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Url" Type="nvarchar" MaxLength="450" Nullable="false" />
           <Property Name="Heartbeat" Type="datetime" />
-          <Property Name="Alive" Type="nvarchar(max)" />
+          <Property Name="Alive" Type="bit" />
         </EntityType>
         <EntityContainer Name="ManagerDbModelStoreContainer">
           <EntitySet Name="JobDefinitions" EntityType="Self.JobDefinitions" Schema="Stardust" store:Type="Tables" />
@@ -135,7 +135,7 @@
           <Property Name="Id" Type="Guid" Nullable="false" />
           <Property Name="Url" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
           <Property Name="Heartbeat" Type="DateTime" Precision="3" />
-          <Property Name="Alive" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Alive" Type="Boolean" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
