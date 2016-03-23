@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -164,6 +165,43 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Assert.AreEqual(new DateOnlyPeriod(2013, 4, 1, 2013, 4, 1), period);
 			}
 		}
+
+		[Test]
+	    public void ShouldUseTerminalDateAsBlockBreaker()
+	    {
+			//range period is 365 days
+			var rangePeriod = new DateTimePeriod(2013, 1, 1, 2013, 12, 31);
+			//matrix is 5 days
+			var matrixPeriod = new DateOnlyPeriod(2013, 4, 1, 2013, 4, 5);
+			_person.TerminatePerson(new DateOnly(2013, 4, 3), new PersonAccountUpdaterDummy());
+
+			using (_mocks.Record())
+			{
+				commonMocks(rangePeriod, matrixPeriod);
+
+				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 3))).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
+
+				//3 is first because of nullcheck
+				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 3))).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
+
+				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 2))).Return(_scheduleDay1);
+				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.None);
+
+				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 1))).Return(_scheduleDay2);
+				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.ContractDayOff);
+
+				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 3))).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
+			}
+
+			using (_mocks.Playback())
+			{
+				var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 3), false);
+				Assert.AreEqual(new DateOnlyPeriod(2013, 4, 2, 2013, 4, 3), period);
+			}
+	    }
 
 		[Test]
 		public void ShouldReturnCorrectPeriodIfContractDayOff()
