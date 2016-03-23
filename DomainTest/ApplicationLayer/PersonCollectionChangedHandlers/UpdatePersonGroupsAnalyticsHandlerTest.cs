@@ -392,7 +392,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBridgeGroupPagePerson(existingGrouping));
-			_analyticsGroupPageRepository.AssertWasCalled(r => r.DeleteGroupPagesByGroupCodes(new Guid[] { existingGrouping }));
+			_analyticsGroupPageRepository.AssertWasCalled(r => r.DeleteGroupPagesByGroupCodes(new[] { existingGrouping }));
 
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonExcludingPersonPeriods(person.Id.GetValueOrDefault(), new[] { personPeriodId }));
 		}

@@ -56,8 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		// Add/Remove groups for a person period
 		private IEnumerable<Guid> updatePersonGroups(Guid personPeriodId, ICollection<Guid> groupIds)
 		{
-			var currentGroups =
-				_analyticsBridgeGroupPagePersonRepository.GetBuiltInGroupPagesForPersonPeriod(personPeriodId)
+			var currentGroups = _analyticsBridgeGroupPagePersonRepository.GetBuiltInGroupPagesForPersonPeriod(personPeriodId)
 					.ToList();
 
 			var toBeDeleted = currentGroups.Where(g => !groupIds.Contains(g)).ToList();
