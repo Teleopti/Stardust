@@ -13,12 +13,15 @@
 		redirect();
 
 		function findTheDeepestArea() {
-			var theDeepestArea = globalApplicationAreas.filter(isAnyAreaInTheUrl);
-			if (theDeepestArea.length > 1) {
-				theDeepestArea.sort();
-				theDeepestArea = theDeepestArea[theDeepestArea.length - 1];
-			}
-			return theDeepestArea;
+		    var theDeepestArea = undefined; 
+		    var areas = globalApplicationAreas.filter(isAnyAreaInTheUrl);
+		    if (areas.length === 1)
+		        theDeepestArea = areas[0];
+		    else if(areas.length > 1) {
+		        areas.sort();
+		        theDeepestArea = areas[areas.length - 1];
+		    }
+		    return theDeepestArea;
 		}
 
 		function tryToSaveReturnHash(areaToGo) {
