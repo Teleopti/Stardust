@@ -10,7 +10,8 @@ input[type=text],input[type=password],input[type=number]{
 
 .seatmap-container{
 	height: 95%;
-	position: relative;
+	width: 100%;
+	position: absolute;
 }
 
 .seatmap{
