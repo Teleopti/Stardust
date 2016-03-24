@@ -4,8 +4,10 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Permissions.Controllers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -13,11 +15,16 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.WebTest.Areas.Permissions
 {
 	[PermissionsTest]
-	public class OrganizationSelectionControllerTest
+	public class OrganizationSelectionControllerTest : ISetup
 	{
 		public OrganizationSelectionController Target;
 		public FakeCurrentBusinessUnit CurrentBusinessUnit;
 		public ISiteRepository SiteRepository;
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<FakeCurrentBusinessUnit>().For<ICurrentBusinessUnit>();
+		}
 
 		[Test]
 		public void ShouldReturnDynamicOptions()
@@ -50,5 +57,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			dynamic result = Target.GetOrganizationSelection();
 			((ICollection<object>)(((ICollection<dynamic>)result.BusinessUnit.ChildNodes).First()).ChildNodes).Count.Should().Be.EqualTo(0);
 		}
+
 	}
 }

@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 			system.UseTestDouble<FakeApplicationRolePersonRepository>().For<IApplicationRolePersonRepository>();
 			system.UseTestDouble<FakePersonInRoleQuerier>().For<IPersonInRoleQuerier>();
-			system.UseTestDouble<FakeCurrentBusinessUnit>().For<ICurrentBusinessUnit>();
 			system.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
 			system.UseTestDouble<FakeApplicationFunctionsToggleFilter>().For<IApplicationFunctionsToggleFilter>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
