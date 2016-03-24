@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		protected override void PreFill(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
 		{
 			schedulerStateHolderTo.LoadCommonState(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(), _repositoryFactory);
-			_skillRepository.FindAllWithSkillDays(period); //hack to prevent working with skill proxies when doing calculation - remove later when we know what skills to use (=when passed in event)
+			_skillRepository.FindAllWithSkillDays(period); //perf hack to prevent working with skill proxies when doing calculation
 		}
 
 		protected override void PostFill(ISchedulerStateHolder schedulerStateHolder, IEnumerable<IPerson> agents, DateOnlyPeriod period)
