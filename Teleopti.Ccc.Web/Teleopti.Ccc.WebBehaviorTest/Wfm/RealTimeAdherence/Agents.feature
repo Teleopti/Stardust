@@ -39,12 +39,14 @@ Background:
 	| Activity        | Phone    |
 	| Phone state     | Ready    |
 	| Name            | Adhering |
+	| IsAlarm         | True     |
 	| Alarm Color     | Green    |
 	| Staffing effect | 0        |
 	And there is a rule with 
 	| Field           | Value        |
 	| Activity        | Phone        |
 	| Phone state     | Pause        |
+	| IsAlarm         | True         |
 	| Alarm Color     | Red          |
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
