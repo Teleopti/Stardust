@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		protected override void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<ISkill> skills, DateOnlyPeriod period)
 		{
 			schedulerStateHolderTo.SchedulingResultState.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>(_schedulerStateHolderFrom.SchedulingResultState.SkillDays);
+			schedulerStateHolderTo.SchedulingResultState.AddSkills(skills.ToArray());
 		}
 
 		protected override void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period)
@@ -50,6 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		protected override void PostFill(ISchedulerStateHolder schedulerStateHolder, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
+			schedulerStateHolder.RequestedPeriod = _schedulerStateHolderFrom.RequestedPeriod;
 		}
 
 		public void Synchronize(IScheduleDictionary modifiedScheduleDictionary, DateOnlyPeriod period)

@@ -37,24 +37,27 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
 		[Test]
+		[Repeat(10)]
 		public void ShouldNotPlaceSameShiftForAllAgentsInIsland()
 		{
 			var scenario = new Scenario("_");
 			var phoneActivity = ActivityFactory.CreateActivity("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var dateOnly = new DateOnly(2010, 1, 1);
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(7, 0, 14, 0, 60), new TimePeriodWithSegment(15, 0, 21, 0, 60), shiftCategory));
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(7, 0, 8, 0, 60), new TimePeriodWithSegment(15, 0, 16, 0, 60), shiftCategory));
 			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(83), TimeSpan.FromHours(1), TimeSpan.FromHours(16))};
 			var skill = SkillFactory.CreateSkill("_").WithId();
 			skill.Activity = phoneActivity;
+			skill.TimeZone = TimeZoneInfo.Utc;
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
-			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60));
+			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(15, TimeSpan.FromMinutes(90)));
 			var schedulerStateHolderFrom = SchedulerStateHolderFrom();
 			schedulerStateHolderFrom.SchedulingResultState.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2009, 12, 31, 2010, 1, 2)));
 			var schedules = new List<IScheduleDay>();
-			for (var i = 0; i < 30; i++)
+			for (var i = 0; i < 10; i++)
 			{
 				var agent = new Person().WithId();
+				agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 				agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 				agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1));
 				agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
@@ -69,15 +72,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				schedules.Add(scheduleDay);
 			}
 			schedulerStateHolderFrom.SchedulingResultState.SkillDays = new Dictionary<ISkill, IList<ISkillDay>> { { skill, new List<ISkillDay> { skillDay } } };
+			schedulerStateHolderFrom.SchedulingResultState.AddSkills(skill);
+			schedulerStateHolderFrom.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(dateOnly, dateOnly), TimeZoneInfo.Utc);
 
 			Target.Optimize(schedules, new OptimizationPreferencesDefaultValueProvider().Fetch(), new DateOnlyPeriod(dateOnly, dateOnly), new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new NoSchedulingProgress());
 
 			var uniqueSchedulePeriods = new HashSet<DateTimePeriod>();
 			foreach (var oldSchedule in schedules)
-			{
+			{ 
 				uniqueSchedulePeriods.Add(schedulerStateHolderFrom.Schedules[oldSchedule.Person].ScheduledDay(dateOnly).PersonAssignment().Period);
 			}
-			uniqueSchedulePeriods.Count.Should().Be.GreaterThan(2); //Two and not one to make sure we not just kept the old ones
+			uniqueSchedulePeriods.Count.Should().Be.EqualTo(2); 
 		}
 
 		[Test]
