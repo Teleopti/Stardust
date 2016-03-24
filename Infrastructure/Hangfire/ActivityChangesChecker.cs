@@ -1,35 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using Hangfire.Server;
-using Hangfire.SqlServer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
-	// with Hangfire 1.5, we think we can inject our server component without deriving from SqlServerStorage
-	public class SqlStorageWithActivityChangesCheckerComponent : SqlServerStorage
-	{
-		private readonly ActivityChangesChecker _activityChangesChecker;
-
-		public SqlStorageWithActivityChangesCheckerComponent(ActivityChangesChecker activityChangesChecker, string nameOrConnectionString, SqlServerStorageOptions options) : base(nameOrConnectionString, options)
-		{
-			_activityChangesChecker = activityChangesChecker;
-		}
-
-		public override IEnumerable<IServerComponent> GetComponents()
-		{
-			return base.GetComponents()
-				.Union(new[] { _activityChangesChecker });
-
-		}
-	}
-
 	// cant be put in the domain yet because of the Hangfire dependency
-	public class ActivityChangesChecker : IServerComponent
+	public class ActivityChangesChecker : IBackgroundProcess
 	{
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
 		private readonly TenantsInitializedInRta _tenants;
@@ -47,13 +25,13 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			_toggleManager = toggleManager;
 		}
 
-		public void Execute(CancellationToken cancellationToken)
+		public void Execute(BackgroundProcessContext context)
 		{
 			if (_timeout.Equals(TimeSpan.MaxValue))
 				return;
 			if (!_toggleManager.IsEnabled(Toggles.RTA_ScaleOut_36979))
 				_tenants.ForAllTenants(t => _rta.CheckForActivityChanges(t));
-			cancellationToken.WaitHandle.WaitOne(_timeout);
+			context.CancellationToken.WaitHandle.WaitOne(_timeout);
 		}
 
 		public void ExecuteForTest()

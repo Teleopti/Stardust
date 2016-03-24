@@ -1,5 +1,6 @@
 using Autofac;
 using Hangfire;
+using Hangfire.Client;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -32,8 +33,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.SingleInstance();
 			builder.Register(c =>
 				new RecurringJobManager(
-					c.Resolve<JobStorage>(),
-					c.Resolve<IBackgroundJobClient>()
+					c.Resolve<JobStorage>()
 					))
 				.As<RecurringJobManager>()
 				.SingleInstance();

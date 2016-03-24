@@ -73,15 +73,8 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 				CountersAggregateInterval = TimeSpan.FromSeconds(countersAggregateInterval)
 			};
 
-			if (_toggleManager.IsEnabled(Toggles.RTA_ScaleOut_36979))
-				GlobalConfiguration.Configuration.UseSqlServerStorage(_config.ConnectionString("Hangfire"), sqlServerStorageOptions);
-			else
-				GlobalConfiguration.Configuration.UseStorage(
-					new SqlStorageWithActivityChangesCheckerComponent(
-						_activityChangesChecker,
-						_config.ConnectionString("Hangfire"),
-						sqlServerStorageOptions));
-			
+			GlobalConfiguration.Configuration.UseSqlServerStorage(_config.ConnectionString("Hangfire"), sqlServerStorageOptions);
+
 			GlobalConfiguration.Configuration.UseAutofacActivator(_lifetimeScope);
 
 
@@ -116,11 +109,14 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			}
 
 
-
-			app.UseHangfireServer(new BackgroundJobServerOptions
+			var options = new BackgroundJobServerOptions
 			{
 				WorkerCount = setThisToOneAndErikWillHuntYouDownAndKillYouSlowlyAndPainfully
-			});
+			};
+			if (_toggleManager.IsEnabled(Toggles.RTA_ScaleOut_36979))
+				app.UseHangfireServer(options);
+			else
+				app.UseHangfireServer(options, _activityChangesChecker);
 
 
 
