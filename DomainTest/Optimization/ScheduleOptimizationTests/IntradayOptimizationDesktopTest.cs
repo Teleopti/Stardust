@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
 		[Test]
-		[Repeat(10)]
 		public void ShouldNotPlaceSameShiftForAllAgentsInIsland()
 		{
 			var scenario = new Scenario("_");
