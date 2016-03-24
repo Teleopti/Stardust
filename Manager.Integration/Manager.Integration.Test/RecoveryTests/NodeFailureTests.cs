@@ -5,9 +5,7 @@ using System.Threading;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Initializers;
 using Manager.Integration.Test.Models;
-using Manager.Integration.Test.Notifications;
 using Manager.Integration.Test.Properties;
-using Manager.Integration.Test.Validators;
 using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.Interfaces;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
@@ -17,7 +15,7 @@ using NUnit.Framework;
 namespace Manager.Integration.Test.RecoveryTests
 {
 	[TestFixture]
-	internal class NodeFailureTests : InitialzeAndFinalizeOneManagerAndOneNode
+	internal class NodeFailureTests : InitialzeAndFinalizeOneManagerAndOneNodeWait
 	{
 		private void LogMessage(string message)
 		{
@@ -33,23 +31,6 @@ namespace Manager.Integration.Test.RecoveryTests
 		public async void ShouldConsiderNodeAsDeadWhenInactiveAndSetJobResulToFatal()
 		{
 			LogMessage("Start test.");
-			//---------------------------------------------
-			// Notify when all 1 nodes are up and running. 
-			//---------------------------------------------
-			LogMessage("Waiting for all 1 nodes to start up.");
-
-			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
-			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
-
-			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(1,
-			                                                      sqlNotiferCancellationTokenSource,
-			                                                      IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
-			task.Start();
-
-			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(2));
-			sqlNotifier.Dispose();
-
-			LogMessage("All 1 nodes has started.");
 
 			//---------------------------------------------
 			// Send a Job.

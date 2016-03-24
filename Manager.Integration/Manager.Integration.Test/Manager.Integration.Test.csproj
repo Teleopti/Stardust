@@ -77,10 +77,12 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Constants\IntegrationControllerRouteConstants.cs" />
     <Compile Include="Constants\ManagerRouteConstants.cs" />
     <Compile Include="Constants\MediaTypeConstants.cs" />
     <Compile Include="Constants\StatusConstants.cs" />
     <Compile Include="EventArgs\GuidAddedEventArgs.cs" />
+    <Compile Include="Helpers\IntergrationControllerUriBuilder.cs" />
     <Compile Include="Initializers\InitializeAndFinalizeBase.cs" />
     <Compile Include="Helpers\AppDomainHelper.cs" />
     <Compile Include="Helpers\DatabaseHelper.cs" />
@@ -89,10 +91,12 @@
     <Compile Include="Helpers\ProcessHelper.cs" />
     <Compile Include="Helpers\SecurityHelper.cs" />
     <Compile Include="Helpers\ManagerUriBuilder.cs" />
+    <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndOneNodeWait.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeSixManagersAndSixNodes.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndOneNodeNoLoadBalancer.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndZeroNodes.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndOneNode.cs" />
+    <Compile Include="IntegrationControllerTests\IntegrationControllerOneManagerAndOneNodeTests.cs" />
     <Compile Include="Interceptor\FunctionalTestInterceptor.cs" />
     <Compile Include="LoadTests\OneManagerAndOneNodeLoadTests.cs" />
     <Compile Include="Models\WorkerNode.cs" />

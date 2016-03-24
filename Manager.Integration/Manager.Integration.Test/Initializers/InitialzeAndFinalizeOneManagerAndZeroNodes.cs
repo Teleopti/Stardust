@@ -2,7 +2,10 @@
 {
 	public class InitialzeAndFinalizeOneManagerAndZeroNodes : InitializeAndFinalizeBase
 	{
-		public InitialzeAndFinalizeOneManagerAndZeroNodes() : base(0, 1, true)
+		public InitialzeAndFinalizeOneManagerAndZeroNodes() : base(numberOfNodes: 0,
+		                                                           numberOfManagers: 1,
+		                                                           useLoadBalancerIfJustOneManager: true,
+		                                                           waitToStartUp: false)
 		{
 		}
 	}

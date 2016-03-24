@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
-using log4net;
+using Manager.IntegrationTest.Console.Host.Constants;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 
 namespace Manager.IntegrationTest.Console.Host
@@ -16,7 +17,7 @@ namespace Manager.IntegrationTest.Console.Host
 
 		public string WhoAmI { get; set; }
 
-		[HttpPost, Route("appdomain/managers")]
+		[HttpPost, Route(IntegrationControllerRouteConstants.Managers)]
 		public IHttpActionResult StartNewManager()
 		{
 			this.Log().DebugWithLineNumber("Called API controller.");
@@ -28,7 +29,7 @@ namespace Manager.IntegrationTest.Console.Host
 			return Ok(friendlyname);
 		}
 
-		[HttpPost, Route("appdomain/nodes")]
+		[HttpPost, Route(IntegrationControllerRouteConstants.Nodes)]
 		public IHttpActionResult StartNewNode()
 		{
 			this.Log().InfoWithLineNumber("StartNewNode.");
@@ -40,7 +41,7 @@ namespace Manager.IntegrationTest.Console.Host
 			return Ok(friendlyname);
 		}
 
-		[HttpDelete, Route("appdomain/managers/{id}")]
+		[HttpDelete, Route(IntegrationControllerRouteConstants.ManagerById)]
 		public IHttpActionResult DeleteManager(string id)
 		{
 			this.Log().InfoWithLineNumber("DeleteManager");
@@ -67,7 +68,7 @@ namespace Manager.IntegrationTest.Console.Host
 			return NotFound();
 		}
 
-		[HttpDelete, Route("appdomain/nodes/{id}")]
+		[HttpDelete, Route(IntegrationControllerRouteConstants.NodeById)]
 		public IHttpActionResult DeleteNode(string id)
 		{
 			this.Log().InfoWithLineNumber("Delete Node");
@@ -94,17 +95,17 @@ namespace Manager.IntegrationTest.Console.Host
 			return NotFound();
 		}
 
-		[HttpGet, Route("appdomain/managers")]
+		[HttpGet, Route(IntegrationControllerRouteConstants.Managers)]
 		public IHttpActionResult GetAllManagers()
 		{
 			this.Log().DebugWithLineNumber("GetAllManagers");
 
-			var appDomainsList = Program.GetAllmanagers();
+			List<string> appDomainsList = Program.GetAllmanagers();
 
 			return Ok(appDomainsList);
 		}
 
-		[HttpGet, Route("appdomain/nodes")]
+		[HttpGet, Route(IntegrationControllerRouteConstants.Nodes)]
 		public IHttpActionResult GetAllNodes()
 		{
 			this.Log().DebugWithLineNumber("GetAllNodes");

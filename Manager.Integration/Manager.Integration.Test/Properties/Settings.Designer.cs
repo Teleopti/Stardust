@@ -85,5 +85,15 @@ namespace Manager.Integration.Test.Properties {
                 return ((string)(this["ManagerLocationUri"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:9100/")]
+        public string IntegrationControllerBaseAddress {
+            get {
+                return ((string)(this["IntegrationControllerBaseAddress"]));
+            }
+        }
     }
 }

@@ -11,8 +11,6 @@ using Microsoft.Owin.Hosting;
 using Owin;
 using Stardust.Manager;
 using Stardust.Manager.Extensions;
-using Stardust.Manager.Helpers;
-using Stardust.Manager.Models;
 
 namespace ManagerConsoleHost
 {
@@ -49,17 +47,17 @@ namespace ManagerConsoleHost
 			SetConsoleCtrlHandler(ConsoleCtrlCheck,
 			                      true);
 
-			string managerName = ConfigurationManager.AppSettings["ManagerName"];
-			Uri baseAddress = new Uri(ConfigurationManager.AppSettings["baseAddress"]);
+			var managerName = ConfigurationManager.AppSettings["ManagerName"];
+			var baseAddress = new Uri(ConfigurationManager.AppSettings["baseAddress"]);
 
 			var managerAddress = baseAddress.Scheme + "://+:" +
-								 baseAddress.Port + "/";
+			                     baseAddress.Port + "/";
 
 			AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
 
-			
-			WhoAmI = 
-				"[MANAGER CONSOLE HOST ( " + managerName + ", " + managerAddress +  " )," + Environment.MachineName.ToUpper() + "]";
+
+			WhoAmI =
+				"[MANAGER CONSOLE HOST ( " + managerName + ", " + managerAddress + " )," + Environment.MachineName.ToUpper() + "]";
 
 			Logger.InfoWithLineNumber(WhoAmI + " : started.");
 
@@ -135,7 +133,7 @@ namespace ManagerConsoleHost
 			if (exp != null)
 			{
 				Logger.FatalWithLineNumber(exp.Message,
-				                                 exp);
+				                           exp);
 			}
 		}
 	}

@@ -8,7 +8,9 @@ using Castle.DynamicProxy;
 using log4net.Config;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Interceptor;
+using Manager.Integration.Test.Notifications;
 using Manager.Integration.Test.Tasks;
+using Manager.Integration.Test.Validators;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 using NUnit.Framework;
 
@@ -18,11 +20,13 @@ namespace Manager.Integration.Test.Initializers
 	{
 		protected InitializeAndFinalizeBase(int numberOfNodes,
 		                                    int numberOfManagers,
-											bool useLoadBalancerIfJustOneManager)
+											bool useLoadBalancerIfJustOneManager,
+											bool waitToStartUp)
 		{
 			NumberOfNodes = numberOfNodes;
 			NumberOfManagers = numberOfManagers;
 			UseLoadBalancerIfJustOneManager = useLoadBalancerIfJustOneManager;
+			WaitToStartUp = waitToStartUp;
 		}
 
 #if (DEBUG)
@@ -43,7 +47,10 @@ namespace Manager.Integration.Test.Initializers
 		protected int NumberOfNodes { get; set; }
 
 		protected int NumberOfManagers { get; set; }
-		public bool UseLoadBalancerIfJustOneManager { get; set; }
+
+		public bool UseLoadBalancerIfJustOneManager { get; private set; }
+
+		protected bool WaitToStartUp { get; set; }
 
 		protected AppDomainTask AppDomainTask { get; set; }
 
@@ -99,6 +106,22 @@ namespace Manager.Integration.Test.Initializers
 			                               numberOfNodes: NumberOfNodes,
 										   useLoadBalancerIfJustOneManager: UseLoadBalancerIfJustOneManager,
 										   cancellationTokenSource: CancellationTokenSource);
+
+
+
+			if (WaitToStartUp)
+			{
+				var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
+				var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
+
+				var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(NumberOfNodes,
+																	  sqlNotiferCancellationTokenSource,
+																	  IntegerValidators.Value1IsEqualToValue2Validator);
+				task.Start();
+
+				sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(10));
+				sqlNotifier.Dispose();
+			}
 		}
 
 		[TestFixtureTearDown]

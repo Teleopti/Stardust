@@ -128,6 +128,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\IntegrationControllerRouteConstants.cs" />
     <Compile Include="Constants\ManagerRouteConstants.cs" />
     <Compile Include="Diagnostics\ManagerIntegrationStopwatch.cs" />
     <Compile Include="Helpers\HttpSender.cs" />

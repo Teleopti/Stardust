@@ -9,7 +9,6 @@ using Manager.Integration.Test.Initializers;
 using Manager.Integration.Test.Notifications;
 using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Timers;
-using Manager.Integration.Test.Validators;
 using Manager.IntegrationTest.Console.Host.Diagnostics;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 using NUnit.Framework;
@@ -17,7 +16,7 @@ using NUnit.Framework;
 namespace Manager.Integration.Test.FunctionalTests
 {
 	[TestFixture]
-	public class OneManagerAndOneNodeTests : InitialzeAndFinalizeOneManagerAndOneNode
+	public class OneManagerAndOneNodeTests : InitialzeAndFinalizeOneManagerAndOneNodeWait
 	{
 		private void LogMessage(string message)
 		{
@@ -35,23 +34,6 @@ namespace Manager.Integration.Test.FunctionalTests
 			var timeout =
 				JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
 				                                       2);
-			//--------------------------------------------
-			// Notify when node is up.
-			//--------------------------------------------
-			LogMessage("Waiting for node to start.");
-
-			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
-			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
-
-			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(NumberOfNodes,
-			                                                      sqlNotiferCancellationTokenSource,
-			                                                      IntegerValidators.Value1IsEqualToValue2Validator);
-			task.Start();
-
-			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(timeout);
-			sqlNotifier.Dispose();
-
-			LogMessage("Node have started.");
 
 			//--------------------------------------------
 			// Start actual test.

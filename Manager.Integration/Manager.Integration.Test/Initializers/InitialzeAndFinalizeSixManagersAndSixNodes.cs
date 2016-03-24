@@ -2,9 +2,11 @@
 {
 	public class InitialzeAndFinalizeSixManagersAndSixNodes : InitializeAndFinalizeBase
 	{
-		public InitialzeAndFinalizeSixManagersAndSixNodes() : base(6, 6, true)
+		public InitialzeAndFinalizeSixManagersAndSixNodes() : base(numberOfNodes: 6,
+		                                                           numberOfManagers: 6,
+		                                                           useLoadBalancerIfJustOneManager: true,
+		                                                           waitToStartUp: false)
 		{
 		}
-
 	}
 }
