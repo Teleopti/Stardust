@@ -96,6 +96,10 @@
 		}
 	}
 
+	.md-sidenav-right md-content select{
+		padding:0;
+	}
+	
 	.people-list .ui-grid-menu-button, .import-people-form .ui-grid-menu-button {
 		top: 0;
 		height: 31px;
