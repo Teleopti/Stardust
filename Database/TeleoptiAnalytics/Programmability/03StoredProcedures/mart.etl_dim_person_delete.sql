@@ -78,10 +78,6 @@ FROM mart.fact_agent_skill AS fact
     INNER JOIN #top AS dim
     ON fact.person_id = dim.person_id
 
-DELETE FROM mart.fact_agent_state
-FROM mart.fact_agent_state AS fact
-    INNER JOIN #top AS dim
-    ON fact.person_id = dim.person_id
 
 DELETE FROM mart.fact_hourly_availability
 FROM mart.fact_hourly_availability AS fact
