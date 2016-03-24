@@ -169,7 +169,6 @@
     <Compile Include="Infrastructure\DataTableDefinition\ScorecardKpiInfrastructure.cs" />
     <Compile Include="Infrastructure\DataTableDefinition\ShiftCategoryInfrastructure.cs" />
     <Compile Include="Infrastructure\DataTableDefinition\SkillInfrastructure.cs" />
-    <Compile Include="Infrastructure\DataTableDefinition\StateGroupInfrastructure.cs" />
     <Compile Include="Infrastructure\DataTableDefinition\TimeZoneInfrastructure.cs" />
     <Compile Include="Infrastructure\DataTableDefinition\WorkloadInfrastructure.cs" />
     <Compile Include="Infrastructure\DataTableDefinition\WorkloadQueueInfrastructure.cs" />
@@ -389,7 +388,6 @@
     <Compile Include="Transformer\Job\Steps\StageScorecardKpiJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\StageShiftCategoryJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\StageSkillJobStep.cs" />
-    <Compile Include="Transformer\Job\Steps\StageStateGroupJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\StageTimeZoneBridgeJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\StageTimeZoneJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\StageWorkloadJobStep.cs" />
@@ -430,7 +428,6 @@
     <Compile Include="Transformer\ScorecardTransformer.cs" />
     <Compile Include="Transformer\ShiftCategoryTransformer.cs" />
     <Compile Include="Transformer\SkillTransformer.cs" />
-    <Compile Include="Transformer\StateGroupTransformer.cs" />
     <Compile Include="Transformer\TimeZoneBridge.cs" />
     <Compile Include="Transformer\TimeZoneFactory.cs" />
     <Compile Include="Transformer\TimeZoneTransformer.cs" />

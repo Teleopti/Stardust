@@ -1576,23 +1576,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 												  _dataMartConnectionString), DateTimeKind.Unspecified);
 		}
 
-		public IList<IRtaStateGroup> LoadRtaStateGroups(IBusinessUnit businessUnitId)
-		{
-			IList<IRtaStateGroup> rtaStateGroupForBusinessUnit;
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var stateGroupRepository = new RtaStateGroupRepository(uow);
-				rtaStateGroupForBusinessUnit = stateGroupRepository.LoadAll();
-			}
-			return rtaStateGroupForBusinessUnit;
-		}
-
-		public int PersistStateGroup(DataTable dataTable)
-		{
-			HelperFunctions.TruncateTable("stage.etl_stg_state_group_delete", _dataMartConnectionString);
-			return HelperFunctions.BulkInsert(dataTable, "stage.stg_state_group", _dataMartConnectionString);
-		}
-
 		public int PersistKpi(DataTable dataTable)
 		{
 			HelperFunctions.TruncateTable("stage.etl_stg_kpi_delete", _dataMartConnectionString);

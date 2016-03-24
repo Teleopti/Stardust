@@ -221,7 +221,6 @@
     <Compile Include="Transformer\ShiftCategoryTransformerTest.cs" />
     <Compile Include="Transformer\SkillTransformerTest.cs" />
     <Compile Include="Transformer\StageScheduleJobStepTest.cs" />
-    <Compile Include="Transformer\StateGroupTransformerTest.cs" />
     <Compile Include="Transformer\TempTest.cs" />
     <Compile Include="Transformer\TimeZoneTransformerTest.cs" />
     <Compile Include="Transformer\WorkloadTransformerTest.cs" />

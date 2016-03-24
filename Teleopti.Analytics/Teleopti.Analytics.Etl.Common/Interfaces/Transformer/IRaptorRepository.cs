@@ -135,11 +135,7 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 		int FillSkillSetDataMart(IBusinessUnit businessUnit);
 		int FillBridgeAgentSkillSetDataMart(IBusinessUnit businessUnit);
 		int FillFactAgentSkillDataMart(IBusinessUnit businessUnit);
-
-		//RTA
-		IList<IRtaStateGroup> LoadRtaStateGroups(IBusinessUnit businessUnit);
-		int PersistStateGroup(DataTable dataTable);
-
+		
 		//Users
 		IList<IPerson> LoadUser();
 		int PersistUser(DataTable dataTable);

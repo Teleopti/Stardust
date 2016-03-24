@@ -36,16 +36,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			return 0;
 		}
 
-		public IList<IRtaStateGroup> LoadRtaStateGroups(IBusinessUnit businessUnit)
-		{
-			return new List<IRtaStateGroup>();
-		}
-
-		public int PersistStateGroup(DataTable dataTable)
-		{
-			return dataTable.Rows.Count;
-		}
-
 		public IList<IShiftCategory> LoadShiftCategory()
 		{
 			return new List<IShiftCategory>();
