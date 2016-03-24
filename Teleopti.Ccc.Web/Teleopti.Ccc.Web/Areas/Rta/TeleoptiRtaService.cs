@@ -4,6 +4,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using log4net;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Rta.WebService;
@@ -99,21 +100,30 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			}
 			catch (InvalidSourceException e)
 			{
-				Log.Error("Source id was not valid.", e);
+				Log.Error("Source id was invalid.", e);
 				return -300;
 			}
 			catch (InvalidPlatformException e)
 			{
-				Log.Error("Platform id was not valid.", e);
+				Log.Error("Platform id was invalid.", e);
 				return -200;
 			}
 			catch (InvalidUserCodeException e)
 			{
-				Log.Info("User code was not valid.", e);
+				Log.Info("User code was invalid.", e);
 				return -100;
 			}
 			catch (AggregateException e)
 			{
+				var onlyInvalidUserCode =
+					e.AllExceptions()
+						.Where(x => x.GetType() != typeof (AggregateException))
+						.All(x => x.GetType() == typeof (InvalidUserCodeException));
+				if (onlyInvalidUserCode)
+				{
+					Log.Info("Batch contained invalid user code.", e);
+					return -100;
+				}
 				Log.Error("Exceptions while processing batch.", e);
 				return -500;
 			}

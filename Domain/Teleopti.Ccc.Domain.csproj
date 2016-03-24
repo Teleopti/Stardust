@@ -179,6 +179,7 @@
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\BuildInGroupsAnalyticsUpdater.cs" />
     <Compile Include="DayOffPlanning\IPeopleInOrganization.cs" />
     <Compile Include="DayOffPlanning\PeopleInOrganization.cs" />
+    <Compile Include="ExceptionExtensions.cs" />
     <Compile Include="Optimization\IOptimizationPreferencesProvider.cs" />
     <Compile Include="ApplicationLayer\Events\GroupPageCollectionChangedEvent.cs" />
     <Compile Include="DayOffPlanning\SkillGroupReducerForCascadingSkills.cs" />
