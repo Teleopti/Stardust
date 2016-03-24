@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 		private readonly ISaveSchedulePartService _saveSchedulePartService;
-		private readonly IScenario _scenario;
 
 		public PersonAbsenceRemover(
 			IScheduleStorage scheduleStorage,
