@@ -65,7 +65,7 @@ task CompileWse -depends Init, PreReq, MountK -description "Complie all WSE file
 
     foreach ($Files in $WseFiles) {
     $Command = $WseCompiler
-    $Arg = @($Files.FullName, '/c')
+    $Arg = @($Files.FullName, '/c', '/s')
     Write-Output "$Command $Arg"
     & $Command $Arg | Out-Null
     }
