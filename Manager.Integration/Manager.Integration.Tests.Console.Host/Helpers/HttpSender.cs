@@ -46,8 +46,36 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message,
-				                           exp);
+				                               exp);
 				throw;
+			}
+		}
+
+		public async Task<HttpResponseMessage> PostAsync(Uri url)
+		{
+			try
+			{
+				using (var client = new HttpClient())
+				{
+					var response = await client.PostAsync(url, null);
+
+					return response;
+				}
+			}
+			catch (Exception exp)
+			{
+				string msg = exp.Message;
+			}
+
+			return null;
+		}
+
+		public async Task<HttpResponseMessage> PostAsync(Uri url,
+		                                                 CancellationToken cancellationToken)
+		{
+			using (var client = new HttpClient())
+			{
+				return await client.PostAsync(url, null, cancellationToken);
 			}
 		}
 
@@ -86,7 +114,7 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message,
-				                           exp);
+				                               exp);
 				throw;
 			}
 		}
@@ -118,7 +146,7 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message,
-				                           exp);
+				                               exp);
 
 				throw;
 			}
@@ -153,7 +181,7 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message,
-				                           exp);
+				                               exp);
 
 				throw;
 			}
@@ -186,7 +214,7 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message,
-				                           exp);
+				                               exp);
 
 				throw;
 			}
@@ -220,7 +248,7 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message,
-				                           exp);
+				                               exp);
 
 				throw;
 			}
@@ -254,13 +282,13 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 			catch (HttpRequestException exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message,
-				                           exp);
+				                               exp);
 			}
 
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message,
-				                           exp);
+				                               exp);
 
 				throw;
 			}
@@ -297,13 +325,13 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 			catch (HttpRequestException exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message,
-				                           exp);
+				                               exp);
 			}
 
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message,
-				                           exp);
+				                               exp);
 
 				throw;
 			}

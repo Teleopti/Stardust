@@ -7,10 +7,14 @@ namespace Manager.IntegrationTest.Console.Host.Interfaces
 {
 	public interface IHttpSender
 	{
+		Task<HttpResponseMessage> PostAsync(Uri url);
+
+		Task<HttpResponseMessage> PostAsync(Uri url,
+											CancellationToken cancellationToken);
+
 		Task<HttpResponseMessage> PostAsync(Uri url,
 											object data,
 											CancellationToken cancellationToken);
-
 
 		Task<HttpResponseMessage> PostAsync(Uri url,
 											object data);

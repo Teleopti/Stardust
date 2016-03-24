@@ -26,10 +26,10 @@ namespace Stardust.Manager
             {
                 using (var client = new HttpClient())
                 {
-					var sez = JsonConvert.SerializeObject(data);
+					client.DefaultRequestHeaders.Accept.Clear();
+					client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));			
 
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+					var sez = JsonConvert.SerializeObject(data);
 
 					var response =
                         await client.PostAsync(url,

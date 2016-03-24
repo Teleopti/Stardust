@@ -128,9 +128,47 @@ namespace Manager.IntegrationTest.Console.Host
 		}
 
 
-		private static int NumberOfManagersToStart { get; set; }
+		private static int NumberOfManagersToStart
+		{
+			get
+			{
+				lock (LockNumberOfManagersToStart)
+				{
+					return _numberOfManagersToStart;
+				}				
+			}
 
-		private static int NumberOfNodesToStart { get; set; }
+			set
+			{
+				lock (LockNumberOfManagersToStart)
+				{
+					_numberOfManagersToStart = value;
+				}				
+			}
+		}
+
+		private static readonly object LockNumberOfManagersToStart = new object();
+
+		private static readonly object LockNumberOfNodesToStart =new object();
+
+		private static int NumberOfNodesToStart
+		{
+			get
+			{
+				lock (LockNumberOfNodesToStart)
+				{
+					return _numberOfNodesToStart;
+				}				
+			}
+
+			set
+			{
+				lock (LockNumberOfNodesToStart)
+				{
+					_numberOfNodesToStart = value;
+				}				
+			}
+		}
 
 		private static Dictionary<string, FileInfo> NodeconfigurationFiles { get; set; }
 
@@ -446,6 +484,8 @@ namespace Manager.IntegrationTest.Console.Host
 
 
 		private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
+		private static int _numberOfNodesToStart;
+		private static int _numberOfManagersToStart;
 
 
 		public static FileInfo CreateNodeConfigurationFile(FileInfo nodeConfigurationFile,

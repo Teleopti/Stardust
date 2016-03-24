@@ -18,12 +18,29 @@ namespace Manager.Integration.Test.IntegrationControllerTests
 			var managersUri =
 				intergrationControllerUriBuilder.GetAllManagersUri();
 
-			var request = await httpSender.GetAsync(managersUri);
+			var httpResponseMessage =
+				await httpSender.GetAsync(managersUri);
 
-			var result = request.Content.ReadAsStringAsync().Result;
+			var result =
+				httpResponseMessage.Content.ReadAsStringAsync().Result;
 
 			return JsonConvert.DeserializeObject(result,
 			                                     typeof (List<string>)) as List<string>;
+		}
+
+		private async Task<string> StartNewNode(IntergrationControllerUriBuilder intergrationControllerUriBuilder,
+		                                        IHttpSender httpSender)
+		{
+			var allNodesUri =
+				intergrationControllerUriBuilder.GetAllNodesUri();
+
+			var httpResponseMessage = httpSender.PostAsync(allNodesUri);
+
+			httpResponseMessage.Wait();
+
+			var res = httpResponseMessage.Result;
+
+			return await res.Content.ReadAsStringAsync();
 		}
 
 		private async Task<List<string>> GetAllNodes(IntergrationControllerUriBuilder intergrationControllerUriBuilder,
@@ -32,12 +49,26 @@ namespace Manager.Integration.Test.IntegrationControllerTests
 			var allNodesUri =
 				intergrationControllerUriBuilder.GetAllNodesUri();
 
-			var request = await httpSender.GetAsync(allNodesUri);
+			var httpResponseMessage =
+				await httpSender.GetAsync(allNodesUri);
 
-			var result = request.Content.ReadAsStringAsync().Result;
+			var result =
+				httpResponseMessage.Content.ReadAsStringAsync().Result;
 
 			return JsonConvert.DeserializeObject(result,
 			                                     typeof (List<string>)) as List<string>;
+		}
+
+		[Test]
+		public void ShouldBeAbleToStartNewNode()
+		{
+			var intergrationControllerUriBuilder = new IntergrationControllerUriBuilder();
+			var httpSender = new HttpSender();
+
+			var nodeName = StartNewNode(intergrationControllerUriBuilder,
+			                            httpSender);
+
+			Assert.IsNotNull(nodeName, "Should start up a new node.");
 		}
 
 		[Test]
