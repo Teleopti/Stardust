@@ -3,8 +3,6 @@ using System.Collections;
 using System.Web;
 using log4net;
 using log4net.Config;
-using Microsoft.IdentityModel.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Web;
 
 namespace Teleopti.Ccc.Web.AuthenticationBridge.Controllers

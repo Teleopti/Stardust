@@ -8,22 +8,18 @@ namespace Teleopti.Ccc.Domain.Common
 		private static ICurrentBusinessUnit _currentBusinessUnit;
 		private static IAppliedAlarm _appliedAlarm;
 
+		// these properties are injected by reflection in ServiceLocatorModule
 
-
-		public static ICurrentBusinessUnit CurrentBusinessUnit { get { return _currentBusinessUnit ?? Common.CurrentBusinessUnit.Make(); } }
-		public static IAppliedAlarm AppliedAlarm { get { return _appliedAlarm ?? new AllRulesIsAlarm(); } }
-
-
-
-		public static void SetInstanceFromContainer(ICurrentBusinessUnit instance)
+		public static ICurrentBusinessUnit CurrentBusinessUnit
 		{
-			_currentBusinessUnit = instance;
+			get { return _currentBusinessUnit ?? Common.CurrentBusinessUnit.Make(); }
+			set { _currentBusinessUnit = value; }
 		}
 
-		public static void SetInstanceFromContainer(IAppliedAlarm instance)
+		public static IAppliedAlarm AppliedAlarm
 		{
-			_appliedAlarm = instance;
+			get { return _appliedAlarm ?? new AllRulesIsAlarm(); }
+			set { _appliedAlarm = value; }
 		}
-
 	}
 }

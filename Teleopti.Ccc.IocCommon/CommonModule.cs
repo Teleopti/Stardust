@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.IocCommon
 		{
 			builder.RegisterModule(new MbCacheModule(_configuration));
 			builder.RegisterModule<DateAndTimeModule>();
+			builder.RegisterModule<ServiceLocatorModule>();
 			builder.RegisterModule<LogModule>();
 			builder.RegisterModule<JsonSerializationModule>();
 			builder.RegisterModule(new ToggleNetModule(_configuration.Args()));

@@ -31,9 +31,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			persistCallbacks(builder);
 
-			builder.RegisterType<CurrentBusinessUnit>().As<ICurrentBusinessUnit>().SingleInstance()
-				.OnActivated(e => ServiceLocatorForEntity.SetInstanceFromContainer(e.Instance))
-				.OnRelease(e => ServiceLocatorForEntity.SetInstanceFromContainer(null as ICurrentBusinessUnit));
+			builder.RegisterType<CurrentBusinessUnit>().As<ICurrentBusinessUnit>().SingleInstance();
 			builder.RegisterType<NoBusinessUnitForRequest>().As<IBusinessUnitForRequest>().SingleInstance();
 
 			builder.RegisterType<CurrentInitiatorIdentifier>().As<ICurrentInitiatorIdentifier>();

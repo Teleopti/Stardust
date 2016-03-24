@@ -3,7 +3,6 @@ using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Rta;
@@ -101,19 +100,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			if (_config.Toggle(Toggles.Wfm_RTA_ProperAlarm_34975))
 			{
-				builder.RegisterType<ProperAlarm>().As<IAppliedAlarm>().SingleInstance()
-					.OnActivated(e => ServiceLocatorForEntity.SetInstanceFromContainer(e.Instance))
-					.OnRelease(e => ServiceLocatorForEntity.SetInstanceFromContainer(null as IAppliedAlarm));
+				builder.RegisterType<ProperAlarm>().As<IAppliedAlarm>().SingleInstance();
 				builder.RegisterType<ProperAlarmColor>().As<IAppliedColor>().SingleInstance();
 			}
 			else
 			{
-				builder.RegisterType<AllRulesIsAlarm>().As<IAppliedAlarm>().SingleInstance()
-					.OnActivated(e => ServiceLocatorForEntity.SetInstanceFromContainer(e.Instance))
-					.OnRelease(e => ServiceLocatorForEntity.SetInstanceFromContainer(null as IAppliedAlarm));
+				builder.RegisterType<AllRulesIsAlarm>().As<IAppliedAlarm>().SingleInstance();
 				builder.RegisterType<RuleColor>().As<IAppliedColor>().SingleInstance();
 			}
-				
+
 		}
 	}
 }

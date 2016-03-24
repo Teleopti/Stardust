@@ -205,6 +205,7 @@
     <Compile Include="Configuration\RtaModule.cs" />
     <Compile Include="Configuration\ScheduleOvertimeModule.cs" />
     <Compile Include="Configuration\SchedulingCommonModule.cs" />
+    <Compile Include="Configuration\ServiceLocatorModule.cs" />
     <Compile Include="Configuration\StardustModule.cs" />
     <Compile Include="Configuration\TenantClientModule.cs" />
     <Compile Include="Configuration\DistributedLockModule.cs" />
