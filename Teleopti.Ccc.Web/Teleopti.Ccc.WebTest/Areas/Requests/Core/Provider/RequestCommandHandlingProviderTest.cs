@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 {
 #pragma warning disable 0649
 	[TestFixture, RequestsTest]
-	class RequestCommandHandlingProviderTest
+	public class RequestCommandHandlingProviderTest
 	{
 		public IRequestCommandHandlingProvider Target;
 		public ICurrentScenario Scenario;
