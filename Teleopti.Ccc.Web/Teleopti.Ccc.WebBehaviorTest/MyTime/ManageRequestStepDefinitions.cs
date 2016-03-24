@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
@@ -48,13 +49,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			BrowserInteractionsControlExtensions.TypeTextIntoInputTextUsingJQuery(Browser.Interactions, "#Request-add-section .request-new-message", "A message. A very very very short message. Or maybe not.");
 			BrowserInteractionsControlExtensions.SelectOptionByTextUsingJQuery(Browser.Interactions, "#Request-add-section .request-new-absence", absenceName);
 
-			// hide personal account info, I don't trust the timing of the ko subscription which will hide this while making AJAX call
-			Browser.Interactions.Javascript("$('#absence-personal-account').hide();"); 
-
 			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .request-new-datefrom').datepicker('set', '{0}');",
 							  dateFrom.ToShortDateString(DataMaker.Data().MyCulture)));
 			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .request-new-dateto').datepicker('set', '{0}');",
-							  dateTo.ToShortDateString(DataMaker.Data().MyCulture))); 
+							  dateTo.ToShortDateString(DataMaker.Data().MyCulture)));
+
+			// I don't trust the timing of the ko subscription which will hide #absence-personal-account while making AJAX call.  Give it a little time to hide the person account info.
+			Thread.Sleep(300);
+
 		}
 
 		[When(@"I input overtime availability with")]
