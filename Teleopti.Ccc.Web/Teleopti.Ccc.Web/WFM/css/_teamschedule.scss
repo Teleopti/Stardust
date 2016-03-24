@@ -15,6 +15,28 @@
 		flex-direction:row;
 		flex-wrap:wrap;
 		justify-content:space-between;
+	
+		.people-search-container{
+			display: inline-block;
+			margin: 10px;
+			#simple-people-search{
+				width: 316px;
+			}
+		}
+
+		.team-schedule-datepicker{
+			display: inline-block;
+			vertical-align:top;
+			white-space: nowrap;
+		}
+
+		team-schedule-datepicker input {
+			text-align: center;
+		}
+
+		team-schedule-datepicker input.datepicker-mini {
+			width: 90px;
+		}
 
 		.wfm-switch{
 			display:inline-block;
@@ -26,28 +48,15 @@
 				left: 12rem;
 			}
 		}
-	}
 
-	.people-search-container{
-		display: inline-block;
-		margin: 10px;
-		#simple-people-search{
-			width: 316px;
+		.context-menu .context-menu-left{
+			z-index: 1000;
+			text-transform: none;
 		}
 	}
 
-	.team-schedule-datepicker{
-		display: inline-block;
-		vertical-align:top;
-		white-space: nowrap;
-	}
-
-	team-schedule-datepicker input {
-		text-align: center;
-	}
-
-	team-schedule-datepicker input.datepicker-mini {
-		width: 90px;
+	.teamschedule-body{
+		position:relative;
 	}
 
 	.page-size-selector {
@@ -211,8 +220,19 @@
 			padding-left: 0; 
 			margin-top: -4px;
 		}
-
-		
 	}
-	
+
+	.modal-box .wfm-simple-list{
+		max-height: 430px
+	}
+
+	.con-footer{
+		.notice-spacer{
+			float:left;
+			margin-bottom: 0;
+			padding: 5px;
+			width: auto;
+			display: inline-block;
+		}
+	}
 }
