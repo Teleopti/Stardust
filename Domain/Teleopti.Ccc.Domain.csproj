@@ -173,6 +173,7 @@
     <Compile Include="ApplicationLayer\Commands\PersonAbsenceRemover.cs" />
     <Compile Include="ApplicationLayer\Events\TenantMinuteTickEvent.cs" />
     <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\GroupPageAnalyticsUpdater.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\IAppliedColor.cs" />
     <Compile Include="ApplicationLayer\TenantTickEventPublisher.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsGroupPage.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdatePersonGroupsAnalyticsHandler.cs" />

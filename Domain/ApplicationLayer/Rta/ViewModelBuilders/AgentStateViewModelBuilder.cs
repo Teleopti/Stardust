@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
@@ -16,12 +16,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IUserCulture _culture;
+		private readonly IAppliedColor _color;
 
-		public AgentStateViewModelBuilder(INow now, IUserTimeZone timeZone, IUserCulture culture)
+		public AgentStateViewModelBuilder(INow now, IUserTimeZone timeZone, IUserCulture culture, IAppliedColor color)
 		{
 			_now = now;
 			_timeZone = timeZone;
 			_culture = culture;
+			_color = color;
 		}
 
 		public IEnumerable<AgentStatusViewModel> Build(IEnumerable<AgentStateReadModel> states)
@@ -39,18 +41,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 					NextActivityStartTime = formatTime(x.NextStart),
 					Alarm = x.RuleName,
 					AlarmStart = x.AlarmStartTime,
-					Color = colorTransition(x, timeInAlarm),
+					Color = _color.ColorTransition(x, timeInAlarm),
 					TimeInState = x.StateStartTime.HasValue ? (int) (_now.UtcDateTime() - x.StateStartTime.Value).TotalSeconds : 0,
 					TimeInAlarm = timeInAlarm
 				};
 			});
-		}
-
-		private static string colorTransition(AgentStateReadModel x, int? timeInAlarm)
-		{
-			return timeInAlarm.HasValue
-				? ColorTranslator.ToHtml(Color.FromArgb(x.AlarmColor ?? Color.White.ToArgb()))
-				: ColorTranslator.ToHtml(Color.FromArgb(x.RuleColor ?? Color.White.ToArgb()));
 		}
 
 		private int? calculateTimeInAlarm(AgentStateReadModel x)
