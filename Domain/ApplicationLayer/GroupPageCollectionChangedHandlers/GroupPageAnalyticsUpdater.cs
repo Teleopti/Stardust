@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
@@ -14,6 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandler
 		IHandleEvent<GroupPageCollectionChangedEvent>,
 		IRunOnServiceBus
 	{
+		private static readonly ILog logger = LogManager.GetLogger(typeof(GroupPageAnalyticsUpdater));
 		private readonly IGroupPageRepository _groupPageRepository;
 		private readonly IAnalyticsGroupPageRepository _analyticsGroupPageRepository;
 		private readonly IAnalyticsBridgeGroupPagePersonRepository _analyticsBridgeGroupPagePersonRepository;
@@ -31,6 +35,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandler
 
 			if (!groupPages.Any())
 			{
+				logger.DebugFormat("Did not find any group pages in APP database, deleting anything we have in analytics for group pages: {0}.",
+						string.Join(",", @event.GroupPageIdCollection));
 				_analyticsBridgeGroupPagePersonRepository.DeleteAllBridgeGroupPagePerson(@event.GroupPageIdCollection);
 				_analyticsGroupPageRepository.DeleteGroupPages(@event.GroupPageIdCollection);
 			}
@@ -41,31 +47,38 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandler
 					var existingInAnalytics = _analyticsGroupPageRepository.GetGroupPage(groupPage.Id.GetValueOrDefault()).ToList();
 					foreach (var rootGroup in groupPage.RootGroupCollection)
 					{
+						var rootGroupId = rootGroup.Id.GetValueOrDefault();
 						var analyticsGroupPage = new AnalyticsGroup
 						{
 							GroupPageCode = groupPage.Id.GetValueOrDefault(),
 							GroupPageName = groupPage.Description.Name,
 							GroupPageNameResourceKey = groupPage.DescriptionKey,
-							GroupCode = rootGroup.Id.GetValueOrDefault(),
+							GroupCode = rootGroupId,
 							GroupName = rootGroup.Description.Name,
 							GroupIsCustom = true,
 							BusinessUnitCode = @event.LogOnBusinessUnitId
 						};
 						if (existingInAnalytics.Any(x => x.GroupCode == rootGroup.Id))
 						{
+							logger.DebugFormat("Updating group page {0}, group {1}", analyticsGroupPage.GroupPageCode, analyticsGroupPage.GroupCode);
 							_analyticsGroupPageRepository.UpdateGroupPage(analyticsGroupPage);
 						}
 						else
 						{
+							logger.DebugFormat("Creating group page {0}, group {1}", analyticsGroupPage.GroupPageCode, analyticsGroupPage.GroupCode);
 							_analyticsGroupPageRepository.AddGroupPage(analyticsGroupPage);
 						}
 						var people = getRecursively(rootGroup.ChildGroupCollection, rootGroup.PersonCollection.ToList()).Select(x => x.Id.GetValueOrDefault()).ToList();
-						var currentPersonCodesInGroupPage = _analyticsBridgeGroupPagePersonRepository.GetBridgeGroupPagePerson(rootGroup.Id.GetValueOrDefault());
+						var currentPersonCodesInGroupPage = _analyticsBridgeGroupPagePersonRepository.GetBridgeGroupPagePerson(rootGroupId);
 						var toBeAdded = people.Where(x => !currentPersonCodesInGroupPage.Contains(x)).ToList();
 						var toBeDeleted = currentPersonCodesInGroupPage.Where(x => !people.Contains(x)).ToList();
 
-						_analyticsBridgeGroupPagePersonRepository.AddBridgeGroupPagePerson(toBeAdded, rootGroup.Id.GetValueOrDefault());
-						_analyticsBridgeGroupPagePersonRepository.DeleteBridgeGroupPagePerson(toBeDeleted, rootGroup.Id.GetValueOrDefault());
+						if (toBeAdded.Any())
+							logger.DebugFormat("Adding {0} people to group {1}", toBeAdded.Count, rootGroupId);
+						_analyticsBridgeGroupPagePersonRepository.AddBridgeGroupPagePerson(toBeAdded, rootGroupId);
+						if (toBeDeleted.Any())
+							logger.DebugFormat("Removing {0} people from group {1}", toBeDeleted.Count, rootGroupId);
+						_analyticsBridgeGroupPagePersonRepository.DeleteBridgeGroupPagePerson(toBeDeleted, rootGroupId);
 					}
 				}
 			}
