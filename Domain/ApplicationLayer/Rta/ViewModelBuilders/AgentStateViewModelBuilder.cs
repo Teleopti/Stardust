@@ -16,14 +16,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IUserCulture _culture;
-		private readonly IAppliedColor _color;
+		private readonly IAppliedAlarm _appliedAlarm;
 
-		public AgentStateViewModelBuilder(INow now, IUserTimeZone timeZone, IUserCulture culture, IAppliedColor color)
+		public AgentStateViewModelBuilder(INow now, IUserTimeZone timeZone, IUserCulture culture, IAppliedAlarm appliedAlarm)
 		{
 			_now = now;
 			_timeZone = timeZone;
 			_culture = culture;
-			_color = color;
+			_appliedAlarm = appliedAlarm;
 		}
 
 		public IEnumerable<AgentStatusViewModel> Build(IEnumerable<AgentStateReadModel> states)
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 					NextActivityStartTime = formatTime(x.NextStart),
 					Alarm = x.RuleName,
 					AlarmStart = x.AlarmStartTime,
-					Color = _color.ColorTransition(x, timeInAlarm),
+					Color = _appliedAlarm.ColorTransition(x, timeInAlarm),
 					TimeInState = x.StateStartTime.HasValue ? (int) (_now.UtcDateTime() - x.StateStartTime.Value).TotalSeconds : 0,
 					TimeInAlarm = timeInAlarm
 				};

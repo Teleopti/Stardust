@@ -1,4 +1,6 @@
 using System;
+using System.Drawing;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -7,6 +9,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		DateTime? StartTime(StateRuleInfo state, StoredStateInfo stored, DateTime currentTime);
 		bool IsAlarm(StateRuleInfo state);
 		bool RuleDefaultAlarm();
+		string ColorTransition(AgentStateReadModel x, int? timeInAlarm);
+
 	}
 
 	public class AllRulesIsAlarm : IAppliedAlarm
@@ -30,6 +34,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			return true;
 		}
+
+		public string ColorTransition(AgentStateReadModel x, int? timeInAlarm)
+		{
+			return ColorTranslator.ToHtml(Color.FromArgb(x.RuleColor ?? Color.White.ToArgb()));
+		}
 	}
 
 	public class ProperAlarm : IAppliedAlarm
@@ -52,6 +61,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public bool RuleDefaultAlarm()
 		{
 			return false;
+		}
+
+		public string ColorTransition(AgentStateReadModel x, int? timeInAlarm)
+		{
+			return timeInAlarm.HasValue
+				? ColorTranslator.ToHtml(Color.FromArgb(x.AlarmColor ?? Color.White.ToArgb()))
+				: ColorTranslator.ToHtml(Color.FromArgb(x.RuleColor ?? Color.White.ToArgb()));
 		}
 	}
 }

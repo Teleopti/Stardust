@@ -99,16 +99,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<ByStaffingEffect>().As<IAppliedAdherence>().SingleInstance();
 
 			if (_config.Toggle(Toggles.Wfm_RTA_ProperAlarm_34975))
-			{
 				builder.RegisterType<ProperAlarm>().As<IAppliedAlarm>().SingleInstance();
-				builder.RegisterType<ProperAlarmColor>().As<IAppliedColor>().SingleInstance();
-			}
 			else
-			{
 				builder.RegisterType<AllRulesIsAlarm>().As<IAppliedAlarm>().SingleInstance();
-				builder.RegisterType<RuleColor>().As<IAppliedColor>().SingleInstance();
-			}
-
 		}
 	}
 }
