@@ -65,6 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 			builder.RegisterType<IntraIntervalFinderService>().As<IIntraIntervalFinderService>();
 			
 			builder.RegisterType<PersonAbsenceCreator>().As<IPersonAbsenceCreator>();
+			builder.RegisterType<PersonAbsenceRemover>().As<IPersonAbsenceRemover>();
 			builder.RegisterType<AbsenceCommandConverter>().As<IAbsenceCommandConverter>();
 			builder.RegisterType<SaveSchedulePartService>().As<ISaveSchedulePartService>();	
 			builder.RegisterType<BusinessRulesForPersonalAccountUpdate>().As<IBusinessRulesForPersonalAccountUpdate>();
