@@ -49,9 +49,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			schedulerStateHolderTo.SchedulingResultState.AllPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>();
 		}
 
-		protected override void PostFill(ISchedulerStateHolder schedulerStateHolder, IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		protected override void PostFill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
-			schedulerStateHolder.RequestedPeriod = _schedulerStateHolderFrom.RequestedPeriod;
+			schedulerStateHolderTo.RequestedPeriod = _schedulerStateHolderFrom.RequestedPeriod;
 		}
 
 		public void Synchronize(IScheduleDictionary modifiedScheduleDictionary, DateOnlyPeriod period)
