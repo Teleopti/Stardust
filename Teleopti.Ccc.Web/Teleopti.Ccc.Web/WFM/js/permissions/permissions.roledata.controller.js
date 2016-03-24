@@ -6,7 +6,8 @@
 			function ($scope, $filter, RoleDataService, Roles) {
 				$scope.organization = { DynamicOptions: [] };
 				$scope.dynamicOptionSelected = { data: 0, isBuiltIn: false, isMyRole:false };
-
+				$scope.tempDataNode = {};
+				$scope.multiDeselectDataModal = false;
 
 				$scope.$watch(function () { return Roles.selectedRole; },
 					function (newSelectedRole) {
@@ -126,6 +127,25 @@
 				$scope.changeOption = function (option) {
 					RoleDataService.assignAuthorizationLevel($scope.selectedRole, option);
 				};
+
+				$scope.launchDeselectConfirmModal = function (node) {
+					$scope.tempDataNode = node;
+					if (node.$modelValue.ChildNodes.length > 0 && node.$modelValue.selected) {
+						$scope.multiDeselectDataModal = true;
+					}
+					else {
+						$scope.toggleOrganizationSelection($scope.tempDataNode);
+					}
+				}
+
+				$scope.closeDeselectConfirmModal = function () {
+					$scope.multiDeselectDataModal = false;
+				}
+
+				$scope.multiDeslectConfirmed = function () {
+					$scope.toggleOrganizationSelection($scope.tempDataNode);
+					$scope.closeDeselectConfirmModal();
+				}
 
 				RoleDataService.refreshOrganizationSelection();
 			}

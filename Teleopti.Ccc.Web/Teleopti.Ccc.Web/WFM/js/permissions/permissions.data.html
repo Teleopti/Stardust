@@ -54,11 +54,29 @@
     </ol>
   </div>
 
-  <!-- Nested node template for data -->
+<div ng-cloak class="modal-box">
+	<div ng-cloak ng-show="multiDeselectDataModal">
+		<div class="modalbg">
+			<div class="dialog-mini">
+				<div class="modal-inner-content">
+					{{'ConfirmToggleChildPermissions'|translate}}
+				</div>
+				<div class="modal-actions">
+					<aside>
+						<button ng-click="closeDeselectConfirmModal()" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+						<button ng-click="multiDeslectConfirmed()" class="wfm-btn wfm-btn-invis-primary">{{'Clear'|translate}}</button>
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Nested node template for data -->
   <script type="text/ng-template" id="nodes_bu_renderer.html">
 
   <ul class="wfm-list">
-    <li ng-click="toggleOrganizationSelection(this)" ng-class="{dataHeader: node.ChildNodes.length > 0}">
+    <li ng-click="launchDeselectConfirmModal(this)" ng-class="{dataHeader: node.ChildNodes.length > 0}">
       <span class="list-item-container">
         {{node.Name}}
       </span>
