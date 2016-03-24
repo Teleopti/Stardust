@@ -69,7 +69,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Steps
 			_jobParameters.Expect(j => j.StateHolder).Return(stateHolder);
 			stateHolder.Expect(s => s.SetThisTime(lastChanged, "Step"));
 			stateHolder.Expect(s => s.PersonCollection).IgnoreArguments().Return(new List<IPerson>());
-			raptorRepository.Expect(r => r.LoadIntradayRequest(new List<IPerson>(), new DateTime())).IgnoreArguments().Return(new List<IPersonRequest>());
+			raptorRepository.Expect(r => r.LoadIntradayRequest(new DateTime())).IgnoreArguments().Return(new List<IPersonRequest>());
 
 			var result = _target.Run(new List<IJobStep>(), null, new List<IJobResult>(), true);
 			result.RowsAffected.Should().Be.EqualTo(0);
