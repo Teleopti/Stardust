@@ -1398,6 +1398,7 @@
     <Content Include="WFM\js\seatManagement\seatplanreport.controller.spec.js" />
     <Content Include="WFM\js\seatManagement\teampicker.controller.spec.js" />
     <Content Include="WFM\js\teamSchedule\html\addabsencepanel.html" />
+    <Content Include="WFM\js\teamSchedule\html\addActivityPanel.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\removeAbsenceConfirmDialog.html" />
     <Content Include="WFM\js\teamSchedule\html\scheduletable.html" />
     <Content Include="WFM\js\teamSchedule\html\teamscheduledatepicker.html" />
@@ -1406,6 +1407,8 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.controller.scheduletable.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.addabsence.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.addabsence.spec.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.directive.addActivity.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.directive.addActivity.sepc.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.datepicker.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.scheduletable.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.timeline.js" />

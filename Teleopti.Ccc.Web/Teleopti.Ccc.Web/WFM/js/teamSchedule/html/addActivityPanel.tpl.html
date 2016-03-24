@@ -1,0 +1,16 @@
+﻿<div class="absence-report">
+	<div class="sidenav-header">{{'AddActivity'|translate}}</div>
+	<md-content layout-padding>
+		<div>
+			<select ng-model="vm.selectedActivityId">
+				<option value="" disabled selected="">{{'PickAnActivity'|translate}}</option>
+				<option value="{{activity.Id}}" ng-repeat="activity in vm.activities | orderBy: 'Name'">{{activity.Name}}</option>
+			</select>
+			<time-range-picker start-time="vm.startTime" end-time="vm.endTime" 
+							   disable-next-day="vm.disableNextDay"></time-range-picker>
+			<button ng-class="{'wfm-btn-primary': vm.isDataChangeValid(), 'wfm-btn-primary-disabled': !vm.isDataChangeValid()}"
+					ng-disabled="!vm.isDataChangeValid()">{{'Apply' | translate}}</button>
+		</div>		
+	</md-content>
+</div>
+

@@ -69,6 +69,7 @@
 		WfmTeamSchedule_SwapShifts_36231,
 		WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
 		WfmTeamSchedule_RemoveAbsence_36705,
+		WfmTeamSchedule_AddActivity_37541,
 
 		ResourcePlanner_WeeklyRestSolver_35043,
 
