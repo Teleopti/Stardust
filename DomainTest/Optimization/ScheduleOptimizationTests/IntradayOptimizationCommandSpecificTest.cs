@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			CheckWeeklyRestRule.IsSatisfyBy(agentRange, weekPeriod, weeklyRest).Should().Be.False();
 		}
 
-		[Test, Ignore("not currently supported")]
+		[Test]
 		public void ShouldOnlyOptimizeChoosenAgents()
 		{
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 
 			Target.Execute(new IntradayOptimizationCommand
 			{
-				//Agents = new[] {agent1},
+				AgentsToOptimize = new[] {agent1},
 				Period = new DateOnlyPeriod(dateOnly, dateOnly)
 			});
 

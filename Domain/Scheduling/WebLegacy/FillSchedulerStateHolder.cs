@@ -10,14 +10,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 	public abstract class FillSchedulerStateHolder : IFillSchedulerStateHolder
 	{
 		[LogTime]
-		public virtual void Fill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
+		public virtual void Fill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentsInIsland, DateOnlyPeriod period)
 		{
-			//when skills are passed by event, we should start with loading skills here! (and remove prefill hack in db loader)
-
 			PreFill(schedulerStateHolderTo, period);
 			var scenario = FetchScenario();
-			FillAgents(schedulerStateHolderTo, scenario, agentIds, period);
-			removeUnwantedAgents(schedulerStateHolderTo, agentIds);
+			FillAgents(schedulerStateHolderTo, scenario, agentsInIsland, period);
+			removeUnwantedAgents(schedulerStateHolderTo, agentsInIsland);
 			var skills = skillsToUse(schedulerStateHolderTo.AllPermittedPersons, period);
 			FillSkillDays(schedulerStateHolderTo, scenario, skills, period);
 			removeUnwantedSkillDays(schedulerStateHolderTo, skills);
@@ -28,7 +26,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		private static IEnumerable<ISkill> skillsToUse(IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
-			//this is wrong!
 			var agentSkills = new HashSet<ISkill>();
 			foreach (var skill in agents.SelectMany(filteredAgent => filteredAgent.ActiveSkillsFor(period)))
 			{

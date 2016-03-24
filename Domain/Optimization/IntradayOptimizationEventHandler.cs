@@ -34,17 +34,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[LogTime]
 		public virtual void Handle(OptimizationWasOrdered @event)
 		{
-			DoOptimization(@event.Period, @event.AgentsInIsland, @event.RunResolveWeeklyRestRule);
+			DoOptimization(@event.Period, @event.AgentsInIsland, @event.AgentsToOptimize, @event.RunResolveWeeklyRestRule);
 			_synchronizeIntradayOptimizationResult.Synchronize(_schedulerStateHolder().Schedules, @event.Period);
 		}
 
 		[UnitOfWork]
-		protected virtual void DoOptimization(DateOnlyPeriod period, IEnumerable<Guid> agentIds, bool runResolveWeeklyRestRule)
+		protected virtual void DoOptimization(DateOnlyPeriod period, IEnumerable<Guid> agentsInIsland, IEnumerable<Guid> agentsToOptimize, bool runResolveWeeklyRestRule)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
-			_fillSchedulerStateHolder.Fill(schedulerStateHolder, agentIds, period);
-			var agents = schedulerStateHolder.AllPermittedPersons.Filter(agentIds).ToList();
-			_intradayOptimization.Execute(period, agents, runResolveWeeklyRestRule);
+			_fillSchedulerStateHolder.Fill(schedulerStateHolder, agentsInIsland, period);
+			_intradayOptimization.Execute(period, schedulerStateHolder.AllPermittedPersons.Filter(agentsToOptimize).ToList(), runResolveWeeklyRestRule);
 		}
 	}
 }
