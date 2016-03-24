@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 
 			Target.Execute(new IntradayOptimizationCommand { Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10) });
 
-			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Single().AgentIds.Single()
+			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Single().AgentsInIsland.Single()
 				.Should().Be.EqualTo(agent.Id.Value);
 		}
 
@@ -91,6 +91,95 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 
 			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count()
 				.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldSetAgentToOptimizeWhenOptimizeFullIsland()
+		{
+			var skill = new Skill().WithId();
+			var agent1 = new Person().WithId();
+			agent1.AddPeriodWithSkill(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()), skill);
+			var agent2 = new Person().WithId();
+			agent2.AddPeriodWithSkill(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()), skill);
+			PersonRepository.Has(agent1);
+			PersonRepository.Has(agent2);
+
+			Target.Execute(new IntradayOptimizationCommand { Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10), AgentsToOptimize = new [] {agent1, agent2} });
+
+			var @event = EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Single();
+			@event.AgentsToOptimize
+				.Should().Have.SameValuesAs(@event.AgentsInIsland);
+		}
+
+		[Test]
+		public void ShouldSetAgentsToOptimizeToAllInIslandIfNullIsPassed()
+		{
+			var skill = new Skill().WithId();
+			var agent1 = new Person().WithId();
+			agent1.AddPeriodWithSkill(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()), skill);
+			var agent2 = new Person().WithId();
+			agent2.AddPeriodWithSkill(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()), skill);
+			PersonRepository.Has(agent1);
+			PersonRepository.Has(agent2);
+
+			Target.Execute(new IntradayOptimizationCommand { Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10), AgentsToOptimize = null });
+
+			var @event = EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Single();
+			@event.AgentsToOptimize
+				.Should().Have.SameValuesAs(agent1.Id.Value, agent2.Id.Value);
+		}
+
+		[Test]
+		public void ShouldSetSpecificAgentsToOptimizeWhenOneIsland()
+		{
+			var skill = new Skill().WithId();
+			var agent1 = new Person().WithId();
+			agent1.AddPeriodWithSkill(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()), skill);
+			var agent2 = new Person().WithId();
+			agent2.AddPeriodWithSkill(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()), skill);
+			PersonRepository.Has(agent1);
+			PersonRepository.Has(agent2);
+
+			Target.Execute(new IntradayOptimizationCommand { Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10), AgentsToOptimize = new[] {agent1} });
+
+			var @event = EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Single();
+			@event.AgentsToOptimize
+				.Should().Have.SameValuesAs(agent1.Id.Value);
+		}
+
+		[Test]
+		public void ShouldSetSpecificAgentsToOptimizeWhenMultipleIsland()
+		{
+			var agent1 = new Person().WithId();
+			agent1.AddPeriodWithSkill(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()), new Skill().WithId());
+			var agent2 = new Person().WithId();
+			agent2.AddPeriodWithSkill(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()), new Skill().WithId());
+			PersonRepository.Has(agent1);
+			PersonRepository.Has(agent2);
+
+			Target.Execute(new IntradayOptimizationCommand { Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10), AgentsToOptimize = new[] { agent1, agent2 } });
+
+			var events = EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().ToArray();
+			var event1 = events[0];
+			var event2 = events[1];
+			event1.AgentsToOptimize.Single()
+				.Should().Not.Be.EqualTo(event2.AgentsToOptimize.Single());
+		}
+
+		[Test]
+		public void ShouldNotCreateEventsForIslandsWithNoAgentsThatAreSetToBeOptimized()
+		{
+			var agent1 = new Person().WithId();
+			agent1.AddPeriodWithSkill(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()), new Skill().WithId());
+			var agent2 = new Person().WithId();
+			agent2.AddPeriodWithSkill(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()), new Skill().WithId());
+			PersonRepository.Has(agent1);
+			PersonRepository.Has(agent2);
+
+			Target.Execute(new IntradayOptimizationCommand { Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10), AgentsToOptimize = new[] { agent1 } });
+
+			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Single().AgentsToOptimize
+				.Should().Have.SameValuesAs(agent1.Id.Value);
 		}
 	}
 }

@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var callbackTracker = new TrackIntradayOptimizationCallback();
 			using (CallbackContext.Create(callbackTracker))
 			{
-				Target.Handle(new OptimizationWasOrdered {AgentIds = PersonRepository.LoadAll().Select(x => x.Id.Value), Period = new DateOnlyPeriod(dateOnly, dateOnly.AddDays(6))});
+				Target.Handle(new OptimizationWasOrdered {AgentsInIsland = PersonRepository.LoadAll().Select(x => x.Id.Value), Period = new DateOnlyPeriod(dateOnly, dateOnly.AddDays(6))});
 			}
 			callbackTracker.SuccessfulOptimizations().Should().Be.EqualTo(10);
 		}
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var callbackTracker = new TrackIntradayOptimizationCallback();
 			using (CallbackContext.Create(callbackTracker))
 			{
-				Target.Handle(new OptimizationWasOrdered { AgentIds = PersonRepository.LoadAll().Select(x => x.Id.Value), Period = new DateOnlyPeriod(dateOnly, dateOnly.AddDays(6)) });
+				Target.Handle(new OptimizationWasOrdered { AgentsInIsland = PersonRepository.LoadAll().Select(x => x.Id.Value), Period = new DateOnlyPeriod(dateOnly, dateOnly.AddDays(6)) });
 			}
 			callbackTracker.UnSuccessfulOptimizations().Should().Be.GreaterThanOrEqualTo(10);
 		}

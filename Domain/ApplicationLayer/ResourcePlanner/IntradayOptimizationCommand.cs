@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 {
@@ -6,5 +7,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 	{
 		public DateOnlyPeriod Period { get; set; }
 		public bool RunResolveWeeklyRestRule { get; set; }
+		public IEnumerable<IPerson> AgentsToOptimize { get; set; }
 	}
 }

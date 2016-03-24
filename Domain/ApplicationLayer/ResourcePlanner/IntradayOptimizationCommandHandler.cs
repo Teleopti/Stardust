@@ -19,12 +19,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 
 		public void Execute(IntradayOptimizationCommand command)
 		{
-			_eventPublisher.Publish(CreateIslands(command.Period).Select(island => new OptimizationWasOrdered
+			var islands = CreateIslands(command.Period);
+			var events = new List<OptimizationWasOrdered>();
+
+			foreach (var island in islands)
 			{
-				Period = command.Period,
-				AgentIds = island.PersonsInIsland().Select(x => x.Id.Value),
-				RunResolveWeeklyRestRule = command.RunResolveWeeklyRestRule
-			}).ToArray());
+				var agentsInIsland = island.PersonsInIsland();
+				var agentsToOptimize = command.AgentsToOptimize == null ? 
+					agentsInIsland : 
+					command.AgentsToOptimize.Where(x => agentsInIsland.Contains(x)).ToArray();
+
+				if (agentsToOptimize.Any())
+				{
+					events.Add(new OptimizationWasOrdered
+					{
+						Period = command.Period,
+						RunResolveWeeklyRestRule = command.RunResolveWeeklyRestRule,
+						AgentsInIsland = agentsInIsland.Select(x => x.Id.Value),
+						AgentsToOptimize = agentsToOptimize.Select(x => x.Id.Value)
+					});
+				}
+			}
+			_eventPublisher.Publish(events.ToArray());
 		}
 
 		[UnitOfWork]
@@ -52,10 +68,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 
 		public void Execute(IntradayOptimizationCommand command)
 		{
+			var agentsToOptimize = command.AgentsToOptimize == null ?
+					LoadPeopleInOrganization(command.Period).Select(x => x.Id.Value) :
+					command.AgentsToOptimize.Select(x => x.Id.Value);
+
 			_eventPublisher.Publish(new OptimizationWasOrdered
 			{
 				Period = command.Period,
-				AgentIds = LoadPeopleInOrganization(command.Period).Select(x => x.Id.Value),
+				AgentsInIsland = LoadPeopleInOrganization(command.Period).Select(x => x.Id.Value),
+				AgentsToOptimize = agentsToOptimize,
 				RunResolveWeeklyRestRule = command.RunResolveWeeklyRestRule
 			});
 		}
