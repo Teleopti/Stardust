@@ -22,22 +22,22 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class OptimizeIntradayIslandsDesktop : IOptimizeIntradayDesktop
 	{
 		private readonly IIntradayOptimizationCommandHandler _intradayOptimizationCommandHandler;
-		private readonly DesktopOptimizationContext _fillSchedulerStateHolder;
+		private readonly DesktopOptimizationContext _desktopOptimizationContext;
 		private readonly Func<ISchedulerStateHolder> _currentSchedulerStateHolder;
 
 		public OptimizeIntradayIslandsDesktop(IIntradayOptimizationCommandHandler intradayOptimizationCommandHandler, 
-																		DesktopOptimizationContext fillSchedulerStateHolder,
+																		DesktopOptimizationContext desktopOptimizationContext,
 																		Func<ISchedulerStateHolder> currentSchedulerStateHolder)
 		{
 			_intradayOptimizationCommandHandler = intradayOptimizationCommandHandler;
-			_fillSchedulerStateHolder = fillSchedulerStateHolder;
+			_desktopOptimizationContext = desktopOptimizationContext;
 			_currentSchedulerStateHolder = currentSchedulerStateHolder;
 		}
 
 		public void Optimize(IEnumerable<IScheduleDay> scheduleDays, IOptimizationPreferences optimizerPreferences, DateOnlyPeriod selectedPeriod,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, ISchedulingProgress backgroundWorker)
 		{
-			using (_fillSchedulerStateHolder.Add(_currentSchedulerStateHolder(), optimizerPreferences))
+			using (_desktopOptimizationContext.Set(_currentSchedulerStateHolder(), optimizerPreferences))
 			{
 				_intradayOptimizationCommandHandler.Execute(new IntradayOptimizationCommand
 				{

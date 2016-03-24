@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			moveSchedules(modifiedScheduleDictionary, _schedulerStateHolderFrom.Schedules, agentsToMove, period);
 		}
 
-		public IDisposable Add(ISchedulerStateHolder schedulerStateHolderFrom, IOptimizationPreferences optimizationPreferences)
+		public IDisposable Set(ISchedulerStateHolder schedulerStateHolderFrom, IOptimizationPreferences optimizationPreferences)
 		{
 			_schedulerStateHolderFrom = schedulerStateHolderFrom;
 			_optimizationPreferences = optimizationPreferences;
