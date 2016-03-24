@@ -163,19 +163,19 @@ function global:MoveWiseFiles {
 
 function global:CopyDependencies {
 
-    Copy-Item -Path "$DEPENDENCIESSRC\ccc7_forecast\SQLEXPR_x86_ENU.EXE" -Destination "$SourceDir\Wise\ccc7_forecast\SQL2008R2\" -Force -ErrorAction Continue
-    Copy-Item -Path "$DEPENDENCIESSRC\ccc7_forecast\ForecastDatabase\TeleoptiCCC_Forecasts.BAK" -Destination "$SourceDir\ForecastDatabase\" -Force -ErrorAction Continue
+    Copy-Item -Path "$DEPENDENCIESSRC\ccc7_forecast\SQLEXPR_x86_ENU.EXE" -Destination "$SourceDir\Wise\ccc7_forecast\SQL2008R2\" -Force -ErrorAction Stop
+    Copy-Item -Path "$DEPENDENCIESSRC\ccc7_forecast\ForecastDatabase\TeleoptiCCC_Forecasts.BAK" -Destination "$SourceDir\ForecastDatabase\" -Force -ErrorAction Stop
 
-    Copy-Item -Path "$DEPENDENCIESSRC\ccc7_server\DemoDatabase\TeleoptiAnalytics_Demo.bak" -Destination "$SourceDir\DemoDatabase\" -Force -ErrorAction Continue
-    Copy-Item -Path "$DEPENDENCIESSRC\ccc7_server\DemoDatabase\TeleoptiCCC7_Demo.bak" -Destination "$SourceDir\DemoDatabase\" -Force -ErrorAction Continue
-    Copy-Item -Path "$DEPENDENCIESSRC\ccc7_server\DemoDatabase\TeleoptiCCC7Agg_Demo.BAK" -Destination "$SourceDir\DemoDatabase\" -Force -ErrorAction Continue
-    Copy-Item -Path "$DEPENDENCIESSRC\ccc7_server\RegisterEventLogSource.exe" -Destination "$SourceDir\Wise\ccc7_server\Logs\" -Force -ErrorAction Continue
-    Copy-Item -Path "$DEPENDENCIESSRC\ccc7_server\ntrights.exe" -Destination "$SourceDir\Wise\ccc7_server\Logs\" -Force -ErrorAction Continue
-    Copy-Item -Path "$DEPENDENCIESSRC\ccc7_server\ntrights.exe" -Destination "$SourceDir\Wise\ccc7_server\" -Force -ErrorAction Continue
-    Copy-Item -Path "$DEPENDENCIESSRC\ccc7_server\sqlio.exe" -Destination "$SourceDir\SupportTools\SQLServerPerformance\SQLIO\" -Force -ErrorAction Continue
+    Copy-Item -Path "$DEPENDENCIESSRC\ccc7_server\DemoDatabase\TeleoptiAnalytics_Demo.bak" -Destination "$SourceDir\DemoDatabase\" -Force -ErrorAction Stop
+    Copy-Item -Path "$DEPENDENCIESSRC\ccc7_server\DemoDatabase\TeleoptiCCC7_Demo.bak" -Destination "$SourceDir\DemoDatabase\" -Force -ErrorAction Stop
+    Copy-Item -Path "$DEPENDENCIESSRC\ccc7_server\DemoDatabase\TeleoptiCCC7Agg_Demo.BAK" -Destination "$SourceDir\DemoDatabase\" -Force -ErrorAction Stop
+    Copy-Item -Path "$DEPENDENCIESSRC\ccc7_server\RegisterEventLogSource.exe" -Destination "$SourceDir\Wise\ccc7_server\Logs\" -Force -ErrorAction Stop
+    Copy-Item -Path "$DEPENDENCIESSRC\ccc7_server\ntrights.exe" -Destination "$SourceDir\Wise\ccc7_server\Logs\" -Force -ErrorAction Stop
+    Copy-Item -Path "$DEPENDENCIESSRC\ccc7_server\ntrights.exe" -Destination "$SourceDir\Wise\ccc7_server\" -Force -ErrorAction Stop
+    Copy-Item -Path "$DEPENDENCIESSRC\ccc7_server\sqlio.exe" -Destination "$SourceDir\SupportTools\SQLServerPerformance\SQLIO\" -Force -ErrorAction Stop
 	
 	if (!(Test-Path -path $SourceDir\images)) {New-Item $SourceDir\images -Type Directory}
-    Copy-Item -Path "$DEPENDENCIESSRC\images\*" -Destination "$SourceDir\images\" -Force -ErrorAction Continue
+    Copy-Item -Path "$DEPENDENCIESSRC\images\*" -Destination "$SourceDir\images\" -Force -ErrorAction Stop
 
 }
 
