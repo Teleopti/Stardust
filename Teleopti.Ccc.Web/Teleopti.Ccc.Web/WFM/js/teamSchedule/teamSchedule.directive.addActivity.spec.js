@@ -38,7 +38,6 @@
 	}));
 
 
-
 	it('should render directive content correctly', function () {
 
 		var html = '<add-activity-panel selected-agents="" selected-date=""></add-activity-panel>';

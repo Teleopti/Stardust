@@ -1,5 +1,5 @@
 'use strict';
-fdescribe('FunctionController', function() {
+describe('FunctionController', function() {
 
     var $q,
         $rootScope,
