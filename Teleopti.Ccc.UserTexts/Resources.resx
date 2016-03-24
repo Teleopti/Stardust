@@ -14210,4 +14210,12 @@ Help us improve your experience by sending an error report</value>
     <value>Replan</value>
     <comment>Replan</comment>
   </data>
+  <data name="ConfirmToggleAllPermissions" xml:space="preserve">
+    <value>This will toggle the state of all functions, are you sure you want to proceed?</value>
+    <comment>warning shown before a toggle all action</comment>
+  </data>
+  <data name="ConfirmToggleChildPermissions" xml:space="preserve">
+    <value>This will clear this function and all child functions below it, are you sure you want to proceed?</value>
+    <comment>warning shown when unselecting a parent permission function</comment>
+  </data>
 </root>

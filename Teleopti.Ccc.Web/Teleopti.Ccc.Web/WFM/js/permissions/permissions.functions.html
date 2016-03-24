@@ -56,12 +56,12 @@
 		<div class="modalbg">
 			<div class="dialog-mini">
 				<div class="modal-inner-content">
-					This will change the state of all functions, are you sure you want to proceed?
+					{{'ConfirmToggleAllPermissions'|translate}}
 				</div>
 				<div class="modal-actions">
 					<aside>
-						<button ng-click="toggleDangerModal = false" class="wfm-btn wfm-btn-invis-default">no thanks</button>
-						<button ng-click="toggleDangerModal = false; toggleAllNode(allToggleElement)"  class="wfm-btn wfm-btn-invis-primary">yes please</button>
+						<button ng-click="toggleDangerModal = false" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+						<button ng-click="toggleDangerModal = false; toggleAllNode(allToggleElement)"  class="wfm-btn wfm-btn-invis-primary">{{'ToggleAll'|translate}}</button>
 					</aside>
 				</div>
 			</div>
@@ -74,12 +74,12 @@
 		<div class="modalbg">
 			<div class="dialog-mini">
 				<div class="modal-inner-content">
-					This will deselect this function and all functions below it for this role, are you sure you want to proceed?
+					{{'ConfirmToggleChildPermissions'|translate}}
 				</div>
 				<div class="modal-actions">
 					<aside>
-						<button ng-click="closemultiDeselectModal()" class="wfm-btn wfm-btn-invis-default">no thanks</button>
-						<button ng-click="deselectFunctionNodes()" class="wfm-btn wfm-btn-invis-primary">yes please</button>
+						<button ng-click="closemultiDeselectModal()" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+						<button ng-click="deselectFunctionNodes()" class="wfm-btn wfm-btn-invis-primary">{{'Clear'|translate}}</button>
 					</aside>
 				</div>
 			</div>
