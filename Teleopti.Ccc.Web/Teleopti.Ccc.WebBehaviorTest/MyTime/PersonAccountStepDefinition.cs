@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see the remaining time is '(.*)'")]
 		public void ThenIShouldSeeTheRemainingTimeIs(string remainingTime)
 		{
-			Browser.Interactions.AssertExists("#absence-personal-account");
+			Browser.Interactions.AssertVisibleUsingJQuery("#absence-personal-account");
 			Browser.Interactions.AssertAnyContains(".remainingTime", remainingTime);
 		}
 
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see the used time is '(.*)'")]
 		public void ThenIShouldSeeTheUsedTimeIs(string usedTime)
 		{
-			Browser.Interactions.AssertExists("#absence-personal-account");
+			Browser.Interactions.AssertVisibleUsingJQuery("#absence-personal-account");
 			Browser.Interactions.AssertAnyContains(".usedTime", usedTime);
 		}
 

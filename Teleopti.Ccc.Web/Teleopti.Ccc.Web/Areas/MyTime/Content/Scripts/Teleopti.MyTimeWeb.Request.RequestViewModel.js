@@ -167,7 +167,6 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 					self.readAbsenceAccount();
 				},
 				complete: function () {
-					self.IsLoadingPersonalAccount(false);
 				}
 			});
 		}
