@@ -31,6 +31,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.IoC
 			builder.RegisterType<ScheduleDictionaryPersister>().As<IScheduleDictionaryPersister>().SingleInstance();
 
 			builder.RegisterType<SwapMainShiftForTwoPersonsCommandHandler>().As<ISwapMainShiftForTwoPersonsCommandHandler>().SingleInstance();
+
+			builder.RegisterType<TeamScheduleCommandHandlingProvider>().As<ITeamScheduleCommandHandlingProvider>().SingleInstance();
+
+
 		}
 	}
 }

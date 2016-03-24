@@ -1,5 +1,9 @@
-﻿using Teleopti.Ccc.Domain.Common;
+﻿using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -11,6 +15,7 @@ using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.IoC;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.WebTest.Areas.Search;
+using Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core;
 using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -32,6 +37,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			system.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
 			system.UseTestDouble<FakePeopleSearchProvider>().For<IPeopleSearchProvider>();
 			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+			system.UseTestDouble<SyncCommandDispatcher>().For<ICommandDispatcher>();
+			system.UseTestDouble<FakeActivityCommandHandler>().For<IHandleCommand<AddActivityCommand>>();
 		}
 	}
 }

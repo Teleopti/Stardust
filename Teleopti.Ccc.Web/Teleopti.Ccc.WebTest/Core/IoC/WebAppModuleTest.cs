@@ -49,6 +49,7 @@ using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.Start.Core.Menu;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
 using Teleopti.Ccc.Web.Areas.Toggle;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core;
@@ -63,6 +64,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using ConfigReader = Teleopti.Ccc.Domain.Config.ConfigReader;
 using ITeamScheduleViewModelFactory = Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory.ITeamScheduleViewModelFactory;
+using TeamScheduleController = Teleopti.Ccc.Web.Areas.MyTime.Controllers.TeamScheduleController;
 
 namespace Teleopti.Ccc.WebTest.Core.IoC
 {
@@ -417,6 +419,13 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		public void ShouldResolveTeamScheduleController()
 		{
 			requestContainer.Resolve<TeamScheduleController>()
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldResolveTeamScheduleCommandController()
+		{
+			requestContainer.Resolve<TeamScheduleCommandController>()
 				.Should().Not.Be.Null();
 		}
 
