@@ -262,11 +262,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			return 0;
 		}
 
-		public int AggregateFactAgentStateDataMart(IBusinessUnit businessUnit)
-		{
-			return 0;
-		}
-
 		public int FillFactSchedulePreferenceMart(DateOnlyPeriod period, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
 		{
 			return 0;

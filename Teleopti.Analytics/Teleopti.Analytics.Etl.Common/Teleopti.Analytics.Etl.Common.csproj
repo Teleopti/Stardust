@@ -333,7 +333,6 @@
     <Compile Include="Transformer\Job\Steps\FactAgentJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\FactAgentQueueJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\FactAgentSkillJobStep.cs" />
-    <Compile Include="Transformer\Job\Steps\FactAgentStateJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\FactAvailabilityJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\FactForecastWorkloadJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\FactKpiTargetTeamJobStep.cs" />

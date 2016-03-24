@@ -140,7 +140,6 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 		IList<IRtaStateGroup> LoadRtaStateGroups(IBusinessUnit businessUnit);
 		int PersistStateGroup(DataTable dataTable);
 		int FillStateGroupDataMart(IBusinessUnit businessUnit);
-		int AggregateFactAgentStateDataMart(IBusinessUnit businessUnit);
 
 		//Users
 		IList<IPerson> LoadUser();
