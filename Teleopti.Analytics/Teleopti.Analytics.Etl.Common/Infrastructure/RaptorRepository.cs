@@ -1083,14 +1083,13 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			}
 		}
 
-		public IList<IPersonRequest> LoadIntradayRequest(ICollection<IPerson> person, DateTime lastTime)
+		public IList<IPersonRequest> LoadIntradayRequest(DateTime lastTime)
 		{
 			IList<IPersonRequest> personRequests;
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var rep = new PersonRequestRepository(uow);
 				uow.Reassociate(((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit);
-				uow.Reassociate(person);
 				personRequests = rep.FindPersonRequestUpdatedAfter(lastTime);
 			}
 			return personRequests;

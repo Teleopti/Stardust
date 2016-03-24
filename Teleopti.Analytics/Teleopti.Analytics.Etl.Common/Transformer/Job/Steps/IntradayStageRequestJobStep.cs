@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Interfaces.Domain;
@@ -23,8 +22,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 
 		protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
 		{
-			//var rowsAffected = 0;
-
 			// Find any changes since last ETL, and get those (only)
 			//var rep = _jobParameters.Helper.Repository;
 			var etlIntraday = _jobParameters.Helper.Repository.LastChangedDate(Result.CurrentBusinessUnit, "Requests");
@@ -39,10 +36,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 
 			var startTimeUtc = DateTime.SpecifyKind(etlIntraday.LastTime, DateTimeKind.Utc);
 
-			//TODO: Get only changed persons
-			ICollection<IPerson> person = _jobParameters.StateHolder.PersonCollection.ToList();
-
-			var rootList = _jobParameters.Helper.Repository.LoadIntradayRequest(person, startTimeUtc);
+			var rootList = _jobParameters.Helper.Repository.LoadIntradayRequest(startTimeUtc);
 			Transformer.Transform(rootList, _jobParameters.IntervalsPerDay, BulkInsertDataTable1);
 
 			return _jobParameters.Helper.Repository.PersistRequest(BulkInsertDataTable1);

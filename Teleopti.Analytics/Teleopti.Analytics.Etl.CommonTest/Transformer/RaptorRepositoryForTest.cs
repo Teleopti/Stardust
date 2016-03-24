@@ -673,7 +673,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			return new List<IPersonRequest>();
 		}
 
-		public IList<IPersonRequest> LoadIntradayRequest(ICollection<IPerson> person, DateTime lastTime)
+		public IList<IPersonRequest> LoadIntradayRequest(DateTime lastTime)
 		{
 			return new List<IPersonRequest>();
 		}
