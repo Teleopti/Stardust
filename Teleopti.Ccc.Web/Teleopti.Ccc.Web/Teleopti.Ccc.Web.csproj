@@ -2388,7 +2388,6 @@
     <Content Include="Areas\MyTime\Views\Settings\PasswordPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\CCCV8_report_time_in_state_per_agent.rdlc" />
     <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_absence_time_per_absence.rdlc" />
     <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_absence_time_per_agent.rdlc" />
     <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_activity_time_per_agent.rdlc" />
