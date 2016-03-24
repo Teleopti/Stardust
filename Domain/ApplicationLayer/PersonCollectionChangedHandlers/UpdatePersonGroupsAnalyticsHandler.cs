@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics;
 using Teleopti.Ccc.Domain.Common;
@@ -18,6 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		IHandleEvent<AnalyticsPersonCollectionChangedEvent>,
 		IRunOnServiceBus
 	{
+		private static readonly ILog logger = LogManager.GetLogger(typeof(UpdatePersonGroupsAnalyticsHandler));
 		private readonly IPersonRepository _personRepository;
 		private readonly IAnalyticsBridgeGroupPagePersonRepository _analyticsBridgeGroupPagePersonRepository;
 		private readonly IAnalyticsGroupPageRepository _analyticsGroupPageRepository;
@@ -31,6 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		
 		public void Handle(AnalyticsPersonCollectionChangedEvent @event)
 		{
+			logger.DebugFormat("Handle AnalyticsPersonCollectionChangedEvent for {0}", @event.SerializedPeople);
 			foreach (var personId in @event.PersonIdCollection)
 			{
 				var person = _personRepository.Get(personId) ?? new Person();
@@ -51,23 +54,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					clearEmptyGroups(deletedGroupIds);
 				}
 				// Remove any group pages associated with deleted person periods or deleted persons
-				_analyticsBridgeGroupPagePersonRepository.DeleteBridgeGroupPagePersonExcludingPersonPeriods(personId, person.PersonPeriodCollection.Select(p => p.Id.GetValueOrDefault()).ToList());
+				var personPeriodIds = person.PersonPeriodCollection.Select(p => p.Id.GetValueOrDefault()).ToList();
+				logger.DebugFormat("deleting bridge group page person {0} excluding person periods {1}", personId, string.Join(",", personPeriodIds));
+				_analyticsBridgeGroupPagePersonRepository.DeleteBridgeGroupPagePersonExcludingPersonPeriods(personId, personPeriodIds);
 			}
 		}
 
 		// Add/Remove groups for a person period
 		private IEnumerable<Guid> updatePersonGroups(Guid personPeriodId, ICollection<analyticsGroupForPerson> groups, Guid businessUnitId)
 		{
-			var currentGroups = _analyticsBridgeGroupPagePersonRepository.GetBuiltInGroupPagesForPersonPeriod(personPeriodId)
-					.ToList();
+			var currentGroups = _analyticsBridgeGroupPagePersonRepository.GetBuiltInGroupPagesForPersonPeriod(personPeriodId).ToList();
 
 			var toBeDeleted = currentGroups.Where(g => groups.All(t => t.GroupCode != g)).ToList();
 			var toBeAdded = groups.Where(t => currentGroups.All(g => g != t.GroupCode)).ToList();
+			
 			_analyticsBridgeGroupPagePersonRepository.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, toBeDeleted);
+			logger.DebugFormat("deleting groups {0} for period {1}", string.Join(",", toBeDeleted), personPeriodId);
 			foreach (var groupInfo in groups)
 			{
 				var @group = _analyticsGroupPageRepository.GetGroupPageByGroupCode(groupInfo.GroupCode);
 				if (@group != null) continue;
+				logger.DebugFormat("adding group page for {0}, {1}, {2}, {3}", groupInfo.GroupPageCode, groupInfo.GroupPageName, groupInfo.GroupCode, groupInfo.GroupCode);
 				_analyticsGroupPageRepository.AddGroupPage(new AnalyticsGroup
 				{
 					GroupName = groupInfo.GroupName,
@@ -79,6 +86,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					GroupPageNameResourceKey = groupInfo.GroupPageNameResourceKey
 				});
 			}
+			logger.DebugFormat("adding groups {0} for period {1}", string.Join(",", toBeAdded), personPeriodId);
 			_analyticsBridgeGroupPagePersonRepository.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, toBeAdded.Select(x => x.GroupCode).ToList());
 			return toBeDeleted;
 		}
@@ -93,6 +101,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				if (!peopleInGroup.Any())
 					groupsToDelete.Add(groupId);
 			}
+			logger.DebugFormat("clearing empty group for {0}", string.Join(",", groupsToDelete));
 			_analyticsGroupPageRepository.DeleteGroupPagesByGroupCodes(groupsToDelete);
 		}
 
