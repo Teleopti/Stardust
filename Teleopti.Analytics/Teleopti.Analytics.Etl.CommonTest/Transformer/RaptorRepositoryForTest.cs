@@ -46,11 +46,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			return dataTable.Rows.Count;
 		}
 
-		public int FillStateGroupDataMart(IBusinessUnit businessUnit)
-		{
-			return 0;
-		}
-
 		public IList<IShiftCategory> LoadShiftCategory()
 		{
 			return new List<IShiftCategory>();

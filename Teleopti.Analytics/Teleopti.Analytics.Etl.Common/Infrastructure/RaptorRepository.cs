@@ -1346,13 +1346,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 												_dataMartConnectionString);
 		}
 
-		public int FillStateGroupDataMart(IBusinessUnit businessUnit)
-		{
-			return
-				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_dim_state_group_load", null,
-												_dataMartConnectionString);
-		}
-
 		public int FillBusinessUnitDataMart(IBusinessUnit businessUnit)
 		{
 			var parameterList = new SqlParameter[] { new SqlParameter("business_unit_code", businessUnit.Id) };

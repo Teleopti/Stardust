@@ -324,7 +324,6 @@
     <Compile Include="Transformer\Job\Steps\DimSiteJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\DimSkillJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\DimSkillSetJobStep.cs" />
-    <Compile Include="Transformer\Job\Steps\DimStateGroupJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\DimTeamJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\DimTimeZoneDeleteJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\DimTimeZoneJobStep.cs" />
