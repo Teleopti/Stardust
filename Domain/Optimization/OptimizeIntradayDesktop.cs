@@ -41,7 +41,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				_intradayOptimizationCommandHandler.Execute(new IntradayOptimizationCommand
 				{
-					Period = selectedPeriod
+					Period = selectedPeriod,
+					AgentsToOptimize = scheduleDays.Select(x=> x.Person).Distinct()
 				});
 			}
 		}	
