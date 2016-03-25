@@ -59,6 +59,12 @@
 		position:relative;
 	}
 
+	.big-table-wrapper {
+		position: relative;
+		overflow: hidden;
+		width:100%;
+	}
+
 	.page-size-selector {
 		width: 60px;
 		margin-top: 10px;
@@ -171,11 +177,6 @@
 				border-bottom: rgba(204, 204, 204, 0.99) 1px solid;
 			}
 		}
-	}
-
-	.big-table-wrapper {
-		position: relative;
-		overflow: hidden;
 	}
 
 	.wfm-btn-sm {

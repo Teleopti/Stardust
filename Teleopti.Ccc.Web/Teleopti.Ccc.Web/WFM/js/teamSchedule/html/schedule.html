@@ -14,14 +14,14 @@
 			<team-schedule-datepicker selected-date="vm.scheduleDate" on-date-change="vm.onScheduleDateChanged()" />
 		</span>
 
-		<div class="wfm-switch" ng-if="vm.toggleForRemoveAbsenceEnabled">
+		<div class="wfm-switch" ng-if="vm.toggles.RemoveAbsenceEnabled">
 			<input type="checkbox" id="switchAbsence" ng-model="vm.onlyLoadScheduleWithAbsence" ng-change="vm.toggleShowAbsenceOnly()"/>
 			<label for="switchAbsence">
 				<span class="wfm-switch-label" translate>ShowOnlyAbsence</span>
 				<span class="wfm-switch-toggle"></span>
 			</label>
 		</div>
-		<div id="scheduleContextMenuButton" tabindex=0 class="context-menu card-context" ng-if="vm.isMenuVisible() || true" ng-click="vm.toggleMenuState()">
+		<div id="scheduleContextMenuButton" tabindex=0 class="context-menu card-context" ng-if="vm.isMenuVisible()" ng-click="vm.toggleMenuState()">
 			<i class="mdi mdi-dots-vertical"></i>
 			<span class="context-menu-left">
 				<ul class="wfm-list">
@@ -46,7 +46,7 @@
 			</div>
 			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
 			<schedule-table schedule-vm="vm.groupScheduleVm()" person-selection="vm.selectedPersonInfo()"
-							selected-person-absences="vm.selectedPersonAbsences" select-mode="vm.toggleForAbsenceReportingEnabled" />
+							selected-person-absences="vm.selectedPersonAbsences" select-mode="vm.toggles.AbsenceReportingEnabled" />
 		</div>
 
 		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="report-absence">
@@ -61,7 +61,7 @@
 		<div class="notice-spacer" ng-show="vm.selectAllVisible()" ng-click="vm.selectAllForAllPages()">
 			<a href="javascript: void(0);"> {{'SelectAllMatchedPeople'|translate}}</a>
 		</div>
-		<select class="page-size-selector" ng-if="vm.toggleForSelectAgentsPerPageEnabled"
+		<select class="page-size-selector" ng-if="vm.toggles.SelectAgentsPerPageEnabled"
 				ng-model="vm.paginationOptions.pageSize" ng-options="option for option in vm.agentsPerPageSelection"
 				ng-change="vm.selectorChanged()"></select>
 		<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>

@@ -52,26 +52,24 @@
 		};
 
 		vm.canActiveAddAbsence = function () {
-			return vm.toggleForAbsenceReportingEnabled
+			return vm.toggles.AbsenceReportingEnabled
 				&& (vm.permissions.IsAddFullDayAbsenceAvailable || vm.permissions.IsAddIntradayAbsenceAvailable)
 				&& vm.permissions.IsModifyScheduleAvailable;
 		}
 
 		vm.canActiveRemoveAbsence = function() {
-			return vm.toggleForRemoveAbsenceEnabled
+			return vm.toggles.RemoveAbsenceEnabled
 				&& vm.permissions.IsRemoveAbsenceAvailable
 				&& vm.permissions.IsModifyScheduleAvailable
 		}
 
 		vm.canActiveSwapShifts = function () {
-			return vm.toggleForSwapShiftEnabled
+			return vm.toggles.SwapShiftEnabled
 				&& vm.permissions.IsSwapShiftsAvailable
 				&& vm.permissions.IsModifyScheduleAvailable;
 		}
 
-		vm.isMenuVisible = function () {
-			return vm.canActiveAddAbsence() || vm.canActiveSwapShifts() || vm.canActiveRemoveAbsence();
-		};
+		
 
 		function updateShiftStatusForSelectedPerson() {
 			var selectedPersonIdList = personSelectionSvc.getSelectedPersonIdList();
@@ -236,7 +234,7 @@
 
 		function canRemoveAbsence() {
 			var selectedPersonAndAbsenceCount = getTotalSelectedPersonAndAbsenceCount();
-			return vm.toggleForRemoveAbsenceEnabled && selectedPersonAndAbsenceCount.AbsenceCount > 0;
+			return vm.toggles.RemoveAbsenceEnabled && selectedPersonAndAbsenceCount.AbsenceCount > 0;
 		}
 		
 		function removeAbsence(removeEntireCrossDayAbsence) {
@@ -475,14 +473,22 @@
 		}
 
 		vm.init = function () {
-			vm.toggleForSelectAgentsPerPageEnabled = toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230;
-			vm.toggleForAbsenceReportingEnabled = toggleSvc.WfmTeamSchedule_AbsenceReporting_35995;
-			vm.searchOptions.isAdvancedSearchEnabled = toggleSvc.WfmPeople_AdvancedSearch_32973;
-			vm.toggleForSwapShiftEnabled = toggleSvc.WfmTeamSchedule_SwapShifts_36231;
-			vm.toggleForRemoveAbsenceEnabled = toggleSvc.WfmTeamSchedule_RemoveAbsence_36705;
-			toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303 && monitorScheduleChanged();
+			vm.toggles = {
+				AbsenceReportingEnabled: toggleSvc.WfmTeamSchedule_AbsenceReporting_35995,
+				AdvancedSearchEnabled: toggleSvc.WfmPeople_AdvancedSearch_32973,
+				RemoveAbsenceEnabled: toggleSvc.WfmTeamSchedule_RemoveAbsence_36705,
+				SeeScheduleChangesByOthers: toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
+				SelectAgentsPerPageEnabled: toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230,
+				SwapShiftEnabled: toggleSvc.WfmTeamSchedule_SwapShifts_36231
+			};
+			vm.searchOptions.isAdvancedSearchEnabled = vm.toggles.AdvancedSearchEnabled;
+			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();
 			vm.resetSchedulePage();
 			registerShortCuts();
+
+			vm.isMenuVisible = function () {
+				return vm.canActiveAddAbsence() || vm.canActiveSwapShifts() || vm.canActiveRemoveAbsence();
+			};
 		};
 
 		$q.all([
