@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 			system.UseTestDouble<SyncCommandDispatcher>().For<ICommandDispatcher>();
 			system.UseTestDouble<FakeActivityCommandHandler>().For<IHandleCommand<AddActivityCommand>>();
+			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
 		}
 	}
 }

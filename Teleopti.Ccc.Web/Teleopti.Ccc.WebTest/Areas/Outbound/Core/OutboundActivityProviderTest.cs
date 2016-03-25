@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 
 			_target = new ActivityProvider(_activityRepository);
 
-			var result = _target.GetAll();
+			var result = _target.GetAllRequireSkill();
 
 			result.Count().Should().Be.EqualTo(1);
 			result.First().Name.Should().Be.EqualTo("a1");
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 
 			_target = new ActivityProvider(_activityRepository);
 
-			var result = _target.GetAll();
+			var result = _target.GetAllRequireSkill();
 
 			result.Count().Should().Be.EqualTo(0);
 		}
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 
 			_target = new ActivityProvider(_activityRepository);
 
-			var result = _target.GetAll();
+			var result = _target.GetAllRequireSkill();
 
 			result.First().Name.Should().Be.EqualTo("a1");
 			result.Last().Name.Should().Be.EqualTo("a2");

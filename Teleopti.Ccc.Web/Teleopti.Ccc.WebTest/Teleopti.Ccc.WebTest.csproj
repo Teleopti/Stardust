@@ -369,6 +369,7 @@
     <Compile Include="Areas\Start\Core\WebApplicationAreaResolverTest.cs" />
     <Compile Include="Areas\TeamSchedule\Core\AbsenceHandler\AbsencePersisterTest.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\AgentsPerPagePersisterAndProviderTest.cs" />
+    <Compile Include="Areas\TeamSchedule\Core\DataProvider\TeamScheduleDataProviderTest.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\TeamScheduleProjectionProviderTests.cs" />
     <Compile Include="Areas\TeamSchedule\Core\TeamScheduleCommandHandlingProviderTest.cs" />
     <Compile Include="Areas\TeamSchedule\PermissionCheckerTest.cs" />

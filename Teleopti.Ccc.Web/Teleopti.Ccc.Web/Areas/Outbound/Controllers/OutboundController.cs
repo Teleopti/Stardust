@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		[HttpGet, Route("api/Outbound/Campaign/Activities"), UnitOfWork]
 		public virtual ICollection<ActivityViewModel> GetActivities()
 		{
-			return _activityProvider.GetAll().ToArray();
+			return _activityProvider.GetAllRequireSkill().ToArray();
 		}
 
 		[HttpGet, Route("api/Outbound/Campaign/{Id}"), UnitOfWork]

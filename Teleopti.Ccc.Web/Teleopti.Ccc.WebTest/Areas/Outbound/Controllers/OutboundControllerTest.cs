@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 		public void ShouldGetAllOutboundActivities()
 		{
 			var outboundActivityProvider = MockRepository.GenerateMock<IActivityProvider>();
-			outboundActivityProvider.Stub(x => x.GetAll()).Return(new List<ActivityViewModel>() {new ActivityViewModel()});
+			outboundActivityProvider.Stub(x => x.GetAllRequireSkill()).Return(new List<ActivityViewModel>() {new ActivityViewModel()});
 
 			var target = new OutboundController(null, null, null, outboundActivityProvider, null, null, null)
 			{

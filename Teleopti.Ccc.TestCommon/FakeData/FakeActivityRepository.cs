@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -75,7 +76,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public IUnitOfWork UnitOfWork { get; private set; }
 		public IList<IActivity> LoadAllSortByName()
 		{
-			throw new NotImplementedException();
+			return withoutAdd ? new List<IActivity> { activity } : _activities.OrderBy(x => x.Name).ToList();
 		}
 	}
 }

@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				Id = Guid.NewGuid(),
 				Name = "test1"
 			};
-			activityProvider.Stub(x => x.GetAll()).Return(new[] {activityViewModel });
+			activityProvider.Stub(x => x.GetAllRequireSkill()).Return(new[] {activityViewModel });
 			var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			var skill = SkillFactory.CreateSkill("testSkill1");
 			skill.DefaultResolution = 30;

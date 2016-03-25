@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.Core.Data
 			_activityRepository = activityRepository;
 		}
 
-		public IEnumerable<ActivityViewModel> GetAll()
+		public IEnumerable<ActivityViewModel> GetAllRequireSkill()
 		{
 			var activities = new List<ActivityViewModel>();
 
@@ -26,5 +26,13 @@ namespace Teleopti.Ccc.Web.Core.Data
 			var sorted = activities.OrderBy(x=>x.Name);
 			return sorted;
 		}
+
+		public IList<ActivityViewModel> GetAll()
+		{
+			return
+				_activityRepository.LoadAllSortByName()
+					.Select(a => new ActivityViewModel {Id = a.Id.GetValueOrDefault(), Name = a.Name})
+					.ToArray();
+		} 
 	}
 }

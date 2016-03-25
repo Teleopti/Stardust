@@ -429,6 +429,13 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 				.Should().Not.Be.Null();
 		}
 
+		[Test]
+		public void ShouldResolveTeamScheduleDataController()
+		{
+			requestContainer.Resolve<TeamScheduleDataController>()
+				.Should().Not.Be.Null();
+		}
+
 
 		[Test]
 		public void ShouldResolvePersonInfoController()

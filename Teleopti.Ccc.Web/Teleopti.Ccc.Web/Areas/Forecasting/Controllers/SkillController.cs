@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		[UnitOfWork, Route("api/Skill/Activities"), HttpGet]
 		public virtual IEnumerable<dynamic> Activities()
 		{
-			return _activityProvider.GetAll().Select(activity => new {Id = activity.Id.GetValueOrDefault(), activity.Name});
+			return _activityProvider.GetAllRequireSkill().Select(activity => new {Id = activity.Id.GetValueOrDefault(), activity.Name});
 		}
 
 		[UnitOfWork, Route("api/Skill/Timezones"), HttpGet]
