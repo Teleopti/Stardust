@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 	{
 		public void ReduceToPrimarySkill(IPersonPeriod personPeriod)
 		{
-			var skillList = personPeriod.PersonSkillCollection.Select(personSkill => personSkill.Skill).OrderBy(skill => skill.Name);
+			var skillList = personPeriod.PersonSkillCollection.Select(personSkill => personSkill.Skill).OrderBy(skill => skill.Name); //fake, ska vara någon property på skillet, två skills med samma aktivitet ska kunna ha samma
 			if (!skillList.Any())
 				return;
 			var activityList = skillList.Select(s => s.Activity).Distinct().ToList();

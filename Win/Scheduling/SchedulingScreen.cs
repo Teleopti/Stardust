@@ -25,6 +25,7 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.Shoveling;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters.Account;
 using Teleopti.Ccc.Infrastructure.Persisters.Requests;
@@ -783,12 +784,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		private void toggleCalculation()
-		{
+		{		
 			_schedulerState.SchedulingResultState.SkipResourceCalculation =
 				!_schedulerState.SchedulingResultState.SkipResourceCalculation;
 			toolStripButtonCalculation.Checked = !_schedulerState.SchedulingResultState.SkipResourceCalculation;
 			if (_schedulerState.SchedulingResultState.SkipResourceCalculation)
 			{
+				if( _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_CascadingSkills_37679))
+				{
+					var shovelService = new ShovelServicePoc(_container.Resolve<ResourceCalculationContextFactory>());
+					shovelService.Execute(_schedulerState.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary,
+						_schedulerState.RequestedPeriod, _schedulerState.SchedulingResultState.Skills.OrderBy(skill => skill.Name).ToList());
+					drawSkillGrid();
+				}
 				statusStrip1.BackColor = Color.Salmon;
 			}
 			else
@@ -3767,6 +3775,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 				var skills = stateHolder.SchedulingResultState.Skills;
 				int orgSkills = skills.Length;
 				int removedSkills = result.FilterSkills(skills,stateHolder.SchedulingResultState.RemoveSkill,s => stateHolder.SchedulingResultState.AddSkills(s));
+				if( _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_CascadingSkills_37679))
+				{
+					var cascadingSkillReducer = new SkillGroupReducerForCascadingSkills();
+					foreach (var person in peopleInOrg)
+					{
+						foreach (var personPeriod in person.PersonPeriodCollection)
+						{
+							cascadingSkillReducer.ReduceToPrimarySkill(personPeriod);						
+						}
+					}
+				}
 				Log.Info("Removed " + removedSkills + " skill when filtering (original: " + orgSkills + ")");
 			}
 		}

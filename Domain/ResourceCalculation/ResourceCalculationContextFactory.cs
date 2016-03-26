@@ -28,6 +28,20 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
 			var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
 			return new ResourceCalculationContext(resources);
+		}
+
+		public IDisposable CreateForShoveling(Func<IPersonSkillProvider> personSkillProvider)
+		{
+			var schedulerStateHolder = _schedulerStateHolder();
+			var minutesPerInterval = 15;
+
+			if (schedulerStateHolder.SchedulingResultState.Skills.Any())
+			{
+				minutesPerInterval = schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution);
+			}
+			var extractor = new ScheduleProjectionExtractor(personSkillProvider(), minutesPerInterval);
+			var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
+			return new ResourceCalculationContext(resources);
 		} 
 	}
 }

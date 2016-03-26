@@ -558,10 +558,13 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             createAndAddItem(listViewPersonPeriod, Resources.Period, period.DateString, 1);
             createAndAddItem(listViewPersonPeriod, Resources.Team, personPeriod.Team.SiteAndTeam, 2);
             createAndAddItem(listViewPersonPeriod, Resources.PersonSkills, "", 2);
-            foreach (IPersonSkill personSkill in personPeriod.PersonSkillCollection)
+            foreach (IPersonSkill personSkill in personPeriod.PersonSkillCollection.OrderBy(ps => ps.Skill.Name))
             {
 				if(personSkill.Active && !((IDeleteTag)personSkill.Skill).IsDeleted)
 					createAndAddItem(listViewPersonPeriod, personSkill.Skill.Name, personSkill.SkillPercentage.ToString(), 3);
+
+				if (!personSkill.Active && !((IDeleteTag)personSkill.Skill).IsDeleted)
+					createAndAddItem(listViewPersonPeriod, personSkill.Skill.Name, "Not Active", 3);
             }
 
             if (personPeriod.PersonMaxSeatSkillCollection.Count > 0)

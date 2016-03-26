@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -18,37 +18,45 @@ namespace Teleopti.Ccc.Domain.Shoveling
 			_resourceCalculationContext = resourceCalculationContext;
 		}
 
-		public void Execute(ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodDictionary, DateTimePeriod periodToCalculate)
+		public void Execute(ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodDictionary, IDateOnlyPeriodAsDateTimePeriod periodToCalculate, IList<ISkill> allOrderedSkillList)
 		{
-			var skillList = skillSkillStaffPeriodDictionary.Keys.ToList();
-			if (!skillList.Any())
-				return;
-
-			var activityList = skillList.Select(s => s.Activity).Distinct().ToList();
-			foreach (var activity in activityList)
+			using (_resourceCalculationContext.CreateForShoveling(() => new PersonSkillProviderForShoveling()))
 			{
-				var defaultResoulution = skillList.First(skill => skill.Activity.Equals(activity)).DefaultResolution;
-				executeForActivity(activity, periodToCalculate, defaultResoulution, skillSkillStaffPeriodDictionary);
-			}
+				var resources = ResourceCalculationContext.Fetch();
 
+				//TODO filter out max seat skills
+				var skillList = skillSkillStaffPeriodDictionary.Keys.ToList();
+				if (!skillList.Any())
+					return;
+
+				var activityList = skillList.Select(s => s.Activity).Distinct().ToList();
+				foreach (var dateOnly in periodToCalculate.DateOnlyPeriod.DayCollection())
+				{
+					var dateTimePeriodToCalculate = periodToCalculate.DateTimePeriodForDateOnly(dateOnly);
+					foreach (var activity in activityList)
+					{
+						var defaultResoulution = skillList.First(skill => skill.Activity.Equals(activity)).DefaultResolution;
+						executeForActivity(activity, dateTimePeriodToCalculate, defaultResoulution, skillSkillStaffPeriodDictionary, allOrderedSkillList, resources);
+					}
+				}
+			}		
 		}
 
 		// this one can be called in parallel for each activity
-		private void executeForActivity(IActivity activity, DateTimePeriod periodToCalculate, int minSkillResoulution,
-			ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodDictionary)
+		private void executeForActivity(IActivity activity, DateTimePeriod utcPeriodToCalculate, int minSkillResoulution,
+			ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodDictionary, IList<ISkill> allOrderedSkillList, 
+			IResourceCalculationDataContainerWithSingleOperation resources)
 		{
-			var allOrderedSkillList = skillSkillStaffPeriodDictionary.Keys.OrderBy(skill => skill.Name);
-			_resourceCalculationContext.Create();
-			// use this one when testing otherwile it will not work
-			//_resourceCalculationContext.CreateForShoveling(() => new PersonSkillProviderForShoveling());
-			var resources = ResourceCalculationContext.Fetch();
 			var shovel = new Shovel();
 			var skillGroupSorter = new SkillGroupPriotizer();
 
-			var periodSplit = periodToCalculate.Intervals(TimeSpan.FromMinutes(minSkillResoulution));
+			var periodSplit = utcPeriodToCalculate.Intervals(TimeSpan.FromMinutes(minSkillResoulution));
 			foreach (var dateTimePeriod in periodSplit)
 			{
 				var resourcesPerSkillGroup = resources.AffectedResources(activity, dateTimePeriod);
+				if(!resourcesPerSkillGroup.Any())
+					continue;
+
 				foreach (var skillGroup in skillGroupSorter.Sort(resourcesPerSkillGroup.Values.ToList(), allOrderedSkillList.ToList()))
 				{
 					var orderedSkills = skillGroup.Skills.OrderBy(skill => skill.Name);
