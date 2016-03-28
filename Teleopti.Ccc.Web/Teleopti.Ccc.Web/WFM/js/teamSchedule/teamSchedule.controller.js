@@ -188,21 +188,29 @@
 			teamScheduleSvc.searchSchedules.query(params).$promise.then(callback);
 		};
 
+		vm.selectAllVisible = function () {
+			var selectedPersonIdList = personSelectionSvc.getSelectedPersonIdList();
+			return vm.paginationOptions.totalPages > 1 && selectedPersonIdList.length < vm.total;
+		};
+
 		vm.setEarliestStartOfSelectedSchedule = function() {
 			var selectedPersonIds = personSelectionSvc.getSelectedPersonIdList();
 			vm.earliestStartTime = scheduleMgmtSvc.getEarliestStartOfSelectedSchedule(vm.scheduleDateMoment(), selectedPersonIds);
 		};
 
-		function toggleAddAbsencePanel() {
-			if (!personSelectionSvc.isAnyAgentSelected() || !vm.canActiveAddAbsence()) return;
+		function addActivity() {
+			vm.setCurrentCommand('addActivity');
+		}
 
+		function addAbsence() {
+			if (!personSelectionSvc.isAnyAgentSelected() || !vm.canActiveAddAbsence()) return;
 			vm.setEarliestStartOfSelectedSchedule();
-			vm.toggleMenuState();
-			vm.setCurrentCommand("addAbsence")();
+			vm.setCurrentCommand("addAbsence");
 		};
 
 		function swapShifts() {
 			if (!personSelectionSvc.canSwapShifts()) return;
+			vm.setCurrentCommand('SwapShifts');
 
 			var selectedPersonIds = personSelectionSvc.getSelectedPersonIdList();
 			var personIdFrom = selectedPersonIds[0];
@@ -241,7 +249,7 @@
 
 		function confirmRemoveAbsence() {
 			if (!canRemoveAbsence()) return;
-
+			vm.setCurrentCommand('RemoveAbsence');
 			var selectedPersonAndAbsenceCount = getTotalSelectedPersonAndAbsenceCount();
 
 			var message = replaceParameters($translate.instant("AreYouSureToRemoveSelectedAbsence"),
@@ -261,10 +269,18 @@
 			
 		vm.commands = [
 			{
+				label: "AddActivity",
+				shortcut: "Alt+A",
+				panelName: "add-activity", 
+				action: addActivity,
+				clickable: function () { return personSelectionSvc.isAnyAgentSelected(); },
+				visible: function() { return vm.canActiveAddActivity(); }
+			},
+			{
 				label: "AddAbsence",
 				shortcut: "Alt+B",
 				panelName: 'report-absence',
-				action: toggleAddAbsencePanel,
+				action: addAbsence,
 				clickable: function () { return personSelectionSvc.isAnyAgentSelected(); },
 				visible: function () { return vm.canActiveAddAbsence(); }
 			},
@@ -286,9 +302,8 @@
 			}
 		];
 
-		vm.selectAllVisible = function () {
-			var selectedPersonIdList = personSelectionSvc.getSelectedPersonIdList();
-			return vm.paginationOptions.totalPages > 1 && selectedPersonIdList.length < vm.total;
+		vm.canActiveAddActivity = function() {
+			return vm.toggles.AddActivityEnabled && vm.permissions.HasAddingActivityPermission;
 		};
 
 		vm.canActiveAddAbsence = function () {
@@ -313,29 +328,18 @@
 			return vm.toggles.RemoveAbsenceEnabled && getTotalSelectedPersonAndAbsenceCount().AbsenceCount > 0;
 		};
 
-		vm.menuState = 'open';
-		vm.toggleMenuState = function () {
-			if (vm.menuState === 'closed') {
-				vm.menuState = 'open';
-				if ($mdSidenav('report-absence').isOpen()) {
-					$mdSidenav('report-absence').toggle();
-				}
-			} else {
-				vm.menuState = 'closed';
+
+		vm.toggleCommandState = function (menuName) {
+			if (menuName !== undefined) {
+				$mdSidenav(menuName).toggle();
 			}
 		};
 
-		vm.isOpen = function () { return false; };
-
-		$scope.$watch("vm.isOpen()", function (newValue, oldValue) {
-			vm.menuState = newValue ? 'closed' : 'open';
-		}, true);
-
-		vm.currentCommand = function () {
-			if (vm.commandName != undefined) {
+		vm.getCurrentCommand = function (currentCmdName) {
+			if (currentCmdName != undefined) {
 				for (var i = 0; i < vm.commands.length; i++) {
 					var cmd = vm.commands[i];
-					if (cmd.label.toLowerCase() === vm.commandName.toLowerCase()) {
+					if (cmd.label.toLowerCase() === currentCmdName.toLowerCase()) {
 						return cmd;
 					}
 				};
@@ -343,33 +347,21 @@
 			return undefined;
 		};
 
-		function buildToggler(navId) {
-			var debounceFn = $mdUtil.debounce(function () {
-				$mdSidenav(navId).toggle().then(function () { });
-			}, 200);
-			return debounceFn;
-		};
+		vm.toggleCurrentSidenav = function () { return false; };
 
-		vm.setCurrentCommand = function (cmdName) {
-			var currentCmd = vm.currentCommand();
+		vm.setCurrentCommand = function (currentCmdName) {
+			var currentCmd = vm.getCurrentCommand(currentCmdName);
+			vm.commands.forEach(function (cmd) {
+				if (cmd.panelName.length > 0 && cmd.panelName !== currentCmd.panelName && $mdSidenav(cmd.panelName).isOpen()) {
+					$mdSidenav(cmd.panelName).close();
+				}
+			});
+
 			if (currentCmd != undefined && currentCmd.panelName != undefined && currentCmd.panelName.length > 0) {
 				$mdComponentRegistry.when(currentCmd.panelName).then(function (sideNav) {
-					if (sideNav.isOpen()) {
-						sideNav.toggle();
-					}
+					vm.toggleCurrentSidenav = angular.bind(sideNav, sideNav.isOpen);
 				});
-			}
-
-			if (cmdName != undefined && cmdName.length > 0) {
-				vm.commandName = cmdName;
-
-				var cmd = vm.currentCommand();
-				$mdComponentRegistry.when(cmd.panelName).then(function (sideNav) {
-					vm.isOpen = angular.bind(sideNav, sideNav.isOpen);
-				});
-				return buildToggler(cmd.panelName);
-			} else {
-				return null;
+				vm.toggleCommandState(currentCmd.panelName);
 			}
 		};
 
@@ -425,6 +417,9 @@
 		}
 
 		function registerShortCuts() {
+			shortCuts.registerKeySequence([keyCodes.A], [keyCodes.ALT], function () {
+				addActivity(); // Alt+A for add activity
+			});
 			shortCuts.registerKeySequence([keyCodes.B], [keyCodes.ALT], function () {
 				toggleAddAbsencePanel(); // Alt+B for add absence
 			});
@@ -475,6 +470,7 @@
 
 		vm.init = function () {
 			vm.toggles = {
+				AddActivityEnabled: toggleSvc.WfmTeamSchedule_AddActivity_37541,
 				AbsenceReportingEnabled: toggleSvc.WfmTeamSchedule_AbsenceReporting_35995,
 				AdvancedSearchEnabled: toggleSvc.WfmPeople_AdvancedSearch_32973,
 				RemoveAbsenceEnabled: toggleSvc.WfmTeamSchedule_RemoveAbsence_36705,

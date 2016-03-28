@@ -6,11 +6,13 @@
 				<option value="" disabled selected="">{{'PickAnActivity'|translate}}</option>
 				<option value="{{activity.Id}}" ng-repeat="activity in vm.activities | orderBy: 'Name'">{{activity.Name}}</option>
 			</select>
-			<time-range-picker start-time="vm.startTime" end-time="vm.endTime" 
+			<time-range-picker start-time="vm.startTime" end-time="vm.endTime"
 							   disable-next-day="vm.disableNextDay"></time-range-picker>
-			<button ng-class="{'wfm-btn-primary': vm.isDataChangeValid(), 'wfm-btn-primary-disabled': !vm.isDataChangeValid()}"
-					ng-disabled="!vm.isDataChangeValid()">{{'Apply' | translate}}</button>
-		</div>		
+			<button class="wfm-btn" ng-class="{'wfm-btn-primary': vm.isDataChangeValid(), 'wfm-btn-primary-disabled': !vm.isDataChangeValid()}"
+					ng-disabled="!vm.isDataChangeValid()">
+				{{'Apply' | translate}}
+			</button>
+		</div>
 	</md-content>
 </div>
 

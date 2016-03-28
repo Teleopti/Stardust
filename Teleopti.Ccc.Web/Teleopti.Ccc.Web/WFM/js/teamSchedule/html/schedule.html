@@ -48,9 +48,12 @@
 		</div>
 
 		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="report-absence">
-			<add-absence ng-if="vm.isOpen()" default-date-time="vm.earliestStartTime" permissions="vm.permissions"
-						 actions-after-absence-apply="vm.afterActionCallback(result,personIds,successMessageTemplate,failMessageTemplate)"
+			<add-absence ng-if="vm.toggleCurrentSidenav()" default-date-time="vm.earliestStartTime" permissions="vm.permissions" actions-after-absence-apply="vm.afterActionCallback(result,personIds,successMessageTemplate,failMessageTemplate)"
 						 agent-id-list="vm.getSelectedPersonIdList()"></add-absence>
+		</md-sidenav>
+
+		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="add-activity">
+			<add-activity-panel ng-if="vm.toggleCurrentSidenav()" selected-agents="vm.getSelectedPersonIdList()" selected-date="vm.scheduleDate"></add-activity-panel>
 		</md-sidenav>
 		
 	</div>
