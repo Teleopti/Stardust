@@ -53,7 +53,7 @@
 		</md-sidenav>
 
 		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="add-activity">
-			<add-activity-panel ng-if="vm.toggleCurrentSidenav()" selected-agents="vm.getSelectedPersonIdList()" selected-date="vm.scheduleDate" default-start="vm.defaultNewActivityStart()"></add-activity-panel>
+			<add-activity-panel ng-if="vm.toggleCurrentSidenav()" selected-agents="vm.getSelectedPersonIdList()" selected-date="vm.scheduleDate" default-start="vm.defaultNewActivityStart()" actions-after-activity-apply="vm.tempAfterAddActivityCallback()"></add-activity-panel>
 		</md-sidenav>
 		
 	</div>

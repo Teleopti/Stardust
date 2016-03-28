@@ -25,7 +25,7 @@
 		var startTimeMoment;
 
 		if (vm.defaultStart) {
-			startTimeMoment = moment(vm.selectedDate()).format("YYYY-MM-DD") + " " + vm.defaultStart();
+			startTimeMoment = moment(moment(vm.selectedDate()).format("YYYY-MM-DD") + " " + vm.defaultStart());
 		} else {
 			startTimeMoment = moment();
 		}
@@ -52,7 +52,8 @@
 
 			}).then(function (data) {			
 				if (vm.actionsAfterActivityApply) {
-					vm.actionsAfterActivityApply(data);
+					//vm.actionsAfterActivityApply(data);
+					vm.actionsAfterActivityApply();
 				}
 			});
 		}	

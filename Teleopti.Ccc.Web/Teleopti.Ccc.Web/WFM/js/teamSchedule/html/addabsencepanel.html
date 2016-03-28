@@ -2,38 +2,39 @@
 	<div class="sidenav-header">{{'AddAbsence'|translate}}</div>
 	<md-content layout-padding>
 		<div>
-		<select class="absence-selector" ng-model="vm.selectedAbsenceId">
-			<option value="" disabled selected="">{{'PickAnAbsence'|translate}}</option>
-			<option value={{absence.Id}} ng-repeat="absence in vm.AvailableAbsenceTypes|orderBy: 'Name'">{{absence.Name}}</option>
-		</select>
-		<h3>{{'From'|translate}}: </h3>
-		<div class="con-row">
-			<span class="col-sm-7 teamschedule-datepicker">
+			<h3>{{'Absence'|translate}}: </h3>
+			<select class="absence-selector" ng-model="vm.selectedAbsenceId">
+				<option value="" disabled selected="">{{'PickAnAbsence'|translate}}</option>
+				<option value={{absence.Id}} ng-repeat="absence in vm.AvailableAbsenceTypes|orderBy: 'Name'">{{absence.Name}}</option>
+			</select>
+			<h3>{{'From'|translate}}: </h3>
+			<div class="con-row">
+				<span class="col-sm-7 teamschedule-datepicker">
 				<team-schedule-datepicker selected-date="vm.selectedAbsenceStartDate" mini />
 			</span>
-			<span class="col-sm-5 uib-timepicker">
+				<span class="col-sm-5 uib-timepicker">
 				<uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.absencePermissions.IsAddIntradayAbsenceAvailable" ng-model="vm.selectedAbsenceStartDate"></uib-timepicker>
 			</span>
-		</div>
+			</div>
 
-		<h3>{{'To'|translate}}: </h3>
-		<div class="con-row">
-			<span class="col-sm-7 teamschedule-datepicker">
+			<h3>{{'To'|translate}}: </h3>
+			<div class="con-row">
+				<span class="col-sm-7 teamschedule-datepicker">
 				<team-schedule-datepicker selected-date="vm.selectedAbsenceEndDate" mini />
 			</span>
-			<span class="col-sm-5 uib-timepicker">
+				<span class="col-sm-5 uib-timepicker">
 				<uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.absencePermissions.IsAddIntradayAbsenceAvailable" ng-model="vm.selectedAbsenceEndDate"></uib-timepicker>
 			</span>
-		</div>
+			</div>
 
-		<div class="wfm-checkbox" ng-if="vm.absencePermissions.IsAddFullDayAbsenceAvailable">
-			<input type="checkbox" id="is-full-day" ng-model="vm.isFullDayAbsence" ng-disabled="vm.absencePermissions.IsAddFullDayAbsenceAvailable && !vm.absencePermissions.IsAddIntradayAbsenceAvailable" />
-			<label for="is-full-day">
-				<span class="wfm-checkbox-toggle"></span>
-				<span class="wfm-checkbox-label">{{'FullDayAbsence'|translate}}</span>
-			</label>
-		</div>
-		<p class="text-danger" ng-if="!vm.isAbsenceTimeValid() && !vm.isAbsenceDateValid()">{{'EndTimeMustBeGreaterOrEqualToStartTime'|translate}}</p>
+			<div class="wfm-checkbox" ng-if="vm.absencePermissions.IsAddFullDayAbsenceAvailable">
+				<input type="checkbox" id="is-full-day" ng-model="vm.isFullDayAbsence" ng-disabled="vm.absencePermissions.IsAddFullDayAbsenceAvailable && !vm.absencePermissions.IsAddIntradayAbsenceAvailable"/>
+				<label for="is-full-day">
+					<span class="wfm-checkbox-toggle"></span>
+					<span class="wfm-checkbox-label">{{'FullDayAbsence'|translate}}</span>
+				</label>
+			</div>
+			<p class="text-danger" ng-if="!vm.isAbsenceTimeValid() && !vm.isAbsenceDateValid()">{{'EndTimeMustBeGreaterOrEqualToStartTime'|translate}}</p>
 		</div>
 		<button class="wfm-btn pull-right" ng-class="{'wfm-btn-primary': vm.isDataChangeValid(), 'wfm-btn-primary-disabled': !vm.isDataChangeValid()}"
 				ng-disabled="!vm.isDataChangeValid()" ng-click="vm.applyAbsence()">

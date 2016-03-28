@@ -1,10 +1,10 @@
-﻿<div class="absence-report">
+﻿<div class="add-activity">
 	<div class="sidenav-header">{{'AddActivity'|translate}}</div>
 	<md-content layout-padding>
 		<form name="newActivityForm">
 			<h3>{{'Activity'|translate}}: </h3>
 			<div class="con-row">
-				<select ng-model="vm.selectedActivityId" required>
+				<select class="activity-selector" ng-model="vm.selectedActivityId" required>
 					<option value="" disabled selected="">{{'PickAnActivity'|translate}}</option>
 					<option value="{{activity.Id}}" ng-repeat="activity in vm.activities | orderBy: 'Name'">{{activity.Name}}</option>
 				</select>

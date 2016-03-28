@@ -362,11 +362,19 @@
 
 		vm.setCurrentCommand = function (currentCmdName) {
 			var currentCmd = vm.getCurrentCommand(currentCmdName);
-			vm.commands.forEach(function (cmd) {
-				if (cmd.panelName.length > 0 && cmd.panelName !== currentCmd.panelName && $mdSidenav(cmd.panelName).isOpen()) {
-					$mdSidenav(cmd.panelName).close();
-				}
-			});
+			if (currentCmd !== undefined) {
+				vm.commands.forEach(function(cmd) {
+					if (cmd.panelName.length > 0 && cmd.panelName !== currentCmd.panelName && $mdSidenav(cmd.panelName).isOpen()) {
+						$mdSidenav(cmd.panelName).close();
+					}
+				});
+			} else {
+				vm.commands.forEach(function (cmd) {
+					if (cmd.panelName.length > 0 && $mdSidenav(cmd.panelName).isOpen()) {
+						$mdSidenav(cmd.panelName).close();
+					}
+				});
+			}
 
 			if (currentCmd != undefined && currentCmd.panelName != undefined && currentCmd.panelName.length > 0) {
 				$mdComponentRegistry.when(currentCmd.panelName).then(function (sideNav) {
@@ -423,8 +431,13 @@
 
 			vm.updateSchedules(personIds);
 			personSelectionSvc.resetPersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
+			vm.setCurrentCommand("");
 		};
 
+		vm.afterAddActivity = function() {
+			//temp test
+			vm.setCurrentCommand("");
+		};
 		function registerShortCuts() {
 			shortCuts.registerKeySequence([keyCodes.A], [keyCodes.ALT], function () {
 				addActivity(); // Alt+A for add activity
