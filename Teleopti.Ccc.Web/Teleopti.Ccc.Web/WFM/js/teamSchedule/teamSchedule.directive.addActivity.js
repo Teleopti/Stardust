@@ -22,7 +22,7 @@
 	function addActivityCtrl(ActivityService) {
 		var vm = this;
 		var startTimeMoment = moment(moment(vm.selectedDate()).format("YYYY-MM-DD") + " " + vm.defaultStart());
-		var endTimeMoment = moment(startTime).add(1, 'hour');
+		var endTimeMoment = moment(startTimeMoment).add(1, 'hour');
 		vm.timeRange = {
 			startTime: startTimeMoment.toDate(),
 			endTime: endTimeMoment.toDate()
