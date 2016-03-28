@@ -21,7 +21,7 @@
 		vm.onlyLoadScheduleWithAbsence = false;
 		vm.lastCommandTrackId = "";
 		vm.selectedPersonAbsences = [];
-
+		vm.isScenarioTest = false;
 		vm.searchOptions = {
 			keyword: '',
 			isAdvancedSearchEnabled: false,
@@ -265,18 +265,17 @@
 			var selectedPersonAndAbsenceCount = getTotalSelectedPersonAndAbsenceCount();
 
 			var message = replaceParameters($translate.instant("AreYouSureToRemoveSelectedAbsence"),
-				[selectedPersonAndAbsenceCount.AbsenceCount, selectedPersonAndAbsenceCount.PersonCount]);
+			[selectedPersonAndAbsenceCount.AbsenceCount, selectedPersonAndAbsenceCount.PersonCount]);
 			dialogSvc.create("js/teamSchedule/html/removeAbsenceConfirmDialog.html", 'RemoveAbsenceConfirmDialogController',
-				{
-					header: $translate.instant("Warning"), 
-					message: message,
-					removeEntireCrossDayAbsence: false
-				}, { animation: true })
-				.result.then(function (result) {
-					removeAbsence(result);
-				}, function () {
-					return;
-				});
+			{
+				header: $translate.instant("Warning"),
+				message: message,
+				removeEntireCrossDayAbsence: false
+			}, { animation: !vm.isScenarioTest }).result.then(function(result) {
+				removeAbsence(result);
+			}, function() {
+				return;
+			});
 		}
 			
 		vm.commands = [
