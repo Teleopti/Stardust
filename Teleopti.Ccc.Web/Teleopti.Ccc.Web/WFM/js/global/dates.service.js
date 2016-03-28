@@ -14,10 +14,10 @@
 			return nowDate;
 		};
 		this.nowMoment = function() {
-			return moment(this.now.getTime());
+			return moment(nowDate);
 		}
 		this.nowInUserTimeZone = function () {
-			return this.nowMoment.tz(CurrentUserInfo.DefaultTimeZone);
+			return moment(this.nowMoment(), CurrentUserInfo.DefaultTimeZone);
 		}
 	}
 

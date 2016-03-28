@@ -21,9 +21,11 @@
 	
 	function addActivityCtrl(ActivityService) {
 		var vm = this;
+		var startTime = moment(vm.selectedDate()).format("YYYY-MM-DD") + " " + vm.defaultStart();
+		var endTime = moment(startTime).add(1, 'hour');
 		vm.timeRange = {
-			startTime: new Date(),
-			endTime: new Date()
+			startTime: new Date(startTime),
+			endTime: new Date(endTime)
 		};
 		vm.disableNextDay = false;
 		vm.isDataChangeValid = isDataChangeValid;
@@ -34,7 +36,7 @@
 		
 		function isDataChangeValid() {
 			return vm.selectedActivityId !== undefined && vm.startTime !== undefined && vm.endTime !== undefined;
-		}
+		}	
 	}
 
 })();
