@@ -119,7 +119,7 @@ describe("[Test for TeamScheduleController]:", function() {
 		expect(controller.defaultNewActivityStart()).toEqual(moment("2015-10-26 12:30:00").format('LT'));
 	});
 
-	fit("should get correct new activity start for selected date", function () {
+	it("should get correct new activity start for selected date", function () {
 		controller.scheduleDate = new Date("2015-10-26");
 		nowDate = new Date("2015-10-25 12:16:00");
 		rootScope.$digest();
