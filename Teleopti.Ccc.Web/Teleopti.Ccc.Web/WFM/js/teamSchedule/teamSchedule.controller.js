@@ -308,7 +308,7 @@
 				label: "RemoveAbsence",
 				shortcut: "Alt+R",
 				panelName: "", // Leave empty if not creating a right panel
-				action: removeAbsence,
+				action: confirmRemoveAbsence,
 				clickable: function() { return vm.canRemoveAbsence(); },
 				visible: function() { return vm.canActiveRemoveAbsence(); }
 			}
@@ -418,22 +418,20 @@
 			}
 		}
 
-		vm.afterActionCallback = function (result, personIds, successMessageTemplate, failMessageTemplate) {
+		vm.afterActionCallback = function(result, personIds, successMessageTemplate, failMessageTemplate) {
 			vm.lastCommandTrackId = result.TrackId;
 			handleActionResult(result.Errors, successMessageTemplate, failMessageTemplate);
 
 			vm.updateSchedules(personIds);
 			personSelectionSvc.resetPersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
-
-			vm.setCurrentCommand("");
-		}
+		};
 
 		function registerShortCuts() {
 			shortCuts.registerKeySequence([keyCodes.A], [keyCodes.ALT], function () {
 				addActivity(); // Alt+A for add activity
 			});
 			shortCuts.registerKeySequence([keyCodes.B], [keyCodes.ALT], function () {
-				toggleAddAbsencePanel(); // Alt+B for add absence
+				addAbsence(); // Alt+B for add absence
 			});
 			shortCuts.registerKeySequence([keyCodes.S], [keyCodes.ALT], function () {
 				swapShifts(); // Alt+S for swap shifts
