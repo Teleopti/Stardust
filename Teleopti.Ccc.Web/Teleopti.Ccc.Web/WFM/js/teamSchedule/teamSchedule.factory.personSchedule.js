@@ -43,6 +43,15 @@
 				IsSelected: false,
 				AllowSwap: function() {
 					return !this.IsFullDayAbsence;
+				},
+				ScheduleStartTime: function () {
+					var start = schedule.Date;
+					angular.forEach(this.Shifts, function(shift) {
+						if (start === shift.Date) {
+							start = shift.Projections[0].Start;
+						}
+					});
+					return start;
 				}
 			}
 

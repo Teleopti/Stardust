@@ -40,25 +40,12 @@ angular.module("wfm.teamSchedule").service("ScheduleManagement", [
 			});
 		}
 
-		function getScheduleStartTime(schedule) {
-			var scheduleStart = new Date("2099-12-31");
-			angular.forEach(schedule.Shifts, function (shift) {
-				var firstProjection = shift.Projections[0];
-				var start = moment(firstProjection.Start).toDate();
-				if (!firstProjection.IsOverNight && start < scheduleStart) {
-					scheduleStart = start;
-				}
-			});
-
-			return scheduleStart;
-		}
-
 		svc.getEarliestStartOfSelectedSchedule = function(scheduleDateMoment, selectedPersonIds) {
 			var startUpdated = false;
 			var earlistStart = new Date("2099-12-31");
 			for (var i = 0; i < svc.groupScheduleVm.Schedules.length; i++) {
 				var schedule = svc.groupScheduleVm.Schedules[i];
-				var scheduleStart = getScheduleStartTime(schedule);
+				var scheduleStart = schedule.ScheduleStartTime();
 				if (selectedPersonIds.indexOf(schedule.PersonId) > -1 && scheduleStart < earlistStart) {
 					startUpdated = true;
 					earlistStart = scheduleStart;
@@ -71,6 +58,11 @@ angular.module("wfm.teamSchedule").service("ScheduleManagement", [
 			}
 
 			return earlistStart;
+		}
+
+		svc.getLatestStartOfSelectedSchedule = function (scheduleDateMoment, selectedPersonIds) {
+
+			
 		}
 	}
 ]);

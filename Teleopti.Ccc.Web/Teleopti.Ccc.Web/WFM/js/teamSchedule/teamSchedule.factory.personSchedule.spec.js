@@ -218,6 +218,49 @@ describe("PersonSchedule", function () {
 		verifyDayOff(timeLine, personSchedule.DayOffs[1], schedule4Today.DayOff);
 	}));
 
+	it("should get correct schedule start time", function() {
+		var queryDate = "2015-10-30";
+		var yesterday = moment(queryDate).add(-1, "days").startOf("days").format("YYYY-MM-DD");
+		var timeLineStart = 0;
+		var timeLineEnd = 1440;
+
+		var timeLine = {
+			Offset: moment(queryDate),
+			StartMinute: timeLineStart,
+			EndMinute: timeLineEnd,
+			LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
+		};
+		var scheduleYesterday = {
+			"PersonId": "221B-Baker-Street",
+			"Name": "Sherlock Holmes",
+			"Date": yesterday,
+			"Projection": [],
+			"DayOff":
+			{
+				"DayOffName": "Day off",
+				"Start": yesterday + " 00:00",
+				"Minutes": 1440
+			}
+		};
+
+		var scheduleToday = {
+			"PersonId": "221B-Baker-Street",
+			"Name": "Sherlock Holmes",
+			"Date": queryDate,
+			"Projection": [
+			{
+				"Color": "#80FF80",
+				"Description": "Email",
+				"Start": queryDate + " 07:00",
+				"Minutes": 480
+			}],
+			"DayOff":null
+		};
+		var personSchedule = target.Create(scheduleToday, timeLine);
+		personSchedule.Merge(scheduleYesterday, timeLine);
+
+		expect(personSchedule.ScheduleStartTime()).toEqual(queryDate + " 07:00");
+	});
 
 	function verifyShift(timeLine, shift, rawSchedule) {
 		shift.Projections.forEach(function (projection, index) {
