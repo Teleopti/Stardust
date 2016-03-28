@@ -61,8 +61,22 @@ angular.module("wfm.teamSchedule").service("ScheduleManagement", [
 		}
 
 		svc.getLatestStartOfSelectedSchedule = function (scheduleDateMoment, selectedPersonIds) {
+			var startUpdated = false;
+			var latestStart = scheduleDateMoment.toDate();
+			svc.groupScheduleVm.Schedules.forEach(function(schedule) {
+				var scheduleStart = schedule.ScheduleStartTime();
+				if (selectedPersonIds.indexOf(schedule.PersonId) > -1 && scheduleStart > latestStart) {
+					startUpdated = true;
+					latestStart = scheduleStart;
+				}
+			});
 
-			
+			if (!startUpdated) {
+				// Set to 08:00 for empty schedule or day off
+				latestStart = scheduleDateMoment.startOf('day').add(8, 'hour').toDate();
+			}
+
+			return latestStart;
 		}
 	}
 ]);
