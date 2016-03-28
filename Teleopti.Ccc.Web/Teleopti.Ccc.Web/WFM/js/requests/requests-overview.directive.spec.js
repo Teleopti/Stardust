@@ -188,10 +188,10 @@
 			var createdTime = test.scope.requests[0].FormatedCreatedTime();
 			var updatededTime = test.scope.requests[0].FormatedUpdatedTime();
 
-			expect(startTime).toEqual(toDateString('2016-01-05T00:00:00'));
-			expect(endTime).toEqual(toDateString('2016-01-07T23:59:00'));
-			expect(createdTime).toEqual(toDateString('2016-01-05T03:29:37'));
-			expect(updatededTime).toEqual(toDateString('2016-01-05T03:29:37'));
+			expect(startTime).toEqual(toDateString('2016-01-05T00:00:00', 'Europe/Berlin'));
+			expect(endTime).toEqual(toDateString('2016-01-07T23:59:00', 'Europe/Berlin'));
+			expect(createdTime).toEqual(toDateString('2016-01-05T03:29:37', 'Europe/Berlin'));
+			expect(updatededTime).toEqual(toDateString('2016-01-05T03:29:37', 'Europe/Berlin'));
 		});
 
 		xit("should be able to switch between user timezone and request submitter timezone", function () {
@@ -204,7 +204,7 @@
 			isolatedScope.requestsTableContainer.isUsingRequestSubmitterTimeZone = false;
 			test.scope.$digest();
 
-			expect(test.scope.requests[0].FormatedPeriodStartTime()).toEqual(toDateString('2016-01-06T05:00:00'));
+			expect(test.scope.requests[0].FormatedPeriodStartTime()).toEqual(toDateString('2016-01-06T05:00:00', 'Europe/Berlin'));
 			
 			isolatedScope.requestsTableContainer.isUsingRequestSubmitterTimeZone = true;
 			test.scope.$digest();
@@ -212,8 +212,9 @@
 			expect(test.scope.requests[0].FormatedPeriodStartTime()).toEqual(toDateString('2016-01-06T14:00:00'));
 		});
 
-		function toDateString(date) {
-			var _dateTime = moment(date).toDate();
+		function toDateString(date, timeZone) {
+			var _isNowDST = moment.tz(timeZone).isDST();
+			var _dateTime = _isNowDST ? moment(date).add(1, 'h').toDate() : moment(date).toDate();
 			return $filter('date')(_dateTime, "short");
 		};
 
