@@ -17,18 +17,32 @@
 
 	function FakeActivityService() {
 		var availableActivities = [];
-		this.fetchAvailableActivities = function () {
-			
+		var targetActivity = null;
+
+		this.fetchAvailableActivities = function() {
 			return {
 				then: function(cb) {
 					cb(availableActivities);
 				}
+			};
 		};
-		}
+
+		this.addActivity = function(input) {
+			targetActivity = input;
+			return {
+				then: function (cb) {
+					cb(targetActivity);
+				}
+			};
+		};
+
+		this.getAddActivityCalledWith = function() {
+			return targetActivity;
+		};
 
 		this.setAvailableActivities = function(activities) {
 			availableActivities = activities;
-		}
+		};
 	}
 
 	beforeEach(inject(function (_$rootScope_, _$compile_) {
@@ -120,7 +134,7 @@
 		var innerScope = element.isolateScope().vm;
 
 		innerScope.timeRange.startTime = new Date('2015-01-01 08:00:00');
-		innerScope.timeRange.startTime = new Date('2015-01-01 02:00:00');
+		innerScope.timeRange.endTime = new Date('2015-01-01 02:00:00');
 		scope.$apply();
 
 
@@ -132,5 +146,136 @@
 
 		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
 		expect(applyButton.attr('disabled')).toBe('disabled');
-	});	
+	});
+
+	it('should call add activity when click apply with correct data', function () {
+		var html = '<add-activity-panel selected-agents="getSelectedAgents()" selected-date="getSelectedDate()"></add-activity-panel>';
+		
+		var scope = $rootScope.$new();
+		scope.getSelectedAgents = function() {
+			return ['agent1', 'agent2'];
+		};
+		scope.getSelectedDate = function () {		
+			return new Date('2016-01-01');
+		};
+
+		var availableActivities = [
+				{
+					"Id": "472e02c8-1a84-4064-9a3b-9b5e015ab3c6",
+					"Name": "E-mail"
+				},
+				{
+					"Id": "5c1409de-a0f1-4cd4-b383-9b5e015ab3c6",
+					"Name": "Invoice"
+				},
+				{
+					"Id": "0ffeb898-11bf-43fc-8104-9b5e015ab3c2",
+					"Name": "Phone"
+				},
+				{
+					"Id": "84db44f4-22a8-44c7-b376-a0a200da613e",
+					"Name": "Sales"
+				},
+				{
+					"Id": "35e33821-862f-461c-92db-9f0800a8d095",
+					"Name": "Social Media"
+				}
+		];
+		fakeActivityService.setAvailableActivities(availableActivities);
+
+		var element = $compile(html)(scope);
+		scope.$apply();
+
+		var innerScope = element.isolateScope().vm;
+
+		innerScope.timeRange.startTime = new Date('2015-01-01 02:00:00');
+		innerScope.timeRange.endTime = new Date('2015-01-01 08:00:00');
+		innerScope.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
+		scope.$apply();
+
+		var applyButton;
+		angular.forEach(element.find('button'), function (e) {
+			var element = angular.element(e);
+			if (element.hasClass('form-submit')) applyButton = element;
+		});
+		
+		applyButton.triggerHandler('click');
+
+		scope.$apply();
+
+		var activityData = fakeActivityService.getAddActivityCalledWith();
+	
+		expect(activityData).not.toBeNull();
+		expect(activityData.agents.length).toEqual(2);
+		expect(activityData.activity).toEqual('472e02c8-1a84-4064-9a3b-9b5e015ab3c6');
+		expect(moment(activityData.startTime).format('HH:mm')).toEqual('02:00');
+		expect(moment(activityData.endTime).format('HH:mm')).toEqual('08:00');
+		expect(moment(activityData.date).format('YYYY-MM-DD')).toEqual('2016-01-01');
+
+	});
+
+	it('should invoke afterAddActivity function after adding activity', function () {
+		var html = '<add-activity-panel selected-agents="getSelectedAgents()" selected-date="getSelectedDate()" actions-after-activity-apply="callback()"></add-activity-panel>';
+
+		var scope = $rootScope.$new();
+		scope.getSelectedAgents = function () {
+			return ['agent1', 'agent2'];
+		};
+		scope.getSelectedDate = function () {
+			return new Date('2016-01-01');
+		};
+
+		var callbackCalled = false;
+
+		scope.callback = function() {
+			callbackCalled = true;
+		}
+
+		var availableActivities = [
+				{
+					"Id": "472e02c8-1a84-4064-9a3b-9b5e015ab3c6",
+					"Name": "E-mail"
+				},
+				{
+					"Id": "5c1409de-a0f1-4cd4-b383-9b5e015ab3c6",
+					"Name": "Invoice"
+				},
+				{
+					"Id": "0ffeb898-11bf-43fc-8104-9b5e015ab3c2",
+					"Name": "Phone"
+				},
+				{
+					"Id": "84db44f4-22a8-44c7-b376-a0a200da613e",
+					"Name": "Sales"
+				},
+				{
+					"Id": "35e33821-862f-461c-92db-9f0800a8d095",
+					"Name": "Social Media"
+				}
+		];
+		fakeActivityService.setAvailableActivities(availableActivities);
+
+		var element = $compile(html)(scope);
+		scope.$apply();
+
+		var innerScope = element.isolateScope().vm;
+
+		innerScope.timeRange.startTime = new Date('2015-01-01 02:00:00');
+		innerScope.timeRange.endTime = new Date('2015-01-01 08:00:00');
+		innerScope.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
+		scope.$apply();
+
+		var applyButton;
+		angular.forEach(element.find('button'), function (e) {
+			var element = angular.element(e);
+			if (element.hasClass('form-submit')) applyButton = element;
+		});
+
+		applyButton.triggerHandler('click');
+
+		scope.$apply();
+
+		expect(callbackCalled).toBeTruthy();
+
+	});
 });

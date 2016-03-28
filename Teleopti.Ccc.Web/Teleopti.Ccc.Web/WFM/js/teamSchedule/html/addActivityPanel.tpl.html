@@ -13,8 +13,10 @@
 								   disable-next-day="vm.disableNextDay"></tmp-time-range-picker>
 		</form>
 
-		<button class="wfm-btn form-submit" ng-class="{'wfm-btn-primary': newActivityForm.$valid, 'wfm-btn-primary-disabled': !newActivityForm.$valid}"
-				ng-disabled="!newActivityForm.$valid">
+		<button class="wfm-btn form-submit"
+				ng-class="{'wfm-btn-primary': newActivityForm.$valid, 'wfm-btn-primary-disabled': !newActivityForm.$valid}"
+				ng-disabled="!newActivityForm.$valid"
+				ng-click="vm.addActivity()">
 			{{'Apply' | translate}}
 		</button>
 	</md-content>
