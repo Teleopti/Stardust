@@ -14218,4 +14218,8 @@ Help us improve your experience by sending an error report</value>
     <value>This will clear this function and all child functions below it, are you sure you want to proceed?</value>
     <comment>warning shown when unselecting a parent permission function</comment>
   </data>
+  <data name="SameDay" xml:space="preserve">
+    <value>Same Day</value>
+    <comment>The opposite to the NextDay</comment>
+  </data>
 </root>

@@ -1,18 +1,22 @@
 ﻿<div class="absence-report">
 	<div class="sidenav-header">{{'AddActivity'|translate}}</div>
 	<md-content layout-padding>
-		<div>
-			<select ng-model="vm.selectedActivityId">
-				<option value="" disabled selected="">{{'PickAnActivity'|translate}}</option>
-				<option value="{{activity.Id}}" ng-repeat="activity in vm.activities | orderBy: 'Name'">{{activity.Name}}</option>
-			</select>
-			<time-range-picker start-time="vm.startTime" end-time="vm.endTime"
-							   disable-next-day="vm.disableNextDay"></time-range-picker>
-			<button class="wfm-btn" ng-class="{'wfm-btn-primary': vm.isDataChangeValid(), 'wfm-btn-primary-disabled': !vm.isDataChangeValid()}"
-					ng-disabled="!vm.isDataChangeValid()">
-				{{'Apply' | translate}}
-			</button>
-		</div>
+		<form name="newActivityForm">
+			<h3>{{'Activity'|translate}}: </h3>
+			<div class="con-row">
+				<select ng-model="vm.selectedActivityId" required>
+					<option value="" disabled selected="">{{'PickAnActivity'|translate}}</option>
+					<option value="{{activity.Id}}" ng-repeat="activity in vm.activities | orderBy: 'Name'">{{activity.Name}}</option>
+				</select>
+			</div>
+			<tmp-time-range-picker ng-model="vm.timeRange" template-url="js/teamSchedule/html/addActivityTimeRangePicker.tpl.html"
+								   disable-next-day="vm.disableNextDay"></tmp-time-range-picker>
+		</form>
+
+		<button class="wfm-btn form-submit" ng-class="{'wfm-btn-primary': newActivityForm.$valid, 'wfm-btn-primary-disabled': !newActivityForm.$valid}"
+				ng-disabled="!newActivityForm.$valid">
+			{{'Apply' | translate}}
+		</button>
 	</md-content>
 </div>
 

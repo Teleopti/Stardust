@@ -42,19 +42,23 @@
 
 		var html = '<add-activity-panel selected-agents="" selected-date=""></add-activity-panel>';
 		var scope = $rootScope.$new();
-		var elements = $compile(html)(scope);
+		var element = $compile(html)(scope);
 
 		scope.$apply();
 
-		var selectElements = elements.find('select');
-
-		var timeRangePicker = elements.find('time-range-picker');
-
-		var applyButton = elements.find('button');
-
+		var form = element.find('form');
+		var selectElements = element.find('select');
+		var timeRangePicker = element.find('tmp-time-range-picker');
+		var applyButton;
+		angular.forEach(element.find('button'), function (e) {
+			var ae = angular.element(e);
+			if (element.hasClass('form-submit')) applyButton = ae;
+		});
+	
+		expect(form.length).toBe(1);
 		expect(selectElements.length).toBe(1);
 		expect(timeRangePicker.length).toBe(1);
-		expect(applyButton.length).toBe(1);
+		expect(applyButton).not.toBeNull();
 	});
 
 	it('should see available activities in select element', function () {
@@ -96,11 +100,37 @@
 		var element = $compile(html)(scope);
 		scope.$apply();
 
-		var applyButton = element.find('button');
+		var applyButton;
+		angular.forEach(element.find('button'), function (e) {
+			var element = angular.element(e);
+			if (element.hasClass('form-submit')) applyButton = element;
+		});
+
 		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
 		expect(applyButton.attr('disabled')).toBe('disabled');
 	});
 
-	//it('should see a diabled button when time range is invalid', function() {});
+	it('should see a diabled button when time range is invalid', function () {
+		var html = '<add-activity-panel selected-agents="" selected-date=""></add-activity-panel>';
+		var scope = $rootScope.$new();
 
+		var element = $compile(html)(scope);
+		scope.$apply();
+
+		var innerScope = element.isolateScope().vm;
+
+		innerScope.timeRange.startTime = new Date('2015-01-01 08:00:00');
+		innerScope.timeRange.startTime = new Date('2015-01-01 02:00:00');
+		scope.$apply();
+
+
+		var applyButton;
+		angular.forEach(element.find('button'), function (e) {
+			var element = angular.element(e);
+			if (element.hasClass('form-submit')) applyButton = element;
+		});
+
+		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
+		expect(applyButton.attr('disabled')).toBe('disabled');
+	});	
 });

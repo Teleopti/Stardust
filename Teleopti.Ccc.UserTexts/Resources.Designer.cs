@@ -23534,6 +23534,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Same Day.
+        /// </summary>
+        public static string SameDay {
+            get {
+                return ResourceManager.GetString("SameDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Same days off.
         /// </summary>
         public static string SameDaysOff {

@@ -220,7 +220,7 @@
 		.con-row>.uib-timepicker{
 			padding-left: 0; 
 			margin-top: -4px;
-		}
+		}		
 	}
 
 	.modal-box .wfm-simple-list{
@@ -236,4 +236,11 @@
 			display: inline-block;
 		}
 	}
+
+	.con-row {
+		align-items: center;
+		.wfm-time-range-picker-wrap button {
+			line-height: 25px;
+		}
+	}	
 }

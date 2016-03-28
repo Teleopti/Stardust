@@ -1403,9 +1403,11 @@
     <Content Include="WFM\js\seatManagement\teampicker.controller.spec.js" />
     <Content Include="WFM\js\teamSchedule\html\addabsencepanel.html" />
     <Content Include="WFM\js\teamSchedule\html\addActivityPanel.tpl.html" />
+    <Content Include="WFM\js\teamSchedule\html\addActivityTimeRangePicker.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\removeAbsenceConfirmDialog.html" />
     <Content Include="WFM\js\teamSchedule\html\scheduletable.html" />
     <Content Include="WFM\js\teamSchedule\html\teamscheduledatepicker.html" />
+    <Content Include="WFM\js\teamSchedule\html\time-range-picker.tpl.html" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.controller.removeAbsenceConfirmDialog.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.controller.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.controller.scheduletable.spec.js" />
@@ -1477,7 +1479,15 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.swapShifts.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.shiftHelpers.js" />
     <Content Include="WFM\js\teamSchedule\html\timeline.html" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.timeRangePicker.directive.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.timeRangePicker.directive.spec.js" />
     <Content Include="WFM\js\teamSchedule\_modules.js" />
+    <Content Include="WFM\vendor\MaterialDesignIcons\scss\materialdesignicons.css">
+      <DependentUpon>materialdesignicons.scss</DependentUpon>
+    </Content>
+    <Content Include="WFM\vendor\MaterialDesignIcons\scss\materialdesignicons.min.css">
+      <DependentUpon>materialdesignicons.css</DependentUpon>
+    </Content>
     <Content Include="WFM\vendor\uigrid.directive.ext.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali-ext.js" />
     <Content Include="WFM\js\forecasting\c3-fix-forecast.js" />

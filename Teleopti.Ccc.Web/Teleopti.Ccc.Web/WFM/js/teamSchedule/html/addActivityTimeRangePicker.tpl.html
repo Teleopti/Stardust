@@ -1,0 +1,30 @@
+﻿<div>
+	<h3>{{'From'|translate}}: </h3>
+	<div class="con-row">
+		<div>
+			<tmp-timepicker-wrap ng-model="startTime"></tmp-timepicker-wrap>
+		</div>
+	</div>
+
+	<h3>{{'To'|translate}}: </h3>
+	<div class="con-row">
+		<div>
+			<tmp-timepicker-wrap ng-model="endTime"></tmp-timepicker-wrap>
+		</div>
+		<div class="next-day-toggle" ng-show="!disableNextDay || nextDay">
+			<button class="wfm-btn wfm-btn-invis-default"
+					ng-class="{'wfm-btn-invis-disabled': disableNextDay }"
+					ng-click="toggleNextDay()">
+				{{ nextDay ? "NextDay" : "SameDay" | translate}}
+			</button>
+		</div>
+	</div>
+</div>
+<div class="error-msg-container ng-invalid-order alert-error notice-spacer">
+	<i class="mdi mdi-alert-octagon"></i>
+	<span translate>EndTimeMustBeGreaterOrEqualToStartTime</span>
+</div>
+<div class="error-msg-container ng-invalid-parse alert-error notice-spacer">
+	<i class="mdi mdi-alert-octagon"></i>
+	<span translate>StartTimeAndEndTimeMustBeSet</span>
+</div>
