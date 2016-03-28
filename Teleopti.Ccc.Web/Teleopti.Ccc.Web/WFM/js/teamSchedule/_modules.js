@@ -1,5 +1,5 @@
 ﻿(function () {
 	angular.module('wfm.teamSchedule', [
-		'currentUserInfoService', 'wfm.pagination', 'toggleService', 'ngResource']);
+		'currentUserInfoService', 'wfm.pagination', 'toggleService', 'ngResource', 'wfmDate']);
 
 })();

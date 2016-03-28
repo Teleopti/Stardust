@@ -21,7 +21,6 @@
 
 		function create(schedule, timeLine) {
 			if (!schedule) schedule = {};
-
 			var projectionVms = createProjections(schedule.Projection, timeLine);
 			var dayOffVm = createDayOffViewModel(schedule.DayOff, timeLine);
 			
@@ -47,7 +46,7 @@
 				ScheduleStartTime: function () {
 					var start = schedule.Date;
 					angular.forEach(this.Shifts, function(shift) {
-						if (start === shift.Date) {
+						if (start === shift.Date && shift.Projections.length > 0) {
 							start = shift.Projections[0].Start;
 						}
 					});

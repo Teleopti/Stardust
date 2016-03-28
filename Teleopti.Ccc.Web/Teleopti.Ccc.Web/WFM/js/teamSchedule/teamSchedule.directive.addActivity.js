@@ -9,7 +9,8 @@
 			restrict: 'E',
 			scope: {
 				selectedAgents: '&',
-				selectedDate: '&'
+				selectedDate: '&',
+				defaultStart: '&'
 			},
 			templateUrl: 'js/teamSchedule/html/addActivityPanel.tpl.html',
 			controller: ['ActivityService', addActivityCtrl],
@@ -32,7 +33,7 @@
 		});
 		
 		function isDataChangeValid() {
-			return vm.selectedAbsenceId !== undefined;
+			return vm.selectedActivityId !== undefined && vm.startTime !== undefined && vm.endTime !== undefined;
 		}
 	}
 

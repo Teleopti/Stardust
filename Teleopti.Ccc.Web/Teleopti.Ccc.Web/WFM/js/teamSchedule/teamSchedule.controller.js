@@ -5,12 +5,12 @@
 			'$scope', '$q', '$locale', '$translate', 'TeamSchedule', 'GroupScheduleFactory',
 			'teamScheduleNotificationService', 'PersonSelection', 'ScheduleManagement', 'SwapShifts', 'PersonAbsence',
 			'Toggle', 'SignalR', '$mdComponentRegistry', '$mdSidenav', '$mdUtil', 'guidgenerator', 'ShortCuts', 'keyCodes',
-			'dialogs', TeamScheduleController
+			'dialogs', 'WFMDate', TeamScheduleController
 		]);
 
 	function TeamScheduleController($scope, $q, $locale, $translate, teamScheduleSvc, groupScheduleFactory,
 		notificationService, personSelectionSvc, scheduleMgmtSvc, swapShiftsSvc, personAbsenceSvc, toggleSvc, signalRSvc,
-		$mdComponentRegistry, $mdSidenav, $mdUtil, guidgenerator, shortCuts, keyCodes, dialogSvc) {
+		$mdComponentRegistry, $mdSidenav, $mdUtil, guidgenerator, shortCuts, keyCodes, dialogSvc, WFMDateSvc) {
 		
 		var vm = this;
 
@@ -58,7 +58,7 @@
 				date: currentDate
 			};
 
-			teamScheduleSvc.getSchedules.query(params).$promise.then(function(result) {
+			teamScheduleSvc.getSchedules.query(params).$promise.then(function (result) {
 				scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment());
 				personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules, currentDate);
 			});
@@ -196,6 +196,18 @@
 		vm.setEarliestStartOfSelectedSchedule = function() {
 			var selectedPersonIds = personSelectionSvc.getSelectedPersonIdList();
 			vm.earliestStartTime = scheduleMgmtSvc.getEarliestStartOfSelectedSchedule(vm.scheduleDateMoment(), selectedPersonIds);
+		};
+
+		vm.defaultNewActivityStart = function() {
+			var nowInUserTimeZone = WFMDateSvc.nowInUserTimeZone();
+			if (vm.scheduleDateMoment().format('YYYY-MM-DD') == nowInUserTimeZone.format('YYYY-MM-DD')) {
+				var minutes = Math.ceil(nowInUserTimeZone.minute() / 15) * 15;
+				var start = nowInUserTimeZone.startOf('hour').minutes(minutes);
+				return start.format('LT');
+			}else {
+				var latestStart = scheduleMgmtSvc.getLatestStartOfSelectedSchedule(vm.scheduleDateMoment(), personSelectionSvc.getSelectedPersonIdList());
+				return moment(latestStart).format('LT');
+			}
 		};
 
 		function addActivity() {
