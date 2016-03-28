@@ -434,7 +434,7 @@
 			vm.setCurrentCommand("");
 		};
 
-		vm.afterAddActivity = function() {
+		vm.tempAfterAddActivityCallback = function() {
 			//temp test
 			vm.setCurrentCommand("");
 		};
