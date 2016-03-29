@@ -12,7 +12,7 @@
 
 			return service;
 		}])
-		.service('CurrentUserInfo', ['AuthenticationRequests', '$q', '$sessionStorage', 'wfmI18nService', 'BusinessUnitsService', 
+		.service('CurrentUserInfo', ['AuthenticationRequests', '$q', '$sessionStorage', 'wfmI18nService', 'BusinessUnitsService',
 			function (AuthenticationRequests, $q, $sessionStorage, wfmI18nService, BusinessUnitsService) {
 				var userName;
 				var defaultTimeZone;
@@ -60,7 +60,7 @@
 				};
 
 				service.resetContext = function () {
-					if (window.location.hash) {
+					if (window.location.hash.length > "#/".length) {
 						var d = new Date();
 						d.setTime(d.getTime() + (5 * 60 * 1000));
 						var expires = 'expires=' + d.toUTCString();
@@ -74,6 +74,6 @@
 				return service;
 			}]);
 
-	
+
 
 })();
