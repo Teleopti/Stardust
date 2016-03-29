@@ -6,10 +6,8 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -29,7 +27,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		private readonly IAgentBadgeWithRankRepository _badgeWithRankRepository;
 		private readonly INow _now;
 		private readonly IRunningEtlJobChecker _runningEtlJobChecker;
-		private readonly IToggleManager _toggleManager;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(CalculateBadgeConsumer));
 		private readonly IGlobalSettingDataRepository _globalSettingRep;
 		private readonly IPersonRepository _personRepository;
@@ -44,7 +41,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			IAgentBadgeWithRankRepository badgeWithRankRepository,
 			INow now,
 			IRunningEtlJobChecker runningEtlJobChecker,
-			IToggleManager toggleManager,
 			IGlobalSettingDataRepository globalSettingRep,
 			IPersonRepository personRepository
 			)
@@ -59,7 +55,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			_badgeWithRankRepository = badgeWithRankRepository;
 			_now = now;
 			_runningEtlJobChecker = runningEtlJobChecker;
-			_toggleManager = toggleManager;
 			_globalSettingRep = globalSettingRep;
 			_personRepository = personRepository;
 		}
@@ -105,7 +100,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					return;
 				}
 				var settings = teamSettings.Select(t => t.GamificationSetting).Distinct();
-				var today = _now.LocalDateOnly();
 				var calculateDate = new DateOnly(message.CalculationDate);
 
 				foreach (var setting in settings)
@@ -116,18 +110,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						if (logger.IsDebugEnabled)
 						{
 							logger.DebugFormat(
-								"No badge type is enabled or setting is deleted. nothing will be done for BusinessUnit=\"{0}\", DataSource=\"{1}\" and Timezone=\"{2}\""
-								+ "(setting Id=\"{3}\", IsDeleted=\"{4}\")",
+								"No badge type is enabled or setting is deleted. nothing will be done for BusinessUnit=\"{0}\", "
+								+"DataSource=\"{1}\" and Timezone=\"{2}\"(setting Id=\"{3}\", IsDeleted=\"{4}\")",
 								message.LogOnBusinessUnitId, message.LogOnDatasource, message.TimeZoneCode, setting.Id, setting.IsDeleted);
 						}
 						continue;
 					}
 
 					var agentsWithSetting = new List<IPerson>();
+					var currentDate = new DateOnly(message.CalculationDate);
 					foreach (var teamSetting in teamSettings.Where(teamSetting => teamSetting.GamificationSetting.Id == settingId))
 					{
 						agentsWithSetting.AddRange(_personRepository.FindPeopleBelongTeam(teamSetting.Team,
-							new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1))));
+							new DateOnlyPeriod(currentDate.AddDays(-1), currentDate.AddDays(1))));
 					}
 					agentsWithSetting = agentsWithSetting.Distinct().ToList();
 

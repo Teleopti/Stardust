@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -34,7 +31,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private IUnitOfWorkFactory loggedOnUnitOfWorkFactory;
 		private IUnitOfWork unitOfWork;
 		private IRunningEtlJobChecker etlJobChecker;
-		private IToggleManager toggleManager;
 		private IAgentBadgeWithRankCalculator badgeWithRankCalculator;
 		private IGlobalSettingDataRepository globalSettingRep;
 		private Guid _businessUnitId;
@@ -53,7 +49,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			badgeRepository = MockRepository.GenerateMock<IAgentBadgeRepository>();
 			badgeWithRankRepository = MockRepository.GenerateMock<IAgentBadgeWithRankRepository>();
 			personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			toggleManager = MockRepository.GenerateMock<IToggleManager>();
 
 			personRepository.Stub(
 				x => x.FindPeopleInOrganization(new DateOnlyPeriod(new DateOnly(2014, 8, 7), new DateOnly(2014, 8, 9)), false))
@@ -102,8 +97,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			etlJobChecker.Stub(x => x.NightlyEtlJobStillRunning()).Return(false);
 
 			target = new CalculateBadgeConsumer(serviceBus, teamSettingsRepository, msgRepository, unitOfWorkFactory, calculator,
-				badgeWithRankCalculator, badgeRepository, badgeWithRankRepository, now, etlJobChecker, toggleManager,
-				globalSettingRep, personRepository);
+				badgeWithRankCalculator, badgeRepository, badgeWithRankRepository, now, etlJobChecker, globalSettingRep, personRepository);
 		}
 
 		[Test]
@@ -127,16 +121,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var team = TeamFactory.CreateSimpleTeam("team");
 			team.SetId(Guid.NewGuid());
 
+			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateTime().AddDays(-1), TimeZoneInfo.Local, timezone);
+			var calculationDateOnly = new DateOnly(calculationDate);
+
 			var persons = new List<IPerson> { new Person() };
 			personRepository.Stub(
 				x =>
-					x.FindPeopleBelongTeam(team, new DateOnlyPeriod(new DateOnly(today).AddDays(-1), new DateOnly(today.AddDays(1)))))
+					x.FindPeopleBelongTeam(team, new DateOnlyPeriod(calculationDateOnly.AddDays(-1), calculationDateOnly.AddDays(1))))
 				.Return(persons);
 
 			teamSettingsRepository.Stub(x => x.FindAllTeamGamificationSettingsSortedByTeam())
 				.Return(new[] { new TeamGamificationSetting { Team = team, GamificationSetting = newSetting } });
 
-			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateTime().AddDays(-1), TimeZoneInfo.Local, timezone);
 			var message = new CalculateBadgeMessage
 			{
 				TimeZoneCode = timezone.Id,
@@ -192,16 +188,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var team = TeamFactory.CreateSimpleTeam("team");
 			team.SetId(Guid.NewGuid());
 
+			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateTime().AddDays(-1), TimeZoneInfo.Local, timezone);
+			var calculationDateOnly = new DateOnly(calculationDate);
+
 			var persons = new List<IPerson> { new Person() };
 			personRepository.Stub(
 				x =>
-					x.FindPeopleBelongTeam(team, new DateOnlyPeriod(new DateOnly(today).AddDays(-1), new DateOnly(today.AddDays(1)))))
+					x.FindPeopleBelongTeam(team, new DateOnlyPeriod(calculationDateOnly.AddDays(-1), calculationDateOnly.AddDays(1))))
 				.Return(persons);
 
 			teamSettingsRepository.Stub(x => x.FindAllTeamGamificationSettingsSortedByTeam())
 				.Return(new[] { new TeamGamificationSetting { Team = team, GamificationSetting = deletedSetting } });
 
-			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateTime().AddDays(-1), TimeZoneInfo.Local, timezone);
 			var message = new CalculateBadgeMessage
 			{
 				TimeZoneCode = timezone.Id,
